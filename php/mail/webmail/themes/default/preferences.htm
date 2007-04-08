@@ -1,0 +1,105 @@
+{config_load file=$umLanguageFile section="Preferences"}
+<html>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<head>
+	<title>{#common_page_title#} - {#prf_title#}</title>
+	<link rel="stylesheet" href="themes/default/webmail.css" type="text/css">
+	<meta http-equiv="Content-Type" content="text/html; charset={#default_char_set#}">
+	<script language="JavaScript" src="themes/default/webmail.js" type="text/javascript"></script>
+	{$umJS}
+
+</head>
+
+<body leftmargin="0" marginwidth="0" topmargin="4" marginheight="3">
+
+{include file="default/pageheader.htm"}
+
+<table align="center" width="758" border="0" cellspacing="0" cellpadding="0">
+	<tr>
+    	<td valign=top width="154"> 
+				{include file="default/menu.htm"}
+	    </td>
+        <td width="1" bgcolor="#817B7B"><img width="1" height="1"></td>
+		<td align="center" valign=top width="602" height=350 bgcolor=#ffffff >
+			<table cellspacing=1 cellpadding=1 width="100%" border=0 bgcolor=White>
+				<form name=form1 action=preferences.php method=POST>
+				<input type=hidden name=sid value="{$umSid}">
+				<input type=hidden name=lid value="{$umLid}">
+				<input type=hidden name=tid value="{$umTid}">
+				<input type=hidden name=save value="yes">
+				<tr height="30">
+					<td colspan=2 class=headers><b>{#prf_general_title#}</b></td>
+				</tr>
+				<tr height="20">
+					<td class=headerright width="25%">{#prf_name#}&nbsp;</td>
+					<td class=default>&nbsp;<input type=text name=f_real_name size=30 value="{$umRealName|escape:"html"}" class="textbox"></td>
+				</tr>
+				<tr height="20">
+					<td class=headerright>{#prf_reply_to#}&nbsp;</td>
+					<td class=default>&nbsp;<input type=text name=f_reply_to size=30 value="{$umReplyTo|escape:"html"}" class="textbox"></td>
+				</tr>
+				<tr height="20">
+					<td class=headerright>{#prf_default_editor_mode#}&nbsp;</td>
+					<td class=default>&nbsp;<select name="f_editor_mode">
+						<option value="text"{if $umEditorMode eq "text"} selected{/if}>{#prf_default_editor_mode_text#}
+						<option value="html"{if $umEditorMode eq "html"} selected{/if}>{#prf_default_editor_mode_html#}
+					</select>
+					</td>
+				</tr>
+				
+				<tr height="30">
+					<td colspan=2 class=headers><b>{#prf_trash_title#}</b></td>
+				</tr>
+				<tr height="20">
+					<td class=default colspan=2>&nbsp;
+						<input type=checkbox name=f_save_trash value="1"{$umSaveTrash}>
+						<acronym style="cursor: hand;" OnClick="f_save_trash.click()">{#prf_save_to_trash#} "<b>{#trash_extended#}</b>"</acronym>
+					</td>
+				</tr>
+				<tr height="20">
+					<td class=default colspan=2>&nbsp;
+						<input type=checkbox name=f_empty_on_exit value="1"{$umEmptyTrashOnExit}>
+						<acronym style="cursor: hand;" OnClick="f_empty_on_exit.click()">{#prf_empty_on_exit#}</acronym>
+					</td>
+				</tr>
+				
+				<tr height="30">
+					<td colspan=2  class=headers><b>{#prf_sent_title#}</b></td>
+				</tr>
+				<tr height="20">
+					<td class=default colspan=2>&nbsp;
+						<input type=checkbox name=f_save_sent value="1"{$umSaveSent}>
+						<acronym style="cursor: hand;" OnClick="f_save_sent.click()">{#prf_save_sent#} "<b>{#sent_extended#}</b>"</acronym>
+					</td>
+				</tr>
+				
+				<tr height="30">
+					<td colspan=2  class=headers><b>{#prf_messages_title#}</b></td>
+				</tr>
+				<tr height="20">
+					<td class=headerright>{#prf_page_limit#}&nbsp;</td>
+					<td class=default>&nbsp;{$umRecordsPerPage}</td>
+				</tr>
+				<tr height="20">
+					<td colspan=2  class=default>&nbsp;
+						<input type=checkbox name=f_display_images value="1"{$umDisplayImages}>
+						<acronym style="cursor: hand;" OnClick="f_display_images.click()">{#prf_display_images#}</acronym>
+					</td>
+				</tr>
+
+				<tr height="30">
+					<td class=default colspan=2 align=center height=30><input type=submit value="{#prf_save_button#}" class="button"></td>
+				</tr>
+				</form>
+			</table>
+		</td>
+		<td width="1" bgcolor="#817B7B"><img width="1" height="1"></td>
+	</tr>
+</table>
+
+{include file="default/pagefooter.htm"}
+
+</body>
+</html>
+

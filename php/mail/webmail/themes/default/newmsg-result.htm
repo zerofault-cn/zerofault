@@ -1,0 +1,57 @@
+{config_load file=$umLanguageFile section="Newmessage"}
+
+<html>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<head>
+	<title>{#common_page_title#}</title>
+	<meta http-equiv="Content-Type" content="text/html; charset={#default_char_set#}">
+	<link rel="stylesheet" href="themes/default/webmail.css" type="text/css">
+	<script language="JavaScript" src="themes/default/webmail.js" type="text/javascript"></script>
+
+{$umJS}
+
+</head>
+
+<body leftmargin="0" marginwidth="0" topmargin="4" marginheight="3">
+
+{include file="default/pageheader.htm"}
+
+<table align="center" width="758" border="0" cellspacing="0" cellpadding="0">
+	<tr>
+		
+    	<td valign=top width="154"> 
+			{include file="default/menu.htm"}
+	    </td>
+        <td width="1" bgcolor="#817B7B"><img width="1" height="1"></td>
+		<td align="center" valign=top width="602" height=350 bgcolor=#ffffff >
+			<table width="100%" border="0" cellspacing="1" cellpadding="0">
+			{if $umMailSent}
+				<tr height=50>
+					<td class=cent>
+						{#result_success#}<br><br>
+						<a href="msglist.php?sid={$umSid}&tid={$umTid}&lid={$umLid}">{#nav_msglist#}</a>
+						&nbsp;&nbsp;&nbsp;&nbsp;
+						<a href="newmsg.php?sid={$umSid}&tid={$umTid}&lid={$umLid}">{#nav_continue#}</a>
+					</td>
+				</tr>
+			{else}
+				<tr height=50>
+					<td class=cent>
+						{#result_error#}<br><br>
+						<font color=red>{$umErrorMessage}</font><br><br>
+						<a href="javascript:history.go(-1)">{#nav_back#}</a>
+					</td>
+				</tr>
+			{/if}
+			</table>
+		</td>
+		<td width="1" bgcolor="#817B7B"><img width="1" height="1"></td>
+	</tr>
+</table>
+
+{include file="default/pagefooter.htm"}
+
+</body>
+</html>
+

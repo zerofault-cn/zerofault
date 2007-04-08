@@ -1,0 +1,271 @@
+<?PHP
+
+// ********************************************************************************
+// CuteCode
+// ********************************************************************************
+if($action == "cutecode")
+{
+echo"<html>
+	<head>
+        <meta http-equiv=\"Content-Type\" content=\"text/html; charset=gb2312\">
+	<title>CuteCode</title>
+    <style type=\"text/css\">
+	<!--
+	 BODY, TD {text-decoration: none; font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 8pt;}
+	 a:active,a:visited,a:link {color: #446488; text-decoration: none; font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 8pt;}
+	 a:hover {font-size : 8pt; color: #000000; font-family: verdana; text-decoration: none; }
+	-->
+	</style>
+	</head>
+	<body bgcolor=#FFFFFF>
+	<script language=\"javascript\" type=\"text/javascript\">
+	<!--
+	function insertcode(type,var1,var2) {
+
+     if(var1 != null){
+      if(var2 == null){ var2='  '; }
+
+		if(type == 'link'){
+        	code = '<a href=\"' +var1+ '\">' +var2+ '</a>';
+        }
+		if(type == 'image'){
+        	code = '<img align=left src=\"' +var1+ '\">';
+        }
+        if(type == 'bold'){
+        	code = '<b>' +var1+ '</b>';
+        }
+        if(type == 'italic'){
+        	code = '<i>' +var1+ '</i>';
+        }
+        if(type == 'underline'){
+        	code = '<u>' +var1+ '</u>';
+        }
+        if(type == 'color'){
+        	code = '<font color=\"' +var1+ '\">' +var2+ '</font>';
+        }
+        if(type == 'size'){
+        	code = '<font size=\"' +var1+ '\">' +var2+ '</font>';
+        }
+        if(type == 'font'){
+        	code = '<font face=\"' +var1+ '\">' +var2+ '</font>';
+        }
+        if(type == 'align'){
+        	code = '<p align=' +var1+ '>' +var2+ '</p>';
+        }
+        if(type == 'quote'){
+        	code = '[quote]' +var1+ '[/quote]';
+        }
+        if(type == 'list'){
+        	code = '<ul>\\n<li>文本1\\n<li>文本2\\n<li>文本3\\n </ul>';
+			alert('样本列表会插入文本框');
+        }
+        	code = ' ' + code + ' ';
+            opener.document.forms['addnews'].$target.value  += code;
+		    if(document.my.ifClose.checked == true)
+            {
+             opener.document.forms['addnews'].$target.focus();
+             window.close();
+             opener.document.forms['addnews'].$target.focus();
+            }
+      }
+	}
+	//-->
+	</script>
+    <table border=0 height=247 width=320 cellspacing=\"0\" cellpadding=\"0\">
+
+	<td height=\"15\" colspan=\"2\" width=\"21\">
+	<td height=\"15\" width=\"342\">
+	<tr>
+    <td height=\"15\" colspan=\"2\" width=\"367\">
+    <font size=\"1\" face=\"Verdana\"><b>快捷标签</b></font>
+    <td height=\"15\" width=\"0\">
+	</tr>
+
+	<tr bgcolor=#F7F6F4><td height=16 width=\"21\">
+	&nbsp;
+	<td height=16 width=\"344\">
+	<a href=\"javascript:insertcode('link', prompt('请输入完整的URL', 'http://'), prompt('请输入网页的标题', '') )\">
+	插入链接</a>
+	<td height=16 width=\"0\">
+    [link=<font color=\"#808080\">URL</font>]<font color=\"#808080\">文字</font>[/link]
+	</tr>
+
+    <tr ><td height=16 width=\"21\">
+	&nbsp;
+	<td height=16 width=\"344\">
+	<a href=\"javascript:insertcode('image', prompt('输入图片的URL：', 'http://') )\">
+	插入图片</a>
+	<td height=16 width=\"0\">
+    [image=<font color=\"#808080\">URL</font>]
+	</tr>
+
+	<tr bgcolor=#F7F6F4><td height=16 width=\"21\">
+	&nbsp;
+	<td height=16 width=\"344\">
+	<a href=\"javascript:insertcode('quote', prompt('引用的文字', '') )\">
+	插入引号</a>
+	<td height=16 width=\"0\">
+    [quote=<font color=\"#808080\">名字</font>]<font color=\"#808080\">文字</font>[/quote]
+	</tr>
+
+    <tr ><td height=16 width=\"21\">
+	&nbsp;
+	<td height=16 width=\"344\">
+	<a href=\"javascript:insertcode('list', 'none' )\">
+	插入列表</a>
+	<td height=16 width=\"0\">
+    [list]<font color=\"#808080\">[*]Text1[*]Text2</font>[/list]
+	</tr>
+
+    <tr bgcolor=#F7F6F4><td height=16 width=\"21\">
+	&nbsp;
+	<td height=16 width=\"344\">
+	<a href=\"javascript:insertcode('bold', prompt('输入要加粗的文字', '') )\">
+	加粗文字</a>
+
+	<td height=16 width=\"0\">
+    [b]<font color=\"#808080\">文字</font>[/b]
+	</tr><tr ><td height=16 width=\"21\">
+	&nbsp;
+	<td height=16 width=\"344\">
+	 <a href=\"javascript:insertcode('italic', prompt('输入斜体文字', '') )\">
+	斜体文字</a>
+	<td height=16 width=\"0\">
+    [i]<font color=\"#808080\">文字</font>[/i]
+	</tr><tr bgcolor=#F7F6F4><td height=16 width=\"21\">
+
+	&nbsp;
+	<td height=16 width=\"344\">
+	 <a href=\"javascript:insertcode('underline', prompt('输入下划线文字', '') )\">
+	下划线文字</a>
+	<td height=16 width=\"0\">
+    [u]<font color=\"#808080\">文字</font>[/u]
+	</tr>
+
+
+
+    <tr><td height=16 width=\"21\">
+	&nbsp;
+	<td height=16 width=\"344\">
+	<a href=\"javascript:insertcode('color', prompt('输入文本的颜色',''), prompt('输入使用这种颜色的文本','') )\">
+	文本颜色</a>
+	<td height=16 width=\"0\">
+    [color=<font color=\"#808080\">颜色</font>]<font color=\"#808080\">文本</font>[/color]
+	</tr><tr bgcolor=#F7F6F4><td height=16 width=\"21\">
+
+	&nbsp;
+	<td height=16 width=\"344\">
+	<a href=\"javascript:insertcode('size', prompt('输入文本的大小',''), prompt('输入该大小的文本','') )\">
+	文本大小</a>
+	<td height=16 width=\"0\">
+    [size=<font color=\"#808080\">大小</font>]<font color=\"#808080\">文本</font>[/size]
+	</tr><tr><td height=16 width=\"21\">
+	&nbsp;
+	<td height=16 width=\"344\">
+	<a href=\"javascript:insertcode('font', prompt('输入文本的字体',''), prompt('输入使用该字体的文本','') )\">
+	文本字体</a>
+
+	<td height=16 width=\"0\">
+    [font=<font color=\"#808080\">字体</font>]<font color=\"#808080\">文本</font>[/font]
+	</tr><tr bgcolor=#F7F6F4><td height=16 width=\"21\">
+	&nbsp;
+	<td height=16 width=\"344\">
+	<a href=\"javascript:insertcode('align', prompt('输入文本的对齐',''), prompt('输入使用该对齐方式的文本','') )\">
+	文本对齐</a>
+	<td height=16 width=\"0\">
+    [align=<font color=\"#808080\">对齐</font>]<font color=\"#808080\">文本</font>[/align]
+	</tr><tr>
+	<td  width=21 height=\"57\">
+	&nbsp;<form name=my>
+	<td height=57 colspan=\"2\" width=\"342\">
+
+    <label><input type=checkbox checked name=ifClose> 在插入代码后关闭窗口</label>
+	</tr></form>
+	</table></body></HTML>";
+}
+else{
+	echoheader("question", "帮助/关于");
+
+    @ini_set("allow_url_fopen", "1");
+
+    $cute_info_file = @file("http://cutephp.com/cutenews/latest_version.php?config_http_script_dir=$config_http_script_dir", "r");
+
+    if(!$cute_info_file){ echo"<center><font color=red>连接不上CuteNews服务器来检查是否有新版本，请以后再试</font><br />"; $connect = FALSE; }
+    else{ $connect = TRUE; }
+
+    $cute_latest = explode("|", $cute_info_file[0]);
+
+    echo"<table border=0 cellpading=0 cellspacing=0 width=\"654\" height=\"175\" >
+    <td width=\"646\" colspan=\"3\" height=\"15\">
+    <tr>
+    <td width=\"650\" valign=\"middle\" height=\"1\" bgcolor=\"#F7F6F4\" colspan=\"3\">
+    &nbsp;&nbsp;<font size=\"2\"><b>版本检查</b></font>";
+
+	if(!$connect){  }
+    elseif($cute_latest[0] > $config_version_id){ echo" <font color=red>(CuteNews有新版本了)</font>"; }
+    elseif($cute_latest[0] == $config_version_id){ echo" (你用的是最新版CuteNews)"; }
+    elseif($cute_latest[0] < $config_version_id){ echo" (你用的是以前发布版本的CuteNews)"; }
+
+    echo"</tr>
+    <tr>
+    <td width=\"29\" valign=\"middle\" height=\"24\">
+    <td width=\"100\" valign=\"middle\" height=\"24\">
+    当前版本
+    <td width=\"523\" valign=\"middle\" height=\"24\">
+    ： $config_version_name &nbsp;&nbsp;(build Id - $config_version_id)
+    </tr>
+    <tr>
+    <td width=\"29\" valign=\"middle\" height=\"23\">
+    <td width=\"100\" valign=\"top\" height=\"23\">
+    最新版本<br />
+    &nbsp;
+    <td width=\"521\" valign=\"top\" height=\"23\">
+    ：";
+
+    if($connect){ echo" $cute_latest[1] &nbsp;&nbsp;(build Id - $cute_latest[0])"; }
+    else{ echo" <font color=red>连接服务器出错，请访问本站，得到详细信息</font>"; }
+
+    echo"</b>
+    </tr>
+    <tr>
+    <td width=\"650\" valign=\"middle\" height=\"1\" bgcolor=\"#F7F6F4\" colspan=\"3\">
+    &nbsp; <font size=\"2\"><b>帮助&amp;支持</b></font>&nbsp;
+    </tr>
+    <tr>
+    <td width=\"31\" valign=\"middle\" height=\"47\">
+    &nbsp;&nbsp;
+    <td width=\"619\" valign=\"middle\" height=\"47\" colspan=\"2\">
+    如果您在使用中遇到什么问题，可以到我们的<a href=\"http://cutephp.com/forum/\" target=\"_blank\">支持论坛</a>中发布出来，或发<a href=\"mailto:flexer@cutephp.com\">电子邮件</a>给我们。你也可以访问<a href=\"http://cutephp.com\" target=\"_blank\">我们的站点</a>，那里每个人都可能帮助你。<br />
+    &nbsp;
+    </tr>
+    <tr>
+    <td width=\"650\" valign=\"middle\" height=\"1\" bgcolor=\"#F7F6F4\" colspan=\"3\">
+    &nbsp; <font size=\"2\"><b>评估我们的代码</b></font>
+    </tr>
+    <tr>
+    <td width=\"33\" valign=\"middle\" height=\"47\">
+    <p>
+    <form action=\"http://www.hotscripts.com/cgi-bin/rate.cgi\" method=\"POST\" target=\"_blank\">
+    <td width=\"617\" valign=\"middle\" height=\"47\" colspan=\"2\">
+    请在<a href=\"http://www.hotscripts.com\" style=\"text-decoration: none\">HotScripts.com
+    </a>中评估我们的代码。&nbsp;<select name=\"ex_rate\" size=\"1\">
+    <option value>-- 选择分值 --</option>
+    <option value=\"5\" selected >太棒了！</option>
+    <option value=\"4\">很好</option>
+    <option value=\"3\">好</option>
+    <option value=\"2\">一般</option>
+    <option value=\"1\">差</option>
+    </select>
+    <input type=\"submit\" value=\"评估！\">
+    <input type=\"hidden\" name=\"ID\" value=\"21011\">
+    </form>
+    </tr>
+    <tr>
+    <td width=\"650\" valign=\"middle\" height=\"6\" colspan=\"3\">
+    </tr>
+    </table>";
+
+	echofooter();
+}
+
+?>

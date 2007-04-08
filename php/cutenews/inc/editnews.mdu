@@ -1,0 +1,582 @@
+<?PHP
+
+if($member_db[1] > 3){ msg("error", "拒绝访问", "你没有权限访问编辑新闻模块"); }
+// ********************************************************************************
+// List all news available for editing
+// ********************************************************************************
+if($action == "list")
+{
+	echoheader("editnews","编辑新闻");
+
+    $cat_lines = @file("./inc/category.db.php");
+    foreach($cat_lines as $single_line){
+		$cat_arr = explode("|", $single_line);
+        $cat[$cat_arr[0]] = $cat_arr[1];
+    }
+
+    // How Many News to show on one page
+    $news_per_page = 21;
+
+    $all_db = array();
+    if($source == ""){ $all_db = file("news.txt"); }
+    else{ $all_db = file("./archives/${source}.news.arch"); }
+
+
+
+// choose only needed news items
+if ($category != "" or $author != ""){
+	foreach($all_db as $raw_line){
+		$raw_arr = explode("|", $raw_line);
+        if (($category == "" or $raw_arr[6] == $category) and ($author == "" or $raw_arr[1] == $author)){
+ 			$all_db_tmp[] = $raw_line;
+        }
+    }
+$all_db = $all_db_tmp;
+}
+
+
+
+
+// Prelist Entries
+    $flag = 1;
+	if($start_from == "0"){ $start_from = ""; }
+    $i = $start_from;
+    $entries_showed = 0;
+
+if(!empty($all_db)){
+
+    foreach ($all_db as $line){
+        $have_perm = FALSE;
+        if($j < $start_from){ $j++; continue; }
+        $i++;
+
+        $item_db = explode("|",$line);
+     	$itemdate = date("d/m/y",$item_db[0]);
+
+     	if(($member_db[1] == 1) or ($member_db[1] == 2)){$have_perm = 1;}
+    	elseif($member_db[1] == 3 and $item_db[1] == $member_db[2]) {$have_perm = 1;}
+
+     	if($member_db[1] < 3 or $item_db[1] == $member_db[2]){
+	     	if($flag == 1){ $bg="bgcolor=#F7F6F4"; $flag = 0; }
+	     	else {$bg = ""; $flag = 1;}
+
+	     	if(strlen($item_db[2]) > 74){ $title = substr($item_db[2],0,70)." ..."; }
+            $title = stripslashes( preg_replace(array("'\|'", "'\"'", "'\''"), array("I", "&quot;", "&#039;"), $item_db[2]) );
+	     	$entries .= "<tr>
+	       	 <td height=18  $bg>
+	         <!-- ID: $item_db[0]--><a title='编辑：$item_db[2]' href=\"$PHP_SELF?mod=editnews&action=editnews&id=$item_db[0]&source=$source\">$title</a>
+    	     <td height=18 $bg align=right>";
+             $entries .= countComments($item_db[0], $source);
+             $entries .= "&nbsp;&nbsp;&nbsp;&nbsp;<td height=18 $bg>&nbsp;&nbsp;&nbsp;";
+
+             if($item_db[6] == ""){ $my_cat = "<font color=gray>---</font>"; }
+             elseif($cat[$item_db[6]] == ""){ $my_cat = "<font color=red>ID <b>$item_db[6]</b></font>"; }
+             else{ $my_cat = $cat[$item_db[6]]; }
+
+             $entries .= "$my_cat&nbsp;<td height=18 $bg>
+	         $itemdate
+	         <td height=18 $bg>
+	      	 $item_db[1]
+             </tr>
+            ";
+        	$entries_showed ++;
+        }//if have permission
+    	if($i >= $news_per_page + $start_from){ break; }
+    }//foreach news line
+}    
+// End prelisting
+
+
+
+    $all_count_news = count($all_db);
+    if($category != ""){ $cat_msg = "目录：<b>$cat[$category]</b>;"; }
+    if($source != ""){
+
+		$news_lines = file("./archives/$source.news.arch");
+		$count = count($news_lines);
+		$last = $count-1;
+		$first_news_arr = explode("|", $news_lines[$last]);
+		$last_news_arr	= explode("|", $news_lines[0]);
+		$first_timestamp = $first_news_arr[0];
+		$last_timestamp	 = $last_news_arr[0];
+		$source_msg = "存档：<b>". date("d M Y",$first_timestamp) ." - ". date("d M Y",$last_timestamp) ."</b>;";
+	}
+
+
+
+///////////////////////////////////////////
+// Options Bar
+echo"
+	<table border=0 cellpading=0 cellspacing=0 width=100%  style=\"border: 1px dotted silver\" >
+	<tr>
+	  <td >
+        显示 <b>$entries_showed</b> 篇文章，共 <b>$all_count_news</b> 篇； $cat_msg $source_msg
+	  </td>
+
+	  <td >
+        <p align=\"right\"><a href=\"javascript:ShowOrHide('options','')\">显示选项&nbsp;</a>
+	  </td>
+	</tr>
+    <tr>
+	  <td  colspan=\"2\">
+
+
+<div id='options' style='display:none;z-index:1;'>
+<form method=POST>
+<table width=\"100%\" cellspacing=\"0\" cellpadding=\"0\">
+<tr>
+	<td height=\"1\" style=\"border-top: 1px dashed silver\" width=\"100%\" align=\"right\" colspan=\"3\">
+    <p align=\"center\">&nbsp;
+	</td>
+</tr>
+<tr >
+	<td height=\"1\" width=\"286\" align=\"right\">
+    类别&nbsp;
+	</td>
+	<td height=\"1\" width=\"180\">
+<select name=\"source\" size=\"1\"><option value=\"\">- 未存档新闻 -</option>";
+
+	if(!$handle = opendir("./archives")){ die("<center>不能打开目录 ./archives "); }
+   		while (false !== ($file = readdir($handle)))
+           {
+   			if($file != "." and $file != ".." and !is_dir("./archives/$file") and eregi("news.arch", $file))
+            {
+            	$file_arr = explode(".", $file);
+                $id		  = $file_arr[0];
+
+                $news_lines = file("./archives/$file");
+                $count = count($news_lines);
+                $last = $count-1;
+                $first_news_arr = explode("|", $news_lines[$last]);
+                $last_news_arr	= explode("|", $news_lines[0]);
+
+                $first_timestamp = $first_news_arr[0];
+                $last_timestamp	 = $last_news_arr[0];
+
+				$arch_date = date("d M Y",$first_timestamp) ." - ". date("d M Y",$last_timestamp);
+                $ifselected = "";
+                if($source == $file_arr[0]){ $ifselected = "selected"; }
+                echo "<option $ifselected value=\"$file_arr[0]\">存档： $arch_date ($count)</option>";
+   			}
+   		}
+	closedir($handle);
+
+echo"</select>
+
+	</td>
+	<td height=\"1\" width=\"182\">
+	</td>
+</tr>
+<tr>
+	<td height=\"1\" width=\"284\" align=\"right\" >
+    栏目&nbsp;
+	</td>
+	<td height=\"1\" width=\"178\" >
+    <select name=\"category\" ><option selected value=\"\">- 所有 -</option>";
+
+    $cat_lines = file("./inc/category.db.php");
+	foreach($cat_lines as $single_line){
+		$cat_arr = explode("|", $single_line);
+		$ifselected = "";
+		if($category == $cat_arr[0]){ $ifselected = "selected"; }
+        echo"<option $ifselected value=\"$cat_arr[0]\">$cat_arr[1]</option>\n";
+   	}
+
+    echo"</select>
+
+	</td>
+	<td height=\"1\" width=\"180\" >
+	</td>
+</tr>
+<tr>
+	<td height=\"1\" width=\"284\" align=\"right\" >
+    作者&nbsp;
+	</td>
+	<td height=\"1\" width=\"178\" >
+    <select name=author size=\"1\"><option value=\"\">- 所有 -</option>";
+
+    $user_lines = file("./inc/users.db.php");
+	foreach($user_lines as $single_line){
+        if(!eregi("<\?", $single_line)){
+	        $user_arr = explode("|", $single_line);
+    		$ifselected = "";
+            if($user_arr[1] != 4){
+	            if($author == $user_arr[2]){ $ifselected = "selected"; }
+		        echo"<option $ifselected value=\"$user_arr[2]\">$user_arr[2]</option>\n";
+			}
+		}
+   	}
+    echo"</select>
+
+	</td>
+	<td height=\"1\" width=\"180\" >
+	</td>
+</tr>
+<tr>
+	<td height=\"1\" width=\"284\" align=\"right\" >
+	</td>
+	<td height=\"1\" width=\"178\" >
+    <br><input type=submit value=\"显示\">
+	</td>
+	<td height=\"1\" width=\"180\" >
+	</td>
+</tr>
+</table>
+</form>
+</div>
+	  </td>
+    </tr>
+	</table>&nbsp;";
+
+// End Options Bar
+////////////////////////////////////////////////////////////////////////////////    Showing List of News
+
+    echo"<table border=0 cellpading=0 cellspacing=0 width=654  >
+	<td width=368>
+	标题
+	<td width=65>
+	评论
+	<td width=65>
+	&nbsp;栏目
+	<td width=58>
+	&nbsp;日期
+	<td width=78>
+	作者";
+
+#####################################################################################################################
+echo $entries;
+#####################################################################################################################
+
+	if($start_from > 0)
+    {
+        $previous = $start_from - $news_per_page;
+        echo"</tr>
+		<tr>
+        <td  colspan=1><p align=left><a href=\"$PHP_SELF?mod=editnews&action=list&start_from=$previous&category=$category&author=$author&source=$source\"><br /><< Previous </a></p>";
+    }else{
+        echo"</tr>
+		<tr>
+        <td  colspan=1>";
+    }
+    if(count($all_db) > $i)
+    {
+        $how_next = count($all_db) - $i;
+        if($how_next > $news_per_page){ $how_next = $news_per_page; }
+        echo"
+		<td  colspan=6><p align=right><a href=\"$PHP_SELF?mod=editnews&action=list&start_from=$i&category=$category&author=$author&source=$source\"><br />Next $how_next >></a></p>
+		</tr>
+		</table>";
+    }else{
+    	echo"</tr>
+		<tr>
+		<td width=638 colspan=6>
+		</tr>
+		</table>";
+    }
+
+    echofooter();
+}
+// ********************************************************************************
+// Edit News Article
+// ********************************************************************************
+elseif($action == "editnews")
+{
+// Show The Article for Editing
+	if($source == ""){ $all_db = file("news.txt"); }
+    else{ $all_db = file("./archives/$source.news.arch"); }
+	$found = FALSE;
+	foreach ($all_db as $line)
+    {
+		$item_db=explode("|",$line);
+		if ($id == $item_db[0]){ $found = TRUE; break;}
+	}//foreach news line
+    if (!$found){ msg("error","错误！！！","找<b>不</b>到选择的新闻条目。"); }
+
+	$newstime   = date("D, d F Y h:i:s",$item_db[0]);
+    $item_db[2] = stripslashes( preg_replace(array("'\|'", "'\"'", "'\''"), array("I", "&quot;", "&#039;"), $item_db[2]) );
+    $item_db[3] = replace_news("admin", $item_db[3]);
+    $item_db[4] = replace_news("admin", $item_db[4]);
+
+	echoheader("editnews","编辑新闻");
+
+    echo"
+    <SCRIPT LANGUAGE=\"JavaScript\">
+	function preview(){
+	dd=window.open('','prv','height=400,width=750,resizable=1,scrollbars=1')
+	document.addnews.mod.value='preview';document.addnews.target='prv'
+	document.addnews.submit();dd.focus()
+	setTimeout(\"document.addnews.mod.value='editnews';document.addnews.target='_self'\",500)
+	}
+    function confirmDelete(url){
+	var agree=confirm(\"Do you really want to permanently delete this article ?\");
+	if (agree)
+	document.location=url;
+	}
+	</SCRIPT>
+
+    <form method=POST name=addnews action=\"$PHP_SELF\">
+	<table border=0 cellpading=0 cellspacing=0 width=\"654\" height=\"100%\" >
+	<td valign=middle width=\"75\">
+	信息
+	<td width=\"571\" colspan=\"6\">
+	$newstime ，$item_db[1]发布
+
+	<tr>
+	<td valign=middle width=\"75\" valign=\"top\">
+	标题
+	<td width=\"464\" colspan=\"3\">
+	<input type=text name=title value=\"$item_db[2]\" size=55 tabindex=1>
+    <td width=\"103\" valign=\"top\">
+	</tr>";
+
+	if($config_use_avatar == "yes"){
+	    echo"
+        <tr>
+		<td valign=middle width=\"75\" valign=\"top\">
+		肖像URL
+		<td width=\"464\" colspan=\"3\">
+		<input type=text name=editavatar value=\"$item_db[5]\" size=42 tabindex=2>&nbsp;&nbsp;&nbsp;( optional )
+		<td width=\"103\" valign=\"top\">
+		</tr>";
+	}
+
+	echo"
+   	<tr>
+	<td valign=middle width=\"75\" valign=\"top\">
+	栏目
+	<td width=\"464\" colspan=\"3\">
+	<select name=\"category\" >";
+
+    $cat_lines = file("./inc/category.db.php");
+	foreach($cat_lines as $single_line){
+		$cat_arr = explode("|", $single_line);
+        if($item_db[6] == $cat_arr[0]){
+			echo"<option selected=\"selected\" value=\"$cat_arr[0]\">$cat_arr[1]</option>\n";
+            $selected = TRUE;
+		}else{ echo"<option value=\"$cat_arr[0]\">$cat_arr[1]</option>\n"; }
+	}
+    if(!$selected){ echo"<option selected value=\"\">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>"; }
+
+    echo"</select>
+    <td width=\"103\" valign=\"top\">
+	</tr>
+
+    <tr>
+	<td width=\"75\" valign=\"top\">
+	<br />简介
+	<td width=\"464\" colspan=\"3\">
+	<textarea rows=\"8\" cols=\"74\" name=\"short_story\" tabindex=3>$item_db[3]</textarea>
+	<td width=\"103\" valign=\"top\" align=center>
+	<p align=\"center\"><a href=\"$PHP_SELF?mod=images&action=quick&area=short_story\" onclick=\"window.open('$PHP_SELF?mod=images&action=quick&area=short_story', '_Addimage', 'HEIGHT=500,resizable=yes,scrollbars=yes,WIDTH=360');return false;\" target=\"_Addimage\"><br />
+	[插入图象]</a><br />
+	<a href=# onclick=\"window.open('$PHP_SELF?&mod=about&action=cutecode&target=short_story', '_Addimage', 'HEIGHT=280,resizable=yes,scrollbars=yes,WIDTH=360');return false;\" target=\"_CuteCode\">[快捷标签]</a><br />
+	<br />
+
+	<script>
+	 function insertext(text,area){
+	if(area==\"short\"){document.addnews.short_story.focus(); document.addnews.short_story.value=document.addnews.short_story.value +\" \"+ text; document.addnews.short_story.focus()}
+	if(area==\"full\") {document.addnews.full_story.focus(); document.addnews.full_story.value=document.addnews.full_story.value +\" \"+ text; document.addnews.full_story.focus()}
+     }
+    </script>";
+
+	echo insertSmilies('short', 4);
+
+	echo"</tr>
+
+	<tr>
+	<td width=\"75\" valign=\"top\">
+	<br />详细内容
+	<td width=\"464\" colspan=\"3\">
+	<textarea rows=\"12\" cols=\"74\" name=\"full_story\" tabindex=4>$item_db[4]</textarea>
+	<td width=\"103\" valign=\"top\" align=center>
+	<br />
+	<a href=\"$PHP_SELF?mod=images&action=quick&area=full_story\" onclick=\"window.open('$PHP_SELF?mod=images&action=quick&area=full_story', '_Addimage', 'HEIGHT=500,resizable=yes,scrollbars=yes,WIDTH=360');return false;\" target=\"_Addimage\">[插入图象]</a><br />
+	<a href=# onclick=\"window.open('$PHP_SELF?&mod=about&action=cutecode&target=full_story', '_Addimage', 'HEIGHT=280,resizable=yes,scrollbars=yes,WIDTH=360');return false;\" target=\"_CuteCode\">[快捷标签]</a><br />
+    <br />";
+
+	echo insertSmilies('full', 4);
+
+	echo"</tr>
+	<tr>
+	<td width=\"75\">
+	<td width=\"571\" colspan=\"4\">
+	<input type=hidden name=id value=$id>
+	<input type=hidden name=action value=doeditnews>
+	<input type=hidden name=mod value=editnews>
+	<input type=hidden name=source value=$source>
+
+	<input type=submit value=\"保存修改\" accesskey=\"s\">&nbsp;
+    <input type=button value=\"预览\" onClick=\"preview()\" accesskey=\"p\">&nbsp; <a href=\"javascript:ShowOrHide('options','')\">[选项]</a>
+	&nbsp;&nbsp;<a href=\"javascript:confirmDelete('$PHP_SELF?mod=editnews&action=doeditnews&source=$source&ifdelete=yes&id=$id')\">[删除]</a>
+	</tr>
+
+	<tr id='options' style='display:none;'>
+	<td width=\"75\">
+    <br>选项
+	<td width=\"575\" colspan=\"4\">
+    &nbsp;<br>
+    <input type=checkbox value=\"yes\" name=\"if_convert_new_lines\" checked>将换行转换成&lt;br /&gt;&nbsp;&nbsp; <input type=checkbox value=\"yes\" name=\"if_use_html\" checked>
+    使用HTML格式
+	</tr>
+
+	</form>
+	<tr>
+	<td width=\"75\">
+	<td width=\"571\" colspan=\"4\">
+	&nbsp;
+	</tr>
+	<tr>
+	<td width=\"75\">
+	评论";
+
+// Show the Comments for Editing
+
+    if($source == ""){ $all_comments_db = file("comments.txt"); }
+    else{ $all_comments_db = file("./archives/${source}.comments.arch"); }
+
+	foreach($all_comments_db as $comment_line)
+    {
+		$comment_line = trim($comment_line);
+		$comments_arr = explode("|>|",$comment_line);
+		if($comments_arr[0] == $id)
+        {//if these are comments for our story
+
+			if ($comments_arr[1] != "")
+            {
+//				<b>&nbsp;".strtolower(Poster)."</b>
+ //				<b>".strtolower(Date)."</b>
+               echo"<td width=210>
+				<b>&nbsp;作者</b>
+				<td width=219>
+				<b>日期</b>
+				<td width=1>
+				<td width=105>
+				</tr>
+				<form method=post name=comments action=\"$PHP_SELF\">";
+
+                $flag = 1;
+          		$different_posters = explode("||",$comments_arr[1]);
+          		foreach($different_posters as $individual_comment)
+          		{
+            		if($flag == 1){ $bg = "bgcolor=#F7F6F4"; $flag = 0;}
+                	else{$bg = ""; $flag = 1;}
+
+		            $comment_arr = explode("|",$individual_comment);
+            		$comtime = date("D, d F Y h:i:s",$comment_arr[0]);
+            		if($comment_arr[1])
+                    {
+					   if(strlen($comment_arr[1]) > 25){ $comment_arr[1] = substr($comment_arr[1],0,22)."..."; }
+ 					   echo"<tr>
+					   <td width=\"75\" >
+					   <td width=\"210\" $bg>
+					    &nbsp; <a title=\"edit this comment\nip:$comment_arr[3]\" href=\"$PHP_SELF?mod=editcomments&action=editcomment&newsid=$id&comid=$comment_arr[0]&source=$source\" onclick=\"window.open('$PHP_SELF?mod=editcomments&action=editcomment&newsid=$id&comid=$comment_arr[0]&source=$source', 'Comments', 'HEIGHT=270,resizable=yes,scrollbars=yes,WIDTH=400');return false;\">$comment_arr[1]</a>
+					   <td width=\"219\" $bg>
+					    <a title=\"edit this comment\nip:$comment_arr[3]\" href=\"$PHP_SELF?mod=editcomments&action=editcomment&newsid=$id&comid=$comment_arr[0]&source=$source\" onclick=\"window.open('$PHP_SELF?mod=editcomments&action=editcomment&newsid=$id&comid=$comment_arr[0]&source=$source', 'Comments', 'HEIGHT=270,resizable=yes,scrollbars=yes,WIDTH=400');return false;\">$comtime</a>
+					   <td width=\"1\" $bg>
+					    <input type=radio name=\"delcomid\" value=\"$comment_arr[0]\">
+					   <td width=\"105\" $bg>
+					   </tr>";
+                    }//if not blank
+          		}//foreach comment
+
+            	echo"<tr>
+	            <td width=\"75\">
+	            <td width=\"210\">
+	            <td width=\"219\">
+	            <p align=\"right\">全部删除
+	            <td width=\"1\">
+	            <input type=radio name=delcomid value=\"all\">
+	            <td width=\"105\">
+	            </tr>
+
+	            <tr>
+	            <td width=\"75\">
+	            <td width=\"466\" colspan=\"3\">
+	            <p align=\"right\"><input type=submit value=\"删除选中的\">
+	            <td width=\"105\">
+	            </tr>
+
+	            <input type=hidden name=newsid value=$id>
+	            <input type=hidden name=deletecomment value=yes>
+	            <input type=hidden name=action value=doeditcomment>
+	            <input type=hidden name=mod value=editcomments>
+                <input type=hidden name=source value=$source>
+	            </form>
+	            </table>";
+
+	            break;//foreach comment line
+           }//if there are any comments
+           else
+           {
+		 	   echo"<td width=\"210\">
+			   没有评论
+			   <td width=\"219\">
+			   <td width=\"1\">
+			   <td width=\"105\">
+			   </tr>
+			   </tr>
+			   </table>";
+           }
+        }//if these are comments for our story
+    }//foreach comments line
+
+    echofooter();
+}
+// ********************************************************************************
+// Do Edit News
+// ********************************************************************************
+elseif($action == "doeditnews")
+{
+	if($title == "" and $ifdelete != "yes"){ msg("error","错误！！！","标题不能为空。", "javascript:history.go(-1)"); }
+	if($short_story == "" and $ifdelete != "yes"){ msg("error","错误！！！","内容不能为空。", "javascript:history.go(-1)"); }
+
+	if($if_convert_new_lines	== "yes"){ $n_to_br		= TRUE; }
+    if($if_use_html				== "yes"){ $use_html	= TRUE; }
+
+	$short_story = 	replace_news("add", rtrim($short_story), $n_to_br, $use_html);
+	$full_story = 	replace_news("add", rtrim($full_story), $n_to_br, $use_html);
+	$title = 		stripslashes( preg_replace(array("'\|'", "'\n'", "''"), array("I", "<br />", ""), $title) );
+    $avatar =		stripslashes( preg_replace(array("'\|'", "'\n'", "''"), array("I", "<br />", ""), $avatar) );
+
+    if($source == ""){ $news_file = "news.txt"; $com_file = "comments.txt"; }
+    else{ $news_file = "./archives/$source.news.arch"; $com_file = "./archives/$source.comments.arch";}
+
+	$old_db = file("$news_file");
+	$new_db = fopen("$news_file", w);
+	foreach($old_db as $old_db_line){
+		$old_db_arr = explode("|", $old_db_line);
+		if($id != $old_db_arr[0]){
+			fwrite($new_db,"$old_db_line");
+        }
+        else
+        {
+			if($ifdelete != "yes")
+            {
+            	$okchanges = TRUE;
+                fwrite($new_db,"$old_db_arr[0]|$old_db_arr[1]|$title|$short_story|$full_story|$editavatar|$category||\n");
+            }
+			else
+            {
+            	$okdeleted = TRUE;
+				$all_file = file("$com_file");
+                $new_com=fopen("$com_file","w");
+                foreach($all_file as $line)
+                {
+					$line_arr = explode("|>|",$line);
+					if($line_arr[0] == $id){ $okdelcom = TRUE; }
+                    else{ fwrite($new_com,"$line"); }
+                }
+                fclose($new_com);
+            }
+        }
+    }
+    fclose($new_db);
+	if($okdeleted and $okdelcom){ msg("info","新闻删除了","成功地删除了新闻。<br />该新闻的所有评论也都被删除了。"); }
+    if($okdeleted and !$okdelcom){ msg("info","新闻删除了","成功地删除了新闻。<br />该新闻的所有评论应该也要删除了。<br /><font color=red>但没有成功删除该新闻的评论。</font>"); }
+    elseif($okchanges){ msg("info","修改保存了","所做的修改成功地保存了。", "$PHP_SELF?mod=editnews&action=editnews&id=$id&source=$source"); }
+	else{ msg("error","错误！！！","找不到指定的新闻条目，或者是数据库文件有问题。"); }
+
+}
+
+
+?>

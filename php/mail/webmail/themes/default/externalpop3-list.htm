@@ -1,0 +1,60 @@
+{config_load file=$umLanguageFile section="ExternalPop3"}
+
+<html>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<head>
+    <title>{#common_page_title#} - {#pop3_title#}</title>
+	<meta http-equiv="Content-Type" content="text/html; charset={#default_char_set#}">
+	<link rel="stylesheet" href="themes/default/webmail.css" type="text/css">
+	<script language="JavaScript" src="themes/default/webmail.js" type="text/javascript"></script>
+
+{$umJS}
+
+</head>
+
+<body leftmargin="0" marginwidth="0" topmargin="4" marginheight="3">
+
+{include file="default/pageheader.htm"}
+
+<table align="center" width="758" border="0" cellspacing="0" cellpadding="0">
+	<tr>
+    	<td valign=top width="154"> 
+			{include file="default/menu.htm"}
+    	</td>
+        <td width="1" bgcolor="#817B7B"><img width="1" height="1"></td>
+		<td align="center" valign=top width="602" height=350 bgcolor=#ffffff >
+			<table width="100%" border="0" cellspacing="1" cellpadding="0">
+				<tr height=20>
+					<td width="40%" class="headers">.:<b>{#pop3_username_hea#}</b>:.</td>
+					<td width="30%" class="headers">.:<b>{#pop3_host_hea#}</b>:.</td>
+					<td width="10%" class="headers">.:<b>{#pop3_enable_hea#}</b>:.</td>
+					<td width="10%" class="headers">.:<b>{#pop3_edit_hea#}</b>:.</td>
+					<td width="10%" class="headers">.:<b>{#pop3_dele_hea#}</b>:.</td>
+				</tr>
+				{section name=i loop=$umExternalPop3List}
+					<tr height=20>
+						<td class="default"> &nbsp;<a class="menu" href="{$umExternalPop3List[i].viewlink}">{$umExternalPop3List[i].username}</a></td>
+						<td class="default"> &nbsp;{$umExternalPop3List[i].host}</td>
+						<td class="default" align="center"> &nbsp;<img src="{$umExternalPop3List[i].statusimg}" width=16 height=16 border=0 alt="{$umExternalPop3List[i].enable}"</td>
+						<td class="default" align="center"> &nbsp;<a class="menu" href="{$umExternalPop3List[i].editlink}">OK</a></td>
+						<td class="default" align="center"> &nbsp;<a class="menu" href="{$umExternalPop3List[i].dellink}">OK</a></td>
+					</tr>
+				{/section}
+				<tr height=30>
+					<td colspan=5 align=center>
+						<form>
+							<input type=button value="{#pop3_new_entry#}" class=button onClick="location = '{$umNew}'">
+						</form>
+					</td>
+				</tr>
+			</table>
+		</td>
+		<td width="1" bgcolor="#817B7B"><img width="1" height="1"></td>
+	</tr>
+</table>
+
+{include file="default/pagefooter.htm"}
+
+</body>
+</html>

@@ -1,0 +1,164 @@
+<?PHP
+//If member access level is commenter, redirect him to personal options
+if($member_db[1] == 4 and $action == "dologin"){ header("Location: $config_http_script_dir/index.php?mod=options&action=personal"); exit; }
+
+
+echoheader("home", "欢迎");
+
+    if(!is_readable("./archives")){ die("错误！！！<br />不能打开目录 ./archives来读取，请检查该目录是否存在，或使用了正确的CHMOD"); }
+    if(!is_readable("./news.txt")){ die("错误！！！<br />不能打开文件news.txt来读取，请检查该文件是否存在，或使用了正确的CHMOD"); }
+    if(!is_readable("./comments.txt")){ die("错误！！！<br />不能打开文件comments.txt来读取，请检查该文件是否存在，或使用了正确的CHMOD"); }
+
+
+// Some Stats
+    $todaynews = 0;
+    $count_comments = 0;
+    $news_db = file("news.txt");
+     foreach ($news_db as $line)
+     {
+      $item_db = explode("|",$line);
+      $itemdate = date("d/m/y",$item_db[0]);
+      if($itemdate == date("d/m/y")) {$todaynews++;}
+     }
+    $stats_news = count( $news_db );
+    $stats_users = count( file("./inc/users.db.php") ) - 1;
+    $stats_archives = 0;
+    $handle = opendir("./archives");
+	while (FALSE !== ($file = readdir($handle)))
+	{
+	if( preg_match("/.news.arch/",$file) ){$stats_archives++;}
+	}
+	closedir($handle);
+    $stats_news_size = formatsize(filesize("news.txt"));
+    $stats_comments_size = formatsize(filesize("comments.txt"));
+
+	// Count Comments
+	$all_comments = file("$cutepath/comments.txt");
+	foreach($all_comments as $news_comments){
+		$single_news_comments = explode("|>|", $news_comments);
+	    $individual_comments = explode("||", $single_news_comments[1]);
+	    $count_comments += count($individual_comments);
+	}
+// Define Welcome Message
+    echo"<table border=0 cellpading=0 cellspacing=0 width=654>
+	<td width=650 colspan=5 height=1>
+	&nbsp;
+
+    <SCRIPT LANGUAGE=\"JavaScript\">
+	<!-- Begin
+	datetoday = new Date();
+	timenow=datetoday.getTime();
+	datetoday.setTime(timenow);
+	thehour = datetoday.getHours();
+	if 		(thehour < 9 ) 	display = \"早上\";
+	else if (thehour < 12) 	display = \"上午\";
+	else if (thehour < 17) 	display = \"下午\";
+	else if (thehour < 20) 	display = \"傍晚\";
+	else display = \"晚上\";
+	var greeting = (display+\"好\" );
+	document.write(greeting);
+	//  End -->
+	</script>
+
+     $member_db[2]";
+
+    if($member_db[1] != 4){ echo"，今天有<b>$todaynews</b>篇新文章，如果想要添加新文章，请<a href=$PHP_SELF?mod=addnews&action=addnews>点击这里<br /></a><br />"; }
+
+    if($member_db[1] == 1){
+    	echo "<tr><td valign=middle height=1 bgcolor=#F7F6F4 width=286 colspan=2>
+              &nbsp;<b>一些统计</b>
+              <td valign=middle height=1 width=35>
+              <td valign=middle height=1 bgcolor=#F7F6F4 width=326 colspan=2>
+              &nbsp;<b>系统自检</b>
+              </tr>
+
+              <tr>
+              <td valign=middle height=1 width=137>
+              &nbsp; 未归档新闻
+              <td valign=middle height=1 width=146>
+              $stats_news
+              <td valign=middle height=1 width=37>
+              <td valign=middle height=1 width=201>
+              &nbsp; 可以写入news.txt
+              <td valign=middle height=1 width=121>";
+
+              if(is_writable("news.txt")){ echo "<font color=green>是</font>"; }
+              else{ echo "<font color=red>否</font>"; }
+
+              echo"</tr>
+              <tr>
+              <td valign=middle height=1 width=137>
+              &nbsp; 未归档评论
+              <td valign=middle height=1 width=146>
+              $count_comments
+              <td valign=middle height=1 width=37>
+              <td valign=middle height=1 width=201>
+              &nbsp; 可以写入comments.txt
+              <td valign=middle height=1 width=121>";
+
+              if(is_writable("comments.txt")){ echo "<font color=green>是</font>"; }
+              else{ echo "<font color=red>否</font>"; }
+
+              echo"</tr>
+              <tr>
+              <td width=137 valign=middle height=1>
+              &nbsp; 用户 
+              <td width=146 valign=middle height=1>
+              $stats_users
+              <td width=37 valign=middle height=1>
+              <td width=201 valign=middle height=1>
+              &nbsp; 可以写入users.db.php
+              <td width=121 valign=middle height=1>";
+
+              if(is_writable("./inc/users.db.php")){ echo "<font color=green>是</font>"; }
+              else{ echo "<font color=red>否</font>"; }
+
+              echo"</tr>
+              <tr>
+              <td width=137 valign=middle height=1>
+              &nbsp; 归档
+              <td width=146 valign=middle height=1>
+              $stats_archives
+              <td width=37 valign=middle height=1>
+              <td width=201 valign=middle height=1>
+              &nbsp; 可以写入archives目录
+              <td width=121 valign=middle height=1>";
+
+              if(is_writable("./archives")){ echo "<font color=green>是</font>"; }
+              else{ echo "<font color=red>否</font>"; }
+
+              echo"</tr>
+              <tr>
+              <td width=137 valign=middle height=1>
+              &nbsp; News.txt大小
+              <td width=146 valign=middle height=1>
+              $stats_news_size
+              <td width=37 valign=middle height=1>
+              <td width=201 valign=middle height=1>
+              <td width=121 valign=middle height=1>
+              </tr>
+
+              <tr>
+              <td width=137 valign=middle height=1>
+              &nbsp; Comments.txt大小
+              <td width=146 valign=middle height=1>
+              $stats_comments_size
+              <td width=37 valign=middle height=1>
+              <td width=201 valign=middle height=1>
+              &nbsp;
+              <td width=121 valign=middle height=1>
+              </tr>
+
+              <tr>
+              <td width=137 valign=middle height=1>
+              <td width=146 valign=middle height=1>
+              <td width=37 valign=middle height=1>
+              <td width=201 valign=middle height=1>
+              &nbsp;
+              <td width=121 valign=middle height=1>
+              </tr>";
+    }
+	echo"</table>";
+
+echofooter();
+?>

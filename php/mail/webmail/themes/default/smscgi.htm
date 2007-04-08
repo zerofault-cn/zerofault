@@ -1,0 +1,81 @@
+{config_load file=$umLanguageFile section="SmsCgi"}
+
+<html>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<head>
+	<title>{#common_page_title#} - {#smscgi_title#}</title>
+	<link rel="stylesheet" href="themes/default/webmail.css" type="text/css">
+	<meta http-equiv="Content-Type" content="text/html; charset={#default_char_set#}">
+
+	<script language="JavaScript" src="themes/default/webmail.js" type="text/javascript"></script>
+
+{$umJS}
+
+</head>
+
+<body leftmargin="0" marginwidth="0" topmargin="4" marginheight="3">
+
+{include file="default/pageheader.htm"}
+
+<table align="center" width="758" border="0" cellspacing="0" cellpadding="0">
+	<tr>
+    	<td valign=top width="154"> 
+			{include file="default/menu.htm"}
+	    </td>
+        <td width="1" bgcolor="#817B7B"><img width="1" height="1"></td>
+		<td align="center" valign=top width="602" height=350 bgcolor=#ffffff >
+			<table cellspacing=1 cellpadding=1 width="100%" border=0 bgcolor=White>
+				<form name=form1 action=smscgi.php method=POST>
+				<input type=hidden name=sid value="{$umSid}">
+				<input type=hidden name=lid value="{$umLid}">
+				<input type=hidden name=tid value="{$umTid}">
+				<input type=hidden name=save value="yes">
+
+				<tr height=20>
+					<td class=headerright width=30%>{#smscgi_service#}&nbsp;</td>
+					<td class=default>{$umSmsCgiIspList}</td>
+				</tr>
+				<tr height=20>
+					<td class=headerright width=30%>{#smscgi_host#}&nbsp;</td>
+					<td class=default><input type=text name=smscgi_host value="{$umSmsCgiHost}" size=32 maxlength=64></td>
+				</tr>
+				<tr height=20>
+					<td class=headerright width=30%>{#smscgi_port#}&nbsp;</td>
+					<td class=default><input type=text name=smscgi_port value="{$umSmsCgiPort}" size=8 maxlength=8></td>
+				</tr>
+				<tr height=20>
+					<td class=headerright width=30%>{#smscgi_length#}&nbsp;</td>
+					<td class=default><input type=text name=smscgi_length value="{$umSmsCgiLength}" size=8 maxlength=8></td>
+				</tr>
+				<tr height=20>
+					<td class=headerright width=30%>{#smscgi_user#}&nbsp;</td>
+					<td class=default><input type=text name=smscgi_user value="{$umSmsCgiUser}" size=32 maxlength=64></td>
+				</tr>
+				<tr height=20>
+					<td class=headerright width=30%>{#smscgi_pass#}&nbsp;</td>
+					<td class=default><input type=text name=smscgi_pass value="{$umSmsCgiPass}" size=32 maxlength=64></td>
+				</tr>
+				<tr height=20>
+					<td class=headerright width=30%>&nbsp;</td>
+					<td class=default>
+						<input type=checkbox name=smscgi_status value="1" {$umSmsCgiStatus}>
+						<acronym style="cursor: hand;" OnClick="smscgi_status.click()">{#smscgi_status#} </acronym>
+					</td>
+				</tr>
+
+				<tr height=30>
+					<td class=default colspan=2 align=center><input type=submit value="{#smscgi_save#}" class="button"></td>
+				</tr>
+				</form>
+			</table>
+		</td>
+		<td width="1" bgcolor="#817B7B"><img width="1" height="1"></td>
+	</tr>
+</table>
+
+{include file="default/pagefooter.htm"}
+
+</body>
+</html>
+

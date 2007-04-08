@@ -1,0 +1,190 @@
+<?PHP
+
+if($member_db[1] != 1){ msg("error", "拒绝访问", "你没有权限编辑栏目"); }
+// ********************************************************************************
+// Add Category
+// ********************************************************************************
+if($action == "add")
+{
+    $cat_name = htmlspecialchars(stripslashes($cat_name));
+    if(!$cat_name){ msg("error","错误！！！","请输入栏目的名称", "javascript:history.go(-1)"); }
+    $cat_icon = preg_replace("/ /", "", $cat_icon);
+    if($cat_icon == "(optional)"){ $cat_icon = ""; }
+
+    $big_num = file("./inc/cat.num.php");
+    $big_num = $big_num[0];
+    if(!$big_num or $big_num == ""){ $big_num = 1; }
+
+    $all_cats = file("./inc/category.db.php");
+    foreach($all_cats as $cat_line)
+    {
+		$cat_arr = explode("|", $cat_line);
+        if($cat_arr[1] == $cat_name){ msg("error", "错误！！！", "已经存在该名称的栏目了", "javascript:history.go(-1)"); }
+        if($cat_arr[0] == $big_num){ $big_num = 33; }
+    }
+    $new_cats = fopen("./inc/category.db.php", "a");
+    $cat_name = stripslashes( preg_replace(array("'\|'",), array("&#124",), $cat_name) );
+	fwrite($new_cats, "$big_num|$cat_name|$cat_icon|||\n");
+	fclose($new_cats);
+    $big_num ++;
+
+    $num_file = fopen("./inc/cat.num.php", "w");
+    fwrite($num_file, $big_num);
+    fclose($num_file);
+}
+// ********************************************************************************
+// Remove Category
+// ********************************************************************************
+elseif($action == "remove")
+{
+	if(!$catid){ msg("error","错误！！！","没有栏目ID", "$PHP_SELF?mod=categories"); }
+
+    $old_cats = file("./inc/category.db.php");
+    $new_cats = fopen("./inc/category.db.php", "w");
+
+    foreach($old_cats as $old_cats_line){
+    	$cat_arr = explode("|", $old_cats_line);
+	    if($cat_arr[0] != $catid){
+			fwrite($new_cats, $old_cats_line);
+        }
+    }
+	fclose($new_cats);
+}
+// ********************************************************************************
+// Edit Category
+// ********************************************************************************
+elseif($action == "edit")
+{
+	if(!$catid){ msg("error","错误！！！","没有栏目ID", "$PHP_SELF?mod=categories"); }
+
+    $all_cats = file("./inc/category.db.php");
+    foreach($all_cats as $cat_line){
+    	$cat_arr = explode("|", $cat_line);
+	    if($cat_arr[0] == $catid){
+
+		$msg="<form action=\"$PHP_SELF\" method=post>
+		<p align=\"center\">栏目名称 <input style=\"text-align: Center\" value=\"$cat_arr[1]\" type=text name=cat_name>&nbsp;&nbsp;&nbsp;栏目图标 <input onFocus=\"this.select()\" style=\"text-align: Center\" value=\"$cat_arr[2]\" type=text name=cat_icon>&nbsp;&nbsp;&nbsp;<input type=submit value=\"保存修改\">
+		&nbsp;&nbsp;
+		<input type=hidden name=action value=doedit>
+		<input type=hidden name=catid value=$catid>
+		<input type=hidden name=mod value=categories>
+		</form>";
+
+        msg("options", "编辑栏目", $msg);
+
+        }
+    }
+}
+// ********************************************************************************
+// DO Edit Category
+// ********************************************************************************
+elseif($action == "doedit")
+{
+    $cat_name = htmlspecialchars(stripslashes($cat_name));
+    if(!$catid){ msg("error","错误！！！","没有栏目ID", "$PHP_SELF?mod=categories"); }
+    if($cat_name == ""){ msg("error", "错误！！！", "必须输入栏目名称", "javascript:history.go(-1)"); }
+
+    $old_cats = file("./inc/category.db.php");
+    $new_cats = fopen("./inc/category.db.php", "w");
+    foreach($old_cats as $cat_line){
+    	$cat_arr = explode("|", $cat_line);
+	    if($cat_arr[0] == $catid){
+			fwrite($new_cats, "$catid|$cat_name|$cat_icon|||\n");
+        }else{
+			fwrite($new_cats, "$cat_line");
+        }
+    }
+    fclose($new_cats);
+}
+// ********************************************************************************
+// List all Categories
+// ********************************************************************************
+echoheader("options", "栏目");
+echo"<table border=0 cellpading=0 cellspacing=0 width=654  >
+<form action=\"$PHP_SELF\" method=post>
+<tr>
+<td width=713 colspan=\"8\">
+
+<p align=\"center\">栏目名称 <input style=\"text-align: Center\" type=text name=cat_name>&nbsp;&nbsp;&nbsp;栏目图标 <input onFocus=\"this.select()\" style=\"text-align: Center\" value=\"(可选)\" type=text name=cat_icon>&nbsp;&nbsp;&nbsp;<input type=submit value=\"增加栏目\">
+&nbsp;&nbsp;
+</tr>
+<input type=hidden name=action value=add>
+<input type=hidden name=mod value=categories>
+</form>
+
+<tr>
+<td width=680 colspan=\"7\">
+&nbsp;
+</tr>
+";
+
+
+$all_cats = file("./inc/category.db.php");
+$count_categories = 0;
+foreach($all_cats as $cat_line)
+{
+    if($i%2 == 0){ $bg = "bgcolor=#F7F6F4"; }else{ $bg = ""; }
+    $i++;
+    $cat_arr = explode("|", $cat_line);
+    $cat_arr[1] = stripslashes( preg_replace(array("'\"'", "'\''"), array("&quot;", "&#039;"), $cat_arr[1]) );
+    $result .= "
+    <tr>
+     <td height=18>
+     <td height=18 $bg>
+       &nbsp;<b>$cat_arr[0]</b>
+     <td height=18 align=\"left\" $bg>
+       $cat_arr[1]
+	 <td height=18 align=\"center\" $bg>";
+
+     if($cat_arr[2] != ""){ $result .= "<img border=0 src=\"$cat_arr[2]\" high=40 width=40 alt=\"$cat_arr[2]\">"; }
+     else{ $result .= "---"; }
+
+     $result .= "<td height=18 align=\"center\" $bg>
+       <a href=\"admin.php?mod=categories&action=edit&catid=$cat_arr[0]\">[编辑]</a>
+     <td height=18 align=\"center\" $bg>
+       <a href=\"admin.php?mod=categories&action=remove&catid=$cat_arr[0]\">[删除]</a>
+     <td height=18 width=\"81\">
+    </tr>";
+	$count_categories ++;
+}
+
+if($count_categories == 0){
+    echo"
+    <tr>
+     <td height=18>
+     <td height=18 $bg colspan=3>
+       <p align=center><br><b>你还没有创建任何栏目</b><br>
+       栏目是可选的。你可以不需要栏目创建新闻
+    </tr>";
+}else{
+	echo"<tr>
+	<td width=60>
+	<td width=10>
+	<u>ID</u>&nbsp;&nbsp;
+	<td width=217>
+	<u>栏目</u>
+	<td width=223>
+	<p align=\"center\">
+	<u>图标</u>
+	<td width=50 align=\"center\">
+	<u>编辑</u>
+	<td width=71 align=\"center\">
+	<u>删除</u>
+	<td width=81>
+	</tr>";
+
+    echo $result;
+
+	echo"<tr>
+    <td >
+	<td colspan=5><br>
+    <p align=center>在你把显示某一栏目的新闻加入你的主页时，请使用<font color=#808080>\$category = \"ID\";</font> <br>其中，ID是你要显示的栏目的ID
+    <br>如果要选择和使用多个栏目，请按这样的格式<font color=#808080>\$category = \"ID1,ID2,ID2\";</font>
+	</tr>";
+}
+
+echo"
+</table><br />";
+
+echofooter();
+?>

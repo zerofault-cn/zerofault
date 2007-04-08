@@ -1,0 +1,130 @@
+{config_load file=$umLanguageFile section="Login"}
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+	<title>{#common_page_title#} - {#lng_title#|escape:"html"}</title>
+	<link rel="stylesheet" href="themes/default/webmail.css" type="text/css">
+	<meta http-equiv="Content-Type" content="text/html; charset={#default_char_set#}">
+</head>
+
+{$umJS}
+
+{literal}
+<script language="Javascript">
+function contact(address)
+{
+	location.href = "mailto:"+address;
+}
+</script>
+{/literal}
+
+<body leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
+<table width="100%" height="100%" border="0" cellpadding="0" cellspacing="0">
+  <tr>
+    <td height="351" align="center">
+      <table border="0" cellpadding="1" cellspacing="3" bgcolor="#FFFFFF">
+        <tr>
+          <td bgcolor="#999999">
+            <table width="744" border="0" cellspacing="0" cellpadding="0">
+              <tr> 
+                <td width="78%" rowspan="2" bgcolor="#FFFFFF"><img src="themes/default/images/magiclogo.gif" width="162" height="65"></td>
+                <td width="22%" height="25" valign="middle" bgcolor="#FFFFFF">
+	           	{if $umWebmasterEmail eq "#@[]"}
+                	<a href="javascript:contact('{#webmaster_mail#}');"><img src="themes/default/images/contact_ico.gif" width="16" height="16" border=0> 
+                  	{#contact_us#}</a>
+                {else}
+                	<a href="javascript:contact('{$umWebmasterEmail}');"><img src="themes/default/images/contact_ico.gif" width="16" height="16" border=0> 
+                  	{#contact_us#}</a>
+                {/if}
+                </td>
+              </tr>
+              <tr> 
+                <td bgcolor="#FFFFFF">&nbsp;</td>
+              </tr>
+              <tr> 
+                <td height="25" colspan="2" bgcolor="#FFFFFF">&nbsp;</td>
+              </tr>
+            </table>
+            <table width="744" border="0" cellspacing="0" cellpadding="0">
+              <tr> 
+                <td rowspan=2 width="264" bgcolor="#FFFFFF"><img src="themes/default/images/mail_pic.jpg" width="264" height="102"></td>
+                <td rowspan=2 background="themes/default/images/mail_pic2.jpg" bgcolor="#FFFFFF">
+                <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                	<tr>
+	                	<td><img src="themes/default/images/winmail.gif" width="290" height="102"></td>
+	                	<td height="34" align="center" valign="middle">
+	                	{if $umRegister neq 0}
+	                		<a href="register.php">{#lng_register#}</a>
+	                	{/if}&nbsp;<br><br>
+	                	</td>
+                	</tr>
+                </table>
+                </td>
+              </tr>
+            </table>
+            <table width="744" border="0" cellspacing="0" cellpadding="0">
+              <tr> 
+                <td width="349" valign="top" bgcolor="#FFFFFF"><img src="themes/default/images/mail_btpic1.jpg" width="349" height="96"></td>
+                <td background="themes/default/images/mail_btpic2.jpg" bgcolor="#FFFFFF"><table width="100%" border="0" cellspacing="0" cellpadding="0">
+					<form name="form1" action="login.php?retid={$umRetID}" method=post>
+                      <tr valign="top"> 
+                        <td width="18%" height="24" align="right" class="bld">{#lng_user_name#}:&nbsp;</td>
+                        <td width="25%" align="left"><input type="text" size="12" name="f_user" value="{$umUser}"></td>
+                        <td width="57%">{if $umAvailableServers neq 0}{$umServer}{/if}</td>
+                      </tr>
+                      <tr valign="top"> 
+                        <td height="24" align="right" class="bld">{#lng_user_pwd#}:&nbsp;</td>
+                        <td align="left"><input type="password" size="12" name="f_pass" value=""></td>
+                        <td>&nbsp;</td>
+                      </tr>
+					{if $umAllowSelectLanguage}
+                      <tr valign="top"> 
+                        <td height="24" align="right" class="bld">{#lng_language#}:&nbsp;</td>
+                        <td colspan="2" align="left">{$umLanguages}</td>
+                      </tr>
+					{/if}
+					{if $umAllowSelectTheme}
+                      <tr valign="top"> 
+                        <td height="24" align="right" class="bld">{#lng_theme#}:&nbsp;</td>
+                        <td align="left">{$umThemes}</td>
+                        <td><input name="submit" type="image" src="themes/default/images/loginbt.gif" width="48" height="18" border="0"></td>
+                      </tr>
+                    {else}
+                      <tr valign="top"> 
+                        <td height="24" align="right" class="bld">&nbsp;</td>
+                        <td colspan="2" align="left"><input name="submit" type="image" src="themes/default/images/loginbt.gif" width="48" height="18" border="0"></td>
+                      </tr>
+					{/if}
+                    </form>
+                  </table></td>
+              </tr>
+            </table>
+            <table width="744" border="0" cellpadding="0" cellspacing="0" bgcolor="#FFFFFF">
+              <tr>
+                <td width="220"><img src="themes/default/images/mail_bt1.jpg" width="220" height="20"></td>
+                <td background="themes/default/images/mail_bt2.jpg">&nbsp;</td>
+              </tr>
+            </table>
+            <table width="744" border="0" cellspacing="0" cellpadding="0">
+              <tr> 
+                <td width="276" rowspan="2" valign="top"><img src="themes/default/images/mail_bt3.jpg" width="349" height="36"></td>
+                <td width="468" bgcolor="#FFFFFF" height="2"><img width="1" height="1"></td>
+              </tr>
+              <tr> 
+                <td height="34" align="right" background="themes/default/images/mail_rpt2.jpg"><a target="_blank" href="{#homepage_url#}">{#homepage#}</a>&nbsp;</td>
+              </tr>
+            </table>
+            <table width="744" border="0" cellpadding="0" cellspacing="0" bgcolor="#FFFFFF">
+              <tr>
+                <td height="70">&nbsp;</td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>
+</body>
+</html>

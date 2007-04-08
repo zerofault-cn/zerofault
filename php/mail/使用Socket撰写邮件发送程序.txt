@@ -1,0 +1,47 @@
+使用Socket撰写邮件发送程序 
+首先，我们简单介绍一下带验证的SMTP服务器如何使用AUTH原语进行身份验证，其详细的定义可以参考RFC2554。
+具体如下：
+1）首先，需要使用EHLO而不是原先的HELO。
+2）EHLO成功以后，客户端需要发送AUTH原语，与服务器就认证时用户名和密码的传递方式进行协商。
+3）如果协商成功，服务器会返回以3开头的结果码，这是就可以把用户名和密码传给服务器。
+4）最后，如果验证成功，就可以开始发信了。
+下面是一个实际的例子，客户端在WinXP的Command窗口中通过"telnet smtp.263.NET 25"命令连接到263的smtp服务器发信：
+220 Welcome to coremail System(With Anti-Spam) 2.1
+EHLO 263.NET
+250-192.168.30.29
+250-PIPELINING
+250-SIZE 10240000
+250-ETRN
+250-AUTH LOGIN
+250 8BITMIME
+AUTH LOGIN
+334 VXNlcm5hbWU6
+bXlhY2NvdW50
+334 UGFzc3dvcmQ6
+bXlwYXNzd29yZA==
+235 Authentication successful
+MAIL FROM:myaccount@263.NET
+250 Ok
+RCPT TO:myaccount@263.NET
+250 Ok
+Data
+354 End data with <CR><LF>.<CR><LF>
+This is a testing email.
+haha.
+.
+250 Ok: queued as AC5291D6406C4
+QUIT
+221 Bye
+
+
+
+上面的内容就是发信的全过程。其中与身份验证有关的主要是第九到第十四行：
+AUTH LOGIN "客户端输入
+334 VXNlcm5hbWU6 "服务器提示“Username:="
+bXlhY2NvdW50 "客户端输入“myaccount="的Base64编码
+334 UGFzc3dvcmQ6 "服务器提示“Password:="
+bXlwYXNzd29yZA== "客户端输入“mypassword="的Base64编码
+235 Authentication successful "服务器端通过验证
+从上面的分析可以看出，在这个身份验证过程中，服务器和客户端都直接通过Socket传递经过标准Base64编码的纯文本。这个过程可以非常方便的用php实现，或者直接添加到原有的源代码中。
+另外，有些ESMTP服务器不支持AUTH LOGIN方式的认证，只支持AUTH CRAM-MD5方式验证。但是这两者之间的区别只是文本的编码方式不同。
+

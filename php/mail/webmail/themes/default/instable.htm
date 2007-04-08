@@ -1,0 +1,80 @@
+{config_load file=$umLanguageFile section="AdvancedEditor"}
+
+<HTML>
+<HEAD>
+
+<TITLE>{#instable_title#}</TITLE>
+<META http-equiv="Content-Type" content="text/html; charset={#default_char_set#}" />
+
+{literal}
+<STYLE>
+ td {font-size: 10.8pt}
+ body {font-size: 10.8pt}
+ BUTTON {width:5em}
+</STYLE>
+{/literal}
+
+{literal}
+<SCRIPT language="JavaScript">
+function returnvar () {
+	var rows_v = rows.value;
+	var columns_v = columns.value;
+	var width_v = width.value;
+	var widthtype_v;
+	if (widthtype.value) var widthtype_v = '%';
+	var border_v = border.value;
+	var cellspacing_v = cellspacing.value;
+	var cellpadding_v = cellpadding.value;
+	tables = '<table border='+border_v+' width='+width_v+widthtype_v+' cellspacing='+cellspacing_v+' cellpadding='+cellpadding_v+'>';
+	for (var i=1; i<=rows_v; i++) {tables += '<tr>';
+	for (var i1=1; i1<=columns_v; i1++) {tables += '<td></td>';}tables += '</tr>';}tables += '</table>';
+	window.returnValue = tables
+	window.close();
+}
+</SCRIPT>
+{/literal}
+
+</HEAD>
+<BODY bgColor="#d6d3ce" leftMargin="2" topMargin="12" marginheight="2" marginwidth="2">
+<CENTER>
+<TABLE cellSpacing="0" cellPadding="0" width="100%" border="0">
+	<TR>
+		<TD>
+			<TABLE cellSpacing="6" cellPadding="0" width="100%" border="0">
+				<TR>
+					<TD align="right">{#instable_rows#}</TD>
+					<TD><INPUT onfocus="this.select()" size="6" value="1" name="rows" /> </TD>
+					<TD align="right">{#instable_cellspacing#}</TD>
+					<TD><INPUT onfocus="this.select()" size="6" value="1" name="cellspacing" /> </TD>
+				</TR>
+				<TR>
+					<TD align="right">{#instable_cols#}</TD>
+					<TD><INPUT onfocus="this.select()" size="6" value="1" name="columns" /> </TD>
+					<TD align="right">{#instable_cellpadding#}</TD>
+					<TD><INPUT onfocus="this.select()" size="6" value="1" name="cellpadding" /> </TD>
+				</TR>
+				<TR>
+					<TD align="right">{#instable_width#}</TD>
+					<TD><INPUT onfocus="this.select()" size="6" value="100" name="width" /> </TD>
+					<TD align="right"><SELECT name="widthtype"> 
+						<OPTION value="1" selected="">{#instable_percent#}</OPTION>
+						<OPTION value="0">{#instable_pixel#}</OPTION></SELECT> </TD>
+					<TD></TD>
+				</TR>
+				<TR>
+					<TD align="right">{#instable_border#}</TD>
+					<TD><INPUT onfocus="this.select()" size="6" value="1" name="border" /> </TD>
+					<TD></TD>
+					<TD></TD>
+				</TR>
+			</TABLE>
+		</TD>
+		<TD vAlign="top" align="middle">
+			<P><BUTTON type="submit" style="BACKGROUND-COLOR: #d6d3ce" onclick="returnvar()">{#instable_okbtn#}</BUTTON></P>
+			<P><BUTTON style="BACKGROUND-COLOR: #d6d3ce" onclick="window.close()">{#instable_cancelbtn#}</BUTTON></P>
+		</TD>
+	</TR>
+</TABLE>
+</CENTER>
+</BODY>
+</HTML>

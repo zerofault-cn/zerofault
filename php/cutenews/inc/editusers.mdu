@@ -1,0 +1,342 @@
+<?PHP
+
+if($member_db[1] != 1){ msg("error", "拒绝访问", "您没有权限编辑用户"); }
+// ********************************************************************************
+// List All Available Users + Show Add User Form
+// ********************************************************************************
+if($action == "list")
+{
+    echoheader("users","用户管理");
+
+	echo"<script language=\"javascript\">
+	<!-- begin
+	function popupedit(id){
+	window.open('$PHP_SELF?mod=editusers&action=edituser&id='+id,'User','toolbar=0,location=0,status=0,menubar=0,scrollbars=0,resizable=0,width=360,height=180');
+	}
+	function confirmdelete(id){
+	var agree=confirm(\"确认要删除这个用户吗?\");
+	if (agree)
+	document.location=\"$PHP_SELF?mod=editusers&action=dodeleteuser&id=\"+id;
+	}
+	// end -->
+	</script>
+	<form method=post action=\"$PHP_SELF\"><table border=0 cellpading=0 cellspacing=0 width=654 height=100% >
+	<td width=329 colspan=\"2\">
+    <b>增加用户</b>
+	<td width=1>
+	<td width=319 colspan=\"3\">
+    <b>User Levels</b>
+    <tr>
+	<td width=129 bgcolor=\"#F7F6F4\" height=\"20\">
+    &nbsp;用户名
+	<td width=196 bgcolor=\"#F7F6F4\" height=\"20\">
+    <input type=text size=\"21\" name=\"regusername\">
+	<td width=1 height=\"20\">
+	<td width=319 bgcolor=\"#F7F6F4\" height=\"20\" colspan=\"3\">
+    &nbsp;Administrator : 拥有全部权限
+    </tr>
+    <tr>
+	<td width=129 bgcolor=\"#F7F6F4\" height=\"20\">
+    &nbsp;密码
+	<td width=196 bgcolor=\"#F7F6F4\" height=\"20\">
+    <input type=text size=\"21\" name=\"regpassword\">
+	<td width=1 height=\"20\">
+	<td width=319 bgcolor=\"#F7F6F4\" height=\"20\" colspan=\"3\">
+    &nbsp;Editor : 能增加新闻和编辑其他新闻
+    </tr>
+    <tr>
+	<td width=129 bgcolor=\"#F7F6F4\" height=\"20\">
+    &nbsp;别名
+	<td width=196 bgcolor=\"#F7F6F4\" height=\"20\">
+    <input type=text size=\"21\" name=\"regnickname\">
+	<td width=1 height=\"20\">
+	<td width=319 bgcolor=\"#F7F6F4\" height=\"20\" colspan=\"3\">
+    &nbsp;Journalist : 只能编辑和增加自己的新闻
+    </tr>
+    <tr>
+	<td width=129 bgcolor=\"#F7F6F4\" height=\"20\">
+    &nbsp;Email
+	<td width=196 bgcolor=\"#F7F6F4\" height=\"20\">
+    <input type=text size=\"21\" name=\"regemail\">
+	<td width=1 height=\"20\">
+	<td width=319 bgcolor=\"#F7F6F4\" height=\"20\" colspan=\"3\">
+    &nbsp;Commenter : 只能发表评论
+    </tr>
+    <tr>
+	<td width=129 bgcolor=\"#F7F6F4\" height=\"20\">
+    &nbsp;权限级别
+	<td width=196 bgcolor=\"#F7F6F4\" height=\"20\">
+    <select name=reglevel>
+           <option value=4>4 (commenter)</option>
+           <option selected value=3>3 (journalist)</option>
+           <option value=2>2 (editor)</option>
+           <option value=1>1 (administrator)</option>
+	</select>
+	<td width=1 height=\"20\">
+	<td width=319 bgcolor=\"#F7F6F4\" height=\"20\" colspan=\"3\">
+    &nbsp;
+    </tr>
+    <tr>
+	<td width=129 bgcolor=\"#F7F6F4\" height=\"20\">
+    &nbsp;
+	<td width=196 bgcolor=\"#F7F6F4\" height=\"20\">
+    <input type=submit value=\"  增加用户  \">
+    <input type=hidden name=action value=adduser>
+    <input type=hidden name=mod value=editusers>
+	<td width=1 height=\"20\">
+	<td width=319 bgcolor=\"#F7F6F4\" height=\"20\" colspan=\"3\">
+    &nbsp;
+    </tr></FORM>
+    <tr>
+	<td width=654 colspan=\"6\">
+    &nbsp;
+    </tr>
+    <tr>
+	<td width=650 colspan=\"6\">
+    <b>编辑用户</b>
+    </tr>
+	<tr>
+
+	<td width=130 bgcolor=\"#F7F6F4\">
+	&nbsp;<u>".strtolower(Username)."</u>
+
+	<td width=197 bgcolor=\"#F7F6F4\">
+    <u>注册日期</u>
+
+	<td width=2 bgcolor=\"#F7F6F4\">
+    &nbsp;
+
+	<td width=83 bgcolor=\"#F7F6F4\">
+    <u>撰写的新闻</u>
+
+	<td width=132 bgcolor=\"#F7F6F4\">
+    <u>权限级别</u>
+
+	<td width=93 bgcolor=\"#F7F6F4\">
+    <u>操作</u>
+	</tr>";
+
+    $all_users = file("./inc/users.db.php");
+    $i = 1
+;
+    foreach($all_users as $user_line)
+    {
+        $i++; $bg = "";
+        if($i%2 == 0){ $bg = "bgcolor=\"#F9F8F7\""; }
+        if(!eregi("<\?",$user_line)){
+        $user_arr = explode("|", $user_line);
+        switch($user_arr[1]){
+        case 1: $user_level = "administrator"; break;
+        case 2: $user_level = "editor"; break;
+        case 3: $user_level = "journalist"; break;
+        case 4: $user_level = "commenter"; break;
+        }
+        echo"<tr>
+		<td width=130 $bg>
+	    &nbsp;$user_arr[2]
+		<td width=197 $bg>";
+	    echo( date("F, d Y @ H:i a",$user_arr[0]) );
+		echo"<td width=2 $bg>
+		<td width=83 $bg>
+	    &nbsp;&nbsp;$user_arr[6]
+		<td width=132 $bg>
+	    &nbsp;$user_level
+		<td width=93 $bg>
+	    <a  onClick=\"javascript:popupedit('$user_arr[0]'); return(false)\" href=#>[编辑]</a>&nbsp;<a onClick=\"javascript:confirmdelete('$user_arr[0]'); return(false)\"  href=\"$PHP_SELF?mod=editusers&action=dodeleteuser&id=$user_arr[0]\">[删除]</a>
+	    </tr>";
+		}
+    }
+
+	echo"<tr>
+	<td width=130 >
+    &nbsp;
+    </tr>";
+
+	echo"</table>";
+    echofooter();
+}
+// ********************************************************************************
+// Add User
+// ********************************************************************************
+elseif($action == "adduser")
+{
+	if(!$regusername){ msg("error","错误！！！", "用户名不能空着", "javascript:history.go(-1)"); }
+	if(!$regpassword){ msg("error","错误！！！", "密码不能空着", "javascript:history.go(-1)"); }
+	if(!$regemail)	 { msg("error","错误！！！", "电子邮件不能空着", "javascript:history.go(-1)"); }
+
+    $all_users = file("./inc/users.db.php");
+    foreach($all_users as $user_line)
+    {
+		$user_arr = explode("|", $user_line);
+        if($user_arr[2] == $regusername){ msg("error", "错误！！！", "这个用户名已经存在了", "javascript:history.go(-1)"); }
+    }
+
+	$add_time = time()+($config_date_adjust*60);
+	$regpassword = md5($regpassword);
+
+	$old_users_file = file("./inc/users.db.php");
+	$new_users_file = fopen("./inc/users.db.php", "a");
+
+	fwrite($new_users_file, "$add_time|$reglevel|$regusername|$regpassword|$regnickname|$regemail|0|0||\n");
+
+	fclose($new_users_file);
+
+    switch($reglevel){
+	case "1": $level = "administrator"; break;
+	case "2": $level = "editor"; break;
+	case "3": $level = "journalist"; break;
+	case "4": $level = "commenter"; break;
+	}
+	msg("info","增加用户","成功地添加了用户<b>$regusername</b>，他的权限级别是<b>$level</b>。", "$PHP_SELF?mod=editusers&action=list");
+}
+// ********************************************************************************
+// Edit User Details
+// ********************************************************************************
+elseif($action == "edituser")
+{
+
+	$users_file = file("./inc/users.db.php");
+    foreach($users_file as $user_line){
+	    $user_arr = explode("|", $user_line);
+        if($id == $user_arr[0]){
+			break;
+        }
+    }
+
+
+    echo"<html><head>
+    <meta http-equiv=\"Content-Type\" content=\"text/html; charset=windows-1251\">
+    <title>Edit Users</title>
+    <style type=\"text/css\">
+    <!--
+            SELECT, option, textarea, input {
+            BORDER-RIGHT: #808080 1px dotted;
+            BORDER-TOP: #808080 1px dotted;
+            BORDER-BOTTOM: #808080 1px dotted;
+            BORDER-LEFT: #808080 1px dotted;
+            COLOR: #000000;
+            FONT-SIZE: 11px;
+            FONT-FAMILY: Verdana; BACKGROUND-COLOR: #ffffff }
+            TD {text-decoration: none; font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 8pt;}
+            BODY {text-decoration: none; font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 3pt;}
+            .header { font-size : 16px; font-weight: bold; color: #808080; font-family: verdana; text-decoration: none; }
+    -->
+    </style>
+    </head>
+    <body>
+    <form action=\"$PHP_SELF\" method=post><table width=\"828\" cellspacing=\"0\" cellpadding=\"0\" height=\"13\">
+    <td width=\"826\" height=\"21\" colspan=\"2\"><div class=header>$user_arr[2] <font size=\"2\">($user_arr[4])</font></div>
+
+    <tr>
+    <td width=\"126\" height=\"20\" bgcolor=\"#F9F8F7\">written news
+    <td  height=\"20\" bgcolor=\"#F9F8F7\" width=\"698\">
+    $user_arr[6]
+    </tr>
+    <tr>
+    <td width=\"126\" height=\"20\">
+    registration date
+    <td  height=\"20\" width=\"698\">";
+	echo date("r", $user_arr[0]);
+    echo"</tr>
+    <tr>
+    <td width=\"126\" height=\"20\" bgcolor=\"#F9F8F7\">
+    电子邮件
+    <td  height=\"20\" bgcolor=\"#F9F8F7\" width=\"698\">
+    $user_arr[5]
+    </tr>
+    <tr>
+ 	<td width=\"126\" height=\"20\">
+    新密码
+    <td  height=\"20\" width=\"698\">
+
+    <input size=\"20\" name=\"editpassword\" >
+    </tr>
+    <tr>
+    <td width=\"126\" height=\"20\" bgcolor=\"#F9F8F7\">
+    访问权限
+    <td  height=\"20\" bgcolor=\"#F9F8F7\" width=\"698\">
+    <select name=editlevel>";
+
+	if($user_arr[1] == 4){echo" <option value=4 selected>4 (commenter)</option>";}    else {echo" <option value=4>4 (commenter)</option>";}
+	if($user_arr[1] == 3){echo" <option value=3 selected>3 (journalist)</option>";}   else {echo" <option value=3>3 (journalist)</option>";}
+	if($user_arr[1] == 2){echo" <option value=2 selected>2 (editor)</option>";}       else {echo" <option value=2>2 (editor)</option>";}
+	if($user_arr[1] == 1){echo" <option value=1 selected>1 (administrator)</option>";}else {echo" <option value=1>1 (administrator)</option>";}
+
+    echo"</select>
+    </tr>
+    <tr>
+    <td width=\"826\" height=\"7\" colspan=\"2\">
+    <br />
+    <input type=submit value=\"更改\">   <input type=button value=\"取消\" onClick=\"window.close();\">
+    <input type=hidden name=id value=$id>
+    <input type=hidden name=mod value=editusers>
+    <input type=hidden name=action value=doedituser>
+    </tr>
+    </table></form>
+    </body>
+    </html>";
+
+
+}
+// ********************************************************************************
+// Do Edit User
+// ********************************************************************************
+elseif($action == "doedituser")
+{
+	if(!$id){ die("This is not a valid user."); }
+
+    $old_db = file("./inc/users.db.php");
+    $new_db = fopen("./inc/users.db.php", w);
+    foreach($old_db as $old_db_line){
+       $old_db_arr = explode("|", $old_db_line);
+        if($id != $old_db_arr[0]){
+        	fwrite($new_db,"$old_db_line");
+        }else{
+        	if($editpassword != ""){
+        		$old_db_arr[3] = md5($editpassword);
+	            if($old_db_arr[2] == $username){setcookie("md5_password", $old_db_arr[3]); }
+            }
+        	fwrite($new_db,"$old_db_arr[0]|$editlevel|$old_db_arr[2]|$old_db_arr[3]|$old_db_arr[4]|$old_db_arr[5]|$old_db_arr[6]|$old_db_arr[7]||\n");
+        }
+    }
+    fclose($new_db);
+	$result = "改变保存好了。";
+
+	echo"<html>
+    <head>
+    <title>编辑用户</title>
+    </head>
+    <body bgcolor=#FFFFFF>
+    <table border=0 cellpading=0 cellspacing=0 width=100% height=100% >
+    <tr><td align=middle width=154>
+    <p align=right><img border=0 src=\"images/info.gif\" width=60 height=57>
+    </td><td align=middle width=558>
+    <p align=left>$result
+    </td></tr>
+    </table>
+    </body>
+    </html>";
+
+}
+// ********************************************************************************
+// Delete User
+// ********************************************************************************
+elseif($action == "dodeleteuser")
+{
+	if(!$id){ die("这是非法用户"); }
+
+	$old_users_file = file("./inc/users.db.php");
+	$new_users_file = fopen("./inc/users.db.php", "w");
+    foreach($old_users_file as $old_user_line){
+	    $old_user_line_arr = explode("|", $old_user_line);
+        if($id != $old_user_line_arr[0]){
+			fwrite($new_users_file, $old_user_line);
+        }else{
+			$deleted = TRUE; $user = $old_user_line_arr[2];
+        }
+    }
+	fclose($new_users_file);
+
+    msg("info","删除用户","成功地删除了这个用户。", "$PHP_SELF?mod=editusers&action=list");
+}
+?>

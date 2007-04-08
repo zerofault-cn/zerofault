@@ -1,0 +1,126 @@
+{config_load file=$umLanguageFile section="MessageList"}
+{um_welcome_message messages=$umNumMessages unread=$umNumUnread boxname=$umBoxName var="umWelcomeMessage"}
+
+<html>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<head>
+	<title>{#common_page_title#} - {#messages_title#}</title>
+	<meta http-equiv="Content-Type" content="text/html; charset={#default_char_set#}">
+	<link rel="stylesheet" href="themes/default/webmail.css" type="text/css">
+	<script language="JavaScript" src="themes/default/webmail.js" type="text/javascript"></script>
+	{$umJS}
+</head>
+
+<body leftmargin="0" marginwidth="0" topmargin="4" marginheight="3">
+
+{include file="default/pageheader.htm"}
+
+<table align="center" width="758" border="0" cellspacing="0" cellpadding="0">
+	<tr>
+    	<td valign=top width="154"> 
+			{include file="default/menu.htm"}
+    	</td>
+        <td width="1" bgcolor="#817B7B"><img width="1" height="1"></td>
+		<td align="center" valign=top width="602" height=350 bgcolor=#ffffff >
+			<form name=form1 action=msglist.php method=post>
+			<table cellspacing=1 cellpadding=1 width="100%" border=0 bgcolor=White>
+			{if $umNumMessages gt 0}
+				<tr height="20">
+					{$umForms}
+					<td colspan="6" class="default"> &nbsp;&nbsp;
+					{$umWelcomeMessage}
+					</td>
+				</tr>
+				{if $umErrorMessage neq ""}
+				<tr height="20">
+					<td colspan="6" class="default"><font color=red><b> &nbsp;&nbsp;{$umErrorMessage}</b></font></td>
+				</tr>
+				{/if}
+	
+				<tr height="20">
+				    <td width="5"  class="headers"><input type=checkbox name=chkall onclick="sel()"></td>
+				    <td width="40"  class="headers"><img src="images/msg_read.gif" border="0" width="14" height="14" alt="">&nbsp;<img src="images/attach.gif" border="0" width="6" height="14" alt="">&nbsp;<img src="./images/prior_high.gif" width=5 height=11 border=0 alt=""></td>
+
+					{if $umFolder eq "sent"}
+				    	<td width="160" class="headers">.:<b><a class="menu" href="javascript:sortby('toname')">{#to_hea#}{$umToArrow}</a></b>:.</td>
+					{else}
+				    	<td width="160" class="headers">.:<b><a class="menu" href="javascript:sortby('fromname')">{#from_hea#}{$umFromArrow}</a></b>:.</td>
+					{/if}
+				    <td width="210" class="headers">.: <b><a class="menu" href="javascript:sortby('subject')">{#subject_hea#}{$umSubjectArrow}</a></b> :.</td>
+				    <td width="120" class="headers">.:<b><a class="menu" href="javascript:sortby('date')">{#date_hea#}{$umDateArrow}</a></b>:.</td>
+				    <td width="70" class="headers">.:<b><a class="menu" href="javascript:sortby('size')">{#size_hea#}{$umSizeArrow}</a></b>:.</td>
+				</tr>
+			
+				{section name=i loop=$umMessageList}
+				<tr height="20">
+					<td class="default">{$umMessageList[i].checkbox}</td>
+					<td class="default">{$umMessageList[i].statusimg}{$umMessageList[i].attachimg}{$umMessageList[i].priorimg}</td>
+
+					{if $umFolder eq "sent"}
+						{if $umAllowFromUrl}
+							<td class="default">&nbsp;<acronym title="{#edit_mail#}{$umMessageList[i].tomail|escape:"html"|default:#no_recipient_text#}">{if $umMessageList[i].read eq "false"}<b>{/if}<a href="{$umMessageList[i].composelinksent}">{$umMessageList[i].to|truncate:30:"...":true|escape:"html"|default:#no_recipient_text#}</a>{if $umMessageList[i].read eq "false"}</b>{/if}</acronym></td>
+						{else}
+							<td class="default">&nbsp;{if $umMessageList[i].read eq "false"}<b>{/if}{$umMessageList[i].to|truncate:30:"...":true|escape:"html"|default:#no_recipient_text#}{if $umMessageList[i].read eq "false"}</b>{/if}</td>
+						{/if}
+					{else}
+						{if $umAllowFromUrl}
+							<td class="default">&nbsp;<acronym title="{#reply_mail#}{$umMessageList[i].frommail|escape:"html"|default:#no_recipient_text#}">{if $umMessageList[i].read eq "false"}<b>{/if}<a href="{$umMessageList[i].composelink}">{$umMessageList[i].from|truncate:30:"...":true|escape:"html"|default:#no_sender_text#}</a>{if $umMessageList[i].read eq "false"}</b>{/if}</acronym></td>
+						{else}
+							<td class="default">&nbsp;{if $umMessageList[i].read eq "false"}<b>{/if}{$umMessageList[i].from|truncate:30:"...":true|escape:"html"|default:#no_sender_text#}{if $umMessageList[i].read eq "false"}</b>{/if}</td>
+						{/if}
+					{/if}
+
+					<td class="default">&nbsp;<acronym title="{#read_mail#}{$umMessageList[i].subject|escape:"html"|default:#no_subject_text#}">{if $umMessageList[i].read eq "false"}<b>{/if}<a href="{$umMessageList[i].readlink}">{$umMessageList[i].subject|truncate:30:"...":true|escape:"html"|default:#no_subject_text#}</a>{if $umMessageList[i].read eq "false"}</b>{/if}</acronym></td>
+					<td class="cent">{if $umMessageList[i].read eq "false"}<b>{/if}{$umMessageList[i].date|date_format:#date_format#}{if $umMessageList[i].read eq "false"}</b>{/if}</td>
+					<td class="right">{if $umMessageList[i].read eq "false"}<b>{/if}{$umMessageList[i].size}Kb &nbsp;{if $umMessageList[i].read eq "false"}</b>{/if}</td>
+				</tr>
+				{/section}
+				
+				<tr height="20">
+					<td colspan="6" class="default">&nbsp; 
+					<a class="menu" href="javascript:delemsg()">{#delete_selected_mnu#}</a> :: 
+					<a class="menu" href="javascript:dropmsg()">{#drop_selected_mnu#}</a> :: 
+					<a class="menu" href="javascript:movemsg()">{#move_selected_mnu#}</a> 
+					<select name="aval_folders">
+						{section name=i loop=$umAvalFolders}
+							<option value="{$umAvalFolders[i].path|escape:"html"}">{$umAvalFolders[i].display|escape:"html"}
+						{/section}
+					</select>
+					</td>
+				</tr>
+				<tr height="20">
+					<td colspan="6" class="default"> &nbsp;&nbsp;
+					{if $umPreviousLink}
+						<a href="{$umPreviousLink}" class="navigation">{#previous_text#}</a> 
+					{/if}
+					&nbsp;{$umNavBar}&nbsp;
+					{if $umNextLink}
+						<a href="{$umNextLink}" class="navigation">{#next_text#}</a>
+					{/if}
+					</td>
+				</tr>
+			{else}		
+				<tr height="50">
+					<td colspan="6" class="cent"><br> &nbsp;&nbsp;{#no_messages#} <b>{$umBoxName|escape:"html"}</b><br><br></td>
+				</tr>
+			{/if}
+		
+			{if $umQuotaEnabled eq 1}
+				<tr height="20">
+					<td class="cent" colspan=6>&nbsp; {#quota_usage_info#}: {#quota_usage_used#} <b>{$umTotalUsed}</b>Kb {#quota_usage_of#} <b>{$umQuotaLimit}</b>Kb {#quota_usage_avail#}<br> {$umUsageGraph}</td>
+				</tr>
+			{/if}
+			
+			</table>
+			</form>
+		</td>
+		<td width="1" bgcolor="#817B7B"><img width="1" height="1"></td>
+	</tr>
+</table>
+
+{include file="default/pagefooter.htm"}
+
+</body>
+</html>
+

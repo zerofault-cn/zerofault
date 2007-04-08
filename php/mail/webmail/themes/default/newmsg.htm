@@ -1,0 +1,164 @@
+{config_load file=$umLanguageFile section="Newmessage"}
+<html>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<head>
+	<title>{#common_page_title#} - {#newmsg_title#}</title>
+	<link rel="stylesheet" href="themes/default/webmail.css" type="text/css">
+	<meta http-equiv="Content-Type" content="text/html; charset={#default_char_set#}">
+	<script language="JavaScript" src="themes/default/webmail.js" type="text/javascript"></script>
+
+{$umJS}
+
+</head>
+
+{if $umAdvancedEditor eq 1}
+	<div id="hiddenCompose" style="position: absolute; left: 3; top: -100; visibility: hidden; z-index: 3">	      
+	<form name="hiddencomposeForm">
+	<textarea name="hiddencomposeFormTextArea">{$umBody|escape:"html"}</textarea>
+	</form>
+	</div>
+{/if}
+
+<body leftmargin="0" marginwidth="0" topmargin="4" marginheight="3">
+
+{include file="default/pageheader.htm"}
+
+<table align="center" width="758" border="0" cellspacing="0" cellpadding="0">
+	<tr>
+		<form name=composeForm method=post action="newmsg.php" onSubmit="return false;">
+		{$umForms}
+
+		
+		<td valign=top width="15%"> 
+			{include file="default/menu.htm"}
+		</td>
+        <td width="1" bgcolor="#817B7B"><img width="1" height="1"></td>
+		<td align="center" valign=top width="602" height=350 bgcolor=#ffffff >
+			<table width="100%" border=0 cellspacing=1 cellpadding=0 >
+				<tr bgcolor=white>
+					<td width="16%" height="18" class="headerright"><a href="javascript:addrpopup()"><img src="images/bookmark_it.gif" width="16" height="16" border="0" alt="{#address_tip#}"></a> &nbsp; {#to_hea#} &nbsp;</td>
+					<td class="default">&nbsp;{$umTo}
+						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+						<input type=button name=bt_enviar value="{#send_text#}" onClick=enviar() class=button>
+					</td>
+				</tr>	
+				<tr bgcolor=white>
+					<td height="18" class="headerright"><a href="javascript:addrpopup()"><img src="images/bookmark_it.gif" width="16" height="16" border="0" alt="{#address_tip#}"></a> &nbsp; {#cc_hea#} &nbsp;</td>
+					<td class="default">&nbsp;{$umCc}</td>
+				</tr>	
+				<tr bgcolor=white>
+					<td height="18" class="headerright"><a href="javascript:addrpopup()"><img src="images/bookmark_it.gif" width="16" height="16" border="0" alt="{#address_tip#}"></a> &nbsp; {#bcc_hea#} &nbsp;</td>
+					<td class="default">&nbsp;{$umBcc}</td>
+				</tr>	
+				
+				<tr bgcolor=white>
+					<td height="18" class="headerright">{#subject_hea#} &nbsp;</td>
+					<td class="default">&nbsp;{$umSubject}</td>
+				</tr>	
+				
+				<tr>
+					<td  class="headerright">{#priority_text#} &nbsp;</td>
+					<td class="default">&nbsp;<select name="priority">
+							<option value="1"{if $umPriority eq 1} selected{/if}>{#priority_high#}
+							<option value="3"{if $umPriority eq 3} selected{/if}>{#priority_normal#}
+							<option value="5"{if $umPriority eq 5} selected{/if}>{#priority_low#}
+						</select>
+						
+						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+						
+						{if $umAdvancedEditor eq 1}
+							<a class=menu href="javascript:textmode()">{#text_mode#}</a>
+						{else}
+							<a class=menu href="javascript:htmlmode()">{#html_mode#}</a>
+						{/if}
+<!--						
+						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+						<input type=button name=bt_envspell value="Spell Check" onClick=envspell() class=button>					</td>
+-->
+				</tr>
+
+
+				<tr>
+					<td class="headerright">{#content_hea#} &nbsp;</td>
+					<td class="default">
+					{if $umAdvancedEditor eq 1}
+						{include file="default/advanced-editor.htm"}
+						<div id="hiddenCompose2" style="position: absolute; left: 3; top: -100; visibility: hidden; z-index: 3">	      
+							<textarea cols=50 rows=15 name=body>{$umBody|escape:"html"}</textarea>
+						</div>
+					{else}
+						<textarea cols=50 rows=15 name=body>{$umBody|escape:"html"}</textarea>
+					{/if}
+
+					</td>
+				</tr>
+
+				<tr bgcolor=white>
+					<td height="20" class="headerright">{#attach_hea#} &nbsp;</td>
+					<td>
+						<table width="100%" border=0 cellspacing=1 cellpadding=0>
+							{if $umHaveAttachs eq 1}
+								<tr height=15>
+									<td width="45%" class="headers">{#attch_name_hea#}</td>
+									<td width="15%" class="headerright">{#attch_size#} &nbsp;</td>
+									<td width="30%" class="headers">{#attch_type_hea#}</td>
+									<td width="10%" class="headers">{#attch_dele_hea#}</td>
+								</tr>
+	
+								{section name=i loop=$umAttachList}
+									<tr height=15>
+										<td width="50%" class="default"><img src="{$umAttachList[i].iconfile}" width="16" height="16" border="0"> &nbsp;{$umAttachList[i].name|escape:"html"}</td>
+										<td width="10%" class="right">{$umAttachList[i].size}Kb&nbsp;</td>
+										<td width="30%" class="default"> &nbsp;{$umAttachList[i].type|truncate:23:"...":true}</td>
+										<td width="10%" class="default"> &nbsp;<a href="{$umAttachList[i].link}">OK</a></td>
+									</tr>
+								{/section}
+							{else}							
+								<tr height=15>
+									<td width="100%" class="headers" colspan=4> &nbsp;{#attch_no_hea#}</td>
+								</tr>
+							{/if}
+						</table>
+						<table width="100%" border=0 cellspacing=1 cellpadding=0>
+							<tr>
+								<td width="100%" class="default"> &nbsp;<a href="javascript:upwin()" class="menu">{#attch_add_new#}</a></td>
+							</tr>
+						</table>
+					</td>
+				</tr>	
+
+				{if $umAddSignature}
+				<tr>
+					<td class="headerright">{#signature_name#} &nbsp;</td>
+					<td class="default">&nbsp;<select name="sign_name" onchange="javascript:chgsig();">
+							{section name=i loop=$umSignatureList}
+						 		<option value="{$umSignatureList[i].content}">{$umSignatureList[i].name}</option>
+							{/section}
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<td  class="headerright">{#signature_content#} &nbsp;</td>
+					<td class="default">&nbsp;<textarea name=sign cols=50 rows=5></textarea></td>
+				</tr>
+				{/if}
+
+				<tr height=30>
+					<td class="default" colspan=2 align=center>
+						<input type=hidden name=bgcolor value="{#umBgColor#}">
+						<input type=button name=bt_enviar value="{#send_text#}" onClick=enviar() class=button>
+					</td>
+				</tr>	
+			</table>
+		</td>
+		<td width="1" bgcolor="#817B7B"><img width="1" height="1"></td>
+		</form>
+	</tr>
+</table>
+
+{include file="default/pagefooter.htm"}
+
+</body>
+</html> 

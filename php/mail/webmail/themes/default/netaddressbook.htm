@@ -1,0 +1,112 @@
+{config_load file=$umLanguageFile section="AddressBook"}
+
+<html>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<head>
+    <title>{#common_page_title#} - {#netadr_title#}</title>
+	<meta http-equiv="Content-Type" content="text/html; charset={#default_char_set#}">
+	<link rel="stylesheet" href="themes/default/webmail.css" type="text/css">
+	<script language="JavaScript" src="themes/default/webmail.js" type="text/javascript"></script>
+
+{$umJS}
+
+</head>
+
+<body leftmargin="0" marginwidth="0" topmargin="4" marginheight="3">
+
+{include file="default/pageheader.htm"}
+
+<table align="center" width="758" border="0" cellspacing="0" cellpadding="0">
+	<tr>
+    	<td valign=top width="154"> 
+			{include file="default/menu.htm"}
+		</td>
+        <td width="1" bgcolor="#817B7B"><img width="1" height="1"></td>
+		<td align="center" valign=top width="602" height=350 bgcolor=#ffffff >
+			<table width="100%" border="0" cellspacing="1" cellpadding="0">
+		        <tr height=20>
+		            <td width="30" class="headers"><a class="menu" href="{$linklist[100]}">All</a></td>
+		            <td width="20" class="headers"><a class="menu" href="{$linklist[0]}">A</a></td>
+		            <td width="20" class="headers"><a class="menu" href="{$linklist[1]}">B</a></td>
+		            <td width="20" class="headers"><a class="menu" href="{$linklist[2]}">C</a></td>
+		            <td width="20" class="headers"><a class="menu" href="{$linklist[3]}">D</a></td>
+		            <td width="20" class="headers"><a class="menu" href="{$linklist[4]}">E</a></td>
+		            <td width="20" class="headers"><a class="menu" href="{$linklist[5]}">F</a></td>
+		            <td width="20" class="headers"><a class="menu" href="{$linklist[6]}">G</a></td>
+		            <td width="20" class="headers"><a class="menu" href="{$linklist[7]}">H</a></td>
+		            <td width="20" class="headers"><a class="menu" href="{$linklist[8]}">I</a></td>
+		            <td width="20" class="headers"><a class="menu" href="{$linklist[9]}">J</a></td>
+		            <td width="20" class="headers"><a class="menu" href="{$linklist[10]}">K</a></td>
+		            <td width="20" class="headers"><a class="menu" href="{$linklist[11]}">L</a></td>
+		            <td width="20" class="headers"><a class="menu" href="{$linklist[12]}">M</a></td>
+		            <td width="20" class="headers"><a class="menu" href="{$linklist[13]}">N</a></td>
+		            <td width="20" class="headers"><a class="menu" href="{$linklist[14]}">O</a></td>
+		            <td width="20" class="headers"><a class="menu" href="{$linklist[15]}">P</a></td>
+		            <td width="20" class="headers"><a class="menu" href="{$linklist[16]}">Q</a></td>
+		            <td width="20" class="headers"><a class="menu" href="{$linklist[17]}">R</a></td>
+		            <td width="20" class="headers"><a class="menu" href="{$linklist[18]}">S</a></td>
+		            <td width="20" class="headers"><a class="menu" href="{$linklist[19]}">T</a></td>
+		            <td width="20" class="headers"><a class="menu" href="{$linklist[20]}">U</a></td>
+		            <td width="20" class="headers"><a class="menu" href="{$linklist[21]}">V</a></td>
+		            <td width="20" class="headers"><a class="menu" href="{$linklist[22]}">W</a></td>
+		            <td width="20" class="headers"><a class="menu" href="{$linklist[23]}">X</a></td>
+		            <td width="20" class="headers"><a class="menu" href="{$linklist[24]}">Y</a></td>
+		            <td width="20" class="headers"><a class="menu" href="{$linklist[25]}">Z</a></td>
+				</tr>
+			</table>
+	      	<br>
+			<table width="100%" border="0" cellspacing="1" cellpadding="0">
+                <tr height=20>		          
+	    	        <td width="20%" class="headers">.:<b>{#netadr_name#}</b>:.</td>
+	    	        <td width="40%" class="headers">.:<b>{#netadr_mail#}</b>:.</td>
+	    	        <td width="20%" class="headers">.:<b>{#netadr_phone#}</b>:.</td>
+	    	        <td width="20%" class="headers">.:<b>{#netadr_addcontact#}</b>:.</td>
+	    		</tr>
+			    	
+			    {section name=i loop=$netulist}
+					<tr height="20">
+						<td class="default">&nbsp;<a href="{$netulist[i].viewlink}" title="{#netadr_viewinfo#}">{$netulist[i].name}</a></td>
+						<td class="default">&nbsp;<a href="{$netulist[i].maillink}">{$netulist[i].mail}</a></td>
+						<td class="default">&nbsp;{$netulist[i].phone}</td>
+						<td class="default" align="center">&nbsp;<a href="{$netulist[i].addcontactlink}" title="{#netadr_addcontact#}"><img src="themes/default/images/address.gif" width=16 height=16 border=0></a></td>
+					</tr>
+			    {/section}
+				
+		       {if $havenav eq 1}
+                       <tr height=20>		          
+		            <td colspan="4" class="default"> &nbsp;&nbsp;
+	    	        	<a class="menu" href="{$forwardlink}">{#netadr_forward#}</a>
+	    	        	&nbsp;&nbsp;
+	    	        	<a class="menu" href="{$nextlink}">{#netadr_next#}</a>
+	    	            </td>
+	    		</tr>
+	    		{/if}
+								    	
+			</table>
+	      	<br>
+			<form method="POST" action="netaddressbook.php" name="searchform">
+				<table width="100%" border="0" cellspacing="1" cellpadding="0">
+					<tr height=30>
+		    		<td class="headerright" width="30%">{#netadr_lookup_tip#} &nbsp;</td>
+		    		<td class="default" width="70%">&nbsp;
+		    		    <input size="40" type=text name="ldapsearchword" class="textbox">
+		    		    <input type="submit" value="{#netadr_lookup#}" class=button >
+		    		</td>
+		    		</tr>
+				</table>
+				
+				<input type="hidden" name="sid" value="{$umSid}">
+				<input type="hidden" name="tid" value="{$umTid}">
+				<input type="hidden" name="lid" value="{$umLid}">
+				<input type="hidden" name="retid" value="{$umRetid}">
+			</form>
+	</td>
+	<td width="1" bgcolor="#817B7B"><img width="1" height="1"></td>
+	</tr>
+</table>
+
+{include file="default/pagefooter.htm"}
+
+</body>
+</html>

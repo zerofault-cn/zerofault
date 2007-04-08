@@ -1,0 +1,84 @@
+{config_load file=$umLanguageFile section="Signature"}
+<html>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<head>
+	<title>{#common_page_title#} - {#sign_title#}</title>
+	<meta http-equiv="Content-Type" content="text/html; charset={#default_char_set#}">
+	<link rel="stylesheet" href="themes/default/webmail.css" type="text/css">
+	<script language="JavaScript" src="themes/default/webmail.js" type="text/javascript"></script>
+	
+	{$umJS}
+
+{literal}
+<script language="JavaScript" type="text/javascript">
+	function save_check()
+	{
+		var name = document.form1.name.value;
+		var content = document.form1.content.value;
+		
+		if (name == "" || content == ""){
+{/literal}
+			alert("{#sign_empty#}");
+{literal}
+			return;
+		}
+		
+		document.form1.submit();
+	}
+</script>
+{/literal}
+
+</head>
+
+<body leftmargin="0" marginwidth="0" topmargin="4" marginheight="3">
+
+{include file="default/pageheader.htm"}
+
+<table align="center" width="758" border="0" cellspacing="0" cellpadding="0">
+	<tr>
+    	<td valign=top width="154"> 
+			{include file="default/menu.htm"}
+	    </td>
+        <td width="1" bgcolor="#817B7B"><img width="1" height="1"></td>
+		<td align="center" valign=top width="602" height=350 bgcolor=#ffffff >
+			<form name=form1 method=post action=signature.php>
+			<input type=hidden name=sid value="{$umSid}">
+			<input type=hidden name=id value="{$umSignID}">
+			<input type=hidden name=lid value="{$umLid}">
+			<input type=hidden name=tid value="{$umTid}">
+			<input type=hidden name=opt value="{$umOpt}">
+
+			<table width="100%" border="0" cellspacing="1" cellpadding="0">
+				<tr height="20">
+					<td class="headerright" width="20%">{#sign_name#} &nbsp;</td>
+					<td class=default>&nbsp;
+						<input size="40" type=text name="name" value="{$umSignName|escape:"html"}" class="textbox">
+						<font color=red>*</font>
+					</td>
+				</tr>
+				<tr height="20">
+					<td class="headerright">{#sign_content#} &nbsp;</td>
+					<td class=default>&nbsp;
+						<textarea rows=6 cols=30 name="content" class="textarea">{$umSignContent|escape:"html"}</textarea>
+						<font color=red>*</font>
+					</td>
+				</tr>
+				<tr height="30">
+					<td colspan=2 class=default align=center height=30>
+						<input type=button value="{#sign_save#}" class=button onclick="javascript:save_check();">
+						&nbsp;
+						<input type=button value="{#sign_back#}" class=button onClick="location = '{$umGoBack}'">
+					</td>
+				</tr>
+			</table>
+			</form>
+		</td>
+		<td width="1" bgcolor="#817B7B"><img width="1" height="1"></td>
+	</tr>
+</table>
+	
+{include file="default/pagefooter.htm"}
+
+</body>
+</html> 

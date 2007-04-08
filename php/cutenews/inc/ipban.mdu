@@ -1,0 +1,115 @@
+<?PHP
+if($member_db[1] != 1){ msg("error", "拒绝访问", "您没有权限处理该部分内容"); }
+// ********************************************************************************
+// Add IP
+// ********************************************************************************
+if($action == "add")
+{
+	if(!$add_ip){ msg("error","错误！！！","IP不能空着", "$PHP_SELF?mod=ipban"); }
+
+    $all_ip = file("./inc/ipban.db.php");
+    $exist = FALSE;
+    foreach($all_ip as $ip_line)
+    {
+		$ip_arr = explode("|", $ip_line);
+        if($ip_arr[0] == $add_ip){ $exist = TRUE; }
+    }
+    if(!$exist)
+    {
+	    $new_ips = fopen("./inc/ipban.db.php", "a");
+	    $add_ip = stripslashes( preg_replace(array("'\|'",), array("I",), $add_ip) );
+		fwrite($new_ips, "$add_ip|0||\n");
+		fclose($new_ips);
+    }
+}
+// ********************************************************************************
+// Remove IP
+// ********************************************************************************
+elseif($action == "remove")
+{
+	if(!$remove_ip){ msg("error","错误！！！","IP不能空着", "$PHP_SELF?mod=ipban"); }
+
+    $old_ips = file("./inc/ipban.db.php");
+    $new_ips = fopen("./inc/ipban.db.php", "w");
+
+    foreach($old_ips as $old_ip_line){
+    	$ip_arr = explode("|", $old_ip_line);
+	    if($ip_arr[0] != stripslashes($remove_ip)){
+			fwrite($new_ips, $old_ip_line);
+        }
+    }
+	fclose($new_ips);
+}
+// ********************************************************************************
+// List all IP
+// ********************************************************************************
+echoheader("options", "IP阻隔");
+
+echo"<table border=0 cellpading=0 cellspacing=0 width=654  >
+<form action=\"$PHP_SELF\" method=post>
+
+<tr>
+<td width=71>
+<td width=217>
+<p align=\"right\">IP. <input type=text name=add_ip>
+<td width=158>
+<p align=\"left\">
+<input type=submit value=\"阻隔该IP\">
+<input type=hidden name=action value=add>
+<input type=hidden name=mod value=ipban>
+<td width=73>
+<td width=121>
+</tr></form>
+
+<tr>
+<td width=71>
+<td width=217>
+<td width=158>
+&nbsp;<br />
+&nbsp;
+<td width=73>
+<td width=121>
+</tr>
+
+<tr>
+<td width=71>
+<td width=217>
+IP
+<td width=158>
+<p align=\"center\">
+已阻隔的时间
+<td width=73 align=\"center\">
+取消阻隔
+<td width=121>
+</tr>";
+
+
+$all_ips = file("./inc/ipban.db.php");
+foreach($all_ips as $ip_line)
+{
+	if(!eregi("<\?",$ip_line))
+    {
+        if($i%2 == 0){ $bg = "bgcolor=#F7F6F4"; }else{ $bg = ""; }
+        $i++;
+        $ip_arr = explode("|", $ip_line);
+        $ip_arr[0] = stripslashes( preg_replace(array("'\"'", "'\''"), array("&quot;", "&#039;"), $ip_arr[0]) );
+        echo"
+        <tr>
+        <td height=18 width=\"71\">
+        <td height=18  $bg width=\"217\" align=\"left\">
+        <a href=\"http://www.geektools.com/cgi-bin/proxy.cgi?targetnic=auto&query=$ip_arr[0]\" target=_blank title=\"关于该ip的更多信息\">$ip_arr[0]</a>
+   	    <td height=18 $bg width=\"158\" align=\"center\">
+        <p align=\"center\">$ip_arr[1]<td height=18 $bg width=\"73\" align=\"center\">
+        <a href=\"$PHP_SELF?mod=ipban&action=remove&remove_ip=$ip_arr[0]\">[取消阻隔]</a><td height=18 width=\"121\">
+        </tr>
+        ";
+    }
+}
+
+
+
+echo"
+</table><br />";
+
+echofooter();
+?>

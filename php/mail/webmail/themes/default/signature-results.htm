@@ -1,0 +1,48 @@
+{config_load file=$umLanguageFile section="Signature"}
+<html>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<head>
+	<title>{#common_page_title#} - {#sign_title#}</title>
+	<meta http-equiv="Content-Type" content="text/html; charset={#default_char_set#}">
+	<link rel="stylesheet" href="themes/default/webmail.css" type="text/css">
+	<script language="JavaScript" src="themes/default/webmail.js" type="text/javascript"></script>
+	
+	{$umJS}
+
+</head>
+
+<body leftmargin="0" marginwidth="0" topmargin="4" marginheight="3">
+
+{include file="default/pageheader.htm"}
+
+<table align="center" width="758" border="0" cellspacing="0" cellpadding="0">
+	<tr>
+    	<td valign=top width="154"> 
+			{include file="default/menu.htm"}
+	    </td>
+        <td width="1" bgcolor="#817B7B"><img width="1" height="1"></td>
+		<td align="center" valign=top width="602" height=350 bgcolor=#ffffff >
+			<table width="100%" border="0" cellspacing="1" cellpadding="0">
+				<tr height="100">
+					<td class=default9 align=center>
+					<br>
+					{if $umOpt eq 1}{#sign_saved#}
+					{elseif $umOpt eq 2}{#sign_added#}
+					{elseif $umOpt eq 3}{#sign_deleted#}
+					{elseif $umOpt eq -1}{#sign_full#}
+					{/if}
+					<br><br>
+					<a href="{$umGoBack}">{#sign_back#}</a>
+					</td>
+				</tr>
+			</table>
+		</td>
+		<td width="1" bgcolor="#817B7B"><img width="1" height="1"></td>
+	</tr>
+</table>
+	
+{include file="default/pagefooter.htm"}
+
+</body>
+</html> 

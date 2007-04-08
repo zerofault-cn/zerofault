@@ -1,0 +1,112 @@
+{config_load file=$umLanguageFile section="Search"}
+
+<html>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<head>
+	<title>{#common_page_title#}</title>
+	<meta http-equiv="Content-Type" content="text/html; charset={#default_char_set#}">
+	<link rel="stylesheet" href="themes/default/webmail.css" type="text/css">
+	<script language="JavaScript" src="themes/default/webmail.js" type="text/javascript"></script>
+
+{$umJS}
+
+</head>
+
+<body leftmargin="0" marginwidth="0" topmargin="4" marginheight="3">
+
+{include file="default/pageheader.htm"}
+
+<table align="center" width="758" border="0" cellspacing="0" cellpadding="0">
+	<tr>
+    	<td valign=top width="154"> 
+			{include file="default/menu.htm"}
+		</td>
+        <td width="1" bgcolor="#817B7B"><img width="1" height="1"></td>
+		<td align="center" valign=top width="602" height=350 bgcolor=#ffffff >
+			<table cellspacing=1 cellpadding=0 width="100%" border=0 bgcolor=White>
+			<tr height="20">
+				<td class="default" colspan="6">&nbsp; {#sch_information_text#} </td>
+			</tr>
+			<tr height="130">
+				<td colspan=6>
+					<form name="form1" action="search.php" method="POST">
+					<input type=hidden name=tid value="{$umTid}">
+					<input type=hidden name=lid value="{$umLid}">
+					<input type=hidden name=sid value="{$umSid}">
+					
+					<table cellspacing=1 cellpadding=0 width="100%" border=0 bgcolor=White>
+						<tr height="20">
+							<td class="headerright" width="20%">{#sch_from_hea#}&nbsp;</td>
+							<td class="default">&nbsp;<input type=text name=srcFrom value="{$umInputFrom|escape:"html"}" class="textbox" size="40" maxlength="40"></td>
+						</tr>
+						<tr height="20">
+							<td class="headerright">{#sch_to_hea#}&nbsp;</td>
+							<td class="default">&nbsp;<input type=text name=srcTo value="{$umInputTo|escape:"html"}" class="textbox" size="40" maxlength="40"></td>
+						</tr>
+						<tr height="20">
+							<td class="headerright">{#sch_cc_hea#}&nbsp;</td>
+							<td class="default">&nbsp;<input type=text name=srcCc value="{$umInputCc|escape:"html"}" class="textbox" size="40" maxlength="40"></td>
+						</tr>
+						<tr height="20">
+							<td class="headerright">{#sch_subject_hea#}&nbsp;</td>
+							<td class="default">&nbsp;<input type=text name=srcSubject value="{$umInputSubject|escape:"html"}" class="textbox" size="40" maxlength="40"></td>
+						</tr>
+						<tr height="20">
+							<td class="headerright">{#sch_body_hea#}&nbsp;</td>
+							<td class="default">&nbsp;<input type=text name=srcBody value="{$umInputBody|escape:"html"}" class="textbox" size="40" maxlength="40"></td>
+						</tr>
+						<tr height="30">
+							<td class="default">&nbsp;</td>
+							<td class="default">&nbsp;<input type=submit value="{#sch_button_text#}" class=button><br></td>
+						</tr>
+					</table>			
+					</form>
+				</td>
+			</tr>
+			<tr height="10">
+				<td colspan="6">&nbsp;</td>
+			</tr>
+
+			{if $umDoSearch}
+				<tr height="20">
+				    <td width="35"  class="headers"><img src="images/msg_read.gif" border="0" width="14" height="14" alt="">&nbsp;<img src="images/attach.gif" border="0" width="6" height="14" alt="">&nbsp;<img src="./images/prior_high.gif" width=5 height=11 border=0 alt=""></td>
+			    	<td width="90" class="headers">.:<b>{#sch_from_hea#}</b>:.</td>
+			    	<td width="90" class="headers">.:<b>{#sch_to_hea#}</b>:.</td>
+				    <td width="190" class="headers">.:<b>{#sch_subject_hea#}</b>:.</td>
+				    <td width="100" class="headers">.:<b>{#sch_date_hea#}</b>:.</td>
+				    <td width="100" class="headers">.:<b>{#sch_folder_hea#}</b>:.</td>
+				</tr>
+
+				{section name=i loop=$umMessageList}
+					{um_translatebox value=$umMessageList[i].folder var="umBoxName"}	
+					<tr height="20">
+						<td class="default">{$umMessageList[i].statusimg}{$umMessageList[i].attachimg}{$umMessageList[i].priorimg}</td>
+						{if $umAllowFromUrl}
+							<td class="default">&nbsp;{if $umMessageList[i].read eq "false"}<b>{/if}<a href="{$umMessageList[i].composelink}">{$umMessageList[i].from|truncate:30:"...":true|escape:"html"|default:#no_sender_text#}</a>{if $umMessageList[i].read eq "false"}</b>{/if}</td>
+							<td class="default">&nbsp;{if $umMessageList[i].read eq "false"}<b>{/if}<a href="{$umMessageList[i].composelinksent}">{$umMessageList[i].to|truncate:30:"...":true|escape:"html"|default:#no_recipient_text#}</a>{if $umMessageList[i].read eq "false"}</b>{/if}</td>
+						{else}
+							<td class="default">&nbsp;{if $umMessageList[i].read eq "false"}<b>{/if}{$umMessageList[i].from|truncate:30:"...":true|escape:"html"|default:#no_sender_text#}{if $umMessageList[i].read eq "false"}</b>{/if}</td>
+							<td class="default">&nbsp;{if $umMessageList[i].read eq "false"}<b>{/if}{$umMessageList[i].to|truncate:30:"...":true|escape:"html"|default:#no_recipient_text#}{if $umMessageList[i].read eq "false"}</b>{/if}</td>
+						{/if}
+						<td class="default">&nbsp;{if $umMessageList[i].read eq "false"}<b>{/if}<a href="{$umMessageList[i].readlink}">{$umMessageList[i].subject|truncate:30:"...":true|escape:"html"|default:#no_subject_text#}</a>{if $umMessageList[i].read eq "false"}</b>{/if}</td>
+						<td class="cent">{if $umMessageList[i].read eq "false"}<b>{/if}{$umMessageList[i].date|date_format:#date_format#}{if $umMessageList[i].read eq "false"}</b>{/if}</td>
+						<td class="default">&nbsp;{if $umMessageList[i].read eq "false"}<b>{/if}<a href="{$umMessageList[i].folderlink}">{$umBoxName}</a>{if $umMessageList[i].read eq "false"}</b>{/if}</td>
+					</tr>
+				{sectionelse}
+					<tr height="50">
+					    <td width="100%" class="default" colspan="6"><center><br>{#sch_no_results#}<br><br></center></td>
+					</tr>
+				{/section}
+			{/if}
+		</table>
+		</td>
+		<td width="1" bgcolor="#817B7B"><img width="1" height="1"></td>
+	</tr>
+</table>
+
+{include file="default/pagefooter.htm"}
+
+</body>
+</html>
+

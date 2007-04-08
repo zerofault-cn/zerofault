@@ -1,0 +1,178 @@
+<?PHP
+
+if($member_db[1] > 3){ msg("error", "拒绝访问", "您没有权限访问添加新闻"); }
+if ($action == "addnews"){
+
+    $cat_lines = file("./inc/category.db.php");
+	echoheader("addnews", "添加新闻");
+
+    echo "
+    <SCRIPT LANGUAGE=\"JavaScript\">
+	function preview(){
+    if(document.addnews.short_story.value == '' || document.addnews.title.value == ''){ alert('文章必须包含标题和简介'); }
+    else{
+	    dd=window.open('','prv','height=400,width=750,resizable=1,scrollbars=1')
+		document.addnews.mod.value='preview';document.addnews.target='prv'
+		document.addnews.submit();dd.focus()
+		setTimeout(\"document.addnews.mod.value='addnews';document.addnews.target='_self'\",500)
+	}
+    }
+	</SCRIPT>
+
+    <form method=post name=addnews action=\"$PHP_SELF\">
+	<table border=0 cellpading=0 cellspacing=0 width=\"654\"  >
+
+    <tr>
+	<td width=\"75\">
+	标题
+	<td width=\"575\" colspan=\"2\">
+	<input type=text size=\"55\" name=\"title\" tabindex=1>
+	</tr>
+
+
+    ";
+
+	if($config_use_avatar == "yes"){
+	    echo"<tr>
+		<td width=\"75\">
+		表情URL
+		<td width=\"575\" colspan=\"2\">
+		<input tabindex=2 type=text size=\"42\" value=\"$member_db[8]\" name=\"manual_avatar\" >&nbsp;&nbsp;&nbsp;( 可选 )
+		</tr>";
+	}
+
+	if(count($cat_lines) > 0){
+		echo"<tr>
+		<td width=\"75\">
+		栏目
+		<td width=\"575\" colspan=\"2\">
+		<select name=category tabindex=3>\n
+        <option value=\"\"> </option>\n";
+	        foreach($cat_lines as $single_line){
+				$cat_arr = explode("|", $single_line);
+                $if_is_selected = "";
+                if($category == $cat_arr[0]){ $if_is_selected = " selected "; }
+                echo"<option $if_is_selected value=\"$cat_arr[0]\">$cat_arr[1]</option>\n";
+	    	}
+	    echo"</select></tr>";
+	}
+    echo"<tr>
+	<td width=\"75\" valign=\"top\">
+	<br />简介
+	<td>
+	<textarea rows=\"8\" cols=\"74\" name=\"short_story\" tabindex=4></textarea>
+	<td width=\"108\" valign=\"top\">
+	<p align=\"center\"><a href=# onclick=\"window.open('$PHP_SELF?&mod=images&action=quick&area=short_story', '_Addimage', 'HEIGHT=500,resizable=yes,scrollbars=yes,WIDTH=360');return false;\" target=\"_Addimage\"><br />
+	[插入图象]</a><br />
+	<a href=# onclick=\"window.open('$PHP_SELF?&mod=about&action=cutecode&target=short_story', '_CuteCode', 'HEIGHT=280,resizable=yes,scrollbars=yes,WIDTH=360');return false;\" target=\"_Addimage\">[快捷标签]</a><br />
+	<br />
+
+	<script>
+	function insertext(text,area){
+	if(area==\"short\"){document.addnews.short_story.focus(); document.addnews.short_story.value=document.addnews.short_story.value +\" \"+ text; document.addnews.short_story.focus() }
+	if(area==\"full\") {document.addnews.full_story.focus(); document.addnews.full_story.value=document.addnews.full_story.value +\" \"+ text; document.addnews.full_story.focus()}
+	}
+    </script>";
+
+    echo insertSmilies('short', 4);
+
+    echo"</tr>
+	<tr>
+	<td width=\"75\" valign=\"top\">
+	<br />详细内容
+	<td>
+	<textarea rows=\"12\" cols=\"74\" name=\"full_story\" tabindex=5></textarea>
+	<td width=\"108\" valign=\"top\">
+	<p align=\"center\"><br />
+	<a href=# onclick=\"window.open('$PHP_SELF?mod=images&action=quick&area=full_story', '_Addimage', 'HEIGHT=500,resizable=yes,scrollbars=yes,WIDTH=360');return false;\" target=\"_Addimage\">[插入图象]</a><br />
+	<a href=# onclick=\"window.open('$PHP_SELF?&mod=about&action=cutecode&target=full_story', '_Addimage', 'HEIGHT=280,resizable=yes,scrollbars=yes,WIDTH=360');return false;\" target=\"_CuteCode\">[快捷标签]</a><br />
+	<br />";
+
+	echo insertSmilies('full', 4);
+
+	echo"</tr>
+	<tr>
+	<td width=\"75\">
+	<td width=\"575\" colspan=\"2\">
+	<input type=submit value=\"     添加新闻     \" accesskey=\"s\">&nbsp;
+    <input type=button value=\"预览\" onClick=\"preview()\" accesskey=\"p\">&nbsp; <a href=\"javascript:ShowOrHide('options','')\">[选项]</a>
+
+	</tr>
+
+	<tr id='options' style='display:none;'>
+	<td width=\"75\">
+    <br>选项
+	<td width=\"575\" colspan=\"4\">
+    &nbsp;<br>
+    <input type=checkbox value=\"yes\" name=\"if_convert_new_lines\" checked>将换行符转换为&lt;br /&gt;&nbsp;&nbsp; <input type=checkbox value=\"yes\" name=\"if_use_html\" checked>
+    使用HTML格式
+	</tr>
+
+	</table>
+	<input type=hidden name=mod value=addnews>
+	<input type=hidden name=action value=doaddnews>
+    </form><br />";
+
+    echofooter();
+}
+// ********************************************************************************
+// Do add News to news.txt
+// ********************************************************************************
+elseif($action == "doaddnews")
+{
+	if($if_convert_new_lines	== "yes"){ $n_to_br		= TRUE; }
+    if($if_use_html				== "yes"){ $use_html	= TRUE; }
+
+	$full_story  = replace_news("add", $full_story, $n_to_br, $use_html);
+	$short_story = replace_news("add", $short_story, $n_to_br, $use_html);
+	$title 		 = replace_news("add", $title, TRUE, $use_html);
+
+	if(!$title){ msg("error","错误!!!","标题不能为空", "javascript:history.go(-1)"); }
+	if(!$short_story){ msg("error","错误!!!","内容不能为空", "javascript:history.go(-1)"); }
+
+    $added_time = time()+ ($config_date_adjust*60);
+    if($member_db[7] == 1){ $added_by_email = $member_db[5]; }
+    else{ $added_by_email = "none"; }
+
+
+// Save The News Article In Active_News_File
+
+	$all_db = file("news.txt");
+
+    foreach($all_db as $news_line){
+    	$news_arr = explode("|", $news_line);
+    	if($news_arr[0] == $added_time){ $added_time++; }
+    }
+
+	$news_file = fopen("news.txt", "w");
+	fwrite($news_file, "$added_time|$member_db[2]|$title|$short_story|$full_story|$manual_avatar|$category||\n");
+	foreach ($all_db as $line){ fwrite($news_file, "$line");}
+	fclose($news_file);
+
+// Add Blank Comment In The Active_Comments_File
+	$old_com_db = file("comments.txt");
+	$new_com_db = fopen("comments.txt", "w");
+	fwrite($new_com_db, "$added_time|>|\n");
+	foreach ($old_com_db as $line){ fwrite($new_com_db, "$line");}
+	fclose($new_com_db);
+
+// Incrase By 1 The Number of Written News for Current User
+    $old_user_db = file("./inc/users.db.php");
+    $new_user_db = fopen("./inc/users.db.php", w);
+    foreach($old_user_db as $old_user_db_line){
+    	$old_user_db_arr = explode("|", $old_user_db_line);
+    	if($username!=$old_user_db_arr[2]){
+        	fwrite($new_user_db,"$old_user_db_line");
+        }
+        else
+        {
+        	$countplus = $old_user_db_arr[6]+1;
+        	fwrite($new_user_db,"$old_user_db_arr[0]|$old_user_db_arr[1]|$old_user_db_arr[2]|$old_user_db_arr[3]|$old_user_db_arr[4]|$old_user_db_arr[5]|$countplus|$old_user_db_arr[7]|$old_user_db_arr[8]||\n");
+        }
+    }
+    fclose($new_user_db);
+
+    msg("info","添加新闻完毕", "成功的添加了新闻条目");
+
+}
+?>

@@ -1,0 +1,119 @@
+{config_load file=$umLanguageFile section="Userinfo"}
+
+<html>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<head>
+	<title>{#common_page_title#} - {#userinfo_title#}</title>
+	<meta http-equiv="Content-Type" content="text/html; charset={#default_char_set#}">
+	<link rel="stylesheet" href="themes/default/webmail.css" type="text/css">
+	<script language="JavaScript" src="themes/default/webmail.js" type="text/javascript"></script>
+
+{$umJS}
+
+</head>
+
+<body leftmargin="0" marginwidth="0" topmargin="4" marginheight="3">
+
+{include file="default/pageheader.htm"}
+
+<table align="center" width="758" border="0" cellspacing="0" cellpadding="0">
+	<tr>
+    	<td valign=top width="154"> 
+			{include file="default/menu.htm"}
+	</td>
+        <td width="1" bgcolor="#817B7B"><img width="1" height="1"></td>
+	<td align="center" valign=top width="602" height=350 bgcolor=#ffffff >
+		<table cellspacing=1 cellpadding=0 width="100%" border=0 bgcolor=White>
+			<tr>
+				<td>
+					<form name="form1" action="userinfo.php" method="POST">
+					<input type=hidden name=tid value="{$umTid}">
+					<input type=hidden name=lid value="{$umLid}">
+					<input type=hidden name=sid value="{$umSid}">
+					<input type=hidden name=saveflag value=1>
+					<input type="hidden" name=m_publicinfo value="{$info_publicinfo}">	
+														
+					<table cellspacing=1 cellpadding=0 width="100%" border=0 bgcolor=White>
+						<tr height="20">
+							<td class="headerright" width="20%">{#userinfo_user#}&nbsp;</td>
+							<td class="default">&nbsp;{$info_user}<input type=hidden name=m_name value="{$info_name|escape:"html"}"></td>
+						</tr>						
+						<tr height="20">
+							<td class="headerright" width="20%">{#userinfo_fullname#}&nbsp;</td>
+							<td class="default">&nbsp;<input type=text name=m_fullname value="{$info_fullname|escape:"html"}" class="textbox" size="40" maxlength="64"></td>
+						</tr>
+						
+						<tr height="20">
+							<td class="headerright" width="20%">{#userinfo_homeaddress#}&nbsp;</td>
+							<td class="default">&nbsp;<input type=text name=m_homeaddress value="{$info_homeaddress|escape:"html"}" class="textbox" size="40" maxlength="256"></td>
+						</tr>
+						<tr height="20">
+							<td class="headerright" width="20%">{#userinfo_homephone#}&nbsp;</td>
+							<td class="default">&nbsp;<input type=text name=m_homephone value="{$info_homephone|escape:"html"}" class="textbox" size="40" maxlength="32"></td>
+						</tr>
+						<tr height="20">
+							<td class="headerright" width="20%">{#userinfo_mobile#}&nbsp;</td>
+							<td class="default">&nbsp;<input type=text name=m_mobile value="{$info_mobile|escape:"html"}" class="textbox" size="40" maxlength="32"></td>
+						</tr>
+						
+						<tr height="20">
+							<td class="headerright" width="20%">{#userinfo_organizationunit#}&nbsp;</td>
+							<td class="default">&nbsp;<input type=text name=m_organizationunit value="{$info_organizationunit|escape:"html"}" class="textbox" size="40" maxlength="128"></td>
+						</tr>
+						<tr height="20">
+							<td class="headerright" width="20%">{#userinfo_jobtitle#}&nbsp;</td>
+							<td class="default">&nbsp;<input type=text name=m_jobtitle value="{$info_jobtitle|escape:"html"}" class="textbox" size="40" maxlength="128"></td>
+						</tr>
+						<tr height="20">
+							<td class="headerright" width="20%">{#userinfo_office#}&nbsp;</td>
+							<td class="default">&nbsp;<input type=text name=m_office value="{$info_office|escape:"html"}" class="textbox" size="40" maxlength="128"></td>
+						</tr>
+						<tr height="20">
+							<td class="headerright" width="20%">{#userinfo_officephone#}&nbsp;</td>
+							<td class="default">&nbsp;<input type=text name=m_officephone value="{$info_officephone|escape:"html"}" class="textbox" size="40" maxlength="32"></td>
+						</tr>
+						<tr height="50">
+							<td class=headerright width="20%">{#userinfo_description#}&nbsp;</td>
+							<td class=default>&nbsp;<textarea name=m_description cols=35 rows=5>{$info_description|escape:"html"}</textarea></td>
+						</tr>
+<!--
+						<tr height="20">
+						    <td class="headerright" width="20%">&nbsp;</td>
+							<td class="default">&nbsp;<input type="checkbox" name=m_publicinfo value="1" {$info_publicinfo}>{#userinfo_publicinfo#}</td>
+						</tr>
+-->						
+						{if $showtype eq 1}
+						<tr height="30">
+							<td class="default" colspan=2 align=center>
+							<font color=#ff0000>
+							{if $errortype eq -1}
+								{#userinfo_failure1#}
+							{elseif $errortype eq 0}
+								{#userinfo_success#}
+							{else}
+								{#userinfo_failure2#}
+							{/if}
+							</font>							
+							</td>
+						</tr>
+						{/if}
+										
+						<tr height="30">
+							<td class="default" colspan=2 align=center><input type=submit value="{#userinfo_save#}" class=button></td>
+						</tr>
+					</table>			
+					</form>
+				</td>
+			</tr>
+		</table>
+	</td>
+	<td width="1" bgcolor="#817B7B"><img width="1" height="1"></td>
+	</tr>
+</table>
+
+{include file="default/pagefooter.htm"}
+
+</body>
+</html>
+

@@ -1,0 +1,543 @@
+#
+# by erroswe@yahoo.se
+#
+common_page_title			        = WebMail | Power by Magic Winmail Server 3.0
+homepage				        = Power by Magic Winmail Server
+homepage_url			     		= http://www.magicwinmail.net
+contact_us				        = Kontakta oss
+webmaster_mail					= support@magicwinmail.net
+banner_url				        = images/banner.gif
+
+# CharSet 
+default_char_set			        = iso-8859-1
+
+# Användarvänliga namn på sytem kataloger
+inbox_extended					= Inkorgen
+sent_extended					= Skickade meddelanden
+trash_extended					= Papperskorgen
+draft_extended					= Utkast
+
+# Navigerings text
+previous_text					= Föregående
+next_text			  	        = Nästa
+
+# Mail Server Fel
+error_connect					= Ett fel uppstod när servern kontaktades
+error_retrieving			        = Fel vid mottagande av dina meddelanden, din inkorg har ändrats
+error_other				        = Systemfel, kontakta systemadministratören
+
+# Felaktigt namn på mailbox
+error_invalid_name				= Felaktigt mappnamn - endast följande tecken A-Z, 0-9, - och mellanslag är tillåtna
+
+# Validations when sending mails
+error_no_recipients				= Fel: Du måste ange minst en mottagare!
+error_compose_invalid_mail1_s			= Fel: Emailadressen verkar inte vara godkänd
+error_compose_invalid_mail1_p			= Fel: Emailadressen verkar inte vara godkänd
+error_compose_invalid_mail2_s			= Kontrollera emailadressen innan detta mail återsänds.
+error_compose_invalid_mail2_p			= Kontrollera emailadressen innan detta mail återsänds.
+
+#Registrering av mail
+register_notify_subject			= Användaren är underrättad
+register_notify_content			= Användaren %mail har registrerats. Mailboxen kan användas efter att administratören har bekräftat den.
+register_welcome_subject		= Välkommen att använda
+register_welcome_content		= Registreringen av din mailbox har lyckats. Du kan nu använda den.
+
+# Verifiera borttagning
+confirm_delete					= Vill du verkligen ta bort meddelandet/meddelandena?
+
+# If the message no have a subject or sender
+no_subject_text					= [Inget ämne]
+no_sender_text					= [Avsändare okänd]
+no_recipient_text				= [Mottagare okänd]
+
+# If the quota limit was exceeded
+quota_exceeded				= Inte tillräckligt med utrymme för att slutföra denna process - Ta bort några meddelande för att fortsätta
+quota_usage_info				= Kvot gräns
+quota_usage_used				= Du har använt
+quota_usage_of				        = av totalt
+quota_usage_avail				= tillgängligt
+
+#*************************************************************#
+# Datum Format                                                #
+# %d = day, %m = month, %y = year, %H = hour, %M = minutes    #
+# for a complete list, see http://www.php.net/strftime        #
+#*************************************************************#
+date_format 					= %m/%d/%y %H:%M
+
+# Meny
+messages_mnu					= Inkorgen
+read_menu					= Läs e-post
+compose_mnu					= Nytt meddelande
+folders_mnu					= Mappar
+search_mnu					= Sök
+address_mnu					= Adressbok
+signature_mnu					= Signatur
+externalpop3_mnu				= Extern POP3
+prefs_mnu					= Generella
+autoforward_mnu					= Vidarebefordring
+autoreply_mnu					= Auto svar
+chgpassword_mnu					= Ändra lösenord
+logoff_mnu 					= Logga ut
+netaddress_mnu                                  = Allmäna kontakter
+userinfo_mnu                                    = Användaruppgifter
+group_mnu					= E-post grupper
+options_mnu               			= Inställningar
+personaddress_mnu               		= Privata kontakter
+
+# Reply
+reply_prefix					= Re:
+forward_prefix					= Fw:
+reply_delimiter					= --------- Ursprungligt meddelande --------
+reply_from_hea					= Från:
+reply_to_hea					= Till:
+reply_cc_hea					= Kopia:
+reply_date_hea					= Datum:
+reply_subject_hea				= Ämne:
+# done
+
+signature_noselect				= Ingen signatur
+
+# page-specific vars
+
+[Headers]
+key_hea						= Nyckel
+value_hea					= Värde
+
+[Folders]
+folders_title					= Mappar
+fld_name_hea					= Mapp
+fld_messages_hea				= Meddelanden
+fld_size_hea					= Storlek
+fld_empty_hea					= Töm
+fld_delete_hea					= Ta bort
+fld_total				        = Totalt:
+fld_make_new					= Skapa ny mapp
+
+[MessageList]
+messages_title					= Meddelande rubrik 
+no_messages					= Du har inga nya meddelanden i
+drop_selected_mnu				= Droppa valde
+delete_selected_mnu				= Radera valda
+move_selected_to_trash_mnu			= Flytta valda till papperskorgen
+move_selected_mnu				= Flytta valda till
+delete_mnu					= Radera
+move_mnu					= Flytta till
+subject_hea					= Ämne
+from_hea					= Från
+to_hea						= Till
+date_hea					= Datum
+size_hea					= Storlek
+
+msg_you_have					= Du har
+msg_message					= meddelande
+msg_messages					= meddelanden
+
+msg_more_unread					= olästa
+msg_one_unread					= oläst
+msg_none_unread					= inget oläst
+msg_in_the_folder				= i mappen
+
+edit_mail					= Skicka till: 
+reply_mail					= Svar till: 
+read_mail					= Läs mail: 
+
+[Login]
+lng_title					= Logga in
+lng_welcome_msg					= Välkommen, logga in till ditt konto
+lng_user_email					= E-post
+lng_user_name					= Användarnamn
+lng_user_pwd					= Lösenord
+lng_server					= Server
+lng_theme					= Tema
+lng_language					= Språk
+lng_login_btn					= Logga in &gt;&gt;
+lng_register					= Registrera
+
+[Newmessage]
+newmsg_title 				        = Skapa
+to_hea						= Till
+cc_hea						= Kopia
+bcc_hea						= Hemlig kopia
+subject_hea					= Ämne
+content_hea					= Innehåll
+address_tip					= Från kontakt
+
+attach_hea					= Bilagor
+attch_add_new				        = Bifoga fil
+attch_name_hea				        = Namn
+attch_size					= Storlek
+attch_type_hea				        = Typ
+attch_dele_hea				        = Ta bort
+attch_no_hea					= Inga filer är bifogade
+
+signature_name					= Välj signatur
+signature_content				= Signatur
+send_text					= Skicka
+html_mode					= Html-editor
+text_mode					= Text-editor
+
+result_error					= Det gick inte att skicka detta e-mail
+result_success					= Ditt meddelande har skickats iväg
+nav_continue					= Nytt meddelande
+nav_msglist					= Inkorgen
+nav_back					= Bakåt
+
+up_title 					= Lägg till fil
+up_information_text				= Välj fil
+up_upload_button_text				= Lägg till
+up_close_button_text				= Stäng
+
+priority_text					= Prioritet
+priority_low					= Låg
+priority_normal					= Normal
+priority_high					= Hög
+
+[AdvancedEditor]
+adv_warning_text_mode1				= Avmarkera ett val
+adv_warning_text_mode2				= för att använda verktygsfältet
+
+adv_type_urlpath				= Skriv URL: \n(eg: http://www.magicwinmail.net)
+adv_type_imgpath				= Skriva URL för en bild: \n(eg: http://www.magicwinmail.net/images/magicwinlogo.jpg)
+
+format_paragraph				= Paragraf
+format_h1					= Stil 1 <H1>
+format_h2					= Stil 2 <H2>
+format_h3					= Stil 3 <H3>
+format_h4					= Stil 4 <H4>
+format_h5					= Stil 5 <H5>
+format_h6					= Stil 6 <H6>
+format_pre					= Formatera <PRE>
+format_clear_all				= Rensa alla
+
+format_font					= Font
+format_size					= Storlek
+
+extra_font_list					=
+
+view_source					= Visa HTML källa
+clear_format					= Rensa formatering
+
+priority_text					= Prioritet
+
+selcolor_title				        = Välj färg
+selcolor_basecolor			        = Basfärg
+selcolor_bright				        = Ljus
+selcolor_code				        = Kod
+selcolor_okbtn				        = OK
+selcolor_cancelbtn			        = Avbryt
+
+inspicture_title				= Infoga bild
+inspicture_source			        = Källa
+inspicture_replce				= Ersätt text
+inspicture_link				 	= Länk URL
+inspicture_align			        = Anpassa
+inspicture_none				    	= Ingen
+inspicture_left			          	= Vänster
+inspicture_right			        = Höger
+inspicture_texttop			    	= Text topp
+inspicture_absmiddle			    	= Absolut mitten
+inspicture_baseline			    	= Baslinje
+inspicture_absbottom			    	= Absolut botten
+inspicture_bottom				= Botten
+inspicture_middle				= Mitten
+inspicture_top				    	= Topp
+inspicture_type				    	= Bildtyp
+inspicture_pic				    	= Vanlig bild
+inspicture_flash			        = Flash-bild
+inspicture_border				= linje
+inspicture_width			        = Bredd
+inspicture_height			        = Höjd
+inspicture_okbtn			        = OK
+inspicture_cancelbtn		          	= Avsluta
+
+instable_title				   	= Infoga tabell
+instable_rows				   	= Rad
+instable_cellspacing			    	= Cellavstånd
+instable_cols				    	= Cols
+instable_cellpadding			    	= Cellutfyllnad
+instable_width				    	= Bredd
+instable_percent				= Procent
+instable_pixel				    	= Pixel
+instable_border				    	= linje
+instable_okbtn			        	= OK
+instable_cancelbtn		        	= Avsluta
+
+
+[BadLogin]
+bdl_title					= Inloggingsfel
+bdl_msg						= Du kan inte logga in med de användarnamn och lösenord du angav.<br><br>Kontrollera ditt användarnamn och lösenord och försök igen.
+bdl_back					= Tillbaka
+
+[Error]
+err_title					= Felmeddelande
+err_msg						= Ett fel uppstod<br><br>Försök och logga in igen
+err_system_msg					= System meddelande: 
+err_exit					= Logga ut
+
+[Preferences]
+prf_title 					= Inställningar
+prf_general_title				= Allmän information
+prf_name					= Namn
+prf_reply_to					= Svar till
+prf_trash_title					= Papperskorgen
+prf_save_to_trash				= När ett meddelande <b>raderas</b> ska den flyttas till
+prf_save_only_read				= Spara enbart <b>lästa meddelanden</b> i 
+prf_empty_on_exit				= <b>Töm</b> papperskorgen när jag loggar ut
+prf_sent_title					= Skickade meddelanden
+prf_save_sent					= Spara <b>skickade meddelanden</b> i mappen
+prf_messages_title				= Meddelanden
+prf_page_limit					= Max antal meddelanden per sida
+prf_save_button					= Spara
+prf_display_images				= Visa bifogad bild
+prf_default_editor_mode				= Standard editor
+prf_default_editor_mode_text			= "TEXT Editor"
+prf_default_editor_mode_html			= "HTML Editor(IE5 or higher)"
+prf_time_to_refesh				= Kontrollera automatiskt efter ny email efter (minuter)
+
+[Catch]
+ctc_title					= Lägg till kontakt
+ctc_information					= Visa enbart e-post i meddelandehuvudet
+ctc_name					= Namn
+ctc_email					= E-post
+ctc_no_address					= Ingen adress tillgänglig
+ctc_close					= Stäng
+ctc_save					= Spara
+
+[Readmsg]
+next_mnu					= Nästa
+previous_mnu					= Föregående
+back_mnu					= Bakåt
+reply_mnu					= Besvara
+reply_all_mnu					= Besvara alla
+forward_mnu					= Vidarebefordra
+headers_mnu					= Huvud
+move_mnu					= Flytta till
+move_to_trash_mnu			      	= Flytta till papperskorgen
+delete_mnu					= Ta bort
+print_mnu					= Skriv ut
+
+from_hea					= Från:
+to_hea						= Till:
+cc_hea						= Kopia:
+date_hea					= Datum:
+subject_hea					= Ämne:
+attach_hea					= Bifogat:
+
+attch_name_hea					= Namn
+attch_force_hea					= Ladda ner
+attch_type_hea					= Typ
+attch_size_hea					= Storlek
+catch_address					= Ny kontakt
+
+[Search]
+sch_information_text				= Skriv en fras eller ett ord du letar efter.
+sch_button_text					= Sök &gt;&gt;
+sch_subject_hea					= Ämne
+sch_from_hea					= Från
+sch_to_hea					= Till
+sch_cc_hea					= Kopia
+sch_date_hea					= Datum
+sch_body_hea					= Huvud
+sch_folder_hea					= Mapp
+sch_no_results					= Inget matchande meddelande kunde hittas
+
+[QuickAddress]
+qad_title 					= Kontakt
+qad_select_address				= Välj kontakt
+qad_to						= Till
+qad_cc						= Kopia
+qad_bcc						= Hemlig kopia
+
+[AddressBook]
+# edit/display
+adr_title					= Kontakt
+adr_name					= Namn
+adr_email					= E-post
+adr_phone					= Telefon
+adr_address					= Adress
+adr_work					= Arbete
+adr_back					= Adressboken
+adr_save					= Spara
+adr_close 					= Stäng 
+adr_empty 					= Poster med en asterisk (*) kan inte vara tom!  
+
+netadr_title 				        = Allmän kontakt
+netadr_cn 					= Namn 
+netadr_sn 					= Fullständigt Namn 
+netadr_mail 				        = E-post 
+
+netadr_homeaddress 			        = Hemadress 
+netadr_homephone 			        = Hemnummer
+netadr_mobile 				        = Mobilnummer 
+
+netadr_ou 					= Avdelning 
+netadr_jobtitle 			        = Yrke 
+netadr_officename 			        = Företagsnamn 
+netadr_telephonenumber 		                = Telefonnummer kontor
+
+netadr_close 				        = Stäng fönster
+
+# list
+adr_name_hea					= Namn
+adr_email_hea					= E-post
+adr_edit_hea					= Ändra
+adr_expo_hea					= Exportera
+adr_dele_hea					= Ta bort
+adr_new_entry					= Lägg till ny kontakt
+
+netadr_name                                     = Namn
+netadr_mail                                     = E-post
+netadr_phone                                    = Telefonnummer
+netadr_forward                                  = Föregående
+netadr_next                                     = Nästa
+netadr_lookup                                   = Sök
+netadr_viewinfo                                 = Se användarinformation
+netadr_lookup_tip                               = Sök kontakt (stödjer inexakt sökning)
+netadr_addcontact                               = Lägg till i kontakt
+
+addr_saved					= Kontakten har blivit sparad
+addr_added					= Kontakten har lagts till
+addr_deleted					= Kontakten har blivit borttagen
+
+[Signature]
+# edit/display
+sign_title					= Signatur
+sign_name					= Namn
+sign_content					= Innehåll
+sign_back					= Bakåt
+sign_save					= Spara
+sign_empty 					= Poster med en asterisk (*) kan inte vara tom!  
+
+# list
+sign_name_hea					= Namn
+sign_content_hea				= Innehåll
+sign_edit_hea					= Ändra
+sign_dele_hea					= Ta bort
+sign_new_entry					= Ny Signatur
+
+sign_saved					= Signaturen har blivit sparad
+sign_added					= Signaturen har lagts till
+sign_deleted					= Signaturen har blivit borttagen
+sign_full					= Signaturen har överstigit systemgränsen och kan inte läggas till.
+                                     
+[AutoForward]
+fwd_title					= Automatisk vidarebefordring
+fwd_address					= Adress att vidarebefordra till
+fwd_address_tip					= Om du använder flera adresser särskilj dem med ; (semikolon) 
+fwd_savecopy					= Efter vidarebefordring, spara en kopia i inkorgen
+fwd_save					= Spara
+
+[AutoReply]
+reply_title					= Automastiskt svar
+reply_content					= Svarsmeddelande
+reply_status					= Aktivera automatiskt svar
+reply_save					= Spara
+
+[Password]
+pwd_title					= Ändra Lösenord
+pwd_old						= Gammalt lösenord
+pwd_new						= Nytt lösenord
+pwd_confirm					= Bekräfta nytt lösenord
+pwd_save					= Spara
+pwd_empty					= Lösenordsposten är inte tom!
+pwd_noequal					= Det nya lösenordet och bekräfta lösenord måste vara identiskt!
+pwd_failure					= Byte av lösenord misslyckades
+pwd_success					= Byte av lösenord lyckades
+pwd_back					= Bakåt
+
+[ExternalPop3]
+# edit/display
+pop3_title					= Extern POP3
+pop3_username					= Användarnamn
+pop3_password					= Lösenord
+pop3_host					= Värd
+pop3_port					= Port
+pop3_enable					= Aktivera
+pop3_savecopy				   	= Spara kopia
+pop3_back					= Tillbaka
+pop3_save					= Spara
+pop3_empty 					= Poster med en asterisk (*) kan inte vara tom!  
+
+# list
+pop3_username_hea				= Användarnamn
+pop3_host_hea					= Värd
+pop3_enable_hea			      		= Aktivera
+pop3_edit_hea					= Ändra
+pop3_dele_hea					= Ta bort
+pop3_new_entry					= Nytt Pop3 konto
+
+pop3_saved					= pop3 kontot har sparats
+pop3_added					= pop3 kontot har lagts till
+pop3_deleted					= pop3 kontot har tagits bort
+pop3_full					= pop3 har överskridit gränsen, du kan inte lägga till det.
+
+[Register]
+reg_title 					= Registrera ny Mailbox
+reg_mailbox 					= Mailbox
+reg_password 					= Lösenord
+reg_confirmpwd 					= Bekräfta Lösenord
+reg_fullname 					= Fullständigt Namn
+reg_description 			      	= Beskrivning
+reg_hide_pwd 					= Dolt
+
+reg_failure					= Registrering av ny mailbox misslyckades
+reg_success					= Registrering av ny mailbox lyckades
+reg_empty					= Poster med en asterisk (*) kan inte vara tom!    
+reg_invaildchar					= Mailboxen innehåller ogiltiga tecken - giltiga tecken är a~z, 0~9, ., _ och -.
+pwd_pwdnoequal					= Lösenordet och det bekräftade lösenordet måste vara identiska!
+reg_register 					= Registrera
+reg_back 					= Bakåt
+reg_affirmtip					= Mailboxen kan inte användas före en administratör har bekräftat den.
+reg_successtip					= Återgå till hemsidan och logga in.
+reg_dberror					= Fel uppkom när databasen kontaktades!
+reg_existuser					= Denna mailbox existerar redan, döp om den och försök igen.
+reg_existaliasuser				= Mailbox alias existerar redan, döp om den och försök igen.
+reg_existgroup					= Mail gruppen existerar redan, döp om den och försök igen.
+reg_userfull					= Mailboxarna har överskridit maximalt antal för denna användare.
+reg_domainuserfull				= Under denna domän har mailboxen överskridit maximalt antal mailboxar.
+reg_domainstoragefull		      		= Under denna domän har mailboxen överskridit maximalt lagringsutrymme.
+
+reg_ldappublicinfo                      = Lägga till allmän kontakt (j/n)?
+reg_ldaphomeaddress                     = Hemadress
+reg_ldaphomephone                       = Hemtelefon
+reg_ldapmobile                          = Mobilnummer
+reg_ldaporganizationunit                = Företag/Avdelning 
+reg_ldapjobtitle                        = Yrke
+reg_ldapoffice                          = Kontor
+reg_ldapofficephone                     = Telefonnummer kontor
+
+[Userinfo]
+userinfo_save				= Spara
+userinfo_title                    	= Personlig information
+userinfo_success			= Redigeringen lyckades!
+userinfo_failure1			= Redigeringen misslyckades! <br> Kommer inte åt personlig information.
+userinfo_failure2			= Redigeringen misslyckades!
+
+userinfo_user                           = E-postkonto
+userinfo_fullname                       = Fullständigt namn
+userinfo_description                    = Beskrivning
+
+userinfo_publicinfo                     = Lägga till allmän kontakt (j/n)?
+userinfo_homeaddress                    = Hemadress
+userinfo_homephone                      = Hemtelefon
+userinfo_mobile                         = Mobilnummer
+userinfo_organizationunit               = Företag/Avdelning
+userinfo_jobtitle                       = Yrke
+userinfo_office                         = Kontor
+userinfo_officephone                    = Telefonnummer kontor
+
+[Group]
+group_title				= E-post grupp
+group_adr				= Grupp e-post
+group_description 			= Beskrivning
+group_memberlist			= Medlemslista
+group_member	 			= Lista medlemmar
+group_contct				= Lägg till kontakt
+
+group_mailto				= Skriv Meddelande
+group_memberlist			= Lista gruppmedlem
+group_addcontact			= Lägg till kontakt
+
+group_list_title			= Gruppmedlems lista
+group_list_close			= Stäng
+group_list_mail	            		= E-post
