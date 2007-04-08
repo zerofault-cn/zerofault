@@ -1,0 +1,9 @@
+<?
+for($i=0;$i<sizeof($admin_limit);$i++)
+{
+	setcookie("admin_limit[$i]","");
+}
+setcookie("goldsoft_admin","");
+header("location:index.php");
+exit;
+?>

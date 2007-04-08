@@ -1,0 +1,19 @@
+<?
+$is_permit=0;
+$prefix=substr(basename($_SERVER['REQUEST_URI']),0,strpos(basename($_SERVER['REQUEST_URI']),'_')+1);//文件名前缀
+if(@in_array($prefix,$_COOKIE["admin_limit"]))
+{
+	$is_permit=1;
+}
+$is_permit=1;//若取消注释则表示取消权限限制
+if(!$is_permit)
+{
+	?>
+	<script>
+		alert("您无权操作");
+		window.history.go(-1);
+	</script>
+	<?
+	exit;
+}
+?>

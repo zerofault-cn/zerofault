@@ -1,0 +1,70 @@
+<?
+include_once "admin_limit.php";
+include_once "../include/mysql_connect.php";
+if(strpos($flashfile_name,"\\"))
+{
+	$flashfile_name=substr(strrchr($flashfile_name,"\\"),1);
+}
+$flashfile_name=str_replace(' ','_',$flashfile_name);//先将文件名中的空格转换成'_'
+$flashfile_name_py=words($flashfile_name);
+$file_ext=substr($flashfile_name,-4);
+if($file_ext!=".swf"&&$file_ext!=".SWF")
+{
+	?>
+	<script>
+		alert("这不是一个Flash文件，请重新选择文件!");
+		window.history.go(-1);
+	</script>
+	<?
+}
+else
+{
+	$sql1="select * from flash_source where flash_path like '%".$flashfile_name_py."'";
+	$result1=mysql_query($sql1);
+	if(mysql_fetch_array($result1))
+	{
+		?>
+		<script>
+			alert("此文件已经添加过,请检查重试");
+			window.history.go(-1);
+		</script>
+		<?
+	}
+	else
+	{
+		$sql2="select type_name from flash_type where id='".$type_id."'";
+		$result2=mysql_query($sql2);
+		$type_name=mysql_result($result2,0,0);
+		$type_name_py=words($type_name);
+		$flash_dir='/jbproject/tomcat/goldsoft/php-vod/flash/'.$type_name_py;
+		if(!file_exists($flash_dir))
+		{
+			umask(000);
+			mkdir($flash_dir,0777);
+		}
+		$flash_path=$type_name_py.'/'.$flashfile_name_py;
+		$upflag=copy($flashfile,$flash_dir.'/'.$flashfile_name_py);
+		$sql3="insert into flash_source(type,flash_name,flash_path,intro,del_flag,time) values('".$type_id."','".$flash_name."','".$flash_path."','".$intro."',1,now())";
+		if($upflag&&mysql_query($sql3)) 
+		{
+			?>
+			<script>
+				if(confirm("已成功上传,继续添加吗?"))
+					window.location="index.php?content=flash_add_source_1";
+				else
+					window.location="index.php?content=flash_source";
+			</script>
+			<?
+		}
+		else
+		{
+			?>
+			<script>
+				alert("添加记录失败,请检查重试,或者报告管理员");
+				window.history.go(-1);
+			</script>
+			<?
+		}
+	}
+}
+?>

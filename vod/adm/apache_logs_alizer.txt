@@ -1,0 +1,36 @@
+系统访问统计:
+功能:对指定页面每小时,每日,每周,每月,甚至每年的访问量的统计
+作用:从另一角度了解用户的需求,以此作为工作投入力度的方向
+设计思想:利用apache的日志生成系统,通过管道输出到rotatelogs,按自定义格式定时生成可分析的日志文件,然后通过php程序分析这些日志文件.并输出统计结果
+缺点:数字电视不能通过这种方法来实现
+实现方法:
+1.在apache/conf/http.conf中定义自己需要的日志格式:
+LogFormat "%>s:%r" mylog
+#%>s:代表http服务器相应代码
+#%r:代表访问的url
+然后添加生成自定义的日志,并设定输出目录
+CustomLog "|rotatelogs /jbproject/tomcat/goldsoft/php-vod/logs/daily/apache_access_log 86400" mylog
+#86400即为以一天为周期
+CustomLog "|rotatelogs /jbproject/tomcat/goldsoft/php-vod/logs/hourly/apache_access_log 3600" mylog
+#3600即以一小时为周期
+2.使用系统的定时计划做批量转换
+可以用系统的周期性批处理功能,但系统的每日执行时间默认是04:03,可能不合自己的需求,可以自定义它的执行时间,不过最好建立自己的自动执行教本
+vi /etc/crontab
+55 23 * * * root run-parts /etc/cron.mydaily
+#每天凌晨23:55将今天按小时做的日志文件移动到以今天日期为文件名的目录中,方便统计
+00 00 1 * * root run-parts /etc/cron.mymonthly
+#每月1号凌晨00:00将上月按月做的日志文件移动到以上月月份为文件名的目录中,方便统计
+mkdir /etc/cron.mydaily
+mkdir /etc/cron.mymonthly
+vi /etc/cron.mydaily/mv_hourly_logs.sh
+today=`date '+%Y%m%d'`
+mkdir /jbproject/tomcat/goldsoft/logs/$today
+mv /jbproject/tomcat/goldsoft/logs/hourly/* /jbproject/tomcat/goldsoft/logs/$today/
+:wq
+vi /etc/cron.mymonthly/mv_daily_logs.sh
+thismonth=`date '+$Y%m'`
+mkdir /jbproject/tomcat/goldsoft/logs/$thismonth
+mv /jbproject/tomcat/goldsoft/logs/daily/* /jbproject/tomcat/goldsoft/logs/$thismonth/
+:wq
+
+to be continue....
