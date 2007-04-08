@@ -1,0 +1,12 @@
+<?php
+
+$conf_mysql_hostname = 'localhost';
+$conf_mysql_username = 'root';
+$conf_mysql_password = 'root';
+$conf_mysql_database = '1';
+$conf_mysql_prefix   = 'sblog_';
+
+$conf_doc_root       = '/www/sblog/';
+$conf_web_root       = 'http://inso/sblog/';
+
+?>
