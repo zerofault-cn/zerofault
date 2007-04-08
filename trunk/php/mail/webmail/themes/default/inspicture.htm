@@ -1,0 +1,144 @@
+{config_load file=$umLanguageFile section="AdvancedEditor"}
+
+<HTML>
+<HEAD>
+<TITLE>{#inspicture_title#}</TITLE>
+
+<META http-equiv="Content-Type" content="text/html; charset={#default_char_set#}"/>
+{literal}
+<STYLE type="text/css">
+ td {font-size: 10.8pt}
+ body {font-size: 10.8pt}
+ BUTTON {width:5em}
+</STYLE>
+{/literal}
+
+{literal}
+<SCRIPT language="JavaScript">
+function returnvar () {
+	var images = '';
+	var src_v = src.value;
+	if (src_v != '' && src_v != 'http:\/\/') {
+		var alt_v = alt.value;
+		var arrange_v = arrange.value;
+		var border_v = border.value;
+		if (border_v == '') border_v = '0';
+		var width_v = width.value;
+		var height_v = height.value;
+		if (pictype.value == 'pic') {
+		var images = '<img src=\''+src_v+'\' alt=\''+alt_v+'\' border=\''+border_v+'\' align=\''+arrange_v+'\'>';
+		var link_v = link.value;
+		if (link_v != '' && link_v != 'http:\/\/') {
+			images = '<a href=\''+link_v+'\' target=_blank>'+images+'</a>';
+		}
+	}
+	else{
+		var images = ''+
+		'<object classid=\'clsid:D27CDB6E-AE6D-11cf-96B8-444553540000\' codebase=http://active.macromedia.com/flash2/cabs/swflash.cab#version=4,0,0,0 width=\''+width_v+'\' height=\''+height_v+'\'>'+
+		'<param name=movie value=\''+src_v+'\'>'+
+		'<param name=quality value=high>'+
+		'<embed src=\''+src_v+'\' loop=false menu=false quality=high width=\''+width_v+'\' height=\''+height_v+'\' type=\'application/x-shockwave-flash\' pluginspage=\'http://www.macromedia.com/shockwave/download/index.cgi?P1_Prod_Version=ShockwaveFlash\'></embed>'+
+		'</object>';
+	}
+}
+	window.returnValue = images;
+	window.close();
+}
+function ChangePicType (obj){
+	if (obj.options[obj.selectedIndex].value == 'pic') {
+		show  = false;
+		color = '#FFFFFF';
+	}
+	else{
+		show  = true;
+		color = '#CCCCCC';
+	}
+	document.all.alt.disabled     =
+	document.all.link.disabled    =
+	document.all.arrange.disabled =
+	document.all.border.disabled  = show;
+	document.all.alt.style.backgroundColor     =
+	document.all.link.style.backgroundColor    =
+	document.all.arrange.style.backgroundColor =
+	document.all.border.style.backgroundColor  = color;
+	if (show == true) {
+		show  = false;
+		color = '#FFFFFF';
+	}
+	else {
+		show  = true;
+		color = '#CCCCCC';
+	}
+	document.all.width.disabled  =
+	document.all.height.disabled = show;
+	document.all.width.style.backgroundColor  =
+	document.all.height.style.backgroundColor = color;
+}
+</SCRIPT>
+{/literal}
+
+</HEAD>
+
+<BODY bgColor="#d6d3ce" leftMargin="2" topMargin="12" marginheight="2" marginwidth="2">
+<CENTER>
+<TABLE cellSpacing="6" cellPadding="0" width="100%" border="0">
+	<TR>
+		<TD>{#inspicture_source#}</TD>
+		<TD><INPUT onfocus="this.select()" tabIndex="1" size="40" value="http://" name="src" /> </TD>
+		<TD vAlign="top" align="middle" rowSpan="3">
+			<P><BUTTON type="submit" style="BACKGROUND-COLOR: #d6d3ce" onclick="returnvar()" tabIndex="6">{#inspicture_okbtn#}</BUTTON></P>
+			<P><BUTTON style="BACKGROUND-COLOR: #d6d3ce" onclick="window.close()" tabIndex="7">{#inspicture_cancelbtn#}</BUTTON></P>
+		</TD>
+	</TR>
+	<TR>
+		<TD>{#inspicture_replce#}</TD>
+		<TD><INPUT onfocus="this.select()" tabIndex="2" size="40" name="alt" /> </TD>
+	</TR>
+	<TR>
+		<TD>{#inspicture_link#}</TD>
+		<TD><INPUT onfocus="this.select()" tabIndex="3" size="40" value="http://" name="link" /> </TD>
+	</TR>
+	<TR>
+		<TD>{#inspicture_align#}</TD>
+		<TD colspan=2>
+			<TABLE cellSpacing="0" cellPadding="0" width="100%" border="0">
+				<TR>
+					<TD width="40%"><SELECT tabIndex="4" name="arrange"> 
+						<OPTION value="">{#inspicture_none#}</OPTION>
+						<OPTION value="left">{#inspicture_left#}</OPTION>
+						<OPTION value="right">{#inspicture_right#}</OPTION>
+						<OPTION value="texttop">{#inspicture_texttop#}</OPTION>
+						<OPTION value="absmiddle">{#inspicture_absmiddle#}</OPTION>
+						<OPTION value="baseline" selected="">{#inspicture_baseline#}</OPTION>
+						<OPTION value="absbottom">{#inspicture_absbottom#}</OPTION>
+						<OPTION value="bottom">{#inspicture_bottom#}</OPTION>
+						<OPTION value="middle">{#inspicture_middle#}</OPTION>
+						<OPTION value="top">{#inspicture_top#}</OPTION>
+						</SELECT>
+          			</TD>
+					<TD width="*">{#inspicture_type#}&nbsp;<SELECT tabIndex="5" onchange="ChangePicType(this)" name="pictype"> 
+						<OPTION value="pic" selected="">{#inspicture_pic#}</OPTION>
+						<OPTION value="flash">{#inspicture_flash#}</OPTION>
+						</SELECT>
+					</TD>
+				</TR>
+			</TABLE>
+		</TD>
+	</TR>
+	<TR>
+    	<TD>{#inspicture_border#}</TD>
+    	<TD>
+      		<TABLE cellSpacing="0" cellPadding="0" width="100%" border="0">
+        		<TR>
+	          		<TD><INPUT onfocus="this.select()" tabIndex="6" value="0" name="border" size="6" maxlength="4"/> </TD>
+	          		<TD>{#inspicture_width#}&nbsp;<INPUT style="BACKGROUND-COLOR: #cccccc" disabled="" onfocus="this.select()" tabIndex="7" size="4" value="100" name="width" /> </TD>
+	          		<TD>{#inspicture_height#}&nbsp;<INPUT style="BACKGROUND-COLOR: #cccccc" disabled="" onfocus="this.select()" tabIndex="7" size="4" value="100" name="height" /></TD>
+        		</TR>
+        	</TABLE>
+        </TD>
+        <TD>&nbsp;</TD>
+    </TR>
+</TABLE>
+</CENTER>
+</BODY>
+</HTML>

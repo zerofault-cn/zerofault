@@ -1,0 +1,72 @@
+{config_load file=$umLanguageFile section="AddressBook"}
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<html>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<head>
+	<title>{#common_page_title#} - {#adr_title#}</title>
+	<meta http-equiv="Content-Type" content="text/html; charset={#default_char_set#}">
+	<link rel="stylesheet" href="themes/default/webmail.css" type="text/css">
+	<script language="JavaScript" src="themes/default/webmail.js" type="text/javascript"></script>
+{$umJS}
+</head>
+
+
+<body leftmargin="0" marginwidth="0" topmargin="4" marginheight="3">
+
+<table align="center" width="100%" border="0" cellspacing="1" cellpadding="0" bgcolor=#ffffff>
+
+	<tr height=20>
+	     <td class="headerright" width="30%">{#netadr_sn#} &nbsp;</td>
+	     <td class=default>&nbsp;&nbsp;&nbsp;{$userinfo[0].sn}</td>
+	</tr>
+	<tr height=20>
+	     <td class="headerright" width="30%">{#netadr_mail#} &nbsp;</td>
+	     <td class=default>&nbsp;&nbsp;&nbsp;{$userinfo[0].mail}</td>
+	</tr>
+	<tr height=20>
+	     <td class="headerright" width="30%">{#netadr_cn#} &nbsp;</td>
+	     <td class=default>&nbsp;&nbsp;&nbsp;{$userinfo[0].cn}</td>
+	</tr>
+	<tr height=20>
+	     <td class="headerright" width="30%">{#netadr_homeaddress#} &nbsp;</td>
+	     <td class=default>&nbsp;&nbsp;&nbsp;{$userinfo[0].homeaddress}</td>
+	</tr>
+	<tr height=20>
+	     <td class="headerright" width="30%">{#netadr_homephone#} &nbsp;</td>
+	     <td class=default>&nbsp;&nbsp;&nbsp;{$userinfo[0].homephone}</td>
+	</tr>
+	<tr height=20>
+	     <td class="headerright" width="30%">{#netadr_mobile#} &nbsp;</td>
+	     <td class=default>&nbsp;&nbsp;&nbsp;{$userinfo[0].mobile}</td>
+	</tr>
+	
+	<tr height=20>
+	     <td class="headerright" width="30%">{#netadr_ou#} &nbsp;</td>
+	     <td class=default>&nbsp;&nbsp;&nbsp;{$userinfo[0].ou}</td>
+	</tr>
+	<tr height=20>
+	     <td class="headerright" width="30%">{#netadr_jobtitle#} &nbsp;</td>
+	     <td class=default>&nbsp;&nbsp;&nbsp;{$userinfo[0].title}</td>
+	</tr>
+	<tr height=20>
+	     <td class="headerright" width="30%">{#netadr_officename#} &nbsp;</td>
+	     <td class=default>&nbsp;&nbsp;&nbsp;{$userinfo[0].physicaldeliveryofficename}</td>
+	</tr>
+	<tr height=20>
+	     <td class="headerright" width="30%">{#netadr_telephonenumber#} &nbsp;</td>
+	     <td class=default>&nbsp;&nbsp;&nbsp;{$userinfo[0].telephonenumber}</td>
+	</tr>
+	
+	<tr  height=30>
+		<td class=default colspan=2 align=center>
+			<input type=button value="{#netadr_close#}" class=button onclick="javascript:window.close();">
+		</td>
+	</tr>
+
+</table>
+	
+</body>
+</html> 

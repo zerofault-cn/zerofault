@@ -1,0 +1,143 @@
+{config_load file=$umLanguageFile section="Readmsg"}
+<html>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<head>
+	<title>{#common_page_title#} - {$umPageTitle|escape:"html"}</title>
+	<meta http-equiv="Content-Type" content="text/html; charset={#default_char_set#}">
+	<link rel="stylesheet" href="themes/default/webmail.css" type="text/css">
+	<script language="JavaScript" src="themes/default/webmail.js" type="text/javascript"></script>
+
+{$umJS}
+
+</head>
+
+<body leftmargin="0" marginwidth="0" topmargin="4" marginheight="3">
+
+{include file="default/pageheader.htm"}
+
+<table align="center" width="758" border="0" cellspacing="0" cellpadding="0">
+	<tr>
+    	<td valign=top width="154"> 
+			{include file="default/menu.htm"}
+	    </td>
+        <td width="1" bgcolor="#817B7B"><img width="1" height="1"></td>
+		<td align="center" valign=top width="602" height=350 bgcolor=#ffffff >
+			<table width="100%" border="0" cellspacing="0" cellpadding="0" align="center">
+				<tr>
+					<td bgcolor=white>
+						<table width="100%" border=0 cellspacing=1 cellpadding=0>
+							{$umReplyForm}			
+							<tr height="20">
+								<td class=default colspan=2>&nbsp; 
+									{if $umHavePrevious eq 1}
+									<a class="menu" href="{$umPreviousLink}" title="{$umPreviousSubject|escape:"html"}">{#previous_mnu#}</a> :: 
+									{/if}
+									{if $umHaveNext eq 1}
+									<a class="menu" href="{$umNextLink}" title="{$umNextSubject|escape:"html"}">{#next_mnu#}</a> :: 
+									{/if}
+									<a class="menu" href="javascript:goback()">{#back_mnu#}</a> :: 
+									<a class="menu" href="javascript:reply()">{#reply_mnu#}</a> :: 
+									<a class="menu" href="javascript:replyall()">{#reply_all_mnu#}</a> :: 
+									<a class="menu" href="javascript:forward()">{#forward_mnu#}</a> :: 
+									<a class="menu" href="javascript:catch_addresses()">{#catch_address#}</a> :: 
+									<a class="menu" href="javascript:printit()">{#print_mnu#}</a> :: 
+									<a class="menu" href="javascript:headers()">{#headers_mnu#}</a>
+								</td>
+							</tr>
+	
+							<tr bgcolor=white height="20">
+								<td width="20%" class="headerright">{#from_hea#} &nbsp;</td>
+								<td class="default">
+								{section name=i loop=$umFromList}
+								 &nbsp;<a href="{$umFromList[i].link}" title="{$umFromList[i].title|escape:"html"}">{$umFromList[i].name|default:#no_sender_text#|escape:"html"}</a>
+								{/section}
+								</td>
+							</tr>
+							<tr bgcolor=white height="20">
+								<td class="headerright">{#to_hea#} &nbsp;</td>
+								<td class="default">
+								{section name=i loop=$umTOList}{if $firstto eq "no"};{/if}&nbsp;<a href="{$umTOList[i].link}" title="{$umTOList[i].title|escape:"html"}">{$umTOList[i].name|escape:"html"}</a>{assign var="firstto" value="no"}{sectionelse}&nbsp;{#no_recipient_text#}{/section}
+								</td>
+							</tr>	
+	
+							{if $umHaveCC}
+								<tr bgcolor=white height="20">
+									<td class="headerright">{#cc_hea#} &nbsp;</td>
+									<td class="default">
+									{section name=i loop=$umCCList}{if $firstcc eq "no"};{/if}&nbsp;<a href="{$umCCList[i].link}" title="{$umCCList[i].title|escape:"html"}">{$umCCList[i].name|escape:"html"}</a>{assign var="firstcc" value="no"}{/section}
+									</td>
+								</tr>	
+							{/if}
+	
+							<tr bgcolor=white height="20">
+								<td class="headerright">{#subject_hea#} &nbsp;</td>
+								<td class="default"> &nbsp;{$umSubject|default:#no_subject_text#|truncate:100:"...":true|escape:"html"}</td>
+							</tr>	
+							<tr bgcolor=white height="20">
+								<td class="headerright">{#date_hea#} &nbsp;</td>
+								<td class="default"> &nbsp;{$umDate|date_format:#date_format#}</td>
+							</tr>	
+							{if $umHaveAttachments}
+								<tr bgcolor=silver>
+									<td class="headerright">{#attach_hea#} &nbsp;</td>
+									<td>
+										<table width="100%" border=0 cellspacing=1 cellpadding=0>
+											<tr bgcolor=#f1f1f1 height="20">
+												<td class="headers" width="60%"> &nbsp;<b>{#attch_name_hea#}</b> ({#attch_force_hea#})</td>
+												<td class="headers"> &nbsp;<b>{#attch_size_hea#}</b></td>
+												<td class="headers"> &nbsp;<b>{#attch_type_hea#}</b></td>
+											</tr>
+											{section name=i loop=$umAttachList}
+												<tr bgcolor=white height="20">
+													<td class="default">&nbsp;
+													{if $umAttachList[i].normlink eq ""}
+														<img src="{$umAttachList[i].iconfile}" width="16" height="16" border="0">&nbsp;{$umAttachList[i].name|truncate:30:"...":true|escape:"html"}&nbsp;<a href="{$umAttachList[i].downlink}"><img src="./images/download.gif" width="16" height="16" border="0" alt=""></a>
+													{else} 
+														<a href="{$umAttachList[i].normlink}"><img src="{$umAttachList[i].iconfile}" width="16" height="16" border="0">&nbsp;{$umAttachList[i].name|truncate:30:"...":true|escape:"html"}</a>&nbsp;<a href="{$umAttachList[i].downlink}"><img src="./images/download.gif" width="16" height="16" border="0" alt=""></a>
+													{/if}
+													</td>
+													<td class="right">{$umAttachList[i].size}Kb &nbsp;</td>
+													<td class="default"> &nbsp;{$umAttachList[i].type}</td>
+												</tr>
+											{/section}
+										</table>
+									</td>
+								</tr>	
+							{/if}
+							<tr height="20">
+								<td colspan=2 class="default">
+									<table width="100%" border=0 cellspacing=1 cellpadding=0>
+										<tr bgcolor=white>
+											<td width="60%"{$umBackImg}{$umBackColor}><font color=black>{$umMessageBody}</font></td>
+										</tr>
+									</table>
+								</td>
+							</tr>
+							<tr height="20">
+								<form name=move action="msglist.php" method=POST>
+										{$umDeleteForm}
+										<td class=default colspan=2>
+										<a class="menu" href="javascript:deletemsg()">{#delete_mnu#}</a> ::
+										<a class="menu" href="javascript:movemsg()">{#move_mnu#} </a> 
+										<select name="aval_folders">
+											{section name=i loop=$umAvalFolders}
+												<option value="{$umAvalFolders[i].path|escape:"html"}">{$umAvalFolders[i].display|escape:"html"}
+											{/section}
+										</select>
+									</td>
+								</form>
+							</tr>
+						</table>
+					</td>
+				</tr>
+			</table>
+		</td>
+		<td width="1" bgcolor="#817B7B"><img width="1" height="1"></td>
+	</tr>
+</table>
+		
+{include file="default/pagefooter.htm"}
+
+</body>
+</html>

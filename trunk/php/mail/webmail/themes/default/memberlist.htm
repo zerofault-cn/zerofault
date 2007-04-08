@@ -1,0 +1,42 @@
+{config_load file=$umLanguageFile section="Group"}
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<html>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<head>
+	<title>{#common_page_title#} - {#group_list_title#}</title>
+	<meta http-equiv="Content-Type" content="text/html; charset={#default_char_set#}">
+	<link rel="stylesheet" href="themes/default/webmail.css" type="text/css">
+	<script language="JavaScript" src="themes/default/webmail.js" type="text/javascript"></script>
+{$umJS}
+</head>
+
+
+<body leftmargin="0" marginwidth="0" topmargin="4" marginheight="3">
+
+<table align="center" width="100%" border="0" cellspacing="1" cellpadding="0" bgcolor=#ffffff>
+
+	<tr height=20>
+	     <td class="headers" width="70%"><b>.:{#group_list_mail#}:.</b></td>
+	     <td class="headers" width="30%"><b>.:{#group_addcontact#}:.</b></td>
+	</tr>
+	
+	{section name=i loop=$mlist}
+	<tr height=20>
+	     <td class="default" width="70%">&nbsp;{$mlist[i].mail}</td>
+	     <td class="default" width="30%" align=center>&nbsp;<a href="{$mlist[i].addlink}" title="{#group_addcontact#}"><img src="themes/default/images/address.gif" width=16 height=16 border=0></a></td>
+	</tr>
+	{/section}
+		
+	<tr  height=30>
+		<td class=default colspan=2 align=center>
+			<input type=button value="{#group_list_close#}" class=button onclick="javascript:window.close();">
+		</td>
+	</tr>
+
+</table>
+	
+</body>
+</html> 

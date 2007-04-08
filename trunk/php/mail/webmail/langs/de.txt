@@ -1,0 +1,543 @@
+#
+# German
+# TRANSLATION BY r.eberwein@ses-bonn.de
+common_page_title			        = WebMail | Powered by Magic Winmail Server 3.0
+homepage				        = Powered by Magic Winmail Server
+homepage_url				        = http://www.magicwinmail.net
+contact_us				        = Kontakt
+webmaster_mail				        = support@magicwinmail.net
+banner_url				        = images/banner.gif
+
+# CharSet 
+default_char_set			        = iso-8859-1
+
+# User-friendly names to system folders
+inbox_extended					= Posteingang
+sent_extended					= Gesendet
+trash_extended					= Papierkorb
+draft_extended					= Entwurf
+
+# Navigation texts
+previous_text					= Vorige
+next_text					= Folgende
+
+# Mail Server Errors
+error_connect					= Fehler bei Kontaktaufnahme zum Server
+error_retrieving				= Fehler beim Empfang der Nachricht, Ihr Eingangskorb wurde angepasst
+error_other					= Systemfehler, bitte wenden Sie sich an Ihren Systemadministrator
+
+# Invalid name of mailbox
+error_invalid_name				= Ungültiger Ordnername - Bitte verwenden Sie nur die folgenden Zeichen  A-Z, 0-9, - und die Leertaste
+
+# Validations when sending mails
+error_no_recipients				= Fehler: Sie brauchen mindestens einen Empfänger
+error_compose_invalid_mail1_s			= Fehler: Diese eMail-Adresse scheint falsch zu sein
+error_compose_invalid_mail1_p			= Fehler: Diese eMail-Adressen scheinen falsch zu sein
+error_compose_invalid_mail2_s			= Bitte prüfen Sie die eMail-Adresse, bevor Sie die Mail zurückschicken.
+error_compose_invalid_mail2_p			= Bitte prüfen Sie die eMail-Adressen, bevor Sie die Mail zurückschicken.
+
+#register mail
+register_notify_subject			= Registrierbenachrichtigung
+register_notify_content			= User %mail wurde registriert. Die Mailbox wird freigegeben, nachdem der Administrator diese bastätigt hat..
+register_welcome_subject			= Herzlich willkommen.
+register_welcome_content			= Ihre Mailbox wurde registriert. Sie können Sie nun verwenden.
+
+# Confirmation of delete
+confirm_delete					= Wollen Sie diese Nachricht(en) wirklich löschen?
+
+# If the message no have a subject or sender
+no_subject_text					= [Kein Betreff]
+no_sender_text					= [Absender unbekannt]
+no_recipient_text				= [Empfänger unbekannt]
+
+# If the quota limit was exceeded
+quota_exceeded					= Sie haben nicht genügend Platz in Ihrer Mailbox. Bitte löschen Sie ein paar Mails.
+quota_usage_info				= max. Speicherplatz
+quota_usage_used				= Verwendet
+quota_usage_of					= von
+quota_usage_avail				= verfügbar
+
+#*************************************************************#
+# Date Format                                                 #
+# %d = day, %m = month, %y = year, %H = hour, %M = minutes    #
+# for a complete list, see http://www.php.net/strftime        #
+#*************************************************************#
+date_format 					= %d.%m.%y %H:%M
+
+# Menu
+messages_mnu					= Posteingang
+read_menu					= eMail(s) lesen
+compose_mnu					= Neue Mail verfassen
+folders_mnu					= Ordner
+search_mnu					= Suchen
+address_mnu					= Kontakte
+signature_mnu					= Signaturen
+externalpop3_mnu				= Externe POP3 Postfächer
+prefs_mnu					= Einstellungen
+autoforward_mnu					= Auto Weiterleitung
+autoreply_mnu					= Auto Antwort
+chgpassword_mnu					= Passwort wechseln
+logoff_mnu 					= ausloggen
+netaddress_mnu                  = Allgemeiner Kontakt
+userinfo_mnu                    = Pers?nliche Informationen
+group_mnu					= PostcGruppe
+options_mnu               			= Wahlen
+personaddress_mnu               			= Pers?nlicher Kontakt
+
+# Reply
+reply_prefix					= Aw:
+forward_prefix					= Fw:
+reply_delimiter					= --------- Original Message --------
+reply_from_hea					= Von:
+reply_to_hea					= An:
+reply_cc_hea					= Cc:
+reply_date_hea					= Datum:
+reply_subject_hea				= Betreff:
+# done
+
+signature_noselect				= Keine Signatur
+
+# page-specific vars
+
+[Headers]
+key_hea						= Schlüssel
+value_hea					= Wert
+
+[Folders]
+folders_title					= Ordner
+fld_name_hea					= Ordner
+fld_messages_hea				= Nachrichten
+fld_size_hea					= Größe
+fld_empty_hea					= Leer
+fld_delete_hea					= Löschen
+fld_total					= Total:
+fld_make_new					= Neuen Ordner erstellen
+
+[MessageList]
+messages_title					= Nachrichtenübersicht 
+no_messages					= Es sind keine neuen Nachrichten in Ihrem
+delete_selected_mnu				= Lösche selektierte Mails
+drop_selected_mnu				= Tropfen vorgew?hlt
+move_selected_to_trash_mnu			= Verschiebe selektierte Mails in den Papierkorb
+move_selected_mnu				= Verschiebe selektierte Mails nach
+delete_mnu					= Löschen
+move_mnu					= Verschieben nach
+subject_hea					= Betreff
+from_hea					= Von
+to_hea						= An
+date_hea					= Datum
+size_hea					= Größe
+
+msg_you_have					= Sie haben
+msg_message					= Nachricht
+msg_messages					= Nachrichten
+
+msg_more_unread					= ungelesene
+msg_one_unread					= ungelesene
+msg_none_unread					= keine ungelesenen
+msg_in_the_folder				= in diesem Ordner
+
+edit_mail				= senden Sie zu: 
+reply_mail				= Erwidern Sie zu: 
+read_mail				= Lesen Sie Post: 
+
+[Login]
+lng_title					= Login
+lng_welcome_msg					= Willkommen, bitte melden Sie sich bei Ihrem Account an
+lng_user_email					= E-mail
+lng_user_name					= Username
+lng_user_pwd					= Passwort
+lng_server						= Server
+lng_theme						= Theme
+lng_language					= Sprache
+lng_login_btn					= Login &gt;&gt;
+lng_register					= Registrierung
+
+[Newmessage]
+newmsg_title 				        = Verfassen
+to_hea						= An
+cc_hea						= Cc
+bcc_hea						= Bcc
+subject_hea					= Betreff
+content_hea					= Inhalt
+address_tip					= Aus Kontakten
+
+attach_hea					= Anhang
+attch_add_new					= Neue Datei anhängen
+attch_name_hea					= Name
+attch_size					= Größe
+attch_type_hea					= Typ
+attch_dele_hea					= Löschen
+attch_no_hea					= Keine Anhänge
+
+signature_name					= Signatur auswählen
+signature_content				= Signatur
+send_text					= Abschicken
+html_mode					= Html Editor
+text_mode					= Text Editor
+
+result_error					= Es war nicht möglich, diese Mail zu verschicken
+result_success					= Diese Mail wurde versendet
+nav_continue					= Schreiben fortsetzen
+nav_msglist						= Posteingang
+nav_back					= Zurück
+
+up_title 					= Datei hinzufügen
+up_information_text				= Datei auswählen
+up_upload_button_text			= Attach
+up_close_button_text			= Close
+
+priority_text					= Priorität
+priority_low					= Niedrig
+priority_normal					= Normal
+priority_high					= Hoch
+
+[AdvancedEditor]
+adv_warning_text_mode1				= Bitte deaktivieren Sie eine Option
+adv_warning_text_mode2				= um die Toolbox zu benutzen
+
+adv_type_urlpath				= Write the URL: \n(eg: http://www.magicwinmail.net)
+adv_type_imgpath				= Write the URL of a image: \n(eg: http://www.magicwinmail.net/images/magicwinlogo.jpg)
+
+format_paragraph				= Paragraph
+format_h1					= Stil 1 <H1>
+format_h2					= Stil 2 <H2>
+format_h3					= Stil 3 <H3>
+format_h4					= Stil 4 <H4>
+format_h5					= Stil 5 <H5>
+format_h6					= Stil 6 <H6>
+format_pre					= Formatiert <PRE>
+format_clear_all				= Alles löschen
+
+format_font					= Schrift
+format_size					= Größe
+
+extra_font_list					=
+
+view_source					= HTML-Code anschauen
+clear_format					= Format löschen
+
+priority_text					= Priorität
+
+selcolor_title				        = Farbe auswählen
+selcolor_basecolor			        = Hintergrund
+selcolor_bright				        = Leuchtend
+selcolor_code				        = Code
+selcolor_okbtn				        = OK
+selcolor_cancelbtn			        = Abbruch
+
+inspicture_title				    = Grafik einfügen
+inspicture_source			        = Quelle
+inspicture_replce				    = Text ersetzen
+inspicture_link				        = Link URL
+inspicture_align			        = Ausrichten
+inspicture_none				        = Keine(s)
+inspicture_left			        	= Links
+inspicture_right			        = Rechts
+inspicture_texttop			        = Text oben
+inspicture_absmiddle			    = Absolute Mitte
+inspicture_baseline			        = Grundlinie
+inspicture_absbottom			    = Absolut unten
+inspicture_bottom				    = Unten
+inspicture_middle				    = Mitte
+inspicture_top					    = Oben
+inspicture_type				        = Grafiktyp
+inspicture_pic				        = Allgemeine Grafik
+inspicture_flash			        = Flash Grafik
+inspicture_border				    = Rahmen
+inspicture_width			        = Breite
+inspicture_height			        = Höhe
+inspicture_okbtn			        = OK
+inspicture_cancelbtn		        = Abbruch
+
+instable_title				    = Tabelle einfügen
+instable_rows				    = Reihen
+instable_cellspacing			= Zellenabstand
+instable_cols				    = Spalten
+instable_cellpadding			= Zellenrand
+instable_width				    = Breite
+instable_percent				= Prozent
+instable_pixel				    = Pixel
+instable_border				    = Rahmen
+instable_okbtn			        = OK
+instable_cancelbtn		        = Abbruch
+
+
+[BadLogin]
+bdl_title					= Login Fehler 
+bdl_msg						= Die Kombination Username und Passwort ist inkorrekt.<br><br>Bitte überprüfen Sie Usernamen und Kennwort und versuchen Sie es erneut.
+bdl_back					= Zurück
+
+[Error]
+err_title					= Fehlerinformationen
+err_msg						= Es gab Fehler in der Verarbeitung<br><br>Bitte loggen Sie sich neu ein.
+err_system_msg					= Systemmeldung: 
+err_exit					= Logout
+
+[Preferences]
+prf_title 					= Einstellungen
+prf_general_title				= Generelle Informationen
+prf_name					= Name
+prf_reply_to					= Antworten an
+prf_trash_title					= Papierkorb
+prf_save_to_trash				= Wenn eine Nachricht <b>gelöscht</b> wird, verschiebe sie nach
+prf_save_only_read				= Nur <b>gelesene Nachrichten </b> speichern unter
+prf_empty_on_exit				= Papierkorb <b>ausleeren</b> wenn Sie sich ausloggen
+prf_sent_title					= Verschickte Nachrichten
+prf_save_sent					= Speichere <b>verschickte Nachrichten</b> unter 
+prf_messages_title				= Nachrichten
+prf_page_limit					= Maximale Anzahl Nachrichten pro Seite
+prf_save_button					= Speichern
+prf_display_images				= Zeige anhängende Grafiken
+prf_default_editor_mode				= Standard Editor
+prf_default_editor_mode_text			= "TEXT Editor"
+prf_default_editor_mode_html			= "HTML Editor(IE5 oder höher)"
+prf_time_to_refesh				= Automatischer Check nach neuen Nachrichten (minutes)
+
+[Catch]
+ctc_title					= Zu Kontakten hinzufügen
+ctc_information				= Nur eMails im Nachrichtenkopf anzeigen
+ctc_name					= Name
+ctc_email					= E-mail
+ctc_no_address				= Keine Adresse verfügbar
+ctc_close					= Schließen
+ctc_save					= Speichern
+
+[Readmsg]
+next_mnu					= Nächste
+previous_mnu				= Vorige
+back_mnu					= Zurück
+reply_mnu					= Antworten
+reply_all_mnu				= Antwort an alle
+forward_mnu					= Weiterleiten
+headers_mnu					= Kopf
+move_mnu					= Verschieben nach
+move_to_trash_mnu			= Papierkorb
+delete_mnu					= Löschen
+print_mnu					= Drucken
+
+from_hea					= Von:
+to_hea						= An:
+cc_hea						= Kopie:
+date_hea					= Datum:
+subject_hea					= Betreff:
+attach_hea					= Anhang:
+
+attch_name_hea					= Name
+attch_force_hea					= Download
+attch_type_hea					= Typ
+attch_size_hea					= Größe
+catch_address					= Zu Kontakten hinzufügen
+
+[Search]
+sch_information_text				= Geben Sie einen Satz oder ein Wort an, nach dem gesucht wird.
+sch_button_text					= Suche &gt;&gt;
+sch_subject_hea					= Betreff
+sch_from_hea					= Von
+sch_to_hea					= An
+sch_cc_hea					= Kopie
+sch_date_hea					= Datum
+sch_body_hea					= Inhalt
+sch_folder_hea					= Ordner
+sch_no_results					= Es wurden keine Nachrichten gefunden, die diesen Kriterien entsprechen
+
+[QuickAddress]
+qad_title 					= Kontakt
+qad_select_address				= Kontakt auswählen
+qad_to						= An
+qad_cc						= Kopie
+qad_bcc						= Blindkopie
+
+[AddressBook]
+# edit/display
+adr_title					= Kontakt
+adr_name					= Name
+adr_email					= E-mail
+adr_phone					= Telefon
+adr_address					= Addresse
+adr_work					= Arbeit
+adr_back					= Zurück
+adr_save					= Speichern
+adr_close                   = Ende
+adr_empty 					= Felder mit einem Stern (*) müssen ausgefüllt werden
+
+netadr_title					= Allgemeiner Kontakt
+netadr_cn                                       = Name
+netadr_sn                                       = Voller Name
+netadr_mail                                     = E-mail
+
+netadr_homeaddress                              = Spuradresse
+netadr_homephone                                = HauptcTelefon
+netadr_mobile                                   = Beweglich
+
+netadr_ou                                       = Abteilung
+netadr_jobtitle                                 = JobcTitel
+netadr_officename                               = B¨¹rocName
+netadr_telephonenumber                          = B¨¹rocTelefon
+
+netadr_close                                    = Nahes Fenster
+
+# list
+adr_name_hea					= Name
+adr_email_hea					= E-mail
+adr_edit_hea					= Ändern
+adr_expo_hea					= Export
+adr_dele_hea					= Löschen
+adr_new_entry					= Neuer Kontact
+
+netadr_name                                     = Name
+netadr_mail                                     = E-mail
+netadr_phone                                    = Telefon
+netadr_forward                                  = Vorw?rts
+netadr_next                                     = Zun?chst
+netadr_lookup                                   = Nachschlagen
+netadr_viewinfo                                 = AnsichtcBenutzercInformationen
+netadr_lookup_tip                               = Ungenaue Suche des Suchcontact(support)
+netadr_addcontact                               = F¨¹gen Sie Kontakt
+
+addr_saved					= Der Kontakt wurde gespeichert
+addr_added					= Der Kontakt wurde hinzugefügt
+addr_deleted					= Der Kontakt wurde gelöscht
+
+[Signature]
+# edit/display
+sign_title					= Signatur
+sign_name					= Name
+sign_content				= Inhalt
+sign_back					= Zurück
+sign_save					= Speichern
+sign_empty 					= Felder mit einem Stern (*) müssen ausgefüllt werden
+
+# list
+sign_name_hea					= Name
+sign_content_hea				= Inhalt
+sign_edit_hea					= Ändern
+sign_dele_hea					= Löschen
+sign_new_entry					= Neue Signatur
+
+sign_saved					= Die Signatur wurde gespeichert
+sign_added					= Die Signatur wurde hinzugefügt
+sign_deleted					= Die Signatur wurde gelöscht
+sign_full					= Die Signaturanzahl überschreitet das Systemlimit, sie wurde nicht hinzugefügt.
+
+[AutoForward]
+fwd_title					= Auto Weiterleitung
+fwd_address					= Weiterleitungsadresse
+fwd_address_tip				= Wenn mehrere Adressen angegeben werden, müssen diese mit einem Semikolon (;) getrennt werden.
+fwd_savecopy				= Nach der Weiterleitung eine Kopie in der lokalen Mailbox speichern.
+fwd_save					= Speichern
+
+[AutoReply]
+reply_title					= Auto Antwort
+reply_content				        = Antwort Inhalt
+reply_status				        = Auto Antwort aktiv
+reply_save					= Speichern
+
+[Password]
+pwd_title					= Passwort wechseln
+pwd_old						= Altes Passwort
+pwd_new						= Neues Passwort
+pwd_confirm					= Passwort bestätigen
+pwd_save					= speichern
+pwd_empty					= Das Passwortfeld darf nicht leer sein.
+pwd_noequal					= Neues Passwort und die Bestätigung müssen übereinstimmen
+pwd_failure					= Passwortwechsel war nicht erfolgreich
+pwd_success					= Passwortwechsel war erfolgreich
+pwd_back					= Zurück
+
+[ExternalPop3]
+# edit/display
+pop3_title					= Externes POP3-Postfach
+pop3_username				        = User Name
+pop3_password				        = Passwort
+pop3_host					= Host
+pop3_port					= Port
+pop3_enable					= Aktiviert
+pop3_savecopy				        = Kopie speichern
+pop3_back					= Zurück
+pop3_save					= Speichern
+pop3_empty 					= Felder mit einem Stern (*) müssen ausgefüllt werden
+
+# list
+pop3_username_hea				= User Name
+pop3_host_hea				        = Host
+pop3_enable_hea					= Aktiviert
+pop3_edit_hea					= Bearbeiten
+pop3_dele_hea					= Löschen
+pop3_new_entry					= Neuer POP3-Account
+
+pop3_saved					= Der POP3-Account wurde gespeichert
+pop3_added					= Der POP3-Account wurde hinzugefügt
+pop3_deleted					= Der POP3-Account wurde gelöscht
+pop3_full					= Die maximale Anzahl an POP3-Accounts wurde erreicht, der Account wurde nicht hinzugefügt.
+
+[Register]
+reg_title 					= Neue Mailbox einrichten
+reg_mailbox 				= Mailbox
+reg_password 				= Passwort
+reg_confirmpwd 				= Passwort bestätigen
+reg_fullname 				= Kompletter Name
+reg_description 			= Beschreibung
+reg_hide_pwd 				= Versteckt
+
+reg_failure					= Fehler bei Registrierung der neuen Mailbox
+reg_success					= Neue Mailbox erfolgreich registriert
+reg_empty					= Felder mit einem Stern (*) müssen ausgefüllt werden   
+reg_invaildchar				= Die Mailbox beinhaltet ungültige Zeichen. Gültig sind: a~z, 0~9, ., _ und -.
+pwd_pwdnoequal				= Passwort und Bestätigung müssen übereinstimmen
+reg_register 				= Registrierung
+reg_back 					= Zurück
+reg_affirmtip				= Die Mailbox wird nicht aktiv, bevor der Administrator dies bestätigt.
+reg_successtip				= Begeben Sie sich bitte zur Startseite.
+reg_dberror					= Der Zugriff auf die Userdatenbank verursachte Fehler!
+reg_existuser				= Dieser Mail-Account existiert schon.
+reg_existaliasuser			= Derselbe Mailbox-Alias existiert schon.
+reg_existgroup				= Dieselbe Mailinggruppe existiert bereits.
+reg_userfull				= Die Anzahl der Mailboxen hat das maximale Limit erreicht.
+reg_domainuserfull			= In dieser Domain hat die Anzahl der Mailboxen ihr Maximum erreicht.
+reg_domainstoragefull		= In dieser Domain hat der Speicherplatz-Bedarf sein Maximum erreicht.
+
+reg_ldappublicinfo                      = Addieren Sie das allgemeine Kontakt (y/n)?
+reg_ldaphomeaddress                     = Spuradresse
+reg_ldaphomephone                       = HauptcTelefon
+reg_ldapmobile                          = Beweglich
+reg_ldaporganizationunit                = Firma/Abteilung
+reg_ldapjobtitle                        = JobcTitel
+reg_ldapoffice                          = B¨¹ro
+reg_ldapofficephone                     = B¨¹rocTelefon
+
+[Userinfo]
+userinfo_save							= Au?er
+userinfo_title                    	= Pers?nliche Informationen
+userinfo_success						= ?ndern Sie Erfolg!
+userinfo_failure1						= ?ndern Sie failure! <br> Kann nicht pers?nliche Informationen erhalten.
+userinfo_failure2						= ?ndern Sie Ausfall!
+
+userinfo_user                           = BenutzercName
+userinfo_fullname                       = Voller Name
+userinfo_description                    = Beschreibung
+
+userinfo_publicinfo                     = Addieren Sie den allgemeinen Kontakt (y/n)?
+userinfo_homeaddress                    = Spuradresse
+userinfo_homephone                      = HauptcTelefon
+userinfo_mobile                         = Beweglich
+userinfo_organizationunit               = Firma/Abteilung
+userinfo_jobtitle                       = JobcTitel 
+userinfo_office                         = B¨¹ro
+userinfo_officephone                    = B¨¹rocTelefon
+
+[Group]
+group_title								= PostcGruppe
+group_adr								= GruppencE-mail
+group_description 						= Beschreibung
+group_memberlist						= MitgliedscListe
+group_member	 						= ListencMitglieder
+group_contct							= F¨¹gen Sie Kontakt
+
+group_mailto							= Schreiben Sie Anzeige
+group_memberlist						= ListencGruppencMitglied
+group_addcontact						= Addieren Sie Kontakt
+
+group_list_title						= GruppencMitgliedscListe
+group_list_close						= Ende
+group_list_mail	            			= E-mail

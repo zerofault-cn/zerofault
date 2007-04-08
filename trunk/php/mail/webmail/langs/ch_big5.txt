@@ -1,0 +1,557 @@
+#
+# Chinese
+#
+common_page_title			    	= WebMail | Power by Magic Winmail Server 3.0
+homepage				    	= Power by Magic Winmail Server
+homepage_url				    	= http://www.magicwinmail.com
+contact_us				    	= 聯系我們
+webmaster_mail				    	= support@magicwinmail.com
+banner_url				    	= images/cn-banner.gif
+
+# CharSet 
+default_char_set				= big5
+        
+
+# User-friendly names to system folders
+inbox_extended					= 收件匣
+sent_extended					= 已發郵件
+trash_extended					= 垃圾箱
+draft_extended					= 草稿箱
+
+# Navigation texts
+previous_text					= 上一條
+next_text					= 下一條
+
+# Mail Server Errors
+error_connect					= 連接伺服器出錯
+error_retrieving				= 取郵件錯誤﹐郵箱名已經修改
+error_other					= 系統出錯﹐請聯系網路管理員
+
+# Invalid name of mailbox
+error_invalid_name				= 無效郵件夾名 - 只能用下列字母群組合 A-Z, 0-9, - 和空格
+
+# Validations when sending mails
+error_no_recipients				= 錯誤﹕必須至少有一個接收件人﹗
+error_compose_invalid_mail1_s			= 錯誤﹕郵件地址無效﹗
+error_compose_invalid_mail1_p			= 錯誤﹕郵件地址無效﹗
+error_compose_invalid_mail2_s			= 重發郵件前請檢查郵件地址。
+error_compose_invalid_mail2_p			= 重發郵件前請檢查郵件地址。
+
+#register mail
+register_notify_subject				= 用戶注冊通知
+register_notify_content				= 用戶%mail已經注冊﹐請管理員進行審核。審核通過後此用戶才能正常使用。
+register_welcome_subject			= 歡迎您的使用
+register_welcome_content			= 您的郵箱已經注冊成功﹐您的正常使用。
+
+# Confirmation of delete
+confirm_delete					= 是否要刪除這（些）郵件﹖
+
+# If the message no have a subject or sender
+no_subject_text					= [無主題]
+no_sender_text					= [無發件人]
+no_recipient_text				= [無收件人]
+
+# If the quota limit was exceeded
+quota_exceeded					= 郵箱沒有足夠的空間完成此項操作﹐請刪除一些郵件後再進行
+quota_usage_info				= 容量限制
+quota_usage_used				= 已用
+quota_usage_of					= 在
+quota_usage_avail				= 可用
+
+#*************************************************************#
+# Date Format                                                 #
+# %d = day, %m = month, %y = year, %H = hour, %M = minutes    #
+# for a complete list, see http://www.php.net/strftime        #
+#*************************************************************#
+date_format 					= %y/%m/%d %H:%M
+
+# Menu
+messages_mnu					= 收件匣
+read_menu					= 讀郵件
+compose_mnu					= 寫郵件
+folders_mnu					= 郵件夾
+search_mnu					= 找到
+address_mnu					= 地址簿
+signature_mnu					= 簽名檔
+externalpop3_mnu				= 外部郵箱
+prefs_mnu					= 使用偏好
+autoforward_mnu					= 自動轉發
+autoreply_mnu					= 自動回復
+chgpassword_mnu					= 修改密碼
+logoff_mnu 					= 結束
+netaddress_mnu               			= 公用地址簿
+userinfo_mnu                  			= 個人資料
+group_mnu					= 郵件通訊群組
+smscgi_mnu					= 新郵件通知
+options_mnu               			= 組態箱
+personaddress_mnu               			= 個人地址簿
+
+# Reply
+reply_prefix					= Re:
+forward_prefix					= Fw:
+reply_delimiter					= --------- Original Message --------
+reply_from_hea					= From:
+reply_to_hea					= To:
+reply_cc_hea					= Cc:
+reply_date_hea					= Date:
+reply_subject_hea				= Subject:
+# done
+
+signature_noselect				= 沒有簽名檔
+
+# page-specific vars
+
+[Headers]
+key_hea						= 項目
+value_hea					= 內容
+
+[Folders]
+folders_title					= 郵件夾
+fld_name_hea					= 郵件夾名
+fld_messages_hea				= 郵件數
+fld_size_hea					= 大小
+fld_empty_hea					= 清空
+fld_delete_hea					= 刪除
+fld_total					= 總計:
+fld_make_new					= 新增郵件夾
+
+[MessageList]
+messages_title					= 郵件清單 
+no_messages					= 沒有郵件在郵件夾 
+delete_selected_mnu				= 刪除已選項
+drop_selected_mnu				= 永久刪除已選項
+move_selected_to_trash_mnu			= 移動已選項到垃圾箱
+move_selected_mnu				= 移動已選項到
+delete_mnu					= 刪除
+move_mnu					= 移動到
+subject_hea					= 主題
+from_hea					= 發件人
+to_hea						= 接收人
+date_hea					= 日期
+size_hea					= 大小
+
+msg_you_have					= 您有
+msg_message					= 郵件
+msg_messages					= 郵件數
+
+msg_more_unread					= 未讀
+msg_one_unread					= 未讀
+msg_none_unread					= 沒有未讀
+msg_in_the_folder				= 在郵件夾
+
+edit_mail					= 發新郵件: 
+reply_mail					= 回復: 
+read_mail					= 閱讀: 
+
+[Login]
+lng_title					= 登入
+lng_welcome_msg					= 歡迎登入本系統
+lng_user_email					= 郵件地址
+lng_user_name					= 用戶名
+lng_user_pwd					= 密碼
+lng_server					= 伺服器
+lng_theme					= 介面風格
+lng_language					= 語言
+lng_login_btn					= 登入 &gt;&gt;
+lng_register					= 注冊新郵箱
+
+[Newmessage]
+newmsg_title 				        = 寫郵件
+to_hea						= 收件人
+cc_hea						= 抄送
+bcc_hea						= 密送
+subject_hea					= 主題
+content_hea					= 內容
+address_tip					= 從地址簿選擇
+
+attach_hea					= 附件
+attch_add_new					= 增加附件
+attch_name_hea					= 標簽
+attch_size					= 大小
+attch_type_hea					= 型式
+attch_dele_hea					= 刪除
+attch_no_hea					= 沒有附件
+
+signature_name					= 選擇簽名檔
+signature_content				= 簽名檔
+send_text					= 發送
+html_mode					= HTML編輯器
+text_mode					= TEXT編輯器
+
+result_error					= 郵件發送失敗
+result_success					= 郵件發送成功
+nav_continue					= 繼續寫郵件
+nav_msglist						= 轉向收件匣
+nav_back					= 返回
+
+up_title 					= 增加檔案
+up_information_text				= 選擇檔案
+up_upload_button_text				= 上傳
+up_close_button_text				= 關閉
+
+priority_text					= 優先權
+priority_low					= 低
+priority_normal					= 中
+priority_high					= 高
+
+[AdvancedEditor]
+adv_warning_text_mode1				= 請不要選中組態
+adv_warning_text_mode2				= 用工具條
+
+adv_type_urlpath				= 填寫URL: \n(eg: http://www.magicwinmail.com)
+adv_type_imgpath				= 填寫圖像的URL: \n(eg: http://www.magicwinmail.com/images/magicwinlogo.jpg)
+
+format_paragraph				= 段落
+format_h1					= 格式 1 <H1>
+format_h2					= 格式 2 <H2>
+format_h3					= 格式 3 <H3>
+format_h4					= 格式 4 <H4>
+format_h5					= 格式 5 <H5>
+format_h6					= 格式 6 <H6>
+format_pre					= 格式化 <PRE>
+format_clear_all				= 清除格式
+
+format_font					= 字形
+format_size					= 字號
+
+extra_font_list 				= <option value="宋體">宋體</option><option value="黑體">黑體</option><option value="楷體_GB2312">楷體</option><option value="仿宋_GB2312">仿宋</option><option value="隸書">隸書</option><option value="幼圓">幼圓</option><option value="新宋體">新宋體</option><option value="細明體">細明體</option>
+
+view_source					= 查看HTML源碼
+clear_format					= 清除格式
+
+selcolor_title				        = 選擇顏色
+selcolor_basecolor			        = 基色
+selcolor_bright				        = 光度
+selcolor_code				        = 代碼
+selcolor_okbtn				        = 確定
+selcolor_cancelbtn			        = 取消
+
+inspicture_title				    = 插入圖片
+inspicture_source			        = 圖片來源
+inspicture_replce				    = 取代文字
+inspicture_link				        = 鏈接地址
+inspicture_align			        = 對齊方式
+inspicture_none				        = 不設定
+inspicture_left			        	= 左
+inspicture_right			        = 右
+inspicture_texttop			        = 文本上方
+inspicture_absmiddle			    	= 正中央
+inspicture_baseline			        = 基線
+inspicture_absbottom			    	= 正下方
+inspicture_bottom				= 下
+inspicture_middle				= 中
+inspicture_top					= 上
+inspicture_type				        = 型式
+inspicture_pic				        = 插入普通圖片
+inspicture_flash			        = 插入Flash動畫
+inspicture_border				= 邊框寬度
+inspicture_width			        = 寬度
+inspicture_height			        = 高度
+inspicture_okbtn			        = 確定
+inspicture_cancelbtn		        	= 取消
+
+instable_title				    	= 插入表格
+instable_rows				    	= 行數
+instable_cellspacing				= 單元格邊距
+instable_cols				    	= 列數
+instable_cellpadding				= 單元格間隔
+instable_width				    	= 寬度
+instable_percent				= 插入表格
+instable_pixel				    	= 像素
+instable_percent				= 百分比
+instable_border				    	= 邊框
+instable_okbtn			        	= 確定
+instable_cancelbtn		        	= 取消
+
+
+[BadLogin]
+bdl_title					= 登入錯誤 
+bdl_msg						= 用戶名或密碼不正確。<br><br>請檢查您輸入的用戶名和密碼﹐然後重試.
+bdl_back					= 返回
+
+[Error]
+err_title					= 系統錯誤
+err_msg						= 在處理過程中發生錯誤<br><br>請重新登入
+err_system_msg				        = 系統資訊﹕ 
+err_exit					= 結束
+
+[Preferences]
+prf_title 					= 使用偏好
+prf_general_title				= 基本資訊
+prf_name					= 發件人名字
+prf_reply_to					= 回復到
+prf_trash_title					= 垃圾箱
+prf_save_to_trash				= 當<b>刪除</b>郵件時﹐移到
+prf_save_only_read				= 存儲<b>已讀郵件</b>到 
+prf_empty_on_exit				= 結束系統時﹐<b>清空</b>垃圾箱
+prf_sent_title					= 已發郵件
+prf_save_sent					= 存儲<b>已發送郵件</b>到 
+prf_messages_title				= 郵件清單
+prf_page_limit					= 每頁顯示郵件數
+prf_save_button					= 儲存
+prf_display_images				= 顯示附件中的圖片
+prf_default_editor_mode				= 預設編輯器
+prf_default_editor_mode_text			= "TEXT編輯器"
+prf_default_editor_mode_html			= "HTML編輯器(IE5或更高)"
+prf_time_to_refesh				= 自動檢查新郵件(分鐘)
+
+[Catch]
+ctc_title					= 增加到地址簿
+ctc_information					= 顯示郵件頭中的地址
+ctc_name					= 姓名
+ctc_email					= E-mail
+ctc_no_address					= 沒有分析到可用地址
+ctc_close					= 關閉
+ctc_save					= 儲存
+
+[Readmsg]
+previous_mnu					= 上一條
+next_mnu					= 下一條
+back_mnu					= 返回
+reply_mnu					= 回復
+reply_all_mnu					= 回復所有
+forward_mnu					= 轉發
+headers_mnu					= 郵件頭
+move_mnu					= 移動到
+move_to_trash_mnu				= 移動到垃圾箱
+delete_mnu					= 刪除
+print_mnu					= 列印
+
+from_hea					= 發件人:
+to_hea						= 收件人:
+cc_hea						= 抄送:
+date_hea					= 日期:
+subject_hea					= 主題:
+attach_hea					= 附件:
+
+attch_name_hea					= 標簽
+attch_force_hea					= 下載
+attch_type_hea					= 型式
+attch_size_hea					= 大小
+catch_address					= 增加到地址簿
+
+[Search]
+sch_information_text				= 輸入要找到的關鍵字。
+sch_button_text					= 找到&gt;&gt;
+sch_subject_hea					= 主題
+sch_from_hea					= 發件人
+sch_to_hea					= 收件人
+sch_cc_hea					= 抄送
+sch_date_hea					= 日期
+sch_body_hea					= 信體
+sch_folder_hea					= 郵件夾
+sch_no_results					= 沒有找到符合條件的郵件
+
+[QuickAddress]
+qad_title 					= 地址簿
+qad_select_address				= 選擇聯系人
+qad_to						= 發件人
+qad_cc						= 抄送
+qad_bcc						= 密送
+
+[AddressBook]
+# edit/display
+adr_title					= 地址簿
+adr_name					= 姓名
+adr_email					= E-mail
+adr_phone					= 電話號碼
+adr_address					= 地址
+adr_work					= 工作單位
+adr_back					= 返回
+adr_save					= 儲存
+adr_close                   			= 關閉
+adr_empty 					= 標有星號(*)不能為空﹗  
+
+netadr_cn                                       = 用戶名
+netadr_sn                                       = 姓名
+netadr_mail                                     = E-mail
+
+netadr_title					= 公用地址簿
+netadr_homeaddress                              = 家庭住址
+netadr_homephone                                = 家庭電話
+netadr_mobile                                   = 手機
+
+netadr_ou                                       = 部門
+netadr_jobtitle                                    = 職務
+netadr_officename                               = 辦公室標簽
+netadr_telephonenumber                          = 辦公室電話
+
+netadr_close                                    = 關閉視窗
+
+
+# list
+adr_name_hea					= 姓名
+adr_email_hea					= E-mail
+adr_edit_hea					= 編輯
+adr_expo_hea					= 導出
+adr_dele_hea					= 刪除
+adr_new_entry					= 新增聯系人
+
+netadr_name                                     = 姓名
+netadr_mail                                     = E-mail
+netadr_phone                                    = 電話
+netadr_forward                                  = 前一頁
+netadr_next                                     = 後一頁
+netadr_lookup                                   = 找到
+netadr_lookup_tip                               = 找到聯系人（支援模糊查詢）
+netadr_addcontact                              = 加入個人地址簿
+
+addr_saved					= 聯系人記錄已經儲存
+addr_added					= 聯系人記錄已經增加
+addr_deleted					= 聯系人記錄已經刪除
+
+[Signature]
+# edit/display
+sign_title					= 簽名檔
+sign_name					= 標簽
+sign_content				        = 內容
+sign_back					= 返回
+sign_save					= 儲存
+sign_empty 					= 標有星號(*)欄不能為空﹗  
+
+# list
+sign_name_hea					= 標簽
+sign_content_hea				= 內容
+sign_edit_hea					= 編輯
+sign_dele_hea					= 刪除
+sign_new_entry					= 新增簽名
+
+sign_saved					= 簽名記錄已經儲存
+sign_added					= 簽名記錄已經增加
+sign_deleted					= 簽名記錄已經刪除
+sign_full					= 簽名記錄數已經超過系統限制﹗
+
+[AutoForward]
+fwd_title					= 自動轉發
+fwd_address					= 轉發地址
+fwd_address_tip					= 多個轉發地址請用分號(;)分隔
+fwd_savecopy					= 轉發後﹐在郵件中保留拷貝
+fwd_save					= 儲存
+
+[AutoReply]
+reply_title					= 自動回復
+reply_content				        = 回復內容
+reply_status				        = 啟用自動回復
+reply_save					= 儲存
+
+[Password]
+pwd_title					= 修改密碼
+pwd_old						= 舊密碼
+pwd_new						= 新密碼
+pwd_confirm					= 確認密碼
+pwd_save					= 儲存
+pwd_empty					= 密碼項不能為空﹗
+pwd_noequal					= 新密碼和確認密碼不一致﹗
+pwd_failure					= 修改密碼失敗
+pwd_success					= 修改密碼成功
+pwd_back					= 返回
+
+[ExternalPop3]
+# edit/display
+pop3_title					= 外部郵箱
+pop3_username				        = 用戶名
+pop3_password				        = 密碼
+pop3_host					= 伺服器
+pop3_port					= 連接埠
+pop3_enable					= 啟用
+pop3_savecopy				        = 保留備份
+pop3_back					= 返回
+pop3_save					= 儲存
+pop3_empty 					= 標有星號(*)欄不能為空﹗  
+
+# list
+pop3_username_hea				= 用戶名
+pop3_host_hea				        = 伺服器
+pop3_enable_hea					= 啟用
+pop3_edit_hea					= 編輯
+pop3_dele_hea					= 刪除
+pop3_new_entry					= 新增外部郵箱
+
+pop3_saved					= 外部郵箱記錄已經儲存
+pop3_added					= 外部郵箱記錄已經增加
+pop3_deleted					= 外部郵箱記錄已經刪除
+pop3_full					= 外部郵箱記錄數已經超過系統限制﹗
+
+[Register]
+reg_title 					= 注冊新用戶
+reg_mailbox 					= 郵箱名
+reg_password 					= 密碼
+reg_confirmpwd 					= 確認密碼
+reg_fullname 					= 用戶名全名
+reg_description 				= 描述
+reg_hide_pwd 					= 隱藏
+
+reg_failure					= 新用戶注冊失敗
+reg_success					= 新用戶注冊成功
+reg_empty					= 標有星號(*)欄不能為空﹗  
+reg_invaildchar					= 郵箱名含有非法字元。郵箱名只能是a~z, 0~9,., _,-的群組合。
+pwd_pwdnoequal					= 密碼和確認密碼不一致﹗
+reg_register 					= 注冊
+reg_back 					= 返回
+reg_affirmtip					= 郵箱暫時不能使用﹐需要管理員確認後才能使用。
+reg_successtip					= 返回首頁﹐然後登入郵箱。
+reg_dberror					= 讀取用戶資料庫檔案出錯。
+reg_existuser					= 同名的郵箱已經存在, 請修改後重試。
+reg_existaliasuser				= 同名的郵箱別名已經存在, 請修改後重試。
+reg_existgroup					= 同名的郵件群組已經存在, 請修改後重試。
+reg_userfull					= 用戶郵箱數已經達到允許注冊數。
+reg_domainuserfull		        	= 此域下用戶郵箱數已經達到本域允許的注冊數。
+reg_domainstoragefull		    		= 此域下用戶郵箱容量已經達到本域允許的總容量。
+
+
+reg_ldappublicinfo                      	= 是否公開個人資料
+
+reg_ldaphomeaddress                     	= 家庭住址
+reg_ldaphomephone                       	= 住宅電話
+reg_ldapmobile                          	= 手機
+
+reg_ldaporganizationunit                	= 公司/部門
+reg_ldapjobtitle                        	= 職務
+reg_ldapoffice                          	= 辦公室
+reg_ldapofficephone                     	= 電話
+
+[Userinfo]
+userinfo_save					= 儲存
+userinfo_title  	                	= 個人資料
+userinfo_success				= 修改成功﹗
+userinfo_failure1				= 修改失敗﹗<br>不能取得個人資料.
+userinfo_failure2				= 修改失敗﹗
+
+userinfo_user                           	= 用戶名
+userinfo_fullname                       	= 用戶全名
+userinfo_description                    	= 描述
+userinfo_publicinfo                     	= 是否加入公用地址簿
+userinfo_homeaddress                    	= 家庭住址
+userinfo_homephone                      	= 住宅電話
+userinfo_mobile                         	= 手機
+userinfo_organizationunit               	= 公司/部門
+userinfo_jobtitle                       	= 職務
+userinfo_office                         	= 辦公室
+userinfo_officephone                    	= 電話
+
+[Group]
+group_title					= 郵件通訊群組
+group_adr					= 群組郵箱地址
+group_description 				= 群組描述
+group_memberlist				= 群組成員清單
+
+group_mailto					= 寫郵件
+group_listmember				= 列出群組成員
+group_addcontact				= 加入個人地址簿
+
+group_list_title				= 通訊群組成員
+group_list_close				= 關閉
+group_list_mail					= E-Mail
+
+[SmsCgi]
+smscgi_title					= 新郵件通知
+smscgi_service					= 手機短訊息服務商
+smscgi_host 				= 手機短訊息發送通訊閘主機
+smscgi_port					= 手機短訊息發送通訊閘連接埠
+smscgi_length				= 手機短訊息長度
+smscgi_user					= 發送短訊息的認證用戶名
+smscgi_pass					= 發送短訊息的認證密碼
+smscgi_status				= 啟用新郵件手機短訊息通知
+
+smscgi_save				= 儲存
+

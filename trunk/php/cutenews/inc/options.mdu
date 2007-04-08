@@ -1,0 +1,524 @@
+<?PHP
+
+
+// ********************************************************************************
+// Options Menu
+// ********************************************************************************
+if($action == "options")
+{
+    echoheader("options","选项");
+
+    echo"<table border=0 cellpading=0 cellspacing=0 width=\"654\" height=\"59\" >
+    <td width=\"18\" height=\"11\">
+    <td width=\"298\" height=\"11\" align=\"left\">
+    <a href=\"$PHP_SELF?mod=options&action=personal\"><b>个人选项</b></a>";
+
+    if($member_db[1] == 1){
+        echo"<td width=\"330\" height=\"11\" align=\"left\">
+        <a href=\"$PHP_SELF?mod=ipban\"><b>阻止来自某IP的评论</b></a>
+        <tr>
+        <td width=\"18\" valign=\"top\" height=\"15\">
+          <td width=\"298\" height=\"15\" align=\"left\">
+          <a href=\"$PHP_SELF?mod=options&action=syscon&rand=".time()."\"><b>系统配置</b></a>
+          <td width=\"330\" height=\"15\" align=\"left\">
+          <a href=\"$PHP_SELF?mod=options&action=templates\"><b>编辑模板</b></a>
+        </tr>
+        <tr>
+          <td width=\"18\" valign=\"top\" height=\"15\">
+          <td width=\"298\" height=\"15\" align=\"left\">
+          <a href=\"$PHP_SELF?mod=editusers&action=list\"><b>添加/编辑用户</b></a>
+          <td width=\"330\" height=\"15\" align=\"left\">
+          <a href=\"$PHP_SELF?mod=tools&action=archive\"><b>归档管理</b></a>
+        </tr>
+        <tr>
+          <td width=\"18\" valign=\"top\" height=\"15\">
+          <td         width=\"298\" height=\"15\" align=\"left\">
+          <a href=\"$PHP_SELF?mod=images\"><b>已上传图片管理</b></a>
+          <td         width=\"330\" height=\"15\" align=\"left\">
+          <a href=\"$PHP_SELF?mod=tools&action=backup\"><b>备份工具</b></a>
+        </tr>
+
+        <tr>
+          <td width=\"18\" valign=\"top\" height=\"15\">
+          <td         width=\"298\" height=\"15\" align=\"left\">
+          <a href=\"$PHP_SELF?mod=categories\"><b>编辑栏目</b></a>
+          <td         width=\"330\" height=\"15\" align=\"left\">
+          &nbsp;
+        </tr>
+
+        <tr>
+        <td width=\"18\" height=\"27\">
+        <td width=\"632\" height=\"27\" colspan=\"2\">
+        </tr>";
+    }
+    echo"</table>";
+    echofooter();
+}
+// ********************************************************************************
+// Show Personal Options
+// ********************************************************************************
+elseif($action == "personal")
+{
+	echoheader("user","个人选项");
+
+    $registrationdate = date("D, d F Y",$member_db[0]);	//registration date
+    if($member_db[7] == 1){ $ifchecked = "Checked"; }		//if user wants to hide his e-mail
+
+     foreach($member_db as $key=>$value){
+     	$member_db[$key]  = stripslashes(preg_replace(array("'\"'", "'\''"), array("&quot;", "&#039;"),$member_db[$key]));
+     }
+
+     echo"
+     <table border=0 height=1 width=617 cellspacing=\"0\" cellpadding=\"0\">
+     <form method=POST action=\"$PHP_SELF\" name=personal>
+     <td height=\"21\" width=\"99\"  bgcolor=#F7F6F4 >
+	 &nbsp;        用户名称
+     <td height=\"21\" width=\"400\"  bgcolor=#F7F6F4 colspan=2>
+     $member_db[2]
+     <tr>
+     <td height=\"21\" width=\"200\">
+	 &nbsp;   新密码
+     <td height=\"21\" width=\"400\" colspan=2>
+     <input name=editpassword >&nbsp;&nbsp;&nbsp;仅在你希望修改当前密码时
+     </tr>
+
+     <tr>
+     <td height=\"21\" width=\"200\" bgcolor=#F7F6F4>
+	 &nbsp;        别名
+     <td height=\"21\" width=\"400\" bgcolor=#F7F6F4 colspan=2>
+     <input type=text name=editnickname value=\"$member_db[4]\">
+     </tr>
+
+     <tr>
+     <td height=\"21\" width=\"200\" >
+	 &nbsp;        电子邮件
+     <td height=\"21\" width=\"400\"  colspan=2>
+     <input type=text name=editmail value=\"$member_db[5]\">&nbsp;&nbsp;&nbsp;<input type=checkbox name=edithidemail $ifchecked>&nbsp;对访问者隐藏电子邮件
+     </tr>";
+
+     if($member_db[1] != 4){echo"<tr>
+     <td height=\"21\" width=\"200\" bgcolor=#F7F6F4>
+	 &nbsp;        默认头像URL
+     <td height=\"21\" width=\"400\" bgcolor=#F7F6F4 >
+     <input type=text name=change_avatar value=\"$member_db[8]\">&nbsp;&nbsp;&nbsp;&nbsp;显示在'增加新闻'页面
+     </tr>"; }else{ $bg = "bgcolor=#F7F6F4"; }
+
+     echo"<tr>
+     <td height=\"21\" width=\"200\" $bg>
+	 &nbsp;    访问权限
+     <td height=\"21\" width=\"400\" $bg colspan=2>";
+
+	 if		($member_db[1] == 4){ echo "commenter"; }
+	 elseif	($member_db[1] == 3){ echo "journalist"; }
+	 elseif	($member_db[1] == 2){ echo "editor"; }
+	 elseif	($member_db[1] == 1){ echo "administrator"; }
+
+     if($member_db[1] != 4){ echo"</tr>
+     <tr>
+     <td height=\"21\" width=\"200\" bgcolor=#F7F6F4>
+	 &nbsp;        已写新闻
+     <td height=\"21\" width=\"400\" bgcolor=#F7F6F4 colspan=2>
+     $member_db[6]
+     </tr>"; }
+
+     echo"<tr>
+     <td height=\"21\" width=\"200\" >
+	 &nbsp;        注册日期
+     <td height=\"21\" width=\"400\"  colspan=2>
+     $registrationdate
+     </tr>
+     <tr>
+     <td height=\"1\" width=\"611\" colspan=\"2\" colspan=3>
+     <br /><input type=submit value=\"保存修改\" accesskey=\"s\">
+     </tr>
+     <input type=hidden name=mod value=options>
+     <input type=hidden name=action value=dosavepersonal>
+     </form>
+     </table>";
+
+    echofooter();
+}
+// ********************************************************************************
+// Save Personal Options
+// ********************************************************************************
+elseif($action == "dosavepersonal")
+{
+	if($edithidemail){ $edithidemail = 1;}else{ $edithidemail = 0; }
+
+	$avatars = preg_replace(array("'\|'","'\n'","' '"), array("","","_"), $avatars);
+
+    $old_user_db = file("./inc/users.db.php");
+	$new_user_db = fopen("./inc/users.db.php", w);
+    $personal_success = FALSE;
+    foreach($old_user_db as $old_user_db_line){
+		$old_user_db_arr = explode("|", $old_user_db_line);
+		if(strtolower($username) != strtolower($old_user_db_arr[2])){
+			fwrite($new_user_db,"$old_user_db_line");
+        }
+		else{
+			if($editpassword != ""){
+            	$old_user_db_arr[3] = md5($editpassword);
+                if($config_use_cookies == TRUE){ setcookie("md5_password", $old_user_db_arr[3]); }
+                $_SESSION['md5_password'] = $old_user_db_arr[3];
+			}
+			fwrite($new_user_db,"$old_user_db_arr[0]|$old_user_db_arr[1]|$old_user_db_arr[2]|$old_user_db_arr[3]|$editnickname|$editmail|$old_user_db_arr[6]|$edithidemail|$change_avatar||\n");
+ 			$personal_success = TRUE;
+        }
+	}
+	fclose($new_user_db);
+	if($personal_success){ msg("info", "保存修改", "Y你的个人信息已经保存了。", "$PHP_SELF?mod=options&action=personal"); }
+    else{ msg("error", "错误！！！", "在列出用户是出错，没有找到 $username ，请从flexer@cutephp.com 处确认这个问题。", "$PHP_SELF?mod=options&action=personal"); }
+}
+// ********************************************************************************
+// Edit Templates
+// ********************************************************************************
+elseif($action == "templates")
+{
+    require("./inc/templates.php");
+
+    $templates_names = array("template_active", "template_comment", "template_form", "template_full", "template_headlines", "template_prev_next");
+    foreach($templates_names as $template)
+    {
+		$$template = preg_replace("/</","&lt;",$$template);
+		$$template = preg_replace("/>/","&gt;",$$template);
+    }
+    echoheader("options","模板");
+
+    echo"<center>在摸板中，你可以在<b>{</b> 和 <b>}</b>  之间插入允许的字符串，它们会被它们代表的内容所替换。
+			 例子： <b>{date}</b> 在显示新闻的时候，会被创建新闻时的时间来替换。<br /><br>
+		   	 注意 1：如果你使用 {full-story} ，但文章没有full story（详细内容），那么系统就会用 short story （简介）来替换<br />
+             注意 2： 在使用 [full-link]，如果文章没有full story（详细内容），那么这个链接就不会显示，[link] 则通常都会显示&nbsp;&nbsp;&nbsp;
+
+    <form method=post action=\"$PHP_SELF\"><table width=\"100%\">
+    <tr>
+    <td height=\"17\"  colspan=\"2\">
+    </tr>
+    <tr>
+    <td height=\"7\"  bgcolor=#F7F6F4 colspan=\"2\">
+    <b><a style=\"font-size:16px\" href=\"javascript:ShowOrHide('active-news1','active-news2')\" >最新新闻</a></b>
+    </tr>
+    <tr id='active-news1' style='display:none'>
+    <td height=\"9\" width=\"200\" valign=\"top\">
+    <b>{title}<br />
+    {avatar}<br />
+    {short-story}<br />
+    {full-story}<br />
+    {author}<br />
+    {date}<br />
+    [link] </b>和<b> [/link]<br />
+    [full-link] </b>和<b> [/full-link]<br />
+    [com-link] </b>和<b> [/com-link]<br />
+    {comments-num}<br />
+    {category}<br />
+    {category-icon}
+    <td height=\"9\"  valign=\"top\" width=430>
+    - 文章的标题<br />
+    - 显示化身图片（如果有的话）<br />
+    - 文章的简介<br />
+    - 详细内容<br />
+    - 作者<br />
+    - 文章发表日期<br />
+    - 将生成一个该文章详细内容的永久链接<br />
+    - 指向文章的详细内容的链接，如果没有详细内容，则不显示<br />
+    - 生成指向文章评论的链接<br />
+    - 显示文章的评论的篇数<br />
+    - 文章的的分类（如果有的话）<br />
+    - 显示分类的图标（如果有的话）<br />
+    </tr>
+    <tr id='active-news2' style='display:none'>
+    <td height=\"8\"  colspan=\"2\">
+    <textarea rows=\"9\" cols=\"98\" name=\"edit_active\">$template_active</textarea>
+    <br />
+    &nbsp;
+    </tr>
+    <tr>
+    <td height=\"7\"  bgcolor=#F7F6F4 colspan=\"2\">
+    <b><a style=\"font-size:16px\" href=\"javascript:ShowOrHide('full-story1','full-story2')\" >详细内容</a></b>
+    </tr>
+    <tr id='full-story1' style='display:none'>
+    <td height=\"9\" width=\"200\" valign=\"top\">
+    <b> {title}<br />
+    {avatar}<br />
+    {full-story}<br />
+    {short-story}</b><b><br />
+    {author}<br />
+    {date}<br />
+    {comments-num}<br />
+    {category}    <br />
+    {category-icon}    </b>
+    <td height=\"9\"  valign=\"top\">
+    - 文章的标题<br />
+    - 显示化身图片（如果有的话）<br />
+    - 详细内容<br />
+    - 文章的简介<br />
+    - 作者<br />
+    - 文章发表日期<br />
+    - 显示文章的评论的篇数<br />
+    - 文章的的分类（如果有的话）<br />
+    - 显示分类的图标（如果有的话）<br />
+    </tr>
+    <tr id='full-story2' style='display:none'>
+    <td height=\"8\"  colspan=\"2\">
+    <textarea rows=\"9\" cols=\"98\" name=\"edit_full\">$template_full</textarea>
+    <br />
+    &nbsp;
+    </tr>
+    <tr>
+    <td height=\"7\"  bgcolor=#F7F6F4 colspan=\"2\">
+    <b><a style=\"font-size:16px\" href=\"javascript:ShowOrHide('comment1','comment2')\" >评论</a></b>
+    </tr>
+    <tr id='comment1' style='display:none'>
+    <td height=\"9\" width=\"200\" valign=\"top\">
+    <b>  {author}<br />
+    {mail}<br />
+    {date}<br />
+    {comment}</b>
+    <td height=\"9\"  valign=\"top\">
+    - 评论人的名字<br />
+    - 评论人的电子邮件<br />
+    - 评论发表的时间<br />
+    - 评论内容
+    </tr>
+    <tr id='comment2' style='display:none'>
+    <td height=\"8\"  colspan=\"2\">
+    <textarea rows=\"9\" cols=\"98\" name=\"edit_comment\">$template_comment</textarea>
+    <br />
+    &nbsp;
+    </tr>
+    <tr>
+    <td height=\"7\"  bgcolor=#F7F6F4 colspan=\"2\">
+    <b><a style=\"font-size:16px\" href=\"javascript:ShowOrHide('add-comment-form1','add-comment-form2')\" >增加评论表格</a></b>
+    </tr>
+    <tr id='add-comment-form1' style='display:none'>
+    <td height=\"9\" width=\"1094\" valign=\"top\" colspan=\"2\">
+    请不要编辑这部分，除非你有HTML相关知识！！！
+    </tr>
+    <tr id='add-comment-form2' style='display:none'>
+    <td height=\"8\"  colspan=\"2\">
+    <textarea rows=\"9\" cols=\"98\" name=\"edit_form\">$template_form</textarea>
+    <br />
+    &nbsp;
+    </tr>
+    <tr>
+    <td height=\"7\"  bgcolor=#F7F6F4 colspan=\"2\">
+    <b><a style=\"font-size:16px\" href=\"javascript:ShowOrHide('headlines1','headlines2')\" >新闻大字标题</a></b>
+    </tr>
+    <tr id='headlines1' style='display:none'>
+    <td height=\"9\" width=\"200\" valign=\"top\">
+    <b> [link] </b>and<b> [/link]<br />
+    {title}<br />
+    {avatar}<br />
+    {short-story}<br />
+    {full-story}<br />
+    {author}<br />
+    {date}<br />
+    [com-link] </b>和<b> [/com-link]<br />
+    {comments-num}<br />
+    {category}<br />
+    {category-icon}
+    </b>
+    <td height=\"9\"  valign=\"top\">
+    - 将生成一个该文章详细内容的永久链接<br />
+    - 文章的标题<br />
+    - 显示化身图片（如果有的话）<br />
+    - 文章的简介<br />
+    - 详细内容<br />
+    - 作者<br />
+    - 文章发表日期<br />
+    - 生成指向文章评论的链接<br />
+    - 显示文章的评论的篇数<br />
+    - 文章的的分类（如果有的话）<br />
+    - 显示分类的图标（如果有的话）<br />
+    </tr>
+
+    <tr id='headlines2' style='display:none'>
+    <td height=\"8\"  colspan=\"2\">
+    <textarea rows=\"3\" cols=\"98\" name=\"edit_headlines\">$template_headlines</textarea>
+    </tr>
+    <tr>
+
+
+<tr>
+    <td height=\"7\"  bgcolor=#F7F6F4 colspan=\"2\">
+    <b><a style=\"font-size:16px\" href=\"javascript:ShowOrHide('previous-next1','previous-next2')\" >前一页 & 后一页</a></b>
+    </tr>
+    <tr id='previous-next1' style='display:none'>
+    <td height=\"9\" width=\"200\" valign=\"top\">
+    <b> [prev-link] </b>and<b> [/prev-link]<br />
+    [next-link] </b>and<b> [/next-link]<br />
+    <td height=\"9\"  valign=\"top\">
+    - 生成一个指向前一页的链接（如果有的话）<br />
+    - 生成一个指向后一页的链接（如果有的话）
+    </tr>
+
+    <tr id='previous-next2' style='display:none'>
+    <td height=\"8\"  colspan=\"2\">
+    <textarea rows=\"3\" cols=\"98\" name=\"edit_prev_next\">$template_prev_next</textarea>
+    </tr>
+<tr>
+
+    <td height=\"8\"  colspan=\"2\">
+    <input type=hidden name=mod value=options>
+    <input type=hidden name=action value=dosavetemplates>
+    <br /><input type=submit value=\"   保存改变   \" accesskey=\"s\">
+    </tr>
+    </table></form>";
+
+	echofooter();
+}
+// ********************************************************************************
+// Do Save Changes to Templates
+// ********************************************************************************
+elseif($action == "dosavetemplates")
+{
+	if($member_db[1] != 1){ msg("error", "Access Denied", "You don't have permission to edit templates"); }
+    $templates_names = array("edit_active", "edit_comment", "edit_form", "edit_full", "edit_headlines", "edit_prev_next");
+    foreach($templates_names as $template)
+    {
+		$$template = stripslashes($$template);
+    }
+
+	$handle = fopen("./inc/templates.php","w");
+    fwrite($handle, "<?PHP\n///////////////////// TEMPLATES FOR NEWS /////////////////////\n");
+    fwrite($handle, "\$template_active = <<<HTML\n$edit_active\nHTML;\n\n\n");
+	fwrite($handle, "\$template_full = <<<HTML\n$edit_full\nHTML;\n\n\n");
+    fwrite($handle, "\$template_comment = <<<HTML\n$edit_comment\nHTML;\n\n\n");
+    fwrite($handle, "\$template_form = <<<HTML\n$edit_form\nHTML;\n\n\n");
+    fwrite($handle, "\$template_headlines = <<<HTML\n$edit_headlines\nHTML;\n");
+    fwrite($handle, "\$template_prev_next = <<<HTML\n$edit_prev_next\nHTML;\n");
+    fwrite($handle, "?>\n");
+
+    msg("info","保存改变","成功地保存了模板");
+}
+
+// ********************************************************************************
+// System Configuration
+// ********************************************************************************
+elseif($action == "syscon")
+{
+    echoheader("options", "系统配置");
+
+    function showRow($title="", $description="", $field="")
+    {
+        global $i;
+        if( $i%2 == 0 and $title != ""){ $bg = "bgcolor=#F7F6F4"; }
+        echo"<tr>
+		<td width=330 colspan=\"2\" $bg><br />
+		&nbsp;<b>$title</b>
+		<td width=320 $bg rowspan=\"2\" valign=\"middle\" align=middle>
+		$field<br />&nbsp;
+		</tr>
+		<tr>
+
+        <td height=18 width=\"27\" $bg>
+        &nbsp;
+
+        <td height=18 width=\"299\" $bg>
+        <font color=\"#808080\">$description</font><br />
+        &nbsp;
+		</tr>";
+    	$bg = ""; $i++;
+    }
+    function makeDropDown($options, $name, $selected)
+    {
+		$output = "<select size=1 name=\"$name\">\r\n";
+        foreach($options as $value=>$description)
+        {
+          $output .= "<option value=\"$value\"";
+          if($selected == $value){ $output .= " selected "; }
+          $output .= ">$description</option>\n";
+        }
+		$output .= "</select>";
+    	return $output;
+    }
+
+
+    echo"<table border=0 cellpading=0 cellspacing=0 width=654  >
+	<form action=\"$PHP_SELF\" method=post>";
+
+    if(!$handle = opendir("./skins")){ die("不能打开目录 ./skins "); }
+    while (false !== ($file = readdir($handle))) {
+    	$file_arr = explode(".",$file);
+		if($file_arr[1] == "skin"){
+			$sys_con_skins_arr[$file_arr[0]] = $file_arr[0];
+		}elseif($file_arr[1] == "lang"){
+			$sys_con_langs_arr[$file_arr[0]] = $file_arr[0];
+		}
+	}
+	closedir($handle);
+
+        //Rss Channel Configs
+	showRow("RSS频道名字", "你的RSS频道的名字", "<input type=text style=\"text-align: center;\"  name='save_con[channel_name]' value='$config_channel_name' size=40>");
+
+	showRow("RSS频道描述", "该频道的简单描述", "<input type=text style=\"text-align: center;\"  name='save_con[channel_description]' value='$config_channel_description' size=50>");
+
+	showRow("RSS文件编码", "生成的XML文件的编码，例子： GB2312", "<input type=text style=\"text-align: center;\"  name='save_con[channel_encoding]' value='$config_channel_encoding' size=10>");
+
+        // Site Configs
+
+	showRow("CuteNews目录的完整URL", "例子： http://yoursite.com/cutenews", "<input type=text style=\"text-align: center;\"  name='save_con[http_script_dir]' value='$config_http_script_dir' size=40>");
+
+	showRow("CuteNews的Skin(皮肤)", "可以从我们的网站上下载更多", makeDropDown($sys_con_skins_arr, "save_con[skin]", "$config_skin"));
+
+        showRow("评论自动换行", "超过该指定数目的就要换行", "<input type=text style=\"text-align: center;\"  name='save_con[auto_wrap]' value=\"$config_auto_wrap\" size=10>");
+
+        showRow("评论攻击保护", "单位：秒； 0 = 没有保护", "<input type=text style=\"text-align: center;\"  name='save_con[flood_time]' value=\"$config_flood_time\" size=10>");
+
+        showRow("表情图表", "用逗号(<b>,</b>)分开", "<input type=text style=\"text-align: center;\"  name='save_con[smilies]' value=\"$config_smilies\" size=40>");
+
+        showRow("时间调整", "单位：分钟；比如： <b>180</b>=+3 小时； <b>-120</b>=-2 小时", "<input type=text style=\"text-align: center;\"  name='save_con[date_adjust]' value=\"$config_date_adjust\" size=10>");
+
+	showRow("使用化身图片", "如果为No，化身URL就不显示", makeDropDown(array("yes"=>"Yes","no"=>"No"), "save_con[use_avatar]", "$config_use_avatar"));
+
+	showRow("反转新闻显示顺序", "如果是yes，老新闻显示在顶上", makeDropDown(array("yes"=>"Yes","no"=>"No"), "save_con[reverse_active]", "$config_reverse_active"));
+
+        showRow("反转大字标题显示顺序", "如果是yes，老标题显示在顶上", makeDropDown(array("yes"=>"Yes","no"=>"No"), "save_con[reverse_headlines]", "$config_reverse_headlines"));
+
+	// Full Story Configs
+
+
+	showRow("显示详细内容时显示评论", "如果是yes，评论显示在详细内容下面", makeDropDown(array("yes"=>"Yes","no"=>"No"), "save_con[show_comments_with_full]", "$config_show_comments_with_full"));
+
+	showRow("新闻的时间格式", "关于时间格式，请参考<a href=\"http://www.php.net/manual/en/function.date.php\" target=\"_blank\">这里</a>", "<input type=text style=\"text-align: center;\"  name='save_con[timestamp_active]' value='$config_timestamp_active' size=40>");
+
+	showRow("在弹出窗口中显示详细内容", "在弹出窗口中显示详细内容", makeDropDown(array("yes"=>"Yes","no"=>"No"), "save_con[full_popup]", "$config_full_popup"));
+
+	showRow("详细内容弹出窗口设置", "只有在'在弹出窗口中显示详细内容'设置后有效", "<input type=text style=\"text-align: center;\"  name='save_con[full_popup_string]' value=\"$config_full_popup_string\" size=40>");
+
+	// COMMENTS Configs
+	showRow("只有注册用户才能发表评论", "如果是yes，只有注册过的用户才能发表评论", makeDropDown(array("yes"=>"Yes","no"=>"No"), "save_con[only_registered_comment]", "$config_only_registered_comment"));
+
+ 	showRow("显示评论时显示详细内容", "在显示评论时显示详细内容", makeDropDown(array("yes"=>"Yes","no"=>"No"), "save_con[show_full_with_comments]", "$config_show_full_with_comments"));
+
+	showRow("评论的时间格式", "关于时间格式，请参考<a href=\"http://www.php.net/manual/en/function.date.php\" target=\"_blank\">这里</a>", "<input type=text style=\"text-align: center;\"  name='save_con[timestamp_comment]' value='$config_timestamp_comment' size=40>");
+
+	showRow("在弹出窗口中显示评论", "在弹出窗口中显示评论", makeDropDown(array("yes"=>"Yes","no"=>"No"), "save_con[comments_popup]", "$config_comments_popup"));
+
+	showRow("评论弹出窗口设置", "只有在'在弹出窗口中显示评论'设置后有效", "<input type=text style=\"text-align: center;\"  name=\"save_con[comments_popup_string]\" value=\"$config_comments_popup_string\" size=40>");
+
+    echo"
+    <input type=hidden name=mod value=options>
+    <input type=hidden name=action value=dosavesyscon>".
+    showRow("","","<br /><input type=submit value=\"     保存改变     \" accesskey=\"s\">")."
+    </form></table>";
+	echofooter();
+}
+// ********************************************************************************
+// Save System Configuration
+// ********************************************************************************
+elseif($action == "dosavesyscon")
+{
+	if($member_db[1] != 1){ msg("error", "拒绝访问", "你没有权限访问本部分。"); }
+	$handler = fopen("./inc/config.php", "w");
+    fwrite($handler, "<?PHP \n\n//系统配置\n\n\$config_version_name = \"$config_version_name\";\n\n\$config_version_id = $config_version_id;\n\n");
+    foreach($save_con as $name=>$value)
+    {
+    	fwrite($handler, "\$config_$name = \"$value\";\n\n");
+    }
+    fwrite($handler, "?>");
+    fclose($handler);
+
+    msg("info", "配置保存", "成功地保存了系统的配置");
+}
+
+?>

@@ -1,0 +1,51 @@
+{config_load file=$umLanguageFile section="Group"}
+
+<html>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<head>
+    <title>{#common_page_title#} - {#group_title#}</title>
+	<meta http-equiv="Content-Type" content="text/html; charset={#default_char_set#}">
+	<link rel="stylesheet" href="themes/default/webmail.css" type="text/css">
+	<script language="JavaScript" src="themes/default/webmail.js" type="text/javascript"></script>
+
+{$umJS}
+
+</head>
+
+<body leftmargin="0" marginwidth="0" topmargin="4" marginheight="3">
+
+{include file="default/pageheader.htm"}
+
+<table align="center" width="758" border="0" cellspacing="0" cellpadding="0">
+	<tr>
+    	<td valign=top width="154"> 
+			{include file="default/menu.htm"}
+		</td>
+        <td width="1" bgcolor="#817B7B"><img width="1" height="1"></td>
+	<td align="center" valign=top width="602" height=350 bgcolor=#ffffff >
+		<table width="100%" border="0" cellspacing="1" cellpadding="0">
+                	<tr height=20>		          
+	    	       		<td width="25%" class="headers">.:<b>{#group_adr#}</b>:.</td>
+	    	        	<td width="35%" class="headers">.:<b>{#group_description#}</b>:.</td>
+	    	        	<td width="20%" class="headers">.:<b>{#group_listmember#}</b>:.</td>
+	    	        	<td width="20%" class="headers">.:<b>{#group_addcontact#}</b>:.</td>
+	    		</tr>
+	    		{section name=i loop=$grouplist}
+					<tr height="20">
+						<td class="default">&nbsp;<a href="{$grouplist[i].mailto}" title="{#group_mailto#}">{$grouplist[i].gid}</a></td>
+						<td class="default">&nbsp;{$grouplist[i].description|truncate:30:"...":true|escape:"html"}</td>
+						<td class="default" align="center">&nbsp;<a href="{$grouplist[i].memberlink}" title="{#group_listmember#}"><img src="themes/default/images/member.gif" width=16 height=16 border=0></a></td>
+						<td class="default" align="center">&nbsp;<a href="{$grouplist[i].addcontactlink}" title="{#group_addcontact#}"><img src="themes/default/images/address.gif" width=16 height=16 border=0></a></td>
+					</tr>
+			{/section}	    		
+	    	</table>
+	</td>
+	<td width="1" bgcolor="#817B7B"><img width="1" height="1"></td>
+	</tr>
+</table>
+
+{include file="default/pagefooter.htm"}
+
+</body>
+</html>

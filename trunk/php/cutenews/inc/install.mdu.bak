@@ -1,0 +1,210 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+<style type="text/css">
+<!--
+a:active,a:visited,a:link {color: #446488; text-decoration: none; font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 8pt;}
+a:hover {color: #00004F; text-decoration: none; font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 8pt;}
+.bborder	{ background-color: #FFFFFF; border: 1px #A7A6B4 solid; }
+BODY {text-decoration: none; font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 8pt;}
+TD {text-decoration: none; font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 8pt;}
+.header { font-size : 16px; font-weight: bold; color: #808080; font-family: verdana; text-decoration: none; }
+-->
+</style>
+	<title>Cute News v1.3 RC1 Installer</title>
+</head>
+<body>
+<center>
+<table width="642" border="0" cellspacing="0" cellpadding="2">
+<tr><td class="bborder" bgcolor="#FFFFFF" width="777">
+<form method=post action="<?PHP echo $PHP_SELF; ?>">
+<table border=0 cellpadding=0 cellspacing=0 bgcolor="#ffffff" width="746" height="9">
+<tr><td bgcolor="#FFFFFF" width="746" colspan="2" height="15">&nbsp;</td>
+</tr><tr><td bgcolor="#000000" width="903" colspan="2" height="1"><img src="images/blank.gif" width=1 height=1></td>
+</tr><tr><td bgcolor="#F7F6F4" width="903" colspan="2" height="18">
+<font size="2"><b>&nbsp;&nbsp; Cute News v1.3 RC1 Installer</b></font>	</td>
+</tr><tr><td bgcolor="#000000" width="903" colspan="2" height="1"><img src="images/blank.gif" width=1 height=1></td>
+</tr><tr><td bgcolor="#FFFFFF" width="51" height="28">
+&nbsp;<br />
+<img border="0" src="images/info.gif" width="60" height="57">
+</td><td bgcolor="#FFFFFF" width="695" height="28">
+&nbsp;<br />
+<?PHP
+
+// ********************************************************************************
+// Do Configure
+// ********************************************************************************
+if($action == "doconfig")
+{
+
+	$url  = preg_replace( "'/index.php'", "", $HTTP_SERVER_VARS['HTTP_REFERER']);
+	$url  = preg_replace( "'\?(.*)'", "", $url);
+    if(substr("$url", -1) == "/"){ $url = substr($url, 0, -1); }
+
+
+	echo"<div class=\"header\">重要配置</div><br />
+	请填入需要的信息，以便程序正确运行。</td></tr></center>
+	<tr>
+      <td bgcolor=\"#FFFFFF\" width=\"51\" height=\"5\">
+&nbsp;</td><td bgcolor=\"#FFFFFF\" width=\"695\" height=\"5\">
+<table width=\"673\" height=\"100%\" cellpadding=\"0\">
+  <td width=\"671\" colspan=\"2\">&nbsp;
+  <tr>
+    <td width=\"222\" bgcolor=\"#F7F6F4\" > &nbsp;Cute News URL位置：
+    <td bgcolor=\"#F7F6F4\" ><input name=url value=\"$url\" size=38 type=text>
+      以Http://开头
+  </tr>
+  <tr>
+    <td >
+    &nbsp;
+    <td >
+  </tr>
+  <tr>
+    <td  bgcolor=\"#F7F6F4\">
+    &nbsp;管理员用户名字：
+    <td  bgcolor=\"#F7F6F4\">
+  <input type=text size=\"28\" name=\"reg_username\" >
+  </tr>
+  <tr>
+    <td  bgcolor=\"#F7F6F4\">
+    &nbsp;密码：
+    <td  bgcolor=\"#F7F6F4\">
+  <input type=text size=\"28\" name=\"reg_password1\">请<b>不要</b>丢失你的密码
+  </tr>
+  <tr>
+    <td  bgcolor=\"#F7F6F4\">
+    &nbsp;确认密码：
+    <td  bgcolor=\"#F7F6F4\">
+  <input type=text size=\"28\" name=\"reg_password2\">
+  </tr>
+  <tr>
+    <td  bgcolor=\"#F7F6F4\">
+    &nbsp;别名
+    <td  bgcolor=\"#F7F6F4\">
+  <input type=text size=\"28\" name=\"reg_nickname\">
+  </tr>
+  <tr>
+    <td  bgcolor=\"#F7F6F4\">
+    &nbsp;电子邮件
+    <td  bgcolor=\"#F7F6F4\">
+  <input type=text size=\"28\" name=\"reg_email\">
+  </tr>
+  <tr>
+    <td >
+    &nbsp;
+    <td >
+  </tr>
+</table>  </td>
+</tr>
+<input type=hidden name=action value=doinstall>
+";
+}
+// ********************************************************************************
+// Do Install
+// ********************************************************************************
+elseif($action == "doinstall")
+{
+	if(!$reg_username or !$reg_password1 or !$url or $reg_password1 != $reg_password2 ){ die("错误！！！<br />你有的信息没有填写或密码不匹配。"); }
+	$reg_password = md5($reg_password1);
+
+    if(!is_writable("./inc/users.db.php")){ die("安装程序不能写文件<b>./inc/users.db.php</b>，<br />请检查文件是否存在或是否正确的CHMOD"); }
+    if(!is_writable("./inc/config.php")){ die("安装程序不能写文件<b>./inc/config.php</b>，<br />请检查文件是否存在或是否正确的CHMOD"); }
+
+	$users_file = fopen("./inc/users.db.php", "w");
+	fwrite($users_file, "<?PHP die(\"你没有操作该文件的权限\"); ?>\n");
+	fwrite($users_file, time()."|1|$reg_username|$reg_password|$reg_nickname|$reg_email|0|0||\n");
+	fclose($users_file);
+
+$config = <<<HTML
+<?PHP
+
+//System Configurations
+
+\$config_version_name = "CuteNews v1.3 RC1汉化版";
+
+\$config_version_id = 132;
+
+\$config_http_script_dir = "$url";
+
+\$config_skin = "default";
+
+\$config_only_registered_comment = "no";
+
+\$config_auto_wrap = "44";
+
+\$config_flood_time = "15";
+
+\$config_smilies = "smile,wink,wassat,tongue,laughing,sad,angry,crying";
+
+\$config_date_adjust = 0;
+
+\$config_use_avatar = "yes";
+
+\$config_reverse_active = "no";
+
+\$config_reverse_headlines = "no";
+
+\$config_show_comments_with_full = "yes";
+
+\$config_timestamp_active = "d M Y";
+
+\$config_full_popup = "no";
+
+\$config_full_popup_string = "HEIGHT=400,WIDTH=650,resizable=yes,scrollbars=yes";
+
+\$config_show_full_with_comments = "yes";
+
+\$config_timestamp_comment = "d M Y h:i a";
+
+\$config_comments_popup = "no";
+
+\$config_comments_popup_string = "HEIGHT=400,WIDTH=650,resizable=yes,scrollbars=yes";
+
+?>
+HTML;
+
+
+	$con_file = fopen("./inc/config.php", "w");
+	fwrite($con_file, $config);
+	fclose($con_file);
+
+    $path = str_replace( '\\', '/', getcwd() );
+    echo"<div class=\"header\">安装完成</div><br />
+	已经成功地安装了CuteNews汉化版。</td></tr></center>
+	<tr>
+	  <td bgcolor=\"#FFFFFF\" width=\"51\" height=\"5\">
+	&nbsp;</td><td bgcolor=\"#FFFFFF\" width=\"695\" height=\"5\">
+	<p align=\"center\"><br />
+	<br />
+	你可以进入CuteNews <a href=\"index.php\">登录</a>页面了。<br /><br>
+
+    建议您阅读一下CuteNews的README文件，它解释了怎样创建你的新闻页面。<br />
+
+	<font color=\"#999999\">注：为了安全起见，你现在可以删除 ./inc/install.mdu文件了。</font>";
+
+    echo"</td>
+	</tr>";
+}
+// ********************************************************************************
+// Start Installation Wizard
+// ********************************************************************************
+else{
+	echo"<div class=\"header\"> 欢迎使用Cute News v1.3 RC1汉化版本安装程序</div><br />
+	该向导将导引你所有的安装步骤，并帮助你培置程序</td></tr></center>
+	<tr>
+	  <td bgcolor=\"#FFFFFF\" width=\"51\" height=\"5\">
+	&nbsp;</td><td bgcolor=\"#FFFFFF\" width=\"695\" height=\"5\">
+	</td>
+	</tr>
+    <input type=hidden name=action value=doconfig>
+    ";
+}
+
+?>
+<tr>
+  <td bgcolor="#FFFFFF" width="51" height="10">
+&nbsp;</td><td bgcolor="#FFFFFF" width="695" height="10">
+<p align="right">
+&nbsp;<?PHP if($action != "doinstall")echo"<input type=submit value=\"处理好了安装 >>\">"; ?>&nbsp; &nbsp &nbsp;<br />&nbsp;</p>
+    </td>
+</tr>
+</table></form></td></tr></table></body></html>

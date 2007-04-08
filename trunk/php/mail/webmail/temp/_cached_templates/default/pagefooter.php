@@ -1,0 +1,12 @@
+<?php /* Smarty version 1.5.2, created on 2003-09-24 13:30:07
+         compiled from default/pagefooter.htm */ ?>
+    <table align="center" width="758" border="0" cellpadding="0" cellspacing="0">
+        <tr align="center">
+		  <td width=154 height="17">&nbsp;</td>
+          <td width="1"><img width="1" height="1"></td>
+          <td align="center" valign=top width="603" ><img src="themes/default/images/mainbt.gif" width="603" height="17"><br>
+            <br>
+            &copy 2003 AMAX Information Technologies Inc. All Rights Reserved. 
+          </td>
+        </tr>
+      </table>

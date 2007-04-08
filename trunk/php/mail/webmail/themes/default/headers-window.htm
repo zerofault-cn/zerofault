@@ -1,0 +1,20 @@
+
+{config_load file=$umLanguageFile section="Headers"}
+
+<html>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<head>
+	<title>{#common_page_title#} - {$umPageTitle|escape:"html"}</title>
+	<meta http-equiv="Content-Type" content="text/html; charset={#default_char_set#}">
+	<link rel="stylesheet" href="themes/default/webmail.css" type="text/css">
+</head>
+
+<body leftmargin="0" marginwidth="0" topmargin="4" marginheight="3">
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+	<tr>
+		<td bgcolor=white><font face="Courier New" size=2>{$umHeaders}</font></td>
+	</tr>
+</table>
+</body>
+</html>

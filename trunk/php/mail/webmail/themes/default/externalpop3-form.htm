@@ -1,0 +1,115 @@
+{config_load file=$umLanguageFile section="ExternalPop3"}
+
+<html>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<head>
+	<title>{#common_page_title#} - {#pop3_title#}</title>
+	<meta http-equiv="Content-Type" content="text/html; charset={#default_char_set#}">
+	<link rel="stylesheet" href="themes/default/webmail.css" type="text/css">
+	<script language="JavaScript" src="themes/default/webmail.js" type="text/javascript"></script>
+
+{$umJS}
+
+{literal}
+<script language="JavaScript" type="text/javascript">
+	function save_check()
+	{
+		var username = document.form1.username.value;
+		var password = document.form1.password.value;
+		var host = document.form1.host.value;
+		
+		if (username == "" || password == "" || host == ""){
+{/literal}
+			alert("{#pop3_empty#}");
+{literal}
+			return;
+		}
+		
+		document.form1.submit();
+	}
+</script>
+{/literal}
+
+</head>
+
+
+<body leftmargin="0" marginwidth="0" topmargin="4" marginheight="3">
+
+{include file="default/pageheader.htm"}
+
+<table align="center" width="758" border="0" cellspacing="0" cellpadding="0">
+	<tr>
+    	<td valign=top width="154"> 
+			{include file="default/menu.htm"}
+    	</td>
+        <td width="1" bgcolor="#817B7B"><img width="1" height="1"></td>
+		<td align="center" valign=top width="602" height=350 bgcolor=#ffffff >
+			<form name=form1 method=post action=externalpop3.php>
+
+			<input type=hidden name=sid value="{$umSid}">
+			<input type=hidden name=id value="{$umPop3ID}">
+			<input type=hidden name=lid value="{$umLid}">
+			<input type=hidden name=tid value="{$umTid}">
+			<input type=hidden name=opt value="{$umOpt}">
+
+			<table width="100%" border="0" cellspacing="1" cellpadding="0">
+				<tr height=20>
+					<td class="headerright" width="20%">{#pop3_username#} &nbsp;</td>
+					<td class=default>&nbsp;
+						<input size="40" type=text name="username" value="{$umUserName|escape:"html"}" class="textbox">
+						<font color=red>*</font>
+					</td>
+				</tr>
+				<tr height=20>
+					<td class="headerright">{#pop3_password#} &nbsp;</td>
+					<td class=default>&nbsp;
+						<input size="40" type=password name="password" value="{$umPassword|escape:"html"}" class="textbox">
+						<font color=red>*</font>
+					</td>
+				</tr>
+				<tr height=20>
+					<td class="headerright">{#pop3_host#} &nbsp;</td>
+					<td class=default>&nbsp;
+						<input size="40" type=text name="host" value="{$umHost|escape:"html"}" class="textbox">
+						<font color=red>*</font>
+					</td>
+				</tr>
+				<tr height=20>
+					<td class="headerright">{#pop3_port#} &nbsp;</td>
+					<td class=default>&nbsp;
+						<input size="40" type=text name="port" value="{$umPort|escape:"html"}" class="textbox">
+					</td>
+				</tr>
+				<tr height=20>
+					<td class="headerright">&nbsp;</td>
+					<td class=default>&nbsp;
+						<input type=checkbox name="enable" value="1" {$umEnable}>
+						<acronym style="cursor: hand;" OnClick="enable.click()">{#pop3_enable#}</acronym>
+					</td>
+				</tr>
+				<tr height=20>
+					<td class="headerright">&nbsp;</td>
+					<td class=default>&nbsp;
+						<input type=checkbox name="savecopy" value="1" {$umSaveCopy}>
+						<acronym style="cursor: hand;" OnClick="savecopy.click()">{#pop3_savecopy#}</acronym>
+					</td>
+				</tr>
+				<tr height=30>
+					<td colspan=2 class=default align=center>
+						<input type=button value="{#pop3_save#}" class=button onclick="javascript:save_check();">
+						&nbsp;
+						<input type=button value="{#pop3_back#}" class=button onClick="location = '{$umGoBack}'">
+					</td>
+				</tr>
+			</table>
+			</form>
+		</td>
+		<td width="1" bgcolor="#817B7B"><img width="1" height="1"></td>
+	</tr>
+</table>
+	
+{include file="default/pagefooter.htm"}
+
+</body>
+</html> 

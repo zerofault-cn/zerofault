@@ -1,0 +1,543 @@
+#
+# English
+#
+common_page_title			        = WebMail | Power by Magic Winmail Server 3.0
+homepage				        = Power by Magic Winmail Server
+homepage_url				        = http://www.magicwinmail.com
+contact_us				        = Contact us
+webmaster_mail				        = support@magicwinmail.com
+banner_url				        = images/banner.gif
+
+# CharSet 
+default_char_set			        = gb2312
+
+# User-friendly names to system folders
+inbox_extended					= Inbox
+sent_extended					= Sent items
+trash_extended					= Trash
+draft_extended					= Draft
+
+# Navigation texts
+previous_text					= Previous
+next_text					= Next
+
+# Mail Server Errors
+error_connect					= Error connecting to the server
+error_retrieving				= Error getting your messages, your Inbox has changed
+error_other					= System failure, please contact your network administrator
+
+# Invalid name of mailbox
+error_invalid_name				= Invalid folder name - Use only the following characters  A-Z, 0-9, - and space
+
+# Validations when sending mails
+error_no_recipients				= Error: You must have at least one recipient!
+error_compose_invalid_mail1_s			= Error: This e-mail address seems to be invalid
+error_compose_invalid_mail1_p			= Error: This e-mail addresses seem to be invalid
+error_compose_invalid_mail2_s			= Check the e-mail address before resending this email.
+error_compose_invalid_mail2_p			= Check your addresses before resending this email.
+
+#register mail
+register_notify_subject			= Register Notify
+register_notify_content			= User %mail has registed. The mailbox will use after administrator affirms.
+register_welcome_subject			= Welcome to Use
+register_welcome_content			= Your mailbox has succeed in register. You maybe use it.
+
+# Confirmation of delete
+confirm_delete					= Do you really want to delete this message(s)?
+
+# If the message no have a subject or sender
+no_subject_text					= [No subject]
+no_sender_text					= [Sender unknown]
+no_recipient_text				= [Recipient unknown]
+
+# If the quota limit was exceeded
+quota_exceeded					= Not enough space in your inbox to complete this action\Please delete some messages to continue
+quota_usage_info				= Quota limit
+quota_usage_used				= Used
+quota_usage_of					= of
+quota_usage_avail				= available
+
+#*************************************************************#
+# Date Format                                                 #
+# %d = day, %m = month, %y = year, %H = hour, %M = minutes    #
+# for a complete list, see http://www.php.net/strftime        #
+#*************************************************************#
+date_format 					= %m/%d/%y %H:%M
+
+# Menu
+messages_mnu					= Inbox
+read_menu					= Read E-Mail(s)
+compose_mnu					= Compose
+folders_mnu					= Folders
+search_mnu					= Search
+address_mnu					= Address Book
+signature_mnu					= Signature
+externalpop3_mnu				= External POP3
+prefs_mnu					= Preferences
+autoforward_mnu					= Auto Forward
+autoreply_mnu					= Auto Reply
+chgpassword_mnu					= Change Password
+logoff_mnu 					= Log out
+netaddress_mnu                  = Public Contact
+userinfo_mnu                    = Personal Information
+group_mnu					= Mail Group
+options_mnu               			= Options
+personaddress_mnu               			= Personal Contact
+
+# Reply
+reply_prefix					= Re:
+forward_prefix					= Fw:
+reply_delimiter					= --------- Original Message --------
+reply_from_hea					= From:
+reply_to_hea					= To:
+reply_cc_hea					= Cc:
+reply_date_hea					= Date:
+reply_subject_hea				= Subject:
+# done
+
+signature_noselect				= None signature
+
+# page-specific vars
+
+[Headers]
+key_hea						= Key
+value_hea					= Value
+
+[Folders]
+folders_title					= Folders
+fld_name_hea					= Folder
+fld_messages_hea				= Messages
+fld_size_hea					= Size
+fld_empty_hea					= Empty
+fld_delete_hea					= Delete
+fld_total					= Total:
+fld_make_new					= Create new folder
+
+[MessageList]
+messages_title					= Messages list 
+no_messages					= No new messages in your 
+delete_selected_mnu				= Delete selected
+drop_selected_mnu				= Drop selected
+move_selected_to_trash_mnu			= Move selected to Trash
+move_selected_mnu				= Move selected to
+delete_mnu					= Delete
+move_mnu					= Move to
+subject_hea					= Subject
+from_hea					= From
+to_hea						= To
+date_hea					= Date
+size_hea					= Size
+
+msg_you_have					= You have
+msg_message					= message
+msg_messages					= messages
+
+msg_more_unread					= unread
+msg_one_unread					= unread
+msg_none_unread					= none unread
+msg_in_the_folder				= in the folder
+
+edit_mail				= send to: 
+reply_mail				= reply to: 
+read_mail				= read mail: 
+
+[Login]
+lng_title					= Login
+lng_welcome_msg					= Welcome, please login into your account
+lng_user_email					= E-mail
+lng_user_name					= Username
+lng_user_pwd					= Password
+lng_server						= Server
+lng_theme						= Theme
+lng_language					= Language
+lng_login_btn					= Login &gt;&gt;
+lng_register					= Register
+
+[Newmessage]
+newmsg_title 				        = Compose
+to_hea						= To
+cc_hea						= Cc
+bcc_hea						= Bcc
+subject_hea					= Subject
+content_hea					= Content
+address_tip					= From Contact
+
+attach_hea					= Attachment
+attch_add_new					= Attach new file
+attch_name_hea					= Name
+attch_size					= Size
+attch_type_hea					= Type
+attch_dele_hea					= Delete
+attch_no_hea					= No attachments
+
+signature_name					= Select signature
+signature_content				= Signature
+send_text					= Send
+html_mode					= Html editor
+text_mode					= Text editor
+
+result_error					= It was not possible to send this e-mail
+result_success					= This e-mail has been sent
+nav_continue					= Continue Compose
+nav_msglist						= Goto Inbox
+nav_back					= Back
+
+up_title 						= Add file
+up_information_text				= Select file
+up_upload_button_text			= Attach
+up_close_button_text			= Close
+
+priority_text					= Priority
+priority_low					= Low
+priority_normal					= Normal
+priority_high					= High
+
+[AdvancedEditor]
+adv_warning_text_mode1				= Please uncheck an option
+adv_warning_text_mode2				= to use the toolbar
+
+adv_type_urlpath				= Write the URL: \n(eg: http://www.magicwinmail.com)
+adv_type_imgpath				= Write the URL of a image: \n(eg: http://www.magicwinmail.com/images/magicwinlogo.jpg)
+
+format_paragraph				= Paragraph
+format_h1					= Style 1 <H1>
+format_h2					= Style 2 <H2>
+format_h3					= Style 3 <H3>
+format_h4					= Style 4 <H4>
+format_h5					= Style 5 <H5>
+format_h6					= Style 6 <H6>
+format_pre					= Formatted <PRE>
+format_clear_all				= Clear all
+
+format_font					= Font
+format_size					= Size
+
+extra_font_list					=
+
+view_source					= View HTML source
+clear_format					= Clear format
+
+priority_text					= Priority
+
+selcolor_title				        = Select color
+selcolor_basecolor			        = Base color
+selcolor_bright				        = Bright
+selcolor_code				        = Code
+selcolor_okbtn				        = OK
+selcolor_cancelbtn			        = Cancel
+
+inspicture_title				    = Insert image
+inspicture_source			        = Source
+inspicture_replce				    = Replace text
+inspicture_link				        = Link URL
+inspicture_align			        = Align
+inspicture_none				        = None
+inspicture_left			        	= Left
+inspicture_right			        = Right
+inspicture_texttop			        = Text top
+inspicture_absmiddle			    = Absolute middle
+inspicture_baseline			        = Base line
+inspicture_absbottom			    = Absolute bottom
+inspicture_bottom				    = Bottom
+inspicture_middle				    = Middle
+inspicture_top					    = Top
+inspicture_type				        = Image type
+inspicture_pic				        = Common image
+inspicture_flash			        = Flash image
+inspicture_border				    = Border
+inspicture_width			        = Width
+inspicture_height			        = Height
+inspicture_okbtn			        = OK
+inspicture_cancelbtn		        = Cancle
+
+instable_title				    = Insert table
+instable_rows				    = Rows
+instable_cellspacing			= Cell spacing
+instable_cols				    = Cols
+instable_cellpadding			= Cell padding
+instable_width				    = Width
+instable_percent				= Percent
+instable_pixel				    = Pixel
+instable_border				    = Border
+instable_okbtn			        = OK
+instable_cancelbtn		        = Cancle
+
+
+[BadLogin]
+bdl_title					= Login error 
+bdl_msg						= You cannot login with the username and password entered.<br><br>Please check your username and password and try again.
+bdl_back					= Back
+
+[Error]
+err_title					= Error Information
+err_msg						= There were errors in the process<br><br>Please login again
+err_system_msg					= System message: 
+err_exit					= Logout
+
+[Preferences]
+prf_title 					= Preferences
+prf_general_title				= General information
+prf_name					= Name
+prf_reply_to					= Reply to
+prf_trash_title					= Trash
+prf_save_to_trash				= When you <b>delete</b> a message, move it to 
+prf_save_only_read				= Save only <b>read messages</b> in the 
+prf_empty_on_exit				= <b>Empty</b> trash folder when you logout
+prf_sent_title					= Sent items
+prf_save_sent					= Save <b>sent messages</b> in the 
+prf_messages_title				= Messages
+prf_page_limit					= Maximum number of messages per page
+prf_save_button					= Save
+prf_display_images				= Show attached images
+prf_default_editor_mode				= Default editor
+prf_default_editor_mode_text			= "TEXT Editor"
+prf_default_editor_mode_html			= "HTML Editor(IE5 or higher)"
+prf_time_to_refesh				= Automatically check for new mail (minutes)
+
+[Catch]
+ctc_title					= Add to Contact
+ctc_information				= Only shows e-mails in message header
+ctc_name					= Name
+ctc_email					= E-mail
+ctc_no_address				= No address available
+ctc_close					= Close
+ctc_save					= Save
+
+[Readmsg]
+next_mnu					= Next
+previous_mnu				= Previous
+back_mnu					= Back
+reply_mnu					= Reply
+reply_all_mnu				= Reply to all
+forward_mnu					= Forward
+headers_mnu					= Header
+move_mnu					= Move to
+move_to_trash_mnu			= Move to Trash
+delete_mnu					= Delete
+print_mnu					= Print
+
+from_hea					= From:
+to_hea						= To:
+cc_hea						= Cc:
+date_hea					= Date:
+subject_hea					= Subject:
+attach_hea					= Attachment:
+
+attch_name_hea					= Name
+attch_force_hea					= Download
+attch_type_hea					= Type
+attch_size_hea					= Size
+catch_address					= Add to contact
+
+[Search]
+sch_information_text				= Write a phrase or a word that you are looking for.
+sch_button_text					= Search &gt;&gt;
+sch_subject_hea					= Subject
+sch_from_hea					= From
+sch_to_hea					= To
+sch_cc_hea					= Cc
+sch_date_hea					= Date
+sch_body_hea					= Message body
+sch_folder_hea					= Folder
+sch_no_results					= No messages matching your criteria have been found
+
+[QuickAddress]
+qad_title 					= Contact
+qad_select_address				= Select a contact
+qad_to						= To
+qad_cc						= Cc
+qad_bcc						= Bcc
+
+[AddressBook]
+# edit/display
+adr_title					= Contact
+adr_name					= Name
+adr_email					= E-mail
+adr_phone					= Phone number
+adr_address					= Address
+adr_work					= Work
+adr_back					= Back
+adr_save					= Save
+adr_close                   = Close
+adr_empty 					= Item(s) with an asterisk (*) can not empty!  
+
+netadr_title					= Public Contact
+netadr_cn                                       = Name
+netadr_sn                                       = Full Name
+netadr_mail                                     = E-mail
+
+netadr_homeaddress                              = Home Address
+netadr_homephone                                = Home Phone
+netadr_mobile                                   = Mobile
+
+netadr_ou                                       = Department
+netadr_jobtitle                                 = Job Title
+netadr_officename                               = Office Name
+netadr_telephonenumber                          = Office Phone
+
+netadr_close                                    = Close Window
+
+# list
+adr_name_hea					= Name
+adr_email_hea					= E-mail
+adr_edit_hea					= Edit
+adr_expo_hea					= Export
+adr_dele_hea					= Delete
+adr_new_entry					= New Contact
+
+netadr_name                                     = Name
+netadr_mail                                     = E-mail
+netadr_phone                                    = Phone
+netadr_forward                                  = Previous
+netadr_next                                     = Next
+netadr_lookup                                   = LookUp
+netadr_viewinfo                                 = View User Information
+netadr_lookup_tip                               = Search contact (support inexact search)
+netadr_addcontact                               = Add to Contact
+
+addr_saved					= The contact has been saved
+addr_added					= The contact has been added
+addr_deleted					= The contact has been deleted
+
+[Signature]
+# edit/display
+sign_title					= Signature
+sign_name					= Name
+sign_content				= Content
+sign_back					= Back
+sign_save					= Save
+sign_empty 					= Item(s) with an asterisk (*) can not empty!  
+
+# list
+sign_name_hea					= Name
+sign_content_hea				= Content
+sign_edit_hea					= Edit
+sign_dele_hea					= Delete
+sign_new_entry					= New Signature
+
+sign_saved					= The signature has been saved
+sign_added					= The signature has been added
+sign_deleted					= The signature has been deleted
+sign_full					= The signature count exceed system limit, you don't add it.
+
+[AutoForward]
+fwd_title					= Auto Forward
+fwd_address					= Forward address
+fwd_address_tip				= Eache address splits with semicolon(;) when multi-address.
+fwd_savecopy				= After forward, save a copy to local mailbox
+fwd_save					= Save
+
+[AutoReply]
+reply_title					= Auto Reply
+reply_content				        = Reply content
+reply_status				        = Active auto reply
+reply_save					= Save
+
+[Password]
+pwd_title					= Change Password
+pwd_old						= Old password
+pwd_new						= New password
+pwd_confirm					= Confirm password
+pwd_save					= Save
+pwd_empty					= Password item not empty!
+pwd_noequal					= New password and confirm password must equal!
+pwd_failure					= Change password failure
+pwd_success					= Change password success
+pwd_back					= Back
+
+[ExternalPop3]
+# edit/display
+pop3_title					= External POP3
+pop3_username				        = User name
+pop3_password				        = Password
+pop3_host					= Host
+pop3_port					= Port
+pop3_enable					= Enable
+pop3_savecopy				        = Save copy
+pop3_back					= Back
+pop3_save					= Save
+pop3_empty 					= Item(s) with an asterisk (*) can not empty!  
+
+# list
+pop3_username_hea				= User name
+pop3_host_hea				        = Host
+pop3_enable_hea					= Enable
+pop3_edit_hea					= Edit
+pop3_dele_hea					= Delete
+pop3_new_entry					= New Pop3 Account
+
+pop3_saved					= The pop3 account has been saved
+pop3_added					= The pop3 account has been added
+pop3_deleted					= The pop3 account has been deleted
+pop3_full					= The pop3 mail count exceed system limit, you don't add it.
+
+[Register]
+reg_title 					= Register New Mailbox
+reg_mailbox 				= Mailbox
+reg_password 				= Password
+reg_confirmpwd 				= Confirm password
+reg_fullname 				= Full name
+reg_description 			= Description
+reg_hide_pwd 				= Hidden
+
+reg_failure					= Register new mailbox failure
+reg_success					= Register new mailbox success
+reg_empty					= Item(s) with an asterisk (*) can not empty!    
+reg_invaildchar				= The mailbox contain invaild char(s). The mailbox must composed of a~z, 0~9, ., _ and -.
+pwd_pwdnoequal				= Password and confirm password must equal!
+reg_register 				= Register
+reg_back 					= Back
+reg_affirmtip				= The mailbox will not use before administrator affirms.
+reg_successtip				= Return to homepage and you maybe login the system.
+reg_dberror					= Accessing user database occurs error!
+reg_existuser				= The same mailbox has existed, please rename and retry.
+reg_existaliasuser			= The same alias mailbox has existed, please rename and retry.
+reg_existgroup				= The same mail group has existed, please rename and retry.
+reg_userfull				= The number of mailbox has attached maxium number of register.
+reg_domainuserfull			= Under this domain, the number of mailbox has attached maxium number of mailbox.
+reg_domainstoragefull		= Under this domain, the quota of mailbox has attached maxium storage of mailbox.
+
+reg_ldappublicinfo                      = Add the Public Contact(y/n)?
+reg_ldaphomeaddress                     = Home Address
+reg_ldaphomephone                       = Home Phone
+reg_ldapmobile                          = Mobile
+reg_ldaporganizationunit                = Company/Department
+reg_ldapjobtitle                        = Job Title
+reg_ldapoffice                          = Office
+reg_ldapofficephone                     = Office Phone
+
+[Userinfo]
+userinfo_save							= Save
+userinfo_title                    	= Personal Information
+userinfo_success						= Modify success!
+userinfo_failure1						= Modify failure! <br> Can't get personal information.
+userinfo_failure2						= Modify failure!
+
+userinfo_user                           = User Name
+userinfo_fullname                       = Full Name
+userinfo_description                    = Description
+
+userinfo_publicinfo                     = Add the Public Contact(y/n)?
+userinfo_homeaddress                    = Home Address
+userinfo_homephone                      = Home Phone
+userinfo_mobile                         = Mobile
+userinfo_organizationunit               = Company/Department
+userinfo_jobtitle                       = Job Title 
+userinfo_office                         = Office
+userinfo_officephone                    = Office Phone
+
+[Group]
+group_title								= Mail Group
+group_adr								= Group E-mail
+group_description 						= Description
+group_memberlist						= Member List
+group_member	 						= List Members
+group_contct							= Add to Contact
+
+group_mailto							= Write Message
+group_memberlist						= List Group Member
+group_addcontact						= Add Contact
+
+group_list_title						= Group Member List
+group_list_close						= Close
+group_list_mail	            			= E-mail

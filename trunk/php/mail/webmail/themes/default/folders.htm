@@ -1,0 +1,78 @@
+{config_load file=$umLanguageFile section="Folders"}
+
+<html>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+
+<head>
+	<title>{#common_page_title#} - {#folders_title#}</title>
+	<link rel="stylesheet" href="themes/default/webmail.css" type="text/css">
+	<meta http-equiv="Content-Type" content="text/html; charset={#default_char_set#}">
+	<script language="JavaScript" src="themes/default/webmail.js" type="text/javascript"></script>
+	{$umJS}
+</head>
+
+<body leftmargin="0" marginwidth="0" topmargin="4" marginheight="3">
+
+{include file="default/pageheader.htm"}
+
+<table align="center" width="758" border="0" cellspacing="0" cellpadding="0">
+	<tr>
+		<td valign=top width="15%"> 
+			{include file="default/menu.htm"}
+		</td>
+        <td width="1" bgcolor="#817B7B"><img width="1" height="1"></td>
+		<td align="center" valign=top width="602" height=350 bgcolor=#ffffff >
+			<table cellspacing=1 cellpadding=1 width="100%" border=0 bgcolor=#ffffff>
+			<tr height=20>
+			    <td width="30%" class="headers">.:<b>{#fld_name_hea#}</b>:.</td>
+			    <td width="20%" class="headers">.:<b>{#fld_messages_hea#}</b>:.</td>
+			    <td width="15%" class="headers">.:<b>{#fld_size_hea#}</b>:.</td>
+			    <td width="15%" class="headers">.:<b>{#fld_empty_hea#}</b>:.</td>
+			    <td width="20%" class="headers">.:<b>{#fld_delete_hea#}</b>:.</td>
+			</tr>
+
+			{section name=i loop=$umFolderList}
+				<tr height=20>
+					<td class="default">&nbsp;<a href="{$umFolderList[i].chlink}">{$umFolderList[i].name|escape:"html"}</a></td>
+					<td class="cent">{$umFolderList[i].msgs}</td>
+					<td class="right">{$umFolderList[i].boxsize}Kb &nbsp;</td>
+					<td class="cent"><a href="{$umFolderList[i].emptylink}">OK</a></td>
+					<td class="cent">{$umFolderList[i].del}</td>
+				</tr>
+			{/section}
+
+			<tr height=20>
+				<td class="default">&nbsp;</td>
+				<td class="right"><b>{#fld_total#}</b> &nbsp;</td>
+				<td class="right"><b>{$umTotalUsed}</b>Kb &nbsp;</td>
+				<td class="cent">&nbsp;</td>
+				<td class="cent">&nbsp;</td>
+			</tr>
+
+			{if $umQuotaEnabled eq 1}
+			<tr height=20>
+				<td class="cent" colspan=5>&nbsp; {#quota_usage_info#}: {#quota_usage_used#} <b>{$umTotalUsed}</b>Kb {#quota_usage_of#} <b>{$umQuotaLimit}</b>Kb {#quota_usage_avail#}<br> {$umUsageGraph}</td>
+			</tr>
+			{/if}
+			<tr height=30 align="center" >
+				<form name="form1" action="folders.php" method="POST" onsubmit="return create();">
+				<input type=hidden name=sid value="{$umSid}">
+				<input type=hidden name=lid value="{$umLid}">
+				<input type=hidden name=tid value="{$umTid}">
+				<td class="default" colspan="5">
+					<input type=Text name=newfolder value="" class="textbox"> &nbsp;<input type=button value="{#fld_make_new#}" class=button onClick="create()">
+				</td>
+				</form>
+			</tr>
+		</table>
+		</td>
+		<td width="1" bgcolor="#817B7B"><img width="1" height="1"></td>
+	</tr>
+</table>
+
+{include file="default/pagefooter.htm"}
+
+</body>
+</html>
+
