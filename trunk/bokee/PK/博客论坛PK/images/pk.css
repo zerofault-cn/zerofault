@@ -1,0 +1,152 @@
+/* ========== PK ====== */
+.pklay{
+	width:950px;
+	overflow:hidden;
+	background:#F5F5F5;
+	margin:15px auto;}
+.pktit{
+	width:918px;
+	height:52px;
+	background: url(pktit.gif);
+	padding:20px 0px 0px 24px;
+	border:1px solid #DEDEDE;
+	margin:3px auto;}	
+.pkzi{
+
+	background: url(pkti.gif) no-repeat 0px 5px;
+	height:40px;
+	font-size:30px;
+	padding-left:180px;
+	font-weight:bold;
+}
+.pktop{
+	width:950px;
+	overflow:hidden;
+	background:#D4E6F7;
+	margin:10px auto;}
+.pktopnei{
+	width:915px;
+	height:157px;
+	padding:15px 0px 0px 27px;
+	background:#fff;
+	border:1px solid #9FC7ED;
+	margin:3px auto;}
+.pktu{
+	width:212px;
+	height:140px;
+	float:left;}	
+.pktu img {	border:1px solid #BBA6A5;}	
+.pktext{
+	width:340px;
+	height:130px;
+	margin:7px 0px 0px 19px;
+	display: inline;
+	text-indent:2em;
+	float:left;}
+.pklei{
+	width:319px;
+	height:132px;
+	margin-top:8px;
+	padding-left:5px;
+	border:1px solid #BBA6A5;
+	float:left;}
+.zhengbg{
+	background:url(zhengf.gif) no-repeat 11px 6px;
+	width:90px;
+	height:50px;
+	font-size:20px;
+	font-weight:bold;
+	padding:20px 0px 0px 70px;
+}
+.fangbg{
+	background:url(fangf.gif) no-repeat 105px 6px;
+	width:135px;
+	height:50px;
+	font-size:20px;
+	font-weight:bold;
+	padding:20px 0px 0px 15px;
+}	
+.pkleiyes{
+	width:152px;
+	height:120px;
+	margin:6px 0px 0px 0px;
+	float:left;}	
+.pklayleft{
+	width:462px;
+	overflow:hidden;
+	background:#FFDFCB;
+	float:left;}
+.pkleftnei{
+	width:452px;
+	overflow:hidden;
+	background:#fff;
+	border:1px solid #FDBA8F;
+	margin:3px auto;}	
+.pkleftit{
+	width:427px;
+	height:23px;
+	font-size:14px;
+	font-weight:bold;
+	margin:1px auto;
+	color:#fff;
+	padding:6px 0px 0px 23px;
+	background:url(pkleftit.gif);}	
+.pkrightnei{
+	width:452px;
+	overflow:hidden;
+	background:#fff;
+	border:1px solid #A2C0EB;
+	margin:3px auto;}	
+.pkrleftext{
+	width:438px;
+	overflow:hidden;
+	font-size:12px;
+	margin:10px auto;}	
+.pkrlefth{
+	font-size:16px;
+	font-weight:bold;
+	float:left;
+	color:#E45B04;}	
+.pkrleftday{
+	float:right;
+	color:#E45B04;}
+.pkrleftwen{
+	margin:5px auto;
+	text-indent:2em;}
+.pkrleftwen img{
+	vertical-align: text-bottom;}	
+.pkliuwen{
+	margin:5px 9px;
+}	
+.pkrliutit{
+	height:16px;
+	width:408px;
+	margin:10px auto;
+	padding:8px 15px 0px 15px;
+	background:#FFD5BA;}							
+.pklayright{
+	width:462px;
+	overflow:hidden;
+	background:#D5E2F6;
+	float:right;}
+.pklaysan{
+	width:950px;
+	overflow:hidden;
+	background:#E7F1D9;}
+.pksannei{
+	width:940px;
+	overflow:hidden;
+	background:#fff;
+	border:1px solid #CBE1AB;
+	margin:3px auto;}
+.pkfayan{
+	width:412px;
+	overflow:hidden;
+	font-size:12px;
+	margin:30px auto;}	
+.fayanlay{
+	width:412px;
+	height:19px;
+	font-weight:bold;
+	padding-left:25px;
+	background:url(guandian.gif) no-repeat;}	
