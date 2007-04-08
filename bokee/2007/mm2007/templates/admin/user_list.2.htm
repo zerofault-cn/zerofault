@@ -1,0 +1,153 @@
+<script>
+function passupdate(id)
+{
+	document.getElementById("iframe1").src='user_pass_update.php?id='+id;
+}
+function testmail(id)
+{
+	document.getElementById("iframe1").src='testmail.php?id='+id;
+}
+function changebutton(id)
+{
+	if(document.getElementById("passbutton"+id).value=='取消审核')
+	{
+		document.getElementById("passbutton"+id).value='通过审核';
+	//	document.getElementById("passtext"+id).innerHTML='<span style="color:red">否</span>';
+	}
+	else
+	{
+		document.getElementById("passbutton"+id).value='取消审核';
+	//	document.getElementById("passtext"+id).innerHTML='<span style="color:blue">是</span>';
+	}
+}
+function confirmdel(id)
+{
+	if(confirm('确定要删除ID为'+id+'的用户记录吗?'))
+	{
+		document.getElementById('iframe1').src='user_del.php?id='+id;
+		window.setTimeout("location.reload()",500);
+	}
+	else
+	{
+		return;
+	}
+}
+function selectall(chk)
+{
+	var f = document.forms["form2"];
+	for (i=0;i<f.elements.length;i++)
+    {
+		f.elements[i].checked = chk;
+	}
+}
+function check()
+{
+	if(document.form1.s_id.value=='' && document.form1.s_blogname.value=='' && document.form1.s_blogurl.value=='' && document.form1.s_realname.value=='' && document.form1.s_city.value=='' && document.form1.s_area.value=='')
+	{
+		alert('您还没有输入任何搜索条件呢!');
+		document.form1.s_id.focus();
+		return false;
+	}
+	return true;
+}
+function check2()
+{
+	var c = document.getElementsByName("id[]");
+	for(i=0;i<c.length;i++)
+	{
+		if(c[i].checked == true)
+		{
+			return true;
+		}
+	}
+	alert("您还没有做任何选择呢!");
+	return false;
+}
+</script>
+<meta http-equiv="Page-Enter" content="blendTrans(Duration=0.1)"/>
+<meta http-equiv="Page-Exit" content="blendTrans(Duration=0.1)" />
+<!-- right div -->
+<div id="Layer2" style="position:absolute;margin-left:10px;width:830px;border:1px solid #000;">
+<!-- search form -->
+<table width="100%" border="0" cellpadding="0" style="background-color:infobackground">
+<form name="form1" method="get" action="" onsubmit="return check()">
+<tr>
+	<td>输入任一搜索条件: <br />
+	ID:<input name="s_id" type="text" size="6" />
+	博客名:<input name="s_blogname" type="text" size="10" />
+	博客地址:<input name="s_blogurl" type="text" size="10" />
+	真名:<input name="s_realname" type="text" size="8" />
+	所在地区:<input name="s_city" type="text" size="6" />
+	报名赛区:<select name="s_area"><option value="">请选择</option>
+			<option value="0">所有</option>
+			<option value="1">中部</option>
+			<option value="2">南部</option>
+			<option value="3">北部</option></select>
+	<input type="hidden" name="s_pass" value="{S_PASS}" />
+	<input type="submit" name="submit" value="搜索" /></td>
+</tr>
+</form>
+</table>
+<!-- search form end -->
+<div style="text-align:center;padding-top:1px;padding-bottom:4px;background-color:#ffffff;border-top:1px dotted #666633">
+<span style="padding:4px 20px;background-color:{COLOR20};"><a href="?s_pass=0&order=id&old=0">未审核</a></span>
+<span style="padding:4px 20px;background-color:{COLOR21};"><a href="?s_pass=1&order=id&old=0">已通过审核<span style="font-size:10px;color:blue">(按ID倒序)</span></a></span>
+<span style="padding:4px 20px;background-color:{COLOR22};"><a href="?s_pass=1&order=allvote&old=0">已通过审核<span style="font-size:10px;color:blue">(按票数排序)</span></a></span>
+<span style="padding:4px 20px;background-color:{COLOR23};"><a href="?s_pass=0&order=id&old=1">未通过审核<span style="font-size:10px;color:blue">(黑名单)</span></a></span>
+</div>
+<div style="text-align:center;padding-top:5px;padding-bottom:4px;background-color:#99ccff;">
+<span style="padding:4px 20px;background-color:{COLOR10};"><a href="?s_area=0">所有赛区</a><strong style="color:#99ccff;">{COUNT}</strong></span>
+<span style="padding:4px 20px;background-color:{COLOR11};"><a href="?s_area=1">中部赛区</a><strong style="color:#99ccff;">{COUNT}</strong></span>
+<span style="padding:4px 20px;background-color:{COLOR12};"><a href="?s_area=2">南部赛区</a><strong style="color:#99ccff;">{COUNT}</strong></span>
+<span style="padding:4px 20px;background-color:{COLOR13};"><a href="?s_area=3">北部赛区</a><strong style="color:#99ccff;">{COUNT}</strong></span>
+</div>
+<!-- main body -->
+<table width="100%"  border="0" cellpadding="0" cellspacing="0" style="backgound-color:#d0d0d0">
+<form name="form2" method="post"  action="user_pass_update.php" target="iframe1">
+<tr class="caption" style="padding:5px 0;background-color:#6699FF;font-weight:bold;">
+	<td>选择</td>
+	<td>序号</td>
+	<td>ID</td>
+	<td>姓名</td>
+	<td>照片</td>
+	<td>BLOG网址</td>
+	<td>报名时间</td>
+	<td>赛区</td>
+	<td colspan="3" align="center">票数</td>
+	<td>留言</td>
+	<td>视频</td>
+	<td>操作</td>
+</tr>
+<!-- BEGIN list -->
+<tr style="background-color:{list.BGCOLOR}">
+	<td><input type="checkbox" name="id[]" value="{list.ID}" {BTNFN} /></td>
+	<td>{list.I}</td>
+	<td><a href="../comment.php?id={list.ID}" target="_blank">{list.ID}</a></td>
+	<td><a href="javascript:void(0)" onclick="javascript:window.open('user_edit.php?id={list.ID}','','width=450,height=605,toolbar=no,status=no,scrollbars=yes,resizable=yes');">{list.REALNAME}</a></td>
+	<td align="center" style="word-break:keep-all;"><a href="javascript:void(0)" onclick="javascript:window.open('user_edit.php?id={list.ID}','','width=450,height=605,toolbar=no,status=no,scrollbars=yes,resizable=yes');"><img src="{list.PHOTO}" width="60" border="0" /></a></td>
+	<td style="word-break:break-all;word-wrap:break-word;"><a href="http://{list.BLOGURL}" target="_blank">{list.BLOGURL}</a></td>
+	<td style="word-break:keep-all;">{list.TIME}</td>
+	<td align="center" style="word-break:keep-all;">{list.AREANAME}</td>
+	<td width="1" style="word-break:keep-all;"><a style="color:#FF00FF;" href="ipvote_cheat.php?mm_id={list.ID}" target="_blank">{list.NETVOTE}</a></td>
+	<td width="1" style="border:0">+30*<a style="color:#FF6600;" href="smsvote_info.php?mm_id={list.ID}" target="_blank">{list.SMSVOTE}</a></td>
+	<td width="1" style="border:0;color:#3300FF;">={list.ALLVOTE}</td>
+	<td align="center">{list.COMM_COUNT}</td>
+	<td align="center"><a href="{list.BOBOLINK}" target="_blank" title="检验视频">{list.BOBO}</a></td>
+	<td align="center"><input type="button" id="passbutton{list.ID}" value="{list.PASSBTN}" onClick="passupdate({list.ID});window.setTimeout('location.reload()',800);" style="{list.PASSBTNSTYLE}" {BTNFN} /><input type="button" value="修改" onclick="window.open('user_edit.php?id={list.ID}','','width=450,height=605,toolbar=no,status=no,scrollbars=yes,resizable=yes');" {BTNFN} /><input type="button" value="删除" onclick="confirmdel({list.ID})" {BTNFN} /><input type="button" value="发测试邮件" style="{TESTMAILSTYLE}" onclick="testmail({list.ID});"></td>
+</tr>
+<!-- END list -->
+<tr class="caption" height="30" style="background-color:#6666FF;">
+	<td colspan="3" style="text-align:left"><input type="checkbox" name="checkall" onclick="selectall(this.checked)" {BTNFN} />↑全选</td>
+	<td colspan="11" style="text-align:right"><input type="button" value="将所选通过审核" onclick="if(check2()){document.form2.submit();window.setTimeout('location.reload()',800);}else return;" style="{PASSBTNSTYLE}" {BTNFN} /><input type="button" value="将所选删除" onclick="if(check2()){document.form2.action='user_del.php';document.form2.submit();window.setTimeout('location.reload()',500);}else return;" {BTNFN} /><input type="button" value="给所选发送测试邮件" onclick="document.form2.action='testmail.php';document.form2.submit();" style="{TESTMAILSTYLE}" {BTNFN} /></td>
+</tr>
+<input type="hidden" name="passall" value="" />
+</form>
+</table>
+<br>
+<div align="center">{PAGE}</div>
+
+<iframe frameborder="0" scrolling="no" id="iframe1" name="iframe1" width="500" height="50" src=""></iframe>
+
+</div>
+<!-- right div end -->
+

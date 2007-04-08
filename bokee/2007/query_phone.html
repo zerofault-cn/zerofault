@@ -1,0 +1,34 @@
+<div style="border:1px solid #ff0;padding:5px">
+<form name="form1">
+<div><h1>立即查询手机本月投票票数</h1></div>
+<div style="margin:5px auto;">输入手机号：<input type="text" name="phone" size="11" value="11位手机号" onclick="this.value=''"> <input type="button" value="查询" onclick="javascript:if(check(document.form1.phone.value))query(document.form1.phone.value)"/></div>
+<div id="info"></div>
+</form>
+</div>
+<iframe id="iframe1" frameborder="0" allowTransparency="true" scrolling="no" width="0" height="0" src=""></iframe>
+<script>
+function isphone(num)
+{
+	return (new RegExp(/^(1[35](\d{9}))$/).test(num));
+}
+function check(phone)
+{
+	if(isphone(phone))
+	{
+		return true;
+	}
+	else
+	{
+		alert("您输入的手机号格式不对");
+		return false;
+	}
+}
+function query(phone)
+{
+	document.getElementById('iframe1').src='mm2007/query_sms.php?phone='+phone;
+}
+function showInfo(count)
+{
+	document.getElementById('info').innerHTML='您本月已投'+count+'票!';
+}
+</script>
