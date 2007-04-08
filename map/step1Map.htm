@@ -1,0 +1,336 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml">
+<head>
+<meta http-equiv="content-type" content="text/html; charset=GB2312"/>
+<title>Step1地图服务</title>
+<style type="text/css">
+v\:* {behavior:url(#default#VML);}
+A:link {COLOR: #000000;}
+A:visited {COLOR: #000000;}
+A:active {COLOR: #000000;}
+A:hover {COLOR: #95948F;}
+input{background-color:#B2D9BE;}
+select{background-color:#B2D9BE;}
+</style>
+<script language="javascript" src="mapjs.aspx" type="text/javascript"></script>
+<script language="javascript" src="map_cn.js" type="text/javascript"></script>
+<script language="javascript" src="Step1Map.js" type="text/javascript"></script>
+<script language="javascript" src="Step1KmlTree.js" type="text/javascript"></script>
+<script type="text/javascript">
+//<![CDATA[
+	var map,minimap;
+	var minimapRect,minimapViewType,viewPoint,viewZoom;
+	var userPosition,crossControl,miniMapControl;
+	var icon_Green,icon_Blue;
+	var searchOverlayTree;
+	var dynamicOverlayTreeNode,tempTreeNode,kmlFileOverlayTreeNode;
+	var dynamicOverlay=new K_DynamicOverlay("/KML/autokml.aspx?type=map&");
+	var imageTileOverlay=new K_ImageTileOverlay("/map/Overlays.aspx?");
+	var autoGeoCode=new K_MSOPGeoCodeSrv("/51Ditu/GeoCodeSrv.asmx?","81320002","81320002",new K_MSOPEncryptPointSrv("/51Ditu/EncryptPoint.asmx?","81320002","81320002"),SetGeoCodeInfo);
+	var addImageOverlay=null;
+	var imagesOverlayGroup=new K_ImagesOverlayGroup(128,new GPoint(0,0),new GSize(50000,50000));
+	function onLoad()
+	{
+		map = new GMap(document.getElementById("map"),null,null,null,true);
+//		map.mapTypes.push(new K_MOSPSpec("/51ditu/GMPubSrv.asmx?", "中国地图","81320002","81320002",new K_MSOPEncryptPointSrv("/51Ditu/EncryptPoint.asmx?","81320002","81320002"),"image/jpeg"));
+		map.addControl(new GLargeMapControl());
+		map.addControl(new GMapTypeControl());
+
+		var baseIcon = new GIcon();
+		baseIcon.shadow = "http://labs.google.com/ridefinder/images/mm_20_shadow.png";
+		baseIcon.iconSize = new GSize(12, 20);
+		baseIcon.shadowSize = new GSize(22, 20);
+		baseIcon.iconAnchor = new GPoint(6, 20);
+		baseIcon.infoWindowAnchor = new GPoint(5, 1);
+		icon_Green= new GIcon(baseIcon);
+		icon_Green.image = "http://labs.google.com/ridefinder/images/mm_20_green.png";
+		icon_Blue= new GIcon(baseIcon);
+		icon_Blue.image = "http://labs.google.com/ridefinder/images/mm_20_blue.png";
+
+		if(K_GetQueryString("zoom")!="")
+			zoom=parseInt(K_GetQueryString("zoom"));
+		else
+			zoom=13;
+		if(K_GetQueryString("center.x")!="" && K_GetQueryString("center.y")!="")
+		{
+			map.centerAndZoom(new GPoint(parseFloat(K_GetQueryString("center.x")),parseFloat(K_GetQueryString("center.y"))),zoom);
+			if(K_GetQueryString("pInfo")!="")
+				CreateMarker(new GPoint(parseFloat(K_GetQueryString("center.x")),parseFloat(K_GetQueryString("center.y"))),icon_Blue,K_GetQueryString("pInfo"));
+			else
+				CreateMarker(new GPoint(parseFloat(K_GetQueryString("center.x")),parseFloat(K_GetQueryString("center.y"))),icon_Blue);
+		}
+		else
+			map.centerAndZoom(new GPoint(106.08,36.94),zoom);
+		setType(K_GetQueryString("type"));
+
+		mapTypes=map.getMapTypes();
+		for(i=0;i<mapTypes.length;i++)
+		{
+			oOption = document.createElement("option");
+			document.getElementById("I_MapType").options.add(oOption);
+			oOption.innerText =mapTypes[i].getLinkText();
+			oOption.value=mapTypes[i].getShortLinkText();
+		}
+		GEvent.addListener(map, "moveend",showInfo);
+		GEvent.trigger(map,"moveend");
+
+		initTree();
+
+		if(K_GetQueryString("kml")!="")
+			LoadKmlFile(K_GetQueryString("kml"));
+	}
+	function AutoLoadImagesOverlayGroup(a)
+	{
+		if(a)
+			imagesOverlayGroup.Bind(map);
+		else
+			imagesOverlayGroup.unBind();
+		document.getElementById("cbx_AutoLoadImagesOverlayGroup").checked=a;
+	}
+	function setType(name)
+	{
+		mapTypes=map.getMapTypes();
+		for(i=0;i<mapTypes.length;i++)
+			if(mapTypes[i].getShortLinkText()==name)
+				map.setMapType(mapTypes[i]);
+	}
+
+	function ShowUserPosition(a)
+	{
+		if(a)
+		{
+			if(userPosition && userPosition.loaded)
+			{
+				userPosition.marker=CreateMarker(userPosition.point,icon_Green,"您的地理位置");
+			}
+			else
+			{
+				document.getElementById('MyLocate').innerHTML="载入中…";
+				userPosition=new K_UserPosition();
+				userPosition.Load(SetUserPosition);
+			}
+		}
+		else
+		{
+			if(userPosition.marker!=null)
+				map.removeOverlay(userPosition.marker);
+		}
+		return true;
+	}
+	function SetUserPosition()
+	{
+		document.getElementById('MyLocate').innerHTML='<a href="javascript:map.centerAndZoom(new GPoint('+this.point.x+','+this.point.y+'),'+this.zoom+');">查看位置</a>';
+		this.marker=CreateMarker(this.point,icon_Green,"您的地理位置");
+	}
+	function CreateMarker(point,icon,html)
+	{
+		var marker = new GMarker(point,icon);
+		if(html && html!="")
+			GEvent.addListener(marker, "click", function(){marker.openInfoWindowHtml(html);});
+		map.addOverlay(marker);
+		return marker;
+	}
+	function ShowCrossControl(a)
+	{
+		if(a)
+		{
+			crossControl=new K_CrossControl();
+			map.addControl(crossControl);
+		}
+		else
+		{
+			map.removeControl(crossControl);
+			crossControl=null;
+		}
+	}
+	function ShowMiniMapControl(a)
+	{
+		if(a)
+		{
+			miniMapControl=new K_MiniMapControl();
+			map.addControl(miniMapControl);
+		}
+		else
+		{
+			map.removeControl(miniMapControl);
+			miniMapControl=null;
+		}
+	}
+	function AutoLoadDynamicOverlay(a)
+	{
+		if(a)
+			dynamicOverlay.Bind(map,dynamicOverlayTreeNode);
+		else
+			dynamicOverlay.unBind(map);
+		document.getElementById("cbx_AutoLoadDynamicOverlay").checked=a;
+	}
+	function AutoLoadImageTileOverlay(a)
+	{
+		if(a)
+			imageTileOverlay.Bind(map);
+		else
+			imageTileOverlay.unBind(map);
+	}
+	var geoCodeListener=null;
+	function AutoLoadGeoCode(a)
+	{
+		if(a)
+		{
+			if(!geoCodeListener)
+				geoCodeListener=GEvent.addListener(map,"moveend",function(){autoGeoCode.GetGeoCode(map.getCenterLatLng());});
+			autoGeoCode.GetGeoCode(map.getCenterLatLng());
+		}
+		else
+		{
+			if(geoCodeListener)
+				GEvent.removeListener(geoCodeListener);
+			geoCodeListener=null;
+			window.defaultStatus="";
+		}
+	}
+	function SetGeoCodeInfo(geoCode)
+	{
+		switch(geoCode.status)
+		{
+			case -2:
+				window.defaultStatus="地理信息查询发生错误";
+				break;
+			case -1:
+				window.defaultStatus="超出可查询范围";
+				break;
+			case 0:
+				window.defaultStatus="没有开始地理信息查询";
+				break;
+			case 1:
+				window.defaultStatus="正在载入中心点地理信息……";
+				break;
+			case 2:
+				window.defaultStatus="中心点地理信息："+geoCode.result;
+				break;
+		}
+	}
+	function AddImageOverlay(href,minX,minY,maxX,maxY,arc,name)
+	{
+		if((!name) || name=="")
+			name="未命名图片";
+		var bounds=new GBounds(minX,minY,maxX,maxY);
+		if(addImageOverlay)
+		{
+			addImageOverlay.treeNode.parent.RemoveNode(addImageOverlay.treeNode);
+			map.removeOverlay(addImageOverlay);
+		}
+		addImageOverlay=new K_ImageOverlay(href,bounds,arc,0.5);
+		addImageOverlay.treeNode=tempTreeNode.AddNode('<input type="checkBox" checked="true"/>'+name+'(<a href="javascript:">切换透明</a>)',name);
+		addImageOverlay.treeNode.span.children.item(0).onclick=K_GetCallBack(addImageOverlay.treeNode,K_OverlayTree.prototype.PointDisplayCallBack);
+		addImageOverlay.treeNode.span.children.item(1).onclick=K_GetCallBack(addImageOverlay.treeNode,K_OverlayTree.prototype.ImageTransportCallBack);
+		map.addOverlay(addImageOverlay);
+		addImageOverlay.treeNode.Marker=addImageOverlay;
+		addImageOverlay.display(true);
+	}
+	function showInfo()
+	{
+		var zoom=map.getZoomLevel();
+		var num=parseInt(Math.log(1/map.spec.pixelsPerLonDegree[zoom])/Math.log(10));
+		var point=map.getCenterLatLng();
+		var px=point.x.toString();
+		px=px.substring(0,px.indexOf(".")-num+2);
+		var py=point.y.toString();
+		py=py.substring(0,py.indexOf(".")-num+2);
+		document.getElementById("I_Center").value =px+","+py;
+		document.getElementById("I_ZoomLevel").value = zoom;
+		document.getElementById("I_MapType").value = map.getCurrentMapType().getShortLinkText();
+		setMinimapRect();
+	}
+	function GetUrl()
+	{
+		return 'http://www.step1.cn/map/index.html?center.x='+map.getCenterLatLng().x+'&center.y='+map.getCenterLatLng().y+'&zoom='+map.getZoomLevel()+'&type='+map.getCurrentMapType().getShortLinkText();
+	}
+	function LoadKml()
+	{
+		var url=window.prompt("请输入地标文件路径(支持KML和KMZ):","http://www.step1.cn/GoogleAPI/map/kml/K_Reverter.kml");
+		if(url && url.length>0)
+			LoadKmlFile(url);
+	}
+	function SearchPlace()
+	{
+		var keyword=window.prompt("请输入地名:(尽量简单，比如\t湖北省监利县，请输入'监利'，\n\t北京天安门，请输入'天安门')","监利");
+		if(keyword && keyword.length>0)
+		{
+			if(searchOverlayTree)
+				searchOverlayTree.clear();
+			searchOverlayTree=new K_OverlayTree(map,searchOverlayTreeNode);
+			var kmlLoad=new K_XmlLoader(K_GetCallBack(searchOverlayTree,searchOverlayTree.ParseKml));
+			kmlLoad.Load("/KML/SearchKML.aspx?type=map&keyword="+escape(keyword));
+		}
+	}
+	function LoadKmlFile(url)
+	{
+		var overlayTree=new K_OverlayTree(map,kmlFileOverlayTreeNode);
+		var kmlLoad=new K_XmlLoader(K_GetCallBack(overlayTree,overlayTree.ParseKml));
+		if(url.indexOf("http://")==0)
+			url="/Kml/GetKmlFile.aspx?url="+url;
+		kmlLoad.Load(url);
+	}
+	function initTree()
+	{
+		var tree=new K_Tree("TreeDiv",'<b>Step1</b>.cn</font>地图浏览');
+		tree.root.ClickCallBack();
+		node=tree.root.AddNode('<image src="'+tree.imageFolder+'collection.gif" height="16"/>地图显示选项');
+		node.AddNode('<input type="checkBox" onclick="ShowUserPosition(this.checked);"/>显示我的位置(<span id="MyLocate">没有载入</span>)');
+		node.AddNode('<input type="checkBox" onclick="ShowCrossControl(this.checked);"/>显示地图中心十字<br/>');
+		node.AddNode('<input type="checkBox" onclick="ShowMiniMapControl(this.checked);"/>鹰眼地图 <a href="javascript:if(miniMapControl){miniMapControl.point=new GPoint(11.25,30.00);miniMapControl.zoom=17;miniMapControl.InitMap();}">全球</a>|<a href="javascript:if(miniMapControl){miniMapControl.point=new GPoint(106.08,36.94);miniMapControl.zoom=15;miniMapControl.InitMap();}">中国</a>|<a href="javascript:if(miniMapControl){miniMapControl.point=null;miniMapControl.zoom=null;miniMapControl.InitMap();}">最佳</a><br/>');
+		node.AddNode('<input type="checkBox" onclick="AutoLoadImageTileOverlay(this.checked);"/>自动加载中国行政区划');
+		node.AddNode('<input type="checkBox" id="cbx_AutoLoadImagesOverlayGroup" onclick="AutoLoadImagesOverlayGroup(this.checked);"/><a href="http://www.51ditu.com" target="_blank">灵图</a><font color="red">中国地图</font>(<a href="javascript:if(imagesOverlayGroup.opacity==1)imagesOverlayGroup.setOpacity(0.6);else imagesOverlayGroup.setOpacity(1);">透明</a>)<font color="red">New!</font>');
+		node.AddNode('<input type="checkBox" onclick="AutoLoadGeoCode(this.checked);"/>在状态栏显示地理信息');
+		node.ClickCallBack();
+
+		node=tree.root.AddNode('<input type="checkBox" id="cbx_AutoLoadDynamicOverlay" onclick="AutoLoadDynamicOverlay(this.checked);"/>自动载入Step1动态标注');
+		dynamicOverlayTreeNode=node.AddNode('<input type="checkBox" checked="true"/>所有标注');
+		dynamicOverlayTreeNode.span.childNodes[0].onclick=K_GetCallBack(dynamicOverlayTreeNode,K_OverlayTree.prototype.FolderDisplayCallBack);
+		var dynamicImageOverlayTreeNode=dynamicOverlayTreeNode.AddNode('<input type="checkBox" checked="true"/>图片地图','图片地图');
+		dynamicImageOverlayTreeNode.span.childNodes[0].onclick=K_GetCallBack(dynamicImageOverlayTreeNode,K_OverlayTree.prototype.FolderDisplayCallBack);
+		dynamicImageOverlayTreeNode.ClickCallBack();
+		dynamicOverlayTreeNode.ClickCallBack();
+
+		kmlFileOverlayTreeNode=tree.root.AddNode('<input type="checkBox" checked="true"/>地标文件[<a href="javascript:LoadKml();">加载新地标]</a>');
+		kmlFileOverlayTreeNode.span.childNodes[0].onclick=K_GetCallBack(kmlFileOverlayTreeNode,K_OverlayTree.prototype.FolderDisplayCallBack);
+
+		searchOverlayTreeNode=tree.root.AddNode('<input type="checkBox" checked="true"/>地名搜索结果<a href="javascript:SearchPlace();">[搜索地名]</a>');
+		searchOverlayTreeNode.span.childNodes[0].onclick=K_GetCallBack(kmlFileOverlayTreeNode,K_OverlayTree.prototype.FolderDisplayCallBack);
+		searchOverlayTreeNode.ClickCallBack();
+
+		tempTreeNode=tree.root.AddNode('<input type="checkBox" checked="true"/>临时标注');
+		tempTreeNode.span.childNodes[0].onclick=K_GetCallBack(tempTreeNode,K_OverlayTree.prototype.FolderDisplayCallBack);
+		node=tree.root.AddNode('<image src="'+tree.imageFolder+'collection.gif" height="16"/>地图相关操作');
+		node.AddNode('<image src="'+tree.imageFolder+'property.gif" height="16"/><a href="NoteBook.html" target="_blank">地图留言本GuestMap<font color="red">New!</font></a>');
+		node.AddNode('<image src="'+tree.imageFolder+'property.gif" height="16"/><a href="AddImageOverlay.html" target="_blank">添加图片地图</a>');
+		node.AddNode('<image src="'+tree.imageFolder+'property.gif" height="16"/><a href="http://www.step1.cn/kml/" target="_blank">地标文件交流系统</a>');
+		node.AddNode('<image src="'+tree.imageFolder+'property.gif" height="16"/><a href="../GoogleApi/map/total.html" target="_blank">Google Maps API开发者</a>');
+		node.AddNode('<image src="'+tree.imageFolder+'property.gif" height="16"/><a href="http://www.step1.cn/archive/2005/11/13/233.aspx#Post" target="_blank">发表意见和建议</a>');
+		node.AddNode('<image src="'+tree.imageFolder+'property.gif" height="16"/><a href="http://www.step1.cn/" target="_self">返回Step1.cn首页</a>');
+		node.ClickCallBack();
+	}
+//]]>
+</script>
+</head>
+<body onload="onLoad()" style="padding:0;margin:0;">
+<table width="990" border="0" cellspacing="0" bgcolor="#EBF6F2">
+<tr><td width="750" valign="top" style="padding:0;margin:0;">
+	<div id="map" style="width: 750px; height: 550px;"></div>
+	<div id="message" style="font-size:13px;background-color:#B2D9BE;">
+		<b>中心经纬</b>:<input id="I_Center" size="18" onchange="map.recenterOrPanToLatLng(new GPoint(parseFloat(document.getElementById('I_Center').value.split(',')[0]),parseFloat(document.getElementById('I_Center').value.split(',')[1])))"/>
+		<b>放大级别</b>:<select id="I_ZoomLevel" onchange="map.zoomTo(parseInt(this.value))">
+			<option value="0">0</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option>
+			<option value="11">11</option><option value="12">12</option><option value="13">13</option><option value="14">14</option><option value="15">15</option><option value="16">16</option><option value="17">17</option><option value="18">18</option><option value="19">19</option><option value="20">20</option>
+		</select>
+		<b>地图类型</b>:<select id="I_MapType" onchange="setType(this.value)"></select>
+		&nbsp;&nbsp;&nbsp;&nbsp;
+		<input type="button" value="复制本视图地址" onclick="clipboardData.setData('text',GetUrl());alert('网址已经复制到剪切板中\n\n谢谢！');"/>
+		<input type="button" value="收藏本视图" onclick="window.external.addFavorite(GetUrl(),'Step1.cn地图服务')"/>
+	</div>
+</td><td valign="top" width="240">
+	<div style="font-size:13px;padding:5px;margin:0px;background-color:#B2D9BE;overflow:auto;width:226px;height:572px;position:absolute;" id="TreeDiv"></div>
+</td></tr></table>
+<div style="display:none;"><script language="javascript" src="/Basic.js"></script>
+</div>
+  </body>
+</html>

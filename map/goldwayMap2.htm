@@ -1,0 +1,143 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
+    <title>My Google Maps Hack</title>
+    <style type="text/css">
+    v\:* {
+      behavior:url(#default#VML);
+    }
+    </style>
+
+<script language="javascript" src="http://maps.google.com/maps?file=api&v=2&key=ABQIAAAAGIXjiA0k2uINv-bo5flFdBQdfUrd590uSmlGKFyPIj7DASFsZBQAkaORK7y8JqofZE1IWTMXScTRKw"></script>
+<script language="javascript" type="text/javascript" src="map_cn.js"></script>
+<script language="javascript" type="text/javascript" src="Step1Map.js"></script>
+</head>
+<body leftmargin=0 topmargin=0>
+<div id="map" style="width: 800px; height: 560px"></div>
+<div id="message" style="font-size:13px;background-color:#B2D9BE;">
+	<b>中心经纬</b>:<input id="I_Center" size="18" onchange="map.recenterOrPanToLatLng(new GPoint(parseFloat(document.getElementById('I_Center').value.split(',')[0]),parseFloat(document.getElementById('I_Center').value.split(',')[1])))"/>
+	<b>放大级别</b>:<select id="I_ZoomLevel" onchange="map.zoomTo(parseInt(this.value))">
+		<option value="0">0</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option>
+		<option value="11">11</option><option value="12">12</option><option value="13">13</option><option value="14">14</option><option value="15">15</option><option value="16">16</option><option value="17">17</option><option value="18">18</option><option value="19">19</option><option value="20">20</option>
+	</select>
+	<b>地图类型</b>:<select id="I_MapType" onchange="setType(this.value)"></select>
+	&nbsp;&nbsp;&nbsp;&nbsp;
+	<input type="button" value="复制本视图地址" onclick="clipboardData.setData('text',GetUrl());alert('网址已经复制到剪切板中\n\n谢谢！');"/>
+	<input type="button" value="收藏本视图" onclick="window.external.addFavorite(GetUrl(),'Step1.cn地图服务')"/>
+</div>
+
+<script type="text/javascript">
+//<![CDATA[
+function CreateMarker(point,icon,html)
+	{
+		var marker = new GMarker(point,icon);
+		if(html && html!="")
+			GEvent.addListener(marker, "click", function(){marker.openInfoWindowHtml(html);});
+		map.addOverlay(marker);
+		return marker;
+	}
+function showInfo()
+{
+	var zoom=map.getZoomLevel();
+	var num=parseInt(Math.log(1/map.spec.pixelsPerLonDegree[zoom])/Math.log(10));
+	var point=map.getCenterLatLng();
+	var px=point.x.toString();
+	px=px.substring(0,px.indexOf(".")-num+2);
+	var py=point.y.toString();
+	py=py.substring(0,py.indexOf(".")-num+2);
+	document.getElementById("I_Center").value =px+","+py;
+	document.getElementById("I_ZoomLevel").value = zoom;
+	document.getElementById("I_MapType").value = map.getCurrentMapType().getShortLinkText();
+	setMinimapRect();
+}
+
+//alert(GBrowserIsCompatible());
+var map;
+var zoom;
+
+map=new GMap2(document.getElementById("map"));
+map.addControl(new GLargeMapControl());
+//map.addControl(new GSmallMapControl());
+map.addControl(new GMapTypeControl());
+
+if(K_GetQueryString("zoom")!="")
+	zoom=parseInt(K_GetQueryString("zoom"));
+else
+	zoom=13;
+if(K_GetQueryString("center.x")!="" && K_GetQueryString("center.y")!="")
+{
+	map.centerAndZoom(new GPoint(parseFloat(K_GetQueryString("center.x")),parseFloat(K_GetQueryString("center.y"))),zoom);
+	if(K_GetQueryString("pInfo")!="")
+		CreateMarker(new GPoint(parseFloat(K_GetQueryString("center.x")),parseFloat(K_GetQueryString("center.y"))),icon_Blue,K_GetQueryString("pInfo"));
+	else
+		CreateMarker(new GPoint(parseFloat(K_GetQueryString("center.x")),parseFloat(K_GetQueryString("center.y"))),icon_Blue);
+}
+else
+	map.centerAndZoom(new GPoint(106.08,36.94),zoom);
+if(K_GetQueryString("type")!="")
+	map.setType(K_GetQueryString("type"));
+else
+	map.setMapType(G_MAP_TYPE);
+
+mapTypes=map.getMapTypes();
+for(i=0;i<mapTypes.length;i++)
+{
+	oOption = document.createElement("option");
+	document.getElementById("I_MapType").options.add(oOption);
+	oOption.innerText =mapTypes[i].getLinkText();
+	oOption.value=mapTypes[i].getShortLinkText();
+}
+GEvent.addListener(map, "moveend",showInfo);
+//GEvent.trigger(map,"moveend");
+
+
+var baseIcon = new GIcon();
+baseIcon.shadow = "http://labs.google.com/ridefinder/images/mm_20_shadow.png";
+baseIcon.iconSize = new GSize(12, 20);
+baseIcon.shadowSize = new GSize(22, 20);
+baseIcon.iconAnchor = new GPoint(6, 20);
+baseIcon.infoWindowAnchor = new GPoint(5, 1);
+icon_Green= new GIcon(baseIcon);
+icon_Green.image = "http://labs.google.com/ridefinder/images/mm_20_green.png";
+icon_Blue= new GIcon(baseIcon);
+icon_Blue.image = "http://labs.google.com/ridefinder/images/mm_20_blue.png";
+icon_Red= new GIcon(baseIcon);
+icon_Red.image = "http://labs.google.com/ridefinder/images/mm_20_red.png";
+var myMarker = new GMarker(map.getCenterLatLng(),icon_Red);
+//map.addOverlay(myMarker);
+
+//黑河127.29,50.14
+//腾冲98.51,25.01
+var line1 = new GPolyline([new GPoint(127.29,50.14),new GPoint(98.51,25.01),new GPoint(98.51,50.14),new GPoint(127.29,50.14)]);
+map.addOverlay(line1);
+
+
+//在地图上使用XML和异步RPC ("AJAX")
+//在这个范例中，我们下载一个静态文件("data.xml")，这个XML文件中包含一系列经/纬坐标，当下载完成后，读取这个XML文件并为每一个坐标在地图上创建一个标记.
+/*
+var request = GXmlHttp.create();
+request.open("GET", "data.xml", true);
+request.onreadystatechange = function()
+{
+	if (request.readyState == 4)
+	{
+		var xmlDoc = request.responseXML;
+		var markers = xmlDoc.documentElement.getElementsByTagName("marker");
+		for (var i = 0; i < markers.length; i++)
+		{
+			var point = new GPoint(parseFloat(markers[i].getAttribute("lng")),parseFloat(markers[i].getAttribute("lat")));
+			var marker = createMarker(point,markers[i].getAttribute("txt"));
+			map.addOverlay(marker);
+		}
+	}
+}
+request.send(null);
+*/
+
+
+//]]>
+</script>
+
+</body>
+</html>

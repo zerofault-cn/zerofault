@@ -1,0 +1,103 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml">
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
+    <title>K_ImageOverlay _ K_ReverterMap _ Google Maps API</title>
+    <style type="text/css">
+    v\:* {
+      behavior:url(#default#VML);
+    }
+    </style>
+<script language="javascript" src="loadGoogleMap.js"></script>
+<script type="text/javascript">
+//<![CDATA[
+var map,imageOverlay;
+function K_ImageOverlay(imageUrl,bounds,rotation,opacity)
+	{
+		this.imageUrl=imageUrl;
+		this.bounds=bounds;
+		this.rotation=-rotation;
+		this.opacity=opacity||0.45;
+	}
+	K_ImageOverlay.prototype.initialize=function(a)
+	{
+		this.map=a;
+		if(this.rotation>5 || this.rotation<-5)
+		{
+			this.drawElement=a.ownerDocument.createElement("v:Image");
+			this.drawElement.style.rotation=this.rotation;
+		}
+		else
+			this.drawElement=a.ownerDocument.createElement("img");
+		this.drawElement.title=this.imageUrl;
+		this.drawElement.style.position="absolute";
+		this.drawElement.style.filter="progid:DXImageTransform.Microsoft.Alpha(opacity="+(this.opacity*100)+");";
+		this.drawElement.style.display="none";
+		this.drawElement.src=this.imageUrl;
+		if(browser.type==1)
+		{
+			this.drawElement.unselectable="on";
+			this.drawElement.onselectstart=function(){return false};
+			this.drawElement.galleryImg="no"
+		}
+		else
+		{
+			this.drawElement.style.MozUserSelect="none"
+		}
+		this.drawElement.style.border="0";
+		this.drawElement.style.padding="0";
+		this.drawElement.style.margin="0";
+		this.drawElement.oncontextmenu=function(){return false};
+		a.markerPane.appendChild(this.drawElement);
+	};
+	K_ImageOverlay.prototype.redraw=function(a)
+	{
+		if(!a)return;
+		var b=this.map.spec.getBitmapCoordinate(this.bounds.minY,this.bounds.minX,this.map.zoomLevel);
+		var min=this.map.getDivCoordinate(b.x,b.y);
+		b=this.map.spec.getBitmapCoordinate(this.bounds.maxY,this.bounds.maxX,this.map.zoomLevel);
+		var max=this.map.getDivCoordinate(b.x,b.y);
+		this.drawElement.style.left=(min.x)+"px";
+		this.drawElement.style.top=(max.y)+"px";
+		this.drawElement.style.width=(max.x-min.x)+"px";
+		this.drawElement.style.height=(min.y-max.y)+"px";
+	};
+	K_ImageOverlay.prototype.setOpacity=function(opacity)
+	{
+		this.opacity=opacity||0.45;
+		this.drawElement.style.filter="progid:DXImageTransform.Microsoft.Alpha(opacity="+(this.opacity*100)+");";
+	}
+	K_ImageOverlay.prototype.copy=function(){return new K_ImageOverlay(this.imageUrl,this.bounds,this.rotation,this.opacity)};
+	K_ImageOverlay.prototype.remove=window.GPolyline.prototype.remove;
+	K_ImageOverlay.prototype.display=window.GPolyline.prototype.display;
+	K_ImageOverlay.prototype.setZIndex=window.GPolyline.prototype.setZIndex;
+	K_ImageOverlay.prototype.getLatitude=function(){return 180};
+
+function onLoad()
+{
+	map = new GMap(document.getElementById("map"));
+	map.addControl(new GLargeMapControl());
+	map.addControl(new GMapTypeControl());
+	map.centerAndZoom(new GPoint(110.093994140625,19.18148958198376),9);
+	var bounds=new GBounds(108.548384827952,18.0400740574296,111.729042228649,20.3537745028853);
+	imageOverlay=new K_ImageOverlay("http://www.gogocn.com/admin/map/map_hainan.jpg",bounds,0,0.5);
+	map.addOverlay(imageOverlay);
+	imageOverlay.display(true);
+}
+function ChangeOpacity(o)
+{
+	opacity=imageOverlay.opacity+o;
+	if(opacity>1)opacity=1;
+	if(opacity<0)opacity=0;
+	imageOverlay.setOpacity(opacity);
+}
+//]]>
+</script>
+  </head>
+  <body onload="onLoad()">
+    <div>Change Image Opacity:  <input type="button" value="+" onclick="ChangeOpacity(0.2)"/> <input type="button" value="-" onclick="ChangeOpacity(-0.2)"/></div>
+    <div><a href="total.html#K_ImageOverlay">Return to article(Chinese)</a></div>
+    <div id="map" style="width: 750px; height: 550px"></div>
+
+  </body>
+</html>

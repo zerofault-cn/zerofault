@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://earth.google.com/kml/2.0">
+<Document>
+	<visiblity>1</visiblity>
+	<NetworkLink>
+		<name>www.Step1.cn</name>
+		<flyToView>0</flyToView>
+		<Url>
+			<href>http://www.step1.cn/kml/AutoKML.aspx</href>
+			<refreshMode>onInterval</refreshMode>
+			<refreshInterval>30</refreshInterval>
+			<viewRefreshMode>onStop</viewRefreshMode>
+			<viewRefreshTime>1</viewRefreshTime>
+			<viewFormat>BBOX=[bboxWest],[bboxSouth],[bboxEast],[bboxNorth],[lookatLon],[lookatLat],[lookatRange],[lookatTilt],[lookatHeading]</viewFormat>
+		</Url>
+		<refreshVisibility>0</refreshVisibility>
+	</NetworkLink>
+</Document>
+</kml>

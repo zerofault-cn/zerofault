@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<History xmlns="http://www.garmin.com/xmlschemas/ForerunnerLogbook" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.garmin.com/xmlschemas/ForerunnerLogbook http://www.garmin.com/xmlschemas/ForerunnerLogbookv1.xsd" version="1">
+<Run>
+<Track>
+<Trackpoint>
+<Position>
+<Latitude>22.5610566765807</Latitude>
+<Longitude>114.031495006396</Longitude>
+<Altitude>0</Altitude>
+</Position>
+<Time>2006-03-24T11:07:01Z</Time>
+</Trackpoint>
+<Trackpoint>
+<Position>
+<Latitude>22.5610566765807</Latitude>
+<Longitude>114.031495006396</Longitude>
+<Altitude>0</Altitude>
+</Position>
+<Time>2006-03-24T11:07:01Z</Time>
+</Trackpoint>
+<Trackpoint>
+<Position>
+<Latitude>22.5610566765807</Latitude>
+<Longitude>14809.9369</Longitude>
+<Altitude>0</Altitude>
+</Position>
+<Time>2006-03-24T11:07:01Z</Time>
+</Trackpoint>
+</Track>
+</Run>
+</History>

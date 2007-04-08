@@ -1,0 +1,160 @@
+
+<html>
+	<head>
+		<style type="text/css">
+		    v\:* {
+		    	behavior:url(#default#VML);
+		    }
+	    </style>
+		<!-- 1. 导入key -->
+		<script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=ABQIAAAA5kccdAmo0A4xDzjnPhMEbBRM1cuKyWT9ON2FpIBQ_SaJLOP0ohRPJoVY0lWQst0ao3ARajaBeKGaEg" type="text/javascript"></script>
+	</head>
+	<body onunload="GUnload()">
+
+		
+		<!-- 2. 定义显示地图的区域，（大小，位置，边框颜色粗细） -->
+		<div id="map" style="position:absolute; left:40px; top:21px; width:454px; height:403px; z-index:1; border:#747474 solid 1px;"></div>
+		<span id="speedMessage"></span>
+		<span id="timeMessage"></span>
+		<!-- 3. 根据API文档，添加JavaScript语句 -->
+		<p>
+<script language="javascript">
+	var marker;
+	var enabled = 0;
+	var oldLatitude=0;
+	var oldLongitude=0;
+	
+	//---地图----------------------------------------------------------
+	//定义地图显示在 maps 区域
+	function ajaxRead(file){
+	  var http_request = false;				
+	  if (window.XMLHttpRequest) { // Mozilla, Safari,...
+		http_request = new XMLHttpRequest();
+		if (http_request.overrideMimeType) {
+		  http_request.overrideMimeType('text/xml');
+		}
+	  }else if (window.ActiveXObject) { // IE
+		for( var i = 5; i; i-- ){
+		  try{
+			if( i == 2 ){
+			  http_request = new ActiveXObject( "Microsoft.XMLHTTP" );
+			}else{
+			  http_request = new ActiveXObject( "Msxml2.XMLHTTP." + i + ".0" );
+			  http_request.setRequestHeader("Content-Type","text/xml");
+			  http_request.setRequestHeader("Content-Type","utf-8");
+			  //alert(i);
+			}break;
+		  }catch(e){
+			http_request = false;
+		  }
+		}
+	  }
+	  
+	  if (!http_request) {
+		alert('Sorry,Cannot create an XMLHTTP instance');
+	  }
+	  http_request.onreadystatechange = function(){
+		if(http_request.readyState == 4){
+		  if (http_request.status == 200) {
+			var responseTXT=http_request.responseTxt;
+			if(responseTXT=="USERRROR"){
+				clearTimeout( TO );
+				alert("对不起,请重新登陆");
+				return;
+			}else if(responseTXT=="GPSERROR"){
+				alert("对不起,今天服务器上还没有您的纪录");
+				clearTimeout( TO );
+				return;
+			}				      	
+			var response = http_request.responseXML.documentElement;
+			try{
+			  var Time=response.getElementsByTagName('Time')[0].firstChild.data;
+			  var Longitude=response.getElementsByTagName('Longitude')[0].firstChild.data;
+			  var Latitude=response.getElementsByTagName('Latitude')[0].firstChild.data;
+			  var Velocity=response.getElementsByTagName('Velocity')[0].firstChild.data;
+			  
+			  //document.all.getElementById('speedMessage').values=Time;
+			  //document.all.getElementById('timeMessage').values=Velocity;
+			  
+			  if(oldLatitude!=0&&oldLongitude!=0&&oldLatitude!=Latitude&&oldLongitude!=Longitude){
+				var polyline = new GPolyline(
+				[
+				new GLatLng(parseFloat(oldLatitude), parseFloat(oldLongitude)),
+				new GLatLng(parseFloat(Latitude), parseFloat(Longitude))
+				], "#ff0000", 10);
+				map.addOverlay(polyline);
+			  }		
+			  map.panTo(new GLatLng(parseFloat(Latitude), parseFloat(Longitude)));
+			  
+			  if(marker!=null){
+				//var point = new GLatLng(parseFloat(oldLatitude), parseFloat(oldLongitude));
+				//marker = new GMarker(point);
+				map.removeOverlay(marker);
+			  }
+			  //---标点--------------------------------------------------------------
+			  //定义地图标记的图标地址
+			  
+			  var point = new GLatLng(parseFloat(Latitude), parseFloat(Longitude));				          
+			  marker = new GMarker(point);				          
+			  map.addOverlay(marker);
+			  
+			  var oldLatitude=Latitude;
+			  var oldLongitude=Longitude;		          				          
+			}catch(e){
+			  alert(e);
+			}
+		  }
+		}
+	  }
+	  http_request.open ('GET', file, true);
+	  http_request.send ('');
+	}
+	
+	function TOfunc() {
+	  var space=parseInt(document.clock.space.value);
+	  TO = window.setTimeout( "TOfunc()", space );
+	  var date=new Date();
+	  ajaxRead("getGoogleData.do?date="+date.getFullYear()+"-"+(date.getMonth()+1)+"-"+date.getDate()+"&random="+date.getHours()+date.getMinutes()+date.getSeconds());
+	}
+	function div_switch(div,div1){
+		div.style='position:absolute; left:518px; top:20px; width:106px; height:187px; z-index:2;';
+		div1.style='position:absolute; left:518px; top:20px; width:106px; height:187px; z-index:1; border:#FFFFFF solid 1px; visibility: hidden;';
+	}
+</script>
+		<div id="control" style="position:absolute; left:518px; top:23px; width:106px; height:79px; z-index:1; border:#FFFFFF solid 1px;">
+
+			<form name="clock" action="">
+				间隔时间：
+				<br>
+				<input name="space" type="text" value="2000" size="10" maxlength="10">
+				<br>
+				<input type="radio" name="rad" value="OFF" checked onClick="if(enabled==1 ){clearTimeout( TO );enabled = 0;}">
+				关闭跟踪
+				<br>
+				<input type="radio" name="rad" value="on" onClick=" if( enabled == 0 ){var TO = setTimeout('TOfunc()',2000);enabled = 1;}">
+				开始跟踪
+				<!-- br>
+				<a href="#" onClick="div_switch(document.all.getElementById('contro2'),document.all.getElementById('control'));">历史记录</a-->
+
+			</form>
+		</div>
+		<div id="contro2" style="position:absolute; left:519px; top:21px; width:106px; height:187px; z-index:2;visibility: hidden;">
+			<div align="left">
+				<a href="#" onClick="div_switch(document.all.getElementById('contro1'),document.all.getElementById('contro2'));">当前记录</a>
+				<br>
+				<a href="index.html?file=2006-03-24.xml">2006-03-24</a>
+			</div>
+
+		</div>
+		<script type="text/javascript">
+			<!--
+			if (GBrowserIsCompatible()) {
+				var map = new GMap2(document.getElementById("map"));
+				map.addControl(new GSmallMapControl());
+				map.addControl(new GMapTypeControl());										
+				map.setCenter(new GLatLng(22.56146,114.03193), 15);
+			}
+			//-->
+		</script>
+	</body>
+</html>

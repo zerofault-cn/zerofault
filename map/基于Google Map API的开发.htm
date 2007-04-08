@@ -1,0 +1,1321 @@
+<html>
+<head>
+<META HTTP-EQUIV="content-type" CONTENT="text/html; charset=GB2312">
+<link rel="stylesheet" href="/apis/maps/mapsapi.css" type="text/css"/>
+<style>
+body,td,div,p,a,font,span{font-family:arial,sans-serif;}
+code{font-size:90%; font-family:"Courier New", Courier, mono}
+.s{ line-height: 155%; }
+table{border-collapse: separate;}
+pre{color: #008000;font-size:90%;font-family: Courier New, Courier;background-color: #eeeeee;border: 1px solid silver;padding: 3px;overflow: auto;}
+#contents{margin-left: 6%;margin-right: 6%;}h2{margin-left: -6%;}h3{margin-left: -4.5%;}h4{margin-left: -3.5%;}#toc{margin-left: -6%;} 
+</style>
+<title>K_ReverterMap说明--基于Google Map API的开发</title>
+</head>
+<body class=search bgcolor=ffffff text=000000 link=0000CC vlink=800080 alink=ff0000 topmargin=5>
+      <font size=-1>
+      <p style="margin-top: 0pt;">&nbsp;&nbsp;&nbsp;&nbsp;K_ReverterMap是K_Reverter在Google Maps API的基础上进行地图开发的时候得到的一些Gmap相关的控件和功能，现在将这些控件提供给大家分享，这些控件大家可以单独使用，也可以统一下载使用包含所有控件的<a href="/map/Step1Map.js" target="_blank">Step1Map.js</a></p>
+      <p>&nbsp;&nbsp;&nbsp;&nbsp;所有的控件都是针对Google Maps而制作，因此，可能在脱离了Google Maps之后不能运行，您可以<a href="documentation.htm" target="_blank">在这儿浏览关于Google Maps API的信息</a></p>
+      <p>&nbsp;&nbsp;&nbsp;&nbsp;具体的基于Google Maps的简单应用，您可以看看<a href="/map/" target="_blank"><font color="green"><b>Step1地图浏览服务</b></font></a>和<a href="/kml/" target="_blank"><font color="green"><b>Google Earth地标文件下载系统</b></font></a></p>
+      <p>&nbsp;&nbsp;&nbsp;&nbsp;想看到更多K_Reverter关于Google Maps API的文章，请浏览<a href="/category/8.aspx" target="_blank">Google Maps API专栏</a></p>
+      <div id="contents">
+        <h2><a name="_Contents">K_ReverterMap说明</a></h2>
+        <p> </p>
+        <ul id="toc">
+          <li> <a href="#MapTypes">自定义公用函数</a>
+            <ul>
+              <li> <a href="#K_LoadJS"><b>K_LoadJS</b>(运行之中异步调用JS文件的函数)</a> </li>
+              <li> <a href="#K_GetQueryString"><b>K_GetQueryString</b>(读取当前网址后缀参数值得函数)</a> </li>
+              <li> <a href="#K_GetCallBack"><b>K_GetCallBack</b>(取得回调句柄的函数)</a> </li>
+              <li> <a href="#K_Cookie"><b>Cookie读写函数</b>(进行Cookie读写的基本函数)</a> </li>
+            </ul>
+          </li>
+          <li> <a href="#MapTypes">自定义地图类型MapTypes</a>
+            <ul>
+              <li> <a href="#K_MOSPSpec"><b>K_MOSPSpec</b>(调用<b>灵图</b>的地图API实现的地图类型)</a> </li>
+            </ul>
+          </li>
+          <li> <a href="#Overlays">自定义标记Overlays</a>
+            <ul>
+              <li> <a href="#K_ImageOverlay"><b>K_ImageOverlay</b>(用来在地图上显示一张图片的控件)</a> </li>
+              <li> <a href="#K_IconOverlay"><b>K_IconOverlay</b>(在地图上显示一个小图标的对象)</a> </li>
+              <li> <a href="#K_HtmlMarker"><b>K_HtmlMarker</b>(用来在地图上显示带文字的标记)</a> </li>
+            </ul>
+          </li>
+          <li> <a href="#Controls">自定义控件Controls</a>
+            <ul>
+              <li> <a href="#K_CrossControl"><b>K_CrossControl</b>(显示地图中心十字的控件)</a> </li>
+              <li> <a href="#K_HtmlControl"><b>K_HtmlControl</b>(在地图上显示HTML内容的对象)</a> </li>
+            </ul>
+          </li>
+          <li> <a href="#Class">其它相关类</a>
+            <ul>
+              <li> <a href="#K_PointMover"><b>K_PointMover</b>(让点沿轨迹移动的类)</a> </li>
+              <li> <a href="#K_XmlLoader"><b>K_XmlLoader</b>(快捷的载入Xml文件或访问WebService的类)</a> </li>
+              <li> <a href="#K_UserPosition"><b>K_UserPosition</b>(根据IP显示用户所在地理位置的类)</a> </li>
+              <li> <a href="#K_MSOPEncryptPointSrv"><b>K_MSOPEncryptPointSrv</b>(使用MOSP的EncryptPoint服务进行灵图数据加密的对象)</a> </li>
+              <li> <a href="#K_MSOPGeoCodeSrv"><b>K_MSOPGeoCodeSrv</b>(使用MOSP的GeoCodeSrv服务载入灵图的地理编码信息对象)</a> </li>
+            </ul>
+          </li>
+        </ul>
+        <p><b>本文来源于<a href="http://www.step1.cn" target="_blank">Step1</a>，由<a href="http://www.step1.cn" target="_blank">K_Reverter</a>撰写并随时修改，有任何问题请到<a href="http://www.step1.cn/archive/2005/09/30/190.aspx#Post" target="_blank">评论区</a>留言</b></p>
+        <p> </p>
+
+        <p> </p>
+        <h2><a name="MapTypes">自定义公用函数</a></h2>
+        <p> </p>
+
+        <h3><a name="K_LoadJS"><b>K_LoadJS</b>(运行之中异步调用JS文件的函数)</a> </a></h3>
+        <p><b>K_LoadJS</b>远程加载并运行一个JS文件，当完成后，调用传入的句柄(如果有).</p>
+        <p><b>K_LoadJS</b>有2个参数，不返回任何值</p>
+        <table border="0" cellpadding="4" cellspacing="1">
+          <tbody>
+            <tr>
+              <th bgcolor="#ccccff"> <strong><font color="#000000" size="-1">参数</font></strong> </th>
+              <th bgcolor="#ccccff"> <strong><font color="#000000" size="-1">说明</font></strong> </th>
+            </tr>
+            <tr><td bgcolor="#f4f4f4">src	</td><td bgcolor="#f4f4f4"><font size="-1">文件路径.</font></td></tr>
+            <tr><td bgcolor="#f4f4f4">handle</td><td bgcolor="#f4f4f4"><font size="-1">加载完成后要执行的句柄</font></td></tr>
+          </tbody>
+        </table>
+        <p>以下是该类的定义源码：</p>
+<pre>
+	function K_LoadJS(src,handle)
+	{
+		var jsFile= document.createElement("script");
+		jsFile.src=src;
+		jsFile.onreadystatechange=function(){if(this.readyState=="complete" || this.readyState=="loaded"){if(handle)handle.call()}};
+		document.body.appendChild(jsFile);
+	}
+</pre>
+
+
+        <h3><a name="K_GetQueryString"><b>K_GetQueryString</b>(读取当前网址后缀参数值得函数)</a> </a></h3>
+        <p><b>K_GetQueryString</b>例如，当前的网址是<b>index.html?id=3&page=5</b>,则K_GetQueryString("id")返回3,而K_GetQueryString("page")返回5.</p>
+        <p><b>K_GetQueryString</b>有2个参数，返回对应的值，如果不存在，返回空字符串 <b>""</b> 而不是null</p>
+        <table border="0" cellpadding="4" cellspacing="1">
+          <tbody>
+            <tr>
+              <th bgcolor="#ccccff"> <strong><font color="#000000" size="-1">参数</font></strong> </th>
+              <th bgcolor="#ccccff"> <strong><font color="#000000" size="-1">说明</font></strong> </th>
+            </tr>
+            <tr><td bgcolor="#f4f4f4">src	</td><td bgcolor="#f4f4f4"><font size="-1">文件路径.</font></td></tr>
+            <tr><td bgcolor="#f4f4f4">handle</td><td bgcolor="#f4f4f4"><font size="-1">加载完成后要执行的句柄</font></td></tr>
+          </tbody>
+        </table>
+        <p>以下是该类的定义源码：</p>
+<pre>
+	function K_GetQueryString(key)
+	{
+		var returnValue =""; 
+		var sURL = window.document.URL;
+		if (sURL.indexOf("?") > 0)
+		{
+			var arrayParams = sURL.split("?");
+			var arrayURLParams = arrayParams[1].split("&");
+			for (var i = 0; arrayURLParams.length>2; i++)
+			{
+				var sParam =  arrayURLParams[i].split("=");
+
+				if ((sParam[0] ==key) && (sParam[1] != ""))
+					returnValue=sParam[1];
+			}
+		}
+		return returnValue;
+	}
+</pre>
+
+
+        <h3><a name="K_GetCallBack"><b>K_GetCallBack</b>(取得回调句柄的函数)</a> </a></h3>
+        <p><b>K_GetCallBack</b>这个函数虽然简单，可是因为在异步和事件处理之中非常重要而定义，因为简单，不多作说明.</p>
+        <p>以下是该类的定义源码：</p>
+<pre>
+	function K_GetCallBack(obj,func)
+	{
+		return function(){func.apply(obj,arguments)};
+	}
+</pre>
+
+        <h3><a name="K_Cookie"><b>Cookie读写函数</b>(进行Cookie读写的基本函数)</a> </a></h3>
+        <p>这是一组网上公用的JS Cookie读写函数.因为本身比较简单，这里也不作具体的说明</p>
+        <p><b>K_GetQueryString</b>有2个参数，返回对应的值，如果不存在，返回空字符串 <b>""</b> 而不是null</p>
+        <p>以下是定义源码：</p>
+<pre>
+	function K_GetCookieVal(offset)
+	{
+		var endstr = document.cookie.indexOf (";", offset);
+		if (endstr == -1)
+			endstr = document.cookie.length;
+		return unescape(document.cookie.substring(offset, endstr));
+	}
+	function K_SetCookie(name, value)
+	{
+		var expdate = new Date();
+		var argv = K_SetCookie.arguments;
+		var argc = K_SetCookie.arguments.length;
+		var expires = (argc > 2) ? argv[2] : null;
+		var path = (argc > 3) ? argv[3] : null;
+		var domain = (argc > 4) ? argv[4] : null;
+		var secure = (argc > 5) ? argv[5] : false;
+		if(expires!=null) expdate.setTime(expdate.getTime() + ( expires * 1000 ));
+		document.cookie = name + "=" + escape (value) +((expires == null) ? "" : ("; expires="+ expdate.toGMTString()))+((path == null) ? "" : ("; path=" + path)) +((domain == null) ? "" : ("; domain=" + domain))+((secure == true) ? "; secure" : "");
+	}
+	function K_DelCookie(name)
+	{
+		var exp = new Date();
+		exp.setTime (exp.getTime() - 1);
+		var cval = GetCookie (name);
+		document.cookie = name + "=" + cval + "; expires="+ exp.toGMTString();
+	}
+	function K_GetCookie(name)
+	{
+		var arg = name + "=";
+		var alen = arg.length;
+		var clen = document.cookie.length;
+		var i = 0;
+		while (clen>i)
+		{
+			var j = i + alen;
+			if (document.cookie.substring(i, j) == arg)
+				return GetCookieVal (j);
+			i = document.cookie.indexOf(" ", i) + 1;
+			if (i == 0) break;
+		}
+		return null;
+	}
+</pre>
+
+        <p> </p>
+        <h2><a name="MapTypes">自定义地图类型MapTypes</a></h2>
+        <p> </p>
+
+        <h3><a name="K_MOSPSpec"><b>K_MOSPSpec</b>(调用<a href="http://www.51ditu.com"><b>灵图</b></a>的地图API实现的地图类型)</a> </a></h3>
+        <p><b>K_MOSPSpec</b>是一个基于AJAX模式实现的MapType,当地图变化时，它并不能立即通过<b>getTileURL</b>方法来得到一个地图图片的网址，而是先让该方法返回一个空图片网址，并向MOSP WebService服务器发出请求，当获取到服务器的返回结果后，从中解析到图片网址，然后地图图片表中的该图片src.</p>
+        <p><b>K_MOSPSpec</b>的使用方法和Google集成的几个MapType差不多(不过Goolge也没有提供其他MapType的详细使用方法)，请参看:<a href="http://www.step1.cn/archive/2005/12/05/243.aspx">关于Google Maps的地图类型(MapType)的一些心得</a></p>
+        <p><b>注意</b>:定义之中使用到了<a href="#K_GetCallBack"><b>K_GetCallBack</b></a>和<a href="#K_XmlLoader"><b>K_XmlLoader</b></a>，由于涉及到灵图的地理点信息加密，还在参数之中要求一个<a href="#K_MSOPEncryptPointSrv"><b>K_MSOPEncryptPointSrv</b></a>，因此，使用时必须包含这些内容才能运行。</p>
+        <p><b>注意</b>:为避免重复的服务器请求，我使用Cookie来记录请求结果，因此<a href="#K_GetCookie"><b>K_GetCookie</b></a>和<a href="#K_SetCookie"><b>K_SetCookie</b></a>也必须可以被引用才能使用。</p>
+        <p><b>K_MOSPSpec</b>的构造函数有6个参数</p>
+        <table border="0" cellpadding="4" cellspacing="1">
+          <tbody>
+            <tr>
+              <th bgcolor="#ccccff"> <strong><font color="#000000" size="-1">参数</font></strong> </th>
+              <th bgcolor="#ccccff"> <strong><font color="#000000" size="-1">说明</font></strong> </th>
+            </tr>
+            <tr><td bgcolor="#f4f4f4">serviceUrl</td><td bgcolor="#f4f4f4"><font size="-1">MOSP<a href="http://freemosp.51ditu.com/" target="_blank">栅格地图发布服务</a>的WebService地址,比如 <b>http://freemosp.51ditu.com/mosp/services/GMPubSrv</b> 注意并不是wsdl的地址,通常因为涉及到<b>跨域访问</b>这个难题，可能不大适合直接使用灵图的地址，最好是使用本地服务器来代理转化一下，本站就是这样做的，所以本站的MOSP的<a href="http://freemosp.51ditu.com/" target="_blank">栅格地图发布服务</a>的WebService地址是 <b><a href="/51Ditu/GMPubSrv.asmx" target="_blank">/51Ditu/GMPubSrv.asmx</a></b> </font></td></tr>
+            <tr><td bgcolor="#f4f4f4">name	</td><td bgcolor="#f4f4f4"><font size="-1">地图的显示名称，比如"中国地图"</font></td></tr>
+            <tr><td bgcolor="#f4f4f4">userId	</td><td bgcolor="#f4f4f4"><font size="-1">MOSP服务用户名. <a href="http://freemosp.51ditu.com/" target="_blank">申请请看</a></font></td></tr>
+            <tr><td bgcolor="#f4f4f4">password	</td><td bgcolor="#f4f4f4"><font size="-1">MOSP服务密码. <a href="http://freemosp.51ditu.com/" target="_blank">申请请看</a></font></td></tr>
+            <tr><td bgcolor="#f4f4f4">encryptPointSrv	</td><td bgcolor="#f4f4f4"><font size="-1">进行灵图数据加密的对象，具体请参看<a href="#K_MSOPEncryptPointSrv"/><b>K_MSOPEncryptPointSrv</b></a></font></td></tr>
+            <tr><td bgcolor="#f4f4f4">format	</td><td bgcolor="#f4f4f4"><font size="-1">需要调用的图片格式，字符串，可以为png,jpg和bmp</font></td></tr>
+          </tbody>
+        </table>
+        <p>以下是该类的定义源码：</p>
+<pre>
+	function K_MOSPSpec(serviceUrl,name,userId,password,encryptPointSrv,format)
+	{
+		this.serviceUrl = serviceUrl;
+		this.tileSize=256;
+		this.backgroundColor="#e5e3df";
+		this.emptyTileURL="http://www.google.com/mapfiles/transparent.gif";
+		this.waterTileUrl="http://www.google.com/intl/en_ALL/mapfiles//water.gif";
+		this.tileURLAdding="#MOSP";
+		this.numZoomLevels=18;
+		this.userId=userId;
+		this.password=password;
+		this.Name = name;
+		this.ShortName="MOSP";
+		this.encryptPointSrv=encryptPointSrv;
+		this.Format = format;
+		this.copywrite = "Step1.cn";
+		this.errorTileMessage="We are sorry, but we don\'t have maps at this zoom level for this region.<p>Try zooming out for a broader look.</p>";
+		this.errorTileMargin=5;
+		this.initMercator();
+	}
+	K_MOSPSpec.prototype.getTileURL=function(a,b,c)
+	{
+		var cokUrl=K_GetCookie("MOSPImg_"+a+"_"+b+"_"+c);
+		if(cokUrl!=null && cokUrl!="")
+			return cokUrl;
+		(new K_GetMOSPUrl(this,a,b,c)).getUrl();
+		return this.emptyTileURL+this.tileURLAdding+'_'+a+'_'+b+'_'+c;
+	}
+	K_MOSPSpec.prototype.getLinkText=function(){return this.Name;}
+	K_MOSPSpec.prototype.getShortLinkText=function(){return this.ShortName;}
+	K_MOSPSpec.prototype.hasOverlay=function(){return false;}
+	K_MOSPSpec.prototype.getCopyright=function(){return this.copywrite;}
+	K_MOSPSpec.prototype.initMercator=_GoogleMapMercSpec.prototype.initMercator;
+	K_MOSPSpec.prototype.adjustBitmapX=_GoogleMapMercSpec.prototype.adjustBitmapX;
+	K_MOSPSpec.prototype.getBitmapCoordinate=_GoogleMapMercSpec.prototype.getBitmapCoordinate;
+	K_MOSPSpec.prototype.getLatLng=_GoogleMapMercSpec.prototype.getLatLng;
+	K_MOSPSpec.prototype.getOverlayURL=_GoogleMapMercSpec.prototype.getOverlayURL;
+	K_MOSPSpec.prototype.getURLArg=_GoogleMapMercSpec.prototype.getURLArg;
+	K_MOSPSpec.prototype.getLowestZoomLevel=_GoogleMapMercSpec.prototype.getLowestZoomLevel;
+	K_MOSPSpec.prototype.getPixelsPerDegree=_GoogleMapMercSpec.prototype.getPixelsPerDegree;
+	K_MOSPSpec.prototype.zoomBitmapCoord=_GoogleMapMercSpec.prototype.zoomBitmapCoord;
+
+	function K_GetMOSPUrl(baseObj,a,b,zoom)
+	{
+		this.baseObj=baseObj;
+		this.a=a;
+		this.b=b;
+		this.zoom=zoom;
+		this.url=baseObj.emptyTileURL;
+	}
+	K_GetMOSPUrl.prototype.getUrl=function()
+	{
+		var minPoint = this.baseObj.getLatLng(this.a*this.baseObj.tileSize,(this.b+1)*this.baseObj.tileSize,this.zoom);
+		var maxPoint = this.baseObj.getLatLng((this.a+1)*this.baseObj.tileSize, this.b*this.baseObj.tileSize,this.zoom);
+		this.baseObj.encryptPointSrv.EncryptPoint([minPoint,maxPoint],K_GetCallBack(this,this.getUrlByLTPoint));
+	};
+	K_GetMOSPUrl.prototype.getUrlByLTPoint=function(points)
+	{
+		var data;
+		width = this.baseObj.tileSize;
+		height = this.baseObj.tileSize;
+		height=parseInt(height*Math.abs(Math.cos((points[1].y+points[0].y)/36000000*Math.PI)));
+		data = '<?xml version="1.0" encoding="utf-8"?>'; 
+		data = data + '<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">'; 
+		data = data + '<soap:Body>'; 
+		data = data + '<getMap xmlns="http://tempuri.org/">'; 
+		data = data + '<reqSpec>';
+		data = data + 	'<mapViewWidth>'+width+'</mapViewWidth><mapVeiwHeight>'+height+'</mapVeiwHeight><boundMode>1</boundMode><boxBoundMode>';
+		data = data + 	  '<minPoint><latitude>'+points[0].y+'</latitude><longitude>'+points[0].x+'</longitude></minPoint>';
+		data = data + 	  '<maxPoint><latitude>'+points[1].y+'</latitude><longitude>'+points[1].x+'</longitude></maxPoint>';
+		data = data + 	'</boxBoundMode>';
+		data = data + '</reqSpec>'; 
+		format=1;
+		if(this.baseObj.Format!=null && (this.baseObj.Format.toLowerCase().indexOf("jpg")>=0 || this.baseObj.Format.toLowerCase().indexOf("jpeg")>=0))
+			format=2;
+		else if(this.baseObj.Format!=null && (this.baseObj.Format.toLowerCase().indexOf("bmp")>=0))
+			format=3;
+		data = data + '<optSpec><mapFormat>'+format+'</mapFormat></optSpec>'; 
+		data = data + '<authToken><applicationID>'+this.baseObj.userId+'</applicationID><password>'+this.baseObj.password+'</password></authToken>'; 
+		data = data + '</getMap>'; 
+		data = data + '</soap:Body>'; 
+		data = data + '</soap:Envelope>';
+
+		var xmlLoader=new K_XmlLoader(K_GetCallBack(this,this.setUrlFromXml));
+		xmlLoader.Load(this.baseObj.serviceUrl,data);
+	}
+	K_GetMOSPUrl.prototype.setUrlFromXml=function(xmlLoader)
+	{
+		if(!xmlLoader.xmlDoc.selectSingleNode("//url"))
+			return;
+		var url=xmlLoader.xmlDoc.selectSingleNode("//url").text;
+		var imageList=document.getElementsByTagName("img");
+		var imageListLength=imageList.length;
+		for(var i=0;imageListLength>i;i++)
+			if(imageList[i].src==this.baseObj.emptyTileURL+this.baseObj.tileURLAdding+'_'+this.a+'_'+this.b+'_'+this.zoom)
+			{
+				imageList[i].src=url;
+				break;
+			}
+		K_SetCookie("MOSPImg_"+this.a+"_"+this.b+"_"+this.zoom,url);
+	}
+</pre>
+	<p>以下是一个使用范例：</p>
+<pre>
+	map.mapTypes.push(new K_MOSPSpec("/51ditu/GMPubSrv.asmx?", "China Map","51445144","51445144","image/jpeg"));
+</pre>
+        <a href="K_MOSPSpec.html" target="_blank">查看范例(K_MOSPSpec.html)</a>
+        <p> </p>
+
+        <p> </p>
+        <h2><a name="Overlays">自定义标记 Overlays</a></h2>
+        <p> </p>
+
+        <h3><a name="K_ImageOverlay"><b>K_ImageOverlay</b>(用来在地图上显示一张图片的控件)</a> </a></h3>
+        <p><b>K_ImageOverlay</b>是一个自定义的Overlay,用法和Google Map中自定义的<a href="documentation.htm#GMarker_code_">GMarker</a>和<a href="documentation.htm#GPolyline_code_">GPolyline</a>差不多，都是通过<a href="documentation.htm#GMap_code_">GMap</a>的<b>addOverlay(overlay)</b>添加到地图之中，通过<b>removeOverlay(overlay)</b>从地图中移除。
+	<p><b>千万注意:</b>考虑到系统性能的问题，就算被添加到地图上，<b>K_ImageOverlay</b>也是默认不显示的，必须使用<b>display</b>方法来使图片显示出来，同时要小心的是，一张图片在地图缩放级别变化时可能被显示的很大，这样可能影响性能，这也是我设置K_ImageOverlay默认不显示的原因</p>
+	<p>当显示的问题解决，最大的问题就在于怎样才能知道一张图片显示所需要的GBounds和rotation的值呢？这个问题比较复杂，我尝试写了一个WebService能够还算有点精确的处理这个问题，如果WebService客户端在地图上取三个特征点，将三个特征点在图片上的坐标和经纬度坐标发送到WebService,就能从返回结果中获得该GBounds和rotation的值，WebService的地址在<a href="http://www.step1.cn/map/addOverlay.asmx" target="_blank">http://www.step1.cn/map/addOverlay.asmx</a>，更具体的内容我会在以后专文讨论。</p>
+	<p>K_ImageOverlay的构造函数有4个参数，分别为</p>
+        <table border="0" cellpadding="4" cellspacing="1">
+          <tbody>
+            <tr>
+              <th bgcolor="#ccccff"> <strong><font color="#000000" size="-1">参数</font></strong> </th>
+              <th bgcolor="#ccccff"> <strong><font color="#000000" size="-1">说明</font></strong> </th>
+            </tr>
+            <tr><td bgcolor="#f4f4f4">imageUrl	</td><td bgcolor="#f4f4f4"><font size="-1">图片的Url地址</font></td></tr>
+            <tr><td bgcolor="#f4f4f4">bounds	</td><td bgcolor="#f4f4f4"><font size="-1">用来描述图片显示区域矩形经纬度的<a href="documentation.htm#GBounds_code_">GBounds</a>,如果需要进行图片旋转，则应该是旋转前的矩形</font></td></tr>
+            <tr><td bgcolor="#f4f4f4">rotation	</td><td bgcolor="#f4f4f4"><font size="-1">图片的顺时针旋转角，用度数表示，(-180 ~ 180)</font></td></tr>
+            <tr><td bgcolor="#f4f4f4">opacity	</td><td bgcolor="#f4f4f4"><font size="-1">图片的显示不透明度(0~1),该值越小越透明</font></td></tr>
+          </tbody>
+        </table>
+	<p>使用这样几个参数是有原因的，因为在Google Earth的KML文件之中，添加一个图片在Google Earth主要就是这几个参数，因此，使用此控件来显示从KML文件中读取出来的GroundOverlay,直接将参数传递即可，不需要任何形式的转化。</p>
+        <p><b>K_ImageOverlay</b>主要方法有</p>
+        <table border="0" cellpadding="4" cellspacing="1">
+          <tbody>
+            <tr>
+              <th bgcolor="#ccccff"> <strong><font color="#000000" size="-1">方法</font></strong> </th>
+              <th bgcolor="#ccccff"> <strong><font color="#000000" size="-1">说明</font></strong> </th>
+            </tr>
+            <tr><td bgcolor="#f4f4f4">setOpacity	</td><td bgcolor="#f4f4f4"><font size="-1">重新设置图片的不透明度，必须在该Overlay已经添加到地图中之后</font></td></tr>
+            <tr><td bgcolor="#f4f4f4">display	</td><td bgcolor="#f4f4f4"><font size="-1">用参数true和false来指定该图片是否显示，在没有指定的时候，考虑到图片影响系统性能，是不显示的，因此，必须使用<b>.display(true)</b>来使图片显示出来</font></td></tr>
+          </tbody>
+        </table>
+        <p>以下是该类的定义源码：</p>
+<pre>
+	function K_ImageOverlay(imageUrl,bounds,rotation,opacity)
+	{
+		this.imageUrl=imageUrl;
+		this.bounds=bounds;
+		this.rotation=-rotation;
+		this.opacity=opacity||0.45;
+	}
+	K_ImageOverlay.prototype.initialize=function(a)
+	{
+		this.map=a;
+		this.drawElement=a.ownerDocument.createElement("v:Image");
+		this.drawElement.style.position="absolute";
+		this.drawElement.style.filter="progid:DXImageTransform.Microsoft.Alpha(opacity="+(this.opacity*100)+");";
+		this.drawElement.style.rotation=this.rotation;
+		this.drawElement.style.display="none";
+		this.drawElement.src=this.imageUrl;
+		if(browser.type==1)
+		{
+			this.drawElement.unselectable="on";
+			this.drawElement.onselectstart=function(){return false};
+			this.drawElement.galleryImg="no"
+		}
+		else
+		{
+			this.drawElement.style.MozUserSelect="none"
+		}
+		this.drawElement.style.border="0";
+		this.drawElement.style.padding="0";
+		this.drawElement.style.margin="0";
+		this.drawElement.oncontextmenu=function(){return false};
+		this.drawElement.appendChild(this.drawElement);
+		a.markerPane.appendChild(this.drawElement);
+	};
+	K_ImageOverlay.prototype.redraw=function(a)
+	{
+		if(!a)return;
+		var b=this.map.spec.getBitmapCoordinate(this.bounds.minY,this.bounds.minX,this.map.zoomLevel);
+		var min=this.map.getDivCoordinate(b.x,b.y);
+		b=this.map.spec.getBitmapCoordinate(this.bounds.maxY,this.bounds.maxX,this.map.zoomLevel);
+		var max=this.map.getDivCoordinate(b.x,b.y);
+		this.drawElement.style.left=(min.x)+"px";
+		this.drawElement.style.top=(max.y)+"px";
+		this.drawElement.style.width=(max.x-min.x)+"px";
+		this.drawElement.style.height=(min.y-max.y)+"px";
+	};
+	K_ImageOverlay.prototype.setOpacity=function(opacity)
+	{
+		this.opacity=opacity||0.45;
+		this.drawElement.style.filter="progid:DXImageTransform.Microsoft.Alpha(opacity="+(this.opacity*100)+");";
+	}
+	K_ImageOverlay.prototype.copy=function(){return new K_ImageOverlay(this.imageUrl,this.bounds,this.rotation,this.opacity)};
+	K_ImageOverlay.prototype.remove=window.GPolyline.prototype.remove;
+	K_ImageOverlay.prototype.display=window.GPolyline.prototype.display;
+	K_ImageOverlay.prototype.setZIndex=window.GPolyline.prototype.setZIndex;
+	K_ImageOverlay.prototype.getLatitude=function(){return 180};
+</pre>
+	<p>以下是一个使用范例：</p>
+<pre>
+	var bounds=new GBounds(108.548384827952,18.0400740574296,111.729042228649,20.3537745028853);
+	imageOverlay=new K_ImageOverlay("http://www.gogocn.com/admin/map/map_hainan.jpg",bounds,0,0.5);
+	map.addOverlay(imageOverlay);
+	imageOverlay.display(true);
+</pre>
+        <a href="K_ImageOverlay.html" target="_blank">查看范例(K_ImageOverlay.html)</a>
+        <p> </p>
+
+
+        <h3><a name="K_IconOverlay"><b>K_IconOverlay</b>(在地图上显示一个小图标的对象)</a> </a></h3>
+        <p><b>K_IconOverlay</b>是一个自定义的Overlay,用法和Google Map中自定义的<a href="documentation.htm#GMarker_code_">GMarker</a>和<a href="documentation.htm#GPolyline_code_">GPolyline</a>差不多，都是通过<a href="documentation.htm#GMap_code_">GMap</a>的<b>addOverlay(control)</b>添加到地图之中，通过<b>removeOverlay(control)</b>从地图中移除。
+	<p><b>K_IconOverlay</b>用来向地图上添加一个图标，同样是向地图上添加一个图片，该图标和<a href="#K_ImageOverlay">K_ImageOverlay</a>不同在于，<a href="#K_ImageOverlay">K_ImageOverlay</a>主要是用来添加地图图片，而这个主要是添加一个图标，功能开发的侧重点不同。</p>
+	<p><b>K_IconOverlay</b>功能非常强大，除了可以指定大小之外，甚至还可以从一张大图片上截取一小块图片作为图标，这个功能开发不仅仅是为了显得Cool，因为在Google Earth的KML文件之中，很多图标就是这样存放的，支持这个功能就等于可以在Google Map之中查看KML地标文件中的标记，而且是能将Google Earth的集成图标显示出来，想必是比较实用的</p>
+	<p>K_IconOverlay的构造函数有4个参数，分别为</p>
+        <table border="0" cellpadding="4" cellspacing="1">
+          <tbody>
+            <tr>
+              <th bgcolor="#ccccff"> <strong><font color="#000000" size="-1">参数</font></strong> </th>
+              <th bgcolor="#ccccff"> <strong><font color="#000000" size="-1">说明</font></strong> </th>
+            </tr>
+            <tr><td bgcolor="#f4f4f4">imageUrl	</td><td bgcolor="#f4f4f4"><font size="-1">图标的引用文件地址</font></td></tr>
+            <tr><td bgcolor="#f4f4f4">point	</td><td bgcolor="#f4f4f4"><font size="-1">图标的显示位置经纬度，应该是一个<a href="documentation.htm#GPoint_code_">GPoint</a></font></td></tr>
+            <tr><td bgcolor="#f4f4f4">scale	</td><td bgcolor="#f4f4f4"><font size="-1">图标的显示缩放倍数</font></td></tr>
+            <tr><td bgcolor="#f4f4f4">bounds	</td><td bgcolor="#f4f4f4"><font size="-1">可选，图标如果是从一个大图片文件上截取的，bounds代表截取区域，应该是一个<a href="documentation.htm#GBounds_code_">GBounds</a>,值得注意的是，为了和地理坐标对应，图片以左下角坐标为(0,0),而不是大家习惯的左上角</font></td></tr>
+          </tbody>
+        </table>
+	<p><b>K_IconOverlay</b>完全参照于<a href="documentation.htm#GMarker_code_">GMarker</a>，该Overlay提供的方法和使用方式完全可以参照<a href="documentation.htm#GMarker_code_">GMarker</a>.</p>
+	<p>如果要给此<b>K_IconOverlay</b>添加<b>infowindow</b>的显示，也可以完全参照<a href="documentation.htm#GMarker_code_" target="_blank">GMarker</a>的用法，具体可以<a href="markerinfowindow.html" target="_blank">查看范例(markerinfowindow.html)</a></p>
+        <p>以下是该类的定义源码：</p>
+<pre>
+	function K_IconOverlay(imageUrl,point,scale,bounds,color)
+	{
+		this.imageUrl=imageUrl;
+		this.point=point;
+		this.scale=scale?scale:1;
+		this.bounds=bounds;
+		this.color=color;
+		this.icon=new Object();
+		this.icon.iconSize=new GSize(this.scale*32,this.scale*32);
+	}
+	K_IconOverlay.prototype.initialize=function(a)
+	{
+		this.map=a;
+		this.div=a.ownerDocument.createElement("img");
+		this.div.src=this.imageUrl;
+		this.div.style.display='none';
+		this.div.style.position="absolute";
+		a.markerPane.appendChild(this.div);
+		this.div.onload=K_GetCallBack(this,this.setClip);
+		if(browser.type==1)
+		{
+			this.div.unselectable="on";
+			this.div.onselectstart=function(){return false};
+			this.div.galleryImg="no"
+		}
+		else
+		{
+			this.div.style.MozUserSelect="none";
+		}
+		this.div.style.border="0";
+		this.div.style.padding="0";
+		this.div.style.margin="0";
+		color=(this.color)?this.color:"FFFFFF";
+		this.div.style.filter="progid:DXImageTransform.Microsoft.Chroma(color='#"+color+"')";
+		this.div.style.cursor="pointer";
+		this.div.oncontextmenu=function(){return false};
+		GEvent.bindDom(this.div,"mousedown",this,this.onMouseDown);
+	};
+	K_IconOverlay.prototype.setClip=function()
+	{
+		this.div.style.display='';
+		this.currentSize=new GSize(this.div.offsetWidth,this.div.offsetHeight);
+		if(this.bounds)
+		{
+			this.div.style.clip="rect("+((this.currentSize.height-this.bounds.maxY)*this.scale)+"px "+(this.bounds.maxX*this.scale)+"px "+((this.currentSize.height-this.bounds.minY)*this.scale)+"px "+(this.bounds.minX*this.scale)+"px)";
+			this.icon.iconSize=new GSize(this.scale*(this.bounds.maxX-this.bounds.minX),this.scale*(this.bounds.maxY-this.bounds.minY));
+		}
+		else
+			this.icon.iconSize=new GSize(this.scale*this.currentSize.width,this.scale*this.currentSize.height);
+		this.div.width=(this.currentSize.width*this.scale);
+		this.div.height=(this.currentSize.height*this.scale);
+		this.div.style.display='';
+		this.redraw(true);
+	}
+	K_IconOverlay.prototype.redraw=function(a)
+	{
+		if(!a)return;
+		if(!this.currentSize)return;
+		var b=this.map.spec.getBitmapCoordinate(this.point.y,this.point.x,this.map.zoomLevel);
+		var c=this.map.getDivCoordinate(b.x,b.y);
+		if(this.bounds)
+		{
+			this.div.style.left=(c.x-(this.bounds.maxX+this.bounds.minX)/2*this.scale)+"px";
+			this.div.style.top=(c.y-(this.currentSize.height*2-this.bounds.maxY-this.bounds.minY)/2*this.scale)+"px";
+		}
+		else
+		{
+			this.div.style.left=(c.x-this.currentSize.width*this.scale/2)+"px";
+			this.div.style.top=(c.y-this.currentSize.height*this.scale/2)+"px";
+		}
+	};
+	K_IconOverlay.prototype.onMouseDown=function(a)
+	{
+		if(browser.type==1)
+		{
+			window.event.cancelBubble=true;
+			window.event.returnValue=false
+		}
+		else
+		{
+			a.cancelBubble=true;
+			a.preventDefault();
+			a.stopPropagation()
+		}
+		GEvent.trigger(this,"click",this);
+		GEvent.trigger(this.map,"click",this)
+	};
+	K_IconOverlay.prototype.copy=function(){return new K_IconOverlay(this.imageUrl,this.point,this.scale,this.bounds)};
+	K_IconOverlay.prototype.remove=function(){if(this.div&&this.div.parentNode){this.div.parentNode.removeChild(this.div)}};
+	K_IconOverlay.prototype.display=function(a){if(a)this.div.style.display="";else this.div.style.display="none";};
+	K_IconOverlay.prototype.setZIndex=function(a){this.div.style.zIndex=a;};
+	K_IconOverlay.prototype.getLatitude=window.GMarker.prototype.getLatitude;
+	K_IconOverlay.prototype.openInfoWindow=function(a,b){this.map.openInfoWindow(this.point,a,new GSize(0,0),GEvent.callback(this,this.onInfoWindowOpen),GEvent.callback(this,this.onInfoWindowClose),b)};
+	K_IconOverlay.prototype.openInfoWindowHtml=function(a,b){this.map.openInfoWindowHtml(this.point,a,new GSize(0,0),GEvent.callback(this,this.onInfoWindowOpen),GEvent.callback(this,this.onInfoWindowClose),b)};
+	K_IconOverlay.prototype.openInfoWindowXslt=function(a,b,c){this.map.openInfoWindowXslt(this.point,a,b,new GSize(0,0),GEvent.callback(this,this.onInfoWindowOpen),GEvent.callback(this,this.onInfoWindowClose),c)};
+	K_IconOverlay.prototype.showMapBlowup=function(a,b){this.map.showMapBlowup(this.point,a,b,new GSize(0,0),GEvent.callback(this,this.onInfoWindowOpen),GEvent.callback(this,this.onInfoWindowClose))};
+	K_IconOverlay.prototype.onInfoWindowOpen=window.GMarker.prototype.onInfoWindowOpen;
+	K_IconOverlay.prototype.onInfoWindowClose=window.GMarker.prototype.onInfoWindowClose;
+</pre>
+	<p>以下是一个使用范例：</p>
+<pre>
+	var point=new GPoint(112.6857368551186,29.94176113301537);
+	iconOverlay=new K_IconOverlay("/Map/Icons/palette-2.png",point,new GSize(32,32),new GBounds(160,192,192,224));
+	map.addOverlay(iconOverlay);
+</pre>
+
+
+        <a href="K_IconOverlay.html" target="_blank">查看范例(K_IconOverlay.html)</a>
+        <p> </p>        
+
+
+	<h3><a name="K_HtmlMarker"><b>K_HtmlMarker</b>(用来在地图上显示带文字的标记)</a> </a></h3>
+        <p><b>K_HtmlMarker</b>是一个自定义的Overlay,用法和Google Map中自定义的<a href="documentation.htm#GMarker_code_">GMarker</a>和<a href="documentation.htm#GPolyline_code_">GPolyline</a>差不多，都是通过<a href="documentation.htm#GMap_code_">GMap</a>的<b>addOverlay(control)</b>添加到地图之中，通过<b>removeOverlay(control)</b>从地图中移除。
+	<p>这次更新对<b>K_HtmlMarker</b>进行了大幅调整，以前<b>K_HtmlMarker</b>是一个独立的Overlay,而现在,<b>K_HtmlMarker</b>的主要功能是在原有的Marker旁边添加文字而成为一个新的Marker,我觉得这样组织比较灵活，本来我更希望能做一个类似于GIcon的对象，可是后来发现GIcon和Gmarker从代码上来讲密不可分，所以我只好采用了这个方案。</p>
+	<p>该控件名称为<b>K_HtmlMarker</b>来自于它的上一个版本的设计构思，实际上<b>不推荐</b>在名称之中使用HTML语法，当然，简单的比如字体颜色是没有问题的</p>
+	<p>K_HtmlMarker的构造函数有3个参数，分别为</p>
+        <table border="0" cellpadding="4" cellspacing="1">
+          <tbody>
+            <tr>
+              <th bgcolor="#ccccff"> <strong><font color="#000000" size="-1">参数</font></strong> </th>
+              <th bgcolor="#ccccff"> <strong><font color="#000000" size="-1">说明</font></strong> </th>
+            </tr>
+            <tr><td bgcolor="#f4f4f4">icon	</td><td bgcolor="#f4f4f4"><font size="-1">注意不是图标，而是用来作为图标的一个Overlay,这个Overlay可以是一个<a href="documentation.htm#GMarker_code_">GMarker</a>,也可以是一个<a href="#K_IconOverlay">K_IconOverlay</a>，这个Overlay应该是还没有添加到地图之中的，可以不设置该Overlay的经纬度，因为K_HtmlMarker会设置该Overlay的经纬度以便显示在一起，实际上Overlay的经纬度设置会被忽略。</font></td></tr>
+            <tr><td bgcolor="#f4f4f4">point	</td><td bgcolor="#f4f4f4"><font size="-1">标记的显示位置经纬度，应该是一个<a href="documentation.htm#GPoint_code_">GPoint</a></font></td></tr>
+            <tr><td bgcolor="#f4f4f4">html	</td><td bgcolor="#f4f4f4"><font size="-1">标记显示的文字Label内容</font></td></tr>
+          </tbody>
+        </table>
+	<p><b>K_HtmlMarker</b>虽然本身包含一个Overlay,可是使用方法和一个单一的Overlay没有什么不同，该Overlay提供的方法和使用方式完全可以参照<a href="documentation.htm#GMarker_code_">GMarker</a>.</p>
+	<p>如果要给此<b>K_HtmlMarker</b>添加<b>infowindow</b>的显示，也可以完全参照<a href="documentation.htm#GMarker_code_" target="_blank">GMarker</a>的用法，具体可以<a href="markerinfowindow.html" target="_blank">查看范例(markerinfowindow.html)</a></p>
+        <p>以下是该类的定义源码：</p>
+<pre>
+	function K_HtmlMarker(icon,point,html)
+	{
+		this.icon=icon;
+		this.point=point;
+		this.icon.point=point;
+		this.html=html;
+	}
+	K_HtmlMarker.prototype.initialize=function(a)
+	{
+		this.map=a;
+		this.icon.initialize(a);
+		GEvent.bindDom(this.icon,"mousedown",this,this.onMouseDown);
+		this.div=a.ownerDocument.createElement("span");
+		this.div.align="left";
+		this.div.style.position="absolute";
+		this.div.style.cursor="default";
+		this.div.style.width="200px";
+		this.div.innerHTML=this.html;
+		a.markerPane.appendChild(this.div);
+		GEvent.bind(this.icon,"click",this,this.onMouseDown);
+	};
+	K_HtmlMarker.prototype.remove=function(){this.icon.remove();if(this.div&&this.div.parentNode){this.div.parentNode.removeChild(this.div)}};
+	K_HtmlMarker.prototype.copy=function()
+	{
+		return new K_HtmlMarker(this.icon.copy(),this.point,this.html)
+	};
+	K_HtmlMarker.prototype.redraw=function(a)
+	{
+		this.icon.redraw(a);
+		if(!a)return;
+		var b=this.map.spec.getBitmapCoordinate(this.point.y,this.point.x,this.map.zoomLevel);
+		var c=this.map.getDivCoordinate(b.x,b.y);
+		var d=c.x;
+		var e=c.y;
+		iconSize=this.icon.icon.iconSize?this.icon.icon.iconSize:new GSize(32,32);
+		this.div.style.left=(d+iconSize.width/2)+"px";
+		this.div.style.top=(e-this.div.offsetHeight/2)+"px";
+	};
+	K_HtmlMarker.prototype.onMouseDown=function(a)
+	{
+		if(browser.type==1)
+		{
+			window.event.cancelBubble=true;
+			window.event.returnValue=false
+		}
+		else
+		{
+			a.cancelBubble=true;
+			a.preventDefault();
+			a.stopPropagation()
+		}
+		GEvent.trigger(this,"click",this);
+		GEvent.trigger(this.map,"click",this)
+	};
+	K_HtmlMarker.prototype.display=function(a){this.icon.display(a);if(a)this.div.style.display="";else this.div.style.display="none";};
+	K_HtmlMarker.prototype.getOffsetTop=function(){return this.div.offsetTop};
+	K_HtmlMarker.prototype.setZIndex=function(a){this.div.style.zIndex=a;};
+	K_HtmlMarker.prototype.addToInfoWindowMask=function(a,b){return;};
+	K_HtmlMarker.prototype.getLatitude=window.GMarker.prototype.getLatitude;
+	K_HtmlMarker.prototype.openInfoWindow=function(a,b){this.map.openInfoWindow(this.point,a,new GSize(0,0),GEvent.callback(this,this.onInfoWindowOpen),GEvent.callback(this,this.onInfoWindowClose),b)};
+	K_HtmlMarker.prototype.openInfoWindowHtml=function(a,b){this.map.openInfoWindowHtml(this.point,a,new GSize(0,0),GEvent.callback(this,this.onInfoWindowOpen),GEvent.callback(this,this.onInfoWindowClose),b)};
+	K_HtmlMarker.prototype.openInfoWindowXslt=function(a,b,c){this.map.openInfoWindowXslt(this.point,a,b,new GSize(0,0),GEvent.callback(this,this.onInfoWindowOpen),GEvent.callback(this,this.onInfoWindowClose),c)};
+	K_HtmlMarker.prototype.showMapBlowup=function(a,b){this.map.showMapBlowup(this.point,a,b,new GSize(0,0),GEvent.callback(this,this.onInfoWindowOpen),GEvent.callback(this,this.onInfoWindowClose))};
+	K_HtmlMarker.prototype.onInfoWindowOpen=window.GMarker.prototype.onInfoWindowOpen;
+	K_HtmlMarker.prototype.onInfoWindowClose=window.GMarker.prototype.onInfoWindowClose;
+</pre>
+	<p>以下是一个使用范例：</p>
+<pre>
+	var point=new GPoint(112.6857368551186,29.94176113301537);
+	htmlOverlay=new K_HtmlMarker(new GMarker(null),point,"<font color='Green'><b>My Hometown</b></font>");
+	map.addOverlay(htmlOverlay);
+</pre>
+        <a href="K_HtmlMarker.html" target="_blank">查看范例(K_HtmlMarker.html)</a>
+        <p> </p>
+
+        <p> </p>
+        <h2><a name="Controls">自定义控件Controls</a></h2>
+        <p> </p>
+
+        <h3><a name="K_CrossControl"><b>K_CrossControl</b>(显示地图中心十字的控件)</a> </a></h3>
+        <p><b>K_CrossControl</b>是一个自定义的Control,用法和Google Map中自定义的<a href="documentation.htm#Controls_overview">控件</a>差不多，都是通过<a href="documentation.htm#GMap_code_">GMap</a>的<b>addControl(control) </b>添加到地图之中，通过<b>removeControl(control) </b>从地图中移除。
+	<p><b>K_CrossControl</b>会在地图上显示一个十字准星，当需要用户在地图上选择一个点的时候非常有用，</p>
+	<p><b>K_CrossControl</b>这次更新有所改动，现在在地图大小可能变化的时候也能运行正常了</p>
+	<p>K_CrossControl的构造函数有4个参数，<b>都是可选参数</b>，分别为</p>
+        <table border="0" cellpadding="4" cellspacing="1">
+          <tbody>
+            <tr>
+              <th bgcolor="#ccccff"> <strong><font color="#000000" size="-1">参数</font></strong> </th>
+              <th bgcolor="#ccccff"> <strong><font color="#000000" size="-1">说明</font></strong> </th>
+            </tr>
+            <tr><td bgcolor="#f4f4f4">length	</td><td bgcolor="#f4f4f4"><font size="-1">十字的每条线长度，当使用图片显示时，则为图片的大小</font></td></tr>
+            <tr><td bgcolor="#f4f4f4">size	</td><td bgcolor="#f4f4f4"><font size="-1">十字每条线的线宽像素值，当使用图片显示时，该值被忽略</font></td></tr>
+            <tr><td bgcolor="#f4f4f4">color	</td><td bgcolor="#f4f4f4"><font size="-1">十字每条线的颜色，当使用图片显示时，该值被忽略</font></td></tr>
+            <tr><td bgcolor="#f4f4f4">image	</td><td bgcolor="#f4f4f4"><font size="-1">当用户的浏览器不支持VML的时候，为显示十字而使用的替代图片，如果没有设置，则使用[http://www.step1.cn/map/cross.gif]<img src="http://www.step1.cn/map/cross.gif"/></font></td></tr>
+          </tbody>
+        </table>
+	<p>为了仿照Google Maps API中的控件定位，我定义了对象<b>K_ControlPosition</b>用来指定控件的位置，该对象是对应<b>GPosition</b>的相关功能，不过<b>GPosition</b>并没有被Google公开.</p>
+        <p>以下是该类的定义源码：</p>
+<pre>
+	function K_CrossControl(length,size,color,image)
+	{
+		this.length=length|10;
+		this.size=size|2;
+		this.color="#000000";
+		if(color)
+			this.color=color;
+		this.image="http://www.step1.cn/map/cross.gif";
+		if(image)
+			this.image=image;
+	}
+	K_CrossControl.prototype.initialize=function(a)
+	{
+		this.Map=a;
+		this.lines=[];
+		if(browser.type==1)
+		{
+			this.div=a.ownerDocument.createElement("<v:group coordSize='21600,21600' style='z-index:4;width:"+(2*this.length)+"px;height:"+(2*this.length)+"px;'></v:group>");
+			var d=this.Map.ownerDocument.createElement("<v:line from='"+(10800)+","+(0)+"' to='"+10800+","+21600+"' style='z-index:5;'>");
+			this.lines.push(d);
+			this.div.appendChild(d)
+			var d=this.Map.ownerDocument.createElement("<v:line from='"+(0)+","+(10800)+"' to='"+21600+","+10800+"' style='z-index:5;'>");
+			this.lines.push(d);
+			this.div.appendChild(d)
+		}
+		else
+		{
+			this.div=a.ownerDocument.createElement("div");
+			var img=a.ownerDocument.createElement("img");
+			img.src=this.image;
+			img.width=this.length*2;
+			img.height=this.length*2;
+			this.div.appendChild(img);
+			this.div.style.width=this.length*2+"px";
+			this.div.style.height=this.length*2+"px";
+			this.div.style.zIndex=4;
+		}
+		a.container.appendChild(this.div);
+		this.defaultPosition=new K_ControlPosition();
+		this.setDefaultPosition();
+		GEvent.bind(a,"resize",this,this.setDefaultPosition);
+		return this.div;
+	};
+	K_CrossControl.prototype.setDefaultPosition=function()
+	{
+		this.defaultPosition.setPosition(this.Map.container.offsetWidth/2-this.length,this.Map.container.offsetHeight/2-this.length);
+		this.defaultPosition.apply(this.div);
+	}
+	K_CrossControl.prototype.getDefaultPosition=function()
+	{
+		return this.defaultPosition;
+	};
+	function K_ControlPosition()
+	{
+	}
+	K_ControlPosition.prototype.setPosition=function(b,c)
+	{
+		this.x=b||0;
+		this.y=c||0;
+	}
+	K_ControlPosition.prototype.apply=function(a)
+	{
+		a.style.position="absolute";
+		a.style.left=this.x+"px";
+		a.style.top=this.y+"px";
+	};
+</pre>
+	<p>以下是一个使用范例：</p>
+<pre>
+	map.addControl(new K_CrossControl());
+</pre>
+        <a href="K_CrossControl.html" target="_blank">查看范例(K_CrossControl.html)</a>
+        <p> </p>
+
+        <h3><a name="K_HtmlControl"><b>K_HtmlControl</b>(在地图上显示HTML内容的对象)</a> </a></h3>
+        <p><b>K_HtmlControl</b>是一个自定义的Control,用法和Google Map中自定义的<a href="documentation.htm#Controls_overview">控件</a>差不多，都是通过<a href="documentation.htm#GMap_code_">GMap</a>的<b>addControl(control) </b>添加到地图之中，通过<b>removeControl(control) </b>从地图中移除。
+	<p><b>K_HtmlControl</b>用来在地图上指定位置显示一个自定义的HTML内容，采用的是和Google其他控件一样的定位系统，这一套定位系统因为不支持中间定位，所以需要显示在地图的中间的<a href="#K_CrossControl">K_CrossControl</a>没有采用，实际上利用了一个Google Maps API之中提供了但是没有公开的类<a href="documentation.htm#GControlPosition_code_">GControlPosition</a>，因为这里要用，我已经在<a href="documentation.htm">Google Maps API文档</a>之中加上了这个对象的内容。</p>
+	<p><b>K_HtmlControl</b>这次更新有所改动，现在在地图大小可能变化的时候也能运行正常了</p>
+	<p>K_HtmlControl的构造函数有2个参数，<b>都是可选参数</b>，分别为</p>
+        <table border="0" cellpadding="4" cellspacing="1">
+          <tbody>
+            <tr>
+              <th bgcolor="#ccccff"> <strong><font color="#000000" size="-1">参数</font></strong> </th>
+              <th bgcolor="#ccccff"> <strong><font color="#000000" size="-1">说明</font></strong> </th>
+            </tr>
+            <tr><td bgcolor="#f4f4f4">html	</td><td bgcolor="#f4f4f4"><font size="-1">要显示的HTML内容</font></td></tr>
+            <tr><td bgcolor="#f4f4f4">position	</td><td bgcolor="#f4f4f4"><font size="-1">控件定为对象，应该是一个<a href="documentation.htm#GControlPosition_code_">GControlPosition</a></font></td></tr>
+          </tbody>
+        </table>
+        <p>以下是该类的定义源码：</p>
+<pre>
+	function K_HtmlControl(html,position)
+	{
+		this.html=html;
+		if(position)
+			this.position=position;
+		else
+			this.position=new GControlPosition(3,10,10);
+	}
+	K_HtmlControl.prototype.initialize=function(a)
+	{
+		this.Map=a;
+		this.div=a.ownerDocument.createElement("div");
+		a.applyControlStyles(this.div);
+		this.div.style.position="absolute";
+		this.div.innerHTML=this.html;
+		a.container.appendChild(this.div);
+		GEvent.addBuiltInListener(this.div,"click",K_GetCallBack(this,this.onClick));
+		return this.div;
+	};
+	K_HtmlControl.prototype.getDefaultPosition=function()
+	{
+		return this.position;
+	};
+	K_HtmlControl.prototype.onClick=function()
+	{
+		GEvent.trigger(this,"click");
+	}
+</pre>
+	<p>以下是一个使用范例：</p>
+<pre>
+	gcp=new GControlPosition(3,20,20);
+	htmlControl=new K_HtmlControl("&lt;div style='padding:3;background-color:white;border:solid 1 black;cursor:hand;'>www.step1.cn&lt;/div>",gcp);
+	map.addControl(htmlControl);
+	GEvent.addListener(htmlControl,"click",function(){self.location="http://www.step1.cn";});
+
+</pre>
+        <a href="K_HtmlControl.html" target="_blank">查看范例(K_HtmlControl.html)</a>
+        <p> </p>
+
+
+        <p> </p>
+        <h2><a name="Class">其它相关类</a></h2>
+        <p> </p>
+
+        <h3><a name="K_PointMover"><b>K_PointMover</b>(让点沿轨迹移动的类)</a> </a></h3>
+        <p><b>K_PointMover</b>用来让一个地理点按照指定的速度沿着指定的轨迹移动，有了这个类，我们就可以非常容易的实现让一个地图上的Overlay在地图上移动(类似有的网站查询行车路线后的车跑动的示例)，或者是让地图自身自动的移动位置</p>
+        <p><b>K_PointMover</b>的构造函数有4个参数</p>
+        <table border="0" cellpadding="4" cellspacing="1">
+          <tbody>
+            <tr>
+              <th bgcolor="#ccccff"> <strong><font color="#000000" size="-1">参数</font></strong> </th>
+              <th bgcolor="#ccccff"> <strong><font color="#000000" size="-1">说明</font></strong> </th>
+            </tr>
+            <tr><td bgcolor="#f4f4f4">points</td><td bgcolor="#f4f4f4"><font size="-1">点的移动轨迹，通过数组形式指定路线上的一些点的经纬度坐标</font></td></tr>
+            <tr><td bgcolor="#f4f4f4">time</td><td bgcolor="#f4f4f4"><font size="-1">每两次调整点的位置间隔的毫秒数，默认为100,1秒=1000毫秒</font></td></tr>
+            <tr><td bgcolor="#f4f4f4">rate</td><td bgcolor="#f4f4f4"><font size="-1">每次移动的跨度，这个大约是以经纬度作为单位的，因此在缩放系数低的情况下，1个单位将是一个非常快的速度</font></td></tr>
+            <tr><td bgcolor="#f4f4f4">handle</td><td bgcolor="#f4f4f4"><font size="-1">每次调整点的位置之后运行的句柄，运行时，以K_PointMover对象本身做参数，因此，可以使用K_PointMover的points属性来访问当前该点的位置</font></td></tr>
+          </tbody>
+        </table>
+        <p><b>K_PointMover</b>有2个方法</p>
+        <table border="0" cellpadding="4" cellspacing="1">
+          <tbody>
+            <tr>
+              <th bgcolor="#ccccff"> <strong><font color="#000000" size="-1">方法</font></strong> </th>
+              <th bgcolor="#ccccff"> <strong><font color="#000000" size="-1">说明</font></strong> </th>
+            </tr>
+            <tr><td bgcolor="#f4f4f4">Move	</td><td bgcolor="#f4f4f4"><font size="-1">开始执行移动过程，移动完成之后，该点会停留在终点，不过假如完成后重新调用该函数，则自动从起点开始重新执行该移动过程</font></td></tr>
+            <tr><td bgcolor="#f4f4f4">Pause	</td><td bgcolor="#f4f4f4"><font size="-1">暂停移动过程，通过Move重新开始从暂停的地方开始移动</font></td></tr>
+          </tbody>
+        </table>
+        <p>以下是该类的定义源码：</p>
+<pre>
+	function K_PointMover(points,time,rate,handle)
+	{
+		this.points=points;
+		this.time=time?time:100;
+		this.rate=rate?rate:1;
+		this.handle=handle;
+		this.pointsIndex=0;
+		this.numberIndex=0;
+	}
+	K_PointMover.prototype.Move=function()
+	{
+		if(!this.timer)
+		{
+			this.timer=setInterval(K_GetCallBack(this,this.Move),this.time);
+			return this.points[this.pointsIndex];
+		}
+		else
+		{
+			if(!this.offset)
+			{
+				offsetX=this.points[this.pointsIndex+1].x-this.points[this.pointsIndex].x;
+				a=Math.log((1+Math.sin(this.points[this.pointsIndex].y*Math.PI/180))/(1-Math.sin(this.points[this.pointsIndex].y*Math.PI/180)))*180/Math.PI/2;
+				a1=Math.log((1+Math.sin(this.points[this.pointsIndex+1].y*Math.PI/180))/(1-Math.sin(this.points[this.pointsIndex+1].y*Math.PI/180)))*180/Math.PI/2;
+				offsetY=a1-a;//this.points[this.pointsIndex+1].y-this.points[this.pointsIndex].y;
+				offset=Math.sqrt(Math.pow(offsetX,2)+Math.pow(offsetY,2));
+				if(offset==0)
+					this.offset=new GSize(0,0);
+				else
+					this.offset=new GSize(offsetX/offset,offsetY/offset);
+			}
+			x=this.points[this.pointsIndex].x+this.rate*this.offset.width*(this.numberIndex+1);
+			y=Math.log((1+Math.sin(this.points[this.pointsIndex].y*Math.PI/180))/(1-Math.sin(this.points[this.pointsIndex].y*Math.PI/180)))*180/Math.PI/2+this.rate*this.offset.height*(this.numberIndex+1);
+			y=(Math.asin((Math.pow(Math.E,y*Math.PI/180*2)-1)/(Math.pow(Math.E,y*Math.PI/180*2)+1))*180/Math.PI);
+			if(0>(x-this.points[this.pointsIndex].x)*(x-this.points[this.pointsIndex+1].x) || 0>(y-this.points[this.pointsIndex].y)*(y-this.points[this.pointsIndex+1].y))
+			{
+				this.point=new GPoint(x,y);
+				this.numberIndex++;
+			}
+			else
+			{
+				this.pointsIndex++;
+				this.numberIndex=0;
+				this.offset=null;
+				this.point=this.points[this.pointsIndex];
+				if(this.pointsIndex>=this.points.length-1)
+				{
+					clearInterval(this.timer);
+					this.pointsIndex=0;
+					this.numberIndex=0;
+				}
+			}
+		}
+		if(this.handle)
+			this.handle.call(null,this);
+	}
+	K_PointMover.prototype.Pause=function()
+	{
+		if(this.timer)
+		{
+			clearInterval(this.timer);
+			this.timer=null;
+		}
+	}
+</pre>
+	<p>以下是一个使用范例：</p>
+<pre>
+var map;
+var moveMarker,pointMover;
+function onLoad()
+{
+	map = new GMap(document.getElementById("map"));
+	map.addControl(new GLargeMapControl());
+	map.addControl(new GMapTypeControl());
+	map.addControl(new K_CrossControl());
+	map.centerAndZoom(new GPoint(106.08,36.94),13);
+	var points=[new GPoint(123.261,53.561),new GPoint(109.572,18.161),new GPoint(73.657,39.465),new GPoint(134.708,48.277),new GPoint(123.261,53.561)];
+	polyline=new GPolyline(points);
+	map.addOverlay(polyline);
+	moveMarker=new GMarker(points[0]);
+	map.addOverlay(moveMarker);
+	pointMover=new K_PointMover(points,100,0.1,MapMove);
+}
+function MapMove(pointMover)
+{
+	if(document.getElementById("MarkerMove").checked)
+	{
+		moveMarker.point=pointMover.point;
+		moveMarker.redraw(true)
+	}
+	if(document.getElementById("MapMove").checked)
+		map.recenterOrPanToLatLng(pointMover.point);
+}
+</pre>
+        <a href="K_PointMover.html" target="_blank">查看范例(K_PointMover.html)</a>
+
+
+        <h3><a name="K_XmlLoader"><b>K_XmlLoader</b>(快捷的载入Xml文件或访问WebService的类)</a> </a></h3>
+        <p><b>K_XmlLoader</b>由于可能用到的KML文件和WebService比较多，因此我使用这个类来统一访问代码,该类完成从访问到返回结果的XML解析部分，如果该结果不能被解析为XML，则弹出包含该结果的警告而停止运行，
+因此在调用parseHandle参数中的句柄的时候表明该XML文档正常</p>
+        <p><b>K_XmlLoader</b><b>K_XmlLoader</b>使用到了一个简单的函数<a href="#K_GetCallBack"><b>K_GetCallBack</b></a>，因此，使用时必须包含该函数才能运行</p>
+        <p><b>K_XmlLoader</b>的构造函数有1个参数</p>
+        <table border="0" cellpadding="4" cellspacing="1">
+          <tbody>
+            <tr>
+              <th bgcolor="#ccccff"> <strong><font color="#000000" size="-1">参数</font></strong> </th>
+              <th bgcolor="#ccccff"> <strong><font color="#000000" size="-1">说明</font></strong> </th>
+            </tr>
+            <tr><td bgcolor="#f4f4f4">parseHandle</td><td bgcolor="#f4f4f4"><font size="-1">指出当XML假载完成后，进行XML处理的函数句柄，该句柄被调用的时候以K_XmlLoader对象本身做参数，因此，可以使用K_XmlLoader的xmlDoc属性来访问xml结果</font></td></tr>
+          </tbody>
+        </table>
+        <p><b>K_XmlLoader</b>只有一个Load方法</p>
+        <table border="0" cellpadding="4" cellspacing="1">
+          <tbody>
+            <tr>
+              <th bgcolor="#ccccff"> <strong><font color="#000000" size="-1">方法</font></strong> </th>
+              <th bgcolor="#ccccff"> <strong><font color="#000000" size="-1">说明</font></strong> </th>
+            </tr>
+            <tr><td bgcolor="#f4f4f4">Load	</td><td bgcolor="#f4f4f4"><font size="-1">加载XML文件或访问WebService,有2个参数，url是XML或WebService路径,postData(可选)是WebService发送的数据</font></td></tr>
+          </tbody>
+        </table>
+	<p>该控件使了一个函数K_LoadJS来载入JS文件，因此，必须包含本函数，该类才能正常使用</p>
+        <p>以下是该类的定义源码：</p>
+<pre>
+	function K_XmlLoader(parseHandle)
+	{
+		this.parseHandle=parseHandle;
+		this.xmlhttp =null;
+	}
+	K_XmlLoader.prototype.Load=function(url,postData)
+	{
+		this.url=url;
+		this.xmlhttp =GXmlHttp.create();
+		var method="GET";
+		if(postData && postData.length>0)
+			method="POST";
+		this.xmlhttp.open(method,this.url,true);
+		this.xmlhttp.onreadystatechange=K_GetCallBack(this,this.ParseXmlFile);
+		if(postData && postData.length>0)
+		{
+			this.xmlhttp.setRequestHeader ("Content-Type","text/xml; charset=utf-8"); 
+			this.xmlhttp.setRequestHeader ("SOAPAction","\"\""); 
+		}
+		this.xmlhttp.send(postData);
+	}
+	K_XmlLoader.prototype.ParseXmlFile=function()
+	{
+		if(this.xmlhttp==null || this.xmlhttp.readyState!=4)
+			return;
+		this.xmlDoc = this.xmlhttp.responseXML;
+		if(this.xmlDoc.documentElement==null && this.xmlhttp.responseText &&　this.xmlhttp.responseText!="")
+		{
+			try{this.xmlDoc=GXml.parse(this.xmlhttp.responseText);}
+			catch(ce){}
+		}
+		if(this.xmlDoc.documentElement==null)
+		{
+			alert(this.xmlhttp.responseText);
+			return;
+		}
+		this.xmlhttp=null;
+		if(this.parseHandle)
+			this.parseHandle.call(null,this);
+	}
+</pre>
+	<p>以下是一个使用范例：</p>
+<pre>
+	var url=window.prompt('Xml File Path:','data.xml');
+	var xmlLoader=new K_XmlLoader(ReadXml);
+	xmlLoader.Load(url,data);
+	function ReadXml(xl)
+	{
+		alert(xl.xmlDoc.xml);
+          var markers = xl.xmlDoc.documentElement.getElementsByTagName("marker");
+          for (var i = 0; i < markers.length; i++) {
+            var point = new GPoint(parseFloat(markers[i].getAttribute("lng")),
+                                   parseFloat(markers[i].getAttribute("lat")));
+	    var marker =new GMarker(point);
+            map.addOverlay(marker);
+          }
+	}
+</pre>
+        <a href="K_XmlLoader.html" target="_blank">查看范例(K_XmlLoader.html)</a>
+
+
+        <p> </p>
+        <h3><a name="K_UserPosition"><b>K_UserPosition</b>(根据IP显示用户所在地理位置的类)</a> </a></h3>
+        <p><b>K_UserPosition</b>是一个使用Microsoft VE控件获取用户所在位置的类，如果用户已经安装VE控件，则返回VE控件记录的地理位置(由用户自己选择位置)，否则则直接使用IP,并通过Microsoft的JS文件实现IP到地理经纬度的转换。</p>
+        <p><b>K_UserPosition</b>的构造函数没有参数，并且只有一个Load方法</p>
+        <table border="0" cellpadding="4" cellspacing="1">
+          <tbody>
+            <tr>
+              <th bgcolor="#ccccff"> <strong><font color="#000000" size="-1">方法</font></strong> </th>
+              <th bgcolor="#ccccff"> <strong><font color="#000000" size="-1">说明</font></strong> </th>
+            </tr>
+            <tr><td bgcolor="#f4f4f4">Load	</td><td bgcolor="#f4f4f4"><font size="-1">调用该方法后开始载入用户地理位置，handle参数是当获取地理位置成功之后以该K_UserPosition为对象调用的方法，该方法可以使用<b>point</b>(代表位置经纬度的<a href="documentation.htm#GPoint_code_">GPoint</a>),<b>zoom</b>(代表该位置最合适的缩放级别)两个属性.</font></td></tr>
+          </tbody>
+        </table>
+	<p>该控件使了一个函数K_LoadJS来载入JS文件，因此，必须包含本函数，该类才能正常使用</p>
+        <p>以下是该类的定义源码：</p>
+<pre>
+	function K_UserPosition()
+	{
+		this.loaded=false;
+	}
+	K_UserPosition.prototype.SetAutoLocateViewport=function(lat,lon,zoom,pin,message)
+	{
+		this.point=new GPoint(lon,lat);
+		this.zoom=zoom;
+		this.pin=pin;
+		this.message=message;
+		this.loaded=true;
+		if(this.handle)
+		{
+			this.handle.apply(this);
+			this.handle=null;
+		}
+	}
+	K_UserPosition.prototype.Load=function(handle)
+	{
+		this.handle=handle;
+		var wifi=this.GetWiFiControl();
+		if(wifi)
+		{
+			try
+			{
+				var results = wifi.GetLocation();
+				if(results&&results.length>0)
+					{eval(results);return;}
+			}
+			catch(ex){}
+		}
+		window.SetAutoLocateViewport=K_GetCallBack(this,this.SetAutoLocateViewport);
+		K_LoadJS("http://virtualearth.msn.com/WiFiIPService/locate.ashx?pos=");
+	}
+	K_UserPosition.prototype.GetWiFiControl=function()
+	{
+		var wifi=null;
+		try
+		{
+			wifi=new ActiveXObject("WiFiScanner");
+		}
+		catch(e)
+		{
+			try
+			{
+				wifi=new ActiveXObject("Microsoft.MapPoint.WiFiScanner.1");
+			}
+			catch(e)
+			{
+				try
+				{
+					wifi=new WiFiScanner("Microsoft.MapPoint.WiFiScanner.1");
+				}
+				catch(e)
+				{}
+			}
+		}
+		return wifi;
+	}
+	function K_LoadJS(src,handle)
+	{
+		var jsFile= document.createElement("script");
+		jsFile.src=src;
+		jsFile.onreadystatechange=function(){if(this.readyState=="complete" || this.readyState=="loaded"){if(handle)handle.call()}};
+		document.body.insertAdjacentElement("afterEnd",jsFile);
+	}
+</pre>
+	<p>以下是一个使用范例：</p>
+<pre>
+	var userPosition=new K_UserPosition();
+	userPosition.Load(function(){
+		map.centerAndZoom(this.point,this.zoom);
+		var marker=new GMarker(this.point);
+		map.addOverlay(marker);
+		GEvent.addListener(marker,"click",function(){marker.openInfoWindowHtml('You Position');});
+	});
+</pre>
+        <a href="K_UserPosition.html" target="_blank">查看范例(K_UserPosition.html)</a>
+        <p> </p>
+
+
+        <h3><a name="K_MSOPEncryptPointSrv"><b>K_MSOPEncryptPointSrv</b>(使用MOSP的EncryptPoint服务进行灵图数据加密的对象)</a> </a></h3>
+        <p><b>K_MSOPEncryptPointSrv</b>灵图的使用的经纬度坐标大约是经纬度坐标乘以100000的坐标，可是毕竟只是大约，所以需要进行精确的转换，就要适用本对象</p>
+	<p><b>K_MSOPEncryptPointSrv</b>定义之中使用到了<a href="#K_GetCallBack"><b>K_GetCallBack</b></a>和<a href="#K_XmlLoader"><b>K_XmlLoader</b></a>，因此，使用时必须包含这些内容才能运行</p>
+        <p><b>K_MSOPEncryptPointSrv</b>的构造函数有3个参数</p>
+        <table border="0" cellpadding="4" cellspacing="1">
+          <tbody>
+            <tr>
+              <th bgcolor="#ccccff"> <strong><font color="#000000" size="-1">参数</font></strong> </th>
+              <th bgcolor="#ccccff"> <strong><font color="#000000" size="-1">说明</font></strong> </th>
+            </tr>
+            <tr><td bgcolor="#f4f4f4">baseUrl</td><td bgcolor="#f4f4f4"><font size="-1">MOSP<a href="http://freemosp.51ditu.com/" target="_blank">数据格式转换</a>的WebService地址,比如 <b>http://freemosp.51ditu.com/mosp/services/EncryptPoint</b> 注意并不是wsdl的地址,通常因为涉及到<b>跨域访问</b>这个难题，可能不大适合直接使用灵图的地址，最好是使用本地服务器来代理转化一下，本站就是这样做的，所以本站的MOSP的<a href="http://freemosp.51ditu.com/" target="_blank">数据格式转换</a>的WebService地址是 <b><a href="/51Ditu/EncryptPoint.asmx" target="_blank">/51Ditu/EncryptPoint.asmx</a></b> </font></td></tr>
+            <tr><td bgcolor="#f4f4f4">userId	</td><td bgcolor="#f4f4f4"><font size="-1">MOSP服务用户名. <a href="http://freemosp.51ditu.com/" target="_blank">申请请看</a></font></td></tr>
+            <tr><td bgcolor="#f4f4f4">password	</td><td bgcolor="#f4f4f4"><font size="-1">MOSP服务密码. <a href="http://freemosp.51ditu.com/" target="_blank">申请请看</a></font></td></tr>
+          </tbody>
+        </table>
+        <p><b>K_MSOPEncryptPointSrv</b>提供一个方法</p>
+        <table border="0" cellpadding="4" cellspacing="1">
+          <tbody>
+            <tr>
+              <th bgcolor="#ccccff"> <strong><font color="#000000" size="-1">方法</font></strong> </th>
+              <th bgcolor="#ccccff"> <strong><font color="#000000" size="-1">说明</font></strong> </th>
+            </tr>
+            <tr><td bgcolor="#f4f4f4">EncryptPoint	</td><td bgcolor="#f4f4f4"><font size="-1">调用该方法后开始进行异步的数据加密，各参数如下：<br/>
+points:一个<a href="documentation.htm#GPoint_code_">GPoint</a>数组,包含待加密的点数据<br/>
+handle:当加密完成之后调用的函数，加密的结果在以一个<a href="documentation.htm#GPoint_code_">GPoint</a>数组的格式发送到该函数的第一个参数之中.</font></td></tr>
+          </tbody>
+        </table>
+
+        <p>以下是该类的定义源码：</p>
+<pre>
+	function K_MSOPEncryptPointSrv(baseUrl,userId,password)
+	{
+		this.baseUrl=baseUrl;
+		this.userId=userId;
+		this.password=password;
+	}
+	K_MSOPEncryptPointSrv.prototype.EncryptPoint=function(points,handle)
+	{
+		(new K_MSOPEncryptPointSrvConnection(this,points,handle));
+	}
+	function K_MSOPEncryptPointSrvConnection(service,points,handle)
+	{
+		this.service=service;
+		this.handle=handle;
+		var data;
+		data = '<?xml version="1.0" encoding="utf-8"?>'; 
+		data = data + '<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">'; 
+		data = data + '<soap:Body>'; 
+		data = data + '<EncryptPointArray xmlns="http://tempuri.org/">'; 
+		for(var i=0;points.length>i;i++)
+		{
+			data = data + '<in><latitude>'+parseInt(points[i].y*100000)+'</latitude><longitude>'+parseInt(points[i].x*100000)+'</longitude></in>';
+		}
+		data = data + '</EncryptPointArray>'; 
+		data = data + '</soap:Body>'; 
+		data = data + '</soap:Envelope>';
+		var xmlLoader=new K_XmlLoader(K_GetCallBack(this,this.EncryptPointCallBack));
+		xmlLoader.Load(this.service.baseUrl,data);
+	}
+	K_MSOPEncryptPointSrvConnection.prototype.EncryptPointCallBack=function(xmlLoader)
+	{
+		var pointsNode=xmlLoader.xmlDoc.getElementsByTagName("Point");
+		points=[];
+		for(var i=0;pointsNode.length>1;i++)
+			points[i]=new GPoint(parseInt(pointsNode[i].getElementsByTagName("longitude")[0].childNodes[0].nodeValue),parseInt(pointsNode[i].getElementsByTagName("latitude")[0].childNodes[0].nodeValue));
+		if(this.handle)
+			this.handle.apply(this,[points]);
+	}
+</pre>
+	<p>以下是一个使用范例：</p>
+<pre>
+	var map,eps,point;
+	function onLoad()
+	{
+		map = new GMap(document.getElementById("map"));
+		map.addControl(new GLargeMapControl());
+		map.addControl(new GMapTypeControl());
+		map.centerAndZoom(new GPoint(106.083984375,36.94989178681327),13);
+
+		eps=new K_MSOPEncryptPointSrv("/51Ditu/EncryptPoint.asmx",51445144,51445144);
+		ChangeInfo();
+		GEvent.addListener(map,"moveend",ChangeInfo);
+	}
+	function ChangeInfo()
+	{
+		point=map.getCenterLatLng();
+		eps.EncryptPoint([point],SetInfo);
+	}
+	function SetInfo(points)
+	{
+		html='The Latlng of Center:('+point.x+','+point.y+')&lt;br/>';
+		html=html+'The MOSP coordinate of Center:('+points[0].x+','+points[0].y+')';
+		document.getElementById("Info").innerHTML=html;
+	}
+</pre>
+        <a href="K_MSOPEncryptPointSrv.html" target="_blank">查看范例(K_MSOPEncryptPointSrv.html)</a>
+        <p> </p>
+
+        <h3><a name="K_MSOPGeoCodeSrv"><b>K_MSOPGeoCodeSrv</b>(使用MOSP的GeoCodeSrv服务载入灵图的地理编码信息对象)</a> </a></h3>
+        <p><b>K_MSOPGeoCodeSrv</b>根据灵图的服务，进行从经纬度到地理信息的查询，例如，根据经纬度(114.11465,22.56203)得到的查询结果是："广东省深圳市罗湖区洪湖西路和洪湖东路交叉口东北321米处,湖景花园西北97米处"。</p>
+        <p><b>K_MSOPGeoCodeSrv</b>定义之中使用到了<a href="#K_GetCallBack"><b>K_GetCallBack</b></a>和<a href="#K_XmlLoader"><b>K_XmlLoader</b></a>，还在参数之中要求一个<a href="#K_MSOPEncryptPointSrv"><b>K_MSOPEncryptPointSrv</b></a>，因此，使用时必须包含这些内容才能运行</p>
+        <p><b>K_MSOPGeoCodeSrv</b>的构造函数有5个参数</p>
+        <table border="0" cellpadding="4" cellspacing="1">
+          <tbody>
+            <tr>
+              <th bgcolor="#ccccff"> <strong><font color="#000000" size="-1">参数</font></strong> </th>
+              <th bgcolor="#ccccff"> <strong><font color="#000000" size="-1">说明</font></strong> </th>
+            </tr>
+            <tr><td bgcolor="#f4f4f4">baseUrl</td><td bgcolor="#f4f4f4"><font size="-1">MOSP<a href="http://freemosp.51ditu.com/" target="_blank">地理编码服务</a>的WebService地址,比如 <b>http://freemosp.51ditu.com/mosp/services/GeoCodeSrv</b> 注意并不是wsdl的地址,通常因为涉及到<b>跨域访问</b>这个难题，可能不大适合直接使用灵图的地址，最好是使用本地服务器来代理转化一下，本站就是这样做的，所以本站的MOSP的<a href="http://freemosp.51ditu.com/" target="_blank">地理编码服务</a>的WebService地址是 <b><a href="/51Ditu/GeoCodeSrv.asmx" target="_blank">/51Ditu/GeoCodeSrv.asmx</a></b> </font></td></tr>
+            <tr><td bgcolor="#f4f4f4">userId	</td><td bgcolor="#f4f4f4"><font size="-1">MOSP服务用户名. <a href="http://freemosp.51ditu.com/" target="_blank">申请请看</a></font></td></tr>
+            <tr><td bgcolor="#f4f4f4">password	</td><td bgcolor="#f4f4f4"><font size="-1">MOSP服务密码. <a href="http://freemosp.51ditu.com/" target="_blank">申请请看</a></font></td></tr>
+            <tr><td bgcolor="#f4f4f4">encryptPointSrv	</td><td bgcolor="#f4f4f4"><font size="-1">用来用作坐标转化的<a href="#K_MSOPEncryptPointSrv"><b>K_MSOPEncryptPointSrv</b></a></font></td></tr>
+            <tr><td bgcolor="#f4f4f4">handle	</td><td bgcolor="#f4f4f4"><font size="-1">每次得到查询结果后运行的句柄，该句柄被调用的时候以K_MSOPGeoCodeSrv对象本身做参数，因此，可以使用K_MSOPGeoCodeSrv的status(查询状态)属性和result(查询结果字符串)属性来访问查询结果,有以下几种状态值：<br/>
+-2:  地理信息查询发生错误</br>
+-1:  超出可查询范围</br>
+0:  没有开始地理信息查询</br>
+1:  正在查询</br>
+2:  查询完成，结果正常</br>
+
+</font></td></tr>
+          </tbody>
+        </table>
+        <p><b>K_MSOPGeoCodeSrv</b>提供一个方法</p>
+        <table border="0" cellpadding="4" cellspacing="1">
+          <tbody>
+            <tr>
+              <th bgcolor="#ccccff"> <strong><font color="#000000" size="-1">方法</font></strong> </th>
+              <th bgcolor="#ccccff"> <strong><font color="#000000" size="-1">说明</font></strong> </th>
+            </tr>
+            <tr><td bgcolor="#f4f4f4">GetGeoCode	</td><td bgcolor="#f4f4f4"><font size="-1">调用该方法后开始进行地理编码查询，参数是代表该位置的一个<a href="documentation.htm#GPoint_code_">GPoint</a>.</font></td></tr>
+          </tbody>
+        </table>
+
+        <p>以下是该类的定义源码：</p>
+<pre>
+	function K_MSOPGeoCodeSrv(baseUrl,userId,password,encryptPointSrv,handle)
+	{
+		this.baseUrl=baseUrl;
+		this.userId=userId;
+		this.password=password;
+		this.handle=handle;
+		this.encryptPointSrv=encryptPointSrv;
+		this.status=0;
+	}
+	K_MSOPGeoCodeSrv.prototype.GetGeoCode=function(point)
+	{
+		if(73.12667>point.x || point.x>135.21180 || 18.12810>point.y || point.y>55.15600)
+		{
+			this.status=-1;
+			this.handle.apply(this);
+			return;
+		}
+		this.status=1;
+		this.point=point;
+		this.encryptPointSrv.EncryptPoint([this.point],K_GetCallBack(this,this.GetGeoCodeByLTPoint));
+	}
+	K_MSOPGeoCodeSrv.prototype.GetGeoCodeByLTPoint=function(points)
+	{
+		var data;
+		data = '<?xml version="1.0" encoding="utf-8"?>'; 
+		data = data + '<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">'; 
+		data = data + '<soap:Body>'; 
+		data = data + '<getAddrByPosition xmlns="http://tempuri.org/">'; 
+		data = data + '<p><latitude>'+points[0].y+'</latitude><longitude>'+points[0].x+'</longitude></p>';
+		data = data + '<authToken><applicationID>'+this.userId+'</applicationID><password>'+this.password+'</password></authToken>'; 
+		data = data + '</getAddrByPosition>'; 
+		data = data + '</soap:Body>'; 
+		data = data + '</soap:Envelope>';
+		var xmlLoader=new K_XmlLoader(K_GetCallBack(this,this.GeoCodeSrvCallBack));
+		xmlLoader.Load(this.baseUrl,data);
+	};
+	K_MSOPGeoCodeSrv.prototype.GeoCodeSrvCallBack=function(xmlLoader)
+	{
+		this.status=-2;
+		if(xmlLoader && xmlLoader.xmlDoc && xmlLoader.xmlDoc.getElementsByTagName("address").length>0 && xmlLoader.xmlDoc.getElementsByTagName("address")[0].text!="")
+		{
+			this.result=xmlLoader.xmlDoc.getElementsByTagName("address")[0].childNodes[0].nodeValue;
+			this.status=2;
+		}
+		if(this.handle)
+			this.handle.call(null,this);
+	}
+</pre>
+	<p>以下是一个使用范例：</p>
+<pre>
+	eps=new K_MSOPEncryptPointSrv("/51Ditu/EncryptPoint.asmx",51445144,51445144);
+	autoGeoCode=new K_MSOPGeoCodeSrv("/51Ditu/GeoCodeSrv.asmx?","51445144","51445144",eps,SetGeoCodeInfo);
+	GEvent.addListener(map,"moveend",function(){autoGeoCode.GetGeoCode(map.getCenterLatLng());});
+	autoGeoCode.GetGeoCode(map.getCenterLatLng());
+	function SetGeoCodeInfo(geoCode)
+	{
+		if(geoCode.status==2)
+			document.getElementById("Info").innerHTML=geoCode.result;
+	}
+</pre>
+        <a href="K_MSOPGeoCodeSrv.html" target="_blank">查看范例(K_MSOPGeoCodeSrv.html)</a>
+        <p> </p>
+
+      </font>
+<div style="display:none;"><script language="javascript" src="/Basic.js"></script></div>
+</body>
+</html>

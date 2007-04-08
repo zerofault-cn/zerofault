@@ -1,0 +1,3296 @@
+<?xml version="1.0"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>Google Maps API Version 2 Reference</title>
+    <link rel="stylesheet" type="text/css" href="../base.css" />
+    <link rel="stylesheet" type="text/css" href="../documentation.css" />
+    <link rel="stylesheet" type="text/css" href="reference.css" />
+  </head>
+  <body>
+    <div xmlns="" id="body">
+      <div id="header">
+        <div id="logo">
+          <a href="http://maps.google.com/">
+            <img src="http://www.google.com/mapfiles/maps_res_logo.gif" alt="Google Maps" />
+          </a>
+        </div>
+        <div id="title">Google Maps API</div>
+      </div>
+      <div id="side">
+        <div id="menu">
+          <div class="item">
+            <a href="../">Google Maps API</a>
+          </div>
+          <div class="item">
+            <a href="../signup.html">Sign up for an API key</a>
+          </div>
+          <div class="item">
+            <a href="./">API Documentation</a>
+          </div>
+          <div class="item">
+            <a href="../faq.html">API Help</a>
+          </div>
+          <div class="item">
+            <a href="../terms.html">API Terms of Use</a>
+          </div>
+          <div class="item">
+            <a href="http://googlemapsapi.blogspot.com/">API Blog</a>
+          </div>
+          <div class="item">
+            <a href="http://groups-beta.google.com/group/Google-Maps-API">API Discussion Group</a>
+          </div>
+        </div>
+      </div>
+      <div id="main">
+        <div id="content" class="reference">
+          <h1>Google Maps API Version 2 Reference</h1>
+          <p>If you only want to use the map to display your content, then
+    you need to know these classes, types, and functions:</p>
+          <div class="toc">
+            <table style="width:100%">
+              <tr>
+                <td style="width:33%">
+                  <div>
+                    <a href="#GMap2">GMap2</a>
+                  </div>
+                  <div>
+                    <a href="#GMapOptions">GMapOptions</a>
+                  </div>
+                  <div>
+                    <a href="#GInfoWindow">GInfoWindow</a>
+                  </div>
+                  <div>
+                    <a href="#GInfoWindowTab">GInfoWindowTab</a>
+                  </div>
+                  <div>
+                    <a href="#GInfoWindowOptions">GInfoWindowOptions</a>
+                  </div>
+                  <div>
+                    <a href="#GMarker">GMarker</a>
+                  </div>
+                  <div>
+                    <a href="#GMarkerOptions">GMarkerOptions</a>
+                  </div>
+                  <div>
+                    <a href="#GPolyline">GPolyline</a>
+                  </div>
+                </td>
+                <td style="width:33%">
+                  <div>
+                    <a href="#GIcon">GIcon</a>
+                  </div>
+                  <div>
+                    <a href="#GPoint">GPoint</a>
+                  </div>
+                  <div>
+                    <a href="#GSize">GSize</a>
+                  </div>
+                  <div>
+                    <a href="#GBounds">GBounds</a>
+                  </div>
+                  <div>
+                    <a href="#GLatLng">GLatLng</a>
+                  </div>
+                  <div>
+                    <a href="#GLatLngBounds">GLatLngBounds</a>
+                  </div>
+                  <div>
+                    <a href="#GControlImpl">GControl</a>
+                  </div>
+                  <div>
+                    <a href="#GEvent">GEvent</a>
+                  </div>
+                </td>
+                <td>
+                  <div>
+                    <a href="#GEventListener">GventListener</a>
+                  </div>
+                  <div>
+                    <a href="#GXmlHttp">GXmlHttp</a>
+                  </div>
+                  <div>
+                    <a href="#GXml">GXml</a>
+                  </div>
+                  <div>
+                    <a href="#GXslt">GXslt</a>
+                  </div>
+                  <div>
+                    <a href="#GLog">GLog</a>
+                  </div>
+                  <div>
+                    <a href="#GDownloadUrl">GDownloadUrl</a>
+                  </div>
+                  <div>
+                    <a href="#GBrowserIsCompatible">GBrowserIsCompatible</a>
+                  </div>
+                </td>
+              </tr>
+            </table>
+          </div>
+          <p>If you want to extend the functionality of the maps API by
+    implementing your own controls, overlays, or map types, then you
+    also need to know these classes and types:</p>
+          <div class="toc">
+            <table style="width:100%">
+              <tr>
+                <td style="width:33%">
+                  <div>
+                    <a href="#GMapPane">GMapPane</a>
+                  </div>
+                  <div>
+                    <a href="#GOverlay">GOverlay</a>
+                  </div>
+                  <div>
+                    <a href="#GControl">GControl</a>
+                  </div>
+                  <div>
+                    <a href="#GControlPosition">GControlPosition</a>
+                  </div>
+                </td>
+                <td style="width:33%">
+                  <div>
+                    <a href="#GControlAnchor">GControlAnchor</a>
+                  </div>
+                  <div>
+                    <a href="#GMapType">GMapType</a>
+                  </div>
+                  <div>
+                    <a href="#GMapTypeOptions">GMapTypeOptions</a>
+                  </div>
+                  <div>
+                    <a href="#GTileLayer">GTileLayer</a>
+                  </div>
+                </td>
+                <td>
+                  <div>
+                    <a href="#GCopyrightCollection">GCopyrightCollection</a>
+                  </div>
+                  <div>
+                    <a href="#GCopyright">GCopyright</a>
+                  </div>
+                  <div>
+                    <a href="#GProjection">GProjection</a>
+                  </div>
+                  <div>
+                    <a href="#GMercatorProjection">GMercatorProjection</a>
+                  </div>
+                </td>
+              </tr>
+            </table>
+          </div>
+          <h2>
+            <a name="GMap2" id="GMap2">class GMap2</a>
+          </h2>
+          <p>Instantiate class <code><span class="xref"><a href="#GMap2">GMap2</a></span></code> in order to
+  create a map. This is the central class in the API. Everything
+  else is auxiliary.</p>
+          <h3>Constructor</h3>
+          <table summary="class GMap2 - Constructor">
+            <tr>
+              <th>Constructor</th>
+              <th>Description</th>
+            </tr>
+            <tr class="odd">
+              <td class="code">GMap2(<span class="type" title="type:  Node">container</span>, <span class="type" title="type:  GMapOptions"> opts?</span>)</td>
+              <td>Creates a new map inside of the given HTML container, which
+      is typically a <code><span class="nomatch">DIV</span></code> element. If no set of map types
+      is given in the optional argument <code><span class="nomatch">opts.mapTypes</span></code>, the
+      default set <code><span class="nomatch">G_DEFAULT_MAP_TYPES</span></code> is used. If no size
+      is given in the optional argument <code><span class="nomatch">opts.size</span></code>, then the
+      size of the <code><span class="nomatch">container</span></code> is used. If <code><span class="nomatch">opts.size</span></code>
+      is given, then the container element of the map is resized
+      accordingly. See <code><span class="nomatch">class GMapOptions</span></code>.</td>
+            </tr>
+          </table>
+          <h3>Methods</h3>
+          <h4>Configuration</h4>
+          <table summary="class GMap2 - Methods">
+            <tr>
+              <th>Methods</th>
+              <th>Return Value</th>
+              <th>Description</th>
+            </tr>
+            <tr class="odd">
+              <td class="code">enableDragging()</td>
+              <td class="code">
+                <span class="void">none</span>
+              </td>
+              <td>Enables the dragging of the map (enabled by default).</td>
+            </tr>
+            <tr class="even">
+              <td class="code">disableDragging()</td>
+              <td class="code">
+                <span class="void">none</span>
+              </td>
+              <td>Disables the dragging of the map.</td>
+            </tr>
+            <tr class="odd">
+              <td class="code">draggingEnabled()</td>
+              <td class="code">
+                <span class="nomatch">Boolean</span>
+              </td>
+              <td>Returns <code><span class="nomatch">true</span></code> iff the dragging of the map is
+      enabled.</td>
+            </tr>
+            <tr class="even">
+              <td class="code">enableInfoWindow()</td>
+              <td class="code">
+                <span class="void">none</span>
+              </td>
+              <td>Enables info window operations on the map (enabled by
+      default).</td>
+            </tr>
+            <tr class="odd">
+              <td class="code">disableInfoWindow()</td>
+              <td class="code">
+                <span class="void">none</span>
+              </td>
+              <td>Closes the info window, if it is open, and disables the
+      opening of a new info window.</td>
+            </tr>
+            <tr class="even">
+              <td class="code">infoWindowEnabled()</td>
+              <td class="code">
+                <span class="nomatch">Boolean</span>
+              </td>
+              <td>Returns <code><span class="nomatch">true</span></code> iff the info window is
+      enabled.</td>
+            </tr>
+          </table>
+          <h4>Controls</h4>
+          <table summary="class GMap2 - Methods">
+            <tr>
+              <th>Methods</th>
+              <th>Return Value</th>
+              <th>Description</th>
+            </tr>
+            <tr class="odd">
+              <td class="code">addControl(<span class="type" title="type:  GControl">control</span>, <span class="type" title="type:  GControlPosition"> position?</span>)</td>
+              <td class="code">
+                <span class="void">none</span>
+              </td>
+              <td>Adds the control to the map. The position on the map is
+      determined by the optional <code><span class="nomatch">position</span></code> argument. If
+      this argument is absent, the default position of the control is
+      used, as determined by the
+      <code><span class="nomatch">GControl.getDefaultPosition()</span></code> method. A control
+      instance must not be added more than once to the map.</td>
+            </tr>
+            <tr class="even">
+              <td class="code">removeControl(<span class="type" title="type:  GControl">control</span>)</td>
+              <td class="code">
+                <span class="void">none</span>
+              </td>
+              <td>Removes the control from the map. It does nothing if the
+      control was never added to the map.</td>
+            </tr>
+            <tr class="odd">
+              <td class="code">getContainer()</td>
+              <td class="code">
+                <span class="nomatch">Node</span>
+              </td>
+              <td>Returns the DOM object that contains the map. Used by
+      <code><span class="nomatch">GControl.initialize()</span></code>.</td>
+            </tr>
+          </table>
+          <h4>Map Types</h4>
+          <table summary="class GMap2 - Methods">
+            <tr>
+              <th>Methods</th>
+              <th>Return Value</th>
+              <th>Description</th>
+            </tr>
+            <tr class="odd">
+              <td class="code">getMapTypes()</td>
+              <td class="code">
+                <span class="nomatch">Array of GMapType</span>
+              </td>
+              <td>Returns the array of map types registered with this map.</td>
+            </tr>
+            <tr class="even">
+              <td class="code">getCurrentMapType()</td>
+              <td class="code">
+                <span class="xref">
+                  <a href="#GMapType">GMapType</a>
+                </span>
+              </td>
+              <td>Returns the currently selected map type.</td>
+            </tr>
+            <tr class="odd">
+              <td class="code">setMapType(<span class="type" title="type:  GMapType">type</span>)</td>
+              <td class="code">
+                <span class="void">none</span>
+              </td>
+              <td>Selects the given new map type. The type must be known to
+      the map. See the constructor, and the method
+      <code><span class="nomatch">addMapType()</span></code>.</td>
+            </tr>
+            <tr class="even">
+              <td class="code">addMapType(<span class="type" title="type:  GMapType">type</span>)</td>
+              <td class="code">
+                <span class="void">none</span>
+              </td>
+              <td>Adds a new map type to the map. See section <code><span class="xref"><a href="#GMapType">GMapType</a></span></code> for how to define
+      custom map types.</td>
+            </tr>
+            <tr class="odd">
+              <td class="code">removeMapType(<span class="type" title="type:  GMapType">type</span>)</td>
+              <td class="code">
+                <span class="void">none</span>
+              </td>
+              <td>Removes the map type from the map. Will update the set of
+      buttons displayed by the <code><span class="nomatch">GMapTypeControl</span></code> and fire
+      the <code><span class="nomatch">removemaptype</span></code> event.</td>
+            </tr>
+          </table>
+          <h4>Map State</h4>
+          <table summary="class GMap2 - Methods">
+            <tr>
+              <th>Methods</th>
+              <th>Return Value</th>
+              <th>Description</th>
+            </tr>
+            <tr class="odd">
+              <td class="code">isLoaded()</td>
+              <td class="code">
+                <span class="nomatch">Boolean</span>
+              </td>
+              <td>Returns <code><span class="nomatch">true</span></code> iff the map was initialized by
+      <code><span class="nomatch">setCenter()</span></code> since it was created.</td>
+            </tr>
+            <tr class="even">
+              <td class="code">getCenter()</td>
+              <td class="code">
+                <span class="xref">
+                  <a href="#GLatLng">GLatLng</a>
+                </span>
+              </td>
+              <td>Returns the geographical coordinates of the center point of
+      the map view.</td>
+            </tr>
+            <tr class="odd">
+              <td class="code">getBounds()</td>
+              <td class="code">
+                <span class="xref">
+                  <a href="#GLatLngBounds">GLatLngBounds</a>
+                </span>
+              </td>
+              <td>Returns the the visible rectangular region of the map view
+      in geographical coordinates.</td>
+            </tr>
+            <tr class="even">
+              <td class="code">getBoundsZoomLevel(<span class="type" title="type:  GLatLngBounds">bounds</span>)</td>
+              <td class="code">
+                <span class="nomatch">Number</span>
+              </td>
+              <td>Returns the zoom level at which the given rectangular region
+      fits in the map view. The zoom level is computed for the
+      currently selected map type. If no map type is selected yet, the
+      first on the list of map types is used.</td>
+            </tr>
+            <tr class="odd">
+              <td class="code">getSize()</td>
+              <td class="code">
+                <span class="xref">
+                  <a href="#GSize">GSize</a>
+                </span>
+              </td>
+              <td>Returns the size of the map view in pixels.</td>
+            </tr>
+            <tr class="even">
+              <td class="code">getZoom()</td>
+              <td class="code">
+                <span class="nomatch">Number</span>
+              </td>
+              <td>Returns the current zoom level.</td>
+            </tr>
+          </table>
+          <h4>Modify the Map State</h4>
+          <table summary="class GMap2 - Methods">
+            <tr>
+              <th>Methods</th>
+              <th>Return Value</th>
+              <th>Description</th>
+            </tr>
+            <tr class="odd">
+              <td class="code">setCenter(<span class="type" title="type:  GLatLng">center</span>, <span class="type" title="type:  Number"> zoom?</span>, <span class="type" title="type:  GMapType">
+      type?</span>)</td>
+              <td class="code">
+                <span class="void">none</span>
+              </td>
+              <td>Sets the map view to the given center. Optionally, also sets
+      zoom level and map type. The map type must be known to the
+      map. See the constructor, and the method
+      <code><span class="nomatch">addMapType()</span></code>. This method must be called first
+      after construction to set the initial state of the map. It is
+      an error to call other operations on the map after
+      construction.</td>
+            </tr>
+            <tr class="even">
+              <td class="code">panTo(<span class="type" title="type:  GLatLng">center</span>)</td>
+              <td class="code">
+                <span class="void">none</span>
+              </td>
+              <td>Changes the center point of the map to the given point. If
+      the point is already visible in the current map view, change the
+      center in a smooth animation.</td>
+            </tr>
+            <tr class="odd">
+              <td class="code">panBy(<span class="type" title="type:  GSize">distance</span>)</td>
+              <td class="code">
+                <span class="void">none</span>
+              </td>
+              <td>Starts a pan animation by the given distance in pixels.</td>
+            </tr>
+            <tr class="even">
+              <td class="code">panDirection(<span class="type" title="type:  one of -1 0 +1">dx</span>, <span class="type" title="type:  one of -1 0 +1"> dy</span>)</td>
+              <td class="code">
+                <span class="void">none</span>
+              </td>
+              <td>Starts a pan animation by half the width of the map in the
+      indicated directions. <code><span class="nomatch">+1</span></code> is right and down,
+      <code><span class="nomatch">-1</span></code> is left and up, respectively.</td>
+            </tr>
+            <tr class="odd">
+              <td class="code">setZoom(<span class="type" title="type:  Number">level</span>)</td>
+              <td class="code">
+                <span class="void">none</span>
+              </td>
+              <td>Sets the zoom level to the given new value.</td>
+            </tr>
+            <tr class="even">
+              <td class="code">zoomIn()</td>
+              <td class="code">
+                <span class="void">none</span>
+              </td>
+              <td>Increments zoom level by one.</td>
+            </tr>
+            <tr class="odd">
+              <td class="code">zoomOut()</td>
+              <td class="code">
+                <span class="void">none</span>
+              </td>
+              <td>Decrements zoom level by one.</td>
+            </tr>
+            <tr class="even">
+              <td class="code">savePosition()</td>
+              <td class="code">
+                <span class="void">none</span>
+              </td>
+              <td>Stores the current map position and zoom level for later
+      recall by <code><span class="nomatch">returnToSavedPosition()</span></code>.</td>
+            </tr>
+            <tr class="odd">
+              <td class="code">returnToSavedPosition()</td>
+              <td class="code">
+                <span class="void">none</span>
+              </td>
+              <td>Restores the map view that was saved by
+      <code><span class="nomatch">savePosition()</span></code>.</td>
+            </tr>
+            <tr class="even">
+              <td class="code">checkResize()</td>
+              <td class="code">
+                <span class="void">none</span>
+              </td>
+              <td>Notifies the map of a change of the size of its
+      container. Call this method after the size of the container DOM
+      object has changed, so that the map can adjust itself to fit the
+      new size.</td>
+            </tr>
+          </table>
+          <h4>Overlays</h4>
+          <table summary="class GMap2 - Methods">
+            <tr>
+              <th>Methods</th>
+              <th>Return Value</th>
+              <th>Description</th>
+            </tr>
+            <tr class="odd">
+              <td class="code">addOverlay(<span class="type" title="type:  GOverlay">overlay</span>)</td>
+              <td class="code">
+                <span class="void">none</span>
+              </td>
+              <td>Adds an overlay to the map and fires the
+      <code><span class="nomatch">addoverlay</span></code> event.</td>
+            </tr>
+            <tr class="even">
+              <td class="code">removeOverlay(<span class="type" title="type:  GOverlay">overlay</span>)</td>
+              <td class="code">
+                <span class="void">none</span>
+              </td>
+              <td>Removes the overlay from the map. If the overlay was on the
+      map, it fires the <code><span class="nomatch">removeoverlay</span></code> event.</td>
+            </tr>
+            <tr class="odd">
+              <td class="code">clearOverlays()</td>
+              <td class="code">
+                <span class="void">none</span>
+              </td>
+              <td>Removes all overlay from the map, and fires the
+      <code><span class="nomatch">clearoverlays</span></code> event.</td>
+            </tr>
+            <tr class="even">
+              <td class="code">getPane(<span class="type" title="type:  GMapPane">pane</span>)</td>
+              <td class="code">
+                <span class="nomatch">Node</span>
+              </td>
+              <td>Returns a DIV that holds the object in the layer identified
+      by <code><span class="nomatch">pane</span></code>. Used by <code><span class="xref"><a href="#GOverlay">GOverlay</a></span></code> instances in
+      method <code><span class="nomatch">GOverlay.initialize()</span></code> instances to draw
+      themselves on the map</td>
+            </tr>
+          </table>
+          <h4>Info Window</h4>
+          <table summary="class GMap2 - Methods">
+            <tr>
+              <th>Methods</th>
+              <th>Return Value</th>
+              <th>Description</th>
+            </tr>
+            <tr class="odd">
+              <td class="code">openInfoWindow(<span class="type" title="type:  GLatLng">point</span>, <span class="type" title="type:  Node"> node</span>, <span class="type" title="type:  GInfoWindowOptions">
+      opts?</span>)</td>
+              <td class="code">
+                <span class="void">none</span>
+              </td>
+              <td>Opens a simple info window at the given point. Pans the map such
+      that the opened info window is fully visible. The content of the
+      info window is given as a DOM node.</td>
+            </tr>
+            <tr class="even">
+              <td class="code">openInfoWindowHtml(<span class="type" title="type:  GLatLng">point</span>, <span class="type" title="type:  String"> html</span>, <span class="type" title="type:  GInfoWindowOptions">
+      opts?</span>)</td>
+              <td class="code">
+                <span class="void">none</span>
+              </td>
+              <td>Opens a simple info window at the given point. Pans the map such
+      that the opened info window is fully visible. The content of the
+      info window is given as HTML text.</td>
+            </tr>
+            <tr class="odd">
+              <td class="code">openInfoWindowTabs(<span class="type" title="type:  GLatLng">point</span>, <span class="type" title="type:  Array of&#10;      GInfoWindowTab"> tabs</span>, <span class="type" title="type:  GinfoWindowOptions"> opts?</span>)</td>
+              <td class="code">
+                <span class="void">none</span>
+              </td>
+              <td>Opens a tabbed info window at the given point. Pans the map such
+      that the opened info window is fully visible. The content of the
+      info window is given as DOM nodes.</td>
+            </tr>
+            <tr class="even">
+              <td class="code">openInfoWindowTabsHtml(<span class="type" title="type:  GLatLng">point</span>, <span class="type" title="type:  Array of&#10;      GInfoWindowTab"> tabs</span>, <span class="type" title="type:  GInfoWindowOptions"> opts?</span>)</td>
+              <td class="code">
+                <span class="void">none</span>
+              </td>
+              <td>Opens a tabbed info window at the given point. Pans the map such
+      that the opened info window is fully visible. The content of the
+      info window is given as HTML text.</td>
+            </tr>
+            <tr class="odd">
+              <td class="code">showMapBlowup(<span class="type" title="type:  GLatLng">point</span>, <span class="type" title="type:  GInfoWindowOptions"> opts?</span>)</td>
+              <td class="code">
+                <span class="void">none</span>
+              </td>
+              <td>Opens an info window at the given point that contains a
+      closeup view on the map around this point.</td>
+            </tr>
+            <tr class="even">
+              <td class="code">closeInfoWindow()</td>
+              <td class="code">
+                <span class="void">none</span>
+              </td>
+              <td>Closes the currently open info window.</td>
+            </tr>
+            <tr class="odd">
+              <td class="code">getInfoWindow()</td>
+              <td class="code">
+                <span class="xref">
+                  <a href="#GInfoWindow">GInfoWindow</a>
+                </span>
+              </td>
+              <td>Returns the info window object of this map. If no info
+      window exists yet, it is created, but not displayed. This
+      operation is not influenced by
+      <code><span class="nomatch">enableInfoWindow()</span></code>.</td>
+            </tr>
+          </table>
+          <h4>Coordinate Transformations</h4>
+          <table summary="class GMap2 - Methods">
+            <tr>
+              <th>Methods</th>
+              <th>Return Value</th>
+              <th>Description</th>
+            </tr>
+            <tr class="odd">
+              <td class="code">fromLatLngToDivPixel(<span class="type" title="type:  GLatLng">latlng</span>)</td>
+              <td class="code">
+                <span class="xref">
+                  <a href="#GPoint">GPoint</a>
+                </span>
+              </td>
+              <td>Computes the pixel coordinates of the given geographical
+      point in the DOM element that holds the draggable map. You need
+      this method to position a custom overlay when you implement the
+      <code><span class="nomatch">GOverlay.redraw()</span></code> method for a custom overlay.</td>
+            </tr>
+            <tr class="even">
+              <td class="code">fromDivPixelToLatLng(<span class="type" title="type:  GPoint">pixel</span>)</td>
+              <td class="code">
+                <span class="xref">
+                  <a href="#GLatLng">GLatLng</a>
+                </span>
+              </td>
+              <td>Computes the geographical coordinates from pixel coordinates
+      in the div that holds the draggable map. You need this when you
+      implement interaction with custom overlays.</td>
+            </tr>
+            <tr class="odd">
+              <td class="code">fromContainerPixelToLatLng(<span class="type" title="type:  GPoint">pixel</span>)</td>
+              <td class="code">
+                <span class="xref">
+                  <a href="#GLatLng">GLatLng</a>
+                </span>
+              </td>
+              <td>Computes the geographical coordinates of the point at the
+      given pixel coordinates in the DOM element that contains the map
+      on the page. You need this when you implement interaction of
+      custom controls with the map.</td>
+            </tr>
+          </table>
+          <h3>Events</h3>
+          <table summary="class GMap2 - Events">
+            <tr>
+              <th>Events</th>
+              <th>Arguments</th>
+              <th>Description</th>
+            </tr>
+            <tr class="odd">
+              <td class="code">addmaptype</td>
+              <td class="code">
+                <span class="type" title="type:  GMapType">type</span>
+              </td>
+              <td>This event is fired when a map type is added to the map.</td>
+            </tr>
+            <tr class="even">
+              <td class="code">removemaptype</td>
+              <td class="code">
+                <span class="type" title="type:  GMapType">type</span>
+              </td>
+              <td>This event is fired when a map type is removed from the map.</td>
+            </tr>
+            <tr class="odd">
+              <td class="code">click</td>
+              <td class="code"><span class="type" title="type:  GOverlay">overlay</span>, <span class="type" title="type:  GLatLng"> point</span></td>
+              <td>This event is fired when the map is clicked with the
+      mouse. If the click was on a marker, then the marker is passed
+      to the event handler in the <code><span class="nomatch">overlay</span></code> argument, and a
+      <code><span class="nomatch">click</span></code> event is also fired on the marker. Otherwise,
+      the geographical coordinates of the point that was clicked are
+      passed in the <code><span class="nomatch">point</span></code> argument.</td>
+            </tr>
+            <tr class="even">
+              <td class="code">movestart</td>
+              <td class="code">
+                <span class="void">none</span>
+              </td>
+              <td>This event is fired when the map view starts changing. This can be
+      caused by dragging, in which case a <code><span class="nomatch">dragstart</span></code> event
+      is also fired, or by invocation of a method that changes the map
+      view.</td>
+            </tr>
+            <tr class="odd">
+              <td class="code">move</td>
+              <td class="code">
+                <span class="void">none</span>
+              </td>
+              <td>This event is fired, possibly repeatedly, while the map
+      view is changing.</td>
+            </tr>
+            <tr class="even">
+              <td class="code">moveend</td>
+              <td class="code">
+                <span class="void">none</span>
+              </td>
+              <td>This event is fired when the change of the map view ends.</td>
+            </tr>
+            <tr class="odd">
+              <td class="code">zoomend</td>
+              <td class="code"><span class="type" title="type:  Number">oldLevel</span>, <span class="type" title="type:  Number"> newLevel</span></td>
+              <td>This event is fired when the map reaches a new zoom
+      level. The event handler receives the previous and the new zoom
+      level as arguments.</td>
+            </tr>
+            <tr class="even">
+              <td class="code">maptypechanged</td>
+              <td class="code">
+                <span class="void">none</span>
+              </td>
+              <td>This event is fired when another map type is selected.</td>
+            </tr>
+            <tr class="odd">
+              <td class="code">infowindowopen</td>
+              <td class="code">
+                <span class="void">none</span>
+              </td>
+              <td>This event is fired when the info window opens.</td>
+            </tr>
+            <tr class="even">
+              <td class="code">infowindowclose</td>
+              <td class="code">
+                <span class="void">none</span>
+              </td>
+              <td>This event is fired when the info window closes. If a
+      currently open info window is reopened at a different point
+      using another call to <code><span class="nomatch">openInfoWindow*()</span></code>, then
+      <code><span class="nomatch">infowindowclose</span></code> will fire first.</td>
+            </tr>
+            <tr class="odd">
+              <td class="code">addoverlay</td>
+              <td class="code">
+                <span class="type" title="type:  GOverlay">overlay</span>
+              </td>
+              <td>This event is fired when a single overlay is added to the
+      map by the method <code><span class="nomatch">addOverlay()</span></code>. The new overlay is
+      passed as an argument <code><span class="nomatch">overlay</span></code> to the event
+      handler.</td>
+            </tr>
+            <tr class="even">
+              <td class="code">removeoverlay</td>
+              <td class="code">
+                <span class="type" title="type:  GOverlay">overlay</span>
+              </td>
+              <td>This event is fired when a single overlay is removed by the
+      method <code><span class="nomatch">removeOverlay()</span></code>. The overlay that was
+      removed is passed as an argument <code><span class="nomatch">overlay</span></code> to the event
+      handler.</td>
+            </tr>
+            <tr class="odd">
+              <td class="code">clearoverlays</td>
+              <td class="code">
+                <span class="void">none</span>
+              </td>
+              <td>This event is fired when all overlays are removed at once
+      by the method <code><span class="nomatch">clearOverlays()</span></code>.</td>
+            </tr>
+            <tr class="even">
+              <td class="code">mouseover</td>
+              <td class="code">
+                <span class="type" title="type:  GLatLng">latlng</span>
+              </td>
+              <td>This event is fired when the user moves the mouse over the
+      map from outside the map.</td>
+            </tr>
+            <tr class="odd">
+              <td class="code">mouseout</td>
+              <td class="code">
+                <span class="type" title="type:  GLatLng">latlng</span>
+              </td>
+              <td>This event is fired when the user moves the mouse off the
+      map.</td>
+            </tr>
+            <tr class="even">
+              <td class="code">mousemove</td>
+              <td class="code">
+                <span class="type" title="type:  GLatLng">latlng</span>
+              </td>
+              <td>This event is fired when the user moves the mouse inside the
+      map.</td>
+            </tr>
+            <tr class="odd">
+              <td class="code">dragstart</td>
+              <td class="code">
+                <span class="void">none</span>
+              </td>
+              <td>This event is fired when the user starts dragging the map.</td>
+            </tr>
+            <tr class="even">
+              <td class="code">drag</td>
+              <td class="code">
+                <span class="void">none</span>
+              </td>
+              <td>This event is repeatedly fired while the user drags the
+      map.</td>
+            </tr>
+            <tr class="odd">
+              <td class="code">dragend</td>
+              <td class="code">
+                <span class="void">none</span>
+              </td>
+              <td>This event is fired when the user stops dragging the map.</td>
+            </tr>
+          </table>
+          <h2>
+            <a name="GMapOptions" id="GMapOptions">class GMapOptions</a>
+          </h2>
+          <p>This class represents optional arguments to the
+  <code><span class="xref"><a href="#GMap2">GMap2</a></span></code> constructor. It has no constructor, but is
+  instantiated as object literal.</p>
+          <h3>Properties</h3>
+          <table summary="class GMapOptions - Properties">
+            <tr>
+              <th>Properties</th>
+              <th>Type</th>
+              <th>Description</th>
+            </tr>
+            <tr class="odd">
+              <td class="code">size</td>
+              <td class="code"> GSize</td>
+              <td>Sets the size in pixels of the map. The container that is
+      passed to the map constructor will be resized to the given
+      size. By default, the map will assume the size of its
+      container.</td>
+            </tr>
+            <tr class="even">
+              <td class="code">mapTypes</td>
+              <td class="code"> Array of GMapType</td>
+              <td>Array of map types to be used by this map. By default,
+      <code><span class="nomatch">G_DEFAULT_MAP_TYPES</span></code> is used. You can use this
+      option to restrict the set of predefined map types that is
+      displayed on the map, or to pass your own map types to the
+      map. See also <code><span class="nomatch">GMap2.addMapType()</span></code>.</td>
+            </tr>
+          </table>
+          <h2>
+            <a name="GMapPane" id="GMapPane">enum GMapPane</a>
+          </h2>
+          <p>These constants define the layering system that is
+  used by overlay to display themselves on the map. There are
+  different layers for icons, shadows, the info window, the shadow on
+  the info window, and transparent mouse event catching objects.</p>
+          <p>You need to use this type if you subclass from
+  <code><span class="xref"><a href="#GOverlay">GOverlay</a></span></code>.</p>
+          <h3>Constants</h3>
+          <table summary="enum GMapPane - Constants">
+            <tr>
+              <th>Constants</th>
+              <th>Description</th>
+            </tr>
+            <tr class="odd">
+              <td class="code">G_MAP_MAP_PANE</td>
+              <td>This pane is still below the shadows of the markers,
+      directly on top of the map. It contains for instance the
+      polylines.</td>
+            </tr>
+            <tr class="even">
+              <td class="code">G_MAP_MARKER_SHADOW_PANE</td>
+              <td>This pane contains the shadows of the markers. It is below
+      the markers.</td>
+            </tr>
+            <tr class="odd">
+              <td class="code">G_MAP_MARKER_PANE</td>
+              <td>This pane contains the markers.</td>
+            </tr>
+            <tr class="even">
+              <td class="code">G_MAP_FLOAT_SHADOW_PANE</td>
+              <td>This pane conatains the shadow of the info window. It is
+      above the <code><span class="nomatch">G_MAP_MARKER_PANE</span></code>, so that markers can be
+      in the shadow of the info window.</td>
+            </tr>
+            <tr class="odd">
+              <td class="code">G_MAP_MARKER_MOUSE_TARGET_PANE</td>
+              <td>This pane contains transparent elements that receive DOM
+      mouse events for the markers. Is is above the
+      <code><span class="nomatch">G_MAP_FLOAT_SHADOW_PANE</span></code>, so that markers in the
+      shadow of the info window can be clickable.</td>
+            </tr>
+            <tr class="even">
+              <td class="code">G_MAP_FLOAT_PANE</td>
+              <td>This pane contains the info window. It is above everything
+      else on the map.</td>
+            </tr>
+          </table>
+          <h2>
+            <a name="GKeyboardHandler" id="GKeyboardHandler">class GKeyboardHandler</a>
+          </h2>
+          <p>Instantiate this class to add keyboard bindings to
+  a map. The key bindings are the same as for the maps application.</p>
+          <table>key
+      action
+    up, down, left, right
+      Moves the map continuously while the key is pressed. Two
+      keys can be pressed simultaneously in order to move
+      diagonally.
+    page down, page up, home, end
+      Pans the map by 3/4 its size in the corresponding direction,
+      with a nice animation. This corresponds to the arrow buttons in
+      the <code><span class="nomatch">GLargeMapControl</span></code> and the
+      <code><span class="nomatch">GSmallMapControl</span></code>.
+    +, -
+      Zooms one level in or out, respectively. This corresponds to
+      the + and - buttons in the <code><span class="nomatch">GLargeMapControl</span></code> and the
+      <code><span class="nomatch">GSmallMapControl</span></code>.
+    </table>
+          <h3>Constructor</h3>
+          <table summary="class GKeyboardHandler - Constructor">
+            <tr>
+              <th>Constructor</th>
+              <th>Description</th>
+            </tr>
+            <tr class="odd">
+              <td class="code">GKeyboardHandler(<span class="type" title="type:  GMap2">map</span>)</td>
+              <td>Installs keyboard event handler for the map passed as argument.</td>
+            </tr>
+          </table>
+          <h2>
+            <a name="GOverlay" id="GOverlay">interface GOverlay</a>
+          </h2>
+          <p>This interface is implemented by the
+  <code><span class="xref"><a href="#GMarker">GMarker</a></span></code>, <code><span class="xref"><a href="#GPolyline">GPolyline</a></span></code>, and
+  <code><span class="xref"><a href="#GInfoWindow">GInfoWindow</a></span></code> classes in the maps API library. You can
+  implement it if you want to display custom types of overlay objects
+  on the map. An instance of <code><span class="xref"><a href="#GOverlay">GOverlay</a></span></code> can be put on the
+  map with the method <code><span class="nomatch">GMap2.addOverlay()</span></code>. The map will
+  then call the method <code><span class="nomatch">GOverlay.initialize()</span></code> on the
+  overlay instance to display itself on the map initially. Whenever
+  the map display changes, the map will call
+  <code><span class="nomatch">GOverlay.redraw()</span></code> so that the overlay can reposition
+  itself if necessary. The overlay instance can use the method
+  <code><span class="nomatch">GMap2.getPane()</span></code> to get hold of one or more DOM
+  container elements to attach itself to.</p>
+          <h3>Constructor</h3>
+          <table summary="interface GOverlay - Constructor">
+            <tr>
+              <th>Constructor</th>
+              <th>Description</th>
+            </tr>
+            <tr class="odd">
+              <td class="code">GOverlay()</td>
+              <td>This constructor creates dummy implementations for the
+      methods. Still, when inheriting from this class, your derived
+      class constructor should call this constructor for
+      completeness.</td>
+            </tr>
+          </table>
+          <h3>Static Methods</h3>
+          <table summary="interface GOverlay - Static Methods">
+            <tr>
+              <th>Static Methods</th>
+              <th>Return Value</th>
+              <th>Description</th>
+            </tr>
+            <tr class="odd">
+              <td class="code">getZIndex(<span class="type" title="type:  Number">latitude</span>)</td>
+              <td class="code">
+                <span class="nomatch">Number</span>
+              </td>
+              <td>Returns a CSS <code><span class="nomatch">z-index</span></code> value for a given
+      latitude. It computes a z index such that overlays further south
+      are on top of overlays further north, thus creating the 3D
+      appearance of marker overlays.</td>
+            </tr>
+          </table>
+          <h3>Abstract Methods</h3>
+          <table summary="interface GOverlay - Abstract Methods">
+            <tr>
+              <th>Abstract Methods</th>
+              <th>Return Value</th>
+              <th>Description</th>
+            </tr>
+            <tr class="odd">
+              <td class="code">initialize(<span class="type" title="type:  GMap2">map</span>)</td>
+              <td class="code">
+                <span class="void">none</span>
+              </td>
+              <td>Called by the map after the overlay is added to the map
+      using <code><span class="nomatch">GMap2.addOverlay()</span></code>. The overlay object can
+      draw itself into the different panes of the map that can be
+      obtained using <code><span class="nomatch">GMap2.getPane()</span></code>.</td>
+            </tr>
+            <tr class="even">
+              <td class="code">remove()</td>
+              <td class="code">
+                <span class="void">none</span>
+              </td>
+              <td>Called by the map after the overlay is removed from the map
+      using <code><span class="nomatch">GMap2.removeOverlay()</span></code> or
+      <code><span class="nomatch">GMap2.clearOverlays()</span></code>. The overlay must remove
+      itself from the map panes here.</td>
+            </tr>
+            <tr class="odd">
+              <td class="code">copy()</td>
+              <td class="code">
+                <span class="xref">
+                  <a href="#GOverlay">GOverlay</a>
+                </span>
+              </td>
+              <td>Returns an uninitialized copy of itself that can be added to
+      the map.</td>
+            </tr>
+            <tr class="even">
+              <td class="code">redraw(<span class="type" title="type:  Boolean">force</span>)</td>
+              <td class="code">
+                <span class="void">none</span>
+              </td>
+              <td>Called by the map when the map display has changed. The
+      argument <code><span class="nomatch">force</span></code> will be <code><span class="nomatch">true</span></code> if the
+      zoom level or the pixel offset of the map view has changed, so
+      that the pixel coordinates need to be recomputed.</td>
+            </tr>
+          </table>
+          <h2>
+            <a name="GInfoWindow" id="GInfoWindow">class GInfoWindow</a>
+          </h2>
+          <p><code><span class="xref"><a href="#GInfoWindow">GInfoWindow</a></span></code> has no constructor. It is
+  created by the map and accessed by its method
+  <code><span class="nomatch">GMap2.getInfoWindow()</span></code>.</p>
+          <h3>Methods</h3>
+          <table summary="class GInfoWindow - Methods">
+            <tr>
+              <th>Methods</th>
+              <th>Return Value</th>
+              <th>Description</th>
+            </tr>
+            <tr class="odd">
+              <td class="code">selectTab(<span class="type" title="type:  Number">index</span>)</td>
+              <td class="code">
+                <span class="void">none</span>
+              </td>
+              <td>Selects the tab with the given index. This has the same
+      effect as clicking on the corresponding tab.</td>
+            </tr>
+            <tr class="even">
+              <td class="code">hide()</td>
+              <td class="code">
+                <span class="void">none</span>
+              </td>
+              <td>Makes the info window invisible. NOTE: This doesn't close
+      the info window. It can be made visible again using
+      <code><span class="nomatch">show()</span></code>.</td>
+            </tr>
+            <tr class="odd">
+              <td class="code">show()</td>
+              <td class="code">
+                <span class="void">none</span>
+              </td>
+              <td>Makes the info window visible if its currently
+      invisible.</td>
+            </tr>
+            <tr class="even">
+              <td class="code">isHidden()</td>
+              <td class="code">
+                <span class="nomatch">Boolean</span>
+              </td>
+              <td>Returns <code><span class="nomatch">true</span></code> iff the info window is
+      hidden. This includes the state that it's closed.</td>
+            </tr>
+            <tr class="odd">
+              <td class="code">reset(<span class="type" title="type:  GLatLng">point</span>, <span class="type" title="type:  Array of&#10;      GInfoWindowTab"> tabs</span>, <span class="type" title="type:  GSize"> size</span>, <span class="type" title="type:  GSize"> offset?</span>, <span class="type" title="type: &#10;      Number"> selectedTab?</span>)</td>
+              <td class="code">
+                <span class="void">none</span>
+              </td>
+              <td>Resets the state of the info window. Each argument may be
+      <code><span class="nomatch">null</span></code> and then its value will not be changed from
+      the current value.</td>
+            </tr>
+            <tr class="even">
+              <td class="code">getPoint()</td>
+              <td class="code">
+                <span class="xref">
+                  <a href="#GLatLng">GLatLng</a>
+                </span>
+              </td>
+              <td>Returns the geographical point at which the info window is
+      anchored. The tip of the window points to this point on the map,
+      modulo the pixel offset.</td>
+            </tr>
+            <tr class="odd">
+              <td class="code">getPixelOffset()</td>
+              <td class="code">
+                <span class="xref">
+                  <a href="#GSize">GSize</a>
+                </span>
+              </td>
+              <td>Returns the offset, in pixels, of the tip of the info window
+      from the point on the map at whose geographical coordinates the
+      info window is anchored.</td>
+            </tr>
+            <tr class="even">
+              <td class="code">getSelectedTab()</td>
+              <td class="code">
+                <span class="nomatch">Number</span>
+              </td>
+              <td>Returns the index, starting at 0, of the current selected tab.</td>
+            </tr>
+          </table>
+          <h3>Events</h3>
+          <table summary="class GInfoWindow - Events">
+            <tr>
+              <th>Events</th>
+              <th>Arguments</th>
+              <th>Description</th>
+            </tr>
+            <tr class="odd">
+              <td class="code">closeclick</td>
+              <td class="code">
+                <span class="void">none</span>
+              </td>
+              <td>This event is fired when the info window close button is
+      clicked. An event handler for this event can implement to close
+      the info window, by calling the
+      <code><span class="nomatch">GMap2.closeInfoWindow()</span></code> method.</td>
+            </tr>
+          </table>
+          <h2>
+            <a name="GInfoWindowTab" id="GInfoWindowTab">class GInfoWindowTab</a>
+          </h2>
+          <p>An array of instances of this class can be passed
+  as the <code><span class="nomatch">tabs</span></code> argument to the methods
+  <code><span class="nomatch">GMap2.openInfoWindowTabs()</span></code>,
+  <code><span class="nomatch">GMap2.openInfoWindowTabsHtml()</span></code>,
+  <code><span class="nomatch">GMarker.openInfoWindowTabs()</span></code>, and
+  <code><span class="nomatch">GMarker.openInfoWindowTabsHtml()</span></code>. If the array contains
+  more than one element, the info window will be shown with
+  tabs. Every <code><span class="nomatch">InfoWindowTab</span></code> object contains two items:
+  <code><span class="nomatch">content</span></code> defines the content of the info window when the
+  tab is selected, and <code><span class="nomatch">label</span></code> defines the label of the
+  tab. The properties are passed as arguments to the constructor. For
+  the <code><span class="nomatch">openInfoWindowTabs()</span></code> methods, <code><span class="nomatch">content</span></code>
+  is a DOM Node. For the methods
+  <code><span class="nomatch">openInfoWindowTabsHtml()</span></code>, <code><span class="nomatch">content</span></code> is a
+  string that contains HTML text.</p>
+          <h3>Constructor</h3>
+          <table summary="class GInfoWindowTab - Constructor">
+            <tr>
+              <th>Constructor</th>
+              <th>Description</th>
+            </tr>
+            <tr class="odd">
+              <td class="code">GInfoWindowTab(<span class="type" title="type:  String">label</span>, <span class="type" title="type:  Node or String"> content</span>)</td>
+              <td>Creates an info window tab data structure that can be passed
+      in the <code><span class="nomatch">tabs</span></code> argument to
+      <code><span class="nomatch">openInfoWindowTabs*()</span></code> methods.</td>
+            </tr>
+          </table>
+          <h2>
+            <a name="GInfoWindowOptions" id="GInfoWindowOptions">class GInfoWindowOptions</a>
+          </h2>
+          <p>Instances of this class are used in the
+  <code><span class="nomatch">opts?</span></code> argument to the methods
+  <code><span class="nomatch">openInfoWindow()</span></code>, <code><span class="nomatch">openInfoWindowHtml()</span></code>,
+  <code><span class="nomatch">openInfoWindowTabs()</span></code>,
+  <code><span class="nomatch">openInfoWindowTabsHtml()</span></code>, and
+  <code><span class="nomatch">showMapBlowup()</span></code> of classes <code><span class="xref"><a href="#GMap2">GMap2</a></span></code> and
+  <code><span class="xref"><a href="#GMarker">GMarker</a></span></code>. There is no constructor for this
+  class. Instead, this class is instantiated as javascript object
+  literal.</p>
+          <h3>Properties</h3>
+          <p>As the name of this class indicates, all
+  properties are optional.</p>
+          <table summary="class GInfoWindowOptions - Properties">
+            <tr>
+              <th>Properties</th>
+              <th>Type</th>
+              <th>Description</th>
+            </tr>
+            <tr class="odd">
+              <td class="code">selectedTab</td>
+              <td class="code"> Number</td>
+              <td>Selects the tab with the given index, starting at 0, instead
+      of the first tab (with index 0).</td>
+            </tr>
+            <tr class="even">
+              <td class="code">maxWidth</td>
+              <td class="code"> Number</td>
+              <td>Maximum width of the info window content, in pixels.</td>
+            </tr>
+            <tr class="odd">
+              <td class="code">onOpenFn</td>
+              <td class="code"> Function</td>
+              <td>Function is called after the info window is opened and the
+      content is displayed.</td>
+            </tr>
+            <tr class="even">
+              <td class="code">onCloseFn</td>
+              <td class="code"> Function</td>
+              <td>Function is called when the info window is closed.</td>
+            </tr>
+            <tr class="odd">
+              <td class="code">zoomLevel</td>
+              <td class="code"> Number</td>
+              <td>Pertinent for <code><span class="nomatch">showMapBlowup()</span></code> only.
+      The zoom level of the blowup map in the info window.</td>
+            </tr>
+            <tr class="even">
+              <td class="code">mapType</td>
+              <td class="code"> GMapType</td>
+              <td>Pertinent for <code><span class="nomatch">showMapBlowup()</span></code> only.
+      The map type of the blowup map in the info window.</td>
+            </tr>
+          </table>
+          <h2>
+            <a name="GMarker" id="GMarker">class GMarker</a>
+          </h2>
+          <p>A <code><span class="xref"><a href="#GMarker">GMarker</a></span></code> marks a position on the
+  map. It implements the <code><span class="xref"><a href="#GOverlay">GOverlay</a></span></code> interface and thus is
+  added to the map using the <code><span class="nomatch">GMap2.addOverlay()</span></code>
+  method.</p>
+          <p>A marker object has a <code><span class="nomatch">point</span></code>, which is
+  the geographical position where the marker is anchored on the map,
+  and an <code><span class="nomatch">icon</span></code>. If the <code><span class="nomatch">icon</span></code> is not set in the
+  constructor, the default icon <code><span class="nomatch">G_DEFAULT_ICON</span></code> is
+  used.</p>
+          <p>After it is added to a map, the info window of
+  that map can be opened through the marker. The marker object will
+  fire mouse events and infowindow events.</p>
+          <h3>Constructor</h3>
+          <table summary="class GMarker - Constructor">
+            <tr>
+              <th>Constructor</th>
+              <th>Description</th>
+            </tr>
+            <tr class="odd">
+              <td class="code">GMarker(<span class="type" title="type:  GLatLng">point</span>, <span class="type" title="type:  GIcon"> icon?</span>, <span class="type" title="type:  Boolean"> inert?</span>)</td>
+              <td>Creates a marker at <code><span class="nomatch">point</span></code> with
+      <code><span class="nomatch">icon</span></code> or the <code><span class="nomatch">G_DEFAULT_ICON</span></code>. If the
+      <code><span class="nomatch">inert</span></code> flag is <code><span class="nomatch">true</span></code>, then the marker is
+      not clickable and will not fire any events. (Deprecated since 2.50)</td>
+            </tr>
+            <tr class="even">
+              <td class="code">GMarker(<span class="type" title="type:  GPoint">point</span>, <span class="type" title="type:  GMarkerOptions"> opts?</span>)</td>
+              <td>Creates a marker at <code><span class="nomatch">point</span></code> with options
+      specified in <code><span class="xref"><a href="#GMarkerOptions">GMarkerOptions</a></span></code>. By default markers are
+      clickable &amp; have the default icon
+      <code><span class="nomatch">G_DEFAULT_ICON</span></code>. (Since 2.50)</td>
+            </tr>
+          </table>
+          <h3>Methods</h3>
+          <p>Before these methods can be invoked, the marker
+  must be added to a map.</p>
+          <table summary="class GMarker - Methods">
+            <tr>
+              <th>Methods</th>
+              <th>Return Value</th>
+              <th>Description</th>
+            </tr>
+            <tr class="odd">
+              <td class="code">openInfoWindow(<span class="type" title="type:  Node">content</span>, <span class="type" title="type:  GInfoWindowOptions"> opts?</span>)</td>
+              <td class="code">
+                <span class="void">none</span>
+              </td>
+              <td>Opens the map info window over the icon of the marker. The
+      content of the info window is given as a DOM node. Only
+      option <code><span class="nomatch">GInfoWindowOptions.maxWidth</span></code> is
+      applicable.</td>
+            </tr>
+            <tr class="even">
+              <td class="code">openInfoWindowHtml(<span class="type" title="type:  String">content</span>, <span class="type" title="type: &#10;      GInfoWindowOptions"> opts?</span>)</td>
+              <td class="code">
+                <span class="void">none</span>
+              </td>
+              <td>Opens the map info window over the icon of the marker. The
+      content of the info window is given as a string that contains
+      HTML text. Only option
+      <code><span class="nomatch">GInfoWindowOptions.maxWidth</span></code> is applicable.</td>
+            </tr>
+            <tr class="odd">
+              <td class="code">openInfoWindowTabs(<span class="type" title="type:  Array of GInfoWindowTab">tabs</span>, <span class="type" title="type:  GInfoWindowOptions">
+      opts?</span>)</td>
+              <td class="code">
+                <span class="void">none</span>
+              </td>
+              <td>Opens the tabbed map info window over the icon of the
+      marker. The content of the info window is given as an array of
+      tabs that contain the tab content as DOM nodes. Only
+      options <code><span class="nomatch">GInfoWindowOptions.maxWidth</span></code> and
+      <code><span class="nomatch">InfoWindowOptions.selectedTab</span></code> are applicable.</td>
+            </tr>
+            <tr class="even">
+              <td class="code">openInfoWindowTabsHtml(<span class="type" title="type:  Array of&#10;      GInfoWindowTab">tabs</span>, <span class="type" title="type:  GInfoWindowOptions"> opts?</span>)</td>
+              <td class="code">
+                <span class="void">none</span>
+              </td>
+              <td>Opens the tabbed map info window over the icon of the
+      marker. The content of the info window is given as an array of
+      tabs that contain the tab content as Strings that contain
+      HTML text. Only options
+      <code><span class="nomatch">InfoWindowOptions.maxWidth</span></code> and
+      <code><span class="nomatch">InfoWindowOptions.selectedTab</span></code> are applicable.</td>
+            </tr>
+            <tr class="odd">
+              <td class="code">showMapBlowup(<span class="type" title="type:  GInfoWindowOptions">opts?</span>)</td>
+              <td class="code">
+                <span class="void">none</span>
+              </td>
+              <td>Opens the map info window over the icon of the marker. The
+      content of the info window is a closeup map around the marker
+      position. Only options <code><span class="nomatch">InfoWindowOptions.zoomLevel</span></code>
+      and <code><span class="nomatch">InfoWindowOptions.mapType</span></code> are applicable.</td>
+            </tr>
+            <tr class="even">
+              <td class="code">getIcon()</td>
+              <td class="code">
+                <span class="xref">
+                  <a href="#GIcon">GIcon</a>
+                </span>
+              </td>
+              <td>Returns the <code><span class="nomatch">icon</span></code> of this marker, as set by the
+      constructor.</td>
+            </tr>
+            <tr class="odd">
+              <td class="code">getPoint()</td>
+              <td class="code">
+                <span class="xref">
+                  <a href="#GLatLng">GLatLng</a>
+                </span>
+              </td>
+              <td>Returns the geographical coordinates of the point at which
+      this marker is anchored, as set by the constructor or by
+      <code><span class="nomatch">setPoint()</span></code>.</td>
+            </tr>
+            <tr class="even">
+              <td class="code">setPoint(<span class="type" title="type:  GLatLng">point</span>)</td>
+              <td class="code">
+                <span class="void">none</span>
+              </td>
+              <td>Sets the geographical coordinates of the point at which this
+      marker is anchored.</td>
+            </tr>
+          </table>
+          <h3>Events</h3>
+          <p>All these events fire only if the marker is not
+  inert (see constructor).</p>
+          <table summary="class GMarker - Events">
+            <tr>
+              <th>Events</th>
+              <th>Arguments</th>
+              <th>Description</th>
+            </tr>
+            <tr class="odd">
+              <td class="code">click</td>
+              <td class="code">
+                <span class="void">none</span>
+              </td>
+              <td>This event is fired when the marker icon was clicked. Notice
+      that this event will also fire for the map, with the marker
+      passed as the first argument to the event handler there.</td>
+            </tr>
+            <tr class="even">
+              <td class="code">dblclick</td>
+              <td class="code">
+                <span class="void">none</span>
+              </td>
+              <td>This event is fired when the marker icon was
+      double-clicked. Notice that this event will not fire
+      for the map, because the map centers on double-click as a
+      hardwired behavior.</td>
+            </tr>
+            <tr class="odd">
+              <td class="code">mousedown</td>
+              <td class="code">
+                <span class="void">none</span>
+              </td>
+              <td>This event is fired when the DOM mousedown event is fired on
+      the marker icon. Notice that the marker will stop the mousedown
+      DOM event, so that it doesn't cause the map to start
+      dragging.</td>
+            </tr>
+            <tr class="even">
+              <td class="code">mouseup</td>
+              <td class="code">
+                <span class="void">none</span>
+              </td>
+              <td>This event is fired for the DOM mouseup on the
+      marker. Notice that the marker will not stop the
+      mousedown DOM event, because it will not confuse the drag
+      handler of the map.</td>
+            </tr>
+            <tr class="odd">
+              <td class="code">mouseover</td>
+              <td class="code">
+                <span class="void">none</span>
+              </td>
+              <td>This event is fired when the mouse enters the area of the
+      marker icon.</td>
+            </tr>
+            <tr class="even">
+              <td class="code">mouseout</td>
+              <td class="code">
+                <span class="void">none</span>
+              </td>
+              <td>This event is fired when the mouse leaves the area of the
+      marker icon.</td>
+            </tr>
+            <tr class="odd">
+              <td class="code">infowindowopen</td>
+              <td class="code">
+                <span class="void">none</span>
+              </td>
+              <td>This event is fired when the info window of the map was
+      opened through this marker.</td>
+            </tr>
+            <tr class="even">
+              <td class="code">infowindowclose</td>
+              <td class="code">
+                <span class="void">none</span>
+              </td>
+              <td>This event is fired when the info window of the map that was
+      opened through this marker is closed again. This happens when
+      either the info window was closed, or when it was opened on
+      another marker, or on the map.</td>
+            </tr>
+            <tr class="odd">
+              <td class="code">remove</td>
+              <td class="code">
+                <span class="void">none</span>
+              </td>
+              <td>This event is fired when the marker is removed from the
+      map, using <code><span class="nomatch">GMap2.removeOverlay()</span></code> or
+      <code><span class="nomatch">GMap2.clearOverlays()</span></code>.</td>
+            </tr>
+          </table>
+          <h2>
+            <a name="GMarkerOptions" id="GMarkerOptions">class GMarkerOptions</a>
+          </h2>
+          <p>Instances of this class are used in the
+  <code><span class="nomatch">opts?</span></code> argument to the constructor of the
+  <code><span class="xref"><a href="#GMarker">GMarker</a></span></code> class. There is no constructor for this
+  class. Instead, this class is instantiated as a javascript object
+  literal.</p>
+          <h3>Properties</h3>
+          <p>As the name of this class indicates, all
+  properties are optional.</p>
+          <table summary="class GMarkerOptions - Properties">
+            <tr>
+              <th>Properties</th>
+              <th>Type</th>
+              <th>Description</th>
+            </tr>
+            <tr class="odd">
+              <td class="code">icon</td>
+              <td class="code"> GIcon</td>
+              <td>Chooses the Icon for this class. If not specified,
+      <code><span class="nomatch">G_DEFAULT_ICON</span></code> is used. (Since 2.50)</td>
+            </tr>
+            <tr class="even">
+              <td class="code">clickable</td>
+              <td class="code"> Boolean</td>
+              <td>Toggles whether or not the marker is clickable. Markers that
+      are not clickable or draggable are inert, consume less resources
+      and do not respond to any events. The default value for this
+      option is <code><span class="nomatch">true</span></code>, i.e. if the option is not
+      specified, the marker will be clickable. (Since 2.50)</td>
+            </tr>
+            <tr class="odd">
+              <td class="code">title</td>
+              <td class="code"> String</td>
+              <td>This string will appear as tooltip on the marker, i.e. it
+      will work just as the <code><span class="nomatch">title</span></code> attribute on HTML
+      elements. (Since 2.50)</td>
+            </tr>
+          </table>
+          <h2>
+            <a name="GPolyline" id="GPolyline">class GPolyline</a>
+          </h2>
+          <p>This is a map overlay that draws a polyline on the
+  map, using the vector drawing facilities of the browser if they are
+  available, or an image overlay from Google servers otherwise.</p>
+          <h3>Constructor</h3>
+          <table summary="class GPolyline - Constructor">
+            <tr>
+              <th>Constructor</th>
+              <th>Description</th>
+            </tr>
+            <tr class="odd">
+              <td class="code">GPolyline(<span class="type" title="type:  Array of GLatLng">points</span>, <span class="type" title="type:  String"> color?</span>, <span class="type" title="type: &#10;      Number"> weight?</span>, <span class="type" title="type:  Number"> opacity?</span>)</td>
+              <td>Creates a polyline from an array of vertices. The
+      <code><span class="nomatch">color</span></code> is given as a string that contains the color
+      as a hexadecimal number RRGGBB. The <code><span class="nomatch">weight</span></code> is the
+      width of the line in pixels. The opacity is given as a number
+      between 0 and 1. The line will be antialiased and
+      semitransparent.</td>
+            </tr>
+          </table>
+          <h3>Methods</h3>
+          <table summary="class GPolyline - Methods">
+            <tr>
+              <th>Methods</th>
+              <th>Return Value</th>
+              <th>Description</th>
+            </tr>
+            <tr class="odd">
+              <td class="code">getVertexCount()</td>
+              <td class="code">
+                <span class="nomatch">Number</span>
+              </td>
+              <td>Returns the number of vertices in the polyline. (Since 2.46)</td>
+            </tr>
+            <tr class="even">
+              <td class="code">getVertex(<span class="type" title="type:  Number">index</span>)</td>
+              <td class="code">
+                <span class="xref">
+                  <a href="#GLatLng">GLatLng</a>
+                </span>
+              </td>
+              <td>Returns the vertex with the given index in the
+      polyline. (Since 2.46)</td>
+            </tr>
+          </table>
+          <h3>Events</h3>
+          <table summary="class GPolyline - Events">
+            <tr>
+              <th>Events</th>
+              <th>Arguments</th>
+              <th>Description</th>
+            </tr>
+            <tr class="odd">
+              <td class="code">remove</td>
+              <td class="code">
+                <span class="void">none</span>
+              </td>
+              <td>This event is fired when the polyline is removed from the
+      map, using <code><span class="nomatch">GMap2.removeOverlay()</span></code> or
+      <code><span class="nomatch">GMap2.clearOverlays()</span></code>.</td>
+            </tr>
+          </table>
+          <h2>
+            <a name="GIcon" id="GIcon">class GIcon</a>
+          </h2>
+          <p>An icon specifies the images used to display a
+  <code><span class="xref"><a href="#GMarker">GMarker</a></span></code> on the map. For browser compatibility reasons,
+  specifying an icon is actually quite complex. Note that you can use
+  the default Maps icon <code><span class="nomatch">G_DEFAULT_ICON</span></code> if you don't want
+  to specify your own.</p>
+          <h3>Constructor</h3>
+          <table summary="class GIcon - Constructor">
+            <tr>
+              <th>Constructor</th>
+              <th>Description</th>
+            </tr>
+            <tr class="odd">
+              <td class="code">GIcon(<span class="type" title="type:  GIcon">copy?</span>, <span class="type" title="type:  String"> image?</span>)</td>
+              <td>Creates a new icon object. If another icon is given in the
+      optional <code><span class="nomatch">copy</span></code> argument, its properties are copied,
+      otherwise they are left empty. The optional argument
+      <code><span class="nomatch">image</span></code> sets the value of the <code><span class="nomatch">image</span></code>
+      property.</td>
+            </tr>
+          </table>
+          <h3>Constants</h3>
+          <table summary="class GIcon - Constants">
+            <tr>
+              <th>Constants</th>
+              <th>Description</th>
+            </tr>
+            <tr class="odd">
+              <td class="code">
+                <span class="type" title="type:  GIcon">G_DEFAULT_ICON</span>
+              </td>
+              <td>The default icon used by markers.</td>
+            </tr>
+          </table>
+          <h3>Properties</h3>
+          <table summary="class GIcon - Properties">
+            <tr>
+              <th>Properties</th>
+              <th>Type</th>
+              <th>Description</th>
+            </tr>
+            <tr class="odd">
+              <td class="code">image</td>
+              <td class="code"> String</td>
+              <td>The foreground image URL of the icon.</td>
+            </tr>
+            <tr class="even">
+              <td class="code">shadow</td>
+              <td class="code"> String</td>
+              <td>The shadow image URL of the icon.</td>
+            </tr>
+            <tr class="odd">
+              <td class="code">iconSize</td>
+              <td class="code"> GSize</td>
+              <td>The pixel size of the foreground image of the icon.</td>
+            </tr>
+            <tr class="even">
+              <td class="code">shadowSize</td>
+              <td class="code"> GSize</td>
+              <td>The pixel size of the shadow image.</td>
+            </tr>
+            <tr class="odd">
+              <td class="code">iconAnchor</td>
+              <td class="code"> GPoint</td>
+              <td>The pixel coordinate relative to the top left corner of the
+      icon image at which this icon is anchored to the map.</td>
+            </tr>
+            <tr class="even">
+              <td class="code">infoWindowAnchor</td>
+              <td class="code"> GPoint</td>
+              <td>The pixel coordinate relative to the top left corner of the
+      icon image at which the info window is anchored to this
+      icon.</td>
+            </tr>
+            <tr class="odd">
+              <td class="code">printImage</td>
+              <td class="code"> String</td>
+              <td>The URL of the foreground icon image used for printed
+      maps. It must be the same size as the main icon image given by
+      <code><span class="nomatch">image</span></code>.</td>
+            </tr>
+            <tr class="even">
+              <td class="code">mozPrintImage</td>
+              <td class="code"> String</td>
+              <td>The URL of the foreground icon image used for printed maps
+      in Firefox/Mozilla. It must be the same size as the main icon
+      image given by <code><span class="nomatch">image</span></code>.</td>
+            </tr>
+            <tr class="odd">
+              <td class="code">printShadow</td>
+              <td class="code"> String</td>
+              <td>The URL of the shadow image used for printed maps. It should
+      be a GIF image since most browsers cannot print PNG images.</td>
+            </tr>
+            <tr class="even">
+              <td class="code">transparent</td>
+              <td class="code"> String</td>
+              <td>The URL of a virtually transparent version of the foreground
+      icon image used to capture click events in Internet
+      Explorer. This image should be a 24-bit PNG version of the main
+      icon image with 1% opacity, but the same shape and size as the
+      main icon.</td>
+            </tr>
+            <tr class="odd">
+              <td class="code">imageMap</td>
+              <td class="code"> Array of Number</td>
+              <td>An array of integers representing the x/y coordinates of the
+      image map we should use to specify the clickable part of the
+      icon image in browsers other than Internet Explorer.</td>
+            </tr>
+          </table>
+          <h2>
+            <a name="GPoint" id="GPoint">class GPoint</a>
+          </h2>
+          <p>A <code><span class="xref"><a href="#GPoint">GPoint</a></span></code> represents a point on the
+  map by its pixel coordinates. Notice that in v2, it doesn't
+  represent a point on the earth by its geographical coordinates
+  anymore. Geographical coordinates are now represented by
+  <code><span class="xref"><a href="#GLatLng">GLatLng</a></span></code>.</p>
+          <p>In the map coordinate system, the <code><span class="nomatch">x</span></code>
+  coordinate increases to the left, and the <code><span class="nomatch">y</span></code> coordinate
+  increases downwards.</p>
+          <p> Notice that while the two parameters of a
+  <code><span class="xref"><a href="#GPoint">GPoint</a></span></code> are accessible as properties <code><span class="nomatch">x</span></code> and
+  <code><span class="nomatch">y</span></code>, it is better to never modify them, but to create a new
+  object with different paramaters instead.</p>
+          <h3>Constructor</h3>
+          <table summary="class GPoint - Constructor">
+            <tr>
+              <th>Constructor</th>
+              <th>Description</th>
+            </tr>
+            <tr class="odd">
+              <td class="code">GPoint(<span class="type" title="type:  Number">x</span>, <span class="type" title="type:  Number"> y</span>)</td>
+              <td>Creates a <code><span class="xref"><a href="#GPoint">GPoint</a></span></code> object.</td>
+            </tr>
+          </table>
+          <h3>Properties</h3>
+          <table summary="class GPoint - Properties">
+            <tr>
+              <th>Properties</th>
+              <th>Type</th>
+              <th>Description</th>
+            </tr>
+            <tr class="odd">
+              <td class="code">x</td>
+              <td class="code"> Number</td>
+              <td><code><span class="nomatch">x</span></code> coordinate, increases to the left.</td>
+            </tr>
+            <tr class="even">
+              <td class="code">y</td>
+              <td class="code"> Number</td>
+              <td><code><span class="nomatch">y</span></code> coordinate, increases downwards.</td>
+            </tr>
+          </table>
+          <h3>Methods</h3>
+          <table summary="class GPoint - Methods">
+            <tr>
+              <th>Methods</th>
+              <th>Return Value</th>
+              <th>Description</th>
+            </tr>
+            <tr class="odd">
+              <td class="code">equals(<span class="type" title="type:  GPoint">other</span>)</td>
+              <td class="code">
+                <span class="nomatch">Boolean</span>
+              </td>
+              <td>Returns <code><span class="nomatch">true</span></code> iff the other point has equal
+      coordinates.</td>
+            </tr>
+            <tr class="even">
+              <td class="code">toString()</td>
+              <td class="code">
+                <span class="nomatch">String</span>
+              </td>
+              <td>Returns a string that contains the x and y coordinates, in
+      this order, separated by a comma.</td>
+            </tr>
+          </table>
+          <h2>
+            <a name="GSize" id="GSize">class GSize</a>
+          </h2>
+          <p>A <code><span class="xref"><a href="#GSize">GSize</a></span></code> is the size in pixels of a
+  rectangular area of the map. The size object has two parameters,
+  <code><span class="nomatch">width</span></code> and <code><span class="nomatch">height</span></code>. Width is a difference in
+  the x-coordinate; height is a difference in the y-coordinate, of
+  points.</p>
+          <p> Notice that while the two parameters of a
+  <code><span class="xref"><a href="#GSize">GSize</a></span></code> are accessible as properties <code><span class="nomatch">width</span></code>
+  and <code><span class="nomatch">height</span></code>, it is better to never modify them, but to
+  create a new object with different paramaters instead.</p>
+          <h3>Constructor</h3>
+          <table summary="class GSize - Constructor">
+            <tr>
+              <th>Constructor</th>
+              <th>Description</th>
+            </tr>
+            <tr class="odd">
+              <td class="code">GSize(<span class="type" title="type:  Number">width</span>, <span class="type" title="type:  Number"> height</span>)</td>
+              <td>Creates a <code><span class="xref"><a href="#GSize">GSize</a></span></code> object.</td>
+            </tr>
+          </table>
+          <h3>Properties</h3>
+          <table summary="class GSize - Properties">
+            <tr>
+              <th>Properties</th>
+              <th>Type</th>
+              <th>Description</th>
+            </tr>
+            <tr class="odd">
+              <td class="code">width</td>
+              <td class="code"> Number</td>
+              <td>The width parameter.</td>
+            </tr>
+            <tr class="even">
+              <td class="code">height</td>
+              <td class="code"> Number</td>
+              <td>The height parameter.</td>
+            </tr>
+          </table>
+          <h3>Methods</h3>
+          <table summary="class GSize - Methods">
+            <tr>
+              <th>Methods</th>
+              <th>Return Value</th>
+              <th>Description</th>
+            </tr>
+            <tr class="odd">
+              <td class="code">equals(<span class="type" title="type:  GSize">other</span>)</td>
+              <td class="code">
+                <span class="nomatch">Boolean</span>
+              </td>
+              <td>Returns <code><span class="nomatch">true</span></code> iff the other size has exactly
+      equal components.</td>
+            </tr>
+            <tr class="even">
+              <td class="code">toString()</td>
+              <td class="code">
+                <span class="nomatch">String</span>
+              </td>
+              <td>Returns a string that contains the wdith and height
+      parameter, in this order, separated by a comma.</td>
+            </tr>
+          </table>
+          <h2>
+            <a name="GBounds" id="GBounds">class GBounds</a>
+          </h2>
+          <p><code><span class="xref"><a href="#GBounds">GBounds</a></span></code> is a rectangular area of the
+  map in pixel coordinates. Notice that a rectangle in
+  geographical coordinates is represented by a
+  <code><span class="xref"><a href="#GLatLngBounds">GLatLngBounds</a></span></code> object.</p>
+          <h3>Constructor</h3>
+          <table summary="class GBounds - Constructor">
+            <tr>
+              <th>Constructor</th>
+              <th>Description</th>
+            </tr>
+            <tr class="odd">
+              <td class="code">GBounds(<span class="type" title="type:  Array of GPoint">points</span>)</td>
+              <td>Constructs a rectangle that contains all the given
+      <code><span class="nomatch">points</span></code>.</td>
+            </tr>
+          </table>
+          <h3>Properties</h3>
+          <table summary="class GBounds - Properties">
+            <tr>
+              <th>Properties</th>
+              <th>Type</th>
+              <th>Description</th>
+            </tr>
+            <tr class="odd">
+              <td class="code">minX</td>
+              <td class="code"> Number</td>
+              <td>The x coordinate of the left edge of the rectangle.</td>
+            </tr>
+            <tr class="even">
+              <td class="code">minY</td>
+              <td class="code"> Number</td>
+              <td>The y coordinate of the top edge of the rectangle.</td>
+            </tr>
+            <tr class="odd">
+              <td class="code">maxX</td>
+              <td class="code"> Number</td>
+              <td>The x coordinate of the right edge of the rectangle.</td>
+            </tr>
+            <tr class="even">
+              <td class="code">maxY</td>
+              <td class="code"> Number</td>
+              <td>The y coordinate of the bottom edge of the rectangle.</td>
+            </tr>
+          </table>
+          <h3>Methods</h3>
+          <table summary="class GBounds - Methods">
+            <tr>
+              <th>Methods</th>
+              <th>Return Value</th>
+              <th>Description</th>
+            </tr>
+            <tr class="odd">
+              <td class="code">toString()</td>
+              <td class="code">
+                <span class="nomatch">String</span>
+              </td>
+              <td>Returns a string that contains the coordinates of the upper
+      left and the lower right corner points of the box, in this
+      order, separated by comma, surrounded by parentheses.</td>
+            </tr>
+            <tr class="even">
+              <td class="code">min()</td>
+              <td class="code">
+                <span class="xref">
+                  <a href="#GPoint">GPoint</a>
+                </span>
+              </td>
+              <td>The point at the upper left corner of the box.</td>
+            </tr>
+            <tr class="odd">
+              <td class="code">max()</td>
+              <td class="code">
+                <span class="xref">
+                  <a href="#GPoint">GPoint</a>
+                </span>
+              </td>
+              <td>The point at the lower right corner of the box.</td>
+            </tr>
+            <tr class="even">
+              <td class="code">containsBounds(<span class="type" title="type:  GBounds">other</span>)</td>
+              <td class="code">
+                <span class="nomatch">Boolean</span>
+              </td>
+              <td>Returns <code><span class="nomatch">true</span></code> iff the other box is entirely
+      contained in this box.</td>
+            </tr>
+            <tr class="odd">
+              <td class="code">extend(<span class="type" title="type:  GPoint">point</span>)</td>
+              <td class="code">
+                <span class="void">none</span>
+              </td>
+              <td>Enlarges this box so that the point is also contained in
+      this box.</td>
+            </tr>
+            <tr class="even">
+              <td class="code">intersection(<span class="type" title="type:  GBounds">other</span>)</td>
+              <td class="code">
+                <span class="xref">
+                  <a href="#GBounds">GBounds</a>
+                </span>
+              </td>
+              <td>Returns the box by which this box overlaps the other
+      box. If there is no overlap, returns an empty box.</td>
+            </tr>
+          </table>
+          <h2>
+            <a name="GLatLng" id="GLatLng">class GLatLng</a>
+          </h2>
+          <p><code><span class="xref"><a href="#GLatLng">GLatLng</a></span></code> is a point in geographical
+  coordinates longitude and latitude.</p>
+          <p>Notice that although usual map projections
+  associate longitude with the x-coordinate of the map, and latitude
+  with the y-coordinate, the latitude cooridnate is always written
+  first, followed by the longitude, as it is custom in
+  cartography.</p>
+          <p>Notice also that you cannot modify the coordinates
+  of a <code><span class="xref"><a href="#GLatLng">GLatLng</a></span></code>. If you want to compute another point, you
+  have to create a new one.</p>
+          <h3>Constructor</h3>
+          <table summary="class GLatLng - Constructor">
+            <tr>
+              <th>Constructor</th>
+              <th>Description</th>
+            </tr>
+            <tr class="odd">
+              <td class="code">GLatLng(<span class="type" title="type:  Number">lat</span>, <span class="type" title="type:  Number"> lng</span>, <span class="type" title="type:  Boolean"> unbounded?</span>)</td>
+              <td>Notice the ordering of latitude and longitude. If the
+      <code><span class="nomatch">unbounded</span></code> flag is <code><span class="nomatch">true</span></code>, then the
+      numbers will be used as passed, oterwise latitude will be
+      clamped to lie between -90 degrees and +90 degrees, and
+      longitude will be wrapped to lie between -180 degrees and +180
+      degrees.</td>
+            </tr>
+          </table>
+          <h3>Methods</h3>
+          <table summary="class GLatLng - Methods">
+            <tr>
+              <th>Methods</th>
+              <th>Return Value</th>
+              <th>Description</th>
+            </tr>
+            <tr class="odd">
+              <td class="code">lat()</td>
+              <td class="code">
+                <span class="nomatch">Number</span>
+              </td>
+              <td>Returns the latitude coordinate in degrees, as a number
+      between -90 and +90. If the <code><span class="nomatch">unbounded</span></code> flag was
+      set in the constructor, this coordinate can be outside this
+      interval.</td>
+            </tr>
+            <tr class="even">
+              <td class="code">lng()</td>
+              <td class="code">
+                <span class="nomatch">Number</span>
+              </td>
+              <td>Returns the longitude coordinate in degrees, as a number
+      between -180 and +180. If the <code><span class="nomatch">unbounded</span></code> flag was
+      set in the constructor, this coordinate can be outside this
+      interval.</td>
+            </tr>
+            <tr class="odd">
+              <td class="code">latRadians()</td>
+              <td class="code">
+                <span class="nomatch">Number</span>
+              </td>
+              <td>Returns the latitude coordinate in radians, as a number
+      between -PI/2 and +PI/2. If the <code><span class="nomatch">unbounded</span></code> flag was
+      set in the constructor, this coordinate can be outside this
+      interval.</td>
+            </tr>
+            <tr class="even">
+              <td class="code">lngRadians()</td>
+              <td class="code">
+                <span class="nomatch">Number</span>
+              </td>
+              <td>Returns the longitude coordinate in radians, as a number
+      between -PI and +PI. If the <code><span class="nomatch">unbounded</span></code> flag was
+      set in the constructor, this coordinate can be outside this
+      interval.</td>
+            </tr>
+            <tr class="odd">
+              <td class="code">equals(<span class="type" title="type:  GLatLng">other</span>)</td>
+              <td class="code">
+                <span class="nomatch">Boolean</span>
+              </td>
+              <td>Returns <code><span class="nomatch">true</span></code> iff the other size has equal
+      components, within certain roundoff margins.</td>
+            </tr>
+            <tr class="even">
+              <td class="code">distanceFrom(<span class="type" title="type:  GLatLng">other</span>)</td>
+              <td class="code">
+                <span class="nomatch">Number</span>
+              </td>
+              <td>Returns the distance, in meters, from this point to the
+      given point. The earth is approximated as a sphere, hence the
+      distance could be off by as much as 0.3%.</td>
+            </tr>
+            <tr class="odd">
+              <td class="code">toUrlValue()</td>
+              <td class="code">
+                <span class="nomatch">String</span>
+              </td>
+              <td>Returns a string that represents this point that is suitable
+      for use as a URL paramater value. It contains the latitude and
+      the longitide in degrees to 6 decimal digits, in this order,
+      separated by a comma, without whitespace.</td>
+            </tr>
+          </table>
+          <h3>Properties</h3>
+          <p>These properties exist for backwards compatibility
+  with v1 event handler functions only. They should not be used.</p>
+          <p>These properties mirror the return values of the
+  <code><span class="nomatch">lng()</span></code> and <code><span class="nomatch">lat()</span></code> accessor methods and
+  they allow a <code><span class="xref"><a href="#GLatLng">GLatLng</a></span></code> to appear in places where a
+  <code><span class="xref"><a href="#GPoint">GPoint</a></span></code> is expected by a v1 client. This is
+  necessary where GLatLng appears in event details (i.e. in
+  arguments of event handler functions). In contrast to method
+  wrappers, it is impossible in the current infrastructure to
+  create event wrappers.</p>
+          <table summary="class GLatLng - Properties">
+            <tr>
+              <th>Properties</th>
+              <th>Type</th>
+              <th>Description</th>
+            </tr>
+            <tr class="odd">
+              <td class="code">x</td>
+              <td class="code"> Number</td>
+              <td>Deprecated.</td>
+            </tr>
+            <tr class="even">
+              <td class="code">y</td>
+              <td class="code"> Number</td>
+              <td>Deprecated.</td>
+            </tr>
+          </table>
+          <h2>
+            <a name="GLatLngBounds" id="GLatLngBounds">class GLatLngBounds</a>
+          </h2>
+          <p>A <code><span class="xref"><a href="#GLatLngBounds">GLatLngBounds</a></span></code> instance represents a
+  rectangle in geographical coordinates, including one that crosses
+  the 180 degrees meridian.</p>
+          <h3>Constructor</h3>
+          <table summary="class GLatLngBounds - Constructor">
+            <tr>
+              <th>Constructor</th>
+              <th>Description</th>
+            </tr>
+            <tr class="odd">
+              <td class="code">GLatLngBounds(<span class="type" title="type:  GLatLng">sw?</span>, <span class="type" title="type:  GLatLng"> ne?</span>)</td>
+              <td>Constructs a rectangle from the points at its south-west and
+      north-east corners.</td>
+            </tr>
+          </table>
+          <h3>Methods</h3>
+          <table summary="class GLatLngBounds - Methods">
+            <tr>
+              <th>Methods</th>
+              <th>Return Value</th>
+              <th>Description</th>
+            </tr>
+            <tr class="odd">
+              <td class="code">equals(<span class="type" title="type:  GLatLngBounds">other</span>)</td>
+              <td class="code">
+                <span class="nomatch">Boolean</span>
+              </td>
+              <td>Returns <code><span class="nomatch">true</span></code> iff all parameters in this
+      rectangle are equal to the parameters of the other, within a
+      certain roundoff margin.</td>
+            </tr>
+            <tr class="even">
+              <td class="code">contains(<span class="type" title="type:  GLatLng">latlng</span>)</td>
+              <td class="code">
+                <span class="nomatch">Boolean</span>
+              </td>
+              <td>Returns <code><span class="nomatch">true</span></code> iff the geographical coordinates
+      of the point lie within this rectangle.</td>
+            </tr>
+            <tr class="odd">
+              <td class="code">intersects(<span class="type" title="type:  GLatLngBounds">other</span>)</td>
+              <td class="code">
+                <span class="nomatch">Boolean</span>
+              </td>
+              <td>What the name says.</td>
+            </tr>
+            <tr class="even">
+              <td class="code">containsBounds(<span class="type" title="type:  GLatLngBounds">other</span>)</td>
+              <td class="code">
+                <span class="nomatch">Boolean</span>
+              </td>
+              <td>What the name says.</td>
+            </tr>
+            <tr class="odd">
+              <td class="code">extend(<span class="type" title="type:  GLatLng">latlng</span>)</td>
+              <td class="code">
+                <span class="void">none</span>
+              </td>
+              <td>Enlarges this rectangle such that it contains the given
+      point. In longitude direction, it is enlarged in the smaller of
+      the two possible ways. If both are equal, it is enlarged at the
+      eastern boundary.</td>
+            </tr>
+            <tr class="even">
+              <td class="code">getSouthWest()</td>
+              <td class="code">
+                <span class="xref">
+                  <a href="#GLatLng">GLatLng</a>
+                </span>
+              </td>
+              <td>Returns the point at the south-west corner of the
+      rectangle.</td>
+            </tr>
+            <tr class="odd">
+              <td class="code">getNorthEast()</td>
+              <td class="code">
+                <span class="xref">
+                  <a href="#GLatLng">GLatLng</a>
+                </span>
+              </td>
+              <td>Returns the point at the north-east corner of the
+      rectangle.</td>
+            </tr>
+            <tr class="even">
+              <td class="code">toSpan()</td>
+              <td class="code">
+                <span class="xref">
+                  <a href="#GLatLng">GLatLng</a>
+                </span>
+              </td>
+              <td>Returns a <code><span class="xref"><a href="#GLatLng">GLatLng</a></span></code> whose cordinates represent
+      the size of this rectangle.</td>
+            </tr>
+            <tr class="odd">
+              <td class="code">isFullLat()</td>
+              <td class="code">
+                <span class="nomatch">Boolean</span>
+              </td>
+              <td>Returns <code><span class="nomatch">true</span></code> if this rectangle extends from the
+      south pole to the north pole.</td>
+            </tr>
+            <tr class="even">
+              <td class="code">isFullLng()</td>
+              <td class="code">
+                <span class="nomatch">Boolean</span>
+              </td>
+              <td>Returns <code><span class="nomatch">true</span></code> if this rectangle extends fully
+      around the earth in the longitude direction.</td>
+            </tr>
+            <tr class="odd">
+              <td class="code">isEmpty()</td>
+              <td class="code">
+                <span class="nomatch">Boolean</span>
+              </td>
+              <td>Returns true if this rectangle is empty.</td>
+            </tr>
+          </table>
+          <h2>
+            <a name="GControl" id="GControl">interface GControl</a>
+          </h2>
+          <p>This interface is implemented by all controls. You
+  can implement it in order to provide a custom control for the
+  map. Controls are added to the map using the
+  <code><span class="nomatch">GMap2.addControl()</span></code> method.</p>
+          <p>In contrast to overlays, which are positioned
+  relative to the map, controls are positioned relative to the map
+  view, i.e. they don't move when the map moves.</p>
+          <h3>Constructor</h3>
+          <table summary="interface GControl - Constructor">
+            <tr>
+              <th>Constructor</th>
+              <th>Description</th>
+            </tr>
+            <tr class="odd">
+              <td class="code">GControl(<span class="type" title="type:  Boolean">printable?</span>, <span class="type" title="type:  Boolean"> selectable?</span>)</td>
+              <td>Creates the prototype instance for a new control class. Flag
+      <code><span class="nomatch">printable</span></code> indicates that the control should be
+      visible in the print output of the map. Flag
+      <code><span class="nomatch">selectable</span></code> indicates that the control will contain
+      text that should be selectable.</td>
+            </tr>
+          </table>
+          <h3>Methods</h3>
+          <p>These methods will be called by the map when the
+  control is added to the map using
+  <code><span class="nomatch">GMap2.addControl()</span></code>. Thus, these methods will not be
+  called by you, but they will be implemented by
+  you.</p>
+          <table summary="interface GControl - Methods">
+            <tr>
+              <th>Methods</th>
+              <th>Return Value</th>
+              <th>Description</th>
+            </tr>
+            <tr class="odd">
+              <td class="code">printable()</td>
+              <td class="code">
+                <span class="nomatch">Boolean</span>
+              </td>
+              <td>Returns to the map if the control should be printable.</td>
+            </tr>
+            <tr class="even">
+              <td class="code">selectable()</td>
+              <td class="code">
+                <span class="nomatch">Boolean</span>
+              </td>
+              <td>Returns to the map if the control contains selectable text.</td>
+            </tr>
+            <tr class="odd">
+              <td class="code">initialize(<span class="type" title="type:  GMap2">map</span>)</td>
+              <td class="code">
+                <span class="nomatch">Node</span>
+              </td>
+              <td>Will be called by the map so the control can initialize
+      itself. The control will use the method
+      <code><span class="nomatch">GMap2.getContainer()</span></code> to get hold of the DOM element
+      that contains the map, and add itself to it. It returns the
+      added element.</td>
+            </tr>
+            <tr class="even">
+              <td class="code">getDefaultPosition()</td>
+              <td class="code">
+                <span class="xref">
+                  <a href="#GControlPosition">GControlPosition</a>
+                </span>
+              </td>
+              <td>Returns to the map the position in the map view at which the
+      control appears by default. This will be overridden by the
+      second argument to <code><span class="nomatch">GMap2.addControl()</span></code>.</td>
+            </tr>
+          </table>
+          <h2>
+            <a name="GControlPosition" id="GControlPosition">class GControlPosition</a>
+          </h2>
+          <p>This class described the position of a control in
+  the map view. It consists of a corner relative to where the control
+  is postioned, and an offset that determines this position. It can be
+  passed as optional argument <code><span class="nomatch">position</span></code> to the method
+  <code><span class="nomatch">GMap2.addControl()</span></code>, and it is returned from method
+  <code><span class="nomatch">GControl.getDefaultPosition()</span></code>.</p>
+          <h3>Constructor</h3>
+          <table summary="class GControlPosition - Constructor">
+            <tr>
+              <th>Constructor</th>
+              <th>Description</th>
+            </tr>
+            <tr class="odd">
+              <td class="code">GControlPosition(<span class="type" title="type:  enum GControlAnchor">anchor</span>, <span class="type" title="type:  GSize"> offset</span>)</td>
+              <td>Creates a specification for a control position.</td>
+            </tr>
+          </table>
+          <h2>
+            <a name="GControlAnchor" id="GControlAnchor">enum GControlAnchor</a>
+          </h2>
+          <h3>Constants</h3>
+          <table summary="enum GControlAnchor - Constants">
+            <tr>
+              <th>Constants</th>
+              <th>Description</th>
+            </tr>
+            <tr class="odd">
+              <td class="code">G_ANCHOR_TOP_RIGHT</td>
+              <td>The control will be anchored in the top right corner of the
+      map.</td>
+            </tr>
+            <tr class="even">
+              <td class="code">G_ANCHOR_TOP_LEFT</td>
+              <td>The control will be anchored in the top left corner of the
+      map.</td>
+            </tr>
+            <tr class="odd">
+              <td class="code">G_ANCHOR_BOTTOM_RIGHT</td>
+              <td>The control will be anchored in the bottom right corner of the
+      map.</td>
+            </tr>
+            <tr class="even">
+              <td class="code">G_ANCHOR_BOTTOM_LEFT</td>
+              <td>The control will be anchored in the bottom left corner of
+      the map.</td>
+            </tr>
+          </table>
+          <h2>
+            <a name="GControlImpl" id="GControlImpl">class GControl</a>
+          </h2>
+          <p>These implementations of <code><span class="nomatch">interface
+  GControl</span></code> are available.</p>
+          <h3>Constructor</h3>
+          <table summary="class GControl - Constructor">
+            <tr>
+              <th>Constructor</th>
+              <th>Description</th>
+            </tr>
+            <tr class="odd">
+              <td class="code">GSmallMapControl()</td>
+              <td>Creates a control with buttons to pan in four directions,
+      and zoom in and zoom out.</td>
+            </tr>
+            <tr class="even">
+              <td class="code">GLargeMapControl()</td>
+              <td>Creates a control with buttons to pan in four directions,
+      and zoom in and zoom out, and a zoom slider.</td>
+            </tr>
+            <tr class="odd">
+              <td class="code">GSmallZoomControl()</td>
+              <td>Creates a control with buttons to zoom in and zoom out.</td>
+            </tr>
+            <tr class="even">
+              <td class="code">GScaleControl()</td>
+              <td>Creates a control that displays the map scale.</td>
+            </tr>
+            <tr class="odd">
+              <td class="code">GMapTypeControl()</td>
+              <td>Creates a control with buttons to switch between map types.</td>
+            </tr>
+          </table>
+          <h2>
+            <a name="GMapType" id="GMapType">class GMapType</a>
+          </h2>
+          <p>The are some predefined map types. This class can
+  be used to define custom map types. In order to pass them to the
+  map, use the <code><span class="xref"><a href="#GMap2">GMap2</a></span></code> constructor, or the
+  <code><span class="nomatch">GMap2.addMapType()</span></code> method.</p>
+          <p>This class can also be subclassed. Constructor
+  arguments can be omitted if instantiated as a prototype. A subclass
+  constructor must invoke the <code><span class="xref"><a href="#GMapType">GMapType</a></span></code> constructor using
+  <code><span class="nomatch">call()</span></code>.</p>
+          <h3>Constructor</h3>
+          <table summary="class GMapType - Constructor">
+            <tr>
+              <th>Constructor</th>
+              <th>Description</th>
+            </tr>
+            <tr class="odd">
+              <td class="code">GMapType(<span class="type" title="type:  Array of GTileLayer">layers</span>, <span class="type" title="type: &#10;      GProjection"> projection</span>, <span class="type" title="type:  String"> name</span>, <span class="type" title="type:  GMapTypeOptions"> opts?</span>)</td>
+              <td>Constructs a map type with the given tile layers,
+      projection, name, and optional parameters.</td>
+            </tr>
+          </table>
+          <h3>Methods</h3>
+          <p>These methods are mostly called by the map that
+  this maptype is passed to, but some methods may also be called from
+  outside the map, e.g. <code><span class="nomatch">getBoundsZoomLevel()</span></code>.</p>
+          <table summary="class GMapType - Methods">
+            <tr>
+              <th>Methods</th>
+              <th>Return Value</th>
+              <th>Description</th>
+            </tr>
+            <tr class="odd">
+              <td class="code">getSpanZoomLevel(<span class="type" title="type:  GLatLng">center</span>, <span class="type" title="type:  GLatLng"> span</span>, <span class="type" title="type:  GSize">
+      viewSize</span>)</td>
+              <td class="code">
+                <span class="nomatch">Number</span>
+              </td>
+              <td>Returns to the map the zoom level at which the map section
+      defined by center and span fits into the map view of the given
+      size in pixels.</td>
+            </tr>
+            <tr class="even">
+              <td class="code">getBoundsZoomLevel(<span class="type" title="type:  GLatLngBounds">bounds</span>, <span class="type" title="type: &#10;      GSize"> viewSize</span>)</td>
+              <td class="code">
+                <span class="void">none</span>
+              </td>
+              <td>Returns to the map the zoom level at which the map section
+      defined by bounds fits into the map view of the given size in
+      pixels.</td>
+            </tr>
+            <tr class="odd">
+              <td class="code">getName(<span class="type" title="type:  Boolean">opt_short</span>)</td>
+              <td class="code">
+                <span class="nomatch">String</span>
+              </td>
+              <td>Returns to the map the name of the map type to be used as
+      the button label in the <code><span class="nomatch">GMapTypeControl</span></code>.</td>
+            </tr>
+            <tr class="even">
+              <td class="code">getProjection()</td>
+              <td class="code">
+                <span class="xref">
+                  <a href="#GProjection">GProjection</a>
+                </span>
+              </td>
+              <td>Returns to the map the projection of this map type.</td>
+            </tr>
+            <tr class="odd">
+              <td class="code">getTileSize()</td>
+              <td class="code">
+                <span class="nomatch">Number</span>
+              </td>
+              <td>Returns to the map the map tile size in pixels of this map
+      type. The tiles are assumed to be quadratic. All tile layers
+      have the same tile size.</td>
+            </tr>
+            <tr class="even">
+              <td class="code">getTileLayers()</td>
+              <td class="code">
+                <span class="nomatch">Array of GTileLayer</span>
+              </td>
+              <td>Returns to the map the array of tile layers.</td>
+            </tr>
+            <tr class="odd">
+              <td class="code">getMinimumResolution(<span class="type" title="type:  GLatLng">latlng?</span>)</td>
+              <td class="code">
+                <span class="nomatch">Number</span>
+              </td>
+              <td>Returns to the map the lowest zoom level at which this map
+      type is defined.</td>
+            </tr>
+            <tr class="even">
+              <td class="code">getMaximumResolution(<span class="type" title="type:  GLatLng">latlng?</span>)</td>
+              <td class="code">
+                <span class="nomatch">Number</span>
+              </td>
+              <td>Returns to the map the highest zoom level at which this map
+      type is defined.</td>
+            </tr>
+            <tr class="odd">
+              <td class="code">getTextColor()</td>
+              <td class="code">
+                <span class="nomatch">String</span>
+              </td>
+              <td>Returns to the map the color that is best used for text that
+      is overlaid on the map. Used for the color of the text of the
+      copyright message displayed by the copyroght control.</td>
+            </tr>
+            <tr class="even">
+              <td class="code">getLinkColor()</td>
+              <td class="code">
+                <span class="nomatch">String</span>
+              </td>
+              <td>Returns to the map the color that is best used for a
+      hyperlink that is overlaid on the map. Used for the color of the
+      link to the terms of use displayed by the copyroght
+      control.</td>
+            </tr>
+            <tr class="odd">
+              <td class="code">getErrorMessage()</td>
+              <td class="code">
+                <span class="nomatch">String</span>
+              </td>
+              <td>Returns to the map the error message that is displayed in
+      areas or on zoom level where this map type doesn't have map
+      tiles.</td>
+            </tr>
+            <tr class="even">
+              <td class="code">getCopyrights(<span class="type" title="type:  GLatLngBounds">bounds</span>, <span class="type" title="type:  Number"> zoom</span>)</td>
+              <td class="code">
+                <span class="nomatch">Array of String</span>
+              </td>
+              <td>Returns to the map the copyright messages appropriate
+      for the region described by <code><span class="nomatch">bounds</span></code> at the given
+      zoom level. This is used by the <code><span class="nomatch">GCopyrightControl</span></code>
+      to display the copyright message on the map.</td>
+            </tr>
+            <tr class="odd">
+              <td class="code">getUrlArg()</td>
+              <td class="code">
+                <span class="nomatch">String</span>
+              </td>
+              <td>Returns to the map a value that is used as a URL paramater
+      value to identify this map type in permalinks to the current map
+      view. This is currently only used by the maps application.</td>
+            </tr>
+          </table>
+          <h3>Constants</h3>
+          <table summary="class GMapType - Constants">
+            <tr>
+              <th>Constants</th>
+              <th>Description</th>
+            </tr>
+            <tr class="odd">
+              <td class="code">
+                <span class="type" title="type:  GMapType">G_NORMAL_MAP</span>
+              </td>
+              <td>This is the normal street map type.</td>
+            </tr>
+            <tr class="even">
+              <td class="code">
+                <span class="type" title="type:  GMapType">G_SATELLITE_MAP</span>
+              </td>
+              <td>This map type shows Google Earth satellite
+      images.</td>
+            </tr>
+            <tr class="odd">
+              <td class="code">
+                <span class="type" title="type:  GMapType">G_HYBRID_MAP</span>
+              </td>
+              <td>This map type shows transparent street maps over Google
+      Earth satellite images.</td>
+            </tr>
+            <tr class="even">
+              <td class="code">
+                <span class="type" title="type:  Array of GMapType">G_DEFAULT_MAP_TYPES</span>
+              </td>
+              <td>An array of all three predefined map types described
+      above.</td>
+            </tr>
+          </table>
+          <h3>Events</h3>
+          <table summary="class GMapType - Events">
+            <tr>
+              <th>Events</th>
+              <th>Arguments</th>
+              <th>Description</th>
+            </tr>
+            <tr class="odd">
+              <td class="code">newcopyright</td>
+              <td class="code">
+                <span class="type" title="type:  GCopyright">copyright</span>
+              </td>
+              <td>This event is fired when a new copyright is added to the
+      copyright collection of one of the tile layers contained in this
+      map type.</td>
+            </tr>
+          </table>
+          <h2>
+            <a name="GMapTypeOptions" id="GMapTypeOptions">class GMapTypeOptions</a>
+          </h2>
+          <p>Instances of this class are used as the
+  <code><span class="nomatch">opts?</span></code> argument to the <code><span class="xref"><a href="#GMapType">GMapType</a></span></code>
+  constructor. There is no constructor for this class. Instead, this
+  class is instantiated as a javascript object literal.</p>
+          <h3>Properties</h3>
+          <table summary="class GMapTypeOptions - Properties">
+            <tr>
+              <th>Properties</th>
+              <th>Type</th>
+              <th>Description</th>
+            </tr>
+            <tr class="odd">
+              <td class="code">shortName</td>
+              <td class="code"> String</td>
+              <td>Sets the short name of the map type that is returned from
+      <code><span class="nomatch">GMapType.getName(true)</span></code>. Default is the same as the
+      <code><span class="nomatch">name</span></code>.</td>
+            </tr>
+            <tr class="even">
+              <td class="code">urlArg</td>
+              <td class="code"> String</td>
+              <td>Sets the url argument of the map type that is returned from
+      <code><span class="nomatch">GMapType.getUrlArg()</span></code>. Default is the empty
+      string.</td>
+            </tr>
+            <tr class="odd">
+              <td class="code">maxResolution</td>
+              <td class="code"> Number</td>
+              <td>Sets the maximum zoom level of this map type, returned by
+      <code><span class="nomatch">GMapType.getMaximumResolution()</span></code>. Default is the maximum
+      of all tile layers.</td>
+            </tr>
+            <tr class="even">
+              <td class="code">minResolution</td>
+              <td class="code"> Number</td>
+              <td>Sets the minimum zoom level of this map type, returned by
+      <code><span class="nomatch">GMapType.getMinimumResolution()</span></code>. Default is the minimum
+      of all tile layers.</td>
+            </tr>
+            <tr class="odd">
+              <td class="code">tileSize</td>
+              <td class="code"> Number</td>
+              <td>Set the tile size returned by
+      <code><span class="nomatch">GMapType.getTileSize()</span></code>. Default is
+      <code><span class="nomatch">256</span></code>.</td>
+            </tr>
+            <tr class="even">
+              <td class="code">textColor</td>
+              <td class="code"> String</td>
+              <td>Sets the text color returned by
+      <code><span class="nomatch">GMapType.getTextColor()</span></code>. Default is
+      <code><span class="nomatch">"black"</span></code>.</td>
+            </tr>
+            <tr class="odd">
+              <td class="code">linkColor</td>
+              <td class="code"> String</td>
+              <td>Sets the text color returned by
+      <code><span class="nomatch">GMapType.getLinkColor()</span></code>. Default is
+      <code><span class="nomatch">"#7777cc"</span></code>.</td>
+            </tr>
+            <tr class="even">
+              <td class="code">errorMessage</td>
+              <td class="code"> String</td>
+              <td>Sets the error message returned by
+      <code><span class="nomatch">GMapType.getErrorMessage()</span></code>. Default is the empty
+      string.</td>
+            </tr>
+          </table>
+          <h2>
+            <a name="GTileLayer" id="GTileLayer">interface GTileLayer</a>
+          </h2>
+          <p>You implement this interface in order to provide
+  custom map tile layers. Your implementation of this interface should
+  use an instance of <code><span class="xref"><a href="#GTileLayer">GTileLayer</a></span></code> as a prototype, because
+  this implements the copyright handling for you.</p>
+          <h3>Constructor</h3>
+          <table summary="interface GTileLayer - Constructor">
+            <tr>
+              <th>Constructor</th>
+              <th>Description</th>
+            </tr>
+            <tr class="odd">
+              <td class="code">GTileLayer(<span class="type" title="type:  GCopyrightCollection">copyrights</span>, <span class="type" title="type: &#10;      Number"> minResolution</span>, <span class="type" title="type:  Number"> maxResolution</span>)</td>
+              <td>Constructor arguments can be omitted if instantiated as
+      a prototype. A Subclass constructor must invoke this constructor
+      using <code><span class="nomatch">call()</span></code>.</td>
+            </tr>
+          </table>
+          <h3>Methods</h3>
+          <p>These methods are called by the map and the map
+  type to which this tile layer is passed. You will need to
+  implement the methods marked abstract when you
+  implement a custom tile layer.</p>
+          <table summary="interface GTileLayer - Methods">
+            <tr>
+              <th>Methods</th>
+              <th>Return Value</th>
+              <th>Description</th>
+            </tr>
+            <tr class="odd">
+              <td class="code">minResolution()</td>
+              <td class="code">
+                <span class="nomatch">Number</span>
+              </td>
+              <td>Returns to the map type the lowest zoom level of this tile
+      layer.</td>
+            </tr>
+            <tr class="even">
+              <td class="code">maxResolution()</td>
+              <td class="code">
+                <span class="nomatch">Number</span>
+              </td>
+              <td>Returns to the map type the highest zoom level of this tile
+      layer.</td>
+            </tr>
+            <tr class="odd">
+              <td class="code">getTileUrl(<span class="type" title="type:  GPoint">tile</span>, <span class="type" title="type:  Number"> zoom</span>)</td>
+              <td class="code">
+                <span class="nomatch">String</span>
+              </td>
+              <td>Abstract. Returns to the map the URL of the map
+      tile with the tile indices given by the <code><span class="nomatch">x</span></code> and
+      <code><span class="nomatch">y</span></code> properties of the <code><span class="xref"><a href="#GPoint">GPoint</a></span></code>, at the
+      given zoom level.</td>
+            </tr>
+            <tr class="even">
+              <td class="code">isPng()</td>
+              <td class="code">
+                <span class="nomatch">Boolean</span>
+              </td>
+              <td>Abstract. Returns to the map whether the tiles are
+      in PNG image format and hence can be transparent. Otherwise GIF
+      is assumed.</td>
+            </tr>
+            <tr class="odd">
+              <td class="code">getOpacity()</td>
+              <td class="code">
+                <span class="nomatch">Number</span>
+              </td>
+              <td>Abstract. Returns to the map the opacity with which
+      to display this tile layer. 1.0 is opaque, 0.0 is
+      transparent.</td>
+            </tr>
+          </table>
+          <h3>Events</h3>
+          <table summary="interface GTileLayer - Events">
+            <tr>
+              <th>Events</th>
+              <th>Arguments</th>
+              <th>Description</th>
+            </tr>
+            <tr class="odd">
+              <td class="code">newcopyright</td>
+              <td class="code">
+                <span class="type" title="type:  GCopyright">copyright</span>
+              </td>
+              <td>This event is fired when a new copyright is added to the
+      copyright collection of this tile layer.</td>
+            </tr>
+          </table>
+          <h2>
+            <a name="GCopyrightCollection" id="GCopyrightCollection">class GCopyrightCollection</a>
+          </h2>
+          <p>You use this class to manage copyright messages
+  displayed on maps of custom map type. If you don't implement custom
+  map types, then you don't need to use this class. A copyright
+  collection contains information about which copyright to display for
+  which region on the map at which zoom level. This is very important
+  for map types that display heterogenous data such as the satellite
+  map type.</p>
+          <h3>Constructor</h3>
+          <table summary="class GCopyrightCollection - Constructor">
+            <tr>
+              <th>Constructor</th>
+              <th>Description</th>
+            </tr>
+            <tr class="odd">
+              <td class="code">GCopyrightCollection(<span class="type" title="type:  String">prefix?</span>)</td>
+              <td>Copyright messages produced from this copyright collection
+      will have the common prefix given as the argument.
+      Example: "Imagery (C) 2006"</td>
+            </tr>
+          </table>
+          <h3>Methods</h3>
+          <table summary="class GCopyrightCollection - Methods">
+            <tr>
+              <th>Methods</th>
+              <th>Return Value</th>
+              <th>Description</th>
+            </tr>
+            <tr class="odd">
+              <td class="code">()</td>
+              <td class="code">
+                <span class="void">none</span>
+              </td>
+              <td></td>
+            </tr>
+            <tr class="even">
+              <td class="code">addCopyright(<span class="type" title="type:  GCopyright">copyright</span>)</td>
+              <td class="code">
+                <span class="void">none</span>
+              </td>
+              <td>Adds a copyright information object to the collection.</td>
+            </tr>
+            <tr class="odd">
+              <td class="code">getCopyrights(<span class="type" title="type:  GLatLngBounds">bounds</span>, <span class="type" title="type:  Number">
+      zoom</span>)</td>
+              <td class="code">
+                <span class="nomatch">Array of String</span>
+              </td>
+              <td>Returns all copyright strings that are pertinent
+      for the given map region at the given zoom level.
+      Example: [ "Google", "Keyhole" ]  </td>
+            </tr>
+            <tr class="even">
+              <td class="code">getCopyrightNotice(<span class="type" title="type: &#10;      GLatLngBounds">bounds</span>, <span class="type" title="type:  Number"> zoom</span>)</td>
+              <td class="code">
+                <span class="nomatch">String</span>
+              </td>
+              <td>Returns the prefix and all relevant copyright strings
+      that are pertinent for the given map region at the given zoom level.
+      Example: "Imagery (C) 2006 Google, Keyhole" </td>
+            </tr>
+          </table>
+          <h3>Events</h3>
+          <table summary="class GCopyrightCollection - Events">
+            <tr>
+              <th>Events</th>
+              <th>Arguments</th>
+              <th>Description</th>
+            </tr>
+            <tr class="odd">
+              <td class="code">newcopyright</td>
+              <td class="code">
+                <span class="type" title="type:  GCopyright">copyright</span>
+              </td>
+              <td>This event is fired when a new copyright was added to this
+      copyright collection.</td>
+            </tr>
+          </table>
+          <h2>
+            <a name="GCopyright" id="GCopyright">class GCopyright</a>
+          </h2>
+          <p>A copyright object contains information about
+  which copyright message applies to a region of the map given by a
+  rectangle, at a given zoom level. You need this object only if you
+  implement custom map types or tile layers.</p>
+          <h3>Constructor</h3>
+          <table summary="class GCopyright - Constructor">
+            <tr>
+              <th>Constructor</th>
+              <th>Description</th>
+            </tr>
+            <tr class="odd">
+              <td class="code">GCopyright(<span class="type" title="type:  Number">id</span>, <span class="type" title="type:  GLatLngBounds"> bounds</span>, <span class="type" title="type: &#10;      Number"> minZoom</span>, <span class="type" title="type:  String"> text</span>)</td>
+              <td>Creates a copyright information object with the given
+      properties.</td>
+            </tr>
+          </table>
+          <h3>Properties</h3>
+          <table summary="class GCopyright - Properties">
+            <tr>
+              <th>Properties</th>
+              <th>Type</th>
+              <th>Description</th>
+            </tr>
+            <tr class="odd">
+              <td class="code">id</td>
+              <td class="code"> Number</td>
+              <td>A unique identifier for this copyright information.</td>
+            </tr>
+            <tr class="even">
+              <td class="code">minZoom</td>
+              <td class="code"> Number</td>
+              <td>The lowest zoom level at which this information applies.</td>
+            </tr>
+            <tr class="odd">
+              <td class="code">bounds</td>
+              <td class="code"> GLatLngBounds</td>
+              <td>The region to which this information applies.</td>
+            </tr>
+            <tr class="even">
+              <td class="code">text</td>
+              <td class="code"> String</td>
+              <td>The text of the copyright message.</td>
+            </tr>
+          </table>
+          <h2>
+            <a name="GProjection" id="GProjection">interface GProjection</a>
+          </h2>
+          <p>This is the interface for map projections. A map
+  projection instance is passed to the constructor of
+  <code><span class="xref"><a href="#GMapType">GMapType</a></span></code>. This interface is implemented by the
+  <code><span class="nomatch">class GMercatorProjection</span></code>, which is used by all
+  predefined map types. You can implement this interface if you want
+  to define map types with different map projections.</p>
+          <h3>Methods</h3>
+          <p>These methods are called by the map. You need to
+  implement them.</p>
+          <table summary="interface GProjection - Methods">
+            <tr>
+              <th>Methods</th>
+              <th>Return Value</th>
+              <th>Description</th>
+            </tr>
+            <tr class="odd">
+              <td class="code">fromLatLngToPixel(<span class="type" title="type:  GLatLng">latlng</span>, <span class="type" title="type: &#10;      Number"> zoom</span>)</td>
+              <td class="code">
+                <span class="xref">
+                  <a href="#GPoint">GPoint</a>
+                </span>
+              </td>
+              <td>Returns the map coordinates in pixels for the point at the
+      given geographical coordinates, and the given zoom level.</td>
+            </tr>
+            <tr class="even">
+              <td class="code">fromPixelToLatLng(<span class="type" title="type:  GPoint">pixel</span>, <span class="type" title="type:  Number"> zoom</span>, <span class="type" title="type:  Boolean">
+      unbounded?</span>)</td>
+              <td class="code">
+                <span class="void">none</span>
+              </td>
+              <td>Returns the geographical coordinates for the point at the
+      given map coordinates in pixels, and the given zoom level. Flag
+      <code><span class="nomatch">unbounded</span></code> causes the geographical longitude coordinate
+      not to wrap when beyond the -180 or 180 degrees meridian.</td>
+            </tr>
+            <tr class="odd">
+              <td class="code">tileCheckRange(<span class="type" title="type:  GPoint">tile</span>, <span class="type" title="type:  Number"> zoom</span>, <span class="type" title="type:  Number">
+      tilesize</span>)</td>
+              <td class="code">
+                <span class="void">none</span>
+              </td>
+              <td>Returns to the map if the tile index is in a valid range for
+      the map type. Otherwise the map will display an empty tile. It
+      also may modify the <code><span class="nomatch">tile</span></code> index to point to another
+      instance of the same tile in the case that the map contains more
+      than one copy of the earth, and hence the same tile at
+      different tile coordinates.</td>
+            </tr>
+            <tr class="even">
+              <td class="code">getWrapWidth(<span class="type" title="type:  Number">zoom</span>)</td>
+              <td class="code">
+                <span class="void">none</span>
+              </td>
+              <td>Returns to the map the periodicity in x-direction, i.e. the
+      number of pixels after which the map repeats itself because it
+      wrapped once round the earth. By default, returns
+      <code><span class="nomatch">Infinity</span></code>, i.e. the map will not repeat itself. This
+      is used by the map to compute the placement of overlays on map
+      views that contain more than one copy of the earth (this usually
+      happens only at low zoom levels). (Since 2.46)</td>
+            </tr>
+          </table>
+          <h2>
+            <a name="GMercatorProjection" id="GMercatorProjection">class GMercatorProjection</a>
+          </h2>
+          <p>This implementation of the
+  <code><span class="xref"><a href="#GProjection">GProjection</a></span></code> interface for the mercator projection is
+  used by all predefined map types.</p>
+          <h3>Constructor</h3>
+          <table summary="class GMercatorProjection - Constructor">
+            <tr>
+              <th>Constructor</th>
+              <th>Description</th>
+            </tr>
+            <tr class="odd">
+              <td class="code">GMercatorProjection(<span class="type" title="type:  Number">zoomlevels</span>)</td>
+              <td>Creates a mercator projection for the given number of zoom
+      levels.</td>
+            </tr>
+          </table>
+          <h3>Methods</h3>
+          <table summary="class GMercatorProjection - Methods">
+            <tr>
+              <th>Methods</th>
+              <th>Return Value</th>
+              <th>Description</th>
+            </tr>
+            <tr class="odd">
+              <td class="code">fromLatLngToPixel(<span class="type" title="type:  GLatLng">latlng</span>, <span class="type" title="type: &#10;      Number"> zoom</span>)</td>
+              <td class="code">
+                <span class="xref">
+                  <a href="#GPoint">GPoint</a>
+                </span>
+              </td>
+              <td>See <code><span class="xref"><a href="#GProjection">GProjection</a></span></code>.</td>
+            </tr>
+            <tr class="even">
+              <td class="code">fromPixelToLatLng(<span class="type" title="type:  GPoint">pixel</span>, <span class="type" title="type: &#10;      Number"> zoom</span>, <span class="type" title="type:  Boolean"> unbounded?</span>)</td>
+              <td class="code">
+                <span class="xref">
+                  <a href="#GLatLng">GLatLng</a>
+                </span>
+              </td>
+              <td>See <code><span class="xref"><a href="#GProjection">GProjection</a></span></code>.</td>
+            </tr>
+            <tr class="odd">
+              <td class="code">checkTileRange(<span class="type" title="type:  GPoint">tile</span>, <span class="type" title="type: &#10;      Number"> zoom</span>, <span class="type" title="type:  Number"> tilesize</span>)</td>
+              <td class="code">
+                <span class="void">none</span>
+              </td>
+              <td>See <code><span class="xref"><a href="#GProjection">GProjection</a></span></code>.</td>
+            </tr>
+            <tr class="even">
+              <td class="code">getWrapWidth(<span class="type" title="type:  Number">zoom</span>)</td>
+              <td class="code">
+                <span class="void">none</span>
+              </td>
+              <td>See <code><span class="xref"><a href="#GProjection">GProjection</a></span></code>. Mercator projection is
+      periodic in longitude direction, therefore this returns the
+      width of the map of the entire Earth in pixels at the given zoom
+      level. (Since 2.46)</td>
+            </tr>
+          </table>
+          <h2>
+            <a name="GEvent" id="GEvent">namespace GEvent</a>
+          </h2>
+          <p>This namespace contains functions that you use to
+  register event handlers, both for custom events and for DOM events,
+  and to fire custom events. All the events defined by this API are
+  custom events that are internally fired by
+  <code><span class="nomatch">GEvent.triggerEvent()</span></code>.</p>
+          <h3>Static Methods</h3>
+          <table summary="namespace GEvent - Static Methods">
+            <tr>
+              <th>Static Methods</th>
+              <th>Return Value</th>
+              <th>Description</th>
+            </tr>
+            <tr class="odd">
+              <td class="code">addListener(<span class="type" title="type:  Object">source</span>, <span class="type" title="type:  String"> event</span>, <span class="type" title="type: &#10;      Function"> handler</span>)</td>
+              <td class="code">
+                <span class="xref">
+                  <a href="#GEventListener">GEventListener</a>
+                </span>
+              </td>
+              <td>Registers an event handler for a custom event on the source
+      object. Returns a handle that can be used to eventually
+      deregister the handler. The event handler will be called with
+      <code><span class="nomatch">this</span></code> set to the source object.</td>
+            </tr>
+            <tr class="even">
+              <td class="code">addDomListener(<span class="type" title="type:  Node">source</span>, <span class="type" title="type:  String"> event</span>, <span class="type" title="type: &#10;      Function"> handler</span>)</td>
+              <td class="code">
+                <span class="xref">
+                  <a href="#GEventListener">GEventListener</a>
+                </span>
+              </td>
+              <td>Registers an event handler for a DOM event on the source
+      object. The source object must be a DOM Node. Returns a handle
+      that can be used to eventually deregister the handler. The event
+      handler will be called with <code><span class="nomatch">this</span></code> set to the source
+      object. This function uses the DOM methods for the current
+      browser to register the event handler.</td>
+            </tr>
+            <tr class="odd">
+              <td class="code">removeListener(<span class="type" title="type:  GEventListener">handle</span>)</td>
+              <td class="code">
+                <span class="void">none</span>
+              </td>
+              <td>Removes a handler that was installed using
+      <code><span class="nomatch">addListener()</span></code> or <code><span class="nomatch">addDomListener()</span></code>.</td>
+            </tr>
+            <tr class="even">
+              <td class="code">clearListeners(<span class="type" title="type:  Object or Node">source</span>, <span class="type" title="type:  String"> event</span>)</td>
+              <td class="code">
+                <span class="void">none</span>
+              </td>
+              <td>Removes all handlers on the given object for the given event
+      that were installed using <code><span class="nomatch">addListener()</span></code> or
+      <code><span class="nomatch">addDomListener()</span></code>.</td>
+            </tr>
+            <tr class="odd">
+              <td class="code">clearInstanceListeners(<span class="type" title="type:  Object or Node">source</span>)</td>
+              <td class="code">
+                <span class="void">none</span>
+              </td>
+              <td>Removes all handlers on the given object for all events that
+      were installed using <code><span class="nomatch">addListener()</span></code> or
+      <code><span class="nomatch">addDomListener()</span></code>.</td>
+            </tr>
+            <tr class="even">
+              <td class="code">trigger(<span class="type" title="type:  Object">source</span>, <span class="type" title="type:  String"> event</span>,  ...)</td>
+              <td class="code">
+                <span class="void">none</span>
+              </td>
+              <td>Fires a custom event on the source object. All arguments
+      after <code><span class="nomatch">event</span></code> are passed as arguments to the event
+      handler functions.</td>
+            </tr>
+            <tr class="odd">
+              <td class="code">bind(<span class="type" title="type:  Object">source</span>, <span class="type" title="type:  String"> event</span>, <span class="type" title="type:  Object"> object</span>, <span class="type" title="type:  Function">
+      method</span>)</td>
+              <td class="code">
+                <span class="void">none</span>
+              </td>
+              <td>Registers an invocation of the method on the given object as
+      the event handler for a custom event on the source
+      object. Returns a handle that can be used to eventually
+      deregister the handler.</td>
+            </tr>
+            <tr class="even">
+              <td class="code">bindDom(<span class="type" title="type:  Node">source</span>, <span class="type" title="type:  String"> event</span>, <span class="type" title="type:  Object"> object</span>, <span class="type" title="type:  Function">
+      method</span>)</td>
+              <td class="code">
+                <span class="void">none</span>
+              </td>
+              <td>Registers an invocation of the method on the given object as
+      the event handler for a custom event on the source
+      object. Returns a handle that can be used to eventually
+      deregister the handler.</td>
+            </tr>
+            <tr class="odd">
+              <td class="code">callback(<span class="type" title="type:  Object">object</span>, <span class="type" title="type:  Function"> method</span>)</td>
+              <td class="code">
+                <span class="void">none</span>
+              </td>
+              <td>Returns a closure that calls <code><span class="nomatch">method</span></code> on
+      <code><span class="nomatch">object</span></code>.</td>
+            </tr>
+            <tr class="even">
+              <td class="code">callbackArgs(<span class="type" title="type:  Object">object</span>, <span class="type" title="type:  Function"> method</span>,  ...)</td>
+              <td class="code">
+                <span class="void">none</span>
+              </td>
+              <td>Returns a closure that calls <code><span class="nomatch">method</span></code> on
+      <code><span class="nomatch">object</span></code> with the given arguments.</td>
+            </tr>
+          </table>
+          <h3>Events</h3>
+          <table summary="namespace GEvent - Events">
+            <tr>
+              <th>Events</th>
+              <th>Arguments</th>
+              <th>Description</th>
+            </tr>
+            <tr class="odd">
+              <td class="code">clearlisteners</td>
+              <td class="code">
+                <span class="type" title="type:  String">event?</span>
+              </td>
+              <td>This event is fired on object when
+      <code><span class="nomatch">clearListeners()</span></code> or
+      <code><span class="nomatch">clearInstanceListeners()</span></code> is called on that
+      object. Of course, the event is fired before the
+      functions are executed.</td>
+            </tr>
+          </table>
+          <h2>
+            <a name="GEventListener" id="GEventListener">class GventListener</a>
+          </h2>
+          <p>This class is opaque. It has no methods and no
+  constructor. Its instances are returned from
+  <code><span class="nomatch">GEvent.addListener()</span></code> or
+  <code><span class="nomatch">GEvent.addDomListener()</span></code> and are eventually passed back
+  to <code><span class="nomatch">GEvent.removeListener()</span></code>.</p>
+          <h2>
+            <a name="GXmlHttp" id="GXmlHttp">namespace GXmlHttp</a>
+          </h2>
+          <p>This namespace provides a factory method to create
+  <code><span class="nomatch">XmlHttpRequest</span></code> instances in a browser independent
+  way.</p>
+          <h3>Static Methods</h3>
+          <table summary="namespace GXmlHttp - Static Methods">
+            <tr>
+              <th>Static Methods</th>
+              <th>Return Value</th>
+              <th>Description</th>
+            </tr>
+            <tr class="odd">
+              <td class="code">create()</td>
+              <td class="code">
+                <span class="xref">
+                  <a href="#GXmlHttp">GXmlHttp</a>
+                </span>
+              </td>
+              <td>Factory to create a new instance of
+      <code><span class="nomatch">XmlHttpRequest</span></code>.</td>
+            </tr>
+          </table>
+          <h2>
+            <a name="GXml" id="GXml">namespace GXml</a>
+          </h2>
+          <p>This namespace provides static methods to handle
+  XML documents and document fragments.</p>
+          <h3>Static Methods</h3>
+          <table summary="namespace GXml - Static Methods">
+            <tr>
+              <th>Static Methods</th>
+              <th>Return Value</th>
+              <th>Description</th>
+            </tr>
+            <tr class="odd">
+              <td class="code">parse(<span class="type" title="type:  String">xmltext</span>)</td>
+              <td class="code">
+                <span class="nomatch">Node</span>
+              </td>
+              <td>Parses the given string as XML text and returns a DOM
+      representation. If the browser doesn't support XML parsing
+      natively, this returns the DOM node of an empty <code><span class="nomatch">DIV</span></code>
+      element.</td>
+            </tr>
+            <tr class="even">
+              <td class="code">value(<span class="type" title="type:  Node">xmlnode</span>)</td>
+              <td class="code">
+                <span class="nomatch">String</span>
+              </td>
+              <td>Returns the text value (i.e., only the plain text content)
+      of the XML document fragment given in DOM representation.</td>
+            </tr>
+          </table>
+          <h2>
+            <a name="GXslt" id="GXslt">class GXslt</a>
+          </h2>
+          <p>This class provides methods to apply XSLT to XML
+  in a browser-independent way.</p>
+          <h3>Static Methods</h3>
+          <table summary="class GXslt - Static Methods">
+            <tr>
+              <th>Static Methods</th>
+              <th>Return Value</th>
+              <th>Description</th>
+            </tr>
+            <tr class="odd">
+              <td class="code">create(<span class="type" title="type:  Node">xsltnode</span>)</td>
+              <td class="code">
+                <span class="xref">
+                  <a href="#GXslt">GXslt</a>
+                </span>
+              </td>
+              <td>Creates a <code><span class="xref"><a href="#GXslt">GXslt</a></span></code> instance from the XSLT
+      stylesheet given as DOM representation.</td>
+            </tr>
+            <tr class="even">
+              <td class="code">transformToHtml(<span class="type" title="type:  Node">xmlnode</span>, <span class="type" title="type:  Node"> htmlnode</span>)</td>
+              <td class="code">
+                <span class="nomatch">Boolean</span>
+              </td>
+              <td>Uses the XSLT stylesheet given in the constructor of this
+      <code><span class="xref"><a href="#GXslt">GXslt</a></span></code> instance to transform the XML document given
+      as DOM representation in <code><span class="nomatch">xmlnode</span></code>. Appends the
+      resulting HTML document fragment to the given
+      <code><span class="nomatch">htmlnode</span></code>. This only works if the browser natively
+      supports XSL transformations, in which case it will return
+      <code><span class="nomatch">true</span></code>. Otherwise, this function will do nothing and
+      return <code><span class="nomatch">false</span></code>.</td>
+            </tr>
+          </table>
+          <h2>
+            <a name="GLog" id="GLog">namespace GLog</a>
+          </h2>
+          <p>This namespace contains some static methods that
+  help you to debug web applications. When you use one of the
+  <code><span class="nomatch">write*()</span></code> methods for the first time, a floating window
+  opens on the page and displays the written messages.</p>
+          <h3>Static Methods</h3>
+          <table summary="namespace GLog - Static Methods">
+            <tr>
+              <th>Static Methods</th>
+              <th>Return Value</th>
+              <th>Description</th>
+            </tr>
+            <tr class="odd">
+              <td class="code">write(<span class="type" title="type:  String">message</span>, <span class="type" title="type:  String"> color?</span>)</td>
+              <td class="code">
+                <span class="void">none</span>
+              </td>
+              <td>Writes the message as plain text into the log window. HTML
+      markup characters will be escaped so that they are visible as
+      characters.</td>
+            </tr>
+            <tr class="even">
+              <td class="code">writeUrl(<span class="type" title="type:  String">url</span>)</td>
+              <td class="code">
+                <span class="void">none</span>
+              </td>
+              <td>Writes a link to the given URL into the log window.</td>
+            </tr>
+            <tr class="odd">
+              <td class="code">writeHtml(<span class="type" title="type:  String">html</span>)</td>
+              <td class="code">
+                <span class="void">none</span>
+              </td>
+              <td>Writes text as HTML in the log window.</td>
+            </tr>
+          </table>
+          <h2>
+            <a name="GDownloadUrl" id="GDownloadUrl">function GDownloadUrl</a>
+          </h2>
+          <p>This function provides a convenient way to
+  asynchronously retrieve a resource identified by a URL. Notice that,
+  since the XmlHttpRequest object is used to execute the request, it
+  is subject to the same-origin restriction of cross-site scripting,
+  i.e. the URL must refer to the same server as the URL of the current
+  document that executes this code. Therefore, it is usually redundant
+  to use an absolute URL for the <code><span class="nomatch">url</span></code> argument, and it is
+  better to use an absolute or relative path only.</p>
+          <h3>Function</h3>
+          <table summary="function GDownloadUrl - Function">
+            <tr>
+              <th>Function</th>
+              <th>Return Value</th>
+              <th>Description</th>
+            </tr>
+            <tr class="odd">
+              <td class="code">GDownloadUrl(<span class="type" title="type:  String">url</span>, <span class="type" title="type:  Function"> onload</span>)</td>
+              <td class="code">
+                <span class="void">none</span>
+              </td>
+              <td>Retrieves the resource from then given URL and calls the
+      <code><span class="nomatch">onload</span></code> function with the text of the document as
+      first argument, and the HTTP response status code as the
+      second. This is subject to cross site scripting
+      restrictions. Uses the underlying <code><span class="nomatch">XmlHttpRequest</span></code>
+      implementation of the browser.</td>
+            </tr>
+          </table>
+          <h2>
+            <a name="GBrowserIsCompatible" id="GBrowserIsCompatible">function GBrowserIsCompatible</a>
+          </h2>
+          <p>This function decides whether the maps API can be
+  used in the current browser.</p>
+          <h3>Function</h3>
+          <table summary="function GBrowserIsCompatible - Function">
+            <tr>
+              <th>Function</th>
+              <th>Return Value</th>
+              <th>Description</th>
+            </tr>
+            <tr class="odd">
+              <td class="code">GBrowserIsCompatible()</td>
+              <td class="code">
+                <span class="nomatch">Boolean</span>
+              </td>
+              <td>Returns <code><span class="nomatch">true</span></code> if the current browser supports the maps
+      API library.</td>
+            </tr>
+          </table>
+          <h2>
+            <a name="GUnload" id="GUnload">function GUnload</a>
+          </h2>
+          <p>You can call this function to cause the map API to
+  cleanup internal data structures to release memory. This helps you
+  to work around various browser bugs that cause memory leaks in web
+  applications. You should call this function in the
+  <code><span class="nomatch">unload</span></code> event handler of your page. After this function
+  was called, the map objects that you've created in this page will be
+  dysfunctional.</p>
+          <h3>Function</h3>
+          <table summary="function GUnload - Function">
+            <tr>
+              <th>Function</th>
+              <th>Return Value</th>
+              <th>Description</th>
+            </tr>
+            <tr class="odd">
+              <td class="code">GUnload()</td>
+              <td class="code">
+                <span class="void">none</span>
+              </td>
+              <td>Dismantles all registered event handlers in order to prevent
+      memory leaks. Should be called as a handler for the
+      <code><span class="nomatch">unload</span></code> event.</td>
+            </tr>
+          </table>
+        </div>
+      </div>
+      <div id="footer">&copy;
+        2006 Google
+        <span class="noprint"> -
+          <a href="http://www.google.com/">Google Home</a> -
+          <a href="http://www.google.com/jobs/">We're Hiring</a> -
+          <a href="http://www.google.com/privacy.html">Privacy Policy</a> -
+          <a href="http://www.google.com/terms_of_service.html">Terms of Service</a></span></div>
+    </div>
+    <script xmlns="" src="http://www.google-analytics.com/urchin.js" type="text/javascript"></script>
+    <script xmlns="" type="text/javascript">//<![CDATA[
+      _uacct = "UA-18027-5";
+      _utcp = "/apis/maps/";
+      urchinTracker();
+    //]]></script>
+  </body>
+</html>

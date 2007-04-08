@@ -1,0 +1,57 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html xmlns:v="urn:schemeas-microsoft-com:vml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+<title>JavaScript Maps API @ www.local.com</title><style type="text/css">
+<!--
+v\:*{ Behavior:url(#default#VML);}
+-->
+</style>
+<!-- <script  language="javascript"  src="http://api.51ditu.com/apis/mapapi?key=MjE4Ljg4LjEyMS4xOTc6ODA4OA==1qaz2wsxemVyb2ZhdWx0QGdtYWlsLmNvbSYmJjIxOC44OC4xMjEuMTk3OjgwODg$"></script> -->
+<!-- szgoldway -->
+<!-- <script  language="javascript"  src="http://api.51ditu.com/apis/mapapi?key=bWVpYnUuY29t1qaz2wsxemVyb2ZhdWx0QGdtYWlsLmNvbSYmJm1laWJ1LmNvbQ$$"></script> -->
+<!-- www.local.com -->
+<script src="http://api.51ditu.com/apis/mapapi?key=bG9jYWwuY29t1qaz2wsxemVyb2ZhdWx0QGdtYWlsLmNvbSYmJmxvY2FsLmNvbQ$$"></script>
+<script language="javascript" src="loadGoogleMap.js"></script>
+<script language="javascript" type="text/javascript" src="goldwayMap2.js"></script>
+</head>
+
+<body leftmargin=0 topmargin=0>
+<div id="Layer1" style="position:absolute; left:600px;">
+	<div align="left">
+	<a href="index2.htm">初始地图</a><br>
+	<br><br>
+	<a href="javascript:readGPS()">当前位置</a>
+	<br><br>
+	<form name="clock">
+	跟踪位置：<br>
+	间隔:<input name="space" type="text" value="10000" size="5" maxlength="10">毫秒
+	<br>
+	<input type="radio" name="rad" value="OFF" checked onClick="if(enabled==1 ){clearTimeout( TO );enabled = 0;}">关闭跟踪
+	<br>
+	<input type="radio" name="rad" value="on" onClick=" if( enabled == 0 ){var TO = setTimeout('TOfunc()',parseInt(document.clock.space.value));enabled = 1;}">开始跟踪
+	</form>
+	<br>
+	<a href="?file=getXML.php?type=line">行驶路线回放</a><br />
+	<a href="?file=2006-03-25-2.xml">2006-03-25</a><br>
+	<br>
+	<div style="font-size:13px;width:230px" id="TreeDiv"></div>
+	
+	</div>
+</div>
+<div id="Layer2" style="position:absolute; left:0; top:0; width:600px; z-index:2">
+	<div id="map" style="width: 600px; height: 500px;"></div>
+	<span id="progress"></span>
+	<span id="distanceMessage"></span>
+	<span id="speedMessage"></span>
+	<span id="timeMessage"></span>
+</div>
+<div id="message" style="position:absolute;top:530px;left:0;font-size:13px;background-color:#B2D9BE;">
+	<b>中心经纬</b>:<input id="I_Center" size="30" oonchange="map.recenterOrPanToLatLng(new GPoint(parseFloat(document.getElementById('I_Center').value.split(',')[0]),parseFloat(document.getElementById('I_Center').value.split(',')[1])))"/>
+	<b>放大级别</b>:<select id="I_ZoomLevel" onchange="map.setZoom(parseInt(this.value))">
+		<option value="0">0</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option><option value="11">11</option><option value="12">12</option><option value="13">13</option><option value="14">14</option><option value="15">15</option><option value="16">16</option><option value="17">17</option><option value="18">18</option><option value="19">19</option><option value="20">20</option>
+	</select>
+</div>
+
+</body>
+</html>

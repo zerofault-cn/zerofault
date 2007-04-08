@@ -1,0 +1,51 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml">
+<head>
+<style type="text/css">
+v\:*
+{
+	behavior:url(#default#VML);
+}
+</style>
+
+<script language="javascript" src="http://maps.google.com/maps?file=api&v=1&key=ABQIAAAAGIXjiA0k2uINv-bo5flFdBSLxiGPPpn4l8ym3gKev6rH4MHlYhSwGS264tZjCR0HVYRkeRny6kUurA"></script>
+<script language="javascript" type="text/javascript" src="map_cn.js"></script>
+<script language="javascript" type="text/javascript" src="Step1Map.js"></script>
+<script language="javascript" type="text/javascript" src="goldwayMap.js"></script>
+</head>
+<body leftmargin=0 topmargin=0>
+<div id="Layer1" style="position:absolute; left:600px;">
+	<div align="left">
+		<a href="?file=2006-03-24.9.xml">2006-03-24.9</a><br />
+		<a href="?file=2006-03-24.8.xml">2006-03-24.8</a><br />
+		<a href="?file=2006-03-24.7.xml">2006-03-24.7</a><br />
+		<a href="?file=2006-03-24.6.xml">2006-03-24.6</a><br />
+		<a href="?file=2006-03-24.5.xml">2006-03-24.5</a><br />
+		<a href="?file=2006-03-24.4.xml">2006-03-24.4</a><br />
+		<a href="?file=2006-03-24.3.xml">2006-03-24.3</a><br />
+		<a href="?file=2006-03-24.2.xml">2006-03-24.2</a><br />
+		<a href="?file=2006-03-24.12.xml">2006-03-24.12</a><br />
+		<a href="?file=2006-03-24.11.xml">2006-03-24.11</a><br />
+		<a href="?file=2006-03-24.xml">2006-03-24</a><br>
+		<a id="runlink" href="#">Latest Run</a> (<a id="runkml" href="data/latest.kml">Download to Google Earth</a>)
+	</div>
+</div>
+<div id="Layer2" style="position:absolute; left:0; top:0; width:600px; z-index:2">
+	<div id="map" style="width: 600px; height: 400px;"></div>
+	<span id="progress"></span>
+	<span id="distanceMessage"></span>
+	<span id="speedMessage"></span>
+	<span id="timeMessage"></span>
+</div>
+<div id="message" style="position:absolute;top:430px;font-size:13px;background-color:#B2D9BE;">
+	<b>中心经纬</b>:<input id="I_Center" size="18" onchange="map.recenterOrPanToLatLng(new GPoint(parseFloat(document.getElementById('I_Center').value.split(',')[0]),parseFloat(document.getElementById('I_Center').value.split(',')[1])))"/>
+	<b>放大级别</b>:<select id="I_ZoomLevel" onchange="map.zoomTo(parseInt(this.value))">
+		<option value="0">0</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option><option value="11">11</option><option value="12">12</option><option value="13">13</option><option value="14">14</option><option value="15">15</option><option value="16">16</option><option value="17">17</option><option value="18">18</option><option value="19">19</option><option value="20">20</option>
+	</select>
+	<b>地图类型</b>:<select id="I_MapType" onchange="setType(this.value)"></select>
+	&nbsp;&nbsp;&nbsp;&nbsp;
+	<input type="button" value="复制本视图地址" onclick="clipboardData.setData('text',GetUrl());alert('网址已经复制到剪切板中\n\n谢谢！');"/>
+	<input type="button" value="收藏本视图" onclick="window.external.addFavorite(GetUrl(),'Step1.cn地图服务')"/>
+</div>
+</body>
+</html>
