@@ -1,0 +1,116 @@
+<script>
+function markupdate(id)
+{
+	document.getElementById("iframe1").src='comment_mark_update.php?id='+id;
+}
+function changebutton(id)
+{
+	if(document.getElementById("button"+id).value=='设为精彩')
+	{
+		document.getElementById("button"+id).value='取消精彩';
+	//	document.getElementById("agreetext"+user_id).innerHTML='<span style="color:red">否</span>';
+	}
+	else
+	{
+		document.getElementById("button"+id).value='取消精彩';
+	//	document.getElementById("agreetext"+user_id).innerHTML='<span style="color:blue">是</span>';
+	}
+}
+function confirmdel(id,mm_id)
+{
+	if(confirm('确定要删除ID为'+id+'的评论吗?'))
+	{
+		document.getElementById('iframe1').src='comment_del.php?id='+id+'&mm_id='+mm_id;
+		window.setTimeout("location.reload()",500);
+	}
+	else
+	{
+		return;
+	}
+}
+function selectall(chk)
+{
+	var f = document.forms["form2"];
+	for (i=0;i<f.elements.length;i++)
+    {
+		f.elements[i].checked = chk;
+	}
+}
+function check()
+{
+	if(document.form1.s_username.value=='' && document.form1.s_blogname.value=='')
+	{
+		alert('您还没有输入任何搜索条件呢!');
+		document.form1.s_username.focus();
+		return false;
+	}
+	return true;
+}
+function check2()
+{
+	var c = document.getElementsByName("id[]");
+	for(i=0;i<c.length;i++)
+	{
+		if(c[i].checked == true)
+		{
+			return true;
+		}
+	}
+	alert("您还没有做任何选择呢!");
+	return false;
+}
+</script>
+<!-- right div -->
+<div id="Layer2" style="position:absolute;margin-left:10px;width:830px;border:1px solid #000;">
+<!-- search form -->
+<table width="100%" border="0">
+<form name="form1" method="get" action="comment_list.php" onsubmit="return check()">
+<tr>
+	<td>输入任一搜索条件：<br />&nbsp;&nbsp;&nbsp;&nbsp;
+	评论用户:<input name="s_username" type="text" size="13" />
+	被评论博客名:<input name="s_blogname" type="text" size="13" />
+	<input type="hidden" name="mm_id" value="{MM_ID}" />
+	<input type="submit" name="submit" value="搜索" /></td>
+</tr>
+</form>
+</table>
+<!-- search form end -->
+<div style="text-align:center;padding:5px 0;background-color:#DCDCDC;border-top:1px dotted #666633">
+<input type="radio" name="radio1" value="0" {CHECK0} onclick="javascript:window.location='?mm_id=0';">对所有人的评论
+<input type="radio" name="radio1" value="1" {CHECK1} onclick="javascript:window.location='?';">对报名用户的评论</div>
+<table width="100%" border="0" cellpadding="0" cellspacing="0">
+<form name="form2" action="comment_mark_update.php" method="post" target="iframe1">
+<tr style="padding:5px 0;background-color:#6699FF;font-weight:bold">
+	<td>选择</td>
+	<td>对象</td>
+	<td>内容</td>
+	<td>留言时间</td>
+	<td align="center">操作</td>
+</tr>
+<!-- BEGIN list -->
+<tr>
+	<td><input type="checkbox" name="id[]" value="{list.ID}" {BTNFN} /></td>
+	<td nowrap>[{list.USERNAME}]对[<a href="{list.BLOGURL}" target="_blank" title="{list.MM_ID}:{list.IP}">{list.BLOGNAME}</a>]留言:</td>
+	<td style="word-wrap:break-word;word-break:break-all;">{list.CONTENT}</a></td>
+	<td nowrap>{list.ADDTIME}</td>
+	<td align="center"><input type="button" id="button{list.ID}" value="{list.MARK}" onClick="markupdate({list.ID});setTimeout('changebutton({list.ID})',100);" {BTNFN} /><input type="button" value="删除" onclick="confirmdel({list.ID},{list.MM_ID})" {BTNFN} /></td>
+</tr>
+<tr>
+	<td colspan="5"><div height="1" style="border-bottom:1px dotted #aaa"></div></td>
+</tr>
+<!-- END list -->
+<tr height="30" style="background-color:#6666FF;">
+	<td colspan="2"><input type="checkbox" name="checkall" onclick="selectall(this.checked)" {BTNFN} />↑全选</td>
+	<td colspan="3" align="right" style="border:0"><input type="button" value="将所选设为精彩" onclick="if(check2()){document.form2.markall.value=1;document.form2.submit();window.setTimeout('location.reload()',500);}else return;" {BTNFN} /><input type="button" value="将所选取消精彩" onclick="if(check2()){document.form2.markall.value=0;document.form2.submit();window.setTimeout('location.reload()',500);}else return;" {BTNFN} /><input type="button" value="将所选删除" onclick="if(check2()){document.form2.action='comment_del.php';document.form2.submit();window.setTimeout('location.reload()',500);}else return;" {BTNFN} {DELBTNFN} /></td>
+</tr>
+<input type="hidden" name="markall" value="" />
+</form>
+</table>
+<br>
+<div align="center">{PAGE}</div>
+<br>
+<div>
+<iframe frameborder="0" scrolling="no" id="iframe1" name="iframe1" width="500" height="40" src=""></iframe>
+</div>
+</div>
+<!-- right div end -->
