@@ -1,0 +1,195 @@
+body
+{
+	text-align:center;
+}
+div#all
+{
+	margin-left: auto;
+	margin-right: auto;
+	margin-top:0px;
+	width:758px;
+}
+div#left
+{
+	float:left;
+	width:168px;
+	padding-right:8px;
+	margin-top:4px;
+	border-top:1px solid #ccc;
+}
+div#main
+{
+	float:right;
+	width:590px;
+	text-align:left;
+	padding-top:5px;
+	margin-top:4px;
+	border-top:1px solid #ccc;
+	padding-left:5px;
+	border-left:1px solid #ccc;
+}
+
+form#form1
+{
+margin:0;
+}
+fieldset#field1
+{
+text-align:left;
+margin-top:5px;
+}
+div#treeMenu1,div#treeMenu2
+{
+margin-left:1.6em;
+padding:1px 0;
+}
+
+div#treeMenu2 a:link 
+{
+	color: #333333;
+	font-size: 10pt; 
+	text-decoration: none
+}
+div#treeMenu2 a:visited 
+{
+	color: #333333;
+	font-size: 10pt;
+	text-decoration: none
+}
+div#treeMenu2 a:hover 
+{
+	color: #ff2200; 
+	font-size: 11pt;
+	text-decoration: underline
+}
+div#list1
+{
+padding:3px 0;
+}
+div#list1 span
+{
+width:124px;
+}
+div#newAlbum1
+{
+float:left;
+}
+div#newAlbum1Photo
+{
+width:116px;
+height:138px;
+}
+div#newAlbum1Photo img
+{
+border:1px solid #b0b0b0;
+}
+div#more
+{
+text-align:right;
+margin-top:5px;
+}
+div#songList
+{
+padding:3px 0;
+border-bottom:1px solid #ccc;
+}
+div#songList span#f0
+{
+width:30px;
+}
+div#songList span#f1,span#f2
+{
+width:120px;
+}
+div#songList span#f3
+{
+width:60px;
+}
+div#songList span#f4
+{
+width:90px;
+}
+div#songList span#f5,span#f6,span#f7,span#f8
+{
+width:40px;
+}
+span#topNavi
+{
+padding-bottom:5px;
+border-bottom:1px solid #ffcc33
+}
+div#pageNavi
+{
+margin-top:5px;
+text-align:right;
+}
+div#singerInfo
+{
+width:150px;
+float:left;
+text-align:center;
+}
+div#singerInfo div#text
+{
+margin-top:5px;
+text-align:center;
+}
+div#singerIntro
+{
+width:430px;
+float:right;
+text-align:right;
+}
+div#albumList
+{
+height:170px;
+border:1px dotted #a0a0a0;
+margin-bottom:5px;
+padding:5px;
+}
+div#albumList div#photo
+{
+float:left;
+width:140px;
+text-align:center;
+}
+div#textIntro
+{
+text-indent:2em;
+line-height:130%;
+word-wrap:break-word;
+}
+
+div#commentList
+{
+	padding:3px 0;
+	border-bottom:1px solid #ccc;
+}
+div#commentList span
+{
+vertical-align:top;
+}
+div#commentList span#f0
+{
+width:40px;
+}
+div#commentList span#f1
+{
+width:80px;
+}
+div#commentList span#f2
+{
+width:320px;
+word-wrap:break-word;
+}
+div#commentList span#f3
+{
+width:140px;
+}
+span#commentLabel
+{
+width:60px;
+text-align:right;
+margin-top:5px;
+vertical-align:top;
+}
