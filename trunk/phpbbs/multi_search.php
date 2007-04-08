@@ -1,0 +1,17 @@
+<?
+$type=$_POST['type'];
+$keyword=$_POST['keyword'];
+if($type=='music')
+{
+	header("location:music/search.php?searchtype=multi&keyword=".$keyword);
+}
+if($type=='soft')
+{
+	header("location:download/index.php?sign=search&newsearchtype=multi&section=multi&keyword=".$keyword);
+}
+if($type=='board')
+{
+	header("location:/phpbbs/board/search.php?title=all&type=all&keyword=".$keyword);
+}
+exit;
+?>

@@ -1,0 +1,13 @@
+REGEDIT4
+
+[HKEY_CLASSES_ROOT\MIME\Database\Content Type\audio/x-mpegurl]
+"Extension"=".m3u"
+
+
+[HKEY_CURRENT_USER\Software\Microsoft\Internet Explorer\Media\MimeTypes]
+"audio/x-mpegurl"=hex:00
+
+
+
+
+

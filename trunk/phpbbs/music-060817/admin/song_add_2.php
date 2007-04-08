@@ -1,0 +1,51 @@
+<?php
+$phpbbs_root_path="../..";
+include_once $phpbbs_root_path.'/include/db_connect.php';
+$singer_id=$_POST['singer_id'];
+$album_id=$_POST['album_id'];
+$song_name=$_POST['song_name'];
+$song_name=addslashes($song_name);
+$mp3file=$_POST['mp3file'];
+$lrcfile=$_POST['lrcfile'];
+$mp3filepath=substr($mp3file,strpos($mp3file,'\\')+1);
+$mp3filepath=str_replace("\\","/",$mp3filepath);
+$mp3filepath=addslashes($mp3filepath);
+if($lrcfile=='')
+	$lrcfile='#';
+else
+{
+	$lrcfilepath=substr($lrcfile,strpos($lrcfile,'\\')+1);
+	$lrcfilepath=str_replace("\\","/",$lrcfilepath);
+	$lrcfilepath=addslashes($lrcfilepath);
+}
+$sql1="select * from song_info where singer_id=".$singer_id." and album_id=".$album_id." and song_name='".$song_name."'";
+$sql2="insert into song_info values('','".$singer_id."','".$album_id."','".$song_name."','".$mp3filepath."','".$lrcfilepath."','',CURDATE())";
+$result1=$db->sql_query($sql1);
+if($db->sql_numrows($result1)>0)
+{
+	?>
+	<script>
+		alert("这首MP3已经存在，请添加其他文件!");
+		window.history.go(-1);
+	</script>
+	<?
+}
+else
+{
+	if($db->sql_query($sql2))
+	{
+		?>
+		<script>
+		if(confirm("已成功添加,继续添加吗?"))
+			window.location="song_add_1.php?singer_id=<?=$singer_id?>&album_id=<?=$album_id?>";
+		else
+			window.location="singer_info.php?singer_id=<?=$singer_id?>";
+		</script>
+		<?
+	}
+	else
+	{
+		echo "error:".$sql2;
+	}
+}
+?>

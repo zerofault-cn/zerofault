@@ -1,0 +1,120 @@
+A:link,A:visited
+{
+	COLOR: #333333;
+	FONT-SIZE: 13px; 
+	TEXT-DECORATION: none
+}
+A:hover 
+{
+	COLOR: #ff2200; 
+	FONT-SIZE: 13px;
+	TEXT-DECORATION: underline
+}
+A:active 
+{
+	COLOR: #ff9966;
+	FONT-SIZE: 13px;
+	TEXT-DECORATION: underline
+}
+TD 
+{
+	COLOR: #000000; 
+	FONT-FAMILY: "Verdana", "宋体"; 
+	FONT-SIZE: 13px;
+	line-height:160%;
+}
+iframe
+{
+	COLOR: #000000;
+	FONT-FAMILY: "Verdana", "宋体"; 
+	FONT-SIZE: 13px;
+}
+BODY 
+{
+	FONT-FAMILY: "宋体";
+	FONT-SIZE: 13px;
+	margin-top:0;
+	SCROLLBAR-FACE-COLOR: #0099cc; 
+	SCROLLBAR-HIGHLIGHT-COLOR: #ffffff; 
+	SCROLLBAR-SHADOW-COLOR: #82aacd; 
+	SCROLLBAR-3DLIGHT-COLOR: #000000; 
+	SCROLLBAR-ARROW-COLOR: #ffffff; 
+	SCROLLBAR-TRACK-COLOR: #00b0dd; 
+	SCROLLBAR-DARKSHADOW-COLOR: #82aacd;
+}
+
+.input 
+{
+	BACKGROUND-COLOR: #3399cc; 
+	BORDER-BOTTOM: #000000 1px solid; 
+	BORDER-LEFT: #000000 0px solid; 
+	BORDER-RIGHT: #000000 0px solid; 
+	BORDER-TOP: #000000 0px solid; 
+	COLOR: #ffffff; 
+	FONT-FAMILY: "Verdana", "宋体"; 
+	FONT-SIZE: 12px;
+}
+
+SELECT 
+{
+	BBACKGROUND-COLOR: #d0dce0; 
+	BORDER-BOTTOM: #000000 1px solid; 
+	BORDER-LEFT: #000000 1px solid; 
+	BORDER-RIGHT: #000000 1px solid; 
+	BORDER-TOP: #000000 1px solid; 
+	COLOR: #000000; 
+	FONT-SIZE: 12px; 
+	LIST-STYLE: decimal inside
+}
+
+HR 
+{
+	COLOR: #99ccff
+}
+.flash 
+{
+	FILTER: Glow(Color=red, Strength=255)?, Strength=?)
+}
+.button 
+{
+	BACKGROUND-COLOR: #3399cc; 
+	BORDER-BOTTOM: #333333 1px solid; 
+	BORDER-LEFT: #333333 1px solid; 
+	BORDER-RIGHT: #333333 1px solid; 
+	BORDER-TOP: #333333 1px solid; 
+	CURSOR: hand
+}
+.button2
+{
+	BORDER-LEFT: 0px ; 
+	BORDER-RIGHT: 0px;
+}
+caption
+{
+	color:#003399;
+	font-size:14px;
+}
+.red
+{
+	color:#ff0000;
+}
+.blue
+{
+	color:#0000ff;
+}
+.green
+{
+	color:green;
+}
+.lightblue
+{
+	color:#0000cc;
+}
+.small
+{
+	font-size:11px
+}
+.big
+{
+	font-size:16px; 
+}
