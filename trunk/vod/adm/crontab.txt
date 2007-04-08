@@ -1,0 +1,54 @@
+#crontab
+SHELL=/bin/bash
+PATH=/sbin:/bin:/usr/sbin:/usr/bin
+MAILTO=root
+HOME=/
+
+# run-parts
+01 * * * * root run-parts /etc/cron.hourly
+02 04 * * * root run-parts /etc/cron.daily
+55 23 * * * root run-parts /etc/cron.mydaily
+00 00 1 * * root run-parts /etc/cron.mymonthly
+58 23 * * 6 root run-parts /etc/cron.myweekly
+22 4 * * 0 root run-parts /etc/cron.weekly
+42 4 1 * * root run-parts /etc/cron.monthly
+
+-------------------------------------------------------
+
+#cron.daily/mysql_backup_daily.sh
+nowdate=`date '+%Y%m%d'`
+/usr/local/mysql/bin/mysqldump -h221.10.222.90 -udba -psql BOD_WIN daily_source dict_entry dict_type epg_schedule epg_station prog_info rss_source rss_type singer_info singer_type > /mnt/disk1/backup/BOD_WIN_$nowdate.sql
+/usr/local/mysql/bin/mysqldump -h221.10.222.90 -udba -psql BOD_WIN prog_info > /mnt/disk1/backup/prog_info_$nowdate.sql
+
+-------------------------------------------------------
+
+#cron.hourly/mysql_backup_hourly.sh
+nowtime=`date '+%Y%m%d%H%M'`
+/usr/local/mysql/bin/mysqldump -h221.10.222.90 -udba -psql BOD_WIN daily_source > /mnt/disk1/backup/daily_source_$nowtime.sql
+/usr/local/mysql/bin/mysqldump -h221.10.222.90 -udba -psql BOD_WIN daily_type > /mnt/disk1/backup/daily_type_$nowtime.sql
+#/usr/local/mysql/bin/mysqldump -h221.10.222.90 -udba -psql BOD_WIN dict_entry > /mnt/disk1/backup/dict_entry_$nowtime.sql
+#/usr/local/mysql/bin/mysqldump -h221.10.222.90 -udba -psql BOD_WIN prog_info > /mnt/disk1/backup/prog_info_$nowtime.sql
+
+-------------------------------------------------------
+
+#cron.mydaily/mv_hourly_logs.sh
+today=`date '+%Y%m%d'`
+mkdir /jbproject/tomcat/goldsoft/php-vod/logs/$today
+mv /jbproject/tomcat/goldsoft/php-vod/logs/hourly/* /jbproject/tomcat/goldsoft/php-vod/logs/$today/
+
+--------------------------------------------------------
+
+#cron.mymonthly/mv_daily_logs.sh
+thismonth=`date '+$Y%m'`
+mkdir /jbproject/tomcat/goldsoft/php-vod/logs/$thismonth
+mv /jbproject/tomcat/goldsoft/php-vod/logs/daily/* /jbproject/tomcat/goldsoft/php-vod/logs/$thismonth/
+
+----------------------------------------------------------
+
+#cron.myweekly/ mv_logs_weekly.sh
+mv /jbproject/tomcat/goldsoft/php-vod/logs/daily/* /jbproject/tomcat/goldsoft/php-vod/logs/weekly/
+
+---------------------------------------------------------
+
+#crontab -e
+00 04 * * * /usr/local/bin/webalizer
