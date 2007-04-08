@@ -1,0 +1,94 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml">
+<head id="ctl00_Head1">
+<style type="text/css">
+v\:* {
+behavior:url(#default#VML);
+}
+</style>
+
+<script language="javascript" src="loadGoogleMap.js"></script>
+
+<script src="gmap-wms.js"></script>
+
+<script src="googleProxy.js"></script>
+
+<script src="GoogleSub.js"></script>
+<script language="javascript" type="text/javascript" src="goldwayMap.js"></script>
+
+<script language="javascript" type="text/javascript">
+<!--
+function window_onload()
+{ 
+    map = new GMap2(document.getElementById("map1")); 
+/*
+	map.mapTypes.pop (); 
+    SATELLITE= map.mapTypes.pop (); 
+    map.mapTypes.pop (); 
+
+    url='http://218.107.47.116:8000/gps/MapTile/pak.aspx?';
+    MAP51 = createWMSSpec(url, "中文地图", "中文地图", "routes", "default", "image/gif", "1.0.0");      
+
+    map.mapTypes.push(SATELLITE);
+    map.mapTypes.push(MAP51);       
+    map.setMapType(SATELLITE);
+*/
+    map.addControl(new GMapTypeControl());    
+    map.addControl(new GLargeMapControl());    
+  
+    CreateGoogleMap();
+	ShowMobileInfo();
+	onLoad();
+    
+}
+function ShowMobileInfo()
+{ 
+	googleMap().centerAndZoom(114.03145551681518,22.56053890148834,2);
+}
+function googleMap()
+{    
+    return document.googleMap
+}
+function refresh()
+{
+    window.location = window.location ;
+}
+
+var map;
+// -->
+    </script>
+
+<title>wms MAP</title>
+</head>
+
+<body  leftmargin=0 topmargin=0 onload="return window_onload()">
+
+<div id="Layer1" style="position:absolute; left:600px;">
+	<div align="left">
+	<a href="index.htm">初始地图</a><br>
+	
+	<a href="javascript:readGPS()">当前位置</a><br>
+	<form name="clock">
+	间隔时间：<input name="space" type="text" value="10000" size="6" maxlength="10">毫秒
+	<br>
+	<input type="radio" name="rad" value="OFF" checked onClick="if(enabled==1 ){clearTimeout( TO );enabled = 0;}">关闭跟踪
+	<br>
+	<input type="radio" name="rad" value="on" onClick=" if( enabled == 0 ){var TO = setTimeout('TOfunc()',parseInt(document.clock.space.value));enabled = 1;}">开始跟踪
+	</form>
+	<br>
+	<a href="?file=line_2006-4-15.xml">行驶路线回放(深圳)</a><br />
+	<a href="?file=2006-03-25.xml">2006-03-25(国外)</a><br>
+	<br>
+	</div>
+</div>
+
+<div id="Layer2" style="position:absolute; left:0; top:0; width:600px; z-index:2">
+	<div id="map1" style="width: 600px; height: 500px;"></div>
+	<span id="progress"></span>
+	<span id="distanceMessage"></span>
+	<span id="speedMessage"></span>
+	<span id="timeMessage"></span>
+</div>
+</body>
+</html>

@@ -1,0 +1,74 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml">
+<head>
+<style type="text/css">
+v\:*
+{
+	behavior:url(#default#VML);
+}
+</style>
+
+<!-- <script language="javascript" src="http://maps.google.com/maps?file=api&v=1&key=ABQIAAAAGIXjiA0k2uINv-bo5flFdBQN1BKPCCKCT7vQy6FmwOpRHbNPcxSxMtoUeQHxkIxFFjme21GJhAO91g"></script> -->
+<script language="javascript" src="loadGoogleMap.js"></script>
+<script  language="javascript"  src="http://api.51ditu.com/apis/mapapi?key=MjE4Ljg4LjEyMS4xOTc6ODA4OA==1qaz2wsxemVyb2ZhdWx0QGdtYWlsLmNvbSYmJjIxOC44OC4xMjEuMTk3OjgwODg$"></script>
+<script language="javascript" type="text/javascript" src="map_cn.js"></script>
+<!-- <script language="javascript" src="Step1Map.js" type="text/javascript"></script> -->
+<script language="javascript" type="text/javascript" src="goldwayMap.js"></script>
+<script>
+
+function init()
+{
+	map2 = new LTMaps("51ditu_map");
+	//定义地图显示中心点为 ，北京(beijing)，比例尺为 7
+//	map2.cityNameAndZoom( "shenzhen" , 12 );
+//	map2.centerAndZoom( new LTPoint(10608000,3694000),12 )
+	map2.centerAndZoom( new LTPoint(11403990,2256541),0 )
+//	setTimeout("map.moveToCenter( new LTPoint( -7907011,3591040 ) )", 5000 );
+	//添加 常用操作控件
+//	map2.addControl(new LTStandMapControl());
+}
+</script>
+</head>
+<body leftmargin=0 topmargin=0 oonload="init()">
+<div id="Layer1" style="position:absolute; left:600px;">
+	<div align="left">
+	<a href="index.htm">初始地图</a><br>
+	<a href="javascript:CreateMarker1(new GLatLng(30.65305825,104.0674999),icon_Red,'成都市提督街88号'),map.setCenter(new GLatLng(30.65305825,104.0674999),12)">我的位置</a><br>
+	<a href="?center.x=114.03145551681518&center.y=22.56053890148834&zoom=17&pInfo=GOLDWAY">金纬科技所在地</a><br><br><!-- 51ditu里的位置：11403990,2256541 -->
+	<a href="javascript:readGPS()">当前位置</a><br>
+	<form name="clock">
+	间隔时间：<input name="space" type="text" value="10000" size="6" maxlength="10">毫秒
+	<br>
+	<input type="radio" name="rad" value="OFF" checked onClick="if(enabled==1 ){clearTimeout( TO );enabled = 0;}">关闭跟踪
+	<br>
+	<input type="radio" name="rad" value="on" onClick=" if( enabled == 0 ){var TO = setTimeout('TOfunc()',parseInt(document.clock.space.value));enabled = 1;}">开始跟踪
+	</form>
+	<br>
+	<a href="?file=getXML.php?type=line">行驶路线回放</a><br />
+	<a href="?file=2006-03-25.xml">2006-03-25</a><br>
+	<br>
+	<div style="font-size:13px;width:230px" id="TreeDiv"></div>
+	
+	</div>
+</div>
+<div id="Layer2" style="position:absolute; left:0; top:0; width:600px; z-index:3;filter:alpha(opacity=50);">
+	<div id="51ditu_map" style="width: 600px; height: 500px;"></div>
+</div>
+<div id="Layer3" style="position:absolute; left:0; top:0; width:600px; z-index:2">
+	<div id="google_map" style="width: 600px; height: 500px;"></div>
+	<span id="progress"></span>
+	<span id="distanceMessage"></span>
+	<span id="speedMessage"></span>
+	<span id="timeMessage"></span>
+</div>
+<div id="message" style="position:absolute;top:530px;left:0;font-size:13px;background-color:#B2D9BE;">
+	<b>中心经纬</b>:<input id="I_Center" size="30" oonchange="map.recenterOrPanToLatLng(new GPoint(parseFloat(document.getElementById('I_Center').value.split(',')[0]),parseFloat(document.getElementById('I_Center').value.split(',')[1])))"/>
+	<b>放大级别</b>:<select id="I_ZoomLevel" onchange="map.setZoom(parseInt(this.value))">
+		<option value="0">0</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option><option value="11">11</option><option value="12">12</option><option value="13">13</option><option value="14">14</option><option value="15">15</option><option value="16">16</option><option value="17">17</option><option value="18">18</option><option value="19">19</option><option value="20">20</option>
+	</select>
+</div>
+</body>
+
+</html>

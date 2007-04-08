@@ -1,0 +1,67 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://earth.google.com/kml/2.0">
+<Folder>
+  <name>My Places</name>
+  <open>1</open>
+  <Placemark>
+    <name>K_Reverter所在公司</name>
+    <description>K_Reverter工作的地方</description>
+    <LookAt id="khLookAt515">
+      <longitude>114.1025871483469</longitude>
+      <latitude>22.55943997726462</latitude>
+      <range>118.9159184708093</range>
+      <tilt>4.67700688799651e-011</tilt>
+      <heading>-0.001388560688114285</heading>
+    </LookAt>
+    <styleUrl>root://styles#default</styleUrl>
+    <Point id="khPoint516">
+      <coordinates>114.102459,22.55952830133242,0</coordinates>
+    </Point>
+  </Placemark>
+  <Placemark>
+    <name>K_Reverter的大学</name>
+    <description>K_Reverter读大学的地方</description>
+    <LookAt id="khLookAt515">
+      <longitude>116.3574438359872</longitude>
+      <latitude>39.98629852076348</latitude>
+      <range>4984.605468292602</range>
+      <tilt>-4.760949646832975e-011</tilt>
+      <heading>1.932251176091116</heading>
+    </LookAt>
+    <styleUrl>root://styles#default</styleUrl>
+    <Point id="khPoint516">
+      <coordinates>116.354006,39.98684166666666,0</coordinates>
+    </Point>
+  </Placemark>
+  <Placemark>
+    <name>K_Reverter的家乡</name>
+    <description>K_Reverter的家乡</description>
+    <LookAt id="khLookAt520">
+      <longitude>112.6857368551186</longitude>
+      <latitude>29.94176113301537</latitude>
+      <range>4985.595011149493</range>
+      <tilt>-7.178662656084629e-011</tilt>
+      <heading>-0.09829787350678551</heading>
+    </LookAt>
+    <styleUrl>root://styles#default</styleUrl>
+    <Point id="khPoint521">
+      <coordinates>112.685736,29.94176111111111,0</coordinates>
+    </Point>
+  </Placemark>
+  <Placemark>
+    <name>K_Reverter住的地方</name>
+    <description>K_Reverter在深圳住的地方</description>
+    <LookAt id="khLookAt517">
+      <longitude>114.1150161989155</longitude>
+      <latitude>22.56200647674139</latitude>
+      <range>847.6976047509552</range>
+      <tilt>3.291445258799457e-011</tilt>
+      <heading>-0.0004819798297113784</heading>
+    </LookAt>
+    <styleUrl>root://styles#default</styleUrl>
+    <Point id="khPoint518">
+      <coordinates>114.114658,22.56204488013702,0</coordinates>
+    </Point>
+  </Placemark>
+</Folder>
+</kml>

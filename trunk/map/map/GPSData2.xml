@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<GPSData>
+  <Name>javalu</Name>
+  <Photo>http://api.51ditu.com/images/api/i.gif</Photo>
+  <Message>JavaCard开发教程之智能卡简介</Message>
+  <Line>
+    <Path Longitude="127.29" Latitude="50.14" Time="112418"/>
+    <Path Longitude="98.51" Latitude="25.01" Time="112418"/>
+  </Line>
+  <!--时间-->
+  <Time>112418</Time>
+  <!--状态-->
+  <State>A</State>
+  <!--经度-->
+  <Longitude>4013056</Longitude>
+  <!--纬度-->
+  <Latitude>11670784</Latitude>
+  <!--速度-->
+  <Velocity>3</Velocity>
+  <!--角度-->
+  <Angle>3</Angle>
+</GPSData>

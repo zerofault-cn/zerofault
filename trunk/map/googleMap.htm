@@ -1,0 +1,251 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml">
+<head>
+
+<!-- 
+
+szgoldway.meibu.com:
+ABQIAAAAGIXjiA0k2uINv-bo5flFdBQN1BKPCCKCT7vQy6FmwOpRHbNPcxSxMtoUeQHxkIxFFjme21GJhAO91g
+www.local.com
+ABQIAAAAGIXjiA0k2uINv-bo5flFdBSLxiGPPpn4l8ym3gKev6rH4MHlYhSwGS264tZjCR0HVYRkeRny6kUurA
+localhost
+ABQIAAAAGIXjiA0k2uINv-bo5flFdBS1SO3jSrC4N-FIWTy8FbTYOa2uUhQg0hevEvvznR-Y5TqqUVq2J5QWrA
+192.168.0.100
+ABQIAAAAGIXjiA0k2uINv-bo5flFdBQdfUrd590uSmlGKFyPIj7DASFsZBQAkaORK7y8JqofZE1IWTMXScTRKw
+-->
+<script language="javascript" type="text/javascript" src="Gmap.js"></script>
+<script language="javascript" type="text/javascript" src="map_cn.js"></script>
+</head>
+<body>
+<a href="http://maps.google.com/maps?file=api&v=1&key=ABQIAAAAGIXjiA0k2uINv-bo5flFdBQN1BKPCCKCT7vQy6FmwOpRHbNPcxSxMtoUeQHxkIxFFjme21GJhAO91g">GmapJS.js</a>
+<div id="map" style="width: 800px; height: 500px"></div>
+<div id="message"></div>
+<script type="text/javascript">
+//<![CDATA[
+function createMarker(point, txt)
+{
+	var marker = new GMarker(point);
+//	Show this marker's index in the info window when it is clicked
+	GEvent.addListener(marker, "click", function()
+	{
+		marker.openInfoWindowHtml(txt);
+	});
+	return marker;
+}
+
+//alert(window.location.href);
+//alert(window.document.URL);
+var map = new GMap(document.getElementById("map"));
+map.setMapType(G_SATELLITE_TYPE);
+
+//在地图上添加控件
+//addControl方法可以在地图上添加控件，并且集成了GSmallMapControl(用来缩放和移动图片)和GMapTypeControl(用来在地图和卫星图模式间切换)两个控件.
+map.addControl(new GLargeMapControl());
+//map.addControl(new GSmallMapControl());
+map.addControl(new GMapTypeControl());
+
+//事件监视
+//GEvent.addListener用来注册事件监视器，在这个例子中，在用户移动或拖拽地图后，输出地图中心点的经/纬.
+GEvent.addListener(map, "moveend", function()
+{
+	var center = map.getCenterLatLng();
+	var latLngStr = '(' + center.y + ', ' + center.x + ')';
+	var zoomLevel=map.getZoomLevel();
+	document.getElementById("message").innerHTML = latLngStr+','+zoomLevel;
+});
+
+//创建一个地图,参数分别为：（经度，纬度），放大率
+//map.centerAndZoom(new GPoint(114.10855293273926, 22.56008314155048),3);
+map.centerAndZoom(new GPoint(39.65952,16.26240),9);
+//map.centerAndZoom(new GPoint(-122.141944, 37.441944), 4);
+
+//地图的移动和变换
+//recenterOrPanToLatLng 方法进行一个地图变换，目标点经/纬在当前视口之中时执行一个连续的动作，否则，执行不连续的变换动作
+//	window.setTimeout(function(){map.recenterOrPanToLatLng(new GPoint(114.1146, 22.6619));}, 5000);
+
+//显示信息浮窗
+//这个范例显示一个指向地图中心点的"Hello world"信息浮窗，这里信息浮窗显示在指向点的上面，而实际上，信息窗能在地图的任何地方显示.
+//map.openInfoWindow(map.getCenterLatLng(),document.createTextNode("Hello world! I'm here"));
+//map.openInfoWindowHtml(map.getCenterLatLng(),"Hello world!<br><li>I'm here<li>I'm fine<li>What about you<li>Byebye");
+//在当前地理位置点GPoint显示一个放大，如果zoomLevel和mapType参数没有被设置，默认使用第1缩放等级和当前正使用的地图类型.
+//map.showMapBlowup(map.getCenterLatLng(),1);
+
+var icon = new GIcon();
+icon.image="narrow.gif";
+//icon.shadow="narrow.gif";
+icon.iconSize=new GSize(15, 15);
+//icon.shadowSize=new GSize(15, 15);
+icon.iconAnchor = new GPoint(6, 20);
+var marker = new GMarker(map.getCenterLatLng(),icon);
+map.addOverlay(marker);
+
+//地图标注
+//本范例通过创建10个随机的标注和折线来说明地图标注的用法.
+
+// Add 10 random markers in the map viewport using the default icon
+/*
+var bounds = map.getBoundsLatLng();
+var width = bounds.maxX - bounds.minX;
+var height = bounds.maxY - bounds.minY;
+for (var i = 0; i < 10; i++) {
+	var point = new GPoint(bounds.minX + width * Math.random(),bounds.minY + height * Math.random());
+	var marker = new GMarker(point);
+	map.addOverlay(marker);
+}
+
+// Add a polyline with 4 random points. Sort the points by longitude so that
+// the line does not intersect itself.
+var points = [];
+for (var i = 0; i < 5; i++) {
+	points.push(new GPoint(bounds.minX + width * Math.random(),bounds.minY + height * Math.random()));
+}
+points.sort(function(p1, p2) { return p1.x - p2.x; });
+map.addOverlay(new GPolyline(points));
+*/
+//黑河127.29,50.14
+//腾冲98.51,25.01
+//var polyline = new GPolyline([new GPoint(114.10805293273926, 22.55958314155048),new GPoint(114.10905293273926, 22.56058314155048)],"#ff00ff", 10);
+//var polyline2= new GPolyline([new GPoint(114.10805293273926, 22.56058314155048),new GPoint(114.10905293273926, 22.55958314155048)],"#ff00ff", 10);
+
+var polyline = new GPolyline([new GPoint(39.65952,16.26240),new GPoint(40.13056,16.70784)],"#ff00ff", 10);
+
+
+map.addOverlay(polyline);
+//map.addOverlay(polyline2);
+
+//响应用户点击
+//本范例在用户点击地图时，在相应的点创建一个标记，用户点击标记时，移除这个标记. 
+/*
+GEvent.addListener(map, 'click', function(overlay, point) {
+  if (overlay) {
+    map.removeOverlay(overlay);
+  } else if (point) {
+    map.addOverlay(new GMarker(point));
+  }
+});
+*/
+
+//在标记上显示信息浮窗
+//在这个例子中，点击每一个标记，就会在标记上面显示一个自定义的信息浮窗.
+/*
+// Creates a marker whose info window displays the given number
+function createMarker(point, number) {
+  var marker = new GMarker(point);
+
+  // Show this marker's index in the info window when it is clicked
+  var html = "Marker #<b>" + number + "</b>";
+  GEvent.addListener(marker, "click", function() {
+    marker.openInfoWindowHtml(html);
+  });
+
+  return marker;
+}
+
+// Add 10 random markers in the map viewport
+var bounds = map.getBoundsLatLng();
+var width = bounds.maxX - bounds.minX;
+var height = bounds.maxY - bounds.minY;
+for (var i = 0; i < 10; i++) {
+  var point = new GPoint(bounds.minX + width * Math.random(),
+                        bounds.minY + height * Math.random());
+  var marker = createMarker(point, i + 1);
+  map.addOverlay(marker);
+}
+*/
+
+//创建图标
+//创建一种新图标,就像在Google Ride Finder上面使用的迷你标记一样.必须给图标指定前景图片、阴影图片、图标在地图上的点和信息浮窗在图标上的点.
+/*
+// Create our "tiny" marker icon
+var icon = new GIcon();
+icon.image = "http://labs.google.com/ridefinder/images/mm_20_red.png";
+icon.shadow = "http://labs.google.com/ridefinder/images/mm_20_shadow.png";
+icon.iconSize = new GSize(12, 20);
+icon.shadowSize = new GSize(22, 20);
+icon.iconAnchor = new GPoint(6, 20);
+icon.infoWindowAnchor = new GPoint(5, 1);
+
+// Creates one of our tiny markers at the given point
+function createMarker(point) {
+  var marker = new GMarker(point, icon);
+  map.addOverlay(marker);
+  GEvent.addListener(marker, "click", function() {
+    marker.openInfoWindowHtml("You clicked me!");
+  });
+}
+
+// Place the icons randomly in the map viewport
+var bounds = map.getBoundsLatLng();
+var width = bounds.maxX - bounds.minX;
+var height = bounds.maxY - bounds.minY;
+for (var i = 0; i < 10; i++) {
+  createMarker(new GPoint(bounds.minX + width * Math.random(),
+                          bounds.minY + height * Math.random()));
+}
+*/
+
+//在地图上使用XML和异步RPC ("AJAX")
+//在这个范例中，我们下载一个静态文件("data.xml")，这个XML文件中包含一系列经/纬坐标，当下载完成后，读取这个XML文件并为每一个坐标在地图上创建一个标记.
+
+var request = GXmlHttp.create();
+request.open("GET", "data.xml", true);
+request.onreadystatechange = function()
+{
+	if (request.readyState == 4)
+	{
+		var xmlDoc = request.responseXML;
+		var markers = xmlDoc.documentElement.getElementsByTagName("marker");
+		for (var i = 0; i < markers.length; i++)
+		{
+			var point = new GPoint(parseFloat(markers[i].getAttribute("lng")),parseFloat(markers[i].getAttribute("lat")));
+			var marker = createMarker(point,markers[i].getAttribute("txt"));
+			map.addOverlay(marker);
+		}
+	}
+}
+request.send(null);
+
+
+// Refresh map function
+    function refreshMap(map)
+    {
+    if (status == "stopped")
+      {
+       window.setTimeout(function(){ refreshMap(map)},6000);
+       return;
+      }
+
+    // AJAX XML Data Download and marker placement, straight 
+    // from Google API documentation
+    var request = GXmlHttp.create();
+    request.open("GET", "data.xml?RANDOM=”"+Math.random(), true);
+    request.onreadystatechange = function() {
+      if (request.readyState == 4) {
+    var xmlDoc = request.responseXML;
+    var markers = xmlDoc.documentElement.getElementsByTagName("marker");
+    
+    for (var i = 0; i < markers.length; i++) {
+      var point = new GPoint(parseFloat(markers[i].getAttribute("lng")),
+                 parseFloat(markers[i].getAttribute("lat")));
+
+      // Sets a marker to the last point added in the database
+      var marker = new GMarker(point);
+      map.addOverlay(marker);
+
+    }
+     // Recenters map to last point added
+     map.centerAtLatLng(point); 
+      }
+    }
+    request.send(null);
+
+    // Reloads map every 6 seconds    
+    window.setTimeout(function(){ refreshMap(map)},6000);
+    }
+
+ //   refreshMap(map);
+
+    //]]>
+    </script>
+  </body>
+</html>

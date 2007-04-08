@@ -1,0 +1,37 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml">
+<head>
+<style type="text/css">
+v\:*
+{
+	behavior:url(#default#VML);
+}
+</style>
+
+
+<script language="javascript" src="loadGoogleMap.js"></script>
+
+<script language="javascript" type="text/javascript" src="map_cn.js"></script>
+<script>
+
+function init()
+{
+	map = new GMap2(document.getElementById("google_map"));
+	map.addControl(new GMapTypeControl());
+	map.setCenter(new GLatLng(29.939613,-95.331255),17,G_NORMAL_MAP);
+}
+</script>
+</head>
+<body leftmargin=0 topmargin=0 onload="init()">
+<div id="Layer3" style="position:absolute; left:0; top:0; width:600px; z-index:2">
+	<div id="google_map" style="width: 600px; height: 500px;"></div>
+	<span id="progress"></span>
+	<span id="distanceMessage"></span>
+	<span id="speedMessage"></span>
+	<span id="timeMessage"></span>
+</div>
+</body>
+
+</html>
