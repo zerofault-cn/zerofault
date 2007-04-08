@@ -1,0 +1,342 @@
+<html>
+
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+
+<title>天气预报</title>
+
+<link rel="stylesheet" href="style.css" type="text/css">
+
+<script language="JavaScript" type="text/JavaScript">
+
+
+
+var city=new Array("北京","哈尔滨","长春","沈阳","天津","呼和浩特","乌鲁木齐","银川","西宁","兰州","西安","拉萨","成都","重庆","贵阳","昆明","太原","石家庄","济南","郑州","合肥","南京","上海","武汉","长沙","南昌","杭州","福州","台北","南宁","海口","广州","香港","澳门");
+
+
+
+var weather=new Array(###weather);
+
+
+
+var i=0;
+
+var t = new Array();
+
+
+
+function show(n) {
+
+	ta=document.getElementById(city[n]);
+
+	ta.innerHTML='<table width="100%" height="100%" background="file:///usr/suit/newebox/image/weather/wt.png"><tr><td valign=top class=style20w>'+weather[n]+'</td><td width=20 valign=bottom align=right><img src=file:///usr/suit/newebox/image/weather/ro.gif></td></tr></table>';
+
+}
+
+
+
+function unshow(n)
+
+{
+
+	tb=document.getElementById(city[n]);
+
+	tb.innerHTML='';
+
+}
+
+
+
+function newPage(n) {
+
+	for(k = 0; k < 9; k++) t[k] = document.getElementById(k);
+
+	if((n % 9) == 8) {		
+
+		for(k = 0; k < 8; k++) t[k].innerHTML='<td height=40 align=center class=style24w style="color:white">'+city[n - 8 + k]+'</td>';
+
+		t[8].innerHTML='<td height=40 align=center class=style24w bgcolor=#3366ff>'+city[n]+'</td>';
+
+	}
+
+	else {
+
+		t[0].innerHTML='<td height=40 align=center class=style24w bgcolor=#3366ff>'+city[n]+'</td>';
+
+		for(k = 1; k < 9; k++) {
+
+			if((n + k) > (city.length - 1)) t[k].innerHTML='<td height=40 align=center class=style24w style="color:white"></td>';
+
+			else t[k].innerHTML='<td height=40 align=center class=style24w style="color:white">'+city[n + k]+'</td>';
+
+		}
+
+	}
+
+	show(n);
+
+}
+
+
+
+function keyDown(e){
+	var keycode=e.which
+	var realkey=String.fromCharCode(e.which)
+	if(keycode==38)
+		{
+
+			if(i > 0) {
+
+				j = i % 9;
+
+				i--;
+
+				if(j == 0) {
+
+					unshow(i + 1);
+
+					newPage(i);
+
+				}
+
+				else {
+
+					t[j].innerHTML='<td height=40 align=center class=style24w style="color:white">'+city[i + 1]+'</td>';
+
+					t[j - 1].innerHTML='<td height=40 align=center class=style24w bgcolor=#3366ff>'+city[i]+'</td>';
+
+					unshow(i + 1);
+
+					show(i);
+
+				}
+
+			}
+
+		}
+		if(keycode==40)
+		{
+
+			if(i < city.length - 1) {
+
+				j = i % 9;
+
+				i++;
+
+				if(j == 8) {
+
+				unshow(i - 1);
+
+				newPage(i);
+
+				}
+
+				else {
+
+					t[j].innerHTML='<td height=40 align=center class=style24w style="color:white">'+city[i - 1]+'</td>';
+
+					t[j + 1].innerHTML='<td height=40 align=center class=style24w bgcolor=#3366ff>'+city[i]+'</td>';
+
+					unshow(i - 1);
+
+					show(i);
+
+				}
+
+			}
+
+		}
+		if(keycode==36)	location =  "menu_1.jsp";
+}    
+document.onkeydown=keyDown
+
+
+function init() {
+	i = 12;
+	for(k = 0; k < 9; k++) t[k] = document.getElementById(k);
+	for(k = 0; k < 3; k++) t[k].innerHTML='<td height=40 align=center class=style24w style="color:white">'+city[9 + k]+'</td>';
+	t[3].innerHTML='<td height=40 align=center class=style24w bgcolor=#3366ff>'+city[i]+'</td>';
+	for(k = 4; k < 9; k++) t[k].innerHTML='<td height=40 align=center class=style24w style="color:white">'+city[9 + k]+'</td>';
+	show(i);
+}
+
+//-->
+
+</script>
+
+</head>
+
+
+
+<body leftMargin=0 topMargin=0 background="file:///usr/suit/newebox/image/weather/weathernewb.jpg" bgcolor="#0a56d" onload="init()">
+
+
+<div id="北京" style="position:absolute; left:185px; top:116px; width:150px; height:90px;"></div>
+
+<div id="哈尔滨" style="position:absolute; left:239px; top:57px; width:150px; height:90px;"></div>
+
+<div id="长春" style="position:absolute; left:234px; top:76px; width:150px; height:90px;"></div>
+
+<div id="沈阳" style="position:absolute; left:226px; top:96px; width:150px; height:90px;"></div>
+
+<div id="天津" style="position:absolute; left:191px; top:126px; width:150px; height:90px;"></div>
+
+<div id="呼和浩特" style="position:absolute; left:151px; top:116px; width:150px; height:90px;"></div>
+
+<div id="乌鲁木齐" style="position:absolute; left:39px; top:79px; width:114px; height:93px;"></div>
+
+<div id="银川" style="position:absolute; left:116px; top:138px; width:150px; height:90px;"></div>
+
+<div id="西宁" style="position:absolute; left:85px; top:154px; width:150px; height:90px;"></div>
+
+<div id="兰州" style="position:absolute; left:101px; top:161px; width:150px; height:90px;"></div>
+
+<div id="西安" style="position:absolute; left:136px; top:175px; width:150px; height:90px;"></div>
+
+<div id="拉萨" style="position:absolute; left:40px; top:180px; width:110px; height:120px;"></div>
+
+<div id="成都" style="position:absolute; left:101px; top:207px; width:150px; height:90px;"></div>
+
+<div id="重庆" style="position:absolute; left:119px; top:216px; width:150px; height:90px;"></div>
+
+<div id="贵阳" style="position:absolute; left:121px; top:244px; width:150px; height:90px;"></div>
+
+<div id="昆明" style="position:absolute; left:90px; top:257px; width:150px; height:90px;"></div>
+
+<div id="太原" style="position:absolute; left:159px; top:141px; width:150px; height:90px;"></div>
+
+<div id="石家庄" style="position:absolute; left:174px; top:137px; width:150px; height:90px;"></div>
+
+<div id="济南" style="position:absolute; left:192px; top:151px; width:150px; height:90px;"></div>
+
+<div id="郑州" style="position:absolute; left:171px; top:169px; width:150px; height:90px;"></div>
+
+<div id="合肥" style="position:absolute; left:199px; top:189px; width:150px; height:90px;"></div>
+
+<div id="南京" style="position:absolute; left:213px; top:187px; width:150px; height:90px;"></div>
+
+<div id="上海" style="position:absolute; left:231px; top:193px; width:150px; height:90px;"></div>
+
+<div id="武汉" style="position:absolute; left:179px; top:203px; width:150px; height:90px;"></div>
+
+<div id="长沙" style="position:absolute; left:169px; top:225px; width:150px; height:90px;"></div>
+
+<div id="南昌" style="position:absolute; left:191px; top:218px; width:150px; height:90px;"></div>
+
+<div id="杭州" style="position:absolute; left:221px; top:201px; width:150px; height:90px;"></div>
+
+<div id="福州" style="position:absolute; left:220px; top:238px; width:150px; height:90px;"></div>
+
+<div id="台北" style="position:absolute; left:239px; top:250px; width:150px; height:90px;"></div>
+
+<div id="南宁" style="position:absolute; left:136px; top:277px; width:150px; height:90px;"></div>
+
+<div id="海口" style="position:absolute; left:153px; top:303px; width:150px; height:90px;"></div>
+
+<div id="广州" style="position:absolute; left:176px; top:271px; width:150px; height:90px;"></div>
+
+<div id="香港" style="position:absolute; left:184px; top:280px; width:150px; height:90px;"></div>
+
+<div id="澳门" style="position:absolute; left:177px; top:282px; width:150px; height:90px;"></div>
+
+
+
+<table width="630" border="0" cellpadding="0" cellspacing="0" height="460">
+
+<tr>
+
+	<td width=33 height=15>&nbsp;</td>
+
+	<td width=560>&nbsp;</td>
+
+	<td width=37 height="15">&nbsp;</td>
+
+</tr>
+
+<tr>
+
+	<td height=430>&nbsp;</td>
+
+	<td valign=top>
+
+	<!--************************************ 可视面积:嵌入内容 *************************************************-->
+
+	<table border=0 cellpadding=0 cellspacing=0 width=560 height="100%">
+
+	<tr>
+
+	<td width=410 height="40">&nbsp;</td>
+
+	<td width=143>&nbsp;</td>
+
+	<td width=7></td>
+
+	</tr>
+
+	<tr>
+
+	<td height=360>&nbsp;</td>
+
+	<td>
+
+	<table width="100%">
+
+	<!--***********************************城市列表**************************-->
+
+	<tr id=0><td height=40 align=center class=style24w style="color:white"></td></tr>
+
+	<tr id=1><td height=40 align=center class=style24w style="color:white"></td></tr>
+
+	<tr id=2><td height=40 align=center class=style24w style="color:white"></td></tr>
+
+	<tr id=3><td height=40 align=center class=style24w style="color:white"></td></tr>
+
+	<tr id=4><td height=40 align=center class=style24w style="color:white"></td></tr>
+
+	<tr id=5><td height=40 align=center class=style24w style="color:white"></td></tr>
+
+	<tr id=6><td height=40 align=center class=style24w style="color:white"></td></tr>
+
+	<tr id=7><td height=40 align=center class=style24w style="color:white"></td></tr>
+
+	<tr id=8><td height=40 align=center class=style24w style="color:white"></td></tr>
+
+	<!--*************************************************************-->
+
+	</table>
+
+	</td>
+
+	<td></td>
+
+	</tr>
+
+	</table>
+
+	<!--********************************************* 可视面积 ***********************************************-->
+
+	</td>
+
+	<td>&nbsp;</td>
+
+</tr>
+
+<tr>
+
+	<td height=15>&nbsp;</td>
+
+	<td>&nbsp;</td>
+
+	<td>&nbsp;</td>
+
+</tr>
+
+</table>
+
+
+
+</body>
+
+</html>
+

@@ -1,0 +1,129 @@
+a:link {
+	text-decoration: none;
+
+}
+a:visited {
+	text-decoration: none;
+
+}
+a:hover {
+	text-decoration: none;
+
+}
+a:active {
+	text-decoration: none;
+
+}
+.style32w{
+	font-family: "黑体","Verdana";
+	font-size: 32px;
+	color:white;
+}
+.style32b{
+	font-family: "黑体","Verdana";
+	font-size: 32px;
+	color:black;
+}
+.style31w{
+	font-family: "黑体","Verdana";
+	font-size: 31px;
+	color:white;
+}
+.style31b{
+	font-family: "黑体","Verdana";
+	font-size: 31px;
+	color:black;
+}
+.style30w{
+	font-family: "黑体","Verdana";
+	font-size: 30px;
+	color:white;
+}
+.style30b{
+	font-family: "黑体","Verdana";
+	font-size: 30px;
+	color:black;
+}
+
+.style24w {
+	font-family: "黑体", "Verdana";
+	font-size: 24px;
+	color:white;
+}
+.style24b {
+	font-family: "黑体","Verdana";
+	font-size: 24px;
+	color:black;
+}
+.style22w {
+	font-family: "黑体","Verdana";
+	font-size: 22px;
+	color:white;
+}
+.style22b {
+	font-family: "黑体","Verdana","Arial";
+	font-size: 22px;
+	color:black;
+}
+
+.style20w {
+	font-family: "黑体","Verdana";
+	font-size: 20px;
+	color:white;
+}
+.style20b {
+	font-family: "黑体","Verdana";
+	font-size: 20px;
+	color:black;
+}
+.style18w
+{
+	font-family: "黑体","Verdana";
+	font-size: 18px;
+	color:white;
+}
+.style18b
+{
+	font-family: "黑体","Verdana";
+	font-size: 18px;
+	color:black;
+}
+.input1
+{
+	BACKGROUND-COLOR: #1562be; 
+	BORDER-BOTTOM: #ffffff 1px solid; 
+	BORDER-LEFT: #ffffff 1px solid; 
+	BORDER-RIGHT: #ffffff 1px solid; 
+	BORDER-TOP: #ffffff 1px solid; 
+	FONT-FAMILY: "Verdana"; 
+	font-size: 22px;
+}
+.input2
+{
+	BACKGROUND-COLOR: white; 
+	BORDER-BOTTOM: #ffffff 1px solid; 
+	BORDER-LEFT: #ffffff 1px solid; 
+	BORDER-RIGHT: #ffffff 1px solid; 
+	BORDER-TOP: #ffffff 1px solid; 
+	FONT-FAMILY: "Verdana"; 
+	font-size: 22px;
+}
+
+h1 
+{ 
+	font-size:12px; 
+	text-decoration:underline; 
+	margin:25px 0 0 0; 
+	padding:0; 
+	color:#03f; 
+}
+ul
+{ 
+	padding:0; 
+	margin: 10px 0 10px 45px;
+}
+li
+{ 
+	padding:0; 
+	margin: 5px 0 0 0;
+}

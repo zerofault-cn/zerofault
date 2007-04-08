@@ -1,0 +1,74 @@
+A:link 
+{
+	COLOR: #333333; 
+	FONT-SIZE: 11pt; 
+	TEXT-DECORATION: none
+}
+A:visited 
+{
+	COLOR: #333333; 
+	FONT-SIZE: 11pt; 
+	TEXT-DECORATION: none
+}
+A:hover 
+{
+	COLOR: #ff2200; 
+	FONT-SIZE: 11pt; 
+	TEXT-DECORATION: underline
+}
+A.bigger:hover 
+{
+	COLOR: #ff2200; 
+	FONT-SIZE: 12pt;
+	TEXT-DECORATION: underline
+}
+
+BODY 
+{
+	FONT-FAMILY: "ËÎÌו"; 
+	FONT-SIZE: 11pt;
+	font-style: normal;
+	font-weight: normal;
+	color: #000066;
+	line-height:160%
+}
+
+TD 
+{
+	FONT-FAMILY: "ËÎÌו"; 
+	FONT-SIZE: 10pt;
+	font-style: normal;
+	font-weight: normal;
+	color: #000066;
+	line-height:160%
+}
+caption
+{
+	FONT-FAMILY: "ËÎÌו"; 
+	FONT-SIZE: 13pt;
+	font-style: normal;
+	font-weight: normal;
+	color: #000066;
+	line-height:160%
+}
+
+.red
+{
+	color:#ff0000;
+}
+.purple
+{
+	color:#aa00cc;
+}
+.small
+{
+	font-size:9pt;
+}
+.big14
+{
+	font-size:14pt;
+}
+.big16
+{
+	font-size:16pt;
+}

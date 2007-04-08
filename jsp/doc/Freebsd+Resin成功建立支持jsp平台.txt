@@ -1,0 +1,325 @@
+Freebsd+Resin成功建立支持jsp平台
+
+环境：FreeBsd 4.9 Apache1.3.29+php4.3.4+mysql4+ports 安装 
+
+
+
+首先要cvsup同步ports ， 
+
+
+
+/usr/local/bin/cvsup -g -L 2 /usr/local/etc/ports-supfile 
+
+
+
+/usr/local/bin/cvsup -g -L 2 /usr/local/etc/stable-supfile 
+
+
+
+然后进入http://www.freebsd.org/ports/java.html 
+
+
+
+进入bsd 关于java 的官方网站，把jdk-1.4.2p5 所需要软件都收集全。放到/usr/ports/distfiles 里 
+
+
+
+
+然后进入/usr/ports/java/jdk14 
+
+
+
+首选要下载j2sdk-1_4_2_02-linux-i586.bin 
+
+
+
+然后#sh ./j2sdk-1_4_2_02-linux-i586.bin-----解开。然后，本例中：复制到 
+
+
+
+/usr/local/linux-sun-jdk1.4.2/ 
+
+
+
+用setenv ALT_BOOTDIR /usr/local/linux-sun-jdk1.4.2/ （指向你解压出来的目录） 
+
+
+
+
+#make 这段时间很常。休息~~~ 
+
+
+
+#make install 
+
+
+
+注：在安装时可以有错误 
+
+
+
+make 时可以要用到环境变量。。 
+
+
+
+（应按错误提示，自己改我这句话，此例中我的需要在make 前加 
+
+
+
+freebsd# unsetenv LANG 
+freebsd# unsetenv JAVA_HOME 
+freebsd# unsetenv CLASSPATH 
+freebsd# setenv ALT_JAVAWS_BOOTDIR /usr/local/jdk1.4.2 
+freebsd# setenv ALT_BOOTDIR /usr/local/linux-sun-jdk1.4.2/ 
+
+
+
+如果没有出错。 
+
+
+
+在/usr/local/下可以看见。 
+
+
+
+/usr/local/jdk1.4.2 目录。 
+
+
+
+然后测试，/usr/local/jdk1.4.2/bin/java -version 
+
+
+
+freebsd# ./java -version 
+java version "1.4.2-p5" 
+Java(TM) 2 Runtime Environment, Standard Edition (build 1.4.2-p5-fuweb_11_dec_2003_16_38) 
+Java HotSpot(TM) Client VM (build 1.4.2-p5-fuweb_11_dec_2003_16_38, mixed mode) 
+
+
+
+
+出现以下。表示jdk 安装成功 
+
+
+
+ 
+
+
+
+下面安装RESIN 
+
+
+
+resin-3.0.4.tar.gz 我下的是这个包，最新的cp 到/usr/local 下 
+
+
+
+# tar zxvf resin-3.0.4.tar.gz 
+设置setenv JAVA_HOME /usr/local/jdk1.4.2 
+# ./configure --with-apxs=/usr/local/sbin/apxs 
+# make 
+# make install 
+
+
+
+然后进入/usr/local/resin-3.0.4/bin 
+修改httpd.sh 文件。 
+
+
+
+# You can predefine JAVA_HOME and RESIN_HOME 
+# 
+JAVA_HOME=/usr/local/jdk1.4.2 
+export JAVA_HOME 
+# 
+RESIN_HOME=/usr/local/resin-3.0.4 
+export RESIN_HOME 
+
+
+
+wq! 
+
+
+
+
+注：APACHE 在/usr/local/etc/apache/httpd.conf 会添加以下模块， 
+
+
+
+# 
+# mod_caucho Resin Configuration 
+# 
+
+
+
+LoadModule caucho_module /usr/local/libexec/apache/mod_caucho.so 
+ResinConfigServer localhost 6802 
+
+
+
+如果有此些表示。整合成功 
+
+
+
+启动 resin 
+http://218.24.233.13:8080　成功 
+
+
+
+然后配置resin.conf 
+
+
+
+进入/usr/local/resin-3.0.4/conf 
+
+
+
+vi resin.conf 
+
+
+
+后。 
+
+
+
+编辑以下。 
+
+
+
+我的服务器做的是虚拟主机。让其中一个域名支持jsp 
+
+
+
+
+配置如下。 
+
+
+
+freebsd# pwd 
+<!-- 
+- Resin 3.0 configuration file. 
+--> 
+<resin xmlns="http://caucho.com/ns/resin"> 
+<!-- 
+- Logging configuration for the JDK logging API. 
+--> 
+<log name='' level='info' path='stdout:' timestamp='[%H:%M:%S.%s] '/> 
+<log name='com.caucho.java' level='fine' path='stdout:' 
+timestamp='[%H:%M:%S.%s] '/> 
+<log name='com.caucho.loader' level='config' path='stdout:' 
+timestamp='[%H:%M:%S.%s] '/> 
+
+
+
+<!-- 
+- For production sites, change dependency-check-interval to something 
+- like 600s, so it only checks for updates every 10 minutes. 
+--> 
+<dependency-check-interval>10s</dependency-check-interval> 
+
+
+
+<!-- 
+- You can change the compiler to "javac" or jikes. 
+- The default is "internal" only because it's the most 
+- likely to be available. 
+--> 
+<javac compiler="internal" args=""/> 
+
+
+
+<!-- Security providers. 
+- <security-provider> 
+- com.sun.net.ssl.internal.ssl.Provider 
+- </security-provider> 
+--> 
+
+
+
+<!-- creates the deploy directory for .ear expansion --> 
+<ear-deploy path='deploy'/> 
+
+
+
+<!-- creates the deploy directory for .rar expansion --> 
+<resource-deploy path='deploy'/> 
+
+
+
+<!-- creates a second deploy directory for .war expansion --> 
+<web-app-deploy path='deploy'/> 
+</host-default> 
+
+
+
+<!-- includes the web-app-default for default web-app behavior --> 
+<resin:include path="app-default.xml"/> 
+
+
+
+<!-- configures the default host, matching any host name --> 
+<host id='www.hc888.com'> 
+<document-directory>/home/fuweb/wwwroot</document-directory> 
+
+
+
+<!-- configures the root web-app --> 
+<web-app id='/'> 
+<!-- adds xsl to the search path --> 
+<class-loader> 
+<simple-loader path="$host-root/xsl"/> 
+</class-loader> 
+
+
+
+<servlet-mapping url-pattern="/servlet/*" servlet-name="invoker"/> 
+</web-app> 
+</host> 
+</server> 
+</resin> 
+
+
+
+ 
+
+
+
+
+如果想自启动 
+
+
+
+在/usr/local/etc/rc.d 建一个ln 连接 
+
+
+
+ln -s resin.sh /usr/local/resin-3.0.4/bin/httpd.sh 
+
+
+
+后从启即可。让你www.hc888.com 目录支持jsp 
+
+
+
+test.jsp 文件 
+
+
+
+<%@page language="java"%> 
+2+2=<%=2+2%> 
+
+
+
+
+<head> 
+<%@page language="java"%> 
+2+2=<%=2+2%> 
+</head> 
+
+
+
+<body>
+
+
+
+ 
