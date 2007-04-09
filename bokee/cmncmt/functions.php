@@ -92,8 +92,8 @@ function getBlogID()
 function getBlogPhoto($username)
 {
 	$blogPhoto='http://'.$username.'.bokee.com/inc/logo_s.png';
-	$fp=fopen($blogPhoto,'r');
-	if($fp)
+	$file=file_get_contents($blogPhoto);
+	if(strlen($file)>100)
 	{
 		return $blogPhoto;
 	}
