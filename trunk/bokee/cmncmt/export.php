@@ -6,23 +6,15 @@ include_once($root_path."config.php");
 include_once($root_path."functions.php");
 include_once($root_path."includes/db.php");
 $sid=$_REQUEST['sid'];
-if(''==$sid)
-{
-	$sid='1';
-}
 $pageitem=$_REQUEST['pageitem'];
-if(''==$pageitem)
+if(''==$pageitem || 0==$pageitem)
 {
-	$pageitem=10;
+	$pageitem=4;
 }
-if(''==$encode)
+if(''!=$_REQUEST['submit1'])
 {
-	$encode='utf-8';
-}
-if($_REQUEST['submit'])
-{
-	$content=conv($_REQUEST['content']);
-	$username=conv($_REQUEST['username']);
+	$content=trim(conv($_REQUEST['content']));
+	$username=trim(conv($_REQUEST['username']));
 	$ip=GetIP();
 	$sql="insert into comment set sid='".$sid."',username='".$username."',content='".format($content)."',addtime=UNIX_TIMESTAMP(),ip='".$ip."'";
 	if($db->sql_query($sql))
@@ -36,7 +28,7 @@ if($_REQUEST['submit'])
 }
 elseif(''!=$_REQUEST['sid'])
 {
-	$sql="select * from comment where sid='".$sid."' order by id desc limit ".$pageitem;
+	$sql="select * from comment where sid='".$sid."' and content!='' order by id desc limit ".$pageitem;
 	$result=$db->sql_query($sql);
 	$i=0;
 	while($row=$db->sql_fetchrow($result))
@@ -48,25 +40,20 @@ elseif(''!=$_REQUEST['sid'])
 		{
 			$username='匿名';
 		}
-		$content=substr_cut(str_replace('<br />',' ',str_replace("\r\n","",$row['content'])),60);
-		if(''==trim($content))
-		{
-			continue;
-		}
+		$content=$row['content'];
 		$addtime=date("Y-m-d H:i",$row['addtime']);
 		$ip=$row['ip'];
 		$ip1=substr($ip,0,strrpos($ip,'.')).'.*';
-		if($username!='匿名')
+		if($sid=='2008')
 		{
-			$userPhoto=getBlogPhoto($username);
+			$content=substr_cut(str_replace('<br />',' ',str_replace("\r\n","",$content)),60);
+			echo '<div class="mess"><div class="lt"><img width="40" height="40" src="/cmncmt/getBlogPhoto.php?sid='.$sid.'&username='.$username.'" /></div><div class="messtext"><div><strong>'.((''==$userPhoto)?$username:'<a href="http://'.$username.'.bokee.com/" target="_blank">'.$username.'</a>').'</strong>: ('.$addtime.')</div><div>'.$content.'</div></div><div class="clear"></div></div>';
 		}
-		else
+		elseif($sid=='ent_comic')
 		{
-			$userPhoto='';
-		}
-		if($sid=='2008'||$sid=='ent_comic')
-		{
-			echo '<div class="mess"><div class="lt"><img width="40" height="40" src="'.((''==$userPhoto)?"http://images.bokee.com/2008/cphoto/2007-04-06/2O5Vx0asWK0a9tKz.gif":$userPhoto).'" /></div><div class="messtext"><div><strong>'.((''==$userPhoto)?$username:'<a href="http://'.$username.'.bokee.com/" target="_blank">'.$username.'</a>').'</strong>: ('.$addtime.')</div><div>'.$content.'</div></div><div class="clear"></div></div>';
+			$content=substr_cut(str_replace('<br />',' ',str_replace("\r\n","",$content)),180);//过滤换行
+			echo '<li class="liulibg">'.$content.'</li>';
+			echo '<li>留言人：'.$username.' 留言时间：'.$addtime.'</li>';
 		}
 	}
 }

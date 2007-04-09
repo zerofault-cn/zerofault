@@ -1,0 +1,17 @@
+<div style="text-align:center">调用示例：</div>
+表单：
+<form name="commentForm" method="post" target="commentIframe">
+<div class="mtop"><b>发表留言:</b></div>
+<div class="mtop"><textarea name="content" class="messliu"></textarea> </div>
+<div class="mtop"><input id="username" name="username" type="text" class="messname"/> <input type="button" onclick="mysubmit()" value="发表"/></div>
+<input type="hidden" name="submit1" value="1" />
+</form>
+<div id="comment" style="border:#e33 1px solid"></div>
+<iframe name="commentIframe" style="display:none" width="500" height="100"></iframe>
+<script>
+var sid=2008;
+var pageitem=4;
+var getall=1;
+</script>
+<script language="javascript" type="text/javascript" src="export.js"></script>
+<script language="javascript" src="/cmncmt/export.php"></script>
