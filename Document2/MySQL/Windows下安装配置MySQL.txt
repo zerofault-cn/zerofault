@@ -1,0 +1,32 @@
+Windows下安装配置MySQL
+
+1，下载安装文件（压缩包）
+如果你已有它们的安装文件或以前已安装过，只要版本相差不是很大或者没有特殊需求的话可以继续使用老版本。
+可以到http://www.mysql.com下载最新版本，也可以点下面的链接直接下载：
+MySQL-4.1.20:
+http://mysql.mirror.vmmatrix.net/Downloads/MySQL-4.1/mysql-noinstall-4.1.20-win32.zip
+
+建议下载非安装方式的压缩包。
+
+2，安装MySQL
+在下载到的MySQL压缩包文件上点右键，选”解压到当前文件夹“（如果你安装的解压软件是WinRAR），解压完成后，当前目录下有一个“mysql-4.1.20-win32”目录，重命名为“mysql-4.1.20”，移动到“D:\pub”目录下。
+
+MySQL提供了适合不同等级应用的配置文件（ini文件），你可以根据自己的需要选择一个，一般选“my-medium.ini”，将其重命名为“my.ini”，然后做以下修改
+
+在“[mysqld]”区块下面添加以下内容：
+# set basedir to your installation path
+basedir=D:\pub\mysql-4.1.20
+# set datadir to the location of your data directory
+datadir=D:\pub\mysql-4.1.20\data
+
+将“socket=/tmp/mysql.sock”改为“socket=D:\pub\mysql-4.1.20\mysql.sock”，（也可以是一个有效的其他目录）
+
+然后将修改好后的my.ini文件复制到“C:\WINDOWS”（或者C:\WINNT）目录下。
+
+打开命令提示符，进入“D:\pub\mysql-4.1.20\bin”目录，
+输入：
+mysqld-nt --install mysql4
+net start mysql4
+即完成了安装
+
+3，下次重装系统后，只需要将“D:\pub\mysql-4.1.20\my.ini”文件复制到“C:\WINDOWS”（或者C:\WINNT）目录下，再执行一次上面的命令即可。

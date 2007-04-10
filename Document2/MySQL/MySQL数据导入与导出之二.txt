@@ -1,0 +1,143 @@
+MySQL数据导入与导出之二
+　　现在使用MySQL的越来越多了，我也用它做了自已的留言板。在使用过程中，慢慢地就要求对它的管理功能需要近一步的掌握，不仅是我，也是很多网友的要求。现在有一些问题是关于如何从MySQL中导出数据，以便用在本地或其它的数据库系统之上；以及将现有数据导入MySQL数据库中。现在就我学习的情况，就这两个问题作一下小结，内容不是很详细。其实MySQL的手册是很详细的，只不过我把有关这两方面的东西提取出来，加上了一点自已的理解，更详细的请参考数据库的相应章节。 
+
+数据导出 
+　　数据导出主要有以下几种方法： 
+
+使用select into outfile 'filename'语句 
+使用mysqldump实用程序 
+使用select into outfile 'filename'语句 
+
+　　可以在mysql的命令行下或在php程序中执行它。我下面以在mysql命令行下为例。在php中使用时，将其改成相应的查询进行处理即可。不过在使用这个命令时，要求用户拥有file的权限。如我们有一个库为phptest，其中有一个表为driver。现在要把driver卸成文件。执行命令： 
+
+
+mysql> use phptest; 
+Database Changed 
+mysql> select * from driver into outfile 'a.txt'; 
+Query OK, 22 rows affected (0.05 sec) 
+
+　　上面就可以完成将表driver从数据库中卸到a.txt文件中。注意文件名要加单引号。那么这个文件在哪呢？在mysql目录下有一个data目录，它即是数据库文件所放的地方。每个库在单独占一个子目录，所以phptest的目录为c:\mysql\data\phptest(注意：我的mysql安装在c:\mysql下)。好，现在我们进去，a.txt就是它。打开这个文件，可能是： 
+
+1 Mika Hakinnen 1 
+2 David Coulthard 1 
+3 Michael Schumacher 2 
+4 Rubens Barrichello 2 
+... 
+
+　　可能还有很多记录。每个字段之间是用制表符分开的(\t)。那么我们可以修改输出文件名的目录，以便放在指定的位置。如'a.txt'可以改成'./a.txt'或'/a.txt'。其中'./a.txt'放在c:\mysql\data目录下了，而'/a.txt'文件则放在c:\目录下了。所以select命令认为的当前目录是数据库的存放目录，这里是 
+c:\mysql\data。 
+
+　　使用select命令还可以指定卸出文件时，字段之间的分隔字符，转义字符，包括字符，及记录行分隔字符。列在下面： 
+
+FIELDS 
+TERMINATED BY '\t' 
+[OPTIONALLY] ENCLOSED BY '' 
+ESCAPED BY '\\' 
+LINES 
+TERMINATED BY '\n' 
+
+
+TERMINATED 表示字段分隔 
+[OPTIONALLY] ENCLOSED 表示字段用什么字符包括起来，如果使用了OPTIONALLY则只有CHAR和VERCHAR被包括 
+ESCAPED 表示当需要转义时用什么作为转义字符 
+LINES TERMINATED 表示每行记录之间用什么分隔 
+　　上面列的是缺省值，而且这些项都是可选的，不选则使用缺省值。可以根据需要进行修改。给出一个例子如下： 
+mysql> select * from driver into outfile 'a.txt' fields terminated by ',' enclosed by '"'; 
+Query OK, 22 rows affected (0.06 sec) 
+
+　　结果可能如下： 
+
+"1","Mika","Hakinnen","1" 
+"2","David","Coulthard","1" 
+"3","Michael","Schumacher","2" 
+"4","Rubens","Barrichello","2" 
+　　可以看到每个字段都用','进行了分隔，且每个字段都用'"'包括了起来。注意，行记录分隔符可以是一个字符串，请大家自行测试。不过，如果输出文件在指定目录下如果存在的话就会报错，先删除再测试即可。 
+
+使用mysqldump实用程序 
+
+　　从上面的select方法可以看出，输出的文件只有数据，而没有表结构。而且，一次只能处理一个表，要处理多个表则不是很容易的。不过可以将select命令写入一个sql 文件（复制文本应该是很容易的吧），然后在命令行下执行即可：mysql 库名<a.sql。而使用mysqldump可以卸出sql文件格式信息（即，内容为sql的命令），也可以卸出纯数据文本或只卸出含有创建表结构而没有数据的sql 文件，同时可以对库中的多个表进行操作，比select的方法可灵活，强大的多，建议使用。下面就详细说明。 
+
+　　先来个最简单的吧： 
+
+mysqldump phptest > a.sql 
+
+　　可能结果如下： 
+# MySQL dump 7.1 
+# 
+# Host: localhost Database: phptest 
+#-------------------------------------------------------- 
+# Server version 3.22.32-shareware-debug 
+
+# 
+# Table structure for table 'driver' 
+# 
+CREATE TABLE driver ( 
+drv_id int(11) DEFAULT '0' NOT NULL auto_increment, 
+drv_forename varchar(15) DEFAULT '' NOT NULL, 
+drv_surname varchar(25) DEFAULT '' NOT NULL, 
+drv_team int(11) DEFAULT '0' NOT NULL, 
+PRIMARY KEY (drv_id) 
+); 
+
+# 
+# Dumping data for table 'driver' 
+# 
+
+INSERT INTO driver VALUES (1,'Mika','Hakinnen',1); 
+INSERT INTO driver VALUES (2,'David','Coulthard',1); 
+INSERT INTO driver VALUES (3,'Michael','Schumacher',2); 
+INSERT INTO driver VALUES (4,'Rubens','Barrichello',2); 
+... 
+
+　　如果有多表，则分别列在下面。可以看到这个文件是一个完整的sql文件，如果要将其导入到其它的数据库中可以通过命令行方式，很方便：mysql phptest < a.sql。如果将数据从本地传到服务器上，则可以 
+将这个文件上传，然后在服务器通过命令行方式装入数据。 
+
+　　如果只想卸出建表指令，则命令如下： 
+
+mysqldump -d phptest > a.sql 
+
+　　如果只想卸出插入数据的sql命令，而不需要建表命令，则命令如下： 
+
+mysqldump -t phptest > a.sql 
+
+　　那么如果我只想要数据，而不想要什么sql命令时，应该如何操作呢？ 
+
+mysqldump -T./ phptest driver 
+
+　　其中，只有指定了-T参数才可以卸出纯文本文件，表示卸出数据的目录，./表示当前目录，即与mysqldump同一目录。如果不指定driver表，则将卸出整个数据库的数据。每个表会生成两个文件，一个为.sql文件，包含建表执行。另一个为.txt文件，只包含数据，且没有sql指令。 
+
+　　对卸出的数据文件，也可以同select方法一样，指定字段分隔符，包括字符，转义字段，行记录分隔符。参数列在下面： 
+
+--fields-terminated-by= 字段分隔符 
+--fields-enclosed-by= 字段包括符 
+--fields-optionally-enclosed-by= 字段包括符，只用在CHAR和VERCHAR字段上 
+--fields-escaped-by= 转义字符 
+--lines-terminated-by= 行记录分隔符 
+　　我想大家应该明白这些参数的意思了吧。一个例子如下： 
+
+mysqldump -T./ --fields-terminated-by=, --fields-enclosed-by=\" phptest driver 
+
+　　输出结果为： 
+
+"1","Mika","Hakinnen","1" 
+"2","David","Coulthard","1" 
+"3","Michael","Schumacher","2" 
+"4","Rubens","Barrichello","2" 
+... 
+
+　　请注意字符的使用。 
+
+小结 
+　　以上为使用select和mysqldump实用程序来卸出文本的方法。select适合利用程序进行处理，而mysqldump则为手工操作，同时提供强大的导出功能，并且可以处理整个库，或库中指定的多表。大家可以根据需求自行决定使用。 
+
+　　同时还有一些方法，如直接数据库文件拷贝也可以，但是移动后的数据库系统与原系统应一致才行。这里就不再提了。 
+
+导入同导出相类似，导入也有两种方法： 
+使用LOAD DATA INFILE 'filename'命令 
+使用mysqlimport实用程序 
+　　由于这两个处理与导出参数相似，只不过是它们的逆操作，故只给出几种命令使用的例子，不再解释了，大家可以自行查阅手册。 
+　　使用load命令： 
+load data infile 'driver.txt' into table driver fields terminated by ',' enclosed by '"'; 
+　　使用mysqlimport实用程序： 
+mysqlimport --fields-terminated-by=, --fields-enclosed-by=\" phptest driver.txt 
+　　文章有不详尽的地方，希望大家参考手册。 

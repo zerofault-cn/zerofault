@@ -1,0 +1,87 @@
+SHOW PROCESSLIST
+SHOW [FULL] PROCESSLIST shows you which threads are running. You can also get this information using the mysqladmin processlist command. If you have the SUPER privilege, you can see all threads. Otherwise, you can see only your own threads. See section 4.6.7 KILL Syntax. If you don't use the FULL option, then only the first 100 characters of each query will be shown.
+
+Starting from 4.0.12, MySQL reports the hostname for TCP/IP connections in hostname:client_port format to make it easier to find out which client is doing what.
+
+This command is very useful if you get the 'too many connections' error message and want to find out what's going on. MySQL reserves one extra connection for a client with the SUPER privilege to ensure that you should always be able to login and check the system (assuming you are not giving this privilege to all your users).
+
+Some states commonly seen in mysqladmin processlist
+
+Checking table:
+The thread is performing [automatic] checking of the table. 
+
+Closing tables:
+Means that the thread is flushing the changed table data to disk and closing the used tables. This should be a fast operation. If not, then you should check that you don't have a full disk or that the disk is not in very heavy use. 
+
+Connect Out:
+Slave connecting to master. 
+
+Copying to tmp table on disk:
+The temporary result set was larger than tmp_table_size and the thread is now changing the in memory-based temporary table to a disk based one to save memory. 
+
+Creating tmp table:
+The thread is creating a temporary table to hold a part of the result for the query. 
+
+deleting from main table:
+When executing the first part of a multiple-table delete and we are only deleting from the first table. 
+
+deleting from reference tables:
+When executing the second part of a multiple-table delete and we are deleting the matched rows from the other tables. 
+
+Flushing tables:
+The thread is executing FLUSH TABLES and is waiting for all threads to close their tables. 
+
+Killed:
+Someone has sent a kill to the thread and it should abort next time it checks the kill flag. The flag is checked in each major loop in MySQL, but in some cases it may still take a short time for the thread to die. If the thread is locked by some other thread, the kill will take effect as soon as the other thread releases its lock. 
+
+Sending data:
+The thread is processing rows for a SELECT statement and is also sending data to the client. 
+
+Sorting for group:
+The thread is doing a sort to satisfy a GROUP BY. 
+
+Sorting for order:
+The thread is doing a sort to satisfy a ORDER BY. 
+
+Opening tables:
+This simply means that the thread is trying to open a table. This is should be very fast procedure, unless something prevents opening. For example an ALTER TABLE or a LOCK TABLE can prevent opening a table until the command is finished. 
+
+Removing duplicates:
+The query was using SELECT DISTINCT in such a way that MySQL couldn't optimise that distinct away at an early stage. Because of this MySQL has to do an extra stage to remove all duplicated rows before sending the result to the client. 
+
+Reopen table:
+The thread got a lock for the table, but noticed after getting the lock that the underlying table structure changed. It has freed the lock, closed the table and is now trying to reopen it. 
+
+Repair by sorting:
+The repair code is using sorting to create indexes. 
+Repair with keycache The repair code is using creating keys one by one through the key cache. This is much slower than Repair by sorting. 
+
+Searching rows for update:
+The thread is doing a first phase to find all matching rows before updating them. This has to be done if the UPDATE is changing the index that is used to find the involved rows. 
+
+Sleeping:
+The thread is wating for the client to send a new command to it. 
+
+System lock:
+The thread is waiting for getting to get a external system lock for the table. If you are not using multiple mysqld servers that are accessing the same tables, you can disable system locks with the --skip-external-locking option. 
+
+Upgrading lock:
+The INSERT DELAYED handler is trying to get a lock for the table to insert rows. 
+
+Updating:
+The thread is searching for rows to update and updating them. 
+
+User Lock:
+The thread is waiting on a GET_LOCK(). 
+
+Waiting for tables:
+The thread got a notification that the underlying structure for a table has changed and it needs to reopen the table to get the new structure. To be able to reopen the table it must however wait until all other threads have closed the table in question. This notification happens if another thread has used FLUSH TABLES or one of the following commands on the table in question: FLUSH TABLES table_name, ALTER TABLE, RENAME TABLE, REPAIR TABLE, ANALYZE TABLE or OPTIMIZE TABLE. 
+
+waiting for handler insert:
+The INSERT DELAYED handler has processed all inserts and are waiting to get new ones. 
+
+Most states are very quick operations. If threads last in any of these states for many seconds, there may be a problem around that needs to be investigated.
+
+There are some other states that are not mentioned previously, but most of these are only useful to find bugs in mysqld.
+
+  

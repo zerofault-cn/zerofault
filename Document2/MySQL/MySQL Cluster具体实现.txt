@@ -1,0 +1,108 @@
+最近在考虑整个系统的容灾和备份，由于用的是mysql, 如果mysql有现成的方案就最好了。
+google一下，发现原来MySQL 4.1.x版本已经推出了cluster功能，采用NDB技术，从索爱购买的的技术，（什么时候俺的索爱手机能装mysql?)还有一下评论：
+MySQL Cluster is a shared-nothing main memory database clustering technology that MySQL bought from a division of Ericsson. It removes that pesky single point of failure from the database portion of your architecture, but it's not a panacea -- if you've got a lot of data, you need a lot of RAM. In a given cluster, you can store (Nodes x Available-RAM-per-node / Redundancy-level) bytes of data.
+
+For example, if you arrange your 10 nodes in redunancy pairs (each piece of data lives in two places, so "Redundancy-level" is 2), and each node has 4Gb of RAM, then your cluster can hold 10 x 4Gb / 2 = about 20Gb of data. It's "about 20Gb" because all 4Gb on each node isn't really available to MySQL Cluster -- the OS needs some RAM, too.
+
+Future versions of MySQL Cluster will use memory as a disk-backed cache so your storage is bounded by available disk instead of available RAM.
+
+NDB应该和InnoDB、MyISAM的使用方式一样, 可以混合使用。既不同的database可以采取不同的方式，下一步要来验证一下。
+上文也可以看出，MySQL采用全内存数据库，The recommendation is to have memory 2x the size of your database size + 10%，这样可能速度会比较快，但对内存要求大。但看起来，在使用时，最好是将database全装到内存里。cluster也是类似的机制，数据都是在 内存里，MySQL
+Cluster is implemented using a Shared Nothing Architecture, so each database node has its own disk and
+memory storage rather than requiring a shared disk which adds to the expense and can limit performance
+in proprietary solutions. MySQL Cluster keeps all data in memory for transaction and fast failover
+purposes and limits Input/Output bottlenecks by asynchronously writing transactions logs to disk.
+不知道这样会有什么风险，还要进一步试一下。如果比较可靠，就是个非常好的消息。
+
+具体实现(2机cluster): 
+
+192.168.0.1服务器(主机)
+mkdir /var/lin/mysql-cluster
+建立config.ini文件，内容如下
+[NDBD DEFAULT]
+NoOfReplicas= 2
+
+[MYSQLD DEFAULT]
+[NDB_MGMD DEFAULT]
+[TCP DEFAULT]
+
+[NDB_MGMD]
+HostName= 192.168.0.1
+
+[NDBD]
+HostName= 192.168.0.1
+DataDir= /var/lib/mysql-cluster
+
+[NDBD]
+HostName= 192.168.0.2
+DataDir= /var/lib/mysql-cluster
+
+[MYSQLD]
+[MYSQLD]
+[MYSQLD]
+
+mysql安装目录为/usr/local/mysql
+在/usr/local/mysql/data下建立文件my.cnf(从/usr/local/mysql/support-files
+下COPY过来),内容如下
+[mysqld]
+下加入
+ndbcluster
+
+最后加入
+[mysql_cluster]
+ndb-connectstring=192.168.0.1
+
+/////////********************
+进入/var/lin/mysql-cluster，执行  //进入Mysql中的Cluster
+ndb_mgmd
+ndbd --initial
+/etc/init.d/mysql restart(重起MYSQL)
+/////////********************
+
+192.168.0.2服务器（子机）
+mkdir /var/lin/mysql-cluster
+建立config.ini文件，内容如下
+[NDBD DEFAULT]
+NoOfReplicas= 2
+
+[MYSQLD DEFAULT]
+#[NDB_MGMD DEFAULT]
+[TCP DEFAULT]
+
+[NDB_MGMD]
+HostName= 192.168.0.1
+
+[NDBD]
+HostName= 192.168.0.1
+DataDir= /var/lib/mysql-cluster
+
+[NDBD]
+HostName= 192.168.0.2
+DataDir= /var/lib/mysql-cluster
+
+[MYSQLD]
+[MYSQLD]
+[MYSQLD]
+
+mysql安装目录为/usr/local/mysql-max
+在/usr/local/mysql/data-max下建立文件my.cnf(从/usr/local/mysql/support-
+files下 COPY过来),内容如下
+[mysqld]
+ndbcluster
+ndb-connectstring=192.168.0.1
+
+[ndbd]
+connect-string=192.168.0.1
+
+# provide connectstring for management server host (default port: 1186)
+[ndb_mgm]
+connect-string=192.168.0.1
+
+# provide location of cluster configuration file
+[ndb_mgmd]
+config-file=/var/lib/mysql-cluster/config.ini
+
+[mysql_cluster]
+ndb-connectstring=192.168.0.1
+
+ok 这样，cluster 就构建成功了！ 用客户端访问：192.168.0.1，即可完成自动的负载均衡。
