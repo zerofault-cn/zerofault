@@ -1,0 +1,211 @@
+PHP+APACHE实现用户论证的方法
+（摘自CCU新闻组，本来出处可能是台湾出版的一本关于PHP的书：PHP宝典） 
+在专业的 Web 站台上，常常会需要使用者的帐号及密码，也就是身份确认的动作。早期的 NCSA httpd 伺服器并没有提供这项使用者确认的功能，Webmaster 只能用手工打造一个身份确认的 CGI 程式。 
+自 CERN httpd 之后的 Web 伺服器大部份都提供了使用者身份确认的功能。仅管每套 Web 伺服器的设定都不太相同，但在设定上都大同小异。 
+以下就是 Apache 伺服器上的使用者身份确认的设定。 
+
+<Directory /home/MyMember> 
+AuthType Basic 
+AuthName MyMember 
+AuthUserFile /usr/local/MyMember.txt 
+Options Includes ExecCGI 
+<Limit GET POST> 
+require valid-user 
+</Limit> 
+</Directory> 
+
+在这个例子中，当使用者在看 MyMember 目录下所有的档案，包括图片档案及其它各式档案时，都需要使用者的帐号密码确认。而使用者的帐号及密码档都存在于/usr/local/MyMember.txt 之中。 
+
+这个帐号密码档 /usr/local/MyMember.txt 的样子可能如下例。其中冒号前的字串是使用者帐号，冒号之后的字串是经过不可还原加密的密码，编码一般都是使用传统的 DES 编码，密码的头二个字是类似种子的字元 (salt)，本例中都是 3P。每行代表一位使用者。当然 Webmaster 要自行控制重覆帐号的情形。比较特殊是在 Win32 系统上架 Apache 的情形，冒号后的密码不可加密，因为 Win32 没有提供这方面的编码 
+API，因此使用者密码以明码的方式存在。 
+
+
+john1234:3PWudBlJMiwro 
+queenwan:3PFNVLNPN9W0M 
+noname00:3PEsXaJx5pk7E 
+wilson49:3PjoWb0EnaG22 
+rootboot:3PIt0snI6.84E 
+sun_moon:3PvymMeNOc.x. 
+nobody38:3PbskPKwV94hw 
+
+在 Apache 1.3.6 版上，可以用 ~apache/bin/htpasswd 来产生单笔的帐号及密码，但对于需要大笔资料的商业站台，可能就需要自行写程式来处理了。UNIX 上需要呼叫 crypt() 来处理编码。 
+
+在一切都设定好了之后，连线时就会在浏览器出现查核密码的视窗，如上图就是SEEDNet 的 MySEED 网站的使用者查核机制。在输入了帐号及密码后，浏览器会将它用BASE64 编码后，传到伺服器端。当然 BASE64 只是编码不是加密，因此在网路上这种传输的安全性仍然不高，还是有可能被中间的刽客截下，再将 BASE64 还原，这也是整个使用者认证中最美中不足的地方，或许日后支援摘要认证 (Digest) 及使用 MD5 编码后，可以解决这种问题。之后每一页仍然需要帐号及密码，只不过浏览器会帮你主动送出，不用再输入帐号密码了。这方面浏览器会保留到被关闭为止，下次重执行浏览器仍需输入第一次。 
+
+在使用者数量少时，使用上述的方法轻松又省事。但是在使用者有数万人，甚至数十万人时，会发生整个伺服器的效率都被搜寻帐号密码下拖垮，可能读取一页需要数十秒到数分钟。这种情形再使用伺服器提供的密码查核机制就不太明智了。在Netscape Enterprise Server 上可能就可以使用 NSAPI 来开发自己的查核方式，在IIS 上也可以用 ISAPI 过滤器开发。写 C/C++ 程式呼叫 NSAPI/ISAPI 总是很累，在PHP 上有了另外的选择，这也是本节的主题。 
+
+
+PHP 的 HTTP 相关函式库提供了 header() 的函式。许多 Web 伺服器与客户端的互动，都可以使用这个函式来变戏法。例如在某个 PHP 页面最开始处，也就是第一行或第二行，加入以下的程式，可以将使用者重导到作者的网页。 
+
+<?php 
+header("Location: http://wilson.gs"); 
+exit; 
+?> 
+
+当然，在上述程式之后的 HTML 文字或者是 PHP 程式都永远不会出现在使用者端了。 
+同样的道理，我们就用 header() 来变使用者认证的把戏。可以在 PHP 的最开头送出字串到使用者端，就会在使用者端出现下图的视窗。 
+
+<?php 
+Header("WWW-Authenticate: Basic realm=\"Member\""); 
+Header("HTTP/1.0 401 Unauthorized"); 
+?> 
+
+在程式中字串 realm=\"Member\" 中的 Member 字样出现在图中，当然若使用中文字取代，浏览器端也会出现中文字，如上面的 MySEED 图。若 Web 站台使用者还有其它语文，如英文或日文，送出中文的 realm 字串似乎就比较不合适。无论如何，这都要视站台的性质及使用者定位而决定。 
+
+当然这还是很粗糙，因为除了送出视窗后，就没有下文了，帐号输入正确也好，输入错误也罢，都不会有任何的结果。我们需要再更进阶的程式来处理。 
+
+
+在后端的使用认证上，考虑使用资料库作为储存帐号及密码的后端，在这种架构可以容纳许多的使用者，管它一万个使用者还是十万个使用者。若您的站已有数十万个使用者帐号，那么恭喜您，您的站算是世界级的大站了。MySQL 是个不错的选择，许多站台，甚至是商业化的站台都用它来做后端的资料库。当然您要架真正的商业站台，钱不是问题的话，那可以使用口碑最广的 Oracle 资料库系列。 
+
+要在 PHP 中使用任何资料库，都要先将资料库的伺服器端及客户端设定好，之后才编译 PHP 及 Apache 系统。 
+
+准备好 MySQL 及 PHP 之后，先在 MySQL 中加入新的资料库，本例是加入mymember，用别的名字当然也可以。MySQL 要加入资料库 (Database) 很容易，只要在MySQL 存放 Database 的地方 mkdir 就可以了。例如在 UNIX Shell 下打 
+
+hahaha:/usr/local/mysql/data# mkdir mymember 
+
+在建立了资料库之后，尚需要建立资料表格 (Table) 方能使用。设定的表格如下，可以将它储在 /tmp/memberauth.sql 中 
+
+
+CREATE TABLE MemberAuth ( 
+Serial mediumint(9) NOT NULL auto_increment, 
+Username char(8) NOT NULL, 
+Password char(8) NOT NULL, 
+Enable char(1) DEFAULT '0' NOT NULL, 
+PRIMARY KEY (Serial) 
+); 
+
+档案 memberauth.sql 
+
+先看看 memberauth.sql 的这些栏位。Serial 是个自动增加的整数栏位，每输入一笔资料，就会自动加一，这当然不能是空的栏位，于是就用 NOT NULL 了。第二个栏位是 Username，代表使用者的帐号，为了统一以及适应各系统起见，设定成八个字，当然这个栏位也不能是空的。Password 是第三个栏位，为使用者的密码。第四个栏位 Enable 做为帐号是否有效的旗标，设计上 0 表示无用，1 表可用，日后还可加入其它值做不同的用途。 
+
+设计好了资料表之后，就要将资料表加入资料库了。由于常要使用 MySQL 资料库，可以到 http://www.phpwizard.net/phpMyAdmin 下载 phpMyAdmin，使用浏览器操作及管理 MySQL，轻松又方便。若使用这套 phpMyAdmin 可以在它的使用者介面上输入memberauth.sql 加入 MySQL 中。或者也可以在 UNIX Shell 下输入下式，也是有同样的效果。 
+
+mysql mymember < /tmp/memberauth.sql 
+
+在准备好了之后，就可以输入使用者帐号及密码在 memberauth 资料表中了。当然还是使用 phpMyAdmin 方便，用 mysql 程式就要一笔笔的 INSERT 了。 
+
+接着进入了设计函式的阶段了。 
+
+
+<?php 
+file://--------------------------- 
+// 使用者认证函式 auth.inc 
+// Author: Wilson Peng 
+// Copyright (C) 1999 
+file://--------------------------- 
+$error401 = "/home/phpdocs/error/401.php"; 
+if ($PHP_AUTH_PW=="") { 
+Header("WWW-Authenticate: Basic realm=\"超金卡会员\""); 
+Header("HTTP/1.0 401 Unauthorized"); 
+include($error401); 
+exit; 
+} else { 
+
+$db_id = mysql_pconnect("localhost", "myid", "mypw"); 
+$result = mysql_db_query("mymember","select password, enable 
+from MemberAuth where username='$PHP_AUTH_USER'"); 
+
+$row = mysql_fetch_array($result); 
+$MemberPasswd = $row[0]; 
+$MemberEnable = $row[1]; 
+if ($MemberEnable==0) { 
+echo "您的帐号被停用了"; 
+exit; 
+} 
+
+if ($PHP_AUTH_PW!=$MemberPasswd) { 
+Header("WWW-Authenticate: Basic realm=\"超金卡会员\""); 
+Header("HTTP/1.0 401 Unauthorized"); 
+include($error401); 
+exit; 
+} 
+} 
+?> 
+
+Copyright (C) 1999, Wilson Peng 
+
+要使用这个 auth.inc，要在每个 PHP 的第一行加入 
+<? require("auth.inc"); ?> 。 
+在加入本程式的 PHP 档案都会检查帐号密码，图片等就不会检查，比起使用 Web 伺服器功能的某目录下全都检查，PHP 显得有弹性多了。 
+
+$error401 = "/home/phpdocs/error/401.php"; 
+
+这行表示在使用者按下取消，或检查失败时，要显示给使用者看的档案。 
+
+if ($PHP_AUTH_PW=="") { 
+Header("WWW-Authenticate: Basic realm=\"超金卡会员\""); 
+Header("HTTP/1.0 401 Unauthorized"); 
+include($error401); 
+exit; 
+} else 
+
+
+到 else 之前，若没有传入密码，则送出输入密码的视窗。其中的 
+$PHP_AUTH_USER、$PHP_AUTH_PW 是 PHP 中特殊的变数，分别代表使用者确认的帐号及密码。上面的程式也是利用这二个变数来处理使用者认证。 
+
+$db_id = mysql_pconnect("localhost", "myid", "mypw"); 
+$result = mysql_db_query("mymember","select password, enable from 
+MemberAuth where username='$PHP_AUTH_USER'"); 
+
+$row = mysql_fetch_array($result); 
+$MemberPasswd = $row[0]; 
+$MemberEnable = $row[1]; 
+
+若使用者有输入帐号及密码，则向资料库查询。同时查核该使用者是否仍可使用。 
+
+if ($MemberEnable==0) { 
+echo "您的帐号被停用了"; 
+exit; 
+} 
+
+上四行程式为帐号被停用的情形。 
+
+if ($PHP_AUTH_PW!=$MemberPasswd) { 
+Header("WWW-Authenticate: Basic realm=\"超金卡会员\""); 
+Header("HTTP/1.0 401 Unauthorized"); 
+include($error401); 
+exit; 
+} 
+
+密码错误则再次向使用者要求输入帐号及密码。 
+
+在实际使用时，可以视需要加入的网页再加入 auth.inc 这个档案，就不用连看张图形也要查一次密码，降低伺服器和使用者二端的资源。当然，和 MySQL 的连系上，可以使用 mysql_pconnect() 一直和 MySQL 伺服器连线。或是使用mysql_connect() 每次重新连线，用这个函式要记得早点使用 mysql_close() 将资料库关闭。下面的程式 auth1.inc 是另一版本的认证程式，就是开启连线后马上关闭，释放资源的例子。 
+
+
+<?php 
+file://--------------------------- 
+// 使用者认证函式-1 auth1.inc 
+// Author: Wilson Peng 
+// Copyright (C) 1999 
+file://--------------------------- 
+$error401 = "/home/phpdocs/error/401.php"; 
+if ($PHP_AUTH_PW=="") { 
+Header("WWW-Authenticate: Basic realm=\"超金卡会员\""); 
+Header("HTTP/1.0 401 Unauthorized"); 
+include($error401); 
+exit; 
+} else { 
+
+$db_id = mysql_connect("localhost", "myid", "mypw"); 
+$result = mysql_db_query("mymember","select password, enable 
+from MemberAuth where username='$PHP_AUTH_USER'"); 
+
+$row = mysql_fetch_array($result); 
+$MemberPasswd = $row[0]; 
+$MemberEnable = $row[1]; 
+mysql_close($db_id); 
+if ($MemberEnable==0) { 
+echo "您的帐号被停用了"; 
+exit; 
+} 
+
+if ($PHP_AUTH_PW!=$MemberPasswd) { 
+Header("WWW-Authenticate: Basic realm=\"超金卡会员\""); 
+Header("HTTP/1.0 401 Unauthorized"); 
+include($error401); 
+exit; 
+} 
+} 
+?> 
+
+在实际应用时，可以在资料库中加入更多功能，如使用者分组 (CUG) 的功能；或是加入时间栏位，可做到期检查。其中的变化，端赖设计者的巧思了。

@@ -1,0 +1,222 @@
+Oracle8.1.6i+ Apache1.3.14+PHP4.0.3完全安装实例
+在redhat 6.2下 Oracle8.1.6I+ APACHE1.3.14+PHP4.0.3完全安装实例 
+1． 本文目的 
+● 在redhat下安装ORACLE8数据库服务器 
+● 安装apache,并支持wml 
+● 安装PHP 
+2． 安装前的准备软件： 
+Redhat 6.2安装光盘 
+Oracle8.161.tar.gz 下载地址： 
+http://freeware.online.sh.cn/mirrors/LinuxApps/Database/Oracle下的oracle8.161.tar.gz 
+Java运行时刻环境（JRE）下载地址： 
+ftp://165.21.84.42/pub/j2sdk/1.3.0/xzc233fcslnx/下的j2sdk-1_3_0-linux-rpm.sh 
+Apache 1.3.14 下载地址： 
+http://www.apache.org/dist/apache1.3.14.tar.gz 
+php4.0.3 pl1 下载地址： 
+http://www.php.net/do_download.php?download_file=php- 4.0.3pl1.tar.gz&source_site=www.php.net 
+3． 安装oracle前的准备 
+● 安装JRE1.3.0 
+[root@wapdb /root]# #以root身份登录 
+[root@wapdb /root]# chmod 755 j2re-1_3_0-linux-rpm.sh #改变j2re-1_3_0-linux-rpm.sh 
+的权限 
+[root@wapdb /root]#./ j2re-1_3_0-linux-rpm.sh #运行j2re-1_3_0-linux-rpm.sh在同级目录 
+下可得到JRE的RPM包。 
+[root@wapdb /root]# rpm –i j2re-1_3_0-linux-rpm #安装JRE1.3.0: 
+● 创建oracle。apache用户组： 
+执行以下命令： 
+[root@wapdb /root]#　　　　　　　　　　　　　　 #以root方式登录 
+[root@wapdb /root]# groupadd oracle　　　　　　　　#创建oracle组 
+[root@wapdb /root]# useradd oracle -g oralce　　　 #在oracle组中建新用户oracle 
+[root@wapdb /root]# useradd apache -g oralce #在oracle组中建新用户apache 
+[root@wapdb /root]# passwd oracle　　　　　　　 #修改oracle用户口令 
+注：oracle组和oracle用户是oracle安装需要的 
+注：创建oracle用户后，linux系统自动在/home目录下创建/home/oracle目录，给oracle用户使用，oracle用户对此目录拥有所有的权限。 
+[root@wapdb /root]# cd /home/oracle 
+[root@wapdb /root]# vi .bash_profile　　　　#编辑.bash_profile文件，并输入以下内容 
+# Setup ORACLE environment 
+NLS_LANG="SIMPLIFIED CHINESE_CHINA.ZHS16CGB231280"; export NLS_LANG 
+JAVA_HOME=/usr/java/jre1.3 
+BASH_ENV=$HOME/.bashrc 
+ORACLE_HOME=/data/oracle/app/oracle/product/8.1.6 
+export ORACLE_HOME 
+ORACLE_SID=wap 
+export ORACLE_SID 
+# Set up the search paths: 
+PATH=$PATH:$HOME/bin:$JAVA_HOME/bin:$ORACLE_HOME:$ORACLE_HOME/bin:$ORACLE_HOME/d 
+bs 
+export USERNAME BASH_ENV PATH ORACLE_HOME JAVA_HOME 
+4． 安装oracle8I 
+[root@wapdb /oracle]# exit　　　　　#退出，以oracle用户重新登录，以使设定的环境生效 
+[oracle@ wapdb/oracle]$ 
+[oracle@ wapdb/oracle]$ tar zxvf oracle8161_tar.gz　　　#解压oracle压缩包到当前目录 
+[oracle@ wapdb/oracle]$ startx　　　　　#启动X-windows后，启用一个终端（xterm）， 
+(图形窗口）在该终端中运行runInstaller 
+[oracle@wapdb /oracle]$ cd Oracle8iR2 #进入解压缩的目录 
+[oracle@wapdb /Oracle8iR2]$ ./runInstaller #执行oracle安装程序。 
+
+这时可以看到用jre运行的的图形化的OUI的欢迎画面，按照提示继续安装进程（这里我们可以选择典型安装）： 
+Welcome： 
+按next 
+File Locations： 
+按next 
+UNIX Group Name： 
+oracle，按next 
+出错，提示要以root权限运行“/data/oracle/app/oracle/product/8.1.6/orainstRoot.sh 
+CTRL+ALT+F2，打开一个新的控制台（字符窗口） 
+以root登录 
+[root@wapdb /root]# cd /data/oracle/app/oracle/product/8.1.6 
+这时，/data/oracle/app/oracle/product/8.1.6目录下有一个文件orainstRoot.sh，运行它 
+[root@wapdb /8.1.6]# sh orainstRoot.sh 
+CTRL+ALT+F7，回到安装界面（图形窗口） 
+按Retry按钮，就可以继续安装了， 
+Available Products： 
+选Oracle8i Enterprise Edition 8.1.6.1.0，按next 
+Installation Types： 
+选Typical（540MB），按next，这时，屏幕右上角出现一个进度标尺 
+Database Identification： 
+Global Database Name：输入wap（可以任意） 
+SID：保留wap 
+按next 
+Database File Location： 
+任意目录，本例设为“/data/oracle/app/oracle/product/8.1.6/data”，按Next，这时，屏幕右上角进度标尺继续前进 
+出现Summary，对你想要安装的产品作一个总结 
+按Install，出现Install画面，等待... 可以看到窗口底部提示的安装等log文件目录，可供以后查询。 
+弹出Setup Privileges窗口 
+提示：在安装继续进行之前，需要以root运行一个脚本 
+“/data/oracle/app/oracle/product/8.1.6/root.sh”， 
+CTRL+ALT+F2，回到刚才运行的第2个终端窗口 
+以root权限执行该文件， 
+[root@wapdb /8.1.6]# sh root.sh 
+屏幕显示： 
+Enter the full pathname of the local bin directory:[/usr/local/bin]: 
+回车 
+系统开始执行一些动作，执行完毕，CTRL+ALT+F7按返回OUI，按OK。 
+Database Creation Progress开始，逐步进行以下4个过程 
+Creating and starting Oracle instance 
+Copying database files 
+Initializing database 
+Database creation completed 
+以上4个过程完成，弹出Oracle Database Configuration Assistant Alert窗口， 
+提示：数据库创建完成，告诉你数据库的一些基本信息 
+global databse name：wap 
+database system identifier（SID）：wap 
+SYS account password：change_on_install 
+SYSTEM account password：manager 
+按ok 
+End of Installation，按Exit退出OUI，完成安装。 
+到此，已经完成了数据库服务器的安装，下一步进行web/wap服务器的安装。 
+5． 安装ORACLE客户端 
+（该步骤适合与数据库服务器与WEB服务器安装在不同机器上，若为同一台机器直接执行 第6步） 
+重复第3步 
+在第4步的安装中选择“客户端安装”步骤大致相同。 
+配置tnsnames.ora文件（可以在/$ORACLE_HOME/bin/运行netasst命令启动OUI来配置）。最快的方法是COPY数据库服务器端的tnsnames.ora到$ORACLE_HOME/network/admin中。 
+以ORACLE用户登录 
+[oracle@wapserver /]$ cd $ORACLE_HOME/network/admin 
+[oracle@wapserver admin]$ ftp xxx.xxx.xxx.xxx #使用FTP登录oracle服务器，以ORACLE 
+并使用oracle用户. 
+ftp>cd /data/oracle/app/oracle/product/8.1.6/network/admin 
+ftp>get tnsnames.ora 
+ftp>bye 
+6． 配置apache_1.3.14 
+[root@wapdb /local]# tar zxvf apache1.3.14.tar.gz #解压apache 
+[root@wapdb /local]# cd /usr/local/apache_1.3.14 #进入apache的解压目录。 
+[root@wapdb /local]# ./configure --prefix=/usr/local/apache 
+5. 安装 PHP4 
+[root@wapdb /local]# tar zxvf php- 4.0.3pl1.tar.gz #解压php 
+[root@wapdb /local]# cd php-4.0.3 
+[root@wapdb /php-4.0.3]#./configure --with-apache=../apache_1.3.14 \ 
+--with-oracle=/data/oracle/app/oracle/product/8.1.6 \ 
+--with-oci8=/data/oracle/app/oracle/product/8.1.6 \ 
+--enable-track-vars 
+[root@wapdb /php-4.0.3]# make #编译 
+[root@wapdb /php-4.0.3]# make install # 安装 
+[root@wapdb /php-4.0.3]# cp php.ini-dist /usr/local/lib/php.ini #拷贝ini文件到lib目录 
+6．安装apache 
+[root@wapdb /php-4.0.3]# cd /usr/local/apache_1.3.14 
+[root@wapdb/apache_1.3.14]# ./configure --prefix=/usr/local/apache \ 
+--activate-module=src/modules/php4/libphp4.a 
+[root@wapdb /apache_1.3.14]# make 
+[root@wapdb /apache_1.3.14]# make install 
+7．配置apache 
+[root@wapdb /apache_1.3.14]# cd /usr/local/apache/conf 
+[root@wapdb /conf]# vi httpd.conf 
+修改httpd.conf文件 
+以下几行去掉注释： 
+ServerName http://。。。。。。。 这个一定要去掉注释 
+Listen XXX.XXX.XXX:8888(其中xxx.xxx.xxx为域名，或者IP地址） 
+AddType application/x-httpd-php .php 
+AddType application/x-httpd-php-source .phps 
+
+修改以下两行： 
+User apache 
+Group oracle 
+[root@wapdb /conf]# vi mime.types 
+修改mime.types文件, 添加WAP支持,添加如下行: 
+text/vnd.WAP.WML WML 
+text/vnd.WAP.WMLscript WMLC 
+image/vnd.WAP.WBMP WMLP 
+application/vnd.WAP.WMLC WMLC 
+application/vnd.WAP.WMLCSRIPTC WMLSC 
+系统的安装已经完成，下面对环境进行测试： 
+8．启动数据库： 
+在数据库服务器里运行： 
+[oracle@wap /bin]$ svrmgrl 
+SVRMGR> connect internal 
+Connected. 
+SVRMGR> startup 
+ORACLE instance started 
+9．启动监听器 
+[oracle@wapdb /bin]$ lsnrctl 
+LSNRCTL> start 
+LSNRCTL> exit 
+这时，oracle数据库已经安装成功，并且数据库已经启动运行，可以试一下 
+[oracle@wapdb /bin]$sqlplus system/manager@wap 
+
+出现以下信息： 
+SQL*Plus: Release 8.1.6.0.0 - Production on Fri Oct 26 20:20:56 2000 
+(c) Copyright 1999 Oracle Corporation. ALL rights reserved. 
+Connected to: 
+Oracle8i Enterprise Edition Release 8.1.6.1.0 - Production 
+With the Partitioning option 
+JServer Release 8.1.6.0.0 - Production 
+SQL> show user 
+USER is "SYSTEM" 
+SQL> 
+SQL> exit 
+10．启动Apache了 
+[oracle@wapdb /root]# cd /usr/local/apache/bin 
+[oracle@wapdb /root]# apachectl start 
+
+11．测试PHP 
+htdocs目录下编辑一个test.php 
+<? 
+phpinfo(); 
+?> 
+通过浏览器浏览该网页，可以看到PHP的环境参数，如果找到有oricle和orci8的支持，说明PHP已经支持ORACLE和OCI8。 
+
+12．测试PHP与ORACLE的连接 
+<? 
+//文件名为test.php. 
+$conn=ocilogon("system","manager","test"); 
+if($conn) 
+echo success; 
+else 
+echo fail; 
+?> 
+如果该程序返回成功标志，则表明连接成功。 
+13．测试时候支持WML 
+在htdocs目录下编辑test.wml 
+<?xml version="1.0"?> 
+<!DOCTYPE wml PUBLIC "-//WAPFORUM//DTD WML 1.1//EN" 
+"http://www.wapforum.org/DTD/wml_1.1.xml"> 
+<wml> 
+<card> 
+<p> 
+hello word! 
+</p> 
+</card> 
+</wml> 
+在任何其他一台win9x的机子上使用WAP模拟器浏览该网页，应该出现”hello word”。 
+现在整个环境已经调试完成，可以利用PHP+ORACLE8i进行动态html或wml的开发了！ 
+
+转自：PHPBuilder.com

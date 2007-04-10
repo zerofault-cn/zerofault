@@ -1,0 +1,107 @@
+模板，PHPLIB处理方式(一)
+　　如果你正想知道什么是模板，首先去看一下Sascha Schumann写的精彩文章《模板-为什么和如何在PHP3中使用它们(Templates - why and how to use them in PHP3)》的前几段。
+　　 一般来说，模板可以让你完全地把你的PHP代码从HTML中分离出来，这样使得HTML的图形设计者们非常高兴，而且可以避免他们搞丢你的宝贵设计。它不是FastTemplates 
+　　那么，我们真的需要在PHPBuilder上关于模板的另一篇文章吗？好，是的，因为有不止一种的方法用PHP来实现模板。Sascha的文章讲述了如何使用FastTEmplates，但是PHP基本类库("PHPLIB")有它自已的模板实现。 
+　　它们有什么不同呢？FastTemplates最初是从一个Perl库转变来的。FastTemplates对Perl程序工作的很 
+好，但是对PHP不太理想。Kristian Koehntopp从头编写了PHPLIB模板，作为一个纯的PHP库，它更好地提供了PHP的优势。好处之一是Kristian的设计使用了preg_replace()来分析模板，据说比FastTemplate 中使用的ereg_replace()要快。PHPLIB模板的另一个好处是它允许动态的块实现嵌套，不象FastTemplates。 
+　　两个库都有着非常相似的特性和能力，但是如果你已经使用了FastTemplates，并且你想学习使用PHPLIB模板，你应该把你所知道的关于FastTemplates 的一切都忘掉。他们的特性可能是相似的，但是PHPLIB模板所做的每件事比FastTemplates只有一点点不同。 
+使用PHPLIB模板 
+　　让我们从一个简单的例子开始。我们假设在/home/mydir/mytemplates/下面有一个名为MyTemplate的模 
+板，它有一些文本，内容可能是：祝贺！你赢了一辆{some_color}Honda Prelude！ 
+　　注意"{some_color}"是用大括号包围的。大括号指明some_color是一个模板变量。我们可能想写这样一 
+个脚本，它可以装入模板，在{some_color}模板变量的地方插入PHP变量$my_color的值，然后输出新的文本。如果$my_color碰巧被设为"蓝色"，最后的输出可能是：祝贺！你赢了一辆新蓝色Honda Prelude！ 
+　　下面是上述结果的PHP脚本： 
+-------------------------------------------------------------------------------- 
+<?php 
+include "template.inc"; 
+$my_color = "blue"; 
+// 将在后面使用 
+$t = new Template("/home/mydir/mytemplates/"); 
+// 创建一个名为 $t 的模板对象 
+$t->set_file("MyFileHandle","MyTemplate.ihtml"); 
+// 设置 MyFileHandle = 我们的模板文件 
+$t->set_var("some_color",$my_color); 
+// 设置模板变量 some_color = $my_color值 
+$t->parse("MyOutput","MyFileHandle"); 
+// 设置模板变量 MyOutput = 分析后的文件 
+$t->p("MyOutput"); 
+// 输出 MyOutput 的值(我们的分析后的数据) 
+?>-------------------------------------------------------------------------------- 
+　　第一行是一个include 指令，用来提供PHPLIB模板功能。当然PHPLIB做的比模板要多，但是如果你只想使用模板特性，只需要包括tmplate.inc （template.inc是来自于PHPLIB的文件之一）。PHPLIB模板使用面向对象程序设计，所以下一件事情就是创建一个模板对象。代码 <? $t = new Template ("/home/mydir/mytemplates/" ); ?> 创建一个新的模板对象$t。这个$t对象是一个句柄，将用来处理所有的模板函数，用于PHP脚本中其它的代码。如果你愿意，你可能创建其它的模板对象（每一个都有着自已的模板变量名字空间），但是一个就够用了。在模板的构造函数调用中的路径("/home/mydir/mytemplates/")用来设置你的模板所在位置的根目录，但是如果你没有设它，它将缺省与你的PHP脚本所在目录一样。
+　　然后我们调用set_file()来定义一个名为"MyFileHandle"的句柄来与MyTemplate.ihtml链接（在parse()被调用之前，模板不会真正地装入）。顺便说一下，PHPLIB模板的模板文件名的后缀为.ihtml 是一种习惯，你可以使用.html，.tpl，或其它的后缀。然后调用set_var()来设置模板变量some_color为$my_color的值（值为"蓝色"），意味着所有在模板中出现{some_color}的地方都将被词"蓝色"所替换，一旦我们调用了parse()。 
+　　接着我们调用parse()，它会装入MyFileHandle(MyTemplate.ihtml)进行分析，并且替换所有模板变量("{某变量}")为模板变量的值，分析的结果放在MyOutput中。任何结果都不会输出到web服务器上，除非p("MyOutput")被调用，它将输出最后分析过的文本。
+模板，PHPLIB处理方式(二)
+嵌套的模板 
+　　parse()函数的一个灵巧的特性是它创建的MyOutput句柄是一个真正的模板变量，就象some_color 是一个模板变量。所以如果你有另一个模板，它有一个{MyOutput}标签，当你分析第二个模板时，所有的 
+{MyOutput}标记将被替换为MyOutput中的分析后的文本。这个特性允许你将一个模板文件嵌入到另一个模板中。所以，我们可能有另一个名为wholePage.ihtml的模板，内容如下：
+
+对不起，你没赢。但是如果你赢了，我们将对你说：{MyOutput} 
+　　并且在wholePage.ihtml被分析后，最后的结果将是：
+对不起，你没赢。但是如果你赢了，我们将对你说： 
+祝贺！你赢了一辆新蓝色Honda Prelude！ 
+　　下面是分析两个模板的PHP代码： 
+-------------------------------------------------------------------------------- 
+<?php 
+
+$t = new Template("/home/mydir/mytemplates/"); 
+
+// 这三行同第一个例子一样 
+$t->set_file("MyFileHandle","MyTemplate.ihtml"); 
+$t->set_var("some_color",$my_color); 
+$t->parse("MyOutput","MyFileHandle"); 
+
+// 注意我们没有调用p() 
+// 这里，仍然没有输出任何东西 
+
+// 现在分析第二个模板 
+$t->set_file("WholeHandle","wholePage.ihtml"); 
+
+// wholePage.ihtml 有 "{MyOutput}" 在里面 
+$t->parse("MyFinalOutput","WholeHandle"); 
+
+// 所有的 {MyOutput} 被替换了 
+$t->p("MyFinalOutput"); 
+// 输出 MyFinalOutput 的值 
+
+?>
+-------------------------------------------------------------------------------- 
+　　最后调用了parse()和p()的两行语句可以合并成一个简写函数pparse()： 
+-------------------------------------------------------------------------------- 
+<?php 
+pparse("MyFinalOutput","SecondHandle"); 
+?> 
+-------------------------------------------------------------------------------- 
+　　另一个PHPLIB模板的特性是set_file()和set_var()函数也能一次接收多组值，通过传递一个句柄/数组对数组。这是一个例子： 
+-------------------------------------------------------------------------------- 
+<?php 
+$t->set_file(array( "pageOneHandle" => "pageone.ihtml", 
+"pageTwoHandle" => "pagetwo.ihtml")); 
+$t->set_var(array( "last_name" => "Gates", 
+"first_name" => "Bill", 
+"net_worth" => $reallybignumber)); 
+?> 
+-------------------------------------------------------------------------------- 
+添加模板文本 
+　　你可以给parse()和pparse()传递第三个参数，如果你想给模板变量追加数据而不是替换它。可以简单的使用true作为第三个参数调用parse()和pparse()，如： 
+-------------------------------------------------------------------------------- 
+<?php 
+$t->parse("MyOutput","MyFileHandle", true); 
+?> 
+-------------------------------------------------------------------------------- 
+　　如果MyOutput已经包含了数据，MyFileHandle将被分析并且被追加到MyOutput已经存在的数据上。这个技术非常有用，如果你已经有了一个模板，你想要同一段文本被重复多次，例如列出一个数据库查询结果中的多行。你也可能是显示数组中的变量，如下面的例子： 
+-------------------------------------------------------------------------------- 
+<?php$t = new Template("/home/mydir/mytemplates/"); $t->set_file(array("mainpage" => "mainpage.ihtml", "each_element" => "each_element.ihtml"));reset($myArray);while (list($elementName, $elementValue) = each($myArray)) { 
+// 设置 'value' 和 'name' 为每一个元素的值和名字 
+$t->set_var("name",$elementName); $t->set_var("value",$elementValue); 
+// 追加each_element的拷贝 
+$t->parse("array_elements","each_element",true);}$t->pparse("output","mainpage");?>-------------------------------------------------------------------------------- 
+　　这个例子使用了两个模板，mainpage.ihtml和each_element.ihtml。mainpage.ihtml模板可能是这样： 
+<HTML> 
+Here is the array: 
+<TABLE> 
+{array_elements} 
+</TABLE> 
+</HTML> 
+　　上面的{array_elements}标签将被each_element.ihtml的拷贝所替换，它将根据数组($myArray)进行重复。each_element.ihtml模板看上去可能是： 
+<TR> <TD>{name}: {value}</TD> </TR> 
+　　处理结果是一个包含$myArray元素的格式化很好的表格。但是如果将两个模板合并成一个模板不是更好吗？实际上，它们可以使用模板块来合并使用。模板块允许从一个模板中取出一块文本，所以你可以重复很多次，或者在它上面做任何你想做的事情。但是我将在另一篇文章讲述这个特性。 

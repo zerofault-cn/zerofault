@@ -1,0 +1,131 @@
+
+PHP下GD安装全攻略 
+文/任天堂 
+本文旨在介绍PHP下图象处理支持的安装，安装后PHP支持GIF、PNG、JPEG、WBMP 
+四种格式的图象，PHP的具体安装设置步骤请参照相应教程。 
+一、Windows下的安装： 
+Windows的图象支持安装非常简单，在站点http://www.php4win.de/ 
+下载的PHP包含了所有的图象支持，其中php_gd.dll不支持GIF格式，php_gd_gif.dll 
+支持上述所有的格式，需要支持以上四种格式，只须用php_gd_gif.dll覆盖php_gd.dll 
+即可。 
+安装完毕后用<? phpinfo(); ?>查看结果如下： 
+gd 
+GD Support enabled 
+GD Version 1.6.2 or higher 
+FreeType Support enabled 
+FreeType Linkage with TTF library 
+GIF Support enabled 
+JPG Support enabled 
+PNG Support enabled 
+WBMP Support enabled 
+
+二、Unix/linux下的安装 
+Unix的安装比较麻烦，下面以最新的php 4.0.4pl1为例介绍在Solaris 7下gd-1.8.3 
+包含gif支持的安装。 
+系统环境：Solaris 7、gcc 2.9.2、make 3.78.1、bison 1.2.8 
+
+jpeg-6b 的安装： 
+文件名：jpeg-6b-sol7-sparc-local.gz 
+版本：6b 
+下载站点：http://www.sunfreeware.com/ 
+下载位置：ftp://ftp.sunfreeware.com/pub/freeware/sparc/7/jpeg-6b-sol7-sparc-local.gz 
+安装方法：/usr/local/bin/gzip -d jpeg-6b-sol7-sparc-local.gz 
+pkgadd -d jpeg-6b-sol7-sparc-local 
+
+zlib 的安装： 
+文件名：zlib-1.1.3-sol7-sparc-local.gz 
+版本：1.1.3 
+下载站点：http://www.sunfreeware.com/ 
+下载位置：ftp://ftp.sunfreeware.com/pub/freeware/sparc/7/zlib-1.1.3-sol7-sparc-local.gz 
+安装方法：/usr/local/bin/gzip -d zlib-1.1.3-sol7-sparc-local.gz 
+pkgadd -d zlib-1.1.3-sol7-sparc-local 
+
+libpng 的安装： 
+文件名：libpng-1.0.2-sol7-sparc-local.gz 
+版本：1.0.2 
+下载站点：http://www.sunfreeware.com/ 
+下载位置：ftp://ftp.sunfreeware.com/pub/freeware/sparc/7/libpng-1.0.2-sol7-sparc-local.gz 
+安装方法：/usr/local/bin/gzip -d libpng-1.0.2-sol7-sparc-local.gz 
+pkgadd -d libpng-1.0.2-sol7-sparc-local 
+
+xpm 的安装： 
+文件名：xpm-3.4k-sol7-sparc-local.gz 
+版本：3.4 
+下载站点：http://www.sunfreeware.com/ 
+下载位置：ftp://ftp.sunfreeware.com/pub/freeware/sparc/7/xpm-3.4k-sol7-sparc-local.gz 
+安装方法：/usr/local/bin/gzip -d xpm-3.4k-sol7-sparc-local.gz 
+pkgadd -d xpm-3.4k-sol7-sparc-local 
+
+freetype 的安装： 
+文件名：freetype-1.3.1.tar.gz 
+版本：1.3.1 
+下载站点：http://freetype.sourceforge.net/ 
+下载位置：ftp://freetype.sourceforge.net/pub/freetype/freetype1/freetype-1.3.1.tar.gz 
+安装方法：/usr/local/bin/gzip -d < freetype-1.3.1.tar.gz | tar vxf - 
+cd freetype-1.3.1 
+./configure 
+make 
+make install 
+
+T1lib 的安装： 
+文件名：t1lib-1.0.1.tar.gz 
+版本：1.0.1 
+下载站点：ftp://ftp.neuroinformatik.ruhr-uni-bochum.de/pub/software/t1lib/ 
+下载位置：ftp://ftp.neuroinformatik.ruhr-uni-bochum.de/pub/software/t1lib/t1lib-1.0.1.tar.gz 
+安装方法：/usr/local/bin/gzip -d < t1lib-1.0.1.tar.gz | tar vxf - 
+cd T1-1.0.1 
+./configure 
+make 
+make install 
+
+gd 的安装： 
+文件名：gd-1.8.3gif.tar.gz 
+版本：1.8.3 
+下载站点：http://www.rime.com.au/gd/ 
+下载位置：ftp://ftp.rhyme.com.au/pub/gd/gd-1.8.3gif.tar.gz 
+安装方法：/usr/local/bin/gzip -d < gd-1.8.3gif.tar.gz | tar vxf - 
+cd gd-1.8.3 
+./configure 
+（编辑 Makefile文件 
+改 CFLAGS=-O 为 CFLAGS=-O -DHAVE_XPM -DHAVE_JPEG -DHAVE_LIBTTF 
+改 LIBS=-lm -lgd -lpng -lz 为 LIBS=-lm -lgd -lpng -lz -ljpeg -lttf -lXpm -lX11 
+改 INCLUDEDIRS=-I. -I/usr/local/include -I/usr/include/X11 -I/usr/X11R6/include/X11 
+为 INCLUDEDIRS=-I. -I/usr/local/include -I/usr/include/X11 -I/usr/X11R6/include/X11 -I/usr/local/include/freetype 
+） 
+make 
+make install 
+
+PHP 的安装： 
+文件名：php-4.0.4pl1.tar.gz 
+版本：4.04 Patch Level 1 
+下载站点：http://www.php.net/ 
+下载位置：http://www.php.net/do_download.php?download_file=php-4.0.4pl1.tar.gz&source_site=www.php.net 
+安装方法：/usr/local/bin/gzip -d < php-4.0.4pl1.tar.gz | tar vxf - 
+./configure --with-apache=../apache_1.3.17 --with-gd=/usr/local \ 
+--with-jpeg-dir=/usr/local --with-xpm-dir=/usr/local \ 
+--with-ttf=/usr/local/freetype --with-t1lib=/usr/local \ 
+--with-zlib=/usr/local --with-tiff-dir=/usr/local \ 
+--with-png-dir=/usr/local 
+（编辑 ext/gd/gd.c 
+寻找 #ifndef USE_GD_IOCTX 加入 #define gdImageCreateFromGifCtx NULL 
+替换 _php_image_create_from(INTERNAL_FUNCTION_PARAM_PASSTHRU, PHP_GDIMG_TYPE_GIF, "GIF", gdImageCreateFromGif,NULL); 
+为 _php_image_create_from(INTERNAL_FUNCTION_PARAM_PASSTHRU, PHP_GDIMG_TYPE_GIF, "GIF", dImageCreateFromGif,gdImageCreateFromGifCtx); 
+） 
+make 
+make install 
+
+您可以自行添加PHP的编译选项来满足你自己的需要，linux下的安装也差不多， 
+
+安装完毕后用<? phpinfo(); ?>查看结果如下： 
+gd 
+GD Support enabled 
+GD Version 1.6.2 or higher 
+FreeType Support enabled 
+FreeType Linkage with TTF library 
+T1Lib Support enabled 
+GIF Support enabled 
+JPG Support enabled 
+PNG Support enabled 
+WBMP Support enabled 
+
+希望上文对您能有所帮助。

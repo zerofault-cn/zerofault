@@ -1,0 +1,31 @@
+session与cookies
+   session_star()为某一浏览器分配并启动一个session，它属服务器端的动作。执行后服务器分配一个ID号，并存在服务器上，再传给浏览器，当该浏览器再次请求时(如刷新)页面时就会传回这个ID,送到session_name中,系统默认的session_name为$PHPSESSID这个名字可以用session_name()改变，当然它不会改变session_name的值。当浏览器带着ID请求php页面时，服务器执行页面时若再次遇到session_star()，则会重新连接到对应的session中，那么该session中的其它变量也看得见。若找不到对应的session，则session_star()则重新分配ID，并传回浏览器，这种情况在浏览器20分钟没有刷新面页时发生，原因是服务器在session_star()执行20分钟后自动删除该session。
+   session_star()在html文档正式报文之前传送有效。
+   若浏览器无ID送来，在session_star()之后，服务器为该浏览器分配了新的ID，用session_id（）可取得，但session_name（默认变量为$PHPSESSID）中的值为空。下次浏览器刷新时则为该ID。
+   setcookie(“aaa”,”bbb”);设定变量$aaa的值为”bbb”,以字串形式传回给浏览器，并存在客户机中（windows98存在c:\windows\cookies目录中），下次浏览器重新请求该页面时将这些cookies参数传回，服务器就可看到这些值。
+   其它session函数:
+   session_star();启动session，在服务器上为每个浏览器分别分配一个session
+   session_name(“user1”);session_name改名,原始名为$PHPSESSID,它由PHP.ini文件设定。
+   session_name();取得session的变量名称，原始结果为”PHPSESSID”
+   session_id();取得当前ID
+   session_id(“ddd”);设定当前session的ID
+   例：
+   <%php
+     setcookie(“aaa”,”bbb”);
+     echo $aaa;
+   %>
+   浏览器第一次请求该程序时无结果，但实现了一个操作，就是浏览器获得cookie参数并写入cookie文本文件中。当浏览器刷新后，cookies就会被送出，服务器就会看到这些cookie变量，并显示出来。
+   实际上，cookies有生命期，浏览器关后就会被自动删除，重新打开浏览器cookie没有了，这与刷新不同。因此，当初setcookie()时也可以设置该cookie的生命期，形式如下：setcookie(“aaa”,”bbb”,time()+100000)，它的生命期为100000，单位可能是1/100秒
+   同session_star()一样，setcookie()应在html正文发送之前执行。因为setcookie()产生的报文不能嵌在html文档之中。
+   另外，setcookie()是否有效，同浏览器的安全设定有关，如果浏览不同意写cookies文件，setcookie()无效，它送出的报文可谓有去无回。
+   以下是下段比较标准的setcookie()范例
+
+<?php
+ $status = 0;
+ if (isset($my) && ($my == "阿见")) $status = 1;
+ if (!isset($CCHK)) {
+  setcookie("myTstCky", "ChocChip");
+   header("Location: $PHP_SELF?CCHK=1");
+   exit;
+ }
+?>

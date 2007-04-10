@@ -1,0 +1,35 @@
+基于各种各样的理由，PHP 的设置需要依赖于 register_globals 
+参数打开，但是也成为安全的重要隐患，请看下面的一段代码：
+
+if (authenticate_user()) {
+$authenticated = true;
+}
+...
+?>
+
+远程用户可以简单的传递 'authenticated' 作为表单变量，即使
+authenticate_user() 函数返回 false，$authenticated 还是会设置成 true。这是一个简单的例子，你或许会说，我的程序不会这样来写。
+而实际上，在稍微复杂一些的应用里面，这个机制就会成为重大的漏洞。
+
+因此，新版本的 PHP ，我们建议用户不要采用这个变量来控制应用，虽然我们没有打算要在不久的将来删除。
+
+为了帮助用户建立 register_globals 设置为 off 的应用，增加了一些变量来代替旧的，下面是7 个新的数组：
+
+$_GET - 包含了通过 GET 发送的表单变量
+$_POST - 包含了通过 POST 发送的表单变量
+$_COOKIE - 包含了 HTTP cookie 变量
+$_SERVER - 包含服务器端变量 (例如：REMOTE_ADDR)
+$_ENV - 包含环境变量
+$_REQUEST - GET 变量，POST 变量和 Cookie 变量的混合，通过用户而来而不能信任的变量。
+$_SESSION - 包含通过会话模块注册的 HTTP 变量
+
+这些变量，在任何范围内，都自动设置为全局变量，可以在任何地方调用，而不需要加 global 关键字。
+例如：
+
+function example1()
+{
+print $_GET["name"]; // 没有必要写成：'global $_GET;' 
+}
+
+另外一个值得一提的小窍门是在 $_SESSION 数组中增加一个记录能自动作为会话变量注册，就像你调用了
+session_register() 函数。 

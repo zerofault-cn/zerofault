@@ -1,0 +1,107 @@
+多重条件组合查询(一)
+平常我们在开发系统时,一定不会缺少查询功能,然而往往算个条件是无法满足用户的要求的,这时我们就应该设置多重条件进行组合,让用户查询时以更加方便地选择查询条件,迅速找到他们所满足的记录. 
+现在我们假设开发一个钟表公司的客户订单系统,有客户订单编号,类别,名称,数量,价格等数据,这里就不将资料一一列击,.订单表如下: 
+订单编号(ID) 类别(TYPE) 名称(NAME) 数量(QTY) 价格(PRICE) 
+001 机芯 机芯1 100 100 
+001 表壳 表壳1 1000 30 
+001 表带 表带1 500 60 
+002 机芯 机芯2 200 150 
+002 表壳 表壳2 500 40 
+002 表带 表带2 300 70 
+现在我们设想要建一个查询系统,让用户即可根据订单编号,也可根据类别,或者根据价格,或者其中的各自组合来实现快速查询,代号如下: 
+下面此部分是显示查询条件的窗体 
+<html> 
+<? 
+$linkstr=mysql_connect("localhost","root","sa"); 
+mysql_select_db("cx",$linkstr); 
+?> 
+<script language="JavaScript"> 
+function variable() 
+{ 
+if (document.search.select1.value!="1") 
+{ 
+if (document.search.no.value=="") 
+{ 
+window.alert("请输入订单号码!"); 
+return false; 
+} 
+else 
+{ 
+if (document.search.type.value=="") 
+{ 
+window.alert("请选择配件类别!"); 
+return false; 
+} 
+} 
+} 
+else 
+{ 
+if (document.search.select2.value!="1") 
+{ 
+if (document.search.price.value=="") 
+{ 
+window.alert("请输入价格!"); 
+return false; 
+} 
+} 
+} 
+} 
+</script> 
+<br> 
+<center><font size="5"><b>多重条件组合查询</b></font></center> 
+<br> 
+<body> 
+<form action="searchjg.php" method="POST" name="search" onsubmit="return variable(this.value)"> 
+<table align="center" border="1" width="400"> 
+<tr> 
+<td align="left" width="100">订单编号</td> 
+<td align="left" width="300"><input type="text" name="no"></td> 
+</tr> 
+<tr> 
+<td align="left" width="200"> 
+<select name="select1"> 
+<option selected value="1"> 
+<option value="2">或者 
+<option value="3">而且 
+</select>类别为 
+</td> 
+<td align="left" width="200"> 
+<select name="type"> 
+<option selected> 
+<? 
+$querystring="select distinct type from orders "; 
+$result=mysql_query($querystring,$linkstr); 
+while (list($type)=mysql_fetch_row($result)) 
+{ 
+echo "<option value="$type">".$type; 
+} 
+?> 
+</select> 
+</tr> 
+<tr> 
+<td> 
+<select name="select2"> 
+<option selected value="1"> 
+<option value="2">或者 
+<option value="3">而且 
+</select>价格位在 
+</td> 
+<td><select name="price"> 
+<option selected> 
+<option value="1">50以下 
+<option value="2">50~200? 
+<option value="3">200以上 
+</select>的配件 
+</td> 
+</tr> 
+<table width="400" align="right"> 
+<tr> 
+<td> 
+<input type="submit" name="submit" value="开始查询"> 
+</td> 
+</tr> 
+</table> 
+</table> 
+</form> 
+</body> 
+</html> 

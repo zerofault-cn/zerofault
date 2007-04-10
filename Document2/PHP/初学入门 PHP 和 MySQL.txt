@@ -1,0 +1,545 @@
+初学入门 PHP 和 MySQL
+　　我想要使用PHP和MySQL，但是如何安装和运行呢？什么是最基本的事情我应该知道的，以便让一个简单的PHP - MySQL应用程序工作？
+　　这是一个基本的教程。没有怪异的代码，只是一些基础。
+　　多说一句，现在有大量的教程是基于UNIX机器的，这个教程将集中在基于Windows平台上。然而，除了安装部分，有或多或少的针对于Windows的说明外，其它部分对所有的平台都是一样的。 
+　　在这个教程中，我们将一步一步地建立一个小的网站，使用了PHP和MySQL的下面特性：
+　　1. 查看数据库； 
+　　2. 编辑数据库的记录； 
+　　3. 修改数据库的记录； 
+　　4. 删除数据库的记录。 
+
+　　我们将同时学习MySQL和PHP，一起去感觉它们。 
+第一节 - 收集和建立必要的项目 
+　　好，开始工作。为了开始PHP-MySQL我们需要一些准备： 
+　　1. 运行web服务器； 
+　　2. 增加PHP扩展； 
+　　3. 运行MySQL。 
+　　第一步，得到和安装Web服务器 
+　　让我们假设一下在你的机器上已经有一个运行着的web服务器。在Windows下有几个好用的web服务器应用程序。要注意一件事，为了运行php/mysql你所选的web服务器应当可以支持扩展。 
+　　一个在Windows上最容易安装的服务器是OmniHTTPd(http://www.omnicron.ab.ca/httpd/，它是一个非 
+常好的自由web服务器。
+　　一旦你从站点上得到了安装文件，双击它并且安装web服务器。如果你在安装时全部选择了使用缺省值，那么你将会把它安装在c:\httpd下。一旦安装成功，安装程序将启动web服务器，带有一个欢迎窗口，在windows的系统托盘中可以看到一个新的图标。 
+　　好了，第一步做完了。 
+　　第二步，下载和安装PHP发行版 
+　　得到PHP Win32发行版很容易：只要去http://www.php.net/download-php.php3，并且选择一个最好的 
+位置就可以了。
+　　在OmniHTTPd上安装PHP非常简单。
+　　最先Unzip安装文件到你的硬盘上，比如展开在c:\php。 
+　　拷贝文件'php3.ini-dist'到你的'%WINDOWS'目录下去，并改名'php3.ini'(在Win95/98为c:\windows，在 
+WinNT/Win2k为c:\winnt)。
+　　按下面编辑php3.ini文件： 
+　　改变'extension_dir'设置为你的PHP安装目录(c:\php)，或存放'php3_*.dll'的目录。 
+　　选择想在PHP启动时装入的模块。你应该将'extension=php3_*.dll'行的注释去掉来装入这些模块(一定 
+要确认去掉了extension=php3_mysql.dll的注释)。一些模块要求有额外的库安装在你的系统上才能正常工作。
+　　PHP问答集(http://www.php.net/FAQ.php3)有更多关于如何得到支持库的信息。你可以通过使用： 
+dl("php_*.dll")动态地装入一个模块。 
+　　PHP扩展库以'php3_'为前缀。这个可以防止在PHP扩展与它们的支持库之间发生混淆。 
+　　现在跟着简单的步骤配置OmniHTTPd: 
+　　在系统托盘中右击蓝色的OmniHTTPd图标，选项属性(Properties)项； 
+　　点击Web Server Global Settings项； 
+　　点中'External'tab标签。现在，在"Virtual"域中输入".php3"，在"actual"域中输入"c:\php\php.exe"， 
+然后单击"Add"。 
+　　选择Mime tab标签并且在"Vritual"中输入"wwwserver/stdcgi"，在"Actual"中输入".php3"，并单 
+击"Add"。
+　　单击 OK。 
+　　在同一个窗体中选择Default Virtual Settings； 
+　　现在单击Server tab标签； 
+　　在"Default Index"域中输入"Index.php3"(用逗号分隔)。这将告诉web服务器也可以识别index.php3文件。 
+　　单击 OK。 
+　　好，足够了。让我们测试一下PHP是否在工作： 
+　　创建一个名为index.php3的文本文件，写入下面的文本： 
+<? 
+echo "I made it!"; 
+?> 
+　　启动你的浏览器，并指到localhost。你应该在屏幕上得到"I made it!"。 
+　　下面，得到和安装MySQL: 
+　　去http://www.mysql.com/download_win.html，下载MySQL-Win32发行版，将zip文件解压到一个临时目录并且运行安装程序(setup.exe)。 
+　　如果你选择了缺省的典型安装，所有的MySQL文件将会安装到c:\mysql目录下。 
+　　现在，跟着以下步骤，每一步都要执行正确。 
+　　进行一些测试： 
+　　首先，你要先运行mysqld-shareware.exe守护程序，它位于c:\mysql\bin下。你可以看到一个dos窗口，并在几秒钟后关闭。如果没有显示错误信息，MySQLd就已经运行了。 
+　　如果想检查一下MySQL，只要运行c:\mysql\bin\mysql。你将会看到有"mysql>"提示符的终端窗口。很好，我们可以同MySQL服务器进行对话了。 
+第二部分 -- 创建和操纵一个MySQL数据库： 
+　　首先我们需要创建要使用的数据库和表。数据库起名为"example"，表名为"tbl"，有以下字段：识别号，名，姓和信息。要通过mysql终端完成建库和定义表的工作，只要双击或运行c:\mysql\bin\mysql.exe。
+　　如果要看在MySQL中已经定义了哪些表，可以使用（注意mysql>是终端提示符）： 
+Mysql> show databases; <回车> 
+　　这个命令可能显示如下信息： 
++----------+ 
+| Database | 
++----------+ 
+| mysql | 
+| test | 
++----------+ 
+2 rows in set (0.01 sec) 
+　　为了定义一个新的数据库(example)，键入： 
+Mysql> create database example; <回车> 
+　　你将会看到一个回答，如： 
+Query OK, 1 row affected (0.17 sec) 
+　　很发，我们现在有了一个新数据库了。现在我们可以在库中建立一个新表，但首先我们需要先选中新的数据库： 
+Mysql> use example; <回车> 
+　　回答应该是： 
+Database changed 
+　　现在我们可以建表了，有如下字段： 
+　　索引号 - 整数 
+　　用户名 - 最大长度为30的字符串 
+　　用户姓 - 最大长度为50的字符串 
+　　自由信息 - 最大长度为100的字符串 
+　　在MySQL提示符下键入下面的命令来创建表： 
+MySQL> create table tbl (idx integer(3), UserName varchar(30), LastName varchar(50), FreeText varchar(100));<回车>
+　　回答应该是：
+Query OK, 0 rows affected (0.01 sec) 
+　　好，让我们看一下从MySQL提示符下看表是什么样子的，键入命令： 
+MySQL> show columns from tbl; <回车> 
+　　我们将得到下面的结果： 
++----------+--------------+------+-----+---------+-------+ 
+| Field | Type | Null | Key | Default | Extra | 
++----------+--------------+------+-----+---------+-------+ 
+| idx | int(3) | YES | | NULL | | 
+| UserName | varchar(30) | YES | | NULL | | 
+| LastName | varchar(50) | YES | | NULL | | 
+| FreeText | varchar(100) | YES | | NULL | | 
++----------+--------------+------+-----+---------+-------+ 
+4 rows in set (0.00 sec) 
+　　在这里，我们可以看到刚创建的表"tbl"的内容。 
+　　现在让我们看一下表中有什么内容。键入下面的命令： 
+MySQL> select * from tbl;<回车> 
+　　这个命令是用来显示表"tbl"中的所有数据的。输出可能是： 
+Empty set (0.07 sec) 
+　　之所以得到这个结果，是因为我们还没有在表中插入任何数据。让我们往表中插入一些数据，键入：MySQL> insert into tbl values (1,'Rafi','Ton','Just a test');<回车> 
+Query OK, 1 row affected (0.04 sec) 
+　　如上所见，我们插入到表中的值是按照前面我们定义表的顺序，因为使用的是缺省的顺序。我们可以设定数据的顺序，语法如下：
+MySQL> insert into tbl (idx,UserName,LastName,FreeText) values (1,'Rafi','Ton','Just a test');<回车> 
+　　好，现在我们可以再看一下表中的内容： 
+MySQL> select * from tbl;<回车> 
+　　这次的结果是： 
++------+----------+----------+-------------+ 
+| idx | UserName | LastName | FreeText | 
++------+----------+----------+-------------+ 
+| 1 | Rafi | Ton | Just a test | 
++------+----------+----------+-------------+ 
+1 row in set (0.00 sec) 
+　　现在我们可以看到表的结构和每一个单元格的内容。 
+　　现在我们想删除数据。为了实现我们应该键入： 
+MySQL> delete from tbl where idx=1 limit 1;<回车> Query OK, 1 row affected (0.00 sec) 
+　　 好，给出一些解释。我们正在告诉MySQL从"tbl"表中删除记录，删除那些idx字段值为1的记录，并且只限制删除一条记录。如果我们不限制删除记录数为1，那么所有idx为1的记录都将被删除（在这个例子中我们只有一条记录，但是虽然如此，我只是想让这一点更加清楚）。 
+　　不幸的是，我们又一次得到了一个空表，所以让我们再输进去： 
+MySQL> insert into tbl values (1,'Rafi','Ton','Just a test');<回车> 
+Query OK, 1 row affected (0.04 sec) 
+　　另一件可以做的事是，修改指定字段的内容，使用"update"命令： 
+MySQL>update tbl set UserName='Berber' where UserName='Rafi';<回车> 
+Query OK, 1 row affected (0.01 sec) 
+Rows matched: 1 Changed: 1 Warnings: 0 
+　　这个命令将搜索所有UserName为"Rafi"的记录，并将它改为"Berber"。注意，set部分和where部分不一定要一样。我们可以索搜一个字段但是改变另一个字段。而且，我们可以执行两个或更多条件的搜索。 
+MySQL>update tbl set UserName='Rafi' where UserName='Berber' and LastName='Ton';<回车> 
+Query OK, 1 row affected (0.04 sec) 
+　　这个查询搜索了两个字段，改变了UserName的值。 
+第三部分 - 组合PHP与MySQL 
+　　在这个部分里，我们将建立一个建单的基于PHP的web站点，用来控制前面所建的MySQL的表。 
+　　我们将建立下面的站点结构（假设你已经知道一些基本的HTML的知识）： 
+　　1. index.php3 用于前端查看表 
+　　2. add.php3 用于往表中插入数据 
+　　3. Modify.php3 用于修改表中的记录 
+　　4. del.php3 用于删除表中的记录 
+　　首先，我们想查看一下数据库： 
+　　看一下下面的脚本。 
+-------------------------------------------------------------------------------- 
+Index.php3: 
+<html> 
+<head><title>Web Database Sample Index</title> 
+</head> 
+<body bgcolor=#ffffff> 
+<h2>Data from tbl</h2> 
+<? 
+mysql_connect() or die ("Problem connecting to DataBase"); 
+$query = "select * from tbl"; 
+$result = mysql_db_query("example", $query); 
+if ($result) { 
+echo "Found these entries in the database:<br><p></p>"; 
+echo "<table width=90% align=center border=1><tr> 
+<td align=center bgcolor=#00FFFF>User Name</td> 
+<td align=center bgcolor=#00FFFF>Last Name</td> 
+<td align=center bgcolor=#00FFFF>Domain Name</td> 
+<td align=center bgcolor=#00FFFF>Request Date</td> 
+</tr>"; 
+while ($r = mysql_fetch_array($result)) 
+{ 
+$idx = $r["idx"]; 
+$user = $r["UserName"]; 
+$last = $r["LastName"]; 
+$text = $r["FreeText"]; 
+echo "<tr> 
+<td>$idx</td> 
+<td>$user</td> 
+<td>$last</td> 
+<td>$text</td> 
+</tr>"; 
+} 
+echo "</table>"; 
+} 
+else 
+{ 
+echo "No data."; 
+} 
+
+mysql_free_result($result); 
+include ('links.x'); 
+?> 
+
+</body> 
+</html>-------------------------------------------------------------------------------- 
+　　好，下面给出一些说明： 
+　　我们先用正常的html标签创建thml文档。当我们想从html中出来转入PHP中时，我们用<?来打开PHP部分，这个告诉web服务器将后面的文本看成是PHP语法而不是一般的html。使用?>来结束PHP部分。
+　　mysql_connect() 命令告诉PHP建立一个与MySQL服务器的连接。如果连接建立成功，脚本将继续，如果不成功，则打印出die命令的信息“Problem connecting to Database”（如果要看关于mysql_connect的更多的信息和其它的PHP函数，可以去http://www.php.net下的文档中查找）。 
+　　现在，如果MySQL是按照我们上面所讨论的那样安装的，就足够了。但是如果你使用的是预装的MySQL(象ISP)，你应该使用下面的命令： 
+mysql_connect (localhost, username, password); 
+　　我们可以将$query设成我们想在MySQL中执行的查询，然后使用mysql_db_query命令来执行它： 
+$result = mysql_db_query("example", $query); 
+　　这时，"example"表示数据库的名字并且$query是要进行的查询。 
+　　我们使用MySQL命令select（象上面所描述的）来从表中取得所有的数据： 
+$query = "select * from tbl"; 
+　　简单地解释一下$result的作用，如果执行成功，函数将返回一个查询结果的一个MySQL结果标识符，如果出错则返回false。返回的不是结果而是一个标识符，可以在后面将它转换成我们所需的信息。 
+　　现在，我们想检查一下在数据库中是否存在有记录，并且如果有则将结果按照html的表格结构打印出来。
+　　为了检查是否存在数据，我们使用if命令和下面的语法： 
+if (argument) { 
+"do something;" 
+} else { 
+"do something different;" 
+} 
+　　这时"do something"当argument=true时你所要执行的命令，"do something different"为当argument = 
+false时所要执行的命令。
+　　注意我们使用echo命令来输出一些html标签来建立html的表格结构。只有从PHP命令输出的文本才会被看成html内容 - PHP命令本身是不会看成html内容的。
+　　我们使用的另一个命令是while指令，使用格式如下： 
+while (argument)) { 
+"something to do"; 
+} 
+　　while循环在argument=true时会不停地重复，执行在{}中的指令集。 
+　　这里我们组合了while循环和PHP函数$r=mysql_fetch_array($result)。这个函数根据相应的结果标识符取回一条记录，并且将结果放在一个相关数组(associative array)$r中，它使用字段的名字作为数组的键值。在我们的脚本中，我们将得到一个数组：$r['idx']，$r['UserName']，$r['LastName']和$r['FreeText']。 
+　　我们也可以使用mysql_fetch_row函数，它会将结果放在一个有序的数组中，我们可以使用$r[0]，$r[1]， 
+$r[2]和$r[3]来得到相应的值。
+　　要了解关于这些函数的更深入的信息请访问http://www.php.net。
+　　现在，我们有了所有的信息，我们可以把它在html表格中打印出来： 
+echo "<tr> 
+<td>$idx</td> 
+<td>$user</td> 
+<td>$last</td> 
+<td>$text</td> 
+</tr>"; 
+　　现在我们可以释放MySQL连接，并且释放一些资源，通过使用mysql_free_result($result)函数。 
+　　PHP另一个有用的特性是在脚本中包括文本文件的功能。让我们假设你有一些可重用的代码（例如到其它页面的链接），我们可以使用include函数，这样可以节省一些代码和时间。而且，如果想改变这些代码，我们只需要改变包含文件的内容，它将会在所有包括它的文件中生效。 
+　　这里我们创建一个名为Links.x的文本文件，它将存放我们想用在每一个页面中的全部链接菜单。
+<p></p> 
+<ul> 
+<li><a href="index.php3">Home</a> 
+<li><a href="add.php3">Add a new entry to the DataBase</a> 
+<li><a href="edit.php3">Edit an entry</a> 
+<li><a href="del.php3">Delete an entry from the DataBase</a> 
+</ul> 
+　　include的语法是： 
+Include ('included_text_file'); 
+　　现在我们可以用?>来关闭PHP部分，并且用</body></html>来结束html页面。 
+　　使用表单增加数据 
+　　让我们看一下下面的代码： 
+-------------------------------------------------------------------------------- 
+<html> 
+<head><title>Add an entry to the database</title> </head> 
+<body bgcolor=#ffffff> 
+<h1>Add an entry</h1>
+<form method="post" action="add2tbl.php3"> 
+<table width=90% align=center> 
+<tr><td>Index:</td><td><input type=text name="idx" size=3 maxlength=3></td></tr> 
+<tr><td>UserName:</td><td><input type=text name="UserName" size=40 
+maxlength=100></td></tr> 
+<tr><td>LastName:</td><td><input type=text name="LastName" size=40 
+maxlength=100></td></tr> 
+<tr><td>FreeText:</td><td><input type=text name="FreeText" s=40 maxlength=100></td></tr> 
+<tr><td></td><td><input type=submit value=add></td></tr> 
+</form> 
+</table> 
+<?php include ('links.x');?> 
+</body> 
+</html> 
+-------------------------------------------------------------------------------- 
+　　假设你对表单很熟悉，这是一个相当简单的脚本。我们根据html页面设计了一个表单，它在提交后调用add2tbl.php3脚本。现在，表单与MySQL表相对应由4个字段组成：index number，FirstName，LastName和FreeText。注意在这个表单中字段名字与MySQL表中字段名一样，但这只是为了方便起见而不是必须。 
+　　我们再一次使用了include命令<? include ('links.x');?>（象在前面所解释的）来增加链接。 
+　　让我们看一下add2tbl.php3脚本： 
+-------------------------------------------------------------------------------- 
+<html> 
+<body> 
+<? 
+if ($UserName) 
+{ 
+mysql_connect() or die ("Problem connecting to DataBase"); 
+$query = "insert into tbl values ('$idx','$UserName','$LastName','$FreeText')"; 
+$result = mysql_db_query("example", $query); 
+
+echo "Data inserted. new table:<br><p></p>"; 
+$query = "SELECT * FROM tbl"; 
+$result = mysql_db_query("example", $query); 
+
+if ($result) 
+{ 
+echo "<table width=90% align=center border=1><tr> 
+<td align=center bgcolor=#00FFFF>idx</td> 
+<td align=center bgcolor=#00FFFF>User Name</td> 
+<td align=center bgcolor=#00FFFF>Last Name</td> 
+<td align=center bgcolor=#00FFFF>Free Text</td> 
+</tr>"; 
+
+while ($r = mysql_fetch_array($result)) 
+{ 
+$idx = $r["idx"]; 
+$user = $r["UserName"]; 
+$last = $r["LastName"]; 
+$free = $r["FreeText"]; 
+
+echo "<tr> 
+<td>$idx</td> 
+<td>$user</td> 
+<td>$last</td> 
+<td>$free</td> 
+</tr>"; 
+
+} // while循环结束 
+echo "</table>"; 
+} 
+else 
+{ 
+echo "No data."; 
+} // if结束($result) 
+} 
+else 
+{ 
+echo "No UserName Entered. Please go back and reenter UserName"; 
+} // if结束($UserName) 
+echo "<p></p>"; 
+include ('links.x'); 
+?> 
+</body> 
+</html>-------------------------------------------------------------------------------- 
+解释： 
+　　这一部分包含两个主要部分。第一部分从前一个表单中得到数据，并将它们插入到数据库中。第二部分从数据库中打印出表的内容。第二部分同我在查看数据库部分中所演示的一样。 
+　　第一部分： 
+　　首先我们象通常一样使用mysql_connect()来同数据库连接。 
+　　然后我们使用下面查询： 
+$query = "insert into tbl values ('$idx','$','$LastName','$FreeText')"; 
+　　这个查询使用从前面表单传递过来的$idx，$UserName，$LastName和$FreeTExt变量，并将它们插入到tbl表中。
+　　注意，我在脚本中所作的注释。使用一个注释可以用"//"，服务器将忽略此行的后面部分。
+　　简单，不是吗？
+　　从数据库中编辑一条记录： 
+　　让我们假设一下，我们想修改数据库中存在的记录。在前面，我们看到有一个叫set的SQL命令用来设置数据库中存在字段的值。我们将使用这个命令来修改数据库中的整条记录。 
+　　考虑下面的脚本： 
+-------------------------------------------------------------------------------- 
+edit.php3: 
+<html> 
+<head><title>Editing an entry from the database</title> 
+</head> 
+<body bgcolor=#ffffff> 
+<h1>Edit an entry</h1 
+<? 
+mysql_connect() or die ("Problem connecting to DataBase"); 
+$query = "select * from tbl"; 
+$result = mysql_db_query("example", $query); 
+if ($result) 
+{ 
+echo "Found these entries in the database:<br>"; 
+echo "<table width=90% align=center border=1><tr> 
+<td align=center bgcolor=#00ffff>idx</td> 
+<td align=center bgcolor=#00FFFF>User Name</td> 
+<td align=center bgcolor=#00FFFF>Last Name</td> 
+<td align=center bgcolor=#00FFFF>Free Text</td> 
+</tr>"; 
+while ($r = mysql_fetch_array($result)) 
+{ 
+$idx = $r["idx"]; 
+$user = $r["UserName"]; 
+$last = $r["LastName"]; 
+$text = $r["FreeText"]; 
+echo "<tr> 
+<td align=center> 
+<a href=\"editing.php3?idx=$idx&user=$user&last=$last&text=$text\">$idx</a></td> 
+<td>$user</td> 
+<td>$last</td> 
+<td>$text</td> 
+</tr>"; 
+} 
+echo "</table>"; 
+}
+else 
+{ 
+echo "No data."; 
+} 
+
+mysql_free_result($result); 
+include ('links.x'); 
+
+?> 
+
+</body> 
+</html>-------------------------------------------------------------------------------- 
+　　如你所见，这里的代码有些熟悉。第一部分只是打印出数据库中表的内容。注意，有一行不太一样： 
+<a href=\"editing.php3?idx=$idx&user=$user&last=$last&text=$text\">$idx</a> 
+　　这一行建立了一个到editing.php3的一个链接，并且给新的脚本传递了一些变量。同表单方式很象，只是使用的是链接。我们将信息转换成：变量和值。注意，为了打印出 " 符号，我们需要使用 \"否则服务器将把它看成PHP脚本的一部分并且作为被打印的信息。 
+　　我们想将数据库中的记录全部转换到过，这样我们就可以得到表中的确切的数据，以便我们修改它容易一些。 
+-------------------------------------------------------------------------------- 
+Editing.php3: 
+<html> 
+<head><title>Editing an entry</title></head> 
+<body bgcolor=#ffffff> 
+<h1>Editing an entry</h1> 
+<form method="post" action="editdb.php3"> 
+<table width=90% align=center> 
+<tr><td>idx:</td><td><?php echo "$idx";?></td></tr> 
+<tr><td>UserName:</td><td><input type=text name=UserName size=40 maxlength=100 
+value="<?php echo "$user";?>"></td></tr> 
+<tr><td>LastName:</td><td><input type=text name=LastName size=40 maxlength=100 
+value="<?php echo "$last";?>"></td></tr> 
+<tr><td>Free Text:</td><td><input type=text name=FreeText size=40 maxlength=100 
+value="<?php echo "$text";?>"></td></tr> 
+<tr><td></td><td><input type=submit value="Edit it!"></td></tr></table> 
+<input type=hidden name=idx value="<?php echo "$idx";?>"> 
+</form> 
+<?php include ('links.x');?> 
+</body> 
+</html>-------------------------------------------------------------------------------- 
+　　好，这个脚本很简单。我们要关心的是，当表单打印出来时，它记录了当前记录的数据，通过在 <inputtype= > 命令中的value属性。这些数据是从前一个页面传递过来的。 
+　　现在，如果我们不改变记录的信息，它将传回当前值，即缺省值。如果我们改变了字段的值，字段的值将变成新的值。接着我们可以将新值传给另一个脚本，它将会改变MySQL表中的值。
+-------------------------------------------------------------------------------- 
+editdb.php3: 
+<?php 
+mysql_connect() or die ("Problem connecting to DataBase"); 
+$query = "update tbl set 
+idx='$idx',UserName='$UserName',LastName='$LastName',FreeText='$FreeText' where 
+idx='$idx'"; 
+$result = mysql_db_query("example", $query); 
+$query = "SELECT * FROM tbl"; 
+$result = mysql_db_query("example", $query); 
+if ($result) 
+{ 
+echo "Found these entries in the database:<br><p></p>"; 
+echo "<table width=90% align=center border=1><tr> 
+<td align=center bgcolor=#00FFFF>idx</td> 
+<td align=center bgcolor=#00FFFF>User Name</td> 
+<td align=center bgcolor=#00FFFF>Last Name</td> 
+<td align=center bgcolor=#00FFFF>Free Text</td> 
+</tr>"; 
+while ($r = mysql_fetch_array($result)) 
+{ 
+$idx = $r["idx"]; 
+$user = $r["UserName"]; 
+$last = $r["LastName"]; 
+$text = $r["FreeText"]; 
+echo "<tr> 
+<td>$idx</td> 
+<td>$user</td> 
+<td>$last</td> 
+<td>$text</td> 
+</tr>"; 
+} 
+echo "</table>"; 
+} 
+else 
+{ 
+echo "No data."; 
+} 
+mysql_free_result($result); 
+include ('links.x'); 
+?>-------------------------------------------------------------------------------- 
+　　基本上要关心的一件事情是下面一行： 
+$query = "update tbl set idx='$idx',UserName='$UserName',LastName='$LastName',FreeText='$FreeText' where idx='$idx'"; 
+　　注意，它与我们在前面MySQL部分解释的语法相同。另一件事，注意这个脚本改变的是idx=$idx的记录，如果表中有多条idx等于$idx的记录，所以这些记录都将被改变。如果我们想更严格一些，我们可以象下面改动一下where子句： 
+$query = "update tbl set idx='$idx',UserName='$UserName', LastName='$LastName',FreeText='$FreeText' where idx='$idx' and UserName='$UserName' and LastName='$LastName' and FreeText='$FreeText'"; 
+　　这个语法将检查所有的字段，而不仅仅是检查idx。 
+　　从数据库中删除一条记录： 
+　　好，删除很容易。我们仍然需要两个脚本：一个用来选择要删除的记录（基本上同上面选择要编辑的记录一样），一个用来真正地进行删除和打印新的表格。 
+-------------------------------------------------------------------------------- 
+del.php3: 
+<html> 
+<head><title>Deleting an entry from the database</title></head>
+<body bgcolor=#ffffff> 
+<h1>Del an entry</h1> 
+<? 
+mysql_connect() or die ("Problem connecting to DataBase"); 
+$query = "select * from tbl"; 
+$result = mysql_db_query("example", $query); 
+if ($result) 
+{ 
+echo "Found these entries in the database:<br><p></p>"; 
+echo "<table width=90% align=center border=1><tr> 
+<td align=center bgcolor=#00ffff>idx</td> 
+<td align=center bgcolor=#00FFFF>User Name</td> 
+<td align=center bgcolor=#00FFFF>Last Name</td> 
+<td align=center bgcolor=#00FFFF>Free Text</td> 
+</tr>"; 
+while ($r = mysql_fetch_array($result)) 
+{ 
+$idx = $r["idx"]; 
+$user = $r["UserName"]; 
+$last = $r["LastName"]; 
+$text = $r["FreeText"]; 
+echo "<tr> 
+<td align=center> 
+<a href=\"dele.php3? 
+idx=$idx&UserName=$user&LastName=$last&FreeText=$text\">$idx</a></td> 
+<td>$user</td> 
+<td>$last</td> 
+<td>$dtext</td> 
+</tr>"; 
+} 
+echo "</table>"; 
+} 
+else 
+{ 
+echo "No data."; 
+} 
+mysql_free_result($result); 
+include ('links.x'); 
+?> 
+</body> 
+</html> 
+-------------------------------------------------------------------------------- 
+　　这个脚本与我们用过的编辑脚本很象，所以可以看一下那里的说明。 
+-------------------------------------------------------------------------------- 
+dele.php3: 
+<?php 
+mysql_connect() or die ("Problem connecting to DataBase"); 
+$query = "delete from tbl where idx='$idx' and UserName='$UserName' and 
+LastName='$LastName' and FreeText='$FreeText'"; 
+$result = mysql_db_query("example", $query); 
+$query = "SELECT * FROM tbl"; 
+$result = mysql_db_query("example", $query); 
+if ($result) 
+{ 
+echo "Found these entries in the database:<br><p></p>"; 
+echo "<table width=90% align=center border=1><tr> 
+<td align=center bgcolor=#00FFFF>idx</td> 
+<td align=center bgcolor=#00FFFF>User Name</td> 
+<td align=center bgcolor=#00FFFF>Last Name</td> 
+<td align=center bgcolor=#00FFFF>Free Text</td> 
+</tr>"; 
+while ($r = mysql_fetch_array($result)) 
+{ 
+$idx = $r["idx"]; 
+$user = $r["UserName"]; 
+$last = $r["LastName"]; 
+$text = $r["FreeText"]; 
+echo "<tr> 
+<td>$idx</td> 
+<td>$user</td> 
+<td>$last</td> 
+<td>$text</td> 
+</tr>"; 
+} 
+echo "</table>"; 
+} 
+else 
+{ 
+echo "No data."; 
+} 
+mysql_free_result($result); 
+include ('links.x'); 
+?>-------------------------------------------------------------------------------- 
+　　这个脚本看上去很熟悉，唯一不同的就是删除查询的语法： 
+$query = "delete from tbl where idx='$idx' and UserName='$UserName' and LastName='$LastName' and FreeText='$FreeText'"; 
+　　这个查询将会删除所有与前面的脚本传递来的信息相配匹的记录。容易吧。 
+　　好了，这就是全部内容了。 
+转自WeberDev.com 

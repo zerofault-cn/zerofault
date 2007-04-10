@@ -1,0 +1,34 @@
+怎样在PHP中通过ADO调用Asscess数据库和COM程序
+翻译: znsoft(http://www.phpease.com znsoftm@21cn.com) 
+PHP4已经支持Microsoft的COM技术。然而文档中在COM部分却提得很少。 
+这儿是几个我试过的例子。希望这些给你一些概念。注意的是这些只能运行在32位的Microsoft Windows平台下。 
+用php激活ADO 
+ADO是Microsoft的数据库对象技术。ADO里面包括连接数据库的对象，从查询语句中返回数据的记录集对象和表现数据元素的字段对象。许多数据库不直接支持ADO.代之的是很多数据库支持低两级的Microsoft数据库技术:ODBC和OLEDB.许多数据库支持ODBC;但OLEDB有比ODBC更快的名声。 
+ADO则是包装ODBC和OLEDB的API. 
+这个例了打开一个新的ADO连接对象，对过ODBC打开一个传统的ACCESS数据库,然后我们执行SQL查询,会返回一个记录集对象。然后我们显示记录集的前三个字段。 
+<?
+	$dbc = new COM("ADODB.Connection");
+	$dbc->Provider = "MSDASQL";
+	$dbc->Open("nwind");
+	$rs = $dbc->Execute("select * from products");
+	$i = 0;
+	while (!$rs->EOF) {
+		$i += 1;
+		$fld0 = $rs->Fields(0);
+		$fld1 = $rs->Fields(1);
+		$fld2 = $rs->Fields(2);
+		print "$fld0->value $fld1->value $fld2->value<BR>";
+		$rs->MoveNext();
+	}
+	$rs->Close();
+?>
+
+用PHP调用Microsoft Word 
+这是另一个例子: 
+<?
+	$word=new COM("word.application") or die("Cannot start Microsoft Word"); 
+	print "Loaded word version ($word->Version)\n"; 
+	$word->visible = 1 ; 
+	$word->Documents->Add(); 
+	$word->Selection->Typetext("This is a test");
+?>

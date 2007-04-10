@@ -1,0 +1,62 @@
+用PHP发送MIME邮件（一）
+译者：limodou 2000年8月14日
+把它EMAIL给我 我来谈谈我的看法 上一篇 下一篇 
+ 
+作者：Kartic Krishnamurthy 译者：limodou 
+
+　　已经厌倦了给你的朋友和客户发送那些单调乏味的文本通知和信件了吗？曾经考虑过发送附件或在邮中 
+嵌入HTML吧。 
+
+　　答案就是MIME。接下来的几页解释了MIME的基础知识，创建符合MIME的信息，然后用一个可以工作的PHP 
+类结束，这个类实现了发送符合MIME邮件。注意对调用脚本，调用者等等的引用表示使用了将要开发的类的 
+脚本，客户程序/MUA等等表示邮件阅读的客户程序或邮件使用代理程序。 
+
+
+一些MIME基础 
+　　MIME表示多用途Internet邮件扩允协议。MIME扩允了基本的面向文本的Internet邮件系统，以便可以在 
+消息中包含二进制附件。 
+
+　　MIME利用了一个事实就是，RFC 822在消息体的内容中做了一点限制：唯一的限制就是只能使用简单的 
+ASCII文本。所以，MIME信息由正常的Internet文本邮件组成，文本邮件拥有一些特别的符合RFC 822的信息 
+头和格式化过的信息体（用ASCII 的子集来表示的附件）。这些MIME头给出了一种在邮件中表示附件的特别 
+的方法。 
+
+MIME信息的剖析 
+　　一个普通的文本邮件的信息包含一个头部分（To: From: Subject: 等等）和一个体部分（Hello Mr., 
+等等）。在一个符合MIME的信息中，也包含一个信息头并不奇怪，邮件的各个部分叫做MIME段，每段前也缀 
+以一个特别的头。MIME邮件只是基于RFC 822邮件的一个扩展。然而它有着自已的RFC规范集。 
+
+
+头字段 
+　　MIME头根据在邮件包中的位置，大体上分为MIME信息头和MIME段头。（译者：MIME信息头指整个邮件 
+的头，而MIME段头只每个MIME段的头。） 
+
+MIME信息头有： 
+
+MIME-Version: 
+这个头提供了所用MIME的版本号。这个值习惯上为1.0。 
+Content-Type: 
+它定义了数据的类型，以便数据能被适当的处理。有效的类型有：text，image，audio，video， 
+applications，multipart和message。注意任何一个二进制附件都应该被叫做application/octet- 
+stream。这个头的一些用例为：image/jpg, application/mswork，multipart/mixed，这只是很少的 
+一部分。 
+Content-Transfer-Encoding: 
+这是所有头中最重要的一个，因为它说明了对数据所执行的编码方式，客户/MUA 将用它对附件进行解 
+码。对于每个附件，可以使用7bit，8bit，binary ，quoted-printable，base64和custom中的一种编 
+码方式。7bit编码是用在US ASCII字符集上的常用的一种编码方式，也就是，保持它的原样。8bit 和 
+binary编码一般不用。对人类可读的标准文本，如果传输要经过对格式有影响的网关时对其进行保护， 
+可以使用quoted printable 。Base64是一种通用方法，在需要决定使用哪一种编码方法时，它提供了 
+一个不用费脑子的选择；它通常用在二进制，非文本数据上。注意，任何非7bit 数据必须用一种模式 
+编码，这样它就可以通过Internet邮件网关！ 
+Content-ID: 
+如果Content-Type是message/external-body或multipart/alternative时，这个头就有用了。它超出了本文的范围。 
+Content-Description: 
+这是一个可选的头。它是任何信息段内容的自由文本描述。描述必须使用us-ascii码。 
+Content-Disposition: 
+一个试验性的头，它用于给客户程序/MUA提供提示，来决定是否在行内显示附件或作为单独的附件。 
+　　MIME段头（出现在实际的MIME附件部分的头），除了MIME-Version头，可以拥有以上任何头字段。如果一个MIME头是信息块的一部分，它将作用于整个信息体。例如，如果Content-Transfer-Encoding显示在信息（指整个信息）头中，它应用于整个信息体，但是如果它显示在一个MIME段里，它"只能"用于那个段中。 
+
+下一页 
+
+
+转自phpbuilder.com

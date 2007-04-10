@@ -1,0 +1,210 @@
+怎样在php中使用PDF文档功能
+ 
+---------------------------------------------------- 
+原作者:Perugini Luca (www.phpbuilder.com) 
+译者:znsoft (http://www.phpease.com) 
+--------------------------------------------------- 
+PHP捆绑PDFLIB库也许是最好的web出版平台了。一对典型的用法: 
+
+需求小册子 
+电子商务发货单 
+
+通过这个指南，你可以学会怎样使用php4中的PDF扩展来创建PDF文档。 
+我们也把焦点放在用mysql数据来创建PDF文档。 
+
+内容摘要 
+
+
+安装PDFLib 3.0.1 和有PDF支持的PHP4.01pl2(译注:你可以安装最新的php4.03pl1) 
+
+提取PDF文档 
+(我假设你有一点配置php的经验) 
+
+
+
+安装PDFLib和有PDF支持的PHP。 
+
+需求: 
+
+PHP 4.02+ 从 http://php.net 下载 
+PDFLib 3.0.1 从 http://www.pdflib.com 下载 
+
+这是一个怎样让PDFLib3.0.1和php4一起工作的小秘方:(老外很幽默的^_^) 
+
+直接从http://www.php.net下载 ext/pdf/pdf.c的补丁来支持PDFLib v 3.0.1 
+
+下载PDFLib3.0.1从此处 http://www.pdflib.com 
+适用的补丁你可以在此找到 http://www.pdflib.com/pdflib/patches.html 
+
+配置,Make和安装PDFLib 
+
+#./configure --enabled-shared-pdflib 
+#make 
+#make install 
+你会使得 PDFLib 安装在 /usr/local/lib . 
+
+
+配置 PHP 
+#./configure --with-apxs=/usr/bin/apxs \ 
+--with-gd --with-pdflib=/usr/local --with-mysql=/usr/local \ 
+--with-config-file-path=/etc/httpd --with-zlib-dir=/usr \ 
+--with-ttf=/usr/local/include \ 
+--with-jpeg-dir=/usr --with-tiff-dir=/usr \ 
+--with-system-regex=yes --enable-debug=no 
+
+#make 
+#make install 
+
+
+
+更新系统库 
+插入 /usr/local/lib 进 /etc/ld.so.conf (文件) 
+
+#/sbin/ldconfig 
+
+
+
+测试和验证 
+现在你需要重启apache 
+#apachectl restart 
+
+
+拷贝pdfclock.php 到的httpd目录中(就是web目录)...测试....一切正常。 
+
+重要信息 
+
+要使得PHPLIb和字体一起工作你必须注意PDFLib手册中的UPR部分。 
+最简单的用PDFLib使用字体的办法是拷贝PDFlib tar包中的标准UPR描述文件(fonts/pdflib.upr)到你的工作目录。 
+
+提取PDF文档 
+现在我们已经作好了如飞地生成PDF文档的条件! 
+
+
+在这个小例子中我们要生成FLYStore公司的需求小册子,当然是从目录数据库中提取数据。 
+
+
+
+
+准备数据库 
+我假设你有一点数据库的经验,最小限度，我真的只希望你懂得怎样创建一个数据库并向其中插入表。 
+创建表 catalogue: 
+
+create table catalogue( 
+id smallint(8) unsigned DEFAULT '0' NOT NULL, 
+item varchar(100) DEFAULT '' NOT NULL, 
+description tinytext, 
+img_data longblob, 
+imgname varchar(60), 
+imgsize varchar(60), 
+imgtype varchar(60), 
+price smallint(8) unsigned DEFAULT '0' NOT NULL, 
+PRIMARY KEY (id), 
+KEY item (item(20)) 
+); 
+
+
+
+送出MIME头信息 
+为了让我们的正确地显示出来,我们需要送出正确的头信息到用户的浏览器。 
+在PHP中我们可以用header函数实现。下面的代码送出正确的MIME类型到浏览器。 
+
+header( "Content-type: application/pdf" ); 
+header( "Content-Disposition: attachment; filename=modulo.pdf" ); 
+header( "Content-Description: PHP3 Generated Data" ); 
+
+
+
+重要信息 
+你必须知道的是在送出头信息前不能输出任何东西。一个常见的错误是在文件的开头存在空格。 
+
+
+从mysql中取数 
+
+这儿我们用一个从目录数据中提数据的简单代码片断。 
+<?php 
+
+$link = mysql_connect ("127.0.0.1", "flyadm", "flystore") 
+or die ("Could not connect"); 
+
+mysql_select_db ("flystore", $link); 
+
+$result = mysql_query ("SELECT * FROM catalogue", $link) 
+or die ("Invalid query"); 
+
+$data = mysql_fetch_row ($result); 
+.... 
+.... 
+mysql_close ($link); 
+
+
+?> 
+
+
+生成PDF文件 
+
+为了生成PDF文档，我们需要作经过以下步骤: 
+
+
+打开一个PDF流，并使它和一个句柄关联： 
+$pdf = PDF_open(); 
+
+(Optional) Set document information like Author, Title, Subject, etc 
+（可选的）设置文档信息,如作者，标题,主题,等 
+
+开始一个新页(PDF文件可以用不同的版面生成不同的页,比如肖像，前景...): 
+PDF_begin_page($pdf, 595, 842); 
+(可选的)设置一个超链接: 
+PDF_add_outline($pdf, "Item ".$data[1]); 
+
+选择字体类型, 尺寸 (pdf_set_font($pdf, "Helvetica-Bold" , 20, winansi);) 表现模式 
+
+插入文本在X.y位置: 
+PDF_show_xy($pdf, "Item : " .$data[1], 100, 700); 
+
+或插入图片在X.Y位置: 
+pdf_place_image($pdf, $im, 100, 300, 3); 
+
+刷新文本缓冲区并关闭PDF流。 
+PDF Coordinate Systems 
+What we need to do to locate a string or picture in some part of the PDF page, 
+在PDF页的很多地方我们需要定位字符串和图片,转换英制单位到DTP点值. 
+
+在PDFLIB手册的45页写到: 
+
+
+
+".. .缺省的坐标系统的原点在页面的左下角,用DTP点作为单位: 
+1 pt = 1 inch /72 = 25.4mm /72 = 0.3528 mm 
+" 
+
+
+这儿是生成PDF文件的代码片断: 
+<?php 
+
+$pdf = PDF_open(); 
+pdf_set_info_author($pdf, "Luca Perugini"); 
+PDF_set_info_title($pdf, "Brochure for FlyStore"); 
+pdf_set_info_creator($pdf, "See Author"); 
+pdf_set_info_subject($pdf, "FlyStore"); 
+PDF_begin_page($pdf, 595, 842); 
+PDF_add_outline($pdf, "Item ".$data[1]); 
+pdf_set_font($pdf, "Helvetica-Bold" , 20, winansi); 
+pdf_set_text_rendering($pdf, 0); 
+pdf_show_xy($pdf, "FlyStore Catalogue 2000",50,780); 
+
+PDF_show_xy($pdf, "Item : " .$data[1], 100, 700); 
+
+PDF_show_xy($pdf, "Description : " .$data[2], 100, 620); 
+
+$im = PDF_open_jpeg($pdf, "pass4_sml.jpg"); 
+pdf_place_image($pdf, $im, 100, 300, 3); 
+pdf_close_image ($im); 
+
+pdf_stroke($pdf); 
+PDF_end_page($pdf); 
+PDF_close($pdf); 
+
+
+?> 
+
+在最后,我要提示你这篇文章

@@ -1,0 +1,127 @@
+用PHP发送MIME邮件（二）
+译者：limodou 2000年8月14日
+把它EMAIL给我 我来谈谈我的看法 上一篇 下一篇 
+ 
+作者：Kartic Krishnamurthy 译者：limodou 
+
+"好，如何创建符合MIME的信息呢？" 
+　　通过上面的一般性的描述，让我们现在看一下所谓的MIME信息到底是什么！ 
+
+
+最简单的MIME信息 
+　　这个信息没有任何段，也就是，没有附件。然而，因为它是一个MIME消息，它必须有必要的头。 
+
+
+From: php@php.net 
+To: 'Alex (the Great)' <alex@greece.net> 
+Subject: Bucephalus 
+MIME-Version: 1.0 
+
+Hello Alexander, 
+
+How's Bucephalus doing? 
+
+　　这里面没有什么，它只是一个简单的拥有MIME头的符合RFC-822 的信息（文本邮件）。注意，如果没有 
+指定Content-Type头，则假设为Content-Type: text/plain;charset='us-ascii'!当然，它有些简单，复杂 
+一些的如下： 
+
+
+From: 'Alex (the Great)' <alex@greece.net> 
+To: php@php.net 
+Subject: re: Bucephalus 
+MIME-Version: 1.0 
+Content-Type: image/jpg; 
+name='buce.jpg' 
+Content-Transfer-Encoding: base64 
+Content-Description: Take a look at him yourself 
+
+<.....base64 encoded jpg image of Bucephalus...> 
+
+　　"嗨，但是我想发送一个word文档和一张我的小狗的图片在同一封邮件中... ！"一个用户说！如果是真 
+的，上面的那个例子就太简单了，并且它没有足够的内容来支持爱好者和现代邮件处理方面的需要。实际上， 
+许多的邮件客户端软件甚至不能显示描述字段！ 
+
+　　这就是我们所面临的"多部分信息"。 
+
+
+多部分信息（Multipart Messages） 
+　　这个概念允许在一封邮件中发送多条项目。例如，假设Alexander想要给php@php.net发送一封他的马的 
+照片的邮件，同时还附带有马的家族图谱及精彩的说明！这样一个简单的要求没有多部分消息的概念是无法 
+被满足的。在这种情况下，我们创建了一个使用Content-Type的信息头的封装来支持邮件的不同部分，以便 
+收信人得到图片，家族图谱和精彩的说明！ 
+
+　　Content-Type 头现在拥有一个"multipart"的值，它表示这是一个完整的邮件信息并且这个头只封装了 
+信息。而且它还有一个"mixed"的子类型（毕竟图片，家族图谱和7bit文本信息是不同的类型，对吗？）。 
+
+　　让我们看一下整个图片看上去象： 
+
+
+From: 'Alex (the Great)' <alex@greece.net> 
+To: php@php.net 
+Subject: re: Bucephalus 
+MIME-Version: 1.0 
+Content-Type: multipart/mixed; 
+boundary="XX-1234DED00099A"; 
+Content-Transfer-Encoding: 7bit 
+
+This is a MIME Encoded Message 
+
+--XX-1234DED00099A 
+Content-Type: text/plain; charset=us-ascii 
+Content-Transfer-Encoding: 7bit 
+
+Hi PHP, 
+
+Attached you will find my horse, Bucephalus', pedigree chart and photo. 
+
+Alex 
+
+--XX-1234DED00099A 
+Content-Type: image/jpg; 
+name="buce.jpg"; 
+Content-Transfer-Encoding: base64 
+Content-Description: "A photo of Bucephalus" 
+
+<.....base64 encoded jpg image of Bucephalus...> 
+
+--XX-1234DED00099A 
+Content-Type: application/octet-stream; 
+name="pedigree.doc" 
+Content-Transfer-Encoding: base64 
+Content-Description: "Pedigree Chart of the great horse" 
+
+<.....base64 encoded doc (pedigree.doc) of Bucephalus...> 
+
+--XX-1234DED00099A-- 
+
+　　哟，看上去很复杂，不是吗？不管怎样，让我们浏览一遍细节吧： 
+
+如果你注意到了在MIME信息头中的Content-Transfer-Encoding，为"7bit"。因为Content-Type为 
+multipart/mixed，编码应该是7bit，8bit或二进制中的一种，7bit是一种广泛使用的格式。 
+象这样一条信息包含了多种信息。客户程序是如何知道JPG图片，文档和普通文本之间的区别呢？你会 
+注意到在Content-Type后面有一个boundary="XX-1234DED00099A"参数。这个值用来分离邮件中的不同 
+部分。它叫做MIME边界标记。边界标记的值必须尽可能的唯一，以免在超出邮件范围时发生混乱。 
+"警告"信息（译者：指"This is a MIME Encoded Message"）在那里是为了让不符合MIME的客户程序 
+能够把它显示给用户，否则他们就不理解一个空白邮件是什么意思。 
+现在，回到边界标记。如果你观察这个简单的邮件，会发现边界标记（XX-1234DED00099A在每一个分 
+都出现了，也就是，在每部分之间都使用了一个边界标记，然而，每个边界标记都以两个连接符开始。 
+很重要的一点需要注意的就是在最后一个MIME段的后面，边界标记不仅仅以那两个边接符作为开始， 
+同时也以它俩作为结束。这一点一定不能忘记，因为它定义了邮件的范围。 
+让我们看一下前两个MIME段： 
+第一段是普通文本信息，因此Content-Type为text/plain，并且编码为7bit（我们也可以省略它， 
+因为如果不指明它也会默认为如此）。 
+第二个就是JPEG图片。相应的表示为Content-Type: image/jpg。name="buce.jpg"（出现在 
+Content-Type的后面，称之为参数），指出了文件的名字；它就是可以在客户程序中看到的附件 
+的名字。如果不给出name="buce.jpg" ，描述字段（如果给出）将作为附件的名字显示出来（然 
+而，在所有客户程序中它不是统一的做法）。 
+注意JPEG 图片可以在邮件件中被显示出来，如果客户程序可以显示行内附件。或者，你可以向客户程 
+指明你想如何显示附件。例如，如果存在 
+
+Content-Disposition: attachment 
+
+头，JPEG图片将被显示为一个附件图标。 
+
+上一页 下一页 
+
+
+转自phpbuilder.com

@@ -1,0 +1,167 @@
+PHP的FDF文档支持
+作者:Uwe Steinmann 
+来源:http://www.phpbuilder.com 
+译者:znsoft webmaster@phpease.com http://www.phpease.com 
+译注:(保留) 
+作PHP已经有一年多了吧，从3.0到4.0，不能说有多高(我现在也只是大菜鸟,比起何、Hunte,差多了，当然还有别的高手),但也有些经验。从PHP的火热 
+到现在的平静， 一路看的多了，听的也多了，见过的"高手"(会写留言板，聊天室什么的)也多,静下来一想：PHP只是一种语言。它自有 
+它存在的必要。国内的web开发也只停留在低水平的层次，想当初国外在大力发展asp组件时我们却只会用asp,PHP也一样。不过要感谢 
+php,它让我得到了生平的第二份工作(第一份是asp的,当初狠学c/c++,怎么也没想到吧),当然也通过它认识了不少朋友,Hunte,陈老板，一蛇, 
+何志强(虽然至今没有联络，但他的文章让我受益非浅),sony,macro,cfr...　为了生计，为了将来的发展，小生将离开PHP界，虽然不愿， 
+但也无奈,将拖了很久的一篇文章译出来作为最后的礼物献给大家，献给所有使用PHP&mysql的朋友。如果有学习VC和驱动开发的朋友可以和 
+我联络,让我们一起来探讨。 
+--------------------------------------------------------------- 
+动机 
+WWW上的交互意味着填表、点击submit按钮,然后得到一个确定的结果。Html和Http提供一个机制来通过表单很容易地执行这种操作。 
+PHP用一种非常便利的方法来支持这种机制,每个输入域(译注:表单的输入框)的值被存贮为一个与输入域同名的PHP变量。 
+
+一个很相似的机制已经被adobe开发着,但是是为PDF文档。他们简单地叫它Acrobat 表单。 从用户的观点来看,Html表单和Acrobat表 
+单唯一的不同是它们的外观。前者使用HTML文档,后者使用PDF文档来呈现表单。 
+
+要开发WEB界面,Acrobat表单也可以象HTML表单一样被处理,如果这个表单象HTML表单一样提供输入数据。然而,Adobe 已经为表单数 
+据提出一个新的格式叫FDF(表单数据格式)。PHP已经包含这种格式的支持。 
+
+用数据生成一个PDF文档的可能性,如定制它,是Acrobat 表单的附加特性了.用PDF文档作为表单并且在PHP中用数据生成PDF文档将在 
+这篇文章中被描述。你会发现这两个例了是多么的容易。 
+
+在你开始试这篇文章中的在线例子之前你要安装Acrobat阅读器插件或使用Acrobat 4.如果你想在自己的web服务器上测试php脚本 
+你也要安装PDF工具包并使PHP中的FDF支持生效。 
+
+最后,如果你开发你自己的PDF表单你需要Acrobat Exchange 3.x或Acrobat 4。 
+
+在过去的几年中,Adobe已经开发出可便携文档格式(PDF)并且扩展了它。一种扩展是允许用户输入数据并送到服务器中处理的Acrobat 
+表单,就象HTML表单。 
+这样的PDF文档与静态的PDF文档很相似,但当你用Acrobat阅读器看它时,你会发现可编辑的区域。 
+就象HTML中一样有很多输入域有效,例如 提交和重置按钮,文本输入域,检查框等等.. 
+创建这样一个PDF表单需要Acrobat Exchange 3.x或新的Acrobat 4软件,不幸的是它们只能在windows和MacOS中运行。 
+两者都提供一个方式来放置不同的输入域到一个已存在的PDF文档中。 
+提交按钮传送在它被按下时调用的URL属性。这非常象HTML,但不同的是在数据被传送到服务器时的格式。 
+在按下Submit按钮时，数据是用一个在URL中可以被观察的确定格式从HTML表单传输。Acrobat表单支持这种格式，还有FDF(表单数据格式) 
+FDP是一种新格式，需要FDF工具包(当前版本4.0)解释。如果PHP在编译时加了FDF支持，它就能解析FDF数据并且用名字存取任何输入域。 
+FDF数据一般被存在PHP的HTTP_RAW_POST_DATA变量中(就象HTML数据存储在HTTP_POAT_DATA中一样) 
+数据的实际赋值是在PHP脚本中完成的，相反的是HTML提交数据是在PHP引擎中被赋值的。 
+
+要想得到一个FDF数据看起来的样子,这儿是一个例子：(译注:从网上拷下的原始文件如此，我也看不清乱码是什么,不过如果放在英文系统中能看清吧) 
+
+%FDF-1.2 %忏嫌 1 0 obj << /FDF << /Fields [ << /V (This is just some text for testing)/T (comment)>> .... 
+
+这个仅仅是一个完整记录的第一部分，但它能明显地表示出输入域的注解(译注:可能是标题吧)和它的值。这儿是测试文本。 
+
+这了让它更清楚,提供一个简单的例子。首先,假设我们有一个包含数量,出版者,准备者,日期，注解发行者，发行准备者等域的PDF表单。 
+前五个域是文本域,最后两个域是检查框(check box)。我们的PHP脚本总会显示数量、日期、注解域的值，当相应的检查框选中时才显示出版者、准备者域的值。 
+如果这个框(check box)被选中，它们的值是"On"这是在表单被创建时设置的。当然这个表单也有提交按钮，在我们的这个例子中它甚至有reset按钮。 
+点击提交按钮运行下面的脚本。这个脚本象上面所述的来赋域数据的值。 
+
+<?php 
+
+$fdffp = fopen("test.fdf", "w"); 
+fwrite($fdffp, $HTTP_RAW_POST_DATA, strlen($HTTP_RAW_POST_DATA)); 
+fclose($fdffp); 
+
+$fdf = fdf_open("test.fdf"); 
+$volume = fdf_get_value($fdf, "volume"); 
+echo "The volume field has the value '<B>$volume</B>'<BR>"; 
+
+$date = fdf_get_value($fdf, "date"); 
+echo "The date field has the value '<B>$date</B>'<BR>"; 
+
+$comment = fdf_get_value($fdf, "comment"); 
+echo "The comment field has the value '<B>$comment</B>'<BR>"; 
+
+if(fdf_get_value($fdf, "show_publisher") == "On") { 
+$publisher = fdf_get_value($fdf, "publisher"); 
+echo "The publisher field has the value '<B>$publisher</B>'<BR>"; 
+} else 
+echo "Publisher shall not be shown.<BR>"; 
+
+if(fdf_get_value($fdf, "show_preparer") == "On") { 
+$preparer = fdf_get_value($fdf, "preparer"); 
+echo "The preparer field has the value '<B>$preparer</B>'<BR>"; 
+} else 
+echo "Preparer shall not be shown.<BR>"; 
+fdf_close($fdf); 
+
+?> 
+
+你可以试试这个例子 http://gehtnix.fernuni-hagen.de:8000/testfdf/example1.pdf 
+
+
+
+比较实际情况，PDF表单比HTML表单有更好的外观，这种技术好象没有确切的优势。然而，PDF有另一种用处。你可以回顾一下上面的 
+过程，并用数据组成一个PDF文档。 
+如果你需要定制PDF文档中仅需的几个确定部分,象地址，日期等等。它也可以用于创建完整的PDF文档,但要用PHP的pdf文档功能创建混合文档 
+需要很多工作。 
+例如在通常情况下，它也值得用于设计者创建准备文档(译注:可能是草稿吧)。用PHP中的PDF文档功能创建PDF表单(译注:不是fdf文档)几乎不可能的。 
+
+在FDF中用数据组成一个PDF文档很简单。你用Acrobat 4的话将必须创建一个PDF文档并在其中加入输入域。放到你的web服务器上。 
+然后，你需要用PHP创建FDF文档,它包含每个域，它的值和数据将被插入的文档的参考。(这个PDF文档你刚才已经建好了)。这个会在php中被飞快 
+地处理。文档的参考是一个指向PDF文档的URL。 
+
+以第一个例子为基础,下面的php脚本非常容易。脚本的第二部分已经加入了。 
+
+<?php 
+
+$fdffp = fopen("test.fdf", "w"); 
+fwrite($fdffp, $HTTP_RAW_POST_DATA, strlen($HTTP_RAW_POST_DATA)); 
+fclose($fdffp); 
+
+$fdf = fdf_open("test.fdf"); 
+$volume = fdf_get_value($fdf, "volume"); 
+$date = fdf_get_value($fdf, "date"); 
+$comment = fdf_get_value($fdf, "comment"); 
+
+if(fdf_get_value($fdf, "show_publisher") == "On") { 
+$publisher = fdf_get_value($fdf, "publisher"); 
+} else 
+$publisher = ""; 
+
+if(fdf_get_value($fdf, "show_preparer") == "On") { 
+$preparer = fdf_get_value($fdf, "preparer"); 
+} else 
+$preparer = ""; 
+
+fdf_close($fdf); 
+
+$outfdf = fdf_create(); 
+fdf_set_value($outfdf, "f_volume", $volume, 0); 
+fdf_set_value($outfdf, "b_volume", $volume, 0); 
+
+fdf_set_value($outfdf, "f_comment", $comment, 0); 
+fdf_set_value($outfdf, "b_comment", $comment, 0); 
+
+fdf_set_value($outfdf, "f_date", $date, 0); 
+fdf_set_value($outfdf, "b_date", $date, 0); 
+
+fdf_set_value($outfdf, "f_preparer", $preparer, 0); 
+fdf_set_value($outfdf, "b_preparer", $preparer, 0); 
+
+fdf_set_value($outfdf, "f_publisher", $publisher, 0); 
+fdf_set_value($outfdf, "b_publisher", $publisher, 0); 
+
+fdf_set_file($outfdf, "http:/testfdf/resultlabel.pdf"); 
+fdf_save($outfdf, "outtest.fdf"); 
+fdf_close($outfdf); 
+Header("Content-type: application/vnd.fdf"); 
+$fp = fopen("outtest.fdf", "r"); 
+fpassthru($fp); 
+unlink("outtest.fdf"); 
+
+?> 
+
+你也可以试试这个例子 http://gehtnix.fernuni-hagen.de:8000/testfdf/example2.pdf 
+
+In this example several steps are performed: 
+在这个例中几个步骤已经完成: 
+
+用户已经埴完了PDF 表单 example2.pdf 
+点击提交按钮后,提交按钮关联的URL已经被调用。在这个例子中,已经执行这个PHP脚本。PHP脚本检索FDF数据流中的数据并创建新的FDF文档 
+它包含作为结果的PDF文档的数据。 
+
+FDF文档用application/vnd.fdf类型送回。 
+
+Acrobat插件读取数据并显示这个参考PDF文档。在此例中为 resultlabel.pdf。 
+
+这仍不是FDF做的每件事,在这个教程中还有很多遗留的东西需要讨论。 
+你可以在adobe的web网站检验这篇文档。 
+
+-- Uwe 

@@ -1,0 +1,38 @@
+PHP 5.2.0发布 
+发表于  2006-11-08    作者:   出自     点击: 404 
+ 
+php5.2,PHP新特性,php,发行,Zend 
+　开发小组日前发布了PHP 5.2.0，该版本是PHP 5.x系列的一个重要改进版本，包括了一系列的新特性和缺陷修正。开发小组建议所有PHP 5.x系列的用户都尽快升级到该版本，升级时可参见升级指南http://cn.php.net/UPDATE_5_2.txt。该版本的更新详情参见发行公告和ChangeLog。
+
+　　该版本主要特性及缺陷修正
+
+新特性：
+
+全新的Zend引擎内存管理器，拥有更高的性能和精确的内存使用跟踪 
+添加输入过滤扩展 
+添加JSON扩展 
+添加ZIP扩展，可以创建和修改zip文件 
+添加文件上传进度跟踪挂钩 
+添加E_RECOVERABLE_ERROR错误模式 
+添加DateTime和DateTimeZone对象有效地处理日期时间信息 
+更新SQLite和PCRE库 
+更新Windows系统版本的OpenSSL、MySQL和PostgreSQL客户端库 
+对若干部份进行了性能优化 
+修正超过200个缺陷
+
+缺陷修正：
+
+在PostgreSQL和PDO扩展中添加了PostgreSQL的转义函数，可根据字符集编码处理转义 
+添加allow_url_include并设置默认值为Off以屏蔽在include和require语句中引入URL地址 
+关闭了调用open_basedir和safe_mode时的真实路径缓存 
+改进了safe_mode在error_log()函数中的作用 
+修正htmlspecialchars()和htmlentities()潜在的缓冲溢出 
+在cURL扩展中添加了safe_mode和open_basedir的检查 
+修正了在64位系统中str_repeat()和wordwrap()的溢出问题 
+修正了tempnam()中处理长路径的问题 
+修正了session.save_path中的safe_mode/open_basedir，允许它们计算额外的参数 
+修正了ini_restore()中ini设置超载问题
+
+
+最新版本下载地址：http://cn.php.net/downloads.php 
+ 

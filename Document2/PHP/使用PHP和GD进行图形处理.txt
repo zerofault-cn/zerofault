@@ -1,0 +1,77 @@
+使用PHP和GD进行图形处理
+因为越来越多的web 站点开始结合数据库在他们的部分设计中，我们能够使用在数据库中采集的数据来 
+显示统计结果。今天有很多的web 站点都有意使用某些民意测验或投票应用。在表格中显示数据是一件事， 
+但是 创建一个数据的图形则就是另外一回事了。当然，我们可以使用表格将可用的条状图形接在一起显示， 
+但是对于线形图或饼状图又如何做呢？PHP 具有一系列的图形函数，这些函数允许我们创建图形，让我们看一看这些函数对于使用和创建一些图形有什么好处。然而要紧记，在PHP中的图形函数要求你的系统安装了GD图形库。你可以在www.boutell.com/gd/找到，还可以得到一些关于在你的系统上如何安装的一些指导。 
+　　注意：我写这篇文章时是在Red Hat Linux 6.2机器上，然后是在Windows 2000机器上结束它的 。在Red Hat我运行的是PHP和MySQL的最新版本，但是在Windows上我不得不回到MySQL 3.21.29和PHP 3.0.11版本上， 因为它有我要处理的所有的东西 -- SQL和PHP的运行都不需要作修改。在这里让我们不要将整个事情放在交叉平台上，好吗？ 
+　　为了保持数据简单，并且允许我们集中注意力在创建图形上，我使用了一个小的假定的数据集：一个国际公司今年前六个月的销售指标。我根据的是一个办事处位于伦敦和另一个在亚特兰大。 
+Month 1 Month 2 Month 3 Month 4 Month 5 Month 6 
+伦敦 325 345 400 390 370 320 
+亚特兰大 300 280 270 300 350 410 
+前六个月的销售指标 
+　　然后我将数据输入到一个MySQL数据库中。我在下面包括了一个数据的卸出： 
+# MySQL dump 7.1 
+# Host: localhost Database: graphing 
+#-------------------------------------------------------- 
+# Server version 3.22.32 
+# Table structure for table 'sales' 
+CREATE TABLE sales ( 
+g_id int(11) DEFAULT '0' NOT NULL auto_increment, 
+g_month tinyint(4) DEFAULT '0' NOT NULL, 
+g_team tinytext NOT NULL, 
+g_num int(11) DEFAULT '0' NOT NULL, 
+PRIMARY KEY (g_id) 
+); 
+
+# Dumping data for table 'sales' 
+INSERT INTO sales VALUES (1,1,'London',325); 
+INSERT INTO sales VALUES (2,1,'Atlanta',300); 
+INSERT INTO sales VALUES (3,2,'London',345); 
+INSERT INTO sales VALUES (4,2,'Atlanta',280); 
+INSERT INTO sales VALUES (5,3,'London',400); 
+INSERT INTO sales VALUES (6,3,'Atlanta',270); 
+INSERT INTO sales VALUES (7,4,'London',390); 
+INSERT INTO sales VALUES (8,4,'Atlanta',300); 
+INSERT INTO sales VALUES (9,5,'London',370); 
+INSERT INTO sales VALUES (10,5,'Atlanta',350); 
+INSERT INTO sales VALUES (11,6,'London',320); 
+INSERT INTO sales VALUES (12,6,'Atlanta',410); 
+
+　　我的数据库叫做graphing，包含数据的表叫做sales。我将月份当做一个整数存在 g_month字段中。 
+　　在我们开始绘图之前，先学一些基础知识，看一下PHP是如何创建一个图像。我们需要做的第一件事就是告诉浏览器它正在得到一个图像和所得到图像的类型： 
+<?php 
+Header( "Content-type: image/gif"); 
+?> 
+　　即然浏览器知道它正在获取一个GIF 图像了，我们可以开始创建图形了。首先我们需要创建一个将用来 绘图的空白的画布。ImageCreate函数可以做到这一点。ImageCreate将返回一个图像的标识符，并且需要告诉函数用象素计算的画布有多大，x(宽度)与y(高度)。 
+<?php 
+$image = imagecreate(200,200); 
+?> 
+　　现在我们得到了一个200像素乘200像素的可用来绘图的空白画布。下一步是创建将要用在图像中的一些 颜色。为了做到这一点我们需要使用ImageColorAllocate函数，还有颜色的RGB值。ImageColorAllocate 将 返回一个我们刚创建的颜色标识。我们将在画布上绘图时使用颜色标识。ImageColorAllocate的工作方式是我们需要为所处理的每一个图像分配一个颜色 -- 所以如果我们创建3个GIF并且在每一个上面使用红色，我们应该分配红色3次（一次为一个GIF）。我将分配一个名为$maroon的颜色，给定红色值为100，绿色为0和 兰色为0。同时我将同样创建白色。 
+<?php 
+$maroon = ImageColorAllocate($image,100,0,0); 
+$white = ImageColorAllocate($image,255,255,255); 
+?> 
+　　即然我们已经得到了颜色，就可以画点什么了。第一件事情要叫的就是将画布白色涂成白色。函数 
+ImageFilledRectangle将在画布上画一个矩形，并且用指定的颜色进行填充。 
+<?php 
+ImageFilledRectangle($image,0,0,200,200,$white); 
+?> 
+　　告诉ImageFilledRectangle的第一件事就是（同样用于所有的图像函数）哪一个图像是我们正在处理的 ， 
+所以传给它$image标识。然后它需要知道x和y坐标来开始画矩形（0,0 -- 左上角）和结束矩形的坐标（ 200, 
+200 -- 画布的右下角）。最后告诉它的事情就是在矩形内填充的颜色，这个例子为$maroon。现在我们可以 
+开始在白色背景上绘图了。 
+<?php 
+ImageRectangle($image,10,10,190,190,$maroon); 
+ImageFilledRectangle($image,50,50,150,150,$maroon); 
+?> 
+　　ImageRectangle工作完全与ImageFilledRectangle同样的方式，除了它不使用颜色填充矩形以外。一旦 
+我们画完了，就可以输出图形了 -- 
+<?php 
+ImageGIF($image); 
+?> 
+　　然后清除我们存在内存中的图像。 
+<?php 
+ImageDestroy($image); 
+?> 
+　　这就是我们得到的： 
+　　然而，它还不是一个要求的图形。 

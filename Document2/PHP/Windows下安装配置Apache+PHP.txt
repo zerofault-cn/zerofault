@@ -1,0 +1,150 @@
+Windows下安装配置Apache+PHP
+
+PHP有两种不同的运行模式，一种是CGI模式(CGI executable),另一种是模块化(Module)方式。 
+可以这样来区别：在CGI模式下，如果客户机请求一个php文件，Web服务器就调用php.exe去解释这个文件，然后再把解释的结果以网页的形式返回给客户机；而在模块化中，PHP是与Web服务器一起启动并运行的，所以从某种角度上来说，以apache模块方式安装的PHP有着比CGI模式更好的安全性以及更好的执行效率和速度。
+所以下面我只介绍把PHP作为Apache的模块方式来安装的方法（Installing as an Apache module）
+
+1，分别下载所需的安装程序（或软件压缩包）
+如果你已有它们的安装程序或以前已安装过，只要版本相差不是很大或者没有特殊需求的话可以继续使用老版本。
+下载Apache：
+可以到http://www.apache.org下载最新的版本，也可点下面的链接直接下载：
+Apache_1.3：
+http://apache.justdn.org/httpd/binaries/win32/apache_1.3.35-win32-x86-no_src.msi
+http://www.apache.org/dist/httpd/binaries/win32/apache_1.3.35-win32-x86-no_src.msi
+Apache_2.0：
+http://apache.justdn.org/httpd/binaries/win32/apache_2.0.58-win32-x86-no_ssl.msi
+http://www.apache.org/dist/httpd/binaries/win32/apache_2.0.58-win32-x86-no_ssl.msi
+Apache_2.2：
+http://apache.justdn.org/httpd/binaries/win32/apache_2.2.2-win32-x86-no_ssl.msi
+http://www.apache.org/dist/httpd/binaries/win32/apache_2.2.2-win32-x86-no_ssl.msi
+备注：以上链接是2006.06.06在www.apache.org采集到的，本人尚未安装测试过，以下的安装说明是不一定是基于最新的版本的，但是同级版本下的配置基本一样。
+下载PHP：
+可以到http://www.php.net下载最新的版本，也可点下面的链接直接下载：
+PHP4：http://cn.php.net/distributions/php-4.4.2-Win32.zip
+PHP5：http://cn.php.net/distributions/php-5.1.4-Win32.zip
+
+2，安装Apache
+Apache所有版本的安装方法一样。
+双击下载到的apache安装文件，开始安装，一直点”Next“，直到填写”Server Information“窗口，
+Network Domain：这一项本来用处不大，但是安装时要求必填，如果你不知道，可以打开命令提示符，输入ipconfig，Connection-specific DNS Suffix后对应的就是，如果没有显示或者你的电脑没连外网，可以随便填，如local.com。
+Server Name：填你的域名，或者你的IP，如果都没有，填localhost也可以。
+Administrator's Email Address：Email你总该有一个吧，当然这个用处也不大，可以随便填。
+
+然后点”Next“，选”Custom“，点”Next“，为了以后重装系统后再次运行apache方便些，需要修改安装路径，默认的安装路径是C:\Program Files\Apache Group\，点”Change“按钮，转到D：（或其他非系统盘），在根目录下建立Pub目录，进入Pub目录，建立Apache-1.3.35（对应你的apache的版本，方便以后管理升级）目录，进入这个目录，点”OK“确认并回到安装窗口，点”Next“，提示将开始复制文件，如果对前面的设置有需要修改的可以点”Back“返回，点”Next“，文件复制完后apache将自动注册系统服务。
+Apache.exe所在的目录层次是：D:\pub\Apache-1.3.35\Apache\
+至此，Apache安装完成,打开IE，输入http://localhost，如果页面能显示，它将会提示你”如果你可以看見此頁，這表示你的 Apache Web Server 已經安裝成功。“
+如果不能显示页面，一般可能的原因是：
+(1)，80端口已被其他程序占用，如IIS，Skype等
+(2)，Server Name设置有误。
+(3)，遇到再补充
+
+
+3，安装PHP
+在下载到的php压缩包文件上点右键，选”解压到当前文件夹“（如果你安装的解压软件是WinRAR），解压完成后，当前目录下有一个“php-4.4.2-Win32”目录，重命名为“php-4.4.2”，移动到“D:\pub”目录下。
+进入“D:\pub\php-4.4.2”目录，将“php.ini-recommended”重命名为“php.ini”。
+然后修改php.ini文件
+(1)，设置extension_dir，这是php调用各种dll库的路径，改为extension_dir = "d:/pub/php-4.4.2/extensions/"
+如果是PHP5，则路径是这样的：extension_dir = "d:/pub/php-5.1.4/ext/"
+还需注意：PHP5默认只支持ODBC，而要让其支持MySQL的话，首先需要复制libmysql.dll到Web Server目录（后面回详细说明具体目录），并去掉extension=php_mysql.dll前面的注释。
+
+(2)，出于安全考虑，PHP4以上默认已经关闭了register_globals，如果你不想修改以前已经写好的但是未采用全局变量（如$_REQUEST，$_GET,$_POST等）接收参数的源代码的话，可以打开register_globals，找到register_globals = Off（默认为关），改为On
+
+(3)，如果不想使用短标记（长标记：“<?php”，短标记：“<?”）来开始PHP程序的话，可以关闭short_open_tag，找到short_open_tag = On，改为Off，
+注意PHP5.1.4默认为Off，不知出于什么而修改！
+
+(4)，如果需要session支持的话，还应该设置session.save_path
+例如： session.save_path = d:/pub/tmp
+到这里PHP安装部分完成
+
+4，配置Apache+PHP
+这里要针对不同的Apache版本和PHP版本分开说明了。
+(1),Apache-1.3.35+PHP-4.4.2
+将“php.ini”和“php4ts.dll”两个文件复制到“D:\pub\Apache-1.3.35\Apache”目录下。
+
+修改httpd.conf
+在LoadModule部分的尾部（当然也可以是其他任何地方，下同）添加：
+LoadModule php4_module "D:/pub/php-4.4.2/sapi/php4apache.dll"
+在AddModule部分的尾部添加：
+AddModule mod_php4.c
+
+修改<IfModule mod_mime.c>
+    TypesConfig conf/mime.types
+</IfModule>为：
+<IfModule mod_mime.c>
+    TypesConfig conf/mime.types
+    AddType application/x-httpd-php .php
+    AddType application/x-httpd-php-source .phps
+</IfModule>
+
+修改DocumentRoot和<Directory "">到你的php源代码所在目录。
+
+添加index.php为默认主页:
+修改DirectoryIndex index.html为：DirectoryIndex index.php index.html
+注：所有的Apache版本修改主目录和默认主页的方法都相同，所以后面就不再列出
+
+(2),Apache-1.3.35+PHP-5.1.4
+将“php.ini”和“libmysql.dll”两个文件复制到“D:\pub\Apache-1.3.35\Apache”目录下。
+注意：在PHP5版本中，由于php5ts.dll与php5apache.dll在同一目录下，所以可以不用复制到Web Server的执行目录下
+
+修改httpd.conf
+在LoadModule部分的尾部添加：
+LoadModule php5_module "D:/pub/php-5.1.4/php5apache.dll"
+在AddModule部分的尾部添加：
+AddModule mod_php5.c
+
+修改<IfModule mod_mime.c>
+    TypesConfig conf/mime.types
+</IfModule>为：
+<IfModule mod_mime.c>
+    TypesConfig conf/mime.types
+    AddType application/x-httpd-php .php
+    AddType application/x-httpd-php-source .phps
+</IfModule>
+
+(3),Apache-2.0.58+PHP-4.4.2
+将“php4ts.dll”文件复制到“D:\pub\Apache-2.0.58\Apache2\bin”目录下。
+
+修改httpd.conf
+在LoadModule部分的尾部添加：
+LoadModule php4_module "D:/pub/php-4.4.2/sapi/php4apache2.dll"
+注意，这里不再需要AddModule了。
+
+在合适的位置添加：
+AddType application/x-httpd-php .php
+AddType application/x-httpd-php-source .phps
+PHPIniDir "D:/pub/php-4.4.2/" （从Apache2开始可以用来定义php.ini的目录，这样可以使php.ini只存在与属于自己版本的目录下）
+
+(4),Apache-2.0.58+PHP-5.1.4
+将“libmysql.dll”文件复制到“D:\pub\Apache-2.0.58\Apache2\bin”目录下。
+
+修改httpd.conf
+在LoadModule部分的尾部添加：
+LoadModule php4_module "D:/pub/php-5.1.4/php5apache2.dll"
+
+在合适的位置添加：
+AddType application/x-httpd-php .php
+AddType application/x-httpd-php-source .phps
+PHPIniDir "D:/pub/php-5.1.4/"
+
+(5),Apache-2.2.2+PHP-4.4.2
+尚未配置成功
+
+
+(6),Apache-2.2.2+PHP-5.1.4
+由于PHP压缩包里的php5apache2.dll只适用于apache2.0.*
+所以需要下载一个替换版本：
+http://www.phpv.net/php5apache2.dll-php5.1.x.rar
+http://blog.haloso.com/attachments/200606/01_034408_php5apache2.dllphp5.1.x.rar
+
+解压后共有三个文件.
+vcredist_x86.exe
+php5apache2.dll
+httpd.exe.manifest
+
+将 php5apache2.dll 覆盖掉你原来PHP目录下的 php5apache2.dll 文件.
+将 httpd.exe.manifest 文件复制到你的apache安装目录下的bin文件夹下.
+双击运行vcredist_x86.exe安装.(如果您的系统里已安装了 .NET framework 2.就可以省掉这一步)
+（注：上面的方法来自PHP5研究室http://www.phpv.net)
+
+然后依照上面Apache-2.0.58+PHP-5.1.4的配置方法，就可以正常使用Apache2.2.2+PHP-5.1.4了。
+

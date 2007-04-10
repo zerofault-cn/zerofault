@@ -1,0 +1,63 @@
+如何统计在线人数
+在论坛里有人问我如何统计在线人数？我也不知道什么是最好的方法。下面是本站的实现的原理，我把它写出来，供大家参考。这只是我的方法，肯定不是最好的，还希望高手们予以指正。
+其实，要真正统计同时在并发在线的人数，是一件不太现实的事，这是因为HTTP协议是种无状态的协议。当客户端向服务器发出一个请求时，服务器会马上建立一个新的TCP/IP连接，在该会话结束后，如页面完全载入后，这个连接就关闭了。一般来说，在线人数指的定是在一定时间段内同时访问站点的人数，而不是基于HTTP协议的并发连接数。
+让我们先来看看一个访客是如何访问一个网站的。他在浏览器的地址栏里输入了目标网站的地址，然后在一段时间内持续浏览该网站的网页，最后，关闭浏览器或输入新的网址——浏览结束了。对于服务器端来说，访客到来是可以知道的，访客在浏览页面也是可以知道的，可是怎么知道什么时候走的呢？由于HTTP协议是无状态的，所以无法知道。通常的做法是记下访客最后一次浏览站点页面的时间。如果该访客在一个特定的时间内没有新的动作，那么可以认为他走了。
+根据上面的这个思路，我觉得最好用数据库，因为数据库要比其他方法如文本文件的效率要高。下面的例子是使用MySQL的，很容易使用其他类型的数据库系统。然后，在所有的页面中调用这个PHP文件，一方面更新数据，另一方面可以显示在线的人数。但是，有一个问题--到底在多长时间内访问的人算是并发的呢？一般来说，是半个小时，也就是1800秒，具体的要根据网站的情况来确定。这个时间越长，统计出的并发在线的人数就越多。本站的是15分钟，900秒。用访问者的IP地址表示一个访问者是个不错的方法。在拨号上网的情况下，被分配了相同IP地址的两个用户在短时间内浏览同一个网站的概率是很小的。 
+
+首先，用MySQL的工具建一个表： 
+
+CREATE TABLE ccol( 
+id integer not null auto_increment, #记录的ID 
+ip char(15) not null, #访问者的IP地址 
+dtstamp datetime not null, #最后访问时间 
+uri char(255), #访问者请求的URI 
+primary key (id) 
+); 
+
+然后，写一段PHP代码： 
+
+<? 
+/* 
+文件:ccol.php - ConCurrent OnLine statistics 
+目的:统计同时在线浏览的人数 
+作者:Hunte, hunte@phpuser.com 
+修改:2000-4-25 
+*/ 
+
+$duration=1800; 
+require "db.php"; 
+//包含DBSQL，详情可以参考我的另一篇文章 
+$ccol=new dbSQL; 
+$ccol->connect(); 
+$ccol->query("DELETE FROM ccol WHERE (UNIX_TIMESTAMP(NOW())-UNIX_TIMESTAMP(dtstamp))>$duration"); 
+//删除超过半小时的记录 
+$ccol->query("SELECT * FROM ccol WHERE ip='$REMOTE_ADDR'"); 
+//判断当前的IP是否在该表中存在 
+if ($ccol->nf())//有？ 
+{ 
+$ccol->next_record();//下移找到的记录数组的指针 
+$id=$ccol->f('id'); 
+$ccol->query("UPDATE ccol SET dtstamp=now(), uri='$REQUEST_URI' WHERE id=$id"); 
+//设置最后访问时间和访问页面 
+} 
+else//没有 
+{ 
+$ccol->query("INSERT INTO ccol VALUES (0, '$REMOTE_ADDR', now(), '$REQUEST_URI')"); 
+} 
+
+$ccol->query("SELECT COUNT(*) AS ccol FROM ccol WHERE (UNIX_TIMESTAMP(NOW())-UNIX_TIMESTAMP(dtstamp))<=$duration"); 
+//找出在半个小时内的记录，后面的WHERE子句可有可无--超出时间的已经被删除了 
+$ccol->next_record() 
+echo "在线人数：", $ccol->f('ccol'); 
+$ccol->free_result(); 
+?> 
+
+怎么用呢？在站点的每个页面的上面调用这个程序，举例来说： 
+--index.php 
+... 
+<!--显示在线人数-> 
+<?require ../stats/ccol.php?> 
+... 
+    当然，这段代码还有改进的余地。例如，在每次调用是都要删除半小时前的记录，这是没有必要而且会降低效率。可以一个什么办法过更长的时间再做，比如6小时。大家自个儿想想吧，我就不说了。 
+这种方法只要稍做修改，就可以派上别的用处，如SESSION的管理、网站的访问统计分析等。 
+

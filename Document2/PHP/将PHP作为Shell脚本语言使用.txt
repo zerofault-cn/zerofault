@@ -1,0 +1,104 @@
+
+将PHP作为Shell脚本语言使用 
+－－英文原著：Darrell Brogdon，发表于 http://www.phpbuilder.com/columns/darrell20000319.php3） 
+可能很多人都想过使用PHP编写一些定时发信之类的程序，但是却没有办法定时执行PHP；一次去PHPBuilder的时候，发现了这一篇文章，于是想给大家翻译一下（同时做了一些修改），希望对大家有用。第一次翻译文章，不好请多多见谅。 
+---------------------------------------------------------------------------------- 
+我们都知道，PHP是一种非常好的动态网页开发语言（速度飞快，开发周期短……）。但是只有很少数的人意识到PHP也可以很好的作为编写Shell脚本的语言，当PHP作为编写Shell脚本的语言时，他并没有Perl或者Bash那么强大，但是他却有着很好的优势，特别是对于我这种熟悉PHP但是不怎么熟悉Perl的人。 
+要使用PHP作为Shell脚本语言，你必须将PHP作为二进制的CGI编译，而不是Apache模式；编译成为二进制CGI模式运行的PHP有一些安全性的问题，关于解决的方法可以参见PHP手册（http://www.php.net）。 
+一开始你可能会对于编写Shell脚本感到不适应，但是会慢慢好起来的：将PHP作为一般的动态网页编写语言和作为Shell脚本语言的唯一不同就在于一个Shell脚本需要在第一行生命解释本脚本的程序路径： 
+#!/usr/local/bin/php -q 
+我们在PHP执行文件后面加入了参数“-1”，这样子PHP就不会输出HTTPHeader（如果仍需要作为Web的动态网页，那么你需要自己使用header函数输出HTTPHeader）。当然，在Shell脚本的里面你还是需要使用PHP的开始和结束标记： 
+<?php 代码 ?> 
+现在让我们看一个例子，以便于更好的了解用PHP作为Shell脚本语言的使用： 
+#!/usr/local/bin/php -q 
+<?php 
+print("Hello, world!\n"); 
+?> 
+上面这个程序会简单的输出“Hello, world!”到显示器上。 
+
+一、传递Shell脚本运行参数给PHP： 
+作为一个Shell脚本，经常会在运行程序时候加入一些参数，PHP作为Shell脚本时有一个内嵌的数组“$argv”，使用“$argv”数组可以很方便的读取Shell脚本运行时候的参数（“$argv[1]”对应的是第一个参数，“$argv[2]”对应的是第二个参数，依此类推）。比如下面这个程序： 
+#!/usr/local/bin/php -q 
+<?php 
+$first_name = $argv[1]; 
+$last_name = $argv[2]; 
+printf("Hello, %s %s! How are you today?\n", $first_name, $last_name); 
+?> 
+上面的代码在运行的时候需要两个参数，分别是姓和名，比如这样子运行： 
+[dbrogdon@artemis dbrogdon]$ scriptname.ph Darrell Brogdon 
+Shell脚本在显示器上面会输出： 
+Hello, Darrell Brogdon! How are you today? 
+[dbrogdon@artemis dbrogdon]$ 
+在PHP作为动态网页编写语言的时候也含有“$argv”这个数组，不过和这里有一些不同：当PHP作为Shell脚本语言的时候“$argv[0]”对应的是脚本的文件名，而当用于动态网页编写的时候，“$argv[1]”对应的是QueryString的第一个参数。 
+
+二、编写一个具有交互式的Shell脚本： 
+如果一个Shell脚本仅仅是自己运行，失去了交互性，那么也没有什么意思了。当PHP用于Shell脚本的编写的时候，怎么读取用户输入的信息呢？很不幸的是PHP自身没有读取用户输入信息的函数或者方法，但是我们可以效仿其他语言编写一个读取用户输入信息的函数“read”： 
+<?php 
+function read() { 
+$fp = fopen('/dev/stdin', 'r'); 
+$input = fgets($fp, 255); 
+fclose($fp); 
+return $input; 
+} 
+?> 
+需要注意的是上面这个函数只能用于Unix系统（其他系统需要作相应的改变）。上面的函数会打开一个文件指针，然后读取一个不超过255字节的行（就是fgets的作用），然后会关闭文件指针，返回读取的信息。 
+现在我们可以使用函数“read”将我们前面编写的程序1修改一下，使他更加具有“交互性”了： 
+#!/usr/local/bin/php -q 
+<?php 
+function read() { 
+$fp = fopen('/dev/stdin', 'r'); 
+$input = fgets($fp, 255); 
+fclose($fp); 
+return $input; 
+} 
+print("What is your first name? "); 
+$first_name = read(); 
+print("What is your last name? "); 
+$last_name = read(); 
+print("\nHello, $first_name $last_name! Nice to meet you!\n"); 
+?> 
+将上面的程序保存下来，运行一下，你可能会看到一件预料之外的事情：最后一行的输入变成了三行！这是因为“read”函数返回的信息还包括了用户每一行的结尾换行符“\n”，保留到了姓和名中，要去掉结尾的换行符，需要把“read”函数修改一下： 
+<?php 
+function read() { 
+$fp = fopen('/dev/stdin', 'r'); 
+$input = fgets($fp, 255); 
+fclose($fp); 
+$input = chop($input); // 去除尾部空白 
+return $input; 
+} 
+?> 
+
+三、在其他语言编写的Shell脚本中包含PHP编写的Shell脚本： 
+有时候我们可能需要在其他语言编写的Shell脚本中包含PHP编写的Shell脚本。其实非常简单，下面是一个简单的例子： 
+#!/bin/bash 
+echo This is the Bash section of the code. 
+
+/usr/local/bin/php -q << EOF 
+<?php 
+print("This is the PHP section of the code\n"); 
+?> 
+EOF 
+其实就是调用PHP来解析下面的代码，然后输出；那么，再试试下面的代码： 
+#!/bin/bash 
+echo This is the Bash section of the code. 
+
+/usr/local/bin/php -q << EOF 
+<?php 
+$myVar = 'PHP'; 
+print("This is the $myVar section of the code\n"); 
+?> 
+EOF 
+可以看出两次的代码唯一的不同就是第二次使用了一个变量“$myVar”，试试运行，PHP竟然给出出错的信息：“Parse error: parse error in - on line 2”！这是因为Bash中的变量也是“$myVar”，而Bash解析器先将变量给替换掉了，要想解决这个问题，你需要在每个PHP的变量前面加上“\”转义符，那么刚才的代码修改如下： 
+#!/bin/bash 
+echo This is the Bash section of the code. 
+
+/usr/local/bin/php -q << EOF 
+<?php 
+\$myVar = 'PHP'; 
+print("This is the \$myVar section of the code\n"); 
+?> 
+EOF 
+
+好了，现在你可以用PHP编写你自己的Shell脚本了，希望你一切顺利。如果有什么问题，可以去http://www.PHPBuilder.com或者http://www.zPHP.com上面讨论。 
+
+翻译：y10k

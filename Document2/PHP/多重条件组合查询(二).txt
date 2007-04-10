@@ -1,0 +1,239 @@
+多重条件组合查询(二)
+接一来这部分是实现用户提交之后的查询结果,也是程序代码的主体部份: 
+<? 
+$linkstr=mysql_connect("localhost","root","sa"); 
+mysql_select_db("cx",$linkstr); 
+$showstr="查询条件为:"; 
+$querystring="select no,type,name,qty,price from orders"; 
+switch($select1) 
+{ 
+case 1: 
+if (!empty($no)) 
+{ 
+switch($select2) 
+{ 
+case 1: 
+$querystring.=" where no=".$no; 
+$showstr.="订单为".$no."所有数据"; 
+break; 
+case 2: 
+switch($price) 
+{ 
+case 1: 
+$querystring.=" where no=".$no." or price<50"; 
+$showstr.="订单为".$no."或者价格少于50元的所有数据"; 
+break; 
+case 2: 
+$querystring.=" where no=".$no." or price between 50 and 200"; 
+$showstr.="订单为".$no."或者价格介于50到200元间的所有数据"; 
+break; 
+case 3: 
+$querystring.=" where no=".$no." or price>200"; 
+$showstr.="订单为".$no."或者价格大于200元间的所有数据"; 
+break; 
+} 
+break; 
+case 3: 
+switch($price) 
+{ 
+case 1: 
+$querystring.=" where no=".$no." and price<50"; 
+$showstr.="订单为".$no."并且价格少于50元的所有数据"; 
+break; 
+case 2: 
+$querystring.=" where no=".$no." and price between 50 and 200"; 
+$showstr.="订单为".$no."并且价格介于50到200元间的所有数据"; 
+break; 
+case 3: 
+$querystring.=" where no=".$no." and price>200"; 
+$showstr.="订单为".$no."并且价格大于200元间的所有数据"; 
+break; 
+} 
+break; 
+} 
+} 
+else 
+{ 
+if (!empty($type)) 
+{ 
+switch($select2) 
+{ 
+case 1: 
+$querystring.=" where type="".$type."" "; 
+$showstr.=" 类型为".$type."所有数据"; 
+break; 
+case 2: 
+switch($price) 
+{ 
+case 1: 
+$querystring.=" where type="".$type."" or price<50"; 
+$showstr.="类型为".$type."或者价格少于50元的所有数据"; 
+break; 
+case 2: 
+$querystring.=" where type="".$type."" or price between 50 and 200"; 
+$showstr.="类型为".$type."或者价格介于50到200元间的所有数据"; 
+break; 
+case 3: 
+$querystring.=" where type="".$type."" or price>200"; 
+$showstr.="类型为".$type."或者价格大于200元间的所有数据"; 
+break; 
+} 
+break; 
+case 3: 
+switch($price) 
+{ 
+case 1: 
+$querystring.=" where type="".$type."" and price<50"; 
+$showstr.="类型为".$type."并且价格少于50元的所有数据"; 
+break; 
+case 2: 
+$querystring.=" where type="".$type."" and price between 50 and 200"; 
+$showstr.="类型为".$type."并且价格介于50到200元间的所有数据"; 
+break; 
+case 3: 
+$querystring.=" where type="".$type."" and price>200"; 
+$showstr.="类型为".$type."并且价格大于200元间的所有数据"; 
+break; 
+} 
+break; 
+} 
+} 
+else 
+{ 
+switch($price) 
+{ 
+case 1: 
+$querystring.=" where price<50"; 
+$showstr.="价格少于50元的所有数据"; 
+break; 
+case 2: 
+$querystring.=" where price between 50 and 200"; 
+$showstr.="价格介于50到200元间的所有数据"; 
+break; 
+case 3: 
+$querystring.=" where price>200"; 
+$showstr.="价格大于200元间的所有数据"; 
+break; 
+} 
+} 
+} 
+break; 
+case 2: 
+switch($select2) 
+{ 
+case 1: 
+$querystring.=" where no=".$no." or type="".$type."""; 
+$showstr.="订单为".$no."或者类别为".$type."所有数据"; 
+break; 
+case 2: 
+switch($price) 
+{ 
+case 1: 
+$querystring.=" where no=".$no." or type="".$type."" or price<50 "; 
+$showstr.="订单为".$no."或者类别为".$type."或者价格少于50元的所有数据"; 
+break; 
+case 2: 
+$querystring.=" where no=".$no." or type="".$type."" or price between 50 and 200"; 
+$showstr.="订单为".$no."或者类别为".$type."或者价格介于50到200元间的所有数据"; 
+break; 
+case 3: 
+$querystring.=" where no=".$no."or type="".$type."" or price>200"; 
+$showstr.="订单为".$no."或者类别为".$type."或者价格大于200元间的所有数据"; 
+break; 
+} 
+break; 
+case 3: 
+switch($price) 
+{ 
+case 1: 
+$querystring.=" where no=".$no." or type="".$type."" and price<50 "; 
+$showstr.="订单为".$no."或者类别为".$type."并且价格少于50元的所有数据"; 
+break; 
+case 2: 
+$querystring.=" where no=".$no." or type="".$type."" and price between 50 and 200"; 
+$showstr.="订单为".$no."或者类别为".$type."并且价格介于50到200元间的所有数据"; 
+break; 
+case 3: 
+$querystring.=" where no=".$no."or type="".$type."" and price>200"; 
+$showstr.="订单为".$no."或者类别为".$type."并且价格大于200元间的所有数据"; 
+break; 
+} 
+break; 
+} 
+break; 
+case 3: 
+switch($select2) 
+{ 
+case 1: 
+$querystring.=" where no=".$no." and type="".$type."""; 
+$showstr.="订单为".$no."并且类别为".$type."所有数据"; 
+break; 
+case 2: 
+switch($price) 
+{ 
+case 1: 
+$querystring.=" where no=".$no." and type="".$type."" or price<50 "; 
+$showstr.="订单为".$no."并且类别为".$type."或者价格少于50元的所有数据"; 
+break; 
+case 2: 
+$querystring.=" where no=".$no." and type="".$type."" or price between 50 and 200"; 
+$showstr.="订单为".$no."并且类别为".$type."或者价格介于50到200元间的所有数据"; 
+break; 
+case 3: 
+$querystring.=" where no=".$no."and type="".$type."" or price>200"; 
+$showstr.="订单为".$no."并且类别为".$type."或者价格大于200元间的所有数据"; 
+break; 
+} 
+break; 
+case 3: 
+switch($price) 
+{ 
+case 1: 
+$querystring.=" where no=".$no." and type="".$type."" and price<50 "; 
+$showstr.="订单为".$no."并且类别为".$type."并且价格少于50元的所有数据"; 
+break; 
+case 2: 
+$querystring.=" where no=".$no." and type="".$type."" and price between 50 and 200"; 
+$showstr.="订单为".$no."并且类别为".$type."并且价格介于50到200元间的所有数据"; 
+break; 
+case 3: 
+$querystring.=" where no=".$no."and type="".$type."" and price>200"; 
+$showstr.="订单为".$no."并且类别为".$type."并且价格大于200元间的所有数据"; 
+break; 
+} 
+break; 
+} 
+break; 
+} 
+$result=mysql_query($querystring,$linkstr); 
+echo "<p>$showstr:<p> 
+"; 
+if (@mysql_num_rows($result)>0) 
+{ 
+while (list($no,$type,$name,$qty,$price)=mysql_fetch_row($result)) 
+{ 
+echo "<table align="center">"; 
+echo "<tr>"; 
+echo "<td>订单编号</td>"; 
+echo "<td>$no</td>"; 
+echo "</tr>"; 
+echo "<tr>"; 
+echo "<td>类别</td>"; 
+echo "<td>$type</td>"; 
+echo "</tr>"; 
+echo "<tr>"; 
+echo "<td>配件</td>"; 
+echo "<td>$name</td>"; 
+echo "</tr>"; 
+echo "<tr>"; 
+echo "<td>数量</td>"; 
+echo "<td>$qty</td>"; 
+echo "</tr>"; 
+echo "<tr>"; 
+echo "<td>价格</td>"; 
+echo "<td>$price</td>"; 
+echo "</tr>"; 
+echo "</table>"; 
+} 
+} 
+?>

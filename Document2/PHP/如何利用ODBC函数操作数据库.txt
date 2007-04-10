@@ -1,0 +1,34 @@
+如何利用ODBC函数操作数据库（阿见）
+<?php
+//建立odbc数据库连接，odbc_connect()函数有三个参数必须输入，分别是：
+//（1）odbc数据库名称，可用的名称在控制面板中设定，使之连向指定的数据库
+//（2）登录数据库时用的用户和密码
+	$dbc = odbc_connect("MS Access Database","","") or die("nnoo");
+//数据库的记录操作应用SQL查询的办实现
+//可实现记录更新，增删，及select查询等
+    $qu=odbc_exec($dbc,"UPDATE 表1 SET 总分 = [语文]+[数学]+1000");
+	$qu=odbc_exec($dbc,"select *,座号,语文+数学+英语 as abc from 表1");
+
+//取得取字段总数
+$n=odbc_num_fields($qu);
+echo $n;
+
+//显示字段名
+for($i=1;$i<=$n;$i++)
+  echo odbc_field_name($qu,$i);
+
+//odbc_fetch_row($quest_id,$number)本应是取得记录信息，但在odbc中仅是定位记录
+//他的第二个参数为定位的记录号，省略时是记录下移一个，为-1时到末记录
+//odbc_result($qu,$I) 用于取得$qu(sql查询结果表)中的当前记录的第$I(数值)个字段,可以用字段实名代替数值
+echo "<table>";
+while(odbc_fetch_row($qu)) {
+  echo "<tr>";
+  for($i=1;$i<=$n;$i++){
+    printf("<td>%s</td>",odbc_result($qu, $i));}
+  echo "</tr>";
+}
+echo "</table>";
+
+//最后数据库用完后应关闭，但也不能提前关闭，否则其他相关数据操作无法实现
+odbc_close($dbc);
+?>

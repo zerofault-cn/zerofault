@@ -1,0 +1,437 @@
+定制php4的session功能
+这篇文章描述了怎样定制php4的session处理。我们提供一个怎样写一个全功能的基于mysql数据库或dbm文件的session处理程序例子。 
+一、序言 
+新的php4有一套自己的session处理函数。缺省情况下,每个session存贮在系统临时目录的一个个独立文件中(例如在unix系统中为/tmp)。这适合或不适合，依你的需求而言。例如:如果你的支持php的web服务器分布在不同的机器上,你不能很容易地共享它们之间的session（当然，你也可以将sessions保存在NFS共享中）。另一个潜在的问题是你机器上的数千或数百万个session文件使你的文件系统变得散乱 。对我们来说幸运的是,php4的开发者非常有远见(感谢他们)，他们为你我这样的用户提供了扩展session处理的接口。这个文档解释一点session的处理并且提供两个能够工作的怎样扩展session处理的例子。我们的第一个例子将使session处理程序保存 session数据到DBM文件中。我们的第二个例子将保存session数据到MYSQL数据库中。在你开始之前，请下载ying20000602.zip 并且将它解开放到web文档目录中。（我已经将它带在本文的结尾处了）任何一个我们写的session处理程序会提供6个基本的函数，它们将被php4的session处理程序调用，所以你不用担心怎样调用它们。好在这些定制处理session的函数对你来说是完全透明的。所以你可以改动它们而不会影响你自己的PHP脚本。这几个函数是: 
+sess_open($sess_path, $session_name); 
+这个函数被session处理程序调用来作初始化工作。需要传给它的两个参数是$sess_path,它对应你的php.ini文件中的session.save_path选项;$session_name,它对应php.ini中的session.name选项。它们具体怎样工作,请看下面的例子。 
+sess_close(); 
+这个函数在页面结束执行并且session处理程序需要关闭时被调用。(注意，不要和sess_destory混淆了,它是用来结束session的) 
+sess_read($key); 
+这个函数在session处理程序读取指定session键值($key)时。 
+这个函数检索并返回标识为$key的session数据.(注意：你不用担心怎样序列化和反序列化数据,如果你不知道这是什么意思，不要担心它) 
+译者注：序列化是将变量或对象在程序结束或需要时保存在文件中，在下次程序运行或需要时再调入内存的技术,有别于只保存数据的方法。 
+sess_write($key, $val); 
+这个函数据在session处理程序需要将数据保存时调用,这种情况经常在你的程序结束时发生。 
+它负责将数据保存在下次能用sess_read($key)函数检索的地方。 
+sess_destroy($key); 
+这个函数在需要消毁session时。它负责删除session并且清除环境。 
+sess_gc($maxlifetime); 
+这个函数负责清理碎片。在这种情况下，它负责删除过时的session数据。session处理程序会偶尔调用它们。 
+现在我们已经清楚了我们提供的函数。它们不是非要这样命名，但必须接受这些参数。(不管你需不需要它们)DBM session 处理程序 我们的第一个范例是写一个保存session数据到DBM文件中的定制session处理程序。(这是ying20000602.zip中的session_dbm.php文件) 有很多充足的理由让你要这样做,例如,如果你在isp那儿有一台共享的服务器(译注:相当于我们说的虚拟主机吧)并且你不想让你的session数据和别人的混在一起。
+重要注释: 
+在你试验这些程序时你的php4必须有DBM支持。如果不是这样的(译注：如果没有DBM支持)会很难看，真的很难看!我们要做的这些工作将会得到一个所有session数据的DBM文件。(万一你不知道，DBM文件象一个仅保存"键/值"对的非常简单的数据库.由下面的6个函数据实现: 
+sess_open($sess_path, $session_name); 
+我们将调用dbmopen()打开一个处于读写模式的DBM文件。我们的DBM文件将被命名为/tmp/PHPSESSID,除非你修改了php.ini中的session路径和名字设置。 
+sess_close(); 
+在这个函数中，我们将简单地调用dbmclose()函数关闭DBM文件。 
+sess_read($key); 
+这儿我们仅仅调用dbmfetch()载入和参数$key相关连的session数据。 
+在载入一个session时，我们需要保证读入的不是一个过期数据，所以我们必须给session配上一个时间标记。 
+为什么？因为在它们失效，不管什么原因而没有被删掉时，我们不会意外地读入过期数据。这会是一个很大的禁忌。
+我们知道DBM文件只保存 键/值 对，因此不得不在写session数据时将时间标记同" 值"一起写入,在读session数据时去掉。 
+任何已经过期的session将被忽略。看看这个源程序，它会让你更清楚。 
+sess_write($key, $val); 
+写入一个session,我们会使用dbmreplace()函数。注意，从上所述我们要保存过期时间标记在session中，所以我们要将时间标记绑到值上。 
+sess_destroy($key); 
+消毁一个session很容易，我们只需要调用dbmdelete()函数将它从session文件中删除。 
+sess_gc($maxlifetime); 
+过期数据收集在这儿有点令人讨厌但却是必需的,为了达到目的我们在循环扫描所有保存在DBM文件中的session并且删掉过期的。这会很慢因 
+为我们循环通过所有保存在这个文件中的所有session数据。 
+现在我们已经有了一个DBM session处理程序,太酷了! 
+现在，我们让这些session保存到mysql数据库中。 
+Mysql session处理程序 
+(This我们的下一个范例是写一个将session数据存到mysql数据库的定制session处理程序。(这个在session_mysql.php文件中,见文章尾部) 
+在你有许多支持PHP的服务器并且你需要共享它们之间的session时你会想将session保存在数据库中的。(比如你服务于很多用户并且需要负载平衡时) 
+You have a bunch of machines doing web/PHP stuff, a machine serving 
+你有一批机器作支持php的服务器，需要一台机器作你的普通数据库服务器,另外一台运行mysql数据库处理session。仅这样对大多数人来 
+说就具有很大的杀伤力的。:)(译注：可能意思是太酷了吧) 
+重要提示: 
+在你试验之前你的php必须支持mysql。(译注：这好象已经不成问题了，php现在已经内建mysql支持了)如果不是这样的话，事情会很难看，真的很难看。 
+首先我们在mysql中创建一个session数据库，并且创建一个session表。先运行你的mysql客户端并且运行下面的命令： 
+mysql> CREATE DATABASE sessions; 
+
+mysql> GRANT select, insert, update, delete ON sessions.* TO phpsession@localhost 
+-> IDENTIFIED BY 'phpsession'; 
+
+mysql> CREATE TABLE sessions ( 
+-> sesskey char(32) not null, 
+-> expiry int(11) unsigned not null, 
+-> value text not null, 
+-> PRIMARY KEY (sesskey) 
+-> ); 
+
+下一步,修改session_mysql.php文件的$SESS_DB* 变量使其匹配你机器上的数据库设置。在你继续之前确信一切看起来良好。 
+我们的6个函数会依靠mysql数据库工作: 
+sess_open($sess_path, $session_name); 
+我们需要调用mysql_Pconnect(),然后用mysql_selsect_db()选择session数据库 。$sess_path 和$session_name 参数是无关的但我们不得不保留它们。(译注：原文如此，可能是为了兼容吧) 
+
+sess_close(); 
+我们要打开一个mysql永久连接因此我们在这个函数中不做任何事。(一个空函数) 
+
+sess_read($key); 
+这个窍门就是一个简单的select语句，我们想要读取所给的$key的session数据，需要指定过期时间信息。
+sess_write($key, $val); 
+写session数据用了一个小把戏。我们首先试图用insert语句保存session数据到数据库中。如果失败(主键约束)则意味着这个key已经写入,然后我们不得不用一update语句代替。 
+
+sess_destroy($key); 
+删除一个session很容易，我们只需要从数据库中删除这个键值。 
+
+sess_gc($maxlifetime); 
+处理过期session也很容易,我们只需要从数据库中删除过期session(). 
+
+作为结束这个小教程，希望你在扩展php4的session处理时有个好感觉。 
+这个范例只是简单的示范了你怎样做才能扩展它们使其适应你的需要，如果你找到什么bug的话，请让我知道:) 
+
+faq: 
+如果你担心session文件在/tmp目录中和别的虚拟机混淆，正好将它们存到别处。 
+这就是为什么有session.save_path选项的原因。 
+如果你担心性能的话你可以考虑将session存在共享内存中。你只需要在编译php时加上MM支持(--with-mm)并指定sessio.save_handler 为 mm在.htaccess中，php.ini中或httpd.conf中。 
+
+我觉得只有多台机器要保存session时才会用到数据库。(最后这句实在不好译，自已看吧) 
+
+session_dbm.php 
+========================================================================= 
+<? 
+/* ------------------------------------------------------------------------ 
+* session_dbm.php 
+* ------------------------------------------------------------------------ 
+* PHP4 DBM Session Handler 
+* Version 1.00 
+* by Ying Zhang (ying@zippydesign.com) 
+* Last Modified: May 21 2000 
+* 
+* ------------------------------------------------------------------------ 
+* TERMS OF USAGE: 
+* ------------------------------------------------------------------------ 
+* You are free to use this library in any way you want, no warranties are 
+* expressed or implied. This works for me, but I don't guarantee that it 
+* works for you, USE AT YOUR OWN RISK. 
+* 
+* While not required to do so, I would appreciate it if you would retain 
+* this header information. If you make any modifications or improvements, 
+* please send them via email to Ying Zhang <ying@zippydesign.com>. 
+* 
+* ------------------------------------------------------------------------ 
+* DESCRIPTION: 
+* ------------------------------------------------------------------------ 
+* This library tells the PHP4 session handler to write to a DBM file 
+* instead of creating individual files for each session. 
+* 
+* ------------------------------------------------------------------------ 
+* INSTALLATION: 
+* ------------------------------------------------------------------------ 
+* Make sure you have DBM support compiled into PHP4. Then copy this 
+* script to a directory that is accessible by the rest of your PHP 
+* scripts. 
+* 
+* ------------------------------------------------------------------------ 
+* USAGE: 
+* ------------------------------------------------------------------------ 
+* Include this file in your scripts before you call session_start(), you 
+* don't have to do anything special after that. 
+*/ 
+
+$SESS_DBM = ""; 
+$SESS_LIFE = get_cfg_var("session.gc_maxlifetime"); 
+
+function sess_open($save_path, $session_name) { 
+global $SESS_DBM; 
+
+$SESS_DBM = dbmopen("$save_path/$session_name", "c"); 
+return ($SESS_DBM); 
+} 
+
+function sess_close() { 
+global $SESS_DBM; 
+
+dbmclose($SESS_DBM); 
+return true; 
+} 
+
+function sess_read($key) { 
+global $SESS_DBM, $SESS_LIFE; 
+
+$var = ""; 
+if ($tmp = dbmfetch($SESS_DBM, $key)) { 
+$expires_at = substr($tmp, 0, strpos($tmp, "|")); 
+
+if ($expires_at > time()) { 
+$var = substr($tmp, strpos($tmp, "|") + 1); 
+} 
+} 
+
+return $var; 
+} 
+
+function sess_write($key, $val) { 
+global $SESS_DBM, $SESS_LIFE; 
+
+dbmreplace($SESS_DBM, $key, time() + $SESS_LIFE . "|" . $val); 
+return true; 
+} 
+
+function sess_destroy($key) { 
+global $SESS_DBM; 
+
+dbmdelete($SESS_DBM, $key); 
+return true; 
+} 
+
+function sess_gc($maxlifetime) { 
+global $SESS_DBM; 
+
+$now = time(); 
+$key = dbmfirstkey($SESS_DBM); 
+while ($key) { 
+if ($tmp = dbmfetch($SESS_DBM, $key)) { 
+$expires_at = substr($tmp, 0, strpos($tmp, "|")); 
+if ($now > $expires_at) { 
+sess_destroy($key); 
+} 
+} 
+
+$key = dbmnextkey($SESS_DBM, $key); 
+} 
+} 
+
+session_set_save_handler( 
+"sess_open", 
+"sess_close", 
+"sess_read", 
+"sess_write", 
+"sess_destroy", 
+"sess_gc"); 
+?> 
+============================ 
+session_mysql.php 
+============================ 
+<? 
+/* ------------------------------------------------------------------------ 
+* session_mysql.php 
+* ------------------------------------------------------------------------ 
+* PHP4 MySQL Session Handler 
+* Version 1.00 
+* by Ying Zhang (ying@zippydesign.com) 
+* Last Modified: May 21 2000 
+* 
+* ------------------------------------------------------------------------ 
+* TERMS OF USAGE: 
+* ------------------------------------------------------------------------ 
+* You are free to use this library in any way you want, no warranties are 
+* expressed or implied. This works for me, but I don't guarantee that it 
+* works for you, USE AT YOUR OWN RISK. 
+* 
+* While not required to do so, I would appreciate it if you would retain 
+* this header information. If you make any modifications or improvements, 
+* please send them via email to Ying Zhang <ying@zippydesign.com>. 
+* 
+* ------------------------------------------------------------------------ 
+* DESCRIPTION: 
+* ------------------------------------------------------------------------ 
+* This library tells the PHP4 session handler to write to a MySQL database 
+* instead of creating individual files for each session. 
+* 
+* Create a new database in MySQL called "sessions" like so: 
+* 
+* CREATE TABLE sessions ( 
+* sesskey char(32) not null, 
+* expiry int(11) unsigned not null, 
+* value text not null, 
+* PRIMARY KEY (sesskey) 
+* ); 
+* 
+* ------------------------------------------------------------------------ 
+* INSTALLATION: 
+* ------------------------------------------------------------------------ 
+* Make sure you have MySQL support compiled into PHP4. Then copy this 
+* script to a directory that is accessible by the rest of your PHP 
+* scripts. 
+* 
+* ------------------------------------------------------------------------ 
+* USAGE: 
+* ------------------------------------------------------------------------ 
+* Include this file in your scripts before you call session_start(), you 
+* don't have to do anything special after that. 
+*/ 
+
+$SESS_DBHOST = "localhost"; /* database server hostname */ 
+$SESS_DBNAME = "sessions"; /* database name */ 
+$SESS_DBUSER = "phpsession"; /* database user */ 
+$SESS_DBPASS = "phpsession"; /* database password */ 
+
+$SESS_DBH = ""; 
+$SESS_LIFE = get_cfg_var("session.gc_maxlifetime"); 
+
+function sess_open($save_path, $session_name) { 
+global $SESS_DBHOST, $SESS_DBNAME, $SESS_DBUSER, $SESS_DBPASS, $SESS_DBH; 
+
+if (! $SESS_DBH = mysql_pconnect($SESS_DBHOST, $SESS_DBUSER, $SESS_DBPASS)) { 
+echo "<li>Can't connect to $SESS_DBHOST as $SESS_DBUSER"; 
+echo "<li>MySQL Error: ", mysql_error(); 
+die; 
+} 
+
+if (! mysql_select_db($SESS_DBNAME, $SESS_DBH)) { 
+echo "<li>Unable to select database $SESS_DBNAME"; 
+die; 
+} 
+
+return true; 
+} 
+
+function sess_close() { 
+return true; 
+} 
+
+function sess_read($key) { 
+global $SESS_DBH, $SESS_LIFE; 
+
+$qry = "SELECT value FROM sessions WHERE sesskey = '$key' AND expiry > " . time(); 
+$qid = mysql_query($qry, $SESS_DBH); 
+
+if (list($value) = mysql_fetch_row($qid)) { 
+return $value; 
+} 
+
+return false; 
+} 
+
+function sess_write($key, $val) { 
+global $SESS_DBH, $SESS_LIFE; 
+
+$expiry = time() + $SESS_LIFE; 
+$value = addslashes($val); 
+
+$qry = "INSERT INTO sessions VALUES ('$key', $expiry, '$value')"; 
+$qid = mysql_query($qry, $SESS_DBH); 
+
+if (! $qid) { 
+$qry = "UPDATE sessions SET expiry = $expiry, value = '$value' WHERE sesskey = '$key' AND expiry > " . time(); 
+$qid = mysql_query($qry, $SESS_DBH); 
+} 
+
+return $qid; 
+} 
+
+function sess_destroy($key) { 
+global $SESS_DBH; 
+
+$qry = "DELETE FROM sessions WHERE sesskey = '$key'"; 
+$qid = mysql_query($qry, $SESS_DBH); 
+
+return $qid; 
+} 
+
+function sess_gc($maxlifetime) { 
+global $SESS_DBH; 
+
+$qry = "DELETE FROM sessions WHERE expiry < " . time(); 
+$qid = mysql_query($qry, $SESS_DBH); 
+
+return mysql_affected_rows($SESS_DBH); 
+} 
+
+session_set_save_handler( 
+"sess_open", 
+"sess_close", 
+"sess_read", 
+"sess_write", 
+"sess_destroy", 
+"sess_gc"); 
+?> 
+========================================================================= 
+test.php 
+========================================================================== 
+<? 
+/* ------------------------------------------------------------------------ 
+* test.php 
+* ------------------------------------------------------------------------ 
+* PHP4 Customer Session Handler Test Script 
+* Version 1.00 
+* by Ying Zhang (ying@zippydesign.com) 
+* Last Modified: May 21 2000 
+*/ 
+
+/* default to DBM handler */ 
+if (! isset($handler)) { 
+$handler = "dbm"; 
+} 
+
+/* default action is increment */ 
+if (! isset($action)) { 
+$action = "increment"; 
+} 
+
+/* load up the appropriate session handling script, depending on the handler */ 
+if ($handler == "dbm") { 
+include("session_dbm.php"); 
+
+} elseif ($handler == "mysql") { 
+include("session_mysql.php"); 
+
+} else { 
+echo "<li>Unrecognized handler ($handler)"; 
+die; 
+} 
+
+/* start the session and register a simple counter */ 
+session_start(); 
+session_register("count"); 
+
+/* figure out what we should do, depending on the action */ 
+switch ($action) { 
+case "increment" : 
+$count = isset($count) ? $count + 1 : 0; 
+break; 
+
+case "destroy" : 
+session_destroy(); 
+break; 
+
+case "gc" : 
+$maxlife = get_cfg_var("session.gc_maxlifetime"); 
+sess_gc($maxlife); 
+break; 
+
+default: 
+echo "<li>Unknown action ($action)"; 
+break; 
+} 
+?> 
+
+<h1>Session Test Script</h1> 
+<ul> 
+<li>Handler: <b><?=$handler?></b> 
+<li>Action: <b><?=$action?></b> 
+<li>Count: <b><?=$count?></b> 
+</ul> 
+
+<hr size=1> 
+<form> 
+<table> 
+<tr> 
+<td>Handler:</td> 
+<td> 
+<select name="handler"> 
+<option value="dbm">DBM</option> 
+<option value="mysql">MySQL</option> 
+</select> 
+</td> 
+</tr> 
+<tr> 
+<td>Action:</td> 
+<td> 
+<select name="action"> 
+<option value="increment">Increment</option> 
+<option value="destroy">Session Destroy</option> 
+<option value="gc">Force Garbage Collection</option> 
+</select> 
+</td> 
+</tr> 
+<tr> 
+<td></td> 
+<td><br><input type="submit"></td> 
+</tr> 
+</table> 
+</form> 
+=================================== 
