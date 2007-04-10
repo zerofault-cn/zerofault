@@ -1,0 +1,24 @@
+windows下修改boot.ini启动linux(使用grub.exe) 
+
+--------------------------------------------------------------------------------
+
+
+使用grub for dos是因为一不小心把mbr格了，所以研究了一下，linux又可以进了，呵呵
+
+现在不用担心一不小心不能引导linux的问题了，你可以大胆的用fdisk /mbr命令了
+首先到ftp://ftp.cosoft.org.cn/incoming/下载grub for dos.
+下载到将文件夹下的 BOOTGRUB 和 GRLDR 两个文件拷贝到window系统盘下(系统盘可以是ntfs格式)，改 Boot.ini 文件，一般是在 Boot.ini 文件末尾增加如下一行： 
+C:\bootgrub="boot grub" 引号里的是启动菜单显示的
+这样 启动时会显示菜单，若要引导 linux,选择boot grub项。
+之后会显示grub>
+这里要输入命令，用help 命令名 可查看命令信息。
+首先find /boot/vmlinuz
+或find /vmlinuz (使用单独的boot分区时用这个)
+命令找到内核所在分区。执行后会显示,如(hd0,7).
+然后为了下一步比较方便，查看一下你的grub.conf文件是怎么写的
+cat (hd0,7)/boot/grub/grub.conf 的这里的(hd0,7)即上面用find命令代到的
+下面你要启动哪个 linux内核就一步步把相应的命令打上。如：
+root (hd0,7)
+kernel *******************
+initrd *********
+最后输入boot即开始走入linux.

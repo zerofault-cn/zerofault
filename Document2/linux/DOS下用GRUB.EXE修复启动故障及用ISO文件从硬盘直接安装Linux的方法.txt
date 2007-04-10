@@ -1,0 +1,138 @@
+DOS 下用 GRUB.EXE 修复启动故障
+
+GRUB.EXE 完全就是 GRUB，只不过重新包装，使得它能够在 DOS 下运行。所以，GRUB.EXE 具有你先前所熟悉的 GRUB 的所有优良特性。目前，grub_for_dos 的最新稳定版 0.0.8 可以从这里得到：
+ftp://ftp.cosoft.org.cn/incoming/grub_for_dos-0.0.8.tar.gz 
+或者进入目录查看： ftp://ftp.cosoft.org.cn/incoming/ 
+
+版本 0.0.8 在驱动器映射之下也能够再次（可以任意嵌套多次）安全地运行 GRUB.EXE。采用的方法是，在每次运行 GRUB.EXE 的时候，都自动卸载先前的驱动器映射，恢复旧的 BIOS int13 中断向量。开发版系列（例如版本 0.1.4）当然也有这个功能。
+
+解压后，把 grub.exe 文件拷贝到 DOS 的硬盘分区或者 DOS 软盘即可。用法：
+
+grub --config-file=(hd0,0)/boot/grub/menu.lst
+
+或者不带参数：
+
+grub
+
+默认的配置文件是 (hd0,0)/boot/grub/menu.lst
+--------------------------------------------------------------------------------
+
+
+如果 Linux 安装之后不能启动，可能的原因是 Lilo 的故障。这时候，用一张 grub 引导软盘启动，可保证启动成功。如果你没有 grub 启动软盘，那么用一张 DOS 启动软盘，再加上一个 grub.exe 文件，同样可以很简单地获得 grub 强大的多重启动功能。
+
+顺便说，用“DOS启动盘＋GRUB.EXE”的方法所制作的软盘，能够用来启动 DOS 和其它操作系统，是真正的“万能引导软盘”。这张软盘在硬盘不能引导 DOS/Windows 的时候还可以引导 DOS，而用其他方法制作的 GRUB 软盘，不能再重复用作 DOS 启动盘。这里所说的“DOS启动盘”可以是 MS-DOS 的，也可以是 FreeDOS 的（顺便说，FreeDOS build 2029 已经支持 Win98 的 FAT32 大分区格式了）。
+--------------------------------------------------------------------------------
+
+
+另外一种情形：当你重新安装 Windows 的时候，Windows 会重写 MBR，从而把 LILO 或 GRUB 的启动代码抹掉。用 GRUB.EXE，你不需软盘就可以启动其他操作系统（假定你的Windows是9x，或者硬盘上安装有DOS）。
+
+用 loadlin.exe 也能启动 Linux，但是 loadlin 需要一个内核文件（vmlinuz），这个内核文件必须处在 DOS/Windows 的分区，有时候这个内核文件不适合作为你新近安装的 Linux 系统的内核。GRUB.EXE 就没有这样的限制，它可以给你很大的自由，它从 DOS 下启动，而能够从 Linux 分区找到任何文件（包括内核文件），你很容易知道这个内核跟你将要引导的系统是匹配的，从而引导 Linux 系统。
+
+loadlin.exe 也是不用安装就可以使用的 Linux 引导器。grub.exe 的不同在于，它是一个引导管理器，可以引导其它操作系统。
+--------------------------------------------------------------------------------
+
+
+请在搜索引擎（ http://www.google.com/ ）中搜索有关 GRUB 的详细资料。这里只是举一个很常用的简单例子，命令行操作：
+
+grub> find /boot/vmlinuz
+(hd0,7)
+
+grub> root (hd0,7)
+grub> kernel /boot/vmlinuz root=/dev/hda8
+grub> boot
+
+简单的几个 grub 命令，就可以启动 Linux 了，很方便吧？顺便说，grub 的 find 命令很好，grub 甚至还有一个 cat 命令可以显示一个文件的内容。在 grub 的提示符下敲入 help 命令，可以获得在线帮助。grub 的分区号 (hd0,N) 一般就是 Linux 的 /dev/hda(N+1), 例如: (hd0,7) 就是 /dev/hda8, 如果你的是 SCSI 硬盘, 则是 /dev/sda8。一个特殊情况是, 当你的系统中没有 IDE 主盘而只有 IDE 0 上的一个从盘时, grub 显示的 (hd0,7) 将是 Linux 的 /dev/hdb8, 也就是说, GRUB 找到的第一个 BIOS 硬盘 (hd0) 是系统中的 /dev/hdb 了。一个复杂一些的例子:
+
+查找系统中的内核文件的位置:
+
+grub> find /boot/vmlinuz
+(hd0,7)
+
+如果你采用了单独的 boot 分区, 那么需要用
+
+grub> find /vmlinuz
+
+来查找。假定找到的结果是
+(hd0,6)
+
+再查找系统中有哪些根分区:
+
+grub> find /sbin/init
+(hd0,7)
+
+启动内核的命令是:
+
+grub> kernel (hd0,6)/vmlinuz root=/dev/hda8
+grub> boot
+
+如果你的 (hd0,7) 不是 /dev/hda8 而是 /dev/hdb8, 你就试试它:
+
+grub> kernel (hd0,6)/vmlinuz root=/dev/hdb8
+grub> boot
+
+分区号是准确的, 只有硬盘号可能会有变化. IDE 硬盘只有 4 种变化, hda, hdb, hdc, hdd, 一个一个地试验, 总可以成功. 当然, 如果你的是 SCSI 硬盘, 需要试验的是 sda, sdb, sdc, sdd 等。
+
+当然 GRUB 也支持菜单操作。GRUB.EXE 默认的菜单配置文件是 (hd0,0)/boot/grub/menu.lst ，正如前面所说，这个配置文件的位置可以由 DOS 命令行参数来重新指定。这个文件所处的分区（默认是(hd0,0)）的类型可以是 DOS/Windows 的 FAT12，FAT16，FAT32，也可以是 Linux 的 ext2 等类型，还可以是 GRUB 所支持的其他分区类型。顺便说，GRUB 的新版本将要支持 iso9660 光盘格式、NTFS 文件系统，以及用软盘映象 img 文件来引导机器（特别适合于没有软盘又想用软盘来启动机器的用户）。
+--------------------------------------------------------------------------------
+
+提醒一下，google 很强大: 在 http://www.google.com/ 的搜索框中敲入 grub.exe 可以快速找到本文的网页。
+--------------------------------------------------------------------------------
+
+
+附: RedHat 和 Mandrake 的硬盘安装方法
+
+假定你的 (hd0,0)【也就是 /dev/hda1 分区】是 DOS 分区，你的那些 ISO 文件都已经处在这个分区之中。你已经在这个 DOS 分区的根目录下创建了一个 boot 子目录, 在 boot 目录下创建了一个 grub 子目录，并在 grub 目录中添加一个名字叫做 menu.lst 的文件,内容如下:
+
+default=0
+timeout=30
+title Red Hat 9 hard disk install
+	root (hd0,0)
+	kernel /boot/vmlinuz-redhat9
+	initrd /boot/initrd-redhat9.img
+title Mandrake 9.1 hard disk install
+	root (hd0,0)
+	kernel /boot/vmlinuz-mdk9.1 ramdisk_size=128000 root=/dev/ram3 automatic=method:disk acpi=off vga=788
+	initrd /boot/hd-mdk9.1.rdz
+title Mandrake 9.1 network install
+	root (hd0,0)
+	kernel /boot/vmlinuz-mdk9.1 ramdisk_size=128000 root=/dev/ram3 acpi=off vga=788
+	initrd /boot/network-mdk9.1.rdz
+title Mandrake 9.1 hdcdrom_usb install
+	root (hd0,0)
+	kernel /boot/vmlinuz-mdk9.1 ramdisk_size=128000 root=/dev/ram3 acpi=off vga=788
+	initrd /boot/hdcdrom_usb-mdk9.1.rdz
+title Mandrake 9.1 cdrom install
+	root (hd0,0)
+	kernel /boot/vmlinuz-mdk9.1 ramdisk_size=128000 root=/dev/ram3 automatic=method:cdrom acpi=off vga=788
+	initrd /boot/cdrom-mdk9.1.rdz
+title Windows
+	rootnoverify (hd0,0)
+	chainloader +1
+title Chainload the Old MBR, that is, the original MBR
+	rootnoverify (hd0,0)
+	chainloader (hd0,7)/boot/boot.0300
+
+
+呵呵，一段小插曲：最后一段的 (hd0,7) 假定是你的 Linux 根分区。Linux 安装程序一般会把安装之前的 MBR 保存在 Linux 根分区的 /boot/boot.0300 文件中，我们正好可以借用它来引导原来的操作系统。这也许对于像 Windows XP 这样难以兼容的系统是有用的。用这种办法引导 Win XP，应当万无一失（前提是，boot.0300 文件是原来能够引导 WinXP 时的 MBR 主引导扇区的拷贝，并且你安装 Linux 的过程没有改动 WinXP 的分区，例如，只是在硬盘尾部的空闲空间中增加新的 Linux 分区）。
+
+注意在 boot 目录应当有 redhat 和 mandrake 的 vmlinuz 和 initrd 文件, 它们的名字可以是任意的, 只要保证 redhat 和 mandrake 的这些文件名不冲突（不互相覆盖）就可以了。这些文件可以从 redhat 和 mandrake 的第一张光盘中找到。在光盘上，redhat 的叫做 vmlinuz 和 initrd.img，而 mandrake 的叫做 vmlinuz 和 hd.img、network.img 等等。你需要继续从 hd.img 或者 network.img 中取出 vmlinuz 以及 hd.rdz 和 network.rdz 文件。【redhat 不需要这么麻烦, initrd.img 文件直接就在光盘上】。
+
+好了，从 DOS 下运行 grub.exe，安装菜单应当呈现在屏幕上。很爽吧？
+--------------------------------------------------------------------------------
+
+由于 Mandrake 的安装程序不能自动查找 CD2 和 CD3，所以，用 ISO 文件安装就稍微复杂了一些。对于这个问题，我喜欢这么来解决：
+
+先用 CD1 安装一个基本的系统。遇到“找不到文件”的错误，按“继续安装”。安装完成后，进入一个终端敲入命令（说明：rc3 跟正式版是一模一样的）：
+
+mkdir /mnt/cd1
+mkdir /mnt/cd2
+mkdir /mnt/cd3
+mount -o loop MandrakeLinux-9.1-rc3-CD1.i586.iso /mnt/cd1
+mount -o loop MandrakeLinux-9.1-rc3-CD2.i586.iso /mnt/cd2
+mount -o loop MandrakeLinux-9.1-rc3-CD3.i586.iso /mnt/cd3
+
+然后进入 “KDE 菜单”－－“设置”－－“Mandrake 控制中心”，需要敲入 root 口令。在左栏点击“软件管理”，然后在右栏点击标有“软件源管理器帮助您定义从何处下载软件包”这一项的图标。在出现的“配置来源”对话框中点击“添加”，在出现的“添加一个来源”对话框中，有一个“名称”栏，你输入“cd1”，还有一个“路径”栏，你输入“/mnt/cd1”，来源类型默认是“本机文件”，不要改动它。还有一个“相对 synthesis/hdlist 路径”栏，让它空着，什么也不要填写。好了，点击“确定”。
+
+对于 cd2 和 cd3，作相似的处理。
+
+完成之后，点击“保存并退出”。然后转到 Mandrake 控制中心，在“软件管理”中点击“RpmDrake 帮助您安装软件包”这一项的图标，等待一分钟，就可以看到三个 ISO 文件中的软件包，你可以选择安装了。

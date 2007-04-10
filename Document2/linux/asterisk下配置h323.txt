@@ -1,0 +1,76 @@
+
+asterisk下配置h323     
+ 
+  1、下载安装OpenH323及支持库PwLib
+http://umn.dl.sourceforge.net/sourceforge/openh323/pwlib-v1_9_0-src-tar.gz
+tar zxvf pwlib-v1_9_0-src-tar.gz
+cd pwlib_v1_9_0/
+./configure
+make
+make install
+make opt
+
+http://umn.dl.sourceforge.net/sourceforge/openh323/openh323-v1_17_1-src-tar.gz
+tar zxvf openh323-v1_17_1-src-tar.gz
+cd openh323_v1_17_1/
+./configure
+make
+make opt
+
+2、编译安装Asterisk H.323 channel
+
+设置环境变量
+export PWLIBDIR=/usr/src/pwlib_v1_9_0
+
+export OPENH323DIR=/usr/src/openh323_v1_17_1/
+
+编译安装
+cd /usr/src/asterisk-1.2.6/chnnels/h323/
+make
+make opt
+cd ..
+cd ..
+make install
+
+3、安装后步骤
+
+把生成的库复制到全局
+cp /usr/local/lib/* /usr/lib
+
+确定channel是否存在，检验安装是否成功
+ldd /usr/lib/asterisk/modules/chan_h323.so
+
+4、配置
+
+(1) 修改extension.conf
+vi /etc/asterisk/extension.conf
+
+在[default]节添加：
+exten => _1XXX,1,Dial(H323/${EXTEN})   <========这里_1XXX和下面的_1XXX可以替换为你自己想用的号码段，并在稍后h323.conf的设置中注意号码段的命名
+exten => _1XXX,3,Hangup
+;假设我们用的号码是以1为起始的四位号码
+
+(2) 复制h323.conf
+cp /usr/etc/asterisk-1.2.6/chnnels/h323/h323.conf.sample
+/etc/asterisk/h323.conf
+
+(3) 修改h323.conf
+vi /etc/asterisk/h323.conf
+
+文件最后加上：
+[1999]           <======参考extensions.conf中定义改成自己想用号码
+type=friend
+username=1999
+host=<ip addr of phone'1999'>
+context=default
+
+在[general]修改：
+加上disallow=all注释
+去掉allow=all注释
+
+5、 启动asterisk
+asterisk -vvvvvvvvvcg
+
+ 
+ 
+ 

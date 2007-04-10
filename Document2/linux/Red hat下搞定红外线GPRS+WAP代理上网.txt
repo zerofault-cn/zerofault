@@ -1,0 +1,97 @@
+Red hat下搞定红外线GPRS+WAP代理上网 
+
+--------------------------------------------------------------------------------
+ 
+日期：2006-3-23 9:22:10? 来源于：? 浏览次数：
+ 
+　笔记本：IBM THINKPAD 570E
+　　手机： 三菱M320 
+
+　　一、硬件设定。
+　　开机，按F1进BIOS，enable serial port，enable infrared。
+
+　　二、安装irda-utils0.9.14
+　　下载地址：http://sourceforge.net/project/showf...?group_id=5616
+　　解压--- -./configure ------ make all -----make install
+
+　　三、编辑红外脚本myirda
+　　vi myirda
+　　内容如下：
+
+
+#!/bin/sh
+#Start up the IrDA process and load necessary modules
+#case "$1" in
+start)
+#Start IRDA
+echo -n "Starting up the IR modules"
+modprobe irda
+modprobe ircomm
+modprobe ircomm-tty
+irattach /dev/ttyS1 -s
+echo "Done."
+echo ""
+;;
+stop)
+#KILL IRDA
+echo -n "Stopping IRDA and removing used modules"
+#Kill the irattach process and remove the modules
+killall -9 irattach
+rmmod ircomm-tty ircomm irda
+echo "Done."
+echo ""
+;;
+*)
+echo "Usage:irdastart.sh{start|stop}"
+echo ""
+exit 1
+esac
+exit 0
+保存
+chmod 755 myirda
+chmod 755 /dev/ircomm0
+开启：
+./myirda start
+关闭：
+./myirda stop
+ 
+
+
+　　四、测试：
+　　打开手机红外线，对准接收窗口，./myirda start，运行irdadump命令，应该有数据显示，否则红外设置不成功。
+
+
+五、建立拨号连接：
+　　我用gnome，
+　　系统工具----互联网配制向导-----调制解调器连接
+　　建立MODEM如下图：
+
+调制解调器设备:/dev/ircomm0
+波特率:115200
+流程控制:无
+调试解调器音量:关
+勾选"使用拨号音拨号"
+
+配制连接如下图：
+
+标签:提供商
+电话号码:*99***1#
+提供商名称:gprs
+登录名:wap
+口令:wap
+
+标签:高级
+挂线超时:600
+拨号模式:手工
+勾选"让PPP做所有验证
+勾选"将这个连接定位默认路由
+调试解调器初始字串:AT+CGDCONT=1,"IP","CMWAP"
+调制解调器端口:Modem0
+
+
+　　拨号：
+　　ifup ppp0
+　　在opera中设置代理服务器: http 10.0.0.172:80
+　　可以上网浏览了^_^
+
+ 

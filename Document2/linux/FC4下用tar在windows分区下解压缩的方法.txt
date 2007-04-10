@@ -1,0 +1,18 @@
+FC4下用tar在windows分区下解压缩时出现类似下面错误:
+"无法将所有权改为 uid 500,gid 500: 不允许的操作"
+解决办法是:
+tar -zxvf *.tar.gz --no-same-owner
+
+或者
+tar -zxvf *.tar.gz -C /root
+
+
+mplayer整合live555不能编译的解决方法
+
+如果有人使用mplayer1.0pre8试图支持网络流媒体的话，在编译的时候会出现，rtspStreamOverTCP，rtsp_port未定义的连接错误。不能正常编译。
+只需要在cfg-common.h文件中找到
+#ifdef STREAMING_LIVE555
+extern int rtspStreamOverTCP;
+extern int rtsp_port;
+#endif
+内容，然后将两个extern去掉，就可以正常编译通过。

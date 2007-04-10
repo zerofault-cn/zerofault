@@ -1,0 +1,214 @@
+
+
+IPW2100安装详细步骤说明
+http://ipw2100.sourceforge.net
+
+需要Linux kernel 2.4.23+ or 2.6.1+
+需要在编译内核的时候选上CONFIG_NET_RADIO
+检验方法,grep CONFIG_NET_RADIO \
+/lib/modules/2.6.6(你的目录可能不一样)/build/include/linux/autoconf.h
+如果回显是CONFIG_NET_RADIO 1或者y话就没有问题了
+不行就再编译吧.....(不会的兄弟就看看基础帖子吧)
+
+首先请下载hostap-driver,这个是IPW所必须的东东,提供了无线网络的WEP加密协议
+http://hostap.epitest.fi/releases/ho...r-0.1.3.tar.gz
+
+tar zxvf hostap-driver-0.1.3.tar.gz
+cd hostap-driver-0.1.3
+然后,用任意编辑器打开该目录下的Makefile文件
+将第三行的KERNEL_PATH=加上你的内核source地址
+小弟的是KERNEL_PATH=/usr/src/linux-2.6.6,你可别照抄啊
+
+保存
+然后Make
+make install
+
+hostap这部分完成了,开始主题IPW^^
+到http://ipw2100.sourceforge.net/#downloads
+下载最新的版本,小弟使用的是0.46_3
+
+照样,解压先
+这个时候把hostap加载
+modprobe hostap
+然后,在IPW的目录下make
+make install
+IPW的安装部分就搞定了,接下来需要配置一下
+还需要下载firmware,http://ipw2100.sf.net/firmware.php
+下载之后,解压到/usr/lib/hotplug/firmware/,没有firmware目录的话,自己建一个
+
+接下来,先加载sysfs
+修改/etc/fstab
+加一行
+none /sys sysfs defaults 0 0
+如果你有,就不要加了
+
+没有/sys目录就建一个
+然后重新加载一下fstab
+mount -a
+
+在/etc/sysconfig/network-scripts/下建立一个ifcfg-eth1文件(如果有了,就加ifcfg-eth2,依此类推)
+内容如下
+
+DEVICE=eth1
+ONBOOT=yes
+BOOTPROTO=dhcp
+TYPE=Wireless
+WIRELESS_ENC_KEY="你的WEP加密字符串" #从别人那儿看来的参数,可是没有成功过
+WIRELESS_ESSID="AP网络名" #这个一般不用填,会自动获取
+WIRELESS_CHANNEL=""
+WIRELESS_MODE="" #可选参数Managed,ad-hoc
+
+
+注意:以上WIRELESS_参数经小弟测试,都没有成功,实在不想再去测试
+采取了另外一种方法,如下
+
+iwconfig eth1 enc 2627F68597(你的WEP加密字符串)
+ifup eth1
+没有iwconfig的朋友,请点击此处下载
+make之后再make install就ok了,一般没有其他问题
+
+这样就行了,其他的参数应该会自动从服务端获取
+除了enc,还有几个常用的参数,essid mode channel nick
+其他参数请用iwconfig --help或者man iwconfig查看
+
+幸运的话,现在你就可以用无线网络了^^Y
+
+启动你的无线网卡,需要启动hostap和ipw2100这两个模块,每次用modprobe太麻烦了
+找到/etc/modprobe.preload
+在文件的最后依此加上
+hostap
+ipw2100
+保存后退出
+
+有WEP的朋友还需要设置一下,我们也利用脚本来完成
+/etc/sysconfig/network-scripts/ifcfg-eth1的内容修改如下
+
+DEVICE=eth1
+ONBOOT=no
+BOOTPROTO=dhcp
+TYPE=Wireless
+
+这样开机就不会自动连接,因为没有设置WEP密码也连不上,只能浪费开机时间
+这样一来,我们就需要自己写脚本来完成网卡的连接
+在/bin下建立一个新文件wlanup
+内容如下
+#!/bin/sh
+iwconfig eth1 enc 2627F68597 #填你的WEP密码
+ifup eth1
+保存后
+输入chmod +x /bin/wlanup
+
+
+找到/etc/rc.d/init.d/network文件
+
+找到以下内容
+case "$1" in
+start)
+在这下面添加一行
+. /bin/wlanup
+注意,是"点空格/bin/wlanup"
+保存退出
+
+这样启动的时候就自动加载了^^Y
+
+--------------------------------------------------------------------------------
+此帖于 04-06-10 10:37 被 cnxlx 编辑.  
+         
+
+cnxlx 
+查看公开信息 
+发悄悄话给 cnxlx 
+访问 cnxlx 的个人网站 
+查找 cnxlx 发表的更多帖子 
+
+ 04-06-10, 10:34  第 3 帖  
+cnxlx 
+ 
+ 
+ 
+
+注册会员 
+
+  注册日期: Dec 2003
+  帖子: 14 
+  精华: 2
+ 
+  
+
+NDISWrapper安装配置
+
+用其它无线网卡的朋友,别眼红Intel的
+Intel驱动不了的朋友也别着急,NDIS或许能给你们些帮助
+
+http://ndiswrapper.sourceforge.net/
+
+http://ndiswrapper.sourceforge.net/s..._chipsets.html 网卡支持列表
+
+先看看有没有你的网卡吧^^
+
+请从上面那个列表中下载你的网卡驱动,解压到一个目录
+列表中没有的网卡请找到你网卡的WINXP的驱动,注意要WINXP的!
+然后下载NDIS
+http://sourceforge.net/projects/ndiswrapper/
+现在最新版本是0.8-rc2
+
+
+安装NDIS要求有Kernel source,没有的兄弟快去搞定吧
+确定/lib/modules/<VERSION>/build是否指向你的Kernel source
+编译过内核的兄弟找不到这个文件,很可能是你编译内核的时候没有运行make modules_install
+很多内核编译文章都没提到modules_install,这下可苦了不看文档的兄弟了
+
+
+一切都确认好之后,就解压NDIS吧
+tar zxvf ndiswrapper-0.8-rc2.tar.gz
+cd ndiswrapper-0.8-rc2
+make install
+NDIS安装很简单
+输入make install就搞定了^^Y
+
+这个时候,查看你刚才解压的驱动程序目录,找到xxxxx.inf的文件
+
+然后
+ndiswrapper -i /路径/xxxx.inf
+第一次可能会提示找不到路径/etc/ndiswrapper
+没关系,实际上已经安装成功
+输入
+ndiswrapper -l
+会输出当前已经安装过的驱动
+Installed ndis drivers:
+w70n51 present
+
+w70n51是你安装的inf文件
+
+"present"则说明,当前有网卡和这个驱动匹配,正在使用该驱动!!!!!!!
+
+既然可以用,就加载吧
+modprobe ndiswrapper
+
+可以输入dmesg来确定一下
+如果看到类似下面的信息,则说明成功了
+wlan0: ndiswrapper ethernet device xx:xx:xx:xx:xx:xx
+
+
+如果没有提示"present",则使用
+ndiswrapper -e w70n51
+卸载该驱动,重新安装一次,或者换换其它驱动,总会成功的^^Y
+
+配置方法和IPW的一样,用iwconfig enc WEP密码 就行了
+ndsiwrapper有个选项可以帮你设置为自动加载
+
+ndsiwrapper -m
+这样就不用修改什么东西了
+
+需要设置WEP密码的朋友,就只有设置脚本了,方法跟我在IPW中提到的一样
+
+
+如果有朋友知道ifcfg-eth1文件的配置方法,请贴出来与大家分享^^
+
+写了老半天,都快4点了,睡觉觉去了^^
+
+
+有问题的朋友请跟贴,乐意与大家讨论Linux在笔记本上的问题
+
+
+第一次发贴,不足之处请各位见谅 

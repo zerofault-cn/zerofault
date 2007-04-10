@@ -1,0 +1,7 @@
+缺少libstdc++.so.5 ，无法运行程序
+
+FC 4 默认自带的编译器是GCC 4.0 ，而 libstdc++.so.5 是GCC 3.3 版本生成的（firefox由 GCC 3.3.2 编译），FC 4 的 GCC 4.0 生成的是 libstdc++.so.6 ，试试用 yum 能不能直接安装 libstdc++.so.5 吧。
+
+#yum install libstdc++.so.5
+
+不过，若使用了 SCIM ，安装 libstdc++.so.5 可能会和 scim 有冲突。

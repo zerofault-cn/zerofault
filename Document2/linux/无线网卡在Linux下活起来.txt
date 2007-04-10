@@ -1,0 +1,90 @@
+无线网卡在Linux下活起来  	
+为了体验无线网络的便捷性，笔者购买了一台笔记本电脑。不过由于其内置的PCI无线网卡在Linux下一直没有驱动程序，所以形同虚设。
+
+一个偶然的机会，笔者在网上发现了NdisWrapper软件项目（http:
+//ndiswrapper.sourceforge.net）。该项目并不编写Linux驱动，而是通过一个内核模块来调用Windows下的Ndis
+驱动程序，从而巧妙地解决了这些无线网卡没有Linux驱动的问题。该项目目前支持的无线网卡有Admtek 8211、Atheros
+AR5004、Broadcom 4301、Broadcom 4309、Broadcom 94306、InProcomm
+IPN2120和Intel PRO/Wireless Lan 2100。
+
+笔者的网卡为Intel PRO/Wireless Lan 2100，安装的Linux发行版本是SuSE 9.0
+Professional，内核版本是2.4.21-166，采用0.3版的NdisWrapper（该软件目前的版本是0.4版，需要2.6或
+2.4.23以上的内核支持）。该软件虽然提供了非常详尽的文档，但因为考虑到安装过程中存在的一些问题，所以在这里给出完整的安装说明。下述命令均以
+root身份执行。
+
+1.到http://prdownloads.sourceforge.net/ndiswrapper/ ndiswrapper-0.3.tar.gz?download下载ndiswrapper-0.3.tar.gz文件。
+
+2.解压缩该文件，此时会在当前目录下生成ndiswrapper目录。命令如下：
+# tar zxvf ndiswrapper-0.3.tar.gz
+
+3.进入ndiswrapper目录，编辑driver/Makefile文件，加入如下语句：
+CFLAGS
++= $(shell [ -f /lib/modules/$(shell uname
+-r)/build/include/linux/modversions.h ] && echo -DEXPORT_SYMTAB
+-DMODVERSIONS -include /lib/modules/$(shell uname
+-r)/build/include/linux/modversions.h )
+
+如果不加入上述语句，在执行“depmod -a”命令时，会出现以下错误：
+depmod: *** Unresolved symbols in /lib/modules/2.4.21-166-default/misc/ndiswrapper.o
+
+4.使用“make”命令编译ndiswrapper。
+
+5.到http://www.asus.com/pub/ASUS/nb/M2N/v12056logo_xp.zip下载Centrino无线网卡的Windows驱动程序，通过“unzip”命令解压缩。
+
+6.创建/usr/local/share/ndiswrapper目录，将.sys和.inf文件拷贝到新建目录。命令如下：
+# mkdir /usr/local/share/ndiswrapper
+# cp w70n51.sys w70n51.inf /usr/local/share/ndiswrapper
+
+7.查找无线网卡的Vendor ID和Device ID，具体做法如下：
+（1）执行“lspci | grep 2100”命令，结果如下，其中02:02.0为无线网卡的PCI ID：
+02:02.0 Network controller: Intel Corp. PRO/Wireless LAN 2100 3B Mini PCI Adapter (rev 04)
+
+（2）根据PCI ID执行“lspci -n|grep 02:02.0”命令查找无线网卡的Vendor ID和Device ID，结果如下：
+02:02.0 Class 0280: 8086:1043 (rev 04)
+
+由上可知，无线网卡对应的Vendor ID为8086，Device ID为1043。
+
+8.使用“insmod driver/ndiswrapper.o”命令调用内核模块。
+
+9.调用无线网卡的Windows驱动程序，命令如下：
+# utils/loaddriver
+
+上面代码中， 为无线网卡的Vendor ID，为Device ID，为Windows驱动程序中sys文件的全路径，为inf文件的全路径。执行下面的命令，如果不出现错误，无线网卡的灯就已经亮起：
+#utils/loaddriver 8086 2043 /usr/local/share/ndiswrapper/w70n51.sys /usr/local/share/ndiswrapper/w70n51.inf
+
+10.设置无线网络，具体步骤如下：
+（1）用“iwconfig”命令来显示无线网卡（eth0、eth1或eth2）的信息。在以下的步骤中，用ethX表示无线网卡的名称。
+（2）设置无线网卡的操作模式为Managed，命令如下：
+# iwconfig ethX mode Managed
+（3）如果采用了WEP加密，需要设置WEP密码，命令如下：
+# iwconfig ethX key password
+对40位和128位加密，password分别为6位和10位的十六进制数字。
+（4）设置SSID，其中ESSID为Access Point的SSID。命令如下：
+# iwconfig ethX essid ESSID
+
+（5）创建/etc/sysconfig/network/ifcfg-ethX文件，使得机器每次启动时，无线网卡都会自动获得IP地址。该文件内容如下：
+
+BOOTPROTO=‘dhcp’MTU=‘’REMOTE_IPADDR=‘’STARTMODE=‘onboot’UNIQUE=‘’
+
+
+11.通过下面的命令启动无线网卡：
+#ifconfig ethX up
+
+12.最后将上述的配置自动化，使得开机自动启动无线网卡。具体分为以下几个步骤：
+（1）使用下面的命令将ndiswrapper.o文件拷贝到系统的内核模块目录下：
+# cp driver/ndiswrapper.*o /lib/modules/$(uname -r)/misc
+
+（2）使用“depmod -a”命令更新系统的模块信息。
+
+（3）拷贝loaddriver文件到某个目录（比如/usr/local/bin）下。命令如下：
+# cp utils/loaddriver /usr/local/bin
+
+（4）拷贝inf和sys文件到某个目录（比如/usr/local/share/ndiswrapper）下。命令如下： # cp bcmwl5.sys bcmwl5.inf /usr/local/share/ndiswrapper
+
+（5）使用下面的命令为无线网卡创建别名：
+#alias ethX=ndiswrapper
+
+（6）修改/etc/modprobe.conf文件，增加如下语句，在开机时自动调用NdisWrapper：
+post-install ethX /usr/local/bin/loaddriver 8086 1043 /usr/local/share/ndiswrapper/*.sys /usr/local/share/ndiswrapper/*.inf
+
+至此，整个设置完成。以后每次进入Linux时，无线网卡就会被激活，并自动获得IP地址。这样就可以在Linux下使用无线网卡的Windows驱动自由地使用Centrino笔记本的无线网络了。
