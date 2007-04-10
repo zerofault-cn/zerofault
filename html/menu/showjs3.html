@@ -1,0 +1,51 @@
+<title>首尾相连的滚动新闻</title><div id="marquees">
+  <a href="javascript:">1,你可曾有过无数的梦想，</a><br>
+  <br>
+  <a href="javascript:">2,却在时光的流逝里幻灭 </a><br>
+  <br>
+  <a href="javascript:">3,你可曾对未来期待憧憬，</a><br>
+  <br>
+  <a href="javascript:">4,却在成长的岁月中迷失</a><br>
+  <br>
+</div> 
+<script language="JavaScript">
+
+marqueesHeight=200;
+stopscroll=false;
+
+with(marquees){
+  style.width=0;
+  style.height=marqueesHeight;
+  style.overflowX="visible";
+  style.overflowY="hidden";
+  noWrap=true;
+  onmouseover=new Function("stopscroll=true");
+  onmouseout=new Function("stopscroll=false");
+}
+document.write('<div id="templayer" style="position:absolute;z-index:1;visibility:hidden"></div>');
+
+preTop=0; currentTop=0; 
+
+function init(){
+  templayer.innerHTML="";
+  while(templayer.offsetHeight<marqueesHeight){
+    templayer.innerHTML+=marquees.innerHTML;
+  }
+  marquees.innerHTML=templayer.innerHTML+templayer.innerHTML;
+  setInterval("scrollUp()",20);//越大越慢
+}
+document.body.onload=init;
+
+function scrollUp(){
+  if(stopscroll==true) return;
+  preTop=marquees.scrollTop;
+  marquees.scrollTop+=1;
+  if(preTop==marquees.scrollTop){
+    marquees.scrollTop=templayer.offsetHeight-marqueesHeight;
+    marquees.scrollTop+=1;
+  }
+}
+</script> 
+
+
+<div style="position: absolute; bottom: 10; right: 10; width: 180; height: 50;cursor:hand;z-index:100000;font:menu;background:infobackground;border:1 solid #999999;padding:4px;"><div style="padding-top:5px;padding-bottom:5px;"><center>评论：<font color=red>0</font> 篇，点击：<font color=green>22</font> 次</center></div> <input type="button" name="Button" value="查看代码" onClick= 'window.location = "view-source:" + window.location.href'> <input type="button" name="Button" value="发表评论" onClick="window.open('view.asp?action=js&js_id=2')" ></div>

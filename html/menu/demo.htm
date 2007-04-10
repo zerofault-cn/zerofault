@@ -1,0 +1,167 @@
+<html>
+<head>
+<title>菜单演示</title>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+<link id="style0" rel="stylesheet" href="|menu/menu.css" type="text/css">
+
+<script language="javascript" src="themes/readThemes.js">
+</script>
+
+<style type="text/css">
+body {
+	margin-top : 0px;
+	margin-bottom : 0px;
+	margin-left : 0px;
+	margin-right : 0px;
+	border:0px;
+}
+</style>
+
+<script type="text/javascript" src="js/poslib.js"></script>
+<script type="text/javascript" src="js/scrollbutton.js"></script>
+<script type="text/javascript" src="js/menu4.js"></script>
+<script language="javascript">
+var popuped = false;
+
+function test(){
+	alert(Menu.prototype.cssFile);
+	window.status="";
+}
+var mb = new MenuBar;
+var rb1,rb2,rb3;
+function createMenu() {	
+	var tmp;
+	//FileMenu
+	var fileMenu = new Menu();
+	
+
+	fileMenu.add(tmp = new MenuItem( "新建" ) );
+	tmp.action=new Function("test()");
+	fileMenu.add(tmp = new MenuSeparator() );
+	fileMenu.add(tmp = new MenuItem( "打开",null) );
+	
+	
+	fileMenu.add(tmp = new MenuItem( "保存" ,null) );
+	tmp.disabled=true;
+
+	fileMenu.add(tmp = new	 MenuItem( "另存为" ,null) );
+	tmp.disabled=true;
+
+	fileMenu.add(tmp = new MenuSeparator() );
+
+	fileMenu.add(tmp = new MenuItem( "打印预览",null,"images/preview.gif" ) );	
+	fileMenu.add(tmp = new	 MenuItem( "打印" ,null,"images/print.gif") );
+	tmp.disabled=true;
+
+	fileMenu.add(tmp = new MenuSeparator() );
+
+	fileMenu.add(tmp = new MenuItem("退出(X)") );
+	tmp.mnemonic="x";
+	tmp.shortcut = "Ctrl + X";
+	mb.add(tmp = new MenuButton( "文件(F)", fileMenu ));
+	tmp.mnemonic="f";
+	
+	//设备资产
+	var edit = new Menu();
+	edit.add(tmp = new MenuItem("剪切"));
+
+	edit.add(tmp = new MenuItem("复制"));
+	edit.add(tmp = new MenuSeparator() );
+	edit.add(tmp = new MenuItem("粘贴"));
+	edit.add(tmp = new MenuItem("查找") );
+	mb.add(tmp = new MenuButton( "编辑(E)", edit ));
+	tmp.mnemonic="e";
+	
+
+	
+	//系统设置
+	var sysMenu = new Menu();
+	sysMenu.add(tmp = new MenuItem( "选项..." ) );
+	
+
+	//界面风格
+	var styleMenu = new Menu();
+	rb1 = new RadioButtonMenuItem("XP", false, "styleGroup", onRadioChanged,null,"default");	
+	rb2 = new RadioButtonMenuItem("默认", false, "styleGroup", onRadioChanged,null,"blue");
+	//设置当前的风格为选定
+	if(_theme=="default"){
+		rb1.checked=true;
+	}else if(_theme=="blue"){
+		rb2.checked=true;
+	}
+	styleMenu.add(rb1);
+	styleMenu.add(rb2);
+
+	sysMenu.add( new MenuItem("界面风格", null, null, styleMenu) );
+
+
+	sysMenu.add(tmp = new MenuSeparator() );
+	sysMenu.add(tmp = new MenuItem( "其它选项" ) );
+
+	mb.add(tmp = new MenuButton( "设置(S)", sysMenu ));
+	tmp.mnemonic="s";
+	//帮助
+	var helpMenu = new Menu();
+	helpMenu.add(tmp = new MenuItem( "索引" ) );
+	helpMenu.add(tmp = new MenuSeparator() );
+	helpMenu.add(tmp = new MenuItem("帮助维护") );
+	helpMenu.add(tmp = new MenuSeparator() );
+	helpMenu.add(tmp = new MenuItem("关于本软件",null,"images/help.gif") );
+	tmp.action= new Function("alert('关于')");
+	mb.add(tmp = new MenuButton( "帮助(H)", helpMenu ));
+	tmp.mnemonic="h";
+	
+	return mb.create();
+}
+
+//界面风格选择
+function onRadioChanged() {	
+	var text;
+	if (rb1.checked){
+		text=rb1.value;
+	}else if (rb2.checked){
+		text=rb2.value;
+	}
+	if(text==_theme){
+		return;
+	}
+	_changeThemes(text);
+	_loadTheme();
+	window.location.reload();
+}
+
+
+function init() {
+	menuDiv.appendChild(createMenu());
+}
+	
+function pop(a){
+	
+	Win=window.open(a,"","toolbar=0,location=0,directories=0,status=1,menubar=0,resizable=0");
+	var windowX = window.screen.availWidth ;
+	var windowY = window.screen.availHeight;
+	Win.resizeTo(windowX,windowY);
+	Win.moveTo(0,0);
+	Win.focus();
+	setTimeout("Win.poped()",10);
+}
+
+function poped(){
+	document.getElementById("linkdiv").innerHTML="";
+	document.getElementById("linkdiv").innerHTML="怎么样？效果不错吧。";
+	
+}
+
+</script>
+</head>
+<body onload="init()" style="overflow:hidden;" scrolling="no" >
+
+<div id="menuDiv" style="width:100%;border-top:0px;border-bottom:2px groove;white-space:nowrap;bakcground:Menu">
+</div>
+<br>
+<div id="linkdiv" align="center">
+<input type="button" onclick="pop('demo.htm')" value="弹出新窗口查看在新窗口中隐藏IE的菜单和工具条。">
+</div>
+</body>
+
+</html>
