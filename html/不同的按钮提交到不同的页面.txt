@@ -1,4 +1,0 @@
-<form name="form1">
-<input type="submit" onClick="form1.action='first.asp';form1.submit()">
-<input type="submit" onClick="form1.action='second.asp';form1.submit()">
-</form>
