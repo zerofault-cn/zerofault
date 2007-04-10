@@ -1,6 +1,10 @@
 <?php
 define('IN_MATCH', true);
-
+define('IN_MATCH', true);
+header("Expires:  " . gmdate("D, d M Y H:i:s") . "GMT");
+header("Last-Modified: " . gmdate("D, d M Y H:i:s") . "GMT");
+header("Cache-Control: no-cache, must-revalidate");
+header("Pragma: no-cache");
 $root_path="./";
 include_once($root_path."config.php");
 include_once($root_path."functions.php");
@@ -61,7 +65,7 @@ elseif(''!=$sid)
 	case 'r_comment':
 	case 'c_comment':
 		$side_arr=array('l_comment'=>1,'r_comment'=>-1,'c_comment'=>0);
-		$sql="select * from comment where sid='".$sid."' and side=".$side_arr[$field]." order by id desc limit ".$pageitem;
+		$sql="select * from comment where sid='".$sid."' and side=".$side_arr[$field]." and content!='' order by id desc limit ".$pageitem;
 		$result=$db->sql_query($sql);
 		while($row=$db->sql_fetchrow($result))
 		{
@@ -97,7 +101,9 @@ else
 	$blogID=getBlogID();
 	if(''!=$blogID)
 	{
-		echo "document.commentForm.username.value='".$blogID."';\n";
+		echo "document.pkForm_l.username.value='".$blogID."';\n";
+		echo "document.pkForm_r.username.value='".$blogID."';\n";
+		echo "document.pkForm_c.username.value='".$blogID."';\n";
 	}
 }
 $db->sql_close();
