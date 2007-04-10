@@ -1,0 +1,82 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312" />
+<title>小灰</title>
+</head>
+
+<body>
+
+<form name="form1" method="post">
+<select id="s1" name="s1"></select>
+<select id="s2" name="s2"></select>
+<select id="s3" name="s3"></select>
+<select id="s4" name="s4"></select>
+</form>
+<script language="JavaScript">
+<!--
+function LianDong(arr, sel)
+{
+ var me = this;
+ this.$ = function(o)
+ {
+  return document.getElementById(o);
+ }
+
+ this.sub = function (i, pid)
+ {
+  for (var j=i+1; j<sel.length; j++)
+  {
+   me.$(sel[j]).length = 0;
+   me.$(sel[j]).options[0] = new Option("请选择", "");
+  }
+  for ( var j = 0; j < arr.length; j++)
+  {
+   if (arr[j][1] == pid)
+   {
+    me.$(sel[i+1]).options[me.$(sel[i+1]).length] = new Option(arr[j][2], arr[j][0]);
+   }
+  }
+ }
+
+ this.init = function()
+ {
+  me.sub(-1,"root");
+  for (var i=0; i<sel.length-1; i++)
+  {
+   me.$(sel[i]).onchange = function()
+   {
+    var i;
+    for (i=0; me.$(sel[i])!=this; i++);
+    me.sub(i, me.$(sel[i]).value);
+   }
+  }
+ }
+
+ this.init();
+}
+
+var array=new Array();
+array[0]=new Array("华南地区","root","华南地区");
+array[1]=new Array("华北地区","root","华北地区");
+array[2]=new Array("上海","华南地区","上海");
+array[3]=new Array("广东","华南地区","广东");
+array[4]=new Array("徐家汇","上海","徐家汇");
+array[5]=new Array("普托","上海","普托");
+array[6]=new Array("广州","广东","广州");
+array[7]=new Array("湛江","广东","湛江");
+array[8]=new Array("湛江1","湛江","湛江1");
+array[9]=new Array("湛江2","湛江","湛江2");
+array[10]=new Array("广州1","广州","广州1");
+array[11]=new Array("广州2","广州","广州2");
+
+var select = new Array("s1","s2","s3","s4");
+
+var liandong=new LianDong(array, select)
+//-->
+</script>
+
+</body>
+</html>
+
+

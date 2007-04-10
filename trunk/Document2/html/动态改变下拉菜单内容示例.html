@@ -1,0 +1,64 @@
+<HTML>
+<HEAD>
+<TITLE>动态改变下拉菜单内容示例</TITLE>
+</HEAD>
+<SCRIPT LANGUAGE=javascript>
+
+//定义一个二维数组aArray,用于存放城市名称。
+var aCity=new Array();
+aCity[0]=new Array();
+aCity[1]=new Array();
+aCity[2]=new Array();
+aCity[3]=new Array();
+//赋值，每个省份的城市存放于数组的一行。
+aCity[0][0]="--请选择--";
+aCity[1][0]="--请选择--";
+aCity[1][1]="广州市";
+aCity[1][2]="深圳市";
+aCity[1][3]="珠海市";
+aCity[1][4]="汕头市";
+aCity[1][5]="佛山市";
+aCity[2][0]="--请选择--";
+aCity[2][1]="长沙市";
+aCity[2][2]="株州市";
+aCity[2][3]="湘潭市";
+aCity[3][0]="--请选择--";
+aCity[3][1]="杭州市";
+aCity[3][2]="苏州市";
+aCity[3][3]="温州市";
+function ChangeCity()
+{
+var i,iProvinceIndex;
+iProvinceIndex=document.frm.optProvince.selectedIndex;
+iCityCount=0;
+while (aCity[iProvinceIndex][iCityCount]!=null)
+ iCityCount++;
+ //计算选定省份的城市个数
+document.frm.optCity.length=iCityCount;//改变下拉菜单的选项数
+for (i=0;i<=iCityCount-1;i++)//改变下拉菜单的内容
+document.frm.optCity[i]=new Option(aCity[iProvinceIndex][i]); 
+document.frm.optCity.focus();
+} 
+
+</SCRIPT>
+
+<BODY ONfocus=ChangeCity()>
+<H3>选择你所在的省份及城市</H3>
+<FORM NAME="frm">
+<P>省份：
+<SELECT NAME="optProvince" SIZE="1" ONCHANGE=ChangeCity()>
+<OPTION>--请选择--</OPTION>
+<OPTION>广东省</OPTION>
+<OPTION>湖南省</OPTION>
+<OPTION>浙江省</OPTION>
+</SELECT>
+</P>
+<P>城市：
+<SELECT NAME="optCity" SIZE="1">
+<OPTION>--请选择--</OPTION> 
+</SELECT>
+</P>
+</FORM>
+</BODY>
+</HTML> 
+

@@ -1,0 +1,12 @@
+IE6.0、FF1.06+：
+clientWidth = width + padding
+clientHeight = height + padding
+offsetWidth = width + padding + border
+offsetHeight = height + padding + border
+IE5.0/5.5：
+clientWidth = width - border
+clientHeight = height - border
+offsetWidth = width
+offsetHeight = height
+(需要提一下：CSS中的margin属性，与clientWidth、offsetWidth、clientHeight、offsetHeight均无关)
+
