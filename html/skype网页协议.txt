@@ -1,0 +1,6 @@
+呼叫此好友：skype:username?call
+发送即时消息：skype:username?chat
+加为好友：skype:username?add
+语音邮件：skype:username?voicemail
+查看资料：skype:username?userinfo
+发送文件：skype:username?sendfile

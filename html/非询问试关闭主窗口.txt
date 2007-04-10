@@ -1,0 +1,3 @@
+非询问试关闭主窗口 
+window.opener=null;(null  可以替换为任何字符)
+window.close();

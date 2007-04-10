@@ -1,0 +1,3 @@
+<input type="file" style="position:absolute;filter:alpha(opacity=0)" hideFocus onpropertychange="document.getElementById('ice').value=this.value"/>
+<input type="text" style="width:152px" id="ice"/>aaa
+<img src="http://community.csdn.net/logo/images/ajax-in-action.JPG" height="20" align="absmiddle"/>
