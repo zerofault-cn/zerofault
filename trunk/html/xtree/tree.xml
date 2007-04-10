@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="gb2312"?>
+<TreeNode>
+	<TreeNode text="一" value="1" action="javascript:alert('0');" radio="true"/>	
+	<TreeNode text="无限加载" radio="true" src="tree.xml"/>
+	<TreeNode text="三" checkbox="true" value="3" checked="true">
+		<TreeNode text="三.一" >
+			<TreeNode text="三.一.一" >
+				<TreeNode text="三.一.一.一"/>
+			</TreeNode>
+		</TreeNode>
+	</TreeNode>	
+</TreeNode>
