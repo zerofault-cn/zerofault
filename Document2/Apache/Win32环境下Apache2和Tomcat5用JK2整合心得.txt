@@ -1,0 +1,92 @@
+Win32环境下Apache2和Tomcat5用JK2整合心得
+作者：yi5转贴自：yi5_yuyu点击数：3文章录入： yuyu3007 
+
+Win32环境下Apache2和Tomcat5用JK2整合心得
+
+
+JK2 下载地址:
+
+http://apache.linuxforum.net/dist/jakarta/tomcat-connectors/jk2/binaries/win32/jakarta-tomcat-connectors-jk2.0.4-win32-apache2.0.49.zip
+
+这里假设已经安装好了Apache2和Tomcat5
+
+
+
+1
+把jk2.properties文件放到${tomcat_home}/conf下，
+
+把workers2.properties文件放到${apache2}/conf下，
+
+其中jk2.properties缺省时全部注释掉了，也无所谓, 就用下载到的缺省的就行.(也可以
+
+加上如下一行，request.tomcatAuthentication=false, 具体作用我还不是很清楚
+
+workers2.properties里应该注意至少包含以下三部分：
+
+[shm:] 
+
+info=Scoreboard. Required for reconfiguration and status with multiprocess servers 
+
+file=E:\Program Files\Apache Software Foundation\Tomcat 5.0\temp\jk2.shm 
+
+size=1048576 
+
+
+[channel.socket:localhost:8009] 
+
+info=Ajp13 forwarding over socket 
+
+tomcatId=localhost:8009 
+
+
+# Map webapps to the Web server uri space 
+
+[uri:/jsp-examples/*]
+
+[uri:/servlets-examples/*]
+
+
+第一部分Windows下文件名路径用”/”或”\”都无所谓（并不像网上有些说法）而且该行可省；
+
+第二部分照写就可以了，这表示JK2用端口8009来工作
+
+第三部分是一个URI映射表，把要用Tomcat来解释的路径按照例子写好，需要时可自己添加。
+
+
+2
+下载到的mod_jk2.so文件放到${apache2}\modules目录下, 
+
+把${apache2}\conf下的httpd.conf里加上一行:
+
+LoadModule jk2_module modules/mod_jk2.so
+
+
+
+3
+重起Apache2, 重起Tomcat5, 
+
+总结一下，其实只需要mod_jk2.so一个文件，其他的jk2.properties，workers2.properties都可以自己建立。
+
+测试方法：
+
+打开http://localhost:8080/jsp-examples/，应能正常访问(通过Tomcat5)
+
+把端口号删掉，即成为http://localhost/jsp-examples/, 还能正常访问(通过Apache2).
+
+
+4
+如果出了问题，检查以下可能:
+
+* 是否把workers2.properties文件正确的放到${apache2}\conf下了
+
+* 检查系统参数里JAVA_HOME等是否正确设定
+
+* 有时造成Apache2无法启动是可能在httpd.conf里加入了非法的行，检查是否只添加了LoadModule jk2_module modules/mod_jk2.so一行。
+
+* 有的机器可能80, 8080, 8009这些端口已经被占用，可以关闭占用的程序， 或改动缺省端口的方法解决。(把IIS, Tomcat服务先停止，用netstat –an 命令可以看到哪些端口被占用)
+
+
+和IIS5的整合相比较，Apache2的整合简单多了，主要是IIS5用到的注册表更改这里不需要了，但是workers2.properties文件的位置不能随便放置了，只能在Apache2的配置目录即和httpd.conf一样的目录${apache2}\conf里。
+(感谢以前摸索这种整合的同行们的努力，本文是个人经验的总结，转载请注明出处）
+yanqlv
+2004/09/24

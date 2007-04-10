@@ -1,0 +1,134 @@
+
+Windows下用Apache 配置WAP + OTA全攻略
+
+
+所用到的软件：
+
+Apache：很好的网络服务器程序，提供对wap的支持，可以到网上搜索一下就很容易找到的。
+Opera（可选）：支持WAP的浏览器，可以测试自己做的wap页，建议安装。
+
+
+首先安装Apache，比如装在D:\Program Files\下，接下来对Apache进行必要的配置，在D:\Program Files\Apache Group\Apache\conf 目录下,可以用记事本打开mime.types，在配置文件中加入这么一行（如果有了就不用加了）： 
+
+text/vnd.wap.wml wml 
+
+这样你的Apache已经配置好了WAP。 
+如果你要配置全面一些的话还要加上以下几行（已经有了就不用加了）： 
+
+image/vnd.wap.wbmp wbmp 
+text/vnd.wap.wmls wmls 
+application/vnd.wap.wmlc wmlc 
+application/vnd.wap.wmlscriptc wmlsc 
+text/vnd.wap.wmlscript wsc 
+text/vnd.wap.wmlscript wmlscript 
+
+修改好以后，别忘了重新启动Apache。 
+现在你可以做个WAP网页测试一下，不会做？那你把下面这些代码复制到记事本，然后保存为index.wml就可以了
+-------------------------------------------------------------
+//从下面开始
+
+<?xml version="1.0" encoding="GB2312"?>
+<!DOCTYPE wml PUBLIC "-//WAPFORUM//DTD WML 1.1//EN" "http://www.wapforum.org/DTD/wml_1.1.xml";>
+<wml>
+<card id="menu" title="灰色轨迹">
+<p>
+深情总是太浓<br/>
+时光总是太匆匆<br/>
+谁说人生难懂<br/>
+只不过是一场梦<br/>
+<b>-------------------</b><br/>
+</p>
+<p>
+<a href="java.wml">JAVA下载</a><br/>
+<a href="picture1.wml">图片下载</a><br/>
+<a href="mid1.wml">铃声下载</a><br/>
+<a href="about.wml">关于本站</a><br/>
+</p>
+<p>
+<b>-------------------</b><br/>
+? 灰色轨迹2003</p>
+</card>
+</wml>
+
+//结束
+-----------------------------------------------------------
+
+index.wml做好了就放到D:\Program Files\Apache Group\Apache\htdocs目录下（主目录），（可以把那些象index.html.pt-br这样的文件放 
+到别的文件夹里，这些都是没用的），然后在浏览器里输http://127.0.0.1/index.wml,(Apache一定要开着)就会出现一个文件下载框，（说明你成功了），不过 
+因为IE不支持WAP，所以不能显示这网页了，你可以用Opera浏览器，他对WAP的支持很好，如果你以后真的要开发wap，那这个是少不了了。
+如果你想在浏览器里直接输http://127.0.0.1就可以打开网页，那你还要配置D:\Program Files\Apache Group\Apache\conf目录下 
+的httpd.conf文件，同样可以用记事本打开，找到下面这段：
+
+<IfModule mod_dir.c> 
+DirectoryIndex index.html index.htm index.shtml index.cgi 
+</IfModule> 
+
+DirectoryIndex就是设置默认打开文件的类型，在最后加上index.wml。 
+修改完成，重启Apache。 
+
+
+如果要实现java下载，也就是所谓的OTA，那还要修改"mime.types"文件，加上如下两行： 
+application/java-archive jar 
+text/vnd.sun.j2me.app-descriptor jad 
+
+如果已经存在jar文件的类型，只不过描述是application/x-archive，那修改一下就行了。
+
+现在WAP，OTA都搞定了，该测试OTA的时候了，请按下面的步骤：
+1：先做一个可以下载JAVA的WAP网页（把要下载的软件也放到htdocs目录下，其中一个是JAD文件，另外一个是JAR文件）
+
+<?xml version="1.0" encoding="GB2312"?>
+<!DOCTYPE wml PUBLIC "-//WAPFORUM//DTD WML 1.1//EN" "http://www.wapforum.org/DTD/wml_1.1.xml";>
+<wml>
+<card id="menu" title="灰色轨迹">
+<p>JAVA下载</p>
+<p>
+<a href="LockemUp.jad">软件名称</a><br/>
+</p>
+<p>
+?灰色轨迹2003</p>
+<p>
+<b>--------------</b><br/>
+<a href="index.wml">[返回首页]</a><br/>
+</p>
+</card>
+</wml>
+————————————————————————————————
+保存为index.wml放在htdocs目录下，网页作好最好先用opera浏览器测试一下，因为一个大小写不同都不行。
+说明：“<a href="LockemUp.jad">软件名称</a><br/>”这一句里的LockemUp.jad就是你要下载的软件的JAD文件名，改成你自己的。
+
+2：拨号上网，查一下自己的IP，win98/me可以用WINIPCFG获的，用记事本打开要下载软件的JAD文件，如下：
+
+MIDlet-Version: 1.0.6
+MIDlet-Vendor: GameLoft S.A.
+MIDlet-Jar-URL:http://61.174.50.194/LockemUp.jar
+MIDlet-Description: Puzzle Game
+MicroEdition-Profile:MIDP-1.0
+MicroEdition-Configuration:CLDC-1.0
+MIDlet-1: LockemUp, , LockemUp/LockemUp
+MIDlet-Name: LockemUp
+MIDlet-Jar-Size: 27304
+------------------------------------
+
+要修改这一句：MIDlet-Jar-URL:http://61.174.50.194/LockemUp.jar
+这里比如你的IP是61.174.50.194 ，要下载的文件是LockemUp.jar，保存。
+
+3：用手机输入网址http://61.174.50.194 (这里比如你的IP是61.174.50.194)
+看见了吗？你的网站出现在你的手机里了（如下）：
+------------------------
+梦回天堂
+
+JAVA下载
+
+软件名称
+
+?梦回天堂2003
+
+--------------
+
+[返回首页]
+---------------------------
+点击软件名称就可以下载了:)
+
+
+最后说明：如果你是拨号上网的，由于是动态IP，那你每次想下载JAVA的时候都要查你的IP，然后修改JAD文件（别忘了同时改index.wml文件 ），当然你的手机也要重输网址了，虽然有点麻烦，但能玩到好玩的游戏这点付出还是值的。我的网站里有好多好玩的游戏：）有什么问题可以到留言本里给我留言。
+

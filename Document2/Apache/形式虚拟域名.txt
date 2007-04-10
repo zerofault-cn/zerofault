@@ -1,0 +1,19 @@
+形式虚拟域名(阿见)
+这是关于网站提供的“username@server”的虚拟域名服务。IE的FTP功能，就是在浏览器的地址栏中键入“password:username@server”IE就会自动登陆FTP服务器；而在Http1.1协议中，也规定了Http访问授权功能，形式同样为“password:username@server”，其中“password:”可以省略，也就是访问“bbs@zphp.com”实际上是以bbs的身份访问“zphp.com”这个服务器。 那么我们只是需要将具体的URI传送给PHP程序，在数据库中搜索出真实的URL重定向就可以了。
+  问题关建在于首页先我们需要制作一个传送URI的页面（作为服务器的默认文档，一般命名为index.htm）
+
+以下只是个演示:
+<script language=”vbscript”> 
+  msgbox document.location.href
+</script>
+或
+<script language=”javascript”>
+  alert(document.location.href); //或alert(document.location);
+</script>
+  地址输入http://127.0.0.1//index.htm 或http://abc@127.0.0.1//index.htm 是同一页面
+但document.location的值不同,分别为:
+  http://@127.0.0.1//index.htm和http:abc@//127.0.0.1//index.htm
+  以下htm面利用vbscript让浏览器重载面页sql.php，参数为url,在sql.php中可看到url变量
+<script language=”vbscript”> 
+  document.location = “sql.php?url=” + document.location.href
+</script> 

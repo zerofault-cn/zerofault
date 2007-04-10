@@ -1,0 +1,56 @@
+(转)利用apache的proxy-ajp做apache-2.2.0与tomcat-5.0.30的结合
+thinking - by - 2006-3-11 14:53:00       今天偶然在网上发现apache-2.2.0增加了一个proxy-ajp模块，看了看它可以完全代替原来的mod-jk把tomcat和apache结合到一起。于是我就下载下来试了一下真的很方便比原来的方法简单多了。下面就说明一下我的安装步骤。tomcat和jdk的安装网上太多的教程我在这里就不再介绍了。大家可以去查看其他的教程。
+
+首先从http://www.apache.org的网站上下载apache-2.2.0的源代码。apache-2.2.0的版本做了些改动大家需要注意一下。首先apr和apr-util需要单独的安装，还有配置文件由原来的一个变为现在的多个不过这样也好，可以清楚的知道那部分配置在那个配置文件里方便修改。安装步骤如下：
+
+解压apache的源代码
+# tar xvjf httpd-2.2.0.tar.bz2
+# cd httpd-2.2.0
+
+安装apr
+# cd srclib/apr
+# ./configure --prefix=/server/soft/apr
+# make
+# make install
+
+安装apr-util
+# cd ../apr-util/
+# ./configure --prefix=/server/soft/apr-util \
+    --with-apr=/server/soft/apr
+# make
+# make install
+# cd ../../
+
+安装apache
+# ./configure --prefix=/server/soft/apache \
+    --enable-so \
+    --enable-rewrite=share \
+    --enable-proxy=share \
+    --enable-proxy-ajp=share \
+    --enable-dav=share \
+    --with-apr=/server/soft/apr \
+    --with-apr-util=/server/soft/apr-util/
+# make 
+# make install
+
+# /server/soft/apache/bin/httpd -l //看看是否有proxy-ajp这个模块
+如果有这个模块证明proxy-ajp模块安装成功，可以进行与tomcat的结合了。
+
+# vi /server/soft/apache/conf/httpd.conf
+把"＃i nclude conf/extra/httpd-vhosts.conf" 前面的"#"去掉然后编辑
+/server/soft/apache/conf/extra/httpd-vhosts.conf
+
+编辑为如下的代码
+<VirtualHost *:80>
+    ServerAdmin admin@easyea.com
+    ProxyPass / ajp://localhost:8009/
+    ProxyPassReverse / ajp://localhost:8009/
+    ServerName localhost
+    ServerAlias www.easyea.com
+    ErrorLog logs/easyea.com-error_log
+    CustomLog logs/easyea.com-access_log common
+</VirtualHost>
+
+然后先启动tomcat，再启动apache 
+# /server/soft/apache/bin/apachctl start 
+打开浏览器看看是否看到了tomcat的欢迎页面，如果是说明apache和tomcat的结合成功 

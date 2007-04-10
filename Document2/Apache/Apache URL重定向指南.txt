@@ -1,0 +1,1230 @@
+Apache URL重定向指南
+
+2004-01-28 21:01:11 Engelschall 阅读7980 611 次
+ 
+ 
+mod_rewrite入门
+Apache mod_rewrite模块是一个处理URL而又极为复杂的模块，使用mod_rewrite你可处理所有和URL有关的问题，你所付出的就是花时间去了解mod_rewrite的复杂架构，一般初学者都很难实时理解mod_rewrite的用法，有时Apache专家也要mod_rewrite来发展Apache的新功能。 
+
+换句话说，当你成功使用mod_rewrite做到你期望的东西，就不要试图再接触mod_rewrite了，因为mod_rewrite的功能实在过于强大。本章的例子会介绍几个成功的例子给你摸索，不像FAQ形式般把你的问题解答。
+
+实用解决方法
+这里还有很多未被发掘的解决方法，请大家耐心地学习如何使用mod_rewrite。 
+
+注意: 由于各人的服务器的配置都有所不同，你可能要更改设定来测试以下例子，例如使用mod_alias和mod_userdir时要加上[PT]，或者使用.htaccess来重定向而非主设定文件等，请尽量理解各例子如何运作，不要生吞活剥地背诵。
+ 
+
+URL规划
+正规URL
+描述: 
+
+在某些网页服务器中，一项资源可能会有数个URL，通常都会公布一正规URL(即真正发放的URL)，其它URL都会被视为快捷方式或只供内部使用等，无论用户在使用快捷方式或正规URL，用户最后所重定向到的URL必需为正规。 
+
+方法: 
+
+我们可将所有非正规的URL重定向至正规的URL中，以下例子把非正规的「/~user」换成正规的「/u/user」，并且加上「/」号结尾。. 
+
+RewriteRule   ^/~([^/]+)/?(.*)    /u/$1/$2  [R]
+RewriteRule   ^/([uge])/([^/]+)$  /$1/$2/   [R]
+ 
+
+正规主机名称
+描述: 
+
+(省略) 
+
+方法: 
+
+RewriteCond %{HTTP_HOST}   !^fully\.qualified\.domain\.name [NC]
+RewriteCond %{HTTP_HOST}   !^$
+RewriteCond %{SERVER_PORT} !^80$
+RewriteRule ^/(.*)         http://fully.qualified.domain.name:%{SERVER_PORT}/$1 [L,R]
+RewriteCond %{HTTP_HOST}   !^fully\.qualified\.domain\.name [NC]
+RewriteCond %{HTTP_HOST}   !^$
+RewriteRule ^/(.*)         http://fully.qualified.domain.name/$1 [L,R]
+ 
+
+DocumentRoot被移动
+描述: 
+
+URL的「/」通常都会映像到DocumentRoot上，但DocumentRoot有时并非重始就限定在某个目录上，它可能只是一个或多个目录的对照而矣。例如我们的内联网址为/e/www/ (WWW的主目录)和/e/sww/ (内联网的主目录)等等，因为所有的网页资料都放在/e/www/目录内，我们要确定所有内嵌的图像都能正确显示。 
+
+方法: 
+
+我们只要把「/」重定向至「/e/www/」，用mod_rewrite来解决比用mod_alias来解决更为简洁，因为URL别名只会比较URL的前部分，但重定向因可能涉及另一台服务器而需要不同的前缀部分(前缀部分已受DocumentRoot限制)，所以mod_rewrite是最好的解决方法:: 
+
+RewriteEngine on
+RewriteRule   ^/$  /e/www/  [R]
+ 
+
+结尾斜线问题
+描述: 
+
+每个网主都曾受到结尾斜线问题的折磨，若在URL中没有结尾斜线，服务器就会认为URL无效并返回错误，因为服务器会根据/~quux/foo去寻找foo这个档案，而非显示这个目录。其实很多时候，这问题应留待用户自己加「/」去解决，但有时你也可以完成步骤。例如你做了多次URL重定向，而目的地为一个CGI程序。 
+
+方法: 
+
+最直观的方法就是令Apache自动加上「/」，使用外部重定向令浏览器能正确找到档案，若我们只做内部重定向，就只能正确显示目录页，在这目录页的图像文件会因相对URL的问题而找不到。例如我们请求/~quux/foo/index.html的image.gif时，重定向后会变成/~quux/image.gif。 
+
+所以我们应使用以下方法:
+
+RewriteEngine  on
+RewriteBase    /~quux/
+RewriteRule    ^foo$  foo/  [R]
+ 
+
+这方法也适用于.htaccess文件在各目录内设定，但这设定会覆盖原先主配置文件。
+
+RewriteEngine  on
+RewriteBase    /~quux/
+RewriteCond    %{REQUEST_FILENAME}  -d
+RewriteRule    ^(.+[^/])$           $1/  [R]
+ 
+
+利用均一的URL版面规划网络群组
+描述: 
+
+所有的网页服务器都有相同的URL版面，即无论用户向哪个主机发出请求URL，用户都会接收到相同的网页，使URL独立于服务器本身。我们的目的在于如何在Apache服务器不能响应时，都能有一个常规(而又独立于服务器运作)的网页传送给用户，设立网络群组可将这网页送至远程。 
+
+方法: 
+
+首先，服务器需要一外部文件把网站的用户、用户组及其它资料存储，这文件的格式如下 
+
+user1  server_of_user1
+user2  server_of_user2
+:      :
+把以上资料存入map.xxx-to-host。然后指示服务器把URL重定向，由 
+
+/u/user/anypath
+/g/group/anypath
+/e/entity/anypath
+至
+
+http://physical-host/u/user/anypath
+http://physical-host/g/group/anypath
+http://physical-host/e/entity/anypath
+当服务器接收到不正确的URL时，服务器会跟随以下指示把URL映像到特定的档案(若URL并没有相对应的记录，就会重定向至 server0 上):
+
+RewriteEngine on
+ 
+RewriteMap      user-to-host   txt:/path/to/map.user-to-host
+RewriteMap     group-to-host   txt:/path/to/map.group-to-host
+RewriteMap    entity-to-host   txt:/path/to/map.entity-to-host
+ 
+RewriteRule   ^/u/([^/]+)/?(.*)   http://${user-to-host:$1|server0}/u/$1/$2
+RewriteRule   ^/g/([^/]+)/?(.*)  http://${group-to-host:$1|server0}/g/$1/$2
+RewriteRule   ^/e/([^/]+)/?(.*) http://${entity-to-host:$1|server0}/e/$1/$2
+ 
+RewriteRule   ^/([uge])/([^/]+)/?$          /$1/$2/.www/
+RewriteRule   ^/([uge])/([^/]+)/([^.]+.+)   /$1/$2/.www/$3\
+ 
+
+把主目录移到新的网页服务器
+描述: 
+
+有很多网主都有以下问题:在升级时把所有用户主目录由旧的服务器移到新的服务器上。 
+
+方法: 
+
+使用mod_rewrite可以简单地解决这问题，把所有/~user/anypathURL重定向至http://newserver/~user/anypath。 
+
+RewriteEngine on
+RewriteRule   ^/~(.+)  http://newserver/~$1  [R,L]
+ 
+
+结构化用户主目录
+描述: 
+
+拥有大量用户的主机通常都会把用户目录规划好，将这些目录归入一个父目录中，然后再将用户的第一个字母作该用户的父目录，例如/~foo/anypath将会是/home/f/foo/.www/anypath，而/~bar/anypath就是/home/b/bar/.www/anypath。 
+
+方法: 
+
+按以下指令将URL直接对映到档案系统中。 
+
+RewriteEngine on
+RewriteRule   ^/~(([a-z])[a-z0-9]+)(.*)  /home/$2/$1/.www$3
+ 
+
+重新组织档案系统
+描述: 
+
+这是一个麻烦的例子:在不用更动现有目录结构下，使用RewriteRules来显示整个目录结构。背景：net.sw是一个装满Unix免费软件的资料夹，并以下列结构存储： 
+
+drwxrwxr-x   2 netsw  users    512 Aug  3 18:39 Audio/
+drwxrwxr-x   2 netsw  users    512 Jul  9 14:37 Benchmark/
+drwxrwxr-x  12 netsw  users    512 Jul  9 00:34 Crypto/
+drwxrwxr-x   5 netsw  users    512 Jul  9 00:41 Database/
+drwxrwxr-x   4 netsw  users    512 Jul 30 19:25 Dicts/
+drwxrwxr-x  10 netsw  users    512 Jul  9 01:54 Graphic/
+drwxrwxr-x   5 netsw  users    512 Jul  9 01:58 Hackers/
+drwxrwxr-x   8 netsw  users    512 Jul  9 03:19 InfoSys/
+drwxrwxr-x   3 netsw  users    512 Jul  9 03:21 Math/
+drwxrwxr-x   3 netsw  users    512 Jul  9 03:24 Misc/
+drwxrwxr-x   9 netsw  users    512 Aug  1 16:33 Network/
+drwxrwxr-x   2 netsw  users    512 Jul  9 05:53 Office/
+drwxrwxr-x   7 netsw  users    512 Jul  9 09:24 SoftEng/
+drwxrwxr-x   7 netsw  users    512 Jul  9 12:17 System/
+drwxrwxr-x  12 netsw  users    512 Aug  3 20:15 Typesetting/
+drwxrwxr-x  10 netsw  users    512 Jul  9 14:08 X11/
+我们打算把这个资料夹公开，而且希望直接地显示这资料夹的目录结构，但是我们又不想更改现有目录架构来迁就，加上我们打算开放给FTP，所以不想加入任何网页或CGI程序到这个资料夹中。
+
+方法: 
+
+本方法分为两部分：第一部份是编写一系列的CGI程序来显示目录结构，这例子会把CGI和刚才的资料夹放进/e/netsw/.www/： 
+
+-rw-r--r--   1 netsw  users    1318 Aug  1 18:10 .wwwacl
+drwxr-xr-x  18 netsw  users     512 Aug  5 15:51 DATA/
+-rw-rw-rw-   1 netsw  users  372982 Aug  5 16:35 LOGFILE
+-rw-r--r--   1 netsw  users     659 Aug  4 09:27 TODO
+-rw-r--r--   1 netsw  users    5697 Aug  1 18:01 netsw-about.html
+-rwxr-xr-x   1 netsw  users     579 Aug  2 10:33 netsw-access.pl
+-rwxr-xr-x   1 netsw  users    1532 Aug  1 17:35 netsw-changes.cgi
+-rwxr-xr-x   1 netsw  users    2866 Aug  5 14:49 netsw-home.cgi
+drwxr-xr-x   2 netsw  users     512 Jul  8 23:47 netsw-img/
+-rwxr-xr-x   1 netsw  users   24050 Aug  5 15:49 netsw-lsdir.cgi
+-rwxr-xr-x   1 netsw  users    1589 Aug  3 18:43 netsw-search.cgi
+-rwxr-xr-x   1 netsw  users    1885 Aug  1 17:41 netsw-tree.cgi
+-rw-r--r--   1 netsw  users     234 Jul 30 16:35 netsw-unlimit.lst
+DATA/子目录就是刚才的资料夹，net.sw内的软件会经rdist程序来自动更新。第二部份将这资料夹和新建立的CGI、网页配合，我们想将DATA/稳藏起来，而在用户请求不同URL时执行正确的CGI程序来显示。先将/net.sw/这URL重定向至/e/netsw：
+
+RewriteRule  ^net.sw$       net.sw/        [R]
+RewriteRule  ^net.sw/(.*)$  e/netsw/$1
+ 
+
+第一条规则纯粹补加URL结尾的「/」号，而第二条规则就是把URL重定向。之后将下列配置存入/e/netsw/.www/.wwwacl：
+
+Options       ExecCGI FollowSymLinks Includes MultiViews 
+ 
+RewriteEngine on
+ 
+#  we are reached via /net.sw/ prefix
+RewriteBase   /net.sw/
+ 
+#  first we rewrite the root dir to 
+#  the handling cgi script
+RewriteRule   ^$                       netsw-home.cgi     [L]
+RewriteRule   ^index\.html$            netsw-home.cgi     [L]
+ 
+#  strip out the subdirs when
+#  the browser requests us from perdir pages
+RewriteRule   ^.+/(netsw-[^/]+/.+)$    $1                 [L]
+ 
+#  and now break the rewriting for local files
+RewriteRule   ^netsw-home\.cgi.*       -                  [L]
+RewriteRule   ^netsw-changes\.cgi.*    -                  [L]
+RewriteRule   ^netsw-search\.cgi.*     -                  [L]
+RewriteRule   ^netsw-tree\.cgi$        -                  [L]
+RewriteRule   ^netsw-about\.html$      -                  [L]
+RewriteRule   ^netsw-img/.*$           -                  [L]
+ 
+#  anything else is a subdir which gets handled
+#  by another cgi script
+RewriteRule   !^netsw-lsdir\.cgi.*     -                  [C]
+RewriteRule   (.*)                     netsw-lsdir.cgi/$1
+ 
+
+提示:
+
+1.        留意第四部份的L(last)旗标及代表不用更改的('-')符号 
+
+2.        留意最后部份第一条规则的 ! (not)字符，及 C (chain) 链接符 
+
+3.        留意最后一条规则代表全部更新的语法 
+
+以Apache的mod_imap取代NCSA的imagemap
+描述: 
+
+很多人都想顺利地把旧的NCSA服务器迁至新的Apache服务器，所以我们都想将旧的NCSA imagemap顺利转换到Apache的mod_imap，问题是imagemap已被很多超级链接连系着，但旧的imagemap是存储在/cgi-bin/imagemap/path/to/page.map，而在Apache却是放在/path/to/page.map。 
+
+方法: 
+
+我们只要将「/cgi-bin/」移除便可： 
+
+RewriteEngine  on
+RewriteRule    ^/cgi-bin/imagemap(.*)  $1  [PT]
+ 
+
+在多个目录下搜寻网页
+描述: 
+
+MultiViews亦不能指示Apache在多个目录里搜寻网页。 
+
+方法: 
+
+请参看以下指令。 
+
+RewriteEngine on
+ 
+#   first try to find it in custom/...
+#   ...and if found stop and be happy:
+RewriteCond         /your/docroot/dir1/%{REQUEST_FILENAME}  -f
+RewriteRule  ^(.+)  /your/docroot/dir1/$1  [L]
+ 
+#   second try to find it in pub/...
+#   ...and if found stop and be happy:
+RewriteCond         /your/docroot/dir2/%{REQUEST_FILENAME}  -f
+RewriteRule  ^(.+)  /your/docroot/dir2/$1  [L]
+ 
+#   else go on for other Alias or ScriptAlias directives,
+#   etc.
+RewriteRule   ^(.+)  -  [PT]
+ 
+
+跟据URL设定环境变量
+描述: 
+
+在页面间传递讯息可以用CGI程序完成，但你却不想用CGI而用URL来传递。 
+
+方法: 
+
+以下指令将变量及其值抽出URL外，然后记入自设的环境变量中，该变量可由XSSI或CGI存取。例如把/foo/S=java/bar/转换为/foo/bar/，然后把「java」写入环境变量「STATUS」。 
+
+RewriteEngine on
+RewriteRule   ^(.*)/S=([^/]+)/(.*)    $1/$3 [E=STATUS:$2]
+ 
+
+虚拟用户主机
+描述: 
+
+你只想根据DNS记录将www.username.host.domain.com的请求直接对映到档案系统，放弃使用Apache的虚拟主机功能。 
+
+方法: 
+
+只有HTTP/1.1请求才可用以下方法做到，我们可根据HTTP Header把http://www.username.host.com/anypath重定向到/home/username/anypath： 
+
+RewriteEngine on
+RewriteCond   %{HTTP_HOST}                 ^www\.[^.]+\.host\.com$
+RewriteRule   ^(.+)                        %{HTTP_HOST}$1          [C]
+RewriteRule   ^www\.([^.]+)\.host\.com(.*) /home/$1$2
+ 
+
+将远程请求重定向至另一个用户主目录
+描述: 
+
+当用者的主机不属于自己的网域ourdomain.com时，就将请求重定向至www.somewhere.com</CODE。< dd> 
+
+方法: 
+
+请参看以下指令: 
+
+RewriteEngine on
+RewriteCond   %{REMOTE_HOST}  !^.+\.ourdomain\.com$
+RewriteRule   ^(/~.+)         http://www.somewhere.com/$1 [R,L]
+ 
+
+将失败的网页请求重定向至另一部网页服务器
+描述: 
+
+这是一般常见的疑问，最直观的方法就是用ErrorDocument加上CGI-scripts更改目标URL，但我们亦可使用mod_rewrite来实行(这方法的效率却比CGI程序更低)。 
+
+方法: 
+
+再一次留意CGI会是更有效率的解决方法，而mod_rewrite的好处在于更安全及易设置: 
+
+RewriteEngine on
+RewriteCond   /your/docroot/%{REQUEST_FILENAME} !-f
+RewriteRule   ^(.+)                             http://webserverB.dom/$1
+ 
+
+以上例子会限制所有网页在DocumentRoot才能成功，我们可加多一点指令来改善：
+
+RewriteEngine on
+RewriteCond   %{REQUEST_URI} !-U
+RewriteRule   ^(.+)          http://webserverB.dom/$1
+ 
+
+这例子使用了mod_rewrite预计URL改动的功能，所有URL都可以安全地重定向至新的目录，但在速度慢的主机上不宜使用这方法，因为采用本例会拖慢服务器工作，当然你可以在高速CPU主机上使用。
+
+更广泛的URL重定向
+描述: 
+
+我们想重定向有控制字符的URL，例如"url#anchor"等，通常Apache会用uri_escape()函数来隔除这些控制字符，因此你不可以直接用mod_rewrite来重定向这类URL。 
+
+方法: 
+
+我们要使用一NPH-CGI(NPH = non-parseable headers)程序处理重定向工作，因为NPH-CGI不会隔除控制字符。首先，我们先利用xredirect： 
+
+RewriteRule ^xredirect:(.+) /path/to/nph-xredirect.cgi/$1 \
+            [T=application/x-httpd-cgi,L]
+ 
+
+强制性将所有URL加上xredirect，然后将URL导入nph-xredirect.cgi中，程序代码如下：
+
+#!/path/to/perl
+##
+##  nph-xredirect.cgi -- NPH/CGI script for extended redirects
+##  Copyright (c) 1997 Ralf S. Engelschall, All Rights Reserved. 
+##
+ 
+$| = 1;
+$url = $ENV{'PATH_INFO'};
+ 
+print "HTTP/1.0 302 Moved Temporarily\n";
+print "Server: $ENV{'SERVER_SOFTWARE'}\n";
+print "Location: $url\n";
+print "Content-type: text/html\n";
+print "\n";
+print "<html>\n";
+print "<head>\n";
+print "<title>302 Moved Temporarily (EXTENDED)</title>\n";
+print "</head>\n";
+print "<body>\n";
+print "<h1>Moved Temporarily (EXTENDED)</h1>\n";
+print "The document has moved <a HREF=\"$url\">here</a>.<p>\n";
+print "</body>\n";
+print "</html>\n";
+ 
+##EOF##
+ 
+
+这样可将所有能或不能直接用mod_rewrite来重定向的URL，经CGI来完成了。例如你可将某URL重定向至新闻服务器
+
+RewriteRule ^anyurl  xredirect:news:newsgroup
+ 
+
+注意：你不需在每条规则后加上[R]或[R,L]。
+
+多样化资料夹存取
+描述: 
+
+若你曾浏览http://www.perl.com/CPAN (CPAN = Comprehensive Perl Archive Network)，它会把你重定向至其中一个最近你主机地区的FTP服务器，事实上这应该叫多样化FTP存取。CPAN用CGI来实行这服务，这次我们用mod_rewrite。 
+
+<STRONG方法:< strong> 
+
+由mod_rewrite 3.0.0开始可使用「ftp:」重定向至FTP服务器，用户主机的地区可依URL的顶层域名来决定，而顶层域名及FTP服务器位置的对照就存入某档案中。 
+
+RewriteEngine on
+RewriteMap    multiplex                txt:/path/to/map.cxan
+RewriteRule   ^/CxAN/(.*)              %{REMOTE_HOST}::$1                 [C]
+RewriteRule   ^.+\.([a-zA-Z]+)::(.*)$  ${multiplex:$1|ftp.default.dom}$2  [R,L]
+ 
+
+ 
+
+##
+##  map.cxan -- Multiplexing Map for CxAN
+##
+ 
+de        ftp://ftp.cxan.de/CxAN/
+uk        ftp://ftp.cxan.uk/CxAN/
+com       ftp://ftp.cxan.com/CxAN/
+ :
+##EOF##
+ 
+
+在某段时间执行不同的重定向
+描述n: 
+
+很多网主仍用CGI随着不同时间将URL重定向至不同的网页。 
+
+方法: 
+
+mod_rewrite设有很多以TIME_xxx开始的环境变量，将这些时间环境变量进行字符串比较可决定重定向至哪个网页： 
+
+RewriteEngine on
+RewriteCond   %{TIME_HOUR}%{TIME_MIN} >0700
+RewriteCond   %{TIME_HOUR}%{TIME_MIN} <1900
+RewriteRule   ^foo\.html$             foo.day.html
+RewriteRule   ^foo\.html$             foo.night.html
+ 
+
+在07:00-19:00就显示foo.day.html，其余时间则显示foo.html
+
+保留旧有文件的URL
+描述: 
+
+更改文件的扩展名后，如何让旧的URL能对映到这新的文件。 
+
+方法: 
+
+把旧的URL用mod_rewrite重定向至新的文件，若有正确的新文件就对映到这文件，没有的话便对映到原有文件。 
+
+#   backward compatibility ruleset for 
+#   rewriting document.html to document.phtml
+#   when and only when document.phtml exists
+#   but no longer document.html
+RewriteEngine on
+RewriteBase   /~quux/
+#   parse out basename, but remember the fact
+RewriteRule   ^(.*)\.html$              $1      [C,E=WasHTML:yes]
+#   rewrite to document.phtml if exists
+RewriteCond   %{REQUEST_FILENAME}.phtml -f
+RewriteRule   ^(.*)$ $1.phtml                   [S=1]
+#   else reverse the previous basename cutout
+RewriteCond   %{ENV:WasHTML}            ^yes$
+RewriteRule   ^(.*)$ $1.html
+ 
+
+内容控制
+由旧的档名转到新的文件名 (档案系统)
+描述: 
+
+假设我们将bar.html改名为foo.html，而我们又想保留旧有的URL，甚至不想给用户新的URL去连至这新档案。 
+
+方法: 
+
+将旧的档案对映到新的档案： 
+
+RewriteEngine  on
+RewriteBase    /~quux/
+RewriteRule    ^foo\.html$  bar.html
+ 
+
+由旧的档名转到新的档名 (URL)
+描述: 
+
+和刚才的例子一样，我们把bar.html改名为foo.html，但这次我们想直接将用户的网页重定向至新的文件，即浏览器的URL位置有所改变。 
+
+方法: 
+
+强制性将URL对映到新的URL： 
+
+RewriteEngine  on
+RewriteBase    /~quux/
+RewriteRule    ^foo\.html$  bar.html  [R]
+ 
+
+由浏览器种类控制内容
+描述: 
+
+一个出色的网页应能支持各种浏览器，例如我们要把完整版网页传送至Netscape，但就要传送文字版至Lynx。 
+
+方法: 
+
+由于浏览器没有提供Apache格式的浏览器种类资料，所以我们不可使用内文转换(mod_negotiation)，我们必需用「User-Agent」决定浏览器种类。例如User-Agent为「Mozilla/3」就把「foo.html」重定向至「foo.NS.html」；若浏览器为「Lynx」或「Mozilla」就重定向至foo.20.html，其它种类的浏览器则导向至foo.32.html： 
+
+RewriteCond %{HTTP_USER_AGENT}  ^Mozilla/3.*
+RewriteRule ^foo\.html$         foo.NS.html          [L]
+ 
+RewriteCond %{HTTP_USER_AGENT}  ^Lynx/.*         [OR]
+RewriteCond %{HTTP_USER_AGENT}  ^Mozilla/[12].*
+RewriteRule ^foo\.html$         foo.20.html          [L]
+ 
+RewriteRule ^foo\.html$         foo.32.html          [L]
+ 
+
+动态本地档案更新(经镜像网站)
+描述: 
+
+你想将某个主机的网页连结到你的网页目录，若被连结的是FTP服务器，你可用mirror程序将最新的档案移到自己的主机上，我们可用webcopy经网页服务器HTTP把档案下载，但这方法有一坏处：只有在执行webcopy时才能更新档案。更好的办法就是在发出请求时立刻找寻最新的档案来源，然后实时下载到自己主机中。 
+
+方法: 
+
+利用Proxy Throughput(flag [P])把远程网页甚至整个网站建立一直接对照。 
+
+RewriteEngine  on
+RewriteBase    /~quux/
+RewriteRule    ^hotsheet/(.*)$  http://www.tstimpreso.com/hotsheet/$1  [P]
+ 
+
+ 
+
+RewriteEngine  on
+RewriteBase    /~quux/
+RewriteRule    ^usa-news\.html$   http://www.quux-corp.com/news/index.html  [P]
+ 
+
+动态镜像档案更新(经本主机)
+描述: 
+
+(省略) 
+
+方法: 
+
+RewriteEngine on
+RewriteCond   /mirror/of/remotesite/$1           -U 
+RewriteRule   ^http://www\.remotesite\.com/(.*)$ /mirror/of/remotesite/$1
+ 
+
+由内部网络更新档案
+描述: 
+
+为了安全起见，我们建立了两个网页服务器，第一个是公开的(www.quux-corp.dom)，第二个则是内部使用，受防火墙所保护，一切资料及网站维护都经这个服务器进行，现在我们想令外部服务器能存取穿过防火墙，获取内部服务器已最新的档案。 
+
+方法: 
+
+我们只容许外部服务器从内部获取资料，一切直接获取的请求都受防火墙拒绝，先在防火墙设定： 
+
+ALLOW Host www.quux-corp.dom Port >1024 --> Host www2.quux-corp.dom Port 80  
+DENY  Host *                 Port *     --> Host www2.quux-corp.dom Port 80
+ 
+
+把以上的字句译成设置防火墙的语法，然后在mod_rewrite透过proxy throughput获取最新资料：
+
+RewriteRule ^/~([^/]+)/?(.*)          /home/$1/.www/$2
+RewriteCond %{REQUEST_FILENAME}       !-f
+RewriteCond %{REQUEST_FILENAME}       !-d
+RewriteRule ^/home/([^/]+)/.www/?(.*) http://www2.quux-corp.dom/~$1/pub/$2 [P]
+ 
+
+平衡服务器负荷
+描述: 
+
+我们想将www[0-5].foo.com这六部服务器的工作量平均分配。 
+
+方法: 
+
+当然你会有很多方法达成，一般都会使用DNS，介绍完DNS后再会讨论mod_rewrite如何实行。 
+
+1.     DNS循环机制 
+
+最简单的方法就是使用BIND的循环机制，e.g.
+
+www0   IN  A       1.2.3.1
+www1   IN  A       1.2.3.2
+www2   IN  A       1.2.3.3
+www3   IN  A       1.2.3.4
+www4   IN  A       1.2.3.5
+www5   IN  A       1.2.3.6
+ 
+
+然后加上以下记录：
+
+www    IN  CNAME   www0.foo.com.
+       IN  CNAME   www1.foo.com.
+       IN  CNAME   www2.foo.com.
+       IN  CNAME   www3.foo.com.
+       IN  CNAME   www4.foo.com.
+       IN  CNAME   www5.foo.com.
+       IN  CNAME   www6.foo.com.
+ 
+
+在DNS层面上这种设定当然是错的，但我们正好使用了BIND的循环机制，BIND接收到www.foo.com的解析请求，然后BIND就会循环地解析作www0-www6，这样就能将用户分配到不同的服务器上，但请记得这不是一个完美的方案，因为其它的域名服务器会快取你服务器的域名解析结果，所以每一次解析到wwwX.foo.com时，都会有很多用户同时被派往同一部服务器，但整体来说已能平衡各服务器的负荷。
+
+2.     DNS平衡负荷 
+
+在http://www.stanford.edu/~schemers/docs/lbnamed/lbnamed.html有一个lbnamed程序专责利用域名服务器把用户请求分发到不同的服务器上，这是一个用Perl 5及其它附助工具写的复杂DNS工作量分配程序。
+
+3.     代理服务器循环建立机制 
+
+我们使用mod_rewrite及其代理服务器网页记录(proxy throughput)功能，先在DNS加入www0.foo.com即是www.foo.com的记录。
+
+www    IN  CNAME   www0.foo.com.
+ 
+
+然后将www0.foo.com变为一独立代理服务器，即是建立一专责代理服务器，然后把请求分流至五部不同的服务器(www1-www5)，我们用lb.pl及以下mod_rewrite规则：
+
+RewriteEngine on
+RewriteMap    lb      prg:/path/to/lb.pl
+RewriteRule   ^/(.+)$ ${lb:$1}           [P,L]
+ 
+
+lb.pl的程序代码：
+
+#!/path/to/perl
+##
+##  lb.pl -- load balancing script
+##
+ 
+$| = 1;
+ 
+$name   = "www";     # the hostname base
+$first  = 1;         # the first server (not 0 here, because 0 is myself) 
+$last   = 5;         # the last server in the round-robin
+$domain = "foo.dom"; # the domainname
+ 
+$cnt = 0;
+while (<STDIN>) {
+    $cnt = (($cnt+1) % ($last+1-$first));
+    $server = sprintf("%s%d.%s", $name, $cnt+$first, $domain);
+    print "http://$server/$_";
+}
+ 
+##EOF##
+ 
+
+注意，www0.foo.com这服务器的工作量仍然和以前一样高，但这服务器的工作就只是负责分流，所有SSI、CGI、ePerl请求都由其它服务器执行，所以整体的工作量已经减少了许多。
+
+4.     硬件/TCP循环机制 
+
+可Cisco的LocalDirector在TCP/IP网络层上把用户请求分流，事实上这种分流程序已刻烙在是电路板上。与硬件有关的解决方法通常都需要大量的金钱，但执行效率就会是最高。
+
+将请求重定向至代理服务器
+描述: 
+
+(省略) 
+
+方法: 
+
+##
+##  apache-rproxy.conf -- Apache configuration for Reverse Proxy Usage
+##
+ 
+#   server type
+ServerType           standalone
+Port                 8000
+MinSpareServers      16
+StartServers         16
+MaxSpareServers      16
+MaxClients           16
+MaxRequestsPerChild  100
+ 
+#   server operation parameters
+KeepAlive            on
+MaxKeepAliveRequests 100
+KeepAliveTimeout     15
+Timeout              400
+IdentityCheck        off
+HostnameLookups      off
+ 
+#   paths to runtime files
+PidFile              /path/to/apache-rproxy.pid
+LockFile             /path/to/apache-rproxy.lock
+ErrorLog             /path/to/apache-rproxy.elog
+CustomLog            /path/to/apache-rproxy.dlog "%{%v/%T}t %h -> %{SERVER}e URL: %U"
+ 
+#   unused paths
+ServerRoot           /tmp
+DocumentRoot         /tmp
+CacheRoot            /tmp
+RewriteLog           /dev/null
+TransferLog          /dev/null
+TypesConfig          /dev/null
+AccessConfig         /dev/null
+ResourceConfig       /dev/null
+ 
+#   speed up and secure processing
+<Directory />
+Options -FollowSymLinks -SymLinksIfOwnerMatch
+AllowOverride None
+</Directory>
+ 
+#   the status page for monitoring the reverse proxy
+<Location /apache-rproxy-status>
+SetHandler server-status
+</Location>
+ 
+#   enable the URL rewriting engine
+RewriteEngine        on
+RewriteLogLevel      0
+ 
+#   define a rewriting map with value-lists where
+#   mod_rewrite randomly chooses a particular value
+RewriteMap     server  rnd:/path/to/apache-rproxy.conf-servers
+ 
+#   make sure the status page is handled locally
+#   and make sure no one uses our proxy except ourself
+RewriteRule    ^/apache-rproxy-status.*  -  [L]
+RewriteRule    ^(http|ftp)://.*          -  [F]
+ 
+#   now choose the possible servers for particular URL types
+RewriteRule    ^/(.*\.(cgi|shtml))$  to://${server:dynamic}/$1  [S=1]
+RewriteRule    ^/(.*)$               to://${server:static}/$1  
+ 
+#   and delegate the generated URL by passing it 
+#   through the proxy module
+RewriteRule    ^to://([^/]+)/(.*)    http://$1/$2   [E=SERVER:$1,P,L]
+ 
+#   and make really sure all other stuff is forbidden 
+#   when it should survive the above rules...
+RewriteRule    .*                    -              [F]
+ 
+#   enable the Proxy module without caching
+ProxyRequests        on
+NoCache              *
+ 
+#   setup URL reverse mapping for redirect reponses
+ProxyPassReverse  /  http://www1.foo.dom/
+ProxyPassReverse  /  http://www2.foo.dom/
+ProxyPassReverse  /  http://www3.foo.dom/
+ProxyPassReverse  /  http://www4.foo.dom/
+ProxyPassReverse  /  http://www5.foo.dom/
+ProxyPassReverse  /  http://www6.foo.dom/
+ 
+
+ 
+
+##
+##  apache-rproxy.conf-servers -- Apache/mod_rewrite selection table
+##
+ 
+#   list of backend servers which serve static
+#   pages (HTML files and Images, etc.)
+static    www1.foo.dom|www2.foo.dom|www3.foo.dom|www4.foo.dom
+ 
+#   list of backend servers which serve dynamically 
+#   generated page (CGI programs or mod_perl scripts)
+dynamic   www5.foo.dom|www6.foo.dom
+ 
+
+建立新的档案型态及服务
+描述: 
+
+你可在网上找到大量华丽的CGI程序，但又因这些CGI的艰难用法，很多人都不愿意使用，甚至Apache Action Handler的MIME类型亦On the net there are a lot of nifty CGI programs. But their usage is usually boring, so a lot of webmaster don't use them. Even Apache's Action handler feature for MIME-types is only appropriate when the CGI programs don't need special URLs (actually PATH_INFO and QUERY_STRINGS) as their input. First, let us configure a new file type with extension .scgi (for secure CGI) which will be processed by the popular cgiwrap program. The problem here is that for instance we use a Homogeneous URL Layout (see above) a file inside the user homedirs has the URL /u/user/foo/bar.scgi. But cgiwrap needs the URL in the form /~user/foo/bar.scgi/. The following rule solves the problem: 
+
+RewriteRule ^/[uge]/([^/]+)/\.www/(.+)\.scgi(.*) ...
+... /internal/cgi/user/cgiwrap/~$1/$2.scgi$3  [NS,T=application/x-http-cgi]
+ 
+
+Or assume we have some more nifty programs: wwwlog (which displays the access.log for a URL subtree and wwwidx (which runs Glimpse on a URL subtree). We have to provide the URL area to these programs so they know on which area they have to act on. But usually this ugly, because they are all the times still requested from that areas, i.e. typically we would run the swwidx program from within /u/user/foo/ via hyperlink to
+
+/internal/cgi/user/swwidx?i=/u/user/foo/
+which is ugly. Because we have to hard-code both the location of the area and the location of the CGI inside the hyperlink. When we have to reorganise or area, we spend a lot of time changing the various hyperlinks.
+
+Solution: 
+
+The solution here is to provide a special new URL format which automatically leads to the proper CGI invocation. We configure the following: 
+
+RewriteRule   ^/([uge])/([^/]+)(/?.*)/\*  /internal/cgi/user/wwwidx?i=/$1/$2$3/
+RewriteRule   ^/([uge])/([^/]+)(/?.*):log /internal/cgi/user/wwwlog?f=/$1/$2$3
+ 
+
+Now the hyperlink to search at /u/user/foo/ reads only
+
+HREF="*"
+which internally gets automatically transformed to
+
+/internal/cgi/user/wwwidx?i=/u/user/foo/
+The same approach leads to an invocation for the access log CGI program when the hyperlink :log gets used.
+
+From Static to Dynamic
+Description: 
+
+How can we transform a static page foo.html into a dynamic variant foo.cgi in a seemless way, i.e. without notice by the browser/user. 
+
+Solution: 
+
+We just rewrite the URL to the CGI-script and force the correct MIME-type so it gets really run as a CGI-script. This way a request to /~quux/foo.html internally leads to the invokation of /~quux/foo.cgi. 
+
+RewriteEngine  on
+RewriteBase    /~quux/
+RewriteRule    ^foo\.html$  foo.cgi  [T=application/x-httpd-cgi]
+ 
+
+On-the-fly Content-Regeneration
+Description: 
+
+Here comes a really esoteric feature: Dynamically generated but statically served pages, i.e. pages should be delivered as pure static pages (read from the filesystem and just passed through), but they have to be generated dynamically by the webserver if missing. This way you can have CGI-generated pages which are statically served unless one (or a cronjob) removes the static contents. Then the contents gets refreshed. 
+
+Solution: 
+
+This is done via the following ruleset: 
+
+RewriteCond %{REQUEST_FILENAME}   !-s
+RewriteRule ^page\.html$          page.cgi   [T=application/x-httpd-cgi,L]
+ 
+
+Here a request to page.html leads to a internal run of a corresponding page.cgi if page.html is still missing or has filesize null. The trick here is that page.cgi is a usual CGI script which (additionally to its STDOUT) writes its output to the file page.html. Once it was run, the server sends out the data of page.html. When the webmaster wants to force a refresh the contents, he just removes page.html (usually done by a cronjob).
+
+Document With Autorefresh
+Description: 
+
+Wouldn't it be nice while creating a complex webpage if the webbrowser would automatically refresh the page every time we write a new version from within our editor? Impossible? 
+
+Solution: 
+
+No! We just combine the MIME multipart feature, the webserver NPH feature and the URL manipulation power of mod_rewrite. First, we establish a new URL feature: Adding just :refresh to any URL causes this to be refreshed every time it gets updated on the filesystem. 
+
+RewriteRule   ^(/[uge]/[^/]+/?.*):refresh  /internal/cgi/apache/nph-refresh?f=$1
+ 
+
+Now when we reference the URL
+
+/u/foo/bar/page.html:refresh
+this leads to the internal invocation of the URL
+
+/internal/cgi/apache/nph-refresh?f=/u/foo/bar/page.html
+The only missing part is the NPH-CGI script. Although one would usually say "left as an exercise to the reader" ;-) I will provide this, too.
+
+#!/sw/bin/perl
+##
+##  nph-refresh -- NPH/CGI script for auto refreshing pages
+##  Copyright (c) 1997 Ralf S. Engelschall, All Rights Reserved. 
+##
+$| = 1;
+ 
+#   split the QUERY_STRING variable
+@pairs = split(/&/, $ENV{'QUERY_STRING'});
+foreach $pair (@pairs) {
+    ($name, $value) = split(/=/, $pair);
+    $name =~ tr/A-Z/a-z/;
+    $name = 'QS_' . $name;
+    $value =~ s/%([a-fA-F0-9][a-fA-F0-9])/pack("C", hex($1))/eg;
+    eval "\$$name = \"$value\"";
+}
+$QS_s = 1 if ($QS_s eq '');
+$QS_n = 3600 if ($QS_n eq '');
+if ($QS_f eq '') {
+    print "HTTP/1.0 200 OK\n";
+    print "Content-type: text/html\n\n";
+    print "&lt;b&gt;ERROR&lt;/b&gt;: No file given\n";
+    exit(0);
+}
+if (! -f $QS_f) {
+    print "HTTP/1.0 200 OK\n";
+    print "Content-type: text/html\n\n";
+    print "&lt;b&gt;ERROR&lt;/b&gt;: File $QS_f not found\n";
+    exit(0);
+}
+ 
+sub print_http_headers_multipart_begin {
+    print "HTTP/1.0 200 OK\n";
+    $bound = "ThisRandomString12345";
+    print "Content-type: multipart/x-mixed-replace;boundary=$bound\n";
+    &print_http_headers_multipart_next;
+}
+ 
+sub print_http_headers_multipart_next {
+    print "\n--$bound\n";
+}
+ 
+sub print_http_headers_multipart_end {
+    print "\n--$bound--\n";
+}
+ 
+sub displayhtml {
+    local($buffer) = @_;
+    $len = length($buffer);
+    print "Content-type: text/html\n";
+    print "Content-length: $len\n\n";
+    print $buffer;
+}
+ 
+sub readfile {
+    local($file) = @_;
+    local(*FP, $size, $buffer, $bytes);
+    ($x, $x, $x, $x, $x, $x, $x, $size) = stat($file);
+    $size = sprintf("%d", $size);
+    open(FP, "&lt;$file");
+    $bytes = sysread(FP, $buffer, $size);
+    close(FP);
+    return $buffer;
+}
+ 
+$buffer = &readfile($QS_f);
+&print_http_headers_multipart_begin;
+&displayhtml($buffer);
+ 
+sub mystat {
+    local($file) = $_[0];
+    local($time);
+ 
+    ($x, $x, $x, $x, $x, $x, $x, $x, $x, $mtime) = stat($file);
+    return $mtime;
+}
+ 
+$mtimeL = &mystat($QS_f);
+$mtime = $mtime;
+for ($n = 0; $n &lt; $QS_n; $n++) {
+    while (1) {
+        $mtime = &mystat($QS_f);
+        if ($mtime ne $mtimeL) {
+            $mtimeL = $mtime;
+            sleep(2);
+            $buffer = &readfile($QS_f);
+            &print_http_headers_multipart_next;
+            &displayhtml($buffer);
+            sleep(5);
+            $mtimeL = &mystat($QS_f);
+            last;
+        }
+        sleep($QS_s);
+    }
+}
+ 
+&print_http_headers_multipart_end;
+ 
+exit(0);
+ 
+##EOF##
+Mass Virtual Hosting
+Description: 
+
+The <VirtualHost> feature of Apache is nice and works great when you just have a few dozens virtual hosts. But when you are an ISP and have hundreds of virtual hosts to provide this feature is not the best choice. 
+
+Solution: 
+
+To provide this feature we map the remote webpage or even the complete remote webarea to our namespace by the use of the Proxy Throughput feature (flag [P]): 
+
+##
+##  vhost.map 
+## 
+www.vhost1.dom:80  /path/to/docroot/vhost1
+www.vhost2.dom:80  /path/to/docroot/vhost2
+     :
+www.vhostN.dom:80  /path/to/docroot/vhostN
+ 
+
+ 
+
+##
+##  httpd.conf
+##
+    :
+#   use the canonical hostname on redirects, etc.
+UseCanonicalName on
+ 
+    :
+#   add the virtual host in front of the CLF-format
+CustomLog  /path/to/access_log  "%{VHOST}e %h %l %u %t \"%r\" %>s %b"
+    :
+ 
+#   enable the rewriting engine in the main server
+RewriteEngine on
+ 
+#   define two maps: one for fixing the URL and one which defines
+#   the available virtual hosts with their corresponding
+#   DocumentRoot.
+RewriteMap    lowercase    int:tolower
+RewriteMap    vhost        txt:/path/to/vhost.map
+ 
+#   Now do the actual virtual host mapping
+#   via a huge and complicated single rule:
+#
+#   1. make sure we don't map for common locations
+RewriteCond   %{REQUEST_URI}  !^/commonurl1/.*
+RewriteCond   %{REQUEST_URI}  !^/commonurl2/.*
+    :
+RewriteCond   %{REQUEST_URI}  !^/commonurlN/.*
+#
+#   2. make sure we have a Host header, because
+#      currently our approach only supports 
+#      virtual hosting through this header
+RewriteCond   %{HTTP_HOST}  !^$
+#
+#   3. lowercase the hostname
+RewriteCond   ${lowercase:%{HTTP_HOST}|NONE}  ^(.+)$
+#
+#   4. lookup this hostname in vhost.map and
+#      remember it only when it is a path 
+#      (and not "NONE" from above)
+RewriteCond   ${vhost:%1}  ^(/.*)$
+#
+#   5. finally we can map the URL to its docroot location 
+#      and remember the virtual host for logging puposes
+RewriteRule   ^/(.*)$   %1/$1  [E=VHOST:${lowercase:%{HTTP_HOST}}]
+    : 
+ 
+
+Access Restriction
+Blocking of Robots
+Description: 
+
+How can we block a really annoying robot from retrieving pages of a specific webarea? A /robots.txt file containing entries of the "Robot Exclusion Protocol" is typically not enough to get rid of such a robot. 
+
+Solution: 
+
+We use a ruleset which forbids the URLs of the webarea /~quux/foo/arc/ (perhaps a very deep directory indexed area where the robot traversal would create big server load). We have to make sure that we forbid access only to the particular robot, i.e. just forbidding the host where the robot runs is not enough. This would block users from this host, too. We accomplish this by also matching the User-Agent HTTP header information. 
+
+RewriteCond %{HTTP_USER_AGENT}   ^NameOfBadRobot.*      
+RewriteCond %{REMOTE_ADDR}       ^123\.45\.67\.[8-9]$
+RewriteRule ^/~quux/foo/arc/.+   -   [F]
+ 
+
+Blocked Inline-Images
+Description: 
+
+Assume we have under http://www.quux-corp.de/~quux/ some pages with inlined GIF graphics. These graphics are nice, so others directly incorporate them via hyperlinks to their pages. We don't like this practice because it adds useless traffic to our server. 
+
+Solution: 
+
+While we cannot 100% protect the images from inclusion, we can at least restrict the cases where the browser sends a HTTP Referer header. 
+
+RewriteCond %{HTTP_REFERER} !^$                                  
+RewriteCond %{HTTP_REFERER} !^http://www.quux-corp.de/~quux/.*$ [NC]
+RewriteRule .*\.gif$        -                                    [F]
+ 
+
+ 
+
+RewriteCond %{HTTP_REFERER}         !^$                                  
+RewriteCond %{HTTP_REFERER}         !.*/foo-with-gif\.html$
+RewriteRule ^inlined-in-foo\.gif$   -                        [F]
+ 
+
+Host Deny
+Description: 
+
+How can we forbid a list of externally configured hosts from using our server? 
+
+Solution: 
+
+For Apache >= 1.3b6: 
+
+RewriteEngine on
+RewriteMap    hosts-deny  txt:/path/to/hosts.deny
+RewriteCond   ${hosts-deny:%{REMOTE_HOST}|NOT-FOUND} !=NOT-FOUND [OR]
+RewriteCond   ${hosts-deny:%{REMOTE_ADDR}|NOT-FOUND} !=NOT-FOUND
+RewriteRule   ^/.*  -  [F]
+ 
+
+For Apache <= 1.3b6:
+
+RewriteEngine on
+RewriteMap    hosts-deny  txt:/path/to/hosts.deny
+RewriteRule   ^/(.*)$ ${hosts-deny:%{REMOTE_HOST}|NOT-FOUND}/$1
+RewriteRule   !^NOT-FOUND/.* - [F]
+RewriteRule   ^NOT-FOUND/(.*)$ ${hosts-deny:%{REMOTE_ADDR}|NOT-FOUND}/$1 
+RewriteRule   !^NOT-FOUND/.* - [F]
+RewriteRule   ^NOT-FOUND/(.*)$ /$1
+ 
+
+ 
+
+##
+##  hosts.deny 
+##
+##  ATTENTION! This is a map, not a list, even when we treat it as such.
+##             mod_rewrite parses it for key/value pairs, so at least a
+##             dummy value "-" must be present for each entry.
+##
+ 
+193.102.180.41 -
+bsdti1.sdm.de  -
+192.76.162.40  -
+ 
+
+URL-Restricted Proxy
+Description: 
+
+How can we restrict the proxy to allow access to a configurable set of internet sites only? The site list is extracted from a prepared bookmarks file. 
+
+Solution: 
+
+We first have to make sure mod_rewrite is below(!) mod_proxy in the Configuration file when compiling the Apache webserver (or in the AddModule list of httpd.conf in the case of dynamically loaded modules), as it must get called _before_ mod_proxy. 
+
+For simplicity, we generate the site list as a textfile map (but see the mod_rewrite documentation for a conversion script to DBM format). A typical Netscape bookmarks file can be converted to a list of sites with a shell script like this:
+
+#!/bin/sh
+cat ${1:-~/.netscape/bookmarks.html} |
+tr -d '\015' | tr '[A-Z]' '[a-z]' | grep href=\" |
+sed -e '/href="file:/d;' -e '/href="news:/d;' \
+    -e 's|^.*href="[^:]*://\([^:/"]*\).*$|\1 OK|;' \
+    -e '/href="/s|^.*href="\([^:/"]*\).*$|\1 OK|;' |
+sort -u
+ 
+
+We redirect the resulting output into a text file called goodsites.txt. It now looks similar to this:
+
+www.apache.org OK
+xml.apache.org OK
+jakarta.apache.org OK
+perl.apache.org OK
+...
+ 
+
+We reference this site file within the configuration for the VirtualHost which is responsible for serving as a proxy (often not port 80, but 81, 8080 or 8008).
+
+<VirtualHost *:8008>
+  ...
+  RewriteEngine   On
+  # Either use the (plaintext) allow list from goodsites.txt
+  RewriteMap      ProxyAllow   txt:/usr/local/apache/conf/goodsites.txt
+  # Or, for faster access, convert it to a DBM database:
+  #RewriteMap     ProxyAllow   dbm:/usr/local/apache/conf/goodsites
+  # Match lowercased hostnames
+  RewriteMap      lowercase    int:tolower
+  # Here we go:
+  # 1) first lowercase the site name and strip off a :port suffix
+  RewriteCond  ${lowercase:%{HTTP_HOST}}    ^([^:]*).*$
+  # 2) next look it up in the map file.
+  #    "%1" refers to the previous regex.
+  #    If the result is "OK", proxy access is granted.
+  RewriteCond  ${ProxyAllow:%1|DENY}        !^OK$          [NC]
+  # 3) Disallow proxy requests if the site was _not_ tagged "OK":
+  RewriteRule  ^proxy:                      -              [F]
+  ...
+</VirtualHost>
+ 
+
+Proxy Deny
+Description: 
+
+How can we forbid a certain host or even a user of a special host from using the Apache proxy? 
+
+Solution: 
+
+We first have to make sure mod_rewrite is below(!) mod_proxy in the Configuration file when compiling the Apache webserver. This way it gets called _before_ mod_proxy. Then we configure the following for a host-dependend deny... 
+
+RewriteCond %{REMOTE_HOST} ^badhost\.mydomain\.com$ 
+RewriteRule !^http://[^/.]\.mydomain.com.*  - [F]
+ 
+
+...and this one for a user@host-dependend deny:
+
+RewriteCond %{REMOTE_IDENT}@%{REMOTE_HOST}  ^badguy@badhost\.mydomain\.com$
+RewriteRule !^http://[^/.]\.mydomain.com.*  - [F]
+ 
+
+Special Authentication Variant
+Description: 
+
+Sometimes a very special authentication is needed, for instance a authentication which checks for a set of explicitly configured users. Only these should receive access and without explicit prompting (which would occur when using the Basic Auth via mod_access). 
+
+Solution: 
+
+We use a list of rewrite conditions to exclude all except our friends: 
+
+RewriteCond %{REMOTE_IDENT}@%{REMOTE_HOST} !^friend1@client1.quux-corp\.com$ 
+RewriteCond %{REMOTE_IDENT}@%{REMOTE_HOST} !^friend2@client2.quux-corp\.com$ 
+RewriteCond %{REMOTE_IDENT}@%{REMOTE_HOST} !^friend3@client3.quux-corp\.com$ 
+RewriteRule ^/~quux/only-for-friends/      -                                 [F]
+ 
+
+Referer-based Deflector
+Description: 
+
+How can we program a flexible URL Deflector which acts on the "Referer" HTTP header and can be configured with as many referring pages as we like? 
+
+Solution: 
+
+Use the following really tricky ruleset... 
+
+RewriteMap  deflector txt:/path/to/deflector.map
+ 
+RewriteCond %{HTTP_REFERER} !=""
+RewriteCond ${deflector:%{HTTP_REFERER}} ^-$
+RewriteRule ^.* %{HTTP_REFERER} [R,L]
+ 
+RewriteCond %{HTTP_REFERER} !=""
+RewriteCond ${deflector:%{HTTP_REFERER}|NOT-FOUND} !=NOT-FOUND
+RewriteRule ^.* ${deflector:%{HTTP_REFERER}} [R,L]
+ 
+
+... in conjunction with a corresponding rewrite map:
+
+##
+##  deflector.map
+##
+ 
+http://www.badguys.com/bad/index.html    -
+http://www.badguys.com/bad/index2.html   -
+http://www.badguys.com/bad/index3.html   http://somewhere.com/
+ 
+
+This automatically redirects the request back to the referring page (when "-" is used as the value in the map) or to a specific URL (when an URL is specified in the map as the second argument).
+
+Other
+External Rewriting Engine
+Description: 
+
+A FAQ: How can we solve the FOO/BAR/QUUX/etc. problem? There seems no solution by the use of mod_rewrite... 
+
+Solution: 
+
+Use an external rewrite map, i.e. a program which acts like a rewrite map. It is run once on startup of Apache receives the requested URLs on STDIN and has to put the resulting (usually rewritten) URL on STDOUT (same order!). 
+
+RewriteEngine on
+RewriteMap    quux-map       prg:/path/to/map.quux.pl
+RewriteRule   ^/~quux/(.*)$  /~quux/${quux-map:$1}
+ 
+
+ 
+
+#!/path/to/perl
+ 
+#   disable buffered I/O which would lead 
+#   to deadloops for the Apache server
+$| = 1;
+ 
+#   read URLs one per line from stdin and
+#   generate substitution URL on stdout
+while (<>) {
+    s|^foo/|bar/|;
+    print $_;
+}
+ 
+
+This is a demonstration-only example and just rewrites all URLs /~quux/foo/... to /~quux/bar/.... Actually you can program whatever you like. But notice that while such maps can be used also by an average user, only the system administrator can define it.
+ 
+ 
