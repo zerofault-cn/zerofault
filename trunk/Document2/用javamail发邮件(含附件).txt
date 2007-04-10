@@ -1,0 +1,195 @@
+用javamail发邮件(含附件) 
+作者：未知     文章来源：www.jspcn.net
+访问次数： 次    加入时间：2005-01-19 
+ 
+作者：◆后街男孩◆
+日期：2000-12-14 17:21:16
+
+//Title: Your Product Name
+//Version: 
+//Copyright: Copyright (c) 1999
+//Author: Your Name
+//Company: Your Company
+//Description: Your description
+
+package Mail;
+
+import java.awt.*;
+import javax.swing.*;
+import java.awt.event.*;
+import java.util.*;
+import java.io.*;
+import javax.mail.*;
+import javax.mail.internet.*;
+import javax.activation.*;
+
+
+public class SendMail extends Frame {
+Label label1 = new Label();
+TextField textField1 = new TextField();
+Label label2 = new Label();
+TextField textField2 = new TextField();
+Label label3 = new Label();
+TextArea textArea1 = new TextArea();
+Label label4 = new Label();
+TextField textField3 = new TextField();
+Button button1 = new Button();
+Button button2 = new Button();
+
+public SendMail() {
+enableEvents(AWTEvent.WINDOW_EVENT_MASK);
+try {
+jbInit();
+}
+catch(Exception e) {
+e.printStackTrace();
+}
+}
+protected void processWindowEvent(WindowEvent e) {
+super.processWindowEvent(e);
+if(e.getID() == WindowEvent.WINDOW_CLOSING) {
+System.exit(0);
+}
+}
+public static void main(String[] args) {
+SendMail sendMail1 = new SendMail();
+sendMail1.setSize (400,400);
+sendMail1.show (true);
+}
+
+private void jbInit() throws Exception {
+label1.setBounds(new Rectangle(41, 38, 45, 23));
+label1.setText("收信人");
+this.setLayout(null);
+this.setSize (400,400);
+textField1.setBounds(new Rectangle(110, 36, 174, 23));
+label2.setBounds(new Rectangle(42, 75, 38, 23));
+label2.setText("主题");
+textField2.setBounds(new Rectangle(110, 76, 173, 23));
+label3.setBounds(new Rectangle(43, 148, 38, 23));
+label3.setText("内容");
+textArea1.setBounds(new Rectangle(110, 155, 256, 170));
+label4.setBounds(new Rectangle(45, 111, 44, 23));
+label4.setText("附件");
+textField3.setBounds(new Rectangle(110, 115, 173, 23));
+button1.setBounds(new Rectangle(70, 348, 88, 24));
+button1.setLabel("发送");
+button1.addActionListener(new java.awt.event.ActionListener() {
+
+public void actionPerformed(ActionEvent e) {
+button1_actionPerformed(e);
+}
+});
+button2.setBounds(new Rectangle(244, 348, 88, 24));
+button2.setLabel("重填");
+button2.addActionListener(new java.awt.event.ActionListener() {
+
+public void actionPerformed(ActionEvent e) {
+button2_actionPerformed(e);
+}
+});
+this.add(label1, null);
+this.add(textField1, null);
+this.add(textField2, null);
+this.add(textField3, null);
+this.add(textArea1, null);
+this.add(label2, null);
+this.add(label4, null);
+this.add(label3, null);
+this.add(button2, null);
+this.add(button1, null);
+}
+
+void button2_actionPerformed(ActionEvent e) {
+textField1.setText ("");
+textField2.setText ("");
+textField3.setText ("");
+textArea1.setText ("");
+}
+
+void button1_actionPerformed(ActionEvent e) {
+String to,from,subject,message,attachment;
+from="toone@mail.com";
+to=textField1.getText ();
+if(to.trim ().equals ("")){
+JOptionPane.showMessageDialog(this, "收信人不能为空!", "错误", JOptionPane.ERROR_MESSAGE);
+return;
+}
+message=textArea1.getText();
+attachment=textField3.getText ();
+if(message.trim ().equals ("")&&attachment.trim ().equals ("")){
+JOptionPane.showMessageDialog(this, "内容和附件不能都为空!", "错误", JOptionPane.ERROR_MESSAGE);
+return;
+}
+if(to.indexOf ("@")==-1) {
+JOptionPane.showMessageDialog(this, "无效的收信人地址!", "错误", JOptionPane.ERROR_MESSAGE);
+return;
+}
+subject=textField2.getText ().trim ();
+if(subject.equals (""))
+if(JOptionPane.showConfirmDialog(this,"你不需要设置主题吗？","系统提示",0)!=0)
+return;
+File file=new File(attachment);
+if(!attachment.equals ("")){
+if(!file.isFile ()){
+JOptionPane.showMessageDialog(this, "无效的附件名!", "错误", JOptionPane.ERROR_MESSAGE);
+return;
+}
+}
+//以上程序是检验输入的有效性
+
+// create some properties and get the default Session
+Properties props = System.getProperties();
+props.put("mail.smtp.host", "192.168.0.1");
+Session session = Session.getDefaultInstance(props, null);
+session.setDebug(false);
+
+try{
+// create a message
+MimeMessage msg = new MimeMessage(session);
+msg.setFrom(new InternetAddress(from));
+InternetAddress[] address = {new InternetAddress(to)};
+msg.setRecipients(Message.RecipientType.TO, address);
+msg.setSubject(subject);
+msg.addHeader ("toone","fangjianhua");
+if(attachment.equals ("")){
+System.out.println ("This is plain mail");
+msg.setText (message);
+}
+else {
+System.out.println ("this is a multipart mail");
+// create and fill the first message part
+MimeBodyPart mbp1 = new MimeBodyPart();
+mbp1.setText(message);
+
+// create the second message part
+MimeBodyPart mbp2 = new MimeBodyPart();
+
+// attach the file to the message
+FileDataSource fds = new FileDataSource(file);
+mbp2.setDataHandler(new DataHandler(fds));
+mbp2.setFileName(fds.getName());
+
+// create the Multipart and its parts to it
+Multipart mp = new MimeMultipart();
+mp.addBodyPart(mbp1);
+mp.addBodyPart(mbp2);
+
+// add the Multipart to the message
+msg.setContent(mp);
+}
+msg.setSentDate(new Date());
+// send the message
+//for(int i=0;i<10;i++)
+Transport.send(msg);
+//System.out.println ("Send a mail success");
+JOptionPane.showMessageDialog(this, "邮件发送成功", "系统提示",JOptionPane.INFORMATION_MESSAGE );
+}
+catch(Exception ex){
+JOptionPane.showMessageDialog(this, "发送邮件失败", "错误", JOptionPane.ERROR_MESSAGE);
+}
+
+}
+}
+　 
+ 

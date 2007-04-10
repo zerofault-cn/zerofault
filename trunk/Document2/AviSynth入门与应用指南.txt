@@ -1,0 +1,404 @@
+AviSynth是AVI synthesizer的缩写，也经常称之为avs，简单来说就是个合成平台！在媒体文件和压缩软件之间担任“桥梁”的角色。这座桥梁不是简单的独木桥、而是有栏杆、有台阶（比喻其提供的大量虑镜）。因此比较灵活！如对于压制real格式来说，源媒体文件是vob、d2v(DVD处理过程中的中间文件)、ac3、mp3、avi、DAT/mpge等，而应用程序是各种real压缩软件如Helix real producer、BatchRealProducer144和EasyRealProducer14，它们都支持avs的导入。当然avs并不只是用于real压缩。它是媒体文件和压缩软件之间的“桥梁”，只要avs支持你所需要处理的媒体文件，压缩软件也支持导入avs文件，你都可以通过avs对视频进行处理，然后让压缩软件输出你所需要的格式的文件。 
+也许你还是不明白AviSynth能做什么，举些简单的例子，你需要对一段avi进行处理。你想把画面尺寸缩小，你可以用avs；你想把画面上的杂点消除，你可以用avs；你想把画面处理得锐利些，你还是可以用avs；AviSynth是桥梁，位于媒体文件和压缩软件之间，压缩软件可以通过AviSynth调用和处理媒体文件。而且不仅仅是压缩软件，甚至是播放器也能调用avs，对播放的文件进行处理，得要需要的播放效果。
+
+AviSynth首先要编写建立一个包含特定命令的文本。注意这里的文本，简单的说就是windows的写字板写出来的文件，你可以用任何一种文本编辑器打开进行编辑。这一特定命令的文本称之为"脚本"(文件后缀名为avs)，这些命令指定要运行处理的媒体文件和滤镜！ 
+
+AviSynth的平台和相关滤镜更新比较快，功能不断增加，编辑avs脚本也更简单。在射手网可以下载到这个平台软件。至于滤镜可以到得到http://www.avisynth.org/warpenterprises/ 
+下载，至于doom9论坛，大家知道有这么个乌合的巢穴就可以了！
+
+上面简单介绍了AviSynth的一些基本概念作为引子，在正文开始前，我想首先交待很重要的一点：avs脚本及其各种滤镜主要适用于大码率媒体文件的处理，也即我们经常接触的DVDRIP/TVRIP avi的制作优化。而对于高度压缩格式的rmvb来说，我们利用的avs滤镜更应该持慎重态度（如亮虑镜、字幕虑镜、画面调整等少数几个）！也就是说avs在rmvb压制方面，我们需要的是利用avs灵活的“中间人”的角色（看下面的例子）！而不是为了avs而去压制！我看到好多朋友初步接触rmvb压制，就在用avs压制DVDRIP-rmvb，完全套用个别论坛给出的avs脚本，里面全是各种滤镜，如3D增强、柔化、去丝等！这些滤镜如果制作DVDRIP的avi那是会获得肯定的画质效果，但是用于rmvb压制，仿佛就是东施效颦，忠言逆耳！real压制的原理和高码率的mpge4编码是不同的，后者有视频上层的概念，因此滤镜的修饰作用可以体现。我看Doom9讨论avs时，主要还是处理各种大数据量影像媒体为主。如处理自己DV录制的影视、电视卡录制的视频源之类的等。而众所周知的影响real媒体压缩效果就是片源效果。VCD片源的再怎么处理也不可能达到DVD的效果，而DVD片源，再怎么胡乱压制也不会差到哪里。因此avs直接在rmvb的压制中需要适当选择，而不能盲从，特别是对于各种滤镜的选择更要注意。一句话AviSynth非常灵活，要按具体情况具体分析。
+
+第二，需要认识avs的桥梁作用。修饰之余尽可能的使用压缩软件本身的功能。对于real压缩，如rmvb压制中帧率的改变就可以在压缩软件中进行设置，而不要在avs中写入相关的语句。另外各种压缩软件使用的是real的压缩内核，而real压缩一般以YV12的快速处理环境为主。这也是在使用avs压制rmvb时需要注意的问题。
+
+自己觉得上文对avs的介绍及应用范围要比下面的内容来的更重要!这是我直到现在才撰写完毕这篇小文的良苦之处。
+
+下面先简单的介绍些基本方法和常用滤镜，滤镜可以理解为各种处理视频的工具。
+
+首先安装avisynth，并将常用虑镜插件dll文件拷贝到安装目录的plugin目录里。
+
+
+一、基本代码
+
+1. LoadPlugin(),加载插件。 
+如： 
+LoadPlugin("VSFilter.dll") 加载字幕插件
+LoadPlugin("mpeg2dec3.dll") 加载DVD的mpeg2编码器插件
+LoadPlugin("mpasource.dll") 加载mp3插件
+
+请下载以上提到的滤镜！并解压制到plugin目录里（当然目录可以自己选定），如果avs文件和滤镜不再同一个目录下，记得要把加载滤镜的路径名写全了。有些滤镜或者脚本是avisynth核心的滤镜或脚本，也就是avisynth本身提供的功能，这些就不需要加载，其它的都需要加载。你也可以用SetWorkingDir设定插件文件的工作路径
+
+SetWorkingDir("d:\GORDIA~1\") # 设定AVS 脚本调用dll 插件文件的工作路径
+
+2.源媒体读取 
+DirectShowSource("e:\vob\ss.VOB")
+DirectShowSource()在高版本avisnyth中显得更万能些，常用的媒体格式，如avi、mpge1/dat、mpge2/vob/bin都可以加载，另外可以不用分离视频和音频，而直接压缩！想要直接压制vob请使用高版本的avisynth，如目前的2.54 。如果遇到打不开的媒体格式你大都可以试试看DirectShowSource。
+
+AVISource(e:\avi\1.avi,false)
+这个对于DVDRIP压制者来说可能更常用些.false表示禁止音频！ 
+
+mpeg2source("XXX.d2v")
+这个用于解码DVD的mpeg2格式的视频
+
+WAVSource("e:\vob\ss.wav") 读取wave音频 
+AC3SOUECE("e:\vob\ss.ac3") 读取ac3音频 
+MPASOURCE("e:\vob\ss.MP3") 读取mp3音频 
+注：WAVSOURCE和AVISOURCE是属于核心脚本，无须读取插件，但AC3SOURCE和MPASOURCE需要读取AC3SOURCE和MPASOURCE插件。DirectShowSource的读取需要安装各种音频和视频的解码器 
+
+3. crop()、LanczosResize()裁黑边和调整大小
+vob文件画面大小一般720×480。16：9宽银幕的都带了很大的黑边，需要裁减掉。也是avs用于vob压制的关键因素之一 
+裁减黑边和缩放画面是vob文件压制中很重要的因素，一般连用。对于本身就无黑边的文件直接用LanczosResize() 
+16：9画面的有2种情况，请记住这几个数值，在rmvb压制中直接套用即可！ 
+DVD变形宽银幕：640×352，608×336 
+电影宽银幕： 640×272
+
+如要将电影宽银幕的画面比列调整到640×272,avs里可以这么写 
+Crop(8,90,704,300) 
+LanczosResize(640,272)
+
+如要将DVD变形宽银幕的画面比列调整到608×336，avs里可以这么写 
+Crop(8,64,704,352) 
+LanczosResize(608,336)
+
+无黑边的画面的直接用 
+LanczosResize(512,384)缩小同时画面强制到标准4：3
+
+请直接记住这几句就可以了得到最佳的rmvb画面大小了！ 
+
+4.亮度滤镜 
+亮度滤镜是使用avs压制vob-rmvb vcd-rmvb的又一关键因素。画面太暗的rmvb是失败之作 
+
+介绍2个 
+Levels(0,1.5,255,0,255) 
+改第二个，我感觉数值在1.3-2之间比较合适，一般1.5比较合适 
+
+Tweak(0,1,20,1) 
+4个浮点数分别表示：调节色度，饱和度，亮度，对比度。一般将第三个调节在0－30之间，以15－20为宜 
+
+个人感觉level()比较好，主要调背景为主，而vob文件主要是背景暗。注意Tweak的其他调节可能和颜色控制环境有关，如YUY2，因此其它的最好不要再改动 
+
+注：ffdshow目前的版本还是不能支持mpge2唉！否则可以利用它来调节亮度了 
+
+5.字幕滤镜 
+TextSub("h:\avs\jrvs.ssa") 加载水印文本 
+VobSub("e:\vob\ss.idx") 加载影片字幕 
+
+6.其它虑镜介绍，在rmvb压制中不推荐使用，如部分朋友选用的 
+FluxSmooth(5,7) 柔化滤镜 
+Convolution3d("moviehq") 3D优化滤镜 
+2者需要加载相应的滤镜插件 
+
+7.常用音频处理脚本：
+ResampleAudio(44100)
+DELAYAUDIO（XXX，30）
+AmplifydB（wavsource（“XXX.WAV”），3，3）
+例子：
+DelayAudio（wavsource（”XXX.WAV“），-30）30的单位是毫秒，经典的解决音画同步问题；
+又如：
+WAVSOURCE（“xxx.wav”）.ResampleAudio(48000)
+音频重新采样，采样率48
+再如：
+AmplifydB（wavsource（“xxx.wav”），3，3）
+左右声道放大3DB
+
+8.色彩模式的转换 
+有些压缩软件不支持某些色彩模式，例如默认情况下Helix不能在YV12环境下工作，需要将DVD的YV12转为YUY2 
+video=ConvertToYUY2(video)，当然如果你装了Xvid，Helix也是可以在YV12下工作的
+
+有如下的转换： 
+ConvertToRGB32（）、ConvertToRGB24、ConvertToRGB（） 
+ConvertToYUY2（）、ConvertToYV12（） 
+
+简单例子： 
+AVISOURCE（“xxx.avi”） 
+ConvertToYUY2（） 
+等价于AVISOURCE（“xxx.avi”，“YUY2”）或者AVISOURCE（“xxx.avi”）.ConvertToYUY2（） 
+其他的也类似
+
+9.截图
+没有想到用avs来截图吧，只要用wmp6.4或mpc6468播放一下写好的avs文件，截图就产生了 
+
+directshowsource("C:\1.rmvb",fps=23.976).ConvertToRGB24 
+trim(0,19) 
+ImageWriter("C:\",0,0,"jpg") 
+
+这里我们假设的是要截取的rmvb为C:\的1.rmvb，要截取的frame(幅)从第1到20共20幅(trim是以0为第一幅) 
+保存路径为C:\，格式为jpg（支持bmp, dds,jpg/jpe/jpeg, pal, pcx格式)
+
+连续截图 
+Avisource("C:\test,avi",false).ConvertToRGB24 
+trim(0,19) 
+ImageWriter("C:\",0,0,"jpg") 
+截取特定的frame 
+Avisource("C:\test,avi",false).ConvertToRGB24 
+trim(1920,1920) 
+ImageWriter("C:\",0,0,"jpg") 
+
+10.合成
+AudioDub(video, audio)
+合成常用于real格式的压制，制作rmvb的时候就需要把视频和音频合成后交给real压缩软件，而制作avi则不需要合成视音频。这主要是因为real格式要求视音频都必须用real压缩，而avi则可以使用多种音频格式，一般是单独压缩视频，然后再用其他软件合成视频音频。
+简单的例子
+V=AVISOURCE（“xxx.avi”，FALSE，“YUY2”） 
+A=WAVSOURCE（“xxx.wav”） 
+AudioDub（V，A）
+合成在rmvb压制方面的例子可以参考后面的rmvb压制部分
+
+需要注意的是avs的脚本可以有两种写法
+例如Crop切边，语法是
+Crop(clip, int left, int top, int width, int height, bool align) 
+clip就是源
+使用的时候可以写
+Video=Crop(Video,8,0,704,480)
+也可以写
+Crop(8,0,704,480)
+但是两种写法是有区别的具体的可以比较下面的两个例子
+
+# PLUGINS
+LoadPlugin("C:\PROGRA~1\Autorv9\SOFTS\AVSFILE\MPEG2DEC3.DLL")
+# VIDEO SOURCE
+Video=Mpeg2Source("E:\a.d2v")
+# CROPPING
+Video=Crop(Video,8,0,704,480)
+# RESIZING
+Video=BicubicResize(Video,640,480,0,0.5)
+# FINISH
+Return(Video)
+
+# PLUGINS
+LoadPlugin("C:\PROGRA~1\Autorv9\SOFTS\AVSFILE\MPEG2DEC3.DLL")
+# VIDEO SOURCE
+Mpeg2Source("E:\a.d2v")
+# CROPPING
+Crop(8,0,704,480)
+# RESIZING
+BicubicResize(640,480,0,0.5)
+
+也就是说如果你制定了源Video，那么你就要注意了必须要调用源的地方都要写上源，最后还要Return(Video)。两种写法不能混用哦。
+
+
+二、压制DVD
+
+下面针对DVD的压缩介绍一下avs运用。对于压制DVD，我们一般已经用DVD Decrypter将DVD抓取出来，并且用DVD2AVI分离了DVD的视音频，得到视频的临时文件*.d2v和音频文件*.ac3等。压制DVD的avs脚本除了上面的常用滤镜和脚本外，还有一些自己特别的地方。
+
+SetWorkingDir("d:\GORDIA~1\") # 设定AVS 脚本调用dll 插件文件的工作路径
+LoadPlugin("mpeg2dec3.dll") # 调用DVD的mpeg2编码器插件
+LoadPlugin("decomb.dll") # 调用交错滤镜插件，包含了IVTC 和Deinterlace 两种滤镜
+LoadPlugin("TomsMoComp.dll") # 调用交错滤镜插件，对应Deinterlace 滤镜中的TomsMoComp 脚本命令
+LoadPlugin("SimpleResize.dll") # 调用变形滤镜插件，对应SimpleResize 脚本命令
+
+mpeg2source("F:\temp1\1.d2v") # 源d2v 文件的路径
+trim(startframe,endframe) # 截取VOB 片断进行压缩。startframe 为起始帧，endframe 为结束帧。主要用于片断测试
+
+压缩或更高级的分段处理压缩
+Telecide(guide=1) # IVTC 滤镜。多用于做NTSC 制式DVD 的IVTC 处理
+Decimate(Cycle=5) # IVTC 滤镜。用于NTSC 制式DVD 删除重复帧处理，即 29.970fps --> 23.976fps
+FieldDeinterlace() # Deinterlace 滤镜。用于做PAL 制式DVD 的Deinterlace 处理，不能同IVTC 和TomsMoComp
+滤镜同时使用
+FieldDeinterlace(blend=false) # 同上
+TomsMoComp(1,5,1) # Deinterlace 滤镜。在处理PAL 制式DVD 时，一般不能同FieldDeinterlace 和 Telecide 同时
+使用
+crop(14,8,-12,-12) # 裁切命令。参数为（左、上、右、下），代表各边被裁切去的象素值
+LanczosResize(640,352) # 变形滤镜。确定最终AVI 的分辨率，常用于普通电影
+SimpleResize(640,352) # 变形滤镜。确定最终AVI 的分辨率，常用于二维动画，不能和LanczosResize 同时使用
+SelectRangeEvery(xxx,14) # 全片平均采样测试语句。其中xxx 主要用于 COMPRESSIBILITY CHECK 测试，即
+(2pass/1pass)*100% 预测算，而正式压缩时不用。其中xxx 为平均采样点的间隔值。例如当
+进行全片 5% 预测，则xxx=280，10%为140，15%为93
+
+压制DVD视频于处理一般avi有不少需要注意的地方。例如IVTC、切边、变形等，IVTC可以参考 IVTC技术原理、隔行与逐行之间；切边、变形可以参考 关于切边和变形
+
+IVTC是其中比较重要的一环。根据检测DVD2AVI显示的VOB 的Video Type 和 Frame Type， 确定影片的 IVTC 或 Deinterlaced 处理方式”，
+AVS 脚本命令的使用原则如下：
+A、对于NTSC Interaced 型：需要做IVTC 和去重复帧处理，则AVS 脚本应包含 Telecide(guide=1) 和 Decimate(Cycle=5) 语句。
+B、对于NTSC Progressive 型：不做任何处理，则AVS 脚本无需包含 IVTC 和 Deinterlace 滤镜。
+C、对于PAL Progressive 型：不做任何处理，则AVS 脚本无需包含 Deinterlace 滤镜。
+D、对于PAL Interlaced 型：需要做Deinterlace 处理，则AVS 脚本应包含 FieldDeinterlace() 或 FieldDeinterlace(blend=false) 或
+TomsMoComp(1,5,1) 语句。
+E、对于NTSC FILM 型：若为 纯FILM 或 FILM≥95% 时，则在DVD2AVI 阶段就已经过force film，这里就无需处理了； 若
+FILM < 95% 时，需要做IVTC 处理，则AVS 脚本应包含 Telecide(guide=1) 和 Decimate(Cycle=5) 语句。
+F、对于NTSC Interlaced / Progressive 混合型：全部做IVTC 处理，则AVS 脚本应包含
+Telecide(guide=1,Gthresh=50,dthreshold=8,threshold=0,Post=true).Decimate(5) 语句。
+
+
+三、rmvb的压制 
+
+下面是一些使用avs压制rmvb的方法
+1 
+LoadPlugin("VSFilter.dll") 
+LoadPlugin("mpasource.dll") 
+video=AVISource("c:\1.avi",false).TextSub("c:\logo.ssa").VobSub("c:\1.idx").Lanczosresize(512,384) ＃定义了avi源、字幕、水印和画面大小 
+audio=mpasource("c:\1.mp3") ＃音频 
+AudioDub(video, audio) 
+
+为简便起见，以avi文件为例说明语法，但此例不推荐用，直接用压缩软件＋ffdshow设置即可。原始avs加载了至少3个额外的滤镜，已略去！ 
+
+该方法可以用于双语DVDRIP的压制，使用双语处理的软件提取自己要的声道即可，而不要再合并成avi了！ 
+
+DTS音轨格式的可以用这个avs法压制 
+先根据中高级教程里的方法将DTS音频转换成wave格式，如放在e:\avi\目录里 
+avs可以这么写： 
+LoadPlugin("VSFilter.dll") 
+video=AVISource("c:\1.avi",false).TextSub("h:\avs\jrvs.ssa").VobSub("e:\avi\t1.idx") 
+audio=WAVSource("e:\avi\t1.wav") 
+AudioDub(video, audio) 
+如此可以不用再合并那么费事了！ 
+
+2 
+LoadPlugin("VSFilter.dll") 
+b=directshowSource("e:\avs\cd1.avi").TextSub("e:\BBSLogo\logo.ssa").VobSub("e:\avs\cd1.idx").Lanczosresize(608,320) 
+c=directshowsource("e:\avs\cd2.avi").VobSub("e:\avs\cd2.idx").Lanczosresize(608,320) 
+final=b+c 
+return final 
+这个语法很好，直接将多CD的压制成一个rmvb，可以在一定程度上解决单CD码率过度错位。如分别1pass压制CD1和CD2可能会由于码率错位太大而使文件增大，但如果2个一起压制，则可能由于码率补偿，平均码率错位反而不大，而使文件大小减小。 
+请注意，这里自己可以将水印放在CD1上，而CD2不会显示（说明什么？呵呵！） 
+
+一般DTS的都要2CD以上，有时影片长度也不长，所以DTS的电影可以这么写avs压制 
+LoadPlugin("VSFilter.dll") 
+video=AviSource("e:\cd1.avi",false).Vobsub("e:\cd1.idx").TextSub("c:\logo.ssa")+AviSource("e:\cd2.avi",false).VobSub("e:\cd2.idx") 
+audio=wavSource("e:\cd1.wav")+wavSource("e:\cd2.wav") 
+AudioDub(video, audio) 
+
+3 
+双语的vcd分成单语来做 
+LoadPlugin("VSFilter.dll") 
+video=DirectShowSource("F:\mpge\*.dat").Levels(0,1.7,255,0,255).LanczosResize(480,360) 
+return GetChannel(video,2) 
+
+1 left channel 
+2 right channel ，一般是国语 
+
+据说这里的*.dat表示成批压制！ 
+
+如果要求控制帧率，那么有句改成这个 
+video=DirectShowSource("F:\mpge\*.dat",fps=25) 
+
+以上都是avi，都可以自动关联ffdshow，所以亮度可以在ffdshow里设置！但请同时去掉ffdshow的字幕和avisynth功能
+
+4
+制作成单音轨双语 
+1. 
+Left=wavSource("C:\1.wav").getleftchannel 
+Right=wavsource("C:\2.wav").getrightchannel 
+mergechannels(Left,Right) 
+#monotostereo(Left,Right) 
+2. 
+Left=DireectShowSource("C:\1.mp3").getleftchannel 
+Right=DirectShowsource("C:\2.mp3").getrightchannel 
+mergechannels(Left,Right) 
+#monotostereo(Left,Right) 
+
+交给graphedit制成wav或Lame mp3 
+
+5
+将双语的rmvb制作成单语双声道的方法 
+1.用rma分离视频及音频 
+http://www.niuguo.net/forum/topic_show.cgi?id=196057&h=1&bpg=1&age=0 
+2.安装 
+http://matroska.free.fr/packs/Matroska_Pack_Full_v1.0.1.exe 
+写一个avs脚本 
+DirectShowSource("C:\audio.rm").getchannel(1,1) 
+#1为左声道 
+#2为右声道 
+3. 
+用BRP重制这个音频脚本,得到单语双声道无视频的音频rm 
+http://cool18.comicer.com/ 
+4.用rma结合之前分离出来的视频及重制的音频
+
+6
+用rmvb直接压制DVD
+1、先将DVD的VOB文件用利用DVDDecrypter拷入硬盘。 
+2、利用dvd2avi软件先生成一个d2v工程和AC3音频。 
+3、利用Azid或其它软件把ac3转为标准的wav文件，这种对音频处理较严谨且音质较好的方法。此外还可以用graphedt生成一个GRF，在AviSynth里面用DirectShowSource导入即可，这样还可以处理双DTS的问题，前提是要装 阿飞 的DTS.AC3；求快就用ac3source加载ac3音频。
+4、利用GK打开d2v工程，先Resolution，然后选制式、纵横比，后按auto crop自动去边，然后记住最右边（左、上、右、下）的四个数值，填入Video=Crop(Video,6,10,-8,-12)，注意这里只取双不取单；然后在GK中的output resolution中的Width右边的小箭头调画面宽度，调完后将数字填入Video=LanczosResize(Video,640,480)中。
+5、编辑.avs文件，主要模板如下：（#号不做处理） 
+#加载插件 
+#mpeg2dec3.dll主要功能是加载d2v工程文件。 
+#ldecomb.dll主要功能是影片场序处理，去拉丝。 
+#Convolution3DYV12.dll主要功能是改善电影画面质量。 
+#VSFilter.dll加载SUB、SRT等格式的字幕。 
+LoadPlugin("D:\Program Files\GordianKnot\mpeg2dec3.dll") 
+LoadPlugin("D:\Program Files\GordianKnot\decomb.dll") 
+LoadPlugin("D:\Program Files\GordianKnot\Convolution3DYV12.dll") 
+LoadPlugin("D:\Program Files\GordianKnot\VSFilter.dll") 
+#加载d2v工程文件 
+#大家选择自己放d2v工程文件的目录和文件名 
+video=mpeg2Source(".:\path\.d2v") 
+# 
+#DVD画面质量改善（有几种状态，专门文章会再介绍，大家用默认就行了） 
+video=Convolution3D(video,0, 3, 4, 3, 4, 2.8, 0) 
+# 
+#将YV12转为YUY2 
+video=ConvertToYUY2(video) 
+# 
+#加载音频（自行修改音频文件的路径和文件名） 
+audio=wavsource(".:\path\.wav") 
+Video=audioDub(video,audio) 
+# 
+#去丝处理（Decimate(5)是,NTSC制式转为23.976，PAL的另有其它模式） 
+video=Telecide(video).Decimate(5) 
+# 
+#去边处理（数字部分大家根据自己的情况修改，数字取双不取单，后面两个要有负号） 
+Video=Crop(Video,6,10,-8,-12) 
+# 
+#画面大小调整（后面的数字根据GK中得到的自行输入） 
+Video=LanczosResize(Video,640,480) 
+# 
+#字幕加载（默认为sub格式，如果是srt格式，请将Video=vobsub(video,".:\path\file")改为#Video=vobsub(video,".:\path\file")，然后去掉#Video=TextSub(video,".:\path\.srt")改为Video=TextSub(video,".:\path\.srt")） 
+#sub格式的（file不加扩展名） 
+Video=vobsub(video,".:\path\file") 
+#srt格式 
+#Video=textsub(video,".:\path\.srt") 
+# 
+#返回视频 
+Return(Video) 
+#模板到此结束 
+将上面的模板拷入.avs文件（可以用写字板创建一个avs文件），然后到VirtualDubMod打开.avs文件，就可以看到预览效果了，如果没有出错，就可以放入helix进行压缩处理。
+
+上面只是处理某种DVD的情况，做IVTC、切边和变形需要按照DVD的具体情况，可以参考avi的制作。那些改善画质的滤镜也需要按照实际情况使用。下面是tct66的一些点评。
+
+1.截取DVD用smartripper比较好,不用考虑声音延迟的问题 
+2.用azid将ac3转成wav是对音频处理较严谨且音质较好的方法 
+用headac3he或besweet+gui会更好些 
+求快就用directshowsource或用GraphEdit调用DTS/AC3解碼 
+3.DVD的源或多或少都有些噪点,求画面干净,用convolution3d 
+如果是保真派,基本上加个undot 
+楼主给的参数,基本上保留了细节,去除了噪点 
+Convolution3d (preset="movieHQ") // Movie Hi Quality (good DVD source) 
+is an alias for Convolution3D (0, 3, 4, 3, 4, 2.8, 0) 
+Convolution3d (preset="animeHQ") // Anime Hi Quality (good DVD source) 
+is an alias for Convolution3D (0, 6, 12, 6, 8, 2.8, 0) 
+4.PAL的DVD基本上都是progressive,不必作deinterlace 
+有些是interlaced,要作deinterlace 
+但是有些D版的PAL制的DVD是由NTSC-film的DVD转成PAL的DVD 
+这时候要作25->24还原的动作 
+Telecide(order=1,guide=2).Decimate(25) 
+NTSC的DVD就复杂很多 
+有film,progressive,interlaced,film混progressive,,film混progressive混interlaced 
+还有其它每5张的某一幅是interlaced,情况特殊,使用IVTC的方法不同 
+5.切边及resize交给GK计算是方便且较正确的
+
+7.120fps的avi压制成RM/RMVB
+首先你要看你的文件名中是否有"&"的符号,如[dmhy&ktkj][full_metal_alchemist][002][jap_chn][1170k].avi，有的话将它重新命名为例如[full_metal_alchemist][002][jap_chn][1170k].avi，不然用BRP转出来的RMVB会为.tmp的乱码，需手动改为.rmvb才可播放，而HPP根本不能压制
+1.使用AviSynth, 
+譬如说是要对120fps的wmv3.avi位于C:\ 
+压制成RMVB,写一个脚本如下: 
+
+AVISource("c:\wmv3.avi") 
+ChangeFPS(23.976) 
+
+若第2行改为ChangeFPS(29.970),水平移动的画面会顿,所以建议为ChangeFPS(23.976) 
+然后用BRP或HPP压制这个*.avs的脚本 
+
+2.若有外挂字幕,需调用VSFilter.dll，譬如说是要对120fps的wmv3.avi及wmv3.srt位于C:\ 
+压制成RMVB,写一个脚本如下: 
+
+AVISource("c:\wmv3.avi") 
+ChangeFPS(23.976) 
+LoadPlugin("VSFilter.dll") 
+TextSub("c:\wmv3.srt") 
+
+若其中是wmv3.idx+wmv3.sub的字幕，第4行改成
+VobtSub("c:\wmv3.idx") 
+
+然后用BRP压制这个*.avs的脚本 
+
+3.虽然这个*.avs脚本播放拖曳的时候声音,画面不同步,不过压制它成RM/RMVB，没有声音,画面不同步的现象
+

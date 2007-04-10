@@ -1,0 +1,42 @@
+Windows Vista完全硬盘安装法
+2007-02-14 15:25 作者： 出处： 远景论坛 责任编辑：原野 　　天极推出新的Vista频道[详细请看]
+
+　　更多相关专题推荐：微软最新操作系统Windows Vista专区 、微软最新系统Windows Vista正式发布、Windows Vista试用版测试文章精选、体验新品:Win Vista中都有什么新玩意 、Windows Vista操作系统应用技巧集锦
+
+　　事先准备:装好xp系统的电脑一台，vista安装iso。
+
+　　注：(1).Windows Vista要求安装在NTFS分区，但是其他分区可以是FAT32格式!
+
+　　(2)简单无损NTFS转换方式：运行cmd进入命令行模式，运行convert x: /fs:ntfs即可(x为需要转换分区盘符)，其间可能需要重启计算机。注：该命令可以无损将FAT分区转换为NTFS分区，该过程不可逆!若对分区中没有有用数据，直接在XP下格式化为NTFS分区也能达到目的!
+
+　　(3)建议安装系统分区至少15GB.(我安完VISTA以后，系统区占用6GB。)
+
+　　想不损失硬盘中已有数据的前提下对硬盘进行重新分区，用PartitionMagic Portable V8.05 汉化绿色版
+
+　　一、Windows Vista系统安装准备
+
+　　1、把vista.iso用虚拟光驱加载，然后拷贝到硬盘中，我的是f:\vista。(用的虚拟光驱是 DAEMON Tools V4.0.8 X64 and X86 [1120]简体中文版)
+
+　　2、把f:\VISTA目录下的bootmgr和boot目录(其实只要里面的boot.sdi和bcd文件)拷贝到c盘根目录下,并在C盘根目录下建个sources文件夹。
+
+　　3、把f:\vista\sources下的boot.win复制到C盘下sourse文件夹。
+
+　　4、运行cmd-c:\boot\bootsect.exe /nt60 c: (注意，此处bootsect在c:\boot目录下)
+
+　　二、Windows Vista安装
+
+　　5、重启计算机，正在启动安装程序，加载boot.wim，启动PE环境。这个过程可能比较长，请等待……
+
+　　6、安装程序启动，选择你要安装的语言类型，同时选择适合自己的时间和货币显示种类及键盘和输入方式。
+
+　　7、出现“开始安装界面”，(要注意了，不点击“现在安装”)点左下角“修复计算机”(repair my computer)。
+
+
+
+　　8、进入“系统恢复选项”，选择最后一项“命令提示符”(command prompt)，进入DOS窗口。
+
+
+
+　　9、执行格式化命令format c:/q(注：如C盘是FAT32格式，想转NTFS格式的话，执行format c:/fs:ntfs)。
+
+　　10、安装系统，执行f:\vista\sources\setup.exe，底下就是正常的安装了。
