@@ -1,0 +1,690 @@
+在b-s开发中经常用到的javaScript技术
+[日期：2004-8-10] 来源：老猫の理想  作者： [字体：大 中 小]  
+
+程序代码： 
+一、验证类 
+1、数字验证内 
+  1.1 整数 
+  1.2 大于0的整数 （用于传来的ID的验证) 
+  1.3 负整数的验证 
+  1.4 整数不能大于iMax 
+  1.5 整数不能小于iMin 
+2、时间类 
+  2.1 短时间，形如 (13:04:06) 
+  2.2 短日期，形如 (2003-12-05) 
+  2.3 长时间，形如 (2003-12-05 13:04:06) 
+  2.4 只有年和月。形如(2003-05,或者2003-5) 
+  2.5 只有小时和分钟,形如(12:03) 
+3、表单类 
+  3.1 所有的表单的值都不能为空 
+  3.2 多行文本框的值不能为空。 
+  3.3 多行文本框的值不能超过sMaxStrleng 
+  3.4 多行文本框的值不能少于sMixStrleng 
+  3.5 判断单选框是否选择。 
+  3.6 判断复选框是否选择. 
+  3.7 复选框的全选，多选，全不选，反选 
+  3.8 文件上传过程中判断文件类型 
+4、字符类 
+  4.1 判断字符全部由a-Z或者是A-Z的字字母组成 
+  4.2 判断字符由字母和数字组成。 
+  4.3 判断字符由字母和数字，下划线,点号组成.且开头的只能是下划线和字母 
+  4.4 字符串替换函数.Replace(); 
+5、浏览器类 
+  5.1 判断浏览器的类型 
+  5.2 判断ie的版本 
+  5.3 判断客户端的分辨率 
+   
+6、结合类 
+  6.1 email的判断。 
+  6.2 手机号码的验证 
+  6.3 身份证的验证 
+   
+
+二、功能类 
+
+1、时间与相关控件类 
+  1.1 日历 
+  1.2 时间控件 
+  1.3 万年历 
+  1.4 显示动态显示时钟效果（文本，如OA中时间） 
+  1.5 显示动态显示时钟效果 (图像，像手表)  
+2、表单类 
+  2.1 自动生成表单 
+  2.2 动态添加，修改，删除下拉框中的元素 
+  2.3 可以输入内容的下拉框 
+  2.4 多行文本框中只能输入iMax文字。如果多输入了，自动减少到iMax个文字（多用于短信发送) 
+   
+3、打印类 
+  3.1 打印控件 
+4、事件类 
+  4.1 屏蔽右键 
+  4.2 屏蔽所有功能键 
+  4.3 --> 和<-- F5 F11,F9,F1 
+  4.4 屏蔽组合键ctrl+N 
+5、网页设计类 
+  5.1 连续滚动的文字，图片（注意是连续的，两段文字和图片中没有空白出现） 
+  5.2 html编辑控件类 
+  5.3 颜色选取框控件 
+  5.4 下拉菜单 
+  5.5 两层或多层次的下拉菜单 
+  5.6 仿IE菜单的按钮。（效果如rongshuxa.com的导航栏目) 
+  5.7 状态栏，title栏的动态效果（例子很多，可以研究一下） 
+  5.8 双击后，网页自动滚屏 
+6、树型结构。 
+  6.1 asp+SQL版 
+  6.2 asp+xml+sql版 
+  6.3 java+sql或者java+sql+xml 
+7、无边框效果的制作 
+8、连动下拉框技术 
+9、文本排序 
+10，画图类，含饼、柱、矢量贝滋曲线 
+11，操纵客户端注册表类 
+12，DIV层相关（拖拽、显示、隐藏、移动、增加） 
+13，TABLAE相关(客户端动态增加行列，模拟进度条，滚动列表等) 
+14，各种<object classid=>相关类，如播放器，flash与脚本互动等 
+16, 刷新/模拟无刷新 异步调用类（XMLHttp或iframe,frame） 
+
+
+
+
+
+<script language="JavaScript"> 
+<!-- 
+function check(text){ 
+var checkstr,iMax=5,iMin=3 
+checkstr="isInt:"+(parseInt(text)==text)+"\n" 
+checkstr+="isID:"+((parseInt(text)==text)&&(text>=0))+"\n" 
+checkstr+="小于"+iMax+":"+((parseInt(text)==text)&&(text<iMax))+"\n" 
+checkstr+="大于"+iMin+":"+((parseInt(text)==text)&&(text>iMin))+"\n" 
+alert(checkstr) 
+} 
+//--> 
+</script> 
+<form method=post action=""> 
+<input type="text" id="text1" onchange="check(this.value)"> 
+</form> 
+
+
+
+4、事件类 
+  4.1 屏蔽右键 
+      在body标签里加上oncontextmenu=self.event.returnValue=false   
+  4.2 屏蔽所有功能键 
+
+  4.3 --> 和<-- F5 F11,F9,F1 
+
+  4.4 屏蔽组合键ctrl+N 
+
+<script language=javascript> 
+function KeyDown(){    
+  if ((window.event.altKey)&& 
+      ((window.event.keyCode==37)||   //屏蔽 Alt+ 方向键 ← 
+       (window.event.keyCode==39))){  //屏蔽 Alt+ 方向键 → 
+     alert("不准你使用ALT+方向键前进或后退网页！"); 
+     event.returnValue=false; 
+     } 
+  if ((event.keyCode==8)||            //屏蔽退格删除键 
+      (event.keyCode==116)){          //屏蔽 F5 刷新键 
+     event.keyCode=0; 
+     event.returnValue=false; 
+     } 
+  if ((event.ctrlKey)&&(event.keyCode==78)){   //屏蔽 Ctrl+n 
+     event.returnValue=false; 
+     } 
+  if ((event.shiftKey)&&(event.keyCode==121)){ //屏蔽 shift+F10 
+     event.returnValue=false; 
+     } 
+  if (event.keyCode==122){ //屏蔽 F11 
+     event.returnValue=false; 
+     } 
+  } 
+只要知道keyCode即可屏蔽所有功能键 
+
+
+一、验证类 
+1、数字验证内 
+  1.1 整数 
+      /^(-|\+)?\d+$/.test(str) 
+  1.2 大于0的整数 （用于传来的ID的验证) 
+      /^\d+$/.test(str) 
+  1.3 负整数的验证 
+      /^-\d+$/.test(str) 
+2、时间类 
+  2.1 短时间，形如 (13:04:06) 
+      function isTime(str) 
+      { 
+        var a = str.match(/^(\d{1,2})(:)?(\d{1,2})\2(\d{1,2})$/); 
+        if (a == null) {alert('输入的参数不是时间格式'); return false;} 
+        if (a[1]>24 || a[3]>60 || a[4]>60) 
+        { 
+          alert("时间格式不对"); 
+          return false 
+        } 
+        return true; 
+      } 
+  2.2 短日期，形如 (2003-12-05) 
+      function strDateTime(str) 
+      { 
+         var r = str.match(/^(\d{1,4})(-|\/)(\d{1,2})\2(\d{1,2})$/);  
+         if(r==null)return false;  
+         var d= new Date(r[1], r[3]-1, r[4]);  
+         return (d.getFullYear()==r[1]&&(d.getMonth()+1)==r[3]&&d.getDate()==r[4]); 
+      } 
+  2.3 长时间，形如 (2003-12-05 13:04:06) 
+      function strDateTime(str) 
+      { 
+        var reg = /^(\d{1,4})(-|\/)(\d{1,2})\2(\d{1,2}) (\d{1,2}):(\d{1,2}):(\d{1,2})$/;  
+        var r = str.match(reg);  
+        if(r==null)return false;  
+        var d= new Date(r[1], r[3]-1,r[4],r[5],r[6],r[7]);  
+        return  
+
+(d.getFullYear()==r[1]&&(d.getMonth()+1)==r[3]&&d.getDate()==r[4]&&d.getHours()==r[5]&&d.getMinutes()==r[6]&&d.getSeconds()== 
+
+r[7]); 
+      } 
+  2.4 只有年和月。形如(2003-05,或者2003-5) 
+  2.5 只有小时和分钟,形如(12:03) 
+3、表单类 
+  3.1 所有的表单的值都不能为空 
+      <input onblur="if(this.value.replace(/^\s+|\s+$/g,'')=='')alert('不能为空!')"> 
+  3.2 多行文本框的值不能为空。 
+  3.3 多行文本框的值不能超过sMaxStrleng 
+  3.4 多行文本框的值不能少于sMixStrleng 
+  3.5 判断单选框是否选择。 
+  3.6 判断复选框是否选择. 
+  3.7 复选框的全选，多选，全不选，反选 
+  3.8 文件上传过程中判断文件类型 
+4、字符类 
+  4.1 判断字符全部由a-Z或者是A-Z的字字母组成 
+      <input onblur="if(/[^a-zA-Z]/g.test(this.value))alert('有错')"> 
+  4.2 判断字符由字母和数字组成。 
+      <input onblur="if(/[^0-9a-zA-Z]/g.test(this.value))alert('有错')"> 
+  4.3 判断字符由字母和数字，下划线,点号组成.且开头的只能是下划线和字母 
+      /^([a-zA-z_]{1})([\w]*)$/g.test(str) 
+  4.4 字符串替换函数.Replace(); 
+5、浏览器类 
+  5.1 判断浏览器的类型 
+      window.navigator.appName 
+  5.2 判断ie的版本 
+      window.navigator.appVersion 
+  5.3 判断客户端的分辨率 
+      window.screen.height;  window.screen.width; 
+   
+6、结合类 
+  6.1 email的判断。 
+      function ismail(mail) 
+      { 
+        return(new RegExp(/^\w+((-\w+)|(\.\w+))*\@[A-Za-z0-9]+((\.|-)[A-Za-z0-9]+)*\.[A-Za-z0-9]+$/).test(mail)); 
+      } 
+  6.2 手机号码的验证 
+  6.3 身份证的验证 
+      function isIdCardNo(num) 
+      { 
+        if (isNaN(num)) {alert("输入的不是数字！"); return false;} 
+        var len = num.length, re;  
+        if (len == 15) 
+          re = new RegExp(/^(\d{6})()?(\d{2})(\d{2})(\d{2})(\d{3})$/); 
+        else if (len == 18) 
+          re = new RegExp(/^(\d{6})()?(\d{4})(\d{2})(\d{2})(\d{3})(\d)$/); 
+        else {alert("输入的数字位数不对！"); return false;} 
+        var a = num.match(re); 
+        if (a != null) 
+        { 
+          if (len==15) 
+          { 
+            var D = new Date("19"+a[3]+"/"+a[4]+"/"+a[5]); 
+            var B = D.getYear()==a[3]&&(D.getMonth()+1)==a[4]&&D.getDate()==a[5]; 
+          } 
+          else 
+          { 
+            var D = new Date(a[3]+"/"+a[4]+"/"+a[5]); 
+            var B = D.getFullYear()==a[3]&&(D.getMonth()+1)==a[4]&&D.getDate()==a[5]; 
+          } 
+          if (!B) {alert("输入的身份证号 "+ a[0] +" 里出生日期不对！"); return false;} 
+        } 
+        return true; 
+      } 
+
+
+3.7 复选框的全选，多选，全不选，反选 
+<form name=hrong> 
+<input type=checkbox name=All onclick="checkAll('mm')">全选<br/> 
+<input type=checkbox name=mm onclick="checkItem('All')"><br/> 
+<input type=checkbox name=mm onclick="checkItem('All')"><br/> 
+<input type=checkbox name=mm onclick="checkItem('All')"><br/> 
+<input type=checkbox name=mm onclick="checkItem('All')"><br/> 
+<input type=checkbox name=mm onclick="checkItem('All')"><br/><br/> 
+
+
+<input type=checkbox name=All2 onclick="checkAll('mm2')">全选<br/> 
+<input type=checkbox name=mm2 onclick="checkItem('All2')"><br/> 
+<input type=checkbox name=mm2 onclick="checkItem('All2')"><br/> 
+<input type=checkbox name=mm2 onclick="checkItem('All2')"><br/> 
+<input type=checkbox name=mm2 onclick="checkItem('All2')"><br/> 
+<input type=checkbox name=mm2 onclick="checkItem('All2')"><br/> 
+
+</form> 
+
+<SCRIPT LANGUAGE="JavaScript"> 
+function checkAll(str) 
+{ 
+  var a = document.getElementsByName(str); 
+  var n = a.length; 
+  for (var i=0; i<n; i++) 
+  a[i].checked = window.event.srcElement.checked; 
+} 
+function checkItem(str) 
+{ 
+  var e = window.event.srcElement; 
+  var all = eval("document.hrong."+ str); 
+  if (e.checked) 
+  { 
+    var a = document.getElementsByName(e.name); 
+    all.checked = true; 
+    for (var i=0; i<a.length; i++) 
+    { 
+      if (!a[i].checked){ all.checked = false; break;} 
+    } 
+  } 
+  else all.checked = false; 
+} 
+</SCRIPT> 
+
+3.8 文件上传过程中判断文件类型 
+<input type=file onchange="alert(this.value.match(/^(.*)(\.)(.{1,8})$/)[3])"> 
+
+
+
+不断地清空剪贴板: 
+<body onload="setInterval('clipboardData.setData(\'Text\',\'\')',100)"> 
+
+
+<script language="JavaScript" type="text/JavaScript"> 
+//先复制一样东西，或者文本或者图片 
+if(clipboardData.getData("Text")||clipboardData.getData("HTML")||clipboardData.getData("URL")) 
+{ 
+alert("有效行为"); 
+} 
+</script> 
+
+
+全屏技术： 
+真正的全屏页面解决之道！（全代码）  
+真正全屏解决之道：  
+1.htm  
+<html>  
+<head>  
+<title>无标题文档</title>  
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">  
+</head>  
+
+<body onload="window.open('fullscreen.htm','','fullscreen=1,scroll=no');">  
+</body>  
+</html>  
+
+
+fullscreen.htm  
+<html>  
+<head>  
+<title>无标题文档</title>  
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">  
+<script language="JavaScript1.2">   
+<!--   
+function opensmallwin(myurl){   
+var w2=300;//想弹出窗口的宽度   
+var h2=100;//想弹出窗口的高度   
+var w3=window.screen.width/2-w2/2;   
+var h3=window.screen.height/2-h2/2;   
+window.open(myurl,'small','toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=no,resizable=0,width='+ w2 +',height='+ h2 +',left='+ w3 +',top='+ h3 +'');   
+}   
+//-->   
+
+<!--  
+function modelesswin(url,mwidth,mheight){  
+  if (document.all&&window.print)  
+    eval('window.external.m2_blocked(url,"","help:0;resizable:0;status:0;center:1;scroll:0;dialogWidth:'+mwidth+'px;dialogHeight:'+mheight+'px")')   
+  else  
+    eval('window.open(url,"","width='+mwidth+'px,height='+mheight+'px,resizable=1,scrollbars=1")')  
+  }  
+//-->  
+
+</script>   
+</head>  
+
+<body  scroll="no">  
+<div align="right"><a href="javascript:" onclick="window.close()">关闭</a> </div>  
+<p></P>  
+<div align="right"><a href="javascript:" onclick="opensmallwin('login.htm')">登录</a> </div>  
+
+<p></P>  
+<div align="center"><a href="javascript:" onclick="modelesswin('login.htm',300,160)">用模态登录窗口</a> </div>  
+</body>  
+</html>  
+
+
+login.htm  
+<html>  
+<head>  
+<title>用户登录</title>  
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">  
+
+<style type="text/css">  
+<!--  
+body {  
+   background-color: #EAEAEA;  
+   font-family: Arial, Helvetica, sans-serif;  
+   font-size: 12px;  
+   line-height: 24px;  
+   color: #336699;  
+}  
+input.boxline {  
+   width: 100px;  
+   font-family: "Times New Roman", "Times", "serif";  
+   font-size: 9pt;  
+   border: 1px solid #669999;  
+   height: 18px;  
+
+}  
+
+input.whiteline {    
+   font-size: 12px; border: 1px #999999 solid  
+}  
+-->  
+</style></head>  
+<body leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">  
+<table width="100%" height="100%" border="0" cellpadding="0" cellspacing="14" bgcolor="#CCCCCC">  
+  <tr valign="top">  
+    <td width="10%" nowrap  align="right"><b>用户名：</b></td>  
+    <td width="90%"><input name="textfield1" type="text" size="25" class="whiteline"></td>  
+  </tr>  
+  <tr valign="top">  
+    <td nowrap align="right"><b>密　码：</b></td>  
+    <td><input name="textfield12" type="password" size="25" class="whiteline"></td>  
+  </tr>  
+  <tr valign="top">  
+    <td> </td>  
+    <td><input type="submit" name="Submit" value="登　　录" class="boxline"></td>  
+  </tr>  
+</table>  
+</body>  
+</html>  
+
+
+自动关掉原窗口：  
+
+
+<html>  
+<head>  
+<title>无标题文档</title>  
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">  
+<style type="text/css">  
+<!--  
+body {  
+   margin-left: 0px;  
+   margin-top: 0px;  
+   margin-right: 0px;  
+   margin-bottom: 0px;  
+}  
+-->  
+</style>  
+</head>  
+
+<body onload="window.open('fullscreen.htm','','fullscreen=1,scroll=no');window.opener=null;window.close()">  
+<input type=button value=关闭 onclick="window.opener=null;window.close()">   
+<!-- IE5.5+ 不会有弹出提示 -->   
+
+<OBJECT id=WebBrowser classid=CLSID:8856F961-340A-11D0-A96B-00C04FD705A2 height=0 width=0></OBJECT>   
+<input type=button value=关闭窗口 onclick=document.all.WebBrowser.ExecWB(45,1)>   
+</body>  
+</html>  
+
+关键是在onload事件中加入：  
+window.opener=null;window.close()  
+
+
+预读图片： 
+<SCRIPT LANGUAGE="JavaScript"> 
+
+<!-- This script and many more are available free online at --> 
+<!-- The JavaScript Source!! <a href=http://javascript.internet.com target=_blank>http://javascript.internet.com --> 
+
+<!-- Begin 
+
+image1 = new Image(); 
+image1.src = "image1.gif"; 
+
+image2 = new Image(); 
+image2.src = "image2.gif"; 
+
+// End --> 
+</script> 
+
+
+
+关于两个网页刷新交互的问题  
+JS处理方法：  
+
+a.htm  
+
+<a href="b.htm" target=blank>发表留言</a>  
+<script>  
+alert("wwwwwwwwwwwwwwwwwwwwwwwwww");  
+</script>  
+
+b.htm  
+
+<script language="javascript">  
+//window.opener.location.reload();刷新父窗口  
+//window.opener.location="2.htm"//重定向父窗口到2.htm页  
+function closewindow()  
+{  
+window.opener.location.reload();  
+self.close();  
+window.opener.document.write("sssssssssssssssssss");  
+}  
+</script>  
+<a href="b.htm" target=blank onclick="closewindow();">关闭</a>  
+
+
+
+后台处理方法：  
+
+private btnForSubmit(Object sender,EventArgs e)  
+{  
+ .............  
+ Response.Write("<script>window.opener.document.execCommand('refresh');window.opener='';window.close();</script>");  
+//string str="<script>window.opener.document.execCommand('refresh');window.opener='';window.close();</script>";  
+//this.RegisterStartupScript("mycode",str);  
+external.m2_blocked()、external.m2_blocked()方法使用详解 
+
+ Javascript有许多内建的方法来产生对话框，如：window.alert(), window.confirm(),window.prompt().等。 然而IE提供更多的方法支持对话框。如： 
+
+　　external.m2_blocked() (IE 4+ 支持) 
+　　external.m2_blocked() (IE 5+ 支持) 
+
+
+ window.external.m2_blocked()方法用来创建一个显示HTML内容的模态对话框，由于是对话框，因此它并没有一般用window.open()打开的窗口的所有属性。 
+ window.external.m2_blocked()方法用来创建一个显示HTML内容的非模态对话框。 
+
+ 当我们用external.m2_blocked()打开窗口时，不必用window.close()去关闭它，当以非模态方式[IE5]打开时， 打开对话框的窗口仍可以进行其他的操作，即对话框不总是最上面的焦点，当打开它的窗口ＵＲＬ改变时，它自动关闭。而模态[ＩＥ４]方式的对话框始终有焦点（焦点不可移走，直到它关闭）。模态对话框和打开它的窗口相联系，因此我们打开另外的窗口时，他们的链接关系依然保存，并且隐藏在活动窗口的下面。 
+
+使用方法如下： 
+ vReturnValue = window.external.m2_blocked(sURL [, vArguments] [, sFeatures]) 
+ vReturnValue = window.external.m2_blocked(sURL [, vArguments] [, sFeatures]) 
+参数说明： 
+ sURL 
+ 必选参数，类型：字符串。用来指定对话框要显示的文档的URL。 
+ vArguments 
+ 可选参数，类型：变体。用来向对话框传递参数。传递的参数类型不限，包括数组等。对话框通过window.dialogArguments来取得传递进来的参数。 
+ sFeatures 
+ 可选参数，类型：字符串。用来描述对话框的外观等信息，可以使用以下的一个或几个，用分号“;”隔开。 
+  dialogHeight 对话框高度，不小于１００px，ＩＥ４中dialogHeight 和 dialogWidth 默认的单位是em，而ＩＥ５中是px，为方便其见，在定义modal方式的对话框时，用px做单位。 
+ 　　dialogWidth: 对话框宽度。 
+ 　　dialogLeft: 距离桌面左的距离。 
+ 　　dialogTop: 离桌面上的距离。 
+ 　　center: {yes | no | 1 | 0 }：窗口是否居中，默认yes，但仍可以指定高度和宽度。 
+ 　　help: {yes | no | 1 | 0 }：是否显示帮助按钮，默认yes。 
+ 　　resizable: {yes | no | 1 | 0 } [ＩＥ５＋]：是否可被改变大小。默认no。 
+ 　　status: {yes | no | 1 | 0 } [IE5+]：是否显示状态栏。默认为yes[ Modeless]或no[Modal]。 
+  scroll:{ yes | no | 1 | 0 | on | off }：指明对话框是否显示滚动条。默认为yes。 
+
+  还有几个属性是用在HTA中的，在一般的网页中一般不使用。 
+  dialogHide:{ yes | no | 1 | 0 | on | off }：在打印或者打印预览时对话框是否隐藏。默认为no。 
+  edge:{ sunken | raised }：指明对话框的边框样式。默认为raised。 
+  unadorned:{ yes | no | 1 | 0 | on | off }：默认为no。 
+
+ 传入参数： 
+ 要想对话框传递参数，是通过vArguments来进行传递的。类型不限制，对于字符串类型，最大为4096个字符。也可以传递对象，例如： 
+
+ test1.htm 
+ ==================== 
+ <script> 
+  var mxh1 = new Array("mxh","net_lover","孟子E章") 
+  var mxh2 = window.open("about:blank","window_mxh") 
+  // 向对话框传递数组 
+  window.external.m2_blocked("test2.htm",mxh1) 
+  // 向对话框传递window对象 
+  window.external.m2_blocked("test3.htm",mxh2) 
+ </script> 
+
+ test2.htm 
+ ==================== 
+ <script> 
+  var a = window.dialogArguments 
+  alert("您传递的参数为：" + a) 
+ </script> 
+
+ test3.htm 
+ ==================== 
+ <script> 
+  var a = window.dialogArguments 
+  alert("您传递的参数为window对象，名称：" + a.name) 
+ </script> 
+
+ 可以通过window.returnValue向打开对话框的窗口返回信息，当然也可以是对象。例如： 
+
+ test4.htm 
+ =================== 
+ <script> 
+  var a = window.external.m2_blocked("test5.htm") 
+  for(i=0;i<a.length;i++) alert(a[i]) 
+ </script> 
+
+ test5.htm 
+ =================== 
+ <script> 
+ function sendTo() 
+ { 
+  var a=new Array("a","b") 
+  window.returnValue = a 
+  window.close() 
+ } 
+ </script> 
+ <body> 
+ <form> 
+  <input value="返回" type=button onclick="sendTo()"> 
+ </form> 
+
+ 常见问题： 
+ 1，如何在模态对话框中进行提交而不新开窗口？ 
+ 如果你 的 浏览器是IE5.5+,可以在对话框中使用带name属性的iframe，提交时可以制定target为该iframe的name。对于IE4+，你可以用高度为0的frame来作：例子， 
+
+ test6.htm 
+ =================== 
+ <script> 
+  window.external.m2_blocked("test7.htm") 
+ </script> 
+
+ test7.htm 
+ =================== 
+ if(window.location.search) alert(window.location.search) 
+ <frameset rows="0,*"> 
+  <frame src="about:blank"> 
+  <frame src="test8.htm"> 
+ </frameset> 
+
+ test8.htm 
+ =================== 
+ <form target="_self" method="get"> 
+ <input name=txt value="test"> 
+ <input type=submit> 
+ </form> 
+ <script> 
+ if(window.location.search) alert(window.location.search) 
+ </script> 
+ 2,可以通过http://servername/virtualdirname/test.htm?name=mxh方式直接向对话框传递参数吗？ 
+ 答案是不能。但在frame里是可以的。 
+//屏蔽 F5 刷新键 
+
+
+function document.onkeydown() 
+{ 
+    var k = window.event.keyCode; 
+    if (k == 116)                   //屏蔽 F5 刷新键 
+    { 
+        window.event.keyCode    = 0; 
+        window.event.returnValue= false; 
+    } 
+} 
+
+
+<script language="Javascript"> 
+ //屏蔽鼠标右键、Ctrl+N、Shift+F10、F5刷新、退格键 
+ //屏蔽F1帮助 
+function window.onhelp() 
+{ 
+   return false 
+} 
+function KeyDown() 
+{ 
+  //alert(event.keyCode); 
+   //屏蔽 Alt+ 方向键 ← 屏蔽 Alt+ 方向键 → 
+  if ((window.event.altKey)&&((window.event.keyCode==37)||(window.event.keyCode==39))) 
+  {   
+     //alert("不准你使用ALT+方向键前进或后退网页！"); 
+     event.returnValue=false; 
+  } 
+  //屏蔽退格删除键,屏蔽 F5 刷新键,Ctrl + R 
+  if ((event.keyCode==116)||(event.ctrlKey && event.keyCode==82)) 
+  {  
+     event.keyCode=0; 
+     event.returnValue=false; 
+  }  
+   
+  //屏蔽 Ctrl+n 
+  if ((event.ctrlKey)&&(event.keyCode==78)) 
+  {   
+     event.returnValue=false; 
+  } 
+   
+  //屏蔽 shift+F10 
+  if ((event.shiftKey)&&(event.keyCode==121)) 
+  {  
+     event.returnValue=false; 
+  } 
+   
+  //屏蔽 shift 加鼠标左键新开一网页 
+  if (window.event.srcElement.tagName == "A" && window.event.shiftKey)  
+  { 
+    window.event.returnValue = false; 
+  } 
+       
+   //屏蔽Alt+F4 
+  if ((window.event.altKey)&&(window.event.keyCode==115)) 
+  { 
+      window.external.m2_blocked("about:blank","","dialogWidth:1px;dialogheight:1px"); 
+      return false; 
+  } 
+   
+  //屏蔽Ctrl+A 
+  if((event.ctrlKey)&&(event.keyCode==65)) 
+  { 
+   return false; 
+  } 
+     
+} 
+</script> 
+</body> 
+</HTML>  
+ 
