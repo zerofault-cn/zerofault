@@ -1,0 +1,118 @@
+用PHP发送MIME邮件（五）
+译者：limodou 2000年8月14日
+把它EMAIL给我 我来谈谈我的看法 上一篇 下一篇 
+ 
+作者：Kartic Krishnamurthy 译者：limodou 
+
+　　我们将考查的下一个方法是，build_message()，它占据了整个工作的大部分，但它是通过一个 
+gen_email()的方法来调用的。请注意build_message()是一个私有方法。 
+
+<?php 
+
+function build_message() { 
+
+$msg = ""; 
+$boundary = 'PM'.chr(rand(65, 91)).'------'.md5(uniqid(rand())); # 边界标识 
+$nparts = sizeof($this->mimeparts); 
+
+//情况1：存在附件列表，所以MIME信息头必须是multipart/mixed 
+if (is_array($this->mimeparts) && ($nparts > 1)) { 
+$c_ver = "MIME-Version: 1.0".CRLF; 
+$c_type = 'Content-Type: multipart/mixed;'.CRLF."\tboundary=\"$boundary\"".CRLF; 
+$c_enc = "Content-Transfer-Encoding: ".BIT7.CRLF; 
+$c_desc = $c_desc?"Content-Description: $c_desc".CRLF:""; 
+$warning = CRLF.WARNING.CRLF.CRLF ; 
+
+// 如果存在MIMIE段，则邮件体也要变成附件 
+if (!empty($this->body)) { 
+$this->attach($this->body, BODY, TEXT, BIT7); 
+} 
+
+// 现在创建邮件的各个MIME段 
+for ($i=0 ; $i < $nparts; $i++) { 
+if (!empty($this->mimeparts[$i])) 
+$msg .= CRLF.'--'.$boundary.CRLF.$this->mimeparts[$i].CRLF; 
+} 
+$msg .= '--'.$boundary.'--'.CRLF; 
+$msg = $c_ver.$c_type.$c_enc.$c_desc.$warning.$msg; 
+} else { 
+if (!empty($this->body)) $msg .= $this->body.CRLF.CRLF; 
+} 
+return $msg; 
+} 
+
+?> 
+
+　　这个方法有点自相予盾，简单而又复杂。要看你自已怎么看了。 
+
+我们在前面读到（在MIME基础中），每一个MIME段都有一个边界标记，这个标记有一个唯一的id。边 
+界标记被用在： 
+MIME信息头中，用来指示附件必须从哪进行划分 
+MIME段中；实际用在每一段的前面和后面来划分附件的边界。（回想一下Alexander的有着图片 
+和图谱的邮件！） 
+（记住：最后一个边界标记要以两个连接符（--）结束，用于指示范围结束）。 
+$boundary包含了边界标记，并且它是通过一个随机数进行了唯一化再做MD5哈希生成的。另外，我们 
+给$boundary冠以一个"PM?"的前缀，这里"?"是一个随机字母。举一个$boundary的例子就是 
+"PMK------2345ee5de0052eba4daf47287953d37e"（PM表示PHP MIME，所以你可以将其改为你的可能的 
+初始值！） 
+
+在生成MIME头的处理中我们必须考虑两种情况。这些情况影响了邮件的原始邮件体（$body在构造函数 
+中）以哪种方式被看待和MIME信息头的特别表示。情况1就是写这篇文章的原因，并且你会看到：可以 
+有许多的附件被包含！在这种情况下，请注意作为信息的部分被放上了警告字符串"This is a MIME 
+encoding message"。因此，真正的消息体本身也必须以附件形式加到信息中！邮件的文本通常是附件 
+列表中的第一个附件，在我们的例子中就是$mimeparts。这个正好就是为什么我们要占用一个 
+$mimeparts索引的原因，以便让第一个索引（是0）可以用于邮件文本部分。邮件体必须以7bit编码进 
+行附加。 
+<?php 
+
+if (!empty($this->body)) { 
+$this->attach($this->body, BODY, TEXT, BIT7); 
+} 
+
+?> 
+
+上面的一小段代码完成附加邮件文本部分作为一个MIME附件的工作。注意，我们使用了'BODY'常量来 
+指示attach()要将附件加到何处。 
+
+第二种情况就是当不存在附件时，在这种情况下，如果提供了邮件文本，它将是包含在局部变量$msg 
+中的唯一信息；在这种情况下不需要MIME头。（然而，在这种情况下我们还应该只把MIME-Version头 
+指定出来----回过头到再看一下前面的演示的最简单的MIME信息。） 
+
+MIME信息头（MIME-Version，Content-Type, 等等。）在有附件的时候被创建。为了用MIME消息头来 
+创建消息体，首先MIME信息头要被创建。然后各个有效的MIME段通过$mimeheaders数组被反复处理。 
+这就是边界标识被实际使用的地点。根据规则的一致性，对一个MIME段被前缀上两个连接符（'-- 
+'.$BOUNDARY.crlf）并且在最后一个MIME段的后面，在边界标识后追加两个连接符表示邮件范围结束。 
+在变量$msg中的完整的信息作为这个方法的值被返回。 
+　　下一个方法，get_email()通过build_message()方法完成MIME消息的生成。因为build_message()是一 
+个内部方法，get_email()在调用完build_message()之后，创建RFC 822的信息头并且追加上MIME信息。 
+
+<?php 
+
+function gen_email($force=false) { 
+
+if (!empty($this->email) && !$force) return $this->email ; // saves processing 
+$email = ""; 
+if (empty($this->subject)) $this->subject = NOSUBJECT; 
+if (!empty($this->from)) $email .= 'From: '.$this->from.CRLF; 
+if (!empty($this->headers)) $email .= $this->headers.CRLF; 
+$email .= $this->build_message(); 
+$this->email = $email; 
+return $this->email; 
+} 
+
+?> 
+
+　　对于我们的类的一个实例来说，类的成员$email拥有生成的整个邮件信息。为了避免信息被无必要的重 
+新生成，这个方法继续创建邮件头，并且只有当$mail为空时才调用build_message()。然而，你可以通过调 
+用gen_email()来强制重新处理。（如果"To"信息被改变或加入了一个新的附件，调用者显示想这么做）。 
+
+　　gen_email()创建了更熟悉的From头。另外，如果没有指定主题，它将主题设为缺省值（No Subject）。 
+我们直到后面才将To和Subject 的内含保存起来。这个方法返回完整的邮件信息，这样就结束了创建MIME信 
+息的任务。 
+
+上一页 下一页 
+
+
+转自phpbuilder.com
+文章评注
+

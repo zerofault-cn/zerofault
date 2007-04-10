@@ -1,0 +1,38 @@
+在PHP中以root身份运行外部命令
+在PHP中运行只有root用户才可以运行的外部程序，一直是个老问题，用常规的办法很难实现。这是因为一般情况下，PHP是作为APACHE的一个模块的，也就是说，PHP是APACHE的一部分，而APACHE除了suEXEC机制外，是不能以不同的用户ID来执行命令的，但suEXEC机制只能CGI有效。
+网上曾经有一篇文章，说用调用"su - -c COMMAND"可以实现，但经过多次试验，发现不行，因为su命令必须在STDIN上输入root的密码。
+怎么办？用常规的方法难以奏效，只能再想其它的方法了。成功的关键在于能有一个可以切换用户ID但又可以在命令上输入密码（或不用输入密码）的工具。有这样的工具吗？有，它就是super。
+下面就具体说说如何来做？
+要注意的是，安装和配置super，都要以root身份来进行。
+?	第一步，切换到root下
+?	第二步，安装super
+先到ftp://ftp.mdtsoft.com/pub/super下载super-3.14.0-1.i386.rpm。这是一个RPM文件，其它包括了两个工具：setuid和super，以及它们的文档和man手册。用下面的命令将它安装到系统中：
+% rpm -Uvh super-3.14.0-1.i386.rpm
+你还可以用这个命令来查看这个RPM中的文件：
+% rpm -qpl super-3.14.0-1.i386.rpm
+从结果可以看到，两个工具都将被安装到/bin目录下。
+?	第三步，配置super
+super的配置文件是/etc/super.tab。这是一个文本文件，格式也比较复杂。不过，我们这里只要很简单的加上几行就可以了。至于详细的说明，可以通过man super.tab来查看。
+假设运行Apache的用户是nobody，我们欲通过super来增加系统用户（调用useradd命令），那么我们只要在super.tab文件中加入以下这行：
+auser /sbin/useradd nobody,hunte
+第一段是super能够识别的命令的别名；第二段是该别名所对应的系统命令的全路径；第三段是可以运行该命令的用户列表，用逗号分隔。这里除了nobody外，还一个叫hunte的普通用户，是用于下面的测试。当然，你应该用你系统中有的任意一个普通用户。
+至此，super的配置就算好了。
+?	第四步，测试
+以第三步中指定的非nobody用户登录，运行：
+% /bin/super auser testuser
+如果前面的配置没什么错误的话，用户testuser应该是成功地创建了。可以用：
+% cat /etc/passwd | grep testuser
+命令来验证一下。
+?	第五步，在PHP中调用该命令
+下面是PHP代码：
+<?
+if ($username)
+{
+//应该检查新用户是否已经存在
+echo '正在创建用户<$username>...';
+system(escapeshellcmd("/bin/super auser $username"));
+}
+?> 
+使用super，使得在PHP中以root身份运行外部命令不再是难事。试试看吧。
+测试环境：RedHat Linux 7.0 (Kernel 2.4.3) + Apache 1.3.9 + PHP 4.0.4pl1
+Hunte于2001年4月15日

@@ -1,0 +1,85 @@
+用PHP发送MIME邮件（四）
+译者：limodou 2000年8月14日
+把它EMAIL给我 我来谈谈我的看法 上一篇 下一篇 
+ 
+作者：Kartic Krishnamurthy 译者：limodou 
+
+核心：方法 
+　　我们将MIME信息头的生成，MIME段头的生成和最终的邮件消息的生成分成几个模块。方法的实现是直接从我们前面遇到的MIME基础而来的。 
+
+<?php 
+
+function attach($data, $description = "", $contenttype = OCTET, $encoding = BASE64, $disp = '') { 
+if (empty($data)) 
+return 0; 
+if (trim($contenttype) == '') 
+$contenttype = OCTET ; 
+if (trim($encoding) == '') 
+$encoding = BASE64; 
+if ($encoding == BIT7) 
+$emsg = $data; 
+elseif ($encoding == QP) 
+$emsg = $$this->qp_func($data); 
+elseif ($encoding == BASE64) { 
+if (!$this->base64_func) # 检查是否有用户自动定函数 
+$emsg = base64_encode($data); 
+else 
+$emsg = $$this->base64_func($data); 
+} 
+$emsg = chunk_split($emsg); 
+//检查是否content-type是text/plain并且如果没有指定charset，追加缺省的CHARSET 
+if (preg_match("!^".TEXT."!i", $contenttype) && !preg_match("!;charset=!i", $contenttype)) 
+$contenttype .= ";\r\n\tcharset=".CHARSET ; 
+$msg = sprintf("Content-Type: %sContent-Transfer-Encoding: %s%s%s%s", 
+$contenttype.CRLF, 
+$encoding.CRLF, 
+((($description) && (BODY != $description))?"Content-Description: $description".CRLF:""), 
+($disp?"Content-Disposition: $disp".CRLF:""), 
+CRLF.$emsg.CRLF); 
+BODY==$description? $this->mimeparts[0] = $msg: $this->mimeparts[] = $msg ; 
+return sizeof($this->mimeparts); 
+} 
+
+?> 
+
+　　让我们仔细地看一下这个方法（对于其它的大部分方法也将如此）： 
+
+这个方法使用的参数有： 
+所附的实际数据（$data） 
+与Content-Description头相应的数据描述（$description） 
+将用在Content-Type头中的数据content-type值（$contentype） 
+用在Content-Transfer-Encoding中的编码值（$encoding） 
+用在Content-Disposition头$disp中的布局值，可以是INLINE或ATTACH，两个都是常量 
+如BASE64，TEXT这样的值等等，作为常量被定义在附加的.def文件中。 
+使用$encoding值来决定需要用哪种编码方式对数据进行编码。有效的值是BIT7(或7bit)，QP或BASE64。 
+这个函数同时也检查了是否用户要使用他/她自已的BASE64或QP函数。在写这篇文章时，在我们的类中 
+只有BIT7和BASE64被实现了，然而，你可以传递你自已的quoted-printable 函数来使用，通过在前面 
+讨论的$qp_func类变量。 
+在编码处理之后，你会注意到对编码的信息使用了chunk_split()。这个函数根据可选长度将字符串分 
+割成小段。因为我们没有指出长度，缺省长度使用76。这个非常附合邮件处理的习惯。 
+接着，如果$contenttype参数包含text/plain，则必须给出"charset=" 参数的值。它的缺省值被定义 
+在常量CHARSET中，值为us-ascii。注意当头使用参数值传递时，在头与参数之间必须有一个分号（;）。 
+例如，Content-Type: text/plain; charset=us-ascii 
+如果其它MIME段头各自的值被传递给这个方法，这些段头被创建。毕竟我们不想拥有一个没有描述的 
+Content-Description头。在创建这些头之后，我们追加上经过编码的数据部分信息。（检查一下方法 
+中的sprintf()语句）。 
+同样，注意我们使用了一个叫BODY（又是一个常量）的特别描述字段。这就是我们用在类实现中的东西。 
+如果描述字段与BODY一样，我们将其赋给$mimeheaders数组中的第一个元素。对于这个请多读几遍。 
+
+attach() 返回$mimeparts数组的当前大小，用在调用脚本的引用中。通过这种方法就可以知道一个附 
+件"X"存在哪一个索引中（实际返回的值要比在数组中的索引小1） 
+注意所有的头必须用一个CRLF（\r\n）序列结束。 
+　　接着，我们看一下fattach()方法，fattach()与attach()相似，但是它使用一个文件名作为它的第一个 
+参数（作为attach()中$data的替换）。这个方法只是一个封装，以便调用者可以用一个文件来调用fattach。 
+fattach()然后将文件读出，接着调用attach()来追加数据。这个方法在失败时返回0，可以在$errstr 变量 
+中找到解释或者当成功时，返回文件附件在$mimeparts数组中的索引号。 
+
+　　我们现在已经开发了附加数据的功能，对它们进行编码并且将单独的MIME段放在私有数组中。还需要完 
+成的工作是： 
+
+完成MIME的各个段 
+创建包含MIME信息头的邮件信息头，邮件原始的信息头（如To:, From:等等）并且包括任何用户定义 
+的头。 
+在头后面追加完整的MIME段，这样一个完整的邮件包就生成了。 
+
+上一页 下一页 

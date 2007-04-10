@@ -1,0 +1,98 @@
+实现跨域名Cookie
+作者：Christopher Kings-Lynne 翻译：limodou 
+　　Cookie真是一个伟大的发明，它允许web开发者保留他们的用户的登录状态。然而，当你的站点或网络有一个以上的域名时就会出现问题了。 
+　　在Cookie规范上说，一个cookie只能用于一个域名，不能够发给其它的域名。因此，如果在浏览器中对 一个域名设置了一个cookie，这个cookie对于其它的域名将无效。如果你想让你的用户从你的站点中的其中一个进行登录，同时也可以在其它域名上进行登录，这可真是一个大难题。 
+　　我的解决方案将使用下面的一般框架： 
+一个预置的脚本将用来接受通过GET或COOKIE方式传递过来的sessionid号。它将比COOKIE优先选择GET变量。所以，无论何时需要引用交叉的域名时，我们把sessionid做为一个URL参数进行发送。 修改Apache配置，用来实现重写所有的交叉域名的cookie。这样做的原因一会儿就会清楚了。 在任何时候出现一个交叉域名引用时使用变量。 
+第一步：创建预置脚本 
+　　将下面的代码加到预置脚本中(或出现在所有脚本之前的函数中)。 
+
+<?php 
+
+/* 支持交叉域名cookie... */ 
+
+// 如果GET变量已经设置了，并且它与cookie变量不同 
+//则使用get变量(更新cookie) 
+global $HTTP_COOKIE_VARS, $HTTP_GET_VARS; 
+if (isset($sessionid) && isset($HTTP_GET_VARS['sessionid']) && ($HTTP_COOKIE_VARS['sessionid'] != $HTTP_GET_VARS['sessionid'])) { 
+SetCookie('sessionid', $HTTP_GET_VARS['sessionid'], 0, '/', ''); 
+$HTTP_COOKIE_VARS['sessionid'] = $HTTP_GET_VARS['sessionid']; 
+$sessionid = $HTTP_GET_VARS['sessionid']; 
+} 
+
+?> 
+
+　　一旦这个代码运行之后，一个全局的'sessionid'变量将可以用于脚本。它将保存着用户的cookie中的 
+sessionid值，或者是通过GET请求发来的sessionid值。 
+第二步：为所有的交叉域名引用使用变量 
+　　创建一个全局的配置文件，用于存放可以进行切换的域名的基本引用形式。例如，如果我们拥有 
+domain1.com和domain2.com，则如下设置： 
+<?php 
+
+$domains['domain1'] = "http://www.domain1.com/-$sessionid-"; 
+$domains['domain2'] = "http://www.domain2.com/-$sessionid-"; 
+
+?> 
+
+　　现在，如果在代码中如下做： 
+
+<?php 
+
+echo "Click &lt;a href=\"", $domains['domain2'], "/contact/?email=yes\"&gt;here&lt;/a&gt; to contact us."; 
+
+?> 
+　　你将产生如下的输出： 
+
+Click <a href="http://www.domain2.com/-66543afe6543asdf6asd-/contact/?email=yes\">here</a> 
+to contact us. 
+
+　　在这里sessionid已经被插入到URL中去了。 
+
+　　在这个地方，你可能会想"这样可能会在web服务器上打开名为横线，sessionid，横线的子目录?!?!?"。 
+然而，下面的步骤将提供一个必需的戏法，以便让它能够使用! 
+
+
+第三步：配置Apache 
+　　现在，剩下的步骤就是配置apache来重写这个URL： 
+
+http://www.domain2.com/-66543afe6543asdf6asd-/contact/ 
+　　变成这样： 
+
+http://www.domain2.com/contact/?sessionid=66543afe6543asdf6asd 
+　　并且这种url： 
+
+http://www.domain2.com/-66543afe6543asdf6asd-/contact/?email=yes 
+　　变成这样： 
+
+http://www.domain2.com/contact/?email=yes&sessionid=66543afe6543asdf6asd 
+　　为了实现它，简单地配置两个虚拟服务器，作为domain1和domain2，如下操作： 
+
+<VirtualHost ipaddress> 
+DocumentRoot /usr/local/www/domain1 
+ServerName www.domain1.com 
+RewriteEngine on 
+RewriteRule ^/-(.*)-(.*\?.*)$ $2&sessionid=$1 [L,R,QSA] 
+RewriteRule ^/-(.*)-(.*)$ $2?sessionid=$1 [L,R,QSA] 
+</VirtualHost> 
+
+<VirtualHost ipaddress> 
+DocumentRoot /usr/local/www/domain2 
+ServerName www.domain2.com 
+RewriteEngine on 
+RewriteRule ^/-(.*)-(.*\?.*)$ $2&sessionid=$1 [L,R,QSA] 
+RewriteRule ^/-(.*)-(.*)$ $2?sessionid=$1 [L,R,QSA] 
+</VirtualHost> 
+
+　　这些重写的规则实现了上面两个URL重写的要求。 
+
+结论 
+　　通过使用变量结合与apache的重写功能，交叉域名cookie可以以一种简单的方式实现。想要维护这样的 
+系统，无论什么时候链接交叉域名，在使用域名变量之外，什么也不用作了！在域名内部的链接不需要进行 
+修改，因为cookie会工作正常。 
+
+　　如果你有兴趣看一下在生产网络中实际运作中的系统，请参观http://www.familyhealth.com.au/。在 
+一些交叉域名链接上移动你的鼠标，并且看一下当你点击后它们是如何被重写的。 
+
+　　也许，使用这个技术唯一的问题就是无法删除在用户浏览器中的全部域名下的cookie。 
+
+转自：PHPBuilder.com

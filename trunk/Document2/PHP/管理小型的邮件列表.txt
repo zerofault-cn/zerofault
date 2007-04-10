@@ -1,0 +1,245 @@
+管理小型的邮件列表
+　　最近有一个读者问我关于ThickBook新闻列表中处理订阅/退订的机制，并且是如何与实际的发送信息相配合，给邮件列表中的所有收信人的。问题提的不错，有一个相当容易的方法，但是我首先要说的是我所做的没有任何投机取巧的地方，因为我非常的酷----就是有，我使用这个方法也只是因为我懒。注意，在市面上有非常多的邮件列表软件，可以把它装在系统上，并且也有一些别的，更多的是结合在一起的脚本集，你也可以用来做同样的事情。但是，正如我所说，我是一个懒人，不想下载和安装任何东西，所以我生成了几个相当简单的页面，用来执行我所要求的工作。很希望，有人能从中学到一些东西。 
+
+　　首先是订阅/退订脚本，它所做的工作就是从数据库表中增加或删除记录。把它叫做"manage.phtml" 或 
+差不多的什么东西。这样呢，就需要后台是某种数据库，在上面可以创建订阅表。根据政治中的半数原则， 
+所以我将使用MySQL作为这个例子的数据库。你可以使用任何你常用的数据库，只是根据PHP手册替换正确的数据库相关函数。 
+
+　　在我的订阅表中，我使用了两个字段：邮件地址(email_addr)和添加日期(date_added)。你可以根据需 
+要增加字段，或者将date_added字段删除。在这个例子中，我只是向你展示我做了什么，你可以适当的进行修改。在我的订阅表中，email_addr字段是一个不重复字段，意味着你不能增加另一个与之完全一样的e-mail地址。这个可以避免重复订阅，而且当用户想退订时，也使删除记录的方法变得简单和可靠。 
+
+　　那么，让我们创建订阅/退订表单吧（manager.phtml或你想起的什么名字）。我使用同一个文件处理订 
+阅和退订，也包括表格自身的动作，所以可能有点复杂。我将从头到尾讲解，然后把所有的片段组合在一起，放在一个表单中。 
+
+　　在脚本的开始处，是打开数据库和准备时间戳。在开始时处理这些不显眼的东西总是可以为我减轻一点压力。
+-------------------------------------------------------------------------------- 
+// 连接数据库 
+$db = mysql_connect("servername", "username", "password") or die ("不能连接。"); 
+mysql_select_db("yourDB", $db) or die ("不能选择数据库。"); 
+// 得到时间戳 
+$add_date = date("Y-m-d"); -------------------------------------------------------------------------------- 
+　　我们希望$op的值是"ds"。它不是复杂的程序缩写----我创的，表示"do something(做某事)" 。所以，脚本的第一件事就是查看$op的值是不是等于"ds"。这个值只有当表单被提交后才会被发送上来。所以如果$op的值不是"ds"，那么说明用户还没有看过表单，所以应该把表单显示出来：
+-------------------------------------------------------------------------------- 
+if ($op != "ds") { 
+//需要订阅/退订 
+$text_block = " 
+<form name=\"form\" method=post action=\"$PHP_SELF\"> 
+<input type=hidden name=op value=ds> 
+<p><strong>your e-mail address:</strong><br> 
+<input type=text name=\"email\" size=25></p> 
+<p><strong>action:</strong><br> 
+<input type=radio name=\"action\" value=\"sub\" checked> sub 
+<input type=radio name=\"action\" value=\"unsub\"> unsub</p> 
+<P><input type=submit name=\"submit\" value=\"do it\"></p> 
+</form> 
+"; 
+}-------------------------------------------------------------------------------- 
+　　你会注意到我把文本放在$text_block变量中。通过把文本放在一个变量中，接下来我所要做的就是在后面在主HTML模板内输出$text_block的值。这是个人习惯问题，你可以根据你喜欢的时间和方式输出文本。
+　　这个表单的动作是$PHP_SELF ，可以想象一下，它的意思就是当按下了提交按钮之后，它将会被重新装入。然后，你可以看到这个表单有三个字段：一个隐藏字段，用于给$op赋值为"ds" ；一个文本字段，叫做"email"，在这里用户将填入他或她的email地址；还有一个是单选按钮集，叫做"action"，根据它，用户可以决定执行哪一个动作（订阅或退订）。 
+
+　　在表单被提交之后，$op将等于"ds"，并且$action的值将包含"sub"或"unsub"。那么，我们继续看上面 
+的if...语句，一旦提交，它将被跳过（因为$op=="ds"）。如果$op的值为"ds"并且$action的值"sub"(订阅)， 
+下面的else if...句被执行。这段代码检查e-mail是否已经存在于订阅表中，如果不存在则将其插入到表中 
+并打印出响应，否则忽略。
+-------------------------------------------------------------------------------- 
+else if (($op == "ds") && ($action == "sub")) { 
+// 检查邮件还未提交则提交它们，否则返回信息 
+$check = "select email_addr from subscribers 
+where email_addr = \"$email\""; 
+$check_result = mysql_query($check) 
+or die("不能执行地e-mail地址的检查。"); 
+$check_num = mysql_num_rows($check_result); 
+if ($check_num == 0) { 
+// 如果$check_num为0，则没有找到匹配的记录，用户应该被提交 
+$sql = "insert into subscribers 
+values(\"$email\", \"$add_date\")"; 
+@mysql_query($sql) or die ("Couldn't insert email."); 
+$text_block = " 
+<P>感谢您的注册！</p> 
+"; 
+} else { 
+// 如果$check_num不为0，则用户已经提交过了，你应该让他们知道 
+$text_block = " 
+<P>你已经订阅过了！</p> 
+"; 
+} 
+}-------------------------------------------------------------------------------- 
+　　下一步：当$action的值为"unsub"（unsubscribe，退订）而不是"sub"时应该做些什么。好，就象上面一样简单，那么对else if...语句扩展一下，多加一块代码，用于检查e-mail在被删除前是否存在于订阅表中，如果存在则删除它并且打印响应，否则忽略它。 
+
+-------------------------------------------------------------------------------- 
+else if (($op == "ds") && ($action == "unsub")) { 
+// 检查已经订阅过，然后将他们退订，否则返回信息 
+$check = "select email_addr from subscribers 
+where email_addr = \"$email\""; 
+$check_result = mysql_query($check) 
+or die("不能执行对e-mail地址的检查。"); 
+$check_num = mysql_num_rows($check_result); 
+if ($check_num == 0) { 
+// 如果$check_num为0，则没有找到匹配记录，用户不能被退订 
+$text_block = " 
+<P>不能在列表中找到你的e-mail地址！</p> 
+<P>你还没有被退订，因为你所输入的e-mail不在数据库中。"; 
+} else { 
+// 如果$check_num不为0，则用户在列表中，所以可以被退订 
+$sql = "delete from subscribers 
+where email_addr = \"$email\""; 
+@mysql_query($sql) or die ("不能删除email。"); 
+$text_block = " 
+<P>退订成功！</p> 
+"; 
+} 
+} 
+?>
+-------------------------------------------------------------------------------- 
+　　现在所有艰难的工作已经做完了，只剩下在一块HTML中输出$text_block变量了： 
+-------------------------------------------------------------------------------- 
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN"> 
+<HTML> 
+<HEAD> <TITLE>订阅/退订</TITLE> </HEAD> 
+<BODY> 
+<h1>订阅/退订</h1> 
+<?php echo "$text_block"; ?> 
+</BODY> 
+</HTML> 
+-------------------------------------------------------------------------------- 
+　　下面是完整的程序清单： 
+-------------------------------------------------------------------------------- 
+<? 
+// 连接数据库 
+$db = mysql_connect("servername", "username", "password") 
+or die ("不能连接。"); 
+mysql_select_db("yourDB", $db) or die ("不能选择数据库。"); 
+// 得到时间戳 
+$add_date = date("Y-m-d"); 
+if ($op != "ds") { 
+//需要订阅/退订 
+$text_block = " 
+<form name=\"form\" method=post action=\"$PHP_SELF\"> 
+<input type=hidden name=op value=ds> 
+<p><strong>your e-mail address:</strong><br> 
+<input type=text name=\"email\" size=25></p> 
+<p><strong>action:</strong><br> 
+<input type=radio name=\"action\" value=\"sub\" checked> sub 
+<input type=radio name=\"action\" value=\"unsub\"> unsub</p> 
+<P><input type=submit name=\"submit\" value=\"do it\"></p> 
+</form> 
+"; 
+} else if (($op == "ds") && ($action == "sub")) { 
+
+// 检查邮件还未提交则提交它们，否则返回信息 
+$check = "select email_addr from subscribers 
+where email_addr = \"$email\""; 
+$check_result = mysql_query($check) 
+or die("不能执行地e-mail地址的检查。"); 
+$check_num = mysql_num_rows($check_result); 
+if ($check_num == 0) { 
+// 如果$check_num为0，则没有找到匹配的记录，用户应该被提交 
+$sql = "insert into subscribers 
+values(\"$email\", \"$add_date\")"; 
+@mysql_query($sql) or die ("Couldn't insert email."); 
+$text_block = " 
+<P>感谢您的注册！</p> 
+"; 
+} else { 
+// 如果$check_num不为0，则用户已经提交过了，你应该让他们知道 
+$text_block = " 
+<P>你已经订阅过了！</p> 
+"; 
+} 
+} else if (($op == "ds") && ($action == "unsub")) { 
+// 检查已经订阅过，然后将他们退订，否则返回信息 
+$check = "select email_addr from subscribers 
+where email_addr = \"$email\""; 
+$check_result = mysql_query($check) 
+or die("不能执行对e-mail地址的检查。"); 
+$check_num = mysql_num_rows($check_result); 
+if ($check_num == 0) { 
+// 如果$check_num为0，则没有找到匹配记录，用户不能被退订 
+$text_block = " 
+<P>不能在列表中找到你的e-mail地址！</p> 
+<P>你还没有被退订，因为你所输入的e-mail不在数据库中。"; 
+} else { 
+// 如果$check_num不为0，则用户在列表中，所以可以被退订 
+$sql = "delete from subscribers 
+where email_addr = \"$email\""; 
+@mysql_query($sql) or die ("不能删除email。"); 
+$text_block = " 
+<P>退订成功！</p> 
+"; 
+} 
+} 
+?> 
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN"> 
+<HTML> 
+<HEAD> <TITLE>订阅/退订</TITLE> </HEAD> 
+<BODY> 
+<h1>订阅/退订</h1> 
+<?php echo "$text_block"; ?> 
+</BODY> 
+</HTML> 
+-------------------------------------------------------------------------------- 
+　　现在你已经有了合适的订阅/退订机制，我将向你展示如何发出一封新闻信件，只使用一个简单的表单和一个邮件脚本。（"while"循环是你的好朋友！）。首先，是名为"send_mail.html"的表单。表单的动作应该是象"do_send_mail.phtml"的什么东西，并且我只使用了一个用来写主题的文本字段(subject)和一个写信件内容的文本域字段(newsletter)。你可以根据需要使用表单字段，只要适当地修改表单和脚本。
+-------------------------------------------------------------------------------- 
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN"> 
+<HTML> 
+<HEAD> 
+<TITLE>发送邮件</TITLE> 
+</HEAD> 
+<BODY> 
+<h1>Send a Newsletter</h1> 
+<FORM ACTION="do_send_mail.phtml" METHOD="post"> 
+<P><strong>给出一个主题：</strong><br> 
+<input type="text" name="subject" size=30></p> 
+<P><strong>邮件内容：</strong><br> 
+<textarea name="newsletter" cols=40 rows=30 wrap=virtual></textarea> 
+<p><input type="submit" name="submit" value="Send Newsletter"></p> 
+</form> 
+</BODY> 
+</HTML> 
+-------------------------------------------------------------------------------- 
+　　最后一点说明的是关于表单的动作，这个脚本叫做"do_send_mail.phtml"。脚本首先查找$subject和$newletter的值，并且如果他们的值有一个为空就重定向到表单： 
+-------------------------------------------------------------------------------- 
+if (($subject =="") || ($newsletter == "")) { 
+header("Location: http://www.yourdomain.com/send_mail.phtml"); 
+exit; 
+}-------------------------------------------------------------------------------- 
+　　接着，连接到数据库并且从订阅表中取出邮件地址： 
+-------------------------------------------------------------------------------- 
+// 连接数据库 
+$db = mysql_connect("servername", "username", "password") 
+or die ("不能连接。"); 
+mysql_select_db("yourDB", $db) or die ("不能选择数据库。"); 
+$sql = "select email_addr from subscribers"; 
+$res = mysql_query($sql) or die("不能得到邮件地址。"); 
+-------------------------------------------------------------------------------- 
+　　在进入到发送邮件信息的循环之前，要建立额外的邮件头。在这里，我只用了"From:"行：
+$headers = "From: \"Your Mailing List\" <you@yourdomain.com>\n"; 
+　　现在进入发送邮件的循环中。首先，使用mysql_fetch_array 函数（或同你的数据库相似的函数）将每条记录放在一个数组中。如果你取回的字段多于一个可能更有意义，我用它是因为它快。下面的语句对结果集进行遍历并且通过mail()函数对每个在列表中的邮箱发送e-mail： 
+-------------------------------------------------------------------------------- 
+while ($row = mysql_fetch_array($res)) { 
+$email_addr = $row[0]; 
+mail("$email_addr", "$subject", $newsletter, $headers); 
+} 
+-------------------------------------------------------------------------------- 
+　　$subject和$newletter的值是在前面的表单中输入的。在脚本的最后增加一行输出语句，以便你知道执 
+行完毕了。这就是全部处理了！完整的"do_send_mail.phtml"脚本看上去为： 
+-------------------------------------------------------------------------------- 
+<? 
+if (($subject =="") || ($newsletter == "")) { 
+header("Location: http://www.yourdomain.com/send_mail.phtml"); 
+exit; 
+} else { 
+// 连接数据库 
+$db = mysql_connect("servername", "username", "password") 
+or die ("不能连接。"); 
+mysql_select_db("yourDB", $db) or die ("不能选择数据库。"); 
+$sql = "select email_addr from subscribers"; 
+$res = mysql_query($sql) or die("不能得到邮件地址。"); 
+$headers = "From: \"Your Mailing List\" <you@yourdomain.com>\n"; 
+while ($row = mysql_fetch_array($res)) { 
+$email_addr = $row[0]; 
+mail("$email_addr", "$subject", $newsletter, $headers); 
+} 
+echo "邮件发送完毕!"; 
+} 
+?> 

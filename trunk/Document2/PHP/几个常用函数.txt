@@ -1,0 +1,36 @@
+几个常用函数（阿见）
+isset($a)函数  返回变量$a是否存在
+gettype($a)函数 测定变量$a的类型
+boolean  session_is_registered(“abcd”); 判断session变量$abcd是否存在（或说是否注册）
+boolean session_register(“abcd”); 注册session变量$abcd,注册成功返回真
+
+substr(“abcd”,2,3); 取子串，结果是”bc”
+ord(‘a’); 字符测序，结果是97
+chr(97); 得ASCII字符’a’
+strftime("%x",filectime(“c:\\windows\\widows.ini”)); 格式化时间(变为标准的日期)
+
+settype($a,$string) 如：settype($a,”integer”);本函式用来设定或转换变数型态。成功传回 true 值，其它情形传回 false 值。参数 var 为原来的变数名，参数 type 为下列的型态之一：integer、double、string、array 与 object。
+
+fgets($fp,10); $fp为文件句柄,取出的串不超过10,读到行尾结束，包括（chr(13)和chr(10)）,返回读取的结果
+fseek($fp,$wz);文件指针定位，相对于文件头开始定位
+ftell($fp);返回文件指针位置
+fread($fp,10);读10个字符，返回读出的结果,读后指向后移
+fwrite($fp,$string,10);定$string中的10个字符，值得注意的是若指定了长度，则在 PHP 环境设定值 magic_quotes_runtime 的设定将被忽略，同时字串中的斜线不会被删除
+filectime(“c:\\windows\\widows.ini”); 取文件时间
+filesize(“c:\\windows\\windows.ini”); 取文件大小
+if(!file_exists($dir) )  mkdir($dir,0700); 使用0700参数不易出错
+file_exists();既可判断文件是否存在，也可用于目录判断
+$fp=fopen("c:\apache\supermm","r"); 只读打开文件,参数”w”为建立
+fclose($fp); 关闭文件
+copy(“文件1”,”文件2”);文件复制
+unlink(“文件1”); 文件删除
+
+mkdir($dir,0700);建立目录
+rmdir($dir);删除目录
+chdir($dir); 改变php当前的执行目录,返回真则成功
+$han=opendir($dir2); 目录遍历之前应用它打开目录
+$fi=readdir($han)；返复执行他，实行该目录遍历，$han是目录名柄
+closedir($han); 关闭目录
+
+Header();setcookies();等
+

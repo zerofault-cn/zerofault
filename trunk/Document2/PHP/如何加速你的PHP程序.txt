@@ -1,0 +1,55 @@
+如何加速你的PHP程序
+我一直认为PHP的运行速度是非常的理想的，尤其是Zend引擎的加速之后。但是PHP仍然有加速的可能，你知道吗？
+
+所有的一切都始于如何优化PHP的编译
+尝试使用针对CPU型号的特殊编译参数 -msse -mmmx -mfpmath=sse 
+在编译的时候添加 -03参数
+编译的时候调节CPU的参数  -march -mcpu Use Caution 
+尽量只编译你需要的模块，避免无用的扩展加载
+对于很少使用的扩展模块，应该编译成共享模式，便于在运行的时候动态加载
+也许有些时候 --disable-all 会是你的好朋友
+把PHP静态编译到Apache可以提速20％
+ # PHP 
+./configure --with-apache=/path/to/apache_source
+
+# Apache
+./configure --activate-module=src/modules/php4/libphp4.a 
+优化你的PHP配置文件
+确认你的 register_globals 配置为disabled
+禁用 magic_quotes_* 选项
+关闭 expose_php 
+关闭 register_argc_argv 
+除非绝对需要不要启用  always_populate_raw_post_data 
+Apache服务器的优化配置
+ MaxSpareServers 使用高配置
+ MaxClients 设置为你的服务器可以承受的2/5
+ MaxRequestsPerChild 理想情况是0 (不限)，但是实际上都设置为一个较的一个值
+优化文件访问
+ DirectoryIndex 文件列表尽可能简短
+无论如何禁止 .htaccess 文件的 AllowOverride none 
+使用 FollowSymLinks 简化文件访问处理
+避免使用 mod_rewrite 或者更复杂的操作
+如果日志非必须的话就禁用
+如果必须使用日志，那么请记录到一个文件中去，并且在分析过后清除
+消除昂贵的系统呼叫
+不要开启 ExtendedStatus 
+在允许和禁止规则的时候使用IP而不要使用域名
+不要启用 HostnameLookups 
+保持  ServerSignature 关闭
+设置 KeepAlive 为较小的一个值
+动态和静态的内容分离
+提高硬盘性能参数
+使用 output_buffering 优化PHP到Apache的交互
+增加Apache的 SendBufferSize 大小
+提高缓存执行
+使用PHP代码缓存机制
+Turck MMCache  停止开发
+APC 较慢，优化不够
+ Zend Cache 优化性能好，但付费
+ionCube PHP Accelerator 免费但不开源
+如果可以使用Zlib压缩
+减少输出数据
+用CSS替换HTML
+压缩HTML页面
+使用Sessions管理
+优化你的SQL指令

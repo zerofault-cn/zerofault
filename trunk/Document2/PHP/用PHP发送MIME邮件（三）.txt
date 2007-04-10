@@ -1,0 +1,91 @@
+用PHP发送MIME邮件（三）
+译者：limodou 2000年8月14日
+把它EMAIL给我 我来谈谈我的看法 上一篇 下一篇 
+ 
+作者：Kartic Krishnamurthy 译者：limodou 
+
+MIME 类 
+　　在有了这些基础之后，让我们用PHP创建和实现一个MIME邮件类。在我们的PHP库函数中，已经有了编码 
+所必须的工具。 
+
+　　MIME类必须能够： 
+
+增加附件 
+对每一个独立的请求，对所附的数据进行编码 
+创建MIME段/头 
+生成一个包含MIME段/头的完整的邮件 
+将整个邮件作为字符串返回 
+用本地的邮件处理程序进行发送（或选择调用一个SMTP邮件处理程序） 
+　　这个类叫做MIME_mail。我们将讨论类的方法，在理论与实际的差距中建立起桥梁。（阅读建议：Luis 
+Argerich的PHP的面向对象编程：开发大型PHP项目的方法）。为了便于阅读大部分的注释已经被去掉了。一 
+些方法与类的成员变量只是用于内部处理，并且已经在下面的注释中被指出来了（同时在初始的类文件中也 
+指出了）。 
+
+<?php 
+
+class MIME_mail { 
+//公有： 
+var $to; 
+var $from; 
+var $subject; 
+var $body; 
+var $headers = ""; 
+var $errstr=""; 
+
+var $base64_func= ''; // 如果未指定使用PHP的base64函数 
+var $qp_func = ''; // 此时为空 
+
+var $mailer = ""; // 将其设为有效的邮件对象的名字 
+
+?> 
+
+　　这里有一些公共处理的变量（也就是，可以在脚本中直接操纵的变量）。这些变量中的大部分都是自说 
+明的。$headers包含了可选的想要发送给邮件处理程序的头信息。$errstr 是一个包含可读错误字符串的变 
+量，它可以用在调用脚本中。 
+
+　　$base64_func和$qp_func是"函数处理器"，用户可以进行定制。缺省地，它们被设为空串。对于$base64_func，一个空串意味着我们将使用PHP内置的base64_encode()函数...（是的！优美，不是吗！）。 
+Quoted Printable可以通过$qp_func被处理。在PHP中没有内置的quoted-printable 编码函数（然而，安装 
+了imap则可以使用imap_qprint()）。在这篇文章中我们将不再讨论quoted_printable方法。 
+
+<?php 
+
+//私有： 
+var $mimeparts = array(); 
+
+?> 
+
+　　$mimeparts是一个内部数组，包含了邮件信息中各自独立的符合MIME段。请不要在这个类（或派生类）之外操纵它和其它的私有方法/变量。 
+
+<?php 
+
+// 构造函数 
+function MIME_mail($from="", $to="", $subject="", $body="", $headers = "") { 
+$this->to = $to; 
+$this->from = $from; 
+$this->subject = $subject; 
+$this->body = $body; 
+if (is_array($headers)) { 
+if (sizeof($headers)>1) 
+$headers=join(CRLF, $headers); 
+else 
+$headers=$headers[0]; 
+} 
+if ($from) { 
+$headers = preg_replace("!(from:\ ?.+?[\r\n]?\b)!i", '', $headers); 
+} 
+$this->headers = chop($headers); 
+$this->mimeparts[] = "" ; //增加位置0 
+return; 
+} 
+
+?> 
+
+　　我们拥有对象的构造函数，它使用"from"和"to"邮件地址，主题和邮件体和头作为参数。对于邮件体部 
+分，可以给出你将可能输入的正常邮件。最后一个参数是可选的（用户自定义）头。例如，X-Mailer: 
+MyMailer_1.0。请注意$headers可以是一个数组，包含了将要发给邮件发送程序的不同的头，或者只是某个 
+特别头的容器。你不能在$headers参数中发送From: 头，如果它被找到，这部分将自动被去掉。你可以象下 
+面使用多个头：array("X-Mailer: MYMailer_1.0", "X-Organization: PHPBuilder.com")。 
+
+　　$mimeparts用一个空项（索引0）创建，在后面我们将看到这样用的道理。 
+
+上一页 下一页 

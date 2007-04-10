@@ -1,0 +1,116 @@
+
+PHP应用技巧七则
+（王锋　2001年05月14日 10:08）ccidnet
+
+PHP (Hypertext Preprocessor)是一种 HTML 内嵌式的语言，也是目前比较流行的网页编程语言。它支持的后端数据库种类凡多，几乎含盖了当前的所有数据库系统。同时它包含了一般语言有的数学运算、时间处理、文件系统、字符串处理、行程处理等功能，再加上它是免费的系统，使得成本与效益比，几乎等于无限大。 
+
+下面是我在用PHP做网站时，总结出一些小技巧，拿出来飨以大家。 
+
+1、判断某个函数是否被支持 
+
+由于在PHP中我们可以灵活的使用增加或者减少php支持的模块，所以有的时候我们在使用PHP之前，总是会首先确定某个模块是否被加载，比如，看看GD图形模块是否被支持，可以用下面的这段代码： 
+
+if(!function_exists('imagecreate')) { 
+die('这个主机目前不支持GD图形模块'); 
+}
+?>
+ 
+
+同样的道理，我们可以利用类似的代码，测试 MSSQL,OCI等模块是否被支持。 
+
+2、在字符串中把网址改成超级链接 
+
+在网页中提交表单时，经常在提交的说明文本中出现一些网址，比如个人主页等信息，如果在显示时自动将其转为超级链接，那将是一件很惬意的事，就像用WORD编辑文档时自动出现超级链接一样。下面这段代码就很好的实现了其功能。 
+
+$string = "连接赛迪网http://www.ccidnet.com 站点";
+//注意：连接后需要有个空格或回车。
+$string = eregi_replace("http://([^ ,\r\n]*)","<a href=\\0 tarrget=_blank>\\0</a>",$string); 
+$string = eregi_replace("ftp://([^ ,\r\n]*)","<a href=\\0 target=_blank>\\0</a?",$string); 
+print $string; 
+?> 
+
+3、用PHP处理多个同名复选框 
+
+如果一个表单中有多个同名复选框，在提交到php时却只有一个值，而并不像asp那样是一串用逗号分割的值。解决的方法是利用数组。将复选框的name后面加上[]，例如：<input type="checkbox" name="pp" value="1"> 改为：<input type="checkbox" name="pp[]" value="1">。这样php将得到一个叫pp的阵列。在提交的表单中先用Count(pp)来判断数组的个数即选中的个数，然后对数组进行分别处理就行了。 
+
+同样的道理也适应于处理下拉框的多选问题。 
+
+4、利用static实现表格的颜色隔行显示 
+
+我们用PHP从数据库查询数据，并将结果输出到浏览器上，如果结果有很多行，表格的bgcolor（背景色）如果全是单色的，浏览者会感觉不太舒服。那么怎样做使表格各行的颜色不同呢？请看下面代码： 
+
+function getcolor()
+{
+static $colorvalue;//定义一个静态变量
+if($colorvalue=="#eeeeee")
+$colorvalue="#F5F5F5";
+else $colorvalue="#eeeeee";
+return($colorvalue); 
+}
+print("＜table border=1＞\n");//下面输出10行 
+for($i=0;$i<10;$i++) 
+{
+$bcolor=getcolor();//换背景颜色 
+print("＜tr bgcolor=$bcolor＞\n");
+print("＜td＞$i＜/td＞\n");
+print("＜/tr＞");
+}
+print("＜/table＞\n");
+?> 
+
+说明： 
+
+此程序中定义了一个静态变量static $colorvalue意思是在函数调用结束后，此变量$colorvalue还保留值，没有消失。当再次调用getcolor()函数时，变量$colorvalue的值是上次函数调用结束时$colorvalue的值。 
+
+5、在php中避免重复引用的办法 
+
+大家知道，在C语言中，我们可以用#define来定义一个MACRO名字，通过检查是否该MACRO名字定义过来决定该头文件是否被引用。在PHP中也有同样的问题，比如：A引用B,C, B引用C,如果不采取措施，C将被引用2次。这样可能会导致一些奇怪的问题。解决办法：定义一个全局变量,并且通过检查该变量是否定义过来解决这个问题.办法很简单，类似C。 只是这个全局变量我建议都用['user_packages'] ['headfilename']的命名规则。 
+
+if (!empty($GLOBALS['FOODTAILS']['GLOBALDEFINE'])) return;
+$GLOBALS['FOODTAILS']['GLOBALDEFINE'] = true;
+class FOODTAILS {... 
+}; 
+?> 
+
+另外，在主程序中尽量采用require_once "headfiles.php"; 以避免重复引用。 
+
+6、如何避免表单的重复提交 
+
+我们在做网站时，常常为一些灌水文章而烦恼。有时，由于网络状况等原因用户不知道提交是否成功，也会再次提交同一份表单，这就造成了表单的重复提交不起。有一个简单的方法可以避免同一表单的重复提交。 首先，先定义一个session变量用来保存一个表单的提交序列号。这里我定义为“$userLastAction”。然后在表单里加入一个hidden变量，把值设为$userLastAction+1：<input type=Hidden name=lastAction value=<? =$userLastAction+1 ?>> 最后，在处理提交之前判断表单是否已被提交过。 
+
+if($lastAction>$userLastAction){
+$userLastAction++; // 序列号加1 
+// 处理表单数据
+}
+?> 
+
+这个技巧的主要原理是不允许用户回退后再次提交，也就是说回退后修改再提交也是不允许的，但是还是不能避免Ctrl-C/Ctrl-V的灌水办法。 
+
+7、下载文件的下载次数回填 
+
+我 们在下载软件时，经常会看到此软件的下载统计次数，而这些统计数给网站管理员分析软件的受欢迎程度带来了方便。其实现原理是：在后端数据库中存放软件的唯 一标识和下载数，在用户下载软件时，首先更新对应软件的下载次数即下载次数加1，然后再到下载文件上正式开始下载。请看下面的实现代码： 
+
+a、先建一数据表download （后端用MySql) 
+
+download表中含有下列两个字段： 
+
+id　　　　下载的文件的唯一标识 
+
+downnum 下载次数，默认值为0 
+
+
+
+b、实现 
+
+假设已经从数据库取出：描述文件名 五笔字型 ；下载文件名：wbzx.zip ；标识号id值为2 
+
+处理后生成的超级链接代码为： 
+
+<a href="download.php?filename=wbzx.zip&id=2">五笔字型</a> 
+
+下面的代码download.php处理下载次数累计及根据传递的文件名定位下载文件。 
+
+//连接Mysql数据库代码略
+$res=mysql_query("update download set downnum=(downnum+1) where id='$id'" ,$db);
+header("location:$filename"); 
+?> 

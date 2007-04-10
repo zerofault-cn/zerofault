@@ -1,0 +1,16 @@
+文件上件
+上传表单的编码方式 enctype=”mulipart/form-data”是必要的
+<form action="log.php?che=0" enctype="multipart/form-data" method="post">
+  文件名:<INPUT TYPE="file" NAME="fil" SIZE="20">
+  <INPUT TYPE="submit" VALUE="提交" NAME="B1">
+  <INPUT TYPE="reset" VALUE="全部重写" NAME="B2">
+</form>
+
+
+//注意，上传的文件在临时文件中，临界时文件的目录在/tmp，由PHP.ini设定
+//请确证c:\tmp目录的存在
+相应的php处理程序:
+if(!$che && $dir2 && $fil!="none"){ //上传
+   $file2=”c:/windows”.$fil_name;
+   copy($fil,$file2);
+ }

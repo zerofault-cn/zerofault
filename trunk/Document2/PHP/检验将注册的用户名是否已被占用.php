@@ -1,0 +1,1 @@
+<a href="#" name="check" id="check" tabindex="6" onClick="javascript:setTimeout('document.getElementById('checkaccount').src='js/ce.js.user.php?id='+document.getElementById('username').value;', 10);" />

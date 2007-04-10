@@ -1,0 +1,106 @@
+浅谈PHP+MYSQL身份验证的方法
+浅谈PHP+MYSQL身份验证的方法 
+　　近日在为学校制做校友录时，需要身份验证，在对比之后决定采用PHP+MYSQL进行身份验证。之前也曾考虑过用cookies或session。但是用cookies，在用户离线再上线后，只要cookies不过 期，不用登录仍然可以保持在线，这对于网吧来说是个隐患。而且用户可以关闭cookies，这样身份验 证就不成功。也考虑过用session,session在浏览过程中不断的将访问信息加入到session中，如果用户在网站内时间很长，浏览的页面很多，就用导致session越来越大，浏览速度降低，最后只有重新登录，虽然这种情况不多见，但不是我们所希望的。我在做这个身份验证时的想法是，在身份验证的同时，记录浏览信息。用户ID在每个页面间传递，ID值是用MD5()函数加密得到的。验证函数是validate_id()，返回值为(0,1),成功为“1”。 
+    思路：判断被传入的ID值是否为匿名登录ID(a684dd572b1887661782981659331eed)，32位,如果是返回0，并且 将浏览信息加入数据库。如果否，则查询数据库，看数据库中的用户ID，用户IP与传入的ID，IP值是否相等 
+　　并且最近浏览时间距当前时间不到20分钟的记录。
+　　判断得到的记录数，如果为0，则认为离线，并用匿名ID登录浏览信息，返回0。记录不为0时，将用户ID，用户IP值，加入数据库，返回1。 
+    创建数据库： 
+　　create table logging{ 
+id int unsigned not null primary key auto_increment, 
+user_id char(32) not null,//用户ID 
+logging_ip varchar(20) not null,//记录用户IP地址 
+page_name varchar(30) not null,//浏览网页名 
+view_time timestamp not null, 
+student_id varchar(20) 
+); 
+
+创建函数： 
+/*-----begin function validate-id()--------------- 验证用户是否登录 ----------------------------*/ 
+function validate_id($link,$id,$ip,$page_name,$student_id=""){ 
+if($id==a684dd572b1887661782981659331eed or $id=''){ 
+$query='insert into logging(user_id,logging_ip,page_name,student_id) values ("a684dd572b1887661782981659331eed","'.$ip.'","'.$page_name.'","anonym");'; 
+$result=mysql_db_query("web",$query,$link); 
+return (0); 
+} 
+else { 
+$year=strftime("%Y"); 
+$month=strftime("%m"); 
+$day=strftime("%d"); 
+$hour=strftime("%H"); 
+$min=strftime("%M"); 
+$sec=strftime("%S"); 
+echo $time_string=$year.$month.$day.$hour.$min.$sec; 
+// echo ("<br>"); 
+// echo "$year-$month-$day $hour-$min-$sec<br>"; 
+//---------begin if's--------------------------- 
+if(($min-=20)<0){ 
+$min+=60; 
+if(($hour-=1)==-1){ 
+$hour+=24; 
+if(($day-=1)==0){ 
+switch ($month) { 
+case 12 :$days=30;break; 
+case 1 :$days=31;break; 
+case 2 :if(($year/4==0)and($year/100!=0)or($year/400==0)){ 
+$days=29;} 
+else {$days=28;} 
+break; 
+case 3 :$days=31;break; 
+case 4 :$days=30;break; 
+case 5 :$days=31;break; 
+case 6 :$days=30;break; 
+case 7 :$days=31;break; 
+case 8 :$days=31;break; 
+case 9 :$days=30;break; 
+case 10 :$days=31;break; 
+case 11 :$days=30;break; 
+} 
+$day+=$days; 
+if(($month-=1)==0){ 
+$month+=12; 
+$year-=1; 
+} 
+} 
+} 
+} 
+//----------------------------------end if's 
+setType($month,"integer"); 
+if($month<10){ 
+setType($month,"string"); 
+$month='0'.$month;} 
+setType($day,"integer"); 
+if($day<10){ 
+setType($day,"string"); 
+$day='0'.$day;} 
+setType($hour,"integer"); 
+if($hour<10){ 
+setType($min,"string"); 
+$hour='0'.$hour;} 
+setType($min,"integer"); 
+if($min<10){ 
+setType($min,"string"); 
+$min='0'.$min;} 
+
+echo '<br>'.$time_string=$year.$month.$day.$hour.$min.$sec; 
+// echo "<br>$year-$month-$day $hour-$min-$sec<br>"; 
+// echo ("<br>"); 
+$query="select id from logging where user_id='$id' and logging_ip='$ip' and view_time>'$time_string';"; 
+$result=mysql_db_query("web",$query,$link); 
+$count=mysql_num_rows($result); 
+if($count==0){ 
+// echo $query="insert into logging(user_id,logging_ip,page_name) values ('a684dd572b1887661782981659331eed','$ip','$page_name');"; 
+$result=mysql_db_query("web",$query,$link); 
+return (0); 
+} 
+else{ 
+$query="insert into logging(user_id,logging_ip,page_name) values('$id','$ip','$page_name')"; 
+$result=mysql_db_query("web",$query,$link); 
+return (1); 
+
+} 
+}//end if 
+} 
+//----------------------------end function validate-id--------- 
+　　这个验证方法很简单，而且没有考虑到用户在登录后再登录的情况，大家可以自己加上。 
+　　如果用cookies，可能用setcookies()建立用户ID，再从环境变量$HTTP_COOKIE或$HTTP_COOKIE_VARS中读 取。都是一样的，不过应该保证用户没有cookies。 
+

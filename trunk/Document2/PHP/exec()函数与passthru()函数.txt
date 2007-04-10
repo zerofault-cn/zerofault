@@ -1,0 +1,8 @@
+exec()函数与passthru()函数（阿见）
+作用：执行外部命令,并将屏幕输出结果返回，exec()返回输出到屏幕上的最后一行，passthru()返回输出到屏幕的全文,且直接送到浏览器
+范例：
+<%php
+//将dos下dir命令所得结果返回，并输出到浏览器
+  echo exec(“dir”);
+passthru(“dir c:\\windows”);
+%>

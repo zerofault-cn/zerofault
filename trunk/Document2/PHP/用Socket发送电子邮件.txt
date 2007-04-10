@@ -1,0 +1,353 @@
+用Socket发送电子邮件
+作者：limodou 
+
+　　在作者所申请的几个PHP 主页空间中，能够提供mail功能的实在不多，总是调用完mail()函数之后就毫无下文了。但是电子邮件在网上生活中的作用越来越大。想一想网虫上网不收邮件能叫真正的网虫吗？邮件的作用我不想再说了，但是如果主页空间不支持mail()发送那么怎么办呢？我也想过通过socket来实现邮件发送，但无奈对用php 进行socket编程不熟悉，再加上发送邮件要用到SMTP协议，又要读不少的英文了，所以一直也没有去研究过。终于有一天我发现了一篇文章，关于用socket编程发送邮件。我如获至宝般将其拷贝下来，并且将其改造成了一个php 可用的类，供大家使用。原来的文章只是一个简单的例子，而且还有一些错误，在我经过多次的实验、改造终于将其改成了一个直接使用socket，向指定的邮箱发送邮件的类，如果大家和前面关于发送MIME的文章结合起来，就可以实现在不支持mail()函数的网站上发送邮件了。因为发送邮件的过程需要时间，可能与mail()的处理机制还不完全一样，所以速度要慢一些，但是可以解决需要发送邮件功能的燃眉之急，同时你也可以学习用php 进行socket编程。下面就将这个类的实现原理介绍给大家，同时向大家讲解一些关于SMTP的基本知识。 
+
+Socket编程介绍 
+　　向大家申明，本人不是一个TCP/IP编程专家，故在此只是讲出了我的一点理解和体会。 
+
+　　使用fsockopen函数打开一个Internet连接，函数语法格式： 
+
+int fsockopen(string hostname, int port, int [errno], string [errstr], int [timeout]); 
+
+　　参数的意思我想不用讲了，这里由于要使用SMTP协议，所以端口号为25。在打开连接成功后，会返回一个socket句柄，使用它就可以象使用文件句柄一样的。可使用的操作有fputs()，fgets()，feof()，fclose() 
+等。
+　　很简单地介绍就到这里吧。 
+
+SMTP的基础 
+　　基于TCP/IP的因特网协议一般的命令格式都是通过请求/ 应答方式实现的，采用的都是文本信息，所以处理起来要容易一些。SMTP是简单邮件传输协议的简称，它可以实现客户端向服务器发送邮件的功能。所以下面所讲的命令是指客户端向服务器发出请求指令，而响应则是指服务器返回给客户端的信息。 
+
+　　SMTP分为命令头和信息体两部分。命令头主要完成客户端与服务器的连接，验证等。整个过程由多条命令组成。每个命令发到服务器后，由服务器给出响应信息，一般为3 位数字的响应码和响应文本。不同的服务器返回的响应码是遵守协议的，但是响应正文本则不必。每个命令及响应的最后都有一个回车符，这样使用fputs()和fgets()就可以进行命令与响应的处理了。SMTP的命令及响应信息都是单行的。信息体则是邮件的正文部分，最后的结束行应以单独的"."作为结束行。 
+
+　　客户端一些常用的SMTP指令为： 
+
+HELO hostname: 与服务器打招呼并告知客户端使用的机器名字，可以随便填写 
+MAIL FROM: sender_id : 告诉服务器发信人的地址 
+RCPT TO: receiver_id : 告诉服务器收信人的地址 
+DATA : 下面开始传输信件内容，且最后要以只含有.的特殊行结束 
+RESET: 取消刚才的指令，从新开始 
+VERIFY userid: 校验帐号是否存在(此指令为可选指令，服务器可能不支持) 
+QUIT : 退出连接，结束 
+　　服务器返回的响应信息为(格式为：响应码+空格+解释)： 
+
+220 服务就绪(在socket连接成功时，会返回此信息) 
+221 正在处理 
+250 请求邮件动作正确，完成(HELO,MAIL FROM,RCPT TO,QUIT指令执行成功会返回此信息) 
+354 开始发送数据，结束以 .(DATA指令执行成功会返回此信息，客户端应发送信息) 
+500 语法错误，命令不能识别 
+550 命令不能执行，邮箱无效 
+552 中断处理：用户超出文件空间 
+　　下面给出一个简单的命令头(这是在打开socket之后做的)，是我向stmp.263.net发邮件的测试结果： 
+
+HELO limodou 
+250 smtp.263.net 
+MAIL FROM: chatme@263.net 
+250 Ok 
+RCPT TO: chatme@263.net 
+250 Ok 
+DATA 
+354 End data with . 
+To: chatme@263.net 
+From: chatme@263.net 
+Subject: test 
+From: chatme@263.net 
+test 
+. 
+QUIT 
+250 Ok: queued as C46411C5097E0 
+
+　　这就是一些SMTP的简单知识。相关内容可以查阅RFC。 
+
+RFC 821定义了收/发电子邮件的相关指令。 
+RFC 822则制定了邮件內容的格式。 
+RFC 2045-2048制定了多媒体邮件內容的格式， 
+RFC 1113, 1422-1424则是讨论如何增进电子邮件的保密性。 
+
+send_mail类的实现 
+　　现在开始介绍我所编写的发送邮件类。有了上面的预备知识了，下面就是实现了。 
+
+类的成员变量 
+
+var $lastmessage; //记录最后返回的响应信息 
+var $lastact; //最后的动作，字符串形式 
+var $welcome; //用在HELO后面，欢迎用户 
+var $debug; //是否显示调试信息 
+var $smtp; //smtp服务器 
+var $port; //smtp端口号 
+var $fp; //socket句柄 
+
+　　其中，$lastmessage和$lastact用于记录最后一次响应信息及执行的命令，当出错时，用户可以使用它 
+们。为了测试需要，我还定义了$debug变量，当其值为true时，会在运行过程中显示一些执行信息，否则无 
+任何输出。$fp用于保存打开后的socket句柄。 
+
+类的构造 
+
+
+-------------------------------------------------------------------------------- 
+function send_mail($smtp, $welcome="", $debug=false) 
+{ 
+if(empty($smtp)) die("SMTP cannt be NULL!"); 
+$this->smtp=$smtp; 
+if(empty($welcome)) 
+{ 
+$this->welcome=gethostbyaddr("localhost"); 
+} 
+else 
+$this->welcome=$welcome; 
+$this->debug=$debug; 
+$this->lastmessage=""; 
+$this->lastact=""; 
+$this->port="25"; 
+} 
+-------------------------------------------------------------------------------- 
+　　这个构造函数主要完成一些初始值的判定及设置。$welcome用于HELO指令中，告诉服务器用户的名字。 HELO指令要求为机器名，但是不用也可以。如果用户没有给出$welcome，则自动查找本地的机器名。 
+
+显示调试信息 
+
+-------------------------------------------------------------------------------- 
+1 function show_debug($message, $inout) 
+2 { 
+3 if ($this->debug) 
+4 { 
+5 if($inout=="in") //响应信息 
+6 { 
+7 $m='<< '; 
+8 } 
+9 else 
+10 $m='>> '; 
+11 if(!ereg("\n$", $message)) 
+12 $message .= "<br>"; 
+13 $message=nl2br($message); 
+14 echo "<font color=#999999>${m}${message}</font>"; 
+15 } 
+16 } 
+-------------------------------------------------------------------------------- 
+　　这个函数用来显示调试信息。可以在$inout中指定是上传的指令还是返回的响应，如果为上传指令，则 使用"out"；如果为返回的响应则使用"in"。 
+
+第3行，判断是否要输出调试信息。 
+第5行，判断是否为响应信息，如果是，则在第7行将信息的前面加上"<< "来区别信息；否则在第10行加上 
+　　　 ">> "来区别上传指令。 
+第11-12行，判断信息串最后是否为换行符，如不是则加上HTML换行标记。第13行将所以的换行符转成HTML的换行标记。 
+第14行，输出整条信息，同时将信息颜色置为灰色以示区别。 
+
+执行一个命令 
+
+
+-------------------------------------------------------------------------------- 
+1 function do_command($command, $code) 
+2 { 
+3 $this->lastact=$command; 
+4 $this->show_debug($this->lastact, "out"); 
+5 fputs ( $this->fp, $this->lastact ); 
+6 $this->lastmessage = fgets ( $this->fp, 512 ); 
+7 $this->show_debug($this->lastmessage, "in"); 
+8 if(!ereg("^$code", $this->lastmessage)) 
+9 { 
+10 return false; 
+11 } 
+12 else 
+13 return true; 
+14 } 
+-------------------------------------------------------------------------------- 
+　　在编写socket处理部分发现，一些命令的处理很相似，如HELO，MAIL FROM，RCPT TO，QUIT，DATA命令， 都要求根据是否显示调试信息将相关内容显示出来，同时对于返回的响应码，如果是期望的，则应继续处理，如果不是期望的，则应中断出理。所以为了清晰与简化，专门对这些命令的处理编写了一个通用处理函数。函数的参数中$code为期望的响应码，如果响应码与之相同则表示处理成功，否则出错。 
+
+第3行，记录最后执行命令。 
+第4行，将上传命令显示出来。 
+第5行，则使用fputs真正向服务器传换指令。 
+第6行，从服务器接收响应信息将放在最后响应消息变量中。 
+第7行，将响应信息显示出来。 
+第8行，判断响应信息是否期待的，如果是则第13行返回成功(true)，否则在第10行返回失败(false)。 
+
+　　这样，这个函数一方面完成指令及信息的发送显示功能，别一方面对返回的响应判断是否成功。 
+
+邮件发送处理 
+
+　　下面是真正的秘密了，可要看仔细了。:) 
+
+-------------------------------------------------------------------------------- 
+1 function send( $to,$from,$subject,$message) 
+2 { 
+3 
+4 //连接服务器 
+5 $this->lastact="connect"; 
+6 
+7 $this->show_debug("Connect to SMTP server : ".$this->smtp, "out"); 
+8 $this->fp = fsockopen ( $this->smtp, $this->port ); 
+9 if ( $this->fp ) 
+10 { 
+11 
+12 set_socket_blocking( $this->fp, true ); 
+13 $this->lastmessage=fgets($this->fp,512); 
+14 $this->show_debug($this->lastmessage, "in"); 
+15 
+16 if (! ereg ( "^220", $this->lastmessage ) ) 
+17 { 
+18 return false; 
+19 } 
+20 else 
+21 { 
+22 $this->lastact="HELO " . $this->welcome . "\n"; 
+23 if(!$this->do_command($this->lastact, "250")) 
+24 { 
+25 fclose($this->fp); 
+26 return false; 
+27 } 
+28 
+29 $this->lastact="MAIL FROM: $from" . "\n"; 
+30 if(!$this->do_command($this->lastact, "250")) 
+31 { 
+32 fclose($this->fp); 
+33 return false; 
+34 } 
+35 
+36 $this->lastact="RCPT TO: $to" . "\n"; 
+37 if(!$this->do_command($this->lastact, "250")) 
+38 { 
+39 fclose($this->fp); 
+40 return false; 
+41 } 
+42 
+43 //发送正文 
+44 $this->lastact="DATA\n"; 
+45 if(!$this->do_command($this->lastact, "354")) 
+46 { 
+47 fclose($this->fp); 
+48 return false; 
+49 } 
+50 
+51 //处理Subject头 
+52 $head="Subject: $subject\n"; 
+53 if(!empty($subject) && !ereg($head, $message)) 
+54 { 
+55 $message = $head.$message; 
+56 } 
+57 
+58 //处理From头 
+59 $head="From: $from\n"; 
+60 if(!empty($from) && !ereg($head, $message)) 
+61 { 
+62 $message = $head.$message; 
+63 } 
+64 
+65 //处理To头 
+66 $head="To: $to\n"; 
+67 if(!empty($to) && !ereg($head, $message)) 
+68 { 
+69 $message = $head.$message; 
+70 } 
+71 
+72 //加上结束串 
+73 if(!ereg("\n\.\n", $message)) 
+74 $message .= "\n.\n"; 
+75 $this->show_debug($message, "out"); 
+76 fputs($this->fp, $message); 
+77 
+78 $this->lastact="QUIT\n"; 
+79 if(!$this->do_command($this->lastact, "250")) 
+80 { 
+81 fclose($this->fp); 
+82 return false; 
+83 } 
+84 } 
+85 return true; 
+86 } 
+87 else 
+88 { 
+89 $this->show_debug("Connect failed!", "in"); 
+90 return false; 
+91 } 
+92 } 
+-------------------------------------------------------------------------------- 
+　　有些意思很清楚的我就不说了。 
+
+　　这个函数一共有四个参数，分别是$to表示收信人，$from表示发信人，$subject表求邮件主题和$message 
+表示邮件体。如果处理成功则返回true，失败则返回false。 
+
+第8行，连接邮件服务器，如果成功响应码应为220。 
+第12行，设置阻塞模式，表示信息必须返回才能继续。详细说明看手册吧。 
+第16行，判断响应码是否为220，如果是，则继续处理，否则出错返回。 
+第22-27行，处理HELO指令，期望响应码为250。 
+第29-34行，处理MAIL FROM指令，期望响应码为250。 
+第36-41行，处理RCPT TO指令，期望响应码为250。 
+第44-49行，处理DATA指令，期望响应码为354。 
+第51-76行，生成邮件体，并发送。 
+第52-56行，如果$subject不为空，则查找邮件体中是否有主题部分，如果没有，则加上主题部分。 
+第59-63行，如果$from不为空，则查找邮件体中是否有发信人部分，如果没有，则加上发信人部分。 
+第66-70行，如果$to不为空，则查找邮件体中是否有收信人部分，如果没有，则加上收信人部分。 
+第73-74行，查找邮件体是否有了结束行，如果没有则加上邮件体的结束行(以"."作为单独的一行的特殊行)。 
+第76行，发送邮件体。 
+第78-83行，执行QUIT结否与服务器的连接，期望响应码为250。 
+第85行，返回处理成功标志(true)。 
+第81-91行，与服务器连接失败的处理。 
+
+　　以上为整个send_mail类的实现，应该不是很难的。下面给出一个实例。 
+
+邮件发送实例 
+　　先给出一个最简单的实例： 
+-------------------------------------------------------------------------------- 
+<? 
+1 include "sendmail.class.php3"; 
+2 $email="Hello, this is a test letter!"; 
+3 $sendmail=new send_mail("smtp.263.net", "limodou", true); //显示调示信息 
+4 if($sendmail->send("chatme@263.net", "chatme@263.net", "test", $email)) 
+5 { 
+6 echo "发送成功！<br>"; 
+7 } 
+8 else 
+9 { 
+10 echo "发送失败！<br>"; 
+11 } 
+?> 
+-------------------------------------------------------------------------------- 
+第1行，装入send_mail类。 
+第3行，创建一个类的实例，且设置显示调示信息，如果不想显示，可以 
+　　　 $sendmail=new send_mail("smtp.263.net");。 
+第4行，发送邮件。 
+
+
+很简单，不是吗？下面再给合以前的发送MIME邮件的例子，给出一个发送HTML附件的例子。 
+
+-------------------------------------------------------------------------------- 
+<?php 
+
+include "MIME.class.php3"; 
+//注，在发送MIME邮件一文中，这个类文件名为MIME.class，在此处我改成这样的 
+
+$to = 'chatme@263.net'; //改为收信人的邮箱 
+$str = "Newsletter for ".date('M Y', time()); 
+
+//信息被我改少了 
+$html_data = '<html><head><title>'. $str. '</title></head> 
+<body bgcolor="#ffffff"> 
+Hello! This is a test! 
+</body> 
+</html>'; 
+
+//生成MIME类实例 
+$mime = new MIME_mail("chatme@263.net", $to, $str); 
+
+//添加HTML附件 
+$mime->attach($html_data, "", HTML, BASE64); 
+
+//注释掉，采用我的发送邮件处理 
+//$mime->send_mail(); 
+
+//生成邮件 
+$mime->gen_email(); 
+
+//显示邮件信息 
+//echo $mime->email."<br>"; 
+
+//包含sendmail文件 
+include "sendmail.class.php3"; 
+
+//创建实例 
+$sendmail=new send_mail("smtp.263.net", "limodou", true); 
+
+//发送邮件 
+$sendmail->send("chatme@263.net", "chatme@263.net", $str, $mime->email); 
+
+?> 
+-------------------------------------------------------------------------------- 
+　　注释写的很清楚，就不再做更多的解释了。如果实际应用中，请将send_mail构造函数中的debug设为 
+false或不写即可。在此处可以下载关于本文的例子。2000082201.zip } 

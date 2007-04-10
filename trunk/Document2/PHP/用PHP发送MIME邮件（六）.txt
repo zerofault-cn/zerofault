@@ -1,0 +1,40 @@
+用PHP发送MIME邮件（六）
+译者：limodou 2000年8月14日
+把它EMAIL给我 我来谈谈我的看法 上一篇 下一篇 
+ 
+作者：Kartic Krishnamurthy 译者：limodou 
+
+　　值得说明的其它两个方法是print_mail()和send_mail()，两个都使用了$force参数。print_mail()输 
+出整个邮件信息，send_mail()使用PHP的mail()函数发送信息。可选的，send_mail()使用了一个SMTP对象 
+和它的发送方法（由用户指定）来发送邮件。 
+
+
+结论 
+　　创建一个符合MIME的信息不象看上去那么复杂，可以通过一个相当简单的方式来实现。MIME消息可以给 
+许多的站点带来新气象。 
+
+　　我们在上面开发的类覆盖了核心思想，并且它可以被扩展，唯一的限制是你的想象力。例如，某人可以 
+写出detach()函数，来删除指定索引的附件（attach()方法可以返回这个信息）。 
+
+　　这个MIME_mail类可以用于发送基于HTML的邮件，不需要改造，只是嵌入的图像不能被发送；这是一个 
+需要特别注意的主题。 
+
+　　然而，没有图象的HTML或引用的图像使用了绝对URL或<BASE>标记也可以使用MIME_mail类进行发送。一 
+个例子如下： 
+
+<?php 
+
+$html_data = '<htm1><body text="#OOOOdd" bgcolor="#000000"><hl>Hello</hl><body></html>'; 
+$mime = new MIME_mail($to, $from, $subject); 
+$mime->attach($html_data, "", OCTET, BASE64, INLINE); 
+$mime->send_mail (); 
+
+?> 
+
+　　这个邮件的收信人将得到一个黑色背景和蓝色的"Hello"文本的邮件！ 
+
+　　发送完整的行内HTML信息，连同其它一些符合MIME邮件发送的高级专题，值得特别考虑，希望这些将成 
+为这篇文章的继续。 
+
+MIME_mail类，常量文件和运行实例可以在此下载zip压缩包。 
+

@@ -1,0 +1,98 @@
+PHP4调用自己编写的COM组件
+搞完了PHP4调用JavaBean，又想去试试调用COM，开始以为很难，自己用VB6写了一个Active Dll在PHP4中调用，马上成功，比调用javabean方便多了，下面讲一下我的步骤。 
+
+下载的版本是从http://www.mm4.de/。 
+
+一：用VB6写Activex Dll 
+
+代码如下： 
+
+Option Explicit 
+
+Private MyScriptingContext As ScriptingContext 
+
+Private MyApplication As Application 
+
+Private MyRequest As Request Private MyResponse As Response 
+
+Private MyServer As Server 
+
+Private MySession As Session Public 
+
+Sub OnStartPage(PassedScriptingContext As ScriptingContext) 
+
+Set MyScriptingContext = PassedScriptingContext 
+
+Set MyApplication = MyScriptingContext.Application 
+
+Set MyRequest = MyScriptingContext.Request 
+
+Set MyResponse = MyScriptingContext.Response 
+
+Set MyServer = MyScriptingContext.Server 
+
+Set MySession = MyScriptingContext.Session 
+
+End Sub 
+
+Public Sub OnEndPage() 
+
+Set MyScriptingContext = Nothing 
+
+Set MyApplication = Nothing 
+
+Set MyRequest = Nothing 
+
+Set MyResponse = Nothing 
+
+Set MyServer = Nothing 
+
+Set MySession = Nothing 
+
+End Sub 
+
+Public Function Test_Number(num) As Variant 
+
+If num < 0 Then Get_Number_Attrib = -1 
+
+If num > 0 Then Get_Number_Attrib = 1 
+
+If num = 0 Then Get_Number_Attrib = 0 
+
+End Function 
+
+具体方法如下：新建一个VB6工程，ActiveX Dll将工程命名为P_test,类名为c_test 
+
+类的文件内容如上。 
+
+编译生成p_test.dll文件 
+
+二：注册 
+
+提示符下运行：regsvr32 p_test.dll 
+
+三：编写php文件，test.php4代码如下： 
+
+<? 
+
+$b=new COM("p_test.c_test"); 
+
+$a=$b->Test_Number(-454); 
+
+echo $a; 
+
+?> 
+
+运行php4文件将显示-1 
+
+可能遇到的问题是，编译工程时通不过，要将 
+
+Microsoft Active Server Pages Object Library 
+
+引用进来，具体实现“Project->References”找到改库，并勾上 
+
+相比之下，PHP4调用com应该比PHP4调用javabean好哦，因为毕竟是Ms系统嘛。大家也可以去自己编写调用数据库的控件，用PHP4调用，从某种程度上，和PHP调用javabean一样，可以说，实现了“隐藏源代码”。 
+
+欢迎有兴趣的朋友交流。 
+
+（转载请注明作者和主页地址） 
