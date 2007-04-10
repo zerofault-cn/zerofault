@@ -1,0 +1,240 @@
+Eclipse3.2中 Java Web 开发环境的搭建之LOMBOZ+TOMCAT 安装及验证[8月27号更新] 
+最近在网上看到有许多介绍 Eclipse 下安装 lomboz 和 myeclipse 的文章，写的不错。现在 eclipse3.2 正式发布已经有一段时间了，相信大家用现在 eclipse3.2 的群体也不在少数吧。但是与 eclipse3.2 对应的插件更新速度相对来讲要慢一些。现在与之对应的 J2EE 开源插件 lomboz 3.2 stable 版本已经正式发布，同时好用的商业插件 myEclipse5.0 也已经正式发布了。（ 基本上只要安装了 myEclipse 这个插件，其它的plug-in就不用再安装了。 对于 myEclipse 和 lomboz 的具体功能在这里我就不详细介绍了。）。但是也许是这些文章完成的时间比较早，有一些内容已经不合适了。我在这里谈一下我的拙见，再补充几条。写的这一篇是对上一篇 Eclipse3.2+Tomcat 5.0.28(5.5.17)+lomboz-all-in-one-win32 配置的补充说明 
+
+如果有写的不对的地方，欢迎大家提出宝贵的意见。 
+
+Eclipse 3.2 中 Java Web 开发环境的搭建之 LOMBOZ+TOMCAT 安装 
+
+  
+
+1.       安装前的准备工作 
+
+说明：系统环境配置 Windows XP SP2 
+
+需要下载以下软件及插件： 
+
+·    Eclipse Release 3.2 SDK 
+
+下载地址： http://www.eclipse.org/downloads/download.php?file=/eclipse/downloads/drops/R-3.2-200606291905/eclipse-SDK-3.2-win32.zip 
+
+·    Sun 1.5.0 JSDK 下载地址： 
+
+http://192.18.108.139/ECom/EComTicketServlet/BEGIN08FB6C26309A0FC7EB2D23E2A42C2159/-2147483648/1620149559/1/753626/753266/1620149559/2ts+/westCoastFSEND/jdk-1.5.0_08-oth-JPR/jdk-1.5.0_08-oth-JPR:16/jdk-1_5_0_08-windows-i586-p-iftw.exe 
+
+·    Lomboz  Project 插件（包含 wtp, emf, jem and gef 等）与 Lomboz 插件（或者直接用集成的 all-in-one 版本的 lomboz 也可以） 
+
+对应的下载地址分别为： 
+
+http://download.zh.forge.objectweb.org/lomboz/lomboz-and-prereqs-S-3.2RC2-200608081203.zip 
+
+
+
+http://download.zh.forge.objectweb.org/lomboz/lomboz-S-3.2RC2-200608081203.zip 
+
+
+
+集成的 all-in-one 版本的 lomboz 下载地址： 
+
+
+
+http://forge.objectweb.org/project/download.php?group_id=97&file_id=6803 
+
+
+apache-tomcat 
+
+所有可以下载的 Tomcat 版本 : 
+http://tomcat.apache.org/download-55.cgi 
+
+我下载的是核心版 (core) jakarta-tomcat- 5.0.2 8 文件 
+TOMCAT 5.0.28 的下载地址 :
+http://mirror.vmmatrix.net/apache/tomcat/tomcat-5/v5.0.28/bin/jakarta-tomcat-5.0.28.exe 
+
+
+
+
+http://mirror.vmmatrix.net/apache/tomcat/tomcat-5/v5.0.28/bin/jakarta-tomcat-5.0.28.exe 
+
+
+tomcat 插件 tomcatPlugin 下载地址： 
+
+http://www.sysdeo.com/eclipse/tomcatplugin 
+
+2 ．安装 LOMBOZ 
+
+JDK 及 Eclipse 的安装： JDK 下载下来以后同一般的软件安装是类似的， Eclipse 只要把你下载下来的 eclipse-SDK-3.2-win32.zip 解压到你的本地硬盘的某一指定路径下即可。 JAVA_HOME 等环境变量的配置在此就不详细说了。 
+
+下面重点说一下 LOMBOZ 的安装 
+
+在安装 LOMBOZ 之前有 3 个必要的步骤。 
+
+（1）      检查你所用的 JDK 版本。 
+
+注意 JDK 的版本必须是 1.4.2 以上版本（包括 1.4.2 ），因为 lomboz 插件的运行要求 JDK1.4 或者更高版本的 JDK 。 
+
+（2）      检查 Eclipse 版本。 
+
+LOMBOZ 的版本要和你的 Eclipse 版本相对应。 一 般来说相同版本号的才比较兼容。   即： 3.2 的 Eclipse 对应插件就装 3.2 的 Lomboz ； Eclipse3.2 其对应插件为 lomboz.3.2 ，这样不容易出错，下载时最好认真阅读网站上的说明，否则有时安装总会出现莫名其妙的问题，浪费时间。 
+
+（3）      安装Lomboz需要Gef和Emf等插件的支持，所以仅仅下载安装 Eclipse3.2,和lomboz 3.2还不够，必须下载以下两个插件： 
+
+lomboz-and-prereqs-S-3.2RC2-200608081203.zip 和 lomboz-S-3.2RC2-200608081203.zip （ 或 lomboz-all-in-one-S-3.2RC2-200608081203-win32.zip ） lomboz-and-prereqs-S-3.2RC2-200608081203.zip 和 lomboz-S-3.2RC2-200608081203.zip 这两个文件 95M 左右，我一开始是用的集成的 all-in-one 版的 lomboz ，这个 all-in-one 版的 lomboz 大概 210M 左右，用它的时候启动 Eclipse 的时候比较慢，现在改用非 all-in-one 版 Lomboz 插件了。 
+
+这一点（安装Lomboz需要Gef和Emf等插件的支持）很容易被忽视，结果安装时有时就会碰到一个问题： 按照步骤安装好后，启动Eclipse，在【window】--->【Preference】左侧菜单上跟本找不到lomboz安装成功标志如多出了web services、web and XML等节点。 而在【Help】-->【About Eclipse Platform】--->【Plug-in Details】 里面查看，却又明明显示Lomboz插件已经安装好了。这个问题了我半天，网上一些中文安装方法都没有明确说清楚，其实要安装好lomboz，gef和emf等插件 （在 lomboz-and-prereqs-S-3.2RC2-200608081203.zip 文件中已经包含了这些插件） 也是需要装的。 
+
+另外，安装完 lomboz 插件以后，打开 eclipse ，在【 Window 】 -> 【 p references 】 左侧菜单上 看不到 lomboz 节点，在 Eclipse 的早期版本（ 3.0 及以前版本）中可以看到 lomboz 选项，但是从 3.1.2 版本及以后就看不到 lomboz 这个选项了（注：我是从 3.0 开始用的，先是用的 3.0, 然后是 3.1.2, 现在我用得是 3.2, 我没用过 3.1.1 这个版本就不知道在 3.1.1 版本中是否显示 lomboz 选项了）。 
+
+下面介绍用links方式安装LOMBOZ插件 
+
+例如我的 Eclipse 是安装在 E:\lihongjun\eclipse ， 在这个目录里新建一个名为 links 的文件夹， E:\lihongjun\eclipse \links\ ， 把下载下来的 lomboz-and-prereqs-S-3.2RC2-200608081203 和 lomboz-S-3.2RC2-200608081203 分别解压到你想存放的目录下，例如我的是分别解压到 E:\lihongjun\eclipse\lomboz 和 E:\lihongjun\eclipse\emf 下。 
+
+在 links 里新建两个文本文件，文件名可以任意取。在我的 eclipse 下命名为 emf.start 和 
+
+lomboz.start （注：文件扩展名任意，如 link ， ini ， start 等 ）再编辑这两个文件 
+
+用记事本打开 lomboz.start 文件。键入 path=lomboz ，同理编辑 emf.start 文件 
+
+path= emf ， 如果你的插件放在别的文件目录里也可以 
+
+path= 盘符 :\\ 插件路径 \\ （注：这里是 ” \\ ” 或用 ” / ” ） 
+
+这样 lomboz 就安装好了。 
+
+Tomcat 安装 
+
+  
+
+3 安装 Tomcat 
+
+tomcat 软件的安装 
+
+与安装 lomboz 类似。在此就不用细说了，我的是安装在 E:\lihongjun\Tomcat 5.0 下了 
+
+tomcat 插件的安装 
+
+在 Eclipse 里新建一个名为 tomcat 文件夹，在 tomcat 下再建立一个名为 eclipse 的文件夹 
+
+在 eclipse 下再建立一个名为 plugins 的文件夹。 
+
+其结构路径是： E:\lihongjun\eclipse\tomcat 
+
+再 解压 t omcatPluginV31.zip 至 E:\lihongjun\eclipse\tomcat 就可以了。 
+
+下面是编辑 links 文件夹中的内容，在 links 目录里新建一个 tomcat.start 的文件 
+
+编辑键入 path=tomcat 
+
+这样插件安装完毕了。 
+
+这样一切准备就都已经 OK 了。 
+
+
+
+配置 LOMBOZ： 
+
+  
+
+具体配置过程见我的另一篇为： Eclipse3.2+Tomcat 5.0.28(5.5.17)+lomboz-all-in-one-win32 配置 的文章 
+
+地址： http://lihongjun.blog.ccidnet.com/blog/ccid/do_showone/tid_57794.html 
+
+
+
+lomboz插件安装成功标志:在文件-新建-项目中新增加了与J2EE相关的类型,J2EE,WEB,EJB等内容.说明lomboz插件安装成功了.
+
+
+
+
+验证 lomboz 与 tomcat 是否安装成功 
+
+1．  新建一个 Tomcat 项目 
+
+选择 [File->New->Project] ，在弹出的向导窗口中选择“ Java ” -> “ Tomcat Project ” 
+
+点击 [Next] 按钮，在弹出的“ New Tomcat Project ”窗口中，输入项目名称“ MyWeb ” 
+
+点击 [Next] 按钮，在弹出窗口中设定 Server.xml 文件对应的 Context 元素的名字，此处填写“ / MyWeb ”。确定选中了“ can update  context definition server.xml ”选项，最后指定一个目录为该 web 应用程序的根目录。 
+
+点击 [Finish] 按钮，完成 Tomcat 项目的创建。 
+
+2. 建立一个 JSP 文件 
+
+此时，在“ Package Explore ”中选择新建的项目“ MyWeb ”并单击右键，在弹出的菜单里选择 [New->File] ，在新建窗口中选择“ Other ” -> “ Web ” - “ JSP ”点击 [Next] 按钮，输入文件名（ demotest.jsp ），点击 [Next] 按钮，在弹出的 JSP 模板选择对话框中选择所需要的对应 JSP 页面的模板，在这里我选择的是 New JSP File （ html ），点击 [Finishi] 按钮， Eclipse 会创建该文件并在编辑区域打开文件。 
+
+结构如下
+
+
+
+
+
+
+此时，屏幕将显示入图一所示的基本 JSP 页面的代码结构。
+
+
+  
+
+
+ 
+  
+
+图一 基本 JSP 页面的代码结构 
+
+  
+
+在该页面中输入如下所示的程序代码即可。 
+
+在 title 中输入： This is my first demo ，在 body 中输入 Hello,World! 
+
+即 < title > This is my first demo </ title > 
+
+< body > 
+
+Hello,World! 
+
+</ body > 
+
+源文件： demotest.jsp 
+
+// 红色粗体部分为我自己添加的代码 
+
+<%@ page language = "java" contentType = "text/html; charset=ISO-8859-1" 
+
+    pageEncoding = "ISO-8859-1" %> 
+
+<! DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" > 
+
+< html > 
+
+< head > 
+
+< meta http-equiv = "Content-Type" content = "text/html; charset=ISO-8859-1" > 
+
+< title >This is my first demo </ title > 
+
+</ head > 
+
+< body > 
+
+Hello,World! 
+
+</ body > 
+
+</ html >
+
+
+
+在 Eclipse 菜单或工具栏中启动 Tomcat 服务器和 IE 浏览器，并在地址栏中输入 http://localhost:8080/MyWeb/demotest.jsp 
+
+运行结果如图二所示
+
+
+
+ 
+
+  
+
+图二 demotest 程序调试成功 
+
+  
+
+Ok ，如果以上简单的 JSP 程序能调试成功的话，说明 lomboz 和 tomcat 插件安装好了！ 
+

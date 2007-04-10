@@ -1,0 +1,29 @@
+wsctf.exe和EXPLORER.EXE的查杀
+2006-11-02 11:38相关症状: 
+
+1、多了wsctf.exe和EXPLORER.EXE两个进程，其中EXPLORER.EXE进程跟系统的EXPLORER.EXE进程名称一样，用msconfig查看发现了多了两个启动项目wsctf.exe和EXPLORER.EXE，在"C:\WINDOWS\system32"下面出现了两个文件:wsctf.exe和EXPLORER.EXE（两个都是隐藏文件）
+
+2、不能正常运行浩方、冰封王座等软件
+
+解决办法:
+
+——插入受感染的U盘或MP3（如果有的话）
+
+——按"Ctrl+Alt+Del"调出Windows任务管理器，结束掉EXPLORER.EXE进程，其中EXPLORER.EXE进程有两个，一个是系统的，一个是病毒的，系统的所在位置是"C:\WINDOWS”，病毒的所在位置是"C:\WINDOWS\system32",只需结束掉病毒的进程就行了。若不能区别两个进程，可以把两个进程都结束掉，然后再切换到——应用程序——新任务——浏览——选择"C:\WINDOWS"文件夹下的explorer.exe，然后打开、确定就可以重新启动系统的EXPLORER.EXE进程了
+
+——结束掉wsctf.exe进程
+
+——打开"我的电脑"——工具——文件夹选项——查看——去掉“隐藏受保护的操作系统文件”前面的勾，在弹出的对话框中按“是”，然后再选择“显示所有文件和文件夹”——确定
+
+——进入U盘或MP3（如果有的话），把wsctf.exe、EXPLORER.EXE、autorun.inf三个文件都删除掉，删除时会弹出是“系统文件”的对话框，不用管，直接按“是”删除就行（若不删除的话，下次使用的时候电脑会被再次感染）
+
+——进入"C:\WINDOWS\system32"——删除掉文件夹里面的wsctf.exe和EXPLORER.EXE两个文件
+
+——按第四步相反的操作，重新隐藏系统文件
+
+——开始——运行——输入regedit,按确定后打开注册表，进入HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Run目录，右键删除掉wsctf.exe和EXPLORER.EXE两条记录。进入HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon, 可以看到键值项Userinit，其值为userinit.exe,EXPLORER.EXE，双击Userinit将中间的逗号和EXPLORER.EXE删除——确定
+
+——重启电脑, 搞定!!
+
+ 
+ 

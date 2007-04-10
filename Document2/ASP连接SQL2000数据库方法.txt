@@ -1,0 +1,39 @@
+与ACCESS完全不一样，所以访问SQL 2000的数据库需要建立客户端和服务器端的连接，注意这个客户端是针对 SQL数据库服务器来说的服务器端的脚本 对 SQLserver 来说也是“客户端应用程序”。 
+
+使用ASP连接MS SQL数据库，标准的连接，常用的多的是下面这种连接字符串：
+CONN.OPEN "Provider=SQLOLEDB.1;"&_
+"Password='"&pass_word&"';"&_
+"Persist Security Info=true;"&_
+"User ID='"&User_ID&"';"&_
+"Initial Catalog='"&db&"';"&_
+"Data Source='"&Data_Source&"';"&_
+"CONNect Timeout="&cntimeout&""
+
+　　描述：
+Provider=SQLOLEDB.1;数据库提供者,后面的 1 是表示版本信息，如果没有就会完全使用当前最新版功能
+User ID=SQL帐号，数据库的帐号
+Password=SQL帐号密码，数据库的帐号密码
+Initial Catalog=数据库名字（只有名字，而ACCESS的是具体带路径的数据文件）
+Data Source=数据源,SQL服务器名或其IP，通常用IP
+上五个参数缺一不可
+关于Data Source：
+如果 IIS 和 SQL 同一台服务器，则 使用安装 IIS的 IP 或 主机名HostName 或 (local)
+例如：
+//Data Source=(Local) '' IIS 与 SQL 一起则第一选择它！
+//Data Source=212.100.1.12
+//Data Source=LSS
+如果 SQLserver 是在另外的机器上，比如你连接到我机器上的的 SQLserver ，就用我机器的 IP 
+//Data Source=208.190.21.112 '我的SQL server IP
+CONNect Timeout=连接超时，是整数，缺省是30秒，可以不用
+Persist Security Info= true or false 可以不用 
+理解SQL和ACCESS的区别：
+ACCESS是文件型的数据库，一个数据库就是一个具体的 MDB文件，所以ACCESS的连接需要给出具体的数据库路径 Data Source='c:\www\mdb\aaa.mdb'
+
+　　而Server.mappath(aaa.mdb)即是将aaa.mdb 映射为 c:\www\mdb\aaa.mdb
+SQLserver是S/C 客户端/服务器方式，与ACCESS完全不一样，所以访问SQL 2000的数据库需要建立客户端和服务器端的连接，注意这个客户端是针对 SQL数据库服务器来说的服务器端的脚本 对 SQLserver 来说也是“客户端应用程序”。
+
+　　SQL的数据库物理上也是一个.MDF数据文件，但这与MDB是天壤之别的，SQL的MDF 可以说是一个数据库的集合,里面包括了很多个数据库（里面的每个数据库有一个名字,每个数据库有相应的拥有者SchMa），而ACCESS的MDB是一个文件就是一个数据库。故访问SQL 数据库要指定其服务器IP 数据库帐号密码 数据库名（当然无路径可言）
+
+　　而访问 ACCESS 只要访问 ACCESS的文件就行了。
+
+　　现在要做的是，进入企业管理器，建立一个数据库（比如为AAA），在数据库中，建立添加数据库用户和密码，然后就可以用上面的连接字符串来连接了！

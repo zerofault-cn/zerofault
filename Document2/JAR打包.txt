@@ -1,0 +1,216 @@
+JAR包打包
+
+jar 应用 先打开命令提示符(win2000或在运行筐里执行cmd命令，win98为DOS提示符)，输入jar -help,然后回车(如果你盘上已经有了jdk1.1或以上版本)，看到什么：
+用法：jar {ctxu}[vfm0Mi] [jar-文件] [manifest-文件] [-C 目录] 文件名 ... 
+
+选项：
+-c 创建新的存档 
+-t 列出存档内容的列表 
+-x 展开存档中的命名的（或所有的〕文件 
+-u 更新已存在的存档 
+-v 生成详细输出到标准输出上 
+-f 指定存档文件名 
+-m 包含来自标明文件的标明信息 
+-0 只存储方式；未用ZIP压缩格式 
+-M 不产生所有项的清单（manifest〕文件 
+-i 为指定的jar文件产生索引信息 
+-C 改变到指定的目录，并且包含下列文件： 
+
+如果一个文件名是一个目录，它将被递归处理。
+清单（manifest〕文件名和存档文件名都需要被指定，按'm' 和 'f'标志指定的相同顺序. 
+
+示例1：将两个class文件存档到一个名为 'classes.jar' 的存档文件中： 
+jar cvf classes.jar Foo.class Bar.class 
+
+示例2：用一个存在的清单（manifest）文件 'mymanifest' 将 foo/ 目录下的所有文件存档到一个名为 'classes.jar' 的存档文件中： 
+jar cvfm classes.jar mymanifest -C foo/ . 
+
+来个小例子试试看： 
+我们只有一个HelloWorld，如下：
+public class HelloWorld{ 
+public static void main(String[] args){ 
+System.out.println("Hi, Hello World!"); 
+} 
+}
+我将这个java文件存到C盘跟目录下，ok，接下来， 
+
+在先前打开的命令提示符下(跳转到C盘提示符下)，我们输入javac HelloWorld.java，然后继续输入：jar cvf hello.jar HelloWorld.class，回车后去你的C盘看看，多了什么，没错 hello.jar 。 
+
+基本的步骤我们现在都知道了，你可以自己去尝试一下随着jar后面的参数的不同，结果有什么变化。 
+
+紧接着我们看看如何运行我们的jar包。 
+
+在进入正题之前，你要先打开我们刚刚做好的jar包看看，多了什么呢，META-INF目录？再看看里面是什么，还有一个MANIFEST.MF文件是不是？用文本编辑器(我这里是UltraEdit)打开它看看： 
+Manifest-Version: 1.0 
+Created-By: 1.4.2 (Sun Microsystems Inc.) 
+
+就是这样。这里我们对它进行修改，加一句：Main-Class: HelloWorld (在第三行)。这个就是我们之前写的那个类，也就是我们的入口类。也即， 
+Manifest-Version: 1.0 
+Created-By: 1.4.2 (Sun Microsystems Inc.) 
+Main-Class: HelloWorld 
+
+接下来，我们在命令提示符里执行： 
+jar umf MANIFEST.MF app.jar 
+
+这样我们使用了我们自己的MANIFEST.MF文件对原来默认的进行了更新。你不妨可以再进去看看是不是添上了Main-Class: HelloWorld这一句。 
+
+Ok，这个最后的一步了，来验证我们做的一切，在命令提示符中输入： 
+java -jar hello.jar(执行) 
+
+出现了什么，――Hi, Hello World! 
+我们再来看看jar文件在tomcat中发布，注意：在tomcat中我们就不能再用jar这种格式，而改war格式，它是专门用于web应用的，其实整个过程下来基本上和jar是类似的： 
+
+先准备我们要打包的资源。 
+
+找到存放tomcat的webapps目录，进到其中，新建一个文件夹，这里命名为hello，再进去新建WEB-INF文件夹，再进去新建 classes文件夹，此时我们也将我们唯一的servlet，HelloWorld.java放到这里，在与classes目录同级下建立一文件 web.xml。Ok，目前我们初步建立了一个简单的web应用。 
+
+在命令提示符下进到先前创制的hello目录下，执行 jar cvf hello.war * ，我们便得到hello.war。将它拷贝至webapps目录下，ok，来看最后一步，打开tomcat的目录conf中的server.xml，加入：
+reloadable="true"/> 
+大功告成！运行它，启动tomcat，后在浏览器中输入http://localhost:8080/hello/HelloWorld，有了吗？ 
+
+好了，就这么多，希望对你有点帮助。
+
+补充： 
+############ 
+
+jar基本操作： 
+
+############ 
+
+1. 创建jar文件 
+jar cf jar-file input-file(s) 
+c---want to Create a JAR file. 
+f---want the output to go to a file rather than to stdout. 
+eg: 1)jar cf myjar.jar query_maintain_insert.htm 
+2)jar cvf myjar.jar query_maintain_insert.htm 
+v---Produces verbose(详细的) output. 
+3)jar cvf myjar.jar query_maintain_insert.htm mydirectory 
+4)jar cv0f myjar.jar query_maintain_insert.htm mydirectory 
+0---don't want the JAR file to be compressed. 
+5)jar cmf MANIFEST.MF myjar.jar yahh.txt 
+m---Used to include manifest information from an existing manifest file. 
+6)jar cMf MANIFEST.MF myjar.jar yahh.txt 
+M---the default manifest file should not be produced. 
+7)jar cvf myjar.jar * 
+*---create all contents in current directory. 
+2. 察看jar文件 
+jar tf jar-file 
+t---want to view the Table of contents of the JAR file. 
+eg: 1)jar vft yahh.jar 
+v---Produces verbose(详细的) output. 
+3. 提取jar文件 
+jar xf jar-file [archived-file(s)] 
+x---want to extract files from the JAR archive. 
+eg: 1)jar xf yahh.jar yahh.txt(仅提取文件yahh.txt) 
+2)jar xf yahh.jar alex/yahhalex.txt(仅提取目录alex下的文件yahhalex.txt) 
+3)jar xf yahh.jar(提取该jar包中的所有文件或目录) 
+4. 修改Manifest文件 
+jar cmf manifest-addition jar-file input-file(s) 
+m---Used to include manifest information from an existing manifest file. 
+5. 更新jar文件
+jar uf jar-file input-file(s) 
+u---want to update an existing JAR file. 
+
+-->生成exe:<--
+
+
+第一種：在jbuilder中： 
+首先你要保证Run菜单-->Run Project能顺利运行 
+然后Wizards菜单-->Native Executable Builder 
+选中Compress the contents of the archive(产生jar文件的话) 
+Next-->Next-->选中Always include all classes and resources再Next-->Next-->Next 
+选中Windows GUI"exe"(产生EXE文件的话)-->Finish 
+再在项目的文件列表中的Native Executable右击-->Make就可以了 
+
+第二種：在cmd 下生成jar文件 
+abc.txt内容如下： 
+Manifest-Version: 1.0 
+Main-Class: main-class-name(回車) 
+在cmd下： 
+javac *.java 
+jar cvfm abc.jar abc.txt *.class 
+示例——生成能通过鼠标双击就执行的.jar文件 
+一、 编写Java源程序Test.java如下： 
+
+// Test.java 
+import javax.swing.*; 
+/** 
+* @(#) Test.java 
+* Copyleft (c) 2002 RatKing 
+* @author RatKing 
+* @version 0.1, 2002-11-7 
+* 描述：一个测试用的Java Application 
+*/ 
+public class Test extends JFrame { 
+public Test(String title) { 
+super(title); 
+this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); 
+this.getContentPane().add(new JLabel("测试！", JLabel.CENTER), SwingConstants.CENTER); 
+this.pack(); 
+} 
+
+public static void main(String[] args) { 
+try { 
+//UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName()); 
+UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName()); 
+} catch(Exception e) { 
+e.printStackTrace(); 
+} 
+Test t = new Test("Test - 测试"); 
+t.setVisible(true); 
+} 
+} 
+
+
+二、编译Test.java为Test.class（当然假设你事先已经设置好了JDK的环境变量PATH和CLASSPATH） 
+在命令行执行编译命令： 
+javac Test.java 
+
+三、用文本编辑器（比如记事本/UltraEdit等 - 甚至用ECHO命令加管道“>>”）编写如下manifest文件，并保存为abc.txt 
+
+Manifest-Version: 1.0 
+Main-Class: Test 
+
+【注意】文件abc.txt内必须是3行文本： 
+第一行的内容依次是：“Manifest”、英文减号、“Version”、英文冒号、英文空格、数字“1”、英文句号、数字“0” 
+第二行的英文冒号与Test之间必须要有一个英文空格！！！ 
+第三行是一个空行，也就是说，你要在Test之后键入一个回车，然后才可以存盘退出！！！ 
+如果冒号后面没有空格，可以生成jar文件但不能执行；如果Test后没有回车符，则生成jar文件时会报错。 
+
+四、将Test.class打包成.jar文件，并使用abc.txt指明哪一个是带有public static void main()的“主函数” 
+在命令行执行编译命令： 
+jar cvfm Test.jar abc.txt *.class 
+
+你可以使用WinZip之类的解压软件看一看刚刚生成的Test.jar文件里到底有什么。 
+
+五、用鼠标双击Test.jar的图标，应该可以看到Test执行后的窗口。 
+
+〖说明〗如果你正确地安装了Java运行环境（JRE），那么.jar的图标应该是象一页纸并有一个A的形状，就如同写字板的图标。 
+如果你的.jar文件默认的打开关联不对，可以重新设置： 
+我的电脑->查看(Win9x)或工具(Win2k)->文件夹选项->文件类型->选择JAR文件->编辑该类型文件的属性->操作栏填入[ open ](不填引号和中括号[])，并在“执行操作的应用程序”栏填入[ "C:\Program Files\Java\j2re1.4.1\bin\javaw.exe" -jar "%1" %* ](填两对英文引号，不填[]) 
+并按“确定”、“关闭”退出对.jar文件关联的编辑。 
+（你的javaw.exe文件是不是位于C:\Program Files\Java\j2re1.4.1\bin\路径下，视你自己电脑的情况而定） 
+
+
+我这也是网上的贴子 
+--------------------------------------------------------------- 
+
+JB中生成.exe文件 
+1、菜单中选择【Wizards】－【Native Executable Builder....】弹出对话框 
+2、在弹出的对话框中第一步（Step 1 of 7）的【Name】输入一个名称，并取消【Always create archive when building the project】点击【Next】 
+3、根据需要悬着需要的类，再选择【Include class dependencies】，点击【Next】 
+4、根据需要悬着需要的库文件，再选择下面的4个单选,反复所有的需要的库，点击【Next】 
+5、默认点击【Next】 
+6、在（Step 5 of 7）的时候选择一个主类运行点击【Next】 
+7、在（Step 6 of 7）的时候选择运行平台【Next】 
+8、默认点击【Finish】，这时候在工程的目录窗口出现了一个在（Step 1 of 7）输入的【Name】目录 
+9、右击这个目录，选择【Rebuild....】，Jbuilder就开始编译和创建执行文件或是Jar文件了 
+10、等完成之后，该目录下右几个文件，一般是有至少一个jar文件，或是一个exe文件 
+11、在Window打开工程所在的目录，就可以看到里面的有几个刚才编译的文件 
+12、执行jar就是用java -jar ***.jar、执行exe直接双击 
+
+
+--------------------------------------------------------------- 
+
+1、不建议使用jb因为打包后，可执行文件的图标改不了且jb的可执行文件实际上是可执行的jar文件，可以将其exe扩展名改为jar一样可执行。 
+2、还是使用jsmooth较好，首先编写menifest文件目的指明main类，使用jar命令打包成可执行jar文件，让后使用开源的jsmooth做成exe。

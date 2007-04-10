@@ -1,0 +1,20 @@
+  
+1,安装的时候不要选择安装成服务，仅仅安装软件，假设到D:\pub\PostgreSQL\8.1 
+
+2,设置系统环境变量,在"系统变量"里添加变量名:PGDATA,变量值为:D:\pub\PostgreSQL\8.1\data
+
+3,创建一个无管理员权限的用户，比如  postgres，设定密码，比如  1234  
+
+4,以管理员，比如  Administrator  登录，打开控制台，简称控制台  A  
+
+5.  在控制台  A  运行  runas  /user:postgres  cmd，打开一个以  postgres  用户身份执行的控制台，简称控制台  P  
+
+6.  在控制台  P  上运行  c:\pgsql\bin\initdb.exe  初始化数据库集群  
+
+7.  在控制台  A  执行  c:\pgsql\bin\pg_ctl  register  -N  PostgreSQL  -U  posgres  -P  1234    注册服务  
+
+8.  在控制台 A 执行 net start PostgreSQL
+  
+9.  为方便起见，可在控制台  P  创建一个管理员名的数据库超级用户，  
+     比如  c:\pgsql\bin\createuser  -s  -d  -l  Administrator
+

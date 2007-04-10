@@ -1,0 +1,362 @@
+Eclipse开发struts完全指南
+
+一、准备安装程序
+1、JDK 5.0 安装程序下载
+下载地址：
+https://jsecom15b.sun.com/ECom/EComActionServlet/DownloadPage:~:com.sun.sunit.sdlc.content.DownloadPageInfo;jsessionid=502E87C71D77E3BC297C08B35DAC9AD4;jsessionid=502E87C71D77E3BC297C08B35DAC9AD4
+
+同意协议后，可以下载jdk-1_5_0_05-windows-i586-p.exe。
+
+2、tomcat 5.5.9下载
+
+下载地址：http://jakarta.apache.org/site/downloads/downloads_tomcat-5.cgi
+
+最新版本是5.5.11alpha版，由于是测试版，所以，可能存在不确定的因素，所以，我们这里下载5.5.9 exe。
+
+3、Sysdeo Eclipse Tomcat Launcher plugin 3.1beta版下载
+
+下载地址：http://www.sysdeo.com/eclipse/tomcatplugin
+
+这里下载tomcatPluginV31beta.zip。
+
+4、eclipse 3.1安装程序下载
+
+下载地址：http://www.eclipse.org/downloads/index.php
+
+这里需要对应版本的JDT，如果下载的是Eclipse SDK版本就自带了，如果没有，同一个下载页面的靠后部分有JDT的下载链接，下载后将对应的文件分别拷贝进eclipse安装目录下的对应的文件夹即可。
+
+这里我们下载eclipse-SDK-3.1-win32.zip 。
+
+5、GEF 3.1 安装程序下载
+
+下载地址：
+
+http://download.eclipse.org/tools/gef/downloads/drops/R-3.1-200507071758/
+
+index.php
+
+这里我们下载GEF-ALL-3.1.zip。
+
+6、Eclipse HTML Editor 1.6.7 安装程序下载
+
+下载地址：https://sourceforge.jp/projects/amateras/files/?release_id=16537
+
+#16537
+
+这里我们下载：tk.eclipse.plugin.htmleditor_1.6.7.zip。
+
+7、StrutsIDE 1.1.7 安装程序下载
+
+下载地址：https://sourceforge.jp/projects/amateras/files/?release_id=16537#16537
+
+这里我们下载：tk.eclipse.plugin.struts_1.1.7.zip。
+
+好了，到此我们准备好了所有的安装包。
+
+二、安装JDK并配置开发环境
+
+这里只需要双击JDK安装包的exe文件，按照提示安装即可。安装完成后，将JDK安装目录下的bin文件夹设置进环境变量的path路径中去。同时，将JRE的lib目录下的rt.jar包设置进环境变量的classpath中去。
+
+这里我们把JDK安装到了默认安装路径C:Program FilesJavajdk1.5.0_02下。这里就不多说了，网上可以搜索到很多JDK安装配置的文章。
+
+三、安装tomcat服务器
+
+只需要双击tomcat安装包的exe文件，按照提示安装即可，这里我们的安装目录为D:Tomcat5.5，管理员密码设置为12345678。
+
+四、安装Eclipse开发工具
+
+只需要把eclipse-SDK-3.1-win32.zip安装包解压，然后把里面的eclipse文件夹剪切至想放置的目录即可，这里我们把eclipse安装到了D:eclipse目录下。
+
+在安装目录下双击eclipse.exe文件，即可启动eclipse。中间会询问默认的工作目录，你可以按其默认设定的，也可以自己设定工作目录，这里设置为E:workspace目录。请选中Use this as the default and do not ask again选项，这样以后启动就不会再询问了。
+
+到此eclipse安装成功。
+
+五、安装tomcatPlugin插件
+
+安装很简单，解压我们已经下载的安装包tomcatPluginV31beta.zip，将解压后的com.sysdeo.eclipse.tomcat_3.1.0.beta文件夹拷贝至D:eclipseplugins目录下即可。我们关掉已经打开的eclipse，重新打开，OK,现在我们会发现工具栏上多了几个雄猫的图标，就是tomcat的启动、停止和重启动的按钮。打开eclipse的window/preferences，我们在左边的树种也可以找到tomcat一项。
+
+点击tomcat项，在右边我们选择version 5.x版本，然后设定tomcat home为D:Tomcat5.5，Contexts directory为D:Tomcat5.5confCatalinalocalhost。到此tomcat plugin设置完毕。
+
+六、安装GEF插件
+
+同样，将GEF-ALL-3.1.zip解压缩，然后拷贝解压后的eclipse目录下的三个文件夹到D:eclipse目录下，覆盖所有的现有文件夹。
+
+好了，到此GEF安装完成。
+
+八、创建测试工程
+
+如果已经完成了上面所有步骤，现在可以重新启动eclipse，使新安装的插件生效，开始正式开发了。
+
+1、使用Sysdeo Tomcat Plugin创建tomcat工程：
+
+File->new->others，打开新建向导对话框，在树中找到java->tomcat projects，选中，点击next按钮。在projects name中输入textweb，选中Use default，点击next。在下一个对话页面，保持默认设置，点击finished。这时，我们在eclipse的package explorer中会看到新建的工程testweb，创建完成。
+
+2、加入struts框架
+
+File->new->others，打开新建向导对话框，找到Amateras->Struts->Add Struts Support，选中点击next按钮。
+
+保持默认设置，点击Finish按钮。这时，在eclipse的package explorer中会看到增加了很多struts的库文件，在WEB-INF下也增加了很多struts的配置文件。到此我们已经在项目加入了Struts框架。
+
+3、编辑struts-config.xml文件
+
+在WEB-INF文件夹下可以找到，右键点击菜单中选择open with->Amateras XML Editer可以直接对xml文本进行编辑，选择open with->struts-config.xml editor可以在图形模式下对文件进行编辑。
+
+在右边的outline中点击相应的struts对象可以添加新的对象进去。这里我们只是说明这里有一个比较方便的struts-config.xml文件的编辑器，后面我们将开发一个简单的小程序。
+
+4、新建一个页面index.jsp
+
+File->new->others，打开新建向导对话框，找到Amateras->JSP File，点击next按钮，FileName改为index.jsp，点击Finish。然后打开index.jsp文件进行编辑，内容如下：
+
+<%@page pageEncoding=GBK contentType=text/html; charset=gb2312 %>
+<html>
+<head>
+<meta http-equiv=Content-Type content=text/html; charset=gb2312/>
+<title></title>
+</head>
+<body>
+<form name=form1 method=post action=/testweb/logincheck.do>
+<table width=300　border=0 cellspacing=0 cellpadding=0>
+<tr align=center>
+<td colspan=2>用户登录信息</td>
+</tr>
+<tr>
+<td>用户名</td>
+<td>
+<input name=username type=text id=username size=12>user</td>
+</tr>
+<tr>
+<td>用户密码</td>
+<td>
+<input name=password type=text id=password size=12>123456</td>
+</tr>
+<tr align=center>
+<td colspan=2><input type=submit name=Submit value=提交></td>
+</tr>
+</table>
+</form>
+</body>
+</html> 
+
+5、创建form数据对象
+
+打开File->new->package对话框，name中输入com.is.form，点击Finish按钮。在右边的Package　Explorer树中找到刚才创建的包，右键点击com.is.form包，菜单中的new->others，找到Amateras->struts->Struts Action Form，点击next，在对话框中name栏输入LoginForm，点击Finish按钮。
+
+编辑LoginForm类的内容为：
+
+package com.is.form;
+import org.apache.struts.action.ActionForm;
+public class LoginForm extends ActionForm
+{
+private static final longserialVersionUID = 1L;
+private String username = "";
+private String password = "";
+/**
+* @return Returns the password.
+*/
+public String getPassword()
+{
+return password;
+}
+
+/**
+
+* @param password The password to set.
+*/
+public void setPassword(String password)
+{
+this.password = password;
+}
+/**
+* @return Returns the username.
+*/
+public String getUsername()
+{
+return username;
+}
+/**
+* @param username The username to set.
+*/
+public void setUsername(String username)
+{
+this.username = username;
+}
+}
+
+注意，这里的两个属性分别对应我们jsp中form中的两个输入控件的名称，为什么这样做，可以去看struts的帮助文档了，我就不详细说了，还有form类再写完属性后，get和set方法可以通过eclipse的source中的命令来自动生成，在右键菜单中，也不详细说了，去网上查资料吧，关于eclipse的使用有很多的文档。
+
+七、安装Eclipse HTML Editor插件
+
+解压缩tk.eclipse.plugin.htmleditor_1.6.7.zip包，然后将plugins目录拷贝至D:\eclipse目录下覆盖原文件夹即可。到此Eclipse HTML Editor插件安装完成。
+
+八、安装StrutsIDE插件
+
+解压缩tk.eclipse.plugin.struts_1.1.7.zip包，然后将plugins目录拷贝至D:\eclipse目录下覆盖原文件夹即可。
+
+好了，到此StrutsIDE插件安装完成。
+
+6、创建action对象
+
+同创建form的过程相同，我们只是新建一个com.is.action包，同样的过程，打开新建向导，只是选择Struts Action，创建LoginAction.java类，均选默认值。我们编辑LoginAction为如下内容：
+package com.is.action;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import org.apache.struts.action.Action;
+import org.apache.struts.action.ActionForm;
+import org.apache.struts.action.ActionForward;
+import org.apache.struts.action.ActionMapping;
+
+import com.is.form.LoginForm;
+
+public class LoginAction extends Action
+{
+private static final long serialVersionUID = 1L;
+
+public ActionForward execute(ActionMapping mapping,ActionForm form,HttpServletRequest request,HttpServletResponse response) throws Exception {
+
+// this line is here for when the input page is upload-utf8.jsp,
+// it sets the correct character encoding for the response
+
+String encoding = request.getCharacterEncoding();
+
+if ((encoding != null) &&(encoding.equalsIgnoreCase("GB2312")))
+{
+response.setContentType("text/html; charset=GB2312");
+} else {
+response.setContentType("text/html; charset=GBK");
+
+}
+
+try {
+
+if (form instanceof LoginForm)
+{
+
+LoginForm theForm = (LoginForm) form;
+
+if(theForm.getUsername().equals("user") &&theForm.getPassword().equals("123456"))
+{
+return new ActionForward("/welcome.do?type=true");
+}
+else {
+return new ActionForward("/welcome.do?type=false");
+
+}
+
+}
+} catch (Exception e)
+{
+
+}
+
+// this shouldn't happen in this example
+
+return null;
+
+}
+}
+
+注意这里是直接用ActionForward转向的，你也可以按照struts中提供的空白例程struts-blank.war中的做法进行转向，可以比较一下会有收获的。
+
+7、创建登录成功页面
+
+同创建index.jsp页面相同，我们创建welcome.jsp页面，均使用默认设置。并编辑其内容如下：
+
+<%@page pageEncoding="GBK" contentType="text/html;charset=GBK" %>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=GBK"/>
+<title></title>
+</head>
+<body>
+<%
+String type = request.getParameter("type");
+if(type!=null&&type.equals("true")){
+out.print("欢迎您的光临！");
+
+}
+else{
+out.print("对不起，你输入的用户名或者密码错误！");
+}
+%>
+</body>
+</html>
+
+8、增加Struts-config.xml中的配置
+
+添加formbean的配置，在和标签之间加入：
+
+<form-bean
+name="loginForm"
+type="com.is.form.LoginForm"/>
+
+添加jsp文件的映射，在和标签之间加入：
+
+<action
+path="/index"
+forward="/index.jsp"/>
+<action
+path="/welcome"
+forward="/welcome.jsp"/>
+
+添加action文件的映射，在和标签之间加入：
+
+path="/logincheck"
+type="com.is.action.LoginAction"
+name="loginForm"
+scope="request"
+validate="true"/>
+
+修改后的struts-config.xml大致如下形式：
+
+<?xml version="1.0"?>
+<!DOCTYPE struts-config PUBLIC "- //Apache Software Foundation //DTD Struts Configuration 1.2//EN" "http://struts.apache.org/dtds/struts-config_1_2.dtd">
+<struts-config>
+<data-sources>
+</data-sources>
+<form-beans>
+<form-bean
+name="loginForm"
+type="com.is.form.LoginForm"/>
+</form-beans>
+<global-exceptions>
+</global-exceptions>
+<global-forwards>
+</global-forwards>
+<action-mappings>
+<action
+path="/index"
+forward="/index.jsp"/>
+<action
+path="/welcome"
+forward="/welcome.jsp"/>
+<action
+path="/logincheck"
+type="com.is.action.LoginAction"
+name="loginForm"
+scope="request"
+validate="true"/>
+</action-mappings>
+<controller processorClass=
+"org.apache.struts.tiles.TilesRequestProcessor"/>
+<message-resources parameter="MessageResources"/>
+<plug-in className=
+"org.apache.struts.tiles.TilesPlugin">
+<set-property property="definitions-config"
+value="/WEB-INF/tiles-defs.xml"/>
+<set-property property="moduleAware" value="true"/>
+</plug-in>
+<plug-in className=
+"org.apache.struts.validator.ValidatorPlugIn">
+<set-property property="pathnames"
+value="/WEB-INF/validator-rules.xml,
+/WEB-INF/validation.xml"/>
+</plug-in>
+</struts-config>
+
+到此我们可以运行测试程序了。
+
+9、运行测试程序
+
+右键点击testweb工程根目录，点击菜单中的Tomcate project->update context definition，将工程部署进tomcat，成功后会提示操作成功。
+
+点击菜单栏中的雄猫图标启动tomcat，然后在IE地址栏中输入http://localhost:8080/testweb/index.do，我们会看到index.jsp的页面内容。 

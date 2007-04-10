@@ -1,0 +1,28 @@
+先装Vista再装XP后如何实现双启动 
+[ 2007-1-18 14:38:00 | By: D.CSQ ] 
+  
+      在工作的空闲时间，我喜欢做一些实验，有时我会去想象Vista用户可能遇到的问题并为其提供一个解决方案。以下是我做的一个实验，供大家参考：
+ 
+
+场景：Vista用户由于工作需要，需再装一个XP以实现双启动
+
+故障：在计算机上先装Vista再装WinXP后，无法实现双启动，无法进入Vista。
+
+原因：在之前基于NT的Windows系统中，Windows使用Ntldr作为Boot Loader来启动系统。在Windows Vista中，微软引入了一种全新的boot loader架构， Windows Boot Manager (Bootmgr.exe)。也就是说原先XP使用的Ntldr和Boot.ini文件在Vista中不再使用，取而代之的是Bootmgr文件,而且Bootmgr文件要用bcdedit.exe 来修改。
+解决方案：
+   步骤：
+   1, 进入XP系统，以administrator身份运行cmd;
+   2, 插入Vista安装盘，运行: (CD-ROM):\boot\bootsect -nt60 all ;
+   3, 进入X:\windows\system32\目录（X为Vista的系统盘）;
+   4, 备份BCD文件,运行bcdedit /export "e:\BCD_Backup\BCD" ;
+   5, 运行bcdedit -create {ntldr} -d "Windows XP" ;
+   6, 运行bcdedit -set {ntldr} device partition=x: (x: 为ntldr文件所在的盘）;
+   7, 运行bcdedit -set {ntldr} path \ntldr ;
+   8, 运行bcdedit -displayorder {ntldr} -addlast ;
+   9, 重启计算机，出现双启动菜单。故障排除.
+实验成功
+
+参考：
+http://msdn2.microsoft.com/en-us/library/aa906211.aspx 
+http://support.microsoft.com/kb/919529/en-us
+ 

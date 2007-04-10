@@ -1,0 +1,1 @@
+点击“开始”，选择“运行”，在“运行”中键入“regedit”,我们可以运行注册表编辑器，依次打开各键，在HKEY_CLASSES_ROOT\Directory\shell下创建一个主键“CommandPrompt”，在右边窗口中把“默认”的值改为：“Command”（或你喜欢的字符，此字符将显示在右键菜单中）并在此主键下创建一个主键“command”，在右边窗口中把“默认”的值改为“command.com /k cd "%1"。

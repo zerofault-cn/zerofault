@@ -1,0 +1,77 @@
+摘要：该文讨论在ASP中页面与数据库连接的几种实用方法，最后给出一个利用该文提供的函数存取SQL Server数据库的例子，对开发网络自动化系统有重要的实际意义。关键词：ASP&nbsp;&nbsp;数据库&nbsp;&nbsp;连接<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;在Internet网上随处可见留言板、讨论组、网上投票、网上调查、聊天室等Internet功能模块，在许多单位的小型局域网中也运行着各种各样的办公自动化网络系统，这些程序都是利用ASP（Active Server Page）与数据库技术结合而实现的。页面与数据库源建立连接是访问数据库的一步，也是最为重要的一步。<br>
+在ASP脚本中可以通过三种实用的方法连接数据库：通过ODBC DSN建立连接，通过oledb建立连接和通过driver建立连接。<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;一、通过ODBC DSN建立连接<br>
+运用ODBC数据源，首先必须在控制面板的ODBC中设置数据源，然后再编写脚本和数据库源建立连接。<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;1、创建 ODBC DSN <br>
+&nbsp;&nbsp;&nbsp;&nbsp;通过在 Windows 的"开始"菜单打开"控制面板"，您可以创建基于 DSN 的文件。双击"ODBC"图标，然后选择"系统 DSN"属性页，单击"添加"，选择数据库驱动程序，然后单击"下一步"。按照后面的指示配置适用于您的数据库软件的 DSN。常用的数据库软件有Microsoft Access和SQL Server等，这里以SQL Server 数据库为例。<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;配置 SQL Server 数据库系统&nbsp;&nbsp;DSN：注意如果数据库驻留在远程服务器上，请与服务器管理员联系，获取附加的配置信息；下面的过程使用 SQL Server 的 ODBC 默认的设置，它可能不适用于您的硬件配置。在"创建新数据源"对话框中，从列表框中选择"SQL Server"，然后单击"下一步"。键入 DSN 文件的名称，然后单击"下一步"。单击"完成"创建数据源。键入运行 SQL 服务程序的服务器的名称、登录 ID 和密码。在"创建 SQL Server 的新数据源"对话框中，在"服务器"列表框中键入包含 SQL Server 数据库的服务器的名称，然后单击"下一步"。选择验证登录 ID 的方式。如果要选择 SQL 服务器验证，请输入一个登录 ID 和密码，然后单击"下一步"。在"创建 SQL Server 的新数据源"对话框中，设置默认数据库、存储过程设置的驱动程序和 ANSI 标识，然后单击"下一步"。（要获取详细信息，请单击"帮助"。）在对话框（同样名为"创建 SQL Server 的新数据源"）中，选择一种字符转换方法，然后单击"下一步"。（详细信息，请单击"帮助"。）在下一个对话框（同样名为"创建 SQL Server 的新数据源"）中，选择登录设置。 注意典型情况下， 您只能使用日志来调试数据库访问问题。 在"ODBC Microsoft SQL Server 安装程序"对话框中，单击"测试数据源"。如果 DSN 正确创建，"测试结果"对话框将指出测试成功完成。<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;2、编写脚本和数据库源建立连接<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ADO（ActiveX Data Objects ） 提供 Connection 对象，可以使用该对象建立和管理应用程序和 ODBC 数据库之间的连接。Connection 对象具有各种属性和方法，可以使用它们打开和关闭数据库连接。编写数据库连接脚本，首先应创建 Connection 对象的实例，接着打开数据库连接：<br>
+<%<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;set conn=server.createobject("adodb.connection")<br>
+conn.open "DSN=ODBC名称;Database=数据库名称;UID=;PWD=;"<br>
+%><br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;二、通过oledb建立连接<br>
+运用oledb方法建立页面与数据库的连接， 不需要创建 ODBC DSN数据源，直接编写如下的脚本和数据源建立连接，是一种简单易用的方法。 <br>
+<%<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;set conn=server.createobject("adodb.connection")<br>
+conn.open "Provider=SQLOLEDB;server=(SQL服务器名称或IP地址);database=数据库名称;uid=;pwd="<br>
+%><br>
+ <br>
+&nbsp;&nbsp;&nbsp;&nbsp;三、通过driver建立连接 <br>
+通过driver建立页面与数据库的连接，同样不需要创建ODBC DSN数据源，但必须知道实际的数据库文件路径或者数据源名(例如,SQLserver的数据库)。<br>
+<%<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;set conn=server.createobject("adodb.connection")<br>
+conn.open "driver={sql server};server=(SQL服务器名称或IP地址);database=数据库名称;uid=;pwd="%><br>
+ <br>
+&nbsp;&nbsp;&nbsp;&nbsp;四、实例（登陆系统）<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;无论是进入论坛发表自己观点，还是进入自动化管理系统，都需要用户填写登录信息，系统在自身的数据库中检查是否有此用户的注册信息，如果检测到，用户即可顺利登录。而这一登录检查过程的实现，就需要后台数据库与前台页面的连接。<br>
+代码实现：连接脚本程序可单独写为一页命名为conn.asp ,需要时引用即可。也可直接写在登录检查页面中。<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;conn.asp源代码：<br>
+<%<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;set conn=server.createobject("adodb.connection")<br>
+conn.open "dsn=test;database=test;uid=czx;pwd=czx123;"<br>
+%><br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;login_check.asp ( 登录检查页 )<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<!--#include file="conn.asp" --><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<%<br>
+&nbsp;&nbsp;&nbsp;&nbsp;Dim name,pwd<br>
+&nbsp;&nbsp;&nbsp;&nbsp;name=trim (Request("name"))<br>
+&nbsp;&nbsp;&nbsp;&nbsp;pwd=trim (Request("pwd"))<br>
+&nbsp;&nbsp;&nbsp;&nbsp;if Request("B1")="登录" then<br>
+&nbsp;&nbsp;&nbsp;&nbsp;set rs=server.createobject("adodb.recordset")<br>
+&nbsp;&nbsp;&nbsp;&nbsp;sql="select * from member where loginname='"&name&"' "<br>
+&nbsp;&nbsp;&nbsp;&nbsp;rs.open sql,conn,1,1<br>
+&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;&nbsp;rs.eof and rs.bof then<br>
+&nbsp;&nbsp;&nbsp;&nbsp;Response.Write "您无权进入，请先注册新用户。"&nbsp;&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;else<br>
+&nbsp;&nbsp;&nbsp;&nbsp;if rs("password")=pwd then<br>
+&nbsp;&nbsp;&nbsp;&nbsp;session("memid")=rs("id")<br>
+&nbsp;&nbsp;&nbsp;&nbsp;rs.close<br>
+&nbsp;&nbsp;&nbsp;&nbsp;set rs=nothing<br>
+&nbsp;&nbsp;&nbsp;&nbsp;Response.Redirect "index.asp"<br>
+&nbsp;&nbsp;&nbsp;&nbsp;end if<br>
+&nbsp;&nbsp;&nbsp;&nbsp;end if<br>
+&nbsp;&nbsp;&nbsp;&nbsp;end if<br>
+&nbsp;&nbsp;&nbsp;&nbsp;conn.close<br>
+&nbsp;&nbsp;&nbsp;&nbsp;set conn=nothing<br>
+&nbsp;&nbsp;&nbsp;&nbsp;%><br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;五、结束语<br>
+&nbsp;&nbsp;&nbsp;&nbsp;本文介绍了几种实用的连接数据库的方法，利用它可以轻松实现页面与SQL数据库的连接。页面与数据库的连接是自动化系统的基础，其实用有效性非常重要，本文中所述方法是作者大量实践经验之总结，其实用有效性已经过实际检验。<br>
+<br>
