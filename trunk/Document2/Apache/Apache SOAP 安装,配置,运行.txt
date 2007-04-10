@@ -1,0 +1,80 @@
+Apache SOAP 安装/配置/运行
+以下是我学习 Apache SOAP 安装, 配置和运行的全程笔记. 如果它对您有所启示或帮助, 我十分欢迎您转载或收录所有的文字和内容. 不过请务必了解一下我许可的 Creative Commons - 创作共用 授权说明, 以避免不必要的误会和法律纠纷.
+
+下载安装 J2SE SDK 
+下载安装 Tomcat 4.x 预编译包 
+下载安装 Java MAIL API 
+下载安装 Java Activation Framework 
+下载安装 Xerces 
+下载安装 Apache SOAP 
+使用 Apache SOAP 
+
+下载安装 J2SE SDK
+http://java.sun.com/j2se/
+
+J2SE 的安装就不在赘言了, 由于 Apache SOAP 是一个 Java Servlet 应用, 要运行它需要 Servlet 容器支持, 所以我们用 Apache 的开源 Servlet 服务器 Tomcat, 并且需要 Java Runtime Environment (JRE) 支持. 另外, Tomcat 在一些应用中可能使用到 javac.exe 来对 JSP 页进行编译, 所以请下载完全版的 SDK 1.2 或更高的版本.
+
+
+下载安装 Tomcat 4.x 预编译包
+http://jakarta.apache.org/tomcat/
+
+下载完成后使用默认配置安装即可. 通常它将会被安装到以下位置:
+
+C:\Program Files\Apache Group\Tomcat 4.1
+测试一下 Tomcat 4.x 服务, 请成功启动 Tomcat 后浏览以下地址:
+
+http://localhost:8080/
+如果可以正常访问, 说明 Tomcat 服务器已经开始工作了.
+
+
+下载安装 Java MAIL API
+http://java.sun.com/products/javamail/
+
+解压缩 javamail-1_3_3-ea.zip (一般放至在系统根目录下), 设置一个环境变量 CLASSPATH, 使其包含 "mail.jar" 文件:
+
+set CLASSPATH=%CLASSPATH%;C:\javamail-1.3.3\mail.jar;.
+由于 Apache SOAP 支持通 Simple Mail Transfer Protocol 进行传输 SOAP 消息, 所以我们需要 Java Mail 的支持.
+
+
+下载安装 Java Activation Framework
+http://java.sun.com/products/javabeans/glasgow/jaf.html
+
+同样是解压缩 jaf-1_0_2-upd2.zip 后设置环境变量 CLASSPATH, 使其包含 "activation.jar" 文件:
+
+set CLASSPATH=%CLASSPATH%;C:\jaf-1.0.2\activation.jar;.
+Java Activation Framework 是 Java Mail API 运行的基础, 所以必须安装这个框架.
+
+
+下载安装 Xerces
+http://xml.apache.org/xerces-j/
+
+解压 Xerces-J-bin.2.5.0.zip 文件后仍然要对环境变量进行设置, 将 xercesImpl.jar 文件指向添加到 CLASSPATH 中:
+
+set CLASSPATH=%CLASSPATH%;C:\xerces-2_5_0\xercesImpl.jar;.
+Xerces 是一个功能完备的 XML 解析器, 不过为了确保它能被顺利调用, 在设置环境变量的时候尽可能把 xercesImpl.jar 定义在别的 XML 解释解析器之前.
+
+
+下载安装 Apache SOAP
+http://ws.apache.org/soap/index.html
+
+解压 soap-bin-2.3.1.zip, 其中 "\lib\soap.jar" 是 SOAP 包含所有 Apache SOAP 的类文件, 所以要加入到 CLASSPATH 环境变量中去; 另外, COMProvider.dll 文件可以使用户采用微软的开发工具, 开发的 COM 组件可以作为 SOAP 服务发布到 Apache SOAP 上:
+
+set CLASSPATH=%CLASSPATH%;C:\soap-2_3_1\lib\soap.jar;.
+set PATH=%PATH%;C:\soap-2_3_1\lib;.
+
+如何使用 SOAP 程序
+要将一个 SOAP 应用程序发布到 Tomcat 上, 有两种方法:
+
+1. 编辑 Tomcat 配置文件 "C:\Program Files\Apache Group\Tomcat 4.1\conf\server.xml", 使其加载 Apache SOAP 应用, 请找到以节点:
+
+
+
+添加新的节点:
+
+
+
+2. 另一种方法是将 .war (Web Application aRchieve) 文件直接拷贝到 C:\Program Files\Apache Group\Tomcat 4.1\webapps 内即可, Tomcat 在每次启动的时候会自动检索 webapps 目录下的 .war 文件, 并将其加载. 
+推荐使用些方法 2., 方法 1. 在实际测试中没有被通过, 所以我对此保留意见.
+
+Posted by Ryun at July 4, 2005 12:30 AM | [^]
+

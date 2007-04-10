@@ -1,0 +1,162 @@
+webalizer汉化后图表乱码的处理
+作者：陶然
+
+写于2003年5月。最后更新： 05/14/2003 16:48:11
+
+版权声明：本文可以任意转载，转载时请保持文章的完整性，并以超链接形式标明文章原始出处和作者信息及本声明。
+http://www.taoran.net/tech/webalizer.html
+
+webalizer是一个简单易用的日志分析软件，但安装好中文版本后，出来的图表中总有让人
+心烦的乱码。本文用一个简单的perl处理脚本就可让乱码不再出现。
+
+#!/usr/bin/perl
+###############################################################################
+# webalizer_patch.pl 
+# 原作：http://mail.tses.tcc.edu.tw/nuke/sections.php?op=viewarticle&artid=139
+# 修改：陶然 <taoran@taoran.net>
+# 功能: 解决HTML汉化后图表中乱码的问题
+# 方法：图表中乱码改用英文显示就正常了
+#       需要修改: graphs.c output.c webalizer_lang.h lang.h
+#
+# tar zxf webalizer-2.01-10-src.tgz
+# cd webalizer-2.01-10
+# ./configure --with-language=simplified_chinese 
+# perl /path/of/webalizer_patch.pl ./  
+# make
+# make install
+#
+###############################################################################
+$file_graph	= "$ARGV[0]/graphs.c";
+if(!(-e $file_graph))   {
+	print "error open  $file_graph 
+";
+	print "Usage:
+  perl $0  DIR
+";
+#DIR是源文件目录，比如 ./
+	exit;
+}
+
+#把图表中的月份和注释改成英文 
+@old_var	= ("msg_h_hits",
+		"msg_h_pages",
+		"msg_h_visits",
+		"msg_h_files",
+		"msg_h_sites",
+		"msg_h_xfer",
+		"s_month");
+
+@new_var	= ("msg_gh_hits",
+		"msg_gh_pages",
+		"msg_gh_visits",
+		"msg_gh_files",
+		"msg_gh_sites",
+		"msg_gh_xfer",
+		"s_gmonth");
+
+open(IN,"<$file_graph");
+@lines	= <IN>;
+$size	= @lines;
+close(IN);
+
+`mv $file_graph $file_graph.bak`;
+open(OUT,">$file_graph");
+for($i=0;$i<$size;$i++)   {
+	for($k=0;$k<@old_var;$k++)   {
+		if($lines[$i] =~ s/$old_var[$k]/$new_var[$k]/g)   {
+			print "$i	$old_var[$k] -> $new_var[$k]
+";
+			print OUT "/* --- Modified --- */
+";
+		}
+	}
+	print OUT $lines[$i];
+}
+close(OUT);
+
+#把图表中的标题改成英文显示 
+$file_output	= "$ARGV[0]/output.c";
+open(IN,"<$file_output");
+@lines	= <IN>;
+$size	= @lines;
+close(IN);
+`mv $file_output $file_output.bak`;
+open(OUT,">$file_output");
+for($i=0;$i<$size;$i++)   {
+	if($lines[$i] =~ s/msg_hmth_du,l_month/"Daily Usage for",s_gmonth/xg) {
+		print "$i	patched
+";
+		print OUT "/* --- Modified --- */
+";
+	} elsif($lines[$i] =~ s/msg_hmth_hu,l_month/"Hourly Usage for",s_gmonth/xg) {
+		print "$i	patched
+";
+		print OUT "/* --- Modified --- */
+";
+	} elsif($lines[$i] =~ s/msg_ctry_use,l_month/"Usage by Country for",s_gmonth/xg) {
+		print "$i	patched
+";
+		print OUT "/* --- Modified --- */
+";
+	} elsif($lines[$i] =~ s/msg_main_us/"Usage summary for"/xg) {
+		print "$i	patched
+";
+		print OUT "/* --- Modified --- */
+";
+	}
+	print  OUT $lines[$i];
+}
+close(OUT);
+
+#加入新的函数给前面显示的程序用 
+
+print "
+patch	$ARGV[0]/webalizer_lang.h
+";
+
+$file_lang	= "$ARGV[0]/webalizer_lang.h";
+open(OUT,">>$file_lang");
+print OUT qq~
+/* --- start Add  ---*/
+char *msg_gh_hits  = "Hits";
+char *msg_gh_pages = "Pages";
+char *msg_gh_visits= "Visits";
+char *msg_gh_files = "Files";
+char *msg_gh_sites = "Sites";
+char *msg_gh_xfer  = "KBytes";
+
+char *s_gmonth[12]={ "Jan", "Feb", "Mar",
+                    "Apr", "May", "Jun",
+                    "Jul", "Aug", "Sep",
+                    "Oct", "Nov", "Dec"};
+
+/* -------------End------------- */
+~;
+
+#补充声明这些新加的函数
+print "
+patch	$ARGV[0]/lang.h
+";
+
+$file_lang	= "$ARGV[0]/lang.h";
+open(OUT,">>$file_lang");
+print OUT qq~
+/* --- start Add  ---*/
+extern char *msg_gh_hits  ;
+extern char *msg_gh_pages ;
+extern char *msg_gh_visits;
+extern char *msg_gh_files ;
+extern char *msg_gh_sites ;
+extern char *msg_gh_xfer  ;
+extern char *s_gmonth[12];
+/* -------------End------------- */
+~;
+
+print "Done ^_^
+";
+
+#############################################################################
+
+陶然
+2003/05/14
+

@@ -1,0 +1,55 @@
+添加GD库
+安装libpng
+http://www.libpng.org/pub/png/libpng.html
+下载libpng-1.2.8-config.tar.gz
+# tar xzvf libpng-1.2.8-config.tar.gz
+# cd libpng-1.2.8-config
+# cp scripts/makefile.linux makefile
+# make
+# make install
+
+安装jpeg
+http://www.ijg.org/
+下载jpegsrc.v6b.tar.gz
+# tar zxvf jpegsrc.v6b.tar.gz 
+# cd jpeg-6b
+# ./configure --enable-shared
+# make
+# make test
+# make install
+
+安装freetype
+http://sourceforge.net/projects/freetype
+下载freetype-2.1.10.tar.gz
+# tar xzvf freetype-2.1.10.tar.gz
+# cd freetype-2.1.10
+# ./configure
+# make
+# make install
+
+安装libz
+http://www.zlib.net/
+下载zlib-1.2.2.tar.gz
+# tar xzvf zlib-1.2.2.tar.gz
+# cd zlib-1.2.2
+# ./configure
+# make
+# make install
+
+安装GD
+http://www.boutell.com/gd/
+下载gd-2.0.33.tar.gz
+# tar xzvf gd-2.0.33.tar.gz
+# cd gd-2.0.33
+# ./configure --with-png --with-freetype --with-jpeg
+# make install
+
+
+重新编译PHP
+# /usr/local/apache2/bin/apachectl stop
+# tar -xzvf php-4.3.11.tar.gz
+# cd php-4.3.11
+# ./configure --with-apxs2=/usr/local/apache2/bin/apxs --with-mysql --with-gd --with-zlib --with-png --with-jpeg-dir=/usr/ --with-freetype-dir=/usr/ --enable-gd-native-ttf --with-ttf
+# make
+# make install
+# /usr/local/apache2/bin/apachectl start

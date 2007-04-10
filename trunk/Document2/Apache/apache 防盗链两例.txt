@@ -1,0 +1,26 @@
+
+　1.利用rewrite 确认你的apache 能使用rewrite mod
+　　RewriteEngine on
+　　RewriteCond %{HTTP_REFERER} !^http://linuxsky.net[/size]/.*$ [NC]
+　　RewriteCond %{HTTP_REFERER} !^http://linuxsky.net$ [NC]
+　　RewriteCond %{HTTP_REFERER} !^http://www.linuxsky.net/.*$ [NC]
+　　RewriteCond %{HTTP_REFERER} !^http://www.linuxsky.net$ [NC]
+　　RewriteRule .*.(gif|jpb|png|css|js|swf])$ http://www.linuxsky.net [R,NC]
+　　
+　　其中有色的地方都是要改为你的：
+　　红色：就是改为你提供下载页面的地址，也就是只有通过这个地址才可以下载你所提供的东东。
+　　蓝色：就是要保护文件的扩展名(以|分开)，也就是说以这些为扩展名的文件只有通过红色的地址才可以访问。
+　　绿色：如果不是通过红色的地址访问蓝色这些为扩展名的文件时就回重定向到绿色地址上。
+　　
+　　
+　　2.利用SetEnvIfNoCase 和 access
+　　
+　　SetEnvIfNoCase Referer "^http://linuxsky.net" local_ref=1
+　　SetEnvIfNoCase Referer "^http://www.linuxsky.net" local_ref=1
+　　<FilesMatch ".(gif|jpb|png|css|js|swf)">
+　　Order Allow,Deny
+　　Allow from env=local_ref
+　　</FilesMatch>
+　　
+　　红色为信任站点，蓝色为受保护的文件扩展名。 
+ 
