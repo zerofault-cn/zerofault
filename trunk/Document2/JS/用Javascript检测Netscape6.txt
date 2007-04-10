@@ -1,0 +1,45 @@
+用Javascript检测Netscape6 
+ 
+ 
+ 
+(2002年04月29日23:00:05 阅读： )
+ 
+ 
+
+　　用Javascript检测用户浏览器版本的方法一般是这样的:
+
+< SCRIPT LANGUAGE="JavaScript">
+< !--
+if (document.all) {
+alert("您使用的浏览器是Internet Explorer");
+}
+else if (document.layers) {
+alert("您使用的浏览器是Netscape Navigator");
+}
+else {
+alert("无法检测的浏览器");
+}
+// -->
+< /SCRIPT> 
+
+　　这段代码可以检测正确检测出IE以及Netscape在6之前的版本，但是碰到Netscape6他就会显示"无法检测的浏览器"。因为Netscape6不支持document.all和document.layers方法。NetScape6支持document.getElementById方法，但同时IE也支持。因此不支持document.all和document.layers方法但支持document.getElementById的就是Netscape6了!
+
+　　根据这个思想我们这样修改上面的代码：
+
+< SCRIPT LANGUAGE="JavaScript">
+< !--
+if (document.all) {
+alert("您使用的浏览器是Internet Explorer");
+}
+else if (document.layers) {
+alert("您使用的浏览器是Netscape Navigator");
+}
+else if (document.getElementById) {
+alert("您使用的浏览器是Netscape 6");
+}
+else {
+alert("无法检测的浏览器");
+}
+// -- >
+< /SCRIPT>　
+ 
