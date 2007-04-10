@@ -1,0 +1,297 @@
+Peeking in MySQL 5.0 Enterprise Functional 
+
+? by Dennis DLL(丹舟) 2004.01
+
+
+      MySQL5.0 Alpha 發佈, 我們期待已久的 Create Function 和 Create Procedure 的功能終於有了. 詳細的資訊請參考 MySQL AB 的官方網站的 新聞. 早就想要的功能,出來了還不趕快試試....
+
+     本文以 Windows XP PRO os 為例<  :) 我可不是有意來替 M$ 宣傳,只是我用的是 Windows,沒有辦法啦>來說明,其它OS 類同, 先下載 MySQL5.0, 為了免除安裝,我們直接下載 Without installer (unzip in C:\) 的版本,到 http://www.mysql.com/downloads/mysql-5.0.html 下載.
+
+1. 直接 unzip 後把其放到 C:\ 下, 並把 root Directory 改為 mysql(不改也可,那在 my.ini 中要把其中的 mysql 改為你的實際名稱)
+
+2. 下面是 my.ini 的配置文件,如果你對配置不熟的話,你可以直接  Copy 過去存為 my.ini 後放到 C:\windows 下即可 (我電腦的 RAM = 256)
+========================================================================================================
+# Example mysql config file.
+# Copy this file to c:\my.cnf to set global options
+# 
+# One can use all long options that the program supports.
+# Run the program with --help to get a list of available options
+
+# This will be passed to all mysql clients
+[client]
+#password=my_password
+port=3306
+#socket=MySQL
+
+# Here is entries for some specific programs
+# The following values assume you have at least 32M ram
+
+# The MySQL server
+[mysqld]
+port=3306
+#socket=MySQL
+skip-locking
+set-variable = key_buffer=16M
+set-variable = max_allowed_packet=1M
+set-variable = table_cache=64
+set-variable = sort_buffer=512K
+set-variable = net_buffer_length=8K
+set-variable = myisam_sort_buffer_size=8M
+server-id = 1
+
+# Uncomment the following if you want to log updates
+#log-bin
+
+# Uncomment the following rows if you move the MySQL distribution to another
+# location
+#basedir = d:/mysql/
+#datadir = d:/mysql/data/
+
+
+# Uncomment the following if you are NOT using BDB tables
+#skip-bdb
+
+# Uncomment the following if you are using BDB tables
+#set-variable = bdb_cache_size=4M
+#set-variable = bdb_max_lock=10000
+
+# Uncomment the following if you are using Innobase tables
+innodb_data_file_path = ibdata1:400M
+innodb_data_home_dir = C:/mysql/InnoDB/ibdata           # InnoDB 及 ibdata 的資料夾你要自己動手
+innodb_log_group_home_dir = C:/mysql/InnoDB/iblogs   # iblogs 的資料夾同樣你要自己動手
+innodb_log_arch_dir = C:/mysql/innodb/iblogs
+set-variable = innodb_mirrored_log_groups=1
+set-variable = innodb_log_files_in_group=3
+set-variable = innodb_log_file_size=5M
+set-variable = innodb_log_buffer_size=8M
+innodb_flush_log_at_trx_commit=1
+innodb_log_archive=0
+set-variable = innodb_buffer_pool_size=16M
+set-variable = innodb_additional_mem_pool_size=2M
+set-variable = innodb_file_io_threads=4
+set-variable = innodb_lock_wait_timeout=50
+
+[mysqldump]
+quick
+set-variable = max_allowed_packet=16M
+
+[mysql]
+no-auto-rehash
+# Remove the next comment character if you are not familiar with SQL
+#safe-updates
+
+[isamchk]
+set-variable = key_buffer=20M
+set-variable = sort_buffer=20M
+set-variable = read_buffer=2M
+set-variable = write_buffer=2M
+
+[myisamchk]
+set-variable = key_buffer=20M
+set-variable = sort_buffer=20M
+set-variable = read_buffer=2M
+set-variable = write_buffer=2M
+
+[mysqlhotcopy]
+interactive-timeout
+[WinMySQLAdmin]
+Server=C:/mysql/bin/mysqld-nt.exe
+============================================================================
+
+3. Create InnoDB table table space 如果運行沒有問題,你應該可以看到如下內容:
+==========================================================
+
+C:\mysql\bin>mysqld --console
+InnoDB: The first specified data file C:\mysql\InnoDB\ibdata\ibdata1 did not exist:
+InnoDB: a new database to be created!
+040113 15:12:54  InnoDB: Setting file C:\mysql\InnoDB\ibdata\ibdata1 size to 400 MB
+InnoDB: Database physically writes the file full: wait...
+InnoDB: Progress in MB: 100 200 300 400
+040113 15:13:19  InnoDB: Log file C:\mysql\InnoDB\iblogs\ib_logfile0 did not exist: new to be created
+InnoDB: Setting log file C:\mysql\InnoDB\iblogs\ib_logfile0 size to 5 MB
+InnoDB: Database physically writes the file full: wait...
+040113 15:13:19  InnoDB: Log file C:\mysql\InnoDB\iblogs\ib_logfile1 did not exist: new to be created
+InnoDB: Setting log file C:\mysql\InnoDB\iblogs\ib_logfile1 size to 5 MB
+InnoDB: Database physically writes the file full: wait...
+040113 15:13:20  InnoDB: Log file C:\mysql\InnoDB\iblogs\ib_logfile2 did not exist: new to be created
+InnoDB: Setting log file C:\mysql\InnoDB\iblogs\ib_logfile2 size to 5 MB
+InnoDB: Database physically writes the file full: wait...
+InnoDB: Doublewrite buffer not found: creating new
+InnoDB: Doublewrite buffer created
+InnoDB: Creating foreign key constraint system tables
+InnoDB: Foreign key constraint system tables created
+040113 15:13:26  InnoDB: Started; log sequence number 0 0
+mysqld: ready for connections.
+Version: '5.0.0-alpha-max-debug'  socket: ''  port: 3306
+==========================================================
+
+安裝 Ok, 進去看看吧,沒想到一進 Mysql 馬上就來了個下馬威, 原來的 '' 這個 user 不能用 mysql 的 databases
+=========================================================
+C:\mysql\bin>mysql
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 2 to server version: 5.0.0-alpha-max-debug
+
+Type 'help;' or '\h' for help. Type '\c' to clear the buffer.
+
+mysql> use mysql
+ERROR 1044 (42000): Access denied for user: ''@'localhost' to database 'mysql
+==========================================================
+
+沒有辦法,只有用 root 進去:
+
+==========================================================
+
+C:\mysql\bin>mysql -u root -p
+Enter password:
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 5 to server version: 5.0.0-alpha-max-debug
+
+Type 'help;' or '\h' for help. Type '\c' to clear the buffer.
+
+mysql>
+
+==========================================================
+
+ :) root  的密碼還是勤快一點把它改掉吧
+
+
+4. 體驗一下 Create Function 吧
+
+CREATE FUNCTION MyFunc (s CHAR(20)) RETURNS CHAR(50) RETURN CONCAT('Hello ',s,'  DLL',' !');
+
+==========================================================
+mysql> CREATE FUNCTION MyFunc (s CHAR(20)) RETURNS CHAR(50) RETURN CONCAT('Hello
+',s,'.Lan',' !');
+Query OK, 0 rows affected (0.00 sec)
+
+mysql>
+
+mysql> select MyFunc('Dennis');
++--------------------+
+| MyFunc('Dennis')   |
++--------------------+
+| Hello Dennis.Lan ! |
++--------------------+
+1 row in set (0.01 sec)
+
+mysql>
+
+==========================================================
+5. Drop Function 
+
+==========================================================
+mysql> drop function MyFunc;
+Query OK, 0 rows affected (0.00 sec)
+
+mysql>
+
+==========================================================
+
+6. Create 一個  Procedure 試試吧!
+
+CREATE PROCEDURE MyProc (OUT param1 INT) BEGIN SELECT COUNT(*) INTO param1 FROM sys_forms; END;
+
+千萬記住,下面這樣子不行喲, 我試了 n 次, 每次都是錯誤, 我還以為 Mysql 有問題呢,原來不是
+
+==========================================================
+
+mysql> use test;
+Database changed
+mysql> CREATE PROCEDURE MyProc (OUT param1 INT) BEGIN SELECT COUNT(*) INTO param
+1 FROM sys_forms; END;
+
+ERROR 1064 (42000): You have an error in your SQL syntax.  Check the manual that
+ corresponds to your MySQL server version for the right syntax to use near 'SELE
+CT COUNT(*) INTO param1 FROM sys_forms' at line 1
+
+==========================================================
+
+正確的做法是:
+==========================================================
+mysql> delimiter | # 因為你的 Procedure 或 Function中難免會用到 ";" 作為 sql statement 的結束符, 所以還是請你把這個結束符號改一下吧,不然就會出現上面的 error 1064(42000)
+
+
+mysql> CREATE PROCEDURE MyProc (OUT param1 INT) BEGIN SELECT COUNT(*) INTO param1 FROM mysql.user; END;
+    -> |
+Query OK, 0 rows affected (0.00 sec)
+
+==========================================================
+
+OK, 你的成功了嗎?
+
+強烈建議你先看看這個  http://www.mysql.com/doc/en/CREATE_PROCEDURE.html
+
+Procedure Create 成功了,測試一下吧!
+Step 1:
+==========================================================
+
+mysql> CALL MyProc(@a)|
+Query OK, 0 rows affected (0.01 sec)
+==========================================================
+
+Step 2:
+==========================================================
+
+mysql> select @a;
+    -> |
++------+
+| @a   |
++------+
+| 0    |
++------+
+1 row in set (0.00 sec)
+
+mysql>
+
+==========================================================
+
+來個完整的:
+
+==========================================================
+
+mysql> CREATE PROCEDURE MyProc (OUT param1 INT) BEGIN SELECT COUNT(*) INTO param
+1 FROM mysql.user; END;
+    -> |
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> call MyProc(@a)|
+Query OK, 0 rows affected (0.03 sec)
+
+mysql> select @a |
++------+
+| @a   |
++------+
+| 4    |
++------+
+1 row in set (0.00 sec)
+
+==========================================================
+
+7. Drop Procedures:
+這樣子做怎麼又不對呀?
+
+==========================================================
+
+mysql> drop procedure myproc;
+    -> |
+ERROR 1289 (42000): PROCEDURE myproc does not exist
+
+==========================================================
+
+原來 Windows 下的 MySQL 在 Procedure 的問題上又區分起輩份的大小了,下面這樣才對啊!
+
+==========================================================
+
+mysql> drop procedure MyProc|
+Query OK, 0 rows affected (0.00 sec)
+
+==========================================================
+
+注: 如果你在和應用程式連結的時候出現
+
+Client does not support authentication protocol requested by server; consider upgrading MySQL client
+
+請參考 http://www.mysql.com/doc/en/Old_client.html 這里提供了詳細的解決方案.
+
+Enjoy it yourself!
+Good Luck!

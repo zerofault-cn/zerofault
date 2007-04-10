@@ -1,0 +1,411 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+  <title> MySQL Cluster(MySQL 集群) 初试 | MySQL 中文网 </title>
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<base href="http://imysql.cn/" />
+<META NAME ="keywords" CONTENT="MySQL,爱MySQL中文网| 爱MySQL，用MySQL，发展MySQL！,yejr,MySQL,MySQL 中文,MySQL 中文 文档,MySQL 中文 手册,MySQL 优化,MySQL 同步,MySQL 下载,MySQL 中文 论坛,MySQL 中文 社区,MySQL 论坛,叶金荣">
+<META NAME="description" CONTENT="MySQL,爱MySQL中文网| 爱MySQL，用MySQL，发展MySQL！,yejr,MySQL,MySQL 中文,MySQL 中文 文档,MySQL 中文 手册,MySQL 优化,MySQL 同步,MySQL 下载,MySQL 中文 论坛,MySQL 中文 社区,MySQL 论坛,叶金荣">
+<style type="text/css" media="all">@import "/misc/drupal.css";</style><link rel="shortcut icon" href="/misc/favicon.ico" type="image/x-icon" />
+   <style type="text/css" media="all">@import "/themes/B7/B7 Green/style.css";</style><script src="/urchin.js" type="text/javascript">
+</script>
+<script type="text/javascript">
+_uacct = "UA-361676-1";
+urchinTracker();
+</script>
+</head>
+<body  >
+<div id="all">
+<div id="header">
+      <div id="search-wrap">
+      <form action="/?q=node/96"  method="post" id="search_theme_form">
+<div><div id="search" class="container-inline"><div class="form-item">
+ <input type="text" maxlength="128" name="edit[search_theme_form_keys]" id="edit-search_theme_form_keys"  size="15" value="" title="输入关键词。" class="form-text" />
+</div>
+<input type="submit" name="op" value="搜索"  class="form-submit" />
+<input type="hidden" name="edit[form_id]" id="edit-search-theme-form" value="search_theme_form"  />
+</div>
+</div></form>
+    </div>
+   
+      <a href=" / " title="Index Page"><img src=" /themes/B7/B7 Green/logo.png " alt="Logo" /></a>
+          <h1 id="site-name"><a href=" / " title="Index Page"> MySQL 中文网 </a></h1>
+          <span id="site-slogan"> 爱 MySQL，用 MySQL，发展 MySQL！ </span>
+     <br class="clear" />
+</div>
+
+  <div id="top-nav">
+       <ul id="primary">
+           <li> <a href="/?q=forum" title="">MySQL 论坛</a> </li>
+           <li> <a href="/?q=taxonomy/term/4" title="">中文文档</a> </li>
+           <li> <a href="/?q=taxonomy/term/5" title="">基础知识</a> </li>
+           <li> <a href="/?q=taxonomy/term/15" title="">高级技术</a> </li>
+           <li> <a href="/?q=node/76" title="">MySQL 下载</a> </li>
+           <li> <a href="/?q=taxonomy/term/14" title="">相关新闻</a> </li>
+           <li> <a href="/?q=blog" title="">个人Blog</a> </li>
+         </ul>
+        </div>
+
+   <div class="breadcrumb"><a href="/?q=node">首页</a></div>  
+  
+<table id="content">
+  <tr>
+           <td class="sidebar" id="sidebar-left">
+         <div class="block block-node" id="block-node-0">
+  <h2>聚合</h2>
+  <div class="content"><a href="/?q=node/feed" class="feed-icon"><img src="/misc/feed.png" alt="Syndicate content" title="Syndicate content" width="16" height="16" /></a></div>
+</div>
+<div class="block block-statistics" id="block-statistics-0">
+  <h2>热门内容</h2>
+  <div class="content"><div class="item-list"><h3>今日：</h3><ul><li><a href="/?q=node/76">MySQL 相关下载</a></li><li><a href="/?q=node/77">MySQL 相关手册下载</a></li><li><a href="/?q=node/20">小谈MySQL字符集</a></li><li><a href="/?q=node/134">MySQL服务器安装完之后如何调节性能</a></li><li><a href="/?q=node/128">MySQL 备份和恢复</a></li><li><a href="/?q=node/55">MySQL 同步（一）</a></li><li><a href="/?q=node/13">SET 和 SHOW语法（一）</a></li></ul></div><br /><div class="item-list"><h3>全部时间：</h3><ul><li><a href="/?q=node/20">小谈MySQL字符集</a></li><li><a href="/?q=node/76">MySQL 相关下载</a></li><li><a href="/?q=node/27">MySQL 优化（一）</a></li><li><a href="/?q=node/77">MySQL 相关手册下载</a></li><li><a href="/?q=node/35">MySQL 优化（二）</a></li><li><a href="/?q=node/55">MySQL 同步（一）</a></li><li><a href="/?q=node/74">升级 MySQL</a></li><li><a href="/?q=node/13">SET 和 SHOW语法（一）</a></li><li><a href="/?q=node/61">MySQL 同步（五）</a></li><li><a href="/?q=node/57">MySQL 同步（三）</a></li></ul></div><br /><div class="item-list"><h3>最新访问：</h3><ul><li><a href="/?q=node/13">SET 和 SHOW语法（一）</a></li><li><a href="/?q=node/16">SET 和 SHOW语法（四）</a></li><li><a href="/?q=node/77">MySQL 相关手册下载</a></li><li><a href="/?q=node/61">MySQL 同步（五）</a></li><li><a href="/?q=node/58">MySQL 同步（四）</a></li><li><a href="/?q=node/57">MySQL 同步（三）</a></li><li><a href="/?q=node/76">MySQL 相关下载</a></li></ul></div></div>
+</div>
+<div class="block block-forum" id="block-forum-1">
+  <h2>论坛最新主题</h2>
+  <div class="content"><div class="item-list"><ul><li><a href="/?q=node/135">求教 &gt; 一个MYSQL查询的问题，谢谢！</a></li><li><a href="/?q=node/132" title="3 comments">请问我的mysql是3.23.54版本，我怎么升级到5.1</a></li><li><a href="/?q=node/126" title="2 comments">关于mysql增量备份</a></li><li><a href="/?q=node/121" title="1条评论">在bash下执行mysql语句</a></li><li><a href="/?q=node/120" title="3 comments">更改 windows\my.ini文件的存放地方</a></li></ul></div><div class="more-link"><a href="/?q=forum" title="阅读最新主题。">更多</a></div></div>
+</div>
+<div class="block block-user" id="block-user-1">
+  <h2>导航</h2>
+  <div class="content">
+<ul class="menu">
+<li class="leaf"><a href="/?q=tracker">最新文章</a></li>
+<li class="collapsed"><a href="/?q=aggregator">新闻聚合器</a></li>
+<li class="leaf"><a href="/?q=admin/logs/referrers">外部来源</a></li>
+<li class="leaf"><a href="/?q=admin/logs/pages">热门页面</a></li>
+<li class="leaf"><a href="/?q=admin/logs/visitors">top visitors</a></li>
+<li class="leaf"><a href="/?q=admin/logs/hits">最新点击</a></li>
+
+</ul>
+</div>
+</div>
+<div class="block block-user" id="block-user-0">
+  <h2>用户登录</h2>
+  <div class="content"><form action="/?q=node/96&amp;destination=node%2F96"  method="post" id="user-login-form">
+<div><div class="form-item">
+ <label for="edit-name">帐 号: <span class="form-required" title="This field is required.">*</span></label>
+ <input type="text" maxlength="60" name="edit[name]" id="edit-name"  size="15" value="" class="form-text required" />
+</div>
+<div class="form-item">
+ <label for="edit-pass"> 密 码 : <span class="form-required" title="This field is required.">*</span></label>
+ <input type="password" maxlength="" name="edit[pass]" id="edit-pass"  size="15"  class="form-text required" />
+</div>
+<input type="submit" name="op" value=" 登 录  "  class="form-submit" />
+<div class="item-list"><ul><li><a href="/?q=user/register" title="建立一个新的用户帐号">注册新帐号</a></li><li><a href="/?q=user/password" title="通过e-mail重设密码">重设密码</a></li></ul></div><input type="hidden" name="edit[form_id]" id="edit-user-login-block" value="user_login_block"  />
+
+</div></form>
+</div>
+</div>
+<div class="block block-comment" id="block-comment-0">
+  <h2>最新评论</h2>
+  <div class="content"><div class="item-list"><ul><li><a href="/?q=node/130#comment-79">哈哈哈，我又错了。</a><br />1天 2 hours 前</li><li><a href="/?q=node/130#comment-78">错别字
+</a><br />1天 3 hours 前</li><li><a href="/?q=node/134#comment-77">多谢指出，哈哈，</a><br />3 days 1 小时 前</li><li><a href="/?q=node/134#comment-76">innodb_buffer_pool_size</a><br />3 days 4 hours 前</li><li><a href="/?q=node/135#comment-75">一下几种例子都是</a><br />3 days 9 hours 前</li></ul></div></div>
+</div>
+<div class="block block-block" id="block-block-3">
+  <h2>关于本站</h2>
+  <div class="content"><div class="block block-about" id="block-about-0">
+My Name:<b>yejr</b><br />
+Mail/Gtalk:<img src="/files/pictures/email.gif" border="0"><br />
+Msn群:<a href="http://www.imqun.com/quns/15268">msn15268@imqun.com</a>(添加其为好友即可)
+</div>
+</div>
+</div>
+<div class="block block-block" id="block-block-2">
+  <h2>友情链接</h2>
+  <div class="content"><div class="block block-bookmarks" id="block-bookmarks-0">
+<div class="content">
+<div class="item-list">
+<ul>
+<li><a href="http://www.planetmysql.org">MySQL Blogs</a></li>
+<li><a href="http://www.mysqlperformanceblog.com">MySQL性能Blog</a></li>
+<li><a href="http://shop33740238.taobao.com">我和GF水晶店</a></li>
+<li><a href="http://www.51cisco.cn">Cisco技术</a></li>
+<li><a href="http://xiaojb.com">JIEER的博客论坛</a></li>
+<li><a href="http://www.dqpi.org">dqpi校友录</a></li>
+<li><a href="http://www.linuxmine.com">Linux宝库</a></li>
+<li><a href="http://www.goood.org">奔向NB的生活</a></li>
+<li><a href="http://www.klaudius.org">行歌拾穗</a></li>
+<li><a href="http://yejr.blogspot.com">涂鸦</a></li>
+<li><a href="http://blog.csdn.net/heiyeshuwu">黑夜路人</a></li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+</div>
+      </td>
+             <td class="main-content" id="content-left">
+                   <h2 class="content-title"> MySQL Cluster(MySQL 集群) 初试 </h2>
+                             <ul class="tabs primary">
+<li class="active"><a href="/?q=node/96" class="active">查看</a></li>
+<li><a href="/?q=node/96/track">跟踪</a></li>
+</ul>
+                                            <!-- start main content -->
+         <!-- begin content --><div class="node  ">
+     <div class="content">
+          <br />
+<script language="javascript" src="/misc/cr.js"></script><p>
+	MySQL Cluster 是MySQL适合于分布式计算环境的高实用、高冗余版本。它采用了NDB Cluster 存储引擎，允许在1个 Cluster 中运行多个MySQL服务器。在MyQL 5.0及以上的二进制版本中、以及与最新的Linux版本兼容的RPM中提供了该存储引擎。（注意，要想获得MySQL Cluster 的功能，必须安装  mysql-server 和 mysql-max RPM）。<br />
+	目前能够运行MySQL Cluster 的操作系统有Linux、Mac OS X和Solaris（一些用户通报成功地在FreeBSD上运行了MySQL Cluster ，但MySQL AB公司尚未正式支持该特性）。</p>
+<p>一、MySQL Cluster概述<br />
+	MySQL Cluster 是一种技术，该技术允许在无共享的系统中部署“内存中”数据库的 Cluster 。通过无共享体系结构，系统能够使用廉价的硬件，而且对软硬件无特殊要求。此外，由于每个组件有自己的内存和磁盘，不存在单点故障。<br />
+	MySQL Cluster 由一组计算机构成，每台计算机上均运行着多种进程，包括MySQL服务器，NDB Cluster 的数据节点，管理服务器，以及（可能）专门的数据访问程序。关于 Cluster 中这些组件的关系，请参见下图：<br /><img src="/files/pictures/cluster-components-1.png" border="0"></img></p>
+<p>	所有的这些节点构成一个完成的MySQL集群体系。数据保存在“NDB存储服务器”的存储引擎中，表（结构）则保存在“MySQL服务器”中。应用程序通过“MySQL服务器”访问这些数据表，集群管理服务器通过管理工具(ndb_mgmd)来管理“NDB存储服务器”。<br />
+	通过将MySQL Cluster 引入开放源码世界，MySQL为所有需要它的人员提供了具有高可用性、高性能和可缩放性的 Cluster 数据管理。</p>
+<p>二、MySQL Cluster 基本概念<br />
+	“NDB” 是一种“内存中”的存储引擎，它具有可用性高和数据一致性好的特点。<br />
+	MySQL Cluster 能够使用多种故障切换和负载平衡选项配置NDB存储引擎，但在 Cluster 级别上的存储引擎上做这个最简单。MySQL Cluster的NDB存储引擎包含完整的数据集，仅取决于 Cluster本身内的其他数据。<br />
+	目前，MySQL Cluster的 Cluster部分可独立于MySQL服务器进行配置。在MySQL Cluster中， Cluster的每个部分被视为1个节点。</p>
+<ul>
+<li>管理(MGM)节点：这类节点的作用是管理MySQL Cluster内的其他节点，如提供配置数据、启动并停止节点、运行备份等。由于这类节点负责管理其他节点的配置，应在启动其他节点之前首先启动这类节点。MGM节点是用命令“ndb_mgmd”启动的。</li>
+<li>数据节点：这类节点用于保存 Cluster的数据。数据节点的数目与副本的数目相关，是片段的倍数。例如，对于两个副本，每个副本有两个片段，那么就有4个数据节点。不过没有必要设置多个副本。数据节点是用命令“ndbd”启动的。</li>
+<li>SQL节点：这是用来访问 Cluster数据的节点。对于MySQL Cluster，客户端节点是使用NDB Cluster存储引擎的传统MySQL服务器。通常，SQL节点是使用命令“mysqld –ndbcluster”启动的，或将“ndbcluster”添加到“my.cnf”后使用“mysqld”启动。</li>
+<p>	注释：在很多情况下，术语“节点”用于指计算机，但在讨论MySQL Cluster时，它表示的是进程。在单台计算机上可以有任意数目的节点，为此，我们采用术语“ Cluster主机”。
+</ul>
+<p>	管理服务器(MGM节点)负责管理 Cluster配置文件和 Cluster日志。 Cluster中的每个节点从管理服务器检索配置数据，并请求确定管理服务器所在位置的方式。当数据节点内出现新的事件时，节点将关于这类事件的信息传输到管理服务器，然后，将这类信息写入 Cluster日志。<br />
+	此外，可以有任意数目的 Cluster客户端进程或应用程序。它们分为两种类型：</p>
+<ul>
+<li>标准MySQL客户端：对于MySQL Cluster，它们与标准的（非 Cluster类）MySQL没有区别。换句话讲，能够从用PHP、Perl、C、C++、Java、Python、Ruby等编写的现有MySQL应用程序访问MySQL Cluster。</li>
+<li>管理客户端：这类客户端与管理服务器相连，并提供了启动和停止节点、启动和停止消息跟踪（仅调试版本）、显示节点版本和状态、启动和停止备份等的命令。</li>
+</ul>
+<p>三、开始准备<br />
+	1、准备服务器<br />
+		现在，我们计划建立有5个节点的MySQL CLuster体系，因此需要用到5台机器，分别做如下用途：</p>
+<pre>
+		节点(用途)		IP地址(主机名)
+		管理节点(MGM)		192.168.0.1(db1)
+		SQL节点1(SQL1)		192.168.0.2(db2)
+		SQL节点2(SQL2)		192.168.0.3(db3)
+		数据节点1(NDBD1)	192.168.0.4(db4)
+		数据节点2(NDBD2)	192.168.0.4(db5)
+</pre><p>	2、注意事项及其他<br />
+		每个节点的操作系统都是Linux，下面的描述中将使用主机名，不再使用IP地址来表示。由于MySQL Cluster采用TCP/IP方式连接，并且节点之间的数据传输没有加密，因此这个体系最好只在单独的子网中运行，并且考虑到传输的速率，强烈建议不要跨越公网使用这个体系。所需的MySQL软件请事先在 http://dev.mysql.com/downloads 下载。<br />
+		实际上整个体系可以在一个单独的实体计算机上运行成功，当然了，必须设定不同的目录以及端口等，只能作为测试时使用。</p>
+<p>四、开始安装<br />
+	1、假定条件<br />
+		在每个节点计算机上都采用 nobody 用户来运行Cluster，因此执行如下命令添加相关用户（如果已经存在则略过，且用root用户执行）：</p>
+<pre>
+	root# /usr/sbin/groupadd nobody
+	root# /usr/sbin/useradd nobody -g nobody
+</pre><p>		假设已经下载了mysql可直接使用的二进制安装包，且放在 /tmp 下了。</p>
+<p>	2、SQL节点和存储节点(NDB节点)安装(即4个机器重复执行以下步骤)</p>
+<pre>
+	root# cd /tmp/
+	root# tar zxf mysql-max-5.0.24-linux-i686.tar.gz
+	root# mv mysql-max-5.0.24-linux-i686 /usr/local/mysql/
+	root# cd /usr/local/mysql/
+	root# ./configure --prefix=/usr/local/mysql
+	root# ./scripts/mysql_install_db
+	root# chown -R nobody:nobody /usr/local/mysql/
+</pre><p>	3、配置SQL节点</p>
+<pre>
+	root# vi /usr/local/mysql/my.cnf
+</pre><p>		然后输入如下内容：</p>
+<pre>
+[mysqld]
+basedir         = /usr/local/mysql/
+datadir         = /usr/local/mysql/data
+user            = nobody
+port            = 3306
+socket          = /tmp/mysql.sock
+
+ndbcluster
+ndb-connectstring=db1
+[MYSQL_CLUSTER]
+ndb-connectstring=db1
+</pre><p>	4、配置存储节点(NDB节点)</p>
+<pre>
+	root# vi /usr/local/mysql/my.cnf
+</pre><p>		然后输入如下内容：</p>
+<pre>
+[mysqld]
+ndbcluster
+ndb-connectstring=db1
+[MYSQL_CLUSTER]
+ndb-connectstring=db1
+</pre><p>	5、安装管理节点</p>
+<pre>
+	root# cd /tmp/
+	root# tar zxf mysql-max-5.0.24-linux-i686.tar.gz
+	root# mkdir /usr/local/mysql/
+	root# mkdir /usr/local/mysql/data/
+	root# cd mysql-max-5.0.24-linux-i686/bin/
+	root# cp ndb_mgm* /usr/local/mysql/
+	root# chown -R nobody:nobody /usr/local/mysql
+</pre><p>	6、配置管理节点</p>
+<pre>
+		root# vi /usr/local/mysql/config.ini
+</pre><p>		然后输入如下内容：</p>
+<pre>
+[NDBD DEFAULT]
+NoOfReplicas=1
+
+[TCP DEFAULT]
+portnumber=3306
+
+#设置管理节点服务器
+[NDB_MGMD]
+hostname=db1
+#MGM上保存日志的目录
+datadir=/usr/local/mysql/data/
+
+#设置存储节点服务器(NDB节点)
+[NDBD]
+hostname=db4
+datadir=/usr/local/mysql/data/
+#第二个NDB节点
+[NDBD]
+hostname=db5
+datadir=/usr/local/mysql/data/
+
+#设置SQL节点服务器
+[MYSQLD]
+hostname=db2
+#第二个SQL节点
+[MYSQLD]
+hostname=db3
+</pre><p>		注释： Cluster管理节点的默认端口是1186，数据节点的默认端口2202。从MySQL 5.0.3开始，该限制已被放宽， Cluster能够根据空闲的端口自动地为数据节点分配端口。如果你的版本低于5.0.22，请注意这个细节。</p>
+<p>五、启动MySQL Cluster</p>
+<p>	较为合理的启动顺序是，首先启动管理节点服务器，然后启动存储节点服务器，最后才启动SQL节点服务器：</p>
+<ul>
+<li>在管理节点服务器上，执行以下命令启动MGM节点进程：<br />
+<pre>
+	root# /usr/local/mysql/ndb_mgmd -f /usr/local/mysql/config.ini
+</pre><p>		必须用参数“-f”或“--config-file”告诉 ndb_mgm 配置文件所在位置，默认是在ndb_mgmd相同目录下。</li>
+<li>在每台存储节点服务器上，如果是第一次启动ndbd进程的话，必须先执行以下命令：<br />
+<pre>
+	root# /usr/local/mysql/bin/ndbd --initial
+</pre><p>		注意，仅应在首次启动ndbd时，或在备份/恢复数据或配置文件发生变化后重启ndbd时使用“--initial”参数。因为该参数会使节点删除由早期ndbd实例创建的、用于恢复的任何文件，包括用于恢复的日志文件。<br />
+		如果不是第一次启动，直接运行如下命令即可：</p>
+<pre>
+	root# /usr/local/mysql/bin/ndbd
+</pre></li>
+<li>最后，运行以下命令启动SQL节点服务器：<br />
+<pre>
+	root# /usr/local/mysql/bin/mysqld_safe --defaults-file=/usr/local/mysql/my.cnf &
+</pre><p>	如果一切顺利，也就是启动过程中没有任何错误信息出现，那么就在管理节点服务器上运行如下命令：</p>
+<pre>
+	root# /usr/local/mysql/ndb_mgm
+	-- NDB Cluster -- Management Client --
+	ndb_mgm> SHOW
+	Connected to Management Server at: localhost:1186
+	Cluster Configuration
+	---------------------
+	[ndbd(NDB)]     2 node(s)
+	id=2    @192.168.0.4  (Version: 5.0.22, Nodegroup: 0, Master)
+	id=3    @192.168.0.5  (Version: 5.0.22, Nodegroup: 0)
+
+	[ndb_mgmd(MGM)] 1 node(s)
+	id=1    @192.168.0.1  (Version: 5.0.22)
+
+	[mysqld(SQL)]   1 node(s)
+	id=2   (Version: 5.0.22)
+	id=3   (Version: 5.0.22)
+</pre></li>
+</ul>
+<p>	具体的输出内容可能会略有不同，这取决于你所使用的MySQL版本。<br />
+	注意：如果你正在使用较早的MySQL版本，你或许会看到引用为‘[mysqld(API)]’的SQL节点。这是一种早期的用法，现已放弃。<br />
+	现在，应能在MySQL Cluster中处理数据库，表和数据。</p>
+<p>六、创建数据库表</p>
+<p>	与没有使用 Cluster的MySQL相比，在MySQL Cluster内操作数据的方式没有太大的区别。执行这类操作时应记住两点：</p>
+<ul>
+<li>表必须用ENGINE=NDB或ENGINE=NDBCLUSTER选项创建，或用ALTER TABLE选项更改，以使用NDB Cluster存储引擎在 Cluster内复制它们。如果使用mysqldump的输出从已有数据库导入表，可在文本编辑器中打开SQL脚本，并将该选项添加到任何表创建语句，或用这类选项之一替换任何已有的ENGINE（或TYPE）选项。</li>
+<li>另外还请记住，每个NDB表必须有一个主键。如果在创建表时用户未定义主键，NDB Cluster存储引擎将自动生成隐含的主键。（注释：该隐含 键也将占用空间，就像任何其他的表索引一样。由于没有足够的内存来容纳这些自动创建的键，出现问题并不罕见）。</li>
+</ul>
+<p>	下面是一个例子：<br />
+	在db2上，创建数据表，插入数据：</p>
+<pre>
+[db2~]root# mysql -uroot test
+[db2~]mysql> create table city(
+[db2~]mysql> id mediumint unsigned not null auto_increment primary key,
+[db2~]mysql> name varchar(20) not null default ''
+[db2~]mysql> ) engine = ndbcluster default charset utf8;
+[db2~]mysql> insert into city values(1, 'city1');
+[db2~]mysql> insert into city values(2, 'city2');
+</pre><p>	在db3上，查询数据：</p>
+<pre>
+[db3~]root# mysql -uroot test
+[db2~]mysql> select * from city;
++-----------+
+|id | name  |
++-----------+
+|1  | city1 |
++-----------+
+|2  | city2 |
++-----------+
+</pre><p>
+七、安全关闭</p>
+<p>	要想关闭 Cluster，可在MGM节点所在的机器上，在Shell中简单地输入下述命令：</p>
+<pre>
+	[db1~]root# /usr/local/mysql/ndb_mgm -e shutdown
+</pre><p>	运行以下命令关闭SQL节点的mysqld服务：</p>
+<pre>
+	[db2~]root# /usr/local/mysql/bin/mysqladmin -uroot shutdown
+</pre><p>
+八、其他<br />
+关于MySQL Cluster更多详细的资料以及备份等请参见MySQL手册的“MySQL Cluster(MySQL 集群)”章节。<br />
+参考资料：《MySQL 5.1 中文手册》</p>
+<p><META NAME ="keywords" CONTENT="mysql cluster,mysql 集群,mysql集群,mysql 集群 配置,mysql 集群 设置"><br />
+<META NAME="description" CONTENT="mysql cluster,mysql 集群,mysql集群,mysql 集群 配置,mysql 集群 设置"></p>
+  </div>
+    <div class="info">
+    由 yejr 在 周一, 2006/08/28 - 21:43 提交          <span class="terms">categories [ <a href="/?q=taxonomy/term/5" rel="tag" title="MySQL基础知识，入门知识">MySQL基础知识</a> ]</span>
+              <span class="links"> <a href="/?q=comment/reply/96#comment_form" title="共享你有关本文的思想和意见。">发表评论</a> | 611 reads </span>
+      </div>
+</div>
+<a id="comment"></a>
+<a id="comment-67"></a>
+<div class="comment">
+
+<div class="title"><a href="/?q=node/96#comment-67" class="active">大部分内容都出自</a></div>
+    <div class="author">由 游客 在 周日, 2006/10/01 - 15:07 提交</div>
+  <div class="content"><p>大部分内容都出自mysql中文手册，何必再写成文章呢</p>
+</div>
+    <div class="links"><a href="/?q=comment/reply/96/67">回复</a></div>
+</div>
+<div style="margin-left:25px;">
+<a id="comment-68"></a>
+<div class="comment">
+
+<div class="title"><a href="/?q=node/96#comment-68" class="active">手册上确实都能找</a></div>
+    <div class="author">由 yejr 在 周日, 2006/10/01 - 23:43 提交</div>
+  <div class="content"><p>手册上确实都能找得到，但是真正去看手册的有多少人呢？本文只是快速总结而已，并不是创新。</p>
+<p>欢迎来到MySQL中文网: http://imysql.cn</p>
+<p>给你的祝福，要让你招架不住！</p>
+</div>
+    <div class="links"><a href="/?q=comment/reply/96/68">回复</a></div>
+</div>
+</div>
+<a id="comment-50"></a>
+<div class="comment">
+
+<div class="title"><a href="/?q=node/96#comment-50" class="active">好文章！good.
+</a></div>
+    <div class="author">由 游客 在 周四, 2006/09/07 - 10:08 提交</div>
+  <div class="content"><p>好文章！good.</p>
+</div>
+    <div class="links"><a href="/?q=comment/reply/96/50">回复</a></div>
+</div>
+<!-- end content -->        <!-- end main content -->
+		<center class="content">Time is speed for scientists.&nbsp;&nbsp;=>&nbsp;&nbsp; 对科学家来说,时间就是速度.</center>
+        </td><!-- mainContent -->
+       </tr>
+</table>
+
+  </div>
+  <div id="footer">
+          <p> MySQL 中文网，打造最好的中文 MySQL 网！<br />
+<a href="http://www.miibeian.go
+v.cn" target="_blank">京ICP备06010240号</a>
+<br />
+<a href="http://imysql.cn">MySQL 中文网</a>
+<br />
+
+
+
+
+ </p>
+      </div><!-- footer -->
+  </body>
+</html>
+

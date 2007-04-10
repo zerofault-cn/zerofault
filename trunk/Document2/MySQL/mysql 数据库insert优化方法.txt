@@ -1,0 +1,69 @@
+mysql 数据库insert优化方法2006-08-02
+Tag: 优化 insert MySQL
+
+
+转:
+
+加快插入速度的方法
+插入一个记录的时间由下列组成： 
+连接：(3) 
+发送查询给服务器：(2) 
+分析查询：(2) 
+插入记录：（1 x 记录大小） 
+插入索引：（1 x 索引） 
+关闭：(1) 
+
+
+这里的数字有点与总体时间成正比。这不考虑打开表的初始开销(它为每个并发运行的查询做一次)。 
+表的大小以N log N (B 树)的速度减慢索引的插入。 
+
+
+加快插入的一些方法： 
+如果你同时从同一客户插入很多行，使用多个值表的INSERT语句。这比使用分开INSERT语句快(在一些情况中几倍)。 
+
+
+如果你从不同客户插入很多行，你能通过使用INSERT DELAYED语句得到更高的速度。见7.14 INSERT句法。 
+
+
+注意，用MyISAM，如果在表中没有删除的行，能在SELECT:s正在运行的同时插入行。 
+
+
+当从一个文本文件装载一个表时，使用LOAD DATA INFILE。这通常比使用很多INSERT语句快20倍。见7.16 LOAD DATA INFILE句法。 
+当表有很多索引时，有可能多做些工作使得LOAD DATA INFILE更快些。使用下列过程： 
+
+
+有选择地用CREATE TABLE创建表。例如使用mysql或Perl-DBI。 
+执行FLUSH TABLES，或外壳命令mysqladmin flush-tables。 
+使用myisamchk --keys-used=0 -rq /path/to/db/tbl_name。这将从表中删除所有索引的使用。 
+
+
+用LOAD DATA INFILE把数据插入到表中，这将不更新任何索引，因此很快。 
+如果你有myisampack并且想要压缩表，在它上面运行myisampack。见10.6.3 压缩表的特征。 
+
+
+用myisamchk -r -q /path/to/db/tbl_name再创建索引。这将在将它写入磁盘前在内存中创建索引树，并且它更快，因为避免大量磁盘寻道。结果索引树也被完美地平衡。 
+
+
+执行FLUSH TABLES，或外壳命令mysqladmin flush-tables。 
+这个过程将被构造进在MySQL的某个未来版本的LOAD DATA INFILE。
+
+
+你可以锁定你的表以加速插入。
+mysql> LOCK TABLES a WRITE;
+mysql> INSERT INTO a VALUES (1,23),(2,34),(4,33);
+mysql> INSERT INTO a VALUES (8,26),(6,29);
+mysql> UNLOCK TABLES;
+
+
+主要的速度差别是索引缓冲区仅被清洗到磁盘上一次，在所有INSERT语句完成后。一般有与有不同的INSERT语句那样夺的索引缓冲区清洗。如果你能用一个单个语句插入所有的行，锁定就不需要。锁定也将降低多连接测试的整体时间，但是对某些线程最大等待时间将上升(因为他们等待锁)。例如：
+
+
+thread 1 does 1000 inserts
+thread 2, 3, and 4 does 1 insert
+thread 5 does 1000 inserts
+
+
+如果你不使用锁定，2、3和4将在1和5前完成。如果你使用锁定，2、3和4将可能不在1或5前完成，但是整体时间应该快大约40%。因为INSERT, UPDATE和DELETE操作在MySQL中是很快的，通过为多于大约5次连续不断地插入或更新一行的东西加锁，你将获得更好的整体性能。
+
+如果你做很多一行的插入，你可以做一个LOCK TABLES，偶尔随后做一个UNLOCK TABLES(大约每1000行)以允许另外的线程存取表。这仍然将导致获得好的性能。当然，LOAD DATA INFILE对装载数据仍然是更快的。 
+

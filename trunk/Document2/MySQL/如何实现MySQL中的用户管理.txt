@@ -1,0 +1,125 @@
+如何实现MySQL中的用户管理
+ MySQL有一套先进的但非标准的安全/授权系统，掌握其授权机制是开始操作MySQL数据库必须要走的第一步，对于一个熟悉SQL基本操作的人来说，也是MySQL所有的知识中比较难以理解的一个部分。本文通过揭开其授权系统的运作机制，希望大家能够可以更好地操作和使用这个优秀的数据库系统。 
+
+本文主要参考了MySQL安装所附的使用手册第六章中的部分内容。如果有任何疑问，请和我联系（lidong@wh.027.net） 
+
+1、授权机制的主要作用是什么？ 
+授权机制的基本作用是给某个主机上的用户对某个数据库以select，insert，update和detete的权限。而其额外的功能还包括是否允许匿名使用数据库，使用MysQL的一些特定函数，如：LOAD DATA INFILE之类。在这里请注意，MySQL中的用户名和Unix系统中的用户名并没有什么关系。虽然许多客户端程序允许你可以用当前的用户名进行登录，但是最标准的做法还是通过--user的选项。 
+2、授权机制是如何进行运作的？ 
+在MySQL中主机和用户的联合视为唯一标志。比如说，在主机1和主机2上的用户lee实际上是不同的，他们对MySQL的使用权限也可以是有差别的。而整个授权机制的核心问题就是要解决授予从某个主机上登录的某个用户对某个数据库的使用权限。你可以通过脚本mysqlaccess测试一个主机上用户的对数据库操作的权限。而所有的授权信息都被存储在数据库mysql的user、host和db表中。我们可以通过mysql mysql的指令连接到这个数据库中，并且通过select * from user(或者db,host)显示每个数据表中的内容。user表中所授予的权限是整个授权机制的基本授权，也就是说，user中的定义对于任何一个用户+主机来说都是适用的，除非在db表中另外有所定义，因此，对于用户来说最好是就某个数据库为基础进行授权。而host表的主要目的是维护一个“安全”服务器的列表。而在具体考虑某个用户/主机对某个数据库的权限的的时候，我们还需要研究一下授权机制的的匹配搜索机制： 
+
+其次，在授权机制中可以对一个用户的口令进行加密，而且是必须加密，加密的方法是password('口令')，如果直接填写口令的话，会导致数据库无法访问。user表中所授予的权限是整个授权机制的基本授权，也就是说，user中的定义对于任何一个用户+主机来说都是适用的，除非在db表中另外有所定义，因此，对于用户来说最好是就某个数据库为基础进行授权。而host表的主要目的是维护一个“安全”服务器的列表。而在具体考虑某个用户/主机对某个数据库的权限的的时候，我们还需要研究一 
+下授权机制的的匹配搜索机制： 
+
+首先，我们需要介绍一下统配符的概念，统配符包括“%”，其意思为任意（的主机、用户或者数据库），而如果一条记录为空的话，也表示任意的意思。其次，在授权机制中可以对一个用户的口令进行加密，而且是必须加密，加密的方法是password('口令')，如果直接填写口令的话，会导致数据库无法访问。 
+从我们对这三个表的显示我们可以看到，这三个表中的每一条记录包含了对于某个用户的授权情况的描述，MySQL数据库中几个相关的授权机制的数据表被搜索的顺序为：user，db，host。也就是说，我们将首先首先检索user数据表，找到第一个匹配的记录，我们把在user数据表中首先匹配的记录称之为Priv；然后搜索db表，获得相应的授权。如果在db数据表相应记录中host字段的为空，并且Priv记录中主机也被包含在host表的host字段之中，这样的话，对于某个user来说，则可以在user表中加入在host表中的一些为“Y”的权限设定。如果在db表中的host字段不为空的话，那么也就不会对该用户/主机的授权产生什么影响了。 
+了解了这一点之后，我们需要讨论在各个数据表中的记录的搜索的优先权的问题，也就是说，怎样确定第一匹配的记录，这并不是按照数据表中的记录的自然先后顺序来确定的。在各个数据表内的各条记录的优先权排列如下： 
+（1）user表：根据先host后user的顺序确定。搜索规则如下：不包含统配符的记录，包含统配符的记录，空记录。而在同样一个host里面，继续按照user来排列，规则和上述的一样。 
+（2）db表：检索的顺序根据host字段确定：不包含统配符的记录，包含统配符的记录，空记录。 
+（3）host表：检索的顺序根据host字段确定：不包含统配符的记录，包含统配符的记录，空记录。我们用下面的例子来说明进行匹配搜索的规则：请记住如果你更改了这些数据表，你必须使用mysqladmin reload使其生效。 
+下面是演示系统是如何进行搜索的： 
++-----------+---------+- 
+| Host | User | ... 
++-----------+---------+- 
+| % | root | ... 
+| % | jeffrey | ... 
+| localhost | root | ... 
+| localhost | | ... 
++-----------+---------+- 
+搜索的顺序应当是: 
+localhost/root 
+localhost/any 
+any/jeffrey 
+any/root 
+这样，如果在localhost的用户jeffrey要连接数据库的话，那么其授权应当根据localhost/“任意” 行所规定的权限而非“任意”/jeffrey行所规定的权限，请大家注意这一点，因为如果不合适的配置完全可能会使得你无法正常地使用这个数据库系统。 
+我们现在来看一个添加一个用户的例子：需要添加一名叫做“custom”用户，他分别从主机'localhost', 'server.domain' 和 'whitehouse.gov'连接到数据库中，他的口令为“stupid”，对于数据库'bankaccount'他只想从“localhost”进行访问，而“customer”数据库则应当被上述3个主机所访问。我们通过以下的sql语句来完成其操 
+作。 
+
+shell> mysql mysql. 
+mysql> insert into user (host,user,password) 
+values('localhost','custom',password('stupid')); 
+mysql> insert into user (host,user,password) 
+values('server.domain','custom',password('stupid')); 
+mysql> insert into user (host,user,password) 
+values('whitehouse.gov','custom',password('stupid')); 
+
+mysql> insert into db 
+(host,db,user,Select_priv,Insert_priv,Update_priv,Delete_priv, 
+Create_priv,Drop_priv) 
+values 
+('localhost','bankaccount','custom','Y','Y','Y','Y','Y','Y'); 
+mysql> insert into db 
+(host,db,user,Select_priv,Insert_priv,Update_priv,Delete_priv, 
+Create_priv,Drop_priv) 
+values 
+('%','customers','custom','Y','Y','Y','Y','Y','Y'); 
+
+3、授权数据表 
+
+授权数据表对表的行操作包括select，insert，update和delete，对表和数据库的操作包括create和drop。其它的授权还包括如LOAD DATA INFILE和SELECT INTO OUTFILE和管理命令：shutdown, reload, refresh 和process.三个授权数据表的结构如下所示： 
+user表 
+字段 类型 健 默认值 
+Host char(60) PRI "" 
+User char(16) PRI "" 
+Password char(16) - "" 
+Select_priv enum('N','Y') - N 
+Insert_priv enum('N','Y') - N 
+Update_priv enum('N','Y') - N 
+Delete_priv enum('N','Y') - N 
+Create_priv enum('N','Y') - N 
+Drop_priv enum('N','Y') - N 
+Reload_priv enum('N','Y') - N 
+Shutdown_priv enum('N','Y') - N 
+Process_priv enum('N','Y') - N 
+File_priv enum('N','Y') - N 
+
+db表 
+字段 类型 健 默认值 
+Host char(60) PRI "" 
+Db char(64) PRI "" 
+User char(16) PRI "" 
+Select_priv enum('N','Y') - N 
+Insert_priv enum('N','Y') - N 
+Update_priv enum('N','Y') - N 
+Delete_priv enum('N','Y') - N 
+Create_priv enum('N','Y') - N 
+Drop_priv enum('N','Y') - N 
+
+host 表只有在db的数据项中出现host为空的情况下使用。 
+字段 类型 健 默认值 
+Host char(60) PRI "" 
+Db char(64) PRI "" 
+Select_priv enum('N','Y') - N 
+Insert_priv enum('N','Y') - N 
+Update_priv enum('N','Y') - N 
+Delete_priv enum('N','Y') - N 
+Create_priv enum('N','Y') - N 
+Drop_priv enum('N','Y') - N 
+
+在数据表中可以使用统配符号。 
+
+4、最常见的Access denied出现错误的原因 
+
+（1）你是否通过mysql_install_db脚本建立mySQL的授权表，你可以通过mysql -u root进行测试，正确的情况下应该不会发生错误。或者，你是否有一个文件为：user.ISD，通常其位置在install_dir/var/mysql/user.ISD。 
+（2）最初使用的时候你应该使用mysql -u root mysql以存取数据库，或者以root身份进行操作。 
+（3）更改了授权之后是否使用了mysqladmin reload进行了更新？ 
+（4）在以测试为目的的时候，你应当选用--without-grant-tables选项启动mysqld服务，你可以在这时更改授权表的相关内容，也可以用mysqlaccess检查你的授权是否到位。 
+（5）没有使用password（"口令"）设定了口令，结果也会出现错误，在使用-p的选项的时候，注意-ppassword之间没有空格。 
+
+5、如何使得MySQL更加安全？ 
+
+（1）为每个MySQL用户使用口令。记住，如果你不加设口令的话，其他人可以通过 
+mysql --user other_user database的方式访问你的数据库，在使用MySQL进行检测的时候系统也会给你相应的警告信息。 
+（2）不要用root方式启动MySQL服务。MySQL可以以任何用户启动。你可以通过添加一个新用户的方式来启动数据库服务。这也不会对系统造成任何影响，因为MySQL的用户和Unix的用户根本来说就使不同的。 
+（3）不要把'Process_priv'，'File_priv'等权限授予任何人。 
+（4）如果你不信任你的DNS，你应当使用IP来取代主机名。在任何情况下都要小心带匹佩符的主机名。以下的一些选项可以影响到你的系统的安全： 
+--secure 
+顾名思义，可以使系统根加安全，因为它可以检查IP地址的一致性。（实际连接IP地址和通过解析的IP地址），不过这使得mySQL在防火墙工作的时候很难被防火墙外的人所访问。 
+--skip-grant-tables 
+一般情况下不要使用这个选项，这可以试的任何人不受限制地访问你的系统。 
+--skip-name-resolve 
+不进行主机名的解析。在授权数据表中的所有主机名必须为ip地址或者'localhost'. 
+--skip-networking 
+不允许通过网络进行连接。所有的连接必须通过Unix Socket。 
+
+（摘自CCU网站，原文由李冬先生所作）

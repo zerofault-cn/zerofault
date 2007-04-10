@@ -1,0 +1,120 @@
+SQL 存储过程
+存储过程是一组编译在单个执行计划中的 Transact-SQL 语句。
+
+Microsoft&reg; SQL Server&#8482; 2000 存储过程以四种方式返回数据： 
+
+输出参数，既可以返回数据（整型值或字符值等），也可以返回游标变量（游标是可以逐行检索的结果集）。
+
+
+返回代码，始终是整型值。
+
+
+SELECT 语句的结果集，这些语句包含在该存储过程内或该存储过程所调用的任何其它存储过程内。
+
+
+可从存储过程外引用的全局游标。 
+存储过程帮助在不同的应用程序之间实现一致的逻辑。在一个存储过程内，可以设计、编码和测试执行某个常用任务所需的 SQL 语句和逻辑。之后，每个需要执行该任务的应用程序只须执行此存储过程即可。将业务逻辑编入单个存储过程还提供了单个控制点，以确保业务规则正确执行。
+
+存储过程还可以提高性能。许多任务以一系列 SQL 语句来执行。对前面 SQL 语句的结果所应用的条件逻辑决定后面执行的 SQL 语句。如果将这些 SQL 语句和条件逻辑写入一个存储过程，它们就成为服务器上一个执行计划的一部分。不必将结果返回给客户端以应用条件逻辑，所有工作都可以在服务器上完成。下例中的 IF 语句显示了在一个过程中嵌入条件逻辑，以防止给应用程序发送结果集：
+
+IF (@QuantityOrdered < (SELECT QuantityOnHand
+                  FROM Inventory
+                  WHERE PartID = @PartOrdered) )
+   BEGIN
+   -- SQL statements to update tables and process order.
+   END
+ELSE
+   BEGIN
+   -- SELECT statement to retrieve the IDs of alternate items
+   -- to suggest as replacements to the customer.
+   END
+
+应用程序不必传输存储过程中的所有 SQL 语句：它们只须传输包含过程名和参数值的 EXECUTE 或 CALL 语句。
+
+存储过程还可以使用户不必知道数据库内的表的详细信息。如果一组存储过程支持用户需要执行的所有业务功能，则用户永远不必直接访问表，他们可以只执行特定的存储过程，这些过程为他们所熟悉的业务进程建立了模型。
+
+存储过程的这个用途的一个例证是 SQL Server 系统存储过程，它将用户从系统表中隔离出来。SQL Server 中包含一组系统存储过程，这些过程的名称通常以 sp_ 开头。这些系统存储过程支持运行 SQL Server 系统所需的所有管理任务。可以使用 Transact-SQL 中与管理相关的语句（如 CREATE TABLE）或系统存储过程来管理 SQL Server 系统，永远不必直接更新系统表。
+
+存储过程和执行计划
+在 SQL Server 6.5 版及更早的版本中，存储过程是对执行计划进行部分预编译的方法。在创建存储过程的同时，系统表内也存储了一个部分编译好的执行计划。执行存储过程比执行 SQL 语句更有效，因为 SQL Server 不必从头到尾编译执行计划，而只须优化该过程所存储的计划。同时，在 SQL Server 过程高速缓存中保留了完全编译好的存储过程执行计划，这意味着后面执行的存储过程可以使用预先编译好的执行计划。
+
+SQL Server 2000 和 SQL Server 7.0 版在语句处理上做了许多修改，将存储过程的许多性能优点扩展到所有 SQL 语句。SQL Server 2000 和 SQL Server 7.0 在创建存储过程时不保存部分编译的计划。与任何其它的 Transact-SQL 语句一样，存储过程也在执行时进行编译。SQL Server 2000 和 SQL Server 7.0 在过程高速缓存内保留所有 SQL 语句的执行计划，而不只是存储过程的执行计划。数据库引擎使用一种高效的算法，将新的 Transact-SQL 语句与现有执行计划的 Transact-SQL 语句进行比较。如果数据库引擎确定新的 Transact-SQL 语句与现有执行计划的 Transact-SQL 语句相匹配，就重新使用这个计划。这样就将执行计划的重复使用性扩展到了所有 SQL 语句，从而减少了预编译存储过程的相对性能优势。
+
+SQL Server 2000 和 SQL Server 7.0 版提供了新的处理 SQL 语句的可选方法。有关更多信息，请参见查询处理器构架。
+
+临时存储过程
+SQL Server 2000 还支持临时存储过程，这些过程与临时表一样，在连接断开时自动被除去。临时存储过程存储在 tempdb 内，它们在连接到 SQL Server 以前的版本时很有用。如果应用程序生成需要多次执行的动态 Transact-SQL 语句，就可以使用临时存储过程。无须每次重新编译 Transact-SQL 语句，而可以创建临时存储过程，在第一次执行时编译该过程，然后多次执行预先编译好的计划。不过，大量使用临时存储过程会导致在 tempdb 内争夺系统表。
+
+SQL Server 2000 和 SQL Server 7.0 的两个功能消除了使用临时存储过程的需要： 
+
+可重新使用前面 SQL 语句的执行计划。该功能与新的系统存储过程 sp_executesql 结合使用时尤为强大。
+
+
+本来就支持用于 OLE DB 和 ODBC 的准备/执行模型，无须使用任何存储过程。 
+有关临时存储过程的其它用法的更多信息，请参见执行计划的高速缓存和重新使用。 
+
+存储过程示例
+下面简单的存储过程示例说明存储过程返回数据的三个方法： 
+
+首先发出 SELECT 语句，要求返回汇总了 sales 表中销售点 (store) 订购活动的结果集。
+
+
+然后发出 SELECT 语句填写输出参数。
+
+
+最后通过带 SELECT 语句的 RETURN 语句返回整数。返回代码通常是用来传回错误检查信息的。此过程的执行没有错误，因此返回了另一个值说明所返回代码的填写方式。 
+USE Northwind
+GO
+DROP PROCEDURE OrderSummary
+GO
+CREATE PROCEDURE OrderSummary @MaxQuantity INT OUTPUT AS
+-- SELECT to return a result set summarizing
+-- employee sales.
+SELECT Ord.EmployeeID, SummSales = SUM(OrDet.UnitPrice * OrDet.Quantity)
+FROM Orders AS Ord
+     JOIN [Order Details] AS OrDet ON (Ord.OrderID = OrDet.OrderID)
+GROUP BY Ord.EmployeeID
+ORDER BY Ord.EmployeeID
+
+-- SELECT to fill the output parameter with the
+-- maximum quantity from Order Details.
+SELECT @MaxQuantity = MAX(Quantity) FROM [Order Details]
+
+-- Return the number of all items ordered.
+RETURN (SELECT SUM(Quantity) FROM [Order Details])
+GO
+
+-- Test the stored procedure.
+
+-- DECLARE variables to hold the return code
+-- and output parameter.
+DECLARE @OrderSum INT
+DECLARE @LargestOrder INT
+
+-- Execute the procedure, which returns
+-- the result set from the first SELECT.
+EXEC @OrderSum = OrderSummary @MaxQuantity = @LargestOrder OUTPUT
+
+-- Use the return code and output parameter.
+PRINT 'The size of the largest single order was: ' +
+                 CONVERT(CHAR(6), @LargestOrder)
+PRINT 'The sum of the quantities ordered was: ' +
+                 CONVERT(CHAR(6), @OrderSum)
+GO
+
+下例执行后的输出结果是：
+
+EmployeeID  SummSales                  
+----------- -------------------------- 
+1           202,143.71                 
+2           177,749.26                 
+3           213,051.30                 
+4           250,187.45                 
+5           75,567.75                  
+6           78,198.10                  
+7           141,295.99                 
+8           133,301.03                 
+9           82,964.00                  
+The size of the largest single order was: 130 
+The sum of the quantities ordered was: 51317
+
