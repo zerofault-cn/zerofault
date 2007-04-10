@@ -1,0 +1,60 @@
+一、screen的介绍
+　　screen是个多元化，多功能的全屏窗口管理器，每个虚拟终端都可以为你提供DEC VT100的功能。如果你还不是很明白，举个简单的例子，平时我们用secureCRT或Putty连接远程服务器的时候，可能在一台服务器有多个任务同时操作。我们一般的做法是，开多个窗口通过鼠标切换窗口。但通过screen，只需要打开一个终端窗口，通过快捷键，切换到不同的虚拟终端。正是因为screen的这种实用功能 ,已经成为unix的必备工具,让unix的日常操作管理更加方便。
+
+二、screen的使用
+　　使用screen非常简易.只需在SHELL键入screen,便可打开一个screen session。而在每个screen session 下，所有命令都以，ctrl+a(C-a)开始。
+
+基本的命令
+
+C-a+c：　　开启新的窗口
+C-a+n：　　切换到下个窗口
+C-a+p：　　前一个窗口
+C-a+C-a：　在两个窗口间切换
+C-a+1..9： 切换到第1..9个窗口
+C-a+a：　　可移到行首
+C-a+t：　　显示当前时间，和系统的load
+C-a+K：　　强行关闭当前的窗口
+C-a+F：　　调整窗口大小
+C-a+S：　　分割窗口
+C-a+Tab：　在窗口中移动
+C-a+Q：　　取消分割
+C-a+?：　　显示简单说明
+C-a+d：　　后台执行，回到还没进screen时的状态,即使logout，不影响进程
+
+下次login 进来时:
+screen -ls -> 显示所有的 screen sessions
+screen -r [pid.xxxx] -> 选择一个screen session 恢复对话
+若 screen -ls 里有 Attached sessions:
+screen -d [pid.xxxx] -> 强制 detach，以便「接手」过来 
+
+例子：
+
+开启一个screen session
+[admin@test admin]$ screen
+[admin@test admin]$ 
+
+vi编辑一个文件，之后因为离开，这时就可以运行+d,显示如下：
+[admin@test admin]$ screen
+[detached]
+
+这个时候运行ps -e可以看到pts/2这个我刚刚运行的screen正在运行vi
+admin 19164 19163 0 15:55 pts/2 00:00:00 /bin/bash
+admin 20633 19164 0 15:57 pts/2 00:00:00 vi 1.txt
+
+
+如果我们想恢复这个session,只需要键入screen -r,而当你有多个session时候,系统将提示你选择一个,如下：
+[admin@test admin]$ screen -ls
+There is a screen on:
+19163.pts-0.test (Detached)
+1 Socket in /home/admin/.screen.
+
+输入该session的pid进行恢复
+[admin@test admin]$ screen -r 19163
+
+想退出screen的session,和退出shell一样,只需要键入exit命令,成功退提示如下：
+[screen is terminating]
+
+
+三、参考资料
+GNU SCREEN
+

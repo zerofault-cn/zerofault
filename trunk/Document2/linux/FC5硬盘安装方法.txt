@@ -1,0 +1,40 @@
+FC5硬盘安装方法
+1、把光盘1里面images下面的那个boot.iso下的isolinux解压出来，放到你DOS能找到的盘根目录下，比哈C盘下，再到红旗或是别的发行版本里找一个叫loadlin.exe的执行文件放到isolinux下
+再面isolinux下写一个批处理里面的内容是：loadlin vmlinuz initrd=initrd.img ramdisk_size=9216保存为boot.bat文件退出
+进放纯DOS，再进入到C盘isolinux文件夹执行boot.bat ........然后OK
+2、用grub可以阿，需要vmlinuz initrd.img两个文件，在disc1的isolinux目录下可以找到
+编辑menu.lst
+下面是我的
+timeout 30
+default 0
+splashimage (fd0)/grub/splash.xpm.gz
+title Fedora Core
+root (hd0,2)
+kernel /boot/vmlinuz ro root=LABEL=/ rhgb quiet
+initrd /boot/initrd
+title Ubuntu
+root (hd0,7)
+kernel /boot/vmlinuz root=/dev/hda8 ro quiet splash
+initrd /boot/initrd
+title WindowXP
+rootnoverify (hd0,0)
+chainloader +1
+title Install-Fedora Core 5
+kernel (fd0)/grub/fc5/vmlinuz
+initrd (fd0)/grub/fc5/initrd.img
+ 
+title DosLinux
+root (fd0)
+kernel /grub/sys/kernel root=/dev/ram0 rw vga=normal
+initrd=/grub/sys/rootfs.cgz
+ 
+如果menu.lst找不到
+可以在dos下启动grub，然后
+kernel (fd0)/grub/fc5/vmlinuz
+initrd (fd0)/grub/fc5/initrd.img
+就可以开始安装了
+要注意路径，可以用find查找
+像这样
+root hda5
+find kernel
+就显示出可以用的vmlinuz 了

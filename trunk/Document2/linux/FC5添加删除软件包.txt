@@ -1,0 +1,39 @@
+
+
+首先，把/etc/yum.repos.d目录下的全部文件移进某个目录（等以后需要从FC的网站升级的时候再把它们复制回来），用文本编辑器打开/etc/yum.conf在末尾添加如下内容：
+[a_local]
+name=my local repo 
+baseurl=file:///mnt/fc5 
+
+添加保存后，在/mnt下创建fc5目录
+#mkdir /mnt/fc5
+加载你所下载的FC5DVD光盘镜像到这个目录，我的DVD ISO文件存放在/soft目录，控制台下执行命令：
+#mount -o loop /soft/FC-5-i386-DVD.iso /mnt/fc5
+这几个步骤完成后，执行“Add/remove software” 
+
+
+
+方法2
+
+
+
+把/etc/yum.repos.d目录下的全部文件备份，然后在该目录下新建一个文件 *.repo，（如core-soft.repo），写入如下内容：
+
+[CDROM]
+name=cdrom
+baseurl=file:///media/disk/
+enabled=1
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-fedora
+gpgcheck=0
+
+
+
+方法3
+这个是我用的
+
+[CDROM]
+name=Fedora Core ISO
+baseurl=file:///mnt/Fedora/iso1 file:///mnt/Fedora/iso2 file:///mnt/Fedora/iso3 file:///mnt/Fedora/iso4 file:///mnt/Fedora/iso5enabled=1
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-fedoragpgcheck=0
+
+我把镜像文件都挂载到/mnt/Fedora/下

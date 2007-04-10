@@ -1,0 +1,98 @@
+Red Hat 9：Linux下安装mplayer播放器
+作者:lastking
+
+在Linux RH9下安装mplayer很多次了，以前都是以失败而告终，前两天终于装成功了，为自己感到庆幸。大家以后安装的时候可以作为一个参考（有些地方我也是参考别人的）。
+
+mplayer是linux下播放速度最快(正确安装了显卡驱动)，支持媒体格式最多的播放器之一 ，它几乎能播放所有的win媒体文件！下面介绍它的安装方法：
+
+
+安装大前提:
+要编译这个软件,确认你系统安装了相应的XFree86-devel,还有如果你要编译gui操作界面
+(./configure --enable-gui),还请确认你的系统有libpng,libpng-devel,gtk和
+gtk-devel(要求版本大于1.2)这四个软件,可以在www.rpmfind.net找到相应的rpm包
+（这些包通过安装Gnome桌面可以获得）
+1、在下载mplayer的最新版本及安装所需软件包的集合包
+
+2、升级gcc： (必要,推荐gcc版本为2.9.5和3.2.x)
+检查你的gcc版本，运行gcc -v看输出是多少，如果是3.0以下的话，则建议安装gcc3.0以
+上（根据mplayer的官方说明，3.0以下的gcc可以用./configre --disable-gcc-checking
+参数编译，但可能不稳定），安装gcc3的方法是：进入gcc3目录，运行rpm -ivh *.rpm
+--nodeps，全部百分百安装后，开一个终端窗口，运行mv /usr/bin/gcc /usr/bin/gcc2
+和mv /usr/bin/gcc3 /usr/bin/gcc，再运行gcc -v，看输出是否为3.0.2，如果是，则ok ，不是，则检查安装步骤。 
+
+3、编译安装mplayer：
+tar vxf MPlayer-****.tar，cd MPlayer-****，./configure （如果你想
+要gui的操作界面，则换用这个命令./configrue --enable-gui，但似乎这个版本的gui编
+译有错，我和linuxCN都无法成功，pre4版本则没问题），make，make
+install，都成功运行一下mplayer（这是为了让它在家目录下建立.mplayer这个配置目录
+(.mplayer为隐藏目录,用ls -a指令可以看见,cd ~/.mplayer指令可以进入)，好进行下一
+步操作）
+
+./configure --prefix=/usr/local --enable-gui  --enable-live --enable-menu --enable-freetype --enable-fontconfig  --enable-win32 --enable-dshow --enable-real --enable-divx4linux --enable-xvid --disable-arts --language=zh_CN --enable-dynamic-plugins --with-codecsdir=/usr/local/lib/codecs --with-win32libdir=/usr/local/lib/codecs --with-reallibdir=/usr/local/lib/codecs --with-livelibdir=/usr/local/lib/live  --with-freetype-config=/usr/bin/freetype-config
+重要参数说明：
+--prefix=             安装路径为/usr/local
+--enable-gui          使用图形界面，mplayer有命令行和图形界面两种运行方式
+--enable-live         使用流媒体支持
+--enable-freetype     字幕字体可以使用ttf字体
+--enable-win32        可以使用win32的.dll格式的解码器
+--enable-real         支持real格式
+--language=zh_CN      mplayer界面的格式为中文
+--with-codecsdir=/usr/local/lib/codecs         指定解码器搜索路径
+--with-win32libdir=/usr/local/lib/codecs       指定win32解码器搜索路径
+--with-reallibdir=/usr/local/lib/codecs        指定real解码器搜索路径
+--with-livelibdir=/usr/local/lib/live          指定live解码器搜索路径
+
+现在使用
+make
+自动编译软件，可以去吃饭，回来再看 
+
+make install             //安装
+
+运行mplayer
+./mplayer
+
+
+4、拷贝配置文件:（注意：下面这个etc目录是上一步中解压出来的MPlayer-***目 录下的，非/etc）
+cp etc/codecs.conf ~/.mplayer
+cp etc/example.conf ~/.mplayer/config
+
+5、安装font和skin:（如果你选择了./configure --enable-gui那才需要skin，否则skin
+不用安装）
+进入自己的home目录，显示隐藏文件，进入.mplayer文件夹，创2个建文件夹：font和
+Skin。
+
+下载font文件，（mplayer官方网站上有）拷入到font内拷贝simsun.ttf到~/.mplayer目录中
+拷贝Blue皮肤目录到/usr/local/share/mplayer/Skins目录中
+
+6、运行方式
+两种：（1）mplayer /路径/要播放的媒体文件名；（2）gmplayer(只有用./configure
+--enable-gui编译的这个命令才有效)
+
+现在可以运行mplayer和gmplayer了。但是gmplayer字幕出现问题，提示找不到
+
+字幕字体文件。按照提示拷贝simsun.ttf（其他字体文件也可以）到~/.mplayer目录中（改文件名）。
+
+7、关于~/.mplayer/config文件的一些配置说明
+vo=xv(选择默认的播放模式，xv模式是支持显卡硬加速功能的模式，对cpu的占用很小，
+推荐；更多的显示模式可以用命令mplayer -vo help看，其中的vesa模式可以在不启动
+xwin界面时播放，有点象当年DOS下的金山影霸)
+ao=oss（选择声音的播放模式，oss是兼容性最好的播放模式，推荐；你也可以试试sdl模
+式）
+fs=yes（全屏模式，yes的话默认以全屏播放，no或前面加#号注释掉这行的话则默认是1
+：1播放模式）
+zoom=yes（即时改变电影画面大小，yes的话则可以用鼠标随意将播放画面拉大拉小，no
+的话不能）
+gui = yes（默认是图形化操作界面，这需要你先前用./configure --enable-gui来编译
+，否则的话就算yes也没有gui操作界面）
+skin = default（设置默认的skin，将等号右边的值换成skin所放目录就可以设置想要的
+skin为默认了，这个参数在用gui操作界面才有效）
+cache = 8192（默认的播放缓存大小，如果机器内存够大，则将它加大一点，如果不是很
+大，譬如128以下，还是用默认的算了）
+framedrop = yes（允许跳帧，如果你的机器CPU速度非常非常慢的话请将这个yes，默认
+是no或前面加#号将这行禁止；对于366MHZ以上的机器，建议都设成no或前面加#号）
+其他设置用默认就行 。
+  
+
+
+./configure  --prefix=/usr/local --enable-gui --enable-menu --enable-freetype --enable-win32 --enable-dshow --enable-real --enable-divx4linux --enable-xvid --disable-arts --language=zh_CN --enable-dynamic-plugins --with-codecsdir=/root/essential-20060611/ --with-win32libdir=/root/essential-20060611/ --with-reallibdir=/root/essential-20060611/
+

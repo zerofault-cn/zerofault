@@ -1,0 +1,25 @@
+挂载windows文件系统时支持中文:
+
+修改/etc/fstab
+
+添加:
+
+/dev/hda1     /mnt/c     vfat    defaults,codepage=936,iocharset=cp936 0 0
+/dev/hda1     /mnt/winc  ntfs    umask=000,nls=utf8
+
+或者直接运行命令:
+
+mount -t vfat -o codepage=936,iocharset=cp936 /dev/hda1 /mnt/c
+mount -t ntfs -o nls=utf8,umask=000 /dev/hda1 /mnt/winc
+
+挂载U盘
+
+修改/etc/fstab
+
+/dev/sda1  /mnt/usb  vfat  noauto,user,dmask=000,fmask=0111,iocharset=cp936 0 0
+
+挂载光驱
+
+mount -t iso9660 -o iocharset=cp936 /dev/cdrom /mnt/cdrom
+
+

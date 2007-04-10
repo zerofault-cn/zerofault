@@ -1,0 +1,9 @@
+Linux忘记root密码
+ 
+ 
+ 
+
+ 
+忘记root密码该怎么办？　推荐方法：如果您安装的boot loader是 LILO:当系统开机出现 LILO: 提示符时，输入 linux single当机器启动后，直接输入 passwd root 命令重设 root 用户密码即可。如果您安装的boot loader是 GRUB:当系统开机出现 GRUB: 的图形界面时，选择你要进入的系统，按字母 e 编辑下一个画面，选中含有 kernel 单词的那一行并按字母 e 编辑在这一行的末尾添加 字母 s 或者 S 或者 1 回车这是屏幕返回上一屏，并且能看到我们所做的改变按字母 b 引导机器在单用户模式下输入 passwd root 命令重设 root 用户密码即可。别的方法：用安装光盘引导系统，进入linux rescue模式，并自动挂载原根分区为 /mnt/sysimage/chroot /mnt/sysimagepasswd root
+ 
+ 
