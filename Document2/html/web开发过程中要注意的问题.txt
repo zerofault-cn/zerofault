@@ -1,0 +1,295 @@
+web开发过程中要注意的问题
+2006-11-17 22:49
+1，document.getElementById方法只能获取到一个对象，即使有多个同名的对象，也只取第一个具有该名称的对象，例如在一个form（名称为myform）中，有三个id="mycheckbox"的复选框，那么使用document.getElementById("mycheckbox")，返回的是第一个checkbox对象，而不是返回一个数组，如果使用document.myform.mycheckbox则返回一个数组。
+
+2，使用showModalDialog打开一个页面，则在这个页面中，对于任何链接和任何表单提交，都会在新的窗口中执行，即使你在链接或form中指定了target="_self"也是没有用的。例如使用showModalDialog打开一个test.html，在该页面有一段代码
+<a href="test2.html" target="_seft">打开</a>
+如果点击该链接，那么将会在新窗口中打开test2.html，至少在ie中是这样的，那么是不是就没有办法解决了呢？不是的，我们可以通过在弹出的页面的head中加入下面的代码来解决这个问题：
+<head>
+  <base target="_self">
+</head>
+
+3，在一个页面含有某个iframe，其id="myframe" name="myframe"，此时使用document.getElementById("myframe")取到的是iframe标签对象，通过该对象可以获取iframe的各个属性，例如src、frameborder、style等等，但是不能获取到iframe所包含的子页面的各个对象。如果使用document.frames("myframe")取到的是iframe组件对象，通过该对象可以获取到iframe所包含的页面的子页面的各个对象，例如子页面的window对象，但是不能获得iframe标签得各个属性，例如上面说到的src等等。请参看如下类似代码：
+1.html
+<script>
+  function check(){
+    var obj1=document.getElementById("myframe");
+    alert(obj1.src);
+    //alert(obj1.window.document.myform.username.value);//Error
+    var obj2=document.frames("myframe");
+    alert(obj2.window.document.myform.username.value);
+    //alert(obj2.src);//Error
+  }
+</script>
+<body onload="check()">
+  <iframe id="myframe" name="myframe" src="2.html" frameborder="3" style="width:300;height:200;border-width:1;border-color:red;border-style:solid"></iframe>
+</body>
+2.html
+<body>
+  <form name="myform">
+    用户名：<input type="text" name="username" value="test" />
+  </form>
+</body>
+
+4，在table中，如果在table中加入border="1" bordercolor="red"，那么table中所有单元格都会加上厚度为1的红色边框，但是如果在table中加入css style="border-width:1;border-color:red;border-style:solid" 那么只会在整个table的最外面加上厚度为1的红色边框，分别如下图所示：
+
+当然第一个出现了双边框，这是因为没有设置cellspacing的缘故，只要在table中设计cellspacing="0"，那么就变为单边框了。
+
+5，许多时候我们需要在页面加载时能够通过javascript去动态操作html中的一些对象，对于这些操作我们最好是在body中定义onload操作，然后在该操作中去完成这些任务，尽量避免在html中嵌入script执行代码，因为对于比较大的页面，当这些脚本执行的时候，页面往往还没有加载完毕，因此许多页面对象还没有被生成，此时动态去改变很可能会报异常。
+
+6，有时候我们需要在iframe子页面中调用父页面的javascript函数，例如在父窗口中定义了一个函数如下：
+<html>
+  <script>
+    function loadImage(){
+       //...
+   }
+ </script>
+<body>
+//...
+</body>
+</html>
+那么在iframe子页面中可以通过parent.loadImage()来实现调用，这也说明用户在页面定义的所有javascript函数都属于window对象之下。那么在父窗口如何调用子窗口中的函数呢，应该很简单了，就是获得子窗口对象，然后调用子窗口对象的window对象下的这些函数即可，例如iframe的name为myframe，在子窗口定义了一个函数getUserName，那么父窗口中的调用方式为document.frames("myframe").getUsername();另外对于父窗口调用子窗口中的方法，还要注意一个问题，就是子窗口的加载有时候会比较慢，如果子窗口正在加载，那么此时它的各种页面对象都不存在，那么当在父窗口调用子窗口的方法时，为了保险可以使用借助setTimeout来实现异步调用，即通过setTimeout指定一定时间之后（例如100ms），再执行调用，调用执行总是判断子窗口页面是否加载完毕，如果没有加载完毕，则继续使用setTimeout方法，循环往复直到子窗口被完全加载，然后执行子窗口的函数调用。既然这里解释了窗口间的异步调用，后面就不专门解释了。
+
+7，在一个网页中如何最小化窗口，当然你可能会说，网页的右上角不是有最小化、最大化和关闭三个按钮吗，当然了这里说这个问题是指，如果不点击网页右上角的最小化，如何实现网页的最小化操作，例如有些项目中，用户需要办公界面是全屏化的，这意味着网页自己提供的许多操作都不可见，更不用说去操作了。在网络上我们搜索最小化的解决方式，我们会发现千篇一律的使用如下的方式实现：
+<object id=hh1 classid="clsid:ADB880A6-D8FF-11CF-9377-00AA003B7A11">  
+<param name="Command" value="Minimize"></object>
+<input type=button value=最小化 onclick=hh1.Click()>  
+在win98和windows2000中这个方式可能是可以的，但是在windows XP中却是不再支持了，不仅如此在windows XP中对javascript不少函数做了限制。那么在XP中如何实现最小化呢，一个可以实现的方式就是自己写一个activeX控件，这个是在项目中证明可以实现的。（不要认为activeX控件很难写，也不要以为activeX控件用户不接受，在实际的项目中如果用户使用的都是ie，那么用户一般是会接受的，当然这里的项目最好是内网办公项目，对于公网项目来说，用户接不接受就很难说了）
+
+8，注意td中nowrap的使用，这个属性是很有用的，例如如果一个td中含有多张图片，那么如果不加入nowrap，那么很可能这些图片会由于其它的td的挤压而产生细微的上下错位，这表现的页面上就是某处出现了一条横向的细缝。这一点很重要，页面中许多非常奇怪的现象都与此有关。
+
+9，对于showModalDialog弹出的页面，不能使用右键菜单，也不支持F5和ctrl+r刷新，如果此时修改弹出页面的内容，那么必须关闭该窗口，然后重新弹出才可以。另外，对于许多web服务器，由于服务器都设置有缓存，如果修改了弹出页面的内容，那么许多时候只是关闭弹出页面还是不够的，往往还需要关闭弹出该页面的那个页面才可以。在这里多说一句，web开发许多奇怪的页面现象都和web服务器的缓存有着很大的关系，因此出现问题时考虑一下是否是由于服务器的缓存所致。
+
+10，我们喜欢在form中定义onsubmit操作，主要是为了在表单提交之前可以做一些有意义的操作，例如检查输入域的有效性等等，但是一定要注意，如果我们通过点击该form中的submit按钮（type=submit或type=image）提交表单，那么该onsubmit操作会被执行，但是如果通过document.formName.submit()提交表单，那么此onsubmit操作将不被执行。
+
+11，许多时候我们修改了页面的内容，但是我们刷新页面或重新打开该页面，却看不到修改的效果，除了前面提到过的showModalDialog和缓存的情况要考虑外，还要检查一下是否改对了地方，即你修改的那个页面是否是服务器上的那个页面，有可能你修改了其它地方的一个页面，如果不是这个原因，那么再进行其它方面的检查。
+
+12，在没有系统规划好之前，请不要在css中定义html标签的统一行为，即下面的形式：
+<style>
+  TABLE{font-size:11pt;color:black;}
+  INPUT{border-width:1;border-color:pink;border-style:solid} 
+</style>
+因为一但定义了这些标签的属性，那么这将会影响页面中所有的这些标签属性，尤其在一些公用的css文件中，尽量不要定义html标签的统一行为。当然如果经过了系统的良好的规划，那么这样做将是非常好的，只是在国内在css上经过良好规划的并不多，因此虽然我们见到许多项目和产品中对html标签做了许多css的定义，但是真正起到作用的并不多。
+
+13，在html标签中有许多属性的名称都是复合词，例如borderColor、frameBorder、readOnly等等，注意这些复合词在html的书写，一般来说我们在html标签中写为borderColor和bordercolor，各个浏览器的解析都会通过，但是我们在使用javascriopt引用这些属性时却需要注意了，一定使用正确的属性名称，严格来说，对于复合词而言，除了第一个有意义的词之外，其它任何有意义的词的首字母都要大写，例如对于上面列出的三个属性的引用，一定要使用borderColor、frameBorder、readOnly的形式。
+<input type="text" id="myinput" readonly />
+<script>
+    var flag=document.getElementById("myinput").readOnly;//正确的方式
+    //var flag=document.getElementById("myinput").readonly;//错误的方式
+</script> 
+
+ 14，我们知道当使用浏览器的菜单“查看”->“文字大小”来改变文字的显示时（或者有些浏览器也可以使用ctrl+滚轮键），网页中的文字的字号会发生相应的变化，如果我们在网页中的文字块中定义了style="font-size:10pt"，那么这些文字块中的文字的大小将是固定的了（注意在<font/>标签定义size属性是不能固定字号的），我想这一点多数人都应该知道的。但是我们使用中有时会出现一种非常奇怪的现象，例如下面的一段代码：
+<table><tr><td>
+<div style="font-size:10pt;border-width:1;border-color:red;border-style:solid">
+  这是上面
+</div>
+<br />
+<div style="font-size:10pt;border-width:1;border-color:green;border-style:solid">
+  这是下面
+</div>
+</td></tr></table>
+我们看一下在字号显示“最大”和“最小”下的差别：
+
+从上图我们可以看到字号我们是固定住了，但是table的高度却会随着查看方式的不同而发生变化，这是为什么呢？原因就在于td当中的那个<br />，我们知道<br />是表示段内换行，但是要注意在网页中所谓的行也是有一定的默认高度的，而且这个高度随着查看方式的不同而发生相应的变化，因此如果我们想固定上面table的高度不发生变化，有下面两种方式：
+方式一：在table标签中加入字号限制例如<table style="font-size:10pt"...
+方式二：在<br />中加入字号限制例如<br style="font-size:10pt" />...
+如果你是一个web开发人员，你可以试着使用ctrl+滚轮键改变网页查看文字的大小，你会发现不少页面都存在这个问题的。
+
+15，网页中定位对象的方式有许多种，下面先简单总结一下，以后再专门写这个方面的文章的：
+1）页面内通用定位方式（这些定位方式适用于后面其它元素的定位）
+document.getElementById(objId);//通过对象的id获取对象，这个是各个浏览器都支持的，返回一个对象
+document.getElementsByName(objName);//通过对象的name获取对象，这个是各个浏览器都支持的，返回一个数组
+document.getElementsByTagName(tagName);//通过标签名称获取对象，这个是各个浏览器都支持的，返回一个数组
+document.all.objId;//通过对象id获取对象，这个是ie支持的，返回一个对象
+document.all(objId);//通过对象id获取对象，这个是ie支持的，返回一个对象
+document.layers.objId;//通过对象id获取对象，这是Netscape支持的，返回一个对象
+document.layers(objId);//通过对象id获取对象，这是Netscape支持的，返回一个对象
+window.objName;//通过对象名称获取对象，至少在ie中如此
+objName;//通过对象名称获取对象，至少在ie中如此
+2）页面内集合元素的定位方式
+我们知道在页面中有许多集合，例如form、frame、image等等，引用这些集合中某个对象的方式为，举其中一个为例，其它都差不多，以form为例：
+document.formName;//通过表单name获取表单对象
+document.forms[index];//通过索引获取表单对象，浏览器会按顺序将页面中所有的表单集合城数组，可以通过下标引用
+document.forms(formName);//通过表单name获取表单对象
+3）定位子窗口的方式（定位子窗口对象，不是标签对象，见前面3中的说明）
+子窗口是指页面中frame或iframe窗口，定位方式为：
+document.frames[index];//索引定位方式
+document.frames(frameName);//通过名称定位
+window.frameName;//通过名称定位
+frameName;//直接通过名称来定位
+4）在子定位父窗口的方式
+通过关键字parent来引用即可，同理parent.parent则表示父父窗口，top则表示最上层窗口。
+5）原窗口定位open弹出窗口的方式，例如下面代码：
+window.open("test.html");
+这里我们要知道window.open将会返回一个弹出窗口的句柄，即可以如下：
+var owin=window.open("test.html");
+owin即代码弹出窗口对象，通过改对象可以引用到弹出窗口的各个对象。
+6）原窗口定位showModalDialog弹出窗口的方式，例如：
+window.showModalDialog("test.html");
+注意showModalDialog与open不同，open弹出窗口后，window.open后面的代码可以继续执行，而showModalDialog弹出窗口后，原页面被阻塞，即window.showModalDialog后面的代码不被执行，直到用户关闭了弹出窗口才会继续往下执行，但这时因为已经关闭了弹出窗口，所以已经无法再对该窗口进行引用。
+7）open弹出的窗口对原窗口的定位方式，这个我们一般都知道，在弹出窗口中使用opener即可。
+8）showModalDialog弹出的窗口对原窗口的定位方式，这个不是使用opener，而应该在弹出窗口中使用parent。
+
+16，编写页面代码尽量使用标准的html、css和javascript，不要以为只要在ie上通过就可以了，要注意最近浏览器市场已经开始发生变化了，不知道你是否听说过Firefox2.0，它的用户量已经不在ie之下了，至少你的代码要在ie和Firefox上都通过才可以，另外现在linux越来越吃香，保不准几年后我们的许多客户都开始使用linux，到那个时候，我们将不得不对原来已经完成的项目进行维护，与其这样的后果，还不如从现在开始就使用标准为好，不要认为跨浏览器是很虚的话题，觉得没有必要，要知道这已经不是几年前了，现在形式和市场都在发生变化，我们的思想也该变一变了。
+
+17，我们的产品或OA系统往往会有许多模块，例如用户管理、发文流程、物品管理等等，我们在为这些模块命名时往往都是不太讲究的，没有注意名字的结构、字数等的统一，例如在个人事务模块下面有三个子模块，名称分别如下：待办事项、已办事项，维护个人信息。对于字数而言我们往往不会苛求太多，但是对于词的结构，我们还是要讲究的，例如上面的三个模块，前两个是名词结构，而后一个是谓词结构（动宾结构），这是不太妥当的，也许你觉得这有些吹毛求疵，当然大多数项目中不会要求这么严格，但是有些客户的确会有这样的要求，另外对我们自己而言，这也体现了我们做事认真、一丝不苟的品格和态度。
+
+18，图标与文字的配比要合适，这不仅要求图标能够正确显示文字的意思，而且还要求图标不能盖过文字的显示与含义，即图标太显眼而文字无足轻重的情况需要避免，例如下面的情况就是不太合适的：
+ 用户管理
+之所以不合适，主要是因为图标的含义与用户管理关系不大，图标的含义更接近“XX编辑”的意思，和用户管理基本没有什么联系。
+
+19，在用户登录和表单处理页面，我们要处理用户按enter键的情况，即用户按enter键也要触发提交事件，不要只有用户点击“登录”或“提交”按钮才触发提交操作。
+
+20，如果我们在页面中使用<a />标签，那么默认情况，当鼠标移到该链接时，鼠标自动会变为手的形状，许多时候我们希望鼠标移动到其它非链接的区域，也希望鼠标变为手的形状，我们一般的处理方式为在该区域的style中加入cursor属性，如下：
+<span style="cursor:hand" onclick="myfunc()">下一页</span>
+或者使用：
+<span style="cursor:url('http://webme.bokee.com/inc/mouse118.cur')" onclick="myfunc()">下一页</span>
+但是要注意，只有在ie中才支持cursor:hand，在firefox2.0中的cursor中是没有hand的，像wait、help等都是支持的，另外firefox中也不支持cursor:url方式。
+
+21，我们有时想通过javascript进行跨域页面的调用，不过出于安全性的考虑，各个浏览器一般都是不支持的，例如下面的代码：
+<iframe src="http://www.google.com"></iframe>
+<script>
+  setTimeout("document.frames[0].window.location.href",3000);
+</script>
+使用setTimeout是为了可以让iframe子页面可以加载完毕，上面的调用会报安全性警告，例如在ie如下：
+
+
+那么是不是说只要是跨域就能不能进行javascript访问了呢？不是的，一种比较常用的办法就是设置document.domain属性，这种方式的描述如下：
+假设有两个页面
+test1.html 所在域：aaa.maindomain.com 访问协议：http 端口：8080
+test2.html 所在域：bbb.maindomain.com 访问协议：http 端口：8080
+满足上面条件的两个页面test1.html、test2.html是可以通过javascript相互访问的，上面的条件即为两个页面位于同一个基础域（例如上面同为maindomain.com），遵循同一个访问协议和端口（例如上面同为http 8080）。只要在这样的两个页面中都设置document.domain为所在基础域名，就可以相互调用了，例如：
+test1.html 所在域为aaa.mydomain.com
+<script>
+  document.domain="mydomain.com";
+</script>
+<iframe src=http://bbb.mydomain.com/test2.html></iframe>
+<script>
+  setTimeout("document.frames[0].window.location.href",3000);
+</script>
+test2.html 所在域为bbb.mydomain.com
+<script>
+  document.domain="mydomain.com";
+</script>
+...
+这样一来，test1.html的调用就是可以的了。一般来说跨域调用的场景发生在集团型企业项目或多机构的政务项目中，而对于这种类型的项目，它们的基础域基本上是相同的，只是三级域名不同，因此可以使用上面的方式来进行跨域调用。
+
+22，你会页面中的javascript调试吗？也许你还不会使用ie或firefox提供的页面调试器或插件，那么没有关系，至少你懂得一种最基本的调试：alert调试，不要认为这是一种很土或很傻的方式，很多时候这种方式都很非常有用的，对于一段很长的javascrip代码，从头到尾加入几个alert，那么立即就能定位错误的大概位置，当然使用调试器的断点也可以很快定位，只是说alert也是一种不错的方式。当然还是希望你能够掌握更为高级的调试器的使用，毕竟调试器带给我的功能更强大。
+
+23，我们许多时候编写完网页之后，发现最终的显示效果和我们想象的不太一样，这有些时候是由于浏览器的不同造成的，但除此之外，我们如何具体定位到底是页面的哪块代码导致不太理想的页面效果呢？当然你可能会使用Dreamweaver或Frontpage打开出问题的页面，然后查找原因，但是这些所见即所得的网页设计器，并非我们想象的那么完美，例如明明在设计器种预览很好的效果，到了真实环境中页面竟然出现了错位等等，这里和你介绍一种非常不错的css的调试方式，这里就不具体说了，请参看我新写过的一篇文章【css在html中的调试作用 】
+
+24，网页打印我们都知道可以调用window.print函数，那么如果想打印iframe子窗口中页面呢，如果你只是获得子窗口对象，然后调用子窗口对象的print方法，此时打印机打印出却不是子窗口页面的内容，而是父窗口页面自身，为什么会这样呢？原来（至少在ie中如此）在父页面调用子窗口的print函数时，因为此时焦点还在父窗口之中，所以打印机此时会将获得焦点的窗口进行打印，我们在打印子窗口之前，只需做一件事即可完成对子窗口的打印，如下代码：
+<html>
+ <head>
+  <script>
+    function myprint(){
+       document.frames("myframe").window.focus();
+       document.frames("myframe").window.print();
+   }
+  </script>
+ </head>
+<body onload="myprint()">
+  <iframe name="myframe" src="test2.html"></iframe>
+</body>
+</html>
+
+25，网页切图许多人都习惯于网页三剑客的配合使用，网页三剑客就是网页开发者都熟悉的Dreamweaver、Fireworks和Flash，一般我们使用使用Flash或Fireworks将动画或图切分后输出成为html页面，然后通过Dreamweaver编辑输出后的页面，这是我们网页切图常用的配合方式，但是通过使用比较发现，在图片的切分方面，使用Photoshop要好于Fireworks，Photoshop不仅定位更加精确，而且由于自身是平面设计的标准，因此它提供了许多图片编辑的其它功能，这要比fireworks强大得多。目前专业的网页设计师都在开始或一直使用Photoshop进行网页设计并切分后输出成为HTML页面。如果你是三剑客的爱好者也没有关系，你可以使用一下看看效果如何，总之我从2000年就开始使用三剑客，现在才逐渐认识到Photoshop已经不仅仅是平面设计的标准了。
+
+26，在javascript中有一个方法可以列出当前对象所支持的所有属性、集合和事件，通过使用in关键字来实现，如下样例代码：
+var str="";
+for(var i in document){
+    str+=i+"\n";
+}
+alert("document's all attributes:"+str);
+
+27，在一个名称为myform的表单中，含有一个名称为mychckbox的复选框，那么document.myform.mycheckbox所取到的是那个复选框对象，那么此时调用document.myform.mycheckbox.length是错误的，如果该表单中含有多个名称为mycheckbox的复选框，那么document.myform.mycheckbox返回的是一个数组，此时调用document.myform.mycheckbox.length就是正确的。单独说这个问题，可能感觉比较简单，但是在实际应用中我们经常会犯与此相关的错误，如下图所示：
+
+上图是我们在应用中经常遇到的“增、删、改”的逻辑，我们在其中经常会对复选框做操作，经常会使用类似document.myform.mycheckbox.length的方式，一般情况不会报错，这主要是因为在我们的列表中一般来说都不会只有一条记录，但是当列表中只有一条记录的时候（尽管这种时候不常见），这样引用就会报错，因为此时document.myform.mycheckbox返回的不是一个数组，则对length的引用就没有意义了，这种错误说起来很容易，但是在编程时往往就会忽略，因此在编程时我们建议如下方式：
+if(document.myform.mycheckbox.length){
+  //...
+}else{
+  //...
+}
+
+28，在ie中有一个很特别的css语法，如果你听说过，那说明你的积累真是太丰富了！在css中有一种给汉语注音的语法，如下所示：
+<style> 
+    ruby{font-size:13pt;} 
+    rt{font-size:18pt;color:red}
+</style>
+<ruby>你知道这个语法吗？<rt>ni zhi dao zhe ge yu fa ma</rt><br>
+不知道<rt>bu zhi dao</rt>    
+</ruby>
+你运行这段代码看看什么效果（要在ie中运行），我这里效果如下：
+
+
+29，我们项目中经常会遇到页面打印的需求，许多时候用户需要只打印页面某一部分，如果直接调用window.print则打印的是整个网页的内容。解决办法不外乎两种，第一种方式是将整个页面分为几个部分，将需要打印的部分放在其中的一个部分，然后定义onbeforeprint和onafterprint两个操作，即打印之前将不要打印的部分隐藏，打印之后将隐藏的部分显示，类似代码如下：
+<script>
+   function beforePrint(){
+       document.getElementById("hidden1").style.display="none";
+       document.getElementById("hidden2").style.display="none";
+   }
+   function afterPrint(){
+       document.getElementById("hidden1").style.display="block";
+       document.getElementById("hidden2").style.display="block";
+   }
+   document.onbeforeprint=beforePrint;
+   document.onafterprint=afterPrint;
+</script>
+<div id="hidden1" style="display:block">
+这里不需要打印
+</div>
+<div id="printDiv" style="display:block">
+这里需要打印
+</div>
+<div id="hidden2" style="display:block">
+这里不需要打印
+</div>
+<input type="button" value="打印" onclick="window.print()"/>
+第二种方式是将需要打印的部分放到iframe之中，然后将焦点移到子窗口，然后调用子窗口的print方法即可。
+
+30，Javascript中的数组和我们一般的编程语言中的数组是不太一样，一般语言中数组的长度是固定的，有些语言中数组中的数据类型也要求是一样的，但是javascript数组却不受这些限制，在javascript中数组基本上是没有长度限制的，而且类型也没有限制，例如下面的一些使用方法：
+var arr=new Array();
+arr[1000]="ok";
+arr[300]=255;
+arr[200]=new Date();
+var date=arr[200];
+alert(date.getTime());
+因为数组的这种机制，我们可以使用数组实现许多数据结构，例如列表、哈西表等等。
+
+31，对于XML的处理一般情况下都是在服务器端处理的，例如在Java中有W3C、JDOM、XPath等许多xml的解析器，但是现在许多时候我们需要在浏览器端处理xml字符串，目前在ie和netscape中都有针对xml字符串的解析，如果你喜欢使用，也没有什么关系，不过对于Java程序员，我给你介绍一个完全按照W3C Document API实现的XML解析器，相信你会非常喜欢的，因为完全是Java的风格，请从 http://download.jsjava.com 下载jsjava0.91，在其中的src/jsorg/w3c/dom下有XML各个对象的实现，在页面中只需引用其中的xmlp.js和i18n.js即可，具体使用可以参考里面的例子：位于下载包的examples/XMLParser/XMLW3CParser下面，也可以直接访问：http://jsjava.sourceforge.net/examples/XMLParser/XMLW3CParser/W3CXMLParser.html 查看例子。
+
+32，一段文本的首行文本缩进两个汉字，这是中文段落的格式要求，我们可以通过在首行加入多个&nbsp;来实现，不过还是建议使用css的标准属性text-indent，例如下面的代码：
+<p style="text-indent:28;font-size:10pt">
+这是一段文本，请注意它的格式，<br>
+你看到了什么效果？如果你看到首行<br>
+缩进了，那么说明起作用了。
+</p>
+显示效果如下：
+
+
+33，在Javascript中字符串的替换函数为replace(regexp, newSubStr)，其中第一个参数是一个正则表达式，但是我们在实际使用中，往往习惯使用为一个字符串，这虽然不会报错，但是得到的结果往往是不正确的，例如下面的例子：
+var str=“ abbbbacc”;
+var rs=str.replace(“a”,”0”);
+(A)0bbbbacc (B)0bbbb0cc
+正确答案是A，当然A可能不是你想要的结果，你想要的结果是字符串中所有的“a”都被替换为“0”，可是上面的使用方式只能将第一个“a”替换为“0”，正确的使用方式，在第一个参数中输入一个正则表达式，如下所示：
+var str=“ abbbbacc”;
+var rs=str.replace(“/a/g”,”0”);//注意如果第一个参数为/a/，结果也是不正确的。
+(A)0bbbbacc (B)0bbbb0cc 
+这样的话答案就是B了，如果你不明白/a/g是什么意思，那么你就需要对Javascript的正则表达式好好学习了，具体可以参看我以前写过的一篇文章：http://blog.csdn.net/eye_of_back/archive/2006/07/14/922667.aspx
+
+34，无论你使用的是ASP，还是PHP，或者JSP，都不建议在页面代码中夹杂着大量的业务逻辑代码。我们应该将业务逻辑代码封装到应用服务器层或者说业务层，web端只是进行调用。在JSP和PHP中我们可以将业务逻辑封装到BO（业务对象）中，由于支持类、接口等一套面向对象的机制，使得这种封装显得很容易，对于ASP，由于ASP.NET和C#的兴起，使得它对业务封装也变得相当方便。虽然我们都懂得服务器的三层架构，但是我们发现许多的项目之中，开发人员仍然在页面中直接编写业务逻辑，甚至直接访问数据库，面对这种情况，不能不说我们的项目管理是存在很大的问题的，我们的项目经理和程序设计师们，我们应该好好反思一下了。
+
+35，有些时候我们在<a/>标签的href中直接加入javascript代码，通过window.open来打开一个自己可以控制许多属性的窗口，例如下面的代码：
+<a href="javascript:window.open('http://www.google.com');">打开Google</a>
+当我们点击链接后，确实弹出了Google的页面，但同时原页面却变为了下面的样子：
+
+这种情况相信有些人遇到过，解决方式如下：
+<a href="javascript:window.open('http://www.google.com');window.opener=null;window.close()">打开Google</a>
+但是为什么前面的那种方式就会出现那种情况呢，其实只要做个简单实验就会明白了，你运行一下下面的代码，点击链接看看会出现什么结果：
+<a href="javascript:window">打开Google</a>
+实验后你会发现，点击链接后页面出现的结果与上面那种结果相同，然后你再实验一下下面的代码：
+<a href="javascript:'test'">打开Google</a>
+点击链接后，你会发现页面中会显示test字样。可见对于类似
+<a href="javascript:js代码">点击</a>
+的代码，如果js代码执行完毕后返回一个对象，那么页面内容会被冲掉，然后将该对象的描述输出到页面中，我们知道window.open方法返回的是弹出的页面的窗口对象（window），因此javascript:window.open将会在弹出一个窗口的同时，原页面会冲掉原有内容并将返回的window对象输出到原页面中。如果在window.open后面加入window.opener=null;window.close()，则弹出窗口后，返回给原页面的对象为空，则原页面不执行任何其它操作
+ 
