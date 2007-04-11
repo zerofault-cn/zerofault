@@ -10,7 +10,7 @@
 	background: url(pktit.gif);
 	padding:20px 0px 0px 24px;
 	border:1px solid #DEDEDE;
-	margin:3px auto;}	
+	margin:3px auto;}
 .pkzi{
 
 	background: url(pkti.gif) no-repeat 0px 5px;
@@ -34,8 +34,8 @@
 .pktu{
 	width:212px;
 	height:140px;
-	float:left;}	
-.pktu img {	border:1px solid #BBA6A5;}	
+	float:left;}
+.pktu img {	border:1px solid #BBA6A5;}
 .pktext{
 	width:340px;
 	height:130px;
@@ -65,12 +65,12 @@
 	font-size:20px;
 	font-weight:bold;
 	padding:20px 0px 0px 15px;
-}	
+}
 .pkleiyes{
 	width:152px;
 	height:120px;
 	margin:6px 0px 0px 0px;
-	float:left;}	
+	float:left;}
 .pklayleft{
 	width:462px;
 	overflow:hidden;
@@ -81,7 +81,7 @@
 	overflow:hidden;
 	background:#fff;
 	border:1px solid #FDBA8F;
-	margin:3px auto;}	
+	margin:3px auto;}
 .pkleftit{
 	width:427px;
 	height:23px;
@@ -90,23 +90,23 @@
 	margin:1px auto;
 	color:#fff;
 	padding:6px 0px 0px 23px;
-	background:url(pkleftit.gif);}	
+	background:url(pkleftit.gif);}
 .pkrightnei{
 	width:452px;
 	overflow:hidden;
 	background:#fff;
 	border:1px solid #A2C0EB;
-	margin:3px auto;}	
+	margin:3px auto;}
 .pkrleftext{
 	width:432px;
 	overflow:hidden;
 	font-size:12px;
-	margin:10px auto;}	
+	margin:10px auto;}
 .pkrlefth{
 	font-size:16px;
 	font-weight:bold;
 	float:left;
-	color:#E45B04;}	
+	color:#E45B04;}
 .pkrleftday{
 	float:right;
 	color:#E45B04;}
@@ -114,10 +114,10 @@
 	margin:5px auto;
 	text-indent:2em;}
 .pkrleftwen img{
-	vertical-align: text-bottom;}	
+	vertical-align: text-bottom;}
 .pkliuwen{
 	margin:5px 9px;
-}	
+}
 .pkrliutit{
 	height:16px;
 	width:408px;
@@ -153,7 +153,7 @@
 	width:412px;
 	overflow:hidden;
 	font-size:12px;
-	margin:30px auto;}	
+	margin:30px auto;}
 .fayanlay{
 	width:412px;
 	height:19px;

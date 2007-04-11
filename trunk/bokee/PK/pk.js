@@ -58,6 +58,11 @@ function getAllData()
 	getData('r_comment');
 	getData('c_comment');
 }
+function getMiniData()
+{
+	getData('l_vote');
+	getData('r_vote');
+}
 String.prototype.rtrim=function()
 {
 	return this.replace(/(\s*$)/g,"");
