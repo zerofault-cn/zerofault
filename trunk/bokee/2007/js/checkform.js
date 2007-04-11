@@ -188,6 +188,9 @@ function setErr(code)
 	case 1:
 		blogurl_err='此博客链接地址已经报名了!不能重复报名';
 		break;
+	case 2:
+		blogurl_err='报名期限已经结束了';
+		break;
 	}
 	
 }
