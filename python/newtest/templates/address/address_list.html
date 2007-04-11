@@ -9,6 +9,14 @@ h1#title {color:white;}
 <hr>
 <div id="content-main">
     <table border="0" width="500">
+    <tr align="right"><td>
+    <form method="GET" action="/address/search/">
+    搜索姓名：<input name="search" type="text" value="{{ searchvalue }}"/>
+    <input type="submit" value="提交"/>
+    </form>
+    </td></tr>
+    </table>
+	<table border="0" width="500">
     <tr align="right">
       <td>{% if has_previous %}
         <a href="?page={{ previous }}">上一页</a>
