@@ -12,11 +12,13 @@ include_once($root_path."dbtable.php");//ÉèÖÃÍ¶Æ±Ê±¼ä¶Î£¬¸ù¾İ²»Í¬Ê±¼ä¶Î£¬½«Êı¾İ±
 $multi=30;//Ã¿¶ÌĞÅÍ¶Æ±Ïàµ±ÓÚ30µãÍøÂçÍ¶Æ±
 
 //ĞŞÕıÓÃ»§µÄÆ±Êı
+
 $sql1="select * from mm_info where pass=1";
 $result=$db->sql_query($sql1);
 while($row=$db->sql_fetchrow($result))
 {
 	$id=$row['id'];
+//	$id=$_REQUEST['id'];
 	$sql2="select count(id) from ".$sms_table." where (status=0 or status=1) and addvote=1 and mm_id=".$id;//Ò»ÌõÒ»Æ±µÄ
 	$sql3="select count(id) from ".$sms_table." where (status=0 or status=1) and addvote=5 and mm_id=".$id;//Ò»ÌõÎåÆ±µÄ
 	$sql4="select count(id) from ".$ip_table." where del_flag!=1 and mm_id=".$id;//ÍøÂçÍ¶Æ±
