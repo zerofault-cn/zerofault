@@ -62,7 +62,7 @@ ROOT_URLCONF = 'newtest.urls'
 TEMPLATE_DIRS = (
     # Put strings here, like "/home/html/django_templates".
     # Always use forward slashes, even on Windows.
-    'e:/pythontest/newtest/templates',
+    'e:/python/newtest/templates',
 
 )
 
@@ -76,4 +76,4 @@ INSTALLED_APPS = (
 	'newtest.address',
 
 )
-STATIC_PATH = 'e:/pythontest/newtest/media'
+STATIC_PATH = 'e:/python/newtest/media'
