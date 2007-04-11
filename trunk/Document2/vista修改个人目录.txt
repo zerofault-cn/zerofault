@@ -1,0 +1,23 @@
+AppData
+E:\USERPROFILE\AppData\Roaming
+
+Cookies
+E:\USERPROFILE\Cookies
+
+Favorites
+E:\USERPROFILE\Favorites
+
+History
+E:\USERPROFILE\History
+
+
+Local AppData
+E:\USERPROFILE\AppData\Local
+
+
+My Pictures
+E:\Pictures
+
+Personal
+E:\Document
+
