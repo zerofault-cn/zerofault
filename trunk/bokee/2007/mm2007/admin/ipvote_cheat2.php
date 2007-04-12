@@ -8,7 +8,7 @@ include_once($root_path."config.php");
 include_once($root_path."includes/template.php");
 include_once($root_path."includes/db.php");
 include_once($root_path."includes/page.php");
-include_once($root_path."dbtable.php");
+include_once($root_path."dbtable2.php");
 
 include_once("left.php");//×ó±ß²Ëµ¥
 

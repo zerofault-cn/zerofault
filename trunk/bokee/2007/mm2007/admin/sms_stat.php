@@ -8,7 +8,7 @@ include_once($root_path."config.php");
 include_once($root_path."includes/template.php");
 include_once($root_path."includes/db.php");
 include_once($root_path."includes/page.php");
-include_once($root_path."dbtable.php");
+include_once($root_path."dbtable2.php");
 
 include_once("left.php");//左边菜单
 
@@ -18,7 +18,7 @@ $area_arr = array('','中部','南部','北部');
 echo '<div style="width:800px;margin-top:10px;margin-left:150px;text-align:center;border:1px solid #000;padding:10px 0;">';
 echo '第二届美女博客大赛短信投票情况';
 
-$sql1="select Service_code,addvote,count(*) as count from ".$sms_table." where status=1 group by Service_code,addvote";
+$sql1="select Service_code,addvote,count(*) as count from ".$sms_table." where status=1 and Service_code!='' group by Service_code,addvote";
 $result1=$db->sql_query($sql1);
 echo '<div style="width:580px;">';
 echo '<div style="width:280px;margin-top:20px;border:1px solid #00f;float:left;text-align:left;padding-top:4px;">';
@@ -33,7 +33,7 @@ while($row=$db->sql_fetchrow($result1))
 }
 echo '</div>';
 
-$sql2="select mm_info.area as area,".$sms_table.".addvote,count(*) as count from ".$sms_table.",mm_info where ".$sms_table.".status=1 and ".$sms_table.".mm_id=mm_info.id group by mm_info.area,".$sms_table.".addvote";
+$sql2="select mm_info.area as area,".$sms_table.".addvote,count(*) as count from ".$sms_table.",mm_info where ".$sms_table.".status=1 and ".$sms_table.".Service_code!='' and ".$sms_table.".mm_id=mm_info.id group by mm_info.area,".$sms_table.".addvote";
 $result2=$db->sql_query($sql2);
 echo '<div style="width:280px;margin-top:20px;border:1px solid #00f;float:right;text-align:left;padding-top:4px;">';
 echo ' 按赛区分:';
@@ -72,7 +72,7 @@ echo '<div style="border-bottom:1px dotted #aaa;"><span style="width:380px;float
 echo '</div>';
 
 //按时间统计,取24小时内每小时的数据
-$sql4="select * from ".$sms_table." where status=1 and polltime>=".(time()-24*60*60)." order by id";
+$sql4="select * from ".$sms_table." where status=1 and Service_code!='' and polltime>=".(time()-24*60*60)." order by id";
 $result4=$db->sql_query($sql4);
 echo '<div style="width:580px;margin-top:20px;border:1px solid #00f;text-align:left;padding-top:4px;">';
 echo '最近24小时投票数:';
@@ -90,7 +90,7 @@ while(list($key,$val)=each($hourVote))
 echo '</div>';
 
 //每天
-$sql5="select * from ".$sms_table." where status=1 order by id";
+$sql5="select * from ".$sms_table." where status=1 and Service_code!='' order by id";
 $result5=$db->sql_query($sql5);
 echo '<div style="width:580px;margin-top:20px;border:1px solid #00f;text-align:left;padding-top:4px;">';
 echo '';
@@ -105,7 +105,7 @@ $average=round($total/sizeof($dayVote),1);
 echo '<div><span style="width:450px;float:right;text-align:left;padding:2px;"><span style="width:'.($average/2).'px;background-color:#00f;margin:2px;Filter: Alpha(Opacity=90, FinishOpacity=10, Style=1, StartX=100, StartY=0, FinishX=0, FinishY=0;"> </span>平均每天 '.$average.' 票</span><span style="width:110px;float:left;text-align:left;padding:2px;">每天投票数:</span></div>';
 while(list($key,$val)=each($dayVote))
 {
-	echo '<div style="border-bottom:1px dotted #aaa;"><span style="width:450px;float:right;text-align:left;padding:2px;"><span style="width:'.($val/2).'px;background-color:#00f;margin:2px;"> </span>'.$val.' 票</span><span style="width:110px;float:left;text-align:right;padding:2px;">'.substr($key,0,4).'-'.substr($key,4,2).'-'.substr($key,6,2).'：</span></div>';
+	echo '<div style="border-bottom:1px dotted #aaa;"><span style="width:450px;float:right;text-align:left;padding:2px;"><span style="width:'.($val/2.5).'px;background-color:#00f;margin:2px;"> </span>'.$val.' 票</span><span style="width:110px;float:left;text-align:right;padding:2px;">'.substr($key,0,4).'-'.substr($key,4,2).'-'.substr($key,6,2).'：</span></div>';
 }
 	
 echo '</div>';

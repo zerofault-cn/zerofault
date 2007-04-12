@@ -8,7 +8,7 @@ include_once($root_path."config.php");
 include_once($root_path."includes/template.php");
 include_once($root_path."includes/db.php");
 include_once($root_path."includes/page.php");
-include_once($root_path."dbtable.php");
+include_once($root_path."dbtable2.php");
 
 include_once("left.php");//左边菜单
 $mm_id=$_REQUEST['mm_id'];
@@ -34,6 +34,7 @@ for($i=mktime(0,0,0,1,18,2007);$i<time();$i+=24*60*60)
 	}
 }
 echo '</select>';
+echo '<a href="ipvote_cheat3.php?mm_id='.$mm_id.'" target="_blank">每天的网络投票数</a>';
 echo '</div>';
 echo '<div>当日各IP的投票时间 <a href="ipvote_info.php?mm_id='.$mm_id.'&date='.$date.'">当日各IP段投票次数</a></div>';
 

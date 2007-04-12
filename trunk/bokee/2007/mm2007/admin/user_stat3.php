@@ -9,7 +9,7 @@ include_once($root_path."functions.php");
 include_once($root_path."includes/template.php");
 include_once($root_path."includes/db.php");
 include_once($root_path."includes/page.php");
-include_once($root_path."dbtable.php");
+include_once($root_path."dbtable2.php");
 
 include_once("left.php");//左边菜单
 $area_arr = array('','中部赛区','南部赛区','北部赛区');

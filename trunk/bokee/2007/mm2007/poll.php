@@ -1,11 +1,11 @@
 <?php
 define('IN_MATCH', true);
-/*
+
 header("Expires:  " . gmdate("D, d M Y H:i:s") . "GMT");
 header("Last-Modified: " . gmdate("D, d M Y H:i:s") . "GMT");
 header("Cache-Control: no-cache, must-revalidate");
 header("Pragma: no-cache");
-*/
+
 session_start();
 $root_path="./";
 include_once($root_path."config.php");
@@ -23,6 +23,8 @@ if(''==$type)
 }
 if($type=='net')
 {
+	//检验浏览器是否支持cookie
+	echo '<script>if(!navigator.cookieEnabled)location="nocookie.html";</script>';
 	$client_ip=GetIP();
 	if(strpos($client_ip,',')>0)
 	{
@@ -44,7 +46,7 @@ if($type=='net')
 	{
 		$count=0;
 	}
-/*	$sql01="select count(id) from ".$ip_table." where polltime>".$today_start." and ip like '".$client_ip2."%'";
+	$sql01="select count(id) from ".$ip_table." where polltime>".$today_start." and ip like '".$client_ip2."%'";
 	$result=$db->sql_query($sql01);
 	if($db->sql_numrows($result)>0)
 	{
@@ -52,10 +54,10 @@ if($type=='net')
 	}
 	if($count01>=$ip_limit)
 	{
-		echo '&nbsp;';
-		exit;
+		header("HTTP/1.1 404 Not Found");
+		exit;	
 	}
-*/
+
 	
 	if($count>=$ip_limit || $_COOKIE['ipcount']>=$ip_limit)
 	{
@@ -73,7 +75,7 @@ if($type=='net')
 	{
 		if(''!=$_POST['vali_code'] && $_POST['vali_code']==substr(md5($_POST['vali_key']),20,6))
 		{
-		/*
+		
 			$sql0="select count(id) from ".$ip_table." where polltime>(UNIX_TIMESTAMP()-8) and ip='".$client_ip."'";//限制投票间隔为5秒
 			$result0=$db->sql_query($sql0);
 			if($db->sql_fetchfield(0,0,$result0)>0)
@@ -84,10 +86,10 @@ if($type=='net')
 			//	echo '<a href="#" onclick="javascript:window.close()">关闭窗口</a>';
 			//	echo '</div>';
 			//	echo '</body>';
-				echo '投票失败，请返回重试';
-				exit;
+				header("HTTP/1.1 404 Not Found");
+		exit;	
 			}
-		*/
+		
 			$sql1="insert into ".$ip_table." set ip='".$client_ip."',user_agent='".getenv("HTTP_USER_AGENT").session_id()."',mm_id=".$id.",polltime=UNIX_TIMESTAMP()";
 			$sql2="update mm_info set netvote=(netvote+1),allvote=(allvote+1) where id=".$id;
 			if($db->sql_query($sql1) && $db->sql_query($sql2))

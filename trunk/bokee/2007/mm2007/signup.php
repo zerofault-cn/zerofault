@@ -5,6 +5,7 @@ include_once($root_path."config.php");
 include_once($root_path."includes/db.php");
 include_once($root_path."includes/template.php");
 include_once($root_path."functions.php");
+include_once($root_path."dbtable.php");
 
 $tpl = new Template($root_path."templates");
 $tpl->set_filenames(array('body' => 'signup.htm'));

@@ -58,18 +58,12 @@ $feephone=$phone= $phone_arr[mt_rand(0,sizeof($phone_arr))];
 
 //$mm_id_arr=array('776','1771');
 //$mm_id=$mm_id_arr[mt_rand(0,1)];
-$mm_id=776;
+$mm_id=1413;
 $status=1;
 $addvote=5;
 $smsid='10000';
-if($mm_id==776)
-{
-	$rand_time=mt_rand(1168223246,time());//id:776
-}
-elseif($mm_id==1771)
-{
-	$rand_time=mt_rand(1175927192,time());//id:1771
-}
+$rand_time=mt_rand(1176307200,time());
+
 /*
 限制每日和每月投票数
 */
