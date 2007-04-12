@@ -1,0 +1,90 @@
+<script>
+function confirmdel(id)
+{
+	if(confirm('确定要删除ID为'+id+'的用户记录吗?'))
+	{
+		document.getElementById('iframe1').src='user_del.php?id='+id;
+		window.setTimeout("location.reload()",500);
+	}
+	else
+	{
+		return;
+	}
+}
+function vouth(id)
+{
+	document.getElementById("iframe1").src='vouth_update.php?id='+id;
+}
+function changetext(id)
+{
+	if(document.getElementById("text"+id).innerHTML=='否')
+	{
+		document.getElementById("text"+id).innerHTML='<span style="color:red">是</span>';
+	}
+}
+function check()
+{
+	if(document.form1.s_id.value=='' && document.form1.s_blogname.value=='' && document.form1.s_realname.value=='')
+	{
+		alert('您还没有输入任何搜索条件呢!');
+		document.form1.s_id.focus();
+		return false;
+	}
+	return true;
+}
+</script>
+
+<!-- right div -->
+<div id="Layer2" style="position:absolute;margin-left:10px;width:830px;border:1px solid #000;">
+<!-- search form -->
+<table width="100%" border="0" cellpadding="0" style="background-color:infobackground">
+<form name="form1" method="get" action="" onsubmit="return check()">
+<tr>
+	<td>输入任一搜索条件：<br />&nbsp;&nbsp;&nbsp;&nbsp;
+	用户ID:<input name="s_id" type="text" size="6" />
+	博客名:<input name="s_blogname" type="text" size="13" />
+	用户姓名:<input name="s_realname" type="text" size="10" />
+	<input type="submit" name="submit" value="搜索" /></td>
+</tr>
+</form>
+</table>
+<!-- search form end -->
+<!-- main body -->
+<table width="100%"  border="0" cellpadding="0" cellspacing="0" style="word-break:break-all;backgound-color:#d0d0d0">
+<form name="form2" method="post"  action="user_pass_update.php" target="iframe1">
+<tr style="padding:5px 0;background-color:#6699FF;font-weight:bold">
+	<td>选择</td>
+	<td>序号</td>
+	<td>ID</td>
+	<td>姓名</td>
+	<td>照片</td>
+	<td>BLOG网址</td>
+	<td>报名时间</td>
+	<td align="center">鲜花</td>
+	<td>推荐</td>
+	<td align="center">操作</td>
+</tr>
+<!-- BEGIN list -->
+<tr style="background-color:{list.BGCOLOR}">
+	<td><input type="checkbox" name="id[]" value="{list.ID}" /></td>
+	<td>{list.I}</td>
+	<td><a href="javascript:void(0)" onclick="javascript:window.open('user_edit.php?id={list.ID}','','width=450,height=605,toolbar=no,status=no,scrollbars=yes,resizable=yes');">{list.ID}</a></td>
+	<td><a href="javascript:void(0)" onclick="javascript:window.open('user_edit.php?id={list.ID}','','width=450,height=605,toolbar=no,status=no,scrollbars=yes,resizable=yes');">{list.BLOGNAME}</a></td>
+	<td><a href="javascript:void(0)" onclick="javascript:window.open('user_edit.php?id={list.ID}','','width=450,height=605,toolbar=no,status=no,scrollbars=yes,resizable=yes');"><img src="{list.PHOTO}" width="60" border="0" /></a></td>
+	<td><a href="http://{list.BLOGURL}" target="_blank">{list.BLOGURL}</a>
+	<td>{list.ADDTIME}</td>
+	<td nowrap>{list.FLOWER}</td>
+	<td align="center" id="text{list.ID}">{list.VOUTH}</td>
+	<td align="center"><input type="button" value="推荐" onclick="vouth({list.ID});setTimeout('changetext({list.ID})',100);" /><input type="button" value="修改" onclick="window.open('user_edit.php?id={list.ID}','','width=450,height=500,toolbar=no,status=no,scrollbars=yes,resizable=yes');" /><input type="button" value="删除" onclick="confirmdel({list.ID})" /></td>
+</tr>
+<!-- END list -->
+</form>
+</table>
+<br>
+<div align="center">{PAGE}</div>
+
+<iframe frameborder="0" scrolling="no" id="iframe1" name="iframe1" width="500" height="40" src=""></iframe>
+
+</div>
+<!-- right div end -->
+

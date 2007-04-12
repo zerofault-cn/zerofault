@@ -1,0 +1,47 @@
+<meta http-equiv="Page-Enter" content="blendTrans(Duration=0.4)"/>
+<meta http-equiv="Page-Enter" content="blendTrans(Duration=0.4)"/>
+	<!--第一屏--> 
+	 <div class="layout">
+	 	 <!--第一屏左侧--> 
+	 	<div class="oneleft" style="height:620px;">
+			<div class="oneleftlay">
+				<h2>明星博客分类</h2>
+				<div class="fenleft">
+					<ul>
+						<li><a href="?i=1">娱乐明星</a></li>
+						<li><a href="?i=2">体育明星</a></li>
+						<li><a href="?i=3">文化名人</a></li>
+						<li><a href="?i=4">网络红人</a></li>
+						<li><a href="?i=5">影视角色</a></li>
+						<li><a href="?i=6">我(草根博客)</a></li>
+						<li><a href="?i=7">其他名人</a></li>
+					</ul>
+				</div>
+			</div>	
+		</div>
+		 <!--第一屏右侧-->
+		 <div class="fenright">
+		 	<div class="fenrightit"><h1>{CAPTION}</h1></div>
+				<!-- BEGIN cat_user_list -->
+				<div class="onecenrow mltb">
+					<ul>
+						<li><a href="{cat_user_list.blogurl}" target="_blank"><img src="photo/{cat_user_list.photo}" /></a></li>
+						<li><a href="{cat_user_list.blogurl}" class="namelink">{cat_user_list.realname}</a></li>
+						<li class="hongli"> <a href="{cat_user_list.groupurl}">群组</a> | <a href="{cat_user_list.blogurl}">博客</a> | <a href="comment.php?id={cat_user_list.id}">留言</a></li>
+						<li><a href="javascript:void(0)" onclick="window.open('poll.php?flower=1&id={cat_user_list.id}');" class="namelink hua" title="送鲜花">{cat_user_list.flower}</a> <a href="javascript:void(0)" onclick="window.open('poll.php?egg=1&id={cat_user_list.id}');" class="namelink egg" title="扔鸡蛋">{cat_user_list.egg}</a></li>
+					</ul>
+				</div>
+				<!-- END cat_user_list -->
+			
+			<div class="clear"></div>
+			<!--分页-->
+			<div class="fenpage">
+				{PAGE}
+			</div> 
+			
+		 </div>
+		<div class="clear"></div>
+	 	<!--页尾--> 
+	</div>
+</body>
+</html>
