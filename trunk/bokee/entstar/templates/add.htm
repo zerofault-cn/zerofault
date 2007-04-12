@@ -1,0 +1,41 @@
+	<!--第一屏-->
+	<div class="tuijianlay">
+		<div class="tuijiantit"><h1>推荐博客</h1></div>
+		<div class="tuijiancon">
+			<ul>
+				<li><h3>提示:</h3></li>
+				<li>1、请先为你的偶像在博客网建立博客和群组，也可以推荐你在本网站的博客和群组； </li>
+				<li>2、请选择合适的分类；</li>
+				<li>3、带“*”为必填项；</li>
+				<li>4、上传图片的尺寸最好为120×100像素。</li>
+			</ul>
+		</div>
+	</div>
+	<div class="tianxie">
+	<script>
+	{script_str}
+	</script>
+	<script language="javascript" type="text/javascript" src="js/checkform.js"></script>
+	<iframe id="iframe1" frameborder="0" allowTransparency="true" scrolling="no" width="0" height="0" src=""></iframe> 
+	<form name="form1" action="" method="post" enctype="multipart/form-data" onsubmit="return check()">
+	<ul>
+		<li>明星、名人的名字是:<input name="realname" type="text" maxlength="20" />*</li>
+		<li>请选择他(她)的类别:
+			<input name="category" type="radio" value="1" onclick="document.form1.cate_select.value=1" /><span>娱乐明星</span>
+			<input name="category" type="radio" value="2" onclick="document.form1.cate_select.value=1" /><span>体育明星</span>
+			<input name="category" type="radio" value="3" onclick="document.form1.cate_select.value=1" /><span>文化明星</span>
+			<input name="category" type="radio" value="4" onclick="document.form1.cate_select.value=1" /><span>网络红人</span>
+			<input name="category" type="radio" value="5" onclick="document.form1.cate_select.value=1" /><span>影视角色</span>
+			<input name="category" type="radio" value="6" onclick="document.form1.cate_select.value=1" /><span>我(草根博客)</span>
+			<input name="category" type="radio" value="7" onclick="document.form1.cate_select.value=1" /><span>其他</span>   *</li>
+		<li>你为他（她）建的博客地址：<input name="blogurl" type="text" size="30" value="http://?.bokee.com" onblur="checkurl('blogurl',this.value)" />*<span id="blogurl_msg"></span></li>
+		<li>你为他（她）建的群组地址：<input name="groupurl" type="text" size="30" value="http://group.bokee.com/?" onblur="checkurl('groupurl',this.value)" />*<span id="groupurl_msg"></span></li>
+		<li>你的名字（或昵称）：<input name="adder_name" type="text" /></li>
+		<li>你的联系方式（电子邮箱或电话）：<input name="adder_contact" type="text" /></li>
+		<li>上传照片：<input name="photo" type="file" />*</li>
+		<li style="padding-left:200px;"><input type="hidden" name="cate_select" value="" /><input name="submit" type="submit" value="提交" />&nbsp;&nbsp;&nbsp;&nbsp;<input type="button" name="return" value="返回" onclick="javascript:history.back();" /></li>
+	</ul>
+	</form>
+	</div>
+	<div class="clear"></div>
+	<!--页尾-->

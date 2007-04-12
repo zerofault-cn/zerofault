@@ -1,0 +1,99 @@
+<meta http-equiv="Page-Enter" content="blendTrans(Duration=0.4)"/>
+	 <!--第一屏--> 
+	 <div class="layout">
+	 	 <!--第一屏左侧--> 
+	 	<div class="oneleft" style="height:780px;">
+			<div class="oneleftlay">
+				<h2>留言排行</h2>
+				<div class="fenleft">
+					<ul>
+						<li><a href="?field=comm&i=0">总留言排行</a></li>
+						<li><a href="?field=comm&i=1">娱乐明星</a></li>
+						<li><a href="?field=comm&i=2">体育明星</a></li>
+						<li><a href="?field=comm&i=3">文化名人</a></li>
+						<li><a href="?field=comm&i=4">网络红人</a></li>
+						<li><a href="?field=comm&i=5">影视角色</a></li>
+						<li><a href="?field=comm&i=6">我(草根博客)</a></li>
+						<li><a href="?field=comm&i=7">其他名人</a></li>
+					</ul>
+				</div>
+			</div>
+			
+			
+			<div class="oneleftlay">
+				<h2>鲜花排行</h2>
+				<div class="fenleft">
+					<ul>
+						<li><a href="?field=flower&i=0">总鲜花排行</a></li>
+						<li><a href="?field=flower&i=1">娱乐明星</a></li>
+						<li><a href="?field=flower&i=2">体育明星</a></li>
+						<li><a href="?field=flower&i=3">文化名人</a></li>
+						<li><a href="?field=flower&i=4">网络红人</a></li>
+						<li><a href="?field=flower&i=5">影视角色</a></li>
+						<li><a href="?field=flower&i=6">我(草根博客)</a></li>
+						<li><a href="?field=flower&i=7">其他名人</a></li>
+					</ul>
+				</div>
+			</div>	
+			
+			<div class="oneleftlay">
+				<h2>鸡蛋排行</h2>
+				<div class="fenleft">
+					<ul>
+						<li><a href="?field=egg&i=0">总鸡蛋排行</a></li>
+						<li><a href="?field=egg&i=1">娱乐明星</a></li>
+						<li><a href="?field=egg&i=2">体育明星</a></li>
+						<li><a href="?field=egg&i=3">文化名人</a></li>
+						<li><a href="?field=egg&i=4">网络红人</a></li>
+						<li><a href="?field=egg&i=5">影视角色</a></li>
+						<li><a href="?field=egg&i=6">我(草根博客)</a></li>
+						<li><a href="?field=egg&i=7">其他名人</a></li>
+					</ul>
+				</div>
+			</div>
+			
+		</div>
+		<!--第一屏右侧-->
+		<div class="fenright2">
+			<div class="pairow">
+				<ul>
+					<li style="width:40px;">序号</li>
+					<li style="width:100px;">明星</li>
+					<li style="width:78px;">点数</li>
+					<li style="width:78px;">本月</li>
+				</ul>
+			</div>
+			<!-- BEGIN cat_comm_phlist1 -->
+			<div class="pairowb" style="background-color:#EAE9E9;">
+				<ul>
+					<li style="width:40px;"><h3>{cat_comm_phlist1.i}</h3></li>
+					<li style="width:104px;background:#fff;"><a href="comment.php?id={cat_comm_phlist1.id}">{cat_comm_phlist1.realname}</a></li>
+					<li style="width:78px;background:#fff;">{cat_comm_phlist1.all_count}</li>
+					<li style="width:78px;background:#fff;">{cat_comm_phlist1.month_count}</li>
+				</ul>
+			</div>
+			<!-- END cat_comm_phlist1 -->
+		</div>
+		<div class="fenright2">
+			<div class="pairow">
+				<ul>
+					<li style="width:40px;">序号</li>
+					<li style="width:100px;">明星</li>
+					<li style="width:78px;">点数</li>
+					<li style="width:78px;">本月</li>
+				</ul>
+			</div>
+			<!-- BEGIN cat_comm_phlist2 -->
+			<div class="pairowb" style="background-color:#EAE9E9;">
+				<ul>
+					<li style="width:40px;"><h3>{cat_comm_phlist2.i}</h3></li>
+					<li style="width:104px; background:#fff;"><a href="comment.php?id={cat_comm_phlist2.id}">{cat_comm_phlist2.realname}</a></li>
+					<li style="width:78px;background:#fff;">{cat_comm_phlist2.all_count}</li>
+					<li style="width:78px;background:#fff;">{cat_comm_phlist2.month_count}</li>
+				</ul>
+			</div>
+			<!-- END cat_comm_phlist2 -->
+		</div>
+		<div class="clear"></div>
+	 	<!--页尾--> 
+	</div>

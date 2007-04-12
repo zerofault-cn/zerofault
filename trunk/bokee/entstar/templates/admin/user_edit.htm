@@ -1,0 +1,49 @@
+<script>
+{script_str}
+</script>
+<div style="font-size:24px">明星编号:{ID}&nbsp;&nbsp;&nbsp;&nbsp;<span style="font-size:16px;">添加时间:{ADDTIME}</span></div>
+<TABLE width="100%" border="0" align="center" cellPadding="1" cellSpacing="0">
+<form name="form1" action="user_edit.php" method="post" enctype="multipart/form-data" >
+<tr>
+	<td align="right">明星名称:</td>
+	<td><input name="realname" type="text" value="{REALNAME}" size="40" maxlength="100"></td>
+</tr>
+<tr>
+	<td align="right">博客地址:</td>
+	<td><input name="blogurl" type="text" value="{BLOGURL}" size="40" maxlength="100"></td>
+</tr>
+<tr>
+	<td align="right">群组地址:</td>
+	<td><input name="groupurl" type="text" value="{GROUPURL}" size="40" maxlength="100"></td>
+</tr>
+<tr>
+	<td align="right">所属类别:</td>
+	<td><select name="category">{CATEOPTION}</select></td>
+</tr>
+<tr>
+	<td align="right">添加者名字:</td>
+	<td><input name="adder_name" type="text" value="{ADDER_NAME}" size="40" maxlength="100"></td>
+</tr>
+<tr>
+	<td align="right">添加者联系方式:</td>
+	<td><input name="adder_contact" type="text" value="{ADDER_CONTACT}" size="40" maxlength="100"></td>
+</tr>
+<tr>
+	<td align="right">重新上传图片:</td>
+	<td><input type="file" name="photo" size="30">
+	</td>
+</tr>
+<tr>
+	<td colspan="2" align="center">
+	<input type="hidden" name="id" value="{ID}" />
+	<input type="hidden" name="oldphoto" value="{PHOTO}">
+	<input name="submit" type="submit" value="提 交" />
+	<input name="cancel" type="button" value="取 消" onclick="javascript:window.close()">
+</td>
+</tr>
+<tr>
+	<td>原照片:</td>
+	<td><img border="0" src="../photo/{PHOTO}"></td>
+</tr>
+</tbody>
+</table>
