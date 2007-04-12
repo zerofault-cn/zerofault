@@ -113,7 +113,7 @@ function check2()
 	<td>BLOG网址</td>
 	<td>报名时间</td>
 	<td>赛区</td>
-	<td colspan="3" align="center">票数</td>
+	<td colspan="3" align="center">票数<br /><span style="color:#00f025">湖北联通</span>,<span style="color:#0054b4">小灵通</span>,<span style="color:#c8008f">IVR</span></td>
 	<td>留言</td>
 	<td>视频</td>
 	<td>操作</td>
@@ -128,9 +128,9 @@ function check2()
 	<td style="word-break:break-all;word-wrap:break-word;"><a href="http://{list.BLOGURL}" target="_blank">{list.BLOGURL}</a></td>
 	<td style="word-break:keep-all;">{list.TIME}</td>
 	<td align="center" style="word-break:keep-all;">{list.AREANAME}</td>
-	<td width="1" style="word-break:keep-all;"><a style="color:#FF00FF;" href="ipvote_cheat.php?mm_id={list.ID}" target="_blank">{list.NETVOTE}</a></td>
-	<td width="1" style="border:0">+30*<a style="color:#FF6600;" href="smsvote_info.php?mm_id={list.ID}" target="_blank">{list.SMSVOTE}</a></td>
-	<td width="1" style="border:0;color:#3300FF;">={list.ALLVOTE}</td>
+	<td width="1" style="word-break:keep-all;"><a style="color:#FF00FF;" href="ipvote_cheat.php?mm_id={list.ID}" target="_blank">{list.NETVOTE}</a><br /><span style="color:#12c000">{list.HBUN}</span></td>
+	<td width="1" style="border:0">+30*<a style="color:#FF6600;" href="smsvote_info.php?mm_id={list.ID}" target="_blank">{list.SMSVOTE}</a><br /><span style="color:#0054b4">{list.HBTE}</span></td>
+	<td width="1" style="border:0;color:#3300FF;">={list.ALLVOTE}<br /><span style="color:#c8008f">{list.HBIVR}</span></td>
 	<td align="center">{list.COMM_COUNT}</td>
 	<td align="center"><a href="{list.BOBOLINK}" target="_blank" title="检验视频">{list.BOBO}</a></td>
 	<td align="center"><input type="button" id="passbutton{list.ID}" value="{list.PASSBTN}" onClick="passupdate({list.ID});window.setTimeout('location.reload()',800);" style="{list.PASSBTNSTYLE}" {BTNFN} /><input type="button" value="修改" onclick="window.open('user_edit.php?id={list.ID}','','width=450,height=605,toolbar=no,status=no,scrollbars=yes,resizable=yes');" {BTNFN} /><input type="button" value="删除" onclick="confirmdel({list.ID})" {BTNFN} /><input type="button" value="发测试邮件" style="{TESTMAILSTYLE}" onclick="testmail({list.ID});"></td>
