@@ -22,7 +22,7 @@ if (!defined("_BB_PAGEITEM_")) {
 else return; 
 
 class PageItem {
-    var $iDefaultRecords = 10; // 默认每页显示记录数，如果没有设置，就使用默认值    
+    var $iDefaultRecords = 15; // 默认每页显示记录数，如果没有设置，就使用默认值    
     var $iMaxRecord; //每页记录数
     var $iTotal; //记录总数
     var $sqlRecord; // 获取记录的SQL查询
@@ -126,7 +126,7 @@ class PageItem {
     {
     	// 有些服务器设置的ServerName跟常用的不同，需要更改这里
         $phpself = "http://" . $_SERVER['SERVER_NAME'] . $_SERVER['PHP_SELF'];
-        
+        $phpself ='';
         $querystring = $_SERVER['QUERY_STRING'];
         $querystring = preg_replace("/page=[0-9]*&?/i", "", $querystring);
         $link = $phpself . "?page=$page&" . $querystring;
