@@ -1,0 +1,30 @@
+<job version="4.2">
+<syncjob>
+<abortonerror abort="no" />
+<fkcheck check="no" />
+<source>
+<host>211.152.20.11</host>
+<user>root</user>
+<pwd>10y9c2U5</pwd>
+<port>3306</port>
+<database>mm_new</database>
+</source>
+<target>
+<host>211.152.19.81</host>
+<user>root</user>
+<pwd>10y9c2U5</pwd>
+<port>3306</port>
+<database>mm2006</database>
+</target>
+<tables all="no">
+<table>
+<name>`mm_common`</name>
+<columns all="yes" />
+</table>
+<table>
+<name>`mm_user`</name>
+<columns all="yes" />
+</table>
+</tables>
+</syncjob>
+</job>

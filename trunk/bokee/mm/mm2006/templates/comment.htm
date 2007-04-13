@@ -1,0 +1,141 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="gb2312">
+<head>
+<title>美女真人秀 博客网-Bokee.com-你我的网络</title>
+<meta http-equiv="Content-Language" content="gb2312" />
+<meta name="description" content="博客网，www.bokee.com,最具影响力中文网站之一，免费提供专业博客托管服务（BSP），现拥有博客公社、移动博客、图片博客、视频博客、教师博客、学生博客、博采、播客和RSS博览等多个应用版块。" />
+<meta name="keywords" content="blog,weblog,blogger,bokee.com,www.bokee.com,博客中国,中国博客,博客,博采,我的博客,博客托管,图片博客,移动博客,群体博客,博客通,SNS,社会网络,博客动力,博客公社,教师博客,学生博客,IT,方兴东,微软问题,科技,新知,生活,社会软件,IT业界,互联网实验室,新媒体,博客研究,podcast,播客,标签,tag,BSP" />
+<meta name="copyright" content="www.bokee.com,博客网，版权所有" />
+<meta name="author" content="www.bokee.com,博客网" />
+<meta name="robots" content="all" />
+<style type="text/css" media="all">
+	@import url("css/public.css");
+	@import url("css/style.css");
+</style>
+<style type="text/css" media="print">
+	@import url("css/public.css");
+	@import url("css/style.css");
+</style>
+<script language="javascript">
+function check()
+{
+	if(document.form2.content.value.replace(/(^\s*)|(\s*$)/g, "").length<2)//去掉首尾空格
+	{
+		alert("您的留言内容太短了！");
+		document.form2.content.focus();
+		return false;
+	}
+}
+String.prototype.trim=function(){
+return this.replace(/(^\s*)|(\s*$)/g, "");
+}
+String.prototype.ltrim=function(){
+return this.replace(/(^\s*)/g,"");
+}
+String.prototype.rtrim=function(){
+return this.replace(/(\s*$)/g,"");
+}
+
+</script>
+</head>
+<body lang="en">
+<!--外层-->
+<div id="beauty">
+  <!--顶部-->
+  <div id="head">
+    <div class="nav"><a href="http://mm.bokee.com/">美女首页</a>|<a href="http://mm.bokee.com/qinggan/index.shtml">谈恋爱</a>|<a href="http://mm.bokee.com/sex/index.shtml">夜生活</a>|<a href="http://mm.bokee.com/pinwei/index.shtml">品男女</a>|<a href="http://mm.bokee.com/office/index.shtml">Office女郎</a>|<a href="http://mm.bokee.com/fushi/index.shtml">服饰秀</a>|<a href="http://mm.bokee.com/pretty/index.shtml">我妆容</a>|<a href="http://mm.bokee.com/group/index.shtml">群组</a>|<a href="http://blogs.bokee.com/huangye/index.shtml">优秀博客</a>|<a href="http://mm.bokee.com/xiangce/index.shtml">美女相册</a>|<a href="http://sex.bokee.com/couple/index.php">美女秀</a></div>
+	<img src="http://images.bokee.com/mm/cphoto/2006-11-27/wtzQ8LRuM3074HNq.jpg" alt="美女频道 美女博客真人秀 秀出你的风采 给你一个展示自己的舞台" /></div>
+  <!--顶部结束-->
+  <!--小导航-->
+  <div class="menu">
+    <div class="subnav_2"><a href="../">首页</a>|<a href="../signup.html">现在报名</a>|<a href="user_list.php?type=hot">鲜花排行</a>|<a href="user_list.php?type=new">最新注册</a>|<a href="comment.php">留言排行</a>|<a href="http://group.bokee.com/group/home.action?groupId=24">美女群组</a></div>
+    <a href="http://mm.bokee.com">美女频道首页</a></div>
+  <!--小导航结束-->
+	<!--右边-->
+	<div class="right_2">
+		<h1>{BLOGNAME}的留言</h1>
+		<div class="msg2_top"></div>
+		<div class="pane_2">
+			<!-- BEGIN list -->
+			<div class="box_2">{list.CONTENT}<br />
+			<span>留言人：{list.USERNAME} 时间：{list.ADDTIME}</span></div>
+			<!-- END list -->
+			<p class="fy">{PAGE}</p>
+		</div>
+		<div class="msg2_bottom"></div>
+		<div style="{FORMDISPLAY}">
+			<h1 class="margin-top">发表留言</h1>
+			<div class="msg2_top"></div>
+			<div class="type_2">
+				<form name="form2" action="" method="post" onsubmit="return check()">
+				<em>用户名：</em><input type="text" name="username" class="text_2" /><br />
+				<em>评论内容：</em><textarea name="content" class="textarea_2"></textarea><br />
+				<input name="submit" type="submit" class="btn_2" value="提交留言" />
+				</form>
+			</div>
+			<div class="msg2_bottom"></div>
+		</div>
+	</div>
+	<!--右边结束-->
+	<!--左边-->
+	<div class="left_2">
+		<div class="piclist" style="{INFODISPLAY0}">
+			<p><a href="{BLOGURL}"><img src="photo/{PHOTO}" alt="{BLOGNAME}" /></a> <strong><a href="{BLOGURL}" target="_blank">{BLOGNAME}</a></strong><br />
+			编号：{ID}<br />
+			<em class="poll"><a href="javascript:void(0)" onclick="window.open('{POLL}','','width=300,height=200,toolbar=no,status=no,scrollbars=auto,resizable=yes')" >献花</a></em><em><a href="javascript:void(0)" onclick="javascript:document.form2.content.focus();">留言</a></em><em><a href="http://blogs.bokee.com/contribute/subject.php?subjectID=11">投稿</a></em><br />
+			总鲜花数：{VOTE}<br />
+			本月鲜花：{MONTHVOTE}<br />
+			</p>
+		</div>
+		<div class="piclist" style="{INFODISPLAY1}">
+			<p><img src="images/nophoto.jpg" style="width:180px;height:270px;padding:0;" /></p>
+		</div>
+		<h1>留言排行</h1>
+		<div class="order">
+			<ul>
+			<!-- BEGIN phList -->
+			<li><span><a href="?id={phList.ID}">留言</a></span><em>{phList.COUNT}条</em><strong><a href="{phList.BLOGURL}" title="{phList.TITLE}" target="_blank">{phList.BLOGNAME}</a></strong></li>
+			<!-- END phList -->
+			</ul>
+		</div>
+	</div>
+	<!--左边结束-->
+	<div class="clear"></div>
+  <!--合作媒体-->
+  <div id="links">
+    <h1><em>合作媒体</em></h1>
+   <a href="http://www.chinasspp.com/"><img src="http://images.bokee.com/mm/include/index/2006-06-22/174ymE7W3nFh64R0.jpg" alt="中国时尚品牌网"/></a>
+<a href="http://women.nen.com.cn/"><img src="http://images.bokee.com/mm/include/index/2006-06-22/M5T1vNBq2wk85f3.jpg" alt="nen女性"/></a>
+<a href="http://www.xfwed.com/"><img src="http://images.bokee.com/mm/include/index/2006-06-22/P64mR975zoFui43S.gif" alt="婚嫁文集"/></a>
+<a href="http://ladies.cnhubei.com/"><img src="http://images.bokee.com/mm/include/index/2006-06-22/LA3G9YBpT9kN6eI1.jpg" alt="伊人湖北"/></a>
+<a href="http://www.enet.com.cn/elady/"><img src="http://images.bokee.com/mm/include/index/2006-06-22/1tL42GuX6ocHg75p.gif" alt="it女性"/></a>
+<a href="http://zt.savalo.com/"><img src="http://images.bokee.com/mm/include/index/2006-06-22/E5nR8X6AcGu643Hu.gif" alt="中亭在线"/></a>
+<a href="http://www.etianshi.cn/"><img src="http://images.bokee.com/mm/include/index/2006-09-18/XS9gN4dHZO6e2wZ7.gif" alt="E天使"/></a>
+<a href="http://www.ayoga.cn/"><img src="http://images.bokee.com/mm/include/index/2006-06-22/3zRFhLAc0u7B319g.gif" alt="亚洲瑜伽网"/></a>
+<a href="http://www.365wed.com/index.shtml"><img src="http://images.bokee.com/mm/cphoto/2006-10-16/hYN3d1Z7BT1086qI.jpg" alt="365结婚网"/></a>
+<a href="http://love.linktone.com/"><img src="http://images.bokee.com/mm/include/index/2006-06-22/R7fxlPrgK2P8sKym.gif" alt="灵通女性"/></a>
+<a href="http://www.znxf.com/"><img src="http://images.bokee.com/mm/include/index/2006-06-22/Wzn98X4oRui6AS19.jpg" alt="祝你幸福"/></a>
+<a href="http://www.chinawedding.com.cn/chinahbh/web/index.asp"><img src="http://images.bokee.com/mm/include/index/2006-07-05/46odvZNpd2w8Cq3w.gif" alt="婚博会"/></a>
+<a href="http://gb.chinabroadcast.cn/ent/fashion.htm "><img src="http://images.bokee.com/mm/include/index/2006-07-27/k963xlE6gy1QEWK3.jpg" alt="国际在线"/></a>
+<a href="http://www.southcn.com/lady/"><img src="http://images.bokee.com/mm/include/index/2006-07-31/b1Y75eH0gBpTwZ86.gif" alt="南方女性"/></a> </div>
+  <!--合作媒体结束-->
+  <!--底部-->
+  <div id="bottom">
+<style type="text/css" media="all">
+.bottomnav{width:761px;height:23px;text-align:center;border-bottom:1px solid #808080;color:#000;line-height:23px;}
+.bottomnav a{height:23px;line-height:23px;}
+.bottomnav a:hover{text-decoration:underline;}
+.copyright{width:761px;height:35px;margin-top:11px;text-align:center;padding:0px auto;color:#808080;}
+.copyright p{height:25px;line-height:25px;text-align:center;color:#808080;}
+.copyright em{color:#000;}	
+</style>
+	<div class="bottomnav">	<a href="http://www.bokee.com/new/about/aboutus.html">关于本站</a> | <a href="http://adimage.bokee.com/images/ad/minisite/service/serve.htm">广告服务</a> | <a href="http://www.bokee.com/new/about/contact.html">联系我们</a> | <a href="http://www.bokee.com/new/about/service.htm">服务条款</a> | <a href="http://www.bokee.com/new/about/privacy.htm">隐私保护</a> | <a href="http://service.bokee.com/">客服中心</a> | <a href="http://column.bokee.com/37233.html">人员招聘 </a>| <a href="http://www.bokee.com/new/about/morelink.htm">友情链接</a> | <a href="http://www.bokee.com/new/about/sitemap.html">导航</a> | <a href="mailto:annzeng#bokee.com">主编信箱</a> | <a href="http://reg.bokee.com/account/Register.b">注册</a>
+	</div><!--版权信息开始-->
+	<div class="copyright">
+		Copyright 2002 - 2005 Bokee.com, All Rights Reserved<br/>增值电信业务经营许可证编号：B2-20050016<br/><a href="http://www.allyes.com/"><img src="http://mm.bokee.com/images/icp.gif" alt="icp" /></a> <a href="http://net.china.cn/chinese/index.htm"> 京ICP证050706号 </a> <a href="http://www.allyes.com/"><img src="http://mm.bokee.com/images/netcn.gif" alt="不良信息举报中心"/></a>  <a href="http://www.allyes.com/"> <img src="http://mm.bokee.com/images/allyes.gif" alt="all"/></a></div>
+</div>
+  <!--底部结束-->
+</div>
+<!--外层结束-->
+</body>
+</html>

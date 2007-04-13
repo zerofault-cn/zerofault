@@ -1,0 +1,1 @@
+CREATE TABLE `month_vote` (`id` INT (3) UNSIGNED AUTO_INCREMENT, `date` DATE DEFAULT '0', `user_id` INT (3) UNSIGNED DEFAULT '0', `vote` INT (3) UNSIGNED DEFAULT '0', PRIMARY KEY(`id`)) 

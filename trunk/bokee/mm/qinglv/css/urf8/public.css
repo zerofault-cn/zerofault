@@ -1,0 +1,17 @@
+@charset "gb2312";/* PR-CSS 全局设置 */
+* {font:12px "Arial", "宋体",sans-serif;}/*12px大，字体优先：Arial,然后：宋体、sans-serif*/
+html,body {height:100%;}/*设置浏览器高度为100%*/
+body {margin:0px;padding:0px;text-align:center;}
+body > div {text-align:center; margin:0 auto;} /*所有body的子对象的div属性*/
+img {border:0px;}
+A img {border:0px;}
+div{border:0px;margin:0px auto;padding:0px;text-align:left;height:auto;}
+form, input, select {margin:0px;padding:0px;text-align:left;height:auto;}
+input,select{vertical-align:middle}
+ul,ol,li,dl,dt,dd,p,span{margin:0px;padding:0px;text-align:left;height:auto;}
+li{list-style:none;}
+h1,h2,h3,h4,h5,h6{margin:0px;padding:0px;text-align:left;height:0px;font-weight:bold;}
+.clear {clear: both;font-size:0px;height:1px;visibility:hidden;width:1px;}
+a:link,a:visited {color:#000;text-decoration: none; }
+a:hover {text-decoration:underline;}
+a:active {text:expression(target="_blank");}
