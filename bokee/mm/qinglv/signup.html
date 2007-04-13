@@ -1,0 +1,80 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="gb2312">
+<head>
+<title>情侣博客 博客网-Bokee.com-你我的网络</title>
+<meta http-equiv="Content-Language" content="gb2312" />
+<meta name="description" content="博客网，www.bokee.com,最具影响力中文网站之一，免费提供专业博客托管服务（BSP），现拥有博客公社、移动博客、图片博客、视频博客、教师博客、学生博客、博采、播客和RSS博览等多个应用版块。" />
+<meta name="keywords" content="blog,weblog,blogger,bokee.com,www.bokee.com,博客中国,中国博客,博客,博采,我的博客,博客托管,图片博客,移动博客,群体博客,博客通,SNS,社会网络,博客动力,博客公社,教师博客,学生博客,IT,方兴东,微软问题,科技,新知,生活,社会软件,IT业界,互联网实验室,新媒体,博客研究,podcast,播客,标签,tag,BSP" />
+<meta name="copyright" content="www.bokee.com,博客网，版权所有" />
+<meta name="author" content="www.bokee.com,博客网" />
+<meta name="robots" content="all" />
+<style type="text/css" media="all">
+	@import url("css/public.css");
+	@import url("css/style.css");
+</style>
+<style type="text/css" media="print">
+	@import url("css/public.css");
+	@import url("css/style.css");
+</style>
+</head>
+<body>
+<!--外层-->
+<div id="sweet">
+	<!--顶部-->
+	<div id="head">
+		<div class="nav"><a href="http://mm.bokee.com/">美女首页</a>|<a href="http://mm.bokee.com/qinggan/index.shtml">谈恋爱</a>|<a href="http://mm.bokee.com/sex/index.shtml">夜生活</a>|<a href="http://mm.bokee.com/pinwei/index.shtml">品男女</a>|<a href="http://mm.bokee.com/office/index.shtml">Office女郎</a>|<a href="http://mm.bokee.com/fushi/index.shtml">服饰秀</a>|<a href="http://mm.bokee.com/pretty/index.shtml">我妆容</a>|<a href="http://mm.bokee.com/group/index.shtml">群组</a>|<a href="http://blogs.bokee.com/huangye/index.shtml">优秀博客</a>|<a href="http://mm.bokee.com/xiangce/index.shtml">美女相册</a>|<a href="http://sex.bokee.com/couple/index.php">美女秀</a></div>
+		<img src="images/top_p.jpg" alt="1" />
+	</div>
+	<!--顶部结束-->
+	<!--小导航-->
+	<div class="menu">
+		<div class="subnav_2"><a href="../">首页</a>|<a href="../signup.html">现在报名</a>|<a href="user_list.php?type=hot">鲜花排行</a>|<a href="user_list.php?type=new">最新注册</a>|<a href="comment.php">留言排行</a>|<a href="http://group.bokee.com/group/home.action?groupId=16">情侣群组</a></div>
+		<a href="http://mm.bokee.com">美女频道首页</a>
+	</div>
+	<!--小导航结束-->
+	<!--主体-->
+	<div class="com_title">现在提示</div>
+	<div class="com_top"></div>
+	<div class="notice">
+		<em>1、</em> 以本人在博客王的个人博客参加本次美女真人秀，也可推荐他人的博客；<br />
+		<em>2、</em> 以本人在博客王的个人博客参加本次美女真人秀，也可推荐他人的博客；<br />
+		<em>3、</em> 以本人在博客王的个人博客参加本次美女真人秀，也可推荐他人的博客；<br />
+		<em>4、</em> 带“<em>＊</em>”为必填项。<br />
+	</div>
+	<div class="com_bottom"></div> 
+	<div class="com_title">现在报名</div>
+	<div class="com_top"></div>
+	<script language="javascript" type="text/javascript" src="js/checkform.js"></script>
+	<form name="form1" action="qinglv/signup.php" method="post" enctype="multipart/form-data" onsubmit="return check()">
+	<div class="enter">
+	<ul>
+		<li><span>参选博客名称：</span><input name="blogname" type="text" class="input_s" /> <em>＊</em></li>
+		<li><span>博客链接地址：</span><input name="blogurl" type="text" class="input_l" value="http://" onchange="checkurl(this.value)" onblur="checkurl(this.value)" /> <em>＊</em><br /><em id="blogurl_msg"></em></li>
+		<li><span>姓名：</span><input name="realname" type="text" class="input_s" /> <em>＊</em></li>
+		<li><span>证件种类：</span><select name="cardtype" class="select">
+			<option value="1">身份证</option>
+			<option value="2">学生证</option>
+			<option value="0" selected>其他</option>
+			</select> </li>
+		<li><span>证件号码：</span><input name="cardnum" type="text" class="input_s" /> </li>
+		<li><span>联系地址：</span><input name="addr" type="text" class="input_l" /> </li>
+		<li><span>邮编：</span><input name="post" type="text" class="input_s" /></li>
+		<li><span>联系电话：</span><input name="phone" type="text" class="input_s" /> <em>＊</em></li>
+		<li><span>E-mail：</span><input name="email" type="text" class="input_s" /> </li>
+		<li><span>其他联系方式：</span><input name="other" type="text" class="input_m" /> <strong>(MSN或QQ)</strong></li>
+		<li><span>上传照片：</span><input name="photo" type="file" class="input_s" /><strong>(图片100*120)</strong><em>＊</em></li>
+	</ul>
+	<input name="submit" type="submit" class="submit" value="提交" />
+	<input name="reset" type="reset" class="redo" value="重填" /> 
+	</div>
+	</form>
+	<iframe id="iframe1" frameborder="0" allowTransparency="true" scrolling="no" width="0" height="0" src=""></iframe> 
+	<div class="com_bottom"></div>
+	<!--主体结束-->   
+	<!--底部-->
+	<div id="bottom"></div>
+	<!--底部结束-->
+</div>
+<!--外层结束-->
+</body>
+</html>
