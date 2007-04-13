@@ -1,0 +1,18 @@
+<?
+session_start();
+$r_ip=$_SERVER["REMOTE_ADDR"];
+$r_ip_arr=explode(".",$r_ip);
+while(strlen($r_ip_arr[2])<3)
+{
+	$r_ip_arr[2]='0'.$r_ip_arr[2];
+}
+while(strlen($r_ip_arr[3])<3)
+{
+	$r_ip_arr[3]='0'.$r_ip_arr[3];
+}
+$account=$r_ip_arr[2].$r_ip_arr[3];
+//setcookie("cookie_account",$account);
+//setcookie("cookie_password",$account);
+$_SESSION['account']=$account;
+$_SESSION['password']=$account;
+?>

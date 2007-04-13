@@ -1,0 +1,115 @@
+body
+{
+	font-family:"ºÚÌå","Times New Roman","Arial Narrow","Verdana";
+}
+a:link,a:visited,a:hover,a:active
+{
+	text-decoration: none;
+}
+#realtime
+{
+	font-size:32px;
+	color:#d7edfe;
+	line-height:130%
+}
+.fs32
+{
+font-size: 32px;
+}
+.fs30
+{
+font-size: 30px;
+}
+.style32w
+{
+	font-size: 32px;
+	color:white;
+}
+.style32b
+{
+	font-size: 32px;
+	color:black;
+}
+.style30w
+{
+	font-size: 30px;
+	color:white;
+}
+.style30b
+{
+	font-size: 30px;
+	color:black;
+}
+
+.style24w 
+{
+	font-size: 24px;
+	color:white;
+}
+.style24b 
+{
+	font-size: 24px;
+	color:black;
+}
+.style22w
+{
+	font-size: 22px;
+	color:white;
+}
+.style22b 
+{
+	font-size: 22px;
+	color:black;
+}
+.style20w 
+{
+	font-size: 20px;
+	color:white;
+}
+.style20b 
+{
+	font-size: 20px;
+	color:black;
+}
+.style18w
+{
+	font-size: 18px;
+	color:white;
+}
+.style18b
+{
+	font-size: 18px;
+	color:black;
+}
+.input1
+{
+	BACKGROUND-COLOR: #1562be; 
+	BORDER-BOTTOM: #ffffff 1px solid; 
+	BORDER-LEFT: #ffffff 1px solid; 
+	BORDER-RIGHT: #ffffff 1px solid; 
+	BORDER-TOP: #ffffff 1px solid; 
+	FONT-FAMILY: "Verdana"; 
+	font-size: 24px;
+}
+.input2
+{
+	BACKGROUND-COLOR: white; 
+	BORDER-BOTTOM: #ffffff 1px solid; 
+	BORDER-LEFT: #ffffff 1px solid; 
+	BORDER-RIGHT: #ffffff 1px solid; 
+	BORDER-TOP: #ffffff 1px solid; 
+	FONT-FAMILY: "Verdana"; 
+	font-size: 24px;
+}
+.red
+{
+color:red;
+}
+.blue
+{
+color:blue;
+}
+.white
+{
+color:white;
+}
