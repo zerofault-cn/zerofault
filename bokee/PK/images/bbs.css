@@ -652,7 +652,10 @@ a:hover {text-decoration: underline;color:#f00;}
 	text-align:center;}
 #footer a{
 	color:#fff;}
-
+#copy_right{
+ text-align:center;
+ font-size:12px;
+}
 /* ========== ÆäËû ====== */
 a.mapmore { color:#6f6f6f;text-decoration: none; font-size:14px;}
 a.mapmore:hover {text-decoration: underline;color:#f00; font-size:14px;}
