@@ -74,7 +74,12 @@ elseif(''!=$sid)
 			{
 				$username='匿名';
 			}
+			$title=$row['title'];
 			$content=str_replace("\r\n","",$row['content']);
+			if(''!=$title)
+			{
+				$content=$title.'<br />&nbsp;&nbsp;&nbsp;&nbsp;';
+			}
 			if(''==trim($content))
 			{
 				continue;
@@ -85,7 +90,7 @@ elseif(''!=$sid)
 			echo '
 			<div class="pkrleftext">
 				<div class="pkrliutit">
-					<span class="lt">用户ID:'.$username.'</span>
+					<span class="lt">用户昵称:'.$username.'</span>
 					<span class="rt">发表时间:'.$addtime.'</span>
 					<div class="clear"></div>
 				</div>
