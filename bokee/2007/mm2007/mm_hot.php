@@ -20,7 +20,7 @@ $tpl = new Template($root_path."templates");
 $tpl->set_filenames(array(
 			'body' => 'mm_hot.htm')
 		);
-$sql="select * from mm_info where area=".$area." and pass=1 order by allvote desc,id limit 0,".$limit;
+$sql="select * from mm_info where area=".$area." and pass=1 order by allvote desc,id desc limit 0,".$limit;
 $i=0;
 $result=$db->sql_query($sql);
 while($row=$db->sql_fetchrow($result))
@@ -49,7 +49,7 @@ while($row=$db->sql_fetchrow($result))
 		"SMSPOLLWIDTH" => ($area==1)?'630':'630',
 		"SMSPOLLHEIGHT" => ($area==1)?'530':'322',
 		"VOTES" 	=> "votes.php?id=".$id,
-		"ORDER"		=> '赛区排名：第'.$i.'名',
+		"ORDER"		=> '',//'赛区排名：第'.$i.'名',
 		"INFO"		=> '报名时间：'.date("m-d",$row['addtime']),
 		"BOBOIMG" => $boboimg,
 		"BOBOIMGALT" => (1==$bobo_flag)?'欣赏视频':'上传视频',

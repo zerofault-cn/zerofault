@@ -22,13 +22,13 @@ if($_POST["Submit"])
 		if("admin_mm"==$name && "k:]gml}M<9J>"==$pass)
 		{
 			session_register("admin");
-			echo "<script>location='user_list.2.php';</script>";
+			echo "<script>location='user_list.php';</script>";
 			exit;
 		}
 		elseif("mm"==$name && "z]k)ONvi5]9i"==$pass)
 		{
 			session_register("user");
-			echo "<script>location='user_list.2.php';</script>";
+			echo "<script>location='user_list.php';</script>";
 			exit;
 		}
 	}
@@ -39,7 +39,7 @@ if($_POST["Submit"])
 			session_register("admin");
 			session_register("admin_area");
 			$_SESSION['admin_area']=$area;
-			echo "<script>location='user_list.2.php';</script>";
+			echo "<script>location='user_list.php';</script>";
 			exit;
 		}
 	}
