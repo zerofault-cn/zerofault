@@ -112,8 +112,8 @@
                 </TR>
                 <TR>
                   <TD align=middle>  
-<span class="zt1">{message}</span>       
-      <form name="addForm" action="" method="post" onSubmit="return checkAddForm();" {FORMFUN}>
+<span class="zt1">{MESSAGE}</span>       
+      <form name="addForm" action="post.php" method="post" onSubmit="return checkform1();" target="iframe1" {FORMFUN}>
       <TABLE cellSpacing=0 cellPadding=0 width=90% align=center border=0>
         <TBODY>
         <TR class="zt1">
@@ -133,7 +133,7 @@
         <TR class="zt1">
           <TD width=89 bgColor=#f4f4f4 height=27>
             <DIV class=hongtextg align=right>博客名称：</DIV></TD>
-          <TD width=402><INPUT name=blogname size="50"> <SPAN 
+          <TD width=402><INPUT name=blogname size="50" value="{BLOGNAME}"> <SPAN 
             class=linktext><SPAN class=xing style1><font color=red>*</font></SPAN></SPAN></TD></TR>
         <TR class="zt1">
           <TD  colSpan=2 height=1></TD></TR>
@@ -142,14 +142,14 @@
 		  <DIV class=hongtextg align=right>博客地址：</DIV>
           </TD>
           <TD width=402>
-			<INPUT type="text" name=blogurl size="50"  value="http://{BLOGID}.bokee.com">
+			<INPUT type="text" name=blogurl size="50"  value="http://{BLOGID}.bokee.com"> <font color=red>*</font>
            </TD></TR>
 		<TR class="zt1">
           <TD width=89 bgColor=#f4f4f4 height=27>
 		  <DIV class=hongtextg align=right>联系方式：</DIV>
           </TD>
           <TD width=402>
-			<INPUT type="text" name="email" size="20"  value="">E-mail、QQ、MSN或电话
+			<INPUT type="text" name="email" size="30"  value="{EMAIL}">(E-mail、QQ、MSN或电话)
            </TD></TR>
         <TR class="zt1">
           <TD  colSpan=2 height=1></TD></TR>
@@ -162,7 +162,7 @@
           <TD bgColor=#f4f4f4 height=27><div align="right"><span class="hongtextg"><SPAN class=linktext></SPAN></span></div></TD>
           <TD>
           <!-- BEGIN sysChannel -->
-          <INPUT type=checkbox  value={sysChannel.id} name="id[]">
+          <INPUT type=checkbox  value="{sysChannel.id}" name="id[]">
             {sysChannel.name} 
           <!-- END sysChannel -->
 	 </TD>
@@ -214,8 +214,8 @@ height=244>
                           </TR>
                           <!-- BEGIN newArticle -->
                           <TR>
-                            <TD class=th1 width=71 height=29><span class="zt1">{newArticle.blogname}</span></TD>
-                            <TD class=th2><span class="zt1"><A href="{newArticle.url}" target="_blank" title="{newArticle.title}">·{newArticle.tmp_title}</A></span></TD>
+                            <TD class=th1 width=71 height=29><span class="zt1">{newArticle.tmp_blogname}</span></TD>
+                            <TD class=th2><span class="zt1"><A href="{newArticle.url}" target="_blank" title="{newArticle.title}">·{newArticle.tmp_title} </A></span></TD>
                           </TR>
                           <!-- END newArticle -->
 			</TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR>
@@ -391,7 +391,7 @@ border=0>
               <TBODY>
               <!-- BEGIN hotAuthor -->
               <TR>
-                <TD class=zt1><span style="float:left">·<A href="{hotAuthor.blogurl}" target="_blank">{hotAuthor.blogname}</a></span><span style="float:right;margin-right:10px">{hotAuthor.month_article}</span></TD>
+                <TD class=zt1><span style="float:left">·<A href="{hotAuthor.blogurl}" target="_blank" title="{hotAuthor.blogname}">{hotAuthor.tmp_blogname}</a></span><span style="float:right;margin-right:10px">{hotAuthor.month_article}</span></TD>
               </TR>
               <!-- END hotAuthor -->
               </TBODY></TABLE>
@@ -418,4 +418,7 @@ href="http://www.hd315.gov.cn/beian/view.asp?bianhao=010202004121300015">京ICP证
 <A href="http://net.china.cn/chinese/index.htm"><IMG alt=不良信息举报中心 
 src="images/netcn.jpg" border=0></A> <A href="http://www.allyes.com/"><IMG 
 alt=好耶广告网络 src="images/allyes.gif" 
-border=0></A></P></DIV></DIV></BODY></HTML>
+border=0></A></P></DIV></DIV>
+<iframe id="iframe1" name="iframe1" width=600 height=50 style="display:none"></iframe>
+</BODY>
+</HTML>
