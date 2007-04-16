@@ -1,0 +1,316 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<HEAD>
+<TITLE>博客文章分类投稿</TITLE>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312" />
+<LINK href="images/style.css" type="text/css" rel="stylesheet">
+<script language="JavaScript" type="text/JavaScript" src="js/checkform.js"></script>
+<meta name="description" content="博客网，www.bokee.com,最具影响力中文网站之一，免费提供专业博客托管服务（BSP），现拥有博客公社、移动博客、图片博客、视频博客、教师博客、学生博客、博采、播客和RSS博览等多个应用版块。" />
+<meta name="keywords" content="blog,weblog,blogger,bokee.com,www.bokee.com,博客中国,中国博客,博客,博采,我的博客,博客托管,图片博客,移动博客,群体博客,博客通,SNS,社会网络,博客动力,博客公社,教师博客,学生博客,IT,方兴东,微软问题,科技,新知,生活,社会软件,IT业界,互联网实验室,新媒体,博客研究,podcast,播客,标签,tag,BSP" />
+<meta name="copyright" content="www.bokee.com,博客网，版权所有" />
+<meta name="author" content="www.bokee.com,博客网" />
+<meta name="robots" content="all" />
+<body>
+<div class="main">
+<!--注册和登录模块开始-->
+	<iframe  marginheight=0 marginwidth=0 frameborder=0 width=760px height=38px scrolling=no  src="http://www.bokee.com/include/login_gsearch_white.html">
+</iframe>
+<!--注册和登录模块结束-->
+<TABLE height=59 cellSpacing=0 cellPadding=0 width=760 border=0>
+  <TBODY>
+  <TR>
+    <TD background=image0523/header.gif>
+      <div align="center" class="style2">{name}</div>
+      <TABLE cellSpacing=0 cellPadding=0 width=181 align=right border=0>
+        <TBODY>
+        </TBODY></TABLE></TD></TR></TBODY></TABLE>
+
+
+<table width="760">
+  <tr>
+    <td width="210" valign="top"><TABLE cellSpacing=0 cellPadding=0 width=210 border=0>
+        <TBODY>
+        <TR>
+          <TD><div align="center"><a href="http://blogs.bokee.com/" target="_blank"><img src="images/0zbth5zR086A3S9g.jpg" width="191" height="242" border="0"></a>
+    </TD>
+        </TR>
+        <TR>
+          <TD height="25"  class=zt1  align="center"><div align="center"><a href="http://blogs.bokee.com/contribute/" target="_blank">回到总投稿器首页 &gt;&gt;</a></div></div></TD>
+        </TR>
+        <TR>
+          <TD background=image0523/myblog.gif height=56>
+            <TABLE cellSpacing=0 cellPadding=0 width="75%" align=right 
+              border=0><TBODY>
+              <TR>
+                <TD class=title2>本频道活跃作者</TD></TR></TBODY></TABLE></TD></TR>
+        <TR>
+          <TD width="210" background=image0523/myblogbg.gif>
+            <TABLE cellSpacing=0 cellPadding=0 width="93%" align=center 
+border=0>
+              <TBODY>
+              <!-- BEGIN activeAuthor -->
+              <TR>
+                <TD class=zt1><span style="float:left">·<A href="{activeAuthor.blogurl}" target="_blank" title="{activeAuthor.blogname}">{activeAuthor.tmp_blogname}</a></span><span style="float:right;margin-right:10px">{activeAuthor.month_article}</span></TD></TR>
+              <!-- END activeAuthor -->
+              </TBODY></TABLE></TD>
+        </TR>
+        <TR>
+      <TD><IMG height=10 src="image0523/mybloged.gif" 
+        width=210></TD></TR></TBODY></TABLE>
+      <TABLE cellSpacing=0 cellPadding=0 width=210 border=0>
+        <TBODY>
+
+        <TR>
+          <TD background=image0523/myblog.gif height=56>
+            <TABLE cellSpacing=0 cellPadding=0 width="75%" align=right 
+              border=0><TBODY>
+              <TR>
+                <TD class=title2>本月热门作者</TD></TR></TBODY></TABLE></TD></TR>
+        <TR>
+          <TD width="210" background=image0523/myblogbg.gif>
+            <TABLE cellSpacing=0 cellPadding=0 width="93%" align=center border=0>
+              <TBODY>
+              <!-- BEGIN hotAuthor -->
+              <TR>
+                <TD class=zt1><span style="float:left">·<A href="{hotAuthor.blogurl}" target="_blank" title="{hotAuthor.blogname}">{hotAuthor.tmp_blogname}</a></span><span style="float:right;margin-right:10px">{hotAuthor.vote}</span></TD>
+              </TR>
+              <!-- END hotAuthor -->
+              </TBODY></TABLE></TD>
+        </TR>
+        <TR>
+      <TD><IMG height=10 src="image0523/mybloged.gif" 
+        width=210></TD></TR></TBODY></TABLE></p></td>
+    <td width="540" valign="top"><table width="540">
+      <tr>
+        <td><TABLE width="93%" height="90" border=0 
+                  align=center cellPadding=0 cellSpacing=0 bgColor=#eceaea>
+          <TBODY>
+            <TR>
+              <TD width="120">                <div align="center"><img 
+                              src="image0523/ah52RtiLAS197531.gif" 
+                              width=100></div></TD>
+              <TD class=linktext align=left><SPAN 
+                        class=zt1>·您推荐的文章，将会被<A style="COLOR: #ff0000" 
+                        href="http://blogs.bokee.com/">博客公社</A>和各个频道优先推广；<BR>
+                ·既可用本人的文章投稿，也可推荐他人的优秀作品；<BR>
+                ·带“*”为必填项；
+                ·点击rss，订阅网友第一时间推荐的文章。</SPAN></TD>
+            </TR>
+          </TBODY>
+        </TABLE></td>
+      </tr>
+	 
+      <tr>
+        <td>{MESSAGE} 
+		<FORM name="addForm" onSubmit="return checkform2();" method="post" action="post.php" target="iframe1" {FORMFUN}>
+                  <TABLE cellSpacing=0 cellPadding=0 width="95%" align=center 
+                  border=0>
+                    <TBODY>
+					
+                    <TR class=zt1>
+                      <TD width=89 bgColor=#f4f4f4 height=27>
+                        <DIV class=hongtextg align=right>文章标题：</DIV></TD>
+                      <TD width=402><INPUT size=50 
+                        name="title" > <SPAN class=linktext><SPAN 
+                        class=xing style1><FONT 
+                      color=red>*</FONT></SPAN></SPAN></TD></TR>
+                    <TR class=zt1>
+                      <TD colSpan=2 height=1></TD></TR>
+                    <TR class=zt1>
+                      <TD width=89 bgColor=#f4f4f4 height=27>
+                        <DIV class=hongtextg align=right>文章链接地址：</DIV></TD>
+                      <TD width=402><input size=50 
+                        value="http://" name="url">
+                      <SPAN 
+                        class=linktext><FONT color=red>*</FONT></SPAN></TD>
+                    </TR>
+                    <TR class=zt1>
+                      <TD colSpan=2 height=1></TD></TR>
+                    <TR class=zt1>
+                      <TD width=89 bgColor=#f4f4f4 height=27>
+                        <DIV class=hongtextg align=right>博客名称：</DIV></TD>
+                      <TD width=402><INPUT size="50" 
+                        name="blogname" value="{BLOGNAME}"> <SPAN class=linktext><SPAN class=xing 
+                        style1><FONT color=red>*</FONT></SPAN></SPAN></TD></TR>
+                    <TR class=zt1>
+                      <TD colSpan=2 height=1></TD></TR>
+                    <TR class=zt1>
+                      <TD width=89 bgColor=#f4f4f4 height=27>
+                        <DIV class=hongtextg align=right>博客地址：</DIV></TD>
+                      <TD width=402><INPUT type="text" name=blogurl size="50"  value="http://{BLOGID}.bokee.com"> <font color=red>*</font></TD></TR>
+                    <TR class=zt1>
+                      <TD colSpan=2 height=1></TD></TR>
+                    <TR class=zt1>
+                      <TD width=89 bgColor=#f4f4f4 height=27>
+                        <DIV class=hongtextg align=right>联系方式：</DIV></TD>
+                      <TD width=402><INPUT type="text" name="email" size="30"  value="{EMAIL}">(E-mail、QQ、MSN或电话)</TD></TR>
+                    <TR class=zt1>
+                      <TD colSpan=2 height=1></TD></TR>
+                    <TR class=zt1>
+                      <TD colSpan=2 height=1></TD></TR>
+                    <TR class=zt1>
+                      <TD class=hongtextg width=89 bgColor=#f4f4f4 
+                      height=32>　</TD>
+                      <TD width=402><input type="hidden" name="id" value="{ID}" /> <INPUT id=Submit type=submit value=提交 name=Submit> 　 <INPUT type=reset value=重填 name=Submit3>                      </TD>
+                    </TR>
+                    <TR>
+                <TD colSpan=2 height=1></TD></TR></TBODY></TABLE>
+        </FORM></td>
+      </tr>
+      <tr>
+        <td><TABLE cellSpacing=0 cellPadding=0 width=535 align=left border=0>
+              <TBODY>
+              <TR>
+                <TD vAlign=center background=image0523/changeh.gif 
+                height=28><div align="left"><SPAN class=title2>·最新文章</SPAN> 
+                	<INPUT onclick=javascript:window.open("{RSSURL}"); type=image height=14 width=36 
+                        src="image0523/rss.gif" border=none>
+                  </div>
+                  <TABLE cellSpacing=0 cellPadding=0 width="50%" align=right 
+                  border=0>
+                    <TBODY>
+                    <TR></TR></TBODY></TABLE></TD></TR>
+              <TR>
+                <TD vAlign=bottom background=image0523/changebg.gif 
+                height=244>
+                  <TABLE height=233 cellSpacing=0 cellPadding=0 width=530 
+                  align=center border=0>
+                    <TBODY>
+                    <TR>
+                      <TD background=image0523/table1bg.gif>
+                        <TABLE 
+                        width="95%" height=580 border=0 align=center cellPadding=0 cellSpacing=0>
+                          <TBODY>
+                          <TR>
+                            <TD class=th1 width=70 height=29 align="center">作者</TD>
+                            <TD colspan="2" class=th2>
+                              <DIV align=center><SPAN 
+                            class=th1>文章标题</SPAN></DIV></TD>
+                            <TD width="98" class=th2><div align="center"><SPAN 
+                            class=th1>时间</SPAN></div></TD>
+                          </TR>
+                          <!-- BEGIN newArticle -->
+                          <TR>
+                            <TD class=th1 width=70 height=29><div align="left"><SPAN 
+                              class=zt1>{newArticle.tmp_blogname}</SPAN></div></TD>
+                            <TD width="292" align="left" class=th2><SPAN class=zt1><A 
+                              href="{newArticle.url}" target="_blank" title="{newArticle.title}">·{newArticle.tmp_title} </A></SPAN></TD>
+                            <TD width="42" class=th2>
+							<input type="button" value="投票" onclick="window.open('poll.php?id={newArticle.id}&author_id={newArticle.author_id}');" />
+                           </TD>
+                            <TD class=th2><div align="center" class="style3">{newArticle.datetime}</div></TD>
+                          </TR>
+                          <!-- END newArticle -->
+                          <TR>
+                            <TD class=th1 height=29>&nbsp;</TD>
+                            <TD colspan="2" class=th2><div align="center">{PAGENAV}</div></TD>
+                            <TD class=th2><div align="center"></div></TD>
+                          </TR>
+                          </TBODY></TABLE>
+                      </TD></TR></TBODY></TABLE></TD></TR>
+              <TR>
+                <TD><p>	  <TABLE cellSpacing=0 cellPadding=0 width=535 align=left border=0>
+              <TBODY>
+              <TR>
+                <TD vAlign=center background=image0523/changeh.gif 
+                height=28><div align="left"><SPAN class=title2>·热门文章</SPAN> 
+                	<INPUT onclick=javascript:window.open("{RSSURL}"); type=image height=14 width=36 
+                        src="image0523/rss.gif" border=none>
+                  </div>
+                  <TABLE cellSpacing=0 cellPadding=0 width="50%" align=right 
+                  border=0>
+                    <TBODY>
+                    <TR></TR></TBODY></TABLE></TD></TR>
+              <TR>
+                <TD vAlign=bottom background=image0523/changebg.gif 
+                height=112>
+                  <TABLE height=112 cellSpacing=0 cellPadding=0 width=530 
+                  align=center border=0>
+                    <TBODY>
+                    <TR>
+                      <TD background=image0523/table1bg.gif>
+                        <TABLE 
+                        width="95%" height=58 border=0 align=center cellPadding=0 cellSpacing=0>
+                          <TBODY>
+                          <TR>
+                            <TD class=th1 width=70 height=29>作者</TD>
+                            <TD colspan="2" class=th2>
+                              <DIV align=center><SPAN 
+                            class=th1>文章标题</SPAN></DIV></TD>
+                            <TD width="98" class=th2><div align="center"><SPAN 
+                            class=th1>票数</SPAN></div></TD>
+                          </TR>
+                          <!-- BEGIN hotArticle -->
+                          <TR>
+                            <TD class=th1 width=70 height=29><div align="left"><SPAN 
+                              class=zt1>{hotArticle.tmp_blogname}</SPAN></div></TD>
+                            <TD width="292" align="left" class=th2><SPAN class=zt1><A 
+                              href="{hotArticle.url}" target="_blank" title="{hotArticle.title}">·{hotArticle.tmp_title} </A></SPAN></TD>
+                            <TD width="42" class=th2><input type="button" value="投票" onclick="window.open('poll.php?id={hotArticle.id}&author_id={hotArticle.author_id}');" /></TD>
+                            <TD class=th2><div align="center" class="style3">{hotArticle.vote}</div></TD>
+                          </TR>
+                          <!-- END hotArticle -->
+                          </TBODY></TABLE>
+                      </TD></TR></TBODY></TABLE></TD></TR>
+              <TR>
+                <TD><IMG height=8 src="image0523/changeed.gif" 
+                width=325></TD></TR></TBODY></TABLE></p>
+                <p>&nbsp;</p></TD></TR></TBODY></TABLE>
+          <p>&nbsp;</p></td>
+      </tr>
+      <tr>
+        <td>
+                    <TABLE height=61 cellSpacing=0 cellPadding=0 width=545 
+            background=images/boosobg.gif border=0>
+              <TBODY>
+              <TR>
+                <TD>
+                  <TABLE cellSpacing=0 cellPadding=0 width="70%" align=right 
+                  border=0>
+                    <TBODY>
+                    <TR>
+                      <TD width="79%">
+                        <FORM action=http://www.booso.com/search method=get target="_blank">
+                        <INPUT class=input3 name=keyword> <TD align=left width="21%">
+                        <INPUT type=image height=25 width=66 src="images/bn3.gif" border=none> </TD><INPUT 
+                      type=hidden value=1 name=blogspan> <INPUT type=hidden 
+                      value=1 name=rssspan> <INPUT type=hidden value=1 
+                      name=imagespan> <INPUT type=hidden value=any 
+                      name=category> <INPUT type=hidden value=1 name=sorttype> 
+                        <input type="hidden" name="radiobutton" value="orderByRelate">
+                      <INPUT type=hidden value=main 
+                  name=type></FORM></TR></TBODY></TABLE></TD></TR></TBODY></TABLE>
+        </td>
+      </tr>
+      <tr>
+        <td>{AD}</td>
+      </tr>
+    </table>      
+      </td>
+  </tr>
+</table>
+<p><!--页尾-->
+</p>
+<!--#include virtual="/include/channelfooter.shtml" -->
+<DIV id=footer><A href="mailto:ceditor@bokee.com">主编信箱</A> | <A 
+href="http://www.bokee.com/new/about/aboutus.html">关于本站</A> | <A 
+href="http://adimage.bokee.com/images/ad/minisite/service/serve.htm">广告服务</A> | 
+<A href="http://www.bokee.com/new/about/contact.html">联系我们</A> | <A 
+href="http://www.bokee.com/new/about/service.htm">服务条款</A> | <A 
+href="http://www.bokee.com/new/about/privacy.htm">隐私保护</A> | <A 
+href="http://service.bokee.com/">客服中心</A> | <A 
+href="http://column.bokee.com/37233.html">人员招聘 </A>| <A 
+href="http://www.bokee.com/new/about/morelink.htm">友情链接</A> | <A 
+href="http://www.bokee.com/new/about/sitemap.html">导航</A> | <A 
+href="http://publishblog.bokee.com/reg.b">注册</A></DIV>
+<DIV id=copyright>
+<P>Copyright 2002 - 2005 Bokee.com, All Rights Reserved</P>
+<P>增值电信业务经营许可证编号：B2-20050016</P>
+<P><IMG alt=京ICP证040883号 src="image0523/icp.gif"><A 
+href="http://www.hd315.gov.cn/beian/view.asp?bianhao=010202004121300015">京ICP证040883号</A> 
+<A href="http://net.china.cn/chinese/index.htm"><IMG alt=不良信息举报中心 
+src="image0523/netcn.jpg" border=0></A> <A 
+href="http://www.allyes.com/"><IMG alt=好耶广告网络 src="image0523/allyes.gif" 
+border=0></A></P></DIV></DIV>
+<iframe id="iframe1" name="iframe1" width=600 height=50 style="display:none"></iframe>
+</BODY></HTML>

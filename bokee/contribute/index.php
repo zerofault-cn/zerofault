@@ -8,13 +8,47 @@ include_once($root_path."functions.php");
 
 $tpl = new Template($root_path."templates");
 $tpl->set_filenames(array('body' => 'index.htm'));
-
+//热门频道
 $sql1="select id,name,article_count from channel order by article_count desc limit 22";
 assign_block_vars_by_sql("hotChannel", $sql1);
 
+//用户可自由投稿的频道
 $sql2="select id,name from channel where sys_flag=1";
 assign_block_vars_by_sql("sysChannel", $sql2);
 
+//最新投稿文章
+$sql3="select title,left(title,34) as tmp_title,url,blogname,left(blogname,8) as tmp_blogname,blogurl from author,article where article.author_id=author.id order by article.id desc limit 8";
+assign_block_vars_by_sql("newArticle", $sql3);
+
+//本月热门作者
+$sql4="select left(blogname,16) as tmp_blogname,blogname,blogurl,month_article from author order by month_article desc limit 14";
+assign_block_vars_by_sql("hotAuthor", $sql4);
+
+$blogID=getBlogID();
+if(''!=$blogID)
+{
+	$sql0="select blogname,email from author where blogid='".$blogID."'";
+	$result0=$db->sql_query($sql0);
+	$blogname=$db->sql_fetchfield(0,0,$result0);
+	$email=$db->sql_fetchfield(1,0,$result0);
+	$tpl->assign_vars(array(
+		"MESSAGE"=>$blogID.',您好，欢迎您来投稿!',
+		"FORMFUN"=>'',
+		"BLOGID"=>$blogID,
+		"BLOGNAME"=>$blogname,
+		"EMAIL"=>$email
+		));
+}
+else
+{
+	$tpl->assign_vars(array(
+		"MESSAGE"=>'您必须先登录博客通行证，然后才能开始投稿',
+		"FORMFUN"=>'disabled',
+		"BLOGID"=>'?',
+		"BLOGNAME"=>'',
+		"EMAIL"=>''
+		));
+}
 $db->sql_close();
 $tpl->pparse('body');
 $tpl->destroy();

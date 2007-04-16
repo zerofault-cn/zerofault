@@ -1,0 +1,141 @@
+HTML {
+	WIDTH: 100%
+}
+BODY {
+	BACKGROUND: #fff; FONT-FAMILY: "ËÎÌå","Verdana","sans-serif"; TEXT-ALIGN: center
+}
+.main {
+	PADDING-RIGHT: 0px; PADDING-LEFT: 0px; PADDING-BOTTOM: 0px; MARGIN: 0px auto; WIDTH: 760px; PADDING-TOP: 0px
+}
+INPUT {
+	FONT-FAMILY: Simsun,sans-serif,Arial
+}
+BODY {
+	PADDING-RIGHT: 0px; PADDING-LEFT: 0px; PADDING-BOTTOM: 0px; MARGIN: 0px; PADDING-TOP: 0px
+}
+FORM {
+	PADDING-RIGHT: 0px; PADDING-LEFT: 0px; PADDING-BOTTOM: 0px; MARGIN: 0px; PADDING-TOP: 0px
+}
+DL {
+	PADDING-RIGHT: 0px; PADDING-LEFT: 0px; PADDING-BOTTOM: 0px; MARGIN: 0px; PADDING-TOP: 0px
+}
+DT {
+	PADDING-RIGHT: 0px; PADDING-LEFT: 0px; PADDING-BOTTOM: 0px; MARGIN: 0px; PADDING-TOP: 0px
+}
+DD {
+	PADDING-RIGHT: 0px; PADDING-LEFT: 0px; PADDING-BOTTOM: 0px; MARGIN: 0px; PADDING-TOP: 0px
+}
+UL {
+	PADDING-RIGHT: 0px; PADDING-LEFT: 0px; PADDING-BOTTOM: 0px; MARGIN: 0px; PADDING-TOP: 0px
+}
+P {
+	PADDING-RIGHT: 0px; PADDING-LEFT: 0px; PADDING-BOTTOM: 0px; MARGIN: 0px; PADDING-TOP: 0px
+}
+H1 {
+	PADDING-RIGHT: 0px; PADDING-LEFT: 0px; PADDING-BOTTOM: 0px; MARGIN: 0px; PADDING-TOP: 0px
+}
+H2 {
+	PADDING-RIGHT: 0px; PADDING-LEFT: 0px; PADDING-BOTTOM: 0px; MARGIN: 0px; PADDING-TOP: 0px
+}
+H3 {
+	PADDING-RIGHT: 0px; PADDING-LEFT: 0px; PADDING-BOTTOM: 0px; MARGIN: 0px; PADDING-TOP: 0px
+}
+H4 {
+	PADDING-RIGHT: 0px; PADDING-LEFT: 0px; PADDING-BOTTOM: 0px; MARGIN: 0px; PADDING-TOP: 0px
+}
+H5 {
+	PADDING-RIGHT: 0px; PADDING-LEFT: 0px; PADDING-BOTTOM: 0px; MARGIN: 0px; PADDING-TOP: 0px
+}
+H6 {
+	PADDING-RIGHT: 0px; PADDING-LEFT: 0px; PADDING-BOTTOM: 0px; MARGIN: 0px; PADDING-TOP: 0px
+}
+A {
+	COLOR: #323232; TEXT-DECORATION: none
+}
+A:hover {
+	TEXT-DECORATION: underline
+}
+UNKNOWN {
+	PADDING-RIGHT: 0px; PADDING-LEFT: 0px; PADDING-BOTTOM: 0px; MARGIN: 0px; PADDING-TOP: 0px
+}
+.main {
+	PADDING-RIGHT: 0px; PADDING-LEFT: 0px; PADDING-BOTTOM: 0px; MARGIN: 0px auto; WIDTH: 760px; PADDING-TOP: 0px
+}
+.headert1 {
+	FONT-WEIGHT: normal; FONT-SIZE: 12px; COLOR: #f00; TEXT-ALIGN: left
+}
+.headert1 A {
+	COLOR: #f00; TEXT-DECORATION: none
+}
+.headert1 A:hover {
+	COLOR: blue; TEXT-DECORATION: underline
+}
+.linkt1 {
+	FONT-WEIGHT: normal; FONT-SIZE: 12px; COLOR: #6c6c6c; TEXT-ALIGN: left
+}
+.linkt1 A {
+	COLOR: #6c6c6c; TEXT-DECORATION: none
+}
+.linkt1 A:hover {
+	COLOR: red; TEXT-DECORATION: underline
+}
+.temp1 {
+	FONT-WEIGHT: normal; FONT-SIZE: 12px; COLOR: black; TEXT-ALIGN: left
+}
+.title1 {
+	FONT-WEIGHT: normal; FONT-SIZE: 14px; COLOR: #f24400; FONT-FAMILY: "ºÚÌå"; TEXT-ALIGN: right
+}
+.input1 {
+	BORDER-RIGHT: #d8d8d8 1px solid; BORDER-TOP: #d8d8d8 1px solid; FONT-WEIGHT: normal; FONT-SIZE: 12px; BACKGROUND: white; BORDER-LEFT: #d8d8d8 1px solid; WIDTH: 79px; COLOR: #6c6a6a; BORDER-BOTTOM: #d8d8d8 1px solid; HEIGHT: 17px
+}
+.cou {
+	FONT-WEIGHT: normal; FONT-SIZE: 12px; COLOR: #0066cc; TEXT-ALIGN: center
+}
+.cou SPAN {
+	COLOR: red
+}
+.title2 {
+	FONT-WEIGHT: normal; FONT-SIZE: 14px; COLOR: #f24400; FONT-FAMILY: "ºÚÌå"; TEXT-ALIGN: left
+}
+.input2 {
+	BORDER-RIGHT: red 1px solid; BORDER-TOP: red 1px solid; FONT-WEIGHT: normal; FONT-SIZE: 12px; BACKGROUND: white; BORDER-LEFT: red 1px solid; WIDTH: 37px; COLOR: red; BORDER-BOTTOM: red 1px solid; HEIGHT: 17px
+}
+.zt1 {
+	FONT-WEIGHT: normal; FONT-SIZE: 12px; COLOR: black; LINE-HEIGHT: 22px; TEXT-ALIGN: left
+}
+.zt1 A {
+	COLOR: black; TEXT-DECORATION: none
+}
+.zt1 A:hover {
+	COLOR: red; TEXT-DECORATION: underline
+}
+.exp1 {
+	FONT-WEIGHT: normal; FONT-SIZE: 12px; COLOR: #766d6e; TEXT-ALIGN: center
+}
+.th1 {
+	FONT-WEIGHT: bolder; FONT-SIZE: 12px; COLOR: #404040; TEXT-ALIGN: center
+}
+.th2 {
+	FONT-WEIGHT: normal; FONT-SIZE: 12px; COLOR: #0066cc; TEXT-ALIGN: left
+}
+.th2 A {
+	COLOR: #0066cc; TEXT-DECORATION: none
+}
+.th2 A:hover {
+	COLOR: red; TEXT-DECORATION: underline
+}
+.input3 {
+	BORDER-RIGHT: #b1b1b1 1px solid; BORDER-TOP: #b1b1b1 1px solid; FONT-WEIGHT: normal; FONT-SIZE: 12px; BORDER-LEFT: #b1b1b1 1px solid; WIDTH: 290px; BORDER-BOTTOM: #b1b1b1 1px solid; HEIGHT: 20px
+}
+#footer {
+	CLEAR: both; FONT-SIZE: 12px; BACKGROUND: #979797; MARGIN: 15px auto 0px; WIDTH: 760px; COLOR: #fff; LINE-HEIGHT: 2; BORDER-BOTTOM: #000 2px solid
+}
+#footer A {
+	COLOR: #fff
+}
+#copyright {
+	FONT-SIZE: 12px; MARGIN: 0px auto; WIDTH: 760px; FONT-FAMILY: Verdana; TEXT-ALIGN: center
+}
+.dazi {
+	FONT-WEIGHT: bold; FONT-SIZE: 14px; COLOR: #0033cc; TEXT-DECORATION: underline
+}

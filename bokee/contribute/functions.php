@@ -1,18 +1,17 @@
 <?php
 /**
-*根据id读取mm_info中的特定列的值
-*用来避免mm_comment与mm_info表的连接查询
+*根据id读取table表中的特定列field的值
 */
-function getField($id,$field)
+function getField($id,$field,$table)
 {
 	global $db;
-	$sql0="select ".$field." from user_info where id=".$id;
+	$sql0="select ".$field." from ".$table." where id=".$id;
 	$result0=$db->sql_query($sql0);
 	$value=$db->sql_fetchfield(0,0,$result0);
 //	$db->sql_freeresult($result0);
 	return $value;
 }
-//参数分别为模版区块名,sql语句,是否需要递增计数
+//参数分别为：模版区块名,sql语句,是否需要递增计数
 function assign_block_vars_by_sql($block_name,$sql,$i=0)
 {
 	global $db,$tpl;
@@ -36,47 +35,30 @@ function assign_vars_by_sql($sql)
 }
 
 /**
-*添加留言时用到,实体化html代码
+*字符串截取函数，
+*保证得到的字符串中没有半个汉字的情况
 */
-function format($text)
+function substr_cut($str_cut,$length = 10)
 {
-	$text=htmlspecialchars($text);
-	$text=str_replace(" ","&nbsp;",$text);
-	$text=nl2br($text);
-//	$text=str_replace("\r\n","",$text);
-//	$text=str_replace("\n","",$text);
-//	$text=addslashes($text);
-	return $text;
+	if (strlen($str_cut) > $length)
+	{
+		for($i=0; $i < $length; $i++)
+		{
+			if (ord($str_cut[$i]) > 128)
+			{
+				$i++;
+			}
+		}
+	$str_cut = substr($str_cut,0,$i);
+	}
+	return $str_cut;
 }
-/**
-*获取用户IP
-*/
-function GetIP()
+
+
+function getBlogID()
 {
-	if (getenv("HTTP_CLIENT_IP") && strcasecmp(getenv("HTTP_CLIENT_IP"), "unknown"))
-	{
-		$ip = getenv("HTTP_CLIENT_IP");
-	}
-	elseif (getenv("HTTP_X_FORWARDED_FOR") && strcasecmp(getenv("HTTP_X_FORWARDED_FOR"), "unknown"))
-	{
-		$ip = getenv("HTTP_X_FORWARDED_FOR");
-	}
-	elseif (getenv("REMOTE_ADDR") && strcasecmp(getenv("REMOTE_ADDR"), "unknown"))
-	{
-		$ip = getenv("REMOTE_ADDR");
-	}
-	elseif (isset($_SERVER['REMOTE_ADDR']) && $_SERVER['REMOTE_ADDR'] && strcasecmp($_SERVER['REMOTE_ADDR'], "unknown"))
-	{
-		$ip = $_SERVER['REMOTE_ADDR'];
-	}
-	else
-	{
-		$ip = "unknown";
-	}
-	if(strrpos($ip,',')>0)
-	{
-		$ip=substr($ip,0,strrpos($ip,','));//截取真实IP，去掉代理IP
-	}
-	return($ip);
+	$bokie=split(',',base64_decode($_COOKIE['bokie']));
+	$cBlogID=substr($bokie[1],0,strpos($bokie[1],'.'));
+	return $cBlogID;
 }
 ?>
