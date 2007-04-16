@@ -16,7 +16,7 @@ $sql1="select name from channel where id=".$id;
 assign_vars_by_sql($sql1);
 
 //本频道活跃作者
-$sql2="select left(blogname,16) as tmp_blogname,blogname,blogurl,count(*) as month_article from author,article where article.author_id=author.id and article.addtime>(UNIX_TIMESTAMP()-30*86400) and (article.channel_id1=".$id." or article.channel_id2=".$id." or article.channel_id3=".$id.") group by author_id order by month_article desc limit 30";
+$sql2="select left(blogname,16) as tmp_blogname,blogname,blogurl,count(*) as month_article from author,article where article.author_id=author.id and article.addtime>(UNIX_TIMESTAMP()-30*86400) and (article.channel_id1=".$id." or article.channel_id2=".$id." or article.channel_id3=".$id.") group by author_id order by month_article desc limit 28";
 assign_block_vars_by_sql("activeAuthor", $sql2);
 
 //本频道热门作者
@@ -29,9 +29,11 @@ while($row=$db->sql_fetchrow($result))
 	$arr[$author_id]+=$vote;
 }
 arsort($arr);
-array_slice($arr,0,20);
+//array_slice($arr,0,20);
+$i=0;
 while(list($key,$val)=each($arr))
 {
+	$i++;
 	$blogname=getField($key,'blogname','author');
 	$tmp_blogname=substr_cut($blogname,10);
 	$blogurl=getField($key,'blogurl','author');
@@ -41,6 +43,10 @@ while(list($key,$val)=each($arr))
 		"blogurl"=>$blogurl,
 		"vote"=>$val
 		));
+	if($i>=21)
+	{
+		break;
+	}
 }
 
 //最新投稿文章
@@ -66,7 +72,7 @@ if(''!=$blogID)
 	$blogname=$db->sql_fetchfield(0,0,$result0);
 	$email=$db->sql_fetchfield(1,0,$result0);
 	$tpl->assign_vars(array(
-		"MESSAGE"=>$blogID.',您好，欢迎您来投稿!',
+		"MESSAGE"=>$blogID.'，您好，欢迎您来投稿!',
 		"FORMFUN"=>'',
 		"BLOGID"=>$blogID,
 		"BLOGNAME"=>$blogname,

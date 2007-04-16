@@ -4,6 +4,7 @@ $sql1="select * from article limit 0,50000";
 $result1=mysql_db_query('contributedb',$sql1);
 while($r=mysql_fetch_array($result1))
 {
+	$aid=$r['articleID'];
 	$blogLink=$r['blogLink'];
 	$blogid=substr($blogLink,7,strpos($blogLink,'.')-7);
 	if(''==$blogid)
@@ -30,7 +31,10 @@ while($r=mysql_fetch_array($result1))
 	if(''!=$author_id)
 	{
 		$sql4="insert into article set author_id=".$author_id.",title='".$title."',url='".$url."',addtime=".$addtime;
-		mysql_db_query('contribute',$sql4);
+		if(mysql_db_query('contribute',$sql4))
+		{
+			echo $author_id.':'.$aid."\r\n<br>";
+		}
 	}
 }
 ?>

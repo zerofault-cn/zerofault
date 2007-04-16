@@ -40,7 +40,7 @@ switch($dbms)
 $db = new sql_db($dbhost, $dbuser, $dbpasswd, $dbname, false);
 if(!$db->db_connect_id)
 {
-   die("Could not connect to the database");
+   die("系统调整，暂停使用，稍候即可恢复");
 }
 
 ?>

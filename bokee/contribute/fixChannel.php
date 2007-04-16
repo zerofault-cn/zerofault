@@ -9,10 +9,12 @@ while($r=mysql_fetch_array($result1))
 
 	$result2=mysql_db_query('contribute',$sql2);
 	$count=mysql_result($result2,0,0);
-echo	$sql3="update channel set article_count=".$count." where id=".$id;
+	$sql3="update channel set article_count=".$count." where id=".$id;
 	if(mysql_db_query('contribute',$sql3))
-		echo 'ok';
-	echo '<br>';
+	{
+		echo $id.":".$count."\r\n<br>";
+	}
+
 }
 
 ?>

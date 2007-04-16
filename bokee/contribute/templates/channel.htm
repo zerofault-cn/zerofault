@@ -20,7 +20,7 @@
   <TBODY>
   <TR>
     <TD background=image0523/header.gif>
-      <div align="center" class="style2">{name}</div>
+      <div align="center" style="color: #FF0000;font-weight: bold;font-size: 24px;">{name}</div>
       <TABLE cellSpacing=0 cellPadding=0 width=181 align=right border=0>
         <TBODY>
         </TBODY></TABLE></TD></TR></TBODY></TABLE>
@@ -50,13 +50,15 @@ border=0>
               <TBODY>
               <!-- BEGIN activeAuthor -->
               <TR>
-                <TD class=zt1><span style="float:left">·<A href="{activeAuthor.blogurl}" target="_blank" title="{activeAuthor.blogname}">{activeAuthor.tmp_blogname}</a></span><span style="float:right;margin-right:10px">{activeAuthor.month_article}</span></TD></TR>
+                <TD class=zt1><span style="float:left">·<A href="{activeAuthor.blogurl}" target="_blank" title="{activeAuthor.blogname}">{activeAuthor.tmp_blogname} </a></span><span style="float:right;margin-right:10px">{activeAuthor.month_article}篇</span></TD></TR>
               <!-- END activeAuthor -->
               </TBODY></TABLE></TD>
         </TR>
         <TR>
       <TD><IMG height=10 src="image0523/mybloged.gif" 
-        width=210></TD></TR></TBODY></TABLE>
+        width=210></TD></TR>
+		<tr><td height=10></td></tr>
+		</TBODY></TABLE>
       <TABLE cellSpacing=0 cellPadding=0 width=210 border=0>
         <TBODY>
 
@@ -72,7 +74,7 @@ border=0>
               <TBODY>
               <!-- BEGIN hotAuthor -->
               <TR>
-                <TD class=zt1><span style="float:left">·<A href="{hotAuthor.blogurl}" target="_blank" title="{hotAuthor.blogname}">{hotAuthor.tmp_blogname}</a></span><span style="float:right;margin-right:10px">{hotAuthor.vote}</span></TD>
+                <TD class=zt1><span style="float:left">·<A href="{hotAuthor.blogurl}" target="_blank" title="{hotAuthor.blogname}">{hotAuthor.tmp_blogname} </a></span><span style="float:right;margin-right:10px">{hotAuthor.vote}票</span></TD>
               </TR>
               <!-- END hotAuthor -->
               </TBODY></TABLE></TD>
@@ -93,18 +95,17 @@ border=0>
                         class=zt1>·您推荐的文章，将会被<A style="COLOR: #ff0000" 
                         href="http://blogs.bokee.com/">博客公社</A>和各个频道优先推广；<BR>
                 ·既可用本人的文章投稿，也可推荐他人的优秀作品；<BR>
-                ·带“*”为必填项；
+                ·带“*”为必填项；<BR>
                 ·点击rss，订阅网友第一时间推荐的文章。</SPAN></TD>
             </TR>
           </TBODY>
         </TABLE></td>
       </tr>
-	 
+	 <FORM name="addForm" onSubmit="return checkform2();" method="post" action="post.php" target="iframe1" {FORMFUN}>
       <tr>
-        <td>{MESSAGE} 
-		<FORM name="addForm" onSubmit="return checkform2();" method="post" action="post.php" target="iframe1" {FORMFUN}>
-                  <TABLE cellSpacing=0 cellPadding=0 width="95%" align=center 
-                  border=0>
+        <td class=zt1 style="color: #003333">{MESSAGE} </td></tr>
+	<tr><td>
+	<TABLE cellSpacing=0 cellPadding=0 width="95%" align=center border=0>
                     <TBODY>
 					
                     <TR class=zt1>
@@ -192,7 +193,7 @@ border=0>
                           <!-- BEGIN newArticle -->
                           <TR>
                             <TD class=th1 width=70 height=29><div align="left"><SPAN 
-                              class=zt1>{newArticle.tmp_blogname}</SPAN></div></TD>
+                              class=zt1>{newArticle.tmp_blogname} </SPAN></div></TD>
                             <TD width="292" align="left" class=th2><SPAN class=zt1><A 
                               href="{newArticle.url}" target="_blank" title="{newArticle.title}">·{newArticle.tmp_title} </A></SPAN></TD>
                             <TD width="42" class=th2>
@@ -243,7 +244,7 @@ border=0>
                           <!-- BEGIN hotArticle -->
                           <TR>
                             <TD class=th1 width=70 height=29><div align="left"><SPAN 
-                              class=zt1>{hotArticle.tmp_blogname}</SPAN></div></TD>
+                              class=zt1>{hotArticle.tmp_blogname} </SPAN></div></TD>
                             <TD width="292" align="left" class=th2><SPAN class=zt1><A 
                               href="{hotArticle.url}" target="_blank" title="{hotArticle.title}">·{hotArticle.tmp_title} </A></SPAN></TD>
                             <TD width="42" class=th2><input type="button" value="投票" onclick="window.open('poll.php?id={hotArticle.id}&author_id={hotArticle.author_id}');" /></TD>
