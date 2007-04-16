@@ -9,7 +9,7 @@ include_once($root_path."functions.php");
 $tpl = new Template($root_path."templates");
 $tpl->set_filenames(array('body' => 'index.htm'));
 //热门频道
-$sql1="select id,name,article_count from channel order by article_count desc limit 22";
+$sql1="select id,name,article_count from channel order by article_count desc limit 21";
 assign_block_vars_by_sql("hotChannel", $sql1);
 
 //用户可自由投稿的频道

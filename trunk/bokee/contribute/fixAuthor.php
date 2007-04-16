@@ -7,7 +7,13 @@ while($r=mysql_fetch_array($result1))
 	$author_id=$r['author_id'];
 	$count=$r['count'];
 	$sql2="update author set article_count=".$count.",month_article=".$count." where id='".$author_id."'";
-	echo $result2=mysql_db_query('contribute',$sql2);
-	
+	if(mysql_db_query('contribute',$sql2))
+	{
+		echo $author_id.":".$count."\r\n<br>";
+	}
+	else
+	{
+		echo $sql2;
+	}
 }
 ?>
