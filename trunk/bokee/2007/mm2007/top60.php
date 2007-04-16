@@ -6,12 +6,23 @@ include_once($root_path."includes/db.php");
 include_once($root_path."includes/template.php");
 include_once($root_path."functions.php");
 
-
 $tpl = new Template($root_path."templates");
 $tpl->set_filenames(array(
 			'body' => 'top60.htm')
 		);
-$sql="select * from mm_info where pass=2 order by allvote desc,id";
+$pass=$_REQUEST['pass'];
+if(''==$pass)
+{
+	$pass=1;
+}
+if($pass==1)//复活选手
+{
+	$sql="select * from mm_info where pass=1 order by allvote desc,id desc limit 10";
+}
+elseif($pass==2)//60强
+{
+	$sql="select * from mm_info where pass=2 order by allvote desc,id desc";
+}
 $result=$db->sql_query($sql);
 while($row=$db->sql_fetchrow($result))
 {
@@ -21,7 +32,7 @@ while($row=$db->sql_fetchrow($result))
 	$tmp_blogname=substr_cut($blogname,14);
 	$photo=$row['photo'];
 	$area=$row['area'];
-	$arr[$id]=array(
+	$tpl->assign_block_vars("list",array(
 		"ID"=>sprintf("%04d",$id),
 		"BLOGURL"=>$blogurl,
 		"BLOGNAME"=>$blogname,
@@ -30,13 +41,7 @@ while($row=$db->sql_fetchrow($result))
 		"SMSPOLLHEIGHT" => ($area==1)?'530':'322',
 		"PHOTO"=>$photo,
 		"AREA"=>$area
-		);
-//	$sql2="update mm_info set pass=2 where id=".$id;
-//	$db->sql_query($sql2);
-}
-while(list($key,$val)=each($arr))
-{
-	$tpl->assign_block_vars("top60list", $val);
+		));
 }
 $db->sql_close();
 $tpl->pparse('body');

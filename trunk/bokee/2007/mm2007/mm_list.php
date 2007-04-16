@@ -47,11 +47,11 @@ if($type=='new')//按报名顺序
 }
 elseif($type=='hot')//按票数顺序
 {
-	$sql="select * from mm_info where pass=1 and area=".$area." order by allvote desc,id";
+	$sql="select * from mm_info where pass=1 and area=".$area." order by allvote desc,id desc";
 }
 elseif($type=='hbhot')//湖北用户票数排序
 {
-	$sql="select * from mm_info where pass=1 and blogurl like '%home.hb.vnet.cn%' order by allvote desc,id";
+	$sql="select * from mm_info where pass=1 and blogurl like '%home.hb.vnet.cn%' order by allvote desc,id desc";
 }
 $pageitem=$limit;
 $result=$db->sql_query($sql);
@@ -84,7 +84,7 @@ while($row=$db->sql_fetchrow($result))
 		"SMSPOLL" => "poll.php?type=sms&area=".$area."&id=".$id,
 		"SMSPOLLWIDTH" => ($area==1)?'630':'630',
 		"SMSPOLLHEIGHT" => ($area==1)?'530':'322',
-		"ORDER" => ($type=='hot')?('赛区排名：第'.$order.'名'):'',
+		"ORDER" =>'',// ($type=='hot')?('赛区排名：第'.$order.'名'):'',
 		"INFO" => '报名时间：'.date("y/m/d",$row['addtime']),
 		"BOBOIMG" => $boboimg,
 		"BOBOIMGALT" => (1==$bobo_flag)?'欣赏视频':'上传视频',

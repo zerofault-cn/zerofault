@@ -13,7 +13,7 @@ $sql2="update mm_info set comm_count=comm_count-1 where id=".$mm_id;
 
 if(checkLogin(getField($mm_id,'blogurl')) && $db->sql_query($sql) && $db->sql_query($sql2))
 {
-	echo 'ok';
+	echo '<script>parent.location.reload();</script>';
 }
 else
 {

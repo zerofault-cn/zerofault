@@ -13,15 +13,90 @@ include_once($root_path."includes/db.php");
 include_once($root_path."includes/template.php");
 include_once($root_path."includes/page.php");
 
-$tpl = new Template($root_path."templates");
-$tpl->set_filenames(array('body' => 'comment.htm'));
-
 $page=$_REQUEST["page"];
 $id=$_REQUEST['id'];//此id为mm_info表的id,即comment表里的mm_id
 if(''==$id)
 {
 	$id=0;
 }
+
+
+//处理提交留言的表单
+$username	= trim($_POST['username']);
+$content	= trim($_POST['content']);
+if(''!=$_POST['submit'])
+{
+	//判断是否刷屏
+	if(isset($_SESSION["lasttime"]))
+	{
+		if($_SESSION["lastcontent"]==$content)
+		{
+			echo "<script>alert('留言不要老是那一句啊！');location='?".$_SERVER["QUERY_STRING"]."';</script>";
+			exit;
+		}
+		if(time()-$_SESSION["lasttime"] < 60)
+		{
+			echo "<script>alert('您留言频率也太快了吧！');location='?".$_SERVER["QUERY_STRING"]."';</script>";
+			exit;
+		}
+		else
+		{
+			$_SESSION['lasttime']=time();
+			$_SESSION['lastcontent']=$content;
+		}
+	}
+	else
+	{
+		$_SESSION['lasttime']=time();
+		$_SESSION['lastcontent']=$content;
+	}
+	if(strlen($content)<2)
+	{
+		echo "<script>alert('您的留言也太短了！');history.back();</script>";
+		exit;
+	}
+	include_once ("./filter.php");//引用屏蔽字符数组$filter_arr
+	$slen=strlen($content);
+	//
+	if(strlen(str_replace("href=","",$content))<$strlen || strlen(eregi_replace("^[[[0-9]{1,4}][[a-z]{1,4}]+]+$","",$content))<$strlen || strlen( str_replace($filter_arr,'',$content) ) < $slen)//如果有字符被屏蔽，则新字符串比原字符串短，以此来判断是否含有脏字
+	{
+		header("location:?".$_SERVER["QUERY_STRING"]."&filter");
+		exit;
+	}
+	$client_ip=GetIP();
+	if(strpos($client_ip,',')>0)
+	{
+		header("location:?".$_SERVER["QUERY_STRING"]."&ip");
+		exit;
+	}
+	$sql0="select count(*) from mm_comment where addtime>(UNIX_TIMESTAMP()-60) and ip='".$client_ip."'";
+	$result0=$db->sql_query($sql0);//同一IP留言时间间隔至少60秒
+	if($db->sql_fetchfield(0,0,$result0)>0)
+	{
+		header("location:?".$_SERVER["QUERY_STRING"]."&time");
+		exit;
+	}
+	$sql="insert into mm_comment set username='".$username."',content='".format($content)."',addtime=".time().",mm_id='".$id."',ip='".$client_ip."'";
+	$sql2="update mm_info set comm_count=comm_count+1 where id=".$id;
+	if($db->sql_query($sql))
+	{
+		if($id>0)
+		{
+			$db->sql_query($sql2);//更新留言计数
+		}
+		header("location:?".$_SERVER["QUERY_STRING"]."&ok");
+	//	echo '<script>window.location="?'.$_SERVER["QUERY_STRING"].'";</script>';
+	}
+	else
+	{
+		echo '<script>alert("有错误发生!请稍后再试，或者联系客服人员");window.location="?'.$_SERVER["QUERY_STRING"].'";</script>';
+	}
+}
+//处理提交留言结束
+
+$tpl = new Template($root_path."templates");
+$tpl->set_filenames(array('body' => 'comment.htm'));
+
 if($id>0)
 {
 	$sql="select * from mm_info where pass=1 or pass=2 and id=".$id;
@@ -96,74 +171,7 @@ else
 		"INFODISPLAY" => "display:none"
 		));
 }
-$username	= trim($_POST['username']);
-$content	= trim($_POST['content']);
-if(''!=$_POST['submit'])
-{
-	//判断是否刷屏
-	if(isset($_SESSION["lasttime"]))
-	{
-		if($_SESSION["lastcontent"]==$content)
-		{
-			echo "<script>alert('留言不要老是那一句啊！');location='?".$_SERVER["QUERY_STRING"]."';</script>";
-			exit;
-		}
-		if(time()-$_SESSION["lasttime"] < 60)
-		{
-			echo "<script>alert('您留言频率也太快了吧！');location='?".$_SERVER["QUERY_STRING"]."';</script>";
-			exit;
-		}
-		else
-		{
-			$_SESSION['lasttime']=time();
-			$_SESSION['lastcontent']=$content;
-		}
-	}
-	else
-	{
-		$_SESSION['lasttime']=time();
-		$_SESSION['lastcontent']=$content;
-	}
-	if(strlen($content)<2)
-	{
-		echo "<script>alert('您的留言也太短了吧！');history.back();</script>";
-		exit;
-	}
-	include_once ("./filter.php");//引用屏蔽字符数组$filter_arr
-	if(strlen( str_replace($filter_arr,'',$content) ) < strlen($content) )//如果有字符被屏蔽，则新字符串比原字符串短，以此来判断是否含有脏字
-	{
-		header("location:?".$_SERVER["QUERY_STRING"]);
-		exit;
-	}
-	$client_ip=GetIP();
-	if(strpos($client_ip,',')>0)
-	{
-		header("location:?".$_SERVER["QUERY_STRING"]);
-		exit;
-	}
-	$sql0="select count(*) from mm_comment where addtime>(UNIX_TIMESTAMP()-60) and ip='".$client_ip."'";
-	$result0=$db->sql_query($sql0);//同一IP留言时间间隔至少60秒
-	if($db->sql_fetchfield(0,0,$result0)>0)
-	{
-		header("location:?".$_SERVER["QUERY_STRING"]);
-		exit;
-	}
-	$sql="insert into mm_comment set username='".$username."',content='".format($content)."',addtime=".time().",mm_id=".$id.",ip='".$client_ip."'";
-	$sql2="update mm_info set comm_count=comm_count+1 where id=".$id;
-	if($db->sql_query($sql))
-	{
-		if($id>0)
-		{
-			$db->sql_query($sql2);//更新留言计数
-		}
-		header("location:?".$_SERVER["QUERY_STRING"]);
-	//	echo '<script>window.location="?'.$_SERVER["QUERY_STRING"].'";</script>';
-	}
-	else
-	{
-		echo '<script>alert("有错误发生!请稍后再试，或者联系客服人员");window.location="?'.$_SERVER["QUERY_STRING"].'";</script>';
-	}
-}
+
 
 /**
 *右边留言列表
