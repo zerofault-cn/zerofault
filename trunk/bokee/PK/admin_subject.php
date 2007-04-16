@@ -75,7 +75,15 @@ $db->sql_close();
 </div>
 <iframe frameborder="0" scrolling="no" id="iframe1" name="iframe1" width="600" height="50" src=""></iframe>
 <script>
+var last_id=0;
 function modify(id) {
+	if(last_id!=0)
+	{
+		last_t1=document.getElementById(last_id);
+		last_t2=document.getElementById('title'+last_id);
+		last_t1.innerHTML=last_t2.value;
+	}
+	last_id=id;
 	t=document.getElementById(id);
 	old_title=t.innerHTML;
 	if(''!=old_title)

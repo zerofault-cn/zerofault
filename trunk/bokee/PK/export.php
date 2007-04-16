@@ -38,6 +38,11 @@ if($_REQUEST['submit1'])
 		$field='c_comment';
 		$field2='c_comm';
 	}
+	if(''==$title && ''==$content)
+	{
+		echo "<script>parent.getData('".$field."');parent.getData('".$field2."');</script>";
+		exit;
+	}
 	$sql1="insert into comment set sid='".$sid."',side=".$side.",username='".$username."',content='".format($content)."',addtime=UNIX_TIMESTAMP(),ip='".$ip."'";
 	$sql2="update subject set ".$field2."=".$field2."+1 where id=".$sid;
 	if($db->sql_query($sql1) && $db->sql_query($sql2))
