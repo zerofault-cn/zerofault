@@ -14,7 +14,7 @@ include_once($root_path."includes/template.php");
 include_once($root_path."includes/page.php");
 
 $tpl = new Template($root_path."templates");
-$tpl->set_filenames(array('body' => 'comment2.htm'));
+$tpl->set_filenames(array('body' => 'comment.htm'));
 
 $page=$_REQUEST["page"];
 $id=$_REQUEST['id'];//此id为mm_info表的id,即comment表里的mm_id
@@ -24,7 +24,7 @@ if(''==$id)
 }
 if($id>0)
 {
-	$sql="select * from mm_info where pass=1 and id=".$id;
+	$sql="select * from mm_info where pass=1 or pass=2 and id=".$id;
 	if($db->sql_numrows($db->sql_query($sql))==0)
 	{
 		echo "此用户还未通过审核,请等待审核通过后才能查看此页面!";
@@ -38,20 +38,22 @@ $area_arr = array(
 
 if($id>0)
 {
-	$sql="select id,area from mm_info where pass=1 order by allvote desc,id";
+	$sql="select * from mm_info where id=".$id;
 	$result=$db->sql_query($sql);
-	while($row=$db->sql_fetchrow($result))
+	$row=$db->sql_fetchrow($result);
+	$pass=$row['pass'];
+	//获取排名
+	$sql2="select id from mm_info where pass=".$pass." order by allvote desc,id desc";
+	$result2=$db->sql_query($sql2);
+	while($row2=$db->sql_fetchrow($result2))
 	{
-		$order[intval($row['area'])]++;
-		if($id==$row['id'])
+		$order++;//总排名
+		if($id==$row2['id'])
 		{
 			break;
 		}
 	}
-	$db->sql_freeresult();
-	$sql="select * from mm_info where id=".$id;
-	$result=$db->sql_query($sql);
-	$row=$db->sql_fetchrow($result);
+
 	$blogurl=$row['blogurl'];
 	$bokeeurl=substr($blogurl,7);
 	if(strpos($bokeeurl,'/')>0)
@@ -78,10 +80,12 @@ if($id>0)
 		"BOBOLINK" => (strlen(file_get_contents($boboimg))==711)?$viewurl:$uploadurl,
 		"DATE" => date("y/m/d",$row['addtime']),
 		"ALLVOTE" => $row['allvote'],
-		"ORDER" => '赛区排名：第'.$order[$row['area']].'名',
+		"ORDER" => ((1==$pass)?'复活选手排名':'60强排名').'：第'.$order.'名',
 		"FLASHOUTSIDEID" => 'flash_outside_spec',
 		"LOGINDISPLAY" => "display:none"
 		));
+	
+	
 }
 else
 {

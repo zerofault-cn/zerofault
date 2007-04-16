@@ -14,7 +14,7 @@ include_once($root_path."includes/template.php");
 include_once($root_path."includes/page.php");
 
 $tpl = new Template($root_path."templates");
-$tpl->set_filenames(array('body' => 'comment.htm'));
+$tpl->set_filenames(array('body' => 'comment2.htm'));
 
 $page=$_REQUEST["page"];
 $id=$_REQUEST['id'];//此id为mm_info表的id,即comment表里的mm_id
@@ -53,6 +53,15 @@ if($id>0)
 	$result=$db->sql_query($sql);
 	$row=$db->sql_fetchrow($result);
 	$blogurl=$row['blogurl'];
+	$bokeeurl=substr($blogurl,7);
+	if(strpos($bokeeurl,'/')>0)
+	{
+		$bokeeurl=substr($bokeeurl,0,strpos($bokeeurl,'/'));
+	}
+	$viewurl='http://my.bobo.com.cn/bokee/zhong.php?flag=view&userid='.$id.'&bokeeURL='.$bokeeurl;
+	$uploadurl=checkLogin($blogurl)?'http://my.bobo.com.cn/bokee/zhong.php?flag=up&userid='.$id.'&bokeeURL='.$bokeeurl:'http://reg.bokee.com/account/LoginCtrl.b';
+//	$uploadurl='http://my.bobo.com.cn/bokee/zhong.php?flag=up&userid=3&bokeeURL=dede0616.bokee.com';
+	$boboimg='http://my.bobo.com.cn/bokee/changepic.php?userid='.$id;
 	$tpl->assign_vars(array(
 		"ID" => sprintf("%04d",$id),
 		"BLOGURL" => $blogurl,
@@ -64,6 +73,9 @@ if($id>0)
 		"SMSPOLL" => "poll.php?type=sms&area=".$row['area']."&id=".$row["id"],
 		"SMSPOLLWIDTH" => ($row['area']==1)?'630':'630',
 		"SMSPOLLHEIGHT" => ($row['area']==1)?'530':'322',
+		"BOBOIMG" => $boboimg,
+		"BOBOIMGALT" => 'BOBO视频',
+		"BOBOLINK" => (strlen(file_get_contents($boboimg))==711)?$viewurl:$uploadurl,
 		"DATE" => date("y/m/d",$row['addtime']),
 		"ALLVOTE" => $row['allvote'],
 		"ORDER" => '赛区排名：第'.$order[$row['area']].'名',
