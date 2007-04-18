@@ -127,15 +127,14 @@ if(''!=$_REQUEST['submit'])//处理搜索
 }
 else
 {
-	if($s_pass==0 && $old==1)
-	{
-		$sqlext.=" and addtime<=".(time()-7*24*3600);//一周之前注册的且未通过审核的放入黑名单
-	}
-	elseif($s_pass==0 && $old==0)
+	if(0==$s_pass)
 	{
 		$sqlext.=" and addtime>".(time()-7*24*3600);
 	}
-	$sql="select * from mm_info where pass=".$s_pass.$sqlext." order by ".$order." desc,id";
+	else
+	{
+		$sql="select * from mm_info where pass=".$s_pass.$sqlext." order by ".$order." desc,id desc";
+	}
 }
 //echo $sql;
 //echo '<br>';
@@ -203,7 +202,8 @@ $tpl->assign_vars(array(
 	"COLOR13" => (3==$s_area)?'#6699FF':'',
 	"COLOR20" => (2==$s_pass)?'#99CCFF':'',
 	"COLOR21" => (1==$s_pass && 'id'==$order)?'#99CCFF':'',
-	"COLOR22" => ('allvote'==$order)?'#99CCFF':'',
+	"COLOR22" => (1==$s_pass && 'allvote'==$order)?'#99CCFF':'',
+	"COLOR23" => (0==$s_pass && 'id'==$order)?'#99CCFF':'',
 	"COUNT" => '('.$total.'名)',
 	"PAGE" => $pagenav
 ));

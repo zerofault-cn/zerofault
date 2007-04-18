@@ -64,9 +64,14 @@ if(''!=$_POST['submit'])
 		exit;
 	}
 	$client_ip=GetIP();
+	if(ereg("^((123.112.102.102)|(124.116.2.21))$",$client_ip))
+	{
+		header("location:?".$_SERVER["QUERY_STRING"]);
+		exit;
+	}
 	if(strpos($client_ip,',')>0)
 	{
-		header("location:?".$_SERVER["QUERY_STRING"]."&ip");
+		header("location:?".$_SERVER["QUERY_STRING"]);
 		exit;
 	}
 	$sql0="select count(*) from mm_comment where addtime>(UNIX_TIMESTAMP()-60) and ip='".$client_ip."'";

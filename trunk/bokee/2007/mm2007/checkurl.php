@@ -6,7 +6,7 @@ include_once($root_path."config.php");
 include_once($root_path."includes/db.php");
 if(mktime(14,0,0,1,18,2007)<time() && time()<mktime(14,0,0,4,12,2007))//海选投票日期
 {
-	echo "<script>parent.setErr(2);</script>";
+//	echo "<script>parent.setErr(2);</script>";
 }
 $blogurl=$_REQUEST['url'];
 $tmp_blogurl=substr($blogurl,7);

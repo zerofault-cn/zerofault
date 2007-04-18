@@ -5,7 +5,7 @@ if(mktime(14,0,0,1,18,2007)<time() && time()<mktime(14,0,0,4,18,2007))//海选投票
 	$sms_table="poll_sms1";
 	$ip_table="poll_ip1";
 }
-elseif(mktime(14,0,0,4,18,2007)<time() && time()<mktime(14,0,0,5,16,2007))//复赛投票期
+elseif(mktime(14,0,0,4,18,2007)<time() && time()<mktime(14,0,0,5,18,2007))//复赛投票期
 {
 	$sms_table="poll_sms2";
 	$ip_table="poll_ip2";

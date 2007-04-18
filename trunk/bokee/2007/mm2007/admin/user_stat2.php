@@ -54,7 +54,7 @@ while(list($key,$val)=each($arr))
 	echo '<div style="border-bottom:1px dotted #aaa;"><span style="width:450px;float:right;text-align:left;padding:2px;"><span style="width:'.(2*$val).'px;background-color:#00f;margin:2px;"> </span>'.$val.' 票</span><span style="width:120px;float:left;text-align:right;padding:2px;"><a href="smsvote_info.php?mm_id='.$key.'&date='.$date.'" target="_blank">'.sprintf("%04d",$key).'</a>：</span></div>';
 }
 echo '</div>';
-
+/*
 $sql2="select mm_id,count(*) as count from ".$ip_table." where polltime>=".$date." and polltime<".($date+24*60*60)." group by mm_id order by count desc";
 $result2=$db->sql_query($sql2);
 echo '<div style="width:580px;margin-top:20px;border:1px solid #00f;text-align:left;padding-top:4px;">';
@@ -111,7 +111,7 @@ while(list($key,$val)=each($arr3))
 	echo '<div style="border-bottom:1px dotted #aaa;"><span style="width:510px;float:right;text-align:left;padding:2px;"><span style="width:'.($tmp_count/10).'px;background-color:#00f;margin:2px;"> </span>'.$val.' 票</span><span style="width:60px;float:left;text-align:right;padding:2px;"><a href="../comment.php?id='.$key.'" target="_blank">'.sprintf("%04d",$key).'</a>：</span></div>';
 }
 echo '</div>';
-
+*/
 $sql4="select mm_id,count(*) as count from mm_comment where addtime>=".$date." and addtime<".($date+24*60*60)." group by mm_id order by count desc limit 10";
 echo '<div style="width:580px;margin-top:20px;border:1px solid #00f;text-align:left;padding-top:4px;">';
 echo '当天留言增加数排行:';

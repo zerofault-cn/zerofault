@@ -16,7 +16,7 @@ $area_arr = array('','中部赛区','南部赛区','北部赛区');
 echo '<div style="width:800px;margin-top:10px;margin-left:150px;text-align:center;border:1px solid #000;padding:10px 0;">';
 echo '<div>第二届美女博客大赛选手赛区排名</div>';
 
-$sql1="select * from mm_info where pass=1 order by allvote desc limit 90";
+$sql1="select * from mm_info order by allvote desc limit 90";
 $result1=$db->sql_query($sql1);
 while($row=$db->sql_fetchrow($result1))
 {

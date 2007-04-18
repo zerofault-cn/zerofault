@@ -12,9 +12,8 @@ include_once($root_path."includes/db.php");
 include_once($root_path."functions.php");
 include_once($root_path."dbtable.php");
 
-$day_limit=5;//每天限投5票
+$day_limit=30;//每天限投5票
 $month_limit=30;//每月限投30票
-$multi=30;//每短信投票相当于30点网络投票
 
 $sp_server='219.141.223.103';//SP服务器的地址
 $authuser='boke';//发送下行短信的用户名和密码
@@ -43,7 +42,7 @@ while($row=$db->sql_fetchrow($result1))
 	$month_poll		= $row['month_poll'];//本月已投票数
 	$status			= $row['status'];
 	
-	$reply='您的投票已成功，'.sprintf("%04d",$mm_id).'号选手目前'.(getField($mm_id,'smsvote')+$addvote).'票。如果您的投票超过5票/日、30票/月的限制，系统将不再回复。客服：010-51818877';
+	$reply='您的投票已成功，'.sprintf("%04d",$mm_id).'号选手目前'.(getField($mm_id,'smsvote')+$addvote).'票。如果您的投票超过'.$day_limit.'票/日、'.$month_limit.'票/月的限制，系统将不再回复。客服：010-51818877';
 	if($month_poll>=25)
 	{
 	//	$reply.='提示：您本月还能投'.($month_limit-$month_poll).'票！';
@@ -68,11 +67,11 @@ while($row=$db->sql_fetchrow($result1))
 		echo "<br>\r\n";
 		continue;
 	}
-	$sql2="update mm_info set smsvote=(smsvote+".$addvote."),allvote=(allvote+".$multi*$addvote.") where id=".$mm_id;
+	$sql2="update mm_info set smsvote=(smsvote+".$addvote."),allvote=(allvote+".$addvote.") where id=".$mm_id;
 	$sql3="update ".$sms_table." set status=(status+1),dealtime=UNIX_TIMESTAMP(),re_smsid=".$result_arr['response']['smsid']." where id=".$id;
 	if(sizeof($result_arr)>0 && $result_arr['response']['responsecode']==0 && intval($result_arr['response']['smsid'])>0)
 	{
-		if($db->sql_query($sql2) && $db->sql_query($sql3))
+		if($db->sql_query($sql3) && $db->sql_query($sql2))
 		{
 			echo 'pollok:'.$id;
 			echo "<br>\r\n";

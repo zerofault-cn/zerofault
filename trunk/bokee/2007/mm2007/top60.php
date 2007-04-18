@@ -37,8 +37,8 @@ while($row=$db->sql_fetchrow($result))
 		"BLOGURL"=>$blogurl,
 		"BLOGNAME"=>$blogname,
 		"TMP_BLOGNAME"=>$tmp_blogname,
-		"SMSPOLLWIDTH" => ($area==1)?'630':'630',
-		"SMSPOLLHEIGHT" => ($area==1)?'530':'322',
+		"SMSPOLLWIDTH" => ($area==1)?'608':'608',
+		"SMSPOLLHEIGHT" => ($area==1)?'520':'320',
 		"PHOTO"=>$photo,
 		"AREA"=>$area
 		));
