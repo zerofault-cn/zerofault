@@ -101,10 +101,10 @@ border=0>
           </TBODY>
         </TABLE></td>
       </tr>
-	 <FORM name="addForm" onSubmit="return checkform2();" method="post" action="post.php" target="iframe1" {FORMFUN}>
+	 
       <tr>
         <td class=zt1 style="color: #003333">{MESSAGE} </td></tr>
-	<tr><td>
+	<tr><td><FORM name="addForm" onSubmit="return checkform2();" method="post" action="post.php" target="iframe1" {FORMFUN}>
 	<TABLE cellSpacing=0 cellPadding=0 width="95%" align=center border=0>
                     <TBODY>
 					
@@ -164,7 +164,7 @@ border=0>
               <TR>
                 <TD vAlign=center background=image0523/changeh.gif 
                 height=28><div align="left"><SPAN class=title2>·最新文章</SPAN> 
-                	<INPUT onclick=javascript:window.open("{RSSURL}"); type=image height=14 width=36 
+                	<INPUT onclick="javascript:window.open('rss.php?id={ID}');" type=image height=14 width=36 
                         src="image0523/rss.gif" border=none>
                   </div>
                   <TABLE cellSpacing=0 cellPadding=0 width="50%" align=right 
@@ -197,7 +197,7 @@ border=0>
                             <TD width="292" align="left" class=th2><SPAN class=zt1><A 
                               href="{newArticle.url}" target="_blank" title="{newArticle.title}">·{newArticle.tmp_title} </A></SPAN></TD>
                             <TD width="42" class=th2>
-							<input type="button" value="投票" onclick="window.open('poll.php?id={newArticle.id}&author_id={newArticle.author_id}');" />
+							<input type="button" value="投票" onclick="window.open('poll.php?id={newArticle.article_id}&author_id={newArticle.author_id}');" />
                            </TD>
                             <TD class=th2><div align="center" class="style3">{newArticle.datetime}</div></TD>
                           </TR>
@@ -247,7 +247,7 @@ border=0>
                               class=zt1>{hotArticle.tmp_blogname} </SPAN></div></TD>
                             <TD width="292" align="left" class=th2><SPAN class=zt1><A 
                               href="{hotArticle.url}" target="_blank" title="{hotArticle.title}">·{hotArticle.tmp_title} </A></SPAN></TD>
-                            <TD width="42" class=th2><input type="button" value="投票" onclick="window.open('poll.php?id={hotArticle.id}&author_id={hotArticle.author_id}');" /></TD>
+                            <TD width="42" class=th2><input type="button" value="投票" onclick="window.open('poll.php?id={hotArticle.article_id}&author_id={hotArticle.author_id}');" /></TD>
                             <TD class=th2><div align="center" class="style3">{hotArticle.vote}</div></TD>
                           </TR>
                           <!-- END hotArticle -->

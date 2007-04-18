@@ -61,4 +61,5 @@ function getBlogID()
 	$cBlogID=substr($bokie[1],0,strpos($bokie[1],'.'));
 	return $cBlogID;
 }
+
 ?>

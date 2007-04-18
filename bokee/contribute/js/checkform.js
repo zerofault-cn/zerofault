@@ -18,7 +18,7 @@ function checkform1()
 		document.addForm.blogname.focus();
 		return false;
 	}
-	if(document.addForm.blogurl.value=="" || document.addForm.blogurl.value.indexOf('?')>0)
+	if(document.addForm.blogurl.value=="" || document.addForm.blogurl.value.length<18)
 	{
 		alert("请输入博客链接地址！");
 		document.addForm.blogurl.focus();
