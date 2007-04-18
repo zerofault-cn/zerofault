@@ -12,9 +12,9 @@ include_once($root_path."includes/db.php");
 include_once($root_path."functions.php");
 include_once($root_path."dbtable.php");//根据不同的投票时间段选取不同的数据表
 
-$day_limit=5;//每天限投5票
+$day_limit=30;//每天限投5票
 $month_limit=30;//每月限投30票
-$multi=30;//每短信投票相当于30点网络投票
+$log_file="sms_query2.txt";
 
 /*
 本程序只接收上行短信，存入数据库，但不处理下行
@@ -50,8 +50,8 @@ $smsid		= $_REQUEST['smsid'];//短信编号。
 */
 if(''==$phone || ''==$Service_code || ''==$content || ''==$connId || ''==$linkId || ''==$pgId || ''==$smsid)
 {
-	echo $info='参数不完整';
-	writeLog('sms_query.txt',$_SERVER["QUERY_STRING"],$info);
+	echo $info='[error01:参数不完整]';
+	writeLog($log_file,$_SERVER["QUERY_STRING"],$info);
 	exit;
 }
 /*
@@ -71,22 +71,15 @@ else
 {
 	if($content=='0000')//某些已知的错误代码，不写日志
 	{
-		echo 'err0:错误的短信代码:0000';
+		echo '短信代码:0000';
 		exit;
 	}
 	else
 	{
-		echo $info='err1:错误的短信代码';
-		writeLog('sms_query.txt',$_SERVER["QUERY_STRING"],$info);
+		echo $info='[error02:错误的短信代码]';
+		writeLog($log_file,$_SERVER["QUERY_STRING"],$info);
 		exit;
 	}
-}
-$sql0="select * from mm_info where id=".$mm_id." and pass=1";
-if($db->sql_numrows($db->sql_query($sql0))==0)
-{
-	echo $info='err2:错误的用户ID:'.$mm_id;
-	writeLog('sms_query.txt',$_SERVER["QUERY_STRING"],$info);
-	exit;
 }
 if(strlen($phone)>11)
 {
@@ -120,59 +113,51 @@ $status=0;
 //检查是否超过每日投票限制
 $sql1="select count(*) from ".$sms_table." where polltime>".$today_start." and (status=0 or status=1) and addvote=1 and feephone='".$feephone."'";
 $sql10="select 5*count(*) from ".$sms_table." where polltime>".$today_start." and (status=0 or status=1) and addvote=5 and feephone='".$feephone."'";
-$day_poll=$db->sql_fetchfield(0,0,$db->sql_query($sql1)) + $db->sql_fetchfield(0,0,$db->sql_query($sql10));
+$day_poll=$db->sql_fetchfield(0,0,$db->sql_query($sql1))+$db->sql_fetchfield(0,0,$db->sql_query($sql10));
 if($day_poll>=$day_limit)
 {
 	$status=2;
-	$pgId=76;//免费下行
 }
 elseif($day_poll+$addvote>$day_limit)
 {
 	$status=6;
-	$pgId=76;
 }
 //检查是否超过每月投票限制
-$sql2="select count(*) from ".$sms_table." where polltime>".$month_start." and (status=0 || status=1) and addvote=1 and feephone='".$feephone."'";
-$sql20="select 5*count(*) from ".$sms_table." where polltime>".$month_start." and (status=0 || status=1) and addvote=5 and feephone='".$feephone."'";
-$month_poll=$db->sql_fetchfield(0,0,$db->sql_query($sql2)) + $db->sql_fetchfield(0,0,$db->sql_query($sql20));
+$sql2="select count(*) from ".$sms_table." where polltime>".$month_start." and (status=0 or status=1) and addvote=1 and feephone='".$feephone."'";
+$sql20="select 5*count(*) from ".$sms_table." where polltime>".$month_start." and (status=0 or status=1) and addvote=5 and feephone='".$feephone."'";
+$month_poll=$db->sql_fetchfield(0,0,$db->sql_query($sql2))+$db->sql_fetchfield(0,0,$db->sql_query($sql20));
 if($month_poll>=$month_limit)
 {
 	$status=4;
-	$pgId=76;
 }
 elseif($month_poll+$addvote>$month_limit)
 {
 	$status=8;
-	$pgId=76;
 }
 $sql3="insert into ".$sms_table." set phone='".$phone."',service_code='".$Service_code."',content='".$content."',connId='".$connId."',linkId='".$linkId."',pgId='".$pgId."',feephone='".$feephone."',smsid='".$smsid."',polltime=UNIX_TIMESTAMP(),mm_id=".$mm_id.",addvote=".$addvote.",day_poll=".$day_poll.",month_poll=".$month_poll.",status=".$status;
 if($db->sql_query($sql3))
 {
 	if($status==0)
 	{
-		echo $info=$feephone.'给'.sprintf("%04d",$mm_id).'投'.$addvote.'票ok！';
+		echo $info='['.$feephone.'给'.sprintf("%04d",$mm_id).'投'.$addvote.'票ok！]';
 	}
 	elseif($status==2)
 	{
-		echo $info='您今天已经投了'.$day_limit.'票了';
+		echo $info='[您今天已经投了'.$day_limit.'票了]';
 	}
 	elseif($status==4)
 	{
-		echo $info='您本月已经投了'.$month_limit.'票了';
+		echo $info='[您本月已经投了'.$month_limit.'票了]';
 	}
 	elseif($status==6)
 	{
-		echo $info='您今天已经投了'.$day_poll.'票了,已经不能再一次投5票了';
+		echo $info='[您今天已经投了'.$day_poll.'票了,已经不能再一次投5票了]';
 	}
 	elseif($status==8)
 	{
-		echo $info='您本月已经投了'.$month_poll.'票了,已经不能再一次投5票了';
+		echo $info='[您本月已经投了'.$month_poll.'票了,已经不能再一次投5票了]';
 	}
-	else
-	{
-		echo $info='其他未知错误';
-	}
-	writeLog('sms_query.txt',$_SERVER["QUERY_STRING"],$info);
+	writeLog($log_file,$_SERVER["QUERY_STRING"],$info);
 }
 else
 {

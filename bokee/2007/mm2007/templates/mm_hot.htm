@@ -2,12 +2,10 @@
 <div class="order_unit"> <a href="{list.BLOGURL}" target="_blank"><img src="mm2007/{list.PHOTO}" alt="{list.TITLE}" /></a>
         <p class="order_unit_b"> 编号：{list.ID}<br />
           <a href="{list.BLOGURL}" target="_blank" title="{list.TITLE}">{list.BLOGNAME}</a><br />
-          <input type="button" class="btn_s" value="投票" onclick="window.open('mm2007/{list.POLL}','','width=300,height=170,toolbar=no,status=no,scrollbars=auto,resizable=yes')" />
+          <input type="button" class="btn_s" value="投票" onclick="window.open('mm2007/{list.SMSPOLL}','','width={list.SMSPOLLWIDTH},height={list.SMSPOLLHEIGHT},toolbar=no,status=no,scrollbars=auto,resizable=yes')" />
           <input type="button" class="btn_s" value="留言" onclick="window.open('mm2007/{list.COMMENT}','','')" />
           <br />
-          <input type="button" class="btn_l" value="手机投票" onclick="window.open('mm2007/{list.SMSPOLL}','','width={list.SMSPOLLWIDTH},height={list.SMSPOLLHEIGHT},toolbar=no,status=no,scrollbars=auto,resizable=yes')" />
-          <br />
-		  <a href="{list.BOBOLINK}"><img style="width:78px;height:20px" src="{list.BOBOIMG}" border="0" width="78" height="20" alt="{list.BOBOIMGALT}"></a>
+          <a href="{list.BOBOLINK}"><img style="width:78px;height:20px" src="{list.BOBOIMG}" border="0" width="78" height="20" alt="{list.BOBOIMGALT}"></a>
           {list.ORDER}<br />
           {list.INFO}<br />
         </p>

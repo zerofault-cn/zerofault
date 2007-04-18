@@ -19,8 +19,13 @@ $type=$_REQUEST['type'];
 $area=$_REQUEST['area'];
 if(''==$type)
 {
-	$type='net';
+	$type='sms';
 }
+
+//复赛只支持短信
+$type='sms';
+
+//网络投票不会被执行
 if($type=='net')
 {
 	//检验浏览器是否支持cookie
@@ -144,26 +149,26 @@ elseif($type=='sms')
 {
 	if($area==1)
 	{
-		echo '<body style="margin:0;background:#ffcc70 url(images/smsbg2_hb.gif) no-repeat top left;font-size:14px;color:#00f;font-weight:bold;">';
-		echo '<div style="position:absolute;left:240px;top:70px;width:14px;font-size:14px;line-height:140%;"><a style="color:#00f;text-decoration:none;" href="../choujiang.shtml" target="_blank">手机短信投票  30票赢大奖</a></div>';
-		echo '<div style="position:absolute;left:218px;top:295px;font-size:12px;line-height:140%;"><a style="color:#00f;text-decoration:none;" href="../choujiang.shtml" target="_blank">查看详细</a></div>';
-		echo '<div style="position:absolute;left:489px;top:103px;">'.sprintf("%04d",$id).'</div>';
-		echo '<div style="position:absolute;left:482px;top:147px;">'.sprintf("%04d",$id).'</div>';
-		echo '<div style="position:absolute;left:475px;top:191px;">'.sprintf("%04d",$id).'</div>';
-		echo '<div style="position:absolute;left:475px;top:235px;">'.sprintf("%04d",$id).'</div>';
-		echo '<div style="position:absolute;left:314px;top:372px;">'.sprintf("%04d",$id).'</div>';
-		echo '<div style="position:absolute;left:327px;top:396px;">'.sprintf("%04d",$id).'</div>';
+		echo '<body style="margin:0;background:#ffcc70 url(images/smsbg_hb.gif) no-repeat top left;font-size:14px;color:#00f;font-weight:bold;">';
+		echo '<div style="position:absolute;left:220px;top:70px;width:14px;font-size:14px;line-height:140%;"><a style="color:#00f;text-decoration:none;" href="../choujiang.shtml" target="_blank">手机短信投票  30票赢大奖</a></div>';
+		echo '<div style="position:absolute;left:198px;top:298px;font-size:12px;line-height:140%;"><a style="color:#00f;text-decoration:none;" href="../choujiang.shtml" target="_blank">查看详细</a></div>';
+		echo '<div style="position:absolute;left:461px;top:89px;">'.sprintf("%04d",$id).'</div>';
+		echo '<div style="position:absolute;left:454px;top:133px;">'.sprintf("%04d",$id).'</div>';
+		echo '<div style="position:absolute;left:446px;top:177px;">'.sprintf("%04d",$id).'</div>';
+		echo '<div style="position:absolute;left:446px;top:221px;">'.sprintf("%04d",$id).'</div>';
+		echo '<div style="position:absolute;left:312px;top:363px;">'.sprintf("%04d",$id).'</div>';
+		echo '<div style="position:absolute;left:326px;top:387px;">'.sprintf("%04d",$id).'</div>';
 		echo '</body>';
 	}
 	else
 	{
-		echo '<body style="margin:0;background:#ffcc70 url(images/smsbg2.gif) no-repeat top left;font-size:14px;color:#00f;font-weight:bold;">';
-		echo '<div style="position:absolute;left:240px;top:70px;width:14px;font-size:14px;line-height:140%;"><a style="color:#00f;text-decoration:none;" href="../choujiang.shtml" target="_blank">手机短信投票  30票赢大奖</a></div>';
-		echo '<div style="position:absolute;left:218px;top:295px;font-size:12px;line-height:140%;"><a style="color:#00f;text-decoration:none;" href="../choujiang.shtml" target="_blank">查看详细</a></div>';
-		echo '<div style="position:absolute;left:489px;top:103px;">'.sprintf("%04d",$id).'</div>';
-		echo '<div style="position:absolute;left:482px;top:147px;">'.sprintf("%04d",$id).'</div>';
-		echo '<div style="position:absolute;left:475px;top:191px;">'.sprintf("%04d",$id).'</div>';
-		echo '<div style="position:absolute;left:475px;top:235px;">'.sprintf("%04d",$id).'</div>';
+		echo '<body style="margin:0;background:#ffcc70 url(images/smsbg.gif) no-repeat top left;font-size:14px;color:#00f;font-weight:bold;">';
+		echo '<div style="position:absolute;left:220px;top:70px;width:14px;font-size:14px;line-height:140%;"><a style="color:#00f;text-decoration:none;" href="../choujiang.shtml" target="_blank">手机短信投票  30票赢大奖</a></div>';
+		echo '<div style="position:absolute;left:198px;top:298px;font-size:12px;line-height:140%;"><a style="color:#00f;text-decoration:none;" href="../choujiang.shtml" target="_blank">查看详细</a></div>';
+		echo '<div style="position:absolute;left:461px;top:89px;">'.sprintf("%04d",$id).'</div>';
+		echo '<div style="position:absolute;left:454px;top:133px;">'.sprintf("%04d",$id).'</div>';
+		echo '<div style="position:absolute;left:446px;top:177px;">'.sprintf("%04d",$id).'</div>';
+		echo '<div style="position:absolute;left:446px;top:221px;">'.sprintf("%04d",$id).'</div>';
 		echo '</body>';
 	}
 }
