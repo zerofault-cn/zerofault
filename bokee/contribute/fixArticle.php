@@ -1,4 +1,7 @@
 <?
+/*
+*修复文章所属频道及文章的得票数
+*/
 $conn=mysql_pconnect('localhost','root','10y9c2U5');
 $sql1="select * from article limit 0,50000";
 $result1=mysql_db_query('contribute',$sql1);

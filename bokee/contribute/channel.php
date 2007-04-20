@@ -46,7 +46,7 @@ else
 		));
 }
 
-//当前频道
+//当前频道名
 $sql1="select name from channel where id=".$id;
 assign_vars_by_sql($sql1);
 
@@ -103,7 +103,7 @@ while(list($key,$val)=each($arr))
 //最新投稿文章
 $pageitem=20;
 //$sql4="select article.id,author_id,title,left(title,40) as tmp_title,url,blogname,left(blogname,10) as tmp_blogname,blogurl,FROM_UNIXTIME(addtime,'%m/%d %H:%i') as datetime from author,article where article.author_id=author.id and (channel_id1=".$id." or channel_id2=".$id." or channel_id3=".$id.") order by article.id desc";
-$sql4="select id,author_id,title,url,addtime from article where channel_id1=".$id." or channel_id2=".$id." or channel_id3=".$id." order by id desc";
+$sql4="select id,author_id,title,url,addtime from article where channel_id1=".$id." or channel_id2=".$id." or channel_id3=".$id." order by addtime desc";
 $result4=$db->sql_query($sql4);
 $total=$db->sql_numrows($result4);
 pageft($total,$pageitem,"?id=".$id);
