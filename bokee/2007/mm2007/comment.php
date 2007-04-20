@@ -159,7 +159,7 @@ if($id>0)
 		"BOBOIMGALT" => 'BOBO视频',
 		"BOBOLINK" => (strlen(file_get_contents($boboimg))==711)?$viewurl:$uploadurl,
 		"DATE" => date("y/m/d",$row['addtime']),
-		"ALLVOTE" => $row['allvote'],
+		"ALLVOTE" => getField($id,'allvote','mm_info_0418'),
 		"ORDER" => ((1==$pass)?'复活选手排名':'60强排名').'：第'.$order.'名',
 		"FLASHOUTSIDEID" => 'flash_outside_spec',
 		"LOGINDISPLAY" => "display:none"
