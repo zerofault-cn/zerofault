@@ -156,8 +156,8 @@ elseif($type=='sms')
 		echo '<div style="position:absolute;left:454px;top:133px;">'.sprintf("%04d",$id).'</div>';
 		echo '<div style="position:absolute;left:446px;top:177px;">'.sprintf("%04d",$id).'</div>';
 		echo '<div style="position:absolute;left:446px;top:221px;">'.sprintf("%04d",$id).'</div>';
-		echo '<div style="position:absolute;left:312px;top:363px;">'.sprintf("%04d",$id).'</div>';
-		echo '<div style="position:absolute;left:326px;top:387px;">'.sprintf("%04d",$id).'</div>';
+		echo '<div style="position:absolute;left:314px;top:364px;">'.sprintf("%04d",$id).'</div>';
+		echo '<div style="position:absolute;left:324px;top:388px;">'.sprintf("%04d",$id).'</div>';
 		echo '</body>';
 	}
 	else

@@ -50,7 +50,7 @@ echo '<div style="width:580px;margin-top:4px;border:1px solid #00f;">';
 echo '<span style="width:380px;float:right;text-align:left;padding:4px;">'.$total.' 票</span><span style="width:110px;float:left;text-align:right;padding:4px;">总计：</span>';
 echo '</div>';
 
-$sql3="select * from mm_info where pass=1 and (hbun_vote!=0 or hbte_vote!=0 or hbivr_vote!=0)";
+$sql3="select * from mm_info where (hbun_vote!=0 or hbte_vote!=0 or hbivr_vote!=0)";
 $result3=$db->sql_query($sql3);
 $hbun_vote=0;
 $hbte_vote=0;
@@ -88,7 +88,7 @@ while($row=$db->sql_fetchrow($result4))
 }
 while(list($key,$val)=each($hourVote))
 {
-	echo '<div style="border-bottom:1px dotted #aaa;"><span style="width:410px;float:right;text-align:left;padding:2px;"><span style="width:'.($val).'px;background-color:#00f;margin:2px;"> </span>'.$val.' 票</span><span style="width:160px;float:left;text-align:right;padding:2px;">'.substr($key,0,4).'-'.substr($key,4,2).'-'.substr($key,6,2).' '.substr($key,8,2).':59:59：</span></div>';
+	echo '<div style="border-bottom:1px dotted #aaa;"><span style="width:400px;float:right;text-align:left;padding:2px;"><span style="width:'.($val/2).'px;background-color:#00f;margin:2px;"> </span>'.$val.' 票</span><span style="width:170px;float:left;text-align:right;padding:2px;">'.substr($key,0,4).'-'.substr($key,4,2).'-'.substr($key,6,2).' '.substr($key,8,2).':59:59：</span></div>';
 }
 echo '</div>';
 
@@ -105,10 +105,11 @@ while($row=$db->sql_fetchrow($result5))
 	$dayVote[$polltime]+=$addvote;
 }
 $average=round($total/sizeof($dayVote),1);
-echo '<div><span style="width:450px;float:right;text-align:left;padding:2px;"><span style="width:'.($average/3).'px;background-color:#00f;margin:2px;Filter: Alpha(Opacity=90, FinishOpacity=10, Style=1, StartX=100, StartY=0, FinishX=0, FinishY=0;"> </span>平均每天 '.$average.' 票</span><span style="width:110px;float:left;text-align:left;padding:2px;">每天投票数:</span></div>';
+echo '<div><span style="width:450px;float:right;text-align:left;padding:2px;"><span style="width:'.($average/10).'px;background-color:#00f;margin:2px;Filter: Alpha(Opacity=90, FinishOpacity=10, Style=1, StartX=100, StartY=0, FinishX=0, FinishY=0;"> </span>平均每天 '.$average.' 票</span><span style="width:110px;float:left;text-align:left;padding:2px;">每天投票数:</span></div>';
 while(list($key,$val)=each($dayVote))
 {
-	echo '<div style="border-bottom:1px dotted #aaa;"><span style="width:450px;float:right;text-align:left;padding:2px;"><span style="width:'.($val/3).'px;background-color:#00f;margin:2px;"> </span>'.$val.' 票</span><span style="width:110px;float:left;text-align:right;padding:2px;">'.substr($key,0,4).'-'.substr($key,4,2).'-'.substr($key,6,2).'：</span></div>';
+//	$tmp_val=min(1400,$val);
+	echo '<div style="border-bottom:1px dotted #aaa;"><span style="width:450px;float:right;text-align:left;padding:2px;"><span style="width:'.($val/10).'px;background-color:#00f;margin:2px;"> </span>'.$val.' 票</span><span style="width:110px;float:left;text-align:right;padding:2px;">'.substr($key,0,4).'-'.substr($key,4,2).'-'.substr($key,6,2).'：</span></div>';
 }
 	
 echo '</div>';

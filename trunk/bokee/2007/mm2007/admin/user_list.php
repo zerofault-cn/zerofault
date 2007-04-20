@@ -58,7 +58,7 @@ elseif(''!=$_SESSION['order'])
 }
 else
 {
-	$order='id';//默认按id排序
+	$order='allvote';//默认按id排序
 }
 if(!session_is_registered('order'))
 {
@@ -179,7 +179,7 @@ while($row=$db->sql_fetchrow($result))
 		"HBTE"=>$row['hbte_vote'],
 		"HBIVR"=>$row['hbivr_vote'],
 		"NETVOTE" => $row['netvote'],
-		"SMSVOTE" => $row['smsvote'],
+		"SMSVOTE" => $row['allvote']-$row['hbun_vote']-$row['hbte_vote']-$row['hbivr_vote'],
 		"ALLVOTE" => $row['allvote'],
 		"COMM_COUNT" => $row['comm_count'],
 		"PASSBTN" => $passbtn_arr[$row['pass']],//设置按钮文字
