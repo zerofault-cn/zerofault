@@ -1,4 +1,7 @@
 <?
+/*
+*修正频道文章数
+*/
 $conn=mysql_pconnect('localhost','root','10y9c2U5');
 $sql1="select id from channel";
 $result1=mysql_db_query('contribute',$sql1);
