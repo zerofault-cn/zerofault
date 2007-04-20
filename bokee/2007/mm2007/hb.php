@@ -33,7 +33,7 @@ if($id>0 && $add>0 && ''!=$from)
 {
 	if($add>0)
 	{
-		$sql="update mm_info set ".$from."_vote=(".$from."_vote+".$add."),smsvote=(smsvote+".$add."),allvote=(allvote+".(30*$add).") where id=".$id;
+		$sql="update mm_info set ".$from."_vote=(".$from."_vote+".$add."),smsvote=(smsvote+".$add."),allvote=(allvote+".$add.") where id=".$id;
 	}
 	if(''!=$sql && $db->sql_query($sql))
 	{

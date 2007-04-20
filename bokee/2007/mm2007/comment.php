@@ -14,7 +14,7 @@ include_once($root_path."includes/template.php");
 include_once($root_path."includes/page.php");
 
 $page=$_REQUEST["page"];
-$id=$_REQUEST['id'];//此id为mm_info表的id,即comment表里的mm_id
+$id=intval($_REQUEST['id']);//此id为mm_info表的id,即comment表里的mm_id
 if(''==$id)
 {
 	$id=0;
@@ -81,7 +81,7 @@ if(''!=$_POST['submit'])
 		header("location:?".$_SERVER["QUERY_STRING"]."&time");
 		exit;
 	}
-	$sql="insert into mm_comment set username='".$username."',content='".format($content)."',addtime=".time().",mm_id='".$id."',ip='".$client_ip."'";
+	$sql="insert into mm_comment set username='".format2($username)."',content='".format($content)."',addtime=".time().",mm_id='".$id."',ip='".$client_ip."'";
 	$sql2="update mm_info set comm_count=comm_count+1 where id=".$id;
 	if($db->sql_query($sql))
 	{
@@ -104,7 +104,7 @@ $tpl->set_filenames(array('body' => 'comment.htm'));
 
 if($id>0)
 {
-	$sql="select * from mm_info where pass=1 or pass=2 and id=".$id;
+	$sql="select * from mm_info where (pass=1 or pass=2) and id=".$id;
 	if($db->sql_numrows($db->sql_query($sql))==0)
 	{
 		echo "此用户还未通过审核,请等待审核通过后才能查看此页面!";

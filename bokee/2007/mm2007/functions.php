@@ -69,7 +69,11 @@ function format($text)
 //	$text=addslashes($text);
 	return $text;
 }
-
+function format2($text) {
+	$text=str_replace(";","",$text);
+	$text=htmlspecialchars($text);
+	$text=addslashes($text);
+}
 function mailto($email,$subject,$info_arr,$id)
 {
 	global $root_path;
