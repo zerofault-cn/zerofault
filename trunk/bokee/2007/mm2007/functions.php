@@ -3,10 +3,10 @@
 *根据id读取mm_info中的特定列的值
 *用来避免mm_comment与mm_info表的连接查询
 */
-function getField($mm_id,$mm_field)
+function getField($mm_id,$mm_field,$table='mm_info')
 {
 	global $db;
-	$sql0="select ".$mm_field." from mm_info where id=".$mm_id;
+	$sql0="select ".$mm_field." from ".$table." where id=".$mm_id;
 	$result0=$db->sql_query($sql0);
 	$value=$db->sql_fetchfield(0,0,$result0);
 //	$db->sql_freeresult($result0);
