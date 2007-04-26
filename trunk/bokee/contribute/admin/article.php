@@ -89,7 +89,7 @@ pageft($total,$pageitem,"?channel_id=".$channel_id);
 $result=$db->sql_query($sql." limit ".$offset.",".$pageitem);
 echo '<table width="100%" border="0" cellpadding="0" cellspacing="0">';
 echo '<caption>'.$caption.'(文章总数:'.$total.')</caption>';
-echo '<tr bgcolor="#6699ff"><td>文章ID</td><td>作者博客</td><td>文章标题</td><td>所属分类(点击修改)</td><td>投稿时间</td><td>操作</td></tr>';
+echo '<tr bgcolor="#6699ff"><td>文章ID</td><td>作者博客</td><td>文章标题</td><td>所属分类</td><td>投稿时间</td><td>操作</td></tr>';
 while($row=$db->sql_fetchrow($result))
 {
 	$id=$row['id'];
@@ -100,6 +100,7 @@ while($row=$db->sql_fetchrow($result))
 	$channel_id1=$row['channel_id1'];
 	$channel_id2=$row['channel_id2'];
 	$channel_id3=$row['channel_id3'];
+	$channel_name1=$channel_name2=$channel_name3='';
 	if(''!=$channel_id1 && $channel_id1>0)
 	{
 		$channel_name1=getField($channel_id1,'name','channel');
@@ -118,7 +119,7 @@ while($row=$db->sql_fetchrow($result))
 	echo '<td>'.getField($author_id,'blogname','author').'</td>';
 	echo '<td><span id="span1'.$id.'"><a id="link'.$id.'" href="'.$url.'" target="_blank">'.$title.'</a><input type="button" onclick="modify('.$id.')" value="修改" /></span>';
 	echo '<span id="span2'.$id.'" style="display:none"><input type="text" id="input'.$id.'" size="'.strlen($title).'" value="'.$title.'"><input type="button" onclick="submitModify('.$id.',document.getElementById(\'input'.$id.'\').value);" value="提交"></span></td>';
-	echo '<td>'.$channel_name1.' '.$channel_name2.' '.$channel_name3.'</td>';
+	echo '<td id="channels'.$id.'" oonclick="modifyChannel('.$id.','.$channel_id1.','.$channel_id2.','.$channel_id3.')">'.$channel_name1.' '.$channel_name2.' '.$channel_name3.'</td>';
 	echo '<td>'.$addtime.'</td>';
 	echo '<td><input type="button" value="删除" onclick="confirmdel('.$row['id'].','.$channel_id.')" /></td>';
 	echo '</tr>';
@@ -152,9 +153,26 @@ function modify(id) {
 function submitModify(id,title) {
 	document.getElementById('iframe1').src='?action=modify&id='+id+'&title='+title;
 }
-function copy(url){
-	clipboardData.setData('Text',url);
-	alert('链接地址已复制到剪贴板');
+function modifyChannel(id,id1,id2,id3) {
+	if(last_id!=0)
+	{
+		last_t1=document.getElementById(last_id);
+		last_t2=document.getElementById('title'+last_id);
+		last_t1.innerHTML=last_t2.value;
+	}
+	last_id=id;
+	t=document.getElementById(id);
+	old_channel=t.innerHTML;
+	//未完成
+	if(old_title.indexOf('<')>=0 || old_title.indexOf('>')>=0)
+	{
+		return;
+	}
+	else
+	{
+		t.innerHTML='<input type="text" id="title'+id+'" size="'+2*textSize+'" value="'+old_title+'"><input type="button" onclick="submitModify('+id+',document.getElementById(\'title'+id+'\').value);" value="提交">';
+		document.getElementById('title'+id).focus();
+	}
 }
 function confirmdel(id,cid)
 {
