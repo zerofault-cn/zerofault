@@ -16,6 +16,7 @@ urlpatterns = patterns('',
 	(r'^python/wiki/(?P<pagename>\w+)/save/$', 'newtest.wiki.views.save'),
 	(r'^python/address/', include('newtest.address.urls')),
 	(r'^python/site_media/(?P<path>.*)$', 'django.views.static.serve',{'document_root': settings.STATIC_PATH}),
+	(r'^python/fileinfo/$', 'newtest.fileinfo.index'),
 
 
     # Uncomment this for admin:
