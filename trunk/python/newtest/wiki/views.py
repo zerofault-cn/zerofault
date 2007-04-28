@@ -39,7 +39,7 @@ def save(request, pagename):
     else:
         page = Wiki(pagename=pagename, content=content)
         page.save()
-    return HttpResponseRedirect("/wiki/%s" % pagename)
+    return HttpResponseRedirect("/python/wiki/%s" % pagename)
 
 import re
 
@@ -47,7 +47,7 @@ r = re.compile(r'\b(([A-Z]+[a-z]+){2,})\b')
 def process(template, page):
     """处理页面链接，并且将回车符转为<br>"""
     t = loader.get_template(template)
-    content = r.sub(r'<a href="/wiki/\1">\1</a>', page.content)
+    content = r.sub(r'<a href="/python/wiki/\1">\1</a>', page.content)
     content = re.sub(r'[\n\r]+', '<br>', content)
     c = Context({'pagename':page.pagename, 'content':content})
     return HttpResponse(t.render(c))
