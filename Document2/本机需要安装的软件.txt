@@ -1,0 +1,41 @@
+本机需要安装的软件
+1，操作系统：Windows XP
+
+2，驱动程序：
+	Battery MaxiMiser and Power Management Features package
+	Configuration package HA
+	Hotkey Features
+	GPRS Modem
+	AccessThinkPad.exe(定制ThinkPad键)
+3，常用软件：
+	WinRar（运行即可）
+	DaemonTools4.08
+	紫光拼音
+	Office
+	MSN Messenger
+	Global Audio Control（加入自动启动）
+	Temperature（即mobile meter，加入自动启动）
+	MemTurbo（加入自动启动）
+
+4，其他修改：
+	修改注册表，导入E:\BackUp\注册表\userprofile.reg，讲用户目录重定义到E:\administrator\
+	导入:禁用历史文档.reg
+	导入:让XP支持多用户远程桌面.reg，并在安全模式下复制E:\download\系统相关\termsrv.dll到system32目录下
+
+	复制cttune.cpl到system32目录下，并在控制面板中调节ClearType
+	复制hdwwiz2000.cpl到system32目录下
+
+
+5，系统服务：
+	注册mysql4为系统服务：(先复制my.ini到windows目录下)
+	D:\pub\mysql-4.1.20\bin>mysqld-nt.exe --install mysql
+	注册Apache为系统服务：
+	D:\pub\Apache-1.3.33\Apache>Apache.exe -k install
+	注册Apache2.2为系统服务
+	D:\pub\Apache-2.2.2\bin>httpd.exe -k install -n apache2.2
+	打开Serv-UAdmin，注册serv-U为系统服务
+
+6需要注册的软件：
+	金山词霸
+	EditPlus
+	LeapFTP

@@ -27,6 +27,6 @@ mysql>\q（退出mysql连接）
 #mysqladmin reload（更新并重载权限表）
 
 
-grant all privileges on *.* to root@'218.249.35.66' identified by 'bokee' with grant option;
+grant all privileges on *.* to root@'10.10.4.34' identified by '10y9c2U5' with grant option;
 flush privileges;
 update user set password=old_password('bokee') where host='218.249.35.66'
