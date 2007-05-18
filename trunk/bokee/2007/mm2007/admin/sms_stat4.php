@@ -85,6 +85,7 @@ while($row=$db->sql_fetchrow($result5))
 	$polltime=date("Ymd",$row['polltime']);
 	$addvote=$row['addvote'];
 	$dayVote[$polltime]+=$addvote;
+	$monthVoteByCode[date("Ym",$row['polltime'])][$addvote]+=$addvote;
 }
 $average=round($total/sizeof($dayVote),1);
 echo '<div><span style="width:450px;float:right;text-align:left;padding:2px;"><span style="width:'.($average/3).'px;background-color:#00f;margin:2px;Filter: Alpha(Opacity=90, FinishOpacity=10, Style=1, StartX=100, StartY=0, FinishX=0, FinishY=0;"> </span>平均每天 '.$average.' 票</span><span style="width:110px;float:left;text-align:left;padding:2px;">每天投票数:</span></div>';
@@ -107,6 +108,15 @@ echo '<div>每月投票数:</div>';
 while(list($key,$val)=each($monthVote))
 {
 	echo '<div style="border-bottom:1px dotted #aaa;"><span style="width:550px;float:right;text-align:left;padding:2px;"><span style="width:'.($val/20).'px;background-color:#00f;margin:2px;"> </span>'.$val.' 票</span><span style="width:110px;float:left;text-align:right;padding:2px;">'.substr($key,0,4).'-'.substr($key,4,2).'：</span></div>';
+}
+echo '</div>';
+
+echo '<div style="width:680px;margin-top:20px;border:1px solid #00f;text-align:left;padding-top:4px;">';
+echo '<div>每月投票数（按代码分）:</div>';
+echo '<div style="border-bottom:1px dotted #aaa;"><span style="width:100px;float:left;text-align:right;padding:2px;">月份：</span><span style="width:270px;float:left;text-align:center;padding:2px;">一次1票</span><span style="width:270px;float:left;text-align:center;padding:2px;">一次5票</span></div>';
+while(list($key,$val)=each($monthVoteByCode))
+{
+	echo '<div style="border-bottom:1px dotted #aaa;"><span style="width:100px;float:left;text-align:right;padding:2px;">'.substr($key,0,4).'-'.substr($key,4,2).'：</span><span style="width:270px;float:left;text-align:center;padding:2px;">1×'.$val[1].'='.$val[1].' 票</span><span style="width:270px;float:left;text-align:center;padding:2px;">5×'.($val[5]/5).'='.$val[5].' 票</span></div>';
 }
 echo '</div>';
 

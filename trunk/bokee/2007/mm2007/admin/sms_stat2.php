@@ -13,7 +13,7 @@ include_once($root_path."dbtable2.php");
 include_once("left.php");//左边菜单
 
 echo '<div style="width:800px;margin-top:10px;margin-left:150px;text-align:center;border:1px solid #000;padding:10px 0;">';
-$sql1="select feephone,addvote from ".$sms_table." where status=1 ";
+$sql1="select feephone,addvote from ".$sms_table." where Service_code!='' and status=1 ";
 $result1=$db->sql_query($sql1);
 //echo '<div style="width:580px;margin-top:20px;border:1px solid #00f;">';
 //echo '投票手机排行';

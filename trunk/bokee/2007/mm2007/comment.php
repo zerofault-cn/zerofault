@@ -57,7 +57,6 @@ if(''!=$_POST['submit'])
 	}
 	include_once ("./filter.php");//引用屏蔽字符数组$filter_arr
 	$slen=strlen($content);
-	//
 	if(strlen(str_replace("href=","",$content))<$strlen || strlen(eregi_replace("^[[[0-9]{1,4}][[a-z]{1,4}]+]+$","",$content))<$strlen || strlen( str_replace($filter_arr,'',$content) ) < $slen)//如果有字符被屏蔽，则新字符串比原字符串短，以此来判断是否含有脏字
 	{
 		header("location:?".$_SERVER["QUERY_STRING"]."&filter");
@@ -81,7 +80,7 @@ if(''!=$_POST['submit'])
 		header("location:?".$_SERVER["QUERY_STRING"]."&time");
 		exit;
 	}
-	$sql="insert into mm_comment set username='".format2($username)."',content='".format($content)."',addtime=".time().",mm_id='".$id."',ip='".$client_ip."'";
+	$sql="insert into mm_comment set username='".htmlspecialchars($username)."',content='".format($content)."',addtime=".time().",mm_id='".$id."',ip='".$client_ip."'";
 	$sql2="update mm_info set comm_count=comm_count+1 where id=".$id;
 	if($db->sql_query($sql))
 	{
@@ -104,7 +103,7 @@ $tpl->set_filenames(array('body' => 'comment.htm'));
 
 if($id>0)
 {
-	$sql="select * from mm_info where (pass=1 or pass=2) and id=".$id;
+	$sql="select * from mm_info where (pass=1 or pass=2 or pass=3) and id=".$id;
 	if($db->sql_numrows($db->sql_query($sql))==0)
 	{
 		echo "此用户还未通过审核,请等待审核通过后才能查看此页面!";
@@ -123,7 +122,7 @@ if($id>0)
 	$row=$db->sql_fetchrow($result);
 	$pass=$row['pass'];
 	//获取排名
-	$sql2="select id from mm_info where pass=".$pass." order by allvote desc,id desc";
+	$sql2="select id from mm_info where pass=".$pass." order by allvote desc,id";
 	$result2=$db->sql_query($sql2);
 	while($row2=$db->sql_fetchrow($result2))
 	{
@@ -159,8 +158,8 @@ if($id>0)
 		"BOBOIMGALT" => 'BOBO视频',
 		"BOBOLINK" => (strlen(file_get_contents($boboimg))==711)?$viewurl:$uploadurl,
 		"DATE" => date("y/m/d",$row['addtime']),
-		"ALLVOTE" => getField($id,'allvote','mm_info_0418'),
-		"ORDER" => ((1==$pass)?'复活选手排名':'60强排名').'：第'.$order.'名',
+		"ALLVOTE" => getField($id,'allvote','mm_info_0518'),
+		"ORDER" => ((3==$pass)?'决赛票数排行：第'.$order.'名':''),
 		"FLASHOUTSIDEID" => 'flash_outside_spec',
 		"LOGINDISPLAY" => "display:none"
 		));

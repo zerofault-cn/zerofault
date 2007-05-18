@@ -1,0 +1,13 @@
+<!-- BEGIN list -->
+<div class="order_unit"> <a href="{list.BLOGURL}" target="_blank"><img src="mm2007/photo/{list.AREA}/{list.PHOTO}" alt="{list.BLOGNAME}" /></a>
+	<p class="order_unit_b"> 编号：{list.ID}<br />
+		<a href="{list.BLOGURL}" target="_blank" title="{list.BLOGNAME}">{list.TMP_BLOGNAME}</a><br />
+		<input type="button" class="btn_s" value="投票" onclick="window.open('mm2007/poll.php?type=sms&id={list.ID}&area={list.AREA}','','width={list.SMSPOLLWIDTH},height={list.SMSPOLLHEIGHT},toolbar=no,status=no,scrollbars=auto,resizable=yes')" />
+		<input type="button" class="btn_s" value="留言" onclick="window.open('mm2007/comment.php?id={list.ID}','','')" />
+		<input type="button" class="btn_l" value="浏览照片" onclick="window.open('{list.BLOGURL}photo/showPhoto2.b','','')" />
+		<br />
+		票数排名：{list.ORDER}<br>
+		报名时间：{list.DATE}
+	</p>
+</div>
+<!-- END list -->

@@ -241,6 +241,9 @@ $filter_arr=array(
 'vhv.cn',
 'pc-hospital.net',
 'xiangqin.tv',
-'vtov.net'
+'vtov.net',
+'³Õ´ô',
+'À¬»øÈ«¼Ò',
+'ËÀº¢×Ó'
 );
 ?>

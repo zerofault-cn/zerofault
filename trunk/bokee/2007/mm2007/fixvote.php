@@ -25,7 +25,7 @@ while($row=$db->sql_fetchrow($result))
 	$sms_vote1=$db->sql_fetchfield(0,0,$db->sql_query($sql2));
 	$sms_vote5=$db->sql_fetchfield(0,0,$db->sql_query($sql3));
 	$ip_vote=$db->sql_fetchfield(0,0,$db->sql_query($sql4));
-	$sql5="update mm_info set netvote=".intval($ip_vote).",smsvote=(hbun_vote+hbte_vote+hbivr_vote+".(intval($sms_vote1)+5*intval($sms_vote5))."),allvote=(".$multi."*smsvote+netvote) where id=".$id;
+	$sql5="update mm_info set smsvote=(hbun_vote+hbte_vote+hbivr_vote+".(intval($sms_vote1)+5*intval($sms_vote5))."),allvote=smsvote where id=".$id;
 	if($db->sql_query($sql5))
 	{
 		echo 'update '.$id.' ok!<br>';

@@ -21,7 +21,7 @@ echo '第二届美女博客大赛选手每天得票情况';
 echo '<br /><br />';
 echo '请选择日期:';
 echo '<select onchange="window.location=\'?date=\'+this.value">';
-for($i=mktime(0,0,0,1,18,2007);$i<time();$i+=24*60*60)
+for($i=mktime(0,0,0,5,18,2007);$i<time();$i+=24*60*60)
 {
 	if($date==$i)
 	{
@@ -51,7 +51,7 @@ while(list($key,$val)=each($arr))
 	{
 		break;
 	}
-	echo '<div style="border-bottom:1px dotted #aaa;"><span style="width:450px;float:right;text-align:left;padding:2px;"><span style="width:'.($val/1.5).'px;background-color:#00f;margin:2px;"> </span>'.$val.' 票</span><span style="width:120px;float:left;text-align:right;padding:2px;"><a href="smsvote_info.php?mm_id='.$key.'&date='.$date.'" target="_blank">'.sprintf("%04d",$key).'</a>：</span></div>';
+	echo '<div style="border-bottom:1px dotted #aaa;"><span style="width:450px;float:right;text-align:left;padding:2px;"><span style="width:'.($val/5).'px;background-color:#00f;margin:2px;"> </span>'.$val.' 票</span><span style="width:120px;float:left;text-align:right;padding:2px;"><a href="smsvote_info.php?mm_id='.$key.'&date='.$date.'" target="_blank">'.sprintf("%04d",$key).'</a>：</span></div>';
 }
 echo '</div>';
 /*
