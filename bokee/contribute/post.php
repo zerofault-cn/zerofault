@@ -55,7 +55,7 @@ if($_POST['Submit'])
 		{
 			$sql_ext.=",channel_id1=".$id;
 		}
-		$sql4="insert into article set author_id=".$author_id.",title='".$title."',url='".$url."',addtime=UNIX_TIMESTAMP()".$sql_ext;
+		$sql4="insert into article set author_id=".$author_id.",title='".htmlspecialchars($title)."',url='".$url."',addtime=UNIX_TIMESTAMP()".$sql_ext;
 		if($db->sql_query($sql4))
 		{
 			echo '
