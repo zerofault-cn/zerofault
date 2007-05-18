@@ -38,7 +38,7 @@ echo '月';
 
 $date_begin=mktime(0,0,0,$month,1,2007);//每月开始时间
 $date_end=mktime(0,0,0,$month+1,1,2007)-1;//每月结束时间
-$sql1="select feephone,addvote,mm_id from ".$sms_table." where status=1 and polltime>=".$date_begin." and polltime<=".$date_end;
+$sql1="select feephone,addvote,mm_id from ".$sms_table." where Service_code!='' and status=1 and polltime>=".$date_begin." and polltime<=".$date_end;
 $result1=$db->sql_query($sql1);
 echo '<div style="width:400px;margin-top:20px;border:1px solid #00f;">';
 

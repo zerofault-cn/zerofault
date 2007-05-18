@@ -1,6 +1,6 @@
 html{background:#434343;}
 #outside{width:853px;height:auto;}
-#head{width:853px; height:325px;margin-top:5px;position:relative;}
+#head{width:853px; height:420px;margin-top:5px;position:relative;}
 #right,#right_8{float:right;width:588px;height:auto!important;height:1582px;min-height:1582px;margin-top:35px;}
 #left,#left_8{float:left;width:256px;height:auto!important;height:1540px;min-height:1540px;margin-top:12px;}
 #bottom{clear:both;width:853px;text-align:center;padding-top:15px;color:#fff;line-height:18px;margin-bottom:30px;}
@@ -12,8 +12,8 @@ html{background:#434343;}
 #top_nav{top:10px;right:25px;}
 #top_nav1{top:10px;left:170px;}
 #top_nav a:link,#top_nav1 a:link,#top_nav a:visited,#top_nav1 a:visited{color:#D59007;line-height:32px;background:url("../images/top_dot.jpg") no-repeat left center;padding-left:12px;}
-#mid_bg{top:46px;width:853px;height:200px;/*background:url("../images/head_middle.jpg") no-repeat;*/}
-#nav_border{width:829px;height:35px;border:12px solid #E9B21A;border-top:none;border-bottom-width:5px;top:246px;}
+#mid_bg{top:141px;width:853px;height:200px;/*background:url("../images/head_middle.jpg") no-repeat;*/}
+#nav_border{width:829px;height:35px;border:12px solid #E9B21A;border-top:none;border-bottom-width:5px;top:341px;}
 #nav{width:829px;height:26px;background:url("../images/head_bottom.jpg") repeat-x;border-bottom:9px solid #FFCC6F;}
 #nav a:link,#nav a:visited{position:absolute;font-weight:bold;line-height:26px;z-index:2;}
 #nav_1{left:22px;}
@@ -22,11 +22,11 @@ html{background:#434343;}
 #nav_4{left:458px;}
 #nav_5{left:601px;}
 #nav_6{left:751px;}
-#flower_1{top:246px;left:98px;}
-#flower_2{top:246px;left:240px;}
-#flower_3{top:246px;left:382px;}
-#flower_4{top:246px;left:524px;}
-#flower_5{top:246px;left:666px;}
+#flower_1{top:341px;left:98px;}
+#flower_2{top:341px;left:240px;}
+#flower_3{top:341px;left:382px;}
+#flower_4{top:341px;left:524px;}
+#flower_5{top:341px;left:666px;}
 .flower{width:87px;height:86px;background:url("../images/head_flower.jpg") no-repeat;z-index:1;text-align:center;}
 .flower a:link,.flower a:visited{line-height:80px;font-weight:bold;font-size:14px;}
 /*links*/

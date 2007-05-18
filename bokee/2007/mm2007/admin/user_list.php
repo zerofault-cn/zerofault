@@ -15,7 +15,7 @@ $tpl->set_filenames(array('body' => 'user_list.htm'));
 
 //一些参数
 $testmail=0;//显示“发送测试邮件”的按钮
-$pageitem=10;//每页显示个数
+$pageitem=12;//每页显示个数
 $passbtn_arr=array('通过审核','取消审核');
 $area_arr=array('','中部','南部','北部');
 
@@ -40,7 +40,7 @@ elseif(''!=$_SESSION['s_pass'])
 }
 else
 {
-	$s_pass=2;//默认显示未审核
+	$s_pass=3;//默认显示未审核
 }
 if(!session_is_registered('s_pass'))
 {
@@ -200,10 +200,11 @@ $tpl->assign_vars(array(
 	"COLOR11" => (1==$s_area)?'#6699FF':'',
 	"COLOR12" => (2==$s_area)?'#6699FF':'',
 	"COLOR13" => (3==$s_area)?'#6699FF':'',
-	"COLOR20" => (2==$s_pass)?'#99CCFF':'',
-	"COLOR21" => (1==$s_pass && 'id'==$order)?'#99CCFF':'',
-	"COLOR22" => (1==$s_pass && 'allvote'==$order)?'#99CCFF':'',
-	"COLOR23" => (0==$s_pass && 'id'==$order)?'#99CCFF':'',
+	"COLOR20" => (3==$s_pass)?'#99CCFF':'',
+	"COLOR21" => (2==$s_pass)?'#99CCFF':'',
+	"COLOR22" => (1==$s_pass && 'id'==$order)?'#99CCFF':'',
+	"COLOR23" => (1==$s_pass && 'allvote'==$order)?'#99CCFF':'',
+	"COLOR24" => (0==$s_pass && 'id'==$order)?'#99CCFF':'',
 	"COUNT" => '('.$total.'名)',
 	"PAGE" => $pagenav
 ));

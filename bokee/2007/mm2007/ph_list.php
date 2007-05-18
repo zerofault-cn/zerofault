@@ -1,5 +1,5 @@
 <?php
-
+//专题页面排行
 define('IN_MATCH', true);
 
 $root_path = "./";
@@ -15,10 +15,12 @@ $tpl = new Template($root_path."templates");
 
 $type=$_GET['type'];//可选值：msg,hot
 $area=$_REQUEST['area'];//赛区标记，1：中，2：南，3：北
+$pass=$_REQUEST['pass'];
 if(''==$type)
 {
 	$type='msg';
 }
+
 if($type=='hot' && ''==$area)
 {
 	$area=1;
@@ -28,11 +30,11 @@ $tpl->set_filenames(array(
 
 if($type=='msg')
 {
-	$sql="select * from mm_info order by comm_count desc,id desc limit 10";
+	$sql="select * from mm_info order by comm_count desc,id desc limit 15";
 }
 elseif($type=='hot')
 {
-	$sql="select * from mm_info where area=".$area." order by allvote desc limit 10";
+	$sql="select * from mm_info where pass=".$pass." order by allvote desc limit 15";
 }
 $result=$db->sql_query($sql);
 $i=0;

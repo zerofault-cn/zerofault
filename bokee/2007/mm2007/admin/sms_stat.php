@@ -88,7 +88,7 @@ while($row=$db->sql_fetchrow($result4))
 }
 while(list($key,$val)=each($hourVote))
 {
-	echo '<div style="border-bottom:1px dotted #aaa;"><span style="width:400px;float:right;text-align:left;padding:2px;"><span style="width:'.($val/2).'px;background-color:#00f;margin:2px;"> </span>'.$val.' 票</span><span style="width:170px;float:left;text-align:right;padding:2px;">'.substr($key,0,4).'-'.substr($key,4,2).'-'.substr($key,6,2).' '.substr($key,8,2).':59:59：</span></div>';
+	echo '<div style="border-bottom:1px dotted #aaa;"><span style="width:400px;float:right;text-align:left;padding:2px;"><span style="width:'.($val/6).'px;background-color:#00f;margin:2px;"> </span>'.$val.' 票</span><span style="width:170px;float:left;text-align:right;padding:2px;">'.substr($key,0,4).'-'.substr($key,4,2).'-'.substr($key,6,2).' '.substr($key,8,2).':59:59：</span></div>';
 }
 echo '</div>';
 
@@ -105,11 +105,11 @@ while($row=$db->sql_fetchrow($result5))
 	$dayVote[$polltime]+=$addvote;
 }
 $average=round($total/sizeof($dayVote),1);
-echo '<div><span style="width:450px;float:right;text-align:left;padding:2px;"><span style="width:'.($average/10).'px;background-color:#00f;margin:2px;Filter: Alpha(Opacity=90, FinishOpacity=10, Style=1, StartX=100, StartY=0, FinishX=0, FinishY=0;"> </span>平均每天 '.$average.' 票</span><span style="width:110px;float:left;text-align:left;padding:2px;">每天投票数:</span></div>';
+echo '<div><span style="width:450px;float:right;text-align:left;padding:2px;"><span style="width:'.($average/15).'px;background-color:#00f;margin:2px;Filter: Alpha(Opacity=90, FinishOpacity=10, Style=1, StartX=100, StartY=0, FinishX=0, FinishY=0;"> </span>平均每天 '.$average.' 票</span><span style="width:110px;float:left;text-align:left;padding:2px;">每天投票数:</span></div>';
 while(list($key,$val)=each($dayVote))
 {
 //	$tmp_val=min(1400,$val);
-	echo '<div style="border-bottom:1px dotted #aaa;"><span style="width:450px;float:right;text-align:left;padding:2px;"><span style="width:'.($val/10).'px;background-color:#00f;margin:2px;"> </span>'.$val.' 票</span><span style="width:110px;float:left;text-align:right;padding:2px;">'.substr($key,0,4).'-'.substr($key,4,2).'-'.substr($key,6,2).'：</span></div>';
+	echo '<div style="border-bottom:1px dotted #aaa;"><span style="width:450px;float:right;text-align:left;padding:2px;"><span style="width:'.($val/15).'px;background-color:#00f;margin:2px;"> </span>'.$val.' 票</span><span style="width:110px;float:left;text-align:right;padding:2px;">'.substr($key,0,4).'-'.substr($key,4,2).'-'.substr($key,6,2).'：</span></div>';
 }
 	
 echo '</div>';

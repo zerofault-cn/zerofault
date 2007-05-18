@@ -8,7 +8,7 @@ include_once($root_path."config.php");
 include_once($root_path."includes/template.php");
 include_once($root_path."includes/db.php");
 include_once($root_path."includes/page.php");
-include_once($root_path."dbtable.php");
+include_once($root_path."dbtable2.php");
 
 include_once("left.php");//左边菜单
 $mm_id=$_REQUEST['mm_id'];
@@ -42,10 +42,11 @@ while($row=$db->sql_fetchrow($result1))
 	$phone=$row['feephone'];
 	$arr1[$phone][]=$row['polltime'];
 	$arr2[$phone][]=$row['addvote'];
+	$allvote+=$row['addvote'];
 }
 //print_r($arr1);
 //arsort($arr1);
-
+echo '<div>今日得票:'.$allvote.'</div>';
 while(sizeof($arr1)>0 && list($key,$val)=each($arr1))
 {
 	for($i=0;$i<sizeof($val);$i++)

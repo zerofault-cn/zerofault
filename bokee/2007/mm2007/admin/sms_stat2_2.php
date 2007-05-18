@@ -13,7 +13,7 @@ include_once($root_path."dbtable2.php");
 include_once("left.php");//左边菜单
 
 echo '<div style="width:800px;margin-top:10px;margin-left:150px;text-align:center;border:1px solid #000;padding:10px 0;">';
-$sql1="select feephone,addvote from ".$sms_table." where Service_code!='' and status=1 ";
+$sql1="select feephone,addvote from poll_sms2 where Service_code!='' and status=1 ";
 $result1=$db->sql_query($sql1);
 //echo '<div style="width:580px;margin-top:20px;border:1px solid #00f;">';
 //echo '投票手机排行';
@@ -33,8 +33,7 @@ while(list($key,$val)=each($arr))
 //echo '</div>';
 
 echo '<div style="width:400px;margin-top:20px;border:1px solid #00f;">';
-echo '<div>投票手机个数统计</div>';
-echo '<div><a href="sms_stat3.php">按月份显示</a></div>';
+echo '<div>复赛投票手机个数统计</div>';
 while(list($key,$val)=each($arr2))
 {
 	echo '<div style="border-bottom:1px dotted #aaa;padding:2px;"><span style="width:100px;float:right;text-align:left;padding:2px;"><span style="color:blue">'.$val.'</span> 个</span><span style="width:280px;float:left;text-align:right;padding:2px;">已投 <span style="color:red">'.$key.'</span> 票的手机号个数：</span></div>';
@@ -42,5 +41,7 @@ while(list($key,$val)=each($arr2))
 echo '</div>';
 
 echo '</div>';
-
+echo '<pre>';
+print_r($arr);
+echo '</pre>';
 ?>

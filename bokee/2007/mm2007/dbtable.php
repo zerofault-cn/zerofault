@@ -17,7 +17,7 @@ elseif(mktime(14,0,0,5,18,2007)<time() && time()<mktime(14,0,0,6,17,2007))//决赛
 }
 else
 {
-	echo '投票期已经结束或者已经过期，详情请查看<a href="http://mm.bokee.com/2007/gonggao.shtml" target="_blank">大赛公告</a>';
+	echo '投票期已经结束，详情请查看<a href="http://mm.bokee.com/2007/gonggao.shtml" target="_blank">大赛公告</a>';
 	exit;
 }
 ?>

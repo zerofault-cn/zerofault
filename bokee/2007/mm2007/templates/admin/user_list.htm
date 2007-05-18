@@ -90,10 +90,11 @@ function check2()
 </table>
 <!-- search form end -->
 <div style="text-align:center;padding-top:1px;padding-bottom:4px;background-color:#ffffff;border-top:1px dotted #666633">
-<span style="padding:4px 20px;background-color:{COLOR20};"><a href="?s_pass=2&order=allvote">TOP60选手</a></span>
-<span style="padding:4px 20px;background-color:{COLOR21};"><a href="?s_pass=1&order=id">复活选手<span style="font-size:10px;color:blue">(按ID倒序)</span></a></span>
-<span style="padding:4px 20px;background-color:{COLOR22};"><a href="?s_pass=1&order=allvote">复活选手<span style="font-size:10px;color:blue">(按票数排序)</span></a></span>
-<span style="padding:4px 20px;background-color:{COLOR23};"><a href="?s_pass=0&order=id">待审核(一周内)</a></span>
+<span style="padding:4px 20px;background-color:{COLOR20};"><a href="?s_pass=3&order=allvote">12金钗（及复活）</a></span>
+<span style="padding:4px 20px;background-color:{COLOR21};"><a href="?s_pass=2&order=allvote">60强其他</a></span>
+<span style="padding:4px 20px;background-color:{COLOR22};"><a href="?s_pass=1&order=id">其他选手<span style="font-size:10px;color:blue">(按ID排序)</span></a></span>
+<span style="padding:4px 20px;background-color:{COLOR23};"><a href="?s_pass=1&order=allvote">其他选手<span style="font-size:10px;color:blue">(按票数排序)</span></a></span>
+
 </div>
 <div style="text-align:center;padding-top:5px;padding-bottom:4px;background-color:#99ccff;">
 <span style="padding:4px 20px;background-color:{COLOR10};"><a href="?s_area=0">所有赛区</a><strong style="color:#99ccff;">{COUNT}</strong></span>
@@ -132,7 +133,7 @@ function check2()
 	<td width="1" style="border:0">+<span style="color:#0054b4">{list.HBTE}</span></td>
 	<td width="1" style="border:0">+<span style="color:#c8008f">{list.HBIVR}</span></td>
 	<td width="1" style="border:0">+<span style="color:#e00">{list.SMSVOTE}</span></td>
-	<td width="1" style="border:0;color:#3300FF;">={list.ALLVOTE}</td>
+	<td width="1" style="border:0;color:#3300FF;">=<a href="smsvote_info.php?mm_id={list.ID}" target="_blank">{list.ALLVOTE}</a></td>
 	<td align="center">{list.COMM_COUNT}</td>
 	<td align="center"><a href="{list.BOBOLINK}" target="_blank" title="检验视频">{list.BOBO}</a></td>
 	<td align="center"><input type="button" id="passbutton{list.ID}" value="{list.PASSBTN}" onClick="passupdate({list.ID});window.setTimeout('location.reload()',800);" style="{list.PASSBTNSTYLE}" {BTNFN} /><input type="button" value="删除" onclick="confirmdel({list.ID})" style="{list.PASSBTNSTYLE}" {BTNFN} /><input type="button" value="修改" onclick="window.open('user_edit.php?id={list.ID}','','width=450,height=605,toolbar=no,status=no,scrollbars=yes,resizable=yes');" {BTNFN} /></td>

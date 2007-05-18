@@ -30,9 +30,11 @@ var cellnum =1;
 var mobile = new Array();
 // set data here!!
 <?php
-$date_begin=mktime(0,0,0,date("m")-1,1,2007);//上月开始时间
-$date_end=mktime(0,0,0,date("m"),1,2007)-1;//上月结束时间
-$sql1="select feephone,addvote from ".$sms_table." where status=1 and polltime>=".$date_begin." and polltime<=".$date_end;
+//$date_begin=mktime(14,0,0,date("m")-1,18,2007);//上月开始时间
+//$date_end=mktime(0,0,0,date("m"),1,2007)-1;//上月结束时间
+$date_begin=mktime(0,0,0,5,1,2007);
+$date_end=mktime(14,0,0,5,16,2007);
+$sql1="select feephone,addvote from poll_sms2 where status=1 and polltime>=".$date_begin." and polltime<=".$date_end;
 $result1=$db->sql_query($sql1);
 while($row=$db->sql_fetchrow($result1))
 {
@@ -49,8 +51,8 @@ while(list($key,$val)=each($arr1))
 		echo 'mobile['.$i.']=new Array();'."\r\n";
 		echo 'mobile['.$i.'][0]='.$key.";\r\n";
 		echo 'mobile['.$i.'][1]='.$val.";\r\n";
+		$i++;
 	}
-	$i++;
 }
 ?>
 var num = mobile.length-1;
@@ -147,14 +149,14 @@ function setValues()
 </script>
 
 <div style="width:800px;margin-top:10px;margin-left:150px;text-align:center;border:1px solid #000;padding:10px 0;">
-<div>第二届美女博客大赛投票手机抽奖系统</div>
-
+<div>第二届美女博客大赛投票手机抽奖系统（5月上半月）</div>
+总共有<?=$i?>个手机号供抽取
 <div id="result" style="height:60px;width:400px;border:2px solid red;text-align:center;font-size:50px;line-height:50px;"></div>
 <div style="padding:5px;">
 <input id="start" type="button" value="开始" style="border: 1px solid; border-color: #aaa 000 #000 #aaa;width:4em; background: #fc0;" onclick="setTimer()" />
 <input id="end" type="button" value="停" style="border: 1px solid; border-color: #aaa 000 #000 #aaa;width:4em; background: #fc0;"onclick="clearTimer();setValues();" disabled/>
 </div>
-<div>PSP奖（3名）</div>
+<div>PSP奖（3名）(前两个号码是内部号码)</div>
 <div style="width:630px;">
 <?php
 for($i=1;$i<=3;$i++)

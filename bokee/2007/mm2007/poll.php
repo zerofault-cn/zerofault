@@ -15,6 +15,15 @@ include_once($root_path."dbtable.php");//ÉèÖÃÍ¶Æ±Ê±¼ä¶Î£¬¸ù¾Ý²»Í¬Ê±¼ä¶Î£¬½«Êý¾Ý±
 
 $ip_limit=30;//Ã¿ÌìÃ¿IPÏÞÍ¶30Æ±
 $id=$_REQUEST['id'];
+
+$sql="select * from mm_info where pass=3 and id=".$id;
+if($db->sql_numrows($db->sql_query($sql))==0)
+{
+	echo "´ËÑ¡ÊÖÎ´½øÈë¾öÈü£¬ÄúÎÞÐëÔÙ¸øËýÍ¶Æ±ÁË£¡<br>¸ÐÐ»Äú¶Ô´Ë´ÎÃÀÅ®²©¿Í´óÈüµÄ¹Ø×¢£¡";
+	exit;
+}
+
+
 $type=$_REQUEST['type'];
 $area=$_REQUEST['area'];
 if(''==$type)

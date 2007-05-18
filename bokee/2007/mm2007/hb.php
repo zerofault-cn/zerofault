@@ -10,6 +10,7 @@ $root_path="./";
 include_once($root_path."config.php");
 include_once($root_path."functions.php");
 include_once($root_path."includes/db.php");
+include_once($root_path."dbtable.php");
 $id=intval($_REQUEST['id']);
 $add=intval($_REQUEST['add']);//add表示每次增加的投票数
 $from=$_REQUEST['from'];

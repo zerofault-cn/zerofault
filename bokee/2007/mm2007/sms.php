@@ -14,7 +14,7 @@ include_once($root_path."dbtable.php");//根据不同的投票时间段选取不同的数据表
 
 $day_limit=30;//每天限投5票
 $month_limit=30;//每月限投30票
-$log_file="sms_query2.txt";
+$log_file="sms_query3.txt";
 
 /*
 本程序只接收上行短信，存入数据库，但不处理下行
@@ -90,6 +90,15 @@ if(strlen($feephone)>11)
 {
 	$feephone=substr($feephone,-11);
 }
+
+$sql="select * from mm_info where pass=3 and id=".$mm_id;
+if($db->sql_numrows($db->sql_query($sql))==0)
+{
+	echo $info='ID为'.$mm_id.'的选手未进入决赛，您无须再给她投票了！';
+	writeLog($log_file,$_SERVER["QUERY_STRING"],$info);
+	exit;
+}
+
 /*
 限制每日和每月投票数
 */
@@ -123,9 +132,15 @@ elseif($day_poll+$addvote>$day_limit)
 	$status=6;
 }
 //检查是否超过每月投票限制
+
+$sql3="select count(*) from poll_sms2 where polltime>".$month_start." and (status=0 or status=1) and addvote=1 and feephone='".$feephone."'";
+$sql30="select 5*count(*) from poll_sms2 where polltime>".$month_start." and (status=0 or status=1) and addvote=5 and feephone='".$feephone."'";
+$half_month_poll=$db->sql_fetchfield(0,0,$db->sql_query($sql3))+$db->sql_fetchfield(0,0,$db->sql_query($sql30));
+
 $sql2="select count(*) from ".$sms_table." where polltime>".$month_start." and (status=0 or status=1) and addvote=1 and feephone='".$feephone."'";
 $sql20="select 5*count(*) from ".$sms_table." where polltime>".$month_start." and (status=0 or status=1) and addvote=5 and feephone='".$feephone."'";
 $month_poll=$db->sql_fetchfield(0,0,$db->sql_query($sql2))+$db->sql_fetchfield(0,0,$db->sql_query($sql20));
+$month_poll+=$half_month_poll;
 if($month_poll>=$month_limit)
 {
 	$status=4;
