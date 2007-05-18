@@ -8,8 +8,15 @@ $root_path="./";
 include_once($root_path."config.php");
 include_once($root_path."functions.php");
 include_once($root_path."includes/db.php");
+include_once($root_path."includes/page.php");
+
 $sid=$_REQUEST['sid'];
 $field=$_REQUEST['field'];
+$getall=$_REQUEST['getall'];
+if(''==$getall)
+{
+	$getall=0;
+}
 $pageitem=$_REQUEST['pageitem'];
 if(''==$pageitem)
 {
@@ -69,10 +76,15 @@ elseif(''!=$sid)
 	case 'r_comment':
 	case 'c_comment':
 		$side_arr=array('l_comment'=>1,'r_comment'=>-1,'c_comment'=>0);
-		$sql="select * from comment where sid='".$sid."' and side=".$side_arr[$field]." and content!='' order by id desc limit ".$pageitem;
+		$sql="select * from comment where sid='".$sid."' and side=".$side_arr[$field]." and content!='' order by id desc";
 		$result=$db->sql_query($sql);
+		$total=$db->sql_numrows($result);
+		pageft($total,$pageitem,$field);
+		$result=$db->sql_query($sql." limit ".$offset.",".$pageitem);
+		$i=0;
 		while($row=$db->sql_fetchrow($result))
 		{
+			$i++;
 			$username=$row['username'];
 			if(''==$username)
 			{
@@ -101,6 +113,14 @@ elseif(''!=$sid)
 				<div class="pkliuwen">'.$content.'</div>
 			</div>
 			';
+			if(0==$getall && $i>=$pageitem)
+			{
+				break;
+			}
+		}
+		if($getall)
+		{
+			echo '<div class="pkrliutit" style="padding-right:0px;text-align:center;">'.$pagenav.'</div>';
 		}
 		break;
 	}
