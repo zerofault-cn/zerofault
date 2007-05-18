@@ -160,7 +160,11 @@
 	font-weight:bold;
 	padding-left:25px;
 	background:url(guandian.gif) no-repeat;}
-#l_comment,#r_comment,#c_comment{
+#l_comment,#r_comment{
+	height:500px;
+	overflow-y:auto;
+}
+#c_comment{
 	height:400px;
 	overflow-y:auto;
 }

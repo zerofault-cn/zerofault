@@ -17,11 +17,12 @@ function createXMLHTTP() {
 	return XMLHTTP;
 }
 var xmlhttp = createXMLHTTP();
-var i='';
+var i=0;
+var page=1;
 function getData(f)
 {
 	i++;
-	xmlhttp.open("get","/pkexport/export.php?i="+i+"&sid="+sid+"&field="+f+"&pageitem="+pageitem,false);
+	xmlhttp.open("get","/pkexport/export.php?i="+i+"&sid="+sid+"&field="+f+"&getall="+getall+"&page="+page+"&pageitem="+pageitem,false);
 	xmlhttp.send(null);
 	document.getElementById(f).innerHTML = xmlhttp.responseText.rtrim();
 }
