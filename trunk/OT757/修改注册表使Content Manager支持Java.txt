@@ -1,0 +1,4 @@
+HKEY_LOCAL_MACHINE\SOFTWARE\Alcatel\One Touch PC Suite 3\Content Manager
+
+新建DWORD值:EnableJava
+值为1

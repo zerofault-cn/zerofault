@@ -1,0 +1,24 @@
+MIDlet-1: EQO,/images/EQO_app_Icon.png,com.neltura.j2me.nudge.gui.GraphicsToolkit
+MicroEdition-Configuration: CLDC-1.0
+MIDlet-Version: 0.92.2
+MIDlet-Vendor: EQO Communications
+MIDlet-Name: EQO Mobile
+MicroEdition-Profile: MIDP-2.0
+Background: True
+AuthNetworkTimeout: 5
+AuthNetworkTimeoutRetries: 6
+AuthNetworkRetryPolicy: 1
+AuthURL: www.eqo.com
+fixedReceivePort: true
+NudgeUiSize: 128x149
+NudgeSendRecvSame: true
+VendorTarget: motorola.MotorolaFactory
+startingServer: 0
+transport: tcp
+MIDlet-Jar-Size: 248309
+MIDlet-Jar-URL: EQO.jar
+NelturaUserId: zerofault
+PhoneNumber: 8613880767668
+dnsPrefix: nsg
+dnsSuffix: .eqo.com
+numServers: 2
