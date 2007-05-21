@@ -1,0 +1,8 @@
+1. Port Range Forwarding
+Opens a port or a range of ports to a single IP address on a network.
+
+2. Port Triggering
+Similar to Port Forwarding, except: a) an outgoing trigger port is required before incoming ports are forwarded, and, b) outgoing and incoming ports are applicable to all IP addresses on the same network.
+
+3. UPnP Forwarding
+same as Port Forwaring but the port or port range can be configured by any UPnP enabled application, e.g., MSN Messenger or Windows Live Messenger.
