@@ -1,0 +1,41 @@
+电脑利用手机GPRS上网的设置方法
+
+首先当然是要让手机连接上电脑,让电脑认出手机Modem,并装好Modem驱动.
+
+采用cmnet方式接入
+
+1,在系统"设备管理器"->"调制解调器"中选择你的手机Modem(比如我的是Standard Modem Over IR link),在Modem的属性->高级中的额外初始化命令中填入AT+CGDCONT=1,"IP","cmnet"其他都不用修改,确定即可.
+
+2,打开网络连接,创建一个新的连接,下一步,选择"连接到Internet",下一步,选择"手动设置我的连接",下一步,选择"用拨号调制解调器连接",下一步,选择你的手机Modem,下一步,ISP名称可以随便填,比如填"GPRS",下一步,电话号码填"*99***1#",下一步,用户名密码等都不用填,再下一步,点"完成"即可.
+
+3,双击"网络连接"中刚才建立的"GPRS"连接,弹出"连接GPRS"的窗口,直接点"拨号"即可.
+
+4,打开IE冲浪去吧.
+
+采用cmwap方式接入
+
+1,在系统"设备管理器"->"调制解调器"中选择你的手机Modem(比如我的是Standard Modem Over IR link),在Modem的属性->高级中的额外初始化命令中填入AT+CGDCONT=1,"IP","cmwap"其他都不用修改,确定即可.
+
+2,同上面第2步.
+
+3,同上面第3步.
+
+4,打开"Internet属性",转到"连接"标签",在"拨号和虚拟专用网络设置"下选择刚才建立的连接"GPRS",点"设置",在"代理服务器"下勾选"对此连接使用代理服务器",地址填入"10.0.0.172"，端口填入"80",然后确定,再确定.
+
+
+5,打开记事本，写下如下代码：
+
+Windows Registry Editor Version 5.00
+
+[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Internet Settings\5.0\User Agent]
+@="OpenWave"
+
+[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Internet Settings\5.0\User Agent\Post Platform]
+".NET CLR 1.1.4322"=""
+"OpenWave"=""
+
+保存为REG格式！然后双击该文件！问"是否确定",点"是"导入注册表.
+(注意,有的手机不需导入这个注册表,有的手机即使导入也不一定能上网,本人仅在自己的手机(Alcatel OT757)上测试成功,我想主要是针对手机浏览器是OpenWave的吧)
+
+6,打开IE开一个网页试试!
+ 
