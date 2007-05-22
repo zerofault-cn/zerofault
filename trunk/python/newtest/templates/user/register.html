@@ -1,0 +1,43 @@
+
+{% block content %}
+<style type="text/css">
+#content-main .label
+{
+	width:140px;
+	text-align:right;
+	padding-right:10px;
+	color:#3366ff;
+}
+#content-main .tip
+{
+	border:1px solid #FFA475;
+	margin-left:5px;
+	background-color:#FFEEE5;
+	color:#ff7300;
+}
+.tip_ok
+{}
+.tip_loading
+{}
+.tip_err
+{padding:0px 5px 0px 25px;background:url(img/ico_04.gif) 5px center no-repeat #FFEEE5;border:1px solid #FFA475;color:#ff0000;line-height:20px;margin:0px 0px 0px 10px;}
+</style>
+<div id="header">
+<h1 id="title">新建一个帐号</h1>
+</div>
+<hr>
+<script language="javascript" type="text/javascript" src="/python/site_media/checkform.js"></script>
+
+
+<form action="submit" method="post" target="iframe1">
+<div id="content-main">
+	<div><span class="label">登录名:</span><span class="input"><input type="text" name="username" onfocus="foc(this)" onblur="blu(this)" /></span><span class="tip" id="username_tip"></span></div>
+	<div><span class="label">设定密码:</span><span class="input"><input type="password" name="password" onfocus="foc(this)" onblur="blu(this)" /></span><span class="tip" id="password_tip"></span></div>
+	<div><span class="label">重复密码:</span><span class="input"><input type="password" name="repassword" onfocus="foc(this)" onblur="blu(this)" /></span><span class="tip" id="repassword_tip"></span></div>
+	<div><span class="label">昵称:</span><span class="input"><input type="text" name="nickname" onfocus="foc(this)" onblur="blu(this)" /></span><span class="tip" id="nickname_tip"></span></div>
+	<div><span class="label">E-mail:</span><span class="input"><input type="text" name="email" onfocus="foc(this)" onblur="blu(this)" /></span><span class="tip" id="email_tip"></span></div>
+	<div><span class="label"></span><input type="submit" name="submit" value="提交" /> <input type="reset" name="rest" value="复位" /></div>
+</div>
+</form>
+
+{% endblock %}
