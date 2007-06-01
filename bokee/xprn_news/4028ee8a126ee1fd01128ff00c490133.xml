@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<NewsML>
+  <NewsEnvelope>
+    <DateAndTime>20070515T214000</DateAndTime>
+  </NewsEnvelope>
+  <NewsItem>
+    <Identification>
+      <NewsIdentifier>
+        <ProviderId>xprn.com</ProviderId>
+        <DateId>20070515</DateId>
+        <NewsItemId>4028ee8a126ee1fd01128ff00c490133</NewsItemId>
+        <RevisionId PreviousRevision="0" Update="N">1</RevisionId>
+        <PublicIdentifier>urn:newsml:xprn:200705154028ee8a126ee1fd01128ff00c490133:1</PublicIdentifier>
+      </NewsIdentifier>
+    </Identification>
+    <NewsManagement>
+      <NewsItemType FormalName="News"/>
+      <FirstCreated>20070515T214000</FirstCreated>
+      <ThisRevisionCreated>20070515T214000</ThisRevisionCreated>
+    </NewsManagement>
+    <NewsComponent Essential="yes" EquivalentsList="no">
+      <Role FormalName="Main"/>
+      <NewsLines>
+        <HeadLine>「香港設計師協會獎07」亞太區設計雙年展提高設計專業性  廣邀區內精英參賽</HeadLine>
+        <ByLine/>
+        <DateLine/>
+        <CopyrightLine>(C) 2007 XPRN, Inc. All rights reserved.</CopyrightLine>
+      </NewsLines>
+      <AdministrativeMetadata>
+        <Catalog>
+          <Resource>
+            <Urn>urn:newsml:xprn.com:20011001:Providers:1</Urn>
+            <DefaultVocabularyFor Context="Provider/Party"/>
+          </Resource>
+        </Catalog>
+        <Provider>
+          <Party FormalName="XPRN"/>
+        </Provider>
+        <Creator>By Staff Reporter</Creator>
+      </AdministrativeMetadata>
+      <RightsMetadata>
+        <Copyright>2007</Copyright>
+      </RightsMetadata>
+      <DescriptiveMetadata>
+        <Language FormalName="zh-TW"/>
+        <Property FormalName="PublicCompany">
+          <Property FormalName="CompanyName" Value=""/>
+          <Property FormalName="StockSymbol" Value=""/>
+          <Property FormalName="StockExchange" Value=""/>
+        </Property>
+        <Property FormalName="IndustryName" Value="Advertising,Marketing"/>
+        <Property FormalName="IndustryName" Value="Media"/>
+      </DescriptiveMetadata>
+      <ContentItem>
+        <MediaType FormalName="TEXT"/>
+        <DataContent>&lt;![CDATA[
+香港，5月15日 /新華美通/ -- 亞太區內備受推崇的「香港設計師協會獎07」（HKDA Awards 07）現已開始接受區內各界別的設計師參賽。大會今年以 "Design. No Junk Food." 為主題，銳意提高設計界的專業性，表揚優質設計。「香港設計師協會獎07」參賽作品分為平面、?品、新媒體、空間四大類別，共設24個項目。
+
+今年大會首次得到中國銀行(香港)、香港知專設計學院及康樂及文化事務署的合辦，預期「香港設計師協會獎07」參賽作品數量將再創高峰。
+
+香港設計師協會主席余志光表示：「『香港設計師協會獎』已有逾30年歷史，獲亞太區設計同業廣泛認同。今年適逢香港設計師協會35周年，我們特以提昇『專業性』為目標，舉辦各項活動。我們感謝合辦機構對『香港設計師協會獎07』的支持，配合今年目標，讓大眾更了解香港設計的專業地位和策略性價值。」
+
+「香港設計師協會獎07」邀請世界各地的設計界權威作評審，包括：平面設計類別 -- Kirsten Dietz、Vince Frost、Natasha Jen、佐藤可士和 (Kashiwa Sato) 及蔡楚堅；產品設計類別 -- 賴平、Michael Young及葉智榮；空間設計類別 -- Matali Crasset、文田昭仁 (Fumita Akihito)及陳樂文；新媒體設計類別 -- Heike Brockmann、Lars Cortsen及Robert Lindstrom。
+
+參賽作品必須完全來自亞太區內的原創作品，今年新增「破格設計」類別，以接受實驗性或非傳統商業性作品。截止日期為2007年6月2日。比賽結果將於2007年10月5日在香港舉行的頒獎晚宴上公佈。所有得獎作品將於2007年10月5日至14日假香港中央圖書館展出，並刊於「香港設計師協會獎07」得獎作品集內。
+
+欲了解更多關於「香港設計師協會獎07」詳情，包括評審簡介、類別及參賽資料，請瀏覽官方網站：http://www.hongkongda.com/awards07 。
+
+
+如有傳媒垂詢，請聯絡「香港設計師協會獎07」新聞秘書處：
+
+藍藍的天有限公司
+王意淳	
+電話：+852-2234-6424 / +852-6290-3801	
+電郵：edith@bbluesky.com
+
+潘迪美
+電話：+852-2234-6424 / +852-9229-4800
+電郵：angel@bbluesky.com
+
+消息來源：香港設計師協會]]&gt;</DataContent>
+      </ContentItem>
+    </NewsComponent>
+  </NewsItem>
+</NewsML>
