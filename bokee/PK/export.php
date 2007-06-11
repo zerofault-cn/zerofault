@@ -106,7 +106,7 @@ elseif(''!=$sid)
 			echo '
 			<div class="pkrleftext">
 				<div class="pkrliutit">
-					<span class="lt">用户昵称:'.$username.'</span>
+					<span class="lt"><span style="color:red">'.($total-$i-$offset+1).'</span>楼：'.$username.'</span>
 					<span class="rt">发表时间:'.$addtime.'</span>
 					<div class="clear"></div>
 				</div>
