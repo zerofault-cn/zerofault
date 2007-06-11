@@ -6,7 +6,7 @@
 //	header("location:index.php");
 }
 $blogID=getBlogID();
-$adminList = array('wuyanpeng','zengaizhi', 'flashtom','zerofault');
+$adminList = array('wuyanpeng','zengaizhi', 'flashtom','zerofault','tangqian');
 if(in_array($blogID, $adminList))
 {
 //	header("location:channel.php?sys_flag=1");

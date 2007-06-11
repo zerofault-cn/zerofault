@@ -197,7 +197,7 @@ border=0>
                             <TD width="292" align="left" class=th2><SPAN class=zt1><A 
                               href="{newArticle.url}" target="_blank" title="{newArticle.title}">·{newArticle.tmp_title} </A></SPAN></TD>
                             <TD width="42" class=th2>
-							<input type="button" value="投票" onclick="window.open('poll.php?id={newArticle.article_id}&author_id={newArticle.author_id}');" />
+							<input type="button" value="投票" onclick="window.open('poll.php?id={newArticle.article_id}&author_id={newArticle.author_id}&'+Math.random());" />
                            </TD>
                             <TD class=th2><div align="center" class="style3">{newArticle.datetime}</div></TD>
                           </TR>
@@ -247,7 +247,7 @@ border=0>
                               class=zt1>{hotArticle.tmp_blogname} </SPAN></div></TD>
                             <TD width="292" align="left" class=th2><SPAN class=zt1><A 
                               href="{hotArticle.url}" target="_blank" title="{hotArticle.title}">·{hotArticle.tmp_title} </A></SPAN></TD>
-                            <TD width="42" class=th2><input type="button" value="投票" onclick="window.open('poll.php?id={hotArticle.article_id}&author_id={hotArticle.author_id}');" /></TD>
+                            <TD width="42" class=th2><input type="button" value="投票" onclick="window.open('poll.php?id={hotArticle.article_id}&author_id={hotArticle.author_id}&'+Math.random());" /></TD>
                             <TD class=th2><div align="center" class="style3">{hotArticle.vote}</div></TD>
                           </TR>
                           <!-- END hotArticle -->
