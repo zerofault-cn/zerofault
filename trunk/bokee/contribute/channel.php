@@ -70,7 +70,7 @@ while($row=$db->sql_fetchrow($result2))
 		"month_article"=>$count
 		));
 }
-//本频道热门作者
+//本频道本月热门作者
 $sql3="select author_id,vote from article where addtime>(UNIX_TIMESTAMP()-30*86400) and (channel_id1=".$id." or channel_id2=".$id." or channel_id3=".$id.")";
 $result3=$db->sql_query($sql3);
 while($row=$db->sql_fetchrow($result3))
@@ -88,6 +88,11 @@ while(list($key,$val)=each($arr))
 	$blogname=getField($key,'blogname','author');
 	$tmp_blogname=substr_cut($blogname,10);
 	$blogurl=getField($key,'blogurl','author');
+	$blogid=getField($key,'blogid','author');
+	if(strlen($blogurl)<18)
+	{
+		$blogurl='http://'.$blogid.'.bokee.com/';
+	}
 	$tpl->assign_block_vars("hotAuthor",array(
 		"blogname"=>$blogname,
 		"tmp_blogname"=>$tmp_blogname,

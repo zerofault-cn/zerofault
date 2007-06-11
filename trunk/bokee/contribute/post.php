@@ -1,5 +1,11 @@
 <?
 define('IN_MATCH', true);
+
+header("Expires:  " . gmdate("D, d M Y H:i:s") . "GMT");
+header("Last-Modified: " . gmdate("D, d M Y H:i:s") . "GMT");
+header("Cache-Control: no-cache, must-revalidate");
+header("Pragma: no-cache");
+
 $root_path ="./";
 include_once($root_path."config.php");
 include_once($root_path."includes/template.php");
@@ -32,12 +38,12 @@ if($_POST['Submit'])
 	if($db->sql_numrows($result2)>0)
 	{
 		$author_id=$db->sql_fetchfield(0,0,$result2);
-		$sql3="update author set blogname='".$blogname."',email='".$email."' where id=".$author_id;
+		$sql3="update author set blogname='".$blogname."',blogurl='".$blogurl."',email='".$email."' where id=".$author_id;
 		$db->sql_query($sql3);
 	}
 	else
 	{
-		$sql3="insert into author set blogid='".$blogID."',blogname='".$blogname."',email='".$email."'";
+		$sql3="insert into author set blogid='".$blogID."',blogurl='".$blogurl."',blogname='".$blogname."',email='".$email."'";
 		$result3=$db->sql_query($sql3);
 		$author_id=$db->sql_nextid();
 	}
