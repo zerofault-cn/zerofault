@@ -5,7 +5,7 @@ $root_path="./";
 include_once($root_path."config.php");
 include_once($root_path."functions.php");
 include_once($root_path."includes/db.php");
-include_once($root_path."includes/page.php");
+include_once($root_path."includes/page0.php");
 
 if($_REQUEST['del'])
 {

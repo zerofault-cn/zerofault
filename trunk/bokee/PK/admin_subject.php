@@ -5,7 +5,7 @@ $root_path="./";
 include_once($root_path."config.php");
 include_once($root_path."functions.php");
 include_once($root_path."includes/db.php");
-include_once($root_path."includes/page.php");
+include_once($root_path."includes/page0.php");
 
 $action=$_REQUEST['action'];
 if('add'==$action)
@@ -57,13 +57,15 @@ $result=$db->sql_query($sql." limit ".$offset.",".$pageitem);
 while($row=$db->sql_fetchrow($result))
 {
 	?>
-	<tr>
+<tr>
 	<td><?=$row['id']?></td>
 	<td id="<?=$row['id']?>" onmouseover="this.style.cursor='hand'" onclick="modify(<?=$row['id']?>);"><?=(''==$row['title'])?'点击修改':$row['title']?></td>
 	<td><span style="color:#FE6309"><?=$row['l_vote']?></span>/<span style="color:#0455DC"><?=$row['r_vote']?></span></td>
 	<td><span style="color:#FE6309"><?=$row['l_comm']?></span>/<span style="color:#0455DC"><?=$row['r_comm']?></span>/<span style="color:#A4CA64"><?=$row['c_comm']?></span> [<a href="admin_comment.php?sid=<?=$row['id']?>">管理评论</a>]</td>
 	<td nowrap><?=date("Y-m-d H:i:s",$row['addtime'])?></td>
-	
+</tr>
+<tr>
+	<td colspan="5"><div height="1" style="border-bottom:1px dotted #aaa"></div></td>
 </tr>
 	<?
 }

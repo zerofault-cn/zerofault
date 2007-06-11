@@ -16,6 +16,7 @@ function createXMLHTTP() {
 	} 
 	return XMLHTTP;
 }
+
 var xmlhttp = createXMLHTTP();
 var i=0;
 var page=1;
@@ -41,23 +42,49 @@ function mysubmit(formId)
 }
 function clearForm()
 {
-	document.pkForm_l.title.value="";
-	document.pkForm_r.title.value="";
-	document.pkForm_c.title.value="";
-	document.pkForm_l.content.value="";
-	document.pkForm_r.content.value="";
-	document.pkForm_c.content.value="";
+	for(i=0;i<document.forms.length;i++)
+	{
+		if(document.forms[i].name=='pkForm_l' || document.forms[i].name=='pkForm_r' || document.forms[i].name=='pkForm_c')
+		{
+			document.forms[i].title.value="";
+			document.forms[i].content.value="";
+		}
+	}
 }
 function getAllData()
 {
-	getData('l_vote');
-	getData('r_vote');
-	getData('l_comm');
-	getData('r_comm');
-	getData('c_comm');
-	getData('l_comment');
-	getData('r_comment');
-	getData('c_comment');
+	if(document.getElementById('l_vote')!=null)
+	{
+		getData('l_vote');
+	}
+	if(document.getElementById('r_vote')!=null)
+	{
+		getData('r_vote');
+	}
+	if(document.getElementById('l_comm')!=null)
+	{
+		getData('l_comm');
+	}
+	if(document.getElementById('r_comm')!=null)
+	{
+		getData('r_comm');
+	}
+	if(document.getElementById('c_comm')!=null)
+	{
+		getData('c_comm');
+	}
+	if(document.getElementById('l_comment')!=null)
+	{
+		getData('l_comment');
+	}
+	if(document.getElementById('r_comment')!=null)
+	{
+		getData('r_comment');
+	}
+	if(document.getElementById('c_comment')!=null)
+	{
+		getData('c_comment');
+	}
 }
 function getMiniData()
 {
