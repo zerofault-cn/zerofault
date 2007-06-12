@@ -1,0 +1,263 @@
+什么是AVS（AVI synthesizer）？如何在压制rmvb中合理利用AVS？     
+
+--------------------------------------------------------------------------------
+
+和ssa字幕特效一样，avs也有其神秘的一面。
+
+
+做为rmvb制作爱好者，尽管很早就接触过avs，但真正体会出其强大功能的还是近2月的事，因为自己在rmvb压制方面也算积累了不少经验和技巧，对于avs在rmvb的应用有自己的一番见解，呵呵！
+
+AviSynth是AVI synthesizer的缩写，简单来说就是个合成平台！在媒体文件和压缩软件之间担任"桥梁"的角色。这座桥梁不是简单的独木桥、而是有栏杆、有台阶（比喻其提供的大量虑镜）。因此比较灵活！如对于压制real格式来说，源媒体文件是vob、d2v(DVD处理过程中的中间文件)、ac3、mp3、avi、DAT/mpge等，而应用程序是各种real压缩软件如Helix real producer、BatchRealProducer144和EasyRealProducer14，它们都支持avs的导入。个人推荐使用EasyRealProducer14（可能目前的版本在avs方面不够完善，但趋势是明朗的，呵呵）。Auto Rv9虽然在avs方面有所体现，但不适合刚接触rmvb压制的朋友，我总觉得有误导之嫌。
+
+AviSynth首先要编写建立一个包含特定命令的文本，称之为"脚本"(文件后缀名为avs)，这些命令指定要运行处理的媒体文件和滤镜！
+
+AviSynth的平台和相关滤镜更新比较快，功能不断增加，编辑avs脚本也更简单。在射手网可以下载到这个平台软件。至于滤镜可以到得到http://www.avisynth.org/warpenterprises/下载，至于doom9论坛，大家知道有这么个乌合的巢穴就可以了！
+
+上面简单介绍了AviSynth的一些基本概念作为引子，在正文开始前，我想首先交待很重要的一点：avs脚本及其各种滤镜主要适用于大码率媒体文件的处理，也即我们经常接触的DVDRIP/TVRIP avi的制作优化。而对于高度压缩格式的rmvb来说，我们利用的avs滤镜应该持慎重态度（如亮虑镜、字幕虑镜、画面调整等少数几个）！也就是说avs在rmvb压制方面，我们需要的是利用avs灵活的“中间人”的角色（看下面的例子）！而不是为了av s而去压制！我看到好多朋友初步接触rmvb压制，就在用avs压制DVDRIP-rmvb，完全套用个别论坛给出的avs脚本，里面全是各种滤镜，如3D增强、柔化、去丝等！这些滤镜如果制作DVDRIP的avi那是会获得肯定的画质效果，但是用于rmvb压制，仿佛就是东施效颦，忠言逆耳！real压制的原理和高码率的mpge4编 码是不同的，后者有视频上层的概念，因此滤镜的修饰作用可以体现。我看Doom9讨论avs时，主要还是处理各种大数据量影像媒体为主。如处理自己DV录制的影视、电视卡录制的视频源之类的等。而众所周知的影响real媒体压缩效果就是片源效果。VCD片 源的再怎么处理也不可能达到DVD的效果，而DVD片源，再怎么胡乱压制也不会差到哪里。因此avs直接在rmvb的压制中需要适当选择，而不能盲从，特别是对于各种滤镜的选择更要注意。
+
+第二，需要认识avs的桥梁作用。修饰之余尽可能的使用压缩软件本身的功能。如rmvb压制中帧率的改变就可以在压缩软件中进行设置，而不要在avs中写入相关的语句。另外各种压缩软件使用的是real的压缩内核，而real压缩一般以YV12的快速处理 环境为主。这也是在使用avs压制rmvb时需要注意的问题
+
+DVDRIP-rmvb的压制请使用我中高级教程里介绍的方法来压制，更显成熟和含蓄！因为黑边裁减、画面缩放和亮度调节都可以通过辅助软件如ffdshow来实现。请注意我使用的少数几个ffdshow的辅助功能（ffdshow可以变相的认为是avs滤镜的插件化） 。其道理和avs是一样的，我只是用了其字幕、调节亮度和缩放尺寸等少数几个功能！
+
+自己觉得上文对avs的介绍及应用范围要比下面的内容来的更重要!这是我直到现在才撰写完毕这篇小文的良苦之处。我希望接触过avs法压制rmvb的朋友能够更有效的利用这种方法！
+
+我自己测试过利用avs压制vob文件。感觉：1，压缩速度较快，因为vob直接压缩成rmvb本身就需要画面缩放，用常规方法压制速度较慢。2，黑边裁减很是轻松。3，可以灵活的加载字幕合水印文件。4，压缩效果不如高质量的DVDRIP-rmvb。
+
+
+下面先简单的介绍些基本方法和常用滤镜。
+
+首先安装avisynth，并将常用虑镜插件dll文件拷贝到安装目录的plugin目录里。
+
+我们主要利用avs来压制DVD的vob文件
+
+一 基本代码
+1. LoadPlugin(),加载插件。
+如：
+LoadPlugin("VSFilter.dll") 加载字幕插件
+LoadPlugin("mpasource.dll") 加载mp3插件
+
+请下载以上提到的滤镜！并解压制到plugin目录里（当然目录可以自己选定）
+
+2.源媒体读取
+DirectShowSource("e:\vob\ss.VOB")
+DirectShowSource()在高版本avisnyth中显得更万能些，常用的媒体格式，如avi、mpge1/dat、mpge2/vob/bin都可以加载，另外可以不用分离视频和音频，而直接压缩！想要直接压制vob请使用高版本的avisynth，如目前的2.54
+
+AVISource(e:\avi\1.avi,false)
+这个对于DVDRIP压制者来说可能更常用些.false表示禁止音频！
+
+WAVSource("e:\vob\ss.wav") 读取wave音频
+AC3SOUECE("e:\vob\ss.ac3") 读取ac3音频
+MPASOURCE("e:\vob\ss.MP3") 读取mp3音频
+注：WAVSOURCE和AVISOURCE是属于核心脚本，无须读取插件，但AC3SOURCE和MPASOURCE需要读取AC3SOURCE和MPASOURCE插件。DirectShowSource的读取需要安装各种音频和视频的解码器
+
+3. crop()、LanczosResize()裁黑边和调整大小
+vob文件画面大小一般720×480。16：9宽银幕的都带了很大的黑边，需要裁减掉。也是avs用于vob压制的关键因素之一
+裁减黑边和缩放画面是vob文件压制中很重要的因素，一般连用。对于本身就无黑边的文件直接用LanczosResize()
+16：9画面的有2种情况，请记住这几个数值，在rmvb压制中直接套用即可！
+DVD变形宽银幕：640×352，608×336
+电影宽银幕： 640×272
+
+如要将电影宽银幕的画面比列调整到640×272,avs里可以这么写
+Crop(8,90,704,300)
+LanczosResize(640,272)
+
+如要将DVD变形宽银幕的画面比列调整到608×336，avs里可以这么写
+Crop(8,64,704,352)
+LanczosResize(608,336)
+
+无黑边的画面的直接用
+LanczosResize(512,384)
+缩小同时画面强制到标准4：3
+
+请直接记住这几句就可以了得到最佳的rmvb画面大小了！
+
+4.亮度滤镜
+亮度滤镜是使用avs压制vob-rmvb vcd-rmvb的又一关键因素。画面太暗的rmvb是失败之作
+
+介绍2个
+Levels(0,1.5,255,0,255)
+改第二个，我感觉数值在1.3-2之间比较合适，一般1.5比较合适
+
+Tweak(0,1,20,1)
+4个浮点数分别表示：调节色度，饱和度，亮度，对比度。一般将第三个调节在0－30之间，以15－20为宜
+
+个人感觉level()比较好，主要调背景为主，而vob文件主要是背景暗。注意Tweak的其他调节可能和颜色控制环境有关，如YUY2，因此其它的最好不要再改动
+
+注：ffdshow目前的版本还是不能支持mpge2唉！否则可以利用它来调节亮度了
+
+5.字幕滤镜
+TextSub("h:\avs\jrvs.ssa") 加载水印文本
+VobSub("e:\vob\ss.idx") 加载影片字幕
+
+6.其它虑镜介绍
+在rmvb压制中不推荐使用，如部分朋友选用的
+FluxSmooth(5,7) 柔化滤镜
+Convolution3d("moviehq") 3D优化滤镜
+2者需要加载相应的滤镜插件
+
+二，合成
+1
+LoadPlugin("VSFilter.dll")
+LoadPlugin("mpasource.dll")
+video=AVISource("c:\1.avi",false).TextSub("c:\logo.ssa").VobSub("c:\1.idx").Lanczosresize(512,384) ＃定义了avi源、字幕、水印和画面大小
+audio=mpasource("c:\1.mp3") ＃音频
+AudioDub(video, audio) 
+
+为简便起见，以avi文件为例说明语法，但此例不推荐用，直接用压缩软件＋ffdshow设置即可。原始avs加载了至少3个额外的滤镜，已略去！
+
+该方法可以用于双语DVDRIP的压制，使用双语处理的软件提取自己要的声道即可，而不要再合并成avi了！
+
+DTS音轨格式的可以用这个avs法压制 
+先根据中高级教程里的方法将DTS音频转换成wave格式，如放在e:\avi\目录里 
+avs可以这么写： 
+LoadPlugin("VSFilter.dll") 
+video=AVISource("c:\1.avi",false).TextSub("h:\avs\jrvs.ssa").VobSub("e:\avi\t1.idx") 
+audio=WAVSource("e:\avi\t1.wav") 
+AudioDub(video, audio) 
+如此可以不用再合并那么费事了！ 
+
+
+2
+LoadPlugin("VSFilter.dll") 
+b=directshowSource("e:\avs\cd1.avi").TextSub("e:\BBSLogo\logo.ssa").VobSub("e:\avs\cd1.idx").Lanczosresize(608,320) 
+c=directshowsource("e:\avs\cd2.avi").VobSub("e:\avs\cd2.idx").Lanczosresize(608,320) 
+final=b+c 
+return final 
+这个语法很好，直接将多CD的压制成一个rmvb，可以在一定程度上解决单CD码率过度错位。如分别1pass压制CD1和CD2可能会由于码率错位太大而使文件增大，但如果2个一起压制，则可能由于码率补偿，平均码率错位反而不大，而使文件大小减小。
+请注意，这里自己可以将水印放在CD1上，而CD2不会显示（说明什么？呵呵！）
+
+一般DTS的都要2CD以上，有时影片长度也不长，所以DTS的电影可以这么写avs压制
+LoadPlugin("VSFilter.dll")
+video=AviSource("e:\cd1.avi",false).Vobsub("e:\cd1.idx").TextSub("c:\logo.ssa")+AviSource("e:\cd2.avi",false).VobSub("e:\cd2.idx") 
+audio=wavSource("e:\cd1.wav")+wavSource("e:\cd2.wav") 
+AudioDub(video, audio) 
+
+
+3.双语的vcd分成单语来做
+LoadPlugin("VSFilter.dll")
+video=DirectShowSource("F:\mpge\*.dat").Levels(0,1.7,255,0,255).LanczosResize(480,360)
+return GetChannel(video,2)
+
+1 left channel 
+2 right channel ，一般是国语
+
+据说这里的*.dat表示成批压制！
+
+如果要求控制帧率，那么有句改成这个
+video=DirectShowSource("F:\mpge\*.dat",fps=25)
+
+4,双语rmvb的制作
+a，双语DVDRIP压制成双语的rmvb
+先用AVIMux_GUI来处理音频。右键点击提示另存为mp3即可
+对于喜欢压制rmvb而门外与DVDRIP压制的朋友建议使用AVIMux_GUI来处理音频，更显轻松合理。
+
+avs语法如下：
+
+LoadPlugin("VSFilter.dll") 
+LoadPlugin("mpasource.dll") 
+video=AVISource("c:\1.avi",false).TextSub("c:\logo.ssa").VobSub("c:\1.idx")
+R＝MPASOURCE("e:\R.MP3")
+L＝MPASOURCE("e:\L.MP3")
+stereo = MergeChannels(R,L)
+return AudioDub(video, stereo) 
+
+双语VCD-rmvb的压制
+avs语法如下
+LoadPlugin("VSFilter.dll")
+video=DirectShowSource("F:\mpge\*.dat").Levels(0,1.7,255,0,255).LanczosResize(480,360)
+stereo＝GetChannel(video,1,2)
+return AudioDub(video,stereo)
+注：不过双语VCD-rmvb可以直接使用压缩软件进行制作，声音码率使用44k以上的立体声即可。我这里是想加大点亮度，那么同时就放大、水印一起来好了，呵呵！
+
+以上都是avi，都可以自动关联ffdshow，所以亮度可以在ffdshow里设置！但请同时去掉ffdshow的字幕和avisynth功能
+
+下面集中给2个用avs法压制vob-rmvb的avs代码
+先按照常规教程里介绍的方法将vov文件拷贝到硬盘上，然后在记事本里写上如下语句，保存为后缀名为avs的文件即可
+然后可以用mediaplayer播放这个avs（想一想，是怎么个效果。呵呵，avs不是联系源文件和应用程序的桥梁吗，播放avs就相当于在播放带字幕和水印的影视了）
+
+1，无黑边者
+LoadPlugin("VSFilter.dll")
+DirectShowSource("e:\vob\ts.VOB")
+LanczosResize(512,384)
+Levels(0,1.5,255,0,255)
+VobSub("e:\vob\ss.idx")
+TextSub("h:\avs\jrvs.ssa")
+
+2,宽银幕（16：9）
+LoadPlugin("VSFilter.dll")
+DirectShowSource("e:\vob\ss.VOB")
+Crop(8,64,704,352)
+LanczosResize(608,336)
+Levels(0,1.5,255,0,255)
+TextSub("H:\avs\jrvs.ssa")
+
+请使用Easy Real Producer14压制，设置如图 
+
+vob文件直接压制成rmvb，初始平均码率可以加大。一般推荐用480k－1500k，帧率23，声音使用44k的，1pass压制，宁可码率错位来保证清晰度
+
+另外利用ffdshow支持avs的特点，可以在DVDRIP-rmvb压制时加载多字幕（就是动态ssa水印字幕了）。或者加载声音文件来个声形并茂（结合动态水印的时间轴）
+
+好了，我是从rmvb压制者角度对avs做的一些介绍和使用技巧。可能和部分朋友的观点有些冲突，不过相信实践吧。DVDRIP的压制和rmb压制不是一回事，就这么实际！
+
+avs在rmvb压制中另外一个作用是利用ffdshow支持avisynth的功能来实现多字幕的加载，部分动态水印可以通过这种方法来实现，但是还不是很完善，请参见水印的那个帖子
+
+第二，部分VCD/mpge格式由于插件冲突，在播放时能自动加载版权水印，但用压缩软件压缩时就不能自动加载了，那么这个时候，就利用avs了
+
+语法如下，比如对于一个dat文件，压缩时不能加载ssa字幕
+
+LoadPlugin("VSFilter.dll")
+DirectShowSource("F:\mpge\2.dat").TextSub("h:\avs\jrvs.ssa") 
+
+
+但是达到完美的avs语句应该是
+LoadPlugin("VSFilter.dll")
+DirectShowSource("F:\mpge\2.dat").Levels(0,1.7,255,0,255).LanczosResize(480,360)
+TextSub("h:\avs\jrvs.ssa") 
+
+同时增加了亮度和放大了画面
+注：亮度这个值要用到的话，一般1.5，感觉亮度合适的话，可以不用这个语句
+VCD画面放大，不要超过512×384，否则就是傻样的rmvb了，违反压缩时画面应该缩小的原则。放大的同时也纠正了画面的比列到标准的4：3画面 
+
+
+再来谈谈2个重要的加载滤镜directshowsource 和avisource 
+
+avs的重要功能体现在其合成、嵌套以及强大的增强滤镜。早期的avs需要先分离视频和音频，然后再利用avs的合成，比较繁琐，一般人也不愿意接触。随着avisynth版本的提高，directshowsource 和avisource可以直接加载，不用分离视频和音频了，avs语法也显得简练起来，因此目前的avs开始广泛的普及了。不过我先提到，真正的掌握和利用avs，可能还是要用到其分离合成的步骤，呵呵！我下面是从实用性角度（比如我们最常接触的几种rm vb的压制）谈谈。 
+
+directshowsource ,avisource是avs中最强大的2个加载语法，版本越高越强大！一般directshowsource 如同其名，只要安装directshowsource 的插件，也就是说，可以用mediaplayer来播放，那么就可以用Directshowsource 来加载。如，安装了ac3filter7.0，就可以直接用Directshowsource来加载ac3音频了，安装了mpge2插件，Directshowsource就可以加载bin(SVCD)和vob(DVD)文件了。牛过的mimi8（阿飞） 的解码插件包，基本是基于directshowsource的插件，配合avs，很大程度上方便了directshowsource的运用！ 
+
+而avisource和wavescource，ac3scource还有mpascource实际是一个性质的东西，他们可以加载不能Directshowsource的源，但是就比较娇贵了，需要相应的滤镜dll文件了，前2者是avs内置的滤镜！ 
+
+一般来说，对于avi文件先用avisource来加载，如wm9和vp6格式的！使用avisource加载的话，源和其它插件脱离关系！如就不能关联ffdshow了！而directshowsource仍旧可以关联ffdshow！所以，我一般推荐 DVDRIP的avi文件是用directshowsource来加载，而一些亮度滤镜、画面大小、水印之类的可以通过ffdshow来加载！ 
+
+关于directshowsource和avisource的其它东西，可以再看看avisynths自带的说明 
+
+我提示几点（因为说明书的确对于非专业的很吃力） 
+avisource("("d:\test\sample.avi",false) 
+false表示禁止音频 
+
+AVISource("cap.avi",false,"RGB32") 
+RGB32是一种色彩处理模式，默认是YV12，处理速度最快 
+一般，这个在常规使用AVISource中不必使用！而很多人在刚接触avs时，就盲目套用一些avs，这样就走上了不归路了！ 
+转换成RGB32，一般字幕社用的多些，因为他们喜欢加一些图片的logo等，而只有RGB32支持透明处理，但RGB32模式处理速度较慢！ 
+
+directshowsource("d:\test\sample.rm",fps=24) 
+举这个例子来说明directshowsource吧，对于rm和asf格式的，需要定义帧率才能读取。如里面的fps=24 
+
+DirectShowSource(string filename, int fps, bool "seek") 
+int fps说明这个是整数型的帧率，但是如果我上例子改成fps=23.976仍旧可以读取 
+
+处理定义帧率的源，需要注意不同步
+
+又如双语VCD只压制一个声道，avs语法可以这么写 
+video=DirectShowSource("F:\mpge\test.dat) 
+return GetChannel(video,2) 
+
+注： 
+1 left channel 
+2 right channel ，一般是国语 
+
+使用AUDIODUB合成时，一般也无需在directshowsource或者AVISource加上禁止音频的参数了！ 
+
+directshowsource 和avisource直接加载的缺点是有可能导致不同步。如5个声道以上的vob文件，双语的avi多CD合成压制时。 
+
+转自:http://mkv.cn/Article/ArticleShow.asp?ArticleID=435

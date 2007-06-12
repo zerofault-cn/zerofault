@@ -1,0 +1,80 @@
+若干著名IT公司名称的来历
+新闻分类：心情哲理
+译者按：比较有意思的东西，没看见中文版，翻译了。对原文所述未经证实，望知者不吝赐教。
+
+Yahoo!
+《格列佛游记》的作者Jonathan Swift发明了yahoo这个单词。在小说里，它代表了一个在外表和行为举止上都令人厌恶的家伙，简直都不能算是一个人。Yahoo! 的创始人杨致远和David Filo选择这个名字的原因是他们觉得自己是yahoo。
+另一种说法，Yahoo是"Yet Another Hierarchical Officious Oracle"的首字母缩写，不过David Filo和杨致远坚持他们选择这个名称的原因是他们喜欢字典里对yahoo的定义：“粗鲁，不通世故，粗俗。” (来源: http://docs.yahoo.com/info/misc/history.html)
+
+
+Xerox
+xer是希腊文字根，代表“干”。由于Chestor Carlson发明的产品是干式复印，和当时占优势的湿法复印有显著的差别，所以他用Xerox命名。
+
+
+SUN Microsystems
+由斯坦福大学的四个家伙创建。SUN 是“Stanford University Network”的首字母缩写。
+
+
+Sony
+来自sonus和sonny的组合。sonus是拉丁词，代表声音。sonny是美国俚语，用来称呼聪明伶俐的少年。 
+
+
+SAP
+代表"Systems, Applications, Products in Data Processing"。四个IBM的前雇员组建了SAP。他们为IBM工作时属于的团队叫“Systems/Applications/Projects”。
+
+
+Red Hat
+公司创始人Marc Ewing念大学的时候，他祖父给了他一顶康奈尔曲棍球队的帽子。帽子上有着红色和白色的条纹。他不小心把帽子弄丢了，不得不拼命去找。红帽子Linux beta版的用户手册里面有一段话，央求用户如果找到了他的红帽子，请归还！
+
+
+Oracle
+Larry Ellison 和 Bob Oats 曾经为中央情报局的一个咨询项目工作。这个项目的代号就叫 Oracle。
+
+
+Motorola
+创始人Paul Galvin是在公司开始生产车用无线电的时候让公司叫现在这个名字的。原先它叫Victrola。
+
+
+Microsoft
+Bill Gate起了这个名字。为了代表MICROcomputer SOFTware，就叫做Micro-Soft，后来把中间的 “-” 去掉了。
+
+
+Lotus
+从莲花式盘坐（padmasana）中得名。创始人Mitch Kapor 曾经是Maharishi Mahesh Yogi的超脱静坐教师。
+（译者注：Mahesh Yogi, Maharishi，印度宗教领袖。）
+
+
+Intel
+Bob Noyce和Gordon Moore想把他们的公司命名为“Moore Noyce”，可是这个名字已经为一家连锁旅馆注册了。Intel是INTegrated ELectronics的缩写。
+
+
+Hewlett-Packard
+Bill Hewlett和Dave Packard丢硬币来决定他们的公司叫Hewlett-Packard还是Packard-Hewlett。
+
+
+Hotmail
+创始人Jack Smith想出了最初的主意，要建立一种任何计算机都可以通过网络访问的电子邮件网络服务。当Sabeer Bhatia参与起草商业计划书的时候，他尝试了各种以mail结尾的名字。最后，他选择了Hotmail。因为Hotmail包含了html。Hotmail最早的形式是HoTMaiL。
+（译者问：Hotmail是不是第一个基于网页的电子邮件服务？）
+
+
+Google
+名字来自于一个关于搜索引擎到底能搜索多少信息的玩笑。最早它叫“Googol”，代表1后面跟100个0。创始人Sergey Brin和Larry Page曾经向一位天使投资人演示他们的项目，最后他们收到了一张给“Google”公司的支票！
+
+
+Cisco
+San Francisco的最后五个字母。公司的徽标像极了金门大桥。
+
+
+Apple Computers 
+Steve Jobs最喜欢的水果。他本该早就为公司申请一个名字，可是三个月过去了，还没有注册。Jobs威胁大家，如果五点钟之前还找不到一个比“苹果电脑”更好的名字，那么公司就叫“苹果电脑”了。
+
+
+Apache
+创始人是从给NCSA httpd后台代码打补丁起步的。结果，他们得到了“A PAtCHy” server（打过补丁的服务器），于是，就叫Apache了。
+
+
+Adobe
+创始人 John Warnock家后面有一条叫做Adobe Creek的河。 
+
+Tags：著名 IT 公司 名称 来历 
+

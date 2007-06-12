@@ -1,0 +1,6 @@
+新旧SpeedStep技术区别
+　　第一代SpeedStep技术，简单的说，就是当使用AC电源或电池驱动时，自动对CPU的工作电压和工作频率进行切换。采用SpeedStep技术的CPU有两种不同的工作模式:使用AC电源时的最高性能模式(Maximum Performace Mode)和使用电池时的电池优化模式(Battery Optimized Mode)，笔记本根据电源情况自动切换工作模式。
+
+　　第二代SpeedStep(Enhanced SpeedStep)技术则可以根据CPU的负荷情况在两种性能模式之间实时进行电压和频率的动态切换，也就是说可以在电池驱动时根据CPU负荷情况自动切换到最高工作频率和电压，也可以在接AC电源时根据CPU负荷情况自动切换到最低工作频率和电压。
+
+　　第三代SpeedStep(Improved Enhanced SpeedStep)技术尽管仍只有两种基本工作模式，但同时还具有多种中间模式，支持多种频率速度与电压设置(由CPU的电压调整机制来控制)，根据CPU当时负荷的强度自动切换工作模式。

@@ -1,0 +1,21 @@
+什么是1G/2G/2.5G/3G？ 
+　　1G（first generation）表示第一代移动通讯技术。如现在以淘汰的模拟移动网。 
+
+　　2G（second generation）表示第二代移动通讯技术。代表为GSM。以数字语音传输技术为核心。 
+
+　　2.5G是基于2G与3G之间的过渡类型。代表为GPRS。比2G在速度、带宽上有所提高。可使现有GSM网络轻易地实现与高速数据分组的简便接入。 
+
+　　3G（third generation）表示第三代移动通讯技术。面向高速、宽带数据传输。国际电信联盟（ITU）称其为IMT-2000（International Mobile Telecom-munication）。最高可提供2Mbp/s的数据传输速率。主流技术为CDMA技术代表有WCDMA（欧，日）、CDMA2000（美）和TD－SCDMA（中）。 
+
+　　什么是GSM？
+
+　　全球移动通讯系统（Global system for Mobile communications）的英文缩写。2G的主流技术，数据速率为9.6kb/s。 
+
+　　什么是GPRS？
+
+　　通用分组无线业务（General Packet Radio Service）的英文缩写。是一种基于GSM系统的无线分组交换技术。是2.5G的主流技术。理论最高数据速率为171.2kb/s。
+
+
+
+
+ 
