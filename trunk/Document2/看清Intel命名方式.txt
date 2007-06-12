@@ -1,0 +1,107 @@
+看清Intel命名方式(1)
+
+Intel CPU目前的命名方式，也采用了类似AMD PR值命名的方式，使AMD PR值命名的方式丧失了比较对象的同时也从主频的恶性竞争中走了出来了（4G Intel心中永远的痛）。 
+
+　　从A到E，老Pentium4系列命名回顾
+
+　　首先，让我们怀着无比沉痛的心情，来祭奠一下那些死在沙滩上“英雄们”（Willmatte、Northwood、Prescott核心的Pentium 4CPU）的命名方式。后面没有任何标记的（G除外），如P4 1.7，是指Willmatte核心、256K二级缓存、20级流水线、400FSB（100MHz外频）、.18工艺，发热量较大，执行效率低（这作为一个基准）。 
+
+　　 数字后有A标记的，这里面有两款，其中P 4 1.6A或2.0A等，指Northwood核心、512K二级缓存、.13工艺，发热量小，超频性极佳（为说明的同上），是某前笔者以为最成功的P 4核心。
+
+　　还有一款带A的产品，如P4 2.4A，指Prescott核心、31级流水线、533FSB（133外频）、1M二级缓存、90nm工艺，发热量奇高，执行效率低（因为过长的流水线需要更高的主频）、较Northwood失败。
+
+　　数字后带B的，如P 4 2.4B指Northwood核心、533FSB、512K二级缓存、.13工艺，发热量小，没有带A或C的好超。
+
+　　数字后带C的，如P 4 2.4C或2.6C，指Northwood核心、800FSB（200MHz外频）、512K二级缓存、.13工艺，发热量小，超品性极佳。Intel的2.4C和AMD Barton 2500＋造就了一个超频神话。
+
+　　数字后带E的，如P4 2.8E指Prescott核心、31级流水线、800FSB、1M二级缓存、90nm工艺，发热量奇高。注：Celeron的核心主要从主频或命名方式来看，如1.7G是Willmatte核心，2.0G是Northwood核心，Celeron D是Prescott核心；这需要不停地积累。
+
+　　下面我们来看令人眼花缭乱的新式Intel命名方式。一般地有低端3XX的Celeron，中高端的5XX、6XX，高端的8XX及尚未上市的9XX。其中，没有4XX，难道老外也比较迷信？！
+
+　低端3XX Celeron：三大步进，高热的Precott核心
+
+　　先来看低端3XX的Celeron：
+
+　　这一系列的共性：Precott核心、256K二级缓存（是同核心Pentium系列的1/4）、533FSB。其中带“J”的是LGA775接口。此命名方式杂乱，建议从倍频入手，记住从何起跳，最高主频即可。
+
+ 接口 主频 倍频 
+Celeron D 320 Socket 478 2.4G 18 
+Celeron D 325 Socket 478 2.53G 19 
+Celeron D 330 Socket 478 2.66G 20 
+Celeron D 335 Socket 478 2.8G 21 
+Celeron D 325J LGA775 2.53G 19 
+Celeron D 330J LGA775 2.66G 20 
+Celeron D 335J LGA775 2.8G 21 
+
+
+　　注：此系列实际最高主频为3.2G，但目前市面上最高的就是2.8G。同时，今年第二季度Intel推出支持64位的Celeron D，共有七款产品，如下：具体型号依次为356、351、346、341、336、331、326，实际工作频率为3.33 GHz，3.20 GHz，3.06 GHz、2.93 GHz、2.80 GHz、2.66 GH、2.53 GHz。
+
+　　鉴于目前64bit的Celeron D在低端市场上很抢手。超频爱好者如何购买到一颗良好体质的CPU，CPU的编号就会给我们提供一个突破口。
+首先，我们要了解下面的事实：
+
+　　C0 步进核心的Celeron D处理器，性能提升的幅度范围最小，也就是最难超频。
+
+　　D0 步进核心的Celeron D处理器，性能提升的幅度范围较大，适合超频使用。
+
+　　E0 步进核心是Intel Prescott系列处理器的最新核心，高频的LGA775接口的Pentium 4 J系列和Celeron D J系列大多采用此步进，E0步进核心Celeron D处理器就是我们的目标。
+
+　　建议家庭普通用户选择326或者331，这两款CPU都采用最新的EO步进，而且倍频够低，笔者购买的一颗326，可以在默认电压下轻松上200MHz外频。总体来看，326或者331的体质都不错。
+
+
+　5X0的Pentium系列：Intel新超频王，LGA775接口全面换
+
+　　5X0的Pentium系列：
+
+　　此系列CPU都是LGA775接口的Prescott核心，晶体管数1亿2500万个，核心面积112 mm2。注：4G CPU出现在Intel的规划内，但是它胎死腹中或者流产了。
+
+ 频率 前端总线 倍频 Intel技术 
+Pentium4 520 2.8 800 14 HT 
+Pentium4 530 3.0 800 15 HT 
+Pentium4 540 3.2 800 16 HT 
+Pentium4 550 3.4 800 17 HT 
+Pentium4 560 3.6 800 18 HT 
+Pentium4 570 3.8 800 19 HT 
+Pentium4 580 4.0 800 20 HT 
+
+
+　　另，新系列Pentium 5x1（目前此系列共有6款：521/531/541/551/561/571）将全面支持EM64T与XD bit技术，不过新处理器使用的是LGA 775接口，Socket 478将不会有新技术的产品推出。
+
+　　为了进一步，巩固中高端市场，Intel发布了P4 506，此款CPU不支持HT，支持EM64T与XD bit技术，超频性普遍不错，上200MHz应该不是问题。
+
+
+　6XXPentium 系列：2M二级缓存，热温监控“烧不死”
+
+　　6XXPentium 系列：
+
+　　此系列采用Prescott－2M核心，1亿6900万个晶体管，135mm2的核心面积，采用和5XX一样的封装（底部增加了两个金属点），具备EIST（增强型Speedstep）、Thermal Monitoring 2（热温监控2）及C1E等技术。
+
+ 频率 前端总线 倍频 Intel技术 
+Pentium4 630 3.0 800 15 HT 
+Pentium4 640 3.2 800 16 HT 
+Pentium4 650 3.4 800 17 HT 
+Pentium4 660 3.6 800 18 HT 
+Pentium4 670 3.8 800 19 HT 
+
+
+　　另，6X1，6X2，6X3也即将上市。6X2系列在6X0的基础上增加了Vanderpool技术；6X1系列采用了下一代65nm制程的单核心Cedar Mill，其余规格与6X0相同，6X3系列也是在6X1的基础上增加了Vanderpool技术。
+
+　　注：Vanderpool技术是一种硬件虚拟机技术，与Vmware这样的虚拟机软件相比，可以在占用较少系统资源的情况下实现更好的功能和性能。
+
+　　5X0系列为普通的Prescott核心，5X1系列支持EM64T，6XX系列支持EM64T和更大缓存。
+
+　8XX的Pentium系列：双核，最便宜的双核心
+
+　　8XX的Pentium系列
+
+　　这一系列会有一个全新的名字－Pentium D，是Intel第一代双核心处理器，主要面向游戏和主流市场。
+
+　　其采用90nm工艺、LGA封装、800FSB、其中两个核心各负责1M的二级缓存（总共为2M二级缓存），支持EM64T、Vanderpool、XD Bit和EIST技术。同时，第二代双核心Pentium D 9XX也即将向我们招手，^_^！6XX和8XX将会是Intel今年内的重点产品。
+
+ 主频 前端总线 倍频 
+Pentium D 820 2.8G 800 14 
+Pentium D 830 3.0G 800 15 
+Pentium D 840 3.2G 800 16 
+
+
+　　带字母“J”的Pentium 4处理器都具备硬件防毒功能（防缓冲区溢出攻击，需操作系统支持）。
+

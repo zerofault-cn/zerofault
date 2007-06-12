@@ -1,0 +1,24 @@
+boot = /dev/hda1
+map = /boot/map
+timeout = 50
+lba32
+prompt
+  message = /boot/message
+  default = Windows2000
+  vga = normal
+  root = /dev/hda1
+  read-only
+install=/boot/boot.b
+image = /boot/vmlinuz-2.4.2-2
+  label = linux
+  append = "hdc=ide-scsi"
+other = /dev/hda2
+  label = Windows2000
+other = /dev/hda3
+  label = Windows98
+ 
+
+
+ÑÏ¹¦¾ü£º315645893
+paragon.ext2fs.anywhere.2.5
+explore2fs-1.00-pre4

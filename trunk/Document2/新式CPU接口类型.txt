@@ -1,0 +1,22 @@
+CPU接口类型（老式的不再介绍）
+我们知道，CPU需要通过某个接口与主板连接的才能进行工作。CPU经过这么多年的发展，采用的接口方式有引脚式、卡式、触点式、针脚式等。而目前CPU的接口都是针脚式接口，对应到主板上就有相应的插槽类型。CPU接口类型不同，在插孔数、体积、形状都有变化，所以不能互相接插。 
+Socket 775
+　　Socket 775又称为Socket T，是目前应用于Intel LGA775封装的CPU所对应的接口，目前采用此种接口的有LGA775封装的Pentium 4、Pentium 4 EE、Celeron D等CPU。与以前的Socket 478接口CPU不同，Socket 775接口CPU的底部没有传统的针脚，而代之以775个触点，即并非针脚式而是触点式，通过与对应的Socket 775插槽内的775根触针接触来传输信号。Socket 775接口不仅能够有效提升处理器的信号强度、提升处理器频率，同时也可以提高处理器生产的良品率、降低生产成本。随着Socket 478的逐渐淡出，Socket 775将成为今后所有Intel桌面CPU的标准接口。
+
+Socket 754
+　　Socket 754是2003年9月AMD64位桌面平台最初发布时的CPU接口，目前采用此接口的有低端的Athlon 64和高端的Sempron，具有754根CPU针脚。随着Socket 939的普及，Socket 754最终也会逐渐淡出。
+
+Socket 939
+　　Socket 939是AMD公司2004年6月才推出的64位桌面平台接口标准，目前采用此接口的有高端的Athlon 64以及Athlon 64 FX，具有939根CPU针脚。Socket 939处理器和与过去的Socket 940插槽是不能混插的，但是，Socket 939仍然使用了相同的CPU风扇系统模式，因此以前用于Socket 940和Socket 754的风扇同样可以使用在Socket 939处理器。
+
+Socket 940
+　　Socket 940是最早发布的AMD64位接口标准，具有940根CPU针脚，目前采用此接口的有服务器/工作站所使用的Opteron以及最初的Athlon 64 FX。随着新出的Athlon 64 FX改用Socket 939接口，所以Socket 940将会成为Opteron的专用接口。
+
+Socket 603
+　　Socket 603的用途比较专业，应用于Intel方面高端的服务器/工作站平台，采用此接口的CPU是Xeon MP和早期的Xeon，具有603根CPU针脚。Socket 603接口的CPU可以兼容于Socket 604插槽。
+
+Socket 604
+　　与Socket 603相仿，Socket 604仍然是应用于Intel方面高端的服务器/工作站平台，采用此接口的CPU是533MHz和800MHz FSB的Xeon。Socket 604接口的CPU不能兼容于Socket 603插槽。
+
+Socket 478
+　　Socket 478接口是目前Pentium 4系列处理器所采用的接口类型，针脚数为478针。Socket 478的Pentium 4处理器面积很小，其针脚排列极为紧密。英特尔公司的Pentium 4系列和P4 赛扬系列都采用此接口。

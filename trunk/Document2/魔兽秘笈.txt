@@ -1,0 +1,23 @@
+魔兽秘笈
+ 
+WarpTen : 快速建造 
+IocainePowder : 快速死亡 
+WhosYourDaddy : 无敌 
+KeyserSoze [amount] : 得到黄金[数字] 
+LeafItToMe [amount] : 得到木头[数字] 
+GreedIsGood [amount] : 得到资源 
+PointBreak : 得到食物 
+ThereIsNoSpoon : 得到魔力 
+TheDudeAbides : cooldown 
+StrengthAndHonor : nodefeat
+ItVexesMe : novictory 
+WhoIsJohnGalt : 搜索 
+ISeeDeadPeople : 显示地图 
+Synergy : 科技树 
+RiseAndShine : 黎明 
+LightsOut : 黄昏 
+DaylightSavings [hour] : 时间[数字] 
+SharpAndShiny : 升级 
+Motherland [race] [level] : 升级 [人物] [级别] 
+SombodySetUpUsTheBomb : 击败敌人 
+AllYourBaseAreBelongToUs : 完全胜利

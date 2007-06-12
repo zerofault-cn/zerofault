@@ -1,0 +1,425 @@
+http://www.phpbuilder.com/columns/argerich20030411.php3?page=1  
+
+
+
+虽然 PHP5 还没有正式发布（开发版本已经提供下载），但我们现在就可以开始体验一下
+新的版本 将要带给我们的惊喜。在以下的介绍中，我们将重点讲述 PHP5 中的三大特色功
+能。这三大特点为： 
+
+* 新的对象模式 (New Object Mode) 
+* 异常处理 (Exceptions) 
+* 名称空间 (Namespace) 
+
+在开始之前，要声明两点： 
+
+* 文章中的例子为了说明如何操作，有些部分使用了 PHP4 的表现手段，这仅仅是为了提
+高文章的可读性。 
+* 文章中描述的部分与 PHP5 的最终发布版可能会有一些出入 
+
+在 PHP5 没有最终正式发布前，你可以随时从 http://snaps.php.net 下载到最新的编译
+版本来亲自体验一下 PHP5 所带给我们这些崭新的功能。 
+
+
+新的对象模式 
+
+PHP5 中的对象已经进行了较系统、较全面的调整，现在的样子可能看起来会有些类似于 
+Java。本小节着重讲述 PHP5 中新的对象模式，并举了一些较简易的例子来说明。就让本
+节成为你的 PHP5 之旅的一个新起点吧。：） 
+
+* 构造函数和析构函数 
+* 对象的引用 
+* 对象的克隆 
+* 对象中的私有、公共及受保护模式 
+* 接口 (Interfaces) 
+* 抽象类 
+* __call 
+* __set 和 __get 
+* 静态成员 
+
+
+构造函数和析构函数 
+
+在 PHP4 中，当函数与对象同名时，这个函数将成为该对象的构造函数，并且在 PHP4 中
+没有析构函数的概念。 
+在 PHP5 中，构造函数被统一命名为 __construct，并且引入了析构函数的概念，被统一
+命名为 __destruct。 
+
+例一：构造函数和析构函数 
+
+<?php 
+class foo { 
+  var $x; 
+  function __construct($x) { 
+    $this->x = $x; 
+  } 
+  function display() { 
+    print($this->x); 
+  } 
+  function __destruct() { 
+    print("bye bye"); 
+  } 
+} 
+$o1 = new foo(4); 
+$o1->display(); 
+?> 
+
+在上面的例子中，当你终止调用 foo 类的时候，其析构函数将会被调用，上例中会输出 
+“bye bye”。 
+
+
+ 对象的引用 
+
+众所周知，在PHP4 中，传递变量给一个函数或方法，实际是把这个变量做了一次复制，也
+就意味着你传给函数或方法的是这个变量的一个副本，除非你使用了引用符号 “&” 来声
+明是要做一个引用，而不是一个 Copy。在 PHP5 中，对象总是以引用的形式存在的，对象
+中的赋值操作同样也都是一个引用操作。 
+
+例二：对象的引用 
+
+
+<?php 
+class foo { 
+  var $x; 
+  function setX($x) { 
+    $this->x = $x; 
+  }  
+  function getX() { 
+    return $this->x; 
+  } 
+} 
+$o1 = new foo; 
+$o1->setX(4); 
+$o2 = $o1; 
+$o1->setX(5); 
+if($o1->getX() == $o2->getX()) print("Oh my god!"); 
+?> 
+
+
+ 对象的克隆 
+
+如上所述，当一个对象始终以引用的形式来被调用时，如果我想得到该对象的一个副本，
+该怎么办呢？PHP5 提供了一个新的功能，就是对象的克隆，语法为 __clone。 
+
+例三：对象的克隆  
+<?php 
+class foo { 
+  var $x; 
+  function setX($x) { 
+    $this->x = $x; 
+  }  
+  function getX() { 
+    return $this->x; 
+  } 
+}  
+$o1 = new foo; 
+$o1->setX(4); 
+$o2 = $o1->__clone(); 
+$o1->setX(5); if($o1->getX() != $o2->getX()) print("Copies are independant"); 
+
+?> 
+
+对象克隆的方法在其它很多应用程序语言中都是存在的，所以你不必担心它的稳定性。：
+） 
+
+
+ 对象中的私有、公共及保护模式 
+
+PHP4 中，一个对象的所有方法和变量都是公共的，这意味着你可以在一个对象的外部操作
+其中的任意一个变量和方法。PHP5 引入了三种新的用来控制这种存取权限的模式，它们是
+：公共的(Public)、受保护的(Protected)及私有的(Private)。 
+
+公共模式(Public):允许在对象外部进行操作控制。 
+私有模式(Private):只允许本对象内的方法对其进行操作控制。 
+受保护模式(Protected)：允许本对象及其父对象对其进行操作控制。 
+
+例四： 对象中的私有、公共及受保护模式 
+
+<?php 
+class foo { 
+  private $x; 
+  public function public_foo() { 
+    print("I'm public"); 
+  } 
+  protected function protected_foo() { 
+    $this->private_foo(); //Ok because we are in the same class we can call pr
+ivate methods 
+    print("I'm protected"); 
+  }  
+  private function private_foo() { 
+    $this->x = 3; 
+    print("I'm private"); 
+  } 
+} 
+class foo2 extends foo { 
+  public function display() { 
+    $this->protected_foo(); 
+    $this->public_foo(); 
+    // $this->private_foo();  // Invalid! the function is private in the base 
+class 
+  } 
+} $x = new foo(); 
+$x->public_foo(); 
+//$x->protected_foo();  //Invalid cannot call protected methods outside the cl
+ass and derived classes 
+//$x->private_foo();    //Invalid private methods can only be used inside the 
+class $x2 = new foo2(); 
+$x2->display(); 
+?> 
+
+提示：对象中的变量总是以私有形式存在的，直接操作一个对象中的变量不是一个好的面
+向对象编程的习惯，更好的办法是把你想要的变量交给一个对象的方法去处理。 
+
+
+ 接口 (Interfaces) 
+
+众所周知，PHP4 中的对象支持继承，要使一个对象成为另一个对象的派生类，你需要使用
+类似 “class foo extends parent” 的代码来控制。 PHP4 和 PHP5 中，一个对象都仅
+能继承一次，多重继承是不被支持的。不过，在 PHP5 中产生了一个新的名词：接口，接
+口是一个没有具体处理代码的特殊对象，它仅仅定义了一些方法的名称及参数，此后的对
+象就可以方便的使用 'implement' 关键字把需要的接口整合起来，然后再加入具体的执行
+代码。 
+
+例五：接口  
+
+<?php 
+interface displayable { 
+  function display(); 
+} 
+interface printable { 
+  function doprint(); 
+}  
+
+class foo implements displayable,printable { 
+  function display() { 
+    // code 
+  }   function doprint() { 
+    // code 
+  } 
+} 
+?> 
+
+这对提高代码的可读性及通俗性有很大的帮助，通过上面的例子可以看到，对象 foo 包含
+了 displayable 和 printable 两个接口，这时我们就可以清楚的知道，对象 foo 一定会
+有一个 display() 方法和一个 print() 方法，只需要去了解接口部分，你就可以轻易的
+操作该对象而不必去关心对象的内部是如何运作的。 
+
+抽象类 
+
+抽象类不能被实例化。 
+抽象类与其它类一样，允许定义变量及方法。 
+抽象类同样可以定义一个抽象的方法，抽象类的方法不会被执行，不过将有可能会在其派
+生类中执行。 
+
+例六：抽象类 
+
+<?php 
+abstract class foo { 
+  protected $x; 
+  abstract function display(); 
+function setX($x) { 
+    $this->x = $x; 
+  } 
+}  
+class foo2 extends foo { 
+  function display() { 
+    // Code 
+  } 
+} 
+?> 
+
+
+ __call 
+
+PHP5 的对象新增了一个专用方法 __call()，这个方法用来监视一个对象中的其它方法。
+如果你试着调用一个对象中不存在的方法，__call 方法将会被自动调用。 
+
+例七：__call 
+
+<?php 
+class foo { 
+  function __call($name,$arguments) { 
+    print("Did you call me? I'm $name!"); 
+  } 
+} $x = new foo(); 
+$x->doStuff(); 
+$x->fancy_stuff(); 
+?> 
+
+这个特殊的方法可以被用来实现“过载(overloading)”的动作，这样你就可以检查你的参
+数并且通过调用一个私有的方法来传递参数。 
+
+例八：使用 __call 实现“过载”动作 
+
+<?php 
+class Magic { 
+  function __call($name,$arguments) { 
+    if($name=='foo') { 
+      if(is_int($arguments[0])) $this->foo_for_int($arguments[0]); 
+      if(is_string($arguments[0])) $this->foo_for_string($arguments[0]); 
+    } 
+  }   private function foo_for_int($x) { 
+    print("oh an int!"); 
+  }   private function foo_for_string($x) { 
+    print("oh a string!"); 
+  } 
+} $x = new Magic(); 
+$x->foo(3); 
+$x->foo("3"); 
+?> 
+
+
+> __set 和 __get 
+
+这是一个很棒的方法，__set 和 __get 方法可以用来捕获一个对象中不存在的变量和方法
+。 
+
+例九： __set 和 __get 
+
+<?php 
+class foo { 
+  function __set($name,$val) { 
+    print("Hello, you tried to put $val in $name"); 
+  } 
+  function __get($name) { 
+    print("Hey you asked for $name"); 
+  } 
+} 
+$x = new foo(); 
+$x->bar = 3; 
+print($x->winky_winky); 
+?> 
+
+
+ 类型指示 
+
+在 PHP5 中，你可以在对象的方法中指明其参数必须为另一个对象的实例。 
+
+例十：类型指示 
+
+<?php 
+class foo { 
+  // code ... 
+} 
+class bar { 
+  public function process_a_foo(foo $foo) { 
+   // Some code 
+  } 
+} 
+$b = new bar(); 
+$f = new foo(); 
+$b->process_a_foo($f); 
+?> 
+
+可以看出，我们可以显性的在参数前指明一个对象的名称，PHP5 会识别出这个参数将会要
+是一个对象实例。 
+
+
+ 静态成员 
+
+静态成员和静态方法在面象对象编程的术语中被称作 “对象方法(class methods)” 和 
+“对象变量(class variables)”。 
+“对象方法” 在一个对象没有实例化前允许被调用。同样，“对象变量” 在一个对象没
+有实例化前可以被独立操作控制(不需要用一个对象的方法来控制)。 
+
+例十一：对象方法和对象变量 
+
+<?php 
+class calculator { 
+  static public $pi = 3.14151692; 
+  static public function add($x,$y) { 
+    return $x + $y; 
+  } 
+} 
+$s = calculator::$pi; 
+$result = calculator::add(3,7); 
+print("$result"); 
+?> 
+
+
+ 异常处理 
+
+异常处理是公认的处理程序错误的理想方法，在 Java 及 C++ 中都有这个概念，我们欣喜
+的看到，在 PHP5 已经加入了这方面的应用。你可以尝试使用 “try” 和 “catch” 来
+控制程序的错误。 
+
+例十二：异常处理 
+
+<?php 
+class foo { 
+  function divide($x,$y) { 
+    if($y==0) throw new Exception("cannot divide by zero"); 
+    return $x/$y; 
+  } 
+} 
+$x = new foo(); 
+try { 
+  $x->divide(3,0);    
+} catch (Exception $e) { 
+    echo $e->getMessage(); 
+    echo "n<br />n"; 
+    // Some catastrophic measure here 
+} 
+?> 
+
+上例中，我们使用了 “try” 来执行花括号中的语句，当有错误发生的时候，代码会把错
+误交给 “catch” 子句来处理，在 “catch” 子句中，你需要指明要把错误交给某个对
+象处理，这样做可以使代码结构看起来更清晰，因为现在我们可以把所有的错误信息交给
+一个对象来处理。 
+
+
+ 自定义错误处理 
+
+你可以很方便的用自定义的处理错误的代码来控制你的程序中的意外。你仅仅需要从异常
+类中派生出一个自己的错误控制类，在你自己的错误控制类中，你需要有一个构造函数和
+一个 getMessage 方法，以下是一个例子。 
+
+例十三：自定义错误处理 
+
+<?php 
+class WeirdProblem extends Exception { 
+   private $data; 
+   function WeirdProblem($data) { 
+        parent::exception(); 
+        $this->data = $data; 
+    } 
+    function getMessage() { 
+        return $this->data . " caused a weird exception!"; 
+    } 
+} 
+?> 
+
+现在我们可以使用 “throw new WeirdProblem($foo)” 来抛出一个错误句柄，如果错误
+在 “try” 的代码块中发生，PHP5 会自动把错误交给 “catch” 部分来处理。 
+
+
+ 名称空间 
+
+名称空间对类的分组或函数分组很有用。它可以把一些相关的类或函数给组合到一起，方
+便以后调用。 
+
+例十四：名称空间 
+
+<?php 
+namespace Math {  
+  class Complex { 
+    //...code... 
+    function __construct() { 
+      print("hey"); 
+    } 
+  } 
+} $m = new Math::Complex(); 
+?> 
+
+注意你需要在何种情况下使用名称空间，在实际运用中，你可能会需要声明两个或多个名
+称一样的对象来做不同的事情，那么你就可以把他们分别放到不同的名称空间中去（但接
+口是要相同的）。 
+
+译者注：本篇文章来自 PHPbuilder，从以上文字中我们高兴的看到 PHP5 中新增加的一些
+优秀的功能。我们还可以看到一些 Java 和 C++ 的影子，现在的 PHP5 还没有正式发布，
+等到真正发布那一天，希望能再带给所有的 PHP 爱好者更多的惊喜。对这方面比较感兴趣
+的朋友可以登录 PHP 官方新闻组去了解更新情况。新闻组地址为 news://news.php.net 
+，也可以登录WEB界面 http://news.php.net 来访问。让我们一起来期待新版本的发布吧
+。：）(超越PHP Avenger) 
+
+
+  

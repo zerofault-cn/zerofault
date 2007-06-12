@@ -1,0 +1,234 @@
+
+
+艾玛 701g 
+192.168.101.1 192.168.0.1 
+用户名：admin 密码：admin 
+用户名：SZIM 密码：SZIM 
+
+艾玛701H 
+192.168.1.1 10.0.0.2 
+用户名：admin 密码：epicrouter 
+
+实达2110EH ROUTER 
+192.168.10.1 
+用户名：user 密码：password 
+用户名：root 密码：grouter 
+
+神州数码/华硕： 
+用户名：adsl 密码：adsl1234 
+全向： 
+用户名：root 密码：root 
+
+普天： 
+用户名：admin 密码：dare 
+
+e-tek 
+用户名:admin 密码:12345 
+
+zyxel 
+用户名:anonymous 密码:1234 
+
+北电 
+用户名:anonymous 密码:12345 
+
+大恒 
+用户名：admin 密码：admin 
+
+大唐 
+用户名：admin 密码：1234 
+
+斯威特 
+用户名：root 密码：root 
+用户名：user 密码：user 
+中兴 
+用户名：adsl 密码：adsl831 
+
+路由品牌名：viking
+帐号：adsl 密码：adsl1234
+帐号：root 密码：grouter 
+
+
+路由品牌名：mt800
+帐号：admin 密码：admin
+
+
+路由品牌名：home gateway
+帐号：user 密码：password
+帐号：admin 密码：epicrouter
+
+
+1、全向QL1680 IP地址10.0.0.2，用户名：admin，密码：qxcomm1680， 
+管理员密码：qxcommsupport。 
+全向QL1880 IP地址192.168.1.1，用户名：root，密码：root 
+全向QL1688 IP地址10.0.0.2，用户名为admin；密码为qxcomm1688 
+2、TP-LINK TD-8800在IE输入192.168.1.1,户名admin,密码admin 
+3、合勤zyxel 642 在运行输入telnet 192.168.1.1 密码1234 
+4、Ecom ED-802EG 在IE输入192.168.1.1，用户名和密码都为root 
+5、神州数码6010RA，在IE输入192.168.1.1　用户名为ADSL，密码为ADSL1234 
+6、华为SmartAX MT800的初始IP是192.168.1.1，用户名和密码都为ADMIN，恢复默认配置的方法有两种，一种是连续按MODEM背后的RESET键三次，另一种是在配置菜单的SAVE&REBOOT里选择恢复默认配置。 
+7、伊泰克：IP：192.168.1.1 用户名：supervisor 密码：12345 
+8、华硕IP：192.168.1.1 用户名：adsl 密码：adsl1234 
+9、阿尔卡特 192.168.1.1 一般没有密码 
+10、同维DSL699E 192.168.1.1 用户名：ROOT 密码：ROOT 
+11、大亚DB102 192.168.1.1 用户名：admin 密码：dare 高级设置://192.168.1.1/doc/index1.htm 
+12、WST的RT1080 192.168.0.1 username:root password:root 
+13、WST的ART18CX 10.0.0.2 username:admin password:conexant username:user password:password 
+14、实达V3.2　root root V5.4　root grouter 
+15、泛德　admin conexant 
+16、东信Ea700 192.168.1.1用户名：空 密码：password 
+17、broadmax的hsa300a 192.168.0.1 username:broadmax password:broadmax 
+18、长虹ch-500E 192.168.1.1 username:root password:root 
+19、重庆普天CP ADSL03 192.168.1.1 username:root password:root 
+20、台湾突破EA110 RS232:38400 192.168.7.1 usernameSL pswSL 
+21、etek-td的ADSL_T07L006.0 192.168.1.1 User Name: supervisor 
+Password: 12345 忘记密码的解决办法： 使用超级终端的Xmodem方式重写Vxworks.dlf，密码恢复成：12345 22、GVC的DSL-802E/R3A 10.0.0.2 username:admin password:epicrouter username:user password:password 
+23、科迈易通km300A-1 192.168.1.1 username: password:password 科迈易通km300A-G 192.168.1.1 username:root password:root 科迈易通km300A-A 192.168.1.1 username:root or admin password:123456 
+24、sunrise的SR-DSL-AE 192.168.1.1 username:admin password:0000 sunrise的DSL-802E_R3A 10.0.0.2 username:admin password:epicrouter username:user password:password 
+
+25、UTStar的ut-300R 192.168.1.1 username:root or admin password:utstar 这些都是一些ADSL设奋的出厂时的默认初始IP，用户名和密码，是要调试这些设奋时必须要知道的东西。 一般调试这些设奋有三种方法，一种是最常见的WEB方法，就是在浏览器中填入设奋的IP，如QX1680，就是在浏览器地址栏输入10.0.0.2，出现提示栏后，输入用户名admin，密码qxcommsupport,就可以管理员设置界面了。最常见和最简单的就是这种方法。 第二种方法就是用TELNET的方法，telnet IP,如早期的合勤642，方法telnet 192.168.1.1,然后输入密码1234,就可以进入全英文的字符界面了。 第三种方法就是用厂商自带的配置程序来进入配置界面，如CyberLink 6307/6309KG 它使用在随Cybrlink 6307/6309KG带的光盘中DSLCom.exe， 出厂时默认值：路由IP地址 :1 92.168.1.1密码 : stm，由于这种方法没有前两种方法方便，所以现在的低端产品比较少采用了。 绝大部分产品的调试都是要先通过产品自带的双绞线连接设奋后，把本机网卡的IP设置成跟该设奋同一网段，再进行配置，如设奋被改了默认的IP或者密码，大部分都可以通过复位来恢复出厂默认值。最常用也是最有用的方法就是把设奋断电后，一直按住复位键，然后通电，持续一小段时间后就可以恢中达通CT-500 192.168.1.1 root/12345 
+26.中兴adsl841默认IP：192.168.1.1，UserName：admin，Password：private 
+
+成都天逸 用户名：admin 密码：epicrouter 
+
+上海中达 用户名：（随意） 密码：12345 
+
+各位用ADSL的朋友，在拿到ADSL猫后，应及时修改默认密码，以免被人所利用 
+
+ADSL MODEM初始地址及用户名密码大全 
+要调试这些设奋，要先把网卡的IP地址设置成跟这些ADSL设奋相同的网段 
+1、全向QL1680在IE浏览器的地址栏里面敲入IP地址10.0.0.2，的用户名是admin出厂时默认值：密码是qxcomm1680，管理员密码是 qxcommsupport 
+2、全向QL1880在IE浏览器的地址栏里面敲入IP地址192.168.1.1，的用户名是root出厂时默认值：密码是root 
+3、全向QL1688在IE浏览器的地址栏里面敲入IP地址10.0.0.2，用户名为admin；出厂时默认值：密码为qxcomm1688 
+4、CyberLink 6307/6309KG 它使用在随Cyberlink6307/6309KG带的光盘中DSLCom.exe， 出厂时默认值：路由IP地址 : 192.168.1.1密码 : stm 
+5、TP-LINK TD-8800在IE输入192.168.1.1,户名admin,密码admin. 
+6、合勤zyxel 642 在运行输入telnet 192.168.1.1 密码1234,一直按住机身后面的的RESET复位键然后开机，保持几十秒就可以恢复出厂默认 值。 
+7、Ecom ED-802EG 在IE输入192.168.1.1，用户名和密码都为root 
+8、神州数码6010RA，在IE输入192.168.1.1　用户名为ADSL，密码为ADSL1234 
+9、华为SmartAX MT800的初始IP是192.168.1.1，用户名和密码都为ADMIN，恢复默认配置的方法有两种，一种是连续按MODEM背后的RESET键三 次，另一种是在配置菜单的SAVE&REBOOT里选择恢复默认配置。 
+
+伊泰克 
+http://192.168.1.1/ 
+用户名：supervisor 
+密码：12345 
+
+华硕 
+http://192.168.1.1/ 
+用户名：adsl 
+密码：adsl1234 
+
+阿尔卡特 
+http://192.168.1.1/ 
+一般没有密码 
+
+同维DSL699E 
+http://192.168.1.1/ 
+用户名：ROOT 
+密码：ROOT 
+
+大亚DB102 
+http://192.168.1.1/ 
+用户名：admin 
+密码：dare 
+高级设置界面：http://192.168.1.1/ doc/index1.htm 
+WST的RT1080 
+http://192.168.0.1/ 
+username:root 
+password:root 
+
+WST的ART18CX 
+http://10.0.0.2/ 
+username:admin 
+password:conexant 
+username:user 
+password ：assword 
+
+全向qxcomm1688 
+http://192.168.1.1/ 
+高端设置密码是：qxcommsuport 
+
+全向qxcomm1680 
+http://192.168.1.1/ 
+登陆ADSL的密码是:qxcomm1680 
+
+实达 
+V3.2　root 
+root 
+V5.4　root 
+grouter 
+
+泛德 
+admin 
+conexant 
+
+东信Ea700 
+http://192.168.1.1/ 
+用户名：空 
+密码：password 
+
+broadmax的hsa300a 
+http://192.168.0.1/ 
+username:broadmax 
+password:broadmax 
+
+长虹ch-500E 
+http://192.168.1.1/ 
+username:root 
+password:root 
+
+重庆普天CP ADSL03 
+http://192.168.1.1/ 
+username:root 
+password:root 
+
+台湾突破EA110 
+RS232:38400 
+http://192.168.7.1/ 
+username SL 
+psw SL 
+
+etek-td的ADSL_T07L006.0 
+http://192.168.1.1/ 
+User Name: supervisor 
+Password: 12345 
+忘记密码的解决办法： 
+使用超级终端的Xmodem方式重写Vxworks.dlf，密码恢复成：12345 
+
+GVC的DSL-802E/R3A 
+http://10.0.0.2/ 
+username:admin 
+password:epicrouter 
+username:user 
+password assword 
+
+科迈易通km300A-1 
+http://192.168.1.1/ 
+username: 
+password assword 
+
+科迈易通km300A-G 
+http://192.168.1.1/ 
+username:root 
+password:root 
+
+科迈易通km300A-A 
+http://192.168.1.1/ 
+username:root or admin 
+password:123456 
+
+sunrise的SR-DSL-AE 
+http://192.168.1.1/ 
+username:admin 
+password:0000 
+
+sunrise的DSL-802E_R3A 
+http://10.0.0.2/ 
+username:admin 
+password:epicrouter 
+username:user 
+password assword 
+
+UTStar的ut-300R 
+http://192.168.1.1/ 
+username:root or admin 
+password:utstar 
+
