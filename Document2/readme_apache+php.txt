@@ -1,3 +1,4 @@
+这里是静态编译apache的方法
 $ gunzip -c apache_1.3.x.tar.gz | tar xf -
 
 $ cd apache_1.3.x
@@ -36,13 +37,43 @@ $ cp php.ini-recommended /usr/local/lib/php.ini
 若apache服务器出现302的错误,则将php.ini中的register_global置为on
 
 编辑/usr/local/apache/conf/httpd.conf
-加入一行:
+查找<IfModule mod_mime.c>
+
+在此范围添加
+
 AddType application/x-httpd-php .php
+AddType application/x-httpd-php-source .phps
 
-修改下列内容:
-DocumentRoot "/jbproject/tomcat/goldsoft/php-vod"
 
-<Directory "/jbproject/tomcat/goldsoft/php-vod">
+
+
+我们再来讲讲DSO动态编译的方法：
+
+首先编译安装apache
+
+tar zvxf apache_1.3.29
+cd apache_1.3.29
+./configure --prefix=/usr/local/apache --enable-module=so \
+--enable-module=rewrite --enable-shared=max &&
+make &&
+make install
+
+so模块用来提供DSO支持的apachehe核心模块，rewrite是地址重写的模块，如果不需要可以不编译
+enable－shared＝max是指除了so以外的所有标准模块都编译成DSO模块。
+
+
+然后编译php
+
+tar zvxf php4.3.4.tar.gz
+cd php4.3.2
+./configure --prefix=/usr/local/php --with-mysql=/usr/local/mysql \
+--with-apxs=/usr/local/apache/bin/apxs &&
+make &&
+make install
+
+然后修改httpd.conf，方法同静态编译的方法
+
+
 
 启动命令:
 /usr/local/apache/bin/apachectl start

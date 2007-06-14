@@ -1,0 +1,49 @@
+用Zend Encode编写开发PHP程序
+使用PHP的人都知道，Zend Encode是一个脚本编程工具，用它写的程序，必须以源码的形式放置在Web服务器上，所以我们无法保护自己的源代码。大家都知道任何一个脚本程序的执行效率同具有相同功能的编译好的二进制代码相比较，它的执行效率都是比较低的。那么要是有一个工具能够帮我们把用PHP写的程序编译成二进制代码就好了，这样不但执行效率提高了，运行速度也加快了。真要是有这么一个工具，那就是一举两得了。 
+现在这不是梦想了，Zend Encode就是为此而开发的，它可以直接将脚本编译成二进制码。有了Zend Encode，你就可以将自己写好的PHP程序，编译后分发给很多用户，而用不着公开自己的源程序代码。编译好的二进制代码可以被Zend Optimizer透明读取，也就是说，客户只要在他的服务器上安装Zend Optimizer就可以执行由Zend Encode编译好的PHP程序。编译程序中包含有Zend Optimizer的部分代码，所以编译过程中对程序代码进一步作了优化处理，这即意味着脚本的执行效率提高了。 
+从一定意义上讲，Zend Encode是一个“PHP编译器”。但是，它又不是一个真正意义上的编译器，因为真正编译完成的程序可以脱离原来的编译环境运行，而Zend Encode编译过的程序，需要有Zend Optimizer的支持。就像编译好的Java二进制代码，需要JVM的支持。所以，Zend Optimizer可以看作是PHP编译好代码的虚拟机。不管怎么说，它们要通过相互配合使用。 
+目前Zend Encode支持的操作系统有：Solaris、Linux、FreeBSD及Windows。Zend Encode可以直接运行，电脑系统中不一定非要安装PHP。 
+Zend Encode的安装 
+先去下载一个软件包吧!Zend Encode不是自由软件，使用它要付费，而且价格相当高。幸好zend.com提供了一个可供试用的软件包，用户可以免费试用30天。这个软件包可以直接从http://www.zend.com上获得。所以，首先要到www.zend.com上下载Zend Encode、Zend Optimizer软件包。其次，要下载一个授权文件license。由于Zend Encode是一个授权使用的产品，所以需要用户从zend.com上申请一个license。申请步骤如下： 
+要申请一个试用的license，需要向zend.com提供你正在使用的计算机的ID，也即在申请页中填写host ID(实际上就是你计算机上的网卡的MAC地址)。查看计算机ID的方法如下：从zend.com下载一个lmutil.z的程序，解压后得到程序lmutil，运行它，它会根据系统的硬件特征产生一个序列串。将这个序列号填入到申请license页的host ID中，zend.com会在48小时内为用户生成一个license，下载此license文件，文件名为zendEncode.dat，它只能在这台电脑上使用。 
+1.将Zend Encode软件包也解压缩到/usr/local/Zend目录下。解压缩完成后，目录下多了一个zendenc的文件，它就是那个“编译器”啦。 
+2.将那个license文件复制到/usr/local/Zend目录下安装完成。 
+Zend Optimizer的安装 
+完成了Zend Encode的安装，才完成了一半任务，要使用编译后的PHP二进制代码，还要安装一个解释器——Zend Optimizer，有了它的支持，编译后的PHP二进制文件才能被正确地执行。 
+与Zend Encode不同，Zend Optimizer是一个免费软件，它的主要功能是加速PHP脚本文件的运行。据Zend.com称，有了Zend Optimizer的优化，程序的执行效率可以提高600%，经过笔者的简单测试，执行效率的确是提高了不少。 
+安装Zend Optimizer步骤如下： 
+1.解压缩Zend Optimizer软件包，将zendoptimizer.so文件复制到/usr/local/Zend/lib目录中。 
+2.打开/usr/local/lib/PHP.ini文件，在文件中加入以下两行： 
+zend_optimizer.optimization_level=15
+zend_extension="/usr/local/Zend/lib/ zendoptimizer.so" 
+
+3.重启动Apache 服务器，使以上更新生效。 
+Zend Encode的使用 
+现在准备工作全部完成了，我们写一个简单的PHP脚本，使用Zend Encode编译一下，看看效果如何。先写一个最简单的脚本，看看编译后的代码能不能执行： 
+#vi test.PHP
+＜? Phpinfo(); ?＞ 
+
+编译它： 
+#[root@mail Zend]# ./zendenc test.PHP testencode.PHP
+Zend Encoder Unlimited (TEST DRIVE) v1.1.0 (c) Zend Technologies, 1999-2000
+Licensed to: xqkred.
+Compiling test.PHP...
+Done encoding test.PHP.
+Optimizing... Done.
+Saving... Done. 
+
+好，成功编译。不过，编译好的程序大小较之以前要大很多。 
+将testencode.PHP复制到Web服务器的发布目录下，在浏览器上键入http://localhost/testencode.PHP，哇！编译后的代码可以成功运行了!由于我们使用是试用版的Zend Encode，所以，在页面的最上面会出现一个图片，说明这是一个由Zend Encode试用软件包所产生的二进制文件。正式版的软件中，图片将不会再现。 
+下面再看看它的执行效率吧！首先写一个小的计算程序粗略估计一下： 
+[compute.PHP]
+＜?
+$t=time();
+for( $i=0;$i＜1000000;$i++) {
+if(($i%20)!=0) {echo $i; echo ",";}
+else { echo "＜br＞";}
+}
+$t1=time();
+echo "＜br＞"; echo "It used:"; echo $t1-$t; echo " seconds";
+?＞ 
+
+这个程序在执行时，取系统的时间，完成后再取系统时间，两个值的差即为整个程序运行所需时间，先在没有编译的情况下执行一遍，然后用Zend Encode编译后再执行一遍。比较结果：没有编译的情况下，运行所需时间平均为19秒,编译后的代码平均执行时间为 9秒，看来执行效率是提高了不少。

