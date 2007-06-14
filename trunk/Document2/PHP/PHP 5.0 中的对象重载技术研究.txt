@@ -1,0 +1,196 @@
+PHP 5.0 中的对象重载技术研究
+一、简介
+
+　　很幸运，PHP 5.0中引入了对象重载技术。本文将探讨对于方法__call()，__set()以及__get()进行重载的可能性。在对重载理论作简单介绍后，我们将通过两个例子直奔主题：第一例，实现持续存储类；第二例，找到一种实现动态的getter/setter的方法。
+
+　　二、什么是对象重载？
+
+　　在PHP中谈到对象重载时,我们要区别两种类型：
+
+　　·方法重载
+
+　　·属性重载
+
+　 　在方法重载的情况下，我们要定义一个魔术般的方法__call()，它将实现一个在相应类中对未定义方法的笼统调用。只有当你想存取类中未定义的方法 时，这种笼统方法才会被调用。在没有方法重载的情况下，下面的例子将导致PHP显示一条致命错误信息：Call to undefined method ThisWillFail::bar() in/some/directory/example.php on line 9并流产程序的执行：
+
+
+
+
+
+＜?php
+　class ThisWillFail {
+　　public function foo() {
+　　　return "Hello World!";
+　　}
+　}
+　$class = new ThisWillFail;
+　$class-＞bar();
+?＞ 
+
+
+
+
+
+　　借助方法重载的帮助，代码能够捕获到这种调用且能够体面地给以处理。
+
+　 　属性重载与方法重载差不多。这种情况下，类把读/写操作重定向(亦可称代理)到类的属性，这些属性在类中没有显式定义。这里的专门方法是__set() 和__get()。依赖于错误报告等级，PHP翻译器通常在存取一个未定义的属性时，或者发出一个通知，或者推迟一下并潜在地定义这个变量。而如果使用属 性重载，翻译器却可以在设置一个未定义的属性时调用__set()，而在存取一个未定义的属性值时调用__get()。
+综上所述，利用重载技术可以实现在象用PHP这样的动态语言进行时软件开发时间的大大缩短。
+
+　　理论介绍至此，下面分析具体编码。
+
+　　三、持续性存储类举例
+
+　　下列代码，通过使用属性重载技术，用少于50行的PHP代码实现了上面所提到的持续性存储类。术语persistable意味着类可以从一个数据结构中描述一个元素，并保持与底端存储系统的同步。用编码的解释就是，外部代码可以使用类来实现从一个数据库表中选定一行。这样，在程序运行时，可以直接存取类的属性来操纵该行中的元素(读/取)。在脚本结束时，PHP将负责把更新的行数据回送到数据库中去。
+
+　　精心研读下面代码将有助于你理解什么是属性重载。
+
+
+
+
+
+＜?php
+　//装入PEAR的 ＜a href="http://pear.php.net/package/DB/"＞DB package＜/a＞
+　require_once "DB.php";
+　class Persistable {
+　　private $data = array();
+　　private $table = "users";
+　　public function __construct($user) {
+　　　$this-＞dbh = DB::Connect("MySQL://user:password@localhost/database");
+　　　$query = "SELECT id, name, email, country FROM " .
+　　　$this-＞table . " WHERE name = ?";
+　　　$this-＞data = $this-＞dbh-＞getRow($query, array($user),
+　　　DB_FETCHMODE_ASSOC);
+　　}
+　　public function __get($member) {
+　　　if (isset($this-＞data[$member])) {
+　　　　return $this-＞data[$member];
+　　　}
+　　}
+　　public function __set($member, $value) {
+　　　// dataset的ID是只读的
+　　　if ($member == "id") {
+　　　　return;
+　　　}
+　　　if (isset($this-＞data[$member])) {
+　　　　$this-＞data[$member] = $value;
+　　　}
+　　}
+　　public function __destruct() {
+　　　$query = "UPDATE " . $this-＞table . " SET name = ?, 
+　　　email = ?, country = ? WHERE id = ?";
+　　　$this-＞dbh-＞query($query, $this-＞name, $this-＞email, 
+　　　$this-＞country, $this-＞id);
+　　}
+　}
+　$class = new Persistable("Martin Jansen");
+　$class-＞name = "John Doe";
+　$class-＞country = "United States";
+　$class-＞email = "john@example.com";
+?＞ 
+
+
+
+
+
+　 　你遇到的第一个问题可能是__construct()，这是PHP 5中引入的新的构造器方法。在PHP 4时代，构造器总是与它们的类名相匹配。在PHP 5中已不再是这样。你不需要对构造器方法有过多的了解，除了调用它可以创建一个类的实例外；并注意到，这里使用了一个参数 - 执行一个基于此参数的数据库。此构造器把查询结果赋值给类属性$data。
+
+　　接下来，程序定义了两个特别的方法__get()和__set()。你应该对它们早已熟悉：__get()用于读取未定义的属性值，__set()用于修改未定义的属性值。
+
+　　这意味着无论什么时候从持续性存储类中读取/写入一个未定义的属性，由这些专门方法来负责管理在属性数组变量$data中的信息，而不是直接改变类的属性(切记：变量$data包含着来自于数据库中的一行!)。
+
+　 　类中的最后一个方法是__construct()的对立者- 析构器__destruct()。PHP在"脚本关闭阶段"调用析构器，典型地这是在PHP脚本执行快要结束的时候。析构器把来自于$data属性的信息 写回到数据库中去。这正是前面同步(synchronization )术语的含义。
+
+　　你可能早已注意到，这里的代码使用了PEAR的数据库抽象层包(database abstraction layer package)。其实这无所谓，通过别的方式与数据库通讯也一样能说明本文的主题。
+
+　 　如果你细心观察，会发现该持续性存储类的描述比较简单。例子中仅涉及了一个数据库表，而没有考虑更复杂的数据模型，如使用LEFT JOIN和其它复杂的数据库操作技术。然而你不必受此约束，借助于属性重载，你可以使用你自己理想的数据库模型。只需要加入少许代码，你即可以在该持续性 存储类中运用复杂的数据库特性。
+
+　　还存在一个小问题 - 当在析构器中查询失败时并没有引入错误处理机制。是析构器的天性导致在这种情况下不可能显示相应的错误信息，因为构建HTML标志常常在PHP调用构析器之前就已经结束了。
+
+　 　为解决这个问题，你可以把__destruct()重命名为象saveData()这样的名字并在调用脚本的某处手工执行这一方法。这对于类的持续性存 储的概念并没有任何改变；仅是多写几行代码而已。作为选择，你还可以在析构器中使用函数error_log()来记录下属于系统范围的错误记录文件中的错 误信息。
+
+　　属性重载的工作机制就是这样。下面我们讨论一下方法重载。
+
+　四、方法重载举例
+
+　　1. 动态的Getter/Setter方法
+
+　　下列代码实现了"动态"getter/setter方法以借助于方法重载的帮助来控制类。下面我们结合源代码进行分析：
+
+
+
+
+
+＜?PHP
+　class DynamicGetterSetter {
+　　private $name = "Martin Jansen";
+　　private $starbucksdrink = "Caramel Cappuccino Swirl";
+　　function __call($method, $arguments) {
+　　　$prefix = strtolower(substr($method, 0, 3));
+　　　$property = strtolower(substr($method, 3));
+　　　if (empty($prefix) || empty($property)) {
+　　　　return;
+　　　}
+　　　if ($prefix == "get" && isset($this-＞$property)) {
+　　　　return $this-＞$property;
+　　　}
+　　　if ($prefix == "set") {
+　　　　$this-＞$property = $arguments[0];
+　　　}
+　　}
+　}
+　$class = new DynamicGetterSetter;
+　echo "Name: " . $class-＞getName() . "\n";
+　echo "Favourite Starbucks flavour: " . $class-＞getStarbucksDrink() . "\n\n";
+　$class-＞setName("John Doe");
+　$class-＞setStarbucksDrink("Classic Coffee");
+　echo "Name: " . $class-＞getName() . "\n";
+　echo "Favourite Starbucks flavour: " . $class-＞getStarbucksDrink() . "\n\n";
+?＞ 
+
+
+
+
+
+　 　很明显，这里的两个属性$name和$starbucksdrink都是私有的，就是说从类的外部是不能够存取这些属性的。在面向对象的编程中，实现公 共的getter/setter方法来存取或修改非公共属性的值是很经常的事情。实现这些是单调的事情，且相当耗费时间和精力。 
+
+　　 借助于方法重载可以容易得解决这个问题。不是为每个属性实现getter/setter方法，上面只实现了一个通用的__call()方法。这意味着当调 用一个未定义的getter/setter方法如setName()或者getStarbucksdrink()时，PHP不会产生一个致命错误而流产， 而是执行（或者代理到）魔术般的__call()方法。
+
+　　这是些简单介绍，下面我们对__call()作一下深入分析。
+
+　　2. 详细分析__call()方法
+
+　　__call()的第一个参数是原始的且尚未确定的方法(如setName)，第二个参数是一个数字索引的一维数组，它包含了原始方法的所有参数。用两个参数("Martin"和42)调用一个未定义的方法将产生下面数组：
+
+
+
+
+
+$class-＞thisMethodDoesNotExist("Martin", 42);
+/导向__call()的第二个参数
+Array
+(
+[0] =＞ Martin
+[1] =＞ 42
+) 
+
+
+
+
+
+　 　在方法__call()内部，如果原始方法以get或者set开头，则要进行某种计算以确定是否代码调用的是一个getter/setter方法。而 且，这种方法还要进一步分析方法名的另外一组成部分(除去开始的三个字符)，因为后面这部分字符串正代表getter/setter参照的属性的名字。
+
+　　如果方法名中指示有一个getter/setter，那么该方法或者返回相应的属性值，或者设置原始方法的第一个参数的值。如果没有的话，它不做任何事情，继续执行程序，好象没有事情发生。
+
+　　3. 实现目标
+
+　 　实质上,相应于任意的属性，存在一种方法允许代码动态地调用任意的getter/setter方法，这种算法是存在的。这在短期内开发一个程序原型的情 况下是很方便的：不是花费大量时间来实现getters/setters，开发人员可以专注于建模API并保证应用程序的根本正确。把__call()方 法纳入到一个抽象类中甚至有可能使你在将来的PHP工程开发中实现代码的重用!
+
+　　4. 不足之外
+
+　　有优点就有缺点。以上方法也有几个不足：较大些的项目可以会使用象phpDocumentor这样的工具来跟踪API结构。用上面介绍的动态方法，所有的getter/setter方法当然不会出现在自动生成的文档中，这是无需多作解释的。
+
+　 　另外一个不足是，类外面的代码可以存取类内的每一个私有属性。当使用真正的getter/setter方法时，有可能区别开外部代码可以存取的私有属性 和对类外部不可见的"真正的"私有属性 - 因为我们有方法重载，而且有虚拟的getter和setter方法可以利用。
+
+　　五、结论
+
+　　本文通过两个例子细致分析了PHP 5.0中对象重载的两种情形。很希望本文的方法帮助你提高PHP编程的工作效率!同时，你也应清醒地看到这种方法的不足。

@@ -1,0 +1,72 @@
+
+想象过在网站上动态生成flash动画吗，本文就让你步入php+flash的激动时代。 
+
+php真是个好东西呀，真是无法预料她明天会变的怎样。。。好了，言归正传，下面 
+
+介绍怎样实现这个功能。 
+
+一、需要的软件 
+
+swf的支持库 
+
+http://reality.sgi.com/grafica/flash/dist.99.linux.tar.Z 
+
+这个包里面有文档，你可以用c来使用它，他的例子就是。 
+
+这哥们太好了，不过他要是提供源码就更好了。 
+
+还有当然是php4了从http://www.php.net得到 
+
+二、安装 
+
+1、libswf.a安装 
+
+#cp dist.99.linux.tar.Z /usr/local 
+
+#tar xvzf dist.99.linux.tar.Z 
+
+#cd dist 
+
+#make 
+
+你会看到例子c程序生成的image.swf和test.swf两个文件，你可以放到浏览器看看结果。 
+
+如果出来了，你就完成一半了。 
+
+你还需要做一些事情 
+
+在/etc/profile中加入 
+
+SWFBINPATH=/usr/local/dist/bin 
+
+export SWFBINPATH 
+
+SWFFONTPATH=/usr/local/dist/fonts 
+
+export SWFFONTPATH 
+
+2、编译php4 
+
+编译加入 
+
+--with-swf=/usr/local/dist 
+
+笔者在编译的时候发现找不到swf.h错误，用 
+
+#cp /usr/local/dist/swf.h /php/src/directory/ext/swf解决问题 
+
+安装完后做个如下的脚本（php文档带的例子），请注意当前目录下的swf目录要可 
+
+写，不然apache会出错的你什么都会的不到的 
+
+执行完后用浏览器调用test.swf文件，你肯定会很惊讶php的威力，呵呵 
+
+体会一下程序设计和艺术设计的完美感觉吧，可惜我没有艺术头脑：-（ 
+
+在/usr/local/dist/bin中有两个程序，imgtofi用来转化rgb,gif,jpg到libswf.a支持的 
+
+图形格式，pstoff为把ps字体转化为libswf.a可用的字体，我转化过英文字体，能在程序 
+
+中使用，但是没转化成功过中文字体，不知道哪位大虾成功了，能否告之一下。 
+
+关于swf的php函数说明，请去php.net找最新的manual。  

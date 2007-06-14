@@ -1,0 +1,61 @@
+Zend Optimizer 配置指南
+
+当前作者：王猛 (HeartIcy@163.com)
+创建日期：2003年1月14日
+修订版本：1.1
+
+Zend Optimizer是由PHP核心引擎“Zend”创建者Zend技术公司所开的免费PHP优化软件。据Zend公司
+透露使用这个软件某些情况下至少可以提高性能30%以上！这么好的免费大餐当然要用，现在我们来
+谈谈如何配置这套软件。
+
+Zend Opt的安装是傻瓜化的，安装向导会自动根据你的选择来修改php.ini帮助你启动这个引擎。下面
+我们来介绍下Zend Opt的配置选项，帮助你最大化自定义合理的配置。下边是我所用的配置文件，看不
+懂也不要着急，看完本文你就会完全明白。
+
+[Zend]
+zend_optimizer.optimization_level=1023
+zend_optimizer.encoder_loader=0
+zend_extension_ts="C:\Program Files\Zend\lib\ZendOptimizer.dll"
+
+现在我们来介绍下上边这个配置文件的含义：
+zend_optimizer.optimization_level 《== 优化程度，这里定义启动多少个优化过程。
+zend_optimizer.encoder_loader 《== 是否允许处理由Zend Encoder加密的PHP文件。
+zend_extension_ts 《== 优化器所在目录。
+
+优化过程 zend_optimizer.optimization_level 详细解释
+
+这里最为重点的部分，仔细看！Zend Opt总共有10个优化过程，从理论上说开的越多性能越好。当然，
+理论和实际永远都存在着差距。优化过程开启的越多对性能消耗也相对也越大，Zend Opt的10个优化过
+程并不相同也就是说效果不是平均的。Zend公司定义的最高值(High模式)为15，这里15指的是开启1-4号
+优化过程。当然，很多朋友并不满足于此，毕竟最高也只开启4个优化过程连总数的一半都没有。各个优
+化过程的对应的数字代码（值）如下：
+
+不使用 0 <= 如果这样不如不装，还能节约点内存说！
+优化过程1(PASS1) 1
+优化过程2(PASS2) 2
+优化过程3(PASS3) 4
+优化过程4(PASS4) 8
+优化过程5(PASS5) 16
+优化过程6(PASS6) 32
+优化过程7(PASS7) 64
+优化过程8(PASS8) 128
+优化过程9(PASS9) 256
+优化过程10(PASS10) 512
+
+以何种方式开启优化过程是通过这些数字代码（值）相加所得的和作为此参数的参数值来控制的。如我
+的配置文件中zend_optimizer.optimization_level = 1023 ， 这里的1023是优化过程1到优化过程10全
+部数字代码（值）相加得到的和，表示开启全部10个优化过程。刚才所提到的Zend公司定义的High模式值
+为15，15表示同时开启优化过程1-4。
+
+加密代码支持 zend_optimizer.encoder_loader 详细解释
+
+对于这个参数，我想如果没有看过Zend Opt FAQ文档的朋友大多数并不知道。这个参数用来告诉Zend Opt
+是否去支持被Zend Encoder加密过的代码。默认情况下Zend Opt将支持加密过的代码。如果不使用被加密
+过的代码我推荐你关闭此选项。这个功能牵扯到解包反码的过程，会导致系统负荷的加重。我的朋友已经
+开发完毕相应的反编译工具，预计春节之后推出。
+
+这个参数的值只有两个 0 关闭， 1 开启。默认为1，推荐设置为0。
+
+模块定位 zend_extension_ts 无需解释
+
+这是最简单的地方，参数就是Zend Opt模块在硬盘上的安装路径。
