@@ -50,7 +50,8 @@ if('modify'==$action)
 {
 	$id=$_REQUEST['id'];
 	$title=$_REQUEST['title'];
-	$sql="update article set title='".$title."' where id=".$id;
+	$url=trim($_REQUEST['url']);
+	$sql="update article set title='".$title."',url='".$url."' where id=".$id;
 	if($db->sql_query($sql))
 	{
 		echo '<script>parent.location.reload();</script>';
@@ -64,6 +65,11 @@ if('modify'==$action)
 include_once("left.php");//左边菜单
 echo '<div style="width:800px;margin-top:10px;margin-left:150px;text-align:center;border:1px solid #000;padding:10px 0;">';
 $channel_id=$_REQUEST['channel_id'];
+$s_title=$_REQUEST['s_title'];
+if($s_title!='')
+{
+	$sql_ext=" and title like '%".$s_title."%'";
+}
 if($channel_id>0)
 {
 	$sql1="select name from channel where id=".$channel_id;
@@ -71,30 +77,37 @@ if($channel_id>0)
 }
 else
 {
+	$channel_id=0;
 	$caption='所有投稿文章';
 }
-$pageitem=15;
+$pageitem=20;
 $page=$_REQUEST["page"];
 if($channel_id>0)
 {
-	$sql="select * from article where channel_id1=".$channel_id." or channel_id2=".$channel_id." or channel_id3=".$channel_id." order by addtime desc";
+	$sql="select * from article where (channel_id1=".$channel_id." or channel_id2=".$channel_id." or channel_id3=".$channel_id.") ".$sql_ext." order by addtime desc";
 }
 else
 {
-	$sql="select * from article order by addtime desc";
+	$sql="select * from article where 1 ".$sql_ext." order by addtime desc";
 }
 $result=$db->sql_query($sql);
 $total=$db->sql_numrows($result);
-pageft($total,$pageitem,"?channel_id=".$channel_id);
+pageft($total,$pageitem,"?channel_id=".$channel_id."&s_title=".$s_title);
 $result=$db->sql_query($sql." limit ".$offset.",".$pageitem);
 echo '<table width="100%" border="0" cellpadding="0" cellspacing="0">';
 echo '<caption>'.$caption.'(文章总数:'.$total.')</caption>';
+echo '<tr><td colspan="6">搜索：输入文章标题:<input type="text" id="s_title" value="'.$s_title.'"><input type="button" onclick="search(document.getElementById(\'s_title\').value)" value="搜索"></td></tr>';
 echo '<tr bgcolor="#6699ff"><td>文章ID</td><td>作者博客</td><td>文章标题</td><td>所属分类</td><td>投稿时间</td><td>操作</td></tr>';
+$input_size=30;
 while($row=$db->sql_fetchrow($result))
 {
 	$id=$row['id'];
 	$author_id=$row['author_id'];
-	$title=$row['title'];
+	$tmptitle=$title=$row['title'];
+	if($s_title!='')
+	{
+		$tmptitle=str_replace($s_title,'<font color="red">'.$s_title.'</font>',$title);
+	}
 	$url=$row['url'];
 	$addtime=date("Y-m-d H:i:s",$row['addtime']);
 	$channel_id1=$row['channel_id1'];
@@ -114,11 +127,12 @@ while($row=$db->sql_fetchrow($result))
 		$channel_name3=getField($channel_id3,'name','channel');
 	}
 	$vote=$row['vote'];
+	$input_size=max($input_size,strlen($title));
 	echo '<tr>';
 	echo '<td>'.$id.'</td>';
 	echo '<td>'.getField($author_id,'blogname','author').'</td>';
-	echo '<td><span id="span1'.$id.'"><a id="link'.$id.'" href="'.$url.'" target="_blank">'.$title.'</a><input type="button" onclick="modify('.$id.')" value="修改" /></span>';
-	echo '<span id="span2'.$id.'" style="display:none"><input type="text" id="input'.$id.'" size="'.strlen($title).'" value="'.$title.'"><input type="button" onclick="submitModify('.$id.',document.getElementById(\'input'.$id.'\').value);" value="提交"></span></td>';
+	echo '<td><span id="span1'.$id.'"><a id="link'.$id.'" href="'.$url.'" target="_blank">'.$tmptitle.'</a><input type="button" onclick="modify('.$id.')" value="修改" /></span>';
+	echo '<span id="span2'.$id.'" style="display:none"><input type="text" id="input'.$id.'" size="'.$input_size.'" value="'.$title.'"><input type="button" onclick="submitModify('.$id.',document.getElementById(\'input'.$id.'\').value,document.getElementById(\'url'.$id.'\').value);" value="提交"><br /><input type="text" id="url'.$id.'" size="'.($input_size+5).'" value="'.trim($url).'"></span></td>';
 	echo '<td id="channels'.$id.'" oonclick="modifyChannel('.$id.','.$channel_id1.','.$channel_id2.','.$channel_id3.')">'.$channel_name1.' '.$channel_name2.' '.$channel_name3.'</td>';
 	echo '<td>'.$addtime.'</td>';
 	echo '<td><input type="button" value="删除" onclick="confirmdel('.$row['id'].','.$channel_id.')" /></td>';
@@ -134,6 +148,7 @@ $db->sql_close();
 <iframe frameborder="0" scrolling="no" id="iframe1" name="iframe1" width="600" height="50" src=""></iframe>
 <script>
 var last_id=0;
+var channel_id=<?=$channel_id?>;
 function modify(id) {
 	if(last_id!=0)
 	{
@@ -149,9 +164,8 @@ function modify(id) {
 	t2.style.display='';
 	document.getElementById('input'+id).focus();
 }
-
-function submitModify(id,title) {
-	document.getElementById('iframe1').src='?action=modify&id='+id+'&title='+title;
+function submitModify(id,title,url) {
+	document.getElementById('iframe1').src='?action=modify&id='+id+'&title='+title+'&url='+url;
 }
 function modifyChannel(id,id1,id2,id3) {
 	if(last_id!=0)
@@ -164,15 +178,7 @@ function modifyChannel(id,id1,id2,id3) {
 	t=document.getElementById(id);
 	old_channel=t.innerHTML;
 	//未完成
-	if(old_title.indexOf('<')>=0 || old_title.indexOf('>')>=0)
-	{
-		return;
-	}
-	else
-	{
-		t.innerHTML='<input type="text" id="title'+id+'" size="'+2*textSize+'" value="'+old_title+'"><input type="button" onclick="submitModify('+id+',document.getElementById(\'title'+id+'\').value);" value="提交">';
-		document.getElementById('title'+id).focus();
-	}
+	
 }
 function confirmdel(id,cid)
 {
@@ -215,5 +221,15 @@ function check2()
 	}
 	alert("您还没有做任何选择呢!");
 	return false;
+}
+function search(s_title) {
+	if(channel_id>0)
+	{
+		document.location="?channel_id="+channel_id+"&s_title="+s_title;
+	}
+	else
+	{
+		document.location="?s_title="+s_title;
+	}
 }
 </script>
