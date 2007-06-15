@@ -25,7 +25,7 @@ function getData()
 	i++;
 	//sid,pageitem,gatall三个变量在html页面中初始化
 	//page由url赋值
-	xmlhttp.open("get","/cmncmt/export.php?sid="+sid+"&page="+page+"&pageitem="+pageitem+"&getall="+getall+"&i="+i, false);
+	xmlhttp.open("get","/cmncmt/export.php?sid="+sid+"&page="+page+"&pageitem="+pageitem+"&getall="+getall+"&"+Math.random(), false);
 	xmlhttp.send(null);
 //	xmlhttp.onreadystatechange = function() 
 	{
@@ -37,7 +37,7 @@ function getData()
 }
 function mysubmit()
 {
-	document.commentForm.action="/cmncmt/export.php?sid="+sid;
+	document.commentForm.action="/cmncmt/export.php?sid="+sid+"&"+Math.random();
 	document.commentForm.submit();
 }
 function clearForm()

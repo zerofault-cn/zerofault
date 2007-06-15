@@ -27,6 +27,7 @@ if(''!=$_REQUEST['submit1'])
 	$sql="insert into comment set sid='".$sid."',username='".$username."',content='".format($content)."',addtime=UNIX_TIMESTAMP(),ip='".$ip."'";
 	if($db->sql_query($sql))
 	{
+		echo $sql;
 		echo "<script>parent.alertOK();</script>";
 	}
 	else
@@ -72,6 +73,11 @@ elseif(''!=$_REQUEST['sid'])
 		{
 			echo '<div style="background-color:#e3e3e3;border:1px solid #ddd">'.$addtime.'&nbsp;&nbsp;'.$username.' IP:'.$ip1.'</div>';
 			echo '<div style="border:1px solid #ddd;border-top:0;">'.$content.'</div>';
+		}
+		else//if(substr($sid,0,4)=='mmzk')//mm周刊
+		{
+			echo '<div style="padding-top:3px;border-left:3px solid #CC0000;background-color:#F0F0F0">留言人：'.$username.' 留言时间：'.$addtime.'</div>';
+			echo '<div style="padding-top:5px;padding-bottom:7px;line-height:140%;">'.$content.'</div>';
 		}
 		if(0==$getall && $i>=$pageitem)
 		{
