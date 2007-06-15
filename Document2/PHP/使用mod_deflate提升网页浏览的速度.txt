@@ -1,0 +1,66 @@
+http://www.port80software.com/products/httpzip/compresscheck
+
+
+
+使用mod_deflate提升网页浏览的速度 
+ 
+apache1.3.x可以用mod_gzip进行优化网页浏览的速度，可以明显的感觉到速度的提升。在apache2中也尝试用mod_gzip，但是配置后确发现网页不能正确显示（空白页），所以改换mod_deflate。
+
+在Linux命令行下运行以下命令安装mod_deflate模块（斜体是apache2的目录）
+
+/usr/local/apache2/bin/apxs -i -c /root/httpd-2.0.48/modules/filters/mod_deflate.c
+
+编辑httpd.conf，加入以下内容：
+
+LoadModule deflate_module modules/mod_deflate.so
+
+DeflateFilterNote ratio
+LogFormat '"%v %h %l %u %t "%r" %>s %b "%{Referer}i" "%{User-Agent}i"" (%{ratio}n)' deflate
+
+
+<Location />
+SetOutputFilter DEFLATE
+BrowserMatch ^Mozilla/4 gzip-only-text/html
+BrowserMatch ^Mozilla/4.0[678] no-gzip
+BrowserMatch \bMSIE !no-gzip !gzip-only-text/html
+SetEnvIfNoCase Request_URI \.(?:gif|jpe?g|png)$ no-gzip dont-vary
+#Header append Vary User-Agent env=!dont-vary
+</Location> 
+
+#查找Customlog 注释原来的的一行，改成
+CustomLog logs/deflate_log deflate 
+
+ 
+
+附注：关于mod_deflate的详细内容，可以参考http://httpd.apache.org/docs-2.0/mod/mod_deflate.html
+
+
+##############################################################################################################################################################################
+
+如果你想了解mod_deflate如何安装请阅读《使用mod_deflate提升网页浏览的速度》
+
+在某些apache上可能配置完后启动apache的时候出现错误，参照本文底部的文章后该问题得以解决。
+
+Cannot load /opt/apache/modules/mod_deflate.so into server: /opt/apache/modules/mod_deflate.so: undefined symbol: deflate
+
+解决的方法如下：
+
+vi /usr/local/apache2/bin/apr-config
+修改LDFLAGS=" " 为 LDFLAGS="-lz"
+然后再重新编译mod_deflate模块，apxs -ica mod_deflate.c
+就OK了
+
+另外在配置deflate规则时，apache2.0推荐加上这句
+Header append Vary User-Agent env=!dont-vary
+以便确保不会输出在压缩过程中出现内容方面的error
+但一般情况下，在测试apache的语法过程中会现出
+Invalid command 'Header', perhaps mis-spelled or defined by a module not included in the server configuration
+解决办法就是加载一个headers模块就OK了
+
+不过最好还是在编译apache模块时直接加上--enable-deflate --enable-headers就省事多了。 
+
+参考文章： 
+
+http://www.ceass.com/index.php?play=reply&id=90
+http://bbs.chinaunix.net/viewthread.php?tid=832661&extra=page%3D1
+

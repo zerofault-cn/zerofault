@@ -1,0 +1,73 @@
+使用mod_gzip模块给网站提速
+作者：陶然
+
+写于2003年6月。最后更新： 06/04/2003 01:05:58
+
+版权声明：本文可以任意转载，转载时请保持文章的完整性，并以超链接形式标明文章原始出处和作者信息及本声明。
+http://www.taoran.net/tech/mod_gzip.html
+
+mod_gzip模块不属于apache自主开发的模块，所以不包括在apache的软件包里。但它对网站的
+加速作用却不容忽视。它的原理是，在客户端请求网页后，从服务器端将网页文件压缩，再下载
+到客户端，由客户端的浏览器负责解压缩并浏览。相对于普通的浏览过程，它可以节省40%左右的
+流量。更为重要的是，它可以对动态生成的，包括CGI、PHP等脚本输出的网页也能进行压缩，压
+缩效率惊人（一般都在60%-85%之间）。
+
+一、操作系统
+ 
+    RatHat Linux 7.2
+    Apache 1.3.27 （已按DSO模式安装）
+ 
+二、需要的软件
+    
+    mod_gzip.so (http://sourceforge.net/projects/mod-gzip/)
+    
+三、mod_gzip的安装
+    cp mod_gzip.so /usr/local/apache/libexec
+
+    也可以下载源码编译安装。
+
+四、apache配置文件的修改
+    在httpd.conf的相应位置分别加上下面两行：
+    LoadModule gzip_module libexec/mod_gzip.so
+    AddModule mod_gzip.c
+
+    在配置文件的最后，虚拟主机配置之前加上以下一段：
+    <IfModule mod_gzip.c>
+    mod_gzip_on yes 
+    mod_gzip_dechunk yes 
+    mod_gzip_keep_workfiles No 
+    mod_gzip_temp_dir /tmp
+    mod_gzip_minimum_file_size 1002 
+    mod_gzip_maximum_file_size 0 
+    mod_gzip_maximum_inmem_size 1000000
+    mod_gzip_item_include file \.htm$
+    mod_gzip_item_include file \.html$
+    mod_gzip_item_include mime text/.*
+    mod_gzip_item_include file \.php$
+    mod_gzip_item_include mime "application/x-httpd-php.*"
+    mod_gzip_item_include mime httpd/unix-directory
+    mod_gzip_item_include handler cgi-script
+    mod_gzip_item_exclude file "\.css$"
+    mod_gzip_item_exclude file "\.js$"
+    </IfModule>
+
+    若要观看使用效果，可以加上下面两行：
+    LogFormat "%h %l %u %t \"%V %r\" %>s %b mod_gzip: %{mod_gzip_result}n In:%{mod_gzip_input_size}n 
+            Out:%{mod_gzip_output_size}n:%{mod_gzip_compression_ratio}npct." common_with_mod_gzip
+    #以上是一行
+    CustomLog /usr/local/apache/logs/mod_gzip_log  common_with_mod_gzip
+       
+五、重新启动apache，浏览一会网页，再查看日志
+    211.156.17.125 - - [03/Jun/2003:11:45:57 +0800] "www.xxxxx.com GET /xxxxx/xxxxx.php HTTP/1.1" 
+            200 3589 mod_gzip: DECHUNK:OK In:23913 Out:3589:85pct.
+    #以上是一行
+
+    可以发现mod_gzip已经起作用了，压缩效率为85%。原先需要下载23K字节才能显示的网页，
+    现在只须下载不到4K字节就看到了，可以感觉到浏览速度快了不少。而CGI和PHP生成的动态
+    网页也可以看到被压缩传输了。考虑到效率的问题，图片类型（本身已经是压缩的）和小于
+    1K的文件、还有配置文件里指定的.css和.js文件是不进行压缩的。
+
+
+陶然
+2003/06/04
+
