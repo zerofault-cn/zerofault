@@ -21,7 +21,40 @@ if(''==$blogID)
 if($_POST['Submit'])
 {
 	$title=$_POST['title'];
-	$url=$_POST['url'];
+	$url=trim($_POST['url']);
+
+	/*
+	http://lydaiwei.bokee.com/view.b?diaryId=10077334
+	http://publishblog.blogchina.com/blog/diary.b?diaryID=4743628&blogID=1072062
+	http://binlong998.bokee.com/control/diary/editDiary.b?diaryId=10624933
+	http://publishblog.blogchina.com/blog/tb.b?diaryID=4722293
+	http://xw6167.bokee.com/.b?diaryId=10715622
+	*/
+	if(strlen(str_replace('tb.b?diaryid=','',$url))<strlen($url))
+	{
+		$url=str_replace('tb.b?diaryid=','viewdiary.',$url).'.html';
+	}
+	if(strlen(str_replace('tb.b?diaryId=','',$url))<strlen($url))
+	{
+		$url=str_replace('tb.b?diaryId=','viewdiary.',$url).'.html';
+	}
+	if(strlen(str_replace('tb.b?diaryID=','',$url))<strlen($url))
+	{
+		$url=str_replace('tb.b?diaryID=','viewdiary.',$url).'.html';
+	}
+	if(strlen(str_replace('view.b?diaryId=','',$url))<strlen($url))
+	{
+		$url=str_replace('view.b?diaryId=','viewdiary.',$url).'.html';
+	}
+	if(strlen(str_replace('control/diary/editDiary.b?diaryId=','',$url))<strlen($url))
+	{
+		$url=str_replace('control/diary/editDiary.b?diaryId=','viewdiary.',$url).'.html';
+	}
+	if(substr($url,-5)!='.html' || eregi('publishblog',$url) ||substr($url,0,7)!='http://')
+	{
+		echo '<script>parent.alert("您的文章链接地址不正确，请检查重试!");parent.document.addForm.url.select();</script>';
+		exit;
+	}
 	$blogname=$_POST['blogname'];
 	$blogurl=$_POST['blogurl'];
 	$email=$_POST['email'];
