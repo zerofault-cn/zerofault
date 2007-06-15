@@ -1,0 +1,88 @@
+使用PHP实现繁体与简体互转 作者： 来源： 
+阅读 728 人次 , 2006-3-29 4:10:00  
+ 
+
+
+ 
+
+<?
+/**** 繁体<==>简体 ****/
+
+/**
+码表的取得：
+http://netcity.hinet.net/kstchieh/table.zip
+包中有两个文件：big5-gb.table，gb-big5.table
+函数gb2big5由于没有big5环境，故未能详细测试
+*/
+
+// 将码表予装入内存
+$filename = "big5-gb.table";
+$fp = fopen($filename, "rb");
+$big5 = fread($fp,filesize($filename));
+fclose($fp);
+$filename = "gb-big5.table";
+$fp = fopen($filename, "rb");
+$gb = fread($fp,filesize($filename));
+fclose($fp);
+
+/**
+big5码转换成gb码
+*/
+function big52gb($text) {
+global $big5;
+$max = strlen($text)-1;
+for($i=0;$i<$max;$i++) {
+$h = ord($text[$i]);
+if($h>=160) {
+$l = ord($text[$i+1]);
+if($h==161 && $l==64) {
+$gb = "　"; 
+}else{
+$p = ($h-160)*510+($l-1)*2;
+$gb = $big5[$p].$big5[$p+1];
+}
+$text[$i] = $gb[0];
+$text[$i+1] = $gb[1];
+$i++;
+}
+}
+return $text;
+}
+
+/**
+gb码转换成big5码
+*/
+function gb2big5($text) {
+global $gb;
+$max = strlen($text)-1;
+for($i=0;$i<$max;$i++) {
+$h = ord($text[$i]);
+if($h>=160) {
+$l = ord($text[$i+1]);
+if($h==161 && $l==64) {
+$big = "　"; 
+}else{
+$p = ($h-160)*510+($l-1)*2;
+$big = $gb[$p].$gb[$p+1];
+}
+$text[$i] = $big[0];
+$text[$i+1] = $big[1];
+$i++;
+}
+}
+return $text;
+}
+
+?>
+<?
+/**** 测试 ****/
+$a = "啊阿埃挨哎唉哀皑癌蔼矮艾碍爱隘鞍氨";
+echo "原简体 $a<br>";
+$a = "摆甁玼玸絁砾魔窯︺锚稲筰綽";
+echo "原繁体 $a<br>";
+$a=big52gb($a); 
+echo "转简体 $a<br>";
+$a=gb2big5($a); 
+echo "转繁体 $a<br>";
+?>
+ 
