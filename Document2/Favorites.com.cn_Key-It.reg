@@ -1,0 +1,14 @@
+REGEDIT4
+
+;Generated with Registry Explorer
+;http://www.favorites.com.cn
+
+[HKEY_CURRENT_USER\Software\Microsoft\Internet Explorer\MenuExt]
+
+[HKEY_CURRENT_USER\Software\Microsoft\Internet Explorer\MenuExt\添加到favorites]
+@="http://www.favorites.com.cn/add/"
+
+[HKEY_CURRENT_USER\Software\Microsoft\Internet Explorer\MenuExt\把图片添加到favorites]
+@="http://www.favorites.com.cn/addpic/"
+"Contexts"=dword:00000002
+
