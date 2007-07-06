@@ -12,7 +12,7 @@ $ gunzip -c php-4.x.y.tar.gz | tar xf -
 
 $ cd php-4.x.y
 
-$ ./configure --with-mysql --with-apache=../apache_1.3.x --with-gd --with-zlib --with-jpeg-dir=../jpeg-6b/ --with-png-dir=../libpng-1.2.16 --with-freetype-dir=../freetype-2.3.2 --enable-gd-native-ttf --with-ttf --enable-mbstring --with-iconv
+$ ./configure --with-mysql --with-apache=../apache_1.3.x --with-gd --with-zlib --with-jpeg-dir=../jpeg-6b/ --with-png-dir=../libpng-1.2.16 --with-freetype-dir=../freetype-2.3.2 --enable-gd-native-ttf --with-ttf --enable-mbstring --with-iconv --with-mssql=/usr/local/freetds
 
 $ make
 
@@ -53,7 +53,7 @@ cd apache_1.3.29
 make
 make install
 
-so模块用来提供DSO支持的apachehe核心模块，rewrite是地址重写的模块，如果不需要可以不编译
+so模块用来提供DSO支持的apache核心模块，rewrite是地址重写的模块，如果不需要可以不编译
 
 安装php之前先要下载并安装以下软件包(同版本或者更高)
 
