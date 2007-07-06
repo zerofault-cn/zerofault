@@ -1,4 +1,7 @@
 <?php
+/*
+*供www首页调用的投稿器作者排行
+*/
 define('IN_MATCH', true);
 $root_path ="./";
 include_once($root_path."config.php");
@@ -10,7 +13,7 @@ $sql="select blogname,blogurl,month_article from author order by month_article d
 $result=$db->sql_query($sql);
 while($row=$db->sql_fetchrow($result))
 {
-	echo '<li><a href="'.$row['blogurl'].'" title="'.$row['blogname'].'">'.substr_cut($row['blogname'], 18).'</a><span>&nbsp;&nbsp;'.$row["month_article"].'ƪ</span></li>';
+	echo '<li><a href="'.$row['blogurl'].'" title="'.$row['blogname'].'">'.substr_cut($row['blogname'], 18).'</a><span>&nbsp;&nbsp;'.$row["month_article"].'篇</span></li>';
 }
 
 ?>

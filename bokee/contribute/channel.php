@@ -13,8 +13,15 @@ include_once($root_path."includes/page.php");
 include_once($root_path."functions.php");
 
 $tpl = new Template($root_path."templates");
-$tpl->set_filenames(array('body' => 'channel.htm'));
-
+$mode=$_REQUEST['mode'];
+if($mode=='export')
+{
+	$tpl->set_filenames(array('body' => 'channel_export.htm'));
+}
+else
+{
+	$tpl->set_filenames(array('body' => 'channel.htm'));
+}
 $id=$_REQUEST['id'];
 $tpl->assign_vars(array(
 	"ID"=>$id
@@ -29,7 +36,7 @@ if(''!=$blogID)
 	$email=$db->sql_fetchfield(1,0,$result0);
 	$tpl->assign_vars(array(
 		"MESSAGE"=>$blogID.'，您好，欢迎您来投稿!',
-		"FORMFUN"=>'',
+		"DISABLE"=>'',
 		"BLOGID"=>$blogID,
 		"BLOGNAME"=>$blogname,
 		"EMAIL"=>$email
@@ -39,7 +46,7 @@ else
 {
 	$tpl->assign_vars(array(
 		"MESSAGE"=>'您必须先登录博客通行证，然后才能开始投稿',
-		"FORMFUN"=>'disabled',
+		"DISABLE"=>'disabled',
 		"BLOGID"=>'',
 		"BLOGNAME"=>'',
 		"EMAIL"=>''
@@ -107,6 +114,10 @@ while(list($key,$val)=each($arr))
 
 //最新投稿文章
 $pageitem=20;
+if($mode=='export')
+{
+	$pageitem=12;
+}
 //$sql4="select article.id,author_id,title,left(title,40) as tmp_title,url,blogname,left(blogname,10) as tmp_blogname,blogurl,FROM_UNIXTIME(addtime,'%m/%d %H:%i') as datetime from author,article where article.author_id=author.id and (channel_id1=".$id." or channel_id2=".$id." or channel_id3=".$id.") order by article.id desc";
 $sql4="select id,author_id,title,url,addtime from article where channel_id1=".$id." or channel_id2=".$id." or channel_id3=".$id." order by addtime desc";
 $result4=$db->sql_query($sql4);
@@ -142,7 +153,13 @@ $tpl->assign_vars(array(
 //热门文章
 //$sql5="select article.id,author_id,title,left(title,40) as tmp_title,url,blogname,left(blogname,10) as tmp_blogname,blogurl,article.vote from author,article where article.author_id=author.id and (channel_id1=".$id." or channel_id2=".$id." or channel_id3=".$id.") order by vote desc limit 14";
 //assign_block_vars_by_sql("hotArticle", $sql5);
-$sql5="select id,author_id,title,url,vote from article where channel_id1=".$id." or channel_id2=".$id." or channel_id3=".$id." order by vote desc limit 14";
+$limit=14;
+if($mode=='export')
+{
+	$limit=6;
+}
+
+$sql5="select id,author_id,title,url,vote from article where channel_id1=".$id." or channel_id2=".$id." or channel_id3=".$id." order by vote desc limit ".$limit;
 $result5=$db->sql_query($sql5);
 while($row=$db->sql_fetchrow($result5))
 {
