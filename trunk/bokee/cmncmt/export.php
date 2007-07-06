@@ -76,8 +76,8 @@ elseif(''!=$_REQUEST['sid'])
 		}
 		else//if(substr($sid,0,4)=='mmzk')//mm周刊
 		{
-			echo '<div style="padding-top:3px;border-left:3px solid #CC0000;background-color:#F0F0F0">留言人：'.$username.' 留言时间：'.$addtime.'</div>';
-			echo '<div style="padding-top:5px;padding-bottom:7px;line-height:140%;">'.$content.'</div>';
+			echo '<div class="label" style="padding-top:3px;border-left:3px solid #CC0000;background-color:#BEBEBE">留言人：'.$username.' 留言时间：'.$addtime.'</div>';
+			echo '<div class="content" style="padding-top:5px;padding-bottom:7px;line-height:140%;">'.$content.'</div>';
 		}
 		if(0==$getall && $i>=$pageitem)
 		{
