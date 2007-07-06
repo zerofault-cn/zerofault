@@ -10,11 +10,106 @@
 <meta name="copyright" content="www.bokee.com,博客网，版权所有" />
 <meta name="author" content="www.bokee.com,博客网" />
 <meta name="robots" content="all" />
-<body>
+<script language="javascript" type="text/javascript" src="getCookie.js"></script>
+<script language="javascript">
+<!--
+function checkLoginForm(form)
+{
+	if(form.username.value=='' || form.username.value=='用户名')
+	{
+		alert('您没有输入登录用户名');
+		form.username.focus();
+		return false;
+	}
+	if(form.password.value=='' || form.password.value=='密码')
+	{
+		alert('您没有输入密码');
+		form.password.focus();
+		return false;
+	}
+	if(form.domain.value=='http://vip.bokee.com/authorEdit/login_check.php')
+	{
+		form.target="_blank";
+	}
+	else
+	{
+		form.target="_self";
+	}
+	form.url.value=window.location.href;
+	form.name.value=form.username.value;
+	return true;
+}
+function isLogin()
+{
+	if(blogID!=null)
+	{
+		if(groupID==1 || groupID==2 || groupID==3 || groupID==98 || groupID==99)//老公社用户
+		{
+			document.getElementById('isLogin').innerHTML=blogID+'&nbsp;&nbsp;<a href="http://publishblog.blogchina.com/control/blog/postBlog.b" target="_blank">写新文章</a> | <a href="http://publishblog.blogchina.com/control/blog/listDiary.b" target="_blank">编辑文章</a> | <a href="http://publishblog.blogchina.com/control/blog/listRemark.b" target="_blank">评论管理</a> | <a href="http://publishblog.blogchina.com/control/blog/listNote.b" target="_blank">留言管理</a> | <a href="http://publishblog.blogchina.com/control/blog/showStyle.b" target="_blank">模版设置</a> | <a href="http://photo.bokee.com/photoblog/PhotoBlogCtrl?page=LoginCtrlPage" target="_blank">我的图博</a> | <a href="http://reg.bokee.com/account/LogoutCtrl.b?url='+window.location.href+'">退出通行证</a>';
+		}
+		else
+		{
+			document.getElementById('isLogin').innerHTML='<a href="http://'+blogID+'.bokee.com/mes/listReceiveBoxIndex.b" target="_blank" title="查看我的私信">'+blogID+'</a>&nbsp;&nbsp;<a href="http://'+blogID+'.bokee.com/control/diary/postDiary.b" target="_blank">写日志</a> | <a href="http://'+blogID+'.bokee.com/photo/loadPicUpload.b" target="_blank">发图片</a> | <a href="http://'+blogID+'.bokee.com/main.b" target="_blank">管理博客</a> | <a href="http://group.bokee.com/group/my.action?action=edit" target="_blank">我的群组</a> | <a href="http://photo.bokee.com/photoblog/PhotoBlogCtrl?page=LoginCtrlPage" target="_blank">我的图博</a> | <a href="http://'+blogID+'.bokee.com/info/viewSendMailToFriend.b" target="_blank">告诉朋友</a> | <a href="http://reg.bokee.com/account/LogoutCtrl.b?url='+window.location.href+'">退出通行证</a>';
+		}
+	}
+}
+function submitFormWithChannel(channelname) {
+	document.gform.channel.value=channelname;
+	document.gform.submit();
+	return;
+}
+// -->
+</script>
+<style>
+#login{
+	font-size:12px;
+	width:760px;
+	height:22px;
+	margin:8px auto;
+	}
+.logintext{
+	width:80px;
+	}
+.lt{float:left;}
+.lr{float:right;}
+</style>
+<body onload="isLogin()">
 <div class="main">
 <!--注册和登录模块开始-->
-	<iframe  marginheight=0 marginwidth=0 frameborder=0 width=760px height=38px scrolling=no  src="http://www.bokee.com/include/login_gsearch_white.html">
-</iframe>
+	<div id="login">
+		<div class="lt" id="isLogin">
+			<form id="loginForm" name="loginForm" method="post" action="http://reg.bokee.com/account/LoginCtrl.b" onsubmit="return checkLoginForm(this)">
+			通行证:
+			<input name="username" type="text" id="username" class="logintext" onfocus="this.value=''" value="用户名"/>
+			<input name="password" type="password" id="password" class="logintext" onfocus="this.value=''" value="密码"/>
+			<label>
+			<select name="domain" id="domain" onchange="this.form.action=this.value;">
+				<option value="http://reg.bokee.com/account/LoginCtrl.b">博客通行证</option>
+				<option value="http://vip.bokee.com/authorEdit/login_check.php">博客专栏</option>
+			</select>
+			</label>
+			<input type="submit" name="submit" value="登录" />
+			<a href="http://reg.bokee.com/account/GetPwdCtrl.b" target="_blank">忘记密码</a>
+			<a href="http://reg.bokee.com/account/Register.b" target="_blank">三十秒注册</a>
+			<input name="name" type="hidden" />
+			<input name="login_where" type="hidden" value="top_index" />
+			<input name="url" id="url" type="hidden" value="" />
+			</form>
+		</div>
+		<div class="lr">
+		<form name="gform" method="get" action="http://www.google.cn/search" target="_blank">
+		<a href="javascript:submitFormWithChannel('logo')"><img src="http://www.bokee.com/include/logo_Google_white.gif" alt="Google" width="75" height="23" border="0" align="middle"></a><input type="text" name="q" size="8" maxlength="255" value=""></input><input type="button" name="sb" value="站内" onclick="javascript:document.gform.sitesearch.value='bokee.com';document.gform.channel.value='sitesearch';document.gform.submit();">
+		</input><input type="button" name="sa" value="互联网" onclick="javascript:document.gform.sitesearch.value='';document.gform.channel.value='internetsearch';document.gform.submit();"></input>
+		<input type="hidden" name="sitesearch" value="bokee.com" />
+		<input type="hidden" name="client" value="aff-bokee"></input>
+		<input type="hidden" name="ie" value="utf8"></input>
+		<input type="hidden" name="oe" value="utf8"></input>
+		<input type="hidden" name="hl" value="zh-CN"></input>
+		<input type="hidden" name="channel" value="sitesearch"></input>
+		</form>
+		</div> 
+		<div class="clear"></div>
+	</div>
 <!--注册和登录模块结束-->
 <TABLE height=59 cellSpacing=0 cellPadding=0 width=760 border=0>
   <TBODY>
@@ -104,7 +199,7 @@ border=0>
 	 
       <tr>
         <td class=zt1 style="color: #003333">{MESSAGE} </td></tr>
-	<tr><td><FORM name="addForm" onSubmit="return checkform2();" method="post" action="post.php" target="iframe1" {FORMFUN}>
+	<tr><td><FORM name="addForm" onSubmit="return checkform2();" method="post" action="post.php" target="iframe1" {DISABLE}>
 	<TABLE cellSpacing=0 cellPadding=0 width="95%" align=center border=0>
                     <TBODY>
 					
@@ -112,7 +207,7 @@ border=0>
                       <TD width=89 bgColor=#f4f4f4 height=27>
                         <DIV class=hongtextg align=right>文章标题：</DIV></TD>
                       <TD width=402><INPUT size=50 
-                        name="title" > <SPAN class=linktext><SPAN 
+                        name="title"  {DISABLE}> <SPAN class=linktext><SPAN 
                         class=xing style1><FONT 
                       color=red>*</FONT></SPAN></SPAN></TD></TR>
                     <TR class=zt1>
@@ -120,7 +215,7 @@ border=0>
                     <TR class=zt1>
                       <TD width=89 bgColor=#f4f4f4 height=27>
                         <DIV class=hongtextg align=right>文章链接地址：</DIV></TD>
-                      <TD width=402><input size=50 value="http://" name="url" onclick="javascript:if(this.value=='http://')this.value='';">
+                      <TD width=402><input size=50 value="http://" name="url" onclick="javascript:if(this.value=='http://')this.value='';" {DISABLE}>
                       <SPAN 
                         class=linktext><FONT color=red>*</FONT></SPAN></TD>
                     </TR>
@@ -130,20 +225,20 @@ border=0>
                       <TD width=89 bgColor=#f4f4f4 height=27>
                         <DIV class=hongtextg align=right>博客名称：</DIV></TD>
                       <TD width=402><INPUT size="50" 
-                        name="blogname" value="{BLOGNAME}"> <SPAN class=linktext><SPAN class=xing 
+                        name="blogname" value="{BLOGNAME}" {DISABLE}> <SPAN class=linktext><SPAN class=xing 
                         style1><FONT color=red>*</FONT></SPAN></SPAN></TD></TR>
                     <TR class=zt1>
                       <TD colSpan=2 height=1></TD></TR>
                     <TR class=zt1>
                       <TD width=89 bgColor=#f4f4f4 height=27>
                         <DIV class=hongtextg align=right>博客地址：</DIV></TD>
-                      <TD width=402><INPUT type="text" name=blogurl size="50"  value="http://{BLOGID}.bokee.com"> <font color=red>*</font></TD></TR>
+                      <TD width=402><INPUT type="text" name=blogurl size="50"  value="http://{BLOGID}.bokee.com" {DISABLE}> <font color=red>*</font></TD></TR>
                     <TR class=zt1>
                       <TD colSpan=2 height=1></TD></TR>
                     <TR class=zt1>
                       <TD width=89 bgColor=#f4f4f4 height=27>
                         <DIV class=hongtextg align=right>联系方式：</DIV></TD>
-                      <TD width=402><INPUT type="text" name="email" size="30"  value="{EMAIL}">(E-mail、QQ、MSN或电话)</TD></TR>
+                      <TD width=402><INPUT type="text" name="email" size="30"  value="{EMAIL}" {DISABLE}>(E-mail、QQ、MSN或电话)</TD></TR>
                     <TR class=zt1>
                       <TD colSpan=2 height=1></TD></TR>
                     <TR class=zt1>
@@ -151,7 +246,7 @@ border=0>
                     <TR class=zt1>
                       <TD class=hongtextg width=89 bgColor=#f4f4f4 
                       height=32>　</TD>
-                      <TD width=402><input type="hidden" name="id" value="{ID}" /> <INPUT id=Submit type=submit value=提交 name=Submit> 　 <INPUT type=reset value=重填 name=Submit3>                      </TD>
+                      <TD width=402><input type="hidden" name="id" value="{ID}" /> <INPUT id=Submit type=submit value=提交 name=Submit  {DISABLE}> 　 <INPUT type=reset value=重填 name=Submit3 {DISABLE}>                      </TD>
                     </TR>
                     <TR>
                 <TD colSpan=2 height=1></TD></TR></TBODY></TABLE>
@@ -196,7 +291,7 @@ border=0>
                             <TD width="292" align="left" class=th2><SPAN class=zt1><A 
                               href="{newArticle.url}" target="_blank" title="{newArticle.title}">·{newArticle.tmp_title} </A></SPAN></TD>
                             <TD width="42" class=th2>
-							<input type="button" value="投票" onclick="window.open('poll.php?id={newArticle.article_id}&author_id={newArticle.author_id}&'+Math.random());" />
+							<input type="button" value="投票" onclick="javascript:document.getElementById('iframe1').src='poll.php?id={newArticle.article_id}&author_id={newArticle.author_id}&'+Math.random();" />
                            </TD>
                             <TD class=th2><div align="center" class="style3">{newArticle.datetime}</div></TD>
                           </TR>
@@ -246,7 +341,7 @@ border=0>
                               class=zt1>{hotArticle.tmp_blogname} </SPAN></div></TD>
                             <TD width="292" align="left" class=th2><SPAN class=zt1><A 
                               href="{hotArticle.url}" target="_blank" title="{hotArticle.title}">·{hotArticle.tmp_title} </A></SPAN></TD>
-                            <TD width="42" class=th2><input type="button" value="投票" onclick="window.open('poll.php?id={hotArticle.article_id}&author_id={hotArticle.author_id}&'+Math.random());" /></TD>
+                            <TD width="42" class=th2><input type="button" value="投票" onclick="javascript:document.getElementById('iframe1').src='poll.php?id={hotArticle.article_id}&author_id={hotArticle.author_id}&'+Math.random();" /></TD>
                             <TD class=th2><div align="center" class="style3">{hotArticle.vote}</div></TD>
                           </TR>
                           <!-- END hotArticle -->

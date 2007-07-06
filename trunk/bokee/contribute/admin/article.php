@@ -1,5 +1,9 @@
 <?
 define('IN_MATCH', true);
+header("Expires:  " . gmdate("D, d M Y H:i:s") . "GMT");
+header("Last-Modified: " . gmdate("D, d M Y H:i:s") . "GMT");
+header("Cache-Control: no-cache, must-revalidate");
+header("Pragma: no-cache");
 $root_path="../";
 include_once($root_path."config.php");
 include_once($root_path."functions.php");
@@ -84,12 +88,13 @@ $pageitem=20;
 $page=$_REQUEST["page"];
 if($channel_id>0)
 {
-	$sql="select * from article where (channel_id1=".$channel_id." or channel_id2=".$channel_id." or channel_id3=".$channel_id.") ".$sql_ext." order by addtime desc";
+	$sql="select * from article where (channel_id1=".$channel_id." or channel_id2=".$channel_id." or channel_id3=".$channel_id.") ".$sql_ext." order by id desc";
 }
 else
 {
-	$sql="select * from article where 1 ".$sql_ext." order by addtime desc";
+	$sql="select * from article where 1 ".$sql_ext." order by id desc";
 }
+
 $result=$db->sql_query($sql);
 $total=$db->sql_numrows($result);
 pageft($total,$pageitem,"?channel_id=".$channel_id."&s_title=".$s_title);

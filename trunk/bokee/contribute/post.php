@@ -50,7 +50,11 @@ if($_POST['Submit'])
 	{
 		$url=str_replace('control/diary/editDiary.b?diaryId=','viewdiary.',$url).'.html';
 	}
-	if(substr($url,-5)!='.html' || eregi('publishblog',$url) ||substr($url,0,7)!='http://')
+	if(substr($url,0,23)=='http://group.bokee.com/')
+	{
+		$url=substr($url,0,strrpos($url,'?'));
+	}
+	if(substr($url,-5)!='.html' || eregi('publishblog',$url) ||substr($url,0,7)!='http://' || substr($url,0,14)=='http://http://')
 	{
 		echo '<script>parent.alert("您的文章链接地址不正确，请检查重试!");parent.document.addForm.url.select();</script>';
 		exit;
@@ -83,16 +87,16 @@ if($_POST['Submit'])
 	$sql_ext='';
 	if(''!=$author_id)
 	{
-		if(is_array($id))
+		if(is_array($channel_id))
 		{
-			for($i=0;$i<sizeof($id);$i++)
+			for($i=0;$i<sizeof($channel_id);$i++)
 			{
-				$sql_ext.=",channel_id".($i+1)."=".$id[$i];
+				$sql_ext.=",channel_id".($i+1)."=".$channel_id[$i];
 			}
 		}
 		else
 		{
-			$sql_ext.=",channel_id1=".$id;
+			$sql_ext.=",channel_id1=".$channel_id;
 		}
 		$sql4="insert into article set author_id=".$author_id.",title='".htmlspecialchars($title)."',url='".$url."',addtime=UNIX_TIMESTAMP()".$sql_ext;
 		if($db->sql_query($sql4))

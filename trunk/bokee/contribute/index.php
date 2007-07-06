@@ -24,7 +24,7 @@ if(''!=$blogID && strlen($blogID)>2)
 	$email=$db->sql_fetchfield(1,0,$result0);
 	$tpl->assign_vars(array(
 		"MESSAGE"=>$blogID.',您好，欢迎您来投稿!',
-		"FORMFUN"=>'',
+		"DISABLE"=>'',
 		"BLOGID"=>$blogID,
 		"BLOGNAME"=>$blogname,
 		"EMAIL"=>$email
@@ -34,7 +34,7 @@ else
 {
 	$tpl->assign_vars(array(
 		"MESSAGE"=>'您必须先登录博客通行证，然后才能开始投稿',
-		"FORMFUN"=>'disabled',
+		"DISABLE"=>'disabled',
 		"BLOGID"=>'',
 		"BLOGNAME"=>'',
 		"EMAIL"=>''
