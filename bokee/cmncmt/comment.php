@@ -47,7 +47,7 @@ $root_path="./";
 include_once($root_path."config.php");
 include_once($root_path."functions.php");
 include_once($root_path."includes/db.php");
-include_once($root_path."includes/page.php");
+include_once($root_path."includes/page0.php");
 $sid=$_REQUEST['sid'];
 if(''==$sid)
 {
@@ -98,7 +98,7 @@ if($_REQUEST['more']!='y')
 		$addtime=date("Y-m-d H:i",$row['addtime']);
 		$ip=$row['ip'];
 		$ip1=substr($ip,0,strrpos($ip,'.')).'.*';
-		echo '<li>'.$content.'<br /><div style="float:right;color:#585858;line-height:20px;background-color:#ddd">来自 '.$ip1.' 的 '.$username.' 发表于 '.$addtime.'</div></li>';
+		echo '<li>'.$content.'<br /><span style="float:right;color:#585858;line-height:20px;background-color:#ddd">'.$username.' 发表于 '.$addtime.' 来自 '.$ip1.'</span></li>';
 	}
 	echo '</ul></div>';
 }
@@ -125,7 +125,7 @@ else
 		$ip=$row['ip'];
 		$ip1=substr($ip,0,strrpos($ip,'.')).'.*';
 		$addtime=date("Y-m-d H:i",$row['addtime']);
-		echo '<li>'.$content.'<br /><span style="float:right;color:#585858;line-height:20px;background-color:#ddd">'.$username.'发表于'.$addtime.' 来自'.$ip1.'</span></li>';
+		echo '<li>'.$content.'<br /><span style="float:right;color:#585858;line-height:20px;background-color:#ddd">'.$username.' 发表于 '.$addtime.' 来自 '.$ip1.'</span></li>';
 		if($i%($pageitem/2)==($pageitem/2-1))
 		{
 			?>
