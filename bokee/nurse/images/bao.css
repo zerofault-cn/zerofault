@@ -1,0 +1,47 @@
+@charset "gb2312";
+.baodtit{
+	width:122px;
+	margin:16px auto;}
+.baodtit h2{
+	background:url(baoico.gif) no-repeat;
+	padding-left:38px;
+	padding-top:3px;}
+.bmdiv{
+	width:676px;
+	overflow:hidden;
+	margin:16px auto;}
+.baotop{ 
+	width:676px;
+	height:20px;
+	background:url(baotop.gif);}	
+.baocon{ 
+	width:636px;
+	overflow:hidden;
+	padding:0px 20px;
+	line-height:22px;
+	background:url(baocon.gif);}
+.baocon p{ text-align:left; padding-top:9px; }	
+.baocon strong{ color:#ee1d78; }	
+.baobot{ 
+	width:676px;
+	height:20px;
+	background:url(baobot.gif);}		
+.baotext{
+	font-size:14px;
+	color:#ee1d78;
+	font-weight:bold;}
+.baotext h2{
+text-align:center;}		
+.baobtn{
+	width:74px;
+	height:20px;
+	padding-top:2px;
+	text-align:center;
+	background:url(btnbg.gif);
+	border:1px solid #f767ad;}
+.baolist li{color:#ee1d78; padding-left:30px; margin-top:12px;}	
+.baolist span{ width:90px; text-align:right; float:left;}
+.baolist em{ font-style:normal;}
+.input_s{ width:150px;}
+.input_m{ width:268px;}
+.input_l{ width:335px;}

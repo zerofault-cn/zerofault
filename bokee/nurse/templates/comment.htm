@@ -1,0 +1,217 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312" />
+<title>感动社会十大护士评选</title>
+<link href="../images/hushi.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+	<!--主框架 -->
+	<div id="container">
+		<!--头部-->
+		<div class="top"><img src="../images/banner.gif" /></div>	
+		<!--导航-->
+		<div class="nav">
+			<ul>
+				<li style="background:none; padding:0px;"><a href="http://nurse.bokee.com/">大赛首页</a></li>
+				<li><a href="../gonggao.shtml" target="_blank">大赛公告</a></li>
+				<li><a href="../signup_1.shtml" target="_blank">现在报名</a></li>
+				<li style="margin-left:315px; background:none; padding:0px;" onmouseover="document.getElementById('subarea').style.visibility='visible'" onmouseout="document.getElementById('subarea').style.visibility='hidden'"><a href="javascript:void(0)">八大赛区</a></li>
+				<li><a href="http://blogs.bokee.com/contribute/channel.php?id=92" target="_blank">投稿</a></li>
+				<li><a href="http://nursefund.bokee.com/">基金</a></li>
+				<li><a href="http://group.bokee.com/angelsosoku">天使群</a></li>
+			</ul>
+			<div id="subarea" style="z-index:99;position:absolute;left:705px;top:302px;width:70px;height:180px;border:1px solid #f767ad;background-color:#fbeef5;font-size:14px;line-height:160%;text-align:center;visibility:hidden;"  onmouseover="this.style.visibility='visible'" onmouseout="this.style.visibility='hidden'">
+				<div onmouseover="this.style.backgroundColor='#ed1e88'" onmouseout="this.style.backgroundColor='#fbeef5'"><a style="font-size:14px;color:#ed1e88;" onmouseover="this.style.color='#ffffff';" onmouseout="this.style.color='#ed1e88';" href="user_list.php?area=1" target="_blank">华北赛区</a></div>
+				<div onmouseover="this.style.backgroundColor='#ed1e88'" onmouseout="this.style.backgroundColor='#fbeef5'"><a style="font-size:14px;color:#ed1e88;" onmouseover="this.style.color='#ffffff';" onmouseout="this.style.color='#ed1e88';" href="user_list.php?area=2" target="_blank">东北赛区</a></div>
+				<div onmouseover="this.style.backgroundColor='#ed1e88'" onmouseout="this.style.backgroundColor='#fbeef5'"><a style="font-size:14px;color:#ed1e88;" onmouseover="this.style.color='#ffffff';" onmouseout="this.style.color='#ed1e88';" href="user_list.php?area=3" target="_blank">华东赛区</a></div>
+				<div onmouseover="this.style.backgroundColor='#ed1e88'" onmouseout="this.style.backgroundColor='#fbeef5'"><a style="font-size:14px;color:#ed1e88;" onmouseover="this.style.color='#ffffff';" onmouseout="this.style.color='#ed1e88';" href="user_list.php?area=4" target="_blank">华中赛区</a></div>
+				<div onmouseover="this.style.backgroundColor='#ed1e88'" onmouseout="this.style.backgroundColor='#fbeef5'"><a style="font-size:14px;color:#ed1e88;" onmouseover="this.style.color='#ffffff';" onmouseout="this.style.color='#ed1e88';" href="user_list.php?area=5" target="_blank">华南赛区</a></div>
+				<div onmouseover="this.style.backgroundColor='#ed1e88'" onmouseout="this.style.backgroundColor='#fbeef5'"><a style="font-size:14px;color:#ed1e88;" onmouseover="this.style.color='#ffffff';" onmouseout="this.style.color='#ed1e88';" href="user_list.php?area=6" target="_blank">西南赛区</a></div>
+				<div onmouseover="this.style.backgroundColor='#ed1e88'" onmouseout="this.style.backgroundColor='#fbeef5'"><a style="font-size:14px;color:#ed1e88;" onmouseover="this.style.color='#ffffff';" onmouseout="this.style.color='#ed1e88';" href="user_list.php?area=7" target="_blank">西北赛区</a></div>
+				<div onmouseover="this.style.backgroundColor='#ed1e88'" onmouseout="this.style.backgroundColor='#fbeef5'"><a style="font-size:14px;color:#ed1e88;" onmouseover="this.style.color='#ffffff';" onmouseout="this.style.color='#ed1e88';" href="user_list.php?area=8" target="_blank">海外赛区</a></div>
+			</div>
+		</div>
+		<!--内容-->
+		<div class="con">
+			<!--第二屏-->
+			<div class="layout">
+				<!--第二屏左侧-->
+				<div class="leftdiv">
+					<!--个人-->
+					<div class="grlay">
+						<div class="grtu">
+							<a href="{BLOGURL}" target="_blank"><img src="photo/{AREA}/{PHOTO}" /></a>
+							<ul>
+								<li>编号：{ID}</li>
+								<li><a href="{BLOGURL}" target="_blank">{REALNAME}</a></li>
+								<li><a href="#">{HOSPITAL}</a></li>
+								<li><input type="button" class="toubtn" value="投 票" onclick="window.open('smspoll.php?id={ID}','','width=700,height=360,toolbar=no,status=no,scrollbars=auto,resizable=yes')" /></li>
+								<li><a href="javascript:void(0)" class="morelink" onclick="javascript:document.commentForm.content.focus();">留言</a> | <a href="poll.php?id={ID}" class="morelink" target="iframe1">献花</a></li>
+							</ul>
+						</div>
+					</div>
+					<!--留言排行-->
+					<div class="bowen mtop">
+						<h1>
+							<span class="lt">留言排行</span>
+							<span class="lr"><a href="#">更多>></a></span>
+							<div class="clear"></div>
+						</h1>
+						<div class="tplist">
+							<ul>
+								<li style="width:64px;">排行</li>
+								<li style="width:102px; text-align:left; padding-left:14px;">博客</li>
+								<li style="width:79px; border:none;">留言数</li>
+							</ul>
+							<div class="clear"></div>
+						</div>
+						<div class="toupai">
+							<ul>
+								<!-- BEGIN commList -->
+								<li><span class="lt"><a href="comment.php?id={commList.ID}" title="{commList.BLOGNAME0}">{commList.BLOGNAME}</a></span><span class="lr">{commList.COUNT}</span></li><div class="clear"></div>
+								<!-- END commList -->
+								<div class="clear"></div>
+							</ul>
+						</div>
+					</div>	
+				
+				</div>
+				<!--第二屏右侧-->
+				<div class="lt" style="margin-left:30px; display:inline;">
+					<div class="lytit"><h2>给{AREA_NAME}赛区：<a class="morelink">{BLOGNAME}</a>的留言</h2></div>
+					<div class="lyqu">
+						<!-- BEGIN list -->
+						<div class="zfcon">
+								<p><span style="float:left;">留言人：{list.USERNAME}</span> <span style="float:right;">{list.ADDTIME}<a href="javascript:void(0)" onclick="confirmdel({list.ID},{ID});" style="display:{DISPLAY}">删除</a></span></p>
+								<div class="clear"></div>
+								<p><strong>{list.CONTENT}</strong></p>
+						</div>
+						<!-- END list -->
+					</div>
+					<div class="page" style="width:438px;">
+						{PAGE}
+					</div>
+					<iframe frameborder="0" scrolling="no" id="iframe1" name="iframe1" width="0" height="0" src=""></iframe>
+					<script language="javascript">
+					function check(form)
+					{
+						if(form.content.value.replace(/(^\s*)|(\s*$)/g, "").length<2)//去掉首尾空格
+						{
+							alert("您的留言内容太短了！");
+							form.content.focus();
+							return false;
+						}
+					}
+					function clearForm()
+					{
+						document.commentForm.content.value='';
+					}
+					function confirmdel(id,user_id)
+					{
+						if(confirm('确定要删除这条评论吗?'))
+						{
+							document.getElementById('iframe1').src='comment_del.php?id='+id+'&user_id='+user_id;
+						}
+						else
+						{
+							return;
+						}
+					}
+					String.prototype.trim=function(){
+					return this.replace(/(^\s*)|(\s*$)/g, "");
+					}
+					String.prototype.ltrim=function(){
+					return this.replace(/(^\s*)/g,"");
+					}
+					String.prototype.rtrim=function(){
+					return this.replace(/(\s*$)/g,"");
+					}
+					</script>
+					<div class="lytit"><h2 style="background: url(images/baoico2.gif) no-repeat;">留言</h2></div>
+					<form name="commentForm" action="" method="post" target="iframe1" onsubmit="return check(this)">
+					<div class="lydiv">
+						<p>用户名： <input name="username" type="text"/></p>
+						<p><span style="vertical-align:top;">内&nbsp;&nbsp;容：</span>
+						<textarea name="content" rows="3" cols="25" style="width:300px; height:80px;"></textarea></p>
+						<p style="padding-left:56px;"><input name="submit" type="submit" value="提交"/></p>
+					</div>
+					</form>
+				</div>
+				<div class="leftdiv" style="margin-left:20px; display:inline; width:187px;">
+					<!--登录 -->
+					<div class="login" style="border:1px solid #f767ad; width:185px; background-image:none;display:{LOGINFORM_DISPLAY};">
+						<form id="loginForm" name="loginForm" method="post" action="http://reg.bokee.com/account/LoginCtrl.b">
+						<p style="padding-left:10px;"><input name="username" type="text"  class="logintext" value="用户名" onclick="this.value=''"/> <input type="submit" class="loginbtn" value="登录"/></p>
+						<p style="padding-left:10px;"><input name="password" type="password"  class="logintext" /> <input type="button" class="loginbtn" onclick="window.open('http://reg.bokee.com/account/Register.b')" value="注册"/></p>
+						<p style="padding-left:0px;"><input type="button" class="bmbtn" onclick="window.open('../signup_1.shtml')" value="我要报名"/></p>
+						<input name="url" id="url" type="hidden" value="http://nurse.bokee.com/nurse/redirect_to_me.php" />
+						</form>
+					</div>
+					<!--投票排行-->
+					<div class="bowen mtop" style="width:185px;">
+						<h1>
+							<span class="lt">投票排行</span>
+							<span class="lr"><a href="#">更多</a></span>
+							<div class="clear"></div>
+						</h1>
+						<div class="tplist">
+							<ul>
+								<li style="width:64px;">排行</li>
+								<li style="width:102px; text-align:left; padding-left:14px;">昵称</li>
+								<li style="width:79px; border:none;"></li>
+							</ul>
+							<div class="clear"></div>
+						</div>
+						<div class="toupai" style="width:155px; background:url(../images/pai03.gif) no-repeat; padding-bottom:8px;">
+							<ul>
+								<!-- BEGIN tplist -->
+								<li><a href="{tplist.BLOGURL}" target="_blank" title="{tplist.BLOGNAME0}">{tplist.BLOGNAME}</a></li>
+								<!-- END tplist -->
+							</ul>
+						</div>
+					</div>	
+					<div class="clear"></div>
+				</div>
+			</div>
+			
+			<!--合作媒体-->
+			<div class="layout">
+				<div class="bowen" style=" width:948px;">
+					<h1>
+						<span class="lt">合作媒体</span>
+						<span class="lr"><a href="#">更多>></a></span>
+						<div class="clear"></div>
+					</h1>
+					<div class="hezuo">
+						<ul>
+							<li><a href="#"><img src="../images/tu09.gif" /></a></li>
+							<li><a href="#"><img src="../images/tu10.gif" /></a></li>
+							<li><a href="#"><img src="../images/tu11.gif" /></a></li>
+							<li><a href="#"><img src="../images/tu12.gif" /></a></li>
+							<li><a href="#"><img src="../images/tu13.gif" /></a></li>
+							<li><a href="#"><img src="../images/tu14.gif" /></a></li>
+							<li><a href="#"><img src="../images/tu15.gif" /></a></li>
+							<div class="clear"></div>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+		<style>
+		.bottom{margin:0 auto; padding: 22px 0px 5px 0px; width: 830px; border-bottom:1px solid #808080; text-align:center; color:#808080;}
+		.bottom a:link {font-size: 12px;color:#000;text-decoration: none;}
+		.bottom a:visited {font-size: 12px;color:#000;text-decoration: none;}
+		.bottom a:hover {font-size: 12px;color: #B41F0B;text-decoration: none;}
+		.copyright { line-height:22px; text-align:center; color:#808080;}
+		</style>
+		<div class="bottom">
+			<a href="http://www.bokee.com/new/about/aboutus.html">关于本站</a> | <a href="http://adimage.bokee.com/images/ad/minisite/service/serve.htm">广告服务</a> | <a href="http://www.bokee.com/new/about/contact.html">联系我们</a> | <a href="http://www.bokee.com/new/about/service.htm">服务条款</a> | <a href="http://www.bokee.com/new/about/privacy.htm">隐私保护</a> | <a href="http://service.bokee.com/">客服中心</a> | <a href="http://column.bokee.com/37233.html">人员招聘 </a>| <a href="http://www.bokee.com/new/about/morelink.htm">友情链接</a> | <a href="http://www.bokee.com/new/about/sitemap.html">导航</a> | <a href="mailto:annzeng#bokee.com">主编信箱</a> | <a href="http://reg.bokee.com/account/Register.b">注册</a>
+		</div><!--版权信息开始-->
+		<div class="copyright">
+			Copyright 2002 - 2005 Bokee.com, All Rights Reserved<br/>增值电信业务经营许可证编号：B2-20050016<br/><a href="http://www.allyes.com/"><img src="../images/icp.gif" alt="icp" /></a> <a href="http://net.china.cn/chinese/index.htm"> 京ICP证050706号 </a> <a href="http://www.allyes.com/"><img src="../images/netcn.gif" alt="不良信息举报中心"/></a>  <a href="http://www.allyes.com/"> <img src="../images/allyes.gif" alt="all"/></a>
+		</div><!--底部结束-->
+	</div>
+</body>
+</html>

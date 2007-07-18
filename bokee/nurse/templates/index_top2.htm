@@ -1,0 +1,20 @@
+					<div class="{CLASS}">
+						<h1>
+							<span class="lt">{AREA_NAME}赛区</span>
+							<span class="lr"><a href="nurse/user_list.php?area={AREA}" target="_blank">更多>></a></span>
+							<div class="clear"></div>
+						</h1>
+						<!-- BEGIN list -->
+						<div class="saitu">
+							<a href="nurse/user_list.php?area={AREA}" target="_blank"><img src="nurse/photo/{list.AREA}/{list.PHOTO}" /></a>
+							<ul>
+								<li>编号：{list.ID}</li>
+								<li><a href="{list.BLOGURL}" target="_blank" title="{list.BLOGNAME0}">{list.BLOGNAME}</a></li>
+								<li><a href="#">{list.HOSPITAL}</a></li>
+								<li><input type="button" class="toubtn" value="投 票" onclick="window.open('nurse/smspoll.php?id={list.ID}','','width=700,height=360,toolbar=no,status=no,scrollbars=auto,resizable=yes')"/></li>
+								<li><a href="nurse/comment.php?id={list.ID}" target="_blank" class="morelink">留言</a> | <a href="nurse/poll.php?id={list.ID}" class="morelink" target="iframe1">献花</a></li>
+							</ul>
+						</div>
+						<div class="jiantu"></div>
+						<!-- END list -->
+					</div>

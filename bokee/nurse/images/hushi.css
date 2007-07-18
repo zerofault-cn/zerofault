@@ -1,0 +1,553 @@
+@charset "gb2312";
+/* ========== 全局CSS定义 ====== */
+html{overflow-x:hidden;}
+body { 	font-size:12px;background: #fff;}
+input {font-family: Simsun,sans-serif,Arial;}
+img {border: 0;}
+div, td {  word-wrap: break-word;  word-break: break-all; font-size:12px; } 
+strong{ color:#f00; font-weight:normal;}
+ul{list-style:none; margin:0px; padding:0px;}
+body,form,dl,dt,dd,ul,p,h1,h2,h3,h4,h5,h6{margin: 0px;padding: 0px;}
+p {text-align:center;padding: 5px 0px 0px 0px;}
+a { color:#000;text-decoration: none;}
+a:hover {text-decoration: underline;color:#f00;}
+.clear{ clear:both;}
+
+/* ========== 结构CSS定义 ====== */
+#container{
+	width:995px;
+	margin:0px auto;
+	overflow:hidden;
+	background:#fff;
+}
+.layout{
+	width:960px;
+	margin:9px auto 0px auto;
+	overflow:hidden;
+}
+/* ========== 头部 ====== */
+.top{
+	width:978px;
+	margin:0px auto;
+	height:274px;
+	
+}
+/* ========== 导航 ====== */
+.nav{
+	width:928px;
+	margin:0px auto;
+	height:37px;
+	font-size:14px;
+	font-weight:bold;
+	padding:0px 0px 0px 50px;
+	background:url(navbg.gif);
+}
+.nav a { color:#fff;}
+.nav a:hover { color:#000;}
+.nav li{ 
+	float:left;
+	margin:12px 0px 0px 6px;
+	display:inline;
+	background:url(navico.gif) no-repeat 0px -3px;
+	padding-left:22px;}
+/* ========== 内容 ====== */
+.con{
+	width:978px;
+	margin:0px auto;
+	overflow:hidden;
+	background:url(conbg.gif) repeat-x;
+}
+/* ========== 第一屏 ====== */
+.leftdiv{
+	width:263px;
+	overflow:hidden;
+	float:left;
+}
+/* ========== 头图 ====== */
+.toutu{
+	width:247px;
+	height:206px;
+	padding:7px;
+	background:#fff;
+	border:1px solid #f767ad;}
+/* ========== 精彩护士博文 ====== */
+.bowen{
+	width:261px;
+	overflow:hidden;
+	border:1px solid #f767ad;}
+.bowen h1{
+	height:19px;
+	padding:7px 11px 0px 44px;
+	background:url(hbg01.gif) no-repeat;}	
+.bowen .lr a{
+	font-size:12px;
+	font-weight:normal;
+	color:#ee1d78;
+	}
+.bwcon{
+	width:240px;
+	height:302px;	
+	background:url(pai01.gif) no-repeat;
+	margin:0px auto;	
+	}
+.bwcon ul{
+	margin-top:6px;
+	line-height:24px;
+	}	
+.bwcon li{
+	padding-left:59px;
+	}
+.toupai li{
+	padding-left:59px;
+	}	
+.toupai ul{
+	margin-top:6px;
+	line-height:24px;
+	}	
+.top01{background:url(top01.gif) no-repeat;}		
+.top02{background:url(top02.gif) no-repeat;}	
+.top03{background:url(top03.gif) no-repeat;}	
+.top04{background:url(top04.gif) no-repeat;}	
+.top05{background:url(top05.gif) no-repeat;}	
+.top06{background:url(top06.gif) no-repeat;}	
+.top07{background:url(top07.gif) no-repeat;}	
+.top08{background:url(top08.gif) no-repeat;}	
+.top09{background:url(top09.gif) no-repeat;}	
+.top10{background:url(top10.gif) no-repeat;}	
+.top11{background:url(top11.gif) no-repeat;}	
+.top12{background:url(top12.gif) no-repeat;}	
+
+			
+.cendiv{
+	width:415px;
+	overflow:hidden;
+	float:left;
+	margin-left:9px;
+	display:inline;
+}
+/* ========== 头条 ====== */
+.toutiao{
+	width:413px;
+	height:90px;
+	background:#fff;
+	padding-top:15px;
+	border:1px solid #f767ad;}
+.toutiao h1{
+	text-align:center;
+	color:#ed1e88;
+	font-size:16px;}
+.toutiao p{
+	text-align:left;
+	line-height:20px;
+	width:364px;
+	margin:0px auto;
+	text-indent:2em;}
+.toutiao a{
+	color:#ed1e88;
+	font-weight:bold;}			
+/* ========== 媒体报道 ====== */
+.meiti{
+	width:413px;
+	height:175px;
+	background:#fff;
+	border:1px solid #f767ad;}
+.meiti h1{
+	height:13px;
+	color:#ed1e88;
+	padding:13px 11px 0px 44px;
+	background:url(meitico.gif) no-repeat 16px 9px;}	
+.meiti .lr a{
+	font-size:12px;
+	font-weight:normal;
+	color:#ee1d78;
+	}
+.meiti ul{
+	width:375px;
+	overflow:hidden;
+	font-size:14px;
+	line-height:22px;
+	margin:0px auto;}
+.meiti ul li{
+	background:url(lico.gif) no-repeat 0px 7px;
+	padding-left:9px;}
+.meiti span{
+	font-size:12px;
+	color:#999999;
+	}	
+.rightdiv{
+	width:263px;
+	overflow:hidden;
+	float:right;
+}
+/* ========== 活动公告 ====== */
+.gong{
+	height:87px;
+	background:#fff;
+	padding-top:8px;}
+
+.gong ul{
+	width:230px;
+	overflow:hidden;
+	line-height:22px;
+	margin:0px auto;}
+.gong ul li{
+	background:url(lico.gif) no-repeat 0px 7px;
+	padding-left:9px;}
+/* ========== 登录 ====== */
+.login{
+	width:261px;
+	border:1px solid #f767ad;
+	border-top:none;
+	border-bottom:none;
+	height:107px;
+	background: url(login.gif) no-repeat 15px 9px #fff;}
+.login p{
+	padding:10px 0px 0px 65px;}	
+.logintext{
+	width:92px;
+	height:14px;
+	text-align:center;
+	padding-top:3px;
+	border:1px solid #f767ad;}	
+.loginbtn{
+	width:54px;
+	height:20px;
+	padding-top:2px;
+	text-align:center;
+	background:url(btnbg.gif);
+	border:1px solid #f767ad;}
+.bmbtn{
+	width:122px;
+	height:27px;
+	padding:4px 0px 0px 20px;
+	background:url(bmbtn.gif);
+	border:none;
+	color:#ee1d78;
+	font-weight:bold;
+}	
+/* ========== 评委介绍 ====== */
+.pwei{
+	width:240px;
+	height:92px;
+	margin:7px auto 7px auto;}
+.pweitu{
+	width:80px;
+	height:80px;
+	float:left;
+	padding:6px;
+	background:url(pwtu.gif);
+	}
+.pweicon{
+	width:137px;
+	height:83px;
+	float:left;
+	padding:9px 0px 0px 11px;
+	background:#fff0f7;
+	}	
+.pweicon p{
+	line-height:20px;
+	width:120px;
+	text-align:left;}	
+/* ========== 感动故事 ====== */
+.gdong{
+	width:157px;
+	overflow:hidden;
+	float:left;
+	margin:12px 0px 15px 25px;
+	display:inline;}
+.gdongtu{
+	width:145px;
+	height:148px;
+	padding:6px;
+	background:url(gdong.gif);
+}
+/* ========== 投票排行 ====== */
+.toupai{
+	width:240px;
+	height:248px;
+	background: url(pai03.gif) no-repeat #fff;
+	margin:0px auto;
+	
+	}
+.toupai .lr{
+	margin-right:20px;
+	}	
+.tplist{
+	width:261px;
+	height:24px;
+	margin-top:-4px;
+	color:#ec1c8c;
+	background:#fff0f7;
+	border-bottom:1px solid #faacd3;
+	border-top:1px solid #faacd3;
+	}
+.tplist li{ 
+	float:left;
+	padding-top:7px; 
+	text-align:center;
+	border-right:1px solid #faacd3; 
+	height:17px;}	
+/* ========== 主办单位 ====== */
+.zhuban{
+	width:200px;
+	overflow:hidden;
+	margin:6px auto;}
+.zhuban li{
+	margin-top:5px;}
+/* ========== 北京赛区 ====== */
+.saiqu{
+	height:317px;
+	width:330px;
+	float:left;
+	margin:0px 0px 0px 17px;
+	display:inline;
+	background:url(saibg.gif) repeat-x;
+	}
+.saiqu h1{
+	height:17px;
+	padding:4px 11px 0px 22px;
+	color:#fff;
+	margin:15px 0px 0px 18px;
+	background:url(saitit.gif) no-repeat;}	
+.saiqu .lr a{
+	font-size:12px;
+	font-weight:normal;
+	color:#ee1d78;
+	}
+.saitu{
+	height:273px;
+	width:124px;
+	margin:4px 0px 0px 16px;
+	display:inline;
+	float:left;
+	padding:6px;
+	background:url(saitu.gif) no-repeat;
+	}
+.saitu img{ 
+	width:124px;
+	height:158px;}	
+.jiantu{
+	height:275px;
+	width:9px;
+	float:left;
+	background:url(jianbg.gif);}	
+.saitu ul{
+	width:120px;
+	margin:5px auto;
+	color:#ee1d78;
+	line-height:17px;
+	text-align:center;}		
+.toubtn{
+	width:64px;
+	height:19px;
+	text-align:center;
+	background:url(toubtn.gif);
+	border:none;
+	padding-top:2px;
+	margin:5px 0px;
+	color:#ee1d78;
+	font-weight:bold;
+}	
+/* ========== 最新注册 ====== */
+.newzhu{
+	height:304px;
+	padding-top:7px;}
+/* ========== 祝福选手 ====== */
+.zhufu{
+	width:420px;
+	overflow:hidden;
+	padding-bottom:13px;
+	float:left;
+	display:inline;
+	margin:14px 0px 0px 25px;}
+
+.zhufu h2{ padding-left:9px;}
+.zfcon{
+	width:392px;
+	overflow:hidden;
+	background:#fafafa;
+	margin-top:13px;
+	padding:4px 13px;
+	border:1px solid #faacd3; }
+.zfcon p{
+	text-align:left;
+	color:#585858;
+	}	
+.zfcon strong{
+	font-size:14px;
+	color:#585858;
+	}		
+.zfcon p a{
+	color:#f51588;}	
+/* ========== 捐赠 ====== */	
+.jcleft{
+	width:315px;
+	overflow:hidden;
+	background:#fff;
+	border:1px solid #faacd3;
+	border-top:none;
+	float:left;}	
+.jcright{
+	width:310px;
+	overflow:hidden;
+	border-bottom:1px solid #faacd3;
+	float:left;}
+.jcright ul{
+	width:280px;
+	overflow-y:auto;
+	height:389px;
+	line-height:21px;
+	margin:10px auto;}		
+.jcright ul li{
+	background:url(lico.gif) no-repeat 0px 7px;
+	padding-left:9px;}		
+.jcright ul li strong{
+	font-size:14px;
+	color:#000;}			
+.jcleft h1,.jcright h1{
+	text-align: center;
+	color:#ee1d78;
+	height:21px;
+	padding:6px 10px 0px 30px;
+	border-top:1px solid #faacd3;
+	background:url(h1bg2.gif);}	
+.jcleft .lr a,.jcright .lr a{
+	font-size:12px;
+	font-weight:normal;
+	color:#ee1d78;
+	}	
+.tulay{
+	width:90px;
+	overflow:hidden;
+	float:left;
+	margin:12px 0px 6px 12px;
+	display:inline;}	
+.jcleftu{
+	width:86px;
+	height:86px;
+	padding:1px;
+	border:1px solid #faacd3;
+	}	
+/* ========== 捐赠企业 ====== */	
+.qiye{
+	height:249px;
+	border-bottom:1px solid #faacd3;}		
+.tulayb{
+	width:119px;
+	overflow:hidden;
+	float:left;
+	margin:15px 0px 0px 24px;
+	display:inline;}	
+.qiyetu{
+	width:115px;
+	height:82px;
+	padding:1px;
+	border:1px solid #faacd3;
+	}		
+/* ========== 合作媒体 ====== */
+.hezuo{
+	width:870px;
+	overflow:hidden;
+	margin:20px auto;}
+.hezuo li{
+	float:left;
+	margin-left:12px;
+	display:inline;}
+.myjc{
+	text-align:center;
+	height:34px;
+	background:#fff0f7;
+	padding-top:6px;
+	border-bottom:1px solid #faacd3;}
+.myly{
+	height:112px;
+	padding-top:6px;}	
+.myly p{
+	text-align:left;
+	padding-left:25px;}	
+.myan{
+	height:141px;
+	border:1px solid #faacd3;
+	width:418px;
+	padding-top:8px;
+	margin-top:13px;}	
+.myan p{
+	text-align:left;
+	padding:6px 0px 0px 8px;}	
+	
+.husou{
+	width:680px;
+	color:#ee1d78;
+	font-weight:bold;
+	margin:0px auto 10px auto;
+	text-align:center;
+	overflow:hidden;}	
+.husou strong{ font-size:16px;
+		font-weight:bold;
+		color:#ee1d78;}		
+/* ========== 留言页面 ====== */
+.page{
+	width:600px;
+	height:18px;
+	margin:15px 0px;
+	background:#fff0f7;
+	text-align:center;
+	padding-top:6px;
+	border-bottom:1px solid #faacd3;
+	border-top:1px solid #faacd3;
+}
+.grlay{
+	width:262px;
+	height:336px;
+	background:url(grbg.gif) no-repeat;
+}
+.grtu{
+	width:152px;
+	overflow:hidden;
+	margin:16px auto 0px auto;
+	}
+.grtu img{
+	border:1px solid #faacd3;
+	width:150px;
+	height:191px;}	
+.grtu ul{
+	width:120px;
+	margin:3px auto;
+	color:#ee1d78;
+	line-height:18px;
+	text-align:center;}	
+.lytit{
+	width:410px;
+	margin-top:12px;}
+.lytit h2{
+	background:url(baoico.gif) no-repeat;
+	padding-left:38px;
+	color:#000;
+	padding-top:3px;}	
+.lydiv{
+	width:388px;
+	margin-top:10px;
+	border:1px solid #faacd3;
+	padding:10px 25px;}	
+.lydiv p{
+	text-align:left;
+	margin:8px 0px 0px 0px;}	
+.lyqu .zfcon{ width:410px;}	
+.liubtn{
+	width:50px;
+	height:18px;
+	margin:-1px 0px 0px 0px;}					
+/* ========== 其他 ====== */
+.lt{float:left;}
+.lr{ float:right;}
+.mtop{ margin-top:8px;}
+.mtopb{ margin-top:18px;}
+h3{ color:#DC0807; font-size:14px; font-weight:bold;}
+h2{ color:#ee1d78; font-size:14px; font-weight:bold;}
+h1{ color:#000; font-size:14px; font-weight:bold;}
+h4{ color:#fff; font-size:14px; font-weight:bold;}
+h5{ color:#DC0405; font-size:13px; font-weight: normal;}
+a.namelink { color:#868485;text-decoration: none; font-size:12px;}
+a.namelink:hover {text-decoration: underline;color:#f00; font-size:12px;}
+a.morelink { color:#ee1d78;text-decoration: none; font-weight:bold;}
+a.morelink:hover {text-decoration: none;color:#000;}
