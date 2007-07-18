@@ -1,0 +1,109 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312" />
+<title>博客交友－填写报名表</title>
+<link href="images/friend.css" rel="stylesheet" type="text/css" />
+<script>
+function initForm()
+{
+	if(blogID!=null)
+	{
+		t('blogurl').value='http://'+blogID+'.bokee.com/';
+	}
+}
+</script>
+</head>
+
+<body onload="isLogin();initForm()">
+	<!-- 主框架开始 -->
+	<div id="container">
+	<!-- 注册登录开始 -->
+		<!--#include virtual="header.html" -->
+		<!-- 第一屏 -->
+		<div class="layout">
+			<h5 class="mtopb">交友报名</h5>
+			<div class="baolay">
+				<h5>特别提示</h5>
+				<ul>
+					<li><span class="number">1、</span>以本人在博客网的个人博客参加本次交友，也可推荐他人的博客报名</li>
+					<li><span class="number">2、</span>正确填写您的博客的名称（八个字以内）和博客链接地址</li>
+					<li><span class="number">3、</span>请完全真实的填写您的个人资料，以便通知线下活动；</li>
+					<li><span class="number">4、</span>带“<strong>*</strong>”为必填项；</li>
+				</ul>
+			</div>
+<script language="javascript" type="text/javascript" src="checkform.js"></script>
+<script language="javascript" type="text/javascript" src="mm_fried/location_array.js"></script>
+<script language="javascript" type="text/javascript" src="mm_fried/edit_info.js"></script>
+<style>
+.tip
+{
+	border:1px solid #A3A0A0;
+	margin-left:5px;
+	background-color:#D5D0CE;
+	color:#6067FB;
+}
+.tip_ok
+{
+	border:1px solid #FFA475;
+	margin-left:5px;
+	background-color:#FFEEE5;
+	color:#ff7300;
+}
+.tip_loading
+{
+	padding:0px 5px 0px 25px;
+	background:url(images/load.gif) 5px center no-repeat #FFEEE5;
+	border:1px solid #FFA475;
+	color:#C0C0C0;
+	line-height:20px;
+	margin:0px 0px 0px 10px;
+}
+.tip_err
+{
+	padding:0px 5px 0px 25px;
+	background:url(images/ico_04.gif) 5px center no-repeat #FFEEE5;
+	border:1px solid #FFA475;
+	color:#ff0000;
+	line-height:20px;
+	margin:0px 0px 0px 10px;
+}
+</style>
+<iframe name="iframe1" id="iframe1" width="0" height="0" style="display:none"></iframe>
+<form name="form1" action="mm_friend/signup.php" method="post" enctype="multipart/form-data" target="iframe1" onsubmit="return check()">
+			<div class="baolay">
+				<ul>
+					<li><span class="baotext">参选博客名称：</span> <input type="text" name="blogname"  class="blogn" ckName="参选博客名称" onfocus="foc(this)" onblur="blu(this)"/> <strong>*</strong><span id="blogname_tip"></span></li>
+					<li><span class="baotext">博客链接地址：</span> <input type="text" name="blogurl" id="blogurl" value="http://" onclick="javascript:if(this.value=='http://')this.value='';" class="dizhi" ckName="博客链接地址" onfocus="foc(this)" onblur="blu(this)"/> <strong>*</strong><span id="blogurl_tip"></span></li>
+					<li><span class="baotext">真实姓名：</span> <input type="text" name="realname" class="blogn" ckName="真实姓名" onfocus="foc(this)" onblur="blu(this)"/> <strong>*</strong><span id="realname_tip"></span></li>
+					<li><span class="baotext">性别：</span> <input type="radio" name="sex" value="2"/> 男&nbsp;&nbsp;&nbsp;&nbsp;<input type="radio" name="sex" value='1' selected /> 女&nbsp;&nbsp;&nbsp;&nbsp;<strong>*(一经填写，不可更改)</strong></li>
+					<li><span class="baotext">所在位置：</span>
+						<select name="input_location1" id="input_location1" onchange="change_province(this.options[this.options.selectedIndex].value);setLocation(this.value,0);">
+						<option value="保密">保密</option><option value="北京">北京</option><option value="天津">天津</option><option value="河北">河北</option><option value="山西">山西</option><option value="内蒙古">内蒙古</option><option value="辽宁">辽宁</option><option value="吉林">吉林</option><option value="黑龙江">黑龙江</option><option value="上海">上海</option><option value="江苏">江苏</option><option value="浙江">浙江</option><option value="安徽">安徽</option><option value="福建">福建</option><option value="江西">江西</option><option value="山东">山东</option><option value="河南">河南</option><option value="湖北">湖北</option><option value="湖南">湖南</option><option value="广东">广东</option><option value="广西">广西</option><option value="海南">海南</option><option value="重庆">重庆</option><option value="四川">四川</option><option value="贵州">贵州</option><option value="云南">云南</option><option value="西藏">西藏</option><option value="陕西">陕西</option><option value="甘肃">甘肃</option><option value="青海">青海</option><option value="宁夏">宁夏</option><option value="新疆">新疆</option><option value="台湾">台湾</option><option value="香港">香港</option><option value="澳门">澳门</option><option value="国外">国外</option>
+						</select>
+						<select name="input_location2" id="input_location2" onchange="setLocation(0,this.value);">
+						</select>
+						<input type="hidden" name="input_location" ckName="所在位置" id="input_location" value="-"><strong>*</strong><span id="input_location1_tip"></span></li>
+					<li><span class="baotext">联系地址：</span> <input type="text" name="address" class="dizhi" onfocus="foc(this)" onblur="blu(this)" /><span id="address_tip"></span></li>
+					<li>（不公开信息，留于主办方以便通知相关线下活动）</li>
+					<li><span class="baotext">邮编：</span> <input type="text" name="post"  class="blogn" onfocus="foc(this)" onblur="blu(this)"/><span id="post_tip"></span></li>
+					<li>（不公开信息，留于主办方以便通知相关线下活动）</li>
+					<li><span class="baotext">联系电话：</span> <input type="text" name="phone"  class="blogn" ckName="联系电话" onfocus="foc(this)" onblur="blu(this)"/> <strong>*</strong><span id="phone_tip"></span></li>
+					<li>（不公开信息，留于主办方以便通知相关线下活动）</li>
+					<li><span class="baotext">E_mail：</span> <input type="text" name="email" class="blogn" ckName="E_mail" onfocus="foc(this)" onblur="blu(this)"/> <strong>*</strong><span id="email_tip"></span></li>
+					<li>（不公开信息，留于主办方以便通知相关线下活动）</li>
+					<li><span class="baotext">其他联系方式：</span> <input type="text" name="other" class="blogn" onfocus="foc(this)" onblur="blu(this)"/><span id="other_tip"></span></li>
+					<li><span class="baotext">上传照片：</span> <input type="file" name="photo" class="blogn" ckName="照片" /> <strong>*</strong><span id="photo_tip">（照片尺寸：200×200）</span></li>
+					<div class="clear"></div>
+				</ul>
+			</div>
+			<div class="baobtn">
+				<input name="submit" type="submit" value="提交" class="tibtn"/>
+				<input type="button" onclick="document.location='index.shtml'" value="返回" class="tibtn"/>
+			</div>
+			</form>
+		</div>
+		<!-- 页脚-->
+	</div>	
+</body>
+</html>

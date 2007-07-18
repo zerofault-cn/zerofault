@@ -1,0 +1,53 @@
+				<!-- 博客留言 -->
+				<div class="blogtui">
+					<h4 class="zibiao">博客留言</h4>
+					<div class="xiziliao">
+						<!-- BEGIN list -->
+						<div class="{list.CLASS}">
+							{list.CONTENT}
+							<p><span>留言人：</span> {list.USERNAME} <span>时间：</span> {list.ADDTIME}<span id="del" onmouseover="this.style.cursor='hand'" style="margin-left:2em;display:{DISPLAY}" onclick="confirmdel({list.ID},{ID});">删除</span></p>
+						</div>
+						<!-- END list -->
+					</div>
+					<!-- 分页 -->	
+					<p id="pagenav">
+						{PAGE}
+					</p>
+					<!-- 发表留言 -->
+					<div class="fbliu" style="display:{FORMDISPLAY}">
+						<form name="form2" action="" method="post" onsubmit="return check()" target="iframe1">
+						<h4 class="btuitit" style="width:612px;">发表留言</h4>
+						<div class="fbliucon">
+							用户名：<input type="text" name="username" />
+							<p><textarea name="content" cols="80" rows="8"></textarea></p>
+							<p class="rtext">如果您不是注册用户，<a href="http://reg.bokee.com/account/Register.b" class="morelink">欢迎注册</a>。 
+							<input name="submit" type="submit" value="提交留言" /></p>
+						</div>
+						</form>
+					</div>
+				</div>	
+			</div>
+			<div class="clear"></div>
+		</div>
+<script language="javascript">
+function check()
+{
+	if(document.form2.content.value.replace(/(^\s*)|(\s*$)/g, "").length<2)//去掉首尾空格
+	{
+		alert("您的留言内容太短了！");
+		document.form2.content.focus();
+		return false;
+	}
+}
+function confirmdel(id,user_id)
+{
+	if(confirm('确定要删除这条评论吗?'))
+	{
+		document.getElementById('iframe1').src='comment_del.php?id='+id+'&user_id='+user_id;
+	}
+	else
+	{
+		return;
+	}
+}
+</script>

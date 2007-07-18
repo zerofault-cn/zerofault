@@ -1,0 +1,79 @@
+<script>
+function markupdate(id)
+{
+	document.getElementById("iframe1").src='comment_mark_update.php?id='+id;
+}
+function changebutton(id)
+{
+	if(document.getElementById("button"+id).value=='设为精彩')
+	{
+		document.getElementById("button"+id).value='取消精彩';
+	}
+	else
+	{
+		document.getElementById("button"+id).value='取消精彩';
+	}
+}
+function confirmdel(id,user_id)
+{
+	if(confirm('确定要删除ID为'+id+'的评论吗?'))
+	{
+		document.getElementById('iframe1').src='comment_del.php?id='+id+'&user_id='+user_id;
+		window.setTimeout("location.reload()",500);
+	}
+	else
+	{
+		return;
+	}
+}
+function check()
+{
+	if(document.form1.s_username.value=='' && document.form1.s_blogname.value=='')
+	{
+		alert('您还没有输入任何搜索条件呢!');
+		document.form1.s_username.focus();
+		return false;
+	}
+	return true;
+}
+</script>
+<!-- right div -->
+<div id="Layer2" style="position:absolute;margin-left:10px;width:830px;border:1px solid #000;">
+<!-- search form -->
+<table width="100%" border="0">
+<form name="form1" method="get" action="" onsubmit="return check()">
+<tr>
+	<td>输入任一搜索条件：<br />&nbsp;&nbsp;&nbsp;&nbsp;
+	评论用户:<input name="s_username" type="text" size="13" />
+	被评论博客名:<input name="s_blogname" type="text" size="13" />
+	<input type="submit" name="submit" value="搜索" /></td>
+</tr>
+</form>
+</table>
+<!-- search form end -->
+<table width="100%" border="0" cellpadding="0" cellspacing="0">
+<tr style="padding:5px 0;background-color:#6699FF;font-weight:bold">
+	<td>序号</td>
+	<td>对象</td>
+	<td>内容</td>
+	<td>留言时间</td>
+	<td align="center">操作</td>
+</tr>
+<!-- BEGIN list -->
+<tr style="background-color:{list.BGCOLOR}">
+	<td>{list.I}</td>
+	<td nowrap>[{list.USERNAME}]对[<a href="../comment.php?id={list.USER_ID}" target="_blank">{list.BLOGNAME}</a>]留言:</td>
+	<td style="word-wrap:break-word;word-break:break-all;">{list.CONTENT}</a></td>
+	<td nowrap>{list.ADDTIME}</td>
+	<td align="center"><input type="button" id="button{list.ID}" value="{list.MARK}" onClick="markupdate({list.ID});setTimeout('changebutton({list.ID})',100);" /><input type="button" value="删除" onclick="confirmdel({list.ID},{list.USER_ID})" /></td>
+</tr>
+<!-- END list -->
+</table>
+<br>
+<div align="center">{PAGE}</div>
+<br>
+<div>
+<iframe frameborder="0" scrolling="no" id="iframe1" name="iframe1" width="500" height="40" src=""></iframe>
+</div>
+</div>
+<!-- right div end -->

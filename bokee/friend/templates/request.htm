@@ -1,0 +1,59 @@
+				<!-- 择偶标准 -->
+				<style>
+				span.edit{display:none;width:400px;}
+				span.label{float:left;width:100px;}
+				span.value{float:left;color:#000000;}
+				</style>
+				<div class="blogtui">
+					<h4 class="zibiao">择偶标准</h4>
+					<div class="xiziliao">
+						<form name="edit_request" action="?action=submit" target="iframe1" method="post">
+						<ul>
+							<li>
+								<span id="op_want_age" class="lr" style="display:{DISPLAY}"><a href="javascript:void(0)" onclick="do_edit('want_age')">修改</a></span>
+								<span class="label">年龄要求：</span>
+								<span id="want_age" class="value">{want_age}</span>
+								<span id="edit_want_age" class="edit lt"><input id="input_want_age1" name="input_want_age1" value="{want_age1}" size="3" />岁～<input id="input_want_age2" name="input_want_age2" value="{want_age2}" size="3" />岁</span>
+							</li><div class="clear"></div>
+							<li class="xili">
+								<span id="op_want_height" class="lr" style="display:{DISPLAY}"><a href="javascript:void(0)" onclick="do_edit('want_height')">修改</a></span>
+								<span class="label">身高要求：</span>
+								<span id="want_height" class="value">{want_height}</span>
+								<span id="edit_want_height" class="edit lt"><input id="input_want_age1" name="input_want_height1" value="{want_height1}" size="3" />cm～<input id="input_want_height2" name="input_want_height2" value="{want_height2}" size="3" />cm</span>
+							</li><div class="clear"></div>
+							<li>
+								<span id="op_want_weight" class="lr" style="display:{DISPLAY}"><a href="javascript:void(0)" onclick="do_edit('want_weight')">修改</a></span>
+								<span class="label">体重要求：</span>
+								<span id="want_weight" class="value">{want_weight}</span>
+								<span id="edit_want_weight" class="edit lt"><input id="input_want_weight1" name="input_want_weight1" value="{want_weight1}" size="3" />kg～<input id="input_want_weight2" name="input_want_weight2" value="{want_weight2}" size="3" />kg
+								</span>
+							</li><div class="clear"></div>
+							<li class="xili">
+								<span id="op_want_sex" class="lr" style="display:{DISPLAY}"><a href="javascript:void(0)" onclick="do_edit('want_sex')">修改</a></span>
+								<span class="label">性别要求：</span>
+								<span id="want_sex" class="value">{want_sex}</span>
+								<span id="edit_want_sex" class="edit lt">
+								{want_sex_str}
+								</span>
+								<input type="hidden" name="input_want_sex" id="input_want_sex" value="{want_sex}"/>
+							</li><div class="clear"></div>
+							<li>
+								<span id="op_want_graduation" class="lr" style="display:{DISPLAY}"><a href="javascript:void(0)" onclick="do_edit('want_graduation')">修改</a></span>
+								<span class="label">学历要求：</span>
+								<span id="want_graduation" class="value">{want_graduation}</span>
+								<span id="edit_want_graduation" class="edit lt">
+								<select name="input_want_graduation" id="input_want_graduation">
+								{want_graduation_options}
+								</select>
+								</span>
+							</li><div class="clear"></div>
+							<li class="xili" style="text-align:center;display:{DISPLAY}">
+								<input type="hidden" name="id" value="{id}" /><input type="submit" id="submitBtn" value="全部保存" style="display:none"/>
+							</li><div class="clear"></div>
+						</ul>
+						</form>
+					</div>
+				</div>
+			</div>
+			<div class="clear"></div>
+		</div>

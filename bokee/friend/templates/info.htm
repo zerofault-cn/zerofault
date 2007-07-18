@@ -1,0 +1,225 @@
+				<!-- 详细资料 -->
+				<style>
+				span.edit{display:none;width:400px;}
+				span.label{float:left;width:100px;}
+				span.value{float:left;color:#000000;}
+				</style>
+				<div class="blogtui">
+					<h4 class="zibiao">详细资料</h4>
+					<div class="xiziliao">
+						<form name="edit_info" action="?action=submit" target="iframe1" method="post">
+						<ul>
+							<li>
+								<span id="op_nickname" class="lr" style="display:{DISPLAY}"><a href="javascript:void(0)" onclick="do_edit('nickname')">修改</a></span>
+								<span class="label">昵称：</span>
+								<span id="nickname" class="value">{nickname}</span>
+								<span id="edit_nickname" class="edit lt"><input id="input_nickname" name="input_nickname" value="{nickname}" size="14" /></span>
+							</li><div class="clear"></div>
+							<li class="xili">
+								<span id="op_realname" class="lr" style="display:{DISPLAY}"><a href="javascript:void(0)" onclick="do_edit('realname')">修改</a></span>
+								<span class="label">姓名：</span>
+								<span id="realname" class="value">{realname}</span>
+								<span id="edit_realname" class="edit lt"><input id="input_realname" name="input_realname" value="{realname}" size="14" /></span>
+							</li><div class="clear"></div>
+							<li>
+								<span class="label">性别：</span>
+								<span id="sex" class="value">{sex}</span>
+								
+							</li><div class="clear"></div>
+							<li class="xili">
+								<span id="op_height" class="lr" style="display:{DISPLAY}"><a href="javascript:void(0)" onclick="do_edit('height')">修改</a></span>
+								<span class="label">身高：</span>
+								<span id="height" class="value">{height}cm</span>
+								<span id="edit_height" class="edit lt"><input id="input_height" name="input_height" value="{height}" size="14" />cm</span>
+							</li><div class="clear"></div>
+							<li>
+								<span id="op_weight" class="lr" style="display:{DISPLAY}"><a href="javascript:void(0)" onclick="do_edit('weight')">修改</a></span>
+								<span class="label">体重：</span>
+								<span id="weight" class="value">{weight}kg</span>
+								<span id="edit_weight" class="edit lt"><input id="input_weight" name="input_weight" value="{weight}" size="14" />kg</span>
+							</li><div class="clear"></div>
+							<li class="xili">
+								<span id="op_birthday" class="lr" style="display:{DISPLAY}"><a href="javascript:void(0)" onclick="do_edit('birthday')">修改</a></span>
+								<span class="label">生日：</span>
+								<span id="birthday" class="value">{birthday}</span>
+								<span id="edit_birthday" class="edit lt">
+								<select name="input_year" id="input_year" onchange="setBirthday(this.value,0,0)">
+									{year_options}
+								</select>
+								<select name="input_month" id="input_month" onchange="setBirthday(0,this.value,0)">
+									{month_options}
+								</select>
+								<select name="input_day" id="input_day" onchange="setBirthday(0,0,this.value)">
+									{day_options}
+								</select>
+								<input type="hidden" name="input_birthday" id="input_birthday" value="{birthday}">
+								</span>
+							</li><div class="clear"></div>
+							<li>
+								<span id="op_bloodtype" class="lr" style="display:{DISPLAY}"><a href="javascript:void(0)" onclick="do_edit('bloodtype')">修改</a></span>
+								<span class="label">血型：</span>
+								<span id="bloodtype" class="value">{bloodtype}</span>
+								<span id="edit_bloodtype" class="edit lt">
+								<select name="input_bloodtype" id="input_bloodtype">
+								{bloodtype_options}
+								</select>
+								</span>
+							</li><div class="clear"></div>
+							<li class="xili">
+								<span id="op_astro" class="lr" style="display:{DISPLAY}"><a href="javascript:void(0)" onclick="do_edit('astro')">修改</a></span>
+								<span class="label">星座：</span>
+								<span id="astro" class="value">{astro}</span>
+								<span id="edit_astro" class="edit lt">
+								<select name="input_astro" id="input_astro">
+								{astro_options}
+								</select>
+								</span>
+							</li><div class="clear"></div>
+							<li>
+								<span id="op_graduation" class="lr" style="display:{DISPLAY}"><a href="javascript:void(0)" onclick="do_edit('graduation')">修改</a></span>
+								<span class="label">学历：</span>
+								<span id="graduation" class="value">{graduation}</span>
+								<span id="edit_graduation" class="edit lt">
+								<select name="input_graduation" id="input_graduation">
+								{graduation_options}
+								</select>
+								</span>
+							</li><div class="clear"></div>
+							<li class="xili">
+								<span id="op_school" class="lr" style="display:{DISPLAY}"><a href="javascript:void(0)" onclick="do_edit('school')">修改</a></span>
+								<span class="label">毕业学校：</span>
+								<span id="school" class="value">{school}</span>
+								<span id="edit_school" class="edit lt">
+								<input name="input_school" id="input_school" value="{school}" />
+								</span>
+							</li><div class="clear"></div>
+							<li>
+								<span id="op_vocation" class="lr" style="display:{DISPLAY}"><a href="javascript:void(0)" onclick="do_edit('vocation')">修改</a></span>
+								<span class="label">职业类型：</span>
+								<span id="vocation" class="value">{vocation}</span>
+								<span id="edit_vocation" class="edit lt">
+								<select name="input_vocation" id="input_vocation">
+								{vocation_options}
+								</select>
+								</span>
+							</li><div class="clear"></div>
+							<li class="xili">
+								<span id="op_income" class="lr" style="display:{DISPLAY}"><a href="javascript:void(0)" onclick="do_edit('income')">修改</a></span>
+								<span class="label">月薪：</span>
+								<span id="income" class="value">{income}</span>
+								<span id="edit_income" class="edit lt">
+								<select name="input_income" id="input_income">
+								{income_options}
+								</select>
+								</span>
+							</li><div class="clear"></div>
+							<li>
+								<span id="op_smoke" class="lr" style="display:{DISPLAY}"><a href="javascript:void(0)" onclick="do_edit('smoke')">修改</a></span>
+								<span class="label">抽烟：</span>
+								<span id="smoke" class="value">{smoke}</span>
+								<span id="edit_smoke" class="edit lt">
+								<select name="input_smoke" id="input_smoke">
+								{smoke_options}
+								</select>
+								</span>
+							</li><div class="clear"></div>
+							<li class="xili">
+								<span id="op_drink" class="lr" style="display:{DISPLAY}"><a href="javascript:void(0)" onclick="do_edit('drink')">修改</a></span>
+								<span class="label">饮酒：</span>
+								<span id="drink" class="value">{drink}</span>
+								<span id="edit_drink" class="edit lt">
+								<select name="input_drink" id="input_drink">
+								{drink_options}
+								</select>
+								</span>
+							</li><div class="clear"></div>
+							<li>
+								<span id="op_marry" class="lr" style="display:{DISPLAY}"><a href="javascript:void(0)" onclick="do_edit('marry')">修改</a></span>
+								<span class="label">婚姻状况：</span>
+								<span id="marry" class="value">{marry}</span>
+								<span id="edit_marry" class="edit lt">
+								<select name="input_marry" id="input_marry">
+								{marry_options}
+								</select>
+								</span>
+							</li><div class="clear"></div>
+							<li class="xili">
+								<span id="op_location" class="lr" style="display:{DISPLAY}"><a href="javascript:void(0)" onclick="do_edit('location')">修改</a></span>
+								<span class="label">位置：</span>
+								<span id="location" class="value">{location}</span>
+								<span id="edit_location" class="edit lt">
+								<select name="input_location1" id="input_location1" onchange="change_province(this.options[this.options.selectedIndex].value);setLocation(this.value,0);">
+								{location1_options}
+								</select>
+								<select name="input_location2" id="input_location2" onchange="setLocation(0,this.value);">
+								{location2_options}
+								</select>
+								<input type="hidden" name="input_location" id="input_location" value="-">
+								</span>
+							</li><div class="clear"></div>
+							<li>
+								<span id="op_intro" class="lr" style="display:{DISPLAY}"><a href="javascript:void(0)" onclick="do_edit('intro')">修改</a></span>
+								<span class="label">个人简介：</span>
+								<span id="intro" class="value">{intro}</span>
+								<span id="edit_intro" class="edit lt">
+								<textarea name="input_intro" id="input_intro" rows="5" cols="54">{intro}</textarea>
+								</span>
+							</li><div class="clear"></div>
+							<li class="xili">
+								<span id="op_motto" class="lr" style="display:{DISPLAY}"><a href="javascript:void(0)" onclick="do_edit('motto')">修改</a></span>
+								<span class="label">座右铭：</span>
+								<span id="motto" class="value">{motto}</span>
+								<span id="edit_motto" class="edit lt">
+								<textarea name="input_motto" id="input_motto" rows="3" cols="54">{motto}</textarea>
+								</span>
+							</li><div class="clear"></div>
+							<li>
+								<span id="op_characters" class="lr" style="display:{DISPLAY}"><a href="javascript:void(0)" onclick="do_edit('characters')">修改</a></span>
+								<span class="label">个性特点：</span>
+								<span id="characters" class="value">{characters}</span>
+								<span id="edit_characters" class="edit lt">
+								{characters_checkbox}
+								</span>
+							</li><div class="clear"></div>
+							<li class="xili">
+								<span id="op_interest" class="lr" style="display:{DISPLAY}"><a href="javascript:void(0)" onclick="do_edit('interest')">修改</a></span>
+								<span class="label">兴趣爱好：</span>
+								<span id="interest" class="value">{interest}</span>
+								<span id="edit_interest" class="edit lt">
+								{interest_checkbox}
+								</span>
+							</li><div class="clear"></div>
+							<li>
+								<span id="op_movie" class="lr" style="display:{DISPLAY}"><a href="javascript:void(0)" onclick="do_edit('movie')">修改</a></span>
+								<span class="label">喜欢的电影：</span>
+								<span id="movie" class="value">{movie}</span>
+								<span id="edit_movie" class="edit lt">
+								{movie_checkbox}
+								</span>
+							</li><div class="clear"></div>
+							<li class="xili">
+								<span id="op_music" class="lr" style="display:{DISPLAY}"><a href="javascript:void(0)" onclick="do_edit('music')">修改</a></span>
+								<span class="label">喜爱的音乐：</span>
+								<span id="music" class="value">{music}</span>
+								<span id="edit_music" class="edit lt">
+								{music_checkbox}
+								</span>
+							</li><div class="clear"></div>
+							<li>
+								<span id="op_book" class="lr" style="display:{DISPLAY}"><a href="javascript:void(0)" onclick="do_edit('book')">修改</a></span>
+								<span class="label">喜欢的书籍：</span>
+								<span id="book" class="value">{book}</span>
+								<span id="edit_book" class="edit lt">
+								{book_checkbox}
+								</span>
+							</li><div class="clear"></div>
+							<li class="xili" style="text-align:center;display:{DISPLAY}">
+								<input type="hidden" name="id" value="{id}" /><input type="submit" id="submitBtn" value="全部保存" style="display:none"/>
+							</li><div class="clear"></div>
+						</ul>
+						</form>
+					</div>
+				</div>
+			</div>
+			<div class="clear"></div>
+		</div>

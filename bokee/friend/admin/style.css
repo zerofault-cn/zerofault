@@ -1,0 +1,103 @@
+a:link,a:visited
+{
+	COLOR: blue; 
+	FONT-SIZE: 11pt; 
+	TEXT-DECORATION: none;
+}
+
+a:hover,a.active
+{
+	COLOR: #ff2200; 
+	FONT-SIZE: 11pt; 
+	TEXT-DECORATION: underline;
+}
+a.bigger:link,a.bigger:visited
+{
+	COLOR: #333333; 
+	FONT-SIZE: 11pt; 
+	TEXT-DECORATION: none;
+}
+
+a.bigger:hover,a.bigger:active
+{
+	COLOR: #ff0000; 
+	FONT-SIZE: 12pt;
+	TEXT-DECORATION: underline;
+}
+BODY 
+{
+	FONT-FAMILY: "Georgia","verdana","宋体"; 
+	FONT-SIZE: 11pt;
+	font-style: normal;
+	font-weight: normal;
+	color: #000066;
+	line-height:140%
+}
+TD 
+{
+	FONT-FAMILY: Verdana,宋体;
+	FONT-SIZE: 10pt;
+	color: #000066;
+	line-height:160%;
+	border-left:1px solid #fff;
+}
+.caption td
+{
+	border:0;
+	text-align:center;
+}
+textarea
+{
+	font-size:10pt;
+}
+caption
+{
+	FONT-FAMILY: Verdana,宋体; 
+	FONT-SIZE: 13pt;
+	font-style: normal;
+	font-weight: normal;
+	color: #000066;
+	line-height:160%
+}
+.blue
+{
+	color:blue;
+}
+.red
+{
+	color:red;
+}
+.green
+{
+	color:green;
+}
+.smallgreen
+{
+	font-size:9px;
+	color:green;
+}
+.smallblue
+{
+font-size:9px;
+color:blue;
+}
+.purple
+{
+	color:#aa00cc;
+}
+.small
+{
+	font-size:9pt;
+}
+.big14
+{
+	font-size:14pt;
+}
+.big16
+{
+	font-size:16pt;
+}
+.narrow
+{
+	FONT-FAMILY:"Arial Narrow","宋体";
+}
