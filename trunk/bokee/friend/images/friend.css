@@ -1,0 +1,499 @@
+@charset "gb2312";
+/* ========== 全局CSS定义 ====== */
+html{overflow-x:hidden;}
+body { 	font-size:12px;background: url(bg.gif) repeat-x #caadcc;}
+input {font-family: Simsun,sans-serif,Arial;}
+img {border: 0;}
+div, td { font-size:12px; } 
+strong{ color:#f00; font-weight:normal;}
+ul{list-style:none; margin:0px; padding:0px;}
+body,form,dl,dt,dd,ul,p,h1,h2,h3,h4,h5,h6{margin: 0px;padding: 0px;}
+p {text-align:center;padding: 8px 0px 0px 0px;}
+a { color:#000;text-decoration: none;}
+a:hover {text-decoration: underline;color:#f00;}
+.clear{ clear:both;}
+
+/* ========== 结构CSS定义 ====== */
+#container{
+	width:982px;
+	margin:0px auto;
+	overflow:hidden;
+	background:#fff;
+}
+.layout{
+	width:950px;
+	margin:8px auto 0px auto;
+	overflow:hidden;
+}
+/* ========== 头部 ====== */
+#login{
+	width:925px;
+	height:22px;
+	margin:12px auto;
+	}
+.logintext{
+	width:78px;
+	}	
+#logo{
+	width:103px;
+	height:23px;
+	float:left;
+	padding:6px 0px 0px 12px;
+	border-top:1px solid #8D8D8D;
+	}	
+#nav{
+	width:830px;
+	height:16px;
+	float:left;
+	padding:13px 0px 0px 0px;
+	border-top:1px solid #8D8D8D;
+	}
+#nav li{
+	float:left;
+	margin:0px 3px 0px 3px;
+	}
+
+#topnav{
+	width:925px;
+	height:142px;
+	color:#fff;
+	background: url(top.gif) no-repeat;
+	}
+.topnavtext{
+	width:870px;
+	margin:8px auto 0px auto;
+	}		
+#topnav a{
+	font-weight:bold;
+	color:#fff;
+	}	
+/* ========== 交友头部 ====== */
+.youtop{
+	width:950px;
+	height:135px;
+	margin:0px auto;
+	background:url(topyou.gif) no-repeat;
+	}
+.navb{
+	width:900px;
+	position:relative;
+	top:10px;
+	left:19px;
+	}
+.navb li{
+	padding:0px 4px 0px 10px;
+	border-right:1px solid #fff;
+	float:left;
+	}
+.navb li a{	
+	color:#fff;
+	}
+.navc{
+	color:#fff;
+	position:relative;
+	top:88px;
+	left:57px;
+	}	
+.navc a{	
+	color:#fff;
+	font-weight:bold;
+	}		
+/* ========== 第一屏 ====== */
+.oneleft{
+	width:284px;
+	float:left;
+	overflow:hidden;
+	}
+.onecen{
+	width:363px;
+	float:left;
+	margin-left:11px;
+	display:inline;
+	overflow:hidden;
+	}
+.oneright{
+	width:280px;
+	float:right;
+	overflow:hidden;
+	}
+/* ========== friend ====== */
+.fritu{
+	width:246px;
+	padding:6px 0px 0px 38px;
+	height:168px;
+	background:url(fritu.gif);}
+/* ========== 本月最受青睐 ====== */	
+.monti{
+	width:284px;
+	height:168px;
+	margin-bottom:7px;
+	padding-top:6px;
+	background: url(monti.gif)}	
+.monlt{ 
+	color:#fff; 
+	font-size:14px;
+	font-weight:bold;
+	margin:14px 11px 0px 12px;
+	display:inline;
+	width:14px;
+	float:left;}	
+/* ========== 热门群组 ====== */
+.qunlay{
+	border:1px solid #d8b2db;
+	border-top:none;
+	padding:10px 0px 5px 0px;
+	overflow:hidden;
+	background-color:#fff;
+	font-size:14px;}
+.qunlay2{
+	border:1px solid #d8b2db;
+	border-top:none;
+	padding:10px 0px 5px 0px;
+	height:126px;
+	overflow:hidden;
+	background-color:#fff;
+	font-size:14px;}
+.qunlist{
+	margin:0px auto;
+	width:272px;
+	overflow:hidden;
+	}
+.qunwen{
+	margin:7px auto 0px auto;
+	width:250px;
+	line-height:24px;
+	overflow:hidden;
+	}
+.qunwen li{
+	background: url(liicon.gif) no-repeat 0px 9px;
+	padding-left:9px;
+	}			
+.quntu{
+	width:79px;
+	margin-left:8px;
+	display:inline;
+	overflow:hidden;
+	float:left;}
+.quntu img{
+	width:79px;
+	height:106px;
+	}
+.qunwen a{
+	font-size:14px;
+}	
+.quntu a{
+	font-size:14px;
+	color:#b267b9 ;}
+/* ========== 头条 ====== */
+.toutiao{
+	width:361px;
+	height:61px;
+	padding:10px 0px 0px 0px;
+	border:1px solid #d7b1da;}
+.touwen{
+	width:317px;
+	margin:8px auto;}
+/* ========== 精彩日志 ====== */
+.jing{
+	width:343px;
+	line-height:24px;
+	margin:8px auto;}
+.jing li{
+	background: url(liicon.gif) no-repeat 0px 8px;
+	padding-left:9px;
+	}
+.jing a{
+	font-size:14px;}	
+/* ========== 专家解答 ====== */
+.jieda{
+	width:360px;
+	height:83px;
+	margin:11px auto 0px auto;	
+	background:#fcf2fb;}
+.jiedatu{
+	width:84px;
+	height:77px;
+	padding:4px 0px 0px 5px;
+	background:#fff;
+	border:1px solid #d7b2dd;
+	float:left;}
+.jiedawen{
+	margin:11px 0px 0px 14px;
+	display:inline;
+	line-height:22px;
+	width:240px;
+	float:left;}
+/* ========== 赞助支持 ====== */
+.zanzhu{
+	width:360px;
+	height:116px;
+	background:url(zhubg.gif) repeat-x;
+	margin:16px auto 0px auto;
+	padding-top:7px;
+	border:1px solid #d7b2dd;}
+.zantu{
+	width:110px;
+	overflow:hidden;
+	float:left;
+	margin:6px 0px 0px 7px;
+	display:inline;}	
+.zantu img{
+	border:1px solid #d7b2dd;}
+.zantu a{
+	font-size:14px;}	
+/* ========== 用户登录 ====== */
+.denglu{
+	width:280px;
+	height:229px;
+	margin:0px auto 0px auto;
+	background:url(dengbg.gif);}
+.dengtext{
+	width:220px;
+	height:80px;
+	position:relative;
+	top:50px;
+	bottom:32px;
+	left:32px;
+}
+.dengtext a{
+	font-size:14px;}	
+.dengshu{
+	width:100px;
+	height:18px;
+	margin-top:10px;
+	border:1px solid #d9b0da;}	
+.dengleft{
+	width:168px;
+	float:left;
+	line-height:22px;
+	font-size:14px;}	
+.dengbtn{
+	width:43px;
+	height:42px;
+	border:none;
+	font-size:14px;
+	font-weight:bold;
+	color:#fff;
+	margin:14px 0px 0px 8px;
+	background:url(dengbtn.gif);}		
+.baom{
+	width:172px;
+	height:37px;
+	border:none;
+	font-size:14px;
+	font-weight:bold;
+	color:#fff;
+	margin:25px 0px 0px 25px;
+	background:url(zhubtn.gif);}
+/* ========== 广告区域 ====== */
+.adleft{
+	width:760px;
+	height:90px;
+	float:left;}
+.adright{
+	height:90px;
+	margin:9px 0px 0px 8px;
+	display: inline;
+	line-height:20px;
+	float:left;}	
+.adright li{
+	background: url(liicon.gif) no-repeat 0px 8px;
+	padding-left:9px;
+	}	
+/* ========== 第二屏 ====== */
+.twoleft{
+	width:323px;
+	float:left;
+	overflow:hidden;
+	}
+/* ========== 本月人气美女 ====== */	
+.renqibg{ background:#fcf2fb;}
+.mmtext{
+	float:left;
+	overflow:hidden;
+	margin:5px 0px 0px 16px;
+	display:inline;
+	width:190px;
+	line-height:20px;
+	}	
+.mmtext a{
+	color:#b566b9;
+	font-weight:bold;
+	text-decoration:underline;
+	}
+.mmtext span{
+	color:#b566b9;
+
+	}
+/* ========== 交友搜索 ====== */
+.soutext{
+	width:240px;
+	height:110px;
+	margin:12px auto;
+	line-height:20px;
+	font-size:14px;
+}
+.soubtn{
+	width:80px;
+	height:20px;
+	margin-left:20px;
+	background:#fcf2fb;
+	padding-top:2px;
+	border:1px solid #d8b2db;
+	font-weight:bold;
+	color:#b667ba;
+}
+.soubtn2{
+	height:20px;
+	margin-left:10px;
+	margin-top:5px;
+	background:#fcf2fb;
+	padding-top:2px;
+	border:1px solid #d8b2db;
+	font-weight:bold;
+	color:#b667ba;
+}
+/* ========== 今日万人迷 ====== */
+.tenext{
+	width:260px;
+	margin:10px auto;
+	margin:0px auto;!important ;
+	line-height:24px;
+	overflow:hidden;
+	font-size:14px;
+}
+.xbie{
+	width:108px;
+	float:left;
+	margin-right:5px;
+	overflow : hidden;
+	white-space:nowrap;
+	text-overflow:ellipsis;
+	}
+.sui{
+	width:33px;
+	float:left;
+	}	
+	
+.tvli li{
+	background: url(tv.gif) no-repeat 0px 1px;
+	padding-left:27px;
+	}
+.topli li{
+	padding-left:64px;
+	}
+.t01{
+	background: url(top01.gif) no-repeat 0px 2px;
+	}	
+.t02{
+	background: url(top02.gif) no-repeat 0px 2px;
+	}	
+.t03{
+	background: url(top03.gif) no-repeat 0px 2px;
+	}	
+.t04{
+	background: url(top04.gif) no-repeat 0px 2px;
+	}
+.t05{
+	background: url(top05.gif) no-repeat 0px 2px;
+	}	
+.t06{
+	background: url(top06.gif) no-repeat 0px 2px;
+	}
+.t07{
+	background: url(top07.gif) no-repeat 0px 2px;
+	}	
+.t08{
+	background: url(top08.gif) no-repeat 0px 2px;
+	}
+.t09{
+	background: url(top09.gif) no-repeat 0px 2px;
+	}	
+.t10{
+	background: url(top10.gif) no-repeat 0px 2px;
+	}	
+.t11{
+	background: url(top11.gif) no-repeat 0px 2px;
+	}	
+.t12{
+	background: url(top12.gif) no-repeat 0px 2px;
+	}	
+.t13{
+	background: url(top13.gif) no-repeat 0px 2px;
+	}	
+.t14{
+	background: url(top14.gif) no-repeat 0px 2px;
+	}
+.t15{
+	background: url(top15.gif) no-repeat 0px 2px;
+	}	
+.t16{
+	background: url(top16.gif) no-repeat 0px 2px;
+	}
+.t17{
+	background: url(top17.gif) no-repeat 0px 2px;
+	}	
+.t18{
+	background: url(top18.gif) no-repeat 0px 2px;
+	}
+.t19{
+	background: url(top19.gif) no-repeat 0px 2px;
+	}	
+.t20{
+	background: url(top20.gif) no-repeat 0px 2px;
+	}	
+/* ========== 报名页面 ====== */
+.baolay{
+	width:553px;
+	overflow:hidden;
+	margin:22px auto 0px auto;
+	padding:24px 0px 24px 71px;
+	border:1px solid #f3d5f1;
+	font-size:14px;
+	}
+.baolay li{
+	margin-top:11px;
+	}	
+.baotext{ width:98px; color:#83068e; float:left; padding-top:3px;}	
+.baobtn{ margin:22px 0px 60px 0px; text-align:center;}
+.tibtn{ width:72px; height:20px; font-size:14px;}
+.blogn{ width:175px;}	
+.dizhi{ width:260px;}	
+.number{ color:#84068b; font-size:14px; font-weight:bold;}																								
+/* ========== 其他 ====== */
+.lt{float:left;}
+.lr{float:right;}
+.rtext{ text-align:right;}
+.mlt{ margin-left:15px; display:inline;}
+.mltb{ margin-left:12px; display:inline;}
+.mrt{ padding-right:12px;}
+.mtop{ margin-top:8px;}
+.mtopc{ margin-top:20px;}
+.mtopb{ margin-top:50px; text-align:center;}
+.nodxian{border-bottom:none;}
+h1{ color:#fff; font-size:14px; font-weight:bold; height:20px; background: url(quntit.gif); padding:7px 0px 0px 14px;}
+h2{ color:#b368ba; font-size:14px; font-weight:bold; text-align:center;}
+h4{ color:#b368ba; font-size:14px; font-weight:bold; padding-left:28px;}
+h3{ color:#b567bb; font-size:14px; font-weight:bold; height:18px; background: url(h3bg.gif); padding:7px 0px 0px 39px;}
+h5{ color:#84068b; font-size:14px; font-weight:bold;}
+a.morelink { color:#DC0709; font-size:12px;text-decoration: none;}
+a.morelink:hover {text-decoration: none;color:#f00;}
+a.name { color:#b267b9; text-decoration: none;}
+a.name:hover {text-decoration: underline;color:#f00;}
+a.miao { color:#b566b9; text-decoration: none; font-weight:bold; margin-left:15px;}
+a.miao:hover {text-decoration: underline;color:#f00;font-weight:bold;}
+
+
+/*Ad*/
+.Ad{margin:12px 16px 0px 16px;border:1px solid #ECD8E3;height: auto!important; height:10px;min-height:10px;}
+.Ad .rim{height: auto!important; height:80px;min-height:80px;}
+.Ad img{margin:5px 0px 0px 21px;}
+.Ad p{ background:url(joinBg.gif) no-repeat; height:70px;width:15px;float:left;padding:10px 5px 0px 5px; color:#944A7D; font-weight:bold;}
+.Ad .wenzi{padding:6px 6px 6px 41px; line-height:22px;}
+.Ad .wenzi a{color:#3C3C3C;}
+.editor{width:860px;margin:5px auto 0px auto;text-align:center;}
+.bottom{margin:0 auto; padding: 22px 0px 5px 0px; width: 830px; border-bottom:1px solid #808080; text-align:center; color:#808080;}
+.bottom a:link {font-size: 12px;color:#000;text-decoration: none;}
+.bottom a:visited {font-size: 12px;color:#000;text-decoration: none;}
+.bottom a:hover {font-size: 12px;color: #B41F0B;text-decoration: none;}
+.copyright { line-height:22px; text-align:center; color:#808080;}

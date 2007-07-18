@@ -1,0 +1,15 @@
+<?php
+$bokie=split(',',base64_decode($_COOKIE['bokie']));
+if(sizeof($bokie)>0)
+{
+	$blogURL=$bokie[1];
+	$blogID=substr($blogURL,0,strpos($blogURL,'.'));
+	$groupID=$bokie[4];
+}
+else
+{
+	$blogURL='';
+	$blogID='';
+	$groupID=0;
+}
+?>

@@ -1,0 +1,145 @@
+		<!-- 第一屏 -->
+		<div class="layout">
+			<!-- 第一屏左侧 -->
+			<div class="oneleft">
+				<!-- 个人头像 -->
+				<div class="toux">
+					<div class="toutu">
+						<a href="{BLOGURL}" target="_blank"><img src="{PHOTO}" alt="{BLOGNAME}"/></a>
+						<p><a href="{BLOGURL}" target="_blank">访问博客：{BLOGNAME}</a></p>
+					</div>
+					<div class="clear"></div>
+				</div>
+				<script>
+				var id='{ID}';
+				</script>
+				<!-- 功能按钮 -->
+				<div class="nanniu">
+					<ul>
+						<li><a href="{BLOGURL}/photo/showPhoto2.b" target="_blank"><img src="../images/addfriend.gif" /> 我的相册</a></li>
+						<li><a href="{BLOGURL}/sn/guestFriendCard.b" target="_blank"><img src="../images/msg.gif" /> 我的亲友团</a></li>
+						<li><a href="javascript:void(0)" onclick="doAddFriend('{BLOGID}');"><img src="../images/addfriend.gif" /> 加为好友</a></li>
+						<li><a href="javascript:void(0)" onclick="popPostMsg('{BLOGID}');"><img src="../images/msg.gif" /> 发送私信</a></li>
+						<li><a href="http://group.bokee.com/group/my.action?userId=133729&blogId={BLOGID}.bokee.com" target="_blank"><img src="../images/group.gif" /> 我的群组</a></li>
+						<li><a href="javascript:void(0)" onClick='jionChatRoomMyPhoto()'><img src="../images/chat.gif" /> 去聊天室</a></li>
+						<li><a href="comment.php?id={ID}"><img src="../images/note.gif" /> 给我留言</a></li>
+						<li><img src="../images/friend.gif" /> 留言数：{COMM_COUNT}</li>
+						<li><a href="javascript:void(0)" onclick="window.open('poll.php?id={ID}');"><img src="../images/flower.gif" width="18" height="18"/> 给我献花</a></li>
+						<li><img src="../images/friend.gif" /> 鲜花数：{VOTE}</li>
+					</ul>
+				</div>
+				<div class="rzliao" style="display:{DISPLAY}">
+					<h4 class="rztit">修改个人资料请登录</h4>
+					<div class="rztext">
+						<form id="loginForm" name="loginForm" method="post" action="http://reg.bokee.com/account/LoginCtrl.b">
+						<span style="width:120px">博客用户名：</span><input name="username" type="text"  class="dengshu" style="width:140px" /><br />
+						<span style="width:120px">博客密码：&emsp;</span><input name="password" type="password" class="dengshu" style="width:140px"/><br />
+						<input name="url" id="url" type="hidden" value="http://mm.bokee.com/friend/mm_friend/redirect_to_me.php" />
+						<input type="submit" value="登录" class="soubtn2"/><input type="button" onclick="window.open('http://reg.bokee.com/account/Register.b')" value="注册博客" class="soubtn2"/><input type="button" onclick="window.open('../signup.html')" value="我要报名" class="soubtn2"/>
+						</form>
+					</div>
+				</div>
+				<div class="rzliao">
+					<h4 class="rztit">交友博客推荐美女</h4>
+					<div class="mtop">
+						<div class="quntu" style="margin-left:4px">
+							<a href="info.php?id={ID1}" target="_blank"><img src="{PHOTO1}" alt="{BLOGNAME1}"/></a>
+						</div>
+						<div class="mmtext" style="margin-left:4px">
+							<ul>
+								<li>编号：<span><a href="info.php?id={ID1}" target="_blank">{ID1}</a></span> 博客：<span><a href="{BLOGURL1}" target="_blank" title="{BLOGNAME10}">{BLOGNAME1}</a></span></li>
+								<li><a href="javascript:void(0)" onclick="window.open('poll.php?id={ID1}');" target="_self" style="font-weight:normal"><img src="../images/flower.gif" style="width:18px;height:18px;">献花</a> 鲜花数：{VOTE1}朵</li>
+								<li><a href="comment.php?id={ID1}" target="_blank" style="font-weight:normal"><img src="../images/note.gif" style="width:18px;height:18px;">留言</a> 留言数：{COMM_COUNT1}条</li>
+								<li style="font-size:13px;"><a href="javascript:void(0)" onclick="popPostMsg('{BLOGID1}');" target="_self">发私信</a> <a href="{BLOGURL1}/photo/showPhoto2.b" target="_blank" style="font-weight:normal">我的相册</a> <a href="http://v2.bokee.com/videoindex.aspx?blogId={BLOGID1}.bokee.com" target="_blank" style="font-weight:normal">我的视频</a></li>
+								<li><span>{INFO1}</span> <a href="info.php?id={ID1}" target="_blank">进入个人介绍</a></li>
+							</ul>
+						</div>
+						<div class="clear"></div>
+					</div>
+				</div>
+				<div class="rzliao">
+					<h4 class="rztit">交友博客推荐帅哥</h4>
+					<div class="mtop">
+						<div class="quntu" style="margin-left:4px">
+							<a href="info.php?id={ID2}" target="_blank"><img src="{PHOTO2}" alt="{BLOGNAME2}"/></a>
+						</div>
+						<div class="mmtext" style="margin-left:4px">
+							<ul>
+								<li>编号：<span><a href="info.php?id={ID2}" target="_blank">{ID2}</a></span> 博客：<span><a href="{BLOGURL2}" target="_blank" title="{BLOGNAME20}">{BLOGNAME2}</a></span></li>
+								<li><a href="javascript:void(0)" onclick="window.open('poll.php?id={ID2}');" target="_self" style="font-weight:normal"><img src="../images/flower.gif" style="width:18px;height:18px;">献花</a> 鲜花数：{VOTE2}朵</li>
+								<li><a href="comment.php?id={ID2}" target="_blank" style="font-weight:normal"><img src="../images/note.gif" style="width:18px;height:18px;">留言</a> 留言数：{COMM_COUNT2}条</li>
+								<li style="font-size:13px;"><a href="javascript:void(0)" onclick="popPostMsg('{BLOGID2}');" target="_self">发私信</a> <a href="{BLOGURL2}/photo/showPhoto2.b" target="_blank" style="font-weight:normal">我的相册</a> <a href="http://v2.bokee.com/videoindex.aspx?blogId={BLOGID2}.bokee.com" target="_blank" style="font-weight:normal">我的视频</a></li>
+								<li><span>{INFO2}</span> <a href="info.php?id={ID2}" target="_blank">进入个人介绍</a></li>
+							</ul>
+						</div>
+						<div class="clear"></div>
+					</div>
+				</div>
+				<!-- 访客 -->
+				<div class="rzliao">
+					<h4 class="rztit">最近访客</h4>
+					<div class="rztext">
+						<ul>
+							<!-- BEGIN visitor -->
+							<li><a href="http://{visitor.blogID}.bokee.com/" target="_blank"><img src="http://{visitor.blogID}.bokee.com/inc/logo_s.png"><br />{visitor.blogID}</a></li>
+							<!-- END visitor -->
+						</ul>
+						<div class="clear"></div>
+					</div>
+				</div>
+			</div>
+			<!-- 第一屏中侧 -->	
+			<div class="ziright">
+				<!-- 第一屏中侧标签选择 -->	
+				<div class="zirightit">
+					<ul>
+						<li class="zirli01"></li>
+						<li class="{INFO_CLASS}"><a href="info.php?id={ID}">详细资料</a></li>
+						<li class="{REQUEST_CLASS}"><a href="request.php?id={ID}">择友标准</a></li>
+						<li class="{COMMENT_CLASS}"><a href="comment.php?id={ID}">留言</a></li>
+						<div class="clear"></div>
+					</ul>
+				</div>
+				<!-- 博客个人推荐 -->	
+				<!--
+				<div class="blogtui">
+					<h4 class="zibiao">博客个人推荐</h4>
+					<div class="btuicon">
+						<h4 class="btuitit">美女</h4>
+						<div class="mtop">
+							<div class="quntu">
+								<a href="info.php?id={ID1}" target="_blank"><img src="{PHOTO1}" alt="{BLOGNAME1}"/></a>
+							</div>
+							<div class="mmtext">
+								<ul>
+									<li>编号：<span><a href="info.php?id={ID1}" target="_blank">{ID1}</a></span> 博客：<span><a href="{BLOGURL1}" target="_blank" title="{BLOGNAME10}">{BLOGNAME1}</a></span></li>
+									<li><a href="javascript:void(0)" onclick="window.open('poll.php?id={ID1}');" target="_self" style="font-weight:normal"><img src="../images/flower.gif" width="18">献花</a> 鲜花数：{VOTE1}朵</li>
+									<li><a href="comment.php?id={ID1}" target="_blank" style="font-weight:normal"><img src="../images/note.gif">留言</a> 留言数：{COMM_COUNT1}条</li>
+									<li style="font-size:13px;"><a href="javascript:void(0)" onclick="popPostMsg('{BLOGID1}');" target="_self">发私信</a> <a href="{BLOGURL1}/photo/showPhoto2.b" target="_blank" style="font-weight:normal">我的相册</a> <a href="http://v2.bokee.com/videoindex.aspx?blogId={BLOGID1}.bokee.com" target="_blank" style="font-weight:normal">我的视频</a></li>
+									<li><span>{INFO1}</span> <a href="info.php?id={ID1}" target="_blank">进入个人介绍</a></li>
+								</ul>
+							</div>
+							<div class="clear"></div>
+						</div>	
+					</div>
+					<div class="btuicon mltb">
+						<h4 class="btuitit">帅哥</h4>
+						<div class="mtop">
+							<div class="quntu">
+								<a href="info.php?id={ID2}" target="_blank"><img src="{PHOTO2}" alt="{BLOGNAME2}"/></a>
+							</div>
+							<div class="mmtext">
+								<ul>
+									<li>编号：<span><a href="info.php?id={ID2}" target="_blank">{ID2}</a></span> 博客：<span><a href="{BLOGURL2}" target="_blank" title="{BLOGNAME20}">{BLOGNAME2}</a></span></li>
+									<li><a href="javascript:void(0)" onclick="window.open('poll.php?id={ID2}');" target="_self" style="font-weight:normal"><img src="../images/flower.gif" width="18">献花</a> 鲜花数：{VOTE2}朵</li>
+									<li><a href="comment.php?id={ID2}" target="_blank" style="font-weight:normal"><img src="../images/note.gif">留言</a> 留言数：{COMM_COUNT2}条</li>
+									<li style="font-size:13px;"><a href="javascript:void(0)" onclick="popPostMsg('{BLOGID2}');" target="_self">发私信</a> <a href="{BLOGURL2}/photo/showPhoto2.b" target="_blank" style="font-weight:normal">我的相册</a> <a href="http://v2.bokee.com/videoindex.aspx?blogId={BLOGID2}.bokee.com" target="_blank" style="font-weight:normal">我的视频</a></li>
+									<li><span>{INFO2}</span> <a href="info.php?id={ID2}" target="_blank">进入个人介绍</a></li>
+								</ul>
+							</div>
+							<div class="clear"></div>
+						</div>	
+					</div>
+					<div class="clear"></div>
+				</div>
+				-->
