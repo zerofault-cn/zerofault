@@ -122,7 +122,7 @@ if($mode=='export')
 $sql4="select id,author_id,title,url,addtime from article where channel_id1=".$id." or channel_id2=".$id." or channel_id3=".$id." order by addtime desc";
 $result4=$db->sql_query($sql4);
 $total=$db->sql_numrows($result4);
-pageft($total,$pageitem,"?id=".$id);
+pageft($total,$pageitem,"?mode=".$mode."&id=".$id);
 //assign_block_vars_by_sql("newArticle",$sql4." limit ".$offset.",".$pageitem);
 $result4=$db->sql_query($sql4." limit ".$offset.",".$pageitem);
 while($row=$db->sql_fetchrow($result4))
