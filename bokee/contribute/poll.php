@@ -13,7 +13,7 @@ include_once($root_path."includes/db.php");
 $id=$_REQUEST['id'];
 $author_id=$_REQUEST['author_id'];
 
-$ip_limit=1;
+$ip_limit=3;
 $client_ip=GetIP();
 $today_start=mktime(0,0,0,date("m"),date("d"),date("Y"));//今天开始时间戳记
 $today_end=$today_start+86400;
