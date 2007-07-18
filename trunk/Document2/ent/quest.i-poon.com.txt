@@ -1,0 +1,74 @@
+地址在quest.i-poon.com，类似闯关的模式，也可以选择关卡，选择第n关时需要提供n-1关的答案作为密码。据作者自己说本来是做给小圈子里的朋友玩的，所以有的题目好像很难揣摩作者的思路。不过如果有这样一个朋友确实是件很幸运的事啊。
+    Level 1，提问：1+1=？无语。
+    Level 2，提示“Password is hidden somewhere...”，还有一行反白提示“I told you it's "hidden somewhere..."”直接复制就可以了。
+    Level 3，“Password is under water”，反白提示“Just ask your keyboard”，求诸键盘，不难猜到是“water”五个字母下面的“szgdf”。
+    Level 4，图片上是三顶帽子、一把锁和一只鸟，反白提示“caps, lock, bird”，先大写锁定，再输入bird，答案为BIRD。
+    Level 5，给了一个链接：
+http://www.wikimapia.org/#y=13768877&x=100547948&z=16&l=0&m=a&v=2，
+提示“Looking for The hidden big eye. The password was kept in the center.”，打开连接后是一幅地图，其实是Google Maps的API，左下角有个纪念碑，俯视图酷似眼睛，hidden big eye指的就是它了，图上有标记“Victory Monument”。我们一致认为这是wikimapia的广告。。。
+    Level 6，“Password is not numbers.The password is 7415963  9874512374123 74123 98741236”，反白提示“It's hard to get password if you're using notebook.”，显然是指小键盘了。不过我一开始把7415963和98741236分别当成N和G了，以为答案是“NELLG”，后来发现N得走向不对，想到应该是H，那么尾字母自然是O了，答案“HELLO”。
+    Level 7，给了一副黑图片，提示“Correct the mistake in darkness ”，反白提示“ They need more contrast, not brightness.”，要调对比度。这道题大家各显其能了，有直接调显示器的，有用Matlab的，我用的是一个软件里类似魔棒的工具，总之看出来里面写着“whisdom”，改错后就是“wisdom”了。该图背景色(0,0,0)，前景色(1,1,1)，对比度确实够低。
+    Level 8，黑底白字一堆x、v、i。提示Now you face the mirror in the darkness.反白提示Use your wisdom!!。左右翻转，再调对比度，发现有键盘的轮，廓线，而几个键帽的位置上写的都是罗马数字，其中c的位置有两个数字i和vii，在shift上还有一个i，这个地方稍微有些费解，正解是第一个字母要同时按shift和c，就是C，而第七个字母是c。将其他字母填入，答案为Complicate，复杂化。
+    Level 9，提示“Numbers of emergency call.”，反白提示“Do not push repeatly.”把911、110、91、10试了一通都不对，后来才知道应该是“emergency”的手机键盘对应数字，所谓不要重复按大概是指e对应3而不是33。答案为363743629。
+    Level 10，提示“Look in the space.Tell me his last name.”反白提示“Sorry, I'm always miss spelling.”好吧，这个我真的败了，即使我知道space指的是space war，又怎么知道Look是Luke的误拼。此君姓Skywalker。
+    Level 11，It comes before this level.反白They're everywhere!!答案是7，指的是7-11便利店-_-b。
+    Level 12， Harry, Isaac, Jenifer, Kenedy, Leonado, Michael, Nicole, Osama I need their heads.Gather them and put the caps on.反白Did you know chemistry? 接连打击之下几乎要放弃了，这道题思路跳跃实在是大，HIJKLMNP -> H to O -> H2O -> WATER。
+    Level 13，#6anana What color? 反白Don't think too much.试探着填yellow，居然对了。#6和b什么关系？难道是象形？
+    Levle 14，F3:F7 G7 I3:I7 J3 J7 K3:K7 M3:M6 N7 O3:O6 Q3:Q7 R3:S3 R5 R7:S7，Not everyone will found it.Depend on which cell you use.反白提示“X”。cell，单元格，在excel里把相应的单元格染上颜色，令人激动的显示出了“LOVE”。不过X是怎么回事。。。（which cell?X cell,即excel谐音——转注）
+    Level 15，显示了复杂的花纹，提示There're too much. I need just one.放大后提出一列细看，原来是IXOHOXI堆叠成的图样。
+    Level 16，提示“If you don't give up. I won't tell you.”，一点击按钮就跳出一个对话框显示“YOU LOOSE”，就是答案。真是恶趣味。
+    Level 17，Password of level -1 is "zero"，第-1关的密码自然是第0关的入口，在首页选第0关，输入zero，得到“Password of level 17 is "unpredictable"”。
+    Level 18，有一幅图片，鼠标放上去就变另一幅，两幅的字母合起来拼成“SPACETIME”。
+    Level 19，问wikimapia的where the center of the world is，反白提示Type it directly。这道题真让人抓狂了，难道是在世界中心呼唤爱？发指的答案是“+”，因为wikimapia的地图中心标志是加号，强调Type directly大概怕有人输入plus。
+    Level 20，Put the cap on.Grab your key board.Now, kill until cat die.反白提示Does cat has 1 life?杀猫九次，输入“KKKKKKKKK”，错误。正确答案是“QQQQQQQQQ”，因为Q与kill谐音orz。  
+    Level 21，6.2831853下面是一张黑图片，Please remove only what you see. May the wisdom and mathematics be with you.在输入框里预填入了“ZyXwVuTsRqPoNmLkJiHgFeDcBa”。wisdom似乎已经成了调对比度的代名词了，调出来是分数线和2，2分之6.2831853，指的自然是圆周率。然后从输入框里拿掉P和i，就是答案。这个题拐的弯挺大。
+    Level 22，上面一串26个血瓶，滴出若干滴血。提示 Everyone have blood.And blood has password.反白Read blood drips.要根据血滴的及地顺序反推血瓶字母，答案是SELFISHNESS。
+    Level 23， 3 21 2333 222 355 3 212333 22321 Whose is that lamb?这串数字是《Mary had a little lamb》的乐谱。。。想起来新概念英语了。。。
+    Level 24， Password is in here.点开是空网页，所以密码就是空。。。（空网页的题名是untitiled,转到preload里输入untitiled竟然有反应，又要输入level -1的密码，不过这时输zero又不管用了，不知道怎么回事，还是空页面，所以还是什么都不输——转注）
+    Level 25，我这里打不开，据说答案是Bermuda，索性直接进26关。（triange是指三角洲，所以是百慕大——转注）
+    Level 26，给了一个网址http://www.winwriters.com/vxml.htm，点开之后赫然发现“Just say "Help"”，密码就是Help。
+    Level 27，Put the right time in the right place.Don't miss any second.反白提示When it's right, you make a Checkmark, right?要把表针摆成对号，相应的时间是10:10:10，是为答案。（好bt!）
+    Level 28，You must escape to underwater. Go deepest and you will found it.我刚知道Esc是escape的缩写，由Esc键一路到底，是Ctrl键。要是笔记本就郁闷了。
+    Level 29，目前的最后一题，给了一幅三原色的图，指着中间说“I need this result”。三原色的中间，也就是red、green和blue的公共部分，也就是e。再吼一声，实在是太bt了！
+
+答案：
+1 2
+2 hidden somewhere...
+3 szgdf
+4 BIRD
+5 Victory Monument
+6 HELLO
+7 wisdom
+8 Complicate
+9 363743629
+10 Skywalker
+11 7
+12 WATER
+13 yellow
+14 LOVE
+15 IXOHOXI
+16 YOU LOOSE
+17 unpredictable
+18 SPACETIME
+19 +
+20 QQQQQQQQQ
+21 删除Pi
+22 SELFISHNESS
+23 Mary
+24 直接点next
+25 Bermuda
+26 Help
+27 10:10:10
+28 Ctrl
+29 e
+30 hip
+31 born to be wild
+32 inspiration
+33 APPLE
+34 apple juice
+35 TSHIRT
+36 0
+37 IDEJEHT
+38 missile
+39 dynamic
+40 Mona Lisa
