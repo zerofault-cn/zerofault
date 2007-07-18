@@ -1,0 +1,87 @@
+<script>
+{script_str}
+</script>
+<div style="font-size:24px">用户ID:{ID}&nbsp;&nbsp;&nbsp;&nbsp;<span style="font-size:16px;">报名时间:{ADDTIME}</span></div>
+<TABLE width="100%" border="0" align="center" cellPadding=1 cellSpacing=0>
+<form name="form1" action="user_edit.php" method="post" enctype="multipart/form-data" {BTNFN} >
+<tr>
+	<td align="right">博客名称:</td>
+	<td><input name="blogname" type="text" value="{BLOGNAME}" size="40" maxlength="100"></td>
+</tr>
+<tr>
+	<td align="right">博客地址:</td>
+	<td><input name="blogurl" type="text" value="{BLOGURL}" size="40" maxlength="100"></td>
+</tr>
+<tr>
+	<td align="right">真实姓名:</td>
+	<td><input name="realname" type="text" value="{REALNAME}" size="40" maxlength="100"></td>
+</tr>
+<tr>
+	<td align="right">年龄：</td>
+	<td><input name="age" type="text" value="{AGE}" />
+</tr>
+<tr>
+	<td align="right">身高：</td>
+	<td><input name="height" type="text" value="{HEIGHT}" />
+</tr>
+<tr>
+	<td align="right">体重：</td>
+	<td><input name="weight" type="text" value="{WEIGHT}" />
+</tr>
+<tr>
+	<td align="right">报名区域:</td>
+	<td><select name="area">{AREAOPTION}</select></td>
+</tr>
+<tr>
+	<td align="right">所在医院:</td>
+	<td><input name="hospital" type="text" value="{HOSPITAL}" size="40" maxlength="100"></td>
+</tr>
+<tr>
+	<td align="right">证件号码:</td>
+	<td><input name="certinum" type="text" value="{IDCARD}" size="40" maxlength="100"></td>
+</tr>
+<tr>
+	<td align="right">联系地址:</td>
+	<td><input name="address" type="text" value="{ADDRESS}" size="40" maxlength="100"></td>
+</tr>
+<tr>
+	<td align="right">邮编:</td>
+	<td><input name="postcode" type="text" value="{POSTCODE}" size="40" maxlength="100"></td>
+</tr>
+<tr>
+	<td align="right">联系电话:</td>
+	<td><input name="phone" type="text" value="{PHONE}" size="40" maxlength="100"></td>
+</tr>
+<tr>
+	<td align="right">E_mail:</td>
+	<td><input name="email" type="text" value="{EMAIL}" size="40" maxlength="100"></td>
+</tr>
+<tr>
+	<td align="right">其他联系方式:</td>
+	<td><input name="other" type="text" value="{OTHER}" size="40" maxlength="100"></td>
+</tr>
+</tr>
+<tr>
+	<td align="right">个人特长：</td>
+	<td><input name="intro" type="text" value="{INTRO}" />
+</tr>
+<tr>
+	<td align="right">重新上传图片:</td>
+	<td><input type="file" name="photo" size="30">
+	</td>
+</tr>
+<tr>
+	<td colspan=2 align="center">
+	<input type="hidden" name="id" value="{ID}" />
+	<input type="hidden" name="oldarea" value="{AREA}" />
+	<input type="hidden" name="oldphoto" value="{PHOTO}">
+	<input name="submit" type="submit" value="提 交" {BTNFN} />
+	<input name="cancel" type="button" value="取 消" onclick="javascript:window.close()">
+</td>
+</tr>
+<tr>
+	<td>原照片:</td>
+	<td><img border="0" src="../photo/{AREA}/{PHOTO}"></td>
+</tr>
+</tbody>
+</table>
