@@ -1,0 +1,50 @@
+
+值得高兴的事情i-poon finished
+最近值得高兴的事情有两件，第一是张雷来了兰州，陪我大概可以有一个多星期的时间，数据工作还在忙，不过有他在身边就不那么孤单。
+第二件是i-poon在昨天的通宵冲刺后终于finish了level 40，目前所有available的题目，本来想post这40个level的hints，但是突然发现google上已经有了，看来聪明的还是很多的，毕竟level 30-level 40是i-poon六月初才发布的。今天给老姚做i-poon，那家伙20分钟冲到level16，很西欧化的方式加上他天生的智慧，果然让他对此类的logic hints题目敏感之至，不过成天喊着眼睛疼，带着脏字和我说话，绝对是不值得赞同的地方。给i-poon的blog留了言，期待着下期的新题目出炉。
+?
+现在和Alex在冲godtower，就是i-poon的inspiration之源了，也是泰国那边的此类题目，目前是99 levels available，要做一阵子，Alex说不急，恩，不急，慢慢享受conque的过程，加油了。
+?
+猪，你别问我i-poon了，Hints我给你写在这里好了：
+i-poon链接：http://www.quest.i-poon.com
+level 1：小朋友都知道
+level 2：tips里面说的很清楚么，不要漏掉省略号:)
+level 3：tips说要ask keyboard，所以看看w-a-t-e-r下面是什么键
+level 4：还是要ask keyboard，看看caps lock是哪个键
+level 5：长得像眼睛的建筑，很好认出来的
+level 6：普通的keyboard和本本的keyboard不一样在什么地方？对了，小键盘嘛~把题目的数字连起来看看，是不是看到什么
+level 7：把图片down下来，把contrast调整到一个合适的数值，好了，correct它吧
+level 8：tips说用wisdom的方法哦，就是level 7的方法，然后，请用镜面原理猜出这个单词
+level 9：把emergency当成call，然后不要repeat输入，好了，你拿到的password是串数字
+level 10：发现tips的语法问题没？怎么有两个动词？对了，原来miss在这里指的是个MM哦，那么Look就是Luke咯
+level 11：中国人做这道题蛮困难的，没有文化背景，所以要感谢我在Vancouver晚上逛超市的经历还有凤凰咨讯的提示，和11组成在一起的变成超市的数字就是答案
+level 12：很有意思的题，H-O=H to O=？记得大写
+level 13：别以为这是颜色的代号，想简单一点，6是不是很像一个字母
+level 14：数据工作的我没有看tips就直接知道方法，why？因为我整理数据使用的工具，好吧，看看X-cell是什么工具
+level 15：好长一串，但我只要一部分，恩，截个图，把它竖起来，U got it
+level 16：大胆的乱猜疑下，弹出来的那个对话框就是答案
+level 17：level -1的答案？记得你是怎么load题目的不？回到首页研究一下就对了（那个here是关键哦）
+level 18：如果你迅速在sun和moon之间转换，越来越快，看到了么？对，password出来了
+level 19：中心都是你说的算的，关键是你的标志，directly的意思是“直接”，不是谁都明白这个含义的，keyboard上能找到
+level 20：kill的谐音是？对，猫有几条命？对
+level 21：又用了wisdom的方法哦，那张图片和所给的数字组成我们熟悉的东西，然后remove你看到的，过关
+level 22：血袋有26个，表示26个字母，血滴是顺序，组成了单词，要大写
+level 23：请你唱出来，你就知道Whose is that lamb? 
+level 24：点开here，什么都没有，所以password也是
+level 25：居然没有看图就猜到了，google下triangle，最多的那个就是password，地名哦
+level 26：Allen wants好显眼，这道题只要E文有初中水准就OK
+level 27：checkmark是勾勾，勾勾就是全对，全对就是满分，把满分填在时：分：秒的地方，注意不是中国的100哦，yogi做了很久
+level 28：escape是Esc，Alex告诉我的，然后用unserwater那题的方法，在deepest的地方找到答案，要用普通keyboard而不是本本的
+level 29：别看tips，否则你要和yogi一样把它想复杂了，三原色的共同之处，张雷贡献的答案
+level 30：level 11告诉我们从level 7开始，你cut掉了什么？全部加起来
+level 31：born-bee-wild，组成一句话，简单极了
+level 32：去掉一个重复的字符串，得到tips里面描述的单词
+level 33：给了gravity，球球就掉下来，摞在一起，看到啦~谢谢Alex
+level 34：让人很生气的题目，首先要double click，其次press hard然后装在glass里面的不一定是jam
+level 35：3=tree，3件shirt就是...
+level 36：你以为你花得出去？
+level 37：RETURN，反过来，当然，要连着THE，yogi最大的失误在这里
+level 38：少了eil，miss又不少，组合在一起就是password
+level 39：方程谁都会，算出字母的值，放在相应的位置，最后一个不是整数
+level 40：不用看tips，直接copy到文本里面，哇，过关
+ 
