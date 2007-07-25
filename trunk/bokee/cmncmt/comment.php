@@ -49,6 +49,7 @@ include_once($root_path."functions.php");
 include_once($root_path."includes/db.php");
 include_once($root_path."includes/page0.php");
 $sid=$_REQUEST['sid'];
+
 if(''==$sid)
 {
 	$sid='1';
@@ -71,11 +72,22 @@ if($_REQUEST['submit'])
 	$sql="insert into comment set sid='".$sid."',username='".$username."',content='".format($content)."',addtime=UNIX_TIMESTAMP(),ip='".$ip."'";
 	if($db->sql_query($sql))
 	{
+		echo '<script>alert("您的评论发表成功");</script>';
 	}
 	else
 	{
 		echo $sql;
 	}
+}
+if($_REQUEST['action']=='getcount')
+{
+	$sql="select count(id) as count from comment where sid='".$sid."'";
+	$result=$db->sql_query($sql);
+	$row=$db->sql_fetchrow($result);
+	echo '<span id="commentCount" style="font-size:11pt;font-weight:bold;color:#990000">';
+	echo $row['count'];
+	echo '</span>';
+	exit;
 }
 if($_REQUEST['more']!='y')
 {
@@ -98,7 +110,7 @@ if($_REQUEST['more']!='y')
 		$addtime=date("Y-m-d H:i",$row['addtime']);
 		$ip=$row['ip'];
 		$ip1=substr($ip,0,strrpos($ip,'.')).'.*';
-		echo '<li>'.$content.'<br /><span style="float:right;color:#585858;line-height:20px;background-color:#ddd">'.$username.' 发表于 '.$addtime.' 来自 '.$ip1.'</span></li>';
+		echo '<li>'.$content.'<br /><span style="float:right;padding-left:5px;border-left:3px solid #CC0000;color:#585858;line-height:20px;background-color:#ddd">'.$username.' 发表于 '.$addtime.' 来自 '.$ip1.'</span></li>';
 	}
 	echo '</ul></div>';
 }
@@ -107,7 +119,7 @@ else
 	$sql="select * from comment where sid='".$sid."' order by id desc ";
 	$result=$db->sql_query($sql);
 	$total=$db->sql_numrows($result);
-	pageft($total,$pageitem,"?sid=".$sid."&more=1");
+	pageft($total,$pageitem,"?sid=".$sid."&more=y");
 	$result=$db->sql_query($sql." limit ".$offset.",".$pageitem);
 	$i=0;
 	while($row=$db->sql_fetchrow($result))
@@ -125,7 +137,7 @@ else
 		$ip=$row['ip'];
 		$ip1=substr($ip,0,strrpos($ip,'.')).'.*';
 		$addtime=date("Y-m-d H:i",$row['addtime']);
-		echo '<li>'.$content.'<br /><span style="float:right;color:#585858;line-height:20px;background-color:#ddd">'.$username.' 发表于 '.$addtime.' 来自 '.$ip1.'</span></li>';
+		echo '<li>'.$content.'<br /><span style="float:right;padding-left:5px;border-left:3px solid #CC0000;color:#585858;line-height:20px;background-color:#ddd">'.$username.' 发表于 '.$addtime.' 来自 '.$ip1.'</span></li>';
 		if($i%($pageitem/2)==($pageitem/2-1))
 		{
 			?>
