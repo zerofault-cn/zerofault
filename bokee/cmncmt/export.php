@@ -74,6 +74,10 @@ elseif(''!=$_REQUEST['sid'])
 			echo '<div style="background-color:#e3e3e3;border:1px solid #ddd">'.$addtime.'&nbsp;&nbsp;'.$username.' IP:'.$ip1.'</div>';
 			echo '<div style="border:1px solid #ddd;border-top:0;">'.$content.'</div>';
 		}
+		elseif($sid=='nurse')
+		{
+			echo '<li>留言人：'.$username.' 时间：'.$addtime.'<br /><strong>'.$content.'</strong>';
+		}
 		else//if(substr($sid,0,4)=='mmzk')//mm周刊
 		{
 			echo '<div class="label" style="padding-top:3px;border-left:3px solid #CC0000;background-color:#BEBEBE">留言人：'.$username.' 留言时间：'.$addtime.'</div>';
