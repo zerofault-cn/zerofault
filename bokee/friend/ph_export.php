@@ -65,7 +65,7 @@ else
 		}
 		elseif($limit==7)//mm ◊“≥7’≈’’∆¨
 		{
-			echo '<div class="cont"><a href="friend/mm_friend/info.php?id='.$id.'" target="_blank"><img src="friend/mm_friend/photo/'.$photo.'" alt="'.$blogname0.'" width="94" height="118"/></a><br /><a href="friend/mm_friend/info.php?id='.$id.'" target="_blank" title="'.$blogname0.'">'.$blogname2.'</a><br/>'.$info.'</div>';
+			echo '<div class="cont"><a href="friend/mm_friend/info.php?id='.$id.'" target="_blank"><img src="friend/mm_friend/photo/'.$photo.'" alt="'.$blogname0.'" width="94" height="118"/></a><br /><a href="friend/mm_friend/info.php?id='.$id.'" target="_blank" title="'.$blogname0.'">'.$blogname2.'</a><br />'.$info.'</div>';
 		}
 	}
 }

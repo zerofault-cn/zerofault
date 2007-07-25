@@ -41,48 +41,21 @@ if($count>=$ip_limit || $_COOKIE['ipcount']>=$ip_limit)//每天限制投票
 	echo '<a href="#" onclick="javascript:window.close()">关闭窗口</a>';
 	exit;
 }
-if(true || ''!=$_REQUEST['submit'])
+$sql1="insert into ip_info set ip='".$client_ip."',user_id=".$id.",polltime=UNIX_TIMESTAMP()";
+$sql2="update user_info set vote=(vote+1),monthvote=(monthvote+1),weekvote=(weekvote+1) where id=".$id;
+if($db->sql_query($sql1) && $db->sql_query($sql2))
 {
-	if(true || $_REQUEST['vali_code']==substr(md5($_REQUEST['vali_key']),20,6))
-	{
-		$sql="update user_info set vote=(vote+1),monthvote=(monthvote+1) where id=".$id;
-		$sql2="insert into ip_info set ip='".$client_ip."',user_id=".$id.",polltime=UNIX_TIMESTAMP()";
-		if($db->sql_query($sql) && $db->sql_query($sql2))
-		{
-			setcookie("ipcount",$count+1,$today_end);//将投票次数存入cookie，期限为今天一天
-			echo '<script>alert("献花成功，感谢您的支持！");window.opener=null;window.close();</script>';
-			exit;
-			echo '<div style="font-size:16px;text-align:center">';
-			echo '献花成功，感谢您的支持！<br />';
-			echo '<a href="#" onclick="javascript:window.close()">关闭窗口</a>';
-			echo '</div>';
-		}
-		else
-		{
-			echo '出错了:'.$sql;
-			echo '<br>'.$sql2;
-		}
-	}
-	else
-	{
-		echo '验证码不一致!<br />';
-		echo '<a href="?id='.$id.'">返回重试</a>';
-	}
+	setcookie("ipcount",$count+1,$today_end);//将投票次数存入cookie，期限为今天一天
+	echo '<script>alert("献花成功，感谢您的支持！");window.opener=null;window.close();</script>';
+	exit;
+	echo '<div style="font-size:16px;text-align:center">';
+	echo '献花成功，感谢您的支持！<br />';
+	echo '<a href="#" onclick="javascript:window.close()">关闭窗口</a>';
+	echo '</div>';
 }
 else
 {
-	$vali_key=rand();
-	$_SESSION['validate_code'] = substr(md5($vali_key),20,6);
-	echo '<div style="font-size:16px;text-align:center">';
-	echo '<form name="form1" action="" method="post">';
-	echo '感谢您对本次活动的关注和支持！<br />';
-	echo '网络投票每天同一个IP限投'.$ip_limit.'票！<br />';
-	echo '请输入图像中的验证码：<input type="text" name="vali_code" size="6" /><br />';
-	echo '<img src="codeimg.php" />&nbsp;&nbsp;<a href="#" onclick="javascript:window.location.reload();">看不清？换一个</a><br /><br />';
-	echo '<input type="hidden" name="vali_key" value="'.$vali_key.'" />';
-	echo '<input type="hidden" name="id" value="'.$id.'" />';
-	echo '<input type="submit" name="submit" value="提交">';
-	echo '</form>';
-	echo '</div>';
+	echo '出错了:'.$sql;
+	echo '<br>'.$sql2;
 }
 ?>

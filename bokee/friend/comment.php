@@ -61,10 +61,10 @@ if(''!=$_POST['submit'])
 	}
 	include_once ("./filter.php");//引用屏蔽字符数组$filter_arr
 	$strlen=strlen($content);
-	//strlen(str_replace("http://","",$content))<$strlen || 
-	if(strlen(eregi_replace("^[0-9]+[a-z]+$","",$content))<$strlen || strlen( str_replace($filter_arr,'',$content) ) < $strlen)//如果有字符被屏蔽，则新字符串比原字符串短，以此来判断是否含有脏字
+	if(strlen(str_replace($filter_arr,'',$content))<$strlen)//如果有字符被屏蔽，则新字符串比原字符串短，以此来判断是否含有脏字
 	{
-		header("location:?".$_SERVER["QUERY_STRING"]."&filter");
+	//	header("location:?".$_SERVER["QUERY_STRING"]."&filter");
+		echo '<script>parent.location.reload();</script>';
 		exit;
 	}
 	$sql="insert into comment set username='".$username."',content='".format(trim($content))."',addtime=UNIX_TIMESTAMP(),ip='".$ip."',user_id=".$id;
@@ -76,11 +76,13 @@ if(''!=$_POST['submit'])
 			$db->sql_query($sql2);//更新留言计数
 		}
 		echo '<script>parent.location.reload();</script>';
+		exit;
 	}
 	else
 	{
+		echo '<script>alert("有错误发生!请稍后再试，或者联系客服人员");</script>';
 		echo $sql;
-	//	echo '<script>alert("有错误发生!请稍后再试，或者联系客服人员");parent.location.reload();</script>';
+		exit;
 	}
 }
 /*处理留言介绍*/
@@ -91,7 +93,6 @@ if($id>0)
 	if($db->sql_numrows($db->sql_query($sql))==0)
 	{
 		echo "该用户还未通过审核，请等待通过审核后再留言!";
-
 		exit;
 	}
 	$result=$db->sql_query($sql);

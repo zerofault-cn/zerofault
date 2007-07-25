@@ -4,6 +4,8 @@
 <meta http-equiv="Content-Type" content="text/html; charset=gb2312" />
 <title>交友</title>
 <link href="images/friend.css" rel="stylesheet" type="text/css" />
+<script language="javascript" type="text/javascript" src="mm_fried/location_array.js"></script>
+<script language="javascript" type="text/javascript" src="mm_fried/edit_info.js"></script>
 </head>
 
 <body onload="isLogin()">
@@ -262,7 +264,11 @@
 							<ul>
 							<form name="searchForm" action="mm_friend/user_list.php" method="post" target="_blank">
 							<li><label><input name="sex" type="radio" value="2" /> </label>男生 <label><input name="sex" type="radio" value="1" checked/> </label>女生</li>
-							<li>地区： <input name="location" type="text" class="dengshu" style="width:180px;"/></li>
+							<li>地区： <select name="input_location1" id="input_location1" style="border:1px solid #d9b0da;margin-top:10px;" onchange="change_province(this.options[this.options.selectedIndex].value);setLocation(this.value,0);">
+							<option value="">--省份--</option><option value="北京">北京</option><option value="天津">天津</option><option value="河北">河北</option><option value="山西">山西</option><option value="内蒙古">内蒙古</option><option value="辽宁">辽宁</option><option value="吉林">吉林</option><option value="黑龙江">黑龙江</option><option value="上海">上海</option><option value="江苏">江苏</option><option value="浙江">浙江</option><option value="安徽">安徽</option><option value="福建">福建</option><option value="江西">江西</option><option value="山东">山东</option><option value="河南">河南</option><option value="湖北">湖北</option><option value="湖南">湖南</option><option value="广东">广东</option><option value="广西">广西</option><option value="海南">海南</option><option value="重庆">重庆</option><option value="四川">四川</option><option value="贵州">贵州</option><option value="云南">云南</option><option value="西藏">西藏</option><option value="陕西">陕西</option><option value="甘肃">甘肃</option><option value="青海">青海</option><option value="宁夏">宁夏</option><option value="新疆">新疆</option><option value="台湾">台湾</option><option value="香港">香港</option><option value="澳门">澳门</option><option value="国外">国外</option>
+							</select>
+							<select name="input_location2" id="input_location2" style="border:1px solid #d9b0da;margin-top:10px;" onchange="setLocation(0,this.value);"></select>
+							<input type="hidden" name="input_location" id="input_location" value="-"></li>
 							<li>年龄： <input name="age1" type="text"  class="dengshu" value="18" style="width:74px;"/> 至 <input name="age2" type="text"  class="dengshu" value="28" style="width:74px;"/></li>
 							<li class="mtop"><input name="submit" type="submit" value="立即搜索" class="soubtn" style="margin-left:3em"/></li>
 							<input type="hidden" name="search" value="1" />

@@ -19,9 +19,9 @@ while($row=$db->sql_fetchrow($result))
 //	$id=$_REQUEST['id'];
 //	$sql3="select count(id) as count from ip_info where polltime>".(mktime(0,0,0,date("m"),date("d"),date("Y"))-86400)." and polltime<".mktime(0,0,0,date("m"),date("d"),date("Y"))." where user_id=".$id;
 	
-	$sql4="select count(id) from ip_info where user_id=".$id;
+	$sql4="select count(id) from ip_info where polltime>".mktime(0,0,0,7,23,2007)." and user_id=".$id;
 	$ip_vote=$db->sql_fetchfield(0,0,$db->sql_query($sql4));
-	$sql5="update user_info set vote=".$ip_vote.",monthvote=".$ip_vote." where id=".$id;
+	$sql5="update user_info set weekvote=".$ip_vote." where id=".$id;
 	if($db->sql_query($sql5))
 	{
 		echo 'update '.$id.' ok!<br>';

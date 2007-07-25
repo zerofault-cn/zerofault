@@ -6,7 +6,7 @@
 						<div class="mmtext">
 							<ul>
 								<li>编号：<span><a href="mm_friend/info.php?id={list.ID}" target="_blank">{list.ID}</a></span> 博客：<span><a href="{list.BLOGURL}" target="_blank" title="{list.BLOGNAME0}">{list.BLOGNAME}</a></span></li>
-								<li><a href="javascript:void(0)" onclick="window.open('mm_friend/poll.php?id={list.ID}');" target="_self" style="font-weight:normal"><img src="images/flower.gif" width="18">献花</a> 鲜花数：{list.VOTE}朵</li>
+								<li><a href="javascript:void(0)" onclick="window.open('mm_friend/poll.php?id={list.ID}');" target="_self" style="font-weight:normal"><img src="images/flower.gif" width="18">献花</a> 鲜花数：{list.VOTE}/{list.WEEKVOTE}<span style="font-size:10px;color:#aaa">(本周)</span></li>
 								<li><a href="mm_friend/comment.php?id={list.ID}" target="_blank" style="font-weight:normal"><img src="images/note.gif">留言</a> 留言数：{list.COMM_COUNT}条</li>
 								<li style="font-size:13px;"><a href="javascript:void(0)" onclick="popPostMsg('{list.BLOGID}');" target="_self">发私信</a> <a href="{list.BLOGURL}/photo/showPhoto2.b" target="_blank" style="font-weight:normal">我的相册</a> <a href="http://v2.bokee.com/videoindex.aspx?blogId={list.BLOGID}.bokee.com" target="_blank" style="font-weight:normal">我的视频</a></li>
 								<li><span>{list.INFO}</span> <a href="mm_friend/info.php?id={list.ID}" target="_blank">进入个人介绍</a></li>
