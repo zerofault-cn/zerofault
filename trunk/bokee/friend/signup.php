@@ -65,7 +65,7 @@ if(''!=$_POST['submit'])
 			if($db->sql_query($sql))
 			{
 				$id=$db->sql_nextid();
-				$sql2="insert into user_info_ext set id=".$id.",location='".$input_location."'";
+				$sql2="insert into user_info_ext set id=".$id.",sex=".$sex.",location='".$input_location."'";
 				$db->sql_query($sql2);
 				echo '<script>parent.alert("报名表提交成功!请登录博客通行证后设置您的详细资料！");parent.location.href="info.php?id='.$id.'";</script>';
 				exit;

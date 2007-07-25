@@ -45,8 +45,9 @@ if(''!=$_REQUEST['submit'])
 		$upload_flag=1;
 	}
 	
-	$sql="update user_info set blogname='".$blogname."',blogurl='".$blogurl."',realname='".trim($realname)."',sex=".$sex.",address='".$address."',post='".$post."',phone='".$phone."',email='".$email."',other='".$other."',pass=".$pass.$sqlext." where id=".$id;
-	if($upload_flag && $db->sql_query($sql))
+	$sql1="update user_info set blogname='".$blogname."',blogurl='".$blogurl."',realname='".trim($realname)."',sex=".$sex.",address='".$address."',post='".$post."',phone='".$phone."',email='".$email."',other='".$other."',pass=".$pass.$sqlext." where id=".$id;
+	$sql2="update user_info_ext set sex=".$sex." where id=".$id;
+	if($upload_flag && $db->sql_query($sql1)&& $db->sql_query($sql2))
 	{
 		$tpl->assign_vars(array("script_str" => 'alert("ÐÞ¸Ä³É¹¦!");window.close();opener.location.reload();'));
 	}

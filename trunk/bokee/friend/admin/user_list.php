@@ -104,9 +104,21 @@ else
 	}
 	if($old>0)
 	{
-		$sql_ext.=" and addtime<=".(time()-7*24*3600);
+		$sql_ext.=" and addtime<=".(time()-3*24*3600);
 	}
-	$sql="select * from user_info where pass=".$pass.$sql_ext." order by id desc";
+	elseif($pass==0)
+	{
+		$sql_ext.=" and addtime>".(time()-3*24*3600);
+	}
+	if($pass==2)
+	{
+		$order=" updatetime desc";
+	}
+	else
+	{
+		$order=" id desc";
+	}
+	$sql="select * from user_info where pass=".$pass.$sql_ext." order by ".$order;
 }
 echo $sql;
 echo '<br />';

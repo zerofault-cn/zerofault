@@ -103,6 +103,10 @@ while(list($key,$val)=each($row2))
 	{
 		$row2[$key]=$sex_arr[$row2[$key]];
 	}
+	if($key=='location')
+	{
+		$row2[$key]=str_replace('-','',$row2[$key]);
+	}
 }
 $tpl->assign_vars($row2);
 $year_option_str='<option value="0000">----</option>';

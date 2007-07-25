@@ -6,13 +6,18 @@ include_once($root_path."functions.php");
 include_once($root_path."includes/db.php");
 include_once($root_path."includes/template.php");
 include_once($root_path."includes/page.php");
-
+include_once($root_path."profile.inc.php");
 $type=$_REQUEST['type'];
 $limit=$_REQUEST['limit'];
 $sex=$_REQUEST["sex"];
 $pass=$_REQUEST['pass'];
 $page=$_REQUEST["page"];
 $search=$_REQUEST["search"];
+$age1=$_REQUEST['age1'];
+$age2=$_REQUEST['age2'];
+$location1=conv($_REQUEST['input_location1']);
+$location2=conv($_REQUEST['input_location2']);
+$location2=str_replace('--请选择--','',$location2);
 if(''==$type)
 {
 	$type='new';
@@ -65,27 +70,24 @@ if($pass==2)
 if(1==$search)
 {
 	$tpl->assign_vars(array(
-		"SUBTITLE0"=>'搜索结果',
+		"SUBTITLE0"=>'搜索结果（'.(''==($location1.$location2)?'所有':($location1.$location2)).'地区/'.$age1.'～'.$age2.'岁/'.$sex2_arr[$sex].'）',
 		"SUBTITLE1"=>''
 		));
 }
-if($type=='hot')//每月鲜花排行
+if($type=='hot')//每周鲜花排行
 {
-	$sql="select user_info.id,user_info.blogurl,user_info.blogname,user_info.photo,user_info.vote,user_info.comm_count,user_info_ext.birthday,user_info_ext.location,user_info_ext.intro from user_info,user_info_ext where user_info.pass>=".$pass." and user_info.id=user_info_ext.id and user_info.sex='".$sex."' order by monthvote desc,id desc";
+	$sql="select user_info.id,user_info.blogurl,user_info.blogname,user_info.photo,user_info.vote,user_info.weekvote,user_info.comm_count,user_info_ext.birthday,user_info_ext.location,user_info_ext.intro from user_info,user_info_ext where user_info.pass>=".$pass." and user_info.id=user_info_ext.id and user_info.sex='".$sex."' order by weekvote desc,id desc";
 }
 if($type=='new')
 {
-	$sql="select user_info.id,user_info.blogurl,user_info.blogname,user_info.photo,user_info.vote,user_info.comm_count,user_info_ext.birthday,user_info_ext.location,user_info_ext.intro from user_info,user_info_ext where user_info.pass>=".$pass." and user_info.id=user_info_ext.id and user_info.sex='".$sex."' order by id desc";
+	$sql="select user_info.id,user_info.blogurl,user_info.blogname,user_info.photo,user_info.vote,user_info.weekvote,user_info.comm_count,user_info_ext.birthday,user_info_ext.location,user_info_ext.intro from user_info,user_info_ext where user_info.pass>=".$pass." and user_info.id=user_info_ext.id and user_info.sex='".$sex."' order by id desc";
 }
 if($pass==2)
 {
-	$sql="select user_info.id,user_info.blogurl,user_info.blogname,user_info.photo,user_info.vote,user_info.comm_count,user_info_ext.birthday,user_info_ext.location,user_info_ext.intro from user_info,user_info_ext where user_info.pass>=".$pass." and user_info.id=user_info_ext.id and user_info.sex='".$sex."' order by updatetime desc,id desc";
+	$sql="select user_info.id,user_info.blogurl,user_info.blogname,user_info.photo,user_info.vote,user_info.weekvote,user_info.comm_count,user_info_ext.birthday,user_info_ext.location,user_info_ext.intro from user_info,user_info_ext where user_info.pass>=".$pass." and user_info.id=user_info_ext.id and user_info.sex='".$sex."' order by updatetime desc,id desc";
 }
 if(1==$search)
 {
-	$age1=$_REQUEST['age1'];
-	$age2=$_REQUEST['age2'];
-	$location=conv($_REQUEST['location']);
 	if($age1=='')
 	{
 		$age1=18;
@@ -94,12 +96,19 @@ if(1==$search)
 	{
 		$age2=25;
 	}
-	$sql_ext=" and YEAR(NOW())-YEAR(user_info_ext.birthday)>".$age1." and YEAR(user_info_ext.birthday)-YEAR(NOW())<".$age2;
-	if($location!='')
+	$sql_ext=" and YEAR(NOW())-YEAR(user_info_ext.birthday)>=".$age1." and YEAR(NOW())-YEAR(user_info_ext.birthday)<=".$age2;
+	if($location1!='')
 	{
-		$sql_ext.=" and user_info_ext.location like '%".$location."%'";
+		if($location2!='')
+		{
+			$sql_ext.=" and user_info_ext.location ='".$location1."-".$location2."'";
+		}
+		else
+		{
+			$sql_ext.=" and user_info_ext.location like '".$location1."%'";
+		}
 	}
-	$sql="select user_info.id,user_info.blogurl,user_info.blogname,user_info.photo,user_info.vote,user_info.comm_count,user_info_ext.birthday,user_info_ext.location,user_info_ext.intro from user_info,user_info_ext where user_info.pass>=".$pass." and user_info.id=user_info_ext.id and user_info.sex='".$sex."'".$sql_ext." order by monthvote desc,id desc";
+	$sql="select user_info.id,user_info.blogurl,user_info.blogname,user_info.photo,user_info.vote,user_info.weekvote,user_info.comm_count,user_info_ext.birthday,user_info_ext.location,user_info_ext.intro from user_info,user_info_ext where user_info.pass>=".$pass." and user_info.id=user_info_ext.id and user_info.sex='".$sex."'".$sql_ext." order by vote desc,id desc";
 }
 $pageitem=$limit;
 $result=$db->sql_query($sql);
@@ -141,6 +150,7 @@ while($row=$db->sql_fetchrow($result))
 		"INFO"=>str_replace('-','',$row['location']).' '.(('0000'==substr($row['birthday'],0,4))?'':((date("Y")-substr($row['birthday'],0,4)).'岁')),
 		"INTRO" => substr_cut(str_replace('<br />',' ',str_replace('&nbsp;','',$row['intro'])),72).'...',
 		"VOTE" => $row["vote"],
+		"WEEKVOTE"=>$row['weekvote'],
 		"COMM_COUNT"=>$row['comm_count']
 		));
 }
