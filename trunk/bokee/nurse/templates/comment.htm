@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=gb2312" />
-<title>感动社会十大护士评选</title>
+<title>{AREA_NAME}赛区{REALNAME}的留言</title>
 <link href="../images/hushi.css" rel="stylesheet" type="text/css" />
 </head>
 
@@ -80,7 +80,7 @@
 				</div>
 				<!--第二屏右侧-->
 				<div class="lt" style="margin-left:30px; display:inline;">
-					<div class="lytit"><h2>给{AREA_NAME}赛区：<a class="morelink">{BLOGNAME}</a>的留言</h2></div>
+					<div class="lytit"><h2>给{AREA_NAME}赛区：<a class="morelink" href="{BLOGURL}" target="_blank">{BLOGNAME}</a>的留言</h2></div>
 					<div class="lyqu">
 						<!-- BEGIN list -->
 						<div class="zfcon">
@@ -132,7 +132,7 @@
 					<div class="lytit"><h2 style="background: url(images/baoico2.gif) no-repeat;">留言</h2></div>
 					<form name="commentForm" action="" method="post" target="iframe1" onsubmit="return check(this)">
 					<div class="lydiv">
-						<p>用户名： <input name="username" type="text"/></p>
+						<p>用户名： <input name="username" type="text" value="{BLOGID}"/></p>
 						<p><span style="vertical-align:top;">内&nbsp;&nbsp;容：</span>
 						<textarea name="content" rows="3" cols="25" style="width:300px; height:80px;"></textarea></p>
 						<p style="padding-left:56px;"><input name="submit" type="submit" value="提交"/></p>

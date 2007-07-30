@@ -162,7 +162,8 @@ while($row=$db->sql_fetchrow($result))
 $tpl->assign_vars(array(
 	"PAGE" => $pagenav,
 	"DISPLAY" => checkLogin($blogurl)?'':'none',
-	"LOGINFORM_DISPLAY"=>getBokie()?'none':''
+	"LOGINFORM_DISPLAY"=>getBokie()?'none':'',
+	"BLOGID"=>getBokie()
 ));
 
 /**

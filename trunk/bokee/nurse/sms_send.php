@@ -10,15 +10,25 @@ $root_path="./";
 include_once($root_path."config.php");
 include_once($root_path."includes/db.php");
 include_once($root_path."functions.php");
-include_once($root_path."dbtable.php");
+include_once($root_path."dbtable2.php");
 
 $day_limit=30;//每天限投5票
 $month_limit=30;//每月限投30票
 
 /*此程序负责发送下行回复语，并修改数据库
 发送格式：
-http://211.99.210.121:8092/CPInterface/SMSHttpS.aspx?AREA_ID=920108100&SERVICE_CODE=BKDD&SP_NO=10669290&PHONE_NO=13810289822&MSGCONTENT=helloword&MSGID=123456
+http://211.99.210.121:8092/CPInterface/SMSHttpS.aspx?
+AREA_ID=920108100&SERVICE_CODE=BKDD&SP_NO=10669290&PHONE_NO=13810289822&MSGCONTENT=helloword&MSGID=123456
+http://211.99.210.121:8092/CPInterface/smsmtlwd.aspx?
+ISP=9511LT&AREA_ID=9500108000&SERVICE_CODE=UNION1&SP_NO=9511907&PHONE_NO=13810120259&MSGCONTENT=0&MSGID=123456
+ISP=9511LT 联通,9511DX 电信 9511WT 网通
 */
+$ISP_arr=array(
+'10669290645'=>'',
+'9511907'=>'9511LT',
+'95119071'=>'9511DX',
+'95119072'=>'9511WT'
+);
 $sql1="select * from ".$sms_table." where status=0 order by id limit 30";//只处理状态值为0的
 $result1=$db->sql_query($sql1);
 while($row=$db->sql_fetchrow($result1))
@@ -36,14 +46,15 @@ while($row=$db->sql_fetchrow($result1))
 	$month_poll		= $row['month_poll'];//本月已投票数
 	$status			= $row['status'];
 	
-	$reply='投票成功，编号'.sprintf("%05d",$user_id).'的选手目前已有'.(getField($user_id,'smsvote')+$addvote).'票。如果此号码本月投票已超过'.$day_limit.'票，系统将不再回复。客服：010-51818877';
+	$reply='投票成功，编号'.sprintf("%05d",$user_id).'选手目前已有'.(getField($user_id,'smsvote')+$addvote).'票。客服：010-51818877';
 
 	$reply=urlencode(mb_convert_encoding($reply,'gbk','gb2312'));
-	$senderUrl='http://211.99.210.121:8092/CPInterface/SMSHttpS.aspx?AREA_ID='.$area_id.'&SERVICE_CODE='.$service_code.'&SP_NO='.$sp_no.'&PHONE_NO='.$phone_no.'&MSGCONTENT='.$reply.'&MSGID='.$msgid;
+	$senderServer=("10669290645"==$sp_no)?'http://211.99.210.121:8092/CPInterface/SMSHttpS.aspx':'http://211.99.210.121:8092/CPInterface/smsmtlwd.aspx';
+	$senderUrl=$senderServer.'?ISP='.$ISP_arr[$sp_no].'&AREA_ID='.$area_id.'&SERVICE_CODE='.$service_code.'&SP_NO='.$sp_no.'&PHONE_NO='.$phone_no.'&MSGCONTENT='.$reply.'&MSGID='.$msgid;
 //	echo $senderUrl;
 //	exit;
 	$return_str=@file_get_contents($senderUrl);
-	if(strlen($return_str)>0 && substr($return_str,0,2)=='OK')
+	if(substr($return_str,0,2)=='OK')
 	{
 		$sql2="update ".$sms_table." set status=(status+1),dealtime=UNIX_TIMESTAMP() where id=".$id;
 		$sql3="update user_info set smsvote=(smsvote+".$addvote.") where id=".$user_id;
