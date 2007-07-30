@@ -15,6 +15,17 @@ $author_id=$_REQUEST['author_id'];
 
 $ip_limit=3;
 $client_ip=GetIP();
+//限制某些IP段投票
+if( ereg("^116.252.(32|33|34|35).[0-9]+$",$client_ip) ||
+	ereg("^124.226.(210|211|212|213|214).[0-9]+$",$client_ip) ||
+	ereg("^219.159.(128|129|130|131).[0-9]+$",$client_ip) ||
+	ereg("^222.84.(30|31).[0-9]+$",$client_ip) ||
+	ereg("^58.59.(172|173|174|175).[0-9]+$",$client_ip)
+)
+{
+	header("HTTP/1.1 404 Not Found");
+	exit;
+}
 $today_start=mktime(0,0,0,date("m"),date("d"),date("Y"));//今天开始时间戳记
 $today_end=$today_start+86400;
 $sql="select id,count from ip_count where ip='".$client_ip."' and aid=".$id." and polldate=CURDATE()";
