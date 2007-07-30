@@ -115,6 +115,56 @@ function getBokie($field='blogID')
 	}
 	return ${$field};
 }
-function mailto() {
+//注册或通过审核后给用户发邮件
+function mailto($email,$subject,$info_arr,$id)
+{
+	global $root_path;
+	include_once($root_path."includes/class.phpmailer.php");
+	$mail = new PHPMailer();
+	$mail->setPluginDir($root_path."includes/");//设置include目录，自己在原始class里面另加的
+	$mail->IsSMTP(); // set mailer to use SMTP
+	$mail->CharSet = 'gb2312';
+	$mail->Encoding = 'base64';
+	$mail->From = 'qian9128@163.com';
+	$mail->FromName = 'nurse.bokee.com';
+	$mail->Host = 'smtp.163.com';
+	$mail->Port = 25;
+	$mail->SMTPAuth = true;
+	$mail->Username = $mail->From;
+	$mail->Password = "8210150920";
+	
+	$mail->addAddress($email);
+	$mail->WordWrap = 50;
+	$mail->IsHTML(true);
+	$mail->Subject = $subject;
+	//生成html格式邮件内容
+	if(is_array($info_arr) && sizeof($info_arr)>0)//报名确认信
+	{
+		$html=file_get_contents("mail1.inc.php");
+		while(list($key,$val)=each($info_arr))
+		{
+			$body.='<div><span class="label">'.$key.'：</span><span class="value">'.$val.'</span></div>'."\r\n";
+		}
+		$html=str_replace('<!-- INFO -->',$body,$html);
+	}
+	else//通过审核后
+	{
+		$html=file_get_contents($root_path."mail2.inc.php");
+		$html=str_replace('{ID}',$id,$html);
+	}
+	$mail->Body = $html;
+
+	if(!$mail->Send())
+	{
+		echo "Mail send failed.\r\n";
+		echo "Error message: ". $mail->ErrorInfo ."\r\n";
+		return false;
+	}
+	else
+	{
+		echo("Send to &lt;".$email."&gt; successed.<br />\r\n");
+		return true;
+	}
 }
+//mailto('zerofault@gmail.com','邮件测试','','00001');
 ?>

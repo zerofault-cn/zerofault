@@ -13,7 +13,7 @@ include_once($root_path."dbtable.php");//根据不同的投票时间段选取不同的数据表
 
 $day_limit=30;//每天限投5票
 $month_limit=30;//每月限投30票
-$log_file="sms_query.log";
+$log_file="sms_query.log";//复赛需改为sms_query2.log,决赛改为sms_query3.log
 /*
 本程序只接收上行短信，存入数据库，但不处理下行
 由sms_send.php定时处理下行
@@ -23,8 +23,10 @@ $log_file="sms_query.log";
 http://nurse.bokee.com/nurse/sms.php?MOTYPE=MoBusi&AREA_ID=920108100&SERVICE_CODE=BKDD&SP_NO=10669290&PHONE_NO=13810289822&MSGCONTENT=helloword&MSGID=123456
 接收成功返回:"OK_YYYY-MM-DD HH:MI:SS"
 
-服务号码：联通：待定
-		  移动：10669290645
+服务号码：联通:9511907
+		  电信:95119071
+		  网通:95119072(网通的linkid即msgid可以为空)
+		  移动:10669290645
 短信内容：HS00001（给编号00001投1票，一次2元）
 */
 
@@ -39,14 +41,14 @@ $msgid			= $_REQUEST['MSGID'];//上行消息id,此处为linkid
 /*
 分析短信内容，验证格式等
 */
-if(''==$area_id || ''==$service_code || ''==$sp_no || ''==$phone_no || ''==$msgcontent || ''==$msgid)
+if(''==$area_id || ''==$service_code || ''==$sp_no || ''==$phone_no || ''==$msgcontent || ('95119072'!=$sp_no && ''==$msgid))
 {
 	echo $info='[error01:参数不完整]';
 	writeLog($log_file,$_SERVER["QUERY_STRING"],$info);
 	exit;
 }
 
-if(eregi("^(HS)([0-9]{5}$)",$msgcontent,$regs))
+if(eregi("^(HS)([0-9]{1,5}$)",$msgcontent,$regs))
 {
 	$addvote=1;//一次投1票
 	$user_id=intval($regs[2]);//user_id
@@ -57,19 +59,25 @@ else
 	writeLog($log_file,$_SERVER["QUERY_STRING"],$info);
 	exit;
 }
+if(!$user_id>0)
+{
+	echo $info='[error03:错误的用户编号]';
+	writeLog($log_file,$_SERVER["QUERY_STRING"],$info);
+	exit;
+}
 if(strlen($phone_no)>11)
 {
 	$phone_no=substr($phone_no,-11);
 }
-/*
-$sql="select * from user_info where pass=3 and id=".$user_id;
+
+$sql="select * from user_info where pass>0 and id=".$user_id;
 if($db->sql_numrows($db->sql_query($sql))==0)
 {
-	echo $info='ID为'.$user_id.'的选手未进入决赛，您无须再给她投票了！';
+	echo $info='不存在ID为'.$user_id.'的选手，您不能给她投票！';
 	writeLog($log_file,$_SERVER["QUERY_STRING"],$info);
 	exit;
 }
-*/
+
 /*
 限制每日和每月投票数
 */

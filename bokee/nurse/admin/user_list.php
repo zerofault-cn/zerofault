@@ -116,9 +116,13 @@ if(''!=$_REQUEST['submit'])//´¦ÀíËÑË÷
 }
 else
 {
-	if(1==$old)
+	if($old==1)
 	{
 		$sqlext.=" and addtime<".(time()-7*24*3600);
+	}
+	elseif($pass==0)
+	{
+		$sqlext.=" and addtime>=".(time()-7*24*3600);
 	}
 	$sql="select * from user_info where pass=".$s_pass.$sqlext." order by ".$order." desc,id desc";
 }

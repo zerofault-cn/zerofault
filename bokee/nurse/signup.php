@@ -5,6 +5,7 @@ include_once($root_path."config.php");
 include_once($root_path."includes/db.php");
 include_once($root_path."includes/template.php");
 include_once($root_path."functions.php");
+include_once($root_path."profile.inc.php");
 
 $action=$_REQUEST['action'];
 if($action=='checkUrl')
@@ -35,6 +36,7 @@ if(''!=$_POST['submit'])
 	$age		= conv($_REQUEST['age']);
 	$height		= conv($_REQUEST['height']);
 	$weight		= conv($_REQUEST['weight']);
+	$province	= conv($_REQUEST['province']);
 	$area		= $_REQUEST['area'];
 	$hospital	= conv($_REQUEST['hospital']);
 	$IDcard		= $_REQUEST['IDcard'];
@@ -75,27 +77,26 @@ if(''!=$_POST['submit'])
 			if($db->sql_query($sql))
 			{
 				$info_arr=array(
-					array("编号",$db->sql_nextid()),
-					array("参选博客名称",$blogname),
-					array("博客链接地址",$blogurl),
-					array("真实姓名",$realname),
-					array("年龄",$age),
-					array("身高",$height),
-					array("体重",$weight),
-					array("报名地区",$area_arr[$area]),
-					array("证件种类",$certi_arr[$area]),
-					array("证件号码",$certinum),
-					array("联系地址",$address),
-					array("邮编",$postcode),
-					array("联系电话",$telenum),
-					array("E_mail",$email),
-					array("其他联系方式",$other),
-					array("英语水平",$english),
-					array("普通话水平",$putonghua),
-					array("个人特长",$intro),
-					array("照片",'<img src="http://nurse.bokee.com/nurse/photo/'.$area.'/'.$filename.'" />'));
+					"参赛编号"=>sprintf("%05d",$db->sql_nextid()),
+					"参赛博客名称"=>$blogname,
+					"博客链接地址"=>$blogurl,
+					"真实姓名"=>$realname,
+					"年龄"=>''==$age?'未填写':$age,
+					"身高"=>''==$height?'未填写':$height,
+					"体重"=>''==$weight?'未填写':$weight,
+					"报名地区"=>$area_arr[$area],
+					"所在医院"=>$hospital,
+					"证件号码"=>''==$IDcard?'未填写':$IDcard,
+					"联系地址"=>$address,
+					"邮编"=>''==$postcode?'未填写':$postcode,
+					"联系电话"=>$phone,
+					"E_mail"=>$email,
+					"其他联系方式"=>''==$other?'未填写':$other,
+					"个人特长"=>''==$intro?'未填写':$intro,
+					"照片"=>'<img src="http://nurse.bokee.com/nurse/photo/'.$area.'/'.$filename.'" />'
+				);
 				
-		//		mailto($email,'感动社会十大优秀护士评选活动确认信',$info_arr,'');
+				mailto($email,'感动社会十大优秀护士评选活动确认信',$info_arr,'');
 		/*		$tpl->assign_vars(array(
 					"MSGTITLE" => '报名表提交成功!',
 					"MSGTEXT" => '<p style="text-indent:2em;font-size:14px;line-height:200%;">感谢您参加第二届美女博客大赛，您已经成功报名，系统已发出一封确认邮件到您填写的email地址 ，请注意查看，如果你的觉得您的资料有任何问题，请立即联系我们修改！</p><p style="text-indent:2em;font-size:14px;line-height:200%;">报名申请将进入审核队列中！博客审核时间为一个工作日，如有疑问或修改资料请致电010-51818811-3232 或者邮件haoranzhang@bokee-inc.com，审核完毕后会有一封审核确认邮件再次发送给您，请耐心等待，并注意查看邮件！</p><br /><br />',
