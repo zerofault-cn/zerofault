@@ -20,17 +20,17 @@ $log_file="sms_query.log";//复赛需改为sms_query2.log,决赛改为sms_query3.log
 */
 /*
 接收格式：
-http://nurse.bokee.com/nurse/sms.php?MOTYPE=MoBusi&AREA_ID=920108100&SERVICE_CODE=BKDD&SP_NO=10669290&PHONE_NO=13810289822&MSGCONTENT=helloword&MSGID=123456
+?MOTYPE=MoBusi&AREA_ID=920108100&SERVICE_CODE=BKDD&SP_NO=10669290&PHONE_NO=13810289822&MSGCONTENT=helloword&MSGID=123456
+?MOTYPE=Mo&ISP=9511LT&AREA_ID=9500108000&SERVICE_CODE=UNION1&SP_NO=9511907&PHONE_NO=13810120259&MSGCONTENT=helloword&MSGID=123456
 接收成功返回:"OK_YYYY-MM-DD HH:MI:SS"
 
-服务号码：联通:9511907
-		  电信:95119071
-		  网通:95119072(网通的linkid即msgid可以为空)
+服务号码：联通/电信/网通:9511907  (网通的linkid即msgid可以为空)
 		  移动:10669290645
 短信内容：HS00001（给编号00001投1票，一次2元）
 */
 
 //接受参数
+$isp			= $_REQUEST['ISP'];//ISP代码，9511LT 联通,9511DX 电信 9511WT 网通
 $area_id		= $_REQUEST['AREA_ID'];//由系统分配的代码
 $service_code	= $_REQUEST['SERVICE_CODE'];//sp业务代码
 $sp_no			= $_REQUEST['SP_NO'];//sp特服号,包含子号码，如10669290645
@@ -40,8 +40,11 @@ $msgid			= $_REQUEST['MSGID'];//上行消息id,此处为linkid
 
 /*
 分析短信内容，验证格式等
+参数不完整的其他情况：
+	当isp不是移动时，isp为空
+	当isp是移动，或者联通，或者电信时，msgid为空
 */
-if(''==$area_id || ''==$service_code || ''==$sp_no || ''==$phone_no || ''==$msgcontent || ('95119072'!=$sp_no && ''==$msgid))
+if(''==$area_id || ''==$service_code || ''==$sp_no ||  ''==$phone_no || ''==$msgcontent || ('10669290645'!=$sp_no && ''==$isp) || ((''==$isp || '9511LT'==$isp || '9511DX'==$isp) && ''==$msgid))
 {
 	echo $info='[error01:参数不完整]';
 	writeLog($log_file,$_SERVER["QUERY_STRING"],$info);
@@ -132,7 +135,7 @@ elseif($month_poll+$addvote>$month_limit)
 
 if($status==0)
 {
-	$sql3="insert into ".$sms_table." set area_id='".$area_id."',service_code='".$service_code."',sp_no='".$sp_no."',phone_no='".$phone_no."',msgcontent='".$msgcontent."',msgid='".$msgid."',polltime=UNIX_TIMESTAMP(),user_id=".$user_id.",addvote=".$addvote.",day_poll=".$day_poll.",month_poll=".$month_poll.",status=".$status;
+	$sql3="insert into ".$sms_table." set isp='".$isp."',area_id='".$area_id."',service_code='".$service_code."',sp_no='".$sp_no."',phone_no='".$phone_no."',msgcontent='".$msgcontent."',msgid='".$msgid."',polltime=UNIX_TIMESTAMP(),user_id=".$user_id.",addvote=".$addvote.",day_poll=".$day_poll.",month_poll=".$month_poll.",status=".$status;
 	if($db->sql_query($sql3))
 	{
 		$info='[status0:'.$phone_no.'给'.sprintf("%05d",$user_id).'投'.$addvote.'票ok！]';
