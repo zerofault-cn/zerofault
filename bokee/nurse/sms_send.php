@@ -23,17 +23,12 @@ http://211.99.210.121:8092/CPInterface/smsmtlwd.aspx?
 ISP=9511LT&AREA_ID=9500108000&SERVICE_CODE=UNION1&SP_NO=9511907&PHONE_NO=13810120259&MSGCONTENT=0&MSGID=123456
 ISP=9511LT 联通,9511DX 电信 9511WT 网通
 */
-$ISP_arr=array(
-'10669290645'=>'',
-'9511907'=>'9511LT',
-'95119071'=>'9511DX',
-'95119072'=>'9511WT'
-);
 $sql1="select * from ".$sms_table." where status=0 order by id limit 30";//只处理状态值为0的
 $result1=$db->sql_query($sql1);
 while($row=$db->sql_fetchrow($result1))
 {
 	$id				= $row['id'];
+	$isp			= $row['isp'];
 	$area_id		= $row['area_id'];
 	$service_code	= $row['service_code'];
 	$sp_no			= $row['sp_no'];
@@ -45,12 +40,12 @@ while($row=$db->sql_fetchrow($result1))
 	$day_poll		= $row['day_poll'];//今天已投票数
 	$month_poll		= $row['month_poll'];//本月已投票数
 	$status			= $row['status'];
-	
+	//设定回复语
 	$reply='投票成功，编号'.sprintf("%05d",$user_id).'选手目前已有'.(getField($user_id,'smsvote')+$addvote).'票。客服：010-51818877';
-
+	//将回复语编码
 	$reply=urlencode(mb_convert_encoding($reply,'gbk','gb2312'));
 	$senderServer=("10669290645"==$sp_no)?'http://211.99.210.121:8092/CPInterface/SMSHttpS.aspx':'http://211.99.210.121:8092/CPInterface/smsmtlwd.aspx';
-	$senderUrl=$senderServer.'?ISP='.$ISP_arr[$sp_no].'&AREA_ID='.$area_id.'&SERVICE_CODE='.$service_code.'&SP_NO='.$sp_no.'&PHONE_NO='.$phone_no.'&MSGCONTENT='.$reply.'&MSGID='.$msgid;
+	$senderUrl=$senderServer.'?ISP='.$isp.'&AREA_ID='.$area_id.'&SERVICE_CODE='.$service_code.'&SP_NO='.$sp_no.'&PHONE_NO='.$phone_no.'&MSGCONTENT='.$reply.'&MSGID='.$msgid;
 //	echo $senderUrl;
 //	exit;
 	$return_str=@file_get_contents($senderUrl);
