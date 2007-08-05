@@ -26,7 +26,7 @@ while($row1=$db->sql_fetchrow($result1))
 	}
 }
 */
-$sql3="update user_info set monthvote=0";
+$sql3="update user_info set weekvote=0";
 if($db->sql_query($sql3))
 {
 	echo "sql3 ok!<br>\r\n";
