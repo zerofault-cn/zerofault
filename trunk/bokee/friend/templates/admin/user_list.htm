@@ -95,7 +95,7 @@ function check2()
 	<td><a href="javascript:void(0)" onclick="javascript:window.open('user_edit.php?id={list.ID}','','width=450,height=605,toolbar=no,status=no,scrollbars=yes,resizable=yes');"><img src="{list.PHOTO}" width="60" border="0" /></a></td>
 	<td><a href="http://{list.BLOGURL}" target="_blank">{list.BLOGURL}</a>
 	<td>{list.ADDTIME}</td>
-	<td nowrap>{list.VOTE}</td>
+	<td nowrap><a href="javascript:void(0)" onclick="javascript:window.open('addvote.php?id={list.ID}','','width=300,height=100,toolbar=no,status=no,scrollbars=no,resizable=no');" title="手动加票">{list.VOTE}</a></td>
 	<td align="center"><input type="button" id="passbutton{list.ID}" value="{list.PASSBTN}" onClick="passupdate({list.ID});" {list.PASSBTNDISABLED}/><input type="button" value="修改" onclick="window.open('user_edit.php?id={list.ID}','','width=450,height=500,toolbar=no,status=no,scrollbars=yes,resizable=yes');" /><input type="button" value="删除" onclick="confirmdel({list.ID})" /></td>
 </tr>
 <!-- END list -->

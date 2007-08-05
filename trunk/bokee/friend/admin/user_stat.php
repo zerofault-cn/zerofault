@@ -26,7 +26,8 @@ while($row=$db->sql_fetchrow($result))
 	$month_arr[$sdate][$i][1]=$vote;
 	$i++;
 }
-while(list($key,$val)=each($month_arr))
+$month_arr2=array_reverse($month_arr);
+while(list($key,$val)=each($month_arr2))
 {
 	echo '<div style="width:580px;margin-top:20px;border:1px solid #00f;text-align:left;padding-top:4px;">';
 	echo '统计月份：'.substr($key,0,7);
