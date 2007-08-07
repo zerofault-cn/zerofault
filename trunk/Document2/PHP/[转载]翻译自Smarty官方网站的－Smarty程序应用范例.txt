@@ -1,0 +1,290 @@
+自由的龙 2006-04-26 13:01 
+
+
+翻译：Surran pkstudio_comeback@yahoo.com
+转载请注明出处和译者
+原文见：http://smarty.php.net/sampleapp/sampleapp_p4.php
+
+第四节
+
+/web/www.example.com/smarty/guestbook/libs/guestbook.lib.php
+
+
+CODE:[Copy to clipboard]<?php
+
+/**
+* Project: Guestbook Sample Smarty Application
+* Author: Monte Ohrt <monte [AT] ohrt [DOT] com>
+* Date: March 14th, 2005
+* File: guestbook.lib.php
+* Version: 1.0
+*/
+
+/**
+* guestbook application library
+*
+*/
+class Guestbook {
+
+  // database object
+  var $sql = null;
+  // smarty template object
+  var $tpl = null;
+  // error messages
+  var $error = null;
+  
+  /**
+  * class constructor
+  */
+  function Guestbook() {
+
+    // instantiate the sql object
+    $this->sql =& new GuestBook_SQL;
+    // instantiate the template object
+    $this->tpl =& new Guestbook_Smarty;
+
+  }
+  
+  /**
+  * display the guestbook entry form
+  *
+  * @param array $formvars the form variables
+  */
+  function displayForm($formvars = array()) {
+
+    // assign the form vars
+    $this->tpl->assign('post',$formvars);
+    // assign error message
+    $this->tpl->assign('error', $this->error);
+    $this->tpl->display('guestbook_form.tpl');
+
+  }
+  
+  /**
+  * fix up form data if necessary
+  *
+  * @param array $formvars the form variables
+  */
+  function mungeFormData(&$formvars) {
+
+    // trim off excess whitespace
+    $formvars['Name'] = trim($formvars['Name']);
+    $formvars['Comment'] = trim($formvars['Comment']);
+
+  }
+
+  /**
+  * test if form information is valid
+  *
+  * @param array $formvars the form variables
+  */
+  function isValidForm($formvars) {
+
+    // reset error message
+    $this->error = null;
+    
+    // test if "Name" is empty
+    if(strlen($formvars['Name']) == 0) {
+        $this->error = 'name_empty';
+        return false; 
+    }
+
+    // test if "Comment" is empty
+    if(strlen($formvars['Comment']) == 0) {
+        $this->error = 'comment_empty';
+        return false; 
+    }
+    
+    // form passed validation
+    return true;
+  }
+  
+  /**
+  * add a new guestbook entry
+  *
+  * @param array $formvars the form variables
+  */
+  function addEntry($formvars) {
+
+    $_query = sprintf(
+        "insert into GUESTBOOK values(0,'%s',NOW(),'%s')",
+        mysql_escape_string($formvars['Name']),
+        mysql_escape_string($formvars['Comment'])
+    );
+    
+    return $this->sql->query($_query);
+    
+  }
+  
+  /**
+  * get the guestbook entries
+  */
+  function getEntries() {
+
+    $this->sql->query(
+        "select * from GUESTBOOK order by EntryDate DESC",
+        SQL_ALL,
+        SQL_ASSOC
+    );
+
+    return $this->sql->record;   
+  }
+  
+  /**
+  * display the guestbook
+  *
+  * @param array $data the guestbook data
+  */
+  function displayBook($data = array()) {
+
+    $this->tpl->assign('data', $data);
+    $this->tpl->display('guestbook.tpl');     
+
+  }
+}
+
+?>
+guestbook.lib.php 是我们这个程序的应用类。它包含了整个程序的实现逻辑。让我们看看每一个方法。
+
+类方法： Guestbook()
+
+
+CODE:[Copy to clipboard]/**
+* class constructor
+*/
+function Guestbook() {
+
+// instantiate the sql object
+$this->sql =& new GuestBook_SQL;
+// instantiate the template object
+$this->tpl =& new Guestbook_Smarty;
+
+}
+构造函数。每次我们使用这个留言簿对象时都执行。它把SQL语句和Smarty对象作为自己的属性，我们以后可以通过这个对象的方法来访问和使用它们（SQL语句和Smarty对象）。
+
+
+类方法： displayForm()
+
+
+CODE:[Copy to clipboard]/**
+* display the guestbook entry form
+*
+* @param array $formvars the form variables
+*/
+function displayForm($formvars = array()) {
+
+// assign the form vars
+$this->tpl->assign('post',$formvars);
+// assign error message
+$this->tpl->assign('error', $this->error);
+$this->tpl->display('guestbook_form.tpl');
+
+}
+displayForm() 该方法用于显示留言书写表单。它指派了模板文件中留言书写表单的变量和验证表单时的出错提示，然后把这个表单显示出来。
+
+
+类方法： mungeFormData()
+
+
+CODE:[Copy to clipboard]/**
+* fix up form data if necessary
+*
+* @param array $formvars the form variables
+*/
+function mungeFormData(&$formvars) {
+
+// trim off excess whitespace
+$formvars['Name'] = trim($formvars['Name']);
+$formvars['Comment'] = trim($formvars['Comment']);
+
+}
+mungeFormData() 该方法删掉来自表单输入内容开头和结尾的空白部分。这个方法在验证表单输入内容时最先调用。注意，表单信息是通过引用的办法传入本方法的，所以任何改变都会导致原始的数组内容（表单内容）发生改变。
+
+
+类方法： isValidForm()
+
+
+CODE:[Copy to clipboard]/**
+* test if form information is valid
+*
+* @param array $formvars the form variables
+*/
+function isValidForm($formvars) {
+
+// reset error message
+$this->error = null;
+
+// test if "Name" is empty
+if(strlen($formvars['Name']) == 0) {
+$this->error = 'name_empty';
+return false;
+}
+
+// test if "Comment" is empty
+if(strlen($formvars['Comment']) == 0) {
+$this->error = 'comment_empty';
+return false;
+}
+
+// form passed validation
+return true;
+}
+isValidForm() 该方法验证表单的输入。这里仅仅简单地验证表单的‘Name’和‘Comment’控件是否为空。如果是空的，对应的出错代码将被指派为本类错误属性的值。（这些错误代码接下来将被模板文件使用用以显示对应的错误提示。）
+
+
+类方法： addEntry()
+
+
+CODE:[Copy to clipboard]/**
+* add a new guestbook entry
+*
+* @param array $formvars the form variables
+*/
+function addEntry($formvars) {
+
+$_query = sprintf(
+"insert into GUESTBOOK values(0,'%s',NOW(),'%s')",
+mysql_escape_string($formvars['Name']),
+mysql_escape_string($formvars['Comment'])
+);
+
+return $this->sql->query($_query);
+
+}
+addEntry 该方法将向数据库中插入一条新的留言簿条目。注意，插入数据库的值已经进行必要操作，以避免SQL语法冲突和注入攻击。
+
+
+类方法： getEntries()
+
+
+CODE:[Copy to clipboard]/**
+* get the guestbook entries
+*/
+function getEntries() {
+
+$this->sql->query(
+"select * from GUESTBOOK order by EntryDate",
+SQL_ALL,
+SQL_ASSOC
+);
+
+return $this->sql->record; 
+}
+getEntries() 该方法将以“field => value”（效果同使用SQL_ASSOC参数）的格式读出数据库中所有的留言簿条目。
+
+
+类方法： displayBook()
+
+
+CODE:[Copy to clipboard]/**
+* display the guestbook
+*
+* @param array $data the guestbook data
+*/
+function displayBook($data = array()) {
+
+$this->tpl->assign('data', $data);
+$this->tpl->display('guestbook.tpl'); 
+
+}
+displayBook() 该方法将显示出留言簿的条目。数组$data即存储留言簿条目的数组，将用来指派给模板文件并在模板文件中显示出来。 

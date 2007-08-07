@@ -1,0 +1,797 @@
+Smarty程序应用范例：留言簿（Guestbook）第一节
+
+
+这是一个使用了Smarty的PHP应用程序。目的是就如何在应用程序中使用Smarty，以及如何分离你的“表现”（presentation）作一个示范。这个范例相当简单，但包含了一个完整的迷你框架（mini-framework）用于快速简单地生成一个Smarty驱动的应用程序。一旦你理解了将“表现”分离的观念，你也许会把它用在一些程序开发上。如果真是那样，你需要根据你自己的判断在你的程序中使用以下代码，并为此负责。
+
+你可以从这里下载这个范例的源代码。http://www.phpinsider.com/php/code/guestbook/Guestbook-1.0.tar.gz
+你可以在这里先看看这个范例的演示。http://www.phpinsider.com/php/code/guestbook/
+
+这篇文章不指导也不涉及如何安装Apache，PEAR和MySQL。请确认你已经知道这些事情或者有可以直接使用的相关软件环境。如果你的运行环境与范例所示有差别，你需要在给出的代码中进行相应的调整。
+
+接下来我们会开发一个没有管理员界面的留言簿程序，用户可以浏览也可以留言。会涉及到一些与Smarty相关的编程知识，比如表单和数据库数据的读取与显示。
+
+这个范例是Smarty安装指南中留言簿程序的扩展，所以我们是基于此之上进行开发的。以下是我们这个程序用到的文件：
+
+guestbook app files/directories:
+/web/www.example.com/docs/
+/web/www.example.com/docs/guestbook/
+/web/www.example.com/docs/guestbook/index.php
+
+/web/www.example.com/smarty/guestbook/
+/web/www.example.com/smarty/guestbook/templates/
+/web/www.example.com/smarty/guestbook/templates_c/
+/web/www.example.com/smarty/guestbook/configs/
+/web/www.example.com/smarty/guestbook/cache/
+
+/web/www.example.com/smarty/guestbook/libs/
+/web/www.example.com/smarty/guestbook/libs/guestbook_setup.php
+/web/www.example.com/smarty/guestbook/libs/guestbook.lib.php
+/web/www.example.com/smarty/guestbook/libs/sql.lib.php
+
+下面，我们一个一个地解释这些文件的用处：
+
+/web/www.example.com/docs/
+/docs/ 是我们WEB服务器的根目录（Apache httpd.conf中的DocumentRoot）。
+
+/web/www.example.com/docs/guestbook/
+/guestbook/ 是能被浏览器访问的一个相对于根目录的下级目录，存放着我们的程序。
+
+/web/www.example.com/docs/guestbook/index.php
+index.php 是我们程序的“大门”，WEB浏览器将通过http://www.example.com/guestbook/index.php访问到这个脚本文件。
+
+/web/www.example.com/smarty/guestbook/
+
+这是存放我们这个程序（实现逻辑的）所有脚本文件的目录，这些脚本文件不一定要存放在服务器根目录下。是否将所有脚本文件都存放在服务器的根目录下完全随你所愿，但是这里我们只把允许WEB浏览器直接访问的页面文件放在WEB服务器的根目录下。你可以使用Apache的“.htaccess”方法或其他WEB服务器软件的方法禁止WEB浏览器对存放在根目录下的这些（不宜让WEB浏览器直接访问的）程序脚本文件的直接访问。
+
+/web/www.example.com/smarty/guestbook/templates/
+这里存放我们的Smarty模板文件。
+
+/web/www.example.com/smarty/guestbook/templates_c/
+
+This is where Smarty places its compiled template files. If you installed this correctly, the web server user running PHP has write access here. For most intents and purposes you can just ignore this directory. 这里存放Smarty编译过的模板文件。如果你安装正确，运行PHP的WEB服务器对这里有写权限。出于一些偷懒的目的你可以忽略这个目录。（瞎翻的，用我自己的话讲：WEB服务器要具有这个目录的写权限，否则不能正确安装。如果不想伤脑筋，就忽略它吧。）
+
+/web/www.example.com/smarty/guestbook/configs/
+用于存放我们程序的设置文件。设置文件包含着你对来自模板或者程序的访问权限的设置信息。它们不是PHP脚本文件，而是一些可以被Smarty的设置文件解析器解析的文本文件。
+
+/web/www.example.com/smarty/guestbook/cache/
+用于存放Smarty的缓存文件。这个目录仅仅当Smarty的缓存功能被打开时才有用。如果你正确安装了，运行PHP的WEB服务器对这里有写权限。就像/templates_c/目录一样，也可以被忽略。（同/templates_c/目录的翻译）
+
+/web/www.example.com/smarty/guestbook/libs/
+/libs/ 我们将把程序的主要脚本文件存放这里。
+
+/web/www.example.com/smarty/guestbook/libs/guestbook_setup.php
+guestbook_setup.php 我们在该脚本文件中存放一些程序的初始化信息。
+
+/web/www.example.com/smarty/guestbook/libs/guestbook.lib.php
+guestbook.lib.php 我们在该脚本文件中存放大部分程序的实现逻辑。
+
+/web/www.example.com/smarty/guestbook/libs/sql.lib.php
+sql.lib.php 我们在该脚本文件中存放程序的数据库访问逻辑。
+
+Smarty程序应用范例：留言簿（Guestbook）第二节
+
+我们将从“index.php”脚本文件开始留言簿程序的编写历程，它将直接被WEB浏览器访问，所以说是我们这个程序的“大门”。
+
+/web/www.example.com/docs/guestbook/index.php
+
+
+<?php
+
+/**
+* Project: Guestbook Sample Smarty Application
+* Author: Monte Ohrt <monte [AT] ohrt [DOT] com>
+* Date: March 14th, 2005
+* File: index.php
+* Version: 1.0
+*/
+
+// define our application directory
+define('GUESTBOOK_DIR', '/web/www.example.com/smarty/guestbook/');
+// define smarty lib directory
+define('SMARTY_DIR', '/usr/local/lib/php/Smarty/');
+// include the setup script
+include(GUESTBOOK_DIR . 'libs/guestbook_setup.php');
+
+// create guestbook object
+$guestbook =& new Guestbook;
+
+// set the current action
+$_action = isset($_REQUEST['action']) ? $_REQUEST['action'] : 'view';
+
+switch($_action) {
+    case 'add':
+        // adding a guestbook entry
+        $guestbook->displayForm();
+        break;
+    case 'submit':
+        // submitting a guestbook entry
+        $guestbook->mungeFormData($_POST);
+        if($guestbook->isValidForm($_POST)) {
+            $guestbook->addEntry($_POST);
+            $guestbook->displayBook($guestbook->getEntries());
+        } else {
+            $guestbook->displayForm($_POST);
+        }
+        break;
+    case 'view':
+    default:
+        // viewing the guestbook
+        $guestbook->displayBook($guestbook->getEntries());        
+        break;   
+}
+
+?>
+
+“index.php”扮演着整个程序的控制者这个角色。它掌控着所有来自WEB浏览器的访问请求，并指导程序发生些什么相应的动作。它定义了程序目录，包括程序的安装脚本，以及根据全局变量$_REQUEST所定义的action值，并指导程序做出相应的动作。
+
+这里有三个基本的动作设置（actions）：
+
+“添加”当用户往留言簿里写内容时；
+“提交”当用户写完内容提交时；
+“浏览”当用户浏览留言簿时。
+
+缺省情况是“浏览”。
+
+/web/www.example.com/smarty/guestbook/libs/guestbook_setup.php
+
+
+<?php
+
+/**
+* Project: Guestbook Sample Smarty Application
+* Author: Monte Ohrt <monte [AT] ohrt [DOT] com>
+* Date: March 14th, 2005
+* File: guestbook_setup.php
+* Version: 1.0
+*/
+
+require(GUESTBOOK_DIR . 'libs/sql.lib.php');
+require(GUESTBOOK_DIR . 'libs/guestbook.lib.php');
+require(SMARTY_DIR . 'Smarty.class.php');
+require('DB.php'); // PEAR DB
+
+// database configuration
+class GuestBook_SQL extends SQL {
+    function GuestBook_SQL() {
+        // dbtype://user:pass@host/dbname
+        $dsn = "mysql://guestbook:foobar@localhost/GUESTBOOK";
+        $this->connect($dsn);
+    }       
+}
+
+// smarty configuration
+class Guestbook_Smarty extends Smarty { 
+    function Guestbook_Smarty() {
+        $this->template_dir = GUESTBOOK_DIR . 'templates';
+        $this->compile_dir = GUESTBOOK_DIR . 'templates_c';
+        $this->config_dir = GUESTBOOK_DIR . 'configs';
+        $this->cache_dir = GUESTBOOK_DIR . 'cache';
+    }
+}
+      
+?>
+
+我们通过“guestbook_setup.php”进行一些基本的程序运行环境设置，比如设置程序的后台数据库和模板文件位置。我们使用PEAR的PEAR::DB库，请确认能够通过你的php.ini中的“include_path”设置访问“DB.php”脚本文件，或者干脆使用“DB.php”的绝对路径。我们用MySQL作为程序的后台数据库，在这里书写恰当的“dsn”信息以便使用你自己的MySQL数据库。
+
+注意：如果运行中你得到一个类似“Call to undefined function: query()”样的错误，说明“$dsn”不正确，请检查“$dsn”是否正确，并测试是否数据库已经连接上了。
+
+我们需要安装一个基本的数据库结构。接下来这个命令行脚本会把我们的数据表导入MySQL数据库中。
+mysql < guestbook.sql
+注意，其中的“GRANT ...”语句修改了数据库的用户权限设置。
+
+guestbook.sql
+CREATE DATABASE GUESTBOOK;
+
+CONNECT GUESTBOOK;
+
+CREATE TABLE GUESTBOOK (
+id int(11) NOT NULL auto_increment,
+Name varchar(255) NOT NULL default '',
+EntryDate datetime NOT NULL default '0000-00-00 00:00:00',
+Comment text NOT NULL,
+PRIMARY KEY (id),
+KEY EntryDate (EntryDate)
+) TYPE=MyISAM;
+
+GRANT ALL ON GUESTBOOK.* to guestbook@localhost identified by 'foobar';
+
+Smarty程序应用范例：留言簿（Guestbook）第三节
+
+/web/www.example.com/smarty/guestbook/libs/sql.lib.php
+
+
+
+
+<?php
+
+/**
+* Project: Guestbook Sample Smarty Application
+* Author: Monte Ohrt <monte [AT] ohrt [DOT] com>
+* Date: March 14th, 2005
+* File: sql.lib.php
+* Version: 1.0
+*/
+
+// define the query types
+define('SQL_NONE', 1);
+define('SQL_ALL', 2);
+define('SQL_INIT', 3);
+
+// define the query formats
+define('SQL_ASSOC', 1);
+define('SQL_INDEX', 2);
+
+class SQL {
+    
+    var $db = null;
+    var $result = null;
+    var $error = null;
+    var $record = null;
+    
+    /**
+     * class constructor
+     */
+    function SQL() { }
+    
+    /**
+     * connect to the database
+     *
+     * @param string $dsn the data source name
+     */
+    function connect($dsn) {
+        $this->db = DB::connect($dsn);
+
+        if(DB::isError($this->db)) {
+            $this->error = $this->db->getMessage();
+            return false;
+        }        
+        return true;
+    }
+    
+    /**
+     * disconnect from the database
+     */
+    function disconnect() {
+        $this->db->disconnect();   
+    }
+    
+    /**
+     * query the database
+     *
+     * @param string $query the SQL query
+     * @param string $type the type of query
+     * @param string $format the query format
+     */
+    function query($query, $type = SQL_NONE, $format = SQL_INDEX) {
+
+        $this->record = array();
+        $_data = array();
+        
+        // determine fetch mode (index or associative)
+        $_fetchmode = ($format == SQL_ASSOC) ? DB_FETCHMODE_ASSOC        : null;
+        
+        $this->result = $this->db->query($query);
+        if (DB::isError($this->result)) {
+            $this->error = $this->result->getMessage();
+            return false;
+        }
+        switch ($type) {
+            case SQL_ALL:
+                // get all the records
+                while($_row = $this->result->fetchRow($_fetchmode)) {
+                    $_data[] = $_row;   
+                }
+                $this->result->free();            
+                $this->record = $_data;
+                break;
+            case SQL_INIT:
+                // get the first record
+                $this->record = $this->result->fetchRow($_fetchmode);
+                break;
+            case SQL_NONE:
+            default:
+                // records will be looped over with next()
+                break;   
+        }
+        return true;
+    }
+    
+    /**
+     * connect to the database
+     *
+     * @param string $format the query format
+     */
+    function next($format = SQL_INDEX) {
+        // fetch mode (index or associative)
+        $_fetchmode = ($format == SQL_ASSOC) ? DB_FETCHMODE_ASSOC         : null;
+        if ($this->record = $this->result->fetchRow($_fetchmode)) {
+            return true;
+        } else {
+            $this->result->free();
+            return false;
+        }
+            
+    }
+    
+}
+
+?>
+
+
+sql.lib.php 是我们基于PEAR::DB的数据库操作类的集合。它有助于尽可能地简化程序的数据库操作语法和代码。你可以拷贝以上代码，而不用过分担心是不是能理解它们，除非你觉得一定要。 
+
+
+接下来是相关参数的速成示例（crash course）：
+
+$guestbook->sql->query("select * from GUESTBOOK", SQL_ALL);
+print_r($guestbook->sql->record);
+
+输出结果： 
+Array
+(
+[0] => Array
+(
+[0] => 1
+[1] => Monte
+[2] => 2005-03-12 17:23:32
+[3] => test entry 1
+)
+
+[1] => Array
+(
+[0] => 2
+[1] => Monte
+[2] => 2005-03-12 17:23:33
+[3] => test entry 2
+)
+
+[2] => Array
+(
+[0] => 3
+[1] => Monte
+[2] => 2005-03-12 17:23:35
+[3] => test entry 3
+)
+
+)
+
+整个留言簿的内容都显示出来了。“SQL_ALL”会得到所有的查询记录。
+
+$guestbook->sql->query("select * from GUESTBOOK");
+while($guestbook->sql->next()) {
+print_r($guestbook->sql->record);
+} 
+
+输出结果: 
+Array
+(
+[0] => 1
+[1] => Monte
+[2] => 2005-03-12 17:23:32
+[3] => test entry 1
+)
+
+Array
+(
+[0] => 2
+[1] => Monte
+[2] => 2005-03-12 17:23:33
+[3] => test entry 2
+)
+
+Array
+(
+[0] => 3
+[1] => Monte
+[2] => 2005-03-12 17:23:35
+[3] => test entry 3
+)
+
+使用循环的方式一个一个地显示所有记录。如果没有设置query()的第二个参数，那么得到的数据库记录结果会被next()从头到尾遍历。
+
+$guestbook->sql->query("select * from GUESTBOOK", SQL_INIT);
+print_r($guestbook->sql->record);
+
+输出结果： 
+Array
+(
+[0] => 1
+[1] => Monte
+[2] => 2005-03-12 17:23:32
+[3] => test entry 1
+)
+
+输出结果仅仅是一条数据库记录（第一条记录）。 “SQL_INIT”只得到一条记录。
+
+$guestbook->sql->query("select * from GUESTBOOK", SQL_INIT, SQL_ASSOC);
+print_r($guestbook->sql->record);
+
+输出结果：
+Array
+(
+[id] => 1
+[Name] => Monte
+[EntryDate] => 2005-03-12 17:23:32
+[Comment] => test entry 1
+)
+
+把“SQL_ASSOC”作为第三参数传递给query()会使返回的结果是一个联合数组，形如：fieldname => value。
+
+$guestbook->sql->query("select * from GUESTBOOK");
+while($guestbook->sql->next(SQL_ASSOC)) {
+print_r($guestbook->sql->record);
+} 
+
+输出结果： 
+Array
+(
+[id] => 1
+[Name] => Monte
+[EntryDate] => 2005-03-12 17:23:32
+[Comment] => test entry 1
+)
+
+Array
+(
+[id] => 2
+[Name] => Monte
+[EntryDate] => 2005-03-12 17:23:33
+[Comment] => test entry 2
+)
+
+Array
+(
+[id] => 3
+[Name] => Monte
+[EntryDate] => 2005-03-12 17:23:35
+[Comment] => test entry 3
+)
+
+把“SQL_ASSOC”作为参数传递给next()也会使返回的结果是一个联合数组。
+
+Smarty程序应用范例：留言簿（Guestbook）第四节
+
+/web/www.example.com/smarty/guestbook/libs/guestbook.lib.php 
+
+
+<?php
+
+/**
+* Project: Guestbook Sample Smarty Application
+* Author: Monte Ohrt <monte [AT] ohrt [DOT] com>
+* Date: March 14th, 2005
+* File: guestbook.lib.php
+* Version: 1.0
+*/
+
+/**
+* guestbook application library
+*
+*/
+class Guestbook {
+
+    // database object
+    var $sql = null;
+    // smarty template object
+    var $tpl = null;
+    // error messages
+    var $error = null;
+    
+    /**
+     * class constructor
+     */
+    function Guestbook() {
+
+        // instantiate the sql object
+        $this->sql =& new GuestBook_SQL;
+        // instantiate the template object
+        $this->tpl =& new Guestbook_Smarty;
+
+    }
+    
+    /**
+     * display the guestbook entry form
+     *
+     * @param array $formvars the form variables
+     */
+    function displayForm($formvars = array()) {
+
+        // assign the form vars
+        $this->tpl->assign('post',$formvars);
+        // assign error message
+        $this->tpl->assign('error', $this->error);
+        $this->tpl->display('guestbook_form.tpl');
+
+    }
+    
+    /**
+     * fix up form data if necessary
+     *
+     * @param array $formvars the form variables
+     */
+    function mungeFormData(&$formvars) {
+
+        // trim off excess whitespace
+        $formvars['Name'] = trim($formvars['Name']);
+        $formvars['Comment'] = trim($formvars['Comment']);
+
+    }
+
+    /**
+     * test if form information is valid
+     *
+     * @param array $formvars the form variables
+     */
+    function isValidForm($formvars) {
+
+        // reset error message
+        $this->error = null;
+        
+        // test if "Name" is empty
+        if(strlen($formvars['Name']) == 0) {
+            $this->error = 'name_empty';
+            return false; 
+        }
+
+        // test if "Comment" is empty
+        if(strlen($formvars['Comment']) == 0) {
+            $this->error = 'comment_empty';
+            return false; 
+        }
+        
+        // form passed validation
+        return true;
+    }
+    
+    /**
+     * add a new guestbook entry
+     *
+     * @param array $formvars the form variables
+     */
+    function addEntry($formvars) {
+
+        $_query = sprintf(
+            "insert into GUESTBOOK values(0,'%s',NOW(),'%s')",
+            mysql_escape_string($formvars['Name']),
+            mysql_escape_string($formvars['Comment'])
+        );
+        
+        return $this->sql->query($_query);
+        
+    }
+    
+    /**
+     * get the guestbook entries
+     */
+    function getEntries() {
+
+        $this->sql->query(
+            "select * from GUESTBOOK order by EntryDate DESC",
+            SQL_ALL,
+            SQL_ASSOC
+        );
+
+        return $this->sql->record;   
+    }
+    
+    /**
+     * display the guestbook
+     *
+     * @param array $data the guestbook data
+     */
+    function displayBook($data = array()) {
+
+        $this->tpl->assign('data', $data);
+        $this->tpl->display('guestbook.tpl');        
+
+    }
+}
+
+?>
+
+guestbook.lib.php 是我们这个程序的应用类。它包含了整个程序的实现逻辑。让我们看看每一个方法。
+
+类方法： Guestbook() 
+/**
+* class constructor
+*/
+function Guestbook() {
+
+// instantiate the sql object
+$this->sql =& new GuestBook_SQL;
+// instantiate the template object
+$this->tpl =& new Guestbook_Smarty;
+}
+
+构造函数。每次我们使用这个留言簿对象时都执行。它把SQL语句和Smarty对象作为自己的属性，我们以后可以通过这个对象的方法来访问和使用它们（SQL语句和Smarty对象）。
+
+类方法： displayForm() 
+/**
+* display the guestbook entry form
+*
+* @param array $formvars the form variables
+*/
+function displayForm($formvars = array()) {
+
+// assign the form vars
+$this->tpl->assign('post',$formvars);
+// assign error message
+$this->tpl->assign('error', $this->error);
+$this->tpl->display('guestbook_form.tpl');
+
+}
+
+displayForm() 该方法用于显示留言书写表单。它指派了模板文件中留言书写表单的变量和验证表单时的出错提示，然后把这个表单显示出来。
+
+类方法： mungeFormData() 
+/**
+* fix up form data if necessary
+*
+* @param array $formvars the form variables
+*/
+function mungeFormData(&$formvars) {
+
+// trim off excess whitespace
+$formvars['Name'] = trim($formvars['Name']);
+$formvars['Comment'] = trim($formvars['Comment']);
+
+} 
+
+mungeFormData() 该方法删掉来自表单输入内容开头和结尾的空白部分。这个方法在验证表单输入内容时最先调用。注意，表单信息是通过引用的办法传入本方法的，所以任何改变都会导致原始的数组内容（表单内容）发生改变。
+
+类方法： isValidForm() 
+/**
+* test if form information is valid
+*
+* @param array $formvars the form variables
+*/
+function isValidForm($formvars) {
+
+// reset error message
+$this->error = null;
+
+// test if "Name" is empty
+if(strlen($formvars['Name']) == 0) {
+$this->error = 'name_empty';
+return false;
+}
+
+// test if "Comment" is empty
+if(strlen($formvars['Comment']) == 0) {
+$this->error = 'comment_empty';
+return false;
+}
+
+// form passed validation
+return true;
+}
+
+isValidForm() 该方法验证表单的输入。这里仅仅简单地验证表单的‘Name’和‘Comment’控件是否为空。如果是空的，对应的出错代码将被指派为本类错误属性的值。（这些错误代码接下来将被模板文件使用用以显示对应的错误提示。）
+
+
+类方法： addEntry() 
+/**
+* add a new guestbook entry
+*
+* @param array $formvars the form variables
+*/
+function addEntry($formvars) {
+
+$_query = sprintf(
+"insert into GUESTBOOK values(0,'%s',NOW(),'%s')",
+mysql_escape_string($formvars['Name']),
+mysql_escape_string($formvars['Comment'])
+);
+
+return $this->sql->query($_query);
+
+}
+
+addEntry 该方法将向数据库中插入一条新的留言簿条目。注意，插入数据库的值已经进行必要操作，以避免SQL语法冲突和注入攻击。
+
+类方法： getEntries() 
+/**
+* get the guestbook entries
+*/
+function getEntries() {
+
+$this->sql->query(
+"select * from GUESTBOOK order by EntryDate",
+SQL_ALL,
+SQL_ASSOC
+);
+
+return $this->sql->record; 
+} 
+
+getEntries() 该方法将以“field => value”（效果同使用SQL_ASSOC参数）的格式读出数据库中所有的留言簿条目。
+
+类方法： displayBook() 
+/**
+* display the guestbook
+*
+* @param array $data the guestbook data
+*/
+function displayBook($data = array()) {
+
+$this->tpl->assign('data', $data);
+$this->tpl->display('guestbook.tpl'); 
+
+} 
+
+displayBook() 该方法将显示出留言簿的条目。数组$data即存储留言簿条目的数组，将用来指派给模板文件并在模板文件中显示出来。
+
+Smarty程序应用范例：留言簿（Guestbook）第五节
+
+我们这个留言簿程序有两个模板文件，一个用来显示留言一个用来书写留言。
+
+/web/www.example.com/smarty/guestbook/templates/guestbook.tpl 
+
+{* Smarty *}
+
+<table border="0" width="300">
+    <tr>
+        <th colspan="2" bgcolor="#d1d1d1">Guestbook Entries (<a href="{$SCRIPT_NAME}?action=add">add</a>)</th>
+    </tr>
+    {foreach from=$data item="entry"}
+        <tr bgcolor="{cycle values="#dedede,#eeeeee" advance=false}">
+            <td>{$entry.Name|escape}</td>        
+            <td align="right">{$entry.EntryDate|date_format:"%e %b, %Y %H:%M:%S"}</td>        
+        </tr>
+        <tr>
+            <td colspan="2" bgcolor="{cycle values="#dedede,#eeeeee"}">{$entry.Comment|escape}</td>
+        </tr>
+    {foreachelse}
+        <tr>
+            <td colspan="2">No records</td>
+        </tr>
+    {/foreach}
+</table>
+
+guestbook.tpl 是用于浏览留言簿的模板文件。它以一个foreach函数从头到尾遍历留言簿的数据，显示出每个留言簿条目的‘Name’、‘Date’和‘Comment’字段信息。‘Date’字段信息经日期格式化调节器（date_format）格式化后显示。 ‘Name’和‘Comment’字段信息使用转码调节器（escape）处理，以便原样显示HTML代码和避免脚本攻击。{cycle} 函数用来在表格中隔两行显示不同的表格背景色。
+
+/web/www.example.com/smarty/guestbook/templates/guestbook_form.tpl 
+
+
+<form action="{$SCRIPT_NAME}?action=submit" method="post">
+
+<table border="1">
+
+    {if $error ne ""}
+        <tr>
+            <td bgcolor="yellow" colspan="2">
+                {if $error eq "name_empty"}You must supply a name.
+                {elseif $error eq "comment_empty"} You must supply a comment.
+                {/if}
+            </td>
+        </tr>
+    {/if}
+    <tr>
+        <td>Name:</td>
+        <td><input type="text" name="Name" value="{$post.Name|escape}" size="40"></td>
+    </tr>
+    <tr>
+        <td valign="top">Comment:</td>
+        <td><textarea name="Comment" cols="40" rows="10">{$post.Comment|escape}</textarea></td>
+    </tr>
+    <tr>
+        <td colspan="2" align="center"><input type="submit" value="Submit"></td>
+    </tr>
+
+</table>
+
+
+</form>
+
+guestbook_form.tpl 是用来书写留言的模板文件。如果因为通不过表单验证产生错误而重新显示表单，已填写的表单内容仍然存在，并且错误代码和错误信息也会显示出来。表单里的内容已经做了HTML转码处理，所以没有了HTML标记或者引号字符的冲突问题。（这个非常重要！）
+
+通过这个范例程序，我们熟悉了几个开发Smarty驱动的程序所需要的关键知识点。如下：
+
+* 所有与页面表现相关的元素都包含在模板文件里。我们没有从模板文件外部指派HTML标签或者其他任何与页面表现相关的元素到模板文件中。唯一从外部指派到页面的只有需要显示的内容，在这里而言就是留言簿的条目。
+
+* 错误提示也由模板文件来维护。我们没有（从模板文件外部）指派错误提示本身，而是指派了错误代码用于确定哪条错误提示需要被显示出来。另一个维护错误提示的方法是使用Smarty的设置文件（config files），在那里（在config file里），我们以“error_code = Error Message”的格式存储错误提示，然后用{$smarty.config.$error_code} 方法根据错误代码显示错误提示。
+
+* PHP 对象（们）相比于过程化的函数＋沉闷的参数更能便捷灵活地传递信息从而（应）被广泛使用。（如同sql/template 对象和错误代码的使用）
+
+希望这个范例能给你一个思路，一个在你的程序开发工作中使用Smarty，把程序中的表现逻辑与实现逻辑干净地分离开来的思路。
+
