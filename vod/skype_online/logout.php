@@ -1,0 +1,11 @@
+<?
+$returnUrl=$_COOKIE['cookie_returnUrl'];
+if(''==$returnUrl)
+{
+	$returnUrl='index.php';
+}
+setcookie("cookie_user_id",'');
+setcookie("cookie_user_account","");
+header("location:".$returnUrl);
+exit;
+?>
