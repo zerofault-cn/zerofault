@@ -1,0 +1,751 @@
+日志分析软件awstats配置集合
+作者:三郎308 日期:2006-12-04
+字体大小: 小 中 大  
+日志分析软件awstats
+
+1. 下载地址
+
+   http://sourceforge.net/projects/awstats/ 
+   
+   http://voxel.dl.sourceforge.net/ ... ts-6.4-1.noarch.rpm
+2. 安装   
+   2.1 rpm安装
+
+[root@web tools]# rpm -ivh awstats-6.4-1.noarch.rpm 
+Preparing...                ########################################### [100%]
+   1:awstats                ########################################### [100%]
+
+----- AWStats 6.4 - Laurent Destailleur -----
+AWStats files have been installed in /usr/local/awstats
+
+If first install, follow instructions in documentation
+(/usr/local/awstats/docs/index.html) to setup AWStats in 3 steps:
+Step 1 : Install and Setup with awstats_configure.pl (or manually)
+Step 2 : Build/Update Statistics with awstats.pl
+Step 3 : Read Statistics
+   
+   2.2 tar包安装
+   
+       直接解压就行了，因为awstats是由perl编写的。其实都一样。
+       
+3. 运行配置脚本生成awstats的配置文件
+   cd /usr/local/awstats/tools
+   perl awstats_configure.pl 
+   配置脚本询问域名等问题，假设回答的域名为www.abcd.com
+   3.1 生成的配置文件会放在/etc/awstats/下面
+   3.2 生成的配置文件的名称为awstats.www.adcd.com.conf
+   3.3 配置脚本只能修改主要的log日志为combined,如果设置了虚拟主机，需要分别修改虚拟主机中的
+
+日志配置。
+       格式设置 LogFormat "%h %l %u %t \"%r\" %>s %b \"%{Referer}i\" \"%{User-Agent}i\"" 
+
+combined
+        自定义的日志采用什么格式 CustomLog logs/testmysite-access_log combined
+        创建日志 TransferLog logs/testmysite-access_log
+        
+4. 编辑awstats.www.abcd.com.conf,保证awstats的正常运行
+
+   4.1 设置web server的logfile位置
+       编辑LogFile为web server的log文件位置
+       LogFile=/usr/local/apache2/logs/abcd-access_log
+       一定保证和httpd.conf中的log文件保证一致，httpd.conf中log名称为
+       logs/abcd-access_log
+   4.2 设置要分析的服务日志类型
+       LogType=W  
+       w表示为WEB日志
+   4.3 设置日志格式
+       LogFormat=1 
+       1表示采用NCSA apache combined/ELF/XLF log format
+   4.4 设置所要分析网站域名
+       SiteDomain="www.testmysite.com.cn"
+       引号中一定要填上域名，或者服务器主机名
+   4.5 设置awstats的数据库存放目录
+       DirData="/usr/local/awstats/data"
+   
+5. 创建awstats初始化数据库
+
+   perl awstats.pl -config=www.abcd.com -update 
+   
+6. 创建awstats的初始化静态统计页面
+
+   perl awstats.pl -config=bbs.testmysite.com.cn -output -staticlinks > awstats.bbs.html 
+   
+7. 通过浏览器刷新统计页面
+
+   7.1 修改awstats.www.testmysite.com.cn.conf中
+       AllowToUpdateStatsFromBrowser=1
+   7.2 修改awstats的存放数据目录的属性为apache的运行用户可读写
+       chown -R nobody /usr/local/awstats/data
+   7.3 检查/usr/local/awstats/wwwroot/cgi-bin/*.pl 是否有执行权限
+       chmod +x /usr/local/awstats/wwwroot/cgi-bin/*.pl    
+       
+       注：rpm安装包里面的*.pl都具有执行权限，tar包里面的*.pl却没有。
+       
+
+8. 设置需要认证才能访问流量统计页面
+
+   8.1 设置用户admin有权访问该页面
+       cd /usr/local/apache2/bin
+       ./htpasswd  -c /usr/local/apache2/passwords admin
+       按提示连续输入两次密码，这样就创建了admin用户才能访问流量统计页面。
+       
+   8.2 设置httpd.conf中的awstats条目增加如下内容
+           AuthType Basic
+           AuthName "Restricted Files"
+           AuthUserFile /usr/local/apache2/passwords
+           Require user admin
+           
+9. 两种观看日志分析方法的比较
+   
+   9.1 静态页面分析方法的优点
+       a. 安全性高，因为分析过程可以在后台通过crontab来执行，不需要执行cgi.
+       b. 统计分析页面响应速度快，因为是自动生成的静态页面，所以速度快过动态生成的页面。
+       c. 对服务器的负载影响可控，自动生成的脚本执行次数一定，对服务器的负载影响也是一定的。
+   9.2 动态页面分析方法的优点
+       a. 实时查看，可以随时在页面动态刷新统计分析结果。
+       
+   9.3 上面两种方法的缺点就是他们优点的反面。
+   
+10. awstats在apache虚拟主机下的配置    
+       
+   10.1 虚拟主机有3个
+        www.testmysite.com.cn
+        bbs.testmysite.com.cn
+        diy.testmysite.com.cn
+   10.2 生成并修改对应虚拟主机的配置文件
+   
+        cd /etc/awstats
+        cp awstats.www.testmysite.com.cn.conf awstats.bbs.testmysite.com.cn.conf
+        cp awstats.www.testmysite.com.cn.conf awstats.diy.testmysite.com.cn.conf
+   10.3 修改配置文件中的下列各项  
+        LogFile=/usr/local/apache2/logs/bbs-accesss_log
+        修改为实际的虚拟主机的log文件位置
+        SiteDomain="bbs.testmysite.com.cn"
+        修改为实际各虚拟主机的域名
+   10.4 修改httpd.conf各虚拟主机中的配置
+        <VirtualHost 202.108.59.23>
+        。。。。。。
+        CustomLog logs/testmysite-access_log combined
+        TransferLog logs/testmysite-access_log
+        。。。。。。
+        </VirtualHost> 
+        主要是修改日志格式保证apache输出的日志格式和awstats配置文件中配置一致。
+12. 观看流量统计方法
+
+    12.1 用户名＆密码
+         admin/testmysiteok
+    12.2 在浏览器输入
+         
+         查看主页流量分析
+         http://www.testmysite.com.cn/aws ... w.testmysite.com.cn
+         查看bbs流量分析
+         http://www.testmysite.com.cn/aws ... s.testmysite.com.cn
+         查看diy流量分析
+         http://www.testmysite.com.cn/aws ... y.testmysite.com.cn
+         
+         为了便于使用可以将以上连接加入收藏夹。 
+
+------------------
+
+
+awstats+Geo-IP安装 
+cd /usr/local/
+wget http://nchc.dl.sourceforge.net/sourceforge/awstats/awstats-6.5.tar.gz
+tar -zxvf awstats-6.5.tar.gz 
+ln -s  /usr/local/awstats-6.5.tar.gz  /usr/local/awstats
+cd  /usr/local/awstats/tools
+perl ./awstats_configure.pl (按照提示进行安装)
+mv /etc/awstats/awstats_mysite.com_conf   /etc/awstats/common.conf
+添加新的配置文件：
+Include "common.conf"
+LogFile="/usr/apache/logs/mysite.net_log"
+SiteDomain="www.mysite.net"
+HostAliases="mysite.net"
+
+修改apache.conf，加上mysite.net的日志文件
+CustomLog logs/mysite.net_log "combined"
+添加apache.conf
+<VirtualHost **.**.**.**>
+ServerName awstats.mysite.com
+DocumentRoot /usr/local/awstats/wwwroot/
+Alias /awstatsclasses "/usr/local/awstats/wwwroot/classes/"
+Alias /awstatscss "/usr/local/awstats/wwwroot/css/"
+Alias /awstatsicons "/usr/local/awstats/wwwroot/icon/"
+ScriptAlias /awstats/ "/usr/local/awstats/wwwroot/cgi-bin/"
+<Directory "/usr/local/awstats/wwwroot">
+    Options None
+    AllowOverride None
+    order allow,deny
+    Allow from all
+</Directory>
+CustomLog logs/mysite.com_log "combined"
+</VirtualHost>
+
+配置Geo-IP:
+Geo-IP C-API
+wget http://www.maxmind.com/download/geoip/api/c/GeoIP-1.3.8.tar.gz
+tar -zxvf GeoIP-1.3.8.tar.gz 
+cd GeoIP-1.3.8
+./configure 
+make
+make install(root)
+
+Geo-IP Perl-API
+wget http://www.maxmind.com/download/geoip/api/perl/Geo-IP-1.27.tar.gz
+tar -zxvf Geo-IP-1.27.tar.gz 
+cd Geo-IP-1.27
+perl Makefile.PL 
+make
+make install(root)
+
+Geo::IPfree
+wget http://search.cpan.org/CPAN/authors/id/G/GM/GMPASSOS/Geo-IPfree-0.2.tar.gz
+tar -zxvf Geo-IPfree-0.2.tar.gz 
+cd Geo-IPfree-0.2
+perl Makefile.PL 
+make
+make install(root)
+
+此时报错：
+[root @ws Geo-IP-1.27]# perl /usr/local/awstats/wwwroot/cgi-bin/awstats.pl --
+
+config=mysite.com
+Error: Plugin load for plugin 'geoip' failed with return code: Error: Can't locate 
+
+Geo/IP/PurePerl.pm in @INC (@INC contains: /usr/lib/perl5/5.8.5/i386-linux-thread-multi 
+
+Geo-IP-PurePerl
+wget http://search.cpan.org/CPAN/authors/id/T/TJ/TJMATHER/Geo-IP-PurePerl-1.14.tar.gz
+tar -zxvf Geo-IP-PurePerl-1.14.tar.gz 
+cd Geo-IP-PurePerl-1.14
+perl Makefile.PL 
+make
+make install(root)
+
+Geo-IP C-API ( http://www.maxmind.com/download/geoip/api/c/ )
+Geo-IP Perl-API ( http://www.maxmind.com/download/geoip/api/perl/ )
+这两个是一组，必须先编译安装C的，再编译安装perl的
+
+Geo::IPfree ( http://search.cpan.org/author/GMPASSOS/Geo-IPfree-0.2/ )
+这单独是一个
+上面两个不能同时在awstats里面用，否则会报错说冲突
+
+安装国家数据库：
+wget http://www.maxmind.com/download/geoip/database/GeoLiteCity.dat.gz
+MaxMind's GeoLiteCity database 
+gzip -d GeoLiteCity.dat.gz
+复制GeoLiteCity.dat到/usr/local/share/GeoIP/下，然后修改awstats.yoursitenam.conf中的
+LoadPlugin="geoip_city_maxmind GEOIP_STANDARD /usr/local/share/GeoIP/GeoLiteCity.dat"
+
+patch:国内主要搜索引擎的搜索结果页定义（源至chedong‘s blog）
+http://www.chedong.com/tech/awstats_6.5_patch.tgz
+AWStats升级到6.5：补充更新
+1 直接复制lib到awstats/lib的下；
+2 将GeoIP.dat文件复制到 /usr/local/share/GeoIP/ 下；
+3 修改awstats.chedong.conf 成你需要的配置文件；
+更新后包含国内主要搜索引擎的搜索结果页定义：search_engines.pm和蜘蛛定义：robots.pm 只需要覆
+
+盖原有lib\目录下的文件即可。
+
+NotPageList="css js class gif jpg jpeg png bmp ico swf xml rdf cgi mp3"
+LoadPlugin="tooltips"
+LoadPlugin="decodeutfkeys"
+LoadPlugin="geoip GEOIP_STANDARD /usr/local/share/GeoIP/GeoIP.dat"
+再下载最新的GeoIP 国家地址库后，解包放到/usr/local/share/GeoIP/GeoIP.dat下面。
+ 
+---------------
+
+AWStats安装手册
+作者：FunBSD
+最后更新：2006年2月25日  
+
+
+目录
+cronolog 
+apache 
+awstats 
+plugin 
+reference 
+
+
+--------------------------------------------------------------------------------
+
+
+cronolog 
+cronolog是一个可以根据日期格式轮循日志的工具。
+
+网址：http://cronolog.org/
+
+pkg_add -r cronolog.tbz 
+
+
+apache 
+配置虚拟主机，日志格式要使用combined:
+
+<VirtualHost *:80>
+ServerName www.funbsd.net
+DocumentRoot /home/funbsd/www
+CustomLog "|/usr/local/sbin/cronolog /var/log/httpd/www.funbsd.net.%w.log" combined
+</VirtualHost> 
+
+
+每天删除最旧的日志文件(crontab -e):
+
+0 0 * * * /var/log/httpd/httpd_log.sh 
+
+
+脚本内容(/var/log/httpd/httpd_log.sh):
+
+rm -f `dirname $0`/*.`date -v+1d +%w`.log
+#Linux:rm -f `dirname $0`/*.`date -d 1day +%w`.log 
+
+
+设置执行权限:
+
+chmod 755 /var/log/httpd/httpd_log.sh 
+
+
+返回页首
+
+
+--------------------------------------------------------------------------------
+
+
+awstats 
+awstats是一个功能强大的web,mail,ftp日志分析和统计工具。
+
+网址：http://awstats.sourceforge.net/
+
+安装:
+
+cd /home/pkg
+fetch http://awstats.sourceforge.net/files/awstats-6.3.tgz
+
+cd /usr/local
+tar zxvf /home/pkg/awstats-6.3.tgz
+mv awstats-6.3 awstats
+
+chown -R root:wheel awstats
+chmod -R 755 awstats  
+
+
+添加主机(可以添加多个):
+
+cd /usr/local/awstats/tools
+perl awstats_configure.pl
+
+Config file path ('none' to skip web server setup):
+> /usr/local/etc/apache2/httpd.conf
+
+Do you want me to build a new AWStats config/profile
+file (required if first install) [y/N] ? y
+
+Your web site, virtual server or profile name:
+> www.funbsd.net
+
+Directory path to store config file(s) (Enter for default):
+> /usr/local/etc/awstats
+ 
+
+
+修改主机配置(/usr/local/etc/awstats/awstats.www.funbsd.net.conf)，与httpd.conf保持一致:
+
+#LogFile="gzip -d < log.gz |"
+#LogFile="awstats/tools/logresolvemerge.pl *.log |"
+LogFile="/var/log/httpd/www.funbsd.net.%Dw-1.log"
+LogType=W
+LogFormat=1
+SiteDomain="www.funbsd.net"
+HostAliases="funbsd.net www.funbsd.net 192.168.0.100"
+DNSLookup=2
+
+DirData="/var/lib/awstats"
+AllowToUpdateStatsFromBrowser=0
+CreateDirDataIfNotExists=0
+SaveDatabaseFilesWithPermissionsForEveryone=0
+PurgeLogFile=0
+ArchiveLogRecords=0
+KeepBackupOfHistoricFiles=1
+
+DefaultFile="index.htm index.html index.php"
+SkipHosts="localhost REGEX[^192\.168\.]"
+SkipFiles="REGEX[^\/images] REGEX[^\/css] REGEX[^\/scripts] REGEX[^\/awstats] REGEX
+
+[^*\.gif]"
+Lang="auto"
+
+#LoadPlugin="decodeutfkeys"
+#LoadPlugin="hashfiles"
+#LoadPlugin="geoip GEOIP_STANDARD"
+#LoadPlugin="userinfo"
+#LoadPlugin="hostinfo"
+
+#Include "" 
+
+
+安装过程会自动在httpd.conf文件中添加下面的配置信息:
+
+Alias /awstatsclasses "/usr/local/awstats/wwwroot/classes/"
+Alias /awstatscss "/usr/local/awstats/wwwroot/css/"
+Alias /awstatsicons "/usr/local/awstats/wwwroot/icon/"
+ScriptAlias /awstats/ "/usr/local/awstats/wwwroot/cgi-bin/"
+<Directory "/usr/local/awstats/wwwroot">
+Options None
+AllowOverride None
+order allow,deny
+Allow from all
+</Directory>  
+
+
+重启Apache:
+
+/usr/local/etc/rc.d/apache2.sh restart 
+
+
+
+统计旧的主机日志:
+
+mkdir -p /var/lib/awstats
+/usr/local/awstats/wwwroot/cgi-bin/awstats.pl -config=www.funbsd.net \
+-update -Logfile=/var/log/httpd/www.funbsd.net.log
+ 
+
+
+定时统计所有主机日志:
+
+0 * * * * /usr/local/awstats/tools/awstats_updateall.pl now -
+
+configdir=/usr/local/etc/awstats > /dev/null 2>&1 
+
+
+测试:
+
+http://www.funbsd.net/awstats/awstats.pl?config=www.funbsd.net 
+
+
+返回页首
+
+
+--------------------------------------------------------------------------------
+
+
+plugin 
+awstats支持插件功能，以GeoIP为例:
+
+网址：http://www.maxmind.com/app/perl?rId=awstats
+
+cd /home/pkg
+fetch http://www.maxmind.com/download/geoip/api/c/GeoIP.tar.gz
+tar zxvf GeoIP.tar.gz
+cd GeoIP-*; ./configure; make; make install
+
+cd /home/pkg
+fetch http://www.maxmind.com/download/geoip/api/perl/Geo-IP-1.27.tar.gz
+tar zxvf Geo-IP-*.tar.gz
+cd Geo-IP-*; perl Makefile.PL; make; make install
+ 
+
+
+定时更新GeoIP库:
+
+MAILTO=postmaster@funbsd.net
+0 0 * * 0 cd /usr/local/share/GeoIP/ && fetch 
+
+http://www.maxmind.com/download/geoip/database/GeoIP.dat.gz && gunzip -f GeoIP.dat.gz 
+
+
+也可以从pkg安装各插件(参考配置文件PLUGINS一节):
+
+pkg_add -r p5-URI.tbz
+pkg_add -r p5-Encode-HanConvert.tbz
+pkg_add -r p5-Storable.tbz
+pkg_add -r GeoIP.tbz
+pkg_add -r p5-Geo-IP.tbz
+pkg_add -r p5-Net-XWhois.tbz
+ 
+
+
+加载插件(/usr/local/etc/awstats/awstats.www.funbsd.net.conf):
+
+LoadPlugin="decodeutfkeys"
+LoadPlugin="hashfiles"
+LoadPlugin="geoip GEOIP_STANDARD"
+LoadPlugin="hostinfo"
+ 
+
+
+reference 
+车东的学习笔记:
+
+http://www.chedong.com/tech/awstats.html 
+
+---------------
+
+awstats安装与配置 
+ 
+  1、到以下网站下载awstats和cronolog安装包:
+http://sourceforge.net/projects/awstats/
+http://www.cronolog.org
+
+2、解压和安装文件
+1)tar xzvf awstats-version.tgz 如下：
+data docs README.TXT tools wwwroot
+(1)默认安装方法
+进入tools目录运行awstats_configure.pl文件：
+perl awstats_configure.pl
+按提示对awstats进行设置
+主要包括：发布的目录、配置文件存放的目录和其他信息的指定，一般采用默认设置即可
+(2)直接编辑apache的httpd.conf文件添加如下内容：
+#
+# Directives to allow use of AWStats as a CGI
+#
+Alias /awstatsclasses "/usr/local/awstats/wwwroot/classes/"
+Alias /awstatscss "/usr/local/awstats/wwwroot/css/"
+Alias /awstatsicons "/usr/local/awstats/wwwroot/icon/"
+ScriptAlias /awstats/ "/usr/local/awstats/wwwroot/cgi-bin/"
+
+#
+# This is to permit URL access to scripts/files in AWStats directory.
+#
+#<Directory "/usr/local/awstats/wwwroot">
+# Options None
+# AllowOverride None
+# order allow,deny
+# Allow from all
+#</Directory>
+
+<VirtualHost 192.168.2.252>
+RewriteEngine On
+RewriteCond %{REQUEST_METHOD} ^TRACE
+RewriteRule .* - [F]
+DocumentRoot "/usr/local/awstats/docs/"
+ErrorLog /var/log/httpd/erro_awstat.log
+CustomLog "|/usr/local/sbin/cronolog /var/log/httpd/access_awstat.%Y%m%d" combined
+<Directory "/usr/local/awstats/wwwroot">
+Options Includes FollowSymLinks
+AllowOverride All
+order allow,deny
+Allow from all
+</Directory>
+</VirtualHost>
+
+2)tar xzvf cronolog-1.6.2.tar.gz
+cd cronolog-1.6.2
+configure
+make 
+make install
+安装完成将在/usr/local/sbin目录下生成以下两个文件：
+cronolog cronosplit
+
+3、修改apache的httpd.conf文件
+设置生成log的文件名：
+CustomLog "|/usr/local/sbin/cronolog /var/log/httpd/access_awstat.%Y%m%d" combined
+
+4、编辑配置文件
+默认是在/etc/awstats目录下的文件，awstats+域名+conf
+例如：awstats.www.ls666.com.conf
+可以在awstats.www.ls666.com.conf指定域名、log文件
+SiteDomain="www.ls666.com"
+LogFile="/var/log/httpd/access_awstat.%YYYY-0%MM-0%DD-0"
+
+5、生成数据
+进入../awstats/wwwroot/cgi-bin/目录里执行如下语句：
+./awstats.pl -update -config=www.ls666.com #www.ls666.com是我们的域名
+
+6、查看成果
+http://192.168.2.252/awstats/awstats.pl?config=www.ls666.com
+ 
+----------------------------
+
+awstats6.5安装笔记
+今天依照DreamHost Wiki的指示，成功安装了多域名分析的awstats6.5，以下的笔记大多是翻译了WIKI上
+
+的文档以及参考了Chedong的awstats安装笔记。同时，安装过程也是一次很好学习使用shell的机会。
+
+1. Download awstats6.5 下载程序
+Login，进入根目录后，利用wget下载源程序：
+
+
+wget http://awstats.sourceforge.net/files/awstats-6.5.tar.gz
+
+解压缩文件：
+
+
+tar xfzv awstats-6.5.tar.gz
+
+将文件夹/awstats-6.5重命名为/awstats，并进入/awstats文件夹：
+
+
+mv awstats-6.5 awstats
+cd awstats
+
+
+2. 安装准备
+新建文件夹/data用于存放awstats的数据，并改变/data权限：
+
+
+mkdir data
+chmod -R 755 data
+
+将awstats的/cgi-bin目录移动到/home/yourusername/awstats/下面：
+
+
+mv wwwroot/cgi-bin .
+
+在你的domain1.com下面新建一个/statistics的文件夹，用于存放awstats最终生成的静态页面文件：
+
+
+cd domain1.com
+mkdir statistics
+
+将/icon，/css，/js三个文件夹拷贝到/statistics文件夹下面，以使其静态页面可以正常引用这些文件
+
+：
+
+
+cp /home/yourusername/awstats/wwwroot/icon 
+/home/yourusername/domain1.com/statistics/icon
+
+cp /home/yourusername/awstats/wwwroot/css 
+/home/yourusername/domain1.com/statistics/css
+
+cp /home/yourusername/awstats/wwwroot/js 
+/home/yourusername/domain1.com/statistics/js
+
+
+注意，如果执行时出现"cp: omitting directory"的提示信息，则请使用cp -r参数来递归拷贝这些文件
+
+。
+
+3. 配置conf文件
+进入/home/yourusername/awstats/cgi-bin/文件夹，你的config文件都保存在这里：
+
+
+cd ~
+cd ./awstats/cgi-bin/
+
+不要直接重命名你的awstats.model.conf文件，建议采用拷贝的方式新增：
+
+
+cp awstats.model.conf common.conf
+
+其中common.conf就是你新生成的用于所有domain的公共配置文件，在不同域名的配置文件中则可以完全
+
+省略这一冗长的部分。
+
+但是，如果你只对一个域名进行统计，则可以直接生成文件"awstats.domain.com.conf"，再按以下方式
+
+进行编辑设定。
+
+GeoIP.dat的path可以通过以下命令得到：
+
+
+locate "GeoIP.dat"
+
+我得到的路径是："/usr/local/share/GeoIP/GeoIP.dat"，你的不一定也是这个，请确认清楚。
+
+现在编辑公共配置文件：
+
+
+vi common.conf
+
+进入后，处于命令状态时，最下面一行显示了文件基本信息，或者空白，按"insert"键进入编辑模式，最
+
+下行显示"--insert--"及当前光标位置信息（注：再次按"insert"键会进行到"--replace--"模式，插入
+
+及替换模式用"insert"键来切换）。现在进入--Insert--模式，改动以下信息：
+
+
+#LogFile="/home/yourusername/logs/domain1.com/http/access.log.0"
+# SiteDomain="domain1.com"
+# HostAliases="www.domain1.com"
+DNSLookup=0
+DirData="/home/yourusername/awstats/data/"
+DirIcons="icon"
+SaveDatabaseFilesWithPermissionsForEveryone=0
+DefaultFile="index.php index.html"
+lang="cn"
+LoadPlugin="decodeutfkeys"
+LoadPlugin="geoip GEOIP_STANDARD /usr/local/share/GeoIP/GeoIP.dat"
+
+编辑完成后，按"ESC"切换到命令模式，输入":w"回车，保存当前变更，再使用":q"退出vi编辑界面。
+注意：被"#"屏蔽掉的三行，是每个domain不同的，需要在各个awstats.domain*.conf中设定。
+
+如果你只对一个域名进行统计，则不必屏蔽这三行，写入正确的配置参数即可。
+
+接下来，针对不同的域名，设定不同的配置：
+
+
+cp awstats.model.conf awstats.domain1.com.conf
+vi awstats.domain1.com.conf
+
+在awatats.domain1.com.conf里，首先删除所有内容，在命令状态下，输入"ndd"，n为从光标所在位置向
+
+下的行数，光标下n-1行将被删除。
+正文输入：
+
+
+Include "common.conf"
+LogFile="/home/yourusername/logs/domain1.com/http/access.log.0"
+SiteDomain="domain1.com"
+HostAliases="www.domain1.com"
+
+保存退出即可。生成其他域名的方法相同，只需注意："domain*.com"这一段要保持一致。
+
+配置好所有的域名后，检查.pl文件的权限，所有.pl文件权限应设定为"755"，即"-rwxr-xr-x"：
+
+
+ls -o
+
+4. 首次生成统计页面
+
+
+perl /home/yourusername/awstats/tools/awstats_buildstaticpages.pl 
+-config=domain1.com -update 
+-awstatsprog=/home/yourusername/awstats/cgi-bin/awstats.pl 
+-dir=/home/yourusername/domain1.com/statistics/
+
+注意以上只有一行，自动换行除外。
+使用web浏览器，地址栏键入http://domain1.com/statistics/awstats.domain1.com.html
+看上去怎么样？
+
+5. 设定crontab
+编辑crontab任务清单，DreamHost使用nano编辑器：
+
+
+crontab -e
+
+针对不同的domain，设定其定时执行的cron job:
+
+
+1 0 * * * perl /home/yourusername/awstats/tools/awstats_buildstaticpages.pl 
+-config=domain1.com -update 
+-awstatsprog=/home/yourusername/awstats/awstats.pl 
+-dir=/home/yourusername/domain1.com/statistics/
+
+注意以上只有一行，自动换行除外。设定完成后，保存退出nano：
+
+
+CTRL + O
+CTRL + X
+
+注意，你可以在不同的domain下设定不同的/statistics文件夹，这样的话，你的配置文件则需要做相应
+
+的改动。我把所有的统计页面都放在了/domain1.com/statistics下面，因此针对不同的domain只需要改
+
+动"-config=domain1.com"一项即可。
+
+详细的使用crontab方法详见Shell使用指南
+
+6. 设定.htaccess文档
+设定默认页面，在你的.htaccess文档中写入：
+
+
+DirectoryIndex awstats.domain1.com.html
+
+当用户访问http://www.domain1.com/statistics时，会自动访问/awstats.domain1.com.html，对于
+
+domain2.com及domain3.com的统计页面，请自行研究解决吧。
+
+详细的.htaccess使用请见.htaccess指南。
+
