@@ -1,0 +1,245 @@
+1.AVI格式 
+
+ 程序代码
+<object id="video" width="400" height="200" border="0" classid="clsid:CFCDAA03-8BE4-11cf-B84B-0020AFBBCCFA">
+<param name="ShowDisplay" value="0">
+<param name="ShowControls" value="1">
+<param name="AutoStart" value="1">
+<param name="AutoRewind" value="0">
+<param name="PlayCount" value="0">
+<param name="Appearance value="0 value=""">
+<param name="BorderStyle value="0 value=""">
+<param name="MovieWindowHeight" value="240">
+<param name="MovieWindowWidth" value="320">
+<param name="FileName" value="file:///D|/work/vod/Mbar.avi">
+<embed width="400" height="200" border="0" showdisplay="0" showcontrols="1" autostart="1" autorewind="0" playcount="0" moviewindowheight="240" moviewindowwidth="320" filename="file:///D|/work/vod/Mbar.avi" src="Mbar.avi">
+</embed> 
+</object>
+
+
+
+2.mpg格式 
+
+ 程序代码
+<object classid="clsid:05589FA1-C356-11CE-BF01-00AA0055595A" id="ActiveMovie1" width="239" height="250">
+<param name="Appearance" value="0">
+<param name="AutoStart" value="-1">
+<param name="AllowChangeDisplayMode" value="-1">
+<param name="AllowHideDisplay" value="0">
+<param name="AllowHideControls" value="-1">
+<param name="AutoRewind" value="-1">
+<param name="Balance" value="0">
+<param name="CurrentPosition" value="0">
+<param name="DisplayBackColor" value="0">
+<param name="DisplayForeColor" value="16777215">
+<param name="DisplayMode" value="0">
+<param name="Enabled" value="-1">
+<param name="EnableContextMenu" value="-1">
+<param name="EnablePositionControls" value="-1">
+<param name="EnableSelectionControls" value="0">
+<param name="EnableTracker" value="-1">
+<param name="Filename" value="../../../mpeg/halali.mpg" valuetype="ref">
+<param name="FullScreenMode" value="0">
+<param name="MovieWindowSize" value="0">
+<param name="PlayCount" value="1">
+<param name="Rate" value="1">
+<param name="SelectionStart" value="-1">
+<param name="SelectionEnd" value="-1">
+<param name="ShowControls" value="-1">
+<param name="ShowDisplay" value="-1">
+<param name="ShowPositionControls" value="0">
+<param name="ShowTracker" value="-1">
+<param name="Volume" value="-480">
+</object>
+
+
+
+3.rm格式 
+
+ 程序代码
+<OBJECT ID=video1 CLASSID="clsid:CFCDAA03-8BE4-11cf-B84B-0020AFBBCCFA" HEIGHT=288 WIDTH=352>
+<param name="_ExtentX" value="9313">
+<param name="_ExtentY" value="7620">
+<param name="AUTOSTART" value="0">
+<param name="SHUFFLE" value="0">
+<param name="PREFETCH" value="0">
+<param name="NOLABELS" value="0">
+<param name="SRC" value="rtsp://203.207.131.35/vod/dawan-a.rm";>
+<param name="CONTROLS" value="ImageWindow">
+<param name="CONSOLE" value="Clip1">
+<param name="LOOP" value="0">
+<param name="NUMLOOP" value="0">
+<param name="CENTER" value="0">
+<param name="MAINTAINASPECT" value="0">
+<param name="BACKGROUNDCOLOR" value="#000000"><embed SRC type="audio/x-pn-realaudio-plugin" CONSOLE="Clip1" CONTROLS="ImageWindow" HEIGHT="288" WIDTH="352" AUTOSTART="false">
+</OBJECT>
+
+
+
+4.wmv格式
+
+ 程序代码
+<object id="NSPlay" width=200 height=180 classid="CLSID:22d6f312-b0f6-11d0-94ab-0080c74c7e95" codebase="http://activex.microsoft.com/activex/controls/mplayer/en/nsmp2inf.cab#Version=6,4,5,715" standby="Loading Microsoft Windows Media Player components..." type="application/x-oleobject" align="right" hspace="5">
+<!-- ASX File Name -->
+<param name="AutoRewind" value=1>
+<param name="FileName" value="xxxxxx.wmv">
+<!-- Display Controls -->
+<param name="ShowControls" value="1">
+<!-- Display Position Controls -->
+<param name="ShowPositionControls" value="0">
+<!-- Display Audio Controls -->
+<param name="ShowAudioControls" value="1">
+<!-- Display Tracker Controls -->
+<param name="ShowTracker" value="0">
+<!-- Show Display -->
+<param name="ShowDisplay" value="0">
+<!-- Display Status Bar -->
+<param name="ShowStatusBar" value="0">
+<!-- Diplay Go To Bar -->
+<param name="ShowGotoBar" value="0">
+<!-- Display Controls -->
+<param name="ShowCaptioning" value="0">
+<!-- Player Autostart -->
+<param name="AutoStart" value=1>
+<!-- Animation at Start -->
+<param name="Volume" value="-2500">
+<param name="AnimationAtStart" value="0">
+<!-- Transparent at Start -->
+<param name="TransparentAtStart" value="0">
+<!-- Do not allow a change in display size -->
+<param name="AllowChangeDisplaySize" value="0">
+<!-- Do not allow scanning -->
+<param name="AllowScan" value="0">
+<!-- Do not show contect menu on right mouse click -->
+<param name="EnableContextMenu" value="0">
+<!-- Do not allow playback toggling on mouse click -->
+<param name="ClickToPlay" value="0">
+</object>
+
+
+
+最简单的播放代码
+
+ 程序代码
+<embed src="http://wmt2.aboutmedia.com.tw/Aboutmedia/warner/mtv/naying-021011_01v_120k.wmv";; 
+autostart="true" loop="true" width="200" height="150" > 
+
+
+把这个网址http://wmt2.aboutmedia.com.tw/Aboutmedia/warner/mtv/naying-021011_01v_120k.wmv换成你要看的电影就行了
+
+
+有图像的rm格式：
+
+ 程序代码
+<OBJECT classid=clsid:CFCDAA03-8BE4-11cf-B84B-0020AFBBCCFA height=288 id=video1 width=305 VIEWASTEXT>
+<param name=_ExtentX value=5503>
+<param name=_ExtentY value=1588>
+<param name=AUTOSTART value=-1>
+<param name=SHUFFLE value=0>
+<param name=PREFETCH value=0>
+<param name=NOLABELS value=0>
+<param name=SRC value=http://media.cdut.edu.cn/ram/new/xiaoxin1.ram>
+<param name=CONTROLS value=Imagewindow,StatusBar,ControlPanel>
+<param name=CONSOLE value=RAPLAYER>
+<param name=LOOP value=0>
+<param name=NUMLOOP value=0>
+<param name=CENTER value=0>
+<param name=MAINTAINASPECT value=0>
+<param name=BACKGROUNDCOLOR value=#000000>
+</OBJECT>
+
+
+
+无图像的rm格式：如相声，歌曲。。。
+
+ 程序代码
+<object ID=video2 WIDTH=300 HEIGHT=62 CLASSID=CLSID:CFCDAA03-8BE4-11CF-B84B-0020AFBBCCFA>
+<param name=_ExtentX value=9657>
+<param name=_ExtentY value=847>
+<param name=AUTOSTART value=-1>
+<param name=SHUFFLE value=0>
+<param name=PREFETCH value=0>
+<param name=NOLABELS value=0>
+<param name=SRC value=http://210.242.69.206/ramgen/broadcast/BCC/encoder/hipop.rm>
+<param name=CONTROLS value=StatusBar,controlpanel>
+<param name=CONSOLE value=Clip1>
+<param name=LOOP value=0>
+<param name=NUMLOOP value=0>
+<param name=CENTER value=0>
+<param name=MAINTAINASPECT value=0>
+<param name=BACKGROUNDCOLOR value=#000000>
+</object>
+
+
+
+最简单的media格式的播放器。。自动识别有无图像，但是版本是你机器的！
+
+ 程序代码
+<embed src=mms://61.175.132.221/tv/mtv/f4/makeawish.wmv width=200 height=200 autostart=true loop=true></embed>
+
+
+
+有图像的media播放器，自动调用网上的插件。
+
+ 程序代码
+<object id=nstv classid=CLSID:6BF52A52-394A-11d3-B153-00C04F79FAA6 width=280 height=265 codebase=http://activex.microsoft.com/activex/controls/mplayer/en/nsmp2inf.cab#Version=5,1,52,701standby=Loading Microsoft? Windows Media? Player components... type=application/x-oleobject>
+<param name=URL value=http://202.99.11.42/xiangsheng/ymjr.wma>
+<PARAM NAME=UIMode value=full><PARAM NAME=AutoStart value=true>
+<PARAM NAME=Enabled value=true>
+<PARAM NAME=enableContextMenu value=false>
+<param name=WindowlessVideo value=true></object>
+
+
+
+无图像的media播放器。。。同上。
+
+ 程序代码
+<object id=nstv classid=CLSID:6BF52A52-394A-11d3-B153-00C04F79FAA6 width=280 height=60 codebase=http://activex.microsoft.com/activex/controls/mplayer/en/nsmp2inf.cab#Version=5,1,52,701standby=Loading Microsoft? Windows Media? Player components... type=application/x-oleobject>
+<param name=URL value=http://202.99.11.42/xiangsheng/ymjr.wma>
+<PARAM NAME=UIMode value=full><PARAM NAME=AutoStart value=true>
+<PARAM NAME=Enabled value=true>
+<PARAM NAME=enableContextMenu value=false>
+</object>
+
+
+
+只是界面不同的media的调插件播放器。。建议不用这个，，你可以看！
+<embed src=http://av.wanwa.com/fileroot/AV/Ramfiles/23809.ram type=audio/x-pn-realaudio-plugin console=Clip1 controls=ControlPanel,StatusBar height=60 width=275 autostart=true></embed>
+
+
+在线播放r m格式视频代码：
+
+ 程序代码
+<object id="player" name="player" classid="clsid:CFCDAA03-8BE4-11cf-B84B-0020AFBBCCFA" width="400" height="272">
+<param name="_ExtentX" value="18415">
+<param name="_ExtentY" value="9102">
+<param name="AUTOSTART" value="-1">
+<param name="SHUFFLE" value="0">
+<param name="PREFETCH" value="0">
+<param name="NOLABELS" value="-1">
+<param name="SRC" value="http://www.xiaoqiong.com/ftp/up/bz.rm">
+<param name="CONTROLS" value="Imagewindow">
+<param name="CONSOLE" value="clip1">
+<param name="LOOP" value="0">
+<param name="NUMLOOP" value="0">
+<param name="CENTER" value="0">
+<param name="MAINTAINASPECT" value="0">
+<param name="BACKGROUNDCOLOR" value="#000000">
+</object><br>
+<object ID="RP2" CLASSID="clsid:CFCDAA03-8BE4-11cf-B84B-0020AFBBCCFA" WIDTH="400" HEIGHT="57">
+<param name="_ExtentX" value="18415">
+<param name="_ExtentY" value="1005">
+<param name="AUTOSTART" value="-1">
+<param name="SHUFFLE" value="0">
+<param name="PREFETCH" value="0">
+<param name="NOLABELS" value="-1">
+<param name="SRC" value="http://www.xiaoqiong.com/ftp/up/bz.rm">
+<PARAM NAME="CONTROLS" VALUE="ControlPanel,StatusBar">
+<param name="CONSOLE" value="clip1">
+<param name="LOOP" value="0">
+<param name="NUMLOOP" value="0">
+<param name="CENTER" value="0">
+<param name="MAINTAINASPECT" value="0">
+<param name="BACKGROUNDCOLOR" value="#000000">
+</object>
+

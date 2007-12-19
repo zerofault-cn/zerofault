@@ -1,0 +1,12 @@
+windows2003下IIS＋PHP4的配置
+iis6支持php4.3.9以上
+
+1，复制php4ts.dll到windows\system32下，复制php.ini到windows下
+
+2，在iis的web服务扩展中添加php4isapi.dll，
+
+3，在主目录选项卡里，点“配置”，添加后缀为“.php”的php4isapi.dll的映射
+
+4，给源代码所在目录加上iis用户的权限
+
+5，php可执行程序php.exe或者php4isapi.dll所在目录加上Users组的权限
