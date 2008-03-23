@@ -1,0 +1,88 @@
+<html>
+  <head>
+  <title>Homepage</title>
+  </head>
+  <body>
+  <a href='http://www.thehungersite.com/'>Manual redirection<br></a>
+  <a href="javascript:ResetCookie()">Cookie reset</a>
+
+  <script language="javascript">
+  <!-- 
+  var bVisitedToday = false;
+
+  var lastVisit = GetCookie("account");
+  if (lastVisit != null) 
+  {
+  lastVisit = 1 * lastVisit;
+  var lastHere = new Date(lastVisit);  
+  var rightNow = new Date();
+
+  if(lastHere.getYear() == rightNow.getYear()
+     && lastHere.getMonth() == rightNow.getMonth()
+     && lastHere.getDate() == rightNow.getDate())
+  {
+     bVisitedToday = true;
+    }
+  }
+
+  if(bVisitedToday == false)
+  {
+  setLastlastVisitCookie();
+  window.location="http://www.thehungersite.com/"
+  }
+  else
+  {
+  //window.location="about:blank"
+  }
+
+  function getCookieVal (offset)
+  {
+  var endstr = documents.cookie.indexOf (";", offset);
+  if (endstr == -1)
+    endstr = documents.cookie.length;
+  return unescape(documents.cookie.substring(offset, endstr));
+  }
+  function GetCookie (name) 
+  {
+  var arg = name + "=";
+  var alen = arg.length;
+  var clen = documents.cookie.length;
+  var i = 0;
+  while (i < clen) {
+    var j = i + alen;
+    if (documents.cookie.substring(i, j) == arg)
+      return getCookieVal (j);
+    i = documents.cookie.indexOf(" ", i) + 1;
+    if (i == 0) break; 
+  }
+  return null;
+  }
+  function SetCookie (name, value)
+  {
+  var argv = SetCookie.arguments;
+  var argc = SetCookie.arguments.length;
+  var expires = (argc > 2) ? argv[2] : null;
+  var path = (argc > 3) ? argv[3] : null;
+  var domain = (argc > 4) ? argv[4] : null;
+  var secure = (argc > 5) ? argv[5] : false;
+  documents.cookie = name + "=" + escape (value) +
+    ((expires == null) ? "" : ("; expires=" + expires.toGMTString())) +
+    ((path == null) ? "" : ("; path=" + path)) +
+    ((domain == null) ? "" : ("; domain=" + domain)) +
+    ((secure == true) ? "; secure" : "");
+  }
+  function setLastlastVisitCookie ()
+  {
+  var rightNow = new Date();
+  var expdate = new Date();
+  expdate.setTime (expdate.getTime() + 1 * (24 * 60 * 60 * 1000)); //+1 day
+  SetCookie ("lastVisit", rightNow.getTime(), expdate, "/");
+  }
+  function ResetCookie()
+  {
+    SetCookie("lastVisit", 0, null, "/");
+  }
+  // -->
+  </script>
+  </body>
+  </html>

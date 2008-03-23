@@ -1,0 +1,374 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+<title>首页</title>
+<link rel="stylesheet" href="style.css" type="text/css">
+<script type="text/JavaScript" language="javascript" src="function.js"></script>
+</head>
+
+<body bgcolor="#ffa042">
+
+<div id="top">
+<div id="top_navi">
+	<div id="top_navi1"><a href="#">帮助中心</a></div>
+	<div id="top_navi2"><a href="#" onclick="window.external.addFavorite('http://','长天影视')">加入收藏</a></div>
+</div>
+<div id="menu">
+	<div id="menu1"><a href="index.htm">首页</a></div>
+	<div id="menu2"><a href="movie/">电影</a></div>
+	<div id="menu3"><a href="webtv/">电视</a></div>
+	<div id="menu4"><a href="comic/">动漫</a></div>
+	<div id="menu5"><a href="news/">新闻</a></div>
+	<div id="menu6"><a href="show/">综艺</a></div>
+	<div id="menu7"><a href="record/">纪实</a></div>
+	<div id="menu8"><a href="mtv/">MTV</a></div>
+	<div id="menu9"><a href="baike/">百科</a></div>
+	<div id="menu10"><a href="subject/">专题</a></div>
+</div>
+<div id="submenu">
+<a href="type.htm">科幻</a> | 喜剧 | 动画 | 故事 | 战争 | 爱情 | 恐怖 | 惊险 | 警匪 | 成人
+</div>
+<div id="titlelayer"></div>
+
+<!-- 搜索板块 -->
+<div id="search">
+<form name="form2" method="post" action="2">
+<div id="search_title">影视搜索</div>
+<div id="search_input">
+	<select name="type">
+	<option selected>按影片名</option>
+	<option>按主演</option>
+	<option>按导演</option>
+	</select>
+	<input type="text" name="keyword" size="30">
+	<input type="submit" name="Submit4" value="搜索"></div>
+</form>
+</div>
+<!-- 海报轮换 -->
+<div id="ad">
+<table width="100%" height="100%" border="0" cellpadding="0" cellspacing="0">
+<tr>
+	<td width="8" height="8" background="image/index2_04.gif"></td>
+	<td bgcolor="#ffffff"></td>
+	<td width="8" background="image/index2_05.gif"></td>
+</tr>
+<tr>
+	<td bgcolor="#ffffff"></td>
+	<td bgcolor="#ffffff">
+	<table width="100%" height="100%" border="0" cellpadding="0" cellspacing="0">
+	<tr>
+		<td><a href="javascript:goUrl()"><img src="javascript:nextAd()" name="imgInit" border=0 style="FILTER: revealTrans(duration=1,transition=23);" width="505" height="192"></a></td>
+	</tr>
+	</table>
+	</td>
+	<td bgcolor="#ffffff"></td>
+</tr>
+<tr>
+	<td height="8" background="image/index2_10.gif"></td>
+	<td bgcolor="#ffffff"></td>
+	<td background="image/index2_11.gif"></td>
+</tr>
+</table>
+</div>
+<!-- 最新公告 -->
+<div id="news">
+<table width="100%" height="100%" border="0" cellpadding="0" cellspacing="0">
+<tr>
+	<td width="8" height="8" background="image/index2_04.gif"></td>
+	<td bgcolor="#ffffff"></td>
+	<td width="8" background="image/index2_05.gif"></td>
+</tr>
+<tr>
+	<td bgcolor="#ffffff"></td>
+	<td height="48" valign="top" bgcolor="#ffffff"><img src="image/index2_13.gif" width="225" height="44"></td>
+	<td bgcolor="#ffffff"></td>
+</tr>
+<tr>
+	<td bgcolor="#ffffff"></td>
+	<td valign="top" style="padding:8px" background="image/index1_11.gif">
+	<table width="100%" border="0" cellpadding="0" cellspacing="0" bgcolor="#ffffff">
+	<tr>
+		<td>
+		<ul id="news">
+		<li><a href="#">公司与网通公司建立战</a></li>
+		<li><a href="#">建设面向PC用户和家易</a></li>
+		<li><a href="#">以用户为中心，提供正</a></li>
+		<li><a href="#">IPTV电视节目以及其他</a></li>
+		<li><a href="#">成为一个提供高质量服</a></li>
+		<li><a href="#">高起点的节目内容提供</a></li>
+		<li><a href="#">让用户和网通认可的优</a></li>
+		<li><a href="#">目前网通的网站上已有</a></li>
+		<li><a href="#">我公司的网站首先要</a></li>
+		<li><a href="#">我公司的网站首先要</a></li>
+		</td>
+	</tr>
+	</table>
+	</td>
+	<td bgcolor="#ffffff"></td>
+</tr>
+<tr>
+	<td height="8" background="image/index2_10.gif"></td>
+	<td bgcolor="#ffffff"></td>
+	<td background="image/index2_11.gif"></td>
+</tr>
+</table>
+</div>
+<!-- 主体部分 -->
+<div id="main">
+<table width="100%" border="0" cellpadding="0" cellspacing="0">
+<tr>
+	<td width="8" height="8" background="image/index2_04.gif"></td>
+	<td bgcolor="#ffffff"></td>
+	<td width="8" background="image/index2_05.gif"></td>
+</tr>
+<tr>
+	<td bgcolor="#ffffff"></td>
+	<td bgcolor="#ffffff">
+	<!-- 最新上映 -->
+	<img src="image/index1_08.gif" width="41" height="28" style="margin-top:10px"><img src="image/index1_09.gif" width="82" height="28">
+	<table width="100%" border="0" cellpadding="0" cellspacing="0" bgcolor="#ffffff">
+	<tr>
+		<td style="padding:8px" background="image/index1_15.gif">
+		<table width="100%" border="0" cellpadding="8" cellspacing="10" bgcolor="#ffffff">
+		<tr>
+			<td align="center" class="list_td"><img src="image/src/h1.jpg" class="minihaibao" title="《杀手无罪》&#10&#10&#10类型：电影&#10产地：美国&#10片长：单本剧&#10主演：&#13&#13&#13妮芙·坎贝尔&#13唐纳德·萨瑟兰&#13&#09威廉·梅西&#13&#09约翰·瑞特尔&#13&#09特蕾茜·乌尔曼"><br><a href="info.htm" title="《杀手无罪》&#10&#10&#10类型：电影&#10产地：美国&#10片长：单本剧&#10主演：&#13&#13&#13妮芙·坎贝尔&#13唐纳德·萨瑟兰&#13&#09威廉·梅西&#13&#09约翰·瑞特尔&#13&#09特蕾茜·乌尔曼">天荒地未老</a></td>
+			<td align="center" class="list_td"><img src="image/src/h1.jpg" class="minihaibao"><br><a href="#" title="《杀手无罪》&#10&#10&#10类型：电影&#10产地：美国&#10片长：单本剧&#10主演：&#13&#13&#13妮芙·坎贝尔&#13唐纳德·萨瑟兰&#13&#09威廉·梅西&#13&#09约翰·瑞特尔&#13&#09特蕾茜·乌尔曼">天荒地未老</a></td>
+			<td align="center" class="list_td"><img src="image/src/h1.jpg" class="minihaibao"><br><a href="#" title="《杀手无罪》&#10&#10&#10类型：电影&#10产地：美国&#10片长：单本剧&#10主演：&#13&#13&#13妮芙·坎贝尔&#13唐纳德·萨瑟兰&#13&#09威廉·梅西&#13&#09约翰·瑞特尔&#13&#09特蕾茜·乌尔曼">天荒地未老</a></td>
+			<td align="center" class="list_td"><img src="image/src/h1.jpg" class="minihaibao" title="《杀手无罪》&#10&#10&#10类型：电影&#10产地：美国&#10片长：单本剧&#10主演：&#13&#13&#13妮芙·坎贝尔&#13唐纳德·萨瑟兰&#13&#09威廉·梅西&#13&#09约翰·瑞特尔&#13&#09特蕾茜·乌尔曼"><br><a href="#" title="《杀手无罪》&#10&#10&#10类型：电影&#10产地：美国&#10片长：单本剧&#10主演：&#13&#13&#13妮芙·坎贝尔&#13唐纳德·萨瑟兰&#13&#09威廉·梅西&#13&#09约翰·瑞特尔&#13&#09特蕾茜·乌尔曼">天荒地未老</a></td>
+			<td align="center"><img src="image/src/h1.jpg" class="minihaibao" title="《杀手无罪》&#10&#10&#10类型：电影&#10产地：美国&#10片长：单本剧&#10主演：&#13&#13&#13妮芙·坎贝尔&#13唐纳德·萨瑟兰&#13&#09威廉·梅西&#13&#09约翰·瑞特尔&#13&#09特蕾茜·乌尔曼"><br><a href="#" title="《杀手无罪》&#10&#10&#10类型：电影&#10产地：美国&#10片长：单本剧&#10主演：&#13&#13&#13妮芙·坎贝尔&#13唐纳德·萨瑟兰&#13&#09威廉·梅西&#13&#09约翰·瑞特尔&#13&#09特蕾茜·乌尔曼">天荒地未老</a></td>
+		</tr>
+		</table>
+		</td>
+	</tr>
+	</table>
+	<br>
+	<img src="image/src/ad.jpg">
+	<br>
+	<!-- 热门影视 -->
+	<img src="image/index1_08.gif" width="41" height="28" style="margin-top:10px"><img src="image/index1_14.gif" width="82" height="28">
+	<table width="100%" border="0" cellpadding="0" cellspacing="0" bgcolor="#ffffff">
+	<tr>
+		<td style="padding:8px" background="image/index1_15.gif">
+		<table width="100%" border="0" cellpadding="8" cellspacing="10" bgcolor="#ffffff">
+		<tr>
+			<td align="center" class="list_td"><img src="image/src/h1.jpg" class="minihaibao" title="《杀手无罪》&#10&#10&#10类型：电影&#10产地：美国&#10片长：单本剧&#10主演：&#13&#13&#13妮芙·坎贝尔&#13唐纳德·萨瑟兰&#13&#09威廉·梅西&#13&#09约翰·瑞特尔&#13&#09特蕾茜·乌尔曼"><br><a href="#" title="《杀手无罪》&#10&#10&#10类型：电影&#10产地：美国&#10片长：单本剧&#10主演：&#13&#13&#13妮芙·坎贝尔&#13唐纳德·萨瑟兰&#13&#09威廉·梅西&#13&#09约翰·瑞特尔&#13&#09特蕾茜·乌尔曼">天荒地未老</a></td>
+			<td align="center" class="list_td"><img src="image/src/h1.jpg" class="minihaibao"><br><a href="#">天荒地未老</a></td>
+			<td align="center" class="list_td"><img src="image/src/h1.jpg" class="minihaibao"><br><a href="#">天荒地未老</a></td>
+			<td align="center" class="list_td"><img src="image/src/h1.jpg" class="minihaibao"><br><a href="#">天荒地未老</a></td>
+			<td align="center"><img src="image/src/h1.jpg" class="minihaibao"><br><a href="#">天荒地未老</a></td>
+		</tr>
+		</table>
+		</td>
+	</tr>
+	</table>
+	<br>
+	<img src="image/src/ad.jpg">
+	<br>
+	<!-- 精品影视 -->
+	<img src="image/index1_08.gif" width="41" height="28" style="margin-top:10px"><img src="image/index1_16.gif" width="82" height="28">
+	<table width="100%" border="0" cellpadding="0" cellspacing="0" bgcolor="#ffffff">
+	<tr>
+		<td style="padding:8px" background="image/index1_15.gif">
+		<table width="100%" border="0" cellpadding="8" cellspacing="10" bgcolor="#ffffff">
+		<tr>
+			<td align="center" class="list_td"><img src="image/src/h1.jpg" class="minihaibao"><br><a href="#">天荒地未老</a></td>
+			<td align="center" class="list_td"><img src="image/src/h1.jpg" class="minihaibao"><br><a href="#">天荒地未老</a></td>
+			<td align="center" class="list_td"><img src="image/src/h1.jpg" class="minihaibao"><br><a href="#">天荒地未老</a></td>
+			<td align="center" class="list_td"><img src="image/src/h1.jpg" class="minihaibao"><br><a href="#">天荒地未老</a></td>
+			<td align="center"><img src="image/src/h1.jpg" class="minihaibao"><br><a href="#">天荒地未老</a></td>
+		</tr>
+		</table>
+		</td>
+	</tr>
+	</table>
+	</td>
+	<td bgcolor="#ffffff"></td>
+</tr>
+<tr>
+	<td height="8" background="image/index2_10.gif"></td>
+	<td bgcolor="#ffffff"></td>
+	<td background="image/index2_11.gif"></td>
+</tr>
+</table>
+</div>
+
+
+
+<!-- End Top DIV -->
+</div>
+<!-- 顶部logo -->
+<table width="993" height="208" border="0" cellpadding="0" cellspacing="0" background="image/index1_01.jpg">
+<tr><td>&nbsp;</td></tr>
+</table>
+<!-- 登录表单 -->
+<table width="200" height="209"  border="0" cellpadding="0" cellspacing="0" bgcolor="#ffa042" background="image/index2_01.gif" style="margin-left:15px;margin-top:15px;color:#ffffff">
+<form name="form1" method="post" action="">
+<tr>
+	<td height="34" colspan="2"><span style="margin-left:18px;color:#fddd04;font-family:WST_ENGl">WWW.PANSKY.NET</span></td>
+</tr>
+<tr>
+	<td height="20" colspan="2"><span style="margin-left:54px">用户登录</span></td>
+</tr>
+<tr>
+	<td height="16" colspan=2></td>
+</tr>
+<tr>
+	<td width="65" height="22" align="right">帐号：</td>
+	<td><input type="text" name="account" size="16" class="input_text"></td>
+</tr>
+<tr>
+	<td height="22" align="right">密码：</td>
+	<td><input type="password" name="password" size="17" class="input_text"></td>
+</tr>
+<tr>
+	<td height="22" align="right">验证码：</td>
+	<td><input type="text" name="validate" size="6" class="input_text"> <img src="image/src/vali.jpg" align="absmiddle"></td>
+</tr>
+<tr>
+	<td height="22" colspan="2"><span style="margin-left:15px">记住帐号：</span><input type="checkbox" name="keepme" value="1">&nbsp;&nbsp;&nbsp;&nbsp;<input type="submit" name="Submit1" value=" 登录 " ></td>
+</tr>
+<tr>
+	<td height="23" colspan="2" align="center"><input type="button" name="Submit2" value="注册" style="background-image:url('image/index1_04.gif')">&nbsp;&nbsp;<input type="button" name="Submit3" value="忘记密码"></td>
+</tr>
+<tr>
+	<td colspan=2>&nbsp;</td>
+</tr>
+</form>
+</table>
+<!-- 分类列表 -->
+<table width="200" border="0" cellpadding="0" cellspacing="0" style="margin-left:15px;margin-top:15px">
+<tr>
+	<td height="53" background="image/index2_03.gif"></td>
+</tr>
+<tr>
+	<td>
+	<table id="type_list" width="100%" border="0" cellpadding="0" cellspacing="0" background="image/index1_07.gif" style="line-height:160%;">
+	<tr>
+		<td style="padding:0 14px 0 14px"><b><a href="#">电影</a></b><br>
+		<a href="#">科幻</a> | <a href="#">喜剧</a> | <a href="#">动画</a> | <a href="#">故事</a> | <a href="#">战争</a> | <a href="#">爱情</a> | <a href="#">恐怖</a> | <a href="#">惊险</a> | <a href="#">警匪</a> | <a href="#">成人</a> |</td>
+	</tr>
+	<tr>
+		<td><hr size="0.6" style="color:#ffffff;background-color: transparent;"></td>
+	</tr>
+	<tr>
+		<td style="padding:0 14px 0 14px"><b><a href="#">电视</a></b><br>
+		<a href="#">欧美</a> | <a href="#">日韩</a> | <a href="#">港台</a> | <a href="#">大陆</a></td>
+	</tr>
+	<tr>
+		<td><hr size="0.6" style="color:#ffffff"></td>
+	</tr>
+	<tr>
+		<td style="padding:0 14px 0 14px"><b>新闻</b><br>
+		今日焦点 | 经济发展 | 社会纵横 | 时事政治</td>
+	</tr>
+	<tr>
+		<td><hr size="0.6" style="color:#ffffff"></td>
+	</tr>
+	<tr>
+		<td style="padding:0 14px 0 14px"><b>MTV</b><br>
+		欧美 | 日韩 | 港台 | 大陆 | 乐队组合</td>
+	</tr>
+	<tr>
+		<td><hr size="0.6" style="color:#ffffff"></td>
+	</tr>
+	<tr>
+		<td style="padding:0 14px 0 14px"><b>百科</b><br>
+		养生之道 | 时尚前沿 | 学习天地</td>
+	</tr>
+	</table>
+	</td>
+</tr>
+<tr>
+	<td><img src="image/index2_06.gif" width="200" height="15"></td>
+</tr>
+</table>
+<!-- 热门点播 -->
+<table width="200" border="0" cellpadding="0" cellspacing="0" style="margin-left:15px;margin-top:15px">
+<tr>
+	<td><img src="image/index2_07.gif" width="200" height="51"></td>
+</tr>
+<tr>
+	<td>
+	<table width="100%" border="0" cellpadding="0" cellspacing="0" background="image/index1_13.gif">
+	<tr>
+		<td>
+		<ul id="hot_list">
+		<li><a href="#">空中危机</a></li>
+		<li><a href="#">僵尸新娘</a></li>
+		<li><a href="#">宛如天堂</a></li>
+		<li><a href="#">冰上迪斯科</a></li>
+		<li><a href="#">驱魔</a></li>
+		<li><a href="#">战争之王</a></li>
+		<li><a href="#">四十岁的老处男</a></li>
+		<li><a href="#">不朽的园丁</a></li>
+		<li><a href="#">非常人贩</a></li>
+		<li><a href="#">狼来了</a></li></td>
+	</tr>
+	</table>
+	</td>
+</tr>
+<tr>
+	<td><img src="image/index2_08.gif" width="200" height="15"></td>
+</tr>
+</table>
+<!-- 排行榜 -->
+<table width="200" border="0" cellpadding="0" cellspacing="0" style="margin-left:15px;margin-top:15px">
+<tr>
+	<td><img src="image/index2_09.gif" width="200" height="51"></td>
+</tr>
+<tr>
+	<td>
+	<table width="100%" border="0" cellpadding="0" cellspacing="0" background="image/index1_13.gif">
+	<tr>
+		<td>
+		<ul id="hot_list">
+		<li><a href="#">空中危机</a></li>
+		<li><a href="#">僵尸新娘</a></li>
+		<li><a href="#">宛如天堂</a></li>
+		<li><a href="#">冰上迪斯科</a></li>
+		<li><a href="#">驱魔</a></li>
+		<li><a href="#">战争之王</a></li>
+		<li><a href="#">四十岁的老处男</a></li>
+		<li><a href="#">不朽的园丁</a></li>
+		<li><a href="#">非常人贩</a></li>
+		<li><a href="#">狼来了</a></li></td>
+	</tr>
+	</table>
+	</td>
+</tr>
+<tr>
+	<td width="200" height="120" align="center" background="image/index2_14.gif"><img src="image/index1_18.gif" width="170" height="45" style="margin-top:40px"></td>
+</tr>
+</table>
+<!-- 底部 -->
+<table width="975" border="0" cellpadding="0" cellspacing="0" bgcolor="#ffe2c6" style="margin:20px 0 30px 15px">
+<tr>
+	<td width="8" height="8" background="image/index2_16.gif"></td>
+	<td></td>
+	<td width="8" background="image/index2_17.gif"></td>
+</tr>
+<tr>
+	<td></td>
+	<td>
+	<table id="footer" width="100%" border="0" cellpadding="0" cellspacing="0">
+	<tr>
+		<td height="26" align="center" background="image/index1_19.gif"><a href="#">联系我们</a> <span style="color:#ffffff">|</span> <a href="#">关于我们</a></td>
+	</tr>
+	<tr>
+		<td height="50" align="center">长天影视版权所有 &copy;2005-2006</td>
+	</tr>
+	</table>
+	</td>
+	<td></td>
+</tr>
+<tr>
+	<td height="8" background="image/index2_18.gif"></td>
+	<td></td>
+	<td background="image/index2_19.gif"></td>
+</tr>
+</table>
+</body>
+<script type="text/JavaScript" language="javascript" src="function_title.js"></script>
+</html>
