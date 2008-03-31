@@ -11,33 +11,36 @@ function createXMLHTTP() {
 			XMLHTTP=null;
 		}
 	}
-	if ( !XMLHTTP && typeof XMLHttpRequest != "undefined" ) { 
+	if ( !XMLHTTP && typeof XMLHttpRequest != "undefined" ) {
 		XMLHTTP=new XMLHttpRequest();//适用Firefox
-	} 
+	}
 	return XMLHTTP;
 }
 
 var xmlhttp = createXMLHTTP();
-var i=0;
 var page=1;
 function getData(f)
 {
-	i++;
-	xmlhttp.open("get","/pkexport/export.php?i="+i+"&sid="+sid+"&field="+f+"&getall="+getall+"&page="+page+"&pageitem="+pageitem,false);
+	xmlhttp.open("get","export.php?sid="+sid+"&field="+f+"&getall="+getall+"&page="+page+"&pageitem="+pageitem+"&"+Math.random(),false);
 	xmlhttp.send(null);
+//	alert(xmlhttp.responseText);
 	document.getElementById(f).innerHTML = xmlhttp.responseText.rtrim();
 }
 function poll(f)
 {
-	i++;
-	xmlhttp.open("get","/pkexport/poll.php?i="+i+"&sid="+sid+"&field="+f,false);
+	xmlhttp.open("get","poll.php?sid="+sid+"&field="+f+"&"+Math.random(),false);
 	xmlhttp.send(null);
 	document.getElementById(f).innerHTML = xmlhttp.responseText;
 }
 function mysubmit(formId)
 {
-	i++;
-	eval('document.'+formId).action='/pkexport/export.php?i='+i+'&sid='+sid;
+	if(eval('document.'+formId).content.value.length<2)
+	{
+		alert('评论内容太短了！');
+		eval('document.'+formId).content.focus();
+		return false;
+	}
+	eval('document.'+formId).action='export.php?sid='+sid+"&"+Math.random();
 	eval('document.'+formId).submit();
 }
 function clearForm()
@@ -96,3 +99,12 @@ String.prototype.rtrim=function()
 	return this.replace(/(\s*$)/g,"");
 }
 //getAllData();
+function load()
+{
+	if(document.all){//IE使用
+		window.attachEvent('onload',getAllData)
+	}
+	else{//FF使用
+		window.addEventListener('load',getAllData,false);
+	}
+}
