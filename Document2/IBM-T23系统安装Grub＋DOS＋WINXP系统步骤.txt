@@ -1,0 +1,26 @@
+IBM-T23系统安装Grub＋DOS＋WINXP系统步骤
+
+启动到DOS，执行命令：sys c:
+重启，开始安装XP。（第二次重启时先关闭电源，然后再开机）
+安装驱动，依次是：
+	未知设备->ACPI Power management driver(79ku03ww)
+	显卡->Video driver(vftp1a2x)
+	声卡->Audio driver V(aftp1axp)
+	无线网卡->BCM94306(需手动选择inf)
+安装IBM程序，依次是：
+	Configuration package HA(中文版)
+	Battery MaxiMiser and Power Management Features package(custom方式，只选driver，不选maximiser)
+	Hotkey Features(热键OSD驱动)
+导入注册表
+复制grub到C:
+复制cttune.cpl到system32，设置ClearType Tuning
+进入安全模式，复制termsrv.dll到system32
+设置OEM-DIY
+安装输入法，删除其他输入法，设置输入法
+安装Global Audio Control
+安装Daemon
+安装office
+安装Alcatel PC Suite
+安装NERO6.6
+安装MSN
+运行MemTurbo
