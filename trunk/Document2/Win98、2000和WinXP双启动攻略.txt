@@ -1,0 +1,137 @@
+一、2000和WinXP的双启动 
+如果在安装WinXP后你重新安装了Win2000，原来的WinXP将不能正常启动。 
+解决方法很简单： 
+启动的到2000下，从WinXP的安装光盘的i386目录下拷贝两个文件NTLDR和Ntdetect.com到C:\（覆盖） 
+如果你的2000也不能正常启动，则需要WinXP的“Recovery Console（恢复控制台）”来解决。 
+进入“系统修复控制台”，执行以下命令： 
+（1）Fixboot 
+（2）cd\ 
+（3）Attrib -S -H -R -A NTLDR 
+（4）Attrib -S -H -R -A ntdetect.com 
+（5）Copy X:\i386\NTLDR C:\ 
+（6）Copy X:\i386\ntdetect.com C:\ 
+（X 代表WinXP安装光盘所在盘符） 
+
+二、Win98和WinXP的双启动 
+在Win98和WinXP共存的多系统环境中，重新安装Win98并不会导致WinXP不能启动，除非你执行了sys命令或格式化了WinXP引导文件所在分区，不过即使你执行了这些破坏性操作，也是能够恢复的。 
+
+首先纠正一个错误：有许多同志都以为在Win98和WinXP共存的情况下又重装了Win98，只许要修改boot.ini文件就行了，这是一个极端错误的方法。或许你曾在进不去WinXP的情况下修改boot.ini就“取得成功”－－进入了WinXP，但是你的情况一定不是我们所述的这样，你一定很幸运，没有丢失Win98和WinXP的引导区文件。如果真的丢失了WinXP引导文件，除非见到鬼，你只修改boot.ini是决计进不了WinXP的！ 
+
+另外，我们还必须了解Win98和WinXP双启动的原理： 
+先装Win98，系统将Win98的引导文件写到硬盘分区的引导区，启动时自动读取； 
+后装WinXP，系统先将Win98的引导区文件复制写到另外的若干文件中，其中包括NTLDR和Ntdetect.com等。然后将自己的引导文件写到引导区，覆盖到原来的Win98引导文件。开机时，如果选择WinXP就直接用引导区文件引导启动，如果选Win98就用原来备份的文件引导。 
+我们在Win98和WinXP共存的情况下又重装了Win98，就相当于先装WinXP后装Win98，虽然原来的Win98引导区文件仍然在C盘中，但是由于又装Win98时，Win98并未将WinXP的系统引导文件备份，而是将其覆盖，于是WinXP的引导区文件就在后装Win98时灰飞烟灭！ 
+（注意此时系统是作为WinXP引导，于是检查系统的文件，本来是应该检查WinXP的文件，现在却检查了Win98的文件，于是提示：“%bootdisk%\windows\system\hal.dll文件丢失或损坏”）系统无法引导！ 
+
+到此，你已经了解了双启动的原理，那么就跟我一起修复WinXP的启动吧~ 
+
+1、生成BootSect.dos文件 
+BootSect.dos文件是WinXP用来引导Win98的扇区文件，必须首先生成这个文件。进入Dos实模式（什么？不会？这样，嗯用软盘启动、在Win98关机时选择“重新启动并切换到MSDOS方式”、用系统安装盘进入……方法很多啦），然后通过Debug生成BootSect.dos： 
+
+C:\>Debug 
+-L 100 2 0 1 
+-nc:\BootSect.dos 
+-rbx 
+BX:0000 
+:0 
+-rcx 
+CX:0000 
+:200 
+-w 
+Writing 00200 bytes 
+-q 
+
+（请注意空格） 
+
+2、恢复WinXP的启动 
+进入“系统修复控制台”： 
+从WinXP的安装光盘启动电脑，在系统安装前有此选项。（略） 
+
+在输入系统管理员密码后显示你的WinXP安装盘符（以我的G：为例） 
+下面是你要输入的命令： 
+（1）修复OS Loader 
+执行Fixboot命令，在接下来的提示中选择”是“或”Y“，这样可以恢复WinXP引导程序，从而使系统引导时不会直接进入”Starting Windows Win98...“界面而是进入启动选择菜单（boot.ini）。 
+（2）修复引导菜单（boot.ini）。 
+执行bootcfg /Rebuild命令：（只输入bootcfg而不接参数，会显示帮助信息，你将了解更多，由于是中文，此处便不详解） 
+@:G:>bootcfg /Rebuild /*重建启动选单*/ 
+…… /*扫描系统*/ 
+1. Windows XP 
+…… /*扫描出的已安装NT系统，如果你只有WinXP和Win98那么此处只有一项，视情况而定。此时系统要求你输入你要添加的WinXP系统*/ 
+将安装添加到启动列表吗？/*当然回答Y*/ 
+输入加载识别符： /*系统选单里为你正添加的系统列出的系统选项，可以随意输入，只要你自己认识（注意不能过长），如“不能选我^-^“*/ 
+OS加载选项：/*（也可不填）输入你的WinXP启动路径，如我的为G盘，就输入“fixboot G:”（引号内）（“fastdetect G:”应该也行，没有试过^_^）*/ 
+exit 退出，重启。 
+
+3、恢复Win98的启动 
+现在你应该能在C：找到boot.ini文件（找不到？哦，那是隐藏的，你可以在Dos中去除它的隐藏和系统属性再改）在文件的最后添加如下一行： 
+C:\"Microsoft Windows Win98" 
+（呵呵~我添加的是C:\"怀念 Win98 美好记忆"，随便啦，看你喜欢，注意不要太长就行。） 
+
+附：解读多重启动引导文件——BOOT.INI 
+
+Windows NT类的操作系统，也就是Windows NT/2000/XP中，有一个特殊文件，也就是“BOOT.INI”文件，这个文件会很轻松地按照我们的需求设置好多重启动系统。 “BOOT.INI”文件会在已经安装了Windows NT/2000/XP的操作系统的所在分区，一般默认为C:\下面存在。但是它默认具有隐藏和系统属性，所以你要设置你的文件夹选项，以便把“BOOT.INI”文件显示出来。我们可以用任何一种文本编辑器来打开他它。一般情况下，它的内容如下: 
+[boot loader] 
+timeout=30 
+default=multi(0)disk(0)rdisk(0)partition(1)\Windows 
+[operating systems] 
+multi(0)disk(0)rdisk(0)partition(1)\Windows="Microsoft Windows XP Professional" /fastdetect 
+　　在Windows 2000或者是XP系统中，我们可以很容易的设置“BOOT.INI”文件。那就是在“我的电脑”上面点击右键，选择“属性”打开“系统属性”对话框，再点击“高级”选项卡，在“启动和故障修复”里面点击“设置”按钮，就可以打开“启动和故障修复”对话框了，在这里面我们就可以对它进行详细设置。 
+　　如果你拥有Windows XP操作系统，那么你可以用“系统配置实用程序”来更方便的编辑“BOOT.INI”文件。具体做法是:打开“开始”菜单，点击“运行”命令，再在弹出的文本框中输入“msconfig”点击“确定”后就会弹出“系统配置实用程序”，再点击“BOOT.INI”选项卡，就会出现如图所示的界面。在这里，我们可以很方便地设置文件。 
+言归正传，现在，来说明一下这个文件内容的含义。 
+
+以我的文件为例： 
+[boot loader] 
+timeout=30 
+default=multi(0)disk(0)rdisk(0)partition(5)\WINDOW 
+[operating systems] 
+multi(0)disk(0)rdisk(0)partition(5)\WINDOW="Microsoft Windows XP Professional" /fastdetect 
+C:\=Microsoft Windows 
+
+1.系统加载部分（[boot loader]） 
+　　这一部分很简单，只有两个设定。那就是“timeout=”和“default=”。 
+“timeout=”就是设定开机时系统引导菜单显示的时间，超过设定值则自动加载下面“default=”指定的操作系统。默认值是30，单位为秒。我们可以在这里面设定等待时间的长短。如果将其设为“0”那么就是不显示系统引导菜单。 
+　　“default=”则是设定默认引导的操作系统。而等号后面的操作系统必须是已经在“[operating systems]”中存在的。如果想默认为加载另外的操作系统，我们可以参看“[operating systems]”中的操作系统列表，然后把想要加载的操作系统按照格式写到“default=”后面就可以了。 
+　　 
+　　2.操作系统部分（[operating systems]） 
+multi(0)disk(0)rdisk(0)partition(5)\WINDOW="Microsoft Windows XP Professional" /fastdetect 
+C:\=Microsoft Windows 
+
+multi(0)disk(0)rdisk(0)partition(5)：（见下）； 
+Microsoft Windows XP Professional：启动菜单的选择项，^_^可以随便改啊，比如我把它给改为了“进入 XP 新时空”； 
+/fastdetect：启动模式. 
+C:\=Microsoft Windows：我的另一个系统，即98 
+
+　在这里面，列出了机器上所安装的操作系统。比如机器上只有一个操作系统，那么就只有一条信息，那就是“multi(0)disk(0)rdisk(0)partition(1)\Windows="Microsoft Windows XP Professional" /fastdetect” 
+在这里需要注意的是，在英文引号内的文字就是引导操作系统菜单时显示出来的让我们选择操作系统的提示文字，在这里面我们可以随意更改。而“multi(0)disk(0)rdisk(0)partition(1) \Windows”这一句就需要些解释了。因为它涉及ARC（高级RISC计算机）命名，它是x86或RISC计算机中用于标识设备的动态方法。 
+ARC命名的第一部分用于标识硬件适配卡/磁盘控制器，它有两个选项:SCSI和Multi： 
+Multi表示一个非SCSI硬盘或一个由SCSI BIOS访问的SCSI硬盘，而SCSI则表示一个SCSI BIOS禁止的SCSI硬盘。(x)是硬件适配卡序号。Disk(x)表示SCSI总线号。如果硬件适配卡为Multi，其正确表示方法就为disk(0)，rdisk(x)则表示硬盘的序号，如果硬件适配卡为SCSI则忽略此值; 
+　　partition(x)表示硬盘的分区序号。 
+了解这些，我们就可以解释前面那条信息的含义了，即“multi(0)disk(0)rdisk(0)partition(1) \Windows”为，在0号非SCSI设备上的第0号磁盘上的第一个分区里面的“Windows”目录下可以找到能够启动的操作系统。 
+　　等号后的内容前面已经说过，那个就是引导菜单显示出来的供我们选择的提示文字。而后面的“/fastdetect”又是作什么用的呢？ 
+这是一个开关符，用来控制启动该操作系统时的具体选项，下面再来详细的介绍各种开关符的含义: 
+/3GB:这是Win2000 SP3新引入的。这使得用户区和系统区分为3G比1G的比例。只有用户使用NT企业版，应用程序也支持3GB选项时，此选项才生效。 
+　　/BASEVIDEO:使用标准VGA方式启动。这种方式主要用于显示驱动程序失效时。 
+　　/BAUDRATE:指出用于调度的波特率，如果用户不设置，则使用默认的9600，而对于线缆Modem则使用19200。 
+　　/BOOTLOG:使Win2000将日志写入 %SystemRoot%\NTBTLOG.TXT 。 
+　　/BURNMEMORY=:使NT在已知的内存上少使用指定的数量，如果/burnmemory=64，则有64M内存NT不使用。 
+　　/CRASHDEBUG:调度器在NT启动时启动，只有在内核错误时才有用，如果系统经常会无故出错，这个选项就很有用了。 
+　　/DEBUG:在启动NT时调入调度器，它可以在任何时间激活，在错误可以再次出现时使用它比较合适。 
+　　/DEBUGPORT= comx :指定用于调度的端口，X就指端口号。 
+　　/FASTDETECT:对于Win2000启动时，它使系统不检查串行口和并行口。 
+　　/HAL=<hal>:允许用户不使用默认的HAL。 
+　　/INTAFFINITY:设置多处理器HAL(HALMPS.DLL)，使编号最大的处理器接收中断请求。如果不设置此选项，Win2000会使所有处理器接收中断请求。 
+　　/KERNEL=<kernel>:与上面的功能相同，不过是针对SMP中的内核而言的。 
+　　/MAXMEM:n:指定NT可以使用的最大内存数，如果一个内存片损坏，这个开关就十分有用了。 
+　　/NODEBUG:不使用调试信息。 
+　　/NOGUIBOOT:指定此选项会使Win2000不加载VGA驱动程序，也就不会显示启动过程和失败时的兰屏信息。 
+　　/NOSERIALMICE=[COMx | COMx,y,z…]:在特定的COM中上禁止对串行鼠标的检测。如果用户有一个非鼠标设备接在COM口上，这个选项会十分有用。如果此开关未加参数，系统会禁止所有COM口。 
+　　/NUMPROC=n:只允许前N个系统处理器工作。 
+　　/ONECPU:在多处理器中只使用一个处理器。 
+　　/PCILOCK:不让NT为PCI设置分配IO/IRQ资源，而启用BIOS设置。 
+　　/SAFEBOOT:安全启动，这个大家一定十分熟悉，Win2000只启动HKLM\System\CurrentControlSet\Control\SafeBoot中的驱动程序和服务，其后跟三个参数MINIMAL，NETWORK或DSREPAIR之一。MINIMAL和NETWORK在允许网络下启动系统。而DSREPAIR要求系统从备份设备中调入活动目录的设置。还有一个选项是"(ALTERNATESHELL)"，它让系统调入由HKLM\System\CurrentControlSet\SafeBoot\AlternateShell指定的SHELL程序，而不使用默认的Explorer。 
+　　/SOS:在调入驱动程序名时显示它的名字，在因驱动问题而无法启动时使用比较好。 
+　　/WIN95:在装有三个系统DOS、Win9x和Windows NT的系统上，让NTLDR直接调用Win9x。启动文件BOOTSECT.W40。 
+　　/WIN95DOS:在装有三个系统DOS、Win9x和Windows NT的系统上，让NTLDR直接调用DOS启动文件BOOTSECT.DOS 
+　　/YEAR=:使用指定的年份，如果设置为/YEAR=2005，那现在的时间就是2005年，此选项仅对NT4+SP4和Win2000生效。
+ 
+
