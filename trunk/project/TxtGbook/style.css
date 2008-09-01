@@ -1,0 +1,98 @@
+body
+{
+	font-family:"Verdana";
+	font-size: 12px;
+	color:#808080;
+}
+a:link,a:hover
+{
+	color:#008080
+	
+}
+a:visited,a:active
+{
+	color:#008080;
+}
+td,textarea,input
+{
+	font-family:"Verdana";
+	font-size: 12px;
+}
+.red
+{
+color:#ff0000;
+}
+div#main
+{
+	margin-left: auto;
+	margin-right: auto;
+	margin-top:20px;
+	margin-bottom:10px;
+	width:758px;
+}
+div#form
+{
+	float:right;
+	width:264px;
+	border:dotted #bbbbbb 1px;
+}
+div#form form
+{
+	margin:8px 0px;
+}
+div#caption
+{
+	padding:4px;
+	font-weight:bold;
+	background-color:#CCFFCC;
+	font-size:14px;
+}
+div#tr
+{
+	margin:2px 0px;
+}
+span#field1
+{
+	padding-left:5px;
+	width:48px;
+	float:left;
+}
+span#field3
+{
+	margin-left:50px;
+}
+div#msg
+{
+	float:left;
+	width:480px;
+}
+div#msgItem
+{
+	margin-bottom:10px;
+	border:dotted #bbbbbb 1px;
+}
+div#msgTitle
+{
+	padding:4px;
+	font-weight:bold;
+	background-color:#E0FFE0;
+	font-size:14px;
+}
+div#msgContent
+{
+	padding:4px;
+	text-indent:2em;
+	word-wrap:break-word;
+	word-break:break-all;
+}
+div#msgInfo
+{
+	padding:2px;
+	background-color:#dddddd;
+}
+div#msgReply
+{
+	padding:3px;
+	font-weight:bold;
+	background-color:#E0FFE0;
+}
