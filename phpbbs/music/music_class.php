@@ -44,7 +44,7 @@ class Music
 		?>
 	<form id="form1" name="form1" action='search.php' method="post" onsubmit="return checkform1();">
 	<fieldset id="field1">
-	<legend><img src="../image/search.gif" width="16" height="16" align="absmiddle">音乐搜索</legend>
+	<legend><img src="../images/search.gif" width="16" height="16" align="absmiddle">音乐搜索</legend>
 	<div style="margin-left:10px;margin-top:5px"><input type="text" name="keyword" size="16"></div>
 	<div style="margin-left:10px;margin-top:5px"><select name="searchtype">
 		<option value="multi">搜索类型</option>
@@ -62,30 +62,30 @@ class Music
 	{
 		?>
 	<fieldset id="field1">
-	<legend><img src="image/icon3.gif" width="16" height="16" align="absmiddle">导航菜单</legend>
-	<div id="treeMenu1"><img name="img0" src="image/folder1.gif" width="16" height="16" align="absmiddle"><a href="javascript:t(document.all.div0,document.img0)"><span class="red">歌手列表</span></a></div>
+	<legend><img src="images/icon3.gif" width="16" height="16" align="absmiddle">导航菜单</legend>
+	<div id="treeMenu1"><img name="img0" src="images/folder1.gif" width="16" height="16" align="absmiddle"><a href="javascript:t(document.all.div0,document.img0)"><span class="red">歌手列表</span></a></div>
 		<div id="div0" style="display:none">
-		<div id="treeMenu2"><img src="image/link.gif"><a href="singer_list.php">所有歌手</a></div>
-		<div id="treeMenu2"><img src="image/link.gif"><a href="singer_list.php?list_id=16">港台男歌手</a></div>
-		<div id="treeMenu2"><img src="image/link.gif"><a href="singer_list.php?list_id=17">港台女歌手</a></div>
-		<div id="treeMenu2"><img src="image/link.gif"><a href="singer_list.php?list_id=18">港台组合</a></div>
-		<div id="treeMenu2"><img src="image/link.gif"><a href="singer_list.php?list_id=26">内地男歌手</a></div>
-		<div id="treeMenu2"><img src="image/link.gif"><a href="singer_list.php?list_id=27">内地女歌手</a></div>
-		<div id="treeMenu2"><img src="image/link.gif"><a href="singer_list.php?list_id=28">内地组合</a></div>
-		<div id="treeMenu2"><img src="image/link.gif"><a href="singer_list.php?list_id=30">其他地区</a></div>
-		<div id="treeMenu2"><img src="image/link.gif"><a href="singer_list.php?list_id=59">纯音乐</a></div>
+		<div id="treeMenu2"><img src="images/link.gif"><a href="singer_list.php">所有歌手</a></div>
+		<div id="treeMenu2"><img src="images/link.gif"><a href="singer_list.php?list_id=16">港台男歌手</a></div>
+		<div id="treeMenu2"><img src="images/link.gif"><a href="singer_list.php?list_id=17">港台女歌手</a></div>
+		<div id="treeMenu2"><img src="images/link.gif"><a href="singer_list.php?list_id=18">港台组合</a></div>
+		<div id="treeMenu2"><img src="images/link.gif"><a href="singer_list.php?list_id=26">内地男歌手</a></div>
+		<div id="treeMenu2"><img src="images/link.gif"><a href="singer_list.php?list_id=27">内地女歌手</a></div>
+		<div id="treeMenu2"><img src="images/link.gif"><a href="singer_list.php?list_id=28">内地组合</a></div>
+		<div id="treeMenu2"><img src="images/link.gif"><a href="singer_list.php?list_id=30">其他地区</a></div>
+		<div id="treeMenu2"><img src="images/link.gif"><a href="singer_list.php?list_id=59">纯音乐</a></div>
 		</div>
-	<div id="treeMenu1"><img name="img1" src="image/folder1.gif" width="16" height="16" align="absmiddle"><a href="javascript: t(document.all.div1,document.img1)"><span class="red">专辑列表</span></a></div>
+	<div id="treeMenu1"><img name="img1" src="images/folder1.gif" width="16" height="16" align="absmiddle"><a href="javascript: t(document.all.div1,document.img1)"><span class="red">专辑列表</span></a></div>
 		<div id="div1" style="display:none">
-		<div id="treeMenu2"><img src="image/link.gif"><a href="album_list.php?sort_field=album_id">最新专辑</a></div>
-		<div id="treeMenu2"><img src="image/link.gif"><a href="album_list.php?sort_field=album_count">热门专辑</a></div>
-		<div id="treeMenu2"><img src="image/link.gif"><a href="album_list.php?sort_field=album_quality">推荐专辑</a></div>
+		<div id="treeMenu2"><img src="images/link.gif"><a href="album_list.php?sort_field=album_id">最新专辑</a></div>
+		<div id="treeMenu2"><img src="images/link.gif"><a href="album_list.php?sort_field=album_count">热门专辑</a></div>
+		<div id="treeMenu2"><img src="images/link.gif"><a href="album_list.php?sort_field=album_quality">推荐专辑</a></div>
 		</div>
-	<div id="treeMenu1"><img name="img2" src="image/folder1.gif" width=16 height=16 align="absmiddle"><a href="javascript: t(document.all.div2,document.img2)"><span class=red>单曲列表</span></a></div>
+	<div id="treeMenu1"><img name="img2" src="images/folder1.gif" width=16 height=16 align="absmiddle"><a href="javascript: t(document.all.div2,document.img2)"><span class=red>单曲列表</span></a></div>
 		<div id="div2" style="display:none">
-		<div id="treeMenu2"><img src="image/link.gif"><a href="single_song.php">所有单曲</a></div>
+		<div id="treeMenu2"><img src="images/link.gif"><a href="single_song.php">所有单曲</a></div>
 		</div>
-	<div id="treeMenu1"><img src="image/link0.gif" align="absmiddle"><a href='music_upload.php'><span class="red">上传歌曲</span></a></div>
+	<div id="treeMenu1"><img src="images/link0.gif" align="absmiddle"><a href='music_upload.php'><span class="red">上传歌曲</span></a></div>
 	</fieldset>
 		<?
 	}
@@ -97,12 +97,12 @@ class Music
 		$result1=$db->sql_query($sql1);
 		?>
 	<fieldset id="field1">
-	<legend><img src="image/icon1.gif" width="16" height="16" align="absmiddle">专辑排行</legend>
+	<legend><img src="images/icon1.gif" width="16" height="16" align="absmiddle">专辑排行</legend>
 		<?
 		while($r=$db->sql_fetchrow($result1))
 		{
 			?>
-	<div id="list1"><span><a href="album_info.php?album_id=<?=$r['album_id']?>" title="<?=$r['album_name']?>"><img src="image/item4.gif" border=0 align="absmiddle"><?=substr($r['album_name'],0,14)?> </a></span><?=$r['album_count']?></div>
+	<div id="list1"><span><a href="album_info.php?album_id=<?=$r['album_id']?>" title="<?=$r['album_name']?>"><img src="images/item4.gif" border=0 align="absmiddle"><?=substr($r['album_name'],0,14)?> </a></span><?=$r['album_count']?></div>
 			<?
 		}
 		?>
@@ -116,12 +116,12 @@ class Music
 		$result1=$db->sql_query($sql1);
 		?>
 	<fieldset id="field1">
-	<legend><img src="image/icon1.gif" width="16" height="16" align="absmiddle">歌曲排行</legend>
+	<legend><img src="images/icon1.gif" width="16" height="16" align="absmiddle">歌曲排行</legend>
 		<?
 		while($r=$db->sql_fetchrow($result1))
 		{
 			?>
-	<div id="list1"><span><a href="play.php?song_id=<?=$r['song_id']?>" title="<?=$r['song_name']?>"><img src="image/item2.gif" border=0 align="absmiddle"><?=substr($r['song_name'],0,14)?> </a></span><?=$r['song_count']?></div>
+	<div id="list1"><span><a href="play.php?song_id=<?=$r['song_id']?>" title="<?=$r['song_name']?>"><img src="images/item2.gif" border=0 align="absmiddle"><?=substr($r['song_name'],0,14)?> </a></span><?=$r['song_count']?></div>
 			<?
 		}
 		?>
@@ -133,9 +133,9 @@ class Music
 	{
 		?>
 	<fieldset id="field1" style="text-align:center">
-	<legend><img src="image/icon2.gif" width="16" height="16" align="absmiddle">推荐软件</legend>
-	<div><a href="image/winamp.exe"><img src="image/winamp.gif" width="90" border="0"><br>Winamp2.81中文版</a></div>
-	<div><a href="minilyrics.zip"><img src="image/minilyrics.gif" width="100" border=0><br>迷你歌词3.3.1378</a></div>
+	<legend><img src="images/icon2.gif" width="16" height="16" align="absmiddle">推荐软件</legend>
+	<div><a href="images/winamp.exe"><img src="images/winamp.gif" width="90" border="0"><br>Winamp2.81中文版</a></div>
+	<div><a href="minilyrics.zip"><img src="images/minilyrics.gif" width="100" border=0><br>迷你歌词3.3.1378</a></div>
 	</fieldset>
 		<?
 	}
@@ -146,14 +146,14 @@ class Music
 		$sql1="select * from album_info order by album_id desc limit 0,5";
 		$result1=$db->sql_query($sql1);
 		?>
-		<img src="image/newalbum.gif">
+		<img src="images/newalbum.gif">
 		<div>
 		<?
 		while($r=$db->sql_fetchrow($result1))
 		{
 			?>
 		<div id="newAlbum1">
-		<div id="newAlbum1Photo"><a href="album_info.php?album_id=<?=$r['album_id']?>"><img src="get_photo.php?photo_type=album&photo_id=<?=$r['album_id']?>" width="96" border="0" id="albumPhoto"></a></div>
+		<div id="newAlbum1Photo"><a href="album_info.php?album_id=<?=$r['album_id']?>"><img src="albums/<?=$r['album_id']?>.jpg" onerror="this.src='images/no_photo.jpg';" width="96" border="0" id="albumPhoto"></a></div>
 		<div><a href="album_info.php?album_id=<?=$r['album_id']?>"><?=substr($r['album_name'],0,14)?> </a></div>
 		<div><a href="singer_info.php?singer_id=<?=$r['singer_id']?>"><?=getSingerName($r['singer_id'])?></a></div>
 		<?=$r['album_pubdate']?>
@@ -171,12 +171,12 @@ class Music
 		global $db;
 		if($song_ltype=='new10')
 		{
-			echo '<img src="image/newsong.gif">';
+			echo '<img src="images/newsong.gif">';
 			$this->label=Array(1,1,0,1,1,1,1,1,1);
 		}
 		else
 		{
-			echo '<img src="image/allsong.gif">';
+			echo '<img src="images/allsong.gif">';
 			$this->label=Array(1,1,0,1,1,1,1,1,1);
 		}
 		$this->songListLabel();
@@ -369,17 +369,17 @@ class Music
 			}
 			if($this->label[6])
 			{
-				echo '<span id="f6"><a href="play.php?song_id='.$song_id.'"><img src="image/play1.gif" border="0"></a></span>';
+				echo '<span id="f6"><a href="play.php?song_id='.$song_id.'"><img src="images/play1.gif" border="0"></a></span>';
 			}
 			if($this->label[7])
 			{
-				echo '<span id="f7"><a href="download.php?song_id='.$song_id.'"><img src="image/download1.gif" border="0"></a></span>';
+				echo '<span id="f7"><a href="download.php?song_id='.$song_id.'"><img src="images/download1.gif" border="0"></a></span>';
 			}
 			if($this->label[8])
 			{
 				if($song_lyric)
 				{
-					echo '<span id="f8"><a href="http://'.$_SERVER["HTTP_HOST"].'/'.str_replace(' ','%20',$song_lyric).'" title="下载方法:点鼠标右键->目标另存为..."><img src="image/lyric.gif" border=0></a></span>';
+					echo '<span id="f8"><a href="http://'.$_SERVER["HTTP_HOST"].'/'.str_replace(' ','%20',$song_lyric).'" title="下载方法:点鼠标右键->目标另存为..."><img src="images/lyric.gif" border=0></a></span>';
 				}
 				else
 				{
@@ -391,7 +391,7 @@ class Music
 		<?
 		}
 	}
-	function convert($name,$type)
+	function convert($name,$type)//截取限定长度的名称，以及搜索结果加亮
 	{
 		global $searchtype,$keyword;
 		$maxsongNameLen=24;
@@ -469,7 +469,7 @@ class Music
 		$result1=$db->sql_query($sql1);
 		$comment_num=$db->sql_numrows($result1);
 		?>
-		<img src="image/comment.gif"><a name="comment"></a>
+		<img src="images/comment.gif"><a name="comment"></a>
 		<?
 		if($comment_num>0)
 		{
@@ -484,7 +484,7 @@ class Music
 			{
 				?>
 		<div id="commentList">
-			<span id="f0"><span style="color:#ff0000"><?=$comment_num-$i?></span> 楼</span><span id="f1"><?=$r["name"]?></span><span id="f2"><?=preg_replace('/\[face\](.*?)\[\/face\]/is','<img src="image/face/\\1.gif" valign="absmiddle">',nl2br(htmlspecialchars($r["content"])));?> </span><span id="f3"><?=$r["posttime"]?></span>
+			<span id="f0"><span style="color:#ff0000"><?=$comment_num-$i?></span> 楼</span><span id="f1"><?=$r["name"]?></span><span id="f2"><?=preg_replace('/\[face\](.*?)\[\/face\]/is','<img src="images/face/\\1.gif" valign="absmiddle">',nl2br(htmlspecialchars($r["content"])));?> </span><span id="f3"><?=$r["posttime"]?></span>
 		</div>
 				<?
 				$i++;
@@ -503,14 +503,14 @@ class Music
 			<div><span id="commentLabel">评论:</span><textarea name="content" cols="50" rows="6" onKeyUp="wordCount()" onKeyDown="wordCount()"></textarea>最多1000字，当前<span id="wordCount" style="color:#ff0000">0</span>字</div>
 			<div><span id="commentLabel">表情:</span>
 				<input type="radio" name="face" value="0" checked>无 
-				<input type="radio" name="face" value="01" onclick="addface(this.value)"><img src="image/face/01.gif" width="20" height="20">
-				<input type="radio" name="face" value="02" onclick="addface(this.value)"><img src="image/face/02.gif" width="20" height="20">
-				<input type="radio" name="face" value="03" onclick="addface(this.value)"><img src="image/face/03.gif" width="20" height="20">
-				<input type="radio" name="face" value="04" onclick="addface(this.value)"><img src="image/face/04.gif" width="20" height="20">
-				<input type="radio" name="face" value="05" onclick="addface(this.value)"><img src="image/face/05.gif" width="20" height="20">
-				<input type="radio" name="face" value="06" onclick="addface(this.value)"><img src="image/face/06.gif" width="20" height="20">
-				<input type="radio" name="face" value="07" onclick="addface(this.value)"><img src="image/face/07.gif" width="20" height="20">
-				<input type="radio" name="face" value="08" onclick="addface(this.value)"><img src="image/face/08.gif" width="20" height="20">
+				<input type="radio" name="face" value="01" onclick="addface(this.value)"><img src="images/face/01.gif" width="20" height="20">
+				<input type="radio" name="face" value="02" onclick="addface(this.value)"><img src="images/face/02.gif" width="20" height="20">
+				<input type="radio" name="face" value="03" onclick="addface(this.value)"><img src="images/face/03.gif" width="20" height="20">
+				<input type="radio" name="face" value="04" onclick="addface(this.value)"><img src="images/face/04.gif" width="20" height="20">
+				<input type="radio" name="face" value="05" onclick="addface(this.value)"><img src="images/face/05.gif" width="20" height="20">
+				<input type="radio" name="face" value="06" onclick="addface(this.value)"><img src="images/face/06.gif" width="20" height="20">
+				<input type="radio" name="face" value="07" onclick="addface(this.value)"><img src="images/face/07.gif" width="20" height="20">
+				<input type="radio" name="face" value="08" onclick="addface(this.value)"><img src="images/face/08.gif" width="20" height="20">
 			</div>
 			<div><span style="margin-left:60px;"><input type="submit" name="submit4" value="发表评论"></span></div>
 		</fieldset>
