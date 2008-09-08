@@ -60,23 +60,23 @@ $music->downloadTools();
 <div id="main">
 <span id="topNavi">您所在位置:<a href="index.php">音乐首页</a>-&gt;<a href="singer_list.php?list_id=<?=$singer_area_id.$singer_chorus_id?>"><?=$singer_area?><?=$singer_chorus?></a>-&gt;<?=$singer_name?>:</span>
 <br /><br />
-<img src="image/singer_info.gif">
+<img src="images/singer_info.gif">
 <div>
 <div id="singerInfo">
-<div id="singerInfoPhoto"><img src="get_photo.php?photo_type=singer&photo_id=<?=$singer_id?>"></div>
+<div id="singerInfoPhoto"><img src="photos/<?=$singer_id?>.jpg" onerror="this.src='images/no_photo.jpg';" /></div>
 <div id="text"><?=$singer_name?></div>
 <div id="text"><?=$singer_area?><?=$singer_chorus?></div>
 </div>
 <div id="singerIntro"><textarea rows="14" cols="58" readonly><?=$music->unformat($singer_intro)?></textarea></div>
 </div>
 <br /><br />
-<img src="image/singer_album.gif">
+<img src="images/singer_album.gif">
 <?
 for($i=0;$i<sizeof($album_info);$i++)
 {
 	?>
 <div id="albumList">
-<div id="photo"><a href="album_info.php?album_id=<?=$album_info[$i][0]?>"><img src="get_photo.php?photo_type=album&photo_id=<?=$album_info[$i][0]?>" width="120" border="0"></a></div>
+<div id="photo"><a href="album_info.php?album_id=<?=$album_info[$i][0]?>"><img src="albums/<?=$album_info[$i][0]?>.jpg" onerror="this.src='images/no_photo.jpg';" width="120" border="0"></a></div>
 <div>专辑名:<a href="album_info.php?album_id=<?=$album_info[$i][0]?>"><?=$album_info[$i][1]?></a></div>
 <div>发布日期:<?=$album_info[$i][2]?></div>
 <div>关注指数:<?=$album_info[$i][4]?></div>
@@ -93,7 +93,7 @@ if(sizeof($album_info)==0)
 if($db->sql_numrows($result5)>0)
 {
 	?>
-<img src="image/single_song.gif">
+<img src="images/single_song.gif">
 	<?
 	$music->setLabel(Array(1,1,0,0,1,1,1,1,1));
 	$music->songListLabel();

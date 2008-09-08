@@ -68,13 +68,13 @@ $music->downloadTools();
 <div id="main">
 <span id="topNavi">您所在位置:<a href="index.php">音乐首页</a>-&gt;专辑列表:</span>
 <br /><br />
-<img src="image/newalbum.gif">
+<img src="images/newalbum.gif">
 <?
 for($i=0;$i<sizeof($album_info);$i++)
 {
 	?>
 <div id="albumList">
-<div id="photo"><a href="album_info.php?album_id=<?=$album_info[$i][0]?>"><img src="get_photo.php?photo_type=album&photo_id=<?=$album_info[$i][0]?>" width="120" border="0"></a></div>
+<div id="photo"><a href="album_info.php?album_id=<?=$album_info[$i][0]?>"><img src="albums/<?=$album_info[$i][0]?>.jpg" onerror="this.src='images/no_photo.jpg';" width="120" border="0"></a></div>
 <div>歌手名:<a href="singer_info.php?singer_id=<?=$album_info[$i][5]?>"><?=$album_info[$i][6]?></a></div>
 <div>专辑名:<a href="album_info.php?album_id=<?=$album_info[$i][0]?>"><?=$album_info[$i][1]?></a></div>
 <div>发布日期:<?=$album_info[$i][2]?></div>

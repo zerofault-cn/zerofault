@@ -60,7 +60,7 @@ $music->downloadTools();
 <img src="image/album_info.gif">
 
 <div id="albumInfo" style="height:160px;">
-<img src="get_photo.php?photo_type=album&photo_id=<?=$album_id?>" width="120" style="margin:8px;float:left">
+<img src="albums/<?=$album_id?>.jpg" onerror="this.src='images/no_photo.jpg';" width="120" style="margin:8px;float:left">
 <div>歌手名:<a href="singer_info.php?singer_id=<?=$singer_id?>"><?=$singer_name?></a></div>
 <div>专辑名:<a href="album_info.php?album_id=<?=$album_id?>"><?=$album_name?></a></div>
 <div>发布日期:<?=$album_pubdate?></div>

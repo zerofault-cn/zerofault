@@ -33,7 +33,7 @@ $music->downloadTools();
 <div id="main">
 <span id="topNavi">您所在位置:<a href="index.php">音乐首页</a>-&gt;歌手列表:</span>
 <br /><br />
-<img src="image/singer_list.gif">
+<img src="images/singer_list.gif">
 <?
 include_once "admin/singer_list.php";
 ?>
