@@ -1,6 +1,6 @@
 <?
 @session_start();
-$index_file="index.ini";//记录留言信息文件的文件名
+$index_file="index.txt";//记录留言信息文件的文件名
 $msgDir="data/";//保存留言信息文件的目录
 $msgFileExt=".txt";//设定文件扩展名
 $pageitem=5;//设定每页显示多少条
