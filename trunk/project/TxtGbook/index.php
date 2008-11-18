@@ -92,7 +92,7 @@ function confirmdel(id)
 /**
 *引用头部
 */
-include_once "../header.php";
+//include_once "../header.php";
 ?>
 <div id="form">
 <!-- 用户留言表单 -->
@@ -266,7 +266,7 @@ echo '<br>';
 <br />
 </div>
 <? 
-include_once '../tail.php';
+//include_once '../tail.php';
 ?>
 <!-- div#msg end -->
 </div><!-- div#main end -->
