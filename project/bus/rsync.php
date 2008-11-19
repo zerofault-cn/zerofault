@@ -11,7 +11,7 @@ curl_setopt($c, CURLOPT_URL, "http://www.hzbus.com.cn/content/busline/line_searc
 curl_setopt($c, CURLOPT_REFERER, "http://www.hzbus.com.cn/");
 curl_setopt($c, CURLOPT_RETURNTRANSFER, 1);
 
-for($i=10;$i<36;$i++)
+for($i=1;$i<7;$i++)
 {
 	curl_setopt($c, CURLOPT_POSTFIELDS,"line_name=".$i);
 	$data = curl_exec($c);
