@@ -10,8 +10,8 @@ $c = curl_init();
 curl_setopt($c, CURLOPT_URL, "http://www.hzbus.com.cn/content/busline/line_search.jsp");
 curl_setopt($c, CURLOPT_REFERER, "http://www.hzbus.com.cn/");
 curl_setopt($c, CURLOPT_RETURNTRANSFER, 1);
-
-for($i=1;$i<7;$i++)
+$start=$_REQUEST['start'];
+for($i=$start;$i<$start+6;$i++)
 {
 	curl_setopt($c, CURLOPT_POSTFIELDS,"line_name=".$i);
 	$data = curl_exec($c);
