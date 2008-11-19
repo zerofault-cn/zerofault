@@ -4,7 +4,7 @@ $root_path="./";
 include_once($root_path."config.php");
 include_once($root_path."includes/db.php");
 
-$sql="select * from ".$line_table." order by no";
+$sql="select * from ".$line_table." order by number";
 $result=$db->sql_query($sql);
 $i=0;
 while($row=$db->sql_fetchrow($result))
