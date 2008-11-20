@@ -8,30 +8,21 @@ include_once($root_path."config.php");
 include_once($root_path."includes/db.php");
 
 echo '<pre>';
-$info=file('hangzhou.txt');
+$info=file('hangzhou_bus_data.txt');
 
-
-//print_r($info);
 
 foreach($info as $row=>$lines)
 {
-	if($row<9)
-	{
-		continue;
-	}
 	$line=explode(',',rtrim($lines));
-//	print_r($line);
-	if(sizeof($line)<2)
-	{
-		break;
-	}
+	$number_arr=explode("/",$line[0]);
+	$number=str_ireplace("K",'',$number_arr[0]);
+	$number=str_ireplace("(夜间线)",'',$number);
+	$number=str_ireplace("(区间)",'',$number);
 	$fare=explode(' ',$line[sizeof($line)-2]);
-//	print_r($fare);
-//	continue;
 	$route1=explode('-',$line[8]);
 	$route2=explode('-',$line[9]);
 	
-echo	"\r\n".$sql1="insert into bus_hz_line set name='".$line[0]."',term1=".getSiteId($line[1]).",start_time1='".$line[2]."',end_time1='".$line[3]."',term2=".getSiteId($line[4]).",start_time2='".$line[5]."',end_time2='".$line[6]."',fare_norm='".$fare[1]."',fare_cond='".$fare[0]."',ic_card='".$line[7]."',service_hour='每天'";
+echo	"\r\n".$sql1="insert into bus_hz_line set name='".$line[0]."',number='".$number."',term1=".getSiteId($line[1]).",start_time1='".$line[2]."',end_time1='".$line[3]."',term2=".getSiteId($line[4]).",start_time2='".$line[5]."',end_time2='".$line[6]."',fare_norm='".$fare[1]."',fare_cond='".$fare[0]."',ic_card='".$line[7]."',service_hour='每天'";
 echo "\r\nresult:".$db->sql_query($sql1);
 	$insertid=$db->sql_nextid();
 	foreach($route1 as $key=>$val)
