@@ -2,9 +2,9 @@
 $dbms = 'mysql4';
 $dbhost = 'localhost';
 //$dbhost = 'www.yesqu.com';
-$dbname = 'haozhanwangcom';
-$dbuser = 'haozhanwangcom';
-$dbpasswd = '52412963';
+$dbname = 'test';
+$dbuser = 'root';
+$dbpasswd = '';
 //$dbpasswd ='';
 
 $line_table='bus_hz_line';
