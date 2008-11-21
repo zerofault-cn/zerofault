@@ -7,38 +7,98 @@ include_once($root_path."config.php");
 include_once($root_path."includes/db.php");
 
 
-$key=array('教工路口','文三新村');
+$key=array('教工路口','浙二医院');
 
 echo 'end:'.$e_sid=getSid($key[1]);
 echo "\r\nstart:".$s_sid=getSid($key[0]);
 echo "\r\n";
 
-print_r(findNext($s_sid));
-
+$result=findNext($s_sid);
+print_r($result);
+getResult($result);
+function getResult($result) {
+	foreach($result as $lid=>$sid)
+	{
+		echo getLname($lid).":";
+		if(is_array($sid) && sizeof($sid)>0)
+		{
+			foreach($sid as $lid2=>$sid2)
+			{
+				echo getSname($lid2).":";
+				getResult($sid2);
+			}
+		}
+		else
+		{
+			echo getSname($sid)."\r\n";
+		}
+	}
+}
 function findNext($s_sid) {
 	global $db,$e_sid;
-	$nextSidArr=getNextSid($s_sid,getLidBySid($s_sid));
+	//取得该站点在它所在线路上的后续站点
+	$nextSidArr=getNextSid($s_sid);
 //	print_r($nextSidArr);
 
-	$result=array();
-	foreach($nextSidArr as $lid=>$sidArr)
+//	$result=array();
+	$c=0;//查询深度
+	foreach($nextSidArr as $lid=>$sidArr)//遍历每天线路,在该线路上找终点
 	{
-		$result[$lid]=array();
+//		$result[$lid]=array();
 		foreach($sidArr as $sid)
 		{
-			$result[$lid]=$sid;
 			if($sid==$e_sid)
 			{
-				return $result;
+				$result[$lid]=$sid;
+			//	return $result;
 			}
 			else
 			{
-				findNext($sid);
+			//	findNext($sid);
 			}
 		}
-		
+		if(sizeof($result[$lid])>0)
+		{
+			return $result;
+		}
+		else
+		{
+			$c=1;
+		}
 	}
-
+	if($c==1)
+	{
+		foreach($nextSidArr as $lid=>$sidArr)
+		{
+//			$result[$lid]=array();
+			foreach($sidArr as $sid)
+			{
+				$nextSidArr2=getNextSid($sid);
+//				$result[$lid][$sid]=array();
+				foreach($nextSidArr2 as $lid2=>$sidArr2)
+				{
+//					$result[$lid][$sid][$lid2]=array();
+					foreach($sidArr2 as $sid2)
+					{
+						if($sid2==$e_sid)
+						{
+							$result[$lid][$sid][$lid2]=$sid2;
+						}
+					}
+					if(sizeof($result[$lid][$sid][$lid2])>0)
+					{
+					//	return $result;
+					break;
+					}
+					else
+					{
+						$c=2;
+					}
+				}
+			}
+		}
+		return $result;
+	}
 }
 
 function getSid($name) {
@@ -102,9 +162,9 @@ function getLidBySid($sid) {
 	}
 	return $lid_arr;
 }
-//获取某一站点针对某一线路的后续站点
-function getNextSid($sid,$lid_arr) {
+function getNextSid($sid) {
 	global $db,$route_table;
+	$lid_arr=getLidBySid($sid);
 	foreach($lid_arr as $lid)
 	{
 		$sql1="select distinct r2.sid as sid from ".$route_table." r1,".$route_table." r2 where r1.lid=".$lid." and r1.sid=".$sid." and r2.direction=r1.direction and r2.i>r1.i and r2.lid=r1.lid";
