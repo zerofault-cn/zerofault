@@ -121,6 +121,8 @@ for($i=$start;$i<$start+10;$i++)
 			echo $str;
 		}
 	}
+	$html->clear();
+	unset($html);
 }
 curl_close($c);
 
