@@ -1,6 +1,5 @@
-
 <?php
-
+/*
 define('IN_MATCH', true);
 $root_path="./";
 include_once($root_path."config.php");
@@ -9,25 +8,24 @@ include_once($root_path."includes/db.php");
 
 //$key=array('抚宁巷','联庄社区');
 //$key=array('义蓬','华东家具市场');
-$key=array('采荷新村','联庄社区');
+//$key=array('采荷新村','联庄社区');
 $s_sid=getSid($key[0]);
 $e_sid=getSid($key[1]);
-echo "\r\n";
-
-$result=findNext($s_sid);
+*/
+//$result=findNext($s_sid);
 //echo '<pre>';
 //print_r($result);
 //echo '</pre>';
-getResult($result);
+//getResult($result);
 function getResult($result) {
-	global $key;
+	global $term1;
 	echo '<table border="1">';
 
 	foreach($result as $i=>$r)
 	{
 		echo '<tr>';
 		echo '<td>'.($i+1).'</td>';
-		echo '<td>'.$key[0].'</td>';
+		echo '<td>'.$term1.'</td>';
 			
 		foreach($r as $n=>$info)
 		{
@@ -140,45 +138,6 @@ function findNext($s_sid) {
 	}
 }
 
-function getSid($name) {
-	global $db,$site_table;
-	$sql1="select id from ".$site_table." where binary name='".$name."'";
-	$result1=$db->sql_query($sql1);
-	if($db->sql_numrows($result1)>0)
-	{
-		return $db->sql_fetchfield(0,0,$result1);
-	}
-	else
-	{
-		return 0;
-	}
-}
-function getSname($sid) {
-	global $db,$site_table;
-	$sql1="select name from ".$site_table." where id=".$sid;
-	$result1=$db->sql_query($sql1);
-	if($db->sql_numrows($result1)>0)
-	{
-		return $db->sql_fetchfield(0,0,$result1);
-	}
-	else
-	{
-		return 0;
-	}
-}
-function getLname($lid) {
-	global $db,$line_table;
-	$sql1="select name from ".$line_table." where id=".$lid;
-	$result1=$db->sql_query($sql1);
-	if($db->sql_numrows($result1)>0)
-	{
-		return $db->sql_fetchfield(0,0,$result1);
-	}
-	else
-	{
-		return 0;
-	}
-}
 function getLidArrBySname($sname) {
 	global $db,$route_table,$site_table;
 	$sql1="select distinct lid from ".$route_table." r,".$site_table." s where s.name='".$sname."' and r.sid=s.id";

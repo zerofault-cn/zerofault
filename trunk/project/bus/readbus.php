@@ -18,6 +18,10 @@ foreach($info as $row=>$lines)
 	$number=str_ireplace("K",'',$number_arr[0]);
 	$number=str_ireplace("(夜间线)",'',$number);
 	$number=str_ireplace("(区间)",'',$number);
+	$number=str_ireplace("B支",'200',$number);
+	$number=str_ireplace("B",'100',$number);
+	$number=str_ireplace("Y",'300',$number);
+	$number=intval($number);
 	$fare=explode(' ',$line[sizeof($line)-2]);
 	$route1=explode('-',$line[8]);
 	$route2=explode('-',$line[9]);
@@ -35,13 +39,14 @@ foreach($info as $row=>$lines)
 		echo		"\r\n".$sql2="insert into bus_hz_route set lid=".$insertid.",sid=".getSiteId($val).",i=".(10*($key+1)).",direction=1";
 		echo "\r\nresult:".$db->sql_query($sql2);
 	}
-
-	foreach($route2 as $key=>$val)
+	if(!in_array($number,array(55,56,59,60,676)) && $line[1]!=$line[4])//起点和终点不是同一站，说明不是环线
 	{
-		echo		"\r\n".$sql4="insert into bus_hz_route set lid=".$insertid.",sid=".getSiteId($val).",i=".(10*($key+1)).",direction=-1";
-		echo "\r\nresult:".$db->sql_query($sql4);
+		foreach($route2 as $key=>$val)
+		{
+			echo		"\r\n".$sql4="insert into bus_hz_route set lid=".$insertid.",sid=".getSiteId($val).",i=".(10*($key+1)).",direction=-1";
+			echo "\r\nresult:".$db->sql_query($sql4);
+		}
 	}
-
 }
 
 function getSiteId($name) {

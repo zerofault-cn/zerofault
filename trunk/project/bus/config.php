@@ -1,18 +1,17 @@
 <?php
 $dbms = 'mysql4';
 $dbhost = 'localhost';
-//$dbhost = 'www.yesqu.com';
-$dbname = 'test';
+$dbname = 'bus';
 $dbuser = 'root';
 $dbpasswd = '';
-//$dbpasswd ='';
 
 $line_table='bus_hz_line';
 $site_table='bus_hz_site';
 $route_table='bus_hz_route';
 
+include_once($root_path. 'functions.php');
 
-
+$theme = 'default';
 include_once($root_path. 'includes/smarty/Smarty.class.php');
 $smarty = new Smarty;
 
