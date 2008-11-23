@@ -20,7 +20,17 @@ $e_sid=getSid($key[1]);
 function getResult($result) {
 	global $term1;
 	echo '<table border="1">';
-
+	echo '<tr>';
+	echo '<th>可选方案</th>';
+	echo '<th>起点</th>';
+	echo '<th>乘坐线路</th>';
+	if(sizeof($result[0])>1)
+	{
+		echo '<th>中途下车</th>';
+		echo '<th>换乘线路</th>';
+	}
+	echo '<th>终点</th>';
+	echo '</tr>';
 	foreach($result as $i=>$r)
 	{
 		echo '<tr>';
