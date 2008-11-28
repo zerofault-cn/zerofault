@@ -1,0 +1,39 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"> 
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>dwnTree：可记忆的无限级树形菜单@随网之舞</title>
+<meta name="keywords" content="dwntree, javascript, 树型菜单,无限级,可记忆,随网之舞" />
+<meta name="description" content="dwnTree：可记忆的无限级树形菜单@随网之舞" />
+<style type="text/css">
+<!--
+*{margin:0;padding:0;}
+body{background:#242424;color:#ccc;font-family:Verdana, Arial, Helvetica, sans-serif;line-height:150%;}
+h1{text-align:center;line-height:200%;}
+h3{text-indent:1em;line-height:160%;color:#666;font-weight:normal;font-size:1em;}
+h3 a{color:#bbb; text-decoration:none;margin:0 0.5em;}
+h3 a:hover{color:#fff;}
+#dwnTree1,#dwnTree2{float:left;width:48%;}
+#dwnTree2{float:right;}
+-->
+</style>
+<style type="text/css">
+<!--
+	@import "dwnTree.css";
+-->
+</style>
+<script type="text/javascript" src="dwnTree.js"></script>
+</head>
+<body>
+<h1>dwnTree：可记忆的无限级树形菜单 1.1</h1>
+<h3><a href="http://dancewithnet.com/2007/04/30/dwntree/">说明</a>|<a href="http://dancewithnet.com/2007/04/30/dwntree/#comments">评论</a></h3>
+左边无记忆，右边使用cookie记忆
+<div id="dwnTree1" class="dwnTree"></div>
+<div id="dwnTree2" class="dwnTree"></div>
+<script type="text/javascript">//<![CDATA[
+new dwnTree('dwnTree1.xml','dwnTree1');
+new dwnTree('dwnTree2.xml','dwnTree2',{name:'dwnTree2Cookie'});
+//]]></script>
+</body>
+</html>
+
