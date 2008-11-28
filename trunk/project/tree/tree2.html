@@ -1,0 +1,57 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>Turning Lists into Trees - odyniec.net</title>
+<link rel="stylesheet" type="text/css" href="tree.css" />
+</head>
+
+<body>
+Simple and clear HTML code with Javascript
+<div class="example">
+	<ul class="tree" id="tree">
+		<li>Animals
+			<ul>
+				<li>Birds</li>
+				<li>Mammals
+					<ul>
+						<li>Elephant</li>
+						<li>Mouse</li>
+					</ul>
+				</li>
+				<li>Reptiles</li>
+			</ul>
+		</li>
+		<li>Plants
+			<ul>
+				<li>Flowers
+					<ul>
+						<li>Rose</li>
+						<li>Tulip</li>
+					</ul>
+				</li>
+				<li>Trees</li>
+			</ul>
+		</li>
+	</ul>
+</div>
+</body>
+<script type="text/javascript">
+window.onload = function () {
+	var tree = document.getElementById("tree");
+	var lists = [ tree ];
+
+	for (var i = 0; i < tree.getElementsByTagName("ul").length; i++)
+	lists[lists.length] = tree.getElementsByTagName("ul")[i];
+
+	for (var i = 0; i < lists.length; i++) {
+		var item = lists[i].lastChild;
+
+		while (!item.tagName || item.tagName.toLowerCase() != "li")
+		item = item.previousSibling;
+
+		item.className += " last";
+	}
+};
+</script>
+
+</html>
