@@ -1,0 +1,19 @@
+现在IE为增强安全性，打了一个让人感觉很“烦”的补丁，在使用某些控件（插件）时，有“单击以激活并使用此控件”提示。也就是要先单击一下才能使用此控件。这对作用Flash做导航的站点是一个比较郁闷的问题。总要先单击一下才能去点按钮……
+
+有方案提出用删除相关补丁的方法，这个方法对网页设计者来说当然是简单，可是对IE用户来说却很麻烦，删半天删不掉不说有时还把系统给搞坏了。
+
+以下是在设计者的角度解决这个问题，测试可行。
+
+第一步：新建一个flash.js
+
+下载这个文件
+
+第二步：网页中插入调用(<head>....</head>内)
+
+<script language="javascript" type="text/javascript" src="flash.js"></script>
+
+第三步：替换原来FLASH代码（<object>......</object>）
+
+<script language="javascript" type="text/javascript">
+writeflashhtml("_swf=index.swf", "_width=1018", "_height=621" ,"_wmode=transparent");
+</script>

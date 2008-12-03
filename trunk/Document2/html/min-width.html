@@ -1,0 +1,141 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312" />
+<title>test</title>
+</head>
+<style type="text/css">
+<!--
+body {
+padding: 0px;
+margin: 0px;
+}
+#wrapper {
+width:auto;
+border:1px solid #000;
+text-align:left;
+min-width:776px; 
+max-width:1000px;
+margin-left:auto;
+margin-right:auto;
+position:relative;
+background-color: #CCCCCC;
+font-family: Verdana, Arial, Helvetica, sans-serif;
+font-size: 12px;
+line-height: 18px;
+}
+#outer{
+margin-left:130px;
+margin-right:130px;
+background:#FF9900;
+border-left:1px solid #000;
+border-right:1px solid #000;
+color: #000000;
+padding: 50px;
+}
+#header{
+position:absolute;
+top:0;
+left:0;
+width:100%;
+height:70px;
+line-height:70px;
+border-bottom:1px solid #000;
+overflow:hidden;
+background:#000000;
+text-align:center;
+font-size:xx-large;
+color: #FFFFFF;
+}
+#footer { 
+width:100%; 
+clear:both; 
+line-height:50px; 
+border-top:1px solid #000; 
+background:#000000; 
+color:#FFFFFF; 
+text-align:center; 
+position:relative;
+}
+#clearheader{ 
+height:72px;
+}
+.outerwrap { 
+float:left; 
+width:99%;
+}
+#right {
+position:relative;
+width:130px; 
+float:right; 
+left:1px;
+margin-right:-129px;
+}
+* html #right { 
+margin-right:-130px; 
+margin-left:-3px;
+}
+.clearer{ 
+height:1px; 
+overflow:hidden; 
+margin-top:-1px; 
+clear:both;
+}
+<!--[if IE 5.0]>
+body {
+width:expression( documentElement.clientWidth <= 800 ? (documentElement.clientWidth == 0 ? (body.clientWidth <= 800 ? "776" : "1000") : "776px") : "1000" );
+}
+#wrapper {
+width:expression( documentElement.clientWidth <= 800 ? (documentElement.clientWidth == 0 ? (body.clientWidth <= 800 ? "776" : "1000") : "776px") : "1000" );
+}
+<![endif]-->
+-->
+</style>
+</head>
+<body>
+<div id="wrapper">
+<div id="header">Header</div>
+<div id="outer">
+<div id="clearheader"></div>
+<div class="outerwrap">
+<p align=left><strong>分析：</strong></p>
+<p align=left>　最外层的wrapper把所有内容都嵌套在里边，整体相对定位。max min已经很好的控制了最窄最宽值，但对IE没有作用。如果没有其他布局的穿插，这一层其实写在body内就可以，少一层嵌套。</p>
+<p class=code align=left>#wrapper{ width:auto; border:1px solid #000; min-width:776px; max-width:1000px; text-align:left; margin-left:auto; margin-right:auto; position:relative;}</p>
+<p></p>
+<p><font color=#ff0000>wrapper 下级的 outer header footer</font></p>
+<p>其中header绝对定位，footer 相对定位；outer分别对左右有130px的外边距，这是兼容非IE的关键。</p>
+<p class=code>#outer{ margin-left:130px; margin-right:130px; background:silver; border-left:1px solid #000; border-right:1px solid #000; color: #000;}<br />
+#header{ position:absolute; top:0; left:0; width:100%; height:70px; line-height:70px; border-bottom:1px solid #000; overflow:hidden; background:#0ff; text-align:center; font-size:xx-large}<br />
+#footer { width:100%; clear:both; line-height:50px; border-top:1px solid #000; background:#ffc; color:#000; text-align:center; position:relative;}</p>
+<p><font color=#ff0000>outer 下级的 clearheader outerwrap right clearer</font></p>
+<p>clearheader 用做填补header的空白，clearer 是一个常用的填充hack用法。<br />
+outerwrap 宽为什么是99%，而不是100%？<br />
+因为他的上层outer有边框，100%宽再加2个边框象素就会撑大，FF有明显效果。<br />
+right 的处理很经典，IE下解析为定位，FF下则为浮动。负边距的处理也刚好使用上outer留出的空白。</p>
+<p class=code>#clearheader{ height:72px;}<br />
+.outerwrap { float:left; width:99%;}<br />
+#right {<br />
+position:relative;<br />
+width:130px; float:right; left:1px;<br />
+margin-right:-129px;<br />
+}<br />
+* html #right { margin-right:-130px; margin-left:-3px}<br />
+.clearer{ height:1px; overflow:hidden; margin-top:-1px; clear:both;}</p>
+<p>outerwrap 内的 centrecontent left clearer 思路与上面类似。</p>
+<p><font color=#ff0000>指定IE5.0及版本以上浏览器有效</font></p>
+<p>使用expression方法实现对IE5.0及以上版本的宽度条件控制，实现自动调整宽度并居中。宽度我都固定了数值，因为如果在这里使用auto，会在调整窗口大小过程中发生div内容无法显示的问题。</p>
+<p class=code>body {<br />
+width:expression( documentElement.clientWidth <= 800 ? (documentElement.clientWidth == 0 ? (body.clientWidth <= 800 ? "776" : "1000") : "776px") : "1000" );<br />
+}<br />
+#wrapper {<br />
+width:expression( documentElement.clientWidth <= 800 ? (documentElement.clientWidth == 0 ? (body.clientWidth <= 800 ? "776" : "1000") : "776px") : "1000" );<br />
+}</p>
+<p class=code>这个例子融合了很多DIV+CSS的经典用法和定义，同时很传统和实用。</p>
+</div>
+<div id="right"></div>
+<div class="clearer"></div>
+</div>
+<div id="footer">Footer</div>
+</div>
+</body>
+</html>

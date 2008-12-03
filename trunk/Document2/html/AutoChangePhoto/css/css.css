@@ -1,0 +1,37 @@
+BODY {
+	PADDING-RIGHT: 0px; PADDING-LEFT: 0px; FONT-SIZE: 12px; BACKGROUND: #000; PADDING-BOTTOM: 0px; MARGIN-LEFT: auto; COLOR: #f6f6ee; MARGIN-RIGHT: auto; PADDING-TOP: 0px; FONT-FAMILY: ËÎÌו; HEIGHT: 490px; TEXT-ALIGN: center
+}
+A {
+	COLOR: #fff; TEXT-DECORATION: none
+}
+A:hover {
+	COLOR: #fff; TEXT-DECORATION: underline
+}
+.fpic {
+	BORDER-TOP-WIDTH: 0px; BORDER-LEFT-WIDTH: 0px; Z-INDEX: 3; BACKGROUND: #000;  BORDER-BOTTOM-WIDTH: 0px; WIDTH: 476px; POSITION: relative; HEIGHT: 330px; BORDER-RIGHT-WIDTH: 0px;BORDER: #dddddd 1px solid;
+text-align:center
+}
+.bpic {
+	FLOAT: left; MARGIN: 0px; WIDTH: 244px; POSITION: relative; HEIGHT: 243px
+}
+#focpic {
+	BORDER-TOP-WIDTH: 0px; BORDER-LEFT-WIDTH: 0px; LEFT: 1px; BORDER-BOTTOM-WIDTH: 0px; POSITION: absolute; TOP: 1px; BORDER-RIGHT-WIDTH: 0px
+}
+.thubpic {
+	PADDING-RIGHT: 0px; PADDING-LEFT: 4px; Z-INDEX: 20; PADDING-BOTTOM: 0px; WIDTH: 63px; CURSOR: pointer; PADDING-TOP: 4px; TOP: 10px; HEIGHT: 49px
+}
+.thubpiccur {
+	PADDING-RIGHT: 0px; PADDING-LEFT: 4px; Z-INDEX: 20; PADDING-BOTTOM: 0px; WIDTH: 63px; CURSOR: pointer; PADDING-TOP: 4px; TOP: 10px; HEIGHT: 49px
+}
+.thubpiccur {
+	Z-INDEX: 30; BACKGROUND: url(../images/arrow3.gif) no-repeat left 50%
+}
+.thubpic IMG {
+	BORDER-RIGHT: #666 3px solid; BORDER-TOP: #666 2px solid; BORDER-LEFT: #666 3px solid; WIDTH: 56px; BORDER-BOTTOM: #666 2px solid; HEIGHT: 42px
+}
+.thubpiccur IMG {
+	BORDER-RIGHT: #666 3px solid; BORDER-TOP: #666 2px solid; BORDER-LEFT: #666 3px solid; WIDTH: 56px; BORDER-BOTTOM: #666 2px solid; HEIGHT: 42px
+}
+.thubpiccur IMG {
+	BORDER-LEFT-COLOR: #fff; BORDER-BOTTOM-COLOR: #fff; BORDER-TOP-COLOR: #fff; BORDER-RIGHT-COLOR: #fff
+}

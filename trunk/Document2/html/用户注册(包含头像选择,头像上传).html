@@ -1,0 +1,588 @@
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" >
+<HTML>
+	<HEAD>
+		<title>论坛注册页面</title>
+		<meta content="Microsoft Visual Studio 7.0" name="GENERATOR">
+		<meta content="C#" name="CODE_LANGUAGE">
+		<meta content="JavaScript" name="vs_defaultClientScript">
+		<meta content="http://schemas.microsoft.com/intellisense/ie5" name="vs_targetSchema">
+		<LINK href="Styles/Forums.css" rel="stylesheet">
+		<script language="javascript" src="js/js.js"></script>
+		<script language="javascript">
+		function countrychange(selectedIndex)
+        {
+          switch(register.country.options[selectedIndex].value)
+           {
+              case "0":
+                    register.state.length=0;
+                    register.state.options.add(new Option("请选择",""));
+                    break;  
+             case "1":
+                     register.state.Length=0;
+                     register.state.options.add(new Option("上海","上海"));
+                     register.state.options.add(new Option("北京","北京"));
+                     register.state.options.add(new Option("天津","天津"));
+                     register.state.options.add(new Option("重庆","重庆"));
+                     register.state.options.add(new Option("河北","河北"));
+                     register.state.options.add(new Option("山西","山西"));
+                     register.state.options.add(new Option("辽宁","辽宁"));
+                     register.state.options.add(new Option("吉林","吉林"));
+                     register.state.options.add(new Option("江苏","江苏"));
+                     register.state.options.add(new Option("浙江","浙江"));
+                     register.state.options.add(new Option("安徽","安徽"));
+                     register.state.options.add(new Option("福建","福建"));
+                     register.state.options.add(new Option("江西","江西"));
+                     register.state.options.add(new Option("山东","山东"));
+                     register.state.options.add(new Option("河南","河南"));
+                     register.state.options.add(new Option("湖北","湖北"));
+                     register.state.options.add(new Option("湖南","湖南"));
+                     register.state.options.add(new Option("广东","广东"));
+                     register.state.options.add(new Option("广西","广西"));
+                     register.state.options.add(new Option("海南","海南"));
+                     register.state.options.add(new Option("四川","四川"));
+                     register.state.options.add(new Option("贵州","贵州"));
+                     register.state.options.add(new Option("云南","云南"));
+                     register.state.options.add(new Option("西藏","西藏"));
+                     register.state.options.add(new Option("陕西","陕西"));
+                     register.state.options.add(new Option("甘肃","甘肃"));
+                     register.state.options.add(new Option("宁夏","宁夏"));
+                     register.state.options.add(new Option("青海","青海"));
+                     register.state.options.add(new Option("新疆","新疆"));
+                     register.state.options.add(new Option("内蒙古","内蒙古"));
+                     register.state.options.add(new Option("黑龙江","黑龙江"));	
+                     break;
+   case "2":
+         register.state.length=0;
+         register.state.options.add(new Option("香港特区","香港特区"));
+         break;
+    case "3":
+         register.state.length=0;
+         register.state.options.add(new Option("台湾省","台湾省"));
+         break;
+    case "4":
+         register.state.length=0;
+         register.state.options.add(new Option("澳门特区","澳门特区"));
+         break;
+    case "5":
+         register.state.length=0;
+         register.state.options.add(new Option("其他地区","其他地区"));
+         break;          
+   }
+}
+
+		</script>
+	</HEAD>
+	<body leftMargin="0" topMargin="0" MS_POSITIONING="GridLayout">
+		<div align="center">
+			<form name="register" method="post" action="register.aspx" language="javascript" onsubmit="ValidatorOnSubmit();" id="register" enctype="multipart/form-data">
+<input type="hidden" name="__EVENTTARGET" value="" />
+<input type="hidden" name="__EVENTARGUMENT" value="" />
+<input type="hidden" name="__VIEWSTATE" value="dDwtMTM0NDIzNDA4MDt0PDtsPGk8MT47PjtsPHQ8O2w8aTwxPjs+O2w8dDw7bDxpPDE+Oz47bDx0PDtsPGk8MD47aTwxPjs+O2w8dDw7bDxpPDA+Oz47bDx0PDtsPGk8MT47aTw1PjtpPDc+Oz47bDx0PHA8cDxsPFRleHQ7PjtsPFw8Ylw+emVyb2ZhdWx0XDwvYlw+Oz4+Oz47Oz47dDxwPHA8bDxUZXh0O05hdmlnYXRlVXJsOz47bDzph43nmbvpmYY7bG9naW4uYXNweDs+Pjs+Ozs+O3Q8cDxwPGw8VGV4dDtOYXZpZ2F0ZVVybDs+O2w85rOo5YaMO3JlZ2lzdGVyLmFzcHg7Pj47Pjs7Pjs+Pjs+Pjt0PDtsPGk8MD47PjtsPHQ8O2w8aTw1Pjs+O2w8dDxwPHA8bDxUZXh0Oz47bDxcPueUqOaIt+azqOWGjDs+Pjs+Ozs+Oz4+Oz4+Oz4+Oz4+Oz4+Oz4+Oz5a+oTdXijGJhL4ZTq2VbgEHldS+g==" />
+
+<script language="javascript">
+<!--
+	function __doPostBack(eventTarget, eventArgument) {
+		var theform;
+		if (window.navigator.appName.toLowerCase().indexOf("netscape") > -1) {
+			theform = document.forms["register"];
+		}
+		else {
+			theform = document.register;
+		}
+		theform.__EVENTTARGET.value = eventTarget.split("$").join(":");
+		theform.__EVENTARGUMENT.value = eventArgument;
+		theform.submit();
+	}
+// -->
+</script>
+
+<script language="javascript" src="/aspnet_client/system_web/1_1_4322/WebUIValidation.js"></script>
+
+
+				
+<table border="0" cellpadding="0" cellspacing="0" width="775" height="65" align="center">
+	<tr>
+		<td><a href="http://www.zj.icbc.com.cn/" target="_blank"><img border="0" src="../../images/logo_icbc.jpg" width="345" height="65"></a></td>
+		<td><img border="0" src="../../images/icon_house.jpg" width="90" height="65"></td>
+		<td align="right"><img border="0" src="../../images/logo_hst.jpg" width="155" height="65"></td>
+	</tr>
+</table>
+<table border="0" cellpadding="0" cellspacing="0" width="775" height="26" align="center">
+	<tr>
+		<td width="42"><img border="0" src="../../images/menu_l.jpg" width="42" height="26"></td>
+		<td width="93" background="../../images/bg1.jpg" onMouseOver="MM_showHideLayers('menu1','','show')" onMouseOut="MM_showHideLayers('menu1','','hide')"><a class="menu" href="#">即时外汇牌价</a></td>
+		<td width="2" background="../../images/bg2.jpg"></td>
+		<td width="93" background="../../images/bg1.jpg" onMouseOver="MM_showHideLayers('menu2','','show')" onMouseOut="MM_showHideLayers('menu2','','hide')"><a class="menu" href="#">&nbsp;技术面分析</a></td>
+		<td width="2" background="../../images/bg2.jpg"></td>
+		<td width="93" background="../../images/bg1.jpg" onMouseOver="MM_showHideLayers('menu3','','show')" onMouseOut="MM_showHideLayers('menu3','','hide')"><a class="menu" href="#">&nbsp;基本面分析</a></td>
+		<td width="2" background="../../images/bg2.jpg"></td>
+		<td width="93" background="../../images/bg1.jpg" onMouseOver="MM_showHideLayers('menu4','','show')" onMouseOut="MM_showHideLayers('menu4','','hide')"><a class="menu" href="#">国际财经新闻</a></td>
+		<td width="2" background="../../images/bg2.jpg"></td>
+		<td width="93" background="../../images/bg1.jpg" onMouseOver="MM_showHideLayers('menu5','','show')" onMouseOut="MM_showHideLayers('menu5','','hide')"><a class="menu" href="#">各国央行动态</a></td>
+		<td width="2" background="../../images/bg2.jpg"></td>
+		<td width="93" background="../../images/bg1.jpg" onMouseOver="MM_showHideLayers('menu6','','show')" onMouseOut="MM_showHideLayers('menu6','','hide')"><a class="menu" href="#">工行汇市专栏</a></td>
+		<td width="165"><img border="0" src="../../images/menu_r.jpg" width="165" height="26"></td>
+	</tr>
+</table>
+<table border="0" cellpadding="0" cellspacing="0" width="775" height="1" align="center">
+	<tr>
+		<td width="43"><img src="../../images/shim.jpg" width="1" height="1"></td>
+		<td width="93">
+			<div id="menu1" style="position: absolute; top: 90; width: 93; height: 106; z-index: 1; visibility: hidden; filter: alpha(opacity=90)" onMouseOver="MM_showHideLayers('menu1','','show')" onMouseOut="MM_showHideLayers('menu1','','hide')">
+				<table border="0" cellspacing="1" cellpadding="2" width="93" height="106" bgcolor="#bd0021">
+					<tbody>
+						<tr>
+							<td height="20" align="center" class="P90" bgcolor="#D7D7D7"><a class="index2" href="../../paijia/foreignListPrice.aspx">工行外汇牌价</a></td>
+						</tr>
+						<tr>
+							<td height="20" align="center" class="P90" bgcolor="#D7D7D7"><a class="index2" href="../../paijia/showImmListPrice.aspx">RMB结售汇报价</a></td>
+						</tr>
+						<tr>
+							<td height="20" align="center" class="P90" bgcolor="#D7D7D7"><a class="index2" href="../../paijia/farListPrice.aspx">RMB远期结售汇</a></td>
+						</tr>
+						<tr>
+							<td height="20" align="center" class="P90" bgcolor="#D7D7D7"><a class="index2" href="../../paijia/stockListPrice.aspx">国际股市报价</a></td>
+						</tr>
+						<tr>
+							<td height="20" align="center" class="P90" bgcolor="#D7D7D7"><a class="index2" href="../../news/zixun_ll.aspx">国际Libor利率</a></td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</td>
+		<td width="2"></td>
+		<td width="93">
+			<div id="menu2" style="position: absolute; top: 90; width: 93; height: 43; z-index: 1; visibility: hidden; filter: alpha(opacity=90)" onMouseOver="MM_showHideLayers('menu2','','show')" onMouseOut="MM_showHideLayers('menu2','','hide')">
+				<table border="0" cellspacing="1" cellpadding="2" width="93" height="43" bgcolor="#bd0021">
+					<tbody>
+						<tr>
+							<td height="20" align="center" class="P90" bgcolor="#D7D7D7"><a class="index2" href="../../paijia/analysisfigure.aspx">图形分析</a></td>
+						</tr>
+						<tr>
+							<td height="20" align="center" class="P90" bgcolor="#D7D7D7"><a class="index2" href="../../news/UpDown.aspx">阻力位与支撑位</a></td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</td>
+		<td width="2"></td>
+		<td width="93">
+			<div id="menu3" style="position: absolute; top: 90; width: 93; height: 106; z-index: 1; visibility: hidden; filter: alpha(opacity=90)" onMouseOver="MM_showHideLayers('menu3','','show')" onMouseOut="MM_showHideLayers('menu3','','hide')">
+				<table border="0" cellspacing="1" cellpadding="2" width="93" height="106" bgcolor="#bd0021">
+					<tbody>
+						<tr>
+							<td height="20" align="center" class="P90" bgcolor="#D7D7D7"><a class="index2" href="../../news/Currency_Usa.aspx">美国基本面</a></td>
+						</tr>
+						<tr>
+							<td height="20" align="center" class="P90" bgcolor="#D7D7D7"><a class="index2" href="../../news/Currency_Euro.aspx">欧元区基本面</a></td>
+						</tr>
+						<tr>
+							<td height="20" align="center" class="P90" bgcolor="#D7D7D7"><a class="index2" href="../../news/Currency_Pound.aspx">英国基本面</a></td>
+						</tr>
+						<tr>
+							<td height="20" align="center" class="P90" bgcolor="#D7D7D7"><a class="index2" href="../../news/Currency_Japan.aspx">日本基本面</a></td>
+						</tr>
+						<tr>
+							<td height="20" align="center" class="P90" bgcolor="#D7D7D7"><a class="index2" href="../../news/Index_Time.aspx">各国财经月历</a></td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</td>
+		<td width="2"></td>
+		<td width="93">
+			<div id="menu4" style="position: absolute; top: 90; width: 93; height: 64; z-index: 1; visibility: hidden; filter: alpha(opacity=90)" onMouseOver="MM_showHideLayers('menu4','','show')" onMouseOut="MM_showHideLayers('menu4','','hide')">
+				<table border="0" cellspacing="1" cellpadding="2" width="93" height="64" bgcolor="#bd0021">
+					<tbody>
+						<tr>
+							<td height="20" align="center" class="P90" bgcolor="#D7D7D7"><a class="index2" href="../../news/InternationalNews.aspx">国际汇市报道</a></td>
+						</tr>
+						<tr>
+							<td height="20" align="center" class="P90" bgcolor="#D7D7D7"><a class="index2" href="../../news/FinancialNews.aspx">相关财经新闻</a></td>
+						</tr>
+						<tr>
+							<td height="20" align="center" class="P90" bgcolor="#D7D7D7"><a class="index2" href="../../news/BankComment.aspx">银行汇市评论</a></td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</td>
+		<td width="2"></td>
+		<td width="93">
+			<div id="menu5" style="position: absolute; top: 90; width: 93; height: 106; z-index: 1; visibility: hidden; filter: alpha(opacity=90)" onMouseOver="MM_showHideLayers('menu5','','show')" onMouseOut="MM_showHideLayers('menu5','','hide')">
+				<table border="0" cellspacing="1" cellpadding="2" width="93" height="106" bgcolor="#bd0021">
+					<tbody>
+						<tr>
+							<td height="20" align="center" class="P90" bgcolor="#D7D7D7"><a class="index2" href="../../news/CentralBank_Usa.aspx">美联储</a></td>
+						</tr>
+						<tr>
+							<td height="20" align="center" class="P90" bgcolor="#D7D7D7"><a class="index2" href="../../news/CentralBank_Japan.aspx">日本央行</a></td>
+						</tr>
+						<tr>
+							<td height="20" align="center" class="P90" bgcolor="#D7D7D7"><a class="index2" href="../../news/CentralBank_Europe.aspx">欧洲央行</a></td>
+						</tr>
+						<tr>
+							<td height="20" align="center" class="P90" bgcolor="#D7D7D7"><a class="index2" href="../../news/CentralBank_Britain.aspx">英国央行</a></td>
+						</tr>
+						<tr>
+							<td height="20" align="center" class="P90" bgcolor="#D7D7D7"><a class="index2" href="../../news/CentralBank_Australia.aspx">澳洲联储</a></td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</td>
+		<td width="93">
+			<div id="menu6" style="position: absolute; top: 90; width: 93; height: 64; z-index: 1; visibility: hidden; filter: alpha(opacity=90)" onMouseOver="MM_showHideLayers('menu6','','show')" onMouseOut="MM_showHideLayers('menu6','','hide')">
+				<table border="0" cellspacing="1" cellpadding="2" width="93" height="64" bgcolor="#bd0021">
+					<tbody>
+						<tr>
+							<td height="20" align="center" class="P90" bgcolor="#D7D7D7"><a class="index2" href="../../ghbbs/Forums" />汇市论坛</a></td>
+						</tr>
+						<tr>
+							<td height="20" align="center" class="P90" bgcolor="#D7D7D7"><a class="index2" href="../../paijia/foreincurmarketC.aspx">专家评论</a></td>
+						</tr>
+						<tr>
+							<td height="20" align="center" class="P90" bgcolor="#D7D7D7"><a class="index2" href="../../paijia/showMedia.aspx">语音讲座</a></td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</td>
+		<td width="165"></td>
+	</tr>
+</table>
+<!--my-->
+<table class="FHeader" cellspacing="0" cellpadding="0" width="775" border="0">
+	<tr>
+		<td background="Images/bg11.gif" height="25">
+			<table border="0" width="100%" cellSpacing="0" cellPadding="0">
+				<tr>
+					<td width="450" height="25">
+						您好，<span id="Header_Greeting"><b>zerofault</b></span>｜
+						<a id="Header_SignOut1" href="javascript:__doPostBack('Header$SignOut1','')">
+							注销｜</a>
+						<a id="Header_UserLink" href="login.aspx">重登陆</a></A>｜
+						<a id="Header_UserLink2" href="register.aspx">注册</a>｜ <a href="query.aspx">
+							搜索</a>｜ <a href="help.aspx">帮助</a>｜<a href="../../default.aspx">返回外汇频道首页</a>｜</td>
+					<td width="300" height="25"><iframe name="I_M" src="http://www.24k99.com/market/Gold_Currency_bbs.aspx" marginwidth="1" marginheight="1" width="100%" height="100%" scrolling="no" frameborder="0">
+							浏览器不支持嵌入式框架，或被配置为不显示嵌入式框架。</iframe>
+					</td>
+					<td>&nbsp;</td>
+				</tr>
+			</table>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<table width="100%" class="hyper" cellpadding="0" cellspacing="0">
+				<tr>
+					<td background="Images/bg3.gif">
+						<table>
+							<tr>
+								<td><a id="Header_LinkToCategories" href="default.aspx">论坛首页</a>
+									<a id="Header_LinkToForum"></a>
+									<a id="Header_LinkToTopic">>用户注册</a>
+								</td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+			</table>
+		</td>
+	</tr>
+</table>
+
+
+				<table class="register" cellSpacing="0" cellPadding="0" width="775">
+					<tr>
+						<td align="middle" background="Images/bg1.gif" height="25"><font color="white">新用户注册</font></td>
+					</tr>
+				</table>
+				<table class="register1" cellSpacing="0" cellPadding="0" width="775" border="1">
+					<tr>
+						<td align="middle">
+							<table cellSpacing="0" cellPadding="0" width="503" border="0" style="WIDTH: 503px; HEIGHT: 707px">
+								<tr>
+									<td class="register2" width="68" style="WIDTH: 68px">用 户 名：</td>
+									<td class="register2">&nbsp;&nbsp;<input name="UserName" type="text" maxlength="16" id="UserName" />
+										<FONT face="宋体" color="#ff3333">(必填,1－16）</FONT>
+										<span id="ContentError" controltovalidate="UserName" errormessage="用户名不能为空！" display="Dynamic" evaluationfunction="RequiredFieldValidatorEvaluateIsValid" initialvalue="" style="color:Red;display:none;">用户名不能为空！</span>
+										<input type="submit" name="testName" value="测试用户名" id="testName" />
+										
+									</td>
+								</tr>
+								<tr>
+									<td class="register2" width="68" style="WIDTH: 68px">E M A I L：</td>
+									<td class="register2">&nbsp;&nbsp;<input name="Email" type="text" id="Email" />&nbsp;<FONT face="宋体" color="#ff3333">(必填）</FONT>
+										<span id="RequiredFieldValidator3" controltovalidate="Email" errormessage="Email不能为空！" evaluationfunction="RequiredFieldValidatorEvaluateIsValid" initialvalue="" style="color:Red;visibility:hidden;">Email不能为空！</span><span id="RegularExpressionValidator1" controltovalidate="Email" errormessage="EMAIL格式不对！" evaluationfunction="RegularExpressionValidatorEvaluateIsValid" validationexpression="\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*" style="color:Red;visibility:hidden;">EMAIL格式不对！</span><table id="showmail" border="0" style="width:112px;">
+	<tr>
+		<td><input id="showmail_0" type="radio" name="showmail" value="true" checked="checked" /><label for="showmail_0">显示</label></td><td><input id="showmail_1" type="radio" name="showmail" value="false" /><label for="showmail_1">不显示</label></td>
+	</tr>
+</table></td>
+								</tr>
+								<tr>
+									<td class="register2" width="68" style="WIDTH: 68px">用户头像：</td>
+									<td class="register2">
+										<table cellSpacing="0" cellPadding="0" border="0">
+											<tr>
+												<td style="WIDTH: 409px">
+													<table cellSpacing="0" cellPadding="0" border="0">
+														<tr>
+															<td><img id="viewImage1" name="viewImage1" src="Images/AvatarUrl/Image19.gif" border="0" /><input name="saveAva" id="saveAva" type="hidden" value="Image19.gif" />
+															</td>
+															<td align="left">
+																<div id="more" style="CURSOR: hand" onclick="view_hidden('DivImage');view_hiddenm('hiddenimage');view_hiddenn('more');" name="more">更多头像</div>
+																<div id="hiddenimage" style="DISPLAY: none; CURSOR: hand" onclick="view_hidden('DivImage');view_hiddenn('hiddenimage');view_hiddenm('more');" name="hiddenimage">点击隐藏头像</div>
+															</td>
+														</tr>
+													</table>
+												</td>
+											</tr>
+											<tr>
+												<td style="WIDTH: 409px">
+													<DIV id="DivImage" style="DISPLAY: none" name="DivImage">
+														<INPUT onclick="changeImage('radiobutton','viewImage1','saveAva')" type="radio" CHECKED value="Image1.gif" name="radiobutton"><IMG src="Images/AvatarUrl/Image1.gif" border="0">
+														<INPUT onclick="changeImage('radiobutton','viewImage1','saveAva')" type="radio" value="Image2.gif" name="radiobutton"><IMG src="Images/AvatarUrl/Image2.gif" border="0">
+														<INPUT onclick="changeImage('radiobutton','viewImage1','saveAva')" type="radio" value="Image3.gif" name="radiobutton"><IMG src="Images/AvatarUrl/Image3.gif" border="0">
+														<INPUT onclick="changeImage('radiobutton','viewImage1','saveAva')" type="radio" value="Image4.gif" name="radiobutton"><IMG src="Images/AvatarUrl/Image4.gif" border="0">
+														<INPUT onclick="changeImage('radiobutton','viewImage1','saveAva')" type="radio" value="Image5.gif" name="radiobutton"><IMG src="Images/AvatarUrl/Image5.gif" border="0">
+														<INPUT onclick="changeImage('radiobutton','viewImage1','saveAva')" type="radio" value="Image6.gif" name="radiobutton"><IMG src="Images/AvatarUrl/Image6.gif" border="0">
+														<INPUT onclick="changeImage('radiobutton','viewImage1','saveAva')" type="radio" value="Image7.gif" name="radiobutton"><IMG src="Images/AvatarUrl/Image7.gif" border="0">
+														<INPUT onclick="changeImage('radiobutton','viewImage1','saveAva')" type="radio" value="Image8.gif" name="radiobutton"><IMG src="Images/AvatarUrl/Image8.gif" border="0">
+														<INPUT onclick="changeImage('radiobutton','viewImage1','saveAva')" type="radio" value="Image9.gif" name="radiobutton"><IMG src="Images/AvatarUrl/Image9.gif" border="0">
+														<INPUT onclick="changeImage('radiobutton','viewImage1','saveAva')" type="radio" value="Image10.gif" name="radiobutton"><IMG src="Images/AvatarUrl/Image10.gif" border="0">
+														<INPUT onclick="changeImage('radiobutton','viewImage1','saveAva')" type="radio" value="Image11.gif" name="radiobutton"><IMG src="Images/AvatarUrl/Image11.gif" border="0">
+														<INPUT onclick="changeImage('radiobutton','viewImage1','saveAva')" type="radio" value="Image12.gif" name="radiobutton"><IMG src="Images/AvatarUrl/Image12.gif" border="0">
+														<INPUT onclick="changeImage('radiobutton','viewImage1','saveAva')" type="radio" value="Image13.gif" name="radiobutton"><IMG src="Images/AvatarUrl/Image13.gif" border="0">
+														<INPUT onclick="changeImage('radiobutton','viewImage1','saveAva')" type="radio" value="Image14.gif" name="radiobutton"><IMG src="Images/AvatarUrl/Image14.gif" border="0">
+														<INPUT onclick="changeImage('radiobutton','viewImage1','saveAva')" type="radio" value="Image15.gif" name="radiobutton"><IMG src="Images/AvatarUrl/Image15.gif" border="0">
+														<INPUT onclick="changeImage('radiobutton','viewImage1','saveAva')" type="radio" value="Image16.gif" name="radiobutton"><IMG src="Images/AvatarUrl/Image16.gif" border="0">
+														<INPUT onclick="changeImage('radiobutton','viewImage1','saveAva')" type="radio" value="Image17.gif" name="radiobutton"><IMG src="Images/AvatarUrl/Image17.gif" border="0">
+														<INPUT onclick="changeImage('radiobutton','viewImage1','saveAva')" type="radio" value="Image18.gif" name="radiobutton"><IMG src="Images/AvatarUrl/Image18.gif" border="0">
+														<INPUT onclick="changeImage('radiobutton','viewImage1','saveAva')" type="radio" value="Image19.gif" name="radiobutton"><IMG src="Images/AvatarUrl/Image19.gif" border="0">
+														<INPUT onclick="changeImage('radiobutton','viewImage1','saveAva')" type="radio" value="Image20.gif" name="radiobutton"><IMG src="Images/AvatarUrl/Image20.gif" border="0">
+														<INPUT onclick="changeImage('radiobutton','viewImage1','saveAva')" type="radio" value="Image21.gif" name="radiobutton"><IMG src="Images/AvatarUrl/Image21.gif" border="0">
+														<INPUT onclick="changeImage('radiobutton','viewImage1','saveAva')" type="radio" value="Image22.gif" name="radiobutton"><IMG src="Images/AvatarUrl/Image22.gif" border="0">
+														<INPUT onclick="changeImage('radiobutton','viewImage1','saveAva')" type="radio" value="Image23.gif" name="radiobutton"><IMG src="Images/AvatarUrl/Image23.gif" border="0">
+														<INPUT onclick="changeImage('radiobutton','viewImage1','saveAva')" type="radio" value="Image24.gif" name="radiobutton"><IMG src="Images/AvatarUrl/Image24.gif" border="0">
+														<INPUT onclick="changeImage('radiobutton','viewImage1','saveAva')" type="radio" value="Image25.gif" name="radiobutton"><IMG src="Images/AvatarUrl/Image25.gif" border="0">
+														<INPUT onclick="changeImage('radiobutton','viewImage1','saveAva')" type="radio" value="Image26.gif" name="radiobutton"><IMG src="Images/AvatarUrl/Image26.gif" border="0">
+														<INPUT onclick="changeImage('radiobutton','viewImage1','saveAva')" type="radio" value="Image27.gif" name="radiobutton"><IMG src="Images/AvatarUrl/Image27.gif" border="0">
+														<INPUT onclick="changeImage('radiobutton','viewImage1','saveAva')" type="radio" value="Image28.gif" name="radiobutton"><IMG src="Images/AvatarUrl/Image28.gif" border="0">
+														<INPUT onclick="changeImage('radiobutton','viewImage1','saveAva')" type="radio" value="Image29.gif" name="radiobutton"><IMG src="Images/AvatarUrl/Image29.gif" border="0">
+														<INPUT onclick="changeImage('radiobutton','viewImage1','saveAva')" type="radio" value="Image30.gif" name="radiobutton"><IMG src="Images/AvatarUrl/Image30.gif" border="0">
+														<INPUT onclick="changeImage('radiobutton','viewImage1','saveAva')" type="radio" value="Image31.gif" name="radiobutton"><IMG src="Images/AvatarUrl/Image31.gif" border="0">
+														<INPUT onclick="changeImage('radiobutton','viewImage1','saveAva')" type="radio" value="Image32.gif" name="radiobutton"><IMG src="Images/AvatarUrl/Image32.gif" border="0">
+														<INPUT onclick="changeImage('radiobutton','viewImage1','saveAva')" type="radio" value="Image33.gif" name="radiobutton"><IMG src="Images/AvatarUrl/Image33.gif" border="0">
+														<INPUT onclick="changeImage('radiobutton','viewImage1','saveAva')" type="radio" value="Image34.gif" name="radiobutton"><IMG src="Images/AvatarUrl/Image34.gif" border="0">
+														<INPUT onclick="changeImage('radiobutton','viewImage1','saveAva')" type="radio" value="Image35.gif" name="radiobutton"><IMG src="Images/AvatarUrl/Image35.gif" border="0">
+														<INPUT onclick="changeImage('radiobutton','viewImage1','saveAva')" type="radio" value="Image36.gif" name="radiobutton"><IMG src="Images/AvatarUrl/Image36.gif" border="0">
+														<INPUT onclick="changeImage('radiobutton','viewImage1','saveAva')" type="radio" value="Image37.gif" name="radiobutton"><IMG src="Images/AvatarUrl/Image37.gif" border="0">
+														<INPUT onclick="changeImage('radiobutton','viewImage1','saveAva')" type="radio" value="Image38.gif" name="radiobutton"><IMG src="Images/AvatarUrl/Image38.gif" border="0">
+														<INPUT onclick="changeImage('radiobutton','viewImage1','saveAva')" type="radio" value="Image39.gif" name="radiobutton"><IMG src="Images/AvatarUrl/Image39.gif" border="0">
+														<INPUT onclick="changeImage('radiobutton','viewImage1','saveAva')" type="radio" value="Image40.gif" name="radiobutton"><IMG src="Images/AvatarUrl/Image40.gif" border="0">
+													</DIV>
+												</td>
+											</tr>
+										</table>
+									</td>
+								</tr>
+								<tr>
+									<td class="register2" width="68" style="WIDTH: 68px">头像上传：</td>
+									<td class="register2">&nbsp; <input name="up_images" id="up_images" type="file" style="WIDTH: 403px; HEIGHT: 22px" size="48" /><BR>
+										(限250K，扩展名为gif、jpg、jpeg)
+										<span id="R_image" controltovalidate="up_images" errormessage="头像图片格式不对！" display="Dynamic" evaluationfunction="RegularExpressionValidatorEvaluateIsValid" validationexpression="^.+\.(gif|GIF|jpg|JPG|jpge|JPGE)$" style="color:Red;display:none;">
+								头像图片格式不对！</span>
+									</td>
+								</tr>
+								<tr>
+									<td class="register2" width="68" style="WIDTH: 68px">密&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+										码：<BR>
+									</td>
+									<td class="register2">&nbsp;&nbsp;<input name="txtPassWord" type="password" maxlength="10" size="10" id="txtPassWord" style="width:152px;" />
+										<FONT face="宋体" color="#ff3333">(必填,6－10,区分大小写）</FONT>
+										<span id="RequiredFieldValidator1" controltovalidate="txtPassWord" errormessage="密码不能为空！" evaluationfunction="RequiredFieldValidatorEvaluateIsValid" initialvalue="" style="color:Red;visibility:hidden;">密码不能为空！</span>
+										<span id="RegularExpressionValidator3" controltovalidate="txtPassWord" errormessage="密码长度为6－10字节" display="Dynamic" evaluationfunction="RegularExpressionValidatorEvaluateIsValid" validationexpression="[0-9A-za-z]{6,10}" style="color:Red;display:none;">密码长度为6－10字节</span></td>
+								</tr>
+								<tr>
+									<td class="register2" width="68" style="WIDTH: 68px">重复密码：</td>
+									<td class="register2">&nbsp;&nbsp;<input name="txtPassWordAgain" type="password" maxlength="10" id="txtPassWordAgain" />
+										<FONT face="宋体" color="#ff3333">(必填）</FONT>
+										<span id="RequiredFieldValidator2" controltovalidate="txtPassWordAgain" errormessage="验证密码不能为空！" evaluationfunction="RequiredFieldValidatorEvaluateIsValid" initialvalue="" style="color:Red;visibility:hidden;">验证密码不能为空！</span><span id="CompareValidator1" controltovalidate="txtPassWordAgain" errormessage="两次密码输入不匹配！" display="Dynamic" evaluationfunction="CompareValidatorEvaluateIsValid" controltocompare="txtPassWord" controlhookup="txtPassWord" style="color:Red;display:none;">两次密码输入不匹配！</span></td>
+								</tr>
+								<tr>
+									<td class="register2" width="68" style="WIDTH: 68px">个性签名：</td>
+									<td class="register2">&nbsp; <input name="Signature" id="Signature" type="file" style="WIDTH: 405px; HEIGHT: 22px" size="48" /><BR>
+										(限250K，扩展名为gif、jpg、jpeg)(图片格式)
+										<span id="Regularexpressionvalidator4" controltovalidate="Signature" errormessage="签名图片格式不对！" display="Dynamic" evaluationfunction="RegularExpressionValidatorEvaluateIsValid" validationexpression="^.+\.(gif|GIF|jpg|JPG|jpge|JPGE)$" style="color:Red;display:none;">
+								签名图片格式不对！</span>
+									</td>
+								</tr>
+								<tr>
+									<td class="register2" width="68">个性签名：</td>
+									<td class="register2">&nbsp;<textarea name="SignatureWord" rows="5" id="SignatureWord" style="width:283px;"></textarea>(文本格式,限50个字)</td>
+								</tr>
+								<tr>
+									<td class="register2" width="68" style="WIDTH: 68px">性&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+										别：</td>
+									<td class="register2">&nbsp;&nbsp;
+										<table id="Sex" border="0">
+	<tr>
+		<td><input id="Sex_0" type="radio" name="Sex" value="男" checked="checked" /><label for="Sex_0">男</label></td><td><input id="Sex_1" type="radio" name="Sex" value="女" /><label for="Sex_1">女</label></td>
+	</tr>
+</table></td>
+								</tr>
+								<tr>
+									<td class="register2" width="68" style="WIDTH: 68px">真实姓名：</td>
+									<td class="register2">&nbsp;&nbsp; FirstName:
+										<input name="FirstName" type="text" maxlength="25" id="FirstName" style="width:109px;" />
+										LastName:<input name="LastName" type="text" id="LastName" style="width:117px;" /></td>
+								</tr>
+								<tr>
+									<td class="register2" width="68" style="WIDTH: 68px">联系电话：</td>
+									<td class="register2">&nbsp;&nbsp;
+										<input name="homephone" type="text" maxlength="14" id="homephone" /></td>
+								</tr>
+								<tr>
+									<td class="register2" width="68" style="WIDTH: 68px">单&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+										位：</td>
+									<td class="register2">&nbsp;&nbsp;
+										<input name="Address1" type="text" id="Address1" style="width:333px;" /></td>
+								</tr>
+								<tr>
+									<td class="register2" width="68" style="WIDTH: 68px">联系地址：</td>
+									<td class="register2">&nbsp;&nbsp;
+										<input name="Address2" type="text" id="Address2" style="width:330px;" /></td>
+								<tr>
+									<td class="register2" width="68" style="WIDTH: 68px">O I C Q&nbsp;&nbsp;&nbsp; 
+										&nbsp;：</td>
+									<td class="register2">&nbsp;&nbsp;
+										<input name="QQ" type="text" maxlength="10" id="QQ" /></td>
+								</tr>
+								<tr>
+									<td class="register2" width="68" style="WIDTH: 68px">个人主页：</td>
+									<td class="register2">&nbsp;&nbsp;
+										<input name="homepage" type="text" maxlength="40" id="homepage" /></td>
+								</tr>
+								<tr>
+									<td class="register2" width="68" style="WIDTH: 68px">国&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+										家：</td>
+									<td class="register2">&nbsp;&nbsp;
+										<select name="country" id="country" size="1" onchange="countrychange(selectedIndex)">
+	<option selected="selected" value="0">请选择</option>
+	<option value="1">中国</option>
+	<option value="2">中国香港</option>
+	<option value="3">中国台湾</option>
+	<option value="4">澳门</option>
+	<option value="5">其他</option>
+</select>
+									</td>
+								</tr>
+								<tr>
+									<td class="register2" width="68" style="WIDTH: 68px">省/直辖市</td>
+									<td class="register2">&nbsp;&nbsp;
+										<select name="state" id="state" size="1">
+	<option selected="selected" value="0">请选择</option>
+</select>
+									</td>
+								</tr>
+								<tr>
+									<td class="register2" width="68" style="WIDTH: 68px">城&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;市：</td>
+									<td class="register2">&nbsp;&nbsp;
+										<input name="city" type="text" maxlength="20" id="city" /></td>
+								</tr>
+								<tr>
+									<td class="register2" width="68" style="WIDTH: 68px">邮政编码：</td>
+									<td class="register2">&nbsp;&nbsp;
+										<input name="zipcode" type="text" maxlength="20" id="zipcode" />
+										<span id="RegularExpressionValidator2" controltovalidate="zipcode" errormessage="请输入正确的格式" display="Dynamic" evaluationfunction="RegularExpressionValidatorEvaluateIsValid" validationexpression="\d{6}" style="color:Red;display:none;">请输入正确的格式</span></td>
+								</tr>
+							</table>
+							<div id="ValidationSummary1" showmessagebox="True" showsummary="False" style="color:Red;display:none;">
+
+</div>
+							<br>
+							<table width="775">
+								<tr>
+									<td align="middle"><input type="submit" name="BtnSubmit" value="确定注册" onclick="if (typeof(Page_ClientValidate) == 'function') Page_ClientValidate(); " language="javascript" id="BtnSubmit" /><FONT face="宋体">&nbsp;</FONT>
+										<input type="submit" name="BtnClear" value="放弃注册" onclick="if (typeof(Page_ClientValidate) == 'function') Page_ClientValidate(); " language="javascript" id="BtnClear" /></td>
+								</tr>
+							</table>
+						</td>
+					</tr>
+				</table>
+				
+<table border="0" cellpadding="0" cellspacing="0" width="775" height="85" align="center">
+	<tr>
+		<td width="100%" height="5"></td>
+	</tr>
+	<tr>
+		<td width="100%" height="10" bgcolor="#BD0021"></td>
+	</tr>
+	<tr>
+		<td width="100%" height="70" class="P90L" align="center" bgcolor="#EFEFEF">
+			<a href="http://ftp.fx168.com/fx168web/j2re.exe" class="index2">如果报价无法正常显示，请点击此处下载JAVA插件</a><br>
+			邮件地址：<a class="index1" href="mailto:webmaster.zj@icbc.com.cn">webmaster.zj@icbc.com.cn</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+			二十四小时服务热线：95588<br>
+			中国工商银行浙江分行版权所有&nbsp;&nbsp;&nbsp;&nbsp;浙ICP备020095&nbsp;&nbsp;&nbsp;&nbsp;Powered 
+			by FX168</td>
+	</tr>
+</table>
+<script language="JavaScript">
+<!--
+function graph(){
+    window.open('../graph/graph.asp','graph','resizable=yes,scrollbars=yes,top=0,left=0,menu=0,location=0,toolbar=0,status=0,height=600,width=800');
+}
+function MM_reloadPage(init) {  //reloads the window if Nav4 resized
+  if (init==true) with (navigator) {if ((appName=="Netscape")&&(parseInt(appVersion)==4)) {
+    document.MM_pgW=innerWidth; document.MM_pgH=innerHeight; onresize=MM_reloadPage; }}
+  else if (innerWidth!=document.MM_pgW || innerHeight!=document.MM_pgH) location.reload();
+}
+MM_reloadPage(true);
+function MM_findObj(n, d) { //v4.0
+  var p,i,x;  if(!d) d=document; if((p=n.indexOf("?"))>0&&parent.frames.length) {
+    d=parent.frames[n.substring(p+1)].document; n=n.substring(0,p);}
+  if(!(x=d[n])&&d.all) x=d.all[n]; for (i=0;!x&&i<d.forms.length;i++) x=d.forms[i][n];
+  for(i=0;!x&&d.layers&&i<d.layers.length;i++) x=MM_findObj(n,d.layers[i].document);
+  if(!x && document.getElementById) x=document.getElementById(n); return x;
+}
+function MM_showHideLayers() { //v3.0
+  var i,p,v,obj,args=MM_showHideLayers.arguments;
+  for (i=0; i<(args.length-2); i+=3) if ((obj=MM_findObj(args[i]))!=null) { v=args[i+2];
+    if (obj.style) { obj=obj.style; v=(v=='show')?'visible':(v='hide')?'hidden':v; }
+    obj.visibility=v; }
+}
+//-->
+</script>
+
+			
+<script language="javascript">
+<!--
+	var Page_ValidationSummaries =  new Array(document.all["ValidationSummary1"]);
+	var Page_Validators =  new Array(document.all["ContentError"], document.all["RequiredFieldValidator3"], document.all["RegularExpressionValidator1"], document.all["R_image"], document.all["RequiredFieldValidator1"], document.all["RegularExpressionValidator3"], document.all["RequiredFieldValidator2"], document.all["CompareValidator1"], document.all["Regularexpressionvalidator4"], document.all["RegularExpressionValidator2"]);
+		// -->
+</script>
+
+			
+<script language="javascript">
+<!--
+var Page_ValidationActive = false;
+if (typeof(clientInformation) != "undefined" && clientInformation.appName.indexOf("Explorer") != -1) {
+    if ((typeof(Page_ValidationVer) != "undefined") && (Page_ValidationVer == "125"))
+        ValidatorOnLoad();
+}
+
+function ValidatorOnSubmit() {
+    if (Page_ValidationActive) {
+        ValidatorCommonOnSubmit();
+    }
+}
+// -->
+</script>
+        
+
+		</form>
+		</div>
+	</body>
+</HTML>

@@ -1,0 +1,29 @@
+<html>
+<head>
+<meta HTTP-EQUIV="content-type" content="text/html;charset=gb2312">
+<title></title>
+<link rel="stylesheet" href="/phpbbs/main.css" type="text/css">
+</head>
+
+<script language=javascript>
+function CheckAll(form)
+{
+	for (var i=0;i<form.elements.length;i++)
+	{
+		var e = form.elements[i];
+		if (e.name != 'checkall')
+			e.checked = form.checkall.checked;
+	}
+}
+</script>
+<body>
+<center>
+<nobr>
+<form action="" name=form1>
+<input type=checkbox name=1 value=1>1<br>
+<input type=checkbox name=2 value=2>2<br>
+<input type=checkbox name=checkall value=on onclick="CheckAll(this.form)">ȫѡ
+</form>
+</center>
+</body>
+</html>

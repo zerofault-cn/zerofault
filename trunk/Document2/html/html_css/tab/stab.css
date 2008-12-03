@@ -1,0 +1,80 @@
+TD.leftItem{
+	text-align: center;
+	cursor:default;
+	width:20px;
+}
+
+TD.selectItem{
+	background-image: url(images/select.gif);
+	background-repeat: no-repeat;
+	text-align: center;
+	width:109px;
+	cursor:default;
+}
+
+TD.selectItemShort{
+	background-image: url(images/selectShort.gif);
+	background-repeat: no-repeat;
+	text-align: center;
+	width:68px;
+	cursor:default;
+}
+
+TD.noSelectItem{
+	background-image: url(images/out.gif);
+	background-repeat: no-repeat;
+	text-align: center;
+	width:109px;
+	cursor:hand;
+}
+
+TD.noSelectItemShort{
+	background-image: url(images/outShort.gif);
+	background-repeat: no-repeat;
+	text-align: center;
+	width:68px;
+	cursor:hand;
+}
+
+TD.overItem{
+	background-image: url(images/over.gif);;
+	background-repeat: no-repeat;
+	vertical-align: 2%;
+	text-align: center;
+	width:109px;
+	cursor:hand;
+	color:red;
+}
+
+TD.overItemShort{
+	background-image: url(images/overShort.gif);;
+	background-repeat: no-repeat;
+	vertical-align: 2%;
+	text-align: center;
+	width:68px;
+	cursor:hand;
+	color:red;
+}
+
+TD.rightItem{
+	text-align: right;
+	cursor:default;
+}
+
+TD.line{
+	background:rgb(128,128,128);
+}
+
+TD.lineSelect{
+	background-image: url(images/selectLine.jpg);;
+	background-repeat: no-repeat;
+}
+
+DIV.context{
+        margin-top : 0px;
+	width:100%;
+	border-top-width:0px;border-top-style:none;border-top-color:#0000FF;
+	border-left-width:1px;border-left-style: solid;border-left-color:rgb(128,128,128);
+	border-right-width:1px;border-right-style: solid;border-right-color:rgb(128,128,128);
+	border-bottom-width:1px;border-bottom-style: solid;	border-bottom-color:rgb(128,128,128);
+}

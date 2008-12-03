@@ -1,0 +1,95 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=gb2312" />
+	<meta name="keywords" content="" />
+	<meta name="description" content="" />
+	<title></title>
+	<style>
+	div,p,li{overflow:hidden;}
+body{margin:0;padding:0 0 12px 0;background:#3f89c6;font-size:13px;line-height:22px;}
+div,p,li{font-family:Verdana,宋体;font-size:13px;}
+form,ul,li,p,h1,h2,h3,h4,h5,h6{margin:0;padding:0;}
+input,select{font-size:12px;line-height:16px;}
+img{border:0;}
+ul,li{list-style-type:none;}
+li{font-size:13px;}
+
+	#Skin div {float:left}
+#SkinList {width:56px;height:11px;overflow:hidden;display:block;}
+#Skinlist {width:22px;height:70px;position:absolute;z-index:120;margin:5px 0 0 8px;text-align:center;padding-top:5px;}
+#Skinlist img{margin-bottom:5px;clear:both;cursor:pointer;}
+
+#Skin li{float:left;width:14px;height:11px;cursor:pointer;}
+#def div{background:url(http://img1.qq.com/news/pics/9468/9468392.gif) no-repeat left top;}
+#s1 div{background:url(http://img1.qq.com/news/pics/9468/9468392.gif) no-repeat left -11px;}
+#s2 div{background:url(http://img1.qq.com/news/pics/9468/9468392.gif) no-repeat left -22px;}
+#s3 div{background:url(http://img1.qq.com/news/pics/9468/9468392.gif) no-repeat left -33px;}
+#s4 div{background:url(http://img1.qq.com/news/pics/9468/9468392.gif) no-repeat left -44px;}
+#s5 div{background:url(http://img1.qq.com/news/pics/9468/9468392.gif) no-repeat left -55px;}
+#s6 div{background:url(http://img1.qq.com/news/pics/9468/9468392.gif) no-repeat left -66px;}
+#s7 div{background:url(http://img1.qq.com/news/pics/9468/9468392.gif) no-repeat left -77px;}
+#s8 div{background:url(http://img1.qq.com/news/pics/9468/9468392.gif) no-repeat left -88px;}
+#s9 div{background:url(http://img1.qq.com/news/pics/9468/9468392.gif) no-repeat left -99px;}
+#sar{cursor:pointer;}
+#sar div{background:url(http://img1.qq.com/news/pics/9468/9468357.gif) no-repeat -20px -1px;}
+#sar div.s{background:url(http://img1.qq.com/news/pics/9468/9468357.gif) no-repeat -10px -1px;}
+
+</style>
+<script>
+var marTime = new Array();
+	var marWay = new Array();
+	var moveTime = new Array();
+	moveTime[0] = 0;
+	moveTime[1] = 0;
+	var speed = 30;
+	var fodTime = 0;
+	var proFlog = 0;
+	var proTime = 0;
+
+function $(o){ return (typeof o == "object")?o:document.getElementById(o);}
+function setSkin(n)
+	{var css = $("cssChange");var cssurl = "/cssn/";cssurl +=cssList[n];css.href=cssurl;}
+
+function formatSkin()
+	{var p = $("SkinList").getElementsByTagName("li");var s = $("sar");for(i=0;i<p.length;i++){p[i].num = i;p[i].onclick = function(){setSkin(this.num);}}s.onclick = function() { openSkin("sar","SkinList",140,56,2,0); };}
+function setdefSkin()
+	{var n =  MiniSite.Cookie.get("TencentSkin");if(n!=null){call_0410("UNKNOWN","skin",n);setSkin(n);}else{call_0410("UNKNOWN","skin",0);}}
+function setdef(){var n =  MiniSite.Cookie.get("Tencent");if(n!=null){tail(n);}else{MiniSite.Home.print()}}
+
+//n=0 skin n=1 pro
+	function openSkin(o1,o2,max,min,speed,n)
+	{var a = $(o1);	var s = $(o2);var w = s.offsetWidth;var move=function(){w+=speed;if(w>=max){w = max;s.style.width = w+"px";				if(moveTime[n]){window.clearInterval(moveTime[n]);}if(n){$("pro_arrow").className = "al";$("pro_arrow").onclick = function() {closeSkin(o1,o2,max,min,speed,n);}				}else{a.innerHTML = "<div class='s'><img src='http://img1.qq.com/news/pics/9471/9471252.gif' alt='收缩' /></div>";a.onclick = function() {closeSkin(o1,o2,max,min,speed,n);}}}else{s.style.width = w + "px";if(n){}else{s.style.display = "block";};}};moveTime[n] = window.setInterval(move,5);}
+
+	function closeSkin(o1,o2,max,min,speed,n)
+	{var a = $(o1);var s = $(o2);var w = s.offsetWidth;var move = function(){w-=speed;if(w<=min){w = min;s.style.width = w + "px";if(n){				$("pro_arrow").className = "ar";$("pro_arrow").onclick = function() {openSkin(o1,o2,max,min,speed,n);};}else{a.innerHTML = "<div><img src='http://img1.qq.com/news/pics/9471/9471252.gif' alt='更多皮肤' /></div>";a.onclick = function() { openSkin(o1,o2,max,min,speed,n);}	};		if(moveTime[n]){window.clearInterval(moveTime[n]);}}else{s.style.display = "block";s.style.width = w + "px";};};moveTime[n] = window.setInterval(move,5);}
+
+</script>
+</head>
+<body>
+<div id="Skin">
+				<div id="SkinList">
+
+					<ul>
+						<li id="def"><div><img src="http://img1.qq.com/news/pics/9471/9471252.gif" alt="默认" /></div></li>
+						<li id="s1"><div><img src="http://img1.qq.com/news/pics/9471/9471252.gif" alt="淡蓝" /></div></li>
+						<li id="s2"><div><img src="http://img1.qq.com/news/pics/9471/9471252.gif" alt="宁夏" /></div></li>
+						<li id="s3"><div><img src="http://img1.qq.com/news/pics/9471/9471252.gif" alt="新绿" /></div></li>
+						<li id="s4"><div><img src="http://img1.qq.com/news/pics/9471/9471252.gif" alt="竹韵" /></div></li>
+						<li id="s5"><div><img src="http://img1.qq.com/news/pics/9471/9471252.gif" alt="水墨" /></div></li>
+						<li id="s6"><div><img src="http://img1.qq.com/news/pics/9471/9471252.gif" alt="星空" /></div></li>
+						<li id="s7"><div><img src="http://img1.qq.com/news/pics/9471/9471252.gif" alt="奥运" /></div></li>
+
+						<li id="s8"><div><img src="http://img1.qq.com/news/pics/9471/9471252.gif" alt="咖啡" /></div></li>
+						<li id="s9"><div><img src="http://img1.qq.com/news/pics/9471/9471252.gif" alt="紫色" /></div></li>
+					</ul>				
+				</div>
+				<div id="sar"><div><img src="http://img1.qq.com/news/pics/9471/9471252.gif" alt="展开" /></div></div>
+				<div class="cl"></div>
+			</div>
+			<script type="text/javascript">
+				formatSkin();//setSkin(0);
+			</script>
+</body>
+</html>
+

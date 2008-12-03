@@ -1,0 +1,53 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312" />
+<meta name="author" content="Wayhome Wang" /> 
+<meta name="Copyright" content="Copyright (C) 2003-2005 www.Abloxo.com All Rights Reserved." /> 
+<meta name="description" content="Wayhome Wang icon, ui, website, wallpaper, design" />
+<title>[示例] div + css 创建自适应宽度布局（液态布局）- Abloxo.com | Oeye.cn</title>
+<style type="text/css">
+<!--
+body{margin:0;padding:0px;text-align:center;}
+#wrap{margin:0 auto;text-align:left;}
+
+/*左边栏，固定宽度*/
+.wrap_l{float:left;background:#FF0000;margin-right:-150px;width:150px;border:1px solid #333;}
+/*中间栏，自适应宽度*/
+.wrap_m{width:auto;background:#00FF00;margin:0 140px 0 150px;border:1px solid #000;}
+/*右边栏，固定宽度*/
+.wrap_r{float:right;background:#0000FF;margin-left:-140px;width:140px;border:1px solid #999;}
+
+.wrap_inner_l{float:left;background:#00FFFF;margin-right:-200px;width:200px;}
+.wrap_inner_m{width:auto;background:#FFFF00;margin:0 0 0 200px;}
+
+-->
+</style>
+</head>
+
+<body>
+<div id="wrap">
+
+<div class="wrap_l">
+这是左边部分<br />
+这是左边部分<br />
+这是左边部分
+</div>
+
+<div class="wrap_r">
+这是右边部分<br />
+这是右边部分<br />
+这是右边部分
+</div>
+
+<div class="wrap_m">
+这是中间部分
+<div class="wrap_inner_l">中间的左边</div>
+<div class="wrap_inner_m">中间的右边</div>
+这是中间部分
+</div>
+
+</div>
+
+</body>
+</html>
