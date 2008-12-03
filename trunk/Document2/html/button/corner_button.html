@@ -1,0 +1,86 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+        "http://www.w3.org/TR/html4/strict.dtd">
+<html lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+	<title>Bulletproof shrinkwrapping buttons</title>
+<style type="text/css">
+@import '/css/lab.css';
+/* Demo page styling */
+body {padding:0}
+#wrap {
+	max-width:50em;
+	margin:2em auto;
+}
+.button:link,
+.button:visited,
+.button:hover {border:none;}
+* html #wrap {width:50em}
+/* End Demo page styling */
+
+.button:link,
+.button:visited { /* Top left corner, top edge */
+	float:left;
+	color:#ddd;
+	background:#333 url(button.gif) no-repeat;
+	font:1.2em/1.0 Georgia,serif;
+	text-decoration:none;
+}
+.button * {display:block;}
+.button span { /* Top right corner */
+	padding:6px 0 0;
+	background:url(corners.gif) no-repeat right top;
+}
+.button span span { /* Bottom left corner, left and bottom edges */
+	padding:0 0 0 6px;
+	background:url(button.gif) no-repeat left bottom;
+}
+.button span span span { /* Bottom right corner */
+	padding:0 0 6px;
+	background:url(corners.gif) no-repeat right bottom;
+}
+.button span span span span { /* Right edge */
+	padding:3px 12px 3px 6px; /* Extra padding (3px vertical, 6px horizontal) added to give the text some breathing room */
+	background:url(button.gif) no-repeat right center;
+}
+.button:hover,
+.button:focus,
+.button:active { /* Make the button more visible on :hover and :focus */
+	outline:2px solid #ff0; /* Not supported by IE/Win :-( */
+	color:#fff;
+}
+/* Put the demo buttons on separate rows with some space between */
+div {clear:both;}
+.button {margin:0 0 1em;}
+</style>
+</head>
+<body>
+	<div id="wrap">
+		<h1>Bulletproof shrinkwrapping buttons</h1>
+		<p>This is a demo document for the technique described in the article <a href="http://www.456bereastreet.com/archive/200705/creating_bulletproof_graphic_link_buttons_with_css/">Creating bulletproof graphic link buttons with CSS</a>. Please refer to the article for details and context.</p>
+		<div>
+			<a class="button" href="#">
+				<span><span><span><span>点击开始注册博客！点击开始注册博客！<br>点击开始注册博客！点击开始注册博客！点击开始注册博客！</span></span></span></span>
+			</a>
+		</div>
+		<div>
+			<a class="button" href="#">
+				<span><span><span><span>Go!</span></span></span></span>
+			</a>
+		</div>
+		<div>
+			<a class="button" href="#">
+				<span><span><span><span>A button with way too much text</span></span></span></span>
+			</a>
+		</div>
+	<div id="labfooter">
+	<p><a href="/lab/">Lab Index</a> | <a href="/">456 Berea Street Home</a> | Copyright &#169; 2003-2007 Roger Johansson</p>
+</div>
+<script src="http://www.google-analytics.com/urchin.js" type="text/javascript">
+</script>
+<script type="text/javascript">
+_uacct = "UA-78628-1";
+urchinTracker();
+</script>	</div>
+</body>
+</html>

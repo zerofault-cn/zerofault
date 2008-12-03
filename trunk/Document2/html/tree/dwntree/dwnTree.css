@@ -1,0 +1,18 @@
+.dwnTree{margin:5px;border:1px solid #ddd;padding:20px 0;background:#fff;font-size:12px;color:#000;}
+.dwnTree ul ul{padding-bottom:10px;}
+.dwnTree ul ul ul{padding-bottom:5px;}
+.dwnTree li{margin-left:15px;list-style:none;background:url(img/line.gif) repeat-y 0 18px;}
+.dwnTree .noBg{background:none;}
+.dwnTree div,.dwnTree .anchor,.dwnTree .joinFirst,.dwnTree .joinLast{height:18px;line-height:18px;background:#fff url(img/join.gif) no-repeat left top;text-indent:30px;cursor:pointer;white-space:nowrap;}
+.dwnTree span{padding:2px 5px 1px 5px;}
+.dwnTree .fold{background-image:url(img/plus.gif);}
+.dwnTree .foldFirst{background:#fff url(img/plusFirst.gif) no-repeat 3px 4px;}
+.dwnTree .foldLast{background-image:url(img/plusLast.gif);}
+.dwnTree .unfold{background-image:url(img/minus.gif);}
+.dwnTree .unfoldFirst{background:#fff url(img/minusFirst.gif) no-repeat 3px 4px;}
+.dwnTree .unfoldLast{background-image:url(img/minusLast.gif);}
+.dwnTree .joinFirst{background:#fff url(img/joinFirst.gif) no-repeat 7px 4px;}
+.dwnTree .joinLast{background-image:url(img/joinLast.gif);}
+.dwnTree a{text-decoration:none;color:#333;padding:2px 5px 1px 5px;}
+.dwnTree a:hover,.dwnTree .active,.dwnTree .hover{color:#fff;background:#0a246a;}
+
