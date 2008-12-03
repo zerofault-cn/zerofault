@@ -1,0 +1,60 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=gb2312" />
+		<meta name="author" content="Linxz" />
+		<title>不规则导航条示例补充</title>
+		<style type="text/css">
+		* {margin:0;padding:0;font:normal 12px/25px "宋体";}
+		body {background:#FFF;text-align:center;}
+		.testMenu{width:806px;height:31px;margin:20px auto;position:relative;margin-top:20px;}
+		.testMenu .box1{display:block;width:6px;height:31px; position:absolute;top:0;left:0;background:transparent url(01.gif) no-repeat;}
+		.testMenu .box2{display:block;width:6px;height:31px; position:absolute;top:0;right:0;background:transparent url(05.gif) no-repeat;}
+		
+		.testMenu ul {list-style:none;width:804px;height:29px;padding:1px;background:#F2F2F2 url(04.gif) repeat-x;overflow:hidden;margin-left:0px;}
+		.testMenu li {font-size:14px;font-weight:bold;float:left;width:117px;height:29px;text-align:center;margin:0 -10px;display:inline;}
+		.testMenu a {font-size:14px;font-weight:bold;color:#666; float:left;width:117px;height:29px;top:0;left:0;background:url(03.gif) center center no-repeat;}
+		.testMenu li.c {background:url(02.gif) 0 0 no-repeat}
+		.testMenu a:hover {color:#333;background:url(02.gif) no-repeat left bottom;width:117px;position:relative;}
+		.testMenu a.home{
+			background-color:#f2f2f2;
+		}
+		.testMenu a.home:hover{
+			position:static;background-color:#FFF
+		}
+		.testMenu a.None{width:21px;background:#f2f2f2;}
+		.testMenu a.None:hover{width:21px;background:#f2f2f2}
+		
+		/*Other Class*/
+		h1{font-size:14px;font-weight:bold;line-height:30px;height:30px;border-bottom:1px silver solid;}
+		.about{width:600px;margin:0 auto;text-align:left;}
+		</style>
+	</head>
+<body>
+<h1>
+	不规则导航条示例补充
+</h1>
+<div class="testMenu">
+	<span class="box1"><!--外框处理--></span>
+	<span class="box2"><!--外框处理--></span>
+	<ul>
+		<li><a href="#" title="菜单" class="home">首页</a></li>
+		<li><a href="#" title="菜单">菜单</a></li>
+		<li><a href="#" title="菜单">菜单</a></li>
+		<li><a href="#" title="菜单">菜单</a></li>
+		<li class="c">菜单</li>
+		<li><a href="#" title="菜单">菜单</a></li>
+		<li><a href="#" title="菜单">菜单</a></li>
+		<li><a href="#" class="None"></a></li>
+	</ul>
+</div>
+
+<div class="about">
+<p>博客：<a href="http://www.iwcn.net">大伟的博客</a></p>
+<p>原始文章：<a href="http://www.linxz.cn/blog2/article.asp?id=128">[xhtml+css实例]不规则导航的制作</a></p>
+<p>论坛讨论：<a href="http://bbs.blueidea.com/thread-2843421-1-1.html">不规则导航的制作</a></p>
+<p>关键字：不规则导航、斜边菜单</p>
+</div>
+
+</body>
+</html>
