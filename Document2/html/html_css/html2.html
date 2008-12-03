@@ -1,0 +1,101 @@
+<html>
+<head>
+<title>HTML测试页面2－块元素与内联元素</title>
+</head>
+<body>
+<h1 align="center">常用HTML标签</h1>
+
+<h2>div元素</h2>
+<div>我在一个div元素中，我独占一行</div>
+<hr />
+<h2>p元素</h2>
+<p>我在p元素中，一般用&lt;p&gt;标签来定义文章的一个段落</p>
+
+<hr />
+<h2>table元素</h2>
+<table border="1">
+	<caption align="bottom">我是表格的标题，并且不被表格的边框所包含，现在我显示在表格的底部</caption>
+	<thead align="center">
+		<tr>
+			<th colspan="3">我是table的头部,这个表格将有3列</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td>我在table的主体第1行第1列</td>
+			<td>我在table的主体第1行第2列</td>
+			<td>我在table的主体第1行第3列</td>
+		</tr>
+		<tr>
+			<td>我在table的主体第2行第1列</td>
+			<td>我在table的主体第2行第2列</td>
+			<td>我在table的主体第2行第3列</td>
+		</tr>
+	</tbody>
+	<tfoot>
+		<tr>
+			<td colspan="3">我在table的表尾，一般省略tfoot标签</td>
+		</tr>
+	</tfoot>
+</table>
+<hr />
+<h2>form元素和fieldset元素</h2>
+<form>
+	<fieldset>
+		<legend>这里是每组内容的描述</legend>
+		对表单进行分组，一个表单可以有多个fieldset
+	</fieldset>
+</form>
+<hr />
+<h2>ul元素－无序列表</h2>
+<ul>
+	<li>无序列表1</li>
+	<li>无序列表2</li>
+	<li>无序列表3</li>
+	<li>无序列表4</li>
+	<li>无序列表5</li>
+</ul>
+<hr />
+<h2>ol元素－有序列表</h2>
+<ol>
+	<li>有序列表1</li>
+	<li>有序列表2</li>
+	<li>有序列表3</li>
+	<li>有序列表4</li>
+	<li>有序列表5</li>
+</ol>
+<hr />
+<h2>dl元素－自定义列表</h2>
+<dl>
+	<dt>定义块元素的标签</dt>
+	<dd>div、p、table、form、fieldset等</dd>
+	<dd>h(h1、h2、h3、h4、h5、h6)</dd>
+	<dd>ul、ol、li</dd>
+	<dd>dl、dt、dd</dd>
+	
+	<dt>定义内联元素的标签</dt>
+	<dd>span、a、img、label、input、button、select、textarea等</dd>
+	<dd>b、strong、i、em</dd>
+	<dd>hr、br</dd>
+	<dd>font(不要再使用这个已经被废弃的标签)</dd>
+</dl>
+<hr />
+<h2>内联元素</h2>
+<a href="#">我是一个链接</a>
+<img src="http://jy.boyie.com/skins/Default/hotfolder.gif" alt="小图片" />
+<label>这是标签定义</label>
+<input type="text" value="我是文本输入框" />
+<button>我是一个按钮</button>
+<select>
+	<option>我是选择列表选项1</option>
+	<option selected="selected">我是默认被选中的选项2</option>
+	<option>我是选择列表选项3</option>
+</select>
+<textarea rows="3" cols="20">我在一个多行文本输入框（文本域）内。</textarea>
+<b>我是粗体字，我很简短。</b>
+<strong>我也是粗体字，不过我语意更强。</strong>
+<i>我是斜体字，我也很简短。</i>
+<em>我也是斜体字，我的语意更强。</em>
+<span>我被强制<br />换行了。</span>
+</body>
+</html>

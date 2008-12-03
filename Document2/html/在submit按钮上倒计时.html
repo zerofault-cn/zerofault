@@ -1,0 +1,28 @@
+<form name="bbrules">
+<input type="submit" name="rulesubmit" value="同 意" style="height: 23px">
+<input type="button" name="return" value="不同意" style="height: 23px" onclick="javascript:history.go(-1);">
+</form>
+</center>
+
+<script language="javascript">
+var secs = 9;
+var wait = secs * 1000;
+document.bbrules.rulesubmit.value = "同 意(" + secs + ")";
+document.bbrules.rulesubmit.disabled = true;
+for(i = 1; i <= secs; i++) {
+        window.setTimeout("update(" + i + ")", i * 1000);
+}
+window.setTimeout("timer()", wait);
+function update(num, value) {
+        if(num == (wait/1000)) {
+                document.bbrules.rulesubmit.value = "同 意";
+        } else {
+                printnr = (wait / 1000)-num;
+                document.bbrules.rulesubmit.value = "同 意(" + printnr + ")";
+        }
+}
+function timer() {
+        document.bbrules.rulesubmit.disabled = false;
+        document.bbrules.rulesubmit.value = "同 意";
+}
+</script>

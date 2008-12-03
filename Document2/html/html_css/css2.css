@@ -1,0 +1,20 @@
+body{
+	background:#FFFFCC url(bg.gif) repeat;
+}
+h1{
+	height:20px;
+	font-size:14px;
+	color:blue;
+	font-weight:normal;
+	text-align:center;
+}
+ul,li{
+	padding:0;
+	margin:0;
+}
+li{
+	margin-left:20px;
+	font-size:12px;
+	line-height:18px;
+	list-style-image:url(list-orange.png);
+}

@@ -1,0 +1,9 @@
+<html>
+<head>
+<title>页面的标题</title>
+</head>
+<body>
+<p>这是我的第一个页面。<b>这是粗体文本。</b></p>
+<!--#include virtual="test.html" -->
+</body>
+</html>

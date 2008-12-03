@@ -1,0 +1,178 @@
+<public:COMPONENT>
+
+<PUBLIC:ATTACH EVENT="ondocumentready" HANDLER="doInit" />
+<PUBLIC:ATTACH EVENT="onclick" HANDLER="doClick" />
+
+<PUBLIC:PROPERTY NAME="label" />
+<PUBLIC:PROPERTY NAME="tabHeight"/>
+<PUBLIC:PROPERTY NAME="tabWidth"/>
+<public:PROPERTY NAME="src" />
+
+<script language="javascript">
+var srcs;
+var selectItem;
+var overItem;
+var itemNum;
+var childrens;
+var uplImgs;
+var upImgs;
+var downlImgs;
+var downImgs;
+var leftImg;
+var lBot;
+var tBot;
+var rBot;
+var rightImg;
+var rTop;
+var tTop;
+
+var tabNum;
+
+function doInit() {
+	setDefaults();	
+	buildTable();
+}
+
+function setDefaults(){
+	if(label == null||label==""){
+		label="&nbsp;&nbsp;&nbsp;&nbsp;";
+	}
+	if(tabHeight == null){
+		tabHeight="200";
+	}
+	if(tabWidth == null){
+		tabWidth= "100%";
+	}
+
+	
+	srcs = new Array();
+	childrens = new Array();
+	uplImgs = new Array(3);
+	upImgs = new Array(3);
+	downlImgs = new Array(3);
+	downImgs = new Array(3);
+	
+	uplImgs[0]="img/tlUp1.gif"
+	uplImgs[1]="img/tlUp2.gif";
+	uplImgs[2]="img/tlUp3.gif";
+	
+	upImgs[0]="img/tUp1.gif"
+	upImgs[1]="img/tUp2.gif";
+	upImgs[2]="img/tUp3.gif";
+	
+	downlImgs[0]="img/tlDown1.gif";
+	downlImgs[1]="img/tlDown2.gif";
+	downlImgs[2]="img/tlDown3.gif";
+	
+	downImgs[0]="img/tDown1.gif";
+	downImgs[1]="img/tDown2.gif";
+	downImgs[2]="img/tDown3.gif";
+	
+	lBot = "img/tabLBot.gif";
+	leftImg = "img/tabL.gif";
+	tBot = "img/tabBot.gif";
+	rBot="img/tabRBot.gif";
+	rightImg="img/tabR.gif";
+	rTop = "img/tableft2.gif";
+	tTop="img/tableft1.gif";
+	
+	selectItem = 0;	
+	tabNum = children.length;
+	
+	for (i=0; i<tabNum; i++) {
+		childrens[i] = children[i];
+		if(children[i].selected!=null){
+			selectItem = i;
+		}
+	}
+}
+
+function buildTable(){
+	str = "";
+	str = "<table width=\""+tabWidth+"\" bgcolo='#CCCCCC' height=\""+tabHeight+"\" style=\"table-layout:fixed;\"  border=\"0\" cellspacing=\"0\" cellpadding=\"0\" onselectstart=\"return false\">";
+	
+	var leftImgs = downlImgs;
+	if(i==0){
+		leftImgs = uplImgs;	
+	}
+	
+	str+="<tr height=33 align='center'>";
+	for (i=0; i<tabNum; i++) {
+		srcs[i] = childrens[i].src;
+		var temp = childrens[i].title;
+		var imgs;
+		if(i==0){
+			imgs = downlImgs;
+			if(i==selectItem){
+				selectItem = i;
+				imgs = uplImgs;
+			}
+			str+="<td background='"+imgs[0]+"' id='T"+i+"L' width='10px' style='cursor:default;'>&nbsp;</td>";
+			str+="<td background='"+imgs[1]+"' tid='"+i+"' id='T"+i+"M' style='align:right;width:"+getLength(temp)+";cursor:hand'><nobr>"+temp+"</nobr></td>";
+			str+="<td background='"+imgs[2]+"' id='T"+i+"R' width='10px' style='cursor:default;'>&nbsp;</td>";	
+		}else{
+			imgs = downImgs;
+			if(i==selectItem){
+				selectItem = i;
+				imgs = upImgs;
+			}			
+			str+="<td background='"+imgs[0]+"' id='T"+i+"_L' width='10px' style='cursor:default;'>&nbsp;</td>";
+			str+="<td background='"+imgs[1]+"' tid='"+i+"' id='T"+i+"_M' style='align:right;width:"+getLength(temp)+";cursor:hand'><nobr>"+temp+"</nobr></td>";
+			str+="<td background='"+imgs[2]+"' id='T"+i+"_R' width='10px' style='cursor:default;'>&nbsp;</td>";	
+		}
+
+	}
+	itemNum = i;
+	str += "<td align='right' background='"+tTop+"'>"+label+"</td><td align='right'  background='"+rTop+"' width='10px'></td></tr>";
+	str += "<tr><td background='"+leftImg+"' width='10px'>&nbsp;</td>";
+	str += "<td colspan='"+(3*i)+"' bgcolor='red' align='left'>";
+	str += getTheWindowString(selectItem);
+	str +="</td>";
+	str += "<td background='"+rightImg+"'  width='10px'></td></tr>";
+	str += "<tr height='14px'><td width='10px' background='"+lBot+"'></td>";
+    	str += "<td background='"+tBot+"' colspan="+(3*i)+"></td>";
+    	str += "<td width='10px' background='"+rBot+"'></td></tr></table>";
+	element.innerHTML = str;
+	
+}
+function doClick(){
+	eTD = window.event.srcElement; 	
+	if(eTD.tagName=="NOBR"){
+		eTD = eTD.parentElement;
+	}
+	if(eTD.tid==null){
+		return;
+	}
+	for(var i=0;i<tabNum;i++){
+		if(eTD.tid==i){
+			selectItem = eTD.tid;
+		}
+			
+	}
+
+	buildTable();
+	return;
+}
+
+function getTheWindowString(index) {
+	d = "<iframe id=myFrame scrolling='auto' overflow='visable' style=\"visibility:visible\"; frameborder=0 style='height:100%;width:100%;'";
+	d += " src='"+srcs[index]+"'></iframe>";
+	return d;
+}
+
+function getLength(a){
+	var temp = "abcdefghijklmnuvwxyzABCDEFGHIJKLMNUVWXYZ!@#$%^&*()_+|";
+	var size = a.length;
+	var i;
+	var width = 0;
+	for(i=0;i<size;i++){
+		if(temp.indexOf(a.charAt(i))<0){
+			width+=16;
+		}else{
+			width+=8;
+		}
+	}
+	return width;
+}
+</script>
+</PUBLIC:COMPONENT>

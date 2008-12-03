@@ -1,0 +1,90 @@
+#map {
+	BACKGROUND: url(map.gif) no-repeat left top; FLOAT: left; WIDTH: 552px; HEIGHT: 447px
+}
+#map H1 {
+	DISPLAY: block; FONT-WEIGHT: normal; POSITION: absolute
+}
+.mapl A:link {
+	DISPLAY: block; BACKGROUND: url(maph1.gif) no-repeat; COLOR: #000; TEXT-DECORATION: none
+}
+.mapl A:visited {
+	DISPLAY: block; BACKGROUND: url(maph1.gif) no-repeat; COLOR: #000; TEXT-DECORATION: none
+}
+.mapr A:link {
+	DISPLAY: block; BACKGROUND: urlmaph1.gif) no-repeat; COLOR: #000; TEXT-DECORATION: none
+}
+.mapr A:visited {
+	DISPLAY: block; BACKGROUND: url(maph1.gif) no-repeat; COLOR: #000; TEXT-DECORATION: none
+}
+.mapl A:link {
+	BACKGROUND-POSITION: left 4px; PADDING-LEFT: 20px
+}
+.mapl A:visited {
+	BACKGROUND-POSITION: left 4px; PADDING-LEFT: 20px
+}
+.mapr A:link {
+	PADDING-RIGHT: 20px; BACKGROUND-POSITION: right 4px
+}
+.mapr A:visited {
+	PADDING-RIGHT: 20px; BACKGROUND-POSITION: right 4px
+}
+.mapl A:hover {
+	PADDING-RIGHT: 20px; DISPLAY: block; BACKGROUND: url(maph1.gif) no-repeat; COLOR: #ff0000
+}
+.mapl A:active {
+	PADDING-RIGHT: 20px; DISPLAY: block; BACKGROUND: url(maph1.gif) no-repeat; COLOR: #ff0000
+}
+.mapr A:hover {
+	PADDING-RIGHT: 20px; DISPLAY: block; BACKGROUND: url(maph1.gif) no-repeat; COLOR: #ff0000
+}
+.mapr A:active {
+	PADDING-RIGHT: 20px; DISPLAY: block; BACKGROUND: url(maph1.gif) no-repeat; COLOR: #ff0000
+}
+#map .mapr A:hover {
+	PADDING-RIGHT: 20px; BACKGROUND-POSITION: right bottom
+}
+#map .mapr A:active {
+	PADDING-RIGHT: 20px; BACKGROUND-POSITION: right bottom
+}
+#map .mapl A:hover {
+	BACKGROUND-POSITION: left bottom; PADDING-LEFT: 20px
+}
+#map .mapl A:active {
+	BACKGROUND-POSITION: left bottom; PADDING-LEFT: 20px
+}
+#city {
+	PADDING-RIGHT: 0px; BORDER-TOP: #cdcdcd 1px solid; PADDING-LEFT: 0px; PADDING-BOTTOM: 10px; MARGIN: 0px auto; WIDTH: 950px; PADDING-TOP: 10px; BORDER-BOTTOM: #cdcdcd 1px solid; TEXT-ALIGN: left
+}
+#city H6 {
+	BACKGROUND-POSITION: left center; PADDING-LEFT: 10px; FONT-SIZE: 14px; BACKGROUND-IMAGE: url(city_icon.gif); MARGIN-BOTTOM: 10px; COLOR: #000; BACKGROUND-REPEAT: no-repeat
+}
+#city A {
+	PADDING-RIGHT: 5px
+}
+#city STRONG {
+	MARGIN-TOP: 5px; DISPLAY: inline; MARGIN-BOTTOM: -2px; COLOR: #333
+}
+#city H1 {
+	COLOR: #333
+}
+#soil {
+	PADDING-RIGHT: 0px; PADDING-LEFT: 0px; PADDING-BOTTOM: 10px; MARGIN: 0px auto; WIDTH: 950px; PADDING-TOP: 10px; TEXT-ALIGN: left
+}
+#soil A {
+	MARGIN: 0px 2px
+}
+#soil H6 {
+	BACKGROUND-POSITION: left center; PADDING-LEFT: 10px; FONT-SIZE: 14px; BACKGROUND-IMAGE: url(soil_icon.gif); MARGIN-BOTTOM: 10px; COLOR: #000; BACKGROUND-REPEAT: no-repeat
+}
+A.z {
+	COLOR: #ff0000
+}
+#rightindex {
+	FLOAT: right; MARGIN: 10px 0px 0px 10px; WIDTH: 380px
+}
+.rightbox {
+	BACKGROUND: url(index_rb1.gif) no-repeat left top; WIDTH: 341px
+}
+.rightbox P {
+	PADDING-RIGHT: 18px; PADDING-LEFT: 18px; BACKGROUND: url(index_rb2.gif) no-repeat left bottom; PADDING-BOTTOM: 15px; PADDING-TOP: 15px
+}
