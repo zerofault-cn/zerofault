@@ -20,9 +20,32 @@ function getUserInfo($id)
 	$result=$db->sql_query($sql);
 	return $row=$db->sql_fetchrow($result);
 }
+
+//对javascript的escape()编码进行反编码，用于中文传输环境
+function unescape($str,$charcode='utf-8'){
+	$text = preg_replace_callback("/%u[0-9A-Za-z]{4}/",toUtf8,$str);
+	return mb_convert_encoding($text, $charcode, 'utf-8');
+}
+
+function toUtf8($ar){
+	foreach($ar as $val){
+		$val = intval(substr($val,2),16);
+		if($val < 0x7F){        // 0000-007F
+			$c .= chr($val);
+		}elseif($val < 0x800) { // 0080-0800
+			$c .= chr(0xC0 | ($val / 64));
+			$c .= chr(0x80 | ($val % 64));
+		}else{                // 0800-FFFF
+			$c .= chr(0xE0 | (($val / 64) / 64));
+			$c .= chr(0x80 | (($val / 64) % 64));
+			$c .= chr(0x80 | ($val % 64));
+		}
+	}
+	return $c;
+}
 /**
 *转换字符编码的函数
-*因为从20.36上提交的表单中的变量都是utf-8编码的,存入数据库前要先转为gb2312
+*因为从20.36上提交的表单中的变量都是utf-8编码的,存入数据库前要先转码，转为gbk是为了尽量避免丢失字符
 *只有包含中文字符的需要转换,数字和英文不需要转换
 */
 function conv($str)
