@@ -13,11 +13,11 @@ if('add'==$action)
 	$table=$_REQUEST['table'];
 	$cate_id=$_REQUEST['cate_id'];
 	$site_id=$_REQUEST['site_id'];
-	$name=mb_convert_encoding($_REQUEST['name'],"gb2312","utf-8,gbk");
+	$name=$_REQUEST['name'];
 	$url=$_REQUEST['url'];
 	$sort=$_REQUEST['sort'];
-	$descr=mb_convert_encoding($_REQUEST['descr'],"gb2312","utf-8,gbk");
-	if('website'==$table)
+	$descr=$_REQUEST['descr'];
+	if('url_website'==$table)
 	{
 		if($site_id>0)
 		{
@@ -40,7 +40,7 @@ if('add'==$action)
 	//	echo $sql1;
 	//	echo '<br />';
 	//	echo $sql2;
-	//	echo '<script>parent.alert("¸ÃÌõÄ¿ÒÑ¾­Ìí¼Ó¹ıÁË!");</script>';
+	//	echo '<script>parent.alert("è¯¥æ¡ç›®å·²ç»æ·»åŠ è¿‡äº†!");</script>';
 		echo '-1';
 		exit;
 	}
@@ -84,7 +84,7 @@ if('modify'==$action)
 	$table=$_REQUEST['table'];
 	$id=$_REQUEST['id'];
 	$field=$_REQUEST['field'];
-	$value=mb_convert_encoding($_REQUEST['value'],"gb2312","utf-8,gbk");
+	$value=$_REQUEST['value'];
 	$sql="update ".$table." set ".$field."='".$value."' where id=".$id;
 	if($db->sql_query($sql))
 	{
@@ -132,63 +132,63 @@ while($row=$db->sql_fetchrow($result))
 }
 $db->sql_close();
 
-//include_once("left.php");//×ó±ß²Ëµ¥
+//include_once("left.php");//å·¦è¾¹èœå•
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=gb2312" />
-<title>ÍøÖ·µ¼º½ºóÌ¨¹ÜÀí</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>ç½‘å€å¯¼èˆªåå°ç®¡ç†</title>
 <link rel="stylesheet" href="style.css" type="text/css">
 <script language="javascript" type="text/javascript" src="jquery-1.2.1.js"></script>
 <script language="javascript" type="text/javascript" src="function.js"></script>
 </head>
 <body>
 <div style="width:800px;margin-top:10px;margin-left:auto;margin-right:auto;border:1px solid #000;padding:10px;">
-	<div style="text-align:center;line-height:20px;color:#000000;FILTER: glow(color:#308148,strength=3);">ÍøÖ·µ¼º½·ÖÀà¼°Á´½Ó¹ÜÀí</div>
+	<div style="text-align:center;line-height:20px;color:#000000;FILTER: glow(color:#308148,strength=3);">ç½‘å€å¯¼èˆªåˆ†ç±»åŠé“¾æ¥ç®¡ç†</div>
 	<div id="addcate" style="border:1px dotted #bbb;padding:3px;line-height:140%;">
-		<input type="button" id="toAddCate" value="Ìí¼ÓĞÂ·ÖÀà" />
+		<input type="button" id="toAddCate" value="æ·»åŠ æ–°åˆ†ç±»" />
 		<div id="addCateForm">
-			·ÖÀàÃû³Æ£º<input type="text" id="cate_name" name="cate_name" size="10">
-			ÅÅĞò£º<input type="text" id="cate_sort" name="cate_sort" value="<?=($max_cate_sort+10)?>" size="4">
-			<input type="button" value="Ìá½»" id="submit_addCate" /> <input type="button" value="È¡Ïû" id="cancel_addCate" /><br />
-			¼ò½é£º<input type="text" id="cate_descr" name="cate_descr" size="40">
+			åˆ†ç±»åç§°ï¼š<input type="text" id="cate_name" name="cate_name" size="10" tabindex="1" />
+			æ’åºï¼š<input type="text" id="cate_sort" name="cate_sort" value="<?=($max_cate_sort+10)?>" size="4">
+			<input type="button" value="æäº¤" id="submit_addCate" /> <input type="button" value="å–æ¶ˆ" id="cancel_addCate" /><br />
+			ç®€ä»‹ï¼š<input type="text" id="cate_descr" name="cate_descr" size="40" tabindex="2" />
 		</div>
 	</div>
 	<ol class="cate_list">
 <?
-$show_arr=array("ÏÔÊ¾","Òş²Ø");
-$mark_arr=array("Í»³ö","ÆÕÍ¨");
+$show_arr=array("æ˜¾ç¤º","éšè—");
+$mark_arr=array("çªå‡º","æ™®é€š");
 $class_arr=array("gray","");
 foreach($cate_arr as $key=>$val)
 {
 	$i=0;
-	//ÁĞ¾Ù·ÖÀà
+	//åˆ—ä¸¾åˆ†ç±»
 	?>
 		<li id="<?=$val["id"]?>" class="<?=$class_arr[$val["flag"]]?>">
 			<div class="cate">
 				<span class="cate_func">
-					ÅÅĞò:<label id="<?=$val["id"]?>"><?=$val["sort"]?></label>
-					<span style="margin-left:100px;"><!-- ¿ÕÎ» --></span>
-					<!-- ÏÔÊ¾ÓëÒş²Ø -->
+					æ’åº:<label id="<?=$val["id"]?>"><?=$val["sort"]?></label>
+					<span style="margin-left:100px;"><!-- ç©ºä½ --></span>
+					<!-- æ˜¾ç¤ºä¸éšè— -->
 					[<a href="javascript:void(0)" id="<?=$val["id"]?>" class="show" value='<?=intval(!$val["flag"])?>'><?=$show_arr[$val["flag"]]?></a>]
-					[<a href="javascript:void(0)" id="<?=$val["id"]?>" class="delete">É¾³ı</a>]
+					[<a href="javascript:void(0)" id="<?=$val["id"]?>" class="delete">åˆ é™¤</a>]
 				</span>
 				<span class="cate_info">
 					<label id="<?=$val["id"]?>"><?=$val["name"]?></label>
-					&nbsp;&nbsp;[<a href="javascript:void(0)" class="toAddSite" value="0">Ìí¼ÓÍøÕ¾</a>]
-					&nbsp;&nbsp;<a href="javascript:void(0)" class="toShowSite" value="0"><?=(sizeof($site_arr[$val["id"]])>10?($val['id']==$all?'[ÏÔÊ¾×îĞÂ10¸ö]':'[ÏÔÊ¾È«²¿'.sizeof($site_arr[$val["id"]]).'¸öÍøÕ¾]'):'')?></a>
+					&nbsp;&nbsp;[<a href="javascript:void(0)" class="toAddSite" value="0">æ·»åŠ ç½‘ç«™</a>]
+					&nbsp;&nbsp;<a href="javascript:void(0)" class="toShowSite" value="0"><?=(sizeof($site_arr[$val["id"]])>10?($val['id']==$all?'[æ˜¾ç¤ºæœ€æ–°10ä¸ª]':'[æ˜¾ç¤ºå…¨éƒ¨'.sizeof($site_arr[$val["id"]]).'ä¸ªç½‘ç«™]'):'')?></a>
 				</span>
 				
 			</div>
 			<ol class="site_list">
 				<div class="addSiteForm" id="<?=$val["id"]?>">
-					ÍøÕ¾£º<input type="text" class="site_name" name="site_name" size="10">
-					ÅÅĞò£º<input type="text" class="site_sort" name="site_sort" value="<?=($max_sort[$val['id']]+10)?>" size="4">
-					<input type="button" value="Ìá½»" class="submit">
-					<input type="button" value="È¡Ïû" class="cancel"><br />
-					ÍøÖ·£º<input type="text" class="site_url" name="site_url" size="20"><br />
-					¼ò½é£º<input type="text" class="site_descr" name="site_descr" size="40">
+					ç½‘ç«™ï¼š<input type="text" class="site_name" name="site_name" size="10" tabindex="1" />
+					æ’åºï¼š<input type="text" class="site_sort" name="site_sort" value="<?=($max_sort[$val['id']]+10)?>" size="4">
+					<input type="button" value="æäº¤" class="submit">
+					<input type="button" value="å–æ¶ˆ" class="cancel"><br />
+					ç½‘å€ï¼š<input type="text" class="site_url" name="site_url" size="20" tabindex="2" /><br />
+					ç®€ä»‹ï¼š<input type="text" class="site_descr" name="site_descr" size="40" tabindex="3" />
 				</div>
 	<?
 	foreach($site_arr[$val["id"]] as $key2=>$val2)
@@ -196,13 +196,13 @@ foreach($cate_arr as $key=>$val)
 		?>
 				<li id="<?=$val2["id"]?>" class="<?=$class_arr[$val2["flag"]]?>">
 					<span class="site_func">
-						ÅÅĞò:<label id="<?=$val2["id"]?>"><?=$val2["sort"]?></label>&nbsp;&nbsp;&nbsp;&nbsp;
+						æ’åº:<label id="<?=$val2["id"]?>"><?=$val2["sort"]?></label>&nbsp;&nbsp;&nbsp;&nbsp;
 						<span function="as a parent">[<a href="javascript:void(0)" id="<?=$val2["id"]?>" class="show" value='<?=intval(!$val2["flag"])?>'><?=$show_arr[$val2["flag"]]?></a>&nbsp;&nbsp;
 						<a href="javascript:void(0)" id="<?=$val2["id"]?>" class="mark" value='<?=intval(!$val2["mark"])?>'><?=$mark_arr[$val2["mark"]]?></a>]</span>
-						<span function="add a parent">[<a href="javascript:void(0)" id="<?=$val2["id"]?>" class="delete">É¾³ı</a>]</span>
+						<span function="add a parent">[<a href="javascript:void(0)" id="<?=$val2["id"]?>" class="delete">åˆ é™¤</a>]</span>
 					</span>
 					<span class="site_info">
-						<a class="<?=($val2["flag"]&&$val2["mark"])?'red':''?>" id="<?=$val2["id"]?>" href="<?=$val2["url"]?>" title="<?=$val2['descr']?>" target="_blank"><?=$val2["name"]?></a>&nbsp;&nbsp;<a href="javascript:void(0)" class="toEditSite">[ĞŞ¸Ä]</a>
+						<a class="<?=($val2["flag"]&&$val2["mark"])?'red':''?>" id="<?=$val2["id"]?>" href="<?=$val2["url"]?>" title="<?=$val2['descr']?>" target="_blank"><?=$val2["name"]?></a>&nbsp;&nbsp;<a href="javascript:void(0)" class="toEditSite">[ä¿®æ”¹]</a>
 					</span>
 					<div class="clear"></div>
 				</li>
