@@ -13,73 +13,85 @@
 </form>
 <form name="form1" action="" method="get">
 <input type="hidden" name="action" value="query_site" />
-输入站点名称：<input type="text" name="site_name" size="6" value="<?=$_REQUEST['site_name']?>" /><input type="submit" value="查询所在线路" />
+输入站点名称：<input type="text" name="site_name" size="6" value="<?=$_REQUEST['site_name']?>" /><input type="submit" value="查询经过线路" />
 </form>
 <form name="form1" action="" method="get">
 <input type="hidden" name="action" value="query_transfer" />
-输入起点：<input type="text" name="term1" size="8" value="<?=$_REQUEST['term1']?>" /><br />
-输入终点：<input type="text" name="term2" size="8" value="<?=$_REQUEST['term2']?>" /><input type="submit" value="换乘查询" />
+输入起点：<input type="text" name="from" size="8" value="<?=$_REQUEST['from']?>" /><br />
+输入终点：<input type="text" name="to" size="8" value="<?=$_REQUEST['to']?>" /><input type="submit" value="换乘查询" />
 </form>
 <?php
 $action=$_REQUEST['action'];
-if('query_line'==$action)
+if(!empty($action))
 {
 	define('IN_MATCH', true);
 	$root_path="./";
 	include_once($root_path."config.php");
 	include_once($root_path."includes/db.php");
-
-	$line_name=intval(trim($_REQUEST['line_name']));
-	if($line_name>0)
+}
+if('query_line'==$action)
+{
+	include_once($root_path."line_info.php");
+	if(!empty($_REQUEST['id']))
 	{
-		$sql1="select * from ".$line_table." l where l.number='".$line_name."' or l.name='".$line_name."'";
-		$result1=$db->sql_query($sql1);
-		while($row1=$db->sql_fetchrow($result1))
+		line_info($_REQUEST['id']);
+	}
+	else
+	{
+		$line_name=trim($_REQUEST['line_name']);
+		if(!empty($line_name)>0)
 		{
-			$line_arr[$row1['name']]['line_info']=$row1;
-			$sql2="select r.direction as dir,s.name as name from ".$site_table." s,".$route_table." r where r.lid=".$row1['id']." and s.id=r.sid order by r.i";
-			$result2=$db->sql_query($sql2);
-			while($row2=$db->sql_fetchrow($result2))
+			$sql1="select * from ".$line_table." l where l.number='".$line_name."' or l.name='".$line_name."'";
+			$result1=$db->sql_query($sql1);
+			while($row1=$db->sql_fetchrow($result1))
 			{
-				$line_arr[$row1['name']]['dir'][$row2['dir']][]=$row2['name'];
+				$line_list[]=$row1;
+			}
+			if(count($line_list)==0)
+			{
+				echo '暂时没有此线路的信息<br />';
+			}
+			else
+			{
+				foreach($line_list as $key=>$line_arr)
+				{
+					line_info($line_arr['id']);
+				}
 			}
 		}
-		if(sizeof($line_arr)==0)
+	}
+}
+if('query_site'==$action)
+{
+	include_once($root_path."site_info.php");
+	if(!empty($_REQUEST['id']))
+	{
+		site_info($_REQUEST['id']);
+	}
+	else
+	{
+		$sql="select * from ".$site_table." where binary name like '%".$_REQUEST['site_name']."%'";
+		$result=$db->sql_query($sql);
+		while($row=$db->sql_fetchrow($result))
 		{
-			echo '此线路还未开通！';
+			$site_list_arr[]=$row;
+		}
+	//	checkvar($site_list_arr);
+		if(count($site_list_arr)==0)
+		{
+			echo '暂时没有经过此处的公交线路!';
+		}
+		else if(count($site_list_arr)==1)
+		{
+			site_info($site_list_arr[0]['id']);
 		}
 		else
 		{
-			foreach($line_arr as $line_name=>$line_info)
+			echo '您查询的关键字有多个可能，请选择最接近的一个：<br />';
+			foreach($site_list_arr as $key=>$site_arr)
 			{
-				echo '线路名称:'.$line_name.'<br>';
-				echo '起点站:'.getSname($line_info['line_info']['term1']).'('.$line_info['line_info']['start_time1'].'-'.$line_info['line_info']['end_time1'].')<br>';
-				echo '终点站:'.getSname($line_info['line_info']['term2']).'('.$line_info['line_info']['start_time2'].'-'.$line_info['line_info']['end_time2'].')<br>';
-				echo '票价:'.$line_info['line_info']['fare_norm'].' '.$line_info['line_info']['fare_cond'].'<br>';
-				echo '可使用公交卡:'.$line_info['line_info']['ic_card'].'<br>';
-				foreach($line_info['dir'] as $dir=>$route_arr)
-				{
-						echo '<span style="color:blue">';
-						if($dir==1)
-						{
-							echo '上行';
-						}
-						else
-						{
-							echo '下行';
-						}
-						echo '：</span><br />';
-						foreach($route_arr as $index=>$name)
-					{
-				
-						echo $name;
-						if($index!=(sizeof($route_arr)-1))
-						{
-							echo '→';
-						}
-					}
-					echo '</br />';
-				}
+				printf("%2d",$key+1);
+				echo '：<a href="?action=query_site&site_name='.$_REQUEST['site_name'].'&id='.$site_arr['id'].'">'.$site_arr['name'].'</a><br />';
 			}
 		}
 	}
@@ -99,7 +111,7 @@ if('query_transfer'==$action)
 	$result=findNext($s_sid);
 	getResult($result);
 }
-echo '数据来源于杭州公交集团网站(http://www.hzbus.com.cn)，数据采集日期:2008-11-20';
+echo '<br /><br /><br />数据来源于杭州公交集团网站(http://www.hzbus.com.cn)，数据采集日期:2008-11-20';
 ?>
 <br />
 <a href="http://blog.haozhanwang.com/" target="_blank">我的BLOG</a>
