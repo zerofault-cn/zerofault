@@ -1,4 +1,11 @@
 <?php
+function checkvar($input)
+{
+	echo "\n<hr><pre>\n";
+	print_r($input);
+	echo "\n</pre><hr>\n";
+}
+
 function getSid($name) {
 	global $db,$site_table;
 	$sql1="select id from ".$site_table." where binary name='".$name."'";
