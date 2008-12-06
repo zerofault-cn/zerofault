@@ -1,6 +1,6 @@
 <html>
 <head>
-<title>杭州公交线路查询－手机版</title>
+<title>杭州公交线路查询－手机适用版</title>
 <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
 <meta name="description" content="杭州公交汽车线路查询，与杭州公交集团网站数据同步" />
 <meta name="keywords" content="杭州 公交车 线路 换乘 查询 手机适用" />

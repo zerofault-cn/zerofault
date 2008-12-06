@@ -33,13 +33,15 @@ function line_info($id) {
 			echo '下行';
 		}
 		echo '：</span>';
+		$count=0;
 		foreach($route_info as $id=>$name)
 		{
 	
 			echo '<a href="?action=query_site&id='.$id.'" title="查看经过【'.$name.'】的所有线路">'.$name.'</a>';
-			if($index!=(sizeof($route_info)-1))
+			if($count!=count($route_info)-1)
 			{
 				echo '→';
+				$count++;
 			}
 		}
 		echo '</br />';
