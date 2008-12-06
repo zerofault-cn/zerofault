@@ -1,13 +1,19 @@
 <html>
 <head>
-<title>杭州公共线路查询－手机版</title>
-<meta http-equiv="Content-Type" content="text/html; charset=GBK">
+<title>杭州公交线路查询－手机版</title>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+<meta name="description" content="杭州公交汽车线路查询，与杭州公交集团网站数据同步" />
+<meta name="keywords" content="杭州 公交车 线路 换乘 查询 手机适用" />
 <link href="style.css" rel="stylesheet" type="text/css">
 </head>
 <body>
 <form name="form1" action="" method="get">
 <input type="hidden" name="action" value="query_line" />
-输入线路编号：<input type="text" name="line_name" size="3" value="<?=$_REQUEST['line_name']?>" /><input type="submit" value="查询" />
+输入线路编号：<input type="text" name="line_name" size="3" value="<?=$_REQUEST['line_name']?>" /><input type="submit" value="查询线路信息" />
+</form>
+<form name="form1" action="" method="get">
+<input type="hidden" name="action" value="query_site" />
+输入站点名称：<input type="text" name="site_name" size="6" value="<?=$_REQUEST['site_name']?>" /><input type="submit" value="查询所在线路" />
 </form>
 <form name="form1" action="" method="get">
 <input type="hidden" name="action" value="query_transfer" />
@@ -93,8 +99,7 @@ if('query_transfer'==$action)
 	$result=findNext($s_sid);
 	getResult($result);
 }
-echo '<br /><br /><br />声明：目前所有数据来源于杭州公交集团网站(http://www.hzbus.com.cn)；本人仅作学习测试用，版权属于原网站<br />';
-echo '数据采集日期:2008-11-20';
+echo '数据来源于杭州公交集团网站(http://www.hzbus.com.cn)，数据采集日期:2008-11-20';
 ?>
 <br />
 <a href="http://blog.haozhanwang.com/" target="_blank">我的BLOG</a>
