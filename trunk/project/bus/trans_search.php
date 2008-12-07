@@ -17,41 +17,46 @@ $e_sid=getSid($key[1]);
 //print_r($result);
 //echo '</pre>';
 //getResult($result);
-function getResult($result) {
-	global $term1;
-	echo '<table border="1">';
-	echo '<tr>';
-	echo '<th>可选方案</th>';
-	echo '<th>起点</th>';
+function getResult($from_sid,$to_sid) {
+	$result=findNext($from_sid,$to_sid);
+	$from=getSname($from_sid);
+	$to=getSname($to_sid);
+	echo '<table borer="0" cellspacing="1" cellpadding="1" bgcolor="#0099CC">';
+	echo '<caption>从【<a href="site_id_'.$from_sid.'.html" title="查看经过【'.$from.'】的所有线路">'.$from.'</a>】到【<a href="site_id_'.$to_sid.'.html" title="查看经过【'.$to.'】的所有线路">'.$to.'</a>】的乘车方案</caption>';
+	echo '<tr bgcolor="#ffffff">';
+	echo '<th>序号</th>';
+//	echo '<th>起点</th>';
 	echo '<th>乘坐线路</th>';
 	if(sizeof($result[0])>1)
 	{
-		echo '<th>中途下车</th>';
+		echo '<th>换乘站点</th>';
 		echo '<th>换乘线路</th>';
 	}
-	echo '<th>终点</th>';
+//	echo '<th>终点</th>';
 	echo '</tr>';
 	foreach($result as $i=>$r)
 	{
-		echo '<tr>';
+		echo '<tr bgcolor="#ffffff">';
 		echo '<td>'.($i+1).'</td>';
-		echo '<td>'.$term1.'</td>';
+//		echo '<td>'.getSname($from_sid).'</td>';
 			
 		foreach($r as $n=>$info)
 		{
-			echo '<td>'.getLname($info['lid'])."</td>";
-			echo '<td>'.getSname($info['sid'])."</td>";
+			echo '<td><a href="line_id_'.$info['lid'].'.html">'.getLname($info['lid'])."</a></td>";
+			if(count($r)>0 && $n!=(count($r)-1))
+			{
+				echo '<td><a href="site_id_'.$info['sid'].'.html">'.getSname($info['sid'])."</a></td>";
+			}
 		}
 		echo "</tr>";
 	}
 	echo '</table>';
 
 }
-function findNext($s_sid) {
-	global $db,$e_sid;
+function findNext($from_sid,$to_sid) {
+	global $db;
 	//取得该站点在它所在线路上的后续站点
-	$nextSidArr=getNextSidArr($s_sid);
-//	print_r($nextSidArr);
+	$nextSidArr=getNextSidArr($from_sid);
 
 	$n=0;//换乘次数
 	$i=0;//可行方案数
@@ -59,7 +64,7 @@ function findNext($s_sid) {
 	{
 		foreach($sidArr as $sid)//在一条线路上找后续站点
 		{
-			if($sid==$e_sid)
+			if($sid==$to_sid)
 			{
 				$result[$i][$n]['lid']=$lid;
 				$result[$i][$n]['sid']=$sid;
@@ -72,8 +77,10 @@ function findNext($s_sid) {
 	{
 		return $result;
 	}
+
 	$n++;
-	foreach($nextSidArr as $lid=>$sidArr)//遍历直接线路
+	//一次换乘
+	foreach($nextSidArr as $lid=>$sidArr)
 	{
 		
 		$get=0;
@@ -81,19 +88,19 @@ function findNext($s_sid) {
 		{
 			continue;
 		}
-		foreach($sidArr as $sid)//对直接线路上所有后续站点搜索后续站点
+		foreach($sidArr as $sid)
 		{
 			$nextSidArr2=getNextSidArr($sid);
 			foreach($nextSidArr2 as $lid2=>$sidArr2)
 			{
 				foreach($sidArr2 as $sid2)
 				{
-					if($sid2==$e_sid)
+					if($sid2==$to_sid)
 					{
 						$result[$i][0]['lid']=$lid;
 						$result[$i][0]['sid']=$sid;
-						$result[$i][$n]['lid']=$lid2;
-						$result[$i][$n]['sid']=$sid2;
+						$result[$i][1]['lid']=$lid2;
+						$result[$i][1]['sid']=$sid2;
 						$i++;
 						$get=1;
 						continue;
@@ -107,19 +114,20 @@ function findNext($s_sid) {
 		return $result;
 	}
 	$n++;
-	foreach($nextSidArr as $lid=>$sidArr)//遍历直接线路
+	//二次换乘
+	foreach($nextSidArr as $lid=>$sidArr)
 	{
 		$get=0;
 		if($get==1)
 		{
 			continue;
 		}
-		foreach($sidArr as $sid)//对直接线路上所有后续站点搜索后续站点
+		foreach($sidArr as $sid)
 		{
-			foreach($nextSidArr as $lid=>$sidArr)//遍历直接线路
+			foreach($nextSidArr as $lid=>$sidArr)
 			{
 
-				foreach($sidArr as $sid)//对直接线路上所有后续站点搜索后续站点
+				foreach($sidArr as $sid)
 				{
 					$nextSidArr2=getNextSidArr($sid);
 					foreach($nextSidArr2 as $lid2=>$sidArr2)
@@ -146,6 +154,7 @@ function findNext($s_sid) {
 	{
 		return $result;
 	}
+	//二次换乘都无结果，就不用再找了
 }
 
 function getLidArrBySname($sname) {

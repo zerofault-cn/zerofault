@@ -7,15 +7,15 @@
 <link href="style.css" rel="stylesheet" type="text/css">
 </head>
 <body>
-<form name="form1" action="" method="get">
+<form name="form1" action="index.php" method="get">
 <input type="hidden" name="action" value="query_line" />
 输入线路编号：<input type="text" name="line_name" size="3" value="<?=$_REQUEST['line_name']?>" /><input type="submit" value="查询线路信息" />
 </form>
-<form name="form1" action="" method="get">
+<form name="form1" action="index.php" method="get">
 <input type="hidden" name="action" value="query_site" />
-输入站点名称：<input type="text" name="site_name" size="6" value="<?=$_REQUEST['site_name']?>" /><input type="submit" value="查询经过线路" />
+输入站点名称：<input type="text" name="site_name" size="6" value="<?=$_REQUEST['site_ame']?>" /><input type="submit" value="查询经过线路" />
 </form>
-<form name="form1" action="" method="get">
+<form name="form1" action="index.php" method="get">
 <input type="hidden" name="action" value="query_transfer" />
 输入起点：<input type="text" name="from" size="8" value="<?=$_REQUEST['from']?>" /><br />
 输入终点：<input type="text" name="to" size="8" value="<?=$_REQUEST['to']?>" /><input type="submit" value="换乘查询" />
@@ -68,7 +68,7 @@ if('query_site'==$action)
 	{
 		site_info($_REQUEST['id']);
 	}
-	else
+	elseif(strlen(trim($_REQUEST['site_name']))>0)
 	{
 		$sql="select * from ".$site_table." where binary name like '%".$_REQUEST['site_name']."%'";
 		$result=$db->sql_query($sql);
@@ -91,25 +91,67 @@ if('query_site'==$action)
 			foreach($site_list_arr as $key=>$site_arr)
 			{
 				printf("%2d",$key+1);
-				echo '：<a href="?action=query_site&site_name='.$_REQUEST['site_name'].'&id='.$site_arr['id'].'">'.$site_arr['name'].'</a><br />';
+				echo '：<a href="site_id_'.$site_arr['id'].'.html">'.$site_arr['name'].'</a><br />';
 			}
 		}
 	}
 }
 if('query_transfer'==$action)
 {
-	define('IN_MATCH', true);
-	$root_path="./";
-	include_once($root_path."config.php");
-	include_once($root_path."includes/db.php");
-
 	include_once($root_path."trans_search.php");
-	$term1=$_REQUEST['term1'];
-	$term2=$_REQUEST['term2'];
-	$s_sid=getSid($term1);
-	$e_sid=getSid($term2);
-	$result=findNext($s_sid);
-	getResult($result);
+	$from=$_REQUEST['from'];
+	$to=$_REQUEST['to'];
+	$from_sid=$_REQUEST['from_sid'];
+	$to_sid=$_REQUEST['to_sid'];
+	
+	if(strlen($from)>0 && strlen($to)>0)
+	{
+		$sql1="select * from ".$site_table." where binary name like '%".$from."%'";
+		$result1=$db->sql_query($sql1);
+		while($row1=$db->sql_fetchrow($result1))
+		{
+			$from_site_list_arr[]=$row1;
+		}
+		$sql2="select * from ".$site_table." where binary name like '%".$to."%'";
+		$result2=$db->sql_query($sql2);
+		while($row2=$db->sql_fetchrow($result2))
+		{
+			$to_site_list_arr[]=$row2;
+		}
+		if(count($from_site_list_arr)==0 || count($to_site_list_arr)==0)
+		{
+			echo '暂时没有经过此起点或终点的公交线路!';
+		}
+		elseif(count($from_site_list_arr)==1 && count($to_site_list_arr)==1)
+		{
+			$from_sid = $from_site_list_arr[0]['id'];
+			$to_sid   = $to_site_list_arr[0]['id'];
+		}
+		else
+		{
+			echo '<form action="index.php" method="get">';
+			echo '<input type="hidden" name="action" value="query_transfer" />';
+			echo '您查询的起点或终点有多个可能，请选择最准确的一个：<br />';
+			echo '请选择起点：';
+			foreach($from_site_list_arr as $key=>$site_arr)
+			{
+				echo '<input type="radio" name="from_sid" value="'.$site_arr['id'].'" checked="true" />'.$site_arr['name'].'&nbsp;';
+			}
+			echo '<hr>请选择终点：';
+			foreach($to_site_list_arr as $key=>$site_arr)
+			{
+				echo '<input type="radio" name="to_sid" value="'.$site_arr['id'].'" checked="true" />'.$site_arr['name'].'&nbsp;';
+			}
+			echo '<br /><input type="submit" value="开始精确查询" />';
+			echo '</form>';
+		}
+		
+		
+	}
+	if($from_sid>0 && $to_sid>0)
+	{
+		getResult($from_sid,$to_sid);
+	}
 }
 echo '<br /><br /><br />数据来源于杭州公交集团网站(http://www.hzbus.com.cn)，数据采集日期:2008-11-20';
 ?>

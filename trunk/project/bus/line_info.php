@@ -17,8 +17,8 @@ function line_info($id) {
 	echo $row1['name'].'&nbsp;';
 	$term1=getSname($row1['term1_sid']);
 	$term2=getSname($row1['term2_sid']);
-	echo '&nbsp;<a href="?action=query_site&id='.$row1['term1_sid'].'" title="查看经过【'.$term1.'】的所有线路">'.$term1.'</a>('.$row1['term1_start'].'-'.$row1['term1_end'].')';
-	echo '&nbsp;<a href="?action=query_site&id='.$row1['term2_sid'].'" title="查看经过【'.$term2.'】的所有线路">'.$term2.'</a>('.$row1['term2_start'].'-'.$row1['term2_end'].')';
+	echo '&nbsp;<a href="site_id_'.$row1['term1_sid'].'.html" title="查看经过【'.$term1.'】的所有线路">'.$term1.'</a>('.$row1['term1_start'].'-'.$row1['term1_end'].')';
+	echo '&nbsp;<a href="site_id_'.$row1['term2_sid'].'.html" title="查看经过【'.$term2.'】的所有线路">'.$term2.'</a>('.$row1['term2_start'].'-'.$row1['term2_end'].')';
 	echo '&nbsp;票价:'.$row1['fare_norm'].' '.$row1['fare_cond'];
 	echo '&nbsp;可使用公交卡:'.$row1['ic_card'].'<br />';
 	foreach($route_list as $direction=>$route_info)
@@ -37,7 +37,7 @@ function line_info($id) {
 		foreach($route_info as $id=>$name)
 		{
 	
-			echo '<a href="?action=query_site&id='.$id.'" title="查看经过【'.$name.'】的所有线路">'.$name.'</a>';
+			echo '<a href="site_id_'.$id.'.html" title="查看经过【'.$name.'】的所有线路">'.$name.'</a>';
 			if($count!=count($route_info)-1)
 			{
 				echo '→';
