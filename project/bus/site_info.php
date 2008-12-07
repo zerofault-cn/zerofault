@@ -10,11 +10,11 @@ function site_info($id) {
 	if(count($line_arr)>0)
 	{
 		echo '<table borer="0" cellspacing="1" cellpadding="1" bgcolor="#0099CC">';
-		echo '<tr bgcolor="#ffffff"><td colspan="3">经过【'.getSname($id).'】的公交线路('.count($line_arr).'条)</td></tr>';
+		echo '<tr bgcolor="#ffffff"><th colspan="3">经过【'.getSname($id).'】的公交线路('.count($line_arr).'条)</td></tr>';
 		echo '<tr bgcolor="#ffffff"><th align="left">序号</th><th>线路名称</th><th>起点－终点</th></tr>';
 		foreach($line_arr as $key=>$line)
 		{
-			echo '<tr bgcolor="#ffffff"><td>'.($key+1).'</td><td><a href="?action=query_line&id='.$line['id'].'" title="查看线路【'.$line['name'].'】的相信信息">'.$line['name'].'</a></td><td>'.$line['term1'].'→'.$line['term2'].'</td></tr>';
+			echo '<tr bgcolor="#ffffff"><td>'.($key+1).'</td><td><a href="line_id_'.$line['id'].'.html" title="查看线路【'.$line['name'].'】的相信信息">'.$line['name'].'</a></td><td>'.$line['term1'].'→'.$line['term2'].'</td></tr>';
 		}
 		echo '</table>';
 	}
