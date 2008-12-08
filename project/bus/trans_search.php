@@ -60,6 +60,7 @@ function findNext($from_sid,$to_sid) {
 
 	$n=0;//换乘次数
 	$i=0;//可行方案数
+	$result=array();
 	foreach($nextSidArr as $lid=>$sidArr)//遍历每条线路,在该线路上找终点
 	{
 		foreach($sidArr as $sid)//在一条线路上找后续站点
@@ -126,7 +127,6 @@ function findNext($from_sid,$to_sid) {
 		{
 			foreach($nextSidArr as $lid=>$sidArr)
 			{
-
 				foreach($sidArr as $sid)
 				{
 					$nextSidArr2=getNextSidArr($sid);
@@ -154,6 +154,7 @@ function findNext($from_sid,$to_sid) {
 	{
 		return $result;
 	}
+	return $result;
 	//二次换乘都无结果，就不用再找了
 }
 
@@ -185,6 +186,7 @@ function getNextSidArr($sid) {
 	foreach($lid_arr as $lid)
 	{
 		$sql1="select distinct r2.sid as sid from ".$route_table." r1,".$route_table." r2 where r1.lid=".$lid." and r1.sid=".$sid." and r2.direction=r1.direction and r2.i>r1.i and r2.lid=r1.lid order by r2.i";
+//	echo '<br />';
 		$result1=$db->sql_query($sql1);
 		$sid_arr[$lid]=array();
 		while($row=$db->sql_fetchrow($result1))
