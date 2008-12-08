@@ -1,0 +1,232 @@
+<html>
+<script language="javascript" type="text/javascript" src="tinymce/jscripts/tiny_mce/tiny_mce.js"></script>
+<script language="javascript" type="text/javascript">
+	tinyMCE.init({
+		theme : "advanced",
+		mode : "specific_textareas",
+		language : "zh-cn",
+		ask : true,
+		save_callback : "customSave",
+		debug : false
+	});
+
+	// Custom insert link callback, extends the link function
+	function customInsertLink(href, target) {
+		var result = new Array();
+
+		alert("customInsertLink called href: " + href + " target: " + target);
+
+		result['href'] = "http://www.sourceforge.net";
+		result['target'] = '_blank';
+
+		return result;
+	}
+
+	// Custom insert image callback, extends the image function
+	function customInsertImage(src, alt, border, hspace, vspace, width, height, align) {
+		var result = new Array();
+
+		var debug = "CustomInsertImage called:\n"
+		debug += "src: " + src + "\n";
+		debug += "alt: " + alt + "\n";
+		debug += "border: " + border + "\n";
+		debug += "hspace: " + hspace + "\n";
+		debug += "vspace: " + vspace + "\n";
+		debug += "width: " + width + "\n";
+		debug += "height: " + height + "\n";
+		debug += "align: " + align + "\n";
+		alert(debug);
+
+		result['src'] = "logo.jpg";
+		result['alt'] = "test description";
+		result['border'] = "2";
+		result['hspace'] = "5";
+		result['vspace'] = "5";
+		result['width'] = width;
+		result['height'] = height;
+		result['align'] = "right";
+
+		return result;
+	}
+
+	// Custom save callback, gets called when the contents is to be submitted
+	function customSave(id, content) {
+		id + "=" + content;
+	}
+</script>
+<script language="javascript">
+
+function init_upload()
+{
+	num = document.getElementById('select_upload').value;
+	for(i=1;i<=num;i++)
+	{
+		document.getElementById('image'+i).style.visibility = 'visible';
+		document.getElementById('text_image'+i).style.visibility = 'visible';
+		//alert('image'+i);
+	}
+
+	num1 = Number(num)+1;
+	for(i=num1;i<=6;i++)
+	{
+		document.getElementById('image'+i).style.visibility = 'hidden';
+		document.getElementById('text_image'+i).style.visibility = 'hidden';
+	}
+}
+
+function coop_media_search()
+{
+	key = document.getElementById('text_coop_media_s').value;
+	options = document.getElementById('select_coop_media').options;
+	length = options.length;
+	for(i=0;i<length;i++)
+	{
+		if(options[i].text.indexOf(key)>-1)
+		{
+			options.selectedIndex  = i;
+		}
+	}
+}
+
+function special_search()
+{
+	key = document.getElementById('text_special_s').value;
+	options = document.getElementById('select_special').options;
+	length = options.length;
+	for(i=0;i<length;i++)
+	{
+		if(options[i].text.indexOf(key)>-1)
+		{
+			options.selectedIndex  = i;
+		}
+	}
+}
+
+function get_number_str(number)
+{
+	number = Number(number);
+	if(number<10)
+		return "00"+number;
+	if(number<100)
+		return "0"+number;
+	return number;
+}
+
+var special_subject=new Array(
+	<!-- BEGIN special_subject -->
+	new Array("{id}","{name}"),
+	<!-- END special_subject -->
+	<!-- BEGIN special_subject_last -->
+new Array("{id}","{name}")
+	<!-- END special_subject_last -->
+	);
+
+function load_special_subject(code)
+{
+	special_code = get_number_str(code);
+	count=0;
+	for(i=0;i<special_subject.length;i++)
+    {
+        if(special_subject[i][0].toString().substring(0,3) == special_code)
+        {
+            //selCity.options[count]=new Option(Citys[i][1],Citys[i][0]);
+            document.getElementById('select_special_subject').options[count]=new Option(special_subject[i][1],special_subject[i][0]);
+            count=count+1;
+        }
+    }
+    document.getElementById('select_special_subject').options[0].selected=true;
+    document.getElementById('select_special_subject').length=count;
+}
+
+function prepare_special_subject(key)
+{
+	options = document.getElementById('select_special_subject').options;
+	length = options.length;
+	for(i=0;i<length;i++)
+	{
+		if(Number(options[i].value.toString().substring(3,6)) == key)
+		{
+			options.selectedIndex  = i;
+		}
+	}
+}
+
+function init()
+{
+	init_upload();
+	{script}
+}
+</script>
+<style type="text/css">
+<!--
+table {
+	font-size: 14px;
+}
+input {
+	height:20px;
+}
+.error {
+color: red;
+}
+-->
+</style>
+<body onLoad="init()">
+<form action="main.php?do=article_do_modify" name="article_form" method="post" enctype='multipart/form-data'>
+<table width="100%" border="0" cellpadding="2" cellspacing="2" bgcolor="#eeeeee">
+  <tr>
+    <td nowrap>群组名</td>
+    <td colspan="2"><input name="title" type="text" id="title" size="50" maxlength="50" value="{title}" onkeyup="sNum.innerText=this.value.length"> <div class="error">{action_error_title}</div></td>
+  </tr>
+  <tr>
+    <td nowrap>群组链接</td>
+    <td colspan="2"><input name="sub_title" type="text" id="sub_title" size="50" value="{sub_title}"></td>
+  </tr>
+  <tr>
+    <td nowrap>群主/话题发起人</td>
+    <td colspan="2"><input name="author" type="text" id="author" size="20" value="{author}"></td>
+  </tr>
+  <tr>
+    <td nowrap>群主/话题发起人的博客</td>
+    <td colspan="2"><input name="description" type="text" id="author" size="50" value="{description}"></td>
+  </tr>
+  <tr>
+    <td nowrap>栏目</td>
+    <td colspan="2"> <select name="subject_id" id="subject_id">{subject_options}
+     </select>
+    </td>
+  </tr>
+  <tr>
+    <td nowrap>级别</td>
+    <td colspan="2">      
+	<!-- BEGIN mark -->
+	<input name="radio_mark" type="radio" value="{value}" {checked}> {value} 
+	<!-- END mark -->
+　　 </td>
+  </tr>
+  <tr>
+    <td nowrap>话题</td>
+    <td colspan="2"><input name="keyword" type="text" id="keyword" size="50" value="{keyword}">（如果有的话）</td>
+  </tr>
+<tr>
+    <td nowrap>话题链接</td>
+    <td colspan="2">
+    <input type="text" name="rss_url" size="50" value="{rss_url}">（如果有的话）</td>
+  </tr>
+  </tr>
+<tr>
+    <td nowrap>访问量/成员数/主题数</td>
+    <td colspan="2">
+    <input type="text" name="view_num" size="10" value="{view_num}">（如果有的话）</td>
+  </tr>
+  <tr>
+    <td nowrap>&nbsp;</td>
+    <td colspan="2">
+	<input type="hidden" name="id" value="{id}">
+	<input type="hidden" name="channel_name" value="{channel_name}">
+	<input name="Submit_pub" type="submit" id="Submit_pub" value="修改文章">
+	<input name="Submit_reset" type="reset" id="Submit_reset" value="重置"></td>
+  </tr>
+</table>
+</form>
+</body>
+</html>

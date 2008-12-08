@@ -1,0 +1,84 @@
+<html>
+<style type="text/css">
+<!--
+table {
+font-size: 14px;
+}
+.wraper {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	width:160px;
+	border:1px solid black;
+	padding:20px 10px;
+}
+-->
+</style>
+
+<body bgcolor="#FFFFFF" text="#000000">
+<table width="90%" border="1" align="center" cellpadding="20" bordercolor="C1D7F4">
+  <tr>
+    <td><table width="98%"  border="0" cellspacing="0" cellpadding="0">
+      <tr>
+        <td width="10">&nbsp;</td>
+        <td width="100" bgcolor="C1D7F4" align="center">栏目添加</td>
+        <td >&nbsp;</td>
+      </tr>
+      <tr bgcolor="C1D7F4">
+        <td height="1"></td>
+        <td height="1"></td>
+        <td height="1"></td>
+      </tr> 
+    </table>
+  
+<table width="80%" border="0" cellspacing="2" cellpadding="10" bgcolor="#c1d7f4" align="center">
+  <tr> 
+    <td bgcolor="#FFFFFF"> 
+      <form action="main.php?do=subject_do_add" name="subject_form" method="post" enctype='multipart/form-data'>
+        <table width="90%" border="0" cellspacing="1" cellpadding="10" bgcolor="#CCCCCC">
+          <tr bgcolor="#FFFFFF"> 
+            <tr bgcolor="#FFFFFF"> 
+            <td>栏目名称：</td>
+            <td> 
+              <input name="name" type="text" value="{name}" maxlength="20">{action_error_subject_name}
+            </td>
+          </tr>
+          <tr bgcolor="#FFFFFF"> 
+            <td>栏目目录：</td>
+            <td> 
+              <input name="dir_name" type="text" value="{dir_name}" maxlength="20">{action_error_subject_dir}
+            </td>
+          </tr>
+		  <tr bgcolor="#FFFFFF"> 
+            <td valign="top">上级栏目：</td>
+            <td> 
+              <select name="parentid" style="font-size:14;width:120">
+                <option value="0" >---顶级频道---</option>
+                <!-- BEGIN subject_1 -->
+                <option value="{subid}" {selected}>{prefix}{name}</option>
+                <!-- END subject_1 -->
+              </select>
+</td>
+          </tr>
+		  <tr bgcolor="#FFFFFF"> 
+            <td valign="top">滚动方式：</td>
+            <td> 
+              <select name="cateid" style="font-size:14;width:120">
+                <option value="0" {selected}>只显示此栏目下文章</option>
+                <option value="1" {selected}>全频道文章滚动</option>
+              </select>
+</td>
+          </tr>
+          <tr bgcolor="#FFFFFF" align="center"> 
+            <td colspan="2"> 
+            <input type="hidden" name="channel_name" value="{channel_name}">
+			
+              <input type="submit" name="Submit" value="添加">
+            </td>
+          </tr>
+        </table>
+      </form>
+    </td>
+  </tr>
+</table>
+</BODY>
+</HTML>

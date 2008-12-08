@@ -1,0 +1,29 @@
+<html>
+<body bgcolor="#FFFFFF" text="#000000">
+<input type="button" onClick="javascript:window.open('main.php?do=flash_pic_add&channel_name={channel_name}&path={path}&flash_id={flash_id}','add_pic','width=400,height=400')" value="添加新图片">
+<br><br>
+<form action="main.php?do=flash_do_edit" name="subject_form" method="post" enctype='multipart/form-data'>
+        <table width="90%" border="0" cellspacing="1" cellpadding="10" bgcolor="#CCCCCC">
+<!-- BEGIN images -->
+          <tr bgcolor="#FFFFFF"> 
+            <td> 
+<img src="{img_src}"> 
+<br>
+<input type="button" onClick="javasript:if(confirm('确定要删除吗?')){location.href='main.php?do=flash_pic_delete&pic_id={pic_id}&channel_name={channel_name}&path={path}&flash_id={flash_id}'}" value="删除此图片">
+<br><br>
+<input type='file' name='file{id}'>
+<input name="name{id}" type="text" size="50" maxlength="100" value="{name}">
+<input name="url{id}" type="text" size="50" maxlength="100" value="{url}">
+<input type="hidden" name="img_src{id}" value="{img_src}">
+            </td>
+          </tr>
+<!-- END images -->
+        </table>
+        <input type="hidden" name="channel_name" value="{channel_name}">
+        <input type="hidden" name="id" value="{id}">
+        <input type="hidden" name="path" value="{root_path}">
+        <input type="hidden" name="num" value="{num}">
+        <input name="Submit" type="submit" id="Submit" value="保存">
+      </form>
+</body>
+</html>

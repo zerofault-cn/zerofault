@@ -1,0 +1,238 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+<HEAD>
+<TITLE>{TITLE}</TITLE>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html;chaset=utf-8">
+<META NAME="Cache-Control" CONTENT="no-store, no-cache, must-revalidate">
+<META NAME="Author" CONTENT="Liutao">
+<META NAME="Keywords" CONTENT="">
+<META NAME="Description" CONTENT="">
+<script language="Javascript">
+
+var channelSwitch;
+
+var blockType;
+var id;
+
+
+var showAdArea = {showAd};
+
+
+function showAd()
+{
+	for(var i=0;i<document.getElementsByTagName('textarea').length;i++)
+	{
+		eval("var name = document.getElementById('name_" + i + "').value");
+		var result = name.match(/ad\:/);
+		if(result != null)
+		{
+			if(showAdArea)
+			{
+				eval("document.getElementById('area_" + i + "').style.display = \"\";");
+			}
+			else
+			{
+				eval("document.getElementById('area_" + i + "').style.display = \"none\";");
+			}			
+		}
+	}
+}
+
+function editBlock(id)
+{
+	var selector = eval("document.getElementById('blocklist_'" + id + ");");
+	var index =selector.selectedIndex;
+
+	var block_id = selector.options[selectedIndex].value;
+
+	var url = "main.php?do=block_edit&channel_name={CHANNEL_NAME}&id=" + block_id;
+	var local = window.open(url,'编辑区块');
+
+	if(local.opener == null)
+	{
+		local.opener = window;
+	}
+
+	local.opener.blur();
+
+	return false;
+}
+
+function getSel()
+{
+	var txt = '';
+	if (window.getSelection)
+	{
+		txt = window.getSelection();
+		alert(txt.nodeType);
+		txt = txt.toString();
+	}
+	else if (document.getSelection)
+	{
+		txt = document.getSelection();
+	}
+	else if (document.selection)
+	{
+		txt = document.selection.createRange().text;
+	}
+	alert(txt);
+	return false;
+}
+
+function getData()
+{
+	var channelSwitch = showChannel();
+
+	var index = eval("document.editform." + channelSwitch + ".selectedIndex;");
+	idv = eval("document.editform." + channelSwitch + ".options[index].value;");
+
+	if(idv < 0)
+		idv = 0;
+
+
+	blockType = eval("document.editform." + channelSwitch + ".options[" + idv + "].id;");
+
+	var block = {type : blockType,
+				 id : idv};
+
+	return block;
+}
+
+function showChannel()
+{
+	for(var i=0;i<document.editform.showchannel.length;i++)
+	{
+		var name = document.editform.showchannel[i].value;
+		if(document.editform.showchannel[i].checked)
+		{
+			channelSwitch = name;
+			eval("document.editform." + name + ".style.display = \"\";");
+		}
+		else
+		{
+			eval("document.editform." + name + ".style.display = \"none\";");
+		}
+	}
+
+
+	return channelSwitch;
+}
+
+function checkData()
+{
+	if(document.editform.name.value.length > 0)
+	{
+		var block = getData();
+		document.editform.channel.value = block['type'] + "=" + block['id']; 
+		return true;
+	}
+
+	alert('请填写要添加的模板名称');
+	return false;
+}
+</script>
+</HEAD>
+
+<body onload="{JS};showChannel();showAd();">
+
+<FORM METHOD="POST" ACTION="main.php?do=tpl_save" name="editform" onsubmit="return checkData();" ENCTYPE="multipart/form-data">
+<TABLE width="100%" name="template">
+<TR>
+	<TD>模板名称</TD>
+	<TD><input name="name" type="text" size="80" value="{NAME}"></TD>
+</TR>
+<TR>
+	<TD>模板所属的频道／专题</TD>
+	<TD><input type="radio" name="showchannel" value="subjectlist" onclick="showChannel();">频道
+		<select id="subjectlist">
+			<!-- BEGIN subject -->
+			<option id="subject_id" value="{id}" {selectflag}>{prefix}{name}
+			<!-- END subject -->　　
+		</select> ｜ 
+		<input type="radio" name="showchannel" value="speciallist" onclick="showChannel();">专题
+
+		<select id="speciallist">
+			<!-- BEGIN special -->
+			<option id="{type}" value="{id}" {selectflag}>{prefix}{name}
+			<!-- END special -->　　
+		</select>
+	</TD>
+</TR>
+<!-- BEGIN block -->
+<TR>
+	<TD colspan="5">
+<TABLE width="100%" id="area_{count}">
+<TR>
+	<TD>模块名称</TD>
+	<TD>{name}</TD>
+</TR>
+<TR>
+	<TD>模块内容</TD>
+	<TD colspan="2">
+	<textarea id="content_{count}" name="block[content][]" cols="80" rows="10">{content}</textarea>
+	<input type="hidden" id="name_{count}" value="{name}">
+	<input type="hidden" name="block[type][]" value="{type}">
+	<input type="hidden" name="block[startpos][]" value="{startpos}">
+	<input type="hidden" name="block[length][]" value="{length}">
+</TR>
+<TR>
+	<TD>操作</TD>
+	<TD>
+		<button name="put" onclick="var index = document.editform.selectBlock[{count}].selectedIndex;document.getElementById('content_{count}').value += '\{' + document.editform.selectBlock[{count}].options[index].innerHTML + '\}'; document.getElementById('content_{count}').focus(); return false;">放置区块</button> ｜ 区块列表:
+		<select name="selectBlock">
+			<!-- BEGIN block_list -->
+			<OPTION VALUE="{id}">{name}</OPTION>
+			<!-- END block_list -->
+		</select>
+
+	</TD>
+</TR>
+</TABLE>
+	</TD>
+</TR>
+<!-- BEGIN used_blocks -->
+<TR>
+	<TD colspan="5">已使用区块：{name} 文章条目：<input type="text" size="2" name="block_limit[{id}]" value="{limit}"></TD>
+</TR>
+<!-- END used_blocks -->
+<!-- BEGIN template_images -->
+<TR>
+	<TD colspan="5">上传图片：
+		<input type="file" size="60" name="template_images[]" />
+		<input type="hidden" name="template_images[{count}][startpos]" value="{startpos}" />
+		<input type="hidden" name="template_images[{count}][length]" value="{length}" />
+	</TD>
+</TR>
+<!-- END template_images -->
+<TR>
+	<TD colspan="5"><hr></TD>
+</TR>
+
+<!-- END block -->
+
+<TR>
+	<TD colspan="5" align="center">是否设为正式页面：
+	<!-- IF is_default="Y" -->
+	<input type="radio" name="is_default" value="Y" CHECKED />是
+	<input type="radio" name="is_default" value="N" />否
+	<!-- ELSE -->
+	<input type="radio" name="is_default" value="Y" />是
+	<input type="radio" name="is_default" value="N" CHECKED />否
+	<!-- ENDIF -->
+	<hr>
+	</TD>
+</TR>
+<TR>
+	<TD colspan="5" align="center">
+	<input type="submit" value="保存" onsubmit="checkData();getChannel();return false;"/> 
+	<input type="reset" value="重设" />
+	<input type="hidden" name="file" value="{FILE}">
+	<input type="hidden" name="id" value="{ID}">
+	<input type="hidden" name="channel" value="">
+	<input type="hidden" name="channel_name" value="{CHANNEL_NAME}">
+	</TD>
+</TR>
+</TABLE>
+</form>
+</body>
+</html>

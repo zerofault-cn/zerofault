@@ -1,0 +1,40 @@
+<html>
+  <head>
+  	<title>RSS文章名称修改</title>
+  	<script language="javascript">
+	
+	function Validator( a )
+	{
+		if( "" == a.rss_title.value )
+		{
+			alert( "名称能为空!" );
+			a.rss_title.focus();
+			return( false );
+		}
+		else
+			return( true );
+	}
+	
+  	</script>
+  </head>
+  <body>
+  	<br>
+  	<center>
+  	<form action="main.php?do=article_rss_title_do_modify" method="post" name="article_rss_title_modify" onSubmit="return Validator(this)">
+  		标题：<input name="rss_title" type="text" size="50" value="{rss_title}"> 
+		<br>
+  		<input name="channel_name" type="hidden"  value="{channel_name}"> <br>
+		作者博客名：<input name="author" type="text" size="30" value="{author}" /><br>
+		<input type="hidden" name="article_id" value="{article_id}" />
+  		<input name="rss_id" type="hidden" value="{rss_id}"> <br>
+		所属栏目：<select name="subject_id">{subject_options}</select><br><br>
+		星级：
+		<!-- BEGIN rss_mark -->
+			<input name="rss_mark" type="radio" value="{value}" {checked}> {value}
+		<!-- END rss_mark -->
+		<br><br>
+		<input name="submit" type="submit" value="修改">
+  	</form>
+  	</center>
+  </body>
+</html>

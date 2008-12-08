@@ -1,0 +1,78 @@
+<html>
+<style type="text/css">
+<!--
+table {
+font-size: 14px;
+}
+.wraper {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	width:160px;
+	border:1px solid black;
+	padding:20px 10px;
+}
+-->
+</style>
+
+<SCRIPT LANGUAGE="javascript" type="text/javascript">
+function Checkform(){
+	var frm = document.templateListForm;
+    var jj=0;
+	for(var ii=0;ii<frm.elements.length;ii++){
+    	var e=frm.elements[ii];
+        if (e.name != 'chkall'){
+		    if (e.checked)  jj++;
+	    }
+    }
+	if (jj){
+		frm.action="main.php?do=photo_delete";
+		return window.confirm("确定删除？");
+	}else{
+		window.alert("没有选择条目");
+    	return false;
+	}
+}
+//
+function CheckAll(){
+	var frm = document.templateListForm;
+  	for(var ii=0;ii<frm.elements.length;ii++){
+    	var e=frm.elements[ii];
+    	if (e.name != 'chkall')
+       		e.checked = frm.chkall.checked;
+  }
+}
+</script>
+
+<body>
+<p><a href="main.php?do=photo_add&channel_name={channel_name}&subject_id={subject_id}" target="_self">添加图片</a></p>
+<form method="post" name="photoListForm" onSubmit="return Checkform()">
+<table width="100%" cellspacing="2" bgcolor="#CCCCCC">
+<tr bgcolor="#FFFFFF">
+<td>&nbsp;</td>
+<td>图片ID</td>
+<td>名称</td>
+<td>操作</td>
+</tr>
+<!-- BEGIN photos -->
+<tr bgcolor="#FFFFFF">
+<td><input type="checkbox" name="photo_id[]" value="{id}"></td>
+<td>{id}</td>
+<td><a href={path}>{name}</a></td>
+<td><a href="main.php?do=photo_delete&id={id}&channel_name={channel_name}&subject_id={subject_id}&p={p}" onClick="javascript:return window.confirm('确定删除？');">删除</a> 　<a href="main.php?do=photo_modify&id={id}&channel_name={channel_name}&subject_id={subject_id}&p={p}">修改</a></td>
+</tr>
+<!-- END photos -->
+</table>
+<input type="hidden" name="channel_name" value="{channel_name}">
+<input type="hidden" name="subject_id" value="{subject_id}">
+<INPUT TYPE="checkbox" NAME="chkall" onclick="CheckAll()"> 全选/取消
+<input type="submit" value="删除选中">
+</form>
+{pagebar}
+<form action="main.php?do=photo_list&channel_name={channel_name}&subject_id={subject_id}&p={p}"  method="post" style="text-align:right;">
+  <label for="jumpage">到
+  <input type="text" name="p" id="p" value="" style="border: 1px solid #7F9DB9;width: 2em; " />
+  页</label>
+  <input type="submit" value="go" style="width: 20px;border: 0; " />
+</form>
+</body>
+</html>

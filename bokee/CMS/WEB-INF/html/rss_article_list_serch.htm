@@ -1,0 +1,156 @@
+<html>
+<style type="text/css">
+<!--
+table {
+font-size: 14px;
+}
+.wraper {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	width:160px;
+	border:1px solid black;
+	padding:20px 10px;
+}
+-->
+</style>
+<script language="JavaScript" src="dateControl.js"></script>
+<SCRIPT LANGUAGE="javascript" type="text/javascript">
+/**********************************************************************/
+/* 函数：changeCondition                                              */
+/* 参数：                                                             */
+/* 功能：改变搜索类型                                                 */
+/* 返回值：                                                           */
+/**********************************************************************/	
+function FP_changeProp() {//v1.0
+ var args=arguments,d=document,i,j,id=args[0],o=FP_getObjectByID(id),s,ao,v,x;
+ d.$cpe=new Array(); if(o) for(i=2; i<args.length; i+=2) { v=args[i+1]; s="o";
+ ao=args[i].split("."); for(j=0; j<ao.length; j++) { s+="."+ao[j]; if(null==eval(s)) {
+  s=null; break; } } x=new Object; x.o=o; x.n=new Array(); x.v=new Array();
+ x.n[x.n.length]=s; eval("x.v[x.v.length]="+s); d.$cpe[d.$cpe.length]=x;
+ if(s) eval(s+"=v"); }
+}
+
+function FP_getObjectByID(id,o) {//v1.0
+ var c,el,els,f,m,n; if(!o)o=document; if(o.getElementById) el=o.getElementById(id);
+ else if(o.layers) c=o.layers; else if(o.all) el=o.all[id]; if(el) return el;
+ if(o.id==id || o.name==id) return o; if(o.childNodes) c=o.childNodes; if(c)
+ for(n=0; n<c.length; n++) { el=FP_getObjectByID(id,c[n]); if(el) return el; }
+ f=o.forms; if(f) for(n=0; n<f.length; n++) { els=f[n].elements;
+ for(m=0; m<els.length; m++){ el=FP_getObjectByID(id,els[n]); if(el) return el; } }
+ return null;
+}
+
+function change(myform)
+{
+  if (document.rss_article_list_serch.Serch_condition.value == "Null")
+   {
+   FP_changeProp(/*id*/'datetime',0,'style.display','none');
+   FP_changeProp(/*id*/'title',0,'style.display','none');
+   FP_changeProp(/*id*/'source',0,'style.display','none');
+   }
+ else if(document.rss_article_list_serch.Serch_condition.value == "datetime")
+   {
+   FP_changeProp(/*id*/'datetime',0,'style.display','block');
+   FP_changeProp(/*id*/'title',0,'style.display','none');
+   FP_changeProp(/*id*/'source',0,'style.display','none');
+   }
+  else if(document.rss_article_list_serch.Serch_condition.value == "title")
+  {
+   FP_changeProp(/*id*/'datetime',0,'style.display','none');
+   FP_changeProp(/*id*/'title',0,'style.display','block');
+   FP_changeProp(/*id*/'source',0,'style.display','none');
+    }
+  else if(document.rss_article_list_serch.Serch_condition.value == "source")
+  {
+   FP_changeProp(/*id*/'datetime',0,'style.display','none');
+   FP_changeProp(/*id*/'title',0,'style.display','none');
+   FP_changeProp(/*id*/'source',0,'style.display','block');
+  }
+}
+
+function show(){
+	  FP_changeProp(/*id*/'{Serch_condition}',0,'style.display','block');
+}
+
+function Checkform( e ){
+	var frm = e;
+    var jj=0;
+	for(var ii=0;ii<frm.elements.length;ii++){
+    	var e=frm.elements[ii];
+        if (e.name != 'chkall'){
+		    if (e.checked)  jj++;
+	    }
+    }
+	if (jj){
+		frm.action="main.php?do=article_delete_group";
+		return window.confirm("确定删除？");
+	}else{
+		window.alert("没有选择条目");
+    	return false;
+	}
+}
+function Checkform1( e ){
+	var frm = e;
+    var jj=0;
+	for(var ii=0;ii<frm.elements.length;ii++){
+    	var e=frm.elements[ii];
+        if (e.name != 'chkall'){
+		    if (e.checked)  jj++;
+	    }
+    }
+	if (jj){
+		return window.confirm("确定删除？");
+	}else{
+		window.alert("没有选择条目");
+    	return false;
+	}
+}
+//
+function CheckAll(){
+	var frm = document.articleDeleteGroupForm;
+  	for(var ii=0;ii<frm.elements.length;ii++){
+    	var e=frm.elements[ii];
+    	if (e.name != 'chkall')
+       		e.checked = frm.chkall.checked;
+  }
+}
+function RssCheckAll(){
+	var frm = document.articleRssDeleteGroupForm;
+  	for(var ii=0;ii<frm.elements.length;ii++){
+    	var e=frm.elements[ii];
+    	if (e.name != 'chkall')
+       		e.checked = frm.chkall.checked;
+  }
+}
+</script>
+
+<body onload="show()">
+{pagebar_rss}
+<!--
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;<a href="main.php?do=article_list&channel_name={channel_name}&subject_id={subject_id}&p={p}&p_rss={p_rss}&chioce_rss=20">20</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="main.php?do=article_list&channel_name={channel_name}&subject_id={subject_id}&p={p}&p_rss={p_rss}&chioce_rss=50">50</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="main.php?do=article_list&channel_name={channel_name}&subject_id={subject_id}&p={p}&p_rss={p_rss}&chioce_rss=100">100</a>&nbsp;&nbsp;|
+<br>
+-->
+<form action="main.php?do=rss_article_list_serch" method = "POST" name="rss_article_list_serch">
+{Option}
+<input type="submit" name="Submit" value="查找">
+<input type="hidden" name="channel_name" value="{channel_name}">
+<input type="hidden" name="subject_id" value="{subject_id}">
+</form>
+
+{rss_begin}
+<!-- BEGIN articles_rss -->
+<tr bgcolor="{bgcolor}">
+<td><input type="checkbox" name="article_id[]" value="{id}"></td>
+<td>{id}</td>
+<td><a href="{url}" target="_blank">{title}</a></td>
+<td>{author}</a></td>
+<td>{datetime}</td>
+<td>
+<a href="#" onClick="window.open('main.php?do=rss_article_local_transfer&channel_name={channel_name}&id={id}','rss_transfer','height=600, width=1000, top=0,left=0, toolbar=no, menubar=no, scrollbars=yes, resizable=no,location=no, status=no')">转移</a>&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="main.php?do=rel_article_delete&id={id}&channel_name={channel_name}&subject_id={subject_id}&p={p}&p_rss={p_rss}" onClick="javascript:return window.confirm('确定删除？');">删除</a> &nbsp;&nbsp;&nbsp;&nbsp;<a href="main.php?do=article_rss_title_modify&id={id}&channel_name={channel_name}&subject_id={subject_id}&p={p}&p_rss={p_rss}">修改</a></td>
+</tr>
+<!-- END articles_rss -->
+{rss_end}
+{pagebar_rss}
+</body>
+</html>

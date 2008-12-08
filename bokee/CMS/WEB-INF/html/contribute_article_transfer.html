@@ -1,0 +1,80 @@
+<html>
+<head>
+<title>选择要转向的栏目</title>
+<script language="javascript">
+var subjects=new Array(
+		{subjects_array}
+		);
+function load_subject(code)
+{
+	special_code = get_number_str(code);
+	count=0;
+	for(i=0;i<subjects.length;i++)
+    {
+        if(subjects[i][0].toString().substring(0,3) == special_code)
+        {
+            document.getElementById('subject_list').options[count]=new Option(subjects[i][1],subjects[i][0]);
+            count=count+1;
+        }
+    }
+    document.getElementById('subject_list').options[0].selected=true;
+    document.getElementById('subject_list').length=count;
+}
+function get_number_str(number)
+{
+	number = Number(number);
+	if(number<10)
+		return "00"+number;
+	if(number<100)
+		return "0"+number;
+	return number;
+}
+function init()
+{
+	options = document.getElementById('select_channel').options;
+	options.selectedIndex = 0;
+	load_subject(options[0].value);
+}
+</script>
+</head>
+<body onload="init()">
+
+<form action="main.php?do=contribute_article_do_transfer" name="form_feed_article_transfer" method="post">
+<center>
+<select name="channel_id" id="select_channel" onChange="load_subject(this.value)">
+<!-- BEGIN channels -->
+<option value="{id}" >{name}</option>
+<!-- END channels -->
+</select>
+<br>（按住Ctrl，可以多选）<br>
+<select name="subject_id[]" id="subject_list" style="WIDTH: 200px" multiple size=16 > 
+</select>
+
+<br><br>
+级别：
+		<!-- BEGIN mark -->
+		<input name="radio_mark" type="radio" value="{value}" {checked}> {value} 
+		<!-- END mark -->
+<br>
+外部rss源：
+			<input name="is_auto" type='radio' value='1' checked onClick="javascript:document.all('rss_source_layer').style.display='none'">自动选择
+			&nbsp;&nbsp;
+			<input name="is_auto" type='radio' value='0' onClick="javascript:document.all('rss_source_layer').style.display='block'">手动选择
+			<br>
+			<div name='rss_source_layer' id='rss_source_layer' style="display:none">
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+			<input name=source type='radio' value='cms'>CMS <input name=source type='radio' value='rss'>RSS <input name=source type='radio' value='blogmark' checked>投稿器 <input name=source type='radio' value='column'>专栏 <input name=source type='radio' value='blog'>博客　<input name=source type='radio' value='bbs'>论坛
+			</div>
+<br>
+更改标题：
+		<input name="rss_article_name" type="text" value="{rss_article_name}" {rss_article_type} size="40"> (多篇文章不能改标题)
+		<input type="hidden" name="rss_article_num" value="{rss_article_num}">
+<br>
+<input name="submit" value="提交" type="submit">
+
+<input type="hidden" name="article_id_string" value="{article_id_string}" />
+<input type="hidden" name="feed_id" value="{feed_id}" />
+</center>
+</form>
+</body>
+</html>

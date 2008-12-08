@@ -1,0 +1,75 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+<HEAD>
+<TITLE>{TITLE}</TITLE>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html;chaset=utf-8">
+<META NAME="Cache-Control" CONTENT="no-store, no-cache, must-revalidate">
+<META NAME="Author" CONTENT="Liutao">
+<META NAME="Keywords" CONTENT="">
+<META NAME="Description" CONTENT="">
+<META ENCODING="UTF-8">
+<script language="Javascript">
+function check()
+{
+	if(!(document.getElementById('limit').value > 0)) 
+	{
+		alert('请输入正确的区块属性');
+		document.forms[0].action = "#";
+		return false;
+	}
+
+	document.forms[0].action = "main.php?do=block_photo_do_add";
+	return true;
+}
+</script>
+</HEAD>
+
+<BODY>
+<table width="100%">
+<FORM name="template_modify_form" METHOD="POST" >
+
+<TR>
+ <TD>图片区块属性：</TD>
+</TR>
+<TR>
+ <TD>选择栏目：		
+	<SELECT name="select_subject">
+	{options}
+	</SELECT></TD>
+</TR>
+<TR>
+	<TD>开始ID:<input type="text" id="start_id" name="start_id" value="0"> &nbsp;&nbsp;&nbsp;&nbsp; 最多选取<INPUT TYPE="text" id="limit" name="limit" value="5">条</TD>
+</TR>
+<TR>
+	<TD>显示方式:
+		<select name="radio_is_group" size="1">
+			<option value="1">组图显示(只显示每个组图中的一张图片)</option>
+			<option value="0">非组图显示(显示所有组图图片)</option>
+		</select>
+	</TD>
+</TR>
+<tr>
+	<td>标题长度
+		是否限制:
+			是<input name="is_limit_title_length" type="radio" value="1" onclick=" document.template_modify_form.title_length.disabled=false">
+			否<input name="is_limit_title_length" type="radio" value="0" onclick="document.template_modify_form.title_length.disabled=true" checked>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 长度：<input name="title_length" disabled="true" size="5">
+	</td>
+</tr>
+
+<tr><td>
+格式：<br>
+<textarea name="format" cols="50" rows="10" id="format">{format}</textarea>
+<br>可用标记：图片地址：path，图片链接：url，名称：name，简介：description
+</td>
+</tr>
+<TR>
+	<TD>
+	<INPUT TYPE="hidden" name="channel_name" value="{channel_name}" />
+	<INPUT TYPE="hidden" name="subject_id" value="{subject_id}" />
+	<INPUT TYPE="submit" value="确定" onclick="check();"/></TD>
+</TR>
+</FORM>
+</TABLE>
+</BODY>
+</HTML>

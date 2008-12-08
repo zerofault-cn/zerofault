@@ -1,0 +1,182 @@
+<html>
+<head>
+<style type="text/css">
+<!--
+table {
+font-size: 14px;
+}
+.wraper {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	width:160px;
+	border:1px solid black;
+	padding:20px 10px;
+}
+textarea {
+	font-size:12px;
+}
+-->
+</style>
+<Script>
+function repImage()
+{
+	name = window.prompt("请输入名称","");
+	if(name!="null")
+	{
+		document.getElementById("rep_content").value = document.selection.createRange().text;
+		document.selection.createRange().text="[[##]]";
+		document.getElementById("rep_category").value = "image";
+		document.forms[0].rep_name.value = name;
+		document.forms[0].submit();
+	}
+	else
+		return ;
+}
+function repText()
+{
+	name = window.prompt("请输入名称","");
+	if(name!="null")
+	{
+		document.getElementById("rep_content").value = document.selection.createRange().text;
+		document.selection.createRange().text="[[##]]";
+		document.getElementById("rep_category").value = "text";
+		document.forms[0].rep_name.value = name;
+		document.forms[0].submit();
+	}
+	else
+		return ;
+}
+function repBlock()
+{
+	name = window.prompt("请输入名称","");
+	if(name!="null")
+	{
+		document.getElementById("rep_content").value = document.selection.createRange().text;
+		document.selection.createRange().text="[[##]]";
+		document.getElementById("rep_category").value = "block";
+		document.forms[0].rep_name.value = name;
+		document.forms[0].submit();
+	}
+	else
+		return ;
+}
+function repAd()
+{
+	name = window.prompt("请输入名称","");
+	if(name!="null")
+	{
+		document.getElementById("rep_content").value = document.selection.createRange().text;
+		document.selection.createRange().text="[[##]]";
+		document.getElementById("rep_category").value = "ad";
+		document.forms[0].rep_name.value = name;
+		document.forms[0].submit();
+	}
+	else
+		return ;
+}
+function createOption(value,text,selected_value)
+{
+		var newOpt	= document.createElement('OPTION'); 
+		newOpt.setAttribute('value',value); 
+		newOpt.innerHTML = text; 
+		if( value == selected_value )
+		newOpt.setAttribute('selected',true);
+		document.forms[0].select_block.appendChild(newOpt);
+}
+</Script>
+</head>
+<body bgcolor="#FFFFFF" text="#000000">
+
+      <form action="main.php?do=template_do_modify" name="template_modify_form" method="post" enctype='multipart/form-data'>
+        <table width="90%" border="0" cellspacing="1" cellpadding="10" bgcolor="#CCCCCC">
+          <tr bgcolor="#FFFFFF"> 
+            <tr bgcolor="#FFFFFF"> 
+            <td>模板名称：</td>
+            <td> 
+              <input name="name" type="text" value="{name}" maxlength="20">{action_error_template_name}　　　　　　<a href="main.php?do=template_publish&id={id}&channel_name={channel_name}&subject_id={subject_id}">发布</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+			  <a href=# onclick="window.open('main.php?do=template_preview&id={id}&channel_name={channel_name}&subject_id={subject_id}&p={p}','preview','width=800,height=600,scrollbars=1')">预览</a>
+            </td>
+          </tr>
+          <tr bgcolor="#FFFFFF"> 
+            <td>生成文件名称：</td>
+            <td> 
+              <input name="file_name" type="text" value="{file_name}" maxlength="40">              
+              {action_error_template_file_name}
+                  是否设为默认模板：
+              <select name="defaulttlist" style="font-size:14;width:120">
+			    <!-- BEGIN defaulttlist -->
+                <option value="{id}" {selected}>{id}</option>
+				<!-- END defaulttlist -->
+              </select>
+			  
+			   是否需要更多页：
+              <select name="is_more" style="font-size:14;width:120">
+			    <!-- BEGIN is_more -->
+                <option value="{id}" {selected}>{id}</option>
+				<!-- END is_more -->
+              </select>
+			  
+			  </td>
+          </tr>
+          <tr bgcolor="#FFFFFF"> 
+            <td>模板内容：</td>
+            <td> 
+            <textarea name="content" cols="100" rows="30" id="content">{content}</textarea>
+            {action_error_template_content}
+            <br>
+            <input name="rep_name" type="hidden" value="{rep_name}">
+            <input type="button" name="rep_image" onclick="repImage()" value="替换图片">
+            <input type="button" name="rep_text" onclick="repText()" value="替换文本">
+            <input type="button" name="rep_ad" onclick="repAd()" value="替换广告">
+            <select name="select_block" id="select_block">
+			{options}
+	      </select>
+            <input type="button" name="rep_block" onclick="repBlock()" value="替换区块"><br><br>
+			<input type="button" name="add_block" onclick="window.open('main.php?do=block_new_add&channel_name={channel_name}&subject_id={subject_id}','','width=1000,height=600')" value="添加区块">
+			<input type="button" name="add_block" onclick="window.open('main.php?do=block_photo_add&channel_name={channel_name}&subject_id={subject_id}','','width=1000,height=600')" value="添加图片区块">
+			<input type="button" name="add_block" onclick="window.open('main.php?do=block_hotcomment_add&channel_name={channel_name}&subject_id={subject_id}','','width=1000,height=600')" value="添加热评区块">
+            </td>
+          </tr>
+        
+          <tr bgcolor="#FFFFFF" align="center"> 
+            <td colspan="2"> 
+            <input type="hidden" name="id" value="{id}">
+            <input type="hidden" name="channel_name" value="{channel_name}">
+            <input type="hidden" name="subject_id" value="{subject_id}">
+            <input type="hidden" id="rep_content" name="rep_content" value="{rep_content}">
+            <input type="hidden" id="rep_category" name="rep_category" value="{rep_category}">
+              <input type="submit" name="Submit" value="修改">
+            </td>
+          </tr>
+        </table>
+      </form>
+
+      <table>
+      	<tr bgcolor="#FFFFFF">
+  	  	<td><font color=red>点击碎片名称修改:</font></td>
+  	  	<td></td>
+  	  </tr>
+  <!-- BEGIN slashes -->
+  	
+  <form action="main.php?do=slash_do_modify" name="slash_modify_form" method="post" enctype='multipart/form-data'>
+  	  
+          <tr bgcolor="#FFFFFF"> 
+            <td>碎片：<font color="red"><a href style="cursor:hand" onClick="javascript:window.open('main.php?do=slash_name_modify&channel_name={channel_name}&slash_id={id}','slash_name_modify','width=400,height=300')">{name}</a></font><br>(<font color="Green">{category}</font>) <a href="#"  onClick="if(confirm('确定删除？')){location.href='main.php?do=slash_delete&channel_name={channel_name}&id={id}&template_id={template_id}&subject_id={subject_id}'};">删除</a>
+			<br>排序:<input name = "taxis" type=text value="{taxis}" size="4" maxlength="4">
+            <input type="hidden" name="channel_name" value="{channel_name}">
+            <input type="hidden" name="id" value="{id}">
+            <input type="hidden" name="template_id" value="{template_id}">
+            <input type="hidden" name="subject_id" value="{subject_id}">
+            <input type="submit" name="Submit" value="修改">
+            </td>
+            <td> 
+            {edit}
+             
+            </td>
+          </tr>
+          </form>
+          <!-- END slashes -->
+          </table>
+          
+</BODY>
+</HTML>

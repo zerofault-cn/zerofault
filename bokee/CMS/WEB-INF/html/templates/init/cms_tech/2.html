@@ -1,0 +1,814 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312" />
+<title>科技频道首页－博客网-Bokee.com-你我的网络</title>
+<link href="images/keji.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+	<!-- 主框架开始 -->
+	<div id="container">
+		<!---- 头部 ---->
+		<!--#include virtual="include/header.html" -->
+		<!---- 第一屏 ---->
+		<div class="layout">
+			<!---- 第一屏左侧 ---->
+			<div class="lefta lt">
+				<input type=hidden name=首页头图 value=2>	
+				<input type=hidden name=头图下方更多图片链接 value=3>
+				<div class="news">
+					<div class="newsrow">
+						<div class="newscon">
+							<ul>
+								<input type=hidden name=博客视点列表 value=7>
+							</ul>
+						</div>
+						<div class="clear"></div>
+					</div>
+					
+					
+				</div>
+			</div>
+			<!---- 第一屏中侧 ---->
+			<div class="centera lt">
+				<div class="centatop">
+					<input type=hidden name=中间_顶部_头条 value=14>
+				</div>
+				
+				<div class="centatext bt">
+					<ul>
+						<input type=hidden name=顶部头条列表1-8 value=15>
+					</ul>	
+				</div>
+				
+				
+				
+				
+				<div class="centatext bt">
+					<ul>
+						<input type=hidden name=顶部头条列表9-16 value=16>
+					</ul>
+				</div>
+				
+				
+				<div class="centatext">
+					<ul>
+						<input type=hidden name=顶部头条列表17-24 value=17>
+					</ul>
+				</div>
+				
+				
+			</div>
+			<!---- 第一屏右侧 ---->
+			<div class="righta lr">
+				<div class="lvlayout nodxian">
+					<form name="form_login" method="post" action="http://vip.bokee.com/authorEdit/login_check.php" target="_blank">
+					<div class="lvtop"><h4>专栏登录</h4></div>
+					<div class="lvrow">用户名：<input name="name" type="text"  class="loginru"/></div>
+					<div class="lvrow">密 &nbsp;码：<input name="password" type="password"  class="loginru"/></div>
+					<div class="lvrow">
+						<input type="hidden" id="login_where" name="login_where" value="top_index">
+						<input name="submit" type="submit" value="登录"  class="loginbtn"/>
+						<input name="reg" type="button" value="注册"  class="loginbtn mlt" onclick="window.open('http://vip.bokee.com/register.php')" />
+						<span class="mlt"><a href="mailto:wangcai@vip.sina.com" target="_self">忘记密码</a></span>
+					</div>
+					</form>
+				</div>
+				<div class="lvlayout">
+					<div class="lvtop"><input type=hidden name=每周频道标签 value=510></div>
+					<div class="rentextb1">
+						<ul>
+						<input type=hidden name=每周频道列表 value=511>
+						</ul>
+					</div>
+					<div class="lvtop">
+						<input type=hidden name=每周人物访谈标签 value=18>
+					</div>
+					<input type=hidden name=每周人物访谈大图 value=19>
+					<div class="rentextb2">
+						<ul>
+							<input type=hidden name=每周人物访谈列表 value=20>
+						</ul>
+					</div>
+				</div>
+				
+			</div>
+			<div class="clear"></div>
+		</div>
+		<!-- 第二屏 -->
+		<div class="layout">
+			<!-- 第二屏左侧 -->
+			<div class="leftb lt">
+				<div class="slvlayout">
+					<div class="zhuantit  cctite">
+						<input type=hidden name=独家专栏推荐标签 value=21>
+					</div>
+					<div class="zhuanname"><input type=hidden name=独家专栏1标签 value=22></div>
+					<div class="zhuancond">
+						<ul>
+							<input type=hidden name=独家专栏1列表 value=23>
+						</ul>
+					</div>
+					<div class="zhuanname"><input type=hidden name=独家专栏2标签 value=24></div>
+					<div class="zhuancond">
+						<ul>
+							<input type=hidden name=独家专栏2列表 value=25>
+						</ul>
+					</div>
+					<div class="zhuanname"><input type=hidden name=独家专栏3标签 value=26></div>
+					<div class="zhuancond">
+						<ul>
+							<input type=hidden name=独家专栏3列表 value=27>
+						</ul>
+					</div>
+					<div class="zhuanname"><input type=hidden name=独家专栏4标签 value=28></div>
+					<div class="zhuancond">
+						<ul>
+							<input type=hidden name=独家专栏4列表 value=29>
+						</ul>
+					</div>
+					<div class="zhuanname"><input type=hidden name=独家专栏5标签 value=30></div>
+					<div class="zhuancond">
+						<ul>
+							<input type=hidden name=独家专栏5列表 value=31>
+						</ul>
+					</div>
+				</div>
+			</div>
+			<!-- 第二屏中间 -->
+			<div class="centerb lt">
+				<div class="slvlayoutcen">
+					<div class="newwtit"><h4>最新文章</h4></div>
+					<div class="newwcon">
+						<ul>
+						<input type=hidden name=第二屏中间最新文章列表 value=32>
+					</ul>
+					</div>
+				</div>	
+			</div>	
+			<!-- 第二屏右侧 -->
+			<div class="righta lr">
+				<div class="slvlayout">
+					<div class="zhuantit cctite"><h4>专栏作家人气榜</h4></div>
+					<div class="rentit">
+						<div class="rentita renqi_labelon" id="renqi_label1" onmouseover="this.style.cursor='hand'" onclick="document.getElementById('renqiweek').style.display='block';document.getElementById('renqimonth').style.display='none';document.getElementById('renqiyear').style.display='none'; document.getElementById('renqi_label1').className='rentita renqi_labelon';document.getElementById('renqi_label2').className='rentitb renqi_labeloff';document.getElementById('renqi_label3').className='rentitc renqi_labeloff';">一周</div>
+						<div class="rentitb renqi_labeloff" id="renqi_label2" onmouseover="this.style.cursor='hand'" onclick="document.getElementById('renqiweek').style.display='none';document.getElementById('renqimonth').style.display='block';document.getElementById('renqiyear').style.display='none'; document.getElementById('renqi_label1').className='rentita renqi_labeloff';document.getElementById('renqi_label2').className='rentitb renqi_labelon';document.getElementById('renqi_label3').className='rentitc renqi_labeloff';">一月</div>
+						<div class="rentitc renqi_labeloff" id="renqi_label3" onmouseover="this.style.cursor='hand'" onclick="document.getElementById('renqiweek').style.display='none';document.getElementById('renqimonth').style.display='none';document.getElementById('renqiyear').style.display='block'; document.getElementById('renqi_label1').className='rentita renqi_labeloff';document.getElementById('renqi_label2').className='rentitb renqi_labeloff';document.getElementById('renqi_label3').className='rentitc renqi_labelon';">一年</div>
+						<div class="clear"></div>
+					</div>
+					<!-- 一周人气排行开始 -->
+					<div class="rencon" id="renqiweek">
+						<ul>
+							<input type=hidden name=专栏作家人气榜_一周 value=36>													
+							<div class="clear"></div>
+						</ul>
+					</div>
+					<!-- 一周人气排行结束 -->
+					<!-- 一月人气排行开始 -->
+					<div class="rencon" id="renqimonth" style="display:none">
+						<ul>
+							<input type=hidden name=专栏作家人气榜_一月 value=37>													
+							<div class="clear"></div>
+						</ul>
+					</div>
+					<!-- 一月人气排行结束 -->
+					<!-- 一年人气排行开始 -->
+					<div class="rencon" id="renqiyear" style="display:none">
+						<ul>
+							<input type=hidden name=专栏作家人气榜_一年 value=38>													
+							<div class="clear"></div>
+						</ul>
+					</div>
+					<!-- 一年人气排行结束 -->
+				</div>	
+				
+				
+				<div class="slvlayout mtop">
+					<div class="zhuantit cctite">
+					<input type=hidden name=第二屏右侧_科技论坛标签 value=39>
+					</div>
+					<div class="bbscon">
+						<ul>
+								<input type=hidden name=第二屏右侧_科技论坛列表 value=40>
+							</ul>
+							<div class="clear"></div>
+					</div>
+				</div>	
+			</div>
+			</div>
+			
+			
+						
+			
+			<!----广告 ---->
+			<div class="layout">
+			<div id="banner"><input type=hidden name=中间广告1_图 value=46></div>
+			<div class="adtext">
+				<ul>
+					<input type=hidden name=中间广告1_文字 value=47>
+				</ul>
+			</div>
+			<div class="clear"></div>
+		</div>
+		<!----第四屏 ---->
+		<div class="layout"> 
+		<!----第四屏左侧 ---->
+			<div class="leftb lt">
+			<div class="slvlayout borderdd">
+					<div class="zhuantit cctitb">
+						<input type=hidden name=第四屏_深度专题推荐标签 value=48>
+					</div>
+					<div class="zhuancon">
+						<ul>
+							<input type=hidden name=第四屏_深度专题_文章列表 value=49>
+						</ul>
+					</div>
+			</div>
+			</div>
+			<!----第四屏中间 ---->
+			<div class="centerc lt">
+					<div class="cctit cctitb">
+						<input type=hidden name=第四屏中间_web20_标签 value=50>
+					</div>
+					<div class="cctitext">
+						<div class="cctizi">
+							<ul>
+								<input type=hidden name=第四屏中间_web20_6条列表 value=51>
+							</ul>
+						</div>
+						<div class="cctizib">
+							<input type=hidden name=第四屏中间_web20_推荐主持人 value=52>
+						</div>
+					</div>
+					<!-- <div class="fourlayout mtop">
+						<div class="top1">TOP1</div>
+						<div class="top1tit">
+							<input type=hidden name=第四屏中间_web20_top1 value=53>
+						</div>
+					</div>-->
+					<div class="fourlayout">
+						<div class="newwcon">
+						<ul>
+						<input type=hidden name=第四屏中间_web20_文章列表1-8 value=54>
+						<input type=hidden name=第四屏中间_web20_文章列表9-16 value=55>
+						</ul>	
+						</div>
+					</div>
+				
+			</div>		
+			
+			<!----第四屏右侧 ---->
+			<div class="leftb lr">
+			<div class="slvlayout borderdd">
+					<div class="zhuantit cctitb">
+						<input type=hidden name=第五屏右侧_科技博客排行标签 value=66>
+					</div>
+					<input type=hidden name=第五屏右侧_科技专题图 value=305>
+					<div class="zhuancon">
+						<ul>
+							<input type=hidden name=第五屏右侧_科技博客排行列表 value=67>
+						</ul>
+					</div>
+			</div>
+			</div>
+			
+					
+		</div>
+		<!----第五屏 ---->
+		<div class="layout"> 
+		<!----第五屏左侧 ---->
+			<div class="leftb lt">
+			<div class="slvlayout borderee">
+					<div class="zhuantit cctitc">
+						<input type=hidden name=第五屏左侧_互联网实验室报告标签 value=58>
+					</div>
+					<div class="zhuancon">
+						<ul>
+							<input type=hidden name=第五屏左侧_互联网实验室列表 value=59>
+						</ul>
+					</div>
+			</div>
+			</div>
+			<!----第五屏中间 ---->
+			<div class="centerc lt borderee">
+					<div class="cctit cctitc">
+						<input type=hidden name=第五屏中间_互联网_标签 value=60>
+					</div>
+					<div class="cctitext">
+						<div class="cctizi">
+							<ul>
+								<input type=hidden name=第五屏中间_互联网_6条标题列表 value=61>
+							</ul>
+						</div>
+						<div class="cctizib">
+							<input type=hidden name=第五屏中间_互联网_推荐主持人 value=62>
+						</div>
+					</div>
+					<!-- <div class="fourlayout mtop">
+						<div class="top1">TOP1</div>
+						<div class="top1tit">
+							<input type=hidden name=第五屏中间_互联网_top1 value=63>
+						</div>
+					</div>-->
+					<div class="fourlayout">
+						<div class="newwcon">
+						<ul>
+						<input type=hidden name=第五屏中间_互联网1-8 value=64>
+						<input type=hidden name=第五屏中间_互联网_9-16 value=65>
+						</ul>	
+						</div>
+					</div>
+				
+			</div>		
+			
+			<!----第五屏右侧 ---->
+			<div class="leftb lr">
+			<div class="slvlayout borderee">
+					<div class="zhuantit cctitc">
+						<input type=hidden name=第四屏右侧_高科技知识库标签 value=56>
+					</div>
+					<div class="zhuanconb">
+						<ul>
+							<input type=hidden name=第四屏右侧_高科技知识库列表 value=57>
+						</ul>
+					</div>
+			</div>
+			</div>
+			
+					
+		</div>
+		<div class="clear"></div>
+		
+		
+		
+		
+	
+		<!----第六屏 ---->
+		<div class="layout"> 
+		<!----第六屏左侧 ---->
+			<div class="leftb lt">
+			<div class="slvlayout borderff">
+					<div class="zhuantit cctite">
+						<input type=hidden name=第六屏左侧_热门话题标签 value=68>
+					</div>
+					<div class="zhuancon">
+						<ul>
+							<input type=hidden name=第六屏左侧_热门话题列表 value=69>
+						</ul>
+					</div>
+			</div>
+			</div>
+			<!----第六屏中间 ---->
+			<div class="centerc lt borderff">
+					<div class="cctit cctite">
+						<input type=hidden name=第六屏中间_通信_标签 value=70>
+					</div>
+					<div class="cctitext">
+						<div class="cctizi">
+							<ul>
+								<input type=hidden name=第六屏中间_通信_6条标题 value=71>
+							</ul>
+						</div>
+						<div class="cctizib">
+							<input type=hidden name=第六屏中间_通信_推荐主持人 value=72>
+						</div>
+					</div>
+					<!-- <div class="fourlayout mtop">
+						<div class="top1">TOP1</div>
+						<div class="top1tit">
+							<input type=hidden name=第六屏中间_通信_top1 value=73>
+						</div>
+					</div>-->
+					<div class="fourlayout">
+						<div class="newwcon">
+						<ul>
+						<input type=hidden name=第六屏中间_通信top_1-8 value=74>
+						<input type=hidden name=第六屏中间_通信top_9-16 value=75>
+						</ul>	
+						</div>
+					</div>
+				
+			</div>		
+			
+			<!----第六屏右侧 ---->
+			<div class="leftb lr">
+			<div class="slvlayout borderff">
+					<div class="zhuantit cctite">
+						<input type=hidden name=第六屏右侧_科技特色博客标签 value=76>
+					</div>
+					<div class="zhuanconc">
+						<ul>
+							<input type=hidden name=第六屏右侧_科技特色博客列表 value=77>
+						</ul>
+					</div>
+			</div>
+			<div class="slvlayout mtopb borderff">
+					<div class="zhuantit cctite">
+						<input type=hidden name=第六屏右侧_科技优秀群组标签 value=78>
+					</div>
+					<div class="zhuanconc">
+						<ul>
+							<input type=hidden name=第六屏右侧_科技优秀群组列表 value=79>
+						</ul>
+					</div>
+			</div>
+			</div>
+			
+			
+			
+					
+		</div>
+		<div class="clear"></div>
+		<!----广告 ---->
+			<div class="layout">
+			<div id="banner"><input type=hidden name=中间广告2_图 value=80></div>
+			<div class="adtext">
+				<ul>
+					<input type=hidden name=中间广告2_文字 value=81>
+				</ul>
+			</div>
+			<div class="clear"></div>
+		</div>	
+		<!----第七屏 ---->
+		<div class="layout"> 
+		<!----第七屏左侧 ---->
+			<div class="leftb lt">
+			<div class="slvlayout bordergg">
+					<div class="zhuantit cctitf">
+						<input type=hidden name=第七屏左侧_知识加油站标签 value=82>
+					</div>
+					<div class="zhuancon">
+						<ul>
+							<input type=hidden name=第七屏左侧_知识加油站列表 value=83>
+						</ul>
+					</div>
+			</div>
+			</div>
+			<!----第七屏中间 ---->
+			<div class="centerc lt">
+					<div class="cctit cctitf">
+						<input type=hidden name=第七屏中间_风险投资标签 value=84>
+					</div>
+					<div class="cctitext">
+						<div class="cctizi">
+							<ul>
+								<input type=hidden name=第七屏中间_风险投资_6条标题 value=85>
+							</ul>
+						</div>
+						<div class="cctizib">
+							<input type=hidden name=第七屏中间_风险投资_推荐主持人 value=86>
+						</div>
+					</div>
+					<!-- <div class="fourlayout mtop">
+						<div class="top1">TOP1</div>
+						<div class="top1tit">
+							<input type=hidden name=第七屏中间_风险投资_top1 value=87>
+						</div>
+					</div>-->
+					<div class="fourlayout">
+						<div class="newwcon">
+						<ul>
+						<input type=hidden name=第七屏中间_风险投资_1-8 value=88>
+						<input type=hidden name=第七屏中间_风险投资_9-16 value=89>
+						</ul>	
+						</div>
+					</div>
+				
+			</div>		
+			
+			<!----第七屏右侧 ---->
+			<div class="leftb lr">
+			<div class="slvlayout bordergg">
+					<div class="zhuantit cctitf">
+						<input type=hidden name=第七屏右侧_科技优秀博客大全标签 value=90>
+					</div>
+					<div class="zhuanconb">
+						<ul>
+							<input type=hidden name=第七屏右侧_科技优秀博客大全列表 value=91>
+							
+						</ul>
+					</div>
+			</div>
+			</div>
+			
+					
+		</div>
+		<div class="clear"></div>
+		
+		
+		
+		
+		<!----第八屏 ---->
+		<div class="layout"> 
+		<!----第八屏左侧 ---->
+			<div class="leftb lt">
+			<div class="slvlayout borderdd">
+					<div class="zhuantit cctitb">
+						<input type=hidden name=第八屏左侧_企业历史系列专题标签 value=92>
+					</div>
+					<div class="zhuancon">
+						<ul>
+							<input type=hidden name=第八屏左侧_企业历史系列专题列表 value=93>
+						</ul>
+					</div>
+			</div>
+			</div>
+			<!----第八屏中间 ---->
+			<div class="centerc lt">
+					<div class="cctit cctitb">
+						<input type=hidden name=第八屏中间_IT_标签 value=94>
+					</div>
+					<div class="cctitext">
+						<div class="cctizi">
+							<ul>
+								<input type=hidden name=第八屏中间_IT_6个标题 value=95>
+							</ul>
+						</div>
+						<div class="cctizib">
+							<input type=hidden name=第八屏中间_IT_推荐主持人 value=96>
+						</div>
+					</div>
+					<!-- <div class="fourlayout mtop">
+						<div class="top1">TOP1</div>
+						<div class="top1tit">
+							<input type=hidden name=第八屏中间_IT_top1 value=97>
+						</div>
+					</div>-->
+					<div class="fourlayout">
+						<div class="newwcon">
+						<ul>
+						<input type=hidden name=第八屏中间_IT_top1-8 value=98>
+						<input type=hidden name=第八屏中间_IT_top9-16 value=99>
+						</ul>	
+						</div>
+					</div>
+				
+			</div>		
+			
+			<!----第八屏右侧 ---->
+			<div class="leftb lr">
+			<div class="slvlayout borderdd">
+					<div class="zhuantit cctitb">
+						<input type=hidden name=第八屏右侧_网络文化手册标签 value=100>
+					</div>
+					<div class="zhuanconb">
+						<ul>
+							<input type=hidden name=第八屏右侧_网络文化手册列表 value=101>
+						</ul>
+					</div>
+			</div>
+			</div>
+			
+			
+			
+					
+		</div>
+		<div class="clear"></div>
+		<!----第八五屏 ---->
+		<div class="layout"> 
+		<!----第八五屏左侧 ---->
+			<div class="leftb lt">
+			<div class="slvlayout borderee">
+					<div class="zhuantit cctitc">
+						<input type=hidden name=第八五屏左侧_最新行情标签 value=493>
+					</div>
+					<div class="zhuancon">
+						<ul>
+							<input type=hidden name=第八五屏左侧_最新行情列表 value=494>				
+						</ul>
+						</div>
+					
+			</div>
+			</div>
+			<!----第八五屏中间 ---->
+			<div class="centerc lt borderee">
+					<div class="cctit cctitc">
+						<input type=hidden name=第八五屏中间_数码生活标签 value=498>
+					</div>
+					<div class="cctitext">
+						<div class="cctizi">
+							<ul>
+								<input type=hidden name=第八五屏中间_数码生活6条列表 value=499>
+							</ul>
+						</div>
+						<div class="cctizib">
+							<input type=hidden name=第八五屏中间_数码生活_推荐主持人 value=500>
+						</div>
+					</div>
+					
+					<div class="fourlayout">
+						<div class="newwcon">
+						<ul>
+						<input type=hidden name=第八五屏中间_数码生活_1-8 value=501>
+						<input type=hidden name=第八五屏中间_数码生活_9-16 value=502>
+						</ul>	
+						</div>
+					</div>
+				
+			</div>		
+			
+			<!----第八五屏右侧 ---->
+			<div class="leftb lr">
+			<div class="slvlayout borderee">
+					<div class="zhuantit cctitc">
+						<input type=hidden name=第八五屏右侧_数码摄影_标签 value=503>
+					</div>
+					<input type=hidden name=第八五屏右侧_数码摄影_图1 value=504>
+					<input type=hidden name=第八五屏右侧_数码摄影_图2 value=509>
+					<div class="zhuanconb">
+						<ul>
+							<input type=hidden name=第八五屏右侧_数码摄影_列表 value=505>
+						</ul>
+					</div>
+			</div>
+			</div>
+		</div>
+		<div class="clear"></div>
+		<!----第九屏 ---->
+		<div class="layout"> 
+		<!----第九屏左侧 ---->
+			<div class="leftb lt">
+			<div class="slvlayout borderff">
+					<div class="zhuantit cctite">
+						<input type=hidden name=第九屏左侧_资源推荐标签 value=102>
+					</div>
+					<div class="zhuancon">
+						<ul>
+							<input type=hidden name=第九屏左侧_资源推荐列表 value=103>
+						</ul>
+					</div>
+			</div>
+			</div>
+			<!----第九屏中间 ---->
+			<div class="centerc lt borderff">
+					<div class="cctit cctite">
+						<input type=hidden name=第九屏中间_科普标签 value=104>
+					</div>
+					<div class="cctitext">
+						<div class="cctizi">
+							<ul>
+								<input type=hidden name=第九屏中间_科普_6个列表 value=105>
+							</ul>
+						</div>
+						<div class="cctizib">
+							<input type=hidden name=第九屏中间_科普_推荐主持人 value=106>
+						</div>
+					</div>
+					<!-- <div class="fourlayout mtop">
+						<div class="top1">TOP1</div>
+						<div class="top1tit">
+							<input type=hidden name=第九屏中间_科普_top1 value=107>
+						</div>
+					</div>-->
+					<div class="fourlayout">
+						<div class="newwcon">
+						<ul>
+						<input type=hidden name=第九屏中间_科普top1-8 value=108>
+						<input type=hidden name=第九屏中间_科普_top9-16 value=109>
+						</ul>	
+						</div>
+					</div>
+				
+			</div>		
+			
+			<!----第九屏右侧 ---->
+			<div class="leftb lr">
+			<div class="slvlayout borderff">
+					<div class="zhuantit cctite">
+						<input type=hidden name=第九屏右侧_科普精彩图文标签 value=110>
+					</div>
+					<input type=hidden name=第九屏右侧_科普精彩图1 value=111>
+					<input type=hidden name=第九屏右侧_科普精彩图2 value=112>
+					<div class="zhuanconb">
+						<ul>
+							<input type=hidden name=第九屏右侧_科普精彩图文列表 value=113>
+						</ul>
+					</div>
+			</div>
+			</div>
+			
+			
+			
+					
+		</div>
+		<div class="clear"></div>
+			
+				<!----第十屏 ---->
+				<div class="layout">
+					<div class="tenlay">
+					 	<div class="tentit">
+							<div class="tentita"><h2>科技点击排行</h2></div>
+							<div class="tentitb keji_labelon" id="dianji_label1" onmouseover="this.style.cursor='hand'" onclick="document.getElementById('dianjihour').style.display='';document.getElementById('dianjiweek').style.display='none';document.getElementById('dianjimonth').style.display='none'; document.getElementById('dianji_label1').className='tentitb keji_labelon';document.getElementById('dianji_label2').className='tentitc keji_labeloff';document.getElementById('dianji_label3').className='tentitd keji_labeloff';">48小时</div>
+							<div class="tentitc keji_labeloff" id="dianji_label2" onmouseover="this.style.cursor='hand'" onclick="document.getElementById('dianjihour').style.display='none';document.getElementById('dianjiweek').style.display='';document.getElementById('dianjimonth').style.display='none'; document.getElementById('dianji_label1').className='tentitb keji_labeloff';document.getElementById('dianji_label2').className='tentitc keji_labelon';document.getElementById('dianji_label3').className='tentitd keji_labeloff';">1周</div>
+							<div class="tentitd keji_labeloff" id="dianji_label3" onmouseover="this.style.cursor='hand'" onclick="document.getElementById('dianjihour').style.display='none';document.getElementById('dianjiweek').style.display='none';document.getElementById('dianjimonth').style.display=''; document.getElementById('dianji_label1').className='tentitb keji_labeloff';document.getElementById('dianji_label2').className='tentitc keji_labeloff';document.getElementById('dianji_label3').className='tentitd keji_labelon';">1月</div>
+							<div class="clear"></div>
+						</div>
+						<!-- 点击排行48小时开始 -->
+						<div class="tenlaycon" id="dianjihour">
+							<ul>
+						<input type=hidden name=论坛点击排行_48小时 value=114>
+						</ul>	
+						</div>
+						<!-- 点击排行48小时结束 -->
+						<!-- 点击排行一周开始 -->
+						<div class="tenlaycon" id="dianjiweek" style="display:none">
+							<ul>
+						<input type=hidden name=科技点击排行_1周 value=115>
+						</ul>	
+						</div>
+						<!-- 点击排行一周结束 -->
+						<!-- 点击排行一月开始 -->
+						<div class="tenlaycon" id="dianjimonth" style="display:none">
+							<ul>
+						<input type=hidden name=科技点击排行_1月 value=116>
+						</ul>	
+						</div>
+						<!-- 点击排行一月结束 -->
+					</div>
+					
+					<div class="tenlay mlt">
+					 	<div class="tentit">
+							<div class="tentita"><h2>科技评论排行</h2></div>
+							<div class="tentitb keji_labelon" id="pinglun_label1" onmouseover="this.style.cursor='hand'" onclick="document.getElementById('pinglunhour').style.display='';document.getElementById('pinglunweek').style.display='none';document.getElementById('pinglunmonth').style.display='none'; document.getElementById('pinglun_label1').className='tentitb keji_labelon';document.getElementById('pinglun_label2').className='tentitc keji_labeloff';document.getElementById('pinglun_label3').className='tentitd keji_labeloff';">48小时</div>
+							<div class="tentitc keji_labeloff" id="pinglun_label2" onmouseover="this.style.cursor='hand'" onclick="document.getElementById('pinglunhour').style.display='none';document.getElementById('pinglunweek').style.display='';document.getElementById('pinglunmonth').style.display='none'; document.getElementById('pinglun_label1').className='tentitb keji_labeloff';document.getElementById('pinglun_label2').className='tentitc keji_labelon';document.getElementById('pinglun_label3').className='tentitd keji_labeloff';">1周</div>
+							<div class="tentitd keji_labeloff" id="pinglun_label3" onmouseover="this.style.cursor='hand'" onclick="document.getElementById('pinglunhour').style.display='none';document.getElementById('pinglunweek').style.display='none';document.getElementById('pinglunmonth').style.display=''; document.getElementById('pinglun_label1').className='tentitb keji_labeloff';document.getElementById('pinglun_label2').className='tentitc keji_labeloff';document.getElementById('pinglun_label3').className='tentitd keji_labelon';">1月</div>
+							<div class="clear"></div>
+						</div>
+						<!-- 评论排行48小时开始 -->
+						<div class="tenlaycon" id="pinglunhour">
+							<ul>
+						<input type=hidden name=科技评论排行_48小时 value=117>
+						</ul>	
+						</div>
+						<!-- 评论排行48小时结束 -->
+						<!-- 评论排行一周开始 -->
+						<div class="tenlaycon" id="pinglunweek" style="display:none">
+							<ul>
+						<input type=hidden name=科技评论排行_1周 value=118>
+						</ul>	
+						</div>
+						<!-- 评论排行一周结束 -->
+						<!-- 评论排行一月开始 -->
+						<div class="tenlaycon" id="pinglunmonth" style="display:none">
+							<ul>
+						<input type=hidden name=科技评论排行_1月 value=119>
+						</ul>	
+						</div>
+						<!-- 评论排行一月结束 -->
+					</div>
+
+					<div class="tenlay mlt">
+					 	<div class="tentit">
+							<div class="tentita"><h2>科技论坛排行</h2></div>
+							<div class="tentitb keji_labelon" id="luntan_label1" onmouseover="this.style.cursor='hand'" onclick="document.getElementById('luntanhour').style.display='';document.getElementById('luntanweek').style.display='none';document.getElementById('luntanmonth').style.display='none'; document.getElementById('luntan_label1').className='tentitb keji_labelon';document.getElementById('luntan_label2').className='tentitc keji_labeloff';document.getElementById('luntan_label3').className='tentitd keji_labeloff';">48小时</div>
+							<div class="tentitc keji_labeloff" id="luntan_label2" onmouseover="this.style.cursor='hand'" onclick="document.getElementById('luntanhour').style.display='none';document.getElementById('luntanweek').style.display='';document.getElementById('luntanmonth').style.display='none'; document.getElementById('luntan_label1').className='tentitb keji_labeloff';document.getElementById('luntan_label2').className='tentitc keji_labelon';document.getElementById('luntan_label3').className='tentitd keji_labeloff';">1周</div>
+							<div class="tentitd keji_labeloff" id="luntan_label3" onmouseover="this.style.cursor='hand'" onclick="document.getElementById('luntanhour').style.display='none';document.getElementById('luntanweek').style.display='none';document.getElementById('luntanmonth').style.display=''; document.getElementById('luntan_label1').className='tentitb keji_labeloff';document.getElementById('luntan_label2').className='tentitc keji_labeloff';document.getElementById('luntan_label3').className='tentitd keji_labelon';">1月</div>
+							<div class="clear"></div>
+						</div>
+						<!-- 论坛排行48小时开始 -->
+						<div class="tenlaycon" id="luntanhour">
+							<ul>
+						<input type=hidden name=科技论坛排行_48小时 value=120>
+						</ul>	
+						</div>
+						<!-- 论坛排行48小时结束 -->
+						<!-- 论坛排行一周开始 -->
+						<div class="tenlaycon" id="luntanweek" style="display:none">
+							<ul>
+						<input type=hidden name=科技论坛排行_1周 value=121>
+						</ul>	
+						</div>
+						<!-- 论坛排行一周结束 -->
+						<!-- 论坛排行一月开始 -->
+						<div class="tenlaycon" id="luntanmonth" style="display:none">
+							<ul>
+						<input type=hidden name=科技论坛排行_1月 value=122>
+						</ul>	
+						</div>
+						<!-- 论坛排行一月结束 -->
+					</div>
+					
+					<div class="clear"></div>
+				</div>
+				
+					<!----第十一屏 ---->
+					<div class="layout textzhong">
+						<input type=hidden name=专栏每日统计 value=123>
+					</div>
+					
+					<!----第十二屏 ---->
+					<div class="layout">
+						<div class="youlink">
+							<div class="youlinkcon">
+								<input type=hidden name=友情链接 value=124>			
+							</div>
+						</div>
+					</div>
+					<!----完 ---->
+		<!--#include virtual="include/footer.html" -->
+	</div>
+	<!-- 主框架结束 -->
+</body>
+<script language="javascript" type="text/javascript" src="http://noc.bokee.com/pv/techbokee/count/count.js" ></script>
+</html>

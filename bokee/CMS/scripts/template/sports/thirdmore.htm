@@ -1,0 +1,90 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="zh-CN" xml:lang="zh-CN">
+<head>
+<meta http-equiv="Content-Type" content="text/html;"/>
+<style type="text/css" media="all">@import url("http://sports.bokee.com/images/css.css");@import url("http://sports.bokee.com/images/second.css");</style>
+<script type="text/javascript" src="http://sports.bokee.com/images/showHideLayer.js"></script>
+<link rel="shortcut icon" href="http://www.bokee.com/favicon.ico" type="image/x-icon"/>
+<title>体育频道-博客网-Bokee.com.com-你我的网络</title>
+<meta name="description" content="博客网，www.bokee.com,最具影响力中文网站之一，免费提供专业博客托管服务（BSP），现拥有博客公社、移动博客、图片博客、视频博客、教师博客、学生博客、博采、播客和RSS博览等多个应用版块。" />
+<meta name="keywords" content="blog,weblog,blogger,bokee.com,www.bokee.com,博客中国,中国博客,博客,博采,我的博客,博客托管,图片博客,移动博客,群体博客,博客通,SNS,社会网络,博客动力,博客公社,教师博客,学生博客,IT,方兴东,微软问题,科技,新知,生活,社会软件,IT业界,互联网实验室,新媒体,博客研究,podcast,播客,标签,tag,BSP" />
+<meta name="copyright" content="www.bokee.com,博客网，版权所有" />
+<meta name="author" content="www.bokee.com,博客网" />
+<meta name="robots" content="all" />
+</head>
+<body>
+<div class="main">
+  <!--页头-->
+  <div id="userlogin">
+    <form name="loginForm" action="http://www.blogchina.com/admin/login.asp" onsubmit="javascript:chklogin()" method="post" target="_self">
+      <input type=hidden name="id" >
+      <input type=hidden name="name" >
+      <input type=hidden name="user.password" >
+      <input type=hidden name="user.userNameFUI" >
+      <input type="hidden" name="login" value="true" >
+      <input name="username"  value="用户名" onfocus="this.value=''" id="user" >
+      <input name="password" type="password" value="密码" id="user"  onfocus="this.value=''">
+      <select name=domain>
+        <option value="博客专栏" selected>博客专栏</option>
+        <option value="博客论坛">博客论坛</option>
+        <option value="博客公社">博客公社</option>
+      </select>
+      <input name="Submit" id='submit_submit' type="submit" value="登录" class="sbmtbutton" >
+      <input type="button" class="sbmtbutton" value="注册" onclick="window.open('http://reg.bokee.com');" >
+      <input type="button" class="sbmtbutton" value="找回密码" onclick="window.open('http://publishblog.bokee.com/getPwd.b');"  >
+      <span class="white"><A href="javascript:window.external.AddFavorite('http://www.bokee.com', '博客网')" target=_self
+>收藏本站</A> | <a href="http://www.blogchina.com/default.htm" target="_blank">旧版</a> | <A href="http://service.bokee.com">客服中心</A> </span>
+    </form>
+    <script language="javascript">
+function chklogin(){
+var frm = document.forms['loginForm'];
+frm.elements['name'].value = frm.elements['username'].value;
+frm.elements['id'].value = frm.elements['username'].value;
+frm.elements['user.userNameFUI'].value = frm.elements['username'].value;
+frm.elements['user.password'].value = frm.elements['password'].value;
+if(frm.elements['domain'].value == '博客论坛'){
+frm.action="http://forum.blogchina.com/login.php";
+}
+if(frm.elements['domain'].value == '博客公社'){
+frm.action="http://publishblog.blogchina.com/login.b";
+}
+if(frm.elements['domain'].value == '博客专栏'){
+frm.action="http://admin.www.blogchina.com/web/asp/login.asp";
+}
+return true;
+}
+</script>
+  </div>
+  
+ 
+  
+  <div class="navigation"><a href="#">首页</a> | <a href="#">资讯中心</a> | <a href="#">专栏</a> | <a href="#">科技</a> | <a href="#">通信</a> | <a href="#">数码</a> | <a href="#">手机</a> | <a href="#">财经</a> | <a href="#">汽车</a> | <a href="#">房产</a> | <a href="#">新知</a> | <a href="#">教育</a> | <a href="#">时尚</a> | <a href="#">生活</a> | <a href="#">电影</a> | <a href="#">音乐</a></div>
+  <div class="banner"><img src="http://sports.bokee.com/images/ty_06.gif" alt="广告" /></div>
+  <div class="logo"><img src="http://sports.bokee.com/images/ty_10.gif" alt="logo" /></div>
+  <div class="logor">
+    <h2><span>·<a href="#">曲波是足坛黑洞最大牺牲品--七大留 贾秀全率</a></span><a href="#">首页</a> <a href="#">篮球</a> <a href="#">综合</a> <a href="#">国内</a> <a href="#">国际</a></h2>
+  </div>
+  <div class="logorb">
+    <h2><a href="#">博客</a> <a href="#">NBA</a> <a href="#">户外</a> <a href="#">中超</a> <a href="#">意甲</a> <a href="#">英超</a> <a href="#">西甲</a> <a href="#">花边</a> <a href="#">视频</a> <a href="#">图片</a> <a href="#">RSS</a> <a href="#">博采</a> <a href="#">社区</a> <a href="#">专栏</a></h2>
+  </div>
+  
+  
+   <div id="thirdmore">
+  	<h2>中国足球</h2>
+	
+	{CONTENT}
+	
+  </div>
+  
+    <div class="bottomlink"> <a href="#">中华网汽车</a> | <a href="#">汽车之家</a> | <a href="#">网易汽车</a> 
+    | <a href="#">人民网汽车频道</a> | <a href="#">新华网汽车频道</a> | <a href="#">千龙网汽车频道</a> 
+    | <a href="#">21cn汽车频道</a> | <a href="#">北方网-汽车新地</a> | <a href="#">新诺轿车网</a> | <a href="#">新诺SUV网</a> | <a href="#">汽车商务网</a> 
+    | <a href="#">汽车部落</a> | <a href="#">HC360慧聪网汽车频道</a> | <a href="#">猎车部落</a> | <a href="#">越野汽车资讯网</a> </div>
+  <!--页尾-->
+  <div id="footer">
+	<a href="mailto:ceditor@blogchina.com">主编信箱</a> | <a href="http://www.bokee.com/new/about/aboutus.html">关于本站</a> | <a href="http://www.bokee.com/new/about/copyright.html">版权声明</a> | <a href="http://www.bokee.com/new/about/notonduty.htm">免责条款</a> | <a href="http://www.bokee.com/new/about/privacy.htm">隐私保护</a> | <a href="http://www.bokee.com/new/about/sitemap.html">网站导航</a> | <a href="http://www.bokee.com/new/about/contact.html">联系方式</a> | <a href="http://www.bokee.com/new/display/37233.html">诚聘英才</a> | <a href="http://www.bokee.com/reg.html">用户注册</a> | <a href="http://www.bokee.com/new/about/thank.html">特别鸣谢</a> | <a href="http://www.bokee.com/new/about/morelink.htm">友情链接</a>
+</div>
+<div id="copyright">Copyright 2002 - 2005 Bokee.com, All Rights Reserved. 博客时代，版权所有</div>
+</div>
+</body>
+</html>

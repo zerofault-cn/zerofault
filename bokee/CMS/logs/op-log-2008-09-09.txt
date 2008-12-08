@@ -1,0 +1,38 @@
+00:02:03
+e:/bokee
+00:02:04
+文件:e:\bokee\cms\mod\TemplateA.cls.php 第 93 行附近出错。/opt/bokee/www/CMS/WEB-INF/html/templates/init/cms_tech/17.html
+00:02:05
+e:/bokee
+00:05:21
+e:/bokee
+00:19:40
+e:/bokee/CMS/web/root/cms_tech/vc/index.htm:/html/cms_tech/vc/index.htm
+00:20:49
+22
+00:20:50
+e:/bokee/CMS/web/root/cms_tech/vc/index.htm:/html/cms_tech/vc/index.htm
+
+
+
+
+00:23:29
+e:/bokee/CMS/web/root/cms_tech/vc/index.htm:/html/cms_tech/vc/index.htm
+00:28:38
+e:/bokee/CMS/web/root/cms_tech/vc/index.htm:/html/cms_tech/vc/index.htm
+00:30:27
+e:/bokee/CMS/web/root/cms_tech/vc/index.htm:/html/cms_tech/vc/index.htm
+00:31:52
+e:/bokee/CMS/web/root/cms_tech/vc/index.htm:/html/cms_tech/vc/index.htm
+00:33:25
+e:/bokee/CMS/web/root/cms_tech/vc/index.htm:/CMS_html/cms_tech/vc/index.htm
+00:35:32
+e:/bokee/CMS/web/root/cms_tech/vc/index.htm:/CMS_html/cms_tech/vc/index.htm
+00:51:50
+文件:e:\bokee\cms\mod\TemplateA.cls.php 第 93 行附近出错。/opt/bokee/www/CMS/WEB-INF/html/templates/init/cms_tech/2.html
+00:52:06
+文件:e:\bokee\cms\mod\TemplateA.cls.php 第 93 行附近出错。/opt/bokee/www/CMS/WEB-INF/html/templates/init/cms_tech/2.html
+
+
+00:53:06
+文件:e:\bokee\cms\mod\TemplateA.cls.php 第 93 行附近出错。/opt/bokee/www/CMS/WEB-INF/html/templates/init/cms_tech/2.html
