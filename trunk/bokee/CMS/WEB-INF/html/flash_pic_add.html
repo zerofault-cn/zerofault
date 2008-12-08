@@ -1,0 +1,47 @@
+<html>
+<head>
+<title>添加图片</title>
+</head>
+<script language="javascript">
+	function Validator( a )
+	{
+		if( "" == a.flash_pic.value )
+		{
+			alert("请选择图片!");
+			return(false);
+		}
+		if( "" == a.pic_name.value )
+		{
+			alert("图片名称不能为空!");
+			a.pic_name.focus();
+			return(false);
+		}
+		if( "" == a.pic_url.value )
+		{
+			alert("图片链接不能为空!");
+			a.pic_url.focus();
+			return(false);
+		}
+		return(true);
+
+	}
+</script>
+<body>
+<br>
+<br>
+<form action="main.php?do=flash_pic_do_add" name="subject_form" method="post" enctype='multipart/form-data' onSubmit="return Validator(this)">
+	<input type="file" name="flash_pic">
+	<br><br>
+	<font size=2>图片名称:</font>
+	<input type="text" name="pic_name" size="50">
+	<br><br>
+	<font size=2>链接地址:</font>
+	<input type="text" name="pic_url" size="50">
+	<input type="hidden" name="channel_name" value="{channel_name}">
+	<input type="hidden" name="flash_path" value="{flash_path}">
+	<input type="hidden" name="flash_id" value="{flash_id}">
+	<br><br>
+	<center><input type="submit" name="submit" value="提交"></center>
+</form>
+</body>
+</html>

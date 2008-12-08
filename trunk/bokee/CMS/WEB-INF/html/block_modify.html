@@ -1,0 +1,43 @@
+<html>
+ <form action="main.php?do=block_do_modify" name="block_modify_form" method="post" enctype='multipart/form-data'>
+<table>
+<tr><td>栏目</td><td>
+<select name="select_subject" id="select_subject">
+{options}
+</select>
+(选中栏目文章显示时包含子栏目)
+</td></tr>
+<tr><td>名称</td><td>
+<input name="name" type="text" value="{name}" maxlength="20">
+</td></tr>
+<tr><td>来源</td><td>
+{source}
+</td></tr>
+<tr><td>起始ID</td><td>
+<input name="start_id" type="text" value="{start_id}" maxlength="5" size="5">
+&nbsp;&nbsp;&nbsp;&nbsp;条目数
+<input name="limit" type="text" value="{limit}" maxlength="5" size="5">
+</td></tr>
+{str_title_length}
+<tr><td>星级</td><td>
+<select name="mark" id="mark">
+{mark}
+</select>1星为最低等低，5星为最高等级，rss文章为1星
+</td></tr>
+<tr><td>格式</td><td>
+<textarea name="format" cols="50" rows="10" id="format">{format}</textarea>
+<br>变量用大括号括起来，常用变量：<br>
+title,url,source,datetime,datetime1,datetime2,datetime3,datetime4,<br>
+datetime5,author,comment,subject,subject_link。<br>
+新增加了一个变量：title0，表示未截断的原始标题。<br>
+<span style="color:blue">群组专用：</span>群组名:title,群组链接:sub_title,群主名:author,群主博客:desc,主题:keyword,主题链接:rss_url,访问量:view_num<br>
+时间格式范例：<br>datetime: 8/21 12:12, datetime1: 8-21 12:12:12, datetime2: 8/21, <br>
+datetime3: 12:12, datetime4: 2005-8-21 12:12:12, datetime5: 2005-8-21
+</td></tr>
+</table>
+<input type="hidden" name="subject_id" value="{subject_id}">
+<input type="hidden" name="id" value="{id}">
+<input type="hidden" name="channel_name" value="{channel_name}">
+<input type="submit" name="Submit" value="保存">
+</form>
+</html>

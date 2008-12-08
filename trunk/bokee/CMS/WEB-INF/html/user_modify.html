@@ -1,0 +1,88 @@
+<html>
+<script language="javascript">
+function init_upload()
+{
+     var role_num = document.getElementById('role_name').value;
+	 if(role_num==0||role_num==1)
+	 {
+	         document.all.modelTR.style.display= "none";
+	 }else
+	 {
+	 	document.all.modelTR.style.display= "";
+	 }
+}
+function CheckAll(){
+	var frm = document.getElementsByName("select_channel[]");
+  	for(var ii=0;ii<frm.length;ii++){
+    	var e=frm[ii];
+       	e.checked = document.all.chkall.checked;
+  }
+}
+</script>
+<style type="text/css">
+<!--
+table {
+	font-size: 14px;
+}
+input {
+	height:20px;
+}
+.error {
+color: red;
+}
+-->
+</style>
+<body onLoad="init_upload()">
+<form action="main.php?do=user_do_modify" name="form" method="post" enctype='multipart/form-data'>
+<input type="hidden" name="id" value="{id}">
+<table width="100%" border="0" cellpadding="2" cellspacing="2" bgcolor="#eeeeee">
+  <tr>
+    <td nowrap>用户名</td>
+    <td width="89%"><input name="username" type="text" id="username" size="20" maxlength="20" value="{username}"> <div class="error">{action_error_username}</div></td>
+  </tr>
+  <tr>
+    <td nowrap>真实姓名</td>
+    <td><input name="real_name" type="text" id="real_name" size="20" maxlength="20" value="{real_name}"> 
+      <div class="error">{action_error_real_name}</div></td>
+  </tr>
+  <tr>
+    <td nowrap>权限</td>
+    <td><select name="role_name" onChange="init_upload()" id="role_name">
+    <!-- BEGIN role -->
+      <option value="{id}" {selected}>{name}</option>
+	  <!-- END role -->
+    </select> <div class="error">{action_error_role}</div></td>
+  </tr>
+  <tr>
+    <td nowrap>电子邮件</td>
+    <td><input name="email" type="text" id="email" size="20" maxlength="30" value="{email}"> 
+      <div class="error">{action_error_email}</div></td>
+  </tr>
+  <tr>
+    <td nowrap>手机</td>
+    <td><input name="cellphone" type="text" id="cellphone" size="20" maxlength="20" value="{cellphone}"> 
+      <div class="error">{action_error_cellphone}</div></td>
+  </tr>
+ <tr  name="modelTR" id="modelTR">
+    <td nowrap>频道</td>
+    <td>
+	<!-- BEGIN channel -->
+    <input type="checkbox" name="select_channel[]" value="{id}" {checked}>{name}{br}
+	  <!-- END channel -->
+	  </select>
+	  <br><INPUT TYPE="checkbox" NAME="chkall" onclick="CheckAll()"> 全选/取消</td>
+        </td>
+  </tr> 
+  <tr>
+    <td nowrap>&nbsp;</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr>
+    <td nowrap>&nbsp;</td>
+    <td><input name="Submit_pub" type="submit" id="Submit_pub" value="修改">
+      <input name="Submit_reset" type="reset" id="Submit_reset" value="重置"></td>
+  </tr>
+</table>
+</form>
+</body>
+</html>

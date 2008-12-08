@@ -1,0 +1,25 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Frameset//EN" "http://www.w3.org/TR/html4/frameset.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>{TITLE}</title>
+</head>
+
+<body>
+<table align="center">
+<tr>
+<td align="center">
+<form action="main.php?do=tpl_add" method="POST">
+<select name="name">
+<!-- BEGIN template_file_list -->
+<option value="{name}">{name}
+<!-- END template_file_list -->
+</select>
+<input type="submit" name="submit" value="提交" accesskey="Enter"/>
+<input type="hidden" name="channel_name" value="{CHANNEL_NAME}">
+</form>
+</td>
+</tr>
+</table>
+</body>
+</html>

@@ -1,0 +1,66 @@
+<html>
+ <form action="main.php?do=block_new_do_add" name="template_modify_form" method="post" enctype='multipart/form-data'>
+<table width=800 border=0>
+<tr><td width=150>栏目</td><td width=600>
+<select name="select_subject" id="select_subject">
+<?php
+echo $_obj['options'];
+?>
+
+</select>
+(选中栏目文章显示时包含子栏目)
+</td></tr>
+<tr><td>名称</td><td>
+<input name="name" type="text" value="<?php
+echo $_obj['file_name'];
+?>
+" maxlength="20">
+</td></tr>
+<tr><td>来源</td><td>
+<input name=source[] type='checkbox' value='cms'>CMS <input name=source[] type='checkbox' value='rss'>RSS <input name=source[] type='checkbox' value='blogmark'>博采 <input name=source[] type='checkbox' value='column'>专栏 <input name=source[] type='checkbox' value='blog'>博客 <input name=source[] type='checkbox' value='bbs'>论坛 
+</td></tr>
+<tr><td>起始ID</td><td>
+<input name="start_id" type="text" value="0" maxlength="5" size="5">
+&nbsp;&nbsp;&nbsp;&nbsp;条目数
+<input name="limit" type="text" value="<?php
+echo $_obj['limit'];
+?>
+" maxlength="5" size="5">
+</td></tr>
+<tr>
+	<td>标题长度</td>
+	<td>
+		是否限制:
+			是<input name="is_limit_title_length" type="radio" value="1" onclick=" document.template_modify_form.title_length.disabled=false">
+			否<input name="is_limit_title_length" type="radio" value="0" onclick="document.template_modify_form.title_length.disabled=true" checked>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 长度：<input name="title_length" disabled="true" size="5">
+	</td>
+</tr>
+<tr><td>星级</td><td>
+<select name="mark" id="mark">
+<option value="1">1</option>
+<option value="2">2</option>
+<option value="3">3</option>
+<option value="4">4</option>
+<option value="5">5</option>
+</select>
+</td></tr>
+<tr><td>格式</td><td>
+<textarea name="format" cols="50" rows="10" id="format"><?php
+echo $_obj['format'];
+?>
+</textarea>
+<br>变量用大括号括起来，常用变量：title,url,source,datetime,datetime1,datetime2,datetime3,datetime4,<br> datetime5,author,comment,subject,subject_link。<br>时间格式范例：datetime: 8/21 12:12, datetime1: 8-21 12:12:12, <br>datetime2: 8/21, datetime3: 12:12, datetime4: 2005-8-21 12:12:12, <br>datetime5: 2005-8-21
+</td></tr>
+</table>
+<input type="hidden" name="subject_id" value="<?php
+echo $_obj['subject_id'];
+?>
+">
+<input type="hidden" name="channel_name" value="<?php
+echo $_obj['channel_name'];
+?>
+">
+<input type="submit" name="Submit" value="保存">
+</form>
+</html>

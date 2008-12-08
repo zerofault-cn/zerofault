@@ -1,0 +1,79 @@
+<html>
+<style type="text/css">
+<!--
+table {
+font-size: 14px;
+}
+.wraper {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	width:160px;
+	border:1px solid black;
+	padding:20px 10px;
+}
+-->
+</style>
+
+<SCRIPT LANGUAGE="javascript" type="text/javascript">
+function Checkform(){
+	var frm = document.articleDeleteGroupForm;
+    var jj=0;
+	for(var ii=0;ii<frm.elements.length;ii++){
+    	var e=frm.elements[ii];
+        if (e.name != 'chkall'){
+		    if (e.checked)  jj++;
+	    }
+    }
+	if (jj){
+		frm.action="main.php?do=feed_article_copy_group";
+		return window.confirm("确定复制？");
+	}else{
+		window.alert("没有选择条目");
+    	return false;
+	}
+}
+//
+function CheckAll(){
+	var frm = document.articleDeleteGroupForm;
+  	for(var ii=0;ii<frm.elements.length;ii++){
+    	var e=frm.elements[ii];
+    	if (e.name != 'chkall')
+       		e.checked = frm.chkall.checked;
+  }
+}
+</script>
+
+<body>
+
+{pagebar}
+<form method="post" name="articleDeleteGroupForm" onSubmit="return Checkform()">
+<table width="100%" cellspacing="2" bgcolor="#CCCCCC">
+<tr bgcolor="#FFFFFF">
+<td>&nbsp;</td>
+<td>ID</td>
+<td>内容源</td>
+<td>栏目</td>
+<td>操作</td>
+</tr>
+<!-- BEGIN mapping -->
+<tr bgcolor="#FFFFFF">
+<td><input type="checkbox" name="article_id[]" value="{id}"></td>
+<td>{id}</td>
+<td><a href="http://blogs.bokee.com/contribute/channel.php?id={feed_id}" target="_blank">{feed_title}</a></td>
+<td>{subject_title} ({subject_id})</td>
+<td><a href="scripts/sync_from_contribute.php?id={id}&channel_name={channel_name}" target="_blank">立即同步</a> <a href="main.php?do=feed_attach_delete&id={id}&channel_name={channel_name}" onClick="javascript:return window.confirm('确定删除？');">删除</a></td>
+</tr>
+<!-- END mapping -->
+</table>
+<INPUT TYPE="checkbox" NAME="chkall" onclick="CheckAll()"> 全选/取消
+<input type="submit" value="删除选中">
+</form>
+{pagebar}
+<form action="main.php?do=contribute_attach_list&feed_id={feed_id}&p={p}" name="rssArticleListForm" method="post" style="text-align:right;">
+  <label for="jumpage">到
+  <input type="text" name="p" id="p" value="" style="border: 1px solid #7F9DB9;width: 2em; " />
+  页</label>
+  <input type="submit" value="go" style="width: 20px;border: 0; " />
+</form>
+</body>
+</html>

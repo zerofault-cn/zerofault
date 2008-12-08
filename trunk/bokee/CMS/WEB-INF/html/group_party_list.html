@@ -1,0 +1,167 @@
+<html>
+<style type="text/css">
+<!--
+table {
+font-size: 14px;
+}
+.wraper {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	width:160px;
+	border:1px solid black;
+	padding:20px 10px;
+}
+-->
+</style>
+<script language="JavaScript" src="dateControl.js"></script>
+<SCRIPT LANGUAGE="javascript" type="text/javascript">
+/**********************************************************************/
+/* 函数：changeCondition                                              */
+/* 参数：                                                             */
+/* 功能：改变搜索类型                                                 */
+/* 返回值：                                                           */
+/**********************************************************************/	
+function FP_changeProp() {//v1.0
+ var args=arguments,d=document,i,j,id=args[0],o=FP_getObjectByID(id),s,ao,v,x;
+ d.$cpe=new Array(); if(o) for(i=2; i<args.length; i+=2) { v=args[i+1]; s="o";
+ ao=args[i].split("."); for(j=0; j<ao.length; j++) { s+="."+ao[j]; if(null==eval(s)) {
+  s=null; break; } } x=new Object; x.o=o; x.n=new Array(); x.v=new Array();
+ x.n[x.n.length]=s; eval("x.v[x.v.length]="+s); d.$cpe[d.$cpe.length]=x;
+ if(s) eval(s+"=v"); }
+}
+
+function FP_getObjectByID(id,o) {//v1.0
+ var c,el,els,f,m,n; if(!o)o=document; if(o.getElementById) el=o.getElementById(id);
+ else if(o.layers) c=o.layers; else if(o.all) el=o.all[id]; if(el) return el;
+ if(o.id==id || o.name==id) return o; if(o.childNodes) c=o.childNodes; if(c)
+ for(n=0; n<c.length; n++) { el=FP_getObjectByID(id,c[n]); if(el) return el; }
+ f=o.forms; if(f) for(n=0; n<f.length; n++) { els=f[n].elements;
+ for(m=0; m<els.length; m++){ el=FP_getObjectByID(id,els[n]); if(el) return el; } }
+ return null;
+}
+
+function change(myform)
+{
+  if (document.rss_article_list_serch.Serch_condition.value == "Null")
+   {
+   FP_changeProp(/*id*/'datetime',0,'style.display','none');
+   FP_changeProp(/*id*/'title',0,'style.display','none');
+   FP_changeProp(/*id*/'source',0,'style.display','none');
+   }
+ else if(document.rss_article_list_serch.Serch_condition.value == "datetime")
+   {
+   FP_changeProp(/*id*/'datetime',0,'style.display','block');
+   FP_changeProp(/*id*/'title',0,'style.display','none');
+   FP_changeProp(/*id*/'source',0,'style.display','none');
+   }
+  else if(document.rss_article_list_serch.Serch_condition.value == "title")
+  {
+   FP_changeProp(/*id*/'datetime',0,'style.display','none');
+   FP_changeProp(/*id*/'title',0,'style.display','block');
+   FP_changeProp(/*id*/'source',0,'style.display','none');
+    }
+  else if(document.rss_article_list_serch.Serch_condition.value == "source")
+  {
+   FP_changeProp(/*id*/'datetime',0,'style.display','none');
+   FP_changeProp(/*id*/'title',0,'style.display','none');
+   FP_changeProp(/*id*/'source',0,'style.display','block');
+  }
+}
+function Checkform( e ){
+	var frm = e;
+    var jj=0;
+	for(var ii=0;ii<frm.elements.length;ii++){
+    	var e=frm.elements[ii];
+        if (e.name != 'chkall'){
+		    if (e.checked)  jj++;
+	    }
+    }
+	if (jj){
+		frm.action="main.php?do=article_delete_group";
+		return window.confirm("确定删除？");
+	}else{
+		window.alert("没有选择条目");
+    	return false;
+	}
+}
+function Checkform1( e ){
+	var frm = e;
+    var jj=0;
+	for(var ii=0;ii<frm.elements.length;ii++){
+    	var e=frm.elements[ii];
+        if (e.name != 'chkall'){
+		    if (e.checked)  jj++;
+	    }
+    }
+	if (jj){
+		return window.confirm("确定删除？");
+	}else{
+		window.alert("没有选择条目");
+    	return false;
+	}
+}
+//
+function CheckAll(){
+	var frm = document.articleDeleteGroupForm;
+  	for(var ii=0;ii<frm.elements.length;ii++){
+    	var e=frm.elements[ii];
+    	if (e.name != 'chkall')
+       		e.checked = frm.chkall.checked;
+  }
+}
+function RssCheckAll(){
+	var frm = document.articleRssDeleteGroupForm;
+  	for(var ii=0;ii<frm.elements.length;ii++){
+    	var e=frm.elements[ii];
+    	if (e.name != 'chkall')
+       		e.checked = frm.chkall.checked;
+  }
+}
+</script>
+
+<body>
+
+{pagebar}
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+|&nbsp;&nbsp;<a href="main.php?do=article_list&channel_name={channel_name}&subject_id={subject_id}&p_rss={p_rss}&p={p}&chioce=20">20</a>&nbsp;&nbsp;
+|&nbsp;&nbsp;<a href="main.php?do=article_list&channel_name={channel_name}&subject_id={subject_id}&p_rss={p_rss}&p={p}&chioce=50">50</a>&nbsp;&nbsp;
+|&nbsp;&nbsp;<a href="main.php?do=article_list&channel_name={channel_name}&subject_id={subject_id}&p_rss={p_rss}&p={p}&chioce=100">100</a>&nbsp;&nbsp;
+|
+<table width="100%" cellspacing="2" bgcolor="#CCCCCC">
+<tr bgcolor="#FFFFFF">
+<td>活动ID</td>
+<td>群组ID</td>
+<!-- <td>创建者ID</td> -->
+<td>活动标题</td>
+<td>开始时间</td>
+<td>结束时间</td>
+<!-- <td>省份</td> -->
+<td>城市</td>
+<td>地址</td>
+<td>已有人数</td>
+<td>限制人数</td>
+<td>评论数</td>
+<td>操作</td>
+</tr>
+<!-- BEGIN articles -->
+<tr bgcolor="{bgcolor}" style="color:{fontcolor}">
+<td>{id}</td>
+<td>{groupid}</td>
+<!-- <td>{creatorid}</td> -->
+<td><a href="http://group.bokee.com/group/partypost.action?groupId={groupid}&partyid={id}" target="_blank">{title}</td>
+<td>{begintime}</td>
+<td>{endtime}</td>
+<!-- <td>{province}</td> -->
+<td>{city}</td>
+<td>{address}</td>
+<td>{membernum}</td>
+<td>{memberlimit}</td>
+<td>{commentnum}</td>
+<td>{opration}</td>
+</tr>
+<!-- END articles -->
+</table>
+{pagebar}
+<iframe id="iframe1" name="iframe1" width="0" height="0"> </iframe>
+</body>
+</html>

@@ -1,0 +1,98 @@
+﻿<html>
+<head>
+	<title>复制模版</title>
+<script language="javascript">
+function selectSubmit(formName)
+{
+    var selSubjectValue;
+    selSubjectValue = chkSelected(formName);
+    if (selSubjectValue != "")
+    {
+        var tempSubjectName,tempSplit,temp_one="",temp_two="";        
+        tempSubjectName = selSubjectValue.split("ζ"); 
+        for(var ss=0; ss<tempSubjectName.length-1; ss++)
+        {
+            tempSplit = tempSubjectName[ss].split(";"); 
+            temp_one += tempSplit[0] + ",";
+            temp_two += tempSplit[1] + ",";
+        }
+	// 将值返回父窗口
+	window.dialogArguments.template_copy.subject_id.value = temp_one;
+	window.dialogArguments.template_copy.subject_name.value = temp_two;	
+
+	// 关闭子窗口
+	window.close();
+    }
+}
+
+function chkSelected(formName)
+{   
+  var selSubjectValue='';
+  if(typeof(formName.subjectselected.length)=="undefined")
+  {      
+      if(formName.subjectselected.checked != true)
+      {
+         alert("请选择要复制的模版！");
+      }
+      else
+      {
+        selSubjectValue = formName.subjectselected.value;      
+      }
+  }
+  else
+  {
+      var total = 0, i = 0; 
+      var max = formName.subjectselected.length;          
+      for(var idx=0; idx<max; idx++)
+      {
+          if(eval("formName.subjectselected["+idx+"].checked") == true)
+          {   
+              selSubjectValue += formName.subjectselected[idx].value + "ζ";  
+              total = total+1;
+          }
+      }      
+      if(total==0)
+         alert("请选择要复制的模版！");
+  }
+  return selSubjectValue;
+}
+</script>
+</head>
+<body>
+	<br><br><br><br><br>
+<center>
+<form name="selSub">
+<table border="1" width='100%'>
+<tr>
+<td width="20%" align='center'>
+选择
+</td>
+<td width="40%" align='center'>
+模版级别
+</td>
+<td width="40%" align='center'>
+目标模版名称
+</td>
+</tr>
+<!-- BEGIN subject_list -->
+<tr>
+<td align='center'>
+<input type="checkbox" value="{subjectid};{subjectname}" name="subjectselected">
+</td>
+<td>
+{subjectlevel}级
+</td>
+<td>
+{subjectname}
+</td>
+</tr>
+<!-- END subject_list -->
+<tr><td colspan="3" align='right'>
+<input type="button" class="buttonXP" name="button" value="确 定" onClick="selectSubmit(this.form)">
+&nbsp;&nbsp;<input type="button" class="buttonXP" name="Submit2" value="取 消" onClick="window.close()">
+</td></tr>
+</table>
+</form>
+</center>
+</body>
+</html>

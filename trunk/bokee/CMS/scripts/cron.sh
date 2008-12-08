@@ -1,0 +1,24 @@
+#!/bin/sh
+#wget "http://cms2.bokee.com/CMS/main.php?do=cron_template_publish&channel_name=sports" -q -O /dev/null
+#wget "http://cms2.bokee.com/CMS/main.php?do=cron_template_publish&channel_name=dachu" -q -O /dev/null
+#wget "http://cms2.bokee.com/CMS/main.php?do=cron_end_level_template_publish&channel_name=sports" -q -O /dev/null
+wget "http://cms2.bokee.com/CMS/main.php?do=cron_template_publish&channel_name=www" -q -O /dev/null
+wget "http://cms2.bokee.com/CMS/main.php?do=cron_template_publish&channel_name=bkj" -q -O /dev/null
+wget "http://cms2.bokee.com/CMS/main.php?do=cron_template_publish&channel_name=lady" -q -O /dev/null
+wget "http://cms2.bokee.com/CMS/main.php?do=cron_template_publish&channel_name=tele" -q -O /dev/null
+wget "http://cms2.bokee.com/CMS/main.php?do=cron_template_publish&channel_name=news" -q -O /dev/null
+wget "http://cms2.bokee.com/CMS/main.php?do=cron_template_publish&channel_name=sex" -q -O /dev/null
+wget "http://cms2.bokee.com/CMS/main.php?do=cron_template_publish&channel_name=tech" -q -O /dev/null
+wget "http://cms2.bokee.com/CMS/main.php?do=cron_template_publish&channel_name=media" -q -O /dev/null
+wget "http://cms2.bokee.com/CMS/main.php?do=cron_template_publish&channel_name=ent" -q -O /dev/null
+wget "http://cms2.bokee.com/CMS/main.php?do=cron_template_publish&channel_name=edu" -q -O /dev/null
+wget "http://cms2.bokee.com/CMS/main.php?do=cron_template_publish&channel_name=game" -q -O /dev/null
+wget "http://cms2.bokee.com/CMS/main.php?do=cron_template_publish&channel_name=joke" -q -O /dev/null
+wget "http://cms2.bokee.com/CMS/main.php?do=cron_template_publish&channel_name=life" -q -O /dev/null
+wget "http://cms2.bokee.com/CMS/main.php?do=cron_template_publish&channel_name=finance" -q -O /dev/null
+wget "http://cms2.bokee.com/CMS/main.php?do=cron_template_publish&channel_name=cul" -q -O /dev/null
+wget "http://cms2.bokee.com/CMS/main.php?do=cron_template_publish&channel_name=rw" -q -O /dev/null
+wget "http://cms2.bokee.com/CMS/main.php?do=cron_template_publish&channel_name=zt" -q -O /dev/null
+wget "http://cms2.bokee.com/CMS/main.php?do=cron_template_publish&channel_name=blog" -q -O /dev/null
+wget "http://cms2.bokee.com/CMS/main.php?do=cron_template_publish&channel_name=column" -q -O /dev/null
+wget "http://cms2.bokee.com/CMS/main.php?do=cron_template_publish&channel_name=mm" -q -O /dev/null

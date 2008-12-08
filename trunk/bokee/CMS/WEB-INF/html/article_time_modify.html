@@ -1,0 +1,50 @@
+<html>
+  <head>
+  	<title>文章发布时间修改</title>
+  </head>
+  <body>
+  	<br><br>
+  	<center>修改发布时间<br><br>
+  	<form action="main.php?do=article_time_do_modify" method="post" name="article_time_modify">
+  		年月日：
+		<select name="year" size="1">
+			<!-- BEGIN year -->
+				<option value="{value}" {selected}>{name}</option>
+			<!-- END year -->
+		</select>年
+		<select name="month" size="1">
+			<!-- BEGIN month -->
+				<option value="{value}" {selected}>{name}</option>
+			<!-- END month -->
+		</select>月
+		<select name="day" size="1">
+			<!-- BEGIN day -->
+				<option value="{value}" {selected}>{name}</option>
+			<!-- END day -->
+		</select>日&nbsp;&nbsp;&nbsp;&nbsp;<br><br>
+		时分秒：
+		<select name="hour" size="1">
+			<!-- BEGIN hour -->
+				<option value="{value}" {selected}>{name}</option>
+			<!-- END hour -->
+		</select>时
+		<select name="minute" size="1">
+			<!-- BEGIN minute -->
+				<option value="{value}" {selected}>{name}</option>
+			<!-- END minute -->
+		</select>分
+		<select name="second" size="1">
+			<!-- BEGIN second -->
+				<option value="{value}" {selected}>{name}</option>
+			<!-- END second -->
+		</select>秒
+		<input type="hidden" name="channel_name" value="{channel_name}">
+		<input type="hidden" name="r_id" value="{r_id}">
+		<input type="hidden" name="article_id" value="{article_id}">
+		<br><br><br>
+
+		<input name="submit" type="submit" value="修改">
+  	</form>
+  	</center>
+  </body>
+</html>

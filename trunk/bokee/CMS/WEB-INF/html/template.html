@@ -1,0 +1,164 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+<HEAD>
+<TITLE>{TITLE}</TITLE>
+<META NAME="Cache-Control" CONTENT="no-store, no-cache, must-revalidate">
+<META NAME="Author" CONTENT="Liutao">
+<META NAME="Keywords" CONTENT="">
+<META NAME="Description" CONTENT="">
+<META ENCODING="UTF-8">
+<script language="Javascript">
+
+var channelSwitch;
+
+var blockType;
+var id;
+function addBlock()
+{
+	var block = getData();
+
+	var url = "main.php?do=addBlock&" + block['type'] + "=" + block['id'];
+	var local = window.open(url,'添加区块');
+
+	if(local.opener == null)
+	{
+		local.opener = window;
+	}
+
+	local.opener.blur();
+
+	return false;
+
+}
+
+function getData()
+{
+	var channelSwitch = showChannel();
+
+	var channel = eval("document.form." + channelSwitch + ".options;");
+
+	for(var i = 0;i<channel.length;i++)
+	{
+		if(channel[i].selected)
+		{
+			blockType = channel[i].id;
+			id = channel[i].value;
+		}
+
+		continue;
+	}
+
+	var block = {type : blockType,
+				id : id};
+
+	return block;
+}
+
+function showChannel()
+{
+	for(var i=0;i<document.form.showchannel.length;i++)
+	{
+		var temp = document.form.showchannel[i].value;
+		if(document.form.showchannel[i].checked)
+		{
+			channelSwitch = temp;
+			eval("document.form." + channelSwitch + ".style.display = \"\";");
+
+			continue;
+		}
+
+		eval("document.form." + temp + ".style.display = \"none\";");
+	}
+
+	return channelSwitch;
+}
+
+function checkData()
+{
+	if(document.form.name.value.length > 0)
+	{
+		var block = getData();
+		document.form.channel.value = block['type'] + "=" + block['id']; 
+		return true;
+
+	}
+
+	alert('请填写要添加的模板名称');
+	return false;
+}
+
+</script>
+</HEAD>
+
+<body>
+
+<FORM METHOD="POST" ACTION="main.php?do=saveTemplate" name="form" onsubmit="return checkData();">
+<TABLE width="100%">
+<TR>
+	<TD>模板名称</TD>
+	<TD><input name="name" type="text" size="80"></TD>
+</TR>
+<TR>
+	<TD>模板所属的频道／专题</TD>
+	<TD><input type="radio" name="showchannel" value="subjectlist" onchange="showChannel();return false;" checked>频道
+		<select id="subjectlist">
+			<!-- BEGIN subject -->
+			<option id="subject_id" value="{id}">{prefix}{name}
+			<!-- END subject -->　　
+		</select> ｜ 
+		<input type="radio" name="showchannel" value="speciallist" onchange="showChannel();return false;">专题
+
+		<select id="speciallist" style="display:none">
+			<!-- BEGIN special -->
+			<option id="{type}" value="{id}">{prefix}{name}
+			<!-- END special -->　　
+		</select> ｜ 
+		<select name="selectBlock">
+			<!-- BEGIN blocklist -->
+			<OPTION VALUE="{id}">{name}
+			<!-- END blocklist -->
+		</select>
+	</TD>
+</TR>
+
+<!-- BEGIN block -->
+<TR>
+	<TD>区块名称</TD>
+	<TD>{name}</TD>
+</TR>
+<TR>
+	<TD>区块类型</TD>
+	<TD>{type}</TD>
+</TR>
+<TR>
+	<TD>区块内容</TD>
+	<TD colspan="2">
+	<textarea name="block[content][]" cols="80" rows="10">{content}</textarea>
+	<input type="hidden" name="block[startpos][]" value="{startpos}">
+	<input type="hidden" name="block[length][]" value="{length}">
+</TR>
+<TR>
+	<TD>操作</TD>
+	<TD>
+		 | <button name="edit" onclick="window.open(); return false">编辑区块</button> | <button name="edit" onclick="addBlock(); return false">添加区块</button>
+
+	</TD>
+</TR>
+<TR>
+	<TD colspan="5"><hr></TD>
+</TR>
+<!-- END block -->
+<TR>
+	<TD colspan="5" align="center">
+	<input type="submit" value="保存" onsubmit="checkData();getChannel();return false;"/> 
+	<input type="reset" value="重设" />
+	<input type="hidden" name="file" value="{FILE}">
+	<input type="hidden" name="id" value="{ID}">
+	<input type="hidden" name="channel" value="">
+	<input type="hidden" name="source" value="{SOURCE}">
+	</TD>
+</TR>
+</TABLE>
+</form>
+</body>
+</html>

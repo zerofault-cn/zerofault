@@ -1,0 +1,148 @@
+<html>
+<style type="text/css">
+<!--
+table {
+font-size: 14px;
+}
+.wraper {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	width:160px;
+	border:1px solid black;
+	padding:20px 10px;
+}
+-->
+</style>
+
+<SCRIPT LANGUAGE="javascript" type="text/javascript">
+function Checkform(){
+	var frm = document.rssArticleCopyGroupForm;
+    var jj=0;
+	for(var ii=0;ii<frm.elements.length;ii++){
+    	var e=frm.elements[ii];
+        if (e.name != 'chkall'){
+		    if (e.checked)  jj++;
+	    }
+    }
+	if (jj){
+		frm.action="main.php?do=rss_article_copy_group";
+		return window.confirm("确定复制？");
+	}else{
+		window.alert("没有选择条目");
+    	return false;
+	}
+}
+//
+function CheckAll(){
+	var frm = document.rssArticleCopyGroupForm;
+  	for(var ii=0;ii<frm.elements.length;ii++){
+    	var e=frm.elements[ii];
+    	if (e.name != 'chkall'){
+    		e.checked = frm.chkall.checked;
+    		if( 'checkbox' == e.type){
+       			changeItem(e);
+       		}
+       	}
+  }
+}
+function validator(){
+	var tag = 0;
+	var frm = document.rssArticleCopyGroupForm;
+  	for(var ii=0;ii<frm.elements.length;ii++){
+    	var e=frm.elements[ii];
+    	if (e.name != 'chkall'){
+       		if(e.checked){
+       			tag = 1;
+       		}
+       	}
+    }  	
+    if( 0 == tag ){
+    	alert("请先选择文章!");
+    	return(false);
+    }
+    else{
+    	return(true);
+    }
+}
+var rss_string = "";
+function changeItem(item){
+	if( "" != rss_string )
+	{
+		if( item.checked )
+		{
+			if( -1 == rss_string.indexOf( item.value ) )
+		        {
+				rss_string = rss_string + "||"+ item.value;
+			}
+		}
+		else
+		{
+			if( -1 != rss_string.indexOf( item.value ) )
+		          {
+		          	var tmp_res = "";
+		          	rss_array = rss_string.split("||");
+		          	for(var ii=0;ii<rss_array.length;ii++)
+		          	{
+		          		if( rss_array[ii] == item.value )
+		          		{
+		          			continue;
+		          		}
+		          		else
+		          		{
+		          			tmp_res += rss_array[ii] + "||";
+		          		}
+		          	}
+		          	rss_string = tmp_res.substring(0,tmp_res.length-2);
+		          }
+		          if(rss_string == item.value)
+		          {
+		          	rss_string = "";
+		          }
+		}
+	}
+	else
+	{
+		if( item.checked )
+		{
+			rss_string = item.value;
+		}
+	}
+}
+</script>
+
+<body>
+
+{pagebar}
+<form method="post" name="rssArticleCopyGroupForm" onSubmit="return Checkform()">
+<table width="100%" cellspacing="2" bgcolor="#CCCCCC">
+<tr bgcolor="#FFFFFF">
+<td>&nbsp;</td>
+<td>文章ID</td>
+<td>文章标题</td>
+<td>发表时间</td>
+<td>来源种子</td>
+<td>操作</td>
+</tr>
+<!-- BEGIN articles -->
+<tr bgcolor="#FFFFFF">
+<td><input type="checkbox" name="article_id[]" value="{id}" onClick="javascrpt:changeItem(this)"></td>
+<td>{id}</td>
+<td><a href="{url}" target="_blank">{title}</a></td>
+<td>{pub_date}</td>
+<td><a href="{feed_url}">{feed_title}</a></td>
+<td>&nbsp;</td>
+</tr>
+<!-- END articles -->
+</table>
+<INPUT TYPE="checkbox" NAME="chkall" onclick="CheckAll()"> 全选/取消
+<input type="button" value="转移到其他栏目" onClick="javascript:if(validator()){window.open('main.php?do=rss_article_transfer&rss_string=' + rss_string,'rss_transfer','height=600, width=1000, top=0,left=0, toolbar=no, menubar=no, scrollbars=yes, resizable=no,location=no, status=no')}">
+</form>
+{pagebar}
+<form action="main.php?do=rss_article_list&p={p}" name="rssArticleListForm" method="post" style="text-align:right;">
+  <label for="jumpage">到
+  <input type="text" name="p" id="p" value="" style="border: 1px solid #7F9DB9;width: 2em; " />
+  页</label>
+  <input type="submit" value="go" style="width: 20px;border: 0; " />
+</form>
+</body>
+</html>

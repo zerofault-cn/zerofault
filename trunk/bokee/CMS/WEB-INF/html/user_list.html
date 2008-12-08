@@ -1,0 +1,85 @@
+<html>
+<style type="text/css">
+<!--
+table {
+font-size: 14px;
+}
+.wraper {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	width:160px;
+	border:1px solid black;
+	padding:20px 10px;
+}
+-->
+</style>
+
+<SCRIPT LANGUAGE="javascript" type="text/javascript">
+function Checkform(){
+	var frm = document.userListForm;
+    var jj=0;
+	for(var ii=0;ii<frm.elements.length;ii++){
+    	var e=frm.elements[ii];
+        if (e.name != 'chkall'){
+		    if (e.checked)  jj++;
+	    }
+    }
+	if (jj){
+		frm.action="main.php?do=user_delete";
+		return window.confirm("确定删除？");
+	}else{
+		window.alert("没有选择条目");
+    	return false;
+	}
+}
+//
+function CheckAll(){
+	var frm = document.userListForm;
+  	for(var ii=0;ii<frm.elements.length;ii++){
+    	var e=frm.elements[ii];
+    	if (e.name != 'chkall')
+       		e.checked = frm.chkall.checked;
+  }
+}
+</script>
+
+<body>
+<p><a href="main.php?do=user_add" target="_self">添加新用户</a></p>
+{pagebar}
+<form method="post" name="userListForm" onSubmit="return Checkform()">
+<table width="100%" cellspacing="2" bgcolor="#CCCCCC">
+<tr bgcolor="#FFFFFF">
+<td>&nbsp;</td>
+<td>用户ID</td>
+<td>用户名</td>
+<td>真实姓名</td>
+<td>权限</td>
+<td>所属频道</td>
+<td>上次登录时间</td>
+<td>操作</td>
+</tr>
+<!-- BEGIN user -->
+<tr bgcolor="#FFFFFF">
+<td><input type="checkbox" name="user_id[]" value="{id}"></td>
+<td>{id}</td>
+<td>{name}</td>
+<td>{real_name}</td>
+<td>{role_name}</td>
+<td>{channel_name}</td>
+<td>{last_login}</td>
+<td><a href="main.php?do=user_delete&id={id}"  onClick="javascript:return window.confirm('确定删除？');">删除</a> <a href="main.php?do=user_modify&id={id}">修改</a></td>
+</tr>
+<!-- END user -->
+</table>
+<INPUT TYPE="checkbox" NAME="chkall" onclick="CheckAll()"> 全选/取消
+<input type="submit" value="删除选中">
+</form>
+{pagebar}
+<form action="main.php?do=user_list&p={p}"  method="post" style="text-align:right;">
+  <label for="jumpage">到
+  <input type="text" name="p" id="p" value="" style="border: 1px solid #7F9DB9;width: 2em; " />
+  页</label>
+  <input type="submit" value="go" style="width: 20px;border: 0; " />
+</form>
+</body>
+</html>
