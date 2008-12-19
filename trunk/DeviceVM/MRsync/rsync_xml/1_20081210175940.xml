@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="gb2312"?>
+<file_sync>
+	<action>publish</action>
+	<file_list>
+	<file>
+		<path>/var/www/ManRsync/module/System/System.List.php</path>
+		<size>0</size>
+		<hash>d41d8cd98f00b204e9800998ecf8427e</hash>
+	</file>
+	<file>
+		<path>/var/www/ManRsync/module/System/System.php</path>
+		<size>393</size>
+		<hash>7df92ccda281bf4c96d17fc74633adae</hash>
+	</file>
+	</file_list>
+</file_sync>

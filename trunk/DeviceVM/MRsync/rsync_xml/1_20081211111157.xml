@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="gb2312"?>
+<file_sync>
+	<action>publish</action>
+	<file_list>
+	<file>
+		<path>/var/www/ManRsync/module/System/User/User.edit.php</path>
+		<size>2103</size>
+		<hash>aa61afbfe7422aaac2c3cbd5c9fa6f45</hash>
+	</file>
+	<file>
+		<path>/var/www/ManRsync/module/System/User/User.add.php</path>
+		<size>1994</size>
+		<hash>fcd9345b6136ac4cdb7ca8e3d1ed29eb</hash>
+	</file>
+	<file>
+		<path>/var/www/ManRsync/module/System/User/User.chpwd.php</path>
+		<size>1548</size>
+		<hash>4f2569a68e1d75ada985cff7b479c734</hash>
+	</file>
+	</file_list>
+</file_sync>

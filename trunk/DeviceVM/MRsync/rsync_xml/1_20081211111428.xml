@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="gb2312"?>
+<file_sync>
+	<action>publish</action>
+	<file_list>
+	<file>
+		<path>/home/devicevm/other/ZendStudio-5_5_0-KeyMaker_1225964814.rar</path>
+		<size>25539</size>
+		<hash>8275c1bf8a7bf74111484417cf11e36a</hash>
+	</file>
+	<file>
+		<path>/home/devicevm/exe/WinSCP4_1225964814.exe</path>
+		<size>2355048</size>
+		<hash>59f9f51fd9b98cc020a6bc0d592ea0fd</hash>
+	</file>
+	</file_list>
+</file_sync>
