@@ -1,0 +1,55 @@
+<!--{if $subop eq 'detail'}-->
+<!--{include file="$Module/$op/$op.html"}-->
+<!--{else}-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title><!--{$Title}--></title>
+<link rel="stylesheet" href="images/style.css" type="text/css" media="screen" />
+<link rel="stylesheet" href="images/jquery-impromptu.css" type="text/css" media="screen" />
+
+<script type="text/javascript" src="images/jquery-1.2.6.pack.js"></script>
+<script type="text/javascript" src="images/jquery-impromptu.1.6.js"></script>
+</head>
+<body>
+<!--{if $subop neq 'detail'}-->
+	<!--{include file="$Module/$Module-left.html"}-->
+<!--{/if}-->
+<!--{if $op neq ''}-->
+	<!--{include file="$Module/$op/$op.html"}-->
+<!--{/if}-->
+</body>
+<iframe id="iframe1" name="iframe1" style="display:none;"></iframe>
+<script type="text/javascript">
+function alert(msg)
+{
+	$.prompt(msg);
+}
+function myLocation(loc)
+{
+	setTimeout(function() {window.location=loc;},2000);
+}
+</script>
+<script type="text/javascript">
+var sid;
+function confirmdel(obj,id)
+{
+	sid=id;
+	$.prompt('Are you sure?',{submit:mysubmit,buttons:{Yes:true,Cancel:false}});
+}
+function mysubmit(v,m){
+	if(v==true)
+	{
+		op='<!--{$smarty.get.op}-->';
+		if(''==op)
+		{
+			op='Rsync';
+		}
+		document.getElementById('iframe1').src='?Mod=<!--{$smarty.get.Mod}-->&op='+op+'&subop=del&id='+sid
+	}
+	return true;
+}
+</script>
+</html>
+<!--{/if}-->

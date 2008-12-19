@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<Rsync>
+	<Host_Info>
+		<Host>192.168.9.177</Host>
+		<Path>/home/devicevm</Path>
+		<Time>2008-12-12 10:13:21</Time>
+		<Sync_ID>5</Sync_ID>
+	</Host_Info>
+	<Sync_List>
+	<Sync_Info>
+		<Path>/home/devicevm/other</Path>
+		<FileName>ZendStudio-5_5_0-KeyMaker_1225964814.rar</FileName>
+	</Sync_Info>
+	<Sync_Info>
+		<Path>/home/devicevm/exe</Path>
+		<FileName>WinSCP4_1225964814.exe</FileName>
+	</Sync_Info>
+	</Sync_List>
+</Rsync>

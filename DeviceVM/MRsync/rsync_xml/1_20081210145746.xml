@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="gb2312"?>
+<file_sync>
+	<action>publish</action>
+	<file_list>
+	<file>
+		<path>/var/www/index.html</path>
+		<size>45</size>
+		<hash>5388f60d7695cb57b87c799ee62d20b2</hash>
+	</file>
+	</file_list>
+</file_sync>

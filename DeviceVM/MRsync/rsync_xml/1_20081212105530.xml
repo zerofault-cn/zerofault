@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<Rsync>
+	<Host_Info>
+		<Host></Host>
+		<Path>/home/adam</Path>
+		<Time>2008-12-12 10:55:30</Time>
+		<Sync_ID>9</Sync_ID>
+	</Host_Info>
+	<Sync_List>
+	<Sync_Info>
+		<Path>/home/adam</Path>
+		<FileName>.bashrc</FileName>
+	</Sync_Info>
+	<Sync_Info>
+		<Path>/home/adam</Path>
+		<FileName>.profile</FileName>
+	</Sync_Info>
+	<Sync_Info>
+		<Path>/home/adam</Path>
+		<FileName>.sudo_as_admin_successful</FileName>
+	</Sync_Info>
+	</Sync_List>
+</Rsync>

@@ -1,0 +1,74 @@
+<div id="right">
+<link rel="stylesheet" href="images/thickbox.css" type="text/css" media="screen" />
+<script type="text/javascript" src="images/thickbox.js"></script>
+<form action="" method="post">
+<input type="hidden" name="perCount" value="<!--{$NavperPage}-->">
+<table width="95%"  border="0" cellpadding="0" cellspacing="0" style="backgound-color:#d0d0d0">
+	<tr>
+		<td align="left" width="50%">
+			<!--{if $NavTotalPages>1}-->
+				<!--{$navagation|default:"&nbsp;"}-->
+			<!--{/if}-->
+		</td>
+		<td align="right" width="50%">
+			<!--{$NavCount|default:"0"}--> / <!--{$NavTotalCount|default:"0"}--> Counts, Total <!--{$NavTotalPages|default:"0"}--> Pages, 
+			<select name="per1" onChange="change_per(this.form, this.value);">
+				<option value="20"<!--{if $NavperPage==20}--> selected <!--{/if}-->>20</option>
+				<option value="50"<!--{if $NavperPage==50}--> selected <!--{/if}-->>50</option>
+				<option value="100"<!--{if $NavperPage==100}--> selected <!--{/if}-->>100</option>
+				<option value="150"<!--{if $NavperPage==150}--> selected <!--{/if}-->>150</option>
+				<option value="200"<!--{if $NavperPage==200}--> selected <!--{/if}-->>200</option>
+				<option value="250"<!--{if $NavperPage==250}--> selected <!--{/if}-->>250</option>
+			</select>C/P.
+		</td>
+	</tr>
+</table>
+<table width="100%"  border="0" cellpadding="1" cellspacing="1" style="backgound-color:#d0d0d0">
+	<tr style="background: #8c8c8c;">
+		<td>Date</td>
+		<td>Time</td>
+		<td>Source</td>
+		<td>User</td>
+		<td>Action</td>
+		<td>Description</td>
+	</tr>
+<!--{section name=key loop=$Out}-->
+	<tr style="cursor:pointer" onmouseover="this.style.backgroundColor='#3E6AC5'" onmouseout="this.style.backgroundColor=''" class="thickbox" alt="?Mod=<!--{$smarty.get.Mod}-->&op=<!--{$smarty.get.op}-->&subop=detail&ID=<!--{$Out[key].ID}-->" value="Detail" <!--{if $smarty.section.key.index % 2 == 1}-->bgcolor="#E0E0E0"<!--{/if}-->>
+		<td nowrap><!--{$Out[key].Date|default:"&nbsp;"}--></td>
+		<td nowrap><!--{$Out[key].Time|default:"&nbsp;"}--></td>
+		<td><!--{$Out[key].Source|default:"&nbsp;"}--></td>
+		<td><!--{$Out[key].User|default:"&nbsp;"}--></td>
+		<td><!--{$Out[key].Action|default:"&nbsp;"}--></td>
+		<td>&nbsp;<!--{$Out[key].Description|default:"&nbsp;"|truncate:30:" ...":true}--></td>
+	</tr>
+<!--{/section}-->
+</table>
+<table width="95%"  border="0" cellpadding="0" cellspacing="0" style="backgound-color:#d0d0d0">
+	<tr>
+		<td align="left" width="50%">
+			<!--{if $NavTotalPages>1}-->
+				<!--{$navagation|default:"&nbsp;"}-->
+			<!--{/if}-->
+		</td>
+		<td align="right" width="50%">
+			<!--{$NavCount|default:"0"}--> / <!--{$NavTotalCount|default:"0"}--> Counts, Total <!--{$NavTotalPages|default:"0"}--> Pages, 
+			<select name="per1" onChange="change_per(this.form, this.value);">
+				<option value="20"<!--{if $NavperPage==20}--> selected <!--{/if}-->>20</option>
+				<option value="50"<!--{if $NavperPage==50}--> selected <!--{/if}-->>50</option>
+				<option value="100"<!--{if $NavperPage==100}--> selected <!--{/if}-->>100</option>
+				<option value="150"<!--{if $NavperPage==150}--> selected <!--{/if}-->>150</option>
+				<option value="200"<!--{if $NavperPage==200}--> selected <!--{/if}-->>200</option>
+				<option value="250"<!--{if $NavperPage==250}--> selected <!--{/if}-->>250</option>
+			</select>C/P.
+		</td>
+	</tr>
+</table>
+</form>
+</div>
+<script type="text/javascript">
+function change_per(formObj, Obj) {
+	formObj.perCount.value=Obj;
+	formObj.submit();
+}
+</script>
+</div>

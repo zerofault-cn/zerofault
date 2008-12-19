@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="gb2312"?>
+<file_sync>
+	<action>publish</action>
+	<file_list>
+	<file>
+		<path>/home/devicevm/apt_repository/pool/test1/released/Kernel.Splashtop.Proto_0.3.6.0.bix</path>
+		<size>36517548</size>
+		<hash>abb76008f4ad66f1161354ab67a10c47</hash>
+	</file>
+	</file_list>
+</file_sync>

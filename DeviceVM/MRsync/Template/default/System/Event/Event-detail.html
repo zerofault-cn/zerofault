@@ -1,0 +1,82 @@
+<fieldset style="width:380px;margin:3px;padding:3px;border:1px solid #bbb;">
+	<legend>Event Detail</legend>
+	<table border="0" cellpadding="0" cellspacing="2" width="100%">
+	<tr>
+		<td width="80">Date:</td>
+		<td width="252"><!--{$Out.Date}--></td>
+		<td rowspan="5" width="48" align="right">
+		<!--{if $NextID neq 0}-->
+			<a class="thickbox" href="?Mod=<!--{$smarty.get.Mod}-->&op=<!--{$smarty.get.op}-->&subop=detail&ID=<!--{$NextID}-->"><img src="images/up.gif" /></a>
+		<!--{/if}-->
+		<!--{if $PreID neq 0}-->
+			<a class="thickbox" href="?Mod=<!--{$smarty.get.Mod}-->&op=<!--{$smarty.get.op}-->&subop=detail&ID=<!--{$PreID}-->"><img src="images/down.gif" /></a>
+		<!--{/if}-->
+			<a href="javascript:void(0)" onclick="tb_remove();"><img src="images/close.gif" class="thickbox" /></a>
+		</td>
+	</tr>
+	<tr>
+		<td>Time:</td>
+		<td><!--{$Out.Time}--></td>
+	</tr>
+	<tr>
+		<td>Source:</td>
+		<td><!--{$Out.Source}--></td>
+	</tr>
+	<tr>
+		<td>User:</td>
+		<td><!--{$Out.User}--></td>
+	</tr>
+	<tr>
+		<td>Action:</td>
+		<td><!--{$Out.Action}--></td>
+	</tr>
+	<!--{if $Out.Action neq 'download'}-->
+	<tr>
+		<td>Info_XML:</td>
+		<td colspan="2"></td>
+	</tr>
+	<tr>
+		<td colspan="3">
+			<textarea style="width:370px;height:90px;overflow-y:auto;overflow-x:hidden;" readonly="true"><!--{$Out.Info_XML}--></textarea>
+		</td>
+	</tr>
+	<tr>
+		<td colspan="3">Description:</td>
+	</tr>
+	<tr>
+		<td colspan="3">
+			<textarea style="width:370px;height:28px;overflow-y:auto;" readonly="true"><!--{$Out.Description}--></textarea>
+		</td>
+	</tr>
+	<!--{else}-->
+	<tr>
+		<td>Remote Host:</td>
+		<td colspan="2"><!--{$DL_Info.Remote_Host}--></td>
+	</tr>
+	<tr>
+		<td colspan="3">F_XML:</td>
+	</tr>
+	<tr>
+		<td colspan="3">
+			<textarea style="width:370px;height:80px;overflow-y:auto;" readonly="true"><!--{$DL_Info.F_XML}--></textarea>
+		</td>
+	</tr>
+	<tr>
+		<td>Type:</td>
+		<td colspan="2"><!--{$DL_Info.Type}--></td>
+	</tr>
+	<tr>
+		<td>Size:</td>
+		<td colspan="2"><!--{$DL_Info.Size}--></td>
+	</tr>
+	<tr>
+		<td>Start:</td>
+		<td colspan="2"><!--{$DL_Info.Start_Time}--></td>
+	</tr>
+	<tr>
+		<td>End:</td>
+		<td colspan="2"><!--{$DL_Info.End_Time}--></td>
+	</tr>
+	<!--{/if}-->
+</table>
+</fieldset>

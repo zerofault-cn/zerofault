@@ -1,0 +1,33 @@
+<h1>Manual Rsync Batch System</h1>
+<div id="wrapper">
+	<div id="left">
+		<ul id="containerul">
+			<li>User Module 
+				<ul>
+					<!--{if $smarty.session.auth.Role eq 'Admin'}--><li><a href="?Mod=<!--{$smarty.get.Mod}-->&op=User&subop=browse">User List</a></li><!--{/if}-->
+					<li><a href="?Mod=<!--{$smarty.get.Mod}-->&op=User&subop=profile">Edit Profile</a></li>
+					<li><a href="?Mod=<!--{$smarty.get.Mod}-->&op=User&subop=chpwd">Change Password</a></li>
+				</ul>
+			</li>
+			<li>Rsync Module
+				<ul>
+					<!--{if $smarty.session.auth.Role eq 'Admin'}--><li><a href="?Mod=<!--{$smarty.get.Mod}-->&op=Host&subop=browse">Rsync_Host</a></li><!--{/if}-->
+					<li><a href="?Mod=<!--{$smarty.get.Mod}-->&op=Rsync&subop=browse">Sync_XML</a></li>
+				</ul>
+			</li>
+			<!--{if $smarty.session.auth.Role eq 'Admin'}-->
+			<li>Event Module
+				<ul>
+					<li><a href="?Mod=<!--{$smarty.get.Mod}-->&op=Event&subop=browse&ETID=1">System Event</a></li>
+					<li><a href="?Mod=<!--{$smarty.get.Mod}-->&op=Event&subop=browse&ETID=2">Application Event</a></li>
+					<li><a href="?Mod=<!--{$smarty.get.Mod}-->&op=Event&subop=browse&ETID=3">Security Event</a></li>
+				</ul>
+			</li>
+			<!--{/if}-->
+			<li><a href="?Mod=Auth&op=logout">LogOut</a></li>
+		</ul>
+		<script type="text/javascript" src="images/leftTree.js"></script>
+		<script type="text/javascript">
+			initiate();// This must be placed immediately after the menu in order to format it properly.
+		</script>
+	</div>
