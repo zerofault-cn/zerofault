@@ -1,6 +1,6 @@
 <?PHP
 /** 
- * @Create in 2008/12/17 10:17:53
+ * @Create in 2008/12/24 04:37:28
  * @Smarty Version 2.6.18
  * 
  */
@@ -8,11 +8,9 @@
 class Sync_Info
 {	
 	var $ID;
-	var $UID;
-	var $XID;
+	var $Sync_ID;
 	var $Path;
 	var $Filename;
-	var $status;
 
 	var $table_name = 'Sync_Info';
 	var $key = 'ID';
@@ -21,18 +19,14 @@ class Sync_Info
 	function Sync_Info() // initialize
 	{
 		$this->ID = null;	
-		$this->UID = null;	
-		$this->XID = null;	
+		$this->Sync_ID = null;	
 		$this->Path = null;	
 		$this->Filename = null;	
-		$this->status = null;	
 	}
 
 	function Sync_Info_Default() // get Default
 	{
-		if(!isset($this->UID)) { $this->UID = '0'; }
-		if(!isset($this->XID)) { $this->XID = '0'; }
-		if(!isset($this->status)) { $this->status = '0'; }
+		if(!isset($this->Sync_ID)) { $this->Sync_ID = '0'; }
 	}
 
 ##########     Member function     ##########
@@ -44,17 +38,15 @@ class Sync_Info
 		
 		$this->Sync_Info_Default(); // get Default
 
-		$iUID = $this->getUID();
-		$iXID = $this->getXID();
+		$iSync_ID = $this->getSync_ID();
 		$iPath = $this->getPath();
 		$iFilename = $this->getFilename();
-		$istatus = $this->getstatus();
 
-		if(isset($iUID)||isset($iXID)||isset($iPath)||isset($iFilename)||isset($istatus))
+		if(isset($iSync_ID)||isset($iPath)||isset($iFilename))
 		{
 			$sql = "INSERT INTO `$this->table_name` ";
-			$sql .= "(`UID`,`XID`,`Path`,`Filename`,`status`)";
-			$sql .= " VALUES(".$iUID.",".$iXID.",'".addslashes($iPath)."','".addslashes($iFilename)."',".$istatus.")";
+			$sql .= "(`Sync_ID`,`Path`,`Filename`)";
+			$sql .= " VALUES(".$iSync_ID.",'".addslashes($iPath)."','".addslashes($iFilename)."')";
 			
 			if($this->debug) {// print sql for debug
 				$this->ShowSQL($sql,"Add one record");
@@ -175,24 +167,18 @@ class Sync_Info
 		global $db;		
 		
 		$iID = $this->getID();		
-		$iUID = $this->getUID();		
-		$iXID = $this->getXID();		
+		$iSync_ID = $this->getSync_ID();		
 		$iPath = $this->getPath();		
 		$iFilename = $this->getFilename();		
-		$istatus = $this->getstatus();		
 
 		if(isset($input)&&trim($input)!='') {
 			$sql = "UPDATE `$this->table_name` SET ";			
 			
-			if(isset($iUID)) { $sql .= "`UID`='".addslashes($iUID)."',"; }
-			
-			if(isset($iXID)) { $sql .= "`XID`='".addslashes($iXID)."',"; }
+			if(isset($iSync_ID)) { $sql .= "`Sync_ID`='".addslashes($iSync_ID)."',"; }
 			
 			if(isset($iPath)) { $sql .= "`Path`='".addslashes($iPath)."',"; }
 			
 			if(isset($iFilename)) { $sql .= "`Filename`='".addslashes($iFilename)."',"; }
-			
-			if(isset($istatus)) { $sql .= "`status`='".addslashes($istatus)."',"; }
 
 			$sql = substr($sql,0,(strlen($sql)-1));
 			
@@ -303,30 +289,17 @@ class Sync_Info
 	// Property  " ID "  End ....  
 		
 	
-	// Property  " UID "  Start ....
-	function setUID($input) // UID set
+	// Property  " Sync_ID "  Start ....
+	function setSync_ID($input) // Sync_ID set
 	{
-		if($this->UID = trim($input)) { return true; }
+		if($this->Sync_ID = trim($input)) { return true; }
 	}
 		
-	function getUID() // UID Get
+	function getSync_ID() // Sync_ID Get
 	{
-		if(isset($this->UID)) { return $this->UID; }
+		if(isset($this->Sync_ID)) { return $this->Sync_ID; }
 	}	
-	// Property  " UID "  End ....  
-		
-	
-	// Property  " XID "  Start ....
-	function setXID($input) // XID set
-	{
-		if($this->XID = trim($input)) { return true; }
-	}
-		
-	function getXID() // XID Get
-	{
-		if(isset($this->XID)) { return $this->XID; }
-	}	
-	// Property  " XID "  End ....  
+	// Property  " Sync_ID "  End ....  
 		
 	
 	// Property  " Path "  Start ....
@@ -353,19 +326,6 @@ class Sync_Info
 		if(isset($this->Filename)) { return $this->Filename; }
 	}	
 	// Property  " Filename "  End ....  
-		
-	
-	// Property  " status "  Start ....
-	function setstatus($input) // status set
-	{
-		if($this->status = trim($input)) { return true; }
-	}
-		
-	function getstatus() // status Get
-	{
-		if(isset($this->status)) { return $this->status; }
-	}	
-	// Property  " status "  End ....  
 		
 
 ###############  Other Function  ############

@@ -1,7 +1,20 @@
 <?php
+include_once("config/path_filter.inc.php");
+
+function array_match($arr,$str) {
+	foreach($arr as $val)
+	{
+		if(strlen($val)>0 && stristr($str,trim($val)))
+		{
+			return true;
+		}
+	}
+	return false;
+}
 function myReadDir($dir)//递归调用，以遍历目录树
 {
 	global $filepath_arr,$dirpath_arr,$ID,$t;
+	global $path_include,$path_exclude;
 	//$handle=opendir($dir);
 	//while($file=readdir($handle))
 	$file_arr=array_filter(scandir($dir),"filter");//过滤隐藏文件;
@@ -9,9 +22,13 @@ function myReadDir($dir)//递归调用，以遍历目录树
 	{
 		if(is_dir($subdir=$dir.'/'.$file))//目录
 		{
-			if((!stristr($subdir,'Customer_Release') && !stristr($subdir,'Internal_Release')))// || stristr($subdir,'M3N-WS SCD') || stristr($subdir,'M3N-HT-Deluxe SCD') || stristr($subdir,'P5N64-WS-PRO SCD'))
+			if(count($path_include)>0 && !array_match($path_include,$subdir))
 			{
-			//	continue;
+				continue;
+			}
+			elseif(count($path_exclude)>0 && array_match($path_exclude,$subdir))
+			{
+				continue;
 			}
 			$tmp_arr=array_filter(scandir($subdir),"filter");//过滤隐藏文件
 			if(count($dirpath_arr)>0 && in_array($subdir.'/',$dirpath_arr))//编辑状态下,判断当前目录是否已被选中过

@@ -1,57 +1,48 @@
-<div id="right">
-<center>
-<table border="0" width="96%">
-	<tr>
-		<td align="right"><input type="button" value="Create New" onclick="window.location='?Mod=<!--{$smarty.get.Mod}-->&op=Rsync&subop=add'"></td>
-	</tr>
-	<tr>
-		<td>
+	<div id="right">
+		<div id="main" class="no-border" style="width:96%">
+			<div class="a_right">
+				<input type="button" value="Create New" onclick="window.location='?Mod=<!--{$smarty.get.Mod}-->&op=Rsync&subop=add'">
+			</div>
 			<table border="0" cellpadding="3" cellspacing="1" width="100%" bgcolor="#0099CC">
-				<tr style="background: #acacac;">
-					<td>Host</td>
-					<td>Path</td>
-					<td>Filename</td>
-					<td>Last Modify Time</td>
-					<td>Action</td>
-				</tr>
-		<!--{section name=key loop=$OUT}-->
-				<tr <!--{if $smarty.section.key.index % 2 == 0}-->bgcolor="#FFFFFF" <!--{else}-->bgcolor="#E8E8E8"<!--{/if}-->>
-					<td align="left"><!--{$OUT[key].Host}--></td>
-					<td align="left"><!--{$OUT[key].Path}--></td>
-					<td><a href="<!--{$smarty.const.XML_FILE_FOLDER|replace:$smarty.const.PATH_ROOT:''}--><!--{$OUT[key].Filename}-->" target="_blank"><!--{$OUT[key].Filename}--></a></td>
-					<td><!--{$OUT[key].Modify_Time}--></td>
-					<td>
-						<input type="button" value="Edit" onclick="window.location='?Mod=System&op=Rsync&subop=edit&id=<!--{$OUT[key].ID}-->'"
-						<!--{if $OUT[key].status neq 0}-->disabled="true"<!--{/if}-->>
-						<input type="button" value="Delete" onclick="confirmdel('<!--{$OUT[key].Filename}-->','<!--{$OUT[key].ID}-->')"
-						<!--{if $OUT[key].status neq 0}-->disabled="true"<!--{/if}-->>
-						<input type="button" value="<!--{if $OUT[key].status eq 0}-->Ready<!--{elseif $OUT[key].status eq 1}-->Unready<!--{elseif $OUT[key].status eq 2}-->Processing<!--{/if}-->" onclick="confirmchg('<!--{$OUT[key].ID}-->','status',<!--{if $OUT[key].status eq 0}-->1<!--{else}-->0<!--{/if}-->)"
-						<!--{if $OUT[key].status eq 2}-->disabled="true"<!--{/if}-->>
-					</td>
-				</tr>
-		<!--{/section}-->
+						<tr style="background: #acacac;">
+							<td>Host_Name</td>
+							<td>Host_IP</td>
+							<td>Sync_XML</td>
+							<td>Last Modify Time</td>
+							<td>Action</td>
+						</tr>
+				<!--{section name=key loop=$OUT}-->
+						<tr <!--{if $smarty.section.key.index % 2 == 0}-->bgcolor="#FFFFFF" <!--{else}-->bgcolor="#E8E8E8"<!--{/if}-->>
+							<td align="left"><!--{$OUT[key].Host_Name}--></td>
+							<td align="left"><!--{$OUT[key].Host_Host}--></td>
+							<td><a href="?Mod=System&op=Rsync&subop=readxml&filename=<!--{$OUT[key].Filename}-->" target="_blank"><!--{$OUT[key].Filename}--></a></td>
+							<td><!--{$OUT[key].Modify_Time}--></td>
+							<td>
+								<input type="button" value="Edit" onclick="window.location='?Mod=System&op=Rsync&subop=edit&id=<!--{$OUT[key].ID}-->'"
+								<!--{if $OUT[key].status neq 0}-->disabled="true"<!--{/if}-->>
+								<input type="button" value="Delete" onclick="confirmdel('<!--{$OUT[key].Filename}-->','<!--{$OUT[key].ID}-->')"
+								<!--{if $OUT[key].status neq 0}-->disabled="true"<!--{/if}-->>
+								<input type="button" value="<!--{if $OUT[key].status eq 0}-->Ready<!--{elseif $OUT[key].status eq 1}-->Unready<!--{elseif $OUT[key].status eq 2}-->Processing<!--{/if}-->" onclick="confirmchg('<!--{$OUT[key].ID}-->','status',<!--{if $OUT[key].status eq 0}-->1<!--{else}-->0<!--{/if}-->)"
+								<!--{if $OUT[key].status eq 2}-->disabled="true"<!--{/if}-->>
+							</td>
+						</tr>
+				<!--{/section}-->
 			</table>
-		</td>
-	</tr>
-	<tr>
-		<td align="right"></td>
-	</tr>
-</table>
-</center>
-<script type="text/javascript">
-var sid;
-function confirmchg(id,field,value)
-{
-	$.prompt('Are you sure?',{submit:
-		function(v,m){
-		if(v)
+		</div>
+		<script type="text/javascript">
+		var sid;
+		function confirmchg(id,field,value)
 		{
-			document.getElementById('iframe1').src='?Mod=<!--{$smarty.get.Mod}-->&op=Rsync&subop=chg&id='+id+'&field='+field+'&value='+value;
+			$.prompt('Are you sure?',{submit:
+				function(v,m){
+				if(v)
+				{
+					document.getElementById('iframe1').src='?Mod=<!--{$smarty.get.Mod}-->&op=Rsync&subop=chg&id='+id+'&field='+field+'&value='+value;
+				}
+				return true;
+			},buttons:{Yes:true,Cancel:false}});
 		}
-		return true;
-	},buttons:{Yes:true,Cancel:false}});
-}
-</script>
-</div>
+		</script>
+	</div>
 </div>
 

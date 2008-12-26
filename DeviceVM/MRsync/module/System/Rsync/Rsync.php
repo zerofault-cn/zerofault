@@ -10,6 +10,7 @@ if (file_exists($iSUB_OP_Mod))
 	$oSync_XML = new Sync_XML();
 	$oSync_Info= new Sync_Info();
 	$oHost_Info= new Host_Info();
+	$oHost_Info->key='Sync_ID';
 
 	include_once($iSUB_OP_Mod);
 }

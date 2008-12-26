@@ -17,6 +17,7 @@
 				<table border="0" cellpadding="3" cellspacing="1" width="100%" bgcolor="#0099CC">
 					<tr style="background: #acacac;">
 						<td>ID</td>
+						<td>Nick Name</td>
 						<td>Host Address</td>
 						<td>Path</td>
 						<td>Description</td>
@@ -25,6 +26,7 @@
 			<!--{section name=key loop=$Rsync_Host}-->
 					<tr <!--{if $smarty.section.key.index % 2 == 0}-->bgcolor="#FFFFFF" <!--{else}-->bgcolor="#E8E8E8"<!--{/if}-->>
 						<td><!--{$Rsync_Host[key].ID}--></td>
+						<td><!--{$Rsync_Host[key].Name}--></td>
 						<td><!--{$Rsync_Host[key].Host}--></td>
 						<td><!--{$Rsync_Host[key].Path}--></td>
 						<td><!--{$Rsync_Host[key].Description}--></td>

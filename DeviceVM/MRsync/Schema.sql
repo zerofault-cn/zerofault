@@ -38,7 +38,6 @@ CREATE TABLE IF NOT EXISTS `Event_Log` (
   `Description` text ,
   PRIMARY KEY (`ID`)
 );
-
 #
 # Table structure for table 'Host_Info'
 #
@@ -47,8 +46,11 @@ DROP TABLE IF EXISTS `Host_Info`;
 CREATE TABLE IF NOT EXISTS `Host_Info` (
   `ID` int(10) unsigned NOT NULL auto_increment,
   `Host` varchar(32) NOT NULL ,
-  `Path` varchar(255) ,
+  `Host_Chroot` varchar(255) NOT NULL ,
+  `Local_Chroot` varchar(255) NOT NULL ,
+  `Time` datetime NOT NULL ,
   `Sync_ID` int(10) unsigned NOT NULL DEFAULT '0' ,
+  `Mail` varchar(255) NOT NULL ,
   PRIMARY KEY (`ID`)
 );
 
@@ -61,6 +63,7 @@ CREATE TABLE IF NOT EXISTS `Host_Info` (
 DROP TABLE IF EXISTS `Rsync_Host`;
 CREATE TABLE IF NOT EXISTS `Rsync_Host` (
   `ID` smallint(5) unsigned NOT NULL auto_increment,
+  `Name` varchar(64) NOT NULL ,
   `Host` varchar(64) NOT NULL ,
   `Path` varchar(255) NOT NULL ,
   `Description` varchar(255) ,
@@ -76,11 +79,9 @@ CREATE TABLE IF NOT EXISTS `Rsync_Host` (
 DROP TABLE IF EXISTS `Sync_Info`;
 CREATE TABLE IF NOT EXISTS `Sync_Info` (
   `ID` int(10) unsigned NOT NULL auto_increment,
-  `UID` int(10) unsigned NOT NULL DEFAULT '0' ,
-  `XID` int(11) NOT NULL DEFAULT '0' ,
+  `Sync_ID` int(11) NOT NULL DEFAULT '0' ,
   `Path` varchar(255) NOT NULL ,
   `Filename` varchar(255) NOT NULL ,
-  `status` tinyint(1) NOT NULL DEFAULT '0' ,
   PRIMARY KEY (`ID`)
 );
 
@@ -93,7 +94,7 @@ CREATE TABLE IF NOT EXISTS `Sync_Info` (
 DROP TABLE IF EXISTS `Sync_XML`;
 CREATE TABLE IF NOT EXISTS `Sync_XML` (
   `ID` int(10) unsigned NOT NULL auto_increment,
-  `UID` tinyint(3) unsigned NOT NULL DEFAULT '0' ,
+  `User_ID` tinyint(3) unsigned NOT NULL DEFAULT '0' ,
   `Filename` varchar(32) NOT NULL ,
   `Create_Time` datetime ,
   `Modify_Time` datetime ,

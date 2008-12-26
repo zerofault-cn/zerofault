@@ -1,6 +1,6 @@
 <?PHP
 /** 
- * @Create in 2008/12/17 10:17:53
+ * @Create in 2008/12/24 04:37:28
  * @Smarty Version 2.6.18
  * 
  */
@@ -8,7 +8,8 @@
 class Sync_XML
 {	
 	var $ID;
-	var $UID;
+	var $User_ID;
+	var $Host_ID;
 	var $Filename;
 	var $Create_Time;
 	var $Modify_Time;
@@ -21,7 +22,8 @@ class Sync_XML
 	function Sync_XML() // initialize
 	{
 		$this->ID = null;	
-		$this->UID = null;	
+		$this->User_ID = null;	
+		$this->Host_ID = null;	
 		$this->Filename = null;	
 		$this->Create_Time = null;	
 		$this->Modify_Time = null;	
@@ -30,7 +32,8 @@ class Sync_XML
 
 	function Sync_XML_Default() // get Default
 	{
-		if(!isset($this->UID)) { $this->UID = '0'; }
+		if(!isset($this->User_ID)) { $this->User_ID = '0'; }
+		if(!isset($this->Host_ID)) { $this->Host_ID = '0'; }
 		if(!isset($this->status)) { $this->status = '0'; }
 	}
 
@@ -43,17 +46,18 @@ class Sync_XML
 		
 		$this->Sync_XML_Default(); // get Default
 
-		$iUID = $this->getUID();
+		$iUser_ID = $this->getUser_ID();
+		$iHost_ID = $this->getHost_ID();
 		$iFilename = $this->getFilename();
 		$iCreate_Time = $this->getCreate_Time();
 		$iModify_Time = $this->getModify_Time();
 		$istatus = $this->getstatus();
 
-		if(isset($iUID)||isset($iFilename)||isset($iCreate_Time)||isset($iModify_Time)||isset($istatus))
+		if(isset($iUser_ID)||isset($iHost_ID)||isset($iFilename)||isset($iCreate_Time)||isset($iModify_Time)||isset($istatus))
 		{
 			$sql = "INSERT INTO `$this->table_name` ";
-			$sql .= "(`UID`,`Filename`,`Create_Time`,`Modify_Time`,`status`)";
-			$sql .= " VALUES(".$iUID.",'".addslashes($iFilename)."','".addslashes($iCreate_Time)."','".addslashes($iModify_Time)."',".$istatus.")";
+			$sql .= "(`User_ID`,`Host_ID`,`Filename`,`Create_Time`,`Modify_Time`,`status`)";
+			$sql .= " VALUES(".$iUser_ID.",".$iHost_ID.",'".addslashes($iFilename)."','".addslashes($iCreate_Time)."','".addslashes($iModify_Time)."',".$istatus.")";
 			
 			if($this->debug) {// print sql for debug
 				$this->ShowSQL($sql,"Add one record");
@@ -174,7 +178,8 @@ class Sync_XML
 		global $db;		
 		
 		$iID = $this->getID();		
-		$iUID = $this->getUID();		
+		$iUser_ID = $this->getUser_ID();		
+		$iHost_ID = $this->getHost_ID();		
 		$iFilename = $this->getFilename();		
 		$iCreate_Time = $this->getCreate_Time();		
 		$iModify_Time = $this->getModify_Time();		
@@ -183,7 +188,9 @@ class Sync_XML
 		if(isset($input)&&trim($input)!='') {
 			$sql = "UPDATE `$this->table_name` SET ";			
 			
-			if(isset($iUID)) { $sql .= "`UID`='".addslashes($iUID)."',"; }
+			if(isset($iUser_ID)) { $sql .= "`User_ID`='".addslashes($iUser_ID)."',"; }
+			
+			if(isset($iHost_ID)) { $sql .= "`Host_ID`='".addslashes($iHost_ID)."',"; }
 			
 			if(isset($iFilename)) { $sql .= "`Filename`='".addslashes($iFilename)."',"; }
 			
@@ -302,17 +309,30 @@ class Sync_XML
 	// Property  " ID "  End ....  
 		
 	
-	// Property  " UID "  Start ....
-	function setUID($input) // UID set
+	// Property  " User_ID "  Start ....
+	function setUser_ID($input) // User_ID set
 	{
-		if($this->UID = trim($input)) { return true; }
+		if($this->User_ID = trim($input)) { return true; }
 	}
 		
-	function getUID() // UID Get
+	function getUser_ID() // User_ID Get
 	{
-		if(isset($this->UID)) { return $this->UID; }
+		if(isset($this->User_ID)) { return $this->User_ID; }
 	}	
-	// Property  " UID "  End ....  
+	// Property  " User_ID "  End ....  
+		
+	
+	// Property  " Host_ID "  Start ....
+	function setHost_ID($input) // Host_ID set
+	{
+		if($this->Host_ID = trim($input)) { return true; }
+	}
+		
+	function getHost_ID() // Host_ID Get
+	{
+		if(isset($this->Host_ID)) { return $this->Host_ID; }
+	}	
+	// Property  " Host_ID "  End ....  
 		
 	
 	// Property  " Filename "  Start ....

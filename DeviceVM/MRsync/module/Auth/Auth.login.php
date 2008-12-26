@@ -27,7 +27,7 @@ if($id!='' && $pw!='') {
 	if($oAdminUser->RecordCount($option)>0)
 	{
 		$arr = $oAdminUser->Browse($option, 1);
-		$auth=array('ID'=>$arr['ID'][0],'Username'=>$arr['Username'][0], 'Password'=>md5($arr['Password'][0]), 'Name'=>$arr['Name'][0], 'Type'=>$arr['Type'][0], 'Role'=>$arr['Role'][0]);
+		$auth=array('ID'=>$arr['ID'][0],'Username'=>$arr['Username'][0], 'Password'=>md5($arr['Password'][0]), 'Name'=>$arr['Name'][0], 'Type'=>$arr['Type'][0], 'Role'=>$arr['Role'][0], 'Mail'=>$arr['Mail'][0]);
 		$_SESSION['auth']=$auth;
 		$oAdminUser->ChangeOne($arr['ID'][0], 'LastLoginTime', date("Y-m-d H:i:s"));
 		$oAdminUser->ChangeOne($arr['ID'][0], 'LastLoginIP', trim($_SERVER['REMOTE_ADDR']));
