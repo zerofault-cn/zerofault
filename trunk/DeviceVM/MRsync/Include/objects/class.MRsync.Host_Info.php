@@ -1,6 +1,6 @@
 <?PHP
 /** 
- * @Create in 2008/12/17 10:17:53
+ * @Create in 2008/12/24 04:37:28
  * @Smarty Version 2.6.18
  * 
  */
@@ -9,19 +9,25 @@ class Host_Info
 {	
 	var $ID;
 	var $Host;
-	var $Path;
+	var $Host_Chroot;
+	var $Local_Chroot;
+	var $Time;
 	var $Sync_ID;
+	var $Mail;
 
 	var $table_name = 'Host_Info';
-	var $key = 'Sync_ID';
+	var $key = 'ID';
 	var $debug = False ;	
 	
 	function Host_Info() // initialize
 	{
 		$this->ID = null;	
 		$this->Host = null;	
-		$this->Path = null;	
+		$this->Host_Chroot = null;	
+		$this->Local_Chroot = null;	
+		$this->Time = null;	
 		$this->Sync_ID = null;	
+		$this->Mail = null;	
 	}
 
 	function Host_Info_Default() // get Default
@@ -39,14 +45,17 @@ class Host_Info
 		$this->Host_Info_Default(); // get Default
 
 		$iHost = $this->getHost();
-		$iPath = $this->getPath();
+		$iHost_Chroot = $this->getHost_Chroot();
+		$iLocal_Chroot = $this->getLocal_Chroot();
+		$iTime = $this->getTime();
 		$iSync_ID = $this->getSync_ID();
+		$iMail = $this->getMail();
 
-		if(isset($iHost)||isset($iPath)||isset($iSync_ID))
+		if(isset($iHost)||isset($iHost_Chroot)||isset($iLocal_Chroot)||isset($iTime)||isset($iSync_ID)||isset($iMail))
 		{
 			$sql = "INSERT INTO `$this->table_name` ";
-			$sql .= "(`Host`,`Path`,`Sync_ID`)";
-			$sql .= " VALUES('".addslashes($iHost)."','".addslashes($iPath)."',".$iSync_ID.")";
+			$sql .= "(`Host`,`Host_Chroot`,`Local_Chroot`,`Time`,`Sync_ID`,`Mail`)";
+			$sql .= " VALUES('".addslashes($iHost)."','".addslashes($iHost_Chroot)."','".addslashes($iLocal_Chroot)."','".addslashes($iTime)."',".$iSync_ID.",'".addslashes($iMail)."')";
 			
 			if($this->debug) {// print sql for debug
 				$this->ShowSQL($sql,"Add one record");
@@ -168,17 +177,26 @@ class Host_Info
 		
 		$iID = $this->getID();		
 		$iHost = $this->getHost();		
-		$iPath = $this->getPath();		
+		$iHost_Chroot = $this->getHost_Chroot();		
+		$iLocal_Chroot = $this->getLocal_Chroot();		
+		$iTime = $this->getTime();		
 		$iSync_ID = $this->getSync_ID();		
+		$iMail = $this->getMail();		
 
 		if(isset($input)&&trim($input)!='') {
 			$sql = "UPDATE `$this->table_name` SET ";			
 			
 			if(isset($iHost)) { $sql .= "`Host`='".addslashes($iHost)."',"; }
 			
-			if(isset($iPath)) { $sql .= "`Path`='".addslashes($iPath)."',"; }
+			if(isset($iHost_Chroot)) { $sql .= "`Host_Chroot`='".addslashes($iHost_Chroot)."',"; }
+			
+			if(isset($iLocal_Chroot)) { $sql .= "`Local_Chroot`='".addslashes($iLocal_Chroot)."',"; }
+			
+			if(isset($iTime)) { $sql .= "`Time`='".addslashes($iTime)."',"; }
 			
 			if(isset($iSync_ID)) { $sql .= "`Sync_ID`='".addslashes($iSync_ID)."',"; }
+			
+			if(isset($iMail)) { $sql .= "`Mail`='".addslashes($iMail)."',"; }
 
 			$sql = substr($sql,0,(strlen($sql)-1));
 			
@@ -302,17 +320,43 @@ class Host_Info
 	// Property  " Host "  End ....  
 		
 	
-	// Property  " Path "  Start ....
-	function setPath($input) // Path set
+	// Property  " Host_Chroot "  Start ....
+	function setHost_Chroot($input) // Host_Chroot set
 	{
-		if($this->Path = trim($input)) { return true; }
+		if($this->Host_Chroot = trim($input)) { return true; }
 	}
 		
-	function getPath() // Path Get
+	function getHost_Chroot() // Host_Chroot Get
 	{
-		if(isset($this->Path)) { return $this->Path; }
+		if(isset($this->Host_Chroot)) { return $this->Host_Chroot; }
 	}	
-	// Property  " Path "  End ....  
+	// Property  " Host_Chroot "  End ....  
+		
+	
+	// Property  " Local_Chroot "  Start ....
+	function setLocal_Chroot($input) // Local_Chroot set
+	{
+		if($this->Local_Chroot = trim($input)) { return true; }
+	}
+		
+	function getLocal_Chroot() // Local_Chroot Get
+	{
+		if(isset($this->Local_Chroot)) { return $this->Local_Chroot; }
+	}	
+	// Property  " Local_Chroot "  End ....  
+		
+	
+	// Property  " Time "  Start ....
+	function setTime($input) // Time set
+	{
+		if($this->Time = trim($input)) { return true; }
+	}
+		
+	function getTime() // Time Get
+	{
+		if(isset($this->Time)) { return $this->Time; }
+	}	
+	// Property  " Time "  End ....  
 		
 	
 	// Property  " Sync_ID "  Start ....
@@ -326,6 +370,19 @@ class Host_Info
 		if(isset($this->Sync_ID)) { return $this->Sync_ID; }
 	}	
 	// Property  " Sync_ID "  End ....  
+		
+	
+	// Property  " Mail "  Start ....
+	function setMail($input) // Mail set
+	{
+		if($this->Mail = trim($input)) { return true; }
+	}
+		
+	function getMail() // Mail Get
+	{
+		if(isset($this->Mail)) { return $this->Mail; }
+	}	
+	// Property  " Mail "  End ....  
 		
 
 ###############  Other Function  ############

@@ -5,6 +5,7 @@ for($i=0;$i<count($arr['ID']);$i++)
 {
 	$Rsync_Host[] = array(
 		'ID'		=> $arr['ID'][$i],
+		'Name'		=> $arr['Name'][$i],
 		'Host'		=> $arr['Host'][$i],
 		'Path'		=> $arr['Path'][$i],
 		'Description'	=> $arr['Description'][$i]

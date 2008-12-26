@@ -11,7 +11,8 @@
 			</li>
 			<li>Rsync Module
 				<ul>
-					<!--{if $smarty.session.auth.Role eq 'Admin'}--><li><a href="?Mod=<!--{$smarty.get.Mod}-->&op=Host&subop=browse">Rsync_Host</a></li><!--{/if}-->
+					<!--{if $smarty.session.auth.Role eq 'Admin'}--><li><a href="?Mod=<!--{$smarty.get.Mod}-->&op=Host&subop=browse">Rsync_Host</a></li>
+					<li><a href="?Mod=<!--{$smarty.get.Mod}-->&op=Rsync&subop=filter">Path_Filter</a></li><!--{/if}-->
 					<li><a href="?Mod=<!--{$smarty.get.Mod}-->&op=Rsync&subop=browse">Sync_XML</a></li>
 				</ul>
 			</li>

@@ -1,6 +1,6 @@
 <?PHP
 /** 
- * @Create in 2008/12/17 10:17:53
+ * @Create in 2008/12/24 04:37:28
  * @Smarty Version 2.6.18
  * 
  */
@@ -8,6 +8,7 @@
 class Rsync_Host
 {	
 	var $ID;
+	var $Name;
 	var $Host;
 	var $Path;
 	var $Description;
@@ -19,6 +20,7 @@ class Rsync_Host
 	function Rsync_Host() // initialize
 	{
 		$this->ID = null;	
+		$this->Name = null;	
 		$this->Host = null;	
 		$this->Path = null;	
 		$this->Description = null;	
@@ -37,15 +39,16 @@ class Rsync_Host
 		
 		$this->Rsync_Host_Default(); // get Default
 
+		$iName = $this->getName();
 		$iHost = $this->getHost();
 		$iPath = $this->getPath();
 		$iDescription = $this->getDescription();
 
-		if(isset($iHost)||isset($iPath)||isset($iDescription))
+		if(isset($iName)||isset($iHost)||isset($iPath)||isset($iDescription))
 		{
 			$sql = "INSERT INTO `$this->table_name` ";
-			$sql .= "(`Host`,`Path`,`Description`)";
-			$sql .= " VALUES('".addslashes($iHost)."','".addslashes($iPath)."','".addslashes($iDescription)."')";
+			$sql .= "(`Name`,`Host`,`Path`,`Description`)";
+			$sql .= " VALUES('".addslashes($iName)."','".addslashes($iHost)."','".addslashes($iPath)."','".addslashes($iDescription)."')";
 			
 			if($this->debug) {// print sql for debug
 				$this->ShowSQL($sql,"Add one record");
@@ -166,12 +169,15 @@ class Rsync_Host
 		global $db;		
 		
 		$iID = $this->getID();		
+		$iName = $this->getName();		
 		$iHost = $this->getHost();		
 		$iPath = $this->getPath();		
 		$iDescription = $this->getDescription();		
 
 		if(isset($input)&&trim($input)!='') {
 			$sql = "UPDATE `$this->table_name` SET ";			
+			
+			if(isset($iName)) { $sql .= "`Name`='".addslashes($iName)."',"; }
 			
 			if(isset($iHost)) { $sql .= "`Host`='".addslashes($iHost)."',"; }
 			
@@ -286,6 +292,19 @@ class Rsync_Host
 		if(isset($this->ID)) { return $this->ID; }
 	}	
 	// Property  " ID "  End ....  
+		
+	
+	// Property  " Name "  Start ....
+	function setName($input) // Name set
+	{
+		if($this->Name = trim($input)) { return true; }
+	}
+		
+	function getName() // Name Get
+	{
+		if(isset($this->Name)) { return $this->Name; }
+	}	
+	// Property  " Name "  End ....  
 		
 	
 	// Property  " Host "  Start ....
