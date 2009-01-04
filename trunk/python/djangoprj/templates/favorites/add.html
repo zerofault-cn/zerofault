@@ -1,0 +1,62 @@
+{% block content %}
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>添加网址</title>
+<script language="javascript" type="text/javascript" src="/site_media/jquery-1.2.6.pack.js"></script>
+<style type="text/css">
+dl{
+	width:400px;
+}
+dt{
+	float:left;
+	width:60px;
+}
+dd{
+	float:right;
+	width:340px;
+	margin:0;
+}
+</style>
+</head>
+<body>
+<h1 id="title">添加一个网址</h1>
+<hr>
+<form name="form1" action="submit/" method="post" onsubmit="return check();">
+<input type="hidden" name="user_name" value="zerofault" />
+<div id="content-main">
+	<dl>
+		<dt>标题：</dt>
+		<dd><input type="text" name="title" /></dd>
+	</dl>
+	<dl>
+		<dt>链接：</dt>
+		<dd><input type="text" name="url" /></dd>
+	</dl>
+	<dl>
+		<dt>描述：</dt>
+		<dd><textarea name="descr" rows="4" cols="50"></textarea></dd>
+	</dl>
+	<dl>
+		<dt>标签：</dt>
+		<dd><input type="text" name="tags" /></dd>
+		<dd><a href="#" onclick="tag(this)">tag1</a> <a href="#" onclick="tag(this)">tag2</a> <a href="#" onclick="tag(this)">tag3</a></dd>
+	</dl>
+	<dl>
+		<dt></dt>
+		<dd><input type="submit" name="submit" value="发布" /> <input type="button" name="submit2" value="私有" onclick="javascript:document.form1.private.value=1;document.form1.submit();" /></dd>
+	</dl>
+</div>
+<input type="hidden" name="private" value="0" />
+</form>
+</body>
+<iframe id="iframe1" name="iframe1" style="display:none;"></iframe>
+<script type="text/javascript">
+$(document).ready(function(){
+	//do something
+});
+
+</script>
+</html>
+{% endblock %}

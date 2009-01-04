@@ -1,0 +1,66 @@
+{% block content %}
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>注册</title>
+<script language="javascript" type="text/javascript" src="/site_media/jquery-1.2.6.pack.js"></script>
+<style type="text/css">
+.label
+{
+	width:140px;
+	text-align:right;
+	padding-right:10px;
+	color:#3366ff;
+	font-size:12px;
+}
+.input1
+{
+	font-size:12px;
+	width:100px;
+}
+.tip
+{
+	border:1px solid #A3A0A0;
+	margin-left:5px;
+	background-color:#D5D0CE;
+	color:#6067FB;
+}
+.tip_ok
+{
+	border:1px solid #FFA475;
+	margin-left:5px;
+	background-color:#FFEEE5;
+	color:#ff7300;
+}
+.tip_loading
+{}
+.tip_err
+{padding:0px 5px 0px 25px;background:url(/python/site_media/ico_04.gif) 5px center no-repeat #FFEEE5;border:1px solid #FFA475;color:#ff0000;line-height:20px;margin:0px 0px 0px 10px;}
+</style>
+</head>
+<body>
+<h1 id="title">新建一个帐号</h1>
+<hr>
+<form name="form1" action="../submit/" method="post" onsubmit="return check();">
+<div id="content-main">
+	<dl>
+		<dt>用户名:</dt><dd><input type="text" name="username" /><span id="username_tip"></span></dd>
+		<dt>设定密码:</dt><dd><input type="password" name="password" /><span id="password_tip"></span></dd>
+		<dt>重复密码:</dt><dd><input type="password" name="repassword" /><span id="repassword_tip"></span></dd>
+		<dt>昵称:</dt><dd><input type="text" name="nickname" /><span id="nickname_tip"></span></dd>
+		<dt>E-mail:</dt><dd><input type="text" name="email" /><span id="email_tip"></span></dd>
+		<dt></dt><dd><input type="submit" name="submit" value="提交" /> <input type="reset" name="rest" value="复位" /></dd>
+	</dl>
+</div>
+</form>
+</body>
+<iframe id="iframe1" name="iframe1" style="display:none;"></iframe>
+<script type="text/javascript">
+$(document).ready(function(){
+	//do something
+});
+
+</script>
+</html>
+{% endblock %}
