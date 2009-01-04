@@ -1,0 +1,31 @@
+{% block content %}
+<div id="header">
+<h1 id="title">用户列表</h1>
+</div>
+<hr>
+<table border="1" width="500">
+<tr>
+	<th>ID</th>
+	<th>用户名</th>
+	<th>昵称</th>
+	<th>E-mail
+</tr>
+{% for user in object_list %}
+<tr>
+	<td>{{ user.id }}</td>
+	<td>{{ user.username }}</td>
+	<td>{{ user.nickname }}</td>
+	<td>{{ user.email }}</td>
+</tr>
+{% endfor %}
+</table>
+<table border="0" width="500">
+    <tr align="right">
+      <td>{% if has_previous %}
+        <a href="?page={{ previous }}">上一页</a>
+        {% endif %} {% if has_next %}
+        <a href="?page={{ next }}">下一页</a>
+        {% endif %}</td></tr>
+    </table>
+<a href="register/">注册</a>
+{% endblock %}
