@@ -1,7 +1,7 @@
 <?php
 $dbms = 'mysql4';
 $dbhost = 'localhost';
-$dbname = 'bus';
+$dbname = 'test';
 $dbuser = 'root';
 $dbpasswd = '';
 

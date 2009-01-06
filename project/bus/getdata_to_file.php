@@ -2,16 +2,16 @@
 <?php
 include_once 'simple_html_dom.php';
 
-$fp=fopen("hangzhou_bus_data2.txt","a");
+$fp=fopen("hangzhou_bus_dataj.txt","a");
 $c = curl_init();
 curl_setopt($c, CURLOPT_URL, "http://www.hzbus.com.cn/content/busline/line_search.jsp");
 curl_setopt($c, CURLOPT_REFERER, "http://www.hzbus.com.cn/");
 curl_setopt($c, CURLOPT_RETURNTRANSFER, 1);
 $start=$_REQUEST['start'];
 $offset=0;
-//for($i=$start;$i<$start+10;$i++)
+for($i=$start;$i<$start+10;$i++)
 {
-	curl_setopt($c, CURLOPT_POSTFIELDS,"line_name=y20");
+	curl_setopt($c, CURLOPT_POSTFIELDS,"line_name=J".$i);
 	$data = curl_exec($c);
 	$html=str_get_html($data);
 	$table=$html->find('table[width="98%"] table',0);
