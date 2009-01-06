@@ -1,25 +1,115 @@
-1，安装python-2.5.msi，安装路径默认即可，注意选择”for all user"，安装完后最好将安装路径加入到用户环境变量的PATH里，方便后面操作
-2，安装apache_2.2.8-win32-x86-no_ssl.msi
-3，安装mod_python-3.3.1.win32-py2.5-Apache2.2.exe
-4，安装MySQL-python-1.2.2.win32-py2.5.exe（相信mysqk你已经有了）
-5，编辑apache2.2/conf/httpd.conf，添加：
-##################################################
-LoadModule python_module modules/mod_python.so
+1，安装python：
+下载地址：http://www.python.org/download/（编写本帖时最新稳定版本有3.0和2.6.1，但我们目前只能使用2.5做开发演示，原因后面会解释）
+文件太大，这里只给出链接：http://www.python.org/ftp/python/2.5.2/python-2.5.2.msi
+下载到windows installer格式的安装包python-2.5.2.msi,直接执行
+安装路径默认即可，注意选择“for all user”，安装完后最好将安装路径加入到用户环境变量的PATH里，方便后面操作。
+按照学习一种语言的传统习惯，让我们用python来说一声“hello world”
+使用解释器
+打开命令提示符，如果刚才设置了环境变量，这里可以直接输入python，启动解释器 C:\python
+
+Python 2.5.2 (r252:60911, Feb 21 2008, 13:11:45) [MSC v.1310 32 bit (Intel)] on win32
+
+Type "help", "copyright", "credits" or "license" for more information.
+
+>>>
+复制代码现在输入print 'Hello World'，然后按Enter键。你应该可以看到输出的单词Hello World！按Ctrl+z，然后回车，可以退出解释器。 >>> print 'Hello World'
+
+Hello World
+
+>>> ^Z
+复制代码使用源文件
+启动你喜欢的编辑器，输入下面这段程序，然后把它保存为helloworld.py #!C:/python25/python.exe
+
+# Filename : helloworld.py
+
+print 'Hello World' 
+复制代码然后到命令提示符下，输入python helloworld.py，或者象shell程序那样直接输入helloworld.py，都可以显示“Hello World”
+
+2，安装mod_python，它提供让Apache支持python的模块(mod_python.so)
+假设你的系统里已经安装了Apache-2.2.*，如果还没有，请到http://httpd.apache.org/download.cgi下载并安装。
+到http://www.modpython.org/下载最新版本的mod_python，要注意Apache和Python的版本搭配。
+目前最新稳定版是3.3.1，它支持python2.3、2.4和2.5（这就是前面我们选用python2.5的原因），支持Apache2.0和2.2。
+照样只给出下载地址：http://apache.mirror.phpchina.com/httpd/modpython/win/3.3.1/
+下载到mod_python-3.3.1.win32-py2.5-Apache2.2.exe，直接执行，安装程序会自动检测注册表中python的安装路径和版本，到最后一步时需要你指定apache的安装目录（仅仅用于检测，并不会自动修改apache的配置为文件）
+
+3，安装MySQL-python，提供让Python支持MySQL的模块
+开发者首页：http://mysql-python.sourceforge.net/，目前最新版本1.2.2，支持MySQL3.52-5.1，支持python2.4和2.5。
+下载连接：http://jaist.dl.sourceforge.net/sourceforge/mysql-python/MySQL-python-1.2.2.win32-py2.5.exe
+下载后按默认安装即可。
+
+4，配置Apache，让python脚本可以通过网页访问。
+编辑apache2.2/conf/httpd.conf，（假设DocumentRoot已设定为e:/var/www)
+添加： LoadModule python_module modules/mod_python.so
+
 <Directory e:/var/www/python/>
-	AddHandler mod_python .py
-	PythonHandler hello(这里代表默认handler）
-	PythonDebug On 
+
+AddHandler mod_python .py
+
+PythonHandler hello(这里代表默认handler）
+
+PythonDebug On 
+
 </Directory>
-#################################################
+复制代码在e:/var/www/python/新建hello.py，并输入以下内容，注意空格或tab必须保留 from mod_python import apache 
 
-编辑e:/var/www/python/hello.py(注意空格或tab必须保留)
-from mod_python import apache 
 def handler(req):
-    req.write("Hello World!") 
-    return apache.OK
 
-重启apache服务，浏览器打开http://localhost/python/hellp.py（或者任意.py结尾的地址：http://localhost/python/aaa.py，因为apache里设置了默认handler)
-看到“Hello World!”即代表成功
+    req.write("Hello World!") 
+
+    return apache.OK
+复制代码重启apache服务，浏览器打开http://localhost/python/hellp.py（或者任意.py结尾的地址如：http://localhost/python/aaa.py，因为apache里设置了默认handler)
+看到“Hello World!”即代表mod_python配置成功。
+注意，使用这种方式仅访问特定的一个py脚本，要象网站那样访问不同目录，不同脚本，并传递参数，就需要用到mod_python的发布处理器(mod_python.publisher) <Directory e:/var/www/python/>
+
+SetHandler mod_python
+
+PythonHandler mod_python.publisher
+
+PythonDebug On 
+
+</Directory>
+复制代码测试:
+    在e:/var/www/python/目录下新建一个test.py #coding:gb2312
+
+def index(req):
+
+    req.write("hello,world!")
+
+    return
+复制代码运行，启动apache没有错误后，打开http://localhost/python/test
+    即可看到hello,world!了
+定义其他方法： #coding:gb2312
+
+def index(req):
+
+    req.write("hello,world!")
+
+    return
+
+def hello(req):
+
+    req.write("hello!!!")
+
+    return
+复制代码可以通过：http://localhost/python/test/hello来访问。
+传递参数 #coding:gb2312
+
+def get(req,name=""):
+
+    if name:
+
+        req.write("参数："+name);
+
+    else:
+
+        req.write("no param.");
+
+    return
+复制代码可以通过：http://localhost/python/test/hello?name=smallfish来访问。
+    POST表单一样，只要参数名写对就行。
+
+********************************************************
+使用Python框架Django
 
 
 配置django
@@ -34,6 +124,7 @@ OK了
 然后输入import django 
 然后输入django.VERSION 
 我看到的是这样的：
+==================================================================
 E:\var\www\python\myproject>python
 Python 2.5 (r25:51908, Sep 19 2006, 09:52:17) [MSC v.1310 32 bit (Intel)] on win
 32
@@ -41,8 +132,9 @@ Type "help", "copyright", "credits" or "license" for more information.
 >>> import django
 >>> django.VERSION
 (1, 0, 2, 'final', 0)
+==================================================================
+将 d:\Python25\Lib\site-packages\django\bin加入用户环境变量PATH里，方便以后操作
 
-设置环境变量（将 d:\Python25\Lib\site-packages\django\bin加入用户环境变量PATH里）
 
 创建django project并测试
 e:\var\www\python\>django-admin.py startproject myproject
@@ -50,15 +142,15 @@ e:\var\www\python\>django-admin.py startproject myproject
 e:\var\www\python\>cd myproject
 e:\var\www\python\myproject>manage.py runserver
 一旦出现:
-
+==================================================================
 Validating models...
 0 errors found.
 
 Starting server on port 8000 with settings module 'newtest.settings'.
 Go to http://127.0.0.1:8000/ for Django.
 Quit the server with CONTROL-C (Unix) or CTRL-BREAK (Windows).
-
-说明 Django 真的启来了。在浏览器中看一下，有一个祝贺页面，说明成功了。
+==================================================================
+在浏览器中打开http://127.0.0.1:8000/，有一个祝贺页面，说明成功了。
 
 在myproject目录下新建hello.py文件
 from django.http import HttpResponse
@@ -72,8 +164,62 @@ def index(request):
 得到“Hello, Django.”
 
 
+下面开始一个app实例，一个 app 就是一个功能的集合，它有自已的 model ，view 和相应的模板，还可以带自已的 urls.py 。那么它也是一个独立的目录，这样一个 app 就可以独立地进行安装，你可以把它安装到其它的 Django 服务器中去。因此采用 app 的组织形式非常有意义。
 
-打开settings.py文件，设置数据库
+以用户注册程序为例，在刚才建立的project目录下新建一个app
+e:\var\www\python\myproject>manage.py startapp user
+这将会在myproject目录下新建一个user目录，这个目录下有以下文件:
+__init__.py 
+  表示 user 目录是一个包。 
+views.py 
+  用来放它的 view 的代码。 
+models.py 
+  用来放 model 代码。 
+
+编辑 user/models.py
+============================================================
+#coding=utf-8
+from django.db import models
+
+class info(models.Model):
+    username = models.CharField('用户名',max_length=20,unique=True)
+    password = models.CharField('密码', max_length=32)
+    nickname=models.CharField('昵称',max_length=32)
+    email = models.CharField('E-mail', max_length=32)
+===========================================================
+每个 model 其实在 Django 中就是一个表，你将用它来保存数据。在实际的应用中，一般都要与数据库打交道，如果你不想用数据库，那么原因可能就是操作数据库麻烦，创建数据库环境也麻烦。但通过 Django 的 model 处理，它是一种 ORM (Object Relation Mapping, 对象与关系的映射)，可以屏蔽掉底层数据库的细节，同时提供以对象的形式来处理数据。非常方便。而且 Django 的 model 层支持多种数据库，如果你改变数据库也不是什么问题，这也为以后的数据库迁移带来好处。
+
+info是 model 的名字，即将创建的数据表名称也是根据它来的,规则是：AppName_ModalName，比如这个就是：user_info，它需要从 models.Model 派生而来。它定义了四个字段，它们都是Charfield类型，它的第一个参数是给admin用的（后面介绍），max_length用来定义字段最大长度，unique表示该字段不能有重复值，对应的sql语句就是：varchar(20) unique(username)
+现在不太了解 model 没有关系，关键是看整个生成过程。
+
+安装 app
+每个一 app 都需要安装一下。安装一般有两步：
+a,修改settings.py 
+
+打开settings.py文件，设置数据库并添加新增的app
+DATABASE_ENGINE = 'mysql'
+DATABASE_NAME = 'test'  
+DATABASE_USER = 'root'  
+DATABASE_PASSWORD = ''  
+DATABASE_HOST = ''      
+DATABASE_PORT = ''      
+DEFAULT_CHARSET = 'utf-8'
+
+在INSTALLED_APPS 里增加myproject.wiki，象这样：
+INSTALLED_APPS = (
+    'django.contrib.auth',
+    'django.contrib.contenttypes',
+    'django.contrib.sessions',
+    'django.contrib.sites',
+    'myproject.user',
+)
+前4个是缺省定义的。给出指定 user 包的引用名来。这一步是为了以后方便地导入所必须的。因为我们的目录都是包的形式，因此这里就是与目录相对应的。
+
+b,执行(在project目录下) 
+e:\var\www\python\myproject>manage.py syncdb
+
+如果没有报错就是成功了。这一步 Django 将根据 model 的信息在数据库中创建相应的表。表就是这样创建出来的。
+
 
 
 
