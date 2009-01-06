@@ -18,6 +18,9 @@ dd{
 	width:340px;
 	margin:0;
 }
+#tags span{
+	cursor:pointer;
+}
 </style>
 </head>
 <body>
@@ -41,11 +44,14 @@ dd{
 	<dl>
 		<dt>标签：</dt>
 		<dd><input type="text" name="tags" /></dd>
-		<dd><a href="#" onclick="tag(this)">tag1</a> <a href="#" onclick="tag(this)">tag2</a> <a href="#" onclick="tag(this)">tag3</a></dd>
+		<dd id="tags">
+		{% for tag_name in tag_list %}
+			<span>{{ tag_name.name }}</span>
+		{% endfor %}
 	</dl>
 	<dl>
 		<dt></dt>
-		<dd><input type="submit" name="submit" value="发布" /> <input type="button" name="submit2" value="私有" onclick="javascript:document.form1.private.value=1;document.form1.submit();" /></dd>
+		<dd><input type="submit" name="submit1" value="发布" /> <input type="button" name="submit2" value="私有" onclick="javascript:document.form1.private.value=1;document.form1.submit();" /></dd>
 	</dl>
 </div>
 <input type="hidden" name="private" value="0" />
@@ -54,7 +60,22 @@ dd{
 <iframe id="iframe1" name="iframe1" style="display:none;"></iframe>
 <script type="text/javascript">
 $(document).ready(function(){
-	//do something
+	var tags=$("input[name=tags]").val();
+	$("#tags span").each(function(){
+		$(this).click(function(){
+			s_tag=$(this).text()+' ';
+			if(tags.indexOf(s_tag)>=0)
+			{
+				tags=tags.replace(s_tag,'');
+				
+			}
+			else
+			{
+				tags+=s_tag;
+			}
+			$("input[name=tags]").val(tags);
+		});
+	});
 });
 
 </script>
