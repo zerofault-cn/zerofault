@@ -1,0 +1,46 @@
+{% block content %}
+
+<a href="add/">添加</a>
+
+<hr>
+
+{% for link in link_list %}
+<dl>
+	<dt><a href="{{link.info.url}}" target="_blank">{{ link.info.title }}</a>[{{ link.user.name }}]</dt>
+	<dd>{{ link.info.descr }}</dd>
+	<dd>
+		{% for tag_name in link.tag %}
+		<a href="#">{{ tag_name }}</a>
+		{% endfor %}
+	</dd>
+</dl>
+{% endfor %}
+<hr>
+{% if is_paginated %}
+	{% ifequal current_page 1 %}|&lt; 
+	{% else %} <a href="?page=1">|&lt;</a>
+	{% endifequal %}
+&nbsp;
+	{% if has_previous %} <a href="?page={{ previous_page }}">&lt;&lt;</a>
+	{% else %} &lt;&lt;
+	{% endif %}
+&nbsp;
+	{% for p in page_numbers %}
+		{% ifequal current_page p %}{{ p }}
+		{% else %}<a href="?page={{ p }}">{{ p }}</a>
+		{% endifequal %}
+	{% endfor %}
+&nbsp;
+	{% if has_next %}<a href="?page={{ next_page }}">&gt;&gt;</a>
+	{% else %}&gt;&gt;
+	{% endif %}
+&nbsp;
+	{% ifequal current_page pages %}&gt;|
+	{% else %} <a href="?page={{ pages }}">&gt;|</a>
+	{% endifequal %}
+	&nbsp;&nbsp;
+	当前：{{ current_page }}/{{ pages }}页，
+{% endif %}
+共{{ count }}个记录
+
+{% endblock %}
