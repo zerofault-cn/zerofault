@@ -11,7 +11,7 @@ from django.core.paginator import Paginator, InvalidPage, EmptyPage
 def index(request):
 	link_list=[]
 	link_all=Link.objects.order_by("-id")
-	paginator = Paginator(link_all, 5)
+	paginator = Paginator(link_all, 20)
 
 	try:
 		page = int(request.GET.get('page', '1'))
