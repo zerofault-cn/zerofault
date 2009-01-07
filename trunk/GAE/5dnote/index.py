@@ -1,3 +1,4 @@
+#coding=utf-8
 import cgi
 import os
 
@@ -10,8 +11,7 @@ from google.appengine.ext.webapp import template
 
 
 class User(db.Model):
-	name   = db.StringProperty()
-	passwd = db.StringProperty()
+	nickname   = db.StringProperty()
 	email  = db.EmailProperty()
 	
 
@@ -38,8 +38,8 @@ class MainPage(webapp.RequestHandler):
 		link_list = link_query.fetch(1000)
 
 		if users.get_current_user():
-			url = users.create_logout_url(self.request.uri)
-			url_linktext = 'LogOut'
+			url = 'add'#users.create_logout_url(self.request.uri)
+			url_linktext = ' 添加 '
 		else:
 			url = users.create_login_url(self.request.uri)
 			url_linktext = 'Login'
@@ -77,17 +77,16 @@ class AddAction(webapp.RequestHandler):
 		l = Link()
 
 		query = u.all()
-		query = query.filter('email=',google_user.email())
+		query = query.filter('email =',google_user.email())
 		if(query.count(1000)>0):
 			u = query.get()
 		else:
-			u.name = google_user.nickname()
-			u.passwd = '123456'
+			u.nickname = google_user.nickname()
 			u.email = google_user.email()
 			u.put()
 
 		query = t.all()
-		query = query.filter('name=',self.request.get('tags'))
+		query = query.filter('name =',self.request.get('tags'))
 		if(query.count(1000)>0):
 			t = query.get()
 		else:

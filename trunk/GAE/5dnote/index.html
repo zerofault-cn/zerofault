@@ -1,19 +1,25 @@
-{% block content %}
-
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+</head>
+<body>
 <a href="{{ url }}">{{ url_linktext }}</a>
-<a href="add">添加</a>
 
 <hr>
+{% block content %}
 
 {% for link in link_list %}
 <dl>
-	<dt><a href="{{link.url}}" target="_blank">{{ link.title }}</a>[{{ link.user.name }}]</dt>
+	<dt><a href="{{link.url}}" target="_blank">{{ link.title }}</a>[{{ link.user.email }}]</dt>
 	<dd>{{ link.descr }}</dd>
 	<dd>
 		<a href="#">{{ link.tag.name }}</a>
 	</dd>
 </dl>
 {% endfor %}
-<hr>
 
 {% endblock %}
+<hr>
+</body>
+</html>
