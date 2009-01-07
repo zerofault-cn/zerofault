@@ -1,4 +1,3 @@
-{% block content %}
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
@@ -45,9 +44,11 @@ dd{
 		<dt>标签：</dt>
 		<dd><input type="text" name="tags" /></dd>
 		<dd id="tags">
+{% block content %}
 		{% for tag_name in tag_list %}
 			<span>{{ tag_name.name }}</span>
 		{% endfor %}
+{% endblock %}
 	</dl>
 	<dl>
 		<dt></dt>
@@ -69,4 +70,3 @@ $(document).ready(function(){
 
 </script>
 </html>
-{% endblock %}
