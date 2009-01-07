@@ -86,10 +86,15 @@ class AddAction(webapp.RequestHandler):
 			u.email = google_user.email()
 			u.put()
 
-		t.name = self.request.get('tags')
-		t.num=1
-		t.hit=True
-		t.put()
+		query = t.all()
+		query = query.filter('name=',self.request.get('tags'))
+		if(query.count(1000)>0):
+			t = query.get()
+		else:
+			t.name = self.request.get('tags')
+			t.num=1
+			t.hit=True
+			t.put()
 
 		l.user = u
 		l.tag = t
