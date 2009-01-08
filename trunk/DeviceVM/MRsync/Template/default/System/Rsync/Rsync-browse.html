@@ -1,4 +1,5 @@
 	<div id="right">
+		<h2>Rsync Schedule List</h2>
 		<div id="main" class="no-border" style="width:96%">
 			<div class="a_right">
 				<input type="button" value="Create New" onclick="window.location='?Mod=<!--{$smarty.get.Mod}-->&op=Rsync&subop=add'">
@@ -15,7 +16,7 @@
 						<tr <!--{if $smarty.section.key.index % 2 == 0}-->bgcolor="#FFFFFF" <!--{else}-->bgcolor="#E8E8E8"<!--{/if}-->>
 							<td align="left"><!--{$OUT[key].Host_Name}--></td>
 							<td align="left"><!--{$OUT[key].Host_Host}--></td>
-							<td><a href="?Mod=System&op=Rsync&subop=readxml&filename=<!--{$OUT[key].Filename}-->" target="_blank"><!--{$OUT[key].Filename}--></a></td>
+							<td><a href="?Mod=System&op=Rsync&subop=echoxml&id=<!--{$OUT[key].ID}-->" target="_blank"><!--{$OUT[key].Filename}--></a></td>
 							<td><!--{$OUT[key].Modify_Time}--></td>
 							<td>
 								<input type="button" value="Edit" onclick="window.location='?Mod=System&op=Rsync&subop=edit&id=<!--{$OUT[key].ID}-->'"
@@ -44,5 +45,6 @@
 		}
 		</script>
 	</div>
+	<div class="clear"></div>
 </div>
 

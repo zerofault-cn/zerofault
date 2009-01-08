@@ -18,7 +18,7 @@ if($action=='Doit')
 	$Host = trim($_POST['Host']);
 	$Host_Chroot = trim($_POST['Host_Chroot']);
 	$Local_Chroot = trim($_POST['Local_Chroot']);
-	$time = date("Y-m-d H:i:s");
+	$time = date("Y/m/d/H/i/s");
 	$mail = $_SESSION['auth']['Mail'];
 
 	$path_arr=$_POST['path_arr'];
@@ -89,7 +89,8 @@ if($action=='Doit')
 	if(fwrite($fp,$xml_content))
 	{
 		//更新Sync_XML表
-		$oSync_XML->Modify_time=$time;
+		$oSync_XML->Modify_Time=$time;
+		$oSync_XML->Content=$xml_content;
 		//更新Host_Info表
 //		$oHost_Info->Host=$Host;
 //		$oHost_Info->Path=$Path;
@@ -170,4 +171,5 @@ for($i=0;$i<count($arr['ID']);$i++)
 }
 $smarty->assign('Sync_Info', $Sync_Info);
 
+$smarty->assign('Title','Edit Rsync Schedule');
 ?>
