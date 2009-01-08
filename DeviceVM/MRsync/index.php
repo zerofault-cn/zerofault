@@ -8,7 +8,7 @@ if(!empty($_GET['Mod']))
 	$iModule = $_GET['Mod'];
 	
 	$iAuth = (session_is_registered("auth") && isset($_SESSION['auth'])) ? $_SESSION['auth'] : '';
-	if($iAuth=='' && $iModule=="System") 
+	if($iAuth=='' && $iModule=="System" && $_GET['subop']!='rchg') 
 	{
 		session_register("login_url");
 		$url = "http://".$_SERVER['HTTP_HOST'];

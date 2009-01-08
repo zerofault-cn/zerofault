@@ -20,4 +20,5 @@ for($i=0;$i<$count;$i++)
 }
 $smarty->assign('OUT',$OUT);
 
+$smarty->assign('Title','Rsync Schedule List');
 ?>

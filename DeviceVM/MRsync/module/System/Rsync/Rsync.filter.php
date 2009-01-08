@@ -71,4 +71,6 @@ include_once("config/path_filter.inc.php");
 
 $smarty->assign('Path_Include', $path_include);
 $smarty->assign('Path_Exclude', $path_exclude);
+
+$smarty->assign('Title','Path Filter Setting');
 ?>

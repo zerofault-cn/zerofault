@@ -53,7 +53,7 @@ if($action=='Doit')
 	}
 	$path_arr=$tmp_path_arr;
 
-	$time = date("Y-m-d H:i:s");
+	$time = date("Y/m/d/H/i/s");
 	$mail = $_SESSION['auth']['Mail'];
 	$xml_filename=$_SESSION['auth']['ID'].'_'.date("YmdHis").'.xml';
 	
@@ -116,6 +116,9 @@ if($action=='Doit')
 		if(fwrite($fp,$xml_content))//xml文件生成成功后,继续写入Sync_Info表
 		{
 		//	$oSync_Info->debug=true;
+			$oSync_XML->Content=$xml_content;
+			$oSync_XML->update($Sync_ID);
+
 			$oSync_Info->Sync_ID=$Sync_ID;
 			foreach($path_arr as $path)
 			{
@@ -163,5 +166,6 @@ for($i=0;$i<count($arr['ID']);$i++)
 		'Description'	=> $arr['Description'][$i]
 	);
 }
+$smarty->assign('Title','Add Rsync Schedule');
 $smarty->assign('Rsync_Host', $Rsync_Host);
 ?>
