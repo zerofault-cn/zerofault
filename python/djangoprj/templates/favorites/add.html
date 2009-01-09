@@ -27,8 +27,12 @@ dd{
 <h1 id="title">添加一个网址</h1>
 <hr>
 <form name="form1" action="submit/" method="post" onsubmit="return check();">
-<input type="hidden" name="user_name" value="zerofault" />
+
 <div id="content-main">
+	<dl>
+		<dt>用户：</dt>
+		<dd><input type="text" name="user_name" value="adam" /></dd>
+	</dl>
 	<dl>
 		<dt>标题：</dt>
 		<dd><input type="text" name="title" /></dd>
@@ -46,7 +50,7 @@ dd{
 		<dd><input type="text" name="tags" /></dd>
 		<dd id="tags">
 		{% for tag_name in tag_list %}
-			<span>{{ tag_name.name }}</span>
+			<span>{{ tag_name.name }}</span>&nbsp;
 		{% endfor %}
 	</dl>
 	<dl>
