@@ -8,9 +8,12 @@ import datetime
 
 from django.core.paginator import Paginator, InvalidPage, EmptyPage
 
-def index(request):
+def index(request,tag_name=''):
 	link_list=[]
-	link_all=Link.objects.order_by("-id")
+	if (tag_name):
+		link_all=Link.objects.filter(private=False).filter(tag__name__exact=tag_name).order_by("-id")
+	else:
+		link_all=Link.objects.filter(private=False).order_by("-id")
 	paginator = Paginator(link_all, 20)
 
 	try:
@@ -24,20 +27,25 @@ def index(request):
 
 	for link_item in link.object_list:
 		#link_list.append({'user':link_item.user,'tag':link_item.tag,'info':link_item})
-		link_list.append({'user':link_item.user,'tag':link_item.tag.all(),'info':link_item})
+		link_list.append({
+						'user':link_item.user,
+						'tag':link_item.tag.all(),
+						'info':link_item})
 
 	return render_to_response('favorites/index.html', {
-	'link_list': link_list,
-	'is_paginated': paginator.num_pages > 1,
-	'has_next': link.has_next(),
-	'has_previous': link.has_previous(),
-	'current_page': page,
-	'next_page': page + 1,
-	'previous_page': page - 1,
-	'pages': paginator.num_pages,
-	'page_numbers': paginator.page_range,
-	'count': paginator.count
+		'link_list': link_list,
+		'tag_list': Tag.objects.values('name').exclude(name='').distinct(),
+		'is_paginated': paginator.num_pages > 1,
+		'has_next': link.has_next(),
+		'has_previous': link.has_previous(),
+		'current_page': page,
+		'next_page': page + 1,
+		'previous_page': page - 1,
+		'pages': paginator.num_pages,
+		'page_numbers': paginator.page_range,
+		'count': paginator.count
 	})
+
 
 def add(request):
 	return render_to_response('favorites/add.html',{'tag_list':Tag.objects.values('name').distinct()})
@@ -54,10 +62,10 @@ def add_submit (request):
 	url   = request.POST['url']
 	descr = request.POST['descr']
 	private=request.POST['private']
-	tags= request.POST['tags']
+	tags  = request.POST['tags']
 	#tag_name= request.POST['tags']
 
-	Tag.objects.all().update(hit=0)
+	#Tag.objects.all().update(hit=0)
 	
 	#oTag=Tag.objects.filter(name=tag_name)
 	#if(oTag.count()>0):
@@ -75,7 +83,5 @@ def add_submit (request):
 		t = Tag.objects.create(name=tag_name,num=1,hit=1)
 		l.tag.add(t)
 		
-
-	
 	return HttpResponseRedirect("../../")
 

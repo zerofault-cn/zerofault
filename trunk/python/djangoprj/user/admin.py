@@ -1,4 +1,4 @@
-from djangoprj.user.models import info
+from djangoprj.user.models import Info
 from django.contrib import admin
 
-admin.site.register(info)
+admin.site.register(Info)

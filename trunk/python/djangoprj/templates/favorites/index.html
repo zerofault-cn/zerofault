@@ -1,16 +1,29 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+</head>
+<body>
 {% block content %}
 
-<a href="add/">添加</a>
+<a href="/favorites/add/">添加</a>
 
 <hr>
+<ul style="float:right;width:120px;border:1px solid #99CCFF;border-top-width:3px;padding:4px 10px;margin-right:20px;list-style:none;">
+	<li><a href="/favorites/">All</li>
+{% for tag in tag_list %}
+	<li><a href="/favorites/tag/{{ tag.name }}/">{{ tag.name }}</a></li>
+{% endfor %}
+</ul>
 
+<div style="float:left;">
 {% for link in link_list %}
 <dl>
-	<dt><a href="{{link.info.url}}" target="_blank">{{ link.info.title }}</a>[{{ link.user.name }}]</dt>
+	<dt><a href="{{link.info.url}}" target="_blank">{{ link.info }}</a>[{{ link.user }}]</dt>
 	<dd>{{ link.info.descr }}</dd>
 	<dd>
 		{% for tag_name in link.tag %}
-		<a href="#">{{ tag_name }}</a>
+		<a href="/favorites/tag/{{ tag_name }}/">{{ tag_name }}</a>
 		{% endfor %}
 	</dd>
 </dl>
@@ -44,3 +57,5 @@
 共{{ count }}个记录
 
 {% endblock %}
+</body>
+</html>
