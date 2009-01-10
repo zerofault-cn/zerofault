@@ -1,10 +1,10 @@
-application: zerofault
+application: zerofault1
 version: 1
 runtime: python
 api_version: 1
 
 handlers:
-- url: /site_media
+- url: /media
   static_dir:  media
 
 - url: /.*

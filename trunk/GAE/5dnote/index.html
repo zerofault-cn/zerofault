@@ -9,12 +9,14 @@
 <hr>
 {% block content %}
 
-{% for link in link_list %}
+{% for link_item in link_list %}
 <dl>
-	<dt><a href="{{link.url}}" target="_blank">{{ link.title }}</a>[{{ link.user.email }}]</dt>
-	<dd>{{ link.descr }}</dd>
+	<dt><a href="{{link_item.info.url}}" target="_blank">{{ link_item.info.title }}</a>{{ link_item.info.addtime }} {{ link_item.info.private }}</dt>
+	<dd>{{ link_item.info.descr }}</dd>
 	<dd>
-		<a href="#">{{ link.tag.name }}</a>
+		{% for tag_item in link_item.tag_list %}
+		<a href="#">{{ tag_item.name }}</a>
+		{% endfor %}
 	</dd>
 </dl>
 {% endfor %}

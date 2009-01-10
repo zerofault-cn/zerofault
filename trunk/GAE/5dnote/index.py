@@ -1,5 +1,5 @@
 #coding=utf-8
-import cgi
+import logging
 import os
 
 from google.appengine.api import users
@@ -10,39 +10,41 @@ from google.appengine.ext.webapp import template
 
 
 
-class User(db.Model):
-	nickname   = db.StringProperty()
-	email  = db.EmailProperty()
-	
-
 class Tag(db.Model):
 	name = db.StringProperty()
 	num  = db.IntegerProperty()
-	hit  = db.BooleanProperty()
 
 class Link(db.Model):
-	user  = db.ReferenceProperty(User)
-	tag   = db.ReferenceProperty(Tag)
 	title = db.StringProperty()
 	url   = db.LinkProperty()
 	descr = db.StringProperty(multiline=True)
 	addtime=db.DateTimeProperty(auto_now_add=True)
 	private=db.BooleanProperty()
-
-
+	tag   = db.ListProperty(db.Key)
 
 class MainPage(webapp.RequestHandler):
 	def get(self):
-		
-		link_query = Link.all().order("-addtime")
-		link_list = link_query.fetch(1000)
-
 		if users.get_current_user():
 			url = 'add'#users.create_logout_url(self.request.uri)
 			url_linktext = ' 添加 '
 		else:
 			url = users.create_login_url(self.request.uri)
 			url_linktext = 'Login'
+		
+		link_list = []
+		l_q = Link.all().order("-addtime")
+		link = l_q.fetch(1000)
+		
+		for link_item in link:
+			logging.info("%s" % link_item.title)
+			tag_list = []
+			for tag_key in link_item.tag:
+				tag_list.append(db.get(tag_key))
+				
+			link_list.append({
+				'info' : link_item,
+				'tag_list' : tag_list})
+			
 		
 		template_values = {
 			'link_list': link_list,
@@ -70,37 +72,29 @@ class AddForm(webapp.RequestHandler):
 
 class AddAction(webapp.RequestHandler):
 	def post(self):
-		google_user = users.get_current_user()
-
-		u = User()
 		t = Tag()
 		l = Link()
 
-		query = u.all()
-		query = query.filter('email =',google_user.email())
-		if(query.count(1000)>0):
-			u = query.get()
-		else:
-			u.nickname = google_user.nickname()
-			u.email = google_user.email()
-			u.put()
-
-		query = t.all()
-		query = query.filter('name =',self.request.get('tags'))
-		if(query.count(1000)>0):
-			t = query.get()
-		else:
-			t.name = self.request.get('tags')
-			t.num=1
-			t.hit=True
-			t.put()
-
-		l.user = u
-		l.tag = t
 		l.title = self.request.get('title')
 		l.url = self.request.get('url')
 		l.descr = self.request.get('descr')
-		l.private = bool(self.request.get('private'))
+		l.private = bool(int(self.request.get('private')))
+
+		tags = self.request.get('tags').split()
+		t_q = t.all()
+		for tag_name in tags:
+			t_q = t_q.filter('name =',tag_name)
+			if(t_q.count(1000)>0):
+				t = t_q.get()
+				t.num=t.num+1
+				t.put()
+			else:
+				t = Tag()
+				t.name = tag_name
+				t.num=1
+				t.put()
+			l.tag.append(t.key())
+
 		l.put()
 		self.redirect('/')
 

@@ -3,7 +3,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>添加网址</title>
-<script language="javascript" type="text/javascript" src="/site_media/jquery-1.2.6.pack.js"></script>
+<script language="javascript" type="text/javascript" src="/media/jquery-1.2.6.pack.js"></script>
 <style type="text/css">
 dl{
 	width:400px;
@@ -61,9 +61,20 @@ dd{
 <iframe id="iframe1" name="iframe1" style="display:none;"></iframe>
 <script type="text/javascript">
 $(document).ready(function(){
+	var tags=$("input[name=tags]").val();
 	$("#tags span").each(function(){
 		$(this).click(function(){
-			$("input[name=tags]").val($(this).text());
+			s_tag=$(this).text()+' ';
+			if(tags.indexOf(s_tag)>=0)
+			{
+				tags=tags.replace(s_tag,'');
+				
+			}
+			else
+			{
+				tags+=s_tag;
+			}
+			$("input[name=tags]").val(tags);
 		});
 	});
 });
