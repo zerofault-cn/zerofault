@@ -5,7 +5,10 @@ api_version: 1
 
 handlers:
 - url: /media
-  static_dir:  media
+  static_dir: media
+
+- url: /csv
+  script: readcsv.py
 
 - url: /.*
-  script:  index.py
+  script: index.py

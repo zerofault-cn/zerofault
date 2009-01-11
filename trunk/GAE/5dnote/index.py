@@ -8,7 +8,17 @@ from google.appengine.ext.webapp.util import run_wsgi_app
 from google.appengine.ext import db
 from google.appengine.ext.webapp import template
 
-
+#equivalent of javascript unescape()
+from urllib import unquote
+import re
+def unichar_fromhex(otxt):
+	bigchar = otxt.group('bigchar')[2:]
+	val = int(bigchar, 16)
+	return unichr(val)
+def unescape(txt):
+	p = re.compile(r'(?P<bigchar>%u[0-9A-Za-z]{4})', re.VERBOSE)
+	return unquote(p.sub(unichar_fromhex, txt))
+#-----------------------------------#
 
 class Tag(db.Model):
 	name = db.StringProperty()
@@ -17,26 +27,28 @@ class Tag(db.Model):
 class Link(db.Model):
 	title = db.StringProperty()
 	url   = db.LinkProperty()
-	descr = db.StringProperty(multiline=True)
+	descr = db.TextProperty()
 	addtime=db.DateTimeProperty(auto_now_add=True)
 	private=db.BooleanProperty()
 	tag   = db.ListProperty(db.Key)
 
-class MainPage(webapp.RequestHandler):
+class Index(webapp.RequestHandler):
 	def get(self):
 		if users.get_current_user():
-			url = 'add'#users.create_logout_url(self.request.uri)
-			url_linktext = ' 添加 '
+			isLogin = True
+			auth_url = users.create_logout_url(self.request.uri)
+			auth_text= '注销'
 		else:
-			url = users.create_login_url(self.request.uri)
-			url_linktext = 'Login'
-		
+			isLogin = False
+			auth_url = users.create_login_url(self.request.uri)
+			auth_text= '登录'
+
 		link_list = []
 		l_q = Link.all().order("-addtime")
 		link = l_q.fetch(1000)
 		
 		for link_item in link:
-			logging.info("%s" % link_item.title)
+			#logging.info("%s" % link_item.title)
 			tag_list = []
 			for tag_key in link_item.tag:
 				tag_list.append(db.get(tag_key))
@@ -47,9 +59,11 @@ class MainPage(webapp.RequestHandler):
 			
 		
 		template_values = {
+			'isLogin'  : isLogin,
+			'auth_url' : auth_url,
+			'auth_text': auth_text,
 			'link_list': link_list,
-			'url': url,
-			'url_linktext': url_linktext
+			'tag_list' : Tag.all()
 			}
 		path = os.path.join(os.path.dirname(__file__),'index.html')
 		self.response.out.write(template.render(path,template_values))
@@ -58,16 +72,24 @@ class MainPage(webapp.RequestHandler):
 
 class AddForm(webapp.RequestHandler):
 	def get(self):
+		if users.get_current_user():
+			title = self.request.get('title')
+			url   = self.request.get('url')
+			descr = self.request.get('descr')
+			
+			tag_query = Tag.all();
+			tag_list = tag_query.fetch(1000)
 
-		tag_query = Tag.all();
-		tag_list = tag_query.fetch(1000)
-
-		template_values = {
-			'tag_list': tag_list
-			}
-		path = os.path.join(os.path.dirname(__file__),'add.html')
-		self.response.out.write(template.render(path,template_values))
-		
+			template_values = {
+				'tag_list': tag_list,
+				'title'   : unescape(title),
+				'url'     : unescape(url),
+				'descr'   : unescape(descr)
+				}
+			path = os.path.join(os.path.dirname(__file__),'add.html')
+			self.response.out.write(template.render(path,template_values))
+		else:
+			self.redirect(users.create_login_url(self.request.uri))
 	
 
 class AddAction(webapp.RequestHandler):
@@ -98,11 +120,13 @@ class AddAction(webapp.RequestHandler):
 		l.put()
 		self.redirect('/')
 
-application = webapp.WSGIApplication(
-                                     [('/', MainPage),
-                                      ('/add', AddForm),
-									  ('/submit', AddAction)],
-                                     debug=True)
+
+application = webapp.WSGIApplication([
+	('/', Index),
+	('/add', AddForm),
+	('/submit', AddAction),
+	('/tag/.*', Index)
+	],debug=True)
 
 def main():
 	run_wsgi_app(application)

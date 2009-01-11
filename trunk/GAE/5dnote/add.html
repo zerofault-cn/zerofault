@@ -23,6 +23,7 @@ dd{
 </style>
 </head>
 <body>
+{% block content %}
 <h1 id="title">添加一个网址</h1>
 <hr>
 <form name="form1" action="submit" method="post" onsubmit="return check();">
@@ -30,33 +31,32 @@ dd{
 <div id="content-main">
 	<dl>
 		<dt>标题：</dt>
-		<dd><input type="text" name="title" /></dd>
+		<dd><input type="text" name="title" value="{{ title }}"/></dd>
 	</dl>
 	<dl>
 		<dt>链接：</dt>
-		<dd><input type="text" name="url" /></dd>
+		<dd><input type="text" name="url" value="{{ url }}"/></dd>
 	</dl>
 	<dl>
 		<dt>描述：</dt>
-		<dd><textarea name="descr" rows="4" cols="50"></textarea></dd>
+		<dd><textarea name="descr" rows="4" cols="50">{{ descr }}</textarea></dd>
 	</dl>
 	<dl>
 		<dt>标签：</dt>
 		<dd><input type="text" name="tags" /></dd>
 		<dd id="tags">
-{% block content %}
 		{% for tag_name in tag_list %}
 			<span>{{ tag_name.name }}</span>
 		{% endfor %}
-{% endblock %}
 	</dl>
-	<dl>
+	<dl class="sure">
 		<dt></dt>
-		<dd><input type="submit" name="submit1" value="发布" /> <input type="button" name="submit2" value="私有" onclick="javascript:document.form1.private.value=1;document.form1.submit();" /></dd>
+		<dd><input type="submit" name="submit1" value="发布" /> <input type="button" name="submit2" value="私有" class="private" onclick="javascript:document.form1.private.value=1;document.form1.submit();" /></dd>
 	</dl>
 </div>
 <input type="hidden" name="private" value="0" />
 </form>
+{% endblock %}
 </body>
 <iframe id="iframe1" name="iframe1" style="display:none;"></iframe>
 <script type="text/javascript">
