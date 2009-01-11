@@ -16,7 +16,7 @@ indexes:
   - name: date
     direction: desc
 
-# Used 2 times in query history.
+# Used once in query history.
 - kind: Link
   properties:
   - name: addtime
