@@ -29,7 +29,7 @@ class Index(webapp.RequestHandler):
 		csvreader = csv.reader(file(os.path.join(os.path.dirname(__file__),'data1.csv'))) 
 		for line in csvreader:
 			#logging.debug(line[0])
-			self.response.out.write('%s ' % line[0])
+			
 			l = Link()
 			l.title = line[0].decode('utf-8')
 			l.url = line[1].decode('utf-8')
@@ -53,7 +53,8 @@ class Index(webapp.RequestHandler):
 			l.tag.append(t.key())
 			
 			l.put()
-			self.response.out.write('%s<br />' % l.key())
+			self.response.out.write('%s ' % l.key())
+			self.response.out.write('%s <br />' % line[0])
 		
 application = webapp.WSGIApplication([
 	('/loadcsv', Index),
