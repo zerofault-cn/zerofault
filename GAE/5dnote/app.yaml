@@ -1,5 +1,5 @@
-application: zerofault1
-version: 1
+application: zerofault
+version: 2
 runtime: python
 api_version: 1
 
@@ -7,8 +7,9 @@ handlers:
 - url: /media
   static_dir: media
 
-- url: /csv
-  script: readcsv.py
+- url: /loadcsv
+  script: loadcsv.py
+  login: admin
 
 - url: /.*
   script: index.py

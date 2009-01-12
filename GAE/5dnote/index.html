@@ -7,8 +7,8 @@
 	<link rel="alternate" type="application/rss+xml" title="zerofault的网络收藏夹" href="/rss/zerofault.xml" />
 	<link rel="alternate" type="application/rss+xml" title="zerofault的网志" href="/rss/blog/zerofault.xml" />
 	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
-	<link rel="icon" type="image/x-icon" href="/favicon.ico" />
-	<link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+	<link rel="icon" type="image/x-icon" href="/media/favicon.ico" />
+	<link rel="shortcut icon" type="image/x-icon" href="/media/favicon.ico" />
 	<link rel="stylesheet" type="text/css" href="/media/style.css" />
 </head>
 <body>
@@ -60,14 +60,38 @@
 	</div>
 	<div id="twocolumnmiddle">
 		<div class="page">
-			<span>1</span><a href="/u/zerofault/p=2">2</a><span class="dot">...</span><a href="/u/zerofault/p=2">下一页</a>
+{% if is_paginated %}
+	{% ifequal current_page 1 %}<span>|&lt;</span> 
+	{% else %} <a href="?page=1">|&lt;</a>
+	{% endifequal %}
+	{% if has_previous %} <a href="?p={{ previous_page }}">&lt;&lt;</a>
+	{% else %} <span>&lt;&lt;</span>
+	{% endif %}
+	{% for p in page_numbers %}
+		{% ifequal current_page p %}<span>{{ p }}</span>
+		{% else %}
+			{% ifequal p '...' %}
+			<span class="dot">...</span>
+			{% else %}
+			<a href="?p={{ p }}">{{ p }}</a>
+			{% endifequal %}
+		{% endifequal %}
+	{% endfor %}
+	{% if has_next %}<a href="?p={{ next_page }}">&gt;&gt;</a>
+	{% else %}<span>&gt;&gt;</span>
+	{% endif %}
+	{% ifequal current_page pages %}<span>&gt;|</span>
+	{% else %} <a href="?p={{ pages }}">&gt;|</a>
+	{% endifequal %}
+	<span>当前:{{ current_page }}/{{ pages }}页</span>
+{% endif %}<span>共{{ count }}个记录</span>
 		</div>
 
 		<div id="favs">
 		{% for link_item in link_list %}
 			<dl class="nfav" id="item_{{ link_item.info.key }}">
 				<dt>
-					<a href="{{link_item.info.url}}" rel="nofollow">{{ link_item.info.title }}</a>
+					<a href="{{link_item.info.url}}" target="_blank">{{ link_item.info.title }}</a>
 					{% if link_item.info.private %}
 					<img src="/media/lock.gif" align="absmiddle" />
 					{% endif %}
@@ -89,7 +113,31 @@
 		</div>
 
 		<div class="page">
-			
+{% if is_paginated %}
+	{% ifequal current_page 1 %}<span>|&lt;</span> 
+	{% else %} <a href="?page=1">|&lt;</a>
+	{% endifequal %}
+	{% if has_previous %} <a href="?p={{ previous_page }}">&lt;&lt;</a>
+	{% else %} <span>&lt;&lt;</span>
+	{% endif %}
+	{% for p in page_numbers %}
+		{% ifequal current_page p %}<span>{{ p }}</span>
+		{% else %}
+			{% ifequal p '...' %}
+			<span class="dot">...</span>
+			{% else %}
+			<a href="?p={{ p }}">{{ p }}</a>
+			{% endifequal %}
+		{% endifequal %}
+	{% endfor %}
+	{% if has_next %}<a href="?p={{ next_page }}">&gt;&gt;</a>
+	{% else %}<span>&gt;&gt;</span>
+	{% endif %}
+	{% ifequal current_page pages %}<span>&gt;|</span>
+	{% else %} <a href="?p={{ pages }}">&gt;|</a>
+	{% endifequal %}
+	<span>当前:{{ current_page }}/{{ pages }}页</span>
+{% endif %}<span>共{{ count }}个记录</span>
 		</div>
 
 	</div>

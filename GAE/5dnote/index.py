@@ -1,7 +1,8 @@
 #coding=utf-8
 import logging
 import os
-
+import math
+import datetime
 from google.appengine.api import users
 from google.appengine.ext import webapp
 from google.appengine.ext.webapp.util import run_wsgi_app
@@ -32,10 +33,7 @@ class Link(db.Model):
 class Tag(db.Model):
 	name = db.StringProperty()
 	num  = db.IntegerProperty()
-
-	@property
-	def relLinks(self):
-		return Link.gql("WHERE tag = :1 ORDER BY addtime DESC", self.key())
+	usetime  = db.DateTimeProperty()
 
 class Index(webapp.RequestHandler):
 	def get(self,tag_name=''):
@@ -50,10 +48,12 @@ class Index(webapp.RequestHandler):
 			auth_text= '登录'
 
 		limit = 20;
-		p = int(self.request.get('p'))
+		p = self.request.get('p')
 		if not p:
 			p=1
-		offset = p*limit
+		else:
+			p = int(p)
+		offset = (p-1)*limit
 		
 		link_list = []
 		l_q = Link.all().order("-addtime")
@@ -66,9 +66,14 @@ class Index(webapp.RequestHandler):
 		if not isLogin:
 			l_q = l_q.filter("private =", False)
 		
-		l_count = l_q.count(1000)
-		link = l_q.fetch(limit,offset)
+		l_count = l_q.count(1000) #总条数
+		p_count = int(math.ceil(l_count / float(limit))) #总页数
+		if p_count <= 10:
+			page_numbers = range(1,p_count+1)
+		else:
+			page_numbers = range(1,6)+['...']+range(p_count-5,p_count+1)
 		
+		link = l_q.fetch(limit,offset)
 		for link_item in link:
 			#logging.info("%s" % link_item.title)
 			tag_list = []
@@ -79,14 +84,29 @@ class Index(webapp.RequestHandler):
 				'info' : link_item,
 				'tag_list' : tag_list})
 			
-		
+		#t_q=Tag.all()
+		#tt=t_q.fetch(100)
+		#for t in tt:
+		#	t.usetime=datetime.datetime.now()
+		#	t.put()
+			
+			
 		template_values = {
 			'isLogin'  : isLogin,
-			'user_nickname'     : user.nickname(),
+			'user'     : user,
 			'auth_url' : auth_url,
 			'auth_text': auth_text,
 			'link_list': link_list,
-			'tag_list' : Tag.all()
+			'tag_list' : Tag.all().order("usetime"),
+			'is_paginated':  p_count> 1,
+			'has_next': p*limit < l_count,
+			'has_previous': p > 1,
+			'current_page': p,
+			'next_page': p + 1,
+			'previous_page': p - 1,
+			'pages': p_count,
+			'page_numbers': page_numbers,
+			'count': l_count
 			}
 		path = os.path.join(os.path.dirname(__file__),'index.html')
 		self.response.out.write(template.render(path,template_values))
@@ -113,12 +133,10 @@ class AddForm(webapp.RequestHandler):
 				descr = unescape(self.request.get('descr'))
 				tag_names  = ''
 			
-			tag_query = Tag.all();
-			tag_list = tag_query.fetch(1000)
-
+			
 			template_values = {
 				'key'     : key,
-				'tag_list': tag_list,
+				'tag_list': Tag.all().order("usetime"),
 				'title'   : title,
 				'url'     : url,
 				'descr'   : descr,
@@ -142,6 +160,12 @@ class AddAction(webapp.RequestHandler):
 		l.url = self.request.get('url')
 		l.descr = self.request.get('descr')
 		l.private = bool(int(self.request.get('private')))
+		if key:
+			oldtags = l.tag
+			for tag_key in oldtags:
+				t = db.get(tag_key)
+				t.num -= 1
+				t.put()
 		l.tag = []
 
 		tags = self.request.get('tags').split()
@@ -150,12 +174,14 @@ class AddAction(webapp.RequestHandler):
 			t_q = t_q.filter('name =',tag_name)
 			if(t_q.count(1000)>0):
 				t = t_q.get()
-				t.num=t.num+1
+				t.num =t.num+1
+				t.usetime = datetime.datetime.now()
 				t.put()
 			else:
 				t = Tag()
 				t.name = tag_name
 				t.num=1
+				t.usetime = datetime.datetime.now()
 				t.put()
 			l.tag.append(t.key())
 
@@ -177,8 +203,9 @@ class DelAction(webapp.RequestHandler):
 
 class DelTag(webapp.RequestHandler):
 	def get(self):
+		user = users.get_current_user()
 		key = self.request.get('key')
-		if key:
+		if key and user and user.email()=='zerofault@gmail.com':
 			db.delete(key)
 		self.redirect('/')
 	
