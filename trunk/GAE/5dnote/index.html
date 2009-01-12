@@ -2,8 +2,8 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 	<title>我的网址收藏@GAE</title>
-	<meta name="keywords" content="zerofault, zerofault, 收藏, 共享, 收藏夹, 网络收藏夹, favorites, fcang, vww, 最好的网络收藏夹, 简洁, 快速, 标签, 图片收藏, 视频收藏, 多媒体收藏夹, web2.0" />
-	<meta name="description" content="zerofault, zerofault, , 快速, 简洁, web2.0, 做最好的网络收藏夹. Favorites是一个提供用户收藏, 推荐, 共享网络资源的平台。除了原本的网页收藏, Favorites中加入了图片、音乐和视频收藏的功能，同时用户还可以拥有自己的好友名单,使用户间可以方便的共享网络资源。" />
+	<meta name="keywords" content="网络收藏夹" />
+	<meta name="description" content="快速, 简洁, web2.0, 做最好的网络收藏夹. Favorites是一个提供用户收藏, 推荐, 共享网络资源的平台。除了原本的网页收藏, Favorites中加入了图片、音乐和视频收藏的功能，同时用户还可以拥有自己的好友名单,使用户间可以方便的共享网络资源。" />
 	<link rel="alternate" type="application/rss+xml" title="zerofault的网络收藏夹" href="/rss/zerofault.xml" />
 	<link rel="alternate" type="application/rss+xml" title="zerofault的网志" href="/rss/blog/zerofault.xml" />
 	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
@@ -13,6 +13,7 @@
 </head>
 <body>
 	<div id="toper">
+		<a>{{ user_nickname }}</a>
 		<a href="/" id="logo"><img alt="my favorites" src="/media/logo.jpg" /></a>
 		{% if isLogin %}
 			<a href="add">添加</a>
@@ -21,7 +22,7 @@
 	</div>
 	<div id="searcher">
 		<ul>
-			<li><a href="/link/" class="curr">我的收藏</a></li>
+			<li><a href="/" class="curr">我的收藏</a></li>
 			<li><a href="/blog/">我的网志</a></li>
 			<li><a href="/pic/">我的图片</a></li>
 		</ul>
@@ -38,7 +39,7 @@
 			<dd id="mytag">
 				<ul style="display: block;">
 					{% for tag_item in tag_list %}
-					<li><a href="/tag/{{ tag_item.name }}">{{ tag_item.name }}</a><a href="/rss/{{ tag_item.name }}.xml" class="num" target="_blank">{{ tag_item.num }}</a></li>
+					<li><a href="/tag/{{ tag_item.name }}">{{ tag_item.name }}</a><a href="/deltag?key={{ tag_item.key }}" class="num" >{{ tag_item.num }}</a></li>
 					{% endfor %}
 				</ul>
 			</dd>
@@ -64,15 +65,24 @@
 
 		<div id="favs">
 		{% for link_item in link_list %}
-			<dl class="nfav" id="fav_htm_326839_513725">
-				<dt><a href="{{link_item.info.url}}" rel="nofollow">{{ link_item.info.title }}</a><a href="/cache/326839" class="dig">快照</a> {{ link_item.info.addtime|date:"Y-m-d" }} {{ link_item.info.private }}</dt>
-				<dd class="noteh">{{ link_item.info.descr|escape|linebreaksbr }}[img]/thu.aspx?w=200&amp;h=200&amp;c=2&amp;f=/image/op/326839.png[/img]</dd>
+			<dl class="nfav" id="item_{{ link_item.info.key }}">
+				<dt>
+					<a href="{{link_item.info.url}}" rel="nofollow">{{ link_item.info.title }}</a>
+					{% if link_item.info.private %}
+					<img src="/media/lock.gif" align="absmiddle" />
+					{% endif %}
+					{{ link_item.info.addtime|date:"Y-m-d" }}
+				</dt>
+				<dd class="noteh">{{ link_item.info.descr|escape|linebreaksbr }}</dd>
 				<dd class="fadd">
 					{% for tag_item in link_item.tag_list %}
 					[<a href="/tag/{{ tag_item.name }}" class="tag">{{ tag_item.name }}</a>]
 					{% endfor %}
+					{% if isLogin %}
 					... 
-					<a href="/post/?id=513725" class="edit">编辑</a>/<a onClick='$("fav_del_513725").style.visibility="visible"' class="edit">删除</a><span class="edit" id='fav_del_513725'><a onClick='delitem("htm","326839","513725")' class="edit">确认</a> / <a onClick='$("fav_del_513725").style.visibility="hidden"' class="edit">取消</a></span>
+					<a href="/add?key={{ link_item.info.key }}" class="edit">编辑</a>/<a onClick='$("#del_{{ link_item.info.key }}").show()' class="edit">删除</a>
+					<span class="edit" id='del_{{ link_item.info.key }}'><a href="del?key={{ link_item.info.key }}" class="edit">确认</a> / <a onClick='$("#del_{{ link_item.info.key }}").hide()' class="edit">取消</a></span>
+					{% endif %}
 				</dd>
 			</dl>
 			{% endfor %}
@@ -84,4 +94,5 @@
 
 	</div>
 </body>
+<script language="javascript" type="text/javascript" src="/media/jquery-1.2.6.pack.js"></script>
 </html>

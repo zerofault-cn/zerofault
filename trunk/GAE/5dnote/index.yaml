@@ -16,8 +16,29 @@ indexes:
   - name: date
     direction: desc
 
-# Used once in query history.
+# Used 2 times in query history.
 - kind: Link
   properties:
+  - name: 1
+  - name: addtime
+    direction: desc
+
+# Used 66 times in query history.
+- kind: Link
+  properties:
+  - name: addtime
+    direction: desc
+
+# Used 9 times in query history.
+- kind: Link
+  properties:
+  - name: private
+  - name: addtime
+    direction: desc
+
+# Used 18 times in query history.
+- kind: Link
+  properties:
+  - name: tag
   - name: addtime
     direction: desc

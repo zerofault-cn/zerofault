@@ -1,4 +1,4 @@
-#coding=utf-8
+# -*- coding: utf-8 -*-
 import logging
 
 import csv,os
@@ -11,7 +11,7 @@ class Tag(db.Model):
 	name = db.StringProperty()
 	num  = db.IntegerProperty()
 
-class Link(db.Model):
+class Link(db.Expando):
 	title = db.StringProperty()
 	url   = db.LinkProperty()
 	descr = db.TextProperty()
@@ -25,9 +25,9 @@ class Index(webapp.RequestHandler):
 		l = Link()
 		
 		self.response.headers['Content-Type'] = 'text/html'
-		csvreader = csv.reader(file(os.path.join(os.path.dirname(__file__),'data.csv'))) 
+		csvreader = csv.reader(file(os.path.join(os.path.dirname(__file__),'data5.csv'))) 
 		for line in csvreader:
-			#logging.info(line[0])
+			#logging.debug(line[0])
 			self.response.out.write('%s ' % line[0])
 			l = Link()
 			l.title = line[0].decode('utf-8')
