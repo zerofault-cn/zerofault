@@ -140,7 +140,7 @@ dl.nfav dd.notes { padding: 3px; background-color:#fffff9; color: #444; max-widt
 .fadd a { color: #999; cursor: pointer; }
 .fadd a.tag:hover { color: #fff; background-color: #54ba16; text-decoration: none; }
 .fadd .fs { margin-left: 8px; margin-right: 8px; }
-.fadd span.edit { margin-left: 20px; visibility: hidden; }
+.fadd span.edit { margin-left: 20px; /*visibility: hidden;*/ display:none; }
 dl.nfav .popup { width: 200px; position: absolute; background-color: #fdfbe0; border: 1px solid #000000; padding: .2em; overflow: hidden; }
 dl.nfav .popup img { max-width: 200px; }
 .wmaplayer { color: #ccc; cursor: pointer; }
