@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import logging
 
-import csv,os
+import csv,os,datetime
 
 from google.appengine.ext import webapp
 from google.appengine.ext.webapp.util import run_wsgi_app
@@ -10,8 +10,9 @@ from google.appengine.ext import db
 class Tag(db.Model):
 	name = db.StringProperty()
 	num  = db.IntegerProperty()
+	usetime=db.DateTimeProperty(auto_now_add=True)
 
-class Link(db.Expando):
+class Link(db.Model):
 	title = db.StringProperty()
 	url   = db.LinkProperty()
 	descr = db.TextProperty()
@@ -25,7 +26,7 @@ class Index(webapp.RequestHandler):
 		l = Link()
 		
 		self.response.headers['Content-Type'] = 'text/html'
-		csvreader = csv.reader(file(os.path.join(os.path.dirname(__file__),'data5.csv'))) 
+		csvreader = csv.reader(file(os.path.join(os.path.dirname(__file__),'data1.csv'))) 
 		for line in csvreader:
 			#logging.debug(line[0])
 			self.response.out.write('%s ' % line[0])
@@ -41,11 +42,13 @@ class Index(webapp.RequestHandler):
 			if(t_q.count(1000)>0):
 				t = t_q.get()
 				t.num=t.num+1
+				t.usetime=datetime.datetime.now()
 				t.put()
 			else:
 				t = Tag()
 				t.name = tag_name
 				t.num=1
+				#t.usetime=datetime.datetime.now()
 				t.put()
 			l.tag.append(t.key())
 			
@@ -53,7 +56,7 @@ class Index(webapp.RequestHandler):
 			self.response.out.write('%s<br />' % l.key())
 		
 application = webapp.WSGIApplication([
-	('/csv', Index),
+	('/loadcsv', Index),
 	],debug=True)
 
 def main():
