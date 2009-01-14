@@ -11,5 +11,8 @@ handlers:
   script: loadcsv.py
   login: admin
 
+- url: /dump/.*
+  script: dump.py
+
 - url: /.*
   script: index.py

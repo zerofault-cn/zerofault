@@ -1,4 +1,4 @@
-#coding=utf-8
+﻿#coding=utf-8
 import logging
 import os
 import math
@@ -33,7 +33,7 @@ class Link(db.Model):
 class Tag(db.Model):
 	name = db.StringProperty()
 	num  = db.IntegerProperty()
-	usetime  = db.DateTimeProperty()
+	usetime  = db.DateTimeProperty(auto_now_add=True)
 
 class Index(webapp.RequestHandler):
 	def get(self,tag_name=''):
@@ -68,10 +68,24 @@ class Index(webapp.RequestHandler):
 		
 		l_count = l_q.count(1000) #总条数
 		p_count = int(math.ceil(l_count / float(limit))) #总页数
-		if p_count <= 10:
+		if p_count <=7 :
 			page_numbers = range(1,p_count+1)
 		else:
-			page_numbers = range(1,6)+['...']+range(p_count-5,p_count+1)
+			if p<=6:
+				#if p>=4:
+				page_numbers = range(1,max(1,p-3))
+				#else:
+				#	page_numbers = []
+			else:
+				page_numbers = [1,2] + ['...']
+			page_numbers += range(max(1,p-3),min(p+4,p_count+1))
+			if p>=4:
+				#if p<=(p_count-4):
+				page_numbers += range(min(p+4,p_count+1),p_count+1)
+				
+			else:
+				page_numbers += (['...']+range(p_count-1,p_count+1))
+			
 		
 		link = l_q.fetch(limit,offset)
 		for link_item in link:
@@ -110,8 +124,7 @@ class Index(webapp.RequestHandler):
 			}
 		path = os.path.join(os.path.dirname(__file__),'index.html')
 		self.response.out.write(template.render(path,template_values))
-	
-			
+
 
 class AddForm(webapp.RequestHandler):
 	def get(self):
@@ -125,7 +138,8 @@ class AddForm(webapp.RequestHandler):
 				descr = l.descr
 				tags  =db.get(l.tag)
 				for tag in tags:
-					tag_names = tag_names+tag.name+' '
+					if tag:
+						tag_names = tag_names+tag.name+' '
 					
 			else:
 				title = unescape(self.request.get('title'))
@@ -161,17 +175,18 @@ class AddAction(webapp.RequestHandler):
 		l.descr = self.request.get('descr')
 		l.private = bool(int(self.request.get('private')))
 		if key:
-			oldtags = l.tag
-			for tag_key in oldtags:
-				t = db.get(tag_key)
-				t.num -= 1
-				t.put()
+			oldtags = db.get(l.tag)
+			for oldtag in oldtags:
+				if oldtag:
+					oldtag.num -= 1
+					oldtag.put()
 		l.tag = []
 
 		tags = self.request.get('tags').split()
-		t_q = t.all()
 		for tag_name in tags:
+			t_q = t.all()
 			t_q = t_q.filter('name =',tag_name)
+			logging.info(tag_name)
 			if(t_q.count(1000)>0):
 				t = t_q.get()
 				t.num =t.num+1
@@ -201,20 +216,21 @@ class DelAction(webapp.RequestHandler):
 				
 		self.redirect('/')
 
-class DelTag(webapp.RequestHandler):
+class DelByKey(webapp.RequestHandler):
 	def get(self):
 		user = users.get_current_user()
 		key = self.request.get('key')
 		if key and user and user.email()=='zerofault@gmail.com':
 			db.delete(key)
-		self.redirect('/')
-	
+			self.response.out.write('1')
+		else:
+			self.response.out.write('0')
+		
 application = webapp.WSGIApplication([
 	('/', Index),
 	('/add', AddForm),
 	('/submit', AddAction),
-	('/del', DelAction),
-	('/deltag',DelTag),
+	('/delkey', DelByKey),
 	('/tag/(.*)', Index)
 	],debug=True)
 

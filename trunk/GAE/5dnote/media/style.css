@@ -1,5 +1,5 @@
 * { padding: 0; margin: 0; font-size: 12px; font-family:Geneva, Arial, Helvetica, sans-serif; }
-body { margin: 10px 15px 10px 15px; overflow: auto; }
+body { margin: 10px 15px 10px 15px;}
 a { color: #333; text-decoration: none; cursor: pointer; }
 a:hover { text-decoration: underline; }
 img { border: none; }
@@ -14,29 +14,6 @@ h3 { font-size: 13px; color: #000; text-decoration: none; margin-top: 20px; marg
 h3:hover { color: #f93; text-decoration: none; }
 p { line-height: 120%; }
 div { line-height: 150%; }
-
-div.item span { line-height: 30px; }
-div.item div { margin-left: 15px; }
-
-#loading { position: absolute; left: 80px; top: 160px; z-index: 89; display: none; }
-#br { clear: both; height: 50px; }
-#counter { display: none; position: absolute; left: -1000px; top: -900px; }
-#bottom { display: block; clear: both; margin: 0px; padding: 0px; height: 0px; line-height: 0px; }
-
-/*************    布局    **************/
-#threecolumnleft { float: left; width: 150px; overflow: hidden; }
-#threecolumnright { float: right; width: 200px; overflow: hidden; }
-#threecolumnmiddle { margin-left: 160px; margin-right: 210px; }
-
-#twocolumnright { float: right; width: 200px; overflow: hidden; }
-#twocolumnmiddle { margin-right: 210px; }
-
-#twocolumnleft2 { float: left; width: 160px; overflow: hidden; }
-#twocolumnmiddle2 { margin-left: 170px; }
-
-#blogright { float: right; width: 240px; overflow: hidden; }
-#blogmiddle { margin-right: 250px; }
-
 
 /*************    顶部    **************/
 #toper { text-align: right; height: 45px !important; height: 35px; margin-top: 5px; }
@@ -57,6 +34,26 @@ div.item div { margin-left: 15px; }
 #searcher #submit { margin-left: -12px; border: none; }
 #searcher .curr { color: #53BA15; }
 
+
+#col_right{ float: right; width:160px; overflow:hidden; }
+#col_middle { margin-right:170px; overflow:hidden; }
+
+/*************    布局    **************/
+#threecolumnleft { float: left; width: 150px; overflow: hidden; }
+#threecolumnright { float: right; width: 200px; overflow: hidden; }
+#threecolumnmiddle { margin-left: 160px; margin-right: 210px; }
+
+#twocolumnright { float: right; width: 200px; overflow: hidden; }
+#twocolumnmiddle { margin-right: 210px; }
+
+#twocolumnleft2 { float: left; width: 160px; overflow: hidden; }
+#twocolumnmiddle2 { margin-left: 170px; }
+
+#blogright { float: right; width: 240px; overflow: hidden; }
+#blogmiddle { margin-right: 250px; }
+
+
+
 /*************  小菜单   **************/
 #smenu { display: block; height: 34px; }
 #smenu a { float: left; display: block; margin-right: 3px; margin-left: 3px; padding: 2px 6px; border: 1px #eee solid; color: #666; }
@@ -64,9 +61,9 @@ div.item div { margin-left: 15px; }
 
 /*************  分页    **************/
 .page { margin-left: -3px !important; margin-left: -6px; height: 30px;  }
-.page span { display: block; float: left; margin-right: 3px; margin-left: 3px; padding: 1px 6px; color: #54ba16; }
+.page span { display: block; float: left; margin-right: 2px; margin-left: 2px; padding: 1px 5px; color: #54ba16; }
 .page .dot { color: #ccc; }
-.page a { display: block; float: left; margin-right: 3px; margin-left: 3px; padding: 1px 6px; border: 1px #eee solid; color: #666; }
+.page a { display: block; float: left; margin-right: 2px; margin-left: 2px; padding: 1px 5px; border: 1px #eee solid; color: #666; }
 .page a:hover { color: #fff; background-color: #64ca26; text-decoration: none; }
 
 #page { margin-left: -3px !important; margin-left: -6px; height: 30px;  }
@@ -130,20 +127,15 @@ img.spc { max-width: 200px; }
 
 /*************  fav    **************/
 #favs { clear: left; }
-dl.nfav { margin-left: 20px; margin-bottom: 10px; }
-dl.nfav .icon img { cursor: pointer; position: absolute; margin-left: -20px; width: 16px; height: 16px; }
-dl.nfav dt a { font-size: 13px; color: #261cdc; }
-dl.nfav dt a.dig { color: #999; margin-left: 10px; }
-dl.nfav dd.noteh { height: 1px; overflow: hidden; }
-dl.nfav dd.notes { padding: 3px; background-color:#fffff9; color: #444; max-width: 80%; }
-.fadd { color: #999; }
-.fadd a { color: #999; cursor: pointer; }
-.fadd a.tag:hover { color: #fff; background-color: #54ba16; text-decoration: none; }
-.fadd .fs { margin-left: 8px; margin-right: 8px; }
-.fadd span.edit { margin-left: 20px; /*visibility: hidden;*/ display:none; }
-dl.nfav .popup { width: 200px; position: absolute; background-color: #fdfbe0; border: 1px solid #000000; padding: .2em; overflow: hidden; }
-dl.nfav .popup img { max-width: 200px; }
-.wmaplayer { color: #ccc; cursor: pointer; }
+#favs dl.item { margin-left: 20px; margin-bottom: 10px; }
+#favs dl.item img.icon { cursor: pointer; position: absolute; margin-left: -20px; width: 16px; height: 16px; }
+#favs dl.item dt a { font-size: 13px; color: #261cdc; }
+#favs dl.item dt a.dig { color: #999; margin-left: 10px; }
+#favs dl.item dd.descr { padding: 3px; background-color:#fffff9; color: #444; max-width: 80%; }
+#favs dl.item dd.tags { color: #999; }
+#favs dl.item dd.tags a { color: #999; cursor: pointer; }
+#favs dl.item dd.tags a.tag:hover { color: #fff; background-color: #54ba16; text-decoration: none; }
+#favs dl.item dd.tags span.edit { margin-left: 20px; /*visibility: hidden;*/ display:none; }
 
 
 /**********		   Form Wrapper			***********/
