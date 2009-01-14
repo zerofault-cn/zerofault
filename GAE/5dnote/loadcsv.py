@@ -24,9 +24,14 @@ class Index(webapp.RequestHandler):
 	def get(self):
 		t = Tag()
 		l = Link()
+		i=0
+		n = self.request.get('n')
+		if not n:
+			n='1'
+		csvfile='data'+n+'.csv'
 		
 		self.response.headers['Content-Type'] = 'text/html'
-		csvreader = csv.reader(file(os.path.join(os.path.dirname(__file__),'data1.csv'))) 
+		csvreader = csv.reader(file(os.path.join(os.path.dirname(__file__),csvfile))) 
 		for line in csvreader:
 			#logging.debug(line[0])
 			
@@ -53,6 +58,8 @@ class Index(webapp.RequestHandler):
 			l.tag.append(t.key())
 			
 			l.put()
+			i +=1
+			self.response.out.write('%d ' % i)
 			self.response.out.write('%s ' % l.key())
 			self.response.out.write('%s <br />' % line[0])
 		

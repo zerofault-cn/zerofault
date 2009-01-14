@@ -23,20 +23,20 @@ indexes:
   - name: addtime
     direction: desc
 
-# Used 7 times in query history.
+# Used 89 times in query history.
 - kind: Link
   properties:
   - name: addtime
     direction: desc
 
-# Used 44 times in query history.
+# Used 16 times in query history.
 - kind: Link
   properties:
   - name: private
   - name: addtime
     direction: desc
 
-# Used 4 times in query history.
+# Unused in query history -- copied from input.
 - kind: Link
   properties:
   - name: private
@@ -44,7 +44,7 @@ indexes:
   - name: addtime
     direction: desc
 
-# Unused in query history -- copied from input.
+# Used 6 times in query history.
 - kind: Link
   properties:
   - name: tag

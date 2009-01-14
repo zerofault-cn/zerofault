@@ -15,7 +15,7 @@ textarea { overflow: auto; }
 #br { clear: both; height: 50px; }
 #counter { display: none; position: absolute; left: -1000px; top: -900px; }
 
-/*************    ∂•≤ø    **************/
+/*************    È°∂ÈÉ®    **************/
 #toper { text-align: right; height: 40px !important; height: 35px; margin-top: 15px; }
 #toper a, #toper strong { padding-left: 10px; padding-right: 10px; font-size: 12px; color: #000; border-right: 1px solid #dbdbdb; }
 #toper a.lm { border: none; clear: right; padding-right: 0; }
@@ -26,24 +26,24 @@ textarea { overflow: auto; }
 #toper_cache a.lm { border: none; clear: right; padding-right: 0; }
 #toper_cache #logo { float: left; border: none; padding-left: 0; margin-top: -10px; }
 
-/*************  ≤ºæ÷   **************/
+/*************  Â∏ÉÂ±Ä   **************/
 #mainLeft, #blogLeft { clear: left; overflow: hidden; display: block; margin-right: 10px !important; margin-right: 210px; }
 #myright, #blogright { width: 200px; float: right; clear: right; margin-right: -10px !important; margin-right: -5px; } 
 
-/*Õ¯÷æ≤ºæ÷*/
+/*ÁΩëÂøóÂ∏ÉÂ±Ä*/
 #blogLeft { margin-right: 240px; }
 #blogright { width: 230px; }
 
 .clrl { border-bottom: 1px solid #dbdbdb; padding-top: 15px; }
 
-/*************    µ◊≤ø    **************/
+/*************    Â∫ïÈÉ®    **************/
 #footer { clear: both; border-top: 1px solid #dbdbdb; padding-top: 13px; padding-bottom: 15px; }
 #footer a { float: left; color: #000; border-left: 1px solid #ddd; padding-right: 5px; padding-left: 5px }
 #footer a.fm { border-left: 0; padding-left: 0; }
 #footer span { float: right; }
 #bottom { clear: left; overflow: hidden; height: 0px; line-height: 0px; }
 
-/*************    µØ≥ˆø    **************/
+/*************    ÂºπÂá∫Á≠ê    **************/
 #itemopen { z-index: 3; position: absolute; left: -200px; top: -200px; visibility: hidden; width:200px; }
 #itemopen2 { z-index: 2; position: absolute; left: -200px; top: -200px; visibility: hidden; width:360px; background-color:#E0E9ED; text-align: center; margin-left: auto; margin-right: auto; cursor: move; }
 #note { background-color: #fdfbe0; border: 1px solid #000000; padding: .2em; overflow: hidden; }
@@ -55,7 +55,7 @@ img.spc { max-width: 200px; }
 .ititle img { float: right; text-align: right; cursor: pointer; border: 0; margin-top: 5px; }
 .ititle span { font-weight: bold; font-size: 12px; }
 
-/*************  À—À˜Ãı   **************/
+/*************  ÊêúÁ¥¢Êù°   **************/
 #searcher { height: 35px; border: 1px solid #eaeef1; margin-bottom: 10px; padding: 0px 8px 0 6px; background-image:url('topbg.gif') }
 #searcher ul { float: left; }
 #searcher ul li { border: 1px solid #eaeef1; float: left; margin-top: 5px; margin-right: 12px; padding-left: 3px; padding-right: 3px; background-color: #F0FAFB; background-image:url('menu.gif') }
@@ -70,7 +70,7 @@ img.spc { max-width: 200px; }
 
 #searcher #cacher { float: left; margin-top: 5px; margin-right: 12px; padding: 3px 5px 3px 5px; }
 
-/*************  ∑÷“≥    **************/
+/*************  ÂàÜÈ°µ    **************/
 #page { position: relative; margin-left: -3px !important; margin-left: -6px; margin-bottom: 10px; }
 #page a { color: #666; border: 1px #eee solid; padding: 1px 6px; margin-right: 3px; margin-left: 3px; display: block; float: left; }
 #page a:hover { color: #fff; background-color: #64ca26; text-decoration: none; }
@@ -139,9 +139,9 @@ img.spc { max-width: 200px; }
 .fav2 .fadd span.edit { margin-left: 60px; visibility: hidden; }
 
 /***********************************************/
-/*                    ◊“≥  	                   */
+/*                   È¶ñÈ°µ  	                   */
 /***********************************************/
-/*************   ‹ª∂”≠   **************/
+/*************  ÂèóÊ¨¢Ëøé   **************/
 #hottags { padding-right: 10px; }
 #hottagt { border: 1px solid #eaeef1; height:25px; padding-left: .5em; background-image:url('toptagt.gif') }
 #hottagt a { font-size: 14px; color: #72A5C2; line-height: 25px; position: absolute; }
@@ -158,9 +158,9 @@ img.spc { max-width: 200px; }
 #hotuser a { font-size:12px; color:#16397D; line-height: 20px; display: block; }
 
 /***********************************************/
-/*                   ±Í«©  	                   */
+/*                   Ê†áÁ≠æ  	                   */
 /***********************************************/
-/*************   ‹ª∂”≠   **************/
+/*************  ÂèóÊ¨¢Ëøé   **************/
 #urlpurs { padding-right: 10px; margin-bottom: 15px; }
 #urlpurt { border: 1px solid #eaeef1; height:25px; padding-left: .5em; background-image:url('toptagt.gif') }
 #urlpurt a { font-size: 14px; color: #72A5C2; line-height: 25px; position: absolute; }
@@ -179,9 +179,9 @@ img.spc { max-width: 200px; }
 
 
 /***********************************************/
-/*                   ”√ªß  	                   */
+/*                   Áî®Êà∑  	                   */
 /***********************************************/
-/*************  ”“≤‡   **************/
+/*************  Âè≥‰æß   **************/
 #mytags { padding-right: 10px; margin-bottom: 15px; }
 #mytagt { border: 1px solid #eaeef1; height:25px; padding-left: .5em; background-image:url('toptagt.gif') }
 #mytagt img { margin-right: 10px; margin-top: 8px; cursor: pointer; }
@@ -214,16 +214,16 @@ img.spc { max-width: 200px; }
 
 
 /***********************************************/
-/*                   ”√ªß∏ˆ»À◊ ¡œ	           */
+/*                   Áî®Êà∑‰∏™‰∫∫ËµÑÊñô	           */
 /***********************************************/
-/*◊ ¡œ”“≤‡   **************/
+/*ËµÑÊñôÂè≥‰æß   **************/
 #addmefriends { padding-right: 10px; margin-top: 15px; margin-bottom: 10px; }
 #addmefriendt { border: 1px solid #eaeef1; height:25px; padding-left: .5em; background-image:url('toptagt.gif') }
 #addmefriendt img { margin-right: 10px; margin-top: 8px; cursor: pointer; }
 #addmefriendt a { font-size: 14px; color: #72A5C2; line-height: 25px; position: absolute; }
 #addmefriend { border: 1px solid #eaeef1; border-top: none; padding: 5px 0 10px 15px; }
 #addmefriend a { color: #024562; line-height: 20px; display: list-item; list-style: none; }
-/*◊ ¡œ◊Û≤‡   **************/
+/*ËµÑÊñôÂ∑¶‰æß   **************/
 #myDetails {}
 
 #myInfo { float: left; height: 98px; width: 300px; }
@@ -263,9 +263,9 @@ img.spc { max-width: 200px; }
 
 
 /***********************************************/
-/*                   ”√ªßÕ¯¬Á»’÷æ	               */
+/*                   Áî®Êà∑ÁΩëÁªúÊó•Âøó	               */
 /***********************************************/
-/*Õ¯÷æ”“≤‡   **************/
+/*ÁΩëÂøóÂè≥‰æß   **************/
 #myDetails { padding-right: 10px; margin-bottom: 10px; }
 #myDetailt { border: 1px solid #eaeef1; height:25px; padding-left: .5em; background-image:url('toptagt.gif') }
 #myDetailt img { margin-right: 10px; margin-top: 8px; cursor: pointer; }
@@ -297,7 +297,7 @@ img.spc { max-width: 200px; }
 
 
 
-/*Õ¯÷æ◊Û≤‡  **************/
+/*ÁΩëÂøóÂ∑¶‰æß  **************/
 #blogLeft #page { margin-top: 20px; }
 
 .mblog { padding-bottom: 5px; display: block; margin-bottom: 10px; }
@@ -346,7 +346,7 @@ img.spc { max-width: 200px; }
 
 
 
-/*ªÿ∏¥Õ¯÷æ  **************/
+/*ÂõûÂ§çÁΩëÂøó  **************/
 #replayblog { border: 1px dashed #ccc; padding: 25px 10px 10px 25px; margin-bottom: 20px; }
 #replayblog input, #replayblog textarea { border: 1px solid #ccc; padding-left: 3px; }
 #replayblog div { margin-bottom: 5px; vertical-align: text-top; }
@@ -390,9 +390,9 @@ img.spc { max-width: 200px; }
 
 
 /***********************************************/
-/*                   ∆‰À¸“≥√Ê                  */
+/*                   ÂÖ∂ÂÆÉÈ°µÈù¢                  */
 /***********************************************/
-/*************     ‘∆     **************/
+/*************     ‰∫ë     **************/
 #cloud { font-weight: bold; line-height: normal; text-align: center; text-decoration: none; margin: 4%; }
 #cloud a { margin: 12px; line-height: 36px; overflow: auto; white-space: nowrap; }
 #cloud a:hover { color: #161; background-color: #ff0; text-decoration: none; }
@@ -441,20 +441,20 @@ img.spc { max-width: 200px; }
 #form { margin: 3%; }
 #form .line { margin-bottom: 1px; clear: both; line-height: 20px; height: 20px; }
 #form .line2 { margin-bottom: 10px; clear: both; line-height: 20px; height: 20px; }
-#form .d1 { width: 30px; margin-right: 5px; float: left; }
+#form .d1 { width: 40px; margin-right: 5px; float: left; }
 #form .d2 { float: left; }
 #form .sure { padding-left: 3em; margin-top: 10px; display: block; }
 #form .error { clear: both; color: #f00; margin-left: 2em; line-height: 20px; }
 #mytags2 { margin-left: 3%; margin-right: 10%; }
 #mytags2 span { display: block; line-height: 22px; } 
-#mytags2 a.cho { margin-right: 1em; text-decoration: none; color: #8c8cff; white-space: nowrap; }
-#mytags2 a.cho:hover { color: #161; background-color: yellow; text-decoration: none; }
+#mytags2 a { margin-right: 1em; text-decoration: none; color: #8c8cff; white-space: nowrap; }
+#mytags2 a:hover,#mytags2 a.focus { color: #161; background-color: yellow; text-decoration: none; }
 #mytags2 .bundle { float: left; clear: left; color: #f69; margin-right: 20px; width: 50px; text-align: right; line-height: 22px; }
 #tips { margin-top: 130px; width: 600px; }
 #tips a { color: #8c8cff; }
 #form #tcontent { width: 450px; height: 160px; padding: 3px; }
 #form #ttitle { padding: 2px; width: 380px; }
-#form #ttags, #form #Turl, #form #Tdescription, #form #Tnotes { width: 360px; margin-bottom: 4px; }
+#form #Ttags, #form #Turl, #form #Tdescription, #form #Tnotes { width: 360px; margin-bottom: 4px; }
 
 
 /********  postb    *********/
@@ -488,7 +488,7 @@ img.spc { max-width: 200px; }
 #buright #Ttags { width: 380px; height: 160px; }
 
 
-/*************    ∆‰À¸“≥√Ê    **************/
+/*************    ÂÖ∂ÂÆÉÈ°µÈù¢    **************/
 #spacer { display: block; margin: 40px; }
 h1 { font-size: 12pt; margin-top: 25px; font-weight: bold; color: #FF9933; text-decoration: none; line-height:150%; }
 h3, h3 a { font-size: 13px; color: #000; text-decoration: none; margin-top: 20px; margin-bottom: 5px; font-weight: bold; }
@@ -521,7 +521,7 @@ h4 a:hover { color: #f93; text-decoration: none; }
     display: inline; margin-right: 10px;    
 }
 
-/*************    ∑«±Í◊º 
+/*************    ÈùûÊ†áÂáÜ 
 .fav .notes { word-break: break-all; }
 .mblog .con td { word-break:break-all; }
 .rblog .con td { word-break:break-all; }
