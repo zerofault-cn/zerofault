@@ -60,9 +60,9 @@ class Index(webapp.RequestHandler):
 		#********************** Query **************************#
 		link = Link.all().order("-addtime")
 		if tag_name:
-			t_q = Tag.gql("WHERE name = :1",unquote(tag_name).decode('utf-8'))
+			tag = Tag.gql("WHERE name = :1",unquote(tag_name).decode('utf-8'))
 			#logging.info(unquote(tag_name))
-			t = t_q.get()
+			t = tag.get()
 			if t:
 				link = link.filter("tag =", t.key())
 		
@@ -113,7 +113,7 @@ class Index(webapp.RequestHandler):
 			'link_list': link_list,
 			'tag_list' : Tag.all().order("usetime"),
 			'is_paginated':  page_count> 1,
-			'has_next': p*limit < l_count,
+			'has_next': p*limit < link_count,
 			'has_previous': p > 1,
 			'current_page': p,
 			'next_page': p + 1,
@@ -122,9 +122,17 @@ class Index(webapp.RequestHandler):
 			'page_numbers': page_numbers,
 			'count': link_count
 			}
-		path = os.path.join(os.path.dirname(__file__),'index.html')
+		path = os.path.join(os.path.dirname(__file__),'templates/index.html')
 		self.response.out.write(template.render(path,template_values))
 
+
+class TagList(webapp.RequestHandler):
+	def get(self):
+		#level = 5 #云层梯度
+		tag = Tag.all.order('usetime')
+		path = os.path.join(os.path.dirname(__file__),'templates/tag.html')
+		self.response.out.write(template.render(path,tag))
+			
 
 class AddForm(webapp.RequestHandler):
 	def get(self):
@@ -150,13 +158,13 @@ class AddForm(webapp.RequestHandler):
 			
 			template_values = {
 				'key'     : key,
-				'tag_list': Tag.all().order("usetime"),
+				'tag_list': Tag.all(),
 				'title'   : title,
 				'url'     : url,
 				'descr'   : descr,
 				'tags'    : tag_names
 				}
-			path = os.path.join(os.path.dirname(__file__),'add.html')
+			path = os.path.join(os.path.dirname(__file__),'templates/add.html')
 			self.response.out.write(template.render(path,template_values))
 		else:
 			self.redirect(users.create_login_url(self.request.uri))
@@ -225,6 +233,7 @@ application = webapp.WSGIApplication([
 	('/submit', AddAction),
 	('/search', Index),
 	('/delkey', DelKey),
+	('/tag', TagList),
 	('/tag/(.*)', Index)
 	],debug=True)
 
