@@ -10,26 +10,13 @@ indexes:
 # automatically uploaded to the admin console when you next deploy
 # your application using appcfg.py.
 
-# Unused in query history -- copied from input.
-- kind: Greeting
-  properties:
-  - name: date
-    direction: desc
-
-# Unused in query history -- copied from input.
-- kind: Link
-  properties:
-  - name: 1
-  - name: addtime
-    direction: desc
-
-# Used 155 times in query history.
+# Used 181 times in query history.
 - kind: Link
   properties:
   - name: addtime
     direction: desc
 
-# Used 44 times in query history.
+# Used 50 times in query history.
 - kind: Link
   properties:
   - name: private
@@ -49,4 +36,10 @@ indexes:
   properties:
   - name: tag
   - name: addtime
+    direction: desc
+
+# Used once in query history.
+- kind: Tag
+  properties:
+  - name: usetime
     direction: desc
