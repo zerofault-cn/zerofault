@@ -37,6 +37,7 @@ class Tag(db.Model):
 
 class Index(webapp.RequestHandler):
 	def get(self,tag_name=''):
+		#********************** User Auth **************************#
 		user = users.get_current_user()
 		if user and user.email()=='zerofault@gmail.com':
 			isLogin = True
@@ -47,6 +48,7 @@ class Index(webapp.RequestHandler):
 			auth_url = users.create_login_url(self.request.uri)
 			auth_text= '登录'
 
+		#********************** Pagenator init**************************#
 		limit = 20;
 		p = self.request.get('p')
 		if not p:
@@ -55,44 +57,32 @@ class Index(webapp.RequestHandler):
 			p = int(p)
 		offset = (p-1)*limit
 		
-		link_list = []
-		l_q = Link.all().order("-addtime")
+		#********************** Query **************************#
+		link = Link.all().order("-addtime")
 		if tag_name:
 			t_q = Tag.gql("WHERE name = :1",unquote(tag_name).decode('utf-8'))
 			#logging.info(unquote(tag_name))
 			t = t_q.get()
 			if t:
-				l_q = l_q.filter("tag =", t.key())
+				link = link.filter("tag =", t.key())
 		
 		if not isLogin:
-			l_q = l_q.filter("private =", False)
+			link = link.filter("private =", False)
 		
-		l_count = l_q.count(1000) #总条数
-		p_count = int(math.ceil(l_count / float(limit))) #总页数
-		if p_count <=7 :
-			page_numbers = range(1,p_count+1)
-		else:
-			if p<=6:
-				page_numbers = range(1,max(1,p-3))
-			else:
-				page_numbers = [1,2] + ['...']
-			page_numbers += range(max(1,p-3),min(p+4,p_count+1))
-			if p >= p_count-5:
-				page_numbers += range(min(p+4,p_count+1),p_count+1)
-			else:
-				page_numbers += (['...']+range(p_count-1,p_count+1))
+		link_count = link.count(1000) #总条数
 			
-		
-		link = l_q.fetch(limit,offset)
+		#********************** Search **************************#
+		s = self.request.get('s')
+		if not s:
+			link = link.fetch(limit,offset)
+		link_list = []
 		for link_item in link:
-			#logging.info("%s" % link_item.title)
-			tag_list = []
-			for tag_key in link_item.tag:
-				tag_list.append(db.get(tag_key))
-				
+			if s and link_item.title.find(s)<0:
+				link_count -=1
+				continue
 			link_list.append({
 				'info' : link_item,
-				'tag_list' : tag_list})
+				'tag_list' : db.get(link_item.tag)})
 			
 		#t_q=Tag.all()
 		#tt=t_q.fetch(100)
@@ -100,6 +90,20 @@ class Index(webapp.RequestHandler):
 		#	t.usetime=datetime.datetime.now()
 		#	t.put()
 			
+		#********************** Pagenator **************************#
+		page_count = int(math.ceil(link_count / float(limit))) #总页数
+		if page_count <=7 :
+			page_numbers = range(1,page_count+1)
+		else:
+			if p<=6:
+				page_numbers = range(1,max(1,p-3))
+			else:
+				page_numbers = [1,2] + ['...']
+			page_numbers += range(max(1,p-3),min(p+4,page_count+1))
+			if p >= page_count-5:
+				page_numbers += range(min(p+4,page_count+1),page_count+1)
+			else:
+				page_numbers += (['...']+range(page_count-1,page_count+1))
 			
 		template_values = {
 			'isLogin'  : isLogin,
@@ -108,15 +112,15 @@ class Index(webapp.RequestHandler):
 			'auth_text': auth_text,
 			'link_list': link_list,
 			'tag_list' : Tag.all().order("usetime"),
-			'is_paginated':  p_count> 1,
+			'is_paginated':  page_count> 1,
 			'has_next': p*limit < l_count,
 			'has_previous': p > 1,
 			'current_page': p,
 			'next_page': p + 1,
 			'previous_page': p - 1,
-			'pages': p_count,
+			'pages': page_count,
 			'page_numbers': page_numbers,
-			'count': l_count
+			'count': link_count
 			}
 		path = os.path.join(os.path.dirname(__file__),'index.html')
 		self.response.out.write(template.render(path,template_values))
@@ -219,6 +223,7 @@ application = webapp.WSGIApplication([
 	('/', Index),
 	('/add', AddForm),
 	('/submit', AddAction),
+	('/search', Index),
 	('/delkey', DelKey),
 	('/tag/(.*)', Index)
 	],debug=True)

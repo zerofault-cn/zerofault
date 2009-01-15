@@ -23,13 +23,13 @@ indexes:
   - name: addtime
     direction: desc
 
-# Used 108 times in query history.
+# Used 155 times in query history.
 - kind: Link
   properties:
   - name: addtime
     direction: desc
 
-# Used 16 times in query history.
+# Used 44 times in query history.
 - kind: Link
   properties:
   - name: private
