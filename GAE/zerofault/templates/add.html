@@ -9,6 +9,7 @@
 {% endblock %} 
 {% block content %}
 	<form name="form1" action="submit" method="post" onsubmit="return check();">
+	<input type="hidden" name="type" value="link" />
 	<input type="hidden" name="key" value="{{ key }}" />
 	<input type="hidden" name="private" value="0" />
 	<div id="form">
@@ -22,7 +23,7 @@
 		</div>
 		<div class="line">
 			<div class="d1">描述：</div>
-			<div class="d2"><textarea name="descr" id="Tnotes" tabIndex="3" rows="5" cols="40">{{ descr }}</textarea></div>
+			<div class="d2"><textarea name="content" id="Tnotes" tabIndex="3" rows="5" cols="40">{{ descr }}</textarea></div>
 		</div>
 		<div class="line">
 			<div class="d1">标签：</div>

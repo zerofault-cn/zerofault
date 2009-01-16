@@ -1,25 +1,51 @@
 #coding=utf-8
 import logging
-
-import csv,os,datetime
+import csv
+import os
+import datetime
 
 from google.appengine.ext import webapp
 from google.appengine.ext.webapp.util import run_wsgi_app
 from google.appengine.ext import db
 
-class Link(db.Model):
-	title = db.StringProperty()
-	url   = db.LinkProperty()
-	descr = db.TextProperty()
-	addtime=db.DateTimeProperty(auto_now_add=True)
-	private=db.BooleanProperty()
-	tag   = db.ListProperty(db.Key)
+from model import Entry,Link,Tag
 
-class Tag(db.Expando):
-	name = db.StringProperty()
-	num  = db.IntegerProperty()
-	usetime  = db.DateTimeProperty(auto_now_add=True)
+class fix1(webapp.RequestHandler):
+	def get (self):
+		
+		for tag in Tag.all():
+			tag.type ='link'
+			tag.count_link=tag.num
+			tag.count_note=0
+			tag.count_pic=0
+			tag.put()
+		#	del tag.num
+		
 
+
+class fix2(webapp.RequestHandler):
+	def get (self):
+		e0=Entry().all()
+		del e0
+		for l in Link.all():
+			e = Entry()
+			e.title = l.title
+			e.url   = l.url
+			e.content=l.descr
+			e.image = ''
+			e.addtime=l.addtime
+			e.private=l.private
+			e.type='link'
+			e.comment=[]
+			e.dig=0
+
+			for t in db.get(l.tag):
+				if t:
+					e.tags.append(t.name)
+			e.put()
+		#	del link_item.tag
+			
+	
 class csv(webapp.RequestHandler):
 	def get(self):
 		i=0
@@ -88,7 +114,9 @@ class rss(webapp.RequestHandler):
 	
 application = webapp.WSGIApplication([
 	('/dump/csv', csv),
-	('/dump/rss', rss)
+	('/dump/rss', rss),
+	('/dump/fix1', fix1),
+	('/dump/fix2', fix2),
 	],debug=True)
 
 def main():

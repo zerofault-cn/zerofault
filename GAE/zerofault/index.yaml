@@ -10,13 +10,26 @@ indexes:
 # automatically uploaded to the admin console when you next deploy
 # your application using appcfg.py.
 
+# Used 18 times in query history.
+- kind: Entry
+  properties:
+  - name: addtime
+    direction: desc
+
+# Used 8 times in query history.
+- kind: Entry
+  properties:
+  - name: private
+  - name: addtime
+    direction: desc
+
 # Used 181 times in query history.
 - kind: Link
   properties:
   - name: addtime
     direction: desc
 
-# Used 50 times in query history.
+# Used 78 times in query history.
 - kind: Link
   properties:
   - name: private
