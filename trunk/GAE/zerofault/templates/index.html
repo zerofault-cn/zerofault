@@ -16,11 +16,11 @@
 
 	<div id="col_right">
 		<dl class="box" id="mytags">
-			<dt><span>我的标签</span><a id="editbundle" >编辑</a></dt>
+			<dt><span><a href="/tag">我的标签</a></span></dt>
 			<dd id="mytag">
 				<ul style="display: block;">
 					{% for tag_item in tag_list %}
-					<li><a href="/tag/{{ tag_item.name }}">{{ tag_item.name }}</a><a href="/dump/rss?tag={{ tag_item.name }}" class="num" >{{ tag_item.num }}</a></li>
+					<li><a href="/tag/{{ tag_item.name }}">{{ tag_item.name }}</a><a href="/dump/rss?tag={{ tag_item.name }}" class="num" >{{ tag_item.count_link }}</a></li>
 					{% endfor %}
 				</ul>
 			</dd>
@@ -68,25 +68,25 @@
 		</div>
 
 		<div id="favs">
-		{% for link_item in link_list %}
-			<dl class="item" id="item_{{ link_item.info.key }}">
+		{% for item in entry_list %}
+			<dl class="item" id="item_{{ item.key }}">
 				<img class="icon" src="/media/htm.gif" />
 				<dt>
-					<a href="{{link_item.info.url}}" target="_blank">{{ link_item.info.title }}</a>
-					{% if link_item.info.private %}
+					<a href="{{item.url}}" target="_blank">{{ item.title }}</a>
+					{% if item.private %}
 					<img src="/media/lock.gif" align="absmiddle" />
 					{% endif %}
-					{{ link_item.info.addtime|date:"Y-m-d" }}
+					{{ item.addtime|date:"Y-m-d" }}
 				</dt>
-				<dd class="descr">{{ link_item.info.descr|escape|linebreaksbr }}</dd>
+				<dd class="descr">{{ item.content|escape|linebreaksbr }}</dd>
 				<dd class="tags">
-					{% for tag_item in link_item.tag_list %}
-					[<a href="/tag/{{ tag_item.name }}" class="tag">{{ tag_item.name }}</a>]
+					{% for tag in item.tags %}
+					[<a href="/{{ item.type }}/tag/{{ tag }}" class="tag">{{ tag }}</a>]
 					{% endfor %}
 					{% if isLogin %}
 					... 
-					<a href="/add?key={{ link_item.info.key }}" class="edit">编辑</a>/ <a class="del" onClick="$('#del_{{ link_item.info.key }}').show()">删除</a>
-					<span class="edit" id='del_{{ link_item.info.key }}'><a onClick="submit_del(this)" value="{{ link_item.info.key }}" hhref="del?key={{ link_item.info.key }}" class="edit">确认</a> / <a onClick='$("#del_{{ link_item.info.key }}").hide()' class="edit">取消</a></span>
+					<a href="/add?key={{ item.key }}" class="edit">编辑</a>/ <a class="del" onClick="$('#del_{{ item.key }}').show()">删除</a>
+					<span class="edit" id='del_{{ item.key }}'><a onClick="submit_del(this)" value="{{ item.key }}" hhref="del?key={{ item.key }}" class="edit">确认</a> / <a onClick='$("#del_{{ item.key }}").hide()' class="edit">取消</a></span>
 					{% endif %}
 				</dd>
 			</dl>

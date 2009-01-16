@@ -9,6 +9,8 @@ from google.appengine.ext.webapp.util import run_wsgi_app
 from google.appengine.ext import db
 from google.appengine.ext.webapp import template
 
+from model import Entry,Link,Tag
+
 #-----------------------------------#
 #equivalent of javascript unescape()
 from urllib import unquote
@@ -22,21 +24,9 @@ def unescape(txt):
 	return unquote(p.sub(unichar_fromhex, txt))
 #-----------------------------------#
 
-class Link(db.Model):
-	title = db.StringProperty()
-	url   = db.LinkProperty()
-	descr = db.TextProperty()
-	addtime=db.DateTimeProperty(auto_now_add=True)
-	private=db.BooleanProperty()
-	tag   = db.ListProperty(db.Key)
-
-class Tag(db.Model):
-	name = db.StringProperty()
-	num  = db.IntegerProperty()
-	usetime  = db.DateTimeProperty(auto_now_add=True)
 
 class Index(webapp.RequestHandler):
-	def get(self,tag_name=''):
+	def get(self,req_tag=''):
 		#********************** User Auth **************************#
 		user = users.get_current_user()
 		if user and user.email()=='zerofault@gmail.com':
@@ -58,40 +48,29 @@ class Index(webapp.RequestHandler):
 		offset = (p-1)*limit
 		
 		#********************** Query **************************#
-		link = Link.all().order("-addtime")
-		if tag_name:
-			tag = Tag.gql("WHERE name = :1",unquote(tag_name).decode('utf-8'))
-			#logging.info(unquote(tag_name))
-			t = tag.get()
-			if t:
-				link = link.filter("tag =", t.key())
-		
+		e = Entry.all().order("-addtime")
+		if req_tag:
+			e = e.filter("tags", req_tag)
 		if not isLogin:
-			link = link.filter("private =", False)
+			e = e.filter("private =", False)
 		
-		link_count = link.count(1000) #总条数
+		item_count = e.count(1000) #总条数
 			
 		#********************** Search **************************#
 		s = self.request.get('s')
-		if not s:
-			link = link.fetch(limit,offset)
-		link_list = []
-		for link_item in link:
-			if s and link_item.title.find(s)<0:
-				link_count -=1
-				continue
-			link_list.append({
-				'info' : link_item,
-				'tag_list' : db.get(link_item.tag)})
+		if s:
+			e = e
+		else:
+			e = e.fetch(limit,offset)
+
+		for item in e:
+			if s and item.title.find(s)<0:
+				item_count -=1
+				e.remove(item)
 			
-		#t_q=Tag.all()
-		#tt=t_q.fetch(100)
-		#for t in tt:
-		#	t.usetime=datetime.datetime.now()
-		#	t.put()
 			
 		#********************** Pagenator **************************#
-		page_count = int(math.ceil(link_count / float(limit))) #总页数
+		page_count = int(math.ceil(item_count / float(limit))) #总页数
 		if page_count <=7 :
 			page_numbers = range(1,page_count+1)
 		else:
@@ -110,59 +89,68 @@ class Index(webapp.RequestHandler):
 			'user'     : user,
 			'auth_url' : auth_url,
 			'auth_text': auth_text,
-			'link_list': link_list,
+			'entry_list': e,
 			'tag_list' : Tag.all().order("usetime"),
 			'is_paginated':  page_count> 1,
-			'has_next': p*limit < link_count,
+			'has_next': p*limit < item_count,
 			'has_previous': p > 1,
 			'current_page': p,
 			'next_page': p + 1,
 			'previous_page': p - 1,
 			'pages': page_count,
 			'page_numbers': page_numbers,
-			'count': link_count
+			'count': item_count
 			}
 		path = os.path.join(os.path.dirname(__file__),'templates/index.html')
 		self.response.out.write(template.render(path,template_values))
 
+class TypeIndex(webapp.RequestHandler):
+	def get (self,type='link'):
+		self.response.out.write(type)
 
 class TagList(webapp.RequestHandler):
 	def get(self):
-		#level = 5 #云层梯度
-		tag = Tag.all.order('usetime')
+		entry_count =Entry().all().count(1000)
+		tags = Tag.all().order('usetime')
+		tag_count = tags.count(1000)
+		for i,tag in enumerate(tags):
+			tags[i].level=tag.count_link/8
+		
+			
 		path = os.path.join(os.path.dirname(__file__),'templates/tag.html')
-		self.response.out.write(template.render(path,tag))
+		self.response.out.write(template.render(path,{'tags':tags}))
 			
 
 class AddForm(webapp.RequestHandler):
 	def get(self):
 		if users.get_current_user():
+			type= self.request.get('type')
+			if not type:
+				type = 'link'
 			key = self.request.get('key')
-			tag_names= ''
 			if key:
-				l = db.get(key)
-				title = l.title
-				url   = l.url
-				descr = l.descr
-				tags  =db.get(l.tag)
-				for tag in tags:
-					if tag:
-						tag_names = tag_names+tag.name+' '
+				e = db.get(key)
+				title = e.title
+				url   = e.url
+				content = e.content
+				tags  = ' '.join(tag for tag in e.tags)
+				
 					
 			else:
 				title = unescape(self.request.get('title'))
 				url   = unescape(self.request.get('url'))
-				descr = unescape(self.request.get('descr'))
-				tag_names  = ''
+				content = unescape(self.request.get('descr'))
+				tags  = ''
 			
 			
 			template_values = {
+				'type'    : type,
 				'key'     : key,
 				'tag_list': Tag.all(),
 				'title'   : title,
 				'url'     : url,
-				'descr'   : descr,
-				'tags'    : tag_names
+				'content'   : content,
+				'tags'    : tags
 				}
 			path = os.path.join(os.path.dirname(__file__),'templates/add.html')
 			self.response.out.write(template.render(path,template_values))
@@ -172,56 +160,70 @@ class AddForm(webapp.RequestHandler):
 
 class AddAction(webapp.RequestHandler):
 	def post(self):
+		type = self.request.get('type')
 		key = self.request.get('key')
-		t = Tag()
 		if key :
-			l = db.get(key)
+			e = db.get(key)
 		else:
-			l = Link()
-		l.title = self.request.get('title')
-		l.url = self.request.get('url')
-		l.descr = self.request.get('descr')
-		l.private = bool(int(self.request.get('private')))
+			e = Link()
+		e.title   = self.request.get('title')
+		e.url     = self.request.get('url')
+		e.content = self.request.get('content')
+		e.private = bool(int(self.request.get('private')))
 		if key:
-			oldtags = db.get(l.tag)
-			for oldtag in oldtags:
-				if oldtag:
-					oldtag.num -= 1
-					oldtag.put()
-		l.tag = []
+			for oldtag in e.tags:
+				t = Tag(name = oldtag)
+				if t:
+					t.num -= 1
+					t.put()
+		
+		tag_names = self.request.get('tags').split()
+		for tag_name in tag_names:
+			t = Tag(name = tag_name)
+			if t:
+				if type == 'link':
+					t.count_link +=1
+				if type == 'note':
+					t.count_note +=1
+				if type == 'pic':
+					t.count_pic +=1
 
-		tags = self.request.get('tags').split()
-		for tag_name in tags:
-			t_q = t.all()
-			t_q = t_q.filter('name =',tag_name)
-			logging.info(tag_name)
-			if(t_q.count(1000)>0):
-				t = t_q.get()
-				t.num =t.num+1
 				t.usetime = datetime.datetime.now()
 				t.put()
 			else:
 				t = Tag()
 				t.name = tag_name
-				t.num=1
+				if type == 'link':
+					t.count_link =1
+				if type == 'note':
+					t.count_note =1
+				if type == 'pic':
+					t.count_pic =1
 				t.usetime = datetime.datetime.now()
 				t.put()
-			l.tag.append(t.key())
-
-		l.put()
+			e.tags.append(db.Category(tag_name))
+		e.put()
 		self.redirect('/')
+
 class DelKey(webapp.RequestHandler):
 	def get(self):
 		user = users.get_current_user()
 		key = self.request.get('key')
 		if key and user and user.email()=='zerofault@gmail.com':
-			l = db.get(key)
-			if l and l.tag:
-				for tag_key in l.tag:
-					t = db.get(tag_key)
-					t.num -= 1
-					t.put()
-				db.delete(key)
+			e = db.get(key)
+			logging.info(e.title)
+			if e and e.tags:
+				for tag in e.tags:
+					t = Tag(name = tag)
+					if t:
+						if e.type == 'link':
+							t.count_link -= 1
+						if e.type == 'note':
+							t.count_note -= 1
+						if e.type == 'pic':
+							t.count_pic -= 1
+						t.put()
+			db.delete(e)
 			self.response.out.write('1')
 		else:
 			self.response.out.write('0')
@@ -234,7 +236,7 @@ application = webapp.WSGIApplication([
 	('/search', Index),
 	('/delkey', DelKey),
 	('/tag', TagList),
-	('/tag/(.*)', Index)
+	('/tag/(.*)', Index),
 	],debug=True)
 
 def main():
