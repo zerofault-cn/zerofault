@@ -4,8 +4,8 @@
 #          Type :   ""
 #          Name :   "Rsync_Host Edit"
 #       Version :   "1.0"
-#  Created Date :   "2008-12-17"
-# Modified Date :   "2008-12-17"
+#  Created Date :   "2009-01-16"
+# Modified Date :   "2009-01-16"
 #       Include :   ""
 #   Global Vars :   "$_SERVER[HTTP_HOST], $_SERVER[SCRIPT_NAME], $_GET[ID], $_POST[Action], $_POST[FromObject]"
 #      Template :   "rsync_host.edit.html"
@@ -27,6 +27,7 @@ if($FormAction == 'Edit')
 {
 	//Global Lobal
 	$frmID = trim($_POST[ID]);
+	$frmName = trim($_POST[Name]);
 	$frmHost = trim($_POST[Host]);
 	$frmPath = trim($_POST[Path]);
 	$frmDescription = trim($_POST[Description]);
@@ -34,6 +35,7 @@ if($FormAction == 'Edit')
 
 	$oRsync_Host = new Rsync_Host;
 
+	$oRsync_Host->setName($frmName);
 	$oRsync_Host->setHost($frmHost);
 	$oRsync_Host->setPath($frmPath);
 	$oRsync_Host->setDescription($frmDescription);
@@ -47,6 +49,7 @@ if($FormAction == 'Edit')
 		$smarty->display('message.htm');
 	}else{
 		$smarty->assign('ID',$frmID);
+		$smarty->assign('Name',$frmName);
 		$smarty->assign('Host',$frmHost);
 		$smarty->assign('Path',$frmPath);
 		$smarty->assign('Description',$frmDescription);
@@ -67,6 +70,7 @@ if($FormAction == 'Edit')
 
 
 		$smarty->assign('ID',$arr[ID]);
+		$smarty->assign('Name',$arr[Name]);
 		$smarty->assign('Host',$arr[Host]);
 		$smarty->assign('Path',$arr[Path]);
 		$smarty->assign('Description',$arr[Description]);

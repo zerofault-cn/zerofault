@@ -4,8 +4,8 @@
 #          Type :   ""
 #          Name :   "Sync_XML Browse"
 #       Version :   "1.0"
-#  Created Date :   "2008-12-17"
-# Modified Date :   "2008-12-17"
+#  Created Date :   "2009-01-16"
+# Modified Date :   "2009-01-16"
 #       Include :   "PATH_Include . pagelist_html.php"
 #   Global Vars :   "$_GET[page], $_SESSION[MyWork][Page]"
 #      Template :   "sync_xml.browse.html"
@@ -50,8 +50,10 @@ $smarty->assign('navagation', $nav->pageListStype1());
 $smarty->assign('NavCount', $offset);
 
 $smarty->assign('ID',$arr[ID]);
-$smarty->assign('UID',$arr[UID]);
+$smarty->assign('User_ID',$arr[User_ID]);
+$smarty->assign('Host_ID',$arr[Host_ID]);
 $smarty->assign('Filename',$arr[Filename]);
+$smarty->assign('Content',$arr[Content]);
 $smarty->assign('Create_Time',$arr[Create_Time]);
 $smarty->assign('Modify_Time',$arr[Modify_Time]);
 $smarty->assign('status',$arr[status]);

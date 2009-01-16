@@ -4,8 +4,8 @@
 #          Type :   ""
 #          Name :   "Host_Info Edit"
 #       Version :   "1.0"
-#  Created Date :   "2008-12-17"
-# Modified Date :   "2008-12-17"
+#  Created Date :   "2009-01-16"
+# Modified Date :   "2009-01-16"
 #       Include :   ""
 #   Global Vars :   "$_SERVER[HTTP_HOST], $_SERVER[SCRIPT_NAME], $_GET[ID], $_POST[Action], $_POST[FromObject]"
 #      Template :   "host_info.edit.html"
@@ -28,15 +28,21 @@ if($FormAction == 'Edit')
 	//Global Lobal
 	$frmID = trim($_POST[ID]);
 	$frmHost = trim($_POST[Host]);
-	$frmPath = trim($_POST[Path]);
+	$frmHost_Chroot = trim($_POST[Host_Chroot]);
+	$frmLocal_Chroot = trim($_POST[Local_Chroot]);
+	$frmTime = trim($_POST[Time]);
 	$frmSync_ID = trim($_POST[Sync_ID]);
+	$frmMail = trim($_POST[Mail]);
 
 
 	$oHost_Info = new Host_Info;
 
 	$oHost_Info->setHost($frmHost);
-	$oHost_Info->setPath($frmPath);
+	$oHost_Info->setHost_Chroot($frmHost_Chroot);
+	$oHost_Info->setLocal_Chroot($frmLocal_Chroot);
+	$oHost_Info->setTime($frmTime);
 	$oHost_Info->setSync_ID($frmSync_ID);
+	$oHost_Info->setMail($frmMail);
         
 
 
@@ -48,8 +54,11 @@ if($FormAction == 'Edit')
 	}else{
 		$smarty->assign('ID',$frmID);
 		$smarty->assign('Host',$frmHost);
-		$smarty->assign('Path',$frmPath);
+		$smarty->assign('Host_Chroot',$frmHost_Chroot);
+		$smarty->assign('Local_Chroot',$frmLocal_Chroot);
+		$smarty->assign('Time',$frmTime);
 		$smarty->assign('Sync_ID',$frmSync_ID);
+		$smarty->assign('Mail',$frmMail);
 
         $smarty->assign('message','Host_Info $frmID Edit Fail !');
         $smarty->display('message.htm');
@@ -68,8 +77,11 @@ if($FormAction == 'Edit')
 
 		$smarty->assign('ID',$arr[ID]);
 		$smarty->assign('Host',$arr[Host]);
-		$smarty->assign('Path',$arr[Path]);
+		$smarty->assign('Host_Chroot',$arr[Host_Chroot]);
+		$smarty->assign('Local_Chroot',$arr[Local_Chroot]);
+		$smarty->assign('Time',$arr[Time]);
 		$smarty->assign('Sync_ID',$arr[Sync_ID]);
+		$smarty->assign('Mail',$arr[Mail]);
 		
 		
 	}else{

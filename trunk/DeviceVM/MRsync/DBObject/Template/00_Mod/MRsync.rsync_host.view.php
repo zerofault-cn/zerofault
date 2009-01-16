@@ -4,8 +4,8 @@
 #          Type :   ""
 #          Name :   "Rsync_Host Add"
 #       Version :   "1.0"
-#  Created Date :   "2008-12-17"
-# Modified Date :   "2008-12-17"
+#  Created Date :   "2009-01-16"
+# Modified Date :   "2009-01-16"
 #       Include :   ""
 #   Global Vars :   "$_SERVER[HTTP_HOST], $_SERVER[SCRIPT_NAME], $_POST[Action], $_GET[ID]"
 #      Template :   "rsync_host.add.html"
@@ -32,6 +32,7 @@ if($FormAction == 'Back')
 		$arr = $oRsync_Host->View($getRsync_HostID);
 
 		$smarty->assign('ID',$arr[ID]);
+		$smarty->assign('Name',$arr[Name]);
 		$smarty->assign('Host',$arr[Host]);
 		$smarty->assign('Path',$arr[Path]);
 		$smarty->assign('Description',$arr[Description]);

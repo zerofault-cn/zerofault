@@ -4,8 +4,8 @@
 #          Type :   ""
 #          Name :   "Rsync_Host Delete"
 #       Version :   "1.0"
-#  Created Date :   "2008-12-17"
-# Modified Date :   "2008-12-17"
+#  Created Date :   "2009-01-16"
+# Modified Date :   "2009-01-16"
 #       Include :   ""
 #   Global Vars :   "$_POST[Action], $_POST[ID], $_GET[ID]"
 #      Template :   "rsync_host.del.html"
@@ -51,6 +51,7 @@ if($FormAction == 'Delete')
 
 
 		$smarty->assign('ID',$arr[ID]);
+		$smarty->assign('Name',$arr[Name]);
 		$smarty->assign('Host',$arr[Host]);
 		$smarty->assign('Path',$arr[Path]);
 		$smarty->assign('Description',$arr[Description]);

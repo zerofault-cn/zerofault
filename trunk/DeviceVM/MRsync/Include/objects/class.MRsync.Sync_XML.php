@@ -1,6 +1,6 @@
 <?PHP
 /** 
- * @Create in 2008/12/24 04:37:28
+ * @Create in 2009/01/16 02:08:08
  * @Smarty Version 2.6.18
  * 
  */
@@ -11,6 +11,7 @@ class Sync_XML
 	var $User_ID;
 	var $Host_ID;
 	var $Filename;
+	var $Content;
 	var $Create_Time;
 	var $Modify_Time;
 	var $status;
@@ -25,6 +26,7 @@ class Sync_XML
 		$this->User_ID = null;	
 		$this->Host_ID = null;	
 		$this->Filename = null;	
+		$this->Content = null;	
 		$this->Create_Time = null;	
 		$this->Modify_Time = null;	
 		$this->status = null;	
@@ -49,15 +51,16 @@ class Sync_XML
 		$iUser_ID = $this->getUser_ID();
 		$iHost_ID = $this->getHost_ID();
 		$iFilename = $this->getFilename();
+		$iContent = $this->getContent();
 		$iCreate_Time = $this->getCreate_Time();
 		$iModify_Time = $this->getModify_Time();
 		$istatus = $this->getstatus();
 
-		if(isset($iUser_ID)||isset($iHost_ID)||isset($iFilename)||isset($iCreate_Time)||isset($iModify_Time)||isset($istatus))
+		if(isset($iUser_ID)||isset($iHost_ID)||isset($iFilename)||isset($iContent)||isset($iCreate_Time)||isset($iModify_Time)||isset($istatus))
 		{
 			$sql = "INSERT INTO `$this->table_name` ";
-			$sql .= "(`User_ID`,`Host_ID`,`Filename`,`Create_Time`,`Modify_Time`,`status`)";
-			$sql .= " VALUES(".$iUser_ID.",".$iHost_ID.",'".addslashes($iFilename)."','".addslashes($iCreate_Time)."','".addslashes($iModify_Time)."',".$istatus.")";
+			$sql .= "(`User_ID`,`Host_ID`,`Filename`,`Content`,`Create_Time`,`Modify_Time`,`status`)";
+			$sql .= " VALUES(".$iUser_ID.",".$iHost_ID.",'".addslashes($iFilename)."','".addslashes($iContent)."','".addslashes($iCreate_Time)."','".addslashes($iModify_Time)."',".$istatus.")";
 			
 			if($this->debug) {// print sql for debug
 				$this->ShowSQL($sql,"Add one record");
@@ -181,6 +184,7 @@ class Sync_XML
 		$iUser_ID = $this->getUser_ID();		
 		$iHost_ID = $this->getHost_ID();		
 		$iFilename = $this->getFilename();		
+		$iContent = $this->getContent();		
 		$iCreate_Time = $this->getCreate_Time();		
 		$iModify_Time = $this->getModify_Time();		
 		$istatus = $this->getstatus();		
@@ -193,6 +197,8 @@ class Sync_XML
 			if(isset($iHost_ID)) { $sql .= "`Host_ID`='".addslashes($iHost_ID)."',"; }
 			
 			if(isset($iFilename)) { $sql .= "`Filename`='".addslashes($iFilename)."',"; }
+			
+			if(isset($iContent)) { $sql .= "`Content`='".addslashes($iContent)."',"; }
 			
 			if(isset($iCreate_Time)) { $sql .= "`Create_Time`='".addslashes($iCreate_Time)."',"; }
 			
@@ -346,6 +352,19 @@ class Sync_XML
 		if(isset($this->Filename)) { return $this->Filename; }
 	}	
 	// Property  " Filename "  End ....  
+		
+	
+	// Property  " Content "  Start ....
+	function setContent($input) // Content set
+	{
+		if($this->Content = trim($input)) { return true; }
+	}
+		
+	function getContent() // Content Get
+	{
+		if(isset($this->Content)) { return $this->Content; }
+	}	
+	// Property  " Content "  End ....  
 		
 	
 	// Property  " Create_Time "  Start ....
