@@ -4,8 +4,8 @@
 #          Type :   ""
 #          Name :   "Host_Info Query Result"
 #       Version :   "1.0"
-#  Created Date :   "2008-12-17"
-# Modified Date :   "2008-12-17"
+#  Created Date :   "2009-01-16"
+# Modified Date :   "2009-01-16"
 #       Include :   "PATH_Include . pagelist_html.php"
 #   Global Vars :   "$_SERVER[HTTP_HOST], $_SERVER[SCRIPT_NAME], $_SESSION[Host_InfoSearchResult][Flag], $_SESSION[Host_InfoSearchResult][Keyword], $_SESSION[MyWork][Page], $_POST[Action], $_GET[page]"
 #      Template :   "host_info.queryresult.html"
@@ -73,8 +73,11 @@ if($FormAction == 'Back')
 
 		$smarty->assign('ID',$arr[ID]);
 		$smarty->assign('Host',$arr[Host]);
-		$smarty->assign('Path',$arr[Path]);
+		$smarty->assign('Host_Chroot',$arr[Host_Chroot]);
+		$smarty->assign('Local_Chroot',$arr[Local_Chroot]);
+		$smarty->assign('Time',$arr[Time]);
 		$smarty->assign('Sync_ID',$arr[Sync_ID]);
+		$smarty->assign('Mail',$arr[Mail]);
 	}else{
 		$smarty->assign('gotoURL',"http://$serverHTTP_HOST$serverSCRIPT_NAME?Mod=$iModule&op=query");
 		$smarty->assign('message',"You Don't select Search Condition !!");

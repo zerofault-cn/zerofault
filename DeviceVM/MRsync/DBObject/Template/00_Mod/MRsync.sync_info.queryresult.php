@@ -4,8 +4,8 @@
 #          Type :   ""
 #          Name :   "Sync_Info Query Result"
 #       Version :   "1.0"
-#  Created Date :   "2008-12-17"
-# Modified Date :   "2008-12-17"
+#  Created Date :   "2009-01-16"
+# Modified Date :   "2009-01-16"
 #       Include :   "PATH_Include . pagelist_html.php"
 #   Global Vars :   "$_SERVER[HTTP_HOST], $_SERVER[SCRIPT_NAME], $_SESSION[Sync_InfoSearchResult][Flag], $_SESSION[Sync_InfoSearchResult][Keyword], $_SESSION[MyWork][Page], $_POST[Action], $_GET[page]"
 #      Template :   "sync_info.queryresult.html"
@@ -72,11 +72,9 @@ if($FormAction == 'Back')
 		$smarty->assign('navagation', $nav->pageListStype1());
 
 		$smarty->assign('ID',$arr[ID]);
-		$smarty->assign('UID',$arr[UID]);
-		$smarty->assign('XID',$arr[XID]);
+		$smarty->assign('Sync_ID',$arr[Sync_ID]);
 		$smarty->assign('Path',$arr[Path]);
 		$smarty->assign('Filename',$arr[Filename]);
-		$smarty->assign('status',$arr[status]);
 	}else{
 		$smarty->assign('gotoURL',"http://$serverHTTP_HOST$serverSCRIPT_NAME?Mod=$iModule&op=query");
 		$smarty->assign('message',"You Don't select Search Condition !!");

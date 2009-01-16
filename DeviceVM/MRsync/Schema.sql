@@ -95,7 +95,9 @@ DROP TABLE IF EXISTS `Sync_XML`;
 CREATE TABLE IF NOT EXISTS `Sync_XML` (
   `ID` int(10) unsigned NOT NULL auto_increment,
   `User_ID` tinyint(3) unsigned NOT NULL DEFAULT '0' ,
+  `Host_ID` int(3) unsigned NOT NULL DEFAULT '0' ,
   `Filename` varchar(32) NOT NULL ,
+  `Content` text ,
   `Create_Time` datetime ,
   `Modify_Time` datetime ,
   `status` tinyint(3) unsigned NOT NULL DEFAULT '0' ,

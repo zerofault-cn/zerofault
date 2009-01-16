@@ -4,8 +4,8 @@
 #          Type :   ""
 #          Name :   "Sync_XML Add"
 #       Version :   "1.0"
-#  Created Date :   "2008-12-17"
-# Modified Date :   "2008-12-17"
+#  Created Date :   "2009-01-16"
+# Modified Date :   "2009-01-16"
 #       Include :   ""
 #   Global Vars :   "$_SERVER[HTTP_HOST], $_SERVER[SCRIPT_NAME], $_POST[Action], $_POST[FromObject]"
 #      Template :   "sync_xml.add.html"
@@ -25,8 +25,10 @@ $Now = date("Y-m-d H:i:s",time());
 if($FormAction == 'Add')
 {
 	//Global Lobal
-	$frmUID = trim($_POST[UID]);
+	$frmUser_ID = trim($_POST[User_ID]);
+	$frmHost_ID = trim($_POST[Host_ID]);
 	$frmFilename = trim($_POST[Filename]);
+	$frmContent = trim($_POST[Content]);
 	$frmCreate_Time = trim($_POST[Create_Time]);
 	$frmModify_Time = trim($_POST[Modify_Time]);
 	$frmstatus = trim($_POST[status]);
@@ -34,8 +36,10 @@ if($FormAction == 'Add')
 
     $oSync_XML = new Sync_XML;
     
-	$oSync_XML->setUID($frmUID);
+	$oSync_XML->setUser_ID($frmUser_ID);
+	$oSync_XML->setHost_ID($frmHost_ID);
 	$oSync_XML->setFilename($frmFilename);
+	$oSync_XML->setContent($frmContent);
 	$oSync_XML->setCreate_Time($frmCreate_Time);
 	$oSync_XML->setModify_Time($frmModify_Time);
 	$oSync_XML->setstatus($frmstatus);
@@ -47,8 +51,10 @@ if($FormAction == 'Add')
         $smarty->assign('message','Sync_XML Add Success !');
         $smarty->display('message.htm');
     }else{
-		$smarty->assign('UID',$frmUID);
+		$smarty->assign('User_ID',$frmUser_ID);
+		$smarty->assign('Host_ID',$frmHost_ID);
 		$smarty->assign('Filename',$frmFilename);
+		$smarty->assign('Content',$frmContent);
 		$smarty->assign('Create_Time',$frmCreate_Time);
 		$smarty->assign('Modify_Time',$frmModify_Time);
 		$smarty->assign('status',$frmstatus);

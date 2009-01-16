@@ -4,8 +4,8 @@
 #          Type :   ""
 #          Name :   "Host_Info Add"
 #       Version :   "1.0"
-#  Created Date :   "2008-12-17"
-# Modified Date :   "2008-12-17"
+#  Created Date :   "2009-01-16"
+# Modified Date :   "2009-01-16"
 #       Include :   ""
 #   Global Vars :   "$_SERVER[HTTP_HOST], $_SERVER[SCRIPT_NAME], $_POST[Action], $_POST[FromObject]"
 #      Template :   "host_info.add.html"
@@ -26,15 +26,21 @@ if($FormAction == 'Add')
 {
 	//Global Lobal
 	$frmHost = trim($_POST[Host]);
-	$frmPath = trim($_POST[Path]);
+	$frmHost_Chroot = trim($_POST[Host_Chroot]);
+	$frmLocal_Chroot = trim($_POST[Local_Chroot]);
+	$frmTime = trim($_POST[Time]);
 	$frmSync_ID = trim($_POST[Sync_ID]);
+	$frmMail = trim($_POST[Mail]);
 
 
     $oHost_Info = new Host_Info;
     
 	$oHost_Info->setHost($frmHost);
-	$oHost_Info->setPath($frmPath);
+	$oHost_Info->setHost_Chroot($frmHost_Chroot);
+	$oHost_Info->setLocal_Chroot($frmLocal_Chroot);
+	$oHost_Info->setTime($frmTime);
 	$oHost_Info->setSync_ID($frmSync_ID);
+	$oHost_Info->setMail($frmMail);
     
 
     if($oHost_Info->Add())
@@ -44,8 +50,11 @@ if($FormAction == 'Add')
         $smarty->display('message.htm');
     }else{
 		$smarty->assign('Host',$frmHost);
-		$smarty->assign('Path',$frmPath);
+		$smarty->assign('Host_Chroot',$frmHost_Chroot);
+		$smarty->assign('Local_Chroot',$frmLocal_Chroot);
+		$smarty->assign('Time',$frmTime);
 		$smarty->assign('Sync_ID',$frmSync_ID);
+		$smarty->assign('Mail',$frmMail);
     
 
         $smarty->assign('message','Host_Info Add Fail !');

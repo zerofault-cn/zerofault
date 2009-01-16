@@ -4,8 +4,8 @@
 #          Type :   ""
 #          Name :   "Rsync_Host Query Result"
 #       Version :   "1.0"
-#  Created Date :   "2008-12-17"
-# Modified Date :   "2008-12-17"
+#  Created Date :   "2009-01-16"
+# Modified Date :   "2009-01-16"
 #       Include :   "PATH_Include . pagelist_html.php"
 #   Global Vars :   "$_SERVER[HTTP_HOST], $_SERVER[SCRIPT_NAME], $_SESSION[Rsync_HostSearchResult][Flag], $_SESSION[Rsync_HostSearchResult][Keyword], $_SESSION[MyWork][Page], $_POST[Action], $_GET[page]"
 #      Template :   "rsync_host.queryresult.html"
@@ -72,6 +72,7 @@ if($FormAction == 'Back')
 		$smarty->assign('navagation', $nav->pageListStype1());
 
 		$smarty->assign('ID',$arr[ID]);
+		$smarty->assign('Name',$arr[Name]);
 		$smarty->assign('Host',$arr[Host]);
 		$smarty->assign('Path',$arr[Path]);
 		$smarty->assign('Description',$arr[Description]);

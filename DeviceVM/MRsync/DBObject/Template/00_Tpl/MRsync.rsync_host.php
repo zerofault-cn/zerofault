@@ -10,7 +10,7 @@
 <body style="margin: 0px;">
 <center>
 <br />
-<b>Warning</b>:  Smarty error: unable to read resource: "/--.html" in <b>/var/www/MRsync/Include/smarty/Smarty.class.php</b> on line <b>1095</b><br />
+<b>Warning</b>:  Smarty error: unable to read resource: "/--.html" in <b>E:\var\www\MRsync\Include\smarty\Smarty.class.php</b> on line <b>1095</b><br />
 </center>
 </body>
 </html>

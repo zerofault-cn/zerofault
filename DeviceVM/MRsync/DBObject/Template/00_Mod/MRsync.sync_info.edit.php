@@ -4,8 +4,8 @@
 #          Type :   ""
 #          Name :   "Sync_Info Edit"
 #       Version :   "1.0"
-#  Created Date :   "2008-12-17"
-# Modified Date :   "2008-12-17"
+#  Created Date :   "2009-01-16"
+# Modified Date :   "2009-01-16"
 #       Include :   ""
 #   Global Vars :   "$_SERVER[HTTP_HOST], $_SERVER[SCRIPT_NAME], $_GET[ID], $_POST[Action], $_POST[FromObject]"
 #      Template :   "sync_info.edit.html"
@@ -27,20 +27,16 @@ if($FormAction == 'Edit')
 {
 	//Global Lobal
 	$frmID = trim($_POST[ID]);
-	$frmUID = trim($_POST[UID]);
-	$frmXID = trim($_POST[XID]);
+	$frmSync_ID = trim($_POST[Sync_ID]);
 	$frmPath = trim($_POST[Path]);
 	$frmFilename = trim($_POST[Filename]);
-	$frmstatus = trim($_POST[status]);
 
 
 	$oSync_Info = new Sync_Info;
 
-	$oSync_Info->setUID($frmUID);
-	$oSync_Info->setXID($frmXID);
+	$oSync_Info->setSync_ID($frmSync_ID);
 	$oSync_Info->setPath($frmPath);
 	$oSync_Info->setFilename($frmFilename);
-	$oSync_Info->setstatus($frmstatus);
         
 
 
@@ -51,11 +47,9 @@ if($FormAction == 'Edit')
 		$smarty->display('message.htm');
 	}else{
 		$smarty->assign('ID',$frmID);
-		$smarty->assign('UID',$frmUID);
-		$smarty->assign('XID',$frmXID);
+		$smarty->assign('Sync_ID',$frmSync_ID);
 		$smarty->assign('Path',$frmPath);
 		$smarty->assign('Filename',$frmFilename);
-		$smarty->assign('status',$frmstatus);
 
         $smarty->assign('message','Sync_Info $frmID Edit Fail !');
         $smarty->display('message.htm');
@@ -73,11 +67,9 @@ if($FormAction == 'Edit')
 
 
 		$smarty->assign('ID',$arr[ID]);
-		$smarty->assign('UID',$arr[UID]);
-		$smarty->assign('XID',$arr[XID]);
+		$smarty->assign('Sync_ID',$arr[Sync_ID]);
 		$smarty->assign('Path',$arr[Path]);
 		$smarty->assign('Filename',$arr[Filename]);
-		$smarty->assign('status',$arr[status]);
 		
 		
 	}else{

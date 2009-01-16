@@ -4,8 +4,8 @@
 #          Type :   ""
 #          Name :   "Sync_Info Add"
 #       Version :   "1.0"
-#  Created Date :   "2008-12-17"
-# Modified Date :   "2008-12-17"
+#  Created Date :   "2009-01-16"
+# Modified Date :   "2009-01-16"
 #       Include :   ""
 #   Global Vars :   "$_SERVER[HTTP_HOST], $_SERVER[SCRIPT_NAME], $_POST[Action], $_POST[FromObject]"
 #      Template :   "sync_info.add.html"
@@ -25,20 +25,16 @@ $Now = date("Y-m-d H:i:s",time());
 if($FormAction == 'Add')
 {
 	//Global Lobal
-	$frmUID = trim($_POST[UID]);
-	$frmXID = trim($_POST[XID]);
+	$frmSync_ID = trim($_POST[Sync_ID]);
 	$frmPath = trim($_POST[Path]);
 	$frmFilename = trim($_POST[Filename]);
-	$frmstatus = trim($_POST[status]);
 
 
     $oSync_Info = new Sync_Info;
     
-	$oSync_Info->setUID($frmUID);
-	$oSync_Info->setXID($frmXID);
+	$oSync_Info->setSync_ID($frmSync_ID);
 	$oSync_Info->setPath($frmPath);
 	$oSync_Info->setFilename($frmFilename);
-	$oSync_Info->setstatus($frmstatus);
     
 
     if($oSync_Info->Add())
@@ -47,11 +43,9 @@ if($FormAction == 'Add')
         $smarty->assign('message','Sync_Info Add Success !');
         $smarty->display('message.htm');
     }else{
-		$smarty->assign('UID',$frmUID);
-		$smarty->assign('XID',$frmXID);
+		$smarty->assign('Sync_ID',$frmSync_ID);
 		$smarty->assign('Path',$frmPath);
 		$smarty->assign('Filename',$frmFilename);
-		$smarty->assign('status',$frmstatus);
     
 
         $smarty->assign('message','Sync_Info Add Fail !');

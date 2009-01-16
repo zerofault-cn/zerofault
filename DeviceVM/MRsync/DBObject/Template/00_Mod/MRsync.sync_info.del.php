@@ -4,8 +4,8 @@
 #          Type :   ""
 #          Name :   "Sync_Info Delete"
 #       Version :   "1.0"
-#  Created Date :   "2008-12-17"
-# Modified Date :   "2008-12-17"
+#  Created Date :   "2009-01-16"
+# Modified Date :   "2009-01-16"
 #       Include :   ""
 #   Global Vars :   "$_POST[Action], $_POST[ID], $_GET[ID]"
 #      Template :   "sync_info.del.html"
@@ -51,11 +51,9 @@ if($FormAction == 'Delete')
 
 
 		$smarty->assign('ID',$arr[ID]);
-		$smarty->assign('UID',$arr[UID]);
-		$smarty->assign('XID',$arr[XID]);
+		$smarty->assign('Sync_ID',$arr[Sync_ID]);
 		$smarty->assign('Path',$arr[Path]);
 		$smarty->assign('Filename',$arr[Filename]);
-		$smarty->assign('status',$arr[status]);
 	}else{
         $smarty->assign('gotoURL',"http://$serverHTTP_HOST$serverSCRIPT_NAME?Mod=$iModule&op=$iop");
 		$smarty->assign('message',"This Data is not exist!");
