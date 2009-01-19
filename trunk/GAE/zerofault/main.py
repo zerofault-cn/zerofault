@@ -146,7 +146,7 @@ class AddForm(webapp.RequestHandler):
 			template_values = {
 				'type'    : type,
 				'key'     : key,
-				'tag_list': Tag.all(),
+				'tag_list': Tag.all().order('usetime'),
 				'title'   : title,
 				'url'     : url,
 				'content'   : content,

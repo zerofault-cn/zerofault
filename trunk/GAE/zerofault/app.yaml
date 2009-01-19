@@ -15,4 +15,4 @@ handlers:
   script: dump.py
 
 - url: /.*
-  script: index.py
+  script: main.py
