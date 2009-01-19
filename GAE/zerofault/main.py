@@ -51,8 +51,8 @@ class Index(webapp.RequestHandler):
 		e = Entry.all().order("-addtime")
 		if req_tag:
 			logging.info(req_tag)
-			logging.info(unicode(unquote(req_tag)))
-			e = e.filter("tags =", req_tag)
+			logging.info(db.Category(req_tag.decode('utf-8')))
+			e = e.filter("tags =", db.Category(unquote(req_tag.decode('utf-8'))))
 		if not isLogin:
 			e = e.filter("private =", False)
 		

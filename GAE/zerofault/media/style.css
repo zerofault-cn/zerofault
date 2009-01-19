@@ -141,13 +141,14 @@ dl.box dd a { margin-right: 10px; font-size:12px; color: #333; line-height: 150%
 #form #Ttags, #form #Turl, #form #Tdescription, #form #Tnotes { width: 360px; margin-bottom: 4px; }
 
 
-#tagcloud{}
+div#tagcloud{padding:5px 20px;line-height:auto;}
+#tagcloud a{margin-right:10px;}
 #tagcloud .level0{font-size:0.8em;font-weight:100;}
-#tagcloud .level1{font-size:0.9em;font-weight:200;}
-#tagcloud .level2{font-size:1.0em;font-weight:300;}
-#tagcloud .level3{font-size:1.2em;font-weight:400;}
-#tagcloud .level4{font-size:1.4em;font-weight:500;}
-#tagcloud .level5{font-size:1.6em;font-weight:600;}
-#tagcloud .level6{font-size:1.8em;font-weight:700;}
-#tagcloud .level7{font-size:2.0em;font-weight:800;}
-#tagcloud .level8{font-size:2.4em;font-weight:900;}
+#tagcloud .level1{font-size:1.2em;font-weight:200;}
+#tagcloud .level2{font-size:1.6em;font-weight:300;line-height:100%;}
+#tagcloud .level3{font-size:2.0em;font-weight:400;line-height:100%;}
+#tagcloud .level4{font-size:2.4em;font-weight:500;line-height:100%;}
+#tagcloud .level5{font-size:2.8em;font-weight:600;line-height:100%;}
+#tagcloud .level6{font-size:3.2em;font-weight:700;line-height:100%;}
+#tagcloud .level7{font-size:3.4em;font-weight:800;line-height:100%;}
+#tagcloud .level8{font-size:3.6em;font-weight:900;line-height:100%;}
