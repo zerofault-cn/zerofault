@@ -13,7 +13,7 @@ from model import Entry,Link,Tag
 
 #-----------------------------------#
 #equivalent of javascript unescape()
-from urllib import unquote
+from urllib import unquote,quote
 import re
 def unichar_fromhex(otxt):
 	bigchar = otxt.group('bigchar')[2:]
@@ -50,7 +50,9 @@ class Index(webapp.RequestHandler):
 		#********************** Query **************************#
 		e = Entry.all().order("-addtime")
 		if req_tag:
-			e = e.filter("tags", req_tag)
+			logging.info(req_tag)
+			logging.info(unicode(unquote(req_tag)))
+			e = e.filter("tags =", req_tag)
 		if not isLogin:
 			e = e.filter("private =", False)
 		
@@ -110,15 +112,17 @@ class TypeIndex(webapp.RequestHandler):
 
 class TagList(webapp.RequestHandler):
 	def get(self):
-		entry_count =Entry().all().count(1000)
+		entry_count =Entry.all().count(1000)
 		tags = Tag.all().order('usetime')
 		tag_count = tags.count(1000)
-		for i,tag in enumerate(tags):
-			tags[i].level=tag.count_link/8
+		tag_list=[]
+		for tag in tags:
+			tag_list.append({"info":tag,"level":tag.count_link/(entry_count/tag_count)})
+			
 		
 			
 		path = os.path.join(os.path.dirname(__file__),'templates/tag.html')
-		self.response.out.write(template.render(path,{'tags':tags}))
+		self.response.out.write(template.render(path,{'tags':tag_list}))
 			
 
 class AddForm(webapp.RequestHandler):
@@ -134,6 +138,7 @@ class AddForm(webapp.RequestHandler):
 				url   = e.url
 				content = e.content
 				tags  = ' '.join(tag for tag in e.tags)
+				tags +=' '
 				
 					
 			else:
@@ -161,26 +166,38 @@ class AddForm(webapp.RequestHandler):
 class AddAction(webapp.RequestHandler):
 	def post(self):
 		type = self.request.get('type')
-		key = self.request.get('key')
+		key  = self.request.get('key')
 		if key :
 			e = db.get(key)
 		else:
-			e = Link()
-		e.title   = self.request.get('title')
-		e.url     = self.request.get('url')
-		e.content = self.request.get('content')
+			e = Entry()
+		title = self.request.get('title')
+		e.title = title.replace('&','&amp;').replace('<','&lt;').replace('>','&gt;')
+		url = self.request.get('url')
+		e.url = url.replace('&','&amp;').replace('<','&lt;').replace('>','&gt;')
+		content = self.request.get('content')
+		e.content = content
+		e.addtime +=datetime.timedelta(hours=+8)
 		e.private = bool(int(self.request.get('private')))
 		if key:
 			for oldtag in e.tags:
-				t = Tag(name = oldtag)
-				if t:
-					t.num -= 1
+				tag = Tag.all().filter('name =',oldtag)
+				if(tag.count(1)>0):
+					t = tag.get()
+					if type == 'link':
+						t.count_link -=1
+					if type == 'note':
+						t.count_note -=1
+					if type == 'pic':
+						t.count_pic -=1
 					t.put()
 		
+		e.tags = []
 		tag_names = self.request.get('tags').split()
 		for tag_name in tag_names:
-			t = Tag(name = tag_name)
-			if t:
+			tag = Tag.all().filter('name =',tag_name)
+			if(tag.count(1)>0):
+				t = tag.get()
 				if type == 'link':
 					t.count_link +=1
 				if type == 'note':

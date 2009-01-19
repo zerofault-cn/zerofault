@@ -76,7 +76,7 @@
 					{% if item.private %}
 					<img src="/media/lock.gif" align="absmiddle" />
 					{% endif %}
-					{{ item.addtime|date:"Y-m-d" }}
+					{{ item.addtime|date:"Y-m-d H:i:s" }}
 				</dt>
 				<dd class="descr">{{ item.content|escape|linebreaksbr }}</dd>
 				<dd class="tags">

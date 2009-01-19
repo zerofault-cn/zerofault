@@ -25,9 +25,13 @@ class fix1(webapp.RequestHandler):
 
 class fix2(webapp.RequestHandler):
 	def get (self):
-		e0=Entry().all()
-		del e0
-		for l in Link.all():
+	#	e0=Entry().all()
+	#	del e0
+		p=self.request.get('p')
+		p = int(p)
+		link=Link.all()
+		link=link.fetch(60,80+60*p)
+		for l in link:
 			e = Entry()
 			e.title = l.title
 			e.url   = l.url
@@ -68,7 +72,7 @@ class csv(webapp.RequestHandler):
 				if tag_item:
 					tag_names = tag_names+tag_item.name+' '
 			self.response.out.write('%s' % tag_names.strip())
-			self.response.out.write('"\n')
+			self.response.out.write('"\r\n')
 
 class rss(webapp.RequestHandler):
 	def get(self):
@@ -76,41 +80,45 @@ class rss(webapp.RequestHandler):
 
 		link = Link.all().order("-addtime")
 		
-		self.response.out.write('<?xml version="1.0" encoding="UTF-8"?>\n')
-		#self.response.out.write('<?xml-stylesheet type="text/xsl" href="/css/rss_xml_style.css"?>\n')
-		self.response.out.write('<rss version="2.0">\n')
-		self.response.out.write('<channel>\n')
-		self.response.out.write('<title>MyFavorites</title>\n')
-		self.response.out.write('<image>\n')
-		self.response.out.write('<title>MyFavorites</title>\n')
-		self.response.out.write('<link>http://zerofault.appspot.com/</link>\n')
-		self.response.out.write('<url>http://zerofault.appspot.com/media/logo.jpg</url>\n')
-		self.response.out.write('</image>\n')
-		self.response.out.write('<description>My Favorites at Google App Engine</description>\n')
-		self.response.out.write('<link>http://zerofault.appspot.com/</link>\n')
-		self.response.out.write('<copyright>Copyright 2009 zerofault. All Rights Reserved</copyright>\n')
-		self.response.out.write('<language>zh-cn</language>\n')
-		self.response.out.write('<generator>python @ google app engine</generator>\n')
+		self.response.out.write('<?xml version="1.0" encoding="UTF-8"?>\r\n')
+		#self.response.out.write('<?xml-stylesheet type="text/xsl" href="/css/rss_xml_style.css"?>\r\n')
+		self.response.out.write('<rss version="2.0">\r\n')
+		self.response.out.write('\t<channel>\r\n')
+		self.response.out.write('\t\t<title>MyFavorites</title>\r\n')
+		self.response.out.write('\t\t<image>\r\n')
+		self.response.out.write('\t\t\t<title>MyFavorites</title>\r\n')
+		self.response.out.write('\t\t\t<link>http://zerofault.appspot.com/</link>\r\n')
+		self.response.out.write('\t\t\t<url>http://zerofault.appspot.com/media/logo.jpg</url>\r\n')
+		self.response.out.write('\t\t</image>\r\n')
+		self.response.out.write('\t\t<description>My Favorites at Google App Engine</description>\r\n')
+		self.response.out.write('\t\t<link>http://zerofault.appspot.com/</link>\r\n')
+		self.response.out.write('\t\t<copyright>Copyright 2009 zerofault. All Rights Reserved</copyright>\r\n')
+		self.response.out.write('\t\t<language>zh-cn</language>\r\n')
+		self.response.out.write('\t\t<generator>python @ google app engine</generator>\r\n')
 		i=0
 		for link_item in link:
 			i +=1
-			self.response.out.write('<item>\n')
-			self.response.out.write('<title>%s</title>\n' % (link_item.title) )
-			self.response.out.write('<link>%s</link>\n' % link_item.url)
-			self.response.out.write('<author>zerofault@gmail.com</author>\n')
+			self.response.out.write('\t\t<item>\r\n')
+			self.response.out.write('\t\t\t<title>%s</title>\r\n' % (link_item.title) )
+			self.response.out.write('\t\t\t<link>%s</link>\r\n' % link_item.url)
+			self.response.out.write('\t\t\t<author>zerofault@gmail.com</author>\r\n')
 			tag_names = ''
 			for tag_item in db.get(link_item.tag):
 				if tag_item:
 					tag_names = tag_names+tag_item.name+' '
 				
-			self.response.out.write('<category>%s</category\n>' % tag_names.strip())
-			self.response.out.write('<pubDate>%s</pubDate>\n' % link_item.addtime)
+			self.response.out.write('\t\t\t<category>%s</category>\r\n' % tag_names.strip())
+			self.response.out.write('\t\t\t<pubDate>%s</pubDate>\r\n' % link_item.addtime)
 			comment = ''
-			self.response.out.write('<comments>%s</comments>\n' % comment)
-			self.response.out.write('<description>%s</description>\n' % link_item.descr)
-			self.response.out.write('</item>\n')
-		self.response.out.write('</channel>\n')
-		self.response.out.write('</rss>\n')
+			self.response.out.write('\t\t\t<comments>%s</comments>\r\n' % comment)
+			if link_item.descr:
+				descr = '<![CDATA[\n' + link_item.descr + '\n]]>'
+			else:
+				descr = ''
+			self.response.out.write('\t\t\t<description>%s</description>\r\n' % link_item.descr)
+			self.response.out.write('\t\t</item>\r\n')
+		self.response.out.write('\t</channel>\r\n')
+		self.response.out.write('</rss>\r\n')
 	
 application = webapp.WSGIApplication([
 	('/dump/csv', csv),
