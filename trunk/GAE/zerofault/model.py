@@ -22,7 +22,7 @@ class Link(db.Expando):
 	tag   = db.ListProperty(db.Key)
 
 class Tag(db.Expando):
-	name = db.CategoryProperty()
+	name = db.StringProperty()
 	type = db.StringProperty()
 	num  = db.IntegerProperty()
 	count_link  = db.IntegerProperty(default=0)
