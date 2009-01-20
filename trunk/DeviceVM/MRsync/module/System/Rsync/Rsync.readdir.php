@@ -1,4 +1,5 @@
 <?php
+#just for test
 function filter($val) {
 	return('.'!=substr($val,0,1));
 }
@@ -24,4 +25,5 @@ $dir=$_GET['dir'];
 myReadDir($dir);
 
 exit;
+
 ?>

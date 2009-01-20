@@ -15,6 +15,7 @@ define('PATH_Compile', PATH_ROOT . 'Compile/');
 define('PATH_Lib',PATH_ROOT . 'lib/');
 
 define('XML_FILE_FOLDER',PATH_ROOT . 'rsync_xml/');
+define('SYNC_RESULT_FOLDER','/home/');
 define('SYNC_FILE_FOLDER','/home/');//include slash('/') at the end
 
 session_start();

@@ -9,7 +9,7 @@ $LOG_ARR=array(
 	"source"=>'Rsync Module',
 	"user"=>'CURL Client @'.$_SERVER['REMOTE_ADDR'],
 	"action"=>'Change '.$field,
-	"info_xml"=>"change ".$field." to ".$value,
+	"info_xml"=>"id:".$ID."\nchange ".$field." to ".$value,
 	"description"=>'update success!'
 );
 include_once(PATH_Include."LogUL.php");

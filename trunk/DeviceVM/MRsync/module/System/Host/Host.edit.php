@@ -62,4 +62,6 @@ if(!empty($arr))
 }
 
 $smarty->assign('Rsync_Host', $Rsync_Host);
+
+$smarty->assign('Title','Edit Rsync Host');
 ?>

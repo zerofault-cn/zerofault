@@ -84,7 +84,8 @@ if($action=='Doit')
 	//从数据库中获取当前编辑的xml文件路径
 	$arr=$oSync_XML->view($ID);
 	$xml_filename=$arr['Filename'];
-	$fp=fopen(XML_FILE_FOLDER.$xml_filename,'w');
+	//$fp=fopen(XML_FILE_FOLDER.$xml_filename,'w');
+	$fp=fopen('rsync_xml/'.$xml_filename,'w');
 
 	if(fwrite($fp,$xml_content))
 	{

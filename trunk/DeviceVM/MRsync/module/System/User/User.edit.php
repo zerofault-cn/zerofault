@@ -64,4 +64,6 @@ if(!empty($arr))
 }
 
 $smarty->assign('User_Info', $User_Info);
+
+$smarty->assign('Title','Edit User Detail');
 ?>

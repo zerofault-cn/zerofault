@@ -17,4 +17,6 @@ for($i=0;$i<count($arr['ID']);$i++)
 	);
 }
 $smarty->assign('User_List', $User_List);
+
+$smarty->assign('Title','User List');
 ?>

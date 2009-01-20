@@ -48,4 +48,6 @@ $smarty->assign('NavTotalPages', $nav->getTotalPages());
 $smarty->assign('NavTotalCount', $event_log_count);
 $smarty->assign('NavCount', $offset);
 $smarty->assign('NavperPage', $perPage);
+
+$smarty->assign('Title','Event Viewer');
 ?>
