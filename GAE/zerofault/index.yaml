@@ -10,7 +10,7 @@ indexes:
 # automatically uploaded to the admin console when you next deploy
 # your application using appcfg.py.
 
-# Used 2 times in query history.
+# Used 26 times in query history.
 - kind: Entry
   properties:
   - name: addtime
@@ -23,43 +23,17 @@ indexes:
   - name: addtime
     direction: desc
 
-# Used 20 times in query history.
+# Used 28 times in query history.
 - kind: Entry
   properties:
+  - name: private
   - name: tags
   - name: addtime
     direction: desc
 
-# Unused in query history -- copied from input.
-- kind: Link
+# Used 64 times in query history.
+- kind: Entry
   properties:
+  - name: tags
   - name: addtime
-    direction: desc
-
-# Unused in query history -- copied from input.
-- kind: Link
-  properties:
-  - name: private
-  - name: addtime
-    direction: desc
-
-# Unused in query history -- copied from input.
-- kind: Link
-  properties:
-  - name: private
-  - name: tag
-  - name: addtime
-    direction: desc
-
-# Unused in query history -- copied from input.
-- kind: Link
-  properties:
-  - name: tag
-  - name: addtime
-    direction: desc
-
-# Unused in query history -- copied from input.
-- kind: Tag
-  properties:
-  - name: usetime
     direction: desc

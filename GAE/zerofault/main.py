@@ -1,4 +1,4 @@
-﻿#coding=utf-8
+#coding=utf-8
 import logging
 import os
 import math
@@ -9,7 +9,7 @@ from google.appengine.ext.webapp.util import run_wsgi_app
 from google.appengine.ext import db
 from google.appengine.ext.webapp import template
 
-from model import Entry,Link,Tag
+from model import Entry,Tag
 
 #-----------------------------------#
 #equivalent of javascript unescape()
@@ -50,13 +50,12 @@ class Index(webapp.RequestHandler):
 		#********************** Query **************************#
 		e = Entry.all().order("-addtime")
 		if req_tag:
-			logging.info(req_tag)
-			logging.info(db.Category(req_tag.decode('utf-8')))
-			e = e.filter("tags =", db.Category(unquote(req_tag.decode('utf-8'))))
+			e = e.filter("tags =", unquote(req_tag).decode('utf-8'))
 		if not isLogin:
 			e = e.filter("private =", False)
 		
-		item_count = e.count(1000) #总条数
+		item_count = e.count(1000) 
+		#总条数
 			
 		#********************** Search **************************#
 		s = self.request.get('s')

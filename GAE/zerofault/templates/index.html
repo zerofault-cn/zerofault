@@ -1,4 +1,4 @@
-﻿{% extends "base.html" %}
+{% extends "base.html" %}
 
 {% block content %}
 	<div id="searcher">
@@ -20,7 +20,7 @@
 			<dd id="mytag">
 				<ul style="display: block;">
 					{% for tag_item in tag_list %}
-					<li><a href="/tag/{{ tag_item.name }}">{{ tag_item.name }}</a><a href="/dump/rss?tag={{ tag_item.name }}" class="num" >{{ tag_item.count_link }}</a></li>
+					<li><a href="/tag/{{ tag_item.name }}">{{ tag_item.name }}</a><a href="/rss/{{ tag_item.name }}" class="num" target="_blank">{{ tag_item.count_link }}</a></li>
 					{% endfor %}
 				</ul>
 			</dd>
@@ -35,7 +35,7 @@
 		</dl>
 
 		<div id="myicon">
-			<a href="/dump/rss" ><img src="/media/rss.gif" alt="rss" class="rss" /></a>
+			<a href="/rss/" target="_blank"><img src="/media/rss.gif" alt="rss" class="rss" /></a>
 		</div>
 
 	</div>

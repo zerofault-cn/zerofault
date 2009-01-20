@@ -1,6 +1,6 @@
-﻿from google.appengine.ext import db
+from google.appengine.ext import db
 
-class Entry(db.Expando):
+class Entry(db.Model):
 	pageid= db.IntegerProperty(default=0)
 	title = db.StringProperty()
 	url   = db.LinkProperty()
@@ -13,15 +13,7 @@ class Entry(db.Expando):
 	comment=db.ListProperty(db.Key)
 	dig   = db.IntegerProperty(default=0)
 
-class Link(db.Expando):
-	title = db.StringProperty()
-	url   = db.LinkProperty()
-	descr = db.TextProperty()
-	addtime=db.DateTimeProperty(auto_now_add=True)
-	private=db.BooleanProperty()
-	tag   = db.ListProperty(db.Key)
-
-class Tag(db.Expando):
+class Tag(db.Model):
 	name = db.StringProperty()
 	type = db.StringProperty()
 	num  = db.IntegerProperty()
