@@ -9,7 +9,7 @@
 {% endblock %} 
 {% block content %}
 	<form name="form1" action="submit" method="post" onsubmit="return check();">
-	<input type="hidden" name="type" value="link" />
+	<input type="hidden" name="type" value="{{ type }}" />
 	<input type="hidden" name="key" value="{{ key }}" />
 	<input type="hidden" name="private" value="0" />
 	<div id="form">
@@ -17,14 +17,34 @@
 			<div class="d1">标题：</div>
 			<div class="d2"><input type="text" id="Tdescription" name="title" tabIndex="1" maxlength="250" size="50"  value="{{ title }}"/></div>
 		</div>
+		{% ifequal type 'note' %}
+		<div class="line">
+			<div class="d1">内容：</div>
+			<div class="d2"><textarea name="content" id="Tnotes" tabIndex="3" rows="9" cols="40">{{ content }}</textarea></div>
+			<input type="hidden" id="Turl" name="url" tabIndex="2" maxlength="180" size="50" value="{{ url }}"/>
+		</div>
+		{% else %}
+		{% ifequal type 'pic' %}
+		<div class="line">
+			<div class="d1">图片：</div>
+			<div class="d2"><img src="{{ url }}" height="170"/></div>
+			<input type="hidden" id="Turl" name="url" value="{{ url }}"/>
+		</div>
+		<div class="line">
+			<div class="d1">描述：</div>
+			<div class="d2"><textarea name="content" id="Tnotes" tabIndex="2" rows="2" cols="40">{{ content }}</textarea></div>
+		</div>
+		{% else %}
 		<div class="line">
 			<div class="d1">链接：</div>
 			<div class="d2"><input type="text" id="Turl" name="url" tabIndex="2" maxlength="180" size="50" value="{{ url }}"/></div>
 		</div>
 		<div class="line">
 			<div class="d1">描述：</div>
-			<div class="d2"><textarea name="content" id="Tnotes" tabIndex="3" rows="5" cols="40">{{ descr }}</textarea></div>
+			<div class="d2"><textarea name="content" id="Tnotes" tabIndex="3" rows="5" cols="40">{{ content }}</textarea></div>
 		</div>
+		{% endifequal %}
+		{% endifequal %}
 		<div class="line">
 			<div class="d1">标签：</div>
 			<div class="d2"><input type="text" id="Ttags" name="tags" tabIndex="4" value="{{ tags }}" maxlength="100" size="50" autocomplete="off" /></div>
