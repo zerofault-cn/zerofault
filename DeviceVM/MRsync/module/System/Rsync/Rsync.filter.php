@@ -2,40 +2,46 @@
 $action = isset($_POST['Action']) ? $_POST['Action'] : '';
 
 if($action=='Doit') {
-	$path_include	= trim($_POST['path_include']);
-	$path_exclude	= trim($_POST['path_exclude']);
-	if(strlen($path_include)>0)
-	{
-		$pi_arr=explode("\n",$path_include);
-	}
-	else
-	{
-		$pi_arr=array();
-	}
-	if(strlen($path_exclude)>0)
-	{
-		$pe_arr=explode("\n",$path_exclude);
-	}
-	else
-	{
-		$pe_arr=array();
-	}
+	$include_arr  = $_POST['include'];
+	$exclude_arr  = $_POST['exclude'];
+	
+	
 	$content = "<?php\n";
-	$content.= '$path_include=array( ';
-	foreach($pi_arr as $pi)
+	//$content.= '$first_include=array( ';
+	for($i=0;$i<sizeof($include_arr);$i++)
 	{
-		$content.= '"'.$pi.'",';
+		if($i==sizeof($include_arr)-1)
+		{
+			$j=0;
+		}
+		else
+		{
+			$j=$i+1;
+		}
+		$content.= '$filter["in"]['.$j.']=array( ';
+		foreach(explode("\n",$include_arr[$i]) as $reg)
+		{
+			if(''!=trim($reg))
+			{
+				$content.= '"'.trim($reg).'",';
+			}
+		}
+		$content = substr($content,0,-1);
+		$content.= ");\n";
+	
+		$content.= '$filter["ex"]['.$j.']=array( ';
+		foreach(explode("\n",$exclude_arr[$i]) as $reg)
+		{
+			if(''!=trim($reg))
+			{
+				$content.= '"'.trim($reg).'",';
+			}
+		}
+		$content = substr($content,0,-1);
+		$content.= ");\n";
 	}
-	$content = substr($content,0,-1);
-	$content.= ");\n";
+	
 
-	$content.= '$path_exclude=array( ';
-	foreach($pe_arr as $pe)
-	{
-		$content.= '"'.$pe.'",';
-	}
-	$content = substr($content,0,-1);
-	$content.= ");\n";
 	$content.= "?>";
 
 	$fp=fopen("config/path_filter.inc.php","w");
@@ -46,7 +52,7 @@ if($action=='Doit') {
 		"source"=>'Rsync Module',
 		"user"=>$_SESSION['auth']['Username'].'@'.$_SERVER['REMOTE_ADDR'],
 		"action"=>'Edit PathFilter',
-		"info_xml"=>"New PathFilter:\nInclude:\n".$path_include."\nExclude:\n".$path_exclude,
+		"info_xml"=>"New PathFilter:\nInclude:\n".print_r($include_arr,true)."\nExclude:\n".print_r($exclude_arr,true),
 		"description"=>'update success!'
 	);
 	include_once(PATH_Include."LogUL.php");
@@ -68,9 +74,13 @@ if($action=='Doit') {
 
 include_once("config/path_filter.inc.php");
 
-
-$smarty->assign('Path_Include', $path_include);
-$smarty->assign('Path_Exclude', $path_exclude);
+foreach($filter as $key=>$val)
+{
+	foreach($val as $i=>$arr)
+	{
+		$smarty->assign('filter_'.$key.'_'.$i, $arr);
+	}
+}
 
 $smarty->assign('Title','Path Filter Setting');
 ?>

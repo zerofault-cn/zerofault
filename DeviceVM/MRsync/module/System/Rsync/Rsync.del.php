@@ -14,7 +14,7 @@ $LOG_ARR=array(
 include_once(PATH_Include."LogUL.php");
 /****************Event Log**********************/
 
-if($oSync_XML->Del($ID) && $oSync_Info->DelOpt("Sync_ID=".$ID) && $oHost_Info->DelOpt("Sync_ID=".$ID) )
+if($oSync_XML->Del($ID) && $oSync_Info->DelOpt("Sync_ID=".$ID) && $oHost_Info->DelOpt("Sync_ID=".$ID) && unlink(XML_FILE_FOLDER.$arr['Filename']))
 {
 	echo '<script>parent.alert("Delete Successfully!");parent.myLocation("?Mod='.$iModule.'&op='.$iop.'&subop=browse");</script>';
 }

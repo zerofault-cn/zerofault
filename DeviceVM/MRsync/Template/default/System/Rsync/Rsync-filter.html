@@ -6,24 +6,66 @@
 			<div class="a_right">
 				<input type="button" value="Back" onclick="history.back();">
 			</div>
-			<table border="0" cellpadding="0" cellspacing="1" width="100%" bgcolor="#0099CC">
+			<table id="path_filter" border="0" cellpadding="0" cellspacing="1" bgcolor="#0099CC">
 				<tr bgcolor="#FFFFFF">
-					<td align="center" colspan="2">One Line For One Rule</td>
-				</tr>
-				<tr bgcolor="#FFFFFF">
-					<td align="center" style="background: #ACACAC;">Path Include</td>
+					<td align="center" rowspan="2" style="background-color:#CCCCCC">一级目录</td>
+					<td align="center" style="background-color:#DDDDDD">Include</td>
 					<td align="left">
-						<textarea name="path_include" cols="50" rows="5"><!--{section name=key loop=$Path_Include}--><!--{$Path_Include[key]}--><!--{/section}--></textarea>
+						<textarea name="include[]">
+<!--{foreach from=$filter_in_1 item=v}-->
+<!--{$v}-->
+<!--{/foreach}--></textarea>
 					</td>
 				</tr>
 				<tr bgcolor="#FFFFFF">
-					<td align="center" style="background: #ACACAC;">Path Exclude</td>
+					<td align="center" style="background-color:#DDDDDD">Exclude</td>
 					<td align="left">
-						<textarea name="path_exclude" cols="50" rows="5"><!--{section name=key loop=$Path_Exclude}--><!--{$Path_Exclude[key]}--><!--{/section}--></textarea>
+						<textarea name="exclude[]">
+<!--{foreach from=$filter_ex_1 item=v}-->
+<!--{$v}-->
+<!--{/foreach}--></textarea>
 					</td>
 				</tr>
 				<tr bgcolor="#FFFFFF">
-					<td align="center" colspan="2">
+					<td align="center" rowspan="2" style="background-color:#CCCCCC">二级目录</td>
+					<td align="center" style="background-color:#DDDDDD">Include</td>
+					<td align="left">
+						<textarea name="include[]">
+<!--{foreach from=$filter_in_2 item=v}-->
+<!--{$v}-->
+<!--{/foreach}--></textarea>
+					</td>
+				</tr>
+				<tr bgcolor="#FFFFFF">
+					<td align="center" style="background-color:#DDDDDD">Exclude</td>
+					<td align="left">
+						<textarea name="exclude[]">
+<!--{foreach from=$filter_ex_2 item=v}-->
+<!--{$v}-->
+<!--{/foreach}--></textarea>
+					</td>
+				</tr>
+				<tr bgcolor="#FFFFFF">
+					<td align="center" rowspan="2" style="background-color:#CCCCCC">其他目录</td>
+					<td align="center" style="background-color:#DDDDDD">Include</td>
+					<td align="left">
+						<textarea name="include[]">
+<!--{foreach from=$filter_in_0 item=v}-->
+<!--{$v}-->
+<!--{/foreach}--></textarea>
+					</td>
+				</tr>
+				<tr bgcolor="#FFFFFF">
+					<td align="center" style="background: #DDDDDD;">Exclude</td>
+					<td align="left">
+						<textarea name="exclude[]">
+<!--{foreach from=$filter_ex_0 item=v}-->
+<!--{$v}-->
+<!--{/foreach}--></textarea>
+					</td>
+				</tr>
+				<tr bgcolor="#FFFFFF">
+					<td align="center" colspan="3">
 						<input type="submit" name="submit" value="Save">&nbsp;&nbsp;
 						<input type="reset" name="reset" value="Reset">&nbsp;&nbsp;&nbsp;&nbsp;
 					</td>
@@ -33,7 +75,22 @@
 				<input type="button" value="Back" onclick="history.back();">
 			</div>
 			</form>
+			
+			<fieldset class="notice">
+				<legend>Notice</legend>
+				<ol>
+					<li>每个规则占一行，规则仅对目录有效，区分大小写，不能使用引号和斜线：'、"、\、/</li>
+					<li>可以使用正则表达式作为规则！常用示例：
+						<ol>
+							<li>^ab :表示匹配由ab开头的目录名；</li>
+							<li>cd$ :表示匹配由cd结尾的目录名；</li>
+						</ol>
+					</li>
+					<li>一级目录规则仅对一级目录有效，二级目录规则仅对二级目录有效，三级以上目录使用其他目录规则！</li>
+				</ol>
+			</fieldset>
 		</div>
 	</div>
+	<div class="clear"></div>
 </div>
 

@@ -111,7 +111,8 @@ if($action=='Doit')
 		$xml_content.= "\t</Sync_List>\n";
 		$xml_content.= "</Rsync>\n";
 		
-		$fp=fopen(XML_FILE_FOLDER.$xml_filename,'w');
+		//$fp=fopen(XML_FILE_FOLDER.$xml_filename,'w');
+		$fp=fopen('rsync_xml/'.$xml_filename,'w');
 		
 		if(fwrite($fp,$xml_content))//xml文件生成成功后,继续写入Sync_Info表
 		{

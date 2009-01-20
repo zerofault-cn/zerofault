@@ -1,23 +1,31 @@
 <?php
 $ID=$_GET['id'];
-$field=$_GET['field'];
-$value=$_GET['value'];
+$status =$_GET['status'];
+$filename=$_GET['filename'];
+
+if(strlen($status)>0)
+{
+	$oSync_XML->status=$status;
+}
+if($filename)
+{
+	$content =read_file(SYNC_RESULT_FOLDER.$filename);
+	$oSync_XML->result=$content;
+}
 
 /****************Event Log**********************/
 $LOG_ARR=array(
 	"type"=>"1",
 	"source"=>'Rsync Module',
 	"user"=>'CURL Client @'.$_SERVER['REMOTE_ADDR'],
-	"action"=>'Change '.$field,
-	"info_xml"=>"id:".$ID."\nchange ".$field." to ".$value,
+	"action"=>'Upload stauts and Sync Result',
+	"info_xml"=>"id:".$ID."\nstatus change to ".$status."\nresult:$filename\n".$content,
 	"description"=>'update success!'
 );
 include_once(PATH_Include."LogUL.php");
 /****************Event Log**********************/
 
-$oSync_XML->{$field}=$value;
-
-if($oSync_XML->update($ID))
+if(!empty($ID) && $oSync_XML->update($ID))
 {
 	echo '1';
 }

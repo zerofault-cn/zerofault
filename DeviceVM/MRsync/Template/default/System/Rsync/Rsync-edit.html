@@ -1,7 +1,7 @@
 	<div id="right">
-		<h2>Edit Rsync Schedule</h2>
 		<script type="text/javascript" src="images/thickbox.js"></script>
 		<link rel="stylesheet" href="images/thickbox.css" type="text/css" media="screen" />
+		<h2>Edit Rsync Schedule</h2>
 		<form name="form1" action="?Mod=<!--{$smarty.get.Mod}-->&op=<!--{$smarty.get.op}-->&subop=<!--{$smarty.get.subop}-->&id=<!--{$ID}-->" method="post" target="iframe1">
 		<input type="hidden" name="Action" value="Doit">
 		<div id="main">
@@ -28,8 +28,8 @@
 					<dd>Action</dd>
 				</dl>
 				<!--{section name=key loop=$Sync_Info}-->
-				<dl id="file_list_a<!--{$smarty.section.key.index}-->">
-					<dt><img src="images/<!--{$Sync_Info[key].Icon}-->.gif" align="absmiddle" /> <!--{$Sync_Info[key].Path}--><input type="hidden" name="path_arr[]" value="<!--{$Sync_Info[key].Path}-->" /></dt>
+				<dl id="file_list_a<!--{$smarty.section.key.index}-->" class="file_list_item">
+					<dt title="<!--{$Sync_Info[key].Path}-->"><img src="images/<!--{$Sync_Info[key].Icon}-->.gif" align="absmiddle" /> <!--{$Sync_Info[key].Path}--><input type="hidden" name="path_arr[]" value="<!--{$Sync_Info[key].Path}-->" /></dt>
 					<dd><a href="javascript:void(0)" onclick="removeItem('a<!--{$smarty.section.key.index}-->',0)">Remove</a></dd>
 				</dl>
 				<!--{/section}-->

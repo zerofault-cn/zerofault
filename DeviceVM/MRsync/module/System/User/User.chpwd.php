@@ -48,5 +48,5 @@ if($action=='Doit') {
 	exit;
 }
 
-
+$smarty->assign('Title','Change Password');
 ?>

@@ -12,4 +12,6 @@ for($i=0;$i<count($arr['ID']);$i++)
 	);
 }
 $smarty->assign('Rsync_Host', $Rsync_Host);
+
+$smarty->assign('Title','Rsync Host List');
 ?>

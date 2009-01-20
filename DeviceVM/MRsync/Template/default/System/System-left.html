@@ -4,24 +4,24 @@
 		<ul id="containerul">
 			<li>User Module 
 				<ul>
-					<!--{if $smarty.session.auth.Role eq 'Admin'}--><li><a href="?Mod=<!--{$smarty.get.Mod}-->&op=User&subop=browse">User List</a></li><!--{/if}-->
-					<li><a href="?Mod=<!--{$smarty.get.Mod}-->&op=User&subop=profile">Edit Profile</a></li>
-					<li><a href="?Mod=<!--{$smarty.get.Mod}-->&op=User&subop=chpwd">Change Password</a></li>
+					<!--{if $smarty.session.auth.Role eq 'Admin'}--><li><a href="?Mod=System&op=User&subop=browse" <!--{if $smarty.server.QUERY_STRING eq 'Mod=System&op=User&subop=browse'}-->class="onfoc"<!--{/if}-->>User List</a></li><!--{/if}-->
+					<li><a href="?Mod=<!--{$smarty.get.Mod}-->&op=User&subop=profile" <!--{if $smarty.server.QUERY_STRING eq 'Mod=System&op=User&subop=profile'}-->class="onfoc"<!--{/if}-->>Edit Profile</a></li>
+					<li><a href="?Mod=<!--{$smarty.get.Mod}-->&op=User&subop=chpwd" <!--{if $smarty.server.QUERY_STRING eq 'Mod=System&op=User&subop=chpwd'}-->class="onfoc"<!--{/if}-->>Change Password</a></li>
 				</ul>
 			</li>
 			<li>Rsync Module
 				<ul>
-					<!--{if $smarty.session.auth.Role eq 'Admin'}--><li><a href="?Mod=<!--{$smarty.get.Mod}-->&op=Host&subop=browse">Rsync_Host</a></li>
-					<li><a href="?Mod=<!--{$smarty.get.Mod}-->&op=Rsync&subop=filter">Path_Filter</a></li><!--{/if}-->
-					<li><a href="?Mod=<!--{$smarty.get.Mod}-->&op=Rsync&subop=browse">Sync_XML</a></li>
+					<!--{if $smarty.session.auth.Role eq 'Admin'}--><li><a href="?Mod=System&op=Host&subop=browse" <!--{if $smarty.server.QUERY_STRING eq 'Mod=System&op=Host&subop=browse'}-->class="onfoc"<!--{/if}-->>Rsync_Host</a></li>
+					<li><a href="?Mod=System&op=Rsync&subop=filter" <!--{if $smarty.server.QUERY_STRING eq 'Mod=System&op=Rsync&subop=filter'}-->class="onfoc"<!--{/if}-->>Path_Filter</a></li><!--{/if}-->
+					<li><a href="?Mod=System&op=Rsync&subop=browse" <!--{if $smarty.server.QUERY_STRING eq 'Mod=System&op=Rsync&subop=browse'}-->class="onfoc"<!--{/if}-->>Sync_XML</a></li>
 				</ul>
 			</li>
 			<!--{if $smarty.session.auth.Role eq 'Admin'}-->
 			<li>Event Module
 				<ul>
-					<li><a href="?Mod=<!--{$smarty.get.Mod}-->&op=Event&subop=browse&ETID=1">System Event</a></li>
-					<li><a href="?Mod=<!--{$smarty.get.Mod}-->&op=Event&subop=browse&ETID=2">Application Event</a></li>
-					<li><a href="?Mod=<!--{$smarty.get.Mod}-->&op=Event&subop=browse&ETID=3">Security Event</a></li>
+					<li><a href="?Mod=System&op=Event&subop=browse&ETID=1" <!--{if $smarty.server.QUERY_STRING eq 'Mod=System&op=Event&subop=browse&ETID=1'}-->class="onfoc"<!--{/if}-->>System Event</a></li>
+					<li><a href="?Mod=System&op=Event&subop=browse&ETID=2" <!--{if $smarty.server.QUERY_STRING eq 'Mod=System&op=Event&subop=browse&ETID=2'}-->class="onfoc"<!--{/if}-->>Application Event</a></li>
+					<li><a href="?Mod=System&op=Event&subop=browse&ETID=3" <!--{if $smarty.server.QUERY_STRING eq 'Mod=System&op=Event&subop=browse&ETID=3'}-->class="onfoc"<!--{/if}-->>Security Event</a></li>
 				</ul>
 			</li>
 			<!--{/if}-->

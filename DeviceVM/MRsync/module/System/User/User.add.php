@@ -56,4 +56,6 @@ if($action=='Doit') {
 	/****************Event Log************************/
 	exit;
 }
+
+$smarty->assign('Title','Add User');
 ?>
