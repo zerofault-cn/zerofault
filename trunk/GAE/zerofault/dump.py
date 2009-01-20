@@ -8,7 +8,21 @@ from google.appengine.ext import webapp
 from google.appengine.ext.webapp.util import run_wsgi_app
 from google.appengine.ext import db
 
-from model import Entry,Link,Tag
+from model import Entry,Tag
+
+
+#-----------------------------------#
+#equivalent of javascript unescape()
+from urllib import unquote,quote
+import re
+def unichar_fromhex(otxt):
+	bigchar = otxt.group('bigchar')[2:]
+	val = int(bigchar, 16)
+	return unichr(val)
+def unescape(txt):
+	p = re.compile(r'(?P<bigchar>%u[0-9A-Za-z]{4})', re.VERBOSE)
+	return unquote(p.sub(unichar_fromhex, txt))
+#-----------------------------------#
 
 class fix1(webapp.RequestHandler):
 	def get (self):
@@ -60,26 +74,24 @@ class csv(webapp.RequestHandler):
 		self.response.headers['Expires'] = '0'
 		self.response.headers['Pragma']  = 'public'
 		
-		link = Link.all().order("-addtime")
+		entry = Entry.all().order("-addtime")
 
-		for link_item in link:
+		for item in entry:
 			i +=1
-			self.response.out.write('"%d","%s","%s","%s","%s","' %(i, link_item.title, link_item.url, link_item.descr, link_item.private))
+			self.response.out.write('"%d","%s","%s","%s","%s","' %(i, item.title, item.url, item.content, item.private))
 				
-			#tags =db.get(link_item.tag)
-			tag_names = ''
-			for tag_item in db.get(link_item.tag):
-				if tag_item:
-					tag_names = tag_names+tag_item.name+' '
-			self.response.out.write('%s' % tag_names.strip())
+			tag_names =','.join(tag for tag in item.tags)
+
+			self.response.out.write('%s' % tag_names)
 			self.response.out.write('"\r\n')
 
 class rss(webapp.RequestHandler):
-	def get(self):
-		self.response.headers['Content-Type'] = 'text/xml'
+	def get(self,req_tag=''):
+		entry = Entry.all().order("-addtime")
+		if req_tag:
+			entry = entry.filter("tags =", unquote(req_tag).decode('utf-8'))
 
-		link = Link.all().order("-addtime")
-		
+		self.response.headers['Content-Type'] = 'text/xml'
 		self.response.out.write('<?xml version="1.0" encoding="UTF-8"?>\r\n')
 		#self.response.out.write('<?xml-stylesheet type="text/xsl" href="/css/rss_xml_style.css"?>\r\n')
 		self.response.out.write('<rss version="2.0">\r\n')
@@ -96,31 +108,33 @@ class rss(webapp.RequestHandler):
 		self.response.out.write('\t\t<language>zh-cn</language>\r\n')
 		self.response.out.write('\t\t<generator>python @ google app engine</generator>\r\n')
 		i=0
-		for link_item in link:
+		for item in entry:
 			i +=1
 			self.response.out.write('\t\t<item>\r\n')
-			self.response.out.write('\t\t\t<title>%s</title>\r\n' % (link_item.title) )
-			self.response.out.write('\t\t\t<link>%s</link>\r\n' % link_item.url)
+			self.response.out.write('\t\t\t<title>%s</title>\r\n' % (item.title) )
+			self.response.out.write('\t\t\t<link>%s</link>\r\n' % item.url)
 			self.response.out.write('\t\t\t<author>zerofault@gmail.com</author>\r\n')
-			tag_names = ''
-			for tag_item in db.get(link_item.tag):
-				if tag_item:
-					tag_names = tag_names+tag_item.name+' '
+
+			#for tag in item.tags:
+			tag_names =','.join(tag for tag in item.tags)
 				
-			self.response.out.write('\t\t\t<category>%s</category>\r\n' % tag_names.strip())
-			self.response.out.write('\t\t\t<pubDate>%s</pubDate>\r\n' % link_item.addtime)
+				
+			self.response.out.write('\t\t\t<category>%s</category>\r\n' % tag_names)
+			self.response.out.write('\t\t\t<pubDate>%s</pubDate>\r\n' % item.addtime)
 			comment = ''
 			self.response.out.write('\t\t\t<comments>%s</comments>\r\n' % comment)
-			if link_item.descr:
-				descr = '<![CDATA[\n' + link_item.descr + '\n]]>'
+			if item.content:
+				content = '<![CDATA[\n' + item.content + '\n]]>'
 			else:
-				descr = ''
-			self.response.out.write('\t\t\t<description>%s</description>\r\n' % link_item.descr)
+				content = ''
+			self.response.out.write('\t\t\t<description>%s</description>\r\n' % content)
 			self.response.out.write('\t\t</item>\r\n')
 		self.response.out.write('\t</channel>\r\n')
 		self.response.out.write('</rss>\r\n')
 	
 application = webapp.WSGIApplication([
+	('/rss/', rss),
+	('/rss/(.*)', rss),
 	('/dump/csv', csv),
 	('/dump/rss', rss),
 	('/dump/fix1', fix1),

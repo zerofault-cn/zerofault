@@ -14,5 +14,8 @@ handlers:
 - url: /dump/.*
   script: dump.py
 
+- url: /rss/.*
+  script: dump.py
+
 - url: /.*
   script: main.py

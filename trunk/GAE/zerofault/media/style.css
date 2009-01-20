@@ -76,7 +76,7 @@ dl.box dd a { margin-right: 10px; font-size:12px; color: #333; line-height: 150%
 
 
 /*************    µ×²¿    **************/
-#footer { clear: both; border-top: 1px solid #dbdbdb; padding-top: 13px; padding-bottom: 15px; margin-top:1em;}
+#footer { clear: both; border-top: 1px solid #dbdbdb; padding-top: 13px; padding-bottom: 15px; margin-top:2em;}
 #footer a { float: left; color: #000; border-left: 1px solid #ddd; padding-right: 5px; padding-left: 5px }
 #footer a.fm { border-left: 0; padding-left: 0; }
 #footer span { float: right; }
