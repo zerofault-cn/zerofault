@@ -3,7 +3,10 @@ import logging
 import os
 import math
 import datetime
+
 from google.appengine.api import users
+from google.appengine.api import urlfetch
+from google.appengine.api import images
 from google.appengine.ext import webapp
 from google.appengine.ext.webapp.util import run_wsgi_app
 from google.appengine.ext import db
@@ -143,7 +146,7 @@ class AddForm(webapp.RequestHandler):
 			else:
 				title = unescape(self.request.get('title'))
 				url   = unescape(self.request.get('url'))
-				content = unescape(self.request.get('descr'))
+				content = unescape(self.request.get('content'))
 				tags  = ''
 			
 			
@@ -164,12 +167,15 @@ class AddForm(webapp.RequestHandler):
 
 class AddAction(webapp.RequestHandler):
 	def post(self):
-		type = self.request.get('type')
 		key  = self.request.get('key')
 		if key :
 			e = db.get(key)
 		else:
 			e = Entry()
+		type = self.request.get('type')
+		if not type:
+			type = 'link'
+		e.type = type
 		title = self.request.get('title')
 		e.title = title.replace('&','&amp;').replace('<','&lt;').replace('>','&gt;')
 		url = self.request.get('url')
@@ -178,6 +184,12 @@ class AddAction(webapp.RequestHandler):
 		e.content = content
 		e.addtime +=datetime.timedelta(hours=+8)
 		e.private = bool(int(self.request.get('private')))
+		if type =='pic':
+			result = urlfetch.fetch(url)
+			if result.status_code == 200:
+				e.image = db.Blob(result.content)
+
+		
 		if key:
 			for oldtag in e.tags:
 				tag = Tag.all().filter('name =',oldtag)
@@ -244,7 +256,19 @@ class DelKey(webapp.RequestHandler):
 		else:
 			self.response.out.write('0')
 
-		
+class ShowPic(webapp.RequestHandler):
+	def get(self):
+		key = self.request.get('key')
+		if key:
+			e = db.get(key)
+			img = images.Image(e.image)
+			img.resize(width=400, height=300)
+			tumbimg = img.execute_transforms(output_encoding=images.PNG)
+			self.response.headers['Content-Type'] = 'image/pnjpg'
+			self.response.out.write(tumbimg)
+		else:
+			self.redirect('/media/logo.gif')
+
 application = webapp.WSGIApplication([
 	('/', Index),
 	('/add', AddForm),
@@ -253,6 +277,7 @@ application = webapp.WSGIApplication([
 	('/delkey', DelKey),
 	('/tag', TagList),
 	('/tag/(.*)', Index),
+	('/show', ShowPic)
 	],debug=True)
 
 def main():

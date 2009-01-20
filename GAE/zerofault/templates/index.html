@@ -78,8 +78,8 @@
 					{% endif %}
 					{{ item.addtime|date:"Y-m-d H:i:s" }}
 				</dt>
-				<dd class="descr">{{ item.content|escape|linebreaksbr }}</dd>
-				<dd class="tags">
+				<dd class="descr">{% ifequal item.type 'pic' %}<img src="/show?key={{ item.key }}" width="400" /><br />{% endifequal %}{{ item.content|escape|linebreaksbr }}</dd>
+				<dd class="tags">{{ item.type }}
 					{% for tag in item.tags %}
 					[<a href="/{{ item.type }}/tag/{{ tag }}" class="tag">{{ tag }}</a>]
 					{% endfor %}

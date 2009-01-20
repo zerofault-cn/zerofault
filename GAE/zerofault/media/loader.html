@@ -25,20 +25,36 @@ if (external.menuArguments)
 		sel = parentDoc.selection.createRange().text;
 	}
 	
-
 	var url = parentwin.location.href;
 	var title = parentwin.document.title; 
- 
+	
 	if (parentwin.event.srcElement.tagName == "A")
 	{
 		url = parentwin.event.srcElement.getAttribute("HREF");
 		title = parentwin.event.srcElement.innerText;
 	}
 
-	var parm = 'scrollbars=no,width=650,height=500,left=75,top=20,status=no,resizable=yes';
-	var address = '/add'+'?title='+escape(title)+'&url='+escape(url)+'&descr='+escape(sel);
-	//var address = 'http://www.favorites.cn/post/'+'?description='+escape(title)+'&urll='+escape(url)+'&notes='+escape(sel);
+	var href=window.location.href
+	var srcEvent = external.menuArguments.event;
+	var EventElement = external.menuArguments.document.elementFromPoint ( srcEvent.clientX, srcEvent.clientY );
+	if(href.substr(href.indexOf('?')+1)=='pic')//'IMG' == EventElement.tagName)
+	{
+		var url = EventElement.href;
+		var title = external.menuArguments.document.title;
+		var alt = EventElement.alt;
+		var purl = external.menuArguments.location.href;
+		var address='http://localhost:8080/add?type=pic&title='+escape(title)+'&url='+escape(url)+'&content='+escape(alt)+escape('\n¿¥‘¥£∫')+escape(purl);
+	}
+	else if(href.substr(href.indexOf('?')+1)=='note')
+	{
+		var address='http://localhost:8080/add?type=note&title='+escape(title)+'&url='+escape(url)+'&content='+escape(sel);
+	}
+	else
+	{
+		var address = 'http://localhost:8080/add?title='+escape(title)+'&url='+escape(url)+'&content='+escape(sel);
+	}
 
+	var parm = 'scrollbars=yes,width=650,height=500,left=75,top=20,status=no,resizable=no';
 	var postwin = window.open( address, '_blank', parm);
 
 	if( postwin )
