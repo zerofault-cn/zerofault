@@ -13,15 +13,16 @@
 	<input type="hidden" name="key" value="{{ key }}" />
 	<input type="hidden" name="private" value="0" />
 	<div id="form">
+		
 		<div class="line">
 			<div class="d1">标题：</div>
-			<div class="d2"><input type="text" id="Tdescription" name="title" tabIndex="1" maxlength="250" size="50"  value="{{ title }}"/></div>
+			<div class="d2"><input type="text" id="Tdescription" name="title" maxlength="250" size="50"  value="{{ title }}"/></div>
 		</div>
 		{% ifequal type 'note' %}
 		<div class="line">
 			<div class="d1">内容：</div>
-			<div class="d2"><textarea name="content" id="Tnotes" tabIndex="3" rows="9" cols="40">{{ content }}</textarea></div>
-			<input type="hidden" id="Turl" name="url" tabIndex="2" maxlength="180" size="50" value="{{ url }}"/>
+			<div class="d2"><textarea name="content" id="Tnotes" rows="9" cols="40">{{ content }}</textarea></div>
+			<input type="hidden" id="Turl" name="url" maxlength="180" size="50" value="{{ url }}"/>
 		</div>
 		{% else %}
 		{% ifequal type 'pic' %}
@@ -32,26 +33,26 @@
 		</div>
 		<div class="line">
 			<div class="d1">描述：</div>
-			<div class="d2"><textarea name="content" id="Tnotes" tabIndex="2" rows="2" cols="40">{{ content }}</textarea></div>
+			<div class="d2"><textarea name="content" id="Tnotes" rows="2" cols="40">{{ content }}</textarea></div>
 		</div>
 		{% else %}
 		<div class="line">
 			<div class="d1">链接：</div>
-			<div class="d2"><input type="text" id="Turl" name="url" tabIndex="2" maxlength="180" size="50" value="{{ url }}"/></div>
+			<div class="d2"><input type="text" id="Turl" name="url" maxlength="180" size="50" value="{{ url }}"/></div>
 		</div>
 		<div class="line">
 			<div class="d1">描述：</div>
-			<div class="d2"><textarea name="content" id="Tnotes" tabIndex="3" rows="5" cols="40">{{ content }}</textarea></div>
+			<div class="d2"><textarea name="content" id="Tnotes" rows="5" cols="40">{{ content }}</textarea></div>
 		</div>
 		{% endifequal %}
 		{% endifequal %}
 		<div class="line">
 			<div class="d1">标签：</div>
-			<div class="d2"><input type="text" id="Ttags" name="tags" tabIndex="4" value="{{ tags }}" maxlength="100" size="50" autocomplete="off" /></div>
+			<div class="d2"><input type="text" id="Ttags" name="tags" value="{{ tags }}" maxlength="100" size="50" autocomplete="off" /></div>
 		</div>
 		<div class="error"></div>
-		<div class="sure"><input type="submit" name="Share" tabIndex="5" value="共享" />
-			<input type="button"  name="Prv" class="private" tabIndex="6" value="私人" onclick="javascript:document.form1.private.value=1;document.form1.submit();"/>
+		<div class="sure"><input type="submit" name="Share" value="共享" />
+			<input type="button"  name="Prv" class="private" value="私人" onclick="javascript:document.form1.private.value=1;document.form1.submit();"/>
 		</div>
 	</div>
 	</form>

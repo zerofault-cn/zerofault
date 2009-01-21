@@ -46,9 +46,15 @@ indexes:
   - name: addtime
     direction: desc
 
-# Used 45 times in query history.
+# Used 61 times in query history.
 - kind: Entry
   properties:
   - name: type
   - name: addtime
     direction: desc
+
+# Used once in query history.
+- kind: Tag
+  properties:
+  - name: type
+  - name: usetime

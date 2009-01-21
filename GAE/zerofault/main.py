@@ -160,6 +160,7 @@ class TypeIndex(webapp.RequestHandler):
 				page_numbers += (['...']+range(page_count-1,page_count+1))
 			
 		template_values = {
+			'type'     : type,
 			'isAdmin'  : isAdmin,
 			'user'     : user,
 			'auth_url' : auth_url,
@@ -242,7 +243,6 @@ class AddAction(webapp.RequestHandler):
 		type = self.request.get('type')
 		if not type:
 			type = 'link'
-		e.type = type
 		title = self.request.get('title')
 		e.title = title.replace('&','&amp;').replace('<','&lt;').replace('>','&gt;')
 		url = self.request.get('url')
@@ -251,6 +251,7 @@ class AddAction(webapp.RequestHandler):
 		e.content = content
 		#e.addtime +=datetime.timedelta(hours=+8)
 		e.private = bool(int(self.request.get('private')))
+		e.type = type
 		if type =='pic':
 			result = urlfetch.fetch(url)
 			if result.status_code == 200:
@@ -288,7 +289,6 @@ class AddAction(webapp.RequestHandler):
 			else:
 				t = Tag()
 				t.name = tag_name
-				t.type = type
 				if type == 'link':
 					t.count_link =1
 				if type == 'note':
@@ -299,7 +299,7 @@ class AddAction(webapp.RequestHandler):
 				t.put()
 			e.tags.append(db.Category(tag_name))
 		e.put()
-		self.redirect('/')
+		self.redirect('/'+type+'/')
 
 class DelKey(webapp.RequestHandler):
 	def get(self):
