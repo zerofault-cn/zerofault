@@ -20,7 +20,7 @@
 			<dd id="mytag">
 				<ul style="display: block;">
 					{% for tag_item in tag_list %}
-					<li><a href="/tag/{{ tag_item.name }}">{{ tag_item.name }}</a><a href="/rss/{{ tag_item.name }}" class="num" target="_blank">{{ tag_item.count_link }}</a></li>
+					<li><a href="/tag/{{ tag_item.name }}">{{ tag_item.name }}</a><a href="/rss/{{ tag_item.name }}" class="num" target="_blank">{{ tag_item.count_pic }}</a></li>
 					{% endfor %}
 				</ul>
 			</dd>
