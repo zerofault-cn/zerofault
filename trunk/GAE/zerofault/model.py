@@ -1,9 +1,10 @@
+#coding=utf-8
 from google.appengine.ext import db
 
 class Entry(db.Model):
 	pageid= db.IntegerProperty(default=0)
 	title = db.StringProperty()
-	url   = db.LinkProperty()
+	url   = db.StringProperty()
 	content = db.TextProperty()
 	image = db.BlobProperty()
 	addtime=db.DateTimeProperty(auto_now_add=True)
@@ -16,7 +17,7 @@ class Entry(db.Model):
 class Tag(db.Model):
 	name = db.StringProperty()
 	type = db.StringProperty()
-	num  = db.IntegerProperty()
+	#num  = db.IntegerProperty()
 	count_link  = db.IntegerProperty(default=0)
 	count_note  = db.IntegerProperty(default=0)
 	count_pic   = db.IntegerProperty(default=0)

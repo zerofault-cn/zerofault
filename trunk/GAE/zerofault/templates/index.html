@@ -4,7 +4,7 @@
 	<div id="searcher">
 		<ul>
 			<li><a href="/" class="curr">我的收藏</a></li>
-			<li><a href="/blog/">我的网志</a></li>
+			<li><a href="/note/">我的网志</a></li>
 			<li><a href="/pic/">我的图片</a></li>
 		</ul>
 		<form action="/search" method="get">
@@ -67,7 +67,7 @@
 {% endif %}
 		</div>
 
-		<div id="favs">
+		<div id="links">
 		{% for item in entry_list %}
 			<dl class="item" id="item_{{ item.key }}">
 				<img class="icon" src="/media/htm.gif" />
@@ -78,12 +78,12 @@
 					{% endif %}
 					{{ item.addtime|date:"Y-m-d H:i:s" }}
 				</dt>
-				<dd class="descr">{% ifequal item.type 'pic' %}<img src="/show?key={{ item.key }}" width="400" /><br />{% endifequal %}{{ item.content|escape|linebreaksbr }}</dd>
-				<dd class="tags">{{ item.type }}
+				<dd class="content">{% ifequal item.type 'pic' %}<img src="/img?key={{ item.key }}" width="400" /><br />{% endifequal %}{{ item.content|escape|linebreaksbr }}</dd>
+				<dd class="tags">
 					{% for tag in item.tags %}
-					[<a href="/{{ item.type }}/tag/{{ tag }}" class="tag">{{ tag }}</a>]
+					[<a href="/tag/{{ tag }}" class="tag">{{ tag }}</a>]
 					{% endfor %}
-					{% if isLogin %}
+					{% if isAdmin %}
 					... 
 					<a href="/add?key={{ item.key }}" class="edit">编辑</a>/ <a class="del" onClick="$('#del_{{ item.key }}').show()">删除</a>
 					<span class="edit" id='del_{{ item.key }}'><a onClick="submit_del(this)" value="{{ item.key }}" hhref="del?key={{ item.key }}" class="edit">确认</a> / <a onClick='$("#del_{{ item.key }}").hide()' class="edit">取消</a></span>
