@@ -5,6 +5,7 @@
 	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 	<meta name="keywords" content="网络收藏夹" />
 	<meta name="description" content="快速, 简洁, web2.0, 做最好的网络收藏夹. Favorites是一个提供用户收藏, 推荐, 共享网络资源的平台。除了原本的网页收藏, Favorites中加入了图片、音乐和视频收藏的功能，同时用户还可以拥有自己的好友名单,使用户间可以方便的共享网络资源。" />
+	<link rel="alternate" type="application/rss+xml" title="zerofault的网络笔记本" href="/rss/" />
 	<link rel="icon" type="image/x-icon" href="/media/favorite.ico" />
 	<link rel="shortcut icon" type="image/x-icon" href="/media/favorite.ico" />
 	<link rel="stylesheet" type="text/css" href="/media/style.css" />
@@ -13,7 +14,7 @@
 <body>
 	<div id="toper">
 		<a href="/" id="logo"><img alt="my favorites" src="/media/logo.gif" /></a>
-		{% if isLogin %}
+		{% if isAdmin %}
 			<strong>{{ user.nickname }}</strong>
 			<a href="/add">添加</a>
 		{% endif %}
@@ -23,11 +24,8 @@
 	<div class="clear"></div>
 	<div id="footer">      
         <a href="/" class="fm">首页</a>
-        <a href="#" >网络日志</a>
-        <a href="#" >关于我们</a>
-        <a href="#" >联系我们</a>
-        <a href="#" >插件下载</a>
-        <a href="#">使用帮助</a>
+        <a href="#">帮助</a>
+        <a href="mailto://zerofault@gmail.com" >联系我</a>
     </div>
 </body>
 <iframe id="iframe1" name="iframe1" style="display:none;"></iframe>

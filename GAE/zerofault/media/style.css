@@ -14,6 +14,7 @@ h3 { font-size: 13px; color: #000; text-decoration: none; margin-top: 20px; marg
 h3:hover { color: #f93; text-decoration: none; }
 p { line-height: 120%; }
 div { line-height: 150%; }
+.clear{clear:both;}
 
 /*************    ∂•≤ø    **************/
 #toper { text-align: right; height: 45px !important; height: 35px; margin-top: 5px; }
@@ -34,7 +35,7 @@ div { line-height: 150%; }
 #searcher #submit { margin-left: -12px; border: none; }
 #searcher .curr { color: #53BA15; }
 
-
+/*************  ∑÷¿∏    **************/
 #col_right{ float: right; width:160px; overflow:hidden; }
 #col_middle {
 	margin-right:10px !important;
@@ -108,22 +109,28 @@ dl.box dd a { margin-right: 10px; font-size:12px; color: #333; line-height: 150%
 #left #head_sys img.head_mouse_on { border: 1px solid #96f; }
 
 /*************  fav    **************/
-#favs { clear: left; }
-#favs dl.item { margin-left: 20px; margin-bottom: 10px; }
-#favs dl.item img.icon { cursor: pointer; position: absolute; margin-left: -20px; width: 16px; height: 16px; }
-#favs dl.item dt a { font-size: 13px; color: #261cdc; }
-#favs dl.item dt a.dig { color: #999; margin-left: 10px; }
-#favs dl.item dd.descr { padding: 3px; background-color:#fffff9; color: #444; margin-right: 20px;}
-#favs dl.item dd.tags { color: #999; }
-#favs dl.item dd.tags a { color: #999; cursor: pointer; }
-#favs dl.item dd.tags a.tag:hover { color: #fff; background-color: #54ba16; text-decoration: none; }
-#favs dl.item dd.tags span.edit { margin-left: 20px; /*visibility: hidden;*/ display:none; }
+#links { clear: left; }
+#links dl.item { margin-left: 20px; margin-bottom: 10px; }
+#links dl.item img.icon { cursor: pointer; position: absolute; margin-left: -20px; width: 16px; height: 16px; }
+#links dl.item dt a { font-size: 13px; color: #261cdc; }
+#links dl.item dt a.dig { color: #999; margin-left: 10px; }
+#links dl.item dd.content { padding: 3px; background-color:#fffff9; color: #444; margin-right: 20px;}
+#links dl.item dd.tags { color: #999; }
+#links dl.item dd.tags a { color: #999; cursor: pointer; }
+#links dl.item dd.tags a.tag:hover { color: #fff; background-color: #54ba16; text-decoration: none; }
+#links dl.item dd.tags span.edit { margin-left: 20px; /*visibility: hidden;*/ display:none; }
 
-
+#pics{clear:left;}
+#pics dl{float:left;width:200px;height:200px;padding:6px}
+#pics dl dt.content{text-align:center;}
+#pics dl.item dd.tags { color: #999; }
+#pics dl.item dd.tags a { color: #999; cursor: pointer; }
+#pics dl.item dd.tags a.tag:hover { color: #fff; background-color: #54ba16; text-decoration: none; }
+#pics dl.item dd.tags span.edit { margin-left: 20px; /*visibility: hidden;*/ display:none; }
 
 /************ post **************/
 #form { margin: 3%; }
-#form .line { margin-bottom: 1px; clear: both; line-height: 20px; height: 20px; }
+#form .line { margin-bottom: 1px; clear: both; line-height: 20px; min-height: 20px; }
 #form .line2 { margin-bottom: 10px; clear: both; line-height: 20px; height: 20px; }
 #form .d1 { width: 40px; margin-right: 5px; float: left; }
 #form .d2 { float: left; }

@@ -31,13 +31,14 @@ def unescape(txt):
 class Index(webapp.RequestHandler):
 	def get(self,req_tag=''):
 		#********************** User Auth **************************#
+		isAdmin = False
 		user = users.get_current_user()
-		if user and user.email()=='zerofault@gmail.com':
-			isLogin = True
+		if user:
+			if users.is_current_user_admin():
+				isAdmin = True
 			auth_url = users.create_logout_url(self.request.uri)
 			auth_text= '注销'
 		else:
-			isLogin = False
 			auth_url = users.create_login_url(self.request.uri)
 			auth_text= '登录'
 
@@ -51,10 +52,10 @@ class Index(webapp.RequestHandler):
 		offset = (p-1)*limit
 		
 		#********************** Query **************************#
-		e = Entry.all().order("-addtime")
+		e = Entry.all().filter('type =','link').order("-addtime")
 		if req_tag:
 			e = e.filter("tags =", unquote(req_tag).decode('utf-8'))
-		if not isLogin:
+		if not isAdmin:
 			e = e.filter("private =", False)
 		
 		item_count = e.count(1000) 
@@ -89,7 +90,7 @@ class Index(webapp.RequestHandler):
 				page_numbers += (['...']+range(page_count-1,page_count+1))
 			
 		template_values = {
-			'isLogin'  : isLogin,
+			'isAdmin'  : isAdmin,
 			'user'     : user,
 			'auth_url' : auth_url,
 			'auth_text': auth_text,
@@ -109,8 +110,74 @@ class Index(webapp.RequestHandler):
 		self.response.out.write(template.render(path,template_values))
 
 class TypeIndex(webapp.RequestHandler):
-	def get (self,type='link'):
-		self.response.out.write(type)
+	def get (self,type='pic',req_tag=''):
+		#********************** User Auth **************************#
+		isAdmin = False
+		user = users.get_current_user()
+		if user:
+			if users.is_current_user_admin():
+				isAdmin = True
+			auth_url = users.create_logout_url(self.request.uri)
+			auth_text= '注销'
+		else:
+			auth_url = users.create_login_url(self.request.uri)
+			auth_text= '登录'
+
+		#********************** Pagenator init**************************#
+		limit = 20;
+		p = self.request.get('p')
+		if not p:
+			p=1
+		else:
+			p = int(p)
+		offset = (p-1)*limit
+		
+		#********************** Query **************************#
+		e = Entry.all().filter('type =', type).order("-addtime")
+		
+		if req_tag:
+			e = e.filter("tags =", unquote(req_tag).decode('utf-8'))
+		if not isAdmin:
+			e = e.filter("private =", False)
+		
+		item_count = e.count(1000) 
+		#总条数
+			
+			
+		#********************** Pagenator **************************#
+		page_count = int(math.ceil(item_count / float(limit))) #总页数
+		if page_count <=7 :
+			page_numbers = range(1,page_count+1)
+		else:
+			if p<=6:
+				page_numbers = range(1,max(1,p-3))
+			else:
+				page_numbers = [1,2] + ['...']
+			page_numbers += range(max(1,p-3),min(p+4,page_count+1))
+			if p >= page_count-5:
+				page_numbers += range(min(p+4,page_count+1),page_count+1)
+			else:
+				page_numbers += (['...']+range(page_count-1,page_count+1))
+			
+		template_values = {
+			'isAdmin'  : isAdmin,
+			'user'     : user,
+			'auth_url' : auth_url,
+			'auth_text': auth_text,
+			'entry_list': e,
+			'tag_list' : Tag.all().order("usetime"),
+			'is_paginated':  page_count> 1,
+			'has_next': p*limit < item_count,
+			'has_previous': p > 1,
+			'current_page': p,
+			'next_page': p + 1,
+			'previous_page': p - 1,
+			'pages': page_count,
+			'page_numbers': page_numbers,
+			'count': item_count
+			}
+		path = os.path.join(os.path.dirname(__file__),'templates/'+type+'.html')
+		self.response.out.write(template.render(path,template_values))
 
 class TagList(webapp.RequestHandler):
 	def get(self):
@@ -182,7 +249,7 @@ class AddAction(webapp.RequestHandler):
 		e.url = url.replace('&','&amp;').replace('<','&lt;').replace('>','&gt;')
 		content = self.request.get('content')
 		e.content = content
-		e.addtime +=datetime.timedelta(hours=+8)
+		#e.addtime +=datetime.timedelta(hours=+8)
 		e.private = bool(int(self.request.get('private')))
 		if type =='pic':
 			result = urlfetch.fetch(url)
@@ -221,6 +288,7 @@ class AddAction(webapp.RequestHandler):
 			else:
 				t = Tag()
 				t.name = tag_name
+				t.type = type
 				if type == 'link':
 					t.count_link =1
 				if type == 'note':
@@ -256,28 +324,29 @@ class DelKey(webapp.RequestHandler):
 		else:
 			self.response.out.write('0')
 
-class ShowPic(webapp.RequestHandler):
+class Image(webapp.RequestHandler):
 	def get(self):
 		key = self.request.get('key')
 		if key:
 			e = db.get(key)
-			img = images.Image(e.image)
-			img.resize(width=400, height=300)
-			tumbimg = img.execute_transforms(output_encoding=images.PNG)
-			self.response.headers['Content-Type'] = 'image/pnjpg'
-			self.response.out.write(tumbimg)
+			#img = images.Image(e.image)
+			#img.resize(width=400, height=300)
+			#tumbimg = img.execute_transforms(output_encoding=images.JPEG)
+			self.response.headers['Content-Type'] = 'image/jpeg'
+			self.response.out.write(e.image)
 		else:
 			self.redirect('/media/logo.gif')
 
 application = webapp.WSGIApplication([
 	('/', Index),
+	('/search', Index),
+	('/tag/(.*)', Index),
+	('/(note|pic){1}/(.*)', TypeIndex),
 	('/add', AddForm),
 	('/submit', AddAction),
-	('/search', Index),
 	('/delkey', DelKey),
 	('/tag', TagList),
-	('/tag/(.*)', Index),
-	('/show', ShowPic)
+	('/img', Image)
 	],debug=True)
 
 def main():

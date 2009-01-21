@@ -3,9 +3,9 @@
 {% block content %}
 	<div id="searcher">
 		<ul>
-			<li><a href="/" class="curr">我的收藏</a></li>
+			<li><a href="/">我的收藏</a></li>
 			<li><a href="/note/">我的网志</a></li>
-			<li><a href="/pic/">我的图片</a></li>
+			<li><a href="/pic/" class="curr">我的图片</a></li>
 		</ul>
 		<form action="/search" method="get">
 			<img src="/media/search_b.gif" alt="search button" />
@@ -22,14 +22,6 @@
 					{% for tag_item in tag_list %}
 					<li><a href="/tag/{{ tag_item.name }}">{{ tag_item.name }}</a><a href="/rss/{{ tag_item.name }}" class="num" target="_blank">{{ tag_item.count_link }}</a></li>
 					{% endfor %}
-				</ul>
-			</dd>
-		</dl>
-
-		<dl class="box" id="myfriends">
-			<dt><span>固定链接</span></dt>
-			<dd id="myfriend">
-				<ul>
 				</ul>
 			</dd>
 		</dl>
@@ -67,30 +59,31 @@
 {% endif %}
 		</div>
 
-		<div id="links">
+		<div id="pics">
 		{% for item in entry_list %}
 			<dl class="item" id="item_{{ item.key }}">
-				<img class="icon" src="/media/htm.gif" />
 				<dt>
-					<a href="{{item.url}}" target="_blank">{{ item.title }}</a>
-					{% if item.private %}
-					<img src="/media/lock.gif" align="absmiddle" />
-					{% endif %}
-					{{ item.addtime|date:"Y-m-d H:i:s" }}
+					<a href="{{item.url}}" target="_blank"><img src="/img?key={{ item.key }}" alt="{{ item.title }}" width="200"/></a>
 				</dt>
-				<dd class="content">{% ifequal item.type 'pic' %}<img src="/img?key={{ item.key }}" width="400" /><br />{% endifequal %}{{ item.content|escape|linebreaksbr }}</dd>
+				<dd class="content">{{ item.content|escape|linebreaksbr }}<br />
+				{% if item.private %}
+					<img src="/media/lock.gif" align="absmiddle" />
+				{% endif %}
+				{{ item.addtime|date:"Y-m-d H:i:s" }}
+				</dd>
 				<dd class="tags">
 					{% for tag in item.tags %}
-					[<a href="/tag/{{ tag }}" class="tag">{{ tag }}</a>]
+					[<a href="{{ tag }}" class="tag">{{ tag }}</a>]
 					{% endfor %}
 					{% if isAdmin %}
 					... 
-					<a href="/add?key={{ item.key }}" class="edit">编辑</a>/ <a class="del" onClick="$('#del_{{ item.key }}').show()">删除</a>
+					<a href="/add?type=pic&key={{ item.key }}" class="edit">编辑</a>/ <a class="del" onClick="$('#del_{{ item.key }}').show()">删除</a>
 					<span class="edit" id='del_{{ item.key }}'><a onClick="submit_del(this)" value="{{ item.key }}" hhref="del?key={{ item.key }}" class="edit">确认</a> / <a onClick='$("#del_{{ item.key }}").hide()' class="edit">取消</a></span>
 					{% endif %}
 				</dd>
 			</dl>
 			{% endfor %}
+			<div class="clear"></div>
 		</div>
 
 		<div class="page">

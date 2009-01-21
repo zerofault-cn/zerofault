@@ -1,4 +1,4 @@
-﻿{% extends "base.html" %}
+{% extends "base.html" %}
 {% block title %}
 {% if key %}
 修改记录 - 
@@ -27,7 +27,7 @@
 		{% ifequal type 'pic' %}
 		<div class="line">
 			<div class="d1">图片：</div>
-			<div class="d2"><img src="{{ url }}" height="170"/></div>
+			<div class="d2"><img id="image" src="{{ url }}" max-height="170" style="display:block"/></div>
 			<input type="hidden" id="Turl" name="url" value="{{ url }}"/>
 		</div>
 		<div class="line">
@@ -51,7 +51,7 @@
 		</div>
 		<div class="error"></div>
 		<div class="sure"><input type="submit" name="Share" tabIndex="5" value="共享" />
-			<input type="button"  name="private" class="private" tabIndex="6" value="私人" onclick="javascript:document.form1.private.value=1;document.form1.submit();"/>
+			<input type="button"  name="Prv" class="private" tabIndex="6" value="私人" onclick="javascript:document.form1.private.value=1;document.form1.submit();"/>
 		</div>
 	</div>
 	</form>
