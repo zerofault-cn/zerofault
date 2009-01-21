@@ -16,7 +16,7 @@
 		
 		<div class="line">
 			<div class="d1">标题：</div>
-			<div class="d2"><input type="text" id="Tdescription" name="title" maxlength="250" size="50"  value="{{ title }}"/></div>
+			<div class="d2"><input type="text" id="Tdescription" name="title" maxlength="250"  value="{{ title }}"/></div>
 		</div>
 		{% ifequal type 'note' %}
 		<div class="line">
@@ -28,7 +28,7 @@
 		{% ifequal type 'pic' %}
 		<div class="line">
 			<div class="d1">图片：</div>
-			<div class="d2"><img id="image" src="{{ url }}" max-height="170" style="display:block"/></div>
+			<div class="d2"><img id="rimage" src="{{ url }}" max-width="360" /></div>
 			<input type="hidden" id="Turl" name="url" value="{{ url }}"/>
 		</div>
 		<div class="line">
@@ -88,6 +88,11 @@ $(document).ready(function(){
 			$("input[name=tags]").val(tags);
 		});
 	});
+
+	if($("img#rimage").width()>360)
+	{
+		$("img#rimage").width(360);
+	}
 });
 
 </script>
