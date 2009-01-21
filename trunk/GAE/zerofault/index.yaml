@@ -46,7 +46,7 @@ indexes:
   - name: addtime
     direction: desc
 
-# Used 61 times in query history.
+# Used 63 times in query history.
 - kind: Entry
   properties:
   - name: type

@@ -299,7 +299,10 @@ class AddAction(webapp.RequestHandler):
 				t.put()
 			e.tags.append(db.Category(tag_name))
 		e.put()
-		self.redirect('/'+type+'/')
+		if type == 'link':
+			self.redirect('/')
+		else:
+			self.redirect('/'+type+'/')
 
 class DelKey(webapp.RequestHandler):
 	def get(self):
