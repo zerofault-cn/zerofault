@@ -29,17 +29,10 @@ def unescape(txt):
 #-----------------------------------#
 
 class Index(webapp.RequestHandler):
-	def HandleEntity(self, entity):
-		ent = search.SearchableEntity(entity)
-		return ent
-
 	def get(self,req_tag=''):
 		#********************** User Auth **************************#
-		isAdmin = False
 		user = users.get_current_user()
 		if user:
-			if users.is_current_user_admin():
-				isAdmin = True
 			auth_url = users.create_logout_url(self.request.uri)
 			auth_text= '注销'
 		else:
@@ -75,21 +68,7 @@ class Index(webapp.RequestHandler):
 			item_count += entry.filter('pageid =',cur_pageid).count()
 			cur_pageid -=1
 
-		#********************** Search **************************#
-		'''
-		s = self.request.get('s')
-		if s:
-			e =[]
-			query = search.SearchableQuery('Entry')
-			query.Search(s)
-			for result in query.Run():
-				#self.response.out.write('%s' % result['email'])
-				e.append(result)
-				logging.info(result['title'])
-		else:
-		'''
 		e = e.fetch(limit,offset)
-			
 			
 		#********************** Pagenator **************************#
 		page_count = int(math.ceil(item_count / float(limit))) #总页数
@@ -125,6 +104,88 @@ class Index(webapp.RequestHandler):
 			}
 		path = os.path.join(os.path.dirname(__file__),'templates/index.html')
 		self.response.out.write(template.render(path,template_values))
+
+
+class UserIndex(webapp.RequestHandler):
+	def get(self,nickname='',req_tag=''):
+		#********************** User Auth **************************#
+		isAdmin = False
+		user = users.get_current_user()
+		if user:
+			if eq(user.nickname(),nickname):
+				isAdmin = True
+			auth_url = users.create_logout_url(self.request.uri)
+			auth_text= '注销'
+		else:
+			auth_url = users.create_login_url(self.request.uri)
+			auth_text= '登录'
+
+		#********************** Pagenator init**************************#
+		limit = 20;
+		p = self.request.get('p')
+		if not p:
+			p=1
+		else:
+			p = int(p)
+		offset = (p-1)*limit
+		
+		#********************** Query **************************#
+		e = Entry.all().filter('userid__nickname =',nickname).filter('type =','link').order("-addtime")
+		if req_tag:
+			e = e.filter("tags =", unquote(req_tag).decode('utf-8'))
+		if not isAdmin:
+			e = e.filter("private =", False)
+		
+		#item_count = 1998#e.count() #总条数
+		cur_pageid = e.get().pageid
+		item_count = 0
+		while cur_pageid>=0:
+			entry=Entry.all().filter('type','link')
+			if req_tag:
+				entry = entry.filter('tags',unquote(req_tag).decode('utf-8'))
+			if not isAdmin:
+				entry = entry.filter('private', False)
+			
+			item_count += entry.filter('pageid =',cur_pageid).count()
+			cur_pageid -=1
+
+		e = e.fetch(limit,offset)
+			
+		#********************** Pagenator **************************#
+		page_count = int(math.ceil(item_count / float(limit))) #总页数
+		if page_count <=7 :
+			page_numbers = range(1,page_count+1)
+		else:
+			if p<=6:
+				page_numbers = range(1,max(1,p-3))
+			else:
+				page_numbers = [1,2] + ['...']
+			page_numbers += range(max(1,p-3),min(p+4,page_count+1))
+			if p >= page_count-5:
+				page_numbers += range(min(p+4,page_count+1),page_count+1)
+			else:
+				page_numbers += (['...']+range(page_count-1,page_count+1))
+			
+		template_values = {
+			'isAdmin'  : isAdmin,
+			'user'     : user,
+			'auth_url' : auth_url,
+			'auth_text': auth_text,
+			'entry_list': e,
+			'tag_list' : Tag.all().order("usetime"),
+			'is_paginated':  page_count> 1,
+			'has_next': p*limit < item_count,
+			'has_previous': p > 1,
+			'current_page': p,
+			'next_page': p + 1,
+			'previous_page': p - 1,
+			'pages': page_count,
+			'page_numbers': page_numbers,
+			'count': item_count
+			}
+		path = os.path.join(os.path.dirname(__file__),'templates/index.html')
+		self.response.out.write(template.render(path,template_values))
+
 
 class TypeIndex(webapp.RequestHandler):
 	def get (self,type='pic',req_tag=''):
@@ -372,7 +433,7 @@ class Image(webapp.RequestHandler):
 
 application = webapp.WSGIApplication([
 	('/', Index),
-	('/search', Index),
+	('/u/(.*)', UserIndex),
 	('/tag/(.*)', Index),
 	('/(note|pic){1}/(.*)', TypeIndex),
 	('/add', AddForm),
