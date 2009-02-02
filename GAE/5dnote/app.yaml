@@ -11,11 +11,11 @@ handlers:
 - url: /media
   static_dir: media
 
-- url: /loadcsv
-  script: loadcsv.py
+- url: /load
+  script: load.py
   login: admin
 
-- url: /dump/.*
+- url: /csv/.*
   script: dump.py
 
 - url: /rss/.*
