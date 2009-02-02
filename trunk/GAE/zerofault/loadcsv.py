@@ -7,11 +7,11 @@ from google.appengine.ext import webapp
 from google.appengine.ext.webapp.util import run_wsgi_app
 from google.appengine.ext import db
 
-from model import Entry,Link,Tag
+from model import Entry,Tag
 
 class Index(webapp.RequestHandler):
 	def get(self):
-		i=0
+		'''i=0
 		n = self.request.get('n')
 		if not n:
 			n='1'
@@ -19,6 +19,7 @@ class Index(webapp.RequestHandler):
 		
 		self.response.headers['Content-Type'] = 'text/html'
 		csvreader = csv.reader(file(os.path.join(os.path.dirname(__file__),csvfile))) 
+		
 		for line in csvreader:
 			e = Entry()
 			e.title = line[0].decode('utf-8')
@@ -47,6 +48,20 @@ class Index(webapp.RequestHandler):
 			self.response.out.write('%d ' % i)
 			self.response.out.write('%s ' % e.key())
 			self.response.out.write('%s <br />' % line[0])
+		'''
+		n = self.request.get('n')
+		if not n:
+			n=0
+		else:
+			n=int(n)
+		for i in range(1,1000):
+			e = Entry()
+			e.title=str(i+n*999)
+			e.pageid=n
+			e.put()
+			self.response.out.write('%d ' % i)
+			self.response.out.write('%s <br />' % e.key())
+			
 		
 application = webapp.WSGIApplication([
 	('/loadcsv', Index),

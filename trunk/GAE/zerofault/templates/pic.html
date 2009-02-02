@@ -3,24 +3,25 @@
 {% block content %}
 	<div id="searcher">
 		<ul>
-			<li><a href="/">我的收藏</a></li>
-			<li><a href="/note/">我的网志</a></li>
+			<li><a href="/">我的网址</a></li>
+			<li><a href="/note/">我的网摘</a></li>
 			<li><a href="/pic/" class="curr">我的图片</a></li>
+			<li><a href="/tag">我的标签</a></li>
 		</ul>
-		<form action="/search" method="get">
+		<!-- <form action="/search" method="get">
 			<img src="/media/search_b.gif" alt="search button" />
 			<input type="text" id="searchBox" maxlength="15" name="s" />
 			<input src="/media/search.gif" id="submit" type="image" />
-		</form>
+		</form> -->
 	</div>
 
 	<div id="col_right">
 		<dl class="box" id="mytags">
-			<dt><span><a href="/tag">我的标签</a></span></dt>
+			<dt><span><a href="/tag">Tag</a></span></dt>
 			<dd id="mytag">
 				<ul style="display: block;">
 					{% for tag_item in tag_list %}
-					<li><a href="/tag/{{ tag_item.name }}">{{ tag_item.name }}</a><a href="/rss/{{ tag_item.name }}" class="num" target="_blank">{{ tag_item.count_pic }}</a></li>
+					<li><a href="/pic/{{ tag_item.name }}">{{ tag_item.name }}</a><a href="/rss/{{ tag_item.name }}" class="num" target="_blank">{{ tag_item.count_pic }}</a></li>
 					{% endfor %}
 				</ul>
 			</dd>
@@ -63,7 +64,7 @@
 		{% for item in entry_list %}
 			<dl class="item" id="item_{{ item.key }}">
 				<dt>
-					<a href="{{item.url}}" target="_blank"><img src="/img?key={{ item.key }}" alt="{{ item.title }}" width="200"/></a>
+					<a href="{{item.url}}" target="_blank"><img src="/img?key={{ item.key }}" alt="{{ item.title }}" width="192"/></a>
 				</dt>
 				<dd class="content">{{ item.content|escape|linebreaksbr }}<br />
 				{% if item.private %}
