@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title %}标签云 - {{ block.super }}
+{% endblock %} 
+{% block content %}
+	<div id="searcher">
+		<ul>
+			<li><a href="/">我的网址</a></li>
+			<li><a href="/note/">我的网摘</a></li>
+			<li><a href="/pic/">我的图片</a></li>
+			<li><a href="/tag" class="curr">我的标签</a></li>
+		</ul>
+		<!-- <form action="/search" method="get">
+			<img src="/media/search_b.gif" alt="search button" />
+			<input type="text" id="searchBox" maxlength="15" name="s" />
+			<input src="/media/search.gif" id="submit" type="image" />
+		</form> -->
+	</div>
+	
+	<div id="col_right">
+	</div>
+	<div id="col_middle">
+		<div id="tagcloud">
+		{% for tag in tags %}
+			<a href="/tag/{{ tag.info.name }}" class="level{{ tag.level }}">{{ tag.info.name }}</a>
+		{% endfor %}
+		</div>
+	</div>
+
+{% endblock %}

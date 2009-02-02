@@ -1,0 +1,402 @@
+* { padding: 0; margin: 0; font-size: 12px; font-family:Geneva, Arial, Helvetica, sans-serif; }
+body { margin: 10px 15px 10px 15px; overflow: auto; }
+a { color: #333; text-decoration: none; cursor: pointer; }
+a:hover { text-decoration: underline; }
+img { border: none; }
+li { list-style: none; white-space: nowrap; }
+input,textarea { border: 1px solid #ccc; padding-left: 2px; padding-right: 2px; }
+textarea { overflow: auto; }
+input .checkbox { border: none; }
+h1 { font-size: 12pt; margin-top: 25px; font-weight: bold; color: #FF9933; text-decoration: none; line-height:150%; }
+h2 { font-size: 13px; color: #000; text-decoration: none; margin-top: 20px; margin-bottom: 5px; font-weight: bold; cursor: pointer; }
+h2:hover { color: #f93; text-decoration: none; }
+h3 { font-size: 13px; color: #000; text-decoration: none; margin-top: 20px; margin-bottom: 5px; font-weight: bold; cursor: pointer; }
+h3:hover { color: #f93; text-decoration: none; }
+p { line-height: 120%; }
+div { line-height: 150%; }
+
+div.item span { line-height: 30px; }
+div.item div { margin-left: 15px; }
+
+#loading { position: absolute; left: 80px; top: 160px; z-index: 89; display: none; }
+#br { clear: both; height: 50px; }
+#counter { display: none; position: absolute; left: -1000px; top: -900px; }
+#bottom { display: block; clear: both; margin: 0px; padding: 0px; height: 0px; line-height: 0px; }
+
+/*************    布局    **************/
+#threecolumnleft { float: left; width: 150px; overflow: hidden; }
+#threecolumnright { float: right; width: 200px; overflow: hidden; }
+#threecolumnmiddle { margin-left: 160px; margin-right: 210px; }
+
+#twocolumnright { float: right; width: 200px; overflow: hidden; }
+#twocolumnmiddle { margin-right: 210px; }
+
+#twocolumnleft2 { float: left; width: 160px; overflow: hidden; }
+#twocolumnmiddle2 { margin-left: 170px; }
+
+#blogright { float: right; width: 240px; overflow: hidden; }
+#blogmiddle { margin-right: 250px; }
+
+
+/*************    顶部    **************/
+#toper { text-align: right; height: 45px !important; height: 35px; margin-top: 5px; }
+#toper a, #toper strong { padding-left: 10px; padding-right: 10px; font-size: 12px; color: #000; border-right: 1px solid #dbdbdb; }
+#toper a.lm { border: none; clear: right; padding-right: 0; }
+#toper #logo { float: left; border: none; padding-left: 0; padding-top: 0px; }
+
+
+/*************  搜索条   **************/
+#searcher { margin-bottom: 10px; height: 35px; padding: 0px 8px 0 6px; border: 1px solid #eaeef1; background-image:url('topbg.gif') }
+#searcher ul { float: left; }
+#searcher ul li { float: left; margin-top: 5px; margin-right: 12px; border: 1px solid #eaeef1; padding-left: 3px; padding-right: 3px; background-color: #F0FAFB; background-image:url('menu.gif') }
+#searcher ul li a { float: left; display: block; line-height: 22px; color: #898989; }
+#searcher ul li a:hover { color: #53BA15; }
+#searcher ul li img { float: left; margin-top: 3px !important; margin-top: 2px; margin-right: 4px; height: 16px; width: 16px; }
+#searcher form { float: right; margin-top: 7px; }
+#searcher form #searchBox { position: absolute; margin-left: -165px; height: 17px; margin-top: 1px; border: none; }
+#searcher #submit { margin-left: -12px; border: none; }
+#searcher .curr { color: #53BA15; }
+
+/*************  小菜单   **************/
+#smenu { display: block; height: 34px; }
+#smenu a { float: left; display: block; margin-right: 3px; margin-left: 3px; padding: 2px 6px; border: 1px #eee solid; color: #666; }
+#smenu a:hover { color: #fff; background-color: #64ca26; text-decoration: none; }
+
+/*************  分页    **************/
+.page { margin-left: -3px !important; margin-left: -6px; height: 30px;  }
+.page span { display: block; float: left; margin-right: 3px; margin-left: 3px; padding: 1px 6px; color: #54ba16; }
+.page .dot { color: #ccc; }
+.page a { display: block; float: left; margin-right: 3px; margin-left: 3px; padding: 1px 6px; border: 1px #eee solid; color: #666; }
+.page a:hover { color: #fff; background-color: #64ca26; text-decoration: none; }
+
+#page { margin-left: -3px !important; margin-left: -6px; height: 30px;  }
+#page span { display: block; float: left; margin-right: 3px; margin-left: 3px; padding: 1px 6px; color: #54ba16; }
+#page .dot { color: #ccc; }
+#page a { display: block; float: left; margin-right: 3px; margin-left: 3px; padding: 1px 6px; border: 1px #eee solid; color: #666; }
+#page a:hover { color: #fff; background-color: #64ca26; text-decoration: none; }
+
+/*************  box   **************/
+dl.box {	margin-bottom: 15px; }
+dl.box dt { height:25px; border: 1px solid #eaeef1; padding-left: .5em; background-image:url('toptagt.gif'); }
+dl.box dt a { position: absolute; font-size: 14px; line-height: 25px; color: #72A5C2; }
+dl.box dt span { font-size: 14px; line-height: 25px; color: #72A5C2; }
+dl.box dt .edit { position: relative; float: right; margin-top: -25px; margin-right: 5px; }
+dl.box dt img { margin-right: 10px; margin-top: 8px; cursor: pointer; }
+dl.box dd { border: 1px solid #eaeef1; border-top: none; padding: 5px 5px 10px 10px; overflow: hidden; }
+dl.box dd a { margin-right: 10px; font-size:12px; color: #333; line-height: 150%; white-space: nowrap; }
+
+/*************    底部    **************/
+#footer { clear: both; border-top: 1px solid #dbdbdb; padding-top: 13px; padding-bottom: 15px; }
+#footer a { float: left; color: #000; border-left: 1px solid #ddd; padding-right: 5px; padding-left: 5px }
+#footer a.fm { border-left: 0; padding-left: 0; }
+#footer span { float: right; }
+
+/*************    弹出筐    **************/
+#itemopen { z-index: 3; position: absolute; left: -200px; top: -200px; visibility: hidden; width:200px; }
+#itemopen2 { z-index: 2; position: absolute; left: -200px; top: -200px; visibility: hidden; width:360px; background-color:#E0E9ED; text-align: center; margin-left: auto; margin-right: auto; cursor: move; }
+#note { background-color: #fdfbe0; border: 1px solid #000000; padding: .2em; overflow: hidden; }
+#note img { max-width: 200px; }
+img.spc { max-width: 200px; }
+
+/************     itemOpen2        **************/
+.ititle { height: 25px; line-height: 25px; background-color: #e0e9ed; }
+.ititle img { float: right; text-align: right; cursor: pointer; border: 0; margin-top: 5px; }
+.ititle span { font-weight: bold; font-size: 12px; }
+
+/************ register / login / set **************/
+#left { float: left; clear: left; width: 170px; margin-right: 20px; }
+#left .head { margin-bottom: 10px; font-size: 13px; }
+#left .item { margin-bottom: 3px; display: block; height: 20px; line-height: 20px; }
+#left .item span { float: left; clear: left; margin-left: 1em;  }
+#left .item input { float: right; clear: right; width: 100px;  }
+#left .item textarea { margin-left: 27px; position: absolute; }
+#left .error { color: #f00; margin-left: 2em; line-height: 20px; }
+#left .sure { padding-left: 3em; margin-top: 15px; display: block; }
+#left .sure input { float: left; padding-left: 3px; padding-right: 3px; margin-left: 20px; }
+#left .item select { position: absolute; margin-left: 30px; border: 1px solid #ccc; }
+#left .sure a { font-size: 14px; line-height: 24px; }
+#right { padding: 10px 10px 15px 5px; float: left; line-height: 150%; background-color: #eee; width: 340px; margin-left: 20px; }
+#right h4 { margin: 5px 0 0 0; font-weight: normal; }
+#right p { margin-left: 0px; }
+#right .learn-more { float: right; clear: right; margin-right: 30px; display: block; margin-top: 5px; }
+#right .learn-more a { margin-left: 10px; color: #666; }
+#left #head { vertical-align: top; display: block; padding-top: 3px; padding-left: 1em; }
+#left #head #myhead { vertical-align: text-top; border: 1px solid #eee; width: 96px; height: 96px; margin-left: 25px !important; margin-left: 23px; }
+#left #head #Fhead { position: absolute; margin-top: 104px; margin-left: -100px; width: 200px; }
+#left #heads { position: absolute; margin-left: 155px !important; margin-top: -100px !important; margin-left: 5px; margin-top: 2px; padding: 2px; }
+#left #head_sys { background-color: #fff; border: 1px solid #ccc; }
+#left #head_sys img.head_mouse_off { border: 1px solid #fff; }
+#left #head_sys img.head_mouse_on { border: 1px solid #96f; }
+
+/*************  fav    **************/
+#favs { clear: left; }
+dl.nfav { margin-left: 20px; margin-bottom: 10px; }
+dl.nfav .icon img { cursor: pointer; position: absolute; margin-left: -20px; width: 16px; height: 16px; }
+dl.nfav dt a { font-size: 13px; color: #261cdc; }
+dl.nfav dt a.dig { color: #999; margin-left: 10px; }
+dl.nfav dd.noteh { height: 1px; overflow: hidden; }
+dl.nfav dd.notes { padding: 3px; background-color:#fffff9; color: #444; max-width: 80%; }
+.fadd { color: #999; }
+.fadd a { color: #999; cursor: pointer; }
+.fadd a.tag:hover { color: #fff; background-color: #54ba16; text-decoration: none; }
+.fadd .fs { margin-left: 8px; margin-right: 8px; }
+.fadd span.edit { margin-left: 20px; /*visibility: hidden;*/ display:none; }
+dl.nfav .popup { width: 200px; position: absolute; background-color: #fdfbe0; border: 1px solid #000000; padding: .2em; overflow: hidden; }
+dl.nfav .popup img { max-width: 200px; }
+.wmaplayer { color: #ccc; cursor: pointer; }
+
+
+/**********		   Form Wrapper			***********/
+.formwrapper { width: 350px; padding-left: 20px; text-align: left; font-family: Arial, Helvetica, sans-serif; font-size: 12px; color: #666666; background: #fff; margin-bottom: 30px; }
+.formwrapper a { color: #1E7ACE; text-decoration: none; }
+.formwrapper a:hover { color: #000; text-decoration: underline; }
+.formwrapper h1 { font-size: 14px; font-weight: bold; margin-left: 20px; margin-bottom: 25px; }
+.formwrapper div { margin-bottom: 10px; }
+.formwrapper pre, .formwrapper p { color: #1E7ACE; margin: 4px; }
+.formwrapper input, .formwrapper select, .formwrapper textarea { padding: 1px; margin: 2px; font-size: 12px; }
+.formwrapper fieldset { padding: 10px; margin-top: 5px; border: none; background: #fff; }
+.formwrapper fieldset legend { color: #1E7ACE; font-weight: bold; padding: 3px 20px 3px 20px; border: none; display: none; background: #fff; }
+.formwrapper fieldset div { clear: left; margin-bottom: 2px; }
+.formwrapper fieldset label { float: left; width: 80px; text-align: right; padding: 4px; padding-right: 6px; margin: 1px; }
+.formwrapper fieldset font { font-size: 12px; position: absolute; padding: 4px; color: #f00; }
+.formwrapper .cb input { border: none; }
+.formwrapper #heads { position: absolute; border: 1px solid #eee; padding: 3px; }
+.formwrapper #heads { margin-top: -124px; margin-left: 250px; }	
+* html .formwrapper #heads { margin-top: -124px; margin-left: 250px; }
+*+html .formwrapper #heads { margin-top: -94px; margin-left: -60px; }
+.formwrapper .enter { text-align: center; margin: 15px; margin-top: 30px; }
+.formwrapper .enter input { padding: 1px 10px; font-size: 12px; }
+
+
+/*************    首页    **************/
+#hotuser dd a { color:#16397D; display: block; }
+#hotuser dd img { float: left; margin-right: 6px; height: 16px; width: 16px; }
+
+#hottag dd a { display: block; }
+#hottag dd img { float: left; margin-right: 6px; height: 16px; width: 16px; }
+
+
+/*************    VV    **************/
+#showvideo * { margin: 0px; padding: 0px; }
+#showvideo dt { height: 1px; overflow: hidden; }
+#showvideo .decription { height: 1px; width: 500px; overflow: hidden; }
+
+/*************    其它页面    **************/
+#spacer { display: block; margin: 40px; }
+h1 { font-size: 12pt; margin-top: 25px; font-weight: bold; color: #FF9933; text-decoration: none; line-height:150%; }
+h3, h3 a { font-size: 13px; color: #000; text-decoration: none; margin-top: 20px; margin-bottom: 5px; font-weight: bold; }
+h3 a:hover { color: #f93; text-decoration: none; }
+h4, h4 a { font-size: 12px; color: #000; text-decoration: none; margin-top: 5px; margin-bottom: 5px; margin-left: 8px; font-weight: bold; }
+h4 a:hover { color: #f93; text-decoration: none; }
+.au-c { display: none; line-height: 150%; }
+.au-c2 { display: block; line-height: 150%; }
+.au-c div, .au-c2 div { margin-left: 30px; margin-bottom: 6px; }
+.private { color: #f93; margin-left: 20px; }
+
+
+/*************    User    **************/
+#mytag { border: 1px solid #eaeef1; border-top: none; padding: 5px 0 10px 15px; }/* background-image:url('11.jpg'); background-position: bottom; background-repeat: repeat-x;*/
+#mytag .bundle { text-decoration: none; font-size:13px; display: block; color: #666; border-bottom: 1px solid #eee; line-height: 20px; margin-bottom: 5px; padding-bottom: 2px; margin-left: -5px; cursor: pointer; }
+#mytag .nb { border: none; }
+#mytag ul { margin-bottom: 8px; }
+#mytag a { color: #6295b2; line-height: 20px; margin-left: 5px; }
+#mytag li .num { color: #ccc; line-height: 20px; position: absolute; right: 20px; }
+
+#myfriend { border: 1px solid #eaeef1; border-top: none; padding: 5px 0 10px 0px; }
+#myfriend img { margin-left: 8px !important; margin-left: -5px; margin-right: 5px;  }
+
+#myfriends #addfriend, #mytags #editbundle { position: absolute; right: 20px; color: #72a5c2; font-size: 12px; }
+
+
+#myfriend a { color: #024562;  line-height: 20px; }
+
+/*************    User 用户云    **************/
+#userCloud { display: block; overflow: hidden; }
+#userCloud ul { width: 240px; height: 150px; padding-top: 15px; float: left; overflow: hidden; }
+#userCloud ul:hover { background-color: #f9f9f9; }
+#userCloud ul li.head { margin-left: 10px; float: left; position: absolute; }
+* html #userCloud ul li.head { position: relative; }
+*+html #userCloud ul li.head { position: relative; }
+#userCloud ul li { margin-left: 55px; }
+#userCloud ul li a { color: #6295b2; }
+
+/*************    User info    **************/
+#myDetails {}
+
+#myInfo { float: left; height: 98px; width: 300px; }
+#myInfo img {width: 96px; height: 96px; border: 1px solid #eee; float: left; }
+#myInfo ul { display: block; margin-left: 116px;  }
+#myInfo ul li { line-height: 19px; font-size: 14px; }
+#myInfo ul li a { color: #72A5C2; margin-bottom: 5px; }
+
+#myFeeling { background-color: #f7f7f7; padding: 8px 10px 20px 12px; font-size: 13px; line-height: 25px; display: block; margin-left: 310px; }
+#myFeeling h3 { font-size: 13px; font-weight: bold; margin-top: 0; }
+
+.clr2 { line-height: 0; height: 0; clear: left; border-bottom: 1px dashed #eee; margin-top: 20px; margin-bottom: 10px; }
+
+#addmsg #status { display: block; margin-bottom: 5px; }
+#addmsg #status a { color: #fff; background-color: #54ba16; float: right; padding-bottom: 1px !important; padding: 2px 6px 0px 6px; }
+#addmsg #status span { color: #64ca26; margin-left: 3px; margin-right: 3px; }
+
+#addmsg #addnow { color: #666; text-align: right; line-height: 28px; display: block; height: 140px; }
+#addmsg #addnow #privy { border: none; }
+#addmsg #addnow #cancle { color: #fff; background-color: #ccc; padding-bottom: 1px !important; padding: 2px 8px 0px 8px; margin-left: 10px; }
+#addmsg #addnow #submit { color: #fff; background-color: #64ca26; padding-bottom: 1px !important; padding: 2px 8px 0px 8px; margin-left: 10px; }
+#addmsg #addnow #error { color: #f00; margin-right: 10px; }
+
+#msgcontent { display: block; padding-right: 5px; }
+#msgcontent textarea { display: block; width: 100%; height: 100px; margin-right: 23px; }
+
+* #msgcontent { width: 99%; overflow: hidden; }
+* #msgcontent textarea { width: 99.9%; }
+
+#rbem { position: absolute; right: 250px; margin-top: -5px; }
+#rbem img { margin-left: 3px; }
+
+
+#msgs { display: block; margin-top: 30px; }
+#msgs .mhead { float: left; width: 38px; padding-top: 3px; }
+#msgs .mhead img { width: 32px; height: 32px; }
+#msgs .msg .ndd { text-align: right; background-color: #f7f7f7; color: #999; padding: 3px 6px; margin-left: 40px; }
+#msgs .msg .ndd a { float: left; color: #5499ba; font-weight: bold; }
+#msgs .msg .ndd span { cursor: pointer; }
+#msgs .msg .ndd span:hover { text-decoration: underline; cursor: pointer; }
+#msgs .msgcon { color: #666; padding: 6px; line-height: 20px; margin-bottom: 10px; margin-left: 40px; }
+
+/*************     标签云     **************/
+#cloud { font-weight: bold; line-height: normal; text-decoration: none; margin: 4%; }
+#cloud a { margin-right: 12px; line-height: 30px; overflow: auto; white-space: nowrap; }
+#cloud a:hover { color: #161; background-color: #ff0; text-decoration: none; }
+#cloud a.bs1 { font-size: 12px; color: #dFbE8D }
+#cloud a.bs2 { font-size: 12px; color: #D2B48C }
+#cloud a.bs3 { font-size: 12px; color: #EE8262 }
+#cloud a.bs4 { font-size: 13px; color: #87CEEB }
+#cloud a.bs5 { font-size: 13px; color: #cc9 }
+#cloud a.bs6 { font-size: 13px; color: #F4A460 }
+#cloud a.bs7 { font-size: 14px; color: #FF7F50 }
+#cloud a.bs8 { font-size: 14px; color: #DB7093 }
+#cloud a.bs9 { font-size: 14px; color: #EECBAD }
+#cloud a.bs10 { font-size: 16px; color: #EE3B3B }
+#cloud span {  display: block; margin-top: 20px; margin-bottom: 5px; }
+
+
+
+
+
+
+/***********  gblog  *************/
+#gblogt { margin-bottom: 5px; margin-left: -5px; line-height: 20px; }
+#gblogt a { color: #000; text-decoration: underline; font-weight: bold; border-right: 1px solid #999; padding-right: 20px; margin-left: 20px; }
+#gblogt a.lm  { padding-right: 0; border-right: none; }
+#gblogt a:hover { color: #cc0; }
+
+.gblogst { margin-bottom: 8px; height: 20px; background-color: #eee; margin-left: -15px; padding-left: 15px; }
+.gblogst div { float: left; line-height: 20px; color:#666;  padding-bottom: 3px; }
+.gblogst .title { width: 400px; padding-left: 20px; }
+.gblogst .name { width: 100px; }
+.gblogst .date { width: 200px; }
+.gblogst .view { width: 60px; text-align: center; margin-left: auto; margin-right: auto; }
+.gblogst .replay { width: 60px; text-align: center; margin-left: auto; margin-right: auto; }
+
+.gblogs { width: 890px; background-position:bottom; background-image:url(/images/dotline.gif); background-repeat: repeat-x; margin-top: 0px; margin-bottom: 8px; height: 20px; }
+.gblogs div { float: left; line-height: 20px; color:#666666;  padding-bottom: 3px; }
+.gblogs .title { font-size: 13px; width: 400px; padding-left: 20px; }
+.gblogs .title a { color: #06c; margin-right: 10px; }
+.gblogs .kind { color: #f00; }
+.gblogs .name { width: 100px; }
+.gblogs .name a { color: #666; }
+.gblogs .date { width: 200px; }
+.gblogs .date a { margin-left: 20px; color: #666; }
+.gblogs .view { width: 60px; text-align: center; margin-left: auto; margin-right: auto; font-family: Tahoma; }
+.gblogs .replay { width: 60px; text-align: center; margin-left: auto; margin-right: auto; font-family: Tahoma; }
+
+.blogl { margin-bottom: 8px; height: 15px; background-color: #eee; margin-left: -15px; margin-right: -5px; } /*** line ***/
+
+
+
+/***********************************************/
+/*                   用户网络日志	               */
+/***********************************************/
+/*网志右侧   **************/
+
+#myDetail { border: 1px solid #eaeef1; border-top: none; padding: 15px 10px 10px 15px; height: 108px; }
+#myDetail img { float: left; width: 96px; height: 96px; border: 1px solid #eee; margin-right: 10px; }
+#myDetail li { line-height: 20px; }
+#myDetail a { color: #000; }
+
+
+#mynewblogt #addblog { position: absolute; right: 20px; color: #72a5c2; font-size: 12px; }
+#mynewblog { border: 1px solid #eaeef1; border-top: none; padding: 5px 10px 10px 15px; }
+#mynewblog li { line-height: 24px; border-bottom: 1px dotted #ccc; }
+#mynewblog a { color: #000; }
+
+#mynewreplayt #addreplay { position: absolute; right: 20px; color: #72a5c2; font-size: 12px; }
+#mynewreplay { border: 1px solid #eaeef1; border-top: none; padding: 5px 10px 10px 15px; }
+#mynewreplay li { line-height: 24px; border-bottom: 1px dotted #ccc; }
+#mynewreplay a { color: #000; }
+
+
+
+/*网志左侧  **************/
+#blogLeft #page { margin-top: 20px; }
+
+.mblog { padding-bottom: 5px; display: block; margin-bottom: 10px; }
+.mblog .title { text-align: right; background-color: #f7f7f7; color: #999; padding: 3px 3px 2px 10px; background-image: url(e.gif); background-position: 5px 7px; background-repeat: no-repeat; }
+.mblog .title a { color: #999; }
+.mblog .title .mtitle { float: left; font-size: 13px; margin-left: 8px; color:#016599; }
+.mblog .title .e { float: left; position: absolute; left: 20px !important; left: 20px; margin-top: 4px !important; margin-top: 2px; }
+.mblog .title span { color: #84C427; margin-left: 2px; margin-right: 2px; }
+.mblog .title .pri { float: left; }
+.mblog .con { margin-bottom: 10px; margin-top: 10px; padding-left: 10px; overflow: auto; }
+.mblog .con td { color: #222; font-size: 13px; }
+
+
+#mblog { padding-bottom: 5px; padding-top: 10px; display: block; margin-bottom: 10px; }
+#mblog .title a { text-align: right; color: #00659A; font-size: 14px; font-weight: bold; padding: 3px 3px 2px 0; }
+#mblog .title .mtitle { float: left; font-size: 13px; margin-left: 8px; color:#016599; }
+#mblog .title img { position: absolute; margin-top: 0 !important; margin-top: 2px; }
+#mblog .title span { color: #84C427; margin-left: 2px; margin-right: 2px; }
+#mblog .con { margin-bottom: 10px; margin-top: 10px; overflow: hidden; }
+#mblog .con td { color: #222; font-size: 13px; }
+#mblog .sub { text-align: right; color: #999; padding-bottom: 3px; padding-top: 10px; border-bottom: 1px #ddd dotted; }
+#mblog .sub span { color: #84C427; margin-left: 2px; margin-right: 2px; }
+#mblog .sub a { color: #999; }
+
+#msgnum { text-align: right; font-weight: bold; color: #84C427; }
+
+#rblogs { display: block; margin-top: 10px; }
+#rblogs .mhead { float: left; width: 38px; padding-top: 3px; }
+#rblogs .mhead img { width: 32px; height: 32px; }
+#rblogs .ndd { text-align: right; background-color: #f7f7f7; color: #999; padding: 3px 6px; margin-left: 40px; }
+#rblogs .ndd a { float: left; color: #5499ba; font-weight: bold; }
+#rblogs .ndd span { cursor: pointer; }
+#rblogs .con .title { color: #5499ba; margin-right: 4px; display: block; }
+#rblogs .con { color: #666; padding: 6px; line-height: 20px; margin-bottom: 10px; margin-left: 40px; }
+
+#addreplay { height: 180px; }
+#addreplay #status a { color: #fff; background-color: #54ba16; padding-bottom: 1px !important; padding: 2px 6px 0px 6px; }
+#addreplay #status { display: block; margin-bottom: 5px; text-align: right; }
+
+#addreplay form { color: #666; text-align: right; line-height: 28px; display: block; height: 140px; }
+#addreplay form #privy { border: none; }
+#addreplay form #error { color: #f00; margin-right: 10px; }
+#addreplay form #cancle { color: #fff; background-color: #ccc; padding-bottom: 1px !important; padding: 2px 8px 0px 8px; margin-left: 10px; }
+#addreplay form #submit { color: #fff; background-color: #64ca26; padding-bottom: 1px !important; padding: 2px 8px 0px 8px; margin-left: 10px; }
+
+
+
+
+/*回复网志  **************/
+#replayblog { border: 1px dashed #ccc; padding: 25px 10px 10px 25px; margin-bottom: 20px; }
+#replayblog input, #replayblog textarea { border: 1px solid #ccc; padding-left: 3px; }
+#replayblog div { margin-bottom: 5px; vertical-align: text-top; }
+#replayblog div span { float: left; display: block; margin-top: 1px; width: 50px; }
+#replayblog img { height: 19px; width: 19px; }
+#replayblog #em, #replayblog #sure { margin-left: 50px; }
+#replayblog #sure input { padding-left: 5px; padding-right: 5px; margin-right: 20px; }
+
+
+
+#rbem { float: right; margin-right: 15px; }
+#rbem img { margin-left: 3px; }
+
