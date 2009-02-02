@@ -73,7 +73,7 @@ dl.box dd a { margin-right: 10px; font-size:12px; color: #333; line-height: 150%
 #myfriend { border: 1px solid #eaeef1; border-top: none; padding: 5px 0 10px 0px; }
 #myfriend img { margin-left: 8px !important; margin-left: -5px; margin-right: 5px;  }
 #myfriends #addfriend, #mytags #editbundle { position: absolute; right: 20px; color: #72a5c2; font-size: 12px; }
- #myfriend a { color: #024562;  line-height: 20px; }
+#myfriend a { color: #024562;  line-height: 20px; }
 
 
 /*************    µ×²¿    **************/
@@ -120,8 +120,8 @@ dl.box dd a { margin-right: 10px; font-size:12px; color: #333; line-height: 150%
 #links dl.item dd.tags a.tag:hover { color: #fff; background-color: #54ba16; text-decoration: none; }
 #links dl.item dd.tags span.edit { margin-left: 20px; /*visibility: hidden;*/ display:none; }
 
-#pics{clear:left;}
-#pics dl{float:left;width:200px;height:200px;padding:6px}
+#pics{clear:both;width:100%;}
+#pics dl{float:left;width:192px;padding:6px}
 #pics dl dt.content{text-align:center;}
 #pics dl.item dd.tags { color: #999; }
 #pics dl.item dd.tags a { color: #999; cursor: pointer; }
@@ -132,9 +132,11 @@ dl.box dd a { margin-right: 10px; font-size:12px; color: #333; line-height: 150%
 #form { margin: 3%; }
 #form .line { margin-bottom: 1px; clear: both; line-height: 20px; min-height: 20px; }
 #form .line2 { margin-bottom: 10px; clear: both; line-height: 20px; height: 20px; }
-#form .d1 { width: 40px; margin-right: 5px; float: left; }
+#form .d1 { width: 40px; float: left; }
 #form .d2 { float: left; }
-#form .sure { padding-left: 3em; margin-top: 10px; display: block; }
+#form .sure { padding-left: 40px; margin-top: 10px; display: block; }
+#form .sure input.private { color: #f93; margin-left: 20px; }
+
 #form .error { clear: both; color: #f00; margin-left: 2em; line-height: 20px; }
 #mytags2 { margin-left: 3%; margin-right: 10%; }
 #mytags2 span { display: block; line-height: 22px; } 

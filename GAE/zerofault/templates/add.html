@@ -28,12 +28,12 @@
 		{% ifequal type 'pic' %}
 		<div class="line">
 			<div class="d1">图片：</div>
-			<div class="d2"><img id="rimage" src="{{ url }}" max-width="360" /></div>
-			<input type="hidden" id="Turl" name="url" value="{{ url }}"/>
+			<div class="d2"><img id="rimage" src="{{ url }}" max-width="360" oonload="resize(this)"/><input type="hidden" id="Turl" name="url" value="{{ url }}"/></div>
+			
 		</div>
 		<div class="line">
 			<div class="d1">描述：</div>
-			<div class="d2"><textarea name="content" id="Tnotes" rows="2" cols="40">{{ content }}</textarea></div>
+			<div class="d2"><textarea name="content" id="Tnotes" rows="3" cols="40">{{ content }}</textarea></div>
 		</div>
 		{% else %}
 		<div class="line">
@@ -48,9 +48,8 @@
 		{% endifequal %}
 		<div class="line">
 			<div class="d1">标签：</div>
-			<div class="d2"><input type="text" id="Ttags" name="tags" value="{{ tags }}" maxlength="100" size="50" autocomplete="off" /></div>
+			<div class="d2"><input type="text" id="Ttags" name="tags" value="{{ tags }}" maxlength="100" size="50" autocomplete="off" /></div><div class="clear"></div>
 		</div>
-		<div class="error"></div>
 		<div class="sure"><input type="submit" name="Share" value="共享" />
 			<input type="button"  name="Prv" class="private" value="私人" onclick="javascript:document.form1.private.value=1;document.form1.submit();"/>
 		</div>
@@ -88,12 +87,18 @@ $(document).ready(function(){
 			$("input[name=tags]").val(tags);
 		});
 	});
-
-	if($("img#rimage").width()>360)
+	if($("#rimage").width()>360)
 	{
-		$("img#rimage").width(360);
+		$("#rimage").width(360);
 	}
 });
-
+function resize(obj)
+{
+	//alert($("#rimage").width()>360);
+	if($("#rimage").width()>360)
+	{
+		$("#rimage").width(360);
+	}
+}
 </script>
 {% endblock %}

@@ -36,7 +36,7 @@ if (external.menuArguments)
 
 	var parm = 'scrollbars=yes,width=650,height=500,left=75,top=20,status=no,resizable=no';
 
-	var href=location.href;
+	var href=window.location.href;
 	//alert(href.substr(href.indexOf('?')+1));
 	if(href.substr(href.indexOf('?')+1)=='pic')//'IMG' == EventElement.tagName)
 	{
@@ -46,23 +46,24 @@ if (external.menuArguments)
 		var title = external.menuArguments.document.title;
 		var alt = EventElement.alt;
 		var purl = external.menuArguments.location.href;
-		var address = '/add?type=pic&title='+escape(title)+'&url='+escape(url)+'&content='+escape(alt)+escape('\nRefer:')+escape(purl);
+		var address = '../add?type=pic&title='+escape(title)+'&url='+escape(url)+'&content='+escape(alt)+escape('\nRefer:')+escape(purl);
 	}
 	else if(href.substr(href.indexOf('?')+1)=='note')
 	{
-		var address = '/add?type=note&title='+escape(title)+'&url=&content='+escape(sel);
+		var address = '../add?type=note&title='+escape(title)+'&url=&content='+escape(sel);
 	}
 	else
 	{
-		var address = '/add?title='+escape(title)+'&url='+escape(url)+'&content='+escape(sel);
+		var address = '../add?title='+escape(title)+'&url='+escape(url)+'&content='+escape(sel);
 	}
-
-	var postwin = window.open( address, '', parm);
+	//address ='http://www.baidu.com/';
+	//alert(address+' '+parm);
+	var postwin = window.open(address, '', parm);
 
 	if( postwin )
 	{
-		postwin.focus();
-		//alert(postwin)
+		//postwin.focus();
+	//	alert(postwin);
 		// postwin.document.form1.title.value=title;
 	}
 }
