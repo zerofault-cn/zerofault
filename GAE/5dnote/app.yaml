@@ -1,0 +1,25 @@
+application: zerofault
+version: 1
+runtime: python
+api_version: 1
+
+handlers:
+- url: /favicon.ico
+  static_files: media/favicon.ico
+  upload: media/favicon.ico
+
+- url: /media
+  static_dir: media
+
+- url: /loadcsv
+  script: loadcsv.py
+  login: admin
+
+- url: /dump/.*
+  script: dump.py
+
+- url: /rss/.*
+  script: dump.py
+
+- url: /.*
+  script: main.py

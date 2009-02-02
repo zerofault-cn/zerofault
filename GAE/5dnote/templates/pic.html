@@ -1,0 +1,141 @@
+{% extends "base.html" %}
+
+{% block content %}
+	<div id="searcher">
+		<ul>
+			<li><a href="/">我的网址</a></li>
+			<li><a href="/note/">我的网摘</a></li>
+			<li><a href="/pic/" class="curr">我的图片</a></li>
+			<li><a href="/tag">我的标签</a></li>
+		</ul>
+		<!-- <form action="/search" method="get">
+			<img src="/media/search_b.gif" alt="search button" />
+			<input type="text" id="searchBox" maxlength="15" name="s" />
+			<input src="/media/search.gif" id="submit" type="image" />
+		</form> -->
+	</div>
+
+	<div id="col_right">
+		<dl class="box" id="mytags">
+			<dt><span><a href="/tag">Tag</a></span></dt>
+			<dd id="mytag">
+				<ul style="display: block;">
+					{% for tag_item in tag_list %}
+					<li><a href="/pic/{{ tag_item.name }}">{{ tag_item.name }}</a><a href="/rss/{{ tag_item.name }}" class="num" target="_blank">{{ tag_item.count_pic }}</a></li>
+					{% endfor %}
+				</ul>
+			</dd>
+		</dl>
+
+		<div id="myicon">
+			<a href="/rss/" target="_blank"><img src="/media/rss.gif" alt="rss" class="rss" /></a>
+		</div>
+
+	</div>
+	<div id="col_middle">
+		<div class="page">
+{% if is_paginated %}
+	{% ifequal current_page 1 %}<span>|&lt;</span> 
+	{% else %} <a href="?page=1">|&lt;</a>
+	{% endifequal %}
+	{% if has_previous %} <a href="?p={{ previous_page }}">&lt;&lt;</a>
+	{% else %} <span>&lt;&lt;</span>
+	{% endif %}
+	{% for p in page_numbers %}
+		{% ifequal current_page p %}<span>{{ p }}</span>
+		{% else %}
+			{% ifequal p '...' %}
+			<span class="dot">...</span>
+			{% else %}
+			<a href="?p={{ p }}">{{ p }}</a>
+			{% endifequal %}
+		{% endifequal %}
+	{% endfor %}
+	{% if has_next %}<a href="?p={{ next_page }}">&gt;&gt;</a>
+	{% else %}<span>&gt;&gt;</span>
+	{% endif %}
+	{% ifequal current_page pages %}<span>&gt;|</span>
+	{% else %} <a href="?p={{ pages }}">&gt;|</a>
+	{% endifequal %}
+{% endif %}
+		</div>
+
+		<div id="pics">
+		{% for item in entry_list %}
+			<dl class="item" id="item_{{ item.key }}">
+				<dt>
+					<a href="{{item.url}}" target="_blank"><img src="/img?key={{ item.key }}" alt="{{ item.title }}" width="192"/></a>
+				</dt>
+				<dd class="content">{{ item.content|escape|linebreaksbr }}<br />
+				{% if item.private %}
+					<img src="/media/lock.gif" align="absmiddle" />
+				{% endif %}
+				{{ item.addtime|date:"Y-m-d H:i:s" }}
+				</dd>
+				<dd class="tags">
+					{% for tag in item.tags %}
+					[<a href="{{ tag }}" class="tag">{{ tag }}</a>]
+					{% endfor %}
+					{% if isAdmin %}
+					... 
+					<a href="/add?type=pic&key={{ item.key }}" class="edit">编辑</a>/ <a class="del" onClick="$('#del_{{ item.key }}').show()">删除</a>
+					<span class="edit" id='del_{{ item.key }}'><a onClick="submit_del(this)" value="{{ item.key }}" hhref="del?key={{ item.key }}" class="edit">确认</a> / <a onClick='$("#del_{{ item.key }}").hide()' class="edit">取消</a></span>
+					{% endif %}
+				</dd>
+			</dl>
+			{% endfor %}
+			<div class="clear"></div>
+		</div>
+
+		<div class="page">
+{% if is_paginated %}
+	{% ifequal current_page 1 %}<span>|&lt;</span> 
+	{% else %} <a href="?page=1">|&lt;</a>
+	{% endifequal %}
+	{% if has_previous %} <a href="?p={{ previous_page }}">&lt;&lt;</a>
+	{% else %} <span>&lt;&lt;</span>
+	{% endif %}
+	{% for p in page_numbers %}
+		{% ifequal current_page p %}<span>{{ p }}</span>
+		{% else %}
+			{% ifequal p '...' %}
+			<span class="dot">...</span>
+			{% else %}
+			<a href="?p={{ p }}">{{ p }}</a>
+			{% endifequal %}
+		{% endifequal %}
+	{% endfor %}
+	{% if has_next %}<a href="?p={{ next_page }}">&gt;&gt;</a>
+	{% else %}<span>&gt;&gt;</span>
+	{% endif %}
+	{% ifequal current_page pages %}<span>&gt;|</span>
+	{% else %} <a href="?p={{ pages }}">&gt;|</a>
+	{% endifequal %}
+{% endif %}
+		</div><span>共{{ count }}个记录</span>
+
+	</div>
+<script language="javascript" type="text/javascript" defer>
+function submit_del(obj){
+	$(obj).parent().after('<span style="color:red">正在删除，请稍候...</span>');
+	key=$(obj).attr('value');
+	$.get("/delkey",{
+		key : key
+	},function(str){
+			if(str == '1')
+			{
+				$("#item_"+key).hide('slow');
+				//$("#item_"+key).remove();
+			}
+			else if(str == '0')
+			{
+				alert('some error occured');
+			}
+			else
+			{
+				//alert(str);
+			}
+		});
+}
+</script>
+{% endblock %}
