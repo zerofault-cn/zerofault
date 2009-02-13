@@ -157,7 +157,7 @@ $smarty->assign('Host_Info', $Host_Info);
 $arr=$oSync_Info->Browse("where Sync_ID=".$ID." order by ID");
 for($i=0;$i<count($arr['ID']);$i++)
 {
-	if(substr($arr['Path'][$i].$arr['Filename'][$i],-1)=='/')
+	if(''==$arr['Filename'][$i])
 	{
 		$icon='folder';
 	}

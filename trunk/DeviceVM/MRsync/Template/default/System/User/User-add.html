@@ -3,13 +3,14 @@
 <center>
 <form action="?Mod=<!--{$smarty.get.Mod}-->&op=<!--{$smarty.get.op}-->&subop=<!--{$smarty.get.subop}-->" method="post" target="iframe1">
 <input type="hidden" name="Action" value="Doit">
+<input type="hidden" name="Type" value="Admin" />
 <table border="0" width="600">
 	<tr>
 		<td align="right"><input type="button" value="Back" onclick="window.location='?Mod=<!--{$smarty.get.Mod}-->&op=<!--{$smarty.get.op}-->'"></td>
 	</tr>
 	<tr>
 		<td>
-			<table border="1" width="100%">
+			<table border="1" cellpadding="3" cellspacing="0" width="100%" bordercolor="#0099CC" style="border-collapse:collapse;">
 				<tr>
 					<td align="center" style="background: #acacac;">Username</td>
 					<td align="left" colspan="3"><input type="text" name="Username" maxlength="60" size="30" value=""><span style="color:red">*</span></td>
@@ -19,21 +20,12 @@
 					<td align="left" colspan="3"><input type="password" name="Password" maxlength="60" size="30" value=""><span style="color:red">*</span></td>
 				</tr>
 				<tr>
-					<td align="center" style="background: #ACACAC;">Type</td>
-					<td align="left">
-						<select name="Type" >
-							<option value="Self">Self</option>
-							<option value="Vendor">Vendor</option>
-							<option value="Client">Client</option>
-							<option value="Admin" selected="true">Admin</option>
-						</select>
-					</td>
+						
 					<td align="center" style="background: #ACACAC;">Role</td>
-					<td align="left">
+					<td align="left" colspan="3">
 						<select name="Role" >
 							<option value="Admin" selected="true">Admin</option>
-							<option value="Staff">Staff</option>
-							<option value="Contact">Contact</option>
+							<option value="User">User</option>
 						</select>
 					</td>
 				</tr>

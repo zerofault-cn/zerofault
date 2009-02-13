@@ -1,6 +1,6 @@
 <?PHP
 /** 
- * @Create in 2009/01/16 02:08:08
+ * @Create in 2009/02/13 11:28:24
  * @Smarty Version 2.6.18
  * 
  */
@@ -15,6 +15,7 @@ class Sync_XML
 	var $Create_Time;
 	var $Modify_Time;
 	var $status;
+	var $result;
 
 	var $table_name = 'Sync_XML';
 	var $key = 'ID';
@@ -30,6 +31,7 @@ class Sync_XML
 		$this->Create_Time = null;	
 		$this->Modify_Time = null;	
 		$this->status = null;	
+		$this->result = null;	
 	}
 
 	function Sync_XML_Default() // get Default
@@ -55,12 +57,13 @@ class Sync_XML
 		$iCreate_Time = $this->getCreate_Time();
 		$iModify_Time = $this->getModify_Time();
 		$istatus = $this->getstatus();
+		$iresult = $this->getresult();
 
-		if(isset($iUser_ID)||isset($iHost_ID)||isset($iFilename)||isset($iContent)||isset($iCreate_Time)||isset($iModify_Time)||isset($istatus))
+		if(isset($iUser_ID)||isset($iHost_ID)||isset($iFilename)||isset($iContent)||isset($iCreate_Time)||isset($iModify_Time)||isset($istatus)||isset($iresult))
 		{
 			$sql = "INSERT INTO `$this->table_name` ";
-			$sql .= "(`User_ID`,`Host_ID`,`Filename`,`Content`,`Create_Time`,`Modify_Time`,`status`)";
-			$sql .= " VALUES(".$iUser_ID.",".$iHost_ID.",'".addslashes($iFilename)."','".addslashes($iContent)."','".addslashes($iCreate_Time)."','".addslashes($iModify_Time)."',".$istatus.")";
+			$sql .= "(`User_ID`,`Host_ID`,`Filename`,`Content`,`Create_Time`,`Modify_Time`,`status`,`result`)";
+			$sql .= " VALUES(".$iUser_ID.",".$iHost_ID.",'".addslashes($iFilename)."','".addslashes($iContent)."','".addslashes($iCreate_Time)."','".addslashes($iModify_Time)."',".$istatus.",'".addslashes($iresult)."')";
 			
 			if($this->debug) {// print sql for debug
 				$this->ShowSQL($sql,"Add one record");
@@ -188,6 +191,7 @@ class Sync_XML
 		$iCreate_Time = $this->getCreate_Time();		
 		$iModify_Time = $this->getModify_Time();		
 		$istatus = $this->getstatus();		
+		$iresult = $this->getresult();		
 
 		if(isset($input)&&trim($input)!='') {
 			$sql = "UPDATE `$this->table_name` SET ";			
@@ -205,6 +209,8 @@ class Sync_XML
 			if(isset($iModify_Time)) { $sql .= "`Modify_Time`='".addslashes($iModify_Time)."',"; }
 			
 			if(isset($istatus)) { $sql .= "`status`='".addslashes($istatus)."',"; }
+			
+			if(isset($iresult)) { $sql .= "`result`='".addslashes($iresult)."',"; }
 
 			$sql = substr($sql,0,(strlen($sql)-1));
 			
@@ -404,6 +410,19 @@ class Sync_XML
 		if(isset($this->status)) { return $this->status; }
 	}	
 	// Property  " status "  End ....  
+		
+	
+	// Property  " result "  Start ....
+	function setresult($input) // result set
+	{
+		if($this->result = trim($input)) { return true; }
+	}
+		
+	function getresult() // result Get
+	{
+		if(isset($this->result)) { return $this->result; }
+	}	
+	// Property  " result "  End ....  
 		
 
 ###############  Other Function  ############
