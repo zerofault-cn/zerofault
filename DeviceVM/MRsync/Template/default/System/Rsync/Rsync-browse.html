@@ -6,9 +6,9 @@
 			<div class="a_right">
 				<input type="button" value="Create New" onclick="window.location='?Mod=<!--{$smarty.get.Mod}-->&op=Rsync&subop=add'">
 			</div>
-			<table border="0" cellpadding="3" cellspacing="1" width="100%" bgcolor="#0099CC">
+			<table border="1" cellpadding="3" cellspacing="0" width="100%" bordercolor="#0099CC" style="border-collapse:collapse;">
 				<tr bgcolor="#FFFFFF">
-					<td align="left" width="50%" colspan="3">
+					<td align="left" width="50%" colspan="5">
 						<!--{if $NavTotalPages>1}-->
 							<!--{$navagation|default:"&nbsp;"}-->
 						<!--{/if}-->
@@ -26,32 +26,41 @@
 					</td>
 				</tr>
 				<tr style="background: #acacac;">
+					<td>ID</td>
 					<td>Host_Name</td>
 					<td>Host_IP</td>
 					<td>Sync_XML</td>
 					<td>Last Modify Time</td>
 					<td>Result</td>
+					<td>Status</td>
 					<td>Action</td>
 				</tr>
 				<!--{section name=key loop=$OUT}-->
 				<tr <!--{if $smarty.section.key.index % 2 == 0}-->bgcolor="#FFFFFF" <!--{else}-->bgcolor="#E8E8E8"<!--{/if}-->>
-					<td align="left"><!--{$OUT[key].Host_Name}--></td>
-					<td align="left"><!--{$OUT[key].Host_Host}--></td>
-					<td><a href="?Mod=System&op=Rsync&subop=echoxml&id=<!--{$OUT[key].ID}-->" target="_blank"><!--{$OUT[key].Filename}--></a></td>
+					<td align="center"><!--{$OUT[key].ID}--></td>
+					<td><!--{$OUT[key].Host_Name}--></td>
+					<td><!--{$OUT[key].Host_Host}--></td>
+					<td align="center"><a href="?Mod=System&op=Rsync&subop=echoxml&id=<!--{$OUT[key].ID}-->" target="_blank">View</a></td>
 					<td><!--{$OUT[key].Modify_Time}--></td>
-					<td><a href="?Mod=System&op=Rsync&subop=echoxml&id=<!--{$OUT[key].ID}-->&field=result" class="thickbox">View</a></td>
+					<td align="center"><!--{if $OUT[key].status eq 3}--><a href="?Mod=System&op=Rsync&subop=echoxml&id=<!--{$OUT[key].ID}-->&field=result" class="thickbox">View</a><!--{/if}--></td>
+					<td><!--{if $OUT[key].status eq 0}-->Unready<!--{elseif $OUT[key].status eq 1}-->Ready<!--{elseif $OUT[key].status eq 2}-->Processing<!--{elseif $OUT[key].status eq 3}-->Finish<!--{/if}--></td>
 					<td nowrap="true">
 						<input type="button" value="Edit" onclick="window.location='?Mod=System&op=Rsync&subop=edit&id=<!--{$OUT[key].ID}-->'"
 						<!--{if $OUT[key].status neq 0}-->disabled="true"<!--{/if}-->>
 						<input type="button" value="Delete" onclick="confirmdel('<!--{$OUT[key].Filename}-->','<!--{$OUT[key].ID}-->')"
 						<!--{if $OUT[key].status neq 0}-->disabled="true"<!--{/if}-->>
-						<input type="button" value="<!--{if $OUT[key].status eq 0}-->Ready<!--{elseif $OUT[key].status eq 1}-->Unready<!--{elseif $OUT[key].status eq 2}-->Processing<!--{elseif $OUT[key].status eq 3}-->Finish<!--{/if}-->" onclick="confirmchg('<!--{$OUT[key].ID}-->','status',<!--{if $OUT[key].status eq 0}-->1<!--{else}-->0<!--{/if}-->)"
-						<!--{if $OUT[key].status gt 1}-->disabled="true"<!--{/if}-->>
+						<!--{if $OUT[key].status eq 0}-->
+						<input type="button" value="Ready" onclick="confirmchg('<!--{$OUT[key].ID}-->','status',1);"/>
+						<!--{elseif $OUT[key].status eq 1}-->
+						<input type="button" value="Unready" onclick="confirmchg('<!--{$OUT[key].ID}-->','status',0);"/>
+						<!--{elseif $OUT[key].status eq 3}-->
+						<input type="button" value="Re-Do" onClick="redo(<!--{$OUT[key].ID}-->)"/>
+						<!--{/if}-->
 					</td>
 				</tr>
 				<!--{/section}-->
 				<tr bgcolor="#FFFFFF">
-					<td align="left" width="50%" colspan="3">
+					<td align="left" width="50%" colspan="5">
 						<!--{if $NavTotalPages>1}-->
 							<!--{$navagation|default:"&nbsp;"}-->
 						<!--{/if}-->
@@ -79,6 +88,17 @@
 				if(v)
 				{
 					document.getElementById('iframe1').src='?Mod=<!--{$smarty.get.Mod}-->&op=Rsync&subop=chg&id='+id+'&field='+field+'&value='+value;
+				}
+				return true;
+			},buttons:{Yes:true,Cancel:false}});
+		}
+		function  redo(id)
+		{
+			$.prompt('Do you want to Re-Do this job?',{submit:
+				function(v,m){
+				if(v)
+				{
+					document.getElementById('iframe1').src='?Mod=<!--{$smarty.get.Mod}-->&op=Rsync&subop=redo&id='+id;
 				}
 				return true;
 			},buttons:{Yes:true,Cancel:false}});

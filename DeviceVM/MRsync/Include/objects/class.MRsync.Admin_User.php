@@ -1,6 +1,6 @@
 <?PHP
 /** 
- * @Create in 2009/01/16 02:08:07
+ * @Create in 2009/02/13 11:28:24
  * @Smarty Version 2.6.18
  * 
  */

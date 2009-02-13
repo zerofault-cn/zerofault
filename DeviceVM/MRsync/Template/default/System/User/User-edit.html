@@ -3,41 +3,28 @@
 <center>
 <form action="?Mod=<!--{$smarty.get.Mod}-->&op=<!--{$smarty.get.op}-->&subop=<!--{$smarty.get.subop}-->&id=<!--{$smarty.get.id}-->" method="post" target="iframe1">
 <input type="hidden" name="Action" value="Doit">
+<input type="hidden" name="Type" value="Admin" />
 <table border="0" width="600">
 	<tr>
 		<td align="right"><input type="button" value="Back" onclick="history.back();"></td>
 	</tr>
 	<tr>
 		<td>
-			<table border="0" cellpadding="0" cellspacing="1" width="100%" bgcolor="#0099CC">
-				<tr bgcolor="#FFFFFF">
-					<td align="center" style="background: #ACACAC;">ID</td>
-					<td align="left" colspan="3"><!--{$User_Info.ID}--></td>
-				</tr>
+			<table border="1" cellpadding="3" cellspacing="0" width="100%" bordercolor="#0099CC" style="border-collapse:collapse;">
 				<tr bgcolor="#FFFFFF">
 					<td align="center" style="background: #ACACAC;">Username</td>
 					<td align="left" colspan="3"><input type="text" name="Username" maxlength="60" size="30" value="<!--{$User_Info.Username}-->"></td>
 				</tr>
 				<tr bgcolor="#FFFFFF">
 					<td align="center" style="background: #ACACAC;">Password</td>
-					<td align="left" colspan="3"><input type="password" name="Password" maxlength="60" size="30" value="">Empty if don't want change!</td>
+					<td align="left" colspan="3"><input type="password" name="Password" maxlength="60" size="30" value="">Leave empty if no change!</td>
 				</tr>
 				<tr bgcolor="#FFFFFF">
-					<td align="center" style="background: #ACACAC;">Type</td>
-					<td align="left">
-						<select name="Type" >
-							<option value="Self" <!--{if $User_Info.Type=='Self'}--> selected="true" <!--{/if}--> >Self</option>
-							<option value="Vendor" <!--{if $User_Info.Type=='Vendor'}--> selected="true" <!--{/if}--> >Vendor</option>
-							<option value="Client" <!--{if $User_Info.Type=='Client'}--> selected="true" <!--{/if}--> >Client</option>
-							<option value="Admin"  <!--{if $User_Info.Type=='Admin'}--> selected="true" <!--{/if}--> >Admin</option>
-						</select>
-					</td>
 					<td align="center" style="background: #ACACAC;">Role</td>
-					<td align="left">
+					<td align="left" colspan="3">
 						<select name="Role" >
 							<option value="Admin" <!--{if $User_Info.Role=='Admin'}--> selected="true" <!--{/if}--> >Admin</option>
-							<option value="Staff" <!--{if $User_Info.Role=='Staff'}--> selected="true" <!--{/if}--> >Staff</option>
-							<option value="Contact" <!--{if $User_Info.Role=='Contact'}--> selected="true" <!--{/if}--> >Contact</option>
+							<option value="User" <!--{if $User_Info.Role=='User'}--> selected="true" <!--{/if}--> >User</option>
 						</select>
 					</td>
 				</tr>
