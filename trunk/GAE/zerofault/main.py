@@ -56,11 +56,11 @@ class Index(webapp.RequestHandler):
 		offset = (p-1)*limit
 		
 		#********************** Query **************************#
-		e = Entry.all().filter('type =','link').order("-addtime")
+		e = Entry.all().filter('type','link').order("-addtime")
 		if req_tag:
-			e = e.filter("tags =", unquote(req_tag).decode('utf-8'))
+			e = e.filter("tags", unquote(req_tag).decode('utf-8'))
 		if not isAdmin:
-			e = e.filter("private =", False)
+			e = e.filter("private", False)
 		
 		#item_count = 1998#e.count() #总条数
 		cur_pageid = e.get().pageid
@@ -72,7 +72,7 @@ class Index(webapp.RequestHandler):
 			if not isAdmin:
 				entry = entry.filter('private', False)
 			
-			item_count += entry.filter('pageid =',cur_pageid).count()
+			item_count += entry.filter('pageid',cur_pageid).count()
 			cur_pageid -=1
 
 		#********************** Search **************************#
@@ -150,12 +150,12 @@ class TypeIndex(webapp.RequestHandler):
 		offset = (p-1)*limit
 		
 		#********************** Query **************************#
-		e = Entry.all().filter('type =', type).order("-addtime")
+		e = Entry.all().filter('type', type).order("-addtime")
 		
 		if req_tag:
-			e = e.filter("tags =", unquote(req_tag).decode('utf-8'))
+			e = e.filter("tags", unquote(req_tag).decode('utf-8'))
 		if not isAdmin:
-			e = e.filter("private =", False)
+			e = e.filter("private", False)
 		
 		item_count = e.count(1000) 
 		#总条数
@@ -277,7 +277,7 @@ class AddAction(webapp.RequestHandler):
 		
 		if key:#更新数据
 			for oldtag in e.tags:
-				tag = Tag.all().filter('name =',oldtag)
+				tag = Tag.all().filter('name',oldtag)
 				if(tag.count(1)>0):
 					t = tag.get()
 					if type == 'link':
@@ -304,7 +304,7 @@ class AddAction(webapp.RequestHandler):
 		e.tags = []
 		tag_names = self.request.get('tags').split()
 		for tag_name in tag_names:
-			tag = Tag.all().filter('name =',tag_name)
+			tag = Tag.all().filter('name',tag_name)
 			if(tag.count(1)>0):
 				t = tag.get()
 				if type == 'link':
@@ -343,8 +343,9 @@ class DelKey(webapp.RequestHandler):
 			logging.info(e.title)
 			if e and e.tags:
 				for tag in e.tags:
-					t = Tag(name = tag)
-					if t:
+					tag = Tag.all().filter('name',tag)
+					if (tag.count(1)>0):
+						t = tag.get()
 						if e.type == 'link':
 							t.count_link -= 1
 						if e.type == 'note':
