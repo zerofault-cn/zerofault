@@ -60,7 +60,7 @@ class Index(webapp.RequestHandler):
 		if req_tag:
 			e = e.filter("tags", unquote(req_tag).decode('utf-8'))
 		
-		if e.count()>0:
+		if e and e.count()>0:
 			cur_pageid = e.get().pageid
 		else:
 			cur_pageid = 0
@@ -296,6 +296,11 @@ class DelKey(webapp.RequestHandler):
 		else:
 			self.response.out.write('0')
 
+class Help(webapp.RequestHandler):
+	def get(self):
+		path = os.path.join(os.path.dirname(__file__),'templates/help.htm')
+		self.response.out.write(template.render(path,{}))
+
 class Image(webapp.RequestHandler):
 	def get(self):
 		key = self.request.get('key')
@@ -317,6 +322,7 @@ application = webapp.WSGIApplication([
 	('/submit', AddAction),
 	('/delkey', DelKey),
 	('/tag/(.*)', TagList),
+	('/help',Help),
 	('/img', Image)
 	],debug=True)
 

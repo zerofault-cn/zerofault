@@ -2,25 +2,13 @@ REGEDIT4
 
 [HKEY_CURRENT_USER\Software\Microsoft\Internet Explorer\MenuExt]
 
-[HKEY_CURRENT_USER\Software\Microsoft\Internet Explorer\MenuExt\收藏到我的网址]
-@="http://zerofault.appspot.com/media/loader.html"
+[HKEY_CURRENT_USER\Software\Microsoft\Internet Explorer\MenuExt\收藏网址到5dnote]
+@="http://5dnote.appspot.com/media/loader.html"
 
-[HKEY_CURRENT_USER\Software\Microsoft\Internet Explorer\MenuExt\收藏到我的图库]
-@="http://zerofault.appspot.com/media/loader.html?pic"
+[HKEY_CURRENT_USER\Software\Microsoft\Internet Explorer\MenuExt\收藏图片到5dnote]
+@="http://5dnote.appspot.com/media/loader.html?pic"
 "Contexts"=dword:00000002
 
-[HKEY_CURRENT_USER\Software\Microsoft\Internet Explorer\MenuExt\收藏到我的网摘]
-@="http://zerofault.appspot.com/media/loader.html?note"
-"Contexts"=dword:00000010
-
-
-[HKEY_CURRENT_USER\Software\Microsoft\Internet Explorer\MenuExt\收藏到我的网址local]
-@="http://localhost:8080/media/loader.html"
-
-[HKEY_CURRENT_USER\Software\Microsoft\Internet Explorer\MenuExt\收藏到我的图库local]
-@="http://localhost:8080/media/loader.html?pic"
-"Contexts"=dword:00000002
-
-[HKEY_CURRENT_USER\Software\Microsoft\Internet Explorer\MenuExt\收藏到我的网摘local]
-@="http://localhost:8080/media/loader.html?note"
+[HKEY_CURRENT_USER\Software\Microsoft\Internet Explorer\MenuExt\收藏文字到5dnote]
+@="http://5dnote.appspot.com/media/loader.html?note"
 "Contexts"=dword:00000010

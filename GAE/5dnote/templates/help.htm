@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block title %}标签云 - {{ block.super }}
+{% endblock %} 
+{% block content %}
+	<div id="searcher">
+		<ul>
+			<li><a href="/">我的网址</a></li>
+			<li><a href="/note/">我的网摘</a></li>
+			<li><a href="/pic/">我的图片</a></li>
+			<li><a href="/tag" class="curr">我的标签</a></li>
+		</ul>
+		<!-- <form action="/search" method="get">
+			<img src="/media/search_b.gif" alt="search button" />
+			<input type="text" id="searchBox" maxlength="15" name="s" />
+			<input src="/media/search.gif" id="submit" type="image" />
+		</form> -->
+	</div>
+	
+	<div id="col_right">
+	</div>
+	<div id="col_middle">
+		<div id="help">
+			<dl>
+				<dt>方法一：右键添加方式 </dt>
+				<dd>
+				<p>
+				下载<a href="media/Add.reg">注册表文件Add.reg</a>到本地，双击"Add.reg"并安装。<br />
+				安装完后，重新打开浏览器，在网页空白位置或链接上点右键，菜单中将出现“收藏网址到5dnote”，点击即可开始提交。如图1：<img src="media/Snap1.jpg"/></p>
+				<p>点击后会弹出一个网页窗口，首次使用时会先打开Google帐号的登录界面，登录你的Gmail帐号即可，然后将显示一个提交表单，标题和链接已经被自动填充，网页上被选择的文字将被自动填充到描述框里，你可以给你的收藏加个标签，方便归类和查找；点“共享”按钮提交，所有人可见；如果点“私有”，将只有在自己登录后才可见。</p>
+				</dd>
+				<dd>卸载：下载<a href="media/Remove.reg">注册表文件Remove.reg</a>并双击执行即可</dd>
+			</dl>
+
+
+			<dl>
+				<dt>方法二：直接添加收藏 </dt>
+				<dd>如果你还没登录，请先点页面右上方的“登录”，如果已经登录，请点击页面右上方的“添加”，后面的步骤和前面相似。</dd>
+
+			</dl>
+			<dl>
+				<dt>方法三：复制别人的收藏 </dt>
+				<dd>登录后，查看别人共享的收藏时，假如喜欢，可以通过点击复制，轻松的获得别人收藏的内容</dd>
+			</dl>
+		</div>
+	</div>
+
+{% endblock %}
