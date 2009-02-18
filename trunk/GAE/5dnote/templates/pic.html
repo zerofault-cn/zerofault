@@ -3,10 +3,17 @@
 {% block content %}
 	<div id="searcher">
 		<ul>
-			<li><a href="/">我的网址</a></li>
-			<li><a href="/note/">我的网摘</a></li>
-			<li><a href="/pic/" class="curr">我的图片</a></li>
-			<li><a href="/tag">我的标签</a></li>
+			{% if req_user %}
+			<li><a href="/link/{{ req_user }}">我的网址</a></li>
+			<li><a href="/note/{{ req_user }}">我的网摘</a></li>
+			<li><a href="/pic/{{ req_user }}" class="curr">我的图片</a></li>
+			<li><a href="/tag/{{ req_user }}">我的标签</a></li>
+			{% else %}
+			<li><a href="/">最新收藏</a></li>
+			<li><a href="/note/">最新网摘</a></li>
+			<li><a href="/pic/" class="curr">最新图片</a></li>
+			<li><a href="/tag/">标签云</a></li>
+			{% endif %}
 		</ul>
 		<!-- <form action="/search" method="get">
 			<img src="/media/search_b.gif" alt="search button" />
@@ -76,11 +83,17 @@
 					{% for tag in item.tags %}
 					[<a href="{{ tag }}" class="tag">{{ tag }}</a>]
 					{% endfor %}
-					{% if isAdmin %}
+					{% ifequal item.user user.nickname %}
 					... 
-					<a href="/add?type=pic&key={{ item.key }}" class="edit">编辑</a>/ <a class="del" onClick="$('#del_{{ item.key }}').show()">删除</a>
+					<a href="/add?key={{ item.key }}" class="edit">编辑</a>/ <a class="del" onClick="$('#del_{{ item.key }}').show()">删除</a>
 					<span class="edit" id='del_{{ item.key }}'><a onClick="submit_del(this)" value="{{ item.key }}" hhref="del?key={{ item.key }}" class="edit">确认</a> / <a onClick='$("#del_{{ item.key }}").hide()' class="edit">取消</a></span>
-					{% endif %}
+					{% else %}
+					&nbsp;-&nbsp;<a href="/link/{{ item.user }}">{{ item.user }}</a>&nbsp;
+						{% if user %}
+					...
+					<a href="/add?key={{ item.key }}" class="edit">复制</a>
+						{% endif %}
+					{% endifequal %}
 				</dd>
 			</dl>
 			{% endfor %}

@@ -1,13 +1,9 @@
 #coding=utf-8
 from google.appengine.ext import db
 
-class User(db.Model):
-	email = db.EmailProperty()
-	nickname= db.StringProperty()
-
 class Entry(db.Model):
-	userid= db.ReferenceProperty(User)
 	pageid= db.IntegerProperty(default=0)
+	user  = db.StringProperty()
 	title = db.StringProperty()
 	url   = db.StringProperty()
 	content = db.TextProperty()
@@ -20,10 +16,8 @@ class Entry(db.Model):
 	dig   = db.IntegerProperty(default=0)
 
 class Tag(db.Model):
-	userid= db.ReferenceProperty(User)
+	user  = db.StringProperty()
 	name = db.StringProperty()
-	#type = db.StringProperty()
-	#num  = db.IntegerProperty()
 	count_link  = db.IntegerProperty(default=0)
 	count_note  = db.IntegerProperty(default=0)
 	count_pic   = db.IntegerProperty(default=0)

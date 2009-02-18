@@ -14,9 +14,9 @@
 <body>
 	<div id="toper">
 		<a href="/" id="logo"><img alt="my favorites" src="/media/logo.gif" /></a>
-		{% if isAdmin %}
-			<strong>{{ user.nickname }}</strong>
-			<a href="/add?type={{ type }}">添加</a>
+		{% if user %}
+			<a href="/link/{{ user.nickname }}" style="font-weight:bold">{{ user.nickname }}</a>
+			<a href="/add?type={{ req_type }}">添加</a>
 		{% endif %}
 		<a href="{{ auth_url }}" class="lm">{{ auth_text }}</a>
 	</div>
