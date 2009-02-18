@@ -130,7 +130,7 @@ dl.box dd a { margin-right: 10px; font-size:12px; color: #333; line-height: 150%
 
 /************ post **************/
 #form { margin: 3%; }
-#form .line { margin-bottom: 1px; clear: both; line-height: 20px; min-height: 20px; }
+#form .line { _height:22px; clear: both; line-height: 20px; min-height: 20px; }
 #form .line2 { margin-bottom: 10px; clear: both; line-height: 20px; height: 20px; }
 #form .d1 { width: 40px; float: left; }
 #form .d2 { float: left; }
@@ -161,3 +161,14 @@ div#tagcloud{padding:5px 20px;line-height:auto;}
 #tagcloud .level6{font-size:3.2em;font-weight:700;line-height:100%;}
 #tagcloud .level7{font-size:3.4em;font-weight:800;line-height:100%;}
 #tagcloud .level8{font-size:3.6em;font-weight:900;line-height:100%;}
+
+#help dl{
+	padding:10px 0 10px 20px;
+}
+#help dl dt{
+	padding:5px 0;
+	font-weight:bold;
+}
+#help dl dd{
+	padding-left:1em;
+}
