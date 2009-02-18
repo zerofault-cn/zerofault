@@ -29,10 +29,6 @@ def unescape(txt):
 #-----------------------------------#
 
 class Index(webapp.RequestHandler):
-	def HandleEntity(self, entity):
-		ent = search.SearchableEntity(entity)
-		return ent
-
 	def get(self,req_tag=''):
 		#********************** User Auth **************************#
 		isAdmin = False
