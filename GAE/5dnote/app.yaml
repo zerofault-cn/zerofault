@@ -1,4 +1,4 @@
-application: zerofault
+application: zerofault1
 version: 1
 runtime: python
 api_version: 1
@@ -10,10 +10,6 @@ handlers:
 
 - url: /media
   static_dir: media
-
-- url: /load
-  script: load.py
-  login: admin
 
 - url: /csv/.*
   script: dump.py

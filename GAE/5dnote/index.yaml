@@ -10,98 +10,52 @@ indexes:
 # automatically uploaded to the admin console when you next deploy
 # your application using appcfg.py.
 
-# Used 8 times in query history.
+# Used 4 times in query history.
 - kind: Entry
   properties:
+  - name: private
+  - name: private
+  - name: type
   - name: addtime
     direction: desc
 
-# Unused in query history -- copied from input.
+# Used 4 times in query history.
 - kind: Entry
   properties:
-  - name: pageid
+  - name: private
+  - name: private
+  - name: type
+  - name: user
   - name: addtime
+    direction: desc
 
-# Used 8 times in query history.
+# Used 4 times in query history.
 - kind: Entry
   properties:
-  - name: pageid
+  - name: private
+  - name: type
+  - name: addtime
+    direction: desc
+
+# Used 4 times in query history.
+- kind: Entry
+  properties:
+  - name: private
+  - name: type
+  - name: user
   - name: addtime
     direction: desc
 
 # Used 2 times in query history.
 - kind: Entry
   properties:
-  - name: pageid
-  - name: pageid
-  - name: pageid
-  - name: pageid
   - name: type
+  - name: user
   - name: addtime
     direction: desc
 
-# Used once in query history.
-- kind: Entry
+# Used 6 times in query history.
+- kind: Tag
   properties:
-  - name: pageid
-  - name: pageid
-  - name: pageid
-  - name: type
-  - name: addtime
-    direction: desc
-
-# Used 25 times in query history.
-- kind: Entry
-  properties:
-  - name: pageid
-  - name: pageid
-  - name: type
-  - name: addtime
-    direction: desc
-
-# Used 16 times in query history.
-- kind: Entry
-  properties:
-  - name: pageid
-  - name: type
-  - name: addtime
-    direction: desc
-
-# Unused in query history -- copied from input.
-- kind: Entry
-  properties:
-  - name: private
-  - name: tags
-  - name: type
-  - name: addtime
-    direction: desc
-
-# Unused in query history -- copied from input.
-- kind: Entry
-  properties:
-  - name: private
-  - name: type
-  - name: addtime
-    direction: desc
-
-# Unused in query history -- copied from input.
-- kind: Entry
-  properties:
-  - name: tags
-  - name: addtime
-    direction: desc
-
-# Unused in query history -- copied from input.
-- kind: Entry
-  properties:
-  - name: tags
-  - name: type
-  - name: addtime
-    direction: desc
-
-# Used 95 times in query history.
-- kind: Entry
-  properties:
-  - name: type
-  - name: addtime
-    direction: desc
+  - name: user
+  - name: usetime
