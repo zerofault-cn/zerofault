@@ -72,7 +72,7 @@ $dir=$_GET['dir'];
 //fwrite($fp,$dir."\n");
 if(empty($dir))
 {
-	$dir=SYNC_FILE_FOLDER;
+	$dir=Local_Chroot;
 }
 $filepath_arr=array();
 $dirpath_arr=array();
@@ -83,7 +83,7 @@ if(!empty($ID))
 	{
 		$filepath_arr[]=$arr['Path'][$i].$arr['Filename'][$i];
 		$tmp_path=$arr['Path'][$i];
-		while(SYNC_FILE_FOLDER != $tmp_path)
+		while(Local_Chroot != $tmp_path)
 		{
 			$dirpath_arr[]= (substr($tmp_path,-1)=='/')?$tmp_path:($tmp_path.'/');
 			$tmp_path=substr($tmp_path,0,strrpos($tmp_path,'/'));
