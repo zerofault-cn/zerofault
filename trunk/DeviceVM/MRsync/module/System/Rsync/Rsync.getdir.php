@@ -20,7 +20,7 @@ function myReadDir($dir)
 	{
 		if(is_dir($subdir=$dir.$file))//目录
 		{
-			$rel_dir=str_replace(SYNC_FILE_FOLDER,'',$subdir);//相对路径
+			$rel_dir=str_replace(Local_Chroot,'',$subdir);//相对路径
 			$dir_depth=count(explode('/',$rel_dir));
 			if($dir_depth>2)
 			{
@@ -35,11 +35,11 @@ function myReadDir($dir)
 			{
 				continue;
 			}
-			echo '<li title="'.$file.'"><input type="checkbox" name="selCheckBox" value="'.str_replace(SYNC_FILE_FOLDER,'',$subdir).'/" /><img src="images/folder.gif" align="absmiddle" /> <a class="thickbox" href="?Mod=System&op=Rsync&subop=getdir&dir='.str_replace('&','%26',str_replace(' ','%20',$subdir)).'/">'.$file.'</a></li>';
+			echo '<li title="'.$file.'"><input type="checkbox" name="selCheckBox" value="'.str_replace(Local_Chroot,'',$subdir).'/" /><img src="images/folder.gif" align="absmiddle" /> <a class="thickbox" href="?Mod=System&op=Rsync&subop=getdir&dir='.str_replace('&','%26',str_replace(' ','%20',$subdir)).'/">'.$file.'</a></li>';
 		}
 		elseif(is_file($filepath=$dir.$file))//普通文件,且非隐藏文件
 		{
-			echo '<li title="'.$file.'"><input type="checkbox" name="selCheckBox" value="'.str_replace(SYNC_FILE_FOLDER,'',$subdir).'" /><img src="images/file.gif" align="absmiddle" /> '.$file.'</li>';
+			echo '<li title="'.$file.'"><input type="checkbox" name="selCheckBox" value="'.str_replace(Local_Chroot,'',$subdir).'" /><img src="images/file.gif" align="absmiddle" /> '.$file.'</li>';
 		}
 	}
 	
@@ -53,11 +53,11 @@ if(empty($dir))
 	}
 	else
 	{
-		$dir=SYNC_FILE_FOLDER;
+		$dir=Local_Chroot;
 	}
 }
 $_SESSION['dir']=$dir;
-$rel_dir=str_replace(SYNC_FILE_FOLDER,'',$dir);
+$rel_dir=str_replace(Local_Chroot,'',$dir);
 if(strlen($rel_dir)>0)
 {
 	$dir_arr=explode('/',$rel_dir);
@@ -70,11 +70,11 @@ else
 <div id="modal">
 	<div id="path_navi">
 <?php
-echo '/<a class="thickbox" href="?Mod=System&op=Rsync&subop=getdir&dir='.SYNC_FILE_FOLDER.'">ROOT</a>';
+echo '/<a class="thickbox" href="?Mod=System&op=Rsync&subop=getdir&dir='.Local_Chroot.'">ROOT</a>';
 for($i=0;$i<count($dir_arr)-2;$i++)
 {
 	$tmpdir.=$dir_arr[$i].'/';
-echo '/<a class="thickbox" href="?Mod=System&op=Rsync&subop=getdir&dir='.SYNC_FILE_FOLDER.$tmpdir.'">';
+echo '/<a class="thickbox" href="?Mod=System&op=Rsync&subop=getdir&dir='.Local_Chroot.$tmpdir.'">';
 	if( strlen($rel_dir)>50 && $i<(count($dir_arr)-4) )
 	{
 		echo '...';
@@ -87,7 +87,7 @@ echo '/<a class="thickbox" href="?Mod=System&op=Rsync&subop=getdir&dir='.SYNC_FI
 		
 }
 !empty($dir_arr[$i]) && print('/'.$dir_arr[$i]);
-echo '/&nbsp;&nbsp;<a class="thickbox" href="?Mod=System&op=Rsync&subop=getdir&dir='.SYNC_FILE_FOLDER.$tmpdir.'"><img src="images/updir.gif" height="18" align="absmiddle" /></a>';
+echo '/&nbsp;&nbsp;<a class="thickbox" href="?Mod=System&op=Rsync&subop=getdir&dir='.Local_Chroot.$tmpdir.'"><img src="images/updir.gif" height="18" align="absmiddle" /></a>';
 ?>
 
 	</div>

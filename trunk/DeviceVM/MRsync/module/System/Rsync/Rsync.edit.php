@@ -17,7 +17,10 @@ if($action=='Doit')
 
 	$Host = trim($_POST['Host']);
 	$Host_Chroot = trim($_POST['Host_Chroot']);
-	$Local_Chroot = trim($_POST['Local_Chroot']);
+	
+	//$Local_Chroot = trim($_POST['Local_Chroot']);
+	$Local_Chroot = SYNC_FILE_FOLDER;
+
 	$time = date("Y/m/d/H/i/s");
 	$mail = $_SESSION['auth']['Mail'];
 
@@ -157,7 +160,7 @@ $smarty->assign('Host_Info', $Host_Info);
 $arr=$oSync_Info->Browse("where Sync_ID=".$ID." order by ID");
 for($i=0;$i<count($arr['ID']);$i++)
 {
-	if(''==$arr['Filename'][$i])
+	if(substr($arr['Path'][$i].$arr['Filename'][$i],-1)=='/')
 	{
 		$icon='folder';
 	}

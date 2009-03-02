@@ -3,14 +3,7 @@ require_once(PATH_Include .'paginator_html.php');
 include_once(objects_path . 'class.' . $DB . '.Rsync_Host.php');
 $oRsync_Host=new Rsync_Host();
 
-if($_SESSION['auth']['Role']=='Admin')
-{
-	$WHERE = " order by ID desc";
-}
-else
-{
-	$WHERE = "where User_ID=".$_SESSION['auth']['ID']." order by ID desc";
-}
+$WHERE = "where User_ID=".$_SESSION['auth']['ID']." order by ID desc";
 $arr=$oSync_XML->Browse($WHERE);
 
 $count = count($arr['ID']);

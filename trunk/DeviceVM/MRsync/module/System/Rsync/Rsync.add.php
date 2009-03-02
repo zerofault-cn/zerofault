@@ -24,7 +24,8 @@ if($action=='Doit')
 	$Host = $_POST['Host'];
 	$Path = $_POST['Path'];
 
-	$Local_Chroot = $_POST['Local_Chroot'];
+	//$Local_Chroot = $_POST['Local_Chroot'];
+	$Local_Chroot = SYNC_FILE_FOLDER;
 
 	$path_arr=$_POST['path_arr'];
 	if(count($path_arr)==0)
