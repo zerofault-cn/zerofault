@@ -9,6 +9,6 @@ REGEDIT4
 @="http://5dnote.appspot.com/media/loader.html?pic"
 "Contexts"=dword:00000002
 
-[HKEY_CURRENT_USER\Software\Microsoft\Internet Explorer\MenuExt\收藏文字到5dnote]
+[HKEY_CURRENT_USER\Software\Microsoft\Internet Explorer\MenuExt\收藏网摘到5dnote]
 @="http://5dnote.appspot.com/media/loader.html?note"
 "Contexts"=dword:00000010
