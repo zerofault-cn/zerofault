@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-
+{% block title %}{% if req_user %}我的图片{% else %}最新图片{% endif %} - {{ block.super }}{% endblock %}
 {% block content %}
 	<div id="searcher">
 		<ul>

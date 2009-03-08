@@ -172,3 +172,7 @@ div#tagcloud{padding:5px 20px;line-height:auto;}
 #help dl dd{
 	padding-left:1em;
 }
+#help img{
+	border:1px solid #aaa;
+	margin:3px;
+}

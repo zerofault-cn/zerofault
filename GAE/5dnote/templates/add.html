@@ -1,12 +1,5 @@
 {% extends "base.html" %}
-{% block title %}
-{% if key %}
-修改记录 - 
-{% else %}
-添加记录 - 
-{% endif %}
-{{ block.super }}
-{% endblock %} 
+{% block title %}{% if key %}修改记录{% else %}添加记录{% endif %} - {{ block.super }}{% endblock %} 
 {% block content %}
 	<form name="form1" action="submit" method="post" onsubmit="return check();">
 	<input type="hidden" name="type" value="{{ type }}" />

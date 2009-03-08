@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-
+{% block title %}{% if req_user %}我的网摘{% else %}最新网摘{% endif %} - {{ block.super }}{% endblock %}
 {% block content %}
 	<div id="searcher">
 		<ul>
