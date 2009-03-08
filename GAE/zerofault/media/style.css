@@ -130,7 +130,7 @@ dl.box dd a { margin-right: 10px; font-size:12px; color: #333; line-height: 150%
 
 /************ post **************/
 #form { margin: 3%; }
-#form .line { margin-bottom: 1px; clear: both; line-height: 20px; min-height: 20px; }
+#form .line { _height:22px; clear: both; line-height: 20px; min-height: 20px; }
 #form .line2 { margin-bottom: 10px; clear: both; line-height: 20px; height: 20px; }
 #form .d1 { width: 40px; float: left; }
 #form .d2 { float: left; }
