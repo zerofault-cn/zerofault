@@ -147,13 +147,14 @@ class TypeIndex(webapp.RequestHandler):
 		
 		#********************** Query **************************#
 		e = Entry.all().filter('type', type).order("-addtime")
-		
 		if req_tag:
 			e = e.filter("tags", unquote(req_tag).decode('utf-8'))
 		if not isAdmin:
 			e = e.filter("private", False)
 		
-		item_count = e.count(1000) 
+		item_count = e.count(1000)
+
+		e = e.fetch(limit,offset)
 		#总条数
 			
 			
