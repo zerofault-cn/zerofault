@@ -298,7 +298,7 @@ class DelKey(webapp.RequestHandler):
 
 class Help(webapp.RequestHandler):
 	def get(self):
-		path = os.path.join(os.path.dirname(__file__),'templates/help.htm')
+		path = os.path.join(os.path.dirname(__file__),'templates/help.html')
 		self.response.out.write(template.render(path,{}))
 
 class Image(webapp.RequestHandler):
