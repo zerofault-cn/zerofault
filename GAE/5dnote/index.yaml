@@ -10,20 +10,20 @@ indexes:
 # automatically uploaded to the admin console when you next deploy
 # your application using appcfg.py.
 
-# Used 5 times in query history.
+# Used 7 times in query history.
 - kind: Entry
   properties:
   - name: addtime
     direction: desc
 
-# Used 3 times in query history.
+# Used 4 times in query history.
 - kind: Entry
   properties:
   - name: pageid
   - name: addtime
     direction: desc
 
-# Used 10 times in query history.
+# Used 14 times in query history.
 - kind: Entry
   properties:
   - name: private
@@ -42,7 +42,7 @@ indexes:
   - name: addtime
     direction: desc
 
-# Used 14 times in query history.
+# Used 20 times in query history.
 - kind: Entry
   properties:
   - name: private
@@ -66,7 +66,7 @@ indexes:
   - name: addtime
     direction: desc
 
-# Used 9 times in query history.
+# Used 17 times in query history.
 - kind: Entry
   properties:
   - name: type
@@ -74,7 +74,7 @@ indexes:
   - name: addtime
     direction: desc
 
-# Used 16 times in query history.
+# Used 20 times in query history.
 - kind: Tag
   properties:
   - name: user
