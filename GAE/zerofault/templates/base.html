@@ -16,7 +16,7 @@
 		<a href="/" id="logo"><img alt="my favorites" src="/media/logo.gif" /></a>
 		{% if isAdmin %}
 			<strong>{{ user.nickname }}</strong>
-			<a href="/add?type={{ type }}">添加</a>
+			<a href="/add?type={{ req_type }}">添加</a>
 		{% endif %}
 		<a href="{{ auth_url }}" class="lm">{{ auth_text }}</a>
 	</div>
@@ -29,4 +29,30 @@
     </div>
 </body>
 <iframe id="iframe1" name="iframe1" style="display:none;"></iframe>
+<script language="javascript" type="text/javascript" defer>
+function submit_del(obj){
+	$(obj).parent().after('<span style="color:red">正在删除，请稍候...</span>');
+	key=$(obj).attr('value');
+	$.get("/delkey",{
+		key : key
+		},function(str){
+			if(str == '1')
+			{
+				$("#item_"+key).hide('slow');
+				//$("#item_"+key).remove();
+			}
+			else if(str == '0')
+			{
+				alert('No such entry/key!');
+			}
+			else if(str == '-1')
+			{
+				alert('The entry is not yours!');
+			}
+			else
+			{
+			}
+		});
+}
+</script>
 </html>

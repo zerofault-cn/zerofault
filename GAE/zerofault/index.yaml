@@ -10,7 +10,7 @@ indexes:
 # automatically uploaded to the admin console when you next deploy
 # your application using appcfg.py.
 
-# Used 8 times in query history.
+# Used 10 times in query history.
 - kind: Entry
   properties:
   - name: addtime
@@ -22,46 +22,19 @@ indexes:
   - name: pageid
   - name: addtime
 
-# Used 8 times in query history.
+# Used 5 times in query history.
 - kind: Entry
   properties:
   - name: pageid
   - name: addtime
     direction: desc
 
-# Used 2 times in query history.
+# Unused in query history -- copied from input.
 - kind: Entry
   properties:
   - name: pageid
   - name: pageid
   - name: pageid
-  - name: pageid
-  - name: type
-  - name: addtime
-    direction: desc
-
-# Used once in query history.
-- kind: Entry
-  properties:
-  - name: pageid
-  - name: pageid
-  - name: pageid
-  - name: type
-  - name: addtime
-    direction: desc
-
-# Used 25 times in query history.
-- kind: Entry
-  properties:
-  - name: pageid
-  - name: pageid
-  - name: type
-  - name: addtime
-    direction: desc
-
-# Used 16 times in query history.
-- kind: Entry
-  properties:
   - name: pageid
   - name: type
   - name: addtime
@@ -70,8 +43,26 @@ indexes:
 # Unused in query history -- copied from input.
 - kind: Entry
   properties:
-  - name: private
-  - name: tags
+  - name: pageid
+  - name: pageid
+  - name: pageid
+  - name: type
+  - name: addtime
+    direction: desc
+
+# Unused in query history -- copied from input.
+- kind: Entry
+  properties:
+  - name: pageid
+  - name: pageid
+  - name: type
+  - name: addtime
+    direction: desc
+
+# Unused in query history -- copied from input.
+- kind: Entry
+  properties:
+  - name: pageid
   - name: type
   - name: addtime
     direction: desc
@@ -80,6 +71,15 @@ indexes:
 - kind: Entry
   properties:
   - name: private
+  - name: tags
+  - name: type
+  - name: addtime
+    direction: desc
+
+# Used 10 times in query history.
+- kind: Entry
+  properties:
+  - name: private
   - name: type
   - name: addtime
     direction: desc
@@ -91,7 +91,7 @@ indexes:
   - name: addtime
     direction: desc
 
-# Unused in query history -- copied from input.
+# Used 14 times in query history.
 - kind: Entry
   properties:
   - name: tags
@@ -99,7 +99,7 @@ indexes:
   - name: addtime
     direction: desc
 
-# Used 95 times in query history.
+# Used 59 times in query history.
 - kind: Entry
   properties:
   - name: type

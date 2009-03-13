@@ -110,23 +110,26 @@ dl.box dd a { margin-right: 10px; font-size:12px; color: #333; line-height: 150%
 
 /*************  fav    **************/
 #links { clear: left; }
-#links dl.item { margin-left: 20px; margin-bottom: 10px; }
-#links dl.item img.icon { cursor: pointer; position: absolute; margin-left: -20px; width: 16px; height: 16px; }
-#links dl.item dt a { font-size: 13px; color: #261cdc; }
-#links dl.item dt a.dig { color: #999; margin-left: 10px; }
-#links dl.item dd.content { padding: 3px; background-color:#fffff9; color: #444; margin-right: 20px;}
-#links dl.item dd.tags { color: #999; }
-#links dl.item dd.tags a { color: #999; cursor: pointer; }
-#links dl.item dd.tags a.tag:hover { color: #fff; background-color: #54ba16; text-decoration: none; }
-#links dl.item dd.tags span.edit { margin-left: 20px; /*visibility: hidden;*/ display:none; }
+#links dl { margin-left: 20px; margin-bottom: 10px; }
+#links dl img.icon { position: absolute; margin-left: -20px; width: 16px; height: 16px; }
+#links dl dt a { font-size: 13px; color: #261cdc; }
+#links dl dt a.dig { color: #999; margin-left: 10px; }
+#links dl dd.content { padding: 3px; background-color:#fffff9; color: #444; margin-right: 20px;}
+#links dl dd.tags { color: #999; }
+#links dl dd.tags a { color: #999; cursor: pointer; }
+#links dl dd.tags a.tag:hover { color: #fff; background-color: #54ba16; text-decoration: none; }
+#links dl dd.tags span.edit { margin-left: 20px; /*visibility: hidden;*/ display:none; }
 
-#pics{clear:both;width:100%;}
-#pics dl{float:left;width:192px;padding:6px}
-#pics dl dt.content{text-align:center;}
-#pics dl.item dd.tags { color: #999; }
-#pics dl.item dd.tags a { color: #999; cursor: pointer; }
-#pics dl.item dd.tags a.tag:hover { color: #fff; background-color: #54ba16; text-decoration: none; }
-#pics dl.item dd.tags span.edit { margin-left: 20px; /*visibility: hidden;*/ display:none; }
+#pics {clear:both;width:100%;}
+#pics dl{float:left;width:192px;padding:6px 6px 0 20px;}
+#pics dl img.icon { position: absolute; margin-left: -20px; width: 16px; height: 16px; }
+#pics dl dt { color: #999; }
+#pics dl dt a { font-size: 13px; color: #261cdc; }
+#pics dl dd.content { padding: 3px; background-color:#fffff9; color: #444;}
+#pics dl dd.tags { color: #999; }
+#pics dl dd.tags a { color: #999; cursor: pointer; }
+#pics dl dd.tags a.tag:hover { color: #fff; background-color: #54ba16; text-decoration: none; }
+#pics dl dd.tags span.edit { margin-left: 12px; /*visibility: hidden;*/ display:none; }
 
 /************ post **************/
 #form { margin: 3%; }
@@ -136,19 +139,16 @@ dl.box dd a { margin-right: 10px; font-size:12px; color: #333; line-height: 150%
 #form .d2 { float: left; }
 #form .sure { padding-left: 40px; margin-top: 10px; display: block; }
 #form .sure input.private { color: #f93; margin-left: 20px; }
+#form #tags, #form #url, #form #title, #form #content, #form #myfile{ width: 360px; margin-bottom: 4px; }
 
-#form .error { clear: both; color: #f00; margin-left: 2em; line-height: 20px; }
 #mytags2 { margin-left: 3%; margin-right: 10%; }
 #mytags2 span { display: block; line-height: 22px; } 
 #mytags2 a { margin-right: 1em; text-decoration: none; color: #8c8cff; white-space: nowrap; }
 #mytags2 a:hover,#mytags2 a.focus { color: #161; background-color: yellow; text-decoration: none; }
 #mytags2 .bundle { float: left; clear: left; color: #f69; margin-right: 20px; width: 50px; text-align: right; line-height: 22px; }
+
 #tips { margin-top: 130px; width: 600px; }
 #tips a { color: #8c8cff; }
-#form #tcontent { width: 450px; height: 160px; padding: 3px; }
-#form #ttitle { padding: 2px; width: 380px; }
-#form #Ttags, #form #Turl, #form #Tdescription, #form #Tnotes { width: 360px; margin-bottom: 4px; }
-
 
 div#tagcloud{padding:5px 20px;line-height:auto;}
 #tagcloud a{margin-right:10px;}

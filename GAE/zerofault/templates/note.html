@@ -79,7 +79,7 @@
 					{% endfor %}
 					{% if isAdmin %}
 					... 
-					<a href="/add?type=note&key={{ item.key }}" class="edit">编辑</a>/ <a class="del" onClick="$('#del_{{ item.key }}').show()">删除</a>
+					<a href="/add?key={{ item.key }}" class="edit">编辑</a>/ <a class="del" onClick="$('#del_{{ item.key }}').show()">删除</a>
 					<span class="edit" id='del_{{ item.key }}'><a onClick="submit_del(this)" value="{{ item.key }}" hhref="del?key={{ item.key }}" class="edit">确认</a> / <a onClick='$("#del_{{ item.key }}").hide()' class="edit">取消</a></span>
 					{% endif %}
 				</dd>
@@ -115,27 +115,4 @@
 		</div><span>共{{ count }}个记录</span>
 
 	</div>
-<script language="javascript" type="text/javascript" defer>
-function submit_del(obj){
-	$(obj).parent().after('<span style="color:red">正在删除，请稍候...</span>');
-	key=$(obj).attr('value');
-	$.get("/delkey",{
-		key : key
-	},function(str){
-			if(str == '1')
-			{
-				$("#item_"+key).hide('slow');
-				//$("#item_"+key).remove();
-			}
-			else if(str == '0')
-			{
-				alert('some error occured');
-			}
-			else
-			{
-				//alert(str);
-			}
-		});
-}
-</script>
 {% endblock %}
