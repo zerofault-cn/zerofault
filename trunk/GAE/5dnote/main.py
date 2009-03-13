@@ -149,6 +149,7 @@ class AddForm(webapp.RequestHandler):
 				e = db.get(key)
 				title = e.title
 				url   = e.url
+				purl  = ''
 				content = e.content
 				type  = e.type
 				tags  = ' '.join(tag for tag in e.tags)
@@ -156,6 +157,7 @@ class AddForm(webapp.RequestHandler):
 			else:
 				title = unescape(self.request.get('title'))
 				url   = unescape(self.request.get('url'))
+				purl  = unescape(self.request.get('purl'))
 				content = unescape(self.request.get('content'))
 				type= self.request.get('type')
 				if not type:
@@ -169,7 +171,8 @@ class AddForm(webapp.RequestHandler):
 				'tag_list': Tag.all().filter("user",nickname).order('usetime'),
 				'title'   : title,
 				'url'     : url,
-				'content'   : content,
+				'purl'    : purl,
+				'content' : content,
 				'tags'    : tags
 				}
 			path = os.path.join(os.path.dirname(__file__),'templates/add.html')
@@ -200,7 +203,9 @@ class AddAction(webapp.RequestHandler):
 			title = self.request.get('title')
 			e.title = title.replace('&','&amp;').replace('<','&lt;').replace('>','&gt;')
 			url = self.request.get('url')
-			e.url = url.replace('&','&amp;').replace('<','&lt;').replace('>','&gt;')
+			purl= self.request.get('purl')
+			if not key:
+				e.url = purl.replace('&','&amp;').replace('<','&lt;').replace('>','&gt;')
 			content = self.request.get('content')
 			e.content = content
 			#e.addtime +=datetime.timedelta(hours=+8)
@@ -241,7 +246,7 @@ class AddAction(webapp.RequestHandler):
 			e.tags = []
 			tag_names = self.request.get('tags').split()
 			for tag_name in tag_names:
-				tag = Tag.all().filter("user",nickname).filter('name =',tag_name)
+				tag = Tag.all().filter("user",nickname).filter('name',tag_name)
 				if(tag.count(1)>0):
 					t = tag.get()
 					if type == 'link':
@@ -277,22 +282,29 @@ class DelKey(webapp.RequestHandler):
 	def get(self):
 		user = users.get_current_user()
 		key = self.request.get('key')
-		if key and users.is_current_user_admin():
+		if key and user:
 			e = db.get(key)
-			logging.info(e.title)
-			if e and e.tags:
-				for tag in e.tags:
-					t = Tag(name = tag)
-					if t:
-						if e.type == 'link':
-							t.count_link -= 1
-						if e.type == 'note':
-							t.count_note -= 1
-						if e.type == 'pic':
-							t.count_pic -= 1
-						t.put()
-			db.delete(e)
-			self.response.out.write('1')
+			if e:
+				nickname = user.nickname()
+				if e.user == nickname:
+					if e.tags:
+						for tag_name in e.tags:
+							tag = Tag.all().filter("user",nickname).filter('name',tag_name)
+							if(tag.count(1)>0):
+								t = tag.get()
+								if e.type == 'link':
+									t.count_link -= 1
+								if e.type == 'note':
+									t.count_note -= 1
+								if e.type == 'pic':
+									t.count_pic -= 1
+								t.put()
+					db.delete(e)
+					self.response.out.write('1')
+				else:
+					self.response.out.write('-1')
+			else:
+				self.response.out.write('0')
 		else:
 			self.response.out.write('0')
 
