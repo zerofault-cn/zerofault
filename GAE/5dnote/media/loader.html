@@ -46,7 +46,7 @@ if (external.menuArguments)
 		var title = external.menuArguments.document.title;
 		var alt = EventElement.alt;
 		var purl = external.menuArguments.location.href;
-		var address = '../add?type=pic&title='+escape(title)+'&url='+escape(url)+'&content='+escape(alt)+escape('\nRefer:')+escape(purl);
+		var address = '../add?type=pic&title='+escape(title)+'&url='+escape(url)+'&content='+escape(alt+'\n'+sel)+'&purl='+escape(purl);
 	}
 	else if(href.substr(href.indexOf('?')+1)=='note')
 	{
