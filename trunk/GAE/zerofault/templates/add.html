@@ -1,12 +1,5 @@
 {% extends "base.html" %}
-{% block title %}
-{% if key %}
-修改记录 - 
-{% else %}
-添加记录 - 
-{% endif %}
-{{ block.super }}
-{% endblock %} 
+{% block title %}{% if key %}修改记录{% else %}添加记录{% endif %} - {{ block.super }}{% endblock %} 
 {% block content %}
 	<form name="form1" action="submit" method="post" onsubmit="return check();">
 	<input type="hidden" name="type" value="{{ type }}" />
@@ -16,41 +9,55 @@
 		
 		<div class="line">
 			<div class="d1">标题：</div>
-			<div class="d2"><input type="text" id="Tdescription" name="title" maxlength="250"  value="{{ title }}"/></div>
+			<div class="d2"><input type="text" id="title" name="title" maxlength="250"  value="{{ title }}"/></div>
 		</div>
 		{% ifequal type 'note' %}
 		<div class="line">
 			<div class="d1">内容：</div>
-			<div class="d2"><textarea name="content" id="Tnotes" rows="9" cols="40">{{ content }}</textarea></div>
-			<input type="hidden" id="Turl" name="url" maxlength="180" size="50" value="{{ url }}"/>
+			<div class="d2">
+				<textarea name="content" id="content" rows="9" cols="40">{{ content }}</textarea>
+			</div>
+			<input type="hidden" name="url" value="{{ url }}"/>
 		</div>
 		{% else %}
 		{% ifequal type 'pic' %}
 		<div class="line">
 			<div class="d1">图片：</div>
-			<div class="d2"><img id="rimage" src="{{ url }}" max-width="360" onload="resize(this);"/></div>
-			<input type="hidden" id="Turl" name="url" value="{{ url }}"/>
+			<div class="d2">
+				{% if key %}
+				<img id="rimage" src="/img?key={{ key }}" max-width="360" oonload="resize(this)"/>
+				<br />url:<input type="text" name="url" value="{{ url }}"/>
+				<br />purl:<input type="text" name="purl" value="{{ purl }}"/>
+				{% else %}
+				{% if url %}
+				<img id="rimage" src="{{ url }}" max-width="360" oonload="resize(this)"/><input type="hidden" name="url" value="{{ url }}"/><input type="hidden" name="purl" value="{{ purl }}"/>
+				{% else %}
+				<input type="file" id="myfile" name="myfile"/>
+				{% endif %}
+				{% endif %}
+			</div>
+			
 		</div>
 		<div class="line">
 			<div class="d1">描述：</div>
-			<div class="d2"><textarea name="content" id="Tnotes" rows="2" cols="40">{{ content }}</textarea></div>
+			<div class="d2"><textarea name="content" id="content" rows="2" cols="40">{{ content }}</textarea></div>
 		</div>
 		{% else %}
 		<div class="line">
 			<div class="d1">链接：</div>
-			<div class="d2"><input type="text" id="Turl" name="url" maxlength="180" size="50" value="{{ url }}"/></div>
+			<div class="d2"><input type="text" id="url" name="url" maxlength="180" size="50" value="{{ url }}"/></div>
 		</div>
 		<div class="line">
 			<div class="d1">描述：</div>
-			<div class="d2"><textarea name="content" id="Tnotes" rows="5" cols="40">{{ content }}</textarea></div>
+			<div class="d2"><textarea name="content" id="content" rows="5" cols="40">{{ content }}</textarea></div>
 		</div>
 		{% endifequal %}
 		{% endifequal %}
 		<div class="line">
 			<div class="d1">标签：</div>
-			<div class="d2"><input type="text" id="Ttags" name="tags" value="{{ tags }}" maxlength="100" size="50" autocomplete="off" /></div>
+			<div class="d2"><input type="text" id="tags" name="tags" value="{{ tags }}" maxlength="100" size="50" autocomplete="off" /></div>
+		
 		</div>
-		<div class="error"></div>
 		<div class="sure"><input type="submit" name="Share" value="共享" />
 			<input type="button"  name="Prv" class="private" value="私人" onclick="javascript:document.form1.private.value=1;document.form1.submit();"/>
 		</div>
