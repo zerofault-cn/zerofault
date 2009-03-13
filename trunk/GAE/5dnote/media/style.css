@@ -140,7 +140,6 @@ dl.box dd a { margin-right: 10px; font-size:12px; color: #333; line-height: 150%
 #form .sure { padding-left: 40px; margin-top: 10px; display: block; }
 #form .sure input.private { color: #f93; margin-left: 20px; }
 #form #tags, #form #url, #form #title, #form #content, #form #myfile{ width: 360px; margin-bottom: 4px; }
-#form .error { clear: both; color: #f00; margin-left: 2em; line-height: 20px; }
 
 #mytags2 { margin-left: 3%; margin-right: 10%; }
 #mytags2 span { display: block; line-height: 22px; } 

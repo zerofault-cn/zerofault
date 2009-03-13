@@ -31,6 +31,7 @@ def unescape(txt):
 class Index(webapp.RequestHandler):
 	def get(self,req_type='link',req_user='',req_tag=''):
 		#********************** User Auth **************************#
+
 		user = users.get_current_user()
 		nickname = ''
 		if user:
@@ -51,35 +52,34 @@ class Index(webapp.RequestHandler):
 		offset = (p-1)*limit
 		
 		#********************** Query **************************#
-		e = Entry.all()
+		e = Entry.all().filter('type',req_type).order("-addtime")
 		if req_user:
 			e = e.filter("user",req_user)
-		e = e.filter('type',req_type).order("-addtime")
-		if req_user != nickname:
-			e = e.filter("private", False)
+
 		if req_tag:
 			e = e.filter("tags", unquote(req_tag).decode('utf-8'))
-		
+		if req_user != nickname:
+			e = e.filter("private", False)
+
 		if e and e.count()>0:
 			cur_pageid = e.get().pageid
 		else:
 			cur_pageid = 0
 		item_count = 0
 		while cur_pageid>=0:
-			entry=Entry.all()
+			entry=Entry.all().filter('type',req_type)
 			if req_user:
 				entry = entry.filter("user",req_user)
-			entry = entry.filter('type',req_type)
-			if req_user != nickname:
-				e = e.filter("private", False)
 			if req_tag:
 				entry = entry.filter('tags',unquote(req_tag).decode('utf-8'))
+			if req_user != nickname:
+				e = e.filter("private", False)
 			
 			item_count += entry.filter('pageid',cur_pageid).count()
 			cur_pageid -=1
 
 		e = e.fetch(limit,offset)
-			
+
 		#********************** Pagenator **************************#
 		page_count = int(math.ceil(item_count / float(limit))) #总页数
 		if page_count <=7 :
@@ -132,12 +132,9 @@ class TagList(webapp.RequestHandler):
 		tag_list=[]
 		for tag in tags:
 			tag_list.append({"info":tag,"level":tag.count_link/(entry_count/tag_count)})
-			
-		
-			
+
 		path = os.path.join(os.path.dirname(__file__),'templates/tag.html')
 		self.response.out.write(template.render(path,{'tags':tag_list}))
-			
 
 class AddForm(webapp.RequestHandler):
 	def get(self):
@@ -164,7 +161,6 @@ class AddForm(webapp.RequestHandler):
 					type = 'link'
 				tags  = ''
 			
-			
 			template_values = {
 				'type'    : type,
 				'key'     : key,
@@ -179,14 +175,12 @@ class AddForm(webapp.RequestHandler):
 			self.response.out.write(template.render(path,template_values))
 		else:
 			self.redirect(users.create_login_url(self.request.uri))
-	
 
 class AddAction(webapp.RequestHandler):
 	def post(self):
 		user = users.get_current_user()
 		if user:
 			nickname=user.nickname()
-			
 			key  = self.request.get('key')
 			if key :
 				e = db.get(key)
@@ -199,7 +193,6 @@ class AddAction(webapp.RequestHandler):
 			type = self.request.get('type')
 			if not type:
 				type = 'link'
-			
 			title = self.request.get('title')
 			e.title = title.replace('&','&amp;').replace('<','&lt;').replace('>','&gt;')
 			url = self.request.get('url')
@@ -216,10 +209,9 @@ class AddAction(webapp.RequestHandler):
 				if result.status_code == 200:
 					e.image = db.Blob(result.content)
 
-			
 			if key:#更新数据
 				for oldtag in e.tags:
-					tag = Tag.all().filter("user",nickname).filter('name =',oldtag)
+					tag = Tag.all().filter("user",nickname).filter('name',oldtag)
 					if(tag.count(1)>0):
 						t = tag.get()
 						if type == 'link':
@@ -236,6 +228,7 @@ class AddAction(webapp.RequestHandler):
 					cur_pageid = entry.get().pageid
 				else:
 					cur_pageid = 0
+				
 				cur_pageCount = entry.filter('pageid =',cur_pageid).count(1000)
 				
 				if cur_pageCount>=max_pageCount:
@@ -255,7 +248,6 @@ class AddAction(webapp.RequestHandler):
 						t.count_note +=1
 					if type == 'pic':
 						t.count_pic +=1
-
 					t.user = nickname
 					t.usetime = datetime.datetime.now()
 					t.put()
@@ -274,7 +266,6 @@ class AddAction(webapp.RequestHandler):
 				e.tags.append(db.Category(tag_name))
 			e.put()
 			self.redirect('/'+type+'/'+nickname)
-			
 		else:
 			self.redirect(users.create_login_url(self.request.uri))
 
