@@ -28,7 +28,9 @@
 			<dd id="mytag">
 				<ul style="display: block;">
 					{% for tag_item in tag_list %}
+					{% if tag_item.count_pic %}
 					<li><a href="/pic/{{ tag_item.name }}">{{ tag_item.name }}</a><a href="/rss/{{ tag_item.name }}" class="num" target="_blank">{{ tag_item.count_pic }}</a></li>
+					{% endif %}
 					{% endfor %}
 				</ul>
 			</dd>
