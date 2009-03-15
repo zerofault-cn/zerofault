@@ -209,9 +209,14 @@ class AddAction(webapp.RequestHandler):
 			e.private = bool(int(self.request.get('private')))
 			e.type = type
 			if type =='pic' and not key:
-				result = urlfetch.fetch(url)
-				if result.status_code == 200:
-					e.image = db.Blob(result.content)
+				try:
+					result = urlfetch.fetch(url)
+					if result.status_code == 200:
+						e.image = db.Blob(result.content)
+				except :
+					self.response.out.write('下载超时！')
+					return
+
 
 			if key:#更新数据
 				for oldtag in e.tags:
