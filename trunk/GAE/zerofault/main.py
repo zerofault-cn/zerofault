@@ -30,6 +30,8 @@ def unescape(txt):
 
 class Index(webapp.RequestHandler):
 	def get(self,req_type='link',req_tag=''):
+		if not req_type:
+			req_type = 'link'
 		#********************** User Auth **************************#
 		isAdmin = False
 		user = users.get_current_user()
@@ -197,8 +199,10 @@ class AddAction(webapp.RequestHandler):
 			e.title = title.replace('&','&amp;').replace('<','&lt;').replace('>','&gt;')
 			url = self.request.get('url')
 			purl= self.request.get('purl')
-			#if not key:
-			e.url = purl.replace('&','&amp;').replace('<','&lt;').replace('>','&gt;')
+			if type == 'pic' and not key:
+				e.url = purl.replace('&','&amp;').replace('<','&lt;').replace('>','&gt;')
+			else:
+				e.url = url.replace('&','&amp;').replace('<','&lt;').replace('>','&gt;')
 			content = self.request.get('content')
 			e.content = content
 			#e.addtime +=datetime.timedelta(hours=+8)
