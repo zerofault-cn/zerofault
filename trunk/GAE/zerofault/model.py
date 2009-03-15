@@ -16,8 +16,6 @@ class Entry(db.Model):
 
 class Tag(db.Model):
 	name = db.StringProperty()
-	#type = db.StringProperty()
-	#num  = db.IntegerProperty()
 	count_link  = db.IntegerProperty(default=0)
 	count_note  = db.IntegerProperty(default=0)
 	count_pic   = db.IntegerProperty(default=0)
