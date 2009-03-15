@@ -30,6 +30,8 @@ def unescape(txt):
 
 class Index(webapp.RequestHandler):
 	def get(self,req_type='link',req_user='',req_tag=''):
+
+		
 		#********************** User Auth **************************#
 
 		user = users.get_current_user()
@@ -58,7 +60,7 @@ class Index(webapp.RequestHandler):
 
 		if req_tag:
 			e = e.filter("tags", unquote(req_tag).decode('utf-8'))
-		if req_user != nickname:
+		if not nickname:
 			e = e.filter("private", False)
 
 		if e and e.count()>0:
@@ -72,8 +74,8 @@ class Index(webapp.RequestHandler):
 				entry = entry.filter("user",req_user)
 			if req_tag:
 				entry = entry.filter('tags',unquote(req_tag).decode('utf-8'))
-			if req_user != nickname:
-				e = e.filter("private", False)
+			if not nickname:
+				entry = entry.filter("private", False)
 			
 			item_count += entry.filter('pageid',cur_pageid).count()
 			cur_pageid -=1
@@ -197,17 +199,23 @@ class AddAction(webapp.RequestHandler):
 			e.title = title.replace('&','&amp;').replace('<','&lt;').replace('>','&gt;')
 			url = self.request.get('url')
 			purl= self.request.get('purl')
-			if not key:
+			if type == 'pic' and not key:
 				e.url = purl.replace('&','&amp;').replace('<','&lt;').replace('>','&gt;')
+			else:
+				e.url = url.replace('&','&amp;').replace('<','&lt;').replace('>','&gt;')
 			content = self.request.get('content')
 			e.content = content
 			#e.addtime +=datetime.timedelta(hours=+8)
 			e.private = bool(int(self.request.get('private')))
 			e.type = type
 			if type =='pic' and not key:
-				result = urlfetch.fetch(url)
-				if result.status_code == 200:
-					e.image = db.Blob(result.content)
+				try:
+					result = urlfetch.fetch(url)
+					if result.status_code == 200:
+						e.image = db.Blob(result.content)
+				except :
+					self.response.out.write('Google读取图片超时，有可能图片太大，或者网络太慢！<br />下次选小点的图片吧！')
+					return
 
 			if key:#更新数据
 				for oldtag in e.tags:

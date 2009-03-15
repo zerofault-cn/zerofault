@@ -39,7 +39,7 @@ div { line-height: 150%; }
 #col_right{ float: right; width:160px; overflow:hidden; }
 #col_middle {
 	margin-right:10px !important;
-	*margin-right:170px;
+	*float:left;
 	overflow:hidden; }
 
 
