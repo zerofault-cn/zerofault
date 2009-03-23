@@ -209,13 +209,24 @@ class AddAction(webapp.RequestHandler):
 			e.private = bool(int(self.request.get('private')))
 			e.type = type
 			if type =='pic' and not key:
-				try:
-					result = urlfetch.fetch(url)
-					if result.status_code == 200:
-						e.image = db.Blob(result.content)
-				except :
-					self.response.out.write('Google读取图片超时，有可能图片太大，或者网络太慢！<br />下次选小点的图片吧！')
-					return
+				if url:
+					try:
+						result = urlfetch.fetch(url)
+						if result.status_code == 200:
+							e.image = db.Blob(result.content)
+					except :
+						self.response.out.write('抓取图片失败，有可能图片太大，或者网络不通！<br />您可以选择<a href="/add?type=pic">手动上传</a>方式！')
+						return
+				else:
+					myfile = self.request.get("myfile")
+					if not myfile:
+						self.response.out.write( '没有选择文件！')
+						return
+					try:
+						e.image = db.Blob(myfile)
+					except :
+						self.response.out.write( '文件上传失败！')
+						return
 
 			if key:#更新数据
 				for oldtag in e.tags:
