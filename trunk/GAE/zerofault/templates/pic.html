@@ -65,13 +65,17 @@
 			<dl class="item" id="item_{{ item.key }}">
 				<img class="icon" src="/media/jpg.gif" />
 				<dt>
+					{% if item.url %}
 					<a href="{{item.url}}" target="_blank" title="点击打开图片引用页">{{ item.title }}</a>
+					{% else %}
+					{{ item.title }}
+					{% endif %}
 					{% if item.private %}
-						<img src="/media/lock.gif" align="absmiddle" />
+					<img src="/media/lock.gif" align="absmiddle" />
 					{% endif %}
 					<br />{{ item.addtime|date:"Y-m-d H:i:s" }}
 				</dt>
-				<dd>
+				<dd class="image">
 					<a href="/img?key={{ item.key }}" target="_blank" title="点击查看大图"><img src="/img?key={{ item.key }}" alt="{{ item.title }}" width="192"/></a>
 				</dd>
 				<dd class="content">

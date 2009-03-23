@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% block title %}{% if key %}修改记录{% else %}添加记录{% endif %} - {{ block.super }}{% endblock %} 
 {% block content %}
-	<form name="form1" action="submit" method="post" onsubmit="return check();">
+	<form name="form1" action="submit" method="post" enctype="multipart/form-data">
 	<input type="hidden" name="type" value="{{ type }}" />
 	<input type="hidden" name="key" value="{{ key }}" />
 	<input type="hidden" name="private" value="0" />
@@ -25,14 +25,14 @@
 			<div class="d1">图片：</div>
 			<div class="d2">
 				{% if key %}
-				<img id="rimage" src="/img?key={{ key }}" max-width="360" oonload="resize(this)"/>
-				<br />url:<input type="text" name="url" value="{{ url }}"/>
-				<br />purl:<input type="text" name="purl" value="{{ purl }}"/>
+				<img id="rimage" src="/img?key={{ key }}" oonload="resize(this)"/>
+				<!-- <br />url:<input type="text" name="url" value="{{ url }}"/>
+				<br />purl:<input type="text" name="purl" value="{{ purl }}"/> -->
 				{% else %}
 				{% if url %}
 				<img id="rimage" src="{{ url }}" max-width="360" oonload="resize(this)"/><input type="hidden" name="url" value="{{ url }}"/><input type="hidden" name="purl" value="{{ purl }}"/>
 				{% else %}
-				<input type="file" id="myfile" name="myfile"/>
+				<input type="file" id="myfile" name="myfile" size="56"/>
 				{% endif %}
 				{% endif %}
 			</div>
