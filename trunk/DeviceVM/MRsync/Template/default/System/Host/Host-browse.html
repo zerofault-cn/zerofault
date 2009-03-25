@@ -1,0 +1,46 @@
+<div id="right">
+<h2>Rsync Host List</h2>
+<center>
+	<table border="0" width="600">
+		<tr>
+			<td align="center">
+				<table border="0" width="100%">
+					<tr>
+						<td align="right">
+							<input type="button" value="Add Rsync_Host" onclick="window.location='?Mod=<!--{$smarty.get.Mod}-->&op=<!--{$smarty.get.op}-->&subop=add'">
+						</td>
+					</tr>
+				</table>
+			</td>
+		</tr>
+		<tr>
+			<td align="center">
+				<table border="1" cellpadding="3" cellspacing="0" width="100%" bordercolor="#0099CC" style="border-collapse:collapse;">
+					<tr style="background: #acacac;">
+						<td>ID</td>
+						<td>Nick Name</td>
+						<td>Host Address</td>
+						<td>Path</td>
+						<td>Description</td>
+						<td>Action</td>
+					</tr>
+			<!--{section name=key loop=$Rsync_Host}-->
+					<tr <!--{if $smarty.section.key.index % 2 == 0}-->bgcolor="#FFFFFF" <!--{else}-->bgcolor="#E8E8E8"<!--{/if}-->>
+						<td><!--{$Rsync_Host[key].ID}--></td>
+						<td><!--{$Rsync_Host[key].Name}--></td>
+						<td><!--{$Rsync_Host[key].Host}--></td>
+						<td align="left"><!--{$Rsync_Host[key].Path}--></td>
+						<td><!--{$Rsync_Host[key].Description}--></td>
+						<td>
+							<input type="button" value="Edit" onclick="window.location='?Mod=<!--{$smarty.get.Mod}-->&op=<!--{$smarty.get.op}-->&subop=edit&id=<!--{$Rsync_Host[key].ID}-->'">
+							<input type="button" value="Delete" onclick="confirmdel('<!--{$Rsync_Host[key].Host}-->',<!--{$Rsync_Host[key].ID}-->)">
+						</td>
+					</tr>
+			<!--{/section}-->
+				</table>
+			</td>
+		</tr>
+	</table>
+</center>
+</div>
+</div>

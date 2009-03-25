@@ -1,0 +1,156 @@
+@charset "gb2312";
+body {
+	padding:0;
+	margin:0;
+	color:#006;
+	font-size:11pt;
+	line-height: 140%;
+	font-family: "Georgia","verdana";
+	background-color:#fff;
+}
+form,dl,dt,dd{margin: 0px;padding: 0px;}
+ol,ul,li,dl,dt,dd{padding:0;margin:0;list-style:none;}
+img{border:0;}
+a{color:#00f;text-decoration:none}
+a:hover,a:active,a.active{color:#f20;text-decoration: underline;}
+.clear{ clear:both;}
+.hide{display:none;}
+
+h1{
+	padding:10px;
+	text-align:center;
+}
+h2{
+	font-size:14pt;
+	margin:5px;
+	text-align:center;
+}
+textarea{font-size:12px;}
+b{font-weight:normal;}
+
+.red{
+	color:red;
+}
+.blue{
+	color:blue;
+}
+
+.f_left{
+	float:left;
+}
+.f_right{
+	float:right;
+}
+.a_right{
+	padding:3px;
+	text-align:right;
+}
+#wrapper{
+	width:1000px;
+	margin:0px auto;
+	padding:10px 0;
+}
+
+#left{
+	float:left;
+	z-index:9;
+	width:180px;
+	padding:10px 0;
+	border:1px solid #000;
+}
+
+#containerul li{
+  margin-left:15px;			/* A left margin to indent the list items and give the menu a sense of structure. */
+}
+#containerul .symbols{			/* Various styles to position the symbols next to the items in the menu. */
+	float:left;
+	width:14px;
+	height:20px;
+	background-position:0 50%;
+	background-repeat:no-repeat;
+}
+.onfoc{
+	background-color:#d0d0d0;
+}
+#right{
+	float:right;
+	width:810px;
+	border:1px solid #000;
+	padding:10px 0;
+	margin:0;
+}
+#main{
+	width:600px;
+	margin:0 auto;
+}
+
+.border{
+	border:1px solid #aaa;padding:5px 10px;
+}
+.no_border{
+	padding:10px;
+}
+
+#path_filter{width:500px;margin:0 auto;}
+#path_filter textarea{border:none;width:99%;min-height:45px;overflow-y:auto;}
+
+.notice ol li{
+	list-style-type:decimal;
+	margin-left:20px;
+}
+
+#path_navi{
+	padding-left:3px;border:1px solid #000;line-height:22px;color:#000;font-family:ËÎÌו;
+}
+#path_list{
+	margin-top:5px;border:1px solid #000;height:280px;line-height:20px;overflow-x:hidden;overflow-y:auto;color:#000;font-family:ËÎÌו;
+}
+#path_list li{white-space:nowrap;text-overflow:ellipsis;}
+
+#file_list{
+	border-color:#ccc #999 #999 #ccc;border-style:solid;border-width:1px;text-align:left;font-family:ËÎÌו
+}
+#file_list dl{
+	height:25px;
+	padding:0 3px;
+	line-height:24px;
+}
+#file_list dl.gray{
+	color:#c0c0c0;
+}
+#file_list dl.gray a:link,#file_list dl.gray a:visited{
+	color:#c0c0c0;
+}
+#file_list dl.ext{
+	color:#000;
+}
+#file_list dl#file_list_label{
+	font-weight:bold;
+	background-color:#ebebeb;
+}
+#file_list dl#file_list_label dd{
+	border-left:1px solid #cbb;
+}
+#file_list dt{
+	float:left;
+	width:507px;
+	white-space:nowrap;
+	overflow:hidden;
+	text-overflow:ellipsis;
+}
+#file_list dd{
+	float:right;
+	width:74px;
+	padding-left:10px;
+}
+
+
+#tooltip {
+	position: absolute;
+	z-index: 3000;
+	border: 1px solid #111;
+	background-color: #FFFFCC;
+	padding: 3px;
+	#opacity: 0.85;
+}
+#tooltip h3, #tooltip div { font-size:14px;font-weight:normal;margin: 0; }
