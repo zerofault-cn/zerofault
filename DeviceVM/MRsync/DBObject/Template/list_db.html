@@ -1,0 +1,63 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8">
+<TITLE>Home</TITLE>
+<LINK REL=STYLESHEET TYPE="text/css" HREF="./style.css">
+<LINK REL=STYLESHEET TYPE="text/css" HREF="./site.css">
+<STYLE>
+</STYLE>
+</HEAD>
+<BODY NOF="(MB=(DefaultMasterBorder, 10, 10, 10, 10), L=(HomeLayout, 511, 317))" STYLE="text-align: center;" TOPMARGIN=0 LEFTMARGIN=0 MARGINWIDTH=0 MARGINHEIGHT=0 onload=document.getElementById("Username").focus()>
+    <TABLE BORDER=0 CELLSPACING=0 CELLPADDING=0 NOF=LY>
+        <TR VALIGN=TOP ALIGN=LEFT>
+            <TD WIDTH=83 HEIGHT=58></TD>
+            <TD></TD>
+        </TR>
+        <TR VALIGN=TOP ALIGN=LEFT>
+            <TD></TD>
+            <TD WIDTH=364>
+                <FORM NAME="Table2FORM" ACTION="" METHOD=POST>
+                    <TABLE ID="Table2" BORDER=1 CELLSPACING=3 CELLPADDING=3 WIDTH="100%">
+                        <TR>
+                            <TD COLSPAN=2>&nbsp;</TD>
+                        </TR>
+                        <TR>
+                            <TD WIDTH=91>DB Server</TD>
+                            <TD WIDTH=246><INPUT ID="Forms Edit Field1" TYPE="text" NAME="DBServer" VALUE="<!!--{$DBServer}-->" SIZE=30 MAXLENGTH=200 readonly ></TD>
+                        </TR>
+                        <TR>
+                            <TD WIDTH=91>DB Name</TD>
+                            <TD WIDTH=246><INPUT ID="FormsEditField2" TYPE=TEXT NAME="DBName" VALUE="<!!--{$DBName}-->" SIZE=30 MAXLENGTH=64 readonly></TD>
+                        </TR>
+                        <TR>
+                            <TD WIDTH=91>Username</TD>
+                            <TD WIDTH=246><INPUT ID="Username" TYPE=TEXT NAME="Username" VALUE="<!!--{$Username}-->" SIZE=30 MAXLENGTH=30 readonly></TD>
+                        </TR>
+                        <TR>
+                            <TD WIDTH=91>Password</TD>
+                            <TD WIDTH=246><INPUT ID="FormsEditField4" TYPE=PASSWORD NAME="Password" VALUE="<!!--{$Password}-->" SIZE=30 MAXLENGTH=30 readonly></TD>
+                        </TR>
+                        <TR>
+                            <TD WIDTH=91>Table List</TD>
+                            <TD WIDTH=246>
+                                <select name="table_list[]" size="<!!--$Show-->" multiple="multiple">
+                                	<!!--{section name=table_list_sec loop=$Out.0}-->
+                                    <option value="<!!--{$Out.0[table_list_sec]}-->" selected="selected"><!!--{$Out.0[table_list_sec]}--></option>
+                                    <!!--{/section}-->
+                            	</select>
+                            </TD>
+                        </TR>
+                        <TR>
+                            <TD COLSPAN=2>
+                                <P STYLE="text-align: center;"><INPUT TYPE=RESET NAME="DBCancel" VALUE="Cancel" ID="Forms Button2">　　<INPUT TYPE=SUBMIT NAME="DBSubmit" VALUE="Create" ID="Forms Button1">　　<INPUT TYPE=SUBMIT NAME="DBDownload" VALUE="Download" ID="Forms Button3"></P>
+                            </TD>
+                        </TR>
+                    </TABLE>
+                </FORM>
+            </TD>
+        </TR>
+    </TABLE>
+</BODY>
+</HTML>
+ 
