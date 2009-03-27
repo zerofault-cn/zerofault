@@ -1,8 +1,0 @@
-<div style="width:1000px;margin:10px auto;">
-	<div style="float:left;z-index:999;width:140px;border:1px solid #000;">
-		<ul style="line-height:200%">
-		<!--{section loop=$ET_ARR name=key}-->
-			<li><a href="?Mod=<!--{$smarty.get.Mod}-->&op=browse&ETID=<!--{$ET_ARR[key].ID}-->" title="<!--{$ET_ARR[key].Description}-->" style="<!--{if $ETID eq $ET_ARR[key].ID}-->background-color:#ddd<!--{/if}-->"><!--{$ET_ARR[key].Name}--></a></li>
-		<!--{/section}-->	
-		</ul>
-	</div>
