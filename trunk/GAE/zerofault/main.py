@@ -130,10 +130,25 @@ class TagList(webapp.RequestHandler):
 		tags = Tag.all().order('usetime')
 
 
-		tag_count = tags.count(1000)
+		tags_count = tags.count(1000)
 		tag_list=[]
 		for tag in tags:
-			tag_list.append({"info":tag,"level":tag.count_link/(entry_count/tag_count)})
+			tag_count=tag.count_link + tag.count_note + tag.count_pic
+			if tag.count_link >= tag.count_note:
+				if tag.count_link >= tag.count_pic:
+					max_type = 'link'
+				else:
+					max_type = 'pic'
+			else:
+				if tag.count_pic >= tag.count_note:
+					max_type = 'pic'
+				else:
+					max_type = 'note'
+			tag_list.append({
+				"info":tag,
+				"type":max_type,
+				"level":tag_count/(entry_count/tags_count)
+				})
 
 		path = os.path.join(os.path.dirname(__file__),'templates/tag.html')
 		self.response.out.write(template.render(path,{'tags':tag_list}))
@@ -205,7 +220,8 @@ class AddAction(webapp.RequestHandler):
 				e.url = url.replace('&','&amp;').replace('<','&lt;').replace('>','&gt;')
 			content = self.request.get('content')
 			e.content = content
-			#e.addtime +=datetime.timedelta(hours=+8)
+			if not key:
+				e.addtime +=datetime.timedelta(hours=+8)
 			e.private = bool(int(self.request.get('private')))
 			e.type = type
 			if type =='pic' and not key:
@@ -331,6 +347,31 @@ class Image(webapp.RequestHandler):
 		else:
 			self.redirect('/media/logo.gif')
 
+class Update(webapp.RequestHandler):
+	def get(self):
+		'''
+		if users.is_current_user_admin():
+			limit = 100;
+			p = self.request.get('p')
+			if not p:
+				p=1
+			else:
+				p = int(p)
+			offset = (p-1)*limit
+			entry = Entry.all().fetch(limit,offset)
+			i=1
+			for e in entry:
+				self.response.out.write(i)
+				self.response.out.write(':')
+				self.response.out.write(e.addtime)
+				self.response.out.write('→')
+				e.addtime +=datetime.timedelta(hours=+8)
+				e.put()
+				self.response.out.write(e.addtime)
+				self.response.out.write('<br />')
+				i+=1
+		'''
+
 application = webapp.WSGIApplication([
 	('/', Index),
 	('/add', AddForm),
@@ -338,6 +379,7 @@ application = webapp.WSGIApplication([
 	('/delkey', DelKey),
 	('/tag', TagList),
 	('/img', Image),
+	('/update', Update),
 	('/(link|note|pic){1}/(.*)', Index),
 	('/(note/|pic/)?(.*)', Index)
 	],debug=True)

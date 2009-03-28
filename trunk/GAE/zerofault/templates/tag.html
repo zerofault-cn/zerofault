@@ -21,7 +21,7 @@
 	<div id="col_middle">
 		<div id="tagcloud">
 		{% for tag in tags %}
-			<a href="/{{ tag.info.name }}" class="level{{ tag.level }}">{{ tag.info.name }}</a>
+			<a href="/{{ tag.type }}/{{ tag.info.name }}" class="level{{ tag.level }}">{{ tag.info.name }}</a>
 		{% endfor %}
 		</div>
 	</div>
