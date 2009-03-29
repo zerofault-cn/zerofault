@@ -38,6 +38,7 @@ class Index(webapp.RequestHandler):
 		nickname = ''
 		if user:
 			nickname=user.nickname()
+		if nickname:
 			auth_url = users.create_logout_url(self.request.uri)
 			auth_text= '注销'
 		else:
@@ -56,7 +57,7 @@ class Index(webapp.RequestHandler):
 		#********************** Query **************************#
 		e = Entry.all().filter('type',req_type).order("-addtime")
 		if req_user == 'all':
-			req_user = '';
+			req_user = ''
 		if req_user:
 			e = e.filter("user",req_user)
 
@@ -105,7 +106,7 @@ class Index(webapp.RequestHandler):
 			tag_list = Tag.all().order("usetime")
 		
 		template_values = {
-			'user'     : user,
+			'nickname' : nickname,
 			'req_type' : req_type,
 			'req_user' : req_user,
 			'auth_url' : auth_url,
@@ -383,12 +384,12 @@ application = webapp.WSGIApplication([
 	('/add', AddForm),
 	('/submit', AddAction),
 	('/delkey', DelKey),
-	('/tag/(.*)', TagList),
+	('/tag/(.*)', TagList),#所有用户：/tag/；单个用户：/tag/username
 	('/help',Help),
 	('/img', Image),
 	('/update', Update),
-	('/(link|note|pic){1}/(.*)', Index),
-	('/(link|note|pic){1}/(.*)/(.*)', Index)
+	('/(link|note|pic){1}/(.*)/(.*)', Index),	#所有用户：/note/all/tag；单个用户：/note/user/tag
+	('/(link|note|pic){1}/(.*)', Index)			#所有用户：/note/；单个用户：/note/user
 	],debug=True)
 
 def main():
