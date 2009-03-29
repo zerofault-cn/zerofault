@@ -24,46 +24,6 @@ def unescape(txt):
 	return unquote(p.sub(unichar_fromhex, txt))
 #-----------------------------------#
 
-class fix1(webapp.RequestHandler):
-	def get (self):
-		
-		for tag in Tag.all():
-			tag.type ='link'
-			tag.count_link=tag.num
-			tag.count_note=0
-			tag.count_pic=0
-			tag.put()
-		#	del tag.num
-		
-
-
-class fix2(webapp.RequestHandler):
-	def get (self):
-	#	e0=Entry().all()
-	#	del e0
-		p=self.request.get('p')
-		p = int(p)
-		link=Link.all()
-		link=link.fetch(60,80+60*p)
-		for l in link:
-			e = Entry()
-			e.title = l.title
-			e.url   = l.url
-			e.content=l.descr
-			e.image = ''
-			e.addtime=l.addtime
-			e.private=l.private
-			e.type='link'
-			e.comment=[]
-			e.dig=0
-
-			for t in db.get(l.tag):
-				if t:
-					e.tags.append(t.name)
-			e.put()
-		#	del link_item.tag
-			
-	
 class csv(webapp.RequestHandler):
 	def get(self):
 		i=0
@@ -74,7 +34,7 @@ class csv(webapp.RequestHandler):
 		self.response.headers['Expires'] = '0'
 		self.response.headers['Pragma']  = 'public'
 		
-		entry = Entry.all().order("-addtime")
+		entry = Entry.all().filter("private", False).order("-addtime")
 
 		for item in entry:
 			i +=1
@@ -86,34 +46,36 @@ class csv(webapp.RequestHandler):
 			self.response.out.write('"\r\n')
 
 class rss(webapp.RequestHandler):
-	def get(self,req_tag=''):
-		entry = Entry.all().order("-addtime")
+	def get(self,req_user='',req_tag=''):
+		entry = Entry.all().filter("private", False).order("-addtime")
+		if req_user != '' and req_user!='all':
+			entry = entry.filter("user", req_user)
 		if req_tag:
-			entry = entry.filter("tags =", unquote(req_tag).decode('utf-8'))
+			entry = entry.filter("tags", unquote(req_tag).decode('utf-8'))
 
 		self.response.headers['Content-Type'] = 'text/xml'
 		self.response.out.write('<?xml version="1.0" encoding="UTF-8"?>\r\n')
 		#self.response.out.write('<?xml-stylesheet type="text/xsl" href="/css/rss_xml_style.css"?>\r\n')
 		self.response.out.write('<rss version="2.0">\r\n')
 		self.response.out.write('\t<channel>\r\n')
-		self.response.out.write('\t\t<title>MyFavorites</title>\r\n')
+		self.response.out.write('\t\t<title>%s - http://5dnote.appspot.com</title>\r\n' % req_user)
 		self.response.out.write('\t\t<image>\r\n')
-		self.response.out.write('\t\t\t<title>MyFavorites</title>\r\n')
-		self.response.out.write('\t\t\t<link>http://zerofault.appspot.com/</link>\r\n')
-		self.response.out.write('\t\t\t<url>http://zerofault.appspot.com/media/logo.jpg</url>\r\n')
+		self.response.out.write('\t\t\t<title>5dnote.appspot.com</title>\r\n')
+		self.response.out.write('\t\t\t<link>http://5dnote.appspot.com/</link>\r\n')
+		self.response.out.write('\t\t\t<url>http://5dnote.appspot.com/media/logo.jpg</url>\r\n')
 		self.response.out.write('\t\t</image>\r\n')
-		self.response.out.write('\t\t<description>My Favorites at Google App Engine</description>\r\n')
-		self.response.out.write('\t\t<link>http://zerofault.appspot.com/</link>\r\n')
-		self.response.out.write('\t\t<copyright>Copyright 2009 zerofault. All Rights Reserved</copyright>\r\n')
+		self.response.out.write('\t\t<description>%s @ http://5dnote.appspot.com</description>\r\n' % req_user)
+		self.response.out.write('\t\t<link>http://5dnote.appspot.com/</link>\r\n')
+		self.response.out.write('\t\t<copyright>Copyright 2009 5dnote.appspot.com All Rights Reserved</copyright>\r\n')
 		self.response.out.write('\t\t<language>zh-cn</language>\r\n')
-		self.response.out.write('\t\t<generator>python @ google app engine</generator>\r\n')
+		self.response.out.write('\t\t<generator>Google App Engine</generator>\r\n')
 		i=0
 		for item in entry:
 			i +=1
 			self.response.out.write('\t\t<item>\r\n')
 			self.response.out.write('\t\t\t<title>%s</title>\r\n' % (item.title) )
 			self.response.out.write('\t\t\t<link>%s</link>\r\n' % item.url)
-			self.response.out.write('\t\t\t<author>zerofault@gmail.com</author>\r\n')
+			self.response.out.write('\t\t\t<author>%s</author>\r\n' % item.user)
 
 			#for tag in item.tags:
 			tag_names =','.join(tag for tag in item.tags)
@@ -133,12 +95,10 @@ class rss(webapp.RequestHandler):
 		self.response.out.write('</rss>\r\n')
 	
 application = webapp.WSGIApplication([
-	('/rss/', rss),
+	('/rss/(.*)/(.*)', rss),
 	('/rss/(.*)', rss),
 	('/dump/csv', csv),
-	('/dump/rss', rss),
-	('/dump/fix1', fix1),
-	('/dump/fix2', fix2),
+	('/dump/rss', rss)
 	],debug=True)
 
 def main():
