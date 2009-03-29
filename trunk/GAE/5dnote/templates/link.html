@@ -3,10 +3,17 @@
 	<div id="searcher">
 		<ul>
 			{% if req_user %}
+			{% ifequal req_user nickname %}
 			<li><a href="/link/{{ req_user }}" class="curr">我的网址</a></li>
 			<li><a href="/note/{{ req_user }}">我的网摘</a></li>
 			<li><a href="/pic/{{ req_user }}">我的图片</a></li>
 			<li><a href="/tag/{{ req_user }}">我的标签</a></li>
+			{% else %}
+			<li><a href="/link/{{ req_user }}" class="curr">TA的网址</a></li>
+			<li><a href="/note/{{ req_user }}">TA的网摘</a></li>
+			<li><a href="/pic/{{ req_user }}">TA的图片</a></li>
+			<li><a href="/tag/{{ req_user }}">TA的标签</a></li>
+			{% endifequal %}
 			{% else %}
 			<li><a href="/" class="curr">最新收藏</a></li>
 			<li><a href="/note/">最新网摘</a></li>
@@ -23,28 +30,28 @@
 
 	<div id="col_right">
 		<dl class="box" id="mytags">
-			<dt><span><a href="/tag">Tag</a></span></dt>
+			<dt><span><a href="/tag/{{ req_user }}">Tag</a></span></dt>
 			<dd id="mytag">
 				<ul style="display: block;">
 					{% for tag_item in tag_list %}
 					{% if tag_item.count_link %}
-					<li><a href="/tag/{{ tag_item.name }}">{{ tag_item.name }}</a><a href="/rss/{{ tag_item.name }}" class="num" target="_blank">{{ tag_item.count_link }}</a></li>
+					<li><a href="/link/{% if not req_user %}all{% else %}{{ req_user }}{% endif %}/{{ tag_item.name }}">{{ tag_item.name }}</a><a class="num">{{ tag_item.count_link }}</a></li>
 					{% endif %}
 					{% endfor %}
 				</ul>
 			</dd>
 		</dl>
 
-		<dl class="box" id="myfriends">
+		<!-- <dl class="box" id="myfriends">
 			<dt><span>固定链接</span></dt>
 			<dd id="myfriend">
 				<ul>
 				</ul>
 			</dd>
-		</dl>
+		</dl> -->
 
 		<div id="myicon">
-			<a href="/rss/" target="_blank"><img src="/media/rss.gif" alt="rss" class="rss" /></a>
+			<a href="/rss/{% if not req_user %}all{% else %}{{ req_user }}{% endif %}" target="_blank"><img src="/media/rss.gif" alt="rss" class="rss" /></a>
 		</div>
 
 	</div>
@@ -90,18 +97,19 @@
 				<dd class="content">{% ifequal item.type 'pic' %}<img src="/img?key={{ item.key }}" width="400" /><br />{% endifequal %}{{ item.content|escape|linebreaksbr }}</dd>
 				<dd class="tags">
 					{% for tag in item.tags %}
-					[<a href="/tag/{{ tag }}" class="tag">{{ tag }}</a>]
+					[<a href="/link/{% if not req_user %}all{% else %}{{ req_user }}{% endif %}/{{ tag }}" class="tag">{{ tag }}</a>]
 					{% endfor %}
-					{% ifequal item.user user.nickname %}
+					{% ifequal item.user nickname %}
 					... 
 					<a href="/add?key={{ item.key }}" class="edit">编辑</a>/ <a class="del" onClick="$('#del_{{ item.key }}').show()">删除</a>
 					<span class="edit" id='del_{{ item.key }}'><a onClick="submit_del(this)" value="{{ item.key }}" hhref="del?key={{ item.key }}" class="edit">确认</a> / <a onClick='$("#del_{{ item.key }}").hide()' class="edit">取消</a></span>
 					{% else %}
-					&nbsp;-&nbsp;<a href="/link/{{ item.user }}">{{ item.user }}</a>&nbsp;
-						{% if user %}
-					...
-					<a href="/add?key={{ item.key }}" class="edit">复制</a>
-						{% endif %}
+					{% if not req_user %}
+					- <a href="/link/{{ item.user }}">{{ item.user }}</a>
+					{% endif %}
+					{% if nickname %}
+					... <a href="/add?key={{ item.key }}" class="edit">复制</a>
+					{% endif %}
 					{% endifequal %}
 				</dd>
 			</dl>
