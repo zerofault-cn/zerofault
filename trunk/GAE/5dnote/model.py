@@ -22,3 +22,8 @@ class Tag(db.Model):
 	count_note  = db.IntegerProperty(default=0)
 	count_pic   = db.IntegerProperty(default=0)
 	usetime  = db.DateTimeProperty(auto_now_add=True)
+
+class User(db.Model):
+	user = db.StringProperty()
+	lang = db.StringProperty(default='en',choices=['en','zh-cn'])
+	timezone=db.IntegerProperty(default=+8)

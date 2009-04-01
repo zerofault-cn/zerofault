@@ -3,6 +3,7 @@ import logging
 import os
 import math
 import datetime
+import Cookie
 
 from google.appengine.api import users
 from google.appengine.api import urlfetch
@@ -13,7 +14,7 @@ from google.appengine.ext.webapp import template
 from google.appengine.ext.webapp.util import run_wsgi_app
 from google.appengine.ext import db
 
-from model import Entry,Tag
+from model import Entry,Tag,User
 
 #-----------------------------------#
 #equivalent of javascript unescape()
@@ -31,7 +32,11 @@ def unescape(txt):
 class Index(webapp.RequestHandler):
 	def get(self,req_type='link',req_user='',req_tag=''):
 
+		self.request.session['has_login'] = True
+		for val in self.response:
+			self.response.out.write("%s<br />" %val)
 		
+
 		#********************** User Auth **************************#
 
 		user = users.get_current_user()
@@ -39,6 +44,14 @@ class Index(webapp.RequestHandler):
 		if user:
 			nickname=user.nickname()
 		if nickname:
+			user_info = User.all().filter('user',nickname)
+			if user_info:
+				user_info = user_info.get()
+				user_lang = user_info.lang
+				user_timezone = user_info.timezone
+			else:
+				user_lang = 'en'
+				user_timezone = +8
 			auth_url = users.create_logout_url(self.request.uri)
 			auth_text= '注销'
 		else:
