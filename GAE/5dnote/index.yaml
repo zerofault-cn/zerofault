@@ -91,7 +91,7 @@ indexes:
   - name: addtime
     direction: desc
 
-# Used 24 times in query history.
+# Used 33 times in query history.
 - kind: Entry
   properties:
   - name: tags
@@ -99,7 +99,7 @@ indexes:
   - name: addtime
     direction: desc
 
-# Used 18 times in query history.
+# Used 21 times in query history.
 - kind: Entry
   properties:
   - name: tags
@@ -108,14 +108,14 @@ indexes:
   - name: addtime
     direction: desc
 
-# Used 52 times in query history.
+# Used 58 times in query history.
 - kind: Entry
   properties:
   - name: type
   - name: addtime
     direction: desc
 
-# Used 64 times in query history.
+# Used 82 times in query history.
 - kind: Entry
   properties:
   - name: type
@@ -123,7 +123,7 @@ indexes:
   - name: addtime
     direction: desc
 
-# Used 42 times in query history.
+# Used 49 times in query history.
 - kind: Tag
   properties:
   - name: user
