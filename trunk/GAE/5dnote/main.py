@@ -32,10 +32,7 @@ def unescape(txt):
 class Index(webapp.RequestHandler):
 	def get(self,req_type='link',req_user='',req_tag=''):
 
-		self.request.session['has_login'] = True
-		for val in self.response:
-			self.response.out.write("%s<br />" %val)
-		
+		user_lang = 'en'
 
 		#********************** User Auth **************************#
 
@@ -45,18 +42,14 @@ class Index(webapp.RequestHandler):
 			nickname=user.nickname()
 		if nickname:
 			user_info = User.all().filter('user',nickname)
-			if user_info:
+			if user_info.count(1)>0:
 				user_info = user_info.get()
 				user_lang = user_info.lang
-				user_timezone = user_info.timezone
-			else:
-				user_lang = 'en'
-				user_timezone = +8
 			auth_url = users.create_logout_url(self.request.uri)
-			auth_text= '注销'
+			auth_text= 'signout'
 		else:
 			auth_url = users.create_login_url(self.request.uri)
-			auth_text= '登录'
+			auth_text= 'signin'
 
 		#********************** Pagenator init**************************#
 		limit = 20;
@@ -136,16 +129,36 @@ class Index(webapp.RequestHandler):
 			'page_numbers': page_numbers,
 			'count': item_count
 			}
-		path = os.path.join(os.path.dirname(__file__),'templates/'+req_type+'.html')
+		path = os.path.join(os.path.dirname(__file__),'templates/'+user_lang+'/'+req_type+'.html')
 		self.response.out.write(template.render(path,template_values))
 
 class TagList(webapp.RequestHandler):
 	def get(self,req_user=''):
+		user_lang = 'en'
+
+		#********************** User Auth **************************#
+
+		user = users.get_current_user()
+		nickname = ''
+		if user:
+			nickname=user.nickname()
+		if nickname:
+			user_info = User.all().filter('user',nickname)
+			if user_info.count(1)>0:
+				user_info = user_info.get()
+				user_lang = user_info.lang
+			auth_url = users.create_logout_url(self.request.uri)
+			auth_text= 'signout'
+		else:
+			auth_url = users.create_login_url(self.request.uri)
+			auth_text= 'signin'
+		
 		entry_count =Entry.all().count(1000)
 		if req_user:
+			tag_user = req_user
 			tags = Tag.all().filter("user",req_user)
 		else:
-			req_user = 'all'
+			tag_user = 'all'
 			tags = Tag.all()
 		tags_count = tags.count(1000)
 		tag_list=[]
@@ -166,15 +179,35 @@ class TagList(webapp.RequestHandler):
 				"type":max_type,
 				"level":tag_count/(entry_count/tags_count)
 				})
-
-		path = os.path.join(os.path.dirname(__file__),'templates/tag.html')
-		self.response.out.write(template.render(path,{'tags':tag_list, 'user':req_user}))
+		template_values = {
+			'nickname' : nickname,
+			'req_user' : req_user,
+			'auth_url' : auth_url,
+			'auth_text': auth_text,
+			'tag_user' : tag_user,
+			'tags'     : tag_list
+			}
+		path = os.path.join(os.path.dirname(__file__),'templates/'+user_lang+'/tag.html')
+		self.response.out.write(template.render(path,template_values))
 
 class AddForm(webapp.RequestHandler):
 	def get(self):
+		user_lang = 'en'
+
+		#********************** User Auth **************************#
+
 		user = users.get_current_user()
+		nickname = ''
 		if user:
 			nickname=user.nickname()
+		if nickname:
+			user_info = User.all().filter('user',nickname)
+			if user_info.count(1)>0:
+				user_info = user_info.get()
+				user_lang = user_info.lang
+			auth_url = users.create_logout_url(self.request.uri)
+			auth_text= 'signout'
+
 			key = self.request.get('key')
 			if key:
 				e = db.get(key)
@@ -196,6 +229,9 @@ class AddForm(webapp.RequestHandler):
 				tags  = ''
 			
 			template_values = {
+				'nickname' : nickname,
+				'auth_url' : auth_url,
+				'auth_text': auth_text,
 				'type'    : type,
 				'key'     : key,
 				'tag_list': Tag.all().filter("user",nickname).order('usetime'),
@@ -205,7 +241,7 @@ class AddForm(webapp.RequestHandler):
 				'content' : content,
 				'tags'    : tags
 				}
-			path = os.path.join(os.path.dirname(__file__),'templates/add.html')
+			path = os.path.join(os.path.dirname(__file__),'templates/'+user_lang+'/add.html')
 			self.response.out.write(template.render(path,template_values))
 		else:
 			self.redirect(users.create_login_url(self.request.uri))
@@ -213,8 +249,10 @@ class AddForm(webapp.RequestHandler):
 class AddAction(webapp.RequestHandler):
 	def post(self):
 		user = users.get_current_user()
+		nickname = ''
 		if user:
 			nickname=user.nickname()
+		if nickname:
 			key  = self.request.get('key')
 			if key :
 				e = db.get(key)
@@ -248,17 +286,17 @@ class AddAction(webapp.RequestHandler):
 						if result.status_code == 200:
 							e.image = db.Blob(result.content)
 					except :
-						self.response.out.write('抓取图片失败，有可能图片太大，或者网络不通！<br />您可以选择<a href="/add?type=pic">手动上传</a>方式！')
+						self.response.out.write('Fetch picture fail! You can choose to <a href="/add?type=pic">upload</a> menually')
 						return
 				else:
 					myfile = self.request.get("myfile")
 					if not myfile:
-						self.response.out.write( '没有选择文件！')
+						self.response.out.write( 'No file specified!')
 						return
 					try:
 						e.image = db.Blob(myfile)
 					except :
-						self.response.out.write( '文件上传失败！')
+						self.response.out.write( 'Uploading fail!')
 						return
 
 			if key:#更新数据
@@ -353,8 +391,31 @@ class DelKey(webapp.RequestHandler):
 
 class Help(webapp.RequestHandler):
 	def get(self):
-		path = os.path.join(os.path.dirname(__file__),'templates/help.html')
-		self.response.out.write(template.render(path,{}))
+		user_lang = 'en'
+
+		#********************** User Auth **************************#
+
+		user = users.get_current_user()
+		nickname = ''
+		if user:
+			nickname=user.nickname()
+		if nickname:
+			user_info = User.all().filter('user',nickname)
+			if user_info.count(1)>0:
+				user_info = user_info.get()
+				user_lang = user_info.lang
+			auth_url = users.create_logout_url(self.request.uri)
+			auth_text= 'signout'
+		else:
+			auth_url = users.create_login_url(self.request.uri)
+			auth_text= 'signin'
+		template_values = {
+			'nickname' : nickname,
+			'auth_url' : auth_url,
+			'auth_text': auth_text
+			}
+		path = os.path.join(os.path.dirname(__file__),'templates/'+user_lang+'/help.html')
+		self.response.out.write(template.render(path,template_values))
 
 class Image(webapp.RequestHandler):
 	def get(self):

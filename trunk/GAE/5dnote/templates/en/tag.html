@@ -1,25 +1,24 @@
 {% extends "base.html" %}
-{% block title %}{% if req_user %}我的标签{% else %}标签云{% endif %} - {{ block.super }}{% endblock %} 
 {% block content %}
 	<div id="searcher">
 		<ul>
 			{% if req_user %}
 			{% ifequal req_user nickname %}
-			<li><a href="/link/{{ req_user }}">我的网址</a></li>
-			<li><a href="/note/{{ req_user }}">我的网摘</a></li>
-			<li><a href="/pic/{{ req_user }}">我的图片</a></li>
-			<li><a href="/tag/{{ req_user }}" class="curr">我的标签</a></li>
+			<li><a href="/link/{{ req_user }}">My Links</a></li>
+			<li><a href="/note/{{ req_user }}">My Extracts</a></li>
+			<li><a href="/pic/{{ req_user }}">My Pictures</a></li>
+			<li><a href="/tag/{{ req_user }}" class="curr">My Tags</a></li>
 			{% else %}
-			<li><a href="/link/{{ req_user }}">TA的网址</a></li>
-			<li><a href="/note/{{ req_user }}">TA的网摘</a></li>
-			<li><a href="/pic/{{ req_user }}">TA的图片</a></li>
-			<li><a href="/tag/{{ req_user }}" class="curr">TA的标签</a></li>
+			<li><a href="/link/{{ req_user }}">His Links</a></li>
+			<li><a href="/note/{{ req_user }}">His Extracts</a></li>
+			<li><a href="/pic/{{ req_user }}">His Pictures</a></li>
+			<li><a href="/tag/{{ req_user }}" class="curr">His Tags</a></li>
 			{% endifequal %}
 			{% else %}
-			<li><a href="/">最新收藏</a></li>
-			<li><a href="/note/">最新网摘</a></li>
-			<li><a href="/pic/">最新图片</a></li>
-			<li><a href="/tag/" class="curr">标签云</a></li>
+			<li><a href="/">All Links</a></li>
+			<li><a href="/note/">All Extracts</a></li>
+			<li><a href="/pic/">All Pictures</a></li>
+			<li><a href="/tag/" class="curr">All Tags</a></li>
 			{% endif %}
 		</ul>
 		<!-- <form action="/search" method="get">
@@ -34,7 +33,7 @@
 	<div id="col_middle">
 		<div id="tagcloud">
 		{% for tag in tags %}
-			<a href="/{{ tag.type }}/{{ user }}/{{ tag.info.name }}" class="level{{ tag.level }}">{{ tag.info.name }}</a>
+			<a href="/{{ tag.type }}/{{ tag_user }}/{{ tag.info.name }}" class="level{{ tag.level }}">{{ tag.info.name }}</a>
 		{% endfor %}
 		</div>
 	</div>
