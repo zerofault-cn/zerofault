@@ -1,0 +1,141 @@
+{% extends "base.html" %}
+{% block title %}{% if req_user %}我的网摘{% else %}最新网摘{% endif %} - {{ block.super }}{% endblock %}
+{% block content %}
+	<div id="searcher">
+		<ul>
+			{% if req_user %}
+			{% ifequal req_user nickname %}
+			<li><a href="/link/{{ req_user }}">我的网址</a></li>
+			<li><a href="/note/{{ req_user }}" class="curr">我的网摘</a></li>
+			<li><a href="/pic/{{ req_user }}">我的图片</a></li>
+			<li><a href="/tag/{{ req_user }}">我的标签</a></li>
+			{% else %}
+			<li><a href="/link/{{ req_user }}">TA的网址</a></li>
+			<li><a href="/note/{{ req_user }}" class="curr">TA的网摘</a></li>
+			<li><a href="/pic/{{ req_user }}">TA的图片</a></li>
+			<li><a href="/tag/{{ req_user }}">TA的标签</a></li>
+			{% endifequal %}
+			{% else %}
+			<li><a href="/">最新收藏</a></li>
+			<li><a href="/note/" class="curr">最新网摘</a></li>
+			<li><a href="/pic/">最新图片</a></li>
+			<li><a href="/tag/">标签云</a></li>
+			{% endif %}
+		</ul>
+		<!-- <form action="/search" method="get">
+			<img src="/media/search_b.gif" alt="search button" />
+			<input type="text" id="searchBox" maxlength="15" name="s" />
+			<input src="/media/search.gif" id="submit" type="image" />
+		</form> -->
+	</div>
+
+	<div id="col_right">
+		<dl class="box" id="mytags">
+			<dt><span><a href="/tag/{{ req_user }}">Tag</a></span></dt>
+			<dd id="mytag">
+				<ul style="display: block;">
+					{% for tag_item in tag_list %}
+					{% if tag_item.count_note %}
+					<li><a href="/note/{% if not req_user %}all{% else %}{{ req_user }}{% endif %}/{{ tag_item.name }}">{{ tag_item.name }}</a><a class="num">{{ tag_item.count_note }}</a></li>
+					{% endif %}
+					{% endfor %}
+				</ul>
+			</dd>
+		</dl>
+
+		<div id="myicon">
+			<a href="/rss/{{ req_user }}" target="_blank"><img src="/media/rss.gif" alt="rss" class="rss" /></a>
+		</div>
+
+	</div>
+	<div id="col_middle">
+		<div class="page">
+{% if is_paginated %}
+	{% ifequal current_page 1 %}<span>|&lt;</span> 
+	{% else %} <a href="?page=1">|&lt;</a>
+	{% endifequal %}
+	{% if has_previous %} <a href="?p={{ previous_page }}">&lt;&lt;</a>
+	{% else %} <span>&lt;&lt;</span>
+	{% endif %}
+	{% for p in page_numbers %}
+		{% ifequal current_page p %}<span>{{ p }}</span>
+		{% else %}
+			{% ifequal p '...' %}
+			<span class="dot">...</span>
+			{% else %}
+			<a href="?p={{ p }}">{{ p }}</a>
+			{% endifequal %}
+		{% endifequal %}
+	{% endfor %}
+	{% if has_next %}<a href="?p={{ next_page }}">&gt;&gt;</a>
+	{% else %}<span>&gt;&gt;</span>
+	{% endif %}
+	{% ifequal current_page pages %}<span>&gt;|</span>
+	{% else %} <a href="?p={{ pages }}">&gt;|</a>
+	{% endifequal %}
+{% endif %}
+		</div>
+
+		<div id="links">
+		{% for item in entry_list %}
+			<dl class="item" id="item_{{ item.key }}">
+				<img class="icon" src="/media/file.png" />
+				<dt>
+					<strong>{{ item.title }}</strong>
+					{% if item.private %}
+					<img src="/media/lock.gif" align="absmiddle" />
+					{% endif %}
+					<br />
+					{{ item.addtime|date:"Y-m-d H:i:s" }}
+				</dt>
+				<dd class="content">{{ item.content|escape|linebreaksbr }}</dd>
+				<dd class="tags">
+					{% for tag in item.tags %}
+					[<a href="/note/{% if not req_user %}all{% else %}{{ req_user }}{% endif %}/{{ tag }}" class="tag">{{ tag }}</a>]
+					{% endfor %}
+					{% ifequal item.user nickname %}
+					... 
+					<a href="/add?key={{ item.key }}" class="edit">编辑</a>/ <a class="del" onClick="$('#del_{{ item.key }}').show()">删除</a>
+					<span class="edit" id='del_{{ item.key }}'><a onClick="submit_del(this)" value="{{ item.key }}" hhref="del?key={{ item.key }}" class="edit">确认</a> / <a onClick='$("#del_{{ item.key }}").hide()' class="edit">取消</a></span>
+					{% else %}
+					{% if not req_user %}
+					- <a href="/note/{{ item.user }}">{{ item.user }}</a>
+					{% endif %}
+					{% if nickname %}
+					... <a href="/add?key={{ item.key }}" class="edit">复制</a>
+					{% endif %}
+					{% endifequal %}
+				</dd>
+			</dl>
+			{% endfor %}
+		</div>
+
+		<div class="page">
+{% if is_paginated %}
+	{% ifequal current_page 1 %}<span>|&lt;</span> 
+	{% else %} <a href="?page=1">|&lt;</a>
+	{% endifequal %}
+	{% if has_previous %} <a href="?p={{ previous_page }}">&lt;&lt;</a>
+	{% else %} <span>&lt;&lt;</span>
+	{% endif %}
+	{% for p in page_numbers %}
+		{% ifequal current_page p %}<span>{{ p }}</span>
+		{% else %}
+			{% ifequal p '...' %}
+			<span class="dot">...</span>
+			{% else %}
+			<a href="?p={{ p }}">{{ p }}</a>
+			{% endifequal %}
+		{% endifequal %}
+	{% endfor %}
+	{% if has_next %}<a href="?p={{ next_page }}">&gt;&gt;</a>
+	{% else %}<span>&gt;&gt;</span>
+	{% endif %}
+	{% ifequal current_page pages %}<span>&gt;|</span>
+	{% else %} <a href="?p={{ pages }}">&gt;|</a>
+	{% endifequal %}
+{% endif %}
+		</div><span>共{{ count }}个记录</span>
+
+	</div>
+{% endblock %}

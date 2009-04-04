@@ -1,0 +1,126 @@
+{% extends "base.html" %}
+{% block title %}{% if key %}Modify an item{% else %}Add an item{% endif %} - {{ block.super }}{% endblock %} 
+{% block content %}
+	<form name="form1" action="submit" method="post" enctype="multipart/form-data">
+	<input type="hidden" name="type" value="{{ type }}" />
+	<input type="hidden" name="key" value="{{ key }}" />
+	<input type="hidden" name="private" value="0" />
+	<input type="hidden" name="tz" id="tz" value="+0" />
+	<input type="hidden" name="lang" id="lang" value="en" />
+	<div id="form">
+		<div class="line">
+			<div class="d1">Title: </div>
+			<div class="d2"><input type="text" id="title" name="title" maxlength="250"  value="{{ title }}"/></div>
+		</div>
+		{% ifequal type 'note' %}
+		<div class="line">
+			<div class="d1">Content: </div>
+			<div class="d2">
+				<textarea name="content" id="content" rows="9" cols="40">{{ content }}</textarea>
+			</div>
+			<input type="hidden" name="url" value="{{ url }}"/>
+		</div>
+		{% else %}
+		{% ifequal type 'pic' %}
+		<div class="line">
+			<div class="d1">Images: </div>
+			<div class="d2">
+				{% if key %}
+				<img id="rimage" src="/img?key={{ key }}" oonload="resize(this)"/>
+				{% else %}
+				{% if url %}
+				<img id="rimage" src="{{ url }}" max-width="360" oonload="resize(this)"/><input type="hidden" name="url" value="{{ url }}"/><input type="hidden" name="purl" value="{{ purl }}"/>
+				{% else %}
+				<input type="file" id="myfile" name="myfile" size="56"/>
+				{% endif %}
+				{% endif %}
+			</div>
+			
+		</div>
+		<div class="line">
+			<div class="d1">Comment: </div>
+			<div class="d2"><textarea name="content" id="content" rows="3" cols="40">{{ content }}</textarea></div>
+		</div>
+		{% else %}
+		<div class="line">
+			<div class="d1">URL: </div>
+			<div class="d2"><input type="text" id="url" name="url" maxlength="180" size="50" value="{{ url }}"/></div>
+		</div>
+		<div class="line">
+			<div class="d1">Comment: </div>
+			<div class="d2"><textarea name="content" id="content" rows="5" cols="40">{{ content }}</textarea></div>
+		</div>
+		{% endifequal %}
+		{% endifequal %}
+		<div class="line">
+			<div class="d1">Tags: </div>
+			<div class="d2"><input type="text" id="tags" name="tags" value="{{ tags }}" maxlength="100" size="50" autocomplete="off" /></div>
+			<div class="clear"></div>
+		</div>
+		<div class="sure"><input type="submit" name="Share" value="Public" />
+			<input type="button" name="Prv" class="private" value="Private" onclick="javascript:document.form1.private.value=1;document.form1.submit();"/>
+		</div>
+	</div>
+	</form>
+	<div id="mytags2"><span>My Tags: ( {% if tag_list.length %}click to add{% else %}None{% endif %} )</span>
+	{% for tag_name in tag_list %}
+		<a href="javascript:void(0)" onFocus="this.blur()">{{ tag_name.name }}</a>
+	{% endfor %}
+	</div>
+<script type="text/javascript" defer>
+$(document).ready(function(){
+	var tags=$("input[name=tags]").val();
+	tag_array=tags.split(' ');
+	$("#mytags2 a").each(function(){
+		for(var key in tag_array)
+		{
+			if( tag_array[key] != '' && tag_array[key]==$(this).text() )
+			{
+				$(this).addClass('focus');
+			}
+		}
+		$(this).click(function(){
+			s_tag=$(this).text()+' ';
+			if(tags.indexOf(s_tag)>=0)
+			{
+				tags=tags.replace(s_tag,'');
+				$(this).removeClass('focus');
+			}
+			else
+			{
+				tags+=s_tag;
+				$(this).addClass('focus');
+			}
+			$("input[name=tags]").val(tags);
+		});
+	});
+	if($("#rimage").width()>360)
+	{
+		$("#rimage").width(360);
+	}
+	$("#tz").val(getTZ());
+	$("#lang").val(window.navigator.systemLanguage);
+});
+function resize(obj)
+{
+	//alert($("#rimage").width()>360);
+	if($("#rimage").width()>360)
+	{
+		$("#rimage").width(360);
+	}
+}
+function getTZ(){
+	var d, tz;
+	d = new Date();
+	tz = d.getTimezoneOffset();
+	if (tz < 0)
+		s = '+' + Math.abs(tz) / 60;
+	else if (tz == 0)
+		s = '+0';
+	else
+		s = '-' + Math.abs(tz) / 60;
+	return s;
+}
+
+</script>
+{% endblock %}

@@ -1,0 +1,147 @@
+{% extends "base.html" %}
+{% block content %}
+	<div id="searcher">
+		<ul>
+			{% if req_user %}
+			{% ifequal req_user nickname %}
+			<li><a href="/link/{{ req_user }}" class="curr">My Links</a></li>
+			<li><a href="/note/{{ req_user }}">My Extracts</a></li>
+			<li><a href="/pic/{{ req_user }}">My Pictures</a></li>
+			<li><a href="/tag/{{ req_user }}">My Tags</a></li>
+			{% else %}
+			<li><a href="/link/{{ req_user }}" class="curr">His Links</a></li>
+			<li><a href="/note/{{ req_user }}">His Extracts</a></li>
+			<li><a href="/pic/{{ req_user }}">His Pictures</a></li>
+			<li><a href="/tag/{{ req_user }}">His Tags</a></li>
+			{% endifequal %}
+			{% else %}
+			<li><a href="/" class="curr">All Links</a></li>
+			<li><a href="/note/">All Extracts</a></li>
+			<li><a href="/pic/">All Pictures</a></li>
+			<li><a href="/tag/">All Tags</a></li>
+			{% endif %}
+		</ul>
+		<!-- <form action="/search" method="get">
+			<img src="/media/search_b.gif" alt="search button" />
+			<input type="text" id="searchBox" maxlength="15" name="s" />
+			<input src="/media/search.gif" id="submit" type="image" />
+		</form> -->
+	</div>
+
+	<div id="col_right">
+		<dl class="box" id="mytags">
+			<dt><span><a href="/tag/{{ req_user }}">Tag</a></span></dt>
+			<dd id="mytag">
+				<ul style="display: block;">
+					{% for tag_item in tag_list %}
+					{% if tag_item.count_link %}
+					<li><a href="/link/{% if not req_user %}all{% else %}{{ req_user }}{% endif %}/{{ tag_item.name }}">{{ tag_item.name }}</a><a class="num">{{ tag_item.count_link }}</a></li>
+					{% endif %}
+					{% endfor %}
+				</ul>
+			</dd>
+		</dl>
+
+		<!-- <dl class="box" id="myfriends">
+			<dt><span>固定链接</span></dt>
+			<dd id="myfriend">
+				<ul>
+				</ul>
+			</dd>
+		</dl> -->
+
+		<div id="myicon">
+			<a href="/rss/{% if not req_user %}all{% else %}{{ req_user }}{% endif %}" target="_blank"><img src="/media/rss.gif" alt="rss" class="rss" /></a>
+		</div>
+
+	</div>
+	<div id="col_middle">
+		<div class="page">
+{% if is_paginated %}
+	{% ifequal current_page 1 %}<span>|&lt;</span> 
+	{% else %} <a href="?page=1">|&lt;</a>
+	{% endifequal %}
+	{% if has_previous %} <a href="?p={{ previous_page }}">&lt;&lt;</a>
+	{% else %} <span>&lt;&lt;</span>
+	{% endif %}
+	{% for p in page_numbers %}
+		{% ifequal current_page p %}<span>{{ p }}</span>
+		{% else %}
+			{% ifequal p '...' %}
+			<span class="dot">...</span>
+			{% else %}
+			<a href="?p={{ p }}">{{ p }}</a>
+			{% endifequal %}
+		{% endifequal %}
+	{% endfor %}
+	{% if has_next %}<a href="?p={{ next_page }}">&gt;&gt;</a>
+	{% else %}<span>&gt;&gt;</span>
+	{% endif %}
+	{% ifequal current_page pages %}<span>&gt;|</span>
+	{% else %} <a href="?p={{ pages }}">&gt;|</a>
+	{% endifequal %}
+{% endif %}
+		</div>
+
+		<div id="links">
+		{% for item in entry_list %}
+			<dl class="item" id="item_{{ item.key }}">
+				<img class="icon" src="/media/htm.gif" />
+				<dt>
+					<a href="{{item.url}}" target="_blank">{{ item.title }}</a>
+					{% if item.private %}
+					<img src="/media/lock.gif" align="absmiddle" />
+					{% endif %}
+					{{ item.addtime|date:"Y-m-d H:i:s" }}
+				</dt>
+				<dd class="content">{% ifequal item.type 'pic' %}<img src="/img?key={{ item.key }}" width="400" /><br />{% endifequal %}{{ item.content|escape|linebreaksbr }}</dd>
+				<dd class="tags">
+					{% for tag in item.tags %}
+					[<a href="/link/{% if not req_user %}all{% else %}{{ req_user }}{% endif %}/{{ tag }}" class="tag">{{ tag }}</a>]
+					{% endfor %}
+					{% ifequal item.user nickname %}
+					... 
+					<a href="/add?key={{ item.key }}" class="edit">Edit</a>/ <a class="del" onClick="$('#del_{{ item.key }}').show()">Delete</a>
+					<span class="edit" id='del_{{ item.key }}'><a onClick="submit_del(this)" value="{{ item.key }}" hhref="del?key={{ item.key }}" class="edit">Confirm</a> / <a onClick='$("#del_{{ item.key }}").hide()' class="edit">Cancel</a></span>
+					{% else %}
+					{% if not req_user %}
+					- <a href="/link/{{ item.user }}">{{ item.user }}</a>
+					{% endif %}
+					{% if nickname %}
+					... <a href="/add?key={{ item.key }}" class="edit">Duplicate</a>
+					{% endif %}
+					{% endifequal %}
+				</dd>
+			</dl>
+			{% endfor %}
+		</div>
+
+		<div class="page">
+{% if is_paginated %}
+	{% ifequal current_page 1 %}<span>|&lt;</span> 
+	{% else %} <a href="?page=1">|&lt;</a>
+	{% endifequal %}
+	{% if has_previous %} <a href="?p={{ previous_page }}">&lt;&lt;</a>
+	{% else %} <span>&lt;&lt;</span>
+	{% endif %}
+	{% for p in page_numbers %}
+		{% ifequal current_page p %}<span>{{ p }}</span>
+		{% else %}
+			{% ifequal p '...' %}
+			<span class="dot">...</span>
+			{% else %}
+			<a href="?p={{ p }}">{{ p }}</a>
+			{% endifequal %}
+		{% endifequal %}
+	{% endfor %}
+	{% if has_next %}<a href="?p={{ next_page }}">&gt;&gt;</a>
+	{% else %}<span>&gt;&gt;</span>
+	{% endif %}
+	{% ifequal current_page pages %}<span>&gt;|</span>
+	{% else %} <a href="?p={{ pages }}">&gt;|</a>
+	{% endifequal %}
+{% endif %}
+		</div><span>{{ count }} items in all</span>
+
+	</div>
+{% endblock %}

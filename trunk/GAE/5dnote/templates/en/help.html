@@ -1,0 +1,67 @@
+{% extends "base.html" %}{% block title %}使用帮助 - {{ block.super }}{% endblock %}
+{% block content %}
+	<div id="searcher">
+		<ul>
+			<li><a href="/">最新收藏</a></li>
+			<li><a href="/note/">最新网摘</a></li>
+			<li><a href="/pic/">最新图片</a></li>
+			<li><a href="/tag/">标签云</a></li>
+		</ul>
+		<!-- <form action="/search" method="get">
+			<img src="/media/search_b.gif" alt="search button" />
+			<input type="text" id="searchBox" maxlength="15" name="s" />
+			<input src="/media/search.gif" id="submit" type="image" />
+		</form> -->
+	</div>
+	
+	<div id="col_right">
+	</div>
+	<div id="col_middle">
+		<div id="help">
+			<dl>
+				<dt>使用前提醒您：</dt>
+				<dd><p>A google account is required to sign in. If you don't have an gmail account, you can register any email with google and use that to sign in. 5dnote will not ask for your password, and does not have access to your google account. </p><br />
+				<p>您需要有一个Google帐号来使用本站服务！如果您暂时还没有，请先去Google<a href="http://mail.google.com/mail/signup" target="_blank">注册</a>一个。登录过程是在Google上完成，5dnote不会要求你输入任何密码信息，也不会访问您的Google帐户！</p></dd>
+			</dl>
+			<dl>
+				<dt>方法一：右键添加方式 </dt>
+				<dd>
+					<p>首先，如果你是使用IE核心的浏览器，请下载<u><a href="media/Add.reg">注册表文件Add.reg</a></u>到本地，双击"Add.reg"并安装。 Mozilla或Firefox用户，请<u><a href="media/AddPlugin.xpi">点此</a></u>直接安装！<br />
+					安装完后，重新打开网页浏览器，右键菜单中将出现“收藏网址到5dnote”、“收藏图片到5dnote”和“收藏网摘到5dnote”等菜单项目（后两个依据右键点击的位置的不同有可能不会同时出现）</p>
+					<dl>
+						<dt>1，收藏链接</dt>
+						<dd>
+							<p>在网页空白位置点右键，（或选中一段文字后点右键），选“收藏网址到5dnote”，如图1：<br /><img src="media/addlink.jpg"/></p>
+							<p>点击后会弹出一个网页窗口，首次使用时会先打开Google帐号的登录界面，登录你的Gmail帐号即可，然后将显示一个提交表单，标题和链接已经被自动填充，网页上被选择的文字将被自动填充到描述框里，你可以给你的收藏加个标签，方便归类和查找；点“共享”按钮提交，所有人可见；如果点“私有”，将只有在自己登录后才可见。</p>
+						</dd>
+						<dt>2，收藏图片</dt>
+						<dd>
+							<p>在图片上点右键，右键菜单中将会多出一个项目“收藏图片到5dnote”，操作如图2：<br /><img src="media/addpic.jpg" /></p>
+							<p>友情提示：图片将被永久保存到Google的服务器上，并可以随意外链，不过图片最大不能超过1M</p>
+							
+						</dd>
+						<dt>3，收藏文字</dt>
+						<dd>
+							<p>在一段选中的文字上点右键，右键菜单中将会多出一个项目“收藏网摘到5dnote”，操作如图3：<br /><img src="media/addtext.jpg" /></p>
+							<p>此种方式最适合添加网上随处看到的有趣的文字、签名档、小故事等</p>
+						</dd>
+					</dl>
+				</dd>
+				
+				<dd>移除菜单：下载<a href="media/Remove.reg">注册表文件Remove.reg</a>并双击执行即可</dd>
+			</dl>
+
+
+			<dl>
+				<dt>方法二：直接添加收藏 </dt>
+				<dd>如果你还没登录，请先点页面右上方的“登录”，如果已经登录，请点击页面右上方的“添加”，后面的步骤和前面相似。</dd>
+
+			</dl>
+			<dl>
+				<dt>方法三：复制别人的收藏 </dt>
+				<dd>登录后，查看其他人的共享收藏时，可以通过点击“复制”，将它收藏到自己的收藏夹里！</dd>
+			</dl>
+		</div>
+	</div>
+
+{% endblock %}
