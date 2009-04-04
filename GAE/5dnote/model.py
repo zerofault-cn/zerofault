@@ -26,4 +26,4 @@ class Tag(db.Model):
 class User(db.Model):
 	user = db.StringProperty()
 	lang = db.StringProperty(default='en',choices=['en','zh-cn'])
-	timezone=db.IntegerProperty(default=+8)
+	tz   =db.IntegerProperty(default=+8)

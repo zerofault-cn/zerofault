@@ -62,7 +62,7 @@
 		</div>
 	</div>
 	</form>
-	<div id="mytags2"><span>My Tags: ( {% if tag_list.length %}click to add{% else %}None{% endif %} )</span>
+	<div id="mytags2"><span>My Tags: ( {% if tag_list.count %}click to add{% else %}None{% endif %} )</span>
 	{% for tag_name in tag_list %}
 		<a href="javascript:void(0)" onFocus="this.blur()">{{ tag_name.name }}</a>
 	{% endfor %}

@@ -1,25 +1,24 @@
 {% extends "base.html" %}
-{% block title %}{% if req_user %}我的图片{% else %}最新图片{% endif %} - {{ block.super }}{% endblock %}
 {% block content %}
 	<div id="searcher">
 		<ul>
 			{% if req_user %}
 			{% ifequal req_user nickname %}
-			<li><a href="/link/{{ req_user }}">我的网址</a></li>
-			<li><a href="/note/{{ req_user }}">我的网摘</a></li>
-			<li><a href="/pic/{{ req_user }}" class="curr">我的图片</a></li>
-			<li><a href="/tag/{{ req_user }}">我的标签</a></li>
+			<li><a href="/link/{{ req_user }}">My Links</a></li>
+			<li><a href="/note/{{ req_user }}">My Extracts</a></li>
+			<li><a href="/pic/{{ req_user }}" class="curr">My Pictures</a></li>
+			<li><a href="/tag/{{ req_user }}">My Tags</a></li>
 			{% else %}
-			<li><a href="/link/{{ req_user }}">TA的网址</a></li>
-			<li><a href="/note/{{ req_user }}">TA的网摘</a></li>
-			<li><a href="/pic/{{ req_user }}" class="curr">TA的图片</a></li>
-			<li><a href="/tag/{{ req_user }}">TA的标签</a></li>
+			<li><a href="/link/{{ req_user }}">His Links</a></li>
+			<li><a href="/note/{{ req_user }}">His Extracts</a></li>
+			<li><a href="/pic/{{ req_user }}" class="curr">His Pictures</a></li>
+			<li><a href="/tag/{{ req_user }}">His Tags</a></li>
 			{% endifequal %}
 			{% else %}
-			<li><a href="/">最新收藏</a></li>
-			<li><a href="/note/">最新网摘</a></li>
-			<li><a href="/pic/" class="curr">最新图片</a></li>
-			<li><a href="/tag/">标签云</a></li>
+			<li><a href="/">All Links</a></li>
+			<li><a href="/note/">All Extracts</a></li>
+			<li><a href="/pic/" class="curr">All Pictures</a></li>
+			<li><a href="/tag/">All Tags</a></li>
 			{% endif %}
 		</ul>
 		<!-- <form action="/search" method="get">
@@ -82,7 +81,7 @@
 				<img class="icon" src="/media/jpg.gif" />
 				<dt>
 					{% if item.url %}
-					<a href="{{item.url}}" target="_blank" title="点击打开图片引用页">{{ item.title }}</a>
+					<a href="{{item.url}}" target="_blank" title="Click to open the refer page">{{ item.title }}</a>
 					{% else %}
 					{{ item.title }}
 					{% endif %}
@@ -92,7 +91,7 @@
 					<br />{{ item.addtime|date:"Y-m-d H:i:s" }}
 				</dt>
 				<dd class="image">
-					<a href="/img?key={{ item.key }}" target="_blank" title="点击查看大图"><img src="/img?key={{ item.key }}" alt="{{ item.title }}" width="192"/></a>
+					<a href="/img?key={{ item.key }}" target="_blank" title="Click to open the original picture"><img src="/img?key={{ item.key }}" alt="{{ item.title }}" width="192"/></a>
 				</dd>
 				<dd class="content">
 					{{ item.content|escape|linebreaksbr }}
@@ -103,14 +102,14 @@
 					{% endfor %}
 					{% ifequal item.user nickname %}
 					... 
-					<a href="/add?key={{ item.key }}" class="edit">编辑</a>/ <a class="del" onClick="$('#del_{{ item.key }}').show()">删除</a>
-					<span class="edit" id='del_{{ item.key }}'><a onClick="submit_del(this)" value="{{ item.key }}" hhref="del?key={{ item.key }}" class="edit">确认</a> / <a onClick='$("#del_{{ item.key }}").hide()' class="edit">取消</a></span>
+					<a href="/add?key={{ item.key }}" class="edit">Edit</a>/ <a class="del" onClick="$('#del_{{ item.key }}').show()">Delete</a>
+					<span class="edit" id='del_{{ item.key }}'><a onClick="submit_del(this)" value="{{ item.key }}" hhref="del?key={{ item.key }}" class="edit">Confirm</a> / <a onClick='$("#del_{{ item.key }}").hide()' class="edit">Cancel</a></span>
 					{% else %}
 					{% if not req_user %}
 					- <a href="/pic/{{ item.user }}">{{ item.user }}</a>
 					{% endif %}
 					{% if nickname %}
-					... <a href="/add?key={{ item.key }}" class="edit">复制</a>
+					... <a href="/add?key={{ item.key }}" class="edit">Duplicate</a>
 					{% endif %}
 					{% endifequal %}
 				</dd>
@@ -144,7 +143,7 @@
 	{% else %} <a href="?p={{ pages }}">&gt;|</a>
 	{% endifequal %}
 {% endif %}
-		</div><span>共{{ count }}个记录</span>
+		</div><span>{{ count }} items in all</span>
 
 	</div>
 {% endblock %}
