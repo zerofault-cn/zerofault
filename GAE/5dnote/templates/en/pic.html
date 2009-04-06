@@ -91,7 +91,7 @@
 					<br />{{ item.addtime|date:"Y-m-d H:i:s" }}
 				</dt>
 				<dd class="image">
-					<a href="/img?key={{ item.key }}" target="_blank" title="Click to open the original picture"><img src="/img?key={{ item.key }}" alt="{{ item.title }}" width="192"/></a>
+					<a href="/img?key={{ item.key }}" title="{{ item.title }}"><img src="/img?key={{ item.key }}" alt="{{ item.title }}" width="192"/></a>
 				</dd>
 				<dd class="content">
 					{{ item.content|escape|linebreaksbr }}
@@ -146,4 +146,9 @@
 		</div><span>{{ count }} items in all</span>
 
 	</div>
+	<script type="text/javascript">
+	$(function() {
+		$('#pics .image a').lightBox();
+	});
+	</script>
 {% endblock %}
