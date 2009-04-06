@@ -109,7 +109,7 @@ class Index(webapp.RequestHandler):
 		if req_user:
 			tag_list = Tag.all().filter("user",req_user).order("usetime")
 		else:
-			tag_list = Tag.all().order("usetime")
+			tag_list = Tag.all().order("-count_"+req_type)
 		
 		template_values = {
 			'nickname' : nickname,
