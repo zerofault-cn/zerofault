@@ -109,7 +109,7 @@ class Index(webapp.RequestHandler):
 			'auth_url' : auth_url,
 			'auth_text': auth_text,
 			'entry_list': e,
-			'tag_list' : Tag.all().order("usetime"),
+			'tag_list' : Tag.all().order("-count_"+req_type),
 			'is_paginated':  page_count> 1,
 			'has_next': p*limit < item_count,
 			'has_previous': p > 1,
