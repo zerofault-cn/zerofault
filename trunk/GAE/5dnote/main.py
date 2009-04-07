@@ -8,6 +8,7 @@ import Cookie
 from google.appengine.api import users
 from google.appengine.api import urlfetch
 from google.appengine.api import images
+from google.appengine.api import memcache
 from google.appengine.ext import webapp
 from google.appengine.ext import search
 from google.appengine.ext.webapp import template
@@ -33,7 +34,6 @@ class Index(webapp.RequestHandler):
 	def get(self,req_type='link',req_user='',req_tag=''):
 
 		user_lang = 'en'
-
 		#********************** User Auth **************************#
 
 		user = users.get_current_user()
@@ -66,7 +66,6 @@ class Index(webapp.RequestHandler):
 			req_user = ''
 		if req_user:
 			e = e.filter("user",req_user)
-
 		if req_tag:
 			e = e.filter("tags", unquote(req_tag).decode('utf-8'))
 		if not nickname:
@@ -135,9 +134,7 @@ class Index(webapp.RequestHandler):
 class TagList(webapp.RequestHandler):
 	def get(self,req_user=''):
 		user_lang = 'en'
-
 		#********************** User Auth **************************#
-
 		user = users.get_current_user()
 		nickname = ''
 		if user:
@@ -193,9 +190,7 @@ class TagList(webapp.RequestHandler):
 class AddForm(webapp.RequestHandler):
 	def get(self):
 		user_lang = 'en'
-
 		#********************** User Auth **************************#
-
 		user = users.get_current_user()
 		nickname = ''
 		if user:
@@ -248,6 +243,7 @@ class AddForm(webapp.RequestHandler):
 
 class AddAction(webapp.RequestHandler):
 	def post(self):
+		#********************** User Auth **************************#
 		user = users.get_current_user()
 		nickname = ''
 		if user:
@@ -286,7 +282,7 @@ class AddAction(webapp.RequestHandler):
 						if result.status_code == 200:
 							e.image = db.Blob(result.content)
 					except :
-						self.response.out.write('Fetch picture fail! You can choose to <a href="/add?type=pic">upload</a> menually')
+						self.response.out.write('Fetch picture fail! You can <a href="/add?type=pic">upload</a> menually')
 						return
 				else:
 					myfile = self.request.get("myfile")
@@ -386,8 +382,26 @@ class DelKey(webapp.RequestHandler):
 					self.response.out.write('-1')
 			else:
 				self.response.out.write('0')
+			memcache.delete(key)
 		else:
 			self.response.out.write('0')
+
+class Image(webapp.RequestHandler):
+	def get(self):
+		key = self.request.get('key')
+		if key:
+			data = memcache.get(key)
+			if data is None:
+				e = db.get(key)
+				data = e.image
+				memcache.add(key, data, 30*24*3600)
+			#img = images.Image(e.image)
+			#img.resize(width=400, height=300)
+			#tumbimg = img.execute_transforms(output_encoding=images.JPEG)
+			self.response.headers['Content-Type'] = 'image/jpeg'
+			self.response.out.write(data)
+		else:
+			self.redirect('/media/logo.gif')
 
 class Help(webapp.RequestHandler):
 	def get(self):
@@ -417,42 +431,6 @@ class Help(webapp.RequestHandler):
 		path = os.path.join(os.path.dirname(__file__),'templates/'+user_lang+'/help.html')
 		self.response.out.write(template.render(path,template_values))
 
-class Image(webapp.RequestHandler):
-	def get(self):
-		key = self.request.get('key')
-		if key:
-			e = db.get(key)
-			#img = images.Image(e.image)
-			#img.resize(width=400, height=300)
-			#tumbimg = img.execute_transforms(output_encoding=images.JPEG)
-			self.response.headers['Content-Type'] = 'image/jpeg'
-			self.response.out.write(e.image)
-		else:
-			self.redirect('/media/logo.gif')
-
-class Update(webapp.RequestHandler):
-	def get(self):
-		if users.is_current_user_admin():
-			limit = 100;
-			p = self.request.get('p')
-			if not p:
-				p=1
-			else:
-				p = int(p)
-			offset = (p-1)*limit
-			entry = Entry.all().fetch(limit,offset)
-			i=1
-			for e in entry:
-				self.response.out.write(i)
-				self.response.out.write(':')
-				self.response.out.write(e.addtime)
-				self.response.out.write('→')
-				e.addtime +=datetime.timedelta(hours=+8)
-				e.put()
-				self.response.out.write(e.addtime)
-				self.response.out.write('<br />')
-				i+=1
-
 application = webapp.WSGIApplication([
 	('/', Index),
 	('/add', AddForm),
@@ -461,7 +439,6 @@ application = webapp.WSGIApplication([
 	('/tag/(.*)', TagList),#所有用户：/tag/；单个用户：/tag/username
 	('/help',Help),
 	('/img', Image),
-	('/update', Update),
 	('/(link|note|pic){1}/(.*)/(.*)', Index),	#所有用户：/note/all/tag；单个用户：/note/user/tag
 	('/(link|note|pic){1}/(.*)', Index)			#所有用户：/note/；单个用户：/note/user
 	],debug=True)
