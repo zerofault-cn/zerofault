@@ -4,9 +4,11 @@ import os
 import math
 import datetime
 
+
 from google.appengine.api import users
 from google.appengine.api import urlfetch
 from google.appengine.api import images
+from google.appengine.api import memcache
 from google.appengine.ext import webapp
 from google.appengine.ext import search
 from google.appengine.ext.webapp import template
@@ -44,6 +46,11 @@ class Index(webapp.RequestHandler):
 			auth_url = users.create_login_url(self.request.uri)
 			auth_text= '登录'
 
+
+
+
+
+
 		#********************** Pagenator init**************************#
 		limit = 20;
 		p = self.request.get('p')
@@ -55,6 +62,7 @@ class Index(webapp.RequestHandler):
 		
 		#********************** Query **************************#
 		e = Entry.all().filter('type',req_type).order("-addtime")
+
 
 
 
@@ -125,9 +133,28 @@ class Index(webapp.RequestHandler):
 
 class TagList(webapp.RequestHandler):
 	def get(self):
-		entry_count =Entry.all().count(1000)
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+		entry_count =Entry.all().count(1000)
 		tags = Tag.all().order('usetime')
+
+
+
 
 
 		tags_count = tags.count(1000)
@@ -149,14 +176,32 @@ class TagList(webapp.RequestHandler):
 				"type":max_type,
 				"level":tag_count/(entry_count/tags_count)
 				})
+		template_values = {
+			'tags'     : tag_list
+			}
+
+
+
+
 
 		path = os.path.join(os.path.dirname(__file__),'templates/tag.html')
-		self.response.out.write(template.render(path,{'tags':tag_list}))
+		self.response.out.write(template.render(path,template_values))
 
 class AddForm(webapp.RequestHandler):
 	def get(self):
 
+
+
+
 		if users.is_current_user_admin():
+
+
+
+
+
+
+
+
 
 			key = self.request.get('key')
 			if key:
@@ -188,6 +233,9 @@ class AddForm(webapp.RequestHandler):
 				'content' : content,
 				'tags'    : tags
 				}
+
+
+
 			path = os.path.join(os.path.dirname(__file__),'templates/add.html')
 			self.response.out.write(template.render(path,template_values))
 		else:
@@ -196,8 +244,11 @@ class AddForm(webapp.RequestHandler):
 class AddAction(webapp.RequestHandler):
 	def post(self):
 
-		if users.is_current_user_admin():
 
+
+
+
+		if users.is_current_user_admin():
 			key  = self.request.get('key')
 			if key :
 				e = db.get(key)
@@ -331,6 +382,7 @@ class DelKey(webapp.RequestHandler):
 
 			else:
 				self.response.out.write('0')
+			memcache.delete(key)
 		else:
 			self.response.out.write('0')
 
@@ -338,12 +390,16 @@ class Image(webapp.RequestHandler):
 	def get(self):
 		key = self.request.get('key')
 		if key:
-			e = db.get(key)
+			data = memcache.get(key)
+			if data is None:
+				e = db.get(key)
+				data = e.image
+				memcache.add(key, data, 30*24*3600)
 			#img = images.Image(e.image)
 			#img.resize(width=400, height=300)
 			#tumbimg = img.execute_transforms(output_encoding=images.JPEG)
 			self.response.headers['Content-Type'] = 'image/jpeg'
-			self.response.out.write(e.image)
+			self.response.out.write(data)
 		else:
 			self.redirect('/media/logo.gif')
 
