@@ -59,7 +59,7 @@ indexes:
   - name: addtime
     direction: desc
 
-# Used 61 times in query history.
+# Used 67 times in query history.
 - kind: Entry
   properties:
   - name: private
@@ -108,7 +108,7 @@ indexes:
   - name: addtime
     direction: desc
 
-# Used 104 times in query history.
+# Used 128 times in query history.
 - kind: Entry
   properties:
   - name: type
@@ -123,7 +123,7 @@ indexes:
   - name: addtime
     direction: desc
 
-# Used 3 times in query history.
+# Used 10 times in query history.
 - kind: Tag
   properties:
   - name: count_link
@@ -135,7 +135,7 @@ indexes:
   - name: count_note
     direction: desc
 
-# Used 8 times in query history.
+# Used 11 times in query history.
 - kind: Tag
   properties:
   - name: count_pic
