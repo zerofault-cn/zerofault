@@ -17,6 +17,7 @@
 	<div id="toper">
 		<a href="/" id="logo"><img alt="my favorites" src="/media/logo.gif" /></a>
 		{% if nickname %}
+			<a href="/set?lang=zh-cn">简体中文</a>&nbsp;&nbsp;
 			<a href="/link/{{ nickname }}" style="font-weight:bold">{{ nickname }}</a>
 			<a href="/add?type={{ req_type }}">Add</a>
 		{% endif %}

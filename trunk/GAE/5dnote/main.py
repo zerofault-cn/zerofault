@@ -261,6 +261,14 @@ class AddAction(webapp.RequestHandler):
 			type = self.request.get('type')
 			if not type:
 				type = 'link'
+			tz = self.request.get('tz')
+			if tz[0:1]=='-':
+				tz = int(tz[1:])
+				tz = -tz
+			else:
+				tz = int(tz[1:])
+				tz = +tz
+			
 			title = self.request.get('title')
 			e.title = title.replace('&','&amp;').replace('<','&lt;').replace('>','&gt;')
 			url = self.request.get('url')
@@ -272,7 +280,7 @@ class AddAction(webapp.RequestHandler):
 			content = self.request.get('content')
 			e.content = content
 			if not key:
-				e.addtime +=datetime.timedelta(hours=+8)
+				e.addtime +=datetime.timedelta(hours=tz)
 			e.private = bool(int(self.request.get('private')))
 			e.type = type
 			if type =='pic' and not key:
@@ -403,12 +411,34 @@ class Image(webapp.RequestHandler):
 		else:
 			self.redirect('/media/logo.gif')
 
+class Set(webapp.RequestHandler):
+	def get(self):
+		lang = self.request.get('lang')
+		if not lang:
+			lang ='en'
+		#********************** User Auth **************************#
+		user = users.get_current_user()
+		nickname = ''
+		if user:
+			nickname=user.nickname()
+		if nickname:
+			user_info = User.all().filter('user',nickname)
+			if user_info.count(1)>0:
+				user_info = user_info.get()
+				user_info.lang = lang
+				user_info.put()
+			else:
+				user_info =User();
+				user_info.user = nickname
+				user_info.lang = lang
+				user_info.put()
+			self.redirect('/link/'+nickname)
+		self.redirect('/')
+
 class Help(webapp.RequestHandler):
 	def get(self):
 		user_lang = 'en'
-
 		#********************** User Auth **************************#
-
 		user = users.get_current_user()
 		nickname = ''
 		if user:
@@ -433,6 +463,7 @@ class Help(webapp.RequestHandler):
 
 application = webapp.WSGIApplication([
 	('/', Index),
+	('/set', Set),
 	('/add', AddForm),
 	('/submit', AddAction),
 	('/delkey', DelKey),
