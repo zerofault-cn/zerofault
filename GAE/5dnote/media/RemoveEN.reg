@@ -1,9 +1,9 @@
 REGEDIT4
 
-[-HKEY_CURRENT_USER\Software\Microsoft\Internet Explorer\MenuExt\Add this page to 5dnote]
+[-HKEY_CURRENT_USER\Software\Microsoft\Internet Explorer\MenuExt\Share this page to 5dnote]
 
-[-HKEY_CURRENT_USER\Software\Microsoft\Internet Explorer\MenuExt\Add picture to 5dnote]
+[-HKEY_CURRENT_USER\Software\Microsoft\Internet Explorer\MenuExt\Share this picture to 5dnote]
 
-[-HKEY_CURRENT_USER\Software\Microsoft\Internet Explorer\MenuExt\Add selection to 5dnote]
+[-HKEY_CURRENT_USER\Software\Microsoft\Internet Explorer\MenuExt\Share my selection to 5dnote]
 
-[-HKEY_CURRENT_USER\Software\Microsoft\Internet Explorer\MenuExt\Add link to 5dnote]
+[-HKEY_CURRENT_USER\Software\Microsoft\Internet Explorer\MenuExt\Share this link to 5dnote]
