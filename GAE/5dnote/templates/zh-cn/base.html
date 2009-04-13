@@ -15,7 +15,7 @@
 	<div id="toper">
 		<a href="/" id="logo"><img alt="my favorites" src="/media/logo.gif" /></a>
 		{% if nickname %}
-			<a href="/set?lang=en">English</a>&nbsp;&nbsp;
+			<a href="/set?lang=en&uri={{ uri }}">English</a>&nbsp;&nbsp;
 			<a href="/link/{{ nickname }}" style="font-weight:bold">{{ nickname }}</a>
 			<a href="/add?type={{ req_type }}">添加</a>
 		{% endif %}
