@@ -30,7 +30,7 @@ def unescape(txt):
 	return unquote(p.sub(unichar_fromhex, txt))
 #-----------------------------------#
 
-class Index(webapp.RequestHandler):
+class Main(webapp.RequestHandler):
 	def get(self,req_type='link',req_user='',req_tag=''):
 
 		user_lang = 'en'
@@ -126,7 +126,8 @@ class Index(webapp.RequestHandler):
 			'previous_page': p - 1,
 			'pages': page_count,
 			'page_numbers': page_numbers,
-			'count': item_count
+			'count': item_count,
+			'uri' : self.request.uri
 			}
 		path = os.path.join(os.path.dirname(__file__),'templates/'+user_lang+'/'+req_type+'.html')
 		self.response.out.write(template.render(path,template_values))
@@ -182,7 +183,8 @@ class TagList(webapp.RequestHandler):
 			'auth_url' : auth_url,
 			'auth_text': auth_text,
 			'tag_user' : tag_user,
-			'tags'     : tag_list
+			'tags'     : tag_list,
+			'uri'      : self.request.uri
 			}
 		path = os.path.join(os.path.dirname(__file__),'templates/'+user_lang+'/tag.html')
 		self.response.out.write(template.render(path,template_values))
@@ -433,7 +435,11 @@ class Set(webapp.RequestHandler):
 				user_info.lang = lang
 				user_info.put()
 			self.redirect('/link/'+nickname)
-		self.redirect('/')
+		uri = self.request.get('uri')
+		if uri:
+			self.redirect(unquote(uri).encode('utf-8'))
+		else:
+			self.redirect('/')
 
 class Help(webapp.RequestHandler):
 	def get(self):
@@ -462,7 +468,7 @@ class Help(webapp.RequestHandler):
 		self.response.out.write(template.render(path,template_values))
 
 application = webapp.WSGIApplication([
-	('/', Index),
+	('/', Main),
 	('/set', Set),
 	('/add', AddForm),
 	('/submit', AddAction),
@@ -470,8 +476,8 @@ application = webapp.WSGIApplication([
 	('/tag/(.*)', TagList),#所有用户：/tag/；单个用户：/tag/username
 	('/help',Help),
 	('/img', Image),
-	('/(link|note|pic){1}/(.*)/(.*)', Index),	#所有用户：/note/all/tag；单个用户：/note/user/tag
-	('/(link|note|pic){1}/(.*)', Index)			#所有用户：/note/；单个用户：/note/user
+	('/(link|note|pic){1}/(.*)/(.*)', Main),	#所有用户：/note/all/tag；单个用户：/note/user/tag
+	('/(link|note|pic){1}/(.*)', Main)			#所有用户：/note/；单个用户：/note/user
 	],debug=True)
 
 def main():

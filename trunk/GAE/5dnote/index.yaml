@@ -10,13 +10,13 @@ indexes:
 # automatically uploaded to the admin console when you next deploy
 # your application using appcfg.py.
 
-# Used 21 times in query history.
+# Used 25 times in query history.
 - kind: Entry
   properties:
   - name: addtime
     direction: desc
 
-# Used 11 times in query history.
+# Used 13 times in query history.
 - kind: Entry
   properties:
   - name: pageid
@@ -59,7 +59,7 @@ indexes:
   - name: addtime
     direction: desc
 
-# Used 67 times in query history.
+# Used 70 times in query history.
 - kind: Entry
   properties:
   - name: private
@@ -91,7 +91,7 @@ indexes:
   - name: addtime
     direction: desc
 
-# Used 33 times in query history.
+# Used 92 times in query history.
 - kind: Entry
   properties:
   - name: tags
@@ -99,7 +99,7 @@ indexes:
   - name: addtime
     direction: desc
 
-# Used 27 times in query history.
+# Used 36 times in query history.
 - kind: Entry
   properties:
   - name: tags
@@ -108,14 +108,14 @@ indexes:
   - name: addtime
     direction: desc
 
-# Used 128 times in query history.
+# Used 149 times in query history.
 - kind: Entry
   properties:
   - name: type
   - name: addtime
     direction: desc
 
-# Used 145 times in query history.
+# Used 173 times in query history.
 - kind: Entry
   properties:
   - name: type
@@ -123,25 +123,25 @@ indexes:
   - name: addtime
     direction: desc
 
-# Used 10 times in query history.
+# Used 32 times in query history.
 - kind: Tag
   properties:
   - name: count_link
     direction: desc
 
-# Used 2 times in query history.
+# Used 5 times in query history.
 - kind: Tag
   properties:
   - name: count_note
     direction: desc
 
-# Used 11 times in query history.
+# Used 12 times in query history.
 - kind: Tag
   properties:
   - name: count_pic
     direction: desc
 
-# Used 132 times in query history.
+# Used 149 times in query history.
 - kind: Tag
   properties:
   - name: user
