@@ -172,10 +172,13 @@ class TagList(webapp.RequestHandler):
 					max_type = 'pic'
 				else:
 					max_type = 'note'
+			logging.info(tag_count)
+			logging.info(entry_count)
+			logging.info(tags_count)
 			tag_list.append({
 				"info":tag,
 				"type":max_type,
-				"level":tag_count/(entry_count/tags_count)
+				"level":tag_count/(float(entry_count)/tags_count)
 				})
 		template_values = {
 			'nickname' : nickname,
