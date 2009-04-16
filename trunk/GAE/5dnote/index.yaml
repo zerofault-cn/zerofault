@@ -10,42 +10,16 @@ indexes:
 # automatically uploaded to the admin console when you next deploy
 # your application using appcfg.py.
 
-# Used 9 times in query history.
+# Used 25 times in query history.
 - kind: Entry
   properties:
   - name: addtime
     direction: desc
 
-# Used 5 times in query history.
+# Used 13 times in query history.
 - kind: Entry
   properties:
   - name: pageid
-  - name: addtime
-    direction: desc
-
-# Unused in query history -- copied from input.
-- kind: Entry
-  properties:
-  - name: private
-  - name: addtime
-    direction: desc
-
-# Used 14 times in query history.
-- kind: Entry
-  properties:
-  - name: private
-  - name: private
-  - name: type
-  - name: addtime
-    direction: desc
-
-# Used 5 times in query history.
-- kind: Entry
-  properties:
-  - name: private
-  - name: private
-  - name: type
-  - name: user
   - name: addtime
     direction: desc
 
@@ -53,7 +27,14 @@ indexes:
 - kind: Entry
   properties:
   - name: private
-  - name: tags
+  - name: addtime
+    direction: desc
+
+# Unused in query history -- copied from input.
+- kind: Entry
+  properties:
+  - name: private
+  - name: private
   - name: type
   - name: addtime
     direction: desc
@@ -62,95 +43,114 @@ indexes:
 - kind: Entry
   properties:
   - name: private
+  - name: private
+  - name: type
+  - name: user
+  - name: addtime
+    direction: desc
+
+# Unused in query history -- copied from input.
+- kind: Entry
+  properties:
+  - name: private
   - name: tags
+  - name: type
+  - name: addtime
+    direction: desc
+
+# Used 21 times in query history.
+- kind: Entry
+  properties:
+  - name: private
+  - name: tags
+  - name: type
+  - name: user
+  - name: addtime
+    direction: desc
+
+# Used 73 times in query history.
+- kind: Entry
+  properties:
+  - name: private
+  - name: type
+  - name: addtime
+    direction: desc
+
+# Used 5 times in query history.
+- kind: Entry
+  properties:
+  - name: private
+  - name: type
+  - name: user
+  - name: addtime
+    direction: desc
+
+# Used once in query history.
+- kind: Entry
+  properties:
+  - name: private
+  - name: user
+  - name: addtime
+    direction: desc
+
+# Used once in query history.
+- kind: Entry
+  properties:
+  - name: tags
+  - name: addtime
+    direction: desc
+
+# Used 92 times in query history.
+- kind: Entry
+  properties:
+  - name: tags
+  - name: type
+  - name: addtime
+    direction: desc
+
+# Used 36 times in query history.
+- kind: Entry
+  properties:
+  - name: tags
+  - name: type
+  - name: user
+  - name: addtime
+    direction: desc
+
+# Used 149 times in query history.
+- kind: Entry
+  properties:
+  - name: type
+  - name: addtime
+    direction: desc
+
+# Used 173 times in query history.
+- kind: Entry
+  properties:
   - name: type
   - name: user
   - name: addtime
     direction: desc
 
 # Used 33 times in query history.
-- kind: Entry
-  properties:
-  - name: private
-  - name: type
-  - name: addtime
-    direction: desc
-
-# Used 5 times in query history.
-- kind: Entry
-  properties:
-  - name: private
-  - name: type
-  - name: user
-  - name: addtime
-    direction: desc
-
-# Unused in query history -- copied from input.
-- kind: Entry
-  properties:
-  - name: private
-  - name: user
-  - name: addtime
-    direction: desc
-
-# Unused in query history -- copied from input.
-- kind: Entry
-  properties:
-  - name: tags
-  - name: addtime
-    direction: desc
-
-# Used 5 times in query history.
-- kind: Entry
-  properties:
-  - name: tags
-  - name: type
-  - name: addtime
-    direction: desc
-
-# Unused in query history -- copied from input.
-- kind: Entry
-  properties:
-  - name: tags
-  - name: type
-  - name: user
-  - name: addtime
-    direction: desc
-
-# Used 5 times in query history.
-- kind: Entry
-  properties:
-  - name: type
-  - name: addtime
-    direction: desc
-
-# Used 19 times in query history.
-- kind: Entry
-  properties:
-  - name: type
-  - name: user
-  - name: addtime
-    direction: desc
-
-# Used 5 times in query history.
 - kind: Tag
   properties:
   - name: count_link
     direction: desc
 
-# Used 3 times in query history.
+# Used 5 times in query history.
 - kind: Tag
   properties:
   - name: count_note
     direction: desc
 
-# Used once in query history.
+# Used 12 times in query history.
 - kind: Tag
   properties:
   - name: count_pic
     direction: desc
 
-# Used 23 times in query history.
+# Used 149 times in query history.
 - kind: Tag
   properties:
   - name: user
