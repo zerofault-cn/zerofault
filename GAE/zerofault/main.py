@@ -403,6 +403,19 @@ class Image(webapp.RequestHandler):
 		else:
 			self.redirect('/media/logo.gif')
 
+class View(webapp.RequestHandler):
+	def get(self):
+		url = self.request.get('url')
+		if url:
+			try:
+				result = urlfetch.fetch(url)
+				if result.status_code == 200:
+					self.response.headers['Content-Type'] = 'image/jpeg'
+					self.response.out.write(result.content)
+			except :
+				self.response.out.write('获取图片超时！')
+				return
+
 class Update(webapp.RequestHandler):
 	def get(self):
 		'''
@@ -435,6 +448,7 @@ application = webapp.WSGIApplication([
 	('/delkey', DelKey),
 	('/tag', TagList),
 	('/img', Image),
+	('/view', View),
 	('/update', Update),
 	('/(link|note|pic){1}/(.*)', Index),
 	('/(note/|pic/)?(.*)', Index)

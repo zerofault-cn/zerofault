@@ -40,3 +40,7 @@ REGEDIT4
 [HKEY_CURRENT_USER\Software\Microsoft\Internet Explorer\MenuExt\收藏链接到5dnote]
 @="http://5dnote.appspot.com/media/loader.html?link"
 "Contexts"=dword:00000020
+
+[HKEY_CURRENT_USER\Software\Microsoft\Internet Explorer\MenuExt\使用GoogleAPI查看]
+@="http://zerofault.appspot.com/media/loader.html?view"
+"Contexts"=dword:00000002

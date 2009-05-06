@@ -38,7 +38,14 @@ if (external.menuArguments)
 
 	var href=window.location.href;
 	//alert(href.substr(href.indexOf('?')+1));
-	if(href.substr(href.indexOf('?')+1)=='pic')//'IMG' == EventElement.tagName)
+	if(href.substr(href.indexOf('?')+1)=='view')
+	{
+		var srcEvent = external.menuArguments.event;
+		var EventElement = external.menuArguments.document.elementFromPoint ( srcEvent.clientX, srcEvent.clientY );
+		var url = EventElement.href;
+		var address = '../view?url='+escape(url);
+	}
+	else if(href.substr(href.indexOf('?')+1)=='pic')//'IMG' == EventElement.tagName)
 	{
 		var srcEvent = external.menuArguments.event;
 		var EventElement = external.menuArguments.document.elementFromPoint ( srcEvent.clientX, srcEvent.clientY );
