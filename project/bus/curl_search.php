@@ -134,9 +134,6 @@ if('query_transfer'==$action)
 	$table=$html->find('table[width="98%"] table',0);
 	echo $table;
 }
-echo '<br /><br /><br />数据来源于杭州公交集团网站(http://www.hzbus.com.cn)，数据采集日期:2008-11-20';
 ?>
-<br />
-<a href="http://blog.haozhanwang.com/" target="_blank">我的BLOG</a>
 </body>
 </html>
