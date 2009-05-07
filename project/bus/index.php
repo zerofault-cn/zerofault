@@ -13,7 +13,7 @@
 </form>
 <form name="form1" action="index.php" method="get">
 <input type="hidden" name="action" value="query_site" />
-输入站点名称：<input type="text" name="site_name" size="6" value="<?=$_REQUEST['site_ame']?>" /><input type="submit" value="查询经过线路" />
+输入站点名称：<input type="text" name="site_name" size="6" value="<?=$_REQUEST['site_name']?>" /><input type="submit" value="查询经过线路" />
 </form>
 <form name="form1" action="index.php" method="get">
 <input type="hidden" name="action" value="query_transfer" />
