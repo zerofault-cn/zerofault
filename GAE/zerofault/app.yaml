@@ -15,6 +15,9 @@ handlers:
   script: loadcsv.py
   login: admin
 
+- url: /parse
+  script: parse.py
+
 - url: /dump/.*
   script: dump.py
 
