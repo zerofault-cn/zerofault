@@ -1,3 +1,6 @@
+<?php
+error_reporting(E_ALL ^ E_NOTICE);
+?>
 <html>
 <head>
 <title>杭州公交线路查询－手机适用版</title>
@@ -34,10 +37,13 @@ function parseLineInfo($descr,$tmp_offset)
 
 	$time1_arr=explode("-",$line_arr[14]);
 	$time2_arr=explode("-",$line_arr[15]);
-	$str=trim($line_arr[1]).','.trim($term_arr[0]).','.trim($time1_arr[0]).','.trim($time1_arr[1]).','.trim($term_arr[1]).','.trim($time2_arr[0]).','.trim($time2_arr[1]).','.trim($line_arr[26]);
+	$str = '<span style="color:#0000FF">'.trim($line_arr[1]).', '.trim($line_arr[26]);
+	$str.= ', 空调车:'.trim($line_arr[22]).' 普通车:'.trim($line_arr[18])."<br />";
 	
-	$str.=',空调车:'.trim($line_arr[22]).' 普通车:'.trim($line_arr[18]).",\r\n";
-	$str .= '<br />';
+	$str.= '起点站: '.trim($term_arr[0]).' ('.trim($time1_arr[0]).'～'.trim($time1_arr[1]).')<br />';
+	$str.= '终点站: '.trim($term_arr[1]).' ('.trim($time2_arr[0]).'～'.trim($time2_arr[1]).')';
+	
+	$str .= '</span><br />';
 	
 	$route_arr=$table->children($tmp_offset)->find('table[bgcolor="3E89C0"]');
 	foreach($route_arr as $r=>$route)
@@ -50,11 +56,11 @@ function parseLineInfo($descr,$tmp_offset)
 		foreach($tr_arr as $row=>$tr)
 		{
 			if(!isset($flag)){
-				$str.='正向：';
+				$str.='<span style="color:#FF3399">正向：';
 				$flag=0;
 			}
 			if($flag){
-				$str.='反向：';
+				$str.='<span style="color:#9933FF">反向：';
 				$flag=0;
 			}
 			
@@ -72,13 +78,13 @@ function parseLineInfo($descr,$tmp_offset)
 			}
 			else
 			{
-				$str.='<br />';
+				$str.='</span><br />';
 				$flag=1;
 			}
 		}
 	}
 	echo $str;
-	echo '<br />';
+	echo '</span><br />';
 }
 $singleWayLines = array('55','56','59','60','676');
 $action=$_REQUEST['action'];
