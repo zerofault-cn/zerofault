@@ -11,7 +11,7 @@ $start=$_REQUEST['start'];
 $offset=0;
 for($i=$start;$i<$start+10;$i++)
 {
-	curl_setopt($c, CURLOPT_POSTFIELDS,"line_name=J".$i);
+	curl_setopt($c, CURLOPT_POSTFIELDS,"line_name=B֧6");
 	$data = curl_exec($c);
 	$html=str_get_html($data);
 	$table=$html->find('table[width="98%"] table',0);
