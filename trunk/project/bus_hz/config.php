@@ -32,7 +32,6 @@ if(!defined("LINE_TABLE"))
 	define("ROUTE_TABLE",'hz_route');
 }
 
-include_once(PATH_ROOT.'/include/function.php');
 
 include_once(PATH_ROOT.'/include/template.php');
 $tpl = new Template(PATH_ROOT."/template");
