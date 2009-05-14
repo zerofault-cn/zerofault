@@ -3,23 +3,27 @@
 <title>杭州公交线路查询－手机版</title>
 <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
 <meta name="description" content="杭州公交汽车线路查询，与杭州公交集团网站数据同步" />
-<meta name="keywords" content="杭州 公交车 线路 换乘 查询 手机版" />
+<meta name="keywords" content="杭州 公交车 线路 换乘 转车 查询 手机版 实时查询 杭州公交" />
 <link href="style.css" rel="stylesheet" type="text/css">
 </head>
 <body>
 <form name="form1" action="index.php" method="get">
 <input type="hidden" name="action" value="query_line" />
-输入线路编号：<input type="text" name="line_name" size="3" value="{LINE_NAME}" /><input type="submit" value="查询线路信息" />
+<input type="hidden" name="curl_search" value="" />
+输入线路编号：<input type="text" name="line_name" size="4" value="{LINE_NAME}" /><input type="submit" value="查询线路详情" /><input type="button" onclick="document.form1.curl_search.value=1;document.form1.submit();" value="查询实时数据" />
 </form>
-<form name="form1" action="index.php" method="get">
+<form name="form2" action="index.php" method="get">
 <input type="hidden" name="action" value="query_site" />
-输入站点名称：<input type="text" name="site_name" size="6" value="{SITE_NAME}" /><input type="submit" value="查询经过线路" />
+<input type="hidden" name="curl_search" value="" />
+输入站点名称：<input type="text" name="site_name" size="8" value="{SITE_NAME}" /><input type="submit" value="查询经过线路" /><input type="button" onclick="if(document.form2.site_name.value!=''){document.form2.curl_search.value=1;document.form2.submit();}" value="查询实时数据" />
 </form>
-<form name="form1" action="index.php" method="get">
+<form name="form3" action="index.php" method="get">
 <input type="hidden" name="action" value="query_transfer" />
 输入起点：<input type="text" name="from" size="8" value="{FROM}" /><br />
 输入终点：<input type="text" name="to" size="8" value="{TO}" /><input type="submit" value="换乘查询" />
 </form>
-{RESULT}
+{HTML}
+<br /><br /><br />
+<span style="color:#7C7C7C">Powered by <a style="text-decoration:none;color:#7C7C7C" href="mailto:zerofault@gmail.com">zerofault</a></span>
 </body>
 </html>

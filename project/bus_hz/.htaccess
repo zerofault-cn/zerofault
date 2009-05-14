@@ -1,0 +1,5 @@
+<IfModule mod_rewrite.c>
+	RewriteEngine On
+	RewriteRule ^(.*)line_id_(.*)\.html$  $1index.php?action=query_line&id=$2 
+	RewriteRule ^(.*)site_id_(.*)\.html$  $1index.php?action=query_site&id=$2 
+</IfModule>
