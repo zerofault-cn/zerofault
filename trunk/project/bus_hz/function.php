@@ -339,7 +339,9 @@ function curl_search($action)
 		$data = curl_exec($c);
 		$data=str_get_html($data);
 		$table=$data->find('table[width="98%"] table',0);
-		$html .= str_replace('line_search.jsp?','index.php?curl_search=1&',$table);
+		//$html = $table;
+		$html = str_replace('line_search.jsp?','index.php?curl_search=1&',$table);
+		//print_r($html);
 	}
 }
 function parseLineInfo($descr,$tmp_offset)
