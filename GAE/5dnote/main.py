@@ -295,7 +295,7 @@ class AddAction(webapp.RequestHandler):
 						if result.status_code == 200:
 							e.image = db.Blob(result.content)
 					except :
-						self.response.out.write('Fetch picture fail! You can <a href="/add?type=pic">upload</a> menually')
+						self.response.out.write('Fetch picture fail! You can <a href="/add?type=pic">upload</a> it manually')
 						return
 				else:
 					myfile = self.request.get("myfile")
