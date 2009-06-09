@@ -1,0 +1,334 @@
+<style type="text/css">
+.eMenu{
+	background:#FFFFFF none repeat scroll 0 0;
+	border:1px solid #838383;
+	padding:1px;
+	position:absolute;
+}
+div a.n{
+	color:#000000;
+	display:block;
+	height:16px;
+	line-height:120%;
+	padding:2px;
+	text-decoration:none;
+}
+a.cs {
+	height:15px;
+	position:relative;
+}
+.fRd1 .cb {
+	background-color:#880000;
+}
+.fRd2 .cb {
+	background-color:#800080;
+}
+.fRd3 .cb {
+	background-color:#FF0000;
+}
+.fRd4 .cb {
+	background-color:#FF00FF;
+}
+.fBu1 .cb {
+	background-color:#000080;
+}
+.fBu2 .cb {
+	background-color:#0000FF;
+}
+.fBu3 .cb {
+	background-color:#00FFFF;
+}
+.fGn1 .cb {
+	background-color:#008080;
+}
+.fGn2 .cb {
+	background-color:#008000;
+}
+.fGn3 .cb {
+	background-color:#808000;
+}
+.fGn4 .cb {
+	background-color:#00FF00;
+}
+.fYl1 .cb {
+	background-color:#FFCC00;
+}
+.fBk1 .cb {
+	background-color:#000000;
+}
+.fBk2 .cb {
+	background-color:#808080;
+}
+.fBk3 .cb {
+	background-color:#C0C0C0;
+}
+.fWt0 .cb {
+	background-color:#FFFFFF;
+	border:1px solid #CCCCCC;
+}
+.cs .cb {
+	cursor:pointer;
+	display:block;
+	font-size:0;
+	height:8px;
+	left:4px;
+	position:absolute;
+	top:3px;
+	width:10px;
+}
+.cs span {
+	color:#333333;
+	cursor:pointer;
+	left:19px;
+	position:absolute;
+	top:0;
+}
+</style>
+<script type="text/javascript">
+var gSetColorType = "foreColor"; 
+var gIsIE = document.all; 
+var gIEVer = fGetIEVer();
+var gLoaded = false;
+var ev = null;
+var gSigns = "";
+var gSignHtml = "";
+
+var gName = window.name;
+
+
+function fGetEv(e){
+	ev = e;
+}
+/**
+ * 获取IE版本
+ */
+function fGetIEVer(){
+	var iVerNo = 0;
+	var sVer = navigator.userAgent;
+	if(sVer.indexOf("MSIE")>-1){
+		var sVerNo = sVer.split(";")[1];
+		sVerNo = sVerNo.replace("MSIE","");
+		iVerNo = parseFloat(sVerNo);
+	}
+	return iVerNo;
+}
+/**
+ * 设置可编辑
+ */
+function fSetEditable(){
+	var f = window.frames["HtmlEditor"];
+	f.document.designMode="on";
+	if(!gIsIE)
+		f.document.execCommand("useCSS",false, true);
+}
+
+function format(type, para){
+	var f = window.frames["HtmlEditor"];
+	var sAlert = "";
+	
+	f.focus();
+	if(!para){
+		if(gIsIE){
+			f.document.execCommand(type);
+		}else{
+			f.document.execCommand(type,false,false);
+		}
+	}else{
+		f.document.execCommand(type,false,para);
+	}
+	f.focus();
+	fHideMenu();
+}
+/**
+ * 显示下拉菜单
+ */
+function fDisplayElement(element,displayValue) {
+	if(gIEVer<=5.01 && gIsIE){
+		
+		return;
+	}
+	var e = window.event || ev;
+	var target = e.srcElement || e.target;
+	if(element == "sign"){
+		element = fGetSign();
+	}
+	if(typeof element == "string"){
+		element = $(element);
+	}
+	if(element && element.style.display != "none"){
+		element.style.display = "none";
+		parent.EV.stopEvent(e);
+		window.frames["HtmlEditor"].focus();
+		return true;
+	}
+	fHideMenu();
+	if(element == null) return;
+	element.style.display = "";
+	
+
+	var iX = f_GetX(target);
+	element.style.display = "";
+	element.style.left = (iX) + "px";
+	element.style.top = gToolbarStatus?59 + "px":33 + "px";
+	//parent.EV.stopEvent(e);
+	window.frames["HtmlEditor"].focus();
+	return true;
+}
+/**
+ * 获取对象
+ */
+function $(id){
+	return document.getElementById(id);
+}
+/**
+ * 获取对象的x坐标
+ */
+function f_GetX(e)
+{
+	var l=e.offsetLeft;
+	while(e=e.offsetParent){				
+		l+=e.offsetLeft;
+	}
+	return l;
+}
+/**
+ * 获取对象的y坐标
+ */
+function f_GetY(e)
+{
+	var t=e.offsetTop;
+	while(e=e.offsetParent){
+		t+=e.offsetTop;
+	}
+	return t;
+}
+/**
+ * 隐藏下拉菜单
+ */
+function fHideMenu(e){
+	try{
+		var arr = ["fontface", "fontsize", "dvForeColor", "dvPortrait", "divAlign", "divList", "dvSign" ,"divInOut" ];
+		for(var i=0;i<arr.length;i++){
+			var obj = $(arr[i]);
+			if(obj){
+				obj.style.display = "none";
+			}
+		}
+		try{
+			parent.LetterPaper.control(window, "hide");
+		}catch(exp){}
+		var dvSignList = parent.$("dvSignList");
+		if(dvSignList) dvSignList.style.display = "none";
+	}catch(exp){}
+	try{
+		var e = e || window.frames["HtmlEditor"].event;
+		var t = e.srcElement || e.target;
+		if(t && t.tagName.toUpperCase() == "IMG"){
+			
+		}else{
+			parent.$('dvImgResize').remove();
+		}
+	}catch(e){}
+}
+var gToolbarStatus = 0;
+function fToggleToolbar(){
+	if($("dvToobar").className.indexOf("hide")>-1){
+		$("dvToobar").className = $("dvToobar").className.replace(" hide", "");
+		$("dvToobarFull").className += " hide";
+		gToolbarStatus = 0;
+	}else{
+		$("dvToobarFull").className = $("dvToobarFull").className.replace(" hide", "");
+		$("dvToobar").className += " hide";
+		gToolbarStatus = 1;
+	}
+}
+function fontname(obj){
+	format('fontname',obj.innerHTML);
+	obj.parentNode.style.display='none'
+}
+function fontsize(size,obj){
+	format('fontsize',size);
+	obj.parentNode.style.display='none'
+}
+window.onload = function(){
+	if(gName == "ifrHtmlEditor") return;
+	try{
+		var f = window.frames["HtmlEditor"];
+		var html = '<HEAD>' +
+
+			'	<style>' +
+			'	body{font-size:14px;font-family:\'宋体\';line-height:25px;padding:8px 10px;margin:0;}' +
+			'	pre {' +
+			'	white-space: pre-wrap; /* css-3 */' +
+			'	white-space: -moz-pre-wrap; /* Mozilla, since 1999 */' +
+			'	white-space: -pre-wrap; /* Opera 4-6 */' +
+			'	white-space: -o-pre-wrap; /* Opera 7 */' +
+			'	word-wrap: break-word; /* Internet Explorer 5.5+ */' +
+			'	/* white-space : normal ;       Internet Explorer 5.5+ */' +
+			'	}' +
+			'	</style>' +
+			'	</HEAD>' +
+			'	<BODY>' +
+			'	</BODY>';
+		f.document.open("text/html","replace");
+		f.document.write(html);
+		f.document.close();
+		if(gIsIE){
+			if(navigator.userAgent.indexOf("MSIE 5.0") > -1){
+				f.document.designMode="on";
+			}else{
+				f.document.body.contentEditable = true;
+			}
+		}else{
+			f.document.designMode="on";
+			f.document.execCommand("useCSS",false, true);
+		}
+	}catch(exp){}
+}
+</script>
+
+<a href="javascript:void(0)" class="icoWgt"  onClick="format('Bold');return false;" title="">加粗</a>
+<a href="javascript:void(0)" class="icoIta" title=""  onClick="format('Italic');return false;">斜体</a>
+<a href="javascript:void(0)" class="icoUln"  onClick="format('Underline');return false;" title="">下划线</a>
+<a href="javascript:void(0)" class="icoFsz"  id="imgFontsize" title="" onClick="fGetEv(event);fDisplayElement('fontsize','');return false;">字号</a>
+<a href="javascript:void(0)" class="icoFcl"  title="" onClick="fGetEv(event);fDisplayElement('dvForeColor','');return false;" id="imgFontColor">字体颜色</a>
+
+<div id="fontsize" class="eMenu" style="display:none;top:35px;left:26px;width:125px;height:170px;">
+	<a href="javascript:void(0)" onClick="fontsize(1,this)" class="n" style="font-size:xx-small;line-height:120%;">极小</a>
+	<a href="javascript:void(0)" onClick="fontsize(2,this)" class="n" style="font-size:x-small;line-height:120%;">特小</a>
+	<a href="javascript:void(0)" onClick="fontsize(3,this)" class="n" style="font-size:small;line-height:120%;">小</a>
+	<a href="javascript:void(0)" onClick="fontsize(4,this)" class="n" style="font-size:medium;line-height:120%;">中</a>
+	<a href="javascript:void(0)" onClick="fontsize(5,this)" class="n" style="font-size:large;line-height:120%;">大</a>
+	<a href="javascript:void(0)" onClick="fontsize(6,this)" class="n" style="font-size:x-large;line-height:120%;height:25px">特大</a>
+	<a href="javascript:void(0)" onClick="fontsize(7,this)" class="n" style="font-size:xx-large;line-height:140%;height:35px">极大</a>
+</div>
+<div id="dvForeColor" class="eMenu" style="display:none;top:35px;left:26px;width:90px;">
+	<a href="javascript:void(0)" onClick="format(gSetColorType,'#800000')" class="n cs fRd1"><b class="cb"></b><span>暗红色</span></a>
+	<a href="javascript:void(0)" onClick="format(gSetColorType,'#800080')" class="n cs fRd2"><b class="cb"></b><span>紫色</span></a>
+	<a href="javascript:void(0)" onClick="format(gSetColorType,'#F00000')" class="n cs fRd3"><b class="cb"></b><span>红色</span></a>
+	<a href="javascript:void(0)" onClick="format(gSetColorType,'#F000F0')" class="n cs fRd4"><b class="cb"></b><span>鲜粉色</span></a>
+	<a href="javascript:void(0)" onClick="format(gSetColorType,'#000080')" class="n cs fBu1"><b class="cb"></b><span>深蓝色</span></a>
+	<a href="javascript:void(0)" onClick="format(gSetColorType,'#0000F0')" class="n cs fBu2"><b class="cb"></b><span>蓝色</span></a>
+	<a href="javascript:void(0)" onClick="format(gSetColorType,'#00F0F0')" class="n cs fBu3"><b class="cb"></b><span>湖蓝色</span></a>
+	<a href="javascript:void(0)" onClick="format(gSetColorType,'#008080')" class="n cs fGn1"><b class="cb"></b><span>蓝绿色</span></a>
+	<a href="javascript:void(0)" onClick="format(gSetColorType,'#008000')" class="n cs fGn2"><b class="cb"></b><span>绿色</span></a>
+	<a href="javascript:void(0)" onClick="format(gSetColorType,'#808000')" class="n cs fGn3"><b class="cb"></b><span>橄榄色</span></a>
+	<a href="javascript:void(0)" onClick="format(gSetColorType,'#00F000')" class="n cs fGn4"><b class="cb"></b><span>浅绿色</span></a>
+	<a href="javascript:void(0)" onClick="format(gSetColorType,'#F0C000')" class="n cs fYl1"><b class="cb"></b><span>橙黄色</span></a>
+	<a href="javascript:void(0)" onClick="format(gSetColorType,'#000000')" class="n cs fBk1"><b class="cb"></b><span>黑色</span></a>
+	<a href="javascript:void(0)" onClick="format(gSetColorType,'#808080')" class="n cs fBk2"><b class="cb"></b><span>灰色</span></a>
+	<a href="javascript:void(0)" onClick="format(gSetColorType,'#C0C0C0')" class="n cs fBk3"><b class="cb"></b><span>银色</span></a>
+	<a href="javascript:void(0)" onClick="format(gSetColorType,'#FFFFFF')" class="n cs fWt0"><b class="cb"></b><span>白色</span></a>
+</div>
+<table cellpadding="0" cellspacing="0" style=" background-color:#999999;height:400px;width:600px;border:1px solid #333;overflow:hidden">
+<tr>
+	<td>
+<SCRIPT LANGUAGE="JavaScript">
+<!--
+if(document.all){document.write('<table width="100%" height="100%" border="0" cellspacing="0" cellpadding="0"  id="divEditor"><tr><td style=""><IFRAME class="HtmlEditor" ID="HtmlEditor" name="HtmlEditor" style="height:100%;width:100%" frameBorder="0" marginHeight=0 marginWidth=0 src="about:blank"></IFRAME></td></tr></table>')}else{document.write('<table width="100%" height="100%" border="0" cellspacing="0" cellpadding="0"  id="divEditor"><tr><td style="background-color:#ffffff"><IFRAME class="HtmlEditor" ID="HtmlEditor" name="HtmlEditor" style="height:100%;width:100%;margin-left:1px;margin-bottom:1px;" frameBorder="0" marginHeight=0 marginWidth=0 src="about:blank"></IFRAME></td></tr></table>')}
+//-->
+</SCRIPT>
+<textarea id="sourceEditor" style="height:100%;width:100%;display:none;border:0px;white-space: pre-wrap;white-space: -moz-pre-wrap;white-space: -pre-wrap;white-space: -o-pre-wrap;word-wrap: break-word;""></textarea>
+	</td>
+</tr>
+</table>
