@@ -1,0 +1,231 @@
+<html>
+<head>
+<style type="text/css">
+body{
+	font-size:12px;
+}
+h3{margin:0;padding:0;font-weight:normal;font-size:12px;}
+#tooltip {
+	position: absolute;
+	z-index: 9999;
+}
+#tooltip h3, #tooltip div {
+	padding:5px;
+	border: 1px solid #FF9900;
+	background-color: #FFFDDD;
+	margin:0;
+}
+#changeSucTip{background: url(http://jd2008.360buy.com/purchase/skin/images/cartTipBottom.gif) bottom no-repeat;height:80px;padding-bottom:4px;}
+#changeSucTip #tipContent{border:#ff9900 1px solid;background:#fffddd;border-bottom:none;height:77px;}
+#changeSucTip #tipTitle{margin-top:10px;text-align:center;}
+#changeSucTip #priceSpan{color:red;}
+
+</style>
+</head>
+<body>
+<a href="javascript:void(0);" title="默认提示tooltip">默认链接</a>
+&nbsp;&nbsp;
+<a class="tooltip" title="<strong>现货：</strong>库存有货，下单后一日内发货<br/>上海库房覆盖地区：江苏、浙江、上海、安徽、钓鱼岛">上海现货</a>
+&nbsp;&nbsp;
+<a class="tooltip" title="<strong>现货：</strong>库存有货，下单后一日内发货<br/>北京库房覆盖地区：北京、天津、河北、山西、河南<br/>辽宁、吉林、黑龙江、内蒙古、山东、湖北、四川、重庆<br/>贵州、云南、西藏、陕西、甘肃、青海、宁夏、新疆">北京现货</a>
+<br />
+<br />
+<div style="width:300px;margin:100px auto;">
+
+<a class="tooltip" href="javascript:void(0);" title='减一' onclick="changeBar('-','6793',this,'gift')" style='margin-right:2px;'>-</a>
+<input type='text' id='gift_count_6793' maxlength='4' style='width:30px' onKeyDown='if(event.keyCode == 13) event.returnValue = false' value='1' onfocus='changeTxtOnFocus(this);' onblur="changeGiftCount('6793',this);" />
+<input type='hidden' name='hidChange6793' value='1' />
+<a class="tooltip" href="javascript:void(0);" title='加一' onclick="changeBar('+','6793',this,'gift')" style='margin-left:2px;'>+</a>
+<br />
+总价:<span id="cartBottom_price">123.00</span>
+</div>
+</body>
+<script type="text/javascript" src="jquery-1.2.6.pack.js"></script>
+<script type="text/javascript" src="jquery.tooltip.pack.js"></script>
+<script type="text/javascript" src="images/jquery.dimensions.js"></script>
+<script type="text/javascript">
+var isIe=(window.ActiveXObject)?true:false;
+var pageLinkUrl="";
+var ajaxUrl="";
+function g(nodeId)
+{
+	return document.getElementById(nodeId);
+}
+function alert(msg)
+{
+	$.prompt(msg);
+}
+function changeBar(type,skuId,obj,skuType)
+{
+	var input=$("#gift_count_"+skuId).val();
+	var change=0;
+	if(type=='+')
+	{
+		input=obj.previousSibling.previousSibling;
+		change=1;
+	}
+	if(type=='-')
+	{
+		input=obj.nextSibling;
+		change=-1;
+	}
+	var num=parseInt(input.value);
+	if(num+change<0)
+	{
+		alert('您输入的数字已经超出的最小值!');
+		return;
+	}
+	input.value=num+change;
+    //txtC.focus();
+    if(skuType=='sku')changeProductCount(skuId,txtC);
+    if(skuType=='gift')changeGiftCount(skuId,txtC);
+    if(skuType=='suit')changeSuitCount(skuId,txtC);
+    
+}
+//更改赠品数量
+function changeGiftCount(giftId,obj)
+{
+	if(obj.value==obj.nextSibling.value){isHaveAjaxServer=false;return;}
+	//检测输入是否为数字
+	var myReg=/\d+/;
+	if(!checknumber(obj.value)){isHaveAjaxServer=false;showAlert_shoppingCart("您输入的格式不正确！",obj);obj.value=obj.nextSibling.value;return;}
+
+	//判断为0的情况
+	if(parseInt(obj.value)==0)
+	{
+		removeGiftOnShoppingCart(giftId,obj);
+		return;
+	}
+	$.get("getnum.html",{
+		'giftId': giftId,
+		'value': obj.value,
+	},function(data){
+		var pos=new getPos(obj);
+		//showProductListHtml(data);
+		showChangeSucTip(pos,'商品');
+		});
+}
+function checknumber(String) 
+{ 
+    if(trimTxt(String)=="")
+    {
+       return false;
+    }
+    var Letters = "1234567890"; 
+    var i; 
+    var c; 
+    for( i = 0; i < String.length; i ++ ) 
+    { 
+        c = String.charAt( i ); 
+        if (Letters.indexOf( c ) ==-1) 
+        { 
+           return false; 
+        } 
+    } 
+    return true; 
+}
+function trimTxt(txt)
+{
+   return txt.replace(/(^\s*)|(\s*$)/g, "");
+}
+function showAlert_shoppingCart(message,obj)
+{
+   alert(message);
+}
+function getPos(obj){
+	this.Left=0;
+	this.Top=0;
+	this.Height=obj.offsetHeight;
+	this.Width=obj.offsetWidth;
+	var tempObj=obj;
+	while (tempObj!=null && tempObj.tagName.toLowerCase()!="body" && tempObj.tagName.toLowerCase()!="html"){
+		this.Left+=tempObj.offsetLeft;
+		this.Top+=tempObj.offsetTop;
+		tempObj=tempObj.offsetParent;
+	}
+}
+//显示变更数量提示
+function showChangeSucTip(pos,changeStr)
+{
+	closeWindow();
+	pos.Top=pos.Top+84;
+	pos.Left=pos.Left+(204-pos.Width)/2;
+	var tipHtml="<div id='changeSucTip'><div id='tipContent'><div id='tipTitle'>"+changeStr+"数量修改成功！<br />商品金额为：<span id='priceSpan'>"+$('#cartBottom_price').innerHTML+"</span>元<br /><a href='javascript:closeWindow()'>关闭</a></div></div></div>";
+	showMessageBox(tipHtml,pos,204);
+
+	var mWin=g('mesWindow');
+	var isGrow=true;
+	if(isIe){
+	//
+	try{
+	//obj.filters.alpha.opacity=90;
+	mWin.style.filter='alpha(opacty=90)';
+	}catch(e){isGrow=false;}
+	}
+	else{mWin.style.opacity=0.9;}
+	if(isGrow){setTimeout(function(){setGrowHidden(mWin,3,10);},40000);}
+	else{setTimeout(function(){closeWindow();},40000);}
+}
+function closeWindow()
+{
+    if(g('mesWindow')!=null)
+    {  
+       g('mesWindow').parentNode.removeChild(g('mesWindow'));
+    }
+}
+function setGrowHidden(obj,intAlphaStep,intTimeStep)
+{
+    
+    try{
+        if(obj==null){return;}
+        if(isIe) 
+        { 
+            try{
+            obj.filters.alpha.opacity-=intAlphaStep; 
+            if (obj.filters.alpha.opacity>0) { 
+            setTimeout(function(){setGrowHidden(obj,intAlphaStep,intTimeStep);},intTimeStep); 
+            } 
+            else {closeWindow();}
+            }catch(e){closeWindow();}
+        } 
+        else 
+        { 
+            var curOpacity=obj.style.opacity;
+            curOpacity-=intAlphaStep/100; 
+            if (curOpacity>0) { 
+            obj.style.opacity =curOpacity; 
+            setTimeout(function(){setGrowHidden(obj,intAlphaStep,intTimeStep);},intTimeStep); 
+            } 
+            else {closeWindow();} 
+        }
+    }catch(e){}
+}
+function showMessageBox(content,pos,wWidth)
+{
+   closeWindow();
+   var bWidth=parseInt(document.documentElement.scrollWidth);
+    var bHeight=parseInt(document.documentElement.scrollHeight);
+	var mesW=document.createElement("div");
+	mesW.id="mesWindow";
+	mesW.innerHTML=content;
+	if(bWidth-pos.Left<wWidth)
+	{
+	   styleStr="left:"+(pos.Left-wWidth)+"px;";
+	}
+	else
+	{
+	   styleStr="left:"+(pos.Left)+"px;";
+	}
+	styleStr+="top:"+pos.Top+"px;position:absolute;width:"+wWidth+"px;";
+	mesW.style.cssText=styleStr;
+	document.body.appendChild(mesW);
+		
+}
+$(function() {
+	$('a.tooltip').tooltip({
+		showURL: false,
+		fade: 500
+	});
+})
+</script>
+</html>
