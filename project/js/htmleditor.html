@@ -1,6 +1,13 @@
 <html>
 <head>
 <style type="text/css">
+body{
+	font-size:12px;
+}
+img{
+	border:0;
+}
+.editor_fn a:link,.editor_fn a:visited{}
 .eMenu{
 	background:#FFFFFF none repeat scroll 0 0;
 	border:1px solid #838383;
@@ -252,7 +259,7 @@ function fontsize(size,obj){
 	format('fontsize',size);
 	obj.parentNode.style.display='none'
 }
-window.onload = function(){
+wwindow.onload = function(){
 	if(gName == "ifrHtmlEditor") return;
 	try{
 		var f = window.frames["HtmlEditor"];
@@ -287,9 +294,23 @@ window.onload = function(){
 		}
 	}catch(exp){}
 }
+function CreateHtmlEditor(id) {
+	var container = $("#"+id);
+	container.append('<div id="'+id+'_fn" class="editor_fn"></div>');
+	var container_fn = $("#"+id+"_fn");
+	container_fn.append('<a href="javascript:void(0)" onClick="format('+id+',\'Bold\');return false;" title="加粗"><img src="images/fn_bold.gif" width="21" height="23" /></a>');
+	container_fn.append('<a href="javascript:void(0)" onClick="format('+id+',\'Italic\');return false;" title="加粗"><img src="images/fn_italic.gif" width="21" height="23" /></a>');
+	container_fn.append('<a href="javascript:void(0)" onClick="format('+id+',\'Underline\');return false;" title="下划线"><img src="images/fn_underline.gif" width="21" height="23" /></a>');
+	container_fn.append('<a href="javascript:void(0)" onClick="fDisplayElement('+id+',\'fontsize\');return false;" title="字号"><img src="images/fn_fontsize.gif" width="22" height="23" /></a>');
+	container_fn.append('<a href="javascript:void(0)" onClick="fDisplayElement('+id+',\'dvForeColor\');return false;" title="字体颜色"><img src="images/fn_color.gif" width="22" height="23" /></a>');
+}
+
 </script>
 </head>
 <body>
+<div style="float:left;width:100px;height:100px;"></div>
+<div id="abc" style="float:left;width:300px;height:200px;">
+</div>
 <a href="javascript:void(0)" class="icoWgt"  onClick="format('Bold');return false;" title="">加粗</a>
 <a href="javascript:void(0)" class="icoIta" title=""  onClick="format('Italic');return false;">斜体</a>
 <a href="javascript:void(0)" class="icoUln"  onClick="format('Underline');return false;" title="">下划线</a>
@@ -329,6 +350,8 @@ window.onload = function(){
 <SCRIPT LANGUAGE="JavaScript">
 <!--
 if(document.all){document.write('<table width="100%" height="100%" border="0" cellspacing="0" cellpadding="0"  id="divEditor"><tr><td style=""><IFRAME class="HtmlEditor" ID="HtmlEditor" name="HtmlEditor" style="height:100%;width:100%" frameBorder="0" marginHeight=0 marginWidth=0 src="about:blank"></IFRAME></td></tr></table>')}else{document.write('<table width="100%" height="100%" border="0" cellspacing="0" cellpadding="0"  id="divEditor"><tr><td style="background-color:#ffffff"><IFRAME class="HtmlEditor" ID="HtmlEditor" name="HtmlEditor" style="height:100%;width:100%;margin-left:1px;margin-bottom:1px;" frameBorder="0" marginHeight=0 marginWidth=0 src="about:blank"></IFRAME></td></tr></table>')}
+
+
 //-->
 </SCRIPT>
 <textarea id="sourceEditor" style="height:100%;width:100%;display:none;border:0px;white-space: pre-wrap;white-space: -moz-pre-wrap;white-space: -pre-wrap;white-space: -o-pre-wrap;word-wrap: break-word;""></textarea>
@@ -336,4 +359,8 @@ if(document.all){document.write('<table width="100%" height="100%" border="0" ce
 </tr>
 </table>
 </body>
+<script type="text/javascript" src="jquery-1.2.6.pack.js"></script>
+<SCRIPT LANGUAGE="JavaScript">
+CreateHtmlEditor('abc');
+</SCRIPT>
 </html>
