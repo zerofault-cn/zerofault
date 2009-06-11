@@ -35,10 +35,10 @@
 
 .TB_overlayMacFFBGHack {background: url(macFFBgHack.png) repeat;}
 .TB_overlayBG {
-	background-color:#000;
-	filter:alpha(opacity=75);
-	-moz-opacity: 0.75;
-	opacity: 0.75;
+	background-color:#EEE;
+	`filter:alpha(opacity=75);
+	`-moz-opacity: 0.75;
+	`opacity: 0.75;
 }
 
 * html #TB_overlay { /* ie6 hack */

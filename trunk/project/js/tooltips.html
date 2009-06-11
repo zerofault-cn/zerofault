@@ -1,4 +1,5 @@
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <style type="text/css">
 body{
@@ -21,6 +22,7 @@ h3{margin:0;padding:0;font-weight:normal;font-size:12px;}
 #changeSucTip #priceSpan{color:red;}
 
 </style>
+<link href="thickbox.css" type="text/css" rel="stylesheet">
 </head>
 <body>
 <a href="javascript:void(0);" title="默认提示tooltip">默认链接</a>
@@ -34,15 +36,17 @@ h3{margin:0;padding:0;font-weight:normal;font-size:12px;}
 
 <a class="tooltip" href="javascript:void(0);" title='减一' onclick="changeBar('-','6793',this,'gift')" style='margin-right:2px;'>-</a>
 <input type='text' id='gift_count_6793' maxlength='4' style='width:30px' onKeyDown='if(event.keyCode == 13) event.returnValue = false' value='1' onfocus='changeTxtOnFocus(this);' onblur="changeGiftCount('6793',this);" />
-<input type='hidden' name='hidChange6793' value='1' />
+<input type='hidden' name='hidChange_6793' value='1' />
 <a class="tooltip" href="javascript:void(0);" title='加一' onclick="changeBar('+','6793',this,'gift')" style='margin-left:2px;'>+</a>
 <br />
-总价:<span id="cartBottom_price">123.00</span>
+总价:<span id="cart_total">123.00</span><a href="ajaxLogin.html?height=150&width=400&modal=true" class="thickbox">我要评论</a>
 </div>
+
 </body>
 <script type="text/javascript" src="jquery-1.2.6.pack.js"></script>
 <script type="text/javascript" src="jquery.tooltip.pack.js"></script>
-<script type="text/javascript" src="images/jquery.dimensions.js"></script>
+<script type="text/javascript" src="jquery.dimensions.js"></script>
+<script type="text/javascript" src="thickbox.js"></script>
 <script type="text/javascript">
 var isIe=(window.ActiveXObject)?true:false;
 var pageLinkUrl="";
@@ -57,52 +61,52 @@ function alert(msg)
 }
 function changeBar(type,skuId,obj,skuType)
 {
-	var input=$("#gift_count_"+skuId).val();
+	var input=$("#gift_count_"+skuId);
 	var change=0;
 	if(type=='+')
 	{
-		input=obj.previousSibling.previousSibling;
 		change=1;
 	}
 	if(type=='-')
 	{
-		input=obj.nextSibling;
 		change=-1;
 	}
-	var num=parseInt(input.value);
+	var num=parseInt(input.val());
 	if(num+change<0)
 	{
 		alert('您输入的数字已经超出的最小值!');
 		return;
 	}
-	input.value=num+change;
-    //txtC.focus();
-    if(skuType=='sku')changeProductCount(skuId,txtC);
-    if(skuType=='gift')changeGiftCount(skuId,txtC);
-    if(skuType=='suit')changeSuitCount(skuId,txtC);
-    
+	input.val(num+change);
+
+	if(skuType=='gift') {
+		changeGiftCount(skuId,input);
+	}
 }
-//更改赠品数量
-function changeGiftCount(giftId,obj)
+
+function changeGiftCount(skuId,obj)
 {
-	if(obj.value==obj.nextSibling.value){isHaveAjaxServer=false;return;}
+	if(obj.val()==$("#hidChange_"+skuId).val()){
+		return;
+	}
 	//检测输入是否为数字
-	var myReg=/\d+/;
-	if(!checknumber(obj.value)){isHaveAjaxServer=false;showAlert_shoppingCart("您输入的格式不正确！",obj);obj.value=obj.nextSibling.value;return;}
+	if(!checknumber(obj.val())){
+		alert("您输入的格式不正确！");
+		obj.val($("#hidChange_"+skuId).val());
+		return;
+	}
 
 	//判断为0的情况
-	if(parseInt(obj.value)==0)
+	if(parseInt(obj.val())==0)
 	{
-		removeGiftOnShoppingCart(giftId,obj);
+		removeGiftOnShoppingCart(skuId,obj);
 		return;
 	}
 	$.get("getnum.html",{
-		'giftId': giftId,
-		'value': obj.value,
+		'skuId': skuId,
+		'value': obj.val(),
 	},function(data){
-		var pos=new getPos(obj);
-		//showProductListHtml(data);
-		showChangeSucTip(pos,'商品');
+		showChangeSucTip(obj);
 		});
 }
 function checknumber(String) 
@@ -128,29 +132,23 @@ function trimTxt(txt)
 {
    return txt.replace(/(^\s*)|(\s*$)/g, "");
 }
-function showAlert_shoppingCart(message,obj)
-{
-   alert(message);
-}
+
 function getPos(obj){
 	this.Left=0;
 	this.Top=0;
-	this.Height=obj.offsetHeight;
-	this.Width=obj.offsetWidth;
-	var tempObj=obj;
-	while (tempObj!=null && tempObj.tagName.toLowerCase()!="body" && tempObj.tagName.toLowerCase()!="html"){
-		this.Left+=tempObj.offsetLeft;
-		this.Top+=tempObj.offsetTop;
-		tempObj=tempObj.offsetParent;
-	}
+	this.Height=obj.height();
+	this.Width=obj.width();
+	
 }
 //显示变更数量提示
-function showChangeSucTip(pos,changeStr)
+function showChangeSucTip(obj)
 {
 	closeWindow();
-	pos.Top=pos.Top+84;
-	pos.Left=pos.Left+(204-pos.Width)/2;
-	var tipHtml="<div id='changeSucTip'><div id='tipContent'><div id='tipTitle'>"+changeStr+"数量修改成功！<br />商品金额为：<span id='priceSpan'>"+$('#cartBottom_price').innerHTML+"</span>元<br /><a href='javascript:closeWindow()'>关闭</a></div></div></div>";
+	var pos = new getPos(obj);
+	var p = obj.position();
+	pos.Top=p.top-84;
+	pos.Left=p.left-(204-pos.Width)/2;
+	var tipHtml="<div id='changeSucTip'><div id='tipContent'><div id='tipTitle'>商品数量修改成功！<br />商品金额为：<span id='priceSpan'>"+$('#cart_total').html()+"</span>元<br /><a href='javascript:closeWindow()'>关闭</a></div></div></div>";
 	showMessageBox(tipHtml,pos,204);
 
 	var mWin=g('mesWindow');
@@ -163,8 +161,8 @@ function showChangeSucTip(pos,changeStr)
 	}catch(e){isGrow=false;}
 	}
 	else{mWin.style.opacity=0.9;}
-	if(isGrow){setTimeout(function(){setGrowHidden(mWin,3,10);},40000);}
-	else{setTimeout(function(){closeWindow();},40000);}
+	if(isGrow){setTimeout(function(){setGrowHidden(mWin,3,10);},4000);}
+	else{setTimeout(function(){closeWindow();},4000);}
 }
 function closeWindow()
 {
