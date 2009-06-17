@@ -5,6 +5,8 @@ import os
 import datetime
 
 from google.appengine.ext import webapp
+from google.appengine.ext.webapp import template
+
 from google.appengine.ext.webapp.util import run_wsgi_app
 from google.appengine.ext import db
 
@@ -63,7 +65,19 @@ class fix2(webapp.RequestHandler):
 			e.put()
 		#	del link_item.tag
 			
-	
+class export(webapp.RequestHandler):
+	def get (self):
+		t = self.request.get('t')
+		if t:
+			dt = datetime.datetime.strptime(t, "%Y-%m-%d-%H-%M-%S")
+		else:
+			dt = datetime.datetime.strptime('1970-01-01-00-00-00', "%Y-%m-%d-%H-%M-%S")
+
+		e = Entry.all().filter('addtime >',dt).order('addtime')
+		e = e.fetch(10)
+		path = os.path.join(os.path.dirname(__file__),'templates/export.tpl')
+		self.response.out.write(template.render(path,{'e':e}))	
+		
 class csv(webapp.RequestHandler):
 	def get(self):
 		i=0
@@ -137,8 +151,7 @@ application = webapp.WSGIApplication([
 	('/rss/(.*)', rss),
 	('/dump/csv', csv),
 	('/dump/rss', rss),
-	('/dump/fix1', fix1),
-	('/dump/fix2', fix2),
+	('/dump/export', export)
 	],debug=True)
 
 def main():
