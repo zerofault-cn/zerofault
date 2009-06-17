@@ -12,9 +12,30 @@ class Home extends Controller {
 	
 	function index()
 	{
-		$type = $_REQUEST['type'];
+		$type = $this->uri->segment(1);
 		empty($type) && $type='link';
 		$data['type'] = $type;
+
+		if($this->uri->segment(2))
+		{
+			$tmp = $this->uri->segment(2);
+			if(strlen($tmp) == strlen(intval($tmp)))
+			{
+				$offset = $tmp;
+			}
+			else
+			{
+				$tag = $tmp;
+			}
+		}
+		if($this->uri->segment(3))
+		{
+			$tag = $this->uri->segment(2);
+			$offset = $this->uri->segment(3);
+		}
+		if($tag)
+		{
+		}
 		$this->db->where('type',$type);
 		$this->db->where('private',0);
 		$query = $this->db->get('entries');
@@ -25,11 +46,7 @@ class Home extends Controller {
 		$uri = $_SERVER['REQUEST_URI'];
 		if(strstr($uri,'index.php')===false)
 		{
-			$uri .= 'index.php';
-		}
-		if(strpos($uri,'?')===false)
-		{
-			$uri .='?type=link';
+			$uri .= 'index.php/link';
 		}
 		else
 		{
