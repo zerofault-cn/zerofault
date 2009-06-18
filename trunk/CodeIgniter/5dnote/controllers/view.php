@@ -1,8 +1,8 @@
 <?php
 
-class Home extends Controller {
+class View extends Controller {
 
-	function Home()
+	function View()
 	{
 		parent::Controller();
 	//	$this->load->scaffolding('entries');
@@ -33,11 +33,13 @@ class Home extends Controller {
 			$tag = $this->uri->segment(2);
 			$offset = $this->uri->segment(3);
 		}
-		if($tag)
-		{
-		}
 		$this->db->where('type',$type);
 		$this->db->where('private',0);
+		if($tag)
+		{
+			$this->db->join('entry_tags', 'entry_tags.entry_id = entries.id','inner');
+			$this->db->join('tags', 'tags.id = entry_tags.tag_id and tags.name='.$tag,'inner');
+		}
 		$query = $this->db->get('entries');
 		$data['total'] = $query->num_rows();
 
