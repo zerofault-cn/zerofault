@@ -86,7 +86,9 @@ class Import extends Controller {
 				'entry_id' => $entry_id,
 				'tag_id'  => $tag_id
 				);
-			$this->db->insert('entry_tags', $data);
+			//checkvar($data);
+			$ret = $this->db->insert('entry_tags', $data);
+			echo $this->db->insert_id().$tags.":".$ret."<br />\r\n";
 		}
 		return true;
 	}
