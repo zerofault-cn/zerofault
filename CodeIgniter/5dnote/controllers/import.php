@@ -23,8 +23,12 @@ class Import extends Controller {
 		{
 			$t = '1970-01-01-00-00-00';
 		}
-		$csv = file_get_contents($baseurl.'dump/export?t='.$t);
-		$lines = explode('$',$this->convert_encoding($csv));
+		//$csv = file_get_contents($baseurl.'dump/export?t='.$t);
+		$c = curl_init();
+		curl_setopt($c, CURLOPT_URL, $baseurl.'dump/export?t='.$t);
+		curl_setopt($c, CURLOPT_RETURNTRANSFER, 1);
+		$data = curl_exec($c);
+		$lines = explode('$',$this->convert_encoding($data));
 		foreach($lines as $line)
 		{
 			if(!strlen($line)>10){
@@ -44,20 +48,21 @@ class Import extends Controller {
 				'addtime' => $fields[4],
 				'private' => 0==strcasecmp('false',$fields[5])?False:True,
 				'type' => $fields[7],
-				'tag_ids' => implode(',',$this->parseTags($fields[6],$fields[7]))
 				);
 			//checkvar($data);
-			$ret = $this->db->insert('entries',$data);
-			echo $this->db->insert_id().':'.$fields[1]."<br />\r\n";
+			$this->db->insert('entries',$data);
+			$entry_id = $this->db->insert_id();
+			$this->insertTags($entry_id, $fields[6], $fields[7]);
+			
+			echo $entry_id.':'.$fields[1]."<br />\r\n";
 		}
 	}
 	function convert_encoding($str)
 	{
 		return iconv("UTF-8", "gb2312//IGNORE" , $str);
 	}
-	function parseTags($tags,$type)
+	function insertTags($entry_id,$tags,$type)
 	{
-		$ret = array();
 		$tags_arr = explode(' ',trim($tags));
 		foreach($tags_arr as $tag)
 		{
@@ -66,64 +71,25 @@ class Import extends Controller {
 			if($query->num_rows()>0)
 			{
 				$row = $query->row();
-				$this->db->query("update tags set count_".$type."=count_".$type."+1, usetime=now() where id=".$row->id);
 				$tag_id = $row->id;
 			}
 			else
 			{
 				$data = array(
 					'name' => $tag,
-					'count_link' => 0,
-					'count_note' => 0,
-					'count_pic' => 0,
 					'usetime' => date("Y-m-d H:i:s")
 					);
-				if($type)
-				{
-					$data['count_'.$type] = 1;
-				}
 				$this->db->insert('tags', $data);
 				$tag_id = $this->db->insert_id();
 			}
-			if($this->checkTagId($tag_id))
-			{
-				$ret[] = $tag_id;
-			}
-			
+			$data = array(
+				'entry_id' => $entry_id,
+				'tag_id'  => $tag_id
+				);
+			$this->db->insert('entry_tags', $data);
 		}
-		return $ret;
+		return true;
 	}
-	function checkTagId($tag_id=0)
-	{
-		if(!$tag_id>0)
-		{
-			return false;
-		}
-		$query = $this->db->query("SHOW COLUMNS FROM entries LIKE 'tag_ids'");
-		$row = $query->row();
-		$Type = $row->Type;//set('1','2','3','4','5','6','7','8','9','10')
-		eval('$set_arr = array'.substr($Type,3).';');
-		if(in_array($tag_id,$set_arr))
-		{
-			return true;
-		}
-		else
-		{
-			$sql = "ALTER TABLE entries CHANGE tag_ids tag_ids ".substr(trim($row->Type),0,-1).",'".$tag_id."') NOT NULL";
-			if($this->db->query($sql))
-			{
-				return true;
-			}
-			else
-			{
-				return false;
-			}
-		}
-
-	}
-
-
-
 }
 
 /* End of file welcome.php */
