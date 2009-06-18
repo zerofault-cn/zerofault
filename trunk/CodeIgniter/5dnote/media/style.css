@@ -45,7 +45,7 @@ div { line-height: 150%; }
 
 /*************  ·ÖÒ³    **************/
 .page { margin-left: -3px !important; margin-left: -6px; height: 30px;  }
-.page span { display: block; float: left; margin-right: 2px; margin-left: 2px; padding: 1px 5px; color: #54ba16; }
+.page span,.page strong { display: block; float: left; margin-right: 2px; margin-left: 2px; padding: 1px 5px; color: #54ba16; }
 .page .dot { color: #ccc; }
 .page a { display: block; float: left; margin-right: 2px; margin-left: 2px; padding: 1px 5px; border: 1px #eee solid; color: #666; }
 .page a:hover { color: #fff; background-color: #64ca26; text-decoration: none; }
