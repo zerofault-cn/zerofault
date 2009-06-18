@@ -57,8 +57,8 @@
 					<?=nl2br($item['content'])?>
 				</dd>
 				<dd class="tags">
-					<?php foreach($item['tag_names'] as $tag_name): ?>
-					[<a href="/<?=$tag_name?>" class="tag"><?=$tag_name?></a>]
+					<?php foreach(explode(',', $item['tag_names']) as $tag_name): ?>
+					[<a href="<? echo (strpos($_SERVER["REQUEST_URI"],'?')===false?'&':'?').'tag='.$tag_name;?>" class="tag"><?=$tag_name?></a>]
 					<?php endforeach; ?>
 					<?php if($_COOKIE['isAdmin']): ?>
 					... 

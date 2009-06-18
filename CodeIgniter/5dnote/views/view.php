@@ -8,12 +8,12 @@
 	<link rel="alternate" type="application/rss+xml" title="zerofault的网络笔记本" href="rss/" />
 	<link rel="icon" type="image/x-icon" href="media/favicon.ico" />
 	<link rel="Shortcut Icon" type="image/x-icon" href="media/favicon.ico" />
-	<link rel="stylesheet" type="text/css" href="media/style.css" />
-	<script language="javascript" type="text/javascript" src="media/jquery-1.2.6.pack.js"></script>
+	<link rel="stylesheet" type="text/css" href="<?=$config['base_url']?>media/style.css" />
+	<script language="javascript" type="text/javascript" src="<?=$config['base_url']?>media/jquery-1.2.6.pack.js"></script>
 </head>
 <body>
 	<div id="toper">
-		<a href="/" id="logo"><img alt="my favorites" src="media/logo.gif" /></a>
+		<a href="/" id="logo"><img alt="my favorites" src="<?=$config['base_url']?>media/logo.gif" /></a>
 		<?php if($_COOKIE['isAdmin']): ?>
 			<a href="/add?type=<?=$type?>">添加</a>
 		<?php endif; ?>
