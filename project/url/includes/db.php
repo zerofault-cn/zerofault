@@ -43,5 +43,5 @@ if(!$db->db_connect_id)
    die("Could not connect to the database");
 }
 //$db->sql_query("SET character_set_connection=uft-8 , character_set_results=utf-8, character_set_client=binary, sql_mode=''");
-$db->sql_query("set names utf8;");
+//$db->sql_query("set names utf8;");
 ?>
