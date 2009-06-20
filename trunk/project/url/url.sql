@@ -1,7 +1,4 @@
 
-create datebase test DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci 
-
-
 DROP TABLE IF EXISTS url_category;
 CREATE TABLE url_category (
 
@@ -19,7 +16,7 @@ sort smallint(3) unsigned NOT NULL default '100',
 
   PRIMARY KEY  (id)
 
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+);
 
 
 DROP TABLE IF EXISTS url_website;
@@ -44,5 +41,5 @@ CREATE TABLE url_website (
   hit int(3) unsigned NOT NULL default '0',
   PRIMARY KEY  (id)
 
-)ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+);
 
