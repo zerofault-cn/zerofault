@@ -1,0 +1,43 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+<title>放大镜</title>
+</head>
+<body bgcolor="#FFFFFF">
+<center>
+--JS放大镜显示--
+<br>
+单击“放大镜”开始浏览，再次单击停止。</center>
+<!--缩略图和放大镜图-->
+<img src="small_hill.gif" id="bgLayer" style="position:absolute; left:160px; top:50px;"> 
+<img src="viewer.gif" id="myviewer" onclick="moveme=!moveme" onmousemove="viewit(this)" style="background-repeat:no-repeat;background-position:2000px 2000px;position:absolute;">
+
+<script language="JavaScript">
+var viewer_bgcolor="#FFFFFF"; //放大镜的背景色，建议设成和网页背景色相同。
+var bigmap="big_hill.gif";    //大图路径
+
+document.all.myviewer.style.backgroundImage='url('+bigmap+')';
+document.all.myviewer.style.backgroundColor=viewer_bgcolor;
+document.write('<img id="getsize" style="position:absolute; left:-2000px; top:-2000px;" src="'+bigmap+'">');
+
+var moveme=false;
+function viewit(obj){
+if (moveme){
+obj.style.left=event.x+parseInt(document.body.scrollLeft)-parseInt(obj.width)/2;
+obj.style.top=event.y+parseInt(document.body.scrollTop)-parseInt(obj.height)/2;
+
+Nx=parseInt(document.all.getsize.width)/parseInt(document.all.bgLayer.width);
+bgx=(-1)*(Nx-1)*(event.x-parseInt(document.all.bgLayer.style.left)+parseInt(document.body.scrollLeft))-parseInt(obj.style.left)+parseInt(document.all.bgLayer.style.left);
+
+Ny=parseInt(document.all.getsize.height)/parseInt(document.all.bgLayer.height);
+bgy=(-1)*(Ny-1)*(event.y-parseInt(document.all.bgLayer.style.top)+parseInt(document.body.scrollTop))-parseInt(obj.style.top)+parseInt(document.all.bgLayer.style.top);
+
+obj.style.backgroundPosition=bgx+" "+bgy;
+}}
+
+
+</script>
+
+</body>
+</html>

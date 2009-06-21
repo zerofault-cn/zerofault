@@ -1,0 +1,123 @@
+-----------------------
+-==- ExtChar Table -==-
+-----------------------
+CP1250 see CP437 by TTF
+EUR Win -> USA Dos Code
+--==--++--===--++--==--
+_B0 = $00B0 -> Shadow L
+_B1 = $00B1 -> Shadow M
+_B2 = $02DB -> Shadow B
+-----------------------
+CP437(MSDOS US)->Screen
+--==--++--===--++--==--
+Char#00=[ ] Char_01=[]
+Char_02=[] Char_03=[]
+Char_04=[] Char_05=[]
+-----------------------
+Char_06=[]
+Char#07=[]
+Char#08=[]
+-----------------------
+Char#09=[	]
+Char#0A=[
+]
+Char_0B=[]
+Char#0C=[]
+Char#0D=[]
+-----------------------
+Char_0E=[] Char_0F=[]
+-----------------------
+Char_10=[] Char_11=[]
+Char_12=[] Char_13=[]
+Char_14=[] Char_15=[]
+Char_16=[] Char_17=[]
+-----------------------
+Char_18=[] Char_19=[]
+Char_1A=[] Char_1B=[]
+Char_1C=[] Char_1D=[]
+Char_1E=[] Char_1F=[]
+-----------------------
+Char_B0=[∞] Char_B1=[±]
+Char_B2=[≤] Char_DB=[€] B2=$02DB
+Char_DC=[‹] Char_DD=[›] DB=$0170
+Char_DF=[ﬂ] Char_DE=[ﬁ] DE=$0162
+-----------------------
+Char_C2=[¬] Char_D2=[“] D2=$0147
+Char_C1=[¡] Char_D0=[–] D0=$0110
+Char_D1=[—] Char_CB=[À] D1=$0143
+Char_CF=[œ] Char_CA=[ ] CF=$010E CA=$0118
+-----------------------
+Char_C4=[ƒ] Char_CD=[Õ]
+Char_C5=[≈] Char_D7=[◊] C5=$0139
+Char_B3=[≥] Char_BA=[∫] B3=$0142 BA=$015F
+Char_D8=[ÿ] Char_CE=[Œ] D8=$0158
+-----------------------
+Char_C6=[∆] Char_C7=[«] C6=$0106
+Char_B5=[µ] Char_B6=[∂]
+Char_C3=[√] Char_CC=[Ã] C3=$0102 CC=$011A
+Char_B4=[¥] Char_B9=[π] B9=$0105
+-----------------------
+Char_C9=[…] Char_BB=[ª]
+Char_C8=[»] Char_BC=[º] C8=$010C BC=$013D
+Char_D6=[÷] Char_B7=[∑] B7=$2219
+Char_D3=[”] Char_BD=[Ω] BD=$02DD
+-----------------------
+Char_D5=[’] Char_B8=[∏] D5=$0150
+Char_D4=[‘] Char_BE=[æ] BE=$013E
+Char_DA=[⁄] Char_BF=[ø] BF=$017C
+Char_C0=[¿] Char_D9=[Ÿ] C0=$0154 D9=$016E
+-----------------------
+Char_7C=[|] Char_7E=[~]
+Char_7D=[}] Char_7F=[]
+-----------------------
+Char_80=[Ä] Char_82=[Ç] 80=$20AC 82=$201A
+Char_81=[Å] Char_83=[É]
+Char_84=[Ñ] Char_86=[Ü] 84=$201E 86=$2020
+Char_85=[Ö] Char_87=[á] 85=$2026 87=$2021
+-----------------------
+Char_88=[à] Char_8A=[ä] 8A=$0160
+Char_89=[â] Char_8B=[ã] 89=$2030 8B=$2039
+Char_8C=[å] Char_8E=[é] 8C=$015A 8E=$017D
+Char_8D=[ç] Char_8F=[è] 8D=$0164 8F=$0179
+-----------------------
+Char_90=[ê] Char_92=[í] 92=$2019
+Char_91=[ë] Char_93=[ì] 91=$2018 93=$201C
+Char_94=[î] Char_96=[ñ] 94=$201D 96=$2013
+Char_95=[ï] Char_97=[ó] 95=$2022 97=$2014
+-----------------------
+Char_98=[ò] Char_9A=[ö] 9A=$0161 9B=$203A
+Char_99=[ô] Char_9B=[õ] 99=$2122 99=Trade [TM]
+Char_9C=[ú] Char_9E=[û] 9C=$015B 9E=$017E
+Char_9D=[ù] Char_9F=[ü] 9D=$0165 9F=$017A
+-----------------------
+Char_A0=[†] Char_A2=[¢] A2=$02D8
+Char_A1=[°] Char_A3=[£] A1=$02C7 A3=$0141
+Char_A4=[§] Char_A6=[¶]
+Char_A5=[•] Char_A7=[ß] A5=$0104
+-----------------------
+Char_A8=[®] Char_AA=[™] AA=$015E
+Char_A9=[©] Char_AB=[´] A9=Trade [C]
+Char_AC=[¨] Char_AE=[Æ] AE=Trade [R]
+Char_AD=[≠] Char_AF=[Ø] AF=$017B
+-----------------------
+Char_E0=[‡] Char_E2=[‚] E0=$0155
+Char_E1=[·] Char_E3=[„] E3=$0103
+Char_E4=[‰] Char_E6=[Ê] E6=$0107
+Char_E5=[Â] Char_E7=[Á] E5=$013A
+-----------------------
+Char_E8=[Ë] Char_EA=[Í] E8=$010D EA=$0119
+Char_E9=[È] Char_EB=[Î]
+Char_EC=[Ï] Char_EE=[Ó] EC=$011B
+Char_ED=[Ì] Char_EF=[Ô] EF=$010F
+-----------------------
+Char_F0=[] Char_F2=[Ú] F0=$0111 F2=$0148
+Char_F1=[Ò] Char_F3=[Û] F1=$0144
+Char_F4=[Ù] Char_F6=[ˆ]
+Char_F5=[ı] Char_F7=[˜] F5=$0151
+-----------------------
+Char_F8=[¯] Char_FA=[˙] F8=$0159
+Char_F9=[˘] Char_FB=[˚] F9=$016F FB=$0171
+Char_FC=[¸] Char_FE=[˛] FE=$0163
+Char_FD=[˝] Char_FF=[ˇ] FF=$02D9
+-----------------------
+
