@@ -5,6 +5,7 @@ import os
 import datetime
 
 from google.appengine.ext import webapp
+from google.appengine.api import urlfetch
 from google.appengine.ext.webapp import template
 
 from google.appengine.ext.webapp.util import run_wsgi_app
@@ -26,58 +27,20 @@ def unescape(txt):
 	return unquote(p.sub(unichar_fromhex, txt))
 #-----------------------------------#
 
-class fix1(webapp.RequestHandler):
-	def get (self):
-		
-		for tag in Tag.all():
-			tag.type ='link'
-			tag.count_link=tag.num
-			tag.count_note=0
-			tag.count_pic=0
-			tag.put()
-		#	del tag.num
-		
-
-
-class fix2(webapp.RequestHandler):
-	def get (self):
-	#	e0=Entry().all()
-	#	del e0
-		p=self.request.get('p')
-		p = int(p)
-		link=Link.all()
-		link=link.fetch(60,80+60*p)
-		for l in link:
-			e = Entry()
-			e.title = l.title
-			e.url   = l.url
-			e.content=l.descr
-			e.image = ''
-			e.addtime=l.addtime
-			e.private=l.private
-			e.type='link'
-			e.comment=[]
-			e.dig=0
-
-			for t in db.get(l.tag):
-				if t:
-					e.tags.append(t.name)
-			e.put()
-		#	del link_item.tag
-			
 class export(webapp.RequestHandler):
 	def get (self):
-		t = self.request.get('t')
-		if t:
-			dt = datetime.datetime.strptime(t, "%Y-%m-%d-%H-%M-%S")
-		else:
-			dt = datetime.datetime.strptime('1970-01-01-00-00-00', "%Y-%m-%d-%H-%M-%S")
-
-		e = Entry.all().filter('addtime >',dt).order('addtime')
-		e = e.fetch(10)
+		offset = self.request.get('offset')
+		if not offset:
+			offset = 0
+		e = Entry.all().order('addtime')
+		e = e.fetch(10,int(offset))
 		path = os.path.join(os.path.dirname(__file__),'templates/export.tpl')
 		self.response.out.write(template.render(path,{'e':e}))	
-		
+
+class trigger(webapp.RequestHandler):
+	def get (self):
+		urlfetch.fetch('http://zerofault.oxyhost.com/5dnote/scripts/import.php')
+	
 class csv(webapp.RequestHandler):
 	def get(self):
 		i=0
@@ -151,6 +114,7 @@ application = webapp.WSGIApplication([
 	('/rss/(.*)', rss),
 	('/dump/csv', csv),
 	('/dump/rss', rss),
+	('/dump/trigger', trigger),
 	('/dump/export', export)
 	],debug=True)
 
