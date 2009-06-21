@@ -1,16 +1,16 @@
 <div valign="bottom">
 <hr width="758" size='0.6' noshade>
-<a href="/phpbbs/introduce.php">网站简介</a> | 
-<a href="/phpbbs/board/insert_1.php">我要留言</a> |
-<a href="/phpbbs/board/index.php">查看留言</a> |
-<a href="mailto:zerofault@163.com"> 联系我</a><br>
-Copyright &copy; 2002-2006 <a href="http://zerofault.8866.org/">海天一色</a> All Rights Reserved
+<a href="<?=$phpbbs_root_path?>/introduce.php">网站简介</a> | 
+<a href="<?=$phpbbs_root_path?>/board/insert_1.php">我要留言</a> |
+<a href="<?=$phpbbs_root_path?>/board/index.php">查看留言</a> |
+<a href="mailto:zerofault at 163.com"> 联系我</a><br>
+Copyright &copy; 2002-2006 海天一色 All Rights Reserved
 <br />
 声明：本站所有内容仅供个人学习测试使用，如有侵犯您的版权，请联系我改正。
 <br />
 <?php
 session_start();
-$filemod = filemtime($_SERVER["PHP_SELF"]);
+$filemod = filemtime(realpath($_SERVER["PHP_SELF"]));
 $filemodtime = date("Y-n-j H:i:s", $filemod);
 //if(!session_is_registered("count"))
 {
