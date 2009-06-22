@@ -1,0 +1,59 @@
+{include:header}
+	<div style="text-align:center;line-height:20px;color:#000000;FILTER: glow(color:#308148,strength=3);">网址导航分类及链接管理</div>
+	<div id="addcate" style="border:1px dotted #bbb;padding:3px;line-height:140%;">
+		<input type="button" id="toAddCate" value="添加新分类" />
+		<div id="addCateForm">
+			分类名称：<input type="text" id="cate_name" name="cate_name" size="10" tabindex="1" />
+			排序：<input type="text" id="cate_sort" name="cate_sort" value="<?=($max_cate_sort+10)?>" size="4">
+			<input type="button" value="提交" id="submit_addCate" /> <input type="button" value="取消" id="cancel_addCate" /><br />
+			简介：<input type="text" id="cate_descr" name="cate_descr" size="40" tabindex="2" />
+		</div>
+	</div>
+	<ol class="cate_list">
+<iterate name="cate_list" id="cate_item">
+		<li id="{$cate_item.id}" class="">
+			<div class="cate">
+				<span class="cate_func">
+					排序:<label id="{$cate_item.id}">{$cate_item.sort}</label>
+					<span style="margin-left:100px;"><!-- 空位 --></span>
+					<!-- 显示与隐藏 -->
+					[<a href="javascript:void(0)" id="{$cate_item.id}" class="show" value='{$cate_item.flag}'>{$cate_item.flag}</a>]
+					[<a href="javascript:void(0)" id="{$cate_item.id}" class="delete">删除</a>]
+				</span>
+				<span class="cate_info">
+					<label id="{$cate_item.id}">{$cate_item.name}</label>
+					&nbsp;&nbsp;[<a href="javascript:void(0)" class="toAddSite" value="0">添加网站</a>]
+					&nbsp;&nbsp;<a href="javascript:void(0)" class="toShowSite" value="0"></a>
+				</span>
+				
+			</div>
+			<ol class="site_list">
+				<div class="addSiteForm" id="{$cate_item.id}">
+					网站：<input type="text" class="site_name" name="site_name" size="10" tabindex="1" />
+					排序：<input type="text" class="site_sort" name="site_sort" value="" size="4">
+					<input type="button" value="提交" class="submit">
+					<input type="button" value="取消" class="cancel"><br />
+					网址：<input type="text" class="site_url" name="site_url" size="20" tabindex="2" /><br />
+					简介：<input type="text" class="site_descr" name="site_descr" size="40" tabindex="3" />
+				</div>
+	<iterate name="site_list" id="site_item">
+				<li id="{$site_item.id}" class="">
+					<span class="site_func">
+						排序:<label id="{$site_item.id}">{$site_item.sort}</label>&nbsp;&nbsp;&nbsp;&nbsp;
+						<span function="as a parent">[<a href="javascript:void(0)" id="{$site_item.id}" class="show" value='{$site_item.flag}'>{$site_item.flag}</a>&nbsp;&nbsp;
+						<a href="javascript:void(0)" id="{$site_item.id}" class="mark" value='{$site_item.mark}'>{$site_item.mark}</a>]</span>
+						<span function="add a parent">[<a href="javascript:void(0)" id="{$site_item.id}" class="delete">删除</a>]</span>
+					</span>
+					<span class="site_info">
+						<a class="" id="{$site_item.id}" href="{$site_item.url}" title="{$site_item.descr}" target="_blank">{$site_item.name}</a>&nbsp;&nbsp;<a href="javascript:void(0)" class="toEditSite">[修改]</a>
+					</span>
+					<div class="clear"></div>
+				</li>
+	</iterate>
+			</ol>
+		</li>
+</iterate>
+	</ol>
+</div>
+</body>
+</html>
