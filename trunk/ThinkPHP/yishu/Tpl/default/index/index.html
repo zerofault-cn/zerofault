@@ -1,0 +1,44 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<TITLE>艺术之家网址大全</TITLE>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" href="{*APP_PUBLIC_URL}/css.css" type="text/css">
+<script language=javascript>
+<!--
+//防止被iframe
+if (top.location !== self.location) {
+top.location=self.location;
+}
+-->
+</script>
+<link href="style.css" type="text/css" rel="stylesheet">
+</head>
+<body>
+<div class="main index">
+	<div class="caption">网站大全</div>
+	<div class="content">
+		<iterate name="list" id="item">
+		<div class="cate_site_list<?=$rotate_bg?>">
+			<div class="cate_title">[{$item.name}]</div>
+			<div class="site_list">
+			<iterate name="item['site_list']" id="site_item">
+			<a id="url" class="<if condition='$site_item.mark eq 1'>red</if>" href="{$site_item.url}" target="_blank" >{$site_item.name}</a>
+			</iterate>
+			</div>
+		</div>
+		</iterate>
+	</div>
+</div>
+</body>
+<iframe frameborder="1" scrolling="no" id="iframe1" name="iframe1" width="800" height="60" src="" style="display:none;"></iframe>
+<script language="javascript" type="text/javascript" src="admin/jquery-1.2.1.js"></script>
+<script language="javascript">
+$("a#url").click(function(){
+	t('iframe1').src=$(this).attr("href");
+});
+function t(id) {
+	return document.getElementById(id);
+}
+</script>
+</html>

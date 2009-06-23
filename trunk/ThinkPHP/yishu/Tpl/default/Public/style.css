@@ -23,7 +23,7 @@ input.cate_sort{
 	line-height:12px;
 }
 span{
-	overflow:hidden£»
+	overflow:hiddenï¼›
 }
 .clear{
 	clear:both;
@@ -66,11 +66,11 @@ label.editable{
 hheight:16px;
 }
 ol.alt{
-	background-color:#ecf6fc;/*ÕâÐÐ½«¸øËùÓÐµÄol¼ÓÉÏ±³¾°É«*/
+	background-color:#ecf6fc;/*è¿™è¡Œå°†ç»™æ‰€æœ‰çš„olåŠ ä¸ŠèƒŒæ™¯è‰²*/
 
 }
 ol.over{
-	background:#bcd4ec;  /*Õâ¸ö½«ÊÇÊó±ê¸ßÁÁÐÐµÄ±³¾°É«*/
+	background:#bcd4ec;  /*è¿™ä¸ªå°†æ˜¯é¼ æ ‡é«˜äº®è¡Œçš„èƒŒæ™¯è‰²*/
 }
 
 .site_info label{
@@ -88,7 +88,7 @@ ol.over{
 .site0,.site0 a{
 	color:#ccc;
 }
-.gray,.gray a{
+.gray, .gray a:link, .gray a:visited{
 	color:#ccc;
 }
 .normal, .normal a{
