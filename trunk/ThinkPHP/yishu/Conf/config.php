@@ -12,7 +12,7 @@ return array(
 
 	'DEBUG_MODE'=>true,
 	'URL_MODEL' => 2,
-	'SHOW_PAGE_TRACE' => TRUE,
+//	'SHOW_PAGE_TRACE' => TRUE,
 	'SQL_DEBUG_LOG' => TRUE,
 
 	);

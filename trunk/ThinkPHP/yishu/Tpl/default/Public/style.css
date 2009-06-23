@@ -1,6 +1,6 @@
 BODY 
 {
-	FONT-FAMILY: "Georgia","verdana","ËÎÌו"; 
+	FONT-FAMILY: Verdana, Arial, Helvetica, sans-serif;
 	FONT-SIZE: 12px;
 	font-style: normal;
 	font-weight: normal;
@@ -90,6 +90,9 @@ ol.over{
 }
 .gray,.gray a{
 	color:#ccc;
+}
+.normal, .normal a{
+	color:#000066;
 }
 label.red,a.red:link,a.red:visited
 {
