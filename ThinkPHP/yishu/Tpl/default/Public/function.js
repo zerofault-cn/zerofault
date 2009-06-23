@@ -1,5 +1,6 @@
 $(document).ready(function(){  //这个就是传说的ready,页面载入完成即执行
-	$("div#addCateForm").hide("fast");//隐藏添加分类的表单
+	//$("div#addCateForm").hide("fast");//隐藏添加分类的表单
+	$("input#toAddCate").hide("fast");
 
 	$("input#toAddCate").click(function(){//点击添加按钮,隐藏此按钮,显示添加分类的表单
 		$(this).hide('slow');
@@ -42,33 +43,33 @@ $(document).ready(function(){  //这个就是传说的ready,页面载入完成�
 	});
 
 	$(".cate_func>label").each(function(i){//设置分类的排序数字的可编辑功能
-		setSortEditable(this,i,'url_category');
+		setSortEditable(this,i,'category');
 	});
 
 	$(".cate_func a.show").each(function(i){//设置分类的显示与隐藏功能
-		setShowFlagFunc(this,i,'url_category');
+		setShowFlagFunc(this,i,'category');
 	});
 
 	$(".cate_func a.delete").each(function(i){//设置分类的删除功能
-		setDeleteFunc(this,i,'url_category');
+		setDeleteFunc(this,i,'category');
 	});
 
 	$(".site_func>label").each(function(i){//设置网址的排序数字的可编辑功能
-		setSortEditable(this,i,'url_website');
+		setSortEditable(this,i,'website');
 	});
 	$(".site_func a.show").each(function(i){//设置网址的显示与隐藏功能
-		setShowFlagFunc(this,i,'url_website');
+		setShowFlagFunc(this,i,'website');
 	});
 	$(".site_func a.mark").each(function(i){//设置网址的突出标记功能
-		if($(this).attr("value")==0)
+		if($(this).attr("val")==0)
 		{
 			$(this).addClass('red');
 		}
-		setShowFlagFunc(this,i,'url_website');
+		setShowFlagFunc(this,i,'website');
 	});
 
 	$(".site_func a.delete").each(function(i){//设置网址删除功能
-		setDeleteFunc(this,i,'url_website');
+		setDeleteFunc(this,i,'website');
 	});
 
 	$(".site_info>a.toEditSite").each(function(i){
@@ -83,7 +84,7 @@ function submit_addCate() {//提交新的分类
 		$("input#cate_name").focus();
 		return false;
 	}
-	$.post("?action=add",{
+	$.post("admin/add",{
 		'name': $("input#cate_name").val(),
 		'sort': $("input#cate_sort").val(),
 		'descr':$("input#cate_descr").val()
@@ -95,7 +96,6 @@ function submit_addCate() {//提交新的分类
 			else if(str=='1')
 			{
 				location.reload();
-			//	addsite('.$id.');
 			}
 			else
 			{
@@ -157,10 +157,10 @@ function cancel_cateName(obj,n){//取消修改分类名称
 
 function showAddSiteForm(obj,n){//显示添加网站的表单
 	$(obj).click(function(){
-		if($(this).attr('value')=='0')
+		if($(this).attr('val')=='0')
 		{
 			$(this).html('取消添加');
-			$(this).attr('value',1);
+			$(this).attr('val',1);
 			$(this).parent().parent().next().children(".addSiteForm").show("slow");
 
 			$(this).parent().parent().next().children(".addSiteForm").children(".submit").click(function(){
@@ -193,8 +193,8 @@ function submit_addSite(obj,n) {//提交新的网站
 		return false;
 	}
 
-	$.post("?action=add",{
-		'table'	:'url_website',
+	$.post("admin/add",{
+		'table'	:'website',
 		'cate_id':$(obj).parent().attr("id"),
 		'name'	:$(obj).prev().prev().val(),
 		'url'	:$(obj).next().next().next().val(),
@@ -218,7 +218,7 @@ function submit_addSite(obj,n) {//提交新的网站
 }
 function cancel_addSite(obj,n){//取消添加网站
 	$(obj).html('添加网站');
-	$(obj).attr('value',0);
+	$(obj).attr('val',0);
 	$(obj).parent().parent().next().children(".addSiteForm").hide("slow");
 }
 function hideOverflowSite(obj,n){//隐藏超过10个的网站
@@ -313,21 +313,22 @@ function cancel_sort(obj,n){//取消更改分类排序,公用
 }
 function setShowFlagFunc(obj,n,table){//设置显示与隐藏功能,公用
 	$(obj).click(function(){
-		$.post("?action=modify",{
+		$.post("admin/update",{
 			'table'	:table,
 			'id'	:$(obj).attr('id'),
-			'field'	:($(obj).attr('class')=='show'?'flag':'mark'),
-			'value'	:$(obj).attr('value')
+			'field'	:$(obj).attr('name'),
+			'value'	:$(obj).attr('val')
 		},function(str){
 				if(str==1)//后台处理成功
 				{
-					if($(obj).attr('value')==0)//当前点击的是隐藏/普通
+					if($(obj).attr('val')==0)//当前点击的是隐藏/普通
 					{
-						$(obj).attr("value",1);
+						$(obj).attr("val",1);
 						if($(obj).attr('class')=='show')
 						{
 							$(obj).html('显示');
 							$(obj).parent().parent().parent().addClass('gray');
+						//	$(obj).parent().parent().parent().removeClass('normal');
 						}
 						else if($(obj).attr('class')=='mark')
 						{
@@ -338,11 +339,12 @@ function setShowFlagFunc(obj,n,table){//设置显示与隐藏功能,公用
 					}
 					else//当前点击的是显示/突出
 					{
-						$(obj).attr("value",0);
+						$(obj).attr("val",0);
 						if($(obj).attr('class')=='show')
 						{
 							$(obj).html('隐藏');
 							$(obj).parent().parent().parent().removeClass('gray');
+						//	$(obj).parent().parent().parent().addClass('normal');
 						}
 						else if($(obj).attr('class')=='mark')
 						{
@@ -365,9 +367,11 @@ function setDeleteFunc(obj,n,table){//设置删除功能,公用
 	$(obj).click(function(){
 		if(confirm('确定删除？'))
 		{
-			$.post("?action=del",{
+			$.post("admin/update",{
 					table:table,
-					id:$(obj).attr('id')
+					id:$(obj).attr('id'),
+					field:'flag',
+					value:-1
 				},function(str){
 					if(str==-1)
 					{
