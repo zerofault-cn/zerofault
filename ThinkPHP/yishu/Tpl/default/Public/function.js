@@ -91,7 +91,7 @@ function submit_addCate() {//提交新的分类
 	},function(str){
 			if(str=='-1')
 			{
-				alert("该条目已经添加过了!");
+				alert("该名称已经添加过了!");
 			}
 			else if(str=='1')
 			{
@@ -132,8 +132,8 @@ function setCateNameEditable(obj,n){//设置分类名称可编辑功能
 	});
 }
 function submit_cateName(obj,n){//提交新的分类名称
-	$.post("?action=modify",{
-		'table'	:'url_category',
+	$.post("admin/update",{
+		'table'	:'category',
 		'id'	:$(obj).parent().prev().attr('id'),
 		'field'	:'name',
 		'value'	:$(obj).parent().children("input").val()
@@ -208,7 +208,6 @@ function submit_addSite(obj,n) {//提交新的网站
 			else if(str=='1')
 			{
 				location.reload();
-			//	addsite('.$id.');
 			}
 			else
 			{
@@ -285,7 +284,7 @@ function setSortEditable(obj,n,table){//设置分类排序数字可编辑功能,
 function submit_sort(obj,n,table){//提交新的分类排序,公用
 //	alert($(obj).parent().prev().attr('id'));
 //	return false;
-	$.post("?action=modify",{
+	$.post("admin/update",{
 		'table'	:table,
 		'id'	:$(obj).parent().prev().attr('id'),
 		'field'	:'sort',
@@ -328,11 +327,10 @@ function setShowFlagFunc(obj,n,table){//设置显示与隐藏功能,公用
 						{
 							$(obj).html('显示');
 							$(obj).parent().parent().parent().addClass('gray');
-						//	$(obj).parent().parent().parent().removeClass('normal');
 						}
 						else if($(obj).attr('class')=='mark')
 						{
-							$(obj).html('突出');
+							$(obj).html('醒目');
 							$(obj).parent().removeClass('red');
 							$(obj).parent().parent().next().children(":first").removeClass("red");
 						}
@@ -344,7 +342,6 @@ function setShowFlagFunc(obj,n,table){//设置显示与隐藏功能,公用
 						{
 							$(obj).html('隐藏');
 							$(obj).parent().parent().parent().removeClass('gray');
-						//	$(obj).parent().parent().parent().addClass('normal');
 						}
 						else if($(obj).attr('class')=='mark')
 						{
@@ -399,7 +396,7 @@ function setSiteEditable(obj,n){
 		name=$(this).prev().html();
 		url=$(this).prev().attr('href');
 		descr=$(this).prev().attr('title');
-		html='<span>网站：<input type="text" value="'+name+'" size="10"> <input type="button" value="提交" class="submit"> <input type="button" value="取消" class="cancel"><br />网址：<input type="text" value="'+url+'" size="20"><br />简介：<input type="text" value="'+descr+'" size="40">';
+		html='<span>网站：<input type="text" value="'+name+'" size="10"> <input type="button" value="提交" class="submit"> <input type="button" value="取消" class="cancel"><br />网址：<input type="text" value="'+url+'" size="20"><br />简介：<input type="text" value="'+descr+'" size="40"></span>';
 		$(this).prev().before(html).hide().nextAll().hide();
 		$(this).prev().prev().children(".submit").click(function(){
 			submit_siteInfo(this,n);
@@ -414,8 +411,8 @@ function submit_siteInfo(obj,n){
 	var id=$(obj).parent().parent().parent().attr("id");
 	var url=$(obj).next().next().next().val();
 	var descr=$(obj).next().next().next().next().next().val();
-	$.post("?action=add",{
-		'table'	:'url_website',
+	$.post("admin/add",{
+		'table'	:'website',
 		'name'	:name,
 		'site_id':id,
 		'url'	:url,

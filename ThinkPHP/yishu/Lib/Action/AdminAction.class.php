@@ -18,18 +18,23 @@ class AdminAction extends Action{
 		}
 		else{
 			$dao = D('category');
-			$rs = $dao->where(array('flag'=>array('gt',-1)))->order('sort')->select();
-			$this->assign('cate_list',$rs);
+			$rs = $dao->where(array('flag'=>array('gt',-1)))->order('flag desc, sort')->select();
+			//dump($rs);
 			$this->assign('new_cate_sort',$rs[sizeof($rs)-1]['sort']+10);
 
 			$dao = D('website');
-			$rs = $dao->where(array('flag'=>array('gt',-1)))->order('sort')->select();
-			foreach($rs as $val){
-				$site_list[$val['cate_id']][]=$val;
-				$site_list[$val['cate_id']]['new_site_sort'] = $val['sort']+10;
+			foreach($rs as $key=>$val){
+				$list[$val['id']] = $val;
+				$list[$val['id']]['site_list'] = array();
+				$list[$val['id']]['new_site_sort'] = 10;
+				$rs2 = $dao->where(array('cate_id'=>$val['id'],'flag'=>array('gt',-1)))->order('flag desc, sort')->select();
+				foreach($rs2 as $key2=>$val2){
+					$list[$val['id']]['site_list'][$val2['id']] = $val2;
+					$list[$val['id']]['new_site_sort'] = $val2['sort']+10;
+				}
 			}
-			//dump($site_list);
-			$this->assign('site_list',$site_list);
+			//dump($list);
+			$this->assign('list',$list);
 			$this->display();
 		}
 	}
@@ -46,6 +51,10 @@ class AdminAction extends Action{
 			$dao = D('website');
 			if($site_id>0)
 			{
+				$rs = $dao->where(array('name'=>$name,'id'=>array('neq',$site_id)))->find();
+				if($rs && sizeof($rs)>0){
+					die('-1');
+				}
 				$dao->find($site_id);
 				$dao->name = $name;
 				$dao->url = $url;
