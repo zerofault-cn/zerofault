@@ -1,0 +1,60 @@
+<meta HTTP-EQUIV="pragma" CONTENT="no-cache">
+
+<meta HTTP-EQUIV="Cache-Control" CONTENT="no-cache, must-revalidate">
+
+<meta HTTP-EQUIV="expires" CONTENT="0">
+
+<script LANGUAGE="JavaScript" defer>
+if (external.menuArguments)
+{
+	var sel = '';
+	var parentwin = external.menuArguments;
+	var parentWin = external.menuArguments.window;
+	var parentDoc = external.menuArguments.document;
+
+	if(parentWin.getSelection)
+	{
+		sel = parentWin.getSelection();
+	}
+	else if(parentDoc.getSelection)
+	{
+		sel = parentDoc.getSelection();
+	}
+	else if(parentDoc.selection)
+	{
+		sel = parentDoc.selection.createRange().text;
+	}
+	
+	var url = parentwin.location.href;
+	var title = parentwin.document.title; 
+	
+	if (parentwin.event.srcElement.tagName == "A")
+	{
+		url = parentwin.event.srcElement.getAttribute("HREF");
+		title = parentwin.event.srcElement.innerText;
+	}
+
+	var parm = 'scrollbars=yes,width=450,height=300,left=75,top=20,status=no,resizable=no';
+
+	
+	var pos = Math.min(title.indexOf('/'),title.indexOf('%'));
+	if(pos>0){
+		title = ttle.substr(0,pos);
+	}
+	pos = url.indexOf('/',7);
+	if(pos>0){
+		url = url.substr(7,pos);
+	}
+	var address = '../admin/remote_add/title/'+title+'/url/'+url+'/content/'+(sel);
+	//address ='http://www.baidu.com/';
+	//alert(address+' '+parm);
+	var postwin = window.open(address, '', parm);
+
+	if( postwin )
+	{
+		//postwin.focus();
+	//	alert(postwin);
+		// postwin.document.form1.title.value=title;
+	}
+}
+</script>

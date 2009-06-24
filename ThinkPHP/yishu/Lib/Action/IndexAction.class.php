@@ -21,5 +21,8 @@ class IndexAction extends Action{
 		$this->assign('list',$list);
 		$this->display();
 	}
+	public function loader(){
+		$this->display();
+	}
 }
 ?>
