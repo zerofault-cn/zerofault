@@ -3,9 +3,9 @@ class AdminAction extends Action{
 	var $lastAction;
 	public function _initialize() {
 		//每个操作都会执行此方法
-		if(!cookie::get('isAdmin') && ACTION_NAME != 'login_form' && ACTION_NAME != 'login'){
+		if(!Cookie::get('isAdmin') && ACTION_NAME != 'login_form' && ACTION_NAME != 'login'){
 			$this->lastAction = ACTION_NAME;
-			redirect(__APP__.'/admin/login_form',3,'转向登录窗口');
+			redirect(__APP__.'/Admin/login_form',3,'转向登录窗口');
 		}
 	}
 	public function login_form(){
@@ -16,17 +16,17 @@ class AdminAction extends Action{
 		$password = $_POST['password'];
 		if('admin' == $username && 'admin' == $password)
 		{
-			cookie::set('isAdmin',1,time()+43200);
+			Cookie::set('isAdmin',1,time()+43200);
 			redirect(__APP__.'/'.$this->lastAction,1,'登录成功');
 		}
 	}
 	public function index(){
-		$dao = D('category');
+		$dao = D('Category');
 		$rs = $dao->where(array('flag'=>array('gt',-1)))->order('flag desc, sort')->select();
 		//dump($rs);
 		$this->assign('new_cate_sort',$rs[sizeof($rs)-1]['sort']+10);
 
-		$dao = D('website');
+		$dao = D('Website');
 		foreach($rs as $key=>$val){
 			$list[$val['id']] = $val;
 			$list[$val['id']]['site_list'] = array();
@@ -51,7 +51,7 @@ class AdminAction extends Action{
 		$descr=$_REQUEST['descr'];
 		if('website'==$table)
 		{
-			$dao = D('website');
+			$dao = D('Website');
 			if($site_id>0)
 			{
 				$rs = $dao->where(array('name'=>$name,'id'=>array('neq',$site_id)))->find();
@@ -92,7 +92,7 @@ class AdminAction extends Action{
 		}
 		else
 		{
-			$dao = D('category');
+			$dao = D('Category');
 			$where['name'] = $name;
 			$rs = $dao->where($where)->find();
 			if($rs && sizeof($rs)>0){
@@ -115,7 +115,7 @@ class AdminAction extends Action{
 		$id=$_REQUEST['id'];
 		$field=$_REQUEST['field'];
 		$value=$_REQUEST['value'];
-		$dao = D($table);
+		$dao = D(ucfirst($table));
 		$rs = $dao->where('id='.$id)->setField($field,$value);
 		if($rs)
 		{
@@ -130,7 +130,7 @@ class AdminAction extends Action{
 		$this->assign('name',$_REQUEST['title']);
 		$this->assign('url','http://'.$_REQUEST['url'].'/');
 		$this->assign('descr',$_REQUEST['content']);
-		$dao = D('category');
+		$dao = D('Category');
 		$rs = $dao->where(array('flag'=>array('neq',-1)))->order('usetime')->select();
 		$this->assign('cate_list',$rs);
 		$this->display();
@@ -142,7 +142,7 @@ class AdminAction extends Action{
 		$url = $_REQUEST['url'];
 		$descr=$_REQUEST['descr'];
 
-		$dao = D('category');
+		$dao = D('Category');
 		if($cate_id==0){
 			$rs = $dao->where(array('name'=>$category))->find();
 			if($rs && sizeof($rs)>0){
@@ -162,7 +162,7 @@ class AdminAction extends Action{
 			$dao->where('id='.$cate_id)->setField('usetime',date("Y-m-d H:i:s"));
 		}
 
-		$dao = D('website');
+		$dao = D('Website');
 		$rs = $dao->where('cate_id='.$cate_id)->field('max(sort) as sort')->find();
 		$max_sort = $rs['sort'];
 		$dao->cate_id = $cate_id;

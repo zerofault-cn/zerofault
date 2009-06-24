@@ -1,0 +1,104 @@
+BODY 
+{
+	FONT-FAMILY: Verdana, Arial, Helvetica, sans-serif;
+	FONT-SIZE: 12px;
+	font-style: normal;
+	font-weight: normal;
+	color: #000066;
+	line-height:140%
+}
+a:link,a:visited
+{
+	color:blue;
+	TEXT-DECORATION: none;
+}
+a:hover,a.active
+{
+	COLOR: #ff2200; 
+	TEXT-DECORATION: underline;
+}
+
+input.cate_sort{
+	height:16px;
+	line-height:12px;
+}
+span{
+	overflow:hidden；
+}
+.clear{
+	clear:both;
+}
+
+.cate_list{
+	list-style-type:disc;
+}
+.cate_list li{line-height:24px;clear:both;}
+.cate_list li div.cate{
+	height:24px;
+	line-height:24px;
+}
+.cate_info label{
+	font-weight:bold;
+}
+.cate_func{
+	float:right;
+}
+label{
+	padding:2px 4px 2px 2px;
+}
+label.editable{
+	padding:1px 3px 1px 1px;
+	border:1px solid #999;
+	background-color:#ffffd3;
+}
+.site_list{
+	list-style-type:decimal;
+}
+.site_list li{
+	line-height:18px;
+}
+.site_list div.addSiteForm{
+	display:none;
+	border:1px dotted #bbb;
+	padding:3px;
+}
+.site_list div.addSiteForm input{
+hheight:16px;
+}
+ol.alt{
+	background-color:#ecf6fc;/*这行将给所有的ol加上背景色*/
+
+}
+ol.over{
+	background:#bcd4ec;  /*这个将是鼠标高亮行的背景色*/
+}
+
+.site_info label{
+	font-weight:normal;
+}
+.site_func{
+	float:right;
+}
+.site_func a{
+
+}
+.cate0,.cate0 a{
+	color:#ccc;
+}
+.site0,.site0 a{
+	color:#ccc;
+}
+.gray, .gray a:link, .gray a:visited{
+	color:#ccc;
+}
+.normal, .normal a{
+	color:#000066;
+}
+label.red,a.red:link,a.red:visited
+{
+color:#FF6F6A;
+}
+.red a.mark:link,.red a.mark:visited
+{
+	color:#FF6F6A;
+}

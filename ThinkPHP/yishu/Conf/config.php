@@ -11,7 +11,7 @@ return array(
 	'DB_PREFIX'=>'yishu_',//数据表前缀（与数据库myapp中的表think_message对应）
 
 //	'DEBUG_MODE'=>true,
-	'URL_MODEL' => 2,
+//	'URL_MODEL' => 2,
 	);
 
 ?>
