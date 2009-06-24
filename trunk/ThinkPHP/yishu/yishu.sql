@@ -24,6 +24,7 @@ CREATE TABLE IF NOT EXISTS `yishu_category` (
   `pid` smallint(5) unsigned NOT NULL default '0',
   `name` varchar(255) NOT NULL,
   `addtime` datetime NOT NULL,
+  `usetime` datetime NOT NULL,
   `sort` smallint(5) unsigned NOT NULL default '0',
   `flag` tinyint(1) NOT NULL default '1',
   PRIMARY KEY  (`id`)
