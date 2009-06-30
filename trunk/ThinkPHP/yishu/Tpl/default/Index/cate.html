@@ -1,0 +1,13 @@
+{include:header}
+<div class="main index">
+	<div class="caption"><a href="__URL__/">网站大全</a> &gt; {$cate_info.name}</div>
+	<div class="content">
+		<iterate name="site_list" id="item">
+		<div class="site_list">
+			<a id="url" class="<if condition='$item.mark eq 1'>red</if>" href="__URL__/site/id/{$item.id}" >{$item.name}</a>
+			<p>{$item.descr|nl2br}</p>
+		</div>
+		</iterate>
+	</div>
+</div>
+{include:footer}
