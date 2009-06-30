@@ -21,7 +21,31 @@ class IndexAction extends Action{
 		$this->assign('list',$list);
 		$this->display();
 	}
+
 	public function loader(){
+		$this->display();
+	}
+
+	public function cate(){
+		$cate_id = $_REQUEST['id'];
+		$dao = D('Category');
+		$rs = $dao->find($cate_id);
+		$this->assign('cate_info', $rs);
+		$dao = D('Website');
+		$rs = $dao->where(array('cate_id'=>$cate_id, 'flag'=>array('gt',0)))->order('sort')->select();
+		
+		$this->assign('site_list', $rs);
+		$this->display();
+	}
+
+	public function site(){
+		$site_id = $_REQUEST['id'];
+		$dao = D('Website');
+		$rs = $dao->find($site_id);
+
+		$dao = D('Category');
+		$rs['cate_info'] = $dao->find($rs['cate_id']);
+		$this->assign('site_info', $rs);
 		$this->display();
 	}
 }

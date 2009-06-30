@@ -63,7 +63,7 @@ $(document).ready(function(){  //这个就是传说的ready,页面载入完成�
 	$(".site_func a.mark").each(function(i){//设置网址的突出标记功能
 		if($(this).attr("val")==0)
 		{
-			$(this).addClass('red');
+			$(this).parent().addClass('red');
 		}
 		setShowFlagFunc(this,i,'website');
 	});
@@ -320,7 +320,7 @@ function setShowFlagFunc(obj,n,table){//设置显示与隐藏功能,公用
 		},function(str){
 				if(str==1)//后台处理成功
 				{
-					if($(obj).attr('val')==0)//当前点击的是隐藏/普通
+					if($(obj).attr("val")==0)//当前点击的是隐藏/普通
 					{
 						$(obj).attr("val",1);
 						if($(obj).attr('class')=='show')
@@ -328,7 +328,7 @@ function setShowFlagFunc(obj,n,table){//设置显示与隐藏功能,公用
 							$(obj).html('显示');
 							$(obj).parent().parent().parent().addClass('gray');
 						}
-						else if($(obj).attr('class')=='mark')
+						else if($(obj).attr('class').indexOf('mark')>=0)
 						{
 							$(obj).html('醒目');
 							$(obj).parent().removeClass('red');
@@ -391,12 +391,12 @@ function setDeleteFunc(obj,n,table){//设置删除功能,公用
 	});
 }
 
-function setSiteEditable(obj,n){
+function setSiteEditable(obj,n){//显示站点编辑表单
 	$(obj).click(function(){
 		name=$(this).prev().html();
 		url=$(this).prev().attr('href');
 		descr=$(this).prev().attr('title');
-		html='<span>网站：<input type="text" value="'+name+'" size="10"> <input type="button" value="提交" class="submit"> <input type="button" value="取消" class="cancel"><br />网址：<input type="text" value="'+url+'" size="20"><br />简介：<input type="text" value="'+descr+'" size="40"></span>';
+		html='<span>网站：<input type="text" value="'+name+'" size="10"> <input type="button" value="提交" class="submit"> <input type="button" value="取消" class="cancel"><br />网址：<input type="text" value="'+url+'" size="20"><br />简介：<textarea rows="3" cols="40">'+descr+'</textarea></span>';
 		$(this).prev().before(html).hide().nextAll().hide();
 		$(this).prev().prev().children(".submit").click(function(){
 			submit_siteInfo(this,n);
@@ -410,7 +410,7 @@ function submit_siteInfo(obj,n){
 	var name=$(obj).prev().val();
 	var id=$(obj).parent().parent().parent().attr("id");
 	var url=$(obj).next().next().next().val();
-	var descr=$(obj).next().next().next().next().next().val();
+	var descr=$(obj).next().next().next().next().next().html();
 	$.post("Admin/add",{
 		'table'	:'website',
 		'name'	:name,

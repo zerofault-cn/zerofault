@@ -43,13 +43,18 @@ span{
 .cate_func{
 	float:right;
 }
-label{
+.site_func label{
+	line-height:20px;
 	padding:2px 4px 2px 2px;
 }
-label.editable{
+.site_func label.editable{
 	padding:1px 3px 1px 1px;
 	border:1px solid #999;
 	background-color:#ffffd3;
+}
+.site_func span input{
+	height:14px;
+	line-height:14px;
 }
 .site_list{
 	list-style-type:decimal;
