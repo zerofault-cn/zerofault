@@ -1,8 +1,29 @@
 {include:header}
 <div class="main index">
-	<div class="caption"><a href="__URL__/">网站大全</a> &gt; <a href="__URL__/cate/id/{$site_info.cate_id}">{$site_info['cate_info']['name']}</a> &gt; {$site_info.name}</div>
+	<h2 class="caption"><a href="__URL__/">网站大全</a> &gt; <a href="__URL__/cate/id/{$site_info.cate_id}">{$site_info['cate_info']['name']}</a> &gt; {$site_info.name}</h2>
 	<div class="content">
-		{:dump($site_info)}
+		<ul>
+			<li>网站名称: {$site_info.name}</li>
+			<li>网址: {$site_info.url}</li>
+			<li>简介：{$site_info.descr|nl2br}</li>
+			<li><a href="__URL__/goto/id/{$site_info.id}" target="_blank">点击</a>：{$site_info.hit}</li>
+			<li>
+				<dl>
+					<iterate name="site_info['comment_list']" id="item">
+					<dt><if condition="$item.user_id eq 0">匿名<else />{$item.user_id}</if> 发表于 {$item.addtime}</dt>
+					<dd>{$item.content|nl2br}</dd>
+					</iterate>
+				</dl>
+			</li>
+			<li>发表评论：<br />
+			<form action="__URL__/comment_add" target="_iframe" method="post">
+			<input type="hidden" name="site_id" value="{$site_info.id}" />
+			<textarea cols="40" rows="5" name="content"></textarea>
+			<br />
+			您的称呼：<input type="text" name="user_id" size="12"/> 验证码：<input TYPE="text" name="verify" size="4" > <img src="__URL__/verify" align="absmiddle" /><input type="submit" class="submit" value="发表"/>
+			</form>
+			</li>
+		</ul>
 	</div>
 </div>
 {include:footer}

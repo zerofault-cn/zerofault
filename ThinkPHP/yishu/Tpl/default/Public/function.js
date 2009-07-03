@@ -410,7 +410,7 @@ function submit_siteInfo(obj,n){
 	var name=$(obj).prev().val();
 	var id=$(obj).parent().parent().parent().attr("id");
 	var url=$(obj).next().next().next().val();
-	var descr=$(obj).next().next().next().next().next().html();
+	var descr=$(obj).next().next().next().next().next().val();
 	$.post("Admin/add",{
 		'table'	:'website',
 		'name'	:name,
