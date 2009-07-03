@@ -1,17 +1,19 @@
 {include:header}
 <div class="main index">
-	<div class="caption">网站大全</div>
+	<h2 class="caption">网站大全</h2>
 	<div class="content">
-		<iterate name="list" id="item">
-		<div class="cate_site_list">
-			<div class="cate_title">[<a href="__URL__/cate/id/{$item.id}">{$item.name}</a>]</div>
-			<div class="site_list">
-			<iterate name="item['site_list']" id="site_item">
+		<iterate name="list" id="item" key="i">
+		<dl class="cate_site_list <eq name='mod' value='0'>rotate_bg</eq>">
+			<dt class="cate_title">[<a href="__URL__/cate/id/{$item.id}">{$item.name}</a>]</dt>
+			<dd class="site_list">
+			<iterate name="item['site_list']" id="site_item" key="j">
 			<a id="url" class="<if condition='$site_item.mark eq 1'>red</if>" href="__URL__/site/id/{$site_item.id}" >{$site_item.name}</a>
 			</iterate>
-			</div>
-		</div>
+			</dd>
+		</dl>
 		</iterate>
+		<div class="clear"></div>
 	</div>
+	<div class="clear"></div>
 </div>
 {include:footer}

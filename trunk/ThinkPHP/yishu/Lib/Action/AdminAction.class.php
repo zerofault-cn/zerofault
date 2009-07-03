@@ -5,7 +5,7 @@ class AdminAction extends Action{
 		//每个操作都会执行此方法
 		if(!Cookie::get('isAdmin') && ACTION_NAME != 'login_form' && ACTION_NAME != 'login'){
 			$this->lastAction = ACTION_NAME;
-			redirect(__APP__.'/Admin/login_form',3,'转向登录窗口');
+			redirect(__APP__.'/Admin/login_form',2,'&#36716;&#21521;&#30331;&#24405;&#31383;&#21475;');//转向登录窗口
 		}
 	}
 	public function login_form(){
@@ -14,16 +14,18 @@ class AdminAction extends Action{
 	public function login(){
 		$username = $_POST['username'];
 		$password = $_POST['password'];
-		if('admin' == $username && 'admin' == $password)
+		if('admin' == $username && 'dvmadmin' == $password)
 		{
 			Cookie::set('isAdmin',1,time()+43200);
-			redirect(__APP__.'/'.$this->lastAction,1,'登录成功');
+			redirect(__APP__.'/'.$this->lastAction,1,'&#30331;&#24405;&#25104;&#21151;');//登录成功
 		}
 	}
 	public function index(){
 		$dao = D('Category');
-		$rs = $dao->where(array('flag'=>array('gt',-1)))->order('flag desc, sort')->select();
-		//dump($rs);
+		$where['flag'] = array('gt', -1);
+		$order = 'flag desc, sort';
+		$rs = $dao->where($where)->order($order)->select();
+		!$rs && $rs = array();
 		$this->assign('new_cate_sort',$rs[sizeof($rs)-1]['sort']+10);
 
 		$dao = D('Website');
@@ -31,7 +33,11 @@ class AdminAction extends Action{
 			$list[$val['id']] = $val;
 			$list[$val['id']]['site_list'] = array();
 			$list[$val['id']]['new_site_sort'] = 10;
-			$rs2 = $dao->where(array('cate_id'=>$val['id'],'flag'=>array('gt',-1)))->order('flag desc, sort')->select();
+			$where['cate_id'] = $val['id'];
+			$where['flag'] = array('gt', -1);
+			$order = 'flag desc, sort';
+			$rs2 = $dao->where($where)->order($order)->select();
+			!$rs2 && $rs2 = array();
 			foreach($rs2 as $key2=>$val2){
 				$list[$val['id']]['site_list'][$val2['id']] = $val2;
 				$list[$val['id']]['new_site_sort'] = $val2['sort']+10;

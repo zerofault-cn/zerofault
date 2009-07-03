@@ -1,23 +1,31 @@
 <?php
 class IndexAction extends Action{
 	public function index(){
-		$dao = D('Category');
-		$rs = $dao->where(array('flag'=>array('gt',-1)))->order('flag desc, sort')->select();
-		//dump($rs);
-		$this->assign('new_cate_sort',$rs[sizeof($rs)-1]['sort']+10);
-
-		$dao = D('Website');
-		foreach($rs as $key=>$val){
-			$list[$val['id']] = $val;
-			$list[$val['id']]['site_list'] = array();
-			$list[$val['id']]['new_site_sort'] = 10;
-			$rs2 = $dao->where(array('cate_id'=>$val['id'],'flag'=>array('gt',-1)))->order('flag desc, sort')->select();
-			foreach($rs2 as $key2=>$val2){
-				$list[$val['id']]['site_list'][$val2['id']] = $val2;
-				$list[$val['id']]['new_site_sort'] = $val2['sort']+10;
-			}
+		if(S('list')) {
+			$list = S('list');
 		}
-		//dump($list);
+		else {
+			$dao = D('Category');
+			$where['flag'] = array('gt', 0);
+			$order = 'sort';
+			$rs = $dao->where($where)->order($order)->select();
+			!$rs && $rs = array();
+			$dao = D('Website');
+			foreach($rs as $key=>$val){
+				$list[$val['id']] = $val;
+				$list[$val['id']]['site_list'] = array();
+				$where['cate_id'] = $val['id'];
+				$where['flag'] = array('gt', 0);
+				$order = 'sort';
+				$rs2 = $dao->where($where)->order($order)->select();
+				!$rs2 && $rs2 = array();
+				foreach($rs2 as $key2=>$val2){
+					$list[$val['id']]['site_list'][$val2['id']] = $val2;
+				}
+			}
+			S('list',$list);
+		}
+	//	dump($list);
 		$this->assign('list',$list);
 		$this->display();
 	}
@@ -45,8 +53,46 @@ class IndexAction extends Action{
 
 		$dao = D('Category');
 		$rs['cate_info'] = $dao->find($rs['cate_id']);
+		
+		$dao = D('Comment');
+		$where['site_id'] = $site_id;
+		$where['flag'] = array('gt', 0);
+		$rs['comment_list'] = $dao->where($where)->select();
+
 		$this->assign('site_info', $rs);
 		$this->display();
 	}
+	public function goto(){
+		$site_id = $_REQUEST['id'];
+		$dao = D('Website');
+		$rs = $dao->find($site_id);
+		$dao->hit = array('exp','(hit+1)');
+		$dao->save();
+		redirect($rs['url']);
+	}
+	public function verify() {
+		import("ORG.Util.Image");
+		Image::buildImageVerify(); 
+	}
+	public function comment_add() {
+		header("Content-Type:text/html; charset=utf-8");
+		if($_SESSION['verify']!=md5(trim($_REQUEST['verify']))) {
+			die('<script>parent.alert("验证码错误!");</script>');
+		}
+		$dao = D('Comment');
+		$data['site_id'] = $_REQUEST['site_id'];
+		$data['content'] = $_REQUEST['content'];
+		$data['user_id'] = 0;
+		$data['ip'] = $_SERVER['REMOTE_ADDR'];
+		$data['addtime'] = date("Y-m-d H:i:s");
+		$data['flag'] = 1;
+		if($dao->add($data)) {
+			die('<script>parent.alert("发表成功");parent.location.reload();</script>');
+		}
+		else{
+			die('<script>parent.alert("发生错误啦，请稍后再试！");parent.location.reload();</script>');
+		}
+	}
+
 }
 ?>
