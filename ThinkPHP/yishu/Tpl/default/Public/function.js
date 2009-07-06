@@ -84,7 +84,7 @@ function submit_addCate() {//提交新的分类
 		$("input#cate_name").focus();
 		return false;
 	}
-	$.post("Admin/add",{
+	$.post("add",{
 		'name': $("input#cate_name").val(),
 		'sort': $("input#cate_sort").val(),
 		'descr':$("input#cate_descr").val()
@@ -132,7 +132,7 @@ function setCateNameEditable(obj,n){//设置分类名称可编辑功能
 	});
 }
 function submit_cateName(obj,n){//提交新的分类名称
-	$.post("Admin/update",{
+	$.post("update",{
 		'table'	:'category',
 		'id'	:$(obj).parent().prev().attr('id'),
 		'field'	:'name',
@@ -193,7 +193,7 @@ function submit_addSite(obj,n) {//提交新的网站
 		return false;
 	}
 
-	$.post("Admin/add",{
+	$.post("add",{
 		'table'	:'website',
 		'cate_id':$(obj).parent().attr("id"),
 		'name'	:$(obj).prev().prev().val(),
@@ -284,7 +284,7 @@ function setSortEditable(obj,n,table){//设置分类排序数字可编辑功能,
 function submit_sort(obj,n,table){//提交新的分类排序,公用
 //	alert($(obj).parent().prev().attr('id'));
 //	return false;
-	$.post("Admin/update",{
+	$.post("update",{
 		'table'	:table,
 		'id'	:$(obj).parent().prev().attr('id'),
 		'field'	:'sort',
@@ -312,7 +312,7 @@ function cancel_sort(obj,n){//取消更改分类排序,公用
 }
 function setShowFlagFunc(obj,n,table){//设置显示与隐藏功能,公用
 	$(obj).click(function(){
-		$.post("Admin/update",{
+		$.post("update",{
 			'table'	:table,
 			'id'	:$(obj).attr('id'),
 			'field'	:$(obj).attr('name'),
@@ -364,7 +364,7 @@ function setDeleteFunc(obj,n,table){//设置删除功能,公用
 	$(obj).click(function(){
 		if(confirm('确定删除？'))
 		{
-			$.post("Admin/update",{
+			$.post("update",{
 					table:table,
 					id:$(obj).attr('id'),
 					field:'flag',
@@ -411,7 +411,7 @@ function submit_siteInfo(obj,n){
 	var id=$(obj).parent().parent().parent().attr("id");
 	var url=$(obj).next().next().next().val();
 	var descr=$(obj).next().next().next().next().next().val();
-	$.post("Admin/add",{
+	$.post("add",{
 		'table'	:'website',
 		'name'	:name,
 		'site_id':id,
