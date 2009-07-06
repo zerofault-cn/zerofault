@@ -1,0 +1,23 @@
+	<h2>管理首页 > 分类管理 > 分类列表</h2>
+	<ul class="cate_list">
+		<iterate name="list" id="item">
+		<li>
+			<div class="cate">
+				<span class="cate_func">
+					排序:<label id="{$item.id}">{$item.sort}</label>
+					<span style="margin-left:100px;"><!-- 空位 --></span>
+					<!-- 显示与隐藏 -->
+					[<a href="javascript:void(0)" id="{$item.id}" class="show" name="flag" val="{:intval(!$item['flag'])}"><if condition="$item.flag eq 0">显示<else />隐藏</if></a>]
+					[<a href="javascript:void(0)" id="{$item.id}" class="delete">删除</a>]
+				</span>
+				<span class="cate_info">
+					<label id="{$item.id}">{$item.name}</label>
+					&nbsp;&nbsp;[<a href="javascript:void(0)" class="toAddSite" val="0">添加网站</a>]
+					&nbsp;&nbsp;<a href="javascript:void(0)" class="toShowSite" val="0"></a>
+				</span>
+				
+			</div>
+		</li>
+		</iterate>
+	</ul>
+

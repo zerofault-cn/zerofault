@@ -1,0 +1,77 @@
+<style type="text/css">
+body{font-size:12px;}
+#form { margin: 3%; }
+#form .line { margin-bottom: 1px; clear: both; line-height: 20px; height: 20px; }
+#form .line2 { margin-bottom: 10px; clear: both; line-height: 20px; height: 20px; }
+#form .d1 { width: 60px; margin-right: 5px; float: left; }
+#form .d2 { float: left; }
+#form .sure { padding-left: 3em; margin-top: 10px; display: block; }
+#categories { margin-left: 3%; margin-right: 10%; }
+#categories span { display: block; line-height: 22px; } 
+#categories a { margin-right: 1em; text-decoration: none; color: #8c8cff; white-space: nowrap; }
+#categories a:hover{ color: #161; background-color: yellow;}
+#categories a.focus {color:#161;background-color:#FF99FF}
+</style>
+	<form name="form1" action="__URL__/remote_submit" method="post" onsubmit="return check(this);">
+	<div id="form">
+		<div class="line">
+			<div class="d1">网站名称：</div>
+			<div class="d2"><input type="text" id="name" name="name" size="30" value="{$name}"/></div>
+		</div>
+		<div class="line">
+			<div class="d1">网站地址：</div>
+			<div class="d2"><input type="text" id="url" name="url" size="30" value="{$url}"/></div>
+		</div>
+		<div class="line">
+			<div class="d1">简单描述：</div>
+			<div class="d2"><textarea name="descr" id="descr" rows="5" cols="30">{$descr}</textarea></div>
+		</div>
+		<div class="line">
+			<div class="d1">所属分类：</div>
+			<div class="d2"><input type="text" id="category" name="category" value="" size="20" autocomplete="off" /><input type="hidden" id="cate_id" name="cate_id" value="" /></div>
+		</div>
+		<div class="sure"><input type="submit" name="Share" value="提交" />
+			<input type="button" class="private" value="取消" onclick="javascript:window.close();"/>
+		</div>
+	</div>
+	</form>
+	<div id="categories"><span>系统已有分类: ( 单击添加 )</span>
+		<iterate name="cate_list" id="item">
+			<a href="javascript:void(0)" onFocus="this.blur()" val="{$item.id}">{$item.name}</a>&nbsp;
+		</iterate>
+	</div>
+<script language="javascript" type="text/javascript" src="{*APP_PUBLIC_URL}/jquery-1.2.6.pack.js"></script>
+<script type="text/javascript" defer>
+$(document).ready(function(){
+	$("#categories a").each(function(){
+		$(this).click(function(){
+			var input = $("#category").val();
+			var select = $(this).text();
+			if(input!='' && input == select)
+			{
+				$("#category").val('');
+				input = '';
+				$(this).removeClass('focus');
+			}
+			else
+			{
+				$("#category").val(select);
+				input = select;
+				$("#categories a").each(function(){
+					$(this).removeClass('focus');
+				});
+				$(this).addClass('focus');
+				$("#cate_id").val($(this).attr('val'));
+			}
+		});
+	});
+});
+function check(frm){
+	if(frm.category.value==''){
+		alert('网站分类必须指定');
+		frm.category.focus();
+		return false;
+	}
+	return true;
+}
+</script>
