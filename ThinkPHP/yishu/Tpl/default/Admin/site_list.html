@@ -1,8 +1,8 @@
-	<h2><a href="index">管理首页</a> > <a href="cate_list">分类管理</a> > 分类列表</h2>
-	<ul class="cate_list">
+	<h2><a href="index">管理首页</a> > <a href="site_list">站点管理</a> > 分类列表</h2>
+	<ul class="site_list">
 		<iterate name="list" id="item">
 		<li class="<eq name='item["flag"]' value='0'>gray</eq>">
-			<span class="cate_func">
+			<span class="site_func">
 				排序:<label id="{$item.id}">{$item.sort}</label>
 				<span style="margin-left:100px;"><!-- 空位 --></span>
 				<!-- 显示与隐藏 -->
@@ -10,14 +10,16 @@
 				[<a href="javascript:void(0)" id="{$item.id}" class="delete">删除</a>]
 			</span>
 			<span class="cate_info">
+				<label id="{$item.cate_info.id}">{$item['cate_info']['name']}</label>
+			</span>
+			<span class="site_info">
 				<label id="{$item.id}">{$item.name}</label>
-				(<a href="site_list?id={$item.id}">{$item.site_count}</a>)
 			</span>
 		</li>
 		</iterate>
 	</ul>
 	<div id="addCateForm">
-		添加新分类：<input type="text" id="cate_name" name="cate_name" size="10" tabindex="1" />
+		添加新站点：<input type="text" id="cate_name" name="cate_name" size="10" tabindex="1" />
 		排序：<input type="text" id="cate_sort" name="cate_sort" value="{$new_cate_sort}" size="4">
 		<input type="button" value="添加" id="submit_addCate" />
 	</div>
