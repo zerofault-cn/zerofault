@@ -44,15 +44,42 @@ class AdminAction extends Action{
 		$where['pid']  = 0;
 		$order = 'flag desc, sort';
 		$rs = $dao->where($where)->order($order)->select();
+		foreach($rs as $key=>$val){
+			$site = D('Website');
+			$tmp = $site->where(array('cate_id'=>$val['id']))->getField('count(*) as count');
+			$rs[$key]['site_count'] = intval($tmp['count'].'.0');
+		}
 		$this->assign('list',$rs);
 
 		$rs = $dao->where($where)->getField('max(sort) as max_sort');
-		$this->assign('new_cate_sort',intval($rs['max_sort'].'0')+10);
+		$this->assign('new_cate_sort',intval($rs['max_sort'].'.0')+10);
 
 		$this->assign('content','cate_list');
 		$this->display('Layout:Admin_layout');
 	}
 	
+	public function site_list(){
+		$dao = D('Website');
+		$cate_id = $_REQUEST['id'];
+		if(intval($cate_id)>0){
+			$where['cate_id'] = $cate_id;
+			$order = 'flag desc, sort';
+		}
+		else{
+			$order = 'id desc';
+		}
+		$where['flag'] = array('gt', -1);
+		$rs = $dao->where($where)->order($order)->select();
+		$dao = D('Category');
+		foreach($rs as $key=>$val){
+			$rs[$key]['cate_info'] = $dao->find($val['cate_id']);
+		}
+		//dump($rs);
+
+		$this->assign('list',$rs);
+		$this->assign('content','site_list');
+		$this->display('Layout:Admin_layout');
+	}
 	public function add(){
 		$table=$_REQUEST['table'];
 		$cate_id=intval($_REQUEST['cate_id']);
