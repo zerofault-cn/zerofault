@@ -5,9 +5,8 @@ class AdminAction extends Action{
 		return mb_convert_encoding($str,'HTML-ENTITIES', 'UTF-8');
 	}
 
-	public function _initialize() {
-		//每个操作都会执行此方法
-		if(!Cookie::get('isAdmin') && ACTION_NAME != 'login_form' && ACTION_NAME != 'login'){
+	public function _initialize() { //每个操作都会执行此方法
+		if(!Session::is_set('isAdmin') && ACTION_NAME != 'login_form' && ACTION_NAME != 'login'){
 			$this->lastAction = ACTION_NAME;
 			redirect(__APP__.'/Admin/login_form',1,$this->_htmlentities('转向登录窗口'));
 		}
@@ -19,7 +18,9 @@ class AdminAction extends Action{
 		$username = $_POST['username'];
 		$password = $_POST['password'];
 		if('admin' == $username && 'dvmadmin' == $password){
-			Cookie::set('isAdmin',1,time()+43200);
+			Session::setExpire(43200, true);
+			Session::set('isAdmin', 1);
+			Session::set('adminName', $username);
 			redirect(__APP__.'/Admin/'.$this->lastAction,1,$this->_htmlentities('登录成功'));
 		}
 		elseif('admin' == $username){
@@ -30,52 +31,96 @@ class AdminAction extends Action{
 		}
 	}
 	public function logout(){
-		Cookie::delete('isAdmin');
+		Session::clear();
 		redirect(__APP__.'/Admin/',1,$this->_htmlentities('退出成功！'));
 	}
 
 	public function index(){
+		$topnavi[]=array(
+			"text"=>"欢迎"
+			);
+		$this->assign("topnavi",$topnavi);
+
 		$this->assign('content','index');
 		$this->display('Layout:Admin_layout');
 	}
 	public function cate_list(){
+		$topnavi[]=array(
+			'text'=> '分类管理',
+			'url' => __APP__.'/Admin/cate_list'
+			);
+
 		$dao = D('Category');
 		$where['flag'] = array('gt', -1);
 		$where['pid']  = 0;
 		$order = 'flag desc, sort';
+
+		$flag = $_REQUEST['flag'];
+		if(!empty($flag)){
+			$where['flag'] = $flag;
+			$order = 'id desc';
+
+			$topnavi[]=array(
+				'text'=> '已删除的分类',
+			);
+		}
+		else{
+			$topnavi[]=array(
+				'text'=> '分类列表',
+			);
+		}
+
 		$rs = $dao->where($where)->order($order)->select();
 		foreach($rs as $key=>$val){
 			$site = D('Website');
-			$tmp = $site->where(array('cate_id'=>$val['id']))->getField('count(*) as count');
-			$rs[$key]['site_count'] = intval($tmp['count'].'.0');
+			$rs[$key]['site_count'] = $site->where(array('cate_id'=>$val['id']))->getField('count(*) as count');
 		}
+
+		$this->assign("topnavi",$topnavi);
 		$this->assign('list',$rs);
-
-		$rs = $dao->where($where)->getField('max(sort) as max_sort');
-		$this->assign('new_cate_sort',intval($rs['max_sort'].'.0')+10);
-
+		$this->assign('new_cate_sort', $dao->where($where)->getField('max(sort) as max_sort')+10);
 		$this->assign('content','cate_list');
 		$this->display('Layout:Admin_layout');
 	}
 	
 	public function site_list(){
-		$dao = D('Website');
+		$topnavi[]=array(
+			'text'=> '站点管理',
+			'url' => __APP__.'/Admin/site_list'
+			);
+
 		$cate_id = $_REQUEST['id'];
-		if(intval($cate_id)>0){
+		if(!empty($cate_id)){
 			$where['cate_id'] = $cate_id;
 			$order = 'flag desc, sort';
+			$dao_cate = D('Category');
+			$cate_name = $dao_cate->where(array('id'=>$cate_id))->getField('name');
+			$topnavi[]=array(
+				'text'=> '站点列表 (分类：'.$cate_name.')',
+				);
 		}
 		else{
 			$order = 'id desc';
+			$topnavi[]=array(
+				'text'=> '站点列表',
+				);
 		}
 		$where['flag'] = array('gt', -1);
-		$rs = $dao->where($where)->order($order)->select();
-		$dao = D('Category');
-		foreach($rs as $key=>$val){
-			$rs[$key]['cate_info'] = $dao->find($val['cate_id']);
+		$flag = $_REQUEST['flag'];
+		if(!empty($flag)){
+			$where['flag'] = $flag;
+			$order = 'id desc';
 		}
-		//dump($rs);
-
+		
+		$dao = D('Website');
+		$rs = $dao->where($where)->order($order)->select();
+		if(empty($cate_id)){
+			isset($dao_cate) || $dao_cate = D('Category');
+			foreach($rs as $key=>$val){
+				$rs[$key]['cate_info'] = $dao_cate->find($val['cate_id']);
+			}
+		}
+		$this->assign("topnavi",$topnavi);
 		$this->assign('list',$rs);
 		$this->assign('content','site_list');
 		$this->display('Layout:Admin_layout');
@@ -88,7 +133,7 @@ class AdminAction extends Action{
 		$url=$_REQUEST['url'];
 		$sort=intval($_REQUEST['sort']);
 		$descr=$_REQUEST['descr'];
-		if('website'==$table)
+		if('Website'==$table)
 		{
 			$dao = D('Website');
 			if($site_id>0)
@@ -150,19 +195,19 @@ class AdminAction extends Action{
 		}
 	}
 	public function update(){
-		$table=$_REQUEST['table'];
+		$table=$_REQUEST['t'];
 		$id=$_REQUEST['id'];
-		$field=$_REQUEST['field'];
-		$value=$_REQUEST['value'];
-		$dao = D(ucfirst($table));
+		$field=$_REQUEST['f'];
+		$value=$_REQUEST['v'];
+		$dao = D($table);
 		$rs = $dao->where('id='.$id)->setField($field,$value);
 		if($rs)
 		{
-			die('1');
+			die('<script>parent.myAlert("操作成功！");parent.myLocation("");</script>');
 		}
 		else
 		{
-			die('sql:'.$dao->getLastSql());
+			die('<script>parent.myAlert("发生错误！<br />sql:'.$dao->getLastSql().'");</script>');
 		}
 	}
 

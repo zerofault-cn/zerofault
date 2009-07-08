@@ -1,27 +1,28 @@
 $(document).ready(function(){
-	$("input#submit_addCate").click(function(){ //点击提交
-		submit_addCate(this);
+	$("input#submit_addSite").click(function(){ //点击提交
+		submit_addSite(this);
 	});
 
-	$(".cate_info>label").each(function(i){ //设置分类名称的可编辑功能
-		setCateNameEditable(this,i);
+	$(".site_info>label").each(function(i){ //设置分类名称的可编辑功能
+		setSiteNameEditable(this,i);
 	});
 
-	$(".cate_func>label").each(function(i){ //设置分类的排序数字的可编辑功能
-		setSortEditable(this,i,'Category');
+	$(".Site_func>label").each(function(i){ //设置分类的排序数字的可编辑功能
+		setSortEditable(this,i,'Website');
 	});
 });
 
-function submit_addCate(){ //提交新的分类
-	if(''==$("input#cate_name").val())
+function submit_addSite(){ //提交新的分类
+	if(''==$("input#site_name").val())
 	{
-		myAlert('分类名称不能为空');
-		$("input#cate_name").focus();
+		myAlert('站点名称不能为空');
+		$("input#site_name").focus();
 		return false;
 	}
 	$.post(_URL_+"/add",{
-		'name': $("input#cate_name").val(),
-		'sort': $("input#cate_sort").val(),
+		'table':'Website',
+		'name': $("input#site_name").val(),
+		'sort': $("input#site_sort").val(),
 	},function(str){
 			if(str=='-1')
 			{
@@ -29,6 +30,7 @@ function submit_addCate(){ //提交新的分类
 			}
 			else if(str=='1')
 			{
+				myAlert("添加成功!");
 				location.reload();
 			}
 			else
@@ -37,7 +39,7 @@ function submit_addCate(){ //提交新的分类
 			}
 		});
 }
-function setCateNameEditable(obj,n){ //设置分类名称可编辑功能
+function setSiteNameEditable(obj,n){ //设置分类名称可编辑功能
 	$(obj).mouseover(function(){
 		$(this).addClass("editable");
 	}).mouseout(function(){
@@ -50,25 +52,25 @@ function setCateNameEditable(obj,n){ //设置分类名称可编辑功能
 			var keyCode=e.keyCode ||window.event.keyCode;
 			if(keyCode==13)//回车键
 			{
-				submit_cateName(this,n);
+				submit_siteName(this,n);
 			}
 			else if(keyCode==27)//取消健
 			{
-				cancel_cateName(this,n);
+				cancel_siteName(this,n);
 			}
 		});
 		$(this).next().children(".submit").css("cursor","pointer").click(function(){
-			submit_cateName(this,n);
+			submit_siteName(this,n);
 		});
 		$(this).next().children(".cancel").css("cursor","pointer").click(function(){
-			cancel_cateName(this,n);
+			cancel_siteName(this,n);
 		});
 	});
 }
-function submit_cateName(obj,n){//提交新的分类名称
-	$("#_iframe").attr("src", _URL_+"/update?t=Category&id="+$(obj).parent().prev().attr('id')+"&f=name&v="+$(obj).parent().children("input").val());
+function submit_siteName(obj,n){//提交新的分类名称
+	$("#_iframe").attr("src", _URL_+"/update?t=Website&id="+$(obj).parent().prev().attr('id')+"&f=name&v="+$(obj).parent().children("input").val());
 }
-function cancel_cateName(obj,n){//取消修改分类名称
+function cancel_siteName(obj,n){//取消修改分类名称
 	$(obj).parent().prev().show();
 	$(obj).parent().remove();
 }

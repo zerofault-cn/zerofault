@@ -1,9 +1,11 @@
 <div id="left">
 	<ul id="containerul">
-		<li><a href="index">管理首页</a></li>
+		<li class="<eq name='ACTION_NAME' value='index'>curr</eq>">
+			<a href="index">管理首页</a>
+		</li>
 		<li>广告管理
 			<ul class="sub">
-				<li><a href="" >广告位列表</a></li>
+				<li><a href="">广告位列表</a></li>
 				<li><a href="">增加广告位</a></li>
 			</ul>
 		</li>
@@ -12,14 +14,17 @@
 				<li><a href="">列表</a></li>
 			</ul>
 		</li>
-		<li>
-			<a href="cate_list" class="<eq name='ACTION_NAME' value='cate_list'>active</eq>">分类管理</a>
+		<li>分类管理
+			<ul class="sub">
+				<li class="<eq name="ACTION_NAME" value="cate_list"><neq name="_GET['flag']" value="-1">curr</neq></eq>"><a href="__URL__/cate_list">分类列表</a></li>
+				<li class="<eq name="ACTION_NAME" value="cate_list"><eq name="_GET['flag']" value="-1">curr</eq></eq>"><a href="__URL__/cate_list/flag/-1/">回收站</a></li>
+			</ul>
 		</li>
-		<li>
-			<a href="site_list" class="<eq name='ACTION_NAME' value='site_list'>active</eq>">站点管理</a>
-		</li>
-		<li>
-			<a href="logout">退出管理</a>
+		<li>站点管理
+			<ul class="sub">
+				<li class="<eq name="ACTION_NAME" value="site_list"><neq name="_GET['flag']" value="-1">curr</neq></eq>"><a href="__URL__/site_list">站点列表</a></li>
+				<li class="<eq name="ACTION_NAME" value="site_list"><eq name="_GET['flag']" value="-1">curr</eq></eq>"><a href="__URL__/site_list/flag/-1/">回收站</a></li>
+			</ul>
 		</li>
 	</ul>
 	<script type="text/javascript">
