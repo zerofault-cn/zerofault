@@ -1,3 +1,4 @@
+	{$page}
 	<table id="table" border="1" cellpadding="3" cellspacing="0" width="100%" bordercolor="#999999" style="border-collapse:collapse;">
 	<tr bgcolor="#ededed">
 		<th width="5%">序号</th>
@@ -5,11 +6,11 @@
 		<eq name="_GET['id']" value="">
 		<th>所属分类</th>
 		</eq>
-		<th width="10%">排序</th>
-		<th width="15%">操作</th>
+		<th width="12%">排序</th>
+		<th width="10%">操作</th>
 	</tr>
 	<iterate name="list" id="item">
-	<tr bgcolor="<eq name='mod' value='1'>#FFFFE1</eq>" class="<eq name='item["flag"]' value='0'>gray</eq>">
+	<tr bgcolor="<eq name='mod' value='1'>#FFFFE1</eq>" class="<eq name='item["flag"]' value='0'>gray</eq> <eq name='item["cate_info"]["flag"]' value='0'>gray</eq>">
 		<td>{$i}</td>
 		<td class="site_info"><label id="{$item.id}">{$item.name}</label></td>
 		<eq name="_GET['id']" value="">
@@ -18,10 +19,11 @@
 		<td class="site_func"><label id="{$item.id}">{$item.sort}</label></td>
 		<td>
 			<if condition="$item['flag'] neq '-1'">
-			<a href="__URL__/update?t=Website&id={$item.id}&f=flag&v={:intval(!$item['flag'])}" target="_iframe" title='<if condition="$item.flag eq 0">显示<else />隐藏</if>'><if condition="$item.flag eq 0"><img src="{*APP_PUBLIC_URL}/Images/sign_tick.png" alt="显示" align="absmiddle"/><else /><img src="{*APP_PUBLIC_URL}/Images/sign_deny.png" alt="隐藏" align="absmiddle"/></if></a>
-			<a href="__URL__/update?t=Website&id={$item.id}&f=flag&v=-1"  target="_iframe" title="删除"><img src="{*APP_PUBLIC_URL}/Images/sign_remove.png" alt="删除" align="absmiddle"/></a>
+			<a href="__URL__/update/t/Website/id/{$item.id}/f/flag/v/{:intval(!$item['flag'])}/" target="_iframe" title='<if condition="$item.flag eq 0">显示<else />隐藏</if>'><if condition="$item.flag eq 0"><img src="{*APP_PUBLIC_URL}/Images/sign_tick.png" alt="显示" align="absmiddle"/><else /><img src="{*APP_PUBLIC_URL}/Images/sign_deny.png" alt="隐藏" align="absmiddle"/></if></a>
+			<a href="__URL__/update/t/Website/id/{$item.id}/f/flag/v/-1/"  target="_iframe" title="删除"><img src="{*APP_PUBLIC_URL}/Images/sign_remove.png" alt="删除" align="absmiddle"/></a>
 			<else />
-			<a href="__URL__/update?t=Website&id={$item.id}&f=flag&v=0" target="_iframe" title="恢复"><img src="{*APP_PUBLIC_URL}/Images/sign_add.png" alt="恢复" align="absmiddle"/></a>
+			<a href="__URL__/update/t/Website/id/{$item.id}/f/flag/v/0/" target="_iframe" title="恢复"><img src="{*APP_PUBLIC_URL}/Images/sign_add.png" alt="恢复" align="absmiddle"/></a>
+			<a href="__URL__/delete/t/Website/id/{$item.id}/" target="_iframe" title="彻底删除"><img src="{*APP_PUBLIC_URL}/Images/sign_remove.png" alt="彻底删除" align="absmiddle"/></a>
 			</if>
 		</td>
 	</tr>
@@ -29,16 +31,18 @@
 	</table>
 	<neq name="_GET['flag']" value='-1'>
 	<div class="addForm">
-		<eq name="_GET['id']" value="">
-		分类：<select name="cate_id">
+		分类：<select name="cate_id" id="cate_id">
 			<option value="">请选择</option>
+			<iterate name="cate_list" id="item">
+			<option value="{$item.id}" <neq name="item['flag']" value="1">style="color:#aaa"</neq><if condition="$item['id'] eq $_GET['id']">selected</if>>{$item.name}</option>
+			</iterate>
 			</select><br />
-		</eq>
-		网站：<input type="text" class="site_name" name="site_name" size="10" tabindex="1" />
-		排序：<input type="text" class="site_sort" name="site_sort" value="{$item.new_site_sort}" size="4">
-		<input type="button" value="添加" class="submit_addSite"><br />
-		网址：<input type="text" class="site_url" name="site_url" size="30" tabindex="2" /><br />
-		简介：<textarea class="site_descr" name="site_descr" cols="40" rows="4" tabindex="3" ></textarea>
+		
+		网站：<input type="text" id="site_name" name="site_name" size="10" tabindex="1" />
+		排序：<input type="text" id="site_sort" name="site_sort" value="" size="4">
+		<input type="button" value="添加" id="submit_addSite"><br />
+		网址：<input type="text" d="site_url" name="site_url" size="30" tabindex="2" /><br />
+		简介：<textarea id="site_descr" name="site_descr" cols="40" rows="4" tabindex="3" ></textarea>
 	</div>
 	</neq>
 	<script language="JavaScript" type="text/javascript">

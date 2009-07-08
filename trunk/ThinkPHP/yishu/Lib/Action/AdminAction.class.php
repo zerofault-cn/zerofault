@@ -89,18 +89,18 @@ class AdminAction extends Action{
 			'url' => __APP__.'/Admin/site_list'
 			);
 
+		$dao_cate = D('Category');
 		$cate_id = $_REQUEST['id'];
 		if(!empty($cate_id)){
 			$where['cate_id'] = $cate_id;
 			$order = 'flag desc, sort';
-			$dao_cate = D('Category');
 			$cate_name = $dao_cate->where(array('id'=>$cate_id))->getField('name');
 			$topnavi[]=array(
 				'text'=> '站点列表 (分类：'.$cate_name.')',
 				);
 		}
 		else{
-			$order = 'id desc';
+			$order = 'cate_id desc, sort';
 			$topnavi[]=array(
 				'text'=> '站点列表',
 				);
@@ -113,15 +113,20 @@ class AdminAction extends Action{
 		}
 		
 		$dao = D('Website');
-		$rs = $dao->where($where)->order($order)->select();
-		if(empty($cate_id)){
-			isset($dao_cate) || $dao_cate = D('Category');
-			foreach($rs as $key=>$val){
-				$rs[$key]['cate_info'] = $dao_cate->find($val['cate_id']);
-			}
+		$count = $dao->where($where)->getField('count(*) as count');
+		import("ORG.Util.Page");
+		$listRows = 10;
+		$p = new Page($count, $listRows);
+		$rs = $dao->where($where)->order($order)->limit($p->firstRow.','.$p->listRows)->select();
+		foreach($rs as $key=>$val){
+			$rs[$key]['cate_info'] = $dao_cate->find($val['cate_id']);
 		}
+
+		
 		$this->assign("topnavi",$topnavi);
-		$this->assign('list',$rs);
+		$this->assign('page', $p->show());
+		$this->assign('list', $rs);
+		$this->assign('cate_list', $dao_cate->where(array('flag'=>array('gt',-1)))->order('flag desc,sort')->select());
 		$this->assign('content','site_list');
 		$this->display('Layout:Admin_layout');
 	}
@@ -203,11 +208,28 @@ class AdminAction extends Action{
 		$rs = $dao->where('id='.$id)->setField($field,$value);
 		if($rs)
 		{
-			die('<script>parent.myAlert("操作成功！");parent.myLocation("");</script>');
+			header("Content-Type:text/html; charset=utf-8");
+			die('<script language="JavaScript" type="text/javascript">parent.myAlert("操作成功！");parent.myLocation("");</script>');
 		}
 		else
 		{
-			die('<script>parent.myAlert("发生错误！<br />sql:'.$dao->getLastSql().'");</script>');
+			header("Content-Type:text/html; charset=utf-8");
+			die('<script language="JavaScript" type="text/javascript">parent.myAlert("发生错误！<br />sql:'.$dao->getLastSql().'");</script>');
+		}
+	}
+	public function delete(){
+		$table=$_REQUEST['t'];
+		$id=$_REQUEST['id'];
+		$dao = D($table);
+		if($dao->find($id) && $dao->delete())
+		{
+			header("Content-Type:text/html; charset=utf-8");
+			die('<script language="JavaScript" type="text/javascript">parent.myAlert("删除成功！");parent.myLocation("");</script>');
+		}
+		else
+		{
+			header("Content-Type:text/html; charset=utf-8");
+			die('<script language="JavaScript" type="text/javascript">parent.myAlert("发生错误！<br />sql:'.$dao->getLastSql().'");</script>');
 		}
 	}
 
