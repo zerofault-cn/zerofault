@@ -7,7 +7,7 @@ $(document).ready(function(){
 		setSiteNameEditable(this,i);
 	});
 
-	$(".Site_func>label").each(function(i){ //设置分类的排序数字的可编辑功能
+	$(".site_func>label").each(function(i){ //设置分类的排序数字的可编辑功能
 		setSortEditable(this,i,'Website');
 	});
 });
@@ -21,8 +21,11 @@ function submit_addSite(){ //提交新的分类
 	}
 	$.post(_URL_+"/add",{
 		'table':'Website',
+		'cate_id':$("select#cate_id").val(),
 		'name': $("input#site_name").val(),
+		'url' : $("input#site_url").val(),
 		'sort': $("input#site_sort").val(),
+		'descr': $("input#site_descr").val()
 	},function(str){
 			if(str=='-1')
 			{

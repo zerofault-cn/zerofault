@@ -13,15 +13,14 @@ $(document).ready(function(){
 });
 
 function submit_addCate(){ //提交新的分类
-	if(''==$("input#cate_name").val())
-	{
+	if(''==$("input#cate_name").val()){
 		myAlert('分类名称不能为空');
 		$("input#cate_name").focus();
 		return false;
 	}
 	$.post(_URL_+"/add",{
 		'name': $("input#cate_name").val(),
-		'sort': $("input#cate_sort").val(),
+		'sort': $("input#cate_sort").val()
 	},function(str){
 			if(str=='-1')
 			{
