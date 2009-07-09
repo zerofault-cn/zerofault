@@ -5,7 +5,7 @@ class AdminMiniAction extends Action{
 		//每个操作都会执行此方法
 		if(!Cookie::get('isAdmin') && ACTION_NAME != 'login_form' && ACTION_NAME != 'login'){
 			$this->lastAction = ACTION_NAME;
-			redirect(__APP__.'/Admin/login_form',2,'&#36716;&#21521;&#30331;&#24405;&#31383;&#21475;');//转向登录窗口
+			redirect(__APP__.'/AdminMini/login_form',2,'&#36716;&#21521;&#30331;&#24405;&#31383;&#21475;');//转向登录窗口
 		}
 	}
 	public function login_form(){
@@ -17,7 +17,7 @@ class AdminMiniAction extends Action{
 		if('admin' == $username && 'dvmadmin' == $password)
 		{
 			Cookie::set('isAdmin',1,time()+43200);
-			redirect(__APP__.'/'.$this->lastAction,1,'&#30331;&#24405;&#25104;&#21151;');//登录成功
+			redirect(__APP__.'/AdminMini/'.$this->lastAction,1,'&#30331;&#24405;&#25104;&#21151;');//登录成功
 		}
 	}
 	public function index(){
@@ -179,6 +179,7 @@ class AdminMiniAction extends Action{
 		$dao->sort = $max_sort+10;
 		$dao->flag = 1;
 		if($dao->add()){
+			header("Content-Type:text/html; charset=utf-8");
 			die('<script>alert("添加成功");window.close();</script>');
 		}
 		else{
