@@ -9,8 +9,8 @@
 	<iterate name="list" id="item">
 	<tr bgcolor="<eq name='mod' value='1'>#FFFFE1</eq>" class="<eq name='item["flag"]' value='0'>gray</eq>">
 		<td>{$i}</td>
-		<td class="cate_info"><label id="{$item.id}">{$item.name}</label></td>
-		<td><a href="site_list?id={$item.id}">{$item.site_count}</a></td>
+		<td class="cate_info"><a href="site_list/id/{$item.id}/" id="{$item.id}">{$item.name}</a> <img src="{*APP_PUBLIC_URL}/Images/form_edit.png" alt="编辑" align="absmiddle"/></td>
+		<td><a href="site_list/id/{$item.id}/">{$item.site_count}</a></td>
 		<td class="cate_func"><label id="{$item.id}">{$item.sort}</label></td>
 		<td>
 			<if condition="$item['flag'] neq '-1'">

@@ -3,7 +3,7 @@ $(document).ready(function(){
 		submit_addCate(this);
 	});
 
-	$(".cate_info>label").each(function(i){ //设置分类名称的可编辑功能
+	$(".cate_info>img").each(function(i){ //设置分类名称的可编辑功能
 		setCateNameEditable(this,i);
 	});
 
@@ -37,13 +37,10 @@ function submit_addCate(){ //提交新的分类
 		});
 }
 function setCateNameEditable(obj,n){ //设置分类名称可编辑功能
-	$(obj).mouseover(function(){
-		$(this).addClass("editable");
-	}).mouseout(function(){
-		$(this).removeClass("editable");
-	}).click(function(){
-		html0=$(this).html();
+	$(obj).css("cursor","pointer").click(function(){
+		html0=$(this).prev().html();
 		html1='<span><input class="quickedit" type="text" value="'+html0+'" size="'+2*html0.length+'"> <i class="submit"><img src="'+APP_PUBLIC_URL+'/Images/sign_tick.png" alt="提交" align="absmiddle"/></i><i class="cancel"><img src="'+APP_PUBLIC_URL+'/Images/sign_cancel.png" alt="取消" align="absmiddle"/></i></span>';
+		$(this).prev().hide();
 		$(this).after(html1).hide();
 		$(this).next().children("input").select().keydown(function(e){
 			var keyCode=e.keyCode ||window.event.keyCode;
@@ -65,9 +62,10 @@ function setCateNameEditable(obj,n){ //设置分类名称可编辑功能
 	});
 }
 function submit_cateName(obj,n){//提交新的分类名称
-	$("#_iframe").attr("src", _URL_+"/update?t=Category&id="+$(obj).parent().prev().attr('id')+"&f=name&v="+$(obj).parent().children("input").val());
+	$("#_iframe").attr("src", _URL_+"/update?t=Category&id="+$(obj).parent().prev().prev().attr('id')+"&f=name&v="+$(obj).parent().children("input").val());
 }
 function cancel_cateName(obj,n){//取消修改分类名称
+	$(obj).parent().prev().prev().show();
 	$(obj).parent().prev().show();
 	$(obj).parent().remove();
 }

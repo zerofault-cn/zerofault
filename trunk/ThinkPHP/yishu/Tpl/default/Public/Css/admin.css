@@ -51,6 +51,11 @@ a:hover,a:active,a.active{color:#f20;text-decoration: underline;}
 input.quickedit{
 	border:1px inset threedface;
 }
+label.editable{
+	padding:1px 3px 1px 1px;
+	border:1px solid #999;
+	background-color:#ffffd3;
+}
 #container{
 	max-width:1000px;
 	height:auto !important;
@@ -201,7 +206,37 @@ input.quickedit{
 	padding:10px;
 	text-align:left;
 }
+.rightColumn .editForm{
+	position:relative;
+}
+.rightColumn .editForm div{
+	display:none;
+	z-index:90;
+	position:absolute;
+	left:-16px;
+	top:-16px;
+	width:270px;
+	padding:10px;
+	border:3px solid #FCD410;
+	background:#FFFFFF;
+	text-align:left;
+	color:#006;
+	line-height:200%;
+}
 
+.rightColumn .editForm input.site_name{
+	width:124px;
+}
+.rightColumn .editForm input.site_sort{
+	width:30px;
+}
+.rightColumn .editForm input.site_url{
+	width:200px;
+}
+.rightColumn .editForm textarea.site_descr{
+	width:200px;
+	height:80px;
+}
 #right{
 	float:right;
 	width:800px;
