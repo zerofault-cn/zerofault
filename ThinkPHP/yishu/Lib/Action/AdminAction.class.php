@@ -100,7 +100,7 @@ class AdminAction extends Action{
 				);
 		}
 		else{
-			$order = 'cate_id desc, sort';
+			$order = 'cate_id desc, flag desc, sort';
 			$topnavi[]=array(
 				'text'=> '站点列表',
 				);
@@ -148,8 +148,10 @@ class AdminAction extends Action{
 					die('-1');
 				}
 				$dao->find($site_id);
+				$dao->cate_id = $cate_id;
 				$dao->name = $name;
 				$dao->url = $url;
+				$dao->sort = $sort;
 				$dao->descr = $descr;
 				if($dao->save()){
 					die('1');

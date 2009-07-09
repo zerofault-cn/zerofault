@@ -12,7 +12,7 @@
 	<iterate name="list" id="item">
 	<tr bgcolor="<eq name='mod' value='1'>#FFFFE1</eq>" class="<eq name='item["flag"]' value='0'>gray</eq> <eq name='item["cate_info"]["flag"]' value='0'>gray</eq>">
 		<td>{$i}</td>
-		<td class="site_info"><label id="{$item.id}">{$item.name}</label></td>
+		<td class="site_info"><a href="{$item.url}" target="_blank" id="{$item.id}" name="{$item['cate_info']['id']}" title="新窗口打开">{$item.name}</a> <img src="{*APP_PUBLIC_URL}/Images/form_edit.png" alt="编辑" align="absmiddle"/></td>
 		<eq name="_GET['id']" value="">
 		<td><a href="__URL__/site_list/id/{$item['cate_info']['id']}/">{$item['cate_info']['name']}</a>
 		</eq>
@@ -31,14 +31,13 @@
 	</table>
 	<neq name="_GET['flag']" value='-1'>
 	<div class="addForm">
-		分类：<select name="cate_id" id="cate_id">
+		所属分类：<select name="cate_id" id="cate_id">
 			<option value="">请选择</option>
 			<iterate name="cate_list" id="item">
 			<option value="{$item.id}" <neq name="item['flag']" value="1">style="color:#aaa"</neq><if condition="$item['id'] eq $_GET['id']">selected</if>>{$item.name}</option>
 			</iterate>
 			</select><br />
-		
-		网站：<input type="text" id="site_name" name="site_name" size="10" tabindex="1" />
+		站点名称：<input type="text" id="site_name" name="site_name" size="10" tabindex="1" />
 		排序：<input type="text" id="site_sort" name="site_sort" value="" size="4">
 		<input type="button" value="添加" id="submit_addSite"><br />
 		网址：<input type="text" d="site_url" name="site_url" size="30" tabindex="2" /><br />
