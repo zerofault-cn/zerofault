@@ -1,0 +1,332 @@
+<style>
+#tags {
+height:25px;
+padding:0pt 14px;
+}
+#tags li {
+background:transparent url({*APP_PUBLIC_URL}/Images/cline.png) no-repeat scroll right center;
+float:left;
+height:25px;
+position:relative;
+width:67px;
+}
+#tags li a {
+float:left;
+line-height:25px;
+text-align:center;
+width:67px;
+}
+#tags li a:hover {
+text-decoration:none;
+}
+#tags li a.focu {
+background:#0E6DBC url({*APP_PUBLIC_URL}/Images/tag.png) no-repeat scroll center;
+color:#FFFFFF;
+font-weight:bold;
+height:30px;
+left:-1px;
+position:absolute;
+top:0pt;
+width:68px;
+}
+.srchbox {
+background:#EDF6FF none repeat scroll 0%;
+border:1px solid #AACCEE;
+height:46px;
+padding:0pt 15px;
+}
+.srchbox form {
+float:left;
+padding:0pt;
+}
+.srchbox img {
+float:left;
+margin-top:7px;
+}
+.srchbox .r {
+float:right;
+line-height:46px;
+overflow:hidden;
+padding-left:10px;
+white-space:nowrap;
+width:400px;
+}
+.src label {
+float:left;
+margin:11px 0pt 0pt 8px;
+}
+.src .text {
+float:left;
+font-family:Verdana;
+font-size:14px;
+font-size-adjust:none;
+font-stretch:normal;
+font-style:normal;
+font-variant:normal;
+font-weight:normal;
+height:20px;
+line-height:18px;
+margin-right:7px;
+padding:2px 1px 0pt;
+width:318px;
+}
+.src .button {
+float:left;
+font-family:Verdana;
+font-size:14px;
+font-size-adjust:none;
+font-stretch:normal;
+font-style:normal;
+font-variant:normal;
+font-weight:normal;
+height:26px;
+line-height:22px;
+width:90px;
+}
+.src .r {
+float:left;
+line-height:46px;
+overflow:hidden;
+padding-left:10px;
+white-space:nowrap;
+width:400px;
+}
+#baidu9 form {
+padding-top:14px;
+}
+#baidu9 input {
+float:none;
+font-family:Verdana;
+font-size:12px;
+font-size-adjust:none;
+font-stretch:normal;
+font-style:normal;
+font-variant:normal;
+font-weight:normal;
+line-height:normal;
+margin-left:2px;
+margin-right:2px;
+}
+#baidu9 select {
+font-family:Verdana;
+font-size:12px;
+font-size-adjust:none;
+font-stretch:normal;
+font-style:normal;
+font-variant:normal;
+font-weight:normal;
+line-height:normal;
+margin-left:2px;
+margin-right:2px;
+}
+#baidu9 .txt {
+border:1px solid #AACCEE;
+height:18px;
+padding:2px 3px 0pt;
+width:130px;
+}
+#baidu9 .button {
+height:22px;
+margin-left:2px;
+margin-right:2px;
+width:45px;
+}
+#baidu9 img {
+margin-right:8px;
+margin-top:1px;
+}
+</style>
+        <div class="src" id="search_ext">
+            <ul id="tags">
+                <li><a href="javascript://" target="_self" onclick="selectTag('baidu8',this)">Google</a></li>
+                <li><a href="javascript://" target="_self" class="focu" onclick="selectTag('baidu0',this)">百度</a></li>
+                <li><a href="javascript://" target="_self" onclick="selectTag('baidu1',this)">MP3</a></li>
+                <li><a href="javascript://" target="_self" onclick="selectTag('baidu2',this)">图片</a></li>
+                <li><a href="javascript://" target="_self" onclick="selectTag('baidu3',this)">贴吧</a></li>
+                <li><a href="javascript://" target="_self" onclick="selectTag('baidu4',this)">知道</a></li>
+                <li><a href="javascript://" target="_self" onclick="selectTag('baidu5',this)">百科</a></li>
+                <li><a href="javascript://" target="_self" onclick="selectTag('baidu6',this)">视频</a></li>
+                <li><a href="javascript://" target="_self" onclick="selectTag('baidu7',this)">股票</a></li>
+                <li><a href="javascript://" target="_self" onclick="selectTag('baidu9',this)">邮箱</a></li>
+            </ul>
+            <div id="baidu0" class="srchbox">
+                <form method="post" action="" onsubmit="return goSearch(word, url)">
+                    <a href="http://www.baidu.com/?tn=q2616875_pg"><img src="{*APP_PUBLIC_URL}/Images/baidu_logo.gif"></a>
+                    <label>
+                    <input name="url" id="url" value="http://www.baidu.com/s?tn=q2616875_pg&amp;wd=" type="hidden">
+                    <input name="word" id="word" class="text" onmouseover="this.focus();" onfocus="this.select();" autocomplete="off" type="text">
+                    <input class="button" value="百度一下" type="submit">
+                    </label>
+                </form>
+                <div class="r"></div>
+            </div>
+            <div id="baidu1" style="display: none;" class="srchbox">
+                <form method="post" action="" onsubmit="return goSearch(word, url)">
+                    <a href="http://mp3.baidu.com/"><img src="http://www.yishu321.com/images/baidu_mp3.gif"></a>
+                    <label>
+                    <input name="url" id="url" value="http://mp3.baidu.com/m?f=ms&amp;tn=baidump3&amp;ct=134217728&amp;lf=&amp;rn=&amp;lm=0&amp;word=" type="hidden">
+                    <input name="word" id="word" class="text" onmouseover="this.focus();" onfocus="this.select();" autocomplete="off" type="text">
+                    <input class="button" value="百度一下" type="submit">
+                    </label>
+                </form>
+                <div class="r"></div>
+            </div>
+            <div id="baidu2" style="display: none;" class="srchbox">
+                <form method="post" action="" onsubmit="return goSearch(word, url)">
+                    <a href="http://image.baidu.com/"><img src="http://www.yishu321.com/images/baidu_img.gif"></a>
+                    <label>
+                    <input name="url" id="url" value="http://image.baidu.com/i?ct=201326592&amp;cl=2&amp;lm=-1&amp;tn=baiduimage&amp;pv=&amp;z=0&amp;word=" type="hidden">
+                    <input name="word" id="word" class="text" onmouseover="this.focus();" onfocus="this.select();" autocomplete="off" type="text">
+                    <input class="button" value="百度一下" type="submit">
+                    </label>
+                </form>
+                <div class="r"></div>
+            </div>
+            <div id="baidu3" style="display: none;" class="srchbox">
+                <form method="post" action="" onsubmit="return goSearch(word, url)">
+                    <a href="http://post.baidu.com/"><img src="http://www.yishu321.com/images/baidu_post.gif"></a>
+                    <label>
+                    <input name="url" id="url" value="http://post.baidu.com/f?kw=" type="hidden">
+                    <input name="word" id="word" class="text" onmouseover="this.focus();" onfocus="this.select();" autocomplete="off" type="text">
+                    <input class="button" value="百度一下" type="submit">
+                    </label>
+                </form>
+                <div class="r"></div>
+            </div>
+            <div id="baidu4" style="display: none;" class="srchbox">
+                <form method="post" action="" onsubmit="return goSearch(word, url)">
+                    <a href="http://zhidao.baidu.com/"><img src="http://www.yishu321.com/images/baidu_know.gif"></a>
+                    <label>
+                    <input name="url" id="url" value="http://zhidao.baidu.com/q?tn=ikaslist&amp;pt=q2616875_pg&amp;ct=17&amp;word=" type="hidden">
+                    <input name="word" id="word" class="text" onmouseover="this.focus();" onfocus="this.select();" autocomplete="off" type="text">
+                    <input class="button" value="百度一下" type="submit">
+                    </label>
+                </form>
+                <div class="r"></div>
+            </div>
+            <div id="baidu5" style="display: none;" class="srchbox">
+                <form method="post" action="" onsubmit="return goSearch(word, url)">
+                    <a href="http://baike.baidu.com/"><img src="http://www.yishu321.com/images/baidu_baike.gif"></a>
+                    <label>
+                    <input name="url" id="url" value="http://baike.baidu.com/w?ct=17&amp;lm=0&amp;tn=baiduWikiSearch&amp;pn=0&amp;rn=10&amp;word=" type="hidden">
+                    <input name="word" id="word" class="text" onmouseover="this.focus();" onfocus="this.select();" autocomplete="off" type="text">
+                    <input class="button" value="百度一下" type="submit">
+                    </label>
+                </form>
+                <div class="r"></div>
+            </div>
+            <div id="baidu6" style="display: none;" class="srchbox">
+                <form method="post" action="" onsubmit="return goSearch(word, url)">
+                    <a href="http://video.baidu.com/"><img src="http://www.yishu321.com/images/baidu_video.gif"></a>
+                    <label>
+                    <input name="url" id="url" value="http://video.baidu.com/v?ct=301989888&amp;rn=20&amp;pn=0&amp;db=0&amp;s=0&amp;word=" type="hidden">
+                    <input name="word" id="word" class="text" onmouseover="this.focus();" onfocus="this.select();" autocomplete="off" type="text">
+                    <input class="button" value="百度一下" type="submit">
+                    </label>
+                </form>
+                <div class="r"></div>
+            </div>
+            <div id="baidu7" style="display: none;" class="srchbox">
+                <form method="post" action="" onsubmit="return goSearch(word, url)">
+                    <a href="http://www.baidu.com/?tn=q2616875_pg"><img src="http://www.yishu321.com/images/baidu_logo.gif"></a>
+                    <label>
+                    <input name="url" id="url" value="http://www.baidu.com/s?tn=q2616875_pg&amp;wd=" type="hidden">
+                    <input name="word" id="word" class="text" onmouseover="this.focus();" onfocus="this.select();" autocomplete="off" type="text">
+                    <input class="button" value="百度一下" type="submit">
+                    </label>
+                </form>
+                <div class="r"></div>
+            </div>
+            <div id="baidu8" style="display: none;" class="srchbox">
+                <form method="post" action="" onsubmit="return goSearch(word, url)">
+                    <a href="http://www.google.cn/"><img src="http://www.yishu321.com/images/google_logo.gif"></a>
+                    <label>
+                    <input name="url" id="url" value="http://www.google.cn/search?hl=zh-CN&amp;meta=&amp;aq=f&amp;oq=&amp;q=" type="hidden">
+                    <input name="word" id="word" class="text" onmouseover="this.focus();" onfocus="this.select();" autocomplete="off" type="text">
+                    <input class="button" value=" 搜 索 " type="submit">
+                    </label>
+                </form>
+                <div class="r"></div>
+            </div>
+            <div id="baidu9" style="display: none;" class="srchbox">
+                <form name="gomail" onsubmit="return clickMail()" action="" method="post" id="FrLgn">
+                    <input name="url" type="hidden">
+                    <input name="username" type="hidden">
+                    <input name="type" type="hidden">
+                    <input name="password" type="hidden">
+                    <input name="domain" type="hidden">
+                    <input name=".intl" value="cn" type="hidden">
+                    <input value="ym" name=".src" type="hidden">
+                    <input name="user" type="hidden">
+                    <input name="pass" type="hidden">
+                    <input value="true" name="enterVip" type="hidden">
+                    <input name="UserName" type="hidden">
+                    <input name="Password" type="hidden">
+                    <input name="u" type="hidden">
+                    <input name="psw" type="hidden">
+                    <input name="login" type="hidden">
+                    <input name="LoginName" type="hidden">
+                    <input name="usr" type="hidden">
+                    <input name="func" type="hidden">
+                    <input name="login_name" type="hidden">
+                    <input name="login_password" type="hidden">
+                    <input name="BackURL" type="hidden">
+                    <input value="http://mail.google.com/mail?ui=html&amp;zy=l" name="continue" type="hidden">
+                    <input name="Email" type="hidden">
+                    <input name="domainname" type="hidden">
+                    <input value="false" name="firstlogin" type="hidden">
+                    <input name="starttime" type="hidden">
+                    <input name="p2" type="hidden">
+                    <input name="passwd" type="hidden">
+                    <input name="id" type="hidden">
+                    <input name="m" type="hidden">
+                    <input name="mpass" type="hidden">
+                    <input name="loginid" type="hidden">
+                    <input name="appid" type="hidden">
+                    <input name="ru" type="hidden">
+                    <input name="eru" type="hidden">
+                    <input name="fl" type="hidden">
+                    <input name="ct" type="hidden">
+                    <input name="vr" type="hidden">
+                    <input name="sg" type="hidden">
+                    <input name="vwriter" type="hidden">
+                    <input name="email" type="hidden">
+                    <input name="passport_51_user" type="hidden">
+                    <input name="passport_51_password" type="hidden">
+                    <input name="gourl" type="hidden">
+                    <input name="Passwd" type="hidden">
+                    <input name="vpassword" type="hidden">
+                    用户名：
+                    <input tabindex="1" size="15" name="uName">
+                    邮箱：
+                    <select tabindex="2" size="1" name="domains">
+                        <optgroup label="请选择邮箱">
+                        <option value="163">@163.com 网易</option>
+                        <option value="sina">@sina.com 新浪</option>
+                        <option value="126">@126.com 网易</option>
+                        <option value="gmail">@gmail.com</option>
+                        <option value="yahoo">@yahoo.com.cn</option>
+                        <option value="21cn">@21cn.com</option>
+                        <option value="sohu">@sohu.com 搜狐</option>
+                        <option value="tom">@tom.com</option>
+                        <option value="188">@188.com</option>
+                        <option value="yahoocn">@yahoo.cn</option>
+                        <option value="yeah">@yeah.net</option>
+                        </optgroup>
+                        <optgroup label="请选择其他服务">
+                        <option value="baidu">百度账号</option>
+                        <option value="chinaren">ChinaRen校友录</option>
+                        <option value="xiaonei">校内网</option>
+                        <option value="51com">51.com</option>
+                        </optgroup>
+                    </select>
+                    密码：
+                    <input tabindex="3" size="12" name="uPw" type="password">
+                    <input tabindex="4" value=" 登录 " name="sub" type="submit">
+                    <input value="submit" name="cmd" type="hidden">
+                </form>
+            </div>
+        </div>
+    <script language="JavaScript" type="text/javascript" src="{*APP_PUBLIC_URL}/Js/external.js"></script>
+	<script language="JavaScript" type="text/javascript" src="{*APP_PUBLIC_URL}/Js/search.js"></script>
+	<script language="JavaScript" type="text/javascript" src="{*APP_PUBLIC_URL}/Js/mail.js"></script>

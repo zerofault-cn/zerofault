@@ -1,19 +1,39 @@
 {include:header}
-<div class="main index">
-	<h2 class="caption">网站大全</h2>
-	<div class="content">
-		<iterate name="list" id="item" key="i">
-		<dl class="cate_site_list <eq name='mod' value='0'>rotate_bg</eq>">
-			<dt class="cate_title">[<a href="__URL__/cate/id/{$item.id}">{$item.name}</a>]</dt>
-			<dd class="site_list">
-			<iterate name="item['site_list']" id="site_item" key="j">
-			<a id="url" class="<if condition='$site_item.mark eq 1'>red</if>" href="__URL__/site/id/{$site_item.id}" >{$site_item.name}</a>
-			</iterate>
-			</dd>
-		</dl>
-		</iterate>
+<div id="container">
+	{include:top}
+	<div class="ad">
+		广告位
+	</div>
+	{include:search_ext}
+
+	{include:search_int}
+	<div id="main">
+		<div id="leftColumn" class="f_left">
+			{include:left}
+		</div>
+		<div id="rightColumn" class="f_right">
+			<div class="box">
+				<h2>推荐网站</h2>
+
+			</div>
+			<div class="box" id="site_list">
+				<h2>分类导航</h2>
+				<iterate name="list" id="item" key="i">
+				<dl>
+					<dt><a href="__URL__/cate/id/{$item.id}">{$item.name}</a>：</dt>
+					
+					<iterate name="item['site_list']" id="site_item" key="j">
+					<dd><a id="url" class="<if condition='$site_item.mark eq 1'>red</if>" href="__URL__/site/id/{$site_item.id}" >{$site_item.name}</a>
+					</dd></iterate>
+					<div class="clear"></div>
+				</dl><div class="clear"></div>
+				</iterate>
+			</div>
+		</div>
 		<div class="clear"></div>
 	</div>
-	<div class="clear"></div>
+	<div id="copy">
+		Copyright &copy; 2009 <a href="http://www.yishu321.com/">yishu321.com</a> All Rights Reserved.
+	</div>
 </div>
 {include:footer}
