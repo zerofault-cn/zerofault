@@ -224,16 +224,16 @@ label.editable{
 	line-height:200%;
 }
 
-.rightColumn .editForm input.site_name{
+.rightColumn input.site_name{
 	width:124px;
 }
-.rightColumn .editForm input.site_sort{
+.rightColumn input.site_sort{
 	width:30px;
 }
-.rightColumn .editForm input.site_url{
+.rightColumn input.site_url{
 	width:200px;
 }
-.rightColumn .editForm textarea.site_descr{
+.rightColumn textarea.site_descr{
 	width:200px;
 	height:80px;
 }

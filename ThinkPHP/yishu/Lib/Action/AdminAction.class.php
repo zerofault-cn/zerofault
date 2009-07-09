@@ -96,11 +96,11 @@ class AdminAction extends Action{
 			$order = 'flag desc, sort';
 			$cate_name = $dao_cate->where(array('id'=>$cate_id))->getField('name');
 			$topnavi[]=array(
-				'text'=> '站点列表 (分类：'.$cate_name.')',
+				'text'=> '站点列表 (当前分类：'.$cate_name.')',
 				);
 		}
 		else{
-			$order = 'cate_id desc, flag desc, sort';
+			$order = 'id desc';
 			$topnavi[]=array(
 				'text'=> '站点列表',
 				);
