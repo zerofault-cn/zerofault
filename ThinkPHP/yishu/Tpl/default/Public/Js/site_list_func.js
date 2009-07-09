@@ -44,13 +44,13 @@ function submit_addSite(){ //提交新的分类
 }
 function show_editsite(obj,i){
 	$(obj).css("cursor","pointer").click(function(){
-		cate_id = $(this).prev().attr('name');
-		site_id = $(this).prev().attr('id');
-		site_name = $(this).prev().text();
-		site_url = $(this).prev().attr('href');
-		site_sort = $(this).parent().parent().children(".site_func").text();
+		var cate_id = $(this).prev().attr('name');
+		var site_id = $(this).prev().attr('id');
+		var site_name = $(this).prev().text();
+		var site_url = $(this).prev().attr('href');
+		var site_sort = $(this).parent().parent().children(".site_func").text();
 		$(".editForm").remove();
-		html = '<span class="editForm"><div>';
+		var html = '<span class="editForm"><div>';
 		html += '所属分类：<select name="cate_id" class="cate_id">';
 		$(".addForm>#cate_id").children().each(function(i){
 			if(''!=$(this).val()){
