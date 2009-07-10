@@ -43,7 +43,9 @@ class IndexAction extends Action{
 		$rs = $dao->where(array('cate_id'=>$cate_id, 'flag'=>array('gt',0)))->order('sort')->select();
 		
 		$this->assign('site_list', $rs);
-		$this->display();
+
+		$this->assign('content','cate');
+		$this->display('Layout:List_layout');
 	}
 
 	public function site(){
@@ -60,7 +62,8 @@ class IndexAction extends Action{
 		$rs['comment_list'] = $dao->where($where)->select();
 
 		$this->assign('site_info', $rs);
-		$this->display();
+		$this->assign('content','site');
+		$this->display('Layout:List_layout');
 	}
 	public function goto(){
 		$site_id = $_REQUEST['id'];
@@ -87,10 +90,12 @@ class IndexAction extends Action{
 		$data['addtime'] = date("Y-m-d H:i:s");
 		$data['flag'] = 1;
 		if($dao->add($data)) {
-			die('<script>parent.alert("发表成功");parent.location.reload();</script>');
+			header("Content-Type:text/html; charset=utf-8");
+			die('<script>parent.alert("发表成功");parent.location.href=parent.location.href;</script>');
 		}
 		else{
-			die('<script>parent.alert("发生错误啦，请稍后再试！");parent.location.reload();</script>');
+			header("Content-Type:text/html; charset=utf-8");
+			die('<script>parent.alert("发生错误啦，请稍后再试！");</script>');
 		}
 	}
 

@@ -62,17 +62,17 @@ a:hover,a:active,a.active{color:#f20;text-decoration: underline;}
 	width:150px;
 	height:60px;
 	padding:10px;
-	border:1px solid #6600CC;
+	border:1px solid #AACCEE;
 }
 #top #tools{
 	width:560px;
 	height:60px;
 	padding:10px;
-	border:1px solid #6600CC;
+	border:1px solid #AACCEE;
 }
 .ad{
 	height:80px;
-	border:1px solid #6600CC;
+	border:1px solid #AACCEE;
 	margin-top:10px;
 	font-size:36px;
 	line-height:80px;
@@ -90,10 +90,14 @@ a:hover,a:active,a.active{color:#f20;text-decoration: underline;}
 }
 
 #rightColumn{
-	width:740px;
+	width:750px;
 	padding-left:10px;
 }
 
+#rightColumn #site_list dl{
+	line-height:20px;
+	border-bottom:1px dotted #aaa;
+}
 #rightColumn #site_list dt{
 	float:left;
 	width:80px;
@@ -103,7 +107,9 @@ a:hover,a:active,a.active{color:#f20;text-decoration: underline;}
 #rightColumn #site_list dd{
 	float:left;
 	width:80px;
-	text-overflow:eclipse;
+	overflow:hidden;
+	text-overflow:ellipsis;
+	white-space:nowrap; 
 }
 
 
