@@ -48,7 +48,7 @@ a:hover,a:active,a.active{color:#f20;text-decoration: underline;}
 	margin-bottom:5px;
 }
 #container{
-	max-width:1000px;
+	max-width:970px;
 	height:auto !important;
 	margin:0 auto;
 	padding:10px;
@@ -90,7 +90,7 @@ a:hover,a:active,a.active{color:#f20;text-decoration: underline;}
 }
 
 #rightColumn{
-	width:750px;
+	width:720px;
 	padding-left:10px;
 }
 
