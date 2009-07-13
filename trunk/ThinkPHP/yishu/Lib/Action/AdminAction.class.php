@@ -2,12 +2,15 @@
 class AdminAction extends Action{
 	var $lastAction;
 	private function _htmlentities($str){
-		return mb_convert_encoding($str,'HTML-ENTITIES', 'UTF-8');
+		//return mb_convert_encoding($str,'HTML-ENTITIES', 'UTF-8');
+		//return iconv('UTF-8','HTML-ENTITIES', $str);
+		return $str;
 	}
 
 	public function _initialize() { //每个操作都会执行此方法
 		if(!Session::is_set('isAdmin') && ACTION_NAME != 'login_form' && ACTION_NAME != 'login'){
 			$this->lastAction = ACTION_NAME;
+			header("Content-Type:text/html; charset=utf-8");
 			redirect(__APP__.'/Admin/login_form',1,$this->_htmlentities('转向登录窗口'));
 		}
 	}
@@ -17,6 +20,7 @@ class AdminAction extends Action{
 	public function login(){
 		$username = $_POST['username'];
 		$password = $_POST['password'];
+		header("Content-Type:text/html; charset=utf-8");
 		if('admin' == $username && 'dvmadmin' == $password){
 			Session::setExpire(43200, true);
 			Session::set('isAdmin', 1);
@@ -32,6 +36,7 @@ class AdminAction extends Action{
 	}
 	public function logout(){
 		Session::clear();
+		header("Content-Type:text/html; charset=utf-8");
 		redirect(__APP__.'/Admin/',1,$this->_htmlentities('退出成功！'));
 	}
 
