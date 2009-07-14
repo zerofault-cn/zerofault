@@ -65,7 +65,7 @@ a:hover,a:active,a.active{color:#f20;text-decoration: underline;}
 	border:1px solid #AACCEE;
 }
 #top #tools{
-	width:560px;
+	width:550px;
 	height:60px;
 	padding:10px;
 	border:1px solid #AACCEE;
@@ -107,11 +107,131 @@ a:hover,a:active,a.active{color:#f20;text-decoration: underline;}
 #rightColumn #site_list dd{
 	float:left;
 	width:80px;
+	padding-right:20px;
 	overflow:hidden;
 	text-overflow:ellipsis;
 	white-space:nowrap; 
 }
 
+ul.starrating{
+
+background:transparent url(../Images/starrating.gif) repeat-x scroll left top;
+display:block;
+float:left;
+height:21px;
+margin:22px 5px 0 32px;
+position:relative;
+width:100px;
+}
+ul.starrating li {
+float:left;
+margin:0;
+padding:0;
+}
+ul.starrating li#currentrating {
+background:transparent url(../Images/starrating.gif) repeat scroll left bottom;
+display:block;
+height:21px;
+position:absolute;
+text-indent:-9000px;
+width:0;
+z-index:1;
+}
+ul.starrating li a {
+display:block;
+height:21px;
+overflow:hidden;
+position:absolute;
+text-indent:-9000px;
+width:10px;
+z-index:20;
+}
+ul.starrating li a:hover {
+background:transparent url(../Images/starrating.gif) repeat scroll left 21px;
+left:0;
+z-index:2;
+}
+ul.starrating a.star1 {
+	left:0;
+}
+ul.starrating a.star1:hover {
+	width:10px;
+}
+ul.starrating a.star2 {
+	left:10px;
+}
+ul.starrating a.star2:hover {
+	width:20px;
+}
+ul.starrating a.star3 {
+	left:20px;
+}
+ul.starrating a.star3:hover {
+	width:30px;
+}
+ul.starrating a.star4 {
+	left:30px;
+}
+ul.starrating a.star4:hover {
+	width:40px;
+}
+ul.starrating a.star5 {
+	left:40px;
+}
+ul.starrating a.star5:hover {
+	width:50px;
+}
+ul.starrating a.star6 {
+	left:50px;
+}
+ul.starrating a.star6:hover {
+	width:60px;
+}
+ul.starrating a.star7 {
+	left:60px;
+}
+ul.starrating a.star7:hover {
+	width:70px;
+}
+ul.starrating a.star8 {
+	left:70px;
+}
+ul.starrating a.star8:hover {
+	width:80px;
+}
+ul.starrating a.star9 {
+	left:80px;
+}
+ul.starrating a.star9:hover {
+	width:90px;
+}
+ul.starrating a.star10 {
+	left:90px;
+}
+ul.starrating a.star10:hover {
+	width:100px;
+}
+
+span#pftip {
+display:block;
+float:left;
+color:#999999;
+font-size:12px;
+left:158px;
+position:absolute;
+top:9px;
+width:200px;
+}
+
+span#pfno {
+display:block;
+float:left;
+color:green;
+font-family:Arial;
+font-weight:bold;
+margin:24px 8px 0 0;
+width:30px;
+}
 
 #copy{
 	padding:10px;
