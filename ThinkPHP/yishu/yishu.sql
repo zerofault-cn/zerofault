@@ -78,7 +78,8 @@ CREATE TABLE IF NOT EXISTS `yishu_website` (
   `addtime` datetime NOT NULL,
   `sort` smallint(5) unsigned NOT NULL default '0',
   `flag` tinyint(1) NOT NULL default '1',
-  `mark` tinyint(1) unsigned NOT NULL,
+  `mark` tinyint(1) unsigned NOT NULL default '0',
   `hit` mediumint(8) unsigned NOT NULL default '0',
+  `view` int(10) unsigned NOT NULL default '0',
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
