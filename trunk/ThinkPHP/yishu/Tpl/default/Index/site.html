@@ -2,10 +2,32 @@
 	<h2 class="caption"><a href="__URL__/">网站大全</a> &gt; <a href="__URL__/cate/id/{$site_info.cate_id}">{$site_info['cate_info']['name']}</a> &gt; {$site_info.name}</h2>
 	<div class="content">
 		<ul>
-			<li>网站名称: {$site_info.name}</li>
+			<li>网站名称: {$site_info.name}
+			<!-- <img class="f_right" src='http://www.shrinktheweb.com/xino.php?embed=1&STWAccessKeyId=c836fb20633c73d&Size=lg&stwUrl={$site_info.url}'/> -->
+			<img class="f_right" src='{$site_info.thumb}'/>
+			</li>
 			<li>网址: {$site_info.url}</li>
 			<li>简介：{$site_info.descr|nl2br}</li>
 			<li><a href="__URL__/goto/id/{$site_info.id}" target="_blank">点击</a>：{$site_info.hit}</li>
+			<li style="position:relative;">
+				<ul class="starrating">
+					<li style="width: {$site_info.vote_width}px; display: block;" id="currentrating"></li>
+					<li><a onmouseover="infen(1)" onmouseout="infen(0)" href="javascript:void(0);" class="star1">1</a></li>
+					<li><a onmouseover="infen(2)" onmouseout="infen(0)" href="javascript:void(0);" class="star2">2</a></li>
+					<li><a onmouseover="infen(3)" onmouseout="infen(0)" href="javascript:void(0);" class="star3">3</a></li>
+					<li><a onmouseover="infen(4)" onmouseout="infen(0)" href="javascript:void(0);" class="star4">4</a></li>
+					<li><a onmouseover="infen(5)" onmouseout="infen(0)" href="javascript:void(0);" class="star5">5</a></li>
+					<li><a onmouseover="infen(6)" onmouseout="infen(0)" href="javascript:void(0);" class="star6">6</a></li>
+					<li><a onmouseover="infen(7)" onmouseout="infen(0)" href="javascript:void(0);" class="star7">7</a></li>
+					<li><a onmouseover="infen(8)" onmouseout="infen(0)" href="javascript:void(0);" class="star8">8</a></li>
+					<li><a onmouseover="infen(9)" onmouseout="infen(0)" href="javascript:void(0);" class="star9">9</a></li>
+					<li><a onmouseover="infen(10)" onmouseout="infen(0)" href="javascript:void(0);" class="star10">10</a></li>
+				</ul>
+				<span id="pftip"></span>
+				<span id="pfno"></span>
+				{$site_info.vote} (已有{$site_info.vote_count}人评分)
+				<div class="clear"></div>
+			</li>
 			<li>
 				<dl>
 					<iterate name="site_info['comment_list']" id="item">
@@ -19,8 +41,13 @@
 			<input type="hidden" name="site_id" value="{$site_info.id}" />
 			<textarea cols="40" rows="5" name="content"></textarea>
 			<br />
-			您的称呼：<input type="text" name="user_id" size="12"/> 验证码：<input TYPE="text" name="verify" size="4" > <img src="__URL__/verify" align="absmiddle" /><input type="submit" class="submit" value="发表"/>
+			您的称呼：<input type="text" name="user_id" size="10" value="匿名"/> 验证码：<input TYPE="text" name="verify" size="4" > <img src="__URL__/verify" align="absmiddle" /><input type="submit" class="submit" value="发表"/>
 			</form>
 			</li>
 		</ul>
+		
 	</div>
+	<script language="JavaScript" type="text/javascript">
+	var site_id = {$site_info.id};
+	var _URL_ = '__URL__';
+	</script>
