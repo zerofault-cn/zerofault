@@ -14,6 +14,9 @@ return array(
 //	'DEBUG_MODE'=>true, //开启调试模式
 //	'SHOW_PAGE_TRACE' => TRUE,
 
+	'APP_DOMAIN_DEPLOY' => false,
+
+
 	'DATA_CACHE_TYPE'=>'file', // 数据缓存方式 文件
 	'DATA_CACHE_TIME'=>10,   // 数据缓存有效期 10 秒
 
