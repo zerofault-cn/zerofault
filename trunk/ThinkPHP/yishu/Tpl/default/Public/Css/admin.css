@@ -171,6 +171,9 @@ label.editable{
 .rightColumn a{
 	color:#0000ff;
 }
+.rightColumn a.red{
+	color:#ff0000;
+}
 .rightColumn a:hover{
 	color:#0066ff;
 }
