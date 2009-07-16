@@ -66,7 +66,7 @@ label.editable{
 	min-height:32px;
 	padding:3px;
 	padding-bottom:8px;
-	background:url(../Images/shadow.jpg) bottom repeat-x;
+	background:url(../Images/admin/shadow.jpg) bottom repeat-x;
 }
 #top .action{
 	float:right;
@@ -97,10 +97,10 @@ label.editable{
 .leftColumn ul{
 	margin-top:28px;
 	padding-top:1px;
-	background:url(../Images/dots11bg.gif) top repeat-x;
+	background:url(../Images/admin/dots11bg.gif) top repeat-x;
 }
 .leftColumn ul li{
-	background:url(../Images/dots11bg.gif) bottom repeat-x;
+	background:url(../Images/admin/dots11bg.gif) bottom repeat-x;
 }
 .leftColumn ul li.curr{
 	color:#0066ff;

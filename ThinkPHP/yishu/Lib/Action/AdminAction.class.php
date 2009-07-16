@@ -118,7 +118,8 @@ class AdminAction extends Action{
 		}
 		
 		$dao = D('Website');
-		$count = $dao->where($where)->getField('count(*) as count');
+		$max_sort = $dao->where($where)->getField("max(sort)");
+		$count = $dao->where($where)->getField('count(*)');
 		import("ORG.Util.Page");
 		$listRows = 10;
 		$p = new Page($count, $listRows);
@@ -132,6 +133,7 @@ class AdminAction extends Action{
 		$this->assign('page', $p->show());
 		$this->assign('list', $rs);
 		$this->assign('cate_list', $dao_cate->where(array('flag'=>array('gt',-1)))->order('flag desc,sort')->select());
+		$this->assign('new_sort', $max_sort+10);
 		$this->assign('content','site_list');
 		$this->display('Layout:Admin_layout');
 	}
