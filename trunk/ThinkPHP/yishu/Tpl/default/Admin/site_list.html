@@ -13,7 +13,7 @@
 	<iterate name="list" id="item">
 	<tr bgcolor="<eq name='mod' value='1'>#FFFFE1</eq>" class="<eq name='item["flag"]' value='0'>gray</eq> <eq name='item["cate_info"]["flag"]' value='0'>gray</eq>">
 		<td>{$i}</td>
-		<td class="site_info"><a class="<if condition='$item.mark eq 1'>red</if>" href="{$item.url}" target="_blank" id="{$item.id}" name="{$item['cate_info']['id']}" title="{$item.descr}">{$item.name}</a> <img src="{*APP_PUBLIC_URL}/Images/form_edit.gif" alt="编辑" align="absmiddle"/></td>
+		<td class="site_info"><a class="<if condition='$item.mark eq 1'>red</if>" href="{$item.url}" target="_blank" id="{$item.id}" name="{$item['cate_info']['id']}" title="{$item.descr}">{$item.name}</a> <img src="{*APP_PUBLIC_URL}/Images/admin/form_edit.gif" alt="编辑" align="absmiddle"/></td>
 		<eq name="_GET['id']" value="">
 		<td><a href="__URL__/site_list/id/{$item['cate_info']['id']}/">{$item['cate_info']['name']}</a>
 		</eq>
@@ -21,12 +21,12 @@
 		<td class="site_func"><label id="{$item.id}">{$item.sort}</label></td>
 		<td>
 			<if condition="$item['flag'] neq '-1'">
-			<a href="__URL__/update/t/Website/id/{$item.id}/f/mark/v/{:intval(!$item['mark'])}/" target="_iframe" title='<if condition="$item.mark eq 0">普通<else />醒目</if>'><if condition="$item.mark eq 0"><img src="{*APP_PUBLIC_URL}/Images/favo.gif" alt="醒目" align="absmiddle"/><else /><img src="{*APP_PUBLIC_URL}/Images/normal.gif" alt="普通" align="absmiddle"/></if></a>
-			<a href="__URL__/update/t/Website/id/{$item.id}/f/flag/v/{:intval(!$item['flag'])}/" target="_iframe" title='<if condition="$item.flag eq 0">显示<else />隐藏</if>'><if condition="$item.flag eq 0"><img src="{*APP_PUBLIC_URL}/Images/sign_tick.gif" alt="显示" align="absmiddle"/><else /><img src="{*APP_PUBLIC_URL}/Images/sign_deny.gif" alt="隐藏" align="absmiddle"/></if></a>
-			<a href="__URL__/update/t/Website/id/{$item.id}/f/flag/v/-1/"  target="_iframe" title="删除"><img src="{*APP_PUBLIC_URL}/Images/sign_remove.gif" alt="删除" align="absmiddle"/></a>
+			<a href="__URL__/update/t/Website/id/{$item.id}/f/mark/v/{:intval(!$item['mark'])}/" target="_iframe" title='<if condition="$item.mark eq 0">普通<else />醒目</if>'><if condition="$item.mark eq 0"><img src="{*APP_PUBLIC_URL}/Images/admin/flag_red.gif" alt="醒目" align="absmiddle"/><else /><img src="{*APP_PUBLIC_URL}/Images/admin/flag_blue.gif" alt="普通" align="absmiddle"/></if></a>
+			<a href="__URL__/update/t/Website/id/{$item.id}/f/flag/v/{:intval(!$item['flag'])}/" target="_iframe" title='<if condition="$item.flag eq 0">显示<else />隐藏</if>'><if condition="$item.flag eq 0"><img src="{*APP_PUBLIC_URL}/Images/admin/tick.gif" alt="显示" align="absmiddle"/><else /><img src="{*APP_PUBLIC_URL}/Images/admin/cross.gif" alt="隐藏" align="absmiddle"/></if></a>
+			<a href="__URL__/update/t/Website/id/{$item.id}/f/flag/v/-1/"  target="_iframe" title="删除"><img src="{*APP_PUBLIC_URL}/Images/admin/delete.gif" alt="删除" align="absmiddle"/></a>
 			<else />
-			<a href="__URL__/update/t/Website/id/{$item.id}/f/flag/v/0/" target="_iframe" title="恢复"><img src="{*APP_PUBLIC_URL}/Images/sign_add.gif" alt="恢复" align="absmiddle"/></a>
-			<a href="__URL__/delete/t/Website/id/{$item.id}/" target="_iframe" title="彻底删除"><img src="{*APP_PUBLIC_URL}/Images/sign_remove.gif" alt="彻底删除" align="absmiddle"/></a>
+			<a href="__URL__/update/t/Website/id/{$item.id}/f/flag/v/0/" target="_iframe" title="恢复"><img src="{*APP_PUBLIC_URL}/Images/admin/add.gif" alt="恢复" align="absmiddle"/></a>
+			<a href="__URL__/delete/t/Website/id/{$item.id}/" target="_iframe" title="彻底删除"><img src="{*APP_PUBLIC_URL}/Images/admin/delete.gif" alt="彻底删除" align="absmiddle"/></a>
 			</if>
 		</td>
 	</tr>
@@ -42,9 +42,9 @@
 			</select>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 		<input type="button" value="添加" class="submit_addSite"><br />
 		站点名称：<input type="text" class="site_name" name="site_name" size="10" tabindex="1" />
-		排序：<input type="text" class="site_sort" name="site_sort" value="" size="4">
+		排序：<input type="text" class="site_sort" name="site_sort" value="{$new_sort}" size="4">
 		<br />
-		站点网址：<input type="text" class="site_url" name="site_url" size="30" tabindex="2" /><br />
+		站点网址：<input type="text" class="site_url" name="site_url" size="30" tabindex="2" value="http://"/><br />
 		站点简介：<textarea class="site_descr" name="site_descr" cols="40" rows="4" tabindex="3" ></textarea>
 	</div>
 	</neq>
