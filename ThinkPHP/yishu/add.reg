@@ -2,9 +2,6 @@ REGEDIT4
 
 [HKEY_CURRENT_USER\Software\Microsoft\Internet Explorer\MenuExt]
 
-[HKEY_CURRENT_USER\Software\Microsoft\Internet Explorer\MenuExt\添加本网站到艺术之家]
+[HKEY_CURRENT_USER\Software\Microsoft\Internet Explorer\MenuExt\添加本网站到yishu321]
 @="http://zerofault.oxyhost.com/yishu/index.php/Index/loader"
-
-[HKEY_CURRENT_USER\Software\Microsoft\Internet Explorer\MenuExt\添加本网站到local]
-@="http://localhost/ThinkPHP/yishu/index.php/Index/loader"
 

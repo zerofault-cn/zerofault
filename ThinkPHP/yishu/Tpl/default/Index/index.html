@@ -8,26 +8,51 @@
 
 	
 	<div id="main">
-		<div id="leftColumn" class="f_left">
+		<div id="leftColumn">
 			{include:left}
 		</div>
-		<div id="rightColumn" class="f_right">
-			<div class="box">
-				<h2>推荐网站</h2>
+		<div id="rightColumn">
+			<div class="box site_list">
+				<div class="w t f_left"></div>
+				<div class="w t f_right"></div>
+				<div class="clear"></div>
+				<div class="w o f_left"></div>
+				<div class="w o f_right"></div>
+				<div class="clear"></div>
+				<div class="w p f_left"></div>
+				<div class="w p f_right"></div>
+				<div class="clear"></div>
+				&nbsp;推荐网站
+				<ul>
+					<iterate name="mark_list" id="item" key="i">
+					<li><a href="__URL__/site/id/{$item.id}/">{$item.name}</a></li>
+					</iterate>
+					<div class="clear"></div>
+				</ul>
 
 			</div>
-			<div class="box" id="site_list">
-				<h2>分类导航</h2>
-				<iterate name="list" id="item" key="i">
-				<dl>
-					<dt><a href="__URL__/cate/id/{$item.id}">{$item.name}</a>：</dt>
+			<div class="box site_list">
+				<div class="w t f_left"></div>
+				<div class="w t f_right"></div>
+				<div class="clear"></div>
+				<div class="w o f_left"></div>
+				<div class="w o f_right"></div>
+				<div class="clear"></div>
+				<div class="w p f_left"></div>
+				<div class="w p f_right"></div>
+				<div class="clear"></div>
+				&nbsp;分类导航
+				<ul>
+					<iterate name="list" id="item" key="i">
+					<li class="label"><a href="__URL__/cate/id/{$item.id}">{$item.name}</a>：</li>
 					
 					<iterate name="item['site_list']" id="site_item" key="j">
-					<dd><a id="url" class="<if condition='$site_item.mark eq 1'>red</if>" href="__URL__/site/id/{$site_item.id}" >{$site_item.name}</a>
-					</dd></iterate>
+					<li><a id="url" class="<if condition='$site_item.mark eq 1'>red</if>" href="__URL__/site/id/{$site_item.id}/" >{$site_item.name}</a>
+					</li></iterate>
 					<div class="clear"></div>
-				</dl><div class="clear"></div>
-				</iterate>
+					</iterate>
+				</ul>
+				<div class="clear"></div>
 			</div>
 		</div>
 		<div class="clear"></div>

@@ -218,25 +218,25 @@ label.editable{
 	position:absolute;
 	left:-16px;
 	top:-16px;
-	width:270px;
+	width:350px;
 	padding:10px;
 	border:3px solid #FCD410;
 	background:#FFFFFF;
 	text-align:left;
 	color:#006;
-	line-height:200%;
+	line-height:240%;
 }
 
 .rightColumn input.site_name{
-	width:124px;
+	width:200px;
 }
 .rightColumn input.site_sort{
 	width:30px;
 }
 .rightColumn input.site_url{
-	width:200px;
+	width:275px;
 }
 .rightColumn textarea.site_descr{
-	width:200px;
-	height:80px;
+	width:340px;
+	height:150px;
 }

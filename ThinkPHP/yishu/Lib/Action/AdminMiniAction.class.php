@@ -1,6 +1,6 @@
 <?php
 class AdminMiniAction extends Action{
-	var $lastAction;
+	protected $lastAction;
 	public function _initialize() {
 		//每个操作都会执行此方法
 		if(!Cookie::get('isAdmin') && ACTION_NAME != 'login_form' && ACTION_NAME != 'login'){
@@ -133,7 +133,7 @@ class AdminMiniAction extends Action{
 		}
 	}
 	public function remote_add(){
-		$this->assign('name',$_REQUEST['title']);
+		$this->assign('name',iconv('','UTF-8',$_REQUEST['title']));
 		$this->assign('url','http://'.$_REQUEST['url'].'/');
 		$this->assign('descr',$_REQUEST['content']);
 		$dao = D('Category');

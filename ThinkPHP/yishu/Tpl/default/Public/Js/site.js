@@ -14,6 +14,14 @@ function infen(var1){
 function GI(id){
 	return document.getElementById(id);
 }
+function get_comment(p){
+	jQuery.get(_URL_+"/get_comment",{
+		'site_id':site_id,
+		'p':p
+	},function(str){
+			jQuery("#comment").html(str);
+		});
+}
 jQuery.noConflict();
 jQuery(document).ready(function(){
 	jQuery(".starrating li a").each(function(i){
@@ -24,7 +32,8 @@ jQuery(document).ready(function(){
 			},function(str){
 					if(str=='-1')
 					{
-						myAlert("您已经给该网站评过分了，谢谢您的热心参与!");
+						myAlert("您已经给该网站评过分了，谢谢您的热心参与！");
+						myOK(2000);
 					}
 					else if(str=='0')
 					{
@@ -32,7 +41,8 @@ jQuery(document).ready(function(){
 					}
 					else
 					{
-						myAlert("评分成功，谢谢您的热心参与!");
+						myAlert("评分成功，谢谢您的热心参与！");
+						myOK(1500);
 						var arr = str.split('|');
 						jQuery("#vote_count").text(arr[0]);
 						jQuery("#vote").text(arr[1]);
@@ -41,4 +51,9 @@ jQuery(document).ready(function(){
 				});
 		});
 	});
+	jQuery.get(_URL_+"/get_comment",{
+		'site_id':site_id,
+	},function(str){
+			jQuery("#comment").html(str);
+		});
 });
