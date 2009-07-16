@@ -39,7 +39,8 @@ CREATE TABLE IF NOT EXISTS `yishu_category` (
 CREATE TABLE IF NOT EXISTS `yishu_comment` (
   `id` int(10) unsigned NOT NULL auto_increment,
   `site_id` mediumint(8) unsigned NOT NULL,
-  `user_id` mediumint(8) unsigned NOT NULL,
+  `name` varchar(64) NOT NULL,
+  `email` varchar(64) NOT NULL, 
   `ip` varchar(16) NOT NULL,
   `content` text NOT NULL,
   `addtime` datetime NOT NULL,
