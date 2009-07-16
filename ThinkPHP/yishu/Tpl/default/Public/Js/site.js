@@ -14,6 +14,9 @@ function infen(var1){
 function GI(id){
 	return document.getElementById(id);
 }
+function getPage(p){
+	get_comment(p);
+}
 function get_comment(p){
 	jQuery.get(_URL_+"/get_comment",{
 		'site_id':site_id,
@@ -21,6 +24,9 @@ function get_comment(p){
 	},function(str){
 			jQuery("#comment").html(str);
 		});
+	document.comment_form.content.value='';
+	document.comment_form.verify.value='';
+	jQuery("#comment_form img").attr('src',_URL_+'/verify?r='+Math.random());
 }
 jQuery.noConflict();
 jQuery(document).ready(function(){
@@ -46,13 +52,13 @@ jQuery(document).ready(function(){
 						var arr = str.split('|');
 						jQuery("#vote_count").text(arr[0]);
 						jQuery("#vote").text(arr[1]);
-						jQuery("#currentrating").css("width:"+arr[2]+"px");
+						jQuery("#currentrating").css("width",arr[2]+'px');
 					}
 				});
 		});
 	});
 	jQuery.get(_URL_+"/get_comment",{
-		'site_id':site_id,
+		'site_id':site_id
 	},function(str){
 			jQuery("#comment").html(str);
 		});

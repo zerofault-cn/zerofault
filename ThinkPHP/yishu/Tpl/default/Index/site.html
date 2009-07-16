@@ -43,7 +43,7 @@
 			<li>
 				<fieldset id="comment_form">
 					<legend>发表评论</legend>
-					<form action="__URL__/add_comment" target="_iframe" method="post">
+					<form name="comment_form" action="__URL__/add_comment" target="_iframe" method="post">
 					<input type="hidden" name="site_id" value="{$site_info.id}" />
 					您的称呼：<input type="text" name="name" size="20" value="匿名"/>(必填)<br />
 					您的Email：<input type="text" name="email" size="20" />(不会对外公开)<br />

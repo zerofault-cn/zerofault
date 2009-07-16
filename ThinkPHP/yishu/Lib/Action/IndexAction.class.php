@@ -132,16 +132,16 @@ class IndexAction extends Action{
 		$where['flag'] = array('gt',0);
 		$order = 'id desc';
 		$count = $dao->where($where)->getField('count(*)');
-
-		import("ORG.Util.Page");
 		$listRows = 10;
-		$p = new Page($count, $listRows);
+		import("@.PageJs");
+		$p = new PageJs($count,$listRows);
 		$rs = $dao->where($where)->order($order)->limit($p->firstRow.','.$p->listRows)->select();
 
 		foreach($rs as $item){
 			echo '<dt>'.(''==$item['name']?'匿名':$item['name']).' 发表于 '.$item['addtime'].'</dt>';
 			echo '<dd>'.nl2br($item['content']).'</dd>';
 		}
+		echo $p->show();
 	}
 	public function add_comment() {
 		header("Content-Type:text/html; charset=utf-8");
@@ -157,7 +157,7 @@ class IndexAction extends Action{
 		$data['addtime'] = date("Y-m-d H:i:s");
 		$data['flag'] = 1;
 		if($dao->add($data)) {
-			die('<script>parent.myAlert("发表成功");parent.myOK(1200);parent.get_comment(0);</script>');
+			die('<script>parent.myAlert("发表成功");parent.myOK(1500);parent.get_comment(0);</script>');
 		}
 		else{
 			die('<script>parent.myAlert("发生错误啦，请稍后再试！");</script>');

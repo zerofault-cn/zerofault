@@ -118,6 +118,7 @@ a:hover,a:active,a.active{color:#f20;text-decoration: underline;}
 }
 
 .box ul{
+	width:238px;
 	background:#FFFFFF none repeat scroll 0 0;
 	border:1px solid #C3D9FF;
 	font-weight:normal;
@@ -174,30 +175,38 @@ a:hover,a:active,a.active{color:#f20;text-decoration: underline;}
 	color:#565B78;
 }
 #rightColumn .box{
+	width:726px;
 	background:#C3D9FF none repeat scroll 0 0;
 }
-
+#rightColumn .box ul{
+	width:724px;
+}
 #rightColumn .site_list ul{
+	width:714px;
 	padding:5px;
 }
 #rightColumn .site_list ul li{
-	float:left;
-	width:100px;
+	float:none;
+	width:auto;
 	padding-left:0;
-	padding-right:20px;
 	border-bottom:1px solid #E3EDFF;
-	overflow:hidden;
-	text-overflow:ellipsis;
-	white-space:nowrap; 
 }
 
-#rightColumn .site_list ul li.label{
+#rightColumn .site_list ul li label{
 	float:left;
 	width:80px;
 	font-weight:bold;
 }
-
+#rightColumn .site_list ul li span{
+	float:left;
+	width:100px;
+	padding-right:20px;
+	overflow:hidden;
+	text-overflow:ellipsis;
+	white-space:nowrap; 
+}
 .box ul.site_list2{
+	width:auto;
 	padding:10px;
 }
 .box ul.site_list2 li{
@@ -207,6 +216,7 @@ a:hover,a:active,a.active{color:#f20;text-decoration: underline;}
 	border-bottom:1px dashed #CCCCCC;
 }
 .box ul.detail{
+	width:auto;
 	padding:10px;
 }
 .box ul.detail li{
@@ -243,13 +253,12 @@ span#pfno {
 	margin:24px 8px 0 0;
 	width:30px;
 }
-
-ul.starrating li {
+.box ul.starrating li{
 	float:left;
 	margin:0;
 	padding:0;
 }
-ul.starrating li#currentrating {
+.box ul.starrating li#currentrating {
 	background:transparent url(../Images/starrating.gif) repeat scroll left bottom;
 	display:block;
 	height:21px;
@@ -258,7 +267,7 @@ ul.starrating li#currentrating {
 	width:0;
 	z-index:1;
 }
-ul.starrating li a {
+.box ul.starrating li a {
 	display:block;
 	height:21px;
 	overflow:hidden;
@@ -267,7 +276,7 @@ ul.starrating li a {
 	width:10px;
 	z-index:20;
 }
-ul.starrating li a:hover {
+.box ul.starrating li a:hover {
 	background:transparent url(../Images/starrating.gif) repeat scroll left 21px;
 	left:0;
 	z-index:2;

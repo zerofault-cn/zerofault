@@ -9,11 +9,6 @@
 				<li><a href="">增加广告位</a></li>
 			</ul>
 		</li>
-		<li>首页管理
-			<ul class="sub">
-				<li><a href="">列表</a></li>
-			</ul>
-		</li>
 		<li>分类管理
 			<ul class="sub">
 				<li class="<eq name="ACTION_NAME" value="cate_list"><neq name="_GET['flag']" value="-1">curr</neq></eq>"><a href="__URL__/cate_list">分类列表</a></li>
@@ -24,6 +19,12 @@
 			<ul class="sub">
 				<li class="<eq name="ACTION_NAME" value="site_list"><neq name="_GET['flag']" value="-1">curr</neq></eq>"><a href="__URL__/site_list">站点列表</a></li>
 				<li class="<eq name="ACTION_NAME" value="site_list"><eq name="_GET['flag']" value="-1">curr</eq></eq>"><a href="__URL__/site_list/flag/-1/">回收站</a></li>
+			</ul>
+		</li>
+		<li>评论管理
+			<ul class="sub">
+				<li class="<eq name="ACTION_NAME" value="comment_list"><neq name="_GET['flag']" value="-1">curr</neq></eq>"><a href="__URL__/comment_list">评论列表</a></li>
+				<li class="<eq name="ACTION_NAME" value="comment_list"><eq name="_GET['flag']" value="-1">curr</eq></eq>"><a href="__URL__/comment_list/flag/-1/">回收站</a></li>
 			</ul>
 		</li>
 	</ul>
