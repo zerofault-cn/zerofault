@@ -88,6 +88,7 @@ class AdminAction extends Action{
 		$this->display('Layout:Admin_layout');
 	}
 	
+
 	public function site_list(){
 		$topnavi[]=array(
 			'text'=> '站点管理',
@@ -137,6 +138,49 @@ class AdminAction extends Action{
 		$this->assign('content','site_list');
 		$this->display('Layout:Admin_layout');
 	}
+	public function comment_list(){
+		$topnavi[]=array(
+			'text'=> '评论管理',
+			'url' => __APP__.'/Admin/comment_list'
+			);
+
+		$dao_site = D('Website');
+		$sie_id = $_REQUEST['id'];
+		if(!empty($site_id)){
+			$where['site_id'] = $site_id;
+			$site_name = $dao_site->where(array('id'=>$site_id))->getField('name');
+			$topnavi[]=array(
+				'text'=> '给网站【'.$site_name.'】的评论',
+				);
+		}
+		else{
+			$topnavi[]=array(
+				'text'=> '所有评论',
+				);
+		}
+		$where['flag'] = 1;
+		$flag = $_REQUEST['flag'];
+		if(!empty($flag)){
+			$where['flag'] = $flag;
+		}
+		$order = 'id desc';
+		$dao = D('Comment');
+		$count = $dao->where($where)->getField('count(*)');
+		import("ORG.Util.Page");
+		$listRows = 10;
+		$p = new Page($count, $listRows);
+		$rs = $dao->where($where)->order($order)->limit($p->firstRow.','.$p->listRows)->select();
+		foreach($rs as $key=>$val){
+			$rs[$key]['site_info'] = $dao_site->find($val['site_id']);
+		}
+
+		$this->assign("topnavi",$topnavi);
+		$this->assign('page', $p->show());
+		$this->assign('list', $rs);
+		$this->assign('content','comment_list');
+		$this->display('Layout:Admin_layout');
+	}
+
 	public function add(){
 		$table=$_REQUEST['table'];
 		$cate_id=intval($_REQUEST['cate_id']);

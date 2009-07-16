@@ -12,7 +12,7 @@
 			{include:left}
 		</div>
 		<div id="rightColumn">
-			<div class="box site_list">
+			<div class="box">
 				<div class="w t f_left"></div>
 				<div class="w t f_right"></div>
 				<div class="clear"></div>
@@ -24,13 +24,13 @@
 				<div class="clear"></div>
 				&nbsp;推荐网站
 				<ul>
-					<iterate name="mark_list" id="item" key="i">
+					<iterate name="mark_list" id="item">
 					<li><a href="__URL__/site/id/{$item.id}/">{$item.name}</a></li>
 					</iterate>
 					<div class="clear"></div>
 				</ul>
-
 			</div>
+			<div class="clear"></div>
 			<div class="box site_list">
 				<div class="w t f_left"></div>
 				<div class="w t f_right"></div>
@@ -44,12 +44,13 @@
 				&nbsp;分类导航
 				<ul>
 					<iterate name="list" id="item" key="i">
-					<li class="label"><a href="__URL__/cate/id/{$item.id}">{$item.name}</a>：</li>
-					
-					<iterate name="item['site_list']" id="site_item" key="j">
-					<li><a id="url" class="<if condition='$site_item.mark eq 1'>red</if>" href="__URL__/site/id/{$site_item.id}/" >{$site_item.name}</a>
-					</li></iterate>
-					<div class="clear"></div>
+					<li>
+						<label><a href="__URL__/cate/id/{$item.id}">{$item.name}</a>：</label>
+						<iterate name="item['site_list']" id="site_item" key="j">
+						<span><a id="url" class="<if condition='$site_item.mark eq 1'>red</if>" href="__URL__/site/id/{$site_item.id}/" >{$site_item.name}</a></span>
+						</iterate>
+						<div class="clear"></div>
+					</li>
 					</iterate>
 				</ul>
 				<div class="clear"></div>

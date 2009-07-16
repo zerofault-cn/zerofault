@@ -48,6 +48,9 @@ a:hover,a:active,a.active{color:#f20;text-decoration: underline;}
 	padding:3px;
 	text-align:right;
 }
+.a_left{
+	text-align:left;
+}
 input.quickedit{
 	border:1px inset threedface;
 }

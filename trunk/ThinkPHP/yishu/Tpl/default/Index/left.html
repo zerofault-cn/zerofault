@@ -10,7 +10,7 @@
 	<div class="clear"></div>
 	&nbsp;网站分类
 	<ul>
-		<iterate name="list" id="item" key="i">
+		<iterate name="list" id="item">
 		<li>•&nbsp;&nbsp;<a href="__URL__/cate/id/{$item.id}/">{$item.name}</a></li>
 		</iterate>
 		<div class="clear"></div>
@@ -26,7 +26,7 @@
 	<div class="b d1">
 		<h2> 热门站点</h2>
 		<ul>
-			<iterate name="hot_list" id="item" key="i">
+			<iterate name="hot_list" id="item">
 			<li>•&nbsp;&nbsp;<a href="__URL__/site/id/{$item.id}/">{$item.name}</a></li>
 			</iterate>
 		</ul>
