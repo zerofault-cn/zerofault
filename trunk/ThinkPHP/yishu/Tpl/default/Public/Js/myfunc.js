@@ -2,6 +2,12 @@ function myAlert(msg)
 {
 	jQuery.prompt(msg);
 }
+function myOK(intval)
+{
+	setTimeout(function() {
+		jQuery("#cleanbluebox").remove();
+	}, intval);
+}
 
 function myLocation(loc)
 {

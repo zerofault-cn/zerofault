@@ -131,6 +131,6 @@ jQuery.extend({
 		return jqib;
 	}	
 });
-$.SetImpromptuDefaults({
+jQuery.SetImpromptuDefaults({
 	prefix: 'cleanblue'
 });

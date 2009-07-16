@@ -1,11 +1,39 @@
 <div class="box">
-	天气<br />
-	黄历，万年历， 更多
+	<div class="w t f_left"></div>
+	<div class="w t f_right"></div>
+	<div class="clear"></div>
+	<div class="w o f_left"></div>
+	<div class="w o f_right"></div>
+	<div class="clear"></div>
+	<div class="w p f_left"></div>
+	<div class="w p f_right"></div>
+	<div class="clear"></div>
+	&nbsp;网站分类
+	<ul>
+		<iterate name="list" id="item" key="i">
+		<li>•&nbsp;&nbsp;<a href="__URL__/cate/id/{$item.id}/">{$item.name}</a></li>
+		</iterate>
+		<div class="clear"></div>
+	</ul>
 </div>
+<div class="clear"></div>
 
-<div class="box">
-	<h2>新站导航</h2>
-	<br /><br /><br /><br /><br /><br />
+<div class="border">
+	<b class="b1"></b>
+	<b class="b2 d1"></b>
+	<b class="b3 d1"></b>
+	<b class="b4 d1"></b>
+	<div class="b d1">
+		<h2> 热门站点</h2>
+		<ul>
+			<iterate name="hot_list" id="item" key="i">
+			<li>•&nbsp;&nbsp;<a href="__URL__/site/id/{$item.id}/">{$item.name}</a></li>
+			</iterate>
+		</ul>
+	</div>
+	<b class="b4b d1"></b>
+	<b class="b3b d1"></b>
+	<b class="b2b d1"></b>
+	<b class="b1b"></b>
 </div>
-
 

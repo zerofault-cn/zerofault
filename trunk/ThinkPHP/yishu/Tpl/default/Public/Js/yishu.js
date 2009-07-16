@@ -1,5 +1,5 @@
 function infen(var1){
-	var fentip=new Array("","很差，浪费生命","很差，浪费生命","不喜欢","不喜欢","一般，不妨一看","一般，不妨一看","一般，不妨一看","喜欢，值得推荐","喜欢，值得推荐","非常喜欢，不容错过");
+	var fentip=new Array("","很差，浪费生命","很差，浪费时间","不喜欢","不好看","一般，可看可不看","没事可以看一看","还可以，不妨一看","喜欢，值得推荐","精彩，值得推荐","非常喜欢，不容错过");
 	if (var1>0){
 		GI("pfno").innerHTML=var1+"分 ";
 		GI("pftip").innerHTML=fentip[var1];
@@ -24,15 +24,19 @@ jQuery(document).ready(function(){
 			},function(str){
 					if(str=='-1')
 					{
-						myAlert("您已经给该网站评过分了!");
+						myAlert("您已经给该网站评过分了，谢谢您的热心参与!");
 					}
-					else if(str=='1')
+					else if(str=='0')
 					{
-						location.reload();
+						myAlert('有错误发生，请稍后再试！');
 					}
 					else
 					{
-						myAlert(str);
+						myAlert("评分成功，谢谢您的热心参与!");
+						var arr = str.split('|');
+						jQuery("#vote_count").text(arr[0]);
+						jQuery("#vote").text(arr[1]);
+						jQuery("#currentrating").css("width:"+arr[2]+"px");
 					}
 				});
 		});
