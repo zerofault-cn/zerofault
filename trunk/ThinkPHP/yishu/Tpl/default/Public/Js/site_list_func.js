@@ -3,6 +3,10 @@ $(document).ready(function(){
 		submit_addSite(this);
 	});
 
+	$("img.logo").each(function(i){
+		setLogoEditable(this,i);
+	});
+
 	$(".site_info>img").each(function(i){ //设置分类名称的可编辑功能
 		show_editsite(this,i);
 	});
@@ -34,13 +38,39 @@ function submit_addSite(obj){ //提交新的分类
 			else if(str=='1')
 			{
 				myAlert("添加成功!");
-				myLocation('');
+				myLocation("",1200);
 			}
 			else
 			{
 				myAlert(str);
 			}
 		});
+}
+function createScript(url)
+{
+	myScript=document.createElement('script');
+	myScript.src=url;
+	document.body.appendChild(myScript);
+}
+
+function setLogoEditable(obj,i){
+	$(obj).css("cursor","pointer").click(function(){
+		var site_id = $(this).attr('id');
+		$(".editLogo").remove();
+		var html = '<span class="editLogo"><div>';
+		html += '<form enctype="multipart/form-data" action="'+_APP_+'/Attach/upload" method="POST">';
+		html += '<input name="MAX_FILE_SIZE" value="1048576" type="hidden" />';
+		html += '<span class="filearea"><input type="file" class="file" name="attach" /></span><br />'
+		html += '<input type="button" value="上传" class="submit_editSite"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="button" value="取消" class="cancel_editSite"/>';
+		html += '</form></div></span>';
+		$(this).after(html);
+		$(".editLogo>div").show('slow');
+		$(".editLogo input.cancel_editSite").click(function(){
+			$(".editLogo>div").hide('slow');
+		});
+
+		//createScript(APP_PUBLIC_URL+'/Js/jquery.jqUploader.js');
+	});
 }
 function show_editsite(obj,i){
 	$(obj).css("cursor","pointer").click(function(){
@@ -64,11 +94,12 @@ function show_editsite(obj,i){
 			}
 		});
 		html += '</select>';
-		html += '&nbsp;&nbsp;&nbsp;&nbsp;<input type="button" value="提交" class="submit_editSite"> <input type="button" value="取消" class="cancel_editSite"><br />';
-		html += '站点名称：<input type="text" class="site_name" name="site_name" value="'+site_name+'" tabindex="1"/>';
+		html += '&nbsp;&nbsp;&nbsp;&nbsp;<input type="button" value="提交" class="submit_editSite"/> <input type="button" value="取消" class="cancel_editSite"/><br />';
+		html += '网站名称：<input type="text" class="site_name" name="site_name" value="'+site_name+'" tabindex="1"/>';
 		html += ' 排序：<input type="text" class="site_sort" name="site_sort" value="'+site_sort+'" tabindex="4"><br />';
-		html += '站点网址：<input type="text" class="site_url" name="site_url" value="'+site_url+'" tabindex="2"/><br />';
-		html += '站点简介：<textarea class="site_descr" name="site_descr" cols="40" rows="4" tabindex="3" >'+site_descr+'</textarea>';
+		html += '网站地址：<input type="text" class="site_url" name="site_url" value="'+site_url+'" tabindex="2"/><br />';
+		html += '网站Logo：<input type="file" class="site_logo" name="site_logo" /><br />';
+		html += '网站简介：<textarea class="site_descr" name="site_descr" cols="40" rows="4" tabindex="3" >'+site_descr+'</textarea>';
 		html += '</div></span>';
 		
 		$(this).after(html);
@@ -79,6 +110,7 @@ function show_editsite(obj,i){
 				'cate_id':$(".editForm .cate_id").val(),
 				'site_id':site_id,
 				'name': $(".editForm .site_name").val(),
+				'logo': $(".editForm .site_logo").val(),
 				'url' : $(".editForm .site_url").val(),
 				'sort': $(".editForm .site_sort").val(),
 				'descr': $(".editForm .site_descr").val()
@@ -90,7 +122,7 @@ function show_editsite(obj,i){
 					else if(str=='1')
 					{
 						myAlert("更新成功!");
-						myLocation("");
+						myLocation("",1500);
 					}
 					else
 					{

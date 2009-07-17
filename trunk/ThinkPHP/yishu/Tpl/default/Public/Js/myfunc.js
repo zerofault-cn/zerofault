@@ -4,17 +4,21 @@ function myAlert(msg)
 }
 function myOK(intval)
 {
+	if(intval==''){
+		intval = 2000;
+	}
 	setTimeout(function() {
 		jQuery("#cleanbluebox").remove();
 	}, intval);
 }
-
-function myLocation(loc)
+function myLocation(loc,intval)
 {
-	
+	if(intval==''){
+		intval = 2000;
+	}
 	setTimeout(function() {
 		window.location.href= (loc==''? window.location.href : loc);
-		},2000);
+		},intval);
 }
 function myConfirm(str,url)
 {
