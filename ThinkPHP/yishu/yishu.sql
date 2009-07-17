@@ -84,3 +84,21 @@ CREATE TABLE IF NOT EXISTS `yishu_website` (
   `view` int(10) unsigned NOT NULL default '0',
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+
+CREATE TABLE `yishu_attach` (
+  `id` int(11) NOT NULL auto_increment,
+  `name` varchar(255) NOT NULL,
+  `type` varchar(255) default NULL,
+  `size` varchar(20) NOT NULL,
+  `extension` varchar(20) NOT NULL,
+  `savepath` varchar(255) NOT NULL,
+  `savename` varchar(255) NOT NULL,
+ `module` varchar(100) NOT NULL,
+  `recordId` int(11) NOT NULL,
+  `userId` int(11) unsigned default NULL,
+  `uploadTime` int(11) unsigned default NULL,
+  `downCount` mediumint(9) unsigned default NULL,
+  `hash` varchar(32) NOT NULL,
+  PRIMARY KEY  (`id`)
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8

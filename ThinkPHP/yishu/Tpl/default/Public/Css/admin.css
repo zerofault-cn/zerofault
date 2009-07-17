@@ -48,9 +48,7 @@ a:hover,a:active,a.active{color:#f20;text-decoration: underline;}
 	padding:3px;
 	text-align:right;
 }
-.a_left{
-	text-align:left;
-}
+
 input.quickedit{
 	border:1px inset threedface;
 }
@@ -212,7 +210,7 @@ label.editable{
 	padding:10px;
 	text-align:left;
 }
-.rightColumn .editForm{
+.rightColumn .editForm, .rightColumn .editLogo{
 	position:relative;
 }
 .rightColumn .editForm div{
@@ -229,7 +227,24 @@ label.editable{
 	color:#006;
 	line-height:240%;
 }
-
+.rightColumn .editLogo div{
+	display:none;
+	z-index:90;
+	position:absolute;
+	left:-6px;
+	top:-30px;
+	width:210px;
+	padding:10px;
+	border:3px solid #FCD410;
+	background:#FFFFFF;
+	text-align:left;
+	color:#006;
+	line-height:240%;
+}
+.rightColumn input.file{
+	width:140px;
+	width:200px\9;
+}
 .rightColumn input.site_name{
 	width:200px;
 }

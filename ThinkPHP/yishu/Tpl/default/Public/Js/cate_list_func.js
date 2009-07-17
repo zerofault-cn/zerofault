@@ -28,7 +28,8 @@ function submit_addCate(){ //提交新的分类
 			}
 			else if(str=='1')
 			{
-				location.reload();
+				myAlert("添加成功!");
+				myLocation("",1200);
 			}
 			else
 			{

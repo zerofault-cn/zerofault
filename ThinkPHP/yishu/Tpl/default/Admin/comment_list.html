@@ -16,13 +16,17 @@
 		<eq name="_GET['id']" value="">
 		<td><a href="__URL__/comment_list/id/{$item['site_info']['id']}/">{$item['site_info']['name']}</a>
 		</eq>
-		<td><neq name="item.email" value=""><a href="javascript:void(0);" onclick="window.clipboardData.setData('Text','{$item.email}');myAlert('已将Email地址复制到剪贴板');myOK(1500);" title="复制Email地址到剪贴板"></neq>{$item.name}<neq name="item.email" value=""></a></neq></td>
+		<td>
+			<neq name="item.email" value=""><a href="javascript:void(0);" onclick="copy('{$item.email}')" title="将Email地址复制到剪贴板"></neq>{$item.name}<neq name="item.email" value=""></a></neq><br />
+			<a href="javascript:void(0);" onclick="traceIP('{$item.ip}')" title="查看IP地址来源">{$item.ip}</a><br />
+			{$item.addtime}
+		</td>
 		<td>
 			<if condition="$item['flag'] neq '-1'">
-			<a href="__URL__/update/t/Comment/id/{$item.id}/f/flag/v/-1/"  target="_iframe" title="删除"><img src="{*APP_PUBLIC_URL}/Images/admin/delete.gif" alt="删除" align="absmiddle"/></a>
+			<a href="__URL__/update/t/Comment/id/{$item.id}/f/flag/v/-1/"  target="_iframe" title="删除"><img src="{*APP_PUBLIC_URL}/Images/admin/cross.gif" alt="删除" align="absmiddle"/></a>
 			<else />
-			<a href="__URL__/update/t/Comment/id/{$item.id}/f/flag/v/1/" target="_iframe" title="恢复"><img src="{*APP_PUBLIC_URL}/Images/admin/add.gif" alt="恢复" align="absmiddle"/></a>
-			<a href="__URL__/delete/t/Comment/id/{$item.id}/" target="_iframe" title="彻底删除"><img src="{*APP_PUBLIC_URL}/Images/admin/delete.gif" alt="彻底删除" align="absmiddle"/></a>
+			<a href="__URL__/update/t/Comment/id/{$item.id}/f/flag/v/1/" target="_iframe" title="恢复"><img src="{*APP_PUBLIC_URL}/Images/admin/tick.gif" alt="恢复" align="absmiddle"/></a>
+			<a href="__URL__/delete/t/Comment/id/{$item.id}/" target="_iframe" title="彻底删除"><img src="{*APP_PUBLIC_URL}/Images/admin/cross.gif" alt="彻底删除" align="absmiddle"/></a>
 			</if>
 		</td>
 	</tr>
@@ -32,3 +36,4 @@
 	var _URL_ = '__URL__';
 	var APP_PUBLIC_URL = '{*APP_PUBLIC_URL}';
 	</script>
+	<script language="JavaScript" type="text/javascript" src="{*APP_PUBLIC_URL}/Js/comment_list_func.js"></script>

@@ -64,7 +64,7 @@ class IndexAction extends Action{
 		$dao->view = array('exp','(view+1)');
 		$dao->save();
 
-		$rs['thumb'] = self::get_thumb($rs['url']);
+//		$rs['thumb'] = self::get_thumb($rs['url']);
 		
 		$dao = D('Vote');
 		$tmp_rs = $dao->where(array('site_id'=>$site_id))->getFields('vote');
@@ -75,12 +75,12 @@ class IndexAction extends Action{
 
 		$dao = D('Category');
 		$rs['cate_info'] = $dao->find($rs['cate_id']);
-		
+/*		
 		$dao = D('Comment');
 		$where['site_id'] = $site_id;
 		$where['flag'] = array('gt', 0);
 		$rs['comment_list'] = $dao->where($where)->select();
-
+*/
 		$this->assign('site_info', $rs);
 		$this->assign('content','site');
 		$this->display('Layout:List_layout');
