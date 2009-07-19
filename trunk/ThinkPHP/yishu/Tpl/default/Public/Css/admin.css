@@ -210,12 +210,12 @@ label.editable{
 	padding:10px;
 	text-align:left;
 }
-.rightColumn .editForm, .rightColumn .editLogo{
+.rightColumn .editForm, .rightColumn .editAttach, .rightColumn .showThumb{
 	position:relative;
 }
 .rightColumn .editForm div{
 	display:none;
-	z-index:90;
+	z-index:100;
 	position:absolute;
 	left:-16px;
 	top:-16px;
@@ -227,12 +227,13 @@ label.editable{
 	color:#006;
 	line-height:240%;
 }
-.rightColumn .editLogo div{
+.rightColumn .editAttach div{
 	display:none;
-	z-index:90;
+	z-index:80;
 	position:absolute;
-	left:-6px;
+	left:-20px;
 	top:-30px;
+	_top:-20px;
 	width:210px;
 	padding:10px;
 	border:3px solid #FCD410;
@@ -241,8 +242,23 @@ label.editable{
 	color:#006;
 	line-height:240%;
 }
+.rightColumn .showThumb div{
+	display:none;
+	z-index:90;
+	position:absolute;
+	left:-10px;
+	top:20px;
+	_top:30px;
+	width:400px;
+	padding:0px;
+	border:3px solid #FCD410;
+	background:#FFFFFF;
+	text-align:left;
+	color:#006;
+	line-height:240%;
+}
 .rightColumn input.file{
-	width:140px;
+	width:120px;
 	width:200px\9;
 }
 .rightColumn input.site_name{

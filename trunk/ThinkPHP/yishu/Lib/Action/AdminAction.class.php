@@ -1,17 +1,11 @@
 <?php
 class AdminAction extends Action{
-	var $lastAction;
-	private function _htmlentities($str){
-		//return mb_convert_encoding($str,'HTML-ENTITIES', 'UTF-8');
-		//return iconv('UTF-8','HTML-ENTITIES', $str);
-		return $str;
-	}
 
 	public function _initialize() { //每个操作都会执行此方法
+		header("Content-Type:text/html; charset=utf-8");
 		if(!Session::is_set('isAdmin') && ACTION_NAME != 'login_form' && ACTION_NAME != 'login'){
-			$this->lastAction = ACTION_NAME;
-			header("Content-Type:text/html; charset=utf-8");
-			redirect(__APP__.'/Admin/login_form',1,$this->_htmlentities('转向登录窗口'));
+			Session::set('lastAction', ACTION_NAME);
+			redirect(__URL__.'/login_form',1,'转向登录窗口');
 		}
 	}
 	public function login_form(){
@@ -20,24 +14,22 @@ class AdminAction extends Action{
 	public function login(){
 		$username = $_POST['username'];
 		$password = $_POST['password'];
-		header("Content-Type:text/html; charset=utf-8");
 		if('admin' == $username && 'dvmadmin' == $password){
 			Session::setExpire(43200, true);
 			Session::set('isAdmin', 1);
 			Session::set('adminName', $username);
-			redirect(__APP__.'/Admin/'.$this->lastAction,1,$this->_htmlentities('登录成功'));
+			redirect(__URL__.'/'.Session::get('lastAction'),1,'登录成功');
 		}
 		elseif('admin' == $username){
-			redirect(__APP__.'/Admin/login_form',2,$this->_htmlentities('密码错误，请重试'));
+			redirect(__URL__.'/login_form',2,'密码错误，请重试');
 		}
 		else{
-			redirect(__APP__.'/Admin/login_form',2,$this->_htmlentities('错误的管理员帐号，请重试'));
+			redirect(__URL__.'/login_form',2,'错误的管理员帐号，请重试');
 		}
 	}
 	public function logout(){
 		Session::clear();
-		header("Content-Type:text/html; charset=utf-8");
-		redirect(__APP__.'/Admin/',1,$this->_htmlentities('退出成功！'));
+		redirect(__URL__.'/',1,'退出成功！');
 	}
 
 	public function index(){
@@ -211,12 +203,10 @@ class AdminAction extends Action{
 			$result .= fgets($fp, 1024);
 		}
 		fclose($fp);
-		header("Content-Type:text/html; charset=utf-8");
 		echo iconv('','UTF-8',$result);
 	}
 
 	public function add(){
-		dump($_FILE);
 		$table=$_REQUEST['table'];
 		$cate_id=intval($_REQUEST['cate_id']);
 		$site_id=intval($_REQUEST['site_id']);
@@ -296,12 +286,10 @@ class AdminAction extends Action{
 		$rs = $dao->where('id='.$id)->setField($field,$value);
 		if($rs)
 		{
-			header("Content-Type:text/html; charset=utf-8");
 			die('<script language="JavaScript" type="text/javascript">parent.myAlert("操作成功！");parent.myLocation("",1200);</script>');
 		}
 		else
 		{
-			header("Content-Type:text/html; charset=utf-8");
 			die('<script language="JavaScript" type="text/javascript">parent.myAlert("发生错误！<br />sql:'.$dao->getLastSql().'");</script>');
 		}
 	}
@@ -311,15 +299,12 @@ class AdminAction extends Action{
 		$dao = D($table);
 		if($dao->find($id) && $dao->delete())
 		{
-			header("Content-Type:text/html; charset=utf-8");
 			die('<script language="JavaScript" type="text/javascript">parent.myAlert("删除成功！");parent.myLocation("","");</script>');
 		}
 		else
 		{
-			header("Content-Type:text/html; charset=utf-8");
 			die('<script language="JavaScript" type="text/javascript">parent.myAlert("发生错误！<br />sql:'.$dao->getLastSql().'");</script>');
 		}
 	}
-
 }
 ?>
