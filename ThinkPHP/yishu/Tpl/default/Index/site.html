@@ -10,8 +10,10 @@
 		<div class="clear"></div>
 		&nbsp;<a href="__URL__/">网站大全</a> &gt; <a href="__URL__/cate/id/{$site_info.cate_id}">{$site_info['cate_info']['name']}</a> &gt; {$site_info.name}
 		<ul class="detail">
+				<if condition="is_file('__APP__/../Html/Attach/logo/'.$site_info['id'].'.gif') eq true"><img class="f_left" src="__APP__/../Html/Attach/logo/{$site_info['id']}.gif" /></if>
+				<if condition="is_file('__APP__/../Html/Attach/thumb/'.$site_info['id'].'.jpg') eq true"><img class="f_right" src="__APP__/../Html/Attach/thumb/{$site_info['id']}.jpg" /></if>
 			<li>网站名称: {$site_info.name}
-			<img class="f_right" src='{$site_info.thumb}'/>
+				
 			</li>
 			<li>网址: {$site_info.url}</li>
 			<li>简介：{$site_info.descr|nl2br}</li>

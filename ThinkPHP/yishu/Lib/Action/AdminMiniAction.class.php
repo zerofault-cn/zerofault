@@ -1,11 +1,13 @@
 <?php
 class AdminMiniAction extends Action{
-	protected $lastAction;
-	public function _initialize() {
-		//每个操作都会执行此方法
-		if(!Cookie::get('isAdmin') && ACTION_NAME != 'login_form' && ACTION_NAME != 'login'){
-			$this->lastAction = ACTION_NAME;
-			redirect(__APP__.'/AdminMini/login_form',2,'&#36716;&#21521;&#30331;&#24405;&#31383;&#21475;');//转向登录窗口
+	public function _initialize() { //每个操作都会执行此方法
+		header("Content-Type:text/html; charset=utf-8");
+		if(!Session::is_set('isAdmin') && ACTION_NAME != 'login_form' && ACTION_NAME != 'login'){
+			Session::set('lastAction', ACTION_NAME);
+			Session::set('r_title', rawurlencode($_REQUEST['title']));
+			Session::set('r_url', $_REQUEST['url']);
+			//echo $_REQUEST['title'];
+			redirect(__URL__.'/login_form',1,'转向登录窗口');
 		}
 	}
 	public function login_form(){
@@ -14,11 +16,22 @@ class AdminMiniAction extends Action{
 	public function login(){
 		$username = $_POST['username'];
 		$password = $_POST['password'];
-		if('admin' == $username && 'dvmadmin' == $password)
-		{
-			Cookie::set('isAdmin',1,time()+43200);
-			redirect(__APP__.'/AdminMini/'.$this->lastAction,1,'&#30331;&#24405;&#25104;&#21151;');//登录成功
+		if('admin' == $username && 'dvmadmin' == $password){
+			Session::setExpire(43200, true);
+			Session::set('isAdmin', 1);
+			Session::set('adminName', $username);
+			redirect(__URL__.'/'.Session::get('lastAction').'/title/'.Session::get('r_title').'/url/'.Session::get('r_url').'/first/1/',1,'登录成功');
 		}
+		elseif('admin' == $username){
+			redirect(__URL__.'/login_form',2,'密码错误，请重试');
+		}
+		else{
+			redirect(__URL__.'/login_form',2,'错误的管理员帐号，请重试');
+		}
+	}
+	public function logout(){
+		Session::clear();
+		redirect(__URL__.'/',1,'退出成功！');
 	}
 	public function index(){
 		$dao = D('Category');
@@ -132,8 +145,14 @@ class AdminMiniAction extends Action{
 			die('sql:'.$dao->getLastSql());
 		}
 	}
+	public function loader(){
+		$this->display();
+	}
+
 	public function remote_add(){
-		$this->assign('name',iconv('','UTF-8',$_REQUEST['title']));
+		$title= $_REQUEST['title'];
+		$_REQUEST['first']=='1' && $title= rawurldecode($title);
+		$this->assign('name',iconv('','UTF-8',$title));
 		$this->assign('url','http://'.$_REQUEST['url'].'/');
 		$this->assign('descr',$_REQUEST['content']);
 		$dao = D('Category');

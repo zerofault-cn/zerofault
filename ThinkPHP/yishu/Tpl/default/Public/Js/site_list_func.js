@@ -4,14 +4,32 @@ $(document).ready(function(){
 	});
 
 	$("img.logo").each(function(i){
-		setLogoEditable(this,i);
+		$(this).css("cursor","pointer").click(function(){
+			var site_id = $(this).attr('id');
+			var attach_type = 'logo';
+			var attach_ext = '.gif';
+			showAttachEdit(this,site_id,attach_type,attach_ext);
+		});
 	});
 
-	$(".site_info>img").each(function(i){ //设置分类名称的可编辑功能
-		show_editsite(this,i);
+	$(".site_info img.edit_info").each(function(i){ //设置站点资料可编辑
+		setInfoEditable(this,i);
 	});
 
-	$(".site_func>label").each(function(i){ //设置分类的排序数字的可编辑功能
+	$(".site_info img.thumb").each(function(i){
+		$(this).css("cursor","pointer").mouseover(function(){
+			$(this).next(".showThumb").children("div").show();
+		}).mouseout(function(){
+			$(this).next(".showThumb").children("div").hide();
+		}).click(function(){
+			var site_id = $(this).attr('id');
+			var attach_type = 'thumb';
+			var attach_ext = '.jpg';
+			showAttachEdit(this,site_id,attach_type,attach_ext);
+		});
+	});
+
+	$(".site_func>label").each(function(i){ //设置排序数字的可编辑
 		setSortEditable(this,i,'Website');
 	});
 });
@@ -46,33 +64,86 @@ function submit_addSite(obj){ //提交新的分类
 			}
 		});
 }
-function createScript(url)
-{
-	myScript=document.createElement('script');
-	myScript.src=url;
-	document.body.appendChild(myScript);
-}
 
-function setLogoEditable(obj,i){
-	$(obj).css("cursor","pointer").click(function(){
-		var site_id = $(this).attr('id');
-		$(".editLogo").remove();
-		var html = '<span class="editLogo"><div>';
-		html += '<form enctype="multipart/form-data" action="'+_APP_+'/Attach/upload" method="POST">';
-		html += '<input name="MAX_FILE_SIZE" value="1048576" type="hidden" />';
-		html += '<span class="filearea"><input type="file" class="file" name="attach" /></span><br />'
-		html += '<input type="button" value="上传" class="submit_editSite"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="button" value="取消" class="cancel_editSite"/>';
-		html += '</form></div></span>';
-		$(this).after(html);
-		$(".editLogo>div").show('slow');
-		$(".editLogo input.cancel_editSite").click(function(){
-			$(".editLogo>div").hide('slow');
+function showAttachEdit(obj,site_id,attach_type,attach_ext){
+	if(attach_type=='logo'){
+		var title = '上传Logo图片(Gif格式,宽100像素)';
+	}
+	else{
+		var title = '上传网站缩略图(Jpg格式,宽400像素)';
+	}
+	$(".editAttach").remove();
+	var html = '<span class="editAttach"><div>';
+	html += title+'<br />';
+	html += '<img id="loading" src="'+APP_PUBLIC_URL+'/Images/ajaxloading.gif" style="position:absolute;left:100px;top:20px;display:none;" aligh="middle">';
+	html += '<form name="form" action="" method="POST" enctype="multipart/form-data">';
+	html += '<input type="file" id="attach" class="file" name="attach" /><br />'
+	html += '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="button" value="上传" class="submit"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="button" value="取消" class="cancel"/>';
+	html += '</form>';
+	html += '</div></span>';
+	$(obj).after(html);
+	$(".editAttach>div").show('slow');
+	$(".editAttach input.cancel").click(function(){
+		$(".editAttach>div").hide('slow');
+	});
+	$(".editAttach input.submit").click(function(){
+		if(checkFileExt($("#attach").val(),attach_ext)==false){
+			return false;
+		}
+		$("#loading").ajaxStart(function(){
+			$(this).show();
+		}).ajaxComplete(function(){
+			$(this).hide();
 		});
-
-		//createScript(APP_PUBLIC_URL+'/Js/jquery.jqUploader.js');
+		$.ajaxFileUpload({
+			url:_APP_+'/Attach/upload/t/'+attach_type+'/id/'+site_id+'/', 
+			secureuri:false,
+			fileElementId:'attach',
+			dataType: 'text',
+			success: function (data, status)
+			{
+				if(data=='1'){
+					myAlert('上传成功！');
+					$(".editAttach").remove();
+					
+					if(attach_type!='logo'){
+						$(obj).attr('src',APP_PUBLIC_URL+'/Images/admin/picture.gif');
+						$(obj).next(".showThumb").show();
+						$(obj).next(".showThumb").children("div").hide();
+					
+						obj = $(obj).next().children('div').children('img');
+					}
+					$(obj).attr('src',_APP_+'/../Html/Attach/'+attach_type+'/'+site_id+attach_ext+'?'+Math.random());
+					myOK(1200);
+				}
+				else{
+					myAlert('上传失败!<br />'+data);
+				}
+			},
+			error: function (data, status, e)
+			{
+				myAlert(e);
+			}
+		});
+	});
+	$(document).keydown(function(e){
+		var keyCode=e.keyCode ||window.event.keyCode;
+		if(keyCode==27)//取消健
+		{
+			$(".editAttach>div").hide('slow');
+		}
 	});
 }
-function show_editsite(obj,i){
+function checkFileExt(filename,allowed_ext){
+	var fileext = filename.substr(filename.lastIndexOf('.')).toLowerCase();
+	if(fileext != allowed_ext){
+		myAlert("只能上传 "+allowed_ext+" 格式的图片！");
+		return false;
+	}
+	return true;
+}
+
+function setInfoEditable(obj,i){
 	$(obj).css("cursor","pointer").click(function(){
 		var cate_id = $(this).prev().attr('name');
 		var site_id = $(this).prev().attr('id');
@@ -98,7 +169,6 @@ function show_editsite(obj,i){
 		html += '网站名称：<input type="text" class="site_name" name="site_name" value="'+site_name+'" tabindex="1"/>';
 		html += ' 排序：<input type="text" class="site_sort" name="site_sort" value="'+site_sort+'" tabindex="4"><br />';
 		html += '网站地址：<input type="text" class="site_url" name="site_url" value="'+site_url+'" tabindex="2"/><br />';
-		html += '网站Logo：<input type="file" class="site_logo" name="site_logo" /><br />';
 		html += '网站简介：<textarea class="site_descr" name="site_descr" cols="40" rows="4" tabindex="3" >'+site_descr+'</textarea>';
 		html += '</div></span>';
 		
@@ -110,7 +180,6 @@ function show_editsite(obj,i){
 				'cate_id':$(".editForm .cate_id").val(),
 				'site_id':site_id,
 				'name': $(".editForm .site_name").val(),
-				'logo': $(".editForm .site_logo").val(),
 				'url' : $(".editForm .site_url").val(),
 				'sort': $(".editForm .site_sort").val(),
 				'descr': $(".editForm .site_descr").val()
@@ -132,6 +201,13 @@ function show_editsite(obj,i){
 		});
 		$(".editForm input.cancel_editSite").click(function(){
 			$(".editForm>div").hide('slow');
+		});
+		$(document).keydown(function(e){
+			var keyCode=e.keyCode ||window.event.keyCode;
+			if(keyCode==27)//取消健
+			{
+				$(".editForm>div").hide('slow');
+			}
 		});
 	});
 }

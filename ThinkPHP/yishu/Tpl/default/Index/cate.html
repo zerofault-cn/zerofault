@@ -12,6 +12,7 @@
 		<ul class="site_list2">
 			<iterate name="site_list" id="item">
 			<li>
+				<if condition="is_file('__APP__/../Html/Attach/logo/'.$item['id'].'.gif') eq true"><img src="__APP__/../Html/Attach/logo/{$item['id']}.gif" /></if>
 				<h3><a href="__URL__/site/id/{$item.id}/">{$item.name}</a> <a href="__URL__/site/id/{$item.id}/">[详情]</a> <a href="__URL__/goto/id/{$item.id}/" target="_blank">[访问]</a></h3>
 				<p>{$item.descr|nl2br}</p>
 			</li>
