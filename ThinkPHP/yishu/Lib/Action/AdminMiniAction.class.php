@@ -145,9 +145,6 @@ class AdminMiniAction extends Action{
 			die('sql:'.$dao->getLastSql());
 		}
 	}
-	public function loader(){
-		$this->display();
-	}
 
 	public function remote_add(){
 		$title= $_REQUEST['title'];
