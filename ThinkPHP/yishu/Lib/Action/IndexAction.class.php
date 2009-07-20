@@ -132,16 +132,15 @@ class IndexAction extends Action{
 		$where['flag'] = array('gt',0);
 		$order = 'id desc';
 		$count = $dao->where($where)->getField('count(*)');
-		$listRows = 10;
-		import("@.PageJs");
-		$p = new PageJs($count,$listRows);
-		$rs = $dao->where($where)->order($order)->limit($p->firstRow.','.$p->listRows)->select();
+		import("@.Paginator");
+		$p = new Paginator($count,5);
+		$rs = $dao->where($where)->order($order)->limit($p->offset.','.$p->limit)->select();
 
 		foreach($rs as $item){
 			echo '<dt>'.(''==$item['name']?'匿名':$item['name']).' 发表于 '.$item['addtime'].'</dt>';
 			echo '<dd>'.nl2br($item['content']).'</dd>';
 		}
-		echo $p->show();
+		echo $p->showJsNavi();
 	}
 	public function add_comment() {
 		header("Content-Type:text/html; charset=utf-8");

@@ -195,6 +195,10 @@ label.editable{
 	text-align:left;
 	vertical-align:top;
 }
+.rightColumn td.a_right{
+	text-align:right;
+	vertical-align:top;
+}
 .rightColumn td.disable{
 	color:#999;
 }
@@ -273,4 +277,10 @@ label.editable{
 .rightColumn textarea.site_descr{
 	width:340px;
 	height:150px;
+}
+.rightColumn .paginator a:link, .rightColumn .paginator a:visited{
+	text-decoration:underline;
+}
+.rightColumn .paginator a:hover, .rightColumn .paginator a:active{
+	text-decoration:none;
 }

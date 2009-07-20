@@ -18,6 +18,7 @@ function getPage(p){
 	get_comment(p);
 }
 function get_comment(p){
+	jQuery("#comment").html('<img style="padding:20px;" src="'+APP_PUBLIC_URL+'/Images/ajaxloading.gif"/>');
 	jQuery.get(_URL_+"/get_comment",{
 		'site_id':site_id,
 		'p':p
