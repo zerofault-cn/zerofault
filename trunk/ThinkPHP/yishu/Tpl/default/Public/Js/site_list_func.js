@@ -22,6 +22,7 @@ $(document).ready(function(){
 		}).mouseout(function(){
 			$(this).next(".showThumb").children("div").hide();
 		}).click(function(){
+			$(this).next(".showThumb").children("div").hide();
 			var site_id = $(this).attr('id');
 			var attach_type = 'thumb';
 			var attach_ext = '.jpg';
@@ -75,7 +76,7 @@ function showAttachEdit(obj,site_id,attach_type,attach_ext){
 	$(".editAttach").remove();
 	var html = '<span class="editAttach"><div>';
 	html += title+'<br />';
-	html += '<img id="loading" src="'+APP_PUBLIC_URL+'/Images/ajaxloading.gif" style="position:absolute;left:100px;top:20px;display:none;" aligh="middle">';
+	html += '<img id="loading" src="'+APP_PUBLIC_URL+'/Images/ajaxloading.gif" style="position:absolute;left:36px;top:60px;display:none;z-index:999;" aligh="middle">';
 	html += '<form name="form" action="" method="POST" enctype="multipart/form-data">';
 	html += '<input type="file" id="attach" class="file" name="attach" /><br />'
 	html += '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="button" value="上传" class="submit"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="button" value="取消" class="cancel"/>';

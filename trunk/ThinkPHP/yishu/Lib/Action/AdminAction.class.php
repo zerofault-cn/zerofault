@@ -113,17 +113,23 @@ class AdminAction extends Action{
 		$dao = D('Website');
 		$max_sort = $dao->where($where)->getField("max(sort)");
 		$count = $dao->where($where)->getField('count(*)');
-		import("ORG.Util.Page");
-		$listRows = 10;
-		$p = new Page($count, $listRows);
-		$rs = $dao->where($where)->order($order)->limit($p->firstRow.','.$p->listRows)->select();
+		import("@.Paginator");
+		$limit = 10;
+		$p = new Paginator($count,$limit);
+		//$p->setConfig('show_num',7);
+		//$p->setConfig('side_num',2);
+		$p->setConfig('first','<img src="'.APP_PUBLIC_URL.'/Images/admin/first.gif" align="absbottom" alt="First"/>');
+		$p->setConfig('prev','<img src="'.APP_PUBLIC_URL.'/Images/admin/prev.gif" align="absbottom" alt="Prev"/>');
+		$p->setConfig('next','<img src="'.APP_PUBLIC_URL.'/Images/admin/next.gif" align="absbottom" alt="Next"/>');
+		$p->setConfig('last','<img src="'.APP_PUBLIC_URL.'/Images/admin/last.gif" align="absbottom" alt="Last"/>');
+		$rs = $dao->where($where)->order($order)->limit($p->offset.','.$p->limit)->select();
 		foreach($rs as $key=>$val){
 			$rs[$key]['cate_info'] = $dao_cate->find($val['cate_id']);
 		}
 
 		
 		$this->assign("topnavi",$topnavi);
-		$this->assign('page', $p->show());
+		$this->assign('page', $p->showMultiNavi());
 		$this->assign('list', $rs);
 		$this->assign('cate_list', $dao_cate->where(array('flag'=>array('gt',-1)))->order('flag desc,sort')->select());
 		$this->assign('new_sort', $max_sort+10);
