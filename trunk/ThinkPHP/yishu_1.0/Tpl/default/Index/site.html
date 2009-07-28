@@ -1,0 +1,68 @@
+	<div class="box">
+		<div class="w t f_left"></div>
+		<div class="w t f_right"></div>
+		<div class="clear"></div>
+		<div class="w o f_left"></div>
+		<div class="w o f_right"></div>
+		<div class="clear"></div>
+		<div class="w p f_left"></div>
+		<div class="w p f_right"></div>
+		<div class="clear"></div>
+		&nbsp;<a href="__URL__/">网站大全</a> &gt; <a href="__URL__/cate/id/{$site_info.cate_id}">{$site_info['cate_info']['name']}</a> &gt; {$site_info.name}
+		<ul class="detail">
+				<if condition="is_file('__APP__/../Html/Attach/logo/'.$site_info['id'].'.gif') eq true"><img class="f_left" src="__APP__/../Html/Attach/logo/{$site_info['id']}.gif" /></if>
+				<if condition="is_file('__APP__/../Html/Attach/thumb/'.$site_info['id'].'.jpg') eq true"><img class="f_right" src="__APP__/../Html/Attach/thumb/{$site_info['id']}.jpg" /></if>
+			<li>网站名称: {$site_info.name}
+				
+			</li>
+			<li>网址: {$site_info.url}</li>
+			<li>简介：{$site_info.descr|nl2br}</li>
+			<li><a href="__URL__/goto/id/{$site_info.id}" target="_blank">访问</a>：{$site_info.hit}</li>
+			<li style="position:relative;">
+				<ul class="starrating">
+					<li style="width: {$site_info.vote_width}px; display: block;" id="currentrating"></li>
+					<li><a onmouseover="infen(1)" onmouseout="infen(0)" href="javascript:void(0);" class="star1">1</a></li>
+					<li><a onmouseover="infen(2)" onmouseout="infen(0)" href="javascript:void(0);" class="star2">2</a></li>
+					<li><a onmouseover="infen(3)" onmouseout="infen(0)" href="javascript:void(0);" class="star3">3</a></li>
+					<li><a onmouseover="infen(4)" onmouseout="infen(0)" href="javascript:void(0);" class="star4">4</a></li>
+					<li><a onmouseover="infen(5)" onmouseout="infen(0)" href="javascript:void(0);" class="star5">5</a></li>
+					<li><a onmouseover="infen(6)" onmouseout="infen(0)" href="javascript:void(0);" class="star6">6</a></li>
+					<li><a onmouseover="infen(7)" onmouseout="infen(0)" href="javascript:void(0);" class="star7">7</a></li>
+					<li><a onmouseover="infen(8)" onmouseout="infen(0)" href="javascript:void(0);" class="star8">8</a></li>
+					<li><a onmouseover="infen(9)" onmouseout="infen(0)" href="javascript:void(0);" class="star9">9</a></li>
+					<li><a onmouseover="infen(10)" onmouseout="infen(0)" href="javascript:void(0);" class="star10">10</a></li>
+				</ul>
+				<span id="pftip"></span>
+				<span id="pfno"></span>
+				<span id="vote">{$site_info.vote}</span> (已有<span id="vote_count">{$site_info.vote_count}</span>人评分)
+				<div class="clear"></div>
+			</li>
+			<li>
+				<dl id="comment">
+					
+				</dl>
+			</li>
+			<li>
+				<fieldset id="comment_form">
+					<legend>发表评论</legend>
+					<form name="comment_form" action="__URL__/add_comment" target="_iframe" method="post">
+					<input type="hidden" name="site_id" value="{$site_info.id}" />
+					您的称呼：<input type="text" name="name" size="20" value="匿名"/>(必填)<br />
+					您的Email：<input type="text" name="email" size="20" />(不会对外公开)<br />
+					内容：<textarea cols="40" rows="5" name="content"></textarea><br />
+					 验证码：<input TYPE="text" name="verify" size="4" > <img src="__URL__/verify" style="cursor:pointer" onclick="javascript:this.src='__URL__/verify?r='+Math.random();" alt="看不清，请点击" align="absmiddle" />&nbsp;&nbsp;
+					 <input type="submit" class="submit" value="发表"/>
+					</form>
+				</fieldset>
+				<div class="clear"></div>
+			</li>
+		</ul>
+		
+	</div>
+	<script language="JavaScript" type="text/javascript">
+	var site_id = {$site_info.id};
+	var _URL_ = '__URL__';
+	var _APP_ = '__APP__';
+	var APP_PUBLIC_URL = '{*APP_PUBLIC_URL}';
+	</script>
+	<script language="JavaScript" type="text/javascript" src="{*APP_PUBLIC_URL}/Js/site.js"></script>
