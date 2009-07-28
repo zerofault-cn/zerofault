@@ -8,7 +8,7 @@ class IndexAction extends Action{
 		}
 		else {
 			$dao = D('Category');
-			$where['flag'] = array('gt', 0);
+			$where['status'] = array('gt', 0);
 			$order = 'sort';
 			$rs = $dao->where($where)->order($order)->select();
 			!$rs && $rs = array();
@@ -17,7 +17,7 @@ class IndexAction extends Action{
 				$list[$val['id']] = $val;
 				$list[$val['id']]['site_list'] = array();
 				$where['cate_id'] = $val['id'];
-				$where['flag'] = array('gt', 0);
+				$where['status'] = array('gt', 0);
 				$order = 'sort';
 				$limit = 5;
 				$rs2 = $dao->where($where)->order($order)->limit($limit)->select();
@@ -26,8 +26,8 @@ class IndexAction extends Action{
 					$list[$val['id']]['site_list'][$val2['id']] = $val2;
 				}
 			}
-			$hot_list = $dao->where(array('flag'=>array('gt',0)))->order('view desc')->limit(10)->select();
-			$mark_list = $dao->where(array('flag'=>array('gt',0),'mark'=>array('gt',0)))->limit(12)->select();
+			$hot_list = $dao->where(array('status'=>array('gt',0)))->order('view desc')->limit(10)->select();
+			$mark_list = $dao->where(array('status'=>array('gt',0),'flag'=>array('gt',0)))->limit(12)->select();
 			S('list',$list);
 			S('hot_list',$hot_list);
 			S('mark_list',$mark_list);
@@ -36,7 +36,9 @@ class IndexAction extends Action{
 		$this->assign('hot_list', $hot_list);
 		$this->assign('mark_list', $mark_list);
 		$this->assign('list',$list);
-		$this->display();
+
+		$this->assign('content','index');
+		$this->display('Layout:Index_layout');
 	}
 
 	public function loader(){
@@ -49,12 +51,12 @@ class IndexAction extends Action{
 		$rs = $dao->find($cate_id);
 		$this->assign('cate_info', $rs);
 		$dao = D('Website');
-		$rs = $dao->where(array('cate_id'=>$cate_id, 'flag'=>array('gt',0)))->order('sort')->select();
+		$rs = $dao->where(array('cate_id'=>$cate_id, 'status'=>array('gt',0)))->order('sort')->select();
 		
 		$this->assign('site_list', $rs);
 
 		$this->assign('content','cate');
-		$this->display('Layout:List_layout');
+		$this->display('Layout:Index_layout');
 	}
 
 	public function site(){
@@ -78,12 +80,12 @@ class IndexAction extends Action{
 /*		
 		$dao = D('Comment');
 		$where['site_id'] = $site_id;
-		$where['flag'] = array('gt', 0);
+		$where['status'] = array('gt', 0);
 		$rs['comment_list'] = $dao->where($where)->select();
 */
 		$this->assign('site_info', $rs);
 		$this->assign('content','site');
-		$this->display('Layout:List_layout');
+		$this->display('Layout:Index_layout');
 	}
 	public function vote(){
 		$site_id = $_REQUEST['site_id'];
@@ -129,7 +131,7 @@ class IndexAction extends Action{
 		header("Content-Type:text/html; charset=utf-8");
 		$dao = D('Comment');
 		$where['site_id'] = $_REQUEST['site_id'];
-		$where['flag'] = array('gt',0);
+		$where['status'] = array('gt',0);
 		$order = 'id desc';
 		$count = $dao->where($where)->getField('count(*)');
 		import("@.Paginator");
@@ -154,7 +156,7 @@ class IndexAction extends Action{
 		$data['email'] = $_REQUEST['email'];
 		$data['ip'] = $_SERVER['REMOTE_ADDR'];
 		$data['addtime'] = date("Y-m-d H:i:s");
-		$data['flag'] = 1;
+		$data['status'] = 1;
 		if($dao->add($data)) {
 			die('<script>parent.myAlert("发表成功");parent.myOK(1500);parent.get_comment(0);</script>');
 		}

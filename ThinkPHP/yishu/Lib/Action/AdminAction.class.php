@@ -1,37 +1,137 @@
 <?php
+/**
+*
+* 负责后台管理的全部操作处理
+*
+* @author zerofault <zerofault@gmail.com>
+* @since 2009/7/27
+*/
 class AdminAction extends Action{
-
-	public function _initialize() { //每个操作都会执行此方法
+	/**
+	*
+	* 对象初始化时自动执行
+	*/
+	public function _initialize() {
 		header("Content-Type:text/html; charset=utf-8");
-		if(!Session::is_set('isAdmin') && ACTION_NAME != 'login_form' && ACTION_NAME != 'login'){
-			Session::set('lastAction', ACTION_NAME);
-			redirect(__URL__.'/login_form',1,'转向登录窗口');
+		dump($_SESSION);
+
+		import('ORG.RBAC.RBAC');
+		// 检查认证
+		if(RBAC::checkAccess()) {
+			//检查认证识别号
+			if(!$_SESSION[C('USER_AUTH_KEY')]) {
+				//记下刚才的Action
+				Session::set('lastAction', ACTION_NAME);
+				//跳转到认证网关
+				redirect(PHP_FILE.C('USER_AUTH_GATEWAY'));
+			}
+			// 检查权限
+			if(!RBAC::AccessDecision()) {
+				$this->assign('message','没有权限！');
+				$this->assign('content','error');
+				$this->display('Layout:Admin_layout');
+				exit;
+			}
 		}
 	}
-	public function login_form(){
-		$this->display();
+	/**
+	*
+	* 生成弹出“操作成功”提示的js代码
+	*
+	* @param string $msg 弹出框内显示的提示语句 
+	* @param string $url 跳转地址，默认为空，表示重新载入当前页
+	* @param integer $timeout 弹出框显示的时间，超过时间后自动关闭或页面跳转
+	*
+	* @return string HTML格式的JS代码
+	*/
+	protected function _success($msg,$url='',$timeout=2000){
+		$html  = '<script language="JavaScript" type="text/javascript">';
+		$html .= 'parent.myAlert("'.$msg.'");';
+		$html .= 'parent.myLocation("'.$url.'",'.$timeout.');';
+		$html .= '</script>';
+		return $html;
 	}
-	public function login(){
-		$username = $_POST['username'];
-		$password = $_POST['password'];
-		if('admin' == $username && 'dvmadmin' == $password){
-			Session::setExpire(43200, true);
-			Session::set('isAdmin', 1);
-			Session::set('adminName', $username);
-			redirect(__URL__.'/'.Session::get('lastAction'),1,'登录成功');
-		}
-		elseif('admin' == $username){
-			redirect(__URL__.'/login_form',2,'密码错误，请重试');
-		}
-		else{
-			redirect(__URL__.'/login_form',2,'错误的管理员帐号，请重试');
+	/**
+	*
+	* 生成弹出“操作失败”提示的js代码
+	*
+	* @param string $msg 弹出框内显示的提示语句 
+	* @param integer $timeout 弹出框显示的时间，如果没有设置，则不会自动关闭，需要用户点OK按钮关闭
+	*
+	* @return string HTML格式的JS代码
+	*/
+	protected function _error($msg,$timeout=0){
+		$html  = '<script language="JavaScript" type="text/javascript">';
+		$html .= 'parent.myAlert("'.$msg.'");';
+		$timeout && $html .= 'parent.myOK('.$timeout.');';
+		$html .= '</script>';
+		return $html;
+	}
+	/**
+	*
+	* 验证是否已登录，如果未登录，显示登录框
+	*/
+	public function login() {
+		if(!isset($_SESSION[C('USER_AUTH_KEY')])) {
+			$this->assign('content','login');
+			$this->display('Layout:Admin_layout');
+		}else{
+			redirect(__URL__);
 		}
 	}
+	/**
+	*
+	* 验证并保存登录信息
+	*/
+	public function checkLogin(){
+		$User	=	D('User');
+		if(empty($_POST['account'])) {
+			die(self::_error('帐号错误！'));
+		}
+		elseif (empty($_POST['password'])){
+			die(self::_error('密码必须！'));
+		}
+		//生成认证条件
+		$map			= array();
+		$map["account"]	= $_POST['account'];
+		$map["status"]	= array('gt',0);
+		$authInfo = $User->where($map)->find();
+
+		//使用用户名、密码和状态的方式进行认证
+		if(false === $authInfo) {
+			die(self::_error('用户名不存在或已禁用！'));
+		}
+		else {
+			if($authInfo['password'] != md5($_POST['password'])) {
+				die(self::_error('密码错误！'));
+			}
+			$_SESSION[C('USER_AUTH_KEY')]	=	$authInfo['id'];
+			$_SESSION['loginUserName']	=	$authInfo['nickname'];
+			if($authInfo['account']=='admin') {
+				// 管理员不受权限控制影响
+				$_SESSION['administrator']		=	true;
+			}
+			else{
+				$_SESSION['administrator']		=	false;
+			}
+			// 缓存访问权限
+			RBAC::saveAccessList();
+			die(self::_success('登陆成功！',__URL__.'/'.Session::get('lastAction'),500));
+		}
+	}
+	/**
+	*
+	* 注销处理
+	*/
 	public function logout(){
 		Session::clear();
-		redirect(__URL__.'/',1,'退出成功！');
+		die(self::_success('注销成功！', __URL__, 500));
 	}
 
+	/**
+	*
+	* 管理后台默认首页
+	*/
 	public function index(){
 		$topnavi[]=array(
 			"text"=>"欢迎"
@@ -41,6 +141,10 @@ class AdminAction extends Action{
 		$this->assign('content','index');
 		$this->display('Layout:Admin_layout');
 	}
+	/**
+	*
+	* 显示分类列表
+	*/
 	public function cate_list(){
 		$topnavi[]=array(
 			'text'=> '分类管理',
@@ -48,13 +152,13 @@ class AdminAction extends Action{
 			);
 
 		$dao = D('Category');
-		$where['flag'] = array('gt', -1);
+		$where['status'] = array('gt', -1);
 		$where['pid']  = 0;
-		$order = 'flag desc, sort';
+		$order = 'status desc, sort';
 
-		$flag = $_REQUEST['flag'];
-		if(!empty($flag)){
-			$where['flag'] = $flag;
+		$status = $_REQUEST['status'];
+		if(!empty($status)){
+			$where['status'] = $status;
 			$order = 'id desc';
 
 			$topnavi[]=array(
@@ -79,8 +183,10 @@ class AdminAction extends Action{
 		$this->assign('content','cate_list');
 		$this->display('Layout:Admin_layout');
 	}
-	
-
+	/**
+	*
+	* 显示网站列表
+	*/
 	public function site_list(){
 		$topnavi[]=array(
 			'text'=> '站点管理',
@@ -91,7 +197,7 @@ class AdminAction extends Action{
 		$cate_id = $_REQUEST['id'];
 		if(!empty($cate_id)){
 			$where['cate_id'] = $cate_id;
-			$order = 'flag desc, sort';
+			$order = 'status desc, sort';
 			$cate_name = $dao_cate->where(array('id'=>$cate_id))->getField('name');
 			$topnavi[]=array(
 				'text'=> '站点列表 (当前分类：'.$cate_name.')',
@@ -103,10 +209,10 @@ class AdminAction extends Action{
 				'text'=> '站点列表',
 				);
 		}
-		$where['flag'] = array('gt', -1);
-		$flag = $_REQUEST['flag'];
-		if(!empty($flag)){
-			$where['flag'] = $flag;
+		$where['status'] = array('gt', -1);
+		$status = $_REQUEST['status'];
+		if(!empty($status)){
+			$where['status'] = $status;
 			$order = 'id desc';
 		}
 		
@@ -131,11 +237,15 @@ class AdminAction extends Action{
 		$this->assign("topnavi",$topnavi);
 		$this->assign('page', $p->showMultiNavi());
 		$this->assign('list', $rs);
-		$this->assign('cate_list', $dao_cate->where(array('flag'=>array('gt',-1)))->order('flag desc,sort')->select());
+		$this->assign('cate_list', $dao_cate->where(array('status'=>array('gt',-1)))->order('status desc,sort')->select());
 		$this->assign('new_sort', $max_sort+10);
 		$this->assign('content','site_list');
 		$this->display('Layout:Admin_layout');
 	}
+	/**
+	*
+	* 显示评论列表
+	*/
 	public function comment_list(){
 		$topnavi[]=array(
 			'text'=> '评论管理',
@@ -156,10 +266,10 @@ class AdminAction extends Action{
 				'text'=> '所有评论',
 				);
 		}
-		$where['flag'] = 1;
-		$flag = $_REQUEST['flag'];
-		if(!empty($flag)){
-			$where['flag'] = $flag;
+		$where['status'] = 1;
+		$status = $_REQUEST['status'];
+		if(!empty($status)){
+			$where['status'] = $status;
 		}
 		$order = 'id desc';
 		$dao = D('Comment');
@@ -178,6 +288,51 @@ class AdminAction extends Action{
 		$this->assign('content','comment_list');
 		$this->display('Layout:Admin_layout');
 	}
+	
+	/**
+	*
+	* 用户列表
+	*/
+	public function user_list(){
+		$topnavi[]=array(
+			'text'=> '用户管理',
+			'url' => __APP__.'/Admin/user_list'
+			);
+		$topnavi[]=array(
+			'text'=> '用户列表',
+			);
+		$dao = D('User');
+		$rs = $dao->select();
+
+		$this->assign("topnavi",$topnavi);
+		$this->assign('list',$rs);
+		$this->assign('content','user_list');
+		$this->display('Layout:Admin_layout');
+	}
+	/**
+	*
+	* 用户组列表
+	*/
+	public function group_list(){
+		$topnavi[]=array(
+			'text'=> '用户组管理',
+			'url' => __APP__.'/Admin/user_list'
+			);
+		$topnavi[]=array(
+			'text'=> '用户组列表',
+			);
+		$dao = D('Group');
+		$rs = $dao->select();
+
+		$this->assign("topnavi",$topnavi);
+		$this->assign('list',$rs);
+		$this->assign('content','group_list');
+		$this->display('Layout:Admin_layout');
+	}
+	/**
+	*
+	* 用PHP的fsockopen模拟HTTP post，用来向ip138网站提交IP查询并获取结果
+	*/
 	public function httpPost(){
 		$url = $_REQUEST['url'];
 		$params = $_REQUEST['params'];
@@ -211,7 +366,10 @@ class AdminAction extends Action{
 		fclose($fp);
 		echo iconv('','UTF-8',$result);
 	}
-
+	/**
+	*
+	* 通用的添加网站和添加分类的方法
+	*/
 	public function add(){
 		$table=$_REQUEST['table'];
 		$cate_id=intval($_REQUEST['cate_id']);
@@ -254,7 +412,7 @@ class AdminAction extends Action{
 				$dao->descr = $descr;
 				$dao->addtime = date("Y-m-d H:i:s");
 				$dao->sort = $sort;
-				$dao->flag = 1;
+				$dao->status = 1;
 				if($dao->add()){
 					die('1');
 				}
@@ -274,7 +432,7 @@ class AdminAction extends Action{
 			$dao->name = $name;
 			$dao->addtime = $dao->usetime = date("Y-m-d H:i:s");
 			$dao->sort = $sort;
-			$dao->flag = 1;
+			$dao->status = 1;
 			if($dao->add()){
 				die('1');
 			}
@@ -283,6 +441,10 @@ class AdminAction extends Action{
 			}
 		}
 	}
+	/**
+	*
+	* 更新某个表某条记录某个字段的值，通用
+	*/
 	public function update(){
 		$table=$_REQUEST['t'];
 		$id=$_REQUEST['id'];
@@ -299,6 +461,10 @@ class AdminAction extends Action{
 			die('<script language="JavaScript" type="text/javascript">parent.myAlert("发生错误！<br />sql:'.$dao->getLastSql().'");</script>');
 		}
 	}
+	/**
+	*
+	* 从某个表删除某条记录
+	*/
 	public function delete(){
 		$table=$_REQUEST['t'];
 		$id=$_REQUEST['id'];

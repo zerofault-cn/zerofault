@@ -11,20 +11,26 @@
 		</li>
 		<li>分类管理
 			<ul class="sub">
-				<li class="<eq name="ACTION_NAME" value="cate_list"><neq name="_GET['flag']" value="-1">curr</neq></eq>"><a href="__URL__/cate_list">分类列表</a></li>
-				<li class="<eq name="ACTION_NAME" value="cate_list"><eq name="_GET['flag']" value="-1">curr</eq></eq>"><a href="__URL__/cate_list/flag/-1/">回收站</a></li>
+				<li class="<eq name="ACTION_NAME" value="cate_list"><neq name="_GET['status']" value="-1">curr</neq></eq>"><a href="__URL__/cate_list">分类列表</a></li>
+				<li class="<eq name="ACTION_NAME" value="cate_list"><eq name="_GET['status']" value="-1">curr</eq></eq>"><a href="__URL__/cate_list/status/-1/">回收站</a></li>
 			</ul>
 		</li>
 		<li>网站管理
 			<ul class="sub">
-				<li class="<eq name="ACTION_NAME" value="site_list"><neq name="_GET['flag']" value="-1">curr</neq></eq>"><a href="__URL__/site_list">网站列表</a></li>
-				<li class="<eq name="ACTION_NAME" value="site_list"><eq name="_GET['flag']" value="-1">curr</eq></eq>"><a href="__URL__/site_list/flag/-1/">回收站</a></li>
+				<li class="<eq name="ACTION_NAME" value="site_list"><neq name="_GET['status']" value="-1">curr</neq></eq>"><a href="__URL__/site_list">网站列表</a></li>
+				<li class="<eq name="ACTION_NAME" value="site_list"><eq name="_GET['status']" value="-1">curr</eq></eq>"><a href="__URL__/site_list/status/-1/">回收站</a></li>
 			</ul>
 		</li>
 		<li>评论管理
 			<ul class="sub">
-				<li class="<eq name="ACTION_NAME" value="comment_list"><neq name="_GET['flag']" value="-1">curr</neq></eq>"><a href="__URL__/comment_list">评论列表</a></li>
-				<li class="<eq name="ACTION_NAME" value="comment_list"><eq name="_GET['flag']" value="-1">curr</eq></eq>"><a href="__URL__/comment_list/flag/-1/">回收站</a></li>
+				<li class="<eq name="ACTION_NAME" value="comment_list"><neq name="_GET['status']" value="-1">curr</neq></eq>"><a href="__URL__/comment_list">评论列表</a></li>
+				<li class="<eq name="ACTION_NAME" value="comment_list"><eq name="_GET['status']" value="-1">curr</eq></eq>"><a href="__URL__/comment_list/status/-1/">回收站</a></li>
+			</ul>
+		</li>
+		<li>用户管理
+			<ul class="sub">
+				<li class="<eq name="ACTION_NAME" value="user_list">curr</eq>"><a href="__URL__/user_list">用户列表</a></li>
+				<li class="<eq name="ACTION_NAME" value="group_list">curr</eq>"><a href="__URL__/group_list">用户组</a></li>
 			</ul>
 		</li>
 	</ul>
