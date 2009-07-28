@@ -1,0 +1,38 @@
+	<table id="table" border="1" cellpadding="3" cellspacing="0" width="100%" bordercolor="#999999" style="border-collapse:collapse;">
+	<tr bgcolor="#ededed">
+		<th width="5%">序号</th>
+		<th>分类名称</th>
+		<th width="10%">网站数量</th>
+		<th width="12%">排序</th>
+		<th width="10%">操作</th>
+	</tr>
+	<iterate name="list" id="item">
+	<tr bgcolor="<eq name='mod' value='1'>#FFFFE1</eq>" class="<eq name='item["flag"]' value='0'>gray</eq>">
+		<td>{$i}</td>
+		<td class="cate_info"><a href="site_list/id/{$item.id}/" id="{$item.id}">{$item.name}</a> <img src="{*APP_PUBLIC_URL}/Images/admin/form_edit.gif" alt="编辑" align="absmiddle"/></td>
+		<td><a href="site_list/id/{$item.id}/">{$item.site_count}</a></td>
+		<td class="cate_func"><label id="{$item.id}">{$item.sort}</label></td>
+		<td>
+			<if condition="$item['flag'] neq '-1'">
+			<a href="__URL__/update/t/Category/id/{$item.id}/f/flag/v/{:intval(!$item['flag'])}/" target="_iframe" title='<if condition="$item.flag eq 0">显示<else />隐藏</if>'><if condition="$item.flag eq 0"><img src="{*APP_PUBLIC_URL}/Images/admin/add.gif" alt="显示" align="absmiddle"/><else /><img src="{*APP_PUBLIC_URL}/Images/admin/delete.gif" alt="隐藏" align="absmiddle"/></if></a>
+			<a href="__URL__/update/t/Category/id/{$item.id}/f/flag/v/-1/"  target="_iframe" title="删除"><img src="{*APP_PUBLIC_URL}/Images/admin/cross.gif" alt="删除" align="absmiddle"/></a>
+			<else />
+			<a href="__URL__/update/t/Category/id/{$item.id}/f/flag/v/0/" target="_iframe" title="恢复"><img src="{*APP_PUBLIC_URL}/Images/admin/tick.gif" alt="恢复" align="absmiddle"/></a>
+			<a href="__URL__/delete/t/Category/id/{$item.id}/" target="_iframe" title="彻底删除"><img src="{*APP_PUBLIC_URL}/Images/admin/cross.gif" alt="彻底删除" align="absmiddle"/></a>
+			</if>
+		</td>
+	</tr>
+	</iterate>
+	</table>
+	<neq name="_GET['flag']" value='-1'>
+	<div class="addForm">
+		添加新分类：<input type="text" id="cate_name" name="cate_name" size="10" tabindex="1" />
+		排序：<input type="text" id="cate_sort" name="cate_sort" value="{$new_cate_sort}" size="4">
+		<input type="button" value="添加" id="submit_addCate" />
+	</div>
+	</neq>
+	<script language="JavaScript" type="text/javascript">
+	var _URL_ = '__URL__';
+	var APP_PUBLIC_URL = '{*APP_PUBLIC_URL}';
+	</script>
+	<script language="JavaScript" type="text/javascript" src="{*APP_PUBLIC_URL}/Js/cate_list_func.js"></script>
