@@ -22,10 +22,10 @@
 			{$item.addtime}
 		</td>
 		<td>
-			<if condition="$item['flag'] neq '-1'">
-			<a href="__URL__/update/t/Comment/id/{$item.id}/f/flag/v/-1/"  target="_iframe" title="删除"><img src="{*APP_PUBLIC_URL}/Images/admin/cross.gif" alt="删除" align="absmiddle"/></a>
+			<if condition="$item['status'] neq '-1'">
+			<a href="__URL__/update/t/Comment/id/{$item.id}/f/status/v/-1/"  target="_iframe" title="删除"><img src="{*APP_PUBLIC_URL}/Images/admin/cross.gif" alt="删除" align="absmiddle"/></a>
 			<else />
-			<a href="__URL__/update/t/Comment/id/{$item.id}/f/flag/v/1/" target="_iframe" title="恢复"><img src="{*APP_PUBLIC_URL}/Images/admin/tick.gif" alt="恢复" align="absmiddle"/></a>
+			<a href="__URL__/update/t/Comment/id/{$item.id}/f/status/v/1/" target="_iframe" title="恢复"><img src="{*APP_PUBLIC_URL}/Images/admin/tick.gif" alt="恢复" align="absmiddle"/></a>
 			<a href="__URL__/delete/t/Comment/id/{$item.id}/" target="_iframe" title="彻底删除"><img src="{*APP_PUBLIC_URL}/Images/admin/cross.gif" alt="彻底删除" align="absmiddle"/></a>
 			</if>
 		</td>
