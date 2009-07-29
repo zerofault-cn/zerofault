@@ -16,10 +16,10 @@
 			<div class="navi">
 				<a href="__APP__">管理首页</a> &gt; 
 				<iterate name="topnavi" id="item">
-					<if condition="$item['url'] neq ''">
-					<a href="{$item.url}">{$item.text}</a> &gt;
-					<else />
+					<if condition="empty($item['url'])">
 					{$item.text}
+					<else />
+					<a href="{$item.url}">{$item.text}</a> &gt;
 					</if>
 				</iterate>
 			</div>
