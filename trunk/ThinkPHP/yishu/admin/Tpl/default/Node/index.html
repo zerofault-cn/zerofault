@@ -1,0 +1,58 @@
+	<table id="table" border="1" cellpadding="3" cellspacing="0" width="100%" bordercolor="#999999" style="border-collapse:collapse;">
+	<tr bgcolor="#ededed">
+		<th width="15%">项目</th>
+		<th width="15%">模块</th>
+		<th >动作</th>
+	</tr>
+	<iterate name="list" id="app" key="n1">
+		<iterate name="app.module" id="module" key="n2">
+			<iterate name="module.action" id="action" key="n3">
+	<tr>
+		<eq name="n3" value="1">
+			<eq name="n2" value="1">
+		<td rowspan="{$app['count']}">
+			<if condition="$app['info']['title']">{$app['info']['title']}<else />{$app['info']['name']}</if>
+			<img class="edit_info" src="{*APP_PUBLIC_URL}/Image/form_edit.gif" alt="编辑" align="absmiddle"/>
+			<if condition="empty($module['info']['id'])">
+			<img src="{*APP_PUBLIC_URL}/Image/cross.gif" alt="彻底删除" align="absmiddle"/>
+			</if>
+			<br />
+			<img src="{*APP_PUBLIC_URL}/Image/form_go.gif" alt="添加子节点" align="absmiddle"/>
+		</td>
+			</eq>
+		<td rowspan="{$module['count']}">
+			<if condition="$module['info']['title']">{$module['info']['title']}<else />{$module['info']['name']}</if>
+			<if condition="empty($module['info']['id']) eq false">
+			<img class="edit_info" src="{*APP_PUBLIC_URL}/Image/form_edit.gif" alt="编辑" align="absmiddle"/>
+				<if condition="empty($action['id'])">
+			<img src="{*APP_PUBLIC_URL}/Image/cross.gif" alt="彻底删除" align="absmiddle"/>
+				</if>
+			</if>
+			<br />
+			<img src="{*APP_PUBLIC_URL}/Image/form_go.gif" alt="添加子节点" align="absmiddle"/>
+		</td>
+		</eq>
+		<td>
+			<if condition="$action['title']">{$action['title']}<else />{$action['name']}</if>
+			<if condition="empty($module['info']['id']) eq false">
+				<if condition="empty($action['id'])">
+				<img src="{*APP_PUBLIC_URL}/Image/form_add.gif" alt="添加节点" align="absmiddle"/>
+				</if>
+			</if>
+			<if condition="empty($action['id']) eq false">
+			<img class="edit_info" src="{*APP_PUBLIC_URL}/Image/form_edit.gif" alt="编辑" align="absmiddle"/>
+			<a href="__URL__/delete/id/{$action['id']}/" target="_iframe" title="彻底删除"><img src="{*APP_PUBLIC_URL}/Image/cross.gif" alt="彻底删除" align="absmiddle"/></a>
+			</if>
+		</td>
+	</tr>
+
+
+			</iterate>
+		</iterate>
+	</iterate>
+	<tr>
+		<td colspan="3">
+			<img src="{*APP_PUBLIC_URL}/Image/form_add.gif" alt="添加APP节点" align="absmiddle"/>
+		</td>
+	</tr>
+	</table>

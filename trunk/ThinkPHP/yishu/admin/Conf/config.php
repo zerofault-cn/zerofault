@@ -17,7 +17,7 @@ return array(
 	'APP_DOMAIN_DEPLOY' => false, //域名根目录下设为true
 
 	'USER_AUTH_ON'=>true,
-	'USER_AUTH_TYPE' => 1,
+	'USER_AUTH_TYPE' => 2,
 	'USER_AUTH_DECISION' => 'My',
 	'USER_AUTH_KEY' => 'authId',
 	'ADMIN_AUTH_KEY' => 'administrator',

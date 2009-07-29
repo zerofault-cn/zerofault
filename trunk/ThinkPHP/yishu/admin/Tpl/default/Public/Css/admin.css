@@ -290,3 +290,7 @@ label.editable{
 .rightColumn .paginator a:hover, .rightColumn .paginator a:active{
 	text-decoration:none;
 }
+
+fieldset.addForm{
+	text-align:left;
+}
