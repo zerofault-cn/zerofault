@@ -15,7 +15,7 @@
 			<li>网站名称: {$site_info.name}
 				
 			</li>
-			<li>网址: {$site_info.url}</li>
+			<li>网址: <a href="__URL__/goto/id/{$site_info.id}" target="_blank">{$site_info.url}</a></li>
 			<li>简介：{$site_info.descr|nl2br}</li>
 			<li><a href="__URL__/goto/id/{$site_info.id}" target="_blank">访问</a>：{$site_info.hit}</li>
 			<li style="position:relative;">
@@ -39,7 +39,7 @@
 			</li>
 			<li>
 				<dl id="comment">
-					
+					<!-- 内容由JS载入 -->
 				</dl>
 			</li>
 			<li>
