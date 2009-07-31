@@ -154,6 +154,7 @@ function setInfoEditable(obj,i){
 		var site_sort = $(this).parent().parent().children(".site_func").text();
 		$(".editForm").remove();
 		var html = '<span class="editForm"><div>';
+		html +='<fieldset><legend>编辑网站信息</legend>';
 		html += '所属分类：<select name="cate_id" class="cate_id">';
 		$(".addForm .cate_id").children().each(function(i){
 			if(''!=$(this).val()){
@@ -171,7 +172,7 @@ function setInfoEditable(obj,i){
 		html += ' 排序：<input type="text" class="site_sort" name="site_sort" value="'+site_sort+'" tabindex="4"><br />';
 		html += '网站地址：<input type="text" class="site_url" name="site_url" value="'+site_url+'" tabindex="2"/><br />';
 		html += '网站简介：<textarea class="site_descr" name="site_descr" cols="40" rows="4" tabindex="3" >'+site_descr+'</textarea>';
-		html += '</div></span>';
+		html += '</fieldset></div></span>';
 		
 		$(this).after(html);
 		$(".editForm>div").show('slow');

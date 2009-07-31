@@ -1,6 +1,6 @@
 <?php
 
-class UserAction extends PublicAction{
+class UserAction extends BaseAction{
 	
 	/**
 	*

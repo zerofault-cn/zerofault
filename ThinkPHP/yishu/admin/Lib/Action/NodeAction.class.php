@@ -1,5 +1,5 @@
 <?php
-class NodeAction extends PublicAction{
+class NodeAction extends BaseAction{
 	/**
 	*
 	* 节点列表
@@ -12,95 +12,130 @@ class NodeAction extends PublicAction{
 		$topnavi[]=array(
 			'text'=> '节点列表',
 			);
+
+		$base_class = 'BaseAction';
+		$base_obj   = new $base_class;
+		$base_method_arr = get_class_methods($base_obj);
+
 		$dNode = D('Node');
-		//获取App节点
+		$where['name'] = APP_NAME;
 		$where['pid'] = 0;
-		$rs_app = $dNode->where($where)->select();
-		$n1=$n2=$n3=0;
-		$nodes = array();
-		if(!$rs_app){
-			$rs_app = array();
-		}
-		foreach($rs_app as $node){
-			$nodes[$n1] = array(
-				'info' => array(
-					'id'    => $node['id'],
-					'name'  => $node['name'],
-					'title' => $node['title'],
-					'descr' => $node['descr'],
-					'status'=> $node['status'],
-					),
-				'count'  => 0,
-				'module' => array()
+		$app = $dNode->where($where)->find();
+		if(empty($app)) {
+			$app = array(
+				'id' => 0,
+				'name'=>APP_NAME,
+				'title'=>'',
+				'descr'=>''
 				);
-			//获取Module节点
-			$where['pid'] = $node['id'];
-			$rs_module = $dNode->where($where)->select();
-			if(!$rs_module){
-				//未定义Module节点
-				$rs_module = array();
-				$nodes[$n1]['count'] = 1;
-				$nodes[$n1]['module'][$n2] = array(
-					'info' => array(
-						'title' => '*',
-						),
-					'count' => 1,
-					'action'=> array(
-						array(
-							'title' => '*'
-							)
-						)
-					);
-			}
-			foreach($rs_module as $node){
-				$nodes[$n1]['module'][$n2] = array(
-					'info' => array(
-						'id'    => $node['id'],
-						'name'  => $node['name'],
-						'title' => $node['title'],
-						'descr' => $node['descr'],
-						'status'=> $node['status'],
-						),
-					'count'  => 0,
-					'action' => array()
-					);
-				//获取Action节点
-				$where['pid'] = $node['id'];
-				$rs_action = $dNode->where($where)->select();
-				if(!$rs_action){
-					$rs_action = array();
-					$nodes[$n1]['count'] += 1;
-					$nodes[$n1]['module'][$n2]['count'] += 1;
-					$nodes[$n1]['module'][$n2]['action'][$n3] = array(
-						'title'  => '*'
-						);
-				}
-				foreach($rs_action as $node){
-					$nodes[$n1]['count'] += 1;
-					$nodes[$n1]['module'][$n2]['count'] += 1;
-					$nodes[$n1]['module'][$n2]['action'][$n3] = array(
-						'id'    => $node['id'],
-						'name'  => $node['name'],
-						'title' => $node['title'],
-						'descr' => $node['descr'],
-						'status'=> $node['status'],
-						);
-					$n3++;
-				}
-				$n2++;
-			}
-			$n1++;
 		}
-		//echo '<pre>';
-		//print_r($nodes);
-		//echo '</pre>';
+		$modules = array();
+		$i = 0;
+		
+		$dir = LIB_PATH.'Action/';
+		$handle=opendir($dir);
+		while($file=readdir($handle))
+		{
+			if(!is_file($dir.$file)) {
+				continue;
+			}
+			$class_name = substr($file,0,-10);
+			if($class_name == $base_class) {
+				continue;
+			}
+			$module_name = substr($class_name,0,-6);
+			if(empty($app['id'])) {
+				$modules[$i] = array(
+					'id'=>0,
+					'name'=>$module_name,
+					'title'=>'',
+					'descr'=>''
+					);
+			}
+			else {
+				$where['name'] = $module_name;
+				$where['pid']  = $app['id'];
+				$module = $dNode->where($where)->find();
+				$modules[$i] = $module ? $module : array(
+					'id'=>0,
+					'name'=>$module_name,
+					'title'=>'',
+					'descr'=>''
+					);
+			}
 
+			$obj = new $class_name;
+			$obj_method = array_diff(get_class_methods($obj),$base_method_arr);
+			if(empty($obj_method)) {
+				$modules[$i]['action'][] = array('title'=>'*');
+			}
+			foreach($obj_method as $action_name) {
+				if(empty($module)) {
+					$modules[$i]['action'][] = array(
+						'id'=>0,
+						'name'=>$action_name,
+						'title'=>'',
+						'descr'=>''
+						);
+				}
+				else {
+					$where['name'] = $action_name;
+					$where['pid']  = $module['id'];
+					$action = $dNode->where($where)->find();
+					
+					$modules[$i]['action'][] = $action ? $action : array(
+						'id'=>0,
+						'name'=>$action_name,
+						'title'=>'',
+						'descr'=>''
+						);
+				}
+			}
+			$i++;
+		}
+		//dump($modules);
 
-		$this->assign("topnavi",$topnavi);
-		$this->assign('list',$nodes);
+		$this->assign("topnavi", $topnavi);
+		$this->assign('app', $app);
+		$this->assign('modules', $modules);
 		$this->assign('content','Node:index');
 		$this->display('Layout:Admin_layout');
 	}
 
+	public function update() {
+		$id   = intval($_REQUEST['id']);
+		$pid  = intval($_REQUEST['pid']);
+		$name = $_REQUEST['name'];
+		$title= $_REQUEST['title'];
+		$descr= $_REQUEST['descr'];
+		$level= intval($_REQUEST['level']);
+
+		$dNode = D('Node');
+
+		$data['pid']  = $pid;
+		$data['name'] = $name;
+		$data['title']= $title;
+		$data['descr']= $descr;
+		$data['level']= $level;
+		if($id>0) {
+			//已有纪录
+			$data['id'] = $id;
+			if($dNode->save($data)) {
+				die('1:'.$id);
+			}
+			else {
+				die('sql:'.$dao->getLastSql());
+			}
+		}
+		else {
+			//新建纪录
+			if($id=$dNode->add($data)) {
+				die('1:'.$id);
+			}
+			else {
+				die('sql:'.$dao->getLastSql());
+			}
+		}
+	}
 }
 ?>

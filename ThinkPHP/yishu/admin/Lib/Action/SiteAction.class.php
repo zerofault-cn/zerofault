@@ -1,5 +1,5 @@
 <?php
-class SiteAction extends PublicAction{
+class SiteAction extends BaseAction{
 
 	/**
 	*

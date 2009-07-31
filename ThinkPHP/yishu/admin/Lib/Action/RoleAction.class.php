@@ -1,5 +1,5 @@
 <?php
-class RoleAction extends PublicAction{
+class RoleAction extends BaseAction{
 	/**
 	*
 	* 用户列表

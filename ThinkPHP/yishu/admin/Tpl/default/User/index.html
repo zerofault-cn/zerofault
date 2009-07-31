@@ -13,14 +13,14 @@
 		<td>{$item.nickname}</td>
 		<td>{$item.login_time}</label></td>
 		<td>
-			<img src="{*APP_PUBLIC_URL}/Images/admin/key_edit.gif" alt="修改密码" align="absmiddle" />
+			<img src="../Public/Image/key_edit.gif" alt="修改密码" align="absmiddle" />
 			<neq name="item.account" value="admin">
 			<if condition="$item['status'] neq '-1'">
-			<a href="__URL__/update/t/User/id/{$item.id}/f/status/v/{:intval(!$item['status'])}/" target="_iframe" title='<if condition="$item.status eq 0">启用<else />禁用</if>'><if condition="$item.status eq 0"><img src="{*APP_PUBLIC_URL}/Images/admin/add.gif" alt="启用" align="absmiddle"/><else /><img src="{*APP_PUBLIC_URL}/Images/admin/delete.gif" alt="禁用" align="absmiddle"/></if></a>
-			<a href="__URL__/update/t/User/id/{$item.id}/f/status/v/-1/"  target="_iframe" title="删除"><img src="{*APP_PUBLIC_URL}/Images/admin/cross.gif" alt="删除" align="absmiddle"/></a>
+			<a href="__URL__/update/t/User/id/{$item.id}/f/status/v/{:intval(!$item['status'])}/" target="_iframe" title='<if condition="$item.status eq 0">启用<else />禁用</if>'><if condition="$item.status eq 0"><img src="../Public/Image/add.gif" alt="启用" align="absmiddle"/><else /><img src="../Public/Image/delete.gif" alt="禁用" align="absmiddle"/></if></a>
+			<a href="__URL__/update/t/User/id/{$item.id}/f/status/v/-1/"  target="_iframe" title="删除"><img src="../Public/Image/cross.gif" alt="删除" align="absmiddle"/></a>
 			<else />
-			<a href="__URL__/update/t/User/id/{$item.id}/f/status/v/0/" target="_iframe" title="恢复"><img src="{*APP_PUBLIC_URL}/Images/admin/tick.gif" alt="恢复" align="absmiddle"/></a>
-			<a href="__URL__/delete/t/User/id/{$item.id}/" target="_iframe" title="彻底删除"><img src="{*APP_PUBLIC_URL}/Images/admin/cross.gif" alt="彻底删除" align="absmiddle"/></a>
+			<a href="__URL__/update/t/User/id/{$item.id}/f/status/v/0/" target="_iframe" title="恢复"><img src="../Public/Image/tick.gif" alt="恢复" align="absmiddle"/></a>
+			<a href="__URL__/delete/t/User/id/{$item.id}/" target="_iframe" title="彻底删除"><img src="../Public/Image/cross.gif" alt="彻底删除" align="absmiddle"/></a>
 			</if>
 			</neq>
 		</td>
@@ -36,8 +36,4 @@
 		<input type="button" value="添加" id="submit_addUser" />
 	</div>
 	</neq>
-	<script language="JavaScript" type="text/javascript">
-	var _URL_ = '__URL__';
-	var APP_PUBLIC_URL = '{*APP_PUBLIC_URL}';
-	</script>
-	<script language="JavaScript" type="text/javascript" src="{*APP_PUBLIC_URL}/Js/user_list_func.js"></script>
+	<script language="JavaScript" type="text/javascript" src="../Public/Js/user_list_func.js"></script>

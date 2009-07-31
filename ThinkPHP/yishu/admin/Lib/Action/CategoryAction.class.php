@@ -1,6 +1,6 @@
 <?php
 
-class CategoryAction extends PublicAction{
+class CategoryAction extends BaseAction{
 	/**
 	*
 	* 显示分类列表
@@ -43,5 +43,56 @@ class CategoryAction extends PublicAction{
 		$this->assign('content','Category:index');
 		$this->display('Layout:Admin_layout');
 	}
+
+	public function add(){
+		$name=$_REQUEST['name'];
+		$sort=intval($_REQUEST['sort']);
+
+		$dCategory = D('Category');
+		$where['name'] = $name;
+		$rs = $dCategory->where($where)->find();
+		if($rs && sizeof($rs)>0){
+			die('-1');
+		}
+		$dCategory->name = $name;
+		$dCategory->addtime = $dCategory->usetime = date("Y-m-d H:i:s");
+		$dCategory->sort = $sort;
+		$dCategory->status = 1;
+		if($dCategory->add()){
+			die('1');
+		}
+		else{
+			die('sql:'.$dCategory->getLastSql());
+		}
+	}
+	public function update(){
+		$id=$_REQUEST['id'];
+		$field=$_REQUEST['f'];
+		$value=$_REQUEST['v'];
+		$dao = D('Category');
+		$rs = $dao->where('id='.$id)->setField($field,$value);
+		if($rs)
+		{
+			die(self::_success('更新成功！','',1200));
+		}
+		else
+		{
+			die(self::_error('发生错误！<br />sql:'.$dao->getLastSql()));
+		}
+	}
+	public function delete(){
+		
+		$id=$_REQUEST['id'];
+		$dao = D('Category');
+		if($dao->find($id) && $dao->delete())
+		{
+			die(self::_success('删除成功！','',1200));
+		}
+		else
+		{
+			die(self::_error('发生错误！<br />sql:'.$dao->getLastSql()));
+		}
+	}
+
 }
 ?>

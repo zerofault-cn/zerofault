@@ -1,6 +1,6 @@
 <?php
 
-class GroupAction extends PublicAction{
+class GroupAction extends BaseAction{
 	/**
 	*
 	* 用户组列表
