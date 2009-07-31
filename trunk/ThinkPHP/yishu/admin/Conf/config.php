@@ -10,9 +10,10 @@ return array(
 	'DB_PORT'=>'3306',
 	'DB_PREFIX'=>'yishu_', //数据表前缀（与数据库myapp中的表think_message对应）
 
+
 //	'URL_MODEL' => 2,
-	'DEBUG_MODE'=>true, //开启调试模式
-	'SHOW_PAGE_TRACE' => TRUE,
+//	'DEBUG_MODE'=>true, //开启调试模式
+//	'SHOW_PAGE_TRACE' => TRUE,
 
 	'APP_DOMAIN_DEPLOY' => false, //域名根目录下设为true
 

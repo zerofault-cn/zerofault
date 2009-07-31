@@ -1,5 +1,5 @@
 <?php
-class IndexAction extends PublicAction{
+class IndexAction extends BaseAction{
 	
 	/**
 	*

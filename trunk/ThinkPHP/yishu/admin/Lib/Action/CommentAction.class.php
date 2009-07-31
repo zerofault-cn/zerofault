@@ -1,6 +1,6 @@
 <?php
 
-class CommentAction extends PublicAction{
+class CommentAction extends BaseAction{
 
 	/**
 	*
