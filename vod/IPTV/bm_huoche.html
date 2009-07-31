@@ -1,0 +1,217 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+<title>达成线列车时刻表</title>
+<script language="JavaScript" type="text/JavaScript" src="locateCSS.js"></script>
+<script language="JavaScript" type="text/JavaScript" src="functions.js"></script>
+<script language="JavaScript" type="text/JavaScript">
+
+var pageitem=9;
+
+var line_info=new Array(26);
+var line_info_table=new Array(26);
+line_info[0]="5627";
+line_info_table[0]="<table border=1 width=100% cellpadding=2 cellspacing=0><caption style=color:#ccff00>达成线列车时刻表</caption><tr><td align=right style=color:#ffcc00>车次</td><td style=color:#ffffff>5627</td><td align=right  style=color:#ffcc00>类型</td><td style=color:#ffffff>空调普快</td></tr><tr><td align=right style=color:#ffcc00>始发站</td><td style=color:#ffffff>达州</td><td align=right  style=color:#ffcc00>始发时间</td><td style=color:#ffffff>22:31</td></tr><tr><td align=right style=color:#ffcc00>查询站</td><td style=color:#ffffff>遂宁</td><td align=right  style=color:#ffcc00>出发时间</td><td style=color:#ffffff>03:04</td></tr><tr><td align=right style=color:#ffcc00>终点站</td><td style=color:#ffffff>成都</td><td align=right  style=color:#ffcc00>终点时间</td><td style=color:#ffffff>05:51</td></tr><tr><td align=right style=color:#ffcc00>历时</td><td colspan=3 style=color:#ffffff>0天7时20分</td></tr></table>";
+line_info[1]="5628";
+line_info_table[1]="<table border=1 width=100% cellpadding=2 cellspacing=0><caption style=color:#ccff00>达成线列车时刻表</caption><tr><td align=right style=color:#ffcc00>车次</td><td style=color:#ffffff>5628</td><td align=right  style=color:#ffcc00>类型</td><td style=color:#ffffff>空调普快</td></tr><tr><td align=right style=color:#ffcc00>始发站</td><td style=color:#ffffff>成都</td><td align=right  style=color:#ffcc00>始发时间</td><td style=color:#ffffff>23:10</td></tr><tr><td align=right style=color:#ffcc00>查询站</td><td style=color:#ffffff>遂宁</td><td align=right  style=color:#ffcc00>出发时间</td><td style=color:#ffffff>01:30</td></tr><tr><td align=right style=color:#ffcc00>终点站</td><td style=color:#ffffff>达州</td><td align=right  style=color:#ffcc00>终点时间</td><td style=color:#ffffff>06:05</td></tr><tr><td align=right style=color:#ffcc00>历时</td><td colspan=3 style=color:#ffffff>0天6时55分</td></tr></table>";
+line_info[2]="5629";
+line_info_table[2]="<table border=1 width=100% cellpadding=2 cellspacing=0><caption style=color:#ccff00>达成线列车时刻表</caption><tr><td align=right style=color:#ffcc00>车次</td><td style=color:#ffffff>5629</td><td align=right  style=color:#ffcc00>类型</td><td style=color:#ffffff>空调普快</td></tr><tr><td align=right style=color:#ffcc00>始发站</td><td style=color:#ffffff>南充</td><td align=right  style=color:#ffcc00>始发时间</td><td style=color:#ffffff>08:56</td></tr><tr><td align=right style=color:#ffcc00>查询站</td><td style=color:#ffffff>遂宁</td><td align=right  style=color:#ffcc00>出发时间</td><td style=color:#ffffff>10:05</td></tr><tr><td align=right style=color:#ffcc00>终点站</td><td style=color:#ffffff>成都</td><td align=right  style=color:#ffcc00>终点时间</td><td style=color:#ffffff>13:38</td></tr><tr><td align=right style=color:#ffcc00>历时</td><td colspan=3 style=color:#ffffff>0天4时42分</td></tr></table>";
+line_info[3]="5629";
+line_info_table[3]="<table border=1 width=100% cellpadding=2 cellspacing=0><caption style=color:#ccff00>达成线列车时刻表</caption><tr><td align=right style=color:#ffcc00>车次</td><td style=color:#ffffff>5629</td><td align=right  style=color:#ffcc00>类型</td><td style=color:#ffffff>空调普快</td></tr><tr><td align=right style=color:#ffcc00>始发站</td><td style=color:#ffffff>南充</td><td align=right  style=color:#ffcc00>始发时间</td><td style=color:#ffffff>08:56</td></tr><tr><td align=right style=color:#ffcc00>查询站</td><td style=color:#ffffff>遂宁西</td><td align=right  style=color:#ffcc00>出发时间</td><td style=color:#ffffff>10:22</td></tr><tr><td align=right style=color:#ffcc00>终点站</td><td style=color:#ffffff>成都</td><td align=right  style=color:#ffcc00>终点时间</td><td style=color:#ffffff>13:38</td></tr><tr><td align=right style=color:#ffcc00>历时</td><td colspan=3 style=color:#ffffff>0天4时42分</td></tr></table>";
+line_info[4]="5630";
+line_info_table[4]="<table border=1 width=100% cellpadding=2 cellspacing=0><caption style=color:#ccff00>达成线列车时刻表</caption><tr><td align=right style=color:#ffcc00>车次</td><td style=color:#ffffff>5630</td><td align=right  style=color:#ffcc00>类型</td><td style=color:#ffffff>空调普快</td></tr><tr><td align=right style=color:#ffcc00>始发站</td><td style=color:#ffffff>成都</td><td align=right  style=color:#ffcc00>始发时间</td><td style=color:#ffffff>14:39</td></tr><tr><td align=right style=color:#ffcc00>查询站</td><td style=color:#ffffff>遂宁西</td><td align=right  style=color:#ffcc00>出发时间</td><td style=color:#ffffff>17:49</td></tr><tr><td align=right style=color:#ffcc00>终点站</td><td style=color:#ffffff>南充</td><td align=right  style=color:#ffcc00>终点时间</td><td style=color:#ffffff>19:23</td></tr><tr><td align=right style=color:#ffcc00>历时</td><td colspan=3 style=color:#ffffff>0天4时44分</td></tr></table>";
+line_info[5]="5630";
+line_info_table[5]="<table border=1 width=100% cellpadding=2 cellspacing=0><caption style=color:#ccff00>达成线列车时刻表</caption><tr><td align=right style=color:#ffcc00>车次</td><td style=color:#ffffff>5630</td><td align=right  style=color:#ffcc00>类型</td><td style=color:#ffffff>空调普快</td></tr><tr><td align=right style=color:#ffcc00>始发站</td><td style=color:#ffffff>成都</td><td align=right  style=color:#ffcc00>始发时间</td><td style=color:#ffffff>14:39</td></tr><tr><td align=right style=color:#ffcc00>查询站</td><td style=color:#ffffff>遂宁</td><td align=right  style=color:#ffcc00>出发时间</td><td style=color:#ffffff>18:01</td></tr><tr><td align=right style=color:#ffcc00>终点站</td><td style=color:#ffffff>南充</td><td align=right  style=color:#ffcc00>终点时间</td><td style=color:#ffffff>19:23</td></tr><tr><td align=right style=color:#ffcc00>历时</td><td colspan=3 style=color:#ffffff>0天4时44分</td></tr></table>";
+line_info[6]="5633";
+line_info_table[6]="<table border=1 width=100% cellpadding=2 cellspacing=0><caption style=color:#ccff00>达成线列车时刻表</caption><tr><td align=right style=color:#ffcc00>车次</td><td style=color:#ffffff>5633</td><td align=right  style=color:#ffcc00>类型</td><td style=color:#ffffff>空调普快</td></tr><tr><td align=right style=color:#ffcc00>始发站</td><td style=color:#ffffff>达州</td><td align=right  style=color:#ffcc00>始发时间</td><td style=color:#ffffff>12:39</td></tr><tr><td align=right style=color:#ffcc00>查询站</td><td style=color:#ffffff>遂宁</td><td align=right  style=color:#ffcc00>出发时间</td><td style=color:#ffffff>16:23</td></tr><tr><td align=right style=color:#ffcc00>终点站</td><td style=color:#ffffff>成都</td><td align=right  style=color:#ffcc00>终点时间</td><td style=color:#ffffff>19:05</td></tr><tr><td align=right style=color:#ffcc00>历时</td><td colspan=3 style=color:#ffffff>0天6时26分</td></tr></table>";
+line_info[7]="5634";
+line_info_table[7]="<table border=1 width=100% cellpadding=2 cellspacing=0><caption style=color:#ccff00>达成线列车时刻表</caption><tr><td align=right style=color:#ffcc00>车次</td><td style=color:#ffffff>5634</td><td align=right  style=color:#ffcc00>类型</td><td style=color:#ffffff>空调普快</td></tr><tr><td align=right style=color:#ffcc00>始发站</td><td style=color:#ffffff>成都</td><td align=right  style=color:#ffcc00>始发时间</td><td style=color:#ffffff>20:08</td></tr><tr><td align=right style=color:#ffcc00>查询站</td><td style=color:#ffffff>遂宁</td><td align=right  style=color:#ffcc00>出发时间</td><td style=color:#ffffff>22:40</td></tr><tr><td align=right style=color:#ffcc00>终点站</td><td style=color:#ffffff>南充</td><td align=right  style=color:#ffcc00>终点时间</td><td style=color:#ffffff>23:41</td></tr><tr><td align=right style=color:#ffcc00>历时</td><td colspan=3 style=color:#ffffff>0天3时33分</td></tr></table>";
+line_info[8]="5637";
+line_info_table[8]="<table border=1 width=100% cellpadding=2 cellspacing=0><caption style=color:#ccff00>达成线列车时刻表</caption><tr><td align=right style=color:#ffcc00>车次</td><td style=color:#ffffff>5637</td><td align=right  style=color:#ffcc00>类型</td><td style=color:#ffffff>空调普快</td></tr><tr><td align=right style=color:#ffcc00>始发站</td><td style=color:#ffffff>南充</td><td align=right  style=color:#ffcc00>始发时间</td><td style=color:#ffffff>07:31</td></tr><tr><td align=right style=color:#ffcc00>查询站</td><td style=color:#ffffff>遂宁</td><td align=right  style=color:#ffcc00>出发时间</td><td style=color:#ffffff>08:29</td></tr><tr><td align=right style=color:#ffcc00>终点站</td><td style=color:#ffffff>成都</td><td align=right  style=color:#ffcc00>终点时间</td><td style=color:#ffffff>11:12</td></tr><tr><td align=right style=color:#ffcc00>历时</td><td colspan=3 style=color:#ffffff>0天3时41分</td></tr></table>";
+line_info[9]="5638";
+line_info_table[9]="<table border=1 width=100% cellpadding=2 cellspacing=0><caption style=color:#ccff00>达成线列车时刻表</caption><tr><td align=right style=color:#ffcc00>车次</td><td style=color:#ffffff>5638</td><td align=right  style=color:#ffcc00>类型</td><td style=color:#ffffff>空调普快</td></tr><tr><td align=right style=color:#ffcc00>始发站</td><td style=color:#ffffff>成都</td><td align=right  style=color:#ffcc00>始发时间</td><td style=color:#ffffff>06:50</td></tr><tr><td align=right style=color:#ffcc00>查询站</td><td style=color:#ffffff>遂宁</td><td align=right  style=color:#ffcc00>出发时间</td><td style=color:#ffffff>10:01</td></tr><tr><td align=right style=color:#ffcc00>终点站</td><td style=color:#ffffff>南充</td><td align=right  style=color:#ffcc00>终点时间</td><td style=color:#ffffff>11:14</td></tr><tr><td align=right style=color:#ffcc00>历时</td><td colspan=3 style=color:#ffffff>0天4时24分</td></tr></table>";
+line_info[10]="5641";
+line_info_table[10]="<table border=1 width=100% cellpadding=2 cellspacing=0><caption style=color:#ccff00>达成线列车时刻表</caption><tr><td align=right style=color:#ffcc00>车次</td><td style=color:#ffffff>5641</td><td align=right  style=color:#ffcc00>类型</td><td style=color:#ffffff>空调普快</td></tr><tr><td align=right style=color:#ffcc00>始发站</td><td style=color:#ffffff>达州</td><td align=right  style=color:#ffcc00>始发时间</td><td style=color:#ffffff>07:25</td></tr><tr><td align=right style=color:#ffcc00>查询站</td><td style=color:#ffffff>遂宁</td><td align=right  style=color:#ffcc00>出发时间</td><td style=color:#ffffff>11:23</td></tr><tr><td align=right style=color:#ffcc00>终点站</td><td style=color:#ffffff>成都</td><td align=right  style=color:#ffcc00>终点时间</td><td style=color:#ffffff>15:05</td></tr><tr><td align=right style=color:#ffcc00>历时</td><td colspan=3 style=color:#ffffff>0天7时40分</td></tr></table>";
+line_info[11]="5642";
+line_info_table[11]="<table border=1 width=100% cellpadding=2 cellspacing=0><caption style=color:#ccff00>达成线列车时刻表</caption><tr><td align=right style=color:#ffcc00>车次</td><td style=color:#ffffff>5642</td><td align=right  style=color:#ffcc00>类型</td><td style=color:#ffffff>空调普快</td></tr><tr><td align=right style=color:#ffcc00>始发站</td><td style=color:#ffffff>成都</td><td align=right  style=color:#ffcc00>始发时间</td><td style=color:#ffffff>12:30</td></tr><tr><td align=right style=color:#ffcc00>查询站</td><td style=color:#ffffff>遂宁</td><td align=right  style=color:#ffcc00>出发时间</td><td style=color:#ffffff>15:04</td></tr><tr><td align=right style=color:#ffcc00>终点站</td><td style=color:#ffffff>达州</td><td align=right  style=color:#ffcc00>终点时间</td><td style=color:#ffffff>19:56</td></tr><tr><td align=right style=color:#ffcc00>历时</td><td colspan=3 style=color:#ffffff>0天7时26分</td></tr></table>";
+line_info[12]="5647";
+line_info_table[12]="<table border=1 width=100% cellpadding=2 cellspacing=0><caption style=color:#ccff00>达成线列车时刻表</caption><tr><td align=right style=color:#ffcc00>车次</td><td style=color:#ffffff>5647</td><td align=right  style=color:#ffcc00>类型</td><td style=color:#ffffff>空调普快</td></tr><tr><td align=right style=color:#ffcc00>始发站</td><td style=color:#ffffff>南充</td><td align=right  style=color:#ffcc00>始发时间</td><td style=color:#ffffff>17:42</td></tr><tr><td align=right style=color:#ffcc00>查询站</td><td style=color:#ffffff>遂宁</td><td align=right  style=color:#ffcc00>出发时间</td><td style=color:#ffffff>18:51</td></tr><tr><td align=right style=color:#ffcc00>终点站</td><td style=color:#ffffff>成都</td><td align=right  style=color:#ffcc00>终点时间</td><td style=color:#ffffff>21:51</td></tr><tr><td align=right style=color:#ffcc00>历时</td><td colspan=3 style=color:#ffffff>0天4时09分</td></tr></table>";
+line_info[13]="5648";
+line_info_table[13]="<table border=1 width=100% cellpadding=2 cellspacing=0><caption style=color:#ccff00>达成线列车时刻表</caption><tr><td align=right style=color:#ffcc00>车次</td><td style=color:#ffffff>5648</td><td align=right  style=color:#ffcc00>类型</td><td style=color:#ffffff>空调普快</td></tr><tr><td align=right style=color:#ffcc00>始发站</td><td style=color:#ffffff>成都</td><td align=right  style=color:#ffcc00>始发时间</td><td style=color:#ffffff>16:30</td></tr><tr><td align=right style=color:#ffcc00>查询站</td><td style=color:#ffffff>遂宁</td><td align=right  style=color:#ffcc00>出发时间</td><td style=color:#ffffff>19:47</td></tr><tr><td align=right style=color:#ffcc00>终点站</td><td style=color:#ffffff>南充</td><td align=right  style=color:#ffcc00>终点时间</td><td style=color:#ffffff>20:58</td></tr><tr><td align=right style=color:#ffcc00>历时</td><td colspan=3 style=color:#ffffff>0天4时28分</td></tr></table>";
+line_info[14]="K351/K354";
+line_info_table[14]="<table border=1 width=100% cellpadding=2 cellspacing=0><caption style=color:#ccff00>达成线列车时刻表</caption><tr><td align=right style=color:#ffcc00>车次</td><td style=color:#ffffff>K351/K354</td><td align=right  style=color:#ffcc00>类型</td><td style=color:#ffffff>空调快速</td></tr><tr><td align=right style=color:#ffcc00>始发站</td><td style=color:#ffffff>上海</td><td align=right  style=color:#ffcc00>始发时间</td><td style=color:#ffffff>15:38</td></tr><tr><td align=right style=color:#ffcc00>查询站</td><td style=color:#ffffff>遂宁</td><td align=right  style=color:#ffcc00>出发时间</td><td style=color:#ffffff>05:49</td></tr><tr><td align=right style=color:#ffcc00>终点站</td><td style=color:#ffffff>成都</td><td align=right  style=color:#ffcc00>终点时间</td><td style=color:#ffffff>08:13</td></tr><tr><td align=right style=color:#ffcc00>历时</td><td colspan=3 style=color:#ffffff>1天16时35分</td></tr></table>";
+line_info[15]="K352/K353";
+line_info_table[15]="<table border=1 width=100% cellpadding=2 cellspacing=0><caption style=color:#ccff00>达成线列车时刻表</caption><tr><td align=right style=color:#ffcc00>车次</td><td style=color:#ffffff>K352/K353</td><td align=right  style=color:#ffcc00>类型</td><td style=color:#ffffff>空调快速</td></tr><tr><td align=right style=color:#ffcc00>始发站</td><td style=color:#ffffff>成都</td><td align=right  style=color:#ffcc00>始发时间</td><td style=color:#ffffff>18:38</td></tr><tr><td align=right style=color:#ffcc00>查询站</td><td style=color:#ffffff>遂宁</td><td align=right  style=color:#ffcc00>出发时间</td><td style=color:#ffffff>21:19</td></tr><tr><td align=right style=color:#ffcc00>终点站</td><td style=color:#ffffff>上海</td><td align=right  style=color:#ffcc00>终点时间</td><td style=color:#ffffff>12:06</td></tr><tr><td align=right style=color:#ffcc00>历时</td><td colspan=3 style=color:#ffffff>1天17时28分</td></tr></table>";
+line_info[16]="N859";
+line_info_table[16]="<table border=1 width=100% cellpadding=2 cellspacing=0><caption style=color:#ccff00>达成线列车时刻表</caption><tr><td align=right style=color:#ffcc00>车次</td><td style=color:#ffffff>N859</td><td align=right  style=color:#ffcc00>类型</td><td style=color:#ffffff>空调快速</td></tr><tr><td align=right style=color:#ffcc00>始发站</td><td style=color:#ffffff>南充</td><td align=right  style=color:#ffcc00>始发时间</td><td style=color:#ffffff>13:18</td></tr><tr><td align=right style=color:#ffcc00>查询站</td><td style=color:#ffffff>遂宁</td><td align=right  style=color:#ffcc00>出发时间</td><td style=color:#ffffff>14:11</td></tr><tr><td align=right style=color:#ffcc00>终点站</td><td style=color:#ffffff>成都</td><td align=right  style=color:#ffcc00>终点时间</td><td style=color:#ffffff>17:10</td></tr><tr><td align=right style=color:#ffcc00>历时</td><td colspan=3 style=color:#ffffff>0天3时52分</td></tr></table>";
+line_info[17]="N860";
+line_info_table[17]="<table border=1 width=100% cellpadding=2 cellspacing=0><caption style=color:#ccff00>达成线列车时刻表</caption><tr><td align=right style=color:#ffcc00>车次</td><td style=color:#ffffff>N860</td><td align=right  style=color:#ffcc00>类型</td><td style=color:#ffffff>空调快速</td></tr><tr><td align=right style=color:#ffcc00>始发站</td><td style=color:#ffffff>成都</td><td align=right  style=color:#ffcc00>始发时间</td><td style=color:#ffffff>09:08</td></tr><tr><td align=right style=color:#ffcc00>查询站</td><td style=color:#ffffff>遂宁</td><td align=right  style=color:#ffcc00>出发时间</td><td style=color:#ffffff>11:55</td></tr><tr><td align=right style=color:#ffcc00>终点站</td><td style=color:#ffffff>南充</td><td align=right  style=color:#ffcc00>终点时间</td><td style=color:#ffffff>12:52</td></tr><tr><td align=right style=color:#ffcc00>历时</td><td colspan=3 style=color:#ffffff>0天3时44分</td></tr></table>";
+line_info[18]="N867";
+line_info_table[18]="<table border=1 width=100% cellpadding=2 cellspacing=0><caption style=color:#ccff00>达成线列车时刻表</caption><tr><td align=right style=color:#ffcc00>车次</td><td style=color:#ffffff>N867</td><td align=right  style=color:#ffcc00>类型</td><td style=color:#ffffff>空调快速</td></tr><tr><td align=right style=color:#ffcc00>始发站</td><td style=color:#ffffff>达州</td><td align=right  style=color:#ffcc00>始发时间</td><td style=color:#ffffff>21:59</td></tr><tr><td align=right style=color:#ffcc00>查询站</td><td style=color:#ffffff>遂宁</td><td align=right  style=color:#ffcc00>出发时间</td><td style=color:#ffffff>02:12</td></tr><tr><td align=right style=color:#ffcc00>终点站</td><td style=color:#ffffff>成都</td><td align=right  style=color:#ffcc00>终点时间</td><td style=color:#ffffff>05:00</td></tr><tr><td align=right style=color:#ffcc00>历时</td><td colspan=3 style=color:#ffffff>0天7时01分</td></tr></table>";
+line_info[19]="N868";
+line_info_table[19]="<table border=1 width=100% cellpadding=2 cellspacing=0><caption style=color:#ccff00>达成线列车时刻表</caption><tr><td align=right style=color:#ffcc00>车次</td><td style=color:#ffffff>N868</td><td align=right  style=color:#ffcc00>类型</td><td style=color:#ffffff>空调快速</td></tr><tr><td align=right style=color:#ffcc00>始发站</td><td style=color:#ffffff>成都</td><td align=right  style=color:#ffcc00>始发时间</td><td style=color:#ffffff>13:25</td></tr><tr><td align=right style=color:#ffcc00>查询站</td><td style=color:#ffffff>遂宁</td><td align=right  style=color:#ffcc00>出发时间</td><td style=color:#ffffff>15:40</td></tr><tr><td align=right style=color:#ffcc00>终点站</td><td style=color:#ffffff>达州</td><td align=right  style=color:#ffcc00>终点时间</td><td style=color:#ffffff>20:59</td></tr><tr><td align=right style=color:#ffcc00>历时</td><td colspan=3 style=color:#ffffff>0天7时34分</td></tr></table>";
+line_info[20]="N869";
+line_info_table[20]="<table border=1 width=100% cellpadding=2 cellspacing=0><caption style=color:#ccff00>达成线列车时刻表</caption><tr><td align=right style=color:#ffcc00>车次</td><td style=color:#ffffff>N869</td><td align=right  style=color:#ffcc00>类型</td><td style=color:#ffffff>空调快速</td></tr><tr><td align=right style=color:#ffcc00>始发站</td><td style=color:#ffffff>达州</td><td align=right  style=color:#ffcc00>始发时间</td><td style=color:#ffffff>16:11</td></tr><tr><td align=right style=color:#ffcc00>查询站</td><td style=color:#ffffff>遂宁</td><td align=right  style=color:#ffcc00>出发时间</td><td style=color:#ffffff>19:53</td></tr><tr><td align=right style=color:#ffcc00>终点站</td><td style=color:#ffffff>成都</td><td align=right  style=color:#ffcc00>终点时间</td><td style=color:#ffffff>22:35</td></tr><tr><td align=right style=color:#ffcc00>历时</td><td colspan=3 style=color:#ffffff>0天6时24分</td></tr></table>";
+line_info[21]="N870";
+line_info_table[21]="<table border=1 width=100% cellpadding=2 cellspacing=0><caption style=color:#ccff00>达成线列车时刻表</caption><tr><td align=right style=color:#ffcc00>车次</td><td style=color:#ffffff>N870</td><td align=right  style=color:#ffcc00>类型</td><td style=color:#ffffff>空调快速</td></tr><tr><td align=right style=color:#ffcc00>始发站</td><td style=color:#ffffff>成都</td><td align=right  style=color:#ffcc00>始发时间</td><td style=color:#ffffff>07:58</td></tr><tr><td align=right style=color:#ffcc00>查询站</td><td style=color:#ffffff>遂宁</td><td align=right  style=color:#ffcc00>出发时间</td><td style=color:#ffffff>10:39</td></tr><tr><td align=right style=color:#ffcc00>终点站</td><td style=color:#ffffff>达州</td><td align=right  style=color:#ffcc00>终点时间</td><td style=color:#ffffff>14:57</td></tr><tr><td align=right style=color:#ffcc00>历时</td><td colspan=3 style=color:#ffffff>0天6时59分</td></tr></table>";
+line_info[22]="T125/T128";
+line_info_table[22]="<table border=1 width=100% cellpadding=2 cellspacing=0><caption style=color:#ccff00>达成线列车时刻表</caption><tr><td align=right style=color:#ffcc00>车次</td><td style=color:#ffffff>T125/T128</td><td align=right  style=color:#ffcc00>类型</td><td style=color:#ffffff>空调特快</td></tr><tr><td align=right style=color:#ffcc00>始发站</td><td style=color:#ffffff>东莞东</td><td align=right  style=color:#ffcc00>始发时间</td><td style=color:#ffffff>21:58</td></tr><tr><td align=right style=color:#ffcc00>查询站</td><td style=color:#ffffff>遂宁</td><td align=right  style=color:#ffcc00>出发时间</td><td style=color:#ffffff>05:07</td></tr><tr><td align=right style=color:#ffcc00>终点站</td><td style=color:#ffffff>成都</td><td align=right  style=color:#ffcc00>终点时间</td><td style=color:#ffffff>07:26</td></tr><tr><td align=right style=color:#ffcc00>历时</td><td colspan=3 style=color:#ffffff>1天9时28分</td></tr></table>";
+line_info[23]="T126/T127";
+line_info_table[23]="<table border=1 width=100% cellpadding=2 cellspacing=0><caption style=color:#ccff00>达成线列车时刻表</caption><tr><td align=right style=color:#ffcc00>车次</td><td style=color:#ffffff>T126/T127</td><td align=right  style=color:#ffcc00>类型</td><td style=color:#ffffff>空调特快</td></tr><tr><td align=right style=color:#ffcc00>始发站</td><td style=color:#ffffff>成都</td><td align=right  style=color:#ffcc00>始发时间</td><td style=color:#ffffff>21:35</td></tr><tr><td align=right style=color:#ffcc00>查询站</td><td style=color:#ffffff>遂宁</td><td align=right  style=color:#ffcc00>出发时间</td><td style=color:#ffffff>23:42</td></tr><tr><td align=right style=color:#ffcc00>终点站</td><td style=color:#ffffff>东莞东</td><td align=right  style=color:#ffcc00>终点时间</td><td style=color:#ffffff>06:44</td></tr><tr><td align=right style=color:#ffcc00>历时</td><td colspan=3 style=color:#ffffff>1天9时09分</td></tr></table>";
+line_info[24]="T245/T248";
+line_info_table[24]="<table border=1 width=100% cellpadding=2 cellspacing=0><caption style=color:#ccff00>达成线列车时刻表</caption><tr><td align=right style=color:#ffcc00>车次</td><td style=color:#ffffff>T245/T248</td><td align=right  style=color:#ffcc00>类型</td><td style=color:#ffffff>空调特快</td></tr><tr><td align=right style=color:#ffcc00>始发站</td><td style=color:#ffffff>成都</td><td align=right  style=color:#ffcc00>始发时间</td><td style=color:#ffffff>15:07</td></tr><tr><td align=right style=color:#ffcc00>查询站</td><td style=color:#ffffff>遂宁</td><td align=right  style=color:#ffcc00>出发时间</td><td style=color:#ffffff>17:14</td></tr><tr><td align=right style=color:#ffcc00>终点站</td><td style=color:#ffffff>武昌</td><td align=right  style=color:#ffcc00>终点时间</td><td style=color:#ffffff>08:02</td></tr><tr><td align=right style=color:#ffcc00>历时</td><td colspan=3 style=color:#ffffff>0天16时55分</td></tr></table>";
+line_info[25]="T246/T247";
+line_info_table[25]="<table border=1 width=100% cellpadding=2 cellspacing=0><caption style=color:#ccff00>达成线列车时刻表</caption><tr><td align=right style=color:#ffcc00>车次</td><td style=color:#ffffff>T246/T247</td><td align=right  style=color:#ffcc00>类型</td><td style=color:#ffffff>空调特快</td></tr><tr><td align=right style=color:#ffcc00>始发站</td><td style=color:#ffffff>武昌</td><td align=right  style=color:#ffcc00>始发时间</td><td style=color:#ffffff>17:31</td></tr><tr><td align=right style=color:#ffcc00>查询站</td><td style=color:#ffffff>遂宁</td><td align=right  style=color:#ffcc00>出发时间</td><td style=color:#ffffff>07:52</td></tr><tr><td align=right style=color:#ffcc00>终点站</td><td style=color:#ffffff>成都</td><td align=right  style=color:#ffcc00>终点时间</td><td style=color:#ffffff>10:01</td></tr><tr><td align=right style=color:#ffcc00>历时</td><td colspan=3 style=color:#ffffff>0天16时30分</td></tr></table>";
+
+var i=0;
+function init()
+{
+	for(k=0;k < pageitem; k++)
+	{
+		document.getElementById(k).innerHTML=line_info[k];
+	}
+	onfoc(i);
+}
+function onfoc(n)
+{
+	document.getElementById(n%pageitem).style.backgroundImage="url(src_"+src_width+"/image/service/huoche/bar1.gif)";
+	document.getElementById(n%pageitem).style.color="#ffffff";
+	show(n);
+}
+function losefoc(n)
+{
+	document.getElementById(n%pageitem).style.backgroundImage="";
+	document.getElementById(n%pageitem).style.color="#b6dbf8";
+}
+function show(n) 
+{
+	document.getElementById('bm_huoche_lineinfo').innerHTML=line_info_table[n];
+}
+
+function newPage(n) 
+{
+	if((n % pageitem)==(pageitem-1))
+	{		
+		for(k = 0; k < pageitem; k++) 
+		{
+			document.getElementById(k).innerHTML=line_info[n-pageitem+k+1];
+		}
+	}
+	else 
+	{
+		for(k = 0; k < pageitem; k++) 
+		{
+			if((n + k) > (line_info.length - 1)) 
+			{
+				document.getElementById(k).innerHTML='';
+			}
+			else 
+			{
+				document.getElementById(k).innerHTML=line_info[n + k];
+			}
+		}
+	}
+	onfoc(n);
+}
+function keyDown(e)
+{
+	if (ie)
+	{
+		var keycode=event.keyCode; 
+	}
+	else
+	{
+		var keycode=e.which;
+	}
+	if(keycode==38 && i>0)
+	{
+		losefoc(i);
+		j=i%pageitem;
+		i--;
+		if(j == 0) 
+		{
+			newPage(i);
+		}
+		else 
+		{
+			onfoc(i);
+		}
+	}
+	if(keycode==40 && i < line_info.length - 1)
+	{
+		losefoc(i);
+		j=i%pageitem;
+		i++;
+		if(j==pageitem-1)
+		{
+			newPage(i);
+		}
+		else
+		{
+			onfoc(i);
+		}
+	}
+	if(keycode==33 && i-pageitem>=0)
+	{
+		losefoc(i);
+		i=pageitem*Math.floor((i-pageitem)/pageitem);
+		newPage(i);
+	}
+	if(keycode==34 && i+pageitem<line_info.length-1)
+	{
+		losefoc(i);	
+		i=pageitem*Math.floor((i+pageitem)/pageitem);
+		newPage(i);
+	}
+	if(keycode==36)	
+	{
+		location = "common_info.html";
+	}
+}    
+document.onkeydown=keyDown
+
+//-->
+</script>
+</head>
+<body id="bm_huoche" onload="init()">
+<div id="topnavi">
+<span class="topnavi">常用信息：火车时刻表</span>
+</div>
+
+<div id="bm_huoche_line">
+<table border="0" width="100%" cellpadding=0 cellspacing=0>
+<tr>
+	<td id=0 class="bm_huoche_line"></td>
+</tr>
+<tr>
+	<td id=1 class="bm_huoche_line"></td>
+</tr>
+<tr>
+	<td id=2 class="bm_huoche_line"></td>
+</tr>
+<tr>
+	<td id=3 class="bm_huoche_line"></td>
+
+</tr>
+<tr>
+	<td id=4 class="bm_huoche_line"></td>
+</tr>
+<tr>
+	<td id=5 class="bm_huoche_line"></td>
+</tr>
+<tr>
+	<td id=6 class="bm_huoche_line"></td>
+</tr>
+<tr>
+	<td id=7 class="bm_huoche_line"></td>
+</tr>
+
+<tr>
+	<td id=8 class="bm_huoche_line"></td>
+</tr>
+</table>
+</div>
+<div id="bm_huoche_lineinfo">
+</div>
+</body>
+</html>

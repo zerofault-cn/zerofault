@@ -1,0 +1,129 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+<title>VOD影片列表</title>
+<script language="JavaScript" type="text/JavaScript" src="locateCSS.js"></script>
+</head>
+<body id="vod_namelist" onload="onfoc(0)">
+<div id="topnavi">
+<span class="topnavi">中国音像在线&gt;&gt;科幻片</span>
+</div>
+<div id="vod_pagenavi">
+<span class="navi"><span id="pagenum">第 1 页</span><span id="pagecount">共 1 页</span></span>
+</div>
+<div id="vod_tips">
+<span id="vod_tips">左右键翻页 上下键选择</span>
+</div>
+<div id="vod_namelist_item">
+<table id="vod_namelist_item" border=0 width="100%" cellspacing=0 cellpadding=0>
+<tr>
+	<td id=0 class="vod_item"><a style="color:#b6dbf8" href='rtsp://192.168.0.208/tom.mp4'>情癫大圣</a></td>
+</tr>
+<tr>
+	<td id=1 class="vod_item"><a style="color:#b6dbf8" href='rtsp://sntx.169ol.com/mtv.mp4'>MP4测试片</a></td>
+</tr>
+<tr>
+	<td id=2 class="vod_item"><a style="color:#b6dbf8" href='rtsp://sntx.169ol.com/jiangnan.rm'>江南</a></td>
+</tr>
+<tr>
+	<td id=3 class="vod_item"><a style="color:#b6dbf8" href='mms://sntx.169ol.com/AngelaZhang-All_Because_Of_You.wmv'>都是因为你</a></td>
+</tr>
+<tr>
+	<td id=4 class="vod_item"><a style="color:#b6dbf8" href='#'>女子扫黑组</a></td>
+</tr>
+<tr>
+	<td id=5 class="vod_item"><a style="color:#b6dbf8" href='#'>夜魔侠</a></td>
+</tr>
+<tr>
+	<td id=6 class="vod_item"><a style="color:#b6dbf8" href='rtsp://sntx.169ol.com/x264.mp4'>星站前传III</a></td>
+</tr>
+<tr>
+	<td id=7 class="vod_item"><a style="color:#b6dbf8" href='rtsp://sntx.169ol.com/Mp2ts_h264.mp4'>指环王</a></td>
+</tr>
+<tr>
+	<td id=8 class="vod_item"><a style="color:#b6dbf8" href='#'>甜心先生</a></td>
+</tr>
+</table>
+</div>
+</body>
+<script language="JavaScript" type="text/JavaScript" src="functions.js"></script>
+<script language="JavaScript" type="text/JavaScript">
+<!--
+var key2=0;
+function onfoc(n) {
+	document.getElementById(n).style.backgroundImage="url(src_"+src_width+"/image/vod/bar3.gif)";
+	td=document.getElementById(n);
+	dat =td.innerHTML;
+	dat = dat.substring(dat.indexOf("href="));
+	td.innerHTML = '<a style="color:#ffffff" ' + dat;
+	document.links[n].focus();
+}
+
+function losefoc(n) {
+	document.getElementById(n).style.backgroundImage="";
+	td=document.getElementById(n);
+	dat =td.innerHTML;
+	dat = dat.substring(dat.indexOf("href="));
+	td.innerHTML = '<a style="color:#b6dbf8" ' + dat;
+}
+function keyDown(e)
+{
+	if (ie)
+	{
+		var keycode=event.keyCode; 
+	}
+	else
+	{
+		var keycode=e.which;
+	}
+	var key1 = keycode -48;
+	var patern=/^[1-link_count]$/; 
+	if (patern.exec(key1)) 
+	{
+		if(key1 == key2 + 1) 
+			onfoc(key1 - 1);
+		else
+		{
+			losefoc(key2);
+			onfoc(key1 - 1)
+			key2 = key1 -1;
+		}
+		location=document.links[key2];
+	}
+	if(keycode==36)//HOME键
+	{
+		location="vod_typelist.html";
+	}
+	if(keycode==38)//光标左上键
+	{
+		losefoc(key2);
+		key2=key2 - 1;
+		if(key2<0)
+		{
+			key2=link_count-1;
+		}
+		onfoc(key2)
+	}
+	if(keycode==40)//光标右下键
+	{
+		losefoc(key2);
+		key2=key2 + 1;
+		if(key2>link_count-1)
+		{
+			key2=0;
+		}
+		onfoc(key2)
+	}
+	if(keycode==37 || keycode==33)
+	{
+		location=pre_page;
+	}
+	if(keycode==39 || keycode==34)
+	{
+		location=next_page;
+	}
+}
+document.onkeydown=keyDown
+//-->
+</script>
+</html>

@@ -1,0 +1,84 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+<title>用户登录</title>
+<script>
+if(screen.width==800)
+{
+	document.write('<link rel="stylesheet" href="src_800/style.css" type="text/css">');
+}
+else if(screen.width==640)
+{
+	document.write('<link rel="stylesheet" href="src_640/style.css" type="text/css">');
+}
+else
+{
+	document.write('<link rel="stylesheet" href="src_800/style.css" type="text/css">');
+}
+</script>
+</head>
+<script language="JavaScript" type="text/JavaScript" src="functions.js"></script>
+<SCRIPT language="javascript" type="text/JavaScript" src="cookie_class.js"></SCRIPT>
+<script language="JavaScript" type="text/JavaScript">
+<!--
+function mysubmit()
+{
+	if(window.document.form1.user_account.value.length<1 || window.document.form1.user_password.value.length<1)
+	{
+		window.document.form1.user_account.focus();
+		return false;
+	}
+	else
+	{
+		user_account=document.form1.user_account.value;
+		user_password=document.form1.user_password.value;
+		SetCookie('cookie_user_account',user_account);
+		location="index.html?user_account="+user_account+"&user_passsword="+user_password;
+	}
+}
+function keyDown(e)
+{
+	if (ie)
+	{
+		var keycode=event.keyCode; 
+	}
+	else
+	{
+		var keycode=e.which;
+	}
+	if (keycode==0)
+		keycode=e.keyCode;
+	if (keycode==35)
+	{
+		mysubmit();
+	}
+	if (keycode==36)
+	{
+		window.history.go(-1);
+	}
+}
+document.onkeydown=keyDown
+
+var tmp_account=(GetCookie("cookie_user_account")!=null&&GetCookie("cookie_user_account")!="")?GetCookie("cookie_user_account"):"";
+//-->
+</script>
+
+<body id="login" onload="document.form1.user_account.value=tmp_account,document.form1.user_account.focus();">
+<div id="topnavi">
+<span class="topnavi">请先登录</span>
+</div>
+<form name="form1">
+<div id="user_account">
+<span style="color:#ffcc00">用户帐号：</span><input type="text" name="user_account" class="input2" size=14>
+</div>
+<div id="user_password">
+<span style="color:#ffcc00">密&emsp;&emsp;码：</span><input type="password" name="user_password" class="input2" size=14>
+</div>
+</form>
+<div id="login_btn">
+<a href="javascript:void(0);" onclick="mysubmit();" onblur="MM_swapImgRestore()"  onfocus="MM_swapImage('Image01','','src_800/image/login/qd2.gif',1)"><img src="src_800/image/login/qd1.gif" name="Image01" border="0"></a>
+&nbsp;&nbsp;
+<a href="setting_index.htm" onblur="MM_swapImgRestore()"  onfocus="MM_swapImage('Image02','','src_800/image/login/qx2.gif',1)"><img src="src_800/image/login/qx1.gif" name="Image02" border="0"></a>
+</div>
+</body>
+</html>

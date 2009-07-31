@@ -1,0 +1,173 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+<title>成都公交线路</title>
+<script language="JavaScript" type="text/JavaScript" src="locateCSS.js"></script>
+<script language="JavaScript" type="text/JavaScript" src="functions.js"></script>
+</head>
+
+<body id="bm_bus" onload="onfoc(0)">
+<div id="topnavi">
+<span class="bm_bus_navi">成都公交线路</span><span class="navi" style="margin-left:8em">第1页&nbsp;&nbsp;共1页</span>
+</div>
+
+<div id="bm_bus_item">
+<table border=0 width="100%" cellspacing=0 cellpadding=0>
+<tr>
+	<td><img src="src_800/image/service/bus/label1.gif" class="bm_bus_label"></td>
+	<td><img src="src_800/image/service/bus/label2.gif" class="bm_bus_label"></td>
+	<td><img src="src_800/image/service/bus/label3.gif" class="bm_bus_label"></td>
+	<td><img src="src_800/image/service/bus/label4.gif" class="bm_bus_label"></td>
+	<td><img src="src_800/image/service/bus/label5.gif" class="bm_bus_label"></td>
+</tr>
+<tr id="0" class="bm_bus_item">
+	<td>1路</td>
+
+	<td>青龙场中心站</td>
+	<td>八一家具城</td>
+	<td>6:00</td>
+	<td>23:00</td>
+</tr>
+	<tr id="1" class="bm_bus_item">
+	<td>2路</td>
+
+	<td>火车北站</td>
+	<td>五桂桥</td>
+	<td>5:45</td>
+	<td>22:30</td>
+</tr>
+	<tr id="2" class="bm_bus_item">
+	<td>3路</td>
+
+	<td>桦林园</td>
+	<td>九里堤公交站</td>
+	<td>6:15</td>
+	<td>23:00</td>
+</tr>
+	<tr id="3" class="bm_bus_item">
+	<td>4路</td>
+
+	<td>五桂桥中心站</td>
+	<td>茶店子客运站</td>
+	<td>5:50</td>
+	<td>23:00</td>
+</tr>
+	<tr id="4" class="bm_bus_item">
+	<td>5路</td>
+
+	<td>成洛路公交站</td>
+	<td>百花中心站</td>
+	<td>6:00</td>
+	<td>23:00</td>
+</tr>
+	<tr id="5" class="bm_bus_item">
+	<td>6路</td>
+
+	<td>机车车辆厂</td>
+	<td>桂溪公交站</td>
+	<td>6:15</td>
+	<td>22:10</td>
+</tr>
+	<tr id="6" class="bm_bus_item">
+	<td>7路</td>
+
+	<td>十里店公交站</td>
+	<td>文化宫</td>
+	<td>6:00</td>
+	<td>21:30</td>
+</tr>
+	<tr id="7" class="bm_bus_item">
+	<td>8路</td>
+
+	<td>十里店公交站</td>
+	<td>五大花园</td>
+	<td>6:10</td>
+	<td>21:30</td>
+</tr>
+	<tr id="8" class="bm_bus_item">
+	<td>9路</td>
+
+	<td>天回镇</td>
+	<td>火车北站</td>
+	<td>6:30</td>
+	<td>21:00</td>
+</tr>
+	</table>
+</div>
+</body>
+
+<script language="JavaScript" type="text/JavaScript">
+pageitem=9;
+var bus_name=new Array(9);
+bus_name[0]="1路";
+bus_name[1]="2路";
+bus_name[2]="3路";
+bus_name[3]="4路";
+bus_name[4]="5路";
+bus_name[5]="6路";
+bus_name[6]="7路";
+bus_name[7]="8路";
+bus_name[8]="9路";
+function onfoc(n)
+{
+	document.getElementById(n).style.backgroundImage="url(src_"+src_width+"/image/service/bus/bar1.gif)";
+	document.getElementById(n).style.color="#ffffff";
+//	show(n);
+}
+function losefoc(n)
+{
+	document.getElementById(n).style.backgroundImage="";
+	document.getElementById(n).style.color="#b6dbf8";
+}
+
+var key2=0;
+function keyDown(e)
+{
+	if (ie)
+	{
+		var keycode=event.keyCode; 
+	}
+	else
+	{
+		var keycode=e.which;
+	}
+	if (keycode==0)
+		keycode=e.keyCode;
+	if(keycode==38)
+	{
+		losefoc(key2);
+		key2=key2 - 1;
+		if(key2<0)
+			key2=8;
+		onfoc(key2);
+	}
+	if(keycode==40)
+	{
+		losefoc(key2);
+		key2=key2 + 1;
+		if(key2>8) 
+			key2=0;
+		onfoc(key2);
+	}
+	if(keycode==13)
+	{
+		location="bm_bus_site.html";
+	}
+	if(keycode==33 && 0!=0)
+	{
+		location="?offset=-9";
+	}
+	if(keycode==34 && 9 < 136)
+	{
+		location="?offset=9";
+	}
+	if(keycode==36)	
+	{
+		location = "common_info.html";
+	}
+}    
+document.onkeydown=keyDown
+
+//-->
+</script>
+</html>

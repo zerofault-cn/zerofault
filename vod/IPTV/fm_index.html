@@ -1,0 +1,370 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+<title>FM收听</title>
+<script language="JavaScript" type="text/JavaScript" src="locateCSS.js"></script>
+<script language="JavaScript" type="text/JavaScript" src="functions.js"></script>
+<script language="JavaScript" type="text/JavaScript">
+
+//一级节点,一维数组
+var str_arr=new Array();
+str_arr[0]=new Array();
+str_arr[0][0]="成都人民广播电台";
+str_arr[0][1]=new Array();
+str_arr[0][1][0]="新闻频道";
+str_arr[0][1][1]="rtsp://real2.cdbs.com.cn/broadcast/1.rm";
+str_arr[0][2]=new Array();
+str_arr[0][2][0]="交通频道";
+str_arr[0][2][1]="rtsp://real2.cdbs.com.cn/broadcast/2.rm";
+str_arr[0][3]=new Array();
+str_arr[0][3][0]="LOVE RADIO";
+str_arr[0][3][1]="rtsp://real2.cdbs.com.cn/broadcast/3.rm";
+str_arr[0][4]=new Array();
+str_arr[0][4][0]="文化休闲频道";
+str_arr[0][4][1]="rtsp://real2.cdbs.com.cn/broadcast/4.rm";
+str_arr[0][5]=new Array();
+str_arr[0][5][0]="飞跃调频";
+str_arr[0][5][1]="rtsp://real2.cdbs.com.cn:555/djok.smil";
+str_arr[1]=new Array();
+str_arr[1][0]="北京人民广播电台";
+str_arr[1][1]=new Array();
+str_arr[1][1][0]="新闻广播-FM100.6";
+str_arr[1][1][1]="mms://alive.bjradio.com.cn/fm1006";
+str_arr[1][2]=new Array();
+str_arr[1][2][0]="交通广播-FM103.9";
+str_arr[1][2][1]="mms://alive.bjradio.com.cn/fm1039";
+str_arr[1][3]=new Array();
+str_arr[1][3][0]="文艺广播-FM87.6";
+str_arr[1][3][1]="mms://alive.bjradio.com.cn/fm876";
+str_arr[1][4]=new Array();
+str_arr[1][4][0]="音乐广播-FM97.4";
+str_arr[1][4][1]="mms://alive.bjradio.com.cn/fm974";
+str_arr[1][5]=new Array();
+str_arr[1][5][0]="首都生活-AM603";
+str_arr[1][5][1]="mms://alive.bjradio.com.cn/am603";
+str_arr[2]=new Array();
+str_arr[2][0]="上海人民广播电台";
+str_arr[2][1]=new Array();
+str_arr[2][1][0]="新闻频率-AM990";
+str_arr[2][1][1]="mms://www.stv.sh.cn/990";
+str_arr[2][2]=new Array();
+str_arr[2][2][0]="交通频率-AM648";
+str_arr[2][2][1]="mms://www.stv.sh.cn/648";
+str_arr[2][3]=new Array();
+str_arr[2][3][0]="东广新闻台-AM1296";
+str_arr[2][3][1]="mms://www.stv.sh.cn/1045";
+str_arr[2][4]=new Array();
+str_arr[2][4][0]="都市792-AM792";
+str_arr[2][4][1]="mms://www.stv.sh.cn/792";
+str_arr[2][5]=new Array();
+str_arr[2][5][0]="动感101-FM101.7";
+str_arr[2][5][1]="mms://www.stv.sh.cn/popmusic";
+str_arr[2][6]=new Array();
+str_arr[2][6][0]="魅力103-FM103.7";
+str_arr[2][6][1]="mms://www.stv.sh.cn/103";
+str_arr[2][7]=new Array();
+str_arr[2][7][0]="经典947-FM94.7";
+str_arr[2][7][1]="mms://www.stv.sh.cn/classic";
+str_arr[2][8]=new Array();
+str_arr[2][8][0]="第一财经-FM97.7";
+str_arr[2][8][1]="mms://www.stv.sh.cn/977";
+str_arr[2][9]=new Array();
+str_arr[2][9][0]="开心调频-FM96.8";
+str_arr[2][9][1]="mms://www.stv.sh.cn/1422";
+str_arr[2][10]=new Array();
+str_arr[2][10][0]="海上戏剧-AM1197";
+str_arr[2][10][1]="mms://www.stv.sh.cn/1197";
+str_arr[3]=new Array();
+str_arr[3][0]="中央人民广播电台";
+str_arr[3][1]=new Array();
+str_arr[3][1][0]="第一套节目";
+str_arr[3][1][1]="rtsp://211.89.225.1/encoder/cnr1";
+str_arr[3][2]=new Array();
+str_arr[3][2][0]="第二套节目";
+str_arr[3][2][1]="rtsp://211.89.225.1/encoder/cnr2";
+str_arr[3][3]=new Array();
+str_arr[3][3][0]="第三套节目";
+str_arr[3][3][1]="rtsp://211.89.225.1/encoder/cnr3";
+str_arr[3][4]=new Array();
+str_arr[3][4][0]="第四套节目";
+str_arr[3][4][1]="rtsp://211.89.225.1/encoder/cnr4";
+str_arr[3][5]=new Array();
+str_arr[3][5][0]="第五套节目";
+str_arr[3][5][1]="rtsp://211.89.225.1/encoder/cnr5";
+str_arr[3][6]=new Array();
+str_arr[3][6][0]="第六套节目";
+str_arr[3][6][1]="rtsp://211.89.225.1/encoder/cnr6";
+str_arr[3][7]=new Array();
+str_arr[3][7][0]="第七套节目";
+str_arr[3][7][1]="rtsp://211.89.225.1/encoder/cnr7";
+str_arr[3][8]=new Array();
+str_arr[3][8][0]="第八套节目";
+str_arr[3][8][1]="rtsp://211.89.225.1/encoder/cnr8";
+
+
+var left_item=8;//每页显示专辑数
+var right_item=9;//每专辑每页显示歌曲数
+var left_focus=0;
+var right_focus=0;
+function init()
+{
+	for(i=0; i < Math.min(str_arr.length,left_item); i++)
+	{
+		document.getElementById(i).innerHTML=str_arr[i][0];
+	}
+	left_onfoc(0);
+}
+function left_onfoc(n)
+{
+	document.getElementById(n%left_item).style.backgroundImage="url(src_"+src_width+"/image/fm/bar1.gif)";
+	document.getElementById(n%left_item).style.color="#ffffff";
+	show(n);
+}
+function left_losefoc(n)
+{
+	document.getElementById(n%left_item).style.backgroundImage="";
+	document.getElementById(n%left_item).style.color="#b6dbf8";
+}
+function right_onfoc(n)
+{
+	document.getElementById(n%right_item+10).style.backgroundImage="url(src_"+src_width+"/image/fm/bar2.gif)";
+	td=document.getElementById(n%right_item+10);
+	dat =td.innerHTML;
+	dat = dat.substring(dat.indexOf("href="));
+	td.innerHTML = '<a style="color:#ffffff" ' + dat;
+	document.links[n%right_item].focus();
+}
+function right_losefoc(n)
+{
+	document.getElementById(n%right_item+10).style.backgroundImage="";
+	td=document.getElementById(n%right_item+10);
+	dat =td.innerHTML;
+	dat = dat.substring(dat.indexOf("href="));
+	td.innerHTML = '<a style="color:#b6dbf8" ' + dat;
+}
+function show(n) 
+{
+	for(i = 0; i < Math.min(str_arr[n].length-1,right_item); i++)
+	{
+		document.getElementById(i+10).innerHTML='<a style="color:#b6dbf8" href="javascript:void(0)">'+str_arr[n][i+1][0]+'</a>';
+	}
+	for(i=str_arr[n].length-1;i<right_item;i++)
+	{
+		document.getElementById(Math.round(i)+10).innerHTML='&nbsp;';
+	}
+	right_onfoc(0);
+}
+
+function left_newPage(n)
+{
+	if(n%left_item == left_item-1)//往上翻
+	{		
+		for(i = 0; i < left_item; i++) 
+		{
+			document.getElementById(i).innerHTML=str_arr[n-left_item+1+i][0];
+		}
+	}
+	else //往下翻
+	{
+		for(i = 0; i < left_item; i++) 
+		{
+			if((n + i) > (str_arr.length - 1)) 
+			{
+				document.getElementById(i).innerHTML='';
+			}
+			else 
+			{
+				document.getElementById(i).innerHTML=str_arr[n+i][0];
+			}
+		}
+	}
+	left_onfoc(n);
+}
+
+function right_newPage(left_n,right_n)
+{
+	if((right_n % right_item) == (right_item-1))//向前翻页
+	{		
+		for(i = 0; i < right_item; i++) 
+		{
+			document.getElementById(i+10).innerHTML='<a style="color:#b6dbf8" href="javascript:void(0)">'+str_arr[left_n][right_n-(right_item-1)+i+1][0]+'</a>';
+		}
+	}
+	else//向后翻页
+	{
+		for(i = 0; i < right_item; i++) 
+		{
+			if((right_n + i) > (str_arr[left_n].length-2)) 
+			{
+				document.getElementById(i+10).innerHTML='&nbsp;';
+			}
+			else 
+			{
+				document.getElementById(i+10).innerHTML='<a style="color:#b6dbf8" href="javascript:void(0)">'+str_arr[left_n][right_n+i+1][0]+'</a>';
+			}
+		}
+	}
+	right_onfoc(right_n);
+}
+
+function end()
+{
+	document.getElementById('blink').innerHTML='<br><blink>【0】键查看帮助</blink>';
+}
+
+
+function keyDown(e)
+{
+	if (ie)
+	{
+		var keycode=event.keyCode; 
+	}
+	else
+	{
+		var keycode=e.which;
+	}
+	if(keycode==37 && left_focus > 0)
+	{
+		left_losefoc(left_focus);
+		right_losefoc(right_focus);
+		right_focus=0;
+		j = left_focus % left_item;
+		left_focus--;
+		if(j == 0) 
+		{
+			left_newPage(left_focus);
+		}
+		else 
+		{
+			left_onfoc(left_focus);
+		}
+	}
+	if(keycode==39 && left_focus < str_arr.length-1)
+	{
+		left_losefoc(left_focus);
+		right_losefoc(right_focus);
+		right_focus=0;j = left_focus % left_item;
+		left_focus++;
+		if(j == left_item-1) 
+		{
+			left_newPage(left_focus);
+		}
+		else 
+		{
+			left_onfoc(left_focus);
+		}
+		
+	}
+	if(keycode==38 && right_focus > 0)
+	{
+		right_losefoc(right_focus);
+		j = right_focus % right_item;
+		right_focus--;
+		if(j == 0)
+		{
+			right_newPage(left_focus,right_focus);
+		}
+		else
+		{
+			right_onfoc(right_focus);
+		}
+	}
+	if(keycode==40 && right_focus < str_arr[left_focus].length-2)
+	{
+		right_losefoc(right_focus);
+		j = right_focus % right_item;
+		right_focus++;
+		if(j == (right_item-1))
+		{
+			right_newPage(left_focus,right_focus);
+		}
+		else
+		{
+			right_onfoc(right_focus);
+		}
+	}
+	if(keycode==13 || keycode==70)//播放键,播放光标位置所在处的歌曲
+	{
+		document.getElementById('nowplay').innerHTML='正在收听：'+str_arr[left_focus][0]+' '+str_arr[left_focus][right_focus+1][0];
+		location=str_arr[left_focus][right_focus+1][1];
+	}
+	if(keycode==36)//返回
+	{
+		location="index.html";
+	}
+}
+document.onkeydown=keyDown
+</script>
+</head>
+
+<body id="fm_index" onload="init()">
+<div id="topnavi">
+<span class="topnavi">FM收听</span>
+</div>
+<div id="fm_left_item">
+<table width="100%" border="0" cellpadding="0" cellspacing="0">
+<tr>
+	<td id=0 class="fm_left_item"></td>
+</tr>
+<tr>
+	<td id=1 class="fm_left_item"></td>
+</tr>
+<tr>
+	<td id=2 class="fm_left_item"></td>
+</tr>
+<tr>
+	<td id=3 class="fm_left_item"></td>
+</tr>
+<tr>
+	<td id=4 class="fm_left_item"></td>
+</tr>
+<tr>
+	<td id=5 class="fm_left_item"></td>
+</tr>
+<tr>
+	<td id=6 class="fm_left_item"></td>
+</tr>
+<tr>
+	<td id=7 class="fm_left_item"></td>
+</tr>
+</table>
+</div>
+<div id="fm_right_item">
+<table width="100%" border=0 cellpadding=0 cellspacing=0 rules=rows frame=void class="style30b">
+<tr>
+	<td id=10 class="fm_right_item"></td>
+</tr>
+<tr>
+	<td id=11 class="fm_right_item"></td>
+</tr>
+<tr>
+	<td id=12 class="fm_right_item"></td>
+</tr>
+<tr>
+	<td id=13 class="fm_right_item"></td>
+</tr>
+<tr>
+	<td id=14 class="fm_right_item"></td>
+</tr>
+<tr>
+	<td id=15 class="fm_right_item"></td>
+</tr>
+<tr>
+	<td id=16 class="fm_right_item"></td>
+</tr>
+<tr>
+	<td id=17 class="fm_right_item"></td>
+</tr>
+<tr>
+	<td id=18 class="fm_right_item"></td>
+</tr>
+</table>
+</div>
+<div id="fm_tips">
+左右选电台,上下选频道
+</div>
+<div id="fm_nowplay">
+<span id="nowplay">请选择电台频道,按"确定"或"播放"键开始收听!</span>
+</div>
+</body>
+</html>

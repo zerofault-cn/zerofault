@@ -1,0 +1,382 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+<title>天气预报</title>
+<script language="JavaScript" type="text/JavaScript" src="locateCSS.js"></script>
+<script language="JavaScript" type="text/JavaScript">
+if(screen.width==800)
+{
+	document.write('<link rel="stylesheet" href="src_800/weather_cn.css" type="text/css">');
+}
+else if(screen.width==640)
+{
+	document.write('<link rel="stylesheet" href="src_640/weather_cn.css" type="text/css">');
+}
+else
+{
+	document.write('<link rel="stylesheet" href="src_800/weather_cn.css" type="text/css">');
+}
+</script>
+<script language="JavaScript" type="text/JavaScript" src="functions.js"></script>
+<script language="JavaScript" type="text/JavaScript">
+var city=new Array(34);
+var city_info=new Array(34);
+var weather=new Array(34);
+var weather_pic=new Array(34);
+city[0]="北京";
+city_info[0]="城市：北京<br>多云转晴<br>2 ~ -7 ℃<br>北风5-6级";
+weather[0]="多云转晴";
+weather_pic[0]='<img src="src_'+src_width+'/image/weather/duoyun.gif" height=50>~<img src="src_'+src_width+'/image/weather/qing.gif" height=50>';
+city[1]="哈尔滨";
+city_info[1]="城市：哈尔滨<br>小雪转中雪<br>-8 ~ -14 ℃<br>西风3-4级转微风";
+weather[1]="小雪转中雪";
+weather_pic[1]='<img src="src_'+src_width+'/image/weather/xiaoxue.gif" height=50>~<img src="src_'+src_width+'/image/weather/zhongxue.gif" height=50>';
+city[2]="长春";
+city_info[2]="城市：长春<br>多云<br>-7 ~ -16 ℃<br>微风";
+weather[2]="多云";
+weather_pic[2]='<img src="src_'+src_width+'/image/weather/duoyun.gif" height=50>';
+city[3]="沈阳";
+city_info[3]="城市：沈阳<br>多云<br>-7 ~ -18 ℃<br>北风3-4级";
+weather[3]="多云";
+weather_pic[3]='<img src="src_'+src_width+'/image/weather/duoyun.gif" height=50>';
+city[4]="天津";
+city_info[4]="城市：天津<br>阴转晴<br>0 ~ -8 ℃<br>北风6-7级";
+weather[4]="阴转晴";
+weather_pic[4]='<img src="src_'+src_width+'/image/weather/yin.gif" height=50>~<img src="src_'+src_width+'/image/weather/qing.gif" height=50>';
+city[5]="呼和浩特";
+city_info[5]="城市：呼和浩特<br>多云转晴<br>-9 ~ -20 ℃<br>西北风5-6级转3-4级";
+weather[5]="多云转晴";
+weather_pic[5]='<img src="src_'+src_width+'/image/weather/duoyun.gif" height=50>~<img src="src_'+src_width+'/image/weather/qing.gif" height=50>';
+city[6]="乌鲁木齐";
+city_info[6]="城市：乌鲁木齐<br>多云<br>-5 ~ -9 ℃<br>微风";
+weather[6]="多云";
+weather_pic[6]='<img src="src_'+src_width+'/image/weather/duoyun.gif height=50>';
+city[7]="银川";
+city_info[7]="城市：银川<br>多云<br>-5 ~ -15 ℃<br>北风5-6级转4-5级";
+weather[7]="多云";
+weather_pic[7]='<img src="src_'+src_width+'/image/weather/duoyun.gif" height=50>';
+city[8]="西宁";
+city_info[8]="城市：西宁<br>晴<br>1 ~ -13 ℃<br>东南风4-5级转微风";
+weather[8]="晴";
+weather_pic[8]='<img src="src_'+src_width+'/image/weather/qing.gif" height=50>';
+city[9]="兰州";
+city_info[9]="城市：兰州<br>多云<br>0 ~ -8 ℃<br>微风";
+weather[9]="多云";
+weather_pic[9]='<img src="src_'+src_width+'/image/weather/duoyun.gif" height=50>';
+city[10]="西安";
+city_info[10]="城市：西安<br>多云转晴<br>7 ~ -3 ℃<br>微风";
+weather[10]="多云转晴";
+weather_pic[10]='<img src="src_'+src_width+'/image/weather/duoyun.gif" height=50>~<img src="src_'+src_width+'/image/weather/qing.gif" height=50>';
+city[11]="拉萨";
+city_info[11]="城市：拉萨<br>多云<br>13 ~ -6 ℃<br>微风";
+weather[11]="多云";
+weather_pic[11]='<img src="src_'+src_width+'/image/weather/duoyun.gif" height=50>';
+city[12]="成都";
+city_info[12]="城市：成都<br>多云<br>12 ~ 4 ℃<br>微风";
+weather[12]="多云";
+weather_pic[12]='<img src="src_'+src_width+'/image/weather/duoyun.gif" height=50>';
+city[13]="重庆";
+city_info[13]="城市：重庆<br>阴<br>12 ~ 7 ℃<br>微风";
+weather[13]="阴";
+weather_pic[13]='<img src="src_'+src_width+'/image/weather/yin.gif" height=50>';
+city[14]="贵阳";
+city_info[14]="城市：贵阳<br>小雨转冻雨<br>4 ~ 0 ℃<br>微风";
+weather[14]="小雨转冻雨";
+weather_pic[14]='<img src="src_'+src_width+'/image/weather/xiaoyu.gif" height=50>~<img src="src_'+src_width+'/image/weather/dongyu.gif" height=50>';
+city[15]="昆明";
+city_info[15]="城市：昆明<br>晴转多云<br>21 ~ 8 ℃<br>微风";
+weather[15]="晴转多云";
+weather_pic[15]='<img src="src_'+src_width+'/image/weather/qing.gif" height=50>~<img src="src_'+src_width+'/image/weather/duoyun.gif" height=50>';
+city[16]="太原";
+city_info[16]="城市：太原<br>多云<br>0 ~ -11 ℃<br>西北风4-5级";
+weather[16]="多云";
+weather_pic[16]='<img src="src_'+src_width+'/image/weather/duoyun.gif" height=50>';
+city[17]="石家庄";
+city_info[17]="城市：石家庄<br>阴转多云<br>3 ~ -4 ℃<br>西北风5-6级";
+weather[17]="阴转多云";
+weather_pic[17]='<img src="src_'+src_width+'/image/weather/yin.gif" height=50>~<img src="src_'+src_width+'/image/weather/duoyun.gif" height=50>';
+city[18]="济南";
+city_info[18]="城市：济南<br>雨夹雪转多云<br>4 ~ -7 ℃<br>北风5-6级";
+weather[18]="雨夹雪转多云";
+weather_pic[18]='<img src="src_'+src_width+'/image/weather/yujiaxue.gif" height=50>~<img src="src_'+src_width+'/image/weather/duoyun.gif" height=50>';
+city[19]="郑州";
+city_info[19]="城市：郑州<br>晴<br>9 ~ -1 ℃<br>北风5-6级";
+weather[19]="晴";
+weather_pic[19]='<img src="src_'+src_width+'/image/weather/qing.gif" height=50>';
+city[20]="合肥";
+city_info[20]="城市：合肥<br>雨夹雪转多云<br>10 ~ 0 ℃<br>北风4-5级";
+weather[20]="雨夹雪转多云";
+weather_pic[20]='<img src="src_'+src_width+'/image/weather/yujiaxue.gif" height=50><img src="src_'+src_width+'/image/weather/duoyun.gif" height=50>';
+city[21]="南京";
+city_info[21]="城市：南京<br>小雨转阴<br>9 ~ 0 ℃<br>西北风5-6级";
+weather[21]="小雨转阴";
+weather_pic[21]='<img src="src_'+src_width+'/image/weather/xiaoyu.gif" height=50><img src="src_'+src_width+'/image/weather/yin.gif" height=50>';
+city[22]="上海";
+city_info[22]="城市：上海<br>小雨<br>12 ~ 3 ℃<br>东北风4-5级转北风5-6级";
+weather[22]="小雨";
+weather_pic[22]='<img src="src_'+src_width+'/image/weather/xiaoyu.gif" height=50>';
+city[23]="武汉";
+city_info[23]="城市：武汉<br>多云<br>9 ~ 2 ℃<br>微风";
+weather[23]="多云";
+weather_pic[23]='<img src="src_'+src_width+'/image/weather/duoyun.gif" height=50>';
+city[24]="长沙";
+city_info[24]="城市：长沙<br>小雨转多云<br>11 ~ 4 ℃<br>微风";
+weather[24]="小雨转多云";
+weather_pic[24]='<img src="src_'+src_width+'/image/weather/xiaoyu.gif" height=50><img src="src_'+src_width+'/image/weather/duoyun.gif" height=50>';
+city[25]="南昌";
+city_info[25]="城市：南昌<br>小雨转多云<br>10 ~ 3 ℃<br>北风3-4级";
+weather[25]="小雨转多云";
+weather_pic[25]='<img src="src_'+src_width+'/image/weather/xiaoyu.gif" height=50><img src="src_'+src_width+'/image/weather/duoyun.gif" height=50>';
+city[26]="杭州";
+city_info[26]="城市：杭州<br>中雨转小雨<br>10 ~ 2 ℃<br>北风5-6级";
+weather[26]="中雨转小雨";
+weather_pic[26]='<img src="src_'+src_width+'/image/weather/zhongyu.gif" height=50><img src="src_'+src_width+'/image/weather/xiaoyu.gif" height=50>';
+city[27]="福州";
+city_info[27]="城市：福州<br>多云转小雨<br>20 ~ 13 ℃<br>微风";
+weather[27]="多云转小雨";
+weather_pic[27]='<img src="src_'+src_width+'/image/weather/duoyun.gif" height=50><img src="src_'+src_width+'/image/weather/xiaoyu.gif" height=50>';
+city[28]="台北";
+city_info[28]="城市：台北<br>多云转阵雨<br>26 ~ 12 ℃<br>微风";
+weather[28]="多云转阵雨";
+weather_pic[28]='<img src="src_'+src_width+'/image/weather/duoyun.gif" height=50><img src="src_'+src_width+'/image/weather/zhenyu.gif" height=50>';
+city[29]="南宁";
+city_info[29]="城市：南宁<br>多云转阵雨<br>19 ~ 12 ℃<br>微风";
+weather[29]="多云转阵雨";
+weather_pic[29]='<img src="src_'+src_width+'/image/weather/duoyun.gif" height=50><img src="src_'+src_width+'/image/weather/zhenyu.gif" height=50>';
+city[30]="海口";
+city_info[30]="城市：海口<br>多云转阴<br>27 ~ 18 ℃<br>东北风4-5级";
+weather[30]="多云转阴";
+weather_pic[30]='<img src="src_'+src_width+'/image/weather/duoyun.gif" height=50><img src="src_'+src_width+'/image/weather/yin.gif" height=50>';
+city[31]="广州";
+city_info[31]="城市：广州<br>多云转阴<br>26 ~ 11 ℃<br>北风3-4级";
+weather[31]="多云转阴";
+weather_pic[31]='<img src="src_'+src_width+'/image/weather/duoyun.gif" height=50><img src="src_'+src_width+'/image/weather/yin.gif" height=50>';
+city[32]="香港";
+city_info[32]="城市：香港<br>多云转小雨<br>24 ~ 14 ℃<br>东风3-4级";
+weather[32]="多云转小雨";
+weather_pic[32]='<img src="src_'+src_width+'/image/weather/duoyun.gif" height=50><img src="src_'+src_width+'/image/weather/xiaoyu.gif" height=50>';
+city[33]="澳门";
+city_info[33]="城市：澳门<br>多云转小雨<br>25 ~ 14 ℃<br>东风3-4级";
+weather[33]="多云转小雨";
+weather_pic[33]='<img src="src_'+src_width+'/image/weather/duoyun.gif" height=50><img src="src_'+src_width+'/image/weather/xiaoyu.gif" height=50>';
+var i=0;
+var pageitem=9;
+function init()
+{
+	for(k = 0; k < pageitem; k++)
+	{
+		document.getElementById(k).innerHTML=city[k];
+	}
+	onfoc(i);
+}
+function onfoc(n)
+{
+	document.getElementById(n%pageitem).style.backgroundImage="url(src_"+src_width+"/image/weather/bar1.gif)";
+	document.getElementById(n%pageitem).style.color="#ffffff";
+	show(n);
+}
+function losefoc(n)
+{
+	document.getElementById(n%pageitem).style.backgroundImage="";
+	document.getElementById(n%pageitem).style.color="#b6dbf8";
+	unshow(n);
+}
+
+function show(n) {
+	document.getElementById('city_info').innerHTML=city_info[n];
+	ta=document.getElementById(city[n]);
+	ta.innerHTML='<table border=0 width=170 height=100 cellspacing=0 cellpadding=0 background="src_'+src_width+'/image/weather/weather_pop.gif"><tr><td height=2></td></tr><tr><td align=center valign=top class="popText">'+weather_pic[n]+'<br>'+weather[n]+'</td></tr></table>';
+}
+
+function unshow(n)
+{
+	document.getElementById(city[n]).innerHTML='';
+}
+
+function newPage(n) 
+{
+	if((n % pageitem)==(pageitem-1))
+	{		
+		for(k = 0; k < pageitem; k++) 
+		{
+			document.getElementById(k).innerHTML=city[n-pageitem+k+1];
+		}
+	}
+	else 
+	{
+		for(k = 0; k < pageitem; k++) 
+		{
+			if((n + k) > (city.length - 1)) 
+			{
+				document.getElementById(k).innerHTML='';
+			}
+			else 
+			{
+				document.getElementById(k).innerHTML=city[n + k];
+			}
+		}
+	}
+	onfoc(n);
+}
+if(document.all)
+{
+	var ie=1;
+	var ns=0;
+}
+else
+{
+	var ns=1;
+	var ie=0;
+}
+function keyDown(e)
+{
+	if (ns)
+	{ 
+		var keycode=e.which
+	} 
+	if (ie)
+	{ 
+		var keycode=event.keyCode; 
+	} 
+	if(keycode==38 && i>0)
+	{
+		losefoc(i);
+		j=i%pageitem;
+		i--;
+		if(j == 0) 
+		{
+			newPage(i);
+		}
+		else 
+		{
+			onfoc(i);
+		}
+	}
+	if(keycode==40 && i < city.length - 1)
+	{
+		losefoc(i);
+		j=i%pageitem;
+		i++;
+		if(j==pageitem-1)
+		{
+			newPage(i);
+		}
+		else
+		{
+			onfoc(i);
+		}
+	}
+	if(keycode==33 && i-pageitem>=0)
+	{
+		losefoc(i);
+		i=pageitem*Math.floor((i-pageitem)/pageitem);
+		newPage(i);
+	}
+	if(keycode==34 && i+pageitem<city.length-1)
+	{
+		losefoc(i);
+		i=pageitem*Math.floor((i+pageitem)/pageitem);
+		newPage(i);
+	}
+	if(keycode==36)
+	{
+		location ="service_index.html";
+	}
+}
+document.onkeydown=keyDown
+
+//-->
+</script>
+</head>
+<body id="weather" onload="init()">
+<div id="北京"></div>
+<div id="哈尔滨"></div>
+<div id="长春"></div>
+<div id="沈阳"></div>
+<div id="天津"></div>
+<div id="呼和浩特"></div>
+<div id="乌鲁木齐"></div>
+<div id="银川"></div>
+<div id="西宁"></div>
+<div id="兰州"></div>
+<div id="西安"></div>
+<div id="拉萨"></div>
+<div id="成都"></div>
+<div id="重庆"></div>
+<div id="贵阳"></div>
+<div id="昆明"></div>
+<div id="太原"></div>
+<div id="石家庄"></div>
+<div id="济南"></div>
+<div id="郑州"></div>
+<div id="合肥"></div>
+<div id="南京"></div>
+<div id="上海"></div>
+<div id="武汉"></div>
+<div id="长沙"></div>
+<div id="南昌"></div>
+<div id="杭州"></div>
+<div id="福州"></div>
+<div id="台北"></div>
+<div id="南宁"></div>
+<div id="海口"></div>
+<div id="广州"></div>
+<div id="香港"></div>
+<div id="澳门"></div>
+<div id="topnavi">
+<span class="weather_title">24小时国内城市天气预报<span style="margin-left:2em">12月03日-12月04日</span></span>
+</div>
+<div id="weather_city_info">
+<table border=0 cellspacing=0 cellpadding=0>
+<tr>
+	<td width=7><img src="src_800/image/weather/left_top.gif"></td>
+	<td background="src_800/image/weather/top.gif" style="background-repeat:repeat"></td>
+	<td><img src="src_800/image/weather/right_top.gif"></td>
+</tr>
+<tr>
+	<td background="src_800/image/weather/left.gif"></td>
+	<td id="city_info" class="fullText" bgcolor="#feffed"></td>
+	<td background="src_800/image/weather/right.gif"></td>
+</tr>
+<tr>
+	<td><img src="src_800/image/weather/left_bottom.gif"></td>
+	<td background="src_800/image/weather/bottom.gif" style="background-repeat:repeat"></td>
+	<td><img src="src_800/image/weather/right_bottom.gif"></td>
+</tr>
+</table>
+</div>
+<div id="weather_city_item">
+<table border=0 width="100%" cellspacing=0 cellpadding=0>
+<!--***********************************城市列表**************************-->
+<tr>
+	<td id="0" class="weather_city_item"></td>
+</tr>
+<tr>
+	<td id="1" class="weather_city_item"></td>
+</tr>
+<tr>
+	<td id="2" class="weather_city_item"></td>
+</tr>
+<tr>
+	<td id="3" class="weather_city_item"></td>
+</tr>
+<tr>
+	<td id="4" class="weather_city_item"></td>
+</tr>
+<tr>
+	<td id="5" class="weather_city_item"></td>
+</tr>
+<tr>
+	<td id="6" class="weather_city_item"></td>
+</tr>
+<tr>
+	<td id="7" class="weather_city_item"></td>
+</tr>
+<tr>
+	<td id="8" class="weather_city_item"></td>
+</tr>
+<!--*************************************************************-->
+</table>
+</div>
+</body>
+</html>

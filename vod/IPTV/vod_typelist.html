@@ -1,0 +1,129 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+<title>VOD分类列表</title>
+<script language="JavaScript" type="text/JavaScript" src="locateCSS.js"></script>
+</head>
+<body id="vod_typelist" onload="onfoc(0)">
+<div id="topnavi">
+<span class="topnavi">中国音像在线</span>
+</div>
+<div id="vod_pagenavi">
+<span class="navi"><span id="pagenum">第 1 页</span><span id="pagecount">共 1 页</span></span>
+</div>
+<div id="vod_tips">
+<span id="vod_tips">左右键翻页 上下键选择</span>
+</div>
+<div id="vod_typelist_item">
+<table id="vod_typelist_item" border=0 width="100%" cellspacing=0 cellpadding=0>
+<tr>
+	<td id=0 class="vod_item"><a style="color:#b6dbf8" href='vod_namelist.html'>最新大片</a></td>
+</tr>
+<tr>
+	<td id=1 class="vod_item"><a style="color:#b6dbf8" href='vod_hotlist.html'>热门点播</a></td>
+</tr>
+<tr>
+	<td id=2 class="vod_item"><a style="color:#b6dbf8" href="prog_list_1.shtml">动作片</a></td>
+</tr>
+<tr>
+	<td id=3 class="vod_item"><a style="color:#b6dbf8" href="prog_list_21.shtml">爱情片</a></td>
+</tr>
+<tr>
+	<td id=4 class="vod_item"><a style="color:#b6dbf8" href="prog_list_22.shtml">喜剧片</a></td>
+</tr>
+<tr>
+	<td id=5 class="vod_item"><a style="color:#b6dbf8" href="prog_list_23.shtml">恐怖片</a></td>
+</tr>
+<tr>
+	<td id=6 class="vod_item"><a style="color:#b6dbf8" href="prog_list_24.shtml">科幻片</a></td>
+</tr>
+<tr>
+	<td id=7 class="vod_item"><a style="color:#b6dbf8" href="prog_list_25.shtml">战争片</a></td>
+</tr>
+<tr>
+	<td id=8 class="vod_item"><a style="color:#b6dbf8" href="prog_list_25.shtml">动画片</a></td>
+</tr>
+</table>
+</div>
+</body>
+<script language="JavaScript" type="text/JavaScript" src="functions.js"></script>
+<script language="JavaScript" type="text/JavaScript">
+<!--
+var key2=0;
+function onfoc(n) {
+	document.getElementById(n).style.backgroundImage="url(src_"+src_width+"/image/vod/bar2.gif)";
+	td=document.getElementById(n);
+	dat =td.innerHTML;
+	dat = dat.substring(dat.indexOf("href="));
+	td.innerHTML = '<a style="color:#ffffff" ' + dat;
+	document.links[n].focus();
+}
+
+function losefoc(n) {
+	document.getElementById(n).style.backgroundImage="";
+	td=document.getElementById(n);
+	dat =td.innerHTML;
+	dat = dat.substring(dat.indexOf("href="));
+	td.innerHTML = '<a style="color:#b6dbf8" ' + dat;
+}
+function keyDown(e)
+{
+	if (ie)
+	{
+		var keycode=event.keyCode; 
+	}
+	else
+	{
+		var keycode=e.which;
+	}
+	var key1 = keycode -48;
+	var patern=/^[1-link_count]$/; 
+	if (patern.exec(key1)) 
+	{
+		if(key1 == key2 + 1) 
+			onfoc(key1 - 1);
+		else
+		{
+			losefoc(key2);
+			onfoc(key1 - 1)
+			key2 = key1 -1;
+		}
+		location=document.links[key2];
+	}
+	if(keycode==36)//HOME键
+	{
+		location="vod_index.html";
+	}
+	if(keycode==38)//光标左上键
+	{
+		losefoc(key2);
+		key2=key2 - 1;
+		if(key2<0)
+		{
+			key2=link_count-1;
+		}
+		onfoc(key2)
+	}
+	if(keycode==40)//光标右下键
+	{
+		losefoc(key2);
+		key2=key2 + 1;
+		if(key2>link_count-1)
+		{
+			key2=0;
+		}
+		onfoc(key2)
+	}
+	if(keycode==37 || keycode==33)
+	{
+		location=pre_page;
+	}
+	if(keycode==39 || keycode==34)
+	{
+		location=next_page;
+	}
+}
+document.onkeydown=keyDown
+//-->
+</script>
+</html>

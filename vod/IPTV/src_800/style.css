@@ -1,0 +1,1061 @@
+/********************通用属性***********************************/
+a:link,a:visited,a:hover,a:active
+{
+	text-decoration: none;
+}
+body
+{
+	font-family:"SimHei","黑体","Verdana","Tahoma","Georgia","Times New Roman","Arial Narrow","Arial";
+	background-Attachment:fixed;
+	background-repeat:no-repeat;
+	Margin-Left:0;
+	Margin-Top:0;
+	font-size:32px;
+	color:#b6dbf8;
+}
+table
+{
+	font-size:32px;
+}
+td
+{
+	background-position:center;
+	background-repeat:no-repeat;
+}
+div
+{
+	position:absolute;
+}
+/******/
+/***************所有页面共用************************************/
+span.navi
+{
+	font-size:30px;
+	color:#ffcc00;
+}
+div#topnavi
+{
+	margin-left:93px;
+	margin-top:34px;
+}
+span.topnavi
+{
+	font-size:32px;
+	letter-spacing:5px;
+	font-weight:bold;
+	color:#ccff00;
+}
+/****************/
+
+/*****************登录页面***************************************/
+body#login
+{
+	background-Image:url("image/login/bg.jpg");
+}
+div#user_account
+{
+	margin-left:208px;
+	margin-top:210px;
+}
+div#user_password
+{
+	margin-left:208px;
+	margin-top:290px;
+}
+div#login_btn
+{
+	margin-left:260px;
+	margin-top:360px;
+}
+/********************/
+/**************首页**********************************************/
+body#index
+{
+	background-Image:url("image/menu/bg.jpg");
+}
+div#index_menu
+{
+	margin-left:156px;
+	margin-top:80px;
+	width:304px;
+	height:460px;
+}
+td.index_menu
+{
+	text-align:center;
+}
+div#realtime
+{
+	margin-left:460px;
+	margin-top:30px;
+	width:300px;
+	height:50px;
+}
+div#icon
+{
+	margin-left:460px;
+	margin-top:164px;
+	width:340px;
+	height:262px;
+}
+div#tips
+{
+	margin-left:489px;
+	margin-top:440px;
+	width:278px;
+	height:93px;
+}
+table#tips
+{
+	font-size: 20px;
+}
+td.tips
+{
+	text-align:center;
+	padding:0 0 7px 0;
+}
+/******************/
+
+/*****************TV_station1************************************/
+body#tv_station
+{
+	background-Image:url("image/tv/bg1.jpg");
+}
+div#tv_num
+{
+	margin-left:70px;
+	margin-top:40px;
+	width:100px;
+	height:86px;
+}
+span.tv_num
+{
+	font-size:32px;
+	color:#00FF00;
+}
+div#tv_item
+{
+	margin-left:143px;
+	margin-top:86px;
+	width:328px;
+	height:464px;
+}
+td.tv_item
+{
+	height:50px;
+	padding:0 0 0 20px;
+}
+div#tv_navi
+{
+	margin-left:515px;
+	margin-top:510px;
+}
+/***************/
+
+/****************tv_station2********************************/
+body#tv_station2
+{
+	background-Image:url("image/tv2/bg1.jpg");
+}
+div#tv_player
+{
+	margin-left:54px;
+	margin-top:25px;
+	width:393px;
+	height:295px;
+}
+div#tv_guide
+{
+	margin-left:50px;
+	margin-top:339px;
+	width:736px;
+}
+table#tv_guide
+{
+	font-size:30px;
+}
+
+/****************/
+
+/****************tv_station3********************************/
+body#tv_station3
+{
+	background-Image:url("image/tv3/bg1.jpg");
+}
+div#tv3_left_item
+{
+	margin-left:59px;
+	margin-top:82px;
+	width:338px;
+}
+table#tv3_left_item td
+{
+	height:50px;
+	padding:0 0 0 5px;
+	background-position:left center;
+}
+div#tv3_right_item
+{
+	margin-left:390px;
+	margin-top:88px;
+	width:340px;
+}
+table#tv3_right_item td
+{
+	height:40px;
+	padding:0 0 0 5px;
+}
+div#tv3_tips
+{
+	margin-left:66px;
+	margin-top:456px;
+	font-size:30px;
+}
+div#tv3_nowplay
+{
+	margin-left:66px;
+	margin-top:516px;
+	font-size:30px;
+	color:#ffcc00;
+}
+/**********************/
+
+/****************VOD共用************************************/
+div#vod_pagenavi
+{
+	margin-left:66px;
+	margin-top:432px;
+}
+span#pagenum
+{
+	margin-left:64px;
+}
+span#pagecount
+{
+	margin-left:50px;
+}
+div#vod_tips
+{
+	margin-left:66px;
+	margin-top:490px;
+}
+span#vod_tips
+{
+	font-size:30px;
+	color:#b6dbf8;
+}
+td.vod_item
+{
+	height:47px;
+	padding:0 0 0 15px;
+	background-position:left center;
+}
+/********************/
+
+/*********************VOD主菜单************************************/
+body#vod_index
+{
+	background-Image:url("image/vod/bg1.jpg");
+}
+div#vod_index_menu
+{
+	margin-left:248px;
+	margin-top:144px;
+	width:300px;
+	height:320px;
+}
+/******************/
+
+/******************VOD类型列表*********************************/
+body#vod_typelist
+{
+	background-Image:url("image/vod/bg2.jpg");
+}
+div#vod_typelist_item
+{
+	margin-left:474px;
+	margin-top:93px;
+}
+/******************/
+
+/******************VOD片名列表*****************************/
+body#vod_namelist
+{
+	background-Image:url("image/vod/bg3.jpg");
+}
+div#vod_namelist_item
+{
+	margin-left:452px;
+	margin-top:93px;
+}
+/******************/
+
+/******************VOD播放页面*******************************/
+body#vod_info
+{
+	background-Image:url("image/vod/bg4.jpg");
+}
+div#vod_haibao
+{
+	margin-left:50px;
+	margin-top:97px;
+}
+div#vod_intro
+{
+	margin-left:383px;
+	margin-top:97px;
+	width:370px;
+	height:475px;
+}
+marquee#vod_intro
+{
+	font-size:30px;
+	color:#b6dbf8;
+}
+img.haibao
+{
+	width:280px;
+	height:371px;
+ }
+/*****************/
+
+/***********************music共用*********************************/
+img.photo
+{
+	width:128px;
+	height:166px;
+}
+/*****************/
+/*************************MUSIC主菜单******************************/
+body#music_index
+{
+	background-Image:url("image/music/bg1.jpg");
+}
+div#music_index_menu
+{
+	margin-left:225px;
+	margin-top:179px;
+	width:300px;
+	height:210px;
+}
+td.music_index_menu
+{
+	text-align:center;
+}
+/*****************/
+
+/*****************在线音乐*********************************/
+body#music_online
+{
+	background-Image:url("image/music/bg2.jpg");
+}
+div#music_online_menu
+{
+	margin-left:0;
+	margin-top:109px;
+	width:480px;
+	height:350px;
+}
+td.music_online_menu
+{
+	padding:0 0 0 95px;
+}
+div#music_online_sysinfo
+{
+	margin-left:520px;
+	margin-top:173px;
+	font-size:30px;
+	color:#b6dbf8;
+	line-height:180%;
+}
+/*****************/
+
+/***************歌手分类***********************************/
+body#music_typelist
+{
+	background-Image:url("image/music/bg3.jpg");
+}
+div#music_typelist_menu
+{
+	margin-left:235px;
+	margin-top:144px;
+	width:300px;
+	height:340px;
+}
+td.music_typelist_menu
+{
+	text-align:center;
+}
+/******************/
+
+/****************歌手列表***********************************/
+body#music_singerlist
+{
+	background-Image:url("image/music/bg4.jpg");
+}
+div#music_singerlist_item
+{
+	margin-left:23px;
+	margin-top:70px;
+	width:756px;
+}
+td.music_photo_item
+{
+	text-align:center;
+	height:194px;
+}
+td.music_singerlist_item
+{
+	text-align:center;
+	height:56px;
+}
+/*******************/
+
+/****************歌手歌曲列表*******************************/
+body#music_singersong
+{
+	background-Image:url("image/music/bg5.jpg");
+}
+div#music_singersong_photo
+{
+	margin-left:55px;
+	margin-top:84px;
+}
+div#music_singersong_name
+{
+	margin-left:220px;
+	margin-top:197px;
+	color:#ffffff;
+}
+div#music_singersong_marquee
+{
+	margin-left:55px;
+	margin-top:280px;
+	width:400px;
+	font-size:30px;
+}
+div#music_singersong_item
+{
+	margin-left:481px;
+	margin-top:94px;
+	width:319px;
+}
+td.music_singersong_item
+{
+	height:45px;
+	padding:0 0 0 5px;
+	background-position:left center;
+}
+/***********************/
+
+/******************FM收听*********************************/
+body#fm_index
+{
+	background-Image:url("image/fm/bg1.jpg");
+}
+div#fm_left_item
+{
+	margin-left:60px;
+	margin-top:88px;
+	width:338px;
+}
+td.fm_left_item
+{
+	height:50px;
+	padding:0 0 0 5px;
+	background-position:left center;
+}
+div#fm_right_item
+{
+	margin-left:424px;
+	margin-top:88px;
+	width:340px;
+}
+td.fm_right_item
+{
+	height:45px;
+	padding:0 0 0 5px;
+	background-position:left center;
+	border-bottom:#000000 1px groove;
+}
+div#fm_tips
+{
+	margin-left:66px;
+	margin-top:456px;
+	font-size:30px;
+}
+div#fm_nowplay
+{
+	margin-left:66px;
+	margin-top:516px;
+	font-size:30px;
+	color:#ffcc00;
+}
+/*******************/
+
+/*******************可视电话首页************************/
+body#vphone_index
+{
+	background-Image:url("image/vphone/bg1.jpg");
+}
+div#vphone_index_menu
+{
+	margin-left:248px;
+	margin-top:139px;
+	width:300px;
+	height:280px;
+}
+td.vphone_index_menu
+{
+	text-align:center;
+}
+/*******************/
+/******************可视电话界面*************************/
+body#vphone_call
+{
+	background-Image:url("image/vphone/bg2.jpg");
+}
+div#vphone_status
+{
+	margin-left:220px;
+	margin-top:448px;
+}
+span.vphone_status
+{
+	color:#ffcc00;
+}
+div#vphone_call_menu
+{
+	margin-left:100px;
+	margin-top:500px;
+	width:600px;
+}
+td.vphone_call_menu
+{
+	font-size:30px;
+	text-align:center;
+}
+/*****************/
+/******************通讯薄****************************/
+body#directory
+{
+	background-Image:url("image/directory/bg1.jpg");
+}
+div.popDiv
+{
+	margin-left:0px;
+	margin-top:0px;
+	width:800px;
+	height:600px;
+}
+table#popDivTable
+{
+	background-Image:url("image/directory/bg2.png");
+	background-Attachment:fixed;
+	background-repeat:no-repeat;
+}
+div#popInnerDiv
+{
+	margin-left:118px;
+	margin-top:92px;
+	width:580px;
+}
+table#popInnerTable
+{
+	height:410px;
+	font-size:30px;
+}
+td.popInnerTableCaption
+{
+	height:40px;
+	text-align:left;
+	color:#ccff00;
+	padding:0 0 0 8px;
+}
+td.popInnerFooter
+{
+	height:35px;
+}
+div#dir_group_table
+{
+	margin-left:26px;
+	margin-top:39px;
+	width:145px;
+}
+td.dir_label
+{
+	height:60px;
+	color:#ffcc00;
+}
+td.dir_group_item
+{
+	height:50px;
+	padding:0 0 0 10px;
+}
+div#dir_contact_table
+{
+	margin-left:185px;
+	margin-top:39px;
+	width:590px;
+}
+td.dir_contact_item
+{
+	height:44px;
+}
+div#dir_oper_table
+{
+	margin-left:28px;
+	margin-top:529px;
+	width:740px;
+}
+td.dir_oper_menu
+{
+	font-size:26px;
+	color:#b6dbf8;
+}
+.input2
+{
+	BACKGROUND-COLOR: white; 
+	BORDER-BOTTOM: #ffffff 1px solid; 
+	BORDER-LEFT: #ffffff 1px solid; 
+	BORDER-RIGHT: #ffffff 1px solid; 
+	BORDER-TOP: #ffffff 1px solid; 
+	FONT-FAMILY: "SimHei","黑体","Verdana"; 
+	font-size: 24px;
+}
+/****************/
+
+/****************可视电话设置******************************/
+body#setting_vphone
+{
+	background-Image:url("image/vphone/setting/bg1.jpg");
+}
+div#vphone_form
+{
+	margin-left:88px;
+	margin-top:160px;
+	width:488px;
+	height:267px;
+}
+/*****************/
+
+/********************游戏娱乐******************************/
+body#game_index
+{
+	background-Image:url("image/game/bg1.jpg");
+}
+div#game_index_menu
+{
+	margin-left:250px;
+	margin-top:160px;
+	width:280px;
+	height:230px;
+}
+td.game_index_menu
+{
+	padding:0 0 0 38px;
+}
+
+body#flash_namelist
+{
+	background-Image:url("image/flash/bg1.jpg");
+}
+div#flash_namelist_item
+{
+	margin-left:426px;
+	margin-top:94px;
+	width:337px;
+}
+td.flash_item
+{
+	height:52px;
+	padding:0 0 0 20px;
+}
+body#flash_player
+{
+	background-color:#0066cc;
+	color:#0066cc;
+	line-height:130%;
+}
+div#flash
+{
+	width:800px;
+}
+div#flash_game_embed
+{
+	margin-left:80px;
+	margin-top:60px;
+	width:652px;
+	height:492px;
+	background-color:#000044;
+	position:relative;
+}
+embed#embed1
+{
+	margin-top:6px;
+	margin-left:6px;
+	width:640px;
+	height:480px;
+}
+div#flash_mtv_embed
+{
+	width:800px;
+	height:600px;
+}
+/***********************/
+
+/*******************新闻首页*****************************/
+body#news_index
+{
+	background-Image:url("image/news/bg1.jpg");
+}
+div#news_index_menu
+{
+	margin-left:185px;
+	margin-top:110px;
+	width:300px;
+	height:370px;
+}
+/********************/
+
+/*******************新闻标题*******************************/
+body#news_title
+{
+	background-Image:url("image/news/bg2.jpg");
+}
+div#news_title_item
+{
+	margin-left:60px;
+	margin-top:90px;
+	width:705px;
+}
+td.news_title_item
+{
+	height:50px;
+	padding:0 0 0 15px;
+	background-position:left center;
+}
+/******************/
+
+/*****************新闻内容**********************************/
+body#news_info
+{
+	background-Image:url("image/news/bg3.jpg");
+}
+div#mplayer
+{
+	margin-left:61px;
+	margin-top:118px;
+	width:328px;
+	height:236px;
+}
+div#news_info
+{
+	margin-left:430px;
+	margin-top:70px;
+	width:323px;
+	height:423px;
+}
+p#news_info
+{
+	font-size:30px;
+}
+/******************/
+/*****************信息服务*********************************/
+body#service_index
+{
+	background-Image:url("image/service/bg1.jpg");
+}
+div#service_index_menu
+{
+	margin-left:247px;
+	margin-top:149px;
+	width:280px;
+	height:330px;
+}
+div#service_index_menu table td
+{
+	padding-left:34px;
+}
+td.common_info_menu
+{
+	padding:0 0 0 32px;
+}
+/*********************/
+
+/******************网页浏览******************************/
+body#web_link
+{
+	background-Image:url("image/service/web_link/bg.jpg");
+}
+div#web_link_menu
+{
+	margin-left:80px;
+	margin-top:130px;
+	width:640px;
+	height:414px;
+}
+td.web_link_menu
+{
+	height:138px;
+	text-align:center;
+}
+div#web_addr
+{
+	margin-left:76px;
+	margin-top:30px;
+}
+span.web_addr
+{
+	font-size:30px;
+	color:#ccff00;
+}
+/***********************/
+
+/*********************天气预报******************************/
+body#weather
+{
+	background-Image:url("image/weather/bg.jpg");
+}
+td.popText
+{
+	height:80px;
+	font-size:24px;
+	color:#000000;
+	line-height:90%;
+}
+td.fullText
+{
+	font-size:24px;
+	color:#000000;
+}
+span.weather_title
+{
+	font-size:30px;
+	color:#ccff00;
+}
+div#weather_city_info
+{
+	margin-left:20px;
+	margin-top:454px;
+}
+div#weather_city_item
+{
+	margin-left:535px;
+	margin-top:154px;
+	width:265px;
+}
+td.weather_city_item
+{
+	height:41px;
+	text-align:center;
+}
+/*********************/
+
+
+/*******************常用电话*********************************/
+body#dianhua
+{
+	background-Image:url("image/service/bg2.jpg");
+}
+div#dianhua_item
+{
+	margin-left:80px;
+	margin-top:90px;
+	width:650px;
+}
+table.dianhua_item_table
+{
+	height:54px;
+}
+div#dianhua_navi
+{
+	margin-left:80px;
+	margin-top:490px;
+	width:600px;
+}
+/***********************/
+
+/******************火车线路*********************************/
+body#bm_huoche
+{
+	background-Image:url("image/service/huoche/bg1.jpg");
+}
+div#bm_huoche_line
+{
+	margin-left:58px;
+	margin-top:124px;
+	width:162px;
+}
+td.bm_huoche_line
+{
+	text-align:center;
+	height:48px;
+}
+div#bm_huoche_lineinfo
+{
+	margin-left:244px;
+	margin-top:90px;
+	width:516px;
+	height:360px;
+}
+/*******************BUS线路************************************/
+body#bm_bus
+{
+	background-Image:url("image/service/bus/bg1.jpg");
+}
+span.bm_bus_navi
+{
+	color:#ccff00;
+}
+div#bm_bus_item
+{
+	margin-left:60px;
+	margin-top:84px;
+	width:705px;
+}
+tr.bm_bus_item
+{
+	height:48px;
+}
+/*******************BUS线路详细*********************************/
+body#bm_bus_site
+{
+	background-Image:url("image/service/bus/bg2.jpg");
+}
+div#start_time
+{
+	margin-left:260px;
+	margin-top:88px;
+}
+div#end_time
+{
+	margin-left:558px;
+	margin-top:88px;
+}
+div#bm_bus_site
+{
+	margin-left:58px;
+	margin-top:182px;
+	width:290px;
+}
+td.bm_bus_site_item
+{
+	height:42px;
+}
+div#bm_bus_site_info
+{
+	margin-left:374px;
+	margin-top:187px;
+	width:387px;
+}
+td.bm_bus_subsite
+{
+	height:50px;
+	background-repeat:repeat-x;
+	background-position:left center;
+}
+/******************/
+
+/******************航班************************************/
+body#bm_airline
+{
+	background-Image:url("image/service/airline/bg1.jpg");
+}
+div#bm_caption
+{
+	margin-left:58px;
+	margin-top:87px;
+	width:162px;
+}
+/******************帐号与设置******************************/
+body#setting_index
+{
+	background-Image:url("image/setting/bg1.jpg");
+}
+div#setting_index_menu
+{
+	margin-left:248px;
+	margin-top:178px;
+	width:300px;
+	height:270px;
+}
+/******************/
+
+/******************网路设置********************************/
+body#setting_network
+{
+	background-Image:url("image/network/bg1.jpg");
+}
+div#set_dial
+{
+	margin-left:90px;
+	margin-top:100px;
+}
+div#set_eth
+{
+	margin-left:90px;
+	margin-top:140px;
+}
+div#set_dhcp
+{
+	margin-left:120px;
+	margin-top:180px;
+}
+div#set_static
+{
+	margin-left:120px;
+	margin-top:220px;
+}
+div#network_form
+{
+	margin-left:120px;
+	margin-top:260px;
+	width:440px;
+}
+/******************/
+
+/******************拨号设置********************************/
+body#setting_dial1
+{
+	background-Image:url("image/dial/bg1.jpg");
+}
+body#setting_dial2
+{
+	background-Image:url("image/dial/bg2.jpg");
+}
+div#dial_keyboard
+{
+	margin-left:0px;
+	margin-top:172px;
+	width:760px;
+}
+div#dial_account
+{
+	margin-left:335px;
+	margin-top:110px;
+}
+div#dial_passwd
+{
+	margin-left:335px;
+	margin-top:110px;
+}
+/******************/
+
+/******************帐号管理********************************/
+body#account_manage
+{
+	background-Image:url("image/account/bg2.jpg");
+}
+div#parent_acc
+{
+	margin-left:62px;
+	margin-top:88px;
+	width:700px;
+}
+div#child_acc
+{
+	margin-left:62px;
+	margin-top:236px;
+	width:700px;
+}

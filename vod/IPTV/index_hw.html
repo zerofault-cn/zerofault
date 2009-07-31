@@ -1,0 +1,156 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+<title>主菜单</title>
+<script>
+if(screen.width==800)
+{
+	document.write('<link rel="stylesheet" href="src_800/style.css" type="text/css">');
+}
+else if(screen.width==640)
+{
+	document.write('<link rel="stylesheet" href="src_640/style.css" type="text/css">');
+}
+else
+{
+	document.write('<link rel="stylesheet" href="src_800/style.css" type="text/css">');
+}
+</script>
+</head>
+<body id="index" onload="onfoc(0)">
+<div id="index_menu"><!-- 菜单部分 -->
+<table id="index_menu" border="0" width="100%" height="100%" cellpadding="0" cellspacing="0">
+<tr>
+	<td id="0" class="index_menu"><a style="color:#b6dbf8" href="http://www.chinavnet.com">1.电视上网</a>&nbsp;</td>
+</tr>
+<tr>
+	<td id="1" class="index_menu"><a style="color:#b6dbf8" href="#">2.视听欣赏</a>&nbsp;</td>
+</tr>
+<tr>
+	<td id="2" class="index_menu"><a style="color:#b6dbf8" href="fm_index.html">3. FM 收听</a>&nbsp;</td>
+</tr>
+<tr>
+	<td id="3" class="index_menu"><a style="color:#b6dbf8" href="vphone_index.html">4.可视电话</a>&nbsp;</td>
+</tr>
+<tr>
+	<td id="4" class="index_menu"><a style="color:#b6dbf8" href="http://www.10jqka.com.cn/ex_info/jhq/LoadHexin.php">5.股票信息</a>&nbsp;</td>
+</tr>
+<tr>
+	<td id="5" class="index_menu"><a style="color:#b6dbf8" href="game_index.html">6.游戏娱乐</a>&nbsp;</td>
+</tr>
+</table>
+</div>
+<div id="realtime"><!-- 时间 -->
+<embed src="clock.swf" quality="high" type="application/x-shockwave-flash" width="100%" height="100%"></embed>
+</div>
+<div id="icon" align=center><!-- ICON -->
+<img id="iconImg" src=""></img>
+</div>
+<div id="tips"><!-- 帮助，设置等 -->
+<table id="tips" width="100%" height="100%" cellspacing=0 cellpadding=0>
+<tr>
+	<td id="6" valign="bottom" class="tips"><a style="color:#b6dbf8" href="shutdown://">关 机</a></td>
+	<td id="7" valign="bottom" class="tips"><a style="color:#b6dbf8" href="#">设 置</a></td>
+	<td id="8"valign="bottom" class="tips"><a style="color:#b6dbf8" href="http://sntx.169ol.com:8088/">帮 助</a></td>
+</tr>
+</table>
+</div>
+</body>
+<script language="JavaScript" type="text/JavaScript" src="functions.js"></script>
+<script language="JavaScript" type="text/JavaScript">
+<!--
+
+function onfoc(n) {
+	var bar_img="";
+	switch (n)
+	{
+		case 6:
+			bar_img="util.gif";
+			break;
+		case 7:
+			bar_img="setup.gif";
+			break;
+		case 8:
+			bar_img="help.gif";
+			break;
+		default:
+			bar_img="bar1.gif";
+	}
+	document.getElementById(n).style.backgroundImage="url(src_"+src_width+"/image/menu/"+bar_img+")";
+	td=document.getElementById(n);
+	dat =td.innerHTML;
+	dat = dat.substring(dat.indexOf("href="));
+	td.innerHTML = '<a style="color:#ffffff" ' + dat;
+	if(n<9)
+	{
+		show_icon(n);
+	}
+	document.links[n].focus();
+}
+
+function losefoc(n) {
+	document.getElementById(n).style.backgroundImage="";
+	td=document.getElementById(n);
+	dat =td.innerHTML;
+	dat = dat.substring(dat.indexOf("href="));
+	td.innerHTML = '<a style="color:#b6dbf8" ' + dat;
+}
+function show_icon(n)
+{
+	document.getElementById('iconImg').src="src_"+src_width+"/image/menu/icon"+n+".gif";
+}
+function keyDown(e)
+{
+	if (ie)
+	{
+		var keycode=event.keyCode; 
+	}
+	else
+	{
+		var keycode=e.which;
+	}
+	var key1 = keycode -48;
+	var patern=/^[1-link_count]$/; 
+	if (patern.exec(key1)) 
+	{
+		if(key1 == key2 + 1) 
+		{
+			onfoc(key1-1);
+		}
+		else
+		{
+			losefoc(key2);
+			onfoc(key1-1)
+			key2=key1-1;
+		}
+		location=document.links[key2];
+	}
+	if(keycode==36)//HOME键
+	{
+	//	location="menu.html";
+	}
+	if(keycode==38)//光标左上键
+	{
+		losefoc(key2);
+		key2=key2 - 1;
+		if(key2<0)
+		{
+			key2=link_count-1;
+		}
+		onfoc(key2)
+	}
+	if(keycode==40)//光标右下键
+	{
+		losefoc(key2);
+		key2=key2 + 1;
+		if(key2>link_count-1)
+		{
+			key2=0;
+		}
+		onfoc(key2)
+	}
+}
+document.onkeydown=keyDown
+//-->
+</script>
+</html>

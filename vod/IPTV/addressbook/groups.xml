@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="GB2312"?>
+<groups>
+     <group> 
+        <name>亲戚亲戚</name>
+        <ring>1</ring>
+        <id>2005112101</id>
+     </group>
+     <group> 
+        <name>朋友</name>
+        <ring>2</ring>
+        <id>2005112102</id>
+     </group>
+	 <group> 
+        <name>同事</name>
+        <ring>2</ring>
+        <id>2005112102</id>
+     </group>
+	 <group> 
+        <name>同事</name>
+        <ring>2</ring>
+        <id>2005112102</id>
+     </group>
+	 <group> 
+        <name>同事</name>
+        <ring>2</ring>
+        <id>2005112102</id>
+     </group>
+	 <group> 
+        <name>同事</name>
+        <ring>2</ring>
+        <id>2005112102</id>
+     </group>
+	 <group> 
+        <name>同事</name>
+        <ring>2</ring>
+        <id>2005112102</id>
+     </group>
+
+</groups>

@@ -1,0 +1,97 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+<title>帮助</title>
+<script language="JavaScript" type="text/JavaScript" src="locateCSS.js"></script>
+</head>
+<body id="help_index" onload="show_help(0)">
+<div id="topnavi">
+<span class="topnavi">快速使用指南-><span id="topnavi2"></span></span>
+</div>
+<div id="help">
+<table id="help" border=0 width="100%" height="100%" cellspacing=0 cellpadding=0>
+<tr>
+	<td id="help_info" valign="top">
+	</td>
+</tr>
+</table>
+</div>
+<div id="help_navi">
+<table id="help_navi" border=0 width="100%" height="100%" cellspacing=0 cellpadding=0>
+<tr>
+	<td width="50%" align="center"><span id="pre" class="navi"></span></td>
+	<td width="50%" align="center"><span id="next" class="navi"></span></td>
+</tr>
+</table>
+</div>
+</table>
+</body>
+<script language="JavaScript" type="text/JavaScript" src="functions.js"></script>
+<script language="JavaScript" type="text/JavaScript">
+<!--
+var help_arr=new Array();
+help_arr[0]=new Array()
+help_arr[0][0]='基本概念';
+help_arr[0][1]='一、基本概念<br><br><div>“家易通”开机启动完成后，会打开一个显示有[登录]、[设置]、[帮助]的界面，以后称这个界面为“主页”。<div><br><div>登录后进入一个包含服务功能菜单的界面，以后都称这一界面为“主菜单”。</div>';
+help_arr[1]=new Array();
+help_arr[1][0]='基本操作';
+help_arr[1][1]='二、基本操作<br><div>使用遥控器的【上】,【下】,【左】,【右】键来移动绿色选中条所在位置,选中条所在处菜单文字变亮，表示已选中这个菜单，然后按【OK】键则进入此菜单对应的页面。</div><div>进入某一页面后，如果页面上有“返回”按钮，您可以通过移动焦点到“返回”按钮上使之选中，然后按【OK】即可返回上级页面，也可以直接按遥控器上的【MENU】键返回上级页面。</div><div>在任何时候，您都可以按遥控器上的【GUIDE】键回到“主页”。</div>';
+help_arr[2]=new Array();
+help_arr[2][0]='关于登录';
+help_arr[2][1]='三、关于登录<br><div>要使用“家易通”提供的功能和服务，您必须先确认您的网络已经接通。</div><br><div>从“主页”上选择[登录]菜单并按【OK】键，如果出现一个需要您输入用户名和密码的界面，则说明网络已畅通，使用您申请到的用户名和密码登录就可以进入主菜单了</div><br><div>如果画面许久都没有变化，则说明您的网络存在故障，需要找网络服务商解决。</div>'
+help_arr[3]=new Array()
+help_arr[3][0]='关于设置'
+help_arr[3][1]='四、关于设置<br><div>在初次安装或您的网络环境改变的情况下，您需要对您的“家易通”进行设置。<div><div>具体设置内容包括：<li>网络设置——设置您的连网方式，网络IP等</li><li>拨号设置——如果您是ADSL拨号上网方式，您需要在这里设置ADSL的用户名和密码</li><li>电话设置——如果您的家易通支持“网通NGN可视电话”功能，您还需要在这里设置帐号、密码、网守等。</li></div><div>详细设置方法见《家易通用户使用手册》</div>'
+
+function show_help(n)
+{
+	document.getElementById("topnavi2").innerHTML=help_arr[n][0];
+	document.getElementById("help_info").innerHTML=help_arr[n][1];
+	if(n>0)
+	{
+		document.getElementById("pre").innerHTML='上页';
+	}
+	else
+	{
+		document.getElementById("pre").innerHTML='';
+	}
+	if(n<help_arr.length-1)
+	{
+		document.getElementById("next").innerHTML='下页';
+	}
+	else
+	{
+		document.getElementById("next").innerHTML='';
+	}
+}
+var key2=0;
+function keyDown(e)
+{
+	if (ie)
+	{
+		var keycode=event.keyCode; 
+	}
+	else
+	{
+		var keycode=e.which;
+	}
+	var key1 = keycode -48;
+	if(keycode==36)//HOME键
+	{
+		location="index.html";
+	}
+	if(key2>0 && (keycode==37 || keycode==38 || keycode==33))//光标左上键
+	{
+		key2--;
+		show_help(key2);
+	}
+	if(key2<help_arr.length-1 && (keycode==39 || keycode==40 || keycode==34))//光标右下键
+	{
+		key2++;
+		show_help(key2);
+	}
+}
+document.onkeydown=keyDown
+//-->
+</script>
+</html>

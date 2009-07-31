@@ -1,0 +1,116 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+<title>可视电话配置</title>
+<script language="JavaScript" type="text/JavaScript" src="locateCSS.js"></script>
+<script language="JavaScript" type="text/JavaScript" src="functions.js"></script>
+<script language="JavaScript" type="text/JavaScript">
+<!--
+/*******************************
+帐号，密码，网守地址,网守端口
+VPHONENUM,
+VPHONEPASSWD,
+VPHONEGKIP,
+VPHONEGKPORT
+*******************************/
+//读取原始配置,初始化默认值
+/******************************
+var oldVPHONENUM	='12345678';
+var oldVPHONEPASSWD	='87654321';
+var oldVPHONEGKIP	='221.10.50.130';
+var oldVPHONEGKPORT	='10000';
+/******************************/
+var oldVPHONENUM	=	iPanel.ioctlRead("NETCONFIG", "VPHONENUM")=='UNDEFINED'?'':iPanel.ioctlRead("NETCONFIG", "VPHONENUM");
+var oldVPHONEPASSWD	=	'';
+var oldVPHONEGKIP	=	iPanel.ioctlRead("NETCONFIG", "VPHONEGKIP")=='UNDEFINED'?'221.10.50.130':iPanel.ioctlRead("NETCONFIG", "VPHONEGKIP");
+var oldVPHONEGKPORT	=	iPanel.ioctlRead("NETCONFIG", "VPHONEGKPORT")=='UNDEFINED'?'':iPanel.ioctlRead("NETCONFIG", "VPHONEGKPORT");
+/*******************************/
+
+function init()
+{
+	document.form1.acc.value=oldVPHONENUM;
+	document.form1.pwd.value=oldVPHONEPASSWD;
+	document.form1.gk1.value=oldVPHONEGKIP.substring(0,oldVPHONEGKIP.indexOf('.'));
+	oldVPHONEGKIP=oldVPHONEGKIP.substring(oldVPHONEGKIP.indexOf('.')+1);
+	document.form1.gk2.value=oldVPHONEGKIP.substring(0,oldVPHONEGKIP.indexOf('.'));
+	oldVPHONEGKIP=oldVPHONEGKIP.substring(oldVPHONEGKIP.indexOf('.')+1);
+	document.form1.gk3.value=oldVPHONEGKIP.substring(0,oldVPHONEGKIP.indexOf('.'));
+	oldVPHONEGKIP=oldVPHONEGKIP.substring(oldVPHONEGKIP.indexOf('.')+1);
+	document.form1.gk4.value=oldVPHONEGKIP;
+	document.form1.port.value=oldVPHONEGKPORT;
+	document.form1.acc.focus();
+}
+
+function save()
+{ 
+	acc	=document.form1.acc.value;
+	pwd	=document.form1.pwd.value;
+	gk	=document.form1.gk1.value+'.'+document.form1.gk2.value+'.'+document.form1.gk3.value+'.'+document.form1.gk4.value;
+	port=document.form1.port.value;
+
+	iPanel.ioctlWrite("NETCONFIG", "VPHONENUM", acc);
+	iPanel.ioctlWrite("NETCONFIG", "VPHONEPASSWD", pwd);
+	iPanel.ioctlWrite("NETCONFIG", "VPHONEGKIP", gk);
+	iPanel.ioctlWrite("NETCONFIG", "VPHONEGKPORT", port);
+
+	location="vphone_index.html";
+}
+function fanhui()
+{
+	location="vphone_index.html";
+}
+	
+function keyDown(e)
+{
+	var keycode=e.which;
+	if (keycode==0)
+	{
+		keycode=e.keyCode;
+	}
+	if (keycode==35) 
+	{
+		save();
+	}
+	if (keycode==36)  
+	{
+		fanhui();
+	}
+}
+document.onkeydown=keyDown;
+//-->
+</script>
+</head>
+
+<body id="setting_vphone" onload="init()">
+<div id="topnavi">
+<span class="topnavi">可视电话设置</span>
+</div>
+<div id="vphone_form">
+<table border=0 width="100%" height="100%" cellpadding=0 cellspacing=0>
+<form name="form1">
+<tr>
+	<td width="38%" align="right">帐&emsp;号：</td>
+	<td><input type="text" name="acc" class="input2" size=15 value=""></td>
+</tr>
+<tr>
+	<td align="right">密&emsp;码：</td>
+	<td><input type="text" name="pwd" class="input2" size=15 value=""></td>
+</tr>
+<tr>
+	<td align="right">网&emsp;守：</td>
+	<td><input type="text" name="gk1" class="input2" size="2" maxlength="3" value="">.<input type="text" name="gk2" class="input2" size="2" maxlength="3" value="">.<input type="text" name="gk3" class="input2" size="2" maxlength="3" value="">.<input type="text" name="gk4" class="input2" size="2" maxlength="3" value=""></td>
+</tr>
+<tr>
+	<td align="right">端&emsp;口：</td>
+	<td><input type="text" name="port" class="input2" size=15 value=""></td>
+</tr>
+<tr>
+	<td colspan=2 align="center">
+	<a href="javascript:void(0)" onclick="save()" onblur="MM_swapImgRestore()"  onfocus="MM_swapImage('Image5','','src_800/image/network/qd2.gif',1)"><img src="src_800/image/network/qd1.gif" name="Image5" border="0" class="btn"></a>&nbsp;
+	<a href="javascript:void(0);" onclick="fanhui()" onblur="MM_swapImgRestore()" onfocus="MM_swapImage('Image6','','src_800/image/network/fh2.gif',1)"><img src="src_800/image/network/fh1.gif" name="Image6" border="0" class="btn"></a></td>
+</tr>
+</form>
+</table>
+</div>
+</body>
+</html>

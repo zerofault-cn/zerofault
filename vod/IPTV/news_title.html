@@ -1,0 +1,116 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+<title>新闻标题</title>
+<script language="JavaScript" type="text/JavaScript" src="locateCSS.js"></script>
+</head>
+<body id="news_title" onload="onfoc(0)">
+<div id="topnavi">
+<span class="topnavi">今日焦点</span><span class="navi" style="margin-left:8em">第1页&nbsp;&nbsp;共1页</span>
+</div>
+<div id="news_title_item">
+<table border=0 width="100%" cellspacing=0 cellpadding=0>
+<tr>
+	<td id=0 class="news_title_item"><a style="color:#b6dbf8" href="news_info.html">1.国际原子能机构理事会未能达成决议</a></td>
+</tr>
+<tr>
+	<td id=1 class="news_title_item"><a style="color:#b6dbf8" href="news_info_2.html">2.最高人民法院公布3起重大责任事故案</a></td>
+</tr>
+<tr>
+	<td id=2 class="news_title_item"><a style="color:#b6dbf8" href="news_info_3.html">3.医院无资质 鼻子被隆歪 美容变毁容 </a></td>
+</tr>
+<tr>
+	<td id=3 class="news_title_item"><a style="color:#b6dbf8" href="news_info.html">4.数千考生收到假通知书 湖北通报招生诈骗案</a></td>
+</tr>
+<tr>
+	<td id=4 class="news_title_item"><a style="color:#b6dbf8" href="news_info.html">5.呼和浩特一座黄河浮桥断裂 4辆拉煤车坠河</a></td>
+</tr>
+<tr>
+	<td id=5 class="news_title_item"><a style="color:#b6dbf8" href="news_info.html">6. 纽约原油期货价格创新高</a></td>
+</tr>
+<tr>
+	<td id=6 class="news_title_item"><a style="color:#b6dbf8" href="news_info.html">7.[经济半小时]中小投资者有了话语权</a></td>
+</tr>
+<tr>
+	<td id=7 class="news_title_item"><a style="color:#b6dbf8" href="news_info.html">8. “伟哥”进入中国药业零售市场</a></td>
+</tr>
+<tr>
+	<td id=8 class="news_title_item"><a style="color:#b6dbf8" href="news_info.html">9. 意大利两名女人质安全回国</a></td>
+</tr>
+</table>
+</div>
+</body>
+<script language="JavaScript" type="text/JavaScript" src="functions.js"></script>
+<script language="JavaScript" type="text/JavaScript">
+<!--
+function onfoc(n) {
+	document.getElementById(n).style.backgroundImage="url(src_"+src_width+"/image/news/bar2.gif)";
+	td=document.getElementById(n);
+	dat =td.innerHTML;
+	dat = dat.substring(dat.indexOf("href="));
+	td.innerHTML = '<a style="color:#ffffff" ' + dat;
+	document.links[n].focus();
+}
+
+function losefoc(n) {
+	document.getElementById(n).style.backgroundImage="";
+	td=document.getElementById(n);
+	dat =td.innerHTML;
+	dat = dat.substring(dat.indexOf("href="));
+	td.innerHTML = '<a style="color:#b6dbf8" ' + dat;
+}
+function keyDown(e)
+{
+	if (ie)
+	{
+		var keycode=event.keyCode; 
+	}
+	else
+	{
+		var keycode=e.which;
+	}
+	var key1 = keycode -48;
+	var patern=/^[1-link_count]$/; 
+	if (patern.exec(key1)) 
+	{
+		if(key1 == key2 + 1) 
+		{
+			onfoc(key1-1);
+		}
+		else
+		{
+			losefoc(key2);
+			onfoc(key1-1)
+			key2=key1-1;
+		}
+		location=document.links[key2];
+	}
+	if(keycode==36)//HOME键
+	{
+		location="news_index.html";
+	}
+	if(keycode==38)//光标左上键
+	{
+		losefoc(key2);
+		key2=key2 - 1;
+		if(key2<0)
+		{
+			key2=link_count-1;
+		}
+		onfoc(key2)
+	}
+	if(keycode==40)//光标右下键
+	{
+		losefoc(key2);
+		key2=key2 + 1;
+		if(key2>link_count-1)
+		{
+			key2=0;
+		}
+		onfoc(key2)
+	}
+}
+document.onkeydown=keyDown
+//-->
+</script>
+</html>

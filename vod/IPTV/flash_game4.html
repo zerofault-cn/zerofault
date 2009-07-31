@@ -1,0 +1,26 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+<title>无标题文档</title>
+<script language="JavaScript" type="text/JavaScript" src="locateCSS.js"></script>
+<script language="JavaScript" type="text/JavaScript">
+function keyDown(e)
+{
+	var keycode=e.which;
+	if(keycode==36)
+	{
+		location="javascript:history.go(-1)";
+	}
+}
+document.onkeydown=keyDown
+</script>
+</head>
+<body id="flash_player" oonload="document.getElementsByTagName('embed')[0].focus()">
+<div id="flash">
+<div id="flash_game_embed">
+<embed id="embed1" src="flash_game/FeiShuHuaShui.swf" quality="low" type="application/x-shockwave-flash"></embed>
+</div>
+</div>
+</body>
+游戏攻略：用【上下】键可以使划水者左右移动，以避免撞到障碍物；用【上】键可以急刹车用以减缓速度，用【下】键可以加速；用【确定】键可以跳跃，可用以跳过障碍物。
+</html>
