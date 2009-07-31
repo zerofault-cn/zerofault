@@ -1,0 +1,109 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+<title>常用服务电话提示</title>
+<script language="JavaScript" type="text/JavaScript" src="locateCSS.js"></script>
+<script language="JavaScript" type="text/JavaScript" src="functions.js"></script>
+<script language="JavaScript" type="text/JavaScript">
+var line=new Array("匪　　警","火　　警","交通事故","医疗急救","报时服务","天气预报","声讯服务台","邮编查询","中国电信电话报障","中国电信号码查询","中国网通服务热线","中国电信服务热线","中国移动客服热线","中国联通客服热线","市长热线","消费投诉","价格投诉");
+
+var line_info=new Array("<table border=0 cellpadding=0 cellspacing=0 width=100% class=dianhua_item_table><tr><td style=color:#b3ffe1>匪　　警</td><td align=right style=color:#b3ffe1>110</td></tr></table>","<table border=0 cellpadding=0 cellspacing=0 width=100% class=dianhua_item_table><tr><td style=color:#b3ffe1>火　　警</td><td align=right style=color:#b3ffe1>119</td></tr></table>","<table border=0 cellpadding=0 cellspacing=0 width=100% class=dianhua_item_table><tr><td style=color:#b3ffe1>交通事故</td><td align=right style=color:#b3ffe1>122</td></tr></table>","<table border=0 cellpadding=0 cellspacing=0 width=100% class=dianhua_item_table><tr><td style=color:#b3ffe1>医疗急救</td><td align=right style=color:#b3ffe1>120</td></tr></table>","<table border=0 cellpadding=0 cellspacing=0 width=100% class=dianhua_item_table><tr><td style=color:#b3ffe1>报时服务</td><td align=right style=color:#b3ffe1>117</td></tr></table>","<table border=0 cellpadding=0 cellspacing=0 width=100% class=dianhua_item_table><tr><td style=color:#b3ffe1>天气预报</td><td align=right style=color:#b3ffe1>121</td></tr></table>","<table border=0 cellpadding=0 cellspacing=0 width=100% class=dianhua_item_table><tr><td style=color:#b3ffe1>声讯服务台</td><td align=right style=color:#b3ffe1>168</td></tr></table>","<table border=0 cellpadding=0 cellspacing=0 width=100% class=dianhua_item_table><tr><td style=color:#b3ffe1>邮编查询</td><td align=right style=color:#b3ffe1>185</td></tr></table>","<table border=0 cellpadding=0 cellspacing=0 width=100% class=dianhua_item_table><tr><td style=color:#b3ffe1>中国电信电话报障</td><td align=right style=color:#b3ffe1>112</td></tr></table>","<table border=0 cellpadding=0 cellspacing=0 width=100% class=dianhua_item_table><tr><td style=color:#b3ffe1>中国电信号码查询</td><td align=right style=color:#b3ffe1>114</td></tr></table>","<table border=0 cellpadding=0 cellspacing=0 width=100% class=dianhua_item_table><tr><td style=color:#b3ffe1>中国网通服务热线</td><td align=right style=color:#b3ffe1>10060</td></tr></table>","<table border=0 cellpadding=0 cellspacing=0 width=100% class=dianhua_item_table><tr><td style=color:#b3ffe1>中国电信服务热线</td><td align=right style=color:#b3ffe1>10000</td></tr></table>","<table border=0 cellpadding=0 cellspacing=0 width=100% class=dianhua_item_table><tr><td style=color:#b3ffe1>中国移动客服热线</td><td align=right style=color:#b3ffe1>1860</td></tr></table>","<table border=0 cellpadding=0 cellspacing=0 width=100% class=dianhua_item_table><tr><td style=color:#b3ffe1>中国联通客服热线</td><td align=right style=color:#b3ffe1>10010</td></tr></table>","<table border=0 cellpadding=0 cellspacing=0 width=100% class=dianhua_item_table><tr><td style=color:#b3ffe1>市长热线</td><td align=right style=color:#b3ffe1>12345</td></tr></table>","<table border=0 cellpadding=0 cellspacing=0 width=100% class=dianhua_item_table><tr><td style=color:#b3ffe1>消费投诉</td><td align=right style=color:#b3ffe1>12315</td></tr></table>","<table border=0 cellpadding=0 cellspacing=0 width=100% class=dianhua_item_table><tr><td style=color:#b3ffe1>价格投诉</td><td align=right style=color:#b3ffe1>12358</td></tr></table>");
+
+
+var k=0;
+var j=0;
+var i=1;
+function showPage(n) 
+{
+	j=0;
+	var startline=k;
+	var endline=Math.min(n*7,17);
+	t1=document.getElementById('dianhua_item');
+	t2=document.getElementById('pre');
+	t3=document.getElementById('next');
+	t1.innerHTML='';
+	for(k = startline; k < endline; k++)
+	{
+		t1.innerHTML+=line_info[k];
+		j++;
+	}
+	if(startline!=0)
+	{
+		t2.innerHTML='上页';
+	}
+	else
+	{
+		t2.innerHTML='';
+	}
+	if(n < 3)
+	{
+		t3.innerHTML='下页';
+	}
+	else
+	{
+		t3.innerHTML='';
+	}
+		
+}
+function keyDown(e)
+{
+	if (ie)
+	{ 
+		var keycode=event.keyCode; 
+	}
+	else
+	{
+		var keycode=e.which;
+	}
+	if(keycode==38||keycode==33)
+	{
+		i--;
+		if(i >= 1)
+		{
+			k=k-j-7;
+			showPage(i);
+		}
+		else
+		{
+			i=1;
+		}
+	}
+	if(keycode==40||keycode==34)
+	{
+		i++;
+		if(i <= 3)
+		{
+			showPage(i);
+		}
+		else
+		{
+			i=3;
+		}
+	}
+	if(keycode==36)	
+	{
+		location = "common_info.html";
+	}
+}
+document.onkeydown=keyDown
+
+//-->
+</script>
+</head>
+
+<body id="dianhua" onload="showPage(1)">
+<div id="topnavi">
+<span class="topnavi">常用信息：常用电话</span>
+</div>
+<div id="dianhua_item">
+</div>
+<div id="dianhua_navi">
+<table border=0 cellpadding=0 cellspacing=0 width="100%">
+<tr>
+	<td width="50%" valign=top align=center><span id=pre class=navi></span></td>
+	<td width="50%" valign=top align=center><span id=next class=navi></span></td>
+</tr>
+</table>
+</div>
+</body>
+</html>

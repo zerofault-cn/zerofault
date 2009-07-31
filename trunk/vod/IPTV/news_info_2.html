@@ -1,0 +1,42 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+<title>视频新闻内容</title>
+<script language="JavaScript" type="text/JavaScript" src="locateCSS.js"></script>
+<script language="JavaScript" type="text/JavaScript" src="functions.js"></script>
+<script language="JavaScript" type="text/JavaScript">
+function keyDown(e)
+{
+	if (ie)
+	{
+		var keycode=event.keyCode; 
+	}
+	else
+	{
+		var keycode=e.which;
+	}
+	if(keycode==36)
+	{
+		location="news_title.html";
+	}
+}
+document.onkeydown=keyDown
+
+//-->
+</script>
+</head>
+<body id="news_info">
+<div id="topnavi">
+<span class="topnavi">新闻频道：今日焦点</span>
+</div>
+<div id="mplayer">
+<embed src="mms://192.168.0.100/vod/daily_source/060309101044_chenjingchao_03.wmv" width="100%" height="100%" type="application/x-mplayer2"></embed>
+</div>
+<div id="news_info">
+<p class="news_info">
+最高人民法院公布3起重大责任事故案<br>
+最高人民法院8日公布了3起重大责任事故犯罪案件的审判结果。这3起重大责任事故犯罪案件是：江苏“3-29”京沪高速公路重大液氯泄漏、河南郑煤集团太平煤矿重大瓦斯爆炸和广东梅州矿难。康兆永、贾江华、赖新泉等27名对事故负有责任的被告人，被分别判处有期徒刑。
+</p>
+</div>
+</body>
+</html>

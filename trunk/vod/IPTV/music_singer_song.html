@@ -1,0 +1,184 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+<title>阿杜_歌曲列表</title>
+<script language="JavaScript" type="text/JavaScript" src="locateCSS.js"></script>
+</head>
+<body id="music_singersong" onload="onfoc(0)">
+<div id="topnavi">
+<span class="topnavi">港台歌手</span><span class="navi" style="margin-left:8em">第1页&nbsp;&nbsp;共10页</span>
+</div>
+<div id="music_singersong_photo">
+<img src="singer_photo/2.jpg" class="photo">
+</div>
+<div id="music_singersong_name">
+阿杜
+</div>
+<div id="music_singersong_marquee">
+	<marquee id="marquee1" direction="up" loop="-1" behavior="scroll" height="224" width="100%" scrolldelay="0" scrollamount="1" border="0" style="margin-top:30px">
+	姓名：杜成义(阿杜）
+	<br>出生地：新加坡
+	<br>生日：03.11
+	<br>星座：双鱼座
+	<br>体重：64
+	<br>身高：172&nbsp;
+	<br>喜欢的女歌手:林忆莲、王菲
+	<br>喜欢的男歌手：张学友、周华建
+	<br>喜欢的女演员：郑裕玲
+	<br>喜欢的男演员：周星驰、周润发
+	<br>喜欢做的事：养鱼、养狗、泡网吧、在家看Discovery频道一整天
+	<br>最难忘的经验：骑脚踏车被车追撞&nbsp;很痛却惊讶自己没受伤
+	<br>最高兴的事：中马票
+	<br>擅长的乐器：吉他、还有自己的声音
+	<br>最喜欢的电影：英雄本色
+	<br>最喜欢的书籍：龙虎门
+	<br>其它经验&nbsp;1999&nbsp;入选海蝶&nbsp;<非常歌手训练班II>成为蔡淳佳及伊雪的同门师弟&nbsp;
+	<br>		
+	</marquee>
+</div>
+<div id="music_singersong_item">
+<table width="100%" border="0" cellpadding="0" cellspacing="0">
+<tr>
+	<td id="0" class="music_singersong_item"><a style='color:#b6dbf8' href='rtsp://192.168.0.208/mtv.mp4'>1.GoodByeToYou</a></td>
+</tr>
+<tr>
+	<td id="1" class="music_singersong_item"><a style='color:#b6dbf8' href='mms://192.168.0.238/bod/music/adu/yueliangdaibiaowodexin.wmv'>2.月亮代表我的心</a></td>
+</tr>
+<tr>
+	<td id="2" class="music_singersong_item"><a style='color:#b6dbf8' href='mms://192.168.0.238/bod/music/adu/yichangyouxiyichangmeng.wmv'>3.一场游戏一场梦</a></td>
+</tr>
+<tr>
+	<td id="3" class="music_singersong_item"><a style='color:#b6dbf8' href='mms://192.168.0.238/bod/music/adu/xiaoshuo.wmv'>4.小说</a></td>
+</tr>
+<tr>
+	<td id="4" class="music_singersong_item"><a style='color:#b6dbf8' href='mms://192.168.0.238/bod/music/adu/wunengweili.wmv'>5.无能为力</a></td>
+</tr>
+<tr>
+	<td id="5" class="music_singersong_item"><a style='color:#b6dbf8' href='mms://192.168.0.238/bod/music/adu/wangleniwanglewo.wmv'>6.忘了你忘了我</a></td>
+</tr>
+<tr>
+	<td id="6" class="music_singersong_item"><a style='color:#b6dbf8' href='mms://192.168.0.238/bod/music/adu/tuirang.wmv'>7.退让</a></td>
+</tr>
+<tr>
+	<td id="7" class="music_singersong_item"><a style='color:#b6dbf8' href='mms://192.168.0.238/bod/music/adu/tianxiehudie.wmv'>8.天蝎蝴蝶</a></td>
+</tr>
+<tr>
+	<td id="8" class="music_singersong_item"><a style='color:#b6dbf8' href='mms://192.168.0.238/bod/music/adu/sixinchedi.wmv'>9.死心撤底</a></td>
+</tr>
+</table>	
+</div>
+</body>
+<script language="JavaScript" type="text/JavaScript" src="functions.js"></script>
+<script language="JavaScript" type="text/JavaScript">
+<!--
+var key2=0;
+function onfoc(n) {
+	document.getElementById(n).style.backgroundImage="url(src_"+src_width+"/image/music/bar5.gif)";
+	td=document.getElementById(n);
+	dat =td.innerHTML;
+	dat = dat.substring(dat.indexOf("href="));
+	td.innerHTML = '<a style="color:#ffffff" ' + dat;
+	document.links[n].focus();
+}
+
+function losefoc(n) {
+	document.getElementById(n).style.backgroundImage="";
+	td=document.getElementById(n);
+	dat =td.innerHTML;
+	dat = dat.substring(dat.indexOf("href="));
+	td.innerHTML = '<a style="color:#b6dbf8" ' + dat;
+}
+
+function begin()
+{
+	td= document.getElementById(key2);
+	dat = td.innerHTML;
+	dat +='<img src=src_800/image/ing.gif height=22>';
+	td.innerHTML = dat; 
+	window.setTimeout('end()',5000);
+}
+function end()
+{
+	td = document.getElementById(key2);
+	dat = td.innerHTML;
+	dat = dat.substring(0,dat.lastIndexOf("<"));
+	td.innerHTML = dat; 
+}
+
+function keyDown(e)
+{
+	if (ie)
+	{
+		var keycode=event.keyCode; 
+	}
+	else
+	{
+		var keycode=e.which;
+	}	var key1 = keycode - 48
+	var patern=/^[1-9]$/; 
+	if (patern.exec(key1))
+	{
+		if(key1 == key2 + 1) 
+			onfoc(key1 - 1);
+		else 
+		{
+			losefoc(key2);
+			onfoc(key1 - 1)
+			key2 = key1 -1;
+		}
+		location = document.links[key2];
+	}
+	if(keycode==13||keycode==70)
+	{
+		begin();
+		location = document.links[key2];
+	}
+	if(keycode==59 || keycode==186) //蓝键
+	{
+		begin();
+		if(navigator.platform=='Win32')
+		{
+		//	location='music_mp3_play.php?song_id='+album_song_id;
+		}
+		else
+		{
+			location="list://\"|mms://sntx.169ol.com/bod/music/adu/zhunikuaile.wmv|mms://sntx.169ol.com/bod/music/adu/yueliangdaibiaowodexin.wmv|mms://sntx.169ol.com/bod/music/adu/yichangyouxiyichangmeng.wmv|mms://sntx.169ol.com/bod/music/adu/xiaoshuo.wmv|mms://sntx.169ol.com/bod/music/adu/wunengweili.wmv|mms://sntx.169ol.com/bod/music/adu/wangleniwanglewo.wmv|mms://sntx.169ol.com/bod/music/adu/tuirang.wmv|mms://sntx.169ol.com/bod/music/adu/tianxiehudie.wmv|mms://sntx.169ol.com/bod/music/adu/sixinchedi.wmv|\"";
+		}
+	}
+	if(keycode==221)//绿键
+	{
+		location="music_mp3_song.php?type_label=1&type_id=1&singerOffset=0&songOffset=0&singer_id=2";
+	}
+	if(keycode==36)
+	{
+		location="music_singer_list.html";
+	}
+	if(keycode==33 && 0!=0)
+	{
+		location="?type_label=1&type_id=1&singerOffset=0&singer_id=2&offset=0";
+	}
+	if(keycode==34 && 9 < 34)
+	{
+		location="?type_label=1&type_id=1&singerOffset=0&singer_id=2&offset=9";
+	}
+	if(keycode==38)
+	{
+		losefoc(key2);
+		key2=key2 - 1;
+		if(key2<0) 
+			key2=link_count-1;
+		onfoc(key2);
+	}
+	if(keycode==40)
+	{
+		losefoc(key2);
+		key2=key2 + 1;
+		if(key2 > link_count-1) 
+			key2=0;
+		onfoc(key2);
+	}
+}
+document.onkeydown=keyDown
+//-->
+</script>
+</html>

@@ -1,0 +1,26 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+<title>无标题文档</title>
+<script language="JavaScript" type="text/JavaScript" src="locateCSS.js"></script>
+<script language="JavaScript" type="text/JavaScript">
+function keyDown(e)
+{
+	var keycode=e.which;
+	if(keycode==36)
+	{
+		location="javascript:history.go(-1)";
+	}
+}
+document.onkeydown=keyDown
+</script>
+</head>
+<body id="flash_player" oonload="document.getElementsByTagName('embed')[0].focus()">
+<div id="flash">
+<div id="flash_game_embed">
+<embed id="embed1" src="flash_game/JiXianPanYan.swf" quality="low" type="application/x-shockwave-flash"></embed>
+</div>
+</div>
+</body>
+游戏提示：钩子附着在崖壁上的时间是有限的；可以按【.】在当前位置做个记号，下次摔下山后可以从这里继续；按【确定】可以查看当前所在位置。
+</html>

@@ -1,0 +1,116 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+<title>首页</title>
+<script language="JavaScript" type="text/JavaScript" src="locateCSS.js"></script>
+</head>
+<body id="index" onload="onfoc(0)">
+<div id="index_menu"><!-- 菜单部分 -->
+<table id="index_menu" border="0" width="100%" height="100%" cellpadding="0" cellspacing="0">
+<tr>
+	<td height="33%" id="img0" class="img"></td>
+	<td id="0" class="text"><a style="color:#b6dbf8" href="javascript:void(0);" onclick="logon();">登&emsp;&emsp;录</a></td>
+</tr>
+<tr>
+	<td height="33%" id="img1" class="img"></td>
+	<td id="1" class="text"><a style="color:#b6dbf8" href="setting_index.html">设&emsp;&emsp;置</a></td>
+</tr>
+<tr>
+	<td height="33%" id="img2" class="img"></td>
+	<td id="2" class="text"><a style="color:#b6dbf8" href="help.html">帮&emsp;&emsp;助</a></td>
+</tr>
+</table>
+</div>
+<div id="realtime"><!-- 时间 -->
+<embed src="clock.swf" quality="high" type="application/x-shockwave-flash" width="100%" height="100%"></embed>
+</div>
+</body>
+<script language="JavaScript" type="text/JavaScript" src="functions.js"></script>
+<script language="JavaScript" type="text/JavaScript">
+<!--
+
+function logon()
+{
+//	location="http://sntx.169ol.com:8088/";//原来的地址
+	location="http://sntx.169ol.com:8088/Authentication/?"+Math.random();
+}
+
+function onfoc(n) 
+{
+	document.getElementById("img"+n).innerHTML='<img src="src_'+src_width+'/image/index/icon'+(n+1)+'.gif">';
+	document.getElementById(n).style.backgroundImage="url(src_"+src_width+"/image/index/bar1.gif)";
+	td=document.getElementById(n);
+	dat =td.innerHTML;
+	dat = dat.substring(dat.indexOf("href="));
+	td.innerHTML = '<a style="color:#ffffff" ' + dat;
+	document.links[n].focus();
+}
+
+function losefoc(n) 
+{
+	document.getElementById("img"+n).innerHTML='';
+	document.getElementById(n).style.backgroundImage="";
+	td=document.getElementById(n);
+	dat =td.innerHTML;
+	dat = dat.substring(dat.indexOf("href="));
+	td.innerHTML = '<a style="color:#b6dbf8" ' + dat;
+}
+function keyDown(e)
+{
+	if (ie)
+	{
+		var keycode=event.keyCode; 
+	}
+	else
+	{
+		var keycode=e.which;
+	}
+	var key1 = keycode -48;
+	var patern=/^[1-link_count]$/; 
+	if (patern.exec(key1)) 
+	{
+		if(key1 == key2 + 1) 
+		{
+			onfoc(key1-1);
+		}
+		else
+		{
+			losefoc(key2);
+			onfoc(key1-1)
+			key2=key1-1;
+		}
+		location=document.links[key2];
+	}
+	if(keycode==36)//HOME键
+	{
+	//	location="menu.html";
+	}
+	if(keycode==38)//光标左上键
+	{
+		losefoc(key2);
+		key2=key2 - 1;
+		if(key2<0)
+		{
+			key2=link_count-1;
+		}
+		onfoc(key2)
+	}
+	if(keycode==40)//光标右下键
+	{
+		losefoc(key2);
+		key2=key2 + 1;
+		if(key2>link_count-1)
+		{
+			key2=0;
+		}
+		onfoc(key2)
+	}
+	if(keycode==48)//0键
+	{
+		location="sysinfo.html";
+	}
+}
+document.onkeydown=keyDown
+//-->
+</script>
+</html>

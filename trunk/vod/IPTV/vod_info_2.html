@@ -1,0 +1,67 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+<title>VOD影片信息_科幻片</title>
+<script>
+if(screen.width==800)
+{
+	document.write('<link rel="stylesheet" href="src_800/style.css" type="text/css">');
+}
+else if(screen.width==640)
+{
+	document.write('<link rel="stylesheet" href="src_640/style.css" type="text/css">');
+}
+else
+{
+	document.write('<link rel="stylesheet" href="src_800/style.css" type="text/css">');
+}
+</script>
+</head>
+<body id="vod_info" onload="show_haibao()">
+<div id="topnavi">
+<span class="topnavi">科幻片&gt;&gt;盗墓迷城II</span>
+</div>
+<div id="vod_haibao">
+</div>
+<div id="vod_intro">
+	<marquee id="vod_intro" width="370" height="475" direction="up" loop="-1" behavior="scroll" scrolldelay="1" scrollamount="1" border="0">
+	<p>
+	片名：盗墓迷城II<br>
+	类型：科幻片<br>
+	格式：wmv<br>
+	影片质量：一般清晰<br>
+	片长：100 分钟<br>
+	</p>
+	</marquee>
+</div>
+</body>
+<script language="JavaScript" type="text/JavaScript" src="functions.js"></script>
+<script language="JavaScript" type="text/JavaScript">
+<!--
+function show_haibao()
+{
+	document.getElementById('vod_haibao').innerHTML='<table border=0 cellpadding=0 cellspacing=0><tr><td width=4 height=4><img src="src_'+src_width+'/image/vod/border_left_top.gif"></td><td><img src="src_'+src_width+'/image/vod/border_top.gif" width="100%"></td><td width=10><img src="src_'+src_width+'/image/vod/border_right_top.gif"></td></tr><tr><td background="src_'+src_width+'/image/vod/border_left.gif"></td><td><img id="haibao" src="haibao/biaoyang.jpg" width="280" height="371"></td><td background="src_'+src_width+'/image/vod/border_right.gif"></td></tr><tr><td height=9><img src="src_'+src_width+'/image/vod/border_left_bottom.gif"></td><td><img src="src_'+src_width+'/image/vod/border_bottom.gif" width="100%"></td><td><img src="src_'+src_width+'/image/vod/border_right_bottom.gif"></td></tr></table>';
+}
+function keyDown(e)
+{
+	if (ie)
+	{
+		var keycode=event.keyCode;
+	}
+	else
+	{
+		var keycode=e.which;
+	}	var key1 = keycode -48;
+	if(keycode==70||keycode==13)
+	{
+		location="mms://sntx.169ol.com/bod/movie/kehuan/THEMUMMY2.WMV";
+	}
+	if (keycode==36)
+	{
+		window.history.go(-1);
+	}
+}
+document.onkeydown=keyDown
+//-->
+</script>
+</html>

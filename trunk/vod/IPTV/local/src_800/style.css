@@ -1,0 +1,226 @@
+/********************通用属性***********************************/
+a:link,a:visited,a:hover,a:active
+{
+	text-decoration: none;
+}
+body
+{
+	font-family:"SimHei","黑体","Verdana","Tahoma","Georgia","Times New Roman","Arial Narrow";
+	background-Attachment:fixed;
+	background-repeat:no-repeat;
+	Margin-Left:0;
+	Margin-Top:0;
+	font-size:32px;
+	color:#b6dbf8;
+}
+table
+{
+	font-size:32px;
+}
+td
+{
+	background-position:center;
+	background-repeat:no-repeat;
+}
+div
+{
+	position:absolute;
+}
+/******/
+/***************所有页面共用************************************/
+span.navi
+{
+	font-size:30px;
+	color:#ffcc00;
+}
+div#topnavi
+{
+	margin-left:93px;
+	margin-top:34px;
+}
+span.topnavi
+{
+	font-size:32px;
+	letter-spacing:5px;
+	font-weight:bold;
+	color:#ccff00;
+}
+/****************/
+
+
+/**************首页**********************************************/
+body#index
+{
+	background-Image:url("image/index/bg.jpg");
+}
+div#realtime
+{
+	margin-left:460px;
+	margin-top:30px;
+	width:300px;
+	height:50px;
+}
+div#index_menu
+{
+	margin-left:178px;
+	margin-top:130px;
+	width:330px;
+	height:314px;
+}
+td.text
+{
+	text-align:center;
+	font-size:30px;
+	padding:0 0 8px 0;
+}
+td.img
+{
+	width:72px;
+}
+/******************/
+
+/****************可视电话设置******************************/
+body#setting_vphone
+{
+	background-Image:url("image/vphone/setting/bg1.jpg");
+}
+div#vphone_form
+{
+	margin-left:88px;
+	margin-top:160px;
+	width:488px;
+	height:267px;
+}
+/*****************/
+
+/******************帐号与设置******************************/
+body#setting_index
+{
+	background-Image:url("image/setting/bg1.jpg");
+}
+div#setting_index_menu
+{
+	margin-left:248px;
+	margin-top:178px;
+	width:300px;
+	height:270px;
+}
+/******************/
+
+/******************网路设置********************************/
+body#setting_network
+{
+	background-Image:url("image/network/bg1.jpg");
+}
+div#set_dial
+{
+	margin-left:90px;
+	margin-top:100px;
+}
+div#set_eth
+{
+	margin-left:90px;
+	margin-top:140px;
+}
+div#set_dhcp
+{
+	margin-left:120px;
+	margin-top:180px;
+}
+div#set_static
+{
+	margin-left:120px;
+	margin-top:220px;
+}
+div#network_form
+{
+	margin-left:120px;
+	margin-top:260px;
+	width:440px;
+}
+
+.input2
+{
+	BACKGROUND-COLOR: white; 
+	BORDER-BOTTOM: #ffffff 1px solid; 
+	BORDER-LEFT: #ffffff 1px solid; 
+	BORDER-RIGHT: #ffffff 1px solid; 
+	BORDER-TOP: #ffffff 1px solid; 
+	FONT-FAMILY:"SimHei","黑体","Verdana"; 
+	font-size: 24px;
+}
+
+/******************/
+
+/******************拨号设置********************************/
+body#setting_dial1
+{
+	background-Image:url("image/dial/bg1.jpg");
+}
+body#setting_dial2
+{
+	background-Image:url("image/dial/bg2.jpg");
+}
+div#dial_keyboard
+{
+	margin-left:20px;
+	margin-top:172px;
+	width:760px;
+}
+div#dial_account
+{
+	margin-left:235px;
+	margin-top:110px;
+}
+div#dial_passwd
+{
+	margin-left:235px;
+	margin-top:110px;
+}
+/******************/
+
+/*******************帮助**********************************/
+body#help_index
+{
+	background-image:url("image/help/bg1.jpg");
+}
+div#help
+{
+	margin-left:70px;
+	margin-top:90px;
+	width:700px;
+}
+table#help td div
+{
+	position:relative;
+	text-indent:2em;
+	color:#ffffff;
+}
+div#help_navi
+{
+	margin-left:90px;
+	margin-top:515px;
+	width:600px;
+}
+/******************/
+
+/******************错误页面**************************/
+body#error
+{
+	background-image:url("image/help/bg2.png");
+}
+div#topnavi1
+{
+	margin-left:130px;
+	margin-top:94px;
+	color:#ffcc00;
+}
+div#error
+{
+	margin-left:130px;
+	margin-top:140px;
+	width:560px;
+	height:340px;
+}
+
+/********************系统信息************************/

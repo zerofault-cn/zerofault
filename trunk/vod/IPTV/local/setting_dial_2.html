@@ -1,0 +1,186 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+<title>拨号设置_密码</title>
+<script language="JavaScript" type="text/JavaScript" src="locateCSS.js"></script>
+<script language="JavaScript" type="text/JavaScript" src="functions.js"></script>
+<script language="JavaScript" type="text/JavaScript">
+<!--
+
+var passwd='';//iPanel.ioctlRead("NETCONFIG", "PPPPASSWD");
+var shift=0;
+var cap=0;
+function init()
+{
+	document.getElementById("dial_passwd").innerHTML=passwd;
+}
+function input(m,n) 
+{
+	if(passwd.length>30)
+	{
+//		return false;
+	}
+	if(cap==0)
+	{
+		if(shift==0)
+		{
+			passwd += m;
+		}
+		else
+		{
+			passwd += n;
+			shift=0;
+		}
+	}
+	else 
+	{
+		if(shift==0)
+		{
+			passwd += n;
+		}
+		else
+		{
+			passwd += m;
+			shift=0;
+		}
+	}
+	t1 = document.getElementById("dial_passwd");
+	t1.innerHTML = passwd;
+}
+
+function capDown()
+{
+	if(cap==0)
+	{
+		cap=1;
+	}
+	else
+	{
+		cap=0;
+	}
+}
+function shiftDown() 
+{
+	if(shift==0)
+	{
+		shift = 1;
+	}
+	else
+	{
+		shift = 0;
+	}
+}
+function backspace()
+{
+	var p = passwd;
+	p = passwd.substring(0,p.length-1);
+	passwd=p;
+	t1 = document.getElementById("dial_passwd");
+	t1.innerHTML = passwd;
+}
+function save()
+{
+	iPanel.ioctlWrite("NETCONFIG", "PPPPASSWD",passwd);
+	location="setting_index.html";
+}
+
+function fanhui()
+{
+	location="setting_dial_1.html";
+}
+key2=6;
+function keyDown(e)
+{
+	var keycode=e.which;
+	if (keycode==0)
+	{
+		keycode=e.keyCode;
+	}
+	if(keycode==8)//退格键
+	{
+		backspace();
+	}
+	if(keycode==36)//返回
+	{
+		fanhui();
+	}
+	if(keycode==35)//输入
+	{
+		save();
+	}
+	if(keycode==37)
+	{
+		key2--;
+		if(key2<0)
+		{
+			key2=51;
+		}
+	}
+	if(keycode==39)
+	{
+		key2++;
+		if(key2>51)
+		{
+			key2=0;
+		}
+	}
+	if(keycode==40)
+	{
+		key2+=13;
+		if(key2>51)
+		{
+			key2=key2%52;
+		}
+		document.links[key2-1].focus();
+	}
+	if(keycode==38)
+	{
+		key2-=13;
+		if(key2<0)
+		{
+			key2=(52+key2)%52;
+		}
+		document.links[key2+1].focus();
+	}
+	if(keycode>47 && keycode<58)
+	{
+		passwd+=keycode-48;
+		t1 = document.getElementById("dial_passwd");
+		t1.innerHTML = passwd;
+	}
+}
+document.onkeydown=keyDown;
+//-->
+</script>
+</head>
+
+<body id="setting_dial2" onload="document.links[6].focus();init()">
+<div id="topnavi">
+<span class="topnavi">拨号设置——密码</span>
+</div>
+<div id="dial_passwd" style="color:#000000">
+</div>
+<div id="dial_keyboard">
+<table width="100%" border="0" cellpadding="0" cellspacing="0">
+<tr>
+	<td align="center">
+	<a href="javascript:void(0)" onClick="input('1','!')" onblur="MM_swapImgRestore()" onfocus="MM_swapImage('Image1','','src_800/image/dial/1_2.gif',1)"><img src="src_800/image/dial/1_1.gif" name="Image1" border="0" class="keyboardbtn"></a><a href="javascript:void(0)" onClick="input('2','@')" onblur="MM_swapImgRestore()" onfocus="MM_swapImage('Image2','','src_800/image/dial/2_2.gif',1)"><img src="src_800/image/dial/2_1.gif" name="Image2" border="0" class="keyboardbtn"></a><a href="javascript:void(0)" onClick="input('3','#')" onblur="MM_swapImgRestore()" onfocus="MM_swapImage('Image3','','src_800/image/dial/3_2.gif',1)"><img src="src_800/image/dial/3_1.gif" name="Image3" border="0" class="keyboardbtn"></a><a href="javascript:void(0)" onClick="input('4','$')" onblur="MM_swapImgRestore()" onfocus="MM_swapImage('Image4','','src_800/image/dial/4_2.gif',1)"><img src="src_800/image/dial/4_1.gif" name="Image4" border="0" class="keyboardbtn"></a><a href="javascript:void(0)" onClick="input('5','%')" onblur="MM_swapImgRestore()" onfocus="MM_swapImage('Image5','','src_800/image/dial/5_2.gif',1)"><img src="src_800/image/dial/5_1.gif" name="Image5" border="0" class="keyboardbtn"></a><a href="javascript:void(0)" onClick="input('6','^')" onblur="MM_swapImgRestore()" onfocus="MM_swapImage('Image6','','src_800/image/dial/6_2.gif',1)"><img src="src_800/image/dial/6_1.gif" name="Image6" border="0" class="keyboardbtn"></a><a href="javascript:void(0)" onClick="input('7','&')" onblur="MM_swapImgRestore()" onfocus="MM_swapImage('Image7','','src_800/image/dial/7_2.gif',1)"><img src="src_800/image/dial/7_1.gif" name="Image7" border="0" class="keyboardbtn"></a><a href="javascript:void(0)" onClick="input('8','*')" onblur="MM_swapImgRestore()" onfocus="MM_swapImage('Image8','','src_800/image/dial/8_2.gif',1)"><img src="src_800/image/dial/8_1.gif" name="Image8" border="0" class="keyboardbtn"></a><a href="javascript:void(0)" onClick="input('9','(')" onblur="MM_swapImgRestore()" onfocus="MM_swapImage('Image9','','src_800/image/dial/9_2.gif',1)"><img src="src_800/image/dial/9_1.gif" name="Image9" border="0" class="keyboardbtn"></a><a href="javascript:void(0)" onClick="input('0',')')" onblur="MM_swapImgRestore()" onfocus="MM_swapImage('Image0','','src_800/image/dial/0_2.gif',1)"><img src="src_800/image/dial/0_1.gif" name="Image0" border="0" class="keyboardbtn"></a><a href="javascript:void(0)" onClick="input('-','_')" onblur="MM_swapImgRestore()" onfocus="MM_swapImage('Image-','','src_800/image/dial/-_2.gif',1)"><img src="src_800/image/dial/-_1.gif" name="Image-" border="0" class="keyboardbtn"></a><a href="javascript:void(0)" onClick="input('=','+')" onblur="MM_swapImgRestore()" onfocus="MM_swapImage('Image=','','src_800/image/dial/=_2.gif',1)"><img src="src_800/image/dial/=_1.gif" name="Image=" border="0" class="keyboardbtn"></a><a href="javascript:void(0)" onClick="backspace()" onblur="MM_swapImgRestore()" onfocus="MM_swapImage('Image08','','src_800/image/dial/backspace_2.gif',1)"><img src="src_800/image/dial/backspace_1.gif" name="Image08" border="0" class="keyboardbtn"></a></td>
+</tr>
+<tr>
+	<td align="center" valign="top">
+	<a href="javascript:void(0)" onClick="input('q','Q')" onblur="MM_swapImgRestore()" onfocus="MM_swapImage('ImageQ','','src_800/image/dial/Q_2.gif',1)"><img src="src_800/image/dial/Q_1.gif" name="ImageQ" border="0" class="keyboardbtn"></a><a href="javascript:void(0)" onClick="input('w','W')" onblur="MM_swapImgRestore()" onfocus="MM_swapImage('ImageW','','src_800/image/dial/W_2.gif',1)"><img src="src_800/image/dial/W_1.gif" name="ImageW" border="0" class="keyboardbtn"></a><a href="javascript:void(0)" onClick="input('e','E')" onblur="MM_swapImgRestore()" onfocus="MM_swapImage('ImageE','','src_800/image/dial/E_2.gif',1)"><img src="src_800/image/dial/E_1.gif" name="ImageE" border="0" class="keyboardbtn"></a><a href="javascript:void(0)" onClick="input('r','R')" onblur="MM_swapImgRestore()" onfocus="MM_swapImage('ImageR','','src_800/image/dial/R_2.gif',1)"><img src="src_800/image/dial/R_1.gif" name="ImageR" border="0" class="keyboardbtn"></a><a href="javascript:void(0)" onClick="input('t','T')" onblur="MM_swapImgRestore()" onfocus="MM_swapImage('ImageT','','src_800/image/dial/T_2.gif',1)"><img src="src_800/image/dial/T_1.gif" name="ImageT" border="0" class="keyboardbtn"></a><a href="javascript:void(0)" onClick="input('y','Y')" onblur="MM_swapImgRestore()" onfocus="MM_swapImage('ImageY','','src_800/image/dial/Y_2.gif',1)"><img src="src_800/image/dial/Y_1.gif" name="ImageY" border="0" class="keyboardbtn"></a><a href="javascript:void(0)" onClick="input('u','U')" onblur="MM_swapImgRestore()" onfocus="MM_swapImage('ImageU','','src_800/image/dial/U_2.gif',1)"><img src="src_800/image/dial/U_1.gif" name="ImageU" border="0" class="keyboardbtn"></a><a href="javascript:void(0)" onClick="input('i','I')" onblur="MM_swapImgRestore()" onfocus="MM_swapImage('ImageI','','src_800/image/dial/I_2.gif',1)"><img src="src_800/image/dial/I_1.gif" name="ImageI" border="0" class="keyboardbtn"></a><a href="javascript:void(0)" onClick="input('o','O')" onblur="MM_swapImgRestore()" onfocus="MM_swapImage('ImageO','','src_800/image/dial/O_2.gif',1)"><img src="src_800/image/dial/O_1.gif" name="ImageO" border="0" class="keyboardbtn"></a><a href="javascript:void(0)" onClick="input('p','P')" onblur="MM_swapImgRestore()" onfocus="MM_swapImage('ImageP','','src_800/image/dial/P_2.gif',1)"><img src="src_800/image/dial/P_1.gif" name="ImageP" border="0" class="keyboardbtn"></a><a href="javascript:void(0)" onClick="input('[','{')" onblur="MM_swapImgRestore()" onfocus="MM_swapImage('Image[','','src_800/image/dial/[_2.gif',1)"><img src="src_800/image/dial/[_1.gif" name="Image[" border="0" class="keyboardbtn"></a><a href="javascript:void(0)" onClick="input(']','}')" onblur="MM_swapImgRestore()" onfocus="MM_swapImage('Image]','','src_800/image/dial/]_2.gif',1)"><img src="src_800/image/dial/]_1.gif" name="Image]" border="0" class="keyboardbtn"></a><a href="javascript:void(0)" onclick="save()" onblur="MM_swapImgRestore()" onfocus="MM_swapImage('ImageEnter','','src_800/image/dial/enter_2.gif',1)"><img src="src_800/image/dial/enter_1.gif" name="ImageEnter" border="0" class="keyboardbtn"></a></td>
+</tr>
+<tr>
+	<td align="center">
+	<a href="javascript:void(0)" onClick="capDown()" onblur="javascript:if(cap!=1)MM_swapImgRestore()" onfocus="MM_swapImage('ImageCAP','','src_800/image/dial/caps_2.gif',1)"><img src="src_800/image/dial/caps_1.gif" name="ImageCAP" border="0" class="keyboardbtn"></a><a href="javascript:void(0)" onClick="input('a','A')" onblur="MM_swapImgRestore()" onfocus="MM_swapImage('ImageA','','src_800/image/dial/A_2.gif',1)"><img src="src_800/image/dial/A_1.gif" name="ImageA" border="0" class="keyboardbtn"></a><a href="javascript:void(0)" onClick="input('s','S')" onblur="MM_swapImgRestore()" onfocus="MM_swapImage('ImageS','','src_800/image/dial/S_2.gif',1)"><img src="src_800/image/dial/S_1.gif" name="ImageS" border="0" class="keyboardbtn"></a><a href="javascript:void(0)" onClick="input('d','D')" onblur="MM_swapImgRestore()" onfocus="MM_swapImage('ImageD','','src_800/image/dial/D_2.gif',1)"><img src="src_800/image/dial/D_1.gif" name="ImageD" border="0" class="keyboardbtn"></a><a href="javascript:void(0)" onClick="input('f','F')" onblur="MM_swapImgRestore()" onfocus="MM_swapImage('ImageF','','src_800/image/dial/F_2.gif',1)"><img src="src_800/image/dial/F_1.gif" name="ImageF" border="0" class="keyboardbtn"></a><a href="javascript:void(0)" onClick="input('g','G')" onblur="MM_swapImgRestore()" onfocus="MM_swapImage('ImageG','','src_800/image/dial/G_2.gif',1)"><img src="src_800/image/dial/G_1.gif" name="ImageG" border="0" class="keyboardbtn"></a><a href="javascript:void(0)" onClick="input('h','H')" onblur="MM_swapImgRestore()" onfocus="MM_swapImage('ImageH','','src_800/image/dial/H_2.gif',1)"><img src="src_800/image/dial/H_1.gif" name="ImageH" border="0" class="keyboardbtn"></a><a href="javascript:void(0)" onClick="input('j','J')" onblur="MM_swapImgRestore()" onfocus="MM_swapImage('ImageJ','','src_800/image/dial/J_2.gif',1)"><img src="src_800/image/dial/J_1.gif" name="ImageJ" border="0" class="keyboardbtn"></a><a href="javascript:void(0)" onClick="input('k','K')" onblur="MM_swapImgRestore()" onfocus="MM_swapImage('ImageK','','src_800/image/dial/K_2.gif',1)"><img src="src_800/image/dial/K_1.gif" name="ImageK" border="0" class="keyboardbtn"></a><a href="javascript:void(0)" onClick="input('l','L')" onblur="MM_swapImgRestore()" onfocus="MM_swapImage('ImageL','','src_800/image/dial/L_2.gif',1)"><img src="src_800/image/dial/L_1.gif" name="ImageL" border="0" class="keyboardbtn"></a><a href="javascript:void(0)" onClick="input(';',':')" onblur="MM_swapImgRestore()" onfocus="MM_swapImage('Imagesemicolon','','src_800/image/dial/semicolon_2.gif',1)"><img src="src_800/image/dial/semicolon_1.gif" name="Imagesemicolon" border="0" class="keyboardbtn"></a><a href="javascript:void(0)" onClick="input('\'','')" onblur="MM_swapImgRestore()" onfocus="MM_swapImage('Imagequote','','src_800/image/dial/quote_2.gif',1)"><img src="src_800/image/dial/quote_1.gif" name="Imagequote" border="0" class="keyboardbtn"></a><a href="javascript:void(0)" onClick="shiftDown()" onblur="MM_swapImgRestore()" onfocus="MM_swapImage('ImageShift','','src_800/image/dial/shift_2.gif',1)"><img src="src_800/image/dial/shift_1.gif" name="ImageShift" border="0" class="keyboardbtn"></a></td>
+</tr>
+<tr>
+	<td align="center">
+	<a href="javascript:void(0)" onClick="input('`','~')" onblur="MM_swapImgRestore()" onfocus="MM_swapImage('Image`','','src_800/image/dial/`_2.gif',1)"><img src="src_800/image/dial/`_1.gif" name="Image`" border="0" class="keyboardbtn2"></a><a href="javascript:void(0)" onClick="input('z','Z')" onblur="MM_swapImgRestore()" onfocus="MM_swapImage('ImageZ','','src_800/image/dial/Z_2.gif',1)"><img src="src_800/image/dial/Z_1.gif" name="ImageZ" border="0" class="keyboardbtn2"></a><a href="javascript:void(0)" onClick="input('x','X')" onblur="MM_swapImgRestore()" onfocus="MM_swapImage('ImageX','','src_800/image/dial/X_2.gif',1)"><img src="src_800/image/dial/X_1.gif" name="ImageX" border="0" class="keyboardbtn2"></a><a href="javascript:void(0)" onClick="input('c','C')" onblur="MM_swapImgRestore()" onfocus="MM_swapImage('ImageC','','src_800/image/dial/C_2.gif',1)"><img src="src_800/image/dial/C_1.gif" name="ImageC" border="0" class="keyboardbtn2"></a><a href="javascript:void(0)" onClick="input('v','V')" onblur="MM_swapImgRestore()" onfocus="MM_swapImage('ImageV','','src_800/image/dial/V_2.gif',1)"><img src="src_800/image/dial/V_1.gif" name="ImageV" border="0" class="keyboardbtn2"></a><a href="javascript:void(0)" onClick="input('b','B')" onblur="MM_swapImgRestore()" onfocus="MM_swapImage('ImageB','','src_800/image/dial/B_2.gif',1)"><img src="src_800/image/dial/B_1.gif" name="ImageB" border="0" class="keyboardbtn2"></a><a href="javascript:void(0)" onClick="input('n','N')" onblur="MM_swapImgRestore()" onfocus="MM_swapImage('ImageN','','src_800/image/dial/N_2.gif',1)"><img src="src_800/image/dial/N_1.gif" name="ImageN" border="0" class="keyboardbtn2"></a><a href="javascript:void(0)" onClick="input('m','M')" onblur="MM_swapImgRestore()" onfocus="MM_swapImage('ImageM','','src_800/image/dial/M_2.gif',1)"><img src="src_800/image/dial/M_1.gif" name="ImageM" border="0" class="keyboardbtn2"></a><a href="javascript:void(0)" onClick="input(',','<')" onblur="MM_swapImgRestore()" onfocus="MM_swapImage('Image<','','src_800/image/dial/comma_2.gif',1)"><img src="src_800/image/dial/comma_1.gif" name="Image<" border="0" class="keyboardbtn2"></a><a href="javascript:void(0)" onClick="input('.','>')" onblur="MM_swapImgRestore()" onfocus="MM_swapImage('Image>','','src_800/image/dial/dot_2.gif',1)"><img src="src_800/image/dial/dot_1.gif" name="Image>" border="0" class="keyboardbtn2"></a><a href="javascript:void(0)" onclick="input('/','?')" onblur="MM_swapImgRestore()" onfocus="MM_swapImage('Image?','','src_800/image/dial/leftslash_2.gif',1)"><img src="src_800/image/dial/leftslash_1.gif" name="Image?" border="0" class="keyboardbtn2"></a><a href="javascript:void(0)" onclick="input('\\','|')" onblur="MM_swapImgRestore()" onfocus="MM_swapImage('Image|','','src_800/image/dial/rightslash_2.gif',1)"><img src="src_800/image/dial/rightslash_1.gif" name="Image|" border="0" class="keyboardbtn2"></a><a href="javascript:void(0)" onblur="MM_swapImgRestore()" onfocus="MM_swapImage('Image09','','src_800/image/dial/tab_2.gif',1)"><img src="src_800/image/dial/tab_1.gif" name="Image09" border="0" class="keyboardbtn2"></a></td>
+</tr>
+<tr>
+	<td height=80 align="center" style="color:#ffcc00">请按<img src="src_800/image/dial/enter_0.gif" border="0" class="keyboardbtn2" align='absmiddle'>按钮保存，并进入下一步</td>
+</tr>
+</table>
+</body>
+</html>

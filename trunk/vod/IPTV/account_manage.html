@@ -1,0 +1,395 @@
+<html>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+<title>帐号管理</title>
+<script language="JavaScript" type="text/JavaScript" src="locateCSS.js"></script>
+<head>
+<script language="JavaScript">
+<!--
+
+function onfoc(n)
+{
+	if(field==0)
+	{
+		document.getElementById(n).style.backgroundImage="url(src_"+src_width+"/image/directory/bar1.gif)";
+		document.getElementById(n).style.color="#ffffff";
+		group_focus=n;
+		contact_focus=0;
+	}
+	else
+	{
+		document.getElementById(10+n).style.backgroundImage="url(src_"+src_width+"/image/directory/bar3.gif)";
+		document.getElementById(10+n).style.color="#ffffff";
+		contact_focus=n;
+	}
+}
+function losefoc(n)
+{
+	if(field==0)
+	{
+		document.getElementById(n).style.backgroundImage="";
+		document.getElementById(n).style.color="#b6dbf8";
+	}
+	else
+	{
+		document.getElementById(10+n).style.backgroundImage="";
+		document.getElementById(10+n).style.color="#b6dbf8";
+	}
+}
+function lock(n)
+{
+	document.getElementById(n).style.backgroundImage="url(src_"+src_width+"/image/directory/bar2.gif)";
+	document.getElementById(n).style.color="#ffffff";
+	group_focus=n;
+}
+
+function op_onfoc(n)
+{
+	document.getElementById(100+n).style.backgroundImage="url(src_"+src_width+"/image/directory/bar5.gif)";
+	document.getElementById(100+n).style.color="#ffffff";
+}
+function op_losefoc(n)
+{
+	document.getElementById(100+n).style.backgroundImage="";
+	document.getElementById(100+n).style.color="#b6dbf8";
+}
+function opration(n)
+{
+	switch (n)
+	{
+	case 0:
+	//	alert(contactData.contacts.item[contact_focus].vphone);
+	//	document.getElementById(10+key2).style.backgroundImage="url(image/directory/bar3.gif)";
+		location="gnomemetting://"+contactData.contacts.item[contact_focus].vphone;
+		break;
+	case 1:
+		document.getElementById('div1').style.display='';
+		document.getElementById('div1_contact_name').innerHTML=contactData.contacts.item[contact_focus].name;
+		document.getElementById('div1_name').innerHTML=contactData.contacts.item[contact_focus].name;
+		document.getElementById('div1_title').innerHTML=contactData.contacts.item[contact_focus].title;
+		document.getElementById('div1_vphone').innerHTML=contactData.contacts.item[contact_focus].vphone;
+		document.getElementById('div1_mobile').innerHTML=contactData.contacts.item[contact_focus].mobile;
+		document.getElementById('div1_phone').innerHTML=contactData.contacts.item[contact_focus].phone;
+		document.getElementById('div1_homephone').innerHTML=contactData.contacts.item[contact_focus].homephone;
+		document.getElementById('div1_email').innerHTML=contactData.contacts.item[contact_focus].email;
+		document.getElementById('div1_address').innerHTML=contactData.contacts.item[contact_focus].address;
+		document.getElementById('div1_ring').innerHTML=contactData.contacts.item[contact_focus].ring;
+		break;
+	case 2:
+		document.getElementById('div2').style.display='';
+		document.form2.group_id.value=groupData.groups.item[group_focus].id;
+		document.getElementById('div2_group_name').innerHTML=groupData.groups.item[group_focus].name;
+		document.form2.name.focus();
+		break;
+	case 3:
+		document.getElementById('div3').style.display='';
+		document.form3.contact_id.value=contactData.contacts.item[contact_focus].id;
+		document.getElementById('div3_contact_name').innerHTML=contactData.contacts.item[contact_focus].name;
+		document.form3.name.value=contactData.contacts.item[contact_focus].name;
+		document.form3.title.value=contactData.contacts.item[contact_focus].title;
+		document.form3.vphone.value=contactData.contacts.item[contact_focus].vphone;
+		document.form3.mobile.value=contactData.contacts.item[contact_focus].mobile;
+		document.form3.phone.value=contactData.contacts.item[contact_focus].phone;
+		document.form3.homephone.value=contactData.contacts.item[contact_focus].homephone;
+		document.form3.email.value=contactData.contacts.item[contact_focus].email;
+		document.form3.address.value=contactData.contacts.item[contact_focus].address;
+		document.form3.ring.value=contactData.contacts.item[contact_focus].ring;
+		document.form3.name.focus();
+		break;
+	case 4:
+		document.getElementById('div4').style.display='';
+		document.form4.contact_id.value=contactData.contacts.item[contact_focus].id;
+		document.getElementById('div4_contact_name').innerHTML=contactData.contacts.item[contact_focus].name;
+		break;
+	case 5:
+		document.getElementById('div5').style.display='';
+		document.form5.group_name.focus();
+		break;
+	case 6:
+		document.getElementById('div6').style.display='';
+		document.getElementById('div6_group_name').innerHTML=groupData.groups.item[group_focus].name;
+		document.form6.group_id.value=groupData.groups.item[group_focus].id;
+		document.form6.group_name.value=groupData.groups.item[group_focus].name;
+		document.form6.ring.value=groupData.groups.item[group_focus].ring;
+		document.form6.group_name.focus();
+		break;
+	case 7:
+		document.getElementById('div7').style.display='';
+		document.form7.group_id.value=groupData.groups.item[group_focus].id;
+		document.getElementById('div7_group_name').innerHTML=groupData.groups.item[group_focus].name;
+		break;
+	default:
+		break;
+	}
+}
+function add_contact()
+{
+	group_id=document.form2.group_id.value;
+	name	=document.form2.name.value;
+	title	=document.form2.title.value;
+	vphone	=document.form2.vphone.value;
+	mobile	=document.form2.mobile.value;
+	phone	=document.form2.phone.value;
+	homephone=document.form2.homephone.value;
+	email	=document.form2.email.value;
+	address	=document.form2.address.value;
+	ring	=document.form2.ring.value;
+	window.setTimeout('myreload()',3000);
+	location="add://contact|"+group_id+"||"+name+"|"+title+"|"+vphone+"|"+mobile+"|"+phone+"|"+homephone+"|"+email+"|"+address+"|"+ring;
+}
+function modify_contact()
+{
+	contact_id=document.form3.contact_id.value;
+	name	=document.form3.name.value;
+	title	=document.form3.title.value;
+	vphone	=document.form3.vphone.value;
+	mobile	=document.form3.mobile.value;
+	phone	=document.form3.phone.value;
+	homephone=document.form3.homephone.value;
+	email	=document.form3.email.value;
+	address	=document.form3.address.value;
+	ring	=document.form3.ring.value;
+	window.setTimeout('myreload()',3000);
+	location="modify://contact|"+contact_id+"|"+name+"|"+title+"|"+vphone+"|"+mobile+"|"+phone+"|"+homephone+"|"+email+"|"+address+"|"+ring;
+}
+function del(type)
+{
+	location="delete://"+type+"|"+document.form3.contact_id.value;
+//	alert(llocation);
+}
+function cancel()
+{
+	document.form0.input0.focus();
+	document.getElementById('div'+key3).style.display='none';
+	document.getElementById(10+key2).style.backgroundImage="url(src_"+src_width+"/image/directory/bar3.gif)";
+	field=1;
+}
+function myreload()
+{
+	location.reload();
+}
+var key2=0;
+var key3=0;
+function keyDown(e)
+{
+	if (ie)
+	{
+		var keycode=event.keyCode; 
+	}
+	else
+	{
+		var keycode=e.which;
+	}
+	var key1 = keycode -48;
+	
+	if(keycode==36)//HOME键
+	{
+		if(field==0)//焦点在左边
+		{
+			location="vphone_index.html";
+		}
+		if(field==1)//焦点在右边
+		{
+			losefoc(contact_focus);
+			count=Math.min(groupData.groups.item.length,8);
+			field=0;
+			key2=group_focus;
+			onfoc(key2);
+		}
+		if(field==2)//焦点在弹出窗口上
+		{
+			cancel();
+		}
+		
+	}
+	if(keycode==13)
+	{
+		if(field==1)
+		{
+			document.getElementById(10+key2).style.backgroundImage="url(src_"+src_width+"/image/directory/bar4.gif)";
+			opration(key3);
+			field=2;
+			
+		}
+		if(field==0)
+		{
+			lock(key2);
+			init(group_focus);
+			count=Math.min(contactData.contacts.item.length,9);
+			field=1;
+			key2=contact_focus;
+			onfoc(key2);
+		}
+	}
+	if(keycode==38 && field!=2)//光标上键
+	{
+		losefoc(key2);
+		key2=key2 - 1;
+		if(key2<0)
+		{
+			key2=count-1;
+		}
+		onfoc(key2)
+	}
+	if(keycode==40 && field!=2)//光标下键
+	{
+		losefoc(key2);
+		key2=key2 + 1;
+		if(key2>count-1)
+		{
+			key2=0;
+		}
+		onfoc(key2)
+	}
+	if(keycode==37 && field!=2)
+	{
+		op_losefoc(key3);
+		key3--;
+		if(key3<0)
+		{
+			key3=7;
+		}
+		op_onfoc(key3);
+	}
+	if(keycode==39 && field!=2)
+	{
+		op_losefoc(key3);
+		key3++;
+		if(key3>7)
+		{
+			key3=0;
+		}
+		op_onfoc(key3);
+	}
+}
+document.onkeydown=keyDown
+// -->
+</script>
+</head>
+<body id="account_manage" onload="onfoc(0)">
+<!-- body正文 -->
+<div id="topnavi">
+<span class="topnavi">帐号管理</span>
+</div>
+<div id="parent_acc">
+<table width="100%" cellpadding=0 cellspacing=0>
+<tr>
+	<td colspan=2>父帐号:</td>
+</tr>
+<tr>
+	<td width="50%">1234567890</td>
+	<td id="0" align="center"><a style="color:#b6dbf8" href="#">修改密码</a></td>
+</tr>
+</table>
+</div>
+<div id="child_acc">
+<table width="100%" cellpadding=0 cellspacing=0>
+<tr>
+	<td colspan=5>子帐号:</td>
+</tr>
+<tr>
+	<td>12345678901</td>
+	<td>等级1</td>
+	<td id="1" align="center"><a style="color:#b6dbf8" href="#">修改密码</a></td>
+	<td id="2" align="center"><a style="color:#b6dbf8" href="#">修改等级</a></td>
+	<td id="3" align="center"><a style="color:#b6dbf8" href="#">删除</a></td>
+</tr>
+<tr>
+	<td>12345678902</td>
+	<td>等级2</td>
+	<td id="4" align="center"><a style="color:#b6dbf8" href="#">修改密码</a></td>
+	<td id="5" align="center"><a style="color:#b6dbf8" href="#">修改等级</a></td>
+	<td id="6" align="center"><a style="color:#b6dbf8" href="#">删除</a></td>
+</tr>
+<tr>
+	<td>12345678903</td>
+	<td>等级3</td>
+	<td id="7" align="center"><a style="color:#b6dbf8" href="#">修改密码</a></td>
+	<td id="8" align="center"><a style="color:#b6dbf8" href="#">修改等级</a></td>
+	<td id="9" align="center"><a style="color:#b6dbf8" href="#">删除</a></td>
+</tr>
+<tr>
+	<td>12345678904</td>
+	<td>等级4</td>
+	<td id="10" align="center"><a style="color:#b6dbf8" href="#">修改密码</a></td>
+	<td id="11" align="center"><a style="color:#b6dbf8" href="#">修改等级</a></td>
+	<td id="12" align="center"><a style="color:#b6dbf8" href="#">删除</a></td>
+</tr>
+</table>
+</div>
+</body>
+<script language="JavaScript" type="text/JavaScript" src="functions.js"></script>
+<script language="JavaScript" type="text/JavaScript">
+<!--
+function onfoc(n) {
+	document.getElementById(n).style.backgroundImage="url(src_"+src_width+"/image/account/bar2.gif)";
+	td=document.getElementById(n);
+	dat =td.innerHTML;
+	dat = dat.substring(dat.indexOf("href="));
+	td.innerHTML = '<a style="color:#ffffff" ' + dat;
+	document.links[n].focus();
+}
+
+function losefoc(n) {
+	document.getElementById(n).style.backgroundImage="";
+	td=document.getElementById(n);
+	dat =td.innerHTML;
+	dat = dat.substring(dat.indexOf("href="));
+	td.innerHTML = '<a style="color:#b6dbf8" ' + dat;
+}
+link_count=13;
+function keyDown(e)
+{
+	if (ie)
+	{
+		var keycode=event.keyCode; 
+	}
+	else
+	{
+		var keycode=e.which;
+	}
+	var key1 = keycode -48;
+	var patern=/^[1-link_count]$/; 
+	if (patern.exec(key1)) 
+	{
+		if(key1 == key2 + 1) 
+		{
+			onfoc(key1-1);
+		}
+		else
+		{
+			losefoc(key2);
+			onfoc(key1-1)
+			key2=key1-1;
+		}
+		location=document.links[key2];
+	}
+	if(keycode==36)//HOME键
+	{
+		location="setting_index.html";
+	}
+	if(keycode==38)//光标左上键
+	{
+		losefoc(key2);
+		key2=key2 - 1;
+		if(key2<0)
+		{
+			key2=link_count-1;
+		}
+		onfoc(key2)
+	}
+	if(keycode==40)//光标右下键
+	{
+		losefoc(key2);
+		key2=key2 + 1;
+		if(key2>link_count-1)
+		{
+			key2=0;
+		}
+		onfoc(key2)
+	}
+}
+document.onkeydown=keyDown
+//-->
+</script>
+</html>
+

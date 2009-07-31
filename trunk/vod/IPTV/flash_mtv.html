@@ -1,0 +1,116 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+<title>FLASH MTV</title>
+<script language="JavaScript" type="text/JavaScript" src="locateCSS.js"></script>
+</head>
+<body id="flash_namelist" onload="menu_onfoc()">
+<div id="topnavi">
+<span class="topnavi">FLASH MTV</span>
+</div>
+<div id="flash_namelist_item">
+<table border=0 width="100%" cellspacing=0 cellpadding=0>
+<tr>
+	<td id=0 class="flash_item"><a style="color:#b6dbf8" href='flash_mtv1.html'>1、蝴蝶</a></td>
+</tr>
+<tr>
+	<td id=1 class="flash_item"><a style="color:#b6dbf8" href='flash_mtv2.html'>2、童话</a></td>
+</tr>
+<tr>
+	<td id=2 class="flash_item"><a style="color:#b6dbf8" href='flash_mtv3.html'>3、十二种颜色</a></td>
+</tr>
+<tr>
+	<td id=3 class="flash_item"><a style="color:#b6dbf8" href='flash_mtv4.html'>4、遗失的美好</a></td>
+</tr>
+<tr>
+	<td id=4 class="flash_item"><a style="color:#b6dbf8" href='flash_mtv5.html'>5、江南</a></td>
+</tr>
+<tr>
+	<td id=5 class="flash_item"><a style="color:#b6dbf8" href='flash_mtv6.html'>6、绝望生鱼片</a></td>
+</tr>
+<tr>
+	<td id=6 class="flash_item"><a style="color:#b6dbf8" href='flash_mtv7.html'>7、披着羊皮的狼</a></td>
+</tr>
+<tr>
+	<td id=7 class="flash_item"><a style="color:#b6dbf8" href='flash_mtv8.html'>8、忍者</a></td>
+</tr>
+<tr>
+	<td id=8 class="flash_item"><a style="color:#b6dbf8" href='flash_mtv9.html'>9、重爱轻友</a></td>
+</tr>
+</table>
+</div>
+</body>
+<script language="JavaScript" type="text/JavaScript" src="functions.js"></script>
+<script language="JavaScript" type="text/JavaScript">
+<!--
+
+function onfoc(n) {
+	document.getElementById(n).style.backgroundImage="url(src_"+src_width+"/image/flash/bar1.gif)";
+	td=document.getElementById(n);
+	dat =td.innerHTML;
+	dat = dat.substring(dat.indexOf("href="));
+	td.innerHTML = '<a style="color:#ffffff" ' + dat;
+	document.links[n].focus();
+}
+
+function losefoc(n) {
+	document.getElementById(n).style.backgroundImage="";
+	td=document.getElementById(n);
+	dat =td.innerHTML;
+	dat = dat.substring(dat.indexOf("href="));
+	td.innerHTML = '<a style="color:#b6dbf8" ' + dat;
+}
+function keyDown(e)
+{
+	if (ie)
+	{
+		var keycode=event.keyCode; 
+	}
+	else
+	{
+		var keycode=e.which;
+	}
+	var key1 = keycode -48;
+	var patern=/^[1-link_count]$/; 
+	if (patern.exec(key1)) 
+	{
+		if(key1 == key2 + 1) 
+			onfoc(key1 - 1);
+		else
+		{
+			losefoc(key2);
+			onfoc(key1 - 1)
+			key2 = key1 -1;
+		}
+		location=document.links[key2];
+	}
+	if(keycode==36)//HOME键
+	{
+		location="game_index.html";
+	}
+	if(keycode==37 || keycode==38)//光标左上键
+	{
+		losefoc(key2);
+		key2=key2 - 1;
+		if(key2<0)
+		{
+			key2=link_count-1;
+		}
+		onfoc(key2)
+	}
+	if(keycode==39 || keycode==40)//光标右下键
+	{
+		losefoc(key2);
+		key2=key2 + 1;
+		if(key2>link_count-1)
+		{
+			key2=0;
+		}
+		onfoc(key2)
+	}
+	SetCookie(filename+'_focus',key2);
+}
+document.onkeydown=keyDown
+//-->
+</script>
+</html>

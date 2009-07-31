@@ -1,0 +1,107 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+<title>在线音乐</title>
+<script language="JavaScript" type="text/JavaScript" src="locateCSS.js"></script>
+</head>
+<body id="music_typelist" onload="onfoc(0)">
+<div id="topnavi">
+<span class="topnavi">歌手分类</span>
+</div>
+<div id="music_typelist_menu">
+<table border=0 width="100%" height="100%" cellspacing=0 cellpadding=0>
+<tr>
+	<td id="0" align="center"><a style="color:#b6dbf8" href="music_singer_list.html">1.港台歌手</a></td>
+</tr>
+<tr>
+	<td id="1" align="center"><a style="color:#b6dbf8" href="music_singer_list.html">2.内地歌手</a></td>
+</tr>
+<tr>
+	<td id="2" align="center"><a style="color:#b6dbf8" href="music_singer_list.html">3.欧美歌手</a></td>
+</tr>
+<tr>
+	<td id="3" align="center"><a style="color:#b6dbf8" href="music_singer_list.html">4.日韩歌手</a></td>
+</tr>
+<tr>
+	<td id="4" align="center"><a style="color:#b6dbf8" href="music_singer_list.html">5.其他歌手</a></td>
+</tr>
+<tr>
+	<td id="5" align="center"><a style="color:#b6dbf8" href="music_singer_list.html">6.乐队组合</a></td>
+</tr>
+</table>
+</div>
+</body>
+<script language="JavaScript" type="text/JavaScript" src="functions.js"></script>
+<script language="JavaScript" type="text/JavaScript">
+<!--
+function onfoc(n) {
+	document.getElementById(n).style.backgroundImage="url(src_"+src_width+"/image/music/bar3.gif)";
+	td=document.getElementById(n);
+	dat =td.innerHTML;
+	dat = dat.substring(dat.indexOf("href="));
+	td.innerHTML = '<a style="color:#ffffff" ' + dat;
+	document.links[n].focus();
+}
+
+function losefoc(n) {
+	document.getElementById(n).style.backgroundImage="";
+	td=document.getElementById(n);
+	dat =td.innerHTML;
+	dat = dat.substring(dat.indexOf("href="));
+	td.innerHTML = '<a style="color:#b6dbf8" ' + dat;
+}
+function keyDown(e)
+{
+	if (ie)
+	{
+		var keycode=event.keyCode; 
+	}
+	else
+	{
+		var keycode=e.which;
+	}
+	var key1 = keycode -48;
+	var patern=/^[1-link_count]$/; 
+	if (patern.exec(key1)) 
+	{
+		if(key1 == key2 + 1) 
+		{
+			onfoc(key1-1);
+		}
+		else
+		{
+			losefoc(key2);
+			onfoc(key1-1)
+			key2=key1-1;
+		}
+		location=document.links[key2];
+	}
+	if(keycode==36)//HOME键
+	{
+		location="music_index.html";
+	}
+	if(keycode==38)//光标左上键
+	{
+		losefoc(key2);
+		key2=key2 - 1;
+		if(key2<0)
+		{
+			key2=link_count-1;
+		}
+		onfoc(key2)
+	}
+	if(keycode==40)//光标右下键
+	{
+		losefoc(key2);
+		key2=key2 + 1;
+		if(key2>link_count-1)
+		{
+			key2=0;
+		}
+		onfoc(key2)
+	}
+}
+document.onkeydown=keyDown
+//-->
+</script>
+</html>

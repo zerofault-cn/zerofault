@@ -1,0 +1,739 @@
+<html>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+<title>电话薄directory</title>
+<script language="JavaScript" type="text/JavaScript" src="locateCSS.js"></script>
+<head>
+<script language="JavaScript" type="text/JavaScript" src="functions.js"></script>
+<script language="JavaScript">
+<!--
+/*******************************************************
+WHITESPACE CLEANER FOR MOZILLA
+By Alex Vincent, http://weblogs.mozillazine.org/weirdal/
+*******************************************************/
+var xmlFeed=false;
+
+/******************************************************
+const notWhitespace = /\S/;
+
+function cleanWhitespace(node) 
+{
+	for (var x = 0; x < node.childNodes.length; x++) 
+	{
+		var childNode = node.childNodes[x];
+		if ((childNode.nodeType == 3)&&(!notWhitespace.test(childNode.nodeValue))) 
+		{
+			node.removeChild(node.childNodes[x]);
+			x--;
+		}
+		if (childNode.nodeType == 1) 
+		{
+			cleanWhitespace(childNode);
+		}
+	}
+}
+*****************************************************/
+function fixXmlMimeType(filename)
+{
+	oxmlhttp = null;
+	oxmlhttp = new XMLHttpRequest();
+	oxmlhttp.overrideMimeType("text/xml");
+	oxmlhttp.open("GET", filename, false);
+	oxmlhttp.send(null);
+	return oxmlhttp.responseXML;
+}
+function getChildrenByTagName(oParent, sTagName)
+{
+	var i=0, aResults=[], oTemp;
+	var reTagName = new RegExp('^'+sTagName+'$', 'i');
+	while ((oTemp=oParent.childNodes.item(i++))) 
+	{
+		if (reTagName.test(oTemp.nodeName)) 
+		{
+			aResults.push(oTemp);
+		}
+	}
+	return aResults;
+}
+
+function getGroup(xmlFile)
+{
+	xmlFeed = fixXmlMimeType(xmlFile);
+	var root = xmlFeed.getElementsByTagName("groups")[0];
+	this.groups = new Object();
+	this.groups.readTag = root;
+
+	this.groups.item = new Array();
+	for (var x=0; x<getChildrenByTagName(root, 'group').length; x++) 
+	{
+		this.groups.item[x] = getChildrenByTagName(root, 'group')[x];
+	}
+	for (var y=0; y<this.groups.item.length; y++) 
+	{
+		var child=getChildrenByTagName(root,'group')[y];
+		this.groups.item[y] = new Object();
+		this.groups.item[y].id = getChildrenByTagName(child, 'id')[0].firstChild.data;
+		this.groups.item[y].name = getChildrenByTagName(child, 'name')[0].firstChild.data;
+		this.groups.item[y].ring = getChildrenByTagName(child, 'ring')[0].firstChild.data;
+	}
+}
+function getContact(xmlFile)
+{
+	xmlFeed=fixXmlMimeType(xmlFile);
+	var root=xmlFeed.getElementsByTagName("contacts")[0];
+	this.contacts = new Object();
+	this.contacts.readTag = root;
+	this.contacts.item=new Array();
+	for (var x=0; x<getChildrenByTagName(root, 'namecard').length; x++) 
+	{
+		this.contacts.item[x] = getChildrenByTagName(root, 'namecard')[x];
+	}
+	for (var y=0; y<this.contacts.item.length; y++) 
+	{
+		var child=getChildrenByTagName(root,'namecard')[y];
+		this.contacts.item[y] = new Object();
+		this.contacts.item[y].id	=	getChildrenByTagName(child, 'id')[0].firstChild.data;
+		this.contacts.item[y].name	=	getChildrenByTagName(child, 'name')[0].firstChild.data;
+		this.contacts.item[y].title =	getChildrenByTagName(child, 'title')[0].firstChild.data;
+		this.contacts.item[y].vphone=	getChildrenByTagName(child, 'vphone')[0].firstChild.data;
+		this.contacts.item[y].mobile=	getChildrenByTagName(child, 'mobile')[0].firstChild.data;
+		this.contacts.item[y].phone =	getChildrenByTagName(child, 'phone')[0].firstChild.data;
+		this.contacts.item[y].homephone=getChildrenByTagName(child, 'homephone')[0].firstChild.data;
+		this.contacts.item[y].email	=	getChildrenByTagName(child, 'email')[0].firstChild.data;
+		this.contacts.item[y].address=	getChildrenByTagName(child, 'address')[0].firstChild.data;
+		this.contacts.item[y].ring	=	getChildrenByTagName(child, 'ring')[0].firstChild.data;
+	}
+}
+
+var groupData=new getGroup("addressbook/groups.xml");
+var field=0;
+var group_focus=0;
+var contact_focus=0;
+var count=Math.min(groupData.groups.item.length,8);
+var contactData=new Object();
+function init(n)
+{
+	contactData=new getContact("addressbook/"+groupData.groups.item[n].id+"/contacts.xml");
+	for(i=0;i<Math.min(groupData.groups.item.length,8); i++) 
+	{
+		document.getElementById(i).innerHTML=groupData.groups.item[i].name;
+	}
+	for(j=0;j<Math.min(contactData.contacts.item.length,9);j++)
+	{
+		document.getElementById(j+10).innerHTML="<td class=dir_contact_item>"+contactData.contacts.item[j].name+"</td><td id=25>"+contactData.contacts.item[j].vphone+"</td><td id=35>"+contactData.contacts.item[j].mobile+"</td><td id=45>"+contactData.contacts.item[j].homephone+"</td>";
+	
+	}
+	for(j=contactData.contacts.item.length;j<9;j++)
+	{
+		document.getElementById(j+10).innerHTML="<td></td><td id=25></td><td id=35></td><td id=45></td>";
+	}
+}	
+function onfoc(n)
+{
+	if(field==0)
+	{
+		document.getElementById(n).style.backgroundImage="url(src_"+src_width+"/image/directory/bar1.gif)";
+		document.getElementById(n).style.color="#ffffff";
+		group_focus=n;
+		contact_focus=0;
+	}
+	else
+	{
+		document.getElementById(10+n).style.backgroundImage="url(src_"+src_width+"/image/directory/bar3.gif)";
+		document.getElementById(10+n).style.color="#ffffff";
+		contact_focus=n;
+	}
+}
+function losefoc(n)
+{
+	if(field==0)
+	{
+		document.getElementById(n).style.backgroundImage="";
+		document.getElementById(n).style.color="#b6dbf8";
+	}
+	else
+	{
+		document.getElementById(10+n).style.backgroundImage="";
+		document.getElementById(10+n).style.color="#b6dbf8";
+	}
+}
+function lock(n)
+{
+	document.getElementById(n).style.backgroundImage="url(src_"+src_width+"/image/directory/bar2.gif)";
+	document.getElementById(n).style.color="#ffffff";
+	group_focus=n;
+}
+
+function op_onfoc(n)
+{
+	document.getElementById(100+n).style.backgroundImage="url(src_"+src_width+"/image/directory/bar5.gif)";
+	document.getElementById(100+n).style.color="#ffffff";
+}
+function op_losefoc(n)
+{
+	document.getElementById(100+n).style.backgroundImage="";
+	document.getElementById(100+n).style.color="#b6dbf8";
+}
+function opration(n)
+{
+	switch (n)
+	{
+	case 0:
+	//	alert(contactData.contacts.item[contact_focus].vphone);
+	//	document.getElementById(10+key2).style.backgroundImage="url(image/directory/bar3.gif)";
+		location="gnomemetting://"+contactData.contacts.item[contact_focus].vphone;
+		break;
+	case 1:
+		document.getElementById('div1').style.display='';
+		document.getElementById('div1_contact_name').innerHTML=contactData.contacts.item[contact_focus].name;
+		document.getElementById('div1_name').innerHTML=contactData.contacts.item[contact_focus].name;
+		document.getElementById('div1_title').innerHTML=contactData.contacts.item[contact_focus].title;
+		document.getElementById('div1_vphone').innerHTML=contactData.contacts.item[contact_focus].vphone;
+		document.getElementById('div1_mobile').innerHTML=contactData.contacts.item[contact_focus].mobile;
+		document.getElementById('div1_phone').innerHTML=contactData.contacts.item[contact_focus].phone;
+		document.getElementById('div1_homephone').innerHTML=contactData.contacts.item[contact_focus].homephone;
+		document.getElementById('div1_email').innerHTML=contactData.contacts.item[contact_focus].email;
+		document.getElementById('div1_address').innerHTML=contactData.contacts.item[contact_focus].address;
+		document.getElementById('div1_ring').innerHTML=contactData.contacts.item[contact_focus].ring;
+		break;
+	case 2:
+		document.getElementById('div2').style.display='';
+		document.form2.group_id.value=groupData.groups.item[group_focus].id;
+		document.getElementById('div2_group_name').innerHTML=groupData.groups.item[group_focus].name;
+		document.form2.name.focus();
+		break;
+	case 3:
+		document.getElementById('div3').style.display='';
+		document.form3.contact_id.value=contactData.contacts.item[contact_focus].id;
+		document.getElementById('div3_contact_name').innerHTML=contactData.contacts.item[contact_focus].name;
+		document.form3.name.value=contactData.contacts.item[contact_focus].name;
+		document.form3.title.value=contactData.contacts.item[contact_focus].title;
+		document.form3.vphone.value=contactData.contacts.item[contact_focus].vphone;
+		document.form3.mobile.value=contactData.contacts.item[contact_focus].mobile;
+		document.form3.phone.value=contactData.contacts.item[contact_focus].phone;
+		document.form3.homephone.value=contactData.contacts.item[contact_focus].homephone;
+		document.form3.email.value=contactData.contacts.item[contact_focus].email;
+		document.form3.address.value=contactData.contacts.item[contact_focus].address;
+		document.form3.ring.value=contactData.contacts.item[contact_focus].ring;
+		document.form3.name.focus();
+		break;
+	case 4:
+		document.getElementById('div4').style.display='';
+		document.form4.contact_id.value=contactData.contacts.item[contact_focus].id;
+		document.getElementById('div4_contact_name').innerHTML=contactData.contacts.item[contact_focus].name;
+		break;
+	case 5:
+		document.getElementById('div5').style.display='';
+		document.form5.group_name.focus();
+		break;
+	case 6:
+		document.getElementById('div6').style.display='';
+		document.getElementById('div6_group_name').innerHTML=groupData.groups.item[group_focus].name;
+		document.form6.group_id.value=groupData.groups.item[group_focus].id;
+		document.form6.group_name.value=groupData.groups.item[group_focus].name;
+		document.form6.ring.value=groupData.groups.item[group_focus].ring;
+		document.form6.group_name.focus();
+		break;
+	case 7:
+		document.getElementById('div7').style.display='';
+		document.form7.group_id.value=groupData.groups.item[group_focus].id;
+		document.getElementById('div7_group_name').innerHTML=groupData.groups.item[group_focus].name;
+		break;
+	default:
+		break;
+	}
+}
+function add_contact()
+{
+	group_id=document.form2.group_id.value;
+	name	=document.form2.name.value;
+	title	=document.form2.title.value;
+	vphone	=document.form2.vphone.value;
+	mobile	=document.form2.mobile.value;
+	phone	=document.form2.phone.value;
+	homephone=document.form2.homephone.value;
+	email	=document.form2.email.value;
+	address	=document.form2.address.value;
+	ring	=document.form2.ring.value;
+	window.setTimeout('myreload()',3000);
+	location="add://contact|"+group_id+"||"+name+"|"+title+"|"+vphone+"|"+mobile+"|"+phone+"|"+homephone+"|"+email+"|"+address+"|"+ring;
+}
+function modify_contact()
+{
+	contact_id=document.form3.contact_id.value;
+	name	=document.form3.name.value;
+	title	=document.form3.title.value;
+	vphone	=document.form3.vphone.value;
+	mobile	=document.form3.mobile.value;
+	phone	=document.form3.phone.value;
+	homephone=document.form3.homephone.value;
+	email	=document.form3.email.value;
+	address	=document.form3.address.value;
+	ring	=document.form3.ring.value;
+	window.setTimeout('myreload()',3000);
+	location="modify://contact|"+contact_id+"|"+name+"|"+title+"|"+vphone+"|"+mobile+"|"+phone+"|"+homephone+"|"+email+"|"+address+"|"+ring;
+}
+function del(type)
+{
+	location="delete://"+type+"|"+document.form3.contact_id.value;
+//	alert(llocation);
+}
+function cancel()
+{
+	document.form0.input0.focus();
+	document.getElementById('div'+key3).style.display='none';
+	document.getElementById(10+key2).style.backgroundImage="url(src_"+src_width+"/image/directory/bar3.gif)";
+	field=1;
+}
+function myreload()
+{
+	location.reload();
+}
+var key2=0;
+var key3=0;
+function keyDown(e)
+{
+	if (ie)
+	{
+		var keycode=event.keyCode; 
+	}
+	else
+	{
+		var keycode=e.which;
+	}
+	var key1 = keycode -48;
+	
+	if(keycode==36)//HOME键
+	{
+		if(field==0)//焦点在左边
+		{
+			location="vphone_index.html";
+		}
+		if(field==1)//焦点在右边
+		{
+			losefoc(contact_focus);
+			count=Math.min(groupData.groups.item.length,8);
+			field=0;
+			key2=group_focus;
+			onfoc(key2);
+		}
+		if(field==2)//焦点在弹出窗口上
+		{
+			cancel();
+		}
+		
+	}
+	if(keycode==13)
+	{
+		if(field==1)
+		{
+			document.getElementById(10+key2).style.backgroundImage="url(src_"+src_width+"/image/directory/bar4.gif)";
+			opration(key3);
+			field=2;
+			
+		}
+		if(field==0)
+		{
+			lock(key2);
+			init(group_focus);
+			count=Math.min(contactData.contacts.item.length,9);
+			field=1;
+			key2=contact_focus;
+			onfoc(key2);
+		}
+	}
+	if(keycode==38 && field!=2)//光标上键
+	{
+		losefoc(key2);
+		key2=key2 - 1;
+		if(key2<0)
+		{
+			key2=count-1;
+		}
+		onfoc(key2)
+	}
+	if(keycode==40 && field!=2)//光标下键
+	{
+		losefoc(key2);
+		key2=key2 + 1;
+		if(key2>count-1)
+		{
+			key2=0;
+		}
+		onfoc(key2)
+	}
+	if(keycode==37 && field!=2)
+	{
+		op_losefoc(key3);
+		key3--;
+		if(key3<0)
+		{
+			key3=7;
+		}
+		op_onfoc(key3);
+	}
+	if(keycode==39 && field!=2)
+	{
+		op_losefoc(key3);
+		key3++;
+		if(key3>7)
+		{
+			key3=0;
+		}
+		op_onfoc(key3);
+	}
+}
+document.onkeydown=keyDown
+// -->
+</script>
+</head>
+<body id="directory" onload="init(0),onfoc(0),op_onfoc(0)">
+<!-- body正文 -->
+<form name="form0"><input type="hidden" name="input0"></form>
+<div id="dir_group_table">
+<table width="100%" border=0 cellpadding=0 cellspacing=0>
+<tr>
+	<td align="center" valign="top" class="dir_label">分 组</td>
+</tr>
+<tr>
+	<td id=0 class="dir_group_item"></td>
+</tr>
+<tr>
+	<td id=1 class="dir_group_item"></td>
+</tr>
+<tr>
+	<td id=2 class="dir_group_item"></td>
+</tr>
+<tr>
+	<td id=3 class="dir_group_item"></td>
+</tr>
+<tr>
+	<td id=4 class="dir_group_item"></td>
+</tr>
+<tr>
+	<td id=5 class="dir_group_item"></td>
+</tr>
+<tr>
+	<td id=6 class="dir_group_item"></td>
+</tr>
+<tr>
+	<td id=7 class="dir_group_item"></td>
+</tr>
+</table>
+</div>
+<div id="dir_contact_table">
+<table border=0 width="100%" cellpadding=0 cellspacing=0>
+<tr>
+	<td valign="top" class="dir_label">姓 名</td>
+	<td valign="top" class="dir_label">可视电话</td>
+	<td valign="top" class="dir_label">手 机</td>
+	<td valign="top" class="dir_label">家庭座机</td>
+</tr>
+<tr id=10></tr>
+<tr id=11></tr>
+<tr id=12></tr>
+<tr id=13></tr>
+<tr id=14></tr>
+<tr id=15></tr>
+<tr id=16></tr>
+<tr id=17></tr>
+<tr id=18></tr>
+</table>
+</div>
+<div id="dir_oper_table">
+<table border=0 width="100%" cellpadding=0 cellspacing=0>
+<tr>
+	<td id=100 align="center" class="dir_oper_menu">拨 号</td>
+	<td id=101 align="center" class="dir_oper_menu">详 细</td>
+	<td id=102 align="center" class="dir_oper_menu">增 加</td>
+	<td id=103 align="center" class="dir_oper_menu">修 改</td>
+	<td id=104 align="center" class="dir_oper_menu">删 除</td>
+	<td id=105 align="center" class="dir_oper_menu">增加分组</td>
+	<td id=106 align="center" class="dir_oper_menu">修改分组</td>
+	<td id=107 align="center" class="dir_oper_menu">删除分组</td>
+</tr>
+</table>
+</div>
+<!-- 详细 -->
+<div id="div1" class="popDiv" style="display:none">
+<table id="popDivTable" border=0 width="100%" height="100%" cellpadding=0 cellspacing=0>
+<tr>
+	<td valign="top">
+	<div id="popInnerDiv">
+	<table id="popInnerTable" border=0 width="100%" cellpadding=0 cellspacing=0>
+	<tr>
+		<td colspan=4 class="popInnerTableCaption"><span id="div1_contact_name"></span> 的详细信息</td>
+	</tr>
+	<tr>
+		<td width="30%" align=right style="color:#ffcc00">姓&emsp;&emsp;名：</td>
+		<td width="25%" id="div1_name"></td>
+		<td width="22%" align=right style="color:#ffcc00">职&emsp;务：</td>
+		<td width="23%" id="div1_title"></td>
+	</tr>
+	<tr>
+		<td align=right style="color:#ffcc00">可视电话：</td>
+		<td id="div1_vphone" colspan=3></td>
+	</tr>
+	<tr>
+		<td align=right style="color:#ffcc00">手&emsp;&emsp;机：</td>
+		<td id="div1_mobile" colspan=3></td>
+	</tr>
+	<tr>
+		<td align=right style="color:#ffcc00">座&emsp;&emsp;机：</td>
+		<td id="div1_phone" colspan=3></td>
+	</tr>
+	<tr>
+		<td align=right style="color:#ffcc00">家庭座机：</td>
+		<td id="div1_homephone" colspan=3></td>
+	</tr>
+	<tr>
+		<td align=right style="color:#ffcc00">电子邮件：</td>
+		<td id="div1_email" colspan=3></td>
+	</tr>
+	<tr>
+		<td align=right style="color:#ffcc00">地&emsp;&emsp;址：</td>
+		<td id="div1_address" colspan=3></td>
+	</tr>
+	<tr>
+		<td align=right style="color:#ffcc00">铃&emsp;&emsp;声：</td>
+		<td id="div1_ring" colspan=3></td>
+	</tr>
+	<tr>
+		<td colspan=4 align=center><a href="javascript:void(0)" onclick="cancel()" onblur="MM_swapImgRestore()" onfocus="MM_swapImage('div1_Image0','','src_800/image/directory/fh2.gif',1)"><img src="src_800/image/directory/fh1.gif" name="div1_Image0" border=0 class="btn"></a></td>
+	</tr>
+	<tr>
+		<td colspan=4 class="popInnerFooter"></td>
+	</tr>
+	</table>
+	</div>
+	</td>
+</tr>
+</table>
+</div>
+<!-- 添加 -->
+<div id="div2" class="popDiv" style="display:none">
+<table id="popDivTable" border=0 width="100%" height="100%" cellpadding=0 cellspacing=0>
+<form name="form2">
+<tr>
+	<td valign=top>
+	<div id="popInnerDiv">
+	<table id="popInnerTable" border=0 width="100%" height="100%" cellpadding=0 cellspacing=0>
+	<input type="hidden" name="group_id" value="">
+	<tr>
+		<td colspan=4 class="popInnerTableCaption">在"<span id="div2_group_name"></span>"分组中添加联系人</td>
+	</tr>
+	<tr>
+		<td width="30%" align=right style="color:#ffcc00">姓&emsp;&emsp;名：</td>
+		<td width="25%"><input type="text" name="name" size=8 class="input2"></td>
+		<td width="22%" style="color:#ffcc00">职&emsp;务：</td>
+		<td width="23%"><input type="text" name="title" size=8 class="input2"></td>
+	</tr>
+	<tr>
+		<td align=right style="color:#ffcc00">可视电话：</td>
+		<td colspan=3><input type="text" name="vphone" class="input2"></td>
+	</tr>
+	<tr>
+		<td align=right style="color:#ffcc00">手&emsp;&emsp;机：</td>
+		<td colspan=3><input type="text" name="mobile" class="input2"></td>
+	</tr>
+	<tr>
+		<td align=right style="color:#ffcc00">座&emsp;&emsp;机：</td>
+		<td colspan=3><input type="text" name="phone" class="input2"></td>
+	</tr>
+	<tr>
+		<td align=right style="color:#ffcc00">家庭座机：</td>
+		<td colspan=3><input type="text" name="homephone" class="input2"></td>
+	</tr>
+	<tr>
+		<td align=right style="color:#ffcc00">电子邮件：</td>
+		<td colspan=3><input type="text" name="email" class="input2"></td>
+	</tr>
+	<tr>
+		<td align=right style="color:#ffcc00">地&emsp;&emsp;址：</td>
+		<td colspan=3><input type="text" name="address" class="input2"></td>
+	</tr>
+	<tr>
+		<td align=right style="color:#ffcc00">铃&emsp;&emsp;声：</td>
+		<td colspan=3><input type="text" name="ring" class="input2"></td>
+	</tr>
+	<tr>
+		<td colspan=4 align=center><a href="javascript:void(0)" onclick="add_contact()" onblur="MM_swapImgRestore()" onfocus="MM_swapImage('div2_Image0','','src_800/image/directory/qd2.gif',1)"><img src="src_800/image/directory/qd1.gif" name="div2_Image0" border=0 class="btn"></a>&emsp;&emsp;&emsp;<a href="javascript:void(0)" onclick="cancel()" onblur="MM_swapImgRestore()"  onfocus="MM_swapImage('div2_Image1','','src_800/image/directory/qx2.gif',1)"><img src="src_800/image/directory/qx1.gif" name="div2_Image1" border=0 class="btn"></a>&emsp;</td>
+	</tr>
+	<tr>
+		<td colspan=4 class="popInnerFooter"></td>
+	</tr>
+	</table>
+	</div>
+	</td>
+</tr>
+</form>
+</table>
+</div>
+<!-- 修改 -->
+<div id="div3" class="popDiv" style="display:none">
+<table id="popDivTable" border=0 width="100%" height="100%" cellpadding=0 cellspacing=0>
+<form name="form3">
+<input type="hidden" name="contact_id" value="">
+<tr>
+	<td valign="top">
+	<div id="popInnerDiv">
+	<table id="popInnerTable" border=0 width="100%" cellpadding=0 cellspacing=0>
+	<tr>
+		<td colspan=4 class="popInnerTableCaption">修改"<span id="div3_contact_name"></span>"的联系方式</td>
+	</tr>
+	<tr>
+		<td width="30%" align=right style="color:#ffcc00">姓&emsp;&emsp;名：</td>
+		<td width="25%"><input type="text" name="name" size=8 class="input2"></td>
+		<td width="22%" style="color:#ffcc00">职&emsp;务：</td>
+		<td width="23%"><input type="text" name="title" size=8 class="input2"></td>
+	</tr>
+	<tr>
+		<td align=right style="color:#ffcc00">可视电话：</td>
+		<td colspan=3><input type="text" name="vphone" class="input2"></td>
+	</tr>
+	<tr>
+		<td align=right style="color:#ffcc00">手&emsp;&emsp;机：</td>
+		<td colspan=3><input type="text" name="mobile" class="input2"></td>
+	</tr>
+	<tr>
+		<td align=right style="color:#ffcc00">座&emsp;&emsp;机：</td>
+		<td colspan=3><input type="text" name="phone" class="input2"></td>
+	</tr>
+	<tr>
+		<td align=right style="color:#ffcc00">家庭座机：</td>
+		<td colspan=3><input type="text" name="homephone" class="input2"></td>
+	</tr>
+	<tr>
+		<td align=right style="color:#ffcc00">电子邮件：</td>
+		<td colspan=3><input type="text" name="email" class="input2"></td>
+	</tr>
+	<tr>
+		<td align=right style="color:#ffcc00">地&emsp;&emsp;址：</td>
+		<td colspan=3><input type="text" name="address" class="input2"></td>
+	</tr>
+	<tr>
+		<td align=right style="color:#ffcc00">铃&emsp;&emsp;声：</td>
+		<td colspan=3><input type="text" name="ring" class="input2"></td>
+	</tr>
+	<tr>
+		<td colspan=4 align=center><a href="javascript:void(0)" onclick="midify_contact()" onblur="MM_swapImgRestore()" onfocus="MM_swapImage('div3_Image0','','src_800/image/directory/qd2.gif',1)"><img src="src_800/image/directory/qd1.gif" name="div3_Image0" border=0 class="btn"></a>&emsp;&emsp;&emsp;<a href="javascript:void(0)" onclick="cancel()" onblur="MM_swapImgRestore()"  onfocus="MM_swapImage('div3_Image1','','src_800/image/directory/qx2.gif',1)"><img src="src_800/image/directory/qx1.gif" name="div3_Image1" border=0 class="btn"></a>&emsp;</td>
+	</tr>
+	<tr>
+		<td colspan=4 class="popInnerFooter"></td>
+	</tr>
+	</table>
+	</div>
+	</td>
+</tr>
+</form>
+</table>
+</div>
+<!-- 删除 -->
+<div id="div4" class="popDiv" style="display:none">
+<table id="popDivTable" border=0 width="100%" height="100%" cellpadding=0 cellspacing=0>
+<form name='form4'>
+<input type="hidden" name="contact_id">
+<tr>
+	<td valign="top">
+	<div id="popInnerDiv">
+	<table id="popInnerTable" border=0 width="100%" cellpadding=0 cellspacing=0>
+	<tr>
+		<td height=40 class="popInnerTableCaption">删除联系人</td>
+	</tr>
+	<tr>
+		<td height=160 align=center valign=bottom>您真的要删除这个联系人?<br><br><span id="div4_contact_name" style="color:#ffcc00"></span></td>
+	<tr>
+		<td align=center><a href="javascript:void(0)" onclick="del('contact')" onblur="MM_swapImgRestore()" onfocus="MM_swapImage('div4_Image0','','src_800/image/directory/qd2.gif',1)"><img src="src_800/image/directory/qd1.gif" name="div4_Image0" border=0 class="btn"></a>&emsp;&emsp;&emsp;<a href="javascript:void(0)" onclick="cancel()" onblur="MM_swapImgRestore()"  onfocus="MM_swapImage('div4_Image1','','src_800/image/directory/qx2.gif',1)"><img src="src_800/image/directory/qx1.gif" name="div4_Image1" border=0 class="btn"></a>&emsp;</td>
+	</tr>
+	</table>
+	</div>
+	</td>
+</tr>
+</form>
+</table>
+</div>
+<!-- 添加分组 -->
+<div id="div5" class="popDiv" style="display:none">
+<table id="popDivTable" border=0 width="100%" height="100%" cellpadding=0 cellspacing=0>
+<form name='form5'>
+<tr>
+	<td valign="top">
+	<div id="popInnerDiv">
+	<table id="popInnerTable" border=0 width="100%" cellpadding=0 cellspacing=0>
+	<tr>
+		<td colspan=2 class="popInnerTableCaption">添加新的分组：</td>
+	</tr>
+	<tr>
+		<td width="40%" height=100 align=right valign=bottom>分组名称：</td>
+		<td valign=bottom><input type="text" name="group_name" size=13 class="input2"></td>
+	</tr>
+	<tr>
+		<td height=50 align=right valign=bottom>铃&emsp;声：</td>
+		<td valign=bottom><input type="text" name="ring" size=10 class="input2"></td>
+	</tr>
+	<tr>
+		<td colspan=2 align=center><a href="javascript:void(0)" onclick="add_group()" onblur="MM_swapImgRestore()" onfocus="MM_swapImage('div5_Image0','','src_800/image/directory/qd2.gif',1)"><img src="src_800/image/directory/qd1.gif" name="div5_Image0" border=0 class="btn"></a>&emsp;&emsp;&emsp;<a href="javascript:void(0)" onclick="cancel()" onblur="MM_swapImgRestore()"  onfocus="MM_swapImage('div5_Image1','','src_800/image/directory/qx2.gif',1)"><img src="src_800/image/directory/qx1.gif" name="div5_Image1" border=0 class="btn"></a>&emsp;</td>
+	</tr>
+	</table>
+	</div>
+	</td>
+</tr>
+</form>
+</table>
+</div>
+<!-- 修改分组 -->
+<div id="div6" class="popDiv" style="display:none">
+<table id="popDivTable" border=0 width="100%" height="100%" cellpadding=0 cellspacing=0>
+<form name='form6'>
+<input type="hidden" name="group_id">
+<tr>
+	<td valign="top">
+	<div id="popInnerDiv">
+	<table id="popInnerTable" border=0 width="100%" cellpadding=0 cellspacing=0>
+	<tr>
+		<td colspan=2 class="popInnerTableCaption">修改"<span id="div6_group_name"></span>"分组的信息：</td>
+	</tr>
+	<tr>
+		<td width="40%" height=100 align=right valign=bottom>分组名称：</td>
+		<td valign=bottom><input type="text" name="group_name" size=13 class="input2"></td>
+	</tr>
+	<tr>
+		<td height=50 align=right valign=bottom>铃&emsp;声：</td>
+		<td valign=bottom><input type="text" name="ring" size=10 class="input2"></td>
+	</tr>
+	<tr>
+		<td colspan=2 align=center><a href="javascript:void(0)" onclick="modify_group()" onblur="MM_swapImgRestore()" onfocus="MM_swapImage('div6_Image0','','src_800/image/directory/qd2.gif',1)"><img src="src_800/image/directory/qd1.gif" name="div6_Image0" border=0 class="btn"></a>&emsp;&emsp;&emsp;<a href="javascript:void(0)" onclick="cancel()" onblur="MM_swapImgRestore()"  onfocus="MM_swapImage('div6_Image1','','src_800/image/directory/qx2.gif',1)"><img src="src_800/image/directory/qx1.gif" name="div6_Image1" border=0 class="btn"></a>&emsp;</td>
+	</tr>
+	</table>
+	</div>
+	</td>
+</tr>
+</form>
+</table>
+</div>
+<!-- 删除分组 -->
+<div id="div7" class="popDiv" style="display:none">
+<table id="popDivTable" border=0 width="100%" height="100%" cellpadding=0 cellspacing=0>
+<form name='form7'>
+<input type="hidden" name="group_id">
+<tr>
+	<td valign="top">
+	<div id="popInnerDiv">
+	<table id="popInnerTable" border=0 width="100%" cellpadding=0 cellspacing=0>
+	<tr>
+		<td  class="popInnerTableCaption">删除分组</td>
+	</tr>
+	<tr>
+		<td height=160 align=center valign=bottom>您真的要删除这个分组?<br><br><span id="div7_group_name" style="color:#ffcc00"></span></td>
+	<tr>
+		<td align=center><a href="javascript:void(0)" onclick="del('group')" onblur="MM_swapImgRestore()" onfocus="MM_swapImage('div7_Image0','','src_800/image/directory/qd2.gif',1)"><img src="src_800/image/directory/qd1.gif" name="div7_Image0" border=0 class="btn"></a>&emsp;&emsp;&emsp;<a href="javascript:void(0)" onclick="cancel()" onblur="MM_swapImgRestore()"  onfocus="MM_swapImage('div7_Image1','','src_800/image/directory/qx2.gif',1)"><img src="src_800/image/directory/qx1.gif" name="div7_Image1" border=0 class="btn"></a>&emsp;</td>
+	</tr>
+	</table>
+	</div>
+	</td>
+</tr>
+</form>
+</table>
+</div>
+</body>
+</html>
+

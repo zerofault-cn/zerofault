@@ -1,0 +1,83 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+<title>系统信息</title>
+<script language="JavaScript" type="text/JavaScript" src="locateCSS.js"></script>
+</head>
+<body id="error">
+<div id="topnavi1">
+<span class="topnavi1" style="color:#ccff00">系统信息<span id="topnavi2"></span></span>
+</div>
+<div id="error">
+<table border="0" width="100%" height="100%" cellpadding="0" cellspacing="0" style="color:#ffffff">
+<tr>
+	<td height="30" colspan="2"></td>
+</tr>
+<tr>
+	<td width="38%" align="right" style="color:#ffcc00">硬件版本：</td>
+	<td id="h_version"></td>
+</tr>
+<tr>
+	<td align="right" style="color:#ffcc00">软件版本：</td>
+	<td id="s_version"></td>
+</tr>
+<tr>
+	<td align="right" style="color:#ffcc00">网卡Mac地址：</td>
+	<td id="mic_addr">00.00.00.00.00.00</td>
+</tr>
+<tr>
+	<td align="right" style="color:#ffcc00">网络状态：</td>
+	<td id="net_status"></td>
+</tr>
+</table>
+</div>
+</body>
+<script language="JavaScript" type="text/JavaScript" src="functions.js"></script>
+<script language="JavaScript" type="text/JavaScript">
+<!--
+/*
+var HWVER=iPanel.ioctlRead("NETCONFIG", "HWVER")=='UNDEFINED'?'0.0.0':iPanel.ioctlRead("NETCONFIG", "HWVER");
+var SWVER=iPanel.ioctlRead("NETCONFIG", "SWVER")=='UNDEFINED'?'0.0.0':iPanel.ioctlRead("NETCONFIG", "SWVER");
+var NTID=iPanel.ioctlRead("NETCONFIG", "NTID")=='UNDEFINED'?'00.00.00.00.00.00':iPanel.ioctlRead("NETCONFIG", "NTID");
+document.getElementById('h_version').innerHTML=HWVER;
+document.getElementById('s_version').innerHTML=SWVER;
+document.getElementById('mic_addr').innerHTML=NTID;
+*/
+document.getElementById('net_status').innerHTML="检测中……";
+var tim=1;
+var url="http://sntx.169ol.com:8088/";
+setInterval("tim++",100);//每0.1秒加1
+document.write("<img src="+url+Math.random()+" width=1 height=1 onerror=detect()>");
+function detect()
+{
+	if(tim>200)//超过5秒认为超时
+	{
+		document.getElementById('net_status').innerHTML="<span style='color:#ff0000'>网络未连接！</span>";
+	}
+	else
+	{
+		document.getElementById('net_status').innerHTML="<span style='color:#00ff00'>网络已连接！</span>";
+	}
+}
+
+
+function keyDown(e)
+{
+	if (ie)
+	{
+		var keycode=event.keyCode; 
+	}
+	else
+	{
+		var keycode=e.which;
+	}
+	if(keycode==36)//HOME键
+	{
+		location="index.html";
+	}
+
+}
+document.onkeydown=keyDown
+//-->
+</script>
+</html>

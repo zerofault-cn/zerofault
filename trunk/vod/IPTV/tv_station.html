@@ -1,0 +1,239 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+<title>数字电视</title>
+<script language="JavaScript" type="text/JavaScript" src="locateCSS.js"></script>
+</head>
+<body id="tv_station" onload="onfoc(0)">
+<div id="tv_num">
+<span id="num" class="tv_num">_</span>
+</div>
+<div id="tv_item">
+<table id="tv_item" width="100%" border="0" cellpadding="0" cellspacing="0">
+<tr>
+	<td id=0 class="tv_item"><a style="color:#b6dbf8" href="mms://live.cctv.com/live1">1.中央电视台-1</a></td>
+</tr>
+<tr>
+	<td id=1 class="tv_item"><a style="color:#b6dbf8" href="#">2.中央电视台-2</a></td>
+</tr>
+<tr>
+	<td id=2 class="tv_item"><a style="color:#b6dbf8" href="mms://live.cctv.com/live">3.中央电视台-4</a></td>
+</tr>
+<tr>
+	<td id=3 class="tv_item"><a style="color:#b6dbf8" href="mms://live.cctv.com/live3">4.中央电视台-9</a></td>
+</tr>
+<tr>
+	<td id=4 class="tv_item"><a style="color:#b6dbf8" href="#">5.凤凰卫视中文台</a></td>
+</tr>
+<tr>
+	<td id=5 class="tv_item"><a style="color:#b6dbf8" href="#">6.星光探索</a></td>
+</tr>
+<tr>
+	<td id=6 class="tv_item"><a style="color:#b6dbf8" href="#">7.凤凰卫视资讯台</a></td>
+</tr>
+<tr>
+	<td id=7 class="tv_item"><a style="color:#b6dbf8" href="#">8.凤凰卫视电影台</a></td>
+</tr>
+<tr>
+	<td id=8 class="tv_item"><a style="color:#b6dbf8" href="#">9.湖南卫视</a></td>
+</tr>
+</table>
+</div>
+<div id="tv_navi">
+<span class="navi">第1页&nbsp;&nbsp;共1页</span>
+</div>
+</body>
+<script language="JavaScript" type="text/JavaScript" src="functions.js"></script>
+<script language="JavaScript" type="text/JavaScript">
+<!--
+
+//当前页节目播放路径,一维数组
+var paths = new Array(8);
+paths[0]="http://sntx.169ol.com:8088/tv/zhongwen.mp4";
+paths[1]="http://sntx.169ol.com:8088/tv/xingguangtansuo.mp4";
+paths[2]="http://sntx.169ol.com:8088/tv/zixun.mp4";
+paths[3]="http://sntx.169ol.com:8088/tv/dianying.mp4";
+paths[4]="sdp://sntx.169ol.com:8088/sdp/84-08.xml=hw?fps=25";
+paths[5]="sdp://sntx.169ol.com:8088/sdp/85-04.xml=hw?fps=25";
+paths[6]="sdp://sntx.169ol.com:8088/sdp/85-01.xml=hw?fps=25";
+paths[7]="sdp://sntx.169ol.com:8088/sdp/85-08.xml=hw?fps=25";
+//所有节目播放路径,一维数组
+var allpath=new Array(46);
+allpath[0]="http://sntx.169ol.com:8088/tv/zhongwen.mp4";
+allpath[1]="http://sntx.169ol.com:8088/tv/xingguangtansuo.mp4";
+allpath[2]="http://sntx.169ol.com:8088/tv/zixun.mp4";
+allpath[3]="http://sntx.169ol.com:8088/tv/dianying.mp4";
+allpath[4]="sdp://sntx.169ol.com:8088/sdp/84-08.xml=hw?fps=25";
+allpath[5]="sdp://sntx.169ol.com:8088/sdp/85-04.xml=hw?fps=25";
+allpath[6]="sdp://sntx.169ol.com:8088/sdp/85-01.xml=hw?fps=25";
+allpath[7]="sdp://sntx.169ol.com:8088/sdp/85-08.xml=hw?fps=25";
+allpath[8]="sdp://sntx.169ol.com:8088/sdp/84-03.xml=hw?fps=25";
+allpath[9]="sdp://sntx.169ol.com:8088/sdp/84-01.xml=hw?fps=25";
+allpath[10]="sdp://sntx.169ol.com:8088/sdp/mcast_example.xml=vlc1";
+allpath[11]="sdp://sntx.169ol.com:8088/sdp/84-02.xml=hw?fps=25";
+allpath[12]="sdp://sntx.169ol.com:8088/sdp/mtv_test.xml=vlc1%force";
+allpath[13]="sdp://sntx.169ol.com:8088/sdp/85-09.xml=hw?fps=25";
+allpath[14]="sdp://sntx.169ol.com:8088/sdp/84-09.xml=hw?fps=25";
+allpath[15]="sdp://sntx.169ol.com:8088/sdp/84-10.xml=hw?fps=25";
+allpath[16]="sdp://sntx.169ol.com:8088/sdp/84-04.xml=hw?fps=25";
+allpath[17]="sdp://sntx.169ol.com:8088/sdp/85-03.xml=hw?fps=25";
+allpath[18]="sdp://sntx.169ol.com:8088/sdp/85-05.xml=hw?fps=25";
+allpath[19]="sdp://sntx.169ol.com:8088/sdp/85-02.xml=hw?fps=25";
+allpath[20]="sdp://sntx.169ol.com:8088/sdp/85-07.xml=hw?fps=25";
+allpath[21]="sdp://sntx.169ol.com:8088/sdp/84-07.xml=hw?fps=25";
+allpath[22]="sdp://sntx.169ol.com:8088/sdp/83-01.xml=hw?fps=25";
+allpath[23]="sdp://sntx.169ol.com:8088/sdp/83-02.xml=hw?fps=25";
+allpath[24]="sdp://sntx.169ol.com:8088/sdp/83-03.xml=hw?fps=25";
+allpath[25]="sdp://sntx.169ol.com:8088/sdp/83-04.xml=hw?fps=25";
+allpath[26]="sdp://sntx.169ol.com:8088/sdp/83-05.xml=hw?fps=25";
+allpath[27]="sdp://sntx.169ol.com:8088/sdp/83-06.xml=hw?fps=25";
+allpath[28]="sdp://sntx.169ol.com:8088/sdp/83-07.xml=hw?fps=25";
+allpath[29]="sdp://sntx.169ol.com:8088/sdp/83-09.xml=hw?fps=25";
+allpath[30]="sdp://sntx.169ol.com:8088/sdp/83-10.xml=hw?fps=25";
+allpath[31]="sdp://sntx.169ol.com:8088/sdp/83-08.xml=vlc1";
+allpath[32]="sdp://sntx.169ol.com:8088/sdp/82-03.xml=hw?fps=25";
+allpath[33]="sdp://sntx.169ol.com:8088/sdp/82-04.xml=hw?fps=25";
+allpath[34]="sdp://sntx.169ol.com:8088/sdp/82-05.xml=hw?fps=25";
+allpath[35]="sdp://sntx.169ol.com:8088/sdp/82-06.xml=hw?fps=25";
+allpath[36]="sdp://sntx.169ol.com:8088/sdp/82-07.xml=hw?fps=25";
+allpath[37]="sdp://sntx.169ol.com:8088/sdp/82-08.xml=hw?fps=25";
+allpath[38]="sdp://sntx.169ol.com:8088/sdp/82-09.xml=hw?fps=25";
+allpath[39]="sdp://sntx.169ol.com:8088/sdp/82-10.xml=hw?fps=25";
+allpath[40]="sdp://sntx.169ol.com:8088/sdp/94-01.xml=hw?fps=25";
+allpath[41]="sdp://sntx.169ol.com:8088/sdp/94-05.xml=hw?fps=25";
+allpath[42]="sdp://sntx.169ol.com:8088/sdp/85-06.xml=hw?fps=25";
+allpath[43]="sdp://sntx.169ol.com:8088/sdp/85-10.xml=hw?fps=25";
+allpath[44]="sdp://sntx.169ol.com:8088/sdp/PAL_CIF.xml=hw?fps=25%force";
+allpath[45]="sdp://sntx.169ol.com:8088/sdp/PAL_4CIF_MP3.xml=vlc1?fps=25%force";
+
+function onfoc(n) {
+	td=document.getElementById(n);
+	td.style.backgroundImage="url(src_"+src_width+"/image/tv/bar1.gif)";
+	dat =td.innerHTML;
+	dat = dat.substring(dat.indexOf("href="));
+	td.innerHTML = '<a style="color:#ffffff" ' + dat;
+	document.links[n].focus();
+}
+
+function losefoc(n) {
+	document.getElementById(n).style.backgroundImage="";
+	td=document.getElementById(n);
+	dat =td.innerHTML;
+	dat = dat.substring(dat.indexOf("href="));
+	td.innerHTML = '<a style="color:#b6dbf8" ' + dat;
+}
+
+var tv_num=0;
+var tv_num_len=1;
+function ch_len()
+{
+	if(tv_num_len==1)
+	{
+		tv_num_len=2;
+		document.getElementById('num').innerHTML='_ _';
+	}
+	else
+	{
+		tv_num_len=1;
+		document.getElementById('num').innerHTML='_';
+	}
+	tv_num=0;
+}
+var key2=0;
+function keyDown(e)
+{
+	if (ie)
+	{
+		var keycode=event.keyCode; 
+	}
+	else
+	{
+		var keycode=e.which;
+	}
+	var key1 = keycode -48
+	if(keycode==190)//.键
+	{
+		ch_len();
+	}
+	if(keycode==221)//绿键
+	{
+		location="sdp://sntx.169ol.com:8088/sdp/list.xml=pls";
+	}
+	if(keycode==33)
+	{
+		location ="?type=tv&offset=0";
+	}
+	if(keycode==34)
+	{
+		location ="?type=tv&offset=8";
+	}
+	if(keycode==38)//光标左上键
+	{
+		losefoc(key2);
+		key2=key2 - 1;
+		if(key2<0)
+		{
+			key2=link_count-1;
+		}
+		onfoc(key2)
+	}
+	if(keycode==40)//光标右下键
+	{
+		losefoc(key2);
+		key2=key2 + 1;
+		if(key2>link_count-1)
+		{
+			key2=0;
+		}
+		onfoc(key2)
+	}
+	if(keycode==36)
+	{
+		location ="index.html";
+	}
+	if(keycode>47 && keycode<59)
+	{
+		tmp_keycode=keycode-48;
+		if(tv_num_len==1)
+		{
+			tv_num=tmp_keycode;
+			document.getElementById('num').innerHTML=tv_num;
+			if(allpath[tv_num])
+			{
+				location=allpath[tv_num];
+			}
+			else
+			{
+				document.getElementById('num').innerHTML='无此<br>频道';
+			}
+		}
+		if(tv_num_len==2)
+		{
+			if(tv_num.toString().length==2)
+			{
+				tv_num=0;
+			}
+			tv_num=tv_num*10+tmp_keycode;
+			if(tv_num.toString().length==1)
+			{
+				document.getElementById('num').innerHTML=tv_num+' _';
+			}
+			if(tv_num.toString().length==2)
+			{
+				document.getElementById('num').innerHTML=tv_num;
+				if(allpath[tv_num])
+				{
+					location=allpath[tv_num];
+				}
+				else
+				{
+					document.getElementById('num').innerHTML='无此<br>频道';
+				}
+			}
+		}
+	}
+}
+document.onkeydown=keyDown
+//-->
+</script>
+</html>

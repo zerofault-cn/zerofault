@@ -1,0 +1,366 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+<title>网络配置</title>
+<script language="JavaScript" type="text/JavaScript" src="locateCSS.js"></script>
+<script language="JavaScript" type="text/JavaScript" src="functions.js"></script>
+<script language="JavaScript" type="text/JavaScript">
+<!--
+/*******************************
+DEVICE=ppp0|eth0|eth0
+BOOTPROTO=dialup|dhcp|static
+IPADDR=192.168.0.90
+NETMASK=255.255.255.0
+GATEWAY=192.168.0.6
+DNS=192.168.0.6
+USER=100001079094
+PPPPASSWD=w8f5m2i6
+*******************************/
+//读取原始配置,初始化默认值
+/******************************
+var oldDEVICE	='eth0';
+var oldBOOTPROTO='static';
+var oldIPADDR	='111.222.333.444';
+var oldNETMASK	='255.254.253.252';
+var oldGATEWAY	='192.168.0.111';
+var oldDNS		='192.168.0.222';
+/******************************/
+var oldDEVICE	=	iPanel.ioctlRead("NETCONFIG", "DEVICE")=='UNDEFINED'?'eth0':iPanel.ioctlRead("NETCONFIG", "DEVICE");
+var oldBOOTPROTO=	iPanel.ioctlRead("NETCONFIG", "BOOTPROTO")=='UNDEFINED'?'static':iPanel.ioctlRead("NETCONFIG", "BOOTPROTO");
+var oldIPADDR	=	iPanel.ioctlRead("NETCONFIG", "IPADDR")=='UNDEFINED'?'192.168.0.0':iPanel.ioctlRead("NETCONFIG", "IPADDR");
+var oldNETMASK	=	iPanel.ioctlRead("NETCONFIG", "NETMASK")=='UNDEFINED'?'255.255.255.0':iPanel.ioctlRead("NETCONFIG", "NETMASK");
+var oldGATEWAY	=	iPanel.ioctlRead("NETCONFIG", "GATEWAY")=='UNDEFINED'?'192.168.0.1':iPanel.ioctlRead("NETCONFIG", "GATEWAY");
+var oldDNS		=	iPanel.ioctlRead("NETCONFIG", "DNS")=='UNDEFINED'?'192.168.0.1':iPanel.ioctlRead("NETCONFIG", "DNS");
+//var oldUSER=iPanel.ioctlRead("NETCONFIG", "USER");
+//var oldPPPPASSWD=iPanel.ioctlRead("NETCONFIG", "PPPPASSWD");
+/*******************************/
+var s1=1;
+var s2=1;
+if(oldDEVICE=='ppp0')
+{
+	s1=0;
+}
+if(oldBOOTPROTO=='dhcp')
+{
+	s2=0;
+}
+
+function init()
+{
+	t1=document.getElementById("select_dial");
+	t2=document.getElementById("select_eth");
+	t3=document.getElementById("select_dhcp");
+	t4=document.getElementById("select_static");
+	if(s1==0)
+	{
+		t1.innerHTML ="<a href=\"javascript:void(0)\" onclick=\"select1()\" onblur=\"MM_swapImgRestore()\"  onfocus=\"MM_swapImage('Image1','','src_800/image/network/xz2_2.gif',1)\"><img src=\"src_800/image/network/xz2_1.gif\" name=\"Image1\" border=\"0\" class=\"select\"></a>";
+		t2.innerHTML = "<a href=\"javascript:void(0)\" onclick=\"select1()\" onblur=\"MM_swapImgRestore()\"  onfocus=\"MM_swapImage('Image2','','src_800/image/network/xz1_2.gif',1)\"><img src=\"src_800/image/network/xz1_1.gif\" name=\"Image2\" border=\"0\" class=\"select\"></a>";
+		t3.innerHTML ="<img src=\"src_800/image/network/xz1_1.gif\" name=\"Image3\" border=\"0\" class=\"select\">";
+		t4.innerHTML ="<img src=\"src_800/image/network/xz1_1.gif\" name=\"Image4\" border=\"0\" class=\"select\">";
+		document.form1.ip1.disabled=true;
+		document.form1.ip2.disabled=true;
+		document.form1.ip3.disabled=true;
+		document.form1.ip4.disabled=true;
+		document.form1.mask1.disabled=true;
+		document.form1.mask2.disabled=true;
+		document.form1.mask3.disabled=true;
+		document.form1.mask4.disabled=true;
+		document.form1.gw1.disabled=true;
+		document.form1.gw2.disabled=true;
+		document.form1.gw3.disabled=true;
+		document.form1.gw4.disabled=true;
+		document.form1.dns1.disabled=true;
+		document.form1.dns2.disabled=true;
+		document.form1.dns3.disabled=true;
+		document.form1.dns4.disabled=true;
+	}
+	else
+	{
+		t1.innerHTML ="<a href=\"javascript:void(0)\" onclick=\"select1()\" onblur=\"MM_swapImgRestore()\"  onfocus=\"MM_swapImage('Image1','','src_800/image/network/xz1_2.gif',1)\"><img src=\"src_800/image/network/xz1_1.gif\" name=\"Image1\" border=\"0\" class=\"select\"></a>";
+		t2.innerHTML = "<a href=\"javascript:void(0)\" onclick=\"select1()\" onblur=\"MM_swapImgRestore()\"  onfocus=\"MM_swapImage('Image2','','src_800/image/network/xz2_2.gif',1)\"><img src=\"src_800/image/network/xz2_1.gif\" name=\"Image2\" border=\"0\" class=\"select\"></a>";
+		if(s2==0)
+		{
+			t3.innerHTML="<a href=\"javascript:void(0)\" onclick=\"select2()\" onblur=\"MM_swapImgRestore()\"  onfocus=\"MM_swapImage('Image3','','src_800/image/network/xz2_2.gif',1)\"><img src=\"src_800/image/network/xz2_1.gif\" name=\"Image3\" border=\"0\" class=\"select\"></a>";
+			t4.innerHTML = "<a href=\"javascript:void(0)\" onclick=\"select2()\" onblur=\"MM_swapImgRestore()\"  onfocus=\"MM_swapImage('Image4','','src_800/image/network/xz1_2.gif',1)\"><img src=\"src_800/image/network/xz1_1.gif\" name=\"Image4\" border=\"0\" class=\"select\"></a>";
+			document.form1.ip1.disabled=true;
+			document.form1.ip2.disabled=true;
+			document.form1.ip3.disabled=true;
+			document.form1.ip4.disabled=true;
+			document.form1.mask1.disabled=true;
+			document.form1.mask2.disabled=true;
+			document.form1.mask3.disabled=true;
+			document.form1.mask4.disabled=true;
+			document.form1.gw1.disabled=true;
+			document.form1.gw2.disabled=true;
+			document.form1.gw3.disabled=true;
+			document.form1.gw4.disabled=true;
+			document.form1.dns1.disabled=true;
+			document.form1.dns2.disabled=true;
+			document.form1.dns3.disabled=true;
+			document.form1.dns4.disabled=true;
+		}
+		else 
+		{
+			t3.innerHTML="<a href=\"javascript:void(0)\" onclick=\"select2()\" onblur=\"MM_swapImgRestore()\"  onfocus=\"MM_swapImage('Image3','','src_800/image/network/xz1_2.gif',1)\"><img src=\"src_800/image/network/xz1_1.gif\" name=\"Image3\" border=\"0\" class=\"select\"></a>";
+			t4.innerHTML = "<a href=\"javascript:void(0)\" onclick=\"select2()\" onblur=\"MM_swapImgRestore()\"  onfocus=\"MM_swapImage('Image4','','src_800/image/network/xz2_2.gif',1)\"><img src=\"src_800/image/network/xz2_1.gif\" name=\"Image4\" border=\"0\" class=\"select\"></a>";
+			document.form1.ip1.disabled=false;
+			document.form1.ip2.disabled=false;
+			document.form1.ip3.disabled=false;
+			document.form1.ip4.disabled=false;
+			document.form1.ip1.value=oldIPADDR.substring(0,oldIPADDR.indexOf('.'));
+			oldIPADDR=oldIPADDR.substring(oldIPADDR.indexOf('.')+1);
+			document.form1.ip2.value=oldIPADDR.substring(0,oldIPADDR.indexOf('.'));
+			oldIPADDR=oldIPADDR.substring(oldIPADDR.indexOf('.')+1);
+			document.form1.ip3.value=oldIPADDR.substring(0,oldIPADDR.indexOf('.'));
+			oldIPADDR=oldIPADDR.substring(oldIPADDR.indexOf('.')+1);
+			document.form1.ip4.value=oldIPADDR;
+
+			document.form1.mask1.disabled=false;
+			document.form1.mask2.disabled=false;
+			document.form1.mask3.disabled=false;
+			document.form1.mask4.disabled=false;
+			document.form1.mask1.value=oldNETMASK.substring(0,oldNETMASK.indexOf('.'));
+			oldNETMASK=oldNETMASK.substring(oldNETMASK.indexOf('.')+1);
+			document.form1.mask2.value=oldNETMASK.substring(0,oldNETMASK.indexOf('.'));
+			oldNETMASK=oldNETMASK.substring(oldNETMASK.indexOf('.')+1);
+			document.form1.mask3.value=oldNETMASK.substring(0,oldNETMASK.indexOf('.'));
+			oldNETMASK=oldNETMASK.substring(oldNETMASK.indexOf('.')+1);
+			document.form1.mask4.value=oldNETMASK;
+			
+			document.form1.gw1.disabled=false;
+			document.form1.gw2.disabled=false;
+			document.form1.gw3.disabled=false;
+			document.form1.gw4.disabled=false;
+			document.form1.gw1.value=oldGATEWAY.substring(0,oldGATEWAY.indexOf('.'));
+			oldGATEWAY=oldGATEWAY.substring(oldGATEWAY.indexOf('.')+1);
+			document.form1.gw2.value=oldGATEWAY.substring(0,oldGATEWAY.indexOf('.'));
+			oldGATEWAY=oldGATEWAY.substring(oldGATEWAY.indexOf('.')+1);
+			document.form1.gw3.value=oldGATEWAY.substring(0,oldGATEWAY.indexOf('.'));
+			oldGATEWAY=oldGATEWAY.substring(oldGATEWAY.indexOf('.')+1);
+			document.form1.gw4.value=oldGATEWAY;
+			
+			document.form1.dns1.disabled=false;
+			document.form1.dns2.disabled=false;
+			document.form1.dns3.disabled=false;
+			document.form1.dns4.disabled=false;
+			document.form1.dns1.value=oldDNS.substring(0,oldDNS.indexOf('.'));
+			oldDNS=oldDNS.substring(oldDNS.indexOf('.')+1);
+			document.form1.dns2.value=oldDNS.substring(0,oldDNS.indexOf('.'));
+			oldDNS=oldDNS.substring(oldDNS.indexOf('.')+1);
+			document.form1.dns3.value=oldDNS.substring(0,oldDNS.indexOf('.'));
+			oldDNS=oldDNS.substring(oldDNS.indexOf('.')+1);
+			document.form1.dns4.value=oldDNS;
+			
+			document.form1.ip1.focus();
+		}
+	}
+}
+function select1()
+{
+	t1=document.getElementById("select_dial");
+	t2=document.getElementById("select_eth");
+	t3=document.getElementById("select_dhcp");
+	t4=document.getElementById("select_static");
+	if(s1==1)
+	{
+		s1=0;
+		t1.innerHTML ="<a href=\"javascript:void(0)\" onclick=\"select1()\" onblur=\"MM_swapImgRestore()\"  onfocus=\"MM_swapImage('Image1','','src_800/image/network/xz2_2.gif',1)\"><img src=\"src_800/image/network/xz2_1.gif\" name=\"Image1\" border=\"0\" class=\"select\"></a>";
+		t2.innerHTML = "<a href=\"javascript:void(0)\" onclick=\"select1()\" onblur=\"MM_swapImgRestore()\"  onfocus=\"MM_swapImage('Image2','','src_800/image/network/xz1_2.gif',1)\"><img src=\"src_800/image/network/xz1_1.gif\" name=\"Image2\" border=\"0\" class=\"select\"></a>";
+		t3.innerHTML ="<img src=\"src_800/image/network/xz1_1.gif\" name=\"Image3\" border=\"0\" class=\"select\">";
+		t4.innerHTML ="<img src=\"src_800/image/network/xz1_1.gif\" name=\"Image4\" border=\"0\" class=\"select\">";
+		document.form1.ip1.disabled=true;
+		document.form1.ip2.disabled=true;
+		document.form1.ip3.disabled=true;
+		document.form1.ip4.disabled=true;
+		document.form1.mask1.disabled=true;
+		document.form1.mask2.disabled=true;
+		document.form1.mask3.disabled=true;
+		document.form1.mask4.disabled=true;
+		document.form1.gw1.disabled=true;
+		document.form1.gw2.disabled=true;
+		document.form1.gw3.disabled=true;
+		document.form1.gw4.disabled=true;
+		document.form1.dns1.disabled=true;
+		document.form1.dns2.disabled=true;
+		document.form1.dns3.disabled=true;
+		document.form1.dns4.disabled=true;
+	}
+	else
+	{
+		s1=1;
+		t1.innerHTML ="<a href=\"javascript:void(0)\" onclick=\"select1()\" onblur=\"MM_swapImgRestore()\"  onfocus=\"MM_swapImage('Image1','','src_800/image/network/xz1_2.gif',1)\"><img src=\"src_800/image/network/xz1_1.gif\" name=\"Image1\" border=\"0\" class=\"select\"></a>";
+		t2.innerHTML = "<a href=\"javascript:void(0)\" onclick=\"select1()\" onblur=\"MM_swapImgRestore()\"  onfocus=\"MM_swapImage('Image2','','src_800/image/network/xz21_2.gif',1)\"><img src=\"src_800/image/network/xz2_1.gif\" name=\"Image2\" border=\"0\" class=\"select\"></a>";
+		t3.innerHTML="<a href=\"javascript:void(0)\" onclick=\"select2()\" onblur=\"MM_swapImgRestore()\"  onfocus=\"MM_swapImage('Image3','','src_800/image/network/xz1_2.gif',1)\"><img src=\"src_800/image/network/xz1_1.gif\" name=\"Image3\" border=\"0\" class=\"select\"></a>";
+		t4.innerHTML = "<a href=\"javascript:void(0)\" onclick=\"select2()\" onblur=\"MM_swapImgRestore()\"  onfocus=\"MM_swapImage('Image4','','src_800/image/network/xz2_2.gif',1)\"><img src=\"src_800/image/network/xz2_1.gif\" name=\"Image4\" border=\"0\" class=\"select\"></a>";
+		document.form1.ip1.disabled=false;
+		document.form1.ip2.disabled=false;
+		document.form1.ip3.disabled=false;
+		document.form1.ip4.disabled=false;
+		document.form1.mask1.disabled=false;
+		document.form1.mask2.disabled=false;
+		document.form1.mask3.disabled=false;
+		document.form1.mask4.disabled=false;
+		document.form1.gw1.disabled=false;
+		document.form1.gw2.disabled=false;
+		document.form1.gw3.disabled=false;
+		document.form1.gw4.disabled=false;
+		document.form1.dns1.disabled=false;
+		document.form1.dns2.disabled=false;
+		document.form1.dns3.disabled=false;
+		document.form1.dns4.disabled=false;
+		document.form1.ip1.focus(); 
+	}
+}
+
+function select2()
+{
+	t3=document.getElementById("select_dhcp");
+	t4=document.getElementById("select_static");
+	if(s2==1)
+	{
+		s2=0; 
+		t3.innerHTML="<a href=\"javascript:void(0)\" onclick=\"select2()\" onblur=\"MM_swapImgRestore()\"  onfocus=\"MM_swapImage('Image3','','src_800/image/network/xz2_2.gif',1)\"><img src=\"src_800/image/network/xz2_1.gif\" name=\"Image3\" border=\"0\" class=\"select\"></a>";
+		t4.innerHTML = "<a href=\"javascript:void(0)\" onclick=\"select2()\" onblur=\"MM_swapImgRestore()\"  onfocus=\"MM_swapImage('Image4','','src_800/image/network/xz1_2.gif',1)\"><img src=\"src_800/image/network/xz1_1.gif\" name=\"Image4\" border=\"0\" class=\"select\"></a>";
+		document.form1.ip1.disabled=true;
+		document.form1.ip2.disabled=true;
+		document.form1.ip3.disabled=true;
+		document.form1.ip4.disabled=true;
+		document.form1.mask1.disabled=true;
+		document.form1.mask2.disabled=true;
+		document.form1.mask3.disabled=true;
+		document.form1.mask4.disabled=true;
+		document.form1.gw1.disabled=true;
+		document.form1.gw2.disabled=true;
+		document.form1.gw3.disabled=true;
+		document.form1.gw4.disabled=true;
+		document.form1.dns1.disabled=true;
+		document.form1.dns2.disabled=true;
+		document.form1.dns3.disabled=true;
+		document.form1.dns4.disabled=true;
+	}
+	else 
+	{
+		s2=1; 
+		t3.innerHTML="<a href=\"javascript:void(0)\" onclick=\"select2()\" onblur=\"MM_swapImgRestore()\"  onfocus=\"MM_swapImage('Image3','','src_800/image/network/xz1_2.gif',1)\"><img src=\"src_800/image/network/xz1_1.gif\" name=\"Image3\" border=\"0\" class=\"select\"></a>";
+		t4.innerHTML = "<a href=\"javascript:void(0)\" onclick=\"select2()\" onblur=\"MM_swapImgRestore()\"  onfocus=\"MM_swapImage('Image4','','src_800/image/network/xz2_2.gif',1)\"><img src=\"src_800/image/network/xz2_1.gif\" name=\"Image4\" border=\"0\" class=\"select\"></a>";
+		document.form1.ip1.disabled=false;
+		document.form1.ip2.disabled=false;
+		document.form1.ip3.disabled=false;
+		document.form1.ip4.disabled=false;
+		document.form1.mask1.disabled=false;
+		document.form1.mask2.disabled=false;
+		document.form1.mask3.disabled=false;
+		document.form1.mask4.disabled=false;
+		document.form1.gw1.disabled=false;
+		document.form1.gw2.disabled=false;
+		document.form1.gw3.disabled=false;
+		document.form1.gw4.disabled=false;
+		document.form1.dns1.disabled=false;
+		document.form1.dns2.disabled=false;
+		document.form1.dns3.disabled=false;
+		document.form1.dns4.disabled=false;
+		document.form1.ip.focus();
+	}
+}
+
+function save()
+{ 
+	if(s1==0)
+	{
+		iPanel.ioctlWrite("NETCONFIG", "DEVICE", "ppp0");
+		iPanel.ioctlWrite("NETCONFIG", "BOOTPROTO", "dialup");
+	}
+	else
+	{
+		iPanel.ioctlWrite("NETCONFIG", "DEVICE", "eth0");
+		if(s2==0)
+		{
+			iPanel.ioctlWrite("NETCONFIG", "BOOTPROTO", "dhcp");
+		}
+		else
+		{
+			ip		=document.form1.ip1.value+'.'+document.form1.ip2.value+'.'+document.form1.ip3.value+'.'+document.form1.ip4.value;
+			mask	=document.form1.mask1.value+'.'+document.form1.mask2.value+'.'+document.form1.mask3.value+'.'+document.form1.mask4.value;
+			gw		=document.form1.gw1.value+'.'+document.form1.gw2.value+'.'+document.form1.gw3.value+'.'+document.form1.gw4.value;
+			dns		=document.form1.dns1.value+'.'+document.form1.dns2.value+'.'+document.form1.dns3.value+'.'+document.form1.dns4.value;
+		//	alert(ip+mask+gw+dns);
+			iPanel.ioctlWrite("NETCONFIG", "BOOTPROTO", "static");
+			iPanel.ioctlWrite("NETCONFIG", "IPADDR", ip);
+			iPanel.ioctlWrite("NETCONFIG", "NETMASK", mask);
+			iPanel.ioctlWrite("NETCONFIG", "GATEWAY", gw);
+			iPanel.ioctlWrite("NETCONFIG", "DNS", dns);
+		}
+	}
+	location="setting_index.html";
+}
+function fanhui()
+{
+	location="setting_index.html";
+}
+	
+function keyDown(e)
+{
+	var keycode=e.which;
+	if (keycode==0)
+	{
+		keycode=e.keyCode;
+	}
+	if (keycode==35) 
+	{
+		save();
+	}
+	if (keycode==36)  
+	{
+		fanhui();
+	}
+}
+document.onkeydown=keyDown;
+//-->
+</script>
+</head>
+
+<body id="setting_network" onload="init()">
+<div id="topnavi">
+<span class="topnavi">网络设置</span>
+</div>
+<div id="set_dial">
+<span id="select_dial"><a href="javascript:void(0)" onclick="select1()" onblur="MM_swapImgRestore()"  onfocus="MM_swapImage('Image1','','src_800/image/network/xz1_2.gif',1)"><img src="src_800/image/network/xz1_1.gif" name="Image1" border="0" class="select"></a></span>使用拨号方式上网
+</div>
+<div id="set_eth">
+<span id="select_eth"><a href="javascript:void(0)" onclick="select1()" onblur="MM_swapImgRestore()"  onfocus="MM_swapImage('Image2','','src_800/image/network/xz2_2.gif',1)"><img src="src_800/image/network/xz2_1.gif" name="Image2" border="0" class="select"></a></span>使用局域网方式上网
+</div>
+<div id="set_dhcp">
+<span id="select_dhcp"><a href="javascript:void(0)" onclick="select2()" onblur="MM_swapImgRestore()"  onfocus="MM_swapImage('Image3','','src_800/image/network/xz1_2.gif',1)"><img src="src_800/image/network/xz1_1.gif" name="Image3" border="0" class="select"></a></span>自动获取IP
+</div>
+<div id="set_static">
+<span id="select_static"><a href="javascript:void(0)" onclick="select2()" onblur="MM_swapImgRestore()"  onfocus="MM_swapImage('Image4','','src_800/image/network/xz2_2.gif',1)"><img src="src_800/image/network/xz2_1.gif" name="Image4" border="0" class="select"></a></span>手动分配IP
+</div>
+<div id="network_form">
+<table border=0 width="100%" cellpadding=0 cellspacing=0>
+<form name="form1">
+<tr>
+	<td>IP&emsp;地址：</td>
+	<td><input type="text" name="ip1" class="input2" size="2" maxlength="3">.<input type="text" name="ip2" class="input2" size="2" maxlength="3">.<input type="text" name="ip3" class="input2" size="2" maxlength="3">.<input type="text" name="ip4" class="input2" size="2" maxlength="3"></td>
+</tr>
+<tr>
+	<td>子网掩码：</td>
+	<td><input type="text" name="mask1" class="input2" size="2" maxlength="3">.<input type="text" name="mask2" class="input2" size="2" maxlength="3">.<input type="text" name="mask3" class="input2" size="2" maxlength="3">.<input type="text" name="mask4" class="input2" size="2" maxlength="3"></td>
+</tr>
+<tr>
+	<td>网&emsp;&emsp;关：</td>
+	<td><input type="text" name="gw1" class="input2" size="2" maxlength="3">.<input type="text" name="gw2" class="input2" size="2" maxlength="3">.<input type="text" name="gw3" class="input2" size="2" maxlength="3">.<input type="text" name="gw4" class="input2" size="2" maxlength="3"></td>
+</tr>
+<tr>
+	<td>DNS：</td>
+	<td><input type="text" name="dns1" class="input2" size="2" maxlength="3">.<input type="text" name="dns2" class="input2" size="2" maxlength="3">.<input type="text" name="dns3" class="input2" size="2" maxlength="3">.<input type="text" name="dns4" class="input2" size="2" maxlength="3"></td>
+</tr>
+<tr>
+	<td height="56" colspan=2 align="center">
+	<a href="javascript:void(0)" onclick="save()" onblur="MM_swapImgRestore()"  onfocus="MM_swapImage('Image5','','src_800/image/network/qd2.gif',1)"><img src="src_800/image/network/qd1.gif" name="Image5" border="0" class="btn"></a>&nbsp;
+	<a href="javascript:void(0);" onclick="fanhui()" onblur="MM_swapImgRestore()" onfocus="MM_swapImage('Image6','','src_800/image/network/fh2.gif',1)"><img src="src_800/image/network/fh1.gif" name="Image6" border="0" class="btn"></a></td>
+</tr>
+</form>
+</table>
+</div>
+</body>
+</html>

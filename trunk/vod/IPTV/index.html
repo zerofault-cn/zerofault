@@ -1,0 +1,153 @@
+<html>
+<head>
+<meta http-equiv="Refresh" ccontent="0;url=http://sntx.169ol.com:8088/">
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+<title>主菜单</title>
+<script language="JavaScript" type="text/JavaScript" src="locateCSS.js"></script>
+</head>
+<body id="index" onload="onfoc(0)">
+<div id="index_menu"><!-- 菜单部分 -->
+<table id="index_menu" border="0" width="100%" height="100%" cellpadding="0" cellspacing="0">
+<tr>
+	<td id="0" class="index_menu"><a style="color:#b6dbf8" href="tv_station.html">1.电视节目</a>&nbsp;</td>
+</tr>
+<tr>
+	<td id="1" class="index_menu"><a style="color:#b6dbf8" href="vod_index.html">2.视频点播</a>&nbsp;</td>
+</tr>
+<tr>
+	<td id="2" class="index_menu"><a style="color:#b6dbf8" href="music_index.html">3.音乐欣赏</a>&nbsp;</td>
+</tr>
+<tr>
+	<td id="3" class="index_menu"><a style="color:#b6dbf8" href="fm_index.html">4. FM 收听</a>&nbsp;</td>
+</tr>
+<tr>
+	<td id="4" class="index_menu"><a style="color:#b6dbf8" href="vphone_index.html">5.可视电话</a>&nbsp;</td>
+</tr>
+<tr>
+	<td id="5" class="index_menu"><a style="color:#b6dbf8" href="http://www.10jqka.com.cn/ex_info/jhq/LoadHexin.php">6.股票信息</a>&nbsp;</td>
+</tr>
+<tr>
+	<td id="6" class="index_menu"><a style="color:#b6dbf8" href="game_index.html">7.游戏娱乐</a>&nbsp;</td>
+</tr>
+<tr>
+	<td id="7" class="index_menu"><a style="color:#b6dbf8" href="news_index.html">8.新闻频道</a>&nbsp;</td>
+</tr>
+<tr>
+	<td id="8" class="index_menu"><a style="color:#b6dbf8" href="service_index.html">9.信息服务</a>&nbsp;</td>
+</tr>
+</table>
+</div>
+<div id="realtime"><!-- 时间 -->
+<embed src="clock.swf" quality="high" type="application/x-shockwave-flash" width="100%" height="100%"></embed>
+</div>
+<div id="icon" align=center><!-- ICON -->
+<img id="iconImg" src=""></img>
+</div>
+<div id="tips"><!-- 帮助，设置等 -->
+<table id="tips"border=0 width="100%" height="100%" cellspacing=0 cellpadding=0>
+<tr>
+	<td id="9" valign="bottom" class="tips"><a style="color:#b6dbf8" href="#"> 注 销</a></td>
+	<td id="10" valign="bottom" class="tips"><a style="color:#b6dbf8" href="#">设 置</a></td>
+	<td id="11"valign="bottom" class="tips"><a style="color:#b6dbf8" href="http://192.168.0.100:8088/">帮 助</a></td>
+</tr>
+</table>
+</div>
+</body>
+<script language="JavaScript" type="text/JavaScript" src="functions.js"></script>
+<script language="JavaScript" type="text/JavaScript">
+<!--
+
+function onfoc(n) {
+	var bar_img="";
+	switch (n)
+	{
+		case 9:
+			bar_img="util.gif";
+			break;
+		case 10:
+			bar_img="setup.gif";
+			break;
+		case 11:
+			bar_img="help.gif";
+			break;
+		default:
+			bar_img="bar1.gif";
+	}
+	document.getElementById(n).style.backgroundImage="url(src_"+src_width+"/image/menu/"+bar_img+")";
+	td=document.getElementById(n);
+	dat =td.innerHTML;
+	dat = dat.substring(dat.indexOf("href="));
+	td.innerHTML = '<a style="color:#ffffff" ' + dat;
+	if(n<9)
+	{
+		show_icon(n);
+	}
+	document.links[n].focus();
+}
+
+function losefoc(n) {
+	document.getElementById(n).style.backgroundImage="";
+	td=document.getElementById(n);
+	dat =td.innerHTML;
+	dat = dat.substring(dat.indexOf("href="));
+	td.innerHTML = '<a style="color:#b6dbf8" ' + dat;
+}
+function show_icon(n)
+{
+	document.getElementById('iconImg').src="src_"+src_width+"/image/menu/icon"+n+".gif";
+}
+function keyDown(e)
+{
+	if (ie)
+	{
+		var keycode=event.keyCode; 
+	}
+	else
+	{
+		var keycode=e.which;
+	}
+	var key1 = keycode -48;
+	var patern=/^[1-link_count]$/; 
+	if (patern.exec(key1)) 
+	{
+		if(key1 == key2 + 1) 
+		{
+			onfoc(key1-1);
+		}
+		else
+		{
+			losefoc(key2);
+			onfoc(key1-1)
+			key2=key1-1;
+		}
+		location=document.links[key2];
+	}
+	if(keycode==36)//HOME键
+	{
+	//	location="menu.html";
+	}
+	if(keycode==38)//光标左上键
+	{
+		losefoc(key2);
+		key2=key2 - 1;
+		if(key2<0)
+		{
+			key2=link_count-1;
+		}
+		onfoc(key2)
+	}
+	if(keycode==40)//光标右下键
+	{
+		losefoc(key2);
+		key2=key2 + 1;
+		if(key2>link_count-1)
+		{
+			key2=0;
+		}
+		onfoc(key2)
+	}
+}
+document.onkeydown=keyDown
+//-->
+</script>
+</html>

@@ -1,0 +1,110 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+<title>在线音乐</title>
+<script language="JavaScript" type="text/JavaScript" src="locateCSS.js"></script>
+</head>
+<body id="music_online" onload="onfoc(0)">
+<div id="topnavi">
+<span class="topnavi">在线音乐</span>
+</div>
+<div id="music_online_menu">
+<table border=0 width="100%" height="100%" cellspacing=0 cellpadding=0>
+<tr>
+	<td id="0" class="music_online_menu"><a style="color:#b6dbf8" href="music_typelist.html">1.按歌手乐队分类</a></td>
+</tr>
+<tr>
+	<td id="1" class="music_online_menu"><a style="color:#b6dbf8" href="#">2.按演唱方式分类</a></td>
+</tr>
+<tr>
+	<td id="2" class="music_online_menu"><a style="color:#b6dbf8" href="#">3.按歌名字数分类</a></td>
+</tr>
+<tr>
+	<td id="3" class="music_online_menu"><a style="color:#b6dbf8" href="#">4.按歌名首字母分类</a></td>
+</tr>
+<tr>
+	<td id="4" class="music_online_menu"><a style="color:#b6dbf8" href="#">5.按其它音乐分类</a></td>
+</tr>
+<tr>
+	<td id="5" class="music_online_menu"><a style="color:#b6dbf8" href="#">6.我的收藏夹</a></td>
+</tr>
+</table>
+</div>
+<div id="music_online_sysinfo">
+服务器资源<br>歌手:669位<br>MTV:3837首
+</div>
+</body>
+<script language="JavaScript" type="text/JavaScript" src="functions.js"></script>
+<script language="JavaScript" type="text/JavaScript">
+<!--
+function onfoc(n) {
+	document.getElementById(n).style.backgroundImage="url(src_"+src_width+"/image/music/bar2.gif)";
+	td=document.getElementById(n);
+	dat =td.innerHTML;
+	dat = dat.substring(dat.indexOf("href="));
+	td.innerHTML = '<a style="color:#ffffff" ' + dat;
+	document.links[n].focus();
+}
+
+function losefoc(n) {
+	document.getElementById(n).style.backgroundImage="";
+	td=document.getElementById(n);
+	dat =td.innerHTML;
+	dat = dat.substring(dat.indexOf("href="));
+	td.innerHTML = '<a style="color:#b6dbf8" ' + dat;
+}
+function keyDown(e)
+{
+	if (ie)
+	{
+		var keycode=event.keyCode; 
+	}
+	else
+	{
+		var keycode=e.which;
+	}
+	var key1 = keycode -48;
+	var patern=/^[1-link_count]$/; 
+	if (patern.exec(key1)) 
+	{
+		if(key1 == key2 + 1) 
+		{
+			onfoc(key1-1);
+		}
+		else
+		{
+			losefoc(key2);
+			onfoc(key1-1)
+			key2=key1-1;
+		}
+		location=document.links[key2];
+	}
+	if(keycode==36)//HOME键
+	{
+		location="music_index.html";
+	}
+	if(keycode==38)//光标左上键
+	{
+		losefoc(key2);
+		key2=key2 - 1;
+		if(key2<0)
+		{
+			key2=link_count-1;
+		}
+		onfoc(key2)
+	}
+	if(keycode==40)//光标右下键
+	{
+		losefoc(key2);
+		key2=key2 + 1;
+		if(key2>link_count-1)
+		{
+			key2=0;
+		}
+		onfoc(key2)
+	}
+}
+document.onkeydown=keyDown
+//-->
+</script>
+</html>

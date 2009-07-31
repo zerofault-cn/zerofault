@@ -1,0 +1,124 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+<title>信息服务_首页</title>
+<script language="JavaScript" type="text/JavaScript" src="locateCSS.js"></script>
+<script language="JavaScript" type="text/JavaScript" src="cookie_class.js"></script>
+<script>
+if(GetCookie("")!=null)
+{}
+</script>
+</head>
+<body id="service_index" onload="onfoc(0)">
+<div id="topnavi">
+<span class="topnavi">信息服务</span>
+</div>
+<div id="service_index_menu">
+<table border=0 width="100%" height="100%" cellspacing=0 cellpadding=0>
+<tr>
+	<td id="0"><a style="color:#b6dbf8" href="web_link.html">1.上网浏览</a></td>
+</tr>
+<tr>
+	<td id="1"><a style="color:#b6dbf8" href="weather_cn.php">2.天气预报</a></td>
+</tr>
+<tr>
+	<td id="2"><a style="color:#b6dbf8" href="bm_dianhua.php">3.常用电话</a></td>
+</tr>
+<tr>
+	<td id="3"><a style="color:#b6dbf8" href="train_line.php">4.火车时刻表</a></td>
+</tr>
+<tr>
+	<td id="4"><a style="color:#b6dbf8" href="airline.php">5.航班时刻表</a></td>
+</tr>
+<tr>
+	<td id="5"><a style="color:#b6dbf8" href="bm_bus.php">6.公交线路</a></td>
+</tr>
+<tr>
+	<td id="6"><a style="color:#b6dbf8" href="bm_jiazheng.php">7.家政服务</a></td>
+</tr>
+<tr>
+	<td id="7"><a style="color:#b6dbf8" href="hospital.html">8.医院信息</a></td>
+</tr>
+<tr>
+	<td id="8"><a style="color:#b6dbf8" href="train_sell.php">9.火车售票点</a></td>
+</tr>
+<tr>
+	<td id="9"><a style="color:#b6dbf8" href="travel.php">10.旅游公司</a></td>
+</tr>
+</table>
+</div>
+</body>
+<script language="JavaScript" type="text/JavaScript" src="functions.js"></script>
+<script language="JavaScript" type="text/JavaScript">
+<!--
+function onfoc(n) {
+	document.getElementById(n).style.backgroundImage="url(src_"+src_width+"/image/service/bar1.gif)";
+	td=document.getElementById(n);
+	dat =td.innerHTML;
+	dat = dat.substring(dat.indexOf("href="));
+	td.innerHTML = '<a style="color:#ffffff" ' + dat;
+	document.links[n].focus();
+}
+
+function losefoc(n) {
+	document.getElementById(n).style.backgroundImage="";
+	td=document.getElementById(n);
+	dat =td.innerHTML;
+	dat = dat.substring(dat.indexOf("href="));
+	td.innerHTML = '<a style="color:#b6dbf8" ' + dat;
+}
+function keyDown(e)
+{
+	if (ie)
+	{
+		var keycode=event.keyCode; 
+	}
+	else
+	{
+		var keycode=e.which;
+	}
+	var key1 = keycode -48;
+	var patern=/^[1-link_count]$/; 
+	if (patern.exec(key1)) 
+	{
+		if(key1 == key2 + 1) 
+		{
+			onfoc(key1-1);
+		}
+		else
+		{
+			losefoc(key2);
+			onfoc(key1-1)
+			key2=key1-1;
+		}
+		location=document.links[key2];
+	}
+	if(keycode==36)//HOME键
+	{
+		location="index.html";
+	}
+	if(keycode==38)//光标左上键
+	{
+		losefoc(key2);
+		key2=key2 - 1;
+		if(key2<0)
+		{
+			key2=link_count-1;
+		}
+		onfoc(key2)
+	}
+	if(keycode==40)//光标右下键
+	{
+		losefoc(key2);
+		key2=key2 + 1;
+		if(key2>link_count-1)
+		{
+			key2=0;
+		}
+		onfoc(key2)
+	}
+}
+document.onkeydown=keyDown
+//-->
+</script>
+</html>

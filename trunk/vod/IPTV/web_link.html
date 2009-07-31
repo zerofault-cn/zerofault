@@ -1,0 +1,57 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+<title>网页链接</title>
+<script language="JavaScript" type="text/JavaScript" src="locateCSS.js"></script>
+<script language="JavaScript" type="text/JavaScript" src="functions.js"></script>
+<script language="JavaScript" type="text/JavaScript">
+<!--
+function linkto()
+{
+	location=document.form1.url.value;
+}
+function keyDown(e)
+{
+	if (ie)
+	{
+		var keycode=event.keyCode; 
+	}
+	else
+	{
+		var keycode=e.which;
+	}
+	var key1 = keycode -48;
+	if (keycode==36)
+	{
+		location="service_index.html";
+	}
+}
+document.onkeydown=keyDown
+//-->
+</script>
+</head>
+
+<body id="web_link" onload="document.form1.url.focus()">
+<form name="form1">
+<div id="web_addr">
+<span class="web_addr">请输入网址：<input type="text" name="url" class="input2" value="http://" size=24>&emsp;<a href="javascript:void(0)" onclick="linkto()" onblur="MM_swapImgRestore()"  onfocus="MM_swapImage('Image0','','src_800/image/service/web_link/linkto2.gif',1)" onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('Image0','','src_800/image/service/web_link/linkto2.gif',1)"><img src="src_800/image/service/web_link/linkto1.gif" name="Image0" class="btn" border=0 align="middle"></a></span>
+</div>
+</form>
+<div id="web_link_menu">
+<table width="100%" height="100%" border="0" cellpadding="0" cellspacing="0">
+<tr>
+	<td width="50%" class="web_link_menu"><a href="http://www.chinavnet.com" onfocus="image1.style.padding='6px',image1.style.backgroundColor='#ff00ff'" onblur="image1.style.padding='0',image1.style.backgroundColor=''"><img src="src_800/image/service/web_link/chinavnet.gif" width="241" height="98" name="image1" class="linkIcon" border=0></a></td>
+	<td width="50%" class="web_link_menu"><a href="http://www.baidu.com" onfocus="image2.style.padding='6px',image2.style.backgroundColor='#ff00ff'" onblur="image2.style.padding='0',image2.style.backgroundColor=''"><img src="src_800/image/service/web_link/baidu.gif" name="image2" class="linkIcon" border=0></a></td>
+</tr>
+<tr>
+	<td width="50%" class="web_link_menu"><a href="http://www.sohu.com" onfocus="image3.style.padding='6px',image3.style.backgroundColor='#ff00ff'" onblur="image3.style.padding='0',image3.style.backgroundColor=''"><img src="src_800/image/service/web_link/sohu.gif" name="image3" class="linkIcon" border=0></a></td>
+	<td width="50%" class="web_link_menu"><a href="http://www.163.com" onfocus="image4.style.padding='6px',image4.style.backgroundColor='#ff00ff'" onblur="image4.style.padding='0',image4.style.backgroundColor=''"><img src="src_800/image/service/web_link/netease.gif" name="image4" class="linkIcon" border=0></a></td>
+</tr>
+<tr>
+	<td width="50%" class="web_link_menu"><a href="http://www.sina.com" onfocus="image5.style.padding='6px',image5.style.backgroundColor='#ff00ff'" onblur="image5.style.padding='0',image5.style.backgroundColor=''"><img src="src_800/image/service/web_link/sina.gif" name="image5" class="linkIcon" border=0></a></td>
+	<td width="50%" class="web_link_menu"><a href="http://www.yahoo.com" onfocus="image6.style.padding='6px',image6.style.backgroundColor='#ff00ff'" onblur="image6.style.padding='0',image6.style.backgroundColor=''"><img src="src_800/image/service/web_link/yahoo.gif" name="image6" class="linkIcon" border=0></a></td>
+</tr>
+</table>
+</div>
+</body>
+</html>

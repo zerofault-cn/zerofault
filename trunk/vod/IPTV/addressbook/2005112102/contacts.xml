@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="GB2312"?>
+<contacts>
+	<namecard>
+		<id>1</id>
+		<name>孙权</name>
+		<title>丞相</title>
+		<vphone>234567</vphone>
+		<mobile>13301110121</mobile>
+		<phone>8888888</phone>
+		<homephone>999999</homephone>
+		<email>caocao@email.com</email>
+		<address>魏国</address>
+		<ring>1</ring>
+	</namecard> 
+	<namecard>
+		<id>2</id>
+		<name>张飞</name>
+		<title>皇叔</title>
+		<vphone>333333</vphone>
+		<mobile>13401340121</mobile>
+		<phone>77777777</phone>
+		<homephone>6666666</homephone>
+		<email>liubei@email.com</email>
+		<address>蜀国</address>
+		<ring>2</ring>
+	</namecard> 
+	<namecard>
+		<id>3</id>
+		<name>张飞</name>
+		<title>皇叔</title>
+		<vphone>333333</vphone>
+		<mobile>13401340121</mobile>
+		<phone>77777777</phone>
+		<homephone>6666666</homephone>
+		<email>liubei@email.com</email>
+		<address>蜀国</address>
+		<ring>2</ring>
+	</namecard> 
+</contacts>

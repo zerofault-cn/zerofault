@@ -1,0 +1,429 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+<META HTTP-EQUIV="pragma" CONTENT="no-cache">
+<META HTTP-EQUIV="Cache-Control" CONTENT="no-cache,must-revalidate">
+<META HTTP-EQUIV="expires" CONTENT="0">
+<meta http-equiv="refresh" content="3600">
+<title>数字电视</title>
+<script language="JavaScript" type="text/JavaScript" src="locateCSS.js"></script>
+</head>
+<script language="JavaScript" type="text/JavaScript" src="functions.js"></script>
+<script language="JavaScript" type="text/JavaScript">
+<!--
+var now = new Date();
+var hours = now.getHours();
+var minutes = now.getMinutes();
+
+var pageitem=5;//每页显示频道数
+var offset=0;//当前页数据库取值offset
+
+var prog_count=8;
+//节目名称，一维数组
+var prog_name_arr=new Array(prog_count);
+prog_name_arr[0]='成都测试';
+prog_name_arr[1]='星光探索';
+prog_name_arr[2]='会展直播';
+prog_name_arr[3]='凤凰卫视中文台';
+prog_name_arr[4]='凤凰卫视资讯台';
+prog_name_arr[5]='凤凰卫视电影台';
+prog_name_arr[6]='湖南卫视';
+prog_name_arr[7]='中央电视台-1';
+
+//节目描述文件名,含路径，一维数组
+var prog_sdp_arr=new Array(8);
+prog_sdp_arr[0]="daily_list/list__mtv.mp4";
+prog_sdp_arr[1]="daily_list/list__xw_050912094132_xinwen1.rm";
+prog_sdp_arr[2]="daily_list/list__xw_050912194427_xinwen.rm";
+prog_sdp_arr[3]="daily_list/list__Garfield.rmvb";
+prog_sdp_arr[4]="daily_list/list__OUTPUT_200509138.wmv";
+prog_sdp_arr[5]="dianying";
+prog_sdp_arr[6]="84-08";
+prog_sdp_arr[7]="85-04";
+
+//节目表，三维数组
+//8个频道，每频道5个节目，每个节目有开始时间，结束时间，节目名称
+var prog_epg_arr=new Array(8);
+prog_epg_arr[0]=new Array(5);
+prog_epg_arr[0][0]=new Array(3);
+prog_epg_arr[0][0][0]='13:00';
+prog_epg_arr[0][0][1]='13:30';
+prog_epg_arr[0][0][2]='1-1';
+prog_epg_arr[0][1]=new Array(3);
+prog_epg_arr[0][1][0]='13:30';
+prog_epg_arr[0][1][1]='14:30';
+prog_epg_arr[0][1][2]='1-2';
+prog_epg_arr[0][2]=new Array(3);
+prog_epg_arr[0][2][0]='14:30';
+prog_epg_arr[0][2][1]='16:30';
+prog_epg_arr[0][2][2]='1-3';
+prog_epg_arr[0][3]=new Array(3);
+prog_epg_arr[0][3][0]='16:30';
+prog_epg_arr[0][3][1]='18:00';
+prog_epg_arr[0][3][2]='1-4';
+prog_epg_arr[0][4]=new Array(3);
+prog_epg_arr[0][4][0]='18:00';
+prog_epg_arr[0][4][1]='24:00';
+prog_epg_arr[0][4][2]='1-5';
+prog_epg_arr[1]=new Array(5);
+prog_epg_arr[1][0]=new Array(3);
+prog_epg_arr[1][0][0]='10:30';
+prog_epg_arr[1][0][1]='13:15';
+prog_epg_arr[1][0][2]='2-1';
+prog_epg_arr[1][1]=new Array(3);
+prog_epg_arr[1][1][0]='13:15';
+prog_epg_arr[1][1][1]='15:45';
+prog_epg_arr[1][1][2]='2-2';
+prog_epg_arr[1][2]=new Array(3);
+prog_epg_arr[1][2][0]='15:45';
+prog_epg_arr[1][2][1]='16:30';
+prog_epg_arr[1][2][2]='2-3';
+prog_epg_arr[1][3]=new Array(3);
+prog_epg_arr[1][3][0]='16:30';
+prog_epg_arr[1][3][1]='17:00';
+prog_epg_arr[1][3][2]='2-4';
+prog_epg_arr[1][4]=new Array(3);
+prog_epg_arr[1][4][0]='17:00';
+prog_epg_arr[1][4][1]='18:00';
+prog_epg_arr[1][4][2]='2-5';
+prog_epg_arr[2]=new Array(5);
+prog_epg_arr[2][0]=new Array(3);
+prog_epg_arr[2][0][0]='18:00';
+prog_epg_arr[2][0][1]='18:30';
+prog_epg_arr[2][0][2]='3-1';
+prog_epg_arr[2][1]=new Array(3);
+prog_epg_arr[2][1][0]='18:30';
+prog_epg_arr[2][1][1]='19:00';
+prog_epg_arr[2][1][2]='3-2';
+prog_epg_arr[2][2]=new Array(3);
+prog_epg_arr[2][2][0]='19:00';
+prog_epg_arr[2][2][1]='19:30';
+prog_epg_arr[2][2][2]='3-3';
+prog_epg_arr[2][3]=new Array(3);
+prog_epg_arr[2][3][0]='19:30';
+prog_epg_arr[2][3][1]='20:00';
+prog_epg_arr[2][3][2]='3-4';
+prog_epg_arr[2][4]=new Array(3);
+prog_epg_arr[2][4][0]='20:00';
+prog_epg_arr[2][4][1]='20:30';
+prog_epg_arr[2][4][2]='3-5';
+prog_epg_arr[3]=new Array(5);
+prog_epg_arr[3][0]=new Array(3);
+prog_epg_arr[3][0][0]='11:00';
+prog_epg_arr[3][0][1]='14:30';
+prog_epg_arr[3][0][2]='4-1';
+prog_epg_arr[3][1]=new Array(3);
+prog_epg_arr[3][1][0]='14:30';
+prog_epg_arr[3][1][1]='15:00';
+prog_epg_arr[3][1][2]='4-2';
+prog_epg_arr[3][2]=new Array(3);
+prog_epg_arr[3][2][0]='15:00';
+prog_epg_arr[3][2][1]='16:30';
+prog_epg_arr[3][2][2]='4-3';
+prog_epg_arr[3][3]=new Array(3);
+prog_epg_arr[3][3][0]='16:30';
+prog_epg_arr[3][3][1]='17:00';
+prog_epg_arr[3][3][2]='4-4';
+prog_epg_arr[3][4]=new Array(3);
+prog_epg_arr[3][4][0]='17:00';
+prog_epg_arr[3][4][1]='17:30';
+prog_epg_arr[3][4][2]='4-5';
+prog_epg_arr[4]=new Array(5);
+prog_epg_arr[4][0]=new Array(3);
+prog_epg_arr[4][0][0]='11:00';
+prog_epg_arr[4][0][1]='11:30';
+prog_epg_arr[4][0][2]='5-1';
+prog_epg_arr[4][1]=new Array(3);
+prog_epg_arr[4][1][0]='11:30';
+prog_epg_arr[4][1][1]='12:00';
+prog_epg_arr[4][1][2]='5-2';
+prog_epg_arr[4][2]=new Array(3);
+prog_epg_arr[4][2][0]='12:00';
+prog_epg_arr[4][2][1]='12:30';
+prog_epg_arr[4][2][2]='5-3';
+prog_epg_arr[4][3]=new Array(3);
+prog_epg_arr[4][3][0]='12:30';
+prog_epg_arr[4][3][1]='16:30';
+prog_epg_arr[4][3][2]='5-4';
+prog_epg_arr[4][4]=new Array(3);
+prog_epg_arr[4][4][0]='16:30';
+prog_epg_arr[4][4][1]='18:00';
+prog_epg_arr[4][4][2]='5-5';
+prog_epg_arr[5]=new Array(5);
+prog_epg_arr[5][0]=new Array(3);
+prog_epg_arr[5][0][0]='10:30';
+prog_epg_arr[5][0][1]='11:30';
+prog_epg_arr[5][0][2]='6-1';
+prog_epg_arr[5][1]=new Array(3);
+prog_epg_arr[5][1][0]='11:30';
+prog_epg_arr[5][1][1]='12:30';
+prog_epg_arr[5][1][2]='6-2';
+prog_epg_arr[5][2]=new Array(3);
+prog_epg_arr[5][2][0]='12:30';
+prog_epg_arr[5][2][1]='13:30';
+prog_epg_arr[5][2][2]='6-3';
+prog_epg_arr[5][3]=new Array(3);
+prog_epg_arr[5][3][0]='13:30';
+prog_epg_arr[5][3][1]='14:00';
+prog_epg_arr[5][3][2]='6-4';
+prog_epg_arr[5][4]=new Array(3);
+prog_epg_arr[5][4][0]='14:00';
+prog_epg_arr[5][4][1]='14:30';
+prog_epg_arr[5][4][2]='6-5';
+prog_epg_arr[6]=new Array(5);
+prog_epg_arr[6][0]=new Array(3);
+prog_epg_arr[6][0][0]='11:00';
+prog_epg_arr[6][0][1]='11:30';
+prog_epg_arr[6][0][2]='节目1';
+prog_epg_arr[6][1]=new Array(3);
+prog_epg_arr[6][1][0]='11:30';
+prog_epg_arr[6][1][1]='12:00';
+prog_epg_arr[6][1][2]='节目2';
+prog_epg_arr[6][2]=new Array(3);
+prog_epg_arr[6][2][0]='12:00';
+prog_epg_arr[6][2][1]='12:30';
+prog_epg_arr[6][2][2]='节目3';
+prog_epg_arr[6][3]=new Array(3);
+prog_epg_arr[6][3][0]='12:30';
+prog_epg_arr[6][3][1]='13:00';
+prog_epg_arr[6][3][2]='节目4';
+prog_epg_arr[6][4]=new Array(3);
+prog_epg_arr[6][4][0]='13:00';
+prog_epg_arr[6][4][1]='13:30';
+prog_epg_arr[6][4][2]='节目5';
+prog_epg_arr[7]=new Array(5);
+prog_epg_arr[7][0]=new Array(3);
+prog_epg_arr[7][0][0]='11:00';
+prog_epg_arr[7][0][1]='11:30';
+prog_epg_arr[7][0][2]='节目1';
+prog_epg_arr[7][1]=new Array(3);
+prog_epg_arr[7][1][0]='11:30';
+prog_epg_arr[7][1][1]='12:00';
+prog_epg_arr[7][1][2]='节目2';
+prog_epg_arr[7][2]=new Array(3);
+prog_epg_arr[7][2][0]='12:00';
+prog_epg_arr[7][2][1]='12:30';
+prog_epg_arr[7][2][2]='节目3';
+prog_epg_arr[7][3]=new Array(3);
+prog_epg_arr[7][3][0]='12:30';
+prog_epg_arr[7][3][1]='17:00';
+prog_epg_arr[7][3][2]='节目4';
+prog_epg_arr[7][4]=new Array(3);
+prog_epg_arr[7][4][0]='17:00';
+prog_epg_arr[7][4][1]='24:00';
+prog_epg_arr[7][4][2]='节目5';
+
+
+
+function onfoc(n)
+{
+	document.getElementById(n).style.backgroundImage="url(src_"+src_width+"/image/tv2/bar1.gif)";
+	document.getElementById(n).style.color="#ffffff";
+}
+function losefoc(n)
+{
+	document.getElementById(n).style.backgroundImage="";
+	document.getElementById(n).style.color="#b6dbf8";
+}
+
+var vfocus=0;
+function keyDown(e)
+{
+	var keycode=e.which
+	if(keycode==13)
+	{
+		document.getElementById("tv_player").innerHTML='<embed name="embed1" src="'+prog_sdp_arr[vfocus]+'"  width="100%" height="100%" type="application/x-mplayer2"></embed>';
+	}
+	if(keycode==70)
+	{
+		location=prog_sdp_arr[vfocus];
+	}
+	if(keycode==221)//绿键
+	{
+		location="sdp://sntx.169ol.com:8088/sdp/list.xml=pls";
+	}
+	if(keycode==33 && 0!=0)
+	{
+		location ="?offset="+Math.max(offset-pageitem,0);
+	}
+	if(keycode==34 && 8 < 45)
+	{
+		location ="?offset="+(offset+pageitem);
+	}
+	if(keycode==38)
+	{
+		losefoc(vfocus);
+		vfocus--;
+		if(vfocus < 0 && offset!=0)
+		{
+			location ="?offset="+Math.max(offset-pageitem,0);
+		}
+		else 
+		{
+			if(vfocus<0)
+				vfocus=pageitem-1;
+			onfoc(vfocus);
+		}
+	}
+	if(keycode==40)
+	{
+		losefoc(vfocus);
+		vfocus++;
+		
+		
+		if(vfocus>prog_count-pageitem*(Math.ceil(prog_count/pageitem)-1)-1 && offset/pageitem+1==Math.ceil(prog_count/pageitem))//当前焦点指针大于当前页行数,并且当前页是最后页
+		{
+			vfocus=0;
+			onfoc(vfocus);
+		}
+		else if(vfocus > pageitem-1)//当前焦点已到本页最后一行,翻下页
+		{
+			location ="?offset="+(offset+pageitem);
+		}
+		else
+		{
+			onfoc(vfocus);
+		}
+	}
+	if(keycode==36)
+	{
+		location ="index.html";
+	}
+	if(keycode>47 && keycode<59)
+	{
+		tmp_keycode=keycode-48;
+		if(tv_num_len==1)
+		{
+			tv_num=tmp_keycode;
+			document.getElementById('tv_num').innerHTML=tv_num;
+			if(allpath[tv_num])
+			{
+				location=allpath[tv_num];
+			}
+			else
+			{
+				document.getElementById('tv_num').innerHTML='无此<br>频道';
+			}
+		}
+		if(tv_num_len==2)
+		{
+			if(tv_num.toString().length==2)
+			{
+				tv_num=0;
+			}
+			tv_num=tv_num*10+tmp_keycode;
+			if(tv_num.toString().length==1)
+			{
+				document.getElementById('tv_num').innerHTML=tv_num+' _';
+			}
+			if(tv_num.toString().length==2)
+			{
+				document.getElementById('tv_num').innerHTML=tv_num;
+				if(allpath[tv_num])
+				{
+					location=allpath[tv_num];
+				}
+				else
+				{
+					document.getElementById('tv_num').innerHTML='无此<br>频道';
+				}
+			}
+		}
+	}
+}
+document.onkeydown=keyDown
+//-->
+</script>
+<body id="tv_station2" onload="onfoc(0)">
+<div id="tv_player">
+</div>
+<div id="tv_guide">
+<table id="tv_guide" width="100%" border=1 cellpadding="0" cellspacing="0" rules=rows>
+<tr>
+<script>
+var td_num=3;//时间单元格数目
+var td_width="";//时间单元格宽度
+if(screen.width==800)
+{
+	document.write('<td width=213 height=37></td>');
+	td_width=Math.round((736-213)/td_num);
+}
+else if(screen.width==640)
+{
+	document.write('<td width=172 height=30></td>');
+	td_width=Math.round((588-172)/td_num);
+}
+else
+{
+	document.write('<td width=213 height=37></td>');
+	td_width=Math.round((736-213)/td_num);
+}
+var bg1='#FF9900';
+for(i=0;i<td_num;i++)
+{
+	if(bg1=='#FF9900')
+	{
+		bg1='#669900';
+	}
+	else
+	{
+		bg1='#FF9900';
+	}
+	document.write('<td width='+td_width+' bgcolor='+bg1+'>'+(hours+i)%24+':00</td>');
+}
+</script>
+</tr>
+<script>
+var t_offset=0;
+for(i=0;i<Math.min(pageitem,prog_name_arr.length);i++)
+{
+	document.write('<tr id='+i+'><td class="tv_guide_item">'+prog_name_arr[i]+'</td><td colspan='+td_num+'><table width="100%" border=0 cellpadding="0" cellspacing="0" class="tv_guide_item"><tr>');
+	t_offset=0;
+	while(t_offset<Math.min(pageitem,prog_name_arr.length) &&(prog_epg_arr[i][t_offset][1].substring(0,2)*60+parseInt(prog_epg_arr[i][t_offset][1].substring(prog_epg_arr[i][t_offset][0].indexOf(':')+1)))<=hours*60)
+	{
+		t_offset++;
+		continue;
+	}
+	if(t_offset==Math.min(pageitem,prog_name_arr.length))
+	{
+		document.write('<td bgcolor="#A7A7A7">&nbsp;</td></tr></table></td></tr>');
+		continue;
+	}
+	offset_width=Math.round(td_width/60*(parseInt(prog_epg_arr[i][t_offset][0].substring(prog_epg_arr[i][t_offset][0].indexOf(':')+1))+(parseInt(prog_epg_arr[i][t_offset][0].substring(0,2))-hours)*60));
+	if(offset_width>0)
+	{
+		document.write('<td width='+offset_width+' bgcolor="#A7A7A7">&nbsp;</td>');
+	}
+	bg2='#CC9900';
+	for(j=t_offset;j<prog_epg_arr[i].length;j++)
+	{
+		if(bg2=='#CC9900')
+		{
+			bg2='#006699';
+		}
+		else
+		{
+			bg2='#CC9900';
+		}
+		if(prog_epg_arr[i][j][0].substring(0,2)>hours+td_num-1)
+		{
+			break;
+		}
+		prog_beginMinute=Math.max( prog_epg_arr[i][j][0].substring(0,2)*60 + parseInt( prog_epg_arr[i][j][0].substring(prog_epg_arr[i][j][0].indexOf(':')+1) ),hours*60);
+		prog_endMinute=Math.min( prog_epg_arr[i][j][1].substring(0,2)*60 + parseInt( prog_epg_arr[i][j][1].substring(prog_epg_arr[i][j][1].indexOf(':')+1) ),(hours+td_num)*60);
+		prog_td_width=Math.round(td_width/60*(prog_endMinute-prog_beginMinute));
+		document.write('<td width='+prog_td_width+' bgcolor='+bg2+'>'+prog_epg_arr[i][j][2]+'</td>');
+		
+	}
+	if(j==prog_epg_arr[i].length && (prog_epg_arr[i][j-1][1].substring(0,2)*60 + parseInt(prog_epg_arr[i][j-1][1].substring(prog_epg_arr[i][j-1][1].indexOf(':')+1)) < (hours+td_num)*60))
+	{
+		document.write('<td bgcolor="#A7A7A7">&nbsp;</td>');
+	}
+	document.write('</tr></table></td></tr>');
+}
+</script>
+<tr></tr>
+</table>
+</div>
+</body>
+</html>
