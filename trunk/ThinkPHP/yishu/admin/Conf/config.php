@@ -24,7 +24,7 @@ return array(
 	'ADMIN_AUTH_KEY' => 'administrator',
 	'USER_AUTH_PROVIDER' => 'DaoAuthentictionProvider',
 	'USER_AUTH_GATEWAY' => '/Public/login',
-	'NOT_AUTH_MODULE' => 'Public',
+	'NOT_AUTH_MODULE' => 'Public,Script',
 	'REQUIRE_AUTH_MODULE'=> '',
 	'NOT_AUTH_ACTION' => 'login,logout,checkLogin',
 	'REQUIRE_AUTH_ACTION'=> ''
