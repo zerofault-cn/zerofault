@@ -1,6 +1,23 @@
 <?php
-
+/**
+*
+* 分类管理类
+*
+* @author zerofault <zerofault@gmail.com>
+* @since 2009/8/5
+*/
 class CategoryAction extends BaseAction{
+	protected $dao;
+	
+	/**
+	*
+	* 默认构造函数
+	*/
+	public function _initialize() {
+		$this->dao = D('Category');
+		parent::_initialize();
+	}
+
 	/**
 	*
 	* 显示分类列表
@@ -11,7 +28,6 @@ class CategoryAction extends BaseAction{
 			'url' => __APP__.'/Admin/cate_list'
 			);
 
-		$dao = D('Category');
 		$where['status'] = array('gt', -1);
 		$where['pid']  = 0;
 		$order = 'status desc, sort';
@@ -31,7 +47,7 @@ class CategoryAction extends BaseAction{
 			);
 		}
 
-		$rs = $dao->where($where)->order($order)->select();
+		$rs = $this->dao->where($where)->order($order)->select();
 		foreach($rs as $key=>$val){
 			$site = D('Website');
 			$rs[$key]['site_count'] = $site->where(array('cate_id'=>$val['id']))->getField('count(*) as count');
@@ -39,60 +55,73 @@ class CategoryAction extends BaseAction{
 
 		$this->assign("topnavi",$topnavi);
 		$this->assign('list',$rs);
-		$this->assign('new_cate_sort', $dao->where($where)->getField('max(sort) as max_sort')+10);
+		$this->assign('new_cate_sort', $this->dao->where($where)->getField('max(sort) as max_sort')+10);
 		$this->assign('content','Category:index');
 		$this->display('Layout:Admin_layout');
 	}
-
+	/**
+	*
+	* 添加分类
+	* 只能被JQuery.post()调用
+	* 返回值：
+	*     -1：已存在同名纪录；
+	*      1：操作成功；
+	*   其它：出错的SQL语句
+	*/
 	public function add(){
 		$name=$_REQUEST['name'];
 		$sort=intval($_REQUEST['sort']);
 
-		$dCategory = D('Category');
 		$where['name'] = $name;
-		$rs = $dCategory->where($where)->find();
+		$rs = $this->dao->where($where)->find();
 		if($rs && sizeof($rs)>0){
 			die('-1');
 		}
-		$dCategory->name = $name;
-		$dCategory->addtime = $dCategory->usetime = date("Y-m-d H:i:s");
-		$dCategory->sort = $sort;
-		$dCategory->status = 1;
-		if($dCategory->add()){
+		$this->dao->name = $name;
+		$this->dao->addtime = $this->dao->usetime = date("Y-m-d H:i:s");
+		$this->dao->sort = $sort;
+		$this->dao->status = 1;
+		if($this->dao->add()){
 			die('1');
 		}
 		else{
-			die('sql:'.$dCategory->getLastSql());
+			die('sql:'.$this->dao->getLastSql());
 		}
 	}
+	/**
+	*
+	* 更新某条纪录的某个字段
+	* 只能在_iframe中执行，执行后在父窗口提示结果
+	*/
 	public function update(){
 		$id=$_REQUEST['id'];
 		$field=$_REQUEST['f'];
 		$value=$_REQUEST['v'];
-		$dao = D('Category');
-		$rs = $dao->where('id='.$id)->setField($field,$value);
+		$rs = $this->dao->where('id='.$id)->setField($field,$value);
 		if($rs)
 		{
-			die(self::_success('更新成功！','',1200));
+			die(self::_success('操作成功！','',1200));
 		}
 		else
 		{
-			die(self::_error('发生错误！<br />sql:'.$dao->getLastSql()));
+			die(self::_error('发生错误！<br />sql:'.$this->dao->getLastSql()));
 		}
 	}
+	/**
+	*
+	* 彻底删除纪录
+	* 只能在_iframe中执行，执行后在父窗口提示结果
+	*/
 	public function delete(){
-		
 		$id=$_REQUEST['id'];
-		$dao = D('Category');
-		if($dao->find($id) && $dao->delete())
+		if($this->dao->find($id) && $this->dao->delete())
 		{
 			die(self::_success('删除成功！','',1200));
 		}
 		else
 		{
-			die(self::_error('发生错误！<br />sql:'.$dao->getLastSql()));
+			die(self::_error('发生错误！<br />sql:'.$this->dao->getLastSql()));
 		}
 	}
-
 }
 ?>

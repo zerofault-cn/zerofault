@@ -1,5 +1,13 @@
 <?php
-
+/**
+*
+* 自定义的Action基类，被其它Action继承
+* 用来统一调用RBAC认证模块
+* 以及定义一些系统公用的方法
+*
+* @author zerofault <zerofault@gmail.com>
+* @since 2009/8/5
+*/
 class BaseAction extends Action{
 	/**
 	*
@@ -61,7 +69,5 @@ class BaseAction extends Action{
 		$html .= '</script>';
 		return $html;
 	}
-	
-
 }
 ?>
