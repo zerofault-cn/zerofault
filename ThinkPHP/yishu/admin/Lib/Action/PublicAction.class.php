@@ -1,5 +1,12 @@
 <?php
-
+/**
+*
+* 公共操作类
+* 无需RBAC认证
+*
+* @author zerofault <zerofault@gmail.com>
+* @since 2009/8/5
+*/
 class PublicAction extends BaseAction{
 	/**
 	*
@@ -61,8 +68,7 @@ class PublicAction extends BaseAction{
 		Session::clear();
 		die(self::_success('注销成功！', __APP__, 500));
 	}
-
-		/**
+	/**
 	*
 	* 用PHP的fsockopen模拟HTTP post，用来向ip138网站提交IP查询并获取结果
 	*/
