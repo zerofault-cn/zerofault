@@ -1,7 +1,7 @@
 <?php
 /**
 *
-* 分类管理类
+* 分类管理
 *
 * @author zerofault <zerofault@gmail.com>
 * @since 2009/8/5
@@ -11,7 +11,7 @@ class CategoryAction extends BaseAction{
 	
 	/**
 	*
-	* 默认构造函数
+	* 构造函数
 	*/
 	public function _initialize() {
 		$this->dao = D('Category');
@@ -20,7 +20,7 @@ class CategoryAction extends BaseAction{
 
 	/**
 	*
-	* 显示分类列表
+	* 分类列表
 	*/
 	public function index(){
 		$topnavi[]=array(
