@@ -29,7 +29,16 @@ class RoleAction extends BaseAction{
 		$topnavi[]=array(
 			'text'=> '角色列表',
 			);
-		$rs = $this->dao->select();
+		$rs = $this->dao->relation(true)->select();
+		$dNode = D('Node');
+		foreach($rs as $key=>$val) {
+			foreach($val['Node'] as $key2=>$val2) {
+				$subnode = $dNode->where(array('pid'=>$val2['id']))->getFields('title');
+				$subnode || $rs[$key]['Node'][$key2]['subNode'] = '*';
+				$subnode && $rs[$key]['Node'][$key2]['subNode'] = implode(', ', $subnode);
+			}
+		}
+		//dump($rs);
 
 		$this->assign("topnavi",$topnavi);
 		$this->assign('list',$rs);

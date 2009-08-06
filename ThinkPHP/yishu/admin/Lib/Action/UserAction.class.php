@@ -9,7 +9,7 @@ class UserAction extends BaseAction{
 	public function index(){
 		$topnavi[]=array(
 			'text'=> '用户管理',
-			'url' => __APP__.'/Admin/user_list'
+			'url' => __APP__.'/User'
 			);
 		$topnavi[]=array(
 			'text'=> '用户列表',

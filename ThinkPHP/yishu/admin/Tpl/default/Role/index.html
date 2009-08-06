@@ -2,12 +2,18 @@
 	<tr bgcolor="#ededed">
 		<th width="5%">ID</th>
 		<th>角色名称</th>
+		<th>拥有权限</th>
 		<th width="10%">操作</th>
 	</tr>
 	<iterate name="list" id="item">
 	<tr bgcolor="<eq name='mod' value='1'>#FFFFE1</eq>" class="<eq name='item.status' value='0'>gray</eq>">
 		<td>{$item['id']}</td>
 		<td>{$item['name']}</td>
+		<td class="a_left">
+		<iterate name="item['Node']" id="node">
+		{$node.title} ( {$node.subNode} )<br />
+		</iterate>
+		</td>
 		<td>
 			<if condition="$item['status'] neq '-1'">
 			<a href="__URL__/update/id/{$item.id}/f/status/v/{:intval(!$item['status'])}" target="_iframe" title='<if condition="$item.status eq 0">启用<else />禁用</if>'><if condition="$item.status eq 0"><img src="{*APP_PUBLIC_URL}/Image/add.gif" alt="启用" align="absmiddle"/><else /><img src="{*APP_PUBLIC_URL}/Image/delete.gif" alt="禁用" align="absmiddle"/></if></a>
