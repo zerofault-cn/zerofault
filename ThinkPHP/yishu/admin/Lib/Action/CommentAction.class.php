@@ -1,7 +1,22 @@
 <?php
-
+/**
+*
+* 网站评论管理
+*
+* @author zerofault <zerofault@gmail.com>
+* @since 2009/8/5
+*/
 class CommentAction extends BaseAction{
+	protected $dao;
 
+	/**
+	*
+	* 默认构造函数
+	*/
+	public function _initialize() {
+		$this->dao = D('Comment');
+		parent::_initialize();
+	}
 	/**
 	*
 	* 显示评论列表
@@ -9,14 +24,14 @@ class CommentAction extends BaseAction{
 	public function index(){
 		$topnavi[]=array(
 			'text'=> '评论管理',
-			'url' => __APP__.'/Admin/comment_list'
+			'url' => __APP__.'/Comment'
 			);
 
-		$dao_site = D('Website');
+		$dWebsite = D('Website');
 		$sie_id = $_REQUEST['id'];
 		if(!empty($site_id)){
 			$where['site_id'] = $site_id;
-			$site_name = $dao_site->where(array('id'=>$site_id))->getField('name');
+			$site_name = $dWebsite->where(array('id'=>$site_id))->getField('name');
 			$topnavi[]=array(
 				'text'=> '给网站【'.$site_name.'】的评论',
 				);
@@ -27,26 +42,42 @@ class CommentAction extends BaseAction{
 				);
 		}
 		$where['status'] = 1;
-		$status = $_REQUEST['status'];
-		if(!empty($status)){
-			$where['status'] = $status;
+		if(!empty($_REQUEST['status'])) {
+			$where['status'] = $_REQUEST['status'];
 		}
 		$order = 'id desc';
-		$dao = D('Comment');
-		$count = $dao->where($where)->getField('count(*)');
-		import("ORG.Util.Page");
-		$listRows = 10;
-		$p = new Page($count, $listRows);
-		$rs = $dao->where($where)->order($order)->limit($p->firstRow.','.$p->listRows)->select();
+		$count = $this->dao->where($where)->getField('count(*)');
+		import("@.Paginator");
+		$limit = 10;
+		$p = new Paginator($count,$limit);
+		$p->setConfig('first','<img src="'.APP_PUBLIC_URL.'/Image/first.gif" align="absbottom" alt="First"/>');
+		$p->setConfig('prev','<img src="'.APP_PUBLIC_URL.'/Image/prev.gif" align="absbottom" alt="Prev"/>');
+		$p->setConfig('next','<img src="'.APP_PUBLIC_URL.'/Image/next.gif" align="absbottom" alt="Next"/>');
+		$p->setConfig('last','<img src="'.APP_PUBLIC_URL.'/Image/last.gif" align="absbottom" alt="Last"/>');
+		$rs = $this->dao->where($where)->order($order)->limit($p->offset.','.$p->limit)->select();
 		foreach($rs as $key=>$val){
-			$rs[$key]['site_info'] = $dao_site->find($val['site_id']);
+			$rs[$key]['site_info'] = $dWebsite->find($val['site_id']);
 		}
 
 		$this->assign("topnavi",$topnavi);
-		$this->assign('page', $p->show());
+		$this->assign('page', $p->showMultiNavi());
 		$this->assign('list', $rs);
 		$this->assign('content','Comment:index');
 		$this->display('Layout:Admin_layout');
+	}
+	/**
+	*
+	* 调用基类方法
+	*/
+	public function update(){
+		parent::_update();
+	}
+	/**
+	*
+	* 调用基类方法
+	*/
+	public function delete(){
+		parent::_delete();
 	}
 }
 ?>

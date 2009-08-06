@@ -8,7 +8,7 @@ $(document).ready(function(){
 		submit_addCate(this);
 	});
 
-	$("table td img.edit").each(function(i){ //设置分类名称的可编辑功能
+	$("img.edit").each(function(i){ //设置分类名称的可编辑功能
 		setCateNameEditable(this,i);
 	});
 
@@ -68,7 +68,7 @@ function setCateNameEditable(obj,n){ //设置分类名称可编辑功能
 	});
 }
 function submit_cateName(obj,n){//提交新的分类名称
-	$("#_iframe").attr("src", _URL_+"/update?id="+$(obj).parent().prev().prev().attr('id')+"&f=name&v="+$(obj).parent().children("input").val());
+	$("#_iframe").attr("src", _URL_+"/update/id/"+$(obj).parent().prev().prev().attr('id')+"/f/name/v/"+$(obj).parent().children("input").val());
 }
 function cancel_cateName(obj,n){//取消修改分类名称
 	$(obj).parent().prev().prev().show();
@@ -106,7 +106,7 @@ function setSortEditable(obj,n){//设置分类排序数字可编辑功能,公用
 	});
 }
 function submit_sort(obj,n){//提交新的分类排序,公用
-	$("#_iframe").attr("src", _URL_+"/update?id="+$(obj).parent().prev().attr('id')+"&f=sort&v="+$(obj).parent().children("input").val());
+	$("#_iframe").attr("src", _URL_+"/update/id/"+$(obj).parent().prev().attr('id')+"/f/sort/v/"+$(obj).parent().children("input").val());
 }
 function cancel_sort(obj,n){//取消更改分类排序,公用
 	$(obj).parent().prev().show();

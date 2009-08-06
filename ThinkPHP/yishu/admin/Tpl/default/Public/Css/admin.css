@@ -275,16 +275,16 @@ label.editable{
 	width:120px;
 	width:200px\9;
 }
-.rightColumn input.site_name{
+.rightColumn .editForm input.name{
 	width:160px;
 }
-.rightColumn input.site_sort{
+.rightColumn .editForm input.sort{
 	width:30px;
 }
-.rightColumn input.site_url{
-	width:275px;
+.rightColumn .editForm input.url{
+	width:260px;
 }
-.rightColumn textarea.site_descr{
+.rightColumn .editForm textarea.descr{
 	width:320px;
 	height:150px;
 }

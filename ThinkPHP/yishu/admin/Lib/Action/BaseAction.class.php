@@ -69,5 +69,40 @@ class BaseAction extends Action{
 		$html .= '</script>';
 		return $html;
 	}
+	/**
+	*
+	* 更新某条纪录的某个字段
+	* 只能在_iframe中执行，执行后在父窗口提示结果
+	*/
+	protected function _update(){
+		$id=$_REQUEST['id'];
+		$field=$_REQUEST['f'];
+		$value=$_REQUEST['v'];
+		$rs = $this->dao->where('id='.$id)->setField($field,$value);
+		if($rs)
+		{
+			die(self::_success('操作成功！','',1200));
+		}
+		else
+		{
+			die(self::_error('发生错误！<br />sql:'.$this->dao->getLastSql()));
+		}
+	}
+	/**
+	*
+	* 彻底删除纪录
+	* 只能在_iframe中执行，执行后在父窗口提示结果
+	*/
+	protected function _delete(){
+		$id=$_REQUEST['id'];
+		if($this->dao->find($id) && $this->dao->delete())
+		{
+			die(self::_success('删除成功！','',1200));
+		}
+		else
+		{
+			die(self::_error('发生错误！<br />sql:'.$this->dao->getLastSql()));
+		}
+	}
 }
 ?>
