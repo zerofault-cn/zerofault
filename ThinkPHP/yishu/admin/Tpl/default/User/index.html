@@ -3,14 +3,19 @@
 		<th width="5%">ID</th>
 		<th>登录帐号</th>
 		<th>别名</th>
+		<th>角色</th>
 		<th width="20%">上次登录时间</th>
 		<th width="10%">操作</th>
 	</tr>
 	<iterate name="list" id="item">
-	<tr bgcolor="<eq name='mod' value='1'>#FFFFE1</eq>" class="<eq name='item["status"]' value='0'>gray</eq>">
+	<tr bgcolor="<eq name='mod' value='1'>#FFFFE1</eq>" class="<eq name='item.status' value='0'>gray</eq>">
 		<td>{$item.id}</td>
 		<td class="user_info">{$item.account}</td>
 		<td>{$item.nickname}</td>
+		<td>
+		<iterate name="item.Role" id="role">
+		{$role.name}<br />
+		</iterate>
 		<td>{$item.login_time}</label></td>
 		<td>
 			<img src="../Public/Image/key_edit.gif" alt="修改密码" align="absmiddle" />
@@ -36,4 +41,4 @@
 		<input type="button" value="添加" id="submit_addUser" />
 	</div>
 	</neq>
-	<script language="JavaScript" type="text/javascript" src="../Public/Js/user_list_func.js"></script>
+	<script language="JavaScript" type="text/javascript" src="../Public/Js/user_func.js"></script>

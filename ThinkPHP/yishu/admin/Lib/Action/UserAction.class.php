@@ -1,7 +1,22 @@
 <?php
-
+/**
+*
+* 用户管理
+*
+* @author zerofault <zerofault@gmail.com>
+* @since 2009/8/5
+*/
 class UserAction extends BaseAction{
+	protected $dao;
 	
+	/**
+	*
+	* 构造函数
+	*/
+	public function _initialize() {
+		$this->dao = D('User');
+		parent::_initialize();
+	}
 	/**
 	*
 	* 用户列表
@@ -14,8 +29,8 @@ class UserAction extends BaseAction{
 		$topnavi[]=array(
 			'text'=> '用户列表',
 			);
-		$dao = D('User');
-		$rs = $dao->select();
+		$rs = $this->dao->relation(true)->select();
+		//dump($rs);
 
 		$this->assign("topnavi",$topnavi);
 		$this->assign('list',$rs);

@@ -1,5 +1,22 @@
 <?php
+/**
+*
+* 节点管理
+*
+* @author zerofault <zerofault@gmail.com>
+* @since 2009/8/5
+*/
 class NodeAction extends BaseAction{
+	protected $dao;
+	
+	/**
+	*
+	* 构造函数
+	*/
+	public function _initialize() {
+		$this->dao = D('Node');
+		parent::_initialize();
+	}
 	/**
 	*
 	* 节点列表
@@ -22,10 +39,9 @@ class NodeAction extends BaseAction{
 		$skip_modules[] = 'Base';
 		
 
-		$dNode = D('Node');
 		$where['name'] = APP_NAME;
 		$where['pid'] = 0;
-		$app = $dNode->where($where)->find();
+		$app = $this->dao->where($where)->find();
 		if(empty($app)) {
 			$app = array(
 				'id' => 0,
@@ -60,7 +76,7 @@ class NodeAction extends BaseAction{
 			else {
 				$where['name'] = $module_name;
 				$where['pid']  = $app['id'];
-				$module = $dNode->where($where)->find();
+				$module = $this->dao->where($where)->find();
 				$modules[$i] = $module ? $module : array(
 					'id'=>0,
 					'name'=>$module_name,
@@ -86,7 +102,7 @@ class NodeAction extends BaseAction{
 				else {
 					$where['name'] = $action_name;
 					$where['pid']  = $module['id'];
-					$action = $dNode->where($where)->find();
+					$action = $this->dao->where($where)->find();
 					
 					$modules[$i]['action'][] = $action ? $action : array(
 						'id'=>0,
@@ -115,8 +131,6 @@ class NodeAction extends BaseAction{
 		$descr= $_REQUEST['descr'];
 		$level= intval($_REQUEST['level']);
 
-		$dNode = D('Node');
-
 		$data['pid']  = $pid;
 		$data['name'] = $name;
 		$data['title']= $title;
@@ -125,7 +139,7 @@ class NodeAction extends BaseAction{
 		if($id>0) {
 			//已有纪录
 			$data['id'] = $id;
-			if($dNode->save($data)) {
+			if($this->dao->save($data)) {
 				die('1:'.$id);
 			}
 			else {
@@ -134,7 +148,7 @@ class NodeAction extends BaseAction{
 		}
 		else {
 			//新建纪录
-			if($id=$dNode->add($data)) {
+			if($id=$this->dao->add($data)) {
 				die('1:'.$id);
 			}
 			else {

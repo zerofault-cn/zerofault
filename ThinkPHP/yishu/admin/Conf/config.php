@@ -19,14 +19,14 @@ return array(
 
 	'USER_AUTH_ON'=>true,
 	'USER_AUTH_TYPE' => 2,
-	'USER_AUTH_DECISION' => 'My',
+	'USER_AUTH_DECISION' => 'Db',
 	'USER_AUTH_KEY' => 'authId',
 	'ADMIN_AUTH_KEY' => 'administrator',
 	'USER_AUTH_PROVIDER' => 'DaoAuthentictionProvider',
 	'USER_AUTH_GATEWAY' => '/Public/login',
 	'NOT_AUTH_MODULE' => 'Public,Script',
 	'REQUIRE_AUTH_MODULE'=> '',
-	'NOT_AUTH_ACTION' => 'login,logout,checkLogin',
+	'NOT_AUTH_ACTION' => '',
 	'REQUIRE_AUTH_ACTION'=> ''
 	);
 
