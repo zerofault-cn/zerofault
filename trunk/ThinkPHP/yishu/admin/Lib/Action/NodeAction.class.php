@@ -16,6 +16,11 @@ class NodeAction extends BaseAction{
 		$base_class = 'BaseAction';
 		$base_obj   = new $base_class;
 		$base_method_arr = get_class_methods($base_obj);
+		
+		//不需进入节点管理的module
+		$skip_modules = split(',', C('NOT_AUTH_MODULE'));
+		$skip_modules[] = 'Base';
+		
 
 		$dNode = D('Node');
 		$where['name'] = APP_NAME;
@@ -40,10 +45,10 @@ class NodeAction extends BaseAction{
 				continue;
 			}
 			$class_name = substr($file,0,-10);
-			if($class_name == $base_class) {
+			$module_name = substr($file,0,-16);
+			if(in_array($module_name, $skip_modules)) {
 				continue;
 			}
-			$module_name = substr($class_name,0,-6);
 			if(empty($app['id'])) {
 				$modules[$i] = array(
 					'id'=>0,

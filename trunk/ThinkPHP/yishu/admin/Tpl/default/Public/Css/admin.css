@@ -231,6 +231,7 @@ label.editable{
 	top:-16px;
 	width:350px;
 	padding:0px 8px 10px;
+	_padding-top:8px;
 	
 	background:#F0F0F0;
 	text-align:left;
