@@ -6,7 +6,7 @@
 		<li>分类管理
 			<ul class="sub">
 				<li class="<eq name="MODULE_NAME" value="Category"><neq name="_GET['status']" value="-1">curr</neq></eq>"><a href="__APP__/Category">分类列表</a></li>
-				<li class="<eq name="MODULE_NAME" value="Category"><eq name="_GET['status']" value="-1">curr</eq></eq>"><a href="__APP__/Category/status/-1">回收站</a></li>
+				<li class="<eq name="MODULE_NAME" value="Category"><eq name="_GET['status']" value="-1">curr</eq></eq>"><a href="__APP__/Category/index/status/-1">回收站</a></li>
 			</ul>
 		</li>
 		<li>网站管理
@@ -24,19 +24,14 @@
 		<li>用户管理
 			<ul class="sub">
 				<li class="<eq name="MODULE_NAME" value="User">curr</eq>"><a href="__APP__/User">用户列表</a></li>
-				<li class="<eq name="MODULE_NAME" value="Group">curr</eq>"><a href="__APP__/Group">用户组</a></li>
+				<li class="<eq name="MODULE_NAME" value="User">curr</eq>"><a href="__APP__/User">用户角色</a></li>
 			</ul>
 		</li>
-		<li>角色管理
-			<ul class="sub">
-				<li class="<eq name="MODULE_NAME" value="Role">curr</eq>"><a href="__APP__/Role">角色列表</a></li>
-				
-			</ul>
-		</li>
-		<li>节点管理
+		<li>权限管理
 			<ul class="sub">
 				<li class="<eq name="MODULE_NAME" value="Node">curr</eq>"><a href="__APP__/Node">节点列表</a></li>
-				
+				<li class="<eq name="MODULE_NAME" value="Role">curr</eq>"><a href="__APP__/Role">角色列表</a></li>
+				<li class="<eq name="MODULE_NAME" value="Access">curr</eq>"><a href="__APP__/Access">角色权限</a></li>
 			</ul>
 		</li>
 	</ul>
