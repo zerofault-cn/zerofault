@@ -14,7 +14,7 @@ class SiteAction extends BaseAction{
 	* 默认构造函数
 	*/
 	public function _initialize() {
-		$this->dao = D('Category');
+		$this->dao = D('Website');
 		parent::_initialize();
 	}
 	/**
@@ -26,7 +26,7 @@ class SiteAction extends BaseAction{
 	public function index(){
 		$topnavi[]=array(
 			'text'=> '站点管理',
-			'url' => __APP__.'/Admin/site_list'
+			'url' => __APP__.'/Site'
 			);
 
 		$dCategory = D('Category');
@@ -136,40 +136,17 @@ class SiteAction extends BaseAction{
 	}
 	/**
 	*
-	* 更新某条纪录的某个字段
-	* 只能在_iframe中执行，执行后在父窗口提示结果
+	* 调用基类方法
 	*/
 	public function update(){
-		$id=$_REQUEST['id'];
-		$field=$_REQUEST['f'];
-		$value=$_REQUEST['v'];
-		$rs = $this->dao->where('id='.$id)->setField($field,$value);
-		if($rs)
-		{
-			die(self::_success('操作成功！','',1200));
-		}
-		else
-		{
-			die(self::_error('发生错误！<br />sql:'.$this->dao->getLastSql()));
-		}
+		parent::_update();
 	}
 	/**
 	*
-	* 彻底删除纪录
-	* 只能在_iframe中执行，执行后在父窗口提示结果
+	* 调用基类方法
 	*/
 	public function delete(){
-		
-		$id=$_REQUEST['id'];
-		$this->dao = D('Category');
-		if($this->dao->find($id) && $this->dao->delete())
-		{
-			die(self::_success('删除成功！','',1200));
-		}
-		else
-		{
-			die(self::_error('发生错误！<br />sql:'.$this->dao->getLastSql()));
-		}
+		parent::_delete();
 	}
 }
 ?>

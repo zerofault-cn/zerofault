@@ -296,7 +296,6 @@ CREATE TABLE `yishu_website` (
   `id` int(10) unsigned NOT NULL auto_increment,
   `cate_id` smallint(5) unsigned NOT NULL default '0',
   `name` varchar(255) NOT NULL,
-  `logo` blob NOT NULL,
   `url` varchar(255) NOT NULL,
   `descr` text NOT NULL,
   `addtime` datetime NOT NULL,
@@ -308,42 +307,3 @@ CREATE TABLE `yishu_website` (
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
-#
-# Dumping data for table yishu_website
-#
-
-INSERT INTO `yishu_website` VALUES (3,1,'雅昌','','http://www.artron.net','雅昌艺术网成立于2000年10月，是目前全球最大最重要的中国艺术品门户','2009-06-23 16:40:41',10,1,0,2,28);
-INSERT INTO `yishu_website` VALUES (4,11,'百度','','http://www.baidu.com/','百度','2009-07-03 12:32:19',20,1,0,0,21);
-INSERT INTO `yishu_website` VALUES (5,3,'测试2333','','http://www.taobao.com/','undefined','2009-07-06 13:11:28',10,-1,0,0,0);
-INSERT INTO `yishu_website` VALUES (6,1,'一千二百三十四','','http://aa.fd','','2009-07-14 13:11:33',30,-1,0,0,1);
-INSERT INTO `yishu_website` VALUES (7,1,'四百五十四','','fhfg','','2009-07-14 13:11:59',40,-1,0,0,0);
-INSERT INTO `yishu_website` VALUES (8,1,'六百四十三','','fgsddfg','','2009-07-14 13:12:11',50,-1,1,0,0);
-INSERT INTO `yishu_website` VALUES (9,1,'四百二十三','','fsgfgds','','2009-07-14 13:12:23',60,-1,0,0,0);
-INSERT INTO `yishu_website` VALUES (10,1,'二百三','','hg','','2009-07-14 13:12:37',70,-1,0,0,0);
-INSERT INTO `yishu_website` VALUES (11,1,'七百八十','','sgdff','','2009-07-14 13:12:54',80,-1,0,0,0);
-INSERT INTO `yishu_website` VALUES (12,11,'华夏收藏网','','http://www.mycollect.net/','','2009-07-16 13:11:51',10,1,0,0,3);
-INSERT INTO `yishu_website` VALUES (13,11,'中国收藏热线','','http://www.997788.com/','','2009-07-16 13:13:31',20,1,0,0,1);
-INSERT INTO `yishu_website` VALUES (14,11,'中华博物网','','http://www.gg-art.com/','','2009-07-16 13:13:39',30,1,0,0,6);
-INSERT INTO `yishu_website` VALUES (15,11,'美国自然历史博物馆','','http://www.amnh.org/','','2009-07-16 13:13:52',40,1,1,0,2);
-INSERT INTO `yishu_website` VALUES (16,11,'中国国家博物馆','','http://www.nationalmuseum.cn/','','2009-07-16 13:14:01',50,1,0,0,2);
-INSERT INTO `yishu_website` VALUES (17,11,'上海博物馆','','http://www.shanghaimuseum.net/','','2009-07-16 13:14:10',60,1,0,0,1);
-INSERT INTO `yishu_website` VALUES (18,11,'首都博物馆','','http://www.capitalmuseum.org.cn/','','2009-07-16 13:14:21',70,1,0,0,0);
-INSERT INTO `yishu_website` VALUES (19,9,'中国书法网','','http://www.freehead.com/index.php','','2009-07-16 13:15:07',10,1,0,2,7);
-INSERT INTO `yishu_website` VALUES (20,9,'中国书法家论坛','','http://www.zgsfj.com/','','2009-07-16 13:15:19',20,1,0,0,9);
-INSERT INTO `yishu_website` VALUES (21,9,'书法网论坛','','http://www.shufa.org/','','2009-07-16 13:15:26',30,1,0,1,3);
-INSERT INTO `yishu_website` VALUES (22,9,'书法江湖论坛','','http://www.sf108.com/','','2009-07-16 13:15:42',40,1,0,0,3);
-INSERT INTO `yishu_website` VALUES (23,9,'书法网','','http://www.shufa.com/','','2009-07-16 13:15:50',50,1,0,0,3);
-INSERT INTO `yishu_website` VALUES (24,9,'中国书画家网','','http://www.zgshj.com/','','2009-07-16 13:16:00',60,1,0,0,1);
-INSERT INTO `yishu_website` VALUES (25,9,'中国书法在线','','http://www.zgsf.com.cn/','','2009-07-16 13:16:06',70,1,0,0,0);
-INSERT INTO `yishu_website` VALUES (26,9,'中国书法艺术网','','http://www.china-shufa.com/','','2009-07-16 13:16:16',80,1,0,0,0);
-INSERT INTO `yishu_website` VALUES (27,10,'中华五千年','','http://www.zh5000.com/','','2009-07-16 13:17:00',10,1,0,0,4);
-INSERT INTO `yishu_website` VALUES (28,10,'艺术中国网','','http://www.artx.cn/','哈哈\n呵呵','2009-07-16 13:17:07',20,1,0,0,4);
-INSERT INTO `yishu_website` VALUES (29,10,'中华博物','','http://www.gg-art.com/','','2009-07-16 13:17:30',30,1,0,1,1);
-INSERT INTO `yishu_website` VALUES (30,2,'雅昌艺术网','','http://www.artron.net/','','2009-07-16 13:17:39',40,1,0,0,7);
-INSERT INTO `yishu_website` VALUES (31,10,'博宝网','','http://www.artxun.com/','','2009-07-16 13:17:49',50,1,0,0,1);
-INSERT INTO `yishu_website` VALUES (32,10,'中国书画交易中心','','http://www.sh1122.com/','','2009-07-16 13:17:58',60,1,1,0,1);
-INSERT INTO `yishu_website` VALUES (33,10,'博雅艺术网','','http://www.manyart.com/','','2009-07-16 13:18:13',70,0,0,0,0);
-INSERT INTO `yishu_website` VALUES (34,10,'艺术空间','','http://www.artsky.com/','','2009-07-16 13:18:25',80,1,0,0,0);
-
-/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
-/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
