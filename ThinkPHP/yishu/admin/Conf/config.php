@@ -19,7 +19,7 @@ return array(
 
 	'USER_AUTH_ON'=>true,
 	'USER_AUTH_TYPE' => 2,
-	'USER_AUTH_DECISION' => 'Db',
+	'USER_AUTH_DECISION' => 'My',
 	'USER_AUTH_KEY' => 'authId',
 	'ADMIN_AUTH_KEY' => 'administrator',
 	'USER_AUTH_PROVIDER' => 'DaoAuthentictionProvider',
