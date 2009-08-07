@@ -47,7 +47,7 @@ class PublicAction extends BaseAction{
 				die(self::_error('密码错误！'));
 			}
 			$_SESSION[C('USER_AUTH_KEY')]	=	$authInfo['id'];
-			$_SESSION['loginUserName']	=	$authInfo['nickname'];
+			$_SESSION['loginUserName']	=	$authInfo['name'];
 			if($authInfo['account']=='admin') {
 				// 管理员不受权限控制影响
 				$_SESSION['administrator']		=	true;
@@ -56,7 +56,7 @@ class PublicAction extends BaseAction{
 				$_SESSION['administrator']		=	false;
 			}
 			// 缓存访问权限
-			RBAC::saveAccessList();
+			RBAC::saveAccessList($authInfo['id']);
 			die(self::_success('登陆成功！',__APP__.'/'.Session::get('lastModule'),500));
 		}
 	}
