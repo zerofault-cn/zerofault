@@ -30,13 +30,64 @@ class UserAction extends BaseAction{
 			'text'=> '用户列表',
 			);
 		$rs = $this->dao->relation(true)->select();
-		//dump($rs);
-
+		
 		$this->assign("topnavi",$topnavi);
 		$this->assign('list',$rs);
+		$this->assign('role_list', D("Role")->where(array('status'=>1))->select());
 		$this->assign('content','User:index');
 		$this->display('Layout:Admin_layout');
 	}
-
+	/**
+	*
+	* 添加用户
+	* 只能被JQuery.post()调用
+	* 返回值：
+	*     -1：已存在同名纪录；
+	*      1：操作成功；
+	*   其它：出错的SQL语句
+	*/
+	public function add(){
+		$account = $_REQUEST['account'];
+		$name = $_REQUEST['name'];
+		$name || $name = $account;
+		$password = $_REQUEST['password'];
+		$role_ids = $_REQUEST['role_ids'];
+		$role_ids || $role_arr = array();
+		$role_ids && $role_id_arr = explode(',', $role_ids);
+		foreach($role_id_arr as $role_id) {
+			$role_arr[] = array('id'=>$role_id);
+		}
+		$where['account'] = $account;
+		$rs = $this->dao->where($where)->find();
+		if($rs && sizeof($rs)>0){
+			die('-1');
+		}
+		$this->dao->account = $account;
+		$this->dao->name = $name;
+		$this->dao->password = md5($password);
+		$this->dao->create_time = $this->dao->login_time = date("Y-m-d H:i:s");
+		$this->dao->status = 1;
+		$this->dao->Role = $role_arr;
+		if($this->dao->relation(true)->add()){
+			die('1');
+		}
+		else{
+			die('sql:'.$this->dao->getLastSql());
+		}
+	}
+	/**
+	*
+	* 调用基类方法
+	*/
+	public function update(){
+		parent::_update();
+	}
+	/**
+	*
+	* 调用基类方法
+	*/
+	public function delete(){
+		parent::_delete();
+	}
 }
 ?>

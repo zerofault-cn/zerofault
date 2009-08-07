@@ -1,35 +1,31 @@
 	<table id="table" border="1" cellpadding="3" cellspacing="0" width="100%" bordercolor="#999999" style="border-collapse:collapse;">
 	<tr bgcolor="#ededed">
 		<th width="5%">ID</th>
-		<th>角色名称</th>
+		<th width="15%">角色名称</th>
 		<th>拥有权限</th>
 		<th width="10%">操作</th>
 	</tr>
 	<iterate name="list" id="item">
 	<tr bgcolor="<eq name='mod' value='1'>#FFFFE1</eq>" class="<eq name='item.status' value='0'>gray</eq>">
-		<td>{$item['id']}</td>
-		<td>{$item['name']}</td>
+		<td>{$item.id}</td>
+		<td><label id="{$item.id}">{$item.name}</label></td>
 		<td class="a_left">
-		<iterate name="item['Node']" id="node">
-		{$node.title} ( {$node.subNode} )<br />
-		</iterate>
+			<iterate name="item['Node']" id="node">
+				<if condition="empty($node['title'])">{$node.name}<else />{$node.title}</if>
+				( {$node.subNode} )
+				<br />
+			</iterate>
 		</td>
 		<td>
-			<if condition="$item['status'] neq '-1'">
-			<a href="__URL__/update/id/{$item.id}/f/status/v/{:intval(!$item['status'])}" target="_iframe" title='<if condition="$item.status eq 0">启用<else />禁用</if>'><if condition="$item.status eq 0"><img src="{*APP_PUBLIC_URL}/Image/add.gif" alt="启用" align="absmiddle"/><else /><img src="{*APP_PUBLIC_URL}/Image/delete.gif" alt="禁用" align="absmiddle"/></if></a>
-			<a href="__URL__/update/id/{$item.id}/f/status/v/-1"  target="_iframe" title="删除"><img src="{*APP_PUBLIC_URL}/Image/cross.gif" alt="删除" align="absmiddle"/></a>
-			<else />
-			<a href="__URL__/update/id/{$item.id}/f/status/v/0" target="_iframe" title="恢复"><img src="{*APP_PUBLIC_URL}/Image/tick.gif" alt="恢复" align="absmiddle"/></a>
-			<a href="__URL__/delete/id/{$item.id}" target="_iframe" title="彻底删除"><img src="{*APP_PUBLIC_URL}/Image/cross.gif" alt="彻底删除" align="absmiddle"/></a>
-			</if>
+			<img class="edit" id="{$item.id}" src="../Public/Image/options-edit.gif" alt="编辑" align="absmiddle"/>
+			<a href="__URL__/update/id/{$item.id}/f/status/v/{:intval(!$item['status'])}" target="_iframe" title='<if condition="$item.status eq 0">启用<else />禁用</if>'><if condition="$item.status eq 0"><img src="../Public/Image/add.gif" alt="启用" align="absmiddle"/><else /><img src="../Public/Image/delete.gif" alt="禁用" align="absmiddle"/></if></a>
+			<img class="delete" src="../Public/Image/cross.gif" alt="彻底删除" align="absmiddle"/>
 		</td>
 	</tr>
 	</iterate>
 	</table>
-	<neq name="_GET['status']" value='-1'>
 	<div class="addForm">
 		添加新角色：<input type="text" class="name" name="name" size="10" tabindex="1" />
 		<input type="button" value="添加" class="submit" />
 	</div>
-	</neq>
 	<script language="JavaScript" type="text/javascript" src="{*APP_PUBLIC_URL}/Js/role_func.js"></script>
