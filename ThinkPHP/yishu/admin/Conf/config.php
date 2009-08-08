@@ -27,7 +27,8 @@ return array(
 	'NOT_AUTH_MODULE' => 'Public,Script',
 	'REQUIRE_AUTH_MODULE'=> '',
 	'NOT_AUTH_ACTION' => '',
-	'REQUIRE_AUTH_ACTION'=> ''
+	'REQUIRE_AUTH_ACTION'=> '',
+	'IFRAME_AUTH_ACTION' => array('update','delete')//在Iframe中进行的且需要认证的操作
 	);
 
 ?>

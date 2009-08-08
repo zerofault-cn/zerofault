@@ -220,6 +220,20 @@ label.editable{
 	padding:10px;
 	text-align:left;
 }
+.rightColumn .addForm dl{
+	float:left;
+	width:180px;
+	border:1px dashed #ddd;
+	margin:3px;
+}
+.rightColumn .addForm dt{
+	padding:3px;
+	background:#C8C8FF;
+}
+.rightColumn .addForm dd{
+	padding:3px;
+	background:#D6FFFF;
+}
 .rightColumn .editForm, .rightColumn .editAttach, .rightColumn .showThumb{
 	position:relative;
 }

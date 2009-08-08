@@ -35,13 +35,13 @@ class PublicAction extends BaseAction{
 		//生成认证条件
 		$map			= array();
 		$map["account"]	= $_POST['account'];
-		$map['password']= $_POST['password'];
+		$map['password']= md5($_POST['password']);
 		$map["status"]	= 1;
 
 		// 进行委托认证
-		$authInfo = RBAC::authenticate($map);  
-		if(false === $authInfo) {  
-			die(self::_error('登录失败，请检查用户名和密码是否有误！');
+		$authInfo = RBAC::authenticate($map, 'User');
+		if(false === $authInfo) {
+			die(self::_error('登录失败，请检查用户名和密码是否有误！'));
 		}
 		else{
 			$_SESSION[C('USER_AUTH_KEY')]	=	$authInfo['id'];
