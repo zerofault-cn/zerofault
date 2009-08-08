@@ -35,25 +35,23 @@ class PublicAction extends BaseAction{
 		//生成认证条件
 		$map			= array();
 		$map["account"]	= $_POST['account'];
-		$map["status"]	= array('gt',0);
-		$authInfo = $User->where($map)->find();
+		$map['password']= $_POST['password'];
+		$map["status"]	= 1;
 
-		//使用用户名、密码和状态的方式进行认证
-		if(false === $authInfo) {
-			die(self::_error('用户名不存在或已禁用！'));
+		// 进行委托认证
+		$authInfo = RBAC::authenticate($map);  
+		if(false === $authInfo) {  
+			die(self::_error('登录失败，请检查用户名和密码是否有误！');
 		}
-		else {
-			if($authInfo['password'] != md5($_POST['password'])) {
-				die(self::_error('密码错误！'));
-			}
+		else{
 			$_SESSION[C('USER_AUTH_KEY')]	=	$authInfo['id'];
-			$_SESSION['loginUserName']	=	$authInfo['name'];
+			$_SESSION['loginUserName']		=	$authInfo['name'];
 			if($authInfo['account']=='admin') {
 				// 管理员不受权限控制影响
-				$_SESSION['administrator']		=	true;
+				$_SESSION['administrator']	=	true;
 			}
 			else{
-				$_SESSION['administrator']		=	false;
+				$_SESSION['administrator']	=	false;
 			}
 			// 缓存访问权限
 			RBAC::saveAccessList($authInfo['id']);

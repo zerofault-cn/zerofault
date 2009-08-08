@@ -97,7 +97,9 @@ class MyAccessDecisionManager extends Base
 					$this->roleUserTable." as user_role,".
 					$this->roleAccessTable." as role_node,".
 					$this->roleNodeTable." as node ".
-					"where user_role.user_id={$authId} and user_role.role_id=role.id and role_node.role_id=role.id and role.status=1 and role_node.node_id=node.id and node.level=1 and node.status=1";
+					"where user_role.user_id={$authId} and user_role.role_id=role.id ".
+					"and role_node.role_id=role.id and role.status=1 ".
+					"and role_node.node_id=node.id and node.level=1 and node.status=1";
 		$apps =   $db->query($sql);
 		$access =  array();
 		foreach($apps as $key=>$app) {
@@ -106,76 +108,40 @@ class MyAccessDecisionManager extends Base
 			$appName	 =	 $app['name'];
 			// 读取项目的模块权限
 			$access[strtoupper($appName)]   =  array();
-			$sql    =   "select n.id, n.name from ".
-						$this->roleTable." as r,".
-						$this->roleUserTable." as ru,".
-						$this->roleAccessTable." as a ,".
-						$this->roleNodeTable." as n ".
-						"where ru.user_id={$authId} and ru.role_id=r.id and  a.role_id=r.id   and r.status=1 and a.node_id=n.id and n.level=2 and n.pid={$appId} and n.status=1";
+			$sql = "select node.id, node.name from ".
+					$this->roleTable." as role,".
+					$this->roleUserTable." as user_role,".
+					$this->roleAccessTable." as role_node,".
+					$this->roleNodeTable." as node ".
+					"where user_role.user_id={$authId} and user_role.role_id=role.id ".
+					"and role_node.role_id=role.id and role.status=1 ".
+					"and role_node.node_id=node.id and node.level=2 and node.status=1 ".
+					"and node.pid={$appId}";
 			$modules =   $db->query($sql);
-			// 判断是否存在公共模块的权限
-			$publicAction  = array();
 			foreach($modules as $key=>$module) {
 				$module	=	(array)$module;
 				$moduleId	 =	 $module['id'];
 				$moduleName = $module['name'];
-				if('PUBLIC'== strtoupper($moduleName)) {
-					$sql    =   "select n.id, n.name from ".
-								$this->roleTable." as r,".
-								$this->roleUserTable." as ru,".
-								$this->roleAccessTable." as a ,".
-								$this->roleNodeTable." as n ".
-								"where ru.user_id={$authId} and ru.role_id=r.id and a.role_id=r.id  and r.status=1 and a.node_id=n.id and n.pid={$moduleId} and n.level=3 and n.status=1";
-					$rs =   $db->query($sql);    
-					foreach ($rs as $a){
-						$a	 =	 (array)$a;
-						$publicAction[$a['name']]	 =	 $a['id'];
-					}
-					unset($modules[$key]);
-					break;
-				}
-			}
-			// 依次读取模块的操作权限
-			foreach($modules as $key=>$module) {
-				$module	=	(array)$module;
-				$moduleId	 =	 $module['id'];
-				$moduleName = $module['name'];
-				$sql    =   "select n.id, n.name from ".
-								$this->roleTable." as r,".
-								$this->roleUserTable." as ru,".
-								$this->roleAccessTable." as a ,".
-								$this->roleNodeTable." as n ".
-								"where ru.user_id={$authId} and ru.role_id=r.id and  a.role_id=r.id  and r.status=1 and a.node_id=n.id and n.pid={$moduleId} and n.level=3 and n.status=1";
-				$rs =   $db->query($sql);    
+				$sql = "select node.id, node.name from ".
+					$this->roleTable." as role,".
+					$this->roleUserTable." as user_role,".
+					$this->roleAccessTable." as role_node,".
+					$this->roleNodeTable." as node ".
+					"where user_role.user_id={$authId} and user_role.role_id=role.id ".
+					"and role_node.role_id=role.id and role.status=1 ".
+					"and role_node.node_id=node.id and node.level=3 and node.status=1 ".
+					"and node.pid={$moduleId}";
+				$rs =   $db->query($sql);
 				$action = array();
 				foreach ($rs as $a){
 					$a	 =	 (array)$a;
-					$action[$a['name']]	 =	 $a['id'];
+					$action[$a['name']] = $a['id'];
 				}
-				// 和公共模块的操作权限合并
-				$action += $publicAction;
 				$access[strtoupper($appName)][strtoupper($moduleName)]   =  array_change_key_case($action,CASE_UPPER);
 			}
 		}
 		return $access;
 	}
 
-	// 读取模块所属的记录访问权限
-	public function getModuleAccessList($authId,$module) {
-		// 读取模块权限
-		$db     =   DB::getInstance();
-		$sql    =   "select a.node_id from ".
-					$this->roleTable." as r,".
-					$this->roleUserTable." as ru,".
-					$this->roleAccessTable." as a ".
-					"where ru.user_id={$authId} and ru.role_id=r.id and a.role_id=r.id  and r.status=1 and a.module='{$module}' and a.status=1";
-		$rs =   $db->query($sql);
-		$access	=	array();
-		foreach ($rs as $node){
-			$node	=	(array)$node;
-			$access[]	=	$node['nodeId'];
-		}
-		return $access;
-	}
 }//类定义结束
 ?>

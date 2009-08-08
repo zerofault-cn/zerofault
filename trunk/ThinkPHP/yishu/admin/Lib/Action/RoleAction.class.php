@@ -30,12 +30,21 @@ class RoleAction extends BaseAction{
 			'text'=> '角色列表',
 			);
 		$rs = $this->dao->relation(true)->select();
-		$dNode = D('Node');
 		foreach($rs as $key=>$val) {
 			foreach($val['Node'] as $key2=>$val2) {
-				$subnode = $dNode->where(array('pid'=>$val2['id']))->getFields('name,title');
-				$subnode || $rs[$key]['Node'][$key2]['subNode'] = '*';
-				$subnode && $rs[$key]['Node'][$key2]['subNode'] = self::_implode(', ', $subnode);
+				$sql = "select node.* ".
+					"from ".C('DB_PREFIX')."node as node,".C('DB_PREFIX')."role_node as role_node ".
+					"where role_node.role_id=".$val['id']." and role_node.node_id=node.id and node.pid=".$val2['id'];
+				$rs2 = $this->dao->query($sql);
+				$subNode_arr = array();
+				if(empty($rs2)) {
+					$subNode_arr = array('无');
+					$rs2 = array();
+				}
+				foreach($rs2 as $node) {
+					$subNode_arr[] = $node['title']?$node['title']:$node['name'];
+				}
+				$rs[$key]['Node'][$key2]['subNode'] = implode(', ',$subNode_arr);
 			}
 		}
 		//dump($rs);
