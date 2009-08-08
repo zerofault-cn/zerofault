@@ -29,7 +29,21 @@ class RoleAction extends BaseAction{
 		$topnavi[]=array(
 			'text'=> '角色列表',
 			);
-		$rs = $this->dao->relation(true)->select();
+		if(!empty($_REQUEST['id'])) {
+			$where['id'] = array('neq',$_REQUEST['id']);
+			$role_info = $this->dao->relation(true)->where(array('id'=>$_REQUEST['id']))->find();
+			foreach($role_info['Node'] as $key2=>$val2) {
+				$role_info['Node'][$val2['id']] = $role_info['Node'][$key2];
+				unset($role_info['Node'][$key2]);
+				$sql = "select node.id ".
+					"from ".C('DB_PREFIX')."node as node,".C('DB_PREFIX')."role_node as role_node ".
+					"where role_node.role_id=".$role_info['id']." and role_node.node_id=node.id and node.pid=".$val2['id'];
+				$rs2 = $this->dao->query($sql);
+				$role_info['Node'][$val2['id']]['subNode'] = $rs2;
+			}
+		}
+		$rs = $this->dao->relation(true)->where($where)->select();
+	//	dump($rs);
 		foreach($rs as $key=>$val) {
 			foreach($val['Node'] as $key2=>$val2) {
 				$sql = "select node.* ".
@@ -47,18 +61,41 @@ class RoleAction extends BaseAction{
 				$rs[$key]['Node'][$key2]['subNode'] = implode(', ',$subNode_arr);
 			}
 		}
-		//dump($rs);
+		$dNode = D('Node');
 
 		$this->assign("topnavi",$topnavi);
 		$this->assign('list',$rs);
+		$this->assign('node_list',$dNode->relation(true)->where(array('level'=>2))->select());
+		if(!empty($_REQUEST['id'])) {
+			$this->assign('role_info',$role_info);
+		}
 		$this->assign('content','Role:index');
 		$this->display('Layout:Admin_layout');
 	}
 
-	public function removeNode() {
-		$role_id = $_REQUEST['role_id'];
-		$node_id = $_REQUEST['node_id'];
-
+	public function add() {
+		$name = $_REQUEST['name'];
+		$node_ids = $_REQUEST['node_ids'];
+		$node_ids || $node_arr = array() && $node_id_arr = array();
+		$node_ids && $node_id_arr = explode(',', $node_ids);
+		foreach($node_id_arr as $node_id) {
+			$node_arr[] = array('id'=>$node_id);
+		}
+		$where['name'] = $name;
+		$rs = $this->dao->where($where)->find();
+		if($rs && sizeof($rs)>0){
+			die('-1');
+		}
+		$this->dao->name = $name;
+		$this->dao->status = 1;
+		$this->dao->descr = $name;
+		$this->dao->Node = $node_arr;
+		if($this->dao->relation(true)->add()){
+			die('1');
+		}
+		else{
+			die('sql:'.$this->dao->getLastSql());
+		}
 	}
 	/**
 	*
@@ -75,7 +112,23 @@ class RoleAction extends BaseAction{
 	* 调用基类方法
 	*/
 	public function update(){
-		parent::_update();
+		$id = $_REQUEST['id'];
+		$name = $_REQUEST['name'];
+		$node_ids = $_REQUEST['node_ids'];
+		$node_ids || $node_arr = array() && $node_id_arr = array();
+		$node_ids && $node_id_arr = explode(',', $node_ids);
+		foreach($node_id_arr as $node_id) {
+			$node_arr[] = array('id'=>$node_id);
+		}
+		$this->dao->find($id);
+		$this->dao->name = $name;
+		$this->dao->Node = $node_arr;
+		if($this->dao->relation(true)->save()){
+			die('1');
+		}
+		else{
+			die('sql:'.$this->dao->getLastSql());
+		}
 	}
 	/**
 	*

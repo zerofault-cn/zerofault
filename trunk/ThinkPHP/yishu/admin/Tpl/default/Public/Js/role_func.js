@@ -1,10 +1,16 @@
 $(document).ready(function(){
 	
+	$(".addForm input.node").each(function(){
+		$(this).click(function(){
+			checkAll(this);
+		});
+	});
+
 	$(".addForm input.submit").click(function(){
 		submit_addForm(this);
 	});
 
-	$("table td label").each(function(i){
+	$("table#table td label").each(function(i){
 		setNameEditable(this,i);
 	});
 	
@@ -18,36 +24,71 @@ $(document).ready(function(){
 
 });
 
+function checkAll(obj) {
+	if($(obj).attr('name')=='module_node') {
+		$("dd#node_"+$(obj).val()).children("input:checkbox").each(function(){
+			$(this).attr("checked",$(obj).attr('checked'));
+		});
+	}
+	else if($(obj).attr('name')=='action_node') {
+		var parent_node = $(obj).parent().prev().children("input:checkbox");
+		var check = false;
+		$(obj).parent().children("input:checkbox").each(function(){
+			check = check || $(this).attr("checked");
+		});
+		$(parent_node).attr('checked',check);
+	}
+
+}
+
 function submit_addForm(){
 	if(''==$(".addForm input.name").val()){
 		myAlert('名称必须填写');
 		$(".addForm input.name").focus();
 		return false;
 	}
-	var role_sel = new Array();
-	$(".addForm input.role_sel:checked").each(function(){
-		role_sel.push($(this).val());
+	var node_sel = new Array();
+	$(".addForm input:checked").each(function(){
+		node_sel.push($(this).val());
 	});
-	$.post(_URL_+"/add",{
-		'account' : $(".addForm input.account").val(),
-		'name'    : $(".addForm input.name").val(),
-		'password': $(".addForm input.password").val(),
-		'role_ids': role_sel.join(',')
-	},function(str){
-			if(str=='-1')
-			{
-				myAlert("该角色名已存在!");
-			}
-			else if(str=='1')
-			{
-				myAlert("添加成功!");
-				myLocation("",1200);
-			}
-			else
-			{
-				myAlert(str);
-			}
-		});
+	if(''!=$(".addForm input.role_id").val()) {
+		$.post(_URL_+"/update",{
+			'id' : $(".addForm input.role_id").val(),
+			'name'    : $(".addForm input.name").val(),
+			'node_ids': node_sel.join(',')
+		},function(str){
+				if(str=='1')
+				{
+					myAlert("更新成功!");
+					loc = window.location.href;
+					myLocation(loc.substring(0,loc.lastIndexOf('/')-3),1200);
+				}
+				else
+				{
+					myAlert(str);
+				}
+			});
+	}
+	else{
+		$.post(_URL_+"/add",{
+			'name'    : $(".addForm input.name").val(),
+			'node_ids': node_sel.join(',')
+		},function(str){
+				if(str=='-1')
+				{
+					myAlert("该角色名已存在!");
+				}
+				else if(str=='1')
+				{
+					myAlert("添加成功!");
+					myLocation("",1200);
+				}
+				else
+				{
+					myAlert(str);
+				}
+			});
+	}
 }
 function confirmDelete(obj,n) {
 	$(obj).css("cursor","pointer").click(function(){

@@ -29,6 +29,9 @@ class BaseAction extends Action{
 			}
 			// 检查权限
 			if(!RBAC::AccessDecision()) {
+				if(in_array(ACTION_NAME,C('IFRAME_AUTH_ACTION'))) {
+					die(self::_error('没有权限！', 2000));
+				}
 				$this->assign('message','没有权限！');
 				$this->assign('content','Public:error');
 				$this->display('Layout:Admin_layout');
