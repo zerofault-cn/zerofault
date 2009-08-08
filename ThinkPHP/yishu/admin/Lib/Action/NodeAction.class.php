@@ -37,7 +37,6 @@ class NodeAction extends BaseAction{
 		//不需进入节点管理的module
 		$skip_modules = split(',', C('NOT_AUTH_MODULE'));
 		$skip_modules[] = 'Base';
-		
 
 		$where['name'] = APP_NAME;
 		$where['pid'] = 0;

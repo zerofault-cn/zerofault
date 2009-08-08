@@ -17,7 +17,7 @@ class BaseAction extends Action{
 		header("Content-Type:text/html; charset=utf-8");
 	//	dump($_SESSION);
 
-		import('ORG.RBAC.RBAC');
+		import('@.RBAC');
 		// 检查认证
 		if(RBAC::checkAccess()) {
 			//检查认证识别号
