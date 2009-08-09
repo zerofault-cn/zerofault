@@ -29,6 +29,7 @@ class RoleAction extends BaseAction{
 		$topnavi[]=array(
 			'text'=> '角色列表',
 			);
+		$where = array();
 		if(!empty($_REQUEST['id'])) {
 			$where['id'] = array('neq',$_REQUEST['id']);
 			$role_info = $this->dao->relation(true)->where(array('id'=>$_REQUEST['id']))->find();
@@ -109,7 +110,7 @@ class RoleAction extends BaseAction{
 	}
 	/**
 	*
-	* 调用基类方法
+	* 关联更新
 	*/
 	public function update(){
 		$id = $_REQUEST['id'];

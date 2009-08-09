@@ -219,6 +219,7 @@ label.editable{
 .rightColumn .addForm{
 	padding:10px;
 	text-align:left;
+	line-height:200%;
 }
 .rightColumn .addForm dl{
 	float:left;

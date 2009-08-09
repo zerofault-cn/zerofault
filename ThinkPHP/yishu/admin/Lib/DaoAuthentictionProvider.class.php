@@ -38,6 +38,8 @@ class DaoAuthentictionProvider extends ProviderManager
         $result = $dao->where($map)->find();
         if($result) {
             $this->data =   $result;
+			$dao->login_time = date("Y-m-d H:i:s");
+			$dao->save();
             return true;
         }else {
             return false;
