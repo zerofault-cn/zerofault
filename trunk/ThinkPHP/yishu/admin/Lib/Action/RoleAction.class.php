@@ -136,7 +136,15 @@ class RoleAction extends BaseAction{
 	* 调用基类方法
 	*/
 	public function delete(){
-		parent::_delete();
+		$id=$_REQUEST['id'];
+		if($this->dao->relation(true)->delete($id))
+		{
+			die(self::_success('删除成功！','',1200));
+		}
+		else
+		{
+			die(self::_error('发生错误！<br />sql:'.$this->dao->getLastSql()));
+		}
 	}
 }
 ?>

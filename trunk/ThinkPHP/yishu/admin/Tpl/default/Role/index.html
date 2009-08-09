@@ -30,6 +30,7 @@
 			<input type="hidden" class="role_id" value="{$role_info.id}"/>
 			<label>角色名称：</label><input type="text" class="name" name="name" size="10" tabindex="1" value="{$role_info.name}" /><br />
 			<label>设置权限：</label>
+			<!-- <input type="checkbox" name="app_node" class="node" value="1" checked="true" />管理后台（必须拥有） -->
 			<iterate name="node_list" id="item">
 			<dl id="{$item.id}">
 				<dt>

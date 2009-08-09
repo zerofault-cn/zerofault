@@ -4,9 +4,9 @@ $(document).ready(function(){
 		submit_addForm(this);
 	});
 
-	$("table#table label").each(function(i){
+//	$("table#table label").each(function(i){
 //		setNameEditable(this,i);
-	});
+//	});
 
 	$("img.password").each(function(i){
 		showPasswordEdit(this, i);
