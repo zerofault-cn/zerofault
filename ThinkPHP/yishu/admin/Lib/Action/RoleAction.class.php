@@ -34,17 +34,17 @@ class RoleAction extends BaseAction{
 			$where['id'] = array('neq',$_REQUEST['id']);
 			$role_info = $this->dao->relation(true)->where(array('id'=>$_REQUEST['id']))->find();
 			foreach($role_info['Node'] as $key2=>$val2) {
-				$role_info['Node'][$val2['id']] = $role_info['Node'][$key2];
-				unset($role_info['Node'][$key2]);
+				$tmp['Node'][$val2['id']] = $role_info['Node'][$key2];
 				$sql = "select node.id ".
 					"from ".C('DB_PREFIX')."node as node,".C('DB_PREFIX')."role_node as role_node ".
 					"where role_node.role_id=".$role_info['id']." and role_node.node_id=node.id and node.pid=".$val2['id'];
 				$rs2 = $this->dao->query($sql);
-				$role_info['Node'][$val2['id']]['subNode'] = $rs2;
+				$tmp['Node'][$val2['id']]['subNode'] = $rs2;
 			}
+			$role_info = $tmp;
 		}
+		dump($role_info);
 		$rs = $this->dao->relation(true)->where($where)->select();
-	//	dump($rs);
 		foreach($rs as $key=>$val) {
 			foreach($val['Node'] as $key2=>$val2) {
 				$sql = "select node.* ".
@@ -62,6 +62,7 @@ class RoleAction extends BaseAction{
 				$rs[$key]['Node'][$key2]['subNode'] = implode(', ',$subNode_arr);
 			}
 		}
+	//	dump($rs);
 		$dNode = D('Node');
 
 		$this->assign("topnavi",$topnavi);
