@@ -29,10 +29,16 @@ class UserAction extends BaseAction{
 		$topnavi[]=array(
 			'text'=> '用户列表',
 			);
-		$rs = $this->dao->relation(true)->select();
+		$where = array();
+		if(!empty($_REQUEST['id'])) {
+			$where['id'] = array('neq',$_REQUEST['id']);
+			$user_info = $this->dao->relation(true)->where('id='.$_REQUEST['id'])->find();
+		}
+		$rs = $this->dao->relation(true)->where($where)->select();
 		
 		$this->assign("topnavi",$topnavi);
 		$this->assign('list',$rs);
+		$this->assign('user_info', $user_info);
 		$this->assign('role_list', D("Role")->where(array('status'=>1))->select());
 		$this->assign('content','User:index');
 		$this->display('Layout:Admin_layout');
@@ -75,11 +81,31 @@ class UserAction extends BaseAction{
 			die('sql:'.$this->dao->getLastSql());
 		}
 	}
+	public function update(){
+		$id = $_REQUEST['id'];
+		$name = $_REQUEST['name'];
+		$role_ids = $_REQUEST['role_ids'];
+		$role_ids || $role_arr = array() && $role_id_arr = array();
+		$role_ids && $role_id_arr = explode(',', $role_ids);
+		foreach($role_id_arr as $role_id) {
+			$role_arr[] = array('id'=>$role_id);
+		}
+		$this->dao->find($id);
+		$this->dao->name = $name;
+		$this->dao->Role = $role_arr;
+		if($this->dao->relation(true)->save()){
+			die('1');
+		}
+		else{
+			die('sql:'.$this->dao->getLastSql());
+		}
+	}
+
 	/**
 	*
 	* 调用基类方法
 	*/
-	public function update(){
+	public function chgpwd(){
 		parent::_update();
 	}
 	/**

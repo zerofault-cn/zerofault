@@ -4,8 +4,8 @@ $(document).ready(function(){
 		submit_addForm(this);
 	});
 
-	$("table td label").each(function(i){
-		setNameEditable(this,i);
+	$("table#table label").each(function(i){
+//		setNameEditable(this,i);
 	});
 
 	$("img.password").each(function(i){
@@ -32,26 +32,46 @@ function submit_addForm(){
 	$(".addForm input.role_sel:checked").each(function(){
 		role_sel.push($(this).val());
 	});
-	$.post(_URL_+"/add",{
-		'account' : $(".addForm input.account").val(),
-		'name'    : $(".addForm input.name").val(),
-		'password': $(".addForm input.password").val(),
-		'role_ids': role_sel.join(',')
-	},function(str){
-			if(str=='-1')
-			{
-				myAlert("该帐号已存在!");
-			}
-			else if(str=='1')
-			{
-				myAlert("添加成功!");
-				myLocation("",1200);
-			}
-			else
-			{
-				myAlert(str);
-			}
-		});
+	if(''!=$(".addForm input.user_id").val()) {
+		$.post(_URL_+"/update",{
+			'id' : $(".addForm input.user_id").val(),
+			'name' : $(".addForm input.name").val(),
+			'role_ids': role_sel.join(',')
+		},function(str){
+				if(str=='1')
+				{
+					myAlert("更新成功!");
+					loc = window.location.href;
+					myLocation(loc.substring(0,loc.lastIndexOf('/')-3),1200);
+				}
+				else
+				{
+					myAlert(str);
+				}
+			});
+	}
+	else{
+		$.post(_URL_+"/add",{
+			'account' : $(".addForm input.account").val(),
+			'name'    : $(".addForm input.name").val(),
+			'password': $(".addForm input.password").val(),
+			'role_ids': role_sel.join(',')
+		},function(str){
+				if(str=='-1')
+				{
+					myAlert("该帐号已存在!");
+				}
+				else if(str=='1')
+				{
+					myAlert("添加成功!");
+					myLocation("",1200);
+				}
+				else
+				{
+					myAlert(str);
+				}
+			});
+	}
 }
 function confirmDelete(obj,n) {
 	$(obj).css("cursor","pointer").click(function(){
