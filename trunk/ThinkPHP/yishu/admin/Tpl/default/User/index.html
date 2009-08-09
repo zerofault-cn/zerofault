@@ -13,9 +13,13 @@
 		<td>{$item.account}</td>
 		<td><label id="{$item.id}">{$item.name}</label></td>
 		<td>
-			<iterate name="item.Role" id="role" key="j">
-			{$role.name}<br />
-			</iterate>
+			<if condition="$item['id'] eq 1">
+			不受权限控制影响
+			<else />
+				<iterate name="item.Role" id="role" key="j">
+				{$role.name}<br />
+				</iterate>
+			</if>
 		<td>{$item.login_time|substr=2,14}</label></td>
 		<td>
 			<img class="password" id="{$item.id}" src="../Public/Image/key_edit.gif" alt="修改密码" align="absmiddle" />

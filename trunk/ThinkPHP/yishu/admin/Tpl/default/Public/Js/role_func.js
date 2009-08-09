@@ -10,9 +10,9 @@ $(document).ready(function(){
 		submit_addForm(this);
 	});
 
-	$("table#table td label").each(function(i){
-		setNameEditable(this,i);
-	});
+//	$("table#table td label").each(function(i){
+//		setNameEditable(this,i);
+//	});
 	
 	$("img.edit").each(function(i){
 		editRole(this, i);
@@ -52,7 +52,7 @@ function submit_addForm(){
 		node_sel.push($(this).val());
 	});
 	if(''!=$(".addForm input.role_id").val()) {
-		$.post(_URL_+"/update",{
+		$.post(_URL_+"/edit",{
 			'id' : $(".addForm input.role_id").val(),
 			'name'    : $(".addForm input.name").val(),
 			'node_ids': node_sel.join(',')

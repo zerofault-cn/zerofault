@@ -98,21 +98,7 @@ class RoleAction extends BaseAction{
 			die('sql:'.$this->dao->getLastSql());
 		}
 	}
-	/**
-	*
-	* 定制的implode方法，针对关联数组，如果值不为空，则取其值，否则取其键
-	*/
-	protected function _implode($sep, $arr) {
-		foreach($arr as $key=>$val) {
-			$tmp[] = empty($val) ? $key : $val;
-		}
-		return implode($sep,$tmp);
-	}
-	/**
-	*
-	* 关联更新
-	*/
-	public function update(){
+	public function edit(){
 		$id = $_REQUEST['id'];
 		$name = $_REQUEST['name'];
 		$node_ids = $_REQUEST['node_ids'];
@@ -130,6 +116,24 @@ class RoleAction extends BaseAction{
 		else{
 			die('sql:'.$this->dao->getLastSql());
 		}
+	}
+
+	/**
+	*
+	* 定制的implode方法，针对关联数组，如果值不为空，则取其值，否则取其键
+	*/
+	protected function _implode($sep, $arr) {
+		foreach($arr as $key=>$val) {
+			$tmp[] = empty($val) ? $key : $val;
+		}
+		return implode($sep,$tmp);
+	}
+	/**
+	*
+	* 关联更新
+	*/
+	public function update(){
+		parent::_update();
 	}
 	/**
 	*
