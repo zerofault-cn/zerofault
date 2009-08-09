@@ -33,6 +33,8 @@ class RoleAction extends BaseAction{
 		if(!empty($_REQUEST['id'])) {
 			$where['id'] = array('neq',$_REQUEST['id']);
 			$role_info = $this->dao->relation(true)->where(array('id'=>$_REQUEST['id']))->find();
+			$tmp = $role_info;
+			unset($tmp['Node']);
 			foreach($role_info['Node'] as $key2=>$val2) {
 				$tmp['Node'][$val2['id']] = $role_info['Node'][$key2];
 				$sql = "select node.id ".
