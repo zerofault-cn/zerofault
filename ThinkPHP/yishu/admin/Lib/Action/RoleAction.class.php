@@ -43,7 +43,7 @@ class RoleAction extends BaseAction{
 			}
 			$role_info = $tmp;
 		}
-		dump($role_info);
+//		dump($role_info);
 		$rs = $this->dao->relation(true)->where($where)->select();
 		foreach($rs as $key=>$val) {
 			foreach($val['Node'] as $key2=>$val2) {
