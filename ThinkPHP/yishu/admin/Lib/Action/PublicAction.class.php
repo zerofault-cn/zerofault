@@ -86,21 +86,31 @@ class PublicAction extends BaseAction{
 		if(!isset($URL_Info["port"])){
 			$URL_Info["port"]=80;
 		}
-		// building POST-request:
-		$request.="POST ".$URL_Info["path"]." HTTP/1.1\n";
-		$request.="Host: ".$URL_Info["host"]."\n";
-		$request.="Referer: $referrer\n";
-		$request.="Content-type: application/x-www-form-urlencoded\n";
-		$request.="Content-length: ".strlen($data_string)."\n";
-		$request.="Connection: close\n";
-		$request.="\n";
-		$request.=$data_string."\n";
-		$fp = fsockopen($URL_Info["host"],$URL_Info["port"]);
-		fputs($fp, $request);
-		while(!feof($fp)) {
-			$result .= fgets($fp, 1024);
+		if(function_exists('curl_init')) {
+			$c = curl_init();
+			curl_setopt($c, CURLOPT_REFERER, "http://www.ip138.com/");
+			curl_setopt($c, CURLOPT_RETURNTRANSFER, 1);
+			curl_setopt($c, CURLOPT_URL, $url);
+			curl_setopt($c, CURLOPT_POSTFIELDS,$params);
+			$result = curl_exec($c);
 		}
-		fclose($fp);
+		else{
+			// building POST-request:
+			$request.="POST ".$URL_Info["path"]." HTTP/1.1\n";
+			$request.="Host: ".$URL_Info["host"]."\n";
+			$request.="Referer: $referrer\n";
+			$request.="Content-type: application/x-www-form-urlencoded\n";
+			$request.="Content-length: ".strlen($data_string)."\n";
+			$request.="Connection: close\n";
+			$request.="\n";
+			$request.=$data_string."\n";
+			$fp = fsockopen($URL_Info["host"],$URL_Info["port"]);
+			fputs($fp, $request);
+			while(!feof($fp)) {
+				$result .= fgets($fp, 1024);
+			}
+			fclose($fp);
+		}
 		echo iconv('','UTF-8',$result);
 	}
 
