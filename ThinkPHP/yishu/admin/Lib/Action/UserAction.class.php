@@ -81,7 +81,7 @@ class UserAction extends BaseAction{
 			die('sql:'.$this->dao->getLastSql());
 		}
 	}
-	public function update(){
+	public function edit(){
 		$id = $_REQUEST['id'];
 		$name = $_REQUEST['name'];
 		$role_ids = $_REQUEST['role_ids'];
@@ -105,7 +105,8 @@ class UserAction extends BaseAction{
 	*
 	* 调用基类方法
 	*/
-	public function chgpwd(){
+	public function update(){
+		'password'==$_REQUEST['f'] && $_REQUEST['v'] = md5($_REQUEST['v']);
 		parent::_update();
 	}
 	/**

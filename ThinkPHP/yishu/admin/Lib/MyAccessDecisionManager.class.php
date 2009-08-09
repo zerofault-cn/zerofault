@@ -99,7 +99,7 @@ class MyAccessDecisionManager extends Base
 					$this->roleNodeTable." as node ".
 					"where user_role.user_id={$authId} and user_role.role_id=role.id ".
 					"and role_node.role_id=role.id and role.status=1 ".
-					"and role_node.node_id=node.id and node.level=1 and node.status=1";
+					"and role_node.node_id=node.id and node.level=1 ";
 		$apps =   $db->query($sql);
 		$access =  array();
 		foreach($apps as $key=>$app) {
@@ -115,7 +115,7 @@ class MyAccessDecisionManager extends Base
 					$this->roleNodeTable." as node ".
 					"where user_role.user_id={$authId} and user_role.role_id=role.id ".
 					"and role_node.role_id=role.id and role.status=1 ".
-					"and role_node.node_id=node.id and node.level=2 and node.status=1 ".
+					"and role_node.node_id=node.id and node.level=2 ".
 					"and node.pid={$appId}";
 			$modules =   $db->query($sql);
 			foreach($modules as $key=>$module) {
@@ -129,7 +129,7 @@ class MyAccessDecisionManager extends Base
 					$this->roleNodeTable." as node ".
 					"where user_role.user_id={$authId} and user_role.role_id=role.id ".
 					"and role_node.role_id=role.id and role.status=1 ".
-					"and role_node.node_id=node.id and node.level=3 and node.status=1 ".
+					"and role_node.node_id=node.id and node.level=3 ".
 					"and node.pid={$moduleId}";
 				$rs =   $db->query($sql);
 				$action = array();
@@ -140,6 +140,7 @@ class MyAccessDecisionManager extends Base
 				$access[strtoupper($appName)][strtoupper($moduleName)]   =  array_change_key_case($action,CASE_UPPER);
 			}
 		}
+		//dump($access);
 		return $access;
 	}
 
