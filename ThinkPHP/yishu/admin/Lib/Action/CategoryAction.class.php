@@ -32,9 +32,8 @@ class CategoryAction extends BaseAction{
 		$where['pid']  = 0;
 		$order = 'status desc, sort';
 
-		$status = $_REQUEST['status'];
-		if(!empty($status)){
-			$where['status'] = $status;
+		if(isset($_REQUEST['status'])){
+			$where['status'] = $_REQUEST['status'];
 			$order = 'id desc';
 
 			$topnavi[]=array(
