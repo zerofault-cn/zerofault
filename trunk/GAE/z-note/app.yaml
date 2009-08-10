@@ -11,9 +11,11 @@ handlers:
 - url: /media
   static_dir: media
 
-- url: /loadcsv
-  script: loadcsv.py
-  login: admin
+- url: /load
+  script: loader.py
+
+- url: /remote_api
+  script: $PYTHON_LIB/google/appengine/ext/remote_api/handler.py
 
 - url: /parse
   script: parse.py
