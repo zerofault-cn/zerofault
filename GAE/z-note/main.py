@@ -14,8 +14,8 @@ from google.appengine.ext import search
 from google.appengine.ext.webapp import template
 from google.appengine.ext.webapp.util import run_wsgi_app
 from google.appengine.ext import db
+from model import Track
 
-from model import Entry,Tag
 
 #-----------------------------------#
 #equivalent of javascript unescape()
@@ -34,7 +34,7 @@ class Index(webapp.RequestHandler):
 	def get(self):
 
 		path = os.path.join(os.path.dirname(__file__),'templates/base.html')
-		self.response.out.write(template.render(path,template_values))
+		self.response.out.write(template.render(path,{}))
 
 
 application = webapp.WSGIApplication([
