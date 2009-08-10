@@ -16,7 +16,7 @@
 
 #USE `yishu`;
 
-
+set names 'utf8';
 #
 # Table structure for table yishu_category
 #

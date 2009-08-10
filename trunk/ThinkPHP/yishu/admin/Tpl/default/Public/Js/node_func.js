@@ -52,7 +52,8 @@ function setNodeEditable(obj,i){
 						$(obj).attr('src',IMAGE_FOLDER+'form_edit.gif');
 						$(".editForm").remove();
 						myAlert("提交成功!");
-						myLocation('',1000);
+						myOK(1000);
+						//myLocation('',1000);
 					}
 					else
 					{

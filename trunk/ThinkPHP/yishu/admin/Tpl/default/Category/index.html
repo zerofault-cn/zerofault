@@ -9,29 +9,29 @@
 	</tr>
 	</thead>
 	<iterate name="list" id="item">
-	<tr bgcolor="<eq name='mod' value='1'>#FFFFE1</eq>" class="<eq name='item["status"]' value='0'>gray</eq>">
-		<td>{$item.id}</td>
-		<td><a href="__APP__/Site/index/id/{$item.id}" id="{$item.id}">{$item.name}</a> <img class="edit" src="../Public/Image/form_edit.gif" alt="编辑" align="absmiddle"/></td>
-		<td><a href="__APP__/Site/index/id/{$item.id}">{$item.site_count}</a></td>
-		<td><label id="{$item.id}">{$item.sort}</label></td>
+	<tr bgcolor="<eq name='mod' value='1'>#FFFFE1</eq>" class="<eq name='item.status' value='0'>gray</eq>">
+		<td>{$item['id']}</td>
+		<td><a href="__APP__/Site/index/id/{$item['id']}" id="{$item['id']}">{$item['name']}</a> <img class="edit" src="../Public/Image/form_edit.gif" alt="编辑" align="absmiddle"/></td>
+		<td><a href="__APP__/Site/index/id/{$item['id']}">{$item['site_count']}</a></td>
+		<td><label id="{$item['id']}">{$item['sort']}</label></td>
 		<td>
 			<if condition="$item['status'] neq '-1'">
-			<a href="__URL__/update/id/{$item.id}/f/status/v/{:intval(!$item['status'])}" target="_iframe" title='<if condition="$item.status eq 0">显示<else />隐藏</if>'><if condition="$item.status eq 0"><img src="../Public/Image/add.gif" alt="显示" align="absmiddle"/><else /><img src="../Public/Image/delete.gif" alt="隐藏" align="absmiddle"/></if></a>
-			<a href="__URL__/update/id/{$item.id}/f/status/v/-1"  target="_iframe" title="删除"><img src="../Public/Image/cross.gif" alt="删除" align="absmiddle"/></a>
+			<a href="__URL__/update/id/{$item['id']}/f/status/v/{:intval(!$item['status'])}" target="_iframe" title="<if condition='$item.status eq 0'>显示<else />隐藏</if>"><if condition='$item.status eq 0'><img src="../Public/Image/add.gif" alt="显示" align="absmiddle"/><else /><img src="../Public/Image/delete.gif" alt="隐藏" align="absmiddle"/></if></a>
+			<a href="__URL__/update/id/{$item['id']}/f/status/v/-1"  target="_iframe" title="删除"><img src="../Public/Image/cross.gif" alt="删除" align="absmiddle"/></a>
 			<else />
-			<a href="__URL__/update/id/{$item.id}/f/status/v/0" target="_iframe" title="恢复"><img src="../Public/Image/tick.gif" alt="恢复" align="absmiddle"/></a>
-			<a href="__URL__/delete/id/{$item.id}" target="_iframe" title="彻底删除"><img src="../Public/Image/cross.gif" alt="彻底删除" align="absmiddle"/></a>
+			<a href="__URL__/update/id/{$item['id']}/f/status/v/0" target="_iframe" title="恢复"><img src="../Public/Image/tick.gif" alt="恢复" align="absmiddle"/></a>
+			<a href="__URL__/delete/id/{$item['id']}" target="_iframe" title="彻底删除"><img src="../Public/Image/cross.gif" alt="彻底删除" align="absmiddle"/></a>
 			</if>
 		</td>
 	</tr>
 	</iterate>
 	</table>
-	<neq name="_GET['status']" value='-1'>
+	<notpresent name="_GET['status']">
 	<div class="addForm">
 		添加新分类：<input type="text" class="name" size="10" tabindex="1" />
 		排序：<input type="text" class="sort" value="{$new_cate_sort}" size="4">
 		<input type="button" value="添加" class="submit" />
 	</div>
-	</neq>
+	</notpresent>
 	<script language="JavaScript" type="text/javascript" src="../Public/Js/jquery.tablesorter.min.js"></script>
 	<script language="JavaScript" type="text/javascript" src="../Public/Js/cate_func.js"></script>

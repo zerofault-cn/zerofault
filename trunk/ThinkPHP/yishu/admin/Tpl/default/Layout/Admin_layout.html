@@ -6,7 +6,7 @@
 			<a href="__APP__/../index.php" target="_blank">网站首页</a>&nbsp;&nbsp;
 			<a href="__APP__/Public/logout" target="_iframe">退出管理</a>
 		</div>
-		<div class="banner"><img width="281" height="75" src="{*APP_PUBLIC_URL}/Image/banner.gif"/></div>
+		<div class="banner"><img width="281" height="75" src="../Public/Image/banner.gif"/></div>
 	</div>
 	<div id="main">
 		<div class="leftColumn">
@@ -16,11 +16,11 @@
 			<div class="navi">
 				<a href="__APP__">管理首页</a> &gt; 
 				<iterate name="topnavi" id="item">
-					<if condition="empty($item['url'])">
-					{$item.text}
-					<else />
+					<present name="item['url']">
 					<a href="{$item.url}">{$item.text}</a> &gt;
-					</if>
+					<else />
+					{$item.text}
+					</present>
 				</iterate>
 			</div>
 

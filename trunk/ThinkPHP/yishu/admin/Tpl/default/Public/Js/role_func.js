@@ -47,15 +47,18 @@ function submit_addForm(){
 		$(".addForm input.name").focus();
 		return false;
 	}
-	var node_sel = new Array();
-	$(".addForm input:checked").each(function(){
-		node_sel.push($(this).val());
-	});
+//	var node_sel = new Array();
+//	$(".addForm input:checked").each(function(){
+//		node_sel.push($(this).val());
+//	});
+	var node_ids = $(".addForm input:checked").map(function(){
+		return $(this).val();
+	}).get().join(',');
 	if(''!=$(".addForm input.role_id").val()) {
 		$.post(_URL_+"/edit",{
 			'id' : $(".addForm input.role_id").val(),
 			'name'    : $(".addForm input.name").val(),
-			'node_ids': node_sel.join(',')
+			'node_ids': node_ids
 		},function(str){
 				if(str=='1')
 				{

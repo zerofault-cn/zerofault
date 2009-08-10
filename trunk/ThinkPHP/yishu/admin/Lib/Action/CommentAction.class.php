@@ -28,10 +28,9 @@ class CommentAction extends BaseAction{
 			);
 
 		$dWebsite = D('Website');
-		$sie_id = $_REQUEST['id'];
-		if(!empty($site_id)){
-			$where['site_id'] = $site_id;
-			$site_name = $dWebsite->where(array('id'=>$site_id))->getField('name');
+		if(!empty($_REQUEST['id'])){
+			$where['site_id'] = $_REQUEST['id'];
+			$site_name = $dWebsite->where(array('id'=>$_REQUEST['id']))->getField('name');
 			$topnavi[]=array(
 				'text'=> '给网站【'.$site_name.'】的评论',
 				);

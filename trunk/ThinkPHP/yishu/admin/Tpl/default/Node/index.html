@@ -11,18 +11,18 @@
 		<td rowspan="{:count($modules)}">
 			<span class="c{$app['id']}" id="{$app['id']}" pid="0" name="{$app['name']}" title="{$app['title']}" descr="{$app['descr']}" level="1"><if condition="empty($app['title'])">{$app['name']}<else />{$app['title']}</if></span>
 			<if condition="$app['id'] neq 0">
-			<img class="edit" src="{*APP_PUBLIC_URL}/Image/form_edit.gif" alt="编辑" align="absmiddle"/>
+			<img class="edit" src="../Public/Image/form_edit.gif" alt="编辑" align="absmiddle"/>
 			<else />
-			<img class="edit" src="{*APP_PUBLIC_URL}/Image/form_add.gif" alt="编辑并登记" align="absmiddle"/>
+			<img class="edit" src="../Public/Image/form_add.gif" alt="编辑并登记" align="absmiddle"/>
 			</if>
 		</td>
 		</if>
 		<td>
 			<span class="c{$module['id']}" id="{$module['id']}" pid="{$app['id']}" name="{$module['name']}" title="{$module['title']}" descr="{$module['descr']}" level="2"><if condition="empty($module['title'])">{$module['name']}<else/>{$module['title']}</if></span>
 			<if condition="$module['id'] neq 0">
-			<img class="edit" src="{*APP_PUBLIC_URL}/Image/form_edit.gif" alt="编辑" align="absmiddle"/>
+			<img class="edit" src="../Public/Image/form_edit.gif" alt="编辑" align="absmiddle"/>
 			<else />
-			<img class="edit" src="{*APP_PUBLIC_URL}/Image/form_add.gif" alt="编辑并登记" align="absmiddle"/>
+			<img class="edit" src="../Public/Image/form_add.gif" alt="编辑并登记" align="absmiddle"/>
 			</if>
 		</td>
 		<td>
@@ -34,9 +34,9 @@
 				<td width="25%" class="a_left">
 					<span class="c{$action['id']}" id="{$action['id']}" pid="{$module['id']}" name="{$action['name']}" title="{$action['title']}" descr="{$action['descr']}" level="3"><if condition="empty($action['title'])">{$action['name']}<else />{$action['title']}</if></span>
 					<if condition="$action['id'] neq 0">
-					<img class="edit" src="{*APP_PUBLIC_URL}/Image/form_edit.gif" alt="编辑" align="absmiddle"/>
+					<img class="edit" src="../Public/Image/form_edit.gif" alt="编辑" align="absmiddle"/>
 					<else />
-					<img class="edit" src="{*APP_PUBLIC_URL}/Image/form_add.gif" alt="编辑并登记" align="absmiddle"/>
+					<img class="edit" src="../Public/Image/form_add.gif" alt="编辑并登记" align="absmiddle"/>
 					</if>
 				</td>
 			<eq name="mod" value="0">
@@ -53,4 +53,4 @@
 		</td>
 	</tr>
 	</table>
-	<script language="JavaScript" type="text/javascript" src="{*APP_PUBLIC_URL}/Js/node_func.js"></script>
+	<script language="JavaScript" type="text/javascript" src="../Public/Js/node_func.js"></script>
