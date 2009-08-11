@@ -11,20 +11,5 @@ handlers:
 - url: /media
   static_dir: media
 
-- url: /load
-  script: loader.py
-
-- url: /remote_api
-  script: $PYTHON_LIB/google/appengine/ext/remote_api/handler.py
-
-- url: /parse
-  script: parse.py
-
-- url: /dump/.*
-  script: dump.py
-
-- url: /rss/.*
-  script: dump.py
-
 - url: /.*
   script: main.py
