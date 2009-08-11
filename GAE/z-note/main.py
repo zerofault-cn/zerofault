@@ -16,7 +16,6 @@ from google.appengine.ext.webapp.util import run_wsgi_app
 from google.appengine.ext import db
 
 from model import Track,TrackPoint
-from json import JsonWriter
 
 
 #---------------------------------------------------------------#
@@ -51,6 +50,7 @@ class Index(webapp.RequestHandler):
 		template_values = {
 			'nickname' : nickname,
 			'user_track': user_track,
+			'ip': self.request.remote_addr,
 			'auth_url' : auth_url,
 			'auth_text': auth_text
 			}
@@ -73,10 +73,13 @@ class Upload(webapp.RequestHandler):
 			#self.response.out.write(len(data))
 			lines = data.splitlines()
 			for line in lines:
+				i += 1
+				if i<3:
+					continue
 				tp = TrackPoint()
 				fields = line.split(',')
 				begin = fields[0]+fields[1]
-				if i==0:
+				if i==3:
 					t.upload_time += datetime.timedelta(hours=+8)
 					t.begin_time   = datetime.datetime.strptime(begin,'%Y%m%d%H%M%S')
 					t.put()
@@ -87,7 +90,6 @@ class Upload(webapp.RequestHandler):
 				tp.elevation = float(fields[4])
 				tp.pdop      = float(fields[9])
 				tp.put()
-				i += 1
 				end = fields[0]+fields[1]
 			t = db.get(key)
 			t.end_time = datetime.datetime.strptime(end,'%Y%m%d%H%M%S')
@@ -100,15 +102,10 @@ class loadTrack(webapp.RequestHandler):
 	def get (self):
 		key = self.request.get('key')
 		if key:
-			#self.response.out.write(key)
-			tp = TrackPoint.all().filter('trackid',db.Key(key)).order("time")
-			#self.response.out.write(tp.count())
-			'''
-			data = memcache.get(key)
-			if data is None:
-				data = TrackPoint.all().filter('trackid',key)
-				memcache.add(key, data, 30*24*3600)
-			'''
+			tp = memcache.get(key)
+			if tp is None:
+				tp = TrackPoint.all().filter('trackid',db.Key(key)).order("time")
+				memcache.add(key, tp, 30*24*3600)
 			self.response.headers['Content-Type'] = 'application/json'
 			result = '['
 			i = 0
