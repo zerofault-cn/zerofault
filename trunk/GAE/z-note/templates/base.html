@@ -14,10 +14,27 @@
 <body>
 <div id="container">
 	<div id="header">
+		{% if nickname %}
+			<a href="/set?lang=en&uri={{ uri }}">English</a>&nbsp;&nbsp;
+			<a href="/link/{{ nickname }}" style="font-weight:bold">{{ nickname }}</a>
+		{% endif %}
+		<a href="{{ auth_url }}" title="登入/出Google帐户" class="lm">{% ifequal auth_text 'signin' %}登入{% else %}退出{% endifequal %}</a>
+		<br />
+		{% if nickname %}
+		<form method="post" action="upload" enctype="multipart/form-data">
+		<input type="file" name="data"/>
+		<input type="submit" value="upload" />
+		</form>
+		{% endif %}
 	</div>
 	
 	<div id="main">
 		<div id="gmap"></div>
+		<div id="track">
+		{% for item in user_track %}
+			<a class="track" id="{{ item.key }}">{{ item.begin_time }} ~ {{ item.end_time }}</a>
+		{% endfor %}
+		</div>
 	</div>
 	<div class="clear"></div>
 	<div id="footer">
@@ -42,8 +59,192 @@ function initialize() {
 
 	}
 }
+
+// for the map
+
+var markers;//历史线路上的标注
+var marker;
+var marker1;//汽车位置临时标注
+var lat0=100;//纬度最大不超过90
+var lng0=200;//经度最大不超过180
+
+var timeOut = 500;  // length to wait till next point is plotted
+var i = 0;
+var currentCheckPoint = 0;//当前标注点
+var checkPoints = new Array();//所有标注点
+
+// for display
+var loadingMessage;
+var distanceMessage;
+var speedMessage;
+var timeMessage;
+var checkPointCount = 1;
+
+// for distance calculations
+var distance = 0;
+var checkPoint; 
+var checkPointDistance = 0;
+var latMax = 0;
+var latMin = 0;
+var longMax = 0;
+var longMin = 0;
+var latSum = 0;
+var longSum = 0;
+var coordinateCount = 0;
+
+var lastMileMinutes1;//上一英里耗时
+// for time calculations
+var totalTime = 0;
+var startTime = 0;
+var timeSpan=0;//已耗时间
+
+var enabled = 0;//设定是否自动刷新当前汽车位置
+
+var searchOverlayTree;
+var dynamicOverlayTreeNode,tempTreeNode,kmlFileOverlayTreeNode;
+//var dynamicOverlay=new K_DynamicOverlay("K_Reverter.kml");
+var imageOverlay;
+//一组google提供的ICON
+var baseIcon = new GIcon();
+baseIcon.shadow = "http://labs.google.com/ridefinder/images/mm_20_shadow.png";
+baseIcon.iconSize = new GSize(12, 20);
+baseIcon.shadowSize = new GSize(22, 20);
+baseIcon.iconAnchor = new GPoint(6, 10);
+baseIcon.infoWindowAnchor = new GPoint(5, 1);
+icon_Green= new GIcon(baseIcon);
+icon_Green.image = "http://labs.google.com/ridefinder/images/mm_20_green.png";
+icon_Blue= new GIcon(baseIcon);
+icon_Blue.image = "http://labs.google.com/ridefinder/images/mm_20_blue.png";
+icon_Red= new GIcon(baseIcon);
+icon_Red.image = "http://labs.google.com/ridefinder/images/mm_20_red.png";
+
+//自定义的汽车图标
+icon_car=new GIcon();
+icon_car.image='car.gif';
+icon_car.iconSize=new GSize(20,20);
+icon_car.iconAnchor = new GPoint(10,10);
+icon_car.infoWindowAnchor=new GPoint(10,10);
+
+
+function plotPoint(markers)
+{
+	if (i < markers.length )
+	{
+		var Lat = markers[i].position.lat;
+		var Lng = markers[i].position.lon;
+	
+		if (Lat > latMax) 
+		{
+			latMax = Lat;
+		}
+		else if (Lat < latMin) 
+		{
+			latMin = Lat;
+		}
+
+		if (Lng > longMax)
+		{
+			longMax = Lng;
+		}
+		else if (Lng < longMin)
+		{
+			longMin = Lng;
+		}
+
+		latSum = latSum + Lat;
+		longSum = longSum + Lat;
+		coordinateCount = coordinateCount + 1;
+
+		var point = new GPoint(Lng,Lat);
+		
+		if (i < markers.length - 1){
+			window.setTimeout(plotPoint,timeOut);
+			calculateTime(i);
+			averageSpeed = Math.round((distance / (totalTime/3600))*100)/100;
+			var minutesSoFar = totalTime / 60;
+			var currentPace = minutesSoFar / distance;
+		//	speedMessage.innerHTML = '每英里耗时:'+displayMinutes(currentPace);
+		//	speedMessage.innerHTML = '平均速度:'+averageSpeed+'公里/小时 ';
+		}
+
+		marker = createMarker(point,i,markers.length);
+	
+		if (i < markers.length && i != 0)
+		{
+			
+			var Lat1 = markers[i-1].position.lat;
+			var Lng1 = markers[i-1].position.lon;
+				
+					
+			var point1 = new GPoint(Lng1,Lat1);
+
+			var points=[point, point1];
+			
+			//RECENTER MAP EVERY TEN POINTS
+			if (i%3==0)
+			{
+				map.recenterOrPanToLatLng(point);
+			}
+/*
+			if (i < markers.length/2)
+			{
+				map.addOverlay(new GPolyline(points, "#0000ff",3,1));
+			}
+			else
+			{
+				map.addOverlay(new GPolyline(points, "#ff0000",3,1));
+			}
+*/
+			if (lastMileMinutes1 > 10)
+			{
+				map.addOverlay(new GPolyline(points, "#ff0000",3,1));
+			}
+			else
+			{
+				map.addOverlay(new GPolyline(points, "#0000ff",3,1));
+			}
+		
+			calculateDistance(Lng, Lat, Lng1, Lat1);
+		}
+		
+		loadingPercentage(i);
+//		distanceMessage.innerHTML=Math.round(distance*100)/100 + "公里 ";
+		
+		i++;
+	}
+}
+// LOADING BAR //
+function loadingPercentage(currentPoint){
+	var percentage = Math.round((currentPoint/(markers.length - 1)) * 100);
+	loadingMessage.style.width = percentage +"%"; 
+}
+
+// Function based on Vincenty formula 
+// Website referenced: http://www.movable-type.co.uk/scripts/LatLongVincenty.html
+// Thanks Chris Veness for this!
+//Also a big thank you to Steve Conniff for taking the time to intruoduce to this more accurate method of calculating distance
+
+function calculateDistance(point1y, point1x, point2y, point2x)
+{
+	// Vincenty formula
+	traveled = LatLong.distVincenty(new LatLong(point2x, point2y), new LatLong(point1x, point1y));
+//	traveled = traveled * 0.000621371192;  // Convert to miles from meters
+	traveled = traveled * 0.001; //转换米到公里
+	distance = distance + traveled;
+	checkPointDistance = checkPointDistance + traveled;
+//	alert(checkPointDistance);
+}
+
 jQuery(function($){
 	initialize();
+	$("a.track").each(function(){
+		$(this).css("cursor","pointer").click(function(){
+			$.getJSON("load?key="+$(this).attr('id'), function(json){
+				alert("JSON Data: " + json[0].position.lat);
+				//plotPoint(json)
+			});
+		});
+	});
 });
 jQuery(window).unload(GUnload());
 </script>

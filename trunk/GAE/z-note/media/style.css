@@ -24,7 +24,12 @@ div { line-height: 150%; }
 	width:600px;
 	height:450px;
 }
-
+#track{
+	position:relative;
+	width:300px;
+	left:610px;
+	top:-450px;
+}
 
 /*************    µ×²¿    **************/
 #footer { clear: both; border-top: 1px solid #dbdbdb; padding-top: 13px; padding-bottom: 15px; margin-top:2em;}
