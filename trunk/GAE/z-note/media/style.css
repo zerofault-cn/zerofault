@@ -24,7 +24,7 @@ div { line-height: 150%; }
 	width:600px;
 	height:450px;
 }
-#track{
+#controller{
 	position:relative;
 	width:300px;
 	left:610px;
@@ -37,3 +37,15 @@ div { line-height: 150%; }
 #footer a.fm { border-left: 0; padding-left: 0; }
 #footer span { float: right; }
 
+
+.form_widget_amount_slider{
+	border-top:1px solid #9d9c99;
+	border-left:1px solid #9d9c99;
+	border-bottom:1px solid #eee;
+	border-right:1px solid #eee;
+	background-color:#f0ede0;
+	height:3px;
+	position:absolute;
+	bottom:0px;
+	width:300px;
+}
