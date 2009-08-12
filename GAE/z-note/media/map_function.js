@@ -400,9 +400,10 @@ function changeSpeed() {
 function getlist() {
 	$.get('getlist',{},function(str){
 		$("#controller").html(str);
+		if(str.length==0) {
+			return;
+		}
 		form_widget_amount_slider('slider_speed',document.getElementById('speed'),300,0,1000,"changeSpeed()");
-
-
 		$("input#play").click(function(){
 			if($("select#key").val()) { 
 				$.getJSON("load?key="+$("select#key").val(), function(json){
@@ -453,6 +454,7 @@ function getlist() {
 					}
 				});
 		});
+
 	});
 }
 jQuery(function($){

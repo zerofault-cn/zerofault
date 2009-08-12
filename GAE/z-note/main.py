@@ -60,7 +60,8 @@ class showTrackList(webapp.RequestHandler):
 		user_track = {}
 		if user:
 			user_track = Track.all().filter('user',user).order('begin_time')
-
+		else:
+			return
 		template_values = {
 			'user_track': user_track
 			}
