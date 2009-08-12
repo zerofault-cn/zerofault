@@ -1,68 +1,55 @@
-// for the map
-var map;
-var markers;//历史线路上的标注
-var marker;
-var marker1;//汽车位置临时标注
-var lat0=100;//纬度最大不超过90
-var lng0=200;//经度最大不超过180
+var map; //GMap2 对象
 
-var timeOut = 1000;  // length to wait till next point is plotted
+var points; //轨迹点数组
+
+var timeOut = 500; //初始的轨迹行进延时时间
+var TO; //setTimeOut返回值，用于暂停和继续操作
 var i = 0;
 var currentCheckPoint = 0;//当前标注点
 var checkPoints = new Array();//所有标注点
+var checkPointCount = 1;
 
 // for display
 var loadingMessage;
 var distanceMessage;
 var speedMessage;
 var timeMessage;
-var checkPointCount = 1;
 
 // for distance calculations
 var distance = 0;
-var checkPoint; 
+var checkPoint = 1; //公里标记单位，默认1公里一个标记
 var checkPointDistance = 0;
-var latMax = 0;
-var latMin = 0;
-var longMax = 0;
-var longMin = 0;
-var latSum = 0;
-var longSum = 0;
 var coordinateCount = 0;
 
+var lastLat;
+var lastLon;
 var lastMileMinutes1;//上一英里耗时
 // for time calculations
 var totalTime = 0;
 var startTime = 0;
 var timeSpan=0;//已耗时间
 
-var enabled = 0;//设定是否自动刷新当前汽车位置
-
-var searchOverlayTree;
-var dynamicOverlayTreeNode,tempTreeNode,kmlFileOverlayTreeNode;
-//var dynamicOverlay=new K_DynamicOverlay("K_Reverter.kml");
-var imageOverlay;
 //一组google提供的ICON
 var baseIcon = new GIcon();
 baseIcon.shadow = "http://labs.google.com/ridefinder/images/mm_20_shadow.png";
-baseIcon.iconSize = new GSize(12, 20);
-baseIcon.shadowSize = new GSize(22, 20);
-baseIcon.iconAnchor = new GLatLng(10,6);
-baseIcon.infoWindowAnchor = new GLatLng(1, 5);
-icon_Green= new GIcon(baseIcon);
+baseIcon.iconSize = new GSize(24, 38);
+baseIcon.shadowSize = new GSize(40, 38);
+baseIcon.iconAnchor = new GPoint(10, 34);
+baseIcon.infoWindowAnchor = new GPoint(9, 5);
+var icon_Green= new GIcon(baseIcon);
 icon_Green.image = "http://labs.google.com/ridefinder/images/mm_20_green.png";
-icon_Blue= new GIcon(baseIcon);
+var icon_Blue= new GIcon(baseIcon);
 icon_Blue.image = "http://labs.google.com/ridefinder/images/mm_20_blue.png";
-icon_Red= new GIcon(baseIcon);
+var icon_Red= new GIcon(baseIcon);
 icon_Red.image = "http://labs.google.com/ridefinder/images/mm_20_red.png";
 
 //自定义的汽车图标
-icon_car=new GIcon();
-icon_car.image='media/target.png';
-icon_car.iconSize=new GSize(20,20);
-icon_car.iconAnchor = new GLatLng(10,10);
-icon_car.infoWindowAnchor=new GLatLng(10,10);
+var icon_car=new GIcon();
+icon_car.image='target.png';
+icon_car.iconSize=new GSize(16,16);
 
+var playing = false; //是否在播放中
+var paused = false; //是否已暂停
 
 function initialize() {
 	loadingMessage = document.getElementById('progress');
@@ -72,140 +59,124 @@ function initialize() {
 
 	if (GBrowserIsCompatible()) {
 		map = new GMap2(document.getElementById("gmap"));
-		map.setCenter(new GLatLng(geoip_latitude, geoip_longitude), 14);
+		map.setMapType(G_SATELLITE_MAP);//设置地图类型：卫星地图（注，大陆地区的街道地图与卫星地图存在错位）
+		map.addControl(new GSmallZoomControl());//仅有放大和缩小两个控制按钮
+		map.addControl(new GOverviewMapControl());//在右下角创建可折叠的迷你型概览地图
 
-		map.setMapType(G_SATELLITE_MAP);
-
-		map.addControl(new GLargeMapControl());
-		map.addControl(new GMapTypeControl());
-
+		var init_point = new GLatLng(geoip_latitude, geoip_longitude);
+		map.setCenter(init_point, 16);
+		
+		var init_marker = new GMarker(init_point);
+		map.addOverlay(init_marker);
+		GEvent.addListener(init_marker, "click", function(){
+			init_marker.openInfoWindowHtml("您的IP地址："+ip+"<br />您所在的城市中心："+geoip_country_name()+' '+geoip_region_name()+' '+geoip_city());
+			});
 	}
 }
 
-
 function plotPoint()
 {
-	if (i < markers.length )
+	if (i < points.length )
 	{
-		var Lat = markers[i].position.lat;
-		var Lng = markers[i].position.lon;
-	
-		if (Lat > latMax) 
-		{
-			latMax = Lat;
-		}
-		else if (Lat < latMin) 
-		{
-			latMin = Lat;
-		}
-
-		if (Lng > longMax)
-		{
-			longMax = Lng;
-		}
-		else if (Lng < longMin)
-		{
-			longMin = Lng;
-		}
-
-		latSum = latSum + Lat;
-		longSum = longSum + Lat;
-		coordinateCount = coordinateCount + 1;
-
+		var Lat = points[i].position.lat;
+		var Lng = points[i].position.lon;
 		var point = new GLatLng(Lat, Lng);
 		
-		if (i < markers.length - 1){
-			window.setTimeout(plotPoint,timeOut);
+		if (i < points.length - 1){
+			TO = window.setTimeout(plotPoint,timeOut);
 			calculateTime(i);
-			averageSpeed = Math.round((distance / (totalTime/3600))*100)/100;
+			if(points[i].speed>0) {
+				$("#currentSpeed").html('当前速度：'+points[i].speed+' 公里/小时(数值由GPS设备提供)');
+			}
+			var averageSpeed = Math.round((distance / (totalTime/3600))*100)/100;
 			var minutesSoFar = totalTime / 60;
-			var currentPace = minutesSoFar / distance;
-			//speedMessage.innerHTML = '每英里耗时:'+displayMinutes(currentPace);
-			speedMessage.innerHTML = '平均速度:'+averageSpeed+'公里/小时 ';
+			var currentPace = minutesSoFar / distance;//每公里耗时多少分钟
+			
+			$("#averageSpeed").html('平均速度：'+averageSpeed+' 公里/小时');
+		}
+		else{
+			playing = false;
 		}
 
-		marker = createMarker(point,i,markers.length);
-	
-		if (i < markers.length && i != 0)
+		var marker = createMarker(point,i);
+		if(i == 0) {
+			lastLat = Lat;
+			lastLon = Lng;
+		}
+		if (i != 0)
 		{
-			
-			var Lat1 = markers[i-1].position.lat;
-			var Lng1 = markers[i-1].position.lon;
-				
-					
+			var Lat1 = lastLat;//points[i-1].position.lat;
+			var Lng1 = lastLon;//points[i-1].position.lon;
 			var point1 = new GLatLng(Lat1, Lng1);
 
-			var points=[point, point1];
+			
+			var point1s=[point, point1];
+
+			lastLat = Lat;
+			lastLon = Lng;
 			
 			//RECENTER MAP EVERY TEN POINTS
-			if (i%3==0)
+			if (i%5==0)
 			{
 				map.panTo(point);
 			}
-/*
-			if (i < markers.length/2)
+
+			if (i < points.length/2)
 			{
-				map.addOverlay(new GPolyline(points, "#0000ff",3,1));
+				map.addOverlay(new GPolyline(point1s, "#0000ff",3,1));
 			}
 			else
 			{
-				map.addOverlay(new GPolyline(points, "#ff0000",3,1));
+				map.addOverlay(new GPolyline(point1s, "#ff0000",3,1));
 			}
-*/
+/*
 			if (lastMileMinutes1 > 10)
 			{
-				map.addOverlay(new GPolyline(points, "#ff0000",3,1));
+				map.addOverlay(new GPolyline(point1s, "#ff0000",3,1));
 			}
 			else
 			{
-				map.addOverlay(new GPolyline(points, "#0000ff",3,1));
+				map.addOverlay(new GPolyline(point1s, "#0000ff",3,1));
 			}
-		
+*/		
 			calculateDistance(Lng, Lat, Lng1, Lat1);
 		}
 		
 		loadingPercentage(i);
-		distanceMessage.innerHTML=Math.round(distance*100)/100 + "公里 ";
-		
-		i++;
+		$("#distance").html('已行驶：'+Math.round(distance*100)/100 + " 公里");
+		i +=5;
+		i = Math.min(points.length,i);
 	}
 }
 // GET THE APPROPRIATE MARKER FOR START, FINISH, CHECKPOINT, AND LINE
-function createMarker(point, i, markerLength) {
-
-	var icon = new GIcon();
-	icon.shadow = "http://labs.google.com/ridefinder/images/mm_20_shadow.png";
-	icon.iconSize = new GSize(24, 38);
-	icon.shadowSize = new GSize(40, 38);
-
-	icon.iconAnchor = new GLatLng(34, 10);    
-	icon.infoWindowAnchor = new GLatLng(5, 9);
-						
+function createMarker(point, i) {
 	if (i == 0 ){
 		checkPoints[currentCheckPoint] = {
-			timestamp: markers[i].time
+			timestamp: points[i].time
 		};
-		map.setCenter(point, 15,G_HYBRID_MAP);
-		icon.image = "http://labs.google.com/ridefinder/images/mm_20_green.png";
-		marker = new GMarker(point,icon);
+		map.panTo(point);
+		
+		var marker = new GMarker(point,icon_Green);
 		map.addOverlay(marker);
-		GEvent.addListener(marker, "click", function() {
-		marker.openInfoWindowHtml("开始");});
+		GEvent.addListener(marker, "click", function(){
+			marker.openInfoWindowHtml("启程！<br />时间："+points[i].time);
+			});
 		return marker;
-	} else if(i == markers.length -1){
-		icon.image = "http://labs.google.com/ridefinder/images/mm_20_red.png";
-		marker = new GMarker(point,icon);
+	}
+	else if(i == points.length -1){
+		var marker = new GMarker(point,icon_Red);
 		map.addOverlay(marker);
-		GEvent.addListener(marker, "click", function() {
-		marker.openInfoWindowHtml("结束");});
-		map.panTo(point, 2000);
+		GEvent.addListener(marker, "click", function(){
+			marker.openInfoWindowHtml("到达！<br />时间："+points[i].time);
+			});
+		map.panTo(point);
 		return marker;
-	}		
+	}
 
 	if (checkPointDistance - checkPoint >= 0 && checkPoint != 0){
 		currentCheckPoint = currentCheckPoint + 1;
 		checkPoints[currentCheckPoint] = {
-			timestamp: markers[i].time
+			timestamp: points[i].time
 		};
 
 		var thisCheckPointDuration = getTimeBetweenCheckPoints(checkPoints[currentCheckPoint-1].timestamp,checkPoints[currentCheckPoint].timestamp);
@@ -215,6 +186,7 @@ function createMarker(point, i, markerLength) {
 		var timeSpan1=timeSpan;
 		lastMileMinutes1=lastMileMinutes;
 
+		var icon = new GIcon(baseIcon);
 		var img_id=thisCheckPoint>39?0:thisCheckPoint;
 		if (lastMileMinutes < 2) {
 			icon.image = "media/images/red" + img_id + ".png";
@@ -222,21 +194,26 @@ function createMarker(point, i, markerLength) {
 			icon.image = "media/images/green" + img_id + ".png";
 		}
 		var distance1 = checkPointDistance;
-		marker = new GMarker(point,icon);
+		var marker = new GMarker(point,icon);
 		map.addOverlay(marker);
 		GEvent.addListener(marker, "click", function() {
-		marker.openInfoWindowHtml("行程: " + thisCheckPoint + "公里<br>前1公里耗时:" + mileTime+'<br>行驶时间:'+timeSpan1);});
+			marker.openInfoWindowHtml("行程: " + thisCheckPoint + "公里<br>前1公里耗时:" + mileTime+'<br>行驶时间:'+timeSpan1);
+			});
 		checkPointDistance = 0;
 		checkPointCount += 1;
 	} else {
-		marker = new GMarker(point, icon);
+		marker = new GMarker(point);
 	}
 	return marker;
+}
+function getTimeBetweenCheckPoints(lastCheckPoint,thisCheckPoint) {
+	var secondsBetween = secondsBetweenDates(lastCheckPoint,thisCheckPoint);
+	return secondsBetween;
 }
 
 // LOADING BAR //
 function loadingPercentage(currentPoint){
-	var percentage = Math.round((currentPoint/(markers.length - 1)) * 100);
+	var percentage = Math.round((currentPoint/(points.length - 1)) * 100);
 	loadingMessage.style.width = percentage +"%"; 
 }
 
@@ -255,40 +232,45 @@ function calculateDistance(point1y, point1x, point2y, point2x)
 	checkPointDistance = checkPointDistance + traveled;
 //	alert(checkPointDistance);
 }
+function calculateTime(i) {
+	if (startTime == 0) {
+		startTime = points[0].time
+	}
+
+	var current_timestamp = points[i].time
+
+	var secondsBetween = secondsBetweenDates(startTime,current_timestamp);
+	totalTime = secondsBetween;
+	timeSpan=convertSeconds(secondsBetween);
+	timeMessage.innerHTML='已行驶时间:'+timeSpan;
+
+}
 function secondsBetweenDates(first_date,second_date) {
 	//begin year/month/day
-	var largeDate = second_date.toString().split(" ");
+	var largeDate = second_date.split(" ");
 	var date = largeDate[0];
 	date = date.split("-");
 	var beforeYear = date[0];
-	var beforeDay = date[2];
-	//beforeDay = beforeDay.replace("0","");
 	var beforeMonth = date[1];
-	//beforeMonth = beforeMonth.replace("0","");
-
+	var beforeDay = date[2];
+	
 	//end year/month/day
-	var largeDate1 = first_date.toString().split(" ");
+	var largeDate1 = first_date.split(" ");
 	var date1 = largeDate1[0];
 	date1 = date1.split("-");
 	var afterYear = date1[0];
-	var afterDay = date1[2];
-	//afterDay = afterDay.replace("0","");
 	var afterMonth = date1[1];
-	//afterMonth = afterMonth.replace("0","");
-
+	var afterDay = date1[2];
+	
 	//begin hour/min/seconds
-	var after = largeDate[1].replace(" ","");
-	after = largeDate[1].replace(" ","");	
-
+	var after = largeDate[1];
 	afterArray = after.split(":");
 	var hour = afterArray[0];
 	var minute = afterArray[1];
 	var second = afterArray[2];
 
 	//end hour/min/seconds
-	var after1 = largeDate1[1].replace(" ","");
-	after1 = largeDate1[1].replace(" ","");	
-
+	var after1 = largeDate1[1];
 	afterArray1 = after1.split(":");
 	var hour1 = afterArray1[0];
 	var minute1 = afterArray1[1];
@@ -299,20 +281,6 @@ function secondsBetweenDates(first_date,second_date) {
 	var seconds = 1000;
 	var secondsBetween = Math.ceil((before.getTime()-after.getTime())/(seconds));
 	return secondsBetween;
-}
-
-function calculateTime(i) {
-	if (startTime == 0) {
-		startTime = markers[0].time
-	}
-
-	var current_timestamp = markers[i].time
-
-	var secondsBetween = secondsBetweenDates(startTime,current_timestamp);
-	totalTime = secondsBetween;
-	timeSpan=convertSeconds(secondsBetween);
-	timeMessage.innerHTML='已行驶时间:'+timeSpan;
-
 }
 
 function convertSeconds(seconds) {
@@ -334,7 +302,6 @@ function convertSeconds(seconds) {
 	 else {
 		minutes = "";
 	 }
-	
 	return hours + minutes + seconds + "秒";
 }
 function displayMinutes(num_seconds,do_alert)
@@ -426,16 +393,45 @@ LatLong.distVincenty = function(p1, p2) {
   s = s.toFixed(3); // round to 1mm precision
   return s;
 }
+
 jQuery(function($){
 	initialize();
-	$("a.track").each(function(){
-		$(this).css("cursor","pointer").click(function(){
-			$.getJSON("load?key="+$(this).attr('id'), function(json){
-				//alert("JSON Data: " + json[0].position.lat);
-				markers = json
-				plotPoint()
+	$("input#play").click(function(){
+		if($("select#key").val()) { 
+			$.getJSON("load?key="+$("select#key").val(), function(json){
+				TO = null;
+				i = 0;
+				currentCheckPoint = 0;
+				checkPoints = new Array();
+				checkPointCount = 1;
+				distance = 0;
+				checkPointDistance = 0;
+				coordinateCount = 0;
+				lastMileMinutes1 = 0;
+				totalTime = 0;
+				startTime = 0;
+				timeSpan = 0;
+				map.clearOverlays();
+				points = json;
+				timeOut = parseInt($('input#speed').val());
+				plotPoint();
+				playing = true;
+				$("input#pause").attr('disabled',false);
 			});
-		});
+		}
+	});
+
+	$("input#pause").click(function(){
+		if(playing && !paused) {
+			clearTimeout( TO );
+			$(this).val('继续');
+			paused = true;
+		}
+		else if(playing && paused){
+			TO = window.setTimeout(plotPoint,timeOut);
+			$(this).val('暂停');
+			paused = false;
+		}
 	});
 });
 jQuery(window).unload(GUnload());

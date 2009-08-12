@@ -35,14 +35,26 @@
 	
 	<div id="main">
 		<div id="gmap"></div>
-		<div id="track">
-		{% for item in user_track %}
-			<a class="track" id="{{ item.key }}">{{ item.begin_time }} ~ {{ item.end_time }}</a>
-		{% endfor %}
+		<div id="controller">
+			<select id="key">
+				<option>选择行动时间</option>
+				{% for item in user_track %}
+				<option value="{{ item.key }}">{{ item.begin_time }} ~ {{ item.end_time }}</option>
+				{% endfor %}
+			</select>
+			速度：<span id="slider_speed"></span>
+			<input type="text" id="speed" name="speed" value="500" size="3" onchange="changeSpeed()" />
+			<input type="button" id="play" value="播放" />
+			<input type="button" id="pause" value="暂停" disabled="true"/>
+			<br />
+			<br />
+			<span id="currentSpeed"></span><br />
+			<span id="averageSpeed"></span><br />
+			<span id="distance"></span>
 		</div>
 	</div>
 	<span id="progress"></span>
-	<span id="distanceMessage"></span>
+	
 	<span id="speedMessage"></span>
 	<span id="timeMessage"></span>
 
@@ -56,10 +68,11 @@
 	</div>
 </body>
 <iframe id="iframe1" name="iframe1" style="display:none;"></iframe>
+<script language="javascript" type="text/javascript" src="/media/jquery-1.2.6.pack.js"></script>
+<script language="javascript" type="text/javascript" src="/media/dhtmlgoodies_slider.js"></script>
 <script language="JavaScript" src="http://j.maxmind.com/app/geoip.js"></script>
 <script language="javascript" type="text/javascript">
 var ip = '{{ ip }}';
-
 //Country Code:geoip_country_code();
 //Country Name:geoip_country_name();
 //City:geoip_city();
@@ -68,12 +81,17 @@ var ip = '{{ ip }}';
 //Latitude:geoip_latitude();
 //Longitude:geoip_longitude();
 //Postal Code:geoip_postal_code();
-
 var geoip_latitude = geoip_latitude();
 var geoip_longitude = geoip_longitude();
+
+form_widget_amount_slider('slider_speed',document.getElementById('speed'),300,0,1000,"changeSpeed()");
+
+function changeSpeed() {
+	timeOut = parseInt($('input#speed').val());
+	TO = window.setTimeout(plotPoint,timeOut);
+}
 </script>
 
-<script language="javascript" type="text/javascript" src="/media/jquery-1.2.6.pack.js"></script>
 <script language="javascript" type="text/javascript" src="/media/loadGMapAPI.js"></script>
 <script language="javascript" type="text/javascript" src="media/map_function.js"></script>
 </html>
