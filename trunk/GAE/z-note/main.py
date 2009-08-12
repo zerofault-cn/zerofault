@@ -33,14 +33,11 @@ def unescape(txt):
 
 class Index(webapp.RequestHandler):
 	def get(self):
-		
 		user = users.get_current_user()
 		nickname = ''
 		user_track = {}
 		if user:
 			nickname=user.nickname()
-			user_track = Track.all().filter('user',user)
-			
 			auth_url = users.create_logout_url(self.request.uri)
 			auth_text= 'signout'
 		else:
@@ -54,7 +51,20 @@ class Index(webapp.RequestHandler):
 			'auth_url' : auth_url,
 			'auth_text': auth_text
 			}
-		path = os.path.join(os.path.dirname(__file__),'templates/base.html')
+		path = os.path.join(os.path.dirname(__file__),'templates/index.html')
+		self.response.out.write(template.render(path,template_values))
+
+class showTrackList(webapp.RequestHandler):
+	def get(self):
+		user = users.get_current_user()
+		user_track = {}
+		if user:
+			user_track = Track.all().filter('user',user).order('begin_time')
+
+		template_values = {
+			'user_track': user_track
+			}
+		path = os.path.join(os.path.dirname(__file__),'templates/list.html')
 		self.response.out.write(template.render(path,template_values))
 
 
@@ -64,39 +74,49 @@ class Upload(webapp.RequestHandler):
 		if user:
 			data = self.request.get("data")
 			if not data:
-				self.response.out.write( 'No file specified!')
+				self.response.out.write('No data received!')
 				return
-			t = Track()
-			i=0
 			
-			self.response.headers['Content-Type'] = 'text/html'
-			#self.response.out.write(len(data))
-			lines = data.splitlines()
-			for line in lines:
-				i += 1
-				if i<3:
+			sections = data.split('-')
+			for section in sections[1:]:
+				#logging.info(section)
+				lines = section.splitlines()
+				#logging.info(lines[1])
+				#logging.info(lines[-1])
+				first = lines[1].split(',')
+				begin_time = first[0]+first[1]
+
+				last = lines[-1].split(',')
+				end_time = last[0]+last[1]
+
+				tt = Track.all().filter('user', user).filter('begin_time',datetime.datetime.strptime(begin_time,'%Y%m%d%H%M%S')).filter('end_time',datetime.datetime.strptime(end_time,'%Y%m%d%H%M%S'))
+				if tt and tt.count()>0:
 					continue
-				tp = TrackPoint()
-				fields = line.split(',')
-				begin = fields[0]+fields[1]
-				if i==3:
-					t.upload_time += datetime.timedelta(hours=+8)
-					t.begin_time   = datetime.datetime.strptime(begin,'%Y%m%d%H%M%S')
-					t.put()
-					key = t.key()
-				tp.trackid   = t.key()
-				tp.time  = datetime.datetime.strptime(fields[0]+fields[1],'%Y%m%d%H%M%S')
-				tp.point     = db.GeoPt(fields[2], fields[3])
-				tp.elevation = float(fields[4])
-				tp.pdop      = float(fields[9])
-				tp.put()
-				end = fields[0]+fields[1]
-			t = db.get(key)
-			t.end_time = datetime.datetime.strptime(end,'%Y%m%d%H%M%S')
-			t.put()
-			self.redirect('/')
+				t = Track()
+				t.upload_time += datetime.timedelta(hours=+8)
+				t.begin_time   = datetime.datetime.strptime(begin_time,'%Y%m%d%H%M%S')
+				t.end_time   = datetime.datetime.strptime(end_time,'%Y%m%d%H%M%S')
+				t.put()
+				key = t.key()
+				i = 0
+				for line in lines[1:]:
+					i += 1
+					if (i+1)!= len(lines) and (i+2)%3 != 0:
+						continue
+					fields = line.split(',')
+					tp = TrackPoint()
+					tp.trackid   = key
+					tp.time      = datetime.datetime.strptime(fields[0]+fields[1],'%Y%m%d%H%M%S')
+					tp.point     = db.GeoPt(fields[2], fields[3])
+					tp.elevation = float(fields[4])
+					tp.speed     = float(fields[7])
+					tp.pdop      = float(fields[9])
+					tp.put()
+
+			self.response.out.write('1')
 		else:
-			self.redirect(users.create_login_url(self.request.uri))
+			self.response.out.write('Not Login')
+			
 
 class loadTrack(webapp.RequestHandler):
 	def get (self):
@@ -114,20 +134,35 @@ class loadTrack(webapp.RequestHandler):
 					result += ','
 				result += '{' 
 				result += '"time":"'+str(item.time)+'",'
-				result += '"position":{"lat":"'+str(item.point.lat)+'","lon":"'+str(item.point.lon)+'"},'
+				result += '"point":{"lat":"'+str(item.point.lat)+'","lon":"'+str(item.point.lon)+'"},'
 				result += '"elevation":"'+str(item.elevation)+'",'
+				result += '"speed":"'+str(item.speed)+'",'
 				result += '"pdop":"'+str(item.pdop)+'"'
 				result += '}'
 				i += 1
 			result += ']'
 			#[{"name":"niaochao","point":{"lat":"39.990","lng":"116.397"},"desc":"aoyunhuizhuchangdi"},
 			self.response.out.write(result)
-		
-	
+
+class delTrack(webapp.RequestHandler):
+	def get (self):
+		key = self.request.get('key')
+		user = users.get_current_user()
+		if key and user:
+			t = db.get(key)
+			if t:
+				db.delete(t)
+				tp = TrackPoint.all().filter('trackid',db.Key(key))
+				for item in tp:
+					item.delete()
+				self.response.out.write('1')
+
 application = webapp.WSGIApplication([
 	('/', Index),
 	('/upload', Upload),
-	('/load', loadTrack)
+	('/load', loadTrack),
+	('/delete', delTrack),
+	('/getlist', showTrackList)
 	],debug=True)
 
 def main():

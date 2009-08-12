@@ -1,0 +1,17 @@
+			<select id="key">
+				<option>选择行动时间</option>
+				{% for item in user_track %}
+				<option value="{{ item.key }}">{{ item.begin_time }} ~ {{ item.end_time }}</option>
+				{% endfor %}
+			</select>
+			速度：<span id="slider_speed"></span>
+			<input type="text" id="speed" name="speed" value="500" size="3" onchange="changeSpeed()" />
+			<input type="button" id="play" value="播放" />
+			<input type="button" id="pause" value="暂停" disabled="true"/>
+			<input type="button" id="delete" value="删除"/>
+			<br />
+			<br />
+			<span id="currentSpeed"></span><br />
+			<span id="averageSpeed"></span><br />
+			<span id="distance"></span><br />
+			<span id="timespan"></span>

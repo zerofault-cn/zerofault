@@ -78,14 +78,14 @@ function plotPoint()
 {
 	if (i < points.length )
 	{
-		var Lat = points[i].position.lat;
-		var Lng = points[i].position.lon;
+		var Lat = points[i].point.lat;
+		var Lng = points[i].point.lon;
 		var point = new GLatLng(Lat, Lng);
 		
 		if (i < points.length - 1){
 			TO = window.setTimeout(plotPoint,timeOut);
 			calculateTime(i);
-			if(points[i].speed>0) {
+			if(parseInt(points[i].speed)>0) {
 				$("#currentSpeed").html('当前速度：'+points[i].speed+' 公里/小时(数值由GPS设备提供)');
 			}
 			var averageSpeed = Math.round((distance / (totalTime/3600))*100)/100;
@@ -144,7 +144,7 @@ function plotPoint()
 		
 		loadingPercentage(i);
 		$("#distance").html('已行驶：'+Math.round(distance*100)/100 + " 公里");
-		i +=5;
+		i += 1;
 		i = Math.min(points.length,i);
 	}
 }
@@ -242,7 +242,7 @@ function calculateTime(i) {
 	var secondsBetween = secondsBetweenDates(startTime,current_timestamp);
 	totalTime = secondsBetween;
 	timeSpan=convertSeconds(secondsBetween);
-	timeMessage.innerHTML='已行驶时间:'+timeSpan;
+	$("#timespan").html('已行驶时间：'+timeSpan);
 
 }
 function secondsBetweenDates(first_date,second_date) {
@@ -393,45 +393,92 @@ LatLong.distVincenty = function(p1, p2) {
   s = s.toFixed(3); // round to 1mm precision
   return s;
 }
+function changeSpeed() {
+	timeOut = parseInt($('input#speed').val());
+	TO = window.setTimeout(plotPoint,timeOut);
+}
+function getlist() {
+	$.get('getlist',{},function(str){
+		$("#controller").html(str);
+		form_widget_amount_slider('slider_speed',document.getElementById('speed'),300,0,1000,"changeSpeed()");
 
+
+		$("input#play").click(function(){
+			if($("select#key").val()) { 
+				$.getJSON("load?key="+$("select#key").val(), function(json){
+					TO = null;
+					i = 0;
+					currentCheckPoint = 0;
+					checkPoints = new Array();
+					checkPointCount = 1;
+					distance = 0;
+					checkPointDistance = 0;
+					coordinateCount = 0;
+					lastMileMinutes1 = 0;
+					totalTime = 0;
+					startTime = 0;
+					timeSpan = 0;
+					map.clearOverlays();
+					points = json;
+					timeOut = parseInt($('input#speed').val());
+					plotPoint();
+					playing = true;
+					$("input#pause").attr('disabled',false);
+				});
+			}
+		});
+
+		$("input#pause").click(function(){
+			if(playing && !paused) {
+				clearTimeout( TO );
+				$(this).val('继续');
+				paused = true;
+			}
+			else if(playing && paused){
+				TO = window.setTimeout(plotPoint,timeOut);
+				$(this).val('暂停');
+				paused = false;
+			}
+		});
+		$("input#delete").click(function(){
+			$.get("delete",{
+				'key':$("select#key").val()
+			},function(str){
+					if(str=='1') {
+						alert('删除成功!');
+						getlist();
+					}
+					else{
+						alert('删除失败');
+					}
+				});
+		});
+	});
+}
 jQuery(function($){
 	initialize();
-	$("input#play").click(function(){
-		if($("select#key").val()) { 
-			$.getJSON("load?key="+$("select#key").val(), function(json){
-				TO = null;
-				i = 0;
-				currentCheckPoint = 0;
-				checkPoints = new Array();
-				checkPointCount = 1;
-				distance = 0;
-				checkPointDistance = 0;
-				coordinateCount = 0;
-				lastMileMinutes1 = 0;
-				totalTime = 0;
-				startTime = 0;
-				timeSpan = 0;
-				map.clearOverlays();
-				points = json;
-				timeOut = parseInt($('input#speed').val());
-				plotPoint();
-				playing = true;
-				$("input#pause").attr('disabled',false);
-			});
-		}
-	});
-
-	$("input#pause").click(function(){
-		if(playing && !paused) {
-			clearTimeout( TO );
-			$(this).val('继续');
-			paused = true;
-		}
-		else if(playing && paused){
-			TO = window.setTimeout(plotPoint,timeOut);
-			$(this).val('暂停');
-			paused = false;
-		}
+	getlist();
+	$("input#upload").click(function(){
+		$.ajaxFileUpload({
+			url:'/upload', 
+			secureuri:false,
+			fileElementId:'data',
+			dataType: 'text',
+			success: function (data, status)
+			{
+				if(data=='1'){
+					alert('上传成功！');
+					getlist();
+				}
+				else{
+					alert('上传失败!<br />'+data);
+				}
+			},
+			error: function (data, status, e)
+			{
+				alert(e);
+			}
+		});
 	});
 });
 jQuery(window).unload(GUnload());
