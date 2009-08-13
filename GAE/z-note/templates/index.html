@@ -34,15 +34,16 @@
 	</div>
 	
 	<div id="main">
-		<div id="gmap"></div>
-		<div id="controller">
-			
+		<div class="left">
+			<div id="gmap"></div>
+			<div id="progress" style="width:0%;"></div>
 		</div>
+		<div class="right">
+			<div id="controller"></div>
+		</div>
+		<div class="clear"></div>
 	</div>
-	<span id="progress"></span>
-	
 
-	<div class="clear"></div>
 	<div id="footer">
 		<a href="/" class="fm">首页</a>
 		<a href="#">帮助</a>
@@ -69,10 +70,7 @@ var ip = '{{ ip }}';
 //Postal Code:geoip_postal_code();
 var geoip_latitude = geoip_latitude();
 var geoip_longitude = geoip_longitude();
-
-
 </script>
-
 <script language="javascript" type="text/javascript" src="/media/loadGMapAPI.js"></script>
 <script language="javascript" type="text/javascript" src="media/map_function.js"></script>
 </html>

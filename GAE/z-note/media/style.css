@@ -1,5 +1,5 @@
 body{
-	padding: 0; margin: 0; font-size: 12px; font-family:Geneva, Arial, Helvetica, sans-serif;
+	padding: 10px; margin: 0; font-size: 12px; font-family:Geneva, Arial, Helvetica, sans-serif;
 }
 a { color: #333; text-decoration: none; cursor: pointer; }
 a:hover { text-decoration: underline; }
@@ -20,17 +20,24 @@ div { line-height: 150%; }
 /*************    ¶¥²¿    **************/
 #header { text-align: right; height: 45px !important; height: 35px; margin-top: 5px; }
 
-#gmap{
+.left{
+	float:left;
 	width:600px;
 	height:450px;
 }
-#controller{
-	position:relative;
-	width:300px;
-	left:610px;
-	top:-450px;
+#gmap{
+	width:100%;
+	height:100%;
 }
-
+.right{
+	float:left;
+	width:300px;
+	padding-left:10px;
+}
+#progress{
+	height:5px;
+	background-color:#FF0000;
+}
 /*************    µ×²¿    **************/
 #footer { clear: both; border-top: 1px solid #dbdbdb; padding-top: 13px; padding-bottom: 15px; margin-top:2em;}
 #footer a { float: left; color: #000; border-left: 1px solid #ddd; padding-right: 5px; padding-left: 5px }

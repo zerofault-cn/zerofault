@@ -1,11 +1,4 @@
-var url=window.location.href;
-
-if(url.indexOf("localhost")>=0)
-{
-	document.write("<script language='javascript' src='http://maps.google.com/maps?file=api&v=2&key=ABQIAAAAGIXjiA0k2uINv-bo5flFdBT2yXp_ZAY8_ufC3CFXhHIE1NvwkxQ698TTKEkLwZu9kXehGWWG9vRn1w'></script>");
-}
-else if(url.indexOf('zerofault.8866.org')>=0)
-{
-	document.write('<script src="http://maps.google.com/maps?file=api&v=2&key=ABQIAAAAGIXjiA0k2uINv-bo5flFdBRa2nuN09Sdo3rTXtaS3oieFFC-ZhTHAHjMT1wtFJxIMD9KFHaPcNo3bg" type="text/javascript"></script>');
-}
-
+var keys = new Array();
+keys['localhost'] = 'ABQIAAAAGIXjiA0k2uINv-bo5flFdBT2yXp_ZAY8_ufC3CFXhHIE1NvwkxQ698TTKEkLwZu9kXehGWWG9vRn1w';
+keys['z-note.appspot.com'] = 'ABQIAAAAGIXjiA0k2uINv-bo5flFdBT_kxoqgq2K7tP_I7splH96j2m6vRQtBrjJ-OWeZzxvsD2JlyZqAk56TA';
+document.write('<script language="javascript" src="http://ditu.google.cn/maps?file=api&amp;v=2.s&amp;key='+keys[window.location.hostname]+'&hl=zh-CN"></script>');

@@ -60,8 +60,11 @@ function initialize() {
 	if (GBrowserIsCompatible()) {
 		map = new GMap2(document.getElementById("gmap"));
 		map.setMapType(G_SATELLITE_MAP);//设置地图类型：卫星地图（注，大陆地区的街道地图与卫星地图存在错位）
-		map.addControl(new GSmallZoomControl());//仅有放大和缩小两个控制按钮
-		map.addControl(new GOverviewMapControl());//在右下角创建可折叠的迷你型概览地图
+		//map.addControl(new GSmallZoomControl());//仅有放大和缩小两个控制按钮
+		//map.addControl(new GOverviewMapControl());//在右下角创建可折叠的迷你型概览地图
+		map.enableScrollWheelZoom(); //鼠标滚轮缩放
+		map.enableContinuousZoom();
+		//map.addControl(new GMapTypeControl());
 
 		var init_point = new GLatLng(geoip_latitude, geoip_longitude);
 		map.setCenter(init_point, 16);
@@ -85,8 +88,11 @@ function plotPoint()
 		if (i < points.length - 1){
 			TO = window.setTimeout(plotPoint,timeOut);
 			calculateTime(i);
+			if(parseInt(points[i].elevation)>0) {
+				$("#currentElevation").html('当前海拔：'+points[i].elevation+' 米（数据由GPS设备提供）');
+			}
 			if(parseInt(points[i].speed)>0) {
-				$("#currentSpeed").html('当前速度：'+points[i].speed+' 公里/小时(数值由GPS设备提供)');
+				$("#currentSpeed").html('当前速度：'+points[i].speed+' 公里/小时（数据由GPS设备提供）');
 			}
 			var averageSpeed = Math.round((distance / (totalTime/3600))*100)/100;
 			var minutesSoFar = totalTime / 60;
@@ -96,6 +102,7 @@ function plotPoint()
 		}
 		else{
 			playing = false;
+			$("input#pause").attr('disabled',true);
 		}
 
 		var marker = createMarker(point,i);
@@ -103,19 +110,15 @@ function plotPoint()
 			lastLat = Lat;
 			lastLon = Lng;
 		}
-		if (i != 0)
-		{
+		if (i != 0) {
 			var Lat1 = lastLat;//points[i-1].position.lat;
 			var Lng1 = lastLon;//points[i-1].position.lon;
 			var point1 = new GLatLng(Lat1, Lng1);
-
-			
-			var point1s=[point, point1];
+			var poly=[point, point1];
 
 			lastLat = Lat;
 			lastLon = Lng;
 			
-			//RECENTER MAP EVERY TEN POINTS
 			if (i%5==0)
 			{
 				map.panTo(point);
@@ -123,27 +126,27 @@ function plotPoint()
 
 			if (i < points.length/2)
 			{
-				map.addOverlay(new GPolyline(point1s, "#0000ff",3,1));
+				map.addOverlay(new GPolyline(poly, "#0000ff",3,1));
 			}
 			else
 			{
-				map.addOverlay(new GPolyline(point1s, "#ff0000",3,1));
+				map.addOverlay(new GPolyline(poly, "#ff0000",3,1));
 			}
 /*
 			if (lastMileMinutes1 > 10)
 			{
-				map.addOverlay(new GPolyline(point1s, "#ff0000",3,1));
+				map.addOverlay(new GPolyline(poly, "#ff0000",3,1));
 			}
 			else
 			{
-				map.addOverlay(new GPolyline(point1s, "#0000ff",3,1));
+				map.addOverlay(new GPolyline(poly, "#0000ff",3,1));
 			}
 */		
 			calculateDistance(Lng, Lat, Lng1, Lat1);
 		}
 		
 		loadingPercentage(i);
-		$("#distance").html('已行驶：'+Math.round(distance*100)/100 + " 公里");
+		$("#distance").html('已&nbsp;行&nbsp;驶：'+Math.round(distance*100)/100 + " 公里");
 		i += 1;
 		i = Math.min(points.length,i);
 	}
@@ -173,7 +176,7 @@ function createMarker(point, i) {
 		return marker;
 	}
 
-	if (checkPointDistance - checkPoint >= 0 && checkPoint != 0){
+	if (checkPointDistance - checkPoint >= 0 && checkPoint != 0) {
 		currentCheckPoint = currentCheckPoint + 1;
 		checkPoints[currentCheckPoint] = {
 			timestamp: points[i].time
@@ -190,7 +193,8 @@ function createMarker(point, i) {
 		var img_id=thisCheckPoint>39?0:thisCheckPoint;
 		if (lastMileMinutes < 2) {
 			icon.image = "media/images/red" + img_id + ".png";
-		} else {
+		}
+		else {
 			icon.image = "media/images/green" + img_id + ".png";
 		}
 		var distance1 = checkPointDistance;
@@ -201,7 +205,8 @@ function createMarker(point, i) {
 			});
 		checkPointDistance = 0;
 		checkPointCount += 1;
-	} else {
+	}
+	else{
 		marker = new GMarker(point);
 	}
 	return marker;
@@ -211,40 +216,6 @@ function getTimeBetweenCheckPoints(lastCheckPoint,thisCheckPoint) {
 	return secondsBetween;
 }
 
-// LOADING BAR //
-function loadingPercentage(currentPoint){
-	var percentage = Math.round((currentPoint/(points.length - 1)) * 100);
-	loadingMessage.style.width = percentage +"%"; 
-}
-
-// Function based on Vincenty formula 
-// Website referenced: http://www.movable-type.co.uk/scripts/LatLongVincenty.html
-// Thanks Chris Veness for this!
-//Also a big thank you to Steve Conniff for taking the time to intruoduce to this more accurate method of calculating distance
-
-function calculateDistance(point1y, point1x, point2y, point2x)
-{
-	// Vincenty formula
-	traveled = LatLong.distVincenty(new LatLong(point2x, point2y), new LatLong(point1x, point1y));
-//	traveled = traveled * 0.000621371192;  // Convert to miles from meters
-	traveled = traveled * 0.001; //转换米到公里
-	distance = distance + traveled;
-	checkPointDistance = checkPointDistance + traveled;
-//	alert(checkPointDistance);
-}
-function calculateTime(i) {
-	if (startTime == 0) {
-		startTime = points[0].time
-	}
-
-	var current_timestamp = points[i].time
-
-	var secondsBetween = secondsBetweenDates(startTime,current_timestamp);
-	totalTime = secondsBetween;
-	timeSpan=convertSeconds(secondsBetween);
-	$("#timespan").html('已行驶时间：'+timeSpan);
-
-}
 function secondsBetweenDates(first_date,second_date) {
 	//begin year/month/day
 	var largeDate = second_date.split(" ");
@@ -281,6 +252,41 @@ function secondsBetweenDates(first_date,second_date) {
 	var seconds = 1000;
 	var secondsBetween = Math.ceil((before.getTime()-after.getTime())/(seconds));
 	return secondsBetween;
+}
+// LOADING BAR //
+function loadingPercentage(currentPoint){
+	var percentage = Math.round((currentPoint/(points.length - 1)) * 100);
+	loadingMessage.style.width = percentage +"%";
+	$("#progressMsg").html('播放进度：'+percentage +"%");
+}
+
+// Function based on Vincenty formula 
+// Website referenced: http://www.movable-type.co.uk/scripts/LatLongVincenty.html
+// Thanks Chris Veness for this!
+//Also a big thank you to Steve Conniff for taking the time to intruoduce to this more accurate method of calculating distance
+
+function calculateDistance(point1y, point1x, point2y, point2x)
+{
+	// Vincenty formula
+	traveled = LatLong.distVincenty(new LatLong(point2x, point2y), new LatLong(point1x, point1y));
+//	traveled = traveled * 0.000621371192;  // Convert to miles from meters
+	traveled = traveled * 0.001; //转换米到公里
+	distance = distance + traveled;
+	checkPointDistance = checkPointDistance + traveled;
+//	alert(checkPointDistance);
+}
+function calculateTime(i) {
+	if (startTime == 0) {
+		startTime = points[0].time
+	}
+
+	var current_timestamp = points[i].time
+
+	var secondsBetween = secondsBetweenDates(startTime,current_timestamp);
+	totalTime = secondsBetween;
+	timeSpan=convertSeconds(secondsBetween);
+	$("#timespan").html('行驶时间：'+timeSpan);
+
 }
 
 function convertSeconds(seconds) {
@@ -394,8 +400,10 @@ LatLong.distVincenty = function(p1, p2) {
   return s;
 }
 function changeSpeed() {
-	timeOut = parseInt($('input#speed').val());
+	timeOut = 1001-parseInt($('input#speed').val());
+	clearTimeout( TO );
 	TO = window.setTimeout(plotPoint,timeOut);
+
 }
 function getlist() {
 	$.get('getlist',{},function(str){
@@ -403,30 +411,32 @@ function getlist() {
 		if(str.length==0) {
 			return;
 		}
-		form_widget_amount_slider('slider_speed',document.getElementById('speed'),300,0,1000,"changeSpeed()");
+		form_widget_amount_slider('slider_speed',document.getElementById('speed'),300,1,1000,"changeSpeed()");
 		$("input#play").click(function(){
-			if($("select#key").val()) { 
-				$.getJSON("load?key="+$("select#key").val(), function(json){
-					TO = null;
-					i = 0;
-					currentCheckPoint = 0;
-					checkPoints = new Array();
-					checkPointCount = 1;
-					distance = 0;
-					checkPointDistance = 0;
-					coordinateCount = 0;
-					lastMileMinutes1 = 0;
-					totalTime = 0;
-					startTime = 0;
-					timeSpan = 0;
-					map.clearOverlays();
-					points = json;
-					timeOut = parseInt($('input#speed').val());
-					plotPoint();
-					playing = true;
-					$("input#pause").attr('disabled',false);
-				});
+			if(''==$("select#key").val()) { 
+				alert('未选择行动轨迹');
+				return;
 			}
+			$.getJSON("load?key="+$("select#key").val(), function(json){
+				TO = null;
+				i = 0;
+				currentCheckPoint = 0;
+				checkPoints = new Array();
+				checkPointCount = 1;
+				distance = 0;
+				checkPointDistance = 0;
+				coordinateCount = 0;
+				lastMileMinutes1 = 0;
+				totalTime = 0;
+				startTime = 0;
+				timeSpan = 0;
+				map.clearOverlays();
+				points = json;
+				timeOut = 1001-parseInt($('input#speed').val());
+				plotPoint();
+				playing = true;
+				$("input#pause").attr('disabled',false);
+			});
 		});
 
 		$("input#pause").click(function(){
@@ -442,6 +452,10 @@ function getlist() {
 			}
 		});
 		$("input#delete").click(function(){
+			if(''==$("select#key").val()) { 
+				alert('未选择行动轨迹');
+				return;
+			}
 			$.get("delete",{
 				'key':$("select#key").val()
 			},function(str){
