@@ -80,10 +80,7 @@ class Upload(webapp.RequestHandler):
 			
 			sections = data.split('-')
 			for section in sections[1:]:
-				#logging.info(section)
 				lines = section.splitlines()
-				#logging.info(lines[1])
-				#logging.info(lines[-1])
 				first = lines[1].split(',')
 				begin_time = first[0]+first[1]
 
@@ -100,16 +97,23 @@ class Upload(webapp.RequestHandler):
 				t.put()
 				key = t.key()
 				i = 0
+				step = int(math.ceil((len(lines)-1)/1000.0))
+				logging.info(step)
 				for line in lines[1:]:
 					i += 1
-					if (i+1)!= len(lines) and (i+2)%3 != 0:
+					if (i+1)!= len(lines) and (i+step-1)%step != 0:
 						continue
+					#logging.info(line)
 					fields = line.split(',')
 					tp = TrackPoint()
 					tp.trackid   = key
 					tp.time      = datetime.datetime.strptime(fields[0]+fields[1],'%Y%m%d%H%M%S')
 					tp.point     = db.GeoPt(fields[2], fields[3])
-					tp.elevation = float(fields[4])
+					if fields[4]=='NaN':
+						ele = 0
+					else:
+						ele =  fields[4]
+					tp.elevation = float(ele)
 					tp.speed     = float(fields[7])
 					tp.pdop      = float(fields[9])
 					tp.put()
@@ -130,6 +134,7 @@ class loadTrack(webapp.RequestHandler):
 			self.response.headers['Content-Type'] = 'application/json'
 			result = '['
 			i = 0
+			logging.info(tp.count())
 			for item in tp:
 				if i>0:
 					result += ','
