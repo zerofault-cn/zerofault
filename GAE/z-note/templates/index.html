@@ -20,14 +20,13 @@
 <div id="container">
 	<div id="header">
 		{% if nickname %}
-			<a href="/set?lang=en&uri={{ uri }}">English</a>&nbsp;&nbsp;
-			<a href="/link/{{ nickname }}" style="font-weight:bold">{{ nickname }}</a>
+			你好，<a href="/link/{{ nickname }}" style="font-weight:bold">{{ nickname }}</a>
 		{% endif %}
 		<a href="{{ auth_url }}" title="登入/出Google帐户" class="lm">{% ifequal auth_text 'signin' %}登入{% else %}退出{% endifequal %}</a>
 		<br />
 		{% if nickname %}
 		<form method="post" action="upload" enctype="multipart/form-data">
-		<input type="file" id="data" name="data"/>
+		上传CSV文件：<input type="file" id="data" name="data" size="10"/>
 		<input type="button" id="upload" value="上传" />
 		</form>
 		{% endif %}
