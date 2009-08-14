@@ -487,7 +487,13 @@ jQuery(function($){
 					getlist();
 				}
 				else{
-					alert('上传失败!<br />'+data);
+					//alert('上传失败!<br />'+data);
+					var oNewWin = window.open("about:blank","_blank");
+					oNewWin.document.open();
+					oNewWin.document.write(data);
+					oNewWin.document.close();
+
+
 				}
 			},
 			error: function (data, status, e)
