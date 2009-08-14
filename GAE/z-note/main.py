@@ -5,6 +5,7 @@ import math
 import datetime
 import csv
 
+
 from google.appengine.api import users
 from google.appengine.api import urlfetch
 from google.appengine.api import images
@@ -16,6 +17,7 @@ from google.appengine.ext.webapp.util import run_wsgi_app
 from google.appengine.ext import db
 
 from model import Track,TrackPoint
+from xml2dict import XML2Dict
 
 
 #---------------------------------------------------------------#
@@ -78,50 +80,78 @@ class Upload(webapp.RequestHandler):
 				self.response.out.write('No data received!')
 				return
 			
-			sections = data.split('-')
-			for section in sections[1:]:
-				lines = section.splitlines()
-				first = lines[1].split(',')
-				begin_time = first[0]+first[1]
+			if data[0:5] == '<?xml':
+				data_type='gpx'
+				obj = XML2Dict(coding = 'gb2312')
+				rs = obj.parse(data)
+				#logging.info(rs)
+				self.print_dict(rs)
+				
+				
+			else:
+				data_type='csv'
+				sections = data.split('-')
+				for section in sections[1:]:
+					lines = section.splitlines()
+					first = lines[1].split(',')
+					begin_time = first[0]+first[1]
 
-				last = lines[-1].split(',')
-				end_time = last[0]+last[1]
+					last = lines[-1].split(',')
+					end_time = last[0]+last[1]
 
-				tt = Track.all().filter('user', user).filter('begin_time',datetime.datetime.strptime(begin_time,'%Y%m%d%H%M%S')).filter('end_time',datetime.datetime.strptime(end_time,'%Y%m%d%H%M%S'))
-				if tt and tt.count()>0:
-					continue
-				t = Track()
-				t.upload_time += datetime.timedelta(hours=+8)
-				t.begin_time   = datetime.datetime.strptime(begin_time,'%Y%m%d%H%M%S')
-				t.end_time   = datetime.datetime.strptime(end_time,'%Y%m%d%H%M%S')
-				t.put()
-				key = t.key()
-				i = 0
-				step = int(math.ceil((len(lines)-1)/1000.0))
-				logging.info(step)
-				for line in lines[1:]:
-					i += 1
-					if (i+1)!= len(lines) and (i+step-1)%step != 0:
+					tt = Track.all().filter('user', user).filter('begin_time',datetime.datetime.strptime(begin_time,'%Y%m%d%H%M%S')).filter('end_time',datetime.datetime.strptime(end_time,'%Y%m%d%H%M%S'))
+					if tt and tt.count()>0:
 						continue
-					#logging.info(line)
-					fields = line.split(',')
-					tp = TrackPoint()
-					tp.trackid   = key
-					tp.time      = datetime.datetime.strptime(fields[0]+fields[1],'%Y%m%d%H%M%S')
-					tp.point     = db.GeoPt(fields[2], fields[3])
-					if fields[4]=='NaN':
-						ele = 0
-					else:
-						ele =  fields[4]
-					tp.elevation = float(ele)
-					tp.speed     = float(fields[7])
-					tp.pdop      = float(fields[9])
-					tp.put()
+					t = Track()
+					t.upload_time += datetime.timedelta(hours=+8)
+					t.begin_time   = datetime.datetime.strptime(begin_time,'%Y%m%d%H%M%S')
+					t.end_time   = datetime.datetime.strptime(end_time,'%Y%m%d%H%M%S')
+					t.put()
+					key = t.key()
+					i = 0
+					step = int(math.ceil((len(lines)-1)/1000.0))
+					logging.info(step)
+					for line in lines[1:]:
+						i += 1
+						if (i+1)!= len(lines) and (i+step-1)%step != 0:
+							continue
+						#logging.info(line)
+						fields = line.split(',')
+						tp = TrackPoint()
+						tp.trackid   = key
+						tp.time      = datetime.datetime.strptime(fields[0]+fields[1],'%Y%m%d%H%M%S')
+						tp.point     = db.GeoPt(fields[2], fields[3])
+						if fields[4]=='NaN':
+							ele = 0
+						else:
+							ele =  fields[4]
+						tp.elevation = float(ele)
+						tp.speed     = float(fields[7])
+						tp.pdop      = float(fields[9])
+						tp.put()
 
 			self.response.out.write('1')
 		else:
 			self.response.out.write('Not Login')
-			
+
+	def print_dict(self,d):
+		
+		if type(d) == dict:
+			self.response.out.write('dict:'+str(len(d))+'<br />')
+			keys = d.keys()
+			for key in keys:
+				if type(d[key]) == str:
+					#self.response.out.write('str:\n')
+					self.response.out.write(key+':'+d[key]+'<br />')
+				elif type(d[key]) == list:
+					self.response.out.write('list:'+str(len(d[key]))+'<br />')
+					for i in d[key]:
+						if type(i) == dict:
+							self.print_dict(i)
+						else:
+							self.response.out.write(i+'<br />')
+				else: 
+					self.print_dict(d[key])
 
 class loadTrack(webapp.RequestHandler):
 	def get (self):

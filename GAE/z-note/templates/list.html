@@ -3,7 +3,7 @@
 				{% for item in user_track %}
 				<option value="{{ item.key }}">{{ item.begin_time }} ~ {{ item.end_time }}</option>
 				{% endfor %}
-			</select>
+			</select><br />
 			播放速度：<input type="text" id="speed" name="speed" value="500" size="3" onchange="changeSpeed()" />
 			<span id="slider_speed"></span>
 			<input type="button" id="play" value="播放" />
