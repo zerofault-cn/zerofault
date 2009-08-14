@@ -476,7 +476,7 @@ jQuery(function($){
 	getlist();
 	$("input#upload").click(function(){
 		$.ajaxFileUpload({
-			url:'/upload', 
+			url:'/upload?'+Math.random(), 
 			secureuri:false,
 			fileElementId:'data',
 			dataType: 'text',

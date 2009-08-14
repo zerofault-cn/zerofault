@@ -1,5 +1,6 @@
 body{
 	padding: 10px; margin: 0; font-size: 12px; font-family:Geneva, Arial, Helvetica, sans-serif;
+	line-height:180%;
 }
 a { color: #333; text-decoration: none; cursor: pointer; }
 a:hover { text-decoration: underline; }
@@ -13,8 +14,6 @@ h2 { font-size: 13px; color: #000; text-decoration: none; margin-top: 20px; marg
 h2:hover { color: #f93; text-decoration: none; }
 h3 { font-size: 13px; color: #000; text-decoration: none; margin-top: 20px; margin-bottom: 5px; font-weight: bold; cursor: pointer; }
 h3:hover { color: #f93; text-decoration: none; }
-p { line-height: 120%; }
-div { line-height: 150%; }
 .clear{clear:both;}
 
 /*************    ¶¥²¿    **************/
