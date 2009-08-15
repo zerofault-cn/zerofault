@@ -82,11 +82,58 @@ class Upload(webapp.RequestHandler):
 			
 			if data[0:5] == '<?xml':
 				data_type='gpx'
-				obj = XML2Dict(coding = 'gb2312')
-				rs = obj.parse(data)
-				#logging.info(rs)
-				self.print_dict(rs)
+				obj = XML2Dict()
+				rs = obj.fromstring(data)
+				section_count = len(rs.gpx.trk)
+				logging.info(1000+section_count)
+				#self.response.out.write(rs)
+				for trk in rs.gpx.trk:
+					point_count = len(trk.trkseg.trkpt)
+					#logging.info(2000+point_count)
 				
+					begin_dt = trk.trkseg.trkpt[0]['time'].value
+					tmp = begin_dt[0:-1].split('T')
+					begin_time = tmp[0]+tmp[1]
+					
+					end_dt = trk.trkseg.trkpt[-1]['time'].value
+					tmp = end_dt[0:-1].split('T')
+					end_time = tmp[0]+tmp[1]
+				
+					tt = Track.all().filter('user', user).filter('begin_time',datetime.datetime.strptime(begin_time,'%Y-%m-%d%H:%M:%S')).filter('end_time',datetime.datetime.strptime(end_time,'%Y-%m-%d%H:%M:%S'))
+					if tt and tt.count()>0:
+						continue
+					t = Track()
+					t.upload_time += datetime.timedelta(hours=+8)
+					t.begin_time   = datetime.datetime.strptime(begin_time,'%Y-%m-%d%H:%M:%S')
+					t.end_time   = datetime.datetime.strptime(end_time,'%Y-%m-%d%H:%M:%S')
+					t.put()
+					key = t.key()
+					i = 0
+					step = int(math.ceil(point_count/1000.0))
+					logging.info('point_count:'+str(point_count))
+					logging.info('step:'+str(step))
+					for trkpt in trk.trkseg.trkpt:
+						i += 1
+						if i!= point_count and (i+step-1)%step != 0:
+							continue
+						dt = trkpt['time'].value
+						tmp = dt[0:-1].split('T')
+						time = tmp[0]+tmp[1]
+						ele = trkpt['ele'].value
+						lon = trkpt['lon'].value
+						lat = trkpt['lat'].value
+						pdop = trkpt['pdop'].value
+
+						tp = TrackPoint()
+						tp.trackid   = key
+						tp.time      = datetime.datetime.strptime(time,'%Y-%m-%d%H:%M:%S')
+						tp.point     = db.GeoPt(lat, lon)
+						if ele=='NaN':
+							ele = 0
+						tp.elevation = float(ele)
+						tp.speed     = 0.0
+						tp.pdop      = float(pdop)
+						tp.put()
 				
 			else:
 				data_type='csv'
@@ -110,7 +157,8 @@ class Upload(webapp.RequestHandler):
 					key = t.key()
 					i = 0
 					step = int(math.ceil((len(lines)-1)/1000.0))
-					logging.info(step)
+					logging.info('point_count:'+str(len(lines)))
+					logging.info('step:'+str(step))
 					for line in lines[1:]:
 						i += 1
 						if (i+1)!= len(lines) and (i+step-1)%step != 0:
@@ -134,24 +182,6 @@ class Upload(webapp.RequestHandler):
 		else:
 			self.response.out.write('Not Login')
 
-	def print_dict(self,d):
-		
-		if type(d) == dict:
-			self.response.out.write('dict:'+str(len(d))+'<br />')
-			keys = d.keys()
-			for key in keys:
-				if type(d[key]) == str:
-					#self.response.out.write('str:\n')
-					self.response.out.write(key+':'+d[key]+'<br />')
-				elif type(d[key]) == list:
-					self.response.out.write('list:'+str(len(d[key]))+'<br />')
-					for i in d[key]:
-						if type(i) == dict:
-							self.print_dict(i)
-						else:
-							self.response.out.write(i+'<br />')
-				else: 
-					self.print_dict(d[key])
 
 class loadTrack(webapp.RequestHandler):
 	def get (self):

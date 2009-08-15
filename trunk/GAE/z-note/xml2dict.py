@@ -1,141 +1,83 @@
-#!/usr/bin/env python
-# -*- coding: UTF-8 -*-
-'''
-XML2Dict: Convert xml string to python dict
-
-@author: Mc.Spring
-@contact: Heresy.Mc@gmail.com
-@since: Created on 2009-5-18
-@todo: Add namespace support
-@copyright: Copyright (C) 2009 MC.Spring Team. All rights reserved.
-@license: http://www.apache.org/licenses/LICENSE-2.0 Apache License
-'''
-
+"""
+Thunder Chen<nkchenz@gmail.com> 2007.9.1
+"""
 try:
     import xml.etree.ElementTree as ET
 except:
     import cElementTree as ET # for 2.4
 
-__all__ = ['XML2Dict']
+from object_dict import object_dict 
+import re
 
 class XML2Dict(object):
 
-    def __init__(self, coding = 'UTF-8'):
-        self._coding = coding
+    def __init__(self):
+        pass
 
     def _parse_node(self, node):
-        
-        # tree dict
-        tree = dict()
-        
+        node_tree = object_dict()
+        # Save attrs and text, hope there will not be a child with same name
+        if node.text:
+            node_tree.value = node.text
+        for (k,v) in node.attrib.items():
+            k,v = self._namespace_split(k, object_dict({'value':v}))
+            node_tree[k] = v
         #Save childrens
         for child in node.getchildren():
-            ctag = child.tag
-            cattri = child.attrib
-            ctree = self._parse_node(child)
-            
-            if ctree == {}:
-                cdict = self._make_dict(ctag, child.text.encode(self._coding).strip(), cattri)
-            else:
-                cdict = self._make_dict(ctag, ctree, cattri)
-
-            if ctag not in tree: # First time found
-                tree.update(cdict)
+            tag, tree = self._namespace_split(child.tag, self._parse_node(child))
+            if  tag not in node_tree: # the first time, so store it in dict
+                node_tree[tag] = tree
                 continue
+            old = node_tree[tag]
+            if not isinstance(old, list):
+                node_tree.pop(tag)
+                node_tree[tag] = [old] # multi times, so change old dict to a list       
+            node_tree[tag].append(tree) # add the new one      
 
-            tmp = tree[ctag]
-            if not isinstance(tmp, list):
-                tree[ctag] = [tmp] # Multi entries, change to list
+        return  node_tree
 
-            tree[ctag].append(ctree) # Add new entry
 
-        return  tree
-
-    def _make_dict(self, tag, value, attri = None):
-        """Generate a new dict with tag and value
-        
-        If attri is True then convert tag name to @tag
-        and convert tuple list to dict
+    def _namespace_split(self, tag, value):
         """
-        ret = {tag: value}
-        
-        # Save attributes as @tag value
-        if attri:
-            tmp = '@' + tag
-            
-            adict = {}
-            for k, v in attri.items():
-                adict[k] = v
-            
-            ret[tmp] = adict
-            
-            del tmp
-            del adict
-        
-        return ret
+           Split the tag  '{http://cs.sfsu.edu/csc867/myscheduler}patients'
+             ns = http://cs.sfsu.edu/csc867/myscheduler
+             name = patients
+        """
+        result = re.compile("\{(.*)\}(.*)").search(tag)
+        if result:
+            print tag
+            value.namespace, tag = result.groups()    
+        return (tag, value)
 
-    def parse(self, xml):
-        """Parse xml string to dict"""
-        EL = ET.fromstring(xml)
-        
-        return self._make_dict(EL.tag, self._parse_node(EL), EL.attrib)
+    def parse(self, file):
+        """parse a xml file to a dict"""
+        f = open(file, 'r')
+        return self.fromstring(f.read()) 
+
+    def fromstring(self, s):
+        """parse a string"""
+        t = ET.fromstring(s)
+        root_tag, root_tree = self._namespace_split(t.tag, self._parse_node(t))
+        return object_dict({root_tag: root_tree})
+
+
 
 if __name__ == '__main__':
-    s = """<rss version="2.0" author="Mc.Spring"> 
-<channel> 
-<title><![CDATA[Twinsen Liang]]></title> 
-<link>http://www.twinsenliang.net</link> 
-<description><![CDATA[je m' appelle twinsen.]]></description> 
-<language>zh-cn</language> 
-<copyright><![CDATA[Copyright 2000-2009 Twinsen Liang all rights reserved]]></copyright> 
-<webMaster><![CDATA[twinsenliang@gmail.com(twinsen)]]></webMaster> 
-<generator>TXmlSave 2.0</generator> 
-<image> 
-	<title>Twinsen Liang</title> 
-	<url>http://www.twinsenliang.net/logo.gif</url> 
-	<link>http://www.twinsenliang.net/</link> 
-	<description>Twinsen Liang</description> 
-</image> 
-<item> 
- 
-	<link target="_blank">http://www.twinsenliang.net/skill/20090413.html</link> 
- 
-	<title><![CDATA[This is the first article title]]></title> 
- 
-	<author><![CDATA[twinsenliang@gmail.com(TwinsenLiang)]]></author> 
- 
-	<category><![CDATA[skill]]></category> 
- 
-	<pubDate>Mon, 13 Apr 2009 02:04:52 +0800</pubDate> 
- 
-	<guid>http://www.twinsenliang.net/skill/20090413.html</guid> 
- 
-	<description><![CDATA[This is the first article content, thanks!]]></description> 
- 
-</item>
-<item> 
- 
-    <link target="_blank">http://www.twinsenliang.net/skill/20090414.html</link> 
- 
-    <title><![CDATA[This is the second article title]]></title> 
- 
-    <author><![CDATA[twinsenliang@gmail.com(TwinsenLiang)]]></author> 
- 
-    <category><![CDATA[skill]]></category> 
- 
-    <pubDate>Mon, 15 Apr 2009 02:04:52 +0800</pubDate> 
- 
-    <guid>http://www.twinsenliang.net/skill/20090414.html</guid> 
- 
-    <description><![CDATA[This is the second article content, thanks!]]></description> 
- 
-</item>
-</channel>
-</rss>"""
+    s = """<?xml version="1.0" encoding="utf-8" ?>
+    <result>
+        <count n="1">10</count>
+        <data><id>491691</id><name>test</name></data>
+        <data><id>491692</id><name>test2</name></data>
+        <data><id>503938</id><name>hello, world</name></data>
+    </result>"""
 
-	
-    obj = XML2Dict(coding = 'gb2312')
+    xml = XML2Dict()
+    r = xml.fromstring(s)
+    from pprint import pprint
+    pprint(r)
+    print r.result.count.value
+    print r.result.count.n
 
-    rs = obj.parse(s)
-
-    print(rs)
+    for data in r.result.data:
+        print data.id, data.name 
+    pprint(xml.parse('a'))
