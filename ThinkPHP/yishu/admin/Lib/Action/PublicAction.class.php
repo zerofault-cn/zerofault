@@ -26,16 +26,16 @@ class PublicAction extends BaseAction{
 	*/
 	public function checkLogin(){
 		$User	=	D('User');
-		if(empty($_POST['account'])) {
-			die(self::_error('帐号错误！'));
+		if(empty($_REQUEST['account'])) {
+			die(self::_error('error!'));
 		}
-		elseif (empty($_POST['password'])){
+		elseif (empty($_REQUEST['password'])){
 			die(self::_error('密码必须！'));
 		}
 		//生成认证条件
 		$map			= array();
-		$map["account"]	= $_POST['account'];
-		$map['password']= md5($_POST['password']);
+		$map["account"]	= $_REQUEST['account'];
+		$map['password']= md5($_REQUEST['password']);
 		$map["status"]	= 1;
 
 		// 进行委托认证
