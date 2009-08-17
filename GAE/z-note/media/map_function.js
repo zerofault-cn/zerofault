@@ -45,7 +45,7 @@ icon_Red.image = "http://labs.google.com/ridefinder/images/mm_20_red.png";
 
 //自定义的汽车图标
 var icon_car=new GIcon();
-icon_car.image='target.png';
+icon_car.image='media/target.png';
 icon_car.iconSize=new GSize(16,16);
 
 var playing = false; //是否在播放中
