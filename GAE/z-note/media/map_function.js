@@ -1,6 +1,6 @@
 var map; //GMap2 对象
 
-var points; //轨迹点数组
+var points; //轨迹点集合,json格式
 
 var timeOut = 500; //初始的轨迹行进延时时间
 var TO; //setTimeOut返回值，用于暂停和继续操作
