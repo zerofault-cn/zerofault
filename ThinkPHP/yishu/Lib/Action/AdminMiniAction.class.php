@@ -20,7 +20,7 @@ class AdminMiniAction extends Action{
 			Session::setExpire(43200, true);
 			Session::set('isAdmin', 1);
 			Session::set('adminName', $username);
-			redirect(__URL__.'/'.Session::get('lastAction').'/title/'.Session::get('r_title').'/url/'.Session::get('r_url').'/first/1/',1,'登录成功');
+			redirect(__URL__.'/'.Session::get('lastAction'),1,'登录成功');
 		}
 		elseif('admin' == $username){
 			redirect(__URL__.'/login_form',2,'密码错误，请重试');
@@ -153,7 +153,7 @@ class AdminMiniAction extends Action{
 		$this->assign('url','http://'.$_REQUEST['url'].'/');
 		$this->assign('descr',$_REQUEST['content']);
 		$dao = D('Category');
-		$rs = $dao->where(array('flag'=>array('neq',-1)))->order('usetime')->select();
+		$rs = $dao->where(array('status'=>array('neq',-1)))->order('usetime')->select();
 		$this->assign('cate_list',$rs);
 		$this->display();
 	}
@@ -176,7 +176,7 @@ class AdminMiniAction extends Action{
 				$dao->name = $category;
 				$dao->addtime = $dao->usetime = date("Y-m-d H:i:s");
 				$dao->sort = $max_sort+10;
-				$dao->flag = 1;
+				$dao->status = 1;
 				$cate_id = $dao->add();
 			}
 		}
@@ -193,7 +193,7 @@ class AdminMiniAction extends Action{
 		$dao->descr = $descr;
 		$dao->addtime = date("Y-m-d H:i:s");
 		$dao->sort = $max_sort+10;
-		$dao->flag = 1;
+		$dao->status = 1;
 		if($dao->add()){
 			header("Content-Type:text/html; charset=utf-8");
 			die('<script>alert("添加成功");window.close();</script>');
