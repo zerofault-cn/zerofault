@@ -1,0 +1,42 @@
+	{$page}
+	<table id="table" class="tablesorter" border="1" cellpadding="3" cellspacing="0" width="100%" bordercolor="#999999" style="border-collapse:collapse;">
+	<thead>
+	<tr bgcolor="#ededed">
+		<th>编号</th>
+		<th>线路名称</th>
+		<th>起点 － 终点</th>
+		<th>首末班时间</th>
+		<th>票价</th>
+		<th>可用IC卡</th>
+		<th>服务时间</th>
+		<th>操作</th>
+	</tr>
+	</thead>
+	<iterate name="list" id="item">
+	<tr bgcolor="<eq name='mod' value='1'>#FFFFE1</eq>">
+		<td rowspan="2">{$item['number']}</td>
+		<td rowspan="2"><a href="#" id="{$item['id']}">{$item['name']}</a></td>
+		<td><a href="#">{$site[$item['start_sid']]}</a>－<a href="#">{$site[$item['end_sid']]}</a></td>
+		<td>{$item['start_first']}-{$item['start_last']}</label></td>
+		<td rowspan="2">{$item['fare_norm']}/{$item['fare_cond']}</td>
+		<td rowspan="2">{$item['ic_card']}</td>
+		<td rowspan="2">{$item['service_hour']}</td>
+		<td rowspan="2">
+			<a href="__URL__/update/id/{$item['id']}/f/status/v/0" target="_iframe" title="恢复"><img src="../Public/Image/tick.gif" alt="恢复" align="absmiddle"/></a>
+			<a href="__URL__/delete/id/{$item['id']}" target="_iframe" title="彻底删除"><img src="../Public/Image/cross.gif" alt="彻底删除" align="absmiddle"/></a>
+		</td>
+	</tr>
+	<tr>
+		<td><a href="">{$site[$item['end_sid']]}</a>－<a href="#">{$site[$item['start_sid']]}</a></td>
+		<td><label id="{$item['id']}">{$item['end_first']}-{$item['end_last']}</label></td>
+	</tr>
+	</iterate>
+	</table>
+	{$page}
+	<notpresent name="_GET['status']">
+	<div class="addForm">
+		添加新分类：<input type="text" class="name" size="10" tabindex="1" />
+		排序：<input type="text" class="sort" value="{$new_cate_sort}" size="4">
+		<input type="button" value="添加" class="submit" />
+	</div>
+	</notpresent>
