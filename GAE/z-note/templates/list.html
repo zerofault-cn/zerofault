@@ -1,14 +1,24 @@
 			<select id="key">
-				<option>选择行动时间</option>
-				{% for item in user_track %}
-				<option value="{{ item.key }}">{{ item.begin_time }} ~ {{ item.end_time }}</option>
+			{% if pub_track_count %}
+				<option value=''>查看他人公开的轨迹</option>
+				{% for item in pub_track %}
+				<option value="{{ item.key }}">{{ item.begin_time }} ~ {{ item.end_time }} (by {{ item.user }})</option>
 				{% endfor %}
-			</select><br />
+			{% else %}
+				<option value=''>选择行动时间</option>
+				{% for item in user_track %}
+				<option value="{{ item.key }}" id="{{ item.private }}">{{ item.begin_time }} ~ {{ item.end_time }}</option>
+				{% endfor %}
+			{% endif %}
+			</select>
+			<br />
 			播放速度：<input type="text" id="speed" name="speed" value="500" size="3" onchange="changeSpeed()" />
 			<span id="slider_speed"></span>
 			<input type="button" id="play" value="播放" />
 			<input type="button" id="pause" value="暂停" disabled="true"/>
-			<input type="button" id="delete" value="删除"/>
+			<input type="button" id="delete" value="删除" style="display:none"/>
+			<input type="button" id="pub" value="设为公开" style="display:none"/>
+			<input type="button" id="hold" value="设为私有" style="display:none"/>
 			<br />
 			<br />
 			<span id="progressMsg"></span><br />

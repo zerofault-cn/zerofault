@@ -37,6 +37,27 @@ class Index(webapp.RequestHandler):
 	def get(self):
 		user = users.get_current_user()
 		nickname = ''
+		if user:
+			nickname=user.nickname()
+			auth_url = users.create_logout_url(self.request.uri)
+			auth_text= 'signout'
+		else:
+			auth_url = users.create_login_url(self.request.uri)
+			auth_text= 'signin'
+
+		template_values = {
+			'nickname' : nickname,
+			'ip': self.request.remote_addr,
+			'auth_url' : auth_url,
+			'auth_text': auth_text
+			}
+		path = os.path.join(os.path.dirname(__file__),'templates/index.html')
+		self.response.out.write(template.render(path,template_values))
+
+class mobile(webapp.RequestHandler):
+	def get(self):
+		user = users.get_current_user()
+		nickname = ''
 		user_track = {}
 		if user:
 			nickname=user.nickname()
@@ -60,12 +81,17 @@ class showTrackList(webapp.RequestHandler):
 	def get(self):
 		user = users.get_current_user()
 		user_track = {}
+		pub_track  = {}
+		pub_track_count = 0
 		if user:
 			user_track = Track.all().filter('user',user).order('begin_time')
 		else:
-			return
+			pub_track = Track.all().filter('private', False).order('begin_time')
+			pub_track_count = pub_track.count()
 		template_values = {
-			'user_track': user_track
+			'user_track': user_track,
+			'pub_track' : pub_track,
+			'pub_track_count' : pub_track_count
 			}
 		path = os.path.join(os.path.dirname(__file__),'templates/list.html')
 		self.response.out.write(template.render(path,template_values))
@@ -81,11 +107,11 @@ class Upload(webapp.RequestHandler):
 				return
 			
 			if data[0:5] == '<?xml':
-				data_type='gpx'
+				logging.info('upload file type: gpx')
 				obj = XML2Dict()
 				rs = obj.fromstring(data)
 				section_count = len(rs.gpx.trk)
-				logging.info(1000+section_count)
+				logging.info(100000+section_count)
 				#self.response.out.write(rs)
 				for trk in rs.gpx.trk:
 					point_count = len(trk.trkseg.trkpt)
@@ -109,7 +135,7 @@ class Upload(webapp.RequestHandler):
 					t.put()
 					key = t.key()
 					i = 0
-					step = int(math.ceil(point_count/1000.0))
+					step = int(math.ceil(point_count/618.0))
 					logging.info('point_count:'+str(point_count))
 					logging.info('step:'+str(step))
 					for trkpt in trk.trkseg.trkpt:
@@ -136,7 +162,7 @@ class Upload(webapp.RequestHandler):
 						tp.put()
 				
 			else:
-				data_type='csv'
+				logging.info('upload file type: csv')
 				sections = data.split('-')
 				for section in sections[1:]:
 					lines = section.splitlines()
@@ -156,7 +182,7 @@ class Upload(webapp.RequestHandler):
 					t.put()
 					key = t.key()
 					i = 0
-					step = int(math.ceil((len(lines)-1)/1000.0))
+					step = int(math.ceil((len(lines)-1)/618.0))
 					logging.info('point_count:'+str(len(lines)))
 					logging.info('step:'+str(step))
 					for line in lines[1:]:
@@ -223,12 +249,29 @@ class delTrack(webapp.RequestHandler):
 					item.delete()
 				self.response.out.write('1')
 
+class setPrivate(webapp.RequestHandler):
+	def get (self):
+		key = self.request.get('key')
+		user = users.get_current_user()
+		if key and user:
+			t = db.get(key)
+			if t:
+				t.private = bool(int(self.request.get('private')))
+				t.put()
+				self.response.out.write('1')
+			else:
+				self.response.out.write('0')
+		else:
+			self.response.out.write('0')
+
 application = webapp.WSGIApplication([
 	('/', Index),
 	('/upload', Upload),
 	('/load', loadTrack),
 	('/delete', delTrack),
-	('/getlist', showTrackList)
+	('/getlist', showTrackList),
+	('/set', setPrivate),
+	('/m' ,mobile)
 	],debug=True)
 
 def main():

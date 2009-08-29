@@ -406,7 +406,7 @@ function changeSpeed() {
 
 }
 function getlist() {
-	$.get('getlist',{},function(str){
+	$.get('getlist?'+Math.random(),{},function(str){
 		$("#controller").html(str);
 		if(str.length==0) {
 			return;
@@ -452,10 +452,6 @@ function getlist() {
 			}
 		});
 		$("input#delete").click(function(){
-			if(''==$("select#key").val()) { 
-				alert('未选择行动轨迹');
-				return;
-			}
 			$.get("delete",{
 				'key':$("select#key").val()
 			},function(str){
@@ -468,7 +464,45 @@ function getlist() {
 					}
 				});
 		});
-
+		$("input#pub").click(function(){
+			$.get("set",{
+				'key' : $("select#key").val(),
+				'private' : 0
+			},function(str){
+					if(str=='1') {
+						alert('设置成功!');
+						getlist();
+					}
+					else{
+						alert('设置失败');
+					}
+				});
+		});
+		$("input#hold").click(function(){
+			$.get("set",{
+				'key' : $("select#key").val(),
+				'private' : 1
+			},function(str){
+					if(str=='1') {
+						alert('设置成功!');
+						getlist();
+					}
+					else{
+						alert('设置失败');
+					}
+				});
+		});
+		$("select#key").change(function(){
+			if($("select#key option:selected").attr('id')){
+				$("input#delete").show();
+				if($("select#key option:selected").attr('id')=='True'){
+					$("input#pub").show();
+				}
+				else{
+					$("input#hold").show();
+				}
+			}
+		});
 	});
 }
 jQuery(function($){
