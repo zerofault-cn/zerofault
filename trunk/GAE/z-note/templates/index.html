@@ -20,7 +20,7 @@
 <div id="container">
 	<div id="header">
 		{% if nickname %}
-			你好，<a href="/link/{{ nickname }}" style="font-weight:bold">{{ nickname }}</a>
+			你好，{{ nickname }}!
 		{% endif %}
 		<a href="{{ auth_url }}" title="登入/出Google帐户" class="lm">{% ifequal auth_text 'signin' %}登入{% else %}退出{% endifequal %}</a>
 		<br />
