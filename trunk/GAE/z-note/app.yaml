@@ -11,5 +11,8 @@ handlers:
 - url: /media
   static_dir: media
 
+- url: /gbook/.*
+  script: gbook.py
+
 - url: /.*
   script: main.py

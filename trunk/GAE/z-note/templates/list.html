@@ -2,7 +2,7 @@
 			{% if pub_track_count %}
 				<option value=''>查看他人公开的轨迹</option>
 				{% for item in pub_track %}
-				<option value="{{ item.key }}">{{ item.begin_time }} ~ {{ item.end_time }} (by {{ item.user }})</option>
+				<option value="{{ item.key }}">{{ item.begin_time|date:"m-d H:i" }} ~ {{ item.end_time|date:"m-d H:i" }} (by {{ item.user }})</option>
 				{% endfor %}
 			{% else %}
 				<option value=''>选择行动时间</option>

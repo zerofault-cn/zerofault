@@ -4,6 +4,7 @@ import os
 import math
 import datetime
 import csv
+import urllib2
 
 
 from google.appengine.api import users
@@ -53,6 +54,12 @@ class Index(webapp.RequestHandler):
 			}
 		path = os.path.join(os.path.dirname(__file__),'templates/index.html')
 		self.response.out.write(template.render(path,template_values))
+
+class getLocation(webapp.RequestHandler):
+	def get(self):
+		r=urllib2.Request("http://www.google.com/loc/json", '{ "host" : "_null_.localdomain", "radio_type" : "unknown", "request_address" : false, "version" : "1.0"}')
+		#{"location":{"latitude":30.655556,"longitude":104.0625,"horizontal_accuracy":166000}}
+		self.response.out.write(urllib2.urlopen(r).read())
 
 class mobile(webapp.RequestHandler):
 	def get(self):
@@ -233,7 +240,7 @@ class loadTrack(webapp.RequestHandler):
 				result += '}'
 				i += 1
 			result += ']'
-			#[{"name":"niaochao","point":{"lat":"39.990","lng":"116.397"},"desc":"aoyunhuizhuchangdi"},
+			#[{"name":"niaochao","point":{"lat":"39.990","lng":"116.397"},"desc":"aoyunhuizhuchangdi"}],
 			self.response.out.write(result)
 
 class delTrack(webapp.RequestHandler):
@@ -270,6 +277,7 @@ application = webapp.WSGIApplication([
 	('/load', loadTrack),
 	('/delete', delTrack),
 	('/getlist', showTrackList),
+	('/getloc', getLocation),
 	('/set', setPrivate),
 	('/m' ,mobile)
 	],debug=True)
