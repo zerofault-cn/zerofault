@@ -51,6 +51,8 @@ icon_car.iconSize=new GSize(16,16);
 var playing = false; //是否在播放中
 var paused = false; //是否已暂停
 
+var geoip_latitude = 30.206935;
+var geoip_longitude = 120.212853;
 function initialize() {
 	loadingMessage = document.getElementById('progress');
 	distanceMessage = document.getElementById('distanceMessage');
@@ -66,14 +68,19 @@ function initialize() {
 		map.enableContinuousZoom();
 		//map.addControl(new GMapTypeControl());
 
+		$.getJSON("getloc", function(json){
+			geoip_latitude = json.location.latitude;
+			geoip_longitude = json.location.longitude;
+		});
+		
 		var init_point = new GLatLng(geoip_latitude, geoip_longitude);
 		map.setCenter(init_point, 16);
 		
 		var init_marker = new GMarker(init_point);
 		map.addOverlay(init_marker);
 		GEvent.addListener(init_marker, "click", function(){
-			init_marker.openInfoWindowHtml("您的IP地址："+ip+"<br />您所在的城市中心："+geoip_country_name()+' '+geoip_region_name()+' '+geoip_city());
-			});
+			init_marker.openInfoWindowHtml("您现在的位置！");
+		});
 	}
 }
 
@@ -419,6 +426,8 @@ function getlist() {
 			}
 			$.getJSON("load?key="+$("select#key").val(), function(json){
 				TO = null;
+				playing = false;
+				paused = false;
 				i = 0;
 				currentCheckPoint = 0;
 				checkPoints = new Array();
@@ -435,7 +444,7 @@ function getlist() {
 				timeOut = 1001-parseInt($('input#speed').val());
 				plotPoint();
 				playing = true;
-				$("input#pause").attr('disabled',false);
+				$("input#pause").val('暂停').attr('disabled',false);
 			});
 		});
 
@@ -493,6 +502,13 @@ function getlist() {
 				});
 		});
 		$("select#key").change(function(){
+			if($("select#key").val() && playing) {
+				if(!paused) {
+					clearTimeout( TO );
+					$("input#pause").val('继续');
+					paused = true;
+				}
+			}
 			if($("select#key option:selected").attr('id')){
 				$("input#delete").show();
 				if($("select#key option:selected").attr('id')=='True'){
@@ -507,6 +523,7 @@ function getlist() {
 }
 jQuery(function($){
 	initialize();
+	
 	getlist();
 	$("input#upload").click(function(){
 		$.ajaxFileUpload({

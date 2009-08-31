@@ -56,7 +56,7 @@
 <script language="javascript" type="text/javascript" src="/media/ajaxfileupload.js"></script>
 
 <script language="javascript" type="text/javascript" src="/media/dhtmlgoodies_slider.js"></script>
-<script language="JavaScript" src="http://j.maxmind.com/app/geoip.js"></script>
+<script language="JavaScript" ssrc="http://j.maxmind.com/app/geoip.js"></script>
 <script language="javascript" type="text/javascript">
 var ip = '{{ ip }}';
 //Country Code:geoip_country_code();
@@ -67,8 +67,8 @@ var ip = '{{ ip }}';
 //Latitude:geoip_latitude();
 //Longitude:geoip_longitude();
 //Postal Code:geoip_postal_code();
-var geoip_latitude = geoip_latitude();
-var geoip_longitude = geoip_longitude();
+var geoip_latitude; 
+var geoip_longitude;
 </script>
 <script language="javascript" type="text/javascript" src="/media/loadGMapAPI.js"></script>
 <script language="javascript" type="text/javascript" src="media/map_function.js"></script>
