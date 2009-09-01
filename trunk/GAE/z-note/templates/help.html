@@ -1,0 +1,53 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml">
+<head>
+	<style type="text/css">
+	v\:*
+	{
+		behavior:url(#default#VML);
+	}
+	</style>
+
+	<title>{% block title %}踪迹 - z-note.appspot.com{% endblock %}</title>
+	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+	<meta name="keywords" content="GPS Trace google map" />
+	<meta name="description" content="" />
+	<link rel="icon" type="image/x-icon" href="/favicon.ico" />
+	<link rel="Shortcut Icon" type="image/x-icon" href="/favicon.ico" />
+	<link rel="stylesheet" type="text/css" href="/media/style.css" />
+</head>
+<body>
+<div id="container">
+	<div id="header">
+		{% if nickname %}
+			你好，{{ nickname }}!
+		{% endif %}
+		<a href="{{ auth_url }}" title="登入/出Google帐户" class="lm">{% ifequal auth_text 'signin' %}登入{% else %}退出{% endifequal %}</a>
+		<br />
+	</div>
+	
+	<div id="main">
+		<h1>踪迹（航迹）回放服务</h1>
+		<h2>使用本站服务，您可以回忆您过去走过的路，也可将自己的旅游行踪分享给大家！</h2>
+		<h3>本服务域名空间等所有资源由Google免费提供！</h3>
+		<h3>本服务目前支持GPSCam软件汇出的CSV或GPX格式航迹文件，如果有其他格式需求，请将记录格式Email给我！</h3>
+		<h4>使用GPSCam软件，并汇出航迹文件的方法：</h4>
+		<p>
+		<img src="media/1.jpg" />
+		<img src="media/2.jpg" />
+		<img src="media/3.jpg" />
+		<img src="media/4.jpg" />
+		<img src="media/5.jpg" />
+		<img src="media/6.jpg" />
+		</p>
+	</div>
+
+	<div id="footer">
+		<a href="/" class="fm">首页</a>
+		<a href="/help">帮助</a>
+		<a href="mailto://zerofault@gmail.com" >联系我</a>
+		<br />
+		<img src="http://code.google.com/appengine/images/appengine-noborder-120x30.gif" alt="Google App Engine 支持" />
+	</div>
+</body>
+</html>

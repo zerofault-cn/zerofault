@@ -55,6 +55,26 @@ class Index(webapp.RequestHandler):
 		path = os.path.join(os.path.dirname(__file__),'templates/index.html')
 		self.response.out.write(template.render(path,template_values))
 
+class Help(webapp.RequestHandler):
+	def get(self):
+		user = users.get_current_user()
+		nickname = ''
+		if user:
+			nickname=user.nickname()
+			auth_url = users.create_logout_url(self.request.uri)
+			auth_text= 'signout'
+		else:
+			auth_url = users.create_login_url(self.request.uri)
+			auth_text= 'signin'
+
+		template_values = {
+			'nickname' : nickname,
+			'auth_url' : auth_url,
+			'auth_text': auth_text
+			}
+		path = os.path.join(os.path.dirname(__file__),'templates/help.html')
+		self.response.out.write(template.render(path,template_values))
+
 class getLocation(webapp.RequestHandler):
 	def get(self):
 		r=urllib2.Request("http://www.google.com/loc/json", '{ "host" : "_null_.localdomain", "radio_type" : "unknown", "request_address" : false, "version" : "1.0"}')
@@ -273,6 +293,7 @@ class setPrivate(webapp.RequestHandler):
 
 application = webapp.WSGIApplication([
 	('/', Index),
+	('/help', Help),
 	('/upload', Upload),
 	('/load', loadTrack),
 	('/delete', delTrack),
