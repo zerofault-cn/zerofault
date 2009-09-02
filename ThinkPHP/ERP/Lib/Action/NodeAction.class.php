@@ -22,14 +22,6 @@ class NodeAction extends BaseAction{
 	* 节点列表
 	*/
 	public function index(){
-		$topnavi[]=array(
-			'text'=> '节点管理',
-			'url' => __APP__.'/Node/'
-			);
-		$topnavi[]=array(
-			'text'=> '节点列表',
-			);
-
 		$base_class = 'BaseAction';
 		$base_obj   = new $base_class;
 		$base_method_arr = get_class_methods($base_obj);
@@ -38,17 +30,6 @@ class NodeAction extends BaseAction{
 		$skip_modules = split(',', C('NOT_AUTH_MODULE'));
 		$skip_modules[] = 'Base';
 
-		$where['name'] = APP_NAME;
-		$where['pid'] = 0;
-		$app = $this->dao->where($where)->find();
-		if(empty($app)) {
-			$app = array(
-				'id' => 0,
-				'name'=>APP_NAME,
-				'title'=>'',
-				'descr'=>''
-				);
-		}
 		$modules = array();
 		$i = 0;
 		
@@ -64,17 +45,8 @@ class NodeAction extends BaseAction{
 			if(in_array($module_name, $skip_modules)) {
 				continue;
 			}
-			if(empty($app['id'])) {
-				$modules[$i] = array(
-					'id'=>0,
-					'name'=>$module_name,
-					'title'=>'',
-					'descr'=>''
-					);
-			}
-			else {
 				$where['name'] = $module_name;
-				$where['pid']  = $app['id'];
+				$where['pid']  = 0;
 				$module = $this->dao->where($where)->find();
 				$modules[$i] = $module ? $module : array(
 					'id'=>0,
@@ -82,7 +54,6 @@ class NodeAction extends BaseAction{
 					'title'=>'',
 					'descr'=>''
 					);
-			}
 
 			$obj = new $class_name;
 			$obj_method = array_diff(get_class_methods($obj),$base_method_arr);
@@ -116,7 +87,6 @@ class NodeAction extends BaseAction{
 		//dump($modules);
 
 		$this->assign("topnavi", $topnavi);
-		$this->assign('app', $app);
 		$this->assign('modules', $modules);
 		$this->assign('content','Node:index');
 		$this->display('Layout:ERP_layout');
