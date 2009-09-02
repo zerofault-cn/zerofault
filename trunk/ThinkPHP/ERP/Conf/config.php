@@ -4,20 +4,20 @@ if($_SERVER["SERVER_NAME"]=='localhost') {
 		// 定义数据库连接信息
 		'DB_TYPE'=> 'mysql',
 		'DB_HOST'=> 'localhost',
-		'DB_NAME'=>'yishu',
+		'DB_NAME'=>'ERP',
 		'DB_USER'=>'root',
 		'DB_PWD'=>'',
 		'DB_PORT'=>'3306',
-		'DB_PREFIX'=>'yishu_', //数据表前缀（与数据库myapp中的表think_message对应）
+		'DB_PREFIX'=>'erp_', //数据表前缀（与数据库myapp中的表think_message对应）
 
-
+		'EXTEND_CONFIG_LIST'=>array('menu'),
 	//	'URL_MODEL' => 2,
 	//	'DEBUG_MODE'=>true, //开启调试模式
 	//	'SHOW_PAGE_TRACE' => TRUE,
 
 		'APP_DOMAIN_DEPLOY' => false, //域名根目录下设为true
 
-		'USER_AUTH_ON'=>true,
+		'USER_AUTH_ON'=>false,
 		'USER_AUTH_TYPE' => 2, //实时认证，开发过程中使用
 		'USER_AUTH_DECISION' => 'My',
 		'USER_AUTH_KEY' => 'authId',

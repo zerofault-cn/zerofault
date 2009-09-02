@@ -38,6 +38,10 @@ class BaseAction extends Action{
 				exit;
 			}
 		}
+		!empty($_REQUEST['p']) && Session::set('p', $_REQUEST['p']);
+		$menu = C('_menu_');
+		$this->assign('menu', $menu);
+		MODULE_NAME != 'Index'&& $this->assign('submenu', $menu[Session::get('p')]['submenu']);
 	}
 	/**
 	*
