@@ -1,25 +1,10 @@
 <?php 
-// +----------------------------------------------------------------------
-// | ThinkPHP                                                             
-// +----------------------------------------------------------------------
-// | Copyright (c) 2008 http://thinkphp.cn All rights reserved.      
-// +----------------------------------------------------------------------
-// | Licensed ( http://www.apache.org/licenses/LICENSE-2.0 )
-// +----------------------------------------------------------------------
-// | Author: liu21st <liu21st@gmail.com>                                  
-// +----------------------------------------------------------------------
-// $Id$
 
 /**
- +------------------------------------------------------------------------------
- * 访问决策管理器
- +------------------------------------------------------------------------------
- * @category   ORG
- * @package  ORG
- * @subpackage  RBAC
- * @author    liu21st <liu21st@gmail.com>
- * @version   $Id$
- +------------------------------------------------------------------------------
+ * 两级控制访问决策管理器
+ *
+ * @author    zerofault <zerofault@gmail.com>
+ * @since     2009/9/3
  */
 class MyAccessDecisionManager extends Base
 {//类定义开始
@@ -61,7 +46,7 @@ class MyAccessDecisionManager extends Base
 	 * @access public 
 	 +----------------------------------------------------------
 	 */
-	public function decide($authId,$app=APP_NAME,$module=MODULE_NAME,$action=ACTION_NAME)
+	public function decide($authId, $module=MODULE_NAME, $action=ACTION_NAME)
 	{
 		//决策认证号是否具有当前模块权限
 		$db     =   DB::getInstance();
@@ -92,22 +77,8 @@ class MyAccessDecisionManager extends Base
 	{
 		// 读取项目权限
 		$db     =   DB::getInstance();
-		$sql    =   "select node.id, node.name from ".
-					$this->roleTable." as role,".
-					$this->roleUserTable." as user_role,".
-					$this->roleAccessTable." as role_node,".
-					$this->roleNodeTable." as node ".
-					"where user_role.user_id={$authId} and user_role.role_id=role.id ".
-					"and role_node.role_id=role.id and role.status=1 ".
-					"and role_node.node_id=node.id and node.level=1 ";
-		$apps =   $db->query($sql);
 		$access =  array();
-		foreach($apps as $key=>$app) {
-			$app	=	(array)$app;
-			$appId	=	$app['id'];
-			$appName	 =	 $app['name'];
 			// 读取项目的模块权限
-			$access[strtoupper($appName)]   =  array();
 			$sql = "select node.id, node.name from ".
 					$this->roleTable." as role,".
 					$this->roleUserTable." as user_role,".
@@ -115,12 +86,11 @@ class MyAccessDecisionManager extends Base
 					$this->roleNodeTable." as node ".
 					"where user_role.user_id={$authId} and user_role.role_id=role.id ".
 					"and role_node.role_id=role.id and role.status=1 ".
-					"and role_node.node_id=node.id and node.level=2 ".
-					"and node.pid={$appId}";
+					"and role_node.node_id=node.id and node.pid=0";
 			$modules =   $db->query($sql);
 			foreach($modules as $key=>$module) {
-				$module	=	(array)$module;
-				$moduleId	 =	 $module['id'];
+				$module     = (array)$module;
+				$moduleId   = $module['id'];
 				$moduleName = $module['name'];
 				$sql = "select node.id, node.name from ".
 					$this->roleTable." as role,".
@@ -129,7 +99,7 @@ class MyAccessDecisionManager extends Base
 					$this->roleNodeTable." as node ".
 					"where user_role.user_id={$authId} and user_role.role_id=role.id ".
 					"and role_node.role_id=role.id and role.status=1 ".
-					"and role_node.node_id=node.id and node.level=3 ".
+					"and role_node.node_id=node.id ".
 					"and node.pid={$moduleId}";
 				$rs =   $db->query($sql);
 				$action = array();
@@ -137,9 +107,8 @@ class MyAccessDecisionManager extends Base
 					$a	 =	 (array)$a;
 					$action[$a['name']] = $a['id'];
 				}
-				$access[strtoupper($appName)][strtoupper($moduleName)]   =  array_change_key_case($action,CASE_UPPER);
+				$access[strtoupper($moduleName)] =  array_change_key_case($action,CASE_UPPER);
 			}
-		}
 		//dump($access);
 		return $access;
 	}

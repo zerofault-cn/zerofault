@@ -14,7 +14,7 @@
 		<td><label id="{$item['id']}">{$item['name']}</label></td>
 		<td>
 			<if condition="$item['id'] eq 1">
-			不受权限控制影响
+			超级管理员
 			<else />
 				<iterate name="item['Role']" id="role" key="j">
 				{$role['name']}<br />

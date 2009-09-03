@@ -2,7 +2,7 @@
 $menu = array();
 
 $menu['Profile'] = array(
-	'name'	  => 'Supplier',
+	'name'	  => 'Category',//Ä¬ÈÏ²Ù×÷Module.index
 	'submenu' => array(
 		'Supplier Profile'	=> 'Supplier',
 		'Department Profile'=> 'Dept',
@@ -40,6 +40,7 @@ $menu['Rbac'] = array(
 	'submenu' => array(
 		'Node' => 'Node',
 		'Role' => 'Role',
+		'User' => 'User'
 		)
 	);
 

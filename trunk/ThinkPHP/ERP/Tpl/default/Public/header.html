@@ -1,8 +1,22 @@
 	<div id="top">
 		<div class="action">
-			您好, {@loginUserName}<br />
-			<a href="__APP__/../index.php" target="_blank">网站首页</a>&nbsp;&nbsp;
-			<a href="__APP__/Public/logout" target="_iframe">退出管理</a>
+			{$Think.lang.select_lang}<select name="sel_lang" onchange="javascript:document.location.href=document.location.href+'?l='+this.value">
+			<if condition="LANG_SET eq 'zh-cn'">
+			<option value="zh-cn" selected="selected">简体中文</option>
+			<else />
+			<option value="zh-cn">简体中文</option>
+			</if>
+			<if condition="LANG_SET eq 'en-us'">
+			<option value="en-us" selected="selected">English</option>
+			<else />
+			<option value="en-us">English</option>
+			</if>
+			</select><br />
+			<if condition="!empty($_SESSION['loginUserName'])">
+			{$Think.lang.hello} {@loginUserName}&nbsp;&nbsp;
+			<a href="__APP__/../index.php" target="_blank">{$Think.lang.chgpwd}</a>&nbsp;&nbsp;
+			<a href="__APP__/Public/logout" target="_iframe">{$Think.lang.logout}</a>
+			</if>
 		</div>
-		<div class="banner"></div>
+		<div class="banner"><layout name="Public:menu" cache="0" /></div>
 	</div>

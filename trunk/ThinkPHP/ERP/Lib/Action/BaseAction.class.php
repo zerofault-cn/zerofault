@@ -15,10 +15,25 @@ class BaseAction extends Action{
 	*/
 	public function _initialize() {
 		header("Content-Type:text/html; charset=utf-8");
-	//	dump($_SESSION);
+		//dump(Cookie::is_set('think_language'));
 
 		import('@.RBAC');
-		// 检查认证
+		!empty($_REQUEST['pmenu']) && Session::set('pmenu', $_REQUEST['pmenu']);
+		$menu = C('_menu_');
+		foreach($menu as $key=>$val) {
+			if(!RBAC::AccessDecision($val['name'], 'index')) {
+				unset($menu[$key]);
+				continue;
+			}
+			foreach($val['submenu'] as $key2=>$val2) {
+				if(!RBAC::AccessDecision($val2, 'index')) {
+					unset($menu[$key]['submenu'][$key2]);
+				}
+			}
+		}
+		$this->assign('menu', $menu);
+		MODULE_NAME != 'Index'&& $this->assign('submenu', $menu[Session::get('pmenu')]['submenu']);
+		// 认证当前操作
 		if(RBAC::checkAccess()) {
 			//检查认证识别号
 			if(!$_SESSION[C('USER_AUTH_KEY')]) {
@@ -38,10 +53,6 @@ class BaseAction extends Action{
 				exit;
 			}
 		}
-		!empty($_REQUEST['p']) && Session::set('p', $_REQUEST['p']);
-		$menu = C('_menu_');
-		$this->assign('menu', $menu);
-		MODULE_NAME != 'Index'&& $this->assign('submenu', $menu[Session::get('p')]['submenu']);
 	}
 	/**
 	*
