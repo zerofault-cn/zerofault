@@ -10,24 +10,16 @@
 		<td>{$item.id}</td>
 		<td><label id="{$item['id']}">{$item['name']}</label></td>
 		<td class="a_left">
-			<if condition="$item['id'] eq 1">
-			拥有操作管理后台的基本权限
-			<else />
-				<iterate name="item['Node']" id="node" key="j">
-					<if condition="empty($node['title'])">{$node['name']}<else />{$node['title']}</if>
-					( {$node['subNode']} )
-					<br />
-				</iterate>
-			</if>
+			<iterate name="item['Node']" id="node" key="j">
+				<if condition="empty($node['title'])">{$node['name']}<else />{$node['title']}</if>
+				( {$node['subNode']} )
+				<br />
+			</iterate>
 		</td>
 		<td>
-			<if condition="$item['id'] eq 1">
-			<a href="__URL__/update/id/{$item['id']}/f/status/v/{:intval(!$item['status'])}" target="_iframe" title="<if condition='$item.status eq 0'>启用<else />禁用</if>"><if condition="$item['status'] eq 0"><img src="../Public/Image/add.gif" alt="启用" align="absmiddle"/><else /><img src="../Public/Image/delete.gif" alt="禁用" align="absmiddle"/></if></a>
-			<else />
 			<a href="__URL__/index/id/{$item['id']}" title="编辑"><img src="../Public/Image/options-edit.gif" alt="编辑" align="absmiddle"/></a>
 			<a href="__URL__/update/id/{$item['id']}/f/status/v/{:intval(!$item['status'])}" target="_iframe" title='<if condition="$item.status eq 0">启用<else />禁用</if>'><if condition="$item['status'] eq 0"><img src="../Public/Image/add.gif" alt="启用" align="absmiddle"/><else /><img src="../Public/Image/delete.gif" alt="禁用" align="absmiddle"/></if></a>
 			<img class="delete" id="{$item['id']}" name="{$item['name']}" src="../Public/Image/cross.gif" alt="彻底删除" align="absmiddle"/>
-			</if>
 		</td>
 	</tr>
 	</iterate>

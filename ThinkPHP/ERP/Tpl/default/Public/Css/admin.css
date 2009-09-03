@@ -77,9 +77,9 @@ label.editable{
 }
 #top .action{
 	float:right;
-	width:300px;
-	height:25px;
-	padding-top:30px;
+	width:400px;
+	height:32px;
+	padding-top:10px;
 	text-align:right;
 }
 #top a{color:#0066ff;}

@@ -7,7 +7,7 @@ class UserModel extends RelationModel{
 			'mapping_limit' => 0,
 			'mapping_order' => '',
 			'relation_foreign_key' => 'role_id',
-			'relation_table' => 'yishu_user_role'
+			'relation_table' => 'erp_user_role'
 			)
 	);
 }

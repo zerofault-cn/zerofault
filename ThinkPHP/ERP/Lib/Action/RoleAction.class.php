@@ -22,14 +22,8 @@ class RoleAction extends BaseAction{
 	* 角色列表
 	*/
 	public function index(){
-		$topnavi[]=array(
-			'text'=> '角色管理',
-			'url' => __APP__.'/Role'
-			);
-		$topnavi[]=array(
-			'text'=> '角色列表',
-			);
 		$where = array();
+		//有编辑请求
 		if(!empty($_REQUEST['id'])) {
 			$where['id'] = array('neq',$_REQUEST['id']);
 			$role_info = $this->dao->relation(true)->where(array('id'=>$_REQUEST['id']))->find();

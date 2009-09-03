@@ -12,8 +12,8 @@ class RoleModel extends RelationModel{
 			'mapping_limit' => 0,
 			'mapping_order' => '',
 			'relation_foreign_key' => 'node_id',
-			'relation_table' => 'yishu_role_node',
-			'condition' => 'pid=1' //此pid为项目admin的Node.id
+			'relation_table' => 'erp_role_node',
+			'condition' => 'pid=0' 
 			)
 	);
 }

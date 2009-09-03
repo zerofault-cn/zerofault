@@ -27,10 +27,10 @@ class PublicAction extends BaseAction{
 	public function checkLogin(){
 		$User	=	D('User');
 		if(empty($_REQUEST['account'])) {
-			die(self::_error('error!'));
+			die(self::_error(L('account_required')));
 		}
 		elseif (empty($_REQUEST['password'])){
-			die(self::_error('密码必须！'));
+			die(self::_error(L('password_required')));
 		}
 		//生成认证条件
 		$map			= array();
