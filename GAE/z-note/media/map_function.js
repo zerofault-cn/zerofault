@@ -126,7 +126,7 @@ function plotPoint()
 			lastLat = Lat;
 			lastLon = Lng;
 			
-			if (i%5==0)
+			if (i%2==0)
 			{
 				map.panTo(point);
 			}

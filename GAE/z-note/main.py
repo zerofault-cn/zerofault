@@ -209,9 +209,10 @@ class Upload(webapp.RequestHandler):
 					t.put()
 					key = t.key()
 					i = 0
-					step = int(math.ceil((len(lines)-1)/618.0))
+					step = int(math.ceil((len(lines)-1)/400.0))
 					logging.info('point_count:'+str(len(lines)))
 					logging.info('step:'+str(step))
+					tp_list = []
 					for line in lines[1:]:
 						i += 1
 						if (i+1)!= len(lines) and (i+step-1)%step != 0:
@@ -227,10 +228,15 @@ class Upload(webapp.RequestHandler):
 						else:
 							ele =  fields[4]
 						tp.elevation = float(ele)
-						tp.speed     = float(fields[7])
+						speed = fields[7]
+						if speed == 'NaN':
+							speed = 0.0
+						else:
+							speed = float(fields[7])
+						tp.speed     = speed
 						tp.pdop      = float(fields[9])
-						tp.put()
-
+						tp_list.append(tp)
+					db.put(tp_list)
 			self.response.out.write('1')
 		else:
 			self.response.out.write('Not Login')
