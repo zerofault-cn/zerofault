@@ -7,7 +7,7 @@
 			{% else %}
 				<option value=''>选择行动时间</option>
 				{% for item in user_track %}
-				<option value="{{ item.key }}" id="{{ item.private }}">{{ item.begin_time }} ~ {{ item.end_time }}</option>
+				<option value="{{ item.key }}" id="{{ item.private }}">{{ item.begin_time }} ~ {{ item.end_time }} [{% if item.private %}私有{% else %}公开{% endif %}]</option>
 				{% endfor %}
 			{% endif %}
 			</select>
