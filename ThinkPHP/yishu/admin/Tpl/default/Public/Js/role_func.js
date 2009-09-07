@@ -75,7 +75,7 @@ function submit_addForm(){
 	else{
 		$.post(_URL_+"/add",{
 			'name'    : $(".addForm input.name").val(),
-			'node_ids': node_sel.join(',')
+			'node_ids': node_ids
 		},function(str){
 				if(str=='-1')
 				{
