@@ -1,49 +1,50 @@
-		<div id="leftColumn">
+		<div id="category">
 			{include:left}
 		</div>
-		<div id="rightColumn">
-			<div class="box">
-				<div class="w t f_left"></div>
-				<div class="w t f_right"></div>
+		<div id="recommond_list">
+			<div class="w t f_left"></div>
+			<div class="w t f_right"></div>
+			<div class="clear"></div>
+			<div class="w o f_left"></div>
+			<div class="w o f_right"></div>
+			<div class="clear"></div>
+			<div class="w p f_left"></div>
+			<div class="w p f_right"></div>
+			<div class="clear"></div>
+			&nbsp;推荐网站
+			<ul>
+				<iterate name="mark_list" id="item">
+				<li><a href="__URL__/site/id/{$item.id}/">{$item.name}</a></li>
+				</iterate>
 				<div class="clear"></div>
-				<div class="w o f_left"></div>
-				<div class="w o f_right"></div>
-				<div class="clear"></div>
-				<div class="w p f_left"></div>
-				<div class="w p f_right"></div>
-				<div class="clear"></div>
-				&nbsp;推荐网站
-				<ul>
-					<iterate name="mark_list" id="item">
-					<li><a href="__URL__/site/id/{$item.id}/">{$item.name}</a></li>
+			</ul>
+		</div>
+		<div class="clear"></div>
+		<div id="pic_site">
+		</div>
+		<div id="hotlist">
+		</div>
+		<div id="site_list">
+			<div class="w t f_left"></div>
+			<div class="w t f_right"></div>
+			<div class="clear"></div>
+			<div class="w o f_left"></div>
+			<div class="w o f_right"></div>
+			<div class="clear"></div>
+			<div class="w p f_left"></div>
+			<div class="w p f_right"></div>
+			<div class="clear"></div>
+			&nbsp;分类导航
+			<ul>
+				<iterate name="list" id="item" key="i">
+				<li>
+					<label><a href="__URL__/cate/id/{$item.id}">{$item.name}</a>：</label>
+					<iterate name="item['site_list']" id="site_item" key="j">
+					<span><a id="url" class="<if condition='$site_item.mark eq 1'>red</if>" href="__URL__/site/id/{$site_item.id}/" >{$site_item.name}</a></span>
 					</iterate>
 					<div class="clear"></div>
-				</ul>
-			</div>
-			<div class="clear"></div>
-			<div class="box site_list">
-				<div class="w t f_left"></div>
-				<div class="w t f_right"></div>
-				<div class="clear"></div>
-				<div class="w o f_left"></div>
-				<div class="w o f_right"></div>
-				<div class="clear"></div>
-				<div class="w p f_left"></div>
-				<div class="w p f_right"></div>
-				<div class="clear"></div>
-				&nbsp;分类导航
-				<ul>
-					<iterate name="list" id="item" key="i">
-					<li>
-						<label><a href="__URL__/cate/id/{$item.id}">{$item.name}</a>：</label>
-						<iterate name="item['site_list']" id="site_item" key="j">
-						<span><a id="url" class="<if condition='$site_item.mark eq 1'>red</if>" href="__URL__/site/id/{$site_item.id}/" >{$site_item.name}</a></span>
-						</iterate>
-						<div class="clear"></div>
-					</li>
-					</iterate>
-				</ul>
-				<div class="clear"></div>
-			</div>
+				</li>
+				</iterate>
+			</ul>
 		</div>
 		<div class="clear"></div>
