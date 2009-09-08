@@ -1,15 +1,116 @@
-<div id="top">
-	<a href="__URL__"><img id="logo" class="f_left" src="{*APP_PUBLIC_URL}/Images/logo.gif" /></a>
-	<div id="tools" class="f_left">
-		<a href="javascript:void(0);" onclick="this.style.behavior='url(#default#homepage)';this.setHomePage('Http://www.yishu321.com/');">设为首页</a>
-		<a href="javascript:void(0);" onclick="window.external.addFavorite('Http://www.yishu321.com/','艺术之家网址大全 - http://www.yishu321.com/');">收藏本站</a>
-		<a href="javascript:void(0);">免费杀毒</a>
-		<a href="javascript:void(0);">首页修复</a>
-		<a href="javascript:void(0);">宽频宽</a>
-	</div>
-	<div id="calendar" class="f_right">
-		<script language="JavaScript" type="text/javascript" src="{*APP_PUBLIC_URL}/Js/time.js"></script>
-		<script language="JavaScript">showcal(0)</script>
-	</div>
-	<div class="clear"></div>
-</div>
+<div class="src" id="search_ext">
+            <ul id="tags">
+                <li><a href="javascript://" target="_self" onclick="selectTag('baidu8',this)">Google</a></li>
+                <li><a href="javascript://" target="_self" class="focu" onclick="selectTag('baidu0',this)">百度</a></li>
+                <li><a href="javascript://" target="_self" onclick="selectTag('baidu1',this)">MP3</a></li>
+                <li><a href="javascript://" target="_self" onclick="selectTag('baidu2',this)">图片</a></li>
+                <li><a href="javascript://" target="_self" onclick="selectTag('baidu3',this)">贴吧</a></li>
+                <li><a href="javascript://" target="_self" onclick="selectTag('baidu4',this)">知道</a></li>
+                <li><a href="javascript://" target="_self" onclick="selectTag('baidu5',this)">百科</a></li>
+                <li><a href="javascript://" target="_self" onclick="selectTag('baidu6',this)">视频</a></li>
+                <li><a href="javascript://" target="_self" onclick="selectTag('baidu7',this)">股票</a></li>
+                <li><a href="javascript://" target="_self" onclick="selectTag('baidu9',this)">邮箱</a></li>
+            </ul>
+            <div id="baidu0" class="srchbox">
+                <form method="post" action="" onsubmit="return goSearch(word, url)">
+                    <a href="http://www.baidu.com/?tn=q2616875_pg"><img src="{*APP_PUBLIC_URL}/Images/baidu_logo.gif"></a>
+                    <label>
+                    <input name="url" id="url" value="http://www.baidu.com/s?tn=q2616875_pg&amp;wd=" type="hidden">
+                    <input name="word" id="word" class="text" onmouseover="this.focus();" onfocus="this.select();" autocomplete="off" type="text">
+                    <input class="button" value="百度一下" type="submit">
+                    </label>
+                </form>
+                <div class="r"></div>
+            </div>
+            <div id="baidu1" style="display: none;" class="srchbox">
+                <form method="post" action="" onsubmit="return goSearch(word, url)">
+                    <a href="http://mp3.baidu.com/"><img src="http://www.yishu321.com/images/baidu_mp3.gif"></a>
+                    <label>
+                    <input name="url" id="url" value="http://mp3.baidu.com/m?f=ms&amp;tn=baidump3&amp;ct=134217728&amp;lf=&amp;rn=&amp;lm=0&amp;word=" type="hidden">
+                    <input name="word" id="word" class="text" onmouseover="this.focus();" onfocus="this.select();" autocomplete="off" type="text">
+                    <input class="button" value="百度一下" type="submit">
+                    </label>
+                </form>
+                <div class="r"></div>
+            </div>
+            <div id="baidu2" style="display: none;" class="srchbox">
+                <form method="post" action="" onsubmit="return goSearch(word, url)">
+                    <a href="http://image.baidu.com/"><img src="http://www.yishu321.com/images/baidu_img.gif"></a>
+                    <label>
+                    <input name="url" id="url" value="http://image.baidu.com/i?ct=201326592&amp;cl=2&amp;lm=-1&amp;tn=baiduimage&amp;pv=&amp;z=0&amp;word=" type="hidden">
+                    <input name="word" id="word" class="text" onmouseover="this.focus();" onfocus="this.select();" autocomplete="off" type="text">
+                    <input class="button" value="百度一下" type="submit">
+                    </label>
+                </form>
+                <div class="r"></div>
+            </div>
+            <div id="baidu3" style="display: none;" class="srchbox">
+                <form method="post" action="" onsubmit="return goSearch(word, url)">
+                    <a href="http://post.baidu.com/"><img src="http://www.yishu321.com/images/baidu_post.gif"></a>
+                    <label>
+                    <input name="url" id="url" value="http://post.baidu.com/f?kw=" type="hidden">
+                    <input name="word" id="word" class="text" onmouseover="this.focus();" onfocus="this.select();" autocomplete="off" type="text">
+                    <input class="button" value="百度一下" type="submit">
+                    </label>
+                </form>
+                <div class="r"></div>
+            </div>
+            <div id="baidu4" style="display: none;" class="srchbox">
+                <form method="post" action="" onsubmit="return goSearch(word, url)">
+                    <a href="http://zhidao.baidu.com/"><img src="http://www.yishu321.com/images/baidu_know.gif"></a>
+                    <label>
+                    <input name="url" id="url" value="http://zhidao.baidu.com/q?tn=ikaslist&amp;pt=q2616875_pg&amp;ct=17&amp;word=" type="hidden">
+                    <input name="word" id="word" class="text" onmouseover="this.focus();" onfocus="this.select();" autocomplete="off" type="text">
+                    <input class="button" value="百度一下" type="submit">
+                    </label>
+                </form>
+                <div class="r"></div>
+            </div>
+            <div id="baidu5" style="display: none;" class="srchbox">
+                <form method="post" action="" onsubmit="return goSearch(word, url)">
+                    <a href="http://baike.baidu.com/"><img src="http://www.yishu321.com/images/baidu_baike.gif"></a>
+                    <label>
+                    <input name="url" id="url" value="http://baike.baidu.com/w?ct=17&amp;lm=0&amp;tn=baiduWikiSearch&amp;pn=0&amp;rn=10&amp;word=" type="hidden">
+                    <input name="word" id="word" class="text" onmouseover="this.focus();" onfocus="this.select();" autocomplete="off" type="text">
+                    <input class="button" value="百度一下" type="submit">
+                    </label>
+                </form>
+                <div class="r"></div>
+            </div>
+            <div id="baidu6" style="display: none;" class="srchbox">
+                <form method="post" action="" onsubmit="return goSearch(word, url)">
+                    <a href="http://video.baidu.com/"><img src="http://www.yishu321.com/images/baidu_video.gif"></a>
+                    <label>
+                    <input name="url" id="url" value="http://video.baidu.com/v?ct=301989888&amp;rn=20&amp;pn=0&amp;db=0&amp;s=0&amp;word=" type="hidden">
+                    <input name="word" id="word" class="text" onmouseover="this.focus();" onfocus="this.select();" autocomplete="off" type="text">
+                    <input class="button" value="百度一下" type="submit">
+                    </label>
+                </form>
+                <div class="r"></div>
+            </div>
+            <div id="baidu7" style="display: none;" class="srchbox">
+                <form method="post" action="" onsubmit="return goSearch(word, url)">
+                    <a href="http://www.baidu.com/?tn=q2616875_pg"><img src="http://www.yishu321.com/images/baidu_logo.gif"></a>
+                    <label>
+                    <input name="url" id="url" value="http://www.baidu.com/s?tn=q2616875_pg&amp;wd=" type="hidden">
+                    <input name="word" id="word" class="text" onmouseover="this.focus();" onfocus="this.select();" autocomplete="off" type="text">
+                    <input class="button" value="百度一下" type="submit">
+                    </label>
+                </form>
+                <div class="r"></div>
+            </div>
+            <div id="baidu8" style="display: none;" class="srchbox">
+                <form method="post" action="" onsubmit="return goSearch(word, url)">
+                    <a href="http://www.google.cn/"><img src="http://www.yishu321.com/images/google_logo.gif"></a>
+                    <label>
+                    <input name="url" id="url" value="http://www.google.cn/search?hl=zh-CN&amp;meta=&amp;aq=f&amp;oq=&amp;q=" type="hidden">
+                    <input name="word" id="word" class="text" onmouseover="this.focus();" onfocus="this.select();" autocomplete="off" type="text">
+                    <input class="button" value=" 搜 索 " type="submit">
+                    </label>
+                </form>
+                <div class="r"></div>
+            </div>
+            
+        </div>
+    <script language="JavaScript" type="text/javascript" src="{*APP_PUBLIC_URL}/Js/external.js"></script>
+	<script language="JavaScript" type="text/javascript" src="{*APP_PUBLIC_URL}/Js/search.js"></script>
