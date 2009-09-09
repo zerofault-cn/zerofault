@@ -21,6 +21,8 @@ h1,h2,h3,h4,h5,h6{
 textarea{
 	font-size:12px;
 }
+input{ border: 1px solid #ECECEC; padding: 2px;background:#ffffff;}
+
 b{font-weight:normal;}
 em{font-style:normal;}
 
@@ -65,9 +67,16 @@ a:hover,a:active,a.active{color:#f20;text-decoration: underline;}
 
 
 #container{
-	max-width:960px;
+	width:960px;
 	height:auto !important;
 	margin:0 auto;
+}
+#header .top{
+	height:32px;
+	padding:5px 10px;;
+	border:1px solid #ECECEC;
+	line-height:22px;
+	margin-bottom:10px;
 }
 
 #header .mail{
@@ -247,104 +256,64 @@ margin-top:1px;
 #main{
 	margin-top:10px;
 }
-#leftColumn{
+
+#main .leftColumn{
 	float:left;
 	width:196px;
-	color:#4173CF;
 }
-
-.box{
-	background:#99BCFC none repeat scroll 0 0;
-	font-size:14px;
+#main .leftColumn h2{
+	height:25px;
+	border:1px solid #ECECEC;
+	border-bottom:none;
+	text-align:center;
 	font-weight:bold;
-	line-height:20px;
-	margin-bottom:8px;
+	font-size:14px;
+	line-height:25px;
 }
-#leftColumn .box{
-	width:196px;
-}
-
-.box ul{
+#main .leftColumn ul{
 	width:194px;
-	background:#FFFFFF none repeat scroll 0 0;
-	border:1px solid #C3D9FF;
-	font-weight:normal;
-	font-size:12px;
-	
+	border:1px solid #ECECEC;
 }
-.box ul li{
+#main .leftColumn ul li{
 	float:left;
-	width:84px;
-	padding-left:10px;
+	width:80px;
+	padding-left:6px;
 }
 
-.b1, .b2, .b3, .b4, .b1b, .b2b, .b3b, .b4b, .b {
-	display:block;
-	overflow:hidden;
-}
-.b2, .b3, .b4, .b2b, .b3b, .b4b, .b {
-	border-left:1px solid #99BCFC;
-	border-right:1px solid #99BCFC;
-}
-.b1, .b2, .b3, .b1b, .b2b, .b3b {
-	height:1px;
-}
-.b1, .b1b {
-	background:#99BCFC none repeat scroll 0 0;
-	margin:0 5px;
-}
-.b2, .b2b {
-	border-width:2px;
-	margin:0 3px;
-}
-.b3, .b3b {
-	margin:0 2px;
-}
-.b4, .b4b {
-	height:2px;
-	margin:0 1px;
-}
-.border h2 {
-	color:#4173CF;
-	font-size:14px;
-	font-weight:bold;
-	height:2em;
-	line-height:2em;
-	overflow:hidden;
-}
-.border ul{
-	padding-left:10px;
-}
-
-#rightColumn{
+#main .rightColumn{
 	float:right;
 	width:750px;
-	color:#565B78;
 }
-#rightColumn .box{
-	width:750px;
-	background:#C3D9FF none repeat scroll 0 0;
+#main .rightColumn h2{
+	height:25px;
+	padding-left:12px;
+	border:1px solid #ECECEC;
+	border-bottom:none;
+	font-weight:bold;
+	font-size:14px;
+	line-height:25px;
 }
-#rightColumn .box ul{
+#main .rightColumn ul{
 	width:748px;
+	border:1px solid #ECECEC;
 }
 #rightColumn .site_list ul{
 	width:738px;
 	padding:5px;
 }
-#rightColumn .site_list ul li{
+#main .rightColumn ul li{
 	float:none;
 	width:auto;
 	padding-left:0;
 	border-bottom:1px solid #E3EDFF;
 }
 
-#rightColumn .site_list ul li label{
+#main .rightColumn ul li label{
 	float:left;
 	width:80px;
 	font-weight:bold;
 }
-#rightColumn .site_list ul li span{
+#main .rightColumn ul li span{
 	float:left;
 	width:100px;
 	padding-right:20px;
@@ -507,8 +476,9 @@ fieldset#comment_form{
 	margin:24px 18px 12px 0;
 	padding-left:12px;
 }
-#copy{
+#footer{
 	padding:10px;
 	margin-top:30px;
 	text-align:center;
+	line-height:24px;
 }
