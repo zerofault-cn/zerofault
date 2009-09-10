@@ -1,13 +1,39 @@
-<table cellspacing="0" cellpadding="0" border="0" width="100%">
-	<tr>
-	<td><if condition="!empty($_SESSION['loginUserName'])">
-			{$Think.lang.hello} {@loginUserName}&nbsp;&nbsp;
+<table class="quick_menu" cellspacing="0" cellpadding="0" border="0" width="100%">
+<tr>
+	<td class="quick_menu_left" align="left" style="width: 100%;">
+	<if condition="!empty($_SESSION['loginUserName'])">
+			User Name: {@loginUserName}&nbsp;&nbsp;<br />
 			<a href="__APP__/../index.php" target="_blank">Change Password</a>&nbsp;&nbsp;
 			<a href="__APP__/Public/logout" target="_iframe">Logout</a>
 			</if>
 	</td>
-	<td >
-		<layout name="Public:menu" cache="0" />
+	<td class="quick_menu_tabs">
+		<table cellspacing="0" cellpadding="0" class="quick_menu_tabs">
+		<tr>
+			<iterate name="menu" id="item">
+			<td nowrap="true" align="center" class="quick_menu_tab"><a href="__APP__/{$item['name']}?pmenu={$key}">{$key}</a></td>
+			</iterate>
+		</tr>
+		</table>
 	</td>
 	</tr>
+</table>
+
+<table cellspacing="0" cellpadding="0" border="0" width="100%" class="main_menu">
+<tr>
+	<td class="main_menu">
+		<table class="main_menu">
+		<tr>
+			<present name="submenu">
+			<iterate name="submenu" id="item">
+			<if condition="MODULE_NAME eq $item">
+			<td class="main_menu_selected"><a href="__APP__/{$item}">{$item}</a></td>
+			<else />
+			<td class="main_menu_unselected"><a href="__APP__/{$item}">{$item}</a></td>
+			</if>
+			</iterate>
+			</present>
+		</table>
+	</td>
+</tr>
 </table>
