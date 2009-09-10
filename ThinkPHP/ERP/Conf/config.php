@@ -1,11 +1,6 @@
 <?php 
 if($_SERVER["SERVER_NAME"]=='localhost') {
 	return array(
-		//'URL_MODEL' => 0,
-		'LANG_SWITCH_ON'=>true,		// 开启多语言功能
-		'AUTO_DETECT_LANG' =>true,
-		'DEFAULT_LANGUAGE'=>'en-us',// 设置默认语言
-		
 		'DB_TYPE'=> 'mysql',	// 定义数据库连接信息
 		'DB_HOST'=> 'localhost',
 		'DB_NAME'=>'ERP',
