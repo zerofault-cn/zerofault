@@ -12,7 +12,7 @@ $menu['Basic Data'] = array(
 		)
 	);
 
-$menu['Inventory Input Management'] = array(
+$menu['Inventory Input<br />Management'] = array(
 	'name'	=> 'Inbound',
 	'submenu' => array(
 		'Products entering information'	=> 'Bill',
@@ -27,7 +27,7 @@ $menu['Storage inventory'] = array(
 		)
 	);
 
-$menu['Inventory output Management'] = array(
+$menu['Inventory output<br />Management'] = array(
 	'name' => 'Outbound',
 	'submenu' => array(
 		'Product Request'	=> 'Requisition',
@@ -35,7 +35,7 @@ $menu['Inventory output Management'] = array(
 		)
 	);
 
-$menu['Purchase management'] = array(
+$menu['Purchase<br />management'] = array(
 	'name' => 'feedback',
 	);
 
