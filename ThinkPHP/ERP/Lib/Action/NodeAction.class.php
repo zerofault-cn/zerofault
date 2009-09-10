@@ -112,7 +112,7 @@ class NodeAction extends BaseAction{
 				die('1:'.$id);
 			}
 			else {
-				die('sql:'.$dao->getLastSql());
+				die('Error!');
 			}
 		}
 		else {
@@ -121,7 +121,7 @@ class NodeAction extends BaseAction{
 				die('1:'.$id);
 			}
 			else {
-				die('sql:'.$dao->getLastSql());
+				die('Error');
 			}
 		}
 	}

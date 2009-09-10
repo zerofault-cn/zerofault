@@ -28,7 +28,7 @@ class MyAccessDecisionManager extends Base
 	{
 		import("Think.Db.Db");
 		$this->roleTable = C('DB_PREFIX').'role';
-		$this->roleUserTable  =  C('DB_PREFIX').'user_role';
+		$this->roleUserTable  =  C('DB_PREFIX').'staff_role';
 		$this->roleAccessTable=   C('DB_PREFIX').'role_node';
 		$this->roleNodeTable    =   C('DB_PREFIX').'node';
 	}

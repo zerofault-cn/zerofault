@@ -14,7 +14,7 @@ class UserAction extends BaseAction{
 	* 构造函数
 	*/
 	public function _initialize() {
-		$this->dao = D('User');
+		$this->dao = D('Staff');
 		parent::_initialize();
 	}
 	/**

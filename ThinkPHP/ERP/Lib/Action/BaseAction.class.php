@@ -32,6 +32,7 @@ class BaseAction extends Action{
 			}
 		}
 		$this->assign('menu', $menu);
+		$this->assign("current_time", date("l, d/m/Y | H:i A"));//Thursday, 10/09/2009 | 11:53 AM
 		MODULE_NAME != 'Index'&& $this->assign('submenu', $menu[Session::get('pmenu')]['submenu']);
 		// 认证当前操作
 		if(RBAC::checkAccess()) {
@@ -45,9 +46,9 @@ class BaseAction extends Action{
 			// 检查权限
 			if(!RBAC::AccessDecision()) {
 				if(in_array(ACTION_NAME,C('IFRAME_AUTH_ACTION'))) {
-					die(self::_error('没有权限！', 2000));
+					die(self::_error('No Permission', 2000));
 				}
-				$this->assign('message','没有权限！');
+				$this->assign('message','No Permission');
 				$this->assign('content','Public:error');
 				$this->display('Layout:ERP_layout');
 				exit;
@@ -99,11 +100,11 @@ class BaseAction extends Action{
 		$rs = $this->dao->where('id='.$id)->setField($field,$value);
 		if($rs)
 		{
-			die(self::_success('操作成功！','',1200));
+			die(self::_success('Success!','',1200));
 		}
 		else
 		{
-			die(self::_error('发生错误！<br />sql:'.$this->dao->getLastSql()));
+			die(self::_error('Error!'));
 		}
 	}
 	/**
@@ -115,11 +116,11 @@ class BaseAction extends Action{
 		$id=$_REQUEST['id'];
 		if($this->dao->find($id) && $this->dao->delete())
 		{
-			die(self::_success('删除成功！','',1200));
+			die(self::_success('Success!','',1200));
 		}
 		else
 		{
-			die(self::_error('发生错误！<br />sql:'.$this->dao->getLastSql()));
+			die(self::_error('Error!'));
 		}
 	}
 }

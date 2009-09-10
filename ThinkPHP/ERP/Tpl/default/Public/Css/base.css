@@ -57,7 +57,6 @@ table {
 	background-color:white;
 	border:medium none;
 	text-align:right;
-	white-space:nowrap;
 }
 .quick_menu_tab {
 	-moz-background-clip:border;
@@ -70,7 +69,6 @@ table {
 	padding-left:10px;
 	padding-right:10px;
 	text-align:right;
-	white-space:nowrap;
 }
 
 .main_menu {
