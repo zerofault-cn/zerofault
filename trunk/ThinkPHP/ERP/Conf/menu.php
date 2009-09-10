@@ -1,41 +1,45 @@
 <?php
 $menu = array();
 
-$menu['Profile'] = array(
+$menu['Basic Data'] = array(
 	'name'	  => 'Category',//Ä¬ÈÏ²Ù×÷Module.index
 	'submenu' => array(
-		'Supplier Profile'	=> 'Supplier',
-		'Department Profile'=> 'Dept',
-		'Staff Profile'		=> 'Staff',
-		'Goods Category'	=> 'Category',
-		'Goods Profile'		=> 'Goods'
+		'Supplier infroamtion'	=> 'Supplier',
+		'Department information'=> 'Dept',
+		'Staff information'		=> 'Staff',
+		'Commodity'	=> 'Commodity',
+		'Products Data'		=> 'Products'
 		)
 	);
 
-$menu['Inbound'] = array(
+$menu['Inventory Input Management'] = array(
 	'name'	=> 'Inbound',
 	'submenu' => array(
-		'Inbound Bill'	=> 'Bill',
-		'Back Bill'		=> 'Bill'
+		'Products entering information'	=> 'Bill',
+		'details of inventory'		=> 'Bill',
+		'return goods amount'		=> 'Bill'
 		)
 	);
-
-$menu['Outbound'] = array(
-	'name' => 'Outbound',
-	'submenu' => array(
-		'Requisition'	=> 'Requisition',
-		'Return'		=> 'Return'
-		)
-	);
-
-$menu['Stock'] = array(
+$menu['Storage inventory'] = array(
 	'name' => 'Stock',
 	'submenu' => array(
 		'Stock List'=>'Stock'
 		)
 	);
 
-$menu['Rbac'] = array(
+$menu['Inventory output Management'] = array(
+	'name' => 'Outbound',
+	'submenu' => array(
+		'Product Request'	=> 'Requisition',
+		'Return'		=> 'Return'
+		)
+	);
+
+$menu['Purchase management'] = array(
+	'name' => 'feedback',
+	);
+
+$menu['System'] = array(
 	'name' => 'Node',
 	'submenu' => array(
 		'Node' => 'Node',

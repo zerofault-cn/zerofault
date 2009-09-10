@@ -15,7 +15,7 @@ class PublicAction extends BaseAction{
 	public function login() {
 		if(!isset($_SESSION[C('USER_AUTH_KEY')])) {
 			$this->assign('content','login');
-			$this->display('Layout:ERP_layout');
+			$this->display('Layout:base');
 		}else{
 			redirect(__URL__);
 		}
