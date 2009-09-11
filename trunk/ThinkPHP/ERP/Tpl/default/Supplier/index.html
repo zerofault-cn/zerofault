@@ -1,0 +1,30 @@
+<p class="page_title_text"><b>Supplier</b></p>
+<table cellpadding="4" border="2" width="90%">
+<tr>
+	<th width="33%">Supplier Inquiries</th>
+	<th width="33%">Supplier Transactions</th>
+	<th width="33%">Supplier Maintenance</th>
+</tr>
+<tr>
+	<td valign="TOP" class="menu_group_items"></td>
+	<td valign="TOP" class="menu_group_items"></td>
+	<td valign="TOP" class="menu_group_items">
+		<a href="/webERP/Suppliers.php?">Add a New Supplier</a><br/>
+	</td>
+</tr>
+</table>
+<form method="POST" action="/webERP/SelectSupplier.php?">
+<p class="page_title_text"><b> Search for Suppliers</b></p>
+<table cellpadding="3" colspan="4">
+<tr>
+	<td>Enter a partial Name:</td>
+	<td><input type="Text" maxlength="25" size="20" value="" name="Keywords"/></td>
+	<td><b>OR</b></td>
+	<td>Enter a partial Code:</td>
+	<td><input type="Text" maxlength="18" size="15" value="" name="SupplierCode"/></td>
+</tr>
+</table>
+<center>
+<input type="SUBMIT" value="Search Now" name="Search"/>
+</center>
+</form>

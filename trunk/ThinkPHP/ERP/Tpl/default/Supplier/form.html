@@ -1,0 +1,73 @@
+<form action="/webERP/Suppliers.php?" method="post">
+<table>
+<tr>
+	<td>Supplier Code:</td>
+	<td><input type="text" maxlength="10" size="11" name="SupplierID"/></td>
+</tr>
+<tr>
+	<td>Supplier Name:</td>
+	<td><input type="text" maxlength="40" size="42" name="SuppName"/></td>
+</tr>
+<tr>
+	<td>Supplier character:</td>
+	<td><input type="text" maxlength="40" size="42" name="Address1"/></td>
+</tr>
+<tr>
+	<td>Supplier address:</td>
+	<td><input type="text" maxlength="40" size="42" name="Address2"/></td>
+</tr>
+<tr>
+	<td>Contact person:</td>
+	<td><input type="text" maxlength="40" size="42" name="Address3"/></td>
+</tr>
+<tr>
+	<td>Postal Code:</td>
+	<td><input type="text" maxlength="40" size="42" name="Address4"/></td>
+</tr>
+<tr>
+	<td>Telephone:</td>
+	<td><input type="text" maxlength="10" size="12" value="11/09/2009" name="SupplierSince"/></td>
+</tr>
+<tr>
+	<td>Cellphone:</td>
+	<td><input type="text" maxlength="12" size="13" name="BankPartics"/></td>
+</tr>
+<tr>
+	<td>Fax:</td>
+	<td><input type="text" maxlength="12" size="13" name="BankPartics"/></td>
+</tr>
+<tr>
+	<td>E-mail:</td>
+	<td><input type="text" maxlength="12" size="13" name="BankPartics"/></td>
+</tr>
+<tr>
+	<td>Bank:</td>
+	<td><input type="text" maxlength="12" size="13" value="0" name="BankRef"/></td>
+</tr>
+<tr>
+	<td>Bank Account No:</td>
+	<td><input type="text" maxlength="30" size="31" name="BankAct"/></td>
+</tr>
+<tr>
+	<td>Payment Terms:</td>
+	<td><select name="PaymentTerms"><option value="20">Due 20th Of the Following Month</option><option value="30">Due By End Of The Following Month</option><option value="7">Payment due within 7 days</option><option value="CA">Cash Only</option></select></td>
+</tr>
+<tr>
+	<td>Tax Reference:</td>
+	<td><select name="TaxGroup"><option value="1">Default tax group</option><option value="2">Ontario</option><option value="3">UK Inland Revenue</option></select></td>
+</tr>
+<tr>
+	<td>Supplier Currency:</td>
+	<td><select name="CurrCode"><option value="AUD" selected="">Australian Dollars</option><option value="CHF">Swiss Francs</option><option value="EUR">Euro</option><option value="GBP">Pounds</option><option value="USD">US Dollars</option></select></td>
+</tr>
+<tr>
+	<td>Website:</td>
+	<td><input type="text" name="website" /></td>
+</tr>
+<tr>
+	<td>Remark:</td>
+	<td><textarea name="remark"></textarea></td>
+</tr>
+</table>
+<input type="Submit" value="Insert New Supplier" name="submit"/>
+</form>
