@@ -39,8 +39,8 @@ class Paginator extends Base{
 		if(isset($this->config[$name])) {
 			$this->config[$name] = $value;
 		}
-		$this->config['show_num'] = max(3,$this->config['show_num']);//最小值3
-		$this->config['side_num'] = max(1,$this->config['side_num']);//最小值1
+		$this->config['show_num'] = max(3,$this->config['show_num']);
+		$this->config['side_num'] = max(1,$this->config['side_num']);
 	}
 
 	function showJsNavi()

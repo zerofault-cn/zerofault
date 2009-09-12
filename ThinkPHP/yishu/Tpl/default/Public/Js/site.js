@@ -52,8 +52,7 @@ jQuery(document).ready(function(){
 						myOK(1500);
 						var arr = str.split('|');
 						jQuery("#vote_count").text(arr[0]);
-						jQuery("#vote").text(arr[1].substr(0,1));
-						jQuery("#vote small").text(arr[1].substr(1));
+						jQuery("#vote").html(arr[1].substr(0,1)+'<small>'+arr[1].substr(1)+'</small>');
 						jQuery("#currentrating").css("width",arr[2]+'px');
 					}
 				});
@@ -64,4 +63,12 @@ jQuery(document).ready(function(){
 	},function(str){
 			jQuery("#comment").html(str);
 		});
+	jQuery("span#username input:checkbox").click(function(){
+		if(jQuery(this).attr("checked")) {
+			jQuery("span#username").html('<input type="hidden" name="name" value="匿名"/><input type="checkbox" name="anonymous" value="1" checked="true"/>匿名发表');
+		}
+		else{
+			jQuery("span#username").html('称呼：<input type="text" name="name" value="匿名" size="8" maxlength="20"/>');
+		}
+	});
 });

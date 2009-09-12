@@ -343,10 +343,10 @@ margin-top:1px;
 .side ul li span{
 	float:left;
 }
-#index .side, #detail .main{
+#index .side, #detail .main, #list .main{
 	float:left;
 }
-#index .main, #detail .side{
+#index .main, #detail .side, #list .side{
 	float:right;
 }
 #category ul li{
@@ -407,10 +407,21 @@ margin-top:1px;
 	text-overflow:ellipsis;
 	white-space:nowrap; 
 }
-#detail ul{
+
+#position{
+	padding:5px 5px 15px;
+}
+#detail .main ul, #list .main ul{
 	width:722px;
 	padding:13px;
 }
+.paginator a:link, .paginator a:visited{
+	text-decoration:underline;
+}
+.paginator a:hover, .paginator a:active{
+	text-decoration:none;
+}
+
 #detail ul.site_info{
 	float:left;
 	width:443px;
@@ -434,6 +445,41 @@ margin-top:1px;
 #detail img.site_thumb{
 	float:right;
 	width:250px;
+}
+#detail span.site_name{
+	line-height:20px;
+	font-weight:bold;
+}
+#detail span.site_name em{
+	font-size:14px;
+	color:#08336F;
+}
+#detail span.site_view{
+	float:right;
+	width:180px;
+	line-height:20px;
+	font-weight:bold;
+}
+#detail span.site_view em{
+	font-size:14px;
+}
+#detail p.site_intro{
+	padding:5px;
+	margin:5px;
+	border:1px solid #E6E6E6;
+	text-indent:2em;
+	line-height:160%;
+}
+#detail span#pfno{
+	font-size:14px;
+	font-weight:bold;
+	color:#BE1008;
+	line-height:18px;
+}
+#detail span#pftip{
+	font-size:12px;
+	font-weight:bold;
+	line-height:18px;
 }
 #detail ul.starrating{
 	position:relative;
@@ -535,24 +581,26 @@ margin-top:1px;
 	width:100px;
 }
 
-
+dl#comment{
+	padding:5px 0px 10px;
+}
 dl#comment dt{
-	border-left:3px solid #CC0000;
-	background:#F0F0F0 none repeat scroll 0 0;
-	padding:5px 0 4px;
-	margin:15px 6px 0 0;
-	text-indent:9px;
-	line-height:16px;
+	height:22px;
+	border-top:1px solid #E6E6E6;
+	background-color:#F7F7F7;
+	padding:0px 15px;
+	line-height:22px;
+	color:#08336F;
+}
+dl#comment dt i{
+	float:right;
+	color:#393939;
+	font-style:normal;
 }
 dl#comment dd{
-	margin-top:9px;
+	padding:5px 15px 10px;
 }
-fieldset#comment_form{
-	float:left;
-	border:1px solid #1FADFF;
-	margin:24px 18px 12px 0;
-	padding-left:12px;
-}
+
 #footer{
 	padding:10px;
 	margin-top:30px;
