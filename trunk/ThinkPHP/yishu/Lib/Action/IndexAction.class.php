@@ -65,13 +65,38 @@ class IndexAction extends Action{
 
 	public function cate(){
 		$cate_id = $_REQUEST['id'];
-		$dao = D('Category');
-		$rs = $dao->find($cate_id);
-		$this->assign('cate_info', $rs);
-		$dao = D('Website');
-		$rs = $dao->where(array('cate_id'=>$cate_id, 'status'=>array('gt',0)))->order('sort')->select();
+		$dCategory = D('Category');
+		$cate_info = $dCategory->find($cate_id);
+		$this->assign('cate_info', $cate_info);
 		
-		$this->assign('site_list', $rs);
+		$dWebsite = D('Website');
+		$where['cate_id'] = $cate_id;
+		$where['status'] = array('gt',0);
+		$count = $dWebsite->where($where)->getField('count(*)');
+		import("@.Paginator");
+		$limit = 10;
+		$p = new Paginator($count,$limit);
+		//$p->setConfig('show_num',7);//设定连续显示的页码个数，这里使用默认值7
+		//$p->setConfig('side_num',2);//设定两遍保留显示的页码个数，这里使用默认值2
+		$p->setConfig('first','<img src="'.APP_PUBLIC_URL.'/Images/first.gif" align="absbottom" alt="First"/>');
+		$p->setConfig('prev','<img src="'.APP_PUBLIC_URL.'/Images/prev.gif" align="absbottom" alt="Prev"/>');
+		$p->setConfig('next','<img src="'.APP_PUBLIC_URL.'/Images/next.gif" align="absbottom" alt="Next"/>');
+		$p->setConfig('last','<img src="'.APP_PUBLIC_URL.'/Images/last.gif" align="absbottom" alt="Last"/>');
+
+		$site_list = $dWebsite->where(array('cate_id'=>$cate_id, 'status'=>array('gt',0)))->order('sort')->limit($p->offset.','.$p->limit)->select();
+		$this->assign('page', $p->showMultiNavi());
+		$this->assign('site_list', $site_list);
+		
+		$base['status'] = array('gt', 0);
+		$order = 'sort';
+		$category_list = $dCategory->where($base)->order($order)->select();
+		$this->assign('category_list',$category_list);
+
+		$where = $base + array('cate_id'=>$cate_id);
+		$hot_list = $dWebsite->where($where)->order('view desc')->limit(10)->select();
+		$new_list = $dWebsite->where($where)->order('id desc')->limit(10)->select();
+		$this->assign('hot_list', $hot_list);
+		$this->assign('new_list', $new_list);
 
 		$this->assign('content','cate');
 		$this->display('Layout:Index_layout');
@@ -85,30 +110,24 @@ class IndexAction extends Action{
 		$dWebsite->view = array('exp','(view+1)');
 		$dWebsite->save();
 
-		$dao = D('Vote');
-		$tmp_rs = $dao->where(array('site_id'=>$site_id))->getFields('vote');
+		$dVote = D('Vote');
+		$tmp_rs = $dVote->where(array('site_id'=>$site_id))->getFields('vote');
 		$site_info['vote_count'] = sizeof($tmp_rs);
 		$site_info['vote'] = sprintf("%.1f", array_sum($tmp_rs) / sizeof($tmp_rs));
 		$site_info['vote_width'] = 10*floor($site_info['vote']);
 
 		$dCategory = D('Category');
 		$site_info['cate_info'] = $dCategory->find($site_info['cate_id']);
-/*		
-		$dao = D('Comment');
-		$where['site_id'] = $site_id;
-		$where['status'] = array('gt', 0);
-		$rs['comment_list'] = $dao->where($where)->select();
-*/
+		$this->assign('site_info', $site_info);
+
 		$base['status'] = array('gt', 0);
 		$order = 'sort';
 		$category_list = $dCategory->where($base)->order($order)->select();
+		$this->assign('category_list',$category_list);
 
 		$where = $base + array('cate_id'=>$site_info['cate_id']);
 		$hot_list = $dWebsite->where($where)->order('view desc')->limit(10)->select();
 		$new_list = $dWebsite->where($where)->order('id desc')->limit(10)->select();
-
-		$this->assign('site_info', $site_info);
-		$this->assign('category_list',$category_list);
 		$this->assign('hot_list', $hot_list);
 		$this->assign('new_list', $new_list);
 
@@ -167,7 +186,7 @@ class IndexAction extends Action{
 		$rs = $dao->where($where)->order($order)->limit($p->offset.','.$p->limit)->select();
 
 		foreach($rs as $item){
-			echo '<dt>'.(''==$item['name']?'匿名':$item['name']).' 发表于 '.$item['addtime'].'</dt>';
+			echo '<dt><i>'.$item['addtime'].'</i>'.(''==$item['name']?'匿名':$item['name']).'</dt>';
 			echo '<dd>'.nl2br($item['content']).'</dd>';
 		}
 		echo $p->showJsNavi();
@@ -189,7 +208,7 @@ class IndexAction extends Action{
 			die('<script>parent.myAlert("发表成功");parent.myOK(1500);parent.get_comment(0);</script>');
 		}
 		else{
-			die('<script>parent.myAlert("发生错误啦，请稍后再试！");</script>');
+			die('<script>parent.myAlert("'.$_REQUEST['verify'].'发生错误啦，请稍后再试！");</script>');
 		}
 	}
 	public function get_thumb($url) {

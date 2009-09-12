@@ -21,7 +21,7 @@
 								<td width="120" id="vote">{$site_info.vote|substr=0,1}<small>{$site_info.vote|substr=1}</small></td>
 							</tr>
 							<tr>
-								<td >
+								<td>
 									<ul class="starrating">
 										<li style="width: {$site_info.vote_width}px; display: block;" id="currentrating"></li>
 										<li><a onmouseover="infen(1)" onmouseout="infen(0)" href="javascript:void(0);" class="star1">1</a></li>
@@ -40,14 +40,16 @@
 							</tr>
 							</table>
 						</li>
-						<li>网站名称: {$site_info.name} 人气: {$site_info.view}</li>
-						<li>网址: <a href="__URL__/goto/id/{$site_info.id}" target="_blank">{$site_info.url}</a>  <a href="__URL__/goto/id/{$site_info.id}" target="_blank"><img src="../Public/Images/enter.gif"/></a></li>
+						<li>
+							<span class="site_view">人气:&nbsp;&nbsp;<em>{$site_info.view}</em></span><span class="site_name">网站名称:&nbsp;&nbsp;<em>{$site_info.name}</em></span></li>
+						<li>
+							<strong>网址:</strong>&nbsp;&nbsp;<a href="__URL__/goto/id/{$site_info.id}" target="_blank">{$site_info.url}</a>&nbsp;&nbsp;&nbsp;<a href="__URL__/goto/id/{$site_info.id}" target="_blank"><img src="../Public/Images/enter.gif" align="absmiddle" /></a></li>
 					</ul>
 					<if condition="is_file('__APP__/../Html/Attach/thumb/'.$site_info['id'].'.jpg') eq true"><img class="site_thumb" src="__APP__/../Html/Attach/thumb/{$site_info['id']}.jpg" /></if>
 					<div class="clear"></div>
 				</li>
 				<li>
-					<p>{$site_info.descr|nl2br}</p>
+					<p class="site_intro">{$site_info.descr|nl2br}</p>
 				</li>
 				<li>
 					<dl id="comment">
@@ -55,56 +57,59 @@
 					</dl>
 				</li>
 				<li>
-					<strong>发表评论</strong>
+					<strong style="line-height:24px;">发表评论</strong>
 					<form name="comment_form" action="__URL__/add_comment" target="_iframe" method="post">
 					<input type="hidden" name="site_id" value="{$site_info.id}" />
-					<textarea cols="40" rows="5" name="content"></textarea><br />
-					<input type="hidden" name="name" size="20" value="匿名"/>
-					<input type="checkbox" name="anonymous" value="1" />匿名发表
+					<input type="hidden" name="email" value=""/>
+					<textarea cols="55" rows="8" name="content"></textarea><br />
+					<span id="username"><input type="hidden" name="name" value="匿名"/><input type="checkbox" name="anonymous" value="1" checked="true"/>匿名发表</span>
+					&nbsp;&nbsp;
 					验证码：<input TYPE="text" name="verify" size="4" > <img src="__URL__/verify" style="cursor:pointer" onclick="javascript:this.src='__URL__/verify?r='+Math.random();" alt="看不清？点击刷新" align="absmiddle" />&nbsp;&nbsp;
-					<input type="image" src="../Public/Images/submit_comment.gif" class="submit" value="提交评论"/>
+					<input type="image" src="../Public/Images/submit_comment.gif" style="border:none" align="absmiddle" class="submit" value="提交评论"/>
 					</form>
 				</li>
 			</ul>
 		</div><!-- end main -->
-		<div id="category" class="side">
-			<h2>网站分类</h2>
-			<ul>
-				<iterate name="category_list" id="item">
-				<if condition="ceil($i/2)%2 eq 0">
-				<li class="gray">&nbsp;&nbsp;<a href="__URL__/cate/id/{$item.id}/">{$item.name}</a></li>
-				<else />
-				<li>&nbsp;&nbsp;<a href="__URL__/cate/id/{$item.id}/">{$item.name}</a></li>
-				</if>
-				</iterate>
-				<div class="clear"></div>
-			</ul>
-		</div>
 		<div class="side">
-			<br />
-			<h2>本类热门网站</h2>
-			<h3><strong>网站名称</strong><strong>人气</strong><div class="clear"></div></h3>
-			<ul id="tab3" class="switch">
-				<iterate name="hot_list" id="item">
-				<li><a href="__URL__/site/id/{$item.id}/">{$item.name}</a><i>{$item.view}</i></li>
-				</iterate>
-				
-			</ul>
-			<ul id="tab4" class="switch" style="display:none">
-				<iterate name="week_list" id="item">
-				<li><a href="__URL__/site/id/{$item.id}/">{$item.name}</a><i>{$item.view}</i></li>
-				</iterate>
-			</ul>
-		</div>
-		<div class="side">
-			<br />
-			<h2>本类新入网站</h2>
-			<ul class="sort">
-				<iterate name="new_list" id="item">
-				<li><a href="__URL__/site/id/{$item['id']}/">{$item.name}</a><em><a href="__URL__/site/id/{$item['id']}">详细</a><span>&nbsp;|&nbsp;</span><a href="__URL__/goto/id/{$item['id']}">进入</a></em></li>
-				</iterate>
-				<div class="clear"></div>
-			</ul>
+			<div id="category" class="side">
+				<h2>网站分类</h2>
+				<ul>
+					<iterate name="category_list" id="item">
+					<if condition="ceil($i/2)%2 eq 0">
+					<li class="gray">&nbsp;&nbsp;<a href="__URL__/cate/id/{$item.id}/">{$item.name}</a></li>
+					<else />
+					<li>&nbsp;&nbsp;<a href="__URL__/cate/id/{$item.id}/">{$item.name}</a></li>
+					</if>
+					</iterate>
+					<div class="clear"></div>
+				</ul>
+			</div>
+			<div class="side">
+				<br />
+				<h2>本类热门网站</h2>
+				<h3><strong>网站名称</strong><strong>人气</strong><div class="clear"></div></h3>
+				<ul id="tab3" class="switch">
+					<iterate name="hot_list" id="item">
+					<li><a href="__URL__/site/id/{$item.id}/">{$item.name}</a><i>{$item.view}</i></li>
+					</iterate>
+					
+				</ul>
+				<ul id="tab4" class="switch" style="display:none">
+					<iterate name="week_list" id="item">
+					<li><a href="__URL__/site/id/{$item.id}/">{$item.name}</a><i>{$item.view}</i></li>
+					</iterate>
+				</ul>
+			</div>
+			<div class="side">
+				<br />
+				<h2>本类新入网站</h2>
+				<ul class="sort">
+					<iterate name="new_list" id="item">
+					<li><a href="__URL__/site/id/{$item['id']}/">{$item.name}</a><em><a href="__URL__/site/id/{$item['id']}">详细</a><span>&nbsp;|&nbsp;</span><a href="__URL__/goto/id/{$item['id']}">进入</a></em></li>
+					</iterate>
+					<div class="clear"></div>
+				</ul>
+			</div>
 		</div>
 	</div><!-- end detail -->
 	<div class="clear"></div>
