@@ -7,35 +7,53 @@ class IndexAction extends Action{
 			$mark_list = S('mark_list');
 		}
 		else {
-			$dao = D('Category');
-			$where['status'] = array('gt', 0);
+			$dCategory = D('Category');
+			$base['status'] = array('gt', 0);
 			$order = 'sort';
-			$rs = $dao->where($where)->order($order)->select();
+			$rs = $dCategory->where($base)->order($order)->select();
 			!$rs && $rs = array();
-			$dao = D('Website');
-			foreach($rs as $key=>$val){
-				$list[$val['id']] = $val;
-				$list[$val['id']]['site_list'] = array();
-				$where['cate_id'] = $val['id'];
-				$where['status'] = array('gt', 0);
-				$order = 'sort';
-				$limit = 5;
-				$rs2 = $dao->where($where)->order($order)->limit($limit)->select();
-				!$rs2 && $rs2 = array();
+			$dWebsite = D('Website');
+			foreach($rs as $key=>$val) {
+				$where = $base + array('cate_id' => $val['id']);
+				$rs2 = $dWebsite->where($where)->order($order)->limit(5)->select();
+				if(!$rs2) {
+					continue;
+				}
+				$category_list[$val['id']] = $val;
+				$category_list[$val['id']]['site_list'] = array();
 				foreach($rs2 as $key2=>$val2){
-					$list[$val['id']]['site_list'][$val2['id']] = $val2;
+					$category_list[$val['id']]['site_list'][$val2['id']] = $val2;
 				}
 			}
-			$hot_list = $dao->where(array('status'=>array('gt',0)))->order('view desc')->limit(10)->select();
-			$mark_list = $dao->where(array('status'=>array('gt',0),'flag'=>array('gt',0)))->limit(12)->select();
-			S('list',$list);
+
+			$where = $base + array('famous'=>1);
+			$famous_list = $dWebsite->where($where)->order($order)->limit(45)->select();
+
+			$where = $base + array('recommend'=>1);
+			$recommend_list = $dWebsite->where($where)->order($order)->limit(45)->select();
+
+			$where = $base + array('famous'=>1) + array('recommend'=>1) + array('flag'=>1);
+			$pic_list = $dWebsite->where($where)->order($order)->limit(5)->select();
+			
+			$hot_list = $dWebsite->where($base)->order('view desc')->limit(10)->select();
+			$week_list = $dWebsite->where($base)->order('view desc')->limit(10)->select();
+			
+			$new_list = $dWebsite->where($base)->order('id desc')->limit(10)->select();
+			foreach($new_list as $key=>$val) {
+				$new_list[$key]['cate_info'] = $dCategory->find($val['cate_id']);
+			}
+			//S('list',$list);
 			S('hot_list',$hot_list);
 			S('mark_list',$mark_list);
 		}
 	//	dump($list);
+		$this->assign('category_list',$category_list);
+		$this->assign('famous_list', $famous_list);
+		$this->assign('recommend_list', $recommend_list);
+		$this->assign('pic_list', $pic_list);
 		$this->assign('hot_list', $hot_list);
-		$this->assign('mark_list', $mark_list);
-		$this->assign('list',$list);
+		$this->assign('week_list', $week_list);
+		$this->assign('new_list', $new_list);
 
 		$this->assign('content','index');
 		$this->display('Layout:Index_layout');
@@ -61,29 +79,39 @@ class IndexAction extends Action{
 
 	public function site(){
 		$site_id = $_REQUEST['id'];
-		$dao = D('Website');
-		$rs = $dao->find($site_id);
-		$dao->view = array('exp','(view+1)');
-		$dao->save();
 
-//		$rs['thumb'] = self::get_thumb($rs['url']);
-		
+		$dWebsite = D('Website');
+		$site_info = $dWebsite->find($site_id);
+		$dWebsite->view = array('exp','(view+1)');
+		$dWebsite->save();
+
 		$dao = D('Vote');
 		$tmp_rs = $dao->where(array('site_id'=>$site_id))->getFields('vote');
-		$rs['vote_count'] = sizeof($tmp_rs);
-		$rs['vote'] = sprintf("%.1f", array_sum($tmp_rs) / sizeof($tmp_rs));
-		$rs['vote_width'] = 10*floor($rs['vote']);
-		
+		$site_info['vote_count'] = sizeof($tmp_rs);
+		$site_info['vote'] = sprintf("%.1f", array_sum($tmp_rs) / sizeof($tmp_rs));
+		$site_info['vote_width'] = 10*floor($site_info['vote']);
 
-		$dao = D('Category');
-		$rs['cate_info'] = $dao->find($rs['cate_id']);
+		$dCategory = D('Category');
+		$site_info['cate_info'] = $dCategory->find($site_info['cate_id']);
 /*		
 		$dao = D('Comment');
 		$where['site_id'] = $site_id;
 		$where['status'] = array('gt', 0);
 		$rs['comment_list'] = $dao->where($where)->select();
 */
-		$this->assign('site_info', $rs);
+		$base['status'] = array('gt', 0);
+		$order = 'sort';
+		$category_list = $dCategory->where($base)->order($order)->select();
+
+		$where = $base + array('cate_id'=>$site_info['cate_id']);
+		$hot_list = $dWebsite->where($where)->order('view desc')->limit(10)->select();
+		$new_list = $dWebsite->where($where)->order('id desc')->limit(10)->select();
+
+		$this->assign('site_info', $site_info);
+		$this->assign('category_list',$category_list);
+		$this->assign('hot_list', $hot_list);
+		$this->assign('new_list', $new_list);
+
 		$this->assign('content','site');
 		$this->display('Layout:Index_layout');
 	}
