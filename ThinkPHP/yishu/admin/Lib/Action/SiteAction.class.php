@@ -53,6 +53,12 @@ class SiteAction extends BaseAction{
 			$where['status'] = $_REQUEST['status'];
 			$order = 'id desc';
 		}
+		if(!empty($_REQUEST['famous'])) {
+			$where['famous'] = $_REQUEST['famous'];
+		}
+		if(!empty($_REQUEST['recommend'])) {
+			$where['recommend'] = $_REQUEST['recommend'];
+		}
 		
 		$max_sort = $this->dao->where($where)->getField("max(sort)");//获取当前条件下所有网站的最大sort值，用于分配给新增网站的默认sort值
 		$count = $this->dao->where($where)->getField('count(*)');//获取当前条件下所有网站的个数，用于分页

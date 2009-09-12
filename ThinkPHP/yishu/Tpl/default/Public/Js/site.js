@@ -52,7 +52,8 @@ jQuery(document).ready(function(){
 						myOK(1500);
 						var arr = str.split('|');
 						jQuery("#vote_count").text(arr[0]);
-						jQuery("#vote").text(arr[1]);
+						jQuery("#vote").text(arr[1].substr(0,1));
+						jQuery("#vote small").text(arr[1].substr(1));
 						jQuery("#currentrating").css("width",arr[2]+'px');
 					}
 				});
