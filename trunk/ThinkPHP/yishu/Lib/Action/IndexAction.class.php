@@ -1,10 +1,14 @@
 <?php
 class IndexAction extends Action{
 	public function index(){
-		if(S('list')) {
-			$list = S('list');
+		if(S('category_list')) {
+			$category_list = S('category_list');
+			$famous_list = S('famous_list');
+			$recommend_list = S('recommend_list');
+			$pic_list = S('pic_list');
 			$hot_list = S('hot_list');
-			$mark_list = S('mark_list');
+			$week_list = S('week_list');
+			$new_list = S('new_list');
 		}
 		else {
 			$dCategory = D('Category');
@@ -25,26 +29,30 @@ class IndexAction extends Action{
 					$category_list[$val['id']]['site_list'][$val2['id']] = $val2;
 				}
 			}
+			S('category_list', $category_list);
 
 			$where = $base + array('famous'=>1);
 			$famous_list = $dWebsite->where($where)->order($order)->limit(45)->select();
+			S('famous_list', $famous_list);
 
 			$where = $base + array('recommend'=>1);
 			$recommend_list = $dWebsite->where($where)->order($order)->limit(45)->select();
+			S('recommend_list', $recommend_list);
 
 			$where = $base + array('famous'=>1) + array('recommend'=>1) + array('flag'=>1);
 			$pic_list = $dWebsite->where($where)->order($order)->limit(5)->select();
-			
+			S('pic_list', $pic_list);
+
 			$hot_list = $dWebsite->where($base)->order('view desc')->limit(10)->select();
 			$week_list = $dWebsite->where($base)->order('view desc')->limit(10)->select();
-			
+			S('hot_list', $hot_list);
+			S('week_list', $week_list);
+
 			$new_list = $dWebsite->where($base)->order('id desc')->limit(10)->select();
 			foreach($new_list as $key=>$val) {
 				$new_list[$key]['cate_info'] = $dCategory->find($val['cate_id']);
 			}
-			//S('list',$list);
-			S('hot_list',$hot_list);
-			S('mark_list',$mark_list);
+			S('new_list',$new_list);
 		}
 	//	dump($list);
 		$this->assign('category_list',$category_list);

@@ -4,7 +4,7 @@ if($_SERVER["SERVER_NAME"]=='localhost') {
 		// 定义数据库连接信息
 		'DB_TYPE'=> 'mysql',
 		'DB_HOST'=> 'localhost',
-		'DB_NAME'=>'yishu',
+		'DB_NAME'=>'yishu321',
 		'DB_USER'=>'root',
 		'DB_PWD'=>'',
 		'DB_PORT'=>'3306',
@@ -17,11 +17,11 @@ if($_SERVER["SERVER_NAME"]=='localhost') {
 		'APP_DOMAIN_DEPLOY' => false, //域名根目录下设为true
 
 		'DATA_CACHE_TYPE'=>'file',	//数据缓存方式：文件
-		'DATA_CACHE_TIME'=>10,		//数据缓存有效期 10 秒
+		'DATA_CACHE_TIME'=>100,		//数据缓存有效期 10 秒
 
 		'HTML_CACHE_ON'=>true,
 		'HTML_FILE_SUFFIX'=>'.html',
-		'HTML_CACHE_TIME'=>10,
+		'HTML_CACHE_TIME'=>1000,
 		'HTML_READ_TYPE'=>0,
 	);
 }
@@ -43,11 +43,11 @@ else{
 		'APP_DOMAIN_DEPLOY' => true, //域名根目录下设为true
 
 		'DATA_CACHE_TYPE'=>'file',	//数据缓存方式：文件
-		'DATA_CACHE_TIME'=>10,		//数据缓存有效期 10 秒
+		'DATA_CACHE_TIME'=>86400,		//数据缓存有效期 10 秒
 
 		'HTML_CACHE_ON'=>false,
 		'HTML_FILE_SUFFIX'=>'.html',
-		'HTML_CACHE_TIME'=>10,
+		'HTML_CACHE_TIME'=>86400,
 		'HTML_READ_TYPE'=>0,
 	);
 }
