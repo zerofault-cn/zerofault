@@ -25,7 +25,7 @@ CREATE TABLE `erp_commodity` (
   `code` varchar(255) NOT NULL,
   `name` varchar(255) NOT NULL,
   PRIMARY KEY  (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `erp_commodity`
@@ -49,7 +49,7 @@ CREATE TABLE `erp_department` (
   `function` varchar(255) NOT NULL,
   `leader` varchar(255) NOT NULL,
   PRIMARY KEY  (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `erp_department`
@@ -60,6 +60,28 @@ CREATE TABLE `erp_department` (
 LOCK TABLES `erp_department` WRITE;
 UNLOCK TABLES;
 /*!40000 ALTER TABLE `erp_department` ENABLE KEYS */;
+
+--
+-- Table structure for table `erp_dept_leader`
+--
+
+DROP TABLE IF EXISTS `erp_dept_leader`;
+CREATE TABLE `erp_dept_leader` (
+  `id` int(10) unsigned NOT NULL auto_increment,
+  `dept_id` int(10) unsigned NOT NULL,
+  `staff_id` int(10) unsigned NOT NULL,
+  PRIMARY KEY  (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `erp_dept_leader`
+--
+
+
+/*!40000 ALTER TABLE `erp_dept_leader` DISABLE KEYS */;
+LOCK TABLES `erp_dept_leader` WRITE;
+UNLOCK TABLES;
+/*!40000 ALTER TABLE `erp_dept_leader` ENABLE KEYS */;
 
 --
 -- Table structure for table `erp_node`
@@ -87,6 +109,31 @@ LOCK TABLES `erp_node` WRITE;
 INSERT INTO `erp_node` VALUES (1,0,'Index','首页','',2,0),(4,3,'delete','删除','',3,0),(3,0,'User','用户管理','',2,0),(5,3,'edit','编辑','',3,0),(6,0,'Role','角色管理','',2,0),(8,6,'index','列表','',3,0);
 UNLOCK TABLES;
 /*!40000 ALTER TABLE `erp_node` ENABLE KEYS */;
+
+--
+-- Table structure for table `erp_options`
+--
+
+DROP TABLE IF EXISTS `erp_options`;
+CREATE TABLE `erp_options` (
+  `id` int(10) unsigned NOT NULL auto_increment,
+  `name` varchar(255) NOT NULL,
+  `title` varchar(255) NOT NULL,
+  `value` varchar(255) NOT NULL,
+  `sort` smallint(5) unsigned NOT NULL default '0',
+  PRIMARY KEY  (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `erp_options`
+--
+
+
+/*!40000 ALTER TABLE `erp_options` DISABLE KEYS */;
+LOCK TABLES `erp_options` WRITE;
+INSERT INTO `erp_options` VALUES (1,'character','Agent','',1),(2,'character','Manufacture','',2),(3,'character','Other','',9),(4,'payment_terms','Due 20th Of the Following Month','',1),(5,'payment_terms','Due By End Of The Following Month','',2),(6,'payment_terms','Payment due within 7 days','',3),(7,'payment_terms','Cash Only','',4),(8,'tax','Default tax group','',1),(9,'tax','Ontario','',2),(10,'tax','UK Inland Revenue','',3);
+UNLOCK TABLES;
+/*!40000 ALTER TABLE `erp_options` ENABLE KEYS */;
 
 --
 -- Table structure for table `erp_role`
@@ -149,7 +196,7 @@ CREATE TABLE `erp_staff` (
   `login_time` datetime NOT NULL,
   `status` tinyint(1) unsigned NOT NULL,
   PRIMARY KEY  (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `erp_staff`
@@ -158,7 +205,7 @@ CREATE TABLE `erp_staff` (
 
 /*!40000 ALTER TABLE `erp_staff` DISABLE KEYS */;
 LOCK TABLES `erp_staff` WRITE;
-INSERT INTO `erp_staff` VALUES (1,'E0001','admin','Administrator','21232f297a57a5a743894a0e4a801fc3','zerofault@gmail.com','0000-00-00 00:00:00','2009-09-10 23:40:29',1);
+INSERT INTO `erp_staff` VALUES (1,'E0001','admin','Administrator','21232f297a57a5a743894a0e4a801fc3','zerofault@gmail.com','0000-00-00 00:00:00','2009-09-13 11:32:43',1);
 UNLOCK TABLES;
 /*!40000 ALTER TABLE `erp_staff` ENABLE KEYS */;
 
@@ -208,7 +255,7 @@ CREATE TABLE `erp_supplier` (
   `website` varchar(255) NOT NULL,
   `remark` tinytext NOT NULL,
   PRIMARY KEY  (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `erp_supplier`
@@ -217,6 +264,7 @@ CREATE TABLE `erp_supplier` (
 
 /*!40000 ALTER TABLE `erp_supplier` DISABLE KEYS */;
 LOCK TABLES `erp_supplier` WRITE;
+INSERT INTO `erp_supplier` VALUES (1,'S00001','ss1','2','add1','','','0123456','','','','','','20','1','AUD','','good\r\nok'),(2,'S00002','ss2','2','','','','','','','','','','20','1','AUD','','');
 UNLOCK TABLES;
 /*!40000 ALTER TABLE `erp_supplier` ENABLE KEYS */;
 
