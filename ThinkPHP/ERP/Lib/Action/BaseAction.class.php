@@ -25,6 +25,9 @@ class BaseAction extends Action{
 				unset($menu[$key]);
 				continue;
 			}
+			if(empty($val['submenu']) || !is_array($val['submenu'])) {
+				continue;
+			}
 			foreach($val['submenu'] as $key2=>$val2) {
 				if(!RBAC::AccessDecision($val2, 'index')) {
 					unset($menu[$key]['submenu'][$key2]);
@@ -67,10 +70,12 @@ class BaseAction extends Action{
 	*/
 	protected function _success($msg,$url='',$timeout=2000){
 		$html  = '<script language="JavaScript" type="text/javascript">';
-		$html .= 'parent.myAlert("'.$msg.'");';
+		if($msg) {
+			$html .= 'parent.myAlert("'.$msg.'");';
+		}
 		$html .= 'parent.myLocation("'.$url.'",'.$timeout.');';
 		$html .= '</script>';
-		return $html;
+		die($html);
 	}
 	/**
 	*
@@ -84,9 +89,9 @@ class BaseAction extends Action{
 	protected function _error($msg,$timeout=0){
 		$html  = '<script language="JavaScript" type="text/javascript">';
 		$html .= 'parent.myAlert("'.$msg.'");';
-		$timeout && $html .= 'parent.myOK('.$timeout.');';
+		!empty($timeout) && $html .= 'parent.myOK('.$timeout.');';
 		$html .= '</script>';
-		return $html;
+		die($html);
 	}
 	/**
 	*

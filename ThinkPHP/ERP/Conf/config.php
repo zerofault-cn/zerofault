@@ -10,7 +10,7 @@ if($_SERVER["SERVER_NAME"]=='localhost') {
 		'DB_PREFIX'=>'erp_',
 
 		'EXTEND_CONFIG_LIST'=>array('menu'),
-	//	'DEBUG_MODE'=>true, //开启调试模式
+		'DEBUG_MODE'=>true, //开启调试模式
 	//	'SHOW_PAGE_TRACE' => TRUE,
 
 		'APP_DOMAIN_DEPLOY' => false, //项目在域名根时设为true
