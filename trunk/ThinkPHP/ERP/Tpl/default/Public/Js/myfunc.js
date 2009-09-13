@@ -13,7 +13,10 @@ function myOK(intval)
 }
 function myLocation(loc,intval)
 {
-	if(intval==''){
+	if(intval == 0) {
+		window.location.href = (loc==''? window.location.href : loc);
+	}
+	if(intval=='') {
 		intval = 2000;
 	}
 	setTimeout(function() {

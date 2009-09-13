@@ -1,4 +1,4 @@
-<p class="page_title_text"><b>Supplier</b></p>
+<p class="page_title_text"><img src="../Public/Images/supplier.gif" align="absmiddle"/> Supplier</p>
 <table cellpadding="4" border="2" width="90%">
 <tr>
 	<th width="33%">Supplier Inquiries</th>
@@ -9,11 +9,11 @@
 	<td valign="TOP" class="menu_group_items"></td>
 	<td valign="TOP" class="menu_group_items"></td>
 	<td valign="TOP" class="menu_group_items">
-		<a href="/webERP/Suppliers.php?">Add a New Supplier</a><br/>
+		<a href="__URL__/form">Add a New Supplier</a><br/>
 	</td>
 </tr>
 </table>
-<form method="POST" action="/webERP/SelectSupplier.php?">
+<form method="post" action="">
 <p class="page_title_text"><b> Search for Suppliers</b></p>
 <table cellpadding="3" colspan="4">
 <tr>
@@ -24,7 +24,28 @@
 	<td><input type="Text" maxlength="18" size="15" value="" name="SupplierCode"/></td>
 </tr>
 </table>
-<center>
-<input type="SUBMIT" value="Search Now" name="Search"/>
-</center>
+<p class="center">
+<input type="submit" value="Search Now" name="Search"/>
+</p>
 </form>
+<present name="result">
+<table cellpadding="2" border="1">
+<tr>
+<tr>
+	<th>Code</th>
+	<th>Supplier Name</th>
+	<th>Character</th>
+	<th>Currency</th>
+	<th>Address</th>
+</tr>
+<iterate name="result" id="item">
+<tr>
+	<td>{$item['code']}</td>
+	<td>{$item['name']}</td>
+	<td>{$item['Character_Value']}</td>
+	<td>{$item['currency']}</td>
+	<td>{$item['address']}</td>
+</tr>
+</iterate>
+</table>
+</present>

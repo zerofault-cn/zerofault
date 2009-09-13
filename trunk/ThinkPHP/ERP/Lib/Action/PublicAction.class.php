@@ -26,10 +26,10 @@ class PublicAction extends BaseAction{
 	*/
 	public function checkLogin(){
 		if(empty($_REQUEST['name'])) {
-			die(self::_error('User ID required'));
+			self::_error('User ID required');
 		}
 		elseif (empty($_REQUEST['password'])){
-			die(self::_error('Password Required'));
+			self::_error('Password Required');
 		}
 		//生成认证条件
 		$map			= array();
@@ -40,7 +40,7 @@ class PublicAction extends BaseAction{
 		// 进行委托认证
 		$authInfo = RBAC::authenticate($map, 'Staff');
 		if(false === $authInfo) {
-			die(self::_error('Error: Wrong account or password!'));
+			self::_error('Error: Wrong User ID or Password!');
 		}
 		else{
 			$_SESSION[C('USER_AUTH_KEY')]	=	$authInfo['id'];
@@ -54,7 +54,7 @@ class PublicAction extends BaseAction{
 			}
 			// 缓存访问权限
 			RBAC::saveAccessList($authInfo['id']);
-			die(self::_success('Success!',__APP__.'/'.Session::get('lastModule'),0));
+			self::_success('',__APP__.'/'.Session::get('lastModule'),0);
 		}
 	}
 	/**
@@ -63,7 +63,7 @@ class PublicAction extends BaseAction{
 	*/
 	public function logout(){
 		Session::clear();
-		die(self::_success('You have Logout!', __APP__, 500));
+		self::_success('You have Logout!', __APP__);
 	}
 
 }

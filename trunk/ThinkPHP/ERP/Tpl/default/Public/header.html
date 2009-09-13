@@ -2,8 +2,7 @@
 <tr>
 	<td class="quick_menu_left" align="left" style="width: 100%;">
 	<if condition="!empty($_SESSION['loginUserName'])">
-			User Name: {@loginUserName}&nbsp;&nbsp;<br />
-			<a href="__APP__/../index.php" target="_blank">Change Password</a>&nbsp;&nbsp;
+			<a href="__APP__/Staff/chgpwd"><img src="../Public/Images/user.gif" alt="User" align="absmiddle"/> {@loginUserName}<br />
 			<a href="__APP__/Public/logout" target="_iframe">Logout</a>
 			</if>
 	</td>
@@ -19,21 +18,21 @@
 	</tr>
 </table>
 
+<present name="submenu">
 <table cellspacing="0" cellpadding="0" border="0" width="100%" class="main_menu">
 <tr>
 	<td class="main_menu">
 		<table class="main_menu">
 		<tr>
-			<present name="submenu">
 			<iterate name="submenu" id="item">
 			<if condition="MODULE_NAME eq $item">
-			<td class="main_menu_selected"><a href="__APP__/{$item}">{$item}</a></td>
+			<td class="main_menu_selected"><a href="__APP__/{$item}">{$key}</a></td>
 			<else />
-			<td class="main_menu_unselected"><a href="__APP__/{$item}">{$item}</a></td>
+			<td class="main_menu_unselected"><a href="__APP__/{$item}">{$key}</a></td>
 			</if>
 			</iterate>
-			</present>
 		</table>
 	</td>
 </tr>
 </table>
+</present>

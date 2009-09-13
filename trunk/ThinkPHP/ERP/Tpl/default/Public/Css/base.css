@@ -29,11 +29,24 @@ a{color:#00f;text-decoration:none;font-weight:normal;}
 a:hover,a:active,a.active{color:#f20;text-decoration: underline;}
 .clear{clear:both;}
 
-#container{
-	background-color:white;
-}
 table {
+	margin:0 auto;
 	background-color:#EEEEFF;
+}
+th {
+	background-color:#CCCCE5;
+	color:#330000;
+	font-size:12px;
+	font-weight:normal;
+	text-align:center;
+}
+div.center{
+	margin:0 auto;
+	text-align:center;
+}
+p.center{
+	padding:10px;
+	text-align:center;
 }
 .quick_menu {
 	background-color:white;
@@ -92,8 +105,16 @@ table {
 	text-align:center;
 	white-space:nowrap;
 }
+div.main{
+	background-color:white;
+}
 
-
+.page_title_text {
+	padding:10px;
+	margin:0;
+	font-weight:bold;
+	text-align:center;
+}
 
 #footer{
 	padding:10px;
@@ -103,145 +124,3 @@ table {
 
 
 
-table#main a{
-	color:#0000ff;
-}
-table#main a.red{
-	color:#ff0000;
-}
-table#main a:hover{
-	color:#0066ff;
-}
-
-table#main th{
-	color:#666666;
-	font-size:10pt;
-	font-weight:bolder;
-	line-height:18pt;
-}
-table#main td button{font-size:12px;margin:0;padding:0;line-height:12px;}
-
-table#main td{
-	text-align:center;
-	font-size:9pt;
-}
-table#main td.a_left,table#main form table.a_center td.a_left{
-	text-align:left;
-	vertical-align:top;
-}
-table#main td.a_right{
-	text-align:right;
-	vertical-align:top;
-}
-table#main td.disable{
-	color:#999;
-}
-table#main form td{
-	text-align:left;
-	vertical-align:top;
-}
-table#main td.a_center,table#main table.a_center td{
-	text-align:center;
-	vertical-align:middle;
-}
-table#main .addForm{
-	padding:10px;
-	text-align:left;
-	line-height:200%;
-}
-table#main .addForm dl{
-	float:left;
-	width:180px;
-	border:1px dashed #ddd;
-	margin:3px;
-}
-table#main .addForm dt{
-	padding:1px 3px;
-	background:#C8C8FF;
-}
-table#main .addForm dd{
-	padding:3px;
-	background:#D6FFFF;
-}
-table#main .editForm, table#main .editAttach, table#main .showThumb{
-	position:relative;
-}
-table#main .editForm div{
-	display:none;
-	z-index:100;
-	position:absolute;
-	left:-16px;
-	top:-16px;
-	width:350px;
-	padding:0px 8px 10px;
-	_padding-top:8px;
-	
-	background:#F0F0F0;
-	text-align:left;
-	color:#006;
-	line-height:240%;
-}
-table#main .editForm fieldset{
-	border:3px solid #FCD410;
-	background:#FFFFFF;
-}
-table#main .editAttach div{
-	display:none;
-	z-index:80;
-	position:absolute;
-	left:-20px;
-	top:-30px;
-	_top:-20px;
-	width:210px;
-	padding:10px;
-	border:3px solid #FCD410;
-	background:#FFFFFF;
-	text-align:left;
-	color:#006;
-	line-height:240%;
-}
-table#main .showThumb div{
-	display:none;
-	z-index:90;
-	position:absolute;
-	left:-10px;
-	top:20px;
-	_top:30px;
-	width:400px;
-	padding:0px;
-	border:3px solid #FCD410;
-	background:#FFFFFF;
-	text-align:left;
-	color:#006;
-	line-height:240%;
-}
-table#main input.file{
-	width:120px;
-	width:200px\9;
-}
-table#main .editForm input.name{
-	width:160px;
-}
-table#main .editForm input.sort{
-	width:30px;
-}
-table#main .editForm input.url{
-	width:260px;
-}
-table#main .editForm textarea.descr{
-	width:320px;
-	height:150px;
-}
-table#main .paginator a:link, table#main .paginator a:visited{
-	text-decoration:underline;
-}
-table#main .paginator a:hover, table#main .paginator a:active{
-	text-decoration:none;
-}
-
-fieldset.addForm{
-	text-align:left;
-}
-table#main #table td span.c0{
-	color:red;
-}

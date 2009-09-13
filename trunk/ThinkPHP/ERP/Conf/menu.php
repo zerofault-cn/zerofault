@@ -2,7 +2,7 @@
 $menu = array();
 
 $menu['Basic Data'] = array(
-	'name'	  => 'Category',//默认操作Module.index
+	'name'	  => 'Supplier',//默认操作Module.index
 	'submenu' => array(
 		'Supplier information'	=> 'Supplier',
 		'Department information'=> 'Dept',
@@ -36,7 +36,7 @@ $menu['Inventory output<br />Management'] = array(
 	);
 
 $menu['Purchase<br />management'] = array(
-	'name' => 'feedback',
+	'name' => 'Feedback',
 	);
 
 $menu['System'] = array(
