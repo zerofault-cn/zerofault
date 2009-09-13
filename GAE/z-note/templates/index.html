@@ -7,7 +7,6 @@
 		behavior:url(#default#VML);
 	}
 	</style>
-
 	<title>{% block title %}足迹记录 - z-note.appspot.com{% endblock %}</title>
 	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 	<meta name="keywords" content="GPS Trace google map" />
@@ -19,19 +18,23 @@
 <body>
 <div id="container">
 	<div id="header">
-		{% if nickname %}
-			你好，{{ nickname }}!
-		{% endif %}
-		<a href="{{ auth_url }}" title="登入/出Google帐户" class="lm">{% ifequal auth_text 'signin' %}登入{% else %}退出{% endifequal %}</a>
-		<br />
-		{% if nickname %}
-		<form method="post" action="upload" enctype="multipart/form-data">
-		上传CSV或GPX文件：<input type="file" id="data" name="data" size="10"/>
-		<input type="button" id="upload" value="上传" />
-		</form>
-		{% endif %}
+		<h1>记录、分享、回忆</h1>
+		<div class="info">
+			{% if nickname %}
+				你好，{{ nickname }}!
+			{% endif %}
+			<a href="{{ auth_url }}" title="登入/出Google帐户" class="lm">{% ifequal auth_text 'signin' %}登入{% else %}退出{% endifequal %}</a><br />
+			{% if nickname %}
+			<form method="post" action="upload" enctype="multipart/form-data">
+			上传CSV或GPX文件：<input type="file" id="data" name="data" size="10"/>
+			<input type="button" id="upload" value="上传" />
+			</form>
+			{% endif %}
+		</div>
+		<div class="clear"></div>
 	</div>
-	
+	<div class="clear"></div>
+
 	<div id="main">
 		<div class="left">
 			<div id="gmap"></div>

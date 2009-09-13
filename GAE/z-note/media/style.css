@@ -1,5 +1,5 @@
 body{
-	padding: 10px; margin: 0; font-size: 12px; font-family:Geneva, Arial, Helvetica, sans-serif;
+	padding: 0 10px; margin: 0; font-size: 12px; font-family:Geneva, Arial, Helvetica, sans-serif;
 	line-height:180%;
 }
 a { color: #333; text-decoration: none; cursor: pointer; }
@@ -9,16 +9,32 @@ li { list-style: none; white-space: nowrap; }
 input,textarea { border: 1px solid #ccc; padding-left: 2px; padding-right: 2px; }
 textarea { overflow: auto; }
 input .checkbox { border: none; }
-h1 { font-size: 12pt; margin-top: 25px; font-weight: bold; color: #FF9933; text-decoration: none; line-height:150%; }
-h2 { font-size: 13px; color: #000; text-decoration: none; margin-top: 20px; margin-bottom: 5px; font-weight: bold; cursor: pointer; }
-h2:hover { color: #f93; text-decoration: none; }
-h3 { font-size: 13px; color: #000; text-decoration: none; margin-top: 20px; margin-bottom: 5px; font-weight: bold; cursor: pointer; }
-h3:hover { color: #f93; text-decoration: none; }
 .clear{clear:both;}
 
 /*************    ¶¥²¿    **************/
-#header { text-align: right; height: 45px !important; height: 35px; margin-top: 5px; }
-
+#header{
+	margin:0;
+	padding:10px 0;
+}
+#header h1{
+	float:left;
+	width:300px;
+	margin:0;
+	padding:0;
+	height:45px;
+	text-align:left;
+	color:#660000;
+	font-size:24px;
+	line-height:24px;
+}
+#header div.info{
+	float:right;
+	width:400px;
+	margin:0;
+	text-align: right; 
+	height: 45px !important; 
+	height: 35px; 
+}
 .left{
 	float:left;
 	width:560px;
