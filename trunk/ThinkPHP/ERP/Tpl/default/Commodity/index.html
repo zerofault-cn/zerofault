@@ -1,0 +1,19 @@
+<p class="page_title_text"> Commodity</p>
+<table cellpadding="2" border="1">
+<tr>
+<tr>
+	<th>Commodity Code</th>
+	<th>Commodity Name</th>
+	<th></th>
+</tr>
+<iterate name="result" id="item">
+<tr>
+	<td>{$item['code']}</td>
+	<td>{$item['name']}</td>
+	<td><a href="__URL__/form/id/{$item['id']}">Edit</a></td>
+</tr>
+</iterate>
+</table>
+<p class="center">
+	<input type="button" onclick="javascript:document.location='__URL__/form';" value="Add a New Commodity" />
+</p>

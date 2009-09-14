@@ -1,13 +1,12 @@
 <?php
 import('RelationModel');
-class NodeModel extends RelationModel{
+class DepartmentModel extends RelationModel{
 	protected $_link = array(
 		'Staff' => array(
-			'mapping_type' => HAS_ONE,
-			'mapping_name' => 'subNode',
-			'mapping_limit' => 0,
-			'mapping_order' => '',
-			'parent_key' => 'pid'
+			'mapping_type' => BELONGS_TO,
+			'mapping_name' => 'leader',
+			'class_name'   => 'Staff',
+			'foreign_key'  => 'leader_id',
 			)
 	);
 }

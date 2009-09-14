@@ -128,5 +128,30 @@ class BaseAction extends Action{
 			die(self::_error('Error!'));
 		}
 	}
+
+	/**
+	*
+	* 根据数组生成HTML格式的下拉列表选项
+	* 生成格式<options value="id" selected="true">name</option>
+	* @param array $rs 从元数据表中取出的ResultSet
+	* @param integer $selected_id 默认选中的value值
+	* @param string $title 供下拉列表中显示的字段
+	* @param string $value 充当下拉列表值的字段
+	*/
+	protected function genOptions($rs=array(), $selected_id=0, $title='name', $value='id') {
+		$str = '';
+		if(empty($rs) || !is_array($rs)) {
+			return $str;
+		}
+		foreach($rs as $key=>$val) {
+			if($selected_id == $val[$value]) {
+				$str .= '<option value="'.$val[$value].'" selected="true">'.$val[$title].'</option>';
+			}
+			else{
+				$str .= '<option value="'.$val[$value].'">'.$val[$title].'</option>';
+			}
+		}
+		return $str;
+	}
 }
 ?>
