@@ -21,7 +21,7 @@
 
 DROP TABLE IF EXISTS `erp_commodity`;
 CREATE TABLE `erp_commodity` (
-  `id` int(10) unsigned NOT NULL,
+  `id` int(10) unsigned NOT NULL auto_increment,
   `code` varchar(255) NOT NULL,
   `name` varchar(255) NOT NULL,
   PRIMARY KEY  (`id`)
@@ -34,6 +34,7 @@ CREATE TABLE `erp_commodity` (
 
 /*!40000 ALTER TABLE `erp_commodity` DISABLE KEYS */;
 LOCK TABLES `erp_commodity` WRITE;
+INSERT INTO `erp_commodity` VALUES (1,'P001','Resistor'),(2,'P002','Capacitor');
 UNLOCK TABLES;
 /*!40000 ALTER TABLE `erp_commodity` ENABLE KEYS */;
 
@@ -47,7 +48,7 @@ CREATE TABLE `erp_department` (
   `code` varchar(255) NOT NULL,
   `name` varchar(255) NOT NULL,
   `function` varchar(255) NOT NULL,
-  `leader` varchar(255) NOT NULL,
+  `leader_id` int(10) unsigned NOT NULL,
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
@@ -58,30 +59,9 @@ CREATE TABLE `erp_department` (
 
 /*!40000 ALTER TABLE `erp_department` DISABLE KEYS */;
 LOCK TABLES `erp_department` WRITE;
+INSERT INTO `erp_department` VALUES (1,'C001','HW','Hardware',1),(2,'C002','SW','Software design',2),(3,'C003','FPGA','IC design',1),(4,'C004','Test','Test',2);
 UNLOCK TABLES;
 /*!40000 ALTER TABLE `erp_department` ENABLE KEYS */;
-
---
--- Table structure for table `erp_dept_leader`
---
-
-DROP TABLE IF EXISTS `erp_dept_leader`;
-CREATE TABLE `erp_dept_leader` (
-  `id` int(10) unsigned NOT NULL auto_increment,
-  `dept_id` int(10) unsigned NOT NULL,
-  `staff_id` int(10) unsigned NOT NULL,
-  PRIMARY KEY  (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
---
--- Dumping data for table `erp_dept_leader`
---
-
-
-/*!40000 ALTER TABLE `erp_dept_leader` DISABLE KEYS */;
-LOCK TABLES `erp_dept_leader` WRITE;
-UNLOCK TABLES;
-/*!40000 ALTER TABLE `erp_dept_leader` ENABLE KEYS */;
 
 --
 -- Table structure for table `erp_node`
@@ -187,6 +167,8 @@ UNLOCK TABLES;
 DROP TABLE IF EXISTS `erp_staff`;
 CREATE TABLE `erp_staff` (
   `id` int(10) unsigned NOT NULL auto_increment,
+  `dept_id` int(10) unsigned NOT NULL,
+  `leader_id` int(10) unsigned NOT NULL,
   `code` varchar(255) NOT NULL,
   `name` varchar(255) NOT NULL,
   `realname` varchar(255) NOT NULL,
@@ -194,6 +176,7 @@ CREATE TABLE `erp_staff` (
   `email` varchar(255) NOT NULL,
   `create_time` datetime NOT NULL,
   `login_time` datetime NOT NULL,
+  `is_leader` tinyint(1) unsigned NOT NULL,
   `status` tinyint(1) unsigned NOT NULL,
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
@@ -205,7 +188,7 @@ CREATE TABLE `erp_staff` (
 
 /*!40000 ALTER TABLE `erp_staff` DISABLE KEYS */;
 LOCK TABLES `erp_staff` WRITE;
-INSERT INTO `erp_staff` VALUES (1,'E0001','admin','Administrator','21232f297a57a5a743894a0e4a801fc3','zerofault@gmail.com','0000-00-00 00:00:00','2009-09-13 11:32:43',1);
+INSERT INTO `erp_staff` VALUES (1,1,0,'E0001','admin','Administrator','21232f297a57a5a743894a0e4a801fc3','zerofault@gmail.com','0000-00-00 00:00:00','2009-09-13 11:32:43',1,1),(2,4,1,'E0002','staff1','Staff1','d41d8cd98f00b204e9800998ecf8427e','staff1@local','0000-00-00 00:00:00','0000-00-00 00:00:00',1,1),(3,2,1,'C003','test2','test2','e10adc3949ba59abbe56e057f20f883e','test2@example.com','0000-00-00 00:00:00','0000-00-00 00:00:00',0,0);
 UNLOCK TABLES;
 /*!40000 ALTER TABLE `erp_staff` ENABLE KEYS */;
 

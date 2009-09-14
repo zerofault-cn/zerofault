@@ -17,7 +17,7 @@ class CommodityAction extends BaseAction{
 
 	public function index(){
 		$this->assign('result', $this->dao->select());
-		$this->assign('content','Dept:index');
+		$this->assign('content','Commodity:index');
 		$this->display('Layout:ERP_layout');
 	}
 
