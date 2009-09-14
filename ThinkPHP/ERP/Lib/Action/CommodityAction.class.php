@@ -1,53 +1,44 @@
 <?php
 /**
 *
-* 员工
+* 货品类别
 *
 * @author zerofault <zerofault@gmail.com>
 * @since 2009/8/5
 */
-class StaffAction extends BaseAction{
+class CommodityAction extends BaseAction{
 
 	protected $dao;
 
 	public function _initialize() {
-		$this->dao = D('Staff');
+		$this->dao = D('Commodity');
 		parent::_initialize();
 	}
 
 	public function index(){
-		$this->assign('result', $this->dao->relation(true)->select());
-		$this->assign('content','Staff:index');
+		$this->assign('result', $this->dao->select());
+		$this->assign('content','Dept:index');
 		$this->display('Layout:ERP_layout');
 	}
 
 	public function form() {
-		$dDepartment = D('Department');
 		$id = $_REQUEST['id'];
 		if(!empty($id) && $id>0) {
 			$info = $this->dao->find($id);
-			//dump($info);
-			$info['dept_opts'] = self::genOptions($dDepartment->select(), $info['dept_id']);
-			$info['leader_opts'] = self::genOptions($this->dao->where(array('is_leader'=>1))->select(), $info['leader_id'],'realname');
 			$code = $info['code'];
 		}
 		else{
 			$info = array(
 				'id'=>0,
 				'name'=>'',
-				'realname'=>'',
-				'password'=>'',
-				'email'=>'',
-				'dept_opts' => self::genOptions($dDepartment->select()),
-				'leader_opts'=>self::genOptions($this->dao->where(array('is_leader'=>1))->select(),'','realname')
 				);
 			$max_id = $this->dao->getField('max(id) as max_id');
 			empty($max_id) && ($max_id = 0);
-			$code = 'E'.sprintf("%04d",$max_id+1);
+			$code = 'P'.sprintf("%03d",$max_id+1);
 		}
 		$this->assign('code', $code);
 		$this->assign('info', $info);
-		$this->assign('content', 'Staff:form');
+		$this->assign('content', 'Commodity:form');
 		$this->display('Layout:ERP_layout');
 	}
 	public function submit() {
@@ -56,30 +47,25 @@ class StaffAction extends BaseAction{
 		}
 		$id = $_REQUEST['id'];
 		$name = trim($_REQUEST['name']);
-		empty($name) && self::_error('Staff Name required');
+		empty($name) && self::_error('Commodity Name required');
 		if(!empty($id) && $id>0) {
 			$rs = $this->dao->where(array('name'=>$name,'id'=>array('neq',$id)))->find();
 			if($rs && sizeof($rs)>0){
-				self::_error('Staff Name: '.$name.' exists already!');
+				self::_error('Commodity Name: '.$name.' exists already!');
 			}
 			$this->dao->find($id);
 		}
 		else{
 			$rs = $this->dao->where(array('name'=>$name))->find();
 			if($rs && sizeof($rs)>0){
-				self::_error('Staff Name: '.$name.' exists already!');
+				self::_error('Commodity Name: '.$name.' exists already!');
 			}
 			$this->dao->code = $_REQUEST['code'];
 		}
 		$this->dao->name = $name;
-		$this->dao->realname = trim($_REQUEST['realname']);
-		$this->dao->password = md5(trim($_REQUEST['password']));
-		$this->dao->email = trim($_REQUEST['email']);
-		$this->dao->dept_id = $_REQUEST['dept_id'];
-		$this->dao->leader_id = $_REQUEST['leader_id'];
 		if(!empty($id) && $id>0) {
 			if($this->dao->save()){
-				self::_success('Staff information updated!',__URL__);
+				self::_success('Commodity information updated!',__URL__);
 			}
 			else{
 				self::_error('Update fail!'.(C('DEBUG_MODE')?$this->dao->getLastSql():''));
@@ -87,10 +73,10 @@ class StaffAction extends BaseAction{
 		}
 		else{
 			if($this->dao->add()) {
-				self::_success('Add staff success!',__URL__);
+				self::_success('Add commodity success!',__URL__);
 			}
 			else{
-				self::_error('Add staff fail!'.(C('DEBUG_MODE')?$this->dao->getLastSql():''));
+				self::_error('Add commodity fail!'.(C('DEBUG_MODE')?$this->dao->getLastSql():''));
 			}
 		}
 		
