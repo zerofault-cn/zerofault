@@ -18,10 +18,10 @@
 <table cellpadding="3" colspan="4">
 <tr>
 	<td>Enter a partial Name:</td>
-	<td><input type="Text" maxlength="25" size="20" value="" name="Keywords"/></td>
+	<td><input type="Text" maxlength="25" size="20" value="" name="s_name"/></td>
 	<td><b>OR</b></td>
 	<td>Enter a partial Code:</td>
-	<td><input type="Text" maxlength="18" size="15" value="" name="SupplierCode"/></td>
+	<td><input type="Text" maxlength="18" size="15" value="" name="s_code"/></td>
 </tr>
 </table>
 <p class="center">
@@ -37,6 +37,7 @@
 	<th>Character</th>
 	<th>Currency</th>
 	<th>Address</th>
+	<th></th>
 </tr>
 <iterate name="result" id="item">
 <tr>
@@ -45,6 +46,7 @@
 	<td>{$item['Character_Value']}</td>
 	<td>{$item['currency']}</td>
 	<td>{$item['address']}</td>
+	<td><a href="__URL__/form/id/{$item['id']}">Edit</td>
 </tr>
 </iterate>
 </table>
