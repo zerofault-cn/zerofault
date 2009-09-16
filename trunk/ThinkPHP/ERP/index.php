@@ -7,8 +7,8 @@
 * @since  2009/9/2
 */
 
-define('THINK_PATH', '../ThinkPHP');
-require(THINK_PATH."/ThinkPHP.php");
+define('THINK_PATH', '../TP');
+require(THINK_PATH."/TP.php");
 
 $App = new App(); 
 $App->run();

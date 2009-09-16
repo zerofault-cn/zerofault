@@ -1,36 +1,5 @@
 <p class="page_title_text"><img src="../Public/Images/supplier.gif" align="absmiddle"/> Supplier</p>
-<table cellpadding="4" border="2" width="90%">
-<tr>
-	<th width="33%">Supplier Inquiries</th>
-	<th width="33%">Supplier Transactions</th>
-	<th width="33%">Supplier Maintenance</th>
-</tr>
-<tr>
-	<td valign="TOP" class="menu_group_items"></td>
-	<td valign="TOP" class="menu_group_items"></td>
-	<td valign="TOP" class="menu_group_items">
-		<a href="__URL__/form">Add a New Supplier</a><br/>
-	</td>
-</tr>
-</table>
-<form method="post" action="">
-<p class="page_title_text"><b> Search for Suppliers</b></p>
-<table cellpadding="3" colspan="4">
-<tr>
-	<td>Enter a partial Name:</td>
-	<td><input type="Text" maxlength="25" size="20" value="" name="s_name"/></td>
-	<td><b>OR</b></td>
-	<td>Enter a partial Code:</td>
-	<td><input type="Text" maxlength="18" size="15" value="" name="s_code"/></td>
-</tr>
-</table>
-<p class="center">
-<input type="submit" value="Search Now" name="Search"/>
-</p>
-</form>
-<present name="result">
 <table cellpadding="2" border="1">
-<tr>
 <tr>
 	<th>Code</th>
 	<th>Supplier Name</th>
@@ -43,11 +12,13 @@
 <tr>
 	<td>{$item['code']}</td>
 	<td>{$item['name']}</td>
-	<td>{$item['Character_Value']}</td>
-	<td>{$item['currency']}</td>
+	<td>{$item['character']['title']}</td>
+	<td>{$item['currency']['title']}</td>
 	<td>{$item['address']}</td>
 	<td><a href="__URL__/form/id/{$item['id']}">Edit</td>
 </tr>
 </iterate>
 </table>
-</present>
+<p class="center">
+	<input type="button" onclick="javascript:document.location='__URL__/form';" value="Add a New Supplier" />
+</p>
