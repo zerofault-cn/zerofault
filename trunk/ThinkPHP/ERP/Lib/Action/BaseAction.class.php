@@ -144,12 +144,25 @@ class BaseAction extends Action{
 			return $str;
 		}
 		foreach($rs as $key=>$val) {
+			$str .= '<option value="'.$val[$value].'" ';
 			if($selected_id == $val[$value]) {
-				$str .= '<option value="'.$val[$value].'" selected="true">'.$val[$title].'</option>';
+				$str .= ' selected="true"';
 			}
-			else{
-				$str .= '<option value="'.$val[$value].'">'.$val[$title].'</option>';
+			$str .= '>'.$val[$title].'</option>';
+		}
+		return $str;
+	}
+	protected function genCheckbox($rs=array(), $checked_ids = array(), $name='') {
+		$str = '';
+		if(empty($rs) || !is_array($rs)) {
+			return $str;
+		}
+		foreach($rs as $id=>$name) {
+			$str .= '<input type="checkbox" name="'.$name.'[]" value="'.$id.'" ';
+			if(!empty($checked_ids) && is_array($checked_ids) && in_array($id, $checked_ids)) {
+				$str .= ' checked="true"';
 			}
+			$str .= '/>'.$name.' ';
 		}
 		return $str;
 	}

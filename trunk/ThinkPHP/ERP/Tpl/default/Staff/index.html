@@ -1,4 +1,4 @@
-<p class="page_title_text"><img src="../Public/Images/user.gif" align="absmiddle"/> Staff</p>
+﻿<p class="page_title_text"><img src="../Public/Images/user.gif" align="absmiddle"/> Staff</p>
 <table cellpadding="2" border="1">
 <tr>
 	<th>Staff Code</th>
@@ -6,6 +6,7 @@
 	<th>Department</th>
 	<th>E_mail</th>
 	<th>Leader</th>
+	<th>Role</th>
 	<th></th>
 </tr>
 <iterate name="result" id="item">
@@ -15,6 +16,13 @@
 	<td>[{$item['dept']['code']}]{$item['dept']['name']}</td>
 	<td>{$item['email']}</td>
 	<td>{$item['leader']['realname']}</td>
+	<td><if condition="$item['id'] eq 1">
+		System Administrator
+		<else />
+			<iterate name="item['role']" id="role" key="j">
+			{$role['name']}<br />
+			</iterate>
+		</if></td>
 	<td><a href="__URL__/form/id/{$item['id']}">Edit</a></td>
 </tr>
 </iterate>

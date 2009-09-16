@@ -1,4 +1,4 @@
-<p class="page_title_text"><img src="../Public/Images/users.gif" align="absmiddle"/> Staff - Add new staff</p>
+﻿<p class="page_title_text"><img src="../Public/Images/users.gif" align="absmiddle"/> Staff - Add new staff</p>
 <form action="__URL__/submit" method="post" target="_iframe">
 <input type="hidden" name="id" value="{$info.id}" />
 <table>
@@ -29,6 +29,10 @@
 <tr>
 	<td>Leader:</td>
 	<td><select name="leader_id"><option value="">Select One</option>{$info.leader_opts}</select></td>
+</tr>
+<tr>
+	<td>Role:</td>
+	<td>{$info.role_chks}</td>
 </tr>
 </table>
 <p class="center">
