@@ -25,10 +25,12 @@ class StaffAction extends BaseAction{
 		$dDepartment = D('Department');
 		$id = $_REQUEST['id'];
 		if(!empty($id) && $id>0) {
-			$info = $this->dao->find($id);
+			$info = $this->dao->relation(true)->find($id);
 			//dump($info);
 			$info['dept_opts'] = self::genOptions($dDepartment->select(), $info['dept_id']);
 			$info['leader_opts'] = self::genOptions($this->dao->where(array('is_leader'=>1))->select(), $info['leader_id'],'realname');
+			//$info['role_chks'] = self::genCheckbox(D("Role")->where(array('status'=>1))->select(),$info['role']);
+			dump($info);
 			$code = $info['code'];
 		}
 		else{
