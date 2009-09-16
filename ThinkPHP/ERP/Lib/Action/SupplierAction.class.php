@@ -16,16 +16,7 @@ class SupplierAction extends BaseAction{
 	}
 
 	public function index(){
-		if(!empty($_POST['Search'])) {
-			$where = array();
-			if(!empty($_REQUEST['s_name'])) {
-				$where['name'] = array('like', '%'.trim($_REQUEST['s_name']).'%');
-			}
-			elseif(!empty($_REQUEST['s_code'])) {
-				$where['code'] = array('like', '%'.trim($_REQUEST['s_code']));
-			}
-			$this->assign('result', $this->dao->where($where)->select());
-		}
+		$this->assign('result', $this->dao->relation(true)->select());
 		$this->assign('content','Supplier:index');
 		$this->display('Layout:ERP_layout');
 	}
@@ -38,7 +29,7 @@ class SupplierAction extends BaseAction{
 			$info['character_opts'] = self::genOptions($dOptions->where(array('type'=>'character'))->order('sort')->select(), $info['character_id'], 'title', 'id');
 			$info['payment_opts'] = self::genOptions($dOptions->where(array('type'=>'payment_terms'))->order('sort')->select(), $info['payment_terms_id'], 'title', 'id');
 			$info['tax_opts'] = self::genOptions($dOptions->where(array('type'=>'tax'))->order('sort')->select(), $info['tax_id'], 'title', 'id');
-			$info['currency_opts'] = self::genOptions($dOptions->where(array('type'=>'currency'))->order('sort')->select(), $info['curr_code'], 'title', 'value');
+			$info['currency_opts'] = self::genOptions($dOptions->where(array('type'=>'currency'))->order('sort')->select(), $info['currency_id'], 'title', 'id');
 			$code = $info['code'];
 		}
 		else{
@@ -104,7 +95,7 @@ class SupplierAction extends BaseAction{
 		$this->dao->account = $_REQUEST['account'];
 		$this->dao->payment_terms_id = $_REQUEST['payment_terms_id'];
 		$this->dao->tax_id = $_REQUEST['tax_id'];
-		$this->dao->curr_code = $_REQUEST['curr_code'];
+		$this->dao->currency_id = $_REQUEST['currency_id'];
 		$this->dao->website = $_REQUEST['website'];
 		$this->dao->remark = $_REQUEST['remark'];
 		if(!empty($id) && $id>0) {
