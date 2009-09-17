@@ -1,0 +1,45 @@
+	<table id="table" border="1" cellpadding="5" cellspacing="0" width="100%" bordercolor="#999999" style="border-collapse:collapse;">
+	<tr bgcolor="#ededed">
+		<th width="15%">模块</th>
+		<th >方法</th>
+	</tr>
+	
+	<iterate name="modules" id="module" key="n1">
+	<tr>
+		<td>
+			<span class="c{$module['id']}" id="{$module['id']}" name="{$module['name']}" title="{$module['title']}" descr="{$module['descr']}" level="2"><if condition="empty($module['title'])">{$module['name']}<else/>{$module['title']}</if></span>
+			<if condition="$module['id'] neq 0">
+			<img class="edit" src="../Public/Images/form_edit.gif" alt="编辑" align="absmiddle"/>
+			<else />
+			<img class="edit" src="../Public/Images/form_add.gif" alt="编辑并登记" align="absmiddle"/>
+			</if>
+		</td>
+		<td>
+			<table border="0" width="100%" cellpadding="3" cellspacing="0" frame="void" style="border-collapse: collapse;border-color:#888888;">
+			<iterate name="module.action" id="action" key="n2" mod="4">
+			<eq name="mod" value="1">
+			<tr>
+			</eq>
+				<td width="25%" class="a_left">
+					<span class="c{$action['id']}" id="{$action['id']}" pid="{$module['id']}" name="{$action['name']}" title="{$action['title']}" descr="{$action['descr']}" level="3"><if condition="empty($action['title'])">{$action['name']}<else />{$action['title']}</if></span>
+					<if condition="$action['id'] neq 0">
+					<img class="edit" src="../Public/Images/form_edit.gif" alt="编辑" align="absmiddle"/>
+					<else />
+					<img class="edit" src="../Public/Images/form_add.gif" alt="编辑并登记" align="absmiddle"/>
+					</if>
+				</td>
+			<eq name="mod" value="0">
+			</tr>
+			</eq>
+			</iterate>
+			</table>
+		</td>
+	</tr>
+	</iterate>
+	<tr>
+		<td colspan="3" class="a_left">
+			注意：红色标识代表尚未在系统中登记，将无法对它们设置权限！
+		</td>
+	</tr>
+	</table>
+	<script language="JavaScript" type="text/javascript" src="../Public/Js/node_func.js"></script>
