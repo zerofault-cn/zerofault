@@ -1,0 +1,29 @@
+﻿<p class="page_title_text"><img src="../Public/Images/users.gif" align="absmiddle"/> Department </p>
+<form action="__URL__/submit" method="post" target="_iframe">
+<input type="hidden" name="id" value="{$info.id}" />
+<table>
+<tr>
+	<td>Department Code:</td>
+	<td><input type="text" maxlength="10" size="15" name="code" value="{$code}" readonly="true" /></td>
+</tr>
+<tr>
+	<td>Department Name:</td>
+	<td><input type="text" maxlength="40" size="15" name="name" value="{$info.name}" /></td>
+</tr>
+<tr>
+	<td>Function:</td>
+	<td><input type="text" maxlength="20" size="15" name="function" value="{$info.function}"/></td>
+</tr>
+<tr>
+	<td>Leader:</td>
+	<td><select name="leader_id"><option value="">Select One</option>{$info.leader_opts}</select></td>
+</tr>
+</table>
+<p class="center">
+<if condition="$info['id'] eq 0">
+<input type="Submit" value="Insert New Department" name="submit"/>
+<else />
+<input type="Submit" value="Update Department Profile" name="submit"/>
+</if>
+</p>
+</form>
