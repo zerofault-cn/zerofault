@@ -5,11 +5,11 @@
 	<meta http-equiv="content-type" content="text/html; charset=gb2312" />
 	<meta name="keywords" content="网络收藏夹" />
 	<meta name="description" content="快速, 简洁, web2.0, 做最好的网络收藏夹. Favorites是一个提供用户收藏, 推荐, 共享网络资源的平台。除了原本的网页收藏, Favorites中加入了图片、音乐和视频收藏的功能，同时用户还可以拥有自己的好友名单,使用户间可以方便的共享网络资源。" />
-	<link rel="alternate" type="application/rss+xml" title="zerofault的网络笔记本" href="rss/" />
-	<link rel="icon" type="image/x-icon" href="media/favicon.ico" />
-	<link rel="Shortcut Icon" type="image/x-icon" href="media/favicon.ico" />
-	<link rel="stylesheet" type="text/css" href="<?=$config['base_url']?>media/style.css" />
-	<script language="javascript" type="text/javascript" src="<?=$config['base_url']?>media/jquery-1.2.6.pack.js"></script>
+	<link rel="alternate" type="application/rss+xml" title="zerofault的网络笔记本" href="/5dnote/rss/" />
+	<link rel="icon" type="image/x-icon" href="/5dnote/media/favicon.ico" />
+	<link rel="Shortcut Icon" type="image/x-icon" href="/5dnote/media/favicon.ico" />
+	<link rel="stylesheet" type="text/css" href="/5dnote/media/style.css" />
+	<script language="javascript" type="text/javascript" src="/5dnote/media/jquery-1.2.6.pack.js"></script>
 </head>
 <body>
 	<div id="toper">
