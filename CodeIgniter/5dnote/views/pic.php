@@ -1,8 +1,8 @@
 	<div id="searcher">
 		<ul>
-			<li><a href="" class="curr">我的网址</a></li>
+			<li><a href="?c=view&m=index&type=link">我的网址</a></li>
 			<li><a href="?c=view&m=index&type=note">我的网摘</a></li>
-			<li><a href="?c=view&m=index&type=pic">我的图片</a></li>
+			<li><a href="" class="curr">我的图片</a></li>
 			<li><a href="?c=view&m=tag">我的标签</a></li>
 		</ul>
 		<!-- <form action="/search" method="get">
@@ -47,12 +47,20 @@
 			<dl class="item" id="item_<?=$item['id']?>">
 				<img class="icon" src="media/htm.gif" />
 				<dt>
+					<? if($item['url']): ?>
 					<a href="<?=$item['url']?>" target="_blank"><?=$item['title']?></a>
+					<? else: ?>
+					<?=$item['title']?>
+					<? endif; ?>
 					<?php if($item['private']): ?>
 					<img src="media/lock.gif" align="absmiddle" />
 					<?php endif; ?>
+					<br />
 					<?=$item['addtime']?>
 				</dt>
+				<dd class="image">
+					<a href="?c=view&m=img&id=<?=$item['id']?>" target="_blank" title="点击查看大图"><img src="?c=view&m=img&id=<?=$item['id']?>" alt="<?=$item['title']?>" width="192"/></a>
+				</dd>
 				<dd class="content">
 					<?=nl2br($item['content'])?>
 				</dd>
@@ -62,8 +70,8 @@
 					<?php endforeach; ?>
 					<?php if($_COOKIE['isAdmin']): ?>
 					... 
-					<a href="/add?key=<?=$item['key']?>" class="edit">编辑</a>/ <a class="del" onClick="$('#del_<?=$item['id']?>').show()">删除</a>
-					<span class="edit" id='del_<?=$item['id']?>'><a onClick="submit_del(this)" value="<?=$item['id']?>" class="edit">确认</a> / <a onClick='$("#del_<?=$item['id']?>").hide()' class="edit">取消</a></span>
+					<a href="/add?key=<?=$item['key']?>" class="edit">编辑</a>/ <a class="del" onClick="$('#del_<?=$item['key']?>').show()">删除</a>
+					<span class="edit" id='del_<?=$item['key']?>'><a onClick="submit_del(this)" value="<?=$item['key']?>" class="edit">确认</a> / <a onClick='$("#del_<?=$item['key']?>").hide()' class="edit">取消</a></span>
 					<?php endif; ?>
 				</dd>
 			</dl>

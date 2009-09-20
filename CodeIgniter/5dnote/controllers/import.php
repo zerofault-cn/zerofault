@@ -11,23 +11,14 @@ class Import extends Controller {
 	{
 		$baseurl = 'http://zerofault.appspot.com/';
 		
-		$this->db->select_max('addtime');
+		$this->db->select('count(*) as count');
 		$query = $this->db->get('entries');
-		if($query->num_rows()>0)
-		{
-			$row = $query->row();
-			$time = strtotime($row->addtime);
-			$t = date('Y-m-d-H-i-s',$time+1);
-		}
-		else
-		{
-			$t = '1970-01-01-00-00-00';
-		}
-		//$csv = file_get_contents($baseurl.'dump/export?t='.$t);
-		$c = curl_init();
-		curl_setopt($c, CURLOPT_URL, $baseurl.'dump/export?t='.$t);
-		curl_setopt($c, CURLOPT_RETURNTRANSFER, 1);
-		$data = curl_exec($c);
+		$row = $query->row();
+		$count = $row->count;
+		echo $url = $baseurl.'dump/export?offset='.$count;
+		echo "<br />\r\n";
+		$data = $this->wget($url);
+		//checkvar($data);
 		$lines = explode('$',$this->convert_encoding($data));
 		foreach($lines as $line)
 		{
@@ -44,12 +35,16 @@ class Import extends Controller {
 				'title' => $fields[1],
 				'url' => $fields[2],
 				'content' => $fields[3],
-				'image' => 'pic'==$fields[7]?file_get_contents($baseurl.'img?key='.$fields[0]):'',
+				'image' => 'pic'==$fields[7]?$this->wget($baseurl.'img?key='.trim($fields[0])):'',
 				'addtime' => $fields[4],
 				'private' => 0==strcasecmp('false',$fields[5])?False:True,
 				'type' => $fields[7],
 				);
 			//checkvar($data);
+			if($data['type']=='pic' && $data['image']=='')
+			{
+				die('fetch pic error!');
+			}
 			$this->db->insert('entries',$data);
 			$entry_id = $this->db->insert_id();
 			$this->insertTags($entry_id, $fields[6], $fields[7]);
@@ -91,6 +86,21 @@ class Import extends Controller {
 			echo $this->db->insert_id().$tags.":".$ret."<br />\r\n";
 		}
 		return true;
+	}
+	function wget($url)
+	{
+		if(ini_get('allow_url_fopen'))
+		{
+			$data = file_get_contents($url);
+		}
+		else
+		{
+			$c = curl_init();
+			curl_setopt($c, CURLOPT_URL, $url);
+			curl_setopt($c, CURLOPT_RETURNTRANSFER, 1);
+			$data = curl_exec($c);
+		}
+		return $data;
 	}
 }
 
