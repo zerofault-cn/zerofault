@@ -152,17 +152,23 @@ class BaseAction extends Action{
 		}
 		return $str;
 	}
-	protected function genCheckbox($rs=array(), $checked_ids = array(), $name='') {
+	protected function genCheckbox($rs=array(), $checked_arr = array(), $chk_name='') {
 		$str = '';
 		if(empty($rs) || !is_array($rs)) {
 			return $str;
 		}
-		foreach($rs as $id=>$name) {
-			$str .= '<input type="checkbox" name="'.$name.'[]" value="'.$id.'" ';
-			if(!empty($checked_ids) && is_array($checked_ids) && in_array($id, $checked_ids)) {
+		$checked_id_arr = array();
+		if(!empty($checked_arr) && is_array($checked_arr)) {
+			foreach($checked_arr as $val) {
+				$checked_id_arr[] = $val['id'];
+			}
+		}
+		foreach($rs as $val) {
+			$str .= '<input type="checkbox" name="'.$chk_name.'[]" value="'.$val['id'].'" ';
+			if(in_array($val['id'], $checked_id_arr)) {
 				$str .= ' checked="true"';
 			}
-			$str .= '/>'.$name.' ';
+			$str .= '/>'.$val['name'].' ';
 		}
 		return $str;
 	}
