@@ -1,0 +1,78 @@
+MySQL的编码问题研究以及乱码解决方案
+adam.zhu@DeviceVM.com.cn
+2008-12-8
+
+
+MySQL从4.1版本开始支持Unicode(UTF-8)，从此也带来了中文乱码问题。
+这里讨论的对象就是mysql4.1及其以上的版本，与其他客户端传输数据时的编码问题。
+
+这里涉及到三个位置的编码：mysql服务、mysql表（或库、列）、客户端
+
+从客户端连接到MySQL服务端口后，执行如下SQL语句，可以查看到它们的编码：
+mysql> show variables like 'character_set_%';
++--------------------------+-------------------------------------+
+| Variable_name            | Value                               |
++--------------------------+-------------------------------------+
+| character_set_client     | latin1                              |
+| character_set_connection | latin1                              |
+| character_set_database   | utf8                                |
+| character_set_filesystem | binary                              |
+| character_set_results    | latin1                              |
+| character_set_server     | utf8                                |
+| character_set_system     | utf8                                |
+| character_sets_dir       | D:\pub\mysql-5.0.22\share\charsets\ |
++--------------------------+-------------------------------------+
+从结果中我们看到，既有utf8，也有latin1，各参数解释如下：
+>character_set_client：	客户端传递数据给服务端时所使用的编码方式，由客户端在连接后设置
+>character_set_connection：服务端收到数据后在内部查询时用的编码方式，由客户端在连接后设置
+>character_set_database：服务端新建table时的默认编码方式，默认与character_set_server一致，可在my.ini更改设置
+>character_set_filesystem：文件系统存储方式，一般都是binary
+>character_set_results：服务端发送查询结果给客户端时的编码方式，由客户端在连接后设置
+>character_set_server：服务端新建database时的默认编码方式，可在my.ini更改设置
+>character_set_system：服务器系统默认编码，一般都是utf8
+
+这里有三个参数（client/connection/results）由客户端连接后设置，我们把它统称为客户端的编码方式
+database仅代表默认设置，table的实际编码方式由建表语句决定
+
+查看DATABASE的编码方式：
+mysql> show create database test;
++----------+---------------------------------------------------------------+
+| Database | Create Database                                               |
++----------+---------------------------------------------------------------+
+| test     | CREATE DATABASE `test` /*!40100 DEFAULT CHARACTER SET utf8 */ |
++----------+---------------------------------------------------------------+
+结果解释：
+/*!40100 DEFAULT CHARACTER SET utf8 */是mysql独特的命令格式，它表示当mysql的版本大于4.1.0时，执行后面的语句
+所以，此时test库的默认编码方式是utf8
+
+查看TABLE的编码方式：
+mysql> show create table test;
++-------+-----------------------------------------------------+
+| Table | Create Table                                        |
++-------+-----------------------------------------------------+
+| test  | CREATE TABLE `test` (
+            `id` tinyint(3) unsigned NOT NULL auto_increment,
+            `FieldName` int(10) unsigned default NULL,
+             PRIMARY KEY  (`id`)
+          ) ENGINE=MyISAM DEFAULT CHARSET=latin1              |
++-------+-----------------------------------------------------+
+这表示，test表的默认编码方式是latin1
+
+以下分析使用php程序模拟，并使用命令”set names xxx“设置client编码
++---------------+---------------+---------------+-------------------------------+-------------------------------+
+| server	| table		| client	| 查询数据的显示		| 写入/更新数据			|
++---------------+---------------+---------------+-------------------------------+-------------------------------+
+| utf8/latin1	| latin1	| latin1	| 显示正常			| 正常更新			|
+| utf8/latin1	| latin1	| gb2312	| 一个中文字符显示成两个问号	| mysql报错Data too long	|
+| utf8/latin1	| latin1	| utf8		| 一个中文字符显示成两个中文字符| mysql报错Data too long	|
++---------------+---------------+---------------+-------------------------------+-------------------------------+
+| utf8/latin1	| utf8		| latin1	| 一个中文字符显示成一个问号	| 写入乱码，但可在utf-8页面正常显示
+| utf8/latin1	| utf8		| gb2312	| 在页面编码为gb2312时正常	| 页面编码为gb2312时写入正常	|
+| utf8/latin1	| utf8		| utf8		| 在页面编码为utf-8时正常	| 页面编码为utf-8时写入正常	|
++---------------+---------------+---------------+-------------------------------+-------------------------------+
+
+从表中分析得出结论：
+1，server的默认编码与显示无关，它只用于新建库（表）且未指定编码时的默认编码；
+2，如果现有数据编码方式是latin1，那么client必须使用latin1才能正确读写数据；
+3，如果现有数据编码方式是utf8，那么client必须使用set names设置编码（gb2312或utf8)，而且页面编码也必须设置一致
+4，对于set names无效的客户端，如mysql-front、MySQLQueryBrowser，或者不支持改变页面编码的程序，如mysql命令行，尚无找到解决方法
