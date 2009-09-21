@@ -1,0 +1,3 @@
+为了查询使用关联查询的方式获取Node List，在定义Role Model时，设置了Node条件'condition' => 'pid=0'，但是当更新Role时，却不能使用这个条件
+所以必须修改文件Lib\Think\Core\Model\RelationModel.class.php第284行
+改为： $mappingCondition = "{$mappingFk}='{$pk}'";

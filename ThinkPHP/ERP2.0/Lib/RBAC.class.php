@@ -182,7 +182,7 @@ class RBAC extends Think
                 }
                 //判断是否为组件化模式，如果是，验证其全模块名
                 $module = defined('P_MODULE_NAME')?  P_MODULE_NAME   :   $ModuleName;
-                if(!isset($accessList[strtoupper($appName)][strtoupper($module)][strtoupper($ActionName)])) {
+                if(!isset($accessList[strtoupper($module)][strtoupper($ActionName)])) {
                     $_SESSION[$accessGuid]  =   false;
                     return false;
                 }
@@ -206,11 +206,12 @@ class RBAC extends Think
      * @access public
      +----------------------------------------------------------
      */
-    static public function getAccessList($authId)
+    static public function getAccessList($authId=null)
     {
         // Db方式权限数据
-        $db     =   DB::getInstance();
-
+        $db     =   Db::getInstance();
+		if(null===$authId)   $authId = $_SESSION[C('USER_AUTH_KEY')];
+		$table = array('role'=>C('RBAC_ROLE_TABLE'),'user'=>C('RBAC_USER_TABLE'),'access'=>C('RBAC_ACCESS_TABLE'),'node'=>C('RBAC_NODE_TABLE'));
         $access =  array();
             // 读取项目的模块权限
             $sql    =   "select node.id,node.name from ".
@@ -218,7 +219,7 @@ class RBAC extends Think
                     $table['user']." as user,".
                     $table['access']." as access,".
                     $table['node']." as node ".
-                    "where user.user_id={$authId} and user.role_id=role.id ".
+                    "where user.staff_id={$authId} and user.role_id=role.id ".
 					"and access.role_id=role.id and role.status=1 ".
 					"and access.node_id=node.id and node.pid=0";
            			$modules =   $db->query($sql);
@@ -231,7 +232,7 @@ class RBAC extends Think
 					$table['user']." as user,".
 					$table['access']." as access,".
 					$table['node']." as node ".
-					"where user.user_id={$authId} and user.role_id=role.id ".
+					"where user.staff_id={$authId} and user.role_id=role.id ".
 					"and access.role_id=role.id and role.status=1 ".
 					"and access.node_id=node.id ".
 					"and node.pid={$moduleId}";

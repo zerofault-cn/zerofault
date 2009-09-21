@@ -38,12 +38,13 @@ class PublicAction extends BaseAction{
 		$map["status"]	= 1;
 
 		// 进行委托认证
-		$authInfo = RBAC::authenticate($map, 'Staff');
-		if(false === $authInfo) {
+		$authInfo = RBAC::authenticate($map);
+//		dump($authInfo);
+		if(empty($authInfo)) {
 			self::_error('Error: Wrong User ID or Password!');
 		}
 		else{
-			D('Staff')->where('id='.$authInfo['id'])->setField($data,date("Y-m-d H:i:s"));
+			D('Staff')->where('id='.$authInfo['id'])->setField('login_time',date("Y-m-d H:i:s"));
 			$_SESSION[C('USER_AUTH_KEY')]	=	$authInfo['id'];
 			$_SESSION['loginUserName']		=	$authInfo['realname'];
 			if($authInfo['name']=='admin') {

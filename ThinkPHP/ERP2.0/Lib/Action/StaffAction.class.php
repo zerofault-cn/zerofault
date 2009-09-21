@@ -83,6 +83,7 @@ class StaffAction extends BaseAction{
 		$this->dao->email = trim($_REQUEST['email']);
 		$this->dao->dept_id = $_REQUEST['dept_id'];
 		$this->dao->leader_id = $_REQUEST['leader_id'];
+		$this->dao->status = 1;
 		$role_id_arr = $_REQUEST['role'];
 		if($role_id_arr) {
 			foreach($role_id_arr as $role_id) {

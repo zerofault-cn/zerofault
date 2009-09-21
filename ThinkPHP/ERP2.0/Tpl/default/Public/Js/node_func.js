@@ -43,7 +43,7 @@ function setNodeEditable(obj,i){
 						$(obj).attr('src',IMAGE_FOLDER+'form_edit.gif');
 						$(".editForm").remove();
 						myAlert("Submit success!");
-						myOK(1000);
+						myOK(1500);
 						//myLocation('',1000);
 					}
 					else

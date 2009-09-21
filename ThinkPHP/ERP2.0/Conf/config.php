@@ -1,7 +1,7 @@
 <?php
 if($_SERVER["SERVER_NAME"]=='localhost') {
 	$config = array(
-		'APP_DEBUG'			=> true,
+		'APP_DEBUG'			=> false,
 		'APP_DOMAIN_DEPLOY'	=> false,
 		'APP_FILE_CASE'		=> true,
 		'APP_CONFIG_LIST'	=> array('menu'),
@@ -22,6 +22,7 @@ if($_SERVER["SERVER_NAME"]=='localhost') {
 
 		'USER_AUTH_ON'=>true,
 		'USER_AUTH_TYPE' => 2, //实时认证
+		'USER_AUTH_MODEL' => 'Staff',
 		'USER_AUTH_KEY' => 'authId',
 		'ADMIN_AUTH_KEY' => 'administrator',
 		'USER_AUTH_GATEWAY' => '/Public/login',
