@@ -85,7 +85,8 @@ class UserAction extends BaseAction{
 		$id = $_REQUEST['id'];
 		$name = $_REQUEST['name'];
 		$role_ids = $_REQUEST['role_ids'];
-		$role_ids || $role_arr = array() && $role_id_arr = array();
+		$role_arr = array();
+		$role_id_arr = array();
 		$role_ids && $role_id_arr = explode(',', $role_ids);
 		foreach($role_id_arr as $role_id) {
 			$role_arr[] = array('id'=>$role_id);

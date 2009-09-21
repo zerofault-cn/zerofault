@@ -80,7 +80,8 @@ class RoleAction extends BaseAction{
 	public function add() {
 		$name = $_REQUEST['name'];
 		$node_ids = $_REQUEST['node_ids'];
-		$node_ids || $node_arr = array() && $node_id_arr = array();
+		$node_arr = array();
+		$node_id_arr = array();
 		$node_ids && $node_id_arr = explode(',', $node_ids);
 		foreach($node_id_arr as $node_id) {
 			$node_arr[] = array('id'=>$node_id);
@@ -105,7 +106,8 @@ class RoleAction extends BaseAction{
 		$id = $_REQUEST['id'];
 		$name = $_REQUEST['name'];
 		$node_ids = $_REQUEST['node_ids'];
-		$node_ids || $node_arr = array() && $node_id_arr = array();
+		$node_arr = array();
+		$node_id_arr = array();
 		$node_ids && $node_id_arr = explode(',', $node_ids);
 		foreach($node_id_arr as $node_id) {
 			$node_arr[] = array('id'=>$node_id);
