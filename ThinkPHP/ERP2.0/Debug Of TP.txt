@@ -1,4 +1,4 @@
-第781行
+Db.class.php第781行
 如果执行update操作，却未更新任何数据，返回值为0，应该返回true
 应修改为：
         if(0 == $this->execute($sql)) {
