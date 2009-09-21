@@ -11,7 +11,7 @@ class CommodityAction extends BaseAction{
 	protected $dao;
 
 	public function _initialize() {
-		$this->dao = D('Commodity');
+		$this->dao = M('Commodity');
 		parent::_initialize();
 	}
 
@@ -64,7 +64,7 @@ class CommodityAction extends BaseAction{
 		}
 		$this->dao->name = $name;
 		if(!empty($id) && $id>0) {
-			if($this->dao->save()){
+			if(false !== $this->dao->save()){
 				self::_success('Commodity information updated!',__URL__);
 			}
 			else{

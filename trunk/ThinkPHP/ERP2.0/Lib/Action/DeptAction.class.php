@@ -70,7 +70,7 @@ class DeptAction extends BaseAction{
 		$this->dao->function = $_REQUEST['function'];
 		$this->dao->leader_id = $_REQUEST['leader_id'];
 		if(!empty($id) && $id>0) {
-			if($this->dao->save()){
+			if(false !== $this->dao->save()){
 				self::_success('Department information updated!',__URL__);
 			}
 			else{

@@ -103,7 +103,7 @@ class BaseAction extends Action{
 		$field=$_REQUEST['f'];
 		$value=$_REQUEST['v'];
 		$rs = $this->dao->where('id='.$id)->setField($field,$value);
-		if($rs)
+		if(false !== $rs)
 		{
 			die(self::_success('Success!','',1200));
 		}

@@ -39,6 +39,13 @@ class RoleAction extends BaseAction{
 			}
 			$role_info = $tmp;
 		}
+		else{
+			$role_info = array(
+				'id' => '',
+				'name' => '',
+				'Node' => array()
+				);
+		}
 //		dump($role_info);
 		$rs = $this->dao->relation(true)->where($where)->select();
 		foreach($rs as $key=>$val) {
@@ -107,7 +114,7 @@ class RoleAction extends BaseAction{
 		$this->dao->find($id);
 		$this->dao->name = $name;
 		$this->dao->Node = $node_arr;
-		if($this->dao->relation(true)->save()){
+		if(false !== $this->dao->relation(true)->save()){
 			die('1');
 		}
 		else{

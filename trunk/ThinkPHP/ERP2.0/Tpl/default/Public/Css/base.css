@@ -116,6 +116,97 @@ div.main{
 	text-align:center;
 }
 
+table span.c0{
+	color:red;
+}
+.addForm{
+	padding:10px;
+	text-align:left;
+	line-height:200%;
+}
+.addForm dl{
+	float:left;
+	width:180px;
+	border:1px dashed #ddd;
+	margin:3px;
+}
+.addForm dt{
+	padding:1px 3px;
+	background:#C8C8FF;
+}
+.addForm dd{
+	padding:3px;
+	background:#D6FFFF;
+}
+.editForm, .editAttach, .showThumb{
+	position:relative;
+}
+.editForm div{
+	display:none;
+	z-index:100;
+	position:absolute;
+	left:-16px;
+	top:-16px;
+	width:350px;
+	padding:0px 8px 10px;
+	_padding-top:8px;
+	
+	background:#F0F0F0;
+	text-align:left;
+	color:#006;
+	line-height:240%;
+}
+.editForm fieldset{
+	border:3px solid #FCD410;
+	background:#FFFFFF;
+}
+.editAttach div{
+	display:none;
+	z-index:80;
+	position:absolute;
+	left:-20px;
+	top:-30px;
+	_top:-20px;
+	width:210px;
+	padding:10px;
+	border:3px solid #FCD410;
+	background:#FFFFFF;
+	text-align:left;
+	color:#006;
+	line-height:240%;
+}
+.showThumb div{
+	display:none;
+	z-index:90;
+	position:absolute;
+	left:-10px;
+	top:20px;
+	_top:30px;
+	width:400px;
+	padding:0px;
+	border:3px solid #FCD410;
+	background:#FFFFFF;
+	text-align:left;
+	color:#006;
+	line-height:240%;
+}
+.editForm input.file{
+	width:120px;
+	width:200px\9;
+}
+.editForm input.name{
+	width:160px;
+}
+.editForm input.sort{
+	width:30px;
+}
+.editForm input.url{
+	width:260px;
+}
+.editForm textarea.descr{
+	width:320px;
+	height:150px;
+}
 #footer{
 	padding:10px;
 	margin-top:30px;
