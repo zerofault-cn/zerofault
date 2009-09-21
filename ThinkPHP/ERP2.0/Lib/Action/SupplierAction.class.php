@@ -22,7 +22,7 @@ class SupplierAction extends BaseAction{
 	}
 
 	public function form() {
-		$dOptions = D('Options');
+		$dOptions = M('Options');
 		$id = $_REQUEST['id'];
 		if(!empty($id) && $id>0) {
 			$info = $this->dao->find($id);
@@ -99,7 +99,7 @@ class SupplierAction extends BaseAction{
 		$this->dao->website = $_REQUEST['website'];
 		$this->dao->remark = $_REQUEST['remark'];
 		if(!empty($id) && $id>0) {
-			if($this->dao->save()){
+			if(false !== $this->dao->save()){
 				self::_success('Supplier information updated!',__URL__);
 			}
 			else{

@@ -45,15 +45,14 @@ class NodeAction extends BaseAction{
 			if(in_array($module_name, $skip_modules)) {
 				continue;
 			}
-				$where['name'] = $module_name;
-				$where['pid']  = 0;
-				$module = $this->dao->where($where)->find();
-				$modules[$i] = $module ? $module : array(
-					'id'=>0,
-					'name'=>$module_name,
-					'title'=>'',
-					'descr'=>''
-					);
+			$where['name'] = $module_name;
+			$where['pid']  = 0;
+			$module = $this->dao->where($where)->find();
+			$modules[$i] = $module ? $module : array(
+				'id'=>0,
+				'name'=>$module_name,
+				'title'=>''
+				);
 
 			$obj = new $class_name;
 			$obj_method = array_diff(get_class_methods($obj),$base_method_arr);
@@ -65,8 +64,7 @@ class NodeAction extends BaseAction{
 					$modules[$i]['action'][] = array(
 						'id'=>0,
 						'name'=>$action_name,
-						'title'=>'',
-						'descr'=>''
+						'title'=>''
 						);
 				}
 				else {
@@ -77,8 +75,7 @@ class NodeAction extends BaseAction{
 					$modules[$i]['action'][] = $action ? $action : array(
 						'id'=>0,
 						'name'=>$action_name,
-						'title'=>'',
-						'descr'=>''
+						'title'=>''
 						);
 				}
 			}
@@ -97,22 +94,18 @@ class NodeAction extends BaseAction{
 		$pid  = intval($_REQUEST['pid']);
 		$name = $_REQUEST['name'];
 		$title= $_REQUEST['title'];
-		$descr= $_REQUEST['descr'];
-		$level= intval($_REQUEST['level']);
 
 		$data['pid']  = $pid;
 		$data['name'] = $name;
 		$data['title']= $title;
-		$data['descr']= $descr;
-		$data['level']= $level;
 		if($id>0) {
 			//已有纪录
 			$data['id'] = $id;
-			if($this->dao->save($data)) {
+			if(false !== $this->dao->save($data)) {
 				die('1:'.$id);
 			}
 			else {
-				die('Error!');
+				die('Save fail!');
 			}
 		}
 		else {
@@ -121,7 +114,7 @@ class NodeAction extends BaseAction{
 				die('1:'.$id);
 			}
 			else {
-				die('Error');
+				die('Add fail');
 			}
 		}
 	}

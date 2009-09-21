@@ -44,7 +44,6 @@ $menu['System'] = array(
 	'submenu' => array(
 		'Node' => 'Node',
 		'Role' => 'Role',
-		'User' => 'User'
 		)
 	);
 

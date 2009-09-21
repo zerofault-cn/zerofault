@@ -94,7 +94,7 @@ class StaffAction extends BaseAction{
 		}
 		$this->dao->role = $role_arr;
 		if(!empty($id) && $id>0) {
-			if($this->dao->relation(true)->save()){
+			if(false !== $this->dao->relation(true)->save()){
 				self::_success('Staff information updated!',__URL__);
 			}
 			else{

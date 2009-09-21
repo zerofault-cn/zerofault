@@ -43,6 +43,9 @@ class PublicAction extends BaseAction{
 			self::_error('Error: Wrong User ID or Password!');
 		}
 		else{
+			$data['id'] = $authInfo['id'];
+			$data['login_time'] = date("Y-m-d H:i:s");
+			$M('Staff')->save($data);
 			$_SESSION[C('USER_AUTH_KEY')]	=	$authInfo['id'];
 			$_SESSION['loginUserName']		=	$authInfo['realname'];
 			if($authInfo['name']=='admin') {
