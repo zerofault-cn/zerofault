@@ -83,7 +83,6 @@ class NodeAction extends BaseAction{
 		}
 		//dump($modules);
 
-		$this->assign("topnavi", $topnavi);
 		$this->assign('modules', $modules);
 		$this->assign('content','Node:index');
 		$this->display('Layout:ERP_layout');

@@ -104,7 +104,7 @@ class RBAC extends Think
 	}
 
     //检查当前操作是否需要认证
-    static function checkAccess()
+    static function checkAccess($ModuleName=MODULE_NAME,$ActionName=ACTION_NAME)
     {
         //如果项目要求认证，并且当前模块需要认证，则进行权限认证
         if( C('USER_AUTH_ON') ){
@@ -118,7 +118,7 @@ class RBAC extends Think
                 $_module['no'] = explode(',',strtoupper(C('NOT_AUTH_MODULE')));
             }
             //检查当前模块是否需要认证
-            if((!empty($_module['no']) && !in_array(strtoupper(MODULE_NAME),$_module['no'])) || (!empty($_module['yes']) && in_array(strtoupper(MODULE_NAME),$_module['yes']))) {
+            if((!empty($_module['no']) && !in_array(strtoupper($ModuleName),$_module['no'])) || (!empty($_module['yes']) && in_array(strtoupper($ModuleName),$_module['yes']))) {
 				if("" != C('REQUIRE_AUTH_ACTION')) {
 					//需要认证的操作
 					$_action['yes'] = explode(',',strtoupper(C('REQUIRE_AUTH_ACTION')));
@@ -127,7 +127,7 @@ class RBAC extends Think
 					$_action['no'] = explode(',',strtoupper(C('NOT_AUTH_ACTION')));
 				}
 				//检查当前操作是否需要认证
-				if((!empty($_action['no']) && !in_array(strtoupper(ACTION_NAME),$_action['no'])) || (!empty($_action['yes']) && in_array(strtoupper(ACTION_NAME),$_action['yes']))) {
+				if((!empty($_action['no']) && !in_array(strtoupper($ActionName),$_action['no'])) || (!empty($_action['yes']) && in_array(strtoupper($ActionName),$_action['yes']))) {
 					return true;
 				}else {
 					return false;
@@ -160,12 +160,13 @@ class RBAC extends Think
 	}
 
     //权限认证的过滤器方法
-    static public function AccessDecision($appName=APP_NAME)
+    static public function AccessDecision($ModuleName=MODULE_NAME,$ActionName=ACTION_NAME)
     {
         //检查是否需要认证
-        if(RBAC::checkAccess()) {
+        if(RBAC::checkAccess($ModuleName,$ActionName)) {
             //存在认证识别号，则进行进一步的访问决策
-            $accessGuid   =   md5($appName.MODULE_NAME.ACTION_NAME);
+			$appName = APP_NAME;
+            $accessGuid   =   md5($appName.$ModuleName.$ActionName);
             if(empty($_SESSION[C('ADMIN_AUTH_KEY')])) {
                 if(C('USER_AUTH_TYPE')==2) {
                     //加强验证和即时验证模式 更加安全 后台权限修改可以即时生效
@@ -180,8 +181,8 @@ class RBAC extends Think
                     $accessList = $_SESSION['_ACCESS_LIST'];
                 }
                 //判断是否为组件化模式，如果是，验证其全模块名
-                $module = defined('P_MODULE_NAME')?  P_MODULE_NAME   :   MODULE_NAME;
-                if(!isset($accessList[strtoupper($appName)][strtoupper($module)][strtoupper(ACTION_NAME)])) {
+                $module = defined('P_MODULE_NAME')?  P_MODULE_NAME   :   $ModuleName;
+                if(!isset($accessList[strtoupper($appName)][strtoupper($module)][strtoupper($ActionName)])) {
                     $_SESSION[$accessGuid]  =   false;
                     return false;
                 }
