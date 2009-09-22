@@ -4,7 +4,7 @@
 <table>
 <tr>
 	<td>Internal PN:</td>
-	<td><input type="text" maxlength="10" size="15" name="PN" value="{$PN}" readonly="true" /></td>
+	<td><input type="text" maxlength="10" size="15" name="PN" value="{$info.Internal_PN}" /></td>
 </tr>
 <tr>
 	<td>Description:</td>
@@ -20,6 +20,7 @@
 </tr>
 <tr>
 	<td>Supplier:</td>
+	<td><select name="supplier_id"><option value="">Select One</option>{$info.supplier_opts}</select></td>
 </tr>
 <tr>
 	<td>Value/Package:</td>
