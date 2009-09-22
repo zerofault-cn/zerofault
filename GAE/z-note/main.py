@@ -159,6 +159,7 @@ class Upload(webapp.RequestHandler):
 					t.upload_time += datetime.timedelta(hours=+8)
 					t.begin_time   = datetime.datetime.strptime(begin_time,'%Y-%m-%d%H:%M:%S')
 					t.end_time   = datetime.datetime.strptime(end_time,'%Y-%m-%d%H:%M:%S')
+					t.description = ''
 					t.put()
 					key = t.key()
 					i = 0
@@ -206,6 +207,7 @@ class Upload(webapp.RequestHandler):
 					t.upload_time += datetime.timedelta(hours=+8)
 					t.begin_time   = datetime.datetime.strptime(begin_time,'%Y%m%d%H%M%S')
 					t.end_time   = datetime.datetime.strptime(end_time,'%Y%m%d%H%M%S')
+					t.description = ''
 					t.put()
 					key = t.key()
 					i = 0
@@ -296,6 +298,20 @@ class setPrivate(webapp.RequestHandler):
 				self.response.out.write('0')
 		else:
 			self.response.out.write('0')
+class setDescription(webapp.RequestHandler):
+	def get (self):
+		key = self.request.get('key')
+		user = users.get_current_user()
+		if key and user:
+			t = db.get(key)
+			if t:
+				t.description = self.request.get('description')
+				t.put()
+				self.response.out.write('1')
+			else:
+				self.response.out.write('0')
+		else:
+			self.response.out.write('0')
 
 application = webapp.WSGIApplication([
 	('/', Index),
@@ -306,6 +322,7 @@ application = webapp.WSGIApplication([
 	('/getlist', showTrackList),
 	('/getloc', getLocation),
 	('/set', setPrivate),
+	('/setDescr', setDescription),
 	('/m' ,mobile)
 	],debug=True)
 

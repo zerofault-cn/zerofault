@@ -2,16 +2,31 @@
 			{% if pub_track_count %}
 				<option value=''>查看他人公开的轨迹</option>
 				{% for item in pub_track %}
-				<option value="{{ item.key }}">{{ item.begin_time|date:"m-d H:i" }} ~ {{ item.end_time|date:"m-d H:i" }} (by {{ item.user }})</option>
+				<option value="{{ item.key }}">
+				{% if item.description %}
+				{{ item.description }}
+				{% else %}
+				{{ item.begin_time|date:"m-d H:i" }} ~ {{ item.end_time|date:"m-d H:i" }}
+				{% endif %}
+				(by {{ item.user }})</option>
 				{% endfor %}
 			{% else %}
 				<option value=''>选择行动时间</option>
 				{% for item in user_track %}
-				<option value="{{ item.key }}" id="{{ item.private }}">{{ item.begin_time }} ~ {{ item.end_time }} [{% if item.private %}私有{% else %}公开{% endif %}]</option>
+				<option value="{{ item.key }}" id="{{ item.private }}" label="{{ item.description }}">
+				{% if item.description %}
+				{{ item.description }}
+				{% else %}
+				{{ item.begin_time }} ~ {{ item.end_time }}
+				{% endif %}
+				[{% if item.private %}私有{% else %}公开{% endif %}]</option>
 				{% endfor %}
 			{% endif %}
 			</select>
+			<div class="clear"></div>
+			<span id="description" style="display:none">简短说明：<input type="text" id="descr" value="" size="25" maxlength="30"/><input type="button" id="submit" value="设置"/></span>
 			<br />
+
 			播放速度：<input type="text" id="speed" name="speed" value="500" size="3" onchange="changeSpeed()" />
 			<span id="slider_speed"></span>
 			<input type="button" id="play" value="播放" />
