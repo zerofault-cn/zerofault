@@ -1,0 +1,92 @@
+<p class="page_title_text">Product Data</p>
+<form action="__URL__/submit" method="post" target="_iframe">
+<input type="hidden" name="id" value="{$info.id}" />
+<table>
+<tr>
+	<td>Internal PN:</td>
+	<td><input type="text" maxlength="10" size="15" name="PN" value="{$PN}" readonly="true" /></td>
+</tr>
+<tr>
+	<td>Description:</td>
+	<td><input type="text" maxlength="40" size="15" name="description" value="{$info.description}" /></td>
+</tr>
+<tr>
+	<td>Manufacture:</td>
+	<td><input type="text" maxlength="20" size="15" name="manufacture" value="{$info.manufacture}"/></td>
+</tr>
+<tr>
+	<td>MPN:</td>
+	<td><input type="text" maxlength="20" size="15" name="MPN" value="{$info.MPN}"/></td>
+</tr>
+<tr>
+	<td>Supplier:</td>
+</tr>
+<tr>
+	<td>Value/Package:</td>
+	<td><input type="text" maxlength="20" size="15" name="value" value="{$info.value}"/></td>
+</tr>
+<tr>
+	<td>Unit:</td>
+	<td><input type="text" maxlength="20" size="15" name="unit" value="{$info.unit}"/></td>
+</tr>
+<tr>
+	<td>Commodity:</td>
+	<td><select name="commodity_id"><option value="">Select One</option>{$info.commodity_opts}</select></td>
+</tr>
+<tr>
+	<td>Rohs:</td>
+	<td><input type="text" maxlength="20" size="15" name="Rohs" value="{$info.Rohs}"/></td>
+</tr>
+<tr>
+	<td>LT days:</td>
+	<td><input type="text" maxlength="20" size="15" name="LT_days" value="{$info.LT_days}"/></td>
+</tr>
+<tr>
+	<td>MOQ:</td>
+	<td><input type="text" maxlength="20" size="15" name="MOQ" value="{$info.MOQ}"/></td>
+</tr>
+<tr>
+	<td>SPQ:</td>
+	<td><input type="text" maxlength="20" size="15" name="SPQ" value="{$info.SPQ}"/></td>
+</tr>
+<tr>
+	<td>MSL:</td>
+	<td><input type="text" maxlength="20" size="15" name="MSL" value="{$info.MSL}"/></td>
+</tr>
+<tr>
+	<td>Project:</td>
+	<td><input type="text" maxlength="20" size="15" name="project" value="{$info.project}"/></td>
+</tr>
+<tr>
+	<td>Inventory Limit:</td>
+	<td><input type="text" maxlength="20" size="15" name="inventory_limit" value="{$info.inventory_limit}"/></td>
+</tr>
+<tr>
+	<td>Currency:</td>
+	<td><select name="currency_id"><option value="">Select One</option>{$info.currency_opts}</select></td>
+</tr>
+<tr>
+	<td>Price:</td>
+	<td><input type="text" maxlength="20" size="15" name="price" value="{$info.price}"/></td>
+</tr>
+<tr>
+	<td>Accessories:</td>
+	<td><input type="text" maxlength="20" size="15" name="accessories" value="{$info.accessories}"/></td>
+</tr>
+<tr>
+	<td>Attachment:</td>
+	<td><input type="file" size="15" name="attachment" value="{$info.attachment}"/></td>
+</tr>
+<tr>
+	<td valign="top">Remark:</td>
+	<td><textarea name="remark" rows="3" cols="36">{$info.remark}</textarea></td>
+</tr>
+</table>
+<p class="center">
+<if condition="$info['id'] eq 0">
+<input type="Submit" value="Insert New Product" name="submit"/>
+<else />
+<input type="Submit" value="Update Product Metadata" name="submit"/>
+</if>
+</p>
+</form>

@@ -1,0 +1,30 @@
+<p class="page_title_text">Product Data</p>
+<table cellpadding="2" border="1">
+<tr>
+	<th>Internal PN</th>
+	<th>Description</th>
+	<th>Manufacture</th>
+	<th>MPN</th>
+	<th>Supplier</th>
+	<th>Value/Package</th>
+	<th>Unit</th>
+	<th>Commodity</th>
+	<th></th>
+</tr>
+<iterate name="result" id="item">
+<tr>
+	<td>{$item['Internal_PN']}</td>
+	<td>{$item['description']}</td>
+	<td>{$item['manufacture']}</td>
+	<td>{$item['MPN']}</td>
+	<td>{$item['supplier']['name']}</td>
+	<td>{$item['value']}</td>
+	<td>{$item['unit']}</td>
+	<td>{$item['commodity']['name']}</td>
+	<td><a href="__URL__/form/id/{$item['id']}">Edit</a></td>
+</tr>
+</iterate>
+</table>
+<p class="center">
+	<input type="button" onclick="javascript:document.location='__URL__/form';" value="Add a New Product" />
+</p>
