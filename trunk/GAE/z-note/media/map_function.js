@@ -501,6 +501,20 @@ function getlist() {
 					}
 				});
 		});
+		$("input#submit").click(function(){
+			$.get("setDescr",{
+				'key' : $("select#key").val(),
+				'description' : $("input#descr").val()
+			},function(str){
+					if(str=='1') {
+						alert('设置成功!');
+						getlist();
+					}
+					else{
+						alert('设置失败');
+					}
+				});
+		});
 		$("select#key").change(function(){
 			if($("select#key").val() && playing) {
 				if(!paused) {
@@ -517,13 +531,14 @@ function getlist() {
 				else{
 					$("input#hold").show();
 				}
+				$("span#description").show();
+				$("span#description input#descr").val($("select#key option:selected").attr('label'));
 			}
 		});
 	});
 }
 jQuery(function($){
 	initialize();
-	
 	getlist();
 	$("input#upload").click(function(){
 		$.ajaxFileUpload({
@@ -543,8 +558,6 @@ jQuery(function($){
 					oNewWin.document.open();
 					oNewWin.document.write(data);
 					oNewWin.document.close();
-
-
 				}
 			},
 			error: function (data, status, e)

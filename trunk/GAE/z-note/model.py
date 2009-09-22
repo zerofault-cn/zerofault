@@ -6,6 +6,7 @@ class Track(db.Model):
 	upload_time = db.DateTimeProperty(auto_now_add=True)
 	begin_time  = db.DateTimeProperty()
 	end_time    = db.DateTimeProperty()
+	description = db.StringProperty()
 	private     = db.BooleanProperty(default=True)
 
 class TrackPoint(db.Model):
