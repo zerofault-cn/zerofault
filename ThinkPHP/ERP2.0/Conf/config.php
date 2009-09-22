@@ -21,7 +21,7 @@ if($_SERVER["SERVER_NAME"]=='localhost') {
 
 
 		'USER_AUTH_ON'=>true,
-		'USER_AUTH_TYPE' => 2, //实时认证
+		'USER_AUTH_TYPE' => 0, //实时认证
 		'USER_AUTH_MODEL' => 'Staff',
 		'USER_AUTH_KEY' => 'authId',
 		'ADMIN_AUTH_KEY' => 'administrator',
