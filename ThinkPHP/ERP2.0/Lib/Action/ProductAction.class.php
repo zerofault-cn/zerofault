@@ -82,7 +82,16 @@ class ProductAction extends BaseAction{
 		$this->dao->currency_id = $_REQUEST['currency_id'];
 		$this->dao->price = $_REQUEST['price'];
 		$this->dao->accessories = $_REQUEST['accessories'];
-		$this->dao->attachment = $_REQUEST['attachment'];
+		$this->dao->attachment = '';
+		$file = $_FILES['attachment'];
+		if($file['size']>0) {
+			$file_path = 'Attach/Product/';
+			$file_name = $PN.'.'.pathinfo($file['name'], PATHINFO_EXTENSION);
+			if(!move_uploaded_file($file['tmp_name'], $file_path.$file_name)) {
+				self::_error('Attachment upload fail!');
+			}
+			$this->dao->attachment = $file_path.$file_name;
+		}
 		$this->dao->remark = $_REQUEST['remark'];
 		if(!empty($id) && $id>0) {
 			if(false !== $this->dao->save()){

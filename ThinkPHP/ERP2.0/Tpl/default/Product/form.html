@@ -1,5 +1,5 @@
 <p class="page_title_text">Product Data</p>
-<form action="__URL__/submit" method="post" target="_iframe">
+<form action="__URL__/submit" method="post" enctype="multipart/form-data" target="_iframe">
 <input type="hidden" name="id" value="{$info.id}" />
 <table>
 <tr>
@@ -76,7 +76,11 @@
 </tr>
 <tr>
 	<td>Attachment:</td>
-	<td><input type="file" size="15" name="attachment" value="{$info.attachment}"/></td>
+	<td><input type="file" size="15" name="attachment" /><br />
+	<neq name="info.attachment" value="">
+	<a href="__APP__/../{$info.attachment}" target="_blank" title="view attachment in new window">View Attachment</a>
+	</neq>
+	</td>
 </tr>
 <tr>
 	<td valign="top">Remark:</td>
