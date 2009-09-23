@@ -35,7 +35,7 @@ class BaseAction extends Action{
 			}
 		}
 		$this->assign('menu', $menu);
-		$this->assign("current_time", date("l, d/m/Y | H:i A"));//Thursday, 10/09/2009 | 11:53 AM
+		$this->assign("current_time", date("l, d/m/Y | h:i A"));//Thursday, 10/09/2009 | 11:53 AM
 		MODULE_NAME != 'Index'&& $this->assign('submenu', $menu[Session::get('pmenu')]['submenu']);
 		// 认证当前操作
 		if(RBAC::checkAccess()) {

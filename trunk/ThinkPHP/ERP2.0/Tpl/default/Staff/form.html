@@ -31,6 +31,10 @@
 	<td><select name="leader_id"><option value="">Select One</option>{$info.leader_opts}</select></td>
 </tr>
 <tr>
+	<td>Is Leader:</td>
+	<td><input type="checkbox" name="is_leader" value="1" <eq name='info.is_leader' value='1'>checked="true"</eq>/>Yes</td>
+</tr>
+<tr>
 	<td>Role:</td>
 	<td>{$info.role_chks}</td>
 </tr>
