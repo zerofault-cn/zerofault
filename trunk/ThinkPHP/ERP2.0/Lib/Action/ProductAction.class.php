@@ -11,7 +11,7 @@ class ProductAction extends BaseAction{
 	protected $dao;
 
 	public function _initialize() {
-		$this->dao = M('Product');
+		$this->dao = D('Product');
 		parent::_initialize();
 	}
 	/**
@@ -19,6 +19,7 @@ class ProductAction extends BaseAction{
 	* 节点列表
 	*/
 	public function index(){
+		$this->assign('result', $this->dao->relation(true)->select());
 		$this->assign('content','Product:index');
 		$this->display('Layout:ERP_layout');
 	}
