@@ -1,7 +1,7 @@
 <?php
 if($_SERVER["SERVER_NAME"]=='localhost') {
 	$config = array(
-		'APP_DEBUG'			=> false,
+		'APP_DEBUG'			=> true,
 		'APP_DOMAIN_DEPLOY'	=> false,
 		'APP_FILE_CASE'		=> true,
 		'APP_CONFIG_LIST'	=> array('menu'),
