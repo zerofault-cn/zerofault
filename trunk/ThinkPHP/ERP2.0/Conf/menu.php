@@ -1,7 +1,7 @@
 <?php
 $menu = array();
 
-$menu['Basic Data'] = array(
+$menu['Basic&nbsp;Data'] = array(
 	'name'	  => 'Supplier',//Ä¬ÈÏ²Ù×÷Module.index
 	'submenu' => array(
 		'Supplier information'	=> 'Supplier',
@@ -12,10 +12,10 @@ $menu['Basic Data'] = array(
 		)
 	);
 
-$menu['Inventory Input<br />Management'] = array(
-	'name'	=> 'Inbound',
+$menu['Inventory&nbsp;Input Management'] = array(
+	'name'	=> 'ProductIn',
 	'submenu' => array(
-		'Products entering information'	=> 'Bill',
+		'Products entering'	=> 'ProductIn',
 		'details of inventory'		=> 'Bill',
 		'return goods amount'		=> 'Bill'
 		)
@@ -27,7 +27,7 @@ $menu['Storage inventory'] = array(
 		)
 	);
 
-$menu['Inventory output<br />Management'] = array(
+$menu['Inventory&nbsp;output Management'] = array(
 	'name' => 'Outbound',
 	'submenu' => array(
 		'Product Request'	=> 'Requisition',
@@ -35,7 +35,7 @@ $menu['Inventory output<br />Management'] = array(
 		)
 	);
 
-$menu['Purchase<br />management'] = array(
+$menu['Purchase management'] = array(
 	'name' => 'Feedback',
 	);
 
