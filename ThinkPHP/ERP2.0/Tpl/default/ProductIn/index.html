@@ -1,0 +1,32 @@
+<p class="page_title_text">Product entering information</p>
+<table cellpadding="2" border="1">
+<tr>
+	<th>No.</th>
+	<th>Product</th>
+	<th>Supplier</th>
+	<th>Quantity</th>
+	<th>Unit</th>
+	<th>Price</th>
+	<th>Total</th>
+	<th>Entering Time</th>
+	<th>Entering Staff</th>
+	<th></th>
+</tr>
+<iterate name="result" id="item">
+<tr>
+	<td>{$item['code']}</td>
+	<td>{$item['product']['MPN']}</td>
+	<td>{$item['supplier']['name']}</td>
+	<td>{$item['quantity']}</td>
+	<td>{$item['unit']['title']}</td>
+	<td>{$item['price']}</td>
+	<td>{$item['quantity']*$item['price']}</td>
+	<td>{$item['create_time']}</td>
+	<td>{$item['staff']['name']}</td>
+	<td><a href="__URL__/form/id/{$item['id']}">Edit</a></td>
+</tr>
+</iterate>
+</table>
+<p class="center">
+	<input type="button" onclick="javascript:document.location='__URL__/form';" value="Add a New Product" />
+</p>

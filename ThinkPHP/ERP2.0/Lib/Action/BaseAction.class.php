@@ -15,12 +15,15 @@ class BaseAction extends Action{
 	*/
 	public function _initialize() {
 		header("Content-Type:text/html; charset=utf-8");
-		//dump(Cookie::is_set('think_language'));
 
 		import('@.RBAC');
-		!empty($_REQUEST['pmenu']) && Session::set('pmenu', $_REQUEST['pmenu']);
+
+		!empty($_REQUEST['pmenu']) && Session::set('pmenu', urldecode($_REQUEST['pmenu']));
 		$menu = C('_menu_');
 		foreach($menu as $key=>$val) {
+			if(str_replace('&nbsp;',' ',$key) == Session::get('pmenu')) {
+				$submenu = $menu[$key]['submenu'];
+			}
 			if(!RBAC::AccessDecision($val['name'], 'index')) {
 				unset($menu[$key]);
 				continue;
@@ -35,8 +38,8 @@ class BaseAction extends Action{
 			}
 		}
 		$this->assign('menu', $menu);
+		$this->assign('submenu', $submenu);
 		$this->assign("current_time", date("l, d/m/Y | h:i A"));//Thursday, 10/09/2009 | 11:53 AM
-		MODULE_NAME != 'Index'&& $this->assign('submenu', $menu[Session::get('pmenu')]['submenu']);
 		// 认证当前操作
 		if(RBAC::checkAccess()) {
 			//检查认证识别号
