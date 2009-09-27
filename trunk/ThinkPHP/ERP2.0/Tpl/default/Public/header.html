@@ -10,7 +10,7 @@
 		<table cellspacing="0" cellpadding="0" class="quick_menu_tabs">
 		<tr>
 			<iterate name="menu" id="item">
-			<td align="center" class="quick_menu_tab"><a href="__APP__/{$item['name']}?pmenu={$key}">{$key}</a></td>
+			<td align="center" class="quick_menu_tab"><a href="__APP__/{$item['name']}?pmenu={$key|str_replace='&nbsp;',' ',###}">{$key}</a></td>
 			</iterate>
 		</tr>
 		</table>
