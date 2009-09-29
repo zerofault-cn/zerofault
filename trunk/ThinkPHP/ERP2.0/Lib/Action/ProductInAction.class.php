@@ -63,8 +63,8 @@ class ProductInAction extends BaseAction{
 		}
 		else{
 			$this->dao->code = $_REQUEST['code'];
-			$this->dao->source = '';
-			$this->dao->destination = '';
+			$this->dao->source = 'Supplier';
+			$this->dao->destination = 'Storage';
 			$this->dao->staff_id = $_SESSION[C('USER_AUTH_KEY')];
 			$this->dao->create_time = date("Y-m-d H:i:s");
 		}
