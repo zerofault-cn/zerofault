@@ -72,7 +72,7 @@ class ProductAction extends BaseAction{
 		$this->dao->value = $_REQUEST['value'];
 		$this->dao->commodity_id = $_REQUEST['commodity_id'];
 		$this->dao->unit = $_REQUEST['unit'];
-		$this->dao->Rohs = $_REQUEST['Rohs'];
+		$this->dao->RoHS = $_REQUEST['Rohs'];
 		$this->dao->LT_days = $_REQUEST['LT_days'];
 		$this->dao->MOQ = $_REQUEST['MOQ'];
 		$this->dao->SPQ = $_REQUEST['SPQ'];
