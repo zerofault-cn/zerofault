@@ -101,10 +101,10 @@ class LineAction extends BaseAction{
 		}
 		$data->clear();
 		unset($data);
-		
 		$this->assign('site', $site);
 		$this->assign('local_info', $local_info);
 		$this->assign('local_list1', $local_list1);
+		$this->assign('local_list2', $local_list2);
 		$this->assign('remote_info', $remote_info);
 		$this->assign('content','Line:edit');
 		$this->display('Layout:Admin_layout');
@@ -117,15 +117,15 @@ class LineAction extends BaseAction{
 		$line_arr=explode("\n",$descr);
 
 		$remote_info['name'] = trim($line_arr[1]);
-	$numbers= explode("/",$remote_info['name']);
-	$number = str_ireplace("K",'',$numbers[0]);
-	$number = str_ireplace("(夜间线)",'',$number);
-	$number = str_ireplace("(区间)",'',$number);
-	$number = str_ireplace("B支",'',$number);
-	$number = str_ireplace("B",'',$number);
-	$number = str_ireplace("Y",'',$number);
-	$number = str_ireplace("J",'',$number);
-	$number = intval($number);
+		$numbers= explode("/",$remote_info['name']);
+		$number = str_ireplace("K",'',$numbers[0]);
+		$number = str_ireplace("(夜间线)",'',$number);
+		$number = str_ireplace("(区间)",'',$number);
+		$number = str_ireplace("B支",'',$number);
+		$number = str_ireplace("B",'',$number);
+		$number = str_ireplace("Y",'',$number);
+		$number = str_ireplace("J",'',$number);
+		$number = intval($number);
 
 		$term_arr=explode("--",$line_arr[6]);
 		$remote_info['start_name'] = trim($term_arr[0]);
@@ -144,41 +144,24 @@ class LineAction extends BaseAction{
 		$remote_info['ic_card'] = trim($line_arr[26]);
 		$remote_info['service_hour'] = trim($line_arr[30]);
 		$route_arr=$table->children($tmp_offset)->find('table[bgcolor="3E89C0"]');
-		foreach($route_arr as $r=>$route)
-		{
-			if($r==1 && in_array($number,$config['circleLines']))
-			{
+		$tmp_arr = array();
+		$tmp_arr['_0'] = array();
+		$tmp_arr['_1'] = array();
+		foreach($route_arr as $r=>$route) {
+			if($r==1 && in_array($number,$config['circleLines'])) {
 				continue;
 			}
 			$tr_arr=$route->children();
-			foreach($tr_arr as $row=>$tr)
-			{
-				if(!isset($flag)){
-					$tmp_arr = array();
-					$flag=0;
-				}
-				if($flag){
-					$tmp_arr = array();
-					$flag=0;
-				}
-				
-				if($row==0 || $row==1)
-				{
+			foreach($tr_arr as $row=>$tr) {
+				if($row==0 || $row==1) {
 					continue;
 				}
-				else
-				{
-					$tmp_arr[] = trim($tr->children(1)->plaintext);
-				}
-				if($row==sizeof($tr_arr)-1)
-				{
-					
-					$flag=1;
-				}
+				$tmp_arr['_'.$r][] = trim($tr->children(1)->plaintext);
+				
 			}
 		}
-		$html .= $str;
-		$html .= '</span><br />';
+		$remote_info['list1'] = $tmp_arr['_0'];
+		$remote_info['list2'] = $tmp_arr['_1'];
 	}
 	/**
 	*
