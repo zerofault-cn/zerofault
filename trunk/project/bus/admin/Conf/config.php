@@ -2,6 +2,7 @@
 if($_SERVER["SERVER_NAME"]=='localhost') {
 	$config = array(
 		'APP_DEBUG'			=> true,
+		'APP_CONFIG_LIST'	=> array('config_hz'),
 
 		'DB_TYPE'			=> 'mysql',
 		'DB_HOST'			=> 'localhost',

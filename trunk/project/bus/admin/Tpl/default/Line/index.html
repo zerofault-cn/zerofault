@@ -22,7 +22,7 @@
 		<td rowspan="2">{$item['ic_card']}</td>
 		<td rowspan="2">{$item['service_hour']}</td>
 		<td rowspan="2">
-			<if condition="$item['status'] eq 0"><a href="javascript:void(0);" onclick="check('{$item['name']}')" title="验证"><img src="../Public/Image/tick0.gif" alt="check" align="absmiddle"/></a>
+			<if condition="$item['status'] eq 0"><a href="__URL__/edit/id/{$item['id']}"  title="更正"><img src="../Public/Image/tick0.gif" alt="check" align="absmiddle"/></a>
 			<else />
 			<img src="../Public/Image/tick.gif" alt="check" align="absmiddle"/>
 			</if>
@@ -40,12 +40,4 @@
 		<input type="button" value="添加" class="submit" />
 	</div>
 <script language="JavaScript" type="text/javascript">
-function check(name){ //提交新的分类
-	$.post(_URL_+"/check",{
-		'name':name
-	},function(str){
-			
-			myAlert(str);
-		});
-}
 </script>
