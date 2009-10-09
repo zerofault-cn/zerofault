@@ -1,0 +1,105 @@
+	<table id="table" class="tablesorter" border="1" cellpadding="3" cellspacing="0" width="100%" bordercolor="#999999" style="border-collapse:collapse;">
+	<thead>
+	<tr>
+		<th>字段</th>
+		<th>本地数据</th>
+		<th>官方数据</th>
+		<th>操作</th>
+	</tr>
+	</thead>
+	<tr>
+		<td bgcolor="#ededed">线路名称</td>
+		<td bgcolor="#FFDEAD">{$local_info['name']}</td>
+		<td bgcolor="#98FB98">{$remote_info['name']}</td>
+		<td><neq name="local_info['name']" value="$remote_info['name']"><img src="../Public/Image/tick.gif" alt="check" align="absmiddle"/></neq></td>
+	</tr>
+	<tr>
+		<td bgcolor="#ededed">起点</td>
+		<td bgcolor="#FFDEAD">{$site[$local_info['start_sid']]}</td>
+		<td bgcolor="#98FB98">{$remote_info['start_name']}</td>
+		<td><neq name="site[$local_info['start_sid']]" value="$remote_info['start_name']"><img src="../Public/Image/tick.gif" alt="check" align="absmiddle"/></neq></td>
+	</tr>
+	<tr>
+		<td bgcolor="#ededed">起点首班</td>
+		<td bgcolor="#FFDEAD">{$local_info['start_first']}</td>
+		<td bgcolor="#98FB98">{$remote_info['start_first']}</td>
+		<td><neq name="local_info['start_first']" value="$remote_info['start_first']"><img src="../Public/Image/tick.gif" alt="check" align="absmiddle"/></neq></td>
+	</tr>
+	<tr>
+		<td bgcolor="#ededed">起点末班</td>
+		<td bgcolor="#FFDEAD">{$local_info['start_last']}</td>
+		<td bgcolor="#98FB98">{$remote_info['start_last']}</td>
+		<td><neq name="local_info['start_last']" value="$remote_info['start_last']"><img src="../Public/Image/tick.gif" alt="check" align="absmiddle"/></neq></td>
+	</tr>
+	<tr>
+		<td bgcolor="#ededed">终点</td>
+		<td bgcolor="#FFDEAD">{$site[$local_info['end_sid']]}</td>
+		<td bgcolor="#98FB98">{$remote_info['end_name']}</td>
+		<td><neq name="site[$local_info['end_sid']]" value="$remote_info['end_name']"><img src="../Public/Image/tick.gif" alt="check" align="absmiddle"/></neq></td>
+	</tr>
+	<tr>
+		<td bgcolor="#ededed">终点首班</td>
+		<td bgcolor="#FFDEAD">{$local_info['end_first']}</td>
+		<td bgcolor="#98FB98">{$remote_info['end_first']}</td>
+		<td><neq name="local_info['end_first']" value="$remote_info['end_first']"><img src="../Public/Image/tick.gif" alt="check" align="absmiddle"/></neq></td>
+	</tr>
+	<tr>
+		<td bgcolor="#ededed">终点末班</td>
+		<td bgcolor="#FFDEAD">{$local_info['end_last']}</td>
+		<td bgcolor="#98FB98">{$remote_info['end_last']}</td>
+		<td><neq name="local_info['end_last']" value="$remote_info['end_last']"><img src="../Public/Image/tick.gif" alt="check" align="absmiddle"/></neq></td>
+	</tr>
+	<tr>
+		<td bgcolor="#ededed">普通车</td>
+		<td bgcolor="#FFDEAD">{$local_info['fare_norm']}</td>
+		<td bgcolor="#98FB98">{$remote_info['fare_norm']}</td>
+		<td><neq name="local_info['fare_norm']" value="$remote_info['fare_norm']"><img src="../Public/Image/tick.gif" alt="check" align="absmiddle"/></neq></td>
+	</tr>
+	<tr>
+		<td bgcolor="#ededed">空调车</td>
+		<td bgcolor="#FFDEAD">{$local_info['fare_cond']}</td>
+		<td bgcolor="#98FB98">{$remote_info['fare_cond']}</td>
+		<td><neq name="local_info['fare_cond']" value="$remote_info['fare_cond']"><img src="../Public/Image/tick.gif" alt="check" align="absmiddle"/></neq></td>
+	</tr>
+	<tr>
+		<td bgcolor="#ededed">可用IC卡</td>
+		<td bgcolor="#FFDEAD">{$local_info['ic_card']}</td>
+		<td bgcolor="#98FB98">{$remote_info['ic_card']}</td>
+		<td><neq name="local_info['ic_card']" value="$remote_info['ic_card']"><img src="../Public/Image/tick.gif" alt="check" align="absmiddle"/></neq></td>
+	</tr>
+	<tr>
+		<td bgcolor="#ededed">服务时间</td>
+		<td bgcolor="#FFDEAD">{$local_info['service_hour']}</td>
+		<td bgcolor="#98FB98">{$remote_info['service_hour']}</td>
+		<td><neq name="local_info['service_hour']" value="$remote_info['service_hour']"><img src="../Public/Image/tick.gif" alt="check" align="absmiddle"/></neq></td>
+	</tr>
+	<tr bgcolor="#C0C0C0">
+		<td>站次</td>
+		<td colspan="2">上行</td>
+		<td></td>
+	</tr>
+	<iterate name="local_list1" id="local_item">
+	<tr>
+		<td>{$i}</td>
+		<td>{$site[$local_item['sid']]}</td>
+		<td></td>
+		<td></td>
+	</tr>
+	</iterate>
+	<tr bgcolor="#C0C0C0">
+		<td>站次</td>
+		<td colspan="2">下行</td>
+		<td></td>
+	</tr>
+	<iterate name="local_list2" id="local_item">
+	<tr>
+		<td>{$i}</td>
+		<td>{$site[$local_item['sid']]}</td>
+		<td></td>
+		<td></td>
+	</tr>
+	</iterate>
+	</table>
+	
+<script language="JavaScript" type="text/javascript">
+</script>
