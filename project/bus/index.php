@@ -1,0 +1,17 @@
+<?php 
+/**
+* 项目总入口
+* 定义框架所在目录、项目名、项目路径
+*
+* @author zerofault <zerofault@gmail.com>
+* @since  2009-10-8
+*/
+
+define('THINK_PATH', '../ThinkPHP/ThinkPHP');
+define('APP_PATH', './admin');
+require(THINK_PATH."/ThinkPHP.php");
+
+$App = new App(); 
+$App->run();
+
+?>
