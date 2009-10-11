@@ -20,8 +20,8 @@ class Paginator extends Think{
 		'prev'=>'&lt;',
 		'next'=>'&gt;',
 		'last'=>'&gt;|',
-		'show_num'=>7,		//设定中间连续显示的页码个数，如...4,5,6,7,8,9,10...，最小为3
-		'side_num'=>2		//设定边界显示的页码个数，如1,2......21,22，最小为1
+		'show_num'=>9,		//设定中间连续显示的页码个数，如...4,5,6,7,8,9,10...，最小为3
+		'side_num'=>3		//设定边界显示的页码个数，如1,2......21,22，最小为1
 	);
 
 	public function __construct($record_count,$limit=10,$parameter='')

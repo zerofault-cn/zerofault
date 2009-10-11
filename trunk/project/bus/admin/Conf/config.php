@@ -1,5 +1,6 @@
 <?php
-if($_SERVER["SERVER_NAME"]=='localhost') {
+
+if(defined('CLI') || $_SERVER["SERVER_NAME"]=='localhost') {
 	$config = array(
 		'APP_DEBUG'			=> false,
 		'APP_CONFIG_LIST'	=> array('config_hz'),
@@ -10,7 +11,6 @@ if($_SERVER["SERVER_NAME"]=='localhost') {
 		'DB_USER'			=> 'root',
 		'DB_PWD'			=> '',
 		'DB_PREFIX'			=> 'bus_hz_',
-		'DB_CHARSET'=>'latin1'
 	);
 }
 else{

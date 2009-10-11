@@ -52,14 +52,108 @@ class LineAction extends BaseAction{
 		foreach($site_arr as $arr) {
 			$site[$arr['id']] = $arr['name'];
 		}
-
-
 		$this->assign("topnavi",$topnavi);
 		$this->assign('page', $p->showMultiNavi());
 		$this->assign('list',$rs);
 		$this->assign('site', $site);
 		$this->assign('content','Line:index');
 		$this->display('Layout:Admin_layout');
+	}
+	function batch_update() {
+		$local_list = $this->dao->where(array('status'=>0))->order('update_time,id')->limit(30)->select();
+		foreach($local_list as $n=>$local_info) {
+			echo $n.".Updating line: ".$local_info['name']."\t";
+			$remote_info = S($local_info['number']);
+			if(false === $remote_info){
+				$names = explode('/',$local_info['name']);
+				$name = $names[0];
+				require_cache(LIB_PATH.'/simple_html_dom.php');
+				global $table,$remote_info,$offset;
+				$c = curl_init();
+				curl_setopt($c, CURLOPT_REFERER, "http://www.hzbus.com.cn/");
+				curl_setopt($c, CURLOPT_RETURNTRANSFER, 1);
+				curl_setopt($c, CURLOPT_URL, "http://www.hzbus.com.cn/content/busline/line_search.jsp");
+				curl_setopt($c, CURLOPT_POSTFIELDS,"line_name=".$name);
+				$data = curl_exec($c);
+				//$data = iconv('gb2312','utf-8',$data);
+				$data = mb_convert_encoding($data,'UTF-8','GBK');
+				$data=str_get_html($data);
+				$table=$data->find('table[width="98%"] table',0);
+				$descr=$table->children(1)->plaintext;
+				echo "...";
+				$remote_info = array();
+				if(strlen(trim($descr))>=2) {
+					$offset = 0;
+					if(strlen(trim($descr))<20) {
+						$offset=2;
+					}
+					$descr=$table->children(1+$offset)->plaintext;
+					self::parseLineInfo($descr,2+$offset);
+					if($offset==2) {
+						$descr=$table->children(4+$offset)->plaintext;
+						self::parseLineInfo($descr,5+$offset);
+					}
+				}
+				$data->clear();
+				unset($data);
+				S($local_info['number'], $remote_info, 7*86400);
+			}
+			echo "...";
+			$base = 0;
+			$qujian = 1;
+			foreach($remote_info as $i=>$info) {
+				if(false !== stripos($info['name'],'区间')) {
+					$qujian = $i;
+				}
+				else{
+					$base = $i;
+				}
+			}
+			if(false === stripos($local_info['name'],'区间')) {
+				$remote_info = $remote_info[$base];
+			}
+			else{
+				$remote_info = $remote_info[$qujian];
+			}
+			//更新line
+			$data = array();
+			$data['start_sid']   = self::getSiteId($remote_info['start_name']);
+			$data['start_first'] = $remote_info['start_first'];
+			$data['start_last']  = $remote_info['start_last'];
+			$data['end_sid']     = self::getSiteId($remote_info['end_name']);
+			$data['end_first']   = $remote_info['end_first'];
+			$data['end_last']    = $remote_info['end_last'];
+			$data['fare_norm']   = $remote_info['fare_norm'];
+			$data['fare_cond']   = $remote_info['fare_cond'];
+			$data['ic_card']     = $remote_info['ic_card'];
+			$data['service_day'] = $remote_info['service_day'];
+			$data['update_time'] = date("Y-m-d H:i:s");
+			$data['status'] = 1;
+			$this->dao->where('id='.$local_info['id'])->data($data)->save();
+			//更新route
+			echo "...";
+			foreach($remote_info['list1'] as $i=>$site) {
+				$data = array();
+				$data['lid'] = $local_info['id'];
+				$data['sid'] = self::getSiteId($site);
+				$data['sort'] = 10*($i+1);
+				$data['dir'] = 1;
+				M('Route')->add($data);
+			}
+			if(empty($remote_info['list2'])) {
+				continue;
+			}
+			foreach($remote_info['list2'] as $i=>$site) {
+				$data = array();
+				$data['lid'] = $local_info['id'];
+				$data['sid'] = self::getSiteId($site);
+				$data['sort'] = 10*($i+1);
+				$data['dir'] = -1;
+				M('Route')->add($data);
+			}
+			echo "Done\n";
+
+		}
 	}
 	function edit() {
 		$topnavi[]=array(
@@ -79,8 +173,8 @@ class LineAction extends BaseAction{
 			$site[$arr['id']] = $arr['name'];
 		}
 		$dRoute = M('Route');
-		$local_list1 = $dRoute->where(array('lid'=>$id,'direction'=>1))->order('i')->select();
-		$local_list2 = $dRoute->where(array('lid'=>$id,'direction'=>-1))->order('i')->select();
+		$local_list1 = $dRoute->where(array('lid'=>$id,'dir'=>1))->order('sort')->select();
+		$local_list2 = $dRoute->where(array('lid'=>$id,'dir'=>-1))->order('sort')->select();
 
 		$remote_info = S($local_info['number']);
 		if($_REQUEST['refresh'] || false === $remote_info){
@@ -199,7 +293,7 @@ class LineAction extends BaseAction{
 		$tmp_remote_info['fare_cond'] = trim($line_arr[22]);
 
 		$tmp_remote_info['ic_card'] = trim($line_arr[26]);
-		$tmp_remote_info['service_hour'] = trim($line_arr[30]);
+		$tmp_remote_info['service_day'] = trim($line_arr[30]);
 		$route_arr=$table->children($tmp_offset)->find('table[bgcolor="3E89C0"]');
 		$tmp_arr = array();
 		$tmp_arr['_0'] = array();
@@ -236,15 +330,25 @@ class LineAction extends BaseAction{
 		$where['name'] = $name;
 		$rs = $this->dao->where($where)->find();
 		if($rs && sizeof($rs)>0){
-			die('-1');
+			self::_error('已存在此线路名！');
 		}
+		$numbers= explode("/",$name);
+		$number = str_ireplace("K",'',$numbers[0]);
+		$number = str_ireplace("(夜间线)",'',$number);
+		$number = str_ireplace("(区间)",'',$number);
+		$number = substr($number,0,1)=='B' ? (1000+intval(str_ireplace("B",'',$number))) : $number;
+		$number = substr($number,0,3)=='B支'? (2000+intval(str_ireplace("B支",'',$number))) : $number;
+		$number = substr($number,0,1)=='Y' ? (3000+intval(str_ireplace("Y",'',$number))) : $number;
+		$number = substr($number,0,1)=='J' ? (4000+intval(str_ireplace("J",'',$number))) : $number;
+		$number = intval($number);
 		$this->dao->name = $name;
+		$this->dao->number = $number;
 		$this->dao->status = 0;
 		if($this->dao->add()){
-			die('1');
+			self::_success('添加成功','',0);
 		}
 		else{
-			die('sql:'.$this->dao->getLastSql());
+			self::_error('sql:'.$this->dao->getLastSql());
 		}
 	}
 	/**
@@ -253,20 +357,20 @@ class LineAction extends BaseAction{
 	*/
 	public function update(){
 		if('route' == $_POST['type']) {
-			$direction = $_POST['direction'];
+			$dir = $_POST['dir'];
 			$lid = $_POST['lid'];
 			$site_arr = $_POST['site'];
-			if(empty($direction) || empty($lid)) {
+			if(empty($dir) || empty($lid)) {
 				return;
 			}
 			$dRoute = M("Route");
-			if(false === $dRoute->where(array('lid'=>$lid,'direction'=>$direction))->delete()) {
+			if(false === $dRoute->where(array('lid'=>$lid,'dir'=>$dir))->delete()) {
 				self::_error('删除旧数据失败！');
 			}
 			foreach($site_arr as $i=>$site) {
 				$data['lid'] = $lid;
-				$data['direction'] = $direction;
-				$data['i'] = 10*($i+1);
+				$data['dir'] = $dir;
+				$data['sort'] = $i;
 				$data['sid'] = self::getSiteId($site);
 				$dRoute->add($data);
 			}

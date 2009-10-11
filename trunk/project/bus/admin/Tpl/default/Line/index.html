@@ -20,16 +20,14 @@
 		<td>{$item['start_first']}-{$item['start_last']}</label></td>
 		<td rowspan="2">{$item['fare_norm']}/{$item['fare_cond']}</td>
 		<td rowspan="2">{$item['ic_card']}</td>
-		<td rowspan="2">{$item['service_hour']}</td>
+		<td rowspan="2">{$item['service_day']}</td>
 		<td rowspan="2">
 			<if condition="_GET.status eq -1">
 			<a href="__URL__/update/id/{$item['id']}/f/status/v/0" target="_iframe" title="恢复"><img src="../Public/Image/tick.gif" alt="tick" align="absmiddle"/></a>
 			<else />
-				<if condition="$item['status'] eq 0">
-			<a href="__URL__/edit/id/{$item['id']}"  title="更正"><img src="../Public/Image/accept.gif" alt="check" align="absmiddle"/></a>
-				<else />
-			<img src="../Public/Image/tick0.gif" alt="check" align="absmiddle"/>
-				</if>
+				
+			<a href="__URL__/edit/id/{$item['id']}"  title="检查"><img src="../Public/Image/accept.gif" alt="check" align="absmiddle"/></a>
+				
 			<a href="__URL__/update/id/{$item['id']}/f/status/v/-1" target="_iframe" title="删除"><img src="../Public/Image/cross.gif" alt="cross" align="absmiddle"/></a>
 			</if>
 
@@ -43,8 +41,10 @@
 	</table>
 	{$page}
 	<div class="addForm">
-		添加新线路：<input type="text" class="name" size="10" tabindex="1" />
-		<input type="button" value="添加" class="submit" />
+		<form action="__URL__/add" method="post" target="_iframe">
+		添加新线路：<input type="text" name="name" size="10" tabindex="1" />
+		<input type="submit" value="添加" />
+		</form>
 	</div>
 <script language="JavaScript" type="text/javascript">
 </script>
