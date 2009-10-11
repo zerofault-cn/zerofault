@@ -60,11 +60,12 @@ class LineAction extends BaseAction{
 		$this->display('Layout:Admin_layout');
 	}
 	function batch_update() {
-		$local_list = $this->dao->where(array('status'=>0))->order('update_time,id')->limit(30)->select();
+		$local_list = $this->dao->where(array('status'=>0))->order('update_time,id')->limit(20)->select();
 		foreach($local_list as $n=>$local_info) {
 			echo $n.".Updating line: ".$local_info['name']."\t";
 			$remote_info = S($local_info['number']);
 			if(false === $remote_info){
+				echo "...";
 				$names = explode('/',$local_info['name']);
 				$name = $names[0];
 				require_cache(LIB_PATH.'/simple_html_dom.php');
@@ -80,7 +81,6 @@ class LineAction extends BaseAction{
 				$data=str_get_html($data);
 				$table=$data->find('table[width="98%"] table',0);
 				$descr=$table->children(1)->plaintext;
-				echo "...";
 				$remote_info = array();
 				if(strlen(trim($descr))>=2) {
 					$offset = 0;
@@ -98,7 +98,6 @@ class LineAction extends BaseAction{
 				unset($data);
 				S($local_info['number'], $remote_info, 7*86400);
 			}
-			echo "...";
 			$base = 0;
 			$qujian = 1;
 			foreach($remote_info as $i=>$info) {
@@ -131,7 +130,6 @@ class LineAction extends BaseAction{
 			$data['status'] = 1;
 			$this->dao->where('id='.$local_info['id'])->data($data)->save();
 			//更新route
-			echo "...";
 			foreach($remote_info['list1'] as $i=>$site) {
 				$data = array();
 				$data['lid'] = $local_info['id'];
@@ -141,18 +139,19 @@ class LineAction extends BaseAction{
 				M('Route')->add($data);
 			}
 			if(empty($remote_info['list2'])) {
+				echo "Circle Line Done\n";
 				continue;
 			}
+			echo "...";
 			foreach($remote_info['list2'] as $i=>$site) {
 				$data = array();
 				$data['lid'] = $local_info['id'];
 				$data['sid'] = self::getSiteId($site);
-				$data['sort'] = 10*($i+1);
+				$data['sort'] = $i;
 				$data['dir'] = -1;
 				M('Route')->add($data);
 			}
 			echo "Done\n";
-
 		}
 	}
 	function edit() {
