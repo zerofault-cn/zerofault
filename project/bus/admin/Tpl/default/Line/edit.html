@@ -1,4 +1,4 @@
-	<table id="table" class="tablesorter" border="1" cellpadding="3" cellspacing="0" width="100%" bordercolor="#999999" style="border-collapse:collapse;">
+	<table id="table" class="tablesorter" border="1" cellpadding="2" cellspacing="0" width="100%" bordercolor="#999999" style="border-collapse:collapse;">
 	<thead>
 	<tr>
 		<th>字段</th>
@@ -11,95 +11,129 @@
 		<td bgcolor="#ededed">线路名称</td>
 		<td bgcolor="#FFDEAD">{$local_info['name']}</td>
 		<td bgcolor="#98FB98">{$remote_info['name']}</td>
-		<td><neq name="local_info['name']" value="$remote_info['name']"><img src="../Public/Image/tick.gif" alt="check" align="absmiddle"/></neq></td>
+		<td><neq name="local_info['name']" value="$remote_info['name']"><img src="../Public/Image/tick.gif" style="cursor:pointer" onclick="update('name','{$remote_info.name|str_replace='/','_',###}')" alt="update" align="absmiddle"/></neq></td>
 	</tr>
 	<tr>
 		<td bgcolor="#ededed">起点</td>
 		<td bgcolor="#FFDEAD">{$site[$local_info['start_sid']]}</td>
 		<td bgcolor="#98FB98">{$remote_info['start_name']}</td>
-		<td><neq name="site[$local_info['start_sid']]" value="$remote_info['start_name']"><img src="../Public/Image/tick.gif" alt="check" align="absmiddle"/></neq></td>
+		<td><neq name="site[$local_info['start_sid']]" value="$remote_info['start_name']"><img src="../Public/Image/tick.gif" style="cursor:pointer" onclick="update('start_sid','{$remote_info['start_name']}')" alt="update" align="absmiddle"/></neq></td>
 	</tr>
 	<tr>
 		<td bgcolor="#ededed">起点首班</td>
 		<td bgcolor="#FFDEAD">{$local_info['start_first']}</td>
 		<td bgcolor="#98FB98">{$remote_info['start_first']}</td>
-		<td><neq name="local_info['start_first']" value="$remote_info['start_first']"><img src="../Public/Image/tick.gif" alt="check" align="absmiddle"/></neq></td>
+		<td><neq name="local_info['start_first']" value="$remote_info['start_first']"><img src="../Public/Image/tick.gif" style="cursor:pointer" onclick="update('start_first','{$remote_info['start_first']}')" alt="update" align="absmiddle"/></neq></td>
 	</tr>
 	<tr>
 		<td bgcolor="#ededed">起点末班</td>
 		<td bgcolor="#FFDEAD">{$local_info['start_last']}</td>
 		<td bgcolor="#98FB98">{$remote_info['start_last']}</td>
-		<td><neq name="local_info['start_last']" value="$remote_info['start_last']"><img src="../Public/Image/tick.gif" alt="check" align="absmiddle"/></neq></td>
+		<td><neq name="local_info['start_last']" value="$remote_info['start_last']"><img src="../Public/Image/tick.gif" style="cursor:pointer" onclick="update('start_last','{$remote_info['start_last']}')" alt="update" align="absmiddle"/></neq></td>
 	</tr>
 	<tr>
 		<td bgcolor="#ededed">终点</td>
 		<td bgcolor="#FFDEAD">{$site[$local_info['end_sid']]}</td>
 		<td bgcolor="#98FB98">{$remote_info['end_name']}</td>
-		<td><neq name="site[$local_info['end_sid']]" value="$remote_info['end_name']"><img src="../Public/Image/tick.gif" alt="check" align="absmiddle"/></neq></td>
+		<td><neq name="site[$local_info['end_sid']]" value="$remote_info['end_name']"><img src="../Public/Image/tick.gif" style="cursor:pointer" onclick="update('end_sid','{$remote_info['end_name']}')" alt="update" align="absmiddle"/></neq></td>
 	</tr>
 	<tr>
 		<td bgcolor="#ededed">终点首班</td>
 		<td bgcolor="#FFDEAD">{$local_info['end_first']}</td>
 		<td bgcolor="#98FB98">{$remote_info['end_first']}</td>
-		<td><neq name="local_info['end_first']" value="$remote_info['end_first']"><img src="../Public/Image/tick.gif" alt="check" align="absmiddle"/></neq></td>
+		<td><neq name="local_info['end_first']" value="$remote_info['end_first']"><img src="../Public/Image/tick.gif" style="cursor:pointer" onclick="update('end_first','{$remote_info['end_first']}')" alt="update" align="absmiddle"/></neq></td>
 	</tr>
 	<tr>
 		<td bgcolor="#ededed">终点末班</td>
 		<td bgcolor="#FFDEAD">{$local_info['end_last']}</td>
 		<td bgcolor="#98FB98">{$remote_info['end_last']}</td>
-		<td><neq name="local_info['end_last']" value="$remote_info['end_last']"><img src="../Public/Image/tick.gif" alt="check" align="absmiddle"/></neq></td>
+		<td><neq name="local_info['end_last']" value="$remote_info['end_last']"><img src="../Public/Image/tick.gif" style="cursor:pointer" onclick="update('end_last','{$remote_info['end_last']}')" alt="update" align="absmiddle"/></neq></td>
 	</tr>
 	<tr>
 		<td bgcolor="#ededed">普通车</td>
 		<td bgcolor="#FFDEAD">{$local_info['fare_norm']}</td>
 		<td bgcolor="#98FB98">{$remote_info['fare_norm']}</td>
-		<td><neq name="local_info['fare_norm']" value="$remote_info['fare_norm']"><img src="../Public/Image/tick.gif" alt="check" align="absmiddle"/></neq></td>
+		<td><neq name="local_info['fare_norm']" value="$remote_info['fare_norm']"><img src="../Public/Image/tick.gif" style="cursor:pointer" onclick="update('fare_norm','{$remote_info['fare_norm']}')" alt="update" align="absmiddle"/></neq></td>
 	</tr>
 	<tr>
 		<td bgcolor="#ededed">空调车</td>
 		<td bgcolor="#FFDEAD">{$local_info['fare_cond']}</td>
 		<td bgcolor="#98FB98">{$remote_info['fare_cond']}</td>
-		<td><neq name="local_info['fare_cond']" value="$remote_info['fare_cond']"><img src="../Public/Image/tick.gif" alt="check" align="absmiddle"/></neq></td>
+		<td><neq name="local_info['fare_cond']" value="$remote_info['fare_cond']"><img src="../Public/Image/tick.gif" style="cursor:pointer" onclick="update('fare_cond','{$remote_info['fare_cond']}')" alt="check" align="absmiddle"/></neq></td>
 	</tr>
 	<tr>
 		<td bgcolor="#ededed">可用IC卡</td>
 		<td bgcolor="#FFDEAD">{$local_info['ic_card']}</td>
 		<td bgcolor="#98FB98">{$remote_info['ic_card']}</td>
-		<td><neq name="local_info['ic_card']" value="$remote_info['ic_card']"><img src="../Public/Image/tick.gif" alt="check" align="absmiddle"/></neq></td>
+		<td><neq name="local_info['ic_card']" value="$remote_info['ic_card']"><img src="../Public/Image/tick.gif" style="cursor:pointer" onclick="update('ic_cart','{$remote_info['ic_card']}')" alt="update" align="absmiddle"/></neq></td>
 	</tr>
 	<tr>
 		<td bgcolor="#ededed">服务时间</td>
 		<td bgcolor="#FFDEAD">{$local_info['service_hour']}</td>
 		<td bgcolor="#98FB98">{$remote_info['service_hour']}</td>
-		<td><neq name="local_info['service_hour']" value="$remote_info['service_hour']"><img src="../Public/Image/tick.gif" alt="check" align="absmiddle"/></neq></td>
+		<td><neq name="local_info['service_hour']" value="$remote_info['service_hour']"><img src="../Public/Image/tick.gif" style="cursor:pointer" onclick="update('service_hour','{$remote_info['service_hour']}')" alt="update" align="absmiddle"/></neq></td>
 	</tr>
-	<tr bgcolor="#C0C0C0">
-		<td>站次</td>
-		<td colspan="2">上行</td>
-		<td></td>
-	</tr>
-	<iterate name="local_list1" id="local_item">
 	<tr>
-		<td>{$i}</td>
-		<td>{$site[$local_item['sid']]}</td>
-		<td>{$remote_info['list1'][$key]}</td>
-		<td></td>
+		<form action="__URL__/update" method="post" target="_iframe">
+		<input type="hidden" name="type" value="route" />
+		<input type="hidden" name="direction" value="1"/>
+		<input type="hidden" name="lid" value="{$local_info['id']}" />
+		<td class="a_center">上行</td>
+		<td valign="top">
+			<table width="100%">
+			<iterate name="local_list1" id="item">
+			<tr>
+				<td class="a_right">{$site[$item['sid']]}</td>
+			</tr>
+			</iterate>
+			</table>
+		</td>
+		<td valign="top">
+			<table width="100%">
+			<iterate name="remote_info.list1" id="item">
+			<tr>
+				<td class="a_left">{$item}<input type="hidden" name="site[]" value="{$item}"/></td>
+			</tr>
+			</iterate>
+			</table>
+		</td>
+		<td class="a_center"><present name="E1"><input type="image" src="../Public/Image/tick.gif" alt="check" align="absmiddle"/></present></td>
+		</form>
 	</tr>
-	</iterate>
-	<tr bgcolor="#C0C0C0">
-		<td>站次</td>
-		<td colspan="2">下行</td>
-		<td></td>
-	</tr>
-	<iterate name="local_list2" id="local_item">
 	<tr>
-		<td>{$i}</td>
-		<td>{$site[$local_item['sid']]}</td>
-		<td>{$remote_info['list2'][$key]}</td>
-		<td></td>
+		<form action="__URL__/update" method="post" target="_iframe">
+		<input type="hidden" name="type" value="route" />
+		<input type="hidden" name="direction" value="-1"/>
+		<input type="hidden" name="lid" value="{$local_info['id']}" />
+		<td class="a_center">下行</td>
+		<td valign="top">
+			<table width="100%">
+			<iterate name="local_list2" id="item">
+			<tr>
+				<td class="a_right">{$site[$item['sid']]}</td>
+			</tr>
+			</iterate>
+			</table>
+		</td>
+		<td valign="top">
+			<table width="100%">
+			<iterate name="remote_info.list2" id="item">
+			<tr>
+				<td class="a_left">{$item}<input type="hidden" name="site[]" value="{$item}"/></td>
+			</tr>
+			</iterate>
+			</table>
+		</td>
+		<td class="a_center"><present name="E2"><input type="image" src="../Public/Image/tick.gif" alt="check" align="absmiddle"/></present></td>
+		</form>
 	</tr>
-	</iterate>
+	<tr>
+		<td colspan="4" class="a_center"><notpresent name="E1"><notpresent name="E2"><img src="../Public/Image/tick.gif" style="cursor:pointer" onclick="update('status','1')" alt="check" align="absmiddle"/></notpresent></notpresent></td>
+	</tr>
 	</table>
 	
 <script language="JavaScript" type="text/javascript">
+function update(field,value){
+	$("#_iframe").attr("src", _URL_+"/update/f/"+field+"/v/"+value+"/id/{$local_info['id']}/");
+}
 </script>

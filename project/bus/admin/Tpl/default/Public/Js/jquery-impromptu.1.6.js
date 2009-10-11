@@ -85,7 +85,7 @@ jQuery.extend({
 			var wsize = getWindowSize();
 			jqib.css({ position: (ie6)? "absolute" : "fixed", height: wsize.height, width: "100%", top: (ie6)? getWindowScrollOffset():0, left: 0, right: 0, bottom: 0 });
 			jqif.css({ position: "absolute", height: wsize.height, width: "100%", top: 0, left: 0, right: 0, bottom: 0 });
-			jqi.css({ position: "absolute", top: "120px", left: "50%", marginLeft: ((((jqi.css("paddingLeft").split("px")[0]*1) + jqi.width())/2)*-1) });					
+			jqi.css({ position: "absolute", top: "150px", left: "50%", marginLeft: ((((jqi.css("paddingLeft").split("px")[0]*1) + jqi.width())/2)*-1) });					
 		};
 		
 		var stylePrompt = function(){

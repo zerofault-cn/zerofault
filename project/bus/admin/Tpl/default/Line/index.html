@@ -22,10 +22,17 @@
 		<td rowspan="2">{$item['ic_card']}</td>
 		<td rowspan="2">{$item['service_hour']}</td>
 		<td rowspan="2">
-			<if condition="$item['status'] eq 0"><a href="__URL__/edit/id/{$item['id']}"  title="更正"><img src="../Public/Image/tick0.gif" alt="check" align="absmiddle"/></a>
+			<if condition="_GET.status eq -1">
+			<a href="__URL__/update/id/{$item['id']}/f/status/v/0" target="_iframe" title="恢复"><img src="../Public/Image/tick.gif" alt="tick" align="absmiddle"/></a>
 			<else />
-			<img src="../Public/Image/tick.gif" alt="check" align="absmiddle"/>
+				<if condition="$item['status'] eq 0">
+			<a href="__URL__/edit/id/{$item['id']}"  title="更正"><img src="../Public/Image/accept.gif" alt="check" align="absmiddle"/></a>
+				<else />
+			<img src="../Public/Image/tick0.gif" alt="check" align="absmiddle"/>
+				</if>
+			<a href="__URL__/update/id/{$item['id']}/f/status/v/-1" target="_iframe" title="删除"><img src="../Public/Image/cross.gif" alt="cross" align="absmiddle"/></a>
 			</if>
+
 		</td>
 	</tr>
 	<tr>

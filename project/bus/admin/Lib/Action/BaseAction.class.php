@@ -69,11 +69,11 @@ class BaseAction extends Action{
 		$rs = $this->dao->where('id='.$id)->setField($field,$value);
 		if($rs)
 		{
-			die(self::_success('操作成功！','',1200));
+			self::_success('操作成功！',__URL__.'/index/status/0',1200);
 		}
 		else
 		{
-			die(self::_error('发生错误！<br />sql:'.$this->dao->getLastSql()));
+			self::_error('发生错误！<br />sql:'.$this->dao->getLastSql());
 		}
 	}
 	/**

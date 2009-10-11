@@ -33,9 +33,13 @@ class LineAction extends BaseAction{
 				'text'=> '线路列表',
 			);
 
-		$where = array();
 		$order = 'update_time';
-		$order = '';
+		$where = array();
+		$where['status'] = array('gt', 0);
+		if(''!=$_REQUEST['status']) {
+			$where['status'] = $_REQUEST['status'];
+			$order = '';
+		}
 		$count = $this->dao->where($where)->getField('count(*)');
 		import("@.Paginator");
 		$limit = 10;
@@ -58,6 +62,13 @@ class LineAction extends BaseAction{
 		$this->display('Layout:Admin_layout');
 	}
 	function edit() {
+		$topnavi[]=array(
+			'text'=> '线路管理',
+			'url' => __APP__.'/Line'
+			);
+		$topnavi[]=array(
+			'text'=> '编辑资料',
+			);
 		$id = $_REQUEST['id'];
 		$local_info = $this->dao->find($id);
 
@@ -71,41 +82,68 @@ class LineAction extends BaseAction{
 		$local_list1 = $dRoute->where(array('lid'=>$id,'direction'=>1))->order('i')->select();
 		$local_list2 = $dRoute->where(array('lid'=>$id,'direction'=>-1))->order('i')->select();
 
-		foreach(explode('/',$local_info['name']) as $name);
-		require_cache(LIB_PATH.'/simple_html_dom.php');
-		global $table,$remote_info;
-		$c = curl_init();
-		curl_setopt($c, CURLOPT_REFERER, "http://www.hzbus.com.cn/");
-		curl_setopt($c, CURLOPT_RETURNTRANSFER, 1);
-		curl_setopt($c, CURLOPT_URL, "http://www.hzbus.com.cn/content/busline/line_search.jsp");
-		curl_setopt($c, CURLOPT_POSTFIELDS,"line_name=".$name);
-		$data = curl_exec($c);
-		$data = iconv('gb2312','utf-8',$data);
-		$data=str_get_html($data);
-		$table=$data->find('table[width="98%"] table',0);
-		$descr=$table->children(1)->plaintext;
-		
-		if(strlen(trim($descr))<2) {
-			$remote_info = array();
-		}
-		else{
-			if(strlen(trim($descr))>2 &&strlen(trim($descr))<20) {
-				$offset=2;
+		$remote_info = S($local_info['name']);
+		if(false === $remote_info){
+			foreach(explode('/',$local_info['name']) as $name);
+			require_cache(LIB_PATH.'/simple_html_dom.php');
+			global $table,$remote_info;
+			$c = curl_init();
+			curl_setopt($c, CURLOPT_REFERER, "http://www.hzbus.com.cn/");
+			curl_setopt($c, CURLOPT_RETURNTRANSFER, 1);
+			curl_setopt($c, CURLOPT_URL, "http://www.hzbus.com.cn/content/busline/line_search.jsp");
+			curl_setopt($c, CURLOPT_POSTFIELDS,"line_name=".$name);
+			$data = curl_exec($c);
+			//$data = iconv('gb2312','utf-8',$data);
+			$data = mb_convert_encoding($data,'UTF-8','GBK');
+			$data=str_get_html($data);
+			$table=$data->find('table[width="98%"] table',0);
+			$descr=$table->children(1)->plaintext;
+			
+			if(strlen(trim($descr))<2) {
+				$remote_info = array();
 			}
-			$descr=$table->children(1+$offset)->plaintext;
-			self::parseLineInfo($descr,2+$offset);
-			if($offset==2) {
-				$descr=$table->children(4+$offset)->plaintext;
-				self::parseLineInfo($descr,5+$offset);
+			else{
+				if(strlen(trim($descr))>2 &&strlen(trim($descr))<20) {
+					$offset=2;
+				}
+				$descr=$table->children(1+$offset)->plaintext;
+				self::parseLineInfo($descr,2+$offset);
+				if($offset==2) {
+					$descr=$table->children(4+$offset)->plaintext;
+					self::parseLineInfo($descr,5+$offset);
+				}
 			}
+			$data->clear();
+			unset($data);
+			S($local_info['name'], $remote_info);
 		}
-		$data->clear();
-		unset($data);
+		$this->assign("topnavi",$topnavi);
 		$this->assign('site', $site);
 		$this->assign('local_info', $local_info);
 		$this->assign('local_list1', $local_list1);
 		$this->assign('local_list2', $local_list2);
 		$this->assign('remote_info', $remote_info);
+		if(sizeof($local_list1) != sizeof($remote_info['list1'])) {
+			$this->assign('E1', 1);
+		}
+		else{
+			foreach($local_list1 as $i=>$val) {
+				if($site[$val['sid']] != $remote_info['list1'][$i]) {
+					$this->assign('E1', 1);
+				}
+			}
+		}
+		if(sizeof($local_list2) != sizeof($remote_info['list2'])) {
+			$this->assign('E2', 1);
+		}
+		else{
+			foreach($local_list2 as $i=>$val) {
+				if($site[$val['sid']] != $remote_info['list2'][$i]) {
+					$this->assign('E2', 1);
+				}
+			}
+		}
+		$this->assign('test','abcdef');
 		$this->assign('content','Line:edit');
 		$this->display('Layout:Admin_layout');
 	}
@@ -174,7 +212,6 @@ class LineAction extends BaseAction{
 	*/
 	public function add(){
 		$name=$_REQUEST['name'];
-		$sort=intval($_REQUEST['sort']);
 
 		$where['name'] = $name;
 		$rs = $this->dao->where($where)->find();
@@ -182,9 +219,7 @@ class LineAction extends BaseAction{
 			die('-1');
 		}
 		$this->dao->name = $name;
-		$this->dao->addtime = $this->dao->usetime = date("Y-m-d H:i:s");
-		$this->dao->sort = $sort;
-		$this->dao->status = 1;
+		$this->dao->status = 0;
 		if($this->dao->add()){
 			die('1');
 		}
@@ -197,8 +232,64 @@ class LineAction extends BaseAction{
 	* 调用基类方法
 	*/
 	public function update(){
-		parent::_update();
+		if('route' == $_POST['type']) {
+			$direction = $_POST['direction'];
+			$lid = $_POST['lid'];
+			$site_arr = $_POST['site'];
+			if(empty($direction) || empty($lid)) {
+				return;
+			}
+			$dRoute = M("Route");
+			if(false === $dRoute->where(array('lid'=>$lid,'direction'=>$direction))->delete()) {
+				self::_error('删除旧数据失败！');
+			}
+			foreach($site_arr as $i=>$site) {
+				$data['lid'] = $lid;
+				$data['direction'] = $direction;
+				$data['i'] = 10*($i+1);
+				$data['sid'] = self::getSiteId($site);
+				$dRoute->add($data);
+			}
+			$this->dao->where('id='.$lid)->setField('update_time', date("Y-m-d H:i:s"));
+			//$this->dao->where('id='.$lid)->setField('status', 1);
+			self::_success('更新成功');
+			
+		}
+		else{
+			$id=$_REQUEST['id'];
+			$field=$_REQUEST['f'];
+			$value=$_REQUEST['v'];
+			if('sid' == substr($field,-3)) {
+				$value = self::getSiteId($value);
+			}
+			if('name'== $field) {
+				$value = str_replace('_','/',$value);
+			}
+			$rs = $this->dao->where('id='.$id)->setField(array('update_time',$field), array(date("Y-m-d H:i:s"),$value));
+			if($rs)
+			{
+				if($field=='status') {
+					self::_success('操作成功！',__URL__.'/index/status/0',0);
+				}
+				else{
+					self::_success('操作成功！','',0);
+				}
+			}
+			else
+			{
+				self::_error('发生错误！<br />sql:'.$this->dao->getLastSql());
+			}
+		}
 	}
+	function getSiteId($name) {
+		$sid = M('Site')->where(array('name'=>$name))->getField('id');
+		if(empty($sid))
+		{
+			$sid = M('Site')->add(array('name'=>$name));
+		}
+		return $sid;
+	}
+
 	/**
 	*
 	* 调用基类方法

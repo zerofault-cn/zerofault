@@ -1,4 +1,4 @@
-function myAlert(msg)
+﻿function myAlert(msg)
 {
 	jQuery.prompt(msg);
 }
