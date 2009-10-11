@@ -5,8 +5,9 @@
 		</li>
 		<li>线路管理
 			<ul class="sub">
-				<li class="<eq name='MODULE_NAME' value='Line'><neq name='_GET.status' value='-1'>curr</neq></eq>"><a href="__APP__/Line">线路列表</a></li>
-				<li class="<eq name='MODULE_NAME' value='Category'><eq name='_GET.status' value='-1'>curr</eq></eq>"><a href="__APP__/Line/index/status/-1">回收站</a></li>
+				<li class="<eq name='MODULE_NAME' value='Line'><neq name='_GET.status' value='0'><neq name='_GET.status' value='-1'>curr</neq></neq></eq>"><a href="__APP__/Line">线路列表</a></li>
+				<li class="<eq name='MODULE_NAME' value='Line'><eq name='_GET.status' value='0'>curr</eq></eq>"><a href="__APP__/Line/index/status/0">未更新</a></li>
+				<li class="<eq name='MODULE_NAME' value='Line'><eq name='_GET.status' value='-1'>curr</eq></eq>"><a href="__APP__/Line/index/status/-1">回收站</a></li>
 			</ul>
 		</li>
 
