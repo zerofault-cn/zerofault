@@ -1,7 +1,7 @@
 <?php
 
 return array(
-	'circleLines'=>array('55','56','59','60','676')
+	'circleLines'=>array('55','56','57','58','59','60','676')
 	);
 
 ?>

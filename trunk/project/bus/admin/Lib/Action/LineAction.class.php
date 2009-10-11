@@ -82,11 +82,12 @@ class LineAction extends BaseAction{
 		$local_list1 = $dRoute->where(array('lid'=>$id,'direction'=>1))->order('i')->select();
 		$local_list2 = $dRoute->where(array('lid'=>$id,'direction'=>-1))->order('i')->select();
 
-		$remote_info = S($local_info['name']);
-		if(false === $remote_info){
-			foreach(explode('/',$local_info['name']) as $name);
+		$remote_info = S($local_info['number']);
+		if($_REQUEST['refresh'] || false === $remote_info){
+			$names = explode('/',$local_info['name']);
+			$name = $names[0];
 			require_cache(LIB_PATH.'/simple_html_dom.php');
-			global $table,$remote_info;
+			global $table,$remote_info,$offset;
 			$c = curl_init();
 			curl_setopt($c, CURLOPT_REFERER, "http://www.hzbus.com.cn/");
 			curl_setopt($c, CURLOPT_RETURNTRANSFER, 1);
@@ -99,29 +100,49 @@ class LineAction extends BaseAction{
 			$table=$data->find('table[width="98%"] table',0);
 			$descr=$table->children(1)->plaintext;
 			
-			if(strlen(trim($descr))<2) {
-				$remote_info = array();
-			}
-			else{
-				if(strlen(trim($descr))>2 &&strlen(trim($descr))<20) {
+			$remote_info = array();
+			if(strlen(trim($descr))>=2) {
+				$offset = 0;
+				if(strlen(trim($descr))<20) {
 					$offset=2;
 				}
 				$descr=$table->children(1+$offset)->plaintext;
+				//Log::record($descr);
 				self::parseLineInfo($descr,2+$offset);
 				if($offset==2) {
 					$descr=$table->children(4+$offset)->plaintext;
+					//Log::record($descr);
 					self::parseLineInfo($descr,5+$offset);
 				}
+				//Log::save();
 			}
 			$data->clear();
 			unset($data);
-			S($local_info['name'], $remote_info);
+			S($local_info['number'], $remote_info);
 		}
+		//dump($remote_info);
+		//exit;
 		$this->assign("topnavi",$topnavi);
 		$this->assign('site', $site);
 		$this->assign('local_info', $local_info);
 		$this->assign('local_list1', $local_list1);
 		$this->assign('local_list2', $local_list2);
+		$base = 0;
+		$qujian = 1;
+		foreach($remote_info as $i=>$info) {
+			if(false !== stripos($info['name'],'区间')) {
+				$qujian = $i;
+			}
+			else{
+				$base = $i;
+			}
+		}
+		if(false === stripos($local_info['name'],'区间')) {
+			$remote_info = $remote_info[$base];
+		}
+		else{
+			$remote_info = $remote_info[$qujian];
+		}
 		$this->assign('remote_info', $remote_info);
 		if(sizeof($local_list1) != sizeof($remote_info['list1'])) {
 			$this->assign('E1', 1);
@@ -143,19 +164,17 @@ class LineAction extends BaseAction{
 				}
 			}
 		}
-		$this->assign('test','abcdef');
 		$this->assign('content','Line:edit');
 		$this->display('Layout:Admin_layout');
 	}
-	function parseLineInfo($descr,$tmp_offset)
-	{
+	function parseLineInfo($descr,$tmp_offset) {
 		require_cache(LIB_PATH.'/simple_html_dom.php');
-		global $table,$remote_info;
-		$config = C('_config_hz_');
-		$line_arr=explode("\n",$descr);
+		global $table,$remote_info,$offset;
+		$config_hz = C('_config_hz_');
 
-		$remote_info['name'] = trim($line_arr[1]);
-		$numbers= explode("/",$remote_info['name']);
+		$line_arr=explode("\n",$descr);
+		$tmp_remote_info['name'] = trim($line_arr[1]);
+		$numbers= explode("/",$tmp_remote_info['name']);
 		$number = str_ireplace("K",'',$numbers[0]);
 		$number = str_ireplace("(夜间线)",'',$number);
 		$number = str_ireplace("(区间)",'',$number);
@@ -166,27 +185,27 @@ class LineAction extends BaseAction{
 		$number = intval($number);
 
 		$term_arr=explode("--",$line_arr[6]);
-		$remote_info['start_name'] = trim($term_arr[0]);
-		$remote_info['end_name'] = trim($term_arr[1]);
+		$tmp_remote_info['start_name'] = trim($term_arr[0]);
+		$tmp_remote_info['end_name'] = trim($term_arr[1]);
 
 		$time1_arr=explode("-",$line_arr[14]);
 		$time2_arr=explode("-",$line_arr[15]);
-		$remote_info['start_first'] = trim($time1_arr[0]);
-		$remote_info['start_last'] = trim($time1_arr[1]);
-		$remote_info['end_first'] = trim($time2_arr[0]);
-		$remote_info['end_last'] = trim($time2_arr[1]);
+		$tmp_remote_info['start_first'] = trim($time1_arr[0]);
+		$tmp_remote_info['start_last'] = trim($time1_arr[1]);
+		$tmp_remote_info['end_first'] = trim($time2_arr[0]);
+		$tmp_remote_info['end_last'] = trim($time2_arr[1]);
 		
-		$remote_info['fare_norm'] = trim($line_arr[18]);
-		$remote_info['fare_cond'] = trim($line_arr[22]);
+		$tmp_remote_info['fare_norm'] = trim($line_arr[18]);
+		$tmp_remote_info['fare_cond'] = trim($line_arr[22]);
 
-		$remote_info['ic_card'] = trim($line_arr[26]);
-		$remote_info['service_hour'] = trim($line_arr[30]);
+		$tmp_remote_info['ic_card'] = trim($line_arr[26]);
+		$tmp_remote_info['service_hour'] = trim($line_arr[30]);
 		$route_arr=$table->children($tmp_offset)->find('table[bgcolor="3E89C0"]');
 		$tmp_arr = array();
 		$tmp_arr['_0'] = array();
 		$tmp_arr['_1'] = array();
 		foreach($route_arr as $r=>$route) {
-			if($r==1 && in_array($number,$config['circleLines'])) {
+			if($r==1 && in_array($number, $config_hz['circlelines'])) {
 				continue;
 			}
 			$tr_arr=$route->children();
@@ -198,8 +217,9 @@ class LineAction extends BaseAction{
 				
 			}
 		}
-		$remote_info['list1'] = $tmp_arr['_0'];
-		$remote_info['list2'] = $tmp_arr['_1'];
+		$tmp_remote_info['list1'] = $tmp_arr['_0'];
+		$tmp_remote_info['list2'] = $tmp_arr['_1'];
+		$remote_info[] = $tmp_remote_info;
 	}
 	/**
 	*

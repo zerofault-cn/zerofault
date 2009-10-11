@@ -3,7 +3,7 @@
 	<tr>
 		<th>字段</th>
 		<th>本地数据</th>
-		<th>官方数据</th>
+		<th>官方数据(<a href="?refresh=1">刷新</a>)</th>
 		<th>操作</th>
 	</tr>
 	</thead>
@@ -92,7 +92,9 @@
 			<table width="100%">
 			<iterate name="remote_info.list1" id="item">
 			<tr>
-				<td class="a_left">{$item}<input type="hidden" name="site[]" value="{$item}"/></td>
+				<td class="a_left">{$item}
+				<if condition="$item neq $site[$local_list1[$i-1]['sid']]"><img src="../Public/Image/warning.gif" alt="?" align="absmiddle"/></if>
+				<input type="hidden" name="site[]" value="{$item}"/></td>
 			</tr>
 			</iterate>
 			</table>
@@ -119,7 +121,9 @@
 			<table width="100%">
 			<iterate name="remote_info.list2" id="item">
 			<tr>
-				<td class="a_left">{$item}<input type="hidden" name="site[]" value="{$item}"/></td>
+				<td class="a_left">{$item}
+				<if condition="$item neq $site[$local_list2[$i-1]['sid']]"><img src="../Public/Image/warning.gif" alt="?" align="absmiddle"/></if>
+				<input type="hidden" name="site[]" value="{$item}"/></td>
 			</tr>
 			</iterate>
 			</table>
