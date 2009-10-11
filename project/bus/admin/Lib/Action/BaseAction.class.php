@@ -15,11 +15,11 @@ class BaseAction extends Action{
 	*/
 	public function _initialize() {
 		header("Content-Type:text/html; charset=utf-8");
-	//	dump($_SESSION);
-
-		if(!Session::is_set('isAdmin') && ACTION_NAME != 'login' && ACTION_NAME != 'checkLogin'){
-			Session::set('lastModule', MODULE_NAME);
-			redirect(__APP__.'/Public/login');
+		if(!defined('CLI')) {
+			if(!Session::is_set('isAdmin') && ACTION_NAME != 'login' && ACTION_NAME != 'checkLogin'){
+				Session::set('lastModule', MODULE_NAME);
+				redirect(__APP__.'/Public/login');
+			}
 		}
 	}
 	/**

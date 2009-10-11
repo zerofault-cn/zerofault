@@ -69,17 +69,17 @@
 	</tr>
 	<tr>
 		<td bgcolor="#ededed">服务时间</td>
-		<td bgcolor="#FFDEAD">{$local_info['service_hour']}</td>
-		<td bgcolor="#98FB98">{$remote_info['service_hour']}</td>
-		<td><neq name="local_info['service_hour']" value="$remote_info['service_hour']"><img src="../Public/Image/tick.gif" style="cursor:pointer" onclick="update('service_hour','{$remote_info['service_hour']}')" alt="update" align="absmiddle"/></neq></td>
+		<td bgcolor="#FFDEAD">{$local_info['service_day']}</td>
+		<td bgcolor="#98FB98">{$remote_info['service_day']}</td>
+		<td><neq name="local_info['service_day']" value="$remote_info['service_day']"><img src="../Public/Image/tick.gif" style="cursor:pointer" onclick="update('service_day','{$remote_info['service_day']}')" alt="update" align="absmiddle"/></neq></td>
 	</tr>
 	<tr>
 		<form action="__URL__/update" method="post" target="_iframe">
 		<input type="hidden" name="type" value="route" />
-		<input type="hidden" name="direction" value="1"/>
+		<input type="hidden" name="dir" value="1"/>
 		<input type="hidden" name="lid" value="{$local_info['id']}" />
-		<td class="a_center">上行</td>
-		<td valign="top">
+		<td bgcolor="#ededed" class="a_center">上行</td>
+		<td valign="top" bgcolor="#FFDEAD">
 			<table width="100%">
 			<iterate name="local_list1" id="item">
 			<tr>
@@ -88,7 +88,7 @@
 			</iterate>
 			</table>
 		</td>
-		<td valign="top">
+		<td valign="top" bgcolor="#98FB98">
 			<table width="100%">
 			<iterate name="remote_info.list1" id="item">
 			<tr>
@@ -105,10 +105,10 @@
 	<tr>
 		<form action="__URL__/update" method="post" target="_iframe">
 		<input type="hidden" name="type" value="route" />
-		<input type="hidden" name="direction" value="-1"/>
+		<input type="hidden" name="dir" value="-1"/>
 		<input type="hidden" name="lid" value="{$local_info['id']}" />
-		<td class="a_center">下行</td>
-		<td valign="top">
+		<td bgcolor="#ededed" class="a_center">下行</td>
+		<td valign="top" bgcolor="#FFDEAD">
 			<table width="100%">
 			<iterate name="local_list2" id="item">
 			<tr>
@@ -117,7 +117,7 @@
 			</iterate>
 			</table>
 		</td>
-		<td valign="top">
+		<td valign="top" bgcolor="#98FB98">
 			<table width="100%">
 			<iterate name="remote_info.list2" id="item">
 			<tr>
