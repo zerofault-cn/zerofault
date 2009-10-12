@@ -1,0 +1,37 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<title>杭州公交线路查询</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<meta name="description" content="杭州公交汽车线路查询，与杭州公交集团网站数据同步" />
+	<meta name="keywords" content="杭州 公交车 线路 换乘 转车 查询 手机版 实时查询 杭州公交" />
+	<style type="text/css">
+	form{
+		margin:0;
+		padding:0;
+	}
+	ol,ul{
+		margin-top:0;
+		margin-bottom:0;
+	}
+	</style>
+</head>
+<body>
+<form name="form1" action="__URL__/search" method="get">
+输入线路编号：<input type="text" name="line_name" size="4" value="{$line_name}" /><input type="submit" value="查询线路详情" /></form>
+
+<form name="form1" action="__URL__/search" method="get">
+输入站点名称：<input type="text" name="site_name" size="8" value="{$site_name}" /><input type="submit" value="查询经过线路" /></form>
+
+<form name="form1" action="__URL__/search" method="get">
+输入起点：<input type="text" name="from" size="8" value="{$from}" /><br />
+输入终点：<input type="text" name="to" size="8" value="{$to}" /><input type="submit" value="换乘查询" />
+</form>
+
+{$result}
+
+<br /><br />
+<span style="color:#7C7C7C">数据来源于<a href="http://www.hzbus.com.cn/index.jsp" target="_blank">杭州公交网</a><br />Powered by <a style="text-decoration:none;color:#7C7C7C" href="mailto:zerofault@gmail.com">zerofault</a></span>
+</body>
+</html>
