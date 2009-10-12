@@ -1,4 +1,33 @@
-		<div style="text-align:center;margin:40px auto;">
-			<h2>默认管理首页</h2>
-		</div>
-
+<style type="text/css">
+#table span{
+	float:left;
+	width:135px;
+}
+</style>
+	<table id="table" class="tablesorter" border="1" cellpadding="3" cellspacing="0" width="100%" bordercolor="#999999" style="border-collapse:collapse;">
+	{~$n=-1}
+	<iterate name="list" id="item">
+		<if condition="$i eq 1">
+	<tr>
+		<td class="a_left">
+		</if>
+		{~$m = floor($item['number']/pow(10,max(1,strlen($item['number'])-1)))}
+		<if condition="$m neq $n">
+		{~$n = $m}
+			<if condition="$i neq 1">
+		</td>
+	</tr>
+				<if condition="$i neq count($list)">
+	<tr>
+		<td class="a_left">
+				</if>
+			</if>
+		</if>
+		<span><a href="__APP__/Line/edit/id/{$item['id']}">{$item['name']}</a></span>
+		<if condition="$i eq count($list)">
+		</td>
+	</tr>
+		</if>
+	</iterate>
+	</table>
+	

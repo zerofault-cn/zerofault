@@ -33,12 +33,12 @@ class LineAction extends BaseAction{
 				'text'=> '线路列表',
 			);
 
-		$order = 'update_time';
+		$order = 'number';
 		$where = array();
 		$where['status'] = array('gt', 0);
 		if(''!=$_REQUEST['status']) {
 			$where['status'] = $_REQUEST['status'];
-			$order = '';
+			$order = 'update_time';
 		}
 		$count = $this->dao->where($where)->getField('count(*)');
 		import("@.Paginator");
@@ -59,100 +59,16 @@ class LineAction extends BaseAction{
 		$this->assign('content','Line:index');
 		$this->display('Layout:Admin_layout');
 	}
-	function batch_update() {
-		$local_list = $this->dao->where(array('status'=>0))->order('update_time,id')->limit(20)->select();
-		foreach($local_list as $n=>$local_info) {
-			echo $n.".Updating line: ".$local_info['name']."\t";
-			$remote_info = S($local_info['number']);
-			if(false === $remote_info){
-				echo "...";
-				$names = explode('/',$local_info['name']);
-				$name = $names[0];
-				require_cache(LIB_PATH.'/simple_html_dom.php');
-				global $table,$remote_info,$offset;
-				$c = curl_init();
-				curl_setopt($c, CURLOPT_REFERER, "http://www.hzbus.com.cn/");
-				curl_setopt($c, CURLOPT_RETURNTRANSFER, 1);
-				curl_setopt($c, CURLOPT_URL, "http://www.hzbus.com.cn/content/busline/line_search.jsp");
-				curl_setopt($c, CURLOPT_POSTFIELDS,"line_name=".$name);
-				$data = curl_exec($c);
-				//$data = iconv('gb2312','utf-8',$data);
-				$data = mb_convert_encoding($data,'UTF-8','GBK');
-				$data=str_get_html($data);
-				$table=$data->find('table[width="98%"] table',0);
-				$descr=$table->children(1)->plaintext;
-				$remote_info = array();
-				if(strlen(trim($descr))>=2) {
-					$offset = 0;
-					if(strlen(trim($descr))<20) {
-						$offset=2;
-					}
-					$descr=$table->children(1+$offset)->plaintext;
-					self::parseLineInfo($descr,2+$offset);
-					if($offset==2) {
-						$descr=$table->children(4+$offset)->plaintext;
-						self::parseLineInfo($descr,5+$offset);
-					}
-				}
-				$data->clear();
-				unset($data);
-				S($local_info['number'], $remote_info, 7*86400);
-			}
-			$base = 0;
-			$qujian = 1;
-			foreach($remote_info as $i=>$info) {
-				if(false !== stripos($info['name'],'区间')) {
-					$qujian = $i;
-				}
-				else{
-					$base = $i;
-				}
-			}
-			if(false === stripos($local_info['name'],'区间')) {
-				$remote_info = $remote_info[$base];
-			}
-			else{
-				$remote_info = $remote_info[$qujian];
-			}
-			//更新line
-			$data = array();
-			$data['start_sid']   = self::getSiteId($remote_info['start_name']);
-			$data['start_first'] = $remote_info['start_first'];
-			$data['start_last']  = $remote_info['start_last'];
-			$data['end_sid']     = self::getSiteId($remote_info['end_name']);
-			$data['end_first']   = $remote_info['end_first'];
-			$data['end_last']    = $remote_info['end_last'];
-			$data['fare_norm']   = $remote_info['fare_norm'];
-			$data['fare_cond']   = $remote_info['fare_cond'];
-			$data['ic_card']     = $remote_info['ic_card'];
-			$data['service_day'] = $remote_info['service_day'];
-			$data['update_time'] = date("Y-m-d H:i:s");
-			$data['status'] = 1;
-			$this->dao->where('id='.$local_info['id'])->data($data)->save();
-			//更新route
-			foreach($remote_info['list1'] as $i=>$site) {
-				$data = array();
-				$data['lid'] = $local_info['id'];
-				$data['sid'] = self::getSiteId($site);
-				$data['sort'] = 10*($i+1);
-				$data['dir'] = 1;
-				M('Route')->add($data);
-			}
-			if(empty($remote_info['list2'])) {
-				echo "Circle Line Done\n";
-				continue;
-			}
-			echo "...";
-			foreach($remote_info['list2'] as $i=>$site) {
-				$data = array();
-				$data['lid'] = $local_info['id'];
-				$data['sid'] = self::getSiteId($site);
-				$data['sort'] = $i;
-				$data['dir'] = -1;
-				M('Route')->add($data);
-			}
-			echo "Done\n";
+	function refresh() {
+		$id = $_REQUEST['id'];
+		$local_info = $this->dao->find($id);
+		$name = $local_info['name'];
+		if($local_info['number']<1000) {
+			$name = $local_info['number'];
 		}
+		$remote_info = self::getRemoteData($name);
+		S($local_info['number'], $remote_info, 7*86400);
+		self::_success('刷新完成','',0);
 	}
 	function edit() {
 		$topnavi[]=array(
@@ -176,66 +92,26 @@ class LineAction extends BaseAction{
 		$local_list2 = $dRoute->where(array('lid'=>$id,'dir'=>-1))->order('sort')->select();
 
 		$remote_info = S($local_info['number']);
-		if($_REQUEST['refresh'] || false === $remote_info){
-			$names = explode('/',$local_info['name']);
-			$name = $names[0];
-			require_cache(LIB_PATH.'/simple_html_dom.php');
-			global $table,$remote_info,$offset;
-			$c = curl_init();
-			curl_setopt($c, CURLOPT_REFERER, "http://www.hzbus.com.cn/");
-			curl_setopt($c, CURLOPT_RETURNTRANSFER, 1);
-			curl_setopt($c, CURLOPT_URL, "http://www.hzbus.com.cn/content/busline/line_search.jsp");
-			curl_setopt($c, CURLOPT_POSTFIELDS,"line_name=".$name);
-			$data = curl_exec($c);
-			//$data = iconv('gb2312','utf-8',$data);
-			$data = mb_convert_encoding($data,'UTF-8','GBK');
-			$data=str_get_html($data);
-			$table=$data->find('table[width="98%"] table',0);
-			$descr=$table->children(1)->plaintext;
-			
-			$remote_info = array();
-			if(strlen(trim($descr))>=2) {
-				$offset = 0;
-				if(strlen(trim($descr))<20) {
-					$offset=2;
-				}
-				$descr=$table->children(1+$offset)->plaintext;
-				//Log::record($descr);
-				self::parseLineInfo($descr,2+$offset);
-				if($offset==2) {
-					$descr=$table->children(4+$offset)->plaintext;
-					//Log::record($descr);
-					self::parseLineInfo($descr,5+$offset);
-				}
-				//Log::save();
+		if(false === $remote_info){
+			$name = $local_info['name'];
+			if($local_info['number']<1000) {
+				$name = $local_info['number'];
 			}
-			$data->clear();
-			unset($data);
-			S($local_info['number'], $remote_info);
+			$remote_info = self::getRemoteData($name);
+			S($local_info['number'], $remote_info, 7*86400);
 		}
-		//dump($remote_info);
-		//exit;
+		foreach($remote_info as $info) {
+			if($local_info['name'] == $info['name']) {
+				$remote_info = $info;
+				break;
+			}
+			continue;
+		}
 		$this->assign("topnavi",$topnavi);
 		$this->assign('site', $site);
 		$this->assign('local_info', $local_info);
 		$this->assign('local_list1', $local_list1);
 		$this->assign('local_list2', $local_list2);
-		$base = 0;
-		$qujian = 1;
-		foreach($remote_info as $i=>$info) {
-			if(false !== stripos($info['name'],'区间')) {
-				$qujian = $i;
-			}
-			else{
-				$base = $i;
-			}
-		}
-		if(false === stripos($local_info['name'],'区间')) {
-			$remote_info = $remote_info[$base];
-		}
-		else{
-			$remote_info = $remote_info[$qujian];
-		}
 		$this->assign('remote_info', $remote_info);
 		if(sizeof($local_list1) != sizeof($remote_info['list1'])) {
 			$this->assign('E1', 1);
@@ -260,13 +136,122 @@ class LineAction extends BaseAction{
 		$this->assign('content','Line:edit');
 		$this->display('Layout:Admin_layout');
 	}
+	function batch_update() {
+		$local_list = $this->dao->where(array('status'=>0))->order('update_time,id')->limit(20)->select();
+		foreach($local_list as $n=>$local_info) {
+			echo $n.". ".$local_info['name']."\t\n\t";
+			$remote_info = S($local_info['number']);
+			if(false === $remote_info){
+				echo "Get data\t";
+				$name = $local_info['name'];
+				if($local_info['number']<1000) {
+					$name = $local_info['number'];
+				}
+				$remote_info = self::getRemoteData($name);
+				S($local_info['number'], $remote_info, 7*86400);
+			}
+			//print_r($remote_info);
+			if(empty($remote_info)) {
+				echo "Not Exists.\t";
+				$this->dao->where('id='.$local_info['id'])->setField(array('update_time','status'), array(date("Y-m-d H:i:s"),-1));
+				echo "Delete Done\n";
+				continue;
+			}
+			foreach($remote_info as $info) {
+				if($local_info['name'] == $info['name']) {
+					$remote_info = $info;
+					break;
+				}
+				else{
+					$remote_info = array();
+				}
+			}
+			if(empty($remote_info)) {
+				echo "Wrong Data.\tPass\n";
+				continue;
+			}
+			//更新line
+			echo "Base info\t";
+			$data = array();
+			$data['start_sid']   = self::getSiteId($remote_info['start_name']);
+			$data['start_first'] = $remote_info['start_first'];
+			$data['start_last']  = $remote_info['start_last'];
+			$data['end_sid']     = self::getSiteId($remote_info['end_name']);
+			$data['end_first']   = $remote_info['end_first'];
+			$data['end_last']    = $remote_info['end_last'];
+			$data['fare_norm']   = $remote_info['fare_norm'];
+			$data['fare_cond']   = $remote_info['fare_cond'];
+			$data['ic_card']     = $remote_info['ic_card'];
+			$data['service_day'] = $remote_info['service_day'];
+			$data['update_time'] = date("Y-m-d H:i:s");
+			$data['status'] = 1;
+			$this->dao->where('id='.$local_info['id'])->data($data)->save();
+			//更新route
+			echo "Route1\t";
+			foreach($remote_info['list1'] as $i=>$site) {
+				$data = array();
+				$data['lid'] = $local_info['id'];
+				$data['sid'] = self::getSiteId($site);
+				$data['sort'] = 10*($i+1);
+				$data['dir'] = 1;
+				M('Route')->add($data);
+			}
+			if(empty($remote_info['list2'])) {
+				echo "Circle Line Done\n";
+				continue;
+			}
+			echo "Route2\t";
+			foreach($remote_info['list2'] as $i=>$site) {
+				$data = array();
+				$data['lid'] = $local_info['id'];
+				$data['sid'] = self::getSiteId($site);
+				$data['sort'] = $i;
+				$data['dir'] = -1;
+				M('Route')->add($data);
+			}
+			echo "Done\n";
+		}
+	}
+	function getRemoteData($name) {
+		require_cache(LIB_PATH.'/simple_html_dom.php');
+		global $table,$remote_info,$offset;
+		$remote_info = array();
+		$c = curl_init();
+		curl_setopt($c, CURLOPT_REFERER, "http://www.hzbus.com.cn/");
+		curl_setopt($c, CURLOPT_RETURNTRANSFER, 1);
+		curl_setopt($c, CURLOPT_URL, "http://www.hzbus.com.cn/content/busline/line_search.jsp");
+		curl_setopt($c, CURLOPT_POSTFIELDS,"line_name=".mb_convert_encoding($name,'GBK','UTF-8'));
+		$data = curl_exec($c);
+		//$data = iconv('gb2312','utf-8',$data);
+		$data = mb_convert_encoding($data,'UTF-8','GBK');
+		$data=str_get_html($data);
+		$table=$data->find('table[width="98%"] table',0);
+		$descr=$table->children(1)->plaintext;
+		if(strlen(trim($descr))>=2) {//表示存在此条线路的信息
+			$offset = 0;
+			if(strlen(trim($descr))<20) {//表示至少有两条同名线路
+				$offset=2;
+			}
+			$descr=$table->children(1+$offset)->plaintext;
+			self::parseLineInfo($descr,2+$offset);
+			if($offset==2) {
+				$descr=$table->children(4+$offset)->plaintext;
+				self::parseLineInfo($descr,5+$offset);
+			}
+		}
+		$data->clear();
+		unset($data);
+		return $remote_info;
+	}
 	function parseLineInfo($descr,$tmp_offset) {
 		require_cache(LIB_PATH.'/simple_html_dom.php');
 		global $table,$remote_info,$offset;
 		$config_hz = C('_config_hz_');
 
+		$tmp_remote_info = array();
 		$line_arr=explode("\n",$descr);
 		$tmp_remote_info['name'] = trim($line_arr[1]);
+		
 		$numbers= explode("/",$tmp_remote_info['name']);
 		$number = str_ireplace("K",'',$numbers[0]);
 		$number = str_ireplace("(夜间线)",'',$number);
@@ -335,8 +320,8 @@ class LineAction extends BaseAction{
 		$number = str_ireplace("K",'',$numbers[0]);
 		$number = str_ireplace("(夜间线)",'',$number);
 		$number = str_ireplace("(区间)",'',$number);
-		$number = substr($number,0,1)=='B' ? (1000+intval(str_ireplace("B",'',$number))) : $number;
 		$number = substr($number,0,3)=='B支'? (2000+intval(str_ireplace("B支",'',$number))) : $number;
+		$number = substr($number,0,1)=='B' ? (1000+intval(str_ireplace("B",'',$number))) : $number;
 		$number = substr($number,0,1)=='Y' ? (3000+intval(str_ireplace("Y",'',$number))) : $number;
 		$number = substr($number,0,1)=='J' ? (4000+intval(str_ireplace("J",'',$number))) : $number;
 		$number = intval($number);
@@ -375,7 +360,7 @@ class LineAction extends BaseAction{
 			}
 			$this->dao->where('id='.$lid)->setField('update_time', date("Y-m-d H:i:s"));
 			//$this->dao->where('id='.$lid)->setField('status', 1);
-			self::_success('更新成功');
+			self::_success('更新成功','',0);
 			
 		}
 		else{
