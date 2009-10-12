@@ -59,16 +59,10 @@ class LineAction extends BaseAction{
 		$this->assign('content','Line:index');
 		$this->display('Layout:Admin_layout');
 	}
-	function refresh() {
-		$id = $_REQUEST['id'];
-		$local_info = $this->dao->find($id);
-		$name = $local_info['name'];
-		if($local_info['number']<1000) {
-			$name = $local_info['number'];
-		}
-		$remote_info = self::getRemoteData($name);
-		S($local_info['number'], $remote_info, 7*86400);
-		self::_success('刷新完成','',0);
+	function clear() {
+		$number = $_REQUEST['number'];
+		S($number, NULL);
+		self::_success('缓存已清除','',0);
 	}
 	function edit() {
 		$topnavi[]=array(
