@@ -137,7 +137,7 @@ class IndexAction extends Action{
 			$result .= implode('→',$site_info);
 			$result .= '<br />';
 
-			$sitr_info = array();
+			$site_info = array();
 			foreach($route as $item) {
 				$site_info[] = '<a href="'.__URL__.'/site/id/'.$item['sid'].'" title="查看经过【'.$Site[$item['sid']].'】的所有线路">'.$Site[$item['sid']].'</a>';
 			}
@@ -216,9 +216,6 @@ class IndexAction extends Action{
 			//没有直达线路，查找一次换乘线路
 			$rs = self::getTrans($from_sid,$to_sid);
 		}
-		if(empty($rs)) {
-			$result = '没有直达线路，也没有一次换乘线路<br />';
-		}
 		$result .= '<table border="1" cellspacing="0" cellpadding="1" bordercolor="#999999" style="border-collapse:collapse;">';
 		$result .= '<tr>';
 		if(sizeof($rs[0])>1) {
@@ -263,6 +260,10 @@ class IndexAction extends Action{
 			$result .= '</td></tr>';
 		}
 		$result .= '</table>';
+		
+		if(empty($rs)) {
+			$result = '没有直达线路，也没有一次换乘线路<br />';
+		}
 
 		if($return) {
 			return $result;
@@ -326,20 +327,23 @@ class IndexAction extends Action{
 		$to_line = M('Line')->find($trans['to_lid']);
 		$to_route = M('Route')->where(array('lid'=>$trans['to_lid'],'dir'=>$trans['to_dir']))->select();
 		
-		$result .= '搭乘：<a href="'.__URL__.'/line/id/'.$from_line['id'].'">'.$from_line['name'].'</a> ('.(1==$trans['from_dir']?($from_line['start_first'].'~'.$from_line['start_last']):($from_line['end_first'].'~'.$from_line['end_last'])).')<br />';
+		$result .= '搭乘：<a href="'.__URL__.'/line/id/'.$from_line['id'].'">'.$from_line['name'].'</a> ('.(1==$trans['from_dir']?('上行，'.$from_line['start_first'].'~'.$from_line['start_last']):('下行，'.$from_line['end_first'].'~'.$from_line['end_last'])).')<br />';
 		
-		$echo = false;
+		$color = '#BBBBBB';
+		$end_flag = 999;
 		$tmp = array();
 		foreach($from_route as $i=>$item) {
 			if($item['sid']==$from_sid) {
-				$echo = true;
+				$color = 'auto';
 			}
 			if(in_array($item['sid'], explode(',', $trans['trans_sids']))) {
-				$echo = false;
+				$end_flag = $i;
 			}
-			if($echo) {
-				$tmp[] = '<a href="'.__URL__.'/site/id/'.$item['sid'].'">'.$Site[$item['sid']].'</a>';
+			if(($end_flag+1) == $i) {
+				$color = '#BBBBBB';
 			}
+			$tmp[] = '<a style="color:'.$color.'" href="'.__URL__.'/site/id/'.$item['sid'].'">'.$Site[$item['sid']].'</a>';
+			
 		}
 		$result .= '经由：'.implode('→', $tmp).'<br />';
 
@@ -349,28 +353,27 @@ class IndexAction extends Action{
 		}
 		$result .= '　在：'.implode('、', $tmp).' 下车，<br />';
 		
-		$result .= '换乘：<a href="'.__URL__.'/line/id/'.$to_line['id'].'">'.$to_line['name'].'</a> ('.(1==$trans['to_dir']?($to_line['start_first'].'~'.$to_line['start_last']):($to_line['end_first'].'~'.$to_line['end_last'])).')<br />';
+		$result .= '换乘：<a href="'.__URL__.'/line/id/'.$to_line['id'].'">'.$to_line['name'].'</a> ('.(1==$trans['to_dir']?('上行，'.$to_line['start_first'].'~'.$to_line['start_last']):('下行，'.$to_line['end_first'].'~'.$to_line['end_last'])).')<br />';
 
-		$echo = false;
-		$start_flag = $end_flag = 0;
+		$color = '#BBBBBB';
+		$end = false;
+		$end_flag = 999;
 		$tmp = array();
+		//dump($to_route);
+		$trans_sid_arr = explode(',', $trans['trans_sids']);
 		foreach($to_route as $i=>$item) {
-			foreach(explode(',', $trans['trans_sids']) as $trans_sid);
-			if($item['sid'] == $trans_sid) {
-				$start_flag = $i;//这个标记过后开始显示
+			if(!$end  && in_array($item['sid'], explode(',', $trans['trans_sids']))) {
+				$color = 'auto';
 			}
 			if($item['sid'] == $to_sid) {
 				$end_flag = $i;//这个标记过后结束显示
 			}
-			if($start_flag == ($i-1)) {
-				$echo = true;
+			if(($end_flag+1) == $i) {
+				$color = '#BBBBBB';
+				$end = true;
 			}
-			if($end_flag == ($i-1)) {
-				$echo = false;
-			}
-			if($echo) {
-				$tmp[] = '<a href="'.__URL__.'/site/id/'.$item['sid'].'">'.$Site[$item['sid']].'</a>';
-			}
+			$tmp[] = '<a style="color:'.$color.'" href="'.__URL__.'/site/id/'.$item['sid'].'">'.$Site[$item['sid']].'</a>';
+			
 		}
 		$result .= '经由：'.implode('→', $tmp).' 到达目的地。';
 
