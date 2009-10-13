@@ -16,6 +16,7 @@ class IndexAction extends Action{
 			$this->Site = $Site;
 			S('Site',$Site,86400);
 		}
+		$this->assign('update_time',M('Line')->getField('max(update_time)'));
 	}
 
 	public function index(){
