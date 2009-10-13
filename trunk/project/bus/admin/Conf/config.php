@@ -1,10 +1,8 @@
 <?php
-
 if(defined('CLI') || $_SERVER["SERVER_NAME"]=='localhost') {
 	$config = array(
 		'APP_DEBUG'			=> false,
 		'APP_CONFIG_LIST'	=> array('config_hz'),
-
 		'DB_TYPE'			=> 'mysql',
 		'DB_HOST'			=> 'localhost',
 		'DB_NAME'			=> 'bus',
