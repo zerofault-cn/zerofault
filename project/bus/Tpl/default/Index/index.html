@@ -21,12 +21,12 @@
 <form name="form1" action="__URL__/search" method="get">
 输入线路编号：<input type="text" name="line_name" size="4" value="{$line_name}" /><input type="submit" value="查询线路详情" /></form>
 
-<form name="form1" action="__URL__/search" method="get">
+<form name="form2" action="__URL__/search" method="get">
 输入站点名称：<input type="text" name="site_name" size="8" value="{$site_name}" /><input type="submit" value="查询经过线路" /></form>
 
-<form name="form1" action="__URL__/search" method="get">
+<form name="form3" action="__URL__/search" method="get">
 输入起点：<input type="text" name="from" size="8" value="{$from}" /><br />
-输入终点：<input type="text" name="to" size="8" value="{$to}" /><input type="submit" value="换乘查询" />
+输入终点：<input type="text" name="to" size="8" value="{$to}" /><input type="submit" value="换乘查询" /><input type="button" onclick="javascript:var tmp=document.form3.from.value;document.form3.from.value=document.form3.to.value;document.form3.to.value=tmp;document.form3.submit();" value="返程查询" />
 </form>
 <br />
 {$result}
