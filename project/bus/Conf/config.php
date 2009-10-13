@@ -1,5 +1,5 @@
 <?php
-if($_SERVER["SERVER_NAME"]=='localhost') {
+if(defined('CLI') || $_SERVER["SERVER_NAME"]=='localhost') {
 	$config = array(
 		'APP_DEBUG'			=> false,
 
