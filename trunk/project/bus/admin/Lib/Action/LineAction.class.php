@@ -210,14 +210,19 @@ class LineAction extends BaseAction{
 		require_cache(LIB_PATH.'/simple_html_dom.php');
 		global $table,$remote_info,$offset;
 		$remote_info = array();
-		$c = curl_init();
-		curl_setopt($c, CURLOPT_REFERER, "http://www.hzbus.com.cn/");
-		curl_setopt($c, CURLOPT_RETURNTRANSFER, 1);
-		curl_setopt($c, CURLOPT_URL, "http://www.hzbus.com.cn/content/busline/line_search.jsp");
-		curl_setopt($c, CURLOPT_POSTFIELDS,"line_name=".mb_convert_encoding($name,'GBK','UTF-8'));
-		$data = curl_exec($c);
-		//$data = iconv('gb2312','utf-8',$data);
-		$data = mb_convert_encoding($data,'UTF-8','GBK');
+		if(function_exists('curl_init')) {
+			$c = curl_init();
+			curl_setopt($c, CURLOPT_REFERER, "http://www.hzbus.com.cn/");
+			curl_setopt($c, CURLOPT_RETURNTRANSFER, 1);
+			curl_setopt($c, CURLOPT_URL, "http://www.hzbus.com.cn/content/busline/line_search.jsp");
+			curl_setopt($c, CURLOPT_POSTFIELDS,"line_name=".iconv('GBK','UTF-8',$name));
+			$data = curl_exec($c);
+		}
+		else{
+			$data = self::httpPost("http://www.hzbus.com.cn/content/busline/line_search.jsp","line_name=".iconv('GBK','UTF-8',$name),"http://www.hzbus.com.cn/");
+		}
+		$data = iconv('GBK','UTF-8',$data);
+		//$data = mb_convert_encoding($data,'UTF-8','GBK');
 		$data=str_get_html($data);
 		$table=$data->find('table[width="98%"] table',0);
 		$descr=$table->children(1)->plaintext;
