@@ -68,7 +68,7 @@ class CommodityAction extends BaseAction{
 				self::_success('Commodity information updated!',__URL__);
 			}
 			else{
-				self::_error('Update fail!'.(C('DEBUG_MODE')?$this->dao->getLastSql():''));
+				self::_error('Update fail!'.(C('APP_DEBUG')?$this->dao->getLastSql():''));
 			}
 		}
 		else{
@@ -76,7 +76,7 @@ class CommodityAction extends BaseAction{
 				self::_success('Add commodity success!',__URL__);
 			}
 			else{
-				self::_error('Add commodity fail!'.(C('DEBUG_MODE')?$this->dao->getLastSql():''));
+				self::_error('Add commodity fail!'.(C('APP_DEBUG')?$this->dao->getLastSql():''));
 			}
 		}
 		

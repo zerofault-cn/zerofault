@@ -1,6 +1,7 @@
 <p class="page_title_text">Product entering infomation</p>
 <form action="__URL__/submit" method="post" target="_iframe">
-<input type="hidden" name="id" value="{$info.id}" />
+<input type="hidden" name="id" value="{$id}" />
+<input type="hidden" name="action" value="{$action}" />
 <table>
 <tr>
 	<td>No.</td>
@@ -8,43 +9,51 @@
 </tr>
 <tr>
 	<td>MPN:</td>
-	<td><select name="product_id" onchange="select_product(this.value);"><option value="">Select One</option>{$info.product_opts}</select></td>
+	<td><if condition="empty($id)">
+		<select name="product_id" onchange="select_product(this.value);"><option value="">Select One</option>{$info.product_opts}</select>
+		<else />
+		<input type="text" size="15" value="{$info['product']['MPN']}" readonly="true"/><input type="hidden" name="product_id" value="{$info['product_id']}" />
+		</if></td>
 </tr>
 <tr>
 	<td>Internal PN:</td>
-	<td><input type="text" maxlength="40" size="15" id="Internal_PN" value="{$info['product']['Internal_PN']}" readonly="true" /></td>
+	<td><input type="text" size="15" id="Internal_PN" value="{$info['product']['Internal_PN']}" readonly="true" /></td>
 </tr>
 <tr>
 	<td>Description:</td>
-	<td><input type="text" maxlength="40" size="15" id="description" value="{$info['product']['description']}" readonly="true" /></td>
+	<td><input type="text" size="15" id="description" value="{$info['product']['description']}" readonly="true" /></td>
 </tr>
 <tr>
 	<td>Manufacture:</td>
-	<td><input type="text" maxlength="20" size="15" id="manufacture" value="{$info['product']['manufacture']}" readonly="true"/></td>
+	<td><input type="text" size="15" id="manufacture" value="{$info['product']['manufacture']}" readonly="true"/></td>
 </tr>
 <tr>
 	<td>Commodity:</td>
-	<td><input type="text" size="15" id="commodity" value="{$info['product']['commodity_id']}" readonly="true"/></td>
+	<td><input type="text" size="15" id="commodity" value="{$info['commodity']}" readonly="true"/></td>
 </tr>
 <tr>
 	<td>Value/Package:</td>
-	<td><input type="text" maxlength="20" size="15" id="value" value="{$info['product']['value']}" readonly="true"/></td>
+	<td><input type="text" size="15" id="value" value="{$info['product']['value']}" readonly="true"/></td>
 </tr>
 <tr>
 	<td>Unit:</td>
-	<td><input type="text" maxlength="20" size="15" id="unit" value="{$info['product']['unit_id']}" readonly="true"/></td>
+	<td><input type="text" size="15" id="unit" value="{$info['unit']}" readonly="true"/></td>
 </tr>
 <tr>
 	<td>MOQ:</td>
-	<td><input type="text" maxlength="20" size="15" id="MOQ" value="{$info['product']['MOQ']}" readonly="true"/></td>
+	<td><input type="text" size="15" id="MOQ" value="{$info['product']['MOQ']}" readonly="true"/></td>
 </tr>
 <tr>
 	<td>Inventory Limit:</td>
-	<td><input type="text" maxlength="20" size="15" id="limit" value="{$info['product']['inventory_limit']}" readonly="true"/></td>
+	<td><input type="text" size="15" id="limit" value="{$info['product']['inventory_limit']}" readonly="true"/></td>
 </tr>
 <tr>
 	<td>Supplier:</td>
-	<td><select name="supplier_id"><option value="">Select One</option>{$info.supplier_opts}</select></td>
+	<td><if condition="empty($id)">
+		<select name="supplier_id"><option value="">Select One</option>{$info.supplier_opts}</select>
+		<else />
+		<input type="text" size="15" value="{$info['supplier']['name']}" readonly="true"/><input type="hidden" name="supplier_id" value="{$info['supplier_id']}" />
+		</if></td>
 </tr>
 <tr>
 	<td>Project:</td>
@@ -53,10 +62,6 @@
 <tr>
 	<td>Currency:</td>
 	<td><select name="currency_id"><option value="">Select One</option>{$info.currency_opts}</select></td>
-</tr>
-<tr>
-	<td>Unit:</td>
-	<td><select name="unit_id"><option value="">Select One</option>{$info.unit_opts}</select></td>
 </tr>
 <tr>
 	<td>Quantity:</td>
@@ -80,18 +85,20 @@
 </tr>
 </table>
 <p class="center">
-<if condition="$info['id'] eq 0">
-<input type="Submit" value="Insert New Product" name="submit"/>
+<if condition="empty($id)">
+<input type="submit" name="submit" value="Insert New Product"/>
+<elseif condition="$action eq 'return'"/>
+<input type="submit" name="submit" value="Return the Product" />
 <else />
-<input type="Submit" value="Update Product Metadata" name="submit"/>
+<input type="submit" name="submit" value="Update Product Metadata"/>
 </if>
 </p>
 </form>
 <script language="JavaScript" type="text/javascript">
 var product = new Array();
 product[''] = new Array('','','','','','','');
-<iterate name="product" id="item">
-product['{$item.id}'] = new Array('{$item.Internal_PN}','{$item.description}','{$item.manufacture}','{$item.value}','{$item["commodity"]["name"]}','{$item.MOQ}','{$item.inventory_limit}');
+<iterate name="ProductList" id="item">
+product['{$item.id}'] = new Array('{$item.Internal_PN}','{$item.description}','{$item.manufacture}','{$item.value}','{$item["commodity"]["name"]}','{$item["unit"]["title"]}','{$item.MOQ}','{$item.inventory_limit}');
 </iterate>
 function $(id) {
 	return document.getElementById(id);
@@ -102,6 +109,7 @@ function select_product(id) {
 	$('manufacture').value = product[id][2];
 	$('value').value = product[id][3];
 	$('commodity').value = product[id][4];
+	$('unit').value = product[id][5];
 	$('MOQ').value = product[id][6];
 	$('limit').value = product[id][7];
 }

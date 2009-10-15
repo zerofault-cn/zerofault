@@ -7,24 +7,20 @@ $menu['Basic&nbsp;Data'] = array(
 		'Supplier information'	=> 'Supplier',
 		'Department information'=> 'Dept',
 		'Staff information'		=> 'Staff',
-		'Commodity'	=> 'Commodity',
-		'Products Data'		=> 'Product'
+		'Commodity'				=> 'Commodity',
+		'Products Data'			=> 'Product'
 		)
 	);
 
 $menu['Inventory&nbsp;Input Management'] = array(
 	'name'	=> 'ProductIn',
 	'submenu' => array(
-		'Products entering'	=> 'ProductIn',
-		'details of inventory'		=> 'Bill',
-		'return goods amount'		=> 'Bill'
+		'Products Entering'		=> 'ProductIn',
+		'Products Returns'		=> 'ProductIn/returns'
 		)
 	);
 $menu['Storage inventory'] = array(
-	'name' => 'Stock',
-	'submenu' => array(
-		'Stock List'=>'Stock'
-		)
+	'name' => 'Storage',
 	);
 
 $menu['Inventory&nbsp;output Management'] = array(

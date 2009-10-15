@@ -108,7 +108,7 @@ class BaseAction extends Action{
 		$rs = $this->dao->where('id='.$id)->setField($field,$value);
 		if(false !== $rs)
 		{
-			die(self::_success('Success!','',1200));
+			die(self::_success('Success!','',1000));
 		}
 		else
 		{
@@ -124,7 +124,7 @@ class BaseAction extends Action{
 		$id=$_REQUEST['id'];
 		if($this->dao->find($id) && $this->dao->delete())
 		{
-			die(self::_success('Success!','',1200));
+			die(self::_success('Success!','',1000));
 		}
 		else
 		{

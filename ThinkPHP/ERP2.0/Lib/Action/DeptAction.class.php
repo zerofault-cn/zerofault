@@ -74,7 +74,7 @@ class DeptAction extends BaseAction{
 				self::_success('Department information updated!',__URL__);
 			}
 			else{
-				self::_error('Update fail!'.(C('DEBUG_MODE')?$this->dao->getLastSql():''));
+				self::_error('Update fail!'.(C('APP_DEBUG')?$this->dao->getLastSql():''));
 			}
 		}
 		else{
@@ -82,7 +82,7 @@ class DeptAction extends BaseAction{
 				self::_success('Add department success!',__URL__);
 			}
 			else{
-				self::_error('Add department fail!'.(C('DEBUG_MODE')?$this->dao->getLastSql():''));
+				self::_error('Add department fail!'.(C('APP_DEBUG')?$this->dao->getLastSql():''));
 			}
 		}
 		

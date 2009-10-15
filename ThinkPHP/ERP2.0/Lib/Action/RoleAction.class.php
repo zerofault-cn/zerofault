@@ -99,7 +99,7 @@ class RoleAction extends BaseAction{
 			die('1');
 		}
 		else{
-			die('sql:'.$this->dao->getLastSql());
+			die('error:'.$this->dao->getLastSql());
 		}
 	}
 	public function edit(){
@@ -118,7 +118,7 @@ class RoleAction extends BaseAction{
 			die('1');
 		}
 		else{
-			die('sql:'.$this->dao->getLastSql());
+			die('error:'.$this->dao->getLastSql());
 		}
 	}
 
@@ -147,11 +147,11 @@ class RoleAction extends BaseAction{
 		$id=$_REQUEST['id'];
 		if($this->dao->relation(true)->delete($id))
 		{
-			die(self::_success('删除成功！','',1200));
+			self::_success('Delete success','',1000);
 		}
 		else
 		{
-			die(self::_error('发生错误！<br />sql:'.$this->dao->getLastSql()));
+			self::_error('Delete fail'.(C('APP_DEBUG')?$this->dao->getLastSql():''));
 		}
 	}
 }
