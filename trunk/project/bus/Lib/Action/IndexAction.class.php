@@ -233,7 +233,7 @@ class IndexAction extends Action{
 		{
 			$result .= '<th>换乘站点</th>';
 			$result .= '<th>换乘线路</th>';
-			$result .= '<th>详细</th>';
+			$result .= '<th nowrap="true">详细</th>';
 		}
 		$result .= '</tr>';
 		foreach($rs as $i=>$item)

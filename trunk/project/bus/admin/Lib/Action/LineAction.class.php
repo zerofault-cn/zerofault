@@ -190,7 +190,7 @@ class LineAction extends BaseAction{
 				$data['dir'] = 1;
 				M('Route')->add($data);
 			}
-			if(empty($remote_info['list2'])) {
+			if(empty($remote_info['list2']) || $remote_info['list1']==$remote_info['list2']) {
 				echo "Circle Line Done\n";
 				continue;
 			}
