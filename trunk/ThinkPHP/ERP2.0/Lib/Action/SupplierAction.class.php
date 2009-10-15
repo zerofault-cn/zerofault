@@ -111,7 +111,7 @@ class SupplierAction extends BaseAction{
 				self::_success('Add supplier success!',__URL__);
 			}
 			else{
-				self::_error('Add supplier fail!'.$this->dao->getLastSql());
+				self::_error('Add supplier fail!'.(C('APP_DEBUG')?$this->dao->getLastSql():''));
 			}
 		}
 		

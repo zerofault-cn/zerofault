@@ -14,10 +14,7 @@ class ProductAction extends BaseAction{
 		$this->dao = D('Product');
 		parent::_initialize();
 	}
-	/**
-	*
-	* 节点列表
-	*/
+
 	public function index(){
 		$this->assign('result', $this->dao->relation(true)->select());
 		$this->assign('content','Product:index');
@@ -30,13 +27,15 @@ class ProductAction extends BaseAction{
 			$info['supplier_opts'] = self::genOptions(D('Supplier')->select(),$info['supplier_id'],'name');
 			$info['commodity_opts'] = self::genOptions(M('Commodity')->select(),$info['commodity_id'],'name');
 			$info['currency_opts'] = self::genOptions(M('Options')->where(array('type'=>'currency'))->order('sort')->select(), $info['currency_id'], 'title');
+			$info['unit_opts'] = self::genOptions(M('Options')->where(array('type'=>'unit'))->order('sort')->select(), $info['unit_id'], 'title');
 		}
 		else{
 			$info = array(
 				'id'=>0,
 				'supplier_opts' => self::genOptions(D('Supplier')->select(),'','name'),
 				'commodity_opts' => self::genOptions(M('Commodity')->select(),'','name'),
-				'currency_opts' => self::genOptions(M('Options')->where(array('type'=>'currency'))->order('sort')->select(), '', 'title')
+				'currency_opts' => self::genOptions(M('Options')->where(array('type'=>'currency'))->order('sort')->select(), '', 'title'),
+				'unit_opts' => self::genOptions(M('Options')->where(array('type'=>'unit'))->order('sort')->select(), '', 'title')
 				);
 		}
 		$this->assign('info', $info);
@@ -71,7 +70,7 @@ class ProductAction extends BaseAction{
 		$this->dao->supplier_id = $_REQUEST['supplier_id'];
 		$this->dao->value = $_REQUEST['value'];
 		$this->dao->commodity_id = $_REQUEST['commodity_id'];
-		$this->dao->unit = $_REQUEST['unit'];
+		$this->dao->unit_id = $_REQUEST['unit_id'];
 		$this->dao->RoHS = $_REQUEST['Rohs'];
 		$this->dao->LT_days = $_REQUEST['LT_days'];
 		$this->dao->MOQ = $_REQUEST['MOQ'];
@@ -98,7 +97,7 @@ class ProductAction extends BaseAction{
 				self::_success('Product information updated!',__URL__);
 			}
 			else{
-				self::_error('Update fail!'.(C('DEBUG_MODE')?$this->dao->getLastSql():''));
+				self::_error('Update fail!'.(C('APP_DEBUG')?$this->dao->getLastSql():''));
 			}
 		}
 		else{
@@ -106,7 +105,7 @@ class ProductAction extends BaseAction{
 				self::_success('Add product data success!',__URL__);
 			}
 			else{
-				self::_error('Add product data fail!'.(C('DEBUG_MODE')?$this->dao->getLastSql():''));
+				self::_error('Add product data fail!'.(C('APP_DEBUG')?$this->dao->getLastSql():''));
 			}
 		}
 		

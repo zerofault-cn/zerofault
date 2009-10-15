@@ -9,18 +9,11 @@
 class NodeAction extends BaseAction{
 	protected $dao;
 	
-	/**
-	*
-	* 构造函数
-	*/
 	public function _initialize() {
 		$this->dao = D('Node');
 		parent::_initialize();
 	}
-	/**
-	*
-	* 节点列表
-	*/
+
 	public function index(){
 		$base_class = 'BaseAction';
 		$base_obj   = new $base_class;
