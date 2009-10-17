@@ -1,4 +1,5 @@
 <?
+error_reporting(E_ALL ^ E_NOTICE);
 define('IN_MATCH', true);
 header("Expires:  " . gmdate("D, d M Y H:i:s") . "GMT");
 header("Last-Modified: " . gmdate("D, d M Y H:i:s") . "GMT");
