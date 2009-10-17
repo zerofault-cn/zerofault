@@ -12,7 +12,7 @@
 
  #DEFAULT db connection settings
  $DB=array(
- 'user'=>"",#required
+ 'user'=>"root",#required
  'pwd'=>"", #required
  'db'=>"",  #default DB, optional
  'host'=>"",#optional
