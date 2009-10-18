@@ -20,7 +20,7 @@ require(THINK_PATH."/ThinkPHP.php");
 
 define('CLI',true);
 define('MODULE_NAME','Line');
-define('ACTION_NAME','batch_update');
+define('ACTION_NAME','batch');
 //实例化一个网站应用实例
 $App = new App();
 //应用程序初始化
