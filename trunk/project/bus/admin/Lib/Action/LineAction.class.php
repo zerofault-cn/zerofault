@@ -62,6 +62,7 @@ class LineAction extends BaseAction{
 	function clear() {
 		$number = $_REQUEST['number'];
 		S($number, NULL);
+		$this->dao->where('number='.$number)->setField('status',0);
 		self::_success('缓存已清除','',0);
 	}
 	function edit() {
@@ -86,7 +87,7 @@ class LineAction extends BaseAction{
 		$local_list2 = $dRoute->where(array('lid'=>$id,'dir'=>-1))->order('sort')->select();
 
 		$remote_info = S($local_info['number']);
-		if(false === $remote_info){
+		if(false === $remote_info && $local_info['status']!=1) {
 			$name = $local_info['name'];
 			if($local_info['number']<1000) {
 				$name = $local_info['number'];
@@ -130,7 +131,7 @@ class LineAction extends BaseAction{
 		$this->assign('content','Line:edit');
 		$this->display('Layout:Admin_layout');
 	}
-	function batch_update() {
+	function batch() {
 		$local_list = $this->dao->where(array('status'=>0))->order('update_time,id')->limit(20)->select();
 		foreach($local_list as $n=>$local_info) {
 			echo $n.". ".$local_info['name']."\t\n\t";
@@ -144,7 +145,6 @@ class LineAction extends BaseAction{
 				$remote_info = self::getRemoteData($name);
 				S($local_info['number'], $remote_info, 7*86400);
 			}
-			//print_r($remote_info);
 			if(empty($remote_info)) {
 				echo "Not Exists.\t";
 				$this->dao->where('id='.$local_info['id'])->setField(array('update_time','status'), array(date("Y-m-d H:i:s"),-1));
