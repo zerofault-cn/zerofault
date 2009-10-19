@@ -16,15 +16,44 @@ class ProductInAction extends BaseAction{
 	}
 
 	public function index() {
+		$rs = M('Options')->where(array('type'=>'unit'))->order('sort')->select();
+		$unit = array();
+		foreach($rs as $i=>$item) {
+			$unit[$item['id']] = $item['title'];
+		}
+		$this->assign('unit', $unit);
+
 		$this->assign('result', $this->dao->relation(true)->where(array('source'=>'Supplier','destination'=>'Storage'))->select());
 		$this->assign('content','ProductIn:index');
 		$this->display('Layout:ERP_layout');
 	}
 	public function returns() {
+		$this->assign('action', 'return');
+
+		$rs = M('Options')->where(array('type'=>'unit'))->order('sort')->select();
+		$unit = array();
+		foreach($rs as $i=>$item) {
+			$unit[$item['id']] = $item['title'];
+		}
+		$this->assign('unit', $unit);
+
 		$this->assign('result', $this->dao->relation(true)->where(array('source'=>'Storage','destination'=>'Supplier'))->select());
-		$this->assign('content','ProductIn:returns');
+		$this->assign('content','ProductIn:index');
 		$this->display('Layout:ERP_layout');
 	}
+	public function confirm() {
+		if(empty($_POST['submit'])) {
+			return;
+		}
+		empty($_POST['chk']) && self::_error('You hadn\'t got any item selected');
+		if($this->dao->where("id in (".implode(',',$_POST['chk']).")")->setField(array('confirm_time', 'confirm_staff_id', 'moved_quantity', 'status'), array(date("Y-m-d H:i:s"), $_SESSION[C('USER_AUTH_KEY')], 0, 1)) ) {
+			self::_success('Confirm success','',1000);
+		}
+		else{
+			self::_error('Something wrong!'.(C('APP_DEBUG')?$this->dao->getLastSql():''));
+		}
+	}
+
 	public function form() {
 		$id = $_REQUEST['id'];
 		$action = $_REQUEST['action'];
@@ -56,19 +85,6 @@ class ProductInAction extends BaseAction{
 		$this->assign('content', 'ProductIn:form');
 		$this->display('Layout:ERP_layout');
 	}
-	public function confirm() {
-		if(empty($_POST['submit'])) {
-			return;
-		}
-		empty($_POST['chk']) && self::_error('You hadn\'t got any item selected');
-		if($this->dao->where("id in (".implode(',',$_POST['chk']).")")->setField(array('confirm_time','confirm_staff_id'),array(date("Y-m-d H:i:s"),$_SESSION[C('USER_AUTH_KEY')]))) {
-			self::_success('Confirm success','',1000);
-		}
-		else{
-			self::_error('Something wrong!'.(C('APP_DEBUG')?$this->dao->getLastSql():''));
-		}
-	}
-
 	public function submit() {
 		if(empty($_POST['submit'])) {
 			return;
@@ -76,6 +92,8 @@ class ProductInAction extends BaseAction{
 		$id = $_REQUEST['id'];
 		$action = $_REQUEST['action'];
 		empty($_REQUEST['product_id']) && self::_error('Select a product first!');
+		('return'==$action) && ($_REQUEST['quantity']>$_REQUEST['ori_quantity']) && self::_error('Return quantity can\'t be larger than '.$_REQUEST['ori_quantity']);
+
 		if($action!='return' && !empty($id) && $id>0) {
 			$this->dao->find($id);
 		}

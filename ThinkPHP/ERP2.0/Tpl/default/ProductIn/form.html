@@ -64,8 +64,9 @@
 	<td><select name="currency_id"><option value="">Select One</option>{$info.currency_opts}</select></td>
 </tr>
 <tr>
-	<td>Quantity:</td>
-	<td><input type="text" maxlength="20" size="15" id="quantity" name="quantity" value="{$info.quantity}" onchange="calc_total()"/></td>
+	<td><if condition="$action eq 'return'">Return</if>
+	Quantity:</td>
+	<td><input type="text" maxlength="20" size="15" id="quantity" name="quantity" value="{$info.quantity}" onchange="calc_total()"/><input type="hidden" name="ori_quantity" value="{$info.quantity}"/></td>
 </tr>
 <tr>
 	<td>Unit Price:</td>

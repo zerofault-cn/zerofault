@@ -1,0 +1,32 @@
+<p class="page_title_text">Storage inventory</p>
+<p class="center">
+<form action="__URL__/index" method="post">
+Commodity<select name="commodity_id"><option value="">All</option>{$commodity_opts}</select>
+Product<select name="product_id"><option value="">All</option>{$product_opts}</select>
+Supplier<select name="supplier_id"><option value="">All</option>{$supplier_opts}</select>
+<input type="submit" name="submit" value="Search"/>
+</form>
+</p>
+<table cellpadding="2" border="1">
+<tr>
+	<th>No.</th>
+	<th>Product</th>
+	<th>Quantity</th>
+	<th>Unit</th>
+	<th>Average Price</th>
+	<th>Total</th>
+	<th>Currency</th>
+</tr>
+<iterate name="result" id="item">
+<tr>
+	<td>{$i}</td>
+	<td>{$item['product']}</td>
+	<td>{$item['quantity']}</td>
+	<td>{$unit[$item['unit_id']]}</td>
+	<td>{$item['total']/$item['quantity']}</td>
+	<td>{$item['total']}</td>
+	<td>{$item['currency']}</td>
+</tr>
+</iterate>
+</table>
+<p class="center"></p>
