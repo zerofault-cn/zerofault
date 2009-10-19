@@ -39,6 +39,7 @@ class BaseAction extends Action{
 		}
 		$this->assign('menu', $menu);
 		$this->assign('submenu', $submenu);
+		$this->assign('action', Session::get('action'));
 		$this->assign("current_time", date("l, d/m/Y | h:i A"));//Thursday, 10/09/2009 | 11:53 AM
 		// 认证当前操作
 		if(RBAC::checkAccess()) {
@@ -174,6 +175,29 @@ class BaseAction extends Action{
 			$str .= '/>'.$val['name'].' ';
 		}
 		return $str;
+	}
+	public function update_quantity($product_id) {
+		$where = array();
+		if(is_array($product_id) && !empty($product_id)) {
+			$where['id'] = array('in',implode(',',$product_id));
+		}
+		elseif(''!=$product_id) {
+			$where['id'] = $product_id;
+		}
+		$rs = D('Product')->where($where)->select();
+		if($rs) {
+			foreach($rs as $item) {
+				$quantity = 0;
+				$flow = D('ProductFlow')->where(array('product_id'=>$item['id'],'status'=>1))->select();
+				if($flow) {
+					foreach($flow as $flow_item) {
+						$quantity += (('Storage'==$flow_item['destination'])?1:-1)*$flow_item['quantity'];
+					}
+				}
+				D('Product')->where('id='.$item['id'])->setField('quantity', $quantity);
+			}
+		}
+		return true;
 	}
 }
 ?>

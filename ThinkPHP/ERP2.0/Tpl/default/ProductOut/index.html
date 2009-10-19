@@ -1,8 +1,8 @@
 <p class="page_title_text">
 <if condition="$action eq 'return'">
-Product Return
+Inventory Return
 <else />
-Product entering information
+Inventory output information
 </if></p>
 <form action="__URL__/confirm" method="post" target="_iframe">
 <table cellpadding="2" border="1">
@@ -10,13 +10,10 @@ Product entering information
 	<th><input type="checkbox" id="checkall" onclick="checkAll();"/></th>
 	<th>No.</th>
 	<th>Product</th>
-	<th>Supplier</th>
-	<th>Quantity</th>
 	<th>Unit</th>
-	<th>Price</th>
-	<th>Total</th>
-	<th>Entering Time</th>
-	<th>Entering Staff</th>
+	<th>Quantity</th>
+	<th>Request Time</th>
+	<th>Request Staff</th>
 	<th>Confirmed Staff</th>
 	<th>Operation</th>
 </tr>
@@ -25,24 +22,25 @@ Product entering information
 	<td><input type="checkbox" name="chk[]" value="{$item['id']}" onclick="updateCheckAll(this);"/></td>
 	<td>{$item['code']}</td>
 	<td>{$item['product']['MPN']}<input type="hidden" name="product_id[]" value="{$item['product_id']}"/></td>
-	<td>{$item['supplier']['name']}</td>
-	<td>{$item['quantity']}</td>
 	<td>{$unit[$item['product']['unit_id']]}</td>
-	<td>{$item['price']}</td>
-	<td>{$item['quantity']*$item['price']}</td>
+	<td>{$item['quantity']}</td>
 	<td>{$item['create_time']}</td>
 	<td>{$item['staff']['name']}</td>
 <!-- 	<td align="center"><if condition="$item['status'] eq 0"><input type="text" name="qty[]" size="3" value="{$item['quantity']}"/><else />{$item['moved_quantity']}</if></td> -->
 	<td align="center">{$item['confirmed_staff']['name']}</td>
 	<td><a href="__URL__/form/id/{$item['id']}">Edit</a>
-	<if condition="$action neq 'return'"><a href="__URL__/form/action/return/id/{$item['id']}">Return</a></if></td>
+	<if condition="$item['destination'] eq 'Staff'">
+	<a href="__URL__/form/action/transfer/id/{$item['id']}">Transfer</a>
+	<elseif condition="$action neq 'returns'"/>
+	<a href="__URL__/form/action/returns/id/{$item['id']}">Return</a>
+	</if></td>
 </tr>
 </iterate>
 </table>
 <p class="center">
 	<input type="submit" name="submit" value="Confirm Selected" />
-	<if condition="$action neq 'return'">
-	<input type="button" onclick="javascript:document.location='__URL__/form';" value="Enter a New Product" />
+	<if condition="$action neq 'transfer' and $action neq 'returns'">
+	<input type="button" onclick="javascript:document.location='__URL__/form/action/{$action}';" value="Enter a New Product" />
 	</if>
 </p>
 </form>

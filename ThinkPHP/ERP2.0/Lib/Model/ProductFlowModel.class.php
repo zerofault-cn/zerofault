@@ -22,9 +22,9 @@ class ProductFlowModel extends RelationModel{
 			),
 		'Staff2' => array(
 			'mapping_type' => BELONGS_TO,
-			'mapping_name' => 'confirm_staff',
+			'mapping_name' => 'confirmed_staff',
 			'class_name'   => 'Staff',
-			'foreign_key'  => 'confirm_staff_id',
+			'foreign_key'  => 'confirmed_staff_id',
 			),
 		'Options' => array(
 			'mapping_type' => BELONGS_TO,
