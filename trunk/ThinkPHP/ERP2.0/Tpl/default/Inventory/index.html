@@ -23,7 +23,7 @@ Supplier<select name="supplier_id"><option value="">All</option>{$supplier_opts}
 	<td>{$item['product']}</td>
 	<td>{$item['quantity']}</td>
 	<td>{$unit[$item['unit_id']]}</td>
-	<td>{$item['total']/$item['quantity']}</td>
+	<td>{$item['total']/$item['quantity']|sprintf='%.2f',###}</td>
 	<td>{$item['total']}</td>
 	<td>{$item['currency']}</td>
 </tr>

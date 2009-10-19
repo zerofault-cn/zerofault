@@ -1,0 +1,89 @@
+<p class="page_title_text">
+<if condition="$action eq 'apply'">
+Apply Product
+<elseif condition="$action eq 'transfer'" />
+Product Transfer
+</if>
+</p>
+<form name="form1" action="__URL__/submit" method="post" target="_iframe">
+<input type="hidden" name="id" value="{$id}" />
+<input type="hidden" name="action" value="{$action}" />
+<table>
+<tr>
+	<td>No.</td>
+	<td><input type="text" maxlength="10" size="15" name="code" value="{$code}" readonly="true" /></td>
+</tr>
+<tr>
+	<td>MPN:</td>
+	<td><if condition="empty($id)">
+		<select name="product_id" onchange="select_product(this.value);"><option value="">Select One</option>{$info.product_opts}</select>
+		<else />
+		<input type="text" size="15" value="{$info['product']['MPN']}" readonly="true"/><input type="hidden" name="product_id" value="{$info['product_id']}" />
+		</if></td>
+</tr>
+<tr>
+	<td>Internal PN:</td>
+	<td><input type="text" size="15" id="Internal_PN" value="{$info['product']['Internal_PN']}" readonly="true" /></td>
+</tr>
+<tr>
+	<td>Description:</td>
+	<td><input type="text" size="15" id="description" value="{$info['product']['description']}" readonly="true" /></td>
+</tr>
+<tr>
+	<td>Manufacture:</td>
+	<td><input type="text" size="15" id="manufacture" value="{$info['product']['manufacture']}" readonly="true"/></td>
+</tr>
+<tr>
+	<td>Commodity:</td>
+	<td><input type="text" size="15" id="commodity" value="{$info['commodity']}" readonly="true"/></td>
+</tr>
+<tr>
+	<td>Value/Package:</td>
+	<td><input type="text" size="15" id="value" value="{$info['product']['value']}" readonly="true"/></td>
+</tr>
+<tr>
+	<td>Unit:</td>
+	<td><input type="text" size="15" id="unit" value="{$info['unit']}" readonly="true"/></td>
+</tr>
+<tr>
+	<td><if condition="$action eq 'apply'">Request</if>
+	Quantity:</td>
+	<td><input type="text" maxlength="20" size="15" id="quantity" name="quantity" value="{$info['quantity']}"><input type="hidden" name="ori_quantity" id="ori_quantity" value="{$info['quantity']}"/></td>
+</tr>
+<tr>
+	<td valign="top">Remark:</td>
+	<td><textarea name="remark" rows="3" cols="36">{$info.remark}</textarea></td>
+</tr>
+</table>
+<p class="center">
+<if condition="empty($id)">
+<input type="submit" name="submit" value="Insert New Product"/>
+<elseif condition="$action eq 'return'"/>
+<input type="submit" name="submit" value="Return the Product" />
+<else />
+<input type="submit" name="submit" value="Update Product Metadata"/>
+</if>
+</p>
+</form>
+<script language="JavaScript" type="text/javascript">
+var product = new Array();
+product[''] = new Array('','','','','','','');
+<iterate name="ProductList" id="item">
+product['{$item.id}'] = new Array('{$item.Internal_PN}','{$item.description}','{$item.manufacture}','{$item.value}','{$item["commodity"]["name"]}','{$item["unit"]["title"]}','{$item.MOQ}','{$item.inventory_limit}','{$item.quantity}');
+</iterate>
+function $(id) {
+	return document.getElementById(id);
+}
+function select_product(id) {
+	$('Internal_PN').value = product[id][0];
+	$('description').value = product[id][1];
+	$('manufacture').value = product[id][2];
+	$('value').value = product[id][3];
+	$('commodity').value = product[id][4];
+	$('unit').value = product[id][5];
+//	$('MOQ').value = product[id][6];
+//	$('limit').value = product[id][7];
+	$('ori_quantity').value = product[id][8];
+//	document.form1.ori_quantity.value= product[id][8];
+}
+</script>

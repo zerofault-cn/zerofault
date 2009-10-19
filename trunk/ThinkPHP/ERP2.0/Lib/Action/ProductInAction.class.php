@@ -1,7 +1,7 @@
 <?php
 /**
 *
-* 入库，退库
+* 入库，退货
 *
 * @author zerofault <zerofault@gmail.com>
 * @since 2009/8/5
@@ -28,6 +28,7 @@ class ProductInAction extends BaseAction{
 		$this->display('Layout:ERP_layout');
 	}
 	public function returns() {
+		Session::set('action', '');
 		$this->assign('action', 'return');
 
 		$rs = M('Options')->where(array('type'=>'unit'))->order('sort')->select();
@@ -46,8 +47,10 @@ class ProductInAction extends BaseAction{
 			return;
 		}
 		empty($_POST['chk']) && self::_error('You hadn\'t got any item selected');
-		if($this->dao->where("id in (".implode(',',$_POST['chk']).")")->setField(array('confirm_time', 'confirm_staff_id', 'moved_quantity', 'status'), array(date("Y-m-d H:i:s"), $_SESSION[C('USER_AUTH_KEY')], 0, 1)) ) {
+		if($this->dao->where("id in (".implode(',',$_POST['chk']).")")->setField(array('confirm_time', 'confirmed_staff_id', 'confirmed_quantity', 'status'), array(date("Y-m-d H:i:s"), $_SESSION[C('USER_AUTH_KEY')], 0, 1)) && self::update_quantity($_REQUEST['product_id'])) {
+			
 			self::_success('Confirm success','',1000);
+			
 		}
 		else{
 			self::_error('Something wrong!'.(C('APP_DEBUG')?$this->dao->getLastSql():''));
@@ -55,6 +58,7 @@ class ProductInAction extends BaseAction{
 	}
 
 	public function form() {
+		Session::set('action', 'form');
 		$id = $_REQUEST['id'];
 		$action = $_REQUEST['action'];
 		if(!empty($id) && $id>0) {

@@ -13,10 +13,10 @@ $menu['Basic&nbsp;Data'] = array(
 	);
 
 $menu['Inventory&nbsp;Input Management'] = array(
-	'name'	=> 'ProductIn',
+	'name'	  => 'ProductIn',
 	'submenu' => array(
-		'Products Entering'		=> 'ProductIn',
-		'Products Returns'		=> 'ProductIn/returns'
+		'Product Entering'		=> 'ProductIn',
+		'Product Return'		=> 'ProductIn/returns'
 		)
 	);
 $menu['Storage inventory'] = array(
@@ -24,10 +24,14 @@ $menu['Storage inventory'] = array(
 	);
 
 $menu['Inventory&nbsp;output Management'] = array(
-	'name' => 'Outbound',
+	'name'	  => 'ProductOut/apply',
 	'submenu' => array(
-		'Product Request'	=> 'Requisition',
-		'Return'		=> 'Return'
+		'Apply Product'			=> 'ProductOut/apply',
+		'Product Transfer'		=> 'ProductOut/transfer',
+		'Components Release'	=> 'ProductOut/release',
+		'Sending Components'	=> 'ProductOut/send',
+		'Scrap Product'			=> 'ProductOut/scrap',
+		'Product Return'		=> 'ProductOut/returns'
 		)
 	);
 
