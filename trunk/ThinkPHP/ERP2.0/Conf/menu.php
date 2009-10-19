@@ -20,7 +20,7 @@ $menu['Inventory&nbsp;Input Management'] = array(
 		)
 	);
 $menu['Storage inventory'] = array(
-	'name' => 'Storage',
+	'name' => 'Inventory',
 	);
 
 $menu['Inventory&nbsp;output Management'] = array(

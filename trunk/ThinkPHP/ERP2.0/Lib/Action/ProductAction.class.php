@@ -24,7 +24,6 @@ class ProductAction extends BaseAction{
 		$id = $_REQUEST['id'];
 		if(!empty($id) && $id>0) {
 			$info = $this->dao->find($id);
-			$info['supplier_opts'] = self::genOptions(D('Supplier')->select(),$info['supplier_id'],'name');
 			$info['commodity_opts'] = self::genOptions(M('Commodity')->select(),$info['commodity_id'],'name');
 			$info['currency_opts'] = self::genOptions(M('Options')->where(array('type'=>'currency'))->order('sort')->select(), $info['currency_id'], 'title');
 			$info['unit_opts'] = self::genOptions(M('Options')->where(array('type'=>'unit'))->order('sort')->select(), $info['unit_id'], 'title');
@@ -32,7 +31,6 @@ class ProductAction extends BaseAction{
 		else{
 			$info = array(
 				'id'=>0,
-				'supplier_opts' => self::genOptions(D('Supplier')->select(),'','name'),
 				'commodity_opts' => self::genOptions(M('Commodity')->select(),'','name'),
 				'currency_opts' => self::genOptions(M('Options')->where(array('type'=>'currency'))->order('sort')->select(), '', 'title'),
 				'unit_opts' => self::genOptions(M('Options')->where(array('type'=>'unit'))->order('sort')->select(), '', 'title')
@@ -67,7 +65,6 @@ class ProductAction extends BaseAction{
 		$this->dao->description = $_REQUEST['description'];
 		$this->dao->manufacture = $_REQUEST['manufacture'];
 		$this->dao->MPN = $_REQUEST['MPN'];
-		$this->dao->supplier_id = $_REQUEST['supplier_id'];
 		$this->dao->value = $_REQUEST['value'];
 		$this->dao->commodity_id = $_REQUEST['commodity_id'];
 		$this->dao->unit_id = $_REQUEST['unit_id'];
