@@ -215,11 +215,11 @@ class LineAction extends BaseAction{
 			curl_setopt($c, CURLOPT_REFERER, "http://www.hzbus.com.cn/");
 			curl_setopt($c, CURLOPT_RETURNTRANSFER, 1);
 			curl_setopt($c, CURLOPT_URL, "http://www.hzbus.com.cn/content/busline/line_search.jsp");
-			curl_setopt($c, CURLOPT_POSTFIELDS,"line_name=".iconv('GBK','UTF-8',$name));
+			curl_setopt($c, CURLOPT_POSTFIELDS,"line_name=".iconv('UTF-8','GBK',$name));
 			$data = curl_exec($c);
 		}
 		else{
-			$data = self::httpPost("http://www.hzbus.com.cn/content/busline/line_search.jsp","line_name=".iconv('GBK','UTF-8',$name),"http://www.hzbus.com.cn/");
+			$data = self::httpPost("http://www.hzbus.com.cn/content/busline/line_search.jsp","line_name=".iconv('UTF-8','GBK',$name),"http://www.hzbus.com.cn/");
 		}
 		$data = iconv('GBK','UTF-8',$data);
 		//$data = mb_convert_encoding($data,'UTF-8','GBK');
