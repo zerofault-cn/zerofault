@@ -1,0 +1,42 @@
+﻿测试环境：http://gw.sandbox.taobao.com/router/rest
+线上环境：http://gw.api.taobao.com/router/rest
+
+需要条件
+    需要去open.taobao.com申请成为开发者和注册应用，获取appkey、secret
+
+通用约定(请仔细阅读)
+
+1、所有的请求和响应数据编码皆为utf-8格式，url里的所有参数值请做urlencode编码。如果请求的Content-Type是application/x-www-form-urlencoded， http body里的所有参数值也做urlencode编码；如果是multipart/form-data格式， 每个表单字段的参数值无需编码，但每个表单字段的charset部分需要指定为utf-8。 
+    
+2、所有api请求和响应内的日期格式都为yyyy-MM-dd HH:mm:ss，注意小时格式是24小时制，例如：2008-03-12 18:23:43。 
+    
+3、所有api请求参数内的v(即版本号)为1.0 。 
+    
+4、所有api请求参数内的format(即返回格式)可选值为json,xml,默认xml。 
+    
+5、所有支持分页的api,默认page_size为40,默认page_no为1。 支持分页的api的page_size上限除了taobao.trades.get,taobao.trades.bought.get,taobao.trades.sold.get为100外，其他的皆为200. 
+    
+6、签名方式为 md5(appsecret + key + value .... key + value)然后转大写字母,其中key,value对是除签名和图片外的所有请求参数按key做的升序排列, value无需编码。 
+    
+7、所有更新数据操作的api(如taobao.item.add和taobao.item.update)强制使用http post方法,查询类不限制。
+
+约定说明(请仔细阅读)
+
+以上7条约定中比较关键的是1、6这两条约定：
+
+1、所有的请求和响应数据编码皆为utf-8格式，所以一定要保证参数的编码为utf-8；当上传图片时，请求的Content-Type是multipart/form-data，每个表单字段的参数值无需编码，但每个表单字段的charset部分需要指定为utf-8。本SDK采用Snoopy类(读取网页和模拟表单提交的一个php类)来访问api服务，默认下载的Snoopy并没有为表单字段指定编码，所以我们需要修改一下Snoopy类将表单字段的charset部分指定为utf-8，详情请看本SDK下Snoopy类的_prepare_post_body方法(与默认的Snoopy类下的_prepare_post_body方法比较一下即可明白)。Snoopy下载地址：http://sourceforge.net/projects/snoopy/
+
+6、生成签名的函数见lib/Util.php。
+
+如何获取session
+
+详情见 http://wiki.open.taobao.com/index.php/%E5%A6%82%E4%BD%95%E5%8F%96%E5%BE%97session%EF%BC%9F
+
+SDK说明
+  面对如此多的api接口，每个api接口所需要的参数个数以及参数类型又都不相同，这样表面上看起来会比较繁杂。但是不管访问那一个api接口，都是按照组织参数、访问服务、解析结果 这三步来进行的，这样看来访问如此多的api接口就如同访问一个api接口一样。
+
+  1、组织参数：需要session时就获取session；访问服务的方式为get时就将参数组织成参数字符串，当为post时就将参数组织成参数数组。
+
+  2、访问服务：get访问、post访问、post访问(带图片)
+
+  3、解析结果：xml解析、json解析
