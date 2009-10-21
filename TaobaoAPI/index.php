@@ -1,49 +1,27 @@
 <?php 
 header("Content-Type:text/html;charset=UTF-8");
+require_once 'phpSDK/lib/config.inc.php';
+require_once 'Paginator.class.php';
+?>
 
-$appKey = '12011633'; 
-$secretCode = '3db8701b36170b8cc7dfd46f919ad171';
- 
-//签名函数 
-function createSign ($paramArr) { 
-    global $secretCode; 
-    $sign = $secretCode; 
-    ksort($paramArr);
-    foreach ($paramArr as $key => $val) { 
-       if ($key !='' && $val !='') { 
-           $sign .= $key.$val; 
-       } 
-    } 
-    $sign = strtoupper(md5($sign)); 
-    return $sign; 
-} 
- 
-//组参函数
-function createStrParam ($paramArr) { 
-    $strParam = ''; 
-    foreach ($paramArr as $key => $val) { 
-       if ($key != '' && $val !='') { 
-           $strParam .= $key.'='.urlencode($val).'&'; 
-       } 
-    } 
-    return $strParam; 
-} 
+<form method="get">
+<input type="text" name="keyword" />
+<input type="submit" />
+</form>
+
+<?php
+
 /*
 获取用户授权码
 访问 http://auth.open.taobao.com/?appkey=12011633
 
 http://container.open.taobao.com/container?authcode=TOP-10073ff8470dd147b19481934f7bb8b3a9tjy2io4RDWbyCBTMDWd7m9F7PWnQ7Q-END
-http://container.open.taobao.com/container?authcode=TOP-10073ff8470dd147b19481934f7bb8b3a9tjy2io4RDWbyCBTMDWd7m9F7PWnQ7Q-END
 
 http://localhost/?top_appkey={appkey}&top_parameters=xxx&top_session=xxx&top_sign=xxx&authcode={授权码} 
 回调url上的top_session即为SessionKey 
 
-127.0.0.1 - - [20/Oct/2009:15:23:47 +0800] "GET /TaobaoAPI/test.php?top_appkey=1
-2011633&top_parameters=aWZyYW1lPTEmdHM9MTI1NjAyMzQ1NzcxMiZ2aWV3X21vZGU9ZnVsbCZ2a
-WV3X3dpZHRoPTAmdmlzaXRvcl9pZD00MDExOTIyMCZ2aXNpdG9yX25pY2s9emVyb2ZhdWx0&top_sess
-ion=186cd1219c6aad8d76de94963ccebd0d4&top_sign=%2FsLDTusVQI2ELvpmKwpStg%3D%3D HT
-TP/1.1" 302 -*/
 
+*/
 $session = '';
 $params = explode('&',$_SERVER['QUERY_STRING']);
 foreach($params as $param_str) {
@@ -53,30 +31,88 @@ foreach($params as $param_str) {
 		break;
 	}
 }
-//$session = '186cd1219c6aad8d76de94963ccebd0d4';
-//参数数组 
-$paramArr = array( 
-	'app_key' => $appKey, 
-	'session' => $session,
-	'method' => 'taobao.trades.bought.get', 
-	'format' => 'xml', 
-	'v' => '1.0', 
-	'timestamp' => date('Y-m-d H:i:s'), 
-//	'fields' => 'sex, buyer_credit, seller_credit, created, last_visit, birthday, type, alipay_bind',
-//	'fields' => 'sid,cid,nick,title,desc,bulletin,pic_path,created,modified', 
-	'fields' => 'seller_nick,buyer_nick,title,created,post_fee,pic_path,num,price,shipping_type',
-	'nick' => '' 
+//API系统参数
+$topParamArr = array(
+	'api_key' => APP_KEY,
+	'pid' => APP_PID,
+	'method' => 'taobao.taobaoke.items.get',
+	'format' => 'xml',
+	'v' => '1.0',
+	'timestamp' => date('Y-m-d H:i:s')
 );
- 
-//生成签名 
-$sign = createSign($paramArr); 
-//组织参数 
-$strParam = createStrParam($paramArr); 
-$strParam .= 'sign='.$sign; 
-//访问服务 
-//$url = 'http://gw.sandbox.taobao.com/router/rest?';
-//$url = 'http://gw.api.tbsandbox.com/router/rest?';
-$url = 'http://gw.api.taobao.com/router/rest?';
-$url .= $strParam; 
-header("Location: ".$url); 
+$limit = 10;
+//API用户参数
+$userParamArr = array(
+	'fields' => 'iid,title,nick,pic_url,price,click_url, commission',
+	'page_size' => $limit,
+	'page_no' => empty($_REQUEST['p'])? 1 : $_REQUEST['p'],
+	'keyword' => empty($_REQUEST['keyword'])? '充值卡' : $_REQUEST['keyword'],
+	//'area' => '杭州',
+	'sort' => 'price_desc',
+);
+
+//总参数数组
+$paramArr = $topParamArr + $userParamArr;
+
+
+//解析xml结果
+$result = array();
+if(!empty($_REQUEST['keyword'])) {
+	$result = Util::getXmlData(Util::getResult($paramArr));
+	$p = new Paginator($result['totalResults'],$limit);
+	echo $p->showMultiNavi();
+	echo '<table border="1" cellspacing="0" cellpadding="2" bordercolor="#999999" style="border-collapse:collapse;"><tr>';
+	echo '<th width="5%">图片</th>';
+	echo '<th width="35%">名称</th>';
+	echo '<th>价格</th>';
+	echo '<th>佣金</th>';
+	echo '<th width="40%">店铺</th>';
+	echo '</tr>';
+	foreach($result['taobaokeItem'] as $item) {
+		//获取店铺ID
+		$ParamArr = array(
+			'api_key' => APP_KEY,
+			'pid' => APP_PID,
+			'method' => 'taobao.shop.get',
+			'format' => 'xml',
+			'v' => '1.0',
+			'timestamp' => date('Y-m-d H:i:s'),
+			'fields' => 'sid',
+			'nick' => $item['nick']
+		);
+		$shop_rs = Util::getXmlData(Util::getResult($ParamArr));
+		//echo '<pre>';
+		//print_r($shop_rs);
+		//echo '</pre>';
+		$shop_sid = $shop_rs['shop']['sid'];
+
+		//获取推广店铺链接
+		$ParamArr = array(
+			'api_key' => APP_KEY,
+			'pid' => APP_PID,
+			'method' => 'taobao.taobaoke.shops.convert',
+			'format' => 'xml',
+			'v' => '1.0',
+			'timestamp' => date('Y-m-d H:i:s'),
+			'fields' => 'shop_title,click_url,shop_commission.rate',
+			'sids' => $shop_sid,
+			'nick' => 'zerofault'
+		);
+		$shop = Util::getXmlData(Util::getResult($ParamArr));
+		//echo '<pre>';
+		//print_r($shop);
+		//echo '</pre>';
+		
+		echo '<tr>';
+		echo '<td align="center"><a href="'.$item['click_url'].'" target="_blank"><img src="'.$item['pic_url'].'" border="0" height="30"/></a></td>';
+		echo '<td><a href="'.$item['click_url'].'" target="_blank">'.$item['title'].'</a></td>';
+		echo '<td>'.$item['price'].'</td>';
+		echo '<td>'.$item['commission'].'</td>';
+		echo '<td><a href="'.$shop['taobaokeShop']['click_url'].'" target="_blank">'.$shop['taobaokeShop']['shop_title'].'</a>';
+		echo '</tr>';
+	}
+}
+
+
+
 ?>
