@@ -2,14 +2,7 @@
 if($_SERVER["SERVER_NAME"]=='localhost') {
 	$config = array(
 		'APP_DEBUG'			=> true,
-		'APP_DOMAIN_DEPLOY'	=> false,
-		'APP_FILE_CASE'		=> true,
 		'APP_CONFIG_LIST'	=> array('menu'),
-
-		'COOKIE_EXPIRE'		=> 86400,    // Coodie有效期
-		'COOKIE_DOMAIN'		=> '',      // Cookie有效域名
-		'COOKIE_PATH'		=> '/',     // Cookie路径
-		'COOKIE_PREFIX'		=> 'erp_',      // Cookie前缀 避免冲突
 
 		'DB_TYPE'			=> 'mysql',
 		'DB_HOST'			=> 'localhost',
@@ -18,8 +11,6 @@ if($_SERVER["SERVER_NAME"]=='localhost') {
 		'DB_PWD'			=> '',
 		'DB_PREFIX'			=> 'erp_',
 
-
-
 		'USER_AUTH_ON'=>true,
 		'USER_AUTH_TYPE' => 0, //实时认证
 		'USER_AUTH_MODEL' => 'Staff',
@@ -34,29 +25,19 @@ if($_SERVER["SERVER_NAME"]=='localhost') {
 		'REQUIRE_AUTH_MODULE'=> '',
 		'NOT_AUTH_ACTION' => '',
 		'REQUIRE_AUTH_ACTION'=> '',
-		'IFRAME_AUTH_ACTION' => array('update','delete','edit')//在Iframe中进行的且需要认证的操作
+		'IFRAME_AUTH_ACTION' => array('update','delete','edit','submit')//在Iframe中进行的且需要认证的操作
 	);
 }
-else{
+elseif($_SERVER["SERVER_NAME"]=='zerofault.zzl.org') {
 	$config = array(
-		'APP_DEBUG'			=> false,
-		'APP_DOMAIN_DEPLOY'	=> false,
-		'APP_FILE_CASE'		=> true,
 		'APP_CONFIG_LIST'	=> array('menu'),
-
-		'COOKIE_EXPIRE'		=> 86400,    // Coodie有效期
-		'COOKIE_DOMAIN'		=> '',      // Cookie有效域名
-		'COOKIE_PATH'		=> '/',     // Cookie路径
-		'COOKIE_PREFIX'		=> 'erp_',      // Cookie前缀 避免冲突
 
 		'DB_TYPE'			=> 'mysql',
 		'DB_HOST'			=> 'localhost',
-		'DB_NAME'			=> 'zerofault_yishu',
-		'DB_USER'			=> 'zerofault_root',
+		'DB_NAME'			=> 'zerofault_zzl_erp',
+		'DB_USER'			=> '22366_root',
 		'DB_PWD'			=> '123456',
 		'DB_PREFIX'			=> 'erp_',
-
-
 
 		'USER_AUTH_ON'=>true,
 		'USER_AUTH_TYPE' => 0, //实时认证
@@ -72,7 +53,7 @@ else{
 		'REQUIRE_AUTH_MODULE'=> '',
 		'NOT_AUTH_ACTION' => '',
 		'REQUIRE_AUTH_ACTION'=> '',
-		'IFRAME_AUTH_ACTION' => array('update','delete','edit')//在Iframe中进行的且需要认证的操作
+		'IFRAME_AUTH_ACTION' => array('update','delete','edit','submit')//在Iframe中进行的且需要认证的操作
 	);
 }
 return $config;
