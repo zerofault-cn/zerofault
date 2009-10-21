@@ -8,7 +8,7 @@ require_once 'lib/config.inc.php';
 //API系统参数
 $topParamArr = array(
 	'api_key' => APP_KEY,
-	'method' => 'taobao.shop.get',
+	'method' => 'taobao.taobaoke.items.get',
 	'format' => 'xml',
 	'v' => '1.0',
 	'timestamp' => date('Y-m-d H:i:s')
@@ -16,8 +16,10 @@ $topParamArr = array(
 
 //API用户参数
 $userParamArr = array(
-	'fields' => 'sid,cid,nick,title,desc,bulletin,pic_path,created,modified',
-	'nick' => '三合一科技',
+	'fields' => 'iid,title,nick,pic_url,price,click_url, commission',
+	'pid' => 'mm_14374711_0_0',
+	'page_size' => 10,
+	'keyword' => '手机'
 );
 
 //总参数数组
@@ -34,11 +36,12 @@ print_r($result);
 echo '</pre>';
 /*
  * 以POST方式访问服务
- */
+
 $result = Util::postResult($paramArr);
 //解析xml结果
 $result = Util::getXmlData($result);
 echo '<pre>';
 print_r($result);
 echo '</pre>';
+*/
 ?>
