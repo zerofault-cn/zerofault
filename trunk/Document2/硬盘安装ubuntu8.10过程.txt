@@ -1,0 +1,64 @@
+3、linux系统安装准备
+a) 将ubuntu.iso镜像文件放在C盘根目录下（其他目录均可）
+b) 将 grubDos（可以网上搜索下载）下的GRLDR文件复制到C盘根目录下
+c）提取ubuntu.iso镜像文件中casper目录下的vmlinuz和initrd.gz两个文件，放在C盘根目录下
+d) 修改C盘根目录下的boot.ini文件（该文件默认为隐藏，只读，显示隐藏，去除只读属性后修改），在最下面添加C:\grldr=Ubuntu一项。
+e) 新建menu.lst文件，以记事本打开编辑内容：
+default 0
+timeout 10
+
+title Windows 95/98/NT/2000/Winxp
+root (hd0,0)
+makeactive
+chainloader +1
+
+title Install Ubuntu 8.10
+root (hd0,0)
+kernel /vmlinuz boot=casper iso-scan/filename=/ubuntu.iso ro quiet splash locale=zh_CN.UTF-8 initrd /initrd.gz
+注： （hd0,0）表示第1个硬盘的第一个分区,即为C盘；
+filename为ubuntu镜像文件的名字，建议修改为ubuntu.iso等好记好输入的文件名
+locale=zh_CN.UTF-8为语言选项，E文过得去的朋友可以选择不要
+4、linux系统安装
+重起计算机，选择ubuntu选项，然后选择install ubuutu 8.10选项，则会进入livecd一样的界面（其实上面的工作=插入ubuntu.iso镜像光盘后从光盘引导计算机）
+5、双击桌面的install文件，则可进入ubuntu 安装界面
+A、因为iso文件是放在第一个硬盘的，所以安装过程进行到硬盘分区时系统能检测出你的第二块硬盘，可以顺利进行分区。强烈建议选择手动分区。如果你在安装linux之前已为linux分好区且已经格式化(笔者是以etx3格式化的)，则编辑对应的分区，选择以etx3格式使用该分区，不要格式化，其他各分区雷同此操作。
+
+B、如果只有1块硬盘，那么建议进行如下操作：
+在双击install 安装 ubuntu之前选择系统管理菜单下的partition editor程序，查看硬盘状态，可以看到你的ubuntu镜像文件所在的分区被ubuntu挂载的目录（一般情况下你的ubuntu镜像文件所在的硬盘分区会被挂载到/isodevice目录下），并在该分区标志的左边出现钥匙一样的标记表示被锁。因此你需要打开终端程序（在系统文件—）附件—》终端terminal）或者ctrl+alt+F1切换，输入： sudo umount –l /isodevice (一定要加-l) 。
+Note： 另外还有一个问题，你如果已经分好了swap分区，系统也会自动加载，在partition editor程序里也可以看到钥匙一样的标记，记住也要把它卸载，可以不用在终端输入命令，直接在partition editor程序里选择swap分区，点右键选择swap off即可。（ps：这个情况好像没人提到过）
+（总之，如果系统将你仅有的1个硬盘中的某个分区挂载后，也可以理解为使用后，那么分区则不能进行，你必须将它完全卸载，才能够进行硬盘分区。）
+C、分区好以后请选择高级选项，可以选择linux引导程序grub的安装位置，如果你不选，则默认安装到你(hd0,0)上，即第一硬盘的MBR上，到时候将由grub来引导你的linux 和xp了。某天你删除了linux，则可能会导致winxp不能引导，则需要进入dos下进行 format /mbr来恢复。（笔者是将ubuntu的grub安装在第二个硬盘的boot分区的(此时在linux下应显示为/dev/sdb6)）
+之后是安装过程，系统自动进行，大约20分钟搞定。（安装过程建议断开网络，除非你的网速很牛逼）
+
+6、安装完成
+A、将grub安装在(hd0,0)的朋友可以重启，则可选择进入ubuntu linux或xp
+B、没有将grub安装在(hd0,0)或者没有安装grub程序的朋友请继续使用livecd模式
+进入boot分区，可以看到ubuntu启动所需的文件和一个grub文件夹，进入grub文件夹，以记事本程序将menu.lst打开，找到
+title Ubuntu 8.10, kernel 2.6.27-7-generic
+uuid ae1a016a-809e-4d
+kernel /vmlinuz-2.6.27-7-generic root=UUID=ae1a016a-809e-4df8-a899-a831d455776f ro quiet splash 
+initrd /initrd.img-2.6.27-7-generic
+quiet
+
+title Ubuntu 8.10, kernel 2.6.27-7-generic (recovery mode)
+uuid ae1a016a-809e-4d
+kernel /vmlinuz-2.6.27-7-generic root=UUID=ae1a016a-809e-4df8-a899-a831d455776f ro single
+initrd /initrd.img-2.6.27-7-generic
+
+title Ubuntu 8.10, memtest86+
+uuid ae1a016a-809e-4d
+kernel /memtest86+.bin
+quiet
+
+这一段文字，copy后添加到C盘根目录下的menu.lst中。此时可能有人不知道C盘在那里，其实之前说过的，windows的C盘此时在/isodevice下。每个人装好ubuntu之后系统生成的uuid肯定不一样，根据你将ubuntn的 grub程序安装的分区，如本人的是第二块硬盘的boot分区，则将每个title下的uuid ae1a016a-809e-4d这一行改为root (hd1,6)，其它建议不要改。
+我的修改如下：
+title Ubuntu 8.10, kernel 2.6.27-7-generic
+root (hd1,6)
+kernel /vmlinuz-2.6.27-7-generic root=UUID=ae1a016a-809e-4df8-a899-a831d455776f ro quiet splash 
+initrd /initrd.img-2.6.27-7-generic
+quiet
+保存后退出，重起电脑，即可大功告成。
+
+写得不好，希望能帮助刚接触ubuntu并想安装的朋友。如有不明白的地方，请email至： xinlongzheng@sohu.com大家一起讨论学习哈！
+
+前两天看到一个关于引导的帖子，说只需要将 grubDos（可以网上搜索下载）下的GRLDR文件复制到C盘根目录下，修改C盘下boot.ini文件添加C:\grldr=Ubuntu，不需要添加任何menu.lst文件，当你在启动时选择ubuntu后，GRLDR会自动搜索linux下的menu.lst，我试了一下，果然可以。如果这样的话，上述关于menu.lst的编辑就是多余了，引导也变得非常简单
