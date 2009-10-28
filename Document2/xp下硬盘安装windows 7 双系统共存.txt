@@ -1,0 +1,52 @@
+xp下硬盘安装windows 7 双系统共存
+
+1。先下载windows7的iso镜像文件。装个虚拟光驱。用虚拟光驱加载windows7镜像文件，把里面的文件全部复制到硬盘,比如D:\windows7。
+2。把windows7里面的“bootmgr”；“boot”文件夹都复制到C盘根目录下，并在C盘根目录下建个sources文件夹，把的D:\windows7\sources下的boot.win复制到C盘下sources文件夹，
+3。运行cmd，运行c:\boot\bootsect.exe /nt60 c: 退出重起。
+4。重启计算机，正在启动安装程序，加载boot.wim，启动PE环境。这个过程可能比较长，请等待……
+5。安装程序启动，选择你要安装的语言类型（*** chinese（PRC）），同时选择适合自己的键盘和输入方式。
+       出现“开始安装界面”，(要注意了，不点击“现在安装”)点左下角“修复计算机”(repair my computer)。
+       进入“系统恢复选项”，选择最后一项“命令提示符”(command prompt)，进入DOS窗口。
+6。在DOS下运行C:\boot\bootsect.exe /nt52 C:
+       然后删除C盘中的如下文件(有些文件可能是隐藏的，删除前请运行attrib -r -h -s)
+       del C:\boot\bootsect.exe
+　    del C:\bootmgr
+　    del C:\boot
+　    del C:\sources
+       删除这些很重要，没删除的话等下不能成功重起引导不了系统完成安装。
+7。现在可以输入安装命令了，输入D:\windows7\sources\setup.exe后回车。然后就跟光盘启动安装一样
+刚装好时占6.5g的空间，驱动全部系统自带。
+
+
+超级任务栏破解方法
+解压后导入注册表文件“取得管理员权限.reg”，打开编辑superbar.bat星号部分为自己电脑名称保存，右键点击c:\windows\explorer.exe取得管理员权限,运行superbar.bat,弹出对话框选择unlock，成功。
+
+下载一个小工具就可以了:x86 or x64 ,将其拷贝到Windows目录,并按管理员权限在命令行执行以下命令.
+
+takeown /f %windir%\explorer.exe 
+cacls %windir%\explorer.exe /E /G MyUserName:F (replacing MyUserName with your username) 
+taskkill /im explorer.exe /f 
+start unlockProtectedFeatures.exe 
+很快您就能看到全新的工具栏了.
+
+以上为引用文字，正在测试中，已经发现无法正常patch文件
+
+好了，下面提供正式的解决方案，已经确定这个脚本无法正常运行，可以运行的方法如下：
+首先把C:\Windows\explorer.exe拷贝到C盘根目录，并且获取权限，然后把那个小程序也放在C盘根目录，执行，选择unlock xxx，就好了
+
+Update:新版本出来了，看这里
+
+As the dialog indicates, patched files are not backed up. I suggest all users back up, by copying into a temporary folder somewhere, the following files:
+
+\Windows\Explorer.exe 
+\Windows\System32\wisptis.exe 
+\Windows\System32\ieframe.dll 
+\Windows\System32\shell32.dll 
+\Windows\System32\stobject.dll 
+\Windows\System32\TabletPC.cpl 
+\Windows\System32\themecpl.dll 
+\Windows\System32\themeui.dll 
+\Windows\System32\powercfg.cpl 
+Understanding the risks involved in patching core system files, you may download a copy of the tool for x86 or x64 (available tomorrow).
+
+
