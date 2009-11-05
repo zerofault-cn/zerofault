@@ -1,0 +1,303 @@
+<html>
+<head>
+<object    id=popup    type="application/x-oleobject"    classid="clsid:adb880a6-d8ff-11cf-9377-00aa003b7a11" > 
+</object> 
+<script language=javascript> 
+   myfont="tahoma,8,italic" 
+   mytext="没什么好说的~~,我就是XLTXLM" 
+</script> 
+
+
+<script>
+  function comfit(select_action,formt){
+    re1 = new RegExp("down$")
+    re2 = new RegExp("del$")
+    re3 = new RegExp("rename$")
+    re4 = new RegExp("source$")
+    re5 = new RegExp("move$")
+	t1    = new RegExp("(.*)down");
+	t2    = new RegExp("(.*)del");
+	t3    = new RegExp("(.*)rename");
+	t4    = new RegExp("(.*)source");
+	t5    = new RegExp("(.*)move");
+    selectvalue = select_action.value
+    selectvalue_1 =selectvalue.replace(t1,"$1");
+    selectvalue_2 =selectvalue.replace(t2,"$1");
+    selectvalue_3 =selectvalue.replace(t3,"$1");
+    selectvalue_4 =selectvalue.replace(t4,"$1");
+    selectvalue_5 =selectvalue.replace(t5,"$1");
+    if (selectvalue.match(re1)){
+      question=confirm('你确认要下载'+selectvalue_1); 
+	  if(!question) return false;
+	  else formt.submit();
+    }
+
+    if (selectvalue.match(re2)){
+      question=confirm('你确认要删除'+selectvalue_2+"吗？"); 
+	  if(!question) return false;
+	  else formt.submit();
+
+    }
+
+    if (selectvalue.match(re3)){
+      question=confirm('你确认要重命名'+selectvalue_3+"吗？");
+	  if(!question) return false;
+	  else {
+			new_name=prompt("请输入新名字","名字");
+			if(!new_name) return false;
+			formt.To_Name.value=new_name;
+			formt.submit();
+	  }
+
+    }
+
+    if (selectvalue.match(re4)){
+      question=confirm("你确认要查看"+selectvalue_4+"的原代码吗"); 
+	  if(!question) return false;
+	  else formt.submit();
+    }
+
+	
+	if (selectvalue.match(re5)){
+      question=confirm('你确认要移动'+selectvalue_5+'吗？');
+	  if(!question) return false;
+	  else {
+			new_name=prompt("要移动到的文件夹名","/移动到此目录/");
+			if(!new_name) return false;
+			formt.Move_To.value=new_name;
+			formt.submit();
+	  }
+
+}
+  }
+</script>
+
+<meta http-equiv=content-type content="text/html; charset=gb2312">
+<meta http-equiv="content-language" content="zh-cn">
+<meta name="generator" content="microsoft frontpage 5.0">
+<meta name="progid" content="frontpage.editor.document">
+<meta http-equiv="content-type" content="text/html; charset=gb2312">
+<body id=all leftmargin=5 topmargin=0 marginheight="0" marginwidth="0">
+<title>FTP管理器</title>
+
+<style>
+input{font-family:tahoma,helvetica,宋体;font-size:12px;border:1px solid #6699cc;background-color:#e8f4ff; 	background-image: url(./img/input.gif);}
+body {font-family: tahoma; font-size: 12px; color: #66cc99;}
+table { font-family: tahoma; font-size: 14px; color:#66cc99}
+a:link, a:visited        { text-decoration: none;font-size: 12px;color: #4eaece}
+a:hover {position: relative; text-decoration: underline overline}}
+
+</style>
+
+</head>
+<body bgcolor="#023266">
+<center>
+<!--------------顶部--------------->
+<table  width="840" border="1" cellpadding="0" cellspacing="0" style="border-collapse: collapse" bordercolor="#111111" >
+<tbody>
+
+  <tr>
+	<td  background="img/bg.gif" height=25 ><a href="index.php">登出主机</a>{ftp主机}&nbsp;&nbsp;    
+	<a href="javascript:popup.textpopup(mytext,myfont ,12,-90,25,-1)"> 关于作者</a></td>
+  </tr>
+</tbody>
+</table>
+
+<p>
+{错误}
+<table  width="840" border="1" cellpadding="0" cellspacing="0" style="border-collapse: collapse" bordercolor="#111111"  >
+
+<tbody>
+
+<!-----------当前状态-------------------->
+<tr>
+	<td  colspan="8"  background="img/bg.gif" height=25>当前状态</td>
+</tr>
+
+<tr>
+	<td bgcolor="#023266"   colspan="8">{提示}</td>
+</tr>
+
+<tr>
+	<td bgcolor="#023266"   colspan="8">当前目录：{路径}</td>
+</tr>
+
+<tr>
+	{上级目录}
+</tr>
+
+<!-----------文件夹-------------------->
+<tr>
+	<td  colspan="8"  background="img/bg.gif" height=25>文件夹:{文件夹个数}个</td>
+</tr>
+
+<tr>
+	<td bgcolor="#023266"  width=8></td>
+	<td bgcolor="#023266"  width=120 >文件夹名</td>
+	<td bgcolor="#023266"  width=80>子文件夹</td>
+	<td bgcolor="#023266"  width=80>子文件</td>
+	<td bgcolor="#023266"  width=80>创建时间</td>
+	<td bgcolor="#023266"  width=100>属性</td>
+	<td bgcolor="#023266"  width=120>使用者|所在组</td>
+	<td bgcolor="#023266"  width=*>动作</td>
+</tr>
+
+<!-- BEGIN folder -->
+<tr>
+	<td bgcolor="#023266" ><img src="img/folder.gif"></td>
+	<td bgcolor="#023266" onmouseover="this.bgcolor='#006666';" onmouseOut="this.bgcolor='#023266';">
+		<a href="?dir={当前目录_}/{文件夹名_}" title="点击进入此目录]">{文件夹名}</td>
+	<td bgcolor="#023266" onmouseover="this.bgcolor='#006666';" onmouseOut="this.bgcolor='#023266';">{子夹数}</td>
+	<td bgcolor="#023266" onmouseover="this.bgcolor='#006666';" onmouseOut="this.bgcolor='#023266';">{子文件数}</td>
+	<td bgcolor="#023266" onmouseover="this.bgcolor='#006666';" onmouseOut="this.bgcolor='#023266';">{夹创建时间}</td>
+	<td bgcolor="#023266" onmouseover="this.bgcolor='#006666';" onmouseOut="this.bgcolor='#023266';">{夹属性}</td>
+	<td bgcolor="#023266" onmouseover="this.bgcolor='#006666';" onmouseOut="this.bgcolor='#023266';">{夹|使用者|所在组}</td>
+<form name="jiabiaodan{夹次序}" method="post" action="">
+	<td bgcolor="#023266" >
+	<input type="hidden" name="To_Name">
+	<input type="hidden" name="Move_To">
+	<select onchange="comfit(Select_Name_Folder,jiabiaodan{夹次序});" name="Select_Name_Folder">
+	<option style="background-color:#66cc99;" value="">===动作===
+	<option style="background-color:66cc99;" value="{当前目录}/{文件夹名}del">===删除===
+	<option style="background-color:#66cc99;" value="{当前目录}/{文件夹名}rename">==重命名==
+	<option style="background-color:66cc99;" value="{当前目录}/{文件夹名}move">===移动===
+	</select>
+	</td>
+</form>
+
+</tr>
+
+<!-- END folder -->
+
+<!-----------文件-------------------->
+<tr>
+	<td  colspan="8"  background="img/bg.gif" height=25>文件:{文件个数}个</td>
+</tr>
+
+<tr>
+	<td bgcolor="#023266"  ></td>
+	<td bgcolor="#023266"  >文件名</td>
+	<td bgcolor="#023266"  >大小</td>
+	<td bgcolor="#023266"  >创建时间</td>
+	<td bgcolor="#023266"  >属性</td>
+	<td bgcolor="#023266"  >使用者|所在组</td>
+	<td bgcolor="#023266"  >最后修改时间</td>
+	<td bgcolor="#023266"  >动作</td>
+</tr>
+<!-- BEGIN file -->
+<tr>
+	<td bgcolor="#023266" ><img src="img/file.gif"></td>
+	<td bgcolor="#023266" onmouseover="this.bgcolor='#006666';" onmouseOut="this.bgcolor='#023266';"><a title="点击这里也可以下载" href="{主机}{当前目录}/{文件名}" target="_blank">{文件名}</td>
+	<td bgcolor="#023266" onmouseover="this.bgcolor='#006666';" onmouseOut="this.bgcolor='#023266';">{大小}</td>
+	<td bgcolor="#023266" onmouseover="this.bgcolor='#006666';" onmouseOut="this.bgcolor='#023266';">{创建时间}</td>
+	<td bgcolor="#023266" onmouseover="this.bgcolor='#006666';" onmouseOut="this.bgcolor='#023266';">{文件属性}</td>
+	<td bgcolor="#023266" onmouseover="this.bgcolor='#006666';" onmouseOut="this.bgcolor='#023266';">{文件|使用者|所在组}</td>
+	<td bgcolor="#023266" onmouseover="this.bgcolor='#006666';" onmouseOut="this.bgcolor='#023266';">{文件修改时间}</td>
+<form name="biaodan{次序}" method="post" action="">
+	<td bgcolor="#023266" >
+	<input type="hidden" name="To_Name">
+	<input type="hidden" name="Move_To">
+	<select onchange="comfit(Select_Name,biaodan{次序});" name="Select_Name">
+	<option style="background-color:#66cc99;" value="">===动作===
+	<option style="background-color:#66cc99;" value="{当前目录}/{文件名}down">===下载===
+	<option style="background-color:66cc99;" value="{当前目录}/{文件名}del">===删除===
+	<option style="background-color:#66cc99;" value="{当前目录}/{文件名}rename">==重命名==
+	<option style="display: none;background-color:#66cc99;" value="{当前目录}/{文件名}source">=PHP代码=
+	<option style="background-color:66cc99;" value="{当前目录}/{文件名}move">===移动===
+	</select>
+	</td>
+</form>
+</tr>
+<!-- END file -->
+<!----------操作----------------->
+
+</table>
+<table  width="840" border="1" cellpadding="0" cellspacing="0" style="border-collapse: collapse" bordercolor="#111111"  id=t136>
+
+<!-----------文件-------------------->
+<tr>
+	<td  colspan="8"  background="img/bg.gif" height=25>操作</td>
+</tr>
+
+<tr>
+<form method="post" action="" name="new_folder">
+	<td bgcolor="#023266"  colspan="2">新建文件夹
+			<input  type="text" name="Folder_Name" size=10>	
+			<input type="submit" value="建立文件" >
+	
+	</td>
+</form>
+
+<form method="post" enctype="multipart/form-data" action="" name="up_load">
+
+	<td bgcolor="#023266" colspan="6">上传文件
+			<input type="file" name="Source_File[]" size=10>
+			<input  type="submit" value="上传文件">
+			<input type=button onclick=addNew() value=增加 >
+			<input type="radio" name="Up_Type" value="FTP_ASCII" >文本模式
+			<input type="radio" name="Up_Type" value="FTP_BINARY" checked>二进制模式
+	</td>
+</tr>
+
+<!-------友情连接--------->
+<tr>
+	<td bgcolor="#115995" colspan="8">友情连接:</td>
+</tr>
+
+<tr>
+	<td bgcolor="#023266" colspan="8">
+	<a href='show.php' target="_blank">web管理</a>&nbsp;&nbsp;|&nbsp;
+	<a href="http://www.fwcn.com/bbs/index.php?s=9c4f328e512f3f10fa49197071bb04b2"  target="_blank">灵感论坛</a>&nbsp;&nbsp;|&nbsp;
+	<a href='http://www.phpx.com' target="_blank">中国php联盟</a>&nbsp;&nbsp;|&nbsp;
+	<a href='http://ctb.11cn.org/index.php' target="_blank">ctb文本论坛</a>&nbsp;&nbsp;|&nbsp;
+	<a href='http://www.phpe.net' target="_blank">超越php</a>
+	
+	
+	</td>
+</tr>
+<tr>
+	<td bgcolor="#115995" colspan="8">属性说明:</td>
+</tr>
+<tr>
+	<td bgcolor="#023266" colspan="8">d:文件夹|r:可读|w:可写|x:可执行|<a href="http://it.rising.com.cn/newsite/channels/safety/syssafety/safe_unix/200304/14-102210199.htm"  target="_blank">更多信息>>></a></td>
+</tr>
+</table>
+<table>
+<tr>
+	<td bgcolor="#115995" colspan="8"></td>
+</tr>
+  </tbody>
+</table>
+</form>
+<p>
+<!------版权------>
+
+power by xltxlm&reg;<br>
+
+<script>
+var i=0,arr=new Array('F9F9F9','F0F0F0');
+function addNew(){
+	tr=document.all.t136.insertRow();
+	tr.style.backgroundColor=arr[i%2];
+	tr.insertCell().innerText="文件"+(++i);
+	tr.insertCell().innerHTML='<input type=file name=Source_File['+i+'] > <a href=javascript:void(0) onclick=del()>删除</a>'
+}
+function del(){
+	document.all.t136.deleteRow(window.event.srcElement.parentElement.parentElement.rowIndex);
+	for(i=0;i<document.all.t136.rows.length-5;i++){
+		document.all.t136.rows[i+5].cells[1].children[0].name="Source_File["+(i+1)+"]";
+		document.all.t136.rows[i+5].style.backgroundColor=arr[i%2];
+	}
+}
+</script> 
+<SCRIPT LANGUAGE="JavaScript"> 
+<!-- Hide 
+
+function killErrors() { 
+return true; 
+} 
+
+window.onerror = killErrors; 
+
+// --> 
+</SCRIPT> 
