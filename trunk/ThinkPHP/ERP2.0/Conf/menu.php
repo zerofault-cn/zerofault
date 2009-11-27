@@ -40,8 +40,9 @@ $menu['My&nbsp;Inbox'] = array(
 	);
 
 $menu['System'] = array(
-	'name' => 'Node',
+	'name' => 'Setting',
 	'submenu' => array(
+		'Setting' => 'Setting',
 		'Node' => 'Node',
 		'Role' => 'Role',
 		)

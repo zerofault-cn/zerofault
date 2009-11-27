@@ -7,7 +7,7 @@
 	<th>MPN</th>
 	<th>Value/Package</th>
 	<th>Unit</th>
-	<th>Commodity</th>
+	<th>Category</th>
 	<th></th>
 </tr>
 <iterate name="result" id="item">
@@ -18,7 +18,7 @@
 	<td>{$item['MPN']}</td>
 	<td>{$item['value']}</td>
 	<td>{$item['unit']['title']}</td>
-	<td>{$item['commodity']['name']}</td>
+	<td>{$item['category']['name']}</td>
 	<td><a href="__URL__/form/id/{$item['id']}">Edit</a></td>
 </tr>
 </iterate>
