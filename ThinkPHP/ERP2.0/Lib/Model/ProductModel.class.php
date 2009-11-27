@@ -8,11 +8,11 @@ class ProductModel extends RelationModel{
 			'class_name'   => 'Supplier',
 			'foreign_key'  => 'supplier_id'
 			),
-		'Commodity' => array(
+		'Category' => array(
 			'mapping_type' => BELONGS_TO,
-			'mapping_name' => 'commodity',
-			'class_name'   => 'Commodity',
-			'foreign_key'  => 'commodity_id'
+			'mapping_name' => 'category',
+			'class_name'   => 'Category',
+			'foreign_key'  => 'category_id'
 			),
 		'Options' => array(
 			'mapping_type' => BELONGS_TO,

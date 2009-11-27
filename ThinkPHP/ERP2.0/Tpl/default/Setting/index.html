@@ -1,0 +1,98 @@
+<p class="page_title_text">Setting Options</p>
+<table >
+<tr>
+	<td class="clsTab current" id="currency"> Currency </td>
+	<td class="clsTab" id="unit"> Unit </td>
+	<td class="clsTab" id="character"> Character </td>
+	<td class="clsTab" id="payment_terms"> Payment Terms </td>
+	<td class="clsTab" id="tax">Tax</td>
+</tr>
+<tr>
+	<td colspan="5">
+	<iterate name="result" id="type_item">
+		<if condition="$key eq 'currency'">
+		<table class="clsTab" width="100%" cellpadding="2" border="1" id="{$key}">
+		<else />
+		<table class="clsTab" width="100%" cellpadding="2" border="1" id="{$key}" style="display:none">
+		</if>
+		<tr>
+			<th>No.</th>
+			<th>Name</th>
+			<eq name="key" value="currency">
+			<th>Code</th>
+			</eq>
+			<th>Order</th>
+			<th>OP</th>
+		</tr>
+		<iterate name="type_item" id="item">
+		<tr>
+			<td>{$i}</td>
+			<td>{$item['name']}</td>
+			<eq name="item.type" value="currency">
+			<td>{$item['code']}</td>
+			</eq>
+			<td>{$item['sort']}</td>
+			<td><a href="__URL__/form/id/{$item['id']}">Edit</a></td>
+		</tr>
+		</iterate>
+		<tr>
+			<td>{$i+1}</td>
+			<td><input type="text" name="name"/></td>
+			<eq name="item.type" value="currency">
+			<td><input type="text" name="code" /></td>
+			</eq>
+			<td><input type="text" name="sort" size="3"/></td>
+			<td><input type="button" value="Add" /></td>
+		</tr>
+		</table>
+	</iterate>
+	
+	</td>
+</tr>
+</table>
+<style>
+td.clsTab {
+	padding:2px 6px;
+	border-bottom:black 2px solid;
+	border-right:black 2px solid;
+	border-left:white 2px solid;
+	border-top:white 2px solid;
+	color:black;
+	text-align:center;
+	background:#6699cc;
+}
+td.current {
+	border-bottom:white 2px solid;
+	border-right:white 2px solid;
+	border-left:black 2px solid;
+	border-top:black 2px solid;
+	color:white;
+}
+</style>
+<script>
+$(document).ready(function(){
+	$("td.clsTab").each(function(){
+		$(this).css("cursor", "pointer").click(function(){
+			switchTab($(this).attr("id"));
+		});
+	});
+});
+function switchTab(id) {
+	$("td.clsTab").each(function(){
+		if($(this).attr("id") == id) {
+			$(this).addClass("current");
+		}
+		else{
+			$(this).removeClass("current");
+		}
+	});
+	$("table.clsTab").each(function(){
+		if($(this).attr("id") == id) {
+			$(this).show();
+		}
+		else{
+			$(this).hide();
+		}
+	});
+}
+</script>

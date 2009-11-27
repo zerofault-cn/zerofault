@@ -1,21 +1,21 @@
-﻿<p class="page_title_text"> Commodity</p>
+<p class="page_title_text">Category</p>
 <form action="__URL__/submit" method="post" target="_iframe">
 <input type="hidden" name="id" value="{$info.id}" />
 <table>
 <tr>
-	<td>Commodity Code:</td>
+	<td>Category Code:</td>
 	<td><input type="text" maxlength="10" size="15" name="code" value="{$code}" readonly="true" /></td>
 </tr>
 <tr>
-	<td>Commodity Name:</td>
+	<td>Category Name:</td>
 	<td><input type="text" maxlength="40" size="15" name="name" value="{$info.name}" /></td>
 </tr>
 </table>
 <p class="center">
 <if condition="$info['id'] eq 0">
-<input type="Submit" value="Insert New Commodity" name="submit"/>
+<input type="Submit" value="Insert New Category" name="submit"/>
 <else />
-<input type="Submit" value="Update Commodity Profile" name="submit"/>
+<input type="Submit" value="Update Category Profile" name="submit"/>
 </if>
 </p>
 </form>
