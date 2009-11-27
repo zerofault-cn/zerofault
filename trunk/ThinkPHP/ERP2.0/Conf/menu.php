@@ -7,7 +7,7 @@ $menu['Basic&nbsp;Data'] = array(
 		'Supplier information'	=> 'Supplier',
 		'Department information'=> 'Dept',
 		'Staff information'		=> 'Staff',
-		'Commodity'				=> 'Commodity',
+		'Category'				=> 'Category',
 		'Products Data'			=> 'Product'
 		)
 	);
@@ -35,7 +35,7 @@ $menu['Inventory&nbsp;output Management'] = array(
 		)
 	);
 
-$menu['Purchase management'] = array(
+$menu['My&nbsp;Inbox'] = array(
 	'name' => 'Feedback',
 	);
 
@@ -47,5 +47,5 @@ $menu['System'] = array(
 		)
 	);
 
-return $menu;
+return array('menu'=>$menu);
 ?>
