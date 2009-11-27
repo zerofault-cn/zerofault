@@ -6,18 +6,18 @@
 * @author zerofault <zerofault@gmail.com>
 * @since 2009/8/5
 */
-class CommodityAction extends BaseAction{
+class CategoryAction extends BaseAction{
 
 	protected $dao;
 
 	public function _initialize() {
-		$this->dao = M('Commodity');
+		$this->dao = M('Category');
 		parent::_initialize();
 	}
 
 	public function index(){
 		$this->assign('result', $this->dao->select());
-		$this->assign('content','Commodity:index');
+		$this->assign('content','Category:index');
 		$this->display('Layout:ERP_layout');
 	}
 
@@ -38,7 +38,7 @@ class CommodityAction extends BaseAction{
 		}
 		$this->assign('code', $code);
 		$this->assign('info', $info);
-		$this->assign('content', 'Commodity:form');
+		$this->assign('content', 'Category:form');
 		$this->display('Layout:ERP_layout');
 	}
 	public function submit() {
@@ -47,25 +47,25 @@ class CommodityAction extends BaseAction{
 		}
 		$id = $_REQUEST['id'];
 		$name = trim($_REQUEST['name']);
-		empty($name) && self::_error('Commodity Name required');
+		empty($name) && self::_error('Category Name required');
 		if(!empty($id) && $id>0) {
 			$rs = $this->dao->where(array('name'=>$name,'id'=>array('neq',$id)))->find();
 			if($rs && sizeof($rs)>0){
-				self::_error('Commodity Name: '.$name.' exists already!');
+				self::_error('Category Name: '.$name.' exists already!');
 			}
 			$this->dao->find($id);
 		}
 		else{
 			$rs = $this->dao->where(array('name'=>$name))->find();
 			if($rs && sizeof($rs)>0){
-				self::_error('Commodity Name: '.$name.' exists already!');
+				self::_error('Category Name: '.$name.' exists already!');
 			}
 			$this->dao->code = $_REQUEST['code'];
 		}
 		$this->dao->name = $name;
 		if(!empty($id) && $id>0) {
 			if(false !== $this->dao->save()){
-				self::_success('Commodity information updated!',__URL__);
+				self::_success('Category information updated!',__URL__);
 			}
 			else{
 				self::_error('Update fail!'.(C('APP_DEBUG')?$this->dao->getLastSql():''));
@@ -73,10 +73,10 @@ class CommodityAction extends BaseAction{
 		}
 		else{
 			if($this->dao->add()) {
-				self::_success('Add commodity success!',__URL__);
+				self::_success('Add category success!',__URL__);
 			}
 			else{
-				self::_error('Add commodity fail!'.(C('APP_DEBUG')?$this->dao->getLastSql():''));
+				self::_error('Add category fail!'.(C('APP_DEBUG')?$this->dao->getLastSql():''));
 			}
 		}
 		

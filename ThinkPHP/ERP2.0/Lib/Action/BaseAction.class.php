@@ -20,6 +20,7 @@ class BaseAction extends Action{
 
 		!empty($_REQUEST['pmenu']) && Session::set('pmenu', urldecode($_REQUEST['pmenu']));
 		$menu = C('_menu_');
+		$menu = $menu['menu'];
 		foreach($menu as $key=>$val) {
 			if(str_replace('&nbsp;',' ',$key) == Session::get('pmenu')) {
 				$submenu = $menu[$key]['submenu'];

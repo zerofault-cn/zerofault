@@ -1,10 +1,12 @@
-﻿<p class="page_title_text"><img src="../Public/Images/supplier.gif" align="absmiddle"/> Supplier</p>
+<p class="page_title_text"><img src="../Public/Images/supplier.gif" align="absmiddle"/> Supplier</p>
 <table cellpadding="2" border="1">
 <tr>
 	<th>Code</th>
 	<th>Supplier Name</th>
 	<th>Character</th>
 	<th>Currency</th>
+	<th>Contact</th>
+	<th>Phone Number</th>
 	<th>Address</th>
 	<th></th>
 </tr>
@@ -14,6 +16,8 @@
 	<td>{$item['name']}</td>
 	<td>{$item['character']['title']}</td>
 	<td>{$item['currency']['title']}</td>
+	<td>{$item['contact']}</td>
+	<td>{$item['cellphone']} {$item['telephone']}</td>
 	<td>{$item['address']}</td>
 	<td><a href="__URL__/form/id/{$item['id']}">Edit</td>
 </tr>
