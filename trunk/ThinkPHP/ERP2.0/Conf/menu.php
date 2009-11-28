@@ -43,8 +43,8 @@ $menu['System'] = array(
 	'name' => 'Setting',
 	'submenu' => array(
 		'Setting' => 'Setting',
-		'Node' => 'Node',
 		'Role' => 'Role',
+		'Node' => 'Node',
 		)
 	);
 
