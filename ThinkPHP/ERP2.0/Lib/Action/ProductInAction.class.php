@@ -19,7 +19,7 @@ class ProductInAction extends BaseAction{
 		$rs = M('Options')->where(array('type'=>'unit'))->order('sort')->select();
 		$unit = array();
 		foreach($rs as $i=>$item) {
-			$unit[$item['id']] = $item['title'];
+			$unit[$item['id']] = $item['name'];
 		}
 		$this->assign('unit', $unit);
 
@@ -34,7 +34,7 @@ class ProductInAction extends BaseAction{
 		$rs = M('Options')->where(array('type'=>'unit'))->order('sort')->select();
 		$unit = array();
 		foreach($rs as $i=>$item) {
-			$unit[$item['id']] = $item['title'];
+			$unit[$item['id']] = $item['name'];
 		}
 		$this->assign('unit', $unit);
 
@@ -63,18 +63,18 @@ class ProductInAction extends BaseAction{
 		$action = $_REQUEST['action'];
 		if(!empty($id) && $id>0) {
 			$info = $this->dao->relation(true)->find($id);
-			$info['commodity'] = M('Commodity')->where("id=".$info['product']['commodity_id'])->getField('name');
-			$info['unit'] = M('Options')->where("id=".$info['product']['unit_id'])->getField('title');
+			$info['category'] = M('Category')->where("id=".$info['product']['category_id'])->getField('name');
+			$info['unit'] = M('Options')->where("id=".$info['product']['unit_id'])->getField('name');
 			
-			$info['currency_opts'] = self::genOptions(M('Options')->where(array('type'=>'currency'))->order('sort')->select(), $info['currency_id'], 'title');
+			$info['currency_opts'] = self::genOptions(M('Options')->where(array('type'=>'currency'))->order('sort')->select(), $info['currency_id']);
 			$code = 'B'.substr($info['code'],1);
 		}
 		else{
 			$info = array(
 				'product_opts' => self::genOptions(D('Product')->select(),'','MPN'),
-				'supplier_opts' => self::genOptions(D('Supplier')->select(),'','name'),
-				'currency_opts' => self::genOptions(M('Options')->where(array('type'=>'currency'))->order('sort')->select(), '', 'title'),
-				'unit_opts' => self::genOptions(M('Options')->where(array('type'=>'unit'))->order('sort')->select(), '', 'title')
+				'supplier_opts' => self::genOptions(D('Supplier')->select()),
+				'currency_opts' => self::genOptions(M('Options')->where(array('type'=>'currency'))->order('sort')->select()),
+				'unit_opts' => self::genOptions(M('Options')->where(array('type'=>'unit'))->order('sort')->select())
 			);
 			$max_id = $this->dao->getField('max(id) as max_id');
 			empty($max_id) && ($max_id = 0);

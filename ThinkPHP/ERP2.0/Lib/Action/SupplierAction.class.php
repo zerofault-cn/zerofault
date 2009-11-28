@@ -27,17 +27,17 @@ class SupplierAction extends BaseAction{
 		$id = $_REQUEST['id'];
 		if(!empty($id) && $id>0) {
 			$info = $this->dao->find($id);
-			$info['character_opts'] = self::genOptions($dOptions->where(array('type'=>'character'))->order('sort')->select(), $info['character_id'], 'title', 'id');
-			$info['payment_opts'] = self::genOptions($dOptions->where(array('type'=>'payment_terms'))->order('sort')->select(), $info['payment_terms_id'], 'title', 'id');
-			$info['tax_opts'] = self::genOptions($dOptions->where(array('type'=>'tax'))->order('sort')->select(), $info['tax_id'], 'title', 'id');
-			$info['currency_opts'] = self::genOptions($dOptions->where(array('type'=>'currency'))->order('sort')->select(), $info['currency_id'], 'title', 'id');
+			$info['character_opts'] = self::genOptions($dOptions->where(array('type'=>'character'))->order('sort')->select(), $info['character_id']);
+			$info['payment_opts'] = self::genOptions($dOptions->where(array('type'=>'payment_terms'))->order('sort')->select(), $info['payment_terms_id']);
+			$info['tax_opts'] = self::genOptions($dOptions->where(array('type'=>'tax'))->order('sort')->select(), $info['tax_id']);
+			$info['currency_opts'] = self::genOptions($dOptions->where(array('type'=>'currency'))->order('sort')->select(), $info['currency_id']);
 			$code = $info['code'];
 		}
 		else{
 			$info = array(
 				'id'=>0,
 				'name'=>'',
-				'character_opts' => self::genOptions($dOptions->where(array('type'=>'character'))->order('sort')->select(), '', 'title', 'id'),
+				'character_opts' => self::genOptions($dOptions->where(array('type'=>'character'))->order('sort')->select()),
 				'address'=>'',
 				'contact'=>'',
 				'postcode'=>'',
@@ -47,9 +47,9 @@ class SupplierAction extends BaseAction{
 				'email'=>'',
 				'bank'=>'',
 				'account'=>'',
-				'payment_opts' => self::genOptions($dOptions->where(array('type'=>'payment_terms'))->order('sort')->select(), '', 'title', 'id'),
-				'tax_opts' => self::genOptions($dOptions->where(array('type'=>'tax'))->order('sort')->select(), '', 'title', 'id'),
-				'currency_opts' => self::genOptions($dOptions->where(array('type'=>'currency'))->order('sort')->select(), '', 'title', 'value'),
+				'payment_opts' => self::genOptions($dOptions->where(array('type'=>'payment_terms'))->order('sort')->select()),
+				'tax_opts' => self::genOptions($dOptions->where(array('type'=>'tax'))->order('sort')->select()),
+				'currency_opts' => self::genOptions($dOptions->where(array('type'=>'currency'))->order('sort')->select()),
 				'website'=>'',
 				'remark'=>''
 				);

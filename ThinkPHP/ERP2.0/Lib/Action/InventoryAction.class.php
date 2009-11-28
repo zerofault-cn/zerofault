@@ -16,9 +16,9 @@ class InventoryAction extends BaseAction{
 	}
 
 	public function index() {
-		$this->assign('commodity_opts', self::genOptions(M('Commodity')->select(), $_REQUEST['commodity_id']) );
-		$this->assign('product_opts', self::genOptions(M('Product')->select(), $_REQUEST['product_id'], 'description') );
-		$this->assign('supplier_opts', self::genOptions(D('Supplier')->select(), $_REQUEST['supplier_id']) );
+		$this->assign('category_opts', self::genOptions(M('Category')->select(), $_REQUEST['category_id']) );
+		$this->assign('product_opts', self::genOptions(M('Product')->select(), $_REQUEST['product_id'], 'description'));
+		$this->assign('supplier_opts', self::genOptions(D('Supplier')->select(), $_REQUEST['supplier_id']));
 		$where = array();
 		$where['status'] = 1;
 		$result = array();
@@ -27,11 +27,11 @@ class InventoryAction extends BaseAction{
 			$rs = M('Options')->where(array('type'=>'unit'))->order('sort')->select();
 			$unit = array();
 			foreach($rs as $i=>$item) {
-				$unit[$item['id']] = $item['title'];
+				$unit[$item['id']] = $item['name'];
 			}
 			$this->assign('unit', $unit);
 
-			!empty($_REQUEST['commodity_id']) && ($where['commodity_id'] = $_REQUEST['commodity_id']);
+			!empty($_REQUEST['category_id']) && ($where['category_id'] = $_REQUEST['category_id']);
 			!empty($_REQUEST['product_id']) && ($where['product_id'] = $_REQUEST['product_id']);
 			!empty($_REQUEST['supplier_id']) && ($where['supplier_id'] = $_REQUEST['supplier_id']);
 			$rs = $this->dao->where($where)->select();

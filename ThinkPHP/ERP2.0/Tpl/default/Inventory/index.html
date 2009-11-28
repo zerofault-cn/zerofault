@@ -1,12 +1,16 @@
 <p class="page_title_text">Storage inventory</p>
-<p class="center">
+<table>
+<tr>
+	<td>
 <form action="__URL__/index" method="post">
-Commodity<select name="commodity_id"><option value="">All</option>{$commodity_opts}</select>
+Category<select name="category_id"><option value="">All</option>{$category_opts}</select>
 Product<select name="product_id"><option value="">All</option>{$product_opts}</select>
 Supplier<select name="supplier_id"><option value="">All</option>{$supplier_opts}</select>
 <input type="submit" name="submit" value="Search"/>
 </form>
-</p>
+	</td>
+</tr>
+</table>
 <table cellpadding="2" border="1">
 <tr>
 	<th>No.</th>

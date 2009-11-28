@@ -25,15 +25,15 @@ class ProductAction extends BaseAction{
 		if(!empty($id) && $id>0) {
 			$info = $this->dao->find($id);
 			$info['category_opts'] = self::genOptions(M('Category')->select(),$info['category_id'],'name');
-			$info['currency_opts'] = self::genOptions(M('Options')->where(array('type'=>'currency'))->order('sort')->select(), $info['currency_id'], 'title');
-			$info['unit_opts'] = self::genOptions(M('Options')->where(array('type'=>'unit'))->order('sort')->select(), $info['unit_id'], 'title');
+			$info['currency_opts'] = self::genOptions(M('Options')->where(array('type'=>'currency'))->order('sort')->select(), $info['currency_id']);
+			$info['unit_opts'] = self::genOptions(M('Options')->where(array('type'=>'unit'))->order('sort')->select(), $info['unit_id']);
 		}
 		else{
 			$info = array(
 				'id'=>0,
-				'category_opts' => self::genOptions(M('Category')->select(),'','name'),
-				'currency_opts' => self::genOptions(M('Options')->where(array('type'=>'currency'))->order('sort')->select(), '', 'title'),
-				'unit_opts' => self::genOptions(M('Options')->where(array('type'=>'unit'))->order('sort')->select(), '', 'title')
+				'category_opts' => self::genOptions(M('Category')->select()),
+				'currency_opts' => self::genOptions(M('Options')->where(array('type'=>'currency'))->order('sort')->select()),
+				'unit_opts' => self::genOptions(M('Options')->where(array('type'=>'unit'))->order('sort')->select())
 				);
 		}
 		$this->assign('info', $info);
