@@ -65,7 +65,7 @@ class ProductInAction extends BaseAction{
 			$info = $this->dao->relation(true)->find($id);
 			$info['category'] = M('Category')->where("id=".$info['product']['category_id'])->getField('name');
 			$info['unit'] = M('Options')->where("id=".$info['product']['unit_id'])->getField('name');
-			
+			$info['supplier_opts'] = self::genOptions(D('Supplier')->select(), $info['supplier_id']);
 			$info['currency_opts'] = self::genOptions(M('Options')->where(array('type'=>'currency'))->order('sort')->select(), $info['currency_id']);
 			$code = 'B'.substr($info['code'],1);
 		}

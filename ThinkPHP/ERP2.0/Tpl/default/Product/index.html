@@ -1,6 +1,7 @@
-<p class="page_title_text">Product Data</p>
+<p class="page_title_text">Component Data</p>
 <table cellpadding="2" border="1">
 <tr>
+	<th>Code</th>
 	<th>Internal PN</th>
 	<th>Description</th>
 	<th>Manufacture</th>
@@ -12,17 +13,18 @@
 </tr>
 <iterate name="result" id="item">
 <tr>
+	<td>{$item['code']}</td>
 	<td>{$item['Internal_PN']}</td>
-	<td>{$item['description']}</td>
-	<td>{$item['manufacture']}</td>
-	<td>{$item['MPN']}</td>
-	<td>{$item['value']}</td>
-	<td>{$item['unit']['name']}</td>
-	<td>{$item['category']['name']}</td>
+	<td>{$item['description']}&nbsp;</td>
+	<td>{$item['manufacture']}&nbsp;</td>
+	<td>{$item['MPN']}&nbsp;</td>
+	<td>{$item['value']}&nbsp;</td>
+	<td>{$item['unit']['name']}&nbsp;</td>
+	<td>{$item['category']['name']}&nbsp;</td>
 	<td><a href="__URL__/form/id/{$item['id']}">Edit</a></td>
 </tr>
 </iterate>
 </table>
 <p class="center">
-	<input type="button" onclick="javascript:document.location='__URL__/form';" value="Add a New Product" />
+	<input type="button" onclick="javascript:document.location='__URL__/form';" value="Add a New Component" />
 </p>

@@ -27,6 +27,7 @@ class ProductAction extends BaseAction{
 			$info['category_opts'] = self::genOptions(M('Category')->select(),$info['category_id'],'name');
 			$info['currency_opts'] = self::genOptions(M('Options')->where(array('type'=>'currency'))->order('sort')->select(), $info['currency_id']);
 			$info['unit_opts'] = self::genOptions(M('Options')->where(array('type'=>'unit'))->order('sort')->select(), $info['unit_id']);
+			$code = $info['code'];
 		}
 		else{
 			$info = array(
@@ -35,7 +36,11 @@ class ProductAction extends BaseAction{
 				'currency_opts' => self::genOptions(M('Options')->where(array('type'=>'currency'))->order('sort')->select()),
 				'unit_opts' => self::genOptions(M('Options')->where(array('type'=>'unit'))->order('sort')->select())
 				);
+			$max_id = $this->dao->getField('max(id) as max_id');
+			empty($max_id) && ($max_id = 0);
+			$code = 'C'.sprintf("%05d",$max_id+1);
 		}
+		$this->assign('code', $code);
 		$this->assign('info', $info);
 		$this->assign('content', 'Product:form');
 		$this->display('Layout:ERP_layout');
@@ -51,15 +56,16 @@ class ProductAction extends BaseAction{
 		if(!empty($id) && $id>0) {
 			$rs = $this->dao->where(array('Internal_PN'=>$PN,'id'=>array('neq',$id)))->find();
 			if($rs && sizeof($rs)>0){
-				self::_error('Internal PN: '.$PN.' has been used by another product!');
+				self::_error('Internal PN: '.$PN.' has been used by another component!');
 			}
 			$this->dao->find($id);
 		}
 		else{
 			$rs = $this->dao->where(array('Internal_PN'=>$PN))->find();
 			if($rs && sizeof($rs)>0){
-				self::_error('Internal PN: '.$PN.' has been used by another product!');
+				self::_error('Internal PN: '.$PN.' has been used by another component!');
 			}
+			$this->dao->code = $_REQUEST['code'];
 		}
 		$this->dao->Internal_PN = $PN;
 		$this->dao->description = $_REQUEST['description'];
@@ -91,7 +97,7 @@ class ProductAction extends BaseAction{
 		$this->dao->remark = $_REQUEST['remark'];
 		if(!empty($id) && $id>0) {
 			if(false !== $this->dao->save()){
-				self::_success('Product information updated!',__URL__);
+				self::_success('Component information updated!',__URL__);
 			}
 			else{
 				self::_error('Update fail!'.(C('APP_DEBUG')?$this->dao->getLastSql():''));
@@ -99,10 +105,10 @@ class ProductAction extends BaseAction{
 		}
 		else{
 			if($this->dao->add()) {
-				self::_success('Add product data success!',__URL__);
+				self::_success('Add component data success!',__URL__);
 			}
 			else{
-				self::_error('Add product data fail!'.(C('APP_DEBUG')?$this->dao->getLastSql():''));
+				self::_error('Add component data fail!'.(C('APP_DEBUG')?$this->dao->getLastSql():''));
 			}
 		}
 		

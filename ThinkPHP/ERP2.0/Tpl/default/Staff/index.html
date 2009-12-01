@@ -14,14 +14,15 @@
 	<td>{$item['code']}</td>
 	<td>{$item['name']}</td>
 	<td>[{$item['dept']['code']}]{$item['dept']['name']}</td>
-	<td>{$item['email']}</td>
-	<td>{$item['leader']['realname']}</td>
+	<td>{$item['email']}&nbsp;</td>
+	<td>{$item['leader']['realname']}&nbsp;</td>
 	<td><if condition="$item['id'] eq 1">
 		System Administrator
 		<else />
 			<iterate name="item['role']" id="role" key="j">
 			{$role['name']}<br />
 			</iterate>
+			<eq name="j" value="">&nbsp;</eq>
 		</if></td>
 	<td><a href="__URL__/form/id/{$item['id']}">Edit</a></td>
 </tr>
