@@ -52,7 +52,8 @@
 	<td><if condition="empty($id)">
 		<select name="supplier_id"><option value="">Select One</option>{$info.supplier_opts}</select>
 		<else />
-		<input type="text" size="15" value="{$info['supplier']['name']}" readonly="true"/><input type="hidden" name="supplier_id" value="{$info['supplier_id']}" />
+		<select name="supplier_id">{$info.supplier_opts}</select>
+		<!-- <input type="text" size="15" value="{$info['supplier']['name']}" readonly="true"/><input type="hidden" name="supplier_id" value="{$info['supplier_id']}" /> -->
 		</if></td>
 </tr>
 <tr>

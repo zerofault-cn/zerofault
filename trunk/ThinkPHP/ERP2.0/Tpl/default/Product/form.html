@@ -1,10 +1,14 @@
-<p class="page_title_text">Product Data</p>
+<p class="page_title_text">Component Data</p>
 <form action="__URL__/submit" method="post" enctype="multipart/form-data" target="_iframe">
 <input type="hidden" name="id" value="{$info.id}" />
 <table>
 <tr>
+	<td>Code:</td>
+	<td><input type="text" maxlength="10" size="15" name="code" value="{$code}" readonly="true" /></td>
+</tr>
+<tr>
 	<td>Internal PN:</td>
-	<td><input type="text" maxlength="10" size="15" name="PN" value="{$info.Internal_PN}" /></td>
+	<td><input type="text" maxlength="40" size="15" name="PN" value="{$info.Internal_PN}" /></td>
 </tr>
 <tr>
 	<td>Description:</td>
@@ -85,9 +89,9 @@
 </table>
 <p class="center">
 <if condition="$info['id'] eq 0">
-<input type="Submit" value="Insert New Product" name="submit"/>
+<input type="Submit" value="Insert New Component" name="submit"/>
 <else />
-<input type="Submit" value="Update Product Metadata" name="submit"/>
+<input type="Submit" value="Update Component Data" name="submit"/>
 </if>
 </p>
 </form>

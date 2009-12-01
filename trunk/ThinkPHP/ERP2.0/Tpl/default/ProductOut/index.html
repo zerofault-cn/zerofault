@@ -25,9 +25,9 @@ Inventory output information
 	<td>{$unit[$item['product']['unit_id']]}</td>
 	<td>{$item['quantity']}</td>
 	<td>{$item['create_time']}</td>
-	<td>{$item['staff']['name']}</td>
+	<td align="center">{$item['staff']['name']}</td>
 <!-- 	<td align="center"><if condition="$item['status'] eq 0"><input type="text" name="qty[]" size="3" value="{$item['quantity']}"/><else />{$item['moved_quantity']}</if></td> -->
-	<td align="center">{$item['confirmed_staff']['name']}</td>
+	<td align="center">{$item['confirmed_staff']['name']}&nbsp;</td>
 	<td><a href="__URL__/form/id/{$item['id']}">Edit</a>
 	<if condition="$item['destination'] eq 'Staff'">
 	<a href="__URL__/form/action/transfer/id/{$item['id']}">Transfer</a>
@@ -40,7 +40,7 @@ Inventory output information
 <p class="center">
 	<input type="submit" name="submit" value="Confirm Selected" />
 	<if condition="$action neq 'transfer' and $action neq 'returns'">
-	<input type="button" onclick="javascript:document.location='__URL__/form/action/{$action}';" value="Enter a New Product" />
+	<input type="button" onclick="javascript:document.location='__URL__/form/action/{$action}';" value="Apply a New Product" />
 	</if>
 </p>
 </form>

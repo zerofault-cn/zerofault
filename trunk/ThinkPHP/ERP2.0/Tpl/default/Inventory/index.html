@@ -11,6 +11,7 @@ Supplier<select name="supplier_id"><option value="">All</option>{$supplier_opts}
 	</td>
 </tr>
 </table>
+<if condition="empty($result) eq false">
 <table cellpadding="2" border="1">
 <tr>
 	<th>No.</th>
@@ -33,4 +34,5 @@ Supplier<select name="supplier_id"><option value="">All</option>{$supplier_opts}
 </tr>
 </iterate>
 </table>
+</if>
 <p class="center"></p>
