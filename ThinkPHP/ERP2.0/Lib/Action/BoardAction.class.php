@@ -1,12 +1,12 @@
 <?php
 /**
 *
-* 货品资料
+* 板子资料
 *
 * @author zerofault <zerofault@gmail.com>
 * @since 2009/8/5
 */
-class ProductAction extends BaseAction{
+class BoardAction extends BaseAction{
 
 	protected $dao;
 
