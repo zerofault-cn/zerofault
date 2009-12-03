@@ -8,7 +8,8 @@ $menu['Basic&nbsp;Data'] = array(
 		'Department information'=> 'Dept',
 		'Staff information'		=> 'Staff',
 		'Category'				=> 'Category',
-		'Component Data'		=> 'Product'
+		'Component Data'		=> 'Product',
+		'Board Data'			=> 'Board'
 		)
 	);
 

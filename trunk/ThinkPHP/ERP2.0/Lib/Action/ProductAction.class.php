@@ -38,7 +38,7 @@ class ProductAction extends BaseAction{
 				);
 			$max_id = $this->dao->getField('max(id) as max_id');
 			empty($max_id) && ($max_id = 0);
-			$code = 'C'.sprintf("%05d",$max_id+1);
+			$code = 'C'.sprintf("%09d",$max_id+1);
 		}
 		$this->assign('code', $code);
 		$this->assign('info', $info);
