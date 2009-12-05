@@ -212,6 +212,20 @@ table span.c0{
 	margin-top:30px;
 	text-align:center;
 }
-
-
-
+td.clsTab {
+	padding:2px 6px;
+	border-bottom:black 2px solid;
+	border-right:black 2px solid;
+	border-left:white 2px solid;
+	border-top:white 2px solid;
+	color:black;
+	text-align:center;
+	background:#6699cc;
+}
+td.current {
+	border-bottom:white 2px solid;
+	border-right:white 2px solid;
+	border-left:black 2px solid;
+	border-top:black 2px solid;
+	color:white;
+}

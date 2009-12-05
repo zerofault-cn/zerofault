@@ -35,3 +35,21 @@ function mySubmit(v,m){
 	}
 	return true;
 }
+function switchTab(id) {
+	$("td.clsTab").each(function(){
+		if($(this).attr("id") == id) {
+			$(this).addClass("current");
+		}
+		else{
+			$(this).removeClass("current");
+		}
+	});
+	$("table.clsTab").each(function(){
+		if($(this).attr("id") == id) {
+			$(this).show();
+		}
+		else{
+			$(this).hide();
+		}
+	});
+}

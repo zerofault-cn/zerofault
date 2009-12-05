@@ -16,33 +16,35 @@ class BoardAction extends BaseAction{
 	}
 
 	public function index(){
-		$this->assign('result', $this->dao->relation(true)->select());
-		$this->assign('content','Product:index');
+		$this->assign('result', $this->dao->where(array('type'=>'Board'))->relation(true)->select());
+		$this->assign('content','Board:index');
 		$this->display('Layout:ERP_layout');
 	}
 	public function form() {
 		$id = $_REQUEST['id'];
 		if(!empty($id) && $id>0) {
 			$info = $this->dao->find($id);
-			$info['category_opts'] = self::genOptions(M('Category')->select(),$info['category_id'],'name');
+			$info['category_opts'] = self::genOptions(M('Category')->where(array('type'=>'Board'))->select(),$info['category_id'],'name');
 			$info['currency_opts'] = self::genOptions(M('Options')->where(array('type'=>'currency'))->order('sort')->select(), $info['currency_id']);
 			$info['unit_opts'] = self::genOptions(M('Options')->where(array('type'=>'unit'))->order('sort')->select(), $info['unit_id']);
+			$info['status_opts'] = self::genOptions(M('Options')->where(array('type'=>'status'))->order('sort')->select(), $info['status_id']);
 			$code = $info['code'];
 		}
 		else{
 			$info = array(
 				'id'=>0,
-				'category_opts' => self::genOptions(M('Category')->select()),
+				'category_opts' => self::genOptions(M('Category')->where(array('type'=>'Board'))->select()),
 				'currency_opts' => self::genOptions(M('Options')->where(array('type'=>'currency'))->order('sort')->select()),
-				'unit_opts' => self::genOptions(M('Options')->where(array('type'=>'unit'))->order('sort')->select())
+				'unit_opts' => self::genOptions(M('Options')->where(array('type'=>'unit'))->order('sort')->select()),
+				'status_opts' => self::genOptions(M('Options')->where(array('type'=>'status'))->order('sort')->select())
 				);
 			$max_id = $this->dao->getField('max(id) as max_id');
 			empty($max_id) && ($max_id = 0);
-			$code = 'C'.sprintf("%09d",$max_id+1);
+			$code = 'B'.sprintf("%09d",$max_id+1);
 		}
 		$this->assign('code', $code);
 		$this->assign('info', $info);
-		$this->assign('content', 'Product:form');
+		$this->assign('content', 'Board:form');
 		$this->display('Layout:ERP_layout');
 	}
 
@@ -73,6 +75,7 @@ class BoardAction extends BaseAction{
 		$this->dao->MPN = $_REQUEST['MPN'];
 		$this->dao->value = $_REQUEST['value'];
 		$this->dao->category_id = $_REQUEST['category_id'];
+		$this->dao->status_id = $_REQUEST['status_id'];
 		$this->dao->unit_id = $_REQUEST['unit_id'];
 		$this->dao->RoHS = $_REQUEST['Rohs'];
 		$this->dao->LT_days = $_REQUEST['LT_days'];

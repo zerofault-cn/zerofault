@@ -1,18 +1,65 @@
 <p class="page_title_text">Category</p>
-<table cellpadding="2" border="1">
+<table >
 <tr>
-	<th>Category Code</th>
-	<th>Category Name</th>
-	<th>OP</th>
+	<td class="clsTab" id="Component"> Component </td>
+	<td class="clsTab" id="Board"> Board </td>
 </tr>
-<iterate name="result" id="item">
 <tr>
-	<td>{$item['code']}</td>
-	<td>{$item['name']}</td>
-	<td><a href="__URL__/form/id/{$item['id']}">Edit</a></td>
+	<td colspan="5">
+	<iterate name="result" id="type_item">
+		<form action="__URL__/submit" method="post" target="_iframe">
+		<input type="hidden" name="type" value="{$key}" />
+		<if condition="$key eq $default_type">
+		<table class="clsTab" width="100%" cellpadding="2" border="1" id="{$key}">
+		<else />
+		<table class="clsTab" width="100%" cellpadding="2" border="1" id="{$key}" style="display:none">
+		</if>
+		<tr>
+			<th>No.</th>
+			<th>Category Code</th>
+			<th>Category Name</th>
+			<th>OP</th>
+		</tr>
+		<iterate name="type_item" id="item">
+		<tr>
+			<td>{$i}</td>
+			<td>{$item['code']}</td>
+			<td>{$item['name']}</td>
+			<td><a href="__URL__/form/id/{$item['id']}">Edit</a></td>
+		</tr>
+		</iterate>
+		<tr id="{$item.type}">
+			<td>{$i+1}</td>
+			<td><input type="text" name="code" class="code" readonly="true" value="{$code}"/></td>
+			<td><input type="text" name="name" class="name" /></td>
+			<td><input type="hidden" name="id" class="id" value="" />
+				<input type="submit" name="submit" class="submit" value="Add" /></td>
+		</tr>
+		</table>
+		</form>
+	</iterate>
+	</td>
 </tr>
-</iterate>
 </table>
-<p class="center">
-	<input type="button" onclick="javascript:document.location='__URL__/form';" value="Add Category" />
-</p>
+<p class="center"></p>
+<script>
+$(document).ready(function(){
+	$("td#{$default_type}").addClass("current");
+	$("td.clsTab").each(function(){
+		$(this).css("cursor", "pointer").click(function(){
+			switchTab($(this).attr("id"));
+		});
+	});
+});
+function edit(obj,id) {
+	var parent = $(obj).parent().parent();
+	var name = parent.children(".name").text();
+	var code = parent.children(".code").text();
+
+	var table = parent.parent();
+	table.find("tr:last").children().children(".code").val(code);
+	table.find("tr:last").children().children(".name").val(name);
+	table.find("tr:last").children().children(".id").val(id);
+	table.find("tr:last").children().children(".submit").val('Save');
+}
+</script>

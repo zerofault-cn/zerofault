@@ -16,7 +16,7 @@ class ProductAction extends BaseAction{
 	}
 
 	public function index(){
-		$this->assign('result', $this->dao->relation(true)->select());
+		$this->assign('result', $this->dao->where(array('type'=>'Component'))->relation(true)->select());
 		$this->assign('content','Product:index');
 		$this->display('Layout:ERP_layout');
 	}
@@ -24,7 +24,7 @@ class ProductAction extends BaseAction{
 		$id = $_REQUEST['id'];
 		if(!empty($id) && $id>0) {
 			$info = $this->dao->find($id);
-			$info['category_opts'] = self::genOptions(M('Category')->select(),$info['category_id'],'name');
+			$info['category_opts'] = self::genOptions(M('Category')->where(array('type'=>'Component'))->select(),$info['category_id'],'name');
 			$info['currency_opts'] = self::genOptions(M('Options')->where(array('type'=>'currency'))->order('sort')->select(), $info['currency_id']);
 			$info['unit_opts'] = self::genOptions(M('Options')->where(array('type'=>'unit'))->order('sort')->select(), $info['unit_id']);
 			$code = $info['code'];
@@ -32,7 +32,7 @@ class ProductAction extends BaseAction{
 		else{
 			$info = array(
 				'id'=>0,
-				'category_opts' => self::genOptions(M('Category')->select()),
+				'category_opts' => self::genOptions(M('Category')->where(array('type'=>'Component'))->select()),
 				'currency_opts' => self::genOptions(M('Options')->where(array('type'=>'currency'))->order('sort')->select()),
 				'unit_opts' => self::genOptions(M('Options')->where(array('type'=>'unit'))->order('sort')->select())
 				);
