@@ -16,12 +16,26 @@ class CategoryAction extends BaseAction{
 	}
 
 	public function index(){
-		$this->assign('result', $this->dao->select());
+		$arr = $this->dao->group('type')->field('type')->select();
+		$result = array();
+		foreach($arr as $val) {
+			$result[$val['type']] = $this->dao->where(array('type'=>$val['type']))->select();
+		}
+		$default_category_type = Session::get('default_category_type');
+		empty($default_category_type) && ($default_category_type = 'Component');
+		
+		$max_id = $this->dao->getField('max(id) as max_id');
+		empty($max_id) && ($max_id = 0);
+		$code = 'P'.sprintf("%03d",$max_id+1);
+		
+		$this->assign('result', $result);
+		$this->assign('default_type', $default_category_type);
+		$this->assign('code', $code);
 		$this->assign('content','Category:index');
 		$this->display('Layout:ERP_layout');
 	}
 
-	public function form() {
+	private function form() {
 		$id = $_REQUEST['id'];
 		if(!empty($id) && $id>0) {
 			$info = $this->dao->find($id);
@@ -45,23 +59,26 @@ class CategoryAction extends BaseAction{
 		if(empty($_POST['submit'])) {
 			return;
 		}
+		$type =  $_REQUEST['type'];
+		Session::set('default_category_type', $type);
 		$id = $_REQUEST['id'];
 		$name = trim($_REQUEST['name']);
 		empty($name) && self::_error('Category Name required');
 		if(!empty($id) && $id>0) {
-			$rs = $this->dao->where(array('name'=>$name,'id'=>array('neq',$id)))->find();
+			$rs = $this->dao->where(array('type'=>$type,'name'=>$name,'id'=>array('neq',$id)))->find();
 			if($rs && sizeof($rs)>0){
 				self::_error('Category Name: '.$name.' exists already!');
 			}
 			$this->dao->find($id);
 		}
 		else{
-			$rs = $this->dao->where(array('name'=>$name))->find();
+			$rs = $this->dao->where(array('type'=>$type,'name'=>$name))->find();
 			if($rs && sizeof($rs)>0){
 				self::_error('Category Name: '.$name.' exists already!');
 			}
 			$this->dao->code = $_REQUEST['code'];
 		}
+		$this->dao->type = $type;
 		$this->dao->name = $name;
 		if(!empty($id) && $id>0) {
 			if(false !== $this->dao->save()){

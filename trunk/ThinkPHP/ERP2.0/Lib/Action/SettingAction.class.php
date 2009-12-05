@@ -21,10 +21,10 @@ class SettingAction extends BaseAction{
 		foreach($arr as $val) {
 			$result[$val['type']] = $this->dao->where(array('type'=>$val['type']))->select();
 		}
-		$default_type = Session::get('default_type');
-		empty($default_type) && ($default_type = 'currency');
+		$default_option_type = Session::get('default_option_type');
+		empty($default_option_type) && ($default_option_type = 'currency');
 		$this->assign('result', $result);
-		$this->assign('default_type', $default_type);
+		$this->assign('default_type', $default_option_type);
 		$this->assign('content','Setting:index');
 		$this->display('Layout:ERP_layout');
 	}
@@ -34,21 +34,21 @@ class SettingAction extends BaseAction{
 			return;
 		}
 		$type =  $_REQUEST['type'];
-		Session::set('default_type', $type);
+		Session::set('default_option_type', $type);
 		$id = $_REQUEST['id'];
 		$name = trim($_REQUEST['name']);
 		$code = trim($_REQUEST['code']);
 		$sort = trim($_REQUEST['sort']);
 		empty($name) && self::_error('Option Name required');
 		if(!empty($id) && $id>0) {
-			$rs = $this->dao->where(array('name'=>$name,'id'=>array('neq',$id)))->find();
+			$rs = $this->dao->where(array('type'=>$type,'name'=>$name,'id'=>array('neq',$id)))->find();
 			if($rs && sizeof($rs)>0){
 				self::_error('Option Name: '.$name.' exists already!');
 			}
 			$this->dao->find($id);
 		}
 		else{
-			$rs = $this->dao->where(array('name'=>$name))->find();
+			$rs = $this->dao->where(array('type'=>$type,'name'=>$name))->find();
 			if($rs && sizeof($rs)>0){
 				self::_error('Option Name: '.$name.' exists already!');
 			}
@@ -76,7 +76,12 @@ class SettingAction extends BaseAction{
 	}
 	public function delete() {
 		$type =  $_REQUEST['type'];
-		Session::set('default_type', $type);
+		Session::set('default_option_type', $type);
+		//判断是否已被使用
+		//$id = $_REQUEST['id'];
+		//$info = $this->dao->find($id);
+		//$rs = M('Product')->where(array($info['type'].'_id'=>$id)->select();
+
 		self::_delete();
 	}
 }

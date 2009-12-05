@@ -6,9 +6,10 @@
 	<td class="clsTab" id="character"> Character </td>
 	<td class="clsTab" id="payment_terms"> Payment Terms </td>
 	<td class="clsTab" id="tax">Tax</td>
+	<td class="clsTab" id="status">Borad Status</td>
 </tr>
 <tr>
-	<td colspan="5">
+	<td colspan="6">
 	<iterate name="result" id="type_item">
 		<form action="__URL__/submit" method="post" target="_iframe">
 		<input type="hidden" name="type" value="{$key}" />
@@ -56,25 +57,6 @@
 </tr>
 </table>
 <p class="center"></p>
-<style>
-td.clsTab {
-	padding:2px 6px;
-	border-bottom:black 2px solid;
-	border-right:black 2px solid;
-	border-left:white 2px solid;
-	border-top:white 2px solid;
-	color:black;
-	text-align:center;
-	background:#6699cc;
-}
-td.current {
-	border-bottom:white 2px solid;
-	border-right:white 2px solid;
-	border-left:black 2px solid;
-	border-top:black 2px solid;
-	color:white;
-}
-</style>
 <script>
 $(document).ready(function(){
 	$("td#{$default_type}").addClass("current");
@@ -84,24 +66,6 @@ $(document).ready(function(){
 		});
 	});
 });
-function switchTab(id) {
-	$("td.clsTab").each(function(){
-		if($(this).attr("id") == id) {
-			$(this).addClass("current");
-		}
-		else{
-			$(this).removeClass("current");
-		}
-	});
-	$("table.clsTab").each(function(){
-		if($(this).attr("id") == id) {
-			$(this).show();
-		}
-		else{
-			$(this).hide();
-		}
-	});
-}
 function edit(obj,id) {
 	var parent = $(obj).parent().parent();
 	var name = parent.children(".name").text();
