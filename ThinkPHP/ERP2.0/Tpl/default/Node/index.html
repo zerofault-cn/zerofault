@@ -7,7 +7,7 @@
 <iterate name="modules" id="module" key="n1">
 <tr>
 	<td>
-		<span class="c{$module['id']}" id="{$module['id']}" name="{$module['name']}" title="{$module['title']}" ><if condition="empty($module['title'])">{$module['name']}<else/>{$module['title']}</if></span>
+		<span class="c{$module['id']}" id="{$module['id']}" pid="0" name="{$module['name']}" title="{$module['title']}" ><if condition="empty($module['title'])">{$module['name']}<else/>{$module['title']}</if></span>
 		<if condition="$module['id'] neq 0">
 		<img class="edit" src="../Public/Images/form_edit.gif" alt="Edit" align="absmiddle"/>
 		<else />

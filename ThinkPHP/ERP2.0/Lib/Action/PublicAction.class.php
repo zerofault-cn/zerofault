@@ -47,7 +47,7 @@ class PublicAction extends BaseAction{
 			D('Staff')->where('id='.$authInfo['id'])->setField('login_time',date("Y-m-d H:i:s"));
 			$_SESSION[C('USER_AUTH_KEY')]	=	$authInfo['id'];
 			$_SESSION['loginUserName']		=	$authInfo['realname'];
-			if($authInfo['name']=='admin') {
+			if($authInfo['id']=='1') {
 				// 管理员不受权限控制影响
 				$_SESSION['administrator']	=	true;
 			}
