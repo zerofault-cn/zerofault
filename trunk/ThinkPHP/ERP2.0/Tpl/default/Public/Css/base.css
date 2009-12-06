@@ -30,9 +30,10 @@ a:hover,a:active,a.active{color:#f20;text-decoration: underline;}
 .clear{clear:both;}
 
 .trbg0{
+	background-color:#CCCCCC;
 }
 .trbg1{
-	background-color:#fdfdfd;
+	background-color:#EEEEEE;
 }
 .red{
 	color:red;
@@ -48,11 +49,11 @@ table {
 	margin:0 auto;
 	background-color:#EEEEFF;
 }
-th {
-	background-color:#CCCCE5;
-	color:#330000;
+th{
+	background-color:#9999CC;
+	ccolor:#330000;
 	font-size:12px;
-	font-weight:normal;
+	ffont-weight:normal;
 	text-align:center;
 }
 div.center{

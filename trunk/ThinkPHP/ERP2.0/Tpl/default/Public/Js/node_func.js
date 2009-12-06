@@ -35,16 +35,21 @@ function setNodeEditable(obj,i){
 			},function(str){
 					if(str.substr(0,1)=='1')
 					{
-						id = str.substr(2);
-						$(obj).prev().attr('class', 'c'+id);
-						$(obj).prev().attr('id', id);
-						$(obj).prev().attr('title', title);
-						$(obj).prev().html(''==title ? name : title);
-						$(obj).attr('src',IMAGE_FOLDER+'form_edit.gif');
-						$(".editForm").remove();
-						myAlert("Submit success!");
-						myOK(1500);
-						//myLocation('',1000);
+						if('0'==pid) {
+							myAlert("Submit success!");
+							myLocation('',1000);
+						}
+						else{
+							id = str.substr(2);
+							$(obj).prev().attr('class', 'c'+id);
+							$(obj).prev().attr('id', id);
+							$(obj).prev().attr('title', title);
+							$(obj).prev().html(''==title ? name : title);
+							$(obj).attr('src',IMAGE_FOLDER+'form_edit.gif');
+							$(".editForm").remove();
+							myAlert("Submit success!");
+							myOK(1000);
+						}
 					}
 					else
 					{
