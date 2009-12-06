@@ -29,7 +29,7 @@ class InventoryAction extends BaseAction{
 			foreach($rs as $i=>$item) {
 				$unit[$item['id']] = $item['name'];
 			}
-			$this->assign('unit', $unit);
+			//$this->assign('unit', $unit);
 
 			!empty($_REQUEST['category_id']) && ($where['category_id'] = $_REQUEST['category_id']);
 			!empty($_REQUEST['product_id']) && ($where['product_id'] = $_REQUEST['product_id']);
@@ -41,8 +41,13 @@ class InventoryAction extends BaseAction{
 			foreach($rs as $item) {
 				if(!array_key_exists($item['product_id'], $result)) {
 					$result[$item['product_id']] = array(
-						'product' => $item['product'],
-						'unit_id' => $item['unit_id'],
+						'Code' => $item['Code'],
+						'MPN' => $item['MPN'],
+						'Internal_PN' => $item['Internal_PN'],
+						'description' => $item['description'],
+						'manufacture' => $item['manufacture'],
+
+						'unit' => $unit[$item['unit_id']],
 						'currency'=> $item['currency'],
 						'quantity' => (('Storage'==$item['destination'])?1:-1)*$item['quantity'],
 						'total' => (('Storage'==$item['destination'])?1:-1)*$item['quantity']*$item['price']

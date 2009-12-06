@@ -1,33 +1,55 @@
-<p class="page_title_text"><img src="../Public/Images/user.gif" align="absmiddle"/> Staff</p>
-<table cellpadding="2" border="1">
+<p class="page_title_text">Staff List</p>
+<table >
 <tr>
-	<th>Staff Code</th>
-	<th>Staff Name</th>
-	<th>Department</th>
-	<th>E_mail</th>
-	<th>Leader</th>
-	<th>Role</th>
-	<th>OP</th>
+	<td class="clsTab" id="status_1"><a href="__ACTION__/index/status/1">Active Staff</a></td>
+	<td class="clsTab" id="status_0"><a href="__ACTION__/index/status/0">Inactive Staff</a></td>
 </tr>
-<iterate name="result" id="item">
 <tr>
-	<td>{$item['code']}</td>
-	<td>{$item['name']}</td>
-	<td>[{$item['dept']['code']}]{$item['dept']['name']}</td>
-	<td>{$item['email']}&nbsp;</td>
-	<td>{$item['leader']['realname']}&nbsp;</td>
-	<td><if condition="$item['id'] eq 1">
-		System Administrator
-		<else />
-			<iterate name="item['role']" id="role" key="j">
-			{$role['name']}<br />
-			</iterate>
-			<eq name="j" value="">&nbsp;</eq>
-		</if></td>
-	<td><a href="__URL__/form/id/{$item['id']}">Edit</a></td>
+	<td colspan="2">
+		<table cellpadding="3" border="1" bordercolor="#999999" style="border-collapse:collapse;">
+		<tr>
+			<th>Code</th>
+			<th>Login account</th>
+			<th>Real name</th>
+			<th>Department</th>
+			<th>E_mail</th>
+			<th>Leader</th>
+			<th>Role</th>
+			<th>OP</th>
+		</tr>
+		<iterate name="result" id="item">
+		<tr class="trbg{$mod}">
+			<td>{$item['code']}</td>
+			<td>{$item['name']}</td>
+			<td>{$item['realname']}</td>
+			<td>[{$item['dept']['code']}]{$item['dept']['name']}</td>
+			<td>{$item['email']}</td>
+			<td>{$item['leader']['realname']}</td>
+			<td><if condition="$item['id'] eq 1">
+				Super Administrator
+				<else />
+					<iterate name="item['role']" id="role" key="j">
+					{$role['name']}<br />
+					</iterate>
+				</if></td>
+			<td><a href="__URL__/form/id/{$item['id']}">Edit</a>
+				<if condition="$item['status'] eq 1">
+				<a href="__URL__/update/f/status/v/0/id/{$item['id']}" target="_iframe">Disable</a>
+				<else />
+				<a href="__URL__/update/f/status/v/1/id/{$item['id']}" target="_iframe">Enable</a>
+				</if>
+				</td>
+		</tr>
+		</iterate>
+		</table>
+	</td>
 </tr>
-</iterate>
 </table>
 <p class="center">
-	<input type="button" onclick="javascript:document.location='__URL__/form';" value="Add a new Staff" />
+	<input type="button" onclick="javascript:document.location='__URL__/form';" value="Add a staff" />
 </p>
+<script language="JavaScript" type="text/javascript">
+$(document).ready(function(){
+	$("td#status_{$status}").addClass("current");
+});
+</script>

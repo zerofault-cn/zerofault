@@ -1,18 +1,18 @@
-<p class="page_title_text">Category</p>
+<p class="page_title_text">Category List</p>
 <table >
 <tr>
 	<td class="clsTab" id="Component"> Component </td>
 	<td class="clsTab" id="Board"> Board </td>
 </tr>
 <tr>
-	<td colspan="5">
+	<td colspan="2">
 	<iterate name="result" id="type_item">
 		<form action="__URL__/submit" method="post" target="_iframe">
 		<input type="hidden" name="type" value="{$key}" />
 		<if condition="$key eq $default_type">
-		<table class="clsTab" width="100%" cellpadding="2" border="1" id="{$key}">
+		<table id="{$key}" class="clsTab" width="100%" cellpadding="3" border="1" bordercolor="#999999" style="border-collapse:collapse;">
 		<else />
-		<table class="clsTab" width="100%" cellpadding="2" border="1" id="{$key}" style="display:none">
+		<table id="{$key}" class="clsTab" width="100%" cellpadding="3" border="1" bordercolor="#999999" style="border-collapse:collapse;display:none">
 		</if>
 		<tr>
 			<th>No.</th>
@@ -21,11 +21,12 @@
 			<th>OP</th>
 		</tr>
 		<iterate name="type_item" id="item">
-		<tr>
+		<tr class="trbg{$mod}">
 			<td>{$i}</td>
-			<td>{$item['code']}</td>
-			<td>{$item['name']}</td>
-			<td><a href="__URL__/form/id/{$item['id']}">Edit</a></td>
+			<td class="code">{$item['code']}</td>
+			<td class="name">{$item['name']}</td>
+			<td><a href="javascript:void(0);" onclick="edit(this,'{$item['id']}');">Edit</a>
+				<a href="__URL__/delete/id/{$item['id']}" target="_iframe">Delete</a></td>
 		</tr>
 		</iterate>
 		<tr id="{$item.type}">
@@ -42,8 +43,9 @@
 </tr>
 </table>
 <p class="center"></p>
-<script>
+<script language="JavaScript" type="text/javascript">
 $(document).ready(function(){
+	document.forms[0].reset();
 	$("td#{$default_type}").addClass("current");
 	$("td.clsTab").each(function(){
 		$(this).css("cursor", "pointer").click(function(){
@@ -51,15 +53,28 @@ $(document).ready(function(){
 		});
 	});
 });
+var has_reset = false;
 function edit(obj,id) {
 	var parent = $(obj).parent().parent();
-	var name = parent.children(".name").text();
 	var code = parent.children(".code").text();
+	var name = parent.children(".name").text();
 
 	var table = parent.parent();
 	table.find("tr:last").children().children(".code").val(code);
 	table.find("tr:last").children().children(".name").val(name);
 	table.find("tr:last").children().children(".id").val(id);
 	table.find("tr:last").children().children(".submit").val('Save');
+	if(!has_reset) {
+		table.find("tr:last").children().children(".submit").after('<input type="reset" class="reset" value="Cancel"/>');
+		$("input.reset").click(function(){
+			document.forms[0].reset();
+			table.find("tr:last").children().children(".id").val('');
+			table.find("tr:last").children().children(".submit").val('Add');
+			$(this).remove();
+			has_reset = false;
+		});
+		has_reset = true;
+	}
+
 }
 </script>

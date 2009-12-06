@@ -23,7 +23,31 @@ class ProductInAction extends BaseAction{
 		}
 		$this->assign('unit', $unit);
 
-		$this->assign('result', $this->dao->relation(true)->where(array('source'=>'Supplier','destination'=>'Storage'))->select());
+		if(isset($_REQUEST['status'])) {
+			$status = $_REQUEST['status'];
+		}
+		elseif(''!=(Session::get('staff_status'))) {
+			$status = Session::get('staff_status');
+		}
+		else{
+			$status = 0;
+		}
+		Session::set('staff_status', $atatus);
+		$this->assign('status', $status);
+		
+		$where = array(
+			'source'=>'Supplier',
+			'destination'=>'Storage',
+			'status'=> $status
+			);
+		$count = $this->dao->where($where)->getField('count(*)');
+		import("@.Paginator");
+		$limit = 10;
+		$p = new Paginator($count,$limit);
+		
+		$order = 'id desc';
+		$this->assign('result', $this->dao->relation(true)->where($where)->order($order)->limit($p->offset.','.$p->limit)->select());
+		$this->assign('page', $p->showMultiNavi());
 		$this->assign('content','ProductIn:index');
 		$this->display('Layout:ERP_layout');
 	}
@@ -38,7 +62,31 @@ class ProductInAction extends BaseAction{
 		}
 		$this->assign('unit', $unit);
 
-		$this->assign('result', $this->dao->relation(true)->where(array('source'=>'Storage','destination'=>'Supplier'))->select());
+		if(isset($_REQUEST['status'])) {
+			$status = $_REQUEST['status'];
+		}
+		elseif(''!=(Session::get('staff_status'))) {
+			$status = Session::get('staff_status');
+		}
+		else{
+			$status = 0;
+		}
+		Session::set('staff_status', $atatus);
+		$this->assign('status', $status);
+		
+		$where = array(
+			'source'=>'Storage',
+			'destination'=>'Supplier',
+			'status'=> $status
+			);
+		$count = $this->dao->where($where)->getField('count(*)');
+		import("@.Paginator");
+		$limit = 10;
+		$p = new Paginator($count,$limit);
+		
+		$order = 'id desc';
+		$this->assign('result', $this->dao->relation(true)->where($where)->order($order)->limit($p->offset.','.$p->limit)->select());
+		$this->assign('page', $p->showMultiNavi());
 		$this->assign('content','ProductIn:index');
 		$this->display('Layout:ERP_layout');
 	}
@@ -50,7 +98,6 @@ class ProductInAction extends BaseAction{
 		if($this->dao->where("id in (".implode(',',$_POST['chk']).")")->setField(array('confirm_time', 'confirmed_staff_id', 'confirmed_quantity', 'status'), array(date("Y-m-d H:i:s"), $_SESSION[C('USER_AUTH_KEY')], 0, 1)) && self::update_quantity($_REQUEST['product_id'])) {
 			
 			self::_success('Confirm success','',1000);
-			
 		}
 		else{
 			self::_error('Something wrong!'.(C('APP_DEBUG')?$this->dao->getLastSql():''));
@@ -149,6 +196,9 @@ class ProductInAction extends BaseAction{
 				}
 			}
 		}
+	}
+	public function delete() {
+		self::_delete();
 	}
 }
 ?>

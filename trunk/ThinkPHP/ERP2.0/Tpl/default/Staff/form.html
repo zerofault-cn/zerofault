@@ -1,4 +1,4 @@
-﻿<p class="page_title_text"><img src="../Public/Images/users.gif" align="absmiddle"/> Staff - Add new staff</p>
+<p class="page_title_text">Staff Form</p>
 <form action="__URL__/submit" method="post" target="_iframe">
 <input type="hidden" name="id" value="{$info.id}" />
 <table>
@@ -15,7 +15,7 @@
 	<td><input type="text" maxlength="40" size="15" name="realname" value="{$info.realname}" /></td>
 </tr>
 <tr>
-	<td>Init Password:</td>
+	<td><if condition="$info['id'] eq 0">Init<else />Reset</if> Password:</td>
 	<td><input type="password" maxlength="40" size="15" name="password" value="" /></td>
 </tr>
 <tr>
