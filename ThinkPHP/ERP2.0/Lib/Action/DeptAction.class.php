@@ -16,12 +16,17 @@ class DeptAction extends BaseAction{
 	}
 
 	public function index(){
+		$max_id = $this->dao->getField('max(id) as max_id');
+		empty($max_id) && ($max_id = 0);
+		$code = 'D'.sprintf("%03d",$max_id+1);
+		$this->assign('code', $code);
+		$this->assign('leader_opts', self::genOptions(M('Staff')->where(array('is_leader'=>1))->select(),'','realname'));
 		$this->assign('result', $this->dao->relation(true)->select());
 		$this->assign('content','Dept:index');
 		$this->display('Layout:ERP_layout');
 	}
 
-	public function form() {
+	private function form() {
 		$dStaff = D('Staff');
 		$id = $_REQUEST['id'];
 		if(!empty($id) && $id>0) {
@@ -85,7 +90,17 @@ class DeptAction extends BaseAction{
 				self::_error('Add department fail!'.(C('APP_DEBUG')?$this->dao->getLastSql():''));
 			}
 		}
-		
+	}
+	public function delete() {
+		//判断是否已被使用
+		$id = $_REQUEST['id'];
+		$rs = M('Staff')->where(array('dept_id'=>$id))->select();
+		if(!empty($rs) && sizeof($rs)>0) {
+			self::_error('It\'s in use, can\'t be deleted!');
+		}
+		else{
+			self::_delete();
+		}
 	}
 }
 ?>

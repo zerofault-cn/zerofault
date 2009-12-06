@@ -3,49 +3,49 @@
 <input type="hidden" name="id" value="{$id}" />
 <input type="hidden" name="action" value="{$action}" />
 <table>
-<tr>
+<tr >
 	<td>No.</td>
-	<td><input type="text" maxlength="10" size="15" name="code" value="{$code}" readonly="true" /></td>
+	<td><input type="text" maxlength="10" size="15" name="code" value="{$code}" readonly="true" /><img src="../Public/Images/lock.gif" /></td>
 </tr>
 <tr>
-	<td>MPN:</td>
-	<td><if condition="empty($id)">
-		<select name="product_id" onchange="select_product(this.value);"><option value="">Select One</option>{$info.product_opts}</select>
-		<else />
-		<input type="text" size="15" value="{$info['product']['MPN']}" readonly="true"/><input type="hidden" name="product_id" value="{$info['product_id']}" />
-		</if></td>
+	<td></td>
+	<td><input type="button" value="Select Component or Board" onclick="selectProduct();"/><input type="hidden" name="product_id" value="{$info['product_id']}" /></td>
 </tr>
 <tr>
 	<td>Internal PN:</td>
-	<td><input type="text" size="15" id="Internal_PN" value="{$info['product']['Internal_PN']}" readonly="true" /></td>
+	<td><input type="text" size="15" id="Internal_PN" value="{$info['product']['Internal_PN']}" readonly="true" /><img src="../Public/Images/system.gif" /></td>
 </tr>
 <tr>
 	<td>Description:</td>
-	<td><input type="text" size="15" id="description" value="{$info['product']['description']}" readonly="true" /></td>
+	<td><input type="text" size="15" id="description" value="{$info['product']['description']}" readonly="true" /><img src="../Public/Images/system.gif" /></td>
 </tr>
 <tr>
 	<td>Manufacture:</td>
-	<td><input type="text" size="15" id="manufacture" value="{$info['product']['manufacture']}" readonly="true"/></td>
+	<td><input type="text" size="15" id="manufacture" value="{$info['product']['manufacture']}" readonly="true"/><img src="../Public/Images/system.gif" /></td>
+</tr>
+<tr>
+	<td>MPN:</td>
+	<td><input type="text" size="15" id="MPN" value="{$info['product']['MPN']}" readonly="true"/><img src="../Public/Images/system.gif" /></td>
 </tr>
 <tr>
 	<td>Category:</td>
-	<td><input type="text" size="15" id="category" value="{$info['category']}" readonly="true"/></td>
+	<td><input type="text" size="15" id="category" value="{$info['category']}" readonly="true"/><img src="../Public/Images/system.gif" /></td>
 </tr>
 <tr>
 	<td>Value/Package:</td>
-	<td><input type="text" size="15" id="value" value="{$info['product']['value']}" readonly="true"/></td>
+	<td><input type="text" size="15" id="value" value="{$info['product']['value']}" readonly="true"/><img src="../Public/Images/system.gif" /></td>
 </tr>
 <tr>
 	<td>Unit:</td>
-	<td><input type="text" size="15" id="unit" value="{$info['unit']}" readonly="true"/></td>
+	<td><input type="text" size="15" id="unit" value="{$info['unit']}" readonly="true"/><img src="../Public/Images/system.gif" /></td>
 </tr>
 <tr>
 	<td>MOQ:</td>
-	<td><input type="text" size="15" id="MOQ" value="{$info['product']['MOQ']}" readonly="true"/></td>
+	<td><input type="text" size="15" id="MOQ" value="{$info['product']['MOQ']}" readonly="true"/><img src="../Public/Images/system.gif" /></td>
 </tr>
 <tr>
 	<td>Inventory Limit:</td>
-	<td><input type="text" size="15" id="limit" value="{$info['product']['inventory_limit']}" readonly="true"/></td>
+	<td><input type="text" size="15" id="limit" value="{$info['product']['inventory_limit']}" readonly="true"/><img src="../Public/Images/system.gif" /></td>
 </tr>
 <tr>
 	<td>Supplier:</td>
@@ -75,7 +75,7 @@
 </tr>
 <tr>
 	<td>Total Price:</td>
-	<td><input type="text" maxlength="20" size="15" id="total" value="{$info['quantity']*$info['price']}" readonly="true"/></td>
+	<td><input type="text" maxlength="20" size="15" id="total" value="{$info['quantity']*$info['price']}" readonly="true"/><img src="../Public/Images/lock.gif" /></td>
 </tr>
 <tr>
 	<td>Accessories:</td>
@@ -97,27 +97,9 @@
 </p>
 </form>
 <script language="JavaScript" type="text/javascript">
-var product = new Array();
-product[''] = new Array('','','','','','','');
-<iterate name="ProductList" id="item">
-product['{$item.id}'] = new Array('{$item.Internal_PN}','{$item.description}','{$item.manufacture}','{$item.value}','{$item["commodity"]["name"]}','{$item["unit"]["title"]}','{$item.MOQ}','{$item.inventory_limit}');
-</iterate>
-function $(id) {
-	return document.getElementById(id);
-}
-function select_product(id) {
-	$('Internal_PN').value = product[id][0];
-	$('description').value = product[id][1];
-	$('manufacture').value = product[id][2];
-	$('value').value = product[id][3];
-	$('commodity').value = product[id][4];
-	$('unit').value = product[id][5];
-	$('MOQ').value = product[id][6];
-	$('limit').value = product[id][7];
-}
 function calc_total() {
-	if($('price').value!='' && $('quantity').value!='') {
-		$('total').value = parseFloat($('price').value)*parseInt($('quantity').value);
+	if($('#price').val()!='' && $('#quantity').val()!='') {
+		$('#total').val(parseFloat($('#price').val())*parseInt($('#quantity').val()));
 	}
 }
 </script>

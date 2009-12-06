@@ -7,7 +7,7 @@
  * @created		2009/7/20
  * @modified	2009/7/20
  */
-class Paginator extends Base{
+class Paginator extends Think{
 	protected $offset;			//当前offset
 	protected $limit;			//每页显示条数
 	protected $parameter;		//已有的url参数
@@ -20,8 +20,8 @@ class Paginator extends Base{
 		'prev'=>'&lt;',
 		'next'=>'&gt;',
 		'last'=>'&gt;|',
-		'show_num'=>7,		//设定中间连续显示的页码个数，如...4,5,6,7,8,9,10...，最小为3
-		'side_num'=>2		//设定边界显示的页码个数，如1,2......21,22，最小为1
+		'show_num'=>9,		//设定中间连续显示的页码个数，如...4,5,6,7,8,9,10...，最小为3
+		'side_num'=>3		//设定边界显示的页码个数，如1,2......21,22，最小为1
 	);
 
 	public function __construct($record_count,$limit=10,$parameter='')
@@ -49,7 +49,7 @@ class Paginator extends Base{
 		//链接地址为：javascript:getPage(1);
 		if($this->record_count<=0) return;
 	
-		$pagenav = '共 '.$this->record_count.' 条/ '.$this->page_count.' 页，当前第 '.$this->current_page.' 页&nbsp;&nbsp;&nbsp;&nbsp;';
+		$pagenav = $this->record_count.' Records / '.$this->page_count.' Pages &nbsp;&nbsp;';
 		if($this->page_count<=1){
 			return $pagenav;
 		}
@@ -166,7 +166,7 @@ class Paginator extends Base{
 
 			$pagenav .= '</td>';
 		}
-		$pagenav .= '<td class="a_right">共 '.$this->record_count.' 条记录，'.$this->page_count.' 页</td>';
+		$pagenav .= '<td class="a_right">'.$this->record_count.' Records, '.$this->page_count.' Pages</td>';
 		$pagenav .= '</tr></table>';
 
 		return $pagenav;

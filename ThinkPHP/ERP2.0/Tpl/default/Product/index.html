@@ -1,5 +1,5 @@
-<p class="page_title_text">Component Data</p>
-<table cellpadding="2" border="1">
+<p class="page_title_text">Component List</p>
+<table cellpadding="3" border="1" bordercolor="#999999" style="border-collapse:collapse;">
 <tr>
 	<th>Code</th>
 	<th>Internal PN</th>
@@ -12,16 +12,17 @@
 	<th>OP</th>
 </tr>
 <iterate name="result" id="item">
-<tr>
+<tr class="trbg{$mod}">
 	<td>{$item['code']}</td>
 	<td>{$item['Internal_PN']}</td>
-	<td>{$item['description']}&nbsp;</td>
-	<td>{$item['manufacture']}&nbsp;</td>
-	<td>{$item['MPN']}&nbsp;</td>
-	<td>{$item['value']}&nbsp;</td>
-	<td>{$item['unit']['name']}&nbsp;</td>
-	<td>{$item['category']['name']}&nbsp;</td>
-	<td><a href="__URL__/form/id/{$item['id']}">Edit</a></td>
+	<td>{$item['description']}</td>
+	<td>{$item['manufacture']}</td>
+	<td>{$item['MPN']}</td>
+	<td>{$item['value']}</td>
+	<td>{$item['unit']['name']}</td>
+	<td>{$item['category']['name']}</td>
+	<td><a href="__URL__/form/id/{$item['id']}">Edit</a>
+		<a href="__URL__/delete/id/{$item['id']}" target="_iframe">Delete</a></td>
 </tr>
 </iterate>
 </table>

@@ -1,22 +1,67 @@
-<p class="page_title_text"><img src="../Public/Images/users.gif" align="absmiddle"/> Department</p>
-<table cellpadding="2" border="1">
+<p class="page_title_text">Department List</p>
+<form id="_form" action="__URL__/submit" method="post" target="_iframe">
+<table cellpadding="3" border="1" bordercolor="#999999" style="border-collapse:collapse;">
 <tr>
-	<th>Department Code</th>
+	<th>Code</th>
 	<th>Name</th>
 	<th>Function</th>
 	<th>Leader</th>
 	<th>OP</th>
 </tr>
 <iterate name="result" id="item">
-<tr>
-	<td>{$item['code']}</td>
-	<td>{$item['name']}</td>
-	<td>{$item['function']}</td>
-	<td>{$item['leader']['realname']}</td>
-	<td><a href="__URL__/form/id/{$item['id']}">Edit</a></td>
+<tr class="trbg{$mod}">
+	<td class="code">{$item['code']}</td>
+	<td class="name">{$item['name']}</td>
+	<td class="function">{$item['function']}</td>
+	<td class="leader">{$item['leader']['realname']}</td>
+	<td><a href="javascript:void(0);" onclick="edit(this,'{$item['id']}');">Edit</a>
+		<a href="__URL__/delete/id/{$item['id']}" target="_iframe">Delete</a></td>
 </tr>
 </iterate>
+<tr>
+	<td><input type="text" name="code" class="code" readonly="true" value="{$code}"/></td>
+	<td><input type="text" name="name" class="name" /></td>
+	<td><input type="text" name="function" class="function" /></td>
+	<td><select name="leader_id" class="leader"><option value="">Select One</option>{$leader_opts}</select></td>
+	<td><input type="hidden" name="id" class="id" value="" />
+		<input type="submit" name="submit" class="submit" value="Add" /></td>
+</tr>
 </table>
-<p class="center">
-	<input type="button" onclick="javascript:document.location='__URL__/form';" value="Add Department" />
-</p>
+</form>
+<p class="center"></p>
+<script language="JavaScript" type="text/javascript">
+$(document).ready(function(){
+	document.forms[0].reset();
+});
+var has_reset = false;
+function edit(obj,id) {
+	var parent = $(obj).parent().parent();
+	var code = parent.children(".code").text();
+	var name = parent.children(".name").text();
+	var func = parent.children(".function").text();
+	var leader = parent.children(".leader").text();
+
+	var table = parent.parent();
+	table.find("tr:last").children().children(".code").val(code);
+	table.find("tr:last").children().children(".name").val(name);
+	table.find("tr:last").children().children(".function").val(func);
+	table.find("tr:last").children().children(".leader").children().each(function(i){
+		if($(this).text() == leader) {
+			$(this).attr("selected","selected");
+		}
+	});
+	table.find("tr:last").children().children(".id").val(id);
+	table.find("tr:last").children().children(".submit").val('Save');
+	if(!has_reset) {
+		table.find("tr:last").children().children(".submit").after('<input type="reset" class="reset" value="Cancel"/>');
+		$("input.reset").click(function(){
+			document.forms[0].reset();
+			table.find("tr:last").children().children(".id").val('');
+			table.find("tr:last").children().children(".submit").val('Add');
+			$(this).remove();
+			has_reset = false;
+		});
+		has_reset = true;
+	}
+}
+</script>

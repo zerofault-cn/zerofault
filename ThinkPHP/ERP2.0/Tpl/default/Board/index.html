@@ -1,5 +1,5 @@
-<p class="page_title_text">Board Data</p>
-<table cellpadding="2" border="1">
+<p class="page_title_text">Board List</p>
+<table cellpadding="3" border="1" bordercolor="#999999" style="border-collapse:collapse;">
 <tr>
 	<th>Code</th>
 	<th>Board Code</th>
@@ -13,7 +13,7 @@
 	<th>OP</th>
 </tr>
 <iterate name="result" id="item">
-<tr>
+<tr class="trbg{$mod}">
 	<td>{$item['code']}</td>
 	<td>{$item['Internal_PN']}</td>
 	<td>{$item['description']}&nbsp;</td>
@@ -23,7 +23,8 @@
 	<td>{$item['unit']['name']}&nbsp;</td>
 	<td>{$item['category']['name']}&nbsp;</td>
 	<td>{$item['status']['name']}&nbsp;</td>
-	<td><a href="__URL__/form/id/{$item['id']}">Edit</a></td>
+	<td><a href="__URL__/form/id/{$item['id']}">Edit</a>
+		<a href="__URL__/delete/id/{$item['id']}" target="_iframe">Delete</a></td>
 </tr>
 </iterate>
 </table>

@@ -115,7 +115,17 @@ class SupplierAction extends BaseAction{
 				self::_error('Add supplier fail!'.(C('APP_DEBUG')?$this->dao->getLastSql():''));
 			}
 		}
-		
+	}
+	public function delete() {
+		//判断是否已被使用
+		$id = $_REQUEST['id'];
+		$rs = M('ProductFlow')->where(array('supplier_id'=>$id))->select();
+		if(!empty($rs) && sizeof($rs)>0) {
+			self::_error('It\'s in use, can\'t be deleted!');
+		}
+		else{
+			self::_delete();
+		}
 	}
 }
 ?>

@@ -29,6 +29,21 @@ a{color:#00f;text-decoration:none;font-weight:normal;}
 a:hover,a:active,a.active{color:#f20;text-decoration: underline;}
 .clear{clear:both;}
 
+.trbg0{
+}
+.trbg1{
+	background-color:#fdfdfd;
+}
+.red{
+	color:red;
+}
+.blue{
+	color:blue;
+}
+.a_right{
+	text-align:right;
+}
+
 table {
 	margin:0 auto;
 	background-color:#EEEEFF;
@@ -222,10 +237,25 @@ td.clsTab {
 	text-align:center;
 	background:#6699cc;
 }
+td.clsTab a{
+	color:black;
+}
 td.current {
 	border-bottom:white 2px solid;
 	border-right:white 2px solid;
 	border-left:black 2px solid;
 	border-top:black 2px solid;
 	color:white;
+}
+td.current a{
+	color:white;
+}
+th.basic_data, td.basic_data {
+	bbackground-color:#fde9d9;
+}
+table.paginator a:link, table.paginator a:visited{
+	text-decoration:underline;
+}
+table.paginator a:hover, table.paginator a:active{
+	text-decoration:none;
 }

@@ -16,7 +16,18 @@ class StaffAction extends BaseAction{
 	}
 
 	public function index(){
-		$this->assign('result', $this->dao->relation(true)->select());
+		if(isset($_REQUEST['status'])) {
+			$status = $_REQUEST['status'];
+		}
+		elseif(''!=(Session::get('staff_status'))) {
+			$status = Session::get('staff_status');
+		}
+		else{
+			$status = 1;
+		}
+		Session::set('staff_status', $atatus);
+		$this->assign('status', $status);
+		$this->assign('result', $this->dao->relation(true)->where(array('status'=>$status))->select());
 		$this->assign('content','Staff:index');
 		$this->display('Layout:ERP_layout');
 	}
@@ -85,14 +96,15 @@ class StaffAction extends BaseAction{
 		$this->dao->leader_id = $_REQUEST['leader_id'];
 		$this->dao->is_leader = intval($_REQUEST['is_leader']);
 		$this->dao->status = 1;
-		$role_id_arr = $_REQUEST['role'];
-		if($role_id_arr) {
-			foreach($role_id_arr as $role_id) {
-				$role_arr[] = array('id'=>$role_id);
-			}
+		if(empty($_REQUEST['role'])) {
+			$role_arr = array();
+			//删除已有role
+			M('StaffRole')->where('staff_id='.$id)->delete();
 		}
 		else{
-			$role_arr = array();
+			foreach($_REQUEST['role'] as $role_id) {
+				$role_arr[] = array('id'=>$role_id);
+			}
 		}
 		$this->dao->role = $role_arr;
 		if(!empty($id) && $id>0) {
@@ -111,7 +123,13 @@ class StaffAction extends BaseAction{
 				self::_error('Add staff fail!'.(C('APP_DEBUG')?$this->dao->getLastSql():''));
 			}
 		}
-		
+	}
+	/**
+	*
+	* 调用基类方法
+	*/
+	public function update(){
+		parent::_update();
 	}
 }
 ?>

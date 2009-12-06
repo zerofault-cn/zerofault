@@ -5,48 +5,76 @@ Product Return List
 Product Entering List
 </if></p>
 <form action="__URL__/confirm" method="post" target="_iframe">
-<table cellpadding="2" border="1">
+<table >
 <tr>
-	<th><input type="checkbox" id="checkall" onclick="checkAll();"/></th>
-	<th>No.</th>
-	<th>Product</th>
-	<th>Supplier</th>
-	<th>Quantity</th>
-	<th>Unit</th>
-	<th>Price</th>
-	<th>Total</th>
-	<th>Entering Time</th>
-	<th>Entering Staff</th>
-	<th>Confirmed Staff</th>
-	<th>Operation</th>
+	<td class="clsTab" id="status_0"><a href="__ACTION__/status/0">Ready for Comfirming</a></td>
+	<td class="clsTab" id="status_1"><a href="__ACTION__/status/1">Comfirmed</a></td>
 </tr>
-<iterate name="result" id="item">
 <tr>
-	<td><input type="checkbox" name="chk[]" value="{$item['id']}" onclick="updateCheckAll(this);"/></td>
-	<td>{$item['code']}</td>
-	<td>{$item['product']['MPN']}<input type="hidden" name="product_id[]" value="{$item['product_id']}"/></td>
-	<td>{$item['supplier']['name']}&nbsp;</td>
-	<td>{$item['quantity']}</td>
-	<td>{$unit[$item['product']['unit_id']]}</td>
-	<td>{$item['price']}</td>
-	<td>{$item['quantity']*$item['price']}</td>
-	<td>{$item['create_time']}</td>
-	<td align="center">{$item['staff']['name']}</td>
-<!-- 	<td align="center"><if condition="$item['status'] eq 0"><input type="text" name="qty[]" size="3" value="{$item['quantity']}"/><else />{$item['moved_quantity']}</if></td> -->
-	<td align="center">{$item['confirmed_staff']['name']}&nbsp;</td>
-	<td><a href="__URL__/form/id/{$item['id']}">Edit</a>
-	<if condition="$action neq 'return'"><a href="__URL__/form/action/return/id/{$item['id']}">Return</a></if></td>
+	<td colspan="2">
+		<table cellpadding="3" border="1" bordercolor="#999999" style="border-collapse:collapse;">
+		<tr>
+			<th><neq name="status" value="1"><input type="checkbox" id="checkall" onclick="checkAll();"/></neq></th>
+			<th>No.</th>
+			<th>Code</th>
+			<th class="basic_data">MPN</th>
+			<th class="basic_data">Internal P/N</th>
+			<th class="basic_data">Description</th>
+			<th class="basic_data">Manufacture</th>
+			<th>Supplier</th>
+			<th>Quantity</th>
+			<th>Unit</th>
+			<th>Price</th>
+			<th>Total</th>
+			<th>Entering Time</th>
+			<th>Entering Staff</th>
+			<th>Confirmed Staff</th>
+			<th>OP</th>
+		</tr>
+		<iterate name="result" id="item">
+		<tr class="trbg{$mod}">
+			<td><neq name="item['status']" value="1"><input type="checkbox" name="chk[]" value="{$item['id']}" onclick="updateCheckAll(this);"/></neq></td>
+			<td align="center">{$i}</td>
+			<td>{$item['code']}</td>
+			<td class="basic_data">{$item['product']['MPN']}<input type="hidden" name="product_id[]" value="{$item['product_id']}"/></td>
+			<td class="basic_data">{$item['product']['Internal_PN']}</td>
+			<td class="basic_data">{$item['product']['description']}</td>
+			<td class="basic_data">{$item['product']['manufacture']}</td>
+			<td>{$item['supplier']['name']}</td>
+			<td>{$item['quantity']}</td>
+			<td>{$unit[$item['product']['unit_id']]}</td>
+			<td>{$item['price']}</td>
+			<td>{$item['quantity']*$item['price']}</td>
+			<td>{$item['create_time']}</td>
+			<td align="center">{$item['staff']['name']}</td>
+		<!-- 	<td align="center"><if condition="$item['status'] eq 0"><input type="text" name="qty[]" size="3" value="{$item['quantity']}"/><else />{$item['moved_quantity']}</if></td> -->
+			<td align="center">{$item['confirmed_staff']['name']}</td>
+			<td><if condition="$item['status'] eq 0">
+				<a href="__URL__/form/id/{$item['id']}">Edit</a>
+				<a href="__URL__/delete/id/{$item['id']}" target="_iframe">Delete</a>
+				<else />
+					<if condition="$action neq 'return'">
+				<a href="__URL__/form/action/return/id/{$item['id']}">Return</a>
+					</if>
+				</if></td>
+		</tr>
+		</iterate>
+		<tr>
+			<td colspan="16">{$page}</td>
+		</tr>
+		</table>
+	</td>
 </tr>
-</iterate>
 </table>
 <p class="center">
-	<input type="submit" name="submit" value="Confirm Selected" />
-	<if condition="$action neq 'return'">
-	<input type="button" onclick="javascript:document.location='__URL__/form';" value="Enter a New Product" />
-	</if>
+	<neq name="status" value="1"><input type="submit" name="submit" value="Confirm Selected" /></neq>
+	<neq name="action" value="return"><input type="button" onclick="javascript:document.location='__URL__/form';" value="Enter a New Product" /></neq>
 </p>
 </form>
 <script type="text/javascript"> 
+$(document).ready(function(){
+	$("td#status_{$status}").addClass("current");
+});
 function checkAll() {
 	var all_check = document.getElementById('checkall');
 	var s_check = document.getElementsByName('chk[]');

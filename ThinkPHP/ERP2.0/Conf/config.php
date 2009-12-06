@@ -29,7 +29,7 @@ $config = array_merge($config,array(
 		'DB_PREFIX'			=> 'erp_',
 
 		'USER_AUTH_ON'=>true,
-		'USER_AUTH_TYPE' => 0, //实时认证
+		'USER_AUTH_TYPE' => 2, //2:实时认证
 		'USER_AUTH_MODEL' => 'Staff',
 		'USER_AUTH_KEY' => 'authId',
 		'ADMIN_AUTH_KEY' => 'administrator',
@@ -38,7 +38,7 @@ $config = array_merge($config,array(
 		'RBAC_USER_TABLE'=>'erp_staff_role',
 		'RBAC_ACCESS_TABLE'=>'erp_role_node',
 		'RBAC_NODE_TABLE'=>'erp_node',
-		'NOT_AUTH_MODULE' => 'Public,Script',
+		'NOT_AUTH_MODULE' => 'Index,Public,Script',
 		'REQUIRE_AUTH_MODULE'=> '',
 		'NOT_AUTH_ACTION' => '',
 		'REQUIRE_AUTH_ACTION'=> '',

@@ -18,45 +18,71 @@ class BaseAction extends Action{
 
 		import('@.RBAC');
 
-		!empty($_REQUEST['pmenu']) && Session::set('pmenu', urldecode($_REQUEST['pmenu']));
-		$menu = C('_menu_');
-		$menu = $menu['menu'];
+		!empty($_REQUEST['top']) && Session::set('top', urldecode($_REQUEST['top']));
+		$_menu_ = C('_menu_');
+		$menu = $_menu_['menu'];
+		$topmenu = array();
 		foreach($menu as $key=>$val) {
-			if(str_replace('&nbsp;',' ',$key) == Session::get('pmenu')) {
-				$submenu = $menu[$key]['submenu'];
+			if(empty($val['submenu'])) {//单层菜单
+				if(RBAC::AccessDecision($val['name'], 'index')) {
+					$topmenu[$key] = $val['name'];
+				}
 			}
-			if(!RBAC::AccessDecision($val['name'], 'index')) {
-				unset($menu[$key]);
-				continue;
-			}
-			if(empty($val['submenu']) || !is_array($val['submenu'])) {
-				continue;
-			}
-			foreach($val['submenu'] as $key2=>$val2) {
-				if(!RBAC::AccessDecision($val2, 'index')) {
-					unset($menu[$key]['submenu'][$key2]);
+			else {//有子菜单
+				if(str_replace('&nbsp;',' ',$key) == Session::get('top')) {//获取当前子菜单
+					$submenu = $menu[$key]['submenu'];
+				}
+				foreach($val['submenu'] as $sub_title=>$sub_action) {
+					if(false === strpos($sub_action, '/')) {//子菜单是Module，如Supplier
+						if(RBAC::AccessDecision($sub_action, 'index')) {
+							$topmenu[$key] = $sub_action;
+							break;
+						}
+					}
+					else{
+						$sub_action_arr = explode('/', $sub_action);
+						if(RBAC::AccessDecision($sub_action_arr[0], $sub_action_arr[1])) {
+							$topmenu[$key] = $sub_action;
+							break;
+						}
+					}
 				}
 			}
 		}
-		$this->assign('menu', $menu);
+		foreach($submenu as $sub_title=>$sub_action) {
+			if(false === strpos($sub_action, '/')) {//子菜单是Module，如Supplier
+				if(!RBAC::AccessDecision($sub_action, 'index')) {
+					unset($submenu[$sub_title]);
+					continue;
+				}
+			}
+			else{
+				$sub_action_arr = explode('/', $sub_action);
+				if(!RBAC::AccessDecision($sub_action_arr[0], $sub_action_arr[1])) {
+					unset($submenu[$sub_title]);
+					continue;
+				}
+			}
+		}
+		$this->assign('topmenu', $topmenu);
 		$this->assign('submenu', $submenu);
 		$this->assign('action', Session::get('action'));
 		$this->assign("current_time", date("l, d/m/Y | h:i A"));//Thursday, 10/09/2009 | 11:53 AM
+		//检查认证识别号
+		if(!$_SESSION[C('USER_AUTH_KEY')] && 'Public'!=MODULE_NAME) {
+			//记下刚才的Action
+			Session::set('lastModule', MODULE_NAME);
+			//跳转到认证网关
+			redirect(PHP_FILE.C('USER_AUTH_GATEWAY'));
+		}
 		// 认证当前操作
 		if(RBAC::checkAccess()) {
-			//检查认证识别号
-			if(!$_SESSION[C('USER_AUTH_KEY')]) {
-				//记下刚才的Action
-				Session::set('lastModule', MODULE_NAME);
-				//跳转到认证网关
-				redirect(PHP_FILE.C('USER_AUTH_GATEWAY'));
-			}
 			// 检查权限
 			if(!RBAC::AccessDecision()) {
 				if(in_array(ACTION_NAME,C('IFRAME_AUTH_ACTION'))) {
-					die(self::_error('No Permission', 2000));
+					die(self::_error('Permission denied!', 2000));
 				}
-				$this->assign('message','No Permission');
+				$this->assign('message','Permission denied!');
 				$this->assign('content','Public:error');
 				$this->display('Layout:ERP_layout');
 				exit;
