@@ -1,7 +1,7 @@
 <?php
 if($_SERVER["SERVER_NAME"]=='localhost') {
 	$config = array(
-		'APP_DEBUG'			=> true,
+		'APP_DEBUG'			=> false,
 		'DB_NAME'			=> 'ERP',
 		'DB_USER'			=> 'root',
 		'DB_PWD'			=> '',

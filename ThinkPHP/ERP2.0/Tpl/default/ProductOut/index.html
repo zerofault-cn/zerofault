@@ -5,7 +5,7 @@ Inventory Return
 Inventory output information
 </if></p>
 <form action="__URL__/confirm" method="post" target="_iframe">
-<table cellpadding="2" border="1">
+<table cellpadding="3" border="1" bordercolor="#FFFFFF" style="border-collapse:collapse;">
 <tr>
 	<th><input type="checkbox" id="checkall" onclick="checkAll();"/></th>
 	<th>No.</th>
@@ -18,7 +18,7 @@ Inventory output information
 	<th>Operation</th>
 </tr>
 <iterate name="result" id="item">
-<tr>
+<tr class="trbg{$mod}">
 	<td><input type="checkbox" name="chk[]" value="{$item['id']}" onclick="updateCheckAll(this);"/></td>
 	<td>{$item['code']}</td>
 	<td>{$item['product']['MPN']}<input type="hidden" name="product_id[]" value="{$item['product_id']}"/></td>

@@ -1,12 +1,12 @@
 ﻿<?php
 /**
 *
-* Feedback
+* Asset
 *
 * @author zerofault <zerofault@gmail.com>
 * @since 2009/8/5
 */
-class FeedbackAction extends BaseAction{
+class AssetAction extends BaseAction{
 
 
 	public function _initialize() {
@@ -17,7 +17,9 @@ class FeedbackAction extends BaseAction{
 		$this->assign('content','');
 		$this->display('Layout:ERP_layout');
 	}
-
+	public function apply() {
+		
+	}
 
 }
 ?>

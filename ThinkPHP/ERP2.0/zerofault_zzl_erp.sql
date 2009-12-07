@@ -208,6 +208,7 @@ CREATE TABLE `erp_product` (
   `MPN` varchar(255) NOT NULL,
   `value` varchar(255) NOT NULL default '',
   `category_id` smallint(5) unsigned NOT NULL,
+  `status_id` smallint(5) unsigned NOT NULL,
   `unit_id` smallint(5) unsigned NOT NULL,
   `Rohs` tinyint(1) NOT NULL,
   `LT_days` smallint(5) unsigned NOT NULL,
@@ -229,19 +230,19 @@ CREATE TABLE `erp_product` (
 -- Dumping data for table `erp_product`
 --
 
-INSERT INTO `erp_product` (`id`, `type`, `code`, `Internal_PN`, `description`, `manufacture`, `MPN`, `value`, `category_id`, `unit_id`, `Rohs`, `LT_days`, `MOQ`, `SPQ`, `MSL`, `project`, `inventory_limit`, `currency_id`, `price`, `quantity`, `accessories`, `attachment`, `remark`) VALUES
-(1, 'Component', 'C000000001', 'PN001', 'ProductDesc', 'ProductManu', 'MPN001', '100', 1, 16, 99, 30, '12', '60', '1', 12, 12, 12, 9.99, 0, 'no', '', 'PN001'),
-(2, 'Component', 'C000000002', 'PN002', 'product2', 'M2', 'MPN2', '100', 2, 18, 0, 0, '', '', '', 0, 0, 15, 1, 30, '', '', ''),
-(3, 'Component', 'C000000003', 'c123001', 'debugger', '', '', '0', 4, 17, 0, 0, '', '', '', 0, 0, 0, 0, 0, '', '', ''),
-(4, 'Component', 'C000000004', 'PI2PCIE241', '2:1 Mux/DeMux Switch', 'Pericom', 'PI2PCIE2412ZHE', '0', 6, 16, 0, 0, '', '', '', 0, 0, 0, 0, 10000, '', '', ''),
-(5, 'Component', 'C000000005', 'AT91SAM9R6', 'MCU ARM9 64K SRAM 144-LFBGA', 'Atmel', 'AT91SAM9R64-CU', '0', 6, 16, 0, 0, '', '', '', 0, 0, 0, 0, 0, '', '', ''),
-(6, 'Component', 'C000000006', 'EP3SL50F48', 'IC STRATIX III L 50K 484-FBGA', 'ALTERA', 'EP3SL50F48', '0', 6, 16, 0, 0, '', '', '', 0, 0, 0, 0, 0, '', '', ''),
-(7, 'Component', 'C000000007', 'TAJD337K00', 'CAP TANT 330UF 6.3V 10% SMD', 'AVX', 'TAJD337K00', '330', 2, 16, 0, 0, '', '', '', 0, 0, 0, 0, 0, '', '', ''),
-(8, 'Component', 'C000000008', 'AGIGA-IT-0', 'SoundStation IP4000', 'Polycom', '0004F2E0F5F7', '0', 10, 16, 0, 0, '', '', '', 0, 0, 0, 0, 0, '', '', ''),
-(9, 'Component', 'C000000009', 'AGIGA-SW-1', 'Windows XP (EN) Professional', '', 'VYMPW-FBFJ4-RF3C4-DB', '0', 10, 16, 0, 0, '', '', '', 0, 0, 0, 0, 0, '', '', ''),
-(10, 'Component', 'C000000010', 'pn11', '', '', '', '', 0, 16, 0, 0, '', '', '', 0, 0, 0, 0, 0, '', '', ''),
-(11, 'Component', 'C000000011', 'AGIGA-ACCESSORY-0036', 'Multi Serial Controller Card', '', '090717GS2010933', '', 10, 16, 0, 0, '', '', '', 0, 0, 0, 0, 0, '', '', ''),
-(12, 'Component', 'C000000012', 'AGIGA-IT-00027', 'Air Conditioner CF405RI', 'Ameite ', '02738908051053F15', '', 10, 18, 0, 0, '', '', '', 0, 0, 0, 0, 0, '', '', '');
+INSERT INTO `erp_product` (`id`, `type`, `code`, `Internal_PN`, `description`, `manufacture`, `MPN`, `value`, `category_id`,`status_id`, `unit_id`, `Rohs`, `LT_days`, `MOQ`, `SPQ`, `MSL`, `project`, `inventory_limit`, `currency_id`, `price`, `quantity`, `accessories`, `attachment`, `remark`) VALUES
+(1, 'Component', 'C000000001', 'PN001', 'ProductDesc', 'ProductManu', 'MPN001', '100', 1, 0,16, 99, 30, '12', '60', '1', 12, 12, 12, 9.99, 0, 'no', '', 'PN001'),
+(2, 'Component', 'C000000002', 'PN002', 'product2', 'M2', 'MPN2', '100', 2,0, 18, 0, 0, '', '', '', 0, 0, 15, 1, 30, '', '', ''),
+(3, 'Component', 'C000000003', 'c123001', 'debugger', '', '', '0', 4,0, 17, 0, 0, '', '', '', 0, 0, 0, 0, 0, '', '', ''),
+(4, 'Component', 'C000000004', 'PI2PCIE241', '2:1 Mux/DeMux Switch', 'Pericom', 'PI2PCIE2412ZHE', '0', 6,0, 16, 0, 0, '', '', '', 0, 0, 0, 0, 10000, '', '', ''),
+(5, 'Component', 'C000000005', 'AT91SAM9R6', 'MCU ARM9 64K SRAM 144-LFBGA', 'Atmel', 'AT91SAM9R64-CU', '0', 6, 0,16, 0, 0, '', '', '', 0, 0, 0, 0, 0, '', '', ''),
+(6, 'Component', 'C000000006', 'EP3SL50F48', 'IC STRATIX III L 50K 484-FBGA', 'ALTERA', 'EP3SL50F48', '0', 6,0, 16, 0, 0, '', '', '', 0, 0, 0, 0, 0, '', '', ''),
+(7, 'Component', 'C000000007', 'TAJD337K00', 'CAP TANT 330UF 6.3V 10% SMD', 'AVX', 'TAJD337K00', '330', 2,0, 16, 0, 0, '', '', '', 0, 0, 0, 0, 0, '', '', ''),
+(8, 'Component', 'C000000008', 'AGIGA-IT-0', 'SoundStation IP4000', 'Polycom', '0004F2E0F5F7', '0', 10,0, 16, 0, 0, '', '', '', 0, 0, 0, 0, 0, '', '', ''),
+(9, 'Component', 'C000000009', 'AGIGA-SW-1', 'Windows XP (EN) Professional', '', 'VYMPW-FBFJ4-RF3C4-DB', '0', 10,0, 16, 0, 0, '', '', '', 0, 0, 0, 0, 0, '', '', ''),
+(10, 'Component', 'C000000010', 'pn11', '', '', '', '', 0, 0,16, 0, 0, '', '', '', 0, 0, 0, 0, 0, '', '', ''),
+(11, 'Component', 'C000000011', 'AGIGA-ACCESSORY-0036', 'Multi Serial Controller Card', '', '090717GS2010933', '', 10,0, 16, 0, 0, '', '', '', 0, 0, 0, 0, 0, '', '', ''),
+(12, 'Component', 'C000000012', 'AGIGA-IT-00027', 'Air Conditioner CF405RI', 'Ameite ', '02738908051053F15', '', 10, 0,18, 0, 0, '', '', '', 0, 0, 0, 0, 0, '', '', '');
 
 -- --------------------------------------------------------
 
