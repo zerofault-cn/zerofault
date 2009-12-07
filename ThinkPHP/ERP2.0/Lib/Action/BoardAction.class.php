@@ -69,6 +69,7 @@ class BoardAction extends BaseAction{
 			}
 			$this->dao->code = $_REQUEST['code'];
 		}
+		$this->dao->type = 'Board';
 		$this->dao->Internal_PN = $PN;
 		$this->dao->description = $_REQUEST['description'];
 		$this->dao->manufacture = $_REQUEST['manufacture'];

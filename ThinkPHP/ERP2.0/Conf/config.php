@@ -5,6 +5,7 @@ if($_SERVER["SERVER_NAME"]=='localhost') {
 		'DB_NAME'			=> 'ERP',
 		'DB_USER'			=> 'root',
 		'DB_PWD'			=> '',
+		'USER_AUTH_TYPE'	=> 2, //2:实时认证
 	);
 }
 elseif($_SERVER["SERVER_NAME"]=='zerofault.zzl.org') {
@@ -12,6 +13,7 @@ elseif($_SERVER["SERVER_NAME"]=='zerofault.zzl.org') {
 		'DB_NAME'			=> 'zerofault_zzl_erp',
 		'DB_USER'			=> '22366_root',
 		'DB_PWD'			=> '123456',
+		'USER_AUTH_TYPE'	=> 0, //0:登录时一次认证
 	);
 }
 elseif($_SERVER["SERVER_NAME"]=='zerofault.oxyhost.com') {
@@ -29,7 +31,6 @@ $config = array_merge($config,array(
 		'DB_PREFIX'			=> 'erp_',
 
 		'USER_AUTH_ON'=>true,
-		'USER_AUTH_TYPE' => 2, //2:实时认证
 		'USER_AUTH_MODEL' => 'Staff',
 		'USER_AUTH_KEY' => 'authId',
 		'ADMIN_AUTH_KEY' => 'administrator',
