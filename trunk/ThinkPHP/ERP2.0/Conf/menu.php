@@ -2,7 +2,7 @@
 $menu = array();
 
 $menu['Basic&nbsp;Data'] = array(
-	'name'	  => 'Supplier',//Ä¬ÈÏ²Ù×÷Module.index
+	'name'	  => 'Supplier',//Ä¬ï¿½Ï²ï¿½ï¿½ï¿½Module.index
 	'submenu' => array(
 		'Supplier information'	=> 'Supplier',
 		'Department information'=> 'Dept',
@@ -36,8 +36,11 @@ $menu['Inventory&nbsp;output Management'] = array(
 		)
 	);
 
-$menu['My&nbsp;Inbox'] = array(
-	'name' => 'Feedback',
+$menu['Assets'] = array(
+	'name' 	  => 'Asset',
+	'submenu' => array(
+		'My Assets' => 'Asset',
+		'Apply Assets' => 'Asset/apply')
 	);
 
 $menu['System'] = array(

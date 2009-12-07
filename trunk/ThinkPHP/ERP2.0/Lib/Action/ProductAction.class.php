@@ -45,7 +45,31 @@ class ProductAction extends BaseAction{
 		$this->assign('content', 'Product:form');
 		$this->display('Layout:ERP_layout');
 	}
-
+	public function select() {
+		if(!empty($_REQUEST['id'])) {
+			echo json_encode($this->dao->relation(true)->find($_REQUEST['id']));
+			return;
+		}
+		if(!empty($_POST['submit'])) {
+			$this->assign('submit', 1);
+			$where = array();
+			$where['type'] = $_REQUEST['type'];
+			if(!empty($_REQUEST['Internal_PN'])) {
+				$where['Internal_PN'] = array('like', '%'.trim($_REQUEST['Internal_PN']).'%');
+			}
+			if(!empty($_REQUEST['description'])) {
+				$where['description'] = array('like', '%'.trim($_REQUEST['description']).'%');
+			}
+			if(!empty($_REQUEST['manufacture'])) {
+				$where['manufacture'] = array('like', '%'.trim($_REQUEST['manufacture']).'%');
+			}
+			if(!empty($_REQUEST['MPN'])) {
+				$where['MPN'] = array('like', '%'.trim($_REQUEST['MPN']).'%');
+			}
+			$this->assign('result', $this->dao->where($where)->select());
+		}
+		$this->display();
+	}
 	public function submit() {
 		if(empty($_POST['submit'])) {
 			return;

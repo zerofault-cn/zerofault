@@ -9,7 +9,7 @@
 </tr>
 <tr>
 	<td></td>
-	<td><input type="button" value="Select Component or Board" onclick="selectProduct();"/><input type="hidden" name="product_id" value="{$info['product_id']}" /></td>
+	<td><input type="button" value="Select Component or Board" class="thickbox" alt="__APP__/Product/select?width=600&height=300&modal=true"/><input type="hidden" id="product_id" name="product_id" value="{$info['product_id']}" /></td>
 </tr>
 <tr>
 	<td>Internal PN:</td>
@@ -45,7 +45,7 @@
 </tr>
 <tr>
 	<td>Inventory Limit:</td>
-	<td><input type="text" size="15" id="limit" value="{$info['product']['inventory_limit']}" readonly="true"/><img src="../Public/Images/system.gif" /></td>
+	<td><input type="text" size="15" id="inventory_limit" value="{$info['product']['inventory_limit']}" readonly="true"/><img src="../Public/Images/system.gif" /></td>
 </tr>
 <tr>
 	<td>Supplier:</td>
