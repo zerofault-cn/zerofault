@@ -94,7 +94,7 @@ class ProductInAction extends BaseAction{
 		if(empty($_POST['submit'])) {
 			return;
 		}
-		empty($_POST['chk']) && self::_error('You hadn\'t got any item selected');
+		empty($_POST['chk']) && self::_error('You haven\'t select any item!');
 		if($this->dao->where("id in (".implode(',',$_POST['chk']).")")->setField(array('confirm_time', 'confirmed_staff_id', 'confirmed_quantity', 'status'), array(date("Y-m-d H:i:s"), $_SESSION[C('USER_AUTH_KEY')], 0, 1)) && self::update_quantity($_REQUEST['product_id'])) {
 			
 			self::_success('Confirm success','',1000);
@@ -142,7 +142,7 @@ class ProductInAction extends BaseAction{
 		}
 		$id = $_REQUEST['id'];
 		$action = $_REQUEST['action'];
-		empty($_REQUEST['product_id']) && self::_error('Select a product first!');
+		empty($_REQUEST['product_id']) && self::_error('Please select a component/board first!');
 		('return'==$action) && ($_REQUEST['quantity']>$_REQUEST['ori_quantity']) && self::_error('Return quantity can\'t be larger than '.$_REQUEST['ori_quantity']);
 
 		if($action!='return' && !empty($id) && $id>0) {
