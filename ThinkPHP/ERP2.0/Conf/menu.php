@@ -9,7 +9,7 @@ $menu['Basic&nbsp;Data'] = array(
 		'Staff information'		=> 'Staff',
 		'Category'				=> 'Category',
 		'Component Data'		=> 'Product',
-		'Board Data'			=> 'Board'
+		'Board Data'			=> 'Board',
 		)
 	);
 
@@ -17,7 +17,7 @@ $menu['Inventory&nbsp;Input Management'] = array(
 	'name'	  => 'ProductIn',
 	'submenu' => array(
 		'Product Entering'		=> 'ProductIn',
-		'Product Return'		=> 'ProductIn/returns'
+		'Product Return'		=> 'ProductIn/returns',
 		)
 	);
 $menu['Storage inventory'] = array(
@@ -32,23 +32,25 @@ $menu['Inventory&nbsp;output Management'] = array(
 		'Components Release'	=> 'ProductOut/release',
 		'Sending Components'	=> 'ProductOut/send',
 		'Scrap Product'			=> 'ProductOut/scrap',
-		'Product Return'		=> 'ProductOut/returns'
+		'Product Return'		=> 'ProductOut/returns',
 		)
 	);
 
 $menu['Assets'] = array(
 	'name' 	  => 'Asset',
 	'submenu' => array(
-		'My Assets' => 'Asset',
-		'Apply Assets' => 'Asset/apply')
+		'My Assets'				=> 'Asset',
+		'Apply Assets'			=> 'Asset/apply',
+		)
 	);
 
 $menu['System'] = array(
 	'name' => 'Setting',
 	'submenu' => array(
-		'Setting' => 'Setting',
-		'Role' => 'Role',
-		'Node' => 'Node',
+		'Location'				=> 'Location',
+		'Setting'				=> 'Setting',
+		'Role'					=> 'Role',
+		'Node'					=> 'Node',
 		)
 	);
 
