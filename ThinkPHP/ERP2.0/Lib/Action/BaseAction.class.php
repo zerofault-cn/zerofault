@@ -136,11 +136,11 @@ class BaseAction extends Action{
 		$rs = $this->dao->where('id='.$id)->setField($field,$value);
 		if(false !== $rs)
 		{
-			die(self::_success('Success!','',1000));
+			die(self::_success('Update success!','',1000));
 		}
 		else
 		{
-			die(self::_error('Error!'));
+			die(self::_error('Update fail!'.(C('APP_DEBUG')?$this->dao->getLastSql():'')));
 		}
 	}
 	/**
@@ -152,11 +152,11 @@ class BaseAction extends Action{
 		$id=$_REQUEST['id'];
 		if($this->dao->find($id) && $this->dao->delete())
 		{
-			die(self::_success('Success!','',1000));
+			die(self::_success('Delete success!','',1000));
 		}
 		else
 		{
-			die(self::_error('Error!'));
+			die(self::_error('Delete fail!'.(C('APP_DEBUG')?$this->dao->getLastSql():'')));
 		}
 	}
 
