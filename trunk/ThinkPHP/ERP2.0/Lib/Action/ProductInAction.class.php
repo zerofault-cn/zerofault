@@ -36,8 +36,7 @@ class ProductInAction extends BaseAction{
 		$this->assign('status', $status);
 		
 		$where = array(
-			'source'=>'Supplier',
-			'destination'=>'Storage',
+			'action'=>'enter',
 			'status'=> $status
 			);
 		$count = $this->dao->where($where)->getField('count(*)');
@@ -75,8 +74,7 @@ class ProductInAction extends BaseAction{
 		$this->assign('status', $status);
 		
 		$where = array(
-			'source'=>'Storage',
-			'destination'=>'Supplier',
+			'action'=>'return',
 			'status'=> $status
 			);
 		$count = $this->dao->where($where)->getField('count(*)');
@@ -94,14 +92,53 @@ class ProductInAction extends BaseAction{
 		if(empty($_POST['submit'])) {
 			return;
 		}
+		$action = $_REQUEST['action'];
 		empty($_POST['chk']) && self::_error('You haven\'t select any item!');
-		if($this->dao->where("id in (".implode(',',$_POST['chk']).")")->setField(array('confirm_time', 'confirmed_staff_id', 'confirmed_quantity', 'status'), array(date("Y-m-d H:i:s"), $_SESSION[C('USER_AUTH_KEY')], 0, 1)) && self::update_quantity($_REQUEST['product_id'])) {
-			
-			self::_success('Confirm success','',1000);
+		$rs = false;
+		foreach ($_POST['chk'] as $id) {
+			$info = $this->dao->find($id);
+			$where = array(
+				'location_id' => 1,
+				'product_id'  => $info['product_id']
+			);
+			if ('return'!=$action) {
+				$lp_id = M('LocationProduct')->where($where)->getField('id');
+				//dump($lp_id);
+				//exit;
+				if(!empty($lp_id)) {
+					M('LocationProduct')->setInc('chg_quantity','id='.$lp_id,$info['quantity']); 
+				}
+				else {
+					M('LocationProduct')->location_id = 1;
+					M('LocationProduct')->product_id = $info['product_id'];
+					M('LocationProduct')->ori_quantity = 0;
+					M('LocationProduct')->chg_quantity = $info['quantity'];
+					M('LocationProduct')->add();
+				}
+				
+			}
+			else {//return action
+				$lp_id = M('LocationProduct')->where($where)->getField('id');
+				if(!empty($lp_id)) {
+					M('LocationProduct')->setDec('chg_quantity','id='.$lp_id,$info['quantity']); 
+				}
+				else {
+					M('LocationProduct')->location_id = 1;
+					M('LocationProduct')->product_id = $info['product_id'];
+					M('LocationProduct')->ori_quantity = 0;
+					M('LocationProduct')->chg_quantity = 0-$info['quantity'];
+					M('LocationProduct')->add();
+				}
+			}
+			$data['id'] = $id;
+			$data['confirm_time'] = date("Y-m-d H:i:s");
+			$data['confirmed_staff_id'] = $_SESSION[C('USER_AUTH_KEY')];
+			$data['status'] = 1;
+			if (!$this->dao->save($data)) {
+				self::_error('Confirm fail!'.(C('APP_DEBUG')?$this->dao->getLastSql():''));
+			}
 		}
-		else{
-			self::_error('Something wrong!'.(C('APP_DEBUG')?$this->dao->getLastSql():''));
-		}
+		self::_success('Confirm success','',1000);
 	}
 
 	public function form() {
@@ -143,6 +180,9 @@ class ProductInAction extends BaseAction{
 		$id = $_REQUEST['id'];
 		$action = $_REQUEST['action'];
 		empty($_REQUEST['product_id']) && self::_error('Please select a component/board first!');
+		empty($_REQUEST['quantity']) && self::_error('Quantity number required!');
+		empty($_REQUEST['price']) && self::_error('Price value required!');
+		($_REQUEST['quantity']<0) && self::_error('Quantity number must be positive!');
 		('return'==$action) && ($_REQUEST['quantity']>$_REQUEST['ori_quantity']) && self::_error('Return quantity can\'t be larger than '.$_REQUEST['ori_quantity']);
 
 		if($action!='return' && !empty($id) && $id>0) {
@@ -151,12 +191,10 @@ class ProductInAction extends BaseAction{
 		else{
 			$this->dao->code = $_REQUEST['code'];
 			if($action=='return') {
-				$this->dao->source = 'Storage';
-				$this->dao->destination = 'Supplier';
+				$this->dao->action = 'return';
 			}
 			else{
-				$this->dao->source = 'Supplier';
-				$this->dao->destination = 'Storage';
+				$this->dao->action = 'enter';
 			}
 			$this->dao->staff_id = $_SESSION[C('USER_AUTH_KEY')];
 			$this->dao->create_time = date("Y-m-d H:i:s");
