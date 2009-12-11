@@ -26,13 +26,13 @@ class ProductInAction extends BaseAction{
 		if(isset($_REQUEST['status'])) {
 			$status = $_REQUEST['status'];
 		}
-		elseif(''!=(Session::get('staff_status'))) {
-			$status = Session::get('staff_status');
+		elseif(''!=(Session::get('enter_status'))) {
+			$status = Session::get('enter_status');
 		}
 		else{
 			$status = 0;
 		}
-		Session::set('staff_status', $atatus);
+		Session::set('enter_status', $atatus);
 		$this->assign('status', $status);
 		
 		$where = array(
@@ -92,44 +92,52 @@ class ProductInAction extends BaseAction{
 		if(empty($_POST['submit'])) {
 			return;
 		}
-		$action = $_REQUEST['action'];
 		empty($_POST['chk']) && self::_error('You haven\'t select any item!');
-		$rs = false;
 		foreach ($_POST['chk'] as $id) {
 			$info = $this->dao->find($id);
 			$where = array(
+				'type' => 'location',
 				'location_id' => 1,
 				'product_id'  => $info['product_id']
 			);
-			if ('return'!=$action) {
+			if ('return'!=$info['action']) {
 				$lp_id = M('LocationProduct')->where($where)->getField('id');
-				//dump($lp_id);
-				//exit;
 				if(!empty($lp_id)) {
-					M('LocationProduct')->setInc('chg_quantity','id='.$lp_id,$info['quantity']); 
+					if (!M('LocationProduct')->setInc('chg_quantity','id='.$lp_id,$info['quantity'])) {
+						self::_error('Update location product fail!'.(C('APP_DEBUG')?$this->dao->getLastSql():''));
+					}
 				}
 				else {
+					M('LocationProduct')->type = 'location';
 					M('LocationProduct')->location_id = 1;
 					M('LocationProduct')->product_id = $info['product_id'];
 					M('LocationProduct')->ori_quantity = 0;
 					M('LocationProduct')->chg_quantity = $info['quantity'];
-					M('LocationProduct')->add();
+					if (!M('LocationProduct')->add()) {
+						self::_error('Insert location product fail!'.(C('APP_DEBUG')?$this->dao->getLastSql():''));
+					}
 				}
 				
 			}
 			else {//return action
 				$lp_id = M('LocationProduct')->where($where)->getField('id');
 				if(!empty($lp_id)) {
-					M('LocationProduct')->setDec('chg_quantity','id='.$lp_id,$info['quantity']); 
+					if (!M('LocationProduct')->setDec('chg_quantity','id='.$lp_id,$info['quantity'])) {
+						self::_error('Update location product fail!'.(C('APP_DEBUG')?$this->dao->getLastSql():''));
+					}
 				}
 				else {
+					M('LocationProduct')->type = 'location';
 					M('LocationProduct')->location_id = 1;
 					M('LocationProduct')->product_id = $info['product_id'];
 					M('LocationProduct')->ori_quantity = 0;
 					M('LocationProduct')->chg_quantity = 0-$info['quantity'];
-					M('LocationProduct')->add();
+					if (!M('LocationProduct')->add()) {
+						self::_error('Insert location product fail!'.(C('APP_DEBUG')?$this->dao->getLastSql():''));
+					}
 				}
 			}
+			$data = array();
 			$data['id'] = $id;
 			$data['confirm_time'] = date("Y-m-d H:i:s");
 			$data['confirmed_staff_id'] = $_SESSION[C('USER_AUTH_KEY')];
@@ -151,7 +159,12 @@ class ProductInAction extends BaseAction{
 			$info['unit'] = M('Options')->where("id=".$info['product']['unit_id'])->getField('name');
 			$info['supplier_opts'] = self::genOptions(D('Supplier')->select(), $info['supplier_id']);
 			$info['currency_opts'] = self::genOptions(M('Options')->where(array('type'=>'currency'))->order('sort')->select(), $info['currency_id']);
-			$code = 'B'.substr($info['code'],1);
+			if ('return'==$action) {
+				$code = 'B'.substr($info['code'],1);
+			}
+			else {
+				$code = $info['code'];
+			}
 		}
 		else{
 			$info = array(

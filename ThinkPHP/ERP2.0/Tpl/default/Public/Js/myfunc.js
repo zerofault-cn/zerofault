@@ -53,3 +53,33 @@ function switchTab(id) {
 		}
 	});
 }
+function checkAll() {
+	var all_check = document.getElementById('checkall');
+	var s_check = document.getElementsByName('chk[]');
+	for(var i=0; i<s_check.length; i++) {
+		s_check[i].checked=all_check.checked;
+	}
+}
+function updateCheckAll(obj) {
+	var all_check = document.getElementById('checkall');
+	var s_check = document.getElementsByName('chk[]');
+	s_check_count = s_check.length;
+	s_checked=0;
+	for(var i=0; i<s_check.length; i++) {
+		if(s_check[i].checked==true) {
+			s_checked++;
+		}
+		else
+		{
+			s_checked--;
+		}
+		if(s_checked==s_check_count)
+		{
+			all_check.checked=true;
+		}
+		else
+		{
+			all_check.checked=false;
+		}
+	}
+}

@@ -2,11 +2,12 @@
 import('RelationModel');
 class ProductModel extends RelationModel{
 	protected $_link = array(
-		'Supplier' => array(
-			'mapping_type' => BELONGS_TO,
-			'mapping_name' => 'supplier',
-			'class_name'   => 'Supplier',
-			'foreign_key'  => 'supplier_id'
+		'LocationProduct' => array(
+			'mapping_type' =>HAS_MANY,
+			'class_name'   =>'LocationProduct',
+			'foreign_key'  =>'product_id',
+			'mapping_name' =>'location_product',
+			'condition'    => 'location_id=1',
 			),
 		'Category' => array(
 			'mapping_type' => BELONGS_TO,

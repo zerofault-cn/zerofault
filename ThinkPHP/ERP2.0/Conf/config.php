@@ -2,7 +2,7 @@
 if($_SERVER["SERVER_NAME"]=='localhost') {
 	$config = array(
 		'APP_DEBUG'			=> true,
-		'DB_NAME'			=> 'ERP',
+		'DB_NAME'			=> 'ERP2',
 		'DB_USER'			=> 'root',
 		'DB_PWD'			=> '',
 		'USER_AUTH_TYPE'	=> 2, //2:实时认证

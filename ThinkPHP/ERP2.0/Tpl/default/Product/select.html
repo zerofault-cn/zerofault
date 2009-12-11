@@ -41,18 +41,19 @@
 <script type="text/javascript">
 var _URL_ = '__URL__';
 function search() {
-$.post(_URL_+"/select",{
-	'submit' : 1,
-	'type' : $("#key_type").val(),
-	'Internal_PN': $("#key_Internal_PN").val(),
-	'description' : $("#key_description").val(),
-	'manufacture': $("#key_manufacture").val(),
-	'MPN': $("#key_MPN").val()
-	},function(str){
-		$("#key").nextAll().remove();
-		$("#key").after(str);
-		$("#btn").html('<input type="button" value="Select" onclick="do_select();" />&nbsp;&nbsp;<input type="button" value="Cancel" onclick="tb_remove();" />');
-	});
+	$.post(_URL_+"/select",{
+		'submit' : 1,
+		'action' : '{$action}',
+		'type' : $("#key_type").val(),
+		'Internal_PN': $("#key_Internal_PN").val(),
+		'description' : $("#key_description").val(),
+		'manufacture': $("#key_manufacture").val(),
+		'MPN': $("#key_MPN").val()
+		},function(str){
+			$("#key").nextAll().remove();
+			$("#key").after(str);
+			$("#btn").html('<input type="button" value="Select" onclick="do_select();" />&nbsp;&nbsp;<input type="button" value="Cancel" onclick="tb_remove();" />');
+		});
 }
 var title_arr = new Array();
 title_arr['Component'] = new Array('Internal P/N','Description','Manufacture','MPN');
@@ -77,7 +78,7 @@ function do_select() {
 			$("#unit").val(json.unit.name);
 			$("#MOQ").val(json.MOQ);
 			$("#inventory_limit").val(json.inventory_limit);
-			$("#ori_quantity").val(json.quantity);
+			$("#ori_quantity").val(parseInt(json.location_product[0].ori_quantity)+parseInt(json.location_product[0].chg_quantity));
 			tb_remove();
 		});
 		
@@ -89,3 +90,6 @@ function do_select() {
 
 </script>
 </present>
+<style>
+#think_run_time,#think_page_trace{display:none;}
+</style>

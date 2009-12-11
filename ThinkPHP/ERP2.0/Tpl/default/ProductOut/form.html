@@ -8,15 +8,18 @@ Product Transfer
 <form name="form1" action="__URL__/submit" method="post" target="_iframe">
 <input type="hidden" name="id" value="{$id}" />
 <input type="hidden" name="action" value="{$action}" />
+<input type="hidden" id="product_id" name="product_id" value="{$info['product_id']}" />
 <table>
 <tr>
 	<td>No.</td>
 	<td><input type="text" maxlength="10" size="15" name="code" value="{$code}" readonly="true" /><img src="../Public/Images/lock.gif" /></td>
 </tr>
+<eq name="action" value="apply">
 <tr>
 	<td></td>
-	<td><input type="button" value="Select Component or Board" class="thickbox" alt="__APP__/Product/select?width=600&height=300&modal=true"/><input type="hidden" id="product_id" name="product_id" value="{$info['product_id']}" /></td>
+	<td><input type="button" value="Select Component/Board" class="thickbox" alt="__APP__/Product/select/action/{$action}?width=600&height=300&modal=true"/></td>
 </tr>
+</eq>
 <tr>
 	<td>Internal PN:</td>
 	<td><input type="text" size="15" id="Internal_PN" value="{$info['product']['Internal_PN']}" readonly="true" /><img src="../Public/Images/system.gif" /></td>
@@ -46,10 +49,15 @@ Product Transfer
 	<td><input type="text" size="15" id="unit" value="{$info['unit']}" readonly="true"/><img src="../Public/Images/system.gif" /></td>
 </tr>
 <tr>
-	<td><if condition="$action eq 'apply'">Request</if>
-	Quantity:</td>
+	<td>{$action|ucfirst} Quantity:</td>
 	<td><input type="text" maxlength="20" size="15" id="quantity" name="quantity" value="{$info['quantity']}"><input type="hidden" name="ori_quantity" id="ori_quantity" value="{$info['quantity']}"/></td>
 </tr>
+<eq name="action" value="transfer">
+<tr>
+	<td>Transfer to:</td>
+	<td><select name="to_id"><option value="">Select One</option>{$info.target_opts}</select></td>
+</tr>
+</eq>
 <tr>
 	<td valign="top">Remark:</td>
 	<td><textarea name="remark" rows="3" cols="36">{$info.remark}</textarea></td>

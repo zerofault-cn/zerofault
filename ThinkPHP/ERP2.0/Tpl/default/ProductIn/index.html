@@ -8,7 +8,7 @@ Product Entering List
 <input type="hidden" name="action" value="{$action}" />
 <table >
 <tr>
-	<td class="clsTab" id="status_0"><a href="__ACTION__/status/0">Ready for Comfirming</a></td>
+	<td class="clsTab" id="status_0"><a href="__ACTION__/status/0">Ready to comfirm</a></td>
 	<td class="clsTab" id="status_1"><a href="__ACTION__/status/1">Comfirmed</a></td>
 </tr>
 <tr>
@@ -48,13 +48,12 @@ Product Entering List
 			<td>{$item['quantity']*$item['price']}</td>
 			<td>{$item['create_time']}</td>
 			<td align="center">{$item['staff']['name']}</td>
-		<!-- 	<td align="center"><if condition="$item['status'] eq 0"><input type="text" name="qty[]" size="3" value="{$item['quantity']}"/><else />{$item['moved_quantity']}</if></td> -->
 			<td align="center">{$item['confirmed_staff']['name']}</td>
 			<td><if condition="$item['status'] eq 0">
-				<a href="__URL__/form/id/{$item['id']}">Edit</a>
+				<a href="__URL__/form/action/{$item['action']}/id/{$item['id']}">Edit</a>
 				<a href="__URL__/delete/id/{$item['id']}" target="_iframe">Delete</a>
 				<else />
-					<if condition="$action neq 'return'">
+					<if condition="$item['action'] neq 'return'">
 				<a href="__URL__/form/action/return/id/{$item['id']}">Return</a>
 					</if>
 				</if></td>
@@ -76,34 +75,5 @@ Product Entering List
 $(document).ready(function(){
 	$("td#status_{$status}").addClass("current");
 });
-function checkAll() {
-	var all_check = document.getElementById('checkall');
-	var s_check = document.getElementsByName('chk[]');
-	for(var i=0; i<s_check.length; i++) {
-		s_check[i].checked=all_check.checked;
-	}
-}
-function updateCheckAll(obj) {
-	var all_check = document.getElementById('checkall');
-	var s_check = document.getElementsByName('chk[]');
-	s_check_count = s_check.length;
-	s_checked=0;
-	for(var i=0; i<s_check.length; i++) {
-		if(s_check[i].checked==true) {
-			s_checked++;
-		}
-		else
-		{
-			s_checked--;
-		}
-		if(s_checked==s_check_count)
-		{
-			all_check.checked=true;
-		}
-		else
-		{
-			all_check.checked=false;
-		}
-	}
-}
+
 </script>
