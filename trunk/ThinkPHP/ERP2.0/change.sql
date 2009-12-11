@@ -4,10 +4,15 @@ CREATE TABLE erp_location_product (id INT UNSIGNED AUTO_INCREMENT, location_id S
 
 ALTER TABLE erp_location_product ADD type ENUM('location','staff')  NOT NULL AFTER id;
 
-ALTER TABLE erp_product_flow CHANGE source from_id SMALLINT NOT NULL;
-ALTER TABLE erp_product_flow CHANGE destination to_id SMALLINT NOT NULL;
-ALTER TABLE erp_product_flow ADD action ENUM('enter','return','apply','transfer','release','scrap','back')  NOT NULL;
+ALTER TABLE erp_product_flow CHANGE source target_type ENUM('location','staff')  NOT NULL;
+ALTER TABLE erp_product_flow CHANGE destination target_id SMALLINT UNSIGNED NOT NULL;
+ALTER TABLE erp_product_flow ADD action ENUM('enter','return','apply','transfer','release','scrap','back')  NOT NULL after code;
 
+ALTER TABLE erp_product_flow CHANGE target_type from_type ENUM('location','staff')  NOT NULL
+ALTER TABLE erp_product_flow CHANGE target_id from_id SMALLINT  UNSIGNED NOT NULL;
+
+ALTER TABLE erp_product_flow ADD to_type ENUM('location','staff')  NOT NULL AFTER from_id;
+ALTER TABLE erp_product_flow ADD to_id SMALLINT UNSIGNED NOT NULL AFTER to_type;
 
 ALTER TABLE erp_product_flow DROP confirmed_quantity;
 ALTER TABLE erp_product_flow CHANGE project project VARCHAR(255)  NOT NULL;

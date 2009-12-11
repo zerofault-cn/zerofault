@@ -45,7 +45,13 @@ class ProductInAction extends BaseAction{
 		$p = new Paginator($count,$limit);
 		
 		$order = 'id desc';
-		$this->assign('result', $this->dao->relation(true)->where($where)->order($order)->limit($p->offset.','.$p->limit)->select());
+		$result = array();
+		foreach($this->dao->relation(true)->where($where)->order($order)->limit($p->offset.','.$p->limit)->select() as $item) {
+			$item['return_quantity'] = $this->dao->where(array('code'=>'B'.substr($item['code'],1),'status'=>1))->sum('quantity');
+			empty($item['return_quantity']) && ($item['return_quantity']=0);
+			$result[] = $item;
+		}
+		$this->assign('result', $result);
 		$this->assign('page', $p->showMultiNavi());
 		$this->assign('content','ProductIn:index');
 		$this->display('Layout:ERP_layout');
@@ -161,6 +167,8 @@ class ProductInAction extends BaseAction{
 			$info['currency_opts'] = self::genOptions(M('Options')->where(array('type'=>'currency'))->order('sort')->select(), $info['currency_id']);
 			if ('return'==$action) {
 				$code = 'B'.substr($info['code'],1);
+				$info['return_quantity'] = $this->dao->where(array('code'=>$code,'status'=>1))->sum('quantity');
+				empty($info['return_quantity']) && ($info['return_quantity']=0);
 			}
 			else {
 				$code = $info['code'];
@@ -193,6 +201,8 @@ class ProductInAction extends BaseAction{
 		$id = $_REQUEST['id'];
 		$action = $_REQUEST['action'];
 		empty($_REQUEST['product_id']) && self::_error('Please select a component/board first!');
+		empty($_REQUEST['supplier_id']) && self::_error('Please select the supplier!');
+		empty($_REQUEST['currency_id']) && self::_error('Please select the currency type!');
 		empty($_REQUEST['quantity']) && self::_error('Quantity number required!');
 		empty($_REQUEST['price']) && self::_error('Price value required!');
 		($_REQUEST['quantity']<0) && self::_error('Quantity number must be positive!');
@@ -223,7 +233,7 @@ class ProductInAction extends BaseAction{
 		$this->dao->remark = $_REQUEST['remark'];
 		if($action!='return' && !empty($id) && $id>0) {
 			if(false !== $this->dao->save()){
-				self::_success('Product information updated!',__URL__);
+				self::_success('Product information updated!',__URL__.('return'==$this->dao->action?'/returns':''));
 			}
 			else{
 				self::_error('Update fail!'.(C('APP_DEBUG')?$this->dao->getLastSql():''));

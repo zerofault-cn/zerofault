@@ -43,7 +43,7 @@ $config = array_merge($config,array(
 		'REQUIRE_AUTH_MODULE'=> '',
 		'NOT_AUTH_ACTION' => '',
 		'REQUIRE_AUTH_ACTION'=> '',
-		'IFRAME_AUTH_ACTION' => array('update','delete','edit','submit')//在Iframe中进行的且需要认证的操作
+		'IFRAME_AUTH_ACTION' => array('update','delete','edit','submit','confirm','select')//在Iframe中进行的且需要认证的操作
 		));
 //echo '<pre>';
 //print_r($config);

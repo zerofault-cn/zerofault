@@ -19,8 +19,8 @@ Inventory output list
 			<th>Product</th>
 			<th>Unit</th>
 			<th>Quantity</th>
-			<th>Request Time</th>
-			<th>Request Staff</th>
+			<th>{$action|ucfirst} Time</th>
+			<th>{$action|ucfirst} Staff</th>
 			<th>Confirmed Staff</th>
 			<th>OP</th>
 		</tr>
@@ -35,7 +35,7 @@ Inventory output list
 			<td align="center">{$item['staff']['name']}</td>
 			<td align="center">{$item['confirmed_staff']['name']}&nbsp;</td>
 			<td><if condition="$item['status'] eq 0">
-				<a href="__URL__/form/action/{$item['action']}/id/{$item['id']}">Edit</a>
+				<a href="__URL__/form/id/{$item['id']}">Edit</a>
 				<a href="__URL__/delete/id/{$item['id']}" target="_iframe">Delete</a>
 				<else />
 					<if condition="$item['action'] eq 'apply'">
@@ -57,7 +57,7 @@ Inventory output list
 </table>
 <p class="center">
 	<input type="submit" name="submit" value="Confirm Selected" />
-	<if condition="$action neq 'transfer' and $action neq 'returns'">
+	<if condition="$action eq 'apply'">
 	<input type="button" onclick="javascript:document.location='__URL__/form/action/{$action}';" value="Apply a New Product" />
 	</if>
 </p>
