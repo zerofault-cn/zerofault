@@ -46,6 +46,7 @@ class ProductAction extends BaseAction{
 		$this->display('Layout:ERP_layout');
 	}
 	public function select() {
+		$action = $_REQUEST['action'];
 		if(!empty($_REQUEST['id'])) {
 			echo json_encode($this->dao->relation(true)->find($_REQUEST['id']));
 			return;
@@ -66,8 +67,23 @@ class ProductAction extends BaseAction{
 			if(!empty($_REQUEST['MPN'])) {
 				$where['MPN'] = array('like', '%'.trim($_REQUEST['MPN']).'%');
 			}
-			$this->assign('result', $this->dao->where($where)->select());
+			if(''==$action || 'enter'==$action) {
+				$this->assign('result', $this->dao->where($where)->select());
+			}
+			elseif('apply'==$action) {
+				$result = array();
+				foreach($this->dao->relation(true)->where($where)->select() as $item) {
+					if(!empty($item) && ($item['location_product'][0]['ori_quantity']+$item['location_product'][0]['chg_quantity'])>0) {
+						$result[] = $item;
+					}
+				}
+				$this->assign('result', $result);
+			}
+			else {
+				//else
+			}
 		}
+		$this->assign('action', $action);
 		$this->display();
 	}
 	public function submit() {

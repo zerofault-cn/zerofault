@@ -23,59 +23,50 @@ class ProductOutAction extends BaseAction{
 	Public function release() {
 		$this->index('release');
 	}
-	Public function send() {
-		$this->index('send');
-	}
 	Public function scrap() {
 		$this->index('scrap');
 	}
-	Public function returns() {
-		$this->index('returns');
+	Public function back() {
+		$this->index('back');
 	}
 	public function index($action='') {
-		if(''==$action) {
-			$action = $_REQUEST['action'];
-		}
-		$this->assign('action', $action);
 		$rs = M('Options')->where(array('type'=>'unit'))->order('sort')->select();
 		$unit = array();
 		foreach($rs as $i=>$item) {
 			$unit[$item['id']] = $item['name'];
 		}
 		$this->assign('unit', $unit);
-
-		$where = array();
-		switch ($action) {
-			case 'apply':
-				$where['source'] = 'Storage';
-				$where['destination'] = 'Staff';
-				break;
-			case 'transfer':
-				$where['source'] = 'Staff';
-				$where['destination'] = 'Staff';
-				break;
-			case 'release':
-				$where['source'] = 'Storage';
-				$where['destination'] = 'Manufactory';
-				break;
-			case 'send':
-				$where['source'] = 'Storage';
-				$where['destination'] = 'Customer';
-				break;
-			case 'scrap':
-				$where['source'] = 'Storage';
-				$where['destination'] = 'Scrap';
-				break;
-			case 'returns':
-				$where['source'] = 'Manufactory';
-				$where['destination'] = 'Storage';
-				break;
-			default:
-				$where['source'] = 'Storage';
-				$where['destination'] = 'Staff';
-				break;
+		
+		if(''==$action) {
+			$action = $_REQUEST['action'];
 		}
-		$this->assign('result', $this->dao->relation(true)->where($where)->select());
+		$this->assign('action', $action);
+
+		if(isset($_REQUEST['status'])) {
+			$status = $_REQUEST['status'];
+		}
+		elseif(''!=(Session::get('enter_status'))) {
+			$status = Session::get('enter_status');
+		}
+		else{
+			$status = 0;
+		}
+		Session::set('enter_status', $atatus);
+		$this->assign('status', $status);
+
+		$where = array(
+			'action' => $action,
+			'status' => $status
+			);
+		
+		$count = $this->dao->where($where)->getField('count(*)');
+		import("@.Paginator");
+		$limit = 10;
+		$p = new Paginator($count,$limit);
+
+		$order = 'id desc';
+		$this->assign('result', $this->dao->relation(true)->where($where)->order($order)->limit($p->offset.','.$p->limit)->select());
+		$this->assign('page', $p->showMultiNavi());
 		$this->assign('content','ProductOut:index');
 		$this->display('Layout:ERP_layout');
 	}
@@ -84,13 +75,69 @@ class ProductOutAction extends BaseAction{
 		if(empty($_POST['submit'])) {
 			return;
 		}
-		empty($_POST['chk']) && self::_error('You hadn\'t got any item selected');
-		if($this->dao->where("id in (".implode(',',$_POST['chk']).")")->setField(array('confirm_time', 'confirmed_staff_id', 'confirmed_quantity', 'status'), array(date("Y-m-d H:i:s"), $_SESSION[C('USER_AUTH_KEY')], 0, 1)) && self::update_quantity($_REQUEST['product_id'])) {
-			self::_success('Confirm success','',1000);
+		empty($_POST['chk']) && self::_error('You haven\'t select any item!');
+		foreach ($_POST['chk'] as $id) {
+			$info = $this->dao->find($id);
+			if('back'!=$info['action']) {
+				//减库存
+				$where = array(
+					'type' => 'location',
+					'location_id' => 1,
+					'product_id'  => $info['product_id'],
+					);
+				$lp_id = M('LocationProduct')->where($where)->getField('id');
+				if (empty($lp_id)) {
+					self::_error('Local Storage empty!');
+				}
+				else {
+					if (!M('LocationProduct')->setDec('chg_quantity','id='.$lp_id,$info['quantity'])) {
+						self::_error('Change location product fail !'.(C('APP_DEBUG')?$this->dao->getLastSql():''));
+					}
+				}
+			}
+			if('apply'==$info['action'] || 'transfer'==$info['action']) {
+				//记入个人资产，或公共资产
+				$where = array(
+					'type'		  => 'apply'==$info['action'] ? 'staff' : 'location',
+					'location_id' => 'apply'==$info['action'] ? $info['staff_id'] : $info['to_id'],
+					'product_id'  => $info['product_id'],
+					);
+			}
+			elseif('back'==$info['action']) {
+				//返回库存
+				$where = array(
+					'type'		  => 'location',
+					'location_id' => 1,
+					'product_id'  => $info['product_id'],
+					);
+			}
+			$lp_id = M('LocationProduct')->where($where)->getField('id');
+			if(!empty($lp_id)) {
+				if (!M('LocationProduct')->setInc('chg_quantity','id='.$lp_id,$info['quantity'])) {
+					self::_error('Update location product fail!'.(C('APP_DEBUG')?$this->dao->getLastSql():''));
+				}
+			}
+			else {
+				M('LocationProduct')->type = 'apply'==$info['action'] ? 'staff' : 'location';
+				M('LocationProduct')->location_id = 'apply'==$info['action'] ? $info['staff_id'] : $info['to_id'];
+				M('LocationProduct')->product_id = $info['product_id'];
+				M('LocationProduct')->ori_quantity = 0;
+				M('LocationProduct')->chg_quantity = $info['quantity'];
+				if (!M('LocationProduct')->add()) {
+					self::_error('Insert location product fail!'.(C('APP_DEBUG')?$this->dao->getLastSql():''));
+				}
+			}
+
+			$data = array();
+			$data['id'] = $id;
+			$data['confirm_time'] = date("Y-m-d H:i:s");
+			$data['confirmed_staff_id'] = $_SESSION[C('USER_AUTH_KEY')];
+			$data['status'] = 1;
+			if (!$this->dao->save($data)) {
+				self::_error('Confirm fail!'.(C('APP_DEBUG')?$this->dao->getLastSql():''));
+			}
 		}
-		else{
-			self::_error('Something wrong!'.(C('APP_DEBUG')?$this->dao->getLastSql():''));
-		}
+		self::_success('Confirm success','',1000);
 	}
 
 	public function form() {
@@ -144,36 +191,7 @@ class ProductOutAction extends BaseAction{
 		}
 		else{
 			$this->dao->code = $_REQUEST['code'];
-			switch ($action) {
-				case 'apply':
-					$this->dao->source = 'Storage';
-					$this->dao->destination = 'Staff';
-					break;
-				case 'transfer':
-					$this->dao->source = 'Staff';
-					$this->dao->destination = 'Staff';
-					break;
-				case 'release':
-					$this->dao->source = 'Storage';
-					$this->dao->destination = 'Manufactory';
-					break;
-				case 'send':
-					$this->dao->source = 'Storage';
-					$this->dao->destination = 'Customer';
-					break;
-				case 'scrap':
-					$this->dao->source = 'Storage';
-					$this->dao->destination = 'Scrap';
-					break;
-				case 'returns':
-					$this->dao->source = 'Manufactory';
-					$this->dao->destination = 'Storage';
-					break;
-				default:
-					$this->dao->source = 'Storage';
-					$this->dao->destination = 'Staff';
-					break;
-			}
+			$this->dao->action = $action;
 			$this->dao->staff_id = $_SESSION[C('USER_AUTH_KEY')];
 			$this->dao->create_time = date("Y-m-d H:i:s");
 		}
@@ -191,17 +209,17 @@ class ProductOutAction extends BaseAction{
 		else{
 			if($this->dao->add()) {
 				if($action=='apply') {
-					self::_success('Product Request success !',__URL__.'/'.$action);
+					self::_success('Apply success !',__URL__.'/'.$action);
 				}
 				elseif('transfer'==$action) {
 					self::_success('Transfer success!',__URL__.'/'.$action);
 				}
 				else{
-					self::_success('Add product data success!',__URL__.'/'.$action);
+					self::_success('Operation success!',__URL__.'/'.$action);
 				}
 			}
 			else{
-					self::_error('Product entering fail!'.(C('APP_DEBUG')?$this->dao->getLastSql():''));
+					self::_error('Operation fail!'.(C('APP_DEBUG')?$this->dao->getLastSql():''));
 			}
 		}
 	}
