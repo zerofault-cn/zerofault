@@ -8,12 +8,12 @@
 	<td>No.</td>
 	<td><input type="text" maxlength="10" size="15" name="code" value="{$code}" readonly="true" /><img src="../Public/Images/lock.gif" /></td>
 </tr>
-<neq name="action" value="return">
+<if condition="$action neq 'return' and $info['action'] neq 'return'">
 <tr>
 	<td></td>
 	<td><input type="button" value="Select Component/Board" class="thickbox" alt="__APP__/Product/select/action/{$action}?width=600&height=300&modal=true"/></td>
 </tr>
-</neq>
+</if>
 <tr>
 	<td>Internal PN:</td>
 	<td><input type="text" size="15" id="Internal_PN" value="{$info['product']['Internal_PN']}" readonly="true" /><img src="../Public/Images/system.gif" /></td>
@@ -71,7 +71,7 @@
 <tr>
 	<td><if condition="$action eq 'return'">Return</if>
 	Quantity:</td>
-	<td><input type="text" maxlength="20" size="15" id="quantity" name="quantity" value="{$info.quantity}" onchange="calc_total()"/><input type="hidden" name="ori_quantity" value="{$info.quantity}"/></td>
+	<td><input type="text" maxlength="20" size="15" id="quantity" name="quantity" value="{$info['quantity']-$info['return_quantity']}" onchange="calc_total()"/><input type="hidden" name="ori_quantity" value="{$info['quantity']-$info['return_quantity']}"/></td>
 </tr>
 <tr>
 	<td>Unit Price:</td>
@@ -96,7 +96,7 @@
 <elseif condition="$action eq 'return'"/>
 <input type="submit" name="submit" value="Return the Product" />
 <else />
-<input type="submit" name="submit" value="Update Product Metadata"/>
+<input type="submit" name="submit" value="Update Information"/>
 </if>
 </p>
 </form>

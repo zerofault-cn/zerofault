@@ -6,7 +6,11 @@
 	<td colspan="2">{$item['description']}</td>
 	<td colspan="2">{$item['manufacture']}</td>
 	<td colspan="2">{$item['MPN']}</td>
+	<if condition="$action eq 'apply'">
+	<td>{$item['location_product'][0]['ori_quantity']+$item['location_product'][0]['chg_quantity']}</th>
+	<else />
 	<td style="background:#ffffff"></td>
+	</if>
 </tr>
 </iterate>
 <else />
@@ -18,7 +22,11 @@
 	<th colspan="2" id="title2">Description</th>
 	<th colspan="2" id="title3">Manufacture</th>
 	<th colspan="2" id="title4">MPN</th>
+	<if condition="$action eq 'apply'">
+	<th>Quantity</th>
+	<else />
 	<th style="background:#ffffff"></th>
+	</if>
 </tr>
 <tr id="key" bgcolor="#FCD5B4">
 	<td><select id="key_type" onchange="update_title(this.value);">
@@ -78,7 +86,9 @@ function do_select() {
 			$("#unit").val(json.unit.name);
 			$("#MOQ").val(json.MOQ);
 			$("#inventory_limit").val(json.inventory_limit);
-			$("#ori_quantity").val(parseInt(json.location_product[0].ori_quantity)+parseInt(json.location_product[0].chg_quantity));
+			if('apply'=='{$action}') {
+				$("#ori_quantity").val(parseInt(json.location_product[0].ori_quantity)+parseInt(json.location_product[0].chg_quantity));
+			}
 			tb_remove();
 		});
 		

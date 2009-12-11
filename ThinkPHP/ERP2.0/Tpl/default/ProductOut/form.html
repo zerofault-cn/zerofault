@@ -1,8 +1,8 @@
 <p class="page_title_text">
-<if condition="$action eq 'apply'">
-Apply Product
-<elseif condition="$action eq 'transfer'" />
-Product Transfer
+<if condition="$action neq ''">
+Product {$action|ucfirst}
+<elseif condition="$action eq '' and $info['action'] neq ''"/>
+Edit {$info['action']|ucfirst} Form
 </if>
 </p>
 <form name="form1" action="__URL__/submit" method="post" target="_iframe">
@@ -14,12 +14,12 @@ Product Transfer
 	<td>No.</td>
 	<td><input type="text" maxlength="10" size="15" name="code" value="{$code}" readonly="true" /><img src="../Public/Images/lock.gif" /></td>
 </tr>
-<eq name="action" value="apply">
+<if condition="$action eq 'apply' or ($action eq '' and $info['action'] eq 'apply')">
 <tr>
 	<td></td>
-	<td><input type="button" value="Select Component/Board" class="thickbox" alt="__APP__/Product/select/action/{$action}?width=600&height=300&modal=true"/></td>
+	<td><input type="button" value="Select Component/Board" class="thickbox" alt="__APP__/Product/select/action/apply?width=600&height=300&modal=true"/></td>
 </tr>
-</eq>
+</if>
 <tr>
 	<td>Internal PN:</td>
 	<td><input type="text" size="15" id="Internal_PN" value="{$info['product']['Internal_PN']}" readonly="true" /><img src="../Public/Images/system.gif" /></td>
@@ -55,7 +55,10 @@ Product Transfer
 <eq name="action" value="transfer">
 <tr>
 	<td>Transfer to:</td>
-	<td><select name="to_id"><option value="">Select One</option>{$info.target_opts}</select></td>
+	<td><select id="location_opts" onchange="select_location(this);"><option value="">Select One</option>{$info.location_opts}</select>
+		<select id="staff_opts" onchange="select_staff(this);"><option value="">Select One</option>{$info.staff_opts}</select>
+		<input type="hidden" name="to_type" id="to_type" value="" />
+		<input type="hidden" name="to_id" id="to_id" value="" /></td>
 </tr>
 </eq>
 <tr>
@@ -66,10 +69,35 @@ Product Transfer
 <p class="center">
 <if condition="empty($id)">
 <input type="submit" name="submit" value="Apply New Product"/>
-<elseif condition="$action eq 'return'"/>
+<elseif condition="$action eq 'back'"/>
 <input type="submit" name="submit" value="Return the Product" />
 <else />
-<input type="submit" name="submit" value="Update Product Infomation"/>
+<input type="submit" name="submit" value="Update Infomation"/>
 </if>
 </p>
 </form>
+<script language="JavaScript" type="text/javascript">
+$(document).ready(function(){
+	if('staff' == $("#location_opts").val()) {
+		$("#staff_opts").show();
+	}
+	else{
+		$("#staff_opts").hide();
+	}
+});
+function select_location(obj) {
+	if('staff' == $(obj).val()) {
+		$('#location_opts').show();
+		$('#to_type').val('staff');
+	}
+	else {
+		$("#staff_opts").hide();
+		$('#to_type').val('location');
+		$("#to_id").val($(obj).val());
+		
+	}
+}
+function select_staff(obj) {
+	$("#to_id").val($(obj).val());
+}
+</script>

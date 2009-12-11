@@ -49,10 +49,10 @@ class PublicAction extends BaseAction{
 			$_SESSION['loginUserName']		=	$authInfo['realname'];
 			if($authInfo['id']=='1') {
 				// 管理员不受权限控制影响
-				$_SESSION['administrator']	=	true;
+				$_SESSION[C('ADMIN_AUTH_KEY')]	=	true;
 			}
 			else{
-				$_SESSION['administrator']	=	false;
+				$_SESSION[C('ADMIN_AUTH_KEY')]	=	false;
 			}
 			// 缓存访问权限
 			RBAC::saveAccessList($authInfo['id']);

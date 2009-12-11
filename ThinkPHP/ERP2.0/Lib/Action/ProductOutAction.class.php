@@ -29,7 +29,7 @@ class ProductOutAction extends BaseAction{
 	Public function back() {
 		$this->index('back');
 	}
-	public function index($action='') {
+	public function index($action='apply') {
 		$rs = M('Options')->where(array('type'=>'unit'))->order('sort')->select();
 		$unit = array();
 		foreach($rs as $i=>$item) {
@@ -37,7 +37,7 @@ class ProductOutAction extends BaseAction{
 		}
 		$this->assign('unit', $unit);
 		
-		if(''==$action) {
+		if(!empty($_REQUEST['action'])) {
 			$action = $_REQUEST['action'];
 		}
 		$this->assign('action', $action);
@@ -58,7 +58,9 @@ class ProductOutAction extends BaseAction{
 			'action' => $action,
 			'status' => $status
 			);
-		
+		if(!$_SESSION[C('ADMIN_AUTH_KEY')]) {
+			$where['staff_id'] = $_SESSION[C('USER_AUTH_KEY')];
+		}
 		$count = $this->dao->where($where)->getField('count(*)');
 		import("@.Paginator");
 		$limit = 10;
@@ -102,6 +104,22 @@ class ProductOutAction extends BaseAction{
 					'location_id' => 'apply'==$info['action'] ? $info['staff_id'] : $info['to_id'],
 					'product_id'  => $info['product_id'],
 					);
+				$lp_id = M('LocationProduct')->where($where)->getField('id');
+				if(!empty($lp_id)) {
+					if (!M('LocationProduct')->setInc('chg_quantity','id='.$lp_id,$info['quantity'])) {
+						self::_error('Update location product fail!'.(C('APP_DEBUG')?$this->dao->getLastSql():''));
+					}
+				}
+				else {
+					M('LocationProduct')->type = 'apply'==$info['action'] ? 'staff' : 'location';
+					M('LocationProduct')->location_id = 'apply'==$info['action'] ? $info['staff_id'] : $info['to_id'];
+					M('LocationProduct')->product_id = $info['product_id'];
+					M('LocationProduct')->ori_quantity = 0;
+					M('LocationProduct')->chg_quantity = $info['quantity'];
+					if (!M('LocationProduct')->add()) {
+						self::_error('Insert location product fail!'.(C('APP_DEBUG')?$this->dao->getLastSql():''));
+					}
+				}
 			}
 			elseif('back'==$info['action']) {
 				//返回库存
@@ -110,21 +128,43 @@ class ProductOutAction extends BaseAction{
 					'location_id' => 1,
 					'product_id'  => $info['product_id'],
 					);
-			}
-			$lp_id = M('LocationProduct')->where($where)->getField('id');
-			if(!empty($lp_id)) {
-				if (!M('LocationProduct')->setInc('chg_quantity','id='.$lp_id,$info['quantity'])) {
-					self::_error('Update location product fail!'.(C('APP_DEBUG')?$this->dao->getLastSql():''));
+				$lp_id = M('LocationProduct')->where($where)->getField('id');
+				if(!empty($lp_id)) {
+					if (!M('LocationProduct')->setInc('chg_quantity','id='.$lp_id,$info['quantity'])) {
+						self::_error('Update location product fail!'.(C('APP_DEBUG')?$this->dao->getLastSql():''));
+					}
 				}
-			}
-			else {
-				M('LocationProduct')->type = 'apply'==$info['action'] ? 'staff' : 'location';
-				M('LocationProduct')->location_id = 'apply'==$info['action'] ? $info['staff_id'] : $info['to_id'];
-				M('LocationProduct')->product_id = $info['product_id'];
-				M('LocationProduct')->ori_quantity = 0;
-				M('LocationProduct')->chg_quantity = $info['quantity'];
-				if (!M('LocationProduct')->add()) {
-					self::_error('Insert location product fail!'.(C('APP_DEBUG')?$this->dao->getLastSql():''));
+				else {
+					M('LocationProduct')->type = 'apply'==$info['action'] ? 'staff' : 'location';
+					M('LocationProduct')->location_id = 'apply'==$info['action'] ? $info['staff_id'] : $info['to_id'];
+					M('LocationProduct')->product_id = $info['product_id'];
+					M('LocationProduct')->ori_quantity = 0;
+					M('LocationProduct')->chg_quantity = $info['quantity'];
+					if (!M('LocationProduct')->add()) {
+						self::_error('Insert location product fail!'.(C('APP_DEBUG')?$this->dao->getLastSql():''));
+					}
+				}
+				//如果是从个人或公共资产返库，从个人资产或公共资产减除
+				$where = array(
+					'type'		  => 'apply'==$info['action'] ? 'staff' : 'location',
+					'location_id' => 'apply'==$info['action'] ? $info['staff_id'] : $info['to_id'],
+					'product_id'  => $info['product_id'],
+					);
+				$lp_id = M('LocationProduct')->where($where)->getField('id');
+				if(!empty($lp_id)) {
+					if (!M('LocationProduct')->setInc('chg_quantity','id='.$lp_id,$info['quantity'])) {
+						self::_error('Update location product fail!'.(C('APP_DEBUG')?$this->dao->getLastSql():''));
+					}
+				}
+				else {
+					M('LocationProduct')->type = 'apply'==$info['action'] ? 'staff' : 'location';
+					M('LocationProduct')->location_id = 'apply'==$info['action'] ? $info['staff_id'] : $info['to_id'];
+					M('LocationProduct')->product_id = $info['product_id'];
+					M('LocationProduct')->ori_quantity = 0;
+					M('LocationProduct')->chg_quantity = $info['quantity'];
+					if (!M('LocationProduct')->add()) {
+						self::_error('Insert location product fail!'.(C('APP_DEBUG')?$this->dao->getLastSql():''));
+					}
 				}
 			}
 
@@ -149,9 +189,16 @@ class ProductOutAction extends BaseAction{
 			$info['unit'] = M('Options')->where("id=".$info['product']['unit_id'])->getField('name');
 			if('transfer'==$action) {
 				$code = 'T'.substr($info['code'],-9);
+				$location_arr = M('Location')->where(array('id'=>array('gt',1)))->select();
+				$location_arr[sizeof($location_arr)] = array('id' => 'staff', 'name' => 'Staff');
+				$info['location_opts'] = self::genOptions($location_arr, 'location'==$info['to_type'] ? $info['to_id'] : 'staff');
+				
+				$info['staff_opts'] = self::genOptions(M('Staff')->where(array('status'=>1))->select(), $info['to_id'], 'realname');
+				$id = 0;
 			}
-			elseif('returns'==$action) {
+			elseif('back'==$action) {
 				$code = 'R'.substr($info['code'], -9);
+				$id = 0;
 			}
 			else{
 				$code = $info['code'];
@@ -186,21 +233,27 @@ class ProductOutAction extends BaseAction{
 		empty($_REQUEST['product_id']) && self::_error('Select a product first!');
 		($_REQUEST['quantity']>$_REQUEST['ori_quantity']) && self::_error('Request quantity can\'t be larger than '.$_REQUEST['ori_quantity']);
 
-		if($action!='transfer' && $action!='returns' && !empty($id) && $id>0) {
+		if($action!='transfer' && $action!='back' && !empty($id) && $id>0) {
 			$this->dao->find($id);
 		}
 		else{
 			$this->dao->code = $_REQUEST['code'];
 			$this->dao->action = $action;
 			$this->dao->staff_id = $_SESSION[C('USER_AUTH_KEY')];
+			$this->dao->to_type = 'staff';
+			$this->dao->to_id = $_SESSION[C('USER_AUTH_KEY')];
 			$this->dao->create_time = date("Y-m-d H:i:s");
+		}
+		if('transfer'==$action) {
+			$this->dao->to_type = $_REQUEST['to_type'];
+			$this->dao->to_id = $_REQUEST['to_id'];
 		}
 		$this->dao->product_id = $_REQUEST['product_id'];
 		$this->dao->quantity = $_REQUEST['quantity'];
 		$this->dao->remark = $_REQUEST['remark'];
-		if($action!='transfer' && $action!='returns' && !empty($id) && $id>0) {
+		if($action!='transfer' && $action!='back' && !empty($id) && $id>0) {
 			if(false !== $this->dao->save()){
-				self::_success('Product information updated!',__URL__.'/'.$action);
+				self::_success('Product information updated!',__URL__.'/'.(''==$action?$this->dao->action:$action));
 			}
 			else{
 				self::_error('Update fail!'.(C('APP_DEBUG')?$this->dao->getLastSql():''));
@@ -222,6 +275,9 @@ class ProductOutAction extends BaseAction{
 					self::_error('Operation fail!'.(C('APP_DEBUG')?$this->dao->getLastSql():''));
 			}
 		}
+	}
+	public function delete() {
+		self::_delete();
 	}
 }
 ?>
