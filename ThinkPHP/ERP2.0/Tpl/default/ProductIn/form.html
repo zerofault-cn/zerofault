@@ -1,4 +1,10 @@
-<p class="page_title_text">Product entering infomation</p>
+<p class="page_title_text">
+<if condition="empty($action)">
+Product Entering Form
+<else />
+Product {$action|ucfirst} Form
+</if>
+</p>
 <form action="__URL__/submit" method="post" target="_iframe">
 <input type="hidden" name="id" value="{$id}" />
 <input type="hidden" name="action" value="{$action}" />
@@ -71,7 +77,7 @@
 <tr>
 	<td><if condition="$action eq 'return'">Return</if>
 	Quantity:</td>
-	<td><input type="text" maxlength="20" size="15" id="quantity" name="quantity" value="{$info['quantity']-$info['return_quantity']}" onchange="calc_total()"/><input type="hidden" name="ori_quantity" value="{$info['quantity']-$info['return_quantity']}"/></td>
+	<td><input type="text" maxlength="20" size="15" id="quantity" name="quantity" value="{$info['quantity']}" onchange="calc_total()"/><input type="hidden" name="ori_quantity" value="{$info['ori_quantity']}"/></td>
 </tr>
 <tr>
 	<td>Unit Price:</td>

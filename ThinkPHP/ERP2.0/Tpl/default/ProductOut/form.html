@@ -14,7 +14,7 @@ Edit {$info['action']|ucfirst} Form
 	<td>No.</td>
 	<td><input type="text" maxlength="10" size="15" name="code" value="{$code}" readonly="true" /><img src="../Public/Images/lock.gif" /></td>
 </tr>
-<if condition="$action eq 'apply' or ($action eq '' and $info['action'] eq 'apply')">
+<if condition="$action eq 'apply' or ($action eq '' and $info['action'] eq 'apply') or (empty($id) && $action eq 'transfer')">
 <tr>
 	<td></td>
 	<td><input type="button" value="Select Component/Board" class="thickbox" alt="__APP__/Product/select/action/apply?width=600&height=300&modal=true"/></td>
@@ -50,15 +50,17 @@ Edit {$info['action']|ucfirst} Form
 </tr>
 <tr>
 	<td>{$action|ucfirst} Quantity:</td>
-	<td><input type="text" maxlength="20" size="15" id="quantity" name="quantity" value="{$info['quantity']}"><input type="hidden" name="ori_quantity" id="ori_quantity" value="{$info['quantity']}"/></td>
+	<td><input type="text" maxlength="20" size="15" id="quantity" name="quantity" value="{$info['quantity']}"><input type="hidden" name="ori_quantity" id="ori_quantity" value="{$info['ori_quantity']}"/></td>
 </tr>
 <eq name="action" value="transfer">
 <tr>
 	<td>Transfer to:</td>
 	<td><select id="location_opts" onchange="select_location(this);"><option value="">Select One</option>{$info.location_opts}</select>
 		<select id="staff_opts" onchange="select_staff(this);"><option value="">Select One</option>{$info.staff_opts}</select>
-		<input type="hidden" name="to_type" id="to_type" value="" />
-		<input type="hidden" name="to_id" id="to_id" value="" /></td>
+		<input type="hidden" name="to_type" id="to_type" value="{$info['to_type']}" />
+		<input type="hidden" name="to_id" id="to_id" value="{$info['to_id']}" />
+		<input type="hidden" name="from_type" value="{$info['from_type']}" />
+		<input type="hidden" name="from_id" value="{$info['from_id']}" /></td>
 </tr>
 </eq>
 <tr>
@@ -67,12 +69,12 @@ Edit {$info['action']|ucfirst} Form
 </tr>
 </table>
 <p class="center">
-<if condition="empty($id)">
-<input type="submit" name="submit" value="Apply New Product"/>
+<if condition="empty($action)">
+<input type="submit" name="submit" value="Update Infomation"/>
 <elseif condition="$action eq 'back'"/>
 <input type="submit" name="submit" value="Return the Product" />
 <else />
-<input type="submit" name="submit" value="Update Infomation"/>
+<input type="submit" name="submit" value="{$action|ucfirst} the Product"/>
 </if>
 </p>
 </form>

@@ -47,8 +47,8 @@ class ProductInAction extends BaseAction{
 		$order = 'id desc';
 		$result = array();
 		foreach($this->dao->relation(true)->where($where)->order($order)->limit($p->offset.','.$p->limit)->select() as $item) {
-			$item['return_quantity'] = $this->dao->where(array('code'=>'B'.substr($item['code'],1),'status'=>1))->sum('quantity');
-			empty($item['return_quantity']) && ($item['return_quantity']=0);
+			$item['returned_quantity'] = $this->dao->where(array('code'=>'B'.substr($item['code'],-9),'status'=>1))->sum('quantity');
+			empty($item['returned_quantity']) && ($item['returned_quantity']=0);
 			$result[] = $item;
 		}
 		$this->assign('result', $result);
@@ -57,7 +57,7 @@ class ProductInAction extends BaseAction{
 		$this->display('Layout:ERP_layout');
 	}
 	public function returns() {
-		Session::set('action', '');
+		//Session::set('action', '');
 		$this->assign('action', 'return');
 
 		$rs = M('Options')->where(array('type'=>'unit'))->order('sort')->select();
@@ -70,13 +70,13 @@ class ProductInAction extends BaseAction{
 		if(isset($_REQUEST['status'])) {
 			$status = $_REQUEST['status'];
 		}
-		elseif(''!=(Session::get('staff_status'))) {
-			$status = Session::get('staff_status');
+		elseif(''!=(Session::get('return_status'))) {
+			$status = Session::get('return_status');
 		}
 		else{
 			$status = 0;
 		}
-		Session::set('staff_status', $atatus);
+		Session::set('return_status', $atatus);
 		$this->assign('status', $status);
 		
 		$where = array(
@@ -93,6 +93,111 @@ class ProductInAction extends BaseAction{
 		$this->assign('page', $p->showMultiNavi());
 		$this->assign('content','ProductIn:index');
 		$this->display('Layout:ERP_layout');
+	}
+	public function form() {
+		//Session::set('action', 'form');
+		$id = $_REQUEST['id'];
+		$action = $_REQUEST['action'];
+		if(!empty($id) && $id>0) {
+			$info = $this->dao->relation(true)->find($id);
+			$info['supplier_opts'] = self::genOptions(D('Supplier')->select(), $info['supplier_id']);
+			$info['currency_opts'] = self::genOptions(M('Options')->where(array('type'=>'currency'))->order('sort')->select(), $info['currency_id']);
+			if ('return'==$action) {//new return
+				$code = 'B'.substr($info['code'],-9);
+				$info['quantity'] = $info['ori_quantity'] = $info['quantity'] - $this->dao->where(array('code'=>$code,'status'=>1))->sum('quantity');
+				$id = 0;
+			}
+			elseif ('return'==$info['action']) {//edit return
+				$code = $info['code'];
+				$action = $info['action'];
+				$from_quantity = $this->dao->where(array('code'=>'A'.substr($code, -9)))->getField('quantity');
+				$info['ori_quantity'] =  $from_quantity - $this->dao->where(array('code'=>$code,'status'=>1))->sum('quantity');
+			}
+			else {//edit enter
+				$code = $info['code'];
+			}
+		}
+		else{//new enter
+			$info = array(
+				'supplier_opts' => self::genOptions(D('Supplier')->select()),
+				'currency_opts' => self::genOptions(M('Options')->where(array('type'=>'currency'))->order('sort')->select()),
+			);
+			$max_id = $this->dao->getField('max(id) as max_id');
+			empty($max_id) && ($max_id = 0);
+			$code = 'A'.sprintf("%09d",$max_id+1);
+		}
+		$this->assign('id', $id);
+		$this->assign('action', $action);
+		$this->assign('code', $code);
+
+		$this->assign('info', $info);
+		$this->assign('content', 'ProductIn:form');
+		$this->display('Layout:ERP_layout');
+	}
+	public function submit() {
+		if(empty($_POST['submit'])) {
+			return;
+		}
+		$id = $_REQUEST['id'];
+		$action = $_REQUEST['action'];
+		empty($_REQUEST['product_id']) && self::_error('Please select a component/board first!');
+		empty($_REQUEST['supplier_id']) && self::_error('Please select the supplier!');
+		empty($_REQUEST['currency_id']) && self::_error('Please select the currency type!');
+		empty($_REQUEST['quantity']) && self::_error('Quantity number required!');
+		empty($_REQUEST['price']) && self::_error('Price value required!');
+		
+		($_REQUEST['quantity']<0) && self::_error('Quantity number must be positive!');
+		('return'==$action) && ($_REQUEST['quantity']>$_REQUEST['ori_quantity']) && self::_error('Return quantity can\'t be larger than '.$_REQUEST['ori_quantity']);
+
+		if(!empty($id) && $id>0) {//from edit
+			$this->dao->find($id);
+		}
+		else{//from new
+			$this->dao->code = $_REQUEST['code'];
+			if($action=='return') {
+				$this->dao->action = 'return';
+			}
+			else{
+				$this->dao->action = 'enter';
+			}
+			$this->dao->staff_id = $_SESSION[C('USER_AUTH_KEY')];
+			$this->dao->create_time = date("Y-m-d H:i:s");
+		}
+		$this->dao->product_id = $_REQUEST['product_id'];
+		$this->dao->supplier_id = $_REQUEST['supplier_id'];
+		$this->dao->project = $_REQUEST['project'];
+		$this->dao->currency_id = $_REQUEST['currency_id'];
+		$this->dao->quantity = $_REQUEST['quantity'];
+		$this->dao->price = $_REQUEST['price'];
+		$this->dao->Lot = '';
+		$this->dao->accessories = $_REQUEST['accessories'];
+		$this->dao->remark = $_REQUEST['remark'];
+		if(!empty($id) && $id>0) {
+			if(false !== $this->dao->save()){
+				self::_success('Product information updated!',__URL__.('return'==$this->dao->action?'/returns':''));
+			}
+			else{
+				self::_error('Update fail!'.(C('APP_DEBUG')?$this->dao->getLastSql():''));
+			}
+		}
+		else{
+			if($this->dao->add()) {
+				if($action=='return') {
+					self::_success('Product ready for return!',__URL__.'/returns');
+				}
+				else{
+					self::_success('Product ready for entering!',__URL__);
+				}
+			}
+			else{
+				if($action=='return') {
+					self::_error('Product return fail!'.(C('APP_DEBUG')?$this->dao->getLastSql():''));
+				}
+				else{
+					self::_error('Product entering fail!'.(C('APP_DEBUG')?$this->dao->getLastSql():''));
+				}
+			}
+		}
 	}
 	public function confirm() {
 		if(empty($_POST['submit'])) {
@@ -155,109 +260,6 @@ class ProductInAction extends BaseAction{
 		self::_success('Confirm success','',1000);
 	}
 
-	public function form() {
-		Session::set('action', 'form');
-		$id = $_REQUEST['id'];
-		$action = $_REQUEST['action'];
-		if(!empty($id) && $id>0) {
-			$info = $this->dao->relation(true)->find($id);
-			$info['category'] = M('Category')->where("id=".$info['product']['category_id'])->getField('name');
-			$info['unit'] = M('Options')->where("id=".$info['product']['unit_id'])->getField('name');
-			$info['supplier_opts'] = self::genOptions(D('Supplier')->select(), $info['supplier_id']);
-			$info['currency_opts'] = self::genOptions(M('Options')->where(array('type'=>'currency'))->order('sort')->select(), $info['currency_id']);
-			if ('return'==$action) {
-				$code = 'B'.substr($info['code'],1);
-				$info['return_quantity'] = $this->dao->where(array('code'=>$code,'status'=>1))->sum('quantity');
-				empty($info['return_quantity']) && ($info['return_quantity']=0);
-			}
-			else {
-				$code = $info['code'];
-			}
-		}
-		else{
-			$info = array(
-				'product_opts' => self::genOptions(D('Product')->select(),'','MPN'),
-				'supplier_opts' => self::genOptions(D('Supplier')->select()),
-				'currency_opts' => self::genOptions(M('Options')->where(array('type'=>'currency'))->order('sort')->select()),
-				'unit_opts' => self::genOptions(M('Options')->where(array('type'=>'unit'))->order('sort')->select())
-			);
-			$max_id = $this->dao->getField('max(id) as max_id');
-			empty($max_id) && ($max_id = 0);
-			$code = 'A'.sprintf("%09d",$max_id+1);
-		}
-		$this->assign('id', $id);
-		$this->assign('action', $action);
-		$this->assign('code', $code);
-
-		$this->assign('info', $info);
-		$this->assign('ProductList', D('Product')->relation(true)->select());
-		$this->assign('content', 'ProductIn:form');
-		$this->display('Layout:ERP_layout');
-	}
-	public function submit() {
-		if(empty($_POST['submit'])) {
-			return;
-		}
-		$id = $_REQUEST['id'];
-		$action = $_REQUEST['action'];
-		empty($_REQUEST['product_id']) && self::_error('Please select a component/board first!');
-		empty($_REQUEST['supplier_id']) && self::_error('Please select the supplier!');
-		empty($_REQUEST['currency_id']) && self::_error('Please select the currency type!');
-		empty($_REQUEST['quantity']) && self::_error('Quantity number required!');
-		empty($_REQUEST['price']) && self::_error('Price value required!');
-		($_REQUEST['quantity']<0) && self::_error('Quantity number must be positive!');
-		('return'==$action) && ($_REQUEST['quantity']>$_REQUEST['ori_quantity']) && self::_error('Return quantity can\'t be larger than '.$_REQUEST['ori_quantity']);
-
-		if($action!='return' && !empty($id) && $id>0) {
-			$this->dao->find($id);
-		}
-		else{
-			$this->dao->code = $_REQUEST['code'];
-			if($action=='return') {
-				$this->dao->action = 'return';
-			}
-			else{
-				$this->dao->action = 'enter';
-			}
-			$this->dao->staff_id = $_SESSION[C('USER_AUTH_KEY')];
-			$this->dao->create_time = date("Y-m-d H:i:s");
-		}
-		$this->dao->product_id = $_REQUEST['product_id'];
-		$this->dao->supplier_id = $_REQUEST['supplier_id'];
-		$this->dao->project = $_REQUEST['project'];
-		$this->dao->currency_id = $_REQUEST['currency_id'];
-		$this->dao->quantity = $_REQUEST['quantity'];
-		$this->dao->price = $_REQUEST['price'];
-		$this->dao->Lot = '';
-		$this->dao->accessories = $_REQUEST['accessories'];
-		$this->dao->remark = $_REQUEST['remark'];
-		if($action!='return' && !empty($id) && $id>0) {
-			if(false !== $this->dao->save()){
-				self::_success('Product information updated!',__URL__.('return'==$this->dao->action?'/returns':''));
-			}
-			else{
-				self::_error('Update fail!'.(C('APP_DEBUG')?$this->dao->getLastSql():''));
-			}
-		}
-		else{
-			if($this->dao->add()) {
-				if($action=='return') {
-					self::_success('Product ready for return !',__URL__.'/returns');
-				}
-				else{
-					self::_success('Add product data success!',__URL__);
-				}
-			}
-			else{
-				if($action=='return') {
-					self::_error('Product return fail!'.(C('APP_DEBUG')?$this->dao->getLastSql():''));
-				}
-				else{
-					self::_error('Product entering fail!'.(C('APP_DEBUG')?$this->dao->getLastSql():''));
-				}
-			}
-		}
-	}
 	public function delete() {
 		self::_delete();
 	}

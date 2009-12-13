@@ -27,7 +27,7 @@ $menu['Storage inventory'] = array(
 $menu['Inventory&nbsp;output Management'] = array(
 	'name'	  => 'ProductOut/apply',
 	'submenu' => array(
-		'Apply Product'			=> 'ProductOut/apply',
+		'Product Apply'			=> 'ProductOut/apply',
 		'Product Transfer'		=> 'ProductOut/transfer',
 		'Components Release'	=> 'ProductOut/release',
 		'Scrap Product'			=> 'ProductOut/scrap',
@@ -35,11 +35,12 @@ $menu['Inventory&nbsp;output Management'] = array(
 		)
 	);
 
-$menu['Assets'] = array(
+$menu['My&nbsp;Assets'] = array(
 	'name' 	  => 'Asset',
 	'submenu' => array(
-		'My Assets'				=> 'Asset',
-		'Apply Assets'			=> 'Asset/apply',
+		'Applied'				=> 'Asset/apply',
+		'Transfer In'			=> 'Asset/transferIn',
+		'Transfer Out'			=> 'Asset/transferOut',
 		)
 	);
 

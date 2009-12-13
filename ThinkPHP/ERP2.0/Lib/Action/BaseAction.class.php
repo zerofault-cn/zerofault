@@ -66,7 +66,7 @@ class BaseAction extends Action{
 		}
 		$this->assign('topmenu', $topmenu);
 		$this->assign('submenu', $submenu);
-		$this->assign('action', Session::get('action'));
+		//$this->assign('action', Session::get('action'));
 		$this->assign("current_time", date("l, d/m/Y | h:i A"));//Thursday, 10/09/2009 | 11:53 AM
 		//检查认证识别号
 		if(!$_SESSION[C('USER_AUTH_KEY')] && 'Public'!=MODULE_NAME) {

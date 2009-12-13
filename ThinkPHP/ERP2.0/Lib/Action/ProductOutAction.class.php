@@ -45,21 +45,35 @@ class ProductOutAction extends BaseAction{
 		if(isset($_REQUEST['status'])) {
 			$status = $_REQUEST['status'];
 		}
-		elseif(''!=(Session::get('enter_status'))) {
-			$status = Session::get('enter_status');
+		elseif(''!=(Session::get($action.'_status'))) {
+			$status = Session::get($action.'_status');
 		}
 		else{
 			$status = 0;
 		}
-		Session::set('enter_status', $atatus);
+		Session::set($action.'_status', $atatus);
 		$this->assign('status', $status);
 
+		
 		$where = array(
 			'action' => $action,
 			'status' => $status
 			);
-		if(!$_SESSION[C('ADMIN_AUTH_KEY')]) {
-			$where['staff_id'] = $_SESSION[C('USER_AUTH_KEY')];
+		if(MODULE_NAME == 'Asset') {
+			if(ACTION_NAME == 'transferIn') {
+				$where['to_type'] = 'staff';
+				$where['to_id'] = $_SESSION[C('USER_AUTH_KEY')];
+			}
+			elseif (ACTION_NAME == 'transferOut') {
+				$where['from_type'] = 'staff';
+				$where['from_id'] = $_SESSION[C('USER_AUTH_KEY')];
+			}
+			else {
+				$where['_string'] = "(from_type='staff' and to_id =".$_SESSION[C('USER_AUTH_KEY')].") or (to_type='staff' and to_id = ".$_SESSION[C('USER_AUTH_KEY')].") or staff_id = ".$_SESSION[C('USER_AUTH_KEY')];
+			}
+		}
+		elseif(!$_SESSION[C('ADMIN_AUTH_KEY')]) {
+			$where['_string'] = "(from_type='staff' and to_id =".$_SESSION[C('USER_AUTH_KEY')].") or (to_type='staff' and to_id = ".$_SESSION[C('USER_AUTH_KEY')].") or staff_id = ".$_SESSION[C('USER_AUTH_KEY')];
 		}
 		$count = $this->dao->where($where)->getField('count(*)');
 		import("@.Paginator");
@@ -67,12 +81,164 @@ class ProductOutAction extends BaseAction{
 		$p = new Paginator($count,$limit);
 
 		$order = 'id desc';
-		$this->assign('result', $this->dao->relation(true)->where($where)->order($order)->limit($p->offset.','.$p->limit)->select());
+		$result = array();
+		foreach($this->dao->relation(true)->where($where)->order($order)->limit($p->offset.','.$p->limit)->select() as $item) {
+			$item['backed_quantity'] = $this->dao->where(array('code'=>'R'.substr($item['code'],-9),'status'=>1))->sum('quantity');
+			empty($item['backed_quantity']) && ($item['backed_quantity']=0);
+			$item['transfered_quantity'] = $this->dao->where(array('code'=>'T'.substr($item['code'],-9),'status'=>1))->sum('quantity');
+			empty($item['transfered_quantity']) && ($item['transfered_quantity']=0);
+			$result[] = $item;
+		}
+		$this->assign('result', $result);
 		$this->assign('page', $p->showMultiNavi());
 		$this->assign('content','ProductOut:index');
 		$this->display('Layout:ERP_layout');
 	}
-	
+
+	public function form() {
+		$id = $_REQUEST['id'];
+		$action = $_REQUEST['action'];
+		if(''==$action) {
+		//	$action = 'apply';
+		}
+		if(!empty($id) && $id>0) {
+			$info = $this->dao->relation(true)->find($id);
+			$info['category'] = M('Category')->where("id=".$info['product']['category_id'])->getField('name');
+			$info['unit'] = M('Options')->where("id=".$info['product']['unit_id'])->getField('name');
+			if('transfer'==$action) {//new transfer
+				$code = 'T'.substr($info['code'],-9);
+				$location_arr = M('Location')->where(array('id'=>array('gt',1)))->select();
+				$location_arr[] = array('id' => 'staff', 'name' => 'Staff');
+				$info['location_opts'] = self::genOptions($location_arr, 'location'==$info['to_type'] ? $info['to_id'] : 'staff');
+				$info['staff_opts'] = self::genOptions(M('Staff')->where(array('status'=>1))->select(), $info['to_id'], 'realname');
+				
+				$backed_quantity = $this->dao->where(array('code'=>'R'.substr($code,-9),'status'=>1))->sum('quantity');
+				$transfered_quantity = $this->dao->where(array('code'=>'T'.substr($code,-9),'status'=>1))->sum('quantity');
+				$info['quantity'] = $info['ori_quantity'] = $info['quantity'] - $backed_quantity - $transfered_quantity;
+				
+				$info['from_type'] = 'staff';
+				$info['from_id'] = $info['staff_id'];
+				
+				$id = 0;
+			}
+			elseif ('back'==$action) {//new back
+				$code = 'R'.substr($info['code'], -9);
+				$backed_quantity = $this->dao->where(array('code'=>'R'.substr($code,-9),'status'=>1))->sum('quantity');
+				$transfered_quantity = $this->dao->where(array('code'=>'T'.substr($code,-9),'status'=>1))->sum('quantity');
+				$info['quantity'] = $info['ori_quantity'] = $info['quantity'] - $backed_quantity - $transfered_quantity;
+				
+				$info['from_type'] = 'staff';
+				$info['from_id'] = $info['staff_id'];
+				
+				$id = 0;
+			}
+			elseif ('transfer'==$info['action'] || 'back' == $info['action']) {//edit transfer/back
+				$code = $info['code'];
+				$action = $info['action'];
+
+				$location_arr = M('Location')->where(array('id'=>array('gt',1)))->select();
+				$location_arr[] = array('id' => 'staff', 'name' => 'Staff');
+				$info['location_opts'] = self::genOptions($location_arr, 'location'==$info['to_type'] ? $info['to_id'] : 'staff');
+				$info['staff_opts'] = self::genOptions(M('Staff')->where(array('status'=>1))->select(), $info['to_id'], 'realname');
+				
+				$from_quantity = $this->dao->where(array('code'=>'Out'.substr($code, -9),'status'=>1))->getField('quantity');
+				$transfered_quantity = $this->dao->where(array('code'=>'T'.substr($code, -9),'status'=>1))->getField('quantity');
+				$backed_quantity = $this->dao->where(array('code'=>'R'.substr($code, -9),'status'=>1))->getField('quantity');
+				$info['ori_quantity'] = $from_quantity - $transfered_quantity - $transfered_quantity;
+			}
+			else{//edit other
+				$code = $info['code'];
+			}
+		}
+		else{
+			$info = array();
+
+			$location_arr = M('Location')->where(array('id'=>array('gt',1)))->select();
+			$location_arr[] = array('id' => 'staff', 'name' => 'Staff');
+			$info['location_opts'] = self::genOptions($location_arr, 'location'==$info['to_type'] ? $info['to_id'] : 'staff');
+			$info['staff_opts'] = self::genOptions(M('Staff')->where(array('status'=>1))->select(), $info['to_id'], 'realname');
+			$info['from_type'] = 'location';
+			$info['from_id'] = 1;
+				
+			$max_id = $this->dao->getField('max(id) as max_id');
+			empty($max_id) && ($max_id = 0);
+			$code = 'Out'.sprintf("%09d",$max_id+1);
+		}
+		$this->assign('id', $id);
+		$this->assign('action', $action);
+		$this->assign('code', $code);
+
+		$this->assign('info', $info);
+		$this->assign('content', 'ProductOut:form');
+		$this->display('Layout:ERP_layout');
+	}
+	public function submit() {
+		if(empty($_POST['submit'])) {
+			return;
+		}
+		$id = $_REQUEST['id'];
+		$action = $_REQUEST['action'];
+		empty($_REQUEST['product_id']) && self::_error('Select a product first!');
+		($_REQUEST['quantity']>$_REQUEST['ori_quantity']) && self::_error(ucfirst($action).'quantity can\'t be larger than '.$_REQUEST['ori_quantity']);
+
+		if(!empty($id) && $id>0) {//from edit
+			$this->dao->find($id);
+		}
+		else{//from new
+			$this->dao->code = $_REQUEST['code'];
+			$rs = $this->dao->where(array('code'=>$_REQUEST['code'],'status'=>0))->select();
+			if(!empty($rs)) {
+				self::_error('Last '.$action.' haven\'t confirmed yet!');
+			}
+			$this->dao->action = $action;
+			
+			$this->dao->from_type = 'location'; //new apply
+			$this->dao->from_id = 1;//new apply
+			$this->dao->to_type = 'staff'; //new apply
+			$this->dao->to_id = $_SESSION[C('USER_AUTH_KEY')];//new apply
+			$this->dao->staff_id = $_SESSION[C('USER_AUTH_KEY')];
+			$this->dao->create_time = date("Y-m-d H:i:s");
+		}
+		if('transfer'==$action) {
+			$this->dao->from_type = $_REQUEST['from_type'];
+			$this->dao->from_id = $_REQUEST['from_id'];
+			$this->dao->to_type = $_REQUEST['to_type'];
+			$this->dao->to_id = $_REQUEST['to_id'];
+		}
+		if('back'==$action) {
+			$this->dao->from_type = $_REQUEST['from_type'];
+			$this->dao->from_id = $_REQUEST['from_id'];
+			$this->dao->to_type = 'location';
+			$this->dao->to_id = 1;
+		}
+		$this->dao->product_id = $_REQUEST['product_id'];
+		$this->dao->quantity = $_REQUEST['quantity'];
+		$this->dao->remark = $_REQUEST['remark'];
+		if(!empty($id) && $id>0) {
+			if(false !== $this->dao->save()){
+				self::_success('Product information updated!',__URL__.'/'.(''==$action ? $this->dao->action : (MODULE_NAME=='Asset'?'':$action)));
+			}
+			else{
+				self::_error('Update fail!'.(C('APP_DEBUG')?$this->dao->getLastSql():''));
+			}
+		}
+		else{
+			if($this->dao->add()) {
+				if($action=='apply') {
+					self::_success('Apply success !',__URL__.'/'.$action);
+				}
+				elseif('transfer'==$action) {
+					self::_success('Transfer success!',__URL__.'/'.(MODULE_NAME=='Asset'?'':$action));
+				}
+				else{
+					self::_success('Operation success!',__URL__.'/'.$action);
+				}
+			}
+			else{
+					self::_error('Operation fail!'.(C('APP_DEBUG')?$this->dao->getLastSql():''));
+			}
+		}
+	}
 	public function confirm() {
 		if(empty($_POST['submit'])) {
 			return;
@@ -80,91 +246,41 @@ class ProductOutAction extends BaseAction{
 		empty($_POST['chk']) && self::_error('You haven\'t select any item!');
 		foreach ($_POST['chk'] as $id) {
 			$info = $this->dao->find($id);
-			if('back'!=$info['action']) {
-				//减库存
-				$where = array(
-					'type' => 'location',
-					'location_id' => 1,
-					'product_id'  => $info['product_id'],
-					);
-				$lp_id = M('LocationProduct')->where($where)->getField('id');
-				if (empty($lp_id)) {
-					self::_error('Local Storage empty!');
-				}
-				else {
-					if (!M('LocationProduct')->setDec('chg_quantity','id='.$lp_id,$info['quantity'])) {
-						self::_error('Change location product fail !'.(C('APP_DEBUG')?$this->dao->getLastSql():''));
-					}
+			//减库存，或减资产
+			$where = array(
+				'type' => $info['from_type'],
+				'location_id' => $info['from_id'],
+				'product_id'  => $info['product_id'],
+				);
+			$lp_id = M('LocationProduct')->where($where)->getField('id');
+			if (empty($lp_id)) {
+				self::_error('Inventory empty fail!');
+			}
+			else {
+				if (!M('LocationProduct')->setDec('chg_quantity','id='.$lp_id,$info['quantity'])) {
+					self::_error('Update inventory fail!'.(C('APP_DEBUG')?$this->dao->getLastSql():''));
 				}
 			}
-			if('apply'==$info['action'] || 'transfer'==$info['action']) {
-				//记入个人资产，或公共资产
-				$where = array(
-					'type'		  => 'apply'==$info['action'] ? 'staff' : 'location',
-					'location_id' => 'apply'==$info['action'] ? $info['staff_id'] : $info['to_id'],
-					'product_id'  => $info['product_id'],
-					);
-				$lp_id = M('LocationProduct')->where($where)->getField('id');
-				if(!empty($lp_id)) {
-					if (!M('LocationProduct')->setInc('chg_quantity','id='.$lp_id,$info['quantity'])) {
-						self::_error('Update location product fail!'.(C('APP_DEBUG')?$this->dao->getLastSql():''));
-					}
-				}
-				else {
-					M('LocationProduct')->type = 'apply'==$info['action'] ? 'staff' : 'location';
-					M('LocationProduct')->location_id = 'apply'==$info['action'] ? $info['staff_id'] : $info['to_id'];
-					M('LocationProduct')->product_id = $info['product_id'];
-					M('LocationProduct')->ori_quantity = 0;
-					M('LocationProduct')->chg_quantity = $info['quantity'];
-					if (!M('LocationProduct')->add()) {
-						self::_error('Insert location product fail!'.(C('APP_DEBUG')?$this->dao->getLastSql():''));
-					}
+			//加个人资产，或公共资产
+			$where = array(
+				'type'		  => $info['to_type'],
+				'location_id' => $info['to_id'],
+				'product_id'  => $info['product_id'],
+				);
+			$lp_id = M('LocationProduct')->where($where)->getField('id');
+			if(!empty($lp_id)) {
+				if (!M('LocationProduct')->setInc('chg_quantity','id='.$lp_id,$info['quantity'])) {
+					self::_error('Update inventory fail!'.(C('APP_DEBUG')?$this->dao->getLastSql():''));
 				}
 			}
-			elseif('back'==$info['action']) {
-				//返回库存
-				$where = array(
-					'type'		  => 'location',
-					'location_id' => 1,
-					'product_id'  => $info['product_id'],
-					);
-				$lp_id = M('LocationProduct')->where($where)->getField('id');
-				if(!empty($lp_id)) {
-					if (!M('LocationProduct')->setInc('chg_quantity','id='.$lp_id,$info['quantity'])) {
-						self::_error('Update location product fail!'.(C('APP_DEBUG')?$this->dao->getLastSql():''));
-					}
-				}
-				else {
-					M('LocationProduct')->type = 'apply'==$info['action'] ? 'staff' : 'location';
-					M('LocationProduct')->location_id = 'apply'==$info['action'] ? $info['staff_id'] : $info['to_id'];
-					M('LocationProduct')->product_id = $info['product_id'];
-					M('LocationProduct')->ori_quantity = 0;
-					M('LocationProduct')->chg_quantity = $info['quantity'];
-					if (!M('LocationProduct')->add()) {
-						self::_error('Insert location product fail!'.(C('APP_DEBUG')?$this->dao->getLastSql():''));
-					}
-				}
-				//如果是从个人或公共资产返库，从个人资产或公共资产减除
-				$where = array(
-					'type'		  => 'apply'==$info['action'] ? 'staff' : 'location',
-					'location_id' => 'apply'==$info['action'] ? $info['staff_id'] : $info['to_id'],
-					'product_id'  => $info['product_id'],
-					);
-				$lp_id = M('LocationProduct')->where($where)->getField('id');
-				if(!empty($lp_id)) {
-					if (!M('LocationProduct')->setInc('chg_quantity','id='.$lp_id,$info['quantity'])) {
-						self::_error('Update location product fail!'.(C('APP_DEBUG')?$this->dao->getLastSql():''));
-					}
-				}
-				else {
-					M('LocationProduct')->type = 'apply'==$info['action'] ? 'staff' : 'location';
-					M('LocationProduct')->location_id = 'apply'==$info['action'] ? $info['staff_id'] : $info['to_id'];
-					M('LocationProduct')->product_id = $info['product_id'];
-					M('LocationProduct')->ori_quantity = 0;
-					M('LocationProduct')->chg_quantity = $info['quantity'];
-					if (!M('LocationProduct')->add()) {
-						self::_error('Insert location product fail!'.(C('APP_DEBUG')?$this->dao->getLastSql():''));
-					}
+			else {
+				M('LocationProduct')->type = $info['to_type'];
+				M('LocationProduct')->location_id = $info['to_id'];
+				M('LocationProduct')->product_id = $info['product_id'];
+				M('LocationProduct')->ori_quantity = 0;
+				M('LocationProduct')->chg_quantity = $info['quantity'];
+				if (!M('LocationProduct')->add()) {
+					self::_error('Insert inventory fail!'.(C('APP_DEBUG')?$this->dao->getLastSql():''));
 				}
 			}
 
@@ -178,103 +294,6 @@ class ProductOutAction extends BaseAction{
 			}
 		}
 		self::_success('Confirm success','',1000);
-	}
-
-	public function form() {
-		$action = $_REQUEST['action'];
-		$id = $_REQUEST['id'];
-		if(!empty($id) && $id>0) {
-			$info = $this->dao->relation(true)->find($id);
-			$info['category'] = M('Category')->where("id=".$info['product']['category_id'])->getField('name');
-			$info['unit'] = M('Options')->where("id=".$info['product']['unit_id'])->getField('name');
-			if('transfer'==$action) {
-				$code = 'T'.substr($info['code'],-9);
-				$location_arr = M('Location')->where(array('id'=>array('gt',1)))->select();
-				$location_arr[sizeof($location_arr)] = array('id' => 'staff', 'name' => 'Staff');
-				$info['location_opts'] = self::genOptions($location_arr, 'location'==$info['to_type'] ? $info['to_id'] : 'staff');
-				
-				$info['staff_opts'] = self::genOptions(M('Staff')->where(array('status'=>1))->select(), $info['to_id'], 'realname');
-				$id = 0;
-			}
-			elseif('back'==$action) {
-				$code = 'R'.substr($info['code'], -9);
-				$id = 0;
-			}
-			else{
-				$code = $info['code'];
-			}
-		}
-		else{
-			$info = array(
-				'product_opts' => self::genOptions(D('Product')->select(),'','MPN'),
-				'supplier_opts' => self::genOptions(D('Supplier')->select()),
-				'currency_opts' => self::genOptions(M('Options')->where(array('type'=>'currency'))->order('sort')->select()),
-				'unit_opts' => self::genOptions(M('Options')->where(array('type'=>'unit'))->order('sort')->select())
-			);
-			$max_id = $this->dao->getField('max(id) as max_id');
-			empty($max_id) && ($max_id = 0);
-			$code = 'Out'.sprintf("%09d",$max_id+1);
-		}
-		$this->assign('id', $id);
-		$this->assign('action', $action);
-		$this->assign('code', $code);
-
-		$this->assign('info', $info);
-		$this->assign('ProductList', D('Product')->relation(true)->select());
-		$this->assign('content', 'ProductOut:form');
-		$this->display('Layout:ERP_layout');
-	}
-	public function submit() {
-		if(empty($_POST['submit'])) {
-			return;
-		}
-		$id = $_REQUEST['id'];
-		$action = $_REQUEST['action'];
-		empty($_REQUEST['product_id']) && self::_error('Select a product first!');
-		($_REQUEST['quantity']>$_REQUEST['ori_quantity']) && self::_error('Request quantity can\'t be larger than '.$_REQUEST['ori_quantity']);
-
-		if($action!='transfer' && $action!='back' && !empty($id) && $id>0) {
-			$this->dao->find($id);
-		}
-		else{
-			$this->dao->code = $_REQUEST['code'];
-			$this->dao->action = $action;
-			$this->dao->staff_id = $_SESSION[C('USER_AUTH_KEY')];
-			$this->dao->to_type = 'staff';
-			$this->dao->to_id = $_SESSION[C('USER_AUTH_KEY')];
-			$this->dao->create_time = date("Y-m-d H:i:s");
-		}
-		if('transfer'==$action) {
-			$this->dao->to_type = $_REQUEST['to_type'];
-			$this->dao->to_id = $_REQUEST['to_id'];
-		}
-		$this->dao->product_id = $_REQUEST['product_id'];
-		$this->dao->quantity = $_REQUEST['quantity'];
-		$this->dao->remark = $_REQUEST['remark'];
-		if($action!='transfer' && $action!='back' && !empty($id) && $id>0) {
-			if(false !== $this->dao->save()){
-				self::_success('Product information updated!',__URL__.'/'.(''==$action?$this->dao->action:$action));
-			}
-			else{
-				self::_error('Update fail!'.(C('APP_DEBUG')?$this->dao->getLastSql():''));
-			}
-		}
-		else{
-			if($this->dao->add()) {
-				if($action=='apply') {
-					self::_success('Apply success !',__URL__.'/'.$action);
-				}
-				elseif('transfer'==$action) {
-					self::_success('Transfer success!',__URL__.'/'.$action);
-				}
-				else{
-					self::_success('Operation success!',__URL__.'/'.$action);
-				}
-			}
-			else{
-					self::_error('Operation fail!'.(C('APP_DEBUG')?$this->dao->getLastSql():''));
-			}
-		}
 	}
 	public function delete() {
 		self::_delete();

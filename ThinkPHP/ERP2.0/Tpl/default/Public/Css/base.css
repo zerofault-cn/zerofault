@@ -49,6 +49,9 @@ table {
 	margin:0 auto;
 	background-color:#EEEEFF;
 }
+table.main, table.main td{
+	background-color:#FFFFFF;
+}
 th{
 	background-color:#9999CC;
 	ccolor:#330000;

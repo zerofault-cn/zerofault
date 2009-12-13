@@ -1,9 +1,6 @@
 <p class="page_title_text">
-<if condition="$action eq 'return'">
-Inventory return list
-<else />
-Inventory output list
-</if></p>
+{$action|ucfirst} List
+</p>
 <form action="__URL__/confirm" method="post" target="_iframe">
 <table >
 <tr>
@@ -14,11 +11,11 @@ Inventory output list
 	<td colspan="2">
 		<table cellpadding="3" border="1" bordercolor="#FFFFFF" style="border-collapse:collapse;">
 		<tr>
-			<th><input type="checkbox" id="checkall" onclick="checkAll();"/></th>
+			<neq name="status" value="1"><th><input type="checkbox" id="checkall" onclick="checkAll();"/></th></neq>
 			<th>No.</th>
 			<th>Product</th>
 			<th>Unit</th>
-			<th>Quantity</th>
+			<th>Quantity<if condition="ACTION_NAME eq 'apply' and $status eq 1">/Remain</if></th>
 			<th>{$action|ucfirst} Time</th>
 			<th>{$action|ucfirst} Staff</th>
 			<th>Confirmed Staff</th>
@@ -26,18 +23,19 @@ Inventory output list
 		</tr>
 		<iterate name="result" id="item">
 		<tr class="trbg{$mod}">
-			<td><input type="checkbox" name="chk[]" value="{$item['id']}" onclick="updateCheckAll(this);"/></td>
+			<neq name="status" value="1">
+			<td><input type="checkbox" name="chk[]" value="{$item['id']}" onclick="updateCheckAll(this);"/></td></neq>
 			<td>{$item['code']}</td>
 			<td>{$item['product']['MPN']}<input type="hidden" name="product_id[]" value="{$item['product_id']}"/></td>
 			<td>{$unit[$item['product']['unit_id']]}</td>
-			<td>{$item['quantity']}</td>
+			<td>{$item['quantity']}<if condition="ACTION_NAME eq 'apply' and $status eq 1">/{$item['quantity']-$item['backed_quantity']-$item['transfered_quantity']}</if></td>
 			<td>{$item['create_time']}</td>
 			<td align="center">{$item['staff']['name']}</td>
 			<td align="center">{$item['confirmed_staff']['name']}&nbsp;</td>
 			<td><if condition="$item['status'] eq 0">
 				<a href="__URL__/form/id/{$item['id']}">Edit</a>
 				<a href="__URL__/delete/id/{$item['id']}" target="_iframe">Delete</a>
-				<else />
+				<elseif condition="($item['quantity']-$item['backed_quantity']-$item['transfered_quantity']) gt 0" />
 					<if condition="$item['action'] eq 'apply'">
 				<a href="__URL__/form/action/transfer/id/{$item['id']}">Transfer</a>
 					</if>
@@ -56,9 +54,13 @@ Inventory output list
 </tr>
 </table>
 <p class="center">
-	<input type="submit" name="submit" value="Confirm Selected" />
-	<if condition="$action eq 'apply'">
-	<input type="button" onclick="javascript:document.location='__URL__/form/action/{$action}';" value="Apply a New Product" />
+	<if condition="MODULE_NAME eq 'Asset' and ACTION_NAME eq 'apply'">
+		<input type="button" onclick="javascript:document.location='__URL__/form/action/{$action}';" value="Apply a Product" />
+	<elseif condition="MODULE_NAME eq 'ProductOut' and ACTION_NAME eq 'transfer'" />
+		<input type="submit" name="submit" value="Confirm Selected" />
+		<input type="button" onclick="javascript:document.location='__URL__/form/action/{$action}';" value="Transfer a Product" />
+	<elseif condition="$status neq 1 and ACTION_NAME neq 'transferOut'" />
+		<input type="submit" name="submit" value="Confirm Selected" />
 	</if>
 </p>
 </form>
