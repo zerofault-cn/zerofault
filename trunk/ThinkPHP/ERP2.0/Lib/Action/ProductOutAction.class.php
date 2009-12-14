@@ -142,15 +142,17 @@ class ProductOutAction extends BaseAction{
 				$info['staff_opts'] = self::genOptions(M('Staff')->where(array('status'=>1))->select(), $info['to_id'], 'realname');
 				
 				$from_quantity = $this->dao->where(array('code'=>'Out'.substr($code, -9),'status'=>1))->getField('quantity');
-				$transfered_quantity = $this->dao->where(array('code'=>'T'.substr($code, -9),'status'=>1))->getField('quantity');
-				$backed_quantity = $this->dao->where(array('code'=>'R'.substr($code, -9),'status'=>1))->getField('quantity');
+				$transfered_quantity = $this->dao->where(array('code'=>'T'.substr($code, -9),'status'=>1))->sum('quantity');
+				$backed_quantity = $this->dao->where(array('code'=>'R'.substr($code, -9),'status'=>1))->sum('quantity');
 				$info['ori_quantity'] = $from_quantity - $transfered_quantity - $transfered_quantity;
 			}
-			else{//edit other
+			else{//edit apply
 				$code = $info['code'];
+				$rs = D('Product')->relation(true)->find($info['product_id']);
+				$info['ori_quantity'] = $rs['location_product'][0]['ori_quantity'] + $rs['location_product'][0]['chg_quantity'];
 			}
 		}
-		else{
+		else{//new apply/transfer
 			$info = array();
 
 			$location_arr = M('Location')->where(array('id'=>array('gt',1)))->select();
@@ -244,43 +246,53 @@ class ProductOutAction extends BaseAction{
 			return;
 		}
 		empty($_POST['chk']) && self::_error('You haven\'t select any item!');
+		sort($_POST['chk']);//先提交的先confirm
+		dump($_POST['chk']);
 		foreach ($_POST['chk'] as $id) {
 			$info = $this->dao->find($id);
-			//减库存，或减资产
-			$where = array(
-				'type' => $info['from_type'],
-				'location_id' => $info['from_id'],
-				'product_id'  => $info['product_id'],
-				);
-			$lp_id = M('LocationProduct')->where($where)->getField('id');
-			if (empty($lp_id)) {
-				self::_error('Inventory empty fail!');
-			}
-			else {
-				if (!M('LocationProduct')->setDec('chg_quantity','id='.$lp_id,$info['quantity'])) {
-					self::_error('Update inventory fail!'.(C('APP_DEBUG')?$this->dao->getLastSql():''));
+			if('back' != $info['action']) {
+				//减库存，或减资产
+				$where = array(
+					'type' => $info['from_type'],
+					'location_id' => $info['from_id'],
+					'product_id'  => $info['product_id'],
+					);
+				$rs = M('LocationProduct')->where($where)->find();
+				if (empty($rs)) {
+					self::_error('Inventory empty fail!');
+				}
+				elseif ($rs['ori_quantity']+$rs['chg_quantity']<$info['quantity']) {
+					self::_error('Inventory insufficient!');
+				}
+				else {
+					if (!M('LocationProduct')->setDec('chg_quantity','id='.$rs['id'], $info['quantity'])) {
+						self::_error('Update inventory fail!'.(C('APP_DEBUG')?$this->dao->getLastSql():''));
+					}
 				}
 			}
-			//加个人资产，或公共资产
-			$where = array(
-				'type'		  => $info['to_type'],
-				'location_id' => $info['to_id'],
-				'product_id'  => $info['product_id'],
-				);
-			$lp_id = M('LocationProduct')->where($where)->getField('id');
-			if(!empty($lp_id)) {
-				if (!M('LocationProduct')->setInc('chg_quantity','id='.$lp_id,$info['quantity'])) {
-					self::_error('Update inventory fail!'.(C('APP_DEBUG')?$this->dao->getLastSql():''));
+			if('release' != $info['action'] && 'scrap' != $info['action']) {
+				//加个人资产，或公共资产
+				$where = array(
+					'type'		  => $info['to_type'],
+					'location_id' => $info['to_id'],
+					'product_id'  => $info['product_id'],
+					);
+				$lp_id = M('LocationProduct')->where($where)->getField('id');
+				if(!empty($lp_id)) {
+					if (!M('LocationProduct')->setInc('chg_quantity','id='.$lp_id,$info['quantity'])) {
+						self::_error('Update inventory fail!'.(C('APP_DEBUG')?$this->dao->getLastSql():''));
+					}
 				}
-			}
-			else {
-				M('LocationProduct')->type = $info['to_type'];
-				M('LocationProduct')->location_id = $info['to_id'];
-				M('LocationProduct')->product_id = $info['product_id'];
-				M('LocationProduct')->ori_quantity = 0;
-				M('LocationProduct')->chg_quantity = $info['quantity'];
-				if (!M('LocationProduct')->add()) {
-					self::_error('Insert inventory fail!'.(C('APP_DEBUG')?$this->dao->getLastSql():''));
+				else {
+					M('LocationProduct')->id = 0;
+					M('LocationProduct')->type = $info['to_type'];
+					M('LocationProduct')->location_id = $info['to_id'];
+					M('LocationProduct')->product_id = $info['product_id'];
+					M('LocationProduct')->ori_quantity = 0;
+					M('LocationProduct')->chg_quantity = $info['quantity'];
+					if (!M('LocationProduct')->add()) {
+						self::_error('Insert inventory fail!'.(C('APP_DEBUG')?$this->dao->getLastSql():''));
+					}
 				}
 			}
 
@@ -295,6 +307,10 @@ class ProductOutAction extends BaseAction{
 		}
 		self::_success('Confirm success','',1000);
 	}
+	public function select() {
+		R('Product', 'select');
+	}
+
 	public function delete() {
 		self::_delete();
 	}

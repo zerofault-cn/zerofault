@@ -84,7 +84,8 @@ class ProductAction extends BaseAction{
 			}
 		}
 		$this->assign('action', $action);
-		$this->display();
+		$this->assign('content', 'Product:select');
+		$this->display('Layout:content');
 	}
 	public function submit() {
 		if(empty($_POST['submit'])) {

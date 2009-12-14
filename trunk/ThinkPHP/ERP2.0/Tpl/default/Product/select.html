@@ -13,6 +13,11 @@
 	</if>
 </tr>
 </iterate>
+<if condition="empty($result)">
+<tr>
+	<td colspan="11" align="center">Inventory Empty</td>
+</tr>
+</if>
 <else />
 <p class="page_title_text">Select Component/Board</p>
 <table id="search_table" cellpadding="3" border="1" bordercolor="#FFFFFF" style="border-collapse:collapse;">
@@ -86,9 +91,10 @@ function do_select() {
 			$("#unit").val(json.unit.name);
 			$("#MOQ").val(json.MOQ);
 			$("#inventory_limit").val(json.inventory_limit);
-			if('apply'=='{$action}') {
+			//if('apply'=='{$action}') {
 				$("#ori_quantity").val(parseInt(json.location_product[0].ori_quantity)+parseInt(json.location_product[0].chg_quantity));
-			}
+				$("#max_quantity").html(parseInt(json.location_product[0].ori_quantity)+parseInt(json.location_product[0].chg_quantity));
+			//}
 			tb_remove();
 		});
 		

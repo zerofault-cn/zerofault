@@ -18,7 +18,11 @@ class BaseAction extends Action{
 
 		import('@.RBAC');
 
-		!empty($_REQUEST['top']) && Session::set('top', urldecode($_REQUEST['top']));
+		$top = $_REQUEST['top'];
+		empty($top) && ($top = Session::get('top'));
+		empty($top) && ($top = 'My Assets');
+		Session::set('top', urldecode($top));
+		
 		$_menu_ = C('_menu_');
 		$menu = $_menu_['menu'];
 		$topmenu = array();

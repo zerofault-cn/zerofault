@@ -11,7 +11,9 @@
 	<td colspan="2">
 		<table cellpadding="3" border="1" bordercolor="#FFFFFF" style="border-collapse:collapse;">
 		<tr>
-			<neq name="status" value="1"><th><input type="checkbox" id="checkall" onclick="checkAll();"/></th></neq>
+			<if condition="$status neq 1 and (MODULE_NAME neq 'Asset' or (MODULE_NAME eq 'Asset' and ACTION_NAME eq 'transferIn'))">
+			<th><input type="checkbox" id="checkall" onclick="checkAll();"/></th>
+			</if>
 			<th>No.</th>
 			<th>Product</th>
 			<th>Unit</th>
@@ -23,8 +25,9 @@
 		</tr>
 		<iterate name="result" id="item">
 		<tr class="trbg{$mod}">
-			<neq name="status" value="1">
-			<td><input type="checkbox" name="chk[]" value="{$item['id']}" onclick="updateCheckAll(this);"/></td></neq>
+			<if condition="$status neq 1 and (MODULE_NAME neq 'Asset' or (MODULE_NAME eq 'Asset' and ACTION_NAME eq 'transferIn'))">
+			<td><input type="checkbox" name="chk[]" value="{$item['id']}" onclick="updateCheckAll(this);"/></td>
+			</if>
 			<td>{$item['code']}</td>
 			<td>{$item['product']['MPN']}<input type="hidden" name="product_id[]" value="{$item['product_id']}"/></td>
 			<td>{$unit[$item['product']['unit_id']]}</td>
@@ -56,10 +59,10 @@
 <p class="center">
 	<if condition="MODULE_NAME eq 'Asset' and ACTION_NAME eq 'apply'">
 		<input type="button" onclick="javascript:document.location='__URL__/form/action/{$action}';" value="Apply a Product" />
-	<elseif condition="MODULE_NAME eq 'ProductOut' and ACTION_NAME eq 'transfer'" />
+	<elseif condition="MODULE_NAME eq 'ProductOut' and ACTION_NAME neq 'apply' and ACTION_NAME neq 'back'" />
 		<input type="submit" name="submit" value="Confirm Selected" />
-		<input type="button" onclick="javascript:document.location='__URL__/form/action/{$action}';" value="Transfer a Product" />
-	<elseif condition="$status neq 1 and ACTION_NAME neq 'transferOut'" />
+		<input type="button" onclick="javascript:document.location='__URL__/form/action/{$action}';" value="{$Think.ACTION_NAME|ucfirst} a Product" />
+	<elseif condition="$status neq 1 and (MODULE_NAME neq 'Asset' or (MODULE_NAME eq 'Asset' and ACTION_NAME eq 'transferIn'))" />
 		<input type="submit" name="submit" value="Confirm Selected" />
 	</if>
 </p>

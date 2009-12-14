@@ -87,6 +87,7 @@ class StaffAction extends BaseAction{
 				self::_error('The name: '.$name.' has been used by another staff!');
 			}
 			$this->dao->code = $_REQUEST['code'];
+			$this->dao->password = md5(trim($_REQUEST['password']));
 			$this->dao->create_time = date("Y-m-d H:i:s");
 		}
 		$this->dao->name = $name;
