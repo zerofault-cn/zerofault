@@ -38,6 +38,9 @@ class AssetAction extends BaseAction{
 	public function confirm() {
 		R('ProductOut', 'confirm');
 	}
+	public function select() {
+		R('Product', 'select');
+	}
 
 }
 ?>

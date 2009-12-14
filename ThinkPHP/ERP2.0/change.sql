@@ -8,7 +8,7 @@ ALTER TABLE erp_product_flow CHANGE source target_type ENUM('location','staff') 
 ALTER TABLE erp_product_flow CHANGE destination target_id SMALLINT UNSIGNED NOT NULL;
 ALTER TABLE erp_product_flow ADD action ENUM('enter','return','apply','transfer','release','scrap','back')  NOT NULL after code;
 
-ALTER TABLE erp_product_flow CHANGE target_type from_type ENUM('location','staff')  NOT NULL
+ALTER TABLE erp_product_flow CHANGE target_type from_type ENUM('location','staff')  NOT NULL;
 ALTER TABLE erp_product_flow CHANGE target_id from_id SMALLINT  UNSIGNED NOT NULL;
 
 ALTER TABLE erp_product_flow ADD to_type ENUM('location','staff')  NOT NULL AFTER from_id;
