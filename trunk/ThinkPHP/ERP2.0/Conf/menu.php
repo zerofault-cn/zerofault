@@ -8,7 +8,7 @@ $menu['Basic&nbsp;Data'] = array(
 		'Department information'=> 'Dept',
 		'Staff information'		=> 'Staff',
 		'Category'				=> 'Category',
-		'Component Data'		=> 'Product',
+		'Component and Fixed assets'=> 'Product',
 		'Board Data'			=> 'Board',
 		)
 	);
@@ -20,7 +20,7 @@ $menu['Inventory&nbsp;Input Management'] = array(
 		'Product Return'		=> 'ProductIn/returns',
 		)
 	);
-$menu['Storage inventory'] = array(
+$menu['Inventory Inquire'] = array(
 	'name' => 'Inventory',
 	);
 
@@ -38,7 +38,7 @@ $menu['Inventory&nbsp;output Management'] = array(
 $menu['My&nbsp;Assets'] = array(
 	'name' 	  => 'Asset',
 	'submenu' => array(
-		'Apply'				=> 'Asset/apply',
+		'Apply'				=> 'Asset',
 		'Transfer In'			=> 'Asset/transferIn',
 		'Transfer Out'			=> 'Asset/transferOut',
 		)

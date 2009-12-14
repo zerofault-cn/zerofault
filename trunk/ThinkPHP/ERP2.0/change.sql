@@ -18,3 +18,8 @@ ALTER TABLE erp_product_flow DROP confirmed_quantity;
 ALTER TABLE erp_product_flow CHANGE project project VARCHAR(255)  NOT NULL;
 
 ALTER TABLE erp_product DROP project;
+
+
+ALTER TABLE erp_product ADD project VARCHAR(255)  NOT NULL AFTER MSL;
+
+ALTER TABLE erp_product_flow DROP project;

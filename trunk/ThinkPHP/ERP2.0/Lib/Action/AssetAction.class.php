@@ -8,14 +8,29 @@
 */
 class AssetAction extends BaseAction{
 
-
+	protected $dao;
+	
 	public function _initialize() {
-		$this->dao = D('ProductFlow');
+		$this->dao = D('LocationProductView');
 		parent::_initialize();
 	}
 
 	public function index(){
-		self::apply();
+		$rs = $this->dao->where(array('LocationProduct.type'=>'staff', 'location_id'=>$_SESSION[C('USER_AUTH_KEY')]))->select();
+		$result = array();
+		foreach($rs as $item) {
+			if(!array_key_exists($item['category_name'], $result)) {
+				$result[$item['category_name']] = array();
+			}
+			if(!isset($default_category)) {
+				$default_category = $item['category_name'];
+			}
+			$result[$item['category_name']][] = $item;
+		}
+		$this->assign('default_category', $default_category);
+		$this->assign('result', $result);
+		$this->assign('content', 'Asset:index');
+		$this->display('Layout:ERP_layout');
 	}
 	public function transfer() {
 		R('ProductOut', 'transfer');

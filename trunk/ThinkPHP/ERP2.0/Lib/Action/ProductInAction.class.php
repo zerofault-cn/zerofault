@@ -167,7 +167,6 @@ class ProductInAction extends BaseAction{
 		}
 		$this->dao->product_id = $_REQUEST['product_id'];
 		$this->dao->supplier_id = $_REQUEST['supplier_id'];
-		$this->dao->project = $_REQUEST['project'];
 		$this->dao->currency_id = $_REQUEST['currency_id'];
 		$this->dao->quantity = $_REQUEST['quantity'];
 		$this->dao->price = $_REQUEST['price'];
