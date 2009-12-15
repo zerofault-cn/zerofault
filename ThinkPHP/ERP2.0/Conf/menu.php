@@ -2,7 +2,7 @@
 $menu = array();
 
 $menu['Basic&nbsp;Data'] = array(
-	'name'	  => 'Supplier',//Ĭ�ϲ���Module.index
+	'name'	  => 'Supplier',//默认Action:Module.index
 	'submenu' => array(
 		'Supplier information'	=> 'Supplier',
 		'Department information'=> 'Dept',
@@ -38,7 +38,8 @@ $menu['Inventory&nbsp;output Management'] = array(
 $menu['My&nbsp;Assets'] = array(
 	'name' 	  => 'Asset',
 	'submenu' => array(
-		'Apply'				=> 'Asset/apply',
+		'Asset List'			=> 'Asset',
+		'Apply'					=> 'Asset/apply',
 		'Transfer In'			=> 'Asset/transferIn',
 		'Transfer Out'			=> 'Asset/transferOut',
 		)
