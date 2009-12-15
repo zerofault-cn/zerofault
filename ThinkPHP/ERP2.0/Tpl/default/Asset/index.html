@@ -13,7 +13,7 @@
 		<if condition="$key eq $default_category">
 		<table class="clsTab" cellpadding="3" border="1" bordercolor="#FFFFFF" style="border-collapse:collapse;" id="{$key}">
 		<else />
-		<table class="clsTab" cellpadding="3" border="1" bordercolor="#FFFFFF" style="border-collapse:collapse;" id="{$key}" style="display:none">
+		<table class="clsTab" cellpadding="3" border="1" bordercolor="#FFFFFF" style="border-collapse:collapse;display:none" id="{$key}">
 		</if>
 		<tr>
 			<th>No.</th>
@@ -39,7 +39,6 @@
 			
 		</tr>
 		</iterate>
-		
 		</table>
 		</form>
 	</iterate>
