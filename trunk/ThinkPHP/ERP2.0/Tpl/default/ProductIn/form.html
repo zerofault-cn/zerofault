@@ -45,8 +45,12 @@ Product {$action|ucfirst} Form
 	<td><input type="text" size="15" id="value" value="{$info['product']['value']}" readonly="true"/><img src="../Public/Images/system.gif" /></td>
 </tr>
 <tr>
+	<td>Project:</td>
+	<td><input type="text" size="15" id="project" value="{$info['product']['project']}" readonly="true"/><img src="../Public/Images/system.gif" /></td>
+</tr>
+<tr>
 	<td>Unit:</td>
-	<td><input type="text" size="15" id="unit" value="{$info['unit']}" readonly="true"/><img src="../Public/Images/system.gif" /></td>
+	<td><input type="text" size="15" id="unit" value="{$info['unit']}" readonly="true"/> readonly="true"</td>
 </tr>
 <tr>
 	<td>MOQ:</td>
@@ -65,10 +69,6 @@ Product {$action|ucfirst} Form
 		<else />
 		<select name="supplier_id">{$info.supplier_opts}</select>
 		</if></td>
-</tr>
-<tr>
-	<td>Project:</td>
-	<td><input type="text" maxlength="20" size="15" name="project" value="{$info.project}"/></td>
 </tr>
 <tr>
 	<td>Currency:</td>
