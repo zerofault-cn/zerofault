@@ -24,9 +24,9 @@ class CategoryAction extends BaseAction{
 		$default_category_type = Session::get('default_category_type');
 		empty($default_category_type) && ($default_category_type = 'Component');
 		
-		$max_id = $this->dao->getField('max(id) as max_id');
-		empty($max_id) && ($max_id = 0);
-		$code = 'P'.sprintf("%03d",$max_id+1);
+		$max_code = $this->dao->max('code');
+		empty($max_code) && ($max_code = 'P'.sprintf("%03d",0));
+		$code = ++ $max_code;
 		
 		$this->assign('result', $result);
 		$this->assign('default_type', $default_category_type);
@@ -35,6 +35,9 @@ class CategoryAction extends BaseAction{
 		$this->display('Layout:ERP_layout');
 	}
 
+	/**
+	* useless
+	*/
 	private function form() {
 		$id = $_REQUEST['id'];
 		if(!empty($id) && $id>0) {
@@ -76,7 +79,10 @@ class CategoryAction extends BaseAction{
 			if($rs && sizeof($rs)>0){
 				self::_error('Category Name: '.$name.' exists already!');
 			}
-			$this->dao->code = $_REQUEST['code'];
+			$max_code = $this->dao->max('code');
+			empty($max_code) && ($max_code = 'P'.sprintf("%03d",0));
+			$code = ++ $max_code;
+			$this->dao->code = $code;
 		}
 		$this->dao->type = $type;
 		$this->dao->name = $name;

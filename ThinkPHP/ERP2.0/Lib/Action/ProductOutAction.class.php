@@ -73,7 +73,7 @@ class ProductOutAction extends BaseAction{
 			}
 		}
 		elseif(!$_SESSION[C('ADMIN_AUTH_KEY')]) {
-			$where['_string'] = "(from_type='staff' and to_id =".$_SESSION[C('USER_AUTH_KEY')].") or (to_type='staff' and to_id = ".$_SESSION[C('USER_AUTH_KEY')].") or staff_id = ".$_SESSION[C('USER_AUTH_KEY')];
+		//	$where['_string'] = "(from_type='staff' and to_id =".$_SESSION[C('USER_AUTH_KEY')].") or (to_type='staff' and to_id = ".$_SESSION[C('USER_AUTH_KEY')].") or staff_id = ".$_SESSION[C('USER_AUTH_KEY')];
 		}
 		$count = $this->dao->where($where)->getField('count(*)');
 		import("@.Paginator");
@@ -152,9 +152,8 @@ class ProductOutAction extends BaseAction{
 				$info['ori_quantity'] = $rs['location_product'][0]['ori_quantity'] + $rs['location_product'][0]['chg_quantity'];
 			}
 		}
-		else{//new apply/transfer
+		else{//new apply/transfer/release/scrap
 			$info = array();
-
 			$location_arr = M('Location')->where(array('id'=>array('gt',1)))->select();
 			$location_arr[] = array('id' => 'staff', 'name' => 'Staff');
 			$info['location_opts'] = self::genOptions($location_arr, 'location'==$info['to_type'] ? $info['to_id'] : 'staff');
@@ -162,9 +161,9 @@ class ProductOutAction extends BaseAction{
 			$info['from_type'] = 'location';
 			$info['from_id'] = 1;
 				
-			$max_id = $this->dao->getField('max(id) as max_id');
-			empty($max_id) && ($max_id = 0);
-			$code = 'Out'.sprintf("%09d",$max_id+1);
+			$max_code = $this->dao->where(array('code'=>array('like','Out%')))->max('code');
+			empty($max_code) && ($max_code = 'Out'.sprintf("%09d",0));
+			$code = ++ $max_code;
 		}
 		$this->assign('id', $id);
 		$this->assign('action', $action);
@@ -187,10 +186,15 @@ class ProductOutAction extends BaseAction{
 			$this->dao->find($id);
 		}
 		else{//from new
-			$this->dao->code = $_REQUEST['code'];
-			$rs = $this->dao->where(array('code'=>$_REQUEST['code'],'status'=>0))->select();
-			if(!empty($rs)) {
-				self::_error('Last '.$action.' haven\'t confirmed yet!');
+			$max_code = $this->dao->where(array('code'=>array('like','Out%')))->max('code');
+			empty($max_code) && ($max_code = 'Out'.sprintf("%09d",0));
+			$code = ++ $max_code;
+			$this->dao->code = $code;
+			if('transfer'==$action || 'back'==$action) {
+				$rs = $this->dao->where(array('code'=>$_REQUEST['code'],'status'=>0))->select();
+				if(!empty($rs)) {
+					self::_error('Last '.$action.' haven\'t confirmed yet!');
+				}
 			}
 			$this->dao->action = $action;
 			
@@ -202,12 +206,14 @@ class ProductOutAction extends BaseAction{
 			$this->dao->create_time = date("Y-m-d H:i:s");
 		}
 		if('transfer'==$action) {
+			$this->dao->code = $_REQUEST['code'];
 			$this->dao->from_type = $_REQUEST['from_type'];
 			$this->dao->from_id = $_REQUEST['from_id'];
 			$this->dao->to_type = $_REQUEST['to_type'];
 			$this->dao->to_id = $_REQUEST['to_id'];
 		}
 		if('back'==$action) {
+			$this->dao->code = $_REQUEST['code'];
 			$this->dao->from_type = $_REQUEST['from_type'];
 			$this->dao->from_id = $_REQUEST['from_id'];
 			$this->dao->to_type = 'location';

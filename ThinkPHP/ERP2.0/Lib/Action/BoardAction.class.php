@@ -38,9 +38,9 @@ class BoardAction extends BaseAction{
 				'unit_opts' => self::genOptions(M('Options')->where(array('type'=>'unit'))->order('sort')->select()),
 				'status_opts' => self::genOptions(M('Options')->where(array('type'=>'status'))->order('sort')->select())
 				);
-			$max_id = $this->dao->getField('max(id) as max_id');
-			empty($max_id) && ($max_id = 0);
-			$code = 'B'.sprintf("%09d",$max_id+1);
+			$max_code = $this->dao->where(array('type'=>'Board'))->max('code');
+			empty($max_code) && ($max_code = 'B'.sprintf("%09d",0));
+			$code = ++ $max_code;
 		}
 		$this->assign('code', $code);
 		$this->assign('info', $info);
@@ -67,7 +67,9 @@ class BoardAction extends BaseAction{
 			if($rs && sizeof($rs)>0){
 				self::_error('Internal PN: '.$PN.' has been used by another component!');
 			}
-			$this->dao->code = $_REQUEST['code'];
+			$max_code = $this->dao->where(array('type'=>'Board'))->max('code');
+			empty($max_code) && ($max_code = 'B'.sprintf("%09d",0));
+			$this->dao->code = ++ $max_code;
 		}
 		$this->dao->type = 'Board';
 		$this->dao->Internal_PN = $PN;

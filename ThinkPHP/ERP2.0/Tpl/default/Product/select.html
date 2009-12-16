@@ -77,6 +77,7 @@ function update_title(type) {
 	$("#title3").text(title_arr[type][2]);
 	$("#title4").text(title_arr[type][3]);
 }
+var action = '{$action}';
 function do_select() {
 	if($("input:checked").length >0) {
 		var product_id = $("input:checked").val();
@@ -88,13 +89,14 @@ function do_select() {
 			$("#MPN").val(json.MPN);
 			$("#category").val(json.category.name);
 			$("#value").val(json.value);
+			$("#project").val(json.project);
 			$("#unit").val(json.unit.name);
 			$("#MOQ").val(json.MOQ);
 			$("#inventory_limit").val(json.inventory_limit);
-			//if('apply'=='{$action}') {
+			if(''!=action && 'enter'!=action) {
 				$("#ori_quantity").val(parseInt(json.location_product[0].ori_quantity)+parseInt(json.location_product[0].chg_quantity));
 				$("#max_quantity").html(parseInt(json.location_product[0].ori_quantity)+parseInt(json.location_product[0].chg_quantity));
-			//}
+			}
 			tb_remove();
 		});
 		

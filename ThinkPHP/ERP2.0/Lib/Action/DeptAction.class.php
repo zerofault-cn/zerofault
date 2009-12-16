@@ -16,9 +16,10 @@ class DeptAction extends BaseAction{
 	}
 
 	public function index(){
-		$max_id = $this->dao->getField('max(id) as max_id');
-		empty($max_id) && ($max_id = 0);
-		$code = 'D'.sprintf("%03d",$max_id+1);
+		$max_code = $this->dao->max('code');
+		empty($max_code) && ($max_code = 'D'.sprintf("%03d",0));
+		$code = ++ $max_code;
+		
 		$this->assign('code', $code);
 		$this->assign('leader_opts', self::genOptions(M('Staff')->where(array('is_leader'=>1))->select(),'','realname'));
 		$this->assign('result', $this->dao->relation(true)->select());
@@ -26,6 +27,9 @@ class DeptAction extends BaseAction{
 		$this->display('Layout:ERP_layout');
 	}
 
+	/**
+	* useless
+	*/
 	private function form() {
 		$dStaff = D('Staff');
 		$id = $_REQUEST['id'];
@@ -69,7 +73,11 @@ class DeptAction extends BaseAction{
 			if($rs && sizeof($rs)>0){
 				self::_error('Department Name: '.$name.' exists already!');
 			}
-			$this->dao->code = $_REQUEST['code'];
+			$max_code = $this->dao->max('code');
+			empty($max_code) && ($max_code = 'D'.sprintf("%03d",0));
+			$code = ++ $max_code;
+		
+			$this->dao->code = $code;
 		}
 		$this->dao->name = $name;
 		$this->dao->function = $_REQUEST['function'];

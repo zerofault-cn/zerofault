@@ -36,56 +36,14 @@ class ProductAction extends BaseAction{
 				'currency_opts' => self::genOptions(M('Options')->where(array('type'=>'currency'))->order('sort')->select()),
 				'unit_opts' => self::genOptions(M('Options')->where(array('type'=>'unit'))->order('sort')->select())
 				);
-			$max_id = $this->dao->getField('max(id) as max_id');
-			empty($max_id) && ($max_id = 0);
-			$code = 'C'.sprintf("%09d",$max_id+1);
+			$max_code = $this->dao->where(array('type'=>'Component'))->max('code');
+			empty($max_code) && ($max_code = 'C'.sprintf("%09d",0));
+			$code = ++ $max_code;
 		}
 		$this->assign('code', $code);
 		$this->assign('info', $info);
 		$this->assign('content', 'Product:form');
 		$this->display('Layout:ERP_layout');
-	}
-	public function select() {
-		$action = $_REQUEST['action'];
-		if(!empty($_REQUEST['id'])) {
-			echo json_encode($this->dao->relation(true)->find($_REQUEST['id']));
-			return;
-		}
-		if(!empty($_POST['submit'])) {
-			$this->assign('submit', 1);
-			$where = array();
-			$where['type'] = $_REQUEST['type'];
-			if(!empty($_REQUEST['Internal_PN'])) {
-				$where['Internal_PN'] = array('like', '%'.trim($_REQUEST['Internal_PN']).'%');
-			}
-			if(!empty($_REQUEST['description'])) {
-				$where['description'] = array('like', '%'.trim($_REQUEST['description']).'%');
-			}
-			if(!empty($_REQUEST['manufacture'])) {
-				$where['manufacture'] = array('like', '%'.trim($_REQUEST['manufacture']).'%');
-			}
-			if(!empty($_REQUEST['MPN'])) {
-				$where['MPN'] = array('like', '%'.trim($_REQUEST['MPN']).'%');
-			}
-			if(''==$action || 'enter'==$action) {
-				$this->assign('result', $this->dao->where($where)->select());
-			}
-			elseif('apply'==$action) {
-				$result = array();
-				foreach($this->dao->relation(true)->where($where)->select() as $item) {
-					if(!empty($item) && ($item['location_product'][0]['ori_quantity']+$item['location_product'][0]['chg_quantity'])>0) {
-						$result[] = $item;
-					}
-				}
-				$this->assign('result', $result);
-			}
-			else {
-				//else
-			}
-		}
-		$this->assign('action', $action);
-		$this->assign('content', 'Product:select');
-		$this->display('Layout:content');
 	}
 	public function submit() {
 		if(empty($_POST['submit'])) {
@@ -106,7 +64,10 @@ class ProductAction extends BaseAction{
 			if($rs && sizeof($rs)>0){
 				self::_error('Internal PN: '.$PN.' has been used by another component!');
 			}
-			$this->dao->code = $_REQUEST['code'];
+			$max_code = $this->dao->where(array('type'=>'Component'))->max('code');
+			empty($max_code) && ($max_code = 'C'.sprintf("%09d",0));
+			$code = ++ $max_code;
+			$this->dao->code = $code;
 		}
 		$this->dao->Internal_PN = $PN;
 		$this->dao->description = $_REQUEST['description'];
@@ -152,6 +113,48 @@ class ProductAction extends BaseAction{
 				self::_error('Add component data fail!'.(C('APP_DEBUG')?$this->dao->getLastSql():''));
 			}
 		}
+	}
+	public function select() {
+		$action = $_REQUEST['action'];
+		if(!empty($_REQUEST['id'])) {
+			echo json_encode($this->dao->relation(true)->find($_REQUEST['id']));
+			return;
+		}
+		if(!empty($_POST['submit'])) {
+			$this->assign('submit', 1);
+			$where = array();
+			$where['type'] = $_REQUEST['type'];
+			if(!empty($_REQUEST['Internal_PN'])) {
+				$where['Internal_PN'] = array('like', '%'.trim($_REQUEST['Internal_PN']).'%');
+			}
+			if(!empty($_REQUEST['description'])) {
+				$where['description'] = array('like', '%'.trim($_REQUEST['description']).'%');
+			}
+			if(!empty($_REQUEST['manufacture'])) {
+				$where['manufacture'] = array('like', '%'.trim($_REQUEST['manufacture']).'%');
+			}
+			if(!empty($_REQUEST['MPN'])) {
+				$where['MPN'] = array('like', '%'.trim($_REQUEST['MPN']).'%');
+			}
+			if(''==$action || 'enter'==$action) {
+				$this->assign('result', $this->dao->where($where)->select());
+			}
+			elseif('apply'==$action) {
+				$result = array();
+				foreach($this->dao->relation(true)->where($where)->select() as $item) {
+					if(!empty($item) && ($item['location_product'][0]['ori_quantity']+$item['location_product'][0]['chg_quantity'])>0) {
+						$result[] = $item;
+					}
+				}
+				$this->assign('result', $result);
+			}
+			else {
+				//else
+			}
+		}
+		$this->assign('action', $action);
+		$this->assign('content', 'Product:select');
+		$this->display('Layout:content');
 	}
 	public function delete() {
 		//判断是否已被使用

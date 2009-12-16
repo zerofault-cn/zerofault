@@ -124,9 +124,9 @@ class ProductInAction extends BaseAction{
 				'supplier_opts' => self::genOptions(D('Supplier')->select()),
 				'currency_opts' => self::genOptions(M('Options')->where(array('type'=>'currency'))->order('sort')->select()),
 			);
-			$max_id = $this->dao->getField('max(id) as max_id');
-			empty($max_id) && ($max_id = 0);
-			$code = 'A'.sprintf("%09d",$max_id+1);
+			$max_code = $this->dao->max('code');
+			empty($max_code) && ($max_code = 'A'.sprintf("%09d",0));
+			$code = ++ $max_code;
 		}
 		$this->assign('id', $id);
 		$this->assign('action', $action);
@@ -155,11 +155,15 @@ class ProductInAction extends BaseAction{
 			$this->dao->find($id);
 		}
 		else{//from new
-			$this->dao->code = $_REQUEST['code'];
 			if($action=='return') {
+				$this->dao->code = $_REQUEST['code'];
 				$this->dao->action = 'return';
 			}
 			else{
+				$max_code = $this->dao->where(array('action'=>'enter'))->max('code');
+				empty($max_code) && ($max_code = 'A'.sprintf("%09d",0));
+				$code = ++ $max_code;
+				$this->dao->code = $code;
 				$this->dao->action = 'enter';
 			}
 			$this->dao->staff_id = $_SESSION[C('USER_AUTH_KEY')];
