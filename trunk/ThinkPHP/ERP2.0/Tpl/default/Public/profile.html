@@ -1,0 +1,58 @@
+<div style="padding:0 15px;">
+<p class="page_title_text">My Profile</p>
+<form action="__URL__/profile" method="post" target="_iframe">
+<input type="hidden" name="id" value="{$info.id}" />
+<table cellpadding="2" border="1" bordercolor="#FFFFFF" style="border-collapse:collapse;">
+<tr>
+	<td>Code:</td>
+	<td><input type="text" size="15" value="{$info['code']}" readonly="true"/><img src="../Public/Images/lock.gif" /></td>
+</tr>
+<tr>
+	<td>Account Name:</td>
+	<td><input type="text" size="15" value="{$info['name']}" readonly="true"/><img src="../Public/Images/lock.gif" /></td>
+</tr>
+<tr>
+	<td>Realname:</td>
+	<td><input type="text" maxlength="40" size="15" name="realname" value="{$info['realname']}" /></td>
+</tr>
+<tr>
+	<td>Change Password:</td>
+	<td><input type="password" maxlength="40" size="15" name="password" value="" /></td>
+</tr>
+<tr>
+	<td colspan="2" width="260"> * If you want't to change your password, you must enter your old password below; or else leave both of them empty!</td>
+</tr>
+<tr>
+	<td>Old Password:</td>
+	<td><input type="password" maxlength="40" size="15" name="old_password" value="" /></td>
+</tr>
+<tr>
+	<td>E_mail:</td>
+	<td><input type="text" maxlength="40" size="20" name="email" value="{$info['email']}" /></td>
+</tr>
+<tr>
+	<td>Department:</td>
+	<td>[{$info['dept']['code']}] {$info['dept']['name']}</td>
+</tr>
+<tr>
+	<td>Leader:</td>
+	<td>{$info['leader']['realname']}</td>
+</tr>
+<tr>
+	<td>Is Leader:</td>
+	<td><if condition="$info['is_leader'] eq '1'">Yes<else />No</if></td>
+</tr>
+<tr>
+	<td>Role:</td>
+	<td><iterate name="info['role']" id="item">{$item.name}<br /></iterate></td>
+</tr>
+</table>
+<p class="center">
+	<input type="Submit" value="Update My Profile" name="submit"/>
+	<input type="button" value="Close" onclick="tb_remove();" />
+</p>
+</form>
+</div>
+<style>
+#think_run_time,#think_page_trace{display:none;}
+</style>

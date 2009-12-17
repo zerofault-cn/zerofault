@@ -33,11 +33,10 @@ class StaffAction extends BaseAction{
 	}
 
 	public function form() {
-		$dDepartment = D('Department');
 		$id = $_REQUEST['id'];
 		if(!empty($id) && $id>0) {
 			$info = $this->dao->relation(true)->find($id);
-			$info['dept_opts'] = self::genOptions($dDepartment->select(), $info['dept_id']);
+			$info['dept_opts'] = self::genOptions(M('Department')->select(), $info['dept_id']);
 			$info['leader_opts'] = self::genOptions($this->dao->where(array('is_leader'=>1))->select(), $info['leader_id'],'realname');
 			$info['role_chks'] = self::genCheckbox(D("Role")->where(array('status'=>1))->select(),$info['role'],'role');
 			$code = $info['code'];
@@ -71,6 +70,9 @@ class StaffAction extends BaseAction{
 		empty($name) && self::_error('Staff Name required');
 		if(!empty($id) && $id>0) {
 			//for edit
+			if(1==$id && 1!=$_SESSION[C('USER_AUTH_KEY')]) {
+				self::_error("You can\'t edit Super Administrator");
+			}
 			$rs = $this->dao->where(array('name'=>$name,'id'=>array('neq',$id)))->find();
 			if($rs && sizeof($rs)>0){
 				self::_error('The name: '.$name.' has been used by another staff!');
