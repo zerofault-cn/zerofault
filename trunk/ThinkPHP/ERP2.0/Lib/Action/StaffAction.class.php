@@ -127,6 +127,36 @@ class StaffAction extends BaseAction{
 			}
 		}
 	}
+	public function profile() {
+		if(!empty($_POST['submit'])) {
+			$realname = trim($_REQUEST['realname']);
+			if($this->dao->where(array('realname'=>$realname,'id'=>array('neq',$_SESSION[C('USER_AUTH_KEY')])))->find()) {
+				self::_error('The realname \"'.$realname.'\" has been used by another staff!');
+			}
+			$this->dao->find($_SESSION[C('USER_AUTH_KEY')]);
+			if(''!=trim($_REQUEST['password'])) {
+				if(''==trim($_REQUEST['old_password'])) {
+					self::_error('You must enter your old password!');
+				}
+				if(md5(trim($_REQUEST['old_password'])) != $staff->password) {
+					self::_error('You old password is wrong!');
+				}
+				$this->dao->password = md5(trim($_REQUEST['password']));
+			}
+			$this->dao->realname = $realname;
+			$this->dao->email = trim($_REQUEST['email']);
+			if(false !== $this->dao->save()) {
+				self::_success('Update success!');
+			}
+			
+		}
+		else {
+			$info = $this->dao->relation(true)->find($_SESSION[C('USER_AUTH_KEY')]);
+			$this->assign('info', $info);
+			$this->assign('content', 'Staff:profile');
+			$this->display('Layout:base');
+		}
+	}
 	/**
 	*
 	* 调用基类方法
