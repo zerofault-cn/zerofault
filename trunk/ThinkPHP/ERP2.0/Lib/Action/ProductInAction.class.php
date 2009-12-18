@@ -146,7 +146,7 @@ class ProductInAction extends BaseAction{
 		empty($_REQUEST['supplier_id']) && self::_error('Please select the supplier!');
 		empty($_REQUEST['currency_id']) && self::_error('Please select the currency type!');
 		empty($_REQUEST['quantity']) && self::_error('Quantity number required!');
-		empty($_REQUEST['price']) && self::_error('Price value required!');
+		//empty($_REQUEST['price']) && self::_error('Price value required!');
 		
 		($_REQUEST['quantity']<0) && self::_error('Quantity number must be positive!');
 		('return'==$action) && ($_REQUEST['quantity']>$_REQUEST['ori_quantity']) && self::_error('Return quantity can\'t be larger than '.$_REQUEST['ori_quantity']);

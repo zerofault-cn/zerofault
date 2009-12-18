@@ -133,22 +133,23 @@ class StaffAction extends BaseAction{
 			if($this->dao->where(array('realname'=>$realname,'id'=>array('neq',$_SESSION[C('USER_AUTH_KEY')])))->find()) {
 				self::_error('The realname \"'.$realname.'\" has been used by another staff!');
 			}
-			$this->dao->find($_SESSION[C('USER_AUTH_KEY')]);
+			$id = $_SESSION[C('USER_AUTH_KEY')];
+			$this->dao->find($id);
 			if(''!=trim($_REQUEST['password'])) {
 				if(''==trim($_REQUEST['old_password'])) {
 					self::_error('You must enter your old password!');
 				}
-				if(md5(trim($_REQUEST['old_password'])) != $staff->password) {
+				if(md5(trim($_REQUEST['old_password'])) != $this->dao->password) {
 					self::_error('You old password is wrong!');
 				}
 				$this->dao->password = md5(trim($_REQUEST['password']));
+				Session::clear();
 			}
 			$this->dao->realname = $realname;
 			$this->dao->email = trim($_REQUEST['email']);
 			if(false !== $this->dao->save()) {
 				self::_success('Update success!');
 			}
-			
 		}
 		else {
 			$info = $this->dao->relation(true)->find($_SESSION[C('USER_AUTH_KEY')]);
