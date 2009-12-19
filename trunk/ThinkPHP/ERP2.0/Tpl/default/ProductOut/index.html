@@ -59,7 +59,7 @@
 <p class="center">
 	<if condition="MODULE_NAME eq 'Asset' and ACTION_NAME eq 'apply'">
 		<input type="button" onclick="javascript:document.location='__URL__/form/action/{$action}';" value="Apply a Product" />
-	<elseif condition="MODULE_NAME eq 'ProductOut' and ACTION_NAME neq 'apply' and ACTION_NAME neq 'back'" />
+	<elseif condition="MODULE_NAME eq 'ProductOut' and ACTION_NAME neq 'apply' and ACTION_NAME neq 'apply_nonfixed' and ACTION_NAME neq 'back'" />
 		<input type="submit" name="submit" value="Confirm Selected" />
 		<input type="button" onclick="javascript:document.location='__URL__/form/action/{$action}';" value="{$Think.ACTION_NAME|ucfirst} a Product" />
 	<elseif condition="$status neq 1 and (MODULE_NAME neq 'Asset' or (MODULE_NAME eq 'Asset' and ACTION_NAME eq 'transferIn'))" />

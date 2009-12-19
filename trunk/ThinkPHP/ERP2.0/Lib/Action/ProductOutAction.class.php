@@ -15,7 +15,10 @@ class ProductOutAction extends BaseAction{
 		parent::_initialize();
 	}
 	Public function apply() {
-		$this->index('apply');
+		$this->index('apply',1);
+	}
+	Public function apply_nonfixed() {
+		$this->index('apply',0);
 	}
 	Public function transfer() {
 		$this->index('transfer');
@@ -29,7 +32,7 @@ class ProductOutAction extends BaseAction{
 	Public function back() {
 		$this->index('back');
 	}
-	public function index($action='apply') {
+	public function index($action='apply',$fixed='') {
 		$rs = M('Options')->where(array('type'=>'unit'))->order('sort')->select();
 		$unit = array();
 		foreach($rs as $i=>$item) {
@@ -59,6 +62,9 @@ class ProductOutAction extends BaseAction{
 			'action' => $action,
 			'status' => $status
 			);
+		if(''!=$fixed) {
+			$where['fixed'] = $fixed;
+		}
 		if(MODULE_NAME == 'Asset') {
 			if(ACTION_NAME == 'transferIn') {
 				$where['to_type'] = 'staff';

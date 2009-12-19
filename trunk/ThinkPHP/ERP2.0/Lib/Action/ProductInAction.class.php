@@ -14,8 +14,13 @@ class ProductInAction extends BaseAction{
 		$this->dao = D('ProductFlow');
 		parent::_initialize();
 	}
-
-	public function index() {
+	Public function fixed() {
+		$this->index(1);
+	}
+	Public function nonfixed() {
+		$this->index(0);
+	}
+	public function index($fixed=1) {
 		$rs = M('Options')->where(array('type'=>'unit'))->order('sort')->select();
 		$unit = array();
 		foreach($rs as $i=>$item) {
@@ -36,6 +41,7 @@ class ProductInAction extends BaseAction{
 		$this->assign('status', $status);
 		
 		$where = array(
+			'fixed' => $fixed,
 			'action'=>'enter',
 			'status'=> $status
 			);
@@ -97,6 +103,7 @@ class ProductInAction extends BaseAction{
 	public function form() {
 		//Session::set('action', 'form');
 		$id = $_REQUEST['id'];
+		$fixed = $_REQUEST['fixed'];
 		$action = $_REQUEST['action'];
 		if(!empty($id) && $id>0) {
 			$info = $this->dao->relation(true)->find($id);
@@ -130,6 +137,7 @@ class ProductInAction extends BaseAction{
 		}
 		$this->assign('id', $id);
 		$this->assign('action', $action);
+		$this->assign('fixed', $fixed);
 		$this->assign('code', $code);
 
 		$this->assign('info', $info);
@@ -166,6 +174,7 @@ class ProductInAction extends BaseAction{
 				$this->dao->code = $code;
 				$this->dao->action = 'enter';
 			}
+			$this->dao->fixed = $_REQUEST['fixed'];
 			$this->dao->staff_id = $_SESSION[C('USER_AUTH_KEY')];
 			$this->dao->create_time = date("Y-m-d H:i:s");
 		}
