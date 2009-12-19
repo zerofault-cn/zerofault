@@ -68,7 +68,13 @@ Product Entering List
 </table>
 <p class="center">
 	<neq name="status" value="1"><input type="submit" name="submit" value="Confirm Selected" /></neq>
-	<neq name="action" value="return"><input type="button" onclick="javascript:document.location='__URL__/form';" value="Enter a New Product" /></neq>
+	<neq name="action" value="return">
+		<if condition="ACTION_NAME eq 'fixed'">
+		<input type="button" onclick="javascript:document.location='__URL__/form/fixed/1';" value="Enter a New Product" />
+		<else />
+		<input type="button" onclick="javascript:document.location='__URL__/form/fixed/0';" value="Enter a New Product" />
+		</if>
+	</neq>
 </p>
 </form>
 <script type="text/javascript"> 

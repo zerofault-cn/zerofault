@@ -8,6 +8,7 @@ Product {$action|ucfirst} Form
 <form action="__URL__/submit" method="post" target="_iframe">
 <input type="hidden" name="id" value="{$id}" />
 <input type="hidden" name="action" value="{$action}" />
+<input type="hidden" name="fixed" value="{$fixed}" />
 <input type="hidden" id="product_id" name="product_id" value="{$info['product_id']}" />
 <table>
 <tr >
@@ -50,7 +51,7 @@ Product {$action|ucfirst} Form
 </tr>
 <tr>
 	<td>Unit:</td>
-	<td><input type="text" size="15" id="unit" value="{$info['unit']}" readonly="true"/> readonly="true"</td>
+	<td><input type="text" size="15" id="unit" value="{$info['unit']}" readonly="true"/><img src="../Public/Images/system.gif" /></td>
 </tr>
 <tr>
 	<td>MOQ:</td>
