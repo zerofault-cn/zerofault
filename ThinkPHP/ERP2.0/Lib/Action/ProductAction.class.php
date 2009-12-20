@@ -69,6 +69,8 @@ class ProductAction extends BaseAction{
 			$code = ++ $max_code;
 			$this->dao->code = $code;
 		}
+		$this->dao->type = 'Component';
+		$this->dao->fixed = $_REQUEST['fixed'];
 		$this->dao->Internal_PN = $PN;
 		$this->dao->description = $_REQUEST['description'];
 		$this->dao->manufacture = $_REQUEST['manufacture'];
@@ -116,6 +118,7 @@ class ProductAction extends BaseAction{
 	}
 	public function select() {
 		$action = $_REQUEST['action'];
+		$fixed = $_REQUEST['fixed'];
 		if(!empty($_REQUEST['id'])) {
 			echo json_encode($this->dao->relation(true)->find($_REQUEST['id']));
 			return;
@@ -123,6 +126,9 @@ class ProductAction extends BaseAction{
 		if(!empty($_POST['submit'])) {
 			$this->assign('submit', 1);
 			$where = array();
+			if(''!=$fixed) {
+				$where['fixed'] = $fixed;
+			}
 			$where['type'] = $_REQUEST['type'];
 			if(!empty($_REQUEST['Internal_PN'])) {
 				$where['Internal_PN'] = array('like', '%'.trim($_REQUEST['Internal_PN']).'%');
@@ -153,6 +159,7 @@ class ProductAction extends BaseAction{
 			}
 		}
 		$this->assign('action', $action);
+		$this->assign('fixed', $fixed);
 		$this->assign('content', 'Product:select');
 		$this->display('Layout:content');
 	}

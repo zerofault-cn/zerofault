@@ -17,7 +17,7 @@ class ProductInAction extends BaseAction{
 	Public function fixed() {
 		$this->index(1);
 	}
-	Public function nonfixed() {
+	Public function floating() {
 		$this->index(0);
 	}
 	public function index($fixed=1) {

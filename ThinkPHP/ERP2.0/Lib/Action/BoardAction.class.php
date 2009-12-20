@@ -72,6 +72,7 @@ class BoardAction extends BaseAction{
 			$this->dao->code = ++ $max_code;
 		}
 		$this->dao->type = 'Board';
+		$this->dao->fixed = $_REQUEST['fixed'];
 		$this->dao->Internal_PN = $PN;
 		$this->dao->description = $_REQUEST['description'];
 		$this->dao->manufacture = $_REQUEST['manufacture'];

@@ -31,7 +31,7 @@ class InventoryAction extends BaseAction{
 			!empty($_REQUEST['MPN']) 		 && ($where['MPN'] 		   = array('like', '%'.trim($_REQUEST['MPN']).'%'));
 			!empty($_REQUEST['value']) 		 && ($where['value'] 	   = array('like', '%'.trim($_REQUEST['value']).'%'));
 			!empty($_REQUEST['project']) 	 && ($where['project'] 	   = array('like', '%'.trim($_REQUEST['project']).'%'));
-			$result = $this->dao->where($where)->select();
+			$result = $this->dao->distinct(true)->where($where)->select();
 			
 		}
 		$this->assign('request', $_REQUEST);

@@ -16,18 +16,15 @@ class AssetAction extends BaseAction{
 	}
 
 	public function index(){
-		$rs = $this->dao->where(array('LocationProduct.type'=>'staff', 'location_id'=>$_SESSION[C('USER_AUTH_KEY')]))->select();
+		$rs = $this->dao->distinct(true)->where(array('LocationProduct.type'=>'staff', 'location_id'=>$_SESSION[C('USER_AUTH_KEY')]))->select();
 		$result = array();
 		foreach($rs as $item) {
-			if(!array_key_exists($item['category_name'], $result)) {
-				$result[$item['category_name']] = array();
-			}
-			if(!isset($default_category)) {
-				$default_category = $item['category_name'];
-			}
-			$result[$item['category_name']][] = $item;
+			$result[$item['fixed']][] = $item;
 		}
-		$this->assign('default_category', $default_category);
+		krsort($result);
+		//dump($result);
+		$this->assign('fixed_arr', array('Floating Assets', 'Fixed Assets'));
+		$this->assign('default_fixed', 1);
 		$this->assign('result', $result);
 		$this->assign('content', 'Asset:index');
 		$this->display('Layout:ERP_layout');
@@ -40,6 +37,9 @@ class AssetAction extends BaseAction{
 	}
 	public function transferOut() {
 		R('ProductOut', 'transfer');
+	}
+	public function back() {
+		$this->index();
 	}
 	public function apply() {
 		R('ProductOut', 'apply');

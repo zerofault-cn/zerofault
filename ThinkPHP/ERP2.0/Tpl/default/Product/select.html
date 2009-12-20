@@ -56,6 +56,7 @@ var _URL_ = '__URL__';
 function search() {
 	$.post(_URL_+"/select",{
 		'submit' : 1,
+		'fixed'  : '{$fixed}',
 		'action' : '{$action}',
 		'type' : $("#key_type").val(),
 		'Internal_PN': $("#key_Internal_PN").val(),
@@ -83,6 +84,7 @@ function do_select() {
 		var product_id = $("input:checked").val();
 		$("#product_id").val(product_id);
 		$.getJSON(_URL_+'/select/id/'+product_id, function(json) {
+			$("#fixed").val(json.fixed);
 			$("#Internal_PN").val(json.Internal_PN);
 			$("#description").val(json.description);
 			$("#manufacture").val(json.manufacture);

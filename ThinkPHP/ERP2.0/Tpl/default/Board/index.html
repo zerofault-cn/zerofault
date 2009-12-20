@@ -9,6 +9,7 @@
 	<th>Value/Package</th>
 	<th>Unit</th>
 	<th>Category</th>
+	<th>Type</th>
 	<th>Board Status</th>
 	<th>OP</th>
 </tr>
@@ -22,6 +23,7 @@
 	<td>{$item['value']}&nbsp;</td>
 	<td>{$item['unit']['name']}&nbsp;</td>
 	<td>{$item['category']['name']}&nbsp;</td>
+	<td><if condition="$item['fixed'] eq 1">Fixed Assets<else />Floating Assets</if></td>
 	<td>{$item['status']['name']}&nbsp;</td>
 	<td><a href="__URL__/form/id/{$item['id']}">Edit</a>
 		<a href="__URL__/delete/id/{$item['id']}" target="_iframe">Delete</a></td>

@@ -17,7 +17,7 @@ class ProductOutAction extends BaseAction{
 	Public function apply() {
 		$this->index('apply',1);
 	}
-	Public function apply_nonfixed() {
+	Public function applyFloating() {
 		$this->index('apply',0);
 	}
 	Public function transfer() {
@@ -162,15 +162,38 @@ class ProductOutAction extends BaseAction{
 			$info = array();
 			$location_arr = M('Location')->where(array('id'=>array('gt',1)))->select();
 			$location_arr[] = array('id' => 'staff', 'name' => 'Staff');
-			$info['location_opts'] = self::genOptions($location_arr, 'location'==$info['to_type'] ? $info['to_id'] : 'staff');
-			$info['staff_opts'] = self::genOptions(M('Staff')->where(array('status'=>1))->select(), $info['to_id'], 'realname');
+			$info['location_opts'] = self::genOptions($location_arr);
+			$info['staff_opts'] = self::genOptions(M('Staff')->where(array('status'=>1))->select(), '', 'realname');
 			$info['from_type'] = 'location';
 			$info['from_id'] = 1;
-				
 			$max_code = $this->dao->where(array('code'=>array('like','Out%')))->max('code');
 			empty($max_code) && ($max_code = 'Out'.sprintf("%09d",0));
 			$code = ++ $max_code;
+			
+			if(!empty($_REQUEST['lp_id'])) {
+				$lp_info = M('LocationProduct')->find($_REQUEST['lp_id']);
+				$this->assign('product_id', $lp_info['product_id']);
+				$info['product'] = M('Product')->find($lp_info['product_id']);
+				$info['category'] = M('Options')->where('id='.$info['product']['category_id'])->getField('name');
+				$info['unit'] = M('Options')->where('id='.$info['product']['unit_id'])->getField('name');
+				$info['ori_quantity'] = $lp_info['ori_quantity']+$lp_info['chg_quantity'];
+				$info['from_type'] = $lp_info['type'];
+				$info['from_id'] = $lp_info['location_id'];
+			
+				if('transfer'==$action) {
+					$max_code = $this->dao->where(array('code'=>array('like','T%')))->max('code');
+					empty($max_code) && ($max_code = 'T'.sprintf("%09d",0));
+				}
+				elseif('back'==$action) {
+					$max_code = $this->dao->where(array('code'=>array('like','R%')))->max('code');
+					empty($max_code) && ($max_code = 'R'.sprintf("%09d",0));
+				
+				}
+				$code = ++ $max_code;
+				
+			}
 		}
+		//dump($info);
 		$this->assign('id', $id);
 		$this->assign('action', $action);
 		$this->assign('code', $code);
@@ -225,6 +248,7 @@ class ProductOutAction extends BaseAction{
 			$this->dao->to_type = 'location';
 			$this->dao->to_id = 1;
 		}
+		$this->dao->fixed = $_REQUEST['fixed'];
 		$this->dao->product_id = $_REQUEST['product_id'];
 		$this->dao->quantity = $_REQUEST['quantity'];
 		$this->dao->remark = $_REQUEST['remark'];

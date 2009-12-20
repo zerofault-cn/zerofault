@@ -173,7 +173,7 @@ class BaseAction extends Action{
 	* @param string $title 供下拉列表中显示的字段
 	* @param string $value 充当下拉列表值的字段
 	*/
-	protected function genOptions($rs=array(), $selected_id=0, $title='name', $value='id') {
+	protected function genOptions($rs=array(), $selected_id='', $title='name', $value='id') {
 		$str = '';
 		if(empty($rs) || !is_array($rs)) {
 			return $str;

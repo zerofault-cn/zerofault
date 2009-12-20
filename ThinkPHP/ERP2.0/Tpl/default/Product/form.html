@@ -35,6 +35,15 @@
 	<td><select name="category_id"><option value="">Select One</option>{$info.category_opts}</select></td>
 </tr>
 <tr>
+	<td>Fixed Assets:</td>
+	<td><if condition="$info['ficxed'] eq 1">
+		<input type="radio" name="fixed" value="1" checked="true"/>Yes&nbsp;&nbsp;<input type="radio" name="fixed" value="0" />No
+		<else />
+		<input type="radio" name="fixed" value="1" />Yes&nbsp;&nbsp;<input type="radio" name="fixed" value="0" checked="true"/>No
+		</if>
+	</td>
+</tr>
+<tr>
 	<td>RoHS:</td>
 	<td><input type="text" maxlength="20" size="15" name="Rohs" value="{$info.Rohs}"/></td>
 </tr>
