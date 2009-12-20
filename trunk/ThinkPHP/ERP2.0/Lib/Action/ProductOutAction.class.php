@@ -62,7 +62,7 @@ class ProductOutAction extends BaseAction{
 			'action' => $action,
 			'status' => $status
 			);
-		if(''!=$fixed) {
+		if(strlen($fixed)!=0) {
 			$where['fixed'] = $fixed;
 		}
 		if(MODULE_NAME == 'Asset') {
