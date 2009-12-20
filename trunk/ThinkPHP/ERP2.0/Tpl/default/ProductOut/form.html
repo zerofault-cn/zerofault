@@ -8,13 +8,14 @@ Edit {$info['action']|ucfirst} Form
 <form name="form1" action="__URL__/submit" method="post" target="_iframe">
 <input type="hidden" name="id" value="{$id}" />
 <input type="hidden" name="action" value="{$action}" />
-<input type="hidden" id="product_id" name="product_id" value="{$info['product_id']}" />
+<input type="hidden" name="fixed" id="fixed" value="{$info['product']['fixed']}" />
+<input type="hidden" id="product_id" name="product_id" value="{$info['product']['id']}" />
 <table>
 <tr>
 	<td>No.</td>
 	<td><input type="text" maxlength="10" size="15" name="code" value="{$code}" readonly="true" /><img src="../Public/Images/lock.gif" /></td>
 </tr>
-<if condition="$action eq 'apply' or ($action eq '' and $info['action'] eq 'apply') or (strlen($id) eq 0 and ($action eq 'transfer' or $action eq 'release' or $action eq 'scrap'))">
+<if condition="!empty($lp_id) and ($action eq 'apply' or ($action eq '' and $info['action'] eq 'apply') or (strlen($id) eq 0 and ($action eq 'transfer' or $action eq 'release' or $action eq 'scrap')))">
 <tr>
 	<td></td>
 	<td><input type="button" value="Select Component/Board" class="thickbox" alt="__URL__/select/action/apply?width=600&height=300&modal=true"/></td>
@@ -89,7 +90,7 @@ $(document).ready(function(){
 });
 function select_location(obj) {
 	if('staff' == $(obj).val()) {
-		$('#location_opts').show();
+		$('#staff_opts').show();
 		$('#to_type').val('staff');
 	}
 	else {

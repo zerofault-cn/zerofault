@@ -25,4 +25,5 @@ ALTER TABLE erp_product ADD project VARCHAR(255)  NOT NULL AFTER MSL;
 ALTER TABLE erp_product_flow DROP project;
 
 
-ALTER TABLE erp_product_flow ADD fixed TINYINT(1)  UNSIGNED DEFAULT "0" NOT NULL AFTER `action`
+ALTER TABLE erp_product ADD fixed TINYINT(1)  UNSIGNED DEFAULT "0" NOT NULL AFTER `type`;
+ALTER TABLE erp_product_flow ADD fixed TINYINT(1)  UNSIGNED DEFAULT "0" NOT NULL AFTER `action`;

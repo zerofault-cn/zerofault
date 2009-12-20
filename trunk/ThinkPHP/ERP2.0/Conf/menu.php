@@ -16,8 +16,8 @@ $menu['Basic&nbsp;Data'] = array(
 $menu['Inventory&nbsp;Input Management'] = array(
 	'name'	  => 'ProductIn',
 	'submenu' => array(
-		'Fixed Asset Entering'		=> 'ProductIn/fixed',
-		'Non-Fixed Asset Entering'  => 'ProductIn/nonfixed',
+		'Fixed Assets Entering'		=> 'ProductIn/fixed',
+		'Floating Assets Entering'  => 'ProductIn/floating',
 		'Product Return'		=> 'ProductIn/returns',
 		)
 	);
@@ -29,7 +29,7 @@ $menu['Inventory&nbsp;output Management'] = array(
 	'name'	  => 'ProductOut/apply',
 	'submenu' => array(
 		'Fixed Asset Apply'		=> 'ProductOut/apply',
-		'Non-Fixed Asset Apply'	=> 'ProductOut/apply_nonfixed',
+		'Non-Fixed Asset Apply'	=> 'ProductOut/applyFloating',
 		'Product Transfer'		=> 'ProductOut/transfer',
 		'Components Release'	=> 'ProductOut/release',
 		'Scrap Product'			=> 'ProductOut/scrap',

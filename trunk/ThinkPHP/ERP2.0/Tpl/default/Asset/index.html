@@ -2,7 +2,7 @@
 <table>
 <tr>
 	<iterate name="result" id="item">
-	<td class="clsTab" id="{$key}"> {$key} </td>
+	<td class="clsTab" id="fixed{$key}"> {$fixed_arr[$key]} </td>
 	</iterate>
 </tr>
 <tr>
@@ -10,10 +10,10 @@
 	<iterate name="result" id="type_item">
 		<form action="__URL__/submit" method="post" target="_iframe">
 		<input type="hidden" name="type" value="{$key}" />
-		<if condition="$key eq $default_category">
-		<table class="clsTab" cellpadding="3" border="1" bordercolor="#FFFFFF" style="border-collapse:collapse;" id="{$key}">
+		<if condition="$key eq $default_fixed">
+		<table class="clsTab" cellpadding="3" border="1" bordercolor="#FFFFFF" style="border-collapse:collapse;" id="fixed{$key}">
 		<else />
-		<table class="clsTab" cellpadding="3" border="1" bordercolor="#FFFFFF" style="border-collapse:collapse;display:none" id="{$key}">
+		<table class="clsTab" cellpadding="3" border="1" bordercolor="#FFFFFF" style="border-collapse:collapse;display:none" id="fixed{$key}">
 		</if>
 		<tr>
 			<th>No.</th>
@@ -24,7 +24,7 @@
 			<th class="basic_data">Manufacture</th>
 			<th>Quantity</th>
 			<th>Unit</th>
-			
+			<th>OP</th>
 		</tr>
 		<iterate name="type_item" id="item">
 		<tr>
@@ -36,7 +36,8 @@
 			<td class="basic_data">{$item['manufacture']}</td>
 			<td>{$item['ori_quantity']+$item['chg_quantity']}</td>
 			<td>{$item['unit_name']}</td>
-			
+			<td><a href="__URL__/form/action/transfer/lp_id/{$item['lp_id']}">Transfer</a>
+				<a href="__URL__/form/action/back/lp_id/{$item['lp_id']}">Return</a></td>
 		</tr>
 		</iterate>
 		</table>
@@ -48,7 +49,7 @@
 <p class="center"></p>
 <script>
 $(document).ready(function(){
-	$("td#{$default_category}").addClass("current");
+	$("td#fixed{$default_fixed}").addClass("current");
 	$("td.clsTab").each(function(){
 		$(this).css("cursor", "pointer").click(function(){
 			switchTab($(this).attr("id"));

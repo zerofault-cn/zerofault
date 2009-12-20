@@ -10,6 +10,7 @@
 	<th>Project</th>
 	<th>Unit</th>
 	<th>Category</th>
+	<th>Type</th>
 	<th>OP</th>
 </tr>
 <iterate name="result" id="item">
@@ -23,6 +24,7 @@
 	<td>{$item['project']}</td>
 	<td>{$item['unit']['name']}</td>
 	<td>{$item['category']['name']}</td>
+	<td><if condition="$item['fixed'] eq 1">Fixed Assets<else />Floating Assets</if></td>
 	<td><a href="__URL__/form/id/{$item['id']}">Edit</a>
 		<a href="__URL__/delete/id/{$item['id']}" target="_iframe">Delete</a></td>
 </tr>
