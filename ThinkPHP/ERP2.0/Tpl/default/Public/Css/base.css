@@ -241,6 +241,9 @@ td.clsTab {
 	text-align:center;
 	background:#6699cc;
 }
+td#status_0, td#fixed1{
+	background:#32CD32;
+}
 td.clsTab a{
 	color:black;
 }
