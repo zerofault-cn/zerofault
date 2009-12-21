@@ -17,12 +17,18 @@ class AssetAction extends BaseAction{
 
 	public function index(){
 		$rs = $this->dao->distinct(true)->where(array('LocationProduct.type'=>'staff', 'location_id'=>$_SESSION[C('USER_AUTH_KEY')]))->select();
-		$result = array();
+		if(empty($rs)) {
+			$rs = array();
+		}
+		$result = array(array(),array());
 		foreach($rs as $item) {
-			$result[$item['fixed']][] = $item;
+			$key = $item['fixed'];
+			if('Board'==$item['type']) {
+				$key  = 1;
+			}
+			$result[$key][] = $item;
 		}
 		krsort($result);
-		//dump($result);
 		$this->assign('fixed_arr', array('Floating Assets', 'Fixed Assets'));
 		$this->assign('default_fixed', 1);
 		$this->assign('result', $result);

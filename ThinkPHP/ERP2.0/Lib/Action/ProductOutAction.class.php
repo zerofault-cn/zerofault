@@ -208,7 +208,8 @@ class ProductOutAction extends BaseAction{
 		}
 		$id = $_REQUEST['id'];
 		$action = $_REQUEST['action'];
-		empty($_REQUEST['product_id']) && self::_error('Select a product first!');
+		empty($_REQUEST['product_id']) && self::_error('Select a Component/Board first!');
+		empty($_REQUEST['quantity']) && self::_error('Quantity must be inputed');
 		($_REQUEST['quantity']>$_REQUEST['ori_quantity']) && self::_error(ucfirst($action).'quantity can\'t be larger than '.$_REQUEST['ori_quantity']);
 
 		if(!empty($id) && $id>0) {//from edit
@@ -283,7 +284,7 @@ class ProductOutAction extends BaseAction{
 		}
 		empty($_POST['chk']) && self::_error('You haven\'t select any item!');
 		sort($_POST['chk']);//先提交的先confirm
-		dump($_POST['chk']);
+		//dump($_POST['chk']);
 		foreach ($_POST['chk'] as $id) {
 			$info = $this->dao->find($id);
 			if('back' != $info['action']) {
