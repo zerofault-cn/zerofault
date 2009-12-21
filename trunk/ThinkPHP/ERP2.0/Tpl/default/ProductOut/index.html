@@ -15,12 +15,17 @@
 			<th><input type="checkbox" id="checkall" onclick="checkAll();"/></th>
 			</if>
 			<th>No.</th>
-			<th>Product</th>
-			<th>Unit</th>
+			<th>Code</th>
+			<th class="basic_data">Internal P/N</th>
+			<th class="basic_data">MPN</th>
+			<th class="basic_data">Description</th>
+			<th class="basic_data">Manufacture</th>
 			<th>Quantity<if condition="ACTION_NAME eq 'apply' and $status eq 1">/Remain</if></th>
+			<th>Unit</th>
 			<th>{$action|ucfirst} Time</th>
 			<th>{$action|ucfirst} Staff</th>
 			<th>Confirmed Staff</th>
+			<th>Remark</th>
 			<th>OP</th>
 		</tr>
 		<iterate name="result" id="item">
@@ -28,29 +33,34 @@
 			<if condition="$status neq 1 and (MODULE_NAME neq 'Asset' or (MODULE_NAME eq 'Asset' and ACTION_NAME eq 'transferIn'))">
 			<td><input type="checkbox" name="chk[]" value="{$item['id']}" onclick="updateCheckAll(this);"/></td>
 			</if>
+			<td align="center">{$i}</td>
 			<td>{$item['code']}</td>
-			<td>{$item['product']['MPN']}<input type="hidden" name="product_id[]" value="{$item['product_id']}"/></td>
-			<td>{$unit[$item['product']['unit_id']]}</td>
+			<td class="basic_data">{$item['product']['Internal_PN']}</td>
+			<td class="basic_data">{$item['product']['MPN']}</td>
+			<td class="basic_data">{$item['product']['description']}</td>
+			<td class="basic_data">{$item['product']['manufacture']}</td>
 			<td>{$item['quantity']}<if condition="ACTION_NAME eq 'apply' and $status eq 1">/{$item['quantity']-$item['backed_quantity']-$item['transfered_quantity']}</if></td>
+			<td>{$unit[$item['product']['unit_id']]}</td>
 			<td>{$item['create_time']}</td>
 			<td align="center">{$item['staff']['name']}</td>
 			<td align="center">{$item['confirmed_staff']['name']}&nbsp;</td>
+			<td>{$item['remark']}</td>
 			<td><if condition="$item['status'] eq 0">
 				<a href="__URL__/form/id/{$item['id']}">Edit</a>
 				<a href="__URL__/delete/id/{$item['id']}" target="_iframe">Delete</a>
 				<elseif condition="($item['quantity']-$item['backed_quantity']-$item['transfered_quantity']) gt 0" />
 					<if condition="$item['action'] eq 'apply'">
-				<a href="__URL__/form/action/transfer/id/{$item['id']}">Transfer</a>
+				<!-- <a href="__URL__/form/action/transfer/id/{$item['id']}">Transfer</a> -->
 					</if>
 					<if condition="$item['action'] neq 'back'">
-				<a href="__URL__/form/action/back/id/{$item['id']}">Return</a>
+				<!-- <a href="__URL__/form/action/back/id/{$item['id']}">Return</a> -->
 					</if>
 				</if>
 				</td>
 		</tr>
 		</iterate>
 		<tr>
-			<td colspan="9">{$page}</td>
+			<td colspan="14">{$page}</td>
 		</tr>
 		</table>
 	</td>

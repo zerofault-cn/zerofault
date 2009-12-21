@@ -48,7 +48,7 @@ class StaffAction extends BaseAction{
 				'realname'=>'',
 				'password'=>'',
 				'email'=>'',
-				'dept_opts' => self::genOptions($dDepartment->select()),
+				'dept_opts' => self::genOptions(M('Department')->select()),
 				'leader_opts'=>self::genOptions($this->dao->where(array('is_leader'=>1))->select(),'','realname'),
 				'role_chks' => self::genCheckbox(D("Role")->where(array('status'=>1))->select(),'','role')
 				);

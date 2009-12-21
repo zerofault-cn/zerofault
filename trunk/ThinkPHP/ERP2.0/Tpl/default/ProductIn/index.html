@@ -18,8 +18,8 @@ Product Entering List
 			<neq name="status" value="1"><th><input type="checkbox" id="checkall" onclick="checkAll();"/></th></neq>
 			<th>No.</th>
 			<th>Code</th>
-			<th class="basic_data">MPN</th>
 			<th class="basic_data">Internal P/N</th>
+			<th class="basic_data">MPN</th>
 			<th class="basic_data">Description</th>
 			<th class="basic_data">Manufacture</th>
 			<th>Supplier</th>
@@ -30,6 +30,7 @@ Product Entering List
 			<th>OP Time</th>
 			<th>OP Staff</th>
 			<th>Confirm Staff</th>
+			<th>Remark</th>
 			<th>OP</th>
 		</tr>
 		<iterate name="result" id="item">
@@ -37,8 +38,8 @@ Product Entering List
 			<neq name="item['status']" value="1"><td><input type="checkbox" name="chk[]" value="{$item['id']}" onclick="updateCheckAll(this);"/></td></neq>
 			<td align="center">{$i}</td>
 			<td>{$item['code']}</td>
-			<td class="basic_data">{$item['product']['MPN']}<input type="hidden" name="product_id[]" value="{$item['product_id']}"/></td>
 			<td class="basic_data">{$item['product']['Internal_PN']}</td>
+			<td class="basic_data">{$item['product']['MPN']}</td>
 			<td class="basic_data">{$item['product']['description']}</td>
 			<td class="basic_data">{$item['product']['manufacture']}</td>
 			<td>{$item['supplier']['name']}</td>
@@ -49,6 +50,7 @@ Product Entering List
 			<td>{$item['create_time']}</td>
 			<td align="center">{$item['staff']['name']}</td>
 			<td align="center">{$item['confirmed_staff']['name']}</td>
+			<td>{$item['remark']}</td>
 			<td><if condition="$item['status'] eq 0">
 				<a href="__URL__/form/id/{$item['id']}">Edit</a>
 				<a href="__URL__/delete/id/{$item['id']}" target="_iframe">Delete</a>
@@ -60,7 +62,7 @@ Product Entering List
 		</tr>
 		</iterate>
 		<tr>
-			<td colspan="16">{$page}</td>
+			<td colspan="17">{$page}</td>
 		</tr>
 		</table>
 	</td>

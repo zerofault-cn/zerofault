@@ -3,7 +3,7 @@ import('ViewModel');
 class LocationProductViewModel extends ViewModel {
 	public $viewFields = array(
 		'LocationProduct' => array('id'=>'lp_id', 'product_id', 'ori_quantity', 'chg_quantity'),
-		'Product' => array('code', 'fixed', 'MPN', 'Internal_PN', 'description', 'manufacture', 'value', 'project', '_on'=>'LocationProduct.product_id=Product.id'),
+		'Product' => array('code', 'type', 'fixed', 'MPN', 'Internal_PN', 'description', 'manufacture', 'value', 'project', '_on'=>'LocationProduct.product_id=Product.id'),
 		'ProductFlow' => array('_on'=>'ProductFlow.product_id=Product.id'),
 		'Category' => array('name'=>'category_name', '_on'=>'Product.category_id=Category.id'),
 		'Supplier' => array('name'=>'supplier_name', '_on'=>'Supplier.id=ProductFlow.supplier_id'),
