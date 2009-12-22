@@ -74,7 +74,7 @@ class BaseAction extends Action{
 		$this->assign("current_time", date("l, d/m/Y | h:i A"));//Thursday, 10/09/2009 | 11:53 AM
 		//检查认证识别号
 		if(!$_SESSION[C('USER_AUTH_KEY')] && 'Public'!=MODULE_NAME) {
-			//记下刚才的Module
+			//记下Module
 			Session::set('lastModule', MODULE_NAME);
 			//跳转到认证网关
 			redirect(PHP_FILE.C('USER_AUTH_GATEWAY'));
@@ -84,7 +84,7 @@ class BaseAction extends Action{
 			// 检查权限
 			if(!RBAC::AccessDecision()) {
 				if(in_array(ACTION_NAME,C('IFRAME_AUTH_ACTION'))) {
-					die(self::_error('Permission denied!', 2000));
+					die(self::_error('Permission denied!', 3000));
 				}
 				$this->assign('message','Permission denied!');
 				$this->assign('content','Public:error');

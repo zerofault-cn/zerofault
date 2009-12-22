@@ -5,7 +5,7 @@ if($_SERVER["SERVER_NAME"]=='localhost') {
 		'DB_NAME'			=> 'ERP2',
 		'DB_USER'			=> 'root',
 		'DB_PWD'			=> '',
-		'USER_AUTH_TYPE'	=> 2, //2:实时认证
+		'USER_AUTH_TYPE'	=> 2, //1:登录时一次验证，2:实时验证，默认为1
 	);
 }
 elseif($_SERVER["SERVER_NAME"]=='zerofault.zzl.org') {
@@ -13,7 +13,6 @@ elseif($_SERVER["SERVER_NAME"]=='zerofault.zzl.org') {
 		'DB_NAME'			=> 'zerofault_zzl_erp',
 		'DB_USER'			=> '22366_root',
 		'DB_PWD'			=> '123456',
-		'USER_AUTH_TYPE'	=> 0, //0:登录时一次认证
 	);
 }
 elseif($_SERVER["SERVER_NAME"]=='zerofault.oxyhost.com') {
@@ -34,19 +33,14 @@ $config = array_merge($config,array(
 		'USER_AUTH_MODEL'	=> 'Staff',
 		'USER_AUTH_KEY'		=> 'authId',
 		'ADMIN_AUTH_KEY'	=> 'administrator',
+		'SUPER_ADMIN_ID'	=> array(1),//超级管理员的ID数组
 		'USER_AUTH_GATEWAY' => '/Public/login',
 		'RBAC_ROLE_TABLE'	=> 'erp_role',
 		'RBAC_USER_TABLE'	=> 'erp_staff_role',
 		'RBAC_ACCESS_TABLE'	=> 'erp_role_node',
 		'RBAC_NODE_TABLE'	=> 'erp_node',
-		'NOT_AUTH_MODULE'	=> 'Index,Public,Script,Asset',
-		'REQUIRE_AUTH_MODULE'=> '',
-		'NOT_AUTH_ACTION'	=> '',
-		'REQUIRE_AUTH_ACTION'=> '',
+		'NOT_AUTH_MODULE'	=> 'Index,Public,Script,Asset,Inventory',
 		'IFRAME_AUTH_ACTION' => array('update','delete','edit','submit','confirm','select')//在Iframe中进行的且需要认证的操作
 		));
-//echo '<pre>';
-//print_r($config);
-//echo '</pre>';
 return $config;
 ?>
