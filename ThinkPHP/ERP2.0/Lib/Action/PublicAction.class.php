@@ -41,13 +41,13 @@ class PublicAction extends BaseAction{
 		$authInfo = RBAC::authenticate($map);
 //		dump($authInfo);
 		if(empty($authInfo)) {
-			self::_error('Error: Wrong User ID or Password!');
+			self::_error('Error: User ID/Password is wrong!');
 		}
 		else{
 			D('Staff')->where('id='.$authInfo['id'])->setField('login_time',date("Y-m-d H:i:s"));
 			$_SESSION[C('USER_AUTH_KEY')]	=	$authInfo['id'];
 			$_SESSION['loginUserName']		=	$authInfo['realname'];
-			if($authInfo['id']=='1') {
+			if(in_array($authInfo['id'], C('SUPER_ADMIN_ID'))) {
 				// 管理员不受权限控制影响
 				$_SESSION[C('ADMIN_AUTH_KEY')]	=	true;
 			}
@@ -66,7 +66,7 @@ class PublicAction extends BaseAction{
 	*/
 	public function logout(){
 		Session::clear();
-		self::_success('You have Logout!', __APP__);
+		self::_success('Logout success!', __APP__);
 	}
 
 }
