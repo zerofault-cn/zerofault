@@ -124,6 +124,12 @@ p.center{
 	text-align:center;
 	white-space:nowrap;
 }
+.main_menu_selected a, .main_menu_unselected a{
+	display:block;
+	width:100%;
+	height:100%;
+	text-decoration:none;
+}
 div.main{
 	background-color:white;
 }
@@ -242,9 +248,13 @@ td.clsTab {
 	background:#6699cc;
 }
 td#status_0, td#fixed1{
-	background:#32CD32;
+	background:#238E23;
 }
 td.clsTab a{
+	display:block;
+	width:100%;
+	height:100%;
+	text-decoration:none;
 	color:black;
 }
 td.current {
