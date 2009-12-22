@@ -4,7 +4,7 @@ return $config = array(
 	'DB_HOST'			=> '~DB_HOST~',
 	'DB_NAME'			=> '~DB_NAME~',
 	'DB_USER'			=> '~DB_USER~',
-	'DB_PWD'			=> '~DB_PWD',
+	'DB_PWD'			=> '~DB_PWD~',
 	'DB_PREFIX'			=> '~DB_PREFIX~',
 
 	'APP_CONFIG_LIST'	=> array('menu'),
