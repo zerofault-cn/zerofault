@@ -1,0 +1,35 @@
+<p class="page_title_text">Component List</p>
+<table cellpadding="3" border="1" bordercolor="#FFFFFF" style="border-collapse:collapse;">
+<tr>
+	<th>Code</th>
+	<th>Internal P/N</th>
+	<th>Description</th>
+	<th>Manufacture</th>
+	<th>MPN</th>
+	<th>Value/Package</th>
+	<th>Project</th>
+	<th>Unit</th>
+	<th>Category</th>
+	<th>Type</th>
+	<th>OP</th>
+</tr>
+<iterate name="result" id="item">
+<tr class="trbg{$mod}">
+	<td>{$item['code']}</td>
+	<td>{$item['Internal_PN']}</td>
+	<td>{$item['description']}</td>
+	<td>{$item['manufacture']}</td>
+	<td>{$item['MPN']}</td>
+	<td>{$item['value']}</td>
+	<td>{$item['project']}</td>
+	<td>{$item['unit']['name']}</td>
+	<td>{$item['category']['name']}</td>
+	<td><if condition="$item['fixed'] eq 1">Fixed Assets<else />Floating Assets</if></td>
+	<td><a href="__URL__/form/id/{$item['id']}">Edit</a>
+		<a href="__URL__/delete/id/{$item['id']}" target="_iframe">Delete</a></td>
+</tr>
+</iterate>
+</table>
+<p class="center">
+	<input type="button" onclick="javascript:document.location='__URL__/form';" value="Add a New Component" />
+</p>
