@@ -1,0 +1,65 @@
+.jqiwarning .jqi{
+      background-color: #b0be96;
+}
+.jqifade{
+      background-color: #ffffff;
+}
+div.jqi{
+      position: absolute;
+      background-color: #c0cEa6;
+      padding: 10px;
+      width: 300px;
+}
+div.jqi .jqiclose{
+      float: right;
+      margin: -35px -10px 0 0;
+      cursor: pointer;
+}
+div.jqi .jqicontainer{
+      background-color: #e0eEc6;
+      padding: 5px;
+      color: #ffffff;
+      font-weight: bold;
+}
+div.jqi .jqimessage{
+      background-color: #c0cEa6;
+      padding: 10px;
+}
+div.jqi .jqibuttons{
+      text-align: center;
+      padding: 5px 0 0 0;
+}
+div.jqi button{
+      padding: 3px 10px 3px 10px;
+      margin: 0 10px;
+} 
+
+/*
+*------------------------
+*   clean blue ex
+*------------------------
+*/
+.cleanbluewarning .cleanblue{ background-color: #acb4c4; }
+.cleanbluefade{ position: absolute; background-color: #888; }
+div.cleanblue{ position: absolute; background-color: #ffffff; width: 300px; font-size: 11px; text-align: left; border: solid 1px #CCC; }
+div.cleanblue .cleanbluecontainer{ background-color: #ffffff; border-top: solid 20px #ABABAB; padding: 5px; font-weight: bold; }
+div.cleanblue .cleanblueclose{ float: right; width: 18px; cursor: pointer; margin: -24px -6px 0 0; font-weight:bold;color: #ffffff; font-weight: bold; }
+div.cleanblue .cleanbluemessage{ padding: 10px; line-height: 20px; color: #333333; }
+div.cleanblue .cleanbluebuttons{ text-align: right; padding: 5px 0 5px 0; border: solid 1px #eeeeee; background-color: #f4f4f4; }
+div.cleanblue button{ padding: 3px 10px; margin: 0 10px; background-color: #BBB; border: solid 1px #f4f4f4; color: #ffffff; font-weight: bold; font-size: 12px; }
+div.cleanblue button:hover{ border: solid 1px #d4d4d4; }
+
+
+/*
+*------------------------
+*   Ext Blue Ex
+*------------------------
+*/
+.extbluewarning .extblue{ border:1px red solid; }
+.extbluefade{ position: absolute; background-color: #ffffff; }
+div.extblue{ border:1px #6289B6 solid; position: absolute; background-color: #CAD8EA; padding: 0; width: 300px; text-align: left; }
+div.extblue .extblueclose{ background-color: #CAD8EA; margin:2px -2px 0 0; cursor: pointer; color: red; text-align: right; }
+div.extblue .extbluecontainer{ background-color: #CAD8EA; padding: 0 5px 5px 5px; color: #000000; font:normal 11px Verdana; }
+div.extblue .extbluemessage{ background-color: #CAD8EA; padding: 0; margin:0 15px 15px 15px; }
+div.extblue .extbluebuttons{ text-align: center; padding: 0px 0 0 0; }
+div.extblue button{ padding: 1px 4px; margin: 0 10px; background-color:#cccccc; font-weight:normal; font-family:Verdana; font-size:10px; }
