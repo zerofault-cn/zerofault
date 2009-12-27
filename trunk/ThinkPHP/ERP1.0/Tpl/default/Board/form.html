@@ -1,0 +1,110 @@
+<p class="page_title_text">Board Form</p>
+<form action="__URL__/submit" method="post" enctype="multipart/form-data" target="_iframe">
+<input type="hidden" name="id" value="{$info.id}" />
+<table>
+<tr>
+	<td>Code:</td>
+	<td><input type="text" maxlength="10" size="15" name="code" value="{$code}" readonly="true" /></td>
+</tr>
+<tr>
+	<td>Board Code:</td>
+	<td><input type="text" maxlength="40" size="15" name="PN" value="{$info.Internal_PN}" /></td>
+</tr>
+<tr>
+	<td>Board Name:</td>
+	<td><input type="text" maxlength="40" size="15" name="description" value="{$info.description}" /></td>
+</tr>
+<tr>
+	<td>Manufacture:</td>
+	<td><input type="text" maxlength="20" size="15" name="manufacture" value="{$info.manufacture}"/></td>
+</tr>
+<tr>
+	<td>Board Series Number:</td>
+	<td><input type="text" maxlength="20" size="15" name="MPN" value="{$info.MPN}"/></td>
+</tr>
+<tr>
+	<td>Value/Package:</td>
+	<td><input type="text" maxlength="20" size="15" name="value" value="{$info.value}"/></td>
+</tr>
+<tr>
+	<td>Unit:</td>
+	<td><select name="unit_id">{$info.unit_opts}</td>
+</tr>
+<tr>
+	<td>Category:</td>
+	<td><select name="category_id"><option value="">Select One</option>{$info.category_opts}</select></td>
+</tr>
+<tr>
+	<td>Fixed Assets:</td>
+	<td><if condition="$info['ficxed'] eq 1">
+		<input type="radio" name="fixed" value="1" checked="true"/>Yes&nbsp;&nbsp;<input type="radio" name="fixed" value="0" />No
+		<else />
+		<input type="radio" name="fixed" value="1" />Yes&nbsp;&nbsp;<input type="radio" name="fixed" value="0" checked="true"/>No
+		</if>
+	</td>
+</tr>
+<tr>
+	<td>Status:</td>
+	<td><select name="status_id"><option value="">Select One</option>{$info.status_opts}</select></td>
+</tr>
+<tr>
+	<td>RoHS:</td>
+	<td><input type="text" maxlength="20" size="15" name="Rohs" value="{$info.Rohs}"/></td>
+</tr>
+<tr>
+	<td>LT days:</td>
+	<td><input type="text" maxlength="20" size="15" name="LT_days" value="{$info.LT_days}"/></td>
+</tr>
+<tr>
+	<td>MOQ:</td>
+	<td><input type="text" maxlength="20" size="15" name="MOQ" value="{$info.MOQ}"/></td>
+</tr>
+<tr>
+	<td>SPQ:</td>
+	<td><input type="text" maxlength="20" size="15" name="SPQ" value="{$info.SPQ}"/></td>
+</tr>
+<tr>
+	<td>MSL:</td>
+	<td><input type="text" maxlength="20" size="15" name="MSL" value="{$info.MSL}"/></td>
+</tr>
+<tr>
+	<td>Project:</td>
+	<td><input type="text" maxlength="20" size="15" name="project" value="{$info.project}"/></td>
+</tr>
+<tr>
+	<td>Inventory Limit:</td>
+	<td><input type="text" maxlength="20" size="15" name="inventory_limit" value="{$info.inventory_limit}"/></td>
+</tr>
+<tr>
+	<td>Currency:</td>
+	<td><select name="currency_id"><option value="">Select One</option>{$info.currency_opts}</select></td>
+</tr>
+<tr>
+	<td>Price:</td>
+	<td><input type="text" maxlength="20" size="15" name="price" value="{$info.price}"/></td>
+</tr>
+<tr>
+	<td>Accessories:</td>
+	<td><input type="text" maxlength="20" size="15" name="accessories" value="{$info.accessories}"/></td>
+</tr>
+<tr>
+	<td>Attachment:</td>
+	<td><input type="file" size="15" name="attachment" /><br />
+	<neq name="info.attachment" value="">
+	<a href="__APP__/../{$info.attachment}" target="_blank" title="view attachment in new window">View Attachment</a>
+	</neq>
+	</td>
+</tr>
+<tr>
+	<td valign="top">Remark:</td>
+	<td><textarea name="remark" rows="3" cols="36">{$info.remark}</textarea></td>
+</tr>
+</table>
+<p class="center">
+<if condition="$info['id'] eq 0">
+<input type="Submit" value="Insert New Component" name="submit"/>
+<else />
+<input type="Submit" value="Update Component Data" name="submit"/>
+</if>
+</p>
+</form>
