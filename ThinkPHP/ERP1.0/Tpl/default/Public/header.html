@@ -1,0 +1,38 @@
+<table class="quick_menu" cellspacing="0" cellpadding="0" border="0" width="100%">
+<tr>
+	<td class="quick_menu_left" align="left" style="width: 100%;">
+	<if condition="!empty($_SESSION['loginUserName'])">
+			<a href="__APP__/Asset/profile?width=300&height=410&modal=true" class="thickbox"><img src="../Public/Images/user.gif" alt="User" align="absmiddle"/> {@loginUserName}<br />
+			<a href="__APP__/Public/logout" target="_iframe">Logout</a>
+			</if>
+	</td>
+	<td class="quick_menu_tabs">
+		<table cellspacing="0" cellpadding="0" class="quick_menu_tabs">
+		<tr>
+			<iterate name="topmenu" id="item">
+			<td align="center" class="quick_menu_tab"><a href="__APP__/{$item}?top={$key|str_replace='&nbsp;',' ',###}">{$key}</a></td>
+			</iterate>
+		</tr>
+		</table>
+	</td>
+	</tr>
+</table>
+
+<present name="submenu">
+<table cellspacing="0" cellpadding="0" border="0" width="100%" class="main_menu">
+<tr>
+	<td class="main_menu">
+		<table class="main_menu">
+		<tr>
+			<iterate name="submenu" id="item">
+				<if condition="(ACTION_NAME eq 'index' and MODULE_NAME eq $item) or (ACTION_NAME neq 'index' and MODULE_NAME.'/'.ACTION_NAME eq $item)">
+			<td class="main_menu_selected"><a href="__APP__/{$item}">{$key}</a></td>
+				<else />
+			<td class="main_menu_unselected"><a href="__APP__/{$item}">{$key}</a></td>
+				</if>
+			</iterate>
+		</table>
+	</td>
+</tr>
+</table>
+</present>

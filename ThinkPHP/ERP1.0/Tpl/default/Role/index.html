@@ -1,0 +1,57 @@
+<p class="page_title_text">System Roles</p>
+	<table id="table" border="1" cellpadding="3" cellspacing="0">
+	<tr>
+		<th width="5%">ID</th>
+		<th width="15%">Role Name</th>
+		<th>Privileges</th>
+		<th width="15%"></th>
+	</tr>
+	<iterate name="list" id="item">
+	<tr bgcolor="<eq name='mod' value='1'>#FFFFE1</eq>" class="<eq name='item.status' value='0'>gray</eq>">
+		<td>{$item.id}</td>
+		<td><label id="{$item['id']}">{$item['name']}</label></td>
+		<td class="a_left">
+			<iterate name="item['Node']" id="node" key="j">
+				<if condition="empty($node['title'])">{$node['name']}<else />{$node['title']}</if>
+				( {$node['subNode']} )
+				<br />
+			</iterate>
+		</td>
+		<td>
+			<a href="__URL__/index/id/{$item['id']}" title="Edit"><img src="../Public/Images/options-edit.gif" alt="Edit" align="absmiddle"/></a>
+			<a href="__URL__/update/id/{$item['id']}/f/status/v/{:intval(!$item['status'])}" target="_iframe" title='<if condition="$item.status eq 0">Enable<else />Disable</if>'><if condition="$item['status'] eq 0"><img src="../Public/Images/add.gif" alt="Enable" align="absmiddle"/><else /><img src="../Public/Images/delete.gif" alt="Disable" align="absmiddle"/></if></a>
+			<img class="delete" id="{$item['id']}" name="{$item['name']}" src="../Public/Images/cross.gif" alt="Delete" align="absmiddle"/>
+		</td>
+	</tr>
+	</iterate>
+	</table>
+	<div class="addForm">
+		<fieldset>
+			<legend><present name="role_info">Assign Privileges<else />Add New Role</present></legend>
+			<input type="hidden" class="role_id" value="{$role_info['id']}"/>
+			<label>Role Name: </label><input type="text" class="name" name="name" size="10" tabindex="1" value="{$role_info['name']}" /><br />
+			Assign privileges for: <br />
+			<iterate name="node_list" id="item">
+			<dl id="{$item['id']}">
+				<dt>
+					<input type="checkbox" name="module_node" class="node" value="{$item['id']}" <iterate name="role_info['Node']" id="role_node" key="j">
+					<if condition="$role_node['id'] eq $item['id']">checked="true"</if>
+					</iterate>
+					/><if condition="empty($item['title'])">{$item['name']}<else/>{$item['title']}</if>
+				</dt>
+				<dd id="node_{$item['id']}">
+					<iterate name="item['subNode']" id="subnode" key='j'>
+					<input type="checkbox" name="action_node" class="node" value="{$subnode['id']}" 
+					<iterate name="role_info['Node'][$item['id']]['subNode']" id="role_subnode" key="k">
+					<if condition="$role_subnode['id'] eq $subnode['id']">checked="true"</if>
+					</iterate>
+					/><if condition="empty($subnode['title'])">{$subnode['name']}<else/>{$subnode['title']}</if><br />
+					</iterate>
+				</dd>
+			</dl>
+			</iterate>
+			<div class="clear"></div>
+			<input type="button" value="Submit" class="submit" />
+		</fieldset>
+	</div>
+	<script language="JavaScript" type="text/javascript" src="../Public/Js/role_func.js"></script>
