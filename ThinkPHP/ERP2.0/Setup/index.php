@@ -105,7 +105,7 @@ b{
 </tr>
 <tr>
 	<td>Attach Folder Writable</td>
-	<td><?php echo is_writable('../Attach/product') ? '<b>Yes</b>' : '<strong>No</strong>';?></td>
+	<td><?php echo is_writable('../Attach/Product') ? '<b>Yes</b>' : '<strong>No</strong>';?></td>
 </tr>
 <tr>
 	<td colspan="2" bgcolor="#DDDDDD">Database Setting</td>
