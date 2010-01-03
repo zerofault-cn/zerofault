@@ -206,6 +206,86 @@ class LineAction extends BaseAction{
 			echo "Done\n";
 		}
 	}
+	function check() {
+		$local_list = $this->dao->where(array('status'=>1))->select();
+		foreach($local_list as $n=>$local_info) {
+			echo $n.". ".$local_info['name']."\t\n\t";
+			$remote_info = S($local_info['number']);
+			if(false === $remote_info){
+				echo "Get data\t";
+				$name = $local_info['name'];
+				if($local_info['number']<1000) {
+					$name = $local_info['number'];
+				}
+				$remote_info = self::getRemoteData($name);
+				S($local_info['number'], $remote_info, 7*86400);
+			}
+			if(empty($remote_info)) {
+				echo "Not Exists.\t";
+				$this->dao->where('id='.$local_info['id'])->setField(array('update_time','status'), array(date("Y-m-d H:i:s"),-1));
+				echo "Delete Done\n";
+				continue;
+			}
+			foreach($remote_info as $info) {
+				if($local_info['name'] == $info['name']) {
+					$remote_info = $info;
+					break;
+				}
+				else{
+					$remote_info = array();
+				}
+			}
+			if(empty($remote_info)) {
+				echo "Wrong Data.\tPass\n";
+				continue;
+			}
+			//检查line
+			echo "Base info\t";
+			$data = array();
+			$data['start_sid']   = self::getSiteId($remote_info['start_name']);
+			$data['start_first'] = $remote_info['start_first'];
+			$data['start_last']  = $remote_info['start_last'];
+			$data['end_sid']     = self::getSiteId($remote_info['end_name']);
+			$data['end_first']   = $remote_info['end_first'];
+			$data['end_last']    = $remote_info['end_last'];
+			$data['fare_norm']   = $remote_info['fare_norm'];
+			$data['fare_cond']   = $remote_info['fare_cond'];
+			$data['ic_card']     = $remote_info['ic_card'];
+			$data['service_day'] = $remote_info['service_day'];
+			foreach($data as $key=>$val) {
+				if(trim($val) != $local_info[$key]) {
+					echo "Changed\t";
+					$this->dao->where('id='.$local_info['id'])->setField('status',0);
+					break;
+				}
+			}
+			//检查route
+			$dRoute = M('Route');
+			$local_list1 = $dRoute->where(array('lid'=>$local_info['id'], 'dir'=>1))->order('sort')->select();
+			$local_list2 = $dRoute->where(array('lid'=>$local_info['id'], 'dir'=>-1))->order('sort')->select();
+			echo "Route1\t";
+			foreach($remote_info['list1'] as $i=>$site) {
+				if ($local_list1[$i]['sid'] != self::getSiteId($site)) {
+					echo "Changed\t";
+					$this->dao->where('id='.$local_info['id'])->setField('status',0);
+					break;
+				}
+			}
+			if(empty($remote_info['list2']) || $remote_info['list1']==$remote_info['list2']) {
+				echo "Circle Line Done\n";
+				continue;
+			}
+			echo "Route2\t";
+			foreach($remote_info['list2'] as $i=>$site) {
+				if ($local_list2[$i]['sid'] != self::getSiteId($site)) {
+					echo "Changed\t";
+					$this->dao->where('id='.$local_info['id'])->setField('status',0);
+					break;
+				}
+			}
+			echo "\n";
+		}
+	}
 	function getRemoteData($name) {
 		require_cache(LIB_PATH.'/simple_html_dom.php');
 		global $table,$remote_info,$offset;
@@ -365,7 +445,7 @@ class LineAction extends BaseAction{
 		else{
 			$id=$_REQUEST['id'];
 			$field=$_REQUEST['f'];
-			$value=$_REQUEST['v'];
+			$value=str_replace('|', '/', $_REQUEST['v']);
 			if('sid' == substr($field,-3)) {
 				$value = self::getSiteId($value);
 			}
