@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 -- 
 -- 主机: localhost
--- 生成日期: 2010 年 01 月 03 日 05:36
+-- 生成日期: 2010 年 01 月 03 日 05:49
 -- 服务器版本: 5.0.22
 -- PHP 版本: 5.2.11
 
@@ -214,7 +214,7 @@ INSERT INTO `bus_hz_line` (`id`, `name`, `number`, `start_sid`, `start_first`, `
 (168, '313/K313', 313, 890, '5:15', '20:30', 217, '5:10', '20:30', '2.00', '3.00', 'A/B/C/D/T', '每天', '2009-10-12 14:14:38', 1),
 (169, 'K315', 315, 777, '5:00', '21:15', 845, '5:00', '21:30', '--', '3.00', 'A/B/C/D/T', '每天', '2010-01-03 11:10:03', 1),
 (170, '316', 316, 172, '6:35', '20:55', 668, '5:50', '21:10', '1.00', '2.00', 'A/B/C/D/T', '每天', '2009-10-12 14:33:04', 1),
-(171, 'K317/KK317', 317, 267, '5:30', '21:00', 644, '6:00', '22:00', '1.50', '3.00', 'A/B/C/D/T', '每天', '2010-01-03 13:31:02', 1),
+(171, '317/K317', 317, 267, '5:30', '21:00', 644, '6:00', '22:00', '1.50', '3.00', 'A/B/C/D/T', '每天', '2010-01-03 13:31:02', 1),
 (172, '318', 318, 808, '5:15', '18:40', 925, '5:45', '19:10', '1.00', '--', 'A/B/C/D/T', '每天', '2009-10-12 14:14:43', 1),
 (173, '318(区间)', 318, 808, '6:00', '18:00', 926, '6:20', '18:20', '1.00', '--', 'A/B/C/D/T', '每天', '2009-10-12 14:14:43', 1),
 (174, 'K319', 319, 927, '5:15', '22:20', 928, '5:15', '21:30', '--', '2.00', 'A/B/C/D/T', '每天', '2009-10-12 14:14:44', 1),
@@ -20640,3 +20640,31 @@ INSERT INTO `bus_hz_site` (`id`, `name`, `around`) VALUES
 (2725, '萍水东路塘中路口', ''),
 (2726, '婴儿港桥', ''),
 (2727, '中兴桥', '');
+
+-- --------------------------------------------------------
+
+-- 
+-- 表的结构 `bus_hz_trans`
+-- 
+
+DROP TABLE IF EXISTS `bus_hz_trans`;
+CREATE TABLE `bus_hz_trans` (
+  `id` int(10) unsigned NOT NULL auto_increment,
+  `from_sid` int(10) unsigned NOT NULL default '0',
+  `from_lid` smallint(5) unsigned NOT NULL default '0',
+  `from_dir` tinyint(1) NOT NULL default '0',
+  `from_sort1` smallint(5) unsigned NOT NULL default '0',
+  `from_sort2` smallint(5) unsigned NOT NULL default '0',
+  `trans_sid` int(10) unsigned NOT NULL default '0',
+  `to_lid` smallint(5) unsigned NOT NULL default '0',
+  `to_dir` tinyint(1) NOT NULL default '0',
+  `to_sid` int(10) unsigned NOT NULL default '0',
+  `to_sort1` smallint(5) unsigned NOT NULL default '0',
+  `to_sort2` smallint(5) unsigned NOT NULL default '0',
+  PRIMARY KEY  (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+-- 
+-- 导出表中的数据 `bus_hz_trans`
+-- 
+
