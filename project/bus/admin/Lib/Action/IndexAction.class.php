@@ -41,7 +41,12 @@ class IndexAction extends BaseAction{
 		}
 		$line = M('Line')->where(array('status'=>array('gt',0)))->order('number')->select();
 		foreach($line as $item) {
-			$str .= $item['name'].",";
+			if ($item['number']<1000) {
+				$str .= $item['number'].",";
+			}
+			else {
+				$str .= $item['name'].",";
+			}
 			$str .= $site[$item['start_sid']].",";
 			$str .= $item['start_first'].",";
 			$str .= $item['start_last'].",";
