@@ -17,7 +17,7 @@ class CategoryAction extends BaseAction{
 
 	public function index(){
 		$arr = $this->dao->group('type')->field('type')->select();
-		$result = array();
+		$result = array('Component'=>array(), 'Board'=>array());
 		foreach($arr as $val) {
 			$result[$val['type']] = $this->dao->where(array('type'=>$val['type']))->select();
 		}
