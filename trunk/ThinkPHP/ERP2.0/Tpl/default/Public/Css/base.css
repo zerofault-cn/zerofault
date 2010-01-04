@@ -101,7 +101,9 @@ p.center{
 	padding-right:10px;
 	text-align:right;
 }
-
+.quick_menu_tabs td.onfoc{
+	background:#66CCFF;
+}
 .main_menu {
 	border:2px inset white;
 }
@@ -151,7 +153,7 @@ table span.c0{
 }
 .addForm dl{
 	float:left;
-	width:180px;
+	width:230px;
 	border:1px dashed #ddd;
 	margin:3px;
 }

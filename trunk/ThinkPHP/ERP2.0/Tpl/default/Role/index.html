@@ -27,9 +27,9 @@
 	</table>
 	<div class="addForm">
 		<fieldset>
-			<legend><present name="role_info">Assign Privileges<else />Add New Role</present></legend>
+			<legend><present name="role_info">Change Privileges<else />Add New Role</present></legend>
 			<input type="hidden" class="role_id" value="{$role_info['id']}"/>
-			<label>Role Name: </label><input type="text" class="name" name="name" size="10" tabindex="1" value="{$role_info['name']}" /><br />
+			<label>Role Name: </label><input type="text" class="name" name="name" size="20" tabindex="1" value="{$role_info['name']}" /><br />
 			Assign privileges for: <br />
 			<iterate name="node_list" id="item">
 			<dl id="{$item['id']}">

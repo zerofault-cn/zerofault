@@ -1,16 +1,20 @@
 <table class="quick_menu" cellspacing="0" cellpadding="0" border="0" width="100%">
 <tr>
 	<td class="quick_menu_left" align="left" style="width: 100%;">
-	<if condition="!empty($_SESSION['loginUserName'])">
-			<a href="__APP__/Asset/profile?width=300&height=410&modal=true" class="thickbox"><img src="../Public/Images/user.gif" alt="User" align="absmiddle"/> {@loginUserName}<br />
-			<a href="__APP__/Public/logout" target="_iframe">Logout</a>
-			</if>
+		<if condition="!empty($_SESSION['loginUserName'])">
+		<a href="__APP__/Asset/profile?width=300&height=410&modal=true" class="thickbox"><img src="../Public/Images/user.gif" alt="User" align="absmiddle"/> {@loginUserName}<br />
+		<a href="__APP__/Public/logout" target="_iframe">Logout</a>
+		</if>
 	</td>
 	<td class="quick_menu_tabs">
 		<table cellspacing="0" cellpadding="0" class="quick_menu_tabs">
 		<tr>
 			<iterate name="topmenu" id="item">
+				<if condition="$_SESSION['top'] eq str_replace('&nbsp;',' ',$key)">
+			<td align="center" class="quick_menu_tab onfoc"><a href="__APP__/{$item}?top={$key|str_replace='&nbsp;',' ',###}">{$key}</a></td>
+				<else />
 			<td align="center" class="quick_menu_tab"><a href="__APP__/{$item}?top={$key|str_replace='&nbsp;',' ',###}">{$key}</a></td>
+				</if>
 			</iterate>
 		</tr>
 		</table>

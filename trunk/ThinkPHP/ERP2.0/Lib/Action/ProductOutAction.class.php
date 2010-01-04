@@ -32,7 +32,7 @@ class ProductOutAction extends BaseAction{
 	Public function back() {
 		$this->index('back');
 	}
-	public function index($action='apply',$fixed='') {
+	private function index($action='apply',$fixed='') {
 		$rs = M('Options')->where(array('type'=>'unit'))->order('sort')->select();
 		$unit = array();
 		foreach($rs as $i=>$item) {

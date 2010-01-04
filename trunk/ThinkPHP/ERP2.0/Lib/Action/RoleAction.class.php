@@ -70,7 +70,7 @@ class RoleAction extends BaseAction{
 
 		$this->assign("topnavi",$topnavi);
 		$this->assign('list',$rs);
-		$this->assign('node_list',$dNode->relation(true)->where(array('pid'=>0))->select());
+		$this->assign('node_list',$dNode->relation(true)->where(array('pid'=>0))->order('title')->select());
 		if(!empty($_REQUEST['id'])) {
 			$this->assign('role_info',$role_info);
 		}
