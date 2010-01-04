@@ -2,10 +2,10 @@
 DROP TABLE IF EXISTS `erp_node`;
 CREATE TABLE IF NOT EXISTS `erp_node` (
   `id` smallint(6) unsigned NOT NULL auto_increment,
-  `pid` smallint(6) unsigned NOT NULL DEFAULT '' ,
+  `pid` smallint(6) unsigned NOT NULL DEFAULT '0' ,
   `name` varchar(20) NOT NULL DEFAULT '' ,
   `title` varchar(50) NOT NULL DEFAULT '' ,
-  `level` tinyint(1) unsigned NOT NULL DEFAULT '' ,
+  `level` tinyint(1) unsigned NOT NULL DEFAULT '0' ,
   PRIMARY KEY (`id`)
 );
 
