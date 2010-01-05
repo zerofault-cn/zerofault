@@ -43,7 +43,7 @@ Product Entering List
 			<td class="basic_data">{$item['product']['description']}</td>
 			<td class="basic_data">{$item['product']['manufacture']}</td>
 			<td>{$item['supplier']['name']}</td>
-			<td>{$item['quantity']}<if condition="$action neq 'return' and $status eq 1">/{$item['return_quantity']}</if></td>
+			<td>{$item['quantity']}<if condition="$action neq 'return' and $status eq 1">/{$item['returned_quantity']}</if></td>
 			<td>{$unit[$item['product']['unit_id']]}</td>
 			<td>{$item['price']}</td>
 			<td>{$item['quantity']*$item['price']}</td>

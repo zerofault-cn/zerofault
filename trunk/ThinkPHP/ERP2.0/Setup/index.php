@@ -66,8 +66,8 @@ if(!empty($_POST['submit'])) {
 	exit;
 }
 ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="content-type" content="text/html; charset=utf-8" />
 <title>ERP Install</title>
@@ -83,7 +83,7 @@ b{
 <body>
 <form method="post" target="_iframe">
 <table align="center" cellpadding="5">
-<caption>ERP Install</option>
+<caption>ERP Install</caption>
 <tr>
 	<td colspan="2" bgcolor="#DDDDDD">System Enviroment Infomation</td>
 </tr>

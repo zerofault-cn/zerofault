@@ -156,7 +156,7 @@ class ProductInAction extends BaseAction{
 		empty($_REQUEST['quantity']) && self::_error('Quantity number required!');
 		//empty($_REQUEST['price']) && self::_error('Price value required!');
 		
-		($_REQUEST['quantity']<0) && self::_error('Quantity number must be positive!');
+		($_REQUEST['quantity']<0) && self::_error('Quantity number must be lager than zero!');
 		('return'==$action) && ($_REQUEST['quantity']>$_REQUEST['ori_quantity']) && self::_error('Return quantity can\'t be larger than '.$_REQUEST['ori_quantity']);
 
 		if(!empty($id) && $id>0) {//from edit
