@@ -11,7 +11,7 @@ class InventoryAction extends BaseAction{
 	protected $dao;
 
 	public function _initialize() {
-		$this->dao = D('LocationProductView');
+		$this->dao = D('ProductView');
 		parent::_initialize();
 	}
 
@@ -19,8 +19,8 @@ class InventoryAction extends BaseAction{
 		$this->assign('category_opts', self::genOptions(M('Category')->select(), $_REQUEST['category_id']) );
 		$this->assign('supplier_opts', self::genOptions(D('Supplier')->select(), $_REQUEST['supplier_id']));
 		$where = array();
-		$where['LocationProduct.type'] = 'location';
-		$where['location_id'] = 1;
+		$where['action'] = 'enter';
+		$where['status'] = 1;
 		$result = array();
 		if(!empty($_POST['submit'])) {
 			!empty($_REQUEST['category_id']) && ($where['category_id'] = $_REQUEST['category_id']);
@@ -31,13 +31,22 @@ class InventoryAction extends BaseAction{
 			!empty($_REQUEST['MPN']) 		 && ($where['MPN'] 		   = array('like', '%'.trim($_REQUEST['MPN']).'%'));
 			!empty($_REQUEST['value']) 		 && ($where['value'] 	   = array('like', '%'.trim($_REQUEST['value']).'%'));
 			!empty($_REQUEST['project']) 	 && ($where['project'] 	   = array('like', '%'.trim($_REQUEST['project']).'%'));
-			$result = $this->dao->distinct(true)->where($where)->select();
-			
+			$result = $this->dao->field("Options.name as unit_name, Category.name as category_name, Product.id as product_id, Product.value as value, Product.project as project, Product.MPN as MPN, Product.Internal_PN as Internal_PN, Product.description as description, Product.manufacture as manufacture, group_concat(Supplier.name SEPARATOR '<br />') as supplier_name")->where($where)->group('product_id')->select();
+			foreach ($result as $i=>$val) {
+				$where = array();
+				$where['product_id'] = $val['product_id'];
+				$where['status'] = 1;
+				$result[$i]['quantity'] = M('ProductFlow')->where($where)->group('action')->getField('action,sum(quantity)');
+			}
 		}
 		$this->assign('request', $_REQUEST);
 		$this->assign('result', $result);
 		$this->assign('content','Inventory:index');
 		$this->display('Layout:ERP_layout');
+	}
+	public function query() {
+		$this->assign('content', 'Inventory:query');
+		$this->display('Layout:content');
 	}
 
 }

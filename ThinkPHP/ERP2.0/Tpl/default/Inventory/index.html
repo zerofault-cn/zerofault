@@ -33,17 +33,25 @@
 <if condition="empty($result) eq false">
 <table cellpadding="3" border="1" bordercolor="#FFFFFF" style="border-collapse:collapse;">
 <tr>
-	<th>No.</th>
-	<th>Category</th>
-	<th>Supplier</th>
-	<th class="basic_data">Internal P/N</th>
-	<th class="basic_data">Description</th>
-	<th class="basic_data">Manufacture</th>
-	<th class="basic_data">MPN</th>
-	<th class="basic_data">Value/Package</th>
-	<th class="basic_data">Project</th>
-	<th>Quantity</th>
-	<th>Unit</th>
+	<th rowspan="2">No.</th>
+	<th rowspan="2">Category</th>
+	<th rowspan="2">Supplier(s)</th>
+	<th rowspan="2" class="basic_data">Internal P/N</th>
+	<th rowspan="2" class="basic_data">Description</th>
+	<th rowspan="2" class="basic_data">Manufacture</th>
+	<th rowspan="2" class="basic_data">MPN</th>
+	<th rowspan="2" class="basic_data">Value/Package</th>
+	<th rowspan="2" class="basic_data">Project</th>
+	<th colspan="6">Quantity</th>
+	<th rowspan="2">Unit</th>
+</tr>
+<tr>
+	<th><abbr title="Entered Quantity">E</abbr></th>
+	<th><abbr title="Returned Quantity">R</abbr></th>
+	<th><abbr title="Applied Quantity">A</abbr></th>
+	<th><abbr title="Transfered Quantity">T</abbr></th>
+	<th><abbr title="Released Quantity">R</abbr></th>
+	<th><abbr title="Scraped Quantity">S</abbr></th>
 </tr>
 <iterate name="result" id="item">
 <tr class="trbg{$mod}">
@@ -56,7 +64,12 @@
 	<td>{$item['MPN']}</td>
 	<td>{$item['value']}</td>
 	<td>{$item['project']}</td>
-	<td>{$item['ori_quantity']+$item['chg_quantity']}</td>
+	<td><a href="__URL__/query/action/enter/id/{$item['product_id']}?width=600&height=300&modal=true" class="thickbox">{$item['quantity']['enter']}</a></td>
+	<td>{$item['quantity']['return']|default=0}</td>
+	<td>{$item['quantity']['apply']|default=0}</td>
+	<td>{$item['quantity']['transfer']|default=0}</td>
+	<td>{$item['quantity']['release']|default=0}</td>
+	<td>{$item['quantity']['scrap']|default=0}</td>
 	<td>{$item['unit_name']}</td>
 </tr>
 </iterate>
