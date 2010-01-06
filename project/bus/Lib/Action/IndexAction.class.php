@@ -122,12 +122,12 @@ class IndexAction extends Action{
 		$result .= '可使用公交卡:'.$line_info['ic_card'].' ';
 		$result .= '服务时间:'.$line_info['service_day'].'<br />';
 		
-		$route = M('Route')->where(array('lid'=>$id,'dir'=>1))->order('sort')->select();
+		$route = M('Route')->distinct(true)->field('sid')->where(array('lid'=>$id,'dir'=>1))->order('sort')->select();
 		$site_info = array();
 		foreach($route as $item) {
 			$site_info[] = '<a href="'.__URL__.'/site/id/'.$item['sid'].'" title="查看经过【'.$Site[$item['sid']].'】的所有线路">'.$Site[$item['sid']].'</a>';
 		}
-		$route = M('Route')->where(array('lid'=>$id,'dir'=>-1))->order('sort')->select();
+		$route = M('Route')->distinct(true)->field('sid')->where(array('lid'=>$id,'dir'=>-1))->order('sort')->select();
 		if(empty($route)) {
 			$result .= '<span style="color:#FF00FF">环线：</span>';
 			$result .= implode('→',$site_info);
@@ -240,11 +240,11 @@ class IndexAction extends Action{
 		$count = array();
 		foreach($rs as $i=>$item) {
 			if(!empty($item['lid'])) {
-				$count[] = $rs[$i]['count'] = M('Route')->where(array('lid'=>$item['lid'],'dir'=>$item['dir'],'sort'=>array('between',$item['sort1'].','.$item['sort2'])))->order('sort')->count();
+				$count[] = $rs[$i]['count'] = M('Route')->distinct(true)->field('sid')->where(array('lid'=>$item['lid'],'dir'=>$item['dir'],'sort'=>array('between',$item['sort1'].','.$item['sort2'])))->order('sort')->count();
 			}
 			else{
-				$count1 = M('Route')->where(array('lid'=>$item['from_lid'],'dir'=>$item['from_dir'],'sort'=>array('between',$item['from_sort1'].','.$item['from_sort2'])))->order('sort')->count();
-				$count2 = M('Route')->where(array('lid'=>$item['to_lid'],'dir'=>$item['to_dir'],'sort'=>array('between',$item['to_sort1'].','.$item['to_sort2'])))->order('sort')->count();
+				$count1 = M('Route')->distinct(true)->field('sid')->where(array('lid'=>$item['from_lid'],'dir'=>$item['from_dir'],'sort'=>array('between',$item['from_sort1'].','.$item['from_sort2'])))->order('sort')->count();
+				$count2 = M('Route')->distinct(true)->field('sid')->where(array('lid'=>$item['to_lid'],'dir'=>$item['to_dir'],'sort'=>array('between',$item['to_sort1'].','.$item['to_sort2'])))->order('sort')->count();
 				$count[] = $rs[$i]['count'] = $count1+$count2;
 			}
 		}
@@ -347,15 +347,15 @@ class IndexAction extends Action{
 		if(empty($to_lid)) {
 			$trans = array('trans_sids'=>$to_sid);
 			$from_line = M('Line')->find($from_lid);
-			$from_route = M('Route')->where(array('lid'=>$from_lid,'dir'=>$from_dir))->select();
+			$from_route = M('Route')->distinct(true)->field('sid')->where(array('lid'=>$from_lid,'dir'=>$from_dir))->select();
 		}
 		else{
 			$where['to_lid'] = $to_lid;
 			$trans = M('Trans')->where($where)->order('from_sid,to_sid,trans_sid')->group('from_lid,to_lid')->field('*,group_concat(trans_sid) as trans_sids')->find();
 			$from_line = M('Line')->find($trans['from_lid']);
-			$from_route = M('Route')->where(array('lid'=>$trans['from_lid'],'dir'=>$trans['from_dir']))->select();
+			$from_route = M('Route')->distinct(true)->field('sid')->where(array('lid'=>$trans['from_lid'],'dir'=>$trans['from_dir']))->select();
 			$to_line = M('Line')->find($trans['to_lid']);
-			$to_route = M('Route')->where(array('lid'=>$trans['to_lid'],'dir'=>$trans['to_dir']))->select();
+			$to_route = M('Route')->distinct(true)->field('sid')->where(array('lid'=>$trans['to_lid'],'dir'=>$trans['to_dir']))->select();
 		}
 		$result .= '搭乘：<a href="'.__URL__.'/line/id/'.$from_line['id'].'">'.$from_line['name'].'</a> ('.(1==$trans['from_dir']?('上行，'.$from_line['start_first'].'~'.$from_line['start_last']):('下行，'.$from_line['end_first'].'~'.$from_line['end_last'])).')<br />';
 		
