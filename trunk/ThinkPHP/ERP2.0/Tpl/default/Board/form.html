@@ -4,11 +4,11 @@
 <table>
 <tr>
 	<td>Code:</td>
-	<td><input type="text" maxlength="10" size="15" name="code" value="{$code}" readonly="true" /></td>
+	<td><input type="text" maxlength="10" size="15" name="code" value="{$code}" readonly="true" /> <img src="../Public/Images/system.gif" /></td>
 </tr>
 <tr>
 	<td>Board Code:</td>
-	<td><input type="text" maxlength="40" size="15" name="PN" value="{$info.Internal_PN}" /></td>
+	<td><input type="text" maxlength="40" size="15" name="PN" value="{$info.Internal_PN}" /> *</td>
 </tr>
 <tr>
 	<td>Board Name:</td>
@@ -59,10 +59,7 @@
 	<td>MOQ:</td>
 	<td><input type="text" maxlength="20" size="15" name="MOQ" value="{$info.MOQ}"/></td>
 </tr>
-<tr>
-	<td>SPQ:</td>
-	<td><input type="text" maxlength="20" size="15" name="SPQ" value="{$info.SPQ}"/></td>
-</tr>
+<input type="hidden" maxlength="20" size="15" name="SPQ" value=""/></td>
 <tr>
 	<td>MSL:</td>
 	<td><input type="text" maxlength="20" size="15" name="MSL" value="{$info.MSL}"/></td>
@@ -71,10 +68,7 @@
 	<td>Project:</td>
 	<td><input type="text" maxlength="20" size="15" name="project" value="{$info.project}"/></td>
 </tr>
-<tr>
-	<td>Inventory Limit:</td>
-	<td><input type="text" maxlength="20" size="15" name="inventory_limit" value="{$info.inventory_limit}"/></td>
-</tr>
+<input type="hidden" maxlength="20" size="15" name="inventory_limit" value=""/></td>
 <tr>
 	<td>Currency:</td>
 	<td><select name="currency_id"><option value="">Select One</option>{$info.currency_opts}</select></td>
@@ -89,9 +83,9 @@
 </tr>
 <tr>
 	<td>Attachment:</td>
-	<td><input type="file" size="15" name="attachment" /><br />
+	<td><input type="file" size="15" name="attachment" /> (Max Filesize: <php>echo ini_get("upload_max_filesize");</php>)<br />
 	<neq name="info.attachment" value="">
-	<a href="__APP__/../{$info.attachment}" target="_blank" title="view attachment in new window">View Attachment</a>
+	<a href="__APP__/../{$info.attachment}" target="_blank" title="View attachment in new window">View Attachment</a>
 	</neq>
 	</td>
 </tr>
@@ -102,9 +96,9 @@
 </table>
 <p class="center">
 <if condition="$info['id'] eq 0">
-<input type="Submit" value="Insert New Component" name="submit"/>
+<input type="Submit" value="Insert New Board" name="submit"/>
 <else />
-<input type="Submit" value="Update Component Data" name="submit"/>
+<input type="Submit" value="Update Board Information" name="submit"/>
 </if>
 </p>
 </form>

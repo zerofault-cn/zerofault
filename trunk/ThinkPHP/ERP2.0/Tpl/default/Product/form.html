@@ -4,11 +4,11 @@
 <table>
 <tr>
 	<td>Code:</td>
-	<td><input type="text" maxlength="10" size="15" name="code" value="{$code}" readonly="true" /></td>
+	<td><input type="text" maxlength="10" size="15" name="code" value="{$code}" readonly="true" /> <img src="../Public/Images/system.gif" /></td>
 </tr>
 <tr>
 	<td>Internal PN:</td>
-	<td><input type="text" maxlength="40" size="15" name="PN" value="{$info.Internal_PN}" /></td>
+	<td><input type="text" maxlength="40" size="15" name="PN" value="{$info.Internal_PN}" /> *</td>
 </tr>
 <tr>
 	<td>Description:</td>
@@ -85,9 +85,9 @@
 </tr>
 <tr>
 	<td>Attachment:</td>
-	<td><input type="file" size="15" name="attachment" /><br />
+	<td><input type="file" size="15" name="attachment" /> (Max Filesize: <php>echo ini_get("upload_max_filesize");</php>)<br />
 	<neq name="info.attachment" value="">
-	<a href="__APP__/../{$info.attachment}" target="_blank" title="view attachment in new window">View Attachment</a>
+	<a href="__APP__/../{$info.attachment}" target="_blank" title="View attachment in new window">View Attachment</a>
 	</neq>
 	</td>
 </tr>
@@ -100,7 +100,7 @@
 <if condition="$info['id'] eq 0">
 <input type="Submit" value="Insert New Component" name="submit"/>
 <else />
-<input type="Submit" value="Update Component Data" name="submit"/>
+<input type="Submit" value="Update Component Information" name="submit"/>
 </if>
 </p>
 </form>

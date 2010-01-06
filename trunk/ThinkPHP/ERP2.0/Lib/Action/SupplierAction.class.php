@@ -16,7 +16,7 @@ class SupplierAction extends BaseAction{
 	}
 
 	public function index(){
-		$this->assign('result', $this->dao->relation(true)->select());
+		$this->assign('result', $this->dao->relation(true)->order('id')->select());
 		$this->assign('content','Supplier:index');
 		$this->display('Layout:ERP_layout');
 	}
@@ -55,7 +55,7 @@ class SupplierAction extends BaseAction{
 				);
 			$max_id = $this->dao->getField('max(id) as max_id');
 			empty($max_id) && ($max_id = 0);
-			$code = 'S'.sprintf("%05d",$max_id+1);
+			$code = 'S'.sprintf("%05d", $max_id + 1);
 		}
 		$this->assign('code', $code);
 		$this->assign('info', $info);
@@ -81,7 +81,10 @@ class SupplierAction extends BaseAction{
 			if($rs && sizeof($rs)>0){
 				self::_error('Supplier Name: '.$name.' exists already!');
 			}
-			$this->dao->code = $_REQUEST['code'];
+			$max_id = $this->dao->getField('max(id) as max_id');
+			empty($max_id) && ($max_id = 0);
+			$code = 'S'.sprintf("%05d", $max_id + 1);
+			$this->dao->code = $code;
 		}
 		$this->dao->name = $name;
 		$this->dao->character_id = $_REQUEST['character_id'];

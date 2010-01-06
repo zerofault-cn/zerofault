@@ -16,7 +16,7 @@ class ProductAction extends BaseAction{
 	}
 
 	public function index(){
-		$this->assign('result', $this->dao->where(array('type'=>'Component'))->relation(true)->select());
+		$this->assign('result', $this->dao->where(array('type'=>'Component'))->relation(true)->order('id')->select());
 		$this->assign('content','Product:index');
 		$this->display('Layout:ERP_layout');
 	}
@@ -88,7 +88,6 @@ class ProductAction extends BaseAction{
 		$this->dao->currency_id = $_REQUEST['currency_id'];
 		$this->dao->price = $_REQUEST['price'];
 		$this->dao->accessories = $_REQUEST['accessories'];
-		$this->dao->attachment = '';
 		$file = $_FILES['attachment'];
 		if($file['size']>0) {
 			$file_path = 'Attach/Product/';
