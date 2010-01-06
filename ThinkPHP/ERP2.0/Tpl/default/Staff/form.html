@@ -4,11 +4,11 @@
 <table>
 <tr>
 	<td>Staff Code:</td>
-	<td><input type="text" maxlength="10" size="15" name="code" value="{$code}" readonly="true" /></td>
+	<td><input type="text" maxlength="10" size="15" name="code" value="{$code}" readonly="true" /> <img src="../Public/Images/system.gif" /></td>
 </tr>
 <tr>
 	<td>Staff Name:</td>
-	<td><input type="text" maxlength="40" size="15" name="name" value="{$info.name}" /></td>
+	<td><input type="text" maxlength="40" size="15" name="name" value="{$info.name}" /> *</td>
 </tr>
 <tr>
 	<td>Staff Realname:</td>
@@ -16,7 +16,7 @@
 </tr>
 <tr>
 	<td><if condition="$info['id'] eq 0">Init<else />Reset</if> Password:</td>
-	<td><input type="password" maxlength="40" size="15" name="password" value="" /></td>
+	<td><input type="password" maxlength="40" size="15" name="password" value="" /> *</td>
 </tr>
 <tr>
 	<td>E_mail:</td>

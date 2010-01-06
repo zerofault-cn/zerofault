@@ -11,6 +11,7 @@
 	<th>Category</th>
 	<th>Type</th>
 	<th>Board Status</th>
+	<th><abbr title="Attachment">ATT</abbr></th>
 	<th>OP</th>
 </tr>
 <iterate name="result" id="item">
@@ -25,8 +26,9 @@
 	<td>{$item['category']['name']}&nbsp;</td>
 	<td><if condition="$item['fixed'] eq 1">Fixed Assets<else />Floating Assets</if></td>
 	<td>{$item['status']['name']}&nbsp;</td>
+	<td align="center"><a href="__APP__/../{$item.attachment}" target="_blank" title="View attachment in new window">{$item.attachment|pathinfo=PATHINFO_EXTENSION}</a></td>
 	<td><a href="__URL__/form/id/{$item['id']}">Edit</a>
-		<a href="__URL__/delete/id/{$item['id']}" target="_iframe">Delete</a></td>
+		<a href="javascript:void(0);" onclick="myConfirm('Are you sure to delete this item?', '__URL__/delete/id/{$item['id']}');" target="_iframe">Delete</a></td>
 </tr>
 </iterate>
 </table>

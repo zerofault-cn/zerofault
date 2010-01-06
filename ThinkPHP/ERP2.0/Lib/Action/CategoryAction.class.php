@@ -19,15 +19,15 @@ class CategoryAction extends BaseAction{
 		$arr = $this->dao->group('type')->field('type')->select();
 		$result = array('Component'=>array(), 'Board'=>array());
 		foreach($arr as $val) {
-			$result[$val['type']] = $this->dao->where(array('type'=>$val['type']))->select();
+			$result[$val['type']] = $this->dao->where(array('type'=>$val['type']))->order('id')->select();
 		}
 		$default_category_type = Session::get('default_category_type');
 		empty($default_category_type) && ($default_category_type = 'Component');
-		
+
 		$max_code = $this->dao->max('code');
 		empty($max_code) && ($max_code = 'P'.sprintf("%03d",0));
 		$code = ++ $max_code;
-		
+
 		$this->assign('result', $result);
 		$this->assign('default_type', $default_category_type);
 		$this->assign('code', $code);

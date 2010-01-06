@@ -27,7 +27,7 @@ class StaffAction extends BaseAction{
 		}
 		Session::set('staff_status', $atatus);
 		$this->assign('status', $status);
-		$this->assign('result', $this->dao->relation(true)->where(array('status'=>$status))->select());
+		$this->assign('result', $this->dao->relation(true)->where(array('status'=>$status))->order('id')->select());
 		$this->assign('content','Staff:index');
 		$this->display('Layout:ERP_layout');
 	}
@@ -67,7 +67,9 @@ class StaffAction extends BaseAction{
 		}
 		$id = $_REQUEST['id'];
 		$name = trim($_REQUEST['name']);
-		empty($name) && self::_error('Staff Name required');
+		empty($name) && self::_error('Staff Name required!');
+		$password = trim($_REQUEST['password']);
+		empty($password) && self::_error('Password required!');
 		if(!empty($id) && $id>0) {
 			//for edit
 			if(1==$id && 1!=$_SESSION[C('USER_AUTH_KEY')]) {
@@ -79,7 +81,7 @@ class StaffAction extends BaseAction{
 			}
 			$this->dao->find($id);
 			if(''!=trim($_REQUEST['password'])) {
-				$this->dao->password = md5(trim($_REQUEST['password']));
+				$this->dao->password = md5($password);
 			}
 		}
 		else{
@@ -88,8 +90,11 @@ class StaffAction extends BaseAction{
 			if($rs && sizeof($rs)>0){
 				self::_error('The name: '.$name.' has been used by another staff!');
 			}
-			$this->dao->code = $_REQUEST['code'];
-			$this->dao->password = md5(trim($_REQUEST['password']));
+			$max_id = $this->dao->getField('max(id) as max_id');
+			empty($max_id) && ($max_id = 0);
+			$code = 'E'.sprintf("%04d",$max_id+1);
+			$this->dao->code = $code;
+			$this->dao->password = md5($password);
 			$this->dao->create_time = date("Y-m-d H:i:s");
 		}
 		$this->dao->name = $name;
@@ -164,6 +169,17 @@ class StaffAction extends BaseAction{
 	*/
 	public function update(){
 		parent::_update();
+	}
+	public function delete() {
+		//判断是否已被使用
+		$id = $_REQUEST['id'];
+		$rs = M('ProductFlow')->where("to_type='staff' and to_id=".$id." and status=1")->select();
+		if(!empty($rs) && sizeof($rs)>0) {
+			self::_error('Something relate to him, can\'t be deleted!');
+		}
+		else{
+			self::_delete();
+		}
 	}
 }
 ?>

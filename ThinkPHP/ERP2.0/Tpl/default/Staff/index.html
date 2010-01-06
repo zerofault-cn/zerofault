@@ -1,11 +1,11 @@
 <p class="page_title_text">Staff List</p>
-<!-- <table >
+<table >
 <tr>
 	<td class="clsTab" id="status_1"><a href="__ACTION__/status/1">Active Staff</a></td>
 	<td class="clsTab" id="status_0"><a href="__ACTION__/status/0">Inactive Staff</a></td>
 </tr>
 <tr>
-	<td colspan="2"> -->
+	<td colspan="2">
 	<table cellpadding="3" border="1" bordercolor="#FFFFFF" style="border-collapse:collapse;">
 		<tr>
 			<th>Code</th>
@@ -33,23 +33,24 @@
 					</iterate>
 				</if></td>
 			<td><a href="__URL__/form/id/{$item['id']}">Edit</a>
-				<!-- <if condition="$item['status'] eq 1">
-				<a href="__URL__/update/f/status/v/0/id/{$item['id']}" target="_iframe">Disable</a>
+				<if condition="$item['status'] eq 1">
+				<a href="javascript:void(0);" onclick="myConfirm('Are you sure to disable him?', '__URL__/update/f/status/v/0/id/{$item['id']}');" target="_iframe">Disable</a>
 				<else />
-				<a href="__URL__/update/f/status/v/1/id/{$item['id']}" target="_iframe">Enable</a>
-				</if> -->
+				<a href="javascript:void(0);" onclick="myConfirm('Are you sure to Enable him?', '__URL__/update/f/status/v/1/id/{$item['id']}');" target="_iframe">Enable</a>
+				</if>
+				<a href="javascript:void(0);" onclick="myConfirm('Are you sure to delete this item?', '__URL__/delete/id/{$item['id']}');" target="_iframe">Delete</a></td>
 				</td>
 		</tr>
 		</iterate>
 		</table>
-<!-- 	</td>
+	</td>
 </tr>
-</table> -->
+</table>
 <p class="center">
 	<input type="button" onclick="javascript:document.location='__URL__/form';" value="Add a staff" />
 </p>
 <script language="JavaScript" type="text/javascript">
 $(document).ready(function(){
-	//$("td#status_{$status}").addClass("current");
+	$("td#status_{$status}").addClass("current");
 });
 </script>
