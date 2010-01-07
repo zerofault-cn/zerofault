@@ -89,10 +89,14 @@ class ProductOutAction extends BaseAction{
 		$order = 'id desc';
 		$result = array();
 		foreach($this->dao->relation(true)->where($where)->order($order)->limit($p->offset.','.$p->limit)->select() as $item) {
-			$item['backed_quantity'] = $this->dao->where(array('code'=>'R'.substr($item['code'],-9),'status'=>1))->sum('quantity');
+			$item['backed_quantity'] = $this->dao->where(array('code'=>'B'.substr($item['code'],-9),'status'=>1))->sum('quantity');
 			empty($item['backed_quantity']) && ($item['backed_quantity']=0);
 			$item['transfered_quantity'] = $this->dao->where(array('code'=>'T'.substr($item['code'],-9),'status'=>1))->sum('quantity');
 			empty($item['transfered_quantity']) && ($item['transfered_quantity']=0);
+			
+			$item['from_name'] = M(ucfirst($item['from_type']))->where('id='.$item['from_id'])->getField('name');
+			$item['to_name'] = M(ucfirst($item['to_type']))->where('id='.$item['to_id'])->getField('name');
+			
 			$result[] = $item;
 		}
 		$this->assign('result', $result);
@@ -147,10 +151,11 @@ class ProductOutAction extends BaseAction{
 				$info['location_opts'] = self::genOptions($location_arr, 'location'==$info['to_type'] ? $info['to_id'] : 'staff');
 				$info['staff_opts'] = self::genOptions(M('Staff')->where(array('status'=>1))->select(), $info['to_id'], 'realname');
 				
-				$from_quantity = $this->dao->where(array('code'=>'Out'.substr($code, -9),'status'=>1))->getField('quantity');
-				$transfered_quantity = $this->dao->where(array('code'=>'T'.substr($code, -9),'status'=>1))->sum('quantity');
-				$backed_quantity = $this->dao->where(array('code'=>'R'.substr($code, -9),'status'=>1))->sum('quantity');
-				$info['ori_quantity'] = $from_quantity - $transfered_quantity - $transfered_quantity;
+				//$from_quantity = $this->dao->where(array('code'=>'Out'.substr($code, -9),'status'=>1))->getField('quantity');
+				//$transfered_quantity = $this->dao->where(array('code'=>'T'.substr($code, -9),'status'=>1))->sum('quantity');
+				//$backed_quantity = $this->dao->where(array('code'=>'R'.substr($code, -9),'status'=>1))->sum('quantity');
+				//$info['ori_quantity'] = $from_quantity - $transfered_quantity - $transfered_quantity;
+				$info['ori_quantity'] = M("LocationProduct")->where(array('type'=>$info['from_type'], 'location_id'=>$info['from_id'], 'product_id'=>$info['product_id']))->getField('`ori_quantity`+`chg_quantity`');
 			}
 			else{//edit apply
 				$code = $info['code'];
@@ -170,7 +175,7 @@ class ProductOutAction extends BaseAction{
 			empty($max_code) && ($max_code = 'Out'.sprintf("%09d",0));
 			$code = ++ $max_code;
 			
-			if(!empty($_REQUEST['lp_id'])) {
+			if(!empty($_REQUEST['lp_id'])) {//act from asset list
 				$lp_info = M('LocationProduct')->find($_REQUEST['lp_id']);
 				$this->assign('product_id', $lp_info['product_id']);
 				$info['product'] = M('Product')->find($lp_info['product_id']);
@@ -240,6 +245,9 @@ class ProductOutAction extends BaseAction{
 			$this->dao->from_type = $_REQUEST['from_type'];
 			$this->dao->from_id = $_REQUEST['from_id'];
 			$this->dao->to_type = $_REQUEST['to_type'];
+			if (empty($_REQUEST['to_id'])) {
+				self::_error('Transfer target must be specified!');
+			}
 			$this->dao->to_id = $_REQUEST['to_id'];
 		}
 		if('back'==$action) {
@@ -264,10 +272,10 @@ class ProductOutAction extends BaseAction{
 		else{
 			if($this->dao->add()) {
 				if($action=='apply') {
-					self::_success('Apply success !',__URL__.'/'.$action);
+					self::_success('Apply request ready for confirm!',__URL__.'/'.$action);
 				}
 				elseif('transfer'==$action) {
-					self::_success('Transfer success!',__URL__.'/'.(MODULE_NAME=='Asset'?'':$action));
+					self::_success('Transfer request ready for confirm!',__URL__.'/'.(MODULE_NAME=='Asset'?'':$action));
 				}
 				else{
 					self::_success('Operation success!',__URL__.'/'.$action);
@@ -287,7 +295,7 @@ class ProductOutAction extends BaseAction{
 		//dump($_POST['chk']);
 		foreach ($_POST['chk'] as $id) {
 			$info = $this->dao->find($id);
-			if('back' != $info['action']) {
+			//if('back' != $info['action']) {
 				//减库存，或减资产
 				$where = array(
 					'type' => $info['from_type'],
@@ -306,7 +314,7 @@ class ProductOutAction extends BaseAction{
 						self::_error('Update inventory fail!'.(C('APP_DEBUG')?$this->dao->getLastSql():''));
 					}
 				}
-			}
+			//}
 			if('release' != $info['action'] && 'scrap' != $info['action']) {
 				//加个人资产，或公共资产
 				$where = array(

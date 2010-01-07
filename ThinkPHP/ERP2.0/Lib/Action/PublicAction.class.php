@@ -56,7 +56,7 @@ class PublicAction extends BaseAction{
 			}
 			// 缓存访问权限
 			RBAC::saveAccessList($authInfo['id']);
-			self::_success('',__APP__.'/'.Session::get('lastModule'),0);
+			self::_success('', __APP__, 0);
 		}
 	}
 

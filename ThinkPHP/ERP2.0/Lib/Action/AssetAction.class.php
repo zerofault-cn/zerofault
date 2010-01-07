@@ -11,23 +11,29 @@ class AssetAction extends BaseAction{
 	protected $dao;
 	
 	public function _initialize() {
-		$this->dao = D('LocationProductView');
+		$this->dao = M('LocationProduct');
 		parent::_initialize();
 	}
 
 	public function index(){
-		$rs = $this->dao->distinct(true)->where(array('LocationProduct.type'=>'staff', 'location_id'=>$_SESSION[C('USER_AUTH_KEY')]))->select();
+		$rs = $this->dao->where(array('type'=>'staff', 'location_id'=>$_SESSION[C('USER_AUTH_KEY')], '`ori_quantity`+`chg_quantity`'=>array('gt', 0)))->select();
+		//dump($rs);
 		if(empty($rs)) {
 			$rs = array();
 		}
 		$result = array(array(),array());
 		foreach($rs as $item) {
-			$key = $item['fixed'];
+			$item['product'] = M('Product')->find($item['product_id']);
+			//dump($item['product']);
+			$item['unit_name'] = M('Options')->where('id='.$item['product']['unit_id'])->getField('name');
+			//dump($item['unit_name']);
+			$i = $item['product']['fixed'];
 			if('Board'==$item['type']) {
-				$key  = 1;
+				$i  = 1;
 			}
-			$result[$key][] = $item;
+			$result[$i][] = $item;
 		}
+		//dump($result);
 		krsort($result);
 		$this->assign('fixed_arr', array('Floating Assets', 'Fixed Assets'));
 		$this->assign('default_fixed', 1);
