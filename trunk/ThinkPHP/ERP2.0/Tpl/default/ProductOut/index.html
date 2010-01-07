@@ -22,6 +22,10 @@
 			<th class="basic_data">Manufacture</th>
 			<th>Quantity<if condition="ACTION_NAME eq 'apply' and $status eq 1">/Remain</if></th>
 			<th>Unit</th>
+			<if condition="$action eq 'transfer'">
+			<th>From</th>
+			<th>To</th>
+			</if>
 			<th>{$action|ucfirst} Time</th>
 			<th>{$action|ucfirst} Staff</th>
 			<th>Confirmed Staff</th>
@@ -41,6 +45,10 @@
 			<td class="basic_data">{$item['product']['manufacture']}</td>
 			<td>{$item['quantity']}<if condition="ACTION_NAME eq 'apply' and $status eq 1">/{$item['quantity']-$item['backed_quantity']-$item['transfered_quantity']}</if></td>
 			<td>{$unit[$item['product']['unit_id']]}</td>
+			<if condition="$action eq 'transfer'">
+			<td>{$item['from_name']}</td>
+			<td>{$item['to_name']}</td>
+			</if>
 			<td>{$item['create_time']}</td>
 			<td align="center">{$item['staff']['name']}</td>
 			<td align="center">{$item['confirmed_staff']['name']}&nbsp;</td>

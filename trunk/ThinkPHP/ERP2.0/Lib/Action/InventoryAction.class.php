@@ -36,6 +36,7 @@ class InventoryAction extends BaseAction{
 				$where = array();
 				$where['product_id'] = $val['product_id'];
 				$where['status'] = 1;
+				$where['_string'] = "(from_type='location' and from_id=1) or (to_type='location' and to_id=1)";
 				$result[$i]['quantity'] = M('ProductFlow')->where($where)->group('action')->getField('action,sum(quantity)');
 			}
 		}

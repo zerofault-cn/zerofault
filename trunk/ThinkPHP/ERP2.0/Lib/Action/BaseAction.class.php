@@ -75,7 +75,7 @@ class BaseAction extends Action{
 		//检查认证识别号
 		if(!$_SESSION[C('USER_AUTH_KEY')] && 'Public'!=MODULE_NAME) {
 			//记下Module
-			Session::set('lastModule', MODULE_NAME);
+			//Session::set('lastModule', MODULE_NAME);
 			//跳转到认证网关
 			redirect(PHP_FILE.C('USER_AUTH_GATEWAY'));
 		}

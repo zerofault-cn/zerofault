@@ -166,6 +166,8 @@ class ProductInAction extends BaseAction{
 			if($action=='return') {
 				$this->dao->code = $_REQUEST['code'];
 				$this->dao->action = 'return';
+				$this->dao->from_type = 'location';
+				$this->dao->from_id = 1;
 			}
 			else{
 				$max_code = $this->dao->where(array('action'=>'enter'))->max('code');
@@ -173,6 +175,8 @@ class ProductInAction extends BaseAction{
 				$code = ++ $max_code;
 				$this->dao->code = $code;
 				$this->dao->action = 'enter';
+				$this->dao->to_type = 'location';
+				$this->dao->to_id = 1;
 			}
 			$this->dao->fixed = $fixed;
 			$this->dao->staff_id = $_SESSION[C('USER_AUTH_KEY')];
