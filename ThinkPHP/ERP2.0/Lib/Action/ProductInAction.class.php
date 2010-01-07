@@ -39,7 +39,7 @@ class ProductInAction extends BaseAction{
 		}
 		Session::set('enter_status', $atatus);
 		$this->assign('status', $status);
-		
+
 		$where = array(
 			'fixed' => $fixed,
 			'action'=>'enter',
@@ -49,11 +49,11 @@ class ProductInAction extends BaseAction{
 		import("@.Paginator");
 		$limit = 10;
 		$p = new Paginator($count,$limit);
-		
+
 		$order = 'id desc';
 		$result = array();
 		foreach($this->dao->relation(true)->where($where)->order($order)->limit($p->offset.','.$p->limit)->select() as $item) {
-			$item['returned_quantity'] = $this->dao->where(array('code'=>'B'.substr($item['code'],-9),'status'=>1))->sum('quantity');
+			$item['returned_quantity'] = $this->dao->where(array('code'=>'R'.substr($item['code'],-9),'status'=>1))->sum('quantity');
 			empty($item['returned_quantity']) && ($item['returned_quantity']=0);
 			$result[] = $item;
 		}
@@ -84,7 +84,7 @@ class ProductInAction extends BaseAction{
 		}
 		Session::set('return_status', $atatus);
 		$this->assign('status', $status);
-		
+
 		$where = array(
 			'action'=>'return',
 			'status'=> $status
@@ -93,7 +93,7 @@ class ProductInAction extends BaseAction{
 		import("@.Paginator");
 		$limit = 10;
 		$p = new Paginator($count,$limit);
-		
+
 		$order = 'id desc';
 		$this->assign('result', $this->dao->relation(true)->where($where)->order($order)->limit($p->offset.','.$p->limit)->select());
 		$this->assign('page', $p->showMultiNavi());
@@ -112,15 +112,14 @@ class ProductInAction extends BaseAction{
 			$info['supplier_opts'] = self::genOptions(D('Supplier')->select(), $info['supplier_id']);
 			$info['currency_opts'] = self::genOptions(M('Options')->where(array('type'=>'currency'))->order('sort')->select(), $info['currency_id']);
 			if ('return'==$action) {//new return
-				$code = 'B'.substr($info['code'],-9);
-				$info['quantity'] = $info['ori_quantity'] = $info['quantity'] - $this->dao->where(array('code'=>$code,'status'=>1))->sum('quantity');
+				$code = 'R'.substr($info['code'],-9);
+				$info['quantity'] = $info['ori_quantity'] = M("LocationProduct")->where(array('type'=>'location', 'location_id'=>1, 'product_id'=>$info['product_id']))->getField('`ori_quantity`+`chg_quantity`');
 				$id = 0;
 			}
 			elseif ('return'==$info['action']) {//edit return
 				$code = $info['code'];
 				$action = $info['action'];
-				$from_quantity = $this->dao->where(array('code'=>'A'.substr($code, -9)))->getField('quantity');
-				$info['ori_quantity'] =  $from_quantity - $this->dao->where(array('code'=>$code,'status'=>1))->sum('quantity');
+				$info['ori_quantity'] =  M("LocationProduct")->where(array('type'=>'location', 'location_id'=>1, 'product_id'=>$info['product_id']))->getField('`ori_quantity`+`chg_quantity`');
 			}
 			else {//edit enter
 				$code = $info['code'];
@@ -131,7 +130,7 @@ class ProductInAction extends BaseAction{
 				'supplier_opts' => self::genOptions(D('Supplier')->select()),
 				'currency_opts' => self::genOptions(M('Options')->where(array('type'=>'currency'))->order('sort')->select()),
 			);
-			$max_code = $this->dao->max('code');
+			$max_code = $this->dao->where(array('action'=>'enter'))->max('code');
 			empty($max_code) && ($max_code = 'A'.sprintf("%09d",0));
 			$code = ++ $max_code;
 		}
@@ -149,14 +148,15 @@ class ProductInAction extends BaseAction{
 			return;
 		}
 		$id = $_REQUEST['id'];
+		$fixed = $_REQUEST['fixed'];
 		$action = $_REQUEST['action'];
 		empty($_REQUEST['product_id']) && self::_error('Please select a component/board first!');
 		empty($_REQUEST['supplier_id']) && self::_error('Please select the supplier!');
 		empty($_REQUEST['currency_id']) && self::_error('Please select the currency type!');
 		empty($_REQUEST['quantity']) && self::_error('Quantity number required!');
 		//empty($_REQUEST['price']) && self::_error('Price value required!');
-		
-		($_REQUEST['quantity']<0) && self::_error('Quantity number must be lager than zero!');
+
+		($_REQUEST['quantity']<0) && self::_error('Quantity number must be larger than 0!');
 		('return'==$action) && ($_REQUEST['quantity']>$_REQUEST['ori_quantity']) && self::_error('Return quantity can\'t be larger than '.$_REQUEST['ori_quantity']);
 
 		if(!empty($id) && $id>0) {//from edit
@@ -174,7 +174,7 @@ class ProductInAction extends BaseAction{
 				$this->dao->code = $code;
 				$this->dao->action = 'enter';
 			}
-			$this->dao->fixed = $_REQUEST['fixed'];
+			$this->dao->fixed = $fixed;
 			$this->dao->staff_id = $_SESSION[C('USER_AUTH_KEY')];
 			$this->dao->create_time = date("Y-m-d H:i:s");
 		}
@@ -200,7 +200,7 @@ class ProductInAction extends BaseAction{
 					self::_success('Product ready for return!',__URL__.'/returns');
 				}
 				else{
-					self::_success('Product ready for entering!',__URL__);
+					self::_success('Product ready for entering!', __URL__ . ($fixed ? '/fixed' : '/floating'));
 				}
 			}
 			else{
@@ -242,7 +242,7 @@ class ProductInAction extends BaseAction{
 						self::_error('Insert location product fail!'.(C('APP_DEBUG')?$this->dao->getLastSql():''));
 					}
 				}
-				
+
 			}
 			else {//return action
 				$lp_id = M('LocationProduct')->where($where)->getField('id');

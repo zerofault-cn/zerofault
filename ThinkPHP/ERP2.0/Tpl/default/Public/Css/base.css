@@ -247,10 +247,10 @@ td.clsTab {
 	border-top:white 2px solid;
 	color:black;
 	text-align:center;
-	background:#6699cc;
+	background:#548DD4;
 }
 td#status_0, td#fixed1{
-	background:#238E23;
+	background:#92D050;
 }
 td.clsTab a{
 	display:block;

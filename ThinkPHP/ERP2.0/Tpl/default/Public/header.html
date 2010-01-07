@@ -29,7 +29,7 @@
 		<table class="main_menu">
 		<tr>
 			<iterate name="submenu" id="item">
-				<if condition="(ACTION_NAME eq 'index' and MODULE_NAME eq $item) or (ACTION_NAME neq 'index' and MODULE_NAME.'/'.ACTION_NAME eq $item)">
+				<if condition="(ACTION_NAME eq 'index' and MODULE_NAME eq $item) or (ACTION_NAME eq 'form' and MODULE_NAME eq $item) or (ACTION_NAME neq 'index' and MODULE_NAME.'/'.ACTION_NAME eq $item)">
 			<td class="main_menu_selected"><a href="__APP__/{$item}">{$key}</a></td>
 				<else />
 			<td class="main_menu_unselected"><a href="__APP__/{$item}">{$key}</a></td>

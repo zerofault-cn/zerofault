@@ -61,20 +61,28 @@ Product Entering List
 				</if></td>
 		</tr>
 		</iterate>
+		<empty name="result">
 		<tr>
-			<td colspan="17">{$page}</td>
+			<td colspan="17" align="center">No Record</td>
+		</tr>
+		</empty>
+		<tr>
+			<td colspan="4">
+				<neq name="status" value="1"><input type="submit" name="submit" value="Confirm Selected Items" /></neq>
+			</td>
+			<td colspan="13">{$page}</td>
 		</tr>
 		</table>
 	</td>
 </tr>
 </table>
 <p class="center">
-	<neq name="status" value="1"><input type="submit" name="submit" value="Confirm Selected" /></neq>
+	
 	<neq name="action" value="return">
 		<if condition="ACTION_NAME eq 'fixed'">
-		<input type="button" onclick="javascript:document.location='__URL__/form/fixed/1';" value="Enter a New Product" />
+		<input type="button" onclick="javascript:document.location='__URL__/form/fixed/1';" value="Enter A New Fixed-Asset" />
 		<else />
-		<input type="button" onclick="javascript:document.location='__URL__/form/fixed/0';" value="Enter a New Product" />
+		<input type="button" onclick="javascript:document.location='__URL__/form/fixed/0';" value="Enter A New Floating-Asset" />
 		</if>
 	</neq>
 </p>

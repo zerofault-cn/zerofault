@@ -22,7 +22,7 @@ class SupplierAction extends BaseAction{
 	}
 
 	public function form() {
-		Session::set('action', 'form');
+		//Session::set('action', 'form');
 		$dOptions = M('Options');
 		$id = $_REQUEST['id'];
 		if(!empty($id) && $id>0) {
