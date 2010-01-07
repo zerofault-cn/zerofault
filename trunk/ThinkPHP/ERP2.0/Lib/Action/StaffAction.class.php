@@ -25,7 +25,7 @@ class StaffAction extends BaseAction{
 		else{
 			$status = 1;
 		}
-		Session::set('staff_status', $atatus);
+		Session::set('staff_status', $status);
 		$this->assign('status', $status);
 		$this->assign('result', $this->dao->relation(true)->where(array('status'=>$status))->order('id')->select());
 		$this->assign('content','Staff:index');

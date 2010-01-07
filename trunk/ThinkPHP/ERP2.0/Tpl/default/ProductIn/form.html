@@ -98,13 +98,7 @@ Product {$action|ucfirst} Form
 </tr>
 </table>
 <p class="center">
-<if condition="empty($id)">
-<input type="submit" name="submit" value="Insert New Product"/>
-<elseif condition="$action eq 'return'"/>
-<input type="submit" name="submit" value="Return the Product" />
-<else />
-<input type="submit" name="submit" value="Update Information"/>
-</if>
+<input type="submit" name="submit" value="Submit"/>
 </p>
 </form>
 <script language="JavaScript" type="text/javascript">
