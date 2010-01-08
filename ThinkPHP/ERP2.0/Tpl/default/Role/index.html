@@ -20,7 +20,7 @@
 		<td>
 			<a href="__URL__/index/id/{$item['id']}" title="Edit"><img src="../Public/Images/options-edit.gif" alt="Edit" align="absmiddle"/></a>
 			<a href="__URL__/update/id/{$item['id']}/f/status/v/{:intval(!$item['status'])}" target="_iframe" title='<if condition="$item.status eq 0">Enable<else />Disable</if>'><if condition="$item['status'] eq 0"><img src="../Public/Images/add.gif" alt="Enable" align="absmiddle"/><else /><img src="../Public/Images/delete.gif" alt="Disable" align="absmiddle"/></if></a>
-			<img class="delete" id="{$item['id']}" name="{$item['name']}" src="../Public/Images/cross.gif" alt="Delete" align="absmiddle"/>
+			<img class="delete" id="{$item['id']}" name="{$item['name']}" src="../Public/Images/cross.gif" alt="Delete" title="Delete" align="absmiddle"/>
 		</td>
 	</tr>
 	</iterate>

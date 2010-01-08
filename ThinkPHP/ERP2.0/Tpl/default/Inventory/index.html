@@ -44,6 +44,7 @@
 	<th rowspan="2" class="basic_data">Project</th>
 	<th colspan="8">Quantity</th>
 	<th rowspan="2">Unit</th>
+	<th rowspan="2">Type</th>
 </tr>
 <tr>
 	<th>Remain</th>
@@ -75,6 +76,7 @@
 	<td><a href="__URL__/query/action/scrap/id/{$item['product_id']}?width=600&height=300&modal=true" class="thickbox">{$item['quantity']['scrap']|default=0}</a></td>
 	<td><a href="__URL__/query/action/back/id/{$item['product_id']}?width=600&height=300&modal=true" class="thickbox">{$item['quantity']['return']|default=0}</a></td>
 	<td>{$item['unit_name']}</td>
+	<td><if condition="$item['fixed'] eq 1">Fixed Assets<else />Floating Assets</if></td>
 </tr>
 </iterate>
 </table>

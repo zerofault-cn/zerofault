@@ -18,7 +18,7 @@ Edit {$info['action']|ucfirst} Form
 <if condition="empty($product_id) eq true and ($action eq 'apply' or ($action eq '' and $info['action'] eq 'apply') or (strlen($id) eq 0 and ($action eq 'transfer' or $action eq 'release' or $action eq 'scrap')))">
 <tr>
 	<td></td>
-	<td><input type="button" value="Select Component/Board" class="thickbox" alt="__URL__/select/action/apply?width=600&height=300&modal=true"/></td>
+	<td><input type="button" value="Select Component/Board" class="thickbox" alt="__URL__/select/action/apply?width=630&height=300&modal=true"/></td>
 </tr>
 </if>
 <tr>
@@ -70,13 +70,7 @@ Edit {$info['action']|ucfirst} Form
 <input type="hidden" name="from_type" value="{$info['from_type']}" />
 <input type="hidden" name="from_id" value="{$info['from_id']}" />
 <p class="center">
-<if condition="empty($action)">
-<input type="submit" name="submit" value="Update Infomation"/>
-<elseif condition="$action eq 'back'"/>
-<input type="submit" name="submit" value="Return the Product" />
-<else />
-<input type="submit" name="submit" value="{$action|ucfirst} the Product"/>
-</if>
+	<input type="submit" name="submit" value="Submit"/>
 </p>
 </form>
 <script language="JavaScript" type="text/javascript">

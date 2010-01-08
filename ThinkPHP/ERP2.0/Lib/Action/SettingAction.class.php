@@ -17,7 +17,14 @@ class SettingAction extends BaseAction{
 
 	public function index(){
 		$arr = $this->dao->group('type')->field('type')->select();
-		$result = array();
+		$result = array(
+			'currency'	=> array(),
+			'unit'		=> array(),
+			'character'	=> array(),
+			'payment_terms' => array(),
+			'tax'		=> array(),
+			'status'	=> array()
+		);
 		foreach($arr as $val) {
 			$result[$val['type']] = $this->dao->where(array('type'=>$val['type']))->select();
 		}
@@ -78,10 +85,39 @@ class SettingAction extends BaseAction{
 		$type =  $_REQUEST['type'];
 		Session::set('default_option_type', $type);
 		//判断是否已被使用
-		//$id = $_REQUEST['id'];
-		//$info = $this->dao->find($id);
-		//$rs = M('Product')->where(array($info['type'].'_id'=>$id)->select();
-
+		$id = $_REQUEST['id'];
+		switch ($type) {
+			case 'unit':
+			case 'status':
+				$rs = M('Product')->where(array($type.'_id'=>$id))->select();
+				if(!empty($rs) && sizeof($rs)>0) {
+					self::_error('It\'s in use, can\'t be deleted!');
+				}
+				break;
+			
+			case 'currency':
+				$rs = M('Product')->where(array($type.'_id'=>$id))->select();
+				if(!empty($rs) && sizeof($rs)>0) {
+					self::_error('It\'s in use, can\'t be deleted!');
+				}
+				$rs = M('ProductFlow')->where(array($type.'_id'=>$id))->select();
+				if(!empty($rs) && sizeof($rs)>0) {
+					self::_error('It\'s in use, can\'t be deleted!');
+				}
+				break;
+				
+			case 'character':
+			case 'payment_terms':
+			case 'tax':
+				$rs = M('Product')->where(array($type.'_id'=>$id))->select();
+				if(!empty($rs) && sizeof($rs)>0) {
+					self::_error('It\'s in use, can\'t be deleted!');
+				}
+				break;
+				
+			default:
+				//nothing
+		}
 		self::_delete();
 	}
 }

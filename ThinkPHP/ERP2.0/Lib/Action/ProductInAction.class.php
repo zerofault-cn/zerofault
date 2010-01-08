@@ -20,7 +20,7 @@ class ProductInAction extends BaseAction{
 	Public function floating() {
 		$this->index(0);
 	}
-	public function index($fixed=1) {
+	private function index($fixed=1) {
 		$rs = M('Options')->where(array('type'=>'unit'))->order('sort')->select();
 		$unit = array();
 		foreach($rs as $i=>$item) {
@@ -31,13 +31,13 @@ class ProductInAction extends BaseAction{
 		if(isset($_REQUEST['status'])) {
 			$status = $_REQUEST['status'];
 		}
-		elseif(''!=(Session::get('enter_status'))) {
-			$status = Session::get('enter_status');
+		elseif(''!=(Session::get(ACTION_NAME.'_status'))) {
+			$status = Session::get(ACTION_NAME.'_status');
 		}
 		else{
 			$status = 0;
 		}
-		Session::set('enter_status', $atatus);
+		Session::set(ACTION_NAME.'_status', $status);
 		$this->assign('status', $status);
 
 		$where = array(
@@ -76,13 +76,13 @@ class ProductInAction extends BaseAction{
 		if(isset($_REQUEST['status'])) {
 			$status = $_REQUEST['status'];
 		}
-		elseif(''!=(Session::get('reject_status'))) {
-			$status = Session::get('reject_status');
+		elseif(''!=(Session::get(ACTION_NAME.'_status'))) {
+			$status = Session::get(ACTION_NAME.'_status');
 		}
 		else{
 			$status = 0;
 		}
-		Session::set('reject_status', $atatus);
+		Session::set(ACTION_NAME.'_status', $status);
 		$this->assign('status', $status);
 
 		$where = array(
