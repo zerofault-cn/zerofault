@@ -33,7 +33,7 @@ $menu['Inventory&nbsp;output Management'] = array(
 		'Product Transfer'		=> 'ProductOut/transfer',
 		'Components Release'	=> 'ProductOut/release',
 		'Scrap Product'			=> 'ProductOut/scrap',
-		'Product Return'		=> 'ProductOut/return',
+		'Product Return'		=> 'ProductOut/returns',
 		)
 	);
 

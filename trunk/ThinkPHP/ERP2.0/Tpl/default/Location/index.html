@@ -13,7 +13,7 @@
 	<td class="name" align="center">{$item['name']}</td>
 	<td class="descr">{$item['descr']}</td>
 	<td align="center"><a href="javascript:void(0);" onclick="edit(this,'{$item['id']}');">Edit</a>
-		<gt name="i" value="1"><a href="__URL__/delete/id/{$item['id']}" target="_iframe">Delete</a></gt></td>
+		<gt name="i" value="1"><a href="javascript:void(0);" onclick="myConfirm('Are you sure to delete this item?', '__URL__/delete/id/{$item['id']}');" target="_iframe">Delete</a></gt></td>
 </tr>
 </iterate>
 <tr>

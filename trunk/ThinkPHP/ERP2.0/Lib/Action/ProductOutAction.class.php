@@ -15,7 +15,7 @@ class ProductOutAction extends BaseAction{
 		parent::_initialize();
 	}
 	Public function apply() {
-		$this->index('apply',1);
+		$this->index('apply');
 	}
 	Public function applyFixed() {
 		$this->index('apply',1);
@@ -51,13 +51,13 @@ class ProductOutAction extends BaseAction{
 		if(isset($_REQUEST['status'])) {
 			$status = $_REQUEST['status'];
 		}
-		elseif(''!=(Session::get($action.'_status'))) {
-			$status = Session::get($action.'_status');
+		elseif(''!=(Session::get(ACTION_NAME.'_status'))) {
+			$status = Session::get(ACTION_NAME.'_status');
 		}
 		else{
 			$status = 0;
 		}
-		Session::set($action.'_status', $status);
+		Session::set(ACTION_NAME.'_status', $status);
 		$this->assign('status', $status);
 
 
@@ -99,7 +99,8 @@ class ProductOutAction extends BaseAction{
 
 			$item['from_name'] = M(ucfirst($item['from_type']))->where('id='.$item['from_id'])->getField('name');
 			$item['to_name'] = M(ucfirst($item['to_type']))->where('id='.$item['to_id'])->getField('name');
-
+			
+			$item['remark2'] = D('Remark2')->relation(true)->where(array('flow_id'=>$item['id'], 'status'=>1))->select();
 			$result[] = $item;
 		}
 		$this->assign('result', $result);
@@ -159,12 +160,18 @@ class ProductOutAction extends BaseAction{
 				//$backed_quantity = $this->dao->where(array('code'=>'R'.substr($code, -9),'status'=>1))->sum('quantity');
 				//$info['ori_quantity'] = $from_quantity - $transfered_quantity - $transfered_quantity;
 				$info['ori_quantity'] = M("LocationProduct")->where(array('type'=>$info['from_type'], 'location_id'=>$info['from_id'], 'product_id'=>$info['product_id']))->getField('`ori_quantity`+`chg_quantity`');
+				if ($info['staff_id'] != $_SESSION[C('USER_AUTH_KEY')]) {//不是当前用户所创建的记录
+					$info['remark'] = M('Remark2')->where(array('flow_id'=>$id, 'staff_id'=>$_SESSION[C('USER_AUTH_KEY')]))->getField('content');
+				}
 			}
-			else{//edit apply
+			else{//edit apply/release/scrap
 				$code = $info['code'];
 				//$rs = D('Product')->relation(true)->find($info['product_id']);
 				//$info['ori_quantity'] = $rs['location_product'][0]['ori_quantity'] + $rs['location_product'][0]['chg_quantity'];
 				$info['ori_quantity'] = M("LocationProduct")->where(array('type'=>$info['from_type'], 'location_id'=>$info['from_id'], 'product_id'=>$info['product_id']))->getField('`ori_quantity`+`chg_quantity`');
+				if ($info['staff_id'] != $_SESSION[C('USER_AUTH_KEY')]) {//不是当前用户所创建的记录
+					$info['remark'] = M('Remark2')->where(array('flow_id'=>$id, 'staff_id'=>$_SESSION[C('USER_AUTH_KEY')]))->getField('content');
+				}
 			}
 		}
 		else{//new apply/transfer/release/scrap
@@ -264,7 +271,13 @@ class ProductOutAction extends BaseAction{
 		$this->dao->fixed = $_REQUEST['fixed'];
 		$this->dao->product_id = $_REQUEST['product_id'];
 		$this->dao->quantity = $_REQUEST['quantity'];
-		$this->dao->remark = $_REQUEST['remark'];
+		//get remark2
+		if(!empty($id) && $id>0 && $this->dao->staff_id != $_SESSION[C('USER_AUTH_KEY')]) {//不是当前用户所创建的记录
+			M('Remark2')->add(array('flow_id'=>$id, 'staff_id'=>$_SESSION[C('USER_AUTH_KEY')], 'content'=>trim($_REQUEST['remark']), 'status'=>1));
+		}
+		else {
+			$this->dao->remark = trim($_REQUEST['remark']);
+		}
 		if(!empty($id) && $id>0) {
 			if(false !== $this->dao->save()){
 				self::_success('Product information updated!',__URL__.'/'.(''==$action ? $this->dao->action : (MODULE_NAME=='Asset'?'':$action)));
@@ -291,12 +304,21 @@ class ProductOutAction extends BaseAction{
 		}
 	}
 	public function confirm() {
-		if(empty($_POST['submit'])) {
+		if(empty($_POST['confirm']) && empty($_POST['reject'])) {
 			return;
 		}
 		empty($_POST['chk']) && self::_error('You haven\'t select any item!');
 		sort($_POST['chk']);//先提交的先confirm
-		//dump($_POST['chk']);
+		
+		if (!empty($_POST['reject'])) {
+			foreach ($_POST['chk'] as $id) {
+				if (!$this->dao->where('id='.$id)->setField('status', -1)) {
+					self::_error('Reject fail!'.(C('APP_DEBUG')?$this->dao->getLastSql():''));
+				}
+			}
+			self::_success('Reject success','',1000);
+			return;
+		}
 		foreach ($_POST['chk'] as $id) {
 			$info = $this->dao->find($id);
 			//if('back' != $info['action']) {
