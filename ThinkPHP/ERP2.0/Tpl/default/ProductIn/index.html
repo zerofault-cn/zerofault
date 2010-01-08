@@ -1,6 +1,6 @@
 <p class="page_title_text">
-<if condition="$action eq 'return'">
-Product Return List
+<if condition="$action eq 'reject'">
+Product Reject List
 <else />
 Product Entering List
 </if></p>
@@ -23,7 +23,7 @@ Product Entering List
 			<th class="basic_data">Description</th>
 			<th class="basic_data">Manufacture</th>
 			<th>Supplier</th>
-			<th>Quantity<if condition="$action neq 'return' and $status eq 1">/Returned</if></th>
+			<th>Quantity<if condition="$action neq 'reject' and $status eq 1">/Rejected</if></th>
 			<th>Unit</th>
 			<th>Price</th>
 			<th>Total</th>
@@ -43,7 +43,7 @@ Product Entering List
 			<td class="basic_data">{$item['product']['description']}</td>
 			<td class="basic_data">{$item['product']['manufacture']}</td>
 			<td>{$item['supplier']['name']}</td>
-			<td>{$item['quantity']}<if condition="$action neq 'return' and $status eq 1">/{$item['returned_quantity']}</if></td>
+			<td>{$item['quantity']}<if condition="$action neq 'reject' and $status eq 1">/{$item['rejected_quantity']}</if></td>
 			<td>{$unit[$item['product']['unit_id']]}</td>
 			<td>{$item['price']}</td>
 			<td>{$item['quantity']*$item['price']}</td>
@@ -55,8 +55,8 @@ Product Entering List
 				<a href="__URL__/form/id/{$item['id']}">Edit</a>
 				<a href="__URL__/delete/id/{$item['id']}" target="_iframe">Delete</a>
 				<else />
-					<if condition="$item['action'] neq 'return'">
-				<a href="__URL__/form/action/return/id/{$item['id']}">Return</a>
+					<if condition="$item['action'] neq 'reject'">
+				<a href="__URL__/form/action/reject/id/{$item['id']}">Reject</a>
 					</if>
 				</if></td>
 		</tr>
@@ -78,7 +78,7 @@ Product Entering List
 </table>
 <p class="center">
 	
-	<neq name="action" value="return">
+	<neq name="action" value="reject">
 		<if condition="ACTION_NAME eq 'fixed'">
 		<input type="button" onclick="javascript:document.location='__URL__/form/fixed/1';" value="Enter A New Fixed-Asset" />
 		<else />

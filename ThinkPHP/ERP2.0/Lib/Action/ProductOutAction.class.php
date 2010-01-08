@@ -17,6 +17,9 @@ class ProductOutAction extends BaseAction{
 	Public function apply() {
 		$this->index('apply',1);
 	}
+	Public function applyFixed() {
+		$this->index('apply',1);
+	}
 	Public function applyFloating() {
 		$this->index('apply',0);
 	}
@@ -29,8 +32,8 @@ class ProductOutAction extends BaseAction{
 	Public function scrap() {
 		$this->index('scrap');
 	}
-	Public function back() {
-		$this->index('back');
+	Public function returns() {
+		$this->index('return');
 	}
 	private function index($action='apply',$fixed='') {
 		$rs = M('Options')->where(array('type'=>'unit'))->order('sort')->select();
@@ -39,7 +42,7 @@ class ProductOutAction extends BaseAction{
 			$unit[$item['id']] = $item['name'];
 		}
 		$this->assign('unit', $unit);
-		
+
 		if(!empty($_REQUEST['action'])) {
 			$action = $_REQUEST['action'];
 		}
@@ -54,10 +57,10 @@ class ProductOutAction extends BaseAction{
 		else{
 			$status = 0;
 		}
-		Session::set($action.'_status', $atatus);
+		Session::set($action.'_status', $status);
 		$this->assign('status', $status);
 
-		
+
 		$where = array(
 			'action' => $action,
 			'status' => $status
@@ -89,14 +92,14 @@ class ProductOutAction extends BaseAction{
 		$order = 'id desc';
 		$result = array();
 		foreach($this->dao->relation(true)->where($where)->order($order)->limit($p->offset.','.$p->limit)->select() as $item) {
-			$item['backed_quantity'] = $this->dao->where(array('code'=>'B'.substr($item['code'],-9),'status'=>1))->sum('quantity');
-			empty($item['backed_quantity']) && ($item['backed_quantity']=0);
+			$item['returned_quantity'] = $this->dao->where(array('code'=>'R'.substr($item['code'],-9),'status'=>1))->sum('quantity');
+			empty($item['returned_quantity']) && ($item['returned_quantity']=0);
 			$item['transfered_quantity'] = $this->dao->where(array('code'=>'T'.substr($item['code'],-9),'status'=>1))->sum('quantity');
 			empty($item['transfered_quantity']) && ($item['transfered_quantity']=0);
-			
+
 			$item['from_name'] = M(ucfirst($item['from_type']))->where('id='.$item['from_id'])->getField('name');
 			$item['to_name'] = M(ucfirst($item['to_type']))->where('id='.$item['to_id'])->getField('name');
-			
+
 			$result[] = $item;
 		}
 		$this->assign('result', $result);
@@ -121,28 +124,28 @@ class ProductOutAction extends BaseAction{
 				$location_arr[] = array('id' => 'staff', 'name' => 'Staff');
 				$info['location_opts'] = self::genOptions($location_arr, 'location'==$info['to_type'] ? $info['to_id'] : 'staff');
 				$info['staff_opts'] = self::genOptions(M('Staff')->where(array('status'=>1))->select(), $info['to_id'], 'realname');
-				
-				$backed_quantity = $this->dao->where(array('code'=>'R'.substr($code,-9),'status'=>1))->sum('quantity');
+
+				$returned_quantity = $this->dao->where(array('code'=>'R'.substr($code,-9),'status'=>1))->sum('quantity');
 				$transfered_quantity = $this->dao->where(array('code'=>'T'.substr($code,-9),'status'=>1))->sum('quantity');
-				$info['quantity'] = $info['ori_quantity'] = $info['quantity'] - $backed_quantity - $transfered_quantity;
-				
+				$info['quantity'] = $info['ori_quantity'] = $info['quantity'] - $returned_quantity- $transfered_quantity;
+
 				$info['from_type'] = 'staff';
 				$info['from_id'] = $info['staff_id'];
-				
+
 				$id = 0;
 			}
-			elseif ('back'==$action) {//new back
+			elseif ('return'==$action) {//new return
 				$code = 'R'.substr($info['code'], -9);
-				$backed_quantity = $this->dao->where(array('code'=>'R'.substr($code,-9),'status'=>1))->sum('quantity');
+				$returned_quantity = $this->dao->where(array('code'=>'R'.substr($code,-9),'status'=>1))->sum('quantity');
 				$transfered_quantity = $this->dao->where(array('code'=>'T'.substr($code,-9),'status'=>1))->sum('quantity');
-				$info['quantity'] = $info['ori_quantity'] = $info['quantity'] - $backed_quantity - $transfered_quantity;
-				
+				$info['quantity'] = $info['ori_quantity'] = $info['quantity'] - $returned_quantity - $transfered_quantity;
+
 				$info['from_type'] = 'staff';
 				$info['from_id'] = $info['staff_id'];
-				
+
 				$id = 0;
 			}
-			elseif ('transfer'==$info['action'] || 'back' == $info['action']) {//edit transfer/back
+			elseif ('transfer'==$info['action'] || 'return' == $info['action']) {//edit transfer/return
 				$code = $info['code'];
 				$action = $info['action'];
 
@@ -150,7 +153,7 @@ class ProductOutAction extends BaseAction{
 				$location_arr[] = array('id' => 'staff', 'name' => 'Staff');
 				$info['location_opts'] = self::genOptions($location_arr, 'location'==$info['to_type'] ? $info['to_id'] : 'staff');
 				$info['staff_opts'] = self::genOptions(M('Staff')->where(array('status'=>1))->select(), $info['to_id'], 'realname');
-				
+
 				//$from_quantity = $this->dao->where(array('code'=>'Out'.substr($code, -9),'status'=>1))->getField('quantity');
 				//$transfered_quantity = $this->dao->where(array('code'=>'T'.substr($code, -9),'status'=>1))->sum('quantity');
 				//$backed_quantity = $this->dao->where(array('code'=>'R'.substr($code, -9),'status'=>1))->sum('quantity');
@@ -159,8 +162,9 @@ class ProductOutAction extends BaseAction{
 			}
 			else{//edit apply
 				$code = $info['code'];
-				$rs = D('Product')->relation(true)->find($info['product_id']);
-				$info['ori_quantity'] = $rs['location_product'][0]['ori_quantity'] + $rs['location_product'][0]['chg_quantity'];
+				//$rs = D('Product')->relation(true)->find($info['product_id']);
+				//$info['ori_quantity'] = $rs['location_product'][0]['ori_quantity'] + $rs['location_product'][0]['chg_quantity'];
+				$info['ori_quantity'] = M("LocationProduct")->where(array('type'=>$info['from_type'], 'location_id'=>$info['from_id'], 'product_id'=>$info['product_id']))->getField('`ori_quantity`+`chg_quantity`');
 			}
 		}
 		else{//new apply/transfer/release/scrap
@@ -174,7 +178,7 @@ class ProductOutAction extends BaseAction{
 			$max_code = $this->dao->where(array('code'=>array('like','Out%')))->max('code');
 			empty($max_code) && ($max_code = 'Out'.sprintf("%09d",0));
 			$code = ++ $max_code;
-			
+
 			if(!empty($_REQUEST['lp_id'])) {//act from asset list
 				$lp_info = M('LocationProduct')->find($_REQUEST['lp_id']);
 				$this->assign('product_id', $lp_info['product_id']);
@@ -184,7 +188,7 @@ class ProductOutAction extends BaseAction{
 				$info['ori_quantity'] = $lp_info['ori_quantity']+$lp_info['chg_quantity'];
 				$info['from_type'] = $lp_info['type'];
 				$info['from_id'] = $lp_info['location_id'];
-			
+
 				if('transfer'==$action) {
 					$max_code = $this->dao->where(array('code'=>array('like','T%')))->max('code');
 					empty($max_code) && ($max_code = 'T'.sprintf("%09d",0));
@@ -192,10 +196,10 @@ class ProductOutAction extends BaseAction{
 				elseif('back'==$action) {
 					$max_code = $this->dao->where(array('code'=>array('like','R%')))->max('code');
 					empty($max_code) && ($max_code = 'R'.sprintf("%09d",0));
-				
+
 				}
 				$code = ++ $max_code;
-				
+
 			}
 		}
 		//dump($info);
@@ -232,7 +236,7 @@ class ProductOutAction extends BaseAction{
 				}
 			}
 			$this->dao->action = $action;
-			
+
 			$this->dao->from_type = 'location'; //new apply
 			$this->dao->from_id = 1;//new apply
 			$this->dao->to_type = 'staff'; //new apply
