@@ -18,7 +18,7 @@ $menu['Inventory&nbsp;Input Management'] = array(
 	'submenu' => array(
 		'Fixed Assets Entering'		=> 'ProductIn/fixed',
 		'Floating Assets Entering'  => 'ProductIn/floating',
-		'Product Return'		=> 'ProductIn/returns',
+		'Product Reject'		=> 'ProductIn/reject',
 		)
 	);
 $menu['Inventory Inquire'] = array(
@@ -28,12 +28,12 @@ $menu['Inventory Inquire'] = array(
 $menu['Inventory&nbsp;output Management'] = array(
 	'name'	  => 'ProductOut/apply',
 	'submenu' => array(
-		'Fixed Asset Apply'		=> 'ProductOut/apply',
+		'Fixed Asset Apply'		=> 'ProductOut/applyFixed',
 		'Floating Asset Apply'	=> 'ProductOut/applyFloating',
 		'Product Transfer'		=> 'ProductOut/transfer',
 		'Components Release'	=> 'ProductOut/release',
 		'Scrap Product'			=> 'ProductOut/scrap',
-		'Product Return'		=> 'ProductOut/back',
+		'Product Return'		=> 'ProductOut/return',
 		)
 	);
 

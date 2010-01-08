@@ -22,7 +22,7 @@
 			<th class="basic_data">Manufacture</th>
 			<th>Quantity<if condition="ACTION_NAME eq 'apply' and $status eq 1">/Remain</if></th>
 			<th>Unit</th>
-			<if condition="$action eq 'transfer'">
+			<if condition="$action eq 'transfer' or $action eq 'back'">
 			<th>From</th>
 			<th>To</th>
 			</if>
@@ -67,21 +67,26 @@
 				</td>
 		</tr>
 		</iterate>
+		<empty name="result">
 		<tr>
-			<td colspan="14">{$page}</td>
+			<td colspan="16" align="center">No Record</td>
+		</tr>
+		</empty>
+		<tr>
+			<td colspan="4">
+				<if condition="MODULE_NAME eq 'ProductOut'">
+					<input type="submit" name="submit" value="Confirm Selected Items" />
+				</if>
+			</td>
+			<td colspan="12">{$page}</td>
 		</tr>
 		</table>
 	</td>
 </tr>
 </table>
 <p class="center">
-	<if condition="MODULE_NAME eq 'Asset' and ACTION_NAME eq 'apply'">
-		<input type="button" onclick="javascript:document.location='__URL__/form/action/{$action}';" value="Apply a Product" />
-	<elseif condition="MODULE_NAME eq 'ProductOut' and ACTION_NAME neq 'apply' and ACTION_NAME neq 'applyFloating' and ACTION_NAME neq 'back'" />
-		<input type="submit" name="submit" value="Confirm Selected" />
+	<if condition="(MODULE_NAME eq 'Asset' and ACTION_NAME eq 'apply') or (MODULE_NAME eq 'ProductOut' and (ACTION_NAME eq 'transfer' or ACTION_NAME eq 'release' or ACTION_NAME eq 'scrap'))">
 		<input type="button" onclick="javascript:document.location='__URL__/form/action/{$action}';" value="{$Think.ACTION_NAME|ucfirst} a Product" />
-	<elseif condition="$status neq 1 and (MODULE_NAME neq 'Asset' or (MODULE_NAME eq 'Asset' and ACTION_NAME eq 'transferIn'))" />
-		<input type="submit" name="submit" value="Confirm Selected" />
 	</if>
 </p>
 </form>

@@ -53,8 +53,8 @@ class ProductInAction extends BaseAction{
 		$order = 'id desc';
 		$result = array();
 		foreach($this->dao->relation(true)->where($where)->order($order)->limit($p->offset.','.$p->limit)->select() as $item) {
-			$item['returned_quantity'] = $this->dao->where(array('code'=>'R'.substr($item['code'],-9),'status'=>1))->sum('quantity');
-			empty($item['returned_quantity']) && ($item['returned_quantity']=0);
+			$item['rejected_quantity'] = $this->dao->where(array('code'=>'B'.substr($item['code'],-9),'status'=>1))->sum('quantity');
+			empty($item['rejected_quantity']) && ($item['rejected_quantity']=0);
 			$result[] = $item;
 		}
 		$this->assign('result', $result);
@@ -62,9 +62,9 @@ class ProductInAction extends BaseAction{
 		$this->assign('content','ProductIn:index');
 		$this->display('Layout:ERP_layout');
 	}
-	public function returns() {
+	public function reject() {
 		//Session::set('action', '');
-		$this->assign('action', 'return');
+		$this->assign('action', 'reject');
 
 		$rs = M('Options')->where(array('type'=>'unit'))->order('sort')->select();
 		$unit = array();
@@ -76,17 +76,17 @@ class ProductInAction extends BaseAction{
 		if(isset($_REQUEST['status'])) {
 			$status = $_REQUEST['status'];
 		}
-		elseif(''!=(Session::get('return_status'))) {
-			$status = Session::get('return_status');
+		elseif(''!=(Session::get('reject_status'))) {
+			$status = Session::get('reject_status');
 		}
 		else{
 			$status = 0;
 		}
-		Session::set('return_status', $atatus);
+		Session::set('reject_status', $atatus);
 		$this->assign('status', $status);
 
 		$where = array(
-			'action'=>'return',
+			'action'=>'reject',
 			'status'=> $status
 			);
 		$count = $this->dao->where($where)->getField('count(*)');
@@ -111,15 +111,15 @@ class ProductInAction extends BaseAction{
 			$info['unit'] = M('Options')->where("id=".$info['product']['unit_id'])->getField('name');
 			$info['supplier_opts'] = self::genOptions(D('Supplier')->select(), $info['supplier_id']);
 			$info['currency_opts'] = self::genOptions(M('Options')->where(array('type'=>'currency'))->order('sort')->select(), $info['currency_id']);
-			if ('return'==$action) {//new return
-				$code = 'R'.substr($info['code'],-9);
-				$info['quantity'] = $info['ori_quantity'] = M("LocationProduct")->where(array('type'=>'location', 'location_id'=>1, 'product_id'=>$info['product_id']))->getField('`ori_quantity`+`chg_quantity`');
+			if ('reject'==$action) {//new reject
+				$code = 'B'.substr($info['code'],-9);
+				$info['quantity'] = $info['ori_quantity'] = M("LocationProduct")->where(array('type'=>'location', 'location_id'=>1, 'product_id'=>$info['product_id']))->getField('chg_quantity');
 				$id = 0;
 			}
-			elseif ('return'==$info['action']) {//edit return
+			elseif ('reject'==$info['action']) {//edit reject
 				$code = $info['code'];
 				$action = $info['action'];
-				$info['ori_quantity'] =  M("LocationProduct")->where(array('type'=>'location', 'location_id'=>1, 'product_id'=>$info['product_id']))->getField('`ori_quantity`+`chg_quantity`');
+				$info['ori_quantity'] =  M("LocationProduct")->where(array('type'=>'location', 'location_id'=>1, 'product_id'=>$info['product_id']))->getField('chg_quantity');
 			}
 			else {//edit enter
 				$code = $info['code'];
@@ -157,15 +157,15 @@ class ProductInAction extends BaseAction{
 		//empty($_REQUEST['price']) && self::_error('Price value required!');
 
 		($_REQUEST['quantity']<0) && self::_error('Quantity number must be larger than 0!');
-		('return'==$action) && ($_REQUEST['quantity']>$_REQUEST['ori_quantity']) && self::_error('Return quantity can\'t be larger than '.$_REQUEST['ori_quantity']);
+		('reject'==$action) && ($_REQUEST['quantity']>$_REQUEST['ori_quantity']) && self::_error('reject quantity can\'t be larger than '.$_REQUEST['ori_quantity']);
 
 		if(!empty($id) && $id>0) {//from edit
 			$this->dao->find($id);
 		}
 		else{//from new
-			if($action=='return') {
+			if($action=='reject') {
 				$this->dao->code = $_REQUEST['code'];
-				$this->dao->action = 'return';
+				$this->dao->action = 'reject';
 				$this->dao->from_type = 'location';
 				$this->dao->from_id = 1;
 			}
@@ -192,7 +192,7 @@ class ProductInAction extends BaseAction{
 		$this->dao->remark = $_REQUEST['remark'];
 		if(!empty($id) && $id>0) {
 			if(false !== $this->dao->save()){
-				self::_success('Product information updated!',__URL__.('return'==$this->dao->action?'/returns':''));
+				self::_success('Product information updated!',__URL__.('reject'==$this->dao->action?'/reject':''));
 			}
 			else{
 				self::_error('Update fail!'.(C('APP_DEBUG')?$this->dao->getLastSql():''));
@@ -200,16 +200,16 @@ class ProductInAction extends BaseAction{
 		}
 		else{
 			if($this->dao->add()) {
-				if($action=='return') {
-					self::_success('Product ready for return!',__URL__.'/returns');
+				if($action=='reject') {
+					self::_success('Product ready for reject!',__URL__.'/reject');
 				}
 				else{
 					self::_success('Product ready for entering!', __URL__ . ($fixed ? '/fixed' : '/floating'));
 				}
 			}
 			else{
-				if($action=='return') {
-					self::_error('Product return fail!'.(C('APP_DEBUG')?$this->dao->getLastSql():''));
+				if($action=='reject') {
+					self::_error('Product reject fail!'.(C('APP_DEBUG')?$this->dao->getLastSql():''));
 				}
 				else{
 					self::_error('Product entering fail!'.(C('APP_DEBUG')?$this->dao->getLastSql():''));
@@ -229,7 +229,7 @@ class ProductInAction extends BaseAction{
 				'location_id' => 1,
 				'product_id'  => $info['product_id']
 			);
-			if ('return'!=$info['action']) {
+			if ('reject'!=$info['action']) {
 				$lp_id = M('LocationProduct')->where($where)->getField('id');
 				if(!empty($lp_id)) {
 					if (!M('LocationProduct')->setInc('chg_quantity','id='.$lp_id,$info['quantity'])) {
@@ -248,7 +248,7 @@ class ProductInAction extends BaseAction{
 				}
 
 			}
-			else {//return action
+			else {//reject action
 				$lp_id = M('LocationProduct')->where($where)->getField('id');
 				if(!empty($lp_id)) {
 					if (!M('LocationProduct')->setDec('chg_quantity','id='.$lp_id,$info['quantity'])) {

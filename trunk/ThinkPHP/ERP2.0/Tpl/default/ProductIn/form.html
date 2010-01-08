@@ -15,7 +15,7 @@ Product {$action|ucfirst} Form
 	<td>No.</td>
 	<td><input type="text" maxlength="10" size="15" name="code" value="{$code}" readonly="true" /><img src="../Public/Images/lock.gif" /></td>
 </tr>
-<if condition="$action neq 'return' and $info['action'] neq 'return'">
+<if condition="$action neq 'reject' and $info['action'] neq 'reject'">
 <tr>
 	<td></td>
 	<td><input type="button" value="Select Component/Board" class="thickbox" alt="__URL__/select/fixed/{$fixed}/action/{$action}?width=600&height=300&modal=true"/></td>
@@ -63,7 +63,7 @@ Product {$action|ucfirst} Form
 </tr>
 <tr>
 	<td>Supplier:</td>
-	<td><if condition="$action eq 'return'">
+	<td><if condition="$action eq 'reject'">
 		{$info['supplier']['name']}<input type="hidden" name="supplier_id" value="{$info['supplier_id']}" />
 		<elseif condition="empty($id)"/>
 		<select name="supplier_id"><option value="">Select One</option>{$info.supplier_opts}</select>
@@ -76,7 +76,7 @@ Product {$action|ucfirst} Form
 	<td><select name="currency_id"><option value="">Select One</option>{$info.currency_opts}</select></td>
 </tr>
 <tr>
-	<td><if condition="$action eq 'return'">Return</if>
+	<td><if condition="$action eq 'reject'">Reject</if>
 	Quantity:</td>
 	<td><input type="text" maxlength="20" size="15" id="quantity" name="quantity" value="{$info['quantity']}" onchange="calc_total()"/><input type="hidden" name="ori_quantity" value="{$info['ori_quantity']}"/></td>
 </tr>
