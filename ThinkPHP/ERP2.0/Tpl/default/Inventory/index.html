@@ -30,7 +30,9 @@
 	</td>
 </tr>
 </table>
-<if condition="empty($result) eq false">
+<empty name="result">
+<p class="center">No Result</p>
+<else />
 <table cellpadding="3" border="1" bordercolor="#FFFFFF" style="border-collapse:collapse;">
 <tr>
 	<th rowspan="2">No.</th>
@@ -80,5 +82,4 @@
 </tr>
 </iterate>
 </table>
-</if>
-<p class="center"></p>
+</empty>

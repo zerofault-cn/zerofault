@@ -299,7 +299,7 @@ class ProductOutAction extends BaseAction{
 				}
 			}
 			else{
-					self::_error('Operation fail!'.(C('APP_DEBUG')?$this->dao->getLastSql():''));
+				self::_error('Operation fail!'.(C('APP_DEBUG')?$this->dao->getLastSql():''));
 			}
 		}
 	}
@@ -378,6 +378,7 @@ class ProductOutAction extends BaseAction{
 		}
 		self::_success('Confirm success','',1000);
 	}
+
 	public function select() {
 		R('Product', 'select');
 	}

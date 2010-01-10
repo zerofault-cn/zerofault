@@ -48,8 +48,20 @@ class InventoryAction extends BaseAction{
 	public function query() {
 		$id = $_REQUEST['id'];
 		$action = $_REQUEST['action'];
-		$rs = M('ProductFlow')->field('id,quantity,supplier_id,staff_id,create_time,confirm_time,confirmed_staff_id,remark')->where(array('product_id'=>$id, 'action'=>$action, 'status'=>1))->select();
+		$where['product_id'] = $id;
+		$where['action'] = $action;
+		$where['status'] = 1;
+		if ('transfer' == $action) {
+			$where['_string'] = "(from_type='location' and from_id=1) or (to_type='location' and to_id=1)";
+		}
+		$rs = M('ProductFlow')->where($where)->select();
 		foreach ($rs as $i=>$val) {
+			if ('location' == $val['to_type']) {
+				$rs[$i]['to_name'] = M('Location')->where('id='.$val['to_id'])->getField('name');
+			}
+			else {
+				$rs[$i]['to_name'] = M('Staff')->where('id='.$val['to_id'])->getField('name');
+			}
 			$rs[$i]['supplier_name'] = M('Supplier')->where('id='.$val['supplier_id'])->getField('name');
 			$rs[$i]['staff_name'] = M('Staff')->where('id='.$val['staff_id'])->getField('name');
 			$rs[$i]['confirm_name'] = M('Staff')->where('id='.$val['confirmed_staff_id'])->getField('name');
