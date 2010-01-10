@@ -46,6 +46,18 @@ class InventoryAction extends BaseAction{
 		$this->display('Layout:ERP_layout');
 	}
 	public function query() {
+		$id = $_REQUEST['id'];
+		$action = $_REQUEST['action'];
+		$rs = M('ProductFlow')->field('id,quantity,supplier_id,staff_id,create_time,confirm_time,confirmed_staff_id,remark')->where(array('product_id'=>$id, 'action'=>$action, 'status'=>1))->select();
+		foreach ($rs as $i=>$val) {
+			$rs[$i]['supplier_name'] = M('Supplier')->where('id='.$val['supplier_id'])->getField('name');
+			$rs[$i]['staff_name'] = M('Staff')->where('id='.$val['staff_id'])->getField('name');
+			$rs[$i]['confirm_name'] = M('Staff')->where('id='.$val['confirmed_staff_id'])->getField('name');
+			$rs[$i]['remark2'] = D('Remark2')->relation(true)->where(array('flow_id'=>$val['id']))->select();
+		}
+		//dump($rs);
+		$this->assign('result', $rs);
+		$this->assign('action', $action);
 		$this->assign('content', 'Inventory:query');
 		$this->display('Layout:content');
 	}
