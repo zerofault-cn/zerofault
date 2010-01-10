@@ -5,6 +5,8 @@
 	<th>Supplier</th>
 	<elseif condition="$action eq 'apply'"/>
 	<th>Apply Staff</th>
+	<elseif condition="$action eq 'transfer'"/>
+	<th>Transfer To</th>
 	</if>
 	<th>Quantity</th>
 	<if condition="$action eq 'apply'">
@@ -23,6 +25,8 @@
 	<td>{$item['supplier_name']}</td>
 	<elseif condition="$action eq 'apply'"/>
 	<td>{$item['staff_name']}</td>
+	<elseif condition="$action eq 'transfer'"/>
+	<td>{$item['to_name']}</td>
 	</if>
 	<td>{$item['quantity']}</td>
 	<if condition="$action neq 'apply'">
@@ -37,6 +41,11 @@
 		</notempty></td>
 </tr>
 </iterate>
+<empty name="result">
+<tr>
+	<td colspan="7" align="center">No Record</td>
+</tr>
+</empty>
 </table>
 <p class="center" id="btn"><input type="button" id="select_close" value="Close" onclick="tb_remove();" /></p>
 

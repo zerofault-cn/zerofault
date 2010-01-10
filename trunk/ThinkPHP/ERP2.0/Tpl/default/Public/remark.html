@@ -1,0 +1,45 @@
+<style>
+fieldset {
+	margin-right:10px;
+}
+legend {
+	line-height:24px;
+}
+dt {
+	padding:3px;border-left:3px solid #CC0000;background-color:#BEBEBE;
+}
+dl{
+	height:200px;
+	overflow-y:auto;
+}
+dd {
+	padding:5px;
+}
+dt span{
+	float:right;
+}
+textarea {
+	width:240px;
+	height:42px;
+	margin-top:4px;
+}
+</style>
+<fieldset>
+	<legend>Remark Queries</legend>
+	<dl>
+		<iterate name="result" id="item">
+		<dt><span>{$item['create_time']}</span>{$staff[$item['staff_id']]}</dt>
+		<dd>{$item['remark']|nl2br}</dd>
+		</iterate>
+		<empty name="result">
+		<p class="center">No Record</p>
+		</empty>
+	</dl>
+</fieldset>
+<form action="__APP__/Public/remark" method="post" target="_iframe">
+<input type="hidden" name="id" value="{$id}"/>
+<textarea name="remark" rows="3" cols="30"></textarea> <input type="submit" name="submit" value="Post My Remark"/> OR <input type="button" id="select_close" value="Close" onclick="tb_remove();" />
+</form>
+<style>
+#think_run_time,#think_page_trace{display:none;}
+</style>

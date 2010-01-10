@@ -68,6 +68,42 @@ class PublicAction extends BaseAction{
 		Session::clear();
 		self::_success('Logout success!', __APP__);
 	}
+	
+	public function remark() {
+		if (!empty($_POST['submit'])) {
+			$id = $_REQUEST['id'];
+			$remark = $_REQUEST['remark'];
+			if ('' == trim($remark)) {
+				self::_error('Content is empty!');
+			}
+			$data = array();
+			$data['flow_id'] = $id;
+			$data['staff_id'] = $_SESSION[C('USER_AUTH_KEY')];
+			$data['remark'] = $remark;
+			$data['create_time'] = date("Y-m-d H:i:s");
+			$data['status'] = 1;
+			if (M('Remark2')->add($data)) {
+				echo '<script>parent.myAlert("Post success");parent.myOK(1000);parent.tb_remove();</script>';
+			}
+			else {
+				self::_error('Post fail!'.(C('APP_DEBUG')?$this->dao->getLastSql():''));
+			}
+			exit;
+		}
+		$staff = array();
+		foreach(M('Staff')->where(array('status'=>1))->select() as $item) {
+			$staff[$item['id']] = $item['name'];
+		}
+		$this->assign('staff', $staff);
+
+		$id = $_REQUEST['id'];
+		$remark = M('ProductFlow')->field('staff_id,create_time,remark')->where('id='.$id)->select();
+		$remark2 = M('Remark2')->where(array('flow_id'=>$id, 'status'=>1))->select();
+		$this->assign('id', $id);
+		$this->assign('result', array_merge($remark,$remark2));
+		$this->assign('content', 'Public:remark');
+		$this->display('Layout:content');
+	}
 
 }
 ?>
