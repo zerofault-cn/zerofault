@@ -23,7 +23,7 @@
 			<th class="basic_data">MPN</th>
 			<th class="basic_data">Description</th>
 			<th class="basic_data">Manufacture</th>
-			<th>Quantity<if condition="ACTION_NAME eq 'apply' and $status eq 1">/Remain</if></th>
+			<th>Quantity</th>
 			<th>Unit</th>
 			<if condition="$action eq 'transfer'">
 			<th>From</th>
@@ -46,7 +46,7 @@
 			<td class="basic_data">{$item['product']['MPN']}</td>
 			<td class="basic_data">{$item['product']['description']}</td>
 			<td class="basic_data">{$item['product']['manufacture']}</td>
-			<td>{$item['quantity']}<if condition="ACTION_NAME eq 'apply' and $status eq 1">/{$item['quantity']-$item['returned_quantity']-$item['transfered_quantity']}</if></td>
+			<td>{$item['quantity']}</td>
 			<td>{$unit[$item['product']['unit_id']]}</td>
 			<if condition="$action eq 'transfer'">
 			<td>{$item['from_name']}</td>
