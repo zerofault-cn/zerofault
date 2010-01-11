@@ -70,25 +70,34 @@ class PublicAction extends BaseAction{
 	}
 	
 	public function remark() {
+		if (!empty($_GET['remark_id'])) {
+			die(M('Remark2')->where('id='.$_GET['remark_id'])->getField('remark'));
+		}
 		if (!empty($_POST['submit'])) {
-			$id = $_REQUEST['id'];
+			$remark_id = $_REQUEST['remark_id'];
+			$flow_id = $_REQUEST['flow_id'];
 			$remark = $_REQUEST['remark'];
 			if ('' == trim($remark)) {
-				self::_error('Content is empty!');
+				die(json_encode(array('result'=>0, 'msg'=>'Content is empty!')));
 			}
 			$data = array();
-			$data['flow_id'] = $id;
+			$data['flow_id'] = $flow_id;
 			$data['staff_id'] = $_SESSION[C('USER_AUTH_KEY')];
 			$data['remark'] = $remark;
 			$data['create_time'] = date("Y-m-d H:i:s");
 			$data['status'] = 1;
-			if (M('Remark2')->add($data)) {
-				echo '<script>parent.myAlert("Post success");parent.myOK(1000);parent.tb_remove();</script>';
+			if (!empty($remark_id) && $remark_id>0) {
+				$res = M('Remark2')->where('id='.$remark_id)->save($data);
 			}
 			else {
-				self::_error('Post fail!'.(C('APP_DEBUG')?$this->dao->getLastSql():''));
+				$res = M('Remark2')->add($data);
 			}
-			exit;
+			if ($res) {
+				die(json_encode(array('result'=>1, 'remark_id'=>$remark_id, 'staff_name'=>$_SESSION['loginUserName'], 'create_time'=>$data['create_time'], 'remark'=>nl2br($remark))));
+			}
+			else {
+				die(json_encode(array('result'=>0, 'msg'=>'Post fail!'.(C('APP_DEBUG')?M('Remark2')->getLastSql():''))));
+			}
 		}
 		$staff = array();
 		foreach(M('Staff')->where(array('status'=>1))->select() as $item) {
@@ -99,11 +108,26 @@ class PublicAction extends BaseAction{
 		$id = $_REQUEST['id'];
 		$remark = M('ProductFlow')->field('staff_id,create_time,remark')->where('id='.$id)->select();
 		$remark2 = M('Remark2')->where(array('flow_id'=>$id, 'status'=>1))->select();
+		if (empty($remark2)) {
+			$remark2 = array();
+		}
 		$this->assign('id', $id);
 		$this->assign('result', array_merge($remark,$remark2));
 		$this->assign('content', 'Public:remark');
 		$this->display('Layout:content');
 	}
-
+	public function remark2() {
+		$id = $_REQUEST['id'];
+		$remark2 = M('Remark2')->where(array('flow_id'=>$id, 'status'=>1))->select();
+		if (empty($remark2)) {
+			$remark2 = array();
+		}
+		foreach ($remark2 as $i=>$item) {
+			$remark2[$i]['staff_name'] = M('Staff')->where('id='.$item['staff_id'])->getField('name');
+			$remark2[$i]['remark'] = nl2br($item['remark']);
+		}
+		echo json_encode($remark2);
+		return;
+	}
 }
 ?>

@@ -70,13 +70,13 @@
 	<td>{$item['value']}</td>
 	<td>{$item['project']}</td>
 	<td>{$item['quantity']['enter']-$item['quantity']['reject']-$item['quantity']['apply']-$item['quantity']['transfer']-$item['quantity']['release']-$item['quantity']['scrap']+$item['quantity']['return']}</td>
-	<td><a href="__URL__/query/action/enter/id/{$item['product_id']}?width=600&height=300&modal=true" class="thickbox">{$item['quantity']['enter']}</a></td>
-	<td><a href="__URL__/query/action/reject/id/{$item['product_id']}?width=600&height=300&modal=true" class="thickbox">{$item['quantity']['reject']|default=0}</a></td>
-	<td><a href="__URL__/query/action/apply/id/{$item['product_id']}?width=600&height=300&modal=true" class="thickbox">{$item['quantity']['apply']|default=0}</a></td>
-	<td><a href="__URL__/query/action/transfer/id/{$item['product_id']}?width=600&height=300&modal=true" class="thickbox">{$item['quantity']['transfer']|default=0}</a></td>
-	<td><a href="__URL__/query/action/release/id/{$item['product_id']}?width=600&height=300&modal=true" class="thickbox">{$item['quantity']['release']|default=0}</a></td>
-	<td><a href="__URL__/query/action/scrap/id/{$item['product_id']}?width=600&height=300&modal=true" class="thickbox">{$item['quantity']['scrap']|default=0}</a></td>
-	<td><a href="__URL__/query/action/return/id/{$item['product_id']}?width=600&height=300&modal=true" class="thickbox">{$item['quantity']['return']|default=0}</a></td>
+	<td><a href="__URL__/query/action/enter/id/{$item['product_id']}?width=630&height=300&modal=true" class="thickbox">{$item['quantity']['enter']}</a></td>
+	<td><a href="__URL__/query/action/reject/id/{$item['product_id']}?width=630&height=300&modal=true" class="thickbox">{$item['quantity']['reject']|default=0}</a></td>
+	<td><a href="__URL__/query/action/apply/id/{$item['product_id']}?width=630&height=300&modal=true" class="thickbox">{$item['quantity']['apply']|default=0}</a></td>
+	<td><a href="__URL__/query/action/transfer/id/{$item['product_id']}?width=630&height=300&modal=true" class="thickbox">{$item['quantity']['transfer']|default=0}</a></td>
+	<td><a href="__URL__/query/action/release/id/{$item['product_id']}?width=630&height=300&modal=true" class="thickbox">{$item['quantity']['release']|default=0}</a></td>
+	<td><a href="__URL__/query/action/scrap/id/{$item['product_id']}?width=630&height=300&modal=true" class="thickbox">{$item['quantity']['scrap']|default=0}</a></td>
+	<td><a href="__URL__/query/action/return/id/{$item['product_id']}?width=630&height=300&modal=true" class="thickbox">{$item['quantity']['return']|default=0}</a></td>
 	<td>{$item['unit_name']}</td>
 	<td><if condition="$item['fixed'] eq 1">Fixed Assets<else />Floating Assets</if></td>
 </tr>
