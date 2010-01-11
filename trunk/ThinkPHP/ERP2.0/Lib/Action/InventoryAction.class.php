@@ -67,7 +67,7 @@ class InventoryAction extends BaseAction{
 			$rs[$i]['confirm_name'] = M('Staff')->where('id='.$val['confirmed_staff_id'])->getField('name');
 			$rs[$i]['remark2'] = D('Remark2')->relation(true)->where(array('flow_id'=>$val['id']))->select();
 		}
-		//dump($rs);
+		$this->assign('id', $id);
 		$this->assign('result', $rs);
 		$this->assign('action', $action);
 		$this->assign('content', 'Inventory:query');

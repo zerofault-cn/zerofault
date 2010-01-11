@@ -9,13 +9,13 @@ dt {
 	padding:3px;border-left:3px solid #CC0000;background-color:#BEBEBE;
 }
 dl{
-	height:200px;
+	height:199px;
 	overflow-y:auto;
 }
 dd {
 	padding:5px;
 }
-dt span{
+dt span,dd span{
 	float:right;
 }
 textarea {
@@ -23,23 +23,84 @@ textarea {
 	height:42px;
 	margin-top:4px;
 }
+#think_run_time,#think_page_trace{display:none;}
+
 </style>
 <fieldset>
 	<legend>Remark Queries</legend>
-	<dl>
+	<dl id="remark_list">
 		<iterate name="result" id="item">
-		<dt><span>{$item['create_time']}</span>{$staff[$item['staff_id']]}</dt>
-		<dd>{$item['remark']|nl2br}</dd>
+		<dt id="dt_{$item['id']}"><span>{$item['create_time']}</span>{$staff[$item['staff_id']]}</dt>
+		<dd id="dd_{$item['id']}"><if condition="$_SESSION[C('USER_AUTH_KEY')] eq $item['staff_id'] and !empty($item['id'])"><span><a href="javascript:void(0);" onclick="edit('{$item['id']}');">Edit</a></span></if><div>{$item['remark']|nl2br}</div></dd>
 		</iterate>
 		<empty name="result">
 		<p class="center">No Record</p>
 		</empty>
 	</dl>
 </fieldset>
-<form action="__APP__/Public/remark" method="post" target="_iframe">
-<input type="hidden" name="id" value="{$id}"/>
-<textarea name="remark" rows="3" cols="30"></textarea> <input type="submit" name="submit" value="Post My Remark"/> OR <input type="button" id="select_close" value="Close" onclick="tb_remove();" />
-</form>
-<style>
-#think_run_time,#think_page_trace{display:none;}
-</style>
+<input type="hidden" name="flow_id" value="{$id}"/>
+<input type="hidden" name="remark_id" value=""/>
+<textarea name="remark" rows="3" cols="30"></textarea> <input type="submit" value="Post My Remark" align="bottom"/>&nbsp;&nbsp;<input type="button" value="Close" onclick="tb_remove();" align="bottom"/>
+<script>
+$(document).ready(function(){
+	$("input:submit").click(function(){
+		if (''==$("textarea[name='remark']").val()) {
+			myAlert('Content is empty!');
+			return;
+		}
+		else {
+			$.post('__APP__/Public/remark', {
+				'flow_id' : $("input[name='flow_id']").val(),
+				'remark_id' : $("input[name='remark_id']").val(),
+				'remark' : $("textarea[name='remark']").val(),
+				'submit' : 1,
+			}, function(json) {
+					if(json.result=='1')
+					{
+						if (''!=$("input[name='remark_id']").val()) {
+							myAlert('Submit success.');
+							$("dt#dt_"+json.remark_id).html('<span>'+json.create_time+'</span>'+json.staff_name);
+							$("dd#dd_"+json.remark_id+" div").html(json.remark);
+							$("input[name='remark_id']").val('');
+							$("input:submit").val('Post My Remark');
+							$("input:reset").remove();
+							has_reset = false;
+						}
+						else {
+							myAlert('Post success.');
+							$("dl#remark_list").append('<dt><span>'+json.create_time+'</span>'+json.staff_name+'</dt><dd>'+json.remark+'</dd>');
+						}
+						$("textarea[name='remark']").val('');
+						myOK(2000);
+					}
+					else {
+						myAlert(json.msg);
+					}
+					
+				}, 'json');
+		}
+	});
+});
+
+var has_reset = false;
+function edit(remark_id) {
+	$("input[name='remark_id']").val(remark_id);
+	$.get('__APP__/Public/remark', {
+		'remark_id' : remark_id,
+	}, function(str) {
+			$("textarea[name='remark']").val(str);
+		});
+	$("input:submit").val('Submit');
+	if(!has_reset) {
+		$("input:submit").after('<input type="reset" value="Cancel"/>');
+		$("input.reset").click(function(){
+			$("input[name='remark_id']").val('');
+			$("textarea[name='remark']").val('');
+			$("input:submit").val('Post My Remark');
+			$(this).remove();
+			has_reset = false;
+		});
+		has_reset = true;
+	}
+}
+</script>
