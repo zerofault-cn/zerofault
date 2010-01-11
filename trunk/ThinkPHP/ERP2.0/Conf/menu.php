@@ -44,6 +44,7 @@ $menu['My&nbsp;Assets'] = array(
 		'Apply'					=> 'Asset/apply',
 		'Transfer In'			=> 'Asset/transferIn',
 		'Transfer Out'			=> 'Asset/transferOut',
+		'Return'				=> 'Asset/returns',
 		)
 	);
 

@@ -161,7 +161,7 @@ class ProductOutAction extends BaseAction{
 				//$info['ori_quantity'] = $from_quantity - $transfered_quantity - $transfered_quantity;
 				$info['ori_quantity'] = M("LocationProduct")->where(array('type'=>$info['from_type'], 'location_id'=>$info['from_id'], 'product_id'=>$info['product_id']))->getField('`ori_quantity`+`chg_quantity`');
 				if ($info['staff_id'] != $_SESSION[C('USER_AUTH_KEY')]) {//不是当前用户所创建的记录
-					$info['remark'] = M('Remark2')->where(array('flow_id'=>$id, 'staff_id'=>$_SESSION[C('USER_AUTH_KEY')]))->getField('content');
+					$info['remark'] = M('Remark2')->where(array('flow_id'=>$id, 'staff_id'=>$_SESSION[C('USER_AUTH_KEY')]))->getField('remark');
 				}
 			}
 			else{//edit apply/release/scrap
@@ -170,7 +170,7 @@ class ProductOutAction extends BaseAction{
 				//$info['ori_quantity'] = $rs['location_product'][0]['ori_quantity'] + $rs['location_product'][0]['chg_quantity'];
 				$info['ori_quantity'] = M("LocationProduct")->where(array('type'=>$info['from_type'], 'location_id'=>$info['from_id'], 'product_id'=>$info['product_id']))->getField('`ori_quantity`+`chg_quantity`');
 				if ($info['staff_id'] != $_SESSION[C('USER_AUTH_KEY')]) {//不是当前用户所创建的记录
-					$info['remark'] = M('Remark2')->where(array('flow_id'=>$id, 'staff_id'=>$_SESSION[C('USER_AUTH_KEY')]))->getField('content');
+					$info['remark'] = M('Remark2')->where(array('flow_id'=>$id, 'staff_id'=>$_SESSION[C('USER_AUTH_KEY')]))->getField('remark');
 				}
 			}
 		}
@@ -200,7 +200,7 @@ class ProductOutAction extends BaseAction{
 					$max_code = $this->dao->where(array('code'=>array('like','T%')))->max('code');
 					empty($max_code) && ($max_code = 'T'.sprintf("%09d",0));
 				}
-				elseif('back'==$action) {
+				elseif('return'==$action) {
 					$max_code = $this->dao->where(array('code'=>array('like','R%')))->max('code');
 					empty($max_code) && ($max_code = 'R'.sprintf("%09d",0));
 
@@ -236,7 +236,7 @@ class ProductOutAction extends BaseAction{
 			empty($max_code) && ($max_code = 'Out'.sprintf("%09d",0));
 			$code = ++ $max_code;
 			$this->dao->code = $code;
-			if('transfer'==$action || 'back'==$action) {
+			if('transfer'==$action || 'return'==$action) {
 				$rs = $this->dao->where(array('code'=>$_REQUEST['code'],'status'=>0))->select();
 				if(!empty($rs)) {
 					self::_error('Last '.$action.' haven\'t confirmed yet!');
@@ -261,7 +261,7 @@ class ProductOutAction extends BaseAction{
 			}
 			$this->dao->to_id = $_REQUEST['to_id'];
 		}
-		if('back'==$action) {
+		if('return'==$action) {
 			$this->dao->code = $_REQUEST['code'];
 			$this->dao->from_type = $_REQUEST['from_type'];
 			$this->dao->from_id = $_REQUEST['from_id'];
@@ -273,7 +273,16 @@ class ProductOutAction extends BaseAction{
 		$this->dao->quantity = $_REQUEST['quantity'];
 		//get remark2
 		if(!empty($id) && $id>0 && $this->dao->staff_id != $_SESSION[C('USER_AUTH_KEY')]) {//不是当前用户所创建的记录
-			M('Remark2')->add(array('flow_id'=>$id, 'staff_id'=>$_SESSION[C('USER_AUTH_KEY')], 'content'=>trim($_REQUEST['remark']), 'status'=>1));
+			if ($remark_id = M('Remark2')->where(array('flow_id'=>$id, 'staff_id'=>$_SESSION[C('USER_AUTH_KEY')]))->getField('id')) {
+				if (!M('Remark2')->where('id='.$remark_id)->save(array('remark'=>trim($_REQUEST['remark']), 'create_time'=>date("Y-m-d H:i:s"), 'status'=>1))) {
+					self::_error('Update remark fail!'.(C('APP_DEBUG')?$this->dao->getLastSql():''));
+				}
+			}
+			else {
+				if (!M('Remark2')->add(array('flow_id'=>$id, 'staff_id'=>$_SESSION[C('USER_AUTH_KEY')], 'remark'=>trim($_REQUEST['remark']), 'create_time'=>date("Y-m-d H:i:s"), 'status'=>1)))  {
+					self::_error('Insert remark fail!'.(C('APP_DEBUG')?$this->dao->getLastSql():''));
+				}
+			}
 		}
 		else {
 			$this->dao->remark = trim($_REQUEST['remark']);
@@ -289,10 +298,13 @@ class ProductOutAction extends BaseAction{
 		else{
 			if($this->dao->add()) {
 				if($action=='apply') {
-					self::_success('Apply request ready for confirm!',__URL__.'/'.$action);
+					self::_success('Apply request is ready for confirm!',__URL__.'/'.$action);
 				}
 				elseif('transfer'==$action) {
-					self::_success('Transfer request ready for confirm!',__URL__.'/'.(MODULE_NAME=='Asset'?'':$action));
+					self::_success('Transfer request is ready for confirm!',__URL__.'/'.(MODULE_NAME=='Asset'?'':$action));
+				}
+				elseif ('return' == $action) {
+					self::_success('Request is ready for confirm!',__URL__.'/returns');
 				}
 				else{
 					self::_success('Operation success!',__URL__.'/'.$action);
@@ -321,26 +333,24 @@ class ProductOutAction extends BaseAction{
 		}
 		foreach ($_POST['chk'] as $id) {
 			$info = $this->dao->find($id);
-			//if('back' != $info['action']) {
-				//减库存，或减资产
-				$where = array(
-					'type' => $info['from_type'],
-					'location_id' => $info['from_id'],
-					'product_id'  => $info['product_id'],
-					);
-				$rs = M('LocationProduct')->where($where)->find();
-				if (empty($rs)) {
-					self::_error('Inventory empty fail!');
+			//减库存，或减资产
+			$where = array(
+				'type' => $info['from_type'],
+				'location_id' => $info['from_id'],
+				'product_id'  => $info['product_id'],
+				);
+			$rs = M('LocationProduct')->where($where)->find();
+			if (empty($rs)) {
+				self::_error('Inventory empty fail!');
+			}
+			elseif ($rs['ori_quantity']+$rs['chg_quantity']<$info['quantity']) {
+				self::_error('Inventory insufficient!');
+			}
+			else {
+				if (!M('LocationProduct')->setDec('chg_quantity','id='.$rs['id'], $info['quantity'])) {
+					self::_error('Update inventory fail!'.(C('APP_DEBUG')?$this->dao->getLastSql():''));
 				}
-				elseif ($rs['ori_quantity']+$rs['chg_quantity']<$info['quantity']) {
-					self::_error('Inventory insufficient!');
-				}
-				else {
-					if (!M('LocationProduct')->setDec('chg_quantity','id='.$rs['id'], $info['quantity'])) {
-						self::_error('Update inventory fail!'.(C('APP_DEBUG')?$this->dao->getLastSql():''));
-					}
-				}
-			//}
+			}
 			if('release' != $info['action'] && 'scrap' != $info['action']) {
 				//加个人资产，或公共资产
 				$where = array(

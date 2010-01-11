@@ -1,8 +1,8 @@
 <p class="page_title_text">
 <if condition="$action neq ''">
-Product {$action|ucfirst}
+Product {$action|ucfirst} Form
 <elseif condition="$action eq '' and $info['action'] neq ''"/>
-Edit {$info['action']|ucfirst} Form
+Product {$info['action']|ucfirst} Form
 </if>
 </p>
 <form name="form1" action="__URL__/submit" method="post" target="_iframe">

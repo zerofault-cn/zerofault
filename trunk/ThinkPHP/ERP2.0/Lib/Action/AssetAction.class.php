@@ -50,11 +50,11 @@ class AssetAction extends BaseAction{
 	public function transferOut() {
 		R('ProductOut', 'transfer');
 	}
-	public function back() {
-		$this->index();
-	}
 	public function apply() {
 		R('ProductOut', 'apply');
+	}
+	public function returns() {
+		R('ProductOut', 'returns');
 	}
 	public function form() {
 		R('ProductOut', 'form');
@@ -70,6 +70,9 @@ class AssetAction extends BaseAction{
 	}
 	public function profile() {
 		R('Staff', 'profile');
+	}
+	public function delete() {
+		R('ProductOut', 'delete');
 	}
 }
 ?>

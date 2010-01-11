@@ -29,7 +29,7 @@ class InventoryAction extends BaseAction{
 			!empty($_REQUEST['description']) && ($where['description'] = array('like', '%'.trim($_REQUEST['description']).'%'));
 			!empty($_REQUEST['manufacture']) && ($where['manufacture'] = array('like', '%'.trim($_REQUEST['manufacture']).'%'));
 			!empty($_REQUEST['MPN']) 		 && ($where['MPN'] 		   = array('like', '%'.trim($_REQUEST['MPN']).'%'));
-			!empty($_REQUEST['value']) 		 && ($where['value'] 	   = array('like', '%'.trim($_REQUEST['value']).'%'));
+			!empty($_REQUEST['value']) 		 && ($where['value'] 	   = trim($_REQUEST['value']));
 			!empty($_REQUEST['project']) 	 && ($where['project'] 	   = array('like', '%'.trim($_REQUEST['project']).'%'));
 			$result = $this->dao->field("Options.name as unit_name, Category.name as category_name, Product.id as product_id, Product.fixed as fixed, Product.value as value, Product.project as project, Product.MPN as MPN, Product.Internal_PN as Internal_PN, Product.description as description, Product.manufacture as manufacture, group_concat(Supplier.name SEPARATOR '<br />') as supplier_name")->where($where)->group('product_id')->select();
 			foreach ($result as $i=>$val) {
