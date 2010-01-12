@@ -57,7 +57,7 @@ class ProductOutAction extends BaseAction{
 		else{
 			$status = 0;
 		}
-		Session::set(ACTION_NAME.'_status', $status);
+		//Session::set(ACTION_NAME.'_status', $status);
 		$this->assign('status', $status);
 
 

@@ -99,6 +99,8 @@ Product {$action|ucfirst} Form
 </table>
 <p class="center">
 	<input type="submit" name="submit" value="Submit"/>
+	&nbsp;&nbsp;&nbsp;&nbsp;
+	<input type="button" value="Cancel" onclick="javascript:location.href='{$_SERVER.HTTP_REFERER}';"/>
 </p>
 </form>
 <script language="JavaScript" type="text/javascript">

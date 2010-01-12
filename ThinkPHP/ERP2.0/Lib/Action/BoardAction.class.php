@@ -44,6 +44,8 @@ class BoardAction extends BaseAction{
 		}
 		$this->assign('code', $code);
 		$this->assign('info', $info);
+		$this->assign('MAX_FILE_SIZE', self::MAX_FILE_SIZE());
+		$this->assign('upload_max_filesize', min(ini_get('memory_limit'), ini_get('post_max_size'), ini_get('upload_max_filesize')));
 		$this->assign('content', 'Board:form');
 		$this->display('Layout:ERP_layout');
 	}
