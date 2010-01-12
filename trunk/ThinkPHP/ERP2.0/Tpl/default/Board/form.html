@@ -83,10 +83,14 @@
 </tr>
 <tr>
 	<td>Attachment:</td>
-	<td><input type="file" size="15" name="attachment" /> (Max Filesize: <php>echo ini_get("upload_max_filesize");</php>)<br />
-	<neq name="info.attachment" value="">
+	<td><input type="hidden" name="MAX_FILE_SIZE" value="{$MAX_FILE_SIZE}"/>
+	<input type="file" size="15" name="attachment" /><br />
+	<empty name="info.attachment">
+	Don't try to upload a file larger than {$upload_max_filesize}!
+	<else />
+	The old attachment will be replaced by the new one!<br />
 	<a href="__APP__/../{$info.attachment}" target="_blank" title="View attachment in new window">View Attachment</a>
-	</neq>
+	</empty>
 	</td>
 </tr>
 <tr>
@@ -95,8 +99,8 @@
 </tr>
 </table>
 <p class="center">
-<input type="submit" value="Submit" name="submit"/>
-&nbsp;&nbsp;&nbsp;&nbsp;
-<input type="button" value="Cancel" onclick="javascript:history.back();"/>
+	<input type="submit" value="Submit" name="submit"/>
+	&nbsp;&nbsp;&nbsp;&nbsp;
+	<input type="button" value="Cancel" onclick="javascript:location.href='__URL__';"/>
 </p>
 </form>

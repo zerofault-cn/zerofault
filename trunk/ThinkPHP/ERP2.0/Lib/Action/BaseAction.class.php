@@ -207,28 +207,13 @@ class BaseAction extends Action{
 		}
 		return $str;
 	}
-	public function update_quantity($product_id) {
-		$where = array();
-		if(is_array($product_id) && !empty($product_id)) {
-			$where['id'] = array('in',implode(',',$product_id));
+	protected function MAX_FILE_SIZE($k=NULL){
+		$tmp = 1024*1024*min(ini_get('memory_limit'), ini_get('post_max_size'), ini_get('upload_max_filesize'));
+		if(is_null($k)) {
+			return $tmp;
+		}else{
+			return min($tmp, 1024*$k);
 		}
-		elseif(''!=$product_id) {
-			$where['id'] = $product_id;
-		}
-		$rs = D('Product')->where($where)->select();
-		if($rs) {
-			foreach($rs as $item) {
-				$quantity = 0;
-				$flow = D('ProductFlow')->where(array('product_id'=>$item['id'],'status'=>1))->select();
-				if($flow) {
-					foreach($flow as $flow_item) {
-						$quantity += (('Storage'==$flow_item['destination'])?1:-1)*$flow_item['quantity'];
-					}
-				}
-				D('Product')->where('id='.$item['id'])->setField('quantity', $quantity);
-			}
-		}
-		return true;
 	}
 }
 ?>
