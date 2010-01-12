@@ -40,53 +40,52 @@ textarea {
 </fieldset>
 <input type="hidden" name="flow_id" value="{$id}"/>
 <input type="hidden" name="remark_id" value=""/>
-<textarea name="remark" rows="3" cols="30"></textarea> <input type="submit" value="Post My Remark" align="bottom"/>&nbsp;&nbsp;<input type="button" value="Close" onclick="tb_remove();" align="bottom"/>
-<script>
-$(document).ready(function(){
-	$("input:submit").click(function(){
-		if (''==$("textarea[name='remark']").val()) {
-			myAlert('Content is empty!');
-			return;
-		}
-		else {
-			$.post('__APP__/Public/remark', {
-				'flow_id' : $("input[name='flow_id']").val(),
-				'remark_id' : $("input[name='remark_id']").val(),
-				'remark' : $("textarea[name='remark']").val(),
-				'submit' : 1,
-			}, function(json) {
-					if(json.result=='1')
-					{
-						if (''!=$("input[name='remark_id']").val()) {
-							myAlert('Submit success.');
-							$("dt#dt_"+json.remark_id).html('<span>'+json.create_time+'</span>'+json.staff_name);
-							$("dd#dd_"+json.remark_id+" div").html(json.remark);
-							$("input[name='remark_id']").val('');
-							$("input:submit").val('Post My Remark');
-							$("input:reset").remove();
-							has_reset = false;
-						}
-						else {
-							myAlert('Post success.');
-							$("dl#remark_list").append('<dt><span>'+json.create_time+'</span>'+json.staff_name+'</dt><dd>'+json.remark+'</dd>');
-						}
-						$("textarea[name='remark']").val('');
-						myOK(2000);
+<textarea name="remark" rows="3" cols="30"></textarea> <input type="button" value="Post My Remark" onclick="javascript:post();" align="bottom"/>&nbsp;&nbsp;<input type="button" value="Close" onclick="tb_remove();" align="bottom"/>
+<script language="JavaScript" type="text/javascript">
+function post() {
+	if (''==$("textarea[name='remark']").val()) {
+		myAlert('Content is empty!');
+		return;
+	}
+	else {
+		$.post('__APP__/Public/remark', {
+			'flow_id' : $("input[name='flow_id']").val(),
+			'remark_id' : $("input[name='remark_id']").val(),
+			'remark' : $("textarea[name='remark']").val(),
+			'submit' : 1
+		}, function(json) {
+				if(json.result=='1')
+				{
+					if (''!=$("input[name='remark_id']").val()) {
+						myAlert('Submit success.');
+						$("dt#dt_"+json.remark_id).html('<span>'+json.create_time+'</span>'+json.staff_name);
+						$("dd#dd_"+json.remark_id+" div").html(json.remark);
+						$("input[name='remark_id']").val('');
+						$("input:submit").val('Post My Remark');
+						$("input:reset").remove();
+						has_reset = false;
 					}
 					else {
-						myAlert(json.msg);
+						myAlert('Post success.');
+						$("dl#remark_list").append('<dt><span>'+json.create_time+'</span>'+json.staff_name+'</dt><dd>'+json.remark+'</dd>');
+						myOK(1000);
 					}
-					
-				}, 'json');
-		}
-	});
-});
+					$("textarea[name='remark']").val('');
+					myOK(2000);
+				}
+				else {
+					myAlert(json.msg);
+				}
+				
+			}, 'json');
+	}
+}
 
 var has_reset = false;
 function edit(remark_id) {
 	$("input[name='remark_id']").val(remark_id);
 	$.get('__APP__/Public/remark', {
-		'remark_id' : remark_id,
+		'remark_id' : remark_id
 	}, function(str) {
 			$("textarea[name='remark']").val(str);
 		});

@@ -1,5 +1,5 @@
 <?php
-if($_SERVER["SERVER_NAME"]=='localhost') {
+if($_SERVER["SERVER_NAME"]=='localhost' || substr($_SERVER["SERVER_NAME"],0,3)=='192') {
 	$config = array(
 		'APP_DEBUG'			=> true,
 		'DB_NAME'			=> 'ERP2',
