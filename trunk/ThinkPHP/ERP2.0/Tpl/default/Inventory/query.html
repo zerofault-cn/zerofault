@@ -63,7 +63,7 @@ textarea {
 </empty>
 </table>
 <p class="center" id="btn"><input type="button" id="select_close" value="Close" onclick="tb_remove();" /></p>
-<script>
+<script language="JavaScript" type="text/javascript">
 function remark(obj,id) {
 	$("tr#remark").remove();
 	$(obj).parent().parent().after('<tr id="remark" bgcolor="#ffffff"><td colspan="7"><p class="center"><img src="../Public/Images/loadingAnimation.gif"/></p></td></tr>');
@@ -91,7 +91,7 @@ function remark(obj,id) {
 				$.post('__APP__/Public/remark', {
 					'flow_id' :id,
 					'remark' : $("textarea[name='remark']").val(),
-					'submit' : 1,
+					'submit' : 1
 				}, function(json) {
 						if(json.result=='1')
 						{
