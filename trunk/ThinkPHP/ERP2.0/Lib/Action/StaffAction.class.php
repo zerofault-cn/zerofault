@@ -68,8 +68,6 @@ class StaffAction extends BaseAction{
 		$id = $_REQUEST['id'];
 		$name = trim($_REQUEST['name']);
 		empty($name) && self::_error('Staff Name required!');
-		$password = trim($_REQUEST['password']);
-		empty($password) && self::_error('Password required!');
 		if(!empty($id) && $id>0) {
 			//for edit
 			if(1==$id && 1!=$_SESSION[C('USER_AUTH_KEY')]) {
@@ -86,6 +84,8 @@ class StaffAction extends BaseAction{
 		}
 		else{
 			//for add
+			$password = trim($_REQUEST['password']);
+			empty($password) && self::_error('Password required!');
 			$rs = $this->dao->where(array('name'=>$name))->find();
 			if($rs && sizeof($rs)>0){
 				self::_error('The name: '.$name.' has been used by another staff!');
