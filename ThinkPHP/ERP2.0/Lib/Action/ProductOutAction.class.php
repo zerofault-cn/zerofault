@@ -97,8 +97,8 @@ class ProductOutAction extends BaseAction{
 			$item['transfered_quantity'] = $this->dao->where(array('code'=>'T'.substr($item['code'],-9),'status'=>1))->sum('quantity');
 			empty($item['transfered_quantity']) && ($item['transfered_quantity']=0);
 
-			$item['from_name'] = M(ucfirst($item['from_type']))->where('id='.$item['from_id'])->getField('name');
-			$item['to_name'] = M(ucfirst($item['to_type']))->where('id='.$item['to_id'])->getField('name');
+			$item['from_name'] = M(ucfirst($item['from_type']))->where('id='.$item['from_id'])->getField('location'==$item['from_type']?'name':'realname');
+			$item['to_name'] = M(ucfirst($item['to_type']))->where('id='.$item['to_id'])->getField('location'==$item['to_type']?'name':'realname');
 			
 			$item['remark2'] = D('Remark2')->relation(true)->where(array('flow_id'=>$item['id'], 'status'=>1))->select();
 			$result[] = $item;
@@ -324,7 +324,7 @@ class ProductOutAction extends BaseAction{
 		
 		if (!empty($_POST['reject'])) {
 			foreach ($_POST['chk'] as $id) {
-				if (!$this->dao->where('id='.$id)->setField('status', -1)) {
+				if (!$this->dao->where('id='.$id)->setField(array('confirmed_staff_id','status'),array($_SESSION[C('USER_AUTH_KEY')], -1))) {
 					self::_error('Reject fail!'.(C('APP_DEBUG')?$this->dao->getLastSql():''));
 				}
 			}

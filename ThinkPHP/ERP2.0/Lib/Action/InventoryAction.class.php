@@ -60,11 +60,11 @@ class InventoryAction extends BaseAction{
 				$rs[$i]['to_name'] = M('Location')->where('id='.$val['to_id'])->getField('name');
 			}
 			else {
-				$rs[$i]['to_name'] = M('Staff')->where('id='.$val['to_id'])->getField('name');
+				$rs[$i]['to_name'] = M('Staff')->where('id='.$val['to_id'])->getField('realname');
 			}
 			$rs[$i]['supplier_name'] = M('Supplier')->where('id='.$val['supplier_id'])->getField('name');
-			$rs[$i]['staff_name'] = M('Staff')->where('id='.$val['staff_id'])->getField('name');
-			$rs[$i]['confirm_name'] = M('Staff')->where('id='.$val['confirmed_staff_id'])->getField('name');
+			$rs[$i]['staff_name'] = M('Staff')->where('id='.$val['staff_id'])->getField('realname');
+			$rs[$i]['confirm_name'] = M('Staff')->where('id='.$val['confirmed_staff_id'])->getField('realname');
 			$rs[$i]['remark2'] = D('Remark2')->relation(true)->where(array('flow_id'=>$val['id']))->select();
 		}
 		$this->assign('id', $id);

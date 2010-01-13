@@ -31,7 +31,11 @@
 			</if>
 			<th>{$action|ucfirst} Time</th>
 			<th>{$action|ucfirst} Staff</th>
-			<th>Confirmed Staff</th>
+			<if condition="$status eq '1'">
+				<th>Confirmed Staff</th>
+			<elseif condition="$status eq '-1'"/>
+				<th>Rejected Staff</th>
+			</if>
 			<th>Remark</th>
 			<th>OP</th>
 		</tr>
@@ -53,8 +57,8 @@
 			<td>{$item['to_name']}</td>
 			</if>
 			<td>{$item['create_time']}</td>
-			<td align="center">{$item['staff']['name']}</td>
-			<td align="center">{$item['confirmed_staff']['name']}&nbsp;</td>
+			<td align="center">{$item['staff']['realname']}</td>
+			<neq name="status" value="0"><td align="center">{$item['confirmed_staff']['realname']}&nbsp;</td></neq>
 			<td>{$item['remark']}
 				<a href="__APP__/Public/remark/id/{$item['id']}?width=600&height=300&modal=true" class="thickbox"><img src="../Public/Images/comments.gif"/></a>
 				</td>
