@@ -101,7 +101,7 @@ class PublicAction extends BaseAction{
 		}
 		$staff = array();
 		foreach(M('Staff')->where(array('status'=>1))->select() as $item) {
-			$staff[$item['id']] = $item['name'];
+			$staff[$item['id']] = $item['realname'];
 		}
 		$this->assign('staff', $staff);
 
@@ -123,7 +123,7 @@ class PublicAction extends BaseAction{
 			$remark2 = array();
 		}
 		foreach ($remark2 as $i=>$item) {
-			$remark2[$i]['staff_name'] = M('Staff')->where('id='.$item['staff_id'])->getField('name');
+			$remark2[$i]['staff_name'] = M('Staff')->where('id='.$item['staff_id'])->getField('realname');
 			$remark2[$i]['remark'] = nl2br($item['remark']);
 		}
 		echo json_encode($remark2);
