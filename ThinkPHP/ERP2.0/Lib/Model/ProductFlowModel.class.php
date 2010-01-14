@@ -32,12 +32,7 @@ class ProductFlowModel extends RelationModel{
 			'class_name'   => 'Options',
 			'foreign_key'  => 'currency_id',
 			),
-		'Options2' => array(
-			'mapping_type' => BELONGS_TO,
-			'mapping_name' => 'unit',
-			'class_name'   => 'Options',
-			'foreign_key'  => 'unit_id',
-			)
+
 	);
 }
 

@@ -32,7 +32,7 @@
 </tr>
 <tr>
 	<td>Is Leader:</td>
-	<td><input type="checkbox" name="is_leader" value="1" <eq name='info.is_leader' value='1'>checked="true"</eq>/>Yes</td>
+	<td><input type="checkbox" name="is_leader" value="1" <notempty name="info['is_leader']" value="1">checked="true"</notempty> />Yes</td>
 </tr>
 <tr>
 	<td>Role:</td>

@@ -32,13 +32,13 @@ class DeptAction extends BaseAction{
 	*/
 	private function form() {
 		$dStaff = D('Staff');
-		$id = $_REQUEST['id'];
-		if(!empty($id) && $id>0) {
+		$id = empty($_REQUEST['id']) ? 0 : intval($_REQUEST['id']);
+		if ($id>0) {
 			$info = $this->dao->find($id);
 			$info['leader_opts'] = self::genOptions($dStaff->where(array('is_leader'=>1))->select(), $info['leader_id'],'realname');
 			$code = $info['code'];
 		}
-		else{
+		else {
 			$info = array(
 				'id'=>0,
 				'name'=>'',
@@ -58,17 +58,17 @@ class DeptAction extends BaseAction{
 		if(empty($_POST['submit'])) {
 			return;
 		}
-		$id = $_REQUEST['id'];
 		$name = trim($_REQUEST['name']);
-		empty($name) && self::_error('Department Name required');
-		if(!empty($id) && $id>0) {
+		!$name && self::_error('Department Name required');
+		$id = empty($_REQUEST['id']) ? 0 : intval($_REQUEST['id']);
+		if ($id>0) {
 			$rs = $this->dao->where(array('name'=>$name,'id'=>array('neq',$id)))->find();
 			if($rs && sizeof($rs)>0){
 				self::_error('Department Name: '.$name.' exists already!');
 			}
 			$this->dao->find($id);
 		}
-		else{
+		else {
 			$rs = $this->dao->where(array('name'=>$name))->find();
 			if($rs && sizeof($rs)>0){
 				self::_error('Department Name: '.$name.' exists already!');
@@ -81,7 +81,7 @@ class DeptAction extends BaseAction{
 		$this->dao->name = $name;
 		$this->dao->function = $_REQUEST['function'];
 		$this->dao->leader_id = $_REQUEST['leader_id'];
-		if(!empty($id) && $id>0) {
+		if ($id>0) {
 			if(false !== $this->dao->save()){
 				self::_success('Department information updated!',__URL__);
 			}

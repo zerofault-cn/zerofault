@@ -39,6 +39,7 @@ class ProductInAction extends BaseAction{
 		}
 		//Session::set(ACTION_NAME.'_status', $status);
 		$this->assign('status', $status);
+		$this->assign('action', 'enter');
 
 		$where = array(
 			'fixed' => $fixed,
@@ -51,8 +52,10 @@ class ProductInAction extends BaseAction{
 		$p = new Paginator($count,$limit);
 
 		$order = 'id desc';
+		$rs = $this->dao->relation(true)->where($where)->order($order)->limit($p->offset.','.$p->limit)->select();
+		empty($rs) && ($rs = array());
 		$result = array();
-		foreach($this->dao->relation(true)->where($where)->order($order)->limit($p->offset.','.$p->limit)->select() as $item) {
+		foreach($rs as $item) {
 			$item['rejected_quantity'] = $this->dao->where(array('code'=>'B'.substr($item['code'],-9),'status'=>1))->sum('quantity');
 			empty($item['rejected_quantity']) && ($item['rejected_quantity']=0);
 			$result[] = $item;
@@ -63,7 +66,6 @@ class ProductInAction extends BaseAction{
 		$this->display('Layout:ERP_layout');
 	}
 	public function reject() {
-		//Session::set('action', '');
 		$this->assign('action', 'reject');
 
 		$rs = M('Options')->where(array('type'=>'unit'))->order('sort')->select();
@@ -101,11 +103,10 @@ class ProductInAction extends BaseAction{
 		$this->display('Layout:ERP_layout');
 	}
 	public function form() {
-		//Session::set('action', 'form');
-		$id = $_REQUEST['id'];
-		$fixed = $_REQUEST['fixed'];
-		$action = $_REQUEST['action'];
-		if(!empty($id) && $id>0) {
+		$fixed = isset($_REQUEST['fixed']) ? $_REQUEST['fixed'] : '';
+		$action = empty($_REQUEST['action']) ? 'enter' : $_REQUEST['action'];
+		$id = empty($_REQUEST['id']) ? 0 : intval($_REQUEST['id']);
+		if ($id>0) {
 			$info = $this->dao->relation(true)->find($id);
 			$info['category'] = M('Category')->where("id=".$info['product']['category_id'])->getField('name');
 			$info['unit'] = M('Options')->where("id=".$info['product']['unit_id'])->getField('name');
@@ -123,9 +124,10 @@ class ProductInAction extends BaseAction{
 			}
 			else {//edit enter
 				$code = $info['code'];
+				$info['ori_quantity'] = 0;
 			}
 		}
-		else{//new enter
+		else {//new enter
 			$info = array(
 				'supplier_opts' => self::genOptions(D('Supplier')->select()),
 				'currency_opts' => self::genOptions(M('Options')->where(array('type'=>'currency'))->order('sort')->select()),
@@ -147,7 +149,6 @@ class ProductInAction extends BaseAction{
 		if(empty($_POST['submit'])) {
 			return;
 		}
-		$id = $_REQUEST['id'];
 		$fixed = $_REQUEST['fixed'];
 		$action = $_REQUEST['action'];
 		empty($_REQUEST['product_id']) && self::_error('Please select a component/board first!');
@@ -159,7 +160,8 @@ class ProductInAction extends BaseAction{
 		($_REQUEST['quantity']<0) && self::_error('Quantity number must be larger than 0!');
 		('reject'==$action) && ($_REQUEST['quantity']>$_REQUEST['ori_quantity']) && self::_error('reject quantity can\'t be larger than '.$_REQUEST['ori_quantity']);
 
-		if(!empty($id) && $id>0) {//from edit
+		$id = empty($_REQUEST['id']) ? 0 : intval($_REQUEST['id']);
+		if ($id>0) {//from edit
 			$this->dao->find($id);
 		}
 		else{//from new
@@ -190,15 +192,15 @@ class ProductInAction extends BaseAction{
 		$this->dao->Lot = '';
 		$this->dao->accessories = $_REQUEST['accessories'];
 		$this->dao->remark = $_REQUEST['remark'];
-		if(!empty($id) && $id>0) {
+		if ($id>0) {
 			if(false !== $this->dao->save()){
-				self::_success('Product information updated!',__URL__.('reject'==$this->dao->action?'/reject':''));
+				self::_success('Product information updated!',__URL__.('reject'==$this->dao->action?'/reject':($this->dao->fixed ? '/fixed' : '/floating')));
 			}
 			else{
 				self::_error('Update fail!'.(C('APP_DEBUG')?$this->dao->getLastSql():''));
 			}
 		}
-		else{
+		else {
 			if($this->dao->add()) {
 				if($action=='reject') {
 					self::_success('Product ready for reject!',__URL__.'/reject');

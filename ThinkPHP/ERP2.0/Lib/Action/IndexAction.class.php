@@ -14,6 +14,8 @@ class IndexAction extends BaseAction{
 	public function index(){
 	//	$this->assign('content','index');
 	//	$this->display('Layout:ERP_layout');
+		$top = 'My Assets';
+		Session::set('top', urldecode($top));
 		$this->redirect('Asset/index');
 	}
 }

@@ -16,13 +16,20 @@ class BoardAction extends BaseAction{
 	}
 
 	public function index(){
-		$this->assign('result', $this->dao->where(array('type'=>'Board'))->relation(true)->order('id')->select());
+		//$this->assign('result', $this->dao->relation(true)->where(array('type'=>'Board'))->field('*,group_concat(Internal_PN order by id desc SEPARATOR "<br />") as Internal_PNs,group_concat(MPN order by id desc SEPARATOR "<br />") as MPNs')->group('description')->order('id')->select());
+		$rs = $this->dao->where(array('type'=>'Board'))->order('id')->getField('description');
+		empty($rs) && ($rs = array());
+		$result = array();
+		foreach ($rs as $val) {
+			$rs2 = $this->dao->relation(true)->where()->select();
+		}
+		$this->assign('result',$result);
 		$this->assign('content','Board:index');
 		$this->display('Layout:ERP_layout');
 	}
 	public function form() {
-		$id = $_REQUEST['id'];
-		if(!empty($id) && $id>0) {
+		$id = empty($_REQUEST['id']) ? 0 : intval($_REQUEST['id']);
+		if ($id>0) {
 			$info = $this->dao->find($id);
 			$info['category_opts'] = self::genOptions(M('Category')->where(array('type'=>'Board'))->select(),$info['category_id'],'name');
 			$info['currency_opts'] = self::genOptions(M('Options')->where(array('type'=>'currency'))->order('sort')->select(), $info['currency_id']);
@@ -30,7 +37,7 @@ class BoardAction extends BaseAction{
 			$info['status_opts'] = self::genOptions(M('Options')->where(array('type'=>'status'))->order('sort')->select(), $info['status_id']);
 			$code = $info['code'];
 		}
-		else{
+		else {
 			$info = array(
 				'id'=>0,
 				'category_opts' => self::genOptions(M('Category')->where(array('type'=>'Board'))->select()),
@@ -54,20 +61,20 @@ class BoardAction extends BaseAction{
 		if(empty($_POST['submit'])) {
 			return;
 		}
-		$id = $_REQUEST['id'];
 		$PN = trim($_REQUEST['PN']);
-		empty($PN) && self::_error('Internal PN required');
-		if(!empty($id) && $id>0) {
-			$rs = $this->dao->where(array('Internal_PN'=>$PN,'id'=>array('neq',$id)))->find();
+		$description = trim($_REQUEST['description']);
+		!$description && self::_error('Borad name required');
+		if ($id>0) {
+			$rs = $this->dao->where(array('Internal_PN'=>$PN, 'description'=>$description, 'id'=>array('neq',$id)))->find();
 			if($rs && sizeof($rs)>0){
-				self::_error('Internal PN: '.$PN.' has been used by another component!');
+				self::_error('Board Code: '.$PN.' has been used by another board!');
 			}
 			$this->dao->find($id);
 		}
-		else{
-			$rs = $this->dao->where(array('Internal_PN'=>$PN))->find();
+		else {
+			$rs = $this->dao->where(array('Internal_PN'=>$PN, 'description'=>$description))->find();
 			if($rs && sizeof($rs)>0){
-				self::_error('Internal PN: '.$PN.' has been used by another component!');
+				self::_error('The board: '.$description.' with code: '.$PN.' has been added!');
 			}
 			$max_code = $this->dao->where(array('type'=>'Board'))->max('code');
 			empty($max_code) && ($max_code = 'B'.sprintf("%09d",0));
@@ -76,7 +83,7 @@ class BoardAction extends BaseAction{
 		$this->dao->type = 'Board';
 		$this->dao->fixed = $_REQUEST['fixed'];
 		$this->dao->Internal_PN = $PN;
-		$this->dao->description = $_REQUEST['description'];
+		$this->dao->description = $description;
 		$this->dao->manufacture = $_REQUEST['manufacture'];
 		$this->dao->MPN = $_REQUEST['MPN'];
 		$this->dao->value = $_REQUEST['value'];
@@ -96,27 +103,27 @@ class BoardAction extends BaseAction{
 		$file = $_FILES['attachment'];
 		if($file['size']>0) {
 			$file_path = 'Attach/Product/';
-			$file_name = $PN.'.'.pathinfo($file['name'], PATHINFO_EXTENSION);
+			$file_name = $this->dao->code.'.'.pathinfo($file['name'], PATHINFO_EXTENSION);
 			if(!move_uploaded_file($file['tmp_name'], $file_path.$file_name)) {
 				self::_error('Attachment upload fail!');
 			}
 			$this->dao->attachment = $file_path.$file_name;
 		}
 		$this->dao->remark = $_REQUEST['remark'];
-		if(!empty($id) && $id>0) {
+		if ($id>0) {
 			if(false !== $this->dao->save()){
-				self::_success('Component information updated!',__URL__);
+				self::_success('Board information updated!',__URL__);
 			}
 			else{
 				self::_error('Update fail!'.(C('APP_DEBUG')?$this->dao->getLastSql():''));
 			}
 		}
-		else{
+		else {
 			if($this->dao->add()) {
-				self::_success('Add component data success!',__URL__);
+				self::_success('Add board data success!',__URL__);
 			}
 			else{
-				self::_error('Add component data fail!'.(C('APP_DEBUG')?$this->dao->getLastSql():''));
+				self::_error('Add board data fail!'.(C('APP_DEBUG')?$this->dao->getLastSql():''));
 			}
 		}
 	}

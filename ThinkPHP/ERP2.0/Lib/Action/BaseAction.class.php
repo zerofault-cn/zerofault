@@ -18,11 +18,11 @@ class BaseAction extends Action{
 
 		import('@.RBAC');
 
-		$top = $_REQUEST['top'];
-		empty($top) && ($top = Session::get('top'));
-		empty($top) && ($top = 'My Assets');
+		$top = empty($_REQUEST['top']) ? '' : $_REQUEST['top'];
+		!$top && ($top = Session::get('top'));
+		!$top && ($top = 'My Assets');
 		Session::set('top', urldecode($top));
-		
+
 		$_menu_ = C('_menu_');
 		$menu = $_menu_['menu'];
 		$topmenu = array();
@@ -97,7 +97,7 @@ class BaseAction extends Action{
 	*
 	* 生成弹出“操作成功”提示的js代码
 	*
-	* @param string $msg 弹出框内显示的提示语句 
+	* @param string $msg 弹出框内显示的提示语句
 	* @param string $url 跳转地址，默认为空，表示重新载入当前页
 	* @param integer $timeout 弹出框显示的时间，超过时间后自动关闭或页面跳转
 	*
@@ -116,7 +116,7 @@ class BaseAction extends Action{
 	*
 	* 生成弹出“操作失败”提示的js代码
 	*
-	* @param string $msg 弹出框内显示的提示语句 
+	* @param string $msg 弹出框内显示的提示语句
 	* @param integer $timeout 弹出框显示的时间，如果没有设置，则不会自动关闭，需要用户点OK按钮关闭
 	*
 	* @return string HTML格式的JS代码
