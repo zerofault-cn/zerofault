@@ -17,12 +17,14 @@ class BoardAction extends BaseAction{
 
 	public function index(){
 		//$this->assign('result', $this->dao->relation(true)->where(array('type'=>'Board'))->field('*,group_concat(Internal_PN order by id desc SEPARATOR "<br />") as Internal_PNs,group_concat(MPN order by id desc SEPARATOR "<br />") as MPNs')->group('description')->order('id')->select());
-		$rs = $this->dao->where(array('type'=>'Board'))->order('id')->getField('description');
+		$rs = $this->dao->where(array('type'=>'Board'))->field('description')->order('id')->select();
+		//dump($rs);
 		empty($rs) && ($rs = array());
 		$result = array();
 		foreach ($rs as $val) {
-			$rs2 = $this->dao->relation(true)->where()->select();
+			$result[$val['description']] = $this->dao->relation(true)->where(array('type'=>'Board', 'description'=>$val['description']))->select();
 		}
+		//dump($result);
 		$this->assign('result',$result);
 		$this->assign('content','Board:index');
 		$this->display('Layout:ERP_layout');
@@ -64,6 +66,7 @@ class BoardAction extends BaseAction{
 		$PN = trim($_REQUEST['PN']);
 		$description = trim($_REQUEST['description']);
 		!$description && self::_error('Borad name required');
+		$id = empty($_REQUEST['id']) ? 0 : intval($_REQUEST['id']);
 		if ($id>0) {
 			$rs = $this->dao->where(array('Internal_PN'=>$PN, 'description'=>$description, 'id'=>array('neq',$id)))->find();
 			if($rs && sizeof($rs)>0){

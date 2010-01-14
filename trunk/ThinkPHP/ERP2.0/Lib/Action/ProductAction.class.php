@@ -148,7 +148,7 @@ class ProductAction extends BaseAction{
 				$where['MPN'] = array('like', '%'.trim($_REQUEST['MPN']).'%');
 			}
 			if(''==$action || 'enter'==$action) {
-				$this->assign('result', $this->dao->where($where)->select());
+				$this->assign('result', $this->dao->where($where)->group('description')->select());
 			}
 			elseif('apply'==$action) {
 				$result = array();

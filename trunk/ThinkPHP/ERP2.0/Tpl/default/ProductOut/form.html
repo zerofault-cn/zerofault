@@ -13,7 +13,7 @@ Product {$info['action']|ucfirst} Form
 <table>
 <tr>
 	<td>No.</td>
-	<td><input type="text" maxlength="10" size="15" name="code" value="{$code}" readonly="true" /><img src="../Public/Images/lock.gif" /></td>
+	<td><input type="text" maxlength="10" size="15" name="code" value="{$code}" readonly="true" /> <img src="../Public/Images/lock.gif" /></td>
 </tr>
 <if condition="empty($product_id) eq true and ($action eq 'apply' or ($action eq '' and $info['action'] eq 'apply') or (strlen($id) eq 0 and ($action eq 'transfer' or $action eq 'release' or $action eq 'scrap')))">
 <tr>
@@ -23,31 +23,31 @@ Product {$info['action']|ucfirst} Form
 </if>
 <tr>
 	<td id="form_title1">Internal PN:</td>
-	<td><input type="text" size="15" id="Internal_PN" value="{$info['product']['Internal_PN']}" readonly="true" /><img src="../Public/Images/system.gif" /></td>
+	<td><input type="text" size="15" id="Internal_PN" value="{$info['product']['Internal_PN']}" readonly="true" /> <img src="../Public/Images/system.gif" /></td>
 </tr>
 <tr>
 	<td id="form_title2">Description:</td>
-	<td><input type="text" size="15" id="description" value="{$info['product']['description']}" readonly="true" /><img src="../Public/Images/system.gif" /></td>
+	<td><input type="text" size="15" id="description" value="{$info['product']['description']}" readonly="true" /> <img src="../Public/Images/system.gif" /></td>
 </tr>
 <tr>
 	<td id="form_title3">Manufacture:</td>
-	<td><input type="text" size="15" id="manufacture" value="{$info['product']['manufacture']}" readonly="true"/><img src="../Public/Images/system.gif" /></td>
+	<td><input type="text" size="15" id="manufacture" value="{$info['product']['manufacture']}" readonly="true"/> <img src="../Public/Images/system.gif" /></td>
 </tr>
 <tr>
 	<td id="form_title4">MPN:</td>
-	<td><input type="text" size="15" id="MPN" value="{$info['product']['MPN']}" readonly="true"/><img src="../Public/Images/system.gif" /></td>
+	<td><input type="text" size="15" id="MPN" value="{$info['product']['MPN']}" readonly="true"/> <img src="../Public/Images/system.gif" /></td>
 </tr>
 <tr>
 	<td>Category:</td>
-	<td><input type="text" size="15" id="category" value="{$info['category']}" readonly="true"/><img src="../Public/Images/system.gif" /></td>
+	<td><input type="text" size="15" id="category" value="{$info['category']}" readonly="true"/> <img src="../Public/Images/system.gif" /></td>
 </tr>
 <tr>
 	<td>Value/Package:</td>
-	<td><input type="text" size="15" id="value" value="{$info['product']['value']}" readonly="true"/><img src="../Public/Images/system.gif" /></td>
+	<td><input type="text" size="15" id="value" value="{$info['product']['value']}" readonly="true"/> <img src="../Public/Images/system.gif" /></td>
 </tr>
 <tr>
 	<td>Unit:</td>
-	<td><input type="text" size="15" id="unit" value="{$info['unit']}" readonly="true"/><img src="../Public/Images/system.gif" /></td>
+	<td><input type="text" size="15" id="unit" value="{$info['unit']}" readonly="true"/> <img src="../Public/Images/system.gif" /></td>
 </tr>
 <tr>
 	<td>{$action|ucfirst} Quantity:</td>
