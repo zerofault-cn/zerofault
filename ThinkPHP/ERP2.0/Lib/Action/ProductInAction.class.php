@@ -152,13 +152,16 @@ class ProductInAction extends BaseAction{
 		$fixed = $_REQUEST['fixed'];
 		$action = $_REQUEST['action'];
 		empty($_REQUEST['product_id']) && self::_error('Please select a component/board first!');
+		$product_id = $_REQUEST['product_id'];
+		$PN = trim($_REQUEST['Internal_PN']);
+		$MPN = trim($_REQUEST['MPN']);
 		empty($_REQUEST['supplier_id']) && self::_error('Please select the supplier!');
 		empty($_REQUEST['currency_id']) && self::_error('Please select the currency type!');
 		empty($_REQUEST['quantity']) && self::_error('Quantity number required!');
 		//empty($_REQUEST['price']) && self::_error('Price value required!');
 
-		($_REQUEST['quantity']<0) && self::_error('Quantity number must be larger than 0!');
-		('reject'==$action) && ($_REQUEST['quantity']>$_REQUEST['ori_quantity']) && self::_error('reject quantity can\'t be larger than '.$_REQUEST['ori_quantity']);
+		intval($_REQUEST['quantity'])==0 && self::_error('Quantity number must be larger than 0!');
+		'reject'==$action && ($_REQUEST['quantity']>$_REQUEST['ori_quantity']) && self::_error('reject quantity can\'t be larger than '.$_REQUEST['ori_quantity']);
 
 		$id = empty($_REQUEST['id']) ? 0 : intval($_REQUEST['id']);
 		if ($id>0) {//from edit
@@ -179,12 +182,26 @@ class ProductInAction extends BaseAction{
 				$this->dao->action = 'enter';
 				$this->dao->to_type = 'location';
 				$this->dao->to_id = 1;
+
+				//get product data
+				$data = M('Product')->find($product_id);
+				if ('Board'==$data['type'] && ($PN!=$data['Internal_PN'] || $MPN!=$data['MPN'])) {//save new product
+					$data['id'] = 0;
+					$data['Internal_PN'] = $PN;
+					$data['MPN'] = $MPN;
+
+					$max_code = M('Product')->where(array('type'=>'Board'))->max('code');
+					empty($max_code) && ($max_code = 'B'.sprintf("%09d",0));
+					$data['code'] = ++$max_code;
+
+					$product_id = M('Product')->add($data);
+				}
 			}
 			$this->dao->fixed = $fixed;
 			$this->dao->staff_id = $_SESSION[C('USER_AUTH_KEY')];
 			$this->dao->create_time = date("Y-m-d H:i:s");
 		}
-		$this->dao->product_id = $_REQUEST['product_id'];
+		$this->dao->product_id = $product_id;
 		$this->dao->supplier_id = $_REQUEST['supplier_id'];
 		$this->dao->currency_id = $_REQUEST['currency_id'];
 		$this->dao->quantity = $_REQUEST['quantity'];

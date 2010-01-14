@@ -1,3 +1,9 @@
+<style>
+.toggle{
+	height:15px;
+	overflow:hidden;
+}
+</style>
 <p class="page_title_text">Board List</p>
 <table cellpadding="3" border="1" bordercolor="#FFFFFF" style="border-collapse:collapse;">
 <tr>
@@ -10,30 +16,54 @@
 	<th>Unit</th>
 	<th>Category</th>
 	<th>Type</th>
-	<th>Board Status</th>
 	<th><abbr title="Attachment">ATT</abbr></th>
+	<th>Board Status</th>
+	<th>Remark</th>
 	<th>OP</th>
 </tr>
-<iterate name="result" id="item">
+<iterate name="result" id="board">
 <tr class="trbg{$mod}">
-	<td>{$item['code']}</td>
-	<td>
-		<div id="code_{$item['code']}" style="height:15px;padding-right:16px;overflow:hidden;cursor:pointer;background:url(../Public/Images/down.gif) center right no-repeat;" onclick="toggle('{$item['code']}');">{$item['Internal_PNs']}</div>
+	<td><div class="toggle {$key}">
+	<foreach name="board" key="j" item="item">
+		{$item['code']}<br />
+	</foreach></div>
 	</td>
-	<td>{$item['description']}</td>
+	<td><div class="toggle {$key}">
+	<foreach name="board" key="j" item="item">
+		{$item['Internal_PN']}<br />
+	</foreach></div>
+	</td>
+	<td style="cursor:pointer;background:url(../Public/Images/sort.gif) center right no-repeat;" onclick="toggle(this,'{$key}');">{$key}</td>
 	<td>{$item['manufacture']}</td>
-	<td>
-		<div id="sn_{$item['code']}" style="height:15px;padding-right:16px;overflow:hidden;cursor:pointer;background:url(../Public/Images/down.gif) center right no-repeat;" onclick="toggle('{$item['code']}');">{$item['MPNs']}</div>
+	<td><div class="toggle {$key}">
+	<foreach name="board" key="j" item="item">
+		{$item['MPN']}<br />
+	</foreach></div>
 	</td>
 	<td>{$item['value']}</td>
 	<td>{$item['unit']['name']}</td>
 	<td>{$item['category']['name']}</td>
 	<td><if condition="$item['fixed'] eq 1">Fixed Assets<else />Floating Assets</if></td>
-	<td>{$item['status']['name']}</td>
 	<td align="center"><a href="__APP__/../{$item.attachment}" target="_blank" title="View attachment in new window">{$item.attachment|pathinfo=PATHINFO_EXTENSION}</a></td>
-	<td><a href="__URL__/form/id/{$item['id']}">Edit</a>
-		<a href="javascript:void(0);" onclick="myConfirm('Are you sure to delete this item?', '__URL__/delete/id/{$item['id']}');" target="_iframe">Delete</a></td>
+	<td><div class="toggle {$key}">
+	<foreach name="board" key="j" item="item">
+		{$item['status']['name']}<br />
+	</foreach></div>
+	</td>
+	<td><div class="toggle {$key}">
+	<foreach name="board" key="j" item="item">
+		{$item['remark']}<br />
+	</foreach></div>
+	</td>
+	<td><div class="toggle {$key}">
+	<foreach name="board" key="j" item="item">
+		<a href="__URL__/form/id/{$item['id']}">Edit</a>
+		<a href="javascript:void(0);" onclick="myConfirm('Are you sure to delete this item?', '__URL__/delete/id/{$item['id']}');" target="_iframe">Delete</a><br />
+	</foreach></div>
+	</td>
 </tr>
+
+	
 </iterate>
 <empty name="item">
 <tr>
@@ -45,26 +75,23 @@
 	<input type="button" onclick="javascript:document.location='__URL__/form';" value="Add a New Board" />
 </p>
 <script type="text/javascript">
-var toggle_obj = new Object();
-function toggle(code) {
-	if (toggle_obj.code)
+var toggle_arr = new Array();
+function toggle(obj,name) {
+	if (toggle_arr[name])
 	{
-		toggle_obj.code = false;
-		$("div#code_"+code).css('height','15px');
-		$("div#code_"+code).css('overflow','hidden');
-		$("div#code_"+code).css('background-image', 'url(../Public/Images/down.gif)');
-		$("div#sn_"+code).css('height','15px');
-		$("div#sn_"+code).css('overflow','hidden');
-		$("div#sn_"+code).css('background-image', 'url(../Public/Images/down.gif)');
+		toggle_arr[name] = false;
+		$(obj).css('background-image', 'url(../Public/Images/sort.gif)');
+		$("div."+name).each(function(){
+			$(this).css('height','15px').css('overflow','hidden');
+		});
 	}
 	else {
-		toggle_obj.code = true;
-		$("div#code_"+code).css('height','auto');
-		$("div#code_"+code).css('overflow','visible');
-		$("div#code_"+code).css('background-image', 'url(../Public/Images/up.gif)');
-		$("div#sn_"+code).css('height','auto');
-		$("div#sn_"+code).css('overflow','visible');
-		$("div#sn_"+code).css('background-image', 'url(../Public/Images/up.gif)');
+		toggle_arr[name] = true;
+		$(obj).css('background-image', 'url(../Public/Images/fold.gif)');
+		$("div."+name).each(function(){
+			$(this).css('height','auto').css('overflow','visible');
+		});
 	}
+	//lert(toggle_arr[name]);
 }
 </script>

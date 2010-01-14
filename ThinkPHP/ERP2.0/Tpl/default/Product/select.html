@@ -57,6 +57,7 @@
 
 <script type="text/javascript">
 var _URL_ = '__URL__';
+var action = '{$action}';
 function search() {
 	$.post(_URL_+"/select",{
 		'submit' : 1,
@@ -82,7 +83,7 @@ function update_title(type) {
 	$("#select_title3").text(title_arr[type][2]);
 	$("#select_title4").text(title_arr[type][3]);
 
-	if ('Component'==type)
+	if ('apply'!=action && 'Component'==type)
 	{
 		$(".tr_Component").show();
 		$(".tr_Board").hide();
@@ -94,7 +95,7 @@ function update_title(type) {
 		$(".select_val1").show();
 		$(".select_val4").show();
 	}
-	else {
+	else if('apply'!=action && 'Board'==type) {
 		$(".tr_Component").hide();
 		$(".tr_Board").show();
 		
