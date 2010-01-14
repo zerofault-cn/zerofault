@@ -1,11 +1,19 @@
 <present name="submit">
 <iterate name="result" id="item">
-<tr class="trbg{$mod}">
+<tr class="trbg{$mod} tr_{$type}">
 	<td align="center"><input type="radio" name="product_id" value="{$item['id']}"/></td>
-	<td colspan="2">{$item['Internal_PN']}</td>
-	<td colspan="2">{$item['description']}</td>
-	<td colspan="2">{$item['manufacture']}</td>
-	<td colspan="2">{$item['MPN']}</td>
+	<if condition="$type eq 'Board'">
+	<td class="select_val1" style="display:none">
+	<else/>
+	<td class="select_val1">
+	</if>{$item['Internal_PN']}</td></neq>
+	<td class="select_val2">{$item['description']}</td>
+	<td class="select_val3">{$item['manufacture']}</td>
+	<if condition="$type eq 'Board'">
+	<td class="select_val4" style="display:none">
+	<else/>
+	<td class="select_val4">
+	</if>{$item['MPN']}</td>
 	<if condition="$action eq 'apply'">
 	<td>{$item['location_product'][0]['ori_quantity']+$item['location_product'][0]['chg_quantity']}</th>
 	<else />
@@ -15,7 +23,7 @@
 </iterate>
 <if condition="empty($result)">
 <tr>
-	<td colspan="11" align="center">Basic Data Not Defined or Inventory Empty</td>
+	<td colspan="7" align="center">Basic Data Not Defined or Inventory Empty</td>
 </tr>
 </if>
 <else />
@@ -23,10 +31,10 @@
 <table id="search_table" cellpadding="3" border="1" bordercolor="#FFFFFF" style="border-collapse:collapse;">
 <tr>
 	<th>Type</th>
-	<th colspan="2" id="title1">Internal P/N</th>
-	<th colspan="2" id="title2">Description</th>
-	<th colspan="2" id="title3">Manufacture</th>
-	<th colspan="2" id="title4">MPN</th>
+	<th id="select_title1">Internal P/N</th>
+	<th id="select_title2">Description</th>
+	<th id="select_title3">Manufacture</th>
+	<th id="select_title4">MPN</th>
 	<if condition="$action eq 'apply'">
 	<th>Quantity</th>
 	<else />
@@ -38,14 +46,10 @@
 			<option value="Component">Component</option>
 			<option value="Board">Board</option>
 		</select></td>
-	<td>and</td>
-	<td><input type="text" id="key_Internal_PN" value="" size="8"/></td>
-	<td>and</td>
-	<td><input type="text" id="key_description" value="" size="8"/></td>
-	<td>and</td>
-	<td><input type="text" id="key_manufacture" value="" size="8"/></td>
-	<td>and</td>
-	<td><input type="text" id="key_MPN" value="" size="8"/></td>
+	<td nowrap="nowrap" id="select_key1">and<input type="text" id="key_Internal_PN" value="" size="8"/></td>
+	<td nowrap="nowrap" id="select_key2">and<input type="text" id="key_description" value="" size="8"/></td>
+	<td nowrap="nowrap" id="select_key3">and<input type="text" id="key_manufacture" value="" size="8"/></td>
+	<td nowrap="nowrap" id="select_key4">and<input type="text" id="key_MPN" value="" size="8"/></td>
 	<td style="background:#ffffff"><input type="button" value="Search" onclick="search();"/></td>
 </tr>
 </table>
@@ -73,10 +77,34 @@ var title_arr = new Array();
 title_arr['Component'] = new Array('Internal P/N','Description','Manufacture','MPN');
 title_arr['Board'] = new Array('Board Code','Board Name','Manufacture','Series Number');
 function update_title(type) {
-	$("#title1").text(title_arr[type][0]);
-	$("#title2").text(title_arr[type][1]);
-	$("#title3").text(title_arr[type][2]);
-	$("#title4").text(title_arr[type][3]);
+	$("#select_title1").text(title_arr[type][0]);
+	$("#select_title2").text(title_arr[type][1]);
+	$("#select_title3").text(title_arr[type][2]);
+	$("#select_title4").text(title_arr[type][3]);
+
+	if ('Component'==type)
+	{
+		$(".tr_Component").show();
+		$(".tr_Board").hide();
+
+		$("#select_title1").show();
+		$("#select_title4").show();
+		$("#select_key1").show();
+		$("#select_key4").show();
+		$(".select_val1").show();
+		$(".select_val4").show();
+	}
+	else {
+		$(".tr_Component").hide();
+		$(".tr_Board").show();
+		
+		$("#select_title1").hide();
+		$("#select_title4").hide();
+		$("#select_key1").hide();
+		$("#select_key4").hide();
+		$(".select_val1").hide();
+		$(".select_val4").hide();
+	}
 }
 var action = '{$action}';
 function do_select() {
@@ -89,7 +117,9 @@ function do_select() {
 			$("#description").val(json.description);
 			$("#manufacture").val(json.manufacture);
 			$("#MPN").val(json.MPN);
-			$("#category").val(json.category.name);
+			if(json.category) {
+				$("#category").val(json.category.name);
+			}
 			$("#value").val(json.value);
 			$("#project").val(json.project);
 			$("#unit").val(json.unit.name);
@@ -99,6 +129,11 @@ function do_select() {
 				$("#ori_quantity").val(parseInt(json.location_product[0].ori_quantity)+parseInt(json.location_product[0].chg_quantity));
 				$("#max_quantity").html(parseInt(json.location_product[0].ori_quantity)+parseInt(json.location_product[0].chg_quantity));
 			}
+			$("#form_title1").text(title_arr[json.type][0]+':');
+			$("#form_title2").text(title_arr[json.type][1]+':');
+			$("#form_title3").text(title_arr[json.type][2]+':');
+			$("#form_title4").text(title_arr[json.type][3]+':');
+
 			tb_remove();
 		});
 		

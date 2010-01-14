@@ -22,10 +22,9 @@ class SupplierAction extends BaseAction{
 	}
 
 	public function form() {
-		//Session::set('action', 'form');
 		$dOptions = M('Options');
-		$id = $_REQUEST['id'];
-		if(!empty($id) && $id>0) {
+		$id = empty($_REQUEST['id']) ? 0 : intval($_REQUEST['id']);
+		if ($id>0) {
 			$info = $this->dao->find($id);
 			$info['character_opts'] = self::genOptions($dOptions->where(array('type'=>'character'))->order('sort')->select(), $info['character_id']);
 			$info['payment_opts'] = self::genOptions($dOptions->where(array('type'=>'payment_terms'))->order('sort')->select(), $info['payment_terms_id']);
@@ -66,17 +65,17 @@ class SupplierAction extends BaseAction{
 		if(empty($_POST['submit'])) {
 			return;
 		}
-		$id = $_REQUEST['id'];
 		$name = trim($_REQUEST['name']);
-		empty($name) && self::_error('Supplier Name required');
-		if(!empty($id) && $id>0) {
+		!$name && self::_error('Supplier Name required');
+		$id = empty($_REQUEST['id']) ? 0 : intval($_REQUEST['id']);
+		if ($id>0) {
 			$rs = $this->dao->where(array('name'=>$name,'id'=>array('neq',$id)))->find();
 			if($rs && sizeof($rs)>0){
 				self::_error('Supplier Name: '.$name.' exists already!');
 			}
 			$this->dao->find($id);
 		}
-		else{
+		else {
 			$rs = $this->dao->where(array('name'=>$name))->find();
 			if($rs && sizeof($rs)>0){
 				self::_error('Supplier Name: '.$name.' exists already!');
@@ -102,7 +101,7 @@ class SupplierAction extends BaseAction{
 		$this->dao->currency_id = $_REQUEST['currency_id'];
 		$this->dao->website = $_REQUEST['website'];
 		$this->dao->remark = $_REQUEST['remark'];
-		if(!empty($id) && $id>0) {
+		if ($id>0) {
 			if(false !== $this->dao->save()){
 				self::_success('Supplier information updated!',__URL__);
 			}

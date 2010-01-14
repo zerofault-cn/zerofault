@@ -39,12 +39,12 @@ class CategoryAction extends BaseAction{
 	* useless
 	*/
 	private function form() {
-		$id = $_REQUEST['id'];
-		if(!empty($id) && $id>0) {
+		$id = empty($_REQUEST['id']) ? 0 : intval($_REQUEST['id']);
+		if ($id>0) {
 			$info = $this->dao->find($id);
 			$code = $info['code'];
 		}
-		else{
+		else {
 			$info = array(
 				'id'=>0,
 				'name'=>'',
@@ -64,17 +64,17 @@ class CategoryAction extends BaseAction{
 		}
 		$type =  $_REQUEST['type'];
 		Session::set('default_category_type', $type);
-		$id = $_REQUEST['id'];
 		$name = trim($_REQUEST['name']);
-		empty($name) && self::_error('Category Name required');
-		if(!empty($id) && $id>0) {
+		!$name && self::_error('Category Name required');
+		$id = empty($_REQUEST['id']) ? 0 : intval($_REQUEST['id']);
+		if ($id>0) {
 			$rs = $this->dao->where(array('type'=>$type,'name'=>$name,'id'=>array('neq',$id)))->find();
 			if($rs && sizeof($rs)>0){
 				self::_error('Category Name: '.$name.' exists already!');
 			}
 			$this->dao->find($id);
 		}
-		else{
+		else {
 			$rs = $this->dao->where(array('type'=>$type,'name'=>$name))->find();
 			if($rs && sizeof($rs)>0){
 				self::_error('Category Name: '.$name.' exists already!');
@@ -86,7 +86,7 @@ class CategoryAction extends BaseAction{
 		}
 		$this->dao->type = $type;
 		$this->dao->name = $name;
-		if(!empty($id) && $id>0) {
+		if ($id>0) {
 			if(false !== $this->dao->save()){
 				self::_success('Category information updated!',__URL__);
 			}
@@ -94,7 +94,7 @@ class CategoryAction extends BaseAction{
 				self::_error('Update fail!'.(C('APP_DEBUG')?$this->dao->getLastSql():''));
 			}
 		}
-		else{
+		else {
 			if($this->dao->add()) {
 				self::_success('Add category success!',__URL__);
 			}

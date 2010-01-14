@@ -33,15 +33,15 @@ class StaffAction extends BaseAction{
 	}
 
 	public function form() {
-		$id = $_REQUEST['id'];
-		if(!empty($id) && $id>0) {
+		$id = empty($_REQUEST['id']) ? 0 : intval($_REQUEST['id']);
+		if ($id>0) {
 			$info = $this->dao->relation(true)->find($id);
 			$info['dept_opts'] = self::genOptions(M('Department')->select(), $info['dept_id']);
 			$info['leader_opts'] = self::genOptions($this->dao->where(array('is_leader'=>1))->select(), $info['leader_id'],'realname');
 			$info['role_chks'] = self::genCheckbox(D("Role")->where(array('status'=>1))->select(),$info['role'],'role');
 			$code = $info['code'];
 		}
-		else{
+		else {
 			$info = array(
 				'id'=>0,
 				'name'=>'',
@@ -65,10 +65,10 @@ class StaffAction extends BaseAction{
 		if(empty($_POST['submit'])) {
 			return;
 		}
-		$id = $_REQUEST['id'];
 		$name = trim($_REQUEST['name']);
-		empty($name) && self::_error('Staff Name required!');
-		if(!empty($id) && $id>0) {
+		!$name && self::_error('Staff Name required!');
+		$id = empty($_REQUEST['id']) ? 0 : intval($_REQUEST['id']);
+		if ($id>0) {
 			//for edit
 			if(1==$id && 1!=$_SESSION[C('USER_AUTH_KEY')]) {
 				self::_error("You can\'t edit Super Administrator");
@@ -82,7 +82,7 @@ class StaffAction extends BaseAction{
 				$this->dao->password = md5($password);
 			}
 		}
-		else{
+		else {
 			//for add
 			$password = trim($_REQUEST['password']);
 			empty($password) && self::_error('Password required!');
@@ -104,7 +104,7 @@ class StaffAction extends BaseAction{
 		$this->dao->leader_id = $_REQUEST['leader_id'];
 		$this->dao->is_leader = intval($_REQUEST['is_leader']);
 		$this->dao->status = 1;
-		if(empty($_REQUEST['role'])) {
+		if (empty($_REQUEST['role'])) {
 			$role_arr = array();
 			//删除已有role
 			M('StaffRole')->where('staff_id='.$id)->delete();
@@ -133,14 +133,14 @@ class StaffAction extends BaseAction{
 		}
 	}
 	public function profile() {
-		if(!empty($_POST['submit'])) {
+		if (!empty($_POST['submit'])) {
 			$realname = trim($_REQUEST['realname']);
 			if($this->dao->where(array('realname'=>$realname,'id'=>array('neq',$_SESSION[C('USER_AUTH_KEY')])))->find()) {
 				self::_error('The realname \"'.$realname.'\" has been used by another staff!');
 			}
 			$id = $_SESSION[C('USER_AUTH_KEY')];
 			$this->dao->find($id);
-			if(''!=trim($_REQUEST['password'])) {
+			if (''!=trim($_REQUEST['password'])) {
 				if(''==trim($_REQUEST['old_password'])) {
 					self::_error('You must enter your old password!');
 				}
@@ -152,7 +152,7 @@ class StaffAction extends BaseAction{
 			}
 			$this->dao->realname = $realname;
 			$this->dao->email = trim($_REQUEST['email']);
-			if(false !== $this->dao->save()) {
+			if (false !== $this->dao->save()) {
 				self::_success('Update success!');
 			}
 		}

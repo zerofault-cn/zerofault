@@ -20,9 +20,10 @@ class ProductAction extends BaseAction{
 		$this->assign('content','Product:index');
 		$this->display('Layout:ERP_layout');
 	}
+
 	public function form() {
-		$id = $_REQUEST['id'];
-		if(!empty($id) && $id>0) {
+		$id = empty($_REQUEST['id']) ? 0 : intval($_REQUEST['id']);
+		if ($id>0) {
 			$info = $this->dao->find($id);
 			$info['category_opts'] = self::genOptions(M('Category')->where(array('type'=>'Component'))->select(),$info['category_id'],'name');
 			$info['currency_opts'] = self::genOptions(M('Options')->where(array('type'=>'currency'))->order('sort')->select(), $info['currency_id']);
@@ -47,21 +48,22 @@ class ProductAction extends BaseAction{
 		$this->assign('content', 'Product:form');
 		$this->display('Layout:ERP_layout');
 	}
+
 	public function submit() {
 		if(empty($_POST['submit'])) {
 			return;
 		}
-		$id = $_REQUEST['id'];
 		$PN = trim($_REQUEST['PN']);
-		empty($PN) && self::_error('Internal PN required');
-		if(!empty($id) && $id>0) {
+		!$PN && self::_error('Internal PN required');
+		$id = empty($_REQUEST['id']) ? 0 : intval($_REQUEST['id']);
+		if ($id>0) {
 			$rs = $this->dao->where(array('Internal_PN'=>$PN,'id'=>array('neq',$id)))->find();
 			if($rs && sizeof($rs)>0){
 				self::_error('Internal PN: '.$PN.' has been used by another component!');
 			}
 			$this->dao->find($id);
 		}
-		else{
+		else {
 			$rs = $this->dao->where(array('Internal_PN'=>$PN))->find();
 			if($rs && sizeof($rs)>0){
 				self::_error('Internal PN: '.$PN.' has been used by another component!');
@@ -93,14 +95,14 @@ class ProductAction extends BaseAction{
 		$file = $_FILES['attachment'];
 		if($file['size']>0) {
 			$file_path = 'Attach/Product/';
-			$file_name = $PN.'.'.pathinfo($file['name'], PATHINFO_EXTENSION);
+			$file_name = $this->dao->code.'.'.pathinfo($file['name'], PATHINFO_EXTENSION);
 			if(!move_uploaded_file($file['tmp_name'], $file_path.$file_name)) {
 				self::_error('Attachment upload fail!');
 			}
 			$this->dao->attachment = $file_path.$file_name;
 		}
 		$this->dao->remark = $_REQUEST['remark'];
-		if(!empty($id) && $id>0) {
+		if ($id>0) {
 			if(false !== $this->dao->save()){
 				self::_success('Component information updated!',__URL__);
 			}
@@ -108,7 +110,7 @@ class ProductAction extends BaseAction{
 				self::_error('Update fail!'.(C('APP_DEBUG')?$this->dao->getLastSql():''));
 			}
 		}
-		else{
+		else {
 			if($this->dao->add()) {
 				self::_success('Add component data success!',__URL__);
 			}
@@ -131,6 +133,8 @@ class ProductAction extends BaseAction{
 				$where['fixed'] = $fixed;
 			}
 			$where['type'] = $_REQUEST['type'];
+			$this->assign('type', $_REQUEST['type']);
+
 			if(!empty($_REQUEST['Internal_PN'])) {
 				$where['Internal_PN'] = array('like', '%'.trim($_REQUEST['Internal_PN']).'%');
 			}
