@@ -15,7 +15,7 @@ Product {$info['action']|ucfirst} Form
 	<td>No.</td>
 	<td><input type="text" maxlength="10" size="15" name="code" value="{$code}" readonly="true" /> <img src="../Public/Images/lock.gif" /></td>
 </tr>
-<if condition="empty($product_id) eq true and ($action eq 'apply' or ($action eq '' and $info['action'] eq 'apply') or (strlen($id) eq 0 and ($action eq 'transfer' or $action eq 'release' or $action eq 'scrap')))">
+<if condition="empty($product_id) and empty($info['product']['id']) and ($action eq 'apply' or ($action eq '' and $info['action'] eq 'apply') or ($id eq 0 and ($action eq 'transfer' or $action eq 'release' or $action eq 'scrap')))">
 <tr>
 	<td></td>
 	<td><input type="button" value="Select Component/Board" class="thickbox" alt="__URL__/select/action/apply?width=630&height=300&modal=true"/></td>

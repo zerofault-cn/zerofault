@@ -60,7 +60,7 @@
 			<td align="center">{$item['staff']['realname']}</td>
 			<neq name="status" value="0"><td align="center">{$item['confirmed_staff']['realname']}&nbsp;</td></neq>
 			<td>{$item['remark']}
-				<a href="__APP__/Public/remark/id/{$item['id']}?width=600&height=300&modal=true" class="thickbox"><img src="../Public/Images/comments.gif"/></a>
+				<a href="__APP__/Public/remark/product_id/{$item['product_id']}/flow_id/{$item['id']}?width=600&height=300&modal=true" class="thickbox"><img src="../Public/Images/comments.gif"/></a>
 				</td>
 			<td><if condition="$item['status'] eq 0">
 				<a href="__URL__/form/id/{$item['id']}">Edit</a>

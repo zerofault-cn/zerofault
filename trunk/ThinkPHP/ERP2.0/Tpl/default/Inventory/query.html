@@ -16,7 +16,7 @@ textarea {
 #think_run_time,#think_page_trace{display:none;}
 </style>
 <p class="page_title_text">Product {$action|ucfirst} Detail</p>
-<table cellpadding="3" border="1" bordercolor="#FFFFFF" style="border-collapse:collapse;">
+<table width="95%" cellpadding="3" border="1" bordercolor="#FFFFFF" style="border-collapse:collapse;">
 <tr>
 	<if condition="$action eq 'enter' or $action eq 'reject'">
 	<th>Supplier</th>
@@ -52,8 +52,7 @@ textarea {
 	<td>{$item['create_time']}</td>
 	<td>{$item['confirm_name']}</td>
 	<td>{$item['confirm_time']}</td>
-	<td>{$item['remark']}
-		<a href="javascript:void(0);" onclick="remark(this,'{$item['id']}')"><img src="../Public/Images/comments.gif"/></a>
+	<td align="center"><a href="javascript:void(0);" onclick="remark(this,{$product_id},{$item['id']})"><img src="../Public/Images/comments.gif"/></a>
 </tr>
 </iterate>
 <empty name="result">
@@ -64,48 +63,58 @@ textarea {
 </table>
 <p class="center" id="btn"><input type="button" id="select_close" value="Close" onclick="tb_remove();" /></p>
 <script language="JavaScript" type="text/javascript">
-function remark(obj,id) {
+function remark(obj, product_id, flow_id) {
 	$("tr#remark").remove();
 	$(obj).parent().parent().after('<tr id="remark" bgcolor="#ffffff"><td colspan="7"><p class="center"><img src="../Public/Images/loadingAnimation.gif"/></p></td></tr>');
-	$.get('__APP__/Public/remark2/id/'+id, {}, function(json) {
-		if(json.length>0) {
-			html = '<dl id="remark_list">';
-			for (var i=0;i<json.length;i++) {
-				html += '<dt id="dt_'+json[i].id+'"><span>'+json[i].create_time+'</span>'+json[i].staff_name+'</dt>';
-				html += '<dd id="dd_'+json[i].id+'">'+json[i].remark+'</dd>';
-			}
-			html += '</dl>';
-		}
-		else {
-			html = '<p class="center">No record</p>';
-		}
-		html += '<textarea name="remark" rows="3" cols="30"></textarea> <input type="submit" value="Post My Remark" align="bottom"/>&nbsp;&nbsp;<input type="button" value="Cancel" onclick=\'$("tr#remark").remove();\' align="bottom"/>';
-		$("tr#remark").children("td").html(html);
-
-		$("input:submit").click(function(){
-			if (''==$("textarea[name='remark']").val()) {
-				myAlert('Content is empty!');
-				return;
+	$.get('__URL__/query_remark/product_id/'+product_id+'/flow_id/'+flow_id, {}, function(json) {
+			if(json.length>0) {
+				html = '<dl id="remark_list">';
+				for (var i=0;i<json.length;i++) {
+					if (json[i].staff_name) {
+						html += '<dt><span>'+json[i].create_time+'</span>'+json[i].staff_name+'</dt>';
+					}
+					else {
+						html += '<dt>Basic remark</dt>';
+					}
+					html += '<dd id="dd_'+json[i].id+'">'+json[i].remark+'</dd>';
+				}
+				html += '</dl>';
 			}
 			else {
-				$.post('__APP__/Public/remark', {
-					'flow_id' :id,
-					'remark' : $("textarea[name='remark']").val(),
-					'submit' : 1
-				}, function(json) {
-						if(json.result=='1')
-						{
-							myAlert('Post success.');
-							myOK(1000);
-							remark(obj, id);
-						}
-						else {
-							myAlert(json.msg);
-						}
-					}, 'json');
+				html = '<p class="center">No record</p>';
 			}
-		});
-	}, 'json');
-		
+			html += '<textarea name="remark" rows="3" cols="30"></textarea> <input type="button" id="post_remark" value="Post My Remark" align="bottom"/>&nbsp;&nbsp;<input type="button" value="Hide" onclick=\'$("tr#remark").remove();\' align="bottom"/>';
+			$("tr#remark").children("td").html(html);
+
+			$("input#post_remark").click(function(){
+				if (''==$("textarea[name='remark']").val()) {
+					myAlert('Content is empty!');
+					return;
+				}
+				else {
+					$.post('__APP__/Public/remark', {
+						'flow_id' :flow_id,
+						'remark' : $("textarea[name='remark']").val(),
+						'submit' : 1
+					}, function(json) {
+							if(json.result=='1') {
+								myAlert('Post success.');
+								myOK(1000);
+								remark(obj, product_id, flow_id);
+							}
+							else {
+								myAlert(json.msg);
+							}
+						}, 'json');
+				}
+			});
+		}, 'json');
 }
+$(document).keydown(function(e){
+	var keyCode=e.keyCode ||window.event.keyCode;
+	if(keyCode==27)//Esc
+	{
+		tb_remove();
+	}
+});
 </script>

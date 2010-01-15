@@ -66,6 +66,7 @@ class BoardAction extends BaseAction{
 		$PN = trim($_REQUEST['PN']);
 		$description = trim($_REQUEST['description']);
 		!$description && self::_error('Borad name required');
+		empty($_REQUEST['category_id']) && self::_error('Category must be specified!');
 		$id = empty($_REQUEST['id']) ? 0 : intval($_REQUEST['id']);
 		if ($id>0) {
 			$rs = $this->dao->where(array('Internal_PN'=>$PN, 'description'=>$description, 'id'=>array('neq',$id)))->find();
@@ -106,7 +107,7 @@ class BoardAction extends BaseAction{
 		$file = $_FILES['attachment'];
 		if($file['size']>0) {
 			$file_path = 'Attach/Product/';
-			$file_name = $this->dao->code.'.'.pathinfo($file['name'], PATHINFO_EXTENSION);
+			$file_name = $this->dao->description.'.'.pathinfo($file['name'], PATHINFO_EXTENSION);
 			if(!move_uploaded_file($file['tmp_name'], $file_path.$file_name)) {
 				self::_error('Attachment upload fail!');
 			}

@@ -30,17 +30,27 @@ textarea {
 	<legend>Remark Queries</legend>
 	<dl id="remark_list">
 		<iterate name="result" id="item">
-		<dt id="dt_{$item['id']}"><span>{$item['create_time']}</span>{$staff[$item['staff_id']]}</dt>
+			<notempty name="item['remark']">
+		<dt id="dt_{$item['id']}">
+			<if condition="empty($item['staff_id'])">
+			Basic remark
+			<elseif condition="empty($item['id'])" />
+			<span>{$item['create_time']}</span>By {$staff[$item['staff_id']]} when entering
+			<else />
+			<span>{$item['create_time']}</span>{$staff[$item['staff_id']]}
+			</if>
+		</dt>
 		<dd id="dd_{$item['id']}"><if condition="$_SESSION[C('USER_AUTH_KEY')] eq $item['staff_id'] and !empty($item['id'])"><span><a href="javascript:void(0);" onclick="edit('{$item['id']}');">Edit</a></span></if><div>{$item['remark']|nl2br}</div></dd>
+			</notempty>
 		</iterate>
 		<empty name="result">
 		<p class="center">No Record</p>
 		</empty>
 	</dl>
 </fieldset>
-<input type="hidden" name="flow_id" value="{$id}"/>
+<input type="hidden" name="flow_id" value="{$flow_id}"/>
 <input type="hidden" name="remark_id" value=""/>
-<textarea name="remark" rows="3" cols="30"></textarea> <input type="button" value="Post My Remark" onclick="javascript:post();" align="bottom"/>&nbsp;&nbsp;<input type="button" value="Close" onclick="tb_remove();" align="bottom"/>
+<textarea name="remark" rows="3" cols="30"></textarea> <input type="button" id="post_remark" value="Post My Remark" onclick="javascript:post();" align="bottom"/>&nbsp;&nbsp;<input type="button" value="Close" onclick="tb_remove();" align="bottom"/>
 <script language="JavaScript" type="text/javascript">
 function post() {
 	if (''==$("textarea[name='remark']").val()) {
@@ -61,8 +71,8 @@ function post() {
 						$("dt#dt_"+json.remark_id).html('<span>'+json.create_time+'</span>'+json.staff_name);
 						$("dd#dd_"+json.remark_id+" div").html(json.remark);
 						$("input[name='remark_id']").val('');
-						$("input:submit").val('Post My Remark');
-						$("input:reset").remove();
+						$("input#post_remark").val('Post My Remark');
+						$("input#reset_remark").remove();
 						has_reset = false;
 					}
 					else {
@@ -89,17 +99,24 @@ function edit(remark_id) {
 	}, function(str) {
 			$("textarea[name='remark']").val(str);
 		});
-	$("input:submit").val('Submit');
+	$("input#post_remark").val('Submit');
 	if(!has_reset) {
-		$("input:submit").after('<input type="reset" value="Cancel"/>');
-		$("input.reset").click(function(){
+		$("input#post_remark").after('<input type="button" id="reset_remark" value="Cancel"/>');
+		$("input#reset_remark").click(function(){
 			$("input[name='remark_id']").val('');
 			$("textarea[name='remark']").val('');
-			$("input:submit").val('Post My Remark');
+			$("input#post_remark").val('Post My Remark');
 			$(this).remove();
 			has_reset = false;
 		});
 		has_reset = true;
 	}
 }
+$(document).keydown(function(e){
+	var keyCode=e.keyCode ||window.event.keyCode;
+	if(keyCode==27)//Esc
+	{
+		tb_remove();
+	}
+});
 </script>

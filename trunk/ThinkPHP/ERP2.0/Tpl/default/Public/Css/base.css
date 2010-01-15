@@ -281,3 +281,13 @@ table.paginator a:link, table.paginator a:visited{
 table.paginator a:hover, table.paginator a:active{
 	text-decoration:none;
 }
+
+ul.toggle{
+	height:21px;
+	overflow:hidden;
+}
+ul.toggle li{
+	height:15px;
+	border-bottom:1px dashed #FFFFFF;
+	padding:3px;
+}
