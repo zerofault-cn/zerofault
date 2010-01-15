@@ -45,8 +45,9 @@ class PublicAction extends BaseAction{
 		}
 		else{
 			D('Staff')->where('id='.$authInfo['id'])->setField('login_time',date("Y-m-d H:i:s"));
-			$_SESSION[C('USER_AUTH_KEY')]	=	$authInfo['id'];
-			$_SESSION['loginUserName']		=	$authInfo['realname'];
+			$_SESSION[C('USER_AUTH_KEY')]	= $authInfo['id'];
+			$_SESSION['loginUserName']		= $authInfo['realname'];
+			$_SESSION['leader_id']			= $authInfo['leader_id'];
 			if(in_array($authInfo['id'], C('SUPER_ADMIN_ID'))) {
 				// 管理员不受权限控制影响
 				$_SESSION[C('ADMIN_AUTH_KEY')]	=	true;
@@ -68,7 +69,7 @@ class PublicAction extends BaseAction{
 		Session::clear();
 		self::_success('Logout success!', __APP__);
 	}
-	
+
 	public function remark() {
 		if (!empty($_GET['remark_id'])) {
 			die(M('Remark2')->where('id='.$_GET['remark_id'])->getField('remark'));
@@ -105,29 +106,18 @@ class PublicAction extends BaseAction{
 		}
 		$this->assign('staff', $staff);
 
-		$id = $_REQUEST['id'];
-		$remark = M('ProductFlow')->field('staff_id,create_time,remark')->where('id='.$id)->select();
-		$remark2 = M('Remark2')->where(array('flow_id'=>$id, 'status'=>1))->select();
+		$product_id = intval($_REQUEST['product_id']);
+		$flow_id = intval($_REQUEST['flow_id']);
+		$remark = M('Product')->field('remark')->where('id='.$product_id)->select();
+		$remark1 = M('ProductFlow')->field('staff_id,create_time,remark')->where('id='.$flow_id)->select();
+		$remark2 = M('Remark2')->where(array('flow_id'=>$flow_id, 'status'=>1))->select();
 		if (empty($remark2)) {
 			$remark2 = array();
 		}
-		$this->assign('id', $id);
-		$this->assign('result', array_merge($remark,$remark2));
+		$this->assign('flow_id', $flow_id);
+		$this->assign('result', array_merge($remark, $remark1, $remark2));
 		$this->assign('content', 'Public:remark');
 		$this->display('Layout:content');
-	}
-	public function remark2() {
-		$id = $_REQUEST['id'];
-		$remark2 = M('Remark2')->where(array('flow_id'=>$id, 'status'=>1))->select();
-		if (empty($remark2)) {
-			$remark2 = array();
-		}
-		foreach ($remark2 as $i=>$item) {
-			$remark2[$i]['staff_name'] = M('Staff')->where('id='.$item['staff_id'])->getField('realname');
-			$remark2[$i]['remark'] = nl2br($item['remark']);
-		}
-		echo json_encode($remark2);
-		return;
 	}
 }
 ?>

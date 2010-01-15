@@ -1,8 +1,7 @@
-﻿$(document).ready(function(){
-	
+$(document).ready(function(){
 	$(".addForm input.node").each(function(){
 		$(this).click(function(){
-			checkAll(this);
+			check($(this));
 		});
 	});
 
@@ -20,21 +19,21 @@
 
 });
 
-function checkAll(obj) {
-	if($(obj).attr('name')=='module_node') {
-		$("dd#node_"+$(obj).val()).children("input:checkbox").each(function(){
-			$(this).attr("checked",$(obj).attr('checked'));
+function check(obj) {
+	//var obj = $(this);
+	if(obj.attr('name')=='module_node') {
+		obj.parent().next().children("input:checkbox").each(function(){
+			$(this).attr("checked",obj.attr('checked'));
 		});
 	}
-	else if($(obj).attr('name')=='action_node') {
-		var parent_node = $(obj).parent().prev().children("input:checkbox");
+	else if(obj.attr('name')=='action_node') {
+		var parent_node = obj.parent().prev().children("input:checkbox");
 		var check = false;
-		$(obj).parent().children("input:checkbox").each(function(){
+		obj.parent().children("input:checkbox").each(function(){
 			check = check || $(this).attr("checked");
 		});
-		$(parent_node).attr('checked',check);
+		parent_node.attr('checked',check);
 	}
-
 }
 
 function submit_addForm(){

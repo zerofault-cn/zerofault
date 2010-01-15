@@ -2,14 +2,14 @@
 <iterate name="result" id="item">
 <tr class="trbg{$mod} tr_{$type}">
 	<td align="center"><input type="radio" name="product_id" value="{$item['id']}"/></td>
-	<if condition="$type eq 'Board'">
+	<if condition="$action neq 'apply' and $type eq 'Board'">
 	<td class="select_val1" style="display:none">
 	<else/>
 	<td class="select_val1">
 	</if>{$item['Internal_PN']}</td></neq>
 	<td class="select_val2">{$item['description']}</td>
 	<td class="select_val3">{$item['manufacture']}</td>
-	<if condition="$type eq 'Board'">
+	<if condition="$action neq 'apply' and $type eq 'Board'">
 	<td class="select_val4" style="display:none">
 	<else/>
 	<td class="select_val4">
@@ -28,7 +28,7 @@
 </if>
 <else />
 <p class="page_title_text">Select Component/Board</p>
-<table id="search_table" cellpadding="3" border="1" bordercolor="#FFFFFF" style="border-collapse:collapse;">
+<table id="search_table" width="95%" cellpadding="3" border="1" bordercolor="#FFFFFF" style="border-collapse:collapse;">
 <tr>
 	<th>Type</th>
 	<th id="select_title1">Internal P/N</th>
@@ -143,7 +143,13 @@ function do_select() {
 		myAlert("You haven't select any item!");
 	}
 }
-
+$(document).keydown(function(e){
+	var keyCode=e.keyCode ||window.event.keyCode;
+	if(keyCode==27)//Esc
+	{
+		tb_remove();
+	}
+});
 </script>
 </present>
 <style>

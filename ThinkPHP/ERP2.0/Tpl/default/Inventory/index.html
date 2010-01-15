@@ -45,6 +45,7 @@
 	<th rowspan="2" class="basic_data">Value/Package</th>
 	<th rowspan="2" class="basic_data">Project</th>
 	<th colspan="8">Quantity</th>
+	<th rowspan="2">Owner(s)</th>
 	<th rowspan="2">Unit</th>
 	<th rowspan="2">Type</th>
 </tr>
@@ -56,13 +57,20 @@
 	<th><abbr title="Transfered Quantity">TRA</abbr></th>
 	<th><abbr title="Released Quantity">REL</abbr></th>
 	<th><abbr title="Scraped Quantity">SCR</abbr></th>
-	<th><abbr title="Return-Backed Quantity">BACK</abbr></th>
+	<th><abbr title="Returned Back Quantity">BACK</abbr></th>
 </tr>
 <iterate name="result" id="item">
 <tr class="trbg{$mod}">
 	<td>{$i}</td>
 	<td>{$item['category_name']}</td>
-	<td>{$item['supplier_name']}</td>
+	<td style="padding:0;">
+	<foreach name="item['suppliers']" key="j" item="supplier">
+		<gt name="j" value="0">
+		<hr size="1" noshade="noshade" style="margin:3px 0;border-top:1px #FFFFFF solid;">
+		</gt>
+		<span style="padding:3px;">{$supplier}</span>
+	</foreach>
+	</td>
 	<td>{$item['Internal_PN']}</td>
 	<td>{$item['description']}</td>
 	<td>{$item['manufacture']}</td>
@@ -70,13 +78,20 @@
 	<td>{$item['value']}</td>
 	<td>{$item['project']}</td>
 	<td>{$item['quantity']['enter']-$item['quantity']['reject']-$item['quantity']['apply']-$item['quantity']['transfer']-$item['quantity']['release']-$item['quantity']['scrap']+$item['quantity']['return']}</td>
-	<td><a href="__URL__/query/action/enter/id/{$item['product_id']}?width=630&height=300&modal=true" class="thickbox">{$item['quantity']['enter']}</a></td>
-	<td><a href="__URL__/query/action/reject/id/{$item['product_id']}?width=630&height=300&modal=true" class="thickbox">{$item['quantity']['reject']|default=0}</a></td>
-	<td><a href="__URL__/query/action/apply/id/{$item['product_id']}?width=630&height=300&modal=true" class="thickbox">{$item['quantity']['apply']|default=0}</a></td>
-	<td><a href="__URL__/query/action/transfer/id/{$item['product_id']}?width=630&height=300&modal=true" class="thickbox">{$item['quantity']['transfer']|default=0}</a></td>
-	<td><a href="__URL__/query/action/release/id/{$item['product_id']}?width=630&height=300&modal=true" class="thickbox">{$item['quantity']['release']|default=0}</a></td>
-	<td><a href="__URL__/query/action/scrap/id/{$item['product_id']}?width=630&height=300&modal=true" class="thickbox">{$item['quantity']['scrap']|default=0}</a></td>
-	<td><a href="__URL__/query/action/return/id/{$item['product_id']}?width=630&height=300&modal=true" class="thickbox">{$item['quantity']['return']|default=0}</a></td>
+	<td><a href="__URL__/query/action/enter/product_id/{$item['product_id']}?width=630&height=300&modal=true" class="thickbox">{$item['quantity']['enter']}</a></td>
+	<td><a href="__URL__/query/action/reject/product_id/{$item['product_id']}?width=630&height=300&modal=true" class="thickbox">{$item['quantity']['reject']|default=0}</a></td>
+	<td><a href="__URL__/query/action/apply/product_id/{$item['product_id']}?width=630&height=300&modal=true" class="thickbox">{$item['quantity']['apply']|default=0}</a></td>
+	<td><a href="__URL__/query/action/transfer/product_id/{$item['product_id']}?width=630&height=300&modal=true" class="thickbox">{$item['quantity']['transfer']|default=0}</a></td>
+	<td><a href="__URL__/query/action/release/product_id/{$item['product_id']}?width=630&height=300&modal=true" class="thickbox">{$item['quantity']['release']|default=0}</a></td>
+	<td><a href="__URL__/query/action/scrap/product_id/{$item['product_id']}?width=630&height=300&modal=true" class="thickbox">{$item['quantity']['scrap']|default=0}</a></td>
+	<td><a href="__URL__/query/action/return/product_id/{$item['product_id']}?width=630&height=300&modal=true" class="thickbox">{$item['quantity']['return']|default=0}</a></td>
+	<td nowrap="nowrap" style="padding:0;">
+	<foreach name="item['owners']" key="j" item="owner">
+		<gt name="j" value="0">
+		<hr size="1" noshade="noshade" style="margin:3px 0;border-top:1px #FFFFFF solid;">
+		</gt>
+		<span style="padding:3px;">{$owner['chg_quantity']}->{$owner['name']}</span>
+	</foreach></td>
 	<td>{$item['unit_name']}</td>
 	<td><if condition="$item['fixed'] eq 1">Fixed Assets<else />Floating Assets</if></td>
 </tr>

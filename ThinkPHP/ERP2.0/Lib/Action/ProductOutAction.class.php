@@ -99,7 +99,7 @@ class ProductOutAction extends BaseAction{
 
 			$item['from_name'] = M(ucfirst($item['from_type']))->where('id='.$item['from_id'])->getField('location'==$item['from_type']?'name':'realname');
 			$item['to_name'] = M(ucfirst($item['to_type']))->where('id='.$item['to_id'])->getField('location'==$item['to_type']?'name':'realname');
-			
+
 			$item['remark2'] = D('Remark2')->relation(true)->where(array('flow_id'=>$item['id'], 'status'=>1))->select();
 			$result[] = $item;
 		}
@@ -110,12 +110,9 @@ class ProductOutAction extends BaseAction{
 	}
 
 	public function form() {
-		$id = $_REQUEST['id'];
 		$action = $_REQUEST['action'];
-		if(''==$action) {
-		//	$action = 'apply';
-		}
-		if(!empty($id) && $id>0) {
+		$id = empty($_REQUEST['id']) ? 0 : intval($_REQUEST['id']);
+		if ($id>0) {
 			$info = $this->dao->relation(true)->find($id);
 			$info['category'] = M('Category')->where("id=".$info['product']['category_id'])->getField('name');
 			$info['unit'] = M('Options')->where("id=".$info['product']['unit_id'])->getField('name');
@@ -164,8 +161,10 @@ class ProductOutAction extends BaseAction{
 					$info['remark'] = M('Remark2')->where(array('flow_id'=>$id, 'staff_id'=>$_SESSION[C('USER_AUTH_KEY')]))->getField('remark');
 				}
 			}
-			else{//edit apply/release/scrap
+			else {//edit apply/release/scrap
 				$code = $info['code'];
+				$action = $info['action'];
+				$this->assign('fixed', $info['fixed']);
 				//$rs = D('Product')->relation(true)->find($info['product_id']);
 				//$info['ori_quantity'] = $rs['location_product'][0]['ori_quantity'] + $rs['location_product'][0]['chg_quantity'];
 				$info['ori_quantity'] = M("LocationProduct")->where(array('type'=>$info['from_type'], 'location_id'=>$info['from_id'], 'product_id'=>$info['product_id']))->getField('`ori_quantity`+`chg_quantity`');
@@ -174,7 +173,7 @@ class ProductOutAction extends BaseAction{
 				}
 			}
 		}
-		else{//new apply/transfer/release/scrap
+		else {//new apply/transfer/release/scrap
 			$info = array();
 			$location_arr = M('Location')->where(array('id'=>array('gt',1)))->select();
 			$location_arr[] = array('id' => 'staff', 'name' => 'Staff');
@@ -186,7 +185,7 @@ class ProductOutAction extends BaseAction{
 			empty($max_code) && ($max_code = 'Out'.sprintf("%09d",0));
 			$code = ++ $max_code;
 
-			if(!empty($_REQUEST['lp_id'])) {//act from asset list
+			if (!empty($_REQUEST['lp_id'])) {//act from asset list
 				$lp_info = M('LocationProduct')->find($_REQUEST['lp_id']);
 				$this->assign('product_id', $lp_info['product_id']);
 				$info['product'] = M('Product')->find($lp_info['product_id']);
@@ -206,7 +205,6 @@ class ProductOutAction extends BaseAction{
 
 				}
 				$code = ++ $max_code;
-
 			}
 		}
 		//dump($info);
@@ -222,16 +220,17 @@ class ProductOutAction extends BaseAction{
 		if(empty($_POST['submit'])) {
 			return;
 		}
-		$id = $_REQUEST['id'];
+
 		$action = $_REQUEST['action'];
 		empty($_REQUEST['product_id']) && self::_error('Select a Component/Board first!');
 		empty($_REQUEST['quantity']) && self::_error('Quantity must be inputed');
 		($_REQUEST['quantity']>$_REQUEST['ori_quantity']) && self::_error(ucfirst($action).'quantity can\'t be larger than '.$_REQUEST['ori_quantity']);
 
-		if(!empty($id) && $id>0) {//from edit
+		$id = empty($_REQUEST['id']) ? 0 : intval($_REQUEST['id']);
+		if ($id>0) {//from edit
 			$this->dao->find($id);
 		}
-		else{//from new
+		else {//from new
 			$max_code = $this->dao->where(array('code'=>array('like','Out%')))->max('code');
 			empty($max_code) && ($max_code = 'Out'.sprintf("%09d",0));
 			$code = ++ $max_code;
@@ -251,7 +250,7 @@ class ProductOutAction extends BaseAction{
 			$this->dao->staff_id = $_SESSION[C('USER_AUTH_KEY')];
 			$this->dao->create_time = date("Y-m-d H:i:s");
 		}
-		if('transfer'==$action) {
+		if ('transfer'==$action) {
 			$this->dao->code = $_REQUEST['code'];
 			$this->dao->from_type = $_REQUEST['from_type'];
 			$this->dao->from_id = $_REQUEST['from_id'];
@@ -261,7 +260,7 @@ class ProductOutAction extends BaseAction{
 			}
 			$this->dao->to_id = $_REQUEST['to_id'];
 		}
-		if('return'==$action) {
+		if ('return'==$action) {
 			$this->dao->code = $_REQUEST['code'];
 			$this->dao->from_type = $_REQUEST['from_type'];
 			$this->dao->from_id = $_REQUEST['from_id'];
@@ -272,7 +271,7 @@ class ProductOutAction extends BaseAction{
 		$this->dao->product_id = $_REQUEST['product_id'];
 		$this->dao->quantity = $_REQUEST['quantity'];
 		//get remark2
-		if(!empty($id) && $id>0 && $this->dao->staff_id != $_SESSION[C('USER_AUTH_KEY')]) {//不是当前用户所创建的记录
+		if ($id>0 && $this->dao->staff_id != $_SESSION[C('USER_AUTH_KEY')]) {//不是当前用户所创建的记录
 			if ($remark_id = M('Remark2')->where(array('flow_id'=>$id, 'staff_id'=>$_SESSION[C('USER_AUTH_KEY')]))->getField('id')) {
 				if (!M('Remark2')->where('id='.$remark_id)->save(array('remark'=>trim($_REQUEST['remark']), 'create_time'=>date("Y-m-d H:i:s"), 'status'=>1))) {
 					self::_error('Update remark fail!'.(C('APP_DEBUG')?$this->dao->getLastSql():''));
@@ -287,16 +286,29 @@ class ProductOutAction extends BaseAction{
 		else {
 			$this->dao->remark = trim($_REQUEST['remark']);
 		}
-		if(!empty($id) && $id>0) {
-			if(false !== $this->dao->save()){
-				self::_success('Product information updated!',__URL__.'/'.(''==$action ? $this->dao->action : (MODULE_NAME=='Asset'?'':$action)));
+		if ($id>0) {
+			if (false !== $this->dao->save()){
+				if (''==$action) {
+					if ('apply'==$this->dao->action) {
+						if ('1'==$this->dao->fixed) {
+							$action = 'applyFixed';
+						}
+						else {
+							$action = 'applyFloating';
+						}
+					}
+				}
+				if (MODULE_NAME=='Asset') {
+					$action = $this->dao->action;
+				}
+				self::_success('Product information updated!',__URL__.'/'.$action);
 			}
-			else{
+			else {
 				self::_error('Update fail!'.(C('APP_DEBUG')?$this->dao->getLastSql():''));
 			}
 		}
-		else{
-			if($this->dao->add()) {
+		else {
+			if ($this->dao->add()) {
 				if($action=='apply') {
 					self::_success('Apply request is ready for confirm!',__URL__.'/'.$action);
 				}
@@ -310,18 +322,18 @@ class ProductOutAction extends BaseAction{
 					self::_success('Operation success!',__URL__.'/'.$action);
 				}
 			}
-			else{
+			else {
 				self::_error('Operation fail!'.(C('APP_DEBUG')?$this->dao->getLastSql():''));
 			}
 		}
 	}
 	public function confirm() {
-		if(empty($_POST['confirm']) && empty($_POST['reject'])) {
+		if (empty($_POST['confirm']) && empty($_POST['reject'])) {
 			return;
 		}
 		empty($_POST['chk']) && self::_error('You haven\'t select any item!');
 		sort($_POST['chk']);//先提交的先confirm
-		
+
 		if (!empty($_POST['reject'])) {
 			foreach ($_POST['chk'] as $id) {
 				if (!$this->dao->where('id='.$id)->setField(array('confirmed_staff_id','status'),array($_SESSION[C('USER_AUTH_KEY')], -1))) {

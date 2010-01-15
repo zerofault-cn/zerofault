@@ -55,6 +55,7 @@ class ProductAction extends BaseAction{
 		}
 		$PN = trim($_REQUEST['PN']);
 		!$PN && self::_error('Internal PN required');
+		empty($_REQUEST['category_id']) && self::_error('Category must be specified!');
 		$id = empty($_REQUEST['id']) ? 0 : intval($_REQUEST['id']);
 		if ($id>0) {
 			$rs = $this->dao->where(array('Internal_PN'=>$PN,'id'=>array('neq',$id)))->find();

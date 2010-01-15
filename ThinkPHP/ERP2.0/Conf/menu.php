@@ -25,7 +25,7 @@ $menu['Inventory Inquire'] = array(
 	'name' => 'Inventory',
 	);
 
-$menu['Inventory&nbsp;output Management'] = array(
+$menu['Inventory&nbsp;Output Management'] = array(
 	'name'	  => 'ProductOut/apply',
 	'submenu' => array(
 		'Fixed Asset Apply'		=> 'ProductOut/applyFixed',
