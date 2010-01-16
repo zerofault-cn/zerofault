@@ -15,6 +15,7 @@ class ProductOutAction extends BaseAction{
 		parent::_initialize();
 	}
 	Public function request() {
+		Session::set('submenu', MODULE_NAME.'/'.ACTION_NAME);
 		$this->index('apply');
 	}
 	Public function apply() {
