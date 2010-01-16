@@ -15,7 +15,7 @@ class BaseAction extends Action{
 	*/
 	public function _initialize() {
 		header("Content-Type:text/html; charset=utf-8");
-
+		$this->show = array();
 		import('@.RBAC');
 
 		$top = empty($_REQUEST['top']) ? '' : $_REQUEST['top'];
