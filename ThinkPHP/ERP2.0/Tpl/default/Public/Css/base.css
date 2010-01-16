@@ -255,6 +255,9 @@ td#status_0, td#fixed1{
 td#status_-1{
 	background:#9966FF;
 }
+td#status_-2{
+	background:#FF66CC;
+}
 td.clsTab a{
 	display:block;
 	width:100%;

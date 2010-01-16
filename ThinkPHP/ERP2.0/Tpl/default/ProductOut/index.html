@@ -1,20 +1,26 @@
 <p class="page_title_text">
+<if condition="ACTION_NAME eq 'request'">
+Staff&nbsp;
+</if>
 {$action|ucfirst} List
 </p>
 <form action="__URL__/confirm" method="post" target="_iframe">
 <table >
 <tr>
+	<if condition="($_SESSION['leader_id'] gt 0 and MODULE_NAME eq 'Asset' and ACTION_NAME eq 'apply') or (MODULE_NAME eq 'Asset' and ACTION_NAME eq 'request')">
+	<td class="clsTab" id="status_-2"><a href="__ACTION__/status/-2">Waiting for Leader's approval</a></td>
+	</if>
 	<td class="clsTab" id="status_0"><a href="__ACTION__/status/0">Ready to confirm</a></td>
 	<td class="clsTab" id="status_1"><a href="__ACTION__/status/1">Confirmed</a></td>
-	<if condition="MODULE_NAME eq 'Asset' and ACTION_NAME eq 'transferOut'">
+	<if condition="MODULE_NAME eq 'Asset' and (ACTION_NAME eq 'transferOut' or ACTION_NAME eq 'apply' or ACTION_NAME eq 'request')">
 	<td class="clsTab" id="status_-1"><a href="__ACTION__/status/-1">Rejected</a></td>
 	</if>
 </tr>
 <tr>
-	<td colspan="3">
+	<td colspan="4">
 		<table cellpadding="3" border="1" bordercolor="#FFFFFF" style="border-collapse:collapse;">
 		<tr>
-			<if condition="$status neq 1 and (MODULE_NAME neq 'Asset' or (MODULE_NAME eq 'Asset' and ACTION_NAME eq 'transferIn'))">
+			<if condition="$status neq 1 and (MODULE_NAME neq 'Asset' or (MODULE_NAME eq 'Asset' and (ACTION_NAME eq 'transferIn' or ACTION_NAME eq 'request')))">
 			<th><input type="checkbox" id="checkall" onclick="checkAll();"/></th>
 			</if>
 			<th>No.</th>
@@ -41,7 +47,7 @@
 		</tr>
 		<iterate name="result" id="item">
 		<tr class="trbg{$mod}">
-			<if condition="$status neq 1 and (MODULE_NAME neq 'Asset' or (MODULE_NAME eq 'Asset' and ACTION_NAME eq 'transferIn'))">
+			<if condition="$status neq 1 and (MODULE_NAME neq 'Asset' or (MODULE_NAME eq 'Asset' and (ACTION_NAME eq 'transferIn' or ACTION_NAME eq 'request')))">
 			<td><input type="checkbox" name="chk[]" value="{$item['id']}" onclick="updateCheckAll(this);"/></td>
 			</if>
 			<td align="center">{$i}</td>
@@ -58,11 +64,13 @@
 			</if>
 			<td>{$item['create_time']}</td>
 			<td align="center">{$item['staff']['realname']}</td>
-			<neq name="status" value="0"><td align="center">{$item['confirmed_staff']['realname']}&nbsp;</td></neq>
+			<if condition="$item['status'] eq 1 or $item['status'] eq -1"><td align="center">{$item['confirmed_staff']['realname']}&nbsp;</td></if>
 			<td>{$item['remark']}
 				<a href="__APP__/Public/remark/product_id/{$item['product_id']}/flow_id/{$item['id']}?width=600&height=300&modal=true" class="thickbox"><img src="../Public/Images/comments.gif"/></a>
 				</td>
-			<td><if condition="$item['status'] eq 0">
+			<td><if condition="(MODULE_NAME eq 'ProductOut' and $item['status'] eq 0)
+			or (MODULE_NAME eq 'Asset' and ACTION_NAME neq 'transferIn' and $item['status'] eq 0)
+			or (MODULE_NAME eq 'Asset' and ACTION_NAME eq 'apply' and (($_SESSION['leader_id'] eq 0 and $item['status'] eq 0) or ($_SESSION['leader_id'] gt 0 and $item['status'] eq -2)))">
 				<a href="__URL__/form/id/{$item['id']}">Edit</a>
 				<a href="javascript:void(0);" onclick="myConfirm('Are you sure to delete this item?', '__URL__/delete/id/{$item['id']}');" target="_iframe">Delete</a></td>
 				<elseif condition="($item['quantity']-$item['returned_quantity']-$item['transfered_quantity']) gt 0" />
@@ -82,16 +90,18 @@
 		</tr>
 		</empty>
 		<tr>
-			<td colspan="7">
+			<td colspan="6">
 				<if condition="$status neq 1 and MODULE_NAME eq 'ProductOut'">
 					<input type="submit" name="confirm" value="Confirm Selected Items" />
-				</if>
-				<if condition="$status neq 1 and MODULE_NAME eq 'Asset' and ACTION_NAME eq 'transferIn'">
-					<input type="submit" name="confirm" value="Confirm Selected Items" />
-					<input type="submit" name="reject" value="Reject Selected Items" />
+				<elseif condition="$status neq 1 and MODULE_NAME eq 'Asset' and ACTION_NAME eq 'transferIn'" />
+					<input type="submit" name="confirm" value="Confirm Selected" />
+					<input type="submit" name="reject" value="Reject Selected" />
+				<elseif condition="MODULE_NAME eq 'Asset' and ACTION_NAME eq 'request' and $status eq -2" />
+					<input type="submit" name="approve" value="Approve Selected" />
+					<input type="submit" name="reject" value="Reject Selected" />
 				</if>
 			</td>
-			<td colspan="9">{$page}</td>
+			<td colspan="10">{$page}</td>
 		</tr>
 		</table>
 	</td>

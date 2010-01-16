@@ -14,6 +14,7 @@
 			<th>Department</th>
 			<th>E_mail</th>
 			<th>Leader</th>
+			<th>Is Leader</th>
 			<th>Role</th>
 			<th>OP</th>
 		</tr>
@@ -25,6 +26,7 @@
 			<td>[{$item['dept']['code']}]{$item['dept']['name']}</td>
 			<td>{$item['email']}</td>
 			<td>{$item['leader']['realname']}</td>
+			<td align="center"><empty name="item['is_leader']">No<else />Yes</empty></td> 
 			<td><if condition="$item['id'] eq 1">
 				Super Administrator
 				<else />

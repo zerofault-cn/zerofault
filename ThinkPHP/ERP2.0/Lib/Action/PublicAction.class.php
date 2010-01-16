@@ -48,6 +48,7 @@ class PublicAction extends BaseAction{
 			$_SESSION[C('USER_AUTH_KEY')]	= $authInfo['id'];
 			$_SESSION['loginUserName']		= $authInfo['realname'];
 			$_SESSION['leader_id']			= $authInfo['leader_id'];
+			$_SESSION['is_leader']			= $authInfo['is_leader'];
 			if(in_array($authInfo['id'], C('SUPER_ADMIN_ID'))) {
 				// 管理员不受权限控制影响
 				$_SESSION[C('ADMIN_AUTH_KEY')]	=	true;
