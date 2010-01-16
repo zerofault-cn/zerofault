@@ -14,6 +14,9 @@ class ProductOutAction extends BaseAction{
 		$this->dao = D('ProductFlow');
 		parent::_initialize();
 	}
+	Public function request() {
+		$this->index('apply');
+	}
 	Public function apply() {
 		$this->index('apply');
 	}
@@ -56,9 +59,11 @@ class ProductOutAction extends BaseAction{
 		}
 		else{
 			$status = 0;
+			if ((MODULE_NAME == 'Asset' && ACTION_NAME == 'apply' && $_SESSION['leader_id']>0) || (ACTION_NAME == 'request')) {
+				$status = -2;
+			}
 		}
 		//Session::set(ACTION_NAME.'_status', $status);
-		$this->assign('status', $status);
 
 
 		$where = array(
@@ -77,8 +82,12 @@ class ProductOutAction extends BaseAction{
 				$where['from_type'] = 'staff';
 				$where['from_id'] = $_SESSION[C('USER_AUTH_KEY')];
 			}
+			elseif (ACTION_NAME == 'request') {
+				$lead_staff_arr = M('Staff')->where(array('leader_id'=>$_SESSION[C('USER_AUTH_KEY')],'status'=>1))->getField('id,name');
+				$where['_string'] = "staff_id in (".implode(',', array_keys($lead_staff_arr)).")";
+			}
 			else {
-				$where['_string'] = "(from_type='staff' and to_id =".$_SESSION[C('USER_AUTH_KEY')].") or (to_type='staff' and to_id = ".$_SESSION[C('USER_AUTH_KEY')].") or staff_id = ".$_SESSION[C('USER_AUTH_KEY')];
+				$where['_string'] = "(from_type='staff' and from_id =".$_SESSION[C('USER_AUTH_KEY')].") or (to_type='staff' and to_id = ".$_SESSION[C('USER_AUTH_KEY')].") or staff_id = ".$_SESSION[C('USER_AUTH_KEY')];
 			}
 		}
 		elseif(!$_SESSION[C('ADMIN_AUTH_KEY')]) {
@@ -103,6 +112,7 @@ class ProductOutAction extends BaseAction{
 			$item['remark2'] = D('Remark2')->relation(true)->where(array('flow_id'=>$item['id'], 'status'=>1))->select();
 			$result[] = $item;
 		}
+		$this->assign('status', $status);
 		$this->assign('result', $result);
 		$this->assign('page', $p->showMultiNavi());
 		$this->assign('content','ProductOut:index');
@@ -118,10 +128,10 @@ class ProductOutAction extends BaseAction{
 			$info['unit'] = M('Options')->where("id=".$info['product']['unit_id'])->getField('name');
 			if('transfer'==$action) {//new transfer
 				$code = 'T'.substr($info['code'],-9);
-				$location_arr = M('Location')->where(array('id'=>array('gt',1)))->select();
+				$location_arr = M('Location')->where(array('id'=>array('neq',1)))->select();
 				$location_arr[] = array('id' => 'staff', 'name' => 'Staff');
 				$info['location_opts'] = self::genOptions($location_arr, 'location'==$info['to_type'] ? $info['to_id'] : 'staff');
-				$info['staff_opts'] = self::genOptions(M('Staff')->where(array('status'=>1))->select(), $info['to_id'], 'realname');
+				$info['staff_opts'] = self::genOptions(M('Staff')->where(array('status'=>1, 'id'=>array('neq',$_SESSION[C('USER_AUTH_KEY')])))->select(), $info['to_id'], 'realname');
 
 				$returned_quantity = $this->dao->where(array('code'=>'R'.substr($code,-9),'status'=>1))->sum('quantity');
 				$transfered_quantity = $this->dao->where(array('code'=>'T'.substr($code,-9),'status'=>1))->sum('quantity');
@@ -150,7 +160,7 @@ class ProductOutAction extends BaseAction{
 				$location_arr = M('Location')->where(array('id'=>array('gt',1)))->select();
 				$location_arr[] = array('id' => 'staff', 'name' => 'Staff');
 				$info['location_opts'] = self::genOptions($location_arr, 'location'==$info['to_type'] ? $info['to_id'] : 'staff');
-				$info['staff_opts'] = self::genOptions(M('Staff')->where(array('status'=>1))->select(), $info['to_id'], 'realname');
+				$info['staff_opts'] = self::genOptions(M('Staff')->where(array('status'=>1, 'id'=>array('neq',$_SESSION[C('USER_AUTH_KEY')])))->select(), $info['to_id'], 'realname');
 
 				//$from_quantity = $this->dao->where(array('code'=>'Out'.substr($code, -9),'status'=>1))->getField('quantity');
 				//$transfered_quantity = $this->dao->where(array('code'=>'T'.substr($code, -9),'status'=>1))->sum('quantity');
@@ -178,7 +188,7 @@ class ProductOutAction extends BaseAction{
 			$location_arr = M('Location')->where(array('id'=>array('gt',1)))->select();
 			$location_arr[] = array('id' => 'staff', 'name' => 'Staff');
 			$info['location_opts'] = self::genOptions($location_arr);
-			$info['staff_opts'] = self::genOptions(M('Staff')->where(array('status'=>1))->select(), '', 'realname');
+			$info['staff_opts'] = self::genOptions(M('Staff')->where(array('status'=>1, 'id'=>array('neq',$_SESSION[C('USER_AUTH_KEY')])))->select(), '', 'realname');
 			$info['from_type'] = 'location';
 			$info['from_id'] = 1;
 			$max_code = $this->dao->where(array('code'=>array('like','Out%')))->max('code');
@@ -248,6 +258,11 @@ class ProductOutAction extends BaseAction{
 			$this->dao->to_type = 'staff'; //new apply
 			$this->dao->to_id = $_SESSION[C('USER_AUTH_KEY')];//new apply
 			$this->dao->staff_id = $_SESSION[C('USER_AUTH_KEY')];
+
+			//如果有Leader，则将status置为-2，Approve后置为0，Reject置为-1
+			if ('apply' == $action && $_SESSION['leader_id']>0) {
+				$this->dao->status = -2;
+			}
 			$this->dao->create_time = date("Y-m-d H:i:s");
 		}
 		if ('transfer'==$action) {
@@ -287,10 +302,11 @@ class ProductOutAction extends BaseAction{
 			$this->dao->remark = trim($_REQUEST['remark']);
 		}
 		if ($id>0) {
-			if (false !== $this->dao->save()){
-				if (''==$action) {
-					if ('apply'==$this->dao->action) {
-						if ('1'==$this->dao->fixed) {
+			if (false !== $this->dao->save()) {
+				$action = $this->dao->action;
+				if ('apply'==$this->dao->action) {
+					if (MODULE_NAME!='Asset') {
+						if (1 == $this->dao->fixed) {
 							$action = 'applyFixed';
 						}
 						else {
@@ -298,8 +314,19 @@ class ProductOutAction extends BaseAction{
 						}
 					}
 				}
-				if (MODULE_NAME=='Asset') {
-					$action = $this->dao->action;
+				elseif ('transfer' == $this->dao->action) {
+					if (MODULE_NAME=='Asset') {
+						if ($this->dao->from_type = 'staff' && $this->dao->from_id = $_SESSION[C('USER_AUTH_KEY')]) {
+							$action = 'transferOut';
+						}
+						elseif ($this->dao->to_type = 'staff' && $this->dao->to_id = $_SESSION[C('USER_AUTH_KEY')]) {
+							$action = 'transferIn';
+						}
+						else {
+							//nothing
+						}
+					}
+					
 				}
 				self::_success('Product information updated!',__URL__.'/'.$action);
 			}
@@ -313,7 +340,7 @@ class ProductOutAction extends BaseAction{
 					self::_success('Apply request is ready for confirm!',__URL__.'/'.$action);
 				}
 				elseif('transfer'==$action) {
-					self::_success('Transfer request is ready for confirm!',__URL__.'/'.(MODULE_NAME=='Asset'?'':$action));
+					self::_success('Transfer request is ready for confirm!',__URL__.'/'.(MODULE_NAME=='Asset'?'transferOut':$action));
 				}
 				elseif ('return' == $action) {
 					self::_success('Request is ready for confirm!',__URL__.'/returns');
@@ -328,7 +355,7 @@ class ProductOutAction extends BaseAction{
 		}
 	}
 	public function confirm() {
-		if (empty($_POST['confirm']) && empty($_POST['reject'])) {
+		if (empty($_POST['confirm']) && empty($_POST['reject']) && empty($_POST['approve'])) {
 			return;
 		}
 		empty($_POST['chk']) && self::_error('You haven\'t select any item!');
@@ -341,6 +368,15 @@ class ProductOutAction extends BaseAction{
 				}
 			}
 			self::_success('Reject success','',1000);
+			return;
+		}
+		elseif (!empty($_POST['approve'])) {
+			foreach ($_POST['chk'] as $id) {
+				if (!$this->dao->where('id='.$id)->setField(array('confirmed_staff_id','status'),array($_SESSION[C('USER_AUTH_KEY')], 0))) {
+					self::_error('Approve fail!'.(C('APP_DEBUG')?$this->dao->getLastSql():''));
+				}
+			}
+			self::_success('Approve success','',1000);
 			return;
 		}
 		foreach ($_POST['chk'] as $id) {

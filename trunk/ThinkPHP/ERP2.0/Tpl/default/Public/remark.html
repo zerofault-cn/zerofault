@@ -35,7 +35,7 @@ textarea {
 			<if condition="empty($item['staff_id'])">
 			Basic remark
 			<elseif condition="empty($item['id'])" />
-			<span>{$item['create_time']}</span>By {$staff[$item['staff_id']]} when entering
+			<span>{$item['create_time']}</span>{$staff[$item['staff_id']]} 
 			<else />
 			<span>{$item['create_time']}</span>{$staff[$item['staff_id']]}
 			</if>

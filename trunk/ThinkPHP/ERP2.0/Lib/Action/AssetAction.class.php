@@ -41,17 +41,20 @@ class AssetAction extends BaseAction{
 		$this->assign('content', 'Asset:index');
 		$this->display('Layout:ERP_layout');
 	}
+	public function request() {
+		R('ProductOut', 'request');
+	}
+	public function apply() {
+		R('ProductOut', 'apply');
+	}
 	public function transfer() {
-		R('ProductOut', 'transfer');
+		self::transferOut();
 	}
 	public function transferIn() {
 		R('ProductOut', 'transfer');
 	}
 	public function transferOut() {
 		R('ProductOut', 'transfer');
-	}
-	public function apply() {
-		R('ProductOut', 'apply');
 	}
 	public function returns() {
 		R('ProductOut', 'returns');

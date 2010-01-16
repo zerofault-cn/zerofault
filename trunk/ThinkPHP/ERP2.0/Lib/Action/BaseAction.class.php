@@ -36,7 +36,11 @@ class BaseAction extends Action{
 				if(str_replace('&nbsp;',' ',$key) == Session::get('top')) {//获取当前子菜单
 					$submenu = $menu[$key]['submenu'];
 				}
+				//确定顶部可显示的菜单项
 				foreach($val['submenu'] as $sub_title=>$sub_action) {
+					if (!$_SESSION['is_leader'] && 'Asset/request'==$sub_action) {
+						continue;
+					}
 					if(false === strpos($sub_action, '/')) {//子菜单是Module，如Supplier
 						if(RBAC::AccessDecision($sub_action, 'index')) {
 							$topmenu[$key] = $sub_action;
@@ -53,6 +57,7 @@ class BaseAction extends Action{
 				}
 			}
 		}
+		//确定可显示的子菜单项
 		foreach($submenu as $sub_title=>$sub_action) {
 			if(false === strpos($sub_action, '/')) {//子菜单是Module，如Supplier
 				if(!RBAC::AccessDecision($sub_action, 'index')) {
@@ -60,7 +65,11 @@ class BaseAction extends Action{
 					continue;
 				}
 			}
-			else{
+			else{//子菜单是Module/Action，如Asset/apply
+				if (!$_SESSION['is_leader'] && 'Asset/request'==$sub_action) {
+					unset($submenu[$sub_title]);
+					continue;
+				}
 				$sub_action_arr = explode('/', $sub_action);
 				if(!RBAC::AccessDecision($sub_action_arr[0], $sub_action_arr[1])) {
 					unset($submenu[$sub_title]);
