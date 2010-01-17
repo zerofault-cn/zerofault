@@ -15,31 +15,38 @@ class ProductOutAction extends BaseAction{
 		parent::_initialize();
 	}
 	Public function request() {
-		Session::set('submenu', MODULE_NAME.'/'.ACTION_NAME);
 		$this->index('apply');
 	}
 	Public function apply() {
 		$this->index('apply');
 	}
 	Public function applyFixed() {
+		$this->assign('MODULE_TITLE', 'Fixed-Assets Apply');
 		$this->index('apply',1);
 	}
 	Public function applyFloating() {
+		$this->assign('MODULE_TITLE', 'Floating-Assets Apply');
 		$this->index('apply',0);
 	}
 	Public function transfer() {
+		$this->assign('MODULE_TITLE', 'Product Transfer');
 		$this->index('transfer');
 	}
 	Public function release() {
+		$this->assign('MODULE_TITLE', 'Product Release');
 		$this->index('release');
 	}
 	Public function scrap() {
+		$this->assign('MODULE_TITLE', 'Product Scrap');
 		$this->index('scrap');
 	}
 	Public function returns() {
+		$this->assign('MODULE_TITLE', 'Product Return');
 		$this->index('return');
 	}
 	private function index($action='apply',$fixed='') {
+		Session::set('sub', MODULE_NAME.'/'.ACTION_NAME);
+		$this->assign('ACTION_TITLE', 'List');
 		$rs = M('Options')->where(array('type'=>'unit'))->order('sort')->select();
 		$unit = array();
 		foreach($rs as $i=>$item) {

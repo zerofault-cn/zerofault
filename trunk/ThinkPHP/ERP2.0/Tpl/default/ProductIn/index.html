@@ -1,9 +1,4 @@
-<p class="page_title_text">
-<if condition="$action eq 'reject'">
-Product Reject List
-<else />
-Product Entering List
-</if></p>
+<p class="page_title_text">{$MODULE_TITLE} - {$ACTION_TITLE}</p>
 <form action="__URL__/confirm" method="post" target="_iframe">
 <input type="hidden" name="action" value="{$action}" />
 <table >
@@ -80,9 +75,9 @@ Product Entering List
 	
 	<neq name="action" value="reject">
 		<if condition="ACTION_NAME eq 'fixed'">
-		<input type="button" onclick="javascript:document.location='__URL__/form/fixed/1';" value="Enter A New Fixed-Asset" />
+		<input type="button" onclick="javascript:document.location='__URL__/form/fixed/1';" value="Enter New Fixed-Assets" />
 		<else />
-		<input type="button" onclick="javascript:document.location='__URL__/form/fixed/0';" value="Enter A New Floating-Asset" />
+		<input type="button" onclick="javascript:document.location='__URL__/form/fixed/0';" value="Enter New Floating-Assets" />
 		</if>
 	</neq>
 </p>

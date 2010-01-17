@@ -15,12 +15,20 @@ class ProductInAction extends BaseAction{
 		parent::_initialize();
 	}
 	Public function fixed() {
+		$this->assign('MODULE_TITLE', 'Fixed-Assets Entering');
 		$this->index(1);
 	}
 	Public function floating() {
+		$this->assign('MODULE_TITLE', 'Floating-Assets Entering');
 		$this->index(0);
 	}
-	private function index($fixed=1) {
+	public function reject() {
+		$this->assign('MODULE_TITLE', 'Product Reject');
+		$this->index();
+	}
+	private function index($fixed='') {
+		Session::set('sub', MODULE_NAME.'/'.ACTION_NAME);
+		$this->assign('ACTION_TITLE', 'List');
 		$rs = M('Options')->where(array('type'=>'unit'))->order('sort')->select();
 		$unit = array();
 		foreach($rs as $i=>$item) {
@@ -39,13 +47,19 @@ class ProductInAction extends BaseAction{
 		}
 		//Session::set(ACTION_NAME.'_status', $status);
 		$this->assign('status', $status);
-		$this->assign('action', 'enter');
+		
+		$action = 'enter';
+		$where = array();
+		$where['status'] = $status;
+		if ('reject' == ACTION_NAME) {
+			$action = 'reject';
+		}
+		else {
+			$where['fixed'] = $fixed;
+		}
+		$where['action'] = $action;
+		$this->assign('action', $action);
 
-		$where = array(
-			'fixed' => $fixed,
-			'action'=>'enter',
-			'status'=> $status
-			);
 		$count = $this->dao->where($where)->getField('count(*)');
 		import("@.Paginator");
 		$limit = 10;
@@ -65,45 +79,13 @@ class ProductInAction extends BaseAction{
 		$this->assign('content','ProductIn:index');
 		$this->display('Layout:ERP_layout');
 	}
-	public function reject() {
-		$this->assign('action', 'reject');
 
-		$rs = M('Options')->where(array('type'=>'unit'))->order('sort')->select();
-		$unit = array();
-		foreach($rs as $i=>$item) {
-			$unit[$item['id']] = $item['name'];
-		}
-		$this->assign('unit', $unit);
-
-		if(isset($_REQUEST['status'])) {
-			$status = $_REQUEST['status'];
-		}
-		elseif(''!=(Session::get(ACTION_NAME.'_status'))) {
-			$status = Session::get(ACTION_NAME.'_status');
-		}
-		else{
-			$status = 0;
-		}
-		Session::set(ACTION_NAME.'_status', $status);
-		$this->assign('status', $status);
-
-		$where = array(
-			'action'=>'reject',
-			'status'=> $status
-			);
-		$count = $this->dao->where($where)->getField('count(*)');
-		import("@.Paginator");
-		$limit = 10;
-		$p = new Paginator($count,$limit);
-
-		$order = 'id desc';
-		$this->assign('result', $this->dao->relation(true)->where($where)->order($order)->limit($p->offset.','.$p->limit)->select());
-		$this->assign('page', $p->showMultiNavi());
-		$this->assign('content','ProductIn:index');
-		$this->display('Layout:ERP_layout');
-	}
 	public function form() {
+		$this->assign('ACTION_TITLE', 'Enter new Fixed-Assets');
 		$fixed = isset($_REQUEST['fixed']) ? $_REQUEST['fixed'] : '';
+		if('0' == $fixed) {
+			$this->assign('ACTION_TITLE', 'Enter new Floating-Assets');
+		}
 		$action = empty($_REQUEST['action']) ? 'enter' : $_REQUEST['action'];
 		$id = empty($_REQUEST['id']) ? 0 : intval($_REQUEST['id']);
 		if ($id>0) {
@@ -113,16 +95,24 @@ class ProductInAction extends BaseAction{
 			$info['supplier_opts'] = self::genOptions(D('Supplier')->select(), $info['supplier_id']);
 			$info['currency_opts'] = self::genOptions(M('Options')->where(array('type'=>'currency'))->order('sort')->select(), $info['currency_id']);
 			if ('reject'==$action) {//new reject
+				Session::set('sub', MODULE_NAME.'/reject');
+				$this->assign('ACTION_TITLE', 'Reject Product');
 				$code = 'B'.substr($info['code'],-9);
 				$info['quantity'] = $info['ori_quantity'] = M("LocationProduct")->where(array('type'=>'location', 'location_id'=>1, 'product_id'=>$info['product_id']))->getField('chg_quantity');
 				$id = 0;
 			}
 			elseif ('reject'==$info['action']) {//edit reject
+				Session::set('sub', MODULE_NAME.'/reject');
+				$this->assign('ACTION_TITLE', 'Edit Reject Request');
 				$code = $info['code'];
 				$action = $info['action'];
 				$info['ori_quantity'] =  M("LocationProduct")->where(array('type'=>'location', 'location_id'=>1, 'product_id'=>$info['product_id']))->getField('chg_quantity');
 			}
 			else {//edit enter
+				$this->assign('ACTION_TITLE', 'Edit Fixed-Assets Entering');
+				if(0 == $info['fixed']) {
+					$this->assign('ACTION_TITLE', 'Edit Floating-Assets Entering');
+				}
 				$code = $info['code'];
 				$info['ori_quantity'] = 0;
 			}
@@ -220,10 +210,10 @@ class ProductInAction extends BaseAction{
 		else {
 			if($this->dao->add()) {
 				if($action=='reject') {
-					self::_success('Product ready for reject!',__URL__.'/reject');
+					self::_success('Product reject request ready for confirm!',__URL__.'/reject');
 				}
 				else{
-					self::_success('Product ready for entering!', __URL__ . ($fixed ? '/fixed' : '/floating'));
+					self::_success('Product entering request ready for confirm!', __URL__ . ($fixed ? '/fixed' : '/floating'));
 				}
 			}
 			else{

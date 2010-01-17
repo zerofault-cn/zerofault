@@ -11,11 +11,14 @@ class CategoryAction extends BaseAction{
 	protected $dao;
 
 	public function _initialize() {
+		Session::set('sub', MODULE_NAME);
 		$this->dao = M('Category');
 		parent::_initialize();
+		$this->assign('MODULE_TITLE', 'Category');
 	}
 
 	public function index(){
+		$this->assign('ACTION_TITLE', 'List');
 		$arr = $this->dao->group('type')->field('type')->select();
 		$result = array('Component'=>array(), 'Board'=>array());
 		foreach($arr as $val) {

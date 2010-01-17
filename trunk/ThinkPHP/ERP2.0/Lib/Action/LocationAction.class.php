@@ -11,11 +11,14 @@ class LocationAction extends BaseAction{
 	protected $dao;
 
 	public function _initialize() {
+		Session::set('sub', MODULE_NAME);
 		$this->dao = M('Location');
 		parent::_initialize();
+		$this->assign('MODULE_TITLE', 'Location');
 	}
 
 	public function index(){
+		$this->assign('ACTION_TITLE', 'Setting');
 		$this->assign('result', $this->dao->select());
 		$this->assign('content','Location:index');
 		$this->display('Layout:ERP_layout');

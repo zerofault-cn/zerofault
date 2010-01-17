@@ -11,11 +11,14 @@ class StaffAction extends BaseAction{
 	protected $dao;
 
 	public function _initialize() {
+		Session::set('sub', MODULE_NAME);
 		$this->dao = D('Staff');
 		parent::_initialize();
+		$this->assign('MODULE_TITLE', 'Staff');
 	}
 
 	public function index(){
+		$this->assign('ACTION_TITLE', 'List');
 		if(isset($_REQUEST['status'])) {
 			$status = $_REQUEST['status'];
 		}
@@ -25,7 +28,7 @@ class StaffAction extends BaseAction{
 		else{
 			$status = 1;
 		}
-		Session::set('staff_status', $status);
+		//Session::set('staff_status', $status);
 		$this->assign('status', $status);
 		$this->assign('result', $this->dao->relation(true)->where(array('status'=>$status))->order('id')->select());
 		$this->assign('content','Staff:index');
@@ -33,8 +36,10 @@ class StaffAction extends BaseAction{
 	}
 
 	public function form() {
+		$this->assign('ACTION_TITLE', 'Add New Staff');
 		$id = empty($_REQUEST['id']) ? 0 : intval($_REQUEST['id']);
 		if ($id>0) {
+			$this->assign('ACTION_TITLE', 'Edit Supplier');
 			$info = $this->dao->relation(true)->find($id);
 			$info['dept_opts'] = self::genOptions(M('Department')->select(), $info['dept_id']);
 			$info['leader_opts'] = self::genOptions($this->dao->where(array('is_leader'=>1))->select(), $info['leader_id'],'realname');

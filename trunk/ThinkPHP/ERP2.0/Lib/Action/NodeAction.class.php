@@ -76,6 +76,8 @@ class NodeAction extends BaseAction{
 		}
 		//dump($modules);
 
+		$this->assign('MODULE_TITLE', 'System Node');
+		$this->assign('ACTION_TITLE', 'Definition');
 		$this->assign('modules', $modules);
 		$this->assign('content','Node:index');
 		$this->display('Layout:ERP_layout');

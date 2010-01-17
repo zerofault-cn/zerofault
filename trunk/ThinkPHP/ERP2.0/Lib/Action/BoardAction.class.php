@@ -11,27 +11,29 @@ class BoardAction extends BaseAction{
 	protected $dao;
 
 	public function _initialize() {
+		Session::set('sub', MODULE_NAME);
 		$this->dao = D('Product');
 		parent::_initialize();
+		$this->assign('MODULE_TITLE', 'Board');
 	}
 
 	public function index(){
-		//$this->assign('result', $this->dao->relation(true)->where(array('type'=>'Board'))->field('*,group_concat(Internal_PN order by id desc SEPARATOR "<br />") as Internal_PNs,group_concat(MPN order by id desc SEPARATOR "<br />") as MPNs')->group('description')->order('id')->select());
+		$this->assign('ACTION_TITLE', 'List');
 		$rs = $this->dao->where(array('type'=>'Board'))->field('description')->order('id')->select();
-		//dump($rs);
 		empty($rs) && ($rs = array());
 		$result = array();
 		foreach ($rs as $val) {
 			$result[$val['description']] = $this->dao->relation(true)->where(array('type'=>'Board', 'description'=>$val['description']))->select();
 		}
-		//dump($result);
 		$this->assign('result',$result);
 		$this->assign('content','Board:index');
 		$this->display('Layout:ERP_layout');
 	}
 	public function form() {
+		$this->assign('ACTION_TITLE', 'Add New Board');
 		$id = empty($_REQUEST['id']) ? 0 : intval($_REQUEST['id']);
 		if ($id>0) {
+			$this->assign('ACTION_TITLE', 'Edit Supplier');
 			$info = $this->dao->find($id);
 			$info['category_opts'] = self::genOptions(M('Category')->where(array('type'=>'Board'))->select(),$info['category_id'],'name');
 			$info['currency_opts'] = self::genOptions(M('Options')->where(array('type'=>'currency'))->order('sort')->select(), $info['currency_id']);

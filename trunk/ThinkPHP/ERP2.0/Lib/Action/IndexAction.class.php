@@ -14,13 +14,13 @@ class IndexAction extends BaseAction{
 	public function index(){
 	//	$this->assign('content','index');
 	//	$this->display('Layout:ERP_layout');
-		$top = 'My Assets';
+		$top = 'Assets Management';
 		Session::set('top', urldecode($top));
 		if ($_SESSION['is_leader']) {
 			$this->redirect('Asset/request');
 		}
 		else {
-			$this->redirect('Asset');
+			$this->redirect('Asset/index');
 		}
 	}
 }

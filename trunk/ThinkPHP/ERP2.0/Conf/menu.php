@@ -16,8 +16,8 @@ $menu['Basic&nbsp;Data'] = array(
 $menu['Inventory&nbsp;Input Management'] = array(
 	'name'	  => 'ProductIn',
 	'submenu' => array(
-		'Fixed Assets Entering'		=> 'ProductIn/fixed',
-		'Floating Assets Entering'  => 'ProductIn/floating',
+		'Fixed-Assets Entering'		=> 'ProductIn/fixed',
+		'Floating-Assets Entering'  => 'ProductIn/floating',
 		'Product Reject'		=> 'ProductIn/reject',
 		)
 	);
@@ -28,8 +28,8 @@ $menu['Inventory Inquire'] = array(
 $menu['Inventory&nbsp;Output Management'] = array(
 	'name'	  => 'ProductOut/apply',
 	'submenu' => array(
-		'Fixed Asset Apply'		=> 'ProductOut/applyFixed',
-		'Floating Asset Apply'	=> 'ProductOut/applyFloating',
+		'Fixed-Asset Apply'		=> 'ProductOut/applyFixed',
+		'Floating-Asset Apply'	=> 'ProductOut/applyFloating',
 		'Product Transfer'		=> 'ProductOut/transfer',
 		'Components Release'	=> 'ProductOut/release',
 		'Scrap Product'			=> 'ProductOut/scrap',
@@ -37,12 +37,12 @@ $menu['Inventory&nbsp;Output Management'] = array(
 		)
 	);
 
-$menu['My&nbsp;Assets'] = array(
+$menu['Assets Management'] = array(
 	'name' 	  => 'Asset',
 	'submenu' => array(
 		'Staff Apply Request'	=> 'Asset/request',
-		'Asset List'			=> 'Asset',
-		'Apply'					=> 'Asset/apply',
+		'My Asset List'			=> 'Asset',
+		'My Apply'				=> 'Asset/apply',
 		'Transfer In'			=> 'Asset/transferIn',
 		'Transfer Out'			=> 'Asset/transferOut',
 		'Return'				=> 'Asset/returns',

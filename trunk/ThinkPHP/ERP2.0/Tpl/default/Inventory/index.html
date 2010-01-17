@@ -30,9 +30,7 @@
 	</td>
 </tr>
 </table>
-<empty name="result">
-<p class="center">No Result</p>
-<else />
+<notempty name="_POST['submit']">
 <table cellpadding="3" border="1" bordercolor="#FFFFFF" style="border-collapse:collapse;">
 <tr>
 	<th rowspan="2">No.</th>
@@ -96,5 +94,11 @@
 	<td><if condition="$item['fixed'] eq 1">Fixed Assets<else />Floating Assets</if></td>
 </tr>
 </iterate>
-</table>
+<empty name="result">
+<tr>
+	<td colspan="20" align="center">No Record</td>
+</tr>
 </empty>
+</table>
+</notempty>
+<p class="center">&nbsp;</p>

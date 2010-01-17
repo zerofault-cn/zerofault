@@ -13,9 +13,12 @@ class AssetAction extends BaseAction{
 	public function _initialize() {
 		$this->dao = M('LocationProduct');
 		parent::_initialize();
+		$this->assign('MODULE_TITLE', 'Asset Management');
 	}
 
 	public function index(){
+		Session::set('sub', MODULE_NAME);
+		$this->assign('ACTION_TITLE', 'My Asset List');
 		$rs = $this->dao->where(array('type'=>'staff', 'location_id'=>$_SESSION[C('USER_AUTH_KEY')], '`ori_quantity`+`chg_quantity`'=>array('gt', 0)))->select();
 		//dump($rs);
 		if(empty($rs)) {
@@ -45,6 +48,7 @@ class AssetAction extends BaseAction{
 		R('ProductOut', 'request');
 	}
 	public function apply() {
+		$this->assign('MODULE_TITLE', 'My Apply');
 		R('ProductOut', 'apply');
 	}
 	public function transfer() {

@@ -11,20 +11,25 @@ class SupplierAction extends BaseAction{
 	protected $dao;
 
 	public function _initialize() {
+		Session::set('sub', MODULE_NAME);
 		$this->dao = D('Supplier');
 		parent::_initialize();
+		$this->assign('MODULE_TITLE', 'Supplier');
 	}
 
 	public function index(){
+		$this->assign('ACTION_TITLE', 'List');
 		$this->assign('result', $this->dao->relation(true)->order('id')->select());
 		$this->assign('content','Supplier:index');
 		$this->display('Layout:ERP_layout');
 	}
 
 	public function form() {
+		$this->assign('ACTION_TITLE', 'Add New Supplier');
 		$dOptions = M('Options');
 		$id = empty($_REQUEST['id']) ? 0 : intval($_REQUEST['id']);
 		if ($id>0) {
+			$this->assign('ACTION_TITLE', 'Edit Supplier');
 			$info = $this->dao->find($id);
 			$info['character_opts'] = self::genOptions($dOptions->where(array('type'=>'character'))->order('sort')->select(), $info['character_id']);
 			$info['payment_opts'] = self::genOptions($dOptions->where(array('type'=>'payment_terms'))->order('sort')->select(), $info['payment_terms_id']);

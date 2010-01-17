@@ -11,11 +11,14 @@ class SettingAction extends BaseAction{
 	protected $dao;
 
 	public function _initialize() {
+		Session::set('sub', MODULE_NAME);
 		$this->dao = M('Options');
 		parent::_initialize();
+		$this->assign('MODULE_TITLE', 'Options');
 	}
 
 	public function index(){
+		$this->assign('ACTION_TITLE', 'Setting');
 		$arr = $this->dao->group('type')->field('type')->select();
 		$result = array(
 			'currency'	=> array(),

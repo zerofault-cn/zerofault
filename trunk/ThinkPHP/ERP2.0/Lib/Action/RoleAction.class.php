@@ -14,14 +14,17 @@ class RoleAction extends BaseAction{
 	* 构造函数
 	*/
 	public function _initialize() {
+		Session::set('sub', MODULE_NAME);
 		$this->dao = D('Role');
 		parent::_initialize();
+		$this->assign('MODULE_TITLE', 'System Role');
 	}
 	/**
 	*
 	* 角色列表
 	*/
 	public function index(){
+		$this->assign('ACTION_TITLE', 'Setting');
 		$where = array();
 		//有编辑请求
 		if(!empty($_REQUEST['id'])) {
