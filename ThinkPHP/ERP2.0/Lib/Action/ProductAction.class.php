@@ -11,19 +11,24 @@ class ProductAction extends BaseAction{
 	protected $dao;
 
 	public function _initialize() {
+		Session::set('sub', MODULE_NAME);
 		$this->dao = D('Product');
 		parent::_initialize();
+		$this->assign('MODULE_TITLE', 'Component');
 	}
 
 	public function index(){
+		$this->assign('ACTION_TITLE', 'List');
 		$this->assign('result', $this->dao->where(array('type'=>'Component'))->relation(true)->order('id')->select());
 		$this->assign('content','Product:index');
 		$this->display('Layout:ERP_layout');
 	}
 
 	public function form() {
+		$this->assign('ACTION_TITLE', 'Add New Component');
 		$id = empty($_REQUEST['id']) ? 0 : intval($_REQUEST['id']);
 		if ($id>0) {
+			$this->assign('ACTION_TITLE', 'Edit Component');
 			$info = $this->dao->find($id);
 			$info['category_opts'] = self::genOptions(M('Category')->where(array('type'=>'Component'))->select(),$info['category_id'],'name');
 			$info['currency_opts'] = self::genOptions(M('Options')->where(array('type'=>'currency'))->order('sort')->select(), $info['currency_id']);

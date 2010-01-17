@@ -13,9 +13,11 @@ class InventoryAction extends BaseAction{
 	public function _initialize() {
 		$this->dao = D('ProductView');
 		parent::_initialize();
+		$this->assign('MODULE_TITLE', 'Inventory Inquire');
 	}
 
 	public function index() {
+		$this->assign('ACTION_TITLE', 'Search');
 		$this->assign('category_opts', self::genOptions(M('Category')->select(), $_REQUEST['category_id']) );
 		$this->assign('supplier_opts', self::genOptions(D('Supplier')->select(), $_REQUEST['supplier_id']));
 		$where = array();
@@ -23,14 +25,15 @@ class InventoryAction extends BaseAction{
 		$where['status'] = 1;
 		$result = array();
 		if(!empty($_POST['submit'])) {
-			!empty($_REQUEST['category_id']) && ($where['category_id'] = $_REQUEST['category_id']);
-			!empty($_REQUEST['supplier_id']) && ($where['supplier_id'] = $_REQUEST['supplier_id']);
-			!empty($_REQUEST['Internal_PN']) && ($where['Internal_PN'] = array('like', '%'.trim($_REQUEST['Internal_PN']).'%'));
-			!empty($_REQUEST['description']) && ($where['description'] = array('like', '%'.trim($_REQUEST['description']).'%'));
-			!empty($_REQUEST['manufacture']) && ($where['manufacture'] = array('like', '%'.trim($_REQUEST['manufacture']).'%'));
-			!empty($_REQUEST['MPN']) 		 && ($where['MPN'] 		   = array('like', '%'.trim($_REQUEST['MPN']).'%'));
-			!empty($_REQUEST['value']) 		 && ($where['value'] 	   = trim($_REQUEST['value']));
-			!empty($_REQUEST['project']) 	 && ($where['project'] 	   = array('like', '%'.trim($_REQUEST['project']).'%'));
+			$this->assign('ACTION_TITLE', 'Result');
+			(''!=$_REQUEST['category_id']) && ($where['category_id'] = $_REQUEST['category_id']);
+			(''!=$_REQUEST['supplier_id']) && ($where['supplier_id'] = $_REQUEST['supplier_id']);
+			(''!=trim($_REQUEST['Internal_PN'])) && ($where['Internal_PN'] = array('like', '%'.trim($_REQUEST['Internal_PN']).'%'));
+			(''!=trim($_REQUEST['description'])) && ($where['description'] = array('like', '%'.trim($_REQUEST['description']).'%'));
+			(''!=trim($_REQUEST['manufacture'])) && ($where['manufacture'] = array('like', '%'.trim($_REQUEST['manufacture']).'%'));
+			(''!=trim($_REQUEST['MPN'])) 		 && ($where['MPN'] 		   = array('like', '%'.trim($_REQUEST['MPN']).'%'));
+			(''!=trim($_REQUEST['value'])) 		 && ($where['value'] 	   = trim($_REQUEST['value']));
+			(''!=trim($_REQUEST['project'])) 	 && ($where['project'] 	   = array('like', '%'.trim($_REQUEST['project']).'%'));
 			$result = $this->dao->field("Options.name as unit_name, Category.name as category_name, Product.id as product_id, Product.fixed as fixed, Product.value as value, Product.project as project, Product.MPN as MPN, Product.Internal_PN as Internal_PN, Product.description as description, Product.manufacture as manufacture, group_concat(Supplier.name) as supplier_names")->where($where)->group('product_id')->select();
 			foreach ($result as $i=>$val) {
 				$where = array();
@@ -44,6 +47,7 @@ class InventoryAction extends BaseAction{
 				$where['product_id'] = $val['product_id'];
 				$where['chg_quantity'] = array('gt',0);
 				$where['_string'] = "(type='location' and location_id!=1) or type='staff'";
+				//获取物品的最终归属
 				$owner_arr = M('LocationProduct')->where($where)->select();
 				empty($owner_arr) && ($owner_arr = array());
 				foreach ($owner_arr as $j=>$owner) {

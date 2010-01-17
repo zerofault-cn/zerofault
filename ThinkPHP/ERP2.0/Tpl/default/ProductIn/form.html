@@ -1,10 +1,4 @@
-<p class="page_title_text">
-<if condition="empty($action)">
-Product Entering Form
-<else />
-Product {$action|ucfirst} Form
-</if>
-</p>
+<p class="page_title_text">{$ACTION_TITLE}</p>
 <form action="__URL__/submit" method="post" target="_iframe">
 <input type="hidden" name="id" value="{$id}" />
 <input type="hidden" name="action" value="{$action}" />
@@ -100,7 +94,7 @@ Product {$action|ucfirst} Form
 <p class="center">
 	<input type="submit" name="submit" value="Submit"/>
 	&nbsp;&nbsp;&nbsp;&nbsp;
-	<input type="button" value="Cancel" onclick="javascript:location.href='{$_SERVER.HTTP_REFERER}';"/>
+	<input type="button" value="Cancel" onclick="javascript:location.href='__APP__/{$_SESSION['sub']}';"/>
 </p>
 </form>
 <script language="JavaScript" type="text/javascript">

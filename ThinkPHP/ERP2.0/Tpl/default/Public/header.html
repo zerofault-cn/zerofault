@@ -22,29 +22,21 @@
 	</tr>
 </table>
 
-<present name="submenu">
+<notempty name="submenu">
 <table cellspacing="0" cellpadding="0" border="0" width="100%" class="main_menu">
 <tr>
 	<td class="main_menu">
 		<table class="main_menu">
 		<tr>
 			<iterate name="submenu" id="item">
-				<if condition="(ACTION_NAME eq 'index' and MODULE_NAME eq $item)
-				or (ACTION_NAME eq 'form' and empty($action) and MODULE_NAME eq $item)
-				or (ACTION_NAME neq 'index' and MODULE_NAME.'/'.ACTION_NAME eq $item)
-				or (ACTION_NAME neq 'request' and !empty($action) and MODULE_NAME.'/'.$action eq $item)
-				or (isset($fixed) and '1' eq $fixed and 'ProductIn/fixed' eq $item)
-				or (isset($fixed) and '0' eq $fixed and 'ProductIn/floating' eq $item)
-				or (isset($fixed) and '1' eq $fixed and 'ProductOut/applyFixed' eq $item)
-				or (isset($fixed) and '0' eq $fixed and 'ProductOut/applyFloating' eq $item)
-				or (MODULE_NAME eq 'Asset' and ACTION_NAME eq 'form' and $action eq 'transfer' and 'Asset/transferOut' eq $item)">
+				<if condition="$_SESSION['sub'] eq $item">
 			<td class="main_menu_selected"><a href="__APP__/{$item}">{$key}</a></td>
 				<else />
 			<td class="main_menu_unselected"><a href="__APP__/{$item}">{$key}</a></td>
 				</if>
 			</iterate>
-		</table>{$_SESSION['submenu']} 
+		</table>
 	</td>
 </tr>
 </table>
-</present>
+</notempty>

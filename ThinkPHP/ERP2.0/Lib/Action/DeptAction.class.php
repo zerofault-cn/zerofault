@@ -11,11 +11,14 @@ class DeptAction extends BaseAction{
 	protected $dao;
 
 	public function _initialize() {
+		Session::set('sub', MODULE_NAME);
 		$this->dao = D('Department');
 		parent::_initialize();
+		$this->assign('MODULE_TITLE', 'Department');
 	}
 
 	public function index(){
+		$this->assign('ACTION_TITLE', 'List');
 		$max_code = $this->dao->max('code');
 		empty($max_code) && ($max_code = 'D'.sprintf("%03d",0));
 		$code = ++ $max_code;

@@ -293,4 +293,5 @@ ul.toggle li{
 	height:15px;
 	border-bottom:1px dashed #FFFFFF;
 	padding:3px;
+	white-space:nowrap;
 }
