@@ -38,7 +38,7 @@ class BaseAction extends Action{
 				}
 				//确定顶部可显示的菜单项
 				foreach($val['submenu'] as $sub_title=>$sub_action) {
-					if (!$_SESSION['is_leader'] && 'Asset/request'==$sub_action) {
+					if (empty($_SESSION['is_leader']) && 'Asset/request'==$sub_action) {
 						continue;
 					}
 					if(false === strpos($sub_action, '/')) {//子菜单是Module，如Supplier
@@ -66,7 +66,7 @@ class BaseAction extends Action{
 				}
 			}
 			else{//子菜单是Module/Action，如Asset/apply
-				if (!$_SESSION['is_leader'] && 'Asset/request'==$sub_action) {
+				if (empty($_SESSION['is_leader']) && 'Asset/request'==$sub_action) {
 					continue;
 				}
 				$sub_action_arr = explode('/', $sub_action);

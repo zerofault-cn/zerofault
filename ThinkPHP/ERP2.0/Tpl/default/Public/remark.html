@@ -48,7 +48,7 @@ textarea {
 		</empty>
 	</dl>
 </fieldset>
-<input type="hidden" name="flow_id" value="{$flow_id}"/>
+<input type="hidden" name="product_id" value="{$product_id}"/>
 <input type="hidden" name="remark_id" value=""/>
 <textarea name="remark" rows="3" cols="30"></textarea> <input type="button" id="post_remark" value="Post My Remark" onclick="javascript:post();" align="bottom"/>&nbsp;&nbsp;<input type="button" value="Close" onclick="tb_remove();" align="bottom"/>
 <script language="JavaScript" type="text/javascript">
@@ -59,7 +59,7 @@ function post() {
 	}
 	else {
 		$.post('__APP__/Public/remark', {
-			'flow_id' : $("input[name='flow_id']").val(),
+			'product_id' : $("input[name='product_id']").val(),
 			'remark_id' : $("input[name='remark_id']").val(),
 			'remark' : $("textarea[name='remark']").val(),
 			'submit' : 1
