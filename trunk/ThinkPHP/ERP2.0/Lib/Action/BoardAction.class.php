@@ -23,7 +23,7 @@ class BoardAction extends BaseAction{
 		empty($rs) && ($rs = array());
 		$result = array();
 		foreach ($rs as $val) {
-			$result[$val['description']] = $this->dao->relation(true)->where(array('type'=>'Board', 'description'=>$val['description']))->select();
+			$result[str_replace(array(' ','"',"'"), '', $val['description'])] = $this->dao->relation(true)->where(array('type'=>'Board', 'description'=>$val['description']))->select();
 		}
 		$this->assign('result',$result);
 		$this->assign('content','Board:index');

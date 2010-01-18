@@ -186,9 +186,9 @@ class ProductOutAction extends BaseAction{
 				//$rs = D('Product')->relation(true)->find($info['product_id']);
 				//$info['ori_quantity'] = $rs['location_product'][0]['ori_quantity'] + $rs['location_product'][0]['chg_quantity'];
 				$info['ori_quantity'] = M("LocationProduct")->where(array('type'=>$info['from_type'], 'location_id'=>$info['from_id'], 'product_id'=>$info['product_id']))->getField('`ori_quantity`+`chg_quantity`');
-				if ($info['staff_id'] != $_SESSION[C('USER_AUTH_KEY')]) {//不是当前用户所创建的记录
-					$info['remark'] = M('Remark2')->where(array('flow_id'=>$id, 'staff_id'=>$_SESSION[C('USER_AUTH_KEY')]))->getField('remark');
-				}
+			//	if ($info['staff_id'] != $_SESSION[C('USER_AUTH_KEY')]) {//不是当前用户所创建的记录
+			//		$info['remark'] = M('Remark2')->where(array('flow_id'=>$id, 'staff_id'=>$_SESSION[C('USER_AUTH_KEY')]))->getField('remark');
+			//	}
 			}
 		}
 		else {//new apply/transfer/release/scrap
@@ -294,7 +294,7 @@ class ProductOutAction extends BaseAction{
 		$this->dao->product_id = $_REQUEST['product_id'];
 		$this->dao->quantity = $_REQUEST['quantity'];
 		//get remark2
-		if ($id>0 && $this->dao->staff_id != $_SESSION[C('USER_AUTH_KEY')]) {//不是当前用户所创建的记录
+		if (false && $id>0 && $this->dao->staff_id != $_SESSION[C('USER_AUTH_KEY')]) {//不是当前用户所创建的记录
 			if ($remark_id = M('Remark2')->where(array('flow_id'=>$id, 'staff_id'=>$_SESSION[C('USER_AUTH_KEY')]))->getField('id')) {
 				if (!M('Remark2')->where('id='.$remark_id)->save(array('remark'=>trim($_REQUEST['remark']), 'create_time'=>date("Y-m-d H:i:s"), 'status'=>1))) {
 					self::_error('Update remark fail!'.(C('APP_DEBUG')?$this->dao->getLastSql():''));
@@ -334,7 +334,7 @@ class ProductOutAction extends BaseAction{
 							//nothing
 						}
 					}
-					
+
 				}
 				self::_success('Product information updated!',__URL__.'/'.$action);
 			}

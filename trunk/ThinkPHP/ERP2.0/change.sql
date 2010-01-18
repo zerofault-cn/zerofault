@@ -28,12 +28,14 @@ ALTER TABLE erp_product_flow DROP project;
 ALTER TABLE erp_product ADD fixed TINYINT(1)  UNSIGNED DEFAULT "0" NOT NULL AFTER `type`;
 ALTER TABLE erp_product_flow ADD fixed TINYINT(1)  UNSIGNED DEFAULT "0" NOT NULL AFTER `action`;
 
-CREATE TABLE `erp_remark2` (
+DROP TABLE IF EXISTS `erp_remark2`;
+CREATE TABLE IF NOT EXISTS `erp_remark2` (
   `id` int(10) unsigned NOT NULL auto_increment,
-  `flow_id` int(10) unsigned NOT NULL default '0',
-  `staff_id` smallint(5) unsigned NOT NULL default '0',
-  `remark` tinytext NOT NULL,
-  `create_time` datetime NOT NULL,
-  `status` tinyint(1) NOT NULL default '0',
-  PRIMARY KEY  (`id`)
+  `flow_id` int(10) unsigned NOT NULL DEFAULT '0' ,
+  `product_id` smallint(5) unsigned NOT NULL DEFAULT '0' ,
+  `staff_id` smallint(5) unsigned NOT NULL DEFAULT '0' ,
+  `remark` text NOT NULL DEFAULT '' ,
+  `create_time` datetime NOT NULL ,
+  `status` tinyint(1) NOT NULL DEFAULT '0' ,
+  PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;

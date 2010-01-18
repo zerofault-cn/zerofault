@@ -76,19 +76,20 @@ class PublicAction extends BaseAction{
 			die(M('Remark2')->where('id='.$_GET['remark_id'])->getField('remark'));
 		}
 		if (!empty($_POST['submit'])) {
-			$remark_id = $_REQUEST['remark_id'];
-			$flow_id = $_REQUEST['flow_id'];
-			$remark = $_REQUEST['remark'];
-			if ('' == trim($remark)) {
+			$remark_id = intval($_REQUEST['remark_id']);
+			$product_id = intval($_REQUEST['product_id']);
+			$remark = trim($_REQUEST['remark']);
+			if ('' == $remark) {
 				die(json_encode(array('result'=>0, 'msg'=>'Content is empty!')));
 			}
 			$data = array();
-			$data['flow_id'] = $flow_id;
+			$data['flow_id'] = 0;
+			$data['product_id'] = $product_id;
 			$data['staff_id'] = $_SESSION[C('USER_AUTH_KEY')];
 			$data['remark'] = $remark;
 			$data['create_time'] = date("Y-m-d H:i:s");
 			$data['status'] = 1;
-			if (!empty($remark_id) && $remark_id>0) {
+			if ($remark_id>0) {
 				$res = M('Remark2')->where('id='.$remark_id)->save($data);
 			}
 			else {
@@ -108,14 +109,14 @@ class PublicAction extends BaseAction{
 		$this->assign('staff', $staff);
 
 		$product_id = intval($_REQUEST['product_id']);
-		$flow_id = intval($_REQUEST['flow_id']);
+		//$flow_id = intval($_REQUEST['flow_id']);
 		$remark = M('Product')->field('remark')->where('id='.$product_id)->select();
-		$remark1 = M('ProductFlow')->field('staff_id,create_time,remark')->where('id='.$flow_id)->select();
-		$remark2 = M('Remark2')->where(array('flow_id'=>$flow_id, 'status'=>1))->select();
+		$remark1 = M('ProductFlow')->field('staff_id,create_time,remark')->where('product_id='.$product_id)->order('id')->select();
+		$remark2 = M('Remark2')->where(array('product_id'=>$product_id, 'status'=>1))->order('id')->select();
 		if (empty($remark2)) {
 			$remark2 = array();
 		}
-		$this->assign('flow_id', $flow_id);
+		$this->assign('product_id', $product_id);
 		$this->assign('result', array_merge($remark, $remark1, $remark2));
 		$this->assign('content', 'Public:remark');
 		$this->display('Layout:content');
