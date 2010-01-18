@@ -41,10 +41,9 @@
 	<th rowspan="2" class="basic_data">Manufacture</th>
 	<th rowspan="2" class="basic_data">MPN</th>
 	<th rowspan="2" class="basic_data">Value/ Package</th>
-	<th rowspan="2" class="basic_data">Project</th>
 	<th colspan="8">Quantity</th>
 	<th rowspan="2">Owner(s)</th>
-	<th rowspan="2">Remark</th>
+	<th rowspan="2">Comment</th>
 	<th rowspan="2">Unit</th>
 	<th rowspan="2">Type</th>
 </tr>
@@ -75,7 +74,6 @@
 	<td>{$item['manufacture']}</td>
 	<td>{$item['MPN']}</td>
 	<td>{$item['value']}</td>
-	<td>{$item['project']}</td>
 	<td>{$item['quantity']['enter']-$item['quantity']['reject']-$item['quantity']['apply']-$item['quantity']['transfer']-$item['quantity']['release']-$item['quantity']['scrap']+$item['quantity']['return']}</td>
 	<td><a href="__URL__/query/action/enter/product_id/{$item['product_id']}?width=630&height=300&modal=true" class="thickbox">{$item['quantity']['enter']}</a></td>
 	<td><a href="__URL__/query/action/reject/product_id/{$item['product_id']}?width=630&height=300&modal=true" class="thickbox">{$item['quantity']['reject']|default=0}</a></td>
@@ -91,7 +89,7 @@
 		</gt>
 		<span style="padding:3px;">{$owner['chg_quantity']}->{$owner['name']}</span>
 	</foreach></td>
-	<td align="center"><a href="__APP__/Public/remark/product_id/{$item['product_id']}?width=600&height=300&modal=true" class="thickbox"><img src="../Public/Images/comments.gif"/></a></td>
+	<td align="center"><a href="__APP__/Public/remark/product_id/{$item['product_id']}?width=600&height=300&modal=true" class="thickbox" title="View Product Comment"><img src="../Public/Images/comments.gif"/></a></td>
 	<td>{$item['unit_name']}</td>
 	<td><if condition="$item['fixed'] eq 1">Fixed Assets<else />Floating Assets</if></td>
 </tr>

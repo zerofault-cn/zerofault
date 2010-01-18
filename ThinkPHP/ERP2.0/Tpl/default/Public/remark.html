@@ -27,13 +27,13 @@ textarea {
 
 </style>
 <fieldset>
-	<legend>Remark Queries</legend>
+	<legend>Product Comment</legend>
 	<dl id="remark_list">
 		<iterate name="result" id="item">
 			<notempty name="item['remark']">
 		<dt id="dt_{$item['id']}">
 			<if condition="empty($item['staff_id'])">
-			Basic remark
+			Basic Remark
 			<elseif condition="empty($item['id'])" />
 			<span>{$item['create_time']}</span>{$staff[$item['staff_id']]} 
 			<else />
@@ -50,7 +50,7 @@ textarea {
 </fieldset>
 <input type="hidden" name="product_id" value="{$product_id}"/>
 <input type="hidden" name="remark_id" value=""/>
-<textarea name="remark" rows="3" cols="30"></textarea> <input type="button" id="post_remark" value="Post My Remark" onclick="javascript:post();" align="bottom"/>&nbsp;&nbsp;<input type="button" value="Close" onclick="tb_remove();" align="bottom"/>
+<textarea name="remark" rows="3" cols="30"></textarea> <input type="button" id="post_remark" value="Post My Comment" onclick="javascript:post();" align="bottom"/>&nbsp;&nbsp;<input type="button" value="Close" onclick="tb_remove();" align="bottom"/>
 <script language="JavaScript" type="text/javascript">
 function post() {
 	if (''==$("textarea[name='remark']").val()) {
@@ -71,7 +71,7 @@ function post() {
 						$("dt#dt_"+json.remark_id).html('<span>'+json.create_time+'</span>'+json.staff_name);
 						$("dd#dd_"+json.remark_id+" div").html(json.remark);
 						$("input[name='remark_id']").val('');
-						$("input#post_remark").val('Post My Remark');
+						$("input#post_remark").val('Post My Comment');
 						$("input#reset_remark").remove();
 						has_reset = false;
 					}

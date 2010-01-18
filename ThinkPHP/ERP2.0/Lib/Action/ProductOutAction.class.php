@@ -117,7 +117,7 @@ class ProductOutAction extends BaseAction{
 			$item['from_name'] = M(ucfirst($item['from_type']))->where('id='.$item['from_id'])->getField('location'==$item['from_type']?'name':'realname');
 			$item['to_name'] = M(ucfirst($item['to_type']))->where('id='.$item['to_id'])->getField('location'==$item['to_type']?'name':'realname');
 
-			$item['remark2'] = D('Remark2')->relation(true)->where(array('flow_id'=>$item['id'], 'status'=>1))->select();
+			//$item['remark2'] = M('Remark2')->where(array('flow_id'=>$item['id'], 'status'=>1))->select();
 			$result[] = $item;
 		}
 		$this->assign('status', $status);
