@@ -89,7 +89,7 @@
 		</gt>
 		<span style="padding:3px;">{$owner['chg_quantity']}->{$owner['name']}</span>
 	</foreach></td>
-	<td align="center"><a href="__APP__/Public/remark/product_id/{$item['product_id']}?width=600&height=300&modal=true" class="thickbox" title="View Product Comment"><img src="../Public/Images/comments.gif"/></a></td>
+	<td valign="top"><a href="__APP__/Public/remark/product_id/{$item['product_id']}?width=600&height=300&modal=true" class="thickbox" title="View Comment Detail"><!-- <img src="../Public/Images/comments.gif"/> -->{$item['lastRemark']}</a></td>
 	<td>{$item['unit_name']}</td>
 	<td><if condition="$item['fixed'] eq 1">Fixed Assets<else />Floating Assets</if></td>
 </tr>

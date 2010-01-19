@@ -88,6 +88,9 @@ class InventoryAction extends BaseAction{
 					}*/
 				}
 				$result[$i]['owners'] = $owner_arr;
+				//获取最后一次Remark
+				$lastRemark = self::getLastComment($val['product_id'])."\n";
+				$result[$i]['lastRemark'] = substr($lastRemark, 0, strpos($lastRemark, "\n"));
 			}
 		}
 		//dump($result);
@@ -116,7 +119,6 @@ class InventoryAction extends BaseAction{
 			$rs[$i]['supplier_name'] = M('Supplier')->where('id='.$val['supplier_id'])->getField('name');
 			$rs[$i]['staff_name'] = M('Staff')->where('id='.$val['staff_id'])->getField('realname');
 			$rs[$i]['confirm_name'] = M('Staff')->where('id='.$val['confirmed_staff_id'])->getField('realname');
-			//$rs[$i]['remark2'] = D('Remark2')->relation(true)->where(array('flow_id'=>$val['id']))->select();
 		}
 		$this->assign('product_id', $product_id);
 		$this->assign('result', $rs);
@@ -124,7 +126,21 @@ class InventoryAction extends BaseAction{
 		$this->assign('content', 'Inventory:query');
 		$this->display('Layout:content');
 	}
-	public function query_remark() {
+	protected function getLastComment($product_id) {
+		$remark2 = M('Remark2')->where(array('product_id'=>$product_id, 'status'=>1))->order('id desc')->getField('remark');
+		if (!empty($remark2)) {
+			return $remark2;
+		}
+		$remark1 = M('ProductFlow')->where('product_id='.$product_id)->order('id desc')->getField('remark');
+		if (!empty($remark1)) {
+			return $remark1;
+		}
+		return M('Product')->where('id='.$product_id)->getField('remark');
+	}
+	/*
+	* useless
+	*/
+	private function query_remark() {
 		$product_id = $_REQUEST['product_id'];
 		$flow_id = $_REQUEST['flow_id'];
 		$remark = M('Product')->field('remark')->where('id='.$product_id)->select();
