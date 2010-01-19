@@ -22,19 +22,36 @@ class PublicAction extends BaseAction{
 	}
 	/**
 	*
-	* 验证并保存登录信息
+	* 发送重置密码请求、验证并保存登录信息
 	*/
-	public function checkLogin(){
-		if(empty($_REQUEST['name'])) {
-			self::_error('User ID required');
+	public function checkLogin() {
+		$action = $_REQUEST['action'];
+		$name = trim($_REQUEST['name']);
+		$password = trim($_REQUEST['password']);
+		if ('getPWD' == $action) {
+			if (''==$name) {
+				self::_error('Enter your User ID first!');
+			}
+			$email = M('Staff')->where(array('name'=>$name))->getField('email');
+			
+			$admin_email = M('Staff')->where(array('id'=>1))->getField('email');
+			empty($admin_email) && self::_error('The System Admin haven\'t set his email,<br />Can\'t send notification!'); 
+			$title = 'Staff ask for reseting his password!';
+			$body = 'Staff Login Account: '.$name;
+			$email && ($body .= '<br />Staff Email: '.$email);
+			//echo $title;
+			//echo "<br />\n";
+			//echo $body;
+			self::_mail($admin_email, $title, $body);
+			exit;
 		}
-		elseif (empty($_REQUEST['password'])){
-			self::_error('Password Required');
-		}
+		'' == $name && self::_error('User ID required');
+		'' == $password && self::_error('Password Required');
+		
 		//生成认证条件
 		$map			= array();
-		$map["name"]	= $_REQUEST['name'];
-		$map['password']= md5($_REQUEST['password']);
+		$map["name"]	= $name;
+		$map['password']= md5($password);
 		$map["status"]	= 1;
 
 		// 进行委托认证

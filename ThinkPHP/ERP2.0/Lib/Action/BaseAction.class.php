@@ -223,5 +223,22 @@ class BaseAction extends Action{
 			return min($tmp, 1024*$k);
 		}
 	}
+	protected function _mail($email,$title,$body) {
+		//172.23.57.20
+		//echo $title = htmlentities($title, ENT_QUOTES);
+		//echo '<br />';
+		//echo $body  = htmlentities($body, ENT_QUOTES);
+		$cmd = "echo '$body' | /usr/bin/mutt -s '$title' $email";
+		echo $cmd;
+		echo "\n";
+		system($cmd,$ret);
+		if('0'==$ret) {
+			echo 'Success@'.date("Y-m-d H:i:s");
+		}
+		else{
+			echo 'Something wrong';
+		}
+		return;
+	}
 }
 ?>
