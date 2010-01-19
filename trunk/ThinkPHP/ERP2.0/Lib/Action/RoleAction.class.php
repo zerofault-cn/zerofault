@@ -59,7 +59,7 @@ class RoleAction extends BaseAction{
 				$rs2 = $this->dao->query($sql);
 				$subNode_arr = array();
 				if(empty($rs2)) {
-					$subNode_arr = array('无');
+					$subNode_arr = array('None');
 					$rs2 = array();
 				}
 				foreach($rs2 as $node) {

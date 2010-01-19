@@ -229,8 +229,7 @@ class BaseAction extends Action{
 		//echo '<br />';
 		//echo $body  = htmlentities($body, ENT_QUOTES);
 		$cmd = "echo '$body' | /usr/bin/mutt -s '$title' $email";
-		echo $cmd;
-		echo "\n";
+		Log::Write($cmd, INFO);
 		system($cmd,$ret);
 		if('0'==$ret) {
 			echo 'Success@'.date("Y-m-d H:i:s");
