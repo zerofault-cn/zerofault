@@ -37,12 +37,18 @@ class PublicAction extends BaseAction{
 			$admin_email = M('Staff')->where(array('id'=>1))->getField('email');
 			empty($admin_email) && self::_error('The System Admin haven\'t set his email,<br />Can\'t send notification!'); 
 			$title = 'Staff ask for reseting his password!';
-			$body = 'Staff Login Account: '.$name;
-			$email && ($body .= '<br />Staff Email: '.$email);
+			$body = "Hi SuperAdmin,\n  A staff can't remember his password, could you please help to reset his password.\nStaff Login Account is: ".$name;
+			$email && ($body .= ", and his email is: ".$email);
+			$body .= "\n\nThanks.\nBest Regards.";
 			//echo $title;
 			//echo "<br />\n";
 			//echo $body;
-			self::_mail($admin_email, $title, $body);
+			if (self::_mail($admin_email, $title, $body)) {
+				self::_success('A password reset request have been send to the System Administrator.');
+			}
+			else{
+				self::_error('send request fail.');
+			}
 			exit;
 		}
 		'' == $name && self::_error('User ID required');
@@ -63,9 +69,7 @@ class PublicAction extends BaseAction{
 		else{
 			D('Staff')->where('id='.$authInfo['id'])->setField('login_time',date("Y-m-d H:i:s"));
 			$_SESSION[C('USER_AUTH_KEY')]	= $authInfo['id'];
-			$_SESSION['loginUserName']		= $authInfo['realname'];
-			$_SESSION['leader_id']			= $authInfo['leader_id'];
-			$_SESSION['is_leader']			= $authInfo['is_leader'];
+			$_SESSION['staff']		= $authInfo;
 			if(in_array($authInfo['id'], C('SUPER_ADMIN_ID'))) {
 				// 管理员不受权限控制影响
 				$_SESSION[C('ADMIN_AUTH_KEY')]	=	true;

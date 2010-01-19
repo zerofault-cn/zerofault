@@ -16,7 +16,7 @@ class IndexAction extends BaseAction{
 	//	$this->display('Layout:ERP_layout');
 		$top = 'Assets Management';
 		Session::set('top', urldecode($top));
-		if ($_SESSION['is_leader']) {
+		if ($_SESSION['staff']['is_leader']) {
 			$this->redirect('Asset/request');
 		}
 		else {

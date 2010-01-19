@@ -34,7 +34,10 @@
 					{$role['name']}<br />
 					</iterate>
 				</if></td>
-			<td><a href="__URL__/form/id/{$item['id']}">Edit</a>
+			<td>
+				<eq name="status" value="1">
+				<a href="__URL__/form/id/{$item['id']}">Edit</a>
+				</eq>
 				<gt name="item['id']" value="1">
 				<if condition="$item['status'] eq 1">
 				<a href="javascript:void(0);" onclick="myConfirm('Are you sure to disable him?', '__URL__/update/f/status/v/0/id/{$item['id']}');" target="_iframe">Disable</a>
