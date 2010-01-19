@@ -267,9 +267,22 @@ class ProductOutAction extends BaseAction{
 			$this->dao->to_id = $_SESSION[C('USER_AUTH_KEY')];//new apply
 			$this->dao->staff_id = $_SESSION[C('USER_AUTH_KEY')];
 
-			//如果有Leader，则将status置为-2，Approve后置为0，Reject置为-1
-			if ('apply' == $action && $_SESSION['leader_id']>0) {
-				$this->dao->status = -2;
+			
+			if ('apply' == $action) {
+				//如果有Leader，则将status置为-2，Approve后置为0，Reject置为-1
+				if ($_SESSION['leader_id']>0) {
+					$this->dao->status = -2;
+					
+					$leader = M('Staff')->find($_SESSION['leader_id']);
+					empty($leader['email']) && self::_error('Your Leader haven\'t set his email,<br />Can\'t send notification mail!'); 
+					$title = 'PR Approve Request ['.$code.']';
+					$body = 'Hi '.$leader['realname'].',<br />';
+					$body .= $_SESSION['loginUserName'].' would apply '.$_REQUEST['Internal_PN'].' '.$_REQUEST['quantity'].' pcs, please login into the ERP System and approve the request ASAP.<br /><br />';
+					$body .= ' <br />';
+					$body .= 'This E_mail was sent by the system automatically , please don\'t reply it .';
+				}
+				self::_mail($admin_email, $title, $body);
+				
 			}
 			$this->dao->create_time = date("Y-m-d H:i:s");
 		}
