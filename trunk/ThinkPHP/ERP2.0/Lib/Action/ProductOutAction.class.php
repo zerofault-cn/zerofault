@@ -67,7 +67,7 @@ class ProductOutAction extends BaseAction{
 		}
 		else{
 			$status = 0;
-			if ((MODULE_NAME == 'Asset' && ACTION_NAME == 'apply' && $_SESSION['leader_id']>0) || (ACTION_NAME == 'request')) {
+			if ((MODULE_NAME == 'Asset' && ACTION_NAME == 'apply' && $_SESSION['staff']['leader_id']>0) || (ACTION_NAME == 'request')) {
 				$status = -2;
 			}
 		}
@@ -269,20 +269,25 @@ class ProductOutAction extends BaseAction{
 
 			
 			if ('apply' == $action) {
+				$title = 'PR Approve Request ['.$code.']';
+				$body_ext = "\n\nThis Mail was sent by the ERP System automatically, please don't reply it.";
+				$body_ext .= "\n\nBest Regards.\nThanks.";
 				//如果有Leader，则将status置为-2，Approve后置为0，Reject置为-1
-				if ($_SESSION['leader_id']>0) {
+				if ($_SESSION['staff']['leader_id']>0) {
 					$this->dao->status = -2;
-					
-					$leader = M('Staff')->find($_SESSION['leader_id']);
+					//send email to leader
+					$leader = M('Staff')->find($_SESSION['staff']['leader_id']);
 					empty($leader['email']) && self::_error('Your Leader haven\'t set his email,<br />Can\'t send notification mail!'); 
-					$title = 'PR Approve Request ['.$code.']';
-					$body = 'Hi '.$leader['realname'].',<br />';
-					$body .= $_SESSION['loginUserName'].' would apply '.$_REQUEST['Internal_PN'].' '.$_REQUEST['quantity'].' pcs, please login into the ERP System and approve the request ASAP.<br /><br />';
-					$body .= ' <br />';
-					$body .= 'This E_mail was sent by the system automatically , please don\'t reply it .';
+					$email = $leader['email'];
+					$body = "Hi ".$leader['realname'].",";
+					$body .= "\n\n  ".$_SESSION['staff']['realname']." would apply ".$_REQUEST['PN']." ".$_REQUEST['quantity']." pcs, please login into the ERP System and approve the request ASAP.";
+					$body .= "\n  Direct access link as below:\n\thttp://".$_SERVER['SERVER_ADDR'].__APP__."/Asset/request";
+					self::_mail($email, $title, $body.$body_ext);
 				}
-				self::_mail($admin_email, $title, $body);
-				
+				$email = $_SESSION['staff']['email'];
+				$body = "Hi ".$_SESSION['staff']['realname'].",";
+				$body .= "\n\n  You have applied ".$_REQUEST['PN']." ".$_REQUEST['quantity']." pcs, please waiting for the approval of your leader.";
+				self::_mail($email, $title, $body.$body_ext);
 			}
 			$this->dao->create_time = date("Y-m-d H:i:s");
 		}

@@ -38,7 +38,7 @@ class BaseAction extends Action{
 				}
 				//确定顶部可显示的菜单项
 				foreach($val['submenu'] as $sub_title=>$sub_action) {
-					if (empty($_SESSION['is_leader']) && 'Asset/request'==$sub_action) {
+					if (empty($_SESSION['staff']['is_leader']) && 'Asset/request'==$sub_action) {
 						continue;
 					}
 					if(false === strpos($sub_action, '/')) {//子菜单是Module，如Supplier
@@ -66,7 +66,7 @@ class BaseAction extends Action{
 				}
 			}
 			else{//子菜单是Module/Action，如Asset/apply
-				if (empty($_SESSION['is_leader']) && 'Asset/request'==$sub_action) {
+				if (empty($_SESSION['staff']['is_leader']) && 'Asset/request'==$sub_action) {
 					continue;
 				}
 				$sub_action_arr = explode('/', $sub_action);
@@ -225,19 +225,20 @@ class BaseAction extends Action{
 	}
 	protected function _mail($email,$title,$body) {
 		//172.23.57.20
-		//echo $title = htmlentities($title, ENT_QUOTES);
+		//$title = htmlentities($title, ENT_QUOTES);
 		//echo '<br />';
-		//echo $body  = htmlentities($body, ENT_QUOTES);
-		$cmd = "echo '$body' | /usr/bin/mutt -s '$title' $email";
+		//$body  = htmlentities($body, ENT_QUOTES);
+		$cmd = 'echo "'.$body.'"|/usr/bin/mutt -s "'.$title.'" "'.$email.'"';
 		Log::Write($cmd, INFO);
 		system($cmd,$ret);
 		if('0'==$ret) {
 			echo 'Success@'.date("Y-m-d H:i:s");
+			return true;
 		}
 		else{
 			echo 'Something wrong';
+			return false;
 		}
-		return;
 	}
 }
 ?>
