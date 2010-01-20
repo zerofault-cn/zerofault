@@ -223,11 +223,49 @@ class BaseAction extends Action{
 			return min($tmp, 1024*$k);
 		}
 	}
-	protected function _mail($email,$title,$body) {
-		//172.23.57.20
-		//$title = htmlentities($title, ENT_QUOTES);
-		//echo '<br />';
-		//$body  = htmlentities($body, ENT_QUOTES);
+	protected function _mail($type='apply', $leader=array(), $PR_info = array()) {
+		$mail_tpl = array(
+			'apply' => array(
+				'title' => "PR Approve Request [code]",
+				'body'  => "Hi [leader],\n\n  [staff] would apply [product] [quantity] [unit], please login into the System and approve the request, Thanks.\n  Direct access link as below:\n\t[url]"
+				),
+			'approve' => array(
+				'title' => "PR was approved, please release the product [product]",
+				'body'  => "Hi [manager],\n\n  [staff] apply [product] [quantity] [unit], his [leader] has approved it, please release the product to him and confirm the PR in the System, Thanks.\n  Direct access link as below:\n\t[url]"
+				),
+			'transfer' => array(
+				'title' => "",
+				'body'  => ""
+				),
+			'return'  => array(
+				'title' => "",
+				'body'  => ""
+				)
+			);
+		$mail_body_ext = "\n\n\nThis Mail was sent by the System automatically, please don't reply it.";
+		
+		$send_to = array();
+		switch ($type) {
+			case 'apply' :
+				if (!empty($leader)) {
+					$send_to[] = $leader['email'];
+
+					$product = M('Product')->find($PR_info['product_id']);
+					$unit = M('Options')->where('id='.$product['unit_id'])->getField('name');
+					$url = "http://".$_SERVER['SERVER_ADDR'].__APP__."/Asset/request";
+
+					//prepare mail
+					$title = str_replace('[code]', $PR_info['code'], $mail_tpl[$type]['title']);
+					$body = str_replace(array('[leader]','[staff]','[product]','[quantity]','[unit]','[url]'), array($leader['realname'], $_SESSION
+					break;
+				}
+
+			case 'approve' :
+				//$product['fixed'] = 1;
+				$manager_id = M('LocationManager')->where(array('location_id'=>1,'fixed'=>$product['fixed']))->getField('staff_id');
+				$manager = M('Staff')->find($manager_id);
+				break;
+
 		$cmd = 'echo "'.$body.'"|/usr/bin/mutt -s "'.$title.'" "'.$email.'"';
 		Log::Write($cmd, INFO);
 		system($cmd,$ret);
