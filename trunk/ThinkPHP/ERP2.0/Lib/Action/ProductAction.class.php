@@ -17,9 +17,9 @@ class ProductAction extends BaseAction{
 		$this->assign('MODULE_TITLE', 'Component');
 	}
 
-	public function index(){
+	public function index() {
 		$this->assign('ACTION_TITLE', 'List');
-		$this->assign('result', $this->dao->where(array('type'=>'Component'))->relation(true)->order('id')->select());
+		$this->assign('result', $this->dao->where(array('type'=>'Component','fixed'=>0))->relation(true)->order('id')->select());
 		$this->assign('content','Product:index');
 		$this->display('Layout:ERP_layout');
 	}
@@ -37,7 +37,8 @@ class ProductAction extends BaseAction{
 		}
 		else{
 			$info = array(
-				'id'=>0,
+				'id' => 0,
+				'fixed' => 0,
 				'category_opts' => self::genOptions(M('Category')->where(array('type'=>'Component'))->select()),
 				'currency_opts' => self::genOptions(M('Options')->where(array('type'=>'currency'))->order('sort')->select()),
 				'unit_opts' => self::genOptions(M('Options')->where(array('type'=>'unit'))->order('sort')->select())
@@ -60,6 +61,9 @@ class ProductAction extends BaseAction{
 		}
 		$PN = trim($_REQUEST['PN']);
 		!$PN && self::_error('Internal PN required');
+		if ('1'==$_REQUEST['fixed'] && ''==trim($_REQUEST['description'])) {
+			self::_error('description is required for Fixed-Assets');
+		}
 		empty($_REQUEST['category_id']) && self::_error('Category must be specified!');
 		$id = empty($_REQUEST['id']) ? 0 : intval($_REQUEST['id']);
 		if ($id>0) {

@@ -295,3 +295,8 @@ ul.toggle li{
 	padding:3px;
 	white-space:nowrap;
 }
+div.spline{
+	height:1px;
+	margin:3px 0;
+	border-top:1px #FFFFFF solid;
+}

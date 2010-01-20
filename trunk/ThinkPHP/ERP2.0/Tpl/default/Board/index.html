@@ -2,7 +2,7 @@
 <table cellpadding="3" border="1" bordercolor="#FFFFFF" style="border-collapse:collapse;">
 <tr>
 	<th>Code</th>
-	<th>Board Code</th>
+	<th>Board&nbsp;Code  (Internal&nbsp;P/N) </th>
 	<th>Board Name</th>
 	<th>Manufacture</th>
 	<th>Board Series Number</th>
@@ -28,9 +28,9 @@
 	</foreach></ul>
 	</td>
 	<if condition="count($board) gt 1">
-		<td style="padding-right:20px;cursor:pointer;background:url(../Public/Images/sort.gif) center right no-repeat;" onclick="toggle(this,'{$key}');">{$key}</td>
+		<td style="padding-right:20px;cursor:pointer;background:url(../Public/Images/sort.gif) center right no-repeat;" onclick="toggle(this,'{$key}');">{$item['description']}</td>
 	<else />
-		<td>{$key}</td>
+		<td>{$item['description']}</td>
 	</if>
 	<td>{$item['manufacture']}</td>
 	<td style="padding:0;"><ul class="toggle {$key}">

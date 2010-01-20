@@ -19,11 +19,16 @@ class BoardAction extends BaseAction{
 
 	public function index(){
 		$this->assign('ACTION_TITLE', 'List');
-		$rs = $this->dao->where(array('type'=>'Board'))->field('description')->order('id')->select();
+		$rs = $this->dao->where(array('type'=>'Board','fixed'=>1,'_logic'=>'or'))->field('id,type,description')->order('id')->select();
 		empty($rs) && ($rs = array());
 		$result = array();
 		foreach ($rs as $val) {
-			$result[str_replace(array(' ','"',"'"), '', $val['description'])] = $this->dao->relation(true)->where(array('type'=>'Board', 'description'=>$val['description']))->select();
+			if ('Board' == $val['type']) {
+				$result[str_replace(array(' ','"',"'"), '', $val['description'])] = $this->dao->relation(true)->where(array('type'=>'Board', 'description'=>$val['description']))->select();
+			}
+			else {
+				$result[str_replace(array(' ','"',"'"), '', $val['description'])] = $this->dao->relation(true)->where('id='.$val['id'])->select();
+			}
 		}
 		$this->assign('result',$result);
 		$this->assign('content','Board:index');
@@ -33,9 +38,9 @@ class BoardAction extends BaseAction{
 		$this->assign('ACTION_TITLE', 'Add New Board');
 		$id = empty($_REQUEST['id']) ? 0 : intval($_REQUEST['id']);
 		if ($id>0) {
-			$this->assign('ACTION_TITLE', 'Edit Supplier');
 			$info = $this->dao->find($id);
-			$info['category_opts'] = self::genOptions(M('Category')->where(array('type'=>'Board'))->select(),$info['category_id'],'name');
+			$this->assign('ACTION_TITLE', 'Edit '.ucfirst($info['type']).' Data');
+			$info['category_opts'] = self::genOptions(M('Category')->where(array('type'=>ucfirst($info['type'])))->select(), $info['category_id'], 'name');
 			$info['currency_opts'] = self::genOptions(M('Options')->where(array('type'=>'currency'))->order('sort')->select(), $info['currency_id']);
 			$info['unit_opts'] = self::genOptions(M('Options')->where(array('type'=>'unit'))->order('sort')->select(), $info['unit_id']);
 			$info['status_opts'] = self::genOptions(M('Options')->where(array('type'=>'status'))->order('sort')->select(), $info['status_id']);
@@ -43,7 +48,8 @@ class BoardAction extends BaseAction{
 		}
 		else {
 			$info = array(
-				'id'=>0,
+				'id' => 0,
+				'fixed' => 1,
 				'category_opts' => self::genOptions(M('Category')->where(array('type'=>'Board'))->select()),
 				'currency_opts' => self::genOptions(M('Options')->where(array('type'=>'currency'))->order('sort')->select()),
 				'unit_opts' => self::genOptions(M('Options')->where(array('type'=>'unit'))->order('sort')->select()),
@@ -85,8 +91,8 @@ class BoardAction extends BaseAction{
 			$max_code = $this->dao->where(array('type'=>'Board'))->max('code');
 			empty($max_code) && ($max_code = 'B'.sprintf("%09d",0));
 			$this->dao->code = ++ $max_code;
+			$this->dao->type = 'Board';
 		}
-		$this->dao->type = 'Board';
 		$this->dao->fixed = $_REQUEST['fixed'];
 		$this->dao->Internal_PN = $PN;
 		$this->dao->description = $description;
