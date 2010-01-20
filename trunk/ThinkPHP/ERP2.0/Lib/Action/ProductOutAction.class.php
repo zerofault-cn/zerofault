@@ -239,9 +239,10 @@ class ProductOutAction extends BaseAction{
 			return;
 		}
 
+		$email_arr = array();
 		$action = $_REQUEST['action'];
 		empty($_REQUEST['product_id']) && self::_error('Select a Component/Board first!');
-		empty($_REQUEST['quantity']) && self::_error('Quantity must be inputed');
+		intval($_REQUEST['quantity'])<=0 && self::_error('Quantity number must be larger than 0.');
 		($_REQUEST['quantity']>$_REQUEST['ori_quantity']) && self::_error(ucfirst($action).'quantity can\'t be larger than '.$_REQUEST['ori_quantity']);
 
 		$id = empty($_REQUEST['id']) ? 0 : intval($_REQUEST['id']);
@@ -269,25 +270,17 @@ class ProductOutAction extends BaseAction{
 
 			
 			if ('apply' == $action) {
-				$title = 'PR Approve Request ['.$code.']';
-				$body_ext = "\n\nThis Mail was sent by the ERP System automatically, please don't reply it.";
-				$body_ext .= "\n\nBest Regards.\nThanks.";
 				//如果有Leader，则将status置为-2，Approve后置为0，Reject置为-1
 				if ($_SESSION['staff']['leader_id']>0) {
 					$this->dao->status = -2;
 					//send email to leader
 					$leader = M('Staff')->find($_SESSION['staff']['leader_id']);
-					empty($leader['email']) && self::_error('Your Leader haven\'t set his email,<br />Can\'t send notification mail!'); 
-					$email = $leader['email'];
-					$body = "Hi ".$leader['realname'].",";
-					$body .= "\n\n  ".$_SESSION['staff']['realname']." would apply ".$_REQUEST['PN']." ".$_REQUEST['quantity']." pcs, please login into the ERP System and approve the request ASAP.";
-					$body .= "\n  Direct access link as below:\n\thttp://".$_SERVER['SERVER_ADDR'].__APP__."/Asset/request";
-					self::_mail($email, $title, $body.$body_ext);
+					//empty($leader['email']) && self::_error('Your Leader haven\'t set his email,<br />Can\'t send notification mail!'); 
 				}
-				$email = $_SESSION['staff']['email'];
-				$body = "Hi ".$_SESSION['staff']['realname'].",";
-				$body .= "\n\n  You have applied ".$_REQUEST['PN']." ".$_REQUEST['quantity']." pcs, please waiting for the approval of your leader.";
-				self::_mail($email, $title, $body.$body_ext);
+				else{
+					$leader = array();
+				}
+				self::_mail('apply', $leader, array('code'=>$code, 'product_id'=>$_REQUEST['product_id'], 'quantity'=>$_REQUEST['quantity']));
 			}
 			$this->dao->create_time = date("Y-m-d H:i:s");
 		}
