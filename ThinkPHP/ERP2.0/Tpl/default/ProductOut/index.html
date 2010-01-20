@@ -2,7 +2,7 @@
 <form action="__URL__/confirm" method="post" target="_iframe">
 <table >
 <tr>
-	<if condition="($_SESSION['staff']['leader_id'] gt 0 and MODULE_NAME eq 'Asset' and ACTION_NAME eq 'apply') or (MODULE_NAME eq 'Asset' and ACTION_NAME eq 'request')">
+	<if condition="($_SESSION['staff']['leader_id'] gt 0 and MODULE_NAME eq 'Asset' and ACTION_NAME eq 'apply') or (MODULE_NAME eq 'Asset' and ACTION_NAME eq 'request') or (MODULE_NAME eq 'ProductOut' and (ACTION_NAME eq 'applyFixed' or ACTION_NAME eq 'applyFloating') and $_SESSION[C('ADMIN_AUTH_KEY')])">
 	<td class="clsTab" id="status_-2"><a href="__ACTION__/status/-2">Waiting for Leader's approval</a></td>
 	</if>
 	<td class="clsTab" id="status_0"><a href="__ACTION__/status/0">Ready to confirm</a></td>
