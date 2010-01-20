@@ -64,7 +64,7 @@
 	<td style="padding:0;">
 	<foreach name="item['suppliers']" key="j" item="supplier">
 		<gt name="j" value="0">
-		<hr size="1" noshade="noshade" style="margin:3px 0;border-top:1px #FFFFFF solid;">
+		<div class="spline"></div>
 		</gt>
 		<span style="padding:3px;">{$supplier}</span>
 	</foreach>
@@ -85,7 +85,7 @@
 	<td nowrap="nowrap" style="padding:0;">
 	<foreach name="item['owners']" key="j" item="owner">
 		<gt name="j" value="0">
-		<hr size="1" noshade="noshade" style="margin:3px 0;border-top:1px #FFFFFF solid;">
+		<div class="spline"></div>
 		</gt>
 		<span style="padding:3px;">{$owner['chg_quantity']}->{$owner['name']}</span>
 	</foreach></td>

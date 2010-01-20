@@ -24,7 +24,7 @@ class DeptAction extends BaseAction{
 		$code = ++ $max_code;
 
 		$this->assign('code', $code);
-		$this->assign('leader_opts', self::genOptions(M('Staff')->where(array('is_leader'=>1))->select(),'','realname'));
+		$this->assign('leader_opts', self::genOptions(M('Staff')->where(array('is_leader'=>1,'status'=>1))->select(),'','realname'));
 		$this->assign('result', $this->dao->relation(true)->order('id')->select());
 		$this->assign('content','Dept:index');
 		$this->display('Layout:ERP_layout');
