@@ -223,7 +223,13 @@ class BaseAction extends Action{
 			return min($tmp, 1024*$k);
 		}
 	}
-	protected function _mail($type='apply', $leader=array(), $PR_info = array()) {
+	/*
+	*
+	* 根据flow信息发送邮件
+	* @param string $type 邮件类型：apply:申请，approve:Leader同意，transfer:转移，return:归还
+	* @param int $flow_id product_flow.ID
+	*/
+	protected function _mail($type='apply',$flow_id=0) {
 		$mail_tpl = array(
 			'apply' => array(
 				'title' => "PR Approve Request [code]",
@@ -247,34 +253,35 @@ class BaseAction extends Action{
 		$send_to = array();
 		switch ($type) {
 			case 'apply' :
-				if (!empty($leader)) {
-					$send_to[] = $leader['email'];
-
-					$product = M('Product')->find($PR_info['product_id']);
-					$unit = M('Options')->where('id='.$product['unit_id'])->getField('name');
+				//get staff info
+				$staff_info = M('Staff')->find($PR_info['staff_id']);
+				if ($staff_info['leader_id']>0) {
+					$leader_info = M('Staff')->find($staff_info['leader_id']);
+					
+					$product_info = M('Product')->find($PR_info['product_id']);
+					$unit_name = M('Options')->where('id='.$product['unit_id'])->getField('name');
 					$url = "http://".$_SERVER['SERVER_ADDR'].__APP__."/Asset/request";
 
 					//prepare mail
-					$title = str_replace('[code]', $PR_info['code'], $mail_tpl[$type]['title']);
-					$body = str_replace(array('[leader]','[staff]','[product]','[quantity]','[unit]','[url]'), array($leader['realname'], $_SESSION
+					$title = str_replace('[code]', $PR_info['code'], $mail_tpl['apply']['title']);
+					$body = str_replace(array('[leader]','[staff]','[product]','[quantity]','[unit]','[url]'), array($leader_info['realname'],$staff_info['realname'], 'Component'==$product_info['type']?$product_info['Internal_PN']:$product_info['description'], $PR_info['quantity'], $unit_name, $url), $mail_tpl['apply']['body']);
 					break;
 				}
 
 			case 'approve' :
-				//$product['fixed'] = 1;
 				$manager_id = M('LocationManager')->where(array('location_id'=>1,'fixed'=>$product['fixed']))->getField('staff_id');
 				$manager = M('Staff')->find($manager_id);
 				break;
-
+		}
 		$cmd = 'echo "'.$body.'"|/usr/bin/mutt -s "'.$title.'" "'.$email.'"';
-		Log::Write($cmd, INFO);
+		Log::Write($cmd, INFO, FILE, '/tmp/mail.log');
 		system($cmd,$ret);
 		if('0'==$ret) {
-			echo 'Success@'.date("Y-m-d H:i:s");
+			Log::Write('Success@'.date("Y-m-d H:i:s"), INFO);
 			return true;
 		}
 		else{
-			echo 'Something wrong';
+			Log::Write('Fail@'.date("Y-m-d H:i:s"), INFO);
 			return false;
 		}
 	}

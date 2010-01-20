@@ -273,14 +273,7 @@ class ProductOutAction extends BaseAction{
 				//如果有Leader，则将status置为-2，Approve后置为0，Reject置为-1
 				if ($_SESSION['staff']['leader_id']>0) {
 					$this->dao->status = -2;
-					//send email to leader
-					$leader = M('Staff')->find($_SESSION['staff']['leader_id']);
-					//empty($leader['email']) && self::_error('Your Leader haven\'t set his email,<br />Can\'t send notification mail!'); 
 				}
-				else{
-					$leader = array();
-				}
-				self::_mail('apply', $leader, array('code'=>$code, 'product_id'=>$_REQUEST['product_id'], 'quantity'=>$_REQUEST['quantity']));
 			}
 			$this->dao->create_time = date("Y-m-d H:i:s");
 		}
@@ -320,7 +313,7 @@ class ProductOutAction extends BaseAction{
 		else {
 			$this->dao->remark = trim($_REQUEST['remark']);
 		}
-		if ($id>0) {
+		if ($id>0) {//for edit
 			if (false !== $this->dao->save()) {
 				$action = $this->dao->action;
 				if ('apply'==$this->dao->action) {
@@ -353,7 +346,8 @@ class ProductOutAction extends BaseAction{
 				self::_error('Update fail!'.(C('APP_DEBUG')?$this->dao->getLastSql():''));
 			}
 		}
-		else {
+		else {//for new
+			self::_mail(array('code'=>$code, 'action'=>$action, 'staff_id'=>$_SESSION[C('USER_AUTH_KEY')], 'product_id'=>$_REQUEST['product_id'], 'quantity'=>$_REQUEST['quantity']));
 			if ($this->dao->add()) {
 				if($action=='apply') {
 					self::_success('Apply request is ready for confirm!',__URL__.'/'.$action);
