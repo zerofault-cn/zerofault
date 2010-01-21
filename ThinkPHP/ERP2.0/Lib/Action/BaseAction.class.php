@@ -233,11 +233,11 @@ class BaseAction extends Action{
 		$mail_tpl = array(
 			'apply' => array(
 				'title' => "PR Approve Request [code]",
-				'body'  => "Hi [leader],\n\n  [staff] would apply [product] [quantity] [unit], please login into the System and approve the request, Thanks.\n  Direct access link as below:\n\t[url]"
+				'body'  => "Hi [leader],\n\n  [staff] would apply [product] ([quantity] [unit]), please login into the System and approve the request, Thanks.\n  Direct access link as below:\n\t[url]"
 				),
 			'approve' => array(
 				'title' => "PR was approved, please release the product [product]",
-				'body'  => "Hi [manager],\n\n  [staff] apply [product] [quantity] [unit], his [leader] has approved it, please release the product to him and confirm the PR in the System, Thanks.\n  Direct access link as below:\n\t[url]"
+				'body'  => "Hi [manager],\n\n  [staff] apply [product] ([quantity] [unit]), his [leader] has approved it, please release the product to him and confirm the PR in the System, Thanks.\n  Direct access link as below:\n\t[url]"
 				),
 			'transfer' => array(
 				'title' => "",
@@ -253,35 +253,61 @@ class BaseAction extends Action{
 		$send_to = array();
 		switch ($type) {
 			case 'apply' :
-				//get staff info
-				$staff_info = M('Staff')->find($PR_info['staff_id']);
+				//get flow info
+				$flow_info = M('ProductFlow')->find($flow_id);
+				$staff_info = M('Staff')->find($flow_info['staff_id']);
 				if ($staff_info['leader_id']>0) {
 					$leader_info = M('Staff')->find($staff_info['leader_id']);
+					$send_to[] = $leader_info['email'];
 					
-					$product_info = M('Product')->find($PR_info['product_id']);
-					$unit_name = M('Options')->where('id='.$product['unit_id'])->getField('name');
+					$manager_id = M('LocationManager')->where(array('location_id'=>1,'fixed'=>$flow_info['fixed']))->getField('staff_id');
+					$manager = M('Staff')->find($manager_id);
+					$send_to[] = $manager['email'];
+					$send_to[] = $staff_info['email'];
+
+					$product_info = M('Product')->find($flow_info['product_id']);
+					$unit_name = M('Options')->where('id='.$product_info['unit_id'])->getField('name');
 					$url = "http://".$_SERVER['SERVER_ADDR'].__APP__."/Asset/request";
 
 					//prepare mail
-					$title = str_replace('[code]', $PR_info['code'], $mail_tpl['apply']['title']);
-					$body = str_replace(array('[leader]','[staff]','[product]','[quantity]','[unit]','[url]'), array($leader_info['realname'],$staff_info['realname'], 'Component'==$product_info['type']?$product_info['Internal_PN']:$product_info['description'], $PR_info['quantity'], $unit_name, $url), $mail_tpl['apply']['body']);
+					$title = str_replace('[code]', $flow_info['code'], $mail_tpl['apply']['title']);
+					$body = str_replace(array('[leader]','[staff]','[product]','[quantity]','[unit]','[url]'), array($leader_info['realname'],$staff_info['realname'], 'Component'==$product_info['type']?$product_info['Internal_PN']:$product_info['description'], $flow_info['quantity'], $unit_name, $url), $mail_tpl['apply']['body']);
 					break;
 				}
 
 			case 'approve' :
-				$manager_id = M('LocationManager')->where(array('location_id'=>1,'fixed'=>$product['fixed']))->getField('staff_id');
+				$flow_info = M('ProductFlow')->find($flow_id);	
+				$manager_id = M('LocationManager')->where(array('location_id'=>1,'fixed'=>$flow_info['fixed']))->getField('staff_id');
 				$manager = M('Staff')->find($manager_id);
+				$send_to[] = $manager['email'];
+
+				$staff_info = M('Staff')->find($flow_info['staff_id']);
+				$send_to[] = $staff_info['email'];
+
+				$product_info = M('Product')->find($flow_info['product_id']);
+				$unit_name = M('Options')->where('id='.$product['unit_id'])->getField('name');
+				$url = "http://".$_SERVER['SERVER_ADDR'].__APP__."/Asset/request";
+
+				//prepare mail
+				$title = str_replace('[code]', $flow_info['code'], $mail_tpl['apply']['title']);
+				$body = str_replace(array('[leader]','[staff]','[product]','[quantity]','[unit]','[url]'), array($leader_info['realname'],$staff_info['realname'], 'Component'==$product_info['type']?$product_info['Internal_PN']:$product_info['description'], $flow_info['quantity'], $unit_name, $url), $mail_tpl['apply']['body']);
 				break;
+			
+			default :
+				//nothing
 		}
-		$cmd = 'echo "'.$body.'"|/usr/bin/mutt -s "'.$title.'" "'.$email.'"';
-		Log::Write($cmd, INFO, FILE, '/tmp/mail.log');
+		$cmd = 'echo "'.$body.$mail_body_ext.'"|/usr/bin/mutt -s "'.$title.'" '.$send_to[0];
+		if (count($send_to)>1) {
+			$cmd .= ' -c '.implode(' -c ', array_slice($send_to,1));
+		}
+		Log::Write($cmd, INFO);
 		system($cmd,$ret);
 		if('0'==$ret) {
-			Log::Write('Success@'.date("Y-m-d H:i:s"), INFO);
+			Log::Write('Success@'.date("Y-m-d H:i:s"));
 			return true;
 		}
 		else{
-			Log::Write('Fail@'.date("Y-m-d H:i:s"), INFO);
+			Log::Write('Fail@'.date("Y-m-d H:i:s"));
 			return false;
 		}
 	}
