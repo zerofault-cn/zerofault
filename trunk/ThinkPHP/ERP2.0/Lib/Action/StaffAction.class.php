@@ -72,6 +72,7 @@ class StaffAction extends BaseAction{
 		}
 		$name = trim($_REQUEST['name']);
 		!$name && self::_error('Staff Name required!');
+		$password = trim($_REQUEST['password']);
 		$id = empty($_REQUEST['id']) ? 0 : intval($_REQUEST['id']);
 		if ($id>0) {
 			//for edit
@@ -83,13 +84,12 @@ class StaffAction extends BaseAction{
 				self::_error('The name: '.$name.' has been used by another staff!');
 			}
 			$this->dao->find($id);
-			if(''!=trim($_REQUEST['password'])) {
+			if(''!=$password) {
 				$this->dao->password = md5($password);
 			}
 		}
 		else {
 			//for add
-			$password = trim($_REQUEST['password']);
 			empty($password) && self::_error('Password required!');
 			$rs = $this->dao->where(array('name'=>$name))->find();
 			if($rs && sizeof($rs)>0){

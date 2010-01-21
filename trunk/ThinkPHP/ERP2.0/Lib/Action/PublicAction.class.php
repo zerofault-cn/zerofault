@@ -40,16 +40,18 @@ class PublicAction extends BaseAction{
 			$body = "Hi SuperAdmin,\n  A staff can't remember his password, could you please help to reset his password.\nStaff Login Account is: ".$name;
 			$email && ($body .= ", and his email is: ".$email);
 			$body .= "\n\nThanks.\nBest Regards.";
-			//echo $title;
-			//echo "<br />\n";
-			//echo $body;
-			if (self::_mail($admin_email, $title, $body)) {
+			$mail_body_ext = "\n\n\nThis Mail was sent by the System automatically, please don't reply it.";
+			
+			$cmd = 'echo "'.$body.$mail_body_ext.'"|/usr/bin/mutt -s "'.$title.'" '.$admin_email;
+			Log::Write($cmd, INFO);
+			system($cmd,$ret);
+			if ('0'==$ret) {
 				self::_success('A password reset request have been send to the System Administrator.');
 			}
 			else{
 				self::_error('send request fail.');
 			}
-			exit;
+			return;
 		}
 		'' == $name && self::_error('User ID required');
 		'' == $password && self::_error('Password Required');
