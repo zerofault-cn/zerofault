@@ -34,13 +34,8 @@
 <table cellpadding="3" border="1" bordercolor="#FFFFFF" style="border-collapse:collapse;">
 <tr>
 	<th rowspan="2">No.</th>
-	<th rowspan="2">Category</th>
+	<th rowspan="2">Product</th>
 	<th rowspan="2">Supplier(s)</th>
-	<th rowspan="2" class="basic_data">Internal P/N</th>
-	<th rowspan="2" class="basic_data">Description</th>
-	<th rowspan="2" class="basic_data">Manufacture</th>
-	<th rowspan="2" class="basic_data">MPN</th>
-	<th rowspan="2" class="basic_data">Value/ Package</th>
 	<th colspan="8">Quantity</th>
 	<th rowspan="2">Owner(s)</th>
 	<th rowspan="2">Comment</th>
@@ -60,7 +55,13 @@
 <iterate name="result" id="item">
 <tr class="trbg{$mod}">
 	<td>{$i}</td>
-	<td>{$item['category_name']}</td>
+	<td><a href="__APP__/Product/info/id/{$item['product_id']}?width=400" class="jTip" id="product{$item['product_id']}" name="Product Detail">
+		<if condition="$item['type'] eq 'Component'">
+		{$item['Internal_PN']}
+		<else />
+		{$item['description']}
+		</if></a>
+	</td>
 	<td style="padding:0;">
 	<foreach name="item['suppliers']" key="j" item="supplier">
 		<gt name="j" value="0">
@@ -69,34 +70,23 @@
 		<span style="padding:3px;">{$supplier}</span>
 	</foreach>
 	</td>
-	<td>{$item['Internal_PN']}</td>
-	<td>{$item['description']}</td>
-	<td>{$item['manufacture']}</td>
-	<td>{$item['MPN']}</td>
-	<td>{$item['value']}</td>
 	<td>{$item['quantity']['enter']-$item['quantity']['reject']-$item['quantity']['apply']-$item['quantity']['transfer']-$item['quantity']['release']-$item['quantity']['scrap']+$item['quantity']['return']}</td>
-	<td><a href="__URL__/query/action/enter/product_id/{$item['product_id']}?width=630&height=300&modal=true" class="thickbox">{$item['quantity']['enter']}</a></td>
-	<td><a href="__URL__/query/action/reject/product_id/{$item['product_id']}?width=630&height=300&modal=true" class="thickbox">{$item['quantity']['reject']|default=0}</a></td>
-	<td><a href="__URL__/query/action/apply/product_id/{$item['product_id']}?width=630&height=300&modal=true" class="thickbox">{$item['quantity']['apply']|default=0}</a></td>
-	<td><a href="__URL__/query/action/transfer/product_id/{$item['product_id']}?width=630&height=300&modal=true" class="thickbox">{$item['quantity']['transfer']|default=0}</a></td>
-	<td><a href="__URL__/query/action/release/product_id/{$item['product_id']}?width=630&height=300&modal=true" class="thickbox">{$item['quantity']['release']|default=0}</a></td>
-	<td><a href="__URL__/query/action/scrap/product_id/{$item['product_id']}?width=630&height=300&modal=true" class="thickbox">{$item['quantity']['scrap']|default=0}</a></td>
-	<td><a href="__URL__/query/action/return/product_id/{$item['product_id']}?width=630&height=300&modal=true" class="thickbox">{$item['quantity']['return']|default=0}</a></td>
-	<td nowrap="nowrap" style="padding:0;">
-	<foreach name="item['owners']" key="j" item="owner">
-		<gt name="j" value="0">
-		<div class="spline"></div>
-		</gt>
-		<span style="padding:3px;">{$owner['chg_quantity']}->{$owner['name']}</span>
-	</foreach></td>
-	<td valign="top"><a href="__APP__/Public/remark/product_id/{$item['product_id']}?width=600&height=300&modal=true" class="thickbox" title="View Comment Detail"><!-- <img src="../Public/Images/comments.gif"/> -->{$item['lastRemark']}</a></td>
+	<td><a id="enter{$item['product_id']}" href="__URL__/query/action/enter/product_id/{$item['product_id']}?width=600" class="jTip" name="Enter Entries">{$item['quantity']['enter']}</a></td>
+	<td><a id="reject{$item['product_id']}" href="__URL__/query/action/reject/product_id/{$item['product_id']}?width=600" class="jTip" name="Reject Entries">{$item['quantity']['reject']|default=0}</a></td>
+	<td><a id="apply{$item['product_id']}" href="__URL__/query/action/apply/product_id/{$item['product_id']}?width=600" class="jTip" name="Apply Entries">{$item['quantity']['apply']|default=0}</a></td>
+	<td><a id="transfer{$item['product_id']}" href="__URL__/query/action/transfer/product_id/{$item['product_id']}?width=600" class="jTip" name="Transfer Entries">{$item['quantity']['transfer']|default=0}</a></td>
+	<td><a id="release{$item['product_id']}" href="__URL__/query/action/release/product_id/{$item['product_id']}?width=600" class="jTip" name="Release Entries">{$item['quantity']['release']|default=0}</a></td>
+	<td><a id="scrap{$item['product_id']}" href="__URL__/query/action/scrap/product_id/{$item['product_id']}?width=600" class="jTip" name="Scrap Entries">{$item['quantity']['scrap']|default=0}</a></td>
+	<td><a id="return{$item['product_id']}" href="__URL__/query/action/return/product_id/{$item['product_id']}?width=600" class="jTip" name="Return Entries">{$item['quantity']['return']|default=0}</a></td>
+	<td nowrap="nowrap"><notempty name="item['owner']">{$item['owner']['name']}({$item['owner']['quantity']})<eq name="item['owner']['more']" value="1"><br /><a id="owner{$item['product_id']}" href="__URL__/owner/product_id/{$item['product_id']}?width=300" class="jTip" name="Product Owners">More Owners</a></eq></notempty></td>
+	<td valign="top"><a style="float:right;" href="__APP__/Public/remark/product_id/{$item['product_id']}?width=600&height=300&modal=true" class="thickbox" title="Click to view all comment"><img src="../Public/Images/comments.gif"/></a>{$item['lastRemark']}</td>
 	<td>{$item['unit_name']}</td>
-	<td><if condition="$item['fixed'] eq 1">Fixed Assets<else />Floating Assets</if></td>
+	<td><if condition="$item['fixed'] eq 1">Fixed-Assets<else />Floating-Assets</if></td>
 </tr>
 </iterate>
 <empty name="result">
 <tr>
-	<td colspan="20" align="center">No Record</td>
+	<td colspan="15" align="center">No Record</td>
 </tr>
 </empty>
 </table>

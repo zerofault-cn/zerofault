@@ -34,7 +34,7 @@ class InventoryAction extends BaseAction{
 			(''!=trim($_REQUEST['MPN'])) 		 && ($where['MPN'] 		   = array('like', '%'.trim($_REQUEST['MPN']).'%'));
 			(''!=trim($_REQUEST['value'])) 		 && ($where['value'] 	   = trim($_REQUEST['value']));
 			(''!=trim($_REQUEST['project'])) 	 && ($where['project'] 	   = array('like', '%'.trim($_REQUEST['project']).'%'));
-			$result = $this->dao->field("Options.name as unit_name, Category.name as category_name, Product.id as product_id, Product.fixed as fixed, Product.value as value, Product.project as project, Product.MPN as MPN, Product.Internal_PN as Internal_PN, Product.description as description, Product.manufacture as manufacture, group_concat(distinct Supplier.name) as supplier_names")->where($where)->group('product_id')->select();
+			$result = $this->dao->field("Options.name as unit_name, Category.name as category_name, Product.id as product_id, Product.fixed as fixed, Product.type as type, Product.Internal_PN as Internal_PN, Product.description as description, group_concat(distinct Supplier.name) as supplier_names")->where($where)->group('product_id')->select();
 			foreach ($result as $i=>$val) {
 				$where = array();
 				$where['product_id'] = $val['product_id'];
@@ -49,7 +49,23 @@ class InventoryAction extends BaseAction{
 				$where['_string'] = "(type='location' and location_id!=1) or type='staff'";
 				//获取物品的最终归属
 				$owner_arr = M('LocationProduct')->where($where)->select();
-				empty($owner_arr) && ($owner_arr = array());
+				if (empty($owner_arr)) {
+					$owner = array();
+				}
+				else {
+					$owner = array();
+					$owner['quantity'] = $owner_arr[0]['chg_quantity'];
+					if ('location' == $owner_arr[0]['type']) {
+						$owner['name'] = M('Location')->where('id='.$owner_arr[0]['location_id'])->getField('name');
+					}
+					else {
+						$owner['name'] = M('Staff')->where('id='.$owner_arr[0]['location_id'])->getField('realname');
+					}
+					if (count($owner_arr)>1) {
+						$owner['more'] = 1;
+					}
+				}
+				/*
 				foreach ($owner_arr as $j=>$owner) {
 					if ('location' == $owner['type']) {
 						$owner_arr[$j]['name'] = M('Location')->where('id='.$owner['location_id'])->getField('name');
@@ -57,37 +73,8 @@ class InventoryAction extends BaseAction{
 					else {
 						$owner_arr[$j]['name'] = M('Staff')->where('id='.$owner['location_id'])->getField('realname');
 					}
-					/*
-					$tmp_action = $tmp_val['action'];
-					$tmp_from_type = $tmp_val['from_type'];
-					$tmp_from_id = $tmp_val['from_id'];
-					$tmp_to_type = $tmp_val['to_type'];
-					$tmp_to_id = $tmp_val['to_id'];
-					$tmp_quantity = $tmp_val['quantity'];
-
-					if ('apply' == $tmp_action) {//所有申请操作都是加数量
-						if (!array_key_exists($tmp_to_id, $owner_arr)) {
-							$owner_arr[$tmp_to_id] = array('type'=>$tmp_to_type,'quantity'=>0);
-						}
-						$owner_arr[$tmp_to_id]['quantity'] += $tmp_quantity;
-					}
-					elseif ('transfer' == $tmp_action) {
-						if ('location'==$tmp_from_type && 1==$tmp_from_id) {//从库存转出
-							if (!array_key_exists($tmp_to_id, $owner_arr)) {
-								$owner_arr[$tmp_to_id] = array('type'=>$tmp_to_type,'quantity'=>0);
-							}
-							$owner_arr[$tmp_to_id]['quantity'] += $tmp_quantity;
-						}
-						elseif ('location'==$tmp_from_type && 1!=$tmp_from_id) {//从其他存储位置转出
-							if (!array_key_exists($tmp_from_id, $owner_arr)) {
-								$owner_arr[$tmp_from_id] = array('type'=>$tmp_from_type,'quantity'=>0);
-							}
-							$owner_arr[$tmp_from_id]['quantity'] -= $tmp_quantity;
-						}
-						//if ('staff'==$tmp_from)
-					}*/
-				}
-				$result[$i]['owners'] = $owner_arr;
+				}*/
+				$result[$i]['owner'] = $owner;
 				//获取最后一次Remark
 				$lastRemark = self::getLastComment($val['product_id'])."\n";
 				$result[$i]['lastRemark'] = substr($lastRemark, 0, strpos($lastRemark, "\n"));
@@ -123,8 +110,30 @@ class InventoryAction extends BaseAction{
 		$this->assign('product_id', $product_id);
 		$this->assign('result', $rs);
 		$this->assign('action', $action);
-		$this->assign('content', 'Inventory:query');
+		$this->assign('content', 'Inventory:query2');
 		$this->display('Layout:content');
+	}
+	public function owner() {
+		$product_id = intval($_REQUEST['product_id']);
+		$where = array();
+		$where['product_id'] = $product_id;
+		$where['chg_quantity'] = array('gt',0);
+		$where['_string'] = "(type='location' and location_id!=1) or type='staff'";
+		//获取物品的最终归属
+		$owner_arr = M('LocationProduct')->where($where)->select();
+		if (empty($owner_arr)) {
+			$owner_arr = array();
+		}
+		foreach ($owner_arr as $j=>$owner) {
+			if ('location' == $owner['type']) {
+				$owner_arr[$j]['name'] = M('Location')->where('id='.$owner['location_id'])->getField('name');
+			}
+			else {
+				$owner_arr[$j]['name'] = M('Staff')->where('id='.$owner['location_id'])->getField('realname');
+			}
+		}
+		$this->assign("result", $owner_arr);
+		$this->display();
 	}
 	protected function getLastComment($product_id) {
 		$remark2 = M('Remark2')->where(array('product_id'=>$product_id, 'status'=>1))->order('id desc')->getField('remark');

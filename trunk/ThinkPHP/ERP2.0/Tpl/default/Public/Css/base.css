@@ -56,8 +56,15 @@ th{
 	background-color:#9999CC;
 	ccolor:#330000;
 	font-size:12px;
-	ffont-weight:normal;
 	text-align:center;
+}
+td.attribute{
+	width:30%;
+	background-color:#9999CC;
+	ccolor:#330000;
+	text-align:right;
+	font-weight:bold;
+	white-space:nowrap;
 }
 div.center{
 	margin:0 auto;
