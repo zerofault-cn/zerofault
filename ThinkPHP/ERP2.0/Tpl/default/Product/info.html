@@ -1,0 +1,33 @@
+<table width="100%" cellpadding="5" border="1" bordercolor="#FFFFFF" style="border-collapse:collapse;">
+<tr class="trbg1">
+	<td class="attribute">Type:</td>
+	<td>{$info['type']}</td>
+</tr>
+<tr class="trbg0">
+	<td class="attribute">Category:</td>
+	<td>{$info['category']['name']}</td>
+</tr>
+<tr class="trbg0">
+	<td class="attribute"><if condition="$info['type'] eq 'Component'">Internal P/N<else />Board Code</if>:</td>
+	<td>{$info['Internal_PN']}</td>
+</tr>
+<tr class="trbg1">
+	<td class="attribute"><if condition="$info['type'] eq 'Component'">Description<else />Board Name</if>:</td>
+	<td>{$info['description']}</td>
+</tr>
+<tr class="trbg0">
+	<td class="attribute">Manufacture:</td>
+	<td>{$info['manufacture']}</td>
+</tr>
+<tr class="trbg1">
+	<td class="attribute"><if condition="$info['type'] eq 'Component'">MPN<else />Board Series Number</if>:</td>
+	<td>{$info['MPN']}</td>
+</tr>
+<tr class="trbg0">
+	<td class="attribute">Value/Package:</td>
+	<td>{$info['value']}</td>
+</tr>
+</table>
+<style>
+#think_run_time,#think_page_trace{display:none;}
+</style>
