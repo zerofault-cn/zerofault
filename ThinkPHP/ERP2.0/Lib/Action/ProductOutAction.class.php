@@ -108,7 +108,9 @@ class ProductOutAction extends BaseAction{
 
 		$order = 'id desc';
 		$result = array();
-		foreach($this->dao->relation(true)->where($where)->order($order)->limit($p->offset.','.$p->limit)->select() as $item) {
+		$rs = $this->dao->relation(true)->where($where)->order($order)->limit($p->offset.','.$p->limit)->select();
+		empty($rs) && ($rs = array());
+		foreach($rs as $item) {
 			$item['returned_quantity'] = $this->dao->where(array('code'=>'R'.substr($item['code'],-9),'status'=>1))->sum('quantity');
 			empty($item['returned_quantity']) && ($item['returned_quantity']=0);
 			$item['transfered_quantity'] = $this->dao->where(array('code'=>'T'.substr($item['code'],-9),'status'=>1))->sum('quantity');
