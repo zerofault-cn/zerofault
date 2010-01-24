@@ -35,12 +35,11 @@
 <tr>
 	<th rowspan="2">No.</th>
 	<th rowspan="2">Product</th>
+	<th rowspan="2">Type</th>
 	<th rowspan="2">Supplier(s)</th>
 	<th colspan="8">Quantity</th>
 	<th rowspan="2">Owner(s)</th>
 	<th rowspan="2">Comment</th>
-	<th rowspan="2">Unit</th>
-	<th rowspan="2">Type</th>
 </tr>
 <tr>
 	<th>Remain</th>
@@ -62,6 +61,7 @@
 		{$item['description']}
 		</if></a>
 	</td>
+	<td><if condition="$item['fixed'] eq 1">Fixed-Assets<else />Floating-Assets</if></td>
 	<td style="padding:0;">
 	<foreach name="item['suppliers']" key="j" item="supplier">
 		<gt name="j" value="0">
@@ -78,10 +78,8 @@
 	<td><a id="release{$item['product_id']}" href="__URL__/query/action/release/product_id/{$item['product_id']}?width=600" class="jTip" name="Release Entries">{$item['quantity']['release']|default=0}</a></td>
 	<td><a id="scrap{$item['product_id']}" href="__URL__/query/action/scrap/product_id/{$item['product_id']}?width=600" class="jTip" name="Scrap Entries">{$item['quantity']['scrap']|default=0}</a></td>
 	<td><a id="return{$item['product_id']}" href="__URL__/query/action/return/product_id/{$item['product_id']}?width=600" class="jTip" name="Return Entries">{$item['quantity']['return']|default=0}</a></td>
-	<td nowrap="nowrap"><notempty name="item['owner']">{$item['owner']['name']}({$item['owner']['quantity']})<eq name="item['owner']['more']" value="1"><br /><a id="owner{$item['product_id']}" href="__URL__/owner/product_id/{$item['product_id']}?width=300" class="jTip" name="Product Owners">More Owners</a></eq></notempty></td>
+	<td nowrap="nowrap"><notempty name="item['owner']">{$item['owner']['name']}({$item['owner']['quantity']} {$item['unit_name']})<eq name="item['owner']['more']" value="1"><br /><a id="owner{$item['product_id']}" href="__URL__/owner/product_id/{$item['product_id']}?width=300" class="jTip" name="Product Owners">More Owners</a></eq></notempty></td>
 	<td valign="top"><a style="float:right;" href="__APP__/Public/remark/product_id/{$item['product_id']}?width=600&height=300&modal=true" class="thickbox" title="Click to view all comment"><img src="../Public/Images/comments.gif"/></a>{$item['lastRemark']}</td>
-	<td>{$item['unit_name']}</td>
-	<td><if condition="$item['fixed'] eq 1">Fixed-Assets<else />Floating-Assets</if></td>
 </tr>
 </iterate>
 <empty name="result">

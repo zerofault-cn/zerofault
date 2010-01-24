@@ -248,7 +248,7 @@ class BaseAction extends Action{
 				'body'  => "Hi [manager],\n\n  [staff] want to return [product] ([quantity] [unit]) to you, please login into the System and operate it quickly, Thanks.\n  Direct access link as below:\n\t[url]"
 				)
 			);
-		$mail_body_ext = "\n\n\nThis Mail was sent by the System automatically, please don't reply it.";
+		$mail_body_ext = "\n\n\nThis mail was sent by the System automatically, please don't reply it.";
 		
 		$send_to = array();
 		switch ($type) {
@@ -285,12 +285,12 @@ class BaseAction extends Action{
 				$send_to[] = $staff_info['email'];
 
 				$product_info = M('Product')->find($flow_info['product_id']);
-				$unit_name = M('Options')->where('id='.$product['unit_id'])->getField('name');
+				$unit_name = M('Options')->where('id='.$product_info['unit_id'])->getField('name');
 				$url = "http://".$_SERVER['SERVER_ADDR'].__APP__."/Asset/request";
 
 				//prepare mail
-				$title = str_replace('[code]', $flow_info['code'], $mail_tpl[$type]['title']);
-				$body = str_replace(array('[leader]','[staff]','[product]','[quantity]','[unit]','[url]'), array($leader_info['realname'],$staff_info['realname'], 'Component'==$product_info['type']?$product_info['Internal_PN']:$product_info['description'], $flow_info['quantity'], $unit_name, $url), $mail_tpl[$type]['body']);
+				$title = str_replace('[product]', 'Component'==$product_info['type']?$product_info['Internal_PN']:$product_info['description'], $mail_tpl[$type]['title']);
+				$body = str_replace(array('[manager]', '[leader]','[staff]','[product]','[quantity]','[unit]','[url]'), array($manager['realname'], $leader_info['realname'],$staff_info['realname'], 'Component'==$product_info['type']?$product_info['Internal_PN']:$product_info['description'], $flow_info['quantity'], $unit_name, $url), $mail_tpl[$type]['body']);
 				break;
 			
 			case 'transfer':
@@ -316,7 +316,7 @@ class BaseAction extends Action{
 				$send_to[] = $from_staff_info['email'];
 
 				$product_info = M('Product')->find($flow_info['product_id']);
-				$unit_name = M('Options')->where('id='.$product['unit_id'])->getField('name');
+				$unit_name = M('Options')->where('id='.$product_info['unit_id'])->getField('name');
 
 				//prepare mail
 				$title = str_replace(array('[from_staff]','[code]'), array($from_staff_info['realname'], $flow_info['code']), $mail_tpl[$type]['title']);
@@ -333,7 +333,7 @@ class BaseAction extends Action{
 				$send_to[] = $staff_info['email'];
 
 				$product_info = M('Product')->find($flow_info['product_id']);
-				$unit_name = M('Options')->where('id='.$product['unit_id'])->getField('name');
+				$unit_name = M('Options')->where('id='.$product_info['unit_id'])->getField('name');
 				$url = "http://".$_SERVER['SERVER_ADDR'].__APP__."/ProductOut/returns";
 
 				//prepare mail

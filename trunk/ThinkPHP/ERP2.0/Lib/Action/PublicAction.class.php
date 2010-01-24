@@ -144,25 +144,27 @@ class PublicAction extends BaseAction{
 		$this->assign('content', 'Public:remark');
 		$this->display('Layout:content');
 	}
-	public function testmail(){
-		$title = "PR Approve Request code";
-		$body = "Hi [leader],\n\n  [staff] would apply [product] ([quantity] [unit]), please login into the System and approve the request, Thanks.\n  Direct access link as below:\n\t[url]";
-		$body = "Hi leader,";
-		$email = "mzhu@agigatech.com";
-		$cmd = 'echo "'.$body.'"|/usr/bin/mutt -s "'.$title.'" '.$email;
-		Log::Write($cmd, INFO);
-		exec("set",$data,$ret);
-		echo '<pre>';
-		print_r($data);
-		echo '</pre>';
-		//system($cmd,$ret);
-		if('0'==$ret) {
-			Log::Write('Success@'.date("Y-m-d H:i:s"), INFO);
-			return true;
-		}
-		else{
-			Log::Write('Fail@'.date("Y-m-d H:i:s"), INFO);
-			return false;
+	public function check(){
+		$rs = M('ProductFlow')->where('status=-2 or status=0')->select();
+		empty($rs) && ($rs = array());
+		foreach ($rs as $item) {
+			if (-2 == $item['status']) {
+				self::_mail('apply', $item['id']);
+			}
+			else {
+				if ('apply' == $item['action']) {
+					self::_mail('approve', $item['id']);
+				}
+				elseif ('transfer' == $item['action']) {
+					self::_mail('transfer', $item['id']);
+				}
+				elseif ('return' == $item['action']) {
+					self::_mail('return', $item['id']);
+				}
+				else{
+					//nothing
+				}
+			}
 		}
 	}
 }

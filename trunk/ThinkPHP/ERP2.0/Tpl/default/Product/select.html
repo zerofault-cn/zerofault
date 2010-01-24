@@ -1,21 +1,21 @@
 <present name="submit">
 <iterate name="result" id="item">
 <tr class="trbg{$mod} tr_{$type}">
-	<td align="center"><input type="radio" name="product_id" value="{$item['id']}"/></td>
+	<td align="center"><input type="radio" id="radio{$item['id']}" name="product_id" value="{$item['id']}"/></td>
 	<if condition="$action neq 'apply' and $type eq 'Board'">
 	<td class="select_val1" style="display:none">
 	<else/>
 	<td class="select_val1">
-	</if>{$item['Internal_PN']}</td></neq>
-	<td class="select_val2">{$item['description']}</td>
-	<td class="select_val3">{$item['manufacture']}</td>
+	</if><label for="radio{$item['id']}">{$item['Internal_PN']}</label></td></neq>
+	<td class="select_val2"><label for="radio{$item['id']}">{$item['description']}</label></td>
+	<td class="select_val3"><label for="radio{$item['id']}">{$item['manufacture']}</label></td>
 	<if condition="$action neq 'apply' and $type eq 'Board'">
 	<td class="select_val4" style="display:none">
 	<else/>
 	<td class="select_val4">
-	</if>{$item['MPN']}</td>
+	</if><label for="radio{$item['id']}">{$item['MPN']}</label></td>
 	<if condition="$action eq 'apply'">
-	<td>{$item['location_product'][0]['ori_quantity']+$item['location_product'][0]['chg_quantity']}</th>
+	<td><label for="radio{$item['id']}">{$item['location_product'][0]['ori_quantity']+$item['location_product'][0]['chg_quantity']}</label></th>
 	<else />
 	<td style="background:#ffffff"></td>
 	</if>
