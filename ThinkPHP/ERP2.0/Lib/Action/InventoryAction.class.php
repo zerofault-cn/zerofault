@@ -86,6 +86,9 @@ class InventoryAction extends BaseAction{
 		$this->assign('content','Inventory:index');
 		$this->display('Layout:ERP_layout');
 	}
+	public function info() {
+		R('Product', 'info');
+	}
 	public function query() {
 		$product_id = $_REQUEST['product_id'];
 		$action = $_REQUEST['action'];

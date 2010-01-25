@@ -54,7 +54,7 @@
 <iterate name="result" id="item">
 <tr class="trbg{$mod}">
 	<td>{$i}</td>
-	<td><a href="__APP__/Product/info/id/{$item['product_id']}?width=400" class="jTip" id="product{$item['product_id']}" name="Product Detail">
+	<td><a href="__URL__/info/id/{$item['product_id']}?width=400" class="jTip" id="product{$item['product_id']}" name="Product Detail">
 		<if condition="$item['type'] eq 'Component'">
 		{$item['Internal_PN']}
 		<else />
