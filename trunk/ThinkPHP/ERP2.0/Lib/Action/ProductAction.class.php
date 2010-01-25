@@ -181,7 +181,8 @@ class ProductAction extends BaseAction{
 	public function info() {
 		$id = $_REQUEST['id'];
 		$this->assign("info", $this->dao->relation(true)->find($id));
-		$this->display();
+		$this->assign('content', 'Product:info');
+		$this->display('Layout:content');
 	}
 	public function delete() {
 		//判断是否已被使用
