@@ -15,12 +15,33 @@ class BaseAction extends Action{
 	*/
 	public function _initialize() {
 		header("Content-Type:text/html; charset=utf-8");
+		//判断是否登录
+		if(!$_SESSION[C('USER_AUTH_KEY')] && 'Public'!=MODULE_NAME) {
+			//记下Module
+			//Session::set('lastModule', MODULE_NAME);
+			//跳转到认证网关
+			redirect(PHP_FILE.C('USER_AUTH_GATEWAY'));
+		}
 
 		import('@.RBAC');
+		// 认证当前操作
+		if(RBAC::checkAccess()) {
+			// 检查权限
+			if(!RBAC::AccessDecision()) {
+				if(in_array(ACTION_NAME,C('IFRAME_AUTH_ACTION'))) {
+					die(self::_error('Permission denied!', 3000));
+				}
+				$this->assign('message','Permission denied!');
+				$this->assign('content','Public:error');
+				$this->display('Layout:ERP_layout');
+				exit;
+			}
+		}
 
+		//准备导航菜单
 		$top = empty($_REQUEST['top']) ? '' : $_REQUEST['top'];
 		!$top && ($top = Session::get('top'));
-		!$top && ($top = 'My Assets');
+		!$top && ($top = 'Assets Management');
 		Session::set('top', urldecode($top));
 
 		$_menu_ = C('_menu_');//载入menu.php的内容
@@ -33,7 +54,7 @@ class BaseAction extends Action{
 				}
 			}
 			else {//有子菜单
-				if(str_replace('&nbsp;',' ',$key) == Session::get('top')) {//获取当前子菜单所有项目，供再次过滤
+				if(str_replace('&nbsp;',' ',$key) == $top) {//获取当前子菜单所有项目，供再次过滤
 					$tmp_submenu = $menu[$key]['submenu'];
 				}
 				//确定顶部可显示的菜单项
@@ -59,6 +80,13 @@ class BaseAction extends Action{
 		}
 		//确定可显示的子菜单项
 		$submenu = array();
+		//根据是否manager增加Asset子菜单
+		if ('Assets Management' == $top) {
+			foreach($_SESSION['manager'] as $location_id=>$location) {
+				$submenu[ucfirst($location['name']).' Assets'] = 'Asset/location/id/'.$location_id;
+			}
+		}
+
 		foreach($tmp_submenu as $sub_title=>$sub_action) {
 			if(false === strpos($sub_action, '/')) {//子菜单是Module，如Supplier
 				if(!RBAC::AccessDecision($sub_action, 'index')) {
@@ -76,30 +104,16 @@ class BaseAction extends Action{
 			}
 			$submenu[$sub_title] = $sub_action;
 		}
+		//根据location增加Inventory子菜单
+		if ('Inventory Inquire'==$top) {
+			foreach($_SESSION['location'] as $location_id=>$location) {
+				$submenu[ucfirst($location).' Inventory'] = 'Inventory/location/id/'.$location_id;
+			}
+			$submenu['Staff Inquire'] = 'Inventory/staff';
+		}
+		$this->assign("current_time", date("l, d/m/Y | h:i A"));//Thursday, 10/09/2009 | 11:53 AM
 		$this->assign('topmenu', $topmenu);
 		$this->assign('submenu', $submenu);
-		//$this->assign('action', Session::get('action'));
-		$this->assign("current_time", date("l, d/m/Y | h:i A"));//Thursday, 10/09/2009 | 11:53 AM
-		//检查认证识别号
-		if(!$_SESSION[C('USER_AUTH_KEY')] && 'Public'!=MODULE_NAME) {
-			//记下Module
-			//Session::set('lastModule', MODULE_NAME);
-			//跳转到认证网关
-			redirect(PHP_FILE.C('USER_AUTH_GATEWAY'));
-		}
-		// 认证当前操作
-		if(RBAC::checkAccess()) {
-			// 检查权限
-			if(!RBAC::AccessDecision()) {
-				if(in_array(ACTION_NAME,C('IFRAME_AUTH_ACTION'))) {
-					die(self::_error('Permission denied!', 3000));
-				}
-				$this->assign('message','Permission denied!');
-				$this->assign('content','Public:error');
-				$this->display('Layout:ERP_layout');
-				exit;
-			}
-		}
 	}
 	/**
 	*

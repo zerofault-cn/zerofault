@@ -22,7 +22,10 @@ $menu['Inventory&nbsp;Input Management'] = array(
 		)
 	);
 $menu['Inventory Inquire'] = array(
-	'name' => 'Inventory',
+	'name'		=> 'Inventory',
+	'submenu'	=> array(
+		'Local Inventory'	=> 'Inventory/index',
+		)
 	);
 
 $menu['Inventory&nbsp;Output Management'] = array(
@@ -56,6 +59,7 @@ $menu['System'] = array(
 		'Setting'				=> 'Setting',
 		'Role'					=> 'Role',
 		'Node'					=> 'Node',
+		'Operation Logs'		=> 'ProductFlow'
 		)
 	);
 
