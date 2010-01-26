@@ -1,0 +1,76 @@
+<p class="page_title_text">{$MODULE_TITLE} - {$ACTION_TITLE}</p>
+<table >
+<tr>
+	<td class="clsTab" id="status_0"><a href="__ACTION__/status/0">Ready to confirm</a></td>
+	<td class="clsTab" id="status_1"><a href="__ACTION__/status/1">Confirmed</a></td>
+</tr>
+<tr>
+	<td colspan="2">
+		<table cellpadding="3" border="1" bordercolor="#FFFFFF" style="border-collapse:collapse;">
+		<tr>
+			<th rowspan="2">ID</th>
+			<th rowspan="2">Code</th>
+			<th rowspan="2">Product</th>
+			<th rowspan="2">Action</th>
+			<th colspan="2">Relative</th>
+			<th rowspan="2">Quantity</th>
+			<th rowspan="2">Unit</th>
+			<th rowspan="2">Currency</th>
+			<th rowspan="2">Price</th>
+			<th rowspan="2">Total</th>
+			<th rowspan="2">OP Staff</th>
+			<th rowspan="2">OP Time</th>
+			<eq name="status" value="1"><th rowspan="2">Confirm Staff</th>
+			<th rowspan="2">Confirm Time</th></eq>
+			<th rowspan="2">Remark</th>
+		</tr>
+		<tr>
+			<th>From</th>
+			<th>To</td>
+		</tr>
+		<iterate name="result" id="item">
+		<tr class="trbg{$mod}">
+			<td align="center">{$item['id']}</td>
+			<td align="right">{$item['code']}</td>
+			<td><a href="__APP__/Product/info/id/{$item['product']['id']}?width=400" class="jTip" id="product{$item['id']}" name="Product Detail">
+				<if condition="$item['product']['type'] eq 'Component'">
+				{$item['product']['Internal_PN']}
+				<else />
+				{$item['product']['description']}
+				</if></a></td>
+			<td>{$item['action']|ucfirst}</td>
+			<td><if condition="$item['action'] eq 'enter'">{$item['supplier']['name']}<elseif condition="$item['action'] eq 'reject'" />Local<else />{$item['from_name']}</if></td>
+			<td><if condition="$item['action'] eq 'enter'">Local<elseif condition="$item['action'] eq 'reject'" />{$item['supplier']['name']}<else />{$item['to_name']}</if></td>
+			<td align="center">{$item['quantity']}</td>
+			<td>{$unit[$item['product']['unit_id']]}</td>
+			<td>{$item['currency']['name']}</td>
+			<td>{$item['price']}</td>
+			<td>{$item['quantity']*$item['price']}</td>
+			<td align="center">{$item['staff']['realname']}</td>
+			<td>{$item['create_time']}</td>
+			<eq name="status" value="1"><td align="center">{$item['confirmed_staff']['realname']}</td>
+			<td>{$item['confirm_time']}</td></eq>
+			<td>{$item['remark']}</td>
+		</tr>
+		</iterate>
+		<empty name="result">
+		<tr>
+			<td colspan="16" align="center">No Record</td>
+		</tr>
+		</empty>
+		<tr>
+			<td colspan="16">{$page}</td>
+		</tr>
+		</table>
+	</td>
+</tr>
+</table>
+<p class="center">
+</p>
+</form>
+<script type="text/javascript"> 
+$(document).ready(function(){
+	$("td#status_{$status}").addClass("current");
+});
+
+</script>

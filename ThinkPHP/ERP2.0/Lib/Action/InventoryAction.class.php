@@ -17,6 +17,7 @@ class InventoryAction extends BaseAction{
 	}
 
 	public function index() {
+		Session::set('sub', MODULE_NAME.'/'.ACTION_NAME);
 		$this->assign('ACTION_TITLE', 'Search');
 		$this->assign('category_opts', self::genOptions(M('Category')->select(), $_REQUEST['category_id']) );
 		$this->assign('supplier_opts', self::genOptions(D('Supplier')->select(), $_REQUEST['supplier_id']));
@@ -86,9 +87,21 @@ class InventoryAction extends BaseAction{
 		$this->assign('content','Inventory:index');
 		$this->display('Layout:ERP_layout');
 	}
+
+	public function location() {
+		$location_id = intval($_REQUEST['id']);
+		$rs = D('LocationProduct')->relation(true)->where(array('type'=>'location','location_id'=>$location_id,'chg_quantity'=>array('gt',0)))->select();
+		empty($rs) && ($owner = array());
+		foreach ($rs as $item) {
+			
+		}
+		dump($rs);
+	}
+
 	public function info() {
 		R('Product', 'info');
 	}
+
 	public function query() {
 		$product_id = $_REQUEST['product_id'];
 		$action = $_REQUEST['action'];

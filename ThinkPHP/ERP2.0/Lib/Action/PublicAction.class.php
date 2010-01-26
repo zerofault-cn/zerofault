@@ -79,6 +79,17 @@ class PublicAction extends BaseAction{
 			else{
 				$_SESSION[C('ADMIN_AUTH_KEY')]	=	false;
 			}
+			//获取当前用户管理的Location信息
+			$rs = M('LocationManager')->where(array('staff_id'=>$authInfo['id'],'location_id'=>array('gt',1)))->group('location_id')->getField('location_id,group_concat(fixed order by fixed separator "")');
+			empty($rs) && ($rs = array());
+			//获取所有Location
+			$rs2 = M('Location')->where(array('id'=>array('gt',1)))->getField('id,name');
+			$_SESSION['location'] = $rs2;
+			$manager = array();
+			foreach($rs as $location_id=>$fixed) {
+				$manager[$location_id] = array('name'=>$rs2[$location_id],'fixed'=>$fixed);
+			}
+			$_SESSION['manager'] = $manager;
 			// 缓存访问权限
 			RBAC::saveAccessList($authInfo['id']);
 			self::_success('', __APP__, 0);
