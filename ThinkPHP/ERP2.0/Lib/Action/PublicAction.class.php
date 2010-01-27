@@ -130,7 +130,7 @@ class PublicAction extends BaseAction{
 				$res = M('Remark2')->add($data);
 			}
 			if ($res) {
-				die(json_encode(array('result'=>1, 'remark_id'=>$remark_id, 'staff_name'=>$_SESSION['loginUserName'], 'create_time'=>$data['create_time'], 'remark'=>nl2br($remark))));
+				die(json_encode(array('result'=>1, 'remark_id'=>$remark_id, 'staff_name'=>$_SESSION['staff']['realname'], 'create_time'=>$data['create_time'], 'remark'=>nl2br($remark))));
 			}
 			else {
 				die(json_encode(array('result'=>0, 'msg'=>'Post fail!'.(C('APP_DEBUG')?M('Remark2')->getLastSql():''))));
