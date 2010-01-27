@@ -21,7 +21,6 @@ class LocationAction extends BaseAction{
 		$this->assign('ACTION_TITLE', 'Setting');
 		$this->assign('staff_opts', self::genOptions(M('Staff')->where(array('status'=>1))->select(), '', 'realname'));
 		
-		
 		$result = $this->dao->relation(true)->order('id')->select();
 		//dump($result);
 		$this->assign('result', $result);

@@ -60,14 +60,15 @@
 	</foreach></ul>
 	</td>
 </tr>
-
-	
 </iterate>
 <empty name="item">
 <tr>
-	<td colspan="12" align="center">No Record</td>
+	<td colspan="13" align="center">No Record</td>
 </tr>
 </empty>
+<tr>
+	<td colspan="13">{$page}</td>
+</tr>
 </table>
 <p class="center">
 	<input type="button" onclick="javascript:document.location='__URL__/form';" value="Add a New Board" />

@@ -251,8 +251,8 @@ class BaseAction extends Action{
 				'body'  => "Hi [leader],\n\n  [staff] would apply [product] ([quantity] [unit]), please login into the System and approve the request, Thanks.\n  Direct access link as below:\n\t[url]"
 				),
 			'approve' => array(
-				'title' => "PR was approved, please release the product [product]",
-				'body'  => "Hi [manager],\n\n  [staff] apply [product] ([quantity] [unit]), his [leader] has approved it, please release the product to him and confirm the PR in the System, Thanks.\n  Direct access link as below:\n\t[url]"
+				'title' => "ECN was approved, please release the product [product]",
+				'body'  => "Hi [manager],\n\n  [staff] need to apply [product] ([quantity] [unit]), it's approved, please release the product to him and confirm the PR in the System, Thanks.\n  Direct access link as below:\n\t[url]"
 				),
 			'transfer' => array(
 				'title' => "[from_staff] Transfer Request [code]",
