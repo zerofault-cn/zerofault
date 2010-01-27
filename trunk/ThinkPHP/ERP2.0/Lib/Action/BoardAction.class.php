@@ -19,7 +19,13 @@ class BoardAction extends BaseAction{
 
 	public function index(){
 		$this->assign('ACTION_TITLE', 'List');
-		$rs = $this->dao->where(array('type'=>'Board','fixed'=>1,'_logic'=>'or'))->field('id,type,description')->order('id')->select();
+
+		$count = $this->dao->where(array('type'=>'Board','fixed'=>1,'_logic'=>'or'))->getField('count(*)');
+		import("@.Paginator");
+		$limit = 20;
+		$p = new Paginator($count,$limit);
+
+		$rs = $this->dao->where(array('type'=>'Board','fixed'=>1,'_logic'=>'or'))->field('id,type,description')->order('id desc')->limit($p->offset.','.$p->limit)->select();
 		empty($rs) && ($rs = array());
 		$result = array();
 		foreach ($rs as $val) {
@@ -31,6 +37,7 @@ class BoardAction extends BaseAction{
 			}
 		}
 		$this->assign('result',$result);
+		$this->assign('page', $p->showMultiNavi());
 		$this->assign('content','Board:index');
 		$this->display('Layout:ERP_layout');
 	}

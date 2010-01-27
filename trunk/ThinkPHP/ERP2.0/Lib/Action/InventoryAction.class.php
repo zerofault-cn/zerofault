@@ -90,6 +90,7 @@ class InventoryAction extends BaseAction{
 
 	public function location() {
 		$location_id = intval($_REQUEST['id']);
+		$this->assign('location_id', $location_id);
 		Session::set('sub', MODULE_NAME.'/'.ACTION_NAME.'/id/'.$location_id);
 		$rs = D('LocationProduct')->relation(true)->where(array('type'=>'location','location_id'=>$location_id,'chg_quantity'=>array('gt',0)))->select();
 		empty($rs) && ($rs = array());
@@ -108,68 +109,34 @@ class InventoryAction extends BaseAction{
 	public function staff() {
 		Session::set('sub', MODULE_NAME.'/'.ACTION_NAME);
 		$this->assign('ACTION_TITLE', 'Staff Assets Inquire');
-		$this->assign('category_opts', self::genOptions(M('Category')->select(), $_REQUEST['category_id']) );
+		$staff_id = empty($_REQUEST['staff_id']) ? 0 : intval($_REQUEST['staff_id']);
+		$this->assign('staff_opts', self::genOptions(M('Staff')->where(array('status'=>1))->select(), $staff_id, 'realname'));
+		$category_id = empty($_REQUEST['category_id']) ? 0 : intval($_REQUEST['category_id']);
+		$this->assign('category_opts', self::genOptions(M('Category')->select(), $category_id));
 		$where = array();
 		$result = array();
 		if(!empty($_POST['submit'])) {
-			(''!=$_REQUEST['staff_id']) && ($where['staff_id'] = $_REQUEST['staff_id']);
-			(''!=$_REQUEST['category_id']) && ($where['category_id'] = $_REQUEST['category_id']);
-			(''!=trim($_REQUEST['Internal_PN'])) && ($where['Internal_PN'] = array('like', '%'.trim($_REQUEST['Internal_PN']).'%'));
-			(''!=trim($_REQUEST['description'])) && ($where['description'] = array('like', '%'.trim($_REQUEST['description']).'%'));
-			(''!=trim($_REQUEST['manufacture'])) && ($where['manufacture'] = array('like', '%'.trim($_REQUEST['manufacture']).'%'));
-			(''!=trim($_REQUEST['MPN'])) 		 && ($where['MPN'] 		   = array('like', '%'.trim($_REQUEST['MPN']).'%'));
-			(''!=trim($_REQUEST['value'])) 		 && ($where['value'] 	   = trim($_REQUEST['value']));
-			(''!=trim($_REQUEST['project'])) 	 && ($where['project'] 	   = array('like', '%'.trim($_REQUEST['project']).'%'));
-			$result = M('LocationProduct')->select();
+			$where['erp_location_product.type'] = 'staff';
+			$where['erp_location_product.location_id'] = $staff_id;
+			$category_id>0 && ($where['erp_category.id'] = $category_id);
+			(''!=trim($_REQUEST['Internal_PN'])) && ($where['erp_product.Internal_PN'] = array('like', '%'.trim($_REQUEST['Internal_PN']).'%'));
+			(''!=trim($_REQUEST['description'])) && ($where['erp_product.description'] = array('like', '%'.trim($_REQUEST['description']).'%'));
+			(''!=trim($_REQUEST['manufacture'])) && ($where['erp_product.manufacture'] = array('like', '%'.trim($_REQUEST['manufacture']).'%'));
+			(''!=trim($_REQUEST['MPN'])) 		 && ($where['erp_product.MPN'] 		   = array('like', '%'.trim($_REQUEST['MPN']).'%'));
+			(''!=trim($_REQUEST['value'])) 		 && ($where['erp_product.value'] 	   = trim($_REQUEST['value']));
+			(''!=trim($_REQUEST['project'])) 	 && ($where['erp_product.project'] 	   = array('like', '%'.trim($_REQUEST['project']).'%'));
+			
+			$result = M('LocationProduct')->field('erp_location_product.id,erp_location_product.product_id,erp_location_product.chg_quantity,erp_product.type,erp_product.fixed,erp_product.Internal_PN,erp_product.description,erp_category.name as category_name,erp_options.name as unit_name')->where($where)->join('erp_product on erp_product.id=erp_location_product.product_id')->join('erp_category on erp_category.id=erp_product.category_id')->join('erp_options on erp_options.id=erp_product.unit_id')->select();
 			foreach ($result as $i=>$val) {
-				$where = array();
-				$where['product_id'] = $val['product_id'];
-				$where['status'] = 1;
-				$where['_string'] = "(from_type='location' and from_id=1) or (to_type='location' and to_id=1)";
-				$result[$i]['quantity'] = M('ProductFlow')->where($where)->group('action')->getField('action,sum(quantity)');
-				$result[$i]['suppliers'] = explode(',', $val['supplier_names']);
-
-				$where = array();
-				$where['product_id'] = $val['product_id'];
-				$where['chg_quantity'] = array('gt',0);
-				$where['_string'] = "(type='location' and location_id!=1) or type='staff'";
-				//获取物品的最终归属
-				$owner_arr = M('LocationProduct')->where($where)->select();
-				if (empty($owner_arr)) {
-					$owner = array();
-				}
-				else {
-					$owner = array();
-					$owner['quantity'] = $owner_arr[0]['chg_quantity'];
-					if ('location' == $owner_arr[0]['type']) {
-						$owner['name'] = M('Location')->where('id='.$owner_arr[0]['location_id'])->getField('name');
-					}
-					else {
-						$owner['name'] = M('Staff')->where('id='.$owner_arr[0]['location_id'])->getField('realname');
-					}
-					if (count($owner_arr)>1) {
-						$owner['more'] = 1;
-					}
-				}
-				/*
-				foreach ($owner_arr as $j=>$owner) {
-					if ('location' == $owner['type']) {
-						$owner_arr[$j]['name'] = M('Location')->where('id='.$owner['location_id'])->getField('name');
-					}
-					else {
-						$owner_arr[$j]['name'] = M('Staff')->where('id='.$owner['location_id'])->getField('realname');
-					}
-				}*/
-				$result[$i]['owner'] = $owner;
 				//获取最后一次Remark
 				$lastRemark = self::getLastComment($val['product_id'])."\n";
 				$result[$i]['lastRemark'] = substr($lastRemark, 0, strpos($lastRemark, "\n"));
 			}
+			//dump($result);
 		}
-		//dump($result);
 		$this->assign('request', $_REQUEST);
 		$this->assign('result', $result);
-		$this->assign('content','Inventory:index');
+		$this->assign('content','Inventory:staff');
 		$this->display('Layout:ERP_layout');
 	}
 	public function info() {
