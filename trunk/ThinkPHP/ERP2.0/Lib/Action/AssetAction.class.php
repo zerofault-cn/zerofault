@@ -44,6 +44,13 @@ class AssetAction extends BaseAction{
 		$this->assign('content', 'Asset:index');
 		$this->display('Layout:ERP_layout');
 	}
+	public function location() {
+		global $location_id;
+		$location_id = intval($_REQUEST['id']);
+		$this->assign('location_id', $location_id);
+		//dump($_SESSION['manager']);
+		R('ProductOut', 'transfer');
+	}
 	public function request() {
 		R('ProductOut', 'request');
 	}

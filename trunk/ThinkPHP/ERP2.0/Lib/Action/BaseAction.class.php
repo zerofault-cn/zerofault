@@ -59,9 +59,6 @@ class BaseAction extends Action{
 				}
 				//确定顶部可显示的菜单项
 				foreach($val['submenu'] as $sub_title=>$sub_action) {
-					if (empty($_SESSION['staff']['is_leader']) && 'Asset/request'==$sub_action) {
-						continue;
-					}
 					if(false === strpos($sub_action, '/')) {//子菜单是Module，如Supplier
 						if(RBAC::AccessDecision($sub_action, 'index')) {
 							$topmenu[$key] = $sub_action;
@@ -83,7 +80,11 @@ class BaseAction extends Action{
 		//根据是否manager增加Asset子菜单
 		if ('Assets Management' == $top) {
 			foreach($_SESSION['manager'] as $location_id=>$location) {
-				$submenu[ucfirst($location['name']).' Assets'] = 'Asset/location/id/'.$location_id;
+				$submenu['Transfered to '.ucfirst($location['name'])] = 'Asset/location/id/'.$location_id;
+			}
+			//判断是否Leader，以增加request子菜单
+			if (!empty($_SESSION['staff']['is_leader'])) {
+				$submenu['Staff Apply Request'] = 'Asset/request';
 			}
 		}
 

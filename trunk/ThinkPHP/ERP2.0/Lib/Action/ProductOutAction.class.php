@@ -45,7 +45,13 @@ class ProductOutAction extends BaseAction{
 		$this->index('return');
 	}
 	private function index($action='apply',$fixed='') {
-		Session::set('sub', MODULE_NAME.'/'.ACTION_NAME);
+		global $location_id;
+		if (empty($location_id)) {
+			Session::set('sub', MODULE_NAME.'/'.ACTION_NAME);
+		}
+		else {
+			Session::set('sub', MODULE_NAME.'/'.ACTION_NAME.'/id/'.$location_id);
+		}
 		$this->assign('ACTION_TITLE', 'List');
 		$rs = M('Options')->where(array('type'=>'unit'))->order('sort')->select();
 		$unit = array();
@@ -93,6 +99,13 @@ class ProductOutAction extends BaseAction{
 			elseif (ACTION_NAME == 'request') {
 				$lead_staff_arr = M('Staff')->where(array('leader_id'=>$_SESSION[C('USER_AUTH_KEY')],'status'=>1))->getField('id,name');
 				$where['_string'] = "staff_id in (".implode(',', array_keys($lead_staff_arr)).")";
+			}
+			elseif (ACTION_NAME == 'location') {
+				if (strlen($_SESSION['manager'][$location_id]['fixed'])==1) {
+					$where['fixed'] = $_SESSION['manager'][$location_id]['fixed'];
+				}
+				$where['to_type'] = 'location';
+				$where['to_id'] = $location_id;
 			}
 			else {
 				$where['_string'] = "(from_type='staff' and from_id =".$_SESSION[C('USER_AUTH_KEY')].") or (to_type='staff' and to_id = ".$_SESSION[C('USER_AUTH_KEY')].") or staff_id = ".$_SESSION[C('USER_AUTH_KEY')];
