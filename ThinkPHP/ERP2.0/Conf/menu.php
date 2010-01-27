@@ -43,7 +43,6 @@ $menu['Inventory&nbsp;Output Management'] = array(
 $menu['Assets Management'] = array(
 	'name' 	  => 'Asset',
 	'submenu' => array(
-		'Staff Apply Request'	=> 'Asset/request',
 		'My Asset List'			=> 'Asset',
 		'My Apply'				=> 'Asset/apply',
 		'Transfer In'			=> 'Asset/transferIn',
