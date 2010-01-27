@@ -190,9 +190,9 @@ class ProductOutAction extends BaseAction{
 				//$backed_quantity = $this->dao->where(array('code'=>'R'.substr($code, -9),'status'=>1))->sum('quantity');
 				//$info['ori_quantity'] = $from_quantity - $transfered_quantity - $transfered_quantity;
 				$info['ori_quantity'] = M("LocationProduct")->where(array('type'=>$info['from_type'], 'location_id'=>$info['from_id'], 'product_id'=>$info['product_id']))->getField('`ori_quantity`+`chg_quantity`');
-				if ($info['staff_id'] != $_SESSION[C('USER_AUTH_KEY')]) {//不是当前用户所创建的记录
-					$info['remark'] = M('Remark2')->where(array('flow_id'=>$id, 'staff_id'=>$_SESSION[C('USER_AUTH_KEY')]))->getField('remark');
-				}
+			//	if ($info['staff_id'] != $_SESSION[C('USER_AUTH_KEY')]) {//不是当前用户所创建的记录
+			//		$info['remark'] = M('Remark2')->where(array('flow_id'=>$id, 'staff_id'=>$_SESSION[C('USER_AUTH_KEY')]))->getField('remark');
+			//	}
 			}
 			else {//edit apply/release/scrap
 				$code = $info['code'];
@@ -313,6 +313,7 @@ class ProductOutAction extends BaseAction{
 		$this->dao->product_id = $_REQUEST['product_id'];
 		$this->dao->quantity = $_REQUEST['quantity'];
 		//get remark2
+		/*
 		if (false && $id>0 && $this->dao->staff_id != $_SESSION[C('USER_AUTH_KEY')]) {//不是当前用户所创建的记录
 			if ($remark_id = M('Remark2')->where(array('flow_id'=>$id, 'staff_id'=>$_SESSION[C('USER_AUTH_KEY')]))->getField('id')) {
 				if (!M('Remark2')->where('id='.$remark_id)->save(array('remark'=>trim($_REQUEST['remark']), 'create_time'=>date("Y-m-d H:i:s"), 'status'=>1))) {
@@ -325,9 +326,9 @@ class ProductOutAction extends BaseAction{
 				}
 			}
 		}
-		else {
+		else {*/
 			$this->dao->remark = trim($_REQUEST['remark']);
-		}
+	//	}
 		if ($id>0) {//for edit
 			if (false !== $this->dao->save()) {
 				$action = $this->dao->action;
@@ -353,7 +354,9 @@ class ProductOutAction extends BaseAction{
 							//nothing
 						}
 					}
-
+				}
+				elseif ('return'==$action) {
+					$action = 'returns';
 				}
 				self::_success('Product information updated!',__URL__.'/'.$action);
 			}
