@@ -7,8 +7,8 @@
 * @since  2009/9/2
 */
 
-//define('THINK_PATH', 'Core');
-define('THINK_PATH', '../ThinkPHP/ThinkPHP');
+define('THINK_PATH', 'Core');
+//define('THINK_PATH', '../ThinkPHP/ThinkPHP');
 require(THINK_PATH."/ThinkPHP.php");
 
 define('CLI',true);
