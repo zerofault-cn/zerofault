@@ -80,7 +80,7 @@ class BaseAction extends Action{
 		//根据是否manager增加Asset子菜单
 		if ('Assets Management' == $top) {
 			foreach($_SESSION['manager'] as $location_id=>$location) {
-				$submenu['Transfered to '.ucfirst($location['name'])] = 'Asset/location/id/'.$location_id;
+				$submenu['Transfer to '.ucfirst($location['name'])] = 'Asset/location/id/'.$location_id;
 			}
 			//判断是否Leader，以增加request子菜单
 			if (!empty($_SESSION['staff']['is_leader'])) {
@@ -247,21 +247,26 @@ class BaseAction extends Action{
 	protected function _mail($type='apply',$flow_id=0) {
 		$mail_tpl = array(
 			'apply' => array(
-				'title' => "ER Approve Request [code]",
-				'body'  => "Hi [leader],\n\n  [staff] would apply [product] ([quantity] [unit]), please login into the System and approve the request, Thanks.\n  Direct access link as below:\n\t[url]"
-				),
-			'approve' => array(
+				'title' => "[staff] apply Product Requisition [code] for approval",
+				'body'  => "Hi [leader],\n\n  [staff] need to apply [product] [quantity] [unit], please login into the ERP System and approve the ER in the system. Thanks.\n  Direct access link as below:\n\t[url]"),
+			'apply_reject' => array(
+				'title' => "Apply Product Requisition [code] for [staff] was rejected",
+				'body' => "Hi [staff],\n\n[leader] rejected your application [product] [quantity] [unit], please noted. Thanks.\n  Direct access link as below:\n\t[url]"),
+			'apply_approve' => array(
 				'title' => "ER was approved, please release the product [product]",
-				'body'  => "Hi [manager],\n\n  [staff] need to apply [product] ([quantity] [unit]), it's approved, please release the product to him and confirm the PR in the System, Thanks.\n  Direct access link as below:\n\t[url]"
-				),
+				'body'  => "Hi [manager],\n\n  [staff] need to apply [product] [quantity] [unit], it's approved, please release the product to him and confirm the ER in the System. Thanks.\n  Direct access link as below:\n\t[url]"),
 			'transfer' => array(
 				'title' => "[from_staff] Transfer Request [code]",
-				'body'  => "Hi [to_staff],\n\n  [from_staff] want to transfer [product] ([quantity] [unit]) to you, please login into the System and operate it quickly, Thanks.\n  Direct access link as below:\n\t[url]"
-				),
+				'body'  => "Hi [to_staff],\n\n  [from_staff] want to transfer [product] [quantity] [unit] to you, please login into the system and confirm the Transfer Request in the system. Thanks.\n  Direct access link as below:\n\t[url]"),
+			'transfer_reject' => array(
+				'title' => "[from_staff] Transfer Request was rejected by [to_staff] [code]",
+				'body'  => "Hi [from_staff],\n\n  [to_staff] rejected your transfer request [product] [quantity] [unit], please be noted. Thanks.\n  Direct access link as below:\n\t[url]"),
 			'return'  => array(
 				'title' => "[staff] Return Request [code]",
-				'body'  => "Hi [manager],\n\n  [staff] want to return [product] ([quantity] [unit]) to you, please login into the System and operate it quickly, Thanks.\n  Direct access link as below:\n\t[url]"
-				)
+				'body'  => "Hi [manager],\n\n  [staff] want to return [product] [quantity] [unit] to you, please login into the System and operate it quickly. Thanks.\n  Direct access link as below:\n\t[url]"),
+			'modify' => array(
+				'title' => "Administrator modified your Requisition",
+				'body' => "Hi [staff],\n\n  Administrator modified your requisition [product] [quantity] [unit], please noted. Thanks.\n ")
 			);
 		$mail_body_ext = "\n\n\nThis mail was sent by the System automatically, please don't reply it.";
 		

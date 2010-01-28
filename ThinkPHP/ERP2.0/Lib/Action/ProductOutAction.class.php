@@ -33,7 +33,7 @@ class ProductOutAction extends BaseAction{
 		$this->index('transfer');
 	}
 	Public function release() {
-		$this->assign('MODULE_TITLE', 'Product Release');
+		$this->assign('MODULE_TITLE', 'Component Release');
 		$this->index('release');
 	}
 	Public function scrap() {
@@ -150,8 +150,9 @@ class ProductOutAction extends BaseAction{
 			$info['category'] = M('Category')->where("id=".$info['product']['category_id'])->getField('name');
 			$info['unit'] = M('Options')->where("id=".$info['product']['unit_id'])->getField('name');
 			if('transfer'==$action) {//new transfer
+				$this->assign('ACTION_TITLE', 'Transfer Form');
 				$code = 'T'.substr($info['code'],-9);
-				$location_arr = M('Location')->where(array('id'=>array('neq',1)))->select();
+				$location_arr = M('Location')->where(array('id'=>array('gt',1)))->select();
 				$location_arr[] = array('id' => 'staff', 'name' => 'Staff');
 				$info['location_opts'] = self::genOptions($location_arr, 'location'==$info['to_type'] ? $info['to_id'] : 'staff');
 				$info['staff_opts'] = self::genOptions(M('Staff')->where(array('status'=>1, 'id'=>array('neq',$_SESSION[C('USER_AUTH_KEY')])))->select(), $info['to_id'], 'realname');
@@ -166,6 +167,7 @@ class ProductOutAction extends BaseAction{
 				$id = 0;
 			}
 			elseif ('return'==$action) {//new return
+				$this->assign('ACTION_TITLE', 'Return Form');
 				$code = 'R'.substr($info['code'], -9);
 				$returned_quantity = $this->dao->where(array('code'=>'R'.substr($code,-9),'status'=>1))->sum('quantity');
 				$transfered_quantity = $this->dao->where(array('code'=>'T'.substr($code,-9),'status'=>1))->sum('quantity');
@@ -197,6 +199,7 @@ class ProductOutAction extends BaseAction{
 			else {//edit apply/release/scrap
 				$code = $info['code'];
 				$action = $info['action'];
+				$this->assign('ACTION_TITLE', ucfirst($action).' Form');
 				$this->assign('fixed', $info['fixed']);
 				//$rs = D('Product')->relation(true)->find($info['product_id']);
 				//$info['ori_quantity'] = $rs['location_product'][0]['ori_quantity'] + $rs['location_product'][0]['chg_quantity'];
@@ -207,6 +210,7 @@ class ProductOutAction extends BaseAction{
 			}
 		}
 		else {//new apply/transfer/release/scrap
+			$this->assign('ACTION_TITLE', ucfirst($action).' Form');
 			$info = array();
 			$location_arr = M('Location')->where(array('id'=>array('gt',1)))->select();
 			$location_arr[] = array('id' => 'staff', 'name' => 'Staff');
@@ -477,7 +481,14 @@ class ProductOutAction extends BaseAction{
 	}
 
 	public function delete() {
-		self::_delete();
+		$id = intval($_REQUEST['id']);
+		$rs = M('ProductFlow')->find($id);
+		if(($rs['confirmed_staff_id']>0 && $rs['status']==0) or $rs['status']>0) {
+			self::_error('It\'s been confirmed, can\'t be deleted!');
+		}
+		else{
+			self::_delete();
+		}
 	}
 }
 ?>
