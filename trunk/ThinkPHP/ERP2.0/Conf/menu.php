@@ -35,7 +35,7 @@ $menu['Inventory&nbsp;Output Management'] = array(
 		'Floating-Asset Apply'	=> 'ProductOut/applyFloating',
 		'Product Transfer'		=> 'ProductOut/transfer',
 		'Components Release'	=> 'ProductOut/release',
-		'Scrap Product'			=> 'ProductOut/scrap',
+		'Product Scrap'			=> 'ProductOut/scrap',
 		'Product Return'		=> 'ProductOut/returns',
 		)
 	);
@@ -45,8 +45,8 @@ $menu['Assets Management'] = array(
 	'submenu' => array(
 		'My Asset List'			=> 'Asset',
 		'My Apply'				=> 'Asset/apply',
-		'Transfer In'			=> 'Asset/transferIn',
-		'Transfer Out'			=> 'Asset/transferOut',
+		'Transfer To Me'		=> 'Asset/transferIn',
+		'My Transfer-Out'	=> 'Asset/transferOut',
 		'My Returns'			=> 'Asset/returns',
 		)
 	);

@@ -40,7 +40,7 @@
 				</if></a></td>
 			<td>{$item['action']|ucfirst}</td>
 			<td><if condition="$item['action'] eq 'enter'">{$item['supplier']['name']}<elseif condition="$item['action'] eq 'reject'" />Local<else />{$item['from_name']}</if></td>
-			<td><if condition="$item['action'] eq 'enter'">Local<elseif condition="$item['action'] eq 'reject'" />{$item['supplier']['name']}<else />{$item['to_name']}</if></td>
+			<td><if condition="$item['action'] eq 'enter'">Local<elseif condition="$item['action'] eq 'reject'" />{$item['supplier']['name']}<elseif condition="$item['action'] neq 'release' and $item['action'] neq 'scrap'" />{$item['to_name']}</if></td>
 			<td align="center">{$item['quantity']}</td>
 			<td>{$unit[$item['product']['unit_id']]}</td>
 			<td>{$item['currency']['name']}</td>
