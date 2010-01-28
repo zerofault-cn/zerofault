@@ -34,7 +34,7 @@
 <table cellpadding="3" border="1" bordercolor="#FFFFFF" style="border-collapse:collapse;">
 <tr>
 	<th rowspan="2">No.</th>
-	<th rowspan="2">Product</th>
+	<th rowspan="2" colspan="2">Product</th>
 	<th rowspan="2">Type</th>
 	<th rowspan="2">Supplier(s)</th>
 	<th colspan="8">Quantity</th>
@@ -54,13 +54,8 @@
 <iterate name="result" id="item">
 <tr class="trbg{$mod}">
 	<td>{$i}</td>
-	<td><a href="__URL__/info/id/{$item['product_id']}?width=400" class="jTip" id="product{$item['product_id']}" name="Product Detail">
-		<if condition="$item['type'] eq 'Component'">
-		{$item['Internal_PN']}
-		<else />
-		{$item['description']}
-		</if></a>
-	</td>
+	<td><a href="__URL__/info/id/{$item['product_id']}?width=400" class="jTip" id="product{$item['product_id']}" name="Product Detail">{$item['Internal_PN']}</a></td>
+	<td>{$item['description']}</td>
 	<td><if condition="$item['fixed'] eq 1">Fixed-Assets<else />Floating-Assets</if></td>
 	<td style="padding:0;">
 	<foreach name="item['suppliers']" key="j" item="supplier">

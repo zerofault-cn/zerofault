@@ -374,6 +374,9 @@ class ProductOutAction extends BaseAction{
 					self::_success('Transfer request is ready for confirm!',__URL__.'/'.(MODULE_NAME=='Asset'?'transferOut':$action));
 				}
 				elseif ('return' == $action) {
+					if ('Asset'!=MODULE_NAME) {
+						Session::set('top', 'Inventory Output Management');
+					}
 					self::_success('Request is ready for confirm!',__URL__.'/returns');
 				}
 				else{

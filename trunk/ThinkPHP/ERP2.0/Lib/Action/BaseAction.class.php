@@ -247,11 +247,11 @@ class BaseAction extends Action{
 	protected function _mail($type='apply',$flow_id=0) {
 		$mail_tpl = array(
 			'apply' => array(
-				'title' => "PR Approve Request [code]",
+				'title' => "ER Approve Request [code]",
 				'body'  => "Hi [leader],\n\n  [staff] would apply [product] ([quantity] [unit]), please login into the System and approve the request, Thanks.\n  Direct access link as below:\n\t[url]"
 				),
 			'approve' => array(
-				'title' => "ECN was approved, please release the product [product]",
+				'title' => "ER was approved, please release the product [product]",
 				'body'  => "Hi [manager],\n\n  [staff] need to apply [product] ([quantity] [unit]), it's approved, please release the product to him and confirm the PR in the System, Thanks.\n  Direct access link as below:\n\t[url]"
 				),
 			'transfer' => array(
