@@ -404,6 +404,7 @@ class ProductOutAction extends BaseAction{
 				if (!$this->dao->where('id='.$id)->setField(array('confirmed_staff_id','status'),array($_SESSION[C('USER_AUTH_KEY')], -1))) {
 					self::_error('Reject fail!'.(C('APP_DEBUG')?$this->dao->getLastSql():''));
 				}
+				self::_mail('reject', $id);
 			}
 			self::_success('Reject success','',1000);
 			return;
@@ -413,7 +414,7 @@ class ProductOutAction extends BaseAction{
 				if (!$this->dao->where('id='.$id)->setField(array('confirmed_staff_id','status'),array($_SESSION[C('USER_AUTH_KEY')], 0))) {
 					self::_error('Approve fail!'.(C('APP_DEBUG')?$this->dao->getLastSql():''));
 				}
-				self::_mail('approve', $id);
+				self::_mail('apply_approve', $id);
 			}
 			self::_success('Approve success','',1000);
 			return;
