@@ -244,169 +244,169 @@ class BaseAction extends Action{
 	* @param string $type 邮件类型：apply:申请，approve:Leader同意，transfer:转移，return:归还
 	* @param int $flow_id product_flow.ID
 	*/
-	protected function _mail($type='apply',$flow_id=0) {
-		$mail_tpl = array(
-			'apply' => array(
-				'title' => "[staff] apply Product Requisition [code] for approval",
-				'body'  => "Hi [leader],\n\n  [staff] need to apply [product] [quantity] [unit], please login into the ERP System and approve the ER in the system. Thanks.\n  Direct access link as below:\n\t[url]"),
-			'apply_reject' => array(
-				'title' => "Apply Product Requisition [code] for [staff] was rejected",
-				'body' => "Hi [staff],\n\n[leader] rejected your application [product] [quantity] [unit], please noted. Thanks.\n  Direct access link as below:\n\t[url]"),
-			'apply_approve' => array(
-				'title' => "ER was approved, please release the product [product]",
-				'body'  => "Hi [manager],\n\n  [staff] need to apply [product] [quantity] [unit], it's approved, please release the product to him and confirm the ER in the System. Thanks.\n  Direct access link as below:\n\t[url]"),
-			'transfer' => array(
-				'title' => "[from_staff] Transfer Request [code]",
-				'body'  => "Hi [to_staff],\n\n  [from_staff] want to transfer [product] [quantity] [unit] to you, please login into the system and confirm the Transfer Request in the system. Thanks.\n  Direct access link as below:\n\t[url]"),
-			'transfer_reject' => array(
-				'title' => "[from_staff] Transfer Request was rejected by [to_staff] [code]",
-				'body'  => "Hi [from_staff],\n\n  [to_staff] rejected your transfer request [product] [quantity] [unit], please be noted. Thanks.\n  Direct access link as below:\n\t[url]"),
-			'return'  => array(
-				'title' => "[staff] Return Request [code]",
-				'body'  => "Hi [manager],\n\n  [staff] want to return [product] [quantity] [unit] to you, please login into the System and operate it quickly. Thanks.\n  Direct access link as below:\n\t[url]"),
-			'modify' => array(
-				'title' => "Administrator modified your Requisition",
-				'body' => "Hi [staff],\n\n  Administrator modified your requisition [product] [quantity] [unit], please noted. Thanks.\n ")
-			);
-		$mail_body_ext = "\n\n\nThis mail was sent by the System automatically, please don't reply it.";
+	protected function _mail($flow_id=0,$do='new') {
+		$mail_tpl = array();
+		foreach(M('Template')->where(array('status'=>1))->select() as $item) {
+			if (!array_key_exists($item['action'], $mail_tpl)) {
+				$mail_tpl[$item['action']] = array();
+			}
+			$mail_tpl[$item['action']][$item['do']] = array(
+				'subject' => $item['subject'],
+				'body'    => $item['body']
+				);
+		}
+		//$mail_body_ext = "\n\n\nThis mail was sent by the System automatically, please don't reply it.";
 		
-		$flow_info = M('ProductFlow')->find($flow_id);
-		$staff_info = M('Staff')->find($flow_info['staff_id']);
-		if ($staff_info['leader_id']>0) {
-			$leader_info = M('Staff')->find($staff_info['leader_id']);
+		$flow = M('ProductFlow')->find($flow_id);
+		$staff = M('Staff')->find($flow['staff_id']);
+		if ($staff['leader_id']>0) {
+			$leader = M('Staff')->find($staff['leader_id']);
 		}
-		if ('location' == $flow_info['to_type']) {
-			$manager_id = M('LocationManager')->where(array('location_id'=>$flow_info['to_id'], 'fixed'=>$flow_info['fixed']))->getField('staff_id');
-			$to_staff_info = M('Staff')->find($manager_id);
-		}
-		else {
-			$to_staff_info = M('Staff')->find($flow_info['to_id']);
-		}
-		if ('location' == $flow_info['from_type']) {
-			$manager_id = M('LocationManager')->where(array('location_id'=>$flow_info['from_id'], 'fixed'=>$flow_info['fixed']))->getField('staff_id');
-			$from_staff_info = M('Staff')->find($manager_id);
+		if ('location' == $flow['to_type']) {
+			$staff_id = M('LocationManager')->where(array('location_id'=>$flow['to_id'], 'fixed'=>$flow['fixed']))->getField('staff_id');
+			$to_staff = M('Staff')->find($staff_id);
 		}
 		else {
-			$from_staff_info = M('Staff')->find($flow_info['from_id']);
+			$to_staff = M('Staff')->find($flow['to_id']);
+		}
+		if ('location' == $flow['from_type']) {
+			$staff_id = M('LocationManager')->where(array('location_id'=>$flow['from_id'], 'fixed'=>$flow['fixed']))->getField('staff_id');
+			$from_staff = M('Staff')->find($staff_id);
+		}
+		else {
+			$from_staff = M('Staff')->find($flow['from_id']);
 		}
 
-		$manager_id = M('LocationManager')->where(array('location_id'=>1,'fixed'=>$flow_info['fixed']))->getField('staff_id');
+		$manager_id = M('LocationManager')->where(array('location_id'=>1,'fixed'=>$flow['fixed']))->getField('staff_id');
 		$manager = M('Staff')->find($manager_id);
-		$product_info = M('Product')->find($flow_info['product_id']);
-		$unit_name = M('Options')->where('id='.$product_info['unit_id'])->getField('name');
+		$product = M('Product')->find($flow['product_id']);
+		$unit_name = M('Options')->where('id='.$product['unit_id'])->getField('name');
 
 		$send_to = array();
-		if ('reject' == $type) {
-			$type = $flow_info['action'].'_reject';
-		}
-
-		switch ($type) {
-			case 'apply' :
-				if (!empty($leader_info)) {
-					$send_to[] = $leader_info['email'];
+		switch ($flow['action'].'_'.$do) {
+			case 'apply_new' :
+			case 'apply_edit' :
+			case 'apply_delete' :
+				if (!empty($leader)) {
+					$send_to[] = $leader['email'];
 					$send_to[] = $manager['email'];
-					$send_to[] = $staff_info['email'];
+					$send_to[] = $staff['email'];
 					$url = "http://".$_SERVER['SERVER_ADDR'].__APP__."/Asset/request";
-
-					$title = str_replace(
-						array('[staff]','[code]'),
-						array($staff_info['realname'], $flow_info['code']),
-						$mail_tpl[$type]['title']);
-					$body = str_replace(
-						array('[leader]','[staff]','[product]','[quantity]','[unit]','[url]'),
-						array($leader_info['realname'],$staff_info['realname'],
-						'Component'==$product_info['type']?$product_info['Internal_PN']:$product_info['description'], $flow_info['quantity'], $unit_name, $url), $mail_tpl[$type]['body']);
 					break;
 				}
-				//continue to approve
+				else{
+					//continue to approve
+				}
 
 			case 'apply_approve' :
 				$send_to[] = $manager['email'];
-				$send_to[] = $staff_info['email'];
+				$send_to[] = $staff['email'];
 				$url = "http://".$_SERVER['SERVER_ADDR'].__APP__."/Asset/request";
-
-				$title = str_replace(
-					'[product]',
-					'Component'==$product_info['type']?$product_info['Internal_PN']:$product_info['description'],
-					$mail_tpl[$type]['title']);
-				$body = str_replace(
-					array('[manager]', '[leader]','[staff]','[product]','[quantity]','[unit]','[url]'),
-					array($manager['realname'], $leader_info['realname'],$staff_info['realname'],
-					'Component'==$product_info['type']?$product_info['Internal_PN']:$product_info['description'], $flow_info['quantity'], $unit_name, $url), $mail_tpl[$type]['body']);
 				break;
 
 			case 'apply_reject' :
-				$send_to[] = $staff_info['email'];
+				$send_to[] = $staff['email'];
 				$send_to[] = $manager['email'];
-				$send_to[] = $leader_info['email'];
+				$send_to[] = $leader['email'];
 				$url = "http://".$_SERVER['SERVER_ADDR'].__APP__."/Asset/apply/status/-1";
-
-					$title = str_replace(
-						array('[staff]','[code]'),
-						array($staff_info['realname'], $flow_info['code']),
-						$mail_tpl[$type]['title']);
-				$body = str_replace(
-					array('[leader]','[staff]','[product]','[quantity]','[unit]','[url]'),
-					array($leader_info['realname'],$staff_info['realname'],
-					'Component'==$product_info['type']?$product_info['Internal_PN']:$product_info['description'], $flow_info['quantity'], $unit_name, $url), $mail_tpl[$type]['body']);
 				break;
-			
-			case 'transfer':
-				if ('location' == $flow_info['to_type']) {
+
+			case 'apply_confirm' :
+				if (!empty($leader)) {
+					$send_to[] = $leader['email'];
+					$send_to[] = $manager['email'];
+					$send_to[] = $staff['email'];
+				}
+				else{
+					$send_to[] = $staff['email'];
+					$send_to[] = $manager['email'];
+				}
+				$url = "http://".$_SERVER['SERVER_ADDR'].__APP__."/Asset/apply/status/1";
+				break;
+
+			case 'transfer_new':
+			case 'transfer_edit':
+			case 'transfer_delete':
+				$send_to[] = $to_staff['email'];
+				$send_to[] = $from_staff['email'];
+				if ('location' == $flow['to_type']) {
 					$url = "http://".$_SERVER['SERVER_ADDR'].__APP__."/ProductOut/transfer";
 				}
 				else {
 					$url = "http://".$_SERVER['SERVER_ADDR'].__APP__."/Asset/transferIn";
 				}
-				$send_to[] = $to_staff_info['email'];
-
-				$send_to[] = $from_staff_info['email'];
-
-				$title = str_replace(
-					array('[from_staff]','[code]'),
-					array($from_staff_info['realname'], $flow_info['code']),
-					$mail_tpl[$type]['title']);
-				$body = str_replace(
-					array('[to_staff]','[from_staff]','[product]','[quantity]','[unit]','[url]'),
-					array($to_staff_info['realname'],$from_staff_info['realname'],
-					'Component'==$product_info['type']?$product_info['Internal_PN']:$product_info['description'], $flow_info['quantity'], $unit_name, $url), $mail_tpl[$type]['body']);
 				break;
 
 			case 'transfer_reject' :
-				$send_to[] = $from_staff_info['email'];
-				$send_to[] = $to_staff_info['email'];
-				$url = "http://".$_SERVER['SERVER_ADDR'].__APP__."/Asset/transferOut/status/-1";
-
-				$title = str_replace(
-					array('[from_staff]','[to_staff]','[code]'),
-					array($from_staff_info['realname'], $to_staff_info['realname'], $flow_info['code']),
-					$mail_tpl[$type]['title']);
-				$body = str_replace(
-					array('[from_staff]','[to_staff]','[product]','[quantity]','[unit]','[url]'),
-					array($from_staff_info['realname'],$to_staff_info['realname'],
-					'Component'==$product_info['type']?$product_info['Internal_PN']:$product_info['description'], $flow_info['quantity'], $unit_name, $url), $mail_tpl[$type]['body']);
+			case 'transfer_confirm':
+				$send_to[] = $from_staff['email'];
+				$send_to[] = $to_staff['email'];
+				if ('location' == $flow['to_type']) {
+					$url = "http://".$_SERVER['SERVER_ADDR'].__APP__."/ProductOut/transfer/status/-1";
+				}
+				else {
+					$url = "http://".$_SERVER['SERVER_ADDR'].__APP__."/Asset/transferOut/status/-1";
+				}
 				break;
 
-			case 'return':
+			case 'return_new':
+			case 'return_edit':
+			case 'return_delete':
 				$send_to[] = $manager['email'];
-				$send_to[] = $staff_info['email'];
+				$send_to[] = $staff['email'];
 				$url = "http://".$_SERVER['SERVER_ADDR'].__APP__."/ProductOut/returns";
+				break;
 
-				$title = str_replace(
-					array('[staff]','[code]'),
-					array($staff_info['realname'],$flow_info['code']),
-					$mail_tpl[$type]['title']);
-				$body = str_replace(
-					array('[manager]','[staff]','[product]','[quantity]','[unit]','[url]'),
-					array($manager['realname'], $staff_info['realname'],
-					'Component'==$product_info['type']?$product_info['Internal_PN']:$product_info['description'], $flow_info['quantity'], $unit_name, $url), $mail_tpl[$type]['body']);
+			case 'return_confirm':
+				$send_to[] = $staff['email'];
+				$send_to[] = $manager['email'];
+				$url = "http://".$_SERVER['SERVER_ADDR'].__APP__."/Asset/returns";
 				break;
 
 			default :
 				//do not send any mail
 				return;
 		}
-		$cmd = 'echo "'.$body.$mail_body_ext.'"|/usr/bin/mutt -s "'.$title.'" '.$send_to[0];
+		if (empty($mail_tpl[$flow['action']][$do])) {
+			Log::Write('Mail template of Action:'.$flow['action'].'->'.$do.' not exists!', INFO);
+			return;
+		}
+		$title = str_replace(
+			array(
+				'[staff]',
+				'[from_staff]',
+				'[to_staff]',
+				'[code]'),
+			array(
+				$staff['realname'],
+				$from_staff['realname'],
+				$to_staff['realname'],
+				$flow['code']),
+			$mail_tpl[$flow['action']][$do]['title']);
+		$body = str_replace(
+			array(
+				'[staff]',
+				'[from_staff]',
+				'[to_staff]',
+				'[leader]',
+				'[manager]',
+				'[product]',
+				'[quantity]',
+				'[unit]',
+				'[url]'),
+			array(
+				$staff['realname'],
+				$from_staff['realname'],
+				$to_staff['realname'],
+				$leader['realname'],
+				$manager['realname'],
+				'Component'==$product['type']?$product['Internal_PN']:$product['description'],
+				$flow['quantity'],
+				$unit_name,
+				$url),
+			$mail_tpl[$flow['action']][$do]['body']);
+
+		$cmd = 'echo "'.$body.'"|/usr/bin/mutt -s "'.$title.'" '.$send_to[0];
 		if (count($send_to)>1) {
 			$cmd .= ' -c '.implode(' -c ', array_slice($send_to,1));
 		}

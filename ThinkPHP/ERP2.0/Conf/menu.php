@@ -55,10 +55,12 @@ $menu['System'] = array(
 	'name' => 'Setting',
 	'submenu' => array(
 		'Location'				=> 'Location',
-		'Setting'				=> 'Setting',
+		'Mail Template'			=> 'Template',
+		'Options Setting'		=> 'Setting',
 		'Role'					=> 'Role',
 		'Node'					=> 'Node',
-		'Operation Logs'		=> 'ProductFlow'
+		'Operation Logs'		=> 'ProductFlow',
+		
 		)
 	);
 
