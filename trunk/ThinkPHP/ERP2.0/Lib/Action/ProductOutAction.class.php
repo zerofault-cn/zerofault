@@ -267,8 +267,8 @@ class ProductOutAction extends BaseAction{
 		$id = empty($_REQUEST['id']) ? 0 : intval($_REQUEST['id']);
 		if ($id>0) {//from edit
 			$this->dao->find($id);
-			if (1==$this->dao->status || (0==$this->dao->status && !empty($this->dao->confirmed_staff_id))) {
-				self::_error('This ER has been approved/confirmed, can\'t be changed');
+			if (-1==$this->dao->status || 1==$this->dao->status || (0==$this->dao->status && !empty($this->dao->confirmed_staff_id))) {
+				self::_error('This ER has been approved/confirmed, can\'t submit.');
 			}
 		}
 		else {//from new
@@ -489,12 +489,11 @@ class ProductOutAction extends BaseAction{
 	public function delete() {
 		$id = intval($_REQUEST['id']);
 		$rs = M('ProductFlow')->find($id);
-		if(($rs['confirmed_staff_id']>0 && $rs['status']==0) or $rs['status']>0) {
-			self::_error('This ER has been approved/confirmed, can\'t be deleted!');
+		if(($rs['confirmed_staff_id']>0 && $rs['status']==0) || -1==$rs['status'] || 1==$rs['status']) {
+			self::_error('This ER has been approved/confirmed, can\'t delete!');
 		}
 		else{
 			self::_delete();
-			self::_mail($id, 'delete');
 		}
 	}
 }
