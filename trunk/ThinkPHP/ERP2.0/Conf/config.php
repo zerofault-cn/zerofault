@@ -29,6 +29,7 @@ $config = array_merge($config,array(
 		'DB_HOST'			=> 'localhost',
 		'DB_PREFIX'			=> 'erp_',
 
+		'ERP_TITLE'			=> 'AGIGA Tech ERP System',
 		'USER_AUTH_ON'		=>true,
 		'USER_AUTH_MODEL'	=> 'Staff',
 		'USER_AUTH_KEY'		=> 'authId',

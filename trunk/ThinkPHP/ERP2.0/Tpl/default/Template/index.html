@@ -1,0 +1,58 @@
+<p class="page_title_text">Mail Template</p>
+<table cellpadding="5" border="1" bordercolor="#FFFFFF" style="border-collapse:collapse;">
+<tr>
+	<th colspan="2">Action</th>
+	<th colspan="2">Mail (Subject/Body)</th>
+	<th>OP</th>
+</tr>
+<iterate name="result" id="action">
+	<php>$j=0;</php>
+	<foreach name="action" key="do" item="item">
+<tr>
+		<if condition="$j eq 0">
+	<td rowspan="{$action|2*count}" align="center">{$key|ucfirst}</td>
+		</if>
+		<if condition="$item['status'] eq 1">
+	<td rowspan="2">{$do|ucfirst}</td>
+	<td align="right" class="trbg0">Subject:&nbsp;</td>
+	<td class="trbg0">{$item['subject']}</td>
+	<td rowspan="2"><a href="__URL__/form/id/{$item['id']}" title="Click to Edit">Edit</a> <a href="__URL__/update/id/{$item['id']}/f/status/v/0" target="_iframe" title="Disable mail notification of this case">Disable</a></td>
+		<else />
+	<td rowspan="2" class="disabled">{$do|ucfirst}</td>
+	<td align="right" class="trbg0 disabled">Subject:&nbsp;</td>
+	<td class="trbg0 disabled">{$item['subject']}</td>
+	<td rowspan="2" class="disabled"><a href="__URL__/form/id/{$item['id']}" title="Click to Edit">Edit</a> <a href="__URL__/update/id/{$item['id']}/f/status/v/1" target="_iframe" title="Enable mail notification of this case">Enable</a></td>
+		</if>
+</tr>
+<tr class="trbg1">
+		<if condition="$item['status'] eq 1">
+	<td align="right">Body:&nbsp;</td>
+	<td>{$item['body']}</td>
+		<else />
+	<td align="right" class="disabled">Body:&nbsp;</td>
+	<td class="disabled">{$item['body']}</td>
+		</if>
+</tr>
+	<php>$j++;</php>
+	</foreach>
+</iterate>
+<tr>
+	<td width="100" style="padding:0"></td>
+	<td width="100" style="padding:0"></td>
+	<td width="70" style="padding:0"></td>
+	<td style="padding:0"></td>
+</tr>
+</table>
+<br />
+<table cellpadding="5" border="1" bordercolor="#FFFFFF" style="border-collapse:collapse;">
+<tr>
+	<th colspan="2">Support Tags</th>
+</tr>
+<iterate name="tags" id="item">
+<tr class="trbg{$mod}">
+	<td>{$key}&nbsp;</td>
+	<td>{$item}</td>
+</tr>
+</iterate>
+</table>
+<br />

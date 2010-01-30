@@ -44,7 +44,12 @@ a:hover,a:active,a.active{color:#f20;text-decoration: underline;}
 .a_right{
 	text-align:right;
 }
-
+.disabled, .disabled a:link, .disabled a:visited{
+	color:#a0a0a0;
+}
+ .disabled a:hover, .disabled a:active{
+	color:#00f;text-decoration: underline;
+}
 table {
 	margin:0 auto;
 	background-color:#EEEEFF;

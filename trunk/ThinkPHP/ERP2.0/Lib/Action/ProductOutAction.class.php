@@ -267,6 +267,9 @@ class ProductOutAction extends BaseAction{
 		$id = empty($_REQUEST['id']) ? 0 : intval($_REQUEST['id']);
 		if ($id>0) {//from edit
 			$this->dao->find($id);
+			if (1==$this->dao->status || (0==$this->dao->status && !empty($this->dao->confirmed_staff_id))) {
+				self::_error('This ER has been approved/confirmed, can\'t be changed');
+			}
 		}
 		else {//from new
 			$max_code = $this->dao->where(array('code'=>array('like','Out%')))->max('code');
@@ -335,6 +338,7 @@ class ProductOutAction extends BaseAction{
 	//	}
 		if ($id>0) {//for edit
 			if (false !== $this->dao->save()) {
+				self::_mail($id, 'edit');
 				$action = $this->dao->action;
 				if ('apply'==$this->dao->action) {
 					if (MODULE_NAME!='Asset') {
@@ -370,7 +374,7 @@ class ProductOutAction extends BaseAction{
 		}
 		else {//for new
 			if ($flow_id = $this->dao->add()) {
-				self::_mail($action, $flow_id);
+				self::_mail($flow_id, 'new');
 				if($action=='apply') {
 					self::_success('Apply request is ready for confirm!',__URL__.'/'.$action);
 				}
@@ -404,7 +408,7 @@ class ProductOutAction extends BaseAction{
 				if (!$this->dao->where('id='.$id)->setField(array('confirmed_staff_id','status'),array($_SESSION[C('USER_AUTH_KEY')], -1))) {
 					self::_error('Reject fail!'.(C('APP_DEBUG')?$this->dao->getLastSql():''));
 				}
-				self::_mail('reject', $id);
+				self::_mail($id, 'reject');
 			}
 			self::_success('Reject success','',1000);
 			return;
@@ -414,7 +418,7 @@ class ProductOutAction extends BaseAction{
 				if (!$this->dao->where('id='.$id)->setField(array('confirmed_staff_id','status'),array($_SESSION[C('USER_AUTH_KEY')], 0))) {
 					self::_error('Approve fail!'.(C('APP_DEBUG')?$this->dao->getLastSql():''));
 				}
-				self::_mail('apply_approve', $id);
+				self::_mail($id, 'approve');
 			}
 			self::_success('Approve success','',1000);
 			return;
@@ -473,6 +477,7 @@ class ProductOutAction extends BaseAction{
 			if (!$this->dao->save($data)) {
 				self::_error('Confirm fail!'.(C('APP_DEBUG')?$this->dao->getLastSql():''));
 			}
+			self::_mail($id, 'confirm');
 		}
 		self::_success('Confirm success','',1000);
 	}
@@ -485,10 +490,11 @@ class ProductOutAction extends BaseAction{
 		$id = intval($_REQUEST['id']);
 		$rs = M('ProductFlow')->find($id);
 		if(($rs['confirmed_staff_id']>0 && $rs['status']==0) or $rs['status']>0) {
-			self::_error('It\'s been confirmed, can\'t be deleted!');
+			self::_error('This ER has been approved/confirmed, can\'t be deleted!');
 		}
 		else{
 			self::_delete();
+			self::_mail($id, 'delete');
 		}
 	}
 }
