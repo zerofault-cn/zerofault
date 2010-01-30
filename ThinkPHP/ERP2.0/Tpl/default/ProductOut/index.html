@@ -7,7 +7,7 @@
 	</if>
 	<td class="clsTab" id="status_0"><a href="__ACTION__/id/{$location_id|default=0}/status/0">Ready to confirm</a></td>
 	<td class="clsTab" id="status_1"><a href="__ACTION__/id/{$location_id|default=0}/status/1">Confirmed</a></td>
-	<if condition="(MODULE_NAME eq 'ProductOut' and ACTION_NAME eq 'transfer') or (MODULE_NAME eq 'Asset' and (ACTION_NAME eq 'transferOut' or ACTION_NAME eq 'apply' or ACTION_NAME eq 'request' or ACTION_NAME eq 'location'))">
+	<if condition="(MODULE_NAME eq 'ProductOut' and ACTION_NAME eq 'transfer') or (MODULE_NAME eq 'Asset')">
 	<td class="clsTab" id="status_-1"><a href="__ACTION__/id/{$location_id|default=0}/status/-1">Rejected</a></td>
 	</if>
 </tr>

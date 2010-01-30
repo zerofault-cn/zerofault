@@ -179,6 +179,7 @@ class BaseAction extends Action{
 		$id=$_REQUEST['id'];
 		if($this->dao->find($id) && $this->dao->delete())
 		{
+			self::_mail($id, 'delete');
 			die(self::_success('Delete success!','',1000));
 		}
 		else
@@ -371,18 +372,20 @@ class BaseAction extends Action{
 			Log::Write('Mail template of Action:'.$flow['action'].'->'.$do.' not exists!', INFO);
 			return;
 		}
-		$title = str_replace(
+		$subject = str_replace(
 			array(
 				'[staff]',
 				'[from_staff]',
 				'[to_staff]',
+				'[product]',
 				'[code]'),
 			array(
 				$staff['realname'],
 				$from_staff['realname'],
 				$to_staff['realname'],
+				'Component'==$product['type']?$product['Internal_PN']:$product['description'],
 				$flow['code']),
-			$mail_tpl[$flow['action']][$do]['title']);
+			$mail_tpl[$flow['action']][$do]['subject']);
 		$body = str_replace(
 			array(
 				'[staff]',
@@ -406,14 +409,14 @@ class BaseAction extends Action{
 				$url),
 			$mail_tpl[$flow['action']][$do]['body']);
 
-		$cmd = 'echo "'.$body.'"|/usr/bin/mutt -s "'.$title.'" '.$send_to[0];
+		$cmd = 'echo "'.$body.'"|/usr/bin/mutt -s "'.$subject.'" '.$send_to[0];
 		if (count($send_to)>1) {
 			$cmd .= ' -c '.implode(' -c ', array_slice($send_to,1));
 		}
 		Log::Write($cmd, INFO);
 		system($cmd,$ret);
 		if('0'==$ret) {
-			Log::Write('Success@'.date("Y-m-d H:i:s"));
+			Log::Write('Success@'.date("Y-m-d H:i:s"), INFO);
 			return true;
 		}
 		else{

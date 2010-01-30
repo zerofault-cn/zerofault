@@ -158,19 +158,20 @@ class PublicAction extends BaseAction{
 	public function check(){
 		$rs = M('ProductFlow')->where('status=-2 or status=0')->select();
 		empty($rs) && ($rs = array());
+		echo 'Get :'.count($rs)."\n";
 		foreach ($rs as $item) {
 			if (-2 == $item['status']) {
-				self::_mail('apply', $item['id']);
+				self::_mail($item['id']);
 			}
 			else {
 				if ('apply' == $item['action']) {
-					self::_mail('approve', $item['id']);
+					self::_mail($item['id'], 'approve');
 				}
 				elseif ('transfer' == $item['action']) {
-					self::_mail('transfer', $item['id']);
+					self::_mail($item['id']);
 				}
 				elseif ('return' == $item['action']) {
-					self::_mail('return', $item['id']);
+					self::_mail($item['id']);
 				}
 				else{
 					//nothing
