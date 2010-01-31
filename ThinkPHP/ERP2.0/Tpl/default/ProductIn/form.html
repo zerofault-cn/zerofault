@@ -7,7 +7,7 @@
 <table>
 <tr >
 	<td>No.</td>
-	<td><input type="text" maxlength="10" size="15" name="code" value="{$code}" readonly="true" /> <img src="../Public/Images/lock.gif" /></td>
+	<td><input type="text" maxlength="20" size="30" name="code" value="{$code}" readonly="true" /> <img src="../Public/Images/lock.gif" /></td>
 </tr>
 <if condition="$action neq 'reject' and $info['action'] neq 'reject'">
 <tr>
@@ -17,43 +17,43 @@
 </if>
 <tr>
 	<td id="form_title1">Internal PN:</td>
-	<td><input type="text" size="15" name="Internal_PN" id="Internal_PN" value="{$info['product']['Internal_PN']}"/></td>
+	<td><input type="text" size="30" name="Internal_PN" id="Internal_PN" value="{$info['product']['Internal_PN']}"/></td>
 </tr>
 <tr>
 	<td id="form_title2">Description:</td>
-	<td><input type="text" size="15" id="description" value="{$info['product']['description']}" readonly="true" /> <img src="../Public/Images/system.gif" /></td>
+	<td><input type="text" size="30" id="description" value="{$info['product']['description']}" readonly="true" /> <img src="../Public/Images/system.gif" /></td>
 </tr>
 <tr>
 	<td id="form_title3">Manufacture:</td>
-	<td><input type="text" size="15" id="manufacture" value="{$info['product']['manufacture']}" readonly="true"/> <img src="../Public/Images/system.gif" /></td>
+	<td><input type="text" size="30" id="manufacture" value="{$info['product']['manufacture']}" readonly="true"/> <img src="../Public/Images/system.gif" /></td>
 </tr>
 <tr>
 	<td id="form_title4">MPN:</td>
-	<td><input type="text" size="15" name="MPN" id="MPN" value="{$info['product']['MPN']}"/></td>
+	<td><input type="text" size="30" name="MPN" id="MPN" value="{$info['product']['MPN']}"/></td>
 </tr>
 <tr>
 	<td>Category:</td>
-	<td><input type="text" size="15" id="category" value="{$info['category']}" readonly="true"/> <img src="../Public/Images/system.gif" /></td>
+	<td><input type="text" size="30" id="category" value="{$info['category']}" readonly="true"/> <img src="../Public/Images/system.gif" /></td>
 </tr>
 <tr>
 	<td>Value/Package:</td>
-	<td><input type="text" size="15" id="value" value="{$info['product']['value']}" readonly="true"/> <img src="../Public/Images/system.gif" /></td>
+	<td><input type="text" size="30" id="value" value="{$info['product']['value']}" readonly="true"/> <img src="../Public/Images/system.gif" /></td>
 </tr>
 <tr>
 	<td>Project:</td>
-	<td><input type="text" size="15" id="project" value="{$info['product']['project']}" readonly="true"/> <img src="../Public/Images/system.gif" /></td>
+	<td><input type="text" size="30" id="project" value="{$info['product']['project']}" readonly="true"/> <img src="../Public/Images/system.gif" /></td>
 </tr>
 <tr>
 	<td>Unit:</td>
-	<td><input type="text" size="15" id="unit" value="{$info['unit']}" readonly="true"/> <img src="../Public/Images/system.gif" /></td>
+	<td><input type="text" size="30" id="unit" value="{$info['unit']}" readonly="true"/> <img src="../Public/Images/system.gif" /></td>
 </tr>
 <tr>
 	<td>MOQ:</td>
-	<td><input type="text" size="15" id="MOQ" value="{$info['product']['MOQ']}" readonly="true"/> <img src="../Public/Images/system.gif" /></td>
+	<td><input type="text" size="30" id="MOQ" value="{$info['product']['MOQ']}" readonly="true"/> <img src="../Public/Images/system.gif" /></td>
 </tr>
 <tr>
 	<td>Inventory Limit:</td>
-	<td><input type="text" size="15" id="inventory_limit" value="{$info['product']['inventory_limit']}" readonly="true"/> <img src="../Public/Images/system.gif" /></td>
+	<td><input type="text" size="30" id="inventory_limit" value="{$info['product']['inventory_limit']}" readonly="true"/> <img src="../Public/Images/system.gif" /></td>
 </tr>
 <tr>
 	<td>Supplier:</td>
@@ -72,19 +72,19 @@
 <tr>
 	<td><if condition="$action eq 'reject'">Reject</if>
 	Quantity:</td>
-	<td><input type="text" maxlength="20" size="15" id="quantity" name="quantity" value="{$info['quantity']}" onchange="calc_total()"/><input type="hidden" name="ori_quantity" value="{$info['ori_quantity']}"/></td>
+	<td><input type="text" maxlength="20" size="30" id="quantity" name="quantity" value="{$info['quantity']}" onchange="calc_total()"/><input type="hidden" name="ori_quantity" value="{$info['ori_quantity']}"/></td>
 </tr>
 <tr>
 	<td>Unit Price:</td>
-	<td><input type="text" maxlength="20" size="15" id="price" name="price" value="{$info.price}" onchange="calc_total()"/></td>
+	<td><input type="text" maxlength="20" size="30" id="price" name="price" value="{$info.price}" onchange="calc_total()"/></td>
 </tr>
 <tr>
 	<td>Total Price:</td>
-	<td><input type="text" maxlength="20" size="15" id="total" value="{$info['quantity']*$info['price']}" readonly="true"/> <img src="../Public/Images/lock.gif" /></td>
+	<td><input type="text" maxlength="20" size="30" id="total" value="{$info['quantity']*$info['price']}" readonly="true"/> <img src="../Public/Images/lock.gif" /></td>
 </tr>
 <tr>
 	<td>Accessories:</td>
-	<td><input type="text" maxlength="20" size="15" name="accessories" value="{$info.accessories}"/></td>
+	<td><input type="text" maxlength="20" size="30" name="accessories" value="{$info.accessories}"/></td>
 </tr>
 <tr>
 	<td valign="top">Remark:</td>
