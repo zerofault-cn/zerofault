@@ -179,7 +179,6 @@ class BaseAction extends Action{
 		$id=$_REQUEST['id'];
 		if($this->dao->find($id) && $this->dao->delete())
 		{
-			self::_mail($id, 'delete');
 			die(self::_success('Delete success!','',1000));
 		}
 		else
@@ -295,9 +294,10 @@ class BaseAction extends Action{
 					$url = "http://".$_SERVER['SERVER_ADDR'].__APP__."/Asset/request";
 					break;
 				}
-				else{
-					//continue to approve
+				elseif($do == 'new') {
+					$do = 'approve';
 				}
+				//continue to approve
 
 			case 'apply_approve' :
 				$send_to[] = $manager['email'];
@@ -366,6 +366,7 @@ class BaseAction extends Action{
 
 			default :
 				//do not send any mail
+				Log::Write('Not in case :'.$flow['action'].'->'.$do);
 				return;
 		}
 		if (empty($mail_tpl[$flow['action']][$do])) {
