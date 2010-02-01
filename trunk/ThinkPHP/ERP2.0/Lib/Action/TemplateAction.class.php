@@ -25,6 +25,7 @@ class TemplateAction extends BaseAction{
 			'[product]' => 'The Internal P/N or Board Name of the product',
 			'[quantity]' => 'The quantity of request',
 			'[unit]' => 'The unit name of the product',
+			'[remark]' => 'The remark of the ER',
 			'[url]' => 'The direct access link'
 			);
 		$this->assign('tags', $tags);
