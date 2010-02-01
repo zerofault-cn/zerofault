@@ -302,6 +302,9 @@ class BaseAction extends Action{
 			case 'apply_approve' :
 				$send_to[] = $manager['email'];
 				$send_to[] = $staff['email'];
+				if (!empty($leader)) {
+					$send_to[] = $leader['email'];
+				}
 				$url = "http://".$_SERVER['SERVER_ADDR'].__APP__."/Asset/request";
 				break;
 
@@ -397,6 +400,7 @@ class BaseAction extends Action{
 				'[product]',
 				'[quantity]',
 				'[unit]',
+				'[remark]',
 				'[url]'),
 			array(
 				$staff['realname'],
@@ -407,6 +411,7 @@ class BaseAction extends Action{
 				'Component'==$product['type']?$product['Internal_PN']:$product['description'],
 				$flow['quantity'],
 				$unit_name,
+				$flow['remark'],
 				$url),
 			$mail_tpl[$flow['action']][$do]['body']);
 
