@@ -11,9 +11,12 @@ class AssetAction extends BaseAction{
 	protected $dao;
 	
 	public function _initialize() {
+		Session::set('top', 'Assets Management');
+		global $MODULE;
+		$MODULE = 'Asset';
 		$this->dao = M('LocationProduct');
 		parent::_initialize();
-		$this->assign('MODULE_TITLE', 'Asset Management');
+		$this->assign('MODULE_TITLE', 'Assets Management');
 	}
 
 	public function index(){
@@ -71,6 +74,7 @@ class AssetAction extends BaseAction{
 		R('ProductOut', 'returns');
 	}
 	public function form() {
+		Session::set('sub', 'Asset/apply');
 		R('ProductOut', 'form');
 	}
 	public function submit() {

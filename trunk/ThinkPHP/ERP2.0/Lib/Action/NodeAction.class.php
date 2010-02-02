@@ -18,7 +18,6 @@ class NodeAction extends BaseAction{
 		$base_class = 'BaseAction';
 		$base_obj   = new $base_class;
 		$base_method_arr = get_class_methods($base_obj);
-		
 		//不需进入节点管理的module
 		$skip_modules = split(',', C('NOT_AUTH_MODULE'));
 		$skip_modules[] = 'Base';
@@ -75,7 +74,8 @@ class NodeAction extends BaseAction{
 			$i++;
 		}
 		//dump($modules);
-
+		Session::set('top', 'System');
+		Session::set('sub', 'Node');
 		$this->assign('MODULE_TITLE', 'System Node');
 		$this->assign('ACTION_TITLE', 'Definition');
 		$this->assign('modules', $modules);

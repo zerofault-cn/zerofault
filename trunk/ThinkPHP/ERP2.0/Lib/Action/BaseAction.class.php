@@ -39,10 +39,11 @@ class BaseAction extends Action{
 		}
 
 		//准备导航菜单
-		$top = empty($_REQUEST['top']) ? '' : $_REQUEST['top'];
-		!$top && ($top = Session::get('top'));
-		!$top && ($top = 'Assets Management');
-		Session::set('top', urldecode($top));
+	//	$top = empty($_REQUEST['top']) ? '' : $_REQUEST['top'];
+	//	!$top && ($top = Session::get('top'));
+	//	!$top && ($top = 'Assets Management');
+	//	Session::set('top', urldecode($top));
+		$top = Session::get('top');
 
 		$_menu_ = C('_menu_');//载入menu.php的内容
 		$menu = $_menu_['menu'];

@@ -11,6 +11,10 @@ class ProductOutAction extends BaseAction{
 	protected $dao;
 
 	public function _initialize() {
+		global $MODULE;
+		if (empty($MODULE)) {
+			Session::set('top', 'Inventory Output Management');
+		}
 		$this->dao = D('ProductFlow');
 		parent::_initialize();
 	}
@@ -239,7 +243,6 @@ class ProductOutAction extends BaseAction{
 				elseif('return'==$action) {
 					$max_code = $this->dao->where(array('code'=>array('like','R%')))->max('code');
 					empty($max_code) && ($max_code = 'R'.sprintf("%09d",0));
-
 				}
 				$code = ++ $max_code;
 			}
@@ -383,7 +386,7 @@ class ProductOutAction extends BaseAction{
 				}
 				elseif ('return' == $action) {
 					if ('Asset'!=MODULE_NAME) {
-						Session::set('top', 'Inventory Output Management');
+						//Session::set('top', 'Inventory Output Management');
 					}
 					self::_success('Request is ready for confirm!',__URL__.'/returns');
 				}
