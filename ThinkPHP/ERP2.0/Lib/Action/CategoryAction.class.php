@@ -11,6 +11,7 @@ class CategoryAction extends BaseAction{
 	protected $dao;
 
 	public function _initialize() {
+		Session::set('top', 'Basic Data');
 		Session::set('sub', MODULE_NAME);
 		$this->dao = M('Category');
 		parent::_initialize();

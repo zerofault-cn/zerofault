@@ -11,6 +11,7 @@ class ProductFlowAction extends BaseAction{
 	protected $dao;
 
 	public function _initialize() {
+		Session::set('top', 'System');
 		$this->dao = D('ProductFlow');
 		parent::_initialize();
 	}

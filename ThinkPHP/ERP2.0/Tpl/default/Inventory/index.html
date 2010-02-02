@@ -65,7 +65,7 @@
 		<span style="padding:3px;">{$supplier}</span>
 	</foreach>
 	</td>
-	<td>{$item['quantity']['enter']-$item['quantity']['reject']-$item['quantity']['apply']-$item['quantity']['transfer']-$item['quantity']['release']-$item['quantity']['scrap']+$item['quantity']['return']}</td>
+	<td><notempty name="item['inventory']['chg_quantity']"><a href="__APP__/Asset/form/action/apply/lp_id/{$item['inventory']['id']}" title="Apply this product">{$item['inventory']['chg_quantity']}</a><else />{$item['inventory']['chg_quantity']}</notempty></td><!-- {$item['quantity']['enter']-$item['quantity']['reject']-$item['quantity']['apply']-$item['quantity']['transfer']-$item['quantity']['release']-$item['quantity']['scrap']+$item['quantity']['return']} -->
 	<td><a id="enter{$item['product_id']}" href="__URL__/query/action/enter/product_id/{$item['product_id']}?width=600" class="jTip" name="Enter Entries">{$item['quantity']['enter']}</a></td>
 	<td><empty name="item['quantity']['reject']">0<else /><a id="reject{$item['product_id']}" href="__URL__/query/action/reject/product_id/{$item['product_id']}?width=600" class="jTip" name="Reject Entries">{$item['quantity']['reject']}</a></empty></td>
 	<td><empty name="item['quantity']['apply']">0<else /><a id="apply{$item['product_id']}" href="__URL__/query/action/apply/product_id/{$item['product_id']}?width=600" class="jTip" name="Apply Entries">{$item['quantity']['apply']}</a></empty></td>

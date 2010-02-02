@@ -11,6 +11,7 @@ class ProductInAction extends BaseAction{
 	protected $dao;
 
 	public function _initialize() {
+		Session::set('top', 'Inventory Input Management');
 		$this->dao = D('ProductFlow');
 		parent::_initialize();
 	}

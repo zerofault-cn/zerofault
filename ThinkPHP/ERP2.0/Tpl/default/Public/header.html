@@ -12,9 +12,9 @@
 		<tr>
 			<iterate name="topmenu" id="item">
 				<if condition="$_SESSION['top'] eq str_replace('&nbsp;',' ',$key)">
-			<td align="center" class="quick_menu_tab onfoc"><a href="__APP__/{$item}?top={$key|str_replace='&nbsp;',' ',###}">{$key}</a></td>
+			<td align="center" class="quick_menu_tab onfoc">{$key}</td>
 				<else />
-			<td align="center" class="quick_menu_tab"><a href="__APP__/{$item}?top={$key|str_replace='&nbsp;',' ',###}">{$key}</a></td>
+			<td align="center" class="quick_menu_tab"><a href="__APP__/{$item}">{$key}</a></td>
 				</if>
 			</iterate>
 		</tr>

@@ -14,6 +14,7 @@ class RoleAction extends BaseAction{
 	* 构造函数
 	*/
 	public function _initialize() {
+		Session::set('top', 'System');
 		Session::set('sub', MODULE_NAME);
 		$this->dao = D('Role');
 		parent::_initialize();

@@ -11,6 +11,7 @@ class InventoryAction extends BaseAction{
 	protected $dao;
 
 	public function _initialize() {
+		Session::set('top', 'Inventory Inquire');
 		$this->dao = D('ProductView');
 		parent::_initialize();
 		$this->assign('MODULE_TITLE', 'Inventory Inquire');
@@ -42,13 +43,22 @@ class InventoryAction extends BaseAction{
 				$where['status'] = 1;
 				$where['_string'] = "(from_type='location' and from_id=1) or (to_type='location' and to_id=1)";
 				$result[$i]['quantity'] = M('ProductFlow')->where($where)->group('action')->getField('action,sum(quantity)');
+
+				//获取物品库存
+				//$result[$i]['remain'] = $result[$i]['quantity']['enter'] - $result[$i]['quantity']['reject'] - $result[$i]['quantity']['apply'] - $result[$i]['quantity']['transfer'] - $result[$i]['quantity']['release'] - $result[$i]['quantity']['scrap'] + $result[$i]['quantity']['return'];
+				$where = array();
+				$where['product_id'] = $val['product_id'];
+				$where['type'] = 'location';
+				$where['location_id'] =1;
+				$result[$i]['inventory'] = M('LocationProduct')->where($where)->find();
+
 				$result[$i]['suppliers'] = explode(',', $val['supplier_names']);
 
+				//获取物品的Owner
 				$where = array();
 				$where['product_id'] = $val['product_id'];
 				$where['chg_quantity'] = array('gt',0);
 				$where['_string'] = "(type='location' and location_id!=1) or type='staff'";
-				//获取物品的最终归属
 				$owner_arr = M('LocationProduct')->where($where)->select();
 				if (empty($owner_arr)) {
 					$owner = array();

@@ -11,6 +11,7 @@ class TemplateAction extends BaseAction{
 	protected $dao;
 
 	public function _initialize() {
+		Session::set('top', 'System');
 		Session::set('sub', MODULE_NAME);
 		$this->dao = M('Template');
 		parent::_initialize();
