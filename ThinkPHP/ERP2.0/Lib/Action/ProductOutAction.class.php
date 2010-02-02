@@ -237,10 +237,12 @@ class ProductOutAction extends BaseAction{
 				$info['from_id'] = $lp_info['location_id'];
 
 				if('transfer'==$action) {
+					Session::set('sub', MODULE_NAME.'/transferOut');
 					$max_code = $this->dao->where(array('code'=>array('like','T%')))->max('code');
 					empty($max_code) && ($max_code = 'T'.sprintf("%09d",0));
 				}
 				elseif('return'==$action) {
+					Session::set('sub', MODULE_NAME.'/returns');
 					$max_code = $this->dao->where(array('code'=>array('like','R%')))->max('code');
 					empty($max_code) && ($max_code = 'R'.sprintf("%09d",0));
 				}

@@ -1,4 +1,35 @@
-<p class="page_title_text">Board List</p>
+<p class="page_title_text">Board and Fixed-Assets List</p>
+<table>
+<tr>
+	<td>
+		<form action="__URL__/index" method="post">
+		<table id="search_table" cellpadding="3" border="1" bordercolor="#FFFFFF" style="border-collapse:collapse;">
+		<tr>
+			<th>Board&nbsp;Code</th>
+			<th>Board&nbsp;Name</th>
+			<th>Manufacture</th>
+			<th>Series Number</th>
+			<th>Value/Package</th>
+			<th>Category</th>
+			<th>Project</td>
+			<th>Board Status</th>
+			<td rowspan="2" ><input type="submit" name="submit" value="Filter"/></td>
+		</tr>
+		<tr>
+			<td><input type="text" name="Internal_PN" size="10" value="{$request['Internal_PN']}"/></td>
+			<td><input type="text" name="description" size="10" value="{$request['description']}"/></td>
+			<td><input type="text" name="manufacture" size="10" value="{$request['manufacture']}"/></td>
+			<td><input type="text" name="MPN" size="12" value="{$request['MPN']}"/></td>
+			<td><input type="text" name="value" size="12" value="{$request['value']}"/></td>
+			<td><select name="category_id"><option value="">All</option>{$category_opts}</select></td>
+			<td><input type="text" name="project" size="10" value="{$request['project']}"/></td>
+			<td><select name="status_id"><option value="">All</option>{$status_opts}</select></td>
+		</tr>
+		</table>
+		</form>
+	</td>
+</tr>
+</table>
 <table cellpadding="3" border="1" bordercolor="#FFFFFF" style="border-collapse:collapse;">
 <tr>
 	<th>Code</th>
@@ -70,6 +101,7 @@
 	<td colspan="13">{$page}</td>
 </tr>
 </table>
+
 <p class="center">
 	<input type="button" onclick="javascript:document.location='__URL__/form';" value="Add a New Board" />
 </p>

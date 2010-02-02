@@ -172,18 +172,20 @@ class ProductInAction extends BaseAction{
 				$this->dao->to_type = 'location';
 				$this->dao->to_id = 1;
 
-				//get product data
-				$data = M('Product')->find($product_id);
-				if ('Board'==$data['type'] && ($PN!=$data['Internal_PN'] || $MPN!=$data['MPN'])) {//save new product
-					$data['id'] = 0;
-					$data['Internal_PN'] = $PN;
-					$data['MPN'] = $MPN;
+				if (empty($_POST['direct_input'])) {
+					//get product data
+					$data = M('Product')->find($product_id);
+					if ('Board'==$data['type'] && ($PN!=$data['Internal_PN'] || $MPN!=$data['MPN'])) {//save new product
+						$data['id'] = 0;
+						$data['Internal_PN'] = $PN;
+						$data['MPN'] = $MPN;
 
-					$max_code = M('Product')->where(array('type'=>'Board'))->max('code');
-					empty($max_code) && ($max_code = 'B'.sprintf("%09d",0));
-					$data['code'] = ++$max_code;
+						$max_code = M('Product')->where(array('type'=>'Board'))->max('code');
+						empty($max_code) && ($max_code = 'B'.sprintf("%09d",0));
+						$data['code'] = ++$max_code;
 
-					$product_id = M('Product')->add($data);
+						$product_id = M('Product')->add($data);
+					}
 				}
 			}
 			$this->dao->fixed = $fixed;
@@ -200,7 +202,13 @@ class ProductInAction extends BaseAction{
 		$this->dao->remark = $_REQUEST['remark'];
 		if ($id>0) {
 			if(false !== $this->dao->save()){
-				self::_success('Product information updated!',__URL__.('reject'==$this->dao->action?'/reject':($this->dao->fixed ? '/fixed' : '/floating')));
+				if (!empty($_POST['direct_input'])) {
+					$loc = __APP__.'/Board';
+				}
+				else {
+					$loc = __URL__.('reject'==$this->dao->action?'/reject':($this->dao->fixed ? '/fixed' : '/floating'));
+				}
+				self::_success('Product information updated!', $loc);
 			}
 			else{
 				self::_error('Update fail!'.(C('APP_DEBUG')?$this->dao->getLastSql():''));
@@ -212,7 +220,13 @@ class ProductInAction extends BaseAction{
 					self::_success('Product reject request ready for confirm!',__URL__.'/reject');
 				}
 				else{
-					self::_success('Product entering request ready for confirm!', __URL__ . ($fixed ? '/fixed' : '/floating'));
+					if (!empty($_POST['direct_input'])) {
+						$loc = __APP__.'/Board';
+					}
+					else {
+						$loc = __URL__.($fixed ? '/fixed' : '/floating');
+					}
+					self::_success('Product entering request ready for confirm!', $loc);
 				}
 			}
 			else{

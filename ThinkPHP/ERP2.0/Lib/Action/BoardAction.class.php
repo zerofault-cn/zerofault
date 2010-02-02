@@ -20,13 +20,34 @@ class BoardAction extends BaseAction{
 
 	public function index(){
 		$this->assign('ACTION_TITLE', 'List');
-
-		$count = $this->dao->where(array('type'=>'Board','fixed'=>1,'_logic'=>'or'))->getField('count(*)');
 		import("@.Paginator");
 		$limit = 20;
+
+		$this->assign('category_opts', self::genOptions(M('Category')->select(), $_REQUEST['category_id']) );
+		$this->assign('status_opts', self::genOptions(M('Options')->where(array('type'=>'status'))->order('sort')->select(), $_REQUEST['status_id']));
+
+		$where = array();
+		$where['type'] = 'Board';
+		$where['fixed'] = 1;
+		$where['_logic'] = 'or';
+		if(!empty($_POST['submit'])) {
+			(''!=$_REQUEST['category_id']) && ($where['category_id'] = intval($_REQUEST['category_id']));
+			(''!=$_REQUEST['status_id']) && ($where['status_id'] = intval($_REQUEST['status_id']));
+			(''!=trim($_REQUEST['Internal_PN'])) && ($where['Internal_PN'] = array('like', '%'.trim($_REQUEST['Internal_PN']).'%'));
+			(''!=trim($_REQUEST['description'])) && ($where['description'] = array('like', '%'.trim($_REQUEST['description']).'%'));
+			(''!=trim($_REQUEST['manufacture'])) && ($where['manufacture'] = array('like', '%'.trim($_REQUEST['manufacture']).'%'));
+			(''!=trim($_REQUEST['MPN'])) 		 && ($where['MPN'] 		   = array('like', '%'.trim($_REQUEST['MPN']).'%'));
+			(''!=trim($_REQUEST['value'])) 		 && ($where['value'] 	   = trim($_REQUEST['value']));
+			(''!=trim($_REQUEST['project'])) 	 && ($where['project'] 	   = array('like', '%'.trim($_REQUEST['project']).'%'));
+			if (count($where) > 3) {
+				$where['_logic'] = 'and';
+				$limit = 1000;
+			}
+		}
+		$count = $this->dao->where($where)->getField('count(*)');
 		$p = new Paginator($count,$limit);
 
-		$rs = $this->dao->where(array('type'=>'Board','fixed'=>1,'_logic'=>'or'))->field('id,type,description')->order('id desc')->limit($p->offset.','.$p->limit)->select();
+		$rs = $this->dao->where($where)->field('id,type,description')->order('id desc')->limit($p->offset.','.$p->limit)->select();
 		empty($rs) && ($rs = array());
 		$result = array();
 		foreach ($rs as $val) {
@@ -37,6 +58,7 @@ class BoardAction extends BaseAction{
 				$result[str_replace(array(' ','"',"'"), '', $val['description'])] = $this->dao->relation(true)->where('id='.$val['id'])->select();
 			}
 		}
+		$this->assign('request', $_REQUEST);
 		$this->assign('result',$result);
 		$this->assign('page', $p->showMultiNavi());
 		$this->assign('content','Board:index');
@@ -49,6 +71,7 @@ class BoardAction extends BaseAction{
 			$info = $this->dao->find($id);
 			$this->assign('ACTION_TITLE', 'Edit '.ucfirst($info['type']).' Data');
 			$info['category_opts'] = self::genOptions(M('Category')->where(array('type'=>ucfirst($info['type'])))->select(), $info['category_id'], 'name');
+			$info['supplier_opts'] = self::genOptions(D('Supplier')->select());
 			$info['currency_opts'] = self::genOptions(M('Options')->where(array('type'=>'currency'))->order('sort')->select(), $info['currency_id']);
 			$info['unit_opts'] = self::genOptions(M('Options')->where(array('type'=>'unit'))->order('sort')->select(), $info['unit_id']);
 			$info['status_opts'] = self::genOptions(M('Options')->where(array('type'=>'status'))->order('sort')->select(), $info['status_id']);
@@ -59,6 +82,7 @@ class BoardAction extends BaseAction{
 				'id' => 0,
 				'fixed' => 1,
 				'category_opts' => self::genOptions(M('Category')->where(array('type'=>'Board'))->select()),
+				'supplier_opts' => self::genOptions(D('Supplier')->select()),
 				'currency_opts' => self::genOptions(M('Options')->where(array('type'=>'currency'))->order('sort')->select()),
 				'unit_opts' => self::genOptions(M('Options')->where(array('type'=>'unit'))->order('sort')->select()),
 				'status_opts' => self::genOptions(M('Options')->where(array('type'=>'status'))->order('sort')->select())
@@ -76,7 +100,7 @@ class BoardAction extends BaseAction{
 	}
 
 	public function submit() {
-		if(empty($_POST['submit'])) {
+		if(empty($_POST['submit1']) && empty($_POST['submit2'])) {
 			return;
 		}
 		$PN = trim($_REQUEST['PN']);
@@ -132,6 +156,9 @@ class BoardAction extends BaseAction{
 		$this->dao->remark = $_REQUEST['remark'];
 		if ($id>0) {
 			if(false !== $this->dao->save()){
+				if (!empty($_POST['submit2'])) {
+					die('<script>parent.clear();parent.direct_input('.$id.');</script>');
+				}
 				self::_success('Board information updated!',__URL__);
 			}
 			else{
@@ -139,7 +166,10 @@ class BoardAction extends BaseAction{
 			}
 		}
 		else {
-			if($this->dao->add()) {
+			if($id = $this->dao->add()) {
+				if (!empty($_POST['submit2'])) {
+					die('<script>parent.clear();parent.direct_input('.$id.');</script>');
+				}
 				self::_success('Add board data success!',__URL__);
 			}
 			else{
