@@ -37,7 +37,7 @@
 <tr>
 	<td>Fixed Assets:</td>
 	<td><if condition="$info['fixed'] eq 1">
-		<input type="radio" name="fixed" value="1" checked="true"/>Yes&nbsp;&nbsp;<input type="radio" name="fixed" value="0" />No
+		<input type="radio" class="fixed" name="fixed" value="1" checked="true"/>Yes&nbsp;&nbsp;<input type="radio" class="fixed" name="fixed" value="0" />No
 		<else />
 		<input type="radio" name="fixed" value="1" />Yes&nbsp;&nbsp;<input type="radio" name="fixed" value="0" checked="true"/>No
 		</if>
@@ -99,8 +99,70 @@
 </tr>
 </table>
 <p class="center">
-	<input type="submit" value="Submit" name="submit"/>
+	<input type="submit" value="Submit" name="submit1"/>
 	&nbsp;&nbsp;&nbsp;&nbsp;
+	<input type="button" value="Direct Warehouse Entry" onclick="mysubmit();"/> &nbsp;&nbsp;&nbsp;&nbsp;
+	<input type="button" value="Cancel" onclick="javascript:location.href='__URL__';"/>
+</p>
+<input type="hidden" name="submit2" value="" />
+</form>
+
+<div id="direct_input" style="display:none;">
+<form name="direct_input" action="__APP__/ProductIn/submit" method="post" target="_iframe">
+<p class="page_title_text">Direct Warehouse Entry</p>
+<table>
+<tr>
+	<td>Supplier:</td>
+	<td><select name="supplier_id"><option value="">Select One</option>{$info.supplier_opts}</select>
+		</td>
+</tr>
+<tr>
+	<td>Currency:</td>
+	<td><select name="currency_id"><option value="">Select One</option>{$info.currency_opts}</select></td>
+</tr>
+<tr>
+	<td>
+	Quantity:</td>
+	<td><input type="text" maxlength="20" size="30" id="quantity" name="quantity" value="" onchange="calc_total()"/></td>
+</tr>
+<tr>
+	<td>Unit Price:</td>
+	<td><input type="text" maxlength="20" size="30" id="price" name="price" value="" onchange="calc_total()"/></td>
+</tr>
+<tr>
+	<td>Total Price:</td>
+	<td><input type="text" maxlength="20" size="30" id="total" value="" readonly="true"/> <img src="../Public/Images/lock.gif" /></td>
+</tr>
+<tr>
+	<td>Accessories:</td>
+	<td><input type="text" maxlength="20" size="30" name="accessories" value=""/></td>
+</tr>
+<tr>
+	<td valign="top">Remark:</td>
+	<td><textarea name="remark" rows="3" cols="36"></textarea></td>
+</tr>
+</table>
+<p class="center">
+	<input type="hidden" name="action" value="enter" />
+	<input type="hidden" id="fixed" name="fixed" value="" />
+	<input type="hidden" name="direct_input" value="1" />
+	<input type="hidden" id="product_id" name="product_id" value="" />
+	<input type="submit" value="Submit" name="submit"/>
 	<input type="button" value="Cancel" onclick="javascript:location.href='__URL__';"/>
 </p>
 </form>
+</div>
+<script type="text/javascript">
+function mysubmit() {
+	$("input[name='submit2']").val('1');
+	$("form:first").submit();
+}
+function clear() {
+	$("input[name='submit2']").val('');
+}
+function direct_input(id) {
+	$("input#product_id").val(id);
+	$("input#fixed").val($("input.fixed:checked").val());
+	tb_show('','#TB_inline?width=330&height=310&modal=true&inlineId=direct_input','')
+}
+</script>

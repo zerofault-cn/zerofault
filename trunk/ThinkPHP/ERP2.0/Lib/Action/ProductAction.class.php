@@ -20,7 +20,31 @@ class ProductAction extends BaseAction{
 
 	public function index() {
 		$this->assign('ACTION_TITLE', 'List');
-		$this->assign('result', $this->dao->where(array('type'=>'Component','fixed'=>0))->relation(true)->order('id')->select());
+		import("@.Paginator");
+		$limit = 20;
+		
+		$this->assign('category_opts', self::genOptions(M('Category')->select(), $_REQUEST['category_id']) );
+
+		$where = array();
+		$where['type'] = 'Component';
+		$where['fixed'] = 0;
+		if(!empty($_POST['submit'])) {
+			(''!=$_REQUEST['category_id']) && ($where['category_id'] = intval($_REQUEST['category_id']));
+			(''!=trim($_REQUEST['Internal_PN'])) && ($where['Internal_PN'] = array('like', '%'.trim($_REQUEST['Internal_PN']).'%'));
+			(''!=trim($_REQUEST['description'])) && ($where['description'] = array('like', '%'.trim($_REQUEST['description']).'%'));
+			(''!=trim($_REQUEST['manufacture'])) && ($where['manufacture'] = array('like', '%'.trim($_REQUEST['manufacture']).'%'));
+			(''!=trim($_REQUEST['MPN'])) 		 && ($where['MPN'] 		   = array('like', '%'.trim($_REQUEST['MPN']).'%'));
+			(''!=trim($_REQUEST['value'])) 		 && ($where['value'] 	   = trim($_REQUEST['value']));
+			(''!=trim($_REQUEST['project'])) 	 && ($where['project'] 	   = array('like', '%'.trim($_REQUEST['project']).'%'));
+			if (count($where)>2) {
+				$limit = 1000;
+			}
+		}
+		$count = $this->dao->where($where)->getField('count(*)');
+		$p = new Paginator($count,$limit);
+
+		$this->assign('result', $this->dao->where($where)->relation(true)->order('id desc')->limit($p->offset.','.$p->limit)->select());
+		$this->assign('page', $p->showMultiNavi());
 		$this->assign('content','Product:index');
 		$this->display('Layout:ERP_layout');
 	}
