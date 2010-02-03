@@ -98,6 +98,8 @@ a.flag:link, a.flag:visited{
 	width:609px;
 	height:91px;
 	border:#E6E6E6 1px solid;
+	line-height:91px;
+	text-align:center;
 }
 #header .weather{
 	float:left;
