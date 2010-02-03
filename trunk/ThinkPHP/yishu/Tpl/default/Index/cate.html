@@ -7,11 +7,11 @@
 			<ul>
 				<iterate name="site_list" id="item">
 				<li>
-					<if condition="is_file('__APP__/../Html/Attach/logo/'.$site_info['id'].'.gif') eq true">
-					<img class="site_logo" src="__APP__/../Html/Attach/logo/{$site_info['id']}.gif" />
+					<a href="__URL__/goto/id/{$item.id}" target="_blank"><if condition="is_file('__APP__/../Html/Attach/logo/'.$item['id'].'.gif') eq true">
+					<img class="site_logo" src="__APP__/../Html/Attach/logo/{$item['id']}.gif" />
 					<else />
 					<img class="site_logo" src="../Public/Images/logo_0.png" />
-					</if>
+					</if></a>
 					<h4><a href="__URL__/site/id/{$item.id}/">{$item.name}</a> <a href="__URL__/site/id/{$item.id}/">[详情]</a> <a href="__URL__/goto/id/{$item.id}/" target="_blank">[访问]</a></h4>
 					<p>{$item.descr|nl2br}</p>
 				</li>

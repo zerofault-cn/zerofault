@@ -4,9 +4,9 @@
 			<ul>
 				<iterate name="category_list" id="item">
 				<if condition="ceil($i/2)%2 eq 0">
-				<li class="gray">&nbsp;&nbsp;<a href="__URL__/cate/id/{$item.id}/">{$item.name}</a></li>
+				<li class="gray">&nbsp;&nbsp;<a href="__URL__/cate/id/{$item.id}/" target="_blank">{$item.name}</a></li>
 				<else />
-				<li>&nbsp;&nbsp;<a href="__URL__/cate/id/{$item.id}/">{$item.name}</a></li>
+				<li>&nbsp;&nbsp;<a href="__URL__/cate/id/{$item.id}/" target="_blank">{$item.name}</a></li>
 				</if>
 				</iterate>
 				<div class="clear"></div>
@@ -19,9 +19,9 @@
 				<iterate name="famous_list" id="item">
 				<li>
 					<if condition="$item['flag'] eq 1">
-					<a class="flag" href="__URL__/site/id/{$item.id}/">{$item.name}</a>
+					<a class="flag" href="__URL__/site/id/{$item.id}/" target="_blank">{$item.name}</a>
 					<else />
-					<a href="__URL__/site/id/{$item.id}/">{$item.name}</a>
+					<a href="__URL__/site/id/{$item.id}/" target="_blank">{$item.name}</a>
 					</if>
 				</li>
 				</iterate>
@@ -31,9 +31,9 @@
 				<iterate name="recommend_list" id="item">
 				<li>
 					<if condition="$item['flag'] eq 1">
-					<a class="flag" href="__URL__/site/id/{$item.id}/">{$item.name}</a>
+					<a class="flag" href="__URL__/site/id/{$item.id}/" target="_blank">{$item.name}</a>
 					<else />
-					<a href="__URL__/site/id/{$item.id}/">{$item.name}</a>
+					<a href="__URL__/site/id/{$item.id}/" target="_blank">{$item.name}</a>
 					</if>
 				</li>
 				</iterate>
@@ -44,7 +44,7 @@
 		<div id="pic_list">
 			<ul>
 				<iterate name="pic_list" id="item">
-				<li><a href="__URL__/site/id/{$item.id}/"><img src="__APP__/../Html/Attach/thumb/{$item['id']}.jpg"/><br />{$item.name}</a></li>
+				<li><a href="__URL__/site/id/{$item.id}/" target="_blank"><img src="__APP__/../Html/Attach/thumb/{$item['id']}.jpg"/><br />{$item.name}</a></li>
 				</iterate>
 				<div class="clear"></div>
 			</ul>
@@ -59,9 +59,9 @@
 					<else />
 				<li>
 					</if>
-					<label>[<a href="__URL__/cate/id/{$item.id}">{$item.name}</a>]</label>
+					<label>[<a href="__URL__/cate/id/{$item.id}" target="_blank">{$item.name}</a>]</label>
 					<iterate name="item['site_list']" id="site_item" key="j">
-					<span><a id="url" class="<if condition='$site_item.mark eq 1'>red</if>" href="__URL__/site/id/{$site_item.id}/" >{$site_item.name}</a></span>
+					<span><a id="url" class="<if condition='$site_item.mark eq 1'>red</if>" href="__URL__/site/id/{$site_item.id}/" target="_blank">{$site_item.name}</a></span>
 					</iterate>
 				</li>
 				<div class="clear"></div>
@@ -74,13 +74,13 @@
 			<h3><strong>网站名称</strong><strong>人气</strong><div class="clear"></div></h3>
 			<ul id="tab3" class="switch">
 				<iterate name="hot_list" id="item">
-				<li><a href="__URL__/site/id/{$item.id}/">{$item.name}</a><i>{$item.view}</i></li>
+				<li><a href="__URL__/site/id/{$item.id}/" target="_blank">{$item.name}</a><i>{$item.view}</i></li>
 				</iterate>
 				
 			</ul>
 			<ul id="tab4" class="switch" style="display:none">
 				<iterate name="week_list" id="item">
-				<li><a href="__URL__/site/id/{$item.id}/">{$item.name}</a><i>{$item.view}</i></li>
+				<li><a href="__URL__/site/id/{$item.id}/" target="_blank">{$item.name}</a><i>{$item.view}</i></li>
 				</iterate>
 			</ul>
 		</div>
@@ -90,7 +90,7 @@
 			<h3><strong>网站名称</strong><strong>分类</strong><div class="clear"></div></h3>
 			<ul class="sort">
 				<iterate name="new_list" id="item">
-				<li><a href="__URL__/site/id/{$item.id}/">{$item.name}</a><i><a href="__URL__/cate/id/{$item['cate_info']['id']}">{$item['cate_info']['name']}</a></i></li>
+				<li><a href="__URL__/site/id/{$item.id}/" target="_blank">{$item.name}</a><i><a href="__URL__/cate/id/{$item['cate_info']['id']}" target="_blank">{$item['cate_info']['name']}</a></i></li>
 				</iterate>
 				<div class="clear"></div>
 			</ul>

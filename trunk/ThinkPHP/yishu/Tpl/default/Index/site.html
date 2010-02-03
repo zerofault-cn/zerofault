@@ -11,11 +11,11 @@
 							<table width="100%" cellpadding="0" cellspacing="0">
 							<tr>
 								<td rowspan="2">
-									<if condition="is_file('__APP__/../Html/Attach/logo/'.$site_info['id'].'.gif') eq true">
+									<a href="__URL__/goto/id/{$site_info.id}" target="_blank"><if condition="is_file('__APP__/../Html/Attach/logo/'.$site_info['id'].'.gif') eq true">
 									<img class="site_logo" src="__APP__/../Html/Attach/logo/{$site_info['id']}.gif" />
 									<else />
 									<img class="site_logo" src="../Public/Images/logo_0.png" />
-									</if>
+									</if></a>
 								</td>
 								<td width="140" valign="bottom"><span id="pfno"></span><br /><span id="pftip"></span></td>
 								<td width="120" id="vote">{$site_info.vote|substr=0,1}<small>{$site_info.vote|substr=1}</small></td>
@@ -41,11 +41,11 @@
 							</table>
 						</li>
 						<li>
-							<span class="site_view">人气:&nbsp;&nbsp;<em>{$site_info.view}</em></span><span class="site_name">网站名称:&nbsp;&nbsp;<em>{$site_info.name}</em></span></li>
+							<span class="site_view">人气:&nbsp;&nbsp;<em>{$site_info.view}</em></span><span class="site_name">网站名称:&nbsp;&nbsp;<em><a href="__URL__/goto/id/{$site_info.id}" target="_blank">{$site_info.name}</a></em></span></li>
 						<li>
 							<strong>网址:</strong>&nbsp;&nbsp;<a href="__URL__/goto/id/{$site_info.id}" target="_blank">{$site_info.url}</a>&nbsp;&nbsp;&nbsp;<a href="__URL__/goto/id/{$site_info.id}" target="_blank"><img src="../Public/Images/enter.gif" align="absmiddle" /></a></li>
 					</ul>
-					<if condition="is_file('__APP__/../Html/Attach/thumb/'.$site_info['id'].'.jpg') eq true"><img class="site_thumb" src="__APP__/../Html/Attach/thumb/{$site_info['id']}.jpg" /></if>
+					<a href="__URL__/goto/id/{$site_info.id}" target="_blank"><if condition="is_file('__APP__/../Html/Attach/thumb/'.$site_info['id'].'.jpg') eq true"><img class="site_thumb" src="__APP__/../Html/Attach/thumb/{$site_info['id']}.jpg" /></if></a>
 					<div class="clear"></div>
 				</li>
 				<li>
