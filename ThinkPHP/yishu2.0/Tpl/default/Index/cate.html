@@ -1,0 +1,64 @@
+	<div id="position">
+		当前位置：&nbsp;<a href="__URL__/">首页</a> &gt; {$cate_info.name}
+	</div>
+	<div id="list">
+		<div class="main">
+			<h2>{$cate_info.name} 网站列表</h2>
+			<ul>
+				<iterate name="site_list" id="item">
+				<li>
+					<a href="__URL__/goto/id/{$item.id}" target="_blank"><if condition="is_file('__APP__/../Html/Attach/logo/'.$item['id'].'.gif') eq true">
+					<img class="site_logo" src="__APP__/../Html/Attach/logo/{$item['id']}.gif" />
+					<else />
+					<img class="site_logo" src="../Public/Images/logo_0.png" />
+					</if></a>
+					<h4><a href="__URL__/site/id/{$item.id}/">{$item.name}</a> <a href="__URL__/site/id/{$item.id}/">[详情]</a> <a href="__URL__/goto/id/{$item.id}/" target="_blank">[访问]</a></h4>
+					<p>{$item.descr|nl2br}</p>
+				</li>
+				</iterate>
+				<li class="page">{$page}</li>
+			</ul>
+		</div><!-- end main -->
+		<div class="side">
+			<div id="category" class="side">
+				<h2>网站分类</h2>
+				<ul>
+					<iterate name="category_list" id="item">
+					<if condition="ceil($i/2)%2 eq 0">
+					<li class="gray">&nbsp;&nbsp;<a href="__URL__/cate/id/{$item.id}/">{$item.name}</a></li>
+					<else />
+					<li>&nbsp;&nbsp;<a href="__URL__/cate/id/{$item.id}/">{$item.name}</a></li>
+					</if>
+					</iterate>
+					<div class="clear"></div>
+				</ul>
+			</div>
+			<div class="side">
+				<br />
+				<h2>本类热门网站</h2>
+				<h3><strong>网站名称</strong><strong>人气</strong><div class="clear"></div></h3>
+				<ul id="tab3" class="switch">
+					<iterate name="hot_list" id="item">
+					<li><a href="__URL__/site/id/{$item.id}/">{$item.name}</a><i>{$item.view}</i></li>
+					</iterate>
+					
+				</ul>
+				<ul id="tab4" class="switch" style="display:none">
+					<iterate name="week_list" id="item">
+					<li><a href="__URL__/site/id/{$item.id}/">{$item.name}</a><i>{$item.view}</i></li>
+					</iterate>
+				</ul>
+			</div>
+			<div class="side">
+				<br />
+				<h2>本类新入网站</h2>
+				<ul class="sort">
+					<iterate name="new_list" id="item">
+					<li><a href="__URL__/site/id/{$item['id']}/">{$item.name}</a><em><a href="__URL__/site/id/{$item['id']}">详细</a><span>&nbsp;|&nbsp;</span><a href="__URL__/goto/id/{$item['id']}">进入</a></em></li>
+					</iterate>
+					<div class="clear"></div>
+				</ul>
+			</div>
+		</div>
+	</div><!-- end detail -->
+	<div class="clear"></div>
