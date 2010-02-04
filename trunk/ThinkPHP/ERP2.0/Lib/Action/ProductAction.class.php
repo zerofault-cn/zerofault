@@ -40,7 +40,7 @@ class ProductAction extends BaseAction{
 				$limit = 1000;
 			}
 		}
-		$count = $this->dao->where($where)->getField('count(*)');
+		$count = $this->dao->where($where)->count();
 		$p = new Paginator($count,$limit);
 
 		$this->assign('result', $this->dao->where($where)->relation(true)->order('id desc')->limit($p->offset.','.$p->limit)->select());

@@ -19,15 +19,18 @@ class InventoryAction extends BaseAction{
 
 	public function index() {
 		Session::set('sub', MODULE_NAME.'/'.ACTION_NAME);
-		$this->assign('ACTION_TITLE', 'Search');
+		$this->assign('ACTION_TITLE', 'List');
 		$this->assign('category_opts', self::genOptions(M('Category')->select(), $_REQUEST['category_id']) );
 		$this->assign('supplier_opts', self::genOptions(D('Supplier')->select(), $_REQUEST['supplier_id']));
+
+		import("@.Paginator");
+		$limit = 50;
+
 		$where = array();
 		$where['action'] = 'enter';
 		$where['status'] = 1;
 		$result = array();
 		if(!empty($_POST['submit'])) {
-			$this->assign('ACTION_TITLE', 'Result');
 			(''!=$_REQUEST['category_id']) && ($where['category_id'] = $_REQUEST['category_id']);
 			(''!=$_REQUEST['supplier_id']) && ($where['supplier_id'] = $_REQUEST['supplier_id']);
 			(''!=trim($_REQUEST['Internal_PN'])) && ($where['Internal_PN'] = array('like', '%'.trim($_REQUEST['Internal_PN']).'%'));
@@ -36,64 +39,72 @@ class InventoryAction extends BaseAction{
 			(''!=trim($_REQUEST['MPN'])) 		 && ($where['MPN'] 		   = array('like', '%'.trim($_REQUEST['MPN']).'%'));
 			(''!=trim($_REQUEST['value'])) 		 && ($where['value'] 	   = trim($_REQUEST['value']));
 			(''!=trim($_REQUEST['project'])) 	 && ($where['project'] 	   = array('like', '%'.trim($_REQUEST['project']).'%'));
-			$result = $this->dao->field("Options.name as unit_name, Category.name as category_name, Product.id as product_id, Product.fixed as fixed, Product.type as type, Product.Internal_PN as Internal_PN, Product.description as description, group_concat(distinct Supplier.name) as supplier_names")->where($where)->group('product_id')->select();
-			foreach ($result as $i=>$val) {
-				$where = array();
-				$where['product_id'] = $val['product_id'];
-				$where['status'] = 1;
-				$where['_string'] = "(from_type='location' and from_id=1) or (to_type='location' and to_id=1)";
-				$result[$i]['quantity'] = M('ProductFlow')->where($where)->group('action')->getField('action,sum(quantity)');
-
-				//获取物品库存
-				//$result[$i]['remain'] = $result[$i]['quantity']['enter'] - $result[$i]['quantity']['reject'] - $result[$i]['quantity']['apply'] - $result[$i]['quantity']['transfer'] - $result[$i]['quantity']['release'] - $result[$i]['quantity']['scrap'] + $result[$i]['quantity']['return'];
-				$where = array();
-				$where['product_id'] = $val['product_id'];
-				$where['type'] = 'location';
-				$where['location_id'] =1;
-				$result[$i]['inventory'] = M('LocationProduct')->where($where)->find();
-
-				$result[$i]['suppliers'] = explode(',', $val['supplier_names']);
-
-				//获取物品的Owner
-				$where = array();
-				$where['product_id'] = $val['product_id'];
-				$where['chg_quantity'] = array('gt',0);
-				$where['_string'] = "(type='location' and location_id!=1) or type='staff'";
-				$owner_arr = M('LocationProduct')->where($where)->select();
-				if (empty($owner_arr)) {
-					$owner = array();
-				}
-				else {
-					$owner = array();
-					$owner['quantity'] = $owner_arr[0]['chg_quantity'];
-					if ('location' == $owner_arr[0]['type']) {
-						$owner['name'] = M('Location')->where('id='.$owner_arr[0]['location_id'])->getField('name');
-					}
-					else {
-						$owner['name'] = M('Staff')->where('id='.$owner_arr[0]['location_id'])->getField('realname');
-					}
-					if (count($owner_arr)>1) {
-						$owner['more'] = 1;
-					}
-				}
-				/*
-				foreach ($owner_arr as $j=>$owner) {
-					if ('location' == $owner['type']) {
-						$owner_arr[$j]['name'] = M('Location')->where('id='.$owner['location_id'])->getField('name');
-					}
-					else {
-						$owner_arr[$j]['name'] = M('Staff')->where('id='.$owner['location_id'])->getField('realname');
-					}
-				}*/
-				$result[$i]['owner'] = $owner;
-				//获取最后一次Remark
-				$lastRemark = self::getLastComment($val['product_id'])."\n";
-				$result[$i]['lastRemark'] = substr($lastRemark, 0, strpos($lastRemark, "\n"));
+			if (count($where)>2) {
+				$limit = 1000;
 			}
 		}
+		$rs = $this->dao->where($where)->group('product_id')->select();
+		$p = new Paginator(count($rs),$limit);
+
+		$result = $this->dao->field("Options.name as unit_name, Category.name as category_name, Product.id as product_id, Product.fixed as fixed, Product.type as type, Product.Internal_PN as Internal_PN, Product.description as description, group_concat(distinct Supplier.name) as supplier_names")->where($where)->group('product_id')->order('Internal_PN')->limit($p->offset.','.$p->limit)->select();
+		foreach ($result as $i=>$val) {
+			$where = array();
+			$where['product_id'] = $val['product_id'];
+			$where['status'] = 1;
+			$where['_string'] = "(from_type='location' and from_id=1) or (to_type='location' and to_id=1)";
+			$result[$i]['quantity'] = M('ProductFlow')->where($where)->group('action')->getField('action,sum(quantity)');
+
+			//获取物品库存
+			//$result[$i]['remain'] = $result[$i]['quantity']['enter'] - $result[$i]['quantity']['reject'] - $result[$i]['quantity']['apply'] - $result[$i]['quantity']['transfer'] - $result[$i]['quantity']['release'] - $result[$i]['quantity']['scrap'] + $result[$i]['quantity']['return'];
+			$where = array();
+			$where['product_id'] = $val['product_id'];
+			$where['type'] = 'location';
+			$where['location_id'] =1;
+			$result[$i]['inventory'] = M('LocationProduct')->where($where)->find();
+
+			$result[$i]['suppliers'] = explode(',', $val['supplier_names']);
+
+			//获取物品的Owner
+			$where = array();
+			$where['product_id'] = $val['product_id'];
+			$where['chg_quantity'] = array('gt',0);
+			$where['_string'] = "(type='location' and location_id!=1) or type='staff'";
+			$owner_arr = M('LocationProduct')->where($where)->select();
+			if (empty($owner_arr)) {
+				$owner = array();
+			}
+			else {
+				$owner = array();
+				$owner['quantity'] = $owner_arr[0]['chg_quantity'];
+				if ('location' == $owner_arr[0]['type']) {
+					$owner['name'] = M('Location')->where('id='.$owner_arr[0]['location_id'])->getField('name');
+				}
+				else {
+					$owner['name'] = M('Staff')->where('id='.$owner_arr[0]['location_id'])->getField('realname');
+				}
+				if (count($owner_arr)>1) {
+					$owner['more'] = 1;
+				}
+			}
+			/*
+			foreach ($owner_arr as $j=>$owner) {
+				if ('location' == $owner['type']) {
+					$owner_arr[$j]['name'] = M('Location')->where('id='.$owner['location_id'])->getField('name');
+				}
+				else {
+					$owner_arr[$j]['name'] = M('Staff')->where('id='.$owner['location_id'])->getField('realname');
+				}
+			}*/
+			$result[$i]['owner'] = $owner;
+			//获取最后一次Remark
+			$lastRemark = self::getLastComment($val['product_id'])."\n";
+			$result[$i]['lastRemark'] = substr($lastRemark, 0, strpos($lastRemark, "\n"));
+		}
+		
 		//dump($result);
 		$this->assign('request', $_REQUEST);
 		$this->assign('result', $result);
+		$this->assign('page', $p->showMultiNavi());
 		$this->assign('content','Inventory:index');
 		$this->display('Layout:ERP_layout');
 	}

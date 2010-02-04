@@ -3,7 +3,13 @@
 	<td class="attribute">Type:</td>
 	<td>{$info['type']}</td>
 </tr>
+<if condition="$info['type'] eq 'Board'">
 <tr class="trbg0">
+	<td class="attribute">Status:</td>
+	<td>{$info['status']['name']}</td>
+</tr>
+</if>
+<tr class="trbg1">
 	<td class="attribute">Category:</td>
 	<td>{$info['category']['name']}</td>
 </tr>

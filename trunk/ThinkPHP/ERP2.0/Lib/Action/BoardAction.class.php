@@ -44,7 +44,7 @@ class BoardAction extends BaseAction{
 				$limit = 1000;
 			}
 		}
-		$count = $this->dao->where($where)->getField('count(*)');
+		$count = $this->dao->where($where)->count();
 		$p = new Paginator($count,$limit);
 
 		$rs = $this->dao->where($where)->field('id,type,description')->order('id desc')->limit($p->offset.','.$p->limit)->select();
