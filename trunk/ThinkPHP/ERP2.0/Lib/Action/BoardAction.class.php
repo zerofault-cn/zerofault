@@ -179,77 +179,92 @@ class BoardAction extends BaseAction{
 	}
 	public function import() {
 		//define header
-		$fields_arr = array();
+		$header_arr = array(
+			'Board Code',
+			'Board Name',
+			'Manufacture',
+			'Series Number',
+			'Value/Package',
+			'Unit',
+			'Category',
+			'Fixed Assets',
+			'Status',
+			'RoHS',
+			'LT days',
+			'MOQ',
+			'MSL',
+			'Project',
+			'Currency',
+			'Price',
+			'Accessories',
+			'Attachment',
+			'Remark'
+			);
 		//define the map of csv_field=>table_column
-		$fields_map_arr = array()
+		$fields_arr = array(
+			'Internal_PN',
+			'description',
+			'manufacture',
+			'MPN',
+			'value',
+			'unit_name',
+			'category_name',
+			'Fixed',
+			'status_name',
+			'Rohs',
+			'LT_days',
+			'MOQ',
+			'MSL',
+			'project',
+			'currency_name',
+			'price',
+			'accessories',
+			'attachment',
+			'remark'
+			);
 		//do upload
 		if (empty($_FILES['file']) || $_FILES['file']['size']==0) {
-			error('Please select a file to upload.');
+			self::_error('Please select a file to upload.');
 		}
 		$confirm = $_REQUEST['confirm'];
 
 		$file = $_FILES['file'];
 		$file_name = $file['name'];
-		$line_arr = file($file['tmp_name']);
+		$fp = fopen($file['tmp_name'], "r");
+		$i=0;
 		$values_arr = array();//to save the validated line array
-		foreach ($line_arr as $i=>$line) {
-			if (''==trim($line)) {//skip empty line
+		while($value_arr = fgetcsv($fp)) {
+			if (empty($value_arr)) {
 				continue;
 			}
-			var_dump($line);
-			$data_arr = array_combine($fields_map_arr, explode($field_sp, trim($line)));
-			//var_dump($data_arr);
-			$data_arr['Date'] = parseChDate($data_arr['Date']);//parse Chinese date
-			if (count($data_arr) != count($fields_arr[$provider])) {
-				write_log(date("Y/m/d H:i:s") . ' Failure (Search) The imported ' . date("ymd", $start_date) . '-' . date("ymd", $end_date) .' '. $provider.'\'s file isn\'t well-formatted.');
-				error('The imported file isn\'t well-formatted. (Line:'.$i.')');
+			if ($i == 0) {
+				if ($value_arr != $header_arr) {
+					self::_error('The imported file\'s header isn\'t right.');
+				}
 			}
 			else {
-				//go on
+				if (count($value_arr) != count($header_arr)) {
+					self::_error('The imported file isn\'t well-formatted. (Line:'.($i+1).')');
+				}
+				$values_arr[$i] = array_combine($fields_arr, $value_arr);
 			}
-			if (0 == $i && array_values($data_arr) != $fields_arr[$provider]) {
-				write_log(date("Y/m/d H:i:s") . ' Failure (Search) The imported ' . date("ymd", $start_date) . '-' . date("ymd", $end_date) .' '. $provider.'\'s file\'s header isn\'t right.');
-				error('The imported file\'s header isn\'t right.');
-			}
-			elseif ($start_date <= strtotime($data_arr['Date']) && strtotime($data_arr['Date']) <= $end_date && (intval(trim($data_arr['Query'], '",'))>0 || floatval(trim($data_arr['Revenue'],'￥",'))>0)) {
-				$values_arr[$i] = $data_arr;
-			}
-			else {
-				echo 'Skip Line: '.$i."\n";
-			}
+			$i++;
 		}
 		//validate upload data
 		if (empty($values_arr)) {
-			write_log(date("Y/m/d H:i:s") . ' Failure (Search) There is no record in the imported ' . date("ymd", $start_date) . '-' . date("ymd", $end_date) . $provider.'\'s file.');
-			error('There is no record in the date range.');
+			self::_error('There is no record in the file.');
 		}
 		if (empty($confirm)) {
 			//confirm once
-			confirm('Import search records into the database?<br /><br />Total records: '.number_format(count($line_arr)-1).'<br />Import records: '.number_format(count($values_arr)).' ('.date("ymd", $start_date) .' - '.date("ymd", $end_date).')', 1);
-		}
-		elseif ('1'==$confirm) {
-			//check exists data
-			$count = $db->GetOne("select count(*) from Search where Provider='".$provider."' and Date BETWEEN '".date("Y-m-d", $start_date)."' AND '".date("Y-m-d", $end_date)."' order by Date");
-			if ($count>0) {
-				//confirm twice
-				confirm('There are already data records between '.date("ymd", $start_date) . '-' . date("ymd", $end_date).'.<br /><br />Are you sure to import anyway?', 2);
-			}
+			self::_confirm('Import basic board data into the database?<br /><br />Record numbers: '.$i.'<br />The repeated record will be ignored', 1);
 		}
 		else {
 		}
 		$duplicated = 0;
 		$imported = 0;
 		$failure_line_arr = array();
-		foreach ($values_arr as $line_num=>$value_arr) {
+		foreach ($values_arr as $i=>$value_arr) {
 			//check repeat
-			$sql  = "Select count(*) from Search where Provider='".$provider."'";
-			if ('Yandex' == $provider) {
-				$sql .= " and Channel='".$clid."'";
-			}
-			elseif ('Baidu' == $provider) {
-				$sql .= " and MainChannel='".$mainChannel."'";
-			}
-			$sql .= arr2sql($value_arr, ' and ');
 			if ($db->GetOne($sql)>0) {
 				$duplicated ++;
 				continue;
