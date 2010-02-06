@@ -154,6 +154,21 @@ class BaseAction extends Action{
 	}
 	/**
 	*
+	* 生成弹出“确认”提示的js代码
+	*
+	* @param string $msg 确认提示语句
+	* @param string $times 确认次数
+	*
+	* @return string HTML格式的js代码
+	*/
+	protected function _confirm($msg, $times) {
+		$html  = '<script language="JavaScript" type="text/javascript">';
+		$html .= 'parent.myConfirm("'.$msg.'", '.$times.');';
+		$html .= '</script>';
+		die($html);
+	}
+	/**
+	*
 	* 更新某条纪录的某个字段
 	* 只能在_iframe中执行，执行后在父窗口提示结果
 	*/
