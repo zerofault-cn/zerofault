@@ -1,0 +1,40 @@
+	{$page}
+	<table id="table" border="1" cellpadding="3" cellspacing="0" width="100%" bordercolor="#999999" style="border-collapse:collapse;">
+	<tr bgcolor="#ededed">
+		<th width="5%">ID</th>
+		<th>评论内容</th>
+		<notpresent name="_GET['id']">
+		<th>评论对象</th>
+		</notpresent>
+		<th>用户</th>
+		<th width="10%">操作</th>
+	</tr>
+	<iterate name="list" id="item">
+	<tr bgcolor="<eq name='mod' value='1'>#FFFFE1</eq>">
+		<td>{$item['id']}</td>
+		<td class="a_left">{$item['content']|nl2br}</a></td>
+		<notpresent name="_GET['id']">
+		<td><a href="__URL__/index/id/{$item['site_info']['id']}" title="查看对网站【{$item['cate_info']['name']}】的所有评论">{$item['site_info']['name']}</a>
+		</notpresent>
+		<td>
+			<if condition="$item['email']">
+			<a href="javascript:void(0);" onclick="copy('{$item['email']}')" title="将该用户的Email地址复制到剪贴板">{$item['name']}</a>
+			<else />
+			{$item['name']}
+			</if>
+			<br />
+			<a href="javascript:void(0);" onclick="traceIP('{$item['ip']}')" title="查看IP地址来源">{$item['ip']}</a><br />
+			{$item['addtime']}
+		</td>
+		<td>
+			<if condition="$item['status'] neq '-1'">
+			<a href="__URL__/update/id/{$item['id']}/f/status/v/-1"  target="_iframe" title="删除"><img src="../Public/Image/cross.gif" alt="删除" align="absmiddle"/></a>
+			<else />
+			<a href="__URL__/update/id/{$item['id']}/f/status/v/1" target="_iframe" title="恢复"><img src="../Public/Image/tick.gif" alt="恢复" align="absmiddle"/></a>
+			<a href="__URL__/delete/id/{$item.id}" target="_iframe" title="彻底删除"><img src="../Public/Image/cross.gif" alt="彻底删除" align="absmiddle"/></a>
+			</if>
+		</td>
+	</tr>
+	</iterate>
+	</table>
+	<script language="JavaScript" type="text/javascript" src="../Public/Js/comment_func.js"></script>

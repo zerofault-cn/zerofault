@@ -1,0 +1,72 @@
+	{$page}
+	<table id="table" border="1" cellpadding="3" cellspacing="0" width="100%" bordercolor="#999999" style="border-collapse:collapse;">
+	<tr bgcolor="#ededed">
+		<th width="5%">ID</th>
+		<th>LOGO</th>
+		<th>网站名称</th>
+		<notpresent name="_GET['id']">
+		<th>所属分类</th>
+		</notpresent>
+		<th width="10%">关注/访问</th>
+		<th width="12%">排序</th>
+		<th width="14%">添加时间</th>
+		<th width="14%">操作</th>
+	</tr>
+	<iterate name="list" id="item">
+	<tr bgcolor="<eq name='mod' value='1'>#FFFFE1</eq>" class="<eq name='item.status' value='0'>gray</eq> <eq name='item["cate_info"]["status"]' value='0'>gray</eq>">
+		<td>{$item['id']}</td>
+		<td>
+			<img id="{$item['id']}" class="logo" src="__APP__/../Html/Attach/logo/{$item['id']}.gif" onerror="this.src='../Public/Image/logo_0.png';" alt="点击更新LOGO"/>
+		</td>
+		<td>
+			<a class="<if condition='$item.flag eq 1'>red</if>" href="{$item['url']}" target="_blank" id="{$item['id']}" name="{$item['cate_info']['id']}" title="{$item['descr']}">{$item['name']}</a>
+			<img class="edit_info" src="../Public/Image/form_edit.gif" alt="编辑" align="absmiddle"/>
+			<if condition="is_file('__APP__/../Html/Attach/thumb/'.$item['id'].'.jpg') eq true"> <img id="{$item['id']}" class="thumb" src="../Public/Image/picture.gif" align="absmiddle"/><span class="showThumb"><div><img src="__APP__/../Html/Attach/thumb/{$item['id']}.jpg" width="400" alt="{$item['name']} 缩略图"></div></span>
+			<else />
+			<img id="{$item['id']}" class="thumb" src="../Public/Image/picture_add.gif" alt="上传缩略图" align="absmiddle"/><span class="showThumb" style="display:none"><div><img src="__APP__/../Html/Attach/thumb/{$item['id']}.jpg" width="400" alt="{$item['name']} 缩略图"></div></span>
+			</if>
+		</td>
+		<notpresent name="_GET['id']">
+		<td><a href="__URL__/index/id/{$item['cate_info']['id']}" title="查看【{$item['cate_info']['name']}】下所有网站">{$item['cate_info']['name']}</a>
+		</notpresent>
+		<td>{$item['view']}/{$item['hit']}</td>
+		<td><label id="{$item['id']}">{$item['sort']}</label></td>
+		<td>{$item['addtime']|substr=2,14}</td>
+		<td>
+			<if condition="$item['status'] neq '-1'">
+			<a href="__URL__/update/id/{$item['id']}/f/famous/v/{:intval(!$item['famous'])}/" target="_iframe" title="<if condition='$item.famous eq 0'>设为名站<else />设为普通</if>"><if condition="$item['famous'] eq 0"><img src="../Public/Image/award_gold.gif" alt="设为名站" /><else /><img src="../Public/Image/award_gray.gif" alt="设为普通" /></if></a>
+			<a href="__URL__/update/id/{$item['id']}/f/recommend/v/{:intval(!$item['recommend'])}/" target="_iframe" title="<if condition='$item.recommend eq 0'>设为推荐<else />设为普通</if>"><if condition="$item['recommend'] eq 0"><img src="../Public/Image/rosette.gif" alt="设为推荐" /><else /><img src="../Public/Image/rosette_gray.gif" alt="设为普通" /></if></a>
+			<a href="__URL__/update/t/Website/id/{$item['id']}/f/flag/v/{:intval(!$item['flag'])}/" target="_iframe" title="<if condition='$item.flag eq 0'>设为醒目<else />设为普通</if>"><if condition="$item['flag'] eq 0"><img src="../Public/Image/flag_red.gif" alt="设为醒目" /><else /><img src="../Public/Image/flag_gray.gif" alt="设为普通" /></if></a>
+			<a href="__URL__/update/t/Website/id/{$item['id']}/f/status/v/{:intval(!$item['status'])}/" target="_iframe" title="<if condition='$item.status eq 0'>显示<else />隐藏</if>"><if condition="$item['status'] eq 0"><img src="../Public/Image/add.gif" alt="显示" /><else /><img src="../Public/Image/delete.gif" alt="隐藏" /></if></a>
+			<a href="__URL__/update/t/Website/id/{$item['id']}/f/status/v/-1/"  target="_iframe" title="删除"><img src="../Public/Image/cross.gif" alt="删除" /></a>
+			<else />
+			<a href="__URL__/update/t/Website/id/{$item['id']}/f/status/v/0/" target="_iframe" title="恢复"><img src="../Public/Image/tick.gif" alt="恢复"/></a>
+			<a href="__URL__/delete/t/Website/id/{$item['id']}/" target="_iframe" title="彻底删除"><img src="../Public/Image/cross.gif" alt="彻底删除"/></a>
+			</if>
+		</td>
+	</tr>
+	</iterate>
+	</table>
+	{$page}
+	<notpresent name="_GET['status']">
+	<div class="addForm">
+		<fieldset>
+			<legend>添加网站</legend>
+			所属分类：<select name="cate_id" class="cate_id">
+			<option value="">请选择</option>
+			<iterate name="cate_list" id="item">
+			<option value="{$item.id}" <neq name="item['status']" value="1">style="color:#aaa"</neq><if condition="$item['id'] eq $_GET['id']">selected</if>>{$item.name}</option>
+			</iterate>
+			</select>
+			<br />
+			网站名称：<input type="text" class="name" name="name" size="10" tabindex="1" />
+			排序：<input type="text" class="sort" name="sort" value="{$new_sort}" size="4">
+			<br />
+			网站地址：<input type="text" class="url" name="url" size="30" tabindex="2" value="http://"/><br />
+			网站简介：<textarea class="descr" name="descr" cols="40" rows="4" tabindex="3" ></textarea><br />
+			　　　　　<input type="button" value="提交" class="submit">
+		</fieldset>
+	</div>
+	</notpresent>
+	<script language="JavaScript" type="text/javascript" src="../Public/Js/ajaxfileupload.js"></script>
+	<script language="JavaScript" type="text/javascript" src="../Public/Js/site_func.js?a"></script>
