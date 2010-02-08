@@ -27,20 +27,20 @@ class BoardAction extends BaseAction{
 		$this->assign('status_opts', self::genOptions(M('Options')->where(array('type'=>'status'))->order('sort')->select(), $_REQUEST['status_id']));
 
 		$where = array();
-		$where['type'] = 'Board';
-		$where['fixed'] = 1;
-		$where['_logic'] = 'or';
+		$where['_string'] = "(type='Board' or fixed=1)";
 		if(!empty($_POST['submit'])) {
 			(''!=$_REQUEST['category_id']) && ($where['category_id'] = intval($_REQUEST['category_id']));
-			(''!=$_REQUEST['status_id']) && ($where['status_id'] = intval($_REQUEST['status_id']));
 			(''!=trim($_REQUEST['Internal_PN'])) && ($where['Internal_PN'] = array('like', '%'.trim($_REQUEST['Internal_PN']).'%'));
 			(''!=trim($_REQUEST['description'])) && ($where['description'] = array('like', '%'.trim($_REQUEST['description']).'%'));
 			(''!=trim($_REQUEST['manufacture'])) && ($where['manufacture'] = array('like', '%'.trim($_REQUEST['manufacture']).'%'));
 			(''!=trim($_REQUEST['MPN'])) 		 && ($where['MPN'] 		   = array('like', '%'.trim($_REQUEST['MPN']).'%'));
 			(''!=trim($_REQUEST['value'])) 		 && ($where['value'] 	   = trim($_REQUEST['value']));
 			(''!=trim($_REQUEST['project'])) 	 && ($where['project'] 	   = array('like', '%'.trim($_REQUEST['project']).'%'));
-			if (count($where) > 3) {
-				$where['_logic'] = 'and';
+			if (''!=$_REQUEST['status_id']) {
+				$where['_string'] = "type='Board'";
+				$where['status_id'] = intval($_REQUEST['status_id']);
+			}
+			if (count($where) > 1) {
 				$limit = 1000;
 			}
 		}
