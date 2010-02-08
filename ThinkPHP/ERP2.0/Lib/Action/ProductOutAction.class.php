@@ -15,6 +15,7 @@ class ProductOutAction extends BaseAction{
 		if (empty($MODULE)) {
 			Session::set('top', 'Inventory Output Management');
 		}
+		//else $MODULE='Asset'
 		$this->dao = D('ProductFlow');
 		parent::_initialize();
 	}
@@ -222,9 +223,6 @@ class ProductOutAction extends BaseAction{
 			$info['staff_opts'] = self::genOptions(M('Staff')->where(array('status'=>1, 'id'=>array('neq',$_SESSION[C('USER_AUTH_KEY')])))->select(), '', 'realname');
 			$info['from_type'] = 'location';
 			$info['from_id'] = 1;
-			$max_code = $this->dao->where(array('code'=>array('like','Out%')))->max('code');
-			empty($max_code) && ($max_code = 'Out'.sprintf("%09d",0));
-			$code = ++ $max_code;
 
 			if (!empty($_REQUEST['lp_id'])) {//act from asset list
 				$lp_info = M('LocationProduct')->find($_REQUEST['lp_id']);
@@ -238,16 +236,25 @@ class ProductOutAction extends BaseAction{
 
 				if('transfer'==$action) {
 					Session::set('sub', MODULE_NAME.'/transferOut');
-					$max_code = $this->dao->where(array('code'=>array('like','T%')))->max('code');
-					empty($max_code) && ($max_code = 'T'.sprintf("%09d",0));
 				}
 				elseif('return'==$action) {
 					Session::set('sub', MODULE_NAME.'/returns');
-					$max_code = $this->dao->where(array('code'=>array('like','R%')))->max('code');
-					empty($max_code) && ($max_code = 'R'.sprintf("%09d",0));
 				}
 				$code = ++ $max_code;
 			}
+			if('transfer'==$action) {
+				$max_code = $this->dao->where(array('code'=>array('like','T%')))->max('code');
+				empty($max_code) && ($max_code = 'T'.sprintf("%09d",0));
+			}
+			elseif('return'==$action) {
+				$max_code = $this->dao->where(array('code'=>array('like','R%')))->max('code');
+				empty($max_code) && ($max_code = 'R'.sprintf("%09d",0));
+			}
+			else {
+				$max_code = $this->dao->where(array('code'=>array('like','Out%')))->max('code');
+				empty($max_code) && ($max_code = 'Out'.sprintf("%09d",0));
+			}
+			$code = ++ $max_code;
 		}
 		//dump($info);
 		$this->assign('id', $id);

@@ -59,8 +59,19 @@ label {
 </table>
 <script>
 function getPWD() {
-	$("input[name='action']").val('getPWD');
-	$("form").submit();
-	$("input[name='action']").val('login');
+	if (''==$("input[name='name']").val()) {
+		myAlert('Enter your User ID first!');
+		return;
+	}
+	jQuery.prompt('Do you realy forget your password?',{submit:send,buttons:{Yes:true, Cancel:false}});
+}
+function send(v, m){
+	if(v==true)
+	{
+		$("input[name='action']").val('getPWD');
+		$("form").submit();
+		$("input[name='action']").val('login');
+	}
+	return true;
 }
 </script>
