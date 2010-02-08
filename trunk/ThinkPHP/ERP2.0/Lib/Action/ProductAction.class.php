@@ -12,13 +12,13 @@ class ProductAction extends BaseAction{
 
 	public function _initialize() {
 		Session::set('top', 'Basic Data');
-		Session::set('sub', MODULE_NAME);
 		$this->dao = D('Product');
 		parent::_initialize();
 		$this->assign('MODULE_TITLE', 'Component');
 	}
 
 	public function index() {
+		Session::set('sub', MODULE_NAME);
 		$this->assign('ACTION_TITLE', 'List');
 		import("@.Paginator");
 		$limit = 20;
@@ -50,6 +50,7 @@ class ProductAction extends BaseAction{
 	}
 
 	public function form() {
+		Session::set('sub', MODULE_NAME);
 		$this->assign('ACTION_TITLE', 'Add New Component');
 		$id = empty($_REQUEST['id']) ? 0 : intval($_REQUEST['id']);
 		if ($id>0) {
@@ -153,6 +154,176 @@ class ProductAction extends BaseAction{
 				self::_error('Add component data fail!'.(C('APP_DEBUG')?$this->dao->getLastSql():''));
 			}
 		}
+	}
+	public function import() {
+		//define header
+		$header_arr = array(
+			'Board Code',
+			'Board Name',
+			'Manufacture',
+			'Series Number',
+			'Value/Package',
+			'Unit',
+			'Category',
+			'Fixed Assets',
+			'Board Status',
+			'RoHS',
+			'LT days',
+			'MOQ',
+			'SPQ',
+			'MSL',
+			'Project',
+			'Currency',
+			'Price',
+			'Accessories',
+			'Attachment',
+			'Remark'
+			);
+		//define the map of csv_field=>table_column
+		$fields_arr = array(
+			'Internal_PN',
+			'description',
+			'manufacture',
+			'MPN',
+			'value',
+			'unit_name',
+			'category_name',
+			'Fixed',
+			'status_name',
+			'Rohs',
+			'LT_days',
+			'MOQ',
+			'MSL',
+			'project',
+			'currency_name',
+			'price',
+			'accessories',
+			'attachment',
+			'remark'
+			);
+		//do upload
+		if (empty($_FILES['file']) || $_FILES['file']['size']==0) {
+			self::_error('Please select a file to upload.');
+		}
+		$confirm = $_REQUEST['confirm'];
+
+		$file = $_FILES['file'];
+		$file_name = $file['name'];
+		$fp = fopen($file['tmp_name'], "r");
+		$i=0;
+		$values_arr = array();//to save the validated line array
+		while($value_arr = fgetcsv($fp)) {
+			if (empty($value_arr)) {
+				continue;
+			}
+			if ($i == 0) {
+				if ($value_arr != $header_arr) {
+					echo '<script>parent.document.Import.file.value="";</script>';
+					self::_error('The imported file\'s header isn\'t right.');
+				}
+			}
+			else {
+				if (count($value_arr) != count($header_arr)) {
+					echo '<script>parent.document.Import.file.value="";</script>';
+					self::_error('The imported file isn\'t well-formatted. (Line:'.($i+1).')');
+				}
+				$values_arr[$i] = array_combine($fields_arr, $value_arr);
+			}
+			$i++;
+		}
+		//validate upload data
+		if (empty($values_arr)) {
+			echo '<script>parent.document.Import.file.value="";</script>';
+			self::_error('There is no record in the file.');
+		}
+		if (empty($confirm)) {
+			//confirm once
+			self::_confirm2('Import board basic data into the system?<br /><br />Record count: <i>'.($i-1).'</i> ;<br />The repeated record will be ignored.', 1);
+		}
+		else {
+		}
+		$duplicated = 0;
+		$imported = 0;
+		$failure_line_arr = array();
+		foreach ($values_arr as $i=>$value_arr) {
+			//check repeat
+			$where = array();
+			$where['type'] = 'Board';
+			$where['Internal_PN'] = $value_arr['Internal_PN'];
+			$where['description'] = $value_arr['description'];
+			$where['manufacture'] = $value_arr['manufacture'];
+			$where['MPN'] = $value_arr['MPN'];
+			if ($this->dao->where($where)->count()>0) {
+				$duplicated ++;
+				continue;
+			}
+			//parse field: unit_name,category_name,Fixed,status_name,currency_name
+			$unit_data = array('type'=>'unit','name'=>$value_arr['unit_name']);
+			if(!($unit_id = M('Options')->where($unit_data)->getField('id'))) {
+				$unit_data['code'] = '';
+				$unit_data['sort'] = M('Options')->where("type='unit'")->max('sort')+1;
+				$unit_id = M('Options')->add($unit_data);
+			}
+			unset($value_arr['unit_name']);
+			$value_arr['unit_id'] = $unit_id;
+
+			$category_data = array('type'=>'Board','name'=>$value_arr['category_name']);
+			if(!($category_id = M('Category')->where($category_data)->getField('id'))) {
+				$max_code = M('Category')->max('code');
+				empty($max_code) && ($max_code = 'P'.sprintf("%03d",0));
+				$category_data['code'] = ++ $max_code;
+				$category_id = M('Category')->add($category_data);
+			}
+			unset($value_arr['category_name']);
+			$value_arr['category_id'] = $category_id;
+
+			$value_arr['fixed'] = 0;
+			if ('YES' == strtoupper($value_arr['Fixed']) || 'Y'== strtoupper($value_arr['Fixed'])) {
+				$value_arr['fixed'] = 1;
+			}
+			unset($value_arr['Fixed']);
+			
+			$status_data = array('type'=>'status','name'=>$value_arr['status_name']);
+			if(!($status_id = M('Options')->where($status_data)->getField('id'))) {
+				$status_data['code'] = '';
+				$status_data['sort'] = M('Options')->where("type='status'")->max('sort')+1;
+				$status_id = M('Options')->add($status_data);
+			}
+			unset($value_arr['status_name']);
+			$value_arr['status_id'] = $status_id;
+
+			$currency_data = array('type'=>'status','code'=>$value_arr['currency_name']);
+			if(!($currency_id = M('Options')->where($currency_data)->getField('id'))) {
+				$currency_data['name'] = $value_arr['currency_name'];
+				$currency_data['sort'] = M('Options')->where("type='currency'")->max('sort')+1;
+				$currency_id = M('Options')->add($currency_data);
+			}
+			unset($value_arr['currency_name']);
+			$value_arr['currency_id'] = $currency_id;
+
+			//do insert
+			$max_code = $this->dao->where(array('type'=>'Board'))->max('code');
+			empty($max_code) && ($max_code = 'B'.sprintf("%09d",0));
+			$value_arr['code'] = ++ $max_code;
+			$value_arr['type'] = 'Board';
+			if (!$this->dao->add($value_arr)) {
+				$failure_line_arr[] = $i;
+				echo $this->dao->getLastSql()."\n";
+			}
+			else {
+				$imported ++;
+			}
+		}
+		$msg  = 'The result of Board Basic Data importing:<br />';
+		$msg .= 'Total records: '.(count($values_arr)-1).'<br />';
+		$msg .= 'Imported records: '.$imported.'<br />';
+		$msg .= 'Duplicated records: '.($duplicated>0 ? '<i>'.$duplicated.'</i>' : 0).'<br />';
+		$msg .= 'Failure records: '.(count($failure_line_arr)>0 ? '<i>'.count($failure_line_arr).'</i>' : 0);
+		count($failure_line_arr)>0 && ($msg .= ' <i>(Line: '.implode(', ', $failure_line_arr).')</i>.');
+		
+		self::_success($msg, '', 10000);
+		exit;
+		//import end
 	}
 	public function select() {
 		$action = $_REQUEST['action'];

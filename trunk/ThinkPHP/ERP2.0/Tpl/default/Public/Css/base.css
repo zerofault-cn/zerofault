@@ -29,6 +29,8 @@ a{color:#00f;text-decoration:none;font-weight:normal;}
 a:hover,a:active,a.active{color:#f20;text-decoration: underline;}
 .clear{clear:both;}
 
+i{color:red;font-style:normal;}
+
 .trbg0{
 	background-color:#CCCCCC;
 }

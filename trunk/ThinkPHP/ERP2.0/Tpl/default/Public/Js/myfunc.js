@@ -23,6 +23,7 @@ function myLocation(loc,intval)
 		window.location.href= (loc==''? window.location.href : loc);
 		},intval);
 }
+var loc = '';
 function myConfirm(str,url)
 {
 	loc=url;
@@ -35,6 +36,25 @@ function mySubmit(v,m){
 	}
 	return true;
 }
+var times = 0;
+function myConfirm2(str,num)
+{
+	times = num;
+	jQuery.prompt(str,{submit:mySubmit2,buttons:{Yes:true,Cancel:false}});
+}
+function mySubmit2(v,m){
+	if(v==true)
+	{
+		jQuery("input[name='confirm']").val(times);
+		document.Import.submit();
+	}
+	else if(document.Import) {
+		document.Import.file.value = '';
+		document.Import.confirm.value = '';
+	}
+	return true;
+}
+
 function switchTab(id) {
 	$("td.clsTab").each(function(){
 		if($(this).attr("id") == id) {

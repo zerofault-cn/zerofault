@@ -40,7 +40,7 @@ class PublicAction extends BaseAction{
 			$body = "Hi SuperAdmin,\n  A staff can't remember his password, could you please help to reset his password.\nStaff Login Account is: ".$name;
 			$email && ($body .= ", and his email is: ".$email);
 			$body .= "\n\nThanks.\nBest Regards.";
-			$mail_body_ext = "\n\n\nThis Mail was sent by the System automatically, please don't reply it.";
+			$mail_body_ext = "\n\n\nThis mail was sent by the ERP system automatically, please don't reply it.";
 			
 			$cmd = 'echo "'.$body.$mail_body_ext.'"|/usr/bin/mutt -s "'.$title.'" '.$admin_email;
 			Log::Write($cmd, INFO);

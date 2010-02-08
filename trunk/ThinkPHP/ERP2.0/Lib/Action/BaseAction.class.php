@@ -161,9 +161,9 @@ class BaseAction extends Action{
 	*
 	* @return string HTML格式的js代码
 	*/
-	protected function _confirm($msg, $times) {
+	protected function _confirm2($msg, $times) {
 		$html  = '<script language="JavaScript" type="text/javascript">';
-		$html .= 'parent.myConfirm("'.$msg.'", '.$times.');';
+		$html .= 'parent.myConfirm2("'.$msg.'", '.$times.');';
 		$html .= '</script>';
 		die($html);
 	}

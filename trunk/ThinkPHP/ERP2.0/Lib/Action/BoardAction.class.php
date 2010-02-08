@@ -188,7 +188,7 @@ class BoardAction extends BaseAction{
 			'Unit',
 			'Category',
 			'Fixed Assets',
-			'Status',
+			'Board Status',
 			'RoHS',
 			'LT days',
 			'MOQ',
@@ -239,11 +239,13 @@ class BoardAction extends BaseAction{
 			}
 			if ($i == 0) {
 				if ($value_arr != $header_arr) {
+					echo '<script>parent.document.Import.file.value="";</script>';
 					self::_error('The imported file\'s header isn\'t right.');
 				}
 			}
 			else {
 				if (count($value_arr) != count($header_arr)) {
+					echo '<script>parent.document.Import.file.value="";</script>';
 					self::_error('The imported file isn\'t well-formatted. (Line:'.($i+1).')');
 				}
 				$values_arr[$i] = array_combine($fields_arr, $value_arr);
@@ -252,11 +254,12 @@ class BoardAction extends BaseAction{
 		}
 		//validate upload data
 		if (empty($values_arr)) {
+			echo '<script>parent.document.Import.file.value="";</script>';
 			self::_error('There is no record in the file.');
 		}
 		if (empty($confirm)) {
 			//confirm once
-			self::_confirm('Import basic board data into the database?<br /><br />Record numbers: '.$i.'<br />The repeated record will be ignored', 1);
+			self::_confirm2('Import board basic data into the system?<br /><br />Record count: <i>'.($i-1).'</i> ;<br />The repeated record will be ignored.', 1);
 		}
 		else {
 		}
@@ -265,46 +268,81 @@ class BoardAction extends BaseAction{
 		$failure_line_arr = array();
 		foreach ($values_arr as $i=>$value_arr) {
 			//check repeat
-			if ($db->GetOne($sql)>0) {
+			$where = array();
+			$where['type'] = 'Board';
+			$where['Internal_PN'] = $value_arr['Internal_PN'];
+			$where['description'] = $value_arr['description'];
+			$where['manufacture'] = $value_arr['manufacture'];
+			$where['MPN'] = $value_arr['MPN'];
+			if ($this->dao->where($where)->count()>0) {
 				$duplicated ++;
 				continue;
 			}
+			//parse field: unit_name,category_name,Fixed,status_name,currency_name
+			$unit_data = array('type'=>'unit','name'=>$value_arr['unit_name']);
+			if(!($unit_id = M('Options')->where($unit_data)->getField('id'))) {
+				$unit_data['code'] = '';
+				$unit_data['sort'] = M('Options')->where("type='unit'")->max('sort')+1;
+				$unit_id = M('Options')->add($unit_data);
+			}
+			unset($value_arr['unit_name']);
+			$value_arr['unit_id'] = $unit_id;
+
+			$category_data = array('type'=>'Board','name'=>$value_arr['category_name']);
+			if(!($category_id = M('Category')->where($category_data)->getField('id'))) {
+				$max_code = M('Category')->max('code');
+				empty($max_code) && ($max_code = 'P'.sprintf("%03d",0));
+				$category_data['code'] = ++ $max_code;
+				$category_id = M('Category')->add($category_data);
+			}
+			unset($value_arr['category_name']);
+			$value_arr['category_id'] = $category_id;
+
+			$value_arr['fixed'] = 0;
+			if ('YES' == strtoupper($value_arr['Fixed']) || 'Y'== strtoupper($value_arr['Fixed'])) {
+				$value_arr['fixed'] = 1;
+			}
+			unset($value_arr['Fixed']);
+			
+			$status_data = array('type'=>'status','name'=>$value_arr['status_name']);
+			if(!($status_id = M('Options')->where($status_data)->getField('id'))) {
+				$status_data['code'] = '';
+				$status_data['sort'] = M('Options')->where("type='status'")->max('sort')+1;
+				$status_id = M('Options')->add($status_data);
+			}
+			unset($value_arr['status_name']);
+			$value_arr['status_id'] = $status_id;
+
+			$currency_data = array('type'=>'status','code'=>$value_arr['currency_name']);
+			if(!($currency_id = M('Options')->where($currency_data)->getField('id'))) {
+				$currency_data['name'] = $value_arr['currency_name'];
+				$currency_data['sort'] = M('Options')->where("type='currency'")->max('sort')+1;
+				$currency_id = M('Options')->add($currency_data);
+			}
+			unset($value_arr['currency_name']);
+			$value_arr['currency_id'] = $currency_id;
+
 			//do insert
-			$sql  = "Insert into Search set Provider='".$provider."'";
-			if ('Yandex' == $provider) {
-				$sql .= ", Channel='".$clid."'";
-			}
-			elseif ('Baidu' == $provider) {
-				$sql .= ", MainChannel='".$mainChannel."'";
-			}
-			$sql .= arr2sql($value_arr, ', ');
-			echo $sql ."\n";
-			if (!$db->Execute($sql)) {
-				$failure_line_arr[] = $line_num;
-				echo $sql."\n";
-				//error('Insert Datebase failure.');
+			$max_code = $this->dao->where(array('type'=>'Board'))->max('code');
+			empty($max_code) && ($max_code = 'B'.sprintf("%09d",0));
+			$value_arr['code'] = ++ $max_code;
+			$value_arr['type'] = 'Board';
+			if (!$this->dao->add($value_arr)) {
+				$failure_line_arr[] = $i;
+				echo $this->dao->getLastSql()."\n";
 			}
 			else {
 				$imported ++;
 			}
 		}
-		$log_type = ' Success';
-		$msg  = 'The result of search record importing:<br />';
-		$msg .= 'Total records: '.number_format(count($line_arr)-1).'<br />';
-		$msg .= 'Expected records: '.number_format(count($values_arr)).' ('.date("ymd", $start_date) .' - '.date("ymd", $end_date).')<br />';
+		$msg  = 'The result of Board Basic Data importing:<br />';
+		$msg .= 'Total records: '.(count($values_arr)-1).'<br />';
 		$msg .= 'Imported records: '.$imported.'<br />';
 		$msg .= 'Duplicated records: '.($duplicated>0 ? '<i>'.$duplicated.'</i>' : 0).'<br />';
 		$msg .= 'Failure records: '.(count($failure_line_arr)>0 ? '<i>'.count($failure_line_arr).'</i>' : 0);
-		if (count($failure_line_arr)>0) {
-			$msg .= ' <i>(Line: '.implode(', ', $failure_line_arr).')</i>.';
-			write_log(date("Y/m/d H:i:s").' Failure (Search) Imported '.date("ymd", $start_date) . '-' . date("ymd", $end_date).' '.$provider.'\'s '.$imported.' records, and there were other '.count($failure_line_arr).' failure records on line '.implode(', ', $failure_line_arr).'.');
-		}
-		else {
-			write_log(date("Y/m/d H:i:s").' Success (Search) Imported '.date("ymd", $start_date) . '-' . date("ymd", $end_date).' '.$provider.'\'s '.$imported.' records.');
-		}
-		if (updateSearchData()) {
-			success($msg, '', 10000);
-		}
+		count($failure_line_arr)>0 && ($msg .= ' <i>(Line: '.implode(', ', $failure_line_arr).')</i>.');
+		
+		self::_success($msg, '', 10000);
 		exit;
 		//import end
 	}
