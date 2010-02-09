@@ -158,15 +158,14 @@ class ProductAction extends BaseAction{
 	public function import() {
 		//define header
 		$header_arr = array(
-			'Board Code',
-			'Board Name',
+			'Internal P/N',
+			'Description',
 			'Manufacture',
-			'Series Number',
+			'MPN',
 			'Value/Package',
 			'Unit',
 			'Category',
 			'Fixed Assets',
-			'Board Status',
 			'RoHS',
 			'LT days',
 			'MOQ',
@@ -189,10 +188,10 @@ class ProductAction extends BaseAction{
 			'unit_name',
 			'category_name',
 			'Fixed',
-			'status_name',
 			'Rohs',
 			'LT_days',
 			'MOQ',
+			'SPQ',
 			'MSL',
 			'project',
 			'currency_name',
@@ -238,7 +237,7 @@ class ProductAction extends BaseAction{
 		}
 		if (empty($confirm)) {
 			//confirm once
-			self::_confirm2('Import board basic data into the system?<br /><br />Record count: <i>'.($i-1).'</i> ;<br />The repeated record will be ignored.', 1);
+			self::_confirm2('Import component basic data into the system?<br /><br />Record count: <i>'.($i-1).'</i> ;<br />The repeated record will be ignored.', 1);
 		}
 		else {
 		}
@@ -248,7 +247,7 @@ class ProductAction extends BaseAction{
 		foreach ($values_arr as $i=>$value_arr) {
 			//check repeat
 			$where = array();
-			$where['type'] = 'Board';
+			$where['type'] = 'Component';
 			$where['Internal_PN'] = $value_arr['Internal_PN'];
 			$where['description'] = $value_arr['description'];
 			$where['manufacture'] = $value_arr['manufacture'];
@@ -267,7 +266,7 @@ class ProductAction extends BaseAction{
 			unset($value_arr['unit_name']);
 			$value_arr['unit_id'] = $unit_id;
 
-			$category_data = array('type'=>'Board','name'=>$value_arr['category_name']);
+			$category_data = array('type'=>'Component','name'=>$value_arr['category_name']);
 			if(!($category_id = M('Category')->where($category_data)->getField('id'))) {
 				$max_code = M('Category')->max('code');
 				empty($max_code) && ($max_code = 'P'.sprintf("%03d",0));
@@ -283,16 +282,9 @@ class ProductAction extends BaseAction{
 			}
 			unset($value_arr['Fixed']);
 			
-			$status_data = array('type'=>'status','name'=>$value_arr['status_name']);
-			if(!($status_id = M('Options')->where($status_data)->getField('id'))) {
-				$status_data['code'] = '';
-				$status_data['sort'] = M('Options')->where("type='status'")->max('sort')+1;
-				$status_id = M('Options')->add($status_data);
-			}
-			unset($value_arr['status_name']);
-			$value_arr['status_id'] = $status_id;
+			$value_arr['status_id'] = 0;
 
-			$currency_data = array('type'=>'status','code'=>$value_arr['currency_name']);
+			$currency_data = array('type'=>'currency','code'=>$value_arr['currency_name']);
 			if(!($currency_id = M('Options')->where($currency_data)->getField('id'))) {
 				$currency_data['name'] = $value_arr['currency_name'];
 				$currency_data['sort'] = M('Options')->where("type='currency'")->max('sort')+1;
@@ -302,10 +294,10 @@ class ProductAction extends BaseAction{
 			$value_arr['currency_id'] = $currency_id;
 
 			//do insert
-			$max_code = $this->dao->where(array('type'=>'Board'))->max('code');
-			empty($max_code) && ($max_code = 'B'.sprintf("%09d",0));
+			$max_code = $this->dao->where(array('type'=>'Component'))->max('code');
+			empty($max_code) && ($max_code = 'C'.sprintf("%09d",0));
 			$value_arr['code'] = ++ $max_code;
-			$value_arr['type'] = 'Board';
+			$value_arr['type'] = 'Component';
 			if (!$this->dao->add($value_arr)) {
 				$failure_line_arr[] = $i;
 				echo $this->dao->getLastSql()."\n";
@@ -314,14 +306,14 @@ class ProductAction extends BaseAction{
 				$imported ++;
 			}
 		}
-		$msg  = 'The result of Board Basic Data importing:<br />';
+		$msg  = 'The result of Component Basic Data importing:<br />';
 		$msg .= 'Total records: '.(count($values_arr)-1).'<br />';
 		$msg .= 'Imported records: '.$imported.'<br />';
 		$msg .= 'Duplicated records: '.($duplicated>0 ? '<i>'.$duplicated.'</i>' : 0).'<br />';
 		$msg .= 'Failure records: '.(count($failure_line_arr)>0 ? '<i>'.count($failure_line_arr).'</i>' : 0);
 		count($failure_line_arr)>0 && ($msg .= ' <i>(Line: '.implode(', ', $failure_line_arr).')</i>.');
 		
-		self::_success($msg, '', 10000);
+		self::_success($msg, '', 5000);
 		exit;
 		//import end
 	}
