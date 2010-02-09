@@ -21,7 +21,7 @@ class BoardAction extends BaseAction{
 	public function index(){
 		$this->assign('ACTION_TITLE', 'List');
 		import("@.Paginator");
-		$limit = 20;
+		$limit = 4;
 
 		$this->assign('category_opts', self::genOptions(M('Category')->select(), $_REQUEST['category_id']) );
 		$this->assign('status_opts', self::genOptions(M('Options')->where(array('type'=>'status'))->order('sort')->select(), $_REQUEST['status_id']));
@@ -44,20 +44,22 @@ class BoardAction extends BaseAction{
 				$limit = 1000;
 			}
 		}
-		$count = $this->dao->where($where)->count();
+		$rs = $this->dao->where($where)->group('type,description')->select();
+		$count = count($rs);
 		$p = new Paginator($count,$limit);
 
-		$rs = $this->dao->where($where)->field('id,type,description')->order('id desc')->limit($p->offset.','.$p->limit)->select();
+		$rs = $this->dao->where($where)->field('id,type,description')->group('type,description')->order('id desc')->limit($p->offset.','.$p->limit)->select();
 		empty($rs) && ($rs = array());
 		$result = array();
 		foreach ($rs as $val) {
 			if ('Board' == $val['type']) {
-				$result[str_replace(array(' ','"',"'"), '', $val['description'])] = $this->dao->relation(true)->where(array('type'=>'Board', 'description'=>$val['description']))->select();
+				$result[str_replace(array(' ','"',"'"), '', $val['description'])] = $this->dao->relation(true)->where(array('type'=>'Board', 'description'=>$val['description']))->order('Internal_PN')->select();
 			}
 			else {
 				$result[str_replace(array(' ','"',"'"), '', $val['description'])] = $this->dao->relation(true)->where('id='.$val['id'])->select();
 			}
 		}
+		
 		$this->assign('request', $_REQUEST);
 		$this->assign('result',$result);
 		$this->assign('page', $p->showMultiNavi());
@@ -313,7 +315,7 @@ class BoardAction extends BaseAction{
 			unset($value_arr['status_name']);
 			$value_arr['status_id'] = $status_id;
 
-			$currency_data = array('type'=>'status','code'=>$value_arr['currency_name']);
+			$currency_data = array('type'=>'currency','code'=>$value_arr['currency_name']);
 			if(!($currency_id = M('Options')->where($currency_data)->getField('id'))) {
 				$currency_data['name'] = $value_arr['currency_name'];
 				$currency_data['sort'] = M('Options')->where("type='currency'")->max('sort')+1;
@@ -342,7 +344,7 @@ class BoardAction extends BaseAction{
 		$msg .= 'Failure records: '.(count($failure_line_arr)>0 ? '<i>'.count($failure_line_arr).'</i>' : 0);
 		count($failure_line_arr)>0 && ($msg .= ' <i>(Line: '.implode(', ', $failure_line_arr).')</i>.');
 		
-		self::_success($msg, '', 10000);
+		self::_success($msg, '', 5000);
 		exit;
 		//import end
 	}

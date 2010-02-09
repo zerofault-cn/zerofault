@@ -69,6 +69,13 @@
 	<td colspan="12">{$page}</td>
 </tr>
 </table>
+<form name="Import" action="__URL__/import" enctype="multipart/form-data" target="_iframe" method="post">
 <p class="center">
+	<img src="../Public/Images/blank.gif" width="85" height="24" align="absmiddle"/>
 	<input type="button" onclick="javascript:document.location='__URL__/form';" value="Add a New Component" />
+	<img src="../Public/Images/blank.gif" width="85" height="24" align="absmiddle" style="position:relative;right:-214px;z-index:99;"/>
+	<input type="button"  value="Import From CSV" />
+	<input type="hidden" name="confirm" value="" />
+	<input type="file" name="file" size="15" onfocus="this.click();this.blur();" onchange="if(this.value!='')document.Import.submit();" style="position:relative;left:-127px;cursor:hand;opacity:0;filter: Alpha(Opacity=0);"/>
 </p>
+</form>
