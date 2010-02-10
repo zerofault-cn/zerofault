@@ -14,9 +14,9 @@
 			<th>No.</th>
 			<th>Code</th>
 			<th class="basic_data">Internal P/N</th>
-			<th class="basic_data">MPN</th>
 			<th class="basic_data">Description</th>
 			<th class="basic_data">Manufacture</th>
+			<th class="basic_data">MPN</th>
 			<th>Supplier</th>
 			<th>Quantity<if condition="$action neq 'reject' and $status eq 1">/Rejected</if></th>
 			<th>Unit</th>
@@ -34,9 +34,9 @@
 			<td align="center">{$i}</td>
 			<td>{$item['code']}</td>
 			<td class="basic_data">{$item['product']['Internal_PN']}</td>
-			<td class="basic_data">{$item['product']['MPN']}</td>
 			<td class="basic_data">{$item['product']['description']}</td>
 			<td class="basic_data">{$item['product']['manufacture']}</td>
+			<td class="basic_data">{$item['product']['MPN']}</td>
 			<td>{$item['supplier']['name']}</td>
 			<td>{$item['quantity']}<if condition="$action neq 'reject' and $status eq 1">/{$item['rejected_quantity']}</if></td>
 			<td>{$unit[$item['product']['unit_id']]}</td>
