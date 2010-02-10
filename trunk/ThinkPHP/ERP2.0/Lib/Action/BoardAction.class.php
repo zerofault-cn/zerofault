@@ -21,7 +21,7 @@ class BoardAction extends BaseAction{
 	public function index(){
 		$this->assign('ACTION_TITLE', 'List');
 		import("@.Paginator");
-		$limit = 4;
+		$limit = 20;
 
 		$this->assign('category_opts', self::genOptions(M('Category')->select(), $_REQUEST['category_id']) );
 		$this->assign('status_opts', self::genOptions(M('Options')->where(array('type'=>'status'))->order('sort')->select(), $_REQUEST['status_id']));
