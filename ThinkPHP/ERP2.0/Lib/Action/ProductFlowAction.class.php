@@ -39,12 +39,22 @@ class ProductFlowAction extends BaseAction{
 		//Session::set(ACTION_NAME.'_status', $status);
 		$this->assign('status', $status);
 		
+		$staff_id = empty($_REQUEST['staff_id']) ? 0 : intval($_REQUEST['staff_id']);
+		$this->assign('staff_opts', self::genOptions(M('Staff')->where(array('status'=>1))->select(), $staff_id, 'realname'));
+
+		import("@.Paginator");
+		$limit = 50;
 		$where = array();
 		$where['status'] = $status;
-		
+		if(!empty($_POST['submit'])) {
+			''!=trim($_REQUEST['Internal_PN']) && ($where['Internal_PN'] = array('like', '%'.trim($_REQUEST['Internal_PN']).'%'));
+			''!=trim($_REQUEST['description']) && ($where['description'] = array('like', '%'.trim($_REQUEST['description']).'%'));
+			''!=trim($_REQUEST['manufacture']) && ($where['manufacture'] = array('like', '%'.trim($_REQUEST['manufacture']).'%'));
+			''!=trim($_REQUEST['MPN']) 		 && ($where['MPN'] 		   = array('like', '%'.trim($_REQUEST['MPN']).'%'));
+			$staff_id>0 && $where['staff_id'] = $staff_id;
+		}
+
 		$count = $this->dao->where($where)->getField('count(*)');
-		import("@.Paginator");
-		$limit = 20;
 		$p = new Paginator($count,$limit);
 
 		$order = 'id desc';
