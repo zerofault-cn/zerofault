@@ -21,9 +21,9 @@
 			<th>No.</th>
 			<th>Code</th>
 			<th class="basic_data">Internal P/N</th>
-			<th class="basic_data">MPN</th>
 			<th class="basic_data">Description</th>
 			<th class="basic_data">Manufacture</th>
+			<th class="basic_data">MPN</th>
 			<th>Quantity</th>
 			<th>Unit</th>
 			<if condition="$action eq 'transfer'">
@@ -48,9 +48,9 @@
 			<td align="center">{$i}</td>
 			<td>{$item['code']}</td>
 			<td class="basic_data">{$item['product']['Internal_PN']}</td>
-			<td class="basic_data">{$item['product']['MPN']}</td>
 			<td class="basic_data">{$item['product']['description']}</td>
 			<td class="basic_data">{$item['product']['manufacture']}</td>
+			<td class="basic_data">{$item['product']['MPN']}</td>
 			<td>{$item['quantity']}</td>
 			<td>{$unit[$item['product']['unit_id']]}</td>
 			<if condition="$action eq 'transfer'">
