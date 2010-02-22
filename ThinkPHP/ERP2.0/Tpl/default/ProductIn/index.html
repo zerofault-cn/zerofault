@@ -71,14 +71,22 @@
 	</td>
 </tr>
 </table>
+</form>
+<form name="Import" action="__URL__/import" enctype="multipart/form-data" target="_iframe" method="post">
 <p class="center">
-	
 	<neq name="action" value="reject">
+		<img src="../Public/Images/blank.gif" width="85" height="24" align="absmiddle"/>
 		<if condition="ACTION_NAME eq 'fixed'">
 		<input type="button" onclick="javascript:document.location='__URL__/form/fixed/1';" value="Enter New Fixed-Assets" />
+		<input type="hidden" name="Fixed" value="Yes" />
 		<else />
 		<input type="button" onclick="javascript:document.location='__URL__/form/fixed/0';" value="Enter New Floating-Assets" />
+		<input type="hidden" name="Fixed" value="No" />
 		</if>
+		<img src="../Public/Images/blank.gif" width="85" height="24" align="absmiddle" style="position:relative;right:-214px;z-index:99;"/>
+		<input type="button"  value="Batch Entering" />
+		<input type="hidden" name="confirm" value="" />
+		<input type="file" name="file" size="15" onfocus="this.click();this.blur();" onchange="if(this.value!='')document.Import.submit();" style="position:relative;left:-127px;cursor:hand;opacity:0;filter: Alpha(Opacity=0);"/>
 	</neq>
 </p>
 </form>

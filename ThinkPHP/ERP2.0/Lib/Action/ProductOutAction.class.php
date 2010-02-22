@@ -302,7 +302,6 @@ class ProductOutAction extends BaseAction{
 			$this->dao->to_id = $_SESSION[C('USER_AUTH_KEY')];//new apply
 			$this->dao->staff_id = $_SESSION[C('USER_AUTH_KEY')];
 
-			
 			if ('apply' == $action) {
 				//如果有Leader，则将status置为-2，Approve后置为0，Reject置为-1
 				if ($_SESSION['staff']['leader_id']>0) {
@@ -331,23 +330,27 @@ class ProductOutAction extends BaseAction{
 		$this->dao->fixed = $_REQUEST['fixed'];
 		$this->dao->product_id = $_REQUEST['product_id'];
 		$this->dao->quantity = $_REQUEST['quantity'];
-		//get remark2
-		/*
-		if (false && $id>0 && $this->dao->staff_id != $_SESSION[C('USER_AUTH_KEY')]) {//不是当前用户所创建的记录
-			if ($remark_id = M('Remark2')->where(array('flow_id'=>$id, 'staff_id'=>$_SESSION[C('USER_AUTH_KEY')]))->getField('id')) {
-				if (!M('Remark2')->where('id='.$remark_id)->save(array('remark'=>trim($_REQUEST['remark']), 'create_time'=>date("Y-m-d H:i:s"), 'status'=>1))) {
-					self::_error('Update remark fail!'.(C('APP_DEBUG')?$this->dao->getLastSql():''));
+		//check quantity again
+		switch ($this->dao->action) {
+			case 'apply':
+				$q0 = M('LocationProduct')->where(array('type'=>'location','location_id'=>1,'product_id'=>$this->dao->product_id))->getField('`ori_quantity`+`chg_quantity`');//库存余量
+				$q1 = M('ProductFlow')->where(array('action'=>'apply','product_id'=>$this->dao->product_id,'_string'=>('status!=-1 and status!=1')))->sum('quantity');//未确认的
+				if (($q0 - $q1) < $this->dao->quantity) {
+					self::_error('The product you applied maybe not enough.');
 				}
-			}
-			else {
-				if (!M('Remark2')->add(array('flow_id'=>$id, 'staff_id'=>$_SESSION[C('USER_AUTH_KEY')], 'remark'=>trim($_REQUEST['remark']), 'create_time'=>date("Y-m-d H:i:s"), 'status'=>1)))  {
-					self::_error('Insert remark fail!'.(C('APP_DEBUG')?$this->dao->getLastSql():''));
-				}
-			}
+				break;
+			case 'transfer':
+				break;
+			case 'release':
+				break;
+			case 'scrap':
+				break;
+			case 'return':
+				break;
+			default:
+				//nothing
 		}
-		else {*/
-			$this->dao->remark = trim($_REQUEST['remark']);
-	//	}
+		$this->dao->remark = trim($_REQUEST['remark']);
 		if ($id>0) {//for edit
 			if (false !== $this->dao->save()) {
 				self::_mail($id, 'edit');

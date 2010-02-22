@@ -242,11 +242,14 @@ class ProductInAction extends BaseAction{
 	public function import($fixed='') {
 		//define header
 		$header_arr = array(
+			'Type',
 			'Internal P/N',
 			'Description',
 			'Manufacture',
 			'MPN',
 			'Value/Package',
+			'Supplier',
+			'Quantity',
 			'Unit',
 			'Category',
 			'Fixed Assets',
@@ -264,11 +267,14 @@ class ProductInAction extends BaseAction{
 			);
 		//define the map of csv_field=>table_column
 		$fields_arr = array(
+			'type',
 			'Internal_PN',
 			'description',
 			'manufacture',
 			'MPN',
 			'value',
+			'supplier_name',
+			'quantity',
 			'unit_name',
 			'category_name',
 			'Fixed',
@@ -289,6 +295,7 @@ class ProductInAction extends BaseAction{
 			self::_error('Please select a file to upload.');
 		}
 		$confirm = $_REQUEST['confirm'];
+		$Fixed = $_REQUEST['Fixed'];
 
 		$file = $_FILES['file'];
 		$file_name = $file['name'];
@@ -311,6 +318,10 @@ class ProductInAction extends BaseAction{
 					self::_error('The imported file isn\'t well-formatted. (Line:'.($i+1).')');
 				}
 				$values_arr[$i] = array_combine($fields_arr, $value_arr);
+				if (strtoupper($Fixed) != strtoupper($values_arr[$i]['Fixed'])) {
+					echo '<script>parent.document.Import.file.value="";</script>';
+					self::_error('The product in line '.($i+1).' is not '.('YES'==strtoupper($Fixed)?'Fixed-Assets':'Floating-Assets'));
+				}
 			}
 			$i++;
 		}
@@ -321,7 +332,7 @@ class ProductInAction extends BaseAction{
 		}
 		if (empty($confirm)) {
 			//confirm once
-			self::_confirm2('Import component basic data into the system?<br /><br />Record count: <i>'.($i-1).'</i> ;<br />The repeated record will be ignored.', 1);
+			self::_confirm2('Batch Entering product into the system?<br /><br />Record count: <i>'.($i-1).'</i> ;<br />The repeated record will be ignored.', 1);
 		}
 		else {
 		}
@@ -329,44 +340,16 @@ class ProductInAction extends BaseAction{
 		$imported = 0;
 		$failure_line_arr = array();
 		foreach ($values_arr as $i=>$value_arr) {
-			//check repeat
-			$where = array();
-			$where['type'] = 'Component';
-			$where['Internal_PN'] = $value_arr['Internal_PN'];
-			$where['description'] = $value_arr['description'];
-			$where['manufacture'] = $value_arr['manufacture'];
-			$where['MPN'] = $value_arr['MPN'];
-			if ($this->dao->where($where)->count()>0) {
-				$duplicated ++;
-				continue;
+			$supplier_data = array('name'=>$value_arr['supplier_name']);
+			if(!($supplier_id = M('Supplier')->where($supplier_data)->getField('id'))) {
+				$max_code = M('Supplier')->max('code');
+				empty($max_code) && ($max_code = 'S'.sprintf("%05d",0));
+				$supplier_data['code'] = ++ $max_code;
+				$supplier_id = M('Supplier')->add($supplier_data);
 			}
-			//parse field: unit_name,category_name,Fixed,status_name,currency_name
-			$unit_data = array('type'=>'unit','name'=>$value_arr['unit_name']);
-			if(!($unit_id = M('Options')->where($unit_data)->getField('id'))) {
-				$unit_data['code'] = '';
-				$unit_data['sort'] = M('Options')->where("type='unit'")->max('sort')+1;
-				$unit_id = M('Options')->add($unit_data);
-			}
-			unset($value_arr['unit_name']);
-			$value_arr['unit_id'] = $unit_id;
-
-			$category_data = array('type'=>'Component','name'=>$value_arr['category_name']);
-			if(!($category_id = M('Category')->where($category_data)->getField('id'))) {
-				$max_code = M('Category')->max('code');
-				empty($max_code) && ($max_code = 'P'.sprintf("%03d",0));
-				$category_data['code'] = ++ $max_code;
-				$category_id = M('Category')->add($category_data);
-			}
-			unset($value_arr['category_name']);
-			$value_arr['category_id'] = $category_id;
-
-			$value_arr['fixed'] = 0;
-			if ('YES' == strtoupper($value_arr['Fixed']) || 'Y'== strtoupper($value_arr['Fixed'])) {
-				$value_arr['fixed'] = 1;
-			}
-			unset($value_arr['Fixed']);
-			
-			$value_arr['status_id'] = 0;
+			unset($value_arr['supplier_name']);
+			$quantity = $value_arr['quantity'];
+			unset($value_arr['quantity']);
 
 			$currency_data = array('type'=>'currency','code'=>$value_arr['currency_name']);
 			if(!($currency_id = M('Options')->where($currency_data)->getField('id'))) {
@@ -375,25 +358,96 @@ class ProductInAction extends BaseAction{
 				$currency_id = M('Options')->add($currency_data);
 			}
 			unset($value_arr['currency_name']);
-			$value_arr['currency_id'] = $currency_id;
 
-			//do insert
-			$max_code = $this->dao->where(array('type'=>'Component'))->max('code');
-			empty($max_code) && ($max_code = 'C'.sprintf("%09d",0));
-			$value_arr['code'] = ++ $max_code;
-			$value_arr['type'] = 'Component';
-			if (!$this->dao->add($value_arr)) {
-				$failure_line_arr[] = $i;
-				echo $this->dao->getLastSql()."\n";
+			//check exists
+			$where = array();
+			$where['type'] = $value_arr['type'];
+			$where['Internal_PN'] = $value_arr['Internal_PN'];
+			$where['description'] = $value_arr['description'];
+			$where['manufacture'] = $value_arr['manufacture'];
+			$where['MPN'] = $value_arr['MPN'];
+			$product_id = M('Product')->where($where)->getField('id');
+			if (empty($product_id)) {
+				//parse field: unit_name,category_name,Fixed,status_name,currency_name
+				$unit_data = array('type'=>'unit','name'=>$value_arr['unit_name']);
+				if(!($unit_id = M('Options')->where($unit_data)->getField('id'))) {
+					$unit_data['code'] = '';
+					$unit_data['sort'] = M('Options')->where("type='unit'")->max('sort')+1;
+					$unit_id = M('Options')->add($unit_data);
+				}
+				unset($value_arr['unit_name']);
+				$value_arr['unit_id'] = $unit_id;
+
+				$category_data = array('type'=>'Component','name'=>$value_arr['category_name']);
+				if(!($category_id = M('Category')->where($category_data)->getField('id'))) {
+					$max_code = M('Category')->max('code');
+					empty($max_code) && ($max_code = 'P'.sprintf("%03d",0));
+					$category_data['code'] = ++ $max_code;
+					$category_id = M('Category')->add($category_data);
+				}
+				unset($value_arr['category_name']);
+				$value_arr['category_id'] = $category_id;
+
+				$value_arr['fixed'] = 0;
+				if ('YES' == strtoupper($value_arr['Fixed']) || 'Y'== strtoupper($value_arr['Fixed'])) {
+					$value_arr['fixed'] = 1;
+				}
+				unset($value_arr['Fixed']);
+				
+				$value_arr['status_id'] = 0;
+
+				$value_arr['currency_id'] = $currency_id;
+
+				//do insert
+				$max_code = M('Product')->where(array('type'=>$value_arr['type']))->max('code');
+				if ('Component'==$value_arr['type']) {
+					empty($max_code) && ($max_code = 'C'.sprintf("%09d",0));
+				}
+				else{
+					empty($max_code) && ($max_code = 'B'.sprintf("%09d",0));
+				}
+				$value_arr['code'] = ++ $max_code;
+				$product_id = M('Product')->add($value_arr);
+				if (empty($product_id)) {
+					$failure_line_arr[] = $i;
+					echo M('Product')->getLastSql()."\n";
+					continue;
+				}
 			}
-			else {
+			$max_code = $this->dao->where(array('action'=>'enter'))->max('code');
+			empty($max_code) && ($max_code = 'A'.sprintf("%09d",0));
+			$code = ++ $max_code;
+			$this->dao->code = $code;
+			$this->dao->action = 'enter';
+			$this->dao->to_type = 'location';
+			$this->dao->to_id = 1;
+
+			$this->dao->fixed = 0;
+			if ('YES' == strtoupper($value_arr['Fixed']) || 'Y'== strtoupper($value_arr['Fixed'])) {
+				$this->dao->fixed = 1;
+			}
+			$this->dao->staff_id = $_SESSION[C('USER_AUTH_KEY')];
+			$this->dao->create_time = date("Y-m-d H:i:s");
+			$this->dao->product_id = $product_id;
+			$this->dao->supplier_id = $supplier_id;
+			$this->dao->currency_id = $currency_id;
+			$this->dao->quantity = $quantity;
+			$this->dao->price = $value_arr['price'];
+			$this->dao->Lot = '';
+			$this->dao->accessories = $value_arr['accessories'];
+			$this->dao->remark = $value_arr['remark'];
+			if ($this->dao->add()) {
 				$imported ++;
 			}
+			else{
+				$failure_line_arr[] = $i;
+				echo $this->dao->getLastSql()."\n";
+				continue;
+			}
 		}
-		$msg  = 'The result of Component Basic Data importing:<br />';
+		$msg  = 'The result of batch entering:<br />';
 		$msg .= 'Total records: '.(count($values_arr)-1).'<br />';
-		$msg .= 'Imported records: '.$imported.'<br />';
-		$msg .= 'Duplicated records: '.($duplicated>0 ? '<i>'.$duplicated.'</i>' : 0).'<br />';
+		$msg .= 'Entered records: '.$imported.'<br />';
 		$msg .= 'Failure records: '.(count($failure_line_arr)>0 ? '<i>'.count($failure_line_arr).'</i>' : 0);
 		count($failure_line_arr)>0 && ($msg .= ' <i>(Line: '.implode(', ', $failure_line_arr).')</i>.');
 		
