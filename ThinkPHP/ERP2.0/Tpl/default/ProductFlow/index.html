@@ -1,9 +1,30 @@
 <p class="page_title_text">{$MODULE_TITLE} - {$ACTION_TITLE}</p>
+<table>
+</table>
 <table >
 <tr>
 	<td class="clsTab" id="status_0"><a href="__ACTION__/status/0">Not Confirmed</a></td>
 	<td class="clsTab" id="status_1"><a href="__ACTION__/status/1">Confirmed</a></td>
 	<td class="clsTab" id="status_-1"><a href="__ACTION__/status/-1">Rejected</a></td>
+</tr>
+<tr>
+	<td colspan="3">
+		<form action="__URL__">
+		<table id="search_table" cellpadding="3" border="1" bordercolor="#FFFFFF" style="border-collapse:collapse;">
+		<tr>
+			<th>OP Staff</th>
+			<th>Internal P/N(Board Code)</th>
+			<th>Description(Board Name)</th>
+			<td rowspan="2" ><input type="submit" name="submit" value="Filter" /></td>
+		</tr>
+		<tr>
+			<td><select name="staff_id"><option value="0">All</option>{$staff_opts}</select></td>
+			<td><input type="text" name="Internal_PN" size="24" value="{$request['Internal_PN']}"/></td>
+			<td><input type="text" name="description" size="24" value="{$request['description']}"/></td>
+		</tr>
+		</table>
+		</form>
+	</td>
 </tr>
 <tr>
 	<td colspan="3">
@@ -59,11 +80,11 @@
 		</iterate>
 		<empty name="result">
 		<tr>
-			<td colspan="16" align="center">No Record</td>
+			<td colspan="17" align="center">No Record</td>
 		</tr>
 		</empty>
 		<tr>
-			<td colspan="16">{$page}</td>
+			<td colspan="17">{$page}</td>
 		</tr>
 		</table>
 	</td>
