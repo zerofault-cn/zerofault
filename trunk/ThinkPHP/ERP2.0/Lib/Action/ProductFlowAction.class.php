@@ -30,13 +30,13 @@ class ProductFlowAction extends BaseAction{
 		if(isset($_REQUEST['status'])) {
 			$status = $_REQUEST['status'];
 		}
-		elseif(''!=(Session::get(ACTION_NAME.'_status'))) {
-			$status = Session::get(ACTION_NAME.'_status');
+		elseif(''!=(Session::get(MODULE_NAME.ACTION_NAME.'_status'))) {
+			$status = Session::get(MODULE_NAME.ACTION_NAME.'_status');
 		}
 		else{
 			$status = 0;
 		}
-		//Session::set(ACTION_NAME.'_status', $status);
+		Session::set(MODULE_NAME.ACTION_NAME.'_status', $status);
 		$this->assign('status', $status);
 		
 		$staff_id = empty($_REQUEST['staff_id']) ? 0 : intval($_REQUEST['staff_id']);
@@ -46,14 +46,16 @@ class ProductFlowAction extends BaseAction{
 		$limit = 50;
 		$where = array();
 		$where['status'] = $status;
-		if(!empty($_POST['submit'])) {
-			''!=trim($_REQUEST['Internal_PN']) && ($where['Internal_PN'] = array('like', '%'.trim($_REQUEST['Internal_PN']).'%'));
-			''!=trim($_REQUEST['description']) && ($where['description'] = array('like', '%'.trim($_REQUEST['description']).'%'));
-			''!=trim($_REQUEST['manufacture']) && ($where['manufacture'] = array('like', '%'.trim($_REQUEST['manufacture']).'%'));
-			''!=trim($_REQUEST['MPN']) 		 && ($where['MPN'] 		   = array('like', '%'.trim($_REQUEST['MPN']).'%'));
+		if(!empty($_REQUEST['submit'])) {
+			$p_where = array();
+			!empty($_REQUEST['Internal_PN']) && ($p_where['Internal_PN'] = array('like', '%'.trim($_REQUEST['Internal_PN']).'%'));
+			!empty($_REQUEST['description']) && ($p_where['description'] = array('like', '%'.trim($_REQUEST['description']).'%'));
+			if (!empty($p_where)) {
+				$rs = M('Product')->where($p_where)->getField('id,id');
+				$where['product_id'] = array('IN', array_values($rs));
+			}
 			$staff_id>0 && $where['staff_id'] = $staff_id;
 		}
-
 		$count = $this->dao->where($where)->getField('count(*)');
 		$p = new Paginator($count,$limit);
 
@@ -77,6 +79,7 @@ class ProductFlowAction extends BaseAction{
 			}
 			$result[] = $item;
 		}
+		$this->assign('request', $_REQUEST);
 		$this->assign('result', $result);
 		$this->assign('page', $p->showMultiNavi());
 		$this->assign('content','ProductFlow:index');
