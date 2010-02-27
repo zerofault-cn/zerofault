@@ -1,5 +1,6 @@
 <?php
-class IndexAction extends Action{
+class IndexAction extends BaseAction{
+
 	public function index(){
 		if(S('category_list')) {
 			$category_list = S('category_list');
@@ -181,7 +182,6 @@ class IndexAction extends Action{
 		Image::buildImageVerify(); 
 	}
 	public function get_comment(){
-		header("Content-Type:text/html; charset=utf-8");
 		$dao = M('Comment');
 		$where['site_id'] = $_REQUEST['site_id'];
 		$where['status'] = array('gt',0);
@@ -198,7 +198,6 @@ class IndexAction extends Action{
 		echo $p->showJsNavi();
 	}
 	public function add_comment() {
-		header("Content-Type:text/html; charset=utf-8");
 		if($_SESSION['verify']!=md5(trim($_REQUEST['verify']))) {
 			die('<script>parent.myAlert("验证码错误!");</script>');
 		}

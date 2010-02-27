@@ -472,6 +472,13 @@ margin-top:1px;
 	text-indent:2em;
 	line-height:160%;
 }
+#detail p.content{
+	padding:5px;
+	margin:5px;
+	text-indent:2em;
+	line-height:160%;
+}
+
 #detail span#pfno{
 	font-size:14px;
 	font-weight:bold;
@@ -601,6 +608,26 @@ dl#comment dt i{
 }
 dl#comment dd{
 	padding:5px 15px 10px;
+}
+
+dl#feedback{
+	padding:5px 0px 10px;
+}
+dl#feedback dt{
+	height:22px;
+	border-top:1px solid #E6E6E6;
+	background-color:#F7F7F7;
+	padding:0px 15px;
+	line-height:22px;
+	color:#08336F;
+}
+dl#feedback dt i{
+	float:right;
+	color:#393939;
+	font-style:normal;
+}
+dl#feedback dd{
+	padding:5px 15px 0px;
 }
 
 #footer{

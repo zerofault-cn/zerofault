@@ -1,12 +1,12 @@
 <?php
 /**
 *
-* 网站评论管理
+* 网站留言管理
 *
 * @author zerofault <zerofault@gmail.com>
 * @since 2009/8/5
 */
-class CommentAction extends BaseAction{
+class FeedbackAction extends BaseAction{
 	protected $dao;
 
 	/**
@@ -14,7 +14,7 @@ class CommentAction extends BaseAction{
 	* 默认构造函数
 	*/
 	public function _initialize() {
-		$this->dao = D('Comment');
+		$this->dao = M('Feedback');
 		parent::_initialize();
 	}
 	/**
@@ -23,24 +23,15 @@ class CommentAction extends BaseAction{
 	*/
 	public function index(){
 		$topnavi[]=array(
-			'text'=> '评论管理',
-			'url' => __APP__.'/Comment'
+			'text'=> '留言管理',
+			'url' => __APP__.'/Feedback'
 			);
 
-		$dWebsite = D('Website');
-		if(!empty($_REQUEST['id'])){
-			$where['site_id'] = $_REQUEST['id'];
-			$site_name = $dWebsite->where(array('id'=>$_REQUEST['id']))->getField('name');
-			$topnavi[]=array(
-				'text'=> '给网站【'.$site_name.'】的评论',
-				);
-		}
-		else{
-			$topnavi[]=array(
-				'text'=> '所有评论',
-				);
-		}
-		$where['status'] = 1;
+		$topnavi[]=array(
+			'text'=> '所有留言',
+			);
+		$where = array();
+		$where['status'] = array('neq', -1);
 		if(!empty($_REQUEST['status'])) {
 			$where['status'] = $_REQUEST['status'];
 		}
@@ -54,15 +45,22 @@ class CommentAction extends BaseAction{
 		$p->setConfig('next','<img src="'.APP_PUBLIC_PATH.'/Image/next.gif" align="absbottom" alt="Next"/>');
 		$p->setConfig('last','<img src="'.APP_PUBLIC_PATH.'/Image/last.gif" align="absbottom" alt="Last"/>');
 		$rs = $this->dao->where($where)->order($order)->limit($p->offset.','.$p->limit)->select();
-		foreach($rs as $key=>$val){
-			$rs[$key]['site_info'] = $dWebsite->find($val['site_id']);
-		}
 
 		$this->assign("topnavi",$topnavi);
 		$this->assign('page', $p->showMultiNavi());
 		$this->assign('list', $rs);
-		$this->assign('content','Comment:index');
+		$this->assign('content','Feedback:index');
 		$this->display('Layout:Admin_layout');
+	}
+	public function reply() {
+		if (!empty($_POST['id'])) {
+			if ($this->dao->where('id='.intval($_POST['id']))->setField(array('reply','replytime'), array(trim($_REQUEST['reply']), date("Y-m-d H:i:s")))) {
+				die('1');
+			}
+			else {
+				die('Error:'.C('APP_DEBUG')?$this->dao->getLastSql():'');
+			}
+		}
 	}
 	/**
 	*
