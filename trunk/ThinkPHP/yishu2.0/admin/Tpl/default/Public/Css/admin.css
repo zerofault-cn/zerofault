@@ -63,6 +63,11 @@ label.editable{
 	border:1px solid #999;
 	background-color:#ffffd3;
 }
+fieldset div.editable{
+	cursor:pointer;
+	border:1px solid #999;
+	background-color:#ffffd3;
+}
 #container{
 	max-width:1000px;
 	height:auto !important;

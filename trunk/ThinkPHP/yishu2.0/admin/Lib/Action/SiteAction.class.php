@@ -67,10 +67,10 @@ class SiteAction extends BaseAction{
 		$p = new Paginator($count,$limit);
 		//$p->setConfig('show_num',7);//设定连续显示的页码个数，这里使用默认值7
 		//$p->setConfig('side_num',2);//设定两遍保留显示的页码个数，这里使用默认值2
-		$p->setConfig('first','<img src="'.APP_PUBLIC_URL.'/Image/first.gif" align="absbottom" alt="First"/>');
-		$p->setConfig('prev','<img src="'.APP_PUBLIC_URL.'/Image/prev.gif" align="absbottom" alt="Prev"/>');
-		$p->setConfig('next','<img src="'.APP_PUBLIC_URL.'/Image/next.gif" align="absbottom" alt="Next"/>');
-		$p->setConfig('last','<img src="'.APP_PUBLIC_URL.'/Image/last.gif" align="absbottom" alt="Last"/>');
+		$p->setConfig('first','<img src="'.APP_PUBLIC_PATH.'/Image/first.gif" align="absbottom" alt="First"/>');
+		$p->setConfig('prev','<img src="'.APP_PUBLIC_PATH.'/Image/prev.gif" align="absbottom" alt="Prev"/>');
+		$p->setConfig('next','<img src="'.APP_PUBLIC_PATH.'/Image/next.gif" align="absbottom" alt="Next"/>');
+		$p->setConfig('last','<img src="'.APP_PUBLIC_PATH.'/Image/last.gif" align="absbottom" alt="Last"/>');
 		$rs = $this->dao->where($where)->order($order)->limit($p->offset.','.$p->limit)->select();
 		foreach($rs as $key=>$val){
 			$rs[$key]['cate_info'] = $dCategory->find($val['cate_id']);

@@ -1,0 +1,76 @@
+	<div id="position">
+		当前位置：&nbsp;<a href="__APP__">首页</a> &gt; 意见反馈
+	</div>
+	<div id="detail">
+		<div class="main">
+			<h2>意见反馈</h2>
+			<ul>
+				<li>
+					<dl id="feedback">
+						<!-- 内容由JS载入 -->
+					</dl>
+				</li>
+				<li style="border-top:1px solid #888;">
+					<strong style="line-height:24px;">您的热心意见有助于帮助我们为您提供更好的服务！</strong>
+					<form name="Form" action="__URL__/submit" target="_iframe" method="post" style="line-height:28px;">
+					<label for="nickname">昵　称：</label><input type="text" id="nickname" name="nickname" size="20" maxlength="20" /> <em class="red">*</em><br />
+					<label for="email">E-mail：</label><input type="text" id="email" name="email" size="20" maxlength="50" /> (不会对外公开)<br />
+					<label for="subject">标　题：</label><input type="text" id="subject" name="subject" size="35" maxlength="50" /><br />
+					<textarea cols="55" rows="8" name="message"></textarea> <em class="red">*</em><br />
+					<input type="checkbox" name="anonymous" value="1"/>匿名发表
+					&nbsp;&nbsp;
+					验证码：<input TYPE="text" name="verify" size="4" > <img src="__APP__/Public/verify" style="cursor:pointer" onclick="javascript:this.src='__APP__/Public/verify?r='+Math.random();" alt="看不清？点击刷新" align="absmiddle" />&nbsp;&nbsp;
+					<input type="image" src="../Public/Images/submit_feedback.gif" style="border:none" align="absmiddle" name="submit" value="提交留言"/>
+					</form>
+				</li>
+			</ul>
+		</div><!-- end main -->
+		<div class="side">
+			<div id="category" class="side">
+				<h2>网站分类</h2>
+				<ul>
+					<iterate name="category_list" id="item">
+					<if condition="ceil($i/2)%2 eq 0">
+					<li class="gray">&nbsp;&nbsp;<a href="__URL__/cate/id/{$item.id}/">{$item.name}</a></li>
+					<else />
+					<li>&nbsp;&nbsp;<a href="__URL__/cate/id/{$item.id}/">{$item.name}</a></li>
+					</if>
+					</iterate>
+					<div class="clear"></div>
+				</ul>
+			</div>
+			
+		</div>
+	</div><!-- end detail -->
+	<div class="clear"></div>
+	<script language="JavaScript" type="text/javascript">
+	function getPage(p){
+		get_feedback(p);
+	}
+	function get_feedback(p){
+		jQuery("#feedback").html('<img style="padding:20px;" src="../Public/Images/ajaxloading.gif"/>');
+		jQuery.get(_URL_+"/get_feedback",{
+			'p':p
+		},function(str){
+				jQuery("#feedback").html(str);
+			});
+	}
+
+	jQuery.noConflict();
+	jQuery(document).ready(function(){
+		jQuery.get(_URL_+"/get_feedback",{
+		},function(str){
+				jQuery("#feedback").html(str);
+			});
+		jQuery("input[name='anonymous']").click(function(){
+			if(jQuery(this).attr("checked")) {
+				jQuery("#nickname").val('匿名网友');
+				jQuery("#nickname").attr('readonly', true);
+			}
+			else{
+				jQuery("#nickname").val('');
+				jQuery("#nickname").attr('readonly', false);
+			}
+		});
+	});
+	</script>

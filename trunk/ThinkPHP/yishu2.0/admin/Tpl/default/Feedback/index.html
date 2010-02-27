@@ -1,0 +1,50 @@
+	{$page}
+	<table id="table" border="1" cellpadding="3" cellspacing="0" width="100%" bordercolor="#999999" style="border-collapse:collapse;">
+	<tr bgcolor="#ededed">
+		<th width="5%">ID</th>
+		<th>留言</th>
+		<th>用户</th>
+		<th width="10%">操作</th>
+	</tr>
+	<iterate name="list" id="item">
+	<tr bgcolor="<eq name='mod' value='1'>#FFFFE1</eq>">
+		<td>{$item['id']}</td>
+		<td class="a_left" id="{$item['id']}">
+			<strong>{$item['subject']}</strong><br />{$item['message']|nl2br}
+			<empty name="item['reply']">
+			<div style="position:relative;"><input type="button" class="reply" style="position:absolute;right:0px;bottom:0px;" value="回复"/></div>
+			<else />
+			<fieldset style="border:1px dashed red;color:red;">
+				<legend>管理员回复</legend>
+				<div class="reply">{$item['reply']|nl2br}</div>
+				<div class="edit_reply" style="display:none;">
+					<textarea class="reply" name="reply" cols="40" rows="4">{$item['reply']}</textarea>
+					<input type="button" value="提交" class="submit"/> <input type="button" value="取消" class="cancel"/>
+				</div>
+			</fieldset>
+			</empty>
+		</td>
+		<td>
+			<if condition="$item['email']">
+			<a href="javascript:void(0);" onclick="copy('{$item['email']}')" title="将该用户的Email地址复制到剪贴板">{$item['nickname']}</a>
+			<else />
+			{$item['nickname']}
+			</if>
+			<br />
+			<a href="javascript:void(0);" onclick="traceIP('{$item['ip']}')" title="查看IP地址来源">{$item['ip']}</a><br />
+			{$item['addtime']}
+		</td>
+		<td>
+			<if condition="$item['status'] neq '-1'">
+			<a href="__URL__/update/id/{$item['id']}/f/status/v/0"  target="_iframe" title="隐藏"><img src="../Public/Image/deny.png" alt="隐藏" align="absmiddle"/></a>
+			<a href="__URL__/update/id/{$item['id']}/f/status/v/-1"  target="_iframe" title="删除"><img src="../Public/Image/cross.gif" alt="删除" align="absmiddle"/></a>
+			<else />
+			<a href="__URL__/update/id/{$item['id']}/f/status/v/1" target="_iframe" title="显示"><img src="../Public/Image/accept.gif" alt="显示" align="absmiddle"/></a>
+			</if>
+		</td>
+	</tr>
+	</iterate>
+	</table>
+	{$page}
+	<script language="JavaScript" type="text/javascript" src="../Public/Js/comment_func.js"></script>
+	<script language="JavaScript" type="text/javascript" src="../Public/Js/feedback_func.js"></script>
