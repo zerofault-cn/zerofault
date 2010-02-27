@@ -35,7 +35,10 @@
 			{$item['addtime']}
 		</td>
 		<td>
-			<if condition="$item['status'] neq '-1'">
+			<if condition="$item['status'] eq '0'">
+			<a href="__URL__/update/id/{$item['id']}/f/status/v/1"  target="_iframe" title="显示"><img src="../Public/Image/accept.gif" alt="显示" align="absmiddle"/></a>
+			<a href="__URL__/update/id/{$item['id']}/f/status/v/-1"  target="_iframe" title="删除"><img src="../Public/Image/cross.gif" alt="删除" align="absmiddle"/></a>
+			<elseif condition="$item['status'] eq '1'" />
 			<a href="__URL__/update/id/{$item['id']}/f/status/v/0"  target="_iframe" title="隐藏"><img src="../Public/Image/deny.png" alt="隐藏" align="absmiddle"/></a>
 			<a href="__URL__/update/id/{$item['id']}/f/status/v/-1"  target="_iframe" title="删除"><img src="../Public/Image/cross.gif" alt="删除" align="absmiddle"/></a>
 			<else />
