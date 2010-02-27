@@ -49,7 +49,7 @@ class FeedbackAction extends BaseAction{
 				self::_error('留言内容太短！');
 			}
 			if (M('Feedback')->add($data)) {
-				self::_success('提交成功，感谢您的热心支持!');
+				self::_success('感谢您的热心支持，请等待审核!');
 			}
 			else {
 				self::_error('提交失败');

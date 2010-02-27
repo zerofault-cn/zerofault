@@ -14,7 +14,6 @@ else {
 		'DB_NAME'			=> 'yishu321',
 		'DB_USER'			=> 'yishu321',
 		'DB_PWD'			=> 'yishu321',
-		'APP_DOMAIN_DEPLOY' => true,
 	);
 }
 $config = array_merge($config,array(

@@ -5,6 +5,7 @@ CREATE TABLE `yishu_feedback` (
   `subject` varchar(255) not NULL default '',
   `message` text not null default '',
   `reply` text not null default '',
+  `ip` varchar(255) not NULL default '',
   `addtime` datetime not null,
   `replytime` datetime not null,
   `status` tinyint(1) not null default '0',
