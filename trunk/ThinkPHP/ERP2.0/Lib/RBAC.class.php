@@ -89,7 +89,7 @@ class RBAC extends Think
         if(null===$authId)   $authId = $_SESSION[C('USER_AUTH_KEY')];
         // 如果使用普通权限模式，保存当前用户的访问权限列表
         // 对管理员开发所有权限
-        if(C('USER_AUTH_TYPE') !=2 && !$_SESSION[C('ADMIN_AUTH_KEY')] )
+        if(C('USER_AUTH_TYPE') !=2 && !$_SESSION[C('ADMIN_AUTH_NAME')] )
             $_SESSION['_ACCESS_LIST']	=	RBAC::getAccessList($authId);
         return ;
     }
@@ -167,7 +167,7 @@ class RBAC extends Think
             //存在认证识别号，则进行进一步的访问决策
 			$appName = APP_NAME;
             $accessGuid   =   md5($appName.$ModuleName.$ActionName);
-            if(empty($_SESSION[C('ADMIN_AUTH_KEY')])) {
+            if(empty($_SESSION[C('ADMIN_AUTH_NAME')])) {
                 if(C('USER_AUTH_TYPE')==2) {
                     //加强验证和即时验证模式 更加安全 后台权限修改可以即时生效
                     //通过数据库进行访问检查

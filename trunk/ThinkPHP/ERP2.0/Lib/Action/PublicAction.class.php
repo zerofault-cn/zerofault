@@ -71,13 +71,13 @@ class PublicAction extends BaseAction{
 		else{
 			D('Staff')->where('id='.$authInfo['id'])->setField('login_time',date("Y-m-d H:i:s"));
 			$_SESSION[C('USER_AUTH_KEY')]	= $authInfo['id'];
-			$_SESSION['staff']		= $authInfo;
+			$_SESSION[C('STAFF_AUTH_NAME')]	= $authInfo;
 			if(in_array($authInfo['id'], C('SUPER_ADMIN_ID'))) {
 				// 管理员不受权限控制影响
-				$_SESSION[C('ADMIN_AUTH_KEY')]	=	true;
+				$_SESSION[C('ADMIN_AUTH_NAME')]	=	true;
 			}
 			else{
-				$_SESSION[C('ADMIN_AUTH_KEY')]	=	false;
+				$_SESSION[C('ADMIN_AUTH_NAME')]	=	false;
 			}
 			//获取当前用户管理的Location信息
 			$rs = M('LocationManager')->where(array('staff_id'=>$authInfo['id'],'location_id'=>array('gt',1)))->group('location_id')->getField('location_id,group_concat(fixed order by fixed separator "")');
@@ -89,7 +89,7 @@ class PublicAction extends BaseAction{
 			foreach($rs as $location_id=>$fixed) {
 				$manager[$location_id] = array('name'=>$rs2[$location_id],'fixed'=>$fixed);
 			}
-			$_SESSION['manager'] = $manager;
+			$_SESSION[C('MANAGER_AUTH_NAME')] = $manager;
 			// 缓存访问权限
 			RBAC::saveAccessList($authInfo['id']);
 			self::_success('', __APP__, 0);
@@ -130,7 +130,7 @@ class PublicAction extends BaseAction{
 				$res = M('Remark2')->add($data);
 			}
 			if ($res) {
-				die(json_encode(array('result'=>1, 'remark_id'=>$remark_id, 'staff_name'=>$_SESSION['staff']['realname'], 'create_time'=>$data['create_time'], 'remark'=>nl2br($remark))));
+				die(json_encode(array('result'=>1, 'remark_id'=>$remark_id, 'staff_name'=>$_SESSION[C('STAFF_AUTH_NAME')]['realname'], 'create_time'=>$data['create_time'], 'remark'=>nl2br($remark))));
 			}
 			else {
 				die(json_encode(array('result'=>0, 'msg'=>'Post fail!'.(C('APP_DEBUG')?M('Remark2')->getLastSql():''))));

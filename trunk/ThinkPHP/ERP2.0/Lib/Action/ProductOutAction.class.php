@@ -78,7 +78,7 @@ class ProductOutAction extends BaseAction{
 		}
 		else{
 			$status = 0;
-			if ((MODULE_NAME == 'Asset' && ACTION_NAME == 'apply' && $_SESSION['staff']['leader_id']>0) || (ACTION_NAME == 'request')) {
+			if ((MODULE_NAME == 'Asset' && ACTION_NAME == 'apply' && $_SESSION[C('STAFF_AUTH_NAME')]['leader_id']>0) || (ACTION_NAME == 'request')) {
 				$status = -2;
 			}
 		}
@@ -106,8 +106,8 @@ class ProductOutAction extends BaseAction{
 				$where['_string'] = "staff_id in (".implode(',', array_keys($lead_staff_arr)).")";
 			}
 			elseif (ACTION_NAME == 'location') {
-				if (strlen($_SESSION['manager'][$location_id]['fixed'])==1) {
-					$where['fixed'] = $_SESSION['manager'][$location_id]['fixed'];
+				if (strlen($_SESSION[C('ADMIN_AUTH_NAME')][$location_id]['fixed'])==1) {
+					$where['fixed'] = $_SESSION[C('ADMIN_AUTH_NAME')][$location_id]['fixed'];
 				}
 				$where['to_type'] = 'location';
 				$where['to_id'] = $location_id;
@@ -116,7 +116,7 @@ class ProductOutAction extends BaseAction{
 				$where['_string'] = "(from_type='staff' and from_id =".$_SESSION[C('USER_AUTH_KEY')].") or (to_type='staff' and to_id = ".$_SESSION[C('USER_AUTH_KEY')].") or staff_id = ".$_SESSION[C('USER_AUTH_KEY')];
 			}
 		}
-		elseif(!$_SESSION[C('ADMIN_AUTH_KEY')]) {
+		elseif(!$_SESSION[C('ADMIN_AUTH_NAME')]) {
 		//	$where['_string'] = "(from_type='staff' and to_id =".$_SESSION[C('USER_AUTH_KEY')].") or (to_type='staff' and to_id = ".$_SESSION[C('USER_AUTH_KEY')].") or staff_id = ".$_SESSION[C('USER_AUTH_KEY')];
 		}
 		$count = $this->dao->where($where)->getField('count(*)');
@@ -304,7 +304,7 @@ class ProductOutAction extends BaseAction{
 
 			if ('apply' == $action) {
 				//如果有Leader，则将status置为-2，Approve后置为0，Reject置为-1
-				if ($_SESSION['staff']['leader_id']>0) {
+				if ($_SESSION[C('STAFF_AUTH_NAME')]['leader_id']>0) {
 					$this->dao->status = -2;
 				}
 			}
