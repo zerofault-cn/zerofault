@@ -51,7 +51,6 @@ class AssetAction extends BaseAction{
 		global $location_id;
 		$location_id = intval($_REQUEST['id']);
 		$this->assign('location_id', $location_id);
-		//dump($_SESSION['manager']);
 		R('ProductOut', 'transfer');
 	}
 	public function request() {

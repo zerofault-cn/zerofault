@@ -80,11 +80,11 @@ class BaseAction extends Action{
 		$submenu = array();
 		//根据是否manager增加Asset子菜单
 		if ('Assets Management' == $top) {
-			foreach($_SESSION['manager'] as $location_id=>$location) {
+			foreach($_SESSION[C('ADMIN_AUTH_NAME')] as $location_id=>$location) {
 				$submenu['Transfer to '.ucfirst($location['name'])] = 'Asset/location/id/'.$location_id;
 			}
 			//判断是否Leader，以增加request子菜单
-			if (!empty($_SESSION['staff']['is_leader'])) {
+			if (!empty($_SESSION[C('STAFF_AUTH_NAME')]['is_leader'])) {
 				$submenu['Staff Apply Request'] = 'Asset/request';
 			}
 		}
@@ -96,7 +96,7 @@ class BaseAction extends Action{
 				}
 			}
 			else{//子菜单是Module/Action，如Asset/apply
-				if (empty($_SESSION['staff']['is_leader']) && 'Asset/request'==$sub_action) {
+				if (empty($_SESSION[C('STAFF_AUTH_NAME')]['is_leader']) && 'Asset/request'==$sub_action) {
 					continue;
 				}
 				$sub_action_arr = explode('/', $sub_action);
@@ -403,7 +403,7 @@ class BaseAction extends Action{
 				$staff['realname'],
 				$from_staff['realname'],
 				$to_staff['realname'],
-				'Component'==$product['type']?$product['Internal_PN']:$product['description'],
+				$product['Internal_PN'].('Board'==$product['type']?('('.$product['description'].')'):''),
 				$flow['code']),
 			$mail_tpl[$flow['action']][$do]['subject']);
 		$body = str_replace(
@@ -424,7 +424,7 @@ class BaseAction extends Action{
 				$to_staff['realname'],
 				$leader['realname'],
 				$manager['realname'],
-				'Component'==$product['type']?$product['Internal_PN']:$product['description'],
+				$product['Internal_PN'].('Board'==$product['type']?('('.$product['description'].')'):''),
 				$flow['quantity'],
 				$unit_name,
 				$flow['remark'],

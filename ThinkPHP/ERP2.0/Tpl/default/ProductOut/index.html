@@ -2,7 +2,7 @@
 <form action="__URL__/confirm" method="post" target="_iframe">
 <table >
 <tr>
-	<if condition="($_SESSION['staff']['leader_id'] gt 0 and MODULE_NAME eq 'Asset' and ACTION_NAME eq 'apply') or (MODULE_NAME eq 'Asset' and ACTION_NAME eq 'request') or (MODULE_NAME eq 'ProductOut' and (ACTION_NAME eq 'applyFixed' or ACTION_NAME eq 'applyFloating') and $_SESSION[C('ADMIN_AUTH_KEY')])">
+	<if condition="($_SESSION[C('STAFF_AUTH_NAME')]['leader_id'] gt 0 and MODULE_NAME eq 'Asset' and ACTION_NAME eq 'apply') or (MODULE_NAME eq 'Asset' and ACTION_NAME eq 'request') or (MODULE_NAME eq 'ProductOut' and (ACTION_NAME eq 'applyFixed' or ACTION_NAME eq 'applyFloating') and $_SESSION[C('ADMIN_AUTH_NAME')])">
 	<td class="clsTab" id="status_-2"><a href="__ACTION__/status/-2">Waiting for Leader's approval</a></td>
 	</if>
 	<td class="clsTab" id="status_0"><a href="__ACTION__/id/{$location_id|default=0}/status/0">Ready to confirm</a></td>
@@ -63,7 +63,7 @@
 			<td>{$item['remark']}</td>
 			<td><if condition="(MODULE_NAME eq 'ProductOut' and $item['status'] lt 1)
 			or (MODULE_NAME eq 'Asset' and (ACTION_NAME eq 'transferOut' or ACTION_NAME eq 'returns') and $item['status'] eq 0)
-			or (MODULE_NAME eq 'Asset' and ACTION_NAME eq 'apply' and (($_SESSION['staff']['leader_id'] eq 0 and $item['status'] eq 0) or ($_SESSION['staff']['leader_id'] gt 0 and $item['status'] eq -2)))">
+			or (MODULE_NAME eq 'Asset' and ACTION_NAME eq 'apply' and (($_SESSION[C('STAFF_AUTH_NAME')]['leader_id'] eq 0 and $item['status'] eq 0) or ($_SESSION[C('STAFF_AUTH_NAME')]['leader_id'] gt 0 and $item['status'] eq -2)))">
 				<a href="__URL__/form/id/{$item['id']}">Edit</a>
 				<a href="javascript:void(0);" onclick="myConfirm('Are you sure to delete this item?', '__URL__/delete/id/{$item['id']}');" target="_iframe">Delete</a></td>
 				<elseif condition="($item['quantity']-$item['returned_quantity']-$item['transfered_quantity']) gt 0" />
