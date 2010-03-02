@@ -32,6 +32,7 @@
 </table>
 <table cellpadding="3" border="1" bordercolor="#FFFFFF" style="border-collapse:collapse;">
 <tr>
+	<th rowspan="2"><input type="checkbox" id="checkall" onclick="checkAll2();"/></th>
 	<th rowspan="2">No.</th>
 	<th rowspan="2" colspan="2">Product</th>
 	<th rowspan="2">Type</th>
@@ -52,7 +53,8 @@
 </tr>
 <iterate name="result" id="item">
 <tr class="trbg{$mod}">
-	<td>{$i}</td>
+	<td><notempty name="item['inventory']['chg_quantity']"><input type="checkbox" name="chk[]" value="{$item['product_id']}" onclick="updateCheckAll2(this);" /></notempty></td>
+	<td align="center">{$i}</td>
 	<td><a href="__URL__/info/id/{$item['product_id']}?width=400" class="jTip" id="product{$item['product_id']}" name="Product Detail">{$item['Internal_PN']}</a></td>
 	<td>{$item['description']}</td>
 	<td><if condition="$item['fixed'] eq 1">Fixed-Assets<else />Floating-Assets</if></td>
@@ -78,11 +80,106 @@
 </iterate>
 <empty name="result">
 <tr>
-	<td colspan="15" align="center">No Record</td>
+	<td colspan="16" align="center">No Record</td>
 </tr>
 </empty>
 <tr>
-	<td colspan="15">{$page}</td>
+	<td colspan="4">
+		<input type="button" name="transfer" onclick="batch_form('transfer');" value="Transfer Selected" />
+		<input type="button" name="release" value="Release Selected" />
+	</td>
+	<td colspan="12">{$page}</td>
 </tr>
 </table>
-<p class="center">&nbsp;</p>
+<div style="display:none" id="batch_form">
+<p class="page_title_text"></p>
+<form>
+<table width="96%" cellpadding="3" border="1" bordercolor="#FFFFFF" style="border-collapse:collapse;">
+<tr>
+	<th>Internal P/N</th>
+	<th>Description</th>
+	<th>Quantity</th>
+</tr>
+<iterate name="result" id="item">
+	<gt name="item['inventory']['chg_quantity']" value="0">
+<tr id="tr_{$item['product_id']}" style="display:none">
+	<td>{$item['Internal_PN']}</td>
+	<td>{$item['description']}</td>
+	<td><input type="text" name="quantity" size="3" value="{$item['inventory']['chg_quantity']}" /><input type="hidden" name="old_quantity" value="{$item['inventory']['chg_quantity']}" /></td>
+</tr>
+	</gt>
+</iterate>
+<tr id="transfer_to" bgcolor="#FFFFFF">
+	<td align="right">Transfer to:</td>
+	<td colspan="2"><select id="location_opts" onchange="select_location(this);"><option value="">Select One</option>{$info.location_opts}</select>
+		<select id="staff_opts" onchange="select_staff(this);"><option value="">Select One</option>{$info.staff_opts}</select></td>
+</tr>
+</table>
+<p class="center">
+	<input type="hidden" name="action" value="" />
+	<input type="submit" value="Submit" name="submit"/>
+	<input type="button" value="Cancel" onclick="tb_remove();"/>
+</p>
+</form>
+</div>
+<script type="text/javascript">
+$(document).ready(function(){
+	var all_check = document.getElementById('checkall');
+	all_check.checked = false;
+	var s_check = document.getElementsByName('chk[]');
+	for(var i=0; i<s_check.length; i++) {
+		s_check[i].checked = false;
+	}
+	});
+function batch_form(action) {
+	if ($("input:checked").length==0) {
+		alert('You haven\'t select any item');
+		return false;
+	}
+	$("#batch_form .page_title_text").html('Batch '+action+' Form');
+	$("input[name='action']").val(action);
+	tb_show('','#TB_inline?width=480&height=360&modal=true&inlineId=batch_form','')
+}
+function checkAll2() {
+	var all_check = document.getElementById('checkall');
+	var s_check = document.getElementsByName('chk[]');
+	for(var i=0; i<s_check.length; i++) {
+		s_check[i].checked = all_check.checked;
+		if (s_check[i].checked == true) {
+			document.getElementById('tr_'+s_check[i].value).style.display = '';
+		}
+		else {
+			document.getElementById('tr_'+s_check[i].value).style.display = 'none';
+		}
+	}
+}
+function updateCheckAll2(obj) {
+	if (obj.checked == true) {
+		document.getElementById('tr_'+obj.value).style.display = '';
+	}
+	else {
+		document.getElementById('tr_'+obj.value).style.display = 'none';
+	}
+	var all_check = document.getElementById('checkall');
+	var s_check = document.getElementsByName('chk[]');
+	s_check_count = s_check.length;
+	s_checked=0;
+	for(var i=0; i<s_check.length; i++) {
+		if(s_check[i].checked==true) {
+			s_checked++;
+		}
+		else
+		{
+			s_checked--;
+		}
+		if(s_checked==s_check_count)
+		{
+			all_check.checked=true;
+		}
+		else
+		{
+			all_check.checked=false;
+		}
+	}
+}
+</script>

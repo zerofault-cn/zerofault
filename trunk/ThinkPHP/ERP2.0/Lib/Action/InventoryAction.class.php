@@ -16,6 +16,9 @@ class InventoryAction extends BaseAction{
 		parent::_initialize();
 		$this->assign('MODULE_TITLE', 'Inventory Inquire');
 	}
+	
+	public function batch() {
+	}
 
 	public function index() {
 		Session::set('sub', MODULE_NAME.'/'.ACTION_NAME);
