@@ -85,15 +85,16 @@
 </empty>
 <tr>
 	<td colspan="4">
-		<input type="button" name="transfer" onclick="batch_form('transfer');" value="Transfer Selected" />
-		<input type="button" name="release" value="Release Selected" />
+		<input type="button" name="transfer" value="Transfer Selected" onclick="batch_form('transfer');" disabled="true" />
+		<input type="button" name="release" value="Release Selected" onclick="batch_form('release');" disabled="true" />
 	</td>
 	<td colspan="12">{$page}</td>
 </tr>
 </table>
+<p class="center"></p>
 <div style="display:none" id="batch_form">
 <p class="page_title_text"></p>
-<form>
+<form action="__URL__/batch" method="post" target="_iframe">
 <table width="96%" cellpadding="3" border="1" bordercolor="#FFFFFF" style="border-collapse:collapse;">
 <tr>
 	<th>Internal P/N</th>
@@ -105,14 +106,16 @@
 <tr id="tr_{$item['product_id']}" style="display:none">
 	<td>{$item['Internal_PN']}</td>
 	<td>{$item['description']}</td>
-	<td><input type="text" name="quantity" size="3" value="{$item['inventory']['chg_quantity']}" /><input type="hidden" name="old_quantity" value="{$item['inventory']['chg_quantity']}" /></td>
+	<td><input type="text" name="quantity[{$item['product_id']}]" size="3" value="{$item['inventory']['chg_quantity']}" /><input type="hidden" name="old_quantity[{$item['product_id']}]" value="{$item['inventory']['chg_quantity']}" /></td>
 </tr>
 	</gt>
 </iterate>
-<tr id="transfer_to" bgcolor="#FFFFFF">
+<tr id="transfer_to" style="display:none" bgcolor="#FFFFFF">
 	<td align="right">Transfer to:</td>
-	<td colspan="2"><select id="location_opts" onchange="select_location(this);"><option value="">Select One</option>{$info.location_opts}</select>
-		<select id="staff_opts" onchange="select_staff(this);"><option value="">Select One</option>{$info.staff_opts}</select></td>
+	<td colspan="2">
+		<select id="location_opts" onchange="select_location(this);"><option value="">Select One</option>{$info.location_opts}</select>
+		<select id="staff_opts" onchange="select_staff(this);" style="display:none;"><option value="">Select One</option>{$info.staff_opts}</select>
+	</td>
 </tr>
 </table>
 <p class="center">
@@ -130,20 +133,30 @@ $(document).ready(function(){
 	for(var i=0; i<s_check.length; i++) {
 		s_check[i].checked = false;
 	}
-	});
+	$("input[name='transfer']").attr("disabled", true);
+	$("input[name='release']").attr("disabled", true);
+});
 function batch_form(action) {
 	if ($("input:checked").length==0) {
 		alert('You haven\'t select any item');
 		return false;
 	}
+	if ('transfer'==action) {
+		$("#transfer_to").show();
+	}
+	else {
+		$("#transfer_to").hide();
+	}
 	$("#batch_form .page_title_text").html('Batch '+action+' Form');
 	$("input[name='action']").val(action);
 	tb_show('','#TB_inline?width=480&height=360&modal=true&inlineId=batch_form','')
 }
+var all_check = document.getElementById('checkall');
+var s_check = document.getElementsByName('chk[]');
+var s_check_count = s_check.length;
+var s_checked=0;
 function checkAll2() {
-	var all_check = document.getElementById('checkall');
-	var s_check = document.getElementsByName('chk[]');
-	for(var i=0; i<s_check.length; i++) {
+	for(var i=0; i<s_check_count; i++) {
 		s_check[i].checked = all_check.checked;
 		if (s_check[i].checked == true) {
 			document.getElementById('tr_'+s_check[i].value).style.display = '';
@@ -152,34 +165,52 @@ function checkAll2() {
 			document.getElementById('tr_'+s_check[i].value).style.display = 'none';
 		}
 	}
+	if (all_check.checked == true) {
+		$("input[name='transfer']").attr("disabled", false);
+		$("input[name='release']").attr("disabled", false);
+	}
+	else {
+		$("input[name='transfer']").attr("disabled", true);
+		$("input[name='release']").attr("disabled", true);
+	}
 }
 function updateCheckAll2(obj) {
 	if (obj.checked == true) {
+		s_checked++;
 		document.getElementById('tr_'+obj.value).style.display = '';
 	}
 	else {
+		s_checked--;
 		document.getElementById('tr_'+obj.value).style.display = 'none';
 	}
-	var all_check = document.getElementById('checkall');
-	var s_check = document.getElementsByName('chk[]');
-	s_check_count = s_check.length;
-	s_checked=0;
-	for(var i=0; i<s_check.length; i++) {
-		if(s_check[i].checked==true) {
-			s_checked++;
-		}
-		else
-		{
-			s_checked--;
-		}
-		if(s_checked==s_check_count)
-		{
-			all_check.checked=true;
-		}
-		else
-		{
-			all_check.checked=false;
-		}
+	if(s_checked == s_check_count) {
+		all_check.checked = true;
 	}
+	else {
+		all_check.checked = false;
+	}
+	if (s_checked == 0) {
+		$("input[name='transfer']").attr("disabled", true);
+		$("input[name='release']").attr("disabled", true);
+	}
+	else {
+		$("input[name='transfer']").attr("disabled", false);
+		$("input[name='release']").attr("disabled", false);
+	}
+}
+function select_location(obj) {
+	if('staff' == $(obj).val()) {
+		$('#staff_opts').show();
+		$('#to_type').val('staff');
+	}
+	else {
+		$("#staff_opts").hide();
+		$('#to_type').val('location');
+		$("#to_id").val($(obj).val());
+		
+	}
+}
+function select_staff(obj) {
+	$("#to_id").val($(obj).val());
 }
 </script>
