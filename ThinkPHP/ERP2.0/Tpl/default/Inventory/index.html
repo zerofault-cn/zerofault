@@ -94,7 +94,7 @@
 <p class="center"></p>
 <div style="display:none" id="batch_form">
 <p class="page_title_text"></p>
-<form action="__URL__/batch" method="post" target="_iframe">
+<form name="Batch" action="__URL__/batch" method="post" target="_iframe">
 <table width="96%" cellpadding="3" border="1" bordercolor="#FFFFFF" style="border-collapse:collapse;">
 <tr>
 	<th>Internal P/N</th>
@@ -106,7 +106,7 @@
 <tr id="tr_{$item['product_id']}" style="display:none">
 	<td>{$item['Internal_PN']}</td>
 	<td>{$item['description']}</td>
-	<td><input type="text" name="quantity[{$item['product_id']}]" size="3" value="{$item['inventory']['chg_quantity']}" /><input type="hidden" name="old_quantity[{$item['product_id']}]" value="{$item['inventory']['chg_quantity']}" /></td>
+	<td><input type="text" id="input_{$item['product_id']}" name="quantity[{$item['product_id']}]" size="3" value="{$item['inventory']['chg_quantity']}" disabled="true"/></td>
 </tr>
 	</gt>
 </iterate>
@@ -120,97 +120,13 @@
 </table>
 <p class="center">
 	<input type="hidden" name="action" value="" />
+	<input type="hidden" name="from_type" id="from_type" value="location" />
+	<input type="hidden" name="from_id" id="from_id" value="1" />
+	<input type="hidden" name="to_type" id="to_type" value="" />
+	<input type="hidden" name="to_id" id="to_id" value="" />
 	<input type="submit" value="Submit" name="submit"/>
 	<input type="button" value="Cancel" onclick="tb_remove();"/>
 </p>
 </form>
 </div>
-<script type="text/javascript">
-$(document).ready(function(){
-	var all_check = document.getElementById('checkall');
-	all_check.checked = false;
-	var s_check = document.getElementsByName('chk[]');
-	for(var i=0; i<s_check.length; i++) {
-		s_check[i].checked = false;
-	}
-	$("input[name='transfer']").attr("disabled", true);
-	$("input[name='release']").attr("disabled", true);
-});
-function batch_form(action) {
-	if ($("input:checked").length==0) {
-		alert('You haven\'t select any item');
-		return false;
-	}
-	if ('transfer'==action) {
-		$("#transfer_to").show();
-	}
-	else {
-		$("#transfer_to").hide();
-	}
-	$("#batch_form .page_title_text").html('Batch '+action+' Form');
-	$("input[name='action']").val(action);
-	tb_show('','#TB_inline?width=480&height=360&modal=true&inlineId=batch_form','')
-}
-var all_check = document.getElementById('checkall');
-var s_check = document.getElementsByName('chk[]');
-var s_check_count = s_check.length;
-var s_checked=0;
-function checkAll2() {
-	for(var i=0; i<s_check_count; i++) {
-		s_check[i].checked = all_check.checked;
-		if (s_check[i].checked == true) {
-			document.getElementById('tr_'+s_check[i].value).style.display = '';
-		}
-		else {
-			document.getElementById('tr_'+s_check[i].value).style.display = 'none';
-		}
-	}
-	if (all_check.checked == true) {
-		$("input[name='transfer']").attr("disabled", false);
-		$("input[name='release']").attr("disabled", false);
-	}
-	else {
-		$("input[name='transfer']").attr("disabled", true);
-		$("input[name='release']").attr("disabled", true);
-	}
-}
-function updateCheckAll2(obj) {
-	if (obj.checked == true) {
-		s_checked++;
-		document.getElementById('tr_'+obj.value).style.display = '';
-	}
-	else {
-		s_checked--;
-		document.getElementById('tr_'+obj.value).style.display = 'none';
-	}
-	if(s_checked == s_check_count) {
-		all_check.checked = true;
-	}
-	else {
-		all_check.checked = false;
-	}
-	if (s_checked == 0) {
-		$("input[name='transfer']").attr("disabled", true);
-		$("input[name='release']").attr("disabled", true);
-	}
-	else {
-		$("input[name='transfer']").attr("disabled", false);
-		$("input[name='release']").attr("disabled", false);
-	}
-}
-function select_location(obj) {
-	if('staff' == $(obj).val()) {
-		$('#staff_opts').show();
-		$('#to_type').val('staff');
-	}
-	else {
-		$("#staff_opts").hide();
-		$('#to_type').val('location');
-		$("#to_id").val($(obj).val());
-		
-	}
-}
-function select_staff(obj) {
-	$("#to_id").val($(obj).val());
-}
-</script>
+<script language="JavaScript" type="text/javascript" src="../Public/Js/batch.js"></script>

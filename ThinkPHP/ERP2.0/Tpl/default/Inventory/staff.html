@@ -33,6 +33,7 @@
 <notempty name="_POST['submit']">
 <table cellpadding="3" border="1" bordercolor="#FFFFFF" style="border-collapse:collapse;">
 <tr>
+	<th><input type="checkbox" id="checkall" onclick="checkAll2();"/></th>
 	<th>No.</th>
 	<th colspan="2">Product</th>
 	<th>Type</th>
@@ -42,7 +43,8 @@
 </tr>
 <iterate name="result" id="item">
 <tr class="trbg{$mod}">
-	<td>{$i}</td>
+	<td><input type="checkbox" name="chk[]" value="{$item['product_id']}" onclick="updateCheckAll2(this);" /></td>
+	<td align="center">{$i}</td>
 	<td><a href="__URL__/info/id/{$item['product_id']}?width=400" class="jTip" id="product{$i}" name="Product Detail">{$item['Internal_PN']}</a></td>
 	<td>{$item['description']}</td>
 	<td><if condition="$item['fixed'] eq 1">Fixed-Assets<else />Floating-Assets</if></td>
@@ -53,9 +55,50 @@
 </iterate>
 <empty name="result">
 <tr>
-	<td colspan="5" align="center">No Record</td>
+	<td colspan="8" align="center">No Record</td>
 </tr>
 </empty>
+<tr>
+	<td colspan="8">
+		<input type="button" name="transfer" value="Transfer Selected" onclick="batch_form('transfer');" disabled="true" />
+	</td>
+</tr>
 </table>
 </notempty>
 <p class="center">&nbsp;</p>
+<div style="display:none" id="batch_form">
+<p class="page_title_text"></p>
+<form name="Batch" action="__URL__/batch" method="post" target="_iframe">
+<table width="96%" cellpadding="3" border="1" bordercolor="#FFFFFF" style="border-collapse:collapse;">
+<tr>
+	<th>Internal P/N</th>
+	<th>Description</th>
+	<th>Quantity</th>
+</tr>
+<iterate name="result" id="item">
+<tr id="tr_{$item['product_id']}" style="display:none">
+	<td>{$item['Internal_PN']}</td>
+	<td>{$item['description']}</td>
+	<td><input type="text" id="input_{$item['product_id']}" name="quantity[{$item['product_id']}]" size="3" value="{$item['chg_quantity']}" disabled="true"/></td>
+</tr>
+</iterate>
+<tr id="transfer_to" style="display:none" bgcolor="#FFFFFF">
+	<td align="right">Transfer to:</td>
+	<td colspan="2">
+		<select id="location_opts" onchange="select_location(this);"><option value="">Select One</option>{$info.location_opts}</select>
+		<select id="staff_opts" onchange="select_staff(this);" style="display:none;"><option value="">Select One</option>{$info.staff_opts}</select>
+	</td>
+</tr>
+</table>
+<p class="center">
+	<input type="hidden" name="action" value="transfer" />
+	<input type="hidden" name="from_type" id="from_type" value="staff" />
+	<input type="hidden" name="from_id" id="from_id" value="{$request['staff_id']}" />
+	<input type="hidden" name="to_type" id="to_type" value="" />
+	<input type="hidden" name="to_id" id="to_id" value="" />
+	<input type="submit" value="Submit" name="submit"/>
+	<input type="button" value="Cancel" onclick="tb_remove();"/>
+</p>
+</form>
+</div>
+<script language="JavaScript" type="text/javascript" src="../Public/Js/batch.js"></script>
