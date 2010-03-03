@@ -18,6 +18,7 @@ class InventoryAction extends BaseAction{
 	}
 	
 	public function batch() {
+		dump($_REQUEST);
 	}
 
 	public function index() {
@@ -26,6 +27,14 @@ class InventoryAction extends BaseAction{
 		$this->assign('category_opts', self::genOptions(M('Category')->select(), $_REQUEST['category_id']) );
 		$this->assign('supplier_opts', self::genOptions(D('Supplier')->select(), $_REQUEST['supplier_id']));
 
+		//for batch transfer
+		$info = array();
+		$location_arr = M('Location')->where(array('id'=>array('gt',1)))->select();
+		$location_arr[] = array('id' => 'staff', 'name' => 'Staff');
+		$info['location_opts'] = self::genOptions($location_arr);
+		$info['staff_opts'] = self::genOptions(M('Staff')->where(array('status'=>1, 'id'=>array('neq',$_SESSION[C('USER_AUTH_KEY')])))->select(), '', 'realname');
+		$this->assign('info', $info);
+		
 		import("@.Paginator");
 		$limit = 50;
 

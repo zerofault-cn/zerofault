@@ -72,15 +72,15 @@
 <tr>
 	<td><if condition="$action eq 'reject'">Reject</if>
 	Quantity:</td>
-	<td><input type="text" maxlength="20" size="30" id="quantity" name="quantity" value="{$info['quantity']}" onchange="calc_total()"/><input type="hidden" name="ori_quantity" value="{$info['ori_quantity']}"/></td>
+	<td><input type="text" size="30" id="quantity" name="quantity" value="{$info['quantity']}" onchange="calc_total()"/><input type="hidden" name="ori_quantity" value="{$info['ori_quantity']}"/></td>
 </tr>
 <tr>
 	<td>Unit Price:</td>
-	<td><input type="text" maxlength="20" size="30" id="price" name="price" value="{$info.price}" onchange="calc_total()"/></td>
+	<td><input type="text" size="30" id="price" name="price" value="{$info.price}" onchange="calc_total()"/></td>
 </tr>
 <tr>
 	<td>Total Price:</td>
-	<td><input type="text" maxlength="20" size="30" id="total" value="{$info['quantity']*$info['price']}" readonly="true"/> <img src="../Public/Images/lock.gif" /></td>
+	<td><input type="text" size="30" id="total" value="{$info['quantity']*$info['price']}" readonly="true"/> <img src="../Public/Images/lock.gif" /></td>
 </tr>
 <tr>
 	<td>Accessories:</td>
