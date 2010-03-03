@@ -18,7 +18,76 @@ class InventoryAction extends BaseAction{
 	}
 	
 	public function batch() {
-		dump($_REQUEST);
+		if(empty($_POST['submit'])) {
+			return;
+		}
+		if (empty($_REQUEST['quantity'])) {
+			self::_error('No product selected!');
+		}
+		$data = array();
+		$data['action'] = $_REQUEST['action'];
+		$data['from_type'] = $_REQUEST['from_type'];
+		$data['from_id'] = $_REQUEST['from_id'];
+		$data['to_type'] = 'location';
+		$data['to_id'] = 0;
+		$data['staff_id'] = $_SESSION[C('USER_AUTH_KEY')];
+		$data['create_time'] = date("Y-m-d H:i:s");
+		if ('transfer' == $_REQUEST['action']) {
+			$data['to_type'] = $_REQUEST['to_type'];
+			if (empty($_REQUEST['to_id'])) {
+				self::_error('Transfer target must be specified!');
+			}
+			$data['to_id'] = $_REQUEST['to_id'];
+		}
+		$where = array(
+			'type' => $_REQUEST['from_type'],
+			'location_id' => $_REQUEST['from_id']
+			);
+		$success_arr = $fail_arr = array();
+		foreach ($_REQUEST['quantity'] as $product_id=>$quantity) {
+			$product = M('Product')->find($product_id);
+			if ($quantity<=0) {
+				self::_error('The quantity of '.$product['Internal_PN'].' can\'t be less than 0');
+			}
+			$where['product_id'] = $product_id;
+			$q = M('LocationProduct')->where($where)->getField('`ori_quantity`+`chg_quantity`');
+			if ($quantity>$q) {
+				self::_error('The quantity of '.$product['Internal_PN'].' can\'t be more than '.$q);
+			}
+			if ('transfer' == $data['action']) {
+				$max_code = M('ProductFlow')->where(array('code'=>array('like','T%')))->max('code');
+				empty($max_code) && ($max_code = 'T'.sprintf("%09d",0));
+			}
+			else {
+				$max_code = M('ProductFlow')->where(array('code'=>array('like','Out%')))->max('code');
+				empty($max_code) && ($max_code = 'Out'.sprintf("%09d",0));
+			}
+			$data['code'] = ++$max_code;
+			$data['fixed'] = $product['fixed'];
+			$data['product_id'] = $product_id;
+			$data['quantity'] = $quantity;
+			if (M('ProductFlow')->add($data)) {
+				$success_arr[] = $product;
+			}
+			else {
+				$fail_arr[] = $product;
+			}
+		}
+		$msg  = 'The result of batch '.$data['action'].':<br />';
+		$msg .= '<strong>Success:</strong><br /><font class=\'blue\'>';
+		foreach ($success_arr as $product) {
+			$msg .= '&nbsp;&nbsp;&nbsp;&nbsp;'.$product['Internal_PN'].'<br />';
+		}
+		$msg .= '</font><strong>Failure:</strong><br /><font class=\'red\'>';
+		foreach ($fail_arr as $product) {
+			$msg .= '&nbsp;&nbsp;&nbsp;&nbsp;'.$product['Internal_PN'].'<br />';
+		}
+		$msg .= '</font>';
+		$url = '';
+		if (count($success_arr)>0) {
+			$url = __APP__.'/ProductOut/'.$data['action'];
+		}
+		self::_success($msg, $url, 5000);
 	}
 
 	public function index() {
@@ -122,6 +191,14 @@ class InventoryAction extends BaseAction{
 	}
 
 	public function location() {
+		//for batch transfer
+		$info = array();
+		$location_arr = M('Location')->where(array('id'=>array('gt',1)))->select();
+		$location_arr[] = array('id' => 'staff', 'name' => 'Staff');
+		$info['location_opts'] = self::genOptions($location_arr);
+		$info['staff_opts'] = self::genOptions(M('Staff')->where(array('status'=>1, 'id'=>array('neq',$_SESSION[C('USER_AUTH_KEY')])))->select(), '', 'realname');
+		$this->assign('info', $info);
+
 		$location_id = intval($_REQUEST['id']);
 		$this->assign('location_id', $location_id);
 		Session::set('sub', MODULE_NAME.'/'.ACTION_NAME.'/id/'.$location_id);
@@ -165,7 +242,14 @@ class InventoryAction extends BaseAction{
 				$lastRemark = self::getLastComment($val['product_id'])."\n";
 				$result[$i]['lastRemark'] = substr($lastRemark, 0, strpos($lastRemark, "\n"));
 			}
-			//dump($result);
+
+			//for batch transfer
+			$info = array();
+			$location_arr = M('Location')->where(array('id'=>array('gt',1)))->select();
+			$location_arr[] = array('id' => 'staff', 'name' => 'Staff');
+			$info['location_opts'] = self::genOptions($location_arr);
+			$info['staff_opts'] = self::genOptions(M('Staff')->where(array('status'=>1, 'id'=>array('neq',$_SESSION[C('USER_AUTH_KEY')])))->select(), '', 'realname');
+			$this->assign('info', $info);
 		}
 		$this->assign('request', $_REQUEST);
 		$this->assign('result', $result);

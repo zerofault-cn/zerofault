@@ -345,8 +345,6 @@ class BoardAction extends BaseAction{
 		count($failure_line_arr)>0 && ($msg .= ' <i>(Line: '.implode(', ', $failure_line_arr).')</i>.');
 		
 		self::_success($msg, '', 5000);
-		exit;
-		//import end
 	}
 	public function delete() {
 		//判断是否已被使用
