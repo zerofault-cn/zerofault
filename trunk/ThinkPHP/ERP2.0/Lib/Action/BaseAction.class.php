@@ -80,7 +80,7 @@ class BaseAction extends Action{
 		$submenu = array();
 		//根据是否manager增加Asset子菜单
 		if ('Assets Management' == $top) {
-			foreach($_SESSION[C('ADMIN_AUTH_NAME')] as $location_id=>$location) {
+			foreach($_SESSION[C('MANAGER_AUTH_NAME')] as $location_id=>$location) {
 				$submenu['Transfer to '.ucfirst($location['name'])] = 'Asset/location/id/'.$location_id;
 			}
 			//判断是否Leader，以增加request子菜单
@@ -403,7 +403,7 @@ class BaseAction extends Action{
 				$staff['realname'],
 				$from_staff['realname'],
 				$to_staff['realname'],
-				$product['Internal_PN'].('Board'==$product['type']?('('.$product['description'].')'):''),
+				$product['Internal_PN'].'('.$product['description'].')',
 				$flow['code']),
 			$mail_tpl[$flow['action']][$do]['subject']);
 		$body = str_replace(
@@ -424,13 +424,13 @@ class BaseAction extends Action{
 				$to_staff['realname'],
 				$leader['realname'],
 				$manager['realname'],
-				$product['Internal_PN'].('Board'==$product['type']?('('.$product['description'].')'):''),
+				$product['Internal_PN'].'('.$product['description'].')',
 				$flow['quantity'],
 				$unit_name,
 				$flow['remark'],
 				$url),
 			$mail_tpl[$flow['action']][$do]['body']);
-
+		$body .= "\n[From ".C('ERP_TITLE')."]\n";
 		$cmd = 'echo "'.$body.'"|/usr/bin/mutt -s "'.$subject.'" '.$send_to[0];
 		if (count($send_to)>1) {
 			$cmd .= ' -c '.implode(' -c ', array_slice($send_to,1));
