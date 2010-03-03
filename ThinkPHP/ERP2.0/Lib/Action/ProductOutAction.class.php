@@ -106,8 +106,8 @@ class ProductOutAction extends BaseAction{
 				$where['_string'] = "staff_id in (".implode(',', array_keys($lead_staff_arr)).")";
 			}
 			elseif (ACTION_NAME == 'location') {
-				if (strlen($_SESSION[C('ADMIN_AUTH_NAME')][$location_id]['fixed'])==1) {
-					$where['fixed'] = $_SESSION[C('ADMIN_AUTH_NAME')][$location_id]['fixed'];
+				if (strlen($_SESSION[C('MANAGER_AUTH_NAME')][$location_id]['fixed'])==1) {
+					$where['fixed'] = $_SESSION[C('MANAGER_AUTH_NAME')][$location_id]['fixed'];
 				}
 				$where['to_type'] = 'location';
 				$where['to_id'] = $location_id;
