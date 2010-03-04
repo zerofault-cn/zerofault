@@ -65,7 +65,7 @@
 <if condition="$_SESSION[C('ADMIN_AUTH_NAME')] eq true">
 <tr>
 	<td colspan="8">
-		<input type="button" name="transfer" value="Transfer Selected" onclick="batch_form('transfer');" disabled="true" />
+		<input type="button" name="transfer" value="Transfer Selected" onclick="batch_form();" disabled="true" />
 	</td>
 </tr>
 </if>
@@ -89,7 +89,7 @@
 	<td><input type="text" id="input_{$item['product_id']}" name="quantity[{$item['product_id']}]" size="3" value="{$item['chg_quantity']}" disabled="true"/></td>
 </tr>
 </iterate>
-<tr id="transfer_to" style="display:none" bgcolor="#FFFFFF">
+<tr id="transfer_to" bgcolor="#FFFFFF">
 	<td align="right">Transfer to:</td>
 	<td colspan="2">
 		<select id="location_opts" onchange="select_location(this);"><option value="">Select One</option>{$info.location_opts}</select>

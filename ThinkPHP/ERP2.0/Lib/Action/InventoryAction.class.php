@@ -86,6 +86,9 @@ class InventoryAction extends BaseAction{
 		$url = '';
 		if (count($success_arr)>0) {
 			$url = __APP__.'/ProductOut/'.$data['action'];
+			if (!empty($_REQUEST['from_page']) && 'Asset'==$_REQUEST['from_page']) {
+				$url = __APP__.'/Asset/transferOut';
+			}
 		}
 		self::_success($msg, $url, 8000);
 	}
