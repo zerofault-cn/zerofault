@@ -25,6 +25,9 @@ function batch_form(action) {
 	if ('release'==action) {
 		$("#transfer_to").hide();
 	}
+	else {
+		$("#transfer_to").show();
+	}
 	$("#batch_form .page_title_text").html('Batch '+action+' Form');
 	$("input[name='action']").val(action);
 	tb_show('','#TB_inline?width=480&height=360&modal=true&inlineId=batch_form','')

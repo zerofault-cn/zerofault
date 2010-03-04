@@ -39,8 +39,16 @@ class AssetAction extends BaseAction{
 			}
 			$result[$i][] = $item;
 		}
-		//dump($result);
 		krsort($result);
+
+		//for batch transfer
+		$info = array();
+		$location_arr = M('Location')->where(array('id'=>array('gt',1)))->select();
+		$location_arr[] = array('id' => 'staff', 'name' => 'Staff');
+		$info['location_opts'] = self::genOptions($location_arr);
+		$info['staff_opts'] = self::genOptions(M('Staff')->where(array('status'=>1, 'id'=>array('neq',$_SESSION[C('USER_AUTH_KEY')])))->select(), '', 'realname');
+		$this->assign('info', $info);
+
 		$this->assign('fixed_arr', array('Floating Assets', 'Fixed Assets'));
 		$this->assign('default_fixed', 1);
 		$this->assign('result', $result);

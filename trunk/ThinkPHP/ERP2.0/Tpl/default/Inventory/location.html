@@ -30,7 +30,7 @@
 </empty>
 <tr>
 	<td colspan="9">
-		<input type="button" name="transfer" value="Transfer Selected" onclick="batch_form('transfer');" disabled="true" />
+		<input type="button" name="transfer" value="Transfer Selected" onclick="batch_form();" disabled="true" />
 	</td>
 </tr>
 </table>
@@ -53,7 +53,7 @@
 </tr>
 	</if>
 </iterate>
-<tr id="transfer_to" style="display:none" bgcolor="#FFFFFF">
+<tr id="transfer_to" bgcolor="#FFFFFF">
 	<td align="right">Transfer to:</td>
 	<td colspan="2">
 		<select id="location_opts" onchange="select_location(this);"><option value="">Select One</option>{$info.location_opts}</select>
