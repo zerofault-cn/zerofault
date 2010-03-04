@@ -14,7 +14,7 @@
 		<table class="clsTab" cellpadding="3" border="1" bordercolor="#FFFFFF" style="border-collapse:collapse;display:none" id="fixed{$key}">
 		</if>
 		<tr>
-			<th><input type="checkbox" id="checkall" onclick="checkAll2();"/></th>
+			<th><if condition="$key eq $default_fixed"><input type="checkbox" id="checkall" onclick="checkAll2();"/></if></th>
 			<th>No.</th>
 			<th>Code</th>
 			<th class="basic_data">MPN</th>

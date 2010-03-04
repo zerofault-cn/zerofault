@@ -102,14 +102,23 @@
 </tr>
 </table>
 <form name="Import" action="__URL__/import" enctype="multipart/form-data" target="_iframe" method="post">
-<p class="center">
-	<img src="../Public/Images/blank.gif" width="85" height="24" align="absmiddle"/>
-	<input type="button" onclick="javascript:document.location='__URL__/form';" value="Add a New Board" />
-	<img src="../Public/Images/blank.gif" width="85" height="24" align="absmiddle" style="position:relative;right:-214px;z-index:99;"/>
-	<input type="button"  value="Import From CSV" />
-	<input type="hidden" name="confirm" value="" />
-	<input type="file" name="file" size="15" onfocus="this.click();this.blur();" onchange="if(this.value!='')document.Import.submit();" style="position:relative;left:-127px;_left:-136px;cursor:pointer;opacity:0;filter: Alpha(Opacity=0);"/>
-</p>
+<table align="center" style="background-color:#FFFFFF;padding:10px;margin:12px auto;">
+<tr>
+	<td align="right" valign="top" width="340">
+		<input type="button" onclick="javascript:document.location='__URL__/form';" value="Add a New Board" />
+	</td>
+	<td width="10">&nbsp;</td>
+	<td width="340" nowrap="nowrap">
+		<input type="button" id="batch" onclick="$('input#batch').hide();$('div#select_file').show();" value="Import From CSV" />
+		<div id="select_file" style="display:none;">
+			<input type="file" name="file" size="15" />
+			<input type="submit" value="Submit" />
+			<input type="button" onclick="$('div#select_file').hide();$('input#batch').show();" value="Cancel" />
+		</div>
+	</td>
+</tr>
+</table>
+<input type="hidden" name="confirm" value="" />
 </form>
 <script type="text/javascript">
 var toggle_arr = new Array();

@@ -308,18 +308,15 @@ class ProductInAction extends BaseAction{
 			}
 			if ($i == 0) {
 				if ($value_arr != $header_arr) {
-					echo '<script>parent.document.Import.file.value="";</script>';
 					self::_error('The imported file\'s header isn\'t right.');
 				}
 			}
 			else {
 				if (count($value_arr) != count($header_arr)) {
-					echo '<script>parent.document.Import.file.value="";</script>';
 					self::_error('The imported file isn\'t well-formatted. (Line:'.($i+1).')');
 				}
 				$values_arr[$i] = array_combine($fields_arr, $value_arr);
 				if (strtoupper($Fixed) != strtoupper($values_arr[$i]['Fixed'])) {
-					echo '<script>parent.document.Import.file.value="";</script>';
 					self::_error('The product in line '.($i+1).' is not '.('YES'==strtoupper($Fixed)?'Fixed-Assets':'Floating-Assets'));
 				}
 			}
@@ -327,7 +324,6 @@ class ProductInAction extends BaseAction{
 		}
 		//validate upload data
 		if (empty($values_arr)) {
-			echo '<script>parent.document.Import.file.value="";</script>';
 			self::_error('There is no record in the file.');
 		}
 		if (empty($confirm)) {
@@ -445,15 +441,13 @@ class ProductInAction extends BaseAction{
 				continue;
 			}
 		}
-		$msg  = 'The result of batch entering:<br />';
-		$msg .= 'Total records: '.(count($values_arr)).'<br />';
-		$msg .= 'Entered records: '.$imported.'<br />';
-		$msg .= 'Failure records: '.(count($failure_line_arr)>0 ? '<i>'.count($failure_line_arr).'</i>' : 0);
+		$msg  = 'Batch entering result:<br />';
+		$msg .= '&nbsp;&nbsp;Total records: '.(count($values_arr)).'<br />';
+		$msg .= '&nbsp;&nbsp;Entered records: '.$imported.'<br />';
+		$msg .= '&nbsp;&nbsp;Failure records: '.(count($failure_line_arr)>0 ? '<i>'.count($failure_line_arr).'</i>' : 0);
 		count($failure_line_arr)>0 && ($msg .= ' <i>(Line: '.implode(', ', $failure_line_arr).')</i>.');
-		
-		self::_success($msg, '', 5000);
-		exit;
-		//import end
+		$msg .= '<br /><br />This page will auto-refresh after 8 seconds.';
+		self::_success($msg, '', 8000);
 	}
 	public function confirm() {
 		if(empty($_POST['submit'])) {

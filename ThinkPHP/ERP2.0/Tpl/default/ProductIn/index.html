@@ -63,7 +63,7 @@
 		</empty>
 		<tr>
 			<td colspan="4">
-				<neq name="status" value="1"><input type="submit" name="submit" value="Confirm Selected Items" /></neq>
+				<neq name="status" value="1"><input type="submit" name="submit" value="Confirm Selected" /></neq>
 			</td>
 			<td colspan="13">{$page}</td>
 		</tr>
@@ -72,23 +72,32 @@
 </tr>
 </table>
 </form>
-<form name="Import" action="__URL__/import" enctype="multipart/form-data" target="_iframe" method="post">
-<p class="center">
-	<neq name="action" value="reject">
-		<img src="../Public/Images/blank.gif" width="85" height="24" align="absmiddle"/>
-		<if condition="ACTION_NAME eq 'fixed'">
-		<input type="button" onclick="javascript:document.location='__URL__/form/fixed/1';" value="Enter New Fixed-Assets" />
+<form id="Import" name="Import" action="__URL__/import" enctype="multipart/form-data" target="_iframe" method="post">
+<neq name="action" value="reject">
+<table align="center" style="background-color:#FFFFFF;padding:10px;margin:12px auto;">
+<tr>
+	<td align="right" valign="top" width="340">
+<if condition="ACTION_NAME eq 'fixed'">
+		<input type="button" onclick="javascript:document.location='__URL__/form/fixed/1';" value="Enter Fixed-Assets" />
 		<input type="hidden" name="Fixed" value="Yes" />
-		<else />
-		<input type="button" onclick="javascript:document.location='__URL__/form/fixed/0';" value="Enter New Floating-Assets" />
+<else />
+		<input type="button" onclick="javascript:document.location='__URL__/form/fixed/0';" value="Enter Floating-Assets" />
 		<input type="hidden" name="Fixed" value="No" />
-		</if>
-		<img src="../Public/Images/blank.gif" width="85" height="24" align="absmiddle" style="position:relative;right:-214px;z-index:99;"/>
-		<input type="button"  value="Batch Entering" />
-		<input type="hidden" name="confirm" value="" />
-		<input type="file" name="file" size="15" onfocus="this.click();this.blur();" onchange="if(this.value!='')document.Import.submit();" style="position:relative;left:-127px;_left:-136px;cursor:pointer;opacity:0;filter: Alpha(Opacity=0);"/>
-	</neq>
-</p>
+</if>
+	</td>
+	<td width="10">&nbsp;</td>
+	<td width="340" nowrap="nowrap">
+		<input type="button" id="batch" onclick="$('input#batch').hide();$('div#select_file').show();" value="Batch Entering" />
+		<div id="select_file" style="display:none;">
+			<input type="file" name="file" size="15" />
+			<input type="submit" value="Submit" />
+			<input type="button" onclick="$('div#select_file').hide();$('input#batch').show();" value="Cancel" />
+		</div>
+	</td>
+</tr>
+</table>
+</neq>
+<input type="hidden" name="confirm" value="" />
 </form>
 <script type="text/javascript"> 
 $(document).ready(function(){
