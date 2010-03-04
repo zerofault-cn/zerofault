@@ -241,13 +241,11 @@ class BoardAction extends BaseAction{
 			}
 			if ($i == 0) {
 				if ($value_arr != $header_arr) {
-					echo '<script>parent.document.Import.file.value="";</script>';
 					self::_error('The imported file\'s header isn\'t right.');
 				}
 			}
 			else {
 				if (count($value_arr) != count($header_arr)) {
-					echo '<script>parent.document.Import.file.value="";</script>';
 					self::_error('The imported file isn\'t well-formatted. (Line:'.($i+1).')');
 				}
 				$values_arr[$i] = array_combine($fields_arr, $value_arr);
@@ -256,7 +254,6 @@ class BoardAction extends BaseAction{
 		}
 		//validate upload data
 		if (empty($values_arr)) {
-			echo '<script>parent.document.Import.file.value="";</script>';
 			self::_error('There is no record in the file.');
 		}
 		if (empty($confirm)) {
@@ -337,13 +334,13 @@ class BoardAction extends BaseAction{
 				$imported ++;
 			}
 		}
-		$msg  = 'The result of Board Basic Data importing:<br />';
-		$msg .= 'Total records: '.(count($values_arr)-1).'<br />';
-		$msg .= 'Imported records: '.$imported.'<br />';
-		$msg .= 'Duplicated records: '.($duplicated>0 ? '<i>'.$duplicated.'</i>' : 0).'<br />';
-		$msg .= 'Failure records: '.(count($failure_line_arr)>0 ? '<i>'.count($failure_line_arr).'</i>' : 0);
+		$msg  = 'Board Basic Data importing result:<br />';
+		$msg .= '&nbsp;&nbsp;Total records: '.(count($values_arr)-1).'<br />';
+		$msg .= '&nbsp;&nbsp;Imported records: '.$imported.'<br />';
+		$msg .= '&nbsp;&nbsp;Duplicated records: '.($duplicated>0 ? '<i>'.$duplicated.'</i>' : 0).'<br />';
+		$msg .= '&nbsp;&nbsp;Failure records: '.(count($failure_line_arr)>0 ? '<i>'.count($failure_line_arr).'</i>' : 0);
 		count($failure_line_arr)>0 && ($msg .= ' <i>(Line: '.implode(', ', $failure_line_arr).')</i>.');
-		
+		$msg .= '<br /><br />This page will auto-refresh after 5 seconds.';
 		self::_success($msg, '', 5000);
 	}
 	public function delete() {
