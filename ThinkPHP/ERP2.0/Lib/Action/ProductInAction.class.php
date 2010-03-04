@@ -147,7 +147,7 @@ class ProductInAction extends BaseAction{
 		$PN = trim($_REQUEST['Internal_PN']);
 		$MPN = trim($_REQUEST['MPN']);
 		empty($_REQUEST['supplier_id']) && self::_error('Please select the supplier!');
-		empty($_REQUEST['currency_id']) && self::_error('Please select the currency type!');
+		//empty($_REQUEST['currency_id']) && self::_error('Please select the currency type!');
 		
 		intval($_REQUEST['quantity'])<=0 && self::_error('Quantity number must be larger than 0.');
 		'reject'==$action && ($_REQUEST['quantity']>$_REQUEST['ori_quantity']) && self::_error('reject quantity can\'t be larger than '.$_REQUEST['ori_quantity']);
