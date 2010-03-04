@@ -446,7 +446,7 @@ class ProductInAction extends BaseAction{
 			}
 		}
 		$msg  = 'The result of batch entering:<br />';
-		$msg .= 'Total records: '.(count($values_arr)-1).'<br />';
+		$msg .= 'Total records: '.(count($values_arr)).'<br />';
 		$msg .= 'Entered records: '.$imported.'<br />';
 		$msg .= 'Failure records: '.(count($failure_line_arr)>0 ? '<i>'.count($failure_line_arr).'</i>' : 0);
 		count($failure_line_arr)>0 && ($msg .= ' <i>(Line: '.implode(', ', $failure_line_arr).')</i>.');
