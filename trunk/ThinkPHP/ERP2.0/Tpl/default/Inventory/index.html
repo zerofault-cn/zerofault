@@ -53,7 +53,7 @@
 </tr>
 <iterate name="result" id="item">
 <tr class="trbg{$mod}">
-	<td><notempty name="item['inventory']['chg_quantity']"><input type="checkbox" name="chk[]" value="{$item['product_id']}" onclick="updateCheckAll2(this);" /></notempty></td>
+	<td><gt name="item['inventory']['chg_quantity']" value="0"><if condition="$_SESSION[C('ADMIN_AUTH_NAME')] eq true or (array_key_exists(1, $_SESSION[C('MANAGER_AUTH_NAME')]) and ($_SESSION[C('MANAGER_AUTH_NAME')][1]['fixed'] eq '01' or (strlen($_SESSION[C('MANAGER_AUTH_NAME')][1]['fixed'])==1 and $item['fixed'] eq $_SESSION[C('MANAGER_AUTH_NAME')][1]['fixed'])))"><input type="checkbox" name="chk[]" value="{$item['product_id']}" onclick="updateCheckAll2(this);" /></if></gt></td>
 	<td align="center">{$i}</td>
 	<td><a href="__URL__/info/id/{$item['product_id']}?width=400" class="jTip" id="product{$item['product_id']}" name="Product Detail">{$item['Internal_PN']}</a></td>
 	<td>{$item['description']}</td>
@@ -103,11 +103,13 @@
 </tr>
 <iterate name="result" id="item">
 	<gt name="item['inventory']['chg_quantity']" value="0">
+		<if condition="$_SESSION[C('ADMIN_AUTH_NAME')] eq true or (array_key_exists(1, $_SESSION[C('MANAGER_AUTH_NAME')]) and ($_SESSION[C('MANAGER_AUTH_NAME')][1]['fixed'] eq '01' or (strlen($_SESSION[C('MANAGER_AUTH_NAME')][1]['fixed'])==1 and $item['fixed'] eq $_SESSION[C('MANAGER_AUTH_NAME')][1]['fixed'])))">
 <tr id="tr_{$item['product_id']}" style="display:none">
 	<td>{$item['Internal_PN']}</td>
 	<td>{$item['description']}</td>
 	<td><input type="text" id="input_{$item['product_id']}" name="quantity[{$item['product_id']}]" size="3" value="{$item['inventory']['chg_quantity']}" disabled="true"/></td>
 </tr>
+		</if>
 	</gt>
 </iterate>
 <tr id="transfer_to" style="display:none" bgcolor="#FFFFFF">

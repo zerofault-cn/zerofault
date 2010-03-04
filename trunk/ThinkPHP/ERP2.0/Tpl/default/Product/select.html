@@ -126,6 +126,8 @@ function do_select() {
 			$("#unit").val(json.unit.name);
 			$("#MOQ").val(json.MOQ);
 			$("#inventory_limit").val(json.inventory_limit);
+			$("#currency_id").val(json.currency_id);
+			$("#price").val(json.price);
 			if(''!=action && 'enter'!=action) {
 				$("#ori_quantity").val(parseInt(json.location_product[0].ori_quantity)+parseInt(json.location_product[0].chg_quantity));
 				$("#max_quantity").html(parseInt(json.location_product[0].ori_quantity)+parseInt(json.location_product[0].chg_quantity));

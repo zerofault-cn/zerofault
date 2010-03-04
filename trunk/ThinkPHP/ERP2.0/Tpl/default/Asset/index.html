@@ -8,14 +8,13 @@
 <tr>
 	<td colspan="6">
 	<iterate name="result" id="type_item">
-		<form action="__URL__/submit" method="post" target="_iframe">
-		<input type="hidden" name="type" value="{$key}" />
 		<if condition="$key eq $default_fixed">
 		<table class="clsTab" cellpadding="3" border="1" bordercolor="#FFFFFF" style="border-collapse:collapse;" id="fixed{$key}">
 		<else />
 		<table class="clsTab" cellpadding="3" border="1" bordercolor="#FFFFFF" style="border-collapse:collapse;display:none" id="fixed{$key}">
 		</if>
 		<tr>
+			<th><input type="checkbox" id="checkall" onclick="checkAll2();"/></th>
 			<th>No.</th>
 			<th>Code</th>
 			<th class="basic_data">MPN</th>
@@ -28,8 +27,9 @@
 			<th>OP</th>
 		</tr>
 		<iterate name="type_item" id="item">
-		<tr>
-			<td>{$i}</td>
+		<tr class="trbg{$mod}">
+			<td><input type="checkbox" name="chk[]" value="{$item['product']['id']}" onclick="updateCheckAll2(this);" /></td>
+			<td align="center">{$i}</td>
 			<td>{$item['product']['code']}</td>
 			<td class="basic_data">{$item['product']['MPN']}</td>
 			<td class="basic_data">{$item['product']['Internal_PN']}</td>
@@ -44,16 +44,59 @@
 		</iterate>
 		<empty name="type_item">
 		<tr>
-			<td colspan="9" align="center">No Record</td>
+			<td colspan="11" align="center">No Record</td>
 		</tr>
 		</empty>
+		<tr>
+			<td colspan="11">
+				<input type="button" name="transfer" value="Transfer Selected" onclick="batch_form();" disabled="true" />
+			</td>
+		</tr>
 		</table>
-		</form>
 	</iterate>
 	</td>
 </tr>
 </table>
 <p class="center"></p>
+<div style="display:none" id="batch_form">
+<p class="page_title_text"></p>
+<form name="Batch" action="__APP__/Inventory/batch" method="post" target="_iframe">
+<table width="96%" cellpadding="3" border="1" bordercolor="#FFFFFF" style="border-collapse:collapse;">
+<tr>
+	<th>Internal P/N</th>
+	<th>Description</th>
+	<th>Quantity</th>
+</tr>
+<iterate name="result" id="type_item">
+	<iterate name="type_item" id="item">
+<tr id="tr_{$item['product']['id']}" style="display:none">
+	<td>{$item['product']['Internal_PN']}</td>
+	<td>{$item['product']['description']}</td>
+	<td><input type="text" id="input_{$item['product']['id']}" name="quantity[{$item['product']['id']}]" size="3" value="{$item['chg_quantity']}" disabled="true"/></td>
+</tr>
+	</iterate>
+</iterate>
+<tr id="transfer_to" bgcolor="#FFFFFF">
+	<td align="right">Transfer to:</td>
+	<td colspan="2">
+		<select id="location_opts" onchange="select_location(this);"><option value="">Select One</option>{$info.location_opts}</select>
+		<select id="staff_opts" onchange="select_staff(this);" style="display:none;"><option value="">Select One</option>{$info.staff_opts}</select>
+	</td>
+</tr>
+</table>
+<p class="center">
+	<input type="hidden" name="action" value="transfer" />
+	<input type="hidden" name="from_type" id="from_type" value="staff" />
+	<input type="hidden" name="from_id" id="from_id" value="{$_SESSION[C('USER_AUTH_KEY')]}" />
+	<input type="hidden" name="to_type" id="to_type" value="" />
+	<input type="hidden" name="to_id" id="to_id" value="" />
+	<input type="submit" value="Submit" name="submit"/>
+	<input type="button" value="Cancel" onclick="tb_remove();"/>
+</p>
+</form>
+</div>
+<script language="JavaScript" type="text/javascript" src="../Public/Js/batch.js"></script>
+
 <script>
 $(document).ready(function(){
 	$("td#fixed{$default_fixed}").addClass("current");
@@ -63,22 +106,4 @@ $(document).ready(function(){
 		});
 	});
 });
-function edit(obj,id) {
-	var parent = $(obj).parent().parent();
-	var name = parent.children(".name").text();
-	if(parent.children(".code")) {
-		var code = parent.children(".code").text();
-	}
-	else{
-		var code = '';
-	}
-	var sort = parent.children(".sort").text();
-
-	var table = parent.parent();
-	table.find("tr:last").children().children(".name").val(name);
-	table.find("tr:last").children().children(".code").val(code);
-	table.find("tr:last").children().children(".sort").val(sort);
-	table.find("tr:last").children().children(".id").val(id);
-	table.find("tr:last").children().children(".submit").val('Save');
-}
 </script>

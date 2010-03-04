@@ -73,21 +73,21 @@ class InventoryAction extends BaseAction{
 				$fail_arr[] = $product;
 			}
 		}
-		$msg  = 'The result of batch '.$data['action'].':<br />';
-		$msg .= '<strong>Success:</strong><br /><font class=\'blue\'>';
+		$msg  = 'Batch '.$data['action'].' result:<br />';
+		$msg .= '<strong>&nbsp;&nbsp;Success:</strong><br /><font class=\'blue\'>';
 		foreach ($success_arr as $product) {
 			$msg .= '&nbsp;&nbsp;&nbsp;&nbsp;'.$product['Internal_PN'].'<br />';
 		}
-		$msg .= '</font><strong>Failure:</strong><br /><font class=\'red\'>';
+		$msg .= '</font><strong>&nbsp;&nbsp;Failure:</strong><br /><font class=\'red\'>';
 		foreach ($fail_arr as $product) {
 			$msg .= '&nbsp;&nbsp;&nbsp;&nbsp;'.$product['Internal_PN'].'<br />';
 		}
-		$msg .= '</font>';
+		$msg .= '</font><br />page will auto-redirect after 8 seconds.';
 		$url = '';
 		if (count($success_arr)>0) {
 			$url = __APP__.'/ProductOut/'.$data['action'];
 		}
-		self::_success($msg, $url, 5000);
+		self::_success($msg, $url, 8000);
 	}
 
 	public function index() {
@@ -242,7 +242,8 @@ class InventoryAction extends BaseAction{
 				$lastRemark = self::getLastComment($val['product_id'])."\n";
 				$result[$i]['lastRemark'] = substr($lastRemark, 0, strpos($lastRemark, "\n"));
 			}
-
+		}
+		if ($_SESSION[C('ADMIN_AUTH_NAME')]) {
 			//for batch transfer
 			$info = array();
 			$location_arr = M('Location')->where(array('id'=>array('gt',1)))->select();

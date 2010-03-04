@@ -15,14 +15,14 @@ function reset_form() {
 	document.Batch.reset();
 }
 function batch_form(action) {
+	if ('undefined' == typeof(action)) {
+		action = 'transfer';
+	}
 	if ($("input:checked").length==0) {
 		alert('You haven\'t select any item');
 		return false;
 	}
-	if ('transfer'==action) {
-		$("#transfer_to").show();
-	}
-	else {
+	if ('release'==action) {
 		$("#transfer_to").hide();
 	}
 	$("#batch_form .page_title_text").html('Batch '+action+' Form');
@@ -41,7 +41,7 @@ function checkAll2() {
 			document.getElementById('input_'+s_check[i].value).disabled = true;
 		}
 	}
-	if (all_check.checked == true) {
+	if (s_check_count>0 && all_check.checked == true) {
 		$("input[name='transfer']").attr("disabled", false);
 		$("input[name='release']").attr("disabled", false);
 	}
