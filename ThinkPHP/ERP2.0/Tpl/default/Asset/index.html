@@ -17,10 +17,10 @@
 			<th><if condition="$key eq $default_fixed"><input type="checkbox" id="checkall" onclick="checkAll2();"/></if></th>
 			<th>No.</th>
 			<th>Code</th>
-			<th class="basic_data">MPN</th>
 			<th class="basic_data">Internal P/N</th>
 			<th class="basic_data">Description</th>
 			<th class="basic_data">Manufacture</th>
+			<th class="basic_data">MPN</th>
 			<th>Quantity</th>
 			<th>Unit</th>
 			<th>Comment</th>
@@ -31,10 +31,10 @@
 			<td><input type="checkbox" name="chk[]" value="{$item['product']['id']}" onclick="updateCheckAll2(this);" /></td>
 			<td align="center">{$i}</td>
 			<td>{$item['product']['code']}</td>
-			<td class="basic_data">{$item['product']['MPN']}</td>
 			<td class="basic_data">{$item['product']['Internal_PN']}</td>
 			<td class="basic_data">{$item['product']['description']}</td>
 			<td class="basic_data">{$item['product']['manufacture']}</td>
+			<td class="basic_data">{$item['product']['MPN']}</td>
 			<td>{$item['ori_quantity']+$item['chg_quantity']}</td>
 			<td>{$item['unit_name']}</td>
 			<td align="center"><a href="__APP__/Public/remark/product_id/{$item['product_id']}?width=600&height=300&modal=true" class="thickbox" title="View Product Comment"><img src="../Public/Images/comments.gif"/></a></td>

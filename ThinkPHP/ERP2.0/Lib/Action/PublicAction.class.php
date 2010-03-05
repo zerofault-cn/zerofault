@@ -80,10 +80,10 @@ class PublicAction extends BaseAction{
 				$_SESSION[C('ADMIN_AUTH_NAME')]	=	false;
 			}
 			//获取当前用户管理的Location信息
-			$rs = M('LocationManager')->where(array('staff_id'=>$authInfo['id'],'location_id'=>array('gt',1)))->group('location_id')->getField('location_id,group_concat(fixed order by fixed separator "")');
+			$rs = M('LocationManager')->where(array('staff_id'=>$authInfo['id']))->group('location_id')->getField('location_id,group_concat(fixed order by fixed separator "")');
 			empty($rs) && ($rs = array());
 			//获取所有Location
-			$rs2 = M('Location')->where(array('id'=>array('gt',1)))->getField('id,name');
+			$rs2 = M('Location')->getField('id,name');
 			$_SESSION['location'] = $rs2;
 			$manager = array();
 			foreach($rs as $location_id=>$fixed) {

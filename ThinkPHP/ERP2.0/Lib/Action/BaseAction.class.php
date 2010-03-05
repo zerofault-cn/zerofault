@@ -109,6 +109,9 @@ class BaseAction extends Action{
 		//根据location增加Inventory子菜单
 		if ('Inventory Inquire'==$top) {
 			foreach($_SESSION['location'] as $location_id=>$location) {
+				if ($location_id==1) {
+					continue;
+				}
 				$submenu[ucfirst($location).' Inventory'] = 'Inventory/location/id/'.$location_id;
 			}
 			$submenu['Staff Inquire'] = 'Inventory/staff';
