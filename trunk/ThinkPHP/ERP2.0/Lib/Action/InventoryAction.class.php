@@ -185,7 +185,7 @@ class InventoryAction extends BaseAction{
 			$result[$i]['lastRemark'] = substr($lastRemark, 0, strpos($lastRemark, "\n"));
 		}
 		
-		//dump($result);
+		//dump($_SESSION);
 		$this->assign('request', $_REQUEST);
 		$this->assign('result', $result);
 		$this->assign('page', $p->showMultiNavi());
