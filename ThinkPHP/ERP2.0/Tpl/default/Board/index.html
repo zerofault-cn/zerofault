@@ -32,15 +32,7 @@
 </table>
 <table cellpadding="3" border="1" bordercolor="#FFFFFF" style="border-collapse:collapse;">
 <tr>
-	<td colspan="11">{$page}</td>
-	<td colspan="2">
-		<select name="per1" onChange="change_per(this.form, this.value);">
-			<option value="50" <if condition="$perPage eq 50">selected</if> >50</option>
-			<option value="100" <if condition="$perPage eq 100">selected</if> >100</option>
-			<option value="150" <if condition="$perPage eq 150">selected</if> >150</option>
-			<option value="200" <if condition="$perPage eq 200">selected</if> >200</option>
-			<option value="300" <if condition="$perPage eq 300">selected</if> >300</option>
-		</select>C/P.</td>
+	<td colspan="13">{$page}</td>
 </tr>
 <tr>
 	<th>Code</th>
@@ -150,11 +142,5 @@ function toggle(obj,name) {
 		});
 	}
 	//lert(toggle_arr[name]);
-}
-</script>
-<script type="text/javascript">
-function change_per(formObj, Obj) {
-	formObj.perCount.value=Obj;
-	formObj.submit();
 }
 </script>

@@ -166,8 +166,18 @@ class Paginator extends Think{
 
 			$pagenav .= '</td>';
 		}
-		$pagenav .= '<td class="a_right">'.$this->record_count.' Records, '.$this->page_count.' Pages</td>';
-		$pagenav .= '</tr></table>';
+		$pagenav .= '<td class="a_right">'.$this->record_count.' Records, '.$this->page_count.' Pages';
+		$perPage = ', <select onChange="change_limit(this.value);">';
+		foreach(array(20,50,100,150,200,300) as $num) {
+			$perPage .= '<option value="'.$num.'" ';
+			if ($this->limit == $num) {
+				$perPage .= ' selected="selected"';
+			}
+			$perPage .= '>'.$num.'</option>';
+		}
+		$perPage .= '</select> C/P.';
+		$pagenav .= $perPage;
+		$pagenav .= '</td></tr></table>';
 
 		return $pagenav;
 	}

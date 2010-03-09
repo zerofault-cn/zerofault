@@ -61,9 +61,17 @@ class ProductInAction extends BaseAction{
 		$where['action'] = $action;
 		$this->assign('action', $action);
 
-		$count = $this->dao->where($where)->getField('count(*)');
 		import("@.Paginator");
-		$limit = 10;
+		$limit = 20;
+		if (!empty($_SESSION[MODULE_NAME.'_'.ACTION_NAME.'_limit'])) {
+			$limit = $_SESSION[MODULE_NAME.'_'.ACTION_NAME.'_limit'];
+		}
+		if (!empty($_REQUEST['limit'])) {
+			$limit = $_REQUEST['limit'];
+		}
+		$_SESSION[MODULE_NAME.'_'.ACTION_NAME.'_limit'] = $limit;
+
+		$count = $this->dao->where($where)->getField('count(*)');
 		$p = new Paginator($count,$limit);
 
 		$order = 'id desc';

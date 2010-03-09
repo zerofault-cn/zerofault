@@ -103,3 +103,6 @@ function updateCheckAll(obj) {
 		}
 	}
 }
+function change_limit(val) {
+	document.location.href = location.href+'?limit='+val;
+}
