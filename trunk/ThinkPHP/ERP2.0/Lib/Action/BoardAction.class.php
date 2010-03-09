@@ -22,6 +22,13 @@ class BoardAction extends BaseAction{
 		$this->assign('ACTION_TITLE', 'List');
 		import("@.Paginator");
 		$limit = 20;
+		if (!empty($_SESSION[MODULE_NAME.'_'.ACTION_NAME.'_limit'])) {
+			$limit = $_SESSION[MODULE_NAME.'_'.ACTION_NAME.'_limit'];
+		}
+		if (!empty($_REQUEST['limit'])) {
+			$limit = $_REQUEST['limit'];
+		}
+		$_SESSION[MODULE_NAME.'_'.ACTION_NAME.'_limit'] = $limit;
 
 		$this->assign('category_opts', self::genOptions(M('Category')->select(), $_REQUEST['category_id']) );
 		$this->assign('status_opts', self::genOptions(M('Options')->where(array('type'=>'status'))->order('sort')->select(), $_REQUEST['status_id']));

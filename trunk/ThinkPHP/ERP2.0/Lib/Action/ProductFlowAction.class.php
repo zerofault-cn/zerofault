@@ -44,6 +44,14 @@ class ProductFlowAction extends BaseAction{
 
 		import("@.Paginator");
 		$limit = 50;
+		if (!empty($_SESSION[MODULE_NAME.'_'.ACTION_NAME.'_limit'])) {
+			$limit = $_SESSION[MODULE_NAME.'_'.ACTION_NAME.'_limit'];
+		}
+		if (!empty($_REQUEST['limit'])) {
+			$limit = $_REQUEST['limit'];
+		}
+		$_SESSION[MODULE_NAME.'_'.ACTION_NAME.'_limit'] = $limit;
+
 		$where = array();
 		$where['status'] = $status;
 		if(!empty($_REQUEST['submit'])) {

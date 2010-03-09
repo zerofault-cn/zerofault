@@ -84,6 +84,16 @@ class ProductOutAction extends BaseAction{
 		}
 		//Session::set(ACTION_NAME.'_status', $status);
 
+		import("@.Paginator");
+		$limit = 20;
+		if (!empty($_SESSION[MODULE_NAME.'_'.ACTION_NAME.'_limit'])) {
+			$limit = $_SESSION[MODULE_NAME.'_'.ACTION_NAME.'_limit'];
+		}
+		if (!empty($_REQUEST['limit'])) {
+			$limit = $_REQUEST['limit'];
+		}
+		$_SESSION[MODULE_NAME.'_'.ACTION_NAME.'_limit'] = $limit;
+
 
 		$where = array(
 			'action' => $action,
@@ -120,8 +130,6 @@ class ProductOutAction extends BaseAction{
 		//	$where['_string'] = "(from_type='staff' and to_id =".$_SESSION[C('USER_AUTH_KEY')].") or (to_type='staff' and to_id = ".$_SESSION[C('USER_AUTH_KEY')].") or staff_id = ".$_SESSION[C('USER_AUTH_KEY')];
 		}
 		$count = $this->dao->where($where)->getField('count(*)');
-		import("@.Paginator");
-		$limit = 10;
 		$p = new Paginator($count,$limit);
 
 		$order = 'id desc';

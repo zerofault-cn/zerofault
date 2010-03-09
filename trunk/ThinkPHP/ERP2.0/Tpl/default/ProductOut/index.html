@@ -15,6 +15,9 @@
 	<td colspan="4">
 		<table cellpadding="3" border="1" bordercolor="#FFFFFF" style="border-collapse:collapse;">
 		<tr>
+			<td colspan="16">{$page}</td>
+		</tr>
+		<tr>
 			<if condition="($status eq 0 or $status eq -2) and (MODULE_NAME neq 'Asset' or (MODULE_NAME eq 'Asset' and $status eq 0 and (ACTION_NAME eq 'transferIn' or ACTION_NAME eq 'request' or ACTION_NAME eq 'location')))">
 			<th><input type="checkbox" id="checkall" onclick="checkAll();"/></th>
 			</if>
