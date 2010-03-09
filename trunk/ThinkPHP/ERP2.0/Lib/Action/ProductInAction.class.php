@@ -328,7 +328,7 @@ class ProductInAction extends BaseAction{
 		}
 		if (empty($confirm)) {
 			//confirm once
-			self::_confirm2('Batch Entering product into the system?<br /><br />Record count: <i>'.($i-1).'</i> ;<br />The repeated record will be ignored.', 1);
+			self::_confirm2('Batch Entering product into the system?<br /><br />Record count: <i>'.($i-1).'</i> ;', 1);
 		}
 		else {
 		}
