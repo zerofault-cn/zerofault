@@ -18,7 +18,7 @@
 			<td colspan="16">{$page}</td>
 		</tr>
 		<tr>
-			<if condition="($status eq 0 or $status eq -2) and (MODULE_NAME neq 'Asset' or (MODULE_NAME eq 'Asset' and $status eq 0 and (ACTION_NAME eq 'transferIn' or ACTION_NAME eq 'request' or ACTION_NAME eq 'location')))">
+			<if condition="(MODULE_NAME eq 'ProductOut' and ($status eq 0 or $status eq -2)) or (ACTION_NAME eq 'location' and $status eq 0) or (ACTION_NAME eq 'request' and $status eq -2) or (ACTION_NAME eq 'transferIn' and $status eq 0)">
 			<th><input type="checkbox" id="checkall" onclick="checkAll();"/></th>
 			</if>
 			<th>No.</th>
@@ -45,7 +45,7 @@
 		</tr>
 		<iterate name="result" id="item">
 		<tr class="trbg{$mod}">
-			<if condition="($status eq 0 or $status eq -2) and (MODULE_NAME neq 'Asset' or (MODULE_NAME eq 'Asset' and $status eq 0 and (ACTION_NAME eq 'transferIn' or ACTION_NAME eq 'request' or ACTION_NAME eq 'location')))">
+			<if condition="(MODULE_NAME eq 'ProductOut' and ($status eq 0 or $status eq -2)) or (ACTION_NAME eq 'location' and $status eq 0) or (ACTION_NAME eq 'request' and $status eq -2) or (ACTION_NAME eq 'transferIn' and $status eq 0)">
 			<td><input type="checkbox" name="chk[]" value="{$item['id']}" onclick="updateCheckAll(this);"/></td>
 			</if>
 			<td align="center">{$i}</td>
@@ -95,7 +95,7 @@
 				<elseif condition="$status eq 0 and MODULE_NAME eq 'Asset' and (ACTION_NAME eq 'transferIn' or ACTION_NAME eq 'location')" />
 					<input type="submit" name="confirm" value="Confirm Selected" />
 					<input type="submit" name="reject" value="Reject Selected" />
-				<elseif condition="MODULE_NAME eq 'Asset' and ACTION_NAME eq 'request' and $status eq -2" />
+				<elseif condition="$status eq -2 and MODULE_NAME eq 'Asset' and ACTION_NAME eq 'request'" />
 					<input type="submit" name="approve" value="Approve Selected" />
 					<input type="submit" name="reject" value="Reject Selected" />
 				</if>
