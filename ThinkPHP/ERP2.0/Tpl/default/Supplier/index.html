@@ -17,7 +17,7 @@
 	<td>{$item['character']['name']}</td>
 	<td>{$item['currency']['name']}</td>
 	<td>{$item['contact']}</td>
-	<td><notempty name="item['cellphone']">{$item['cellphone']} /</notempty> {$item['telephone']}</td>
+	<td>{$item['telephone']} <notempty name="item['cellphone']"> / {$item['cellphone']}</notempty> </td>
 	<td>{$item['address']}</td>
 	<td><a href="__URL__/form/id/{$item['id']}">Edit</a>
 		<a href="javascript:void(0);" onclick="myConfirm('Are you sure to delete this item?', '__URL__/delete/id/{$item['id']}');" target="_iframe">Delete</a></td>
