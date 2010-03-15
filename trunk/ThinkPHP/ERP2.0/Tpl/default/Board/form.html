@@ -8,7 +8,7 @@
 </tr>
 <tr>
 	<td>Board Code:</td>
-	<td><input type="text" size="30" name="PN" value="{$info.Internal_PN}" /></td>
+	<td><input type="text" size="30" name="PN" value="{$info.Internal_PN}" /> *</td>
 </tr>
 <tr>
 	<td>Board Name:</td>
@@ -163,6 +163,6 @@ function clear() {
 function direct_input(id) {
 	$("input#product_id").val(id);
 	$("input#fixed").val($("input.fixed:checked").val());
-	tb_show('','#TB_inline?width=330&height=310&modal=true&inlineId=direct_input','')
+	tb_show('','#TB_inline?width=360&height=360&modal=true&inlineId=direct_input','')
 }
 </script>

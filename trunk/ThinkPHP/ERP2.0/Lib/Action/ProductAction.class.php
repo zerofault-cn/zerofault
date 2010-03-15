@@ -249,13 +249,13 @@ class ProductAction extends BaseAction{
 		$imported = 0;
 		$failure_line_arr = array();
 		foreach ($values_arr as $i=>$value_arr) {
-			//check repeat
+			//check exists
 			$where = array();
-			$where['type'] = 'Component';
+			//$where['type'] = 'Component';
 			$where['Internal_PN'] = $value_arr['Internal_PN'];
-			$where['description'] = $value_arr['description'];
-			$where['manufacture'] = $value_arr['manufacture'];
-			$where['MPN'] = $value_arr['MPN'];
+			//$where['description'] = $value_arr['description'];
+			//$where['manufacture'] = $value_arr['manufacture'];
+			//$where['MPN'] = $value_arr['MPN'];
 			if ($this->dao->where($where)->count()>0) {
 				$duplicated ++;
 				continue;

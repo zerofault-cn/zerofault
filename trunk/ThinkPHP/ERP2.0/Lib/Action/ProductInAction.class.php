@@ -153,7 +153,7 @@ class ProductInAction extends BaseAction{
 		empty($_REQUEST['product_id']) && self::_error('Please select a component/board first!');
 		$product_id = $_REQUEST['product_id'];
 		$PN = trim($_REQUEST['Internal_PN']);
-		$MPN = trim($_REQUEST['MPN']);
+		$MPN = trim($_REQUEST['MPN']);//board series number
 		empty($_REQUEST['supplier_id']) && self::_error('Please select the supplier!');
 		//empty($_REQUEST['currency_id']) && self::_error('Please select the currency type!');
 		
@@ -183,7 +183,7 @@ class ProductInAction extends BaseAction{
 				if (empty($_POST['direct_input'])) {
 					//get product data
 					$data = M('Product')->find($product_id);
-					if ('Board'==$data['type'] && ($PN!=$data['Internal_PN'] || $MPN!=$data['MPN'])) {//save new product
+					if ('Board'==$data['type'] && $PN!=$data['Internal_PN']) {//save new board
 						$data['id'] = 0;
 						$data['Internal_PN'] = $PN;
 						$data['MPN'] = $MPN;
@@ -365,11 +365,11 @@ class ProductInAction extends BaseAction{
 
 			//check exists
 			$where = array();
-			$where['type'] = $value_arr['type'];
+			//$where['type'] = $value_arr['type'];
 			$where['Internal_PN'] = $value_arr['Internal_PN'];
-			$where['description'] = $value_arr['description'];
-			$where['manufacture'] = $value_arr['manufacture'];
-			$where['MPN'] = $value_arr['MPN'];
+			//$where['description'] = $value_arr['description'];
+			//$where['manufacture'] = $value_arr['manufacture'];
+			//$where['MPN'] = $value_arr['MPN'];
 			$product_id = M('Product')->where($where)->getField('id');
 			if (empty($product_id)) {
 				//parse field: unit_name,category_name,Fixed,status_name,currency_name

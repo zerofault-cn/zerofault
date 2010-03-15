@@ -113,19 +113,20 @@ class BoardAction extends BaseAction{
 			return;
 		}
 		$PN = trim($_REQUEST['PN']);
+		!$PN && self::_error('Internal PN required');
 		$description = trim($_REQUEST['description']);
 		!$description && self::_error('Borad name required');
 		empty($_REQUEST['category_id']) && self::_error('Category must be specified!');
 		$id = empty($_REQUEST['id']) ? 0 : intval($_REQUEST['id']);
 		if ($id>0) {
-			$rs = $this->dao->where(array('Internal_PN'=>$PN, 'description'=>$description, 'id'=>array('neq',$id)))->find();
-			if($rs && sizeof($rs)>0){
+			$rs = $this->dao->where(array('Internal_PN'=>$PN, 'id'=>array('neq',$id)))->find();
+			if($rs && sizeof($rs)>0) {
 				self::_error('Board Code: '.$PN.' has been used by another board!');
 			}
 			$this->dao->find($id);
 		}
 		else {
-			$rs = $this->dao->where(array('Internal_PN'=>$PN, 'description'=>$description))->find();
+			$rs = $this->dao->where(array('Internal_PN'=>$PN))->find();
 			if($rs && sizeof($rs)>0){
 				self::_error('The board: '.$description.' with code: '.$PN.' has been added!');
 			}
@@ -273,13 +274,13 @@ class BoardAction extends BaseAction{
 		$imported = 0;
 		$failure_line_arr = array();
 		foreach ($values_arr as $i=>$value_arr) {
-			//check repeat
+			//check exists
 			$where = array();
-			$where['type'] = 'Board';
+			//$where['type'] = 'Board';
 			$where['Internal_PN'] = $value_arr['Internal_PN'];
-			$where['description'] = $value_arr['description'];
-			$where['manufacture'] = $value_arr['manufacture'];
-			$where['MPN'] = $value_arr['MPN'];
+			//$where['description'] = $value_arr['description'];
+			//$where['manufacture'] = $value_arr['manufacture'];
+			//$where['MPN'] = $value_arr['MPN'];
 			if ($this->dao->where($where)->count()>0) {
 				$duplicated ++;
 				continue;
