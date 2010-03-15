@@ -66,7 +66,8 @@ class InventoryAction extends BaseAction{
 			$data['fixed'] = $product['fixed'];
 			$data['product_id'] = $product_id;
 			$data['quantity'] = $quantity;
-			if (M('ProductFlow')->add($data)) {
+			if ($flow_id = M('ProductFlow')->add($data)) {
+				self::_mail($flow_id, 'new');
 				$success_arr[] = $product;
 			}
 			else {
