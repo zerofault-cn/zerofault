@@ -60,10 +60,10 @@ class BoardAction extends BaseAction{
 		$result = array();
 		foreach ($rs as $val) {
 			if ('Board' == $val['type']) {
-				$result[str_replace(array(' ','"',"'"), '', $val['description'])] = $this->dao->relation(true)->where(array('type'=>'Board', 'description'=>$val['description']))->order('Internal_PN')->select();
+				$result[str_replace(array('(',')',' ','"',"'"), '', $val['description'])] = $this->dao->relation(true)->where(array('type'=>'Board', 'description'=>$val['description']))->order('Internal_PN')->select();
 			}
 			else {
-				$result[str_replace(array(' ','"',"'"), '', $val['description'])] = $this->dao->relation(true)->where('id='.$val['id'])->select();
+				$result[str_replace(array('(',')',' ','"',"'"), '', $val['description'])] = $this->dao->relation(true)->where('id='.$val['id'])->select();
 			}
 		}
 		
