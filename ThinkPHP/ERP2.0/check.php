@@ -1,19 +1,23 @@
 <?php 
 /**
-* 项目总入口
-* 定义框架所在目录、项目名、项目路径
+* 命令行调用接口
 *
 * @author zerofault <zerofault@gmail.com>
 * @since  2009/9/2
 */
 
 define('THINK_PATH', 'Core');
-//define('THINK_PATH', '../ThinkPHP/ThinkPHP');
 require(THINK_PATH."/ThinkPHP.php");
 
+//定义为命令行模式
 define('CLI',true);
+
+//定义默认Module和Action
 define('MODULE_NAME','Public');
 define('ACTION_NAME','check');
+
+//设置web服务器的IP及路径
+define('APP_ROOT', 'http://127.0.0.1/ERP2.0/index.php');
 
 $App = new App(); 
 $App->run();
