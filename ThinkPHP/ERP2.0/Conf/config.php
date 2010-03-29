@@ -1,6 +1,6 @@
 <?php
 	$config = array(
-		//'APP_DEBUG'			=> true,
+		'APP_DEBUG'			=> true,
 		'DB_NAME'			=> 'ERP2',
 		'DB_USER'			=> 'root',
 		'DB_PWD'			=> '',
