@@ -302,6 +302,9 @@ class BaseAction extends Action{
 		$unit_name = M('Options')->where('id='.$product['unit_id'])->getField('name');
 
 		$send_to = array();
+		if (!defined('APP_ROOT')) {
+			define('APP_ROOT', 'http://'.$_SERVER['SERVER_ADDR'].__APP__);
+		}
 		switch ($flow['action'].'_'.$do) {
 			case 'apply_new' :
 			case 'apply_edit' :
@@ -310,7 +313,7 @@ class BaseAction extends Action{
 					$send_to[] = $leader['email'];
 					$send_to[] = $manager['email'];
 					$send_to[] = $staff['email'];
-					$url = "http://".$_SERVER['SERVER_ADDR'].__APP__."/Asset/request";
+					$url = APP_ROOT."/Asset/request";
 					break;
 				}
 				elseif($do == 'new') {
@@ -324,14 +327,14 @@ class BaseAction extends Action{
 				if (!empty($leader)) {
 					$send_to[] = $leader['email'];
 				}
-				$url = "http://".$_SERVER['SERVER_ADDR'].__APP__."/Asset/request";
+				$url = APP_ROOT."/Asset/request";
 				break;
 
 			case 'apply_reject' :
 				$send_to[] = $staff['email'];
 				$send_to[] = $manager['email'];
 				$send_to[] = $leader['email'];
-				$url = "http://".$_SERVER['SERVER_ADDR'].__APP__."/Asset/apply/status/-1";
+				$url = APP_ROOT."/Asset/apply/status/-1";
 				break;
 
 			case 'apply_confirm' :
@@ -344,7 +347,7 @@ class BaseAction extends Action{
 					$send_to[] = $staff['email'];
 					$send_to[] = $manager['email'];
 				}
-				$url = "http://".$_SERVER['SERVER_ADDR'].__APP__."/Asset/apply/status/1";
+				$url = APP_ROOT."/Asset/apply/status/1";
 				break;
 
 			case 'transfer_new':
@@ -353,10 +356,10 @@ class BaseAction extends Action{
 				$send_to[] = $to_staff['email'];
 				$send_to[] = $from_staff['email'];
 				if ('location' == $flow['to_type']) {
-					$url = "http://".$_SERVER['SERVER_ADDR'].__APP__."/ProductOut/transfer";
+					$url = APP_ROOT."/ProductOut/transfer";
 				}
 				else {
-					$url = "http://".$_SERVER['SERVER_ADDR'].__APP__."/Asset/transferIn";
+					$url = APP_ROOT."/Asset/transferIn";
 				}
 				break;
 
@@ -365,10 +368,10 @@ class BaseAction extends Action{
 				$send_to[] = $from_staff['email'];
 				$send_to[] = $to_staff['email'];
 				if ('location' == $flow['to_type']) {
-					$url = "http://".$_SERVER['SERVER_ADDR'].__APP__."/ProductOut/transfer/status/-1";
+					$url = APP_ROOT."/ProductOut/transfer/status/-1";
 				}
 				else {
-					$url = "http://".$_SERVER['SERVER_ADDR'].__APP__."/Asset/transferOut/status/-1";
+					$url = APP_ROOT."/Asset/transferOut/status/-1";
 				}
 				break;
 
@@ -377,13 +380,13 @@ class BaseAction extends Action{
 			case 'return_delete':
 				$send_to[] = $manager['email'];
 				$send_to[] = $staff['email'];
-				$url = "http://".$_SERVER['SERVER_ADDR'].__APP__."/ProductOut/returns";
+				$url = APP_ROOT."/ProductOut/returns";
 				break;
 
 			case 'return_confirm':
 				$send_to[] = $staff['email'];
 				$send_to[] = $manager['email'];
-				$url = "http://".$_SERVER['SERVER_ADDR'].__APP__."/Asset/returns";
+				$url = APP_ROOT."/Asset/returns";
 				break;
 
 			default :
@@ -392,7 +395,7 @@ class BaseAction extends Action{
 				return;
 		}
 		if (empty($mail_tpl[$flow['action']][$do])) {
-			Log::Write('Mail template of Action:'.$flow['action'].'->'.$do.' not exists!', INFO);
+			Log::Write('Mail template of Action: '.$flow['action'].'->'.$do.' not exists!', INFO);
 			return;
 		}
 		$subject = str_replace(
@@ -434,6 +437,9 @@ class BaseAction extends Action{
 				$url),
 			$mail_tpl[$flow['action']][$do]['body']);
 		$body .= "\n[From ".C('ERP_TITLE')."]\n";
+		if ('check'==ACTION_NAME) {
+			$send_to = array_unique(array_merge($send_to, C('NOTIFICATION_MAILTO')));
+		}
 		$cmd = 'echo "'.$body.'"|/usr/bin/mutt -s "'.$subject.'" '.$send_to[0];
 		if (count($send_to)>1) {
 			$cmd .= ' -c '.implode(' -c ', array_slice($send_to,1));
@@ -441,11 +447,11 @@ class BaseAction extends Action{
 		Log::Write($cmd, INFO);
 		system($cmd,$ret);
 		if('0'==$ret) {
-			Log::Write('Success@'.date("Y-m-d H:i:s"), INFO);
+			Log::Write('Success', INFO);
 			return true;
 		}
 		else{
-			Log::Write('Fail@'.date("Y-m-d H:i:s"));
+			Log::Write('Fail');
 			return false;
 		}
 	}
