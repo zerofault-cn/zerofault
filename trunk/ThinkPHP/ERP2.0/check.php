@@ -6,7 +6,8 @@
 * @since  2009/9/2
 */
 
-define('THINK_PATH', 'Core');
+define('THINK_PATH', dirname(__FILE__).'/Core');
+//define('THINK_PATH', dirname(__FILE__).'/../ThinkPHP/ThinkPHP');
 require(THINK_PATH."/ThinkPHP.php");
 
 //定义为命令行模式
