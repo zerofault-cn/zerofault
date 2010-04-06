@@ -70,10 +70,10 @@ a.flag:link, a.flag:visited{
 	width:580px;
 }
 #header .fix, #header .kill, #header .favo, #header .home{
-	float:right;
+	display:block;
 	padding-left:20px;
-	padding-right:12px;
-	background:url(../Images/icons.gif)  no-repeat;
+	margin:3px auto;
+	background:url(../Images/icons.gif) no-repeat;
 	line-height:18px;
 }
 #header .kill{
@@ -95,7 +95,7 @@ a.flag:link, a.flag:visited{
 }
 #header .ad{
 	float:left;
-	width:609px;
+	width:660px;
 	height:91px;
 	border:#E6E6E6 1px solid;
 	line-height:91px;
@@ -106,22 +106,47 @@ a.flag:link, a.flag:visited{
 	width:159px;
 	height:93px;
 }
+#header .link{
+	float:right;
+	width:90px;
+	height:93px;
+}
 #top{
-	clear:both;
+	float:left;
+	width:490px;
+	padding-top:12px;
+	padding-bottom:10px;
+}
+#gtrans{
+	float:right;
+	width:442px;
+	height:72px;
+	background:url(../Images/search_bg2.gif) center repeat-x;
+	border:1px solid #E6E6E6;
+	padding:0 10px;
 	margin-top:12px;
 	margin-bottom:10px;
 }
-#top #tags {
+#gtrans img{
+	float:left;
+	padding:25px 10px 25px 0;
+}
+#gtrans form{
+	float:left;
+	padding:14px 0;
+	line-height:18px;
+}
+#top #tags{
 height:23px;
 padding:0 14px;
 }
-#top #tags li {
+#top #tags li{
 float:left;
 height:23px;
 position:relative;
 width:73px;
 }
-#top #tags li a {
+#top #tags li a{
 float:left;
 width:73px;
 height:23px;
@@ -137,11 +162,11 @@ position:absolute;
 top:0pt;
 width:73px;
 }
-#top .srchbox {
+#top .srchbox{
 background:url(../Images/search_bg.gif) repeat-x;
 border:1px solid #E6E6E6;
 height:47px;
-padding:0 15px;
+padding:0 10px;
 }
 #top .srchbox form {
 float:left;
@@ -176,7 +201,7 @@ height:20px;
 line-height:18px;
 margin-right:7px;
 padding:2px 1px 0pt;
-width:318px;
+width:270px;
 }
 #top .srchbox .button {
 float:left;
@@ -357,6 +382,7 @@ margin-top:1px;
 }
 #category ul li a{
 	float:none;
+	color:#003399;
 	width:auto;
 }
 #site_list ul li{
