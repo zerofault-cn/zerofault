@@ -100,7 +100,55 @@
 		
 		return $arrUserInfo;
 	}
-
+	function getNextUsersInList($nCurUserId, $nMailingListId, $nSlotId, $nCirculationFormId)
+	{
+		global $DATABASE_HOST, $DATABASE_UID, $DATABASE_PWD, $DATABASE_DB;
+		
+		$arrUserInfo = array();
+		$arrUsersInfo = array();
+		
+		$nConnection = mysql_connect($DATABASE_HOST, $DATABASE_UID, $DATABASE_PWD) or die('DB Connection fail');
+		
+		if (mysql_select_db($DATABASE_DB, $nConnection))
+		{
+			$arrUserDone = array();
+			$sql = "select * from cf_circulationprocess where nCirculationFormId=$nCirculationFormId and nDecissionState=1";
+			$rs = mysql_query($sql, $nConnection);
+			if ($rs && mysql_num_rows($rs)) {
+				while ($r = mysql_fetch_array($rs)) {
+					$arrUserDone[] = array($r['nSlotId'], $r['nUserId']);
+				}
+			}
+			$strQuery = "SELECT * FROM cf_slottouser INNER JOIN cf_formslot ON cf_slottouser.nSlotId  = cf_formslot.nID WHERE cf_slottouser.nMailingListId=$nMailingListId ORDER BY cf_formslot.nSlotNumber ASC, cf_slottouser.nPosition ASC";
+			$nResult = mysql_query($strQuery, $nConnection);
+			
+        	if ($nResult)
+        	{
+        		if (mysql_num_rows($nResult) > 0)
+        		{
+					while (	$arrRow = mysql_fetch_array($nResult))
+        			{
+        				if (in_array(array($arrRow['nSlotId'], $arrRow['nUserId']), $arrUserDone)) {
+        					continue;
+        				}
+        				$arrUsersInfo[$arrRow['nSlotId']][] = array($arrRow["nUserId"], $arrRow["nSlotId"], false);
+					}
+				}
+			}
+		}
+		if (count($arrUsersInfo)) {
+			$arrUserInfo = array_shift($arrUsersInfo);
+			if (!array_key_exists($nSlotId, $arrUsersInfo)) {
+				foreach ($arrUserInfo as $i=>$item) {
+					$arrUserInfo[$i][2] = $item[1];
+				}
+			}
+		}
+		else {
+			$arrUserInfo = array(array(''));
+		}
+		return $arrUserInfo;
+	}
 	function sendToUser($nUserId, $nCirculationId, $nSlotId, $nCirculationProcessId, $nCirculationHistoryId, $tsDateInProcessSince = '')
 	{
 		global $DATABASE_HOST, $DATABASE_UID, $DATABASE_PWD, $DATABASE_DB, $MAIL_HEADER_PRE, $CUTEFLOW_SERVER;
@@ -190,16 +238,20 @@
 				//------------------------------------------------------
 				//--- update status in circulationprocess table
 				//------------------------------------------------------				
-				if ($tsDateInProcessSince == '')
-				{
-					$strQuery = "INSERT INTO cf_circulationprocess values (null, $nCirculationId, $nSlotId, $nUserId, $TStoday, 0, 0, $nCirculationProcessId, $nCirculationHistoryId, 0)";
-					mysql_query($strQuery, $nConnection) or die ($strQuery.mysql_error());
-				}
-				else
-				{
-									//( `nID` , `nCirculationFormId` , `nSlotId`, `nUserId` , `dateInProcessSince` , `nDecissionState`, `dateDecission` , `nIsSubstitiuteOf` , `nCirculationHistoryId`)
-					$strQuery = "INSERT INTO cf_circulationprocess values (null, $nCirculationId, $nSlotId, $nUserId, $tsDateInProcessSince, 0, 0, 0, $nCirculationHistoryId, 0)";
-					mysql_query($strQuery, $nConnection) or die ($strQuery.mysql_error());
+				$sql = "select * from cf_circulationprocess where nCirculationFormId=$nCirculationId and nSlotId=$nSlotId and nUserId=$nUserId and nCirculationHistoryId=$nCirculationHistoryId";
+				$rs = mysql_query($sql);
+				if ($rs && mysql_num_rows($rs)==0) {
+					if ($tsDateInProcessSince == '')
+					{
+						$strQuery = "INSERT INTO cf_circulationprocess values (null, $nCirculationId, $nSlotId, $nUserId, $TStoday, 0, 0, $nCirculationProcessId, $nCirculationHistoryId, 0)";
+						mysql_query($strQuery, $nConnection) or die ($strQuery.mysql_error());
+					}
+					else
+					{
+										//( `nID` , `nCirculationFormId` , `nSlotId`, `nUserId` , `dateInProcessSince` , `nDecissionState`, `dateDecission` , `nIsSubstitiuteOf` , `nCirculationHistoryId`)
+						$strQuery = "INSERT INTO cf_circulationprocess values (null, $nCirculationId, $nSlotId, $nUserId, $tsDateInProcessSince, 0, 0, 0, $nCirculationHistoryId, 0)";
+						mysql_query($strQuery, $nConnection) or die ($strQuery.mysql_error());
+					}
 				}
 				
 				//------------------------------------------------------

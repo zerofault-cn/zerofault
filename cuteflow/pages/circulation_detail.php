@@ -258,7 +258,7 @@
             $arrProcessInformation = array();
 			$arrProcessInformationSubstitute = array();
 			
-            $strQuery = "SELECT * FROM cf_circulationprocess WHERE nCirculationFormId=".$_REQUEST["circid"]." AND nCirculationHistoryId=".$_REQUEST["nRevisionId"]." ORDER BY dateInProcessSince";
+            $strQuery = "SELECT * FROM cf_circulationprocess WHERE nCirculationFormId=".$_REQUEST["circid"]." AND nCirculationHistoryId=".$_REQUEST["nRevisionId"]." ORDER BY dateInProcessSince, nID";
     		$nResult = mysql_query($strQuery, $nConnection) or die ($strQuery."<br>".mysql_error());
     		if ($nResult)
     		{
@@ -643,7 +643,6 @@ if ($view != 'print')
 								
 								$nPICount++;
 								$bLastUser = ($nPICount == sizeof($arrProcessInformation)) ? true : false;
-																
 								printUser($arrCurPi, false, $arrRow["nUserId"], $bLastUser);
 								$printed_users = $printed_users+1;
 								$nCurPiId 		= $arrCurPi["nID"];

@@ -435,12 +435,12 @@
 	<table border="0" style="font-weight:bold;">
 		<tr>
 			<td><img src="<?php echo $CUTEFLOW_SERVER;?>/images/singleuser.gif"></td>
-			<td><?php echo htmlentities($CIRCDETAIL_SENDER);?></td>
+			<td><?php echo ($CIRCDETAIL_SENDER);?></td>
 			<td><?php echo htmlentities($arrUsers[$arrCirculationForm["nSenderId"]]["strLastName"].",".$arrUsers[$arrCirculationForm["nSenderId"]]["strFirstName"]."  (".$arrUsers[$arrCirculationForm["nSenderId"]]["strUserId"].")");?></td>
 		</tr>
 		<tr>
 			<td><img src="<?php echo $CUTEFLOW_SERVER;?>/images/calendar.gif"></td>
-			<td><?php echo htmlentities($CIRCDETAIL_SENDDATE);?></td>
+			<td><?php echo ($CIRCDETAIL_SENDDATE);?></td>
 			<td><?php echo convertDateFromDB($arrCirculationHistory["dateSending"]);?></td>
 		</tr>
 		

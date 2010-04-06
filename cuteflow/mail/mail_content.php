@@ -74,7 +74,7 @@
 					}
 				}
 				
-				$strQuery = "SELECT nID FROM `cf_circulationprocess` WHERE nCirculationFormId = '".$_REQUEST['cfid']."' AND ( nDecissionState = '0' OR nDecissionState = '2' OR nDecissionState = '16')";
+				$strQuery = "SELECT nID FROM `cf_circulationprocess` WHERE nUserId=".$_REQUEST['uid']." and nCirculationFormId = '".$_REQUEST['cfid']."' AND ( nDecissionState = '0' OR nDecissionState = '2' OR nDecissionState = '16')";
 				$nResult = mysql_query($strQuery, $nConnection);
 	    		if ($nResult)
 	    		{

@@ -565,7 +565,7 @@ include	('../language_files/language.inc.php');
 				}
 				?>
 				<a href="#" onMouseOver="tip('detail')" onMouseOut="untip()" onClick="showCirculationDetails(<?php echo $nCirculationFormID ?>, <?php if ($OPEN_DETAILS_IN_SEPERATE_WINDOW == true) { echo 1; } else { echo 0; } ?>); return false"><img src="../images/act_view.gif" border="0"height="16" width="16" style="margin-right: 4px;"></a>
-				<a href="javascript: editCirculation(<?php echo $nCirculationFormID ?>)" onMouseOver="tip('edit')" onMouseOut="untip()"><img src="../images/edit.png" border="0"height="16" width="16" style="margin-right: 4px;"></a>
+				<a href="javascript: editCirculation(<?php echo $nCirculationFormID ?>,<?php echo $_REQUEST['FILTER_Station']?>)" onMouseOver="tip('edit')" onMouseOut="untip()"><img src="../images/edit.png" border="0"height="16" width="16" style="margin-right: 4px;"></a>
 				<?php
 			}
 			echo "</td></tr>";

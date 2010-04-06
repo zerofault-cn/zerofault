@@ -84,9 +84,9 @@
 			nCurID = myID;
 		}
 		
-		function editCirculation(nCirculationId)
+		function editCirculation(nCirculationId,UserId)
 		{	
-			var strParams	= 'cfid=' + nCirculationId + '&language=<?php echo $_REQUEST['language']?>';
+			var strParams	= 'cfid=' + nCirculationId + '&uid='+UserId+'&language=<?php echo $_REQUEST['language']?>';
 			inpdata	= strParams;
 			encodeblowfish();
 			
