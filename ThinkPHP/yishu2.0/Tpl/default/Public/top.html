@@ -1,32 +1,14 @@
-<div id="top">
+	<div id="top">
             <ul id="tags">
-                <li><a href="javascript://" target="_self" onclick="selectTag('baidu8',this)">Google</a></li>
-                <li><a href="javascript://" target="_self" class="focu" onclick="selectTag('baidu0',this)">百度</a></li>
-                <li><a href="javascript://" target="_self" onclick="selectTag('baidu1',this)">MP3</a></li>
+                <li><a href="javascript://" target="_self" onclick="selectTag('baidu0',this)">Google</a></li>
+                <li><a href="javascript://" target="_self" class="focu" onclick="selectTag('baidu1',this)">百度</a></li>
                 <li><a href="javascript://" target="_self" onclick="selectTag('baidu2',this)">图片</a></li>
-                <li><a href="javascript://" target="_self" onclick="selectTag('baidu3',this)">贴吧</a></li>
-                <li><a href="javascript://" target="_self" onclick="selectTag('baidu4',this)">知道</a></li>
-                <li><a href="javascript://" target="_self" onclick="selectTag('baidu5',this)">百科</a></li>
-                <li><a href="javascript://" target="_self" onclick="selectTag('baidu6',this)">视频</a></li>
-                <li><a href="javascript://" target="_self" onclick="selectTag('baidu7',this)">股票</a></li>
-                <!-- <li><a href="javascript://" target="_self" onclick="selectTag('baidu9',this)">邮箱</a></li> -->
             </ul>
-            <div id="baidu0" class="srchbox">
+            <div id="baidu1" class="srchbox">
                 <form method="post" action="" onsubmit="return goSearch(word, url)">
                     <a href="http://www.baidu.com/?tn=q2616875_pg"><img src="../Public/Images/baidu_logo.gif"></a>
                     <label>
                     <input name="url" id="url" value="http://www.baidu.com/s?tn=q2616875_pg&amp;wd=" type="hidden">
-                    <input name="word" id="word" class="text" onmouseover="this.focus();" onfocus="this.select();" autocomplete="off" type="text">
-                    <input class="button" value="百度一下" type="submit">
-                    </label>
-                </form>
-                <div class="r"></div>
-            </div>
-            <div id="baidu1" style="display: none;" class="srchbox">
-                <form method="post" action="" onsubmit="return goSearch(word, url)">
-                    <a href="http://mp3.baidu.com/"><img src="../Public/Images/baidu_mp3.gif"></a>
-                    <label>
-                    <input name="url" id="url" value="http://mp3.baidu.com/m?f=ms&amp;tn=baidump3&amp;ct=134217728&amp;lf=&amp;rn=&amp;lm=0&amp;word=" type="hidden">
                     <input name="word" id="word" class="text" onmouseover="this.focus();" onfocus="this.select();" autocomplete="off" type="text">
                     <input class="button" value="百度一下" type="submit">
                     </label>
@@ -44,68 +26,13 @@
                 </form>
                 <div class="r"></div>
             </div>
-            <div id="baidu3" style="display: none;" class="srchbox">
-                <form method="post" action="" onsubmit="return goSearch(word, url)">
-                    <a href="http://post.baidu.com/"><img src="../Public/Images/baidu_post.gif"></a>
-                    <label>
-                    <input name="url" id="url" value="http://post.baidu.com/f?kw=" type="hidden">
-                    <input name="word" id="word" class="text" onmouseover="this.focus();" onfocus="this.select();" autocomplete="off" type="text">
-                    <input class="button" value="百度一下" type="submit">
-                    </label>
-                </form>
-                <div class="r"></div>
-            </div>
-            <div id="baidu4" style="display: none;" class="srchbox">
-                <form method="post" action="" onsubmit="return goSearch(word, url)">
-                    <a href="http://zhidao.baidu.com/"><img src="../Public/Images/baidu_know.gif"></a>
-                    <label>
-                    <input name="url" id="url" value="http://zhidao.baidu.com/q?tn=ikaslist&amp;pt=q2616875_pg&amp;ct=17&amp;word=" type="hidden">
-                    <input name="word" id="word" class="text" onmouseover="this.focus();" onfocus="this.select();" autocomplete="off" type="text">
-                    <input class="button" value="百度一下" type="submit">
-                    </label>
-                </form>
-                <div class="r"></div>
-            </div>
-            <div id="baidu5" style="display: none;" class="srchbox">
-                <form method="post" action="" onsubmit="return goSearch(word, url)">
-                    <a href="http://baike.baidu.com/"><img src="../Public/Images/baidu_baike.gif"></a>
-                    <label>
-                    <input name="url" id="url" value="http://baike.baidu.com/w?ct=17&amp;lm=0&amp;tn=baiduWikiSearch&amp;pn=0&amp;rn=10&amp;word=" type="hidden">
-                    <input name="word" id="word" class="text" onmouseover="this.focus();" onfocus="this.select();" autocomplete="off" type="text">
-                    <input class="button" value="百度一下" type="submit">
-                    </label>
-                </form>
-                <div class="r"></div>
-            </div>
-            <div id="baidu6" style="display: none;" class="srchbox">
-                <form method="post" action="" onsubmit="return goSearch(word, url)">
-                    <a href="http://video.baidu.com/"><img src="../Public/Images/baidu_video.gif"></a>
-                    <label>
-                    <input name="url" id="url" value="http://video.baidu.com/v?ct=301989888&amp;rn=20&amp;pn=0&amp;db=0&amp;s=0&amp;word=" type="hidden">
-                    <input name="word" id="word" class="text" onmouseover="this.focus();" onfocus="this.select();" autocomplete="off" type="text">
-                    <input class="button" value="百度一下" type="submit">
-                    </label>
-                </form>
-                <div class="r"></div>
-            </div>
-            <div id="baidu7" style="display: none;" class="srchbox">
-                <form method="post" action="" onsubmit="return goSearch(word, url)">
-                    <a href="http://www.baidu.com/?tn=q2616875_pg"><img src="../Public/Images/baidu_logo.gif"></a>
-                    <label>
-                    <input name="url" id="url" value="http://www.baidu.com/s?tn=q2616875_pg&amp;wd=" type="hidden">
-                    <input name="word" id="word" class="text" onmouseover="this.focus();" onfocus="this.select();" autocomplete="off" type="text">
-                    <input class="button" value="百度一下" type="submit">
-                    </label>
-                </form>
-                <div class="r"></div>
-            </div>
-            <div id="baidu8" style="display: none;" class="srchbox">
+            <div id="baidu0" style="display: none;" class="srchbox">
                 <form method="post" action="" onsubmit="return goSearch(word, url)">
                     <a href="http://www.google.cn/"><img src="../Public/Images/google_logo.gif"></a>
                     <label>
                     <input name="url" id="url" value="http://www.google.cn/search?hl=zh-CN&amp;meta=&amp;aq=f&amp;oq=&amp;q=" type="hidden">
                     <input name="word" id="word" class="text" onmouseover="this.focus();" onfocus="this.select();" autocomplete="off" type="text">
-                    <input class="button" value=" 搜 索 " type="submit">
+                    <input class="button" value=" Google搜索 " type="submit">
                     </label>
                 </form>
                 <div class="r"></div>
@@ -114,3 +41,16 @@
         </div>
     <script language="JavaScript" type="text/javascript" src="../Public/Js/external.js"></script>
 	<script language="JavaScript" type="text/javascript" src="../Public/Js/search.js"></script>
+	<div id="gtrans">
+		<img src="../Public/Images/gtran.gif" alt="Google 翻译" class="img"/>
+		<form class="form" action="http://translate.google.cn/translate" target="_blank">
+			将网站 <input type="text" name="u" id=url value="http://www." size="20" onclick="this.value=''"/>
+			从 <select name=sl style='width:auto'><option value="ar">阿拉伯文</option><option value="bg">保加利亚文</option><option value="pl">波兰语</option><option value="ko">朝鲜语</option><option value="da">丹麦语</option><option value="de">德语</option><option value="ru">俄语</option><option value="fr">法语</option><option value="tl">菲律宾文</option><option value="fi">芬兰语</option><option value="nl">荷兰语</option><option value="ca">加泰罗尼亚文</option><option value="cs">捷克语</option><option value="hr">克罗地亚文</option><option value="lv">拉脱维亚语</option><option value="lt">立陶宛语</option><option value="ro">罗马尼亚语</option><option value="no">挪威语</option><option value="pt">葡萄牙语</option><option value="ja">日语</option><option value="sv">瑞典语</option><option value="sr">塞尔维亚文</option><option value="sl">斯拉维尼亚文</option><option value="sk">斯洛伐克文</option><option value="uk">乌克兰文</option><option value="es">西班牙语</option><option value="iw">希伯来语</option><option value="el">希腊语</option><option value="it">意大利语</option><option value="hi">印度文</option><option value="id">印尼文</option><option value="en" selected>英语</option><option value="vi">越南文</option><option value="zh-CN">中文</option></select> <!-- <span style='font-size:1.5em;vertical-align:-1px;'>&raquo;</span> --> 
+			<br />
+			翻译为 <select name=tl style='width:auto'><option value="ar">阿拉伯文</option><option value="bg">保加利亚文</option><option value="pl">波兰语</option><option value="ko">朝鲜语</option><option value="da">丹麦语</option><option value="de">德语</option><option value="ru">俄语</option><option value="fr">法语</option><option value="tl">菲律宾文</option><option value="fi">芬兰语</option><option value="nl">荷兰语</option><option value="ca">加泰罗尼亚文</option><option value="cs">捷克语</option><option value="hr">克罗地亚文</option><option value="lv">拉脱维亚语</option><option value="lt">立陶宛语</option><option value="ro">罗马尼亚语</option><option value="no">挪威语</option><option value="pt">葡萄牙语</option><option value="ja">日语</option><option value="sv">瑞典语</option><option value="sr">塞尔维亚文</option><option value="sl">斯拉维尼亚文</option><option value="sk">斯洛伐克文</option><option value="uk">乌克兰文</option><option value="es">西班牙语</option><option value="iw">希伯来语</option><option value="el">希腊语</option><option value="it">意大利语</option><option value="hi">印度文</option><option value="id">印尼文</option><option value="en">英语</option><option value="vi">越南文</option><option value="zh-TW">中文(繁体)</option><option value="zh-CN" selected>中文(简体)</option></select>
+			<input type="submit" value="显示结果" />
+			<input name="hl" value="zh-CN" type="hidden">
+			<input name="ie" value="UTF-8" type="hidden">
+		</form>
+	</div>
+	<div class="clear"></div>
