@@ -810,6 +810,16 @@
 	{
 		$arrNextUser = getNextUserInList(-1, $nMailinglistID, -1);
 		sendToUser($arrNextUser[0], $nCirculationFormID, $arrNextUser[1], 0, $nCirculationHistoryID);
+		
+		$arrNextUser2 = $arrNextUser;
+		while ($arrNextUser2[1]==$arrNextUser[1]) {
+			$arrNextUser2 = $arrNextUser;
+			$arrNextUser = getNextUserInList($arrNextUser[0], $nMailinglistID, $arrNextUser[1]);
+			if (empty($arrNextUser) || $arrNextUser[1]!=$arrNextUser2[1]) {
+				break;
+			}
+			sendToUser($arrNextUser[0], $nCirculationFormID, $arrNextUser[1], 0, $nCirculationHistoryID);
+		}
 	}
 ?>
 <head>
