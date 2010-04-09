@@ -20,6 +20,7 @@ function myLocation(loc,intval)
 		window.location.href= (loc==''? window.location.href : loc);
 		},intval);
 }
+var loc;
 function myConfirm(str,url)
 {
 	loc=url;
