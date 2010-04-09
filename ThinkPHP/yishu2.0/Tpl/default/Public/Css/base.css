@@ -45,7 +45,7 @@ a.flag:link, a.flag:visited{
 #container{
 	width:960px;
 	height:auto !important;
-	margin:0 auto;
+	margin:15px auto;
 }
 #header .top{
 	height:23px;
@@ -112,29 +112,23 @@ a.flag:link, a.flag:visited{
 	height:93px;
 }
 #top{
-	float:left;
-	width:490px;
+	clear:both;
 	padding-top:12px;
 	padding-bottom:10px;
 }
 #gtrans{
 	float:right;
-	width:442px;
-	height:72px;
-	background:url(../Images/search_bg2.gif) center repeat-x;
+	width:728px;
+	height:27px;
+	background:url(../Images/search_bg.gif) center repeat-x;
 	border:1px solid #E6E6E6;
-	padding:0 10px;
+	padding:10px;
 	margin-top:12px;
 	margin-bottom:10px;
+	line-height:27px;
 }
 #gtrans img{
-	float:left;
-	padding:25px 10px 25px 0;
-}
-#gtrans form{
-	float:left;
-	padding:14px 0;
-	line-height:18px;
+	padding:5px 10px 0 0;
 }
 #top #tags{
 height:23px;
@@ -166,7 +160,7 @@ width:73px;
 background:url(../Images/search_bg.gif) repeat-x;
 border:1px solid #E6E6E6;
 height:47px;
-padding:0 10px;
+padding:0 15px;
 }
 #top .srchbox form {
 float:left;
@@ -201,7 +195,7 @@ height:20px;
 line-height:18px;
 margin-right:7px;
 padding:2px 1px 0pt;
-width:270px;
+width:318px;
 }
 #top .srchbox .button {
 float:left;
