@@ -94,7 +94,7 @@ class UserAction extends BaseAction{
 		$this->dao->find($id);
 		$this->dao->name = $name;
 		$this->dao->Role = $role_arr;
-		if($this->dao->relation(true)->save()){
+		if(false !== $this->dao->relation(true)->save()){
 			die('1');
 		}
 		else{
