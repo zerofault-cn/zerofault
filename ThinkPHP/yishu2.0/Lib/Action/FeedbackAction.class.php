@@ -22,7 +22,9 @@ class FeedbackAction extends BaseAction{
 		foreach($rs as $item){
 			echo '<dt><i>'.$item['addtime'].'</i>'.(''==$item['nickname']?'匿名网友':$item['nickname']).'</dt>';
 			echo '<dd>'.nl2br($item['message']).'</dd>';
-			echo '<dd style="padding-left:30px"><fieldset style="border:1px dashed red;"><legend style="color:red;">管理员回复</legend>'.nl2br($item['reply']).'</fieldset></dd>';
+			if (!empty($item['reply'])) {
+				echo '<dd style="padding-left:30px"><fieldset style="border:1px dashed red;"><legend style="color:red;">管理员回复</legend>'.nl2br($item['reply']).'</fieldset></dd>';
+			}
 		}
 		echo '<div style="padding-top:10px;">'.$p->showJsNavi().'</div>';
 	}
@@ -39,7 +41,7 @@ class FeedbackAction extends BaseAction{
 				'message'  => trim($_REQUEST['message']),
 				'ip'       => $_SERVER['REMOTE_ADDR'],
 				'addtime'  => date('Y-m-d H:i:s'),
-				'status'   => 0
+				'status'   => 1
 				);
 
 			if (''==$data['nickname']) {
@@ -49,7 +51,7 @@ class FeedbackAction extends BaseAction{
 				self::_error('留言内容太短！');
 			}
 			if (M('Feedback')->add($data)) {
-				self::_success('感谢您的热心支持，请等待审核!');
+				self::_success('感谢您的热心支持！');//，请等待审核!');
 			}
 			else {
 				self::_error('提交失败');
