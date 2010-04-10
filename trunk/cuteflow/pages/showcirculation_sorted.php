@@ -390,7 +390,7 @@ include	('../language_files/language.inc.php');
 				$strCurStation	= $arrRow['strCurStation'];
 			}
 			
-			$arrDecissionState 	= $objCirculation->getDecissionState($nCirculationFormID);
+			$arrDecissionState 	= $objCirculation->getDecissionState_arr($nCirculationFormID);
 			$strStartDate		= $objCirculation->getStartDate($nCirculationFormID);
 			$strSender			= $objCirculation->getSender($nCirculationFormID);
 			$arrMaillist		= $objCirculation->getMailinglist($nMailingListId);
@@ -406,9 +406,9 @@ include	('../language_files/language.inc.php');
 				$class = 'rowUneven';
 			}
                 
-			echo "\n<tr class=\"$class\" valign=\"top\">\n";
+			echo "\n<tr class=\"$class\" valign=\"middle\">\n";
 			echo "<td>$nShownIndex</td>";
-			
+			//echo '<pre>';print_r($arrDecissionState);echo '</pre>';
 			foreach ($arrCirculation_Cols as $strCurRow)
 			{			
 				switch($strCurRow)
@@ -423,7 +423,7 @@ include	('../language_files/language.inc.php');
 							echo "<td nowrap ".getColHighlight($nIndex, $sortby, 'COL_CIRCULATION_STATION')." align=\"left\">";
 							switch ($arrDecissionState['nDecissionState'])
 							{
-								case 0: echo $arrDecissionState['strCurStation']; break;
+								case 0: echo implode('<br />',$arrDecissionState['strCurStation']); break;
 								case 1: echo "<img src=\"../images/circ_done.gif\">&nbsp;<em>$CIRCULATION_MNGT_CIRC_DONE</em>"; break;
 								case 2: $bStopped = true; echo "<img src=\"../images/circ_stop.gif\">&nbsp;<em>$CIRCULATION_MNGT_CIRC_BREAK</em>"; break;
 								case 4: echo "<img src=\"../images/circ_done.gif\">&nbsp;<em>$CIRCULATION_MNGT_CIRC_DONE </em>"; break; //new
@@ -480,7 +480,7 @@ include	('../language_files/language.inc.php');
 					{	
 						?>
 						<td valign="middle">
-		    				<div id="counter" class="counter" style="width: <?php echo $width ?>%; <?php if ($width > 0) echo 'background-color: '.$mycolor ?>;"><?php echo $width ?>%
+		    				<div id="counter" class="counter" style="height:14px;width: <?php echo $width ?>%; <?php if ($width > 0) echo 'background-color: '.$mycolor ?>;"><?php echo $width ?>%
 							</div>
 						</td>
 						<?php

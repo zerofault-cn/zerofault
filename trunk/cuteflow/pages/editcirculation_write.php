@@ -360,7 +360,7 @@
 			}
 			else
 			{
-				$strQuery 	= "INSERT INTO cf_fieldvalue values( null, '$nCurInputFieldID', '$strCurStandardValue', '$nCurFormSlotID', '$nCirculationFormID' , '$nCirculationHistoryID' )";
+				$strQuery 	= "INSERT INTO cf_fieldvalue values( null, '$nCurInputFieldID', '$nUserId', '$strCurStandardValue', '$nCurFormSlotID', '$nCirculationFormID' , '$nCirculationHistoryID' )";
 				$nResult 	= @mysql_query($strQuery);
 			}			
 		}

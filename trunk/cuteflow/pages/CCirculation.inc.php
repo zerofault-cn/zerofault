@@ -1430,6 +1430,23 @@ class CCirculation
 	            }   
 	        }
 	    }
+		function getMaxProcessId_arr($nHistoryId)
+	    {
+	        $query = "SELECT nID FROM `cf_circulationprocess` WHERE nDecissionState!=1 and `nCirculationHistoryId`=".$nHistoryId;
+	        $nResult = mysql_query($query);
+	
+	        $Id_arr = array();
+	        if ($nResult)
+	        {
+	            if (mysql_num_rows($nResult) > 0)
+	            {
+	                while ($arrRow = mysql_fetch_array($nResult)) {
+	                    $Id_arr[] = $arrRow[0];
+	                }
+	            }   
+	        }
+	        return $Id_arr;
+	    }
 		function getProcessInformation($nMaxId)
 	    {
 	        $query = "SELECT * FROM `cf_circulationprocess` WHERE `nID`=".$nMaxId;
@@ -1489,6 +1506,45 @@ class CCirculation
 			$arrResults['nCurStationID']	= $nCurUserId;
 		}
 			
+		return $arrResults;
+	}
+	function getDecissionState_arr($nCirculationFormID)
+	{		
+		$arrHistoryData 		= $this->getMaxHistoryData($nCirculationFormID);
+		$Id_arr					= $this->getMaxProcessId_arr($arrHistoryData);
+        foreach ($Id_arr as $nMaxId) {
+			$arrProcessInformation 	= $this->getProcessInformation($nMaxId);
+	        
+	        if (($arrProcessInformation["nDecissionState"] == 0) || ($arrProcessInformation["nDecissionState"] == 8) )
+			{
+				$tsDateInProcessSince = $arrProcessInformation["dateInProcessSince"];
+				$tsNow = time();
+				$diff = (int)((($tsNow-$tsDateInProcessSince))/(24*60*60));
+			}
+			else
+			{
+				$diff = '-';
+			}
+	        			
+			$arrResults['nDecissionState']	= $arrProcessInformation["nDecissionState"];
+			$arrResults['nDaysInProgress']	= $diff;
+			if ($arrProcessInformation["nUserId"] != -2)
+			{
+				$arrResults['strCurStation'][]	= $this->getUsername($arrProcessInformation["nUserId"]);
+				$arrResults['nCurStationID']	= $arrProcessInformation["nUserId"];
+			}
+			else
+			{
+				$strQuery = "SELECT nSenderId FROM cf_circulationform WHERE nID = '".$arrProcessInformation['nCirculationFormId']."' LIMIT 1;";
+				$nResult = mysql_query($strQuery);
+				$arrResult = mysql_fetch_array($nResult, MYSQL_ASSOC);
+				
+				$nCurUserId = $arrResult['nSenderId'];
+				
+				$arrResults['strCurStation']	= $this->getUsername($nCurUserId);
+				$arrResults['nCurStationID']	= $nCurUserId;
+			}
+        }
 		return $arrResults;
 	}
 	
