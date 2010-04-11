@@ -247,11 +247,11 @@
     			{
     				while (	$arrRow = mysql_fetch_array($nResult))
     				{
-    					$arrValues[$arrRow["nInputFieldId"]."_".$arrRow["nSlotId"]] = $arrRow;
+    					$arrValues[$arrRow["nInputFieldId"]."_".$arrRow["nSlotId"]][$arrRow['nUserId']] = $arrRow;
     				}
     			}
     		}
-			
+			//echo '<pre>';print_r($arrValues);echo '</pre>';
 			//-----------------------------------------------
             //--- get the form process detail
             //-----------------------------------------------	            
@@ -733,13 +733,15 @@ if ($view != 'print')
 											$nRunningCounter = 1;
 			    		                  	while (	$arrRow = mysql_fetch_array($nResult))
             			       				{
-												echo "<td class=\"mandatory\" width=\"20%\" valign=\"top\">".$arrRow["strName"].":</td>";
+												echo "<td class=\"mandatory\" width=\"20%\" valign=\"middle\">".$arrRow["strName"].":</td>";
 												echo "<td width=\"300px\" valign=\"top\">";
+												foreach ($arrValues[$arrRow["nFieldId"]."_".$arrSlot["nID"]] as $user_id=>$user_val) {
+												echo '<div><strong>[<img src="../images/singleuser.gif" height="16" width="16" align="absmiddle"/> '.$arrUsers[$user_id]["strUserId"].'] </strong>';
 												if ($arrRow["nType"] == 1)
 												{
-													if ($arrValues[$arrRow["nFieldId"]."_".$arrSlot["nID"]]["strFieldValue"]!='')
+													if ($user_val["strFieldValue"]!='')
 													{
-														$arrValue = split('rrrrr',$arrValues[$arrRow["nFieldId"]."_".$arrSlot["nID"]]["strFieldValue"]);
+														$arrValue = split('rrrrr',$user_val["strFieldValue"]);
 														
 														$output = replaceLinks($arrValue[0]); 
 														if ($arrRow['strBgColor'] != "") {
@@ -760,7 +762,7 @@ if ($view != 'print')
 												}
 												else if ($arrRow["nType"] == 2)
 												{
-													if ($arrValues[$arrRow["nFieldId"]."_".$arrSlot["nID"]]["strFieldValue"] != "on")
+													if ($user_val["strFieldValue"] != "on")
 													{
 														$state = "inactive";
 													}
@@ -773,9 +775,9 @@ if ($view != 'print')
 												}
 												else if ($arrRow["nType"] == 3)
 												{
-													if ($arrValues[$arrRow["nFieldId"]."_".$arrSlot["nID"]]["strFieldValue"]!='')
+													if ($user_val["strFieldValue"]!='')
 													{
-														$arrValue = split('xx',$arrValues[$arrRow["nFieldId"]."_".$arrSlot["nID"]]["strFieldValue"]);								
+														$arrValue = split('xx',$user_val["strFieldValue"]);								
 														$nNumGroup 	= $arrValue[1];														
 														$arrValue1 = split('rrrrr',$arrValue[2]);														
 														$strMyValue	= $arrValue1[0];
@@ -795,9 +797,9 @@ if ($view != 'print')
 												}
 												else if ($arrRow["nType"] == 4)
 												{
-													if ($arrValues[$arrRow["nFieldId"]."_".$arrSlot["nID"]]["strFieldValue"]!='')
+													if ($user_val["strFieldValue"]!='')
 													{
-														$arrValue = split('xx',$arrValues[$arrRow["nFieldId"]."_".$arrSlot["nID"]]["strFieldValue"]);
+														$arrValue = split('xx',$user_val["strFieldValue"]);
 														$nDateGroup 	= $arrValue[1];
 														$arrValue2 = split('rrrrr',$arrValue[2]);
 														$strMyValue 	= $arrValue2[0];
@@ -817,9 +819,9 @@ if ($view != 'print')
 												}
 												else if ($arrRow["nType"] == 5)
 												{
-													if ($arrValues[$arrRow["nFieldId"]."_".$arrSlot["nID"]]["strFieldValue"]!='')
+													if ($user_val["strFieldValue"]!='')
 													{
-														echo replaceLinks($arrValues[$arrRow["nFieldId"]."_".$arrSlot["nID"]]["strFieldValue"]);
+														echo replaceLinks($user_val["strFieldValue"]);
 													}
 													else
 													{
@@ -828,9 +830,9 @@ if ($view != 'print')
 												}
 												else if ($arrRow["nType"] == 6)
 												{
-													if ($arrValues[$arrRow["nFieldId"]."_".$arrSlot["nID"]]["strFieldValue"]!='')
+													if ($user_val["strFieldValue"]!='')
 													{
-														$strValue = $arrValues[$arrRow["nFieldId"]."_".$arrSlot["nID"]]["strFieldValue"];
+														$strValue = $user_val["strFieldValue"];
 														$arrMySplit = split('---', $strValue);
 														
 														if ($arrMySplit[1] > 1)
@@ -846,7 +848,7 @@ if ($view != 'print')
 														}
 														else
 														{	// we have to use the standard value
-															$strValue = $arrValues[$arrRow["nFieldId"]."_".$arrSlot["nID"]]["strFieldValue"];
+															$strValue = $user_val["strFieldValue"];
 															$keyId = rand(1, 150);
 														}
 													}
@@ -864,9 +866,9 @@ if ($view != 'print')
 												}
 												else if ($arrRow["nType"] == 7)
 												{
-													if ($arrValues[$arrRow["nFieldId"]."_".$arrSlot["nID"]]["strFieldValue"]!='')
+													if ($user_val["strFieldValue"]!='')
 													{
-													$strValue = $arrValues[$arrRow["nFieldId"]."_".$arrSlot["nID"]]["strFieldValue"];
+													$strValue = $user_val["strFieldValue"];
 														$arrMySplit = split('---', $strValue);
 														
 														if ($arrMySplit[1] > 1)
@@ -882,7 +884,7 @@ if ($view != 'print')
 														}
 														else
 														{	// we have to use the standard value
-															$strValue = $arrValues[$arrRow["nFieldId"]."_".$arrSlot["nID"]]["strFieldValue"];
+															$strValue = $user_val["strFieldValue"];
 															$keyId = rand(1, 150);
 														}
 													}
@@ -901,9 +903,9 @@ if ($view != 'print')
 												}
 												elseif($arrRow["nType"] == 8)
 												{
-													if ($arrValues[$arrRow["nFieldId"]."_".$arrSlot["nID"]]["strFieldValue"]!='')
+													if ($user_val["strFieldValue"]!='')
 													{
-														$strValue = $arrValues[$arrRow["nFieldId"]."_".$arrSlot["nID"]]["strFieldValue"];
+														$strValue = $user_val["strFieldValue"];
 														$arrMySplit = split('---', $strValue);
 														
 														if ($arrMySplit[1] > 1)
@@ -919,7 +921,7 @@ if ($view != 'print')
 														}
 														else
 														{	// we have to use the standard value
-															$strValue = $arrValues[$arrRow["nFieldId"]."_".$arrSlot["nID"]]["strFieldValue"];
+															$strValue = $user_val["strFieldValue"];
 															$keyId = rand(1, 150);
 														}
 													}
@@ -938,9 +940,9 @@ if ($view != 'print')
 												}
 												elseif($arrRow["nType"] == 9)
 												{
-													if ($arrValues[$arrRow["nFieldId"]."_".$arrSlot["nID"]]["strFieldValue"]!='')
+													if ($user_val["strFieldValue"]!='')
 													{
-														$arrSplit = split('---',$arrValues[$arrRow["nFieldId"]."_".$arrSlot["nID"]]["strFieldValue"]);
+														$arrSplit = split('---',$user_val["strFieldValue"]);
 													}
 													else
 													{
@@ -959,7 +961,8 @@ if ($view != 'print')
 													
 													echo "<a href=\"$strLink\" target=\"_blank\">$strFilename</a>";
 												}
-												
+												echo '</div>';
+												}
 												echo "</td>";
 																					
 												if ($nRunningCounter % 2 == 0)
