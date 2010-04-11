@@ -127,10 +127,11 @@
     			{
     				while (	$arrRow = mysql_fetch_array($nResult))
     				{
-    					$arrValues[$arrRow["nInputFieldId"]."_".$arrRow["nSlotId"]."_".$arrRow["nFormId"]] = $arrRow;
+    					$arrValues[$arrRow["nInputFieldId"]."_".$arrRow["nSlotId"]."_".$arrRow["nFormId"]][$arrRow['nUserId']] = $arrRow;
     				}
     			}
     		}
+			//echo '<pre>';print_r($arrValues);echo '</pre>';
 		}
 	}
 ?>
@@ -498,7 +499,7 @@
 					?>
 							<tr>
 								<td align="left">
-									<strong><?php echo htmlentities($MAIL_CONTENT_ATTETION); ?></strong> <?php echo $MAIL_CONTENT_STOPPED_TEXT; ?>					
+									<strong><?php echo ($MAIL_CONTENT_ATTETION); ?></strong> <?php echo $MAIL_CONTENT_STOPPED_TEXT; ?>					
 					<?php		
 							}
 							else
@@ -506,7 +507,7 @@
 					?>
 							<tr>
 								<td align="left">
-									<strong><?php echo htmlentities($MAIL_CONTENT_ATTETION); ?></strong> <?php echo $MAIL_CONTENT_ATTETION_TEXT; ?>
+									<strong><?php echo ($MAIL_CONTENT_ATTETION); ?></strong> <?php echo $MAIL_CONTENT_ATTETION_TEXT; ?>
 					<?php
 							}
 						}
@@ -583,27 +584,40 @@
 																			$nRunningCounter = 1;
 											    		                  	while (	$arrRow = mysql_fetch_array($nResult))
 								            			       				{
-																				echo "<td class=\"mandatory\" width=\"200px\" valign=\"top\">".htmlentities($arrRow["strName"]).":</td>";
+																				echo "<td class=\"mandatory\" width=\"200px\" valign=\"top\">".($arrRow["strName"]).":</td>";
 																				echo "<td width=\"250px\" valign=\"top\" align=\"left\">";
 																				
 																				$bReadOnly = $arrRow['bReadOnly'];
-																				
+																				$bTextOnly = 0;
 																				$keyId = $arrRow["nFieldId"]."_".$arrSlot["nID"]."_".$arrCirculationProcess["nCirculationFormId"];
+																				foreach ($arrValues[$keyId] as $user_id=>$user_val) {
+																				if ($user_id != $arrCirculationProcess['nUserId']) {
+																					$bTextOnly = 1;
+																				}
+																				else{
+																					$bTextOnly = 0;
+																				}
+																				echo '<div style="clear:both;"><strong style="float:left;">[<img src="../images/singleuser.gif" height="16" width="16" align="absmiddle"/> '.$arrUsers[$user_id]["strUserId"].']</strong>&nbsp;<span style="float:left;padding-left:5px;">';
 																				if ($arrRow["nType"] == 1)
 																				{
 																					if ( ($arrSlot["nID"] == $arrCirculationProcess["nSlotId"]) &&
 																					     ($arrCirculationProcess["nDecissionState"] == 0) && (!$bReadOnly) )
 																					{
 																						//--- Slot is allowed to edit
-																						if ($arrValues[$keyId]["strFieldValue"]!='')
+																						if ($user_val["strFieldValue"]!='')
 																						{																							
-																							$arrValue = split('rrrrr',$arrValues[$keyId]["strFieldValue"]);
+																							$arrValue = split('rrrrr',$user_val["strFieldValue"]);
 								
 																							$strFieldValue 	= $arrValue[0];																					
 																							$REG_Text		= $arrValue[1];
 																							
 																							$bgStyle = $arrRow['strBgColor'] != "" ? 'background-color: #'.$arrRow['strBgColor'] : '';
-																							echo "<input style=\"width:220px; $bgStyle\" class=\"InputText\" type=\"text\" name=\"".$keyId.'_1'."\" id=\"".$keyId.'_1'."\" value=\"".$strFieldValue."\">";
+																							if($bTextOnly) {
+																								echo $strFieldValue;
+																							}
+																							else {
+																								echo "<input style=\"width:220px; $bgStyle\" class=\"InputText\" type=\"text\" name=\"".$keyId.'_1'."\" id=\"".$keyId.'_1'."\" value=\"".$strFieldValue."\">";
+																							}
 																							?>
 																							<script language="javascript">
 																							addID('<?php echo $keyId."zz1zz".$REG_Text; ?>');
@@ -618,7 +632,12 @@
 																							$REG_Text		= $arrValue[1];
 																							
 																							$bgStyle = $arrRow['strBgColor'] != "" ? 'background-color: #'.$arrRow['strBgColor'] : '';
-																							echo "<input style=\"width:220px; $bgStyle\" class=\"InputText\" type=\"text\" name=\"".$keyId.'_1'."\" id=\"".$keyId.'_1'."\" value=\"".$strFieldValue."\">";
+																							if($bTextOnly) {
+																								echo $strFieldValue;
+																							}
+																							else {
+																								echo "<input style=\"width:220px; $bgStyle\" class=\"InputText\" type=\"text\" name=\"".$keyId.'_1'."\" id=\"".$keyId.'_1'."\" value=\"".$strFieldValue."\">";
+																							}
 																							?>
 																							<script language="javascript">
 																							addID('<?php echo $keyId."zz1zz".$REG_Text; ?>');
@@ -628,9 +647,9 @@
 																					}
 																					else
 																					{
-																						if ($arrValues[$keyId]["strFieldValue"]!='')
+																						if ($user_val["strFieldValue"]!='')
 																						{
-																							$arrValue = split('rrrrr',$arrValues[$keyId]["strFieldValue"]);
+																							$arrValue = split('rrrrr',$user_val["strFieldValue"]);
 																							$strFieldValue 	= $arrValue[0];		
 																							$REG_Text		= $arrValue[1];
 																							
@@ -644,10 +663,10 @@
 																							$REG_Text		= $arrValue[1];		
 																							
 																							$bgStyle = $arrRow['strBgColor'] != "" ? 'background-color: #'.$arrRow['strBgColor'] : '';
-																							echo "<input style=\"width:220px; $bgStyle\" class=\"InputText\" type=\"text\" name=\"".$keyId.'_1'."\" id=\"".$keyId.'_1'."\" value=\"".$strFieldValue."\" readonly>";;
+																							echo "<input style=\"width:220px; $bgStyle\" class=\"InputText\" type=\"text\" name=\"".$keyId.'_1'."\" id=\"".$keyId.'_1'."\" value=\"".$strFieldValue."\" readonly>";
 																						}	
 																					}
-																					if ($REG_Text != '')
+																					if ($REG_Text != '' && $bTextOnly==0)
 																					{
 																						?>
 																						<input type="hidden" name="<?php echo $keyId.'_REG'; ?>" value="<?php echo $REG_Text; ?>">
@@ -657,9 +676,9 @@
 																				else if ($arrRow["nType"] == 2)
 																				{
 																					$MyChecked = 0;
-																					if ($arrValues[$keyId]["strFieldValue"]!='')
+																					if ($user_val["strFieldValue"]!='')
 																					{
-																						if ($arrValues[$keyId]["strFieldValue"] == 'on')
+																						if ($user_val["strFieldValue"] == 'on')
 																						{
 																							$MyChecked = 1;
 																						}
@@ -674,18 +693,27 @@
 																					if ( ($arrSlot["nID"] == $arrCirculationProcess["nSlotId"])  && ($arrCirculationProcess["nDecissionState"] == 0) && (!$bReadOnly) )
 																					{	//--- Slot is allowed to edit
 																					
-																						if ($MyChecked)
-																						{
-																							echo "<input type=\"checkbox\" name=\"".$keyId.'_2'."\" value=\"on\" checked>";
+																						if($bTextOnly) {
+																							if ($MyChecked) {
+																								echo '<img src="../images/active.gif" height="16" width="16" align="absmiddle">';
+																							}
+																							else {
+																								echo '<img src="../images/inactive.gif" height="16" width="16" align="absmiddle">';
+																							}
 																						}
-																						else
-																						{
-																							echo "<input type=\"checkbox\" name=\"".$keyId.'_2'."\" value=\"on\">";
+																						else {
+																							if ($MyChecked)
+																							{
+																								echo "<input type=\"checkbox\" name=\"".$keyId.'_2'."\" value=\"on\" checked>";
+																							}
+																							else
+																							{
+																								echo "<input type=\"checkbox\" name=\"".$keyId.'_2'."\" value=\"on\">";
+																							}
 																						}
-																						
 																					}
 																					else
-																					{																						
+																					{
 																						if ($MyChecked)
 																						{
 																							echo "<input type=\"checkbox\" name=\"".$keyId.'_2'."\" value=\"on\" disabled checked>";
@@ -694,9 +722,11 @@
 																						else
 																						{
 																							echo "<input type=\"checkbox\" name=\"".$keyId.'_2'."\" value=\"on\" disabled>";
-																						}																						
+																						}
 																					}
-																					echo "<input type=\"hidden\" name=\"".$keyId.'_2xx'."\" value=\"\">";
+																					if ($bTextOnly==0) {
+																						echo "<input type=\"hidden\" name=\"".$keyId.'_2xx'."\" value=\"\">";
+																					}
 																				}
 																				else if ($arrRow["nType"] == 3)
 																				{																					
@@ -706,9 +736,9 @@
 																					{
 																						//--- Slot is allowed to edit
 																						
-																						if ($arrValues[$keyId]["strFieldValue"]!='')
+																						if ($user_val["strFieldValue"]!='')
 																						{
-																							$arrMyValue = split('xx',$arrValues[$keyId]["strFieldValue"]);
+																							$arrMyValue = split('xx',$user_val["strFieldValue"]);
 																							$strMyValue = $arrMyValue['2'];
 																
 																							$arrValue3 = split('rrrrr',$strMyValue);
@@ -716,7 +746,12 @@
 																							$REG_Number		= $arrValue3[1];
 																							
 																							$bgStyle = $arrRow['strBgColor'] != "" ? 'background-color: #'.$arrRow['strBgColor'] : '';
-																							echo "<input class=\"InputText\" style='$bgStyle' type=\"text\" name=\"".$keyId.'_3_'.$arrMyValue['1']."\" id=\"".$keyId.'_3_'.$arrMyValue['1']."\" value=\"".$strFieldValue."\"><br>";
+																							if($bTextOnly) {
+																								echo $strFieldValue;
+																							}
+																							else {
+																								echo "<input class=\"InputText\" style='$bgStyle' type=\"text\" name=\"".$keyId.'_3_'.$arrMyValue['1']."\" id=\"".$keyId.'_3_'.$arrMyValue['1']."\" value=\"".$strFieldValue."\"><br>";
+																							}
 																						}
 																						else
 																						{
@@ -728,14 +763,19 @@
 																							$REG_Number		= $arrValue3[1];
 																							
 																							$bgStyle = $arrRow['strBgColor'] != "" ? 'background-color: #'.$arrRow['strBgColor'] : '';
-																							echo "<input class=\"InputText\" style='$bgStyle' type=\"text\" name=\"".$keyId.'_3_'.$arrMyValue['1']."\" id=\"".$keyId.'_3_'.$arrMyValue['1']."\" value=\"".$strFieldValue."\"><br>";
-																						}																					
+																							if($bTextOnly) {
+																								echo $strFieldValue;
+																							}
+																							else {
+																								echo "<input class=\"InputText\" style='$bgStyle' type=\"text\" name=\"".$keyId.'_3_'.$arrMyValue['1']."\" id=\"".$keyId.'_3_'.$arrMyValue['1']."\" value=\"".$strFieldValue."\"><br>";
+																							}
+																						}
 																					}
 																					else
 																					{
-																						if ($arrValues[$keyId]["strFieldValue"]!='')
+																						if ($user_val["strFieldValue"]!='')
 																						{
-																							$arrMyValue = split('xx',$arrValues[$keyId]["strFieldValue"]);
+																							$arrMyValue = split('xx',$user_val["strFieldValue"]);
 																							$strMyValue = $arrMyValue['2'];
 																
 																							$arrValue3 = split('rrrrr',$strMyValue);
@@ -792,7 +832,7 @@
 																							<?php
 																							break;
 																					}
-																					if ($REG_Number != '')
+																					if ($REG_Number != '' && $bTextOnly==0)
 																					{
 																						?>
 																						<input type="hidden" name="<?php echo $keyId.'_REG'; ?>" value="<?php echo $REG_Number; ?>">
@@ -805,17 +845,21 @@
 																					     ($arrCirculationProcess["nDecissionState"] == 0) && (!$bReadOnly)  )
 																					{
 																						//--- Slot is allowed to edit
-																						if ($arrValues[$keyId]["strFieldValue"]!='')
+																						if ($user_val["strFieldValue"]!='')
 																						{
-																							$arrMyValue = split('xx',$arrValues[$keyId]["strFieldValue"]);
+																							$arrMyValue = split('xx',$user_val["strFieldValue"]);
 																							$strMyValue = $arrMyValue['2'];																					
 																							$arrValue3 = split('rrrrr',$strMyValue);																						
 																							$strFieldValue 	= $arrValue3[0];
 																							$REG_Date		= $arrValue3[1];
 																							
 																							$bgStyle = $arrRow['strBgColor'] != "" ? 'background-color: #'.$arrRow['strBgColor'] : '';
-																							echo "<input class=\"InputText\" style='$bgStyle' type=\"text\" name=\"".$keyId.'_4_'.$arrMyValue['1']."\" id=\"".$keyId.'_4_'.$arrMyValue['1']."\" value=\"".$strFieldValue."\"><br>";
-																							
+																							if($bTextOnly) {
+																								echo $strFieldValue;
+																							}
+																							else {
+																								echo "<input class=\"InputText\" style='$bgStyle' type=\"text\" name=\"".$keyId.'_4_'.$arrMyValue['1']."\" id=\"".$keyId.'_4_'.$arrMyValue['1']."\" value=\"".$strFieldValue."\"><br>";
+																							}
 																						}
 																						else
 																						{
@@ -826,15 +870,19 @@
 																							$REG_Date		= $arrValue3[1];
 																							
 																							$bgStyle = $arrRow['strBgColor'] != "" ? 'background-color: #'.$arrRow['strBgColor'] : '';
-																							echo "<input class=\"InputText\" style='$bgStyle' type=\"text\" name=\"".$keyId.'_4_'.$arrMyValue['1']."\" id=\"".$keyId.'_4_'.$arrMyValue['1']."\" value=\"".$strFieldValue."\"><br>";
-																							
+																							if($bTextOnly) {
+																								echo $strFieldValue;
+																							}
+																							else {
+																								echo "<input class=\"InputText\" style='$bgStyle' type=\"text\" name=\"".$keyId.'_4_'.$arrMyValue['1']."\" id=\"".$keyId.'_4_'.$arrMyValue['1']."\" value=\"".$strFieldValue."\"><br>";
+																							}
 																						}
 																					}
 																					else
 																					{
-																						if ($arrValues[$keyId]["strFieldValue"]!='')
+																						if ($user_val["strFieldValue"]!='')
 																						{
-																							$arrMyValue = split('xx',$arrValues[$keyId]["strFieldValue"]);
+																							$arrMyValue = split('xx',$user_val["strFieldValue"]);
 																							$strMyValue = $arrMyValue['2'];																					
 																							$arrValue3 = split('rrrrr',$strMyValue);																						
 																							$strFieldValue 	= $arrValue3[0];
@@ -846,14 +894,14 @@
 																						else
 																						{
 																							$arrMyValue = split('xx',$arrRow['3']);
-																							$strMyValue = $arrMyValue['2'];																					
-																							$arrValue3 = split('rrrrr',$strMyValue);																						
+																							$strMyValue = $arrMyValue['2'];
+																							$arrValue3 = split('rrrrr',$strMyValue);
 																							$strFieldValue 	= $arrValue3[0];
 																							$REG_Date		= $arrValue3[1];
 																							
 																							$bgStyle = $arrRow['strBgColor'] != "" ? 'background-color: #'.$arrRow['strBgColor'] : '';
 																							echo "<input class=\"InputText\" style='$bgColor' type=\"text\" name=\"".$keyId.'_4_'.$arrMyValue['1']."\" id=\"".$keyId.'_4_'.$arrMyValue['1']."\" value=\"".$strFieldValue."\" readonly><br>";
-																						}																							
+																						}
 																					}
 																					switch ($arrMyValue['1'])
 																					{
@@ -889,7 +937,7 @@
 																							<?php
 																							break;
 																					}
-																					if ($REG_Date != '')
+																					if ($REG_Date != '' && $bTextOnly==0)
 																					{
 																						?>
 																						<input type="hidden" name="<?php echo $keyId.'_REG'; ?>" value="<?php echo $REG_Date; ?>">
@@ -902,16 +950,23 @@
 																					     ($arrCirculationProcess["nDecissionState"] == 0) && (!$bReadOnly)  )
 																					{
 																						//--- Slot is allowed to edit
-																						if ($arrValues[$keyId]["strFieldValue"]!='')
+																						if ($user_val["strFieldValue"]!='')
 																						{
 																							?>
 																							<script language="javascript">
 																							addID('<?php echo $keyId."zz5"; ?>');
 																							</script>
 																							
-																							<?php $bgStyle = $arrRow['strBgColor'] != "" ? 'background-color: #'.$arrRow['strBgColor'] : ''; ?>
-																							<textarea Name="<?php echo $keyId.'_5'; ?>" id="<?php echo $keyId.'_5'; ?>" class="InputText" style="<?php echo $bgStyle?>; width:250px; height: 100px;"><?php echo $arrValues[$keyId]["strFieldValue"];?></textarea>
 																							<?php
+																							$bgStyle = $arrRow['strBgColor'] != "" ? 'background-color: #'.$arrRow['strBgColor'] : '';
+																							if($bTextOnly) {
+																								echo nl2br($user_val["strFieldValue"]);
+																							}
+																							else {
+																								?>
+																							<textarea Name="<?php echo $keyId.'_5'; ?>" id="<?php echo $keyId.'_5'; ?>" class="InputText" style="<?php echo $bgStyle?>; width:250px; height: 100px;"><?php echo $user_val["strFieldValue"];?></textarea>
+																								<?php
+																							}
 																						}
 																						else
 																						{
@@ -920,18 +975,25 @@
 																							addID('<?php echo $keyId."zz5"; ?>');
 																							</script>
 																							
-																							<?php $bgStyle = $arrRow['strBgColor'] != "" ? 'background-color: #'.$arrRow['strBgColor'] : ''; ?>
-																							<textarea Name="<?php echo $keyId.'_5'; ?>" id="<?php echo $keyId.'_5'; ?>" class="InputText" style="<?php echo $bgStyle?>;width:250px; height: 100px;"><?php echo $arrRow['3'];?></textarea>
 																							<?php
+																							$bgStyle = $arrRow['strBgColor'] != "" ? 'background-color: #'.$arrRow['strBgColor'] : '';
+																							if($bTextOnly) {
+																								echo nl2br($arrRow['3']);
+																							}
+																							else {
+																								?>
+																							<textarea Name="<?php echo $keyId.'_5'; ?>" id="<?php echo $keyId.'_5'; ?>" class="InputText" style="<?php echo $bgStyle?>;width:250px; height: 100px;"><?php echo $arrRow['3'];?></textarea>
+																								<?php
+																							}
 																						}
 																					}
 																					else
 																					{
-																						if ($arrValues[$keyId]["strFieldValue"]!='')
+																						if ($user_val["strFieldValue"]!='')
 																						{
 																							?>
 																							<?php $bgStyle = $arrRow['strBgColor'] != "" ? 'background-color: #'.$arrRow['strBgColor'] : ''; ?>
-																							<textarea readonly Name="<?php echo $keyId.'_5'; ?>" id="<?php echo $keyId.'_5'; ?>" class="InputText" style="<?php echo $bgStyle?>;width:250px; height: 100px;"><?php echo $arrValues[$keyId]["strFieldValue"];?></textarea>
+																							<textarea readonly Name="<?php echo $keyId.'_5'; ?>" id="<?php echo $keyId.'_5'; ?>" class="InputText" style="<?php echo $bgStyle?>;width:250px; height: 100px;"><?php echo $user_val["strFieldValue"];?></textarea>
 																							<?php
 																						}
 																						else
@@ -945,14 +1007,12 @@
 																				}
 																				else if ($arrRow["nType"] == 6)
 																				{
-																					if ($arrValues[$keyId]["strFieldValue"]!='')
+																					if ($user_val["strFieldValue"]!='')
 																					{	// standard values
-																						$strValue = $arrValues[$keyId]["strFieldValue"];																						
+																						$strValue = $user_val["strFieldValue"];
 																						$arrMySplit = split('---', $strValue);
-														
 																						if ($arrMySplit[1] > 1)
 																						{	// edited field values
-																							
 																							$strValue = '';
 																							$nMax = (sizeof($arrMySplit));
 																							for ($nIndex = 3; $nIndex < $nMax; $nIndex = $nIndex + 2)
@@ -961,23 +1021,31 @@
 																							}
 																						}
 																					}
-																					
 																					$nInputfieldID 	= $arrRow["nFieldId"];
-																					
 																					$bIsEnabled 	= 1;
 																					if ( !(($arrSlot["nID"] == $arrCirculationProcess["nSlotId"]) && ($arrCirculationProcess["nDecissionState"] == 0) && (!$bReadOnly) ) )
 																					{//--- Slot is not allowed to edit
 																						$bIsEnabled 	= 0;
 																					}
 																					$strEcho = $objMyCirculation->getRadioGroup($nInputfieldID, $strValue, $bIsEnabled, $keyId, $nRunningCounter);
-																					
-																					echo $strEcho;
+																					if($bTextOnly) {
+																						$arrSplit = split('---',$strValue);
+																						$arrInputFieldValues = $objMyCirculation->getInputFieldValue($nInputfieldID);
+																						foreach ($arrSplit as $key=>$val) {
+																							if ($val==1) {
+																								echo $arrInputFieldValues[$key].'<br />';
+																							}
+																						}
+																					}
+																					else {
+																						echo $strEcho;
+																					}
 																				}
 																				else if ($arrRow["nType"] == 7)
 																				{
-																					if ($arrValues[$keyId]["strFieldValue"]!='')
+																					if ($user_val["strFieldValue"]!='')
 																					{	// standard values
-																						$strValue = $arrValues[$keyId]["strFieldValue"];																						
+																						$strValue = $user_val["strFieldValue"];
 																						$arrMySplit = split('---', $strValue);
 														
 																						if ($arrMySplit[1] > 1)
@@ -998,17 +1066,26 @@
 																					if ( !(($arrSlot["nID"] == $arrCirculationProcess["nSlotId"]) && ($arrCirculationProcess["nDecissionState"] == 0) && (!$bReadOnly) ) )
 																					{//--- Slot is not allowed to edit
 																						$bIsEnabled 	= 0;
-																					}																					
-																					
+																					}
 																					$strEcho = $objMyCirculation->getCheckBoxGroup($nInputfieldID, $strValue, $bIsEnabled, $keyId, $nRunningCounter);
-																					
-																					echo $strEcho;
+																					if($bTextOnly) {
+																						$arrSplit = split('---',$strValue);
+																						$arrInputFieldValues = $objMyCirculation->getInputFieldValue($nInputfieldID);
+																						foreach ($arrSplit as $key=>$val) {
+																							if ($val==1) {
+																								echo $arrInputFieldValues[$key].'<br />';
+																							}
+																						}
+																					}
+																					else {
+																						echo $strEcho;
+																					}
 																				}
 																				elseif($arrRow["nType"] == 8)
 																				{
-																					if ($arrValues[$keyId]["strFieldValue"]!='')
+																					if ($user_val["strFieldValue"]!='')
 																					{	// standard values
-																						$strValue = $arrValues[$keyId]["strFieldValue"];																						
+																						$strValue = $user_val["strFieldValue"];
 																						$arrMySplit = split('---', $strValue);
 														
 																						if ($arrMySplit[1] > 1)
@@ -1029,25 +1106,35 @@
 																					if ( !(($arrSlot["nID"] == $arrCirculationProcess["nSlotId"]) && ($arrCirculationProcess["nDecissionState"] == 0) && (!$bReadOnly) ) )
 																					{//--- Slot is not allowed to edit
 																						$bIsEnabled 	= 0;
-																					}																					
+																					}
 																					
 																					$strEcho = $objMyCirculation->getComboBoxGroup($nInputfieldID, $strValue, $bIsEnabled, $keyId, $nRunningCounter);
-																					
-																					echo $strEcho;
+																					if($bTextOnly) {
+																						$arrSplit = split('---',$strValue);
+																						$arrInputFieldValues = $objMyCirculation->getInputFieldValue($nInputfieldID);
+																						foreach ($arrSplit as $key=>$val) {
+																							if ($val==1) {
+																								echo $arrInputFieldValues[$key].'<br />';
+																							}
+																						}
+																					}
+																					else {
+																						echo $strEcho;
+																					}
 																				}
 																				elseif($arrRow["nType"] == 9)
 																				{
-																					if ($arrValues[$keyId]["strFieldValue"]!='')
+																					if ($user_val["strFieldValue"]!='')
 																					{
-																						$arrValue = split('rrrrr',$arrValues[$keyId]["strFieldValue"]);																				
+																						$arrValue = split('rrrrr',$user_val["strFieldValue"]);
 																						$REG_File		= $arrValue[1];
-																						$arrSplit = split('---',$arrValue[0]);								
+																						$arrSplit = split('---',$arrValue[0]);
 																					}
 																					else
 																					{
-																						$arrValue = split('rrrrr',$arrRow['3']);																				
+																						$arrValue = split('rrrrr',$arrRow['3']);
 																						$REG_File		= $arrValue[1];
-																						$arrSplit = split('---',$arrValue[0]);																						
+																						$arrSplit = split('---',$arrValue[0]);
 																					}
 																					
 																					$nNumberOfUploads 	= $arrSplit[1];
@@ -1057,7 +1144,7 @@
 																					$strLink			= $strUploadPath.$strDirectory.'/'.$strFilename;
 																					
 																					echo "<a href=\"$strLink\" target=\"_blank\">$strFilename</a>";
-																					if ( !(!(($arrSlot["nID"] == $arrCirculationProcess["nSlotId"]) && ($arrCirculationProcess["nDecissionState"] == 0) && (!$bReadOnly) )) )
+																					if ( !(!(($arrSlot["nID"] == $arrCirculationProcess["nSlotId"]) && ($arrCirculationProcess["nDecissionState"] == 0) && (!$bReadOnly) && $bTextOnly==0)) )
 																					{//--- Slot is allowed to edit
 																						if ($bIsEmail)
 																						{
@@ -1071,7 +1158,7 @@
 																							<?php
 																						}
 																						?>
-																						<input type="hidden" name="FILEName_<?php echo $keyId; ?>_<?php echo $nNumberOfUploads; ?>" value="<?php echo $arrValues[$keyId]["strFieldValue"]; ?>">
+																						<input type="hidden" name="FILEName_<?php echo $keyId; ?>_<?php echo $nNumberOfUploads; ?>" value="<?php echo $user_val["strFieldValue"]; ?>">
 																						<?php
 																						if ($REG_File != '')
 																						{
@@ -1086,7 +1173,8 @@
 																						<?php	
 																					}
 																				}
-																				
+																				echo '</span></div>';
+																				}
 																				echo "</td>";
 																													
 																				if ($nRunningCounter % 2 == 0)

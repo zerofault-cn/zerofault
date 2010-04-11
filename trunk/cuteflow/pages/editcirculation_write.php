@@ -286,7 +286,20 @@
 		$strQuery = "INSERT INTO cf_attachment values (null, '$strFolderName".$_FILES["attachment4"]["name"]."', ".$nCirculationHistoryID.")";
 		@mysql_query($strQuery);
 	}
-	
+	$Slots_arr = $objCirculation->getFormslots($nFormTemplateID);
+	$Slot_User_arr = array();
+	foreach ($Slots_arr as $slot) {
+		$strQuery 	= "SELECT * FROM cf_slottouser WHERE nMailingListId = '$nMailinglistID' AND nSlotId = '".$slot['nID']."' ORDER BY nPosition ASC";
+		$nResult 	= mysql_query($strQuery);
+		if ($nResult && mysql_num_rows($nResult) > 0)
+		{
+			while ($arrRow = mysql_fetch_array($nResult))
+			{
+				$Slot_User_arr[$slot['nID']][] = $arrRow['nUserId'];
+			}
+		}
+	}
+	//echo '<pre>';print_r($Slot_User_arr);echo '</pre>';
 	// - - - - - - - - - - - - START STANDARDVALUES - - - - - - - - - - - - 
 	if ($_REQUEST['bUseLatestValues'] != 'on')
 	{
@@ -338,31 +351,33 @@
 			
 			$nMyFieldType = $objMyCirculation->getFieldType($nCurInputFieldID);
 			
-			$arrSplit = '';
-			$strNewStdValue = '';
-			if (($nMyFieldType == 6) || ($nMyFieldType == 7) || ($nMyFieldType == 8))
-			{
-				$arrSplit = split('---', $strCurStandardValue);
-				
-				for ($nNewIndex = 3; $nNewIndex < sizeof($arrSplit); $nNewIndex = ($nNewIndex + 2))
+			foreach ($Slot_User_arr[$nCurFormSlotID] as $user_id) {
+				$arrSplit = '';
+				$strNewStdValue = '';
+				if (($nMyFieldType == 6) || ($nMyFieldType == 7) || ($nMyFieldType == 8))
 				{
-					if ($arrSplit[$nNewIndex] == '')
+					$arrSplit = split('---', $strCurStandardValue);
+					
+					for ($nNewIndex = 3; $nNewIndex < sizeof($arrSplit); $nNewIndex = ($nNewIndex + 2))
 					{
-						$strNewStdValue = $strNewStdValue.'0---';
+						if ($arrSplit[$nNewIndex] == '')
+						{
+							$strNewStdValue = $strNewStdValue.'0---';
+						}
+						else
+						{
+							$strNewStdValue = $strNewStdValue.$arrSplit[$nNewIndex].'---';
+						}
 					}
-					else
-					{
-						$strNewStdValue = $strNewStdValue.$arrSplit[$nNewIndex].'---';
-					}
+					$strQuery 	= "INSERT INTO cf_fieldvalue values( null, '$nCurInputFieldID', '$user_id', '$strNewStdValue', '$nCurFormSlotID', '$nCirculationFormID' , '$nCirculationHistoryID' )";
+					$nResult 	= @mysql_query($strQuery);
 				}
-				$strQuery 	= "INSERT INTO cf_fieldvalue values( null, '$nCurInputFieldID', '$strNewStdValue', '$nCurFormSlotID', '$nCirculationFormID' , '$nCirculationHistoryID' )";
-				$nResult 	= @mysql_query($strQuery);
+				else
+				{
+					$strQuery 	= "INSERT INTO cf_fieldvalue values( null, '$nCurInputFieldID', '$user_id', '$strCurStandardValue', '$nCurFormSlotID', '$nCirculationFormID' , '$nCirculationHistoryID' )";
+					$nResult 	= @mysql_query($strQuery);
+				}
 			}
-			else
-			{
-				$strQuery 	= "INSERT INTO cf_fieldvalue values( null, '$nCurInputFieldID', '$nUserId', '$strCurStandardValue', '$nCurFormSlotID', '$nCirculationFormID' , '$nCirculationHistoryID' )";
-				$nResult 	= @mysql_query($strQuery);
-			}			
 		}
 	}
 	// - - - - - - - - - - - - END STANDARDVALUES - - - - - - - - - - - -

@@ -521,10 +521,14 @@
 						$arrCBContent;
 												
 						$arrValues = explode("_", $key);
+						//echo '<pre>';print_r($arrProcessInfo);print_r($arrValues);echo '</pre>';
 						if (sizeof($arrValues) > 1)
 						{
 							if ($arrValues[0] == 'RBName')
 							{
+								if ($arrProcessInfo['nSlotId'] != $arrValues[2]) {
+									continue;
+								}
 								$nFieldId	= $arrValues[1];
 								$nSlotId 	= $arrValues[2];
 								$nFormId	= $arrValues[3];
@@ -545,6 +549,9 @@
 							}							
 							elseif ($arrValues[0] == 'CBName')
 							{
+								if ($arrProcessInfo['nSlotId'] != $arrValues[2]) {
+									continue;
+								}
 								$nFieldId	= $arrValues[1];
 								$nSlotId 	= $arrValues[2];
 								$nFormId	= $arrValues[3];
@@ -563,6 +570,9 @@
 							}
 							elseif ($arrValues[0] == 'COMBOName')
 							{
+								if ($arrProcessInfo['nSlotId'] != $arrValues[2]) {
+									continue;
+								}
 								$nFieldId	= $arrValues[1];
 								$nSlotId 	= $arrValues[2];
 								$nFormId	= $arrValues[3];
@@ -583,6 +593,9 @@
 							}
 							elseif ($arrValues[0] == 'FILEName')
 							{
+								if ($arrProcessInfo['nSlotId'] != $arrValues[2]) {
+									continue;
+								}
 								$nFieldId	= $arrValues[1];
 								$nSlotId 	= $arrValues[2];
 								$nFormId	= $arrValues[3];
@@ -604,18 +617,18 @@
 									
 									@move_uploaded_file($_FILES[$strMyKey]['tmp_name'], $uploadfile);
 									
-									$strQuery = "SELECT nID FROM cf_fieldvalue WHERE nInputFieldId=$nFieldId AND nSlotId=$nSlotId AND nFormId=$nFormId AND nCirculationHistoryId=".$arrProcessInfo["nCirculationHistoryId"];
+									$strQuery = "SELECT nID FROM cf_fieldvalue WHERE nInputFieldId=$nFieldId AND nSlotId=$nSlotId and nUserId=".$arrProcessInfo["nUserId"]." AND nFormId=$nFormId AND nCirculationHistoryId=".$arrProcessInfo["nCirculationHistoryId"];
 									$nResult = mysql_query($strQuery, $nConnection);
 									
 									if ($nResult)
 							   		{
 							   			if (mysql_num_rows($nResult) > 0)
 										{
-											$strQuery = "UPDATE cf_fieldvalue SET strFieldValue='$value' WHERE nInputFieldId=".$arrValues[1]." AND nSlotId=".$arrValues[2]." AND nFormId=".$arrProcessInfo["nCirculationFormId"]." AND nCirculationHistoryId=".$arrProcessInfo["nCirculationHistoryId"];
+											$strQuery = "UPDATE cf_fieldvalue SET strFieldValue='$value' WHERE nInputFieldId=".$arrValues[1]." and nUserId=".$arrProcessInfo["nUserId"]." AND nSlotId=".$arrValues[2]." AND nFormId=".$arrProcessInfo["nCirculationFormId"]." AND nCirculationHistoryId=".$arrProcessInfo["nCirculationHistoryId"];
 										}
 										else
 										{
-											$strQuery = "INSERT INTO cf_fieldvalue values(null, ".$arrValues[1].", '$value', ".$arrValues[2].", ".$arrProcessInfo["nCirculationFormId"].",".$arrProcessInfo["nCirculationHistoryId"].")";
+											$strQuery = "INSERT INTO cf_fieldvalue values(null, ".$arrValues[1].", ".$arrProcessInfo["nUserId"].", '$value', ".$arrValues[2].", ".$arrProcessInfo["nCirculationFormId"].",".$arrProcessInfo["nCirculationHistoryId"].")";
 										}
 									}
 									mysql_query($strQuery, $nConnection);
@@ -623,6 +636,9 @@
 							}
 							else
 							{								
+								if ($arrProcessInfo['nSlotId'] != $arrValues[1]) {
+									continue;
+								}
 								//--- Test if value already exists
 								$nFieldId 	= $arrValues[0];
 								$nSlotId 	= $arrValues[1];
@@ -697,18 +713,18 @@
 								
 								if (($nFieldType == 1) || ($nFieldType == '2xx') || ($nFieldType == 3) || ($nFieldType == 4) || ($nFieldType == 5))
 								{
-									$strQuery = "SELECT nID FROM cf_fieldvalue WHERE nInputFieldId=$nFieldId AND nSlotId=$nSlotId AND nFormId=$nFormId AND nCirculationHistoryId=".$arrProcessInfo["nCirculationHistoryId"];
+									$strQuery = "SELECT nID FROM cf_fieldvalue WHERE nInputFieldId=$nFieldId and nUserId=".$arrProcessInfo["nUserId"]." AND nSlotId=$nSlotId AND nFormId=$nFormId AND nCirculationHistoryId=".$arrProcessInfo["nCirculationHistoryId"];
 									$nResult = mysql_query($strQuery, $nConnection);
 									
 									if ($nResult)
 							   		{
 							   			if (mysql_num_rows($nResult) > 0)
 										{
-											$strQuery = "UPDATE cf_fieldvalue SET strFieldValue='$value' WHERE nInputFieldId=".$arrValues[0]." AND nSlotId=".$arrValues[1]." AND nFormId=".$arrProcessInfo["nCirculationFormId"]." AND nCirculationHistoryId=".$arrProcessInfo["nCirculationHistoryId"];
+											$strQuery = "UPDATE cf_fieldvalue SET strFieldValue='$value' WHERE nInputFieldId=".$arrValues[0]." and nUserId=".$arrProcessInfo["nUserId"]." AND nSlotId=".$arrValues[1]." AND nFormId=".$arrProcessInfo["nCirculationFormId"]." AND nCirculationHistoryId=".$arrProcessInfo["nCirculationHistoryId"];
 										}
 										else
 										{
-											$strQuery = "INSERT INTO cf_fieldvalue values(null, ".$arrValues[0].", '$value', ".$arrValues[1].", ".$arrProcessInfo["nCirculationFormId"].",".$arrProcessInfo["nCirculationHistoryId"].")";
+											$strQuery = "INSERT INTO cf_fieldvalue values(null, ".$arrValues[0].", ".$arrProcessInfo["nUserId"].", '$value', ".$arrValues[1].", ".$arrProcessInfo["nCirculationFormId"].",".$arrProcessInfo["nCirculationHistoryId"].")";
 										}
 									}
 									mysql_query($strQuery, $nConnection);
@@ -745,7 +761,7 @@
 								$nCounter++;
 							}
 							
-							$strQuery = "SELECT nID FROM cf_fieldvalue WHERE nInputFieldId=$nFieldId AND nSlotId=$nSlotId AND nFormId=$nFormId AND nCirculationHistoryId=".$arrProcessInfo["nCirculationHistoryId"];
+							$strQuery = "SELECT nID FROM cf_fieldvalue WHERE nInputFieldId=$nFieldId and nUserId=".$arrProcessInfo["nUserId"]." AND nSlotId=$nSlotId AND nFormId=$nFormId AND nCirculationHistoryId=".$arrProcessInfo["nCirculationHistoryId"];
 							$nResult = mysql_query($strQuery, $nConnection);
 							
 							
@@ -753,11 +769,11 @@
 					   		{
 					   			if (mysql_num_rows($nResult) > 0)
 								{
-									$strQuery = "UPDATE cf_fieldvalue SET strFieldValue='$strCrazyValue' WHERE nInputFieldId= '$nFieldId' AND nSlotId= '$nSlotId' AND nFormId=".$arrProcessInfo["nCirculationFormId"]." AND nCirculationHistoryId=".$arrProcessInfo["nCirculationHistoryId"];
+									$strQuery = "UPDATE cf_fieldvalue SET strFieldValue='$strCrazyValue' WHERE nInputFieldId= '$nFieldId' and nUserId=".$arrProcessInfo["nUserId"]." AND nSlotId= '$nSlotId' AND nFormId=".$arrProcessInfo["nCirculationFormId"]." AND nCirculationHistoryId=".$arrProcessInfo["nCirculationHistoryId"];
 								}
 								else
 								{
-									$strQuery = "INSERT INTO cf_fieldvalue values(null, '$nFieldId', '$strCrazyValue', '$nSlotId', ".$arrProcessInfo["nCirculationFormId"].",".$arrProcessInfo["nCirculationHistoryId"].")";
+									$strQuery = "INSERT INTO cf_fieldvalue values(null, '$nFieldId', ".$arrProcessInfo["nUserId"].", '$strCrazyValue', '$nSlotId', ".$arrProcessInfo["nCirculationFormId"].",".$arrProcessInfo["nCirculationHistoryId"].")";
 								}
 							}
 							mysql_query($strQuery, $nConnection);
@@ -789,18 +805,18 @@
 								$strCrazyValue = $strCrazyValue.$nCurState.'---';
 							}
 							
-							$strQuery = "SELECT nID FROM cf_fieldvalue WHERE nInputFieldId=$nFieldId AND nSlotId=$nSlotId AND nFormId=$nFormId AND nCirculationHistoryId=".$arrProcessInfo["nCirculationHistoryId"];
+							$strQuery = "SELECT nID FROM cf_fieldvalue WHERE nInputFieldId=$nFieldId and nUserId=".$arrProcessInfo["nUserId"]." AND nSlotId=$nSlotId AND nFormId=$nFormId AND nCirculationHistoryId=".$arrProcessInfo["nCirculationHistoryId"];
 							$nResult = mysql_query($strQuery, $nConnection);
 							
 							if ($nResult)
 					   		{
 					   			if (mysql_num_rows($nResult) > 0)
 								{
-									$strQuery = "UPDATE cf_fieldvalue SET strFieldValue='$strCrazyValue' WHERE nInputFieldId= '$nFieldId' AND nSlotId= '$nSlotId' AND nFormId=".$arrProcessInfo["nCirculationFormId"]." AND nCirculationHistoryId=".$arrProcessInfo["nCirculationHistoryId"];
+									$strQuery = "UPDATE cf_fieldvalue SET strFieldValue='$strCrazyValue' WHERE nInputFieldId= '$nFieldId' and nUserId=".$arrProcessInfo["nUserId"]." AND nSlotId= '$nSlotId' AND nFormId=".$arrProcessInfo["nCirculationFormId"]." AND nCirculationHistoryId=".$arrProcessInfo["nCirculationHistoryId"];
 								}
 								else
 								{
-									$strQuery = "INSERT INTO cf_fieldvalue values(null, '$nFieldId', '$strCrazyValue', '$nSlotId', ".$arrProcessInfo["nCirculationFormId"].",".$arrProcessInfo["nCirculationHistoryId"].")";
+									$strQuery = "INSERT INTO cf_fieldvalue values(null, '$nFieldId', ".$arrProcessInfo["nUserId"].", '$strCrazyValue', '$nSlotId', ".$arrProcessInfo["nCirculationFormId"].",".$arrProcessInfo["nCirculationHistoryId"].")";
 								}
 							}
 							mysql_query($strQuery, $nConnection);
@@ -834,7 +850,7 @@
 								$nCounter++;
 							}
 							
-							$strQuery = "UPDATE cf_fieldvalue SET strFieldValue='$strCrazyValue' WHERE nInputFieldId= '$nFieldId' AND nSlotId= '$nSlotId' AND nFormId=".$arrProcessInfo["nCirculationFormId"]." AND nCirculationHistoryId=".$arrProcessInfo["nCirculationHistoryId"];
+							$strQuery = "UPDATE cf_fieldvalue SET strFieldValue='$strCrazyValue' WHERE nInputFieldId= '$nFieldId' and nUserId=".$arrProcessInfo["nUserId"]." AND nSlotId= '$nSlotId' AND nFormId=".$arrProcessInfo["nCirculationFormId"]." AND nCirculationHistoryId=".$arrProcessInfo["nCirculationHistoryId"];
 							mysql_query($strQuery, $nConnection);
 						}
 					}
