@@ -1,0 +1,133 @@
+	<div id="index">
+		<div id="category" class="side">
+			<h2>网站分类</h2>
+			<ul>
+				<iterate name="category_list" id="item">
+				<if condition="ceil($i/2)%2 eq 0">
+				<li class="gray">&nbsp;&nbsp;<a href="__URL__/cate/id/{$item.id}/" target="_blank">{$item.name}</a></li>
+				<else />
+				<li>&nbsp;&nbsp;<a href="__URL__/cate/id/{$item.id}/" target="_blank">{$item.name}</a></li>
+				</if>
+				</iterate>
+				<div class="clear"></div>
+			</ul>
+		</div>
+		<div id="site_list" class="main">
+			<h2><span id="tab1" class="tab_on" onclick="switch_tab(this);">名站导航</span><span id="tab2" class="" onclick="switch_tab(this);">推荐网站</span></h2>
+			<div class="clear"></div>
+			<ul id="tab1" class="switch">
+				<iterate name="famous_list" id="item">
+				<li>
+					<if condition="$item['flag'] eq 1">
+					<a class="flag" href="__URL__/site/id/{$item.id}/" target="_blank">{$item.name}</a>
+					<else />
+					<a href="__URL__/site/id/{$item.id}/" target="_blank">{$item.name}</a>
+					</if>
+				</li>
+				</iterate>
+				<div class="clear"></div>
+			</ul>
+			<ul id="tab2"  class="switch" style="display:none">
+				<iterate name="recommend_list" id="item">
+				<li>
+					<if condition="$item['flag'] eq 1">
+					<a class="flag" href="__URL__/site/id/{$item.id}/" target="_blank">{$item.name}</a>
+					<else />
+					<a href="__URL__/site/id/{$item.id}/" target="_blank">{$item.name}</a>
+					</if>
+				</li>
+				</iterate>
+				<div class="clear"></div>
+			</ul>
+		</div>
+		<div class="clear"></div>
+		<div id="pic_list">
+			<ul>
+				<iterate name="pic_list" id="item">
+				<li><a href="__URL__/site/id/{$item.id}/" target="_blank"><img src="__APP__/../Html/Attach/thumb/{$item['id']}.jpg"/><br />{$item.name}</a></li>
+				</iterate>
+				<div class="clear"></div>
+			</ul>
+			<div class="clear"></div>
+		</div>
+		<div class="side">
+			<h2><span id="tab3" class="tab_on" onclick="switch_tab(this);">热门排行</span><span id="tab4" onclick="switch_tab(this);">本周排行</span></h2>
+			<div class="clear"></div>
+			<h3><strong>网站名称</strong><strong>人气</strong><div class="clear"></div></h3>
+			<ul id="tab3" class="switch">
+				<iterate name="hot_list" id="item">
+				<li><a href="__URL__/site/id/{$item.id}/" target="_blank">{$item.name}</a><i>{$item.view}</i></li>
+				</iterate>
+				
+			</ul>
+			<ul id="tab4" class="switch" style="display:none">
+				<iterate name="week_list" id="item">
+				<li><a href="__URL__/site/id/{$item.id}/" target="_blank">{$item.name}</a><i>{$item.view}</i></li>
+				</iterate>
+			</ul>
+		</div>
+		<div id="cate_site" class="main">
+			<h2>分类导航</h2>
+			<ul>
+				<iterate name="category_list" id="item" key="i">
+					<if condition="$mod eq 0">
+				<li class="gray">
+					<else />
+				<li>
+					</if>
+					<label>[<a href="__URL__/cate/id/{$item.id}" target="_blank">{$item.name}</a>]</label>
+					<iterate name="item['site_list']" id="site_item" key="j">
+					<span><a id="url" class="<if condition='$site_item.mark eq 1'>red</if>" href="__URL__/site/id/{$site_item.id}/" target="_blank">{$site_item.name}</a></span>
+					</iterate>
+				</li>
+				<div class="clear"></div>
+				</iterate>
+			</ul>
+		</div>
+		<div class="side">
+		<br />
+			<h2>新站导航</h2>
+			<h3><strong>网站名称</strong><strong>分类</strong><div class="clear"></div></h3>
+			<ul class="sort">
+				<iterate name="new_list" id="item">
+				<li><a href="__URL__/site/id/{$item.id}/" target="_blank">{$item.name}</a><i><a href="__URL__/cate/id/{$item['cate_info']['id']}" target="_blank">{$item['cate_info']['name']}</a></i></li>
+				</iterate>
+				<div class="clear"></div>
+			</ul>
+		</div>
+		<div id="gtrans">
+			<form class="form" action="http://translate.google.cn/translate" target="_blank">
+			<img src="../Public/Images/gtran.gif" alt="Google 翻译" class="img" align="absmiddle"/>
+				<input type="text" name="u" id=url value="http://www." size="30" onclick="this.value=''"/>
+				<select name=sl style='width:auto'><option value="ar">阿拉伯文</option><option value="bg">保加利亚文</option><option value="pl">波兰语</option><option value="ko">朝鲜语</option><option value="da">丹麦语</option><option value="de">德语</option><option value="ru">俄语</option><option value="fr">法语</option><option value="tl">菲律宾文</option><option value="fi">芬兰语</option><option value="nl">荷兰语</option><option value="ca">加泰罗尼亚文</option><option value="cs">捷克语</option><option value="hr">克罗地亚文</option><option value="lv">拉脱维亚语</option><option value="lt">立陶宛语</option><option value="ro">罗马尼亚语</option><option value="no">挪威语</option><option value="pt">葡萄牙语</option><option value="ja">日语</option><option value="sv">瑞典语</option><option value="sr">塞尔维亚文</option><option value="sl">斯拉维尼亚文</option><option value="sk">斯洛伐克文</option><option value="uk">乌克兰文</option><option value="es">西班牙语</option><option value="iw">希伯来语</option><option value="el">希腊语</option><option value="it">意大利语</option><option value="hi">印度文</option><option value="id">印尼文</option><option value="en" selected>英语</option><option value="vi">越南文</option><option value="zh-CN">中文</option></select>
+				<span style='font-size:1.5em;vertical-align:-1px;'>&raquo;</span>
+				<select name=tl style='width:auto'><option value="ar">阿拉伯文</option><option value="bg">保加利亚文</option><option value="pl">波兰语</option><option value="ko">朝鲜语</option><option value="da">丹麦语</option><option value="de">德语</option><option value="ru">俄语</option><option value="fr">法语</option><option value="tl">菲律宾文</option><option value="fi">芬兰语</option><option value="nl">荷兰语</option><option value="ca">加泰罗尼亚文</option><option value="cs">捷克语</option><option value="hr">克罗地亚文</option><option value="lv">拉脱维亚语</option><option value="lt">立陶宛语</option><option value="ro">罗马尼亚语</option><option value="no">挪威语</option><option value="pt">葡萄牙语</option><option value="ja">日语</option><option value="sv">瑞典语</option><option value="sr">塞尔维亚文</option><option value="sl">斯拉维尼亚文</option><option value="sk">斯洛伐克文</option><option value="uk">乌克兰文</option><option value="es">西班牙语</option><option value="iw">希伯来语</option><option value="el">希腊语</option><option value="it">意大利语</option><option value="hi">印度文</option><option value="id">印尼文</option><option value="en">英语</option><option value="vi">越南文</option><option value="zh-TW">中文(繁体)</option><option value="zh-CN" selected>中文(简体)</option></select>
+				<input type="submit" value=" 翻 译 " />
+				<input name="hl" value="zh-CN" type="hidden">
+				<input name="ie" value="UTF-8" type="hidden">
+			</form>
+		</div>
+		<div class="clear"></div>
+	</div>
+<script type="text/javascript">
+function switch_tab(obj) {
+	jQuery(obj).parent().children("span").each(function(i) {
+		if(jQuery(obj).attr('id') == jQuery(this).attr('id')) {
+			jQuery(this).addClass("tab_on");
+		}
+		else{
+			jQuery(this).removeClass();
+		}
+	});
+	
+	jQuery(obj).parent().siblings("ul").each(function(i) {
+		if(jQuery(obj).attr('id') == jQuery(this).attr('id')) {
+			jQuery(this).show();
+		}
+		else{
+			jQuery(this).hide();
+		}
+	});
+}
+</script>
+
