@@ -1,0 +1,343 @@
+/*--------------------------全--局-------------------------------*/
+* {
+	margin:0;
+	padding:0;
+}
+
+body{
+	background-color: #EAF1F9;
+	background-repeat: repeat-x;
+	background-image: url(images/bg.gif);
+}
+
+ul{
+	list-style-type:none;
+	list-style-position : outside;
+}
+
+img{
+	border:0;
+}
+
+.clr {clear:both;}
+
+/**/
+#head {
+	width: 960px;
+	height: 69px;
+	margin:0 auto;
+	background-image: url(images/head.gif);
+}
+#head-left {
+	width: 484px;
+	height: 69px;
+	float: left;
+	background-image: url(images/index-sign.gif);
+}
+#head-right {
+	width: 180px;
+	height: 30px;
+	margin-top:22px;
+	float: right;
+	font-size: 14px;
+	font-weight: bold;
+}
+
+
+/**/
+#all-top {
+	width: 960px;
+	height: 3px;
+	margin:0 auto;
+	font-size:1px;
+	background-image: url(images/line-top.gif);
+}
+
+#all {
+	width: 954px;
+	height:500px;
+	margin:0 auto;
+	padding:0 3px;
+	background-image: url(images/bg-all.gif);
+}
+#all-leftbg {
+	width: 954px;
+	margin:0;
+	background-image: url(images/left-down.jpg);
+	background-repeat: no-repeat;
+	background-position: left bottom;
+}
+#all-leftbg2 {
+	width: 954px;
+	margin:0;
+	background-image: url(images/left-down2.jpg);
+	background-repeat: repeat-y;
+}
+
+/**/
+#menu {
+	width: 954px;
+	height: 32px;
+	padding-bottom: 1px;
+}
+#menu-left {
+	width: 4px;
+	height: 32px;
+	float: left;
+	background-image: url(images/bt-left.gif);
+}
+#menu-center {
+	width: 940px;
+	height: 32px;
+	padding: 0 3px;
+	float: left;
+	background-image: url(images/bt-bg.gif);
+}
+#menu-right {
+	width: 4px;
+	height: 32px;
+	float: left;
+	background-image: url(images/bt-right.gif);
+}
+
+#menu ul {display:inline;}
+#menu li {
+	width: 94px;
+	float: left;
+	text-align: center;
+	font-size: 14px;
+	font-weight: bold;
+	list-style-type: none;
+	background-image: url(images/bt-line.gif);
+	background-repeat: no-repeat;
+	background-position: right;
+}
+#menu li a {
+	DISPLAY: block;
+	padding-top: 7px;
+	height: 24px;
+	color: #FFFFFF;
+}
+#menu li a:hover {
+	padding-top: 6px;
+	color: #A6FDFA;
+}
+
+/**/
+#left {
+	width:244px;
+	float:left;
+	margin-top: 1px;
+	padding-top: 27px;
+	padding-bottom: 10px;
+	background-image: url(images/left-top.gif);
+	background-repeat: no-repeat;
+	text-align: center;
+}
+#left-address {
+	width: 213px;
+	margin:0 15px;
+	text-align: left;
+}
+#left-address ul {display:inline;}
+#left-address li {
+	width: 199px;
+	height: 22px;
+	float: left;
+	margin-bottom:4px;
+	padding: 7px 0 0 12px;
+	list-style-type: none;
+	background-color: #EAF5FB;
+	border: 1px #BFDCEC solid;
+	background-image: url(images/arrow.gif);
+	background-repeat: no-repeat;
+	background-position: 5px 3px;
+}
+
+#left-list {
+	width: 213px;
+	margin:0 15px;
+	text-align: left;
+}
+#left-list ul {display:inline;}
+#left-list li {
+	float:left;
+	width:198px;
+	height:20px;
+	/*margin-left:6px;*/
+	padding: 7px 0px 0px 15px;
+	list-style-type: none;
+	border-bottom: 1px dashed #999999;
+	background-image: url(images/arrow.gif);
+	background-repeat: no-repeat;
+	background-position: 5px 3px;
+}
+
+
+.workType {
+	width: 199px;
+	height: 22px;
+	margin: 10px 15px 4px 15px;
+	clear: both;
+	padding: 7px 0 0 12px;
+	text-align: left;
+	font-size: 14px;
+	font-weight:bold;
+	background-color: #EAF5FB;
+	border: 1px #BFDCEC solid;
+}
+
+.workList {
+	width: 213px;
+	margin:0 auto;
+	text-align: left;
+}
+.workList ul {display:inline;}
+.workList li {
+	float:left;
+	width:198px;
+	height:20px;
+	/*margin-left:6px;*/
+	padding: 7px 0px 0px 15px;
+	list-style-type: none;
+	border-bottom: 1px dashed #999999;
+	background-image: url(images/arrow.gif);
+	background-repeat: no-repeat;
+	background-position: 5px 3px;
+}
+
+
+/**/
+#right {
+	float: left;
+	width: 680px;
+	margin-left: 15px;
+	margin-top:5px;
+	overflow:hidden;/*没有这一句的话，main的底色无法在firefox和ie7中显示出来*/
+}
+.right-title {
+	height: 24px;
+	background-image: url(images/title.gif);
+	margin-bottom:10px;
+	padding: 5px 0px 0px 23px;
+	font-size:14px;
+	color:#404E67;
+	font-weight:bold;
+	clear: left;
+}
+#right #tv {
+	width: 290px;
+	float: left;
+	margin-top: 5px;
+}
+#right #indexcontent {
+	width: 390px;
+	float: left;
+	line-height:180%;
+}
+#right .content {
+	line-height:180%;
+}
+#right .content p {
+	margin: 0px 0px 10px 0px;
+}
+#picshow { overflow: hidden; width: 680px; margin-bottom: 8px;}
+#picshow img { width:190px; height:130px; margin:0 5px; border:#EFEFEF solid 2px; padding:3px;}
+
+
+.imgshow ul { display:inline;}
+.imgshow li {
+	width: 258px;
+	float: left;
+	padding: 10px 41px 0px 41px;
+	text-align: center;
+	list-style-type: none;
+	line-height: 200%;
+}
+.imgshow img {
+	padding:3px;
+	border:1px #CDCDCD solid;
+}
+
+#right #list {width: 660px;margin:0 auto;}
+#right #list .left {
+	float:left;
+	width: 565px;
+	height: 20px;
+	padding: 7px 0 0 15px;
+	list-style-type: none;
+	border-bottom: 1px dashed #999999;
+	background-image: url(img/arrow-0.gif);
+	background-repeat: no-repeat;
+	background-position: 5px 3px;
+}
+#right #list .right {
+	float:left;
+	width: 80px;
+	height: 20px;
+	padding: 7px 0 0 0px;
+	list-style-type: none;
+	border-bottom: 1px dashed #999999;
+}
+
+#right #list ul {display:inline;}
+#right #list li {
+	float:left;
+	width:645px;
+	height:20px;
+	/*margin-left:6px;*/
+	padding: 7px 0px 0px 15px;
+	list-style-type: none;
+	border-bottom: 1px dashed #999999;
+	background-image: url(images/arrow.gif);
+	background-repeat: no-repeat;
+	background-position: 5px 3px;
+}
+
+.indexnews {
+	width: 332px;
+	float: left;
+}
+.indexnews-title {
+	height: 21px;
+	background-image: url(images/index-news.gif);
+	padding: 7px 0px 0px 26px;
+	font-size:14px;
+	color:#FFFFFF;
+	font-weight:bold;
+	clear: left;/*我看这句不需要*/
+}
+.indexnewslist {
+	width: 312px;
+	height: 205px;
+	padding: 0 10px;
+	background-image: url(images/index-newsdown.gif);
+}
+.indexnewslist ul {display:inline;}
+.indexnewslist li {
+	float:left;
+	width:297px;
+	height:20px;
+	padding: 7px 0px 0px 15px;
+	list-style-type: none;
+	border-bottom: 1px dashed #999999;
+	background-image: url(images/arrow.gif);
+	background-repeat: no-repeat;
+	background-position: 5px 3px;
+}
+
+
+/**/
+#foot-bg {
+	background-image: url(images/bg_down.gif);
+}
+#foot {
+	width: 960px;
+	height: 52px;
+	margin:0 auto;
+	padding-top:8px;
+	border-top: 1px solid #C1D0D9;
+	background-image: url(images/bg-foot.gif);
+	line-height: 180%;
+	text-align: center;
+}
