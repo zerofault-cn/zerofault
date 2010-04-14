@@ -221,6 +221,7 @@
 				$arrFieldvalue = $arrFieldvalues[$nIndex];
 				
 				$nInputFieldId 			= $arrFieldvalue['nInputFieldId'];
+				$nUserId				= $arrFieldvalue['nUserId'];
 				$strFieldValue 			= $arrFieldvalue['strFieldValue'];
 				$nSlotId 				= $arrFieldvalue['nSlotId'];
 				$nFormId 				= $arrFieldvalue['nFormId'];
@@ -228,6 +229,7 @@
 				
 				$query = "INSERT INTO cf_fieldvalue VALUES(	null,
 															'$nInputFieldId',
+															$nUserId,
 															'$strFieldValue',
 															'$nSlotId',
 															'$nFormId',
