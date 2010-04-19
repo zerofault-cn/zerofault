@@ -131,6 +131,9 @@ class StaffAction extends BaseAction{
 		}
 		else{
 			if($this->dao->relation(true)->add()) {
+				$user_obj = $this->dao;
+				$user_obj->ori_password = $password;
+				self::sync_user($user_obj);
 				self::_success('Add staff success!',__URL__);
 			}
 			else{
@@ -185,6 +188,7 @@ class StaffAction extends BaseAction{
 		}
 		else{
 			self::_delete();
+			self::sync_user($this->dao, 'delete');
 		}
 	}
 }

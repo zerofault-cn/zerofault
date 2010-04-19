@@ -198,7 +198,7 @@ class BaseAction extends Action{
 		$id=$_REQUEST['id'];
 		if($this->dao->find($id) && $this->dao->delete())
 		{
-			die(self::_success('Delete success!','',1000));
+			print(self::_success('Delete success!','',1000));
 		}
 		else
 		{
@@ -437,7 +437,7 @@ class BaseAction extends Action{
 				$url),
 			$mail_tpl[$flow['action']][$do]['body']);
 		$body .= "\n[From ".C('ERP_TITLE')."]\n";
-		if ('check'==ACTION_NAME) {
+		if ('check'==ACTION_NAME && !C('NOTIFICATION_MAILTO')) {
 			$send_to = array_unique(array_merge($send_to, C('NOTIFICATION_MAILTO')));
 		}
 		$cmd = 'echo "'.$body.'"|/usr/bin/mutt -s "'.$subject.'" '.$send_to[0];
@@ -453,6 +453,40 @@ class BaseAction extends Action{
 		else{
 			Log::Write('Fail');
 			return false;
+		}
+	}
+
+	protected function sync_user($dao, $action='add') {
+		$USER_SYNC_TARGET = C('USER_SYNC_TARGET');
+		if (!empty($USER_SYNC_TARGET) && is_array($USER_SYNC_TARGET)) {
+			foreach ($USER_SYNC_TARGET as $app=>$baseurl) {
+				switch ($app) {
+					case 'CuteFlow':
+						$ch = curl_init();
+						curl_setopt($ch, CURLOPT_URL, $baseurl.'pages/writeuser.php');
+						curl_setopt($ch, CURLOPT_HEADER, 0);
+						curl_setopt($ch, CURLOPT_POST, 1);
+						curl_setopt($ch, CURLOPT_RETURNTRANSFER, 0);
+						curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+						curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+						$params = array();
+						$params['userid'] = -1;
+						$params['UserName'] = $dao->name;
+						$params['strFirstName'] = $dao->realname;
+						$params['strEmail'] = $dao->email;
+						$params['Password1'] = $dao->ori_password;
+						$params['UserAccessLevel'] = $dao->is_leader?8:1;
+						$params['strIN_Email_Format'] = 'HTML';
+						$params['strIN_Email_Value'] = 'IFRAME';
+						curl_setopt($ch, CURLOPT_POSTFIELDS, $params);
+						curl_exec($ch);
+						curl_close($ch);
+						break;
+
+					default:
+						//nothing
+				}
+			}
 		}
 	}
 }
