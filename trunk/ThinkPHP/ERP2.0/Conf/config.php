@@ -21,7 +21,8 @@ $config = array_merge($config,array(
 		'MANAGER_AUTH_NAME' => 'manager',
 		'ADMIN_AUTH_NAME'	=> 'administrator',
 		'SUPER_ADMIN_ID'	=> array(1), //超级管理员的ID数组
-		'NOTIFICATION_MAILTO' => array('bin.li@agigatech.com'), //重复通知邮件会额外发送给这些邮件帐号
+		'NOTIFICATION_MAILTO' => array(), //重复通知邮件会额外发送给这些邮件帐号
+		'USER_SYNC_TARGET'  => array('CuteFlow'=>'http://localhost/cuteflow2.11.2/'),
 		'USER_AUTH_GATEWAY' => '/Public/login',
 		'RBAC_ROLE_TABLE'	=> 'erp_role',
 		'RBAC_USER_TABLE'	=> 'erp_staff_role',
