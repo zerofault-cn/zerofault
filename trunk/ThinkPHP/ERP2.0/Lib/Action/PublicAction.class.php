@@ -179,5 +179,8 @@ class PublicAction extends BaseAction{
 			}
 		}
 	}
+	public function sync_users() {
+		R('Staff', 'sync_users');
+	}
 }
 ?>

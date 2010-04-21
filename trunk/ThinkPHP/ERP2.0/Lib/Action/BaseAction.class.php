@@ -456,28 +456,28 @@ class BaseAction extends Action{
 		}
 	}
 
-	protected function sync_user($dao, $action='add') {
+	protected function sync_user($dao) {
 		$USER_SYNC_TARGET = C('USER_SYNC_TARGET');
 		if (!empty($USER_SYNC_TARGET) && is_array($USER_SYNC_TARGET)) {
 			foreach ($USER_SYNC_TARGET as $app=>$baseurl) {
 				switch ($app) {
 					case 'CuteFlow':
+						echo "Start to sync to CuteFlow\n";
 						$ch = curl_init();
-						curl_setopt($ch, CURLOPT_URL, $baseurl.'pages/writeuser.php');
+						curl_setopt($ch, CURLOPT_URL, $baseurl.'pages/sync_user.php');
 						curl_setopt($ch, CURLOPT_HEADER, 0);
 						curl_setopt($ch, CURLOPT_POST, 1);
 						curl_setopt($ch, CURLOPT_RETURNTRANSFER, 0);
 						curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
 						curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
 						$params = array();
-						$params['userid'] = -1;
+						$params['action'] = $action;
 						$params['UserName'] = $dao->name;
 						$params['strFirstName'] = $dao->realname;
-						$params['strEmail'] = $dao->email;
-						$params['Password1'] = $dao->ori_password;
+						$params['strLastName'] = 'AGIGA';
+						$params['strEMail'] = $dao->email;
+						$params['Password'] = $dao->password;
 						$params['UserAccessLevel'] = $dao->is_leader?8:1;
-						$params['strIN_Email_Format'] = 'HTML';
-						$params['strIN_Email_Value'] = 'IFRAME';
 						curl_setopt($ch, CURLOPT_POSTFIELDS, $params);
 						curl_exec($ch);
 						curl_close($ch);
