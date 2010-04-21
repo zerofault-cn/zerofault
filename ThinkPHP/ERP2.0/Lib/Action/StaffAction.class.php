@@ -123,6 +123,7 @@ class StaffAction extends BaseAction{
 		$this->dao->role = $role_arr;
 		if(!empty($id) && $id>0) {
 			if(false !== $this->dao->relation(true)->save()){
+				self::sync_user($this->dao);
 				self::_success('Staff information updated!',__URL__);
 			}
 			else{
@@ -131,9 +132,7 @@ class StaffAction extends BaseAction{
 		}
 		else{
 			if($this->dao->relation(true)->add()) {
-				$user_obj = $this->dao;
-				$user_obj->ori_password = $password;
-				self::sync_user($user_obj);
+				self::sync_user($this->dao);
 				self::_success('Add staff success!',__URL__);
 			}
 			else{
@@ -162,6 +161,7 @@ class StaffAction extends BaseAction{
 			$this->dao->realname = $realname;
 			$this->dao->email = trim($_REQUEST['email']);
 			if (false !== $this->dao->save()) {
+				self::sync_user($this->dao);
 				self::_success('Update success!');
 			}
 		}
@@ -171,6 +171,8 @@ class StaffAction extends BaseAction{
 			$this->assign('content', 'Staff:profile');
 			$this->display('Layout:base');
 		}
+	}
+	public function sync_users() {
 	}
 	/**
 	*
