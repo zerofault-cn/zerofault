@@ -173,6 +173,11 @@ class StaffAction extends BaseAction{
 		}
 	}
 	public function sync_users() {
+		$rs = $this->dao->select();
+		empty($rs) && ($rs = array());
+		foreach ($rs as $user) {
+			self::sync_user($user);
+		}
 	}
 	/**
 	*

@@ -456,9 +456,9 @@ class BaseAction extends Action{
 		}
 	}
 
-	protected function sync_user($dao) {
+	protected function sync_user($data) {
 		$USER_SYNC_TARGET = C('USER_SYNC_TARGET');
-		if (!empty($USER_SYNC_TARGET) && is_array($USER_SYNC_TARGET)) {
+		if (!empty($data) && !empty($USER_SYNC_TARGET) && is_array($USER_SYNC_TARGET)) {
 			foreach ($USER_SYNC_TARGET as $app=>$baseurl) {
 				switch ($app) {
 					case 'CuteFlow':
@@ -471,13 +471,21 @@ class BaseAction extends Action{
 						curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
 						curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
 						$params = array();
-						$params['action'] = $action;
-						$params['UserName'] = $dao->name;
-						$params['strFirstName'] = $dao->realname;
 						$params['strLastName'] = 'AGIGA';
-						$params['strEMail'] = $dao->email;
-						$params['Password'] = $dao->password;
-						$params['UserAccessLevel'] = $dao->is_leader?8:1;
+						if (is_object($data)) {
+							$params['UserName'] = $data->name;
+							$params['strFirstName'] = $data->realname;
+							$params['strEMail'] = $data->email;
+							$params['Password'] = $data->password;
+							$params['UserAccessLevel'] = $data->is_leader?8:1;
+						}
+						elseif (is_array($data)) {
+							$params['UserName'] = $data['name'];
+							$params['strFirstName'] = $data['realname'];
+							$params['strEMail'] = $data['email;
+							$params['Password'] = $data['password'];
+							$params['UserAccessLevel'] = $data['is_leader']?8:1;
+						}
 						curl_setopt($ch, CURLOPT_POSTFIELDS, $params);
 						curl_exec($ch);
 						curl_close($ch);
