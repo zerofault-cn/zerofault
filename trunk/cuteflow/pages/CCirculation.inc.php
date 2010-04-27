@@ -351,6 +351,11 @@ class CCirculation
 		$strQuery 	= "DELETE FROM cf_circulationprocess WHERE nID = '$nDELCirculationProcessID' LIMIT 1;";
 		$nResult 	= @mysql_query($strQuery);
 	}
+	function resetMyCirculationProcess($nDELCirculationProcessID)
+	{
+		$strQuery 	= "update cf_circulationprocess set nDecissionState=0 WHERE nID = '$nDELCirculationProcessID' LIMIT 1;";
+		$nResult 	= @mysql_query($strQuery);
+	}
 	
 	/**
 	*	@param $nCirculationHistoryID

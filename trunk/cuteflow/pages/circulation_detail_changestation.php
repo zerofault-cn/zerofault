@@ -45,11 +45,11 @@
 				$arrCurLaterEntry 			= $arrLaterEntries[$nIndex];
 				$nDELCirculationProcessID 	= $arrCurLaterEntry['nID'];
 				
-				$objMyCirculation->deleteMyCirculationProcess($nDELCirculationProcessID);
+			//	$objMyCirculation->deleteMyCirculationProcess($nDELCirculationProcessID);
 			}
 			
 			$arrCurInfos = $objMyCirculation->getMyCirculationProcess($nMyCirculationProcessID);
-			$objMyCirculation->deleteMyCirculationProcess($nMyCirculationProcessID);
+			$objMyCirculation->resetMyCirculationProcess($nMyCirculationProcessID);
 			
 			sendToUser($arrCurInfos['nUserId'], $nCirculationFormID, $arrCurInfos['nSlotId'], 0, $nCirculationHistoryID, time());
 			
