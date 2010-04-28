@@ -1437,7 +1437,7 @@ class CCirculation
 	    }
 		function getMaxProcessId_arr($nHistoryId)
 	    {
-	        $query = "SELECT nID FROM `cf_circulationprocess` WHERE nDecissionState!=1 and `nCirculationHistoryId`=".$nHistoryId;
+	        $query = "SELECT nID FROM `cf_circulationprocess` WHERE nDecissionState=0 and `nCirculationHistoryId`=".$nHistoryId;
 	        $nResult = mysql_query($query);
 	
 	        $Id_arr = array();

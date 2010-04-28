@@ -149,7 +149,7 @@
 		}
 		return $arrUserInfo;
 	}
-	function sendToUser($nUserId, $nCirculationId, $nSlotId, $nCirculationProcessId, $nCirculationHistoryId, $tsDateInProcessSince = '')
+	function sendToUser($nUserId, $nCirculationId, $nSlotId, $nCirculationProcessId, $nCirculationHistoryId, $tsDateInProcessSince = '', $force_send_mail=false)
 	{
 		global $DATABASE_HOST, $DATABASE_UID, $DATABASE_PWD, $DATABASE_DB, $MAIL_HEADER_PRE, $CUTEFLOW_SERVER;
 		global $SMTP_SERVER, $SMTP_PORT, $SMTP_USERID, $SMTP_PWD, $SMTP_USE_AUTH;
@@ -258,7 +258,7 @@
 				//------------------------------------------------------
 				//--- generate email message
 				//------------------------------------------------------	
-				if ($SEND_WORKFLOW_MAIL == true && $send_mail) 
+				if ($force_send_mail || ($SEND_WORKFLOW_MAIL == true && $send_mail)) 
 				{		
 					$strQuery = "SELECT nID FROM cf_circulationprocess WHERE nSlotId=$nSlotId AND nUserId=$nUserId AND nCirculationFormId=$nCirculationId AND nCirculationHistoryId=$nCirculationHistoryId";
 					$nResult = mysql_query($strQuery, $nConnection);
