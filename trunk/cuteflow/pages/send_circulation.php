@@ -112,7 +112,7 @@
 		if (mysql_select_db($DATABASE_DB, $nConnection))
 		{
 			$arrUserDone = array();
-			$sql = "select * from cf_circulationprocess where nCirculationFormId=$nCirculationFormId and nDecissionState=1";
+			$sql = "select * from cf_circulationprocess where nCirculationFormId=$nCirculationFormId and nDecissionState!=0";
 			$rs = mysql_query($sql, $nConnection);
 			if ($rs && mysql_num_rows($rs)) {
 				while ($r = mysql_fetch_array($rs)) {
@@ -252,12 +252,13 @@
 						$strQuery = "INSERT INTO cf_circulationprocess values (null, $nCirculationId, $nSlotId, $nUserId, $tsDateInProcessSince, 0, 0, 0, $nCirculationHistoryId, 0)";
 						mysql_query($strQuery, $nConnection) or die ($strQuery.mysql_error());
 					}
+					$send_mail = true;
 				}
 				
 				//------------------------------------------------------
 				//--- generate email message
 				//------------------------------------------------------	
-				if ($SEND_WORKFLOW_MAIL == true) 
+				if ($SEND_WORKFLOW_MAIL == true && $send_mail) 
 				{		
 					$strQuery = "SELECT nID FROM cf_circulationprocess WHERE nSlotId=$nSlotId AND nUserId=$nUserId AND nCirculationFormId=$nCirculationId AND nCirculationHistoryId=$nCirculationHistoryId";
 					$nResult = mysql_query($strQuery, $nConnection);
@@ -306,7 +307,7 @@
 						$Circulation_AdditionalText = str_replace("\n", "<br>", $arrHistory['strAdditionalText']);
 	    				
 	    				//--- create mail
-						require_once '../mail/mail_'.$emailFormat.$emailValues.'.inc.php';
+						require '../mail/mail_'.$emailFormat.$emailValues.'.inc.php';
 	
 						switch ($emailFormat)
 						{
@@ -344,7 +345,7 @@
 							$message->setTo(array($arrRow["strEMail"]));
 							
 							$result = $mailer->send($message);
-							
+
 							if (!$result)
 							{
 								$fp = @fopen ("mailerror.log", "a");
