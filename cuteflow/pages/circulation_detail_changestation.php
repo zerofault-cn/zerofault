@@ -51,7 +51,7 @@
 			$arrCurInfos = $objMyCirculation->getMyCirculationProcess($nMyCirculationProcessID);
 			$objMyCirculation->resetMyCirculationProcess($nMyCirculationProcessID);
 			
-			sendToUser($arrCurInfos['nUserId'], $nCirculationFormID, $arrCurInfos['nSlotId'], 0, $nCirculationHistoryID, time());
+			sendToUser($arrCurInfos['nUserId'], $nCirculationFormID, $arrCurInfos['nSlotId'], 0, $nCirculationHistoryID, time(), true);
 			
 			
 			?>
