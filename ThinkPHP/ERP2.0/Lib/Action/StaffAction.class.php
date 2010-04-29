@@ -195,7 +195,7 @@ class StaffAction extends BaseAction{
 		}
 		else{
 			self::_delete();
-			self::sync_user($this->dao, 'delete');
+		//	self::sync_user($this->dao, 'delete');
 		}
 	}
 }
