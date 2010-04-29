@@ -473,18 +473,22 @@ class BaseAction extends Action{
 						$params = array();
 						$params['strLastName'] = 'AGIGA';
 						if (is_object($data)) {
+							echo "User: ".$data->name."\n";
 							$params['UserName'] = $data->name;
 							$params['strFirstName'] = $data->realname;
 							$params['strEMail'] = $data->email;
 							$params['Password'] = $data->password;
 							$params['UserAccessLevel'] = $data->is_leader?8:1;
+							$params['Deleted'] = intval(!$data->status);
 						}
 						elseif (is_array($data)) {
+							echo "User: ".$data['name']."\n";
 							$params['UserName'] = $data['name'];
 							$params['strFirstName'] = $data['realname'];
-							$params['strEMail'] = $data['email;
+							$params['strEMail'] = $data['email'];
 							$params['Password'] = $data['password'];
 							$params['UserAccessLevel'] = $data['is_leader']?8:1;
+							$params['Deleted'] = intval(!$data['status']);
 						}
 						curl_setopt($ch, CURLOPT_POSTFIELDS, $params);
 						curl_exec($ch);
