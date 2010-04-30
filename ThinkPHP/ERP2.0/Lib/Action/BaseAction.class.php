@@ -463,13 +463,6 @@ class BaseAction extends Action{
 				switch ($app) {
 					case 'CuteFlow':
 						echo "Start to sync to CuteFlow\n";
-						$ch = curl_init();
-						curl_setopt($ch, CURLOPT_URL, $baseurl.'pages/sync_user.php');
-						curl_setopt($ch, CURLOPT_HEADER, 0);
-						curl_setopt($ch, CURLOPT_POST, 1);
-						curl_setopt($ch, CURLOPT_RETURNTRANSFER, 0);
-						curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-						curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
 						$params = array();
 						$params['strLastName'] = 'AGIGA';
 						if (is_object($data)) {
@@ -490,9 +483,22 @@ class BaseAction extends Action{
 							$params['UserAccessLevel'] = $data['is_leader']?8:1;
 							$params['Deleted'] = intval(!$data['status']);
 						}
-						curl_setopt($ch, CURLOPT_POSTFIELDS, $params);
-						curl_exec($ch);
-						curl_close($ch);
+						
+						if(false && function_exists('curl_init')) {
+							$ch = curl_init();
+							curl_setopt($ch, CURLOPT_URL, $baseurl.'pages/sync_user.php');
+							curl_setopt($ch, CURLOPT_HEADER, 0);
+							curl_setopt($ch, CURLOPT_POST, 1);
+							curl_setopt($ch, CURLOPT_RETURNTRANSFER, 0);
+							curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+							curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+							curl_setopt($ch, CURLOPT_POSTFIELDS, $params);
+							curl_exec($ch);
+							curl_close($ch);
+						}
+						else {
+							self::httpPost($baseurl.'pages/sync_user.php', $params);
+						}
 						break;
 
 					default:
@@ -500,6 +506,40 @@ class BaseAction extends Action{
 				}
 			}
 		}
+	}
+	protected function httpPost($url, $params){
+		$result = '';
+		
+		$URL_Info=parse_url($url);
+		if(empty($URL_Info["port"])) {
+			$URL_Info["port"]=80;
+		}
+		$param_str = self::getParametersAsString($params);
+		// building POST-request:
+		$request .= "POST ".$URL_Info["path"]." HTTP/1.0\r\n";
+		$request .= "Host: ".$URL_Info["host"]."\r\n";
+		$request .= "Referer: ".$refer."\r\n";
+		$request .= "Content-type: application/x-www-form-urlencoded\r\n";
+		$request .= "Content-length: ".strlen($param_str)."\r\n";
+		$request .= "Connection: close\r\n";
+		$request .= "\r\n";
+		$request .= $param_str;
+
+		$fp = fsockopen($URL_Info["host"], $URL_Info["port"]);
+		fputs($fp, $request);
+		while(!feof($fp)) {
+			$result .= fgets($fp, 1024);
+		}
+		fclose($fp);
+		return $result;
+	}
+	protected function getParametersAsString(array $parameters)
+	{
+		$queryParameters = array();
+		foreach ($parameters as $key => $value) {
+			$queryParameters[] = $key . '=' . str_replace('%7E', '~', rawurlencode($value));
+		}
+		return implode('&', $queryParameters);
 	}
 }
 ?>
