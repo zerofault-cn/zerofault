@@ -408,9 +408,10 @@ LatLong.distVincenty = function(p1, p2) {
 }
 function changeSpeed() {
 	timeOut = 1001-parseInt($('input#speed').val());
-	clearTimeout( TO );
-	TO = window.setTimeout(plotPoint,timeOut);
-
+	if(TO) {
+		clearTimeout( TO );
+		TO = window.setTimeout(plotPoint,timeOut);
+	}
 }
 function getlist() {
 	$.get('getlist?'+Math.random(),{},function(str){
