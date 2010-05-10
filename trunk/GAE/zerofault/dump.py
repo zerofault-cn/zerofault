@@ -64,7 +64,7 @@ class csv(webapp.RequestHandler):
 
 class rss(webapp.RequestHandler):
 	def get(self,req_tag=''):
-		entry = Entry.all().order("-addtime")
+		entry = Entry.all().filter("private", False).order("-addtime")
 		if req_tag:
 			entry = entry.filter("tags =", unquote(req_tag).decode('utf-8'))
 
@@ -93,7 +93,7 @@ class rss(webapp.RequestHandler):
 			self.response.out.write('\t\t\t<author>zerofault@gmail.com</author>\r\n')
 
 			#for tag in item.tags:
-			tag_names =','.join(tag for tag in item.tags)
+			tag_names =' '.join(tag for tag in item.tags)
 				
 				
 			self.response.out.write('\t\t\t<category>%s</category>\r\n' % tag_names)
