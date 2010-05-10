@@ -1,4 +1,4 @@
 cron:
-- description: cron job trigger
-  url: /dump/trigger
-  schedule: every 1 hours
+#- description: cron job trigger
+#  url: /dump/trigger
+#  schedule: every 1 hours
