@@ -59,7 +59,10 @@ class SiteAction extends BaseAction{
 		if(!empty($_REQUEST['recommend'])) {
 			$where['recommend'] = $_REQUEST['recommend'];
 		}
-		
+		if (!empty($_REQUEST['s_name'])) {
+			$where['name'] = array('LIKE', '%'.iconv("GB2312", "UTF-8", trim($_REQUEST['s_name'])).'%');
+			$this->assign('s_name', iconv("GB2312", "UTF-8", $_REQUEST['s_name']));
+		}
 		$max_sort = $this->dao->where($where)->getField("max(sort)");//获取当前条件下所有网站的最大sort值，用于分配给新增网站的默认sort值
 		$count = $this->dao->where($where)->getField('count(*)');//获取当前条件下所有网站的个数，用于分页
 		import("@.Paginator");
