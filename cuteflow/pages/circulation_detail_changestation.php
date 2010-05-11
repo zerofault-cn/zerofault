@@ -37,17 +37,17 @@
 		
 		if ($nMyCirculationProcessID != $nCURCirculationProcessID) // if true the selected station is not the current one
 		{
-			$arrLaterEntries	= $objMyCirculation->getLaterEntries($nCirculationFormID, $nCirculationHistoryID, $tsMyDateInProcessSince);
-						
+			//$arrLaterEntries	= $objMyCirculation->getLaterEntries($nCirculationFormID, $nCirculationHistoryID, $tsMyDateInProcessSince);
+			$arrLaterEntries	= $objMyCirculation->getLaterSlots($nCirculationFormID, $nCirculationHistoryID, $arrMyCirculationProcess['nSlotId']);
 			$nMax = sizeof($arrLaterEntries);
 			for ($nIndex = 0; $nIndex < $nMax; $nIndex++)
 			{
 				$arrCurLaterEntry 			= $arrLaterEntries[$nIndex];
 				$nDELCirculationProcessID 	= $arrCurLaterEntry['nID'];
 				
-			//	$objMyCirculation->deleteMyCirculationProcess($nDELCirculationProcessID);
+				$objMyCirculation->deleteMyCirculationProcess($nDELCirculationProcessID);
 			}
-			
+			mysql_query("Optimize table cf_circulationprocess");
 			$arrCurInfos = $objMyCirculation->getMyCirculationProcess($nMyCirculationProcessID);
 			$objMyCirculation->resetMyCirculationProcess($nMyCirculationProcessID);
 			

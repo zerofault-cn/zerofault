@@ -64,6 +64,7 @@
     	maketip('retry_station','<?php echo escapeSingle($CIRCDETAIL_TIP_RETRY);?>');
     	maketip('change_station','<?php echo escapeSingle($CIRCDETAIL_TIP_CHANGE_STATION);?>');
     	maketip('change_substitute','<?php echo escapeSingle($CIRCDETAIL_TIP_CHANGE_SUBSTITUTE);?>');
+		maketip('redo','<?php echo escapeSingle($CIRCDETAIL_TIP_REDO);?>');
     	
     	var nCURCirculationFormID;
     	var strCURLanguage;
@@ -429,9 +430,14 @@
 						</a>
 					<?php endif; ?>
 					
-					<a onMouseOver="tip('change_station')" onMouseOut="untip()" href="javascript:BrowseUserlist('<?php echo $_REQUEST['circid'] ?>', '<?php echo $_REQUEST['language'] ?>', '<?php echo $arrRow['nID'] ?>', '<?php echo $nMailingListID ?>')">
-					<img src="../images/cs.jpg" border="0" height="16" width="16" style="margin-left: 4px;">
-					</a>
+					<a onMouseOver="tip('change_station')" onMouseOut="untip()" href="javascript:BrowseUserlist('<?php echo $_REQUEST['circid'] ?>', '<?php echo $_REQUEST['language'] ?>', '<?php echo $arrRow['nID'] ?>', '<?php echo $nMailingListID ?>')"><img src="../images/cs.jpg" border="0" height="16" width="16" style="margin-left: 4px;"></a>
+					<?php
+				}
+				elseif ($nState==1 || $nState==4) {
+					$strParams				= 'circid='.$_REQUEST['circid'].'&language='.$_REQUEST['language'].'&cpid='.$arrRow['nID'].'&start='.$_REQUEST['start'].'&sortby='.$_REQUEST['sortby'].'&archivemode='.$_REQUEST['archivemode'];
+					$strEncyrptedParams		= $objURL->encryptURL($strParams);
+					?>
+					<a onMouseOver="tip('redo')" onMouseOut="untip()" href="redo.php?key=<?php echo $strEncyrptedParams ?>"><img src="../images/128.png" border="0" height="16" width="16"></a>
 					<?php
 				}
 				/*else if (($bLastUser == true) && ($bIsSubstitute == false) && ($nState != 16) && ($nState != 8))
