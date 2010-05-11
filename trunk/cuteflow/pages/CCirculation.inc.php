@@ -283,6 +283,25 @@ class CCirculation
 		}
 		return $arrRows;
 	}
+	function getLaterSlots($nCirculationFormID, $nCirculationHistoryID, $nSlotId)	
+	{
+		$strQuery 	= "	SELECT *
+						FROM cf_circulationprocess
+						WHERE nCirculationFormId = '$nCirculationFormID' AND nCirculationHistoryId = '$nCirculationHistoryID' AND nSlotId > '$nSlotId'
+						ORDER BY dateInProcessSince ASC;";
+		$nResult 	= mysql_query($strQuery) or die(mysql_error());
+		
+		if ($nResult)
+		{
+			$nIndex = 0;
+			while (	$arrRow = mysql_fetch_array($nResult, MYSQL_ASSOC))
+			{
+				$arrRows[$nIndex] = $arrRow;
+				$nIndex++;						
+			}
+		}
+		return $arrRows;
+	}
 	
 	/**
 	*	sets the current station
