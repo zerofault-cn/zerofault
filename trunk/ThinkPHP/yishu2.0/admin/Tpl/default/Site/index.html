@@ -1,3 +1,4 @@
+	<form style="text-align:left">网站名称 <input type="text" name="s_name" value="{$s_name}" /> <input type="submit" value="搜索" /></form>
 	{$page}
 	<table id="table" border="1" cellpadding="3" cellspacing="0" width="100%" bordercolor="#999999" style="border-collapse:collapse;">
 	<tr bgcolor="#ededed">
@@ -48,7 +49,6 @@
 	</iterate>
 	</table>
 	{$page}
-	<notpresent name="_GET['status']">
 	<div class="addForm">
 		<fieldset>
 			<legend>添加网站</legend>
@@ -67,6 +67,5 @@
 			　　　　　<input type="button" value="提交" class="submit">
 		</fieldset>
 	</div>
-	</notpresent>
 	<script language="JavaScript" type="text/javascript" src="../Public/Js/ajaxfileupload.js"></script>
 	<script language="JavaScript" type="text/javascript" src="../Public/Js/site_func.js?a"></script>

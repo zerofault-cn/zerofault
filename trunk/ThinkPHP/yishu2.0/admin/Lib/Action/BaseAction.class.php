@@ -81,9 +81,11 @@ class BaseAction extends Action{
 		$id=$_REQUEST['id'];
 		$field=$_REQUEST['f'];
 		$value=$_REQUEST['v'];
+		$value = iconv("GB2312", "UTF-8", $value);
 		$rs = $this->dao->where('id='.$id)->setField($field,$value);
-		if($rs)
+		if(false !== $rs)
 		{
+			Log::Write($this->dao->getLastSql(), INFO);
 			die(self::_success('操作成功！','',1200));
 		}
 		else
