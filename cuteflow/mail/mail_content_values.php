@@ -40,7 +40,11 @@
 					$arrCirculationProcess = mysql_fetch_array($nResult);				
 				}
 			}
-			
+			if ($arrCirculationProcess['nIsSubstitiuteOf']>0) {
+				$sql = "select nUserId from cf_circulationprocess WHERE nID=".$arrCirculationProcess['nIsSubstitiuteOf'];
+				$rs = mysql_query($sql);
+				$arrCirculationProcess['SubstitiuteOfUserId'] = mysql_result($rs, 0);
+			}
 			//-----------------------------------------------
 			//--- get the single circulation form
 			//-----------------------------------------------
@@ -590,14 +594,15 @@
 																				$bReadOnly = $arrRow['bReadOnly'];
 																				$bTextOnly = 0;
 																				$keyId = $arrRow["nFieldId"]."_".$arrSlot["nID"]."_".$arrCirculationProcess["nCirculationFormId"];
+																				//echo '<pre>';print_r($arrValues[$keyId]);echo '</pre>';
 																				foreach ($arrValues[$keyId] as $user_id=>$user_val) {
-																				if ($user_id != $arrCirculationProcess['nUserId']) {
+																				if ($user_id!=$arrCirculationProcess['nUserId'] && $user_id!=$arrCirculationProcess['SubstitiuteOfUserId']) {
 																					$bTextOnly = 1;
 																				}
 																				else{
 																					$bTextOnly = 0;
 																				}
-																				echo '<div style="clear:both;"><strong style="float:left;">[<img src="../images/singleuser.gif" height="16" width="16" align="absmiddle"/> '.$arrUsers[$user_id]["strUserId"].']</strong>&nbsp;<span style="float:left;padding-left:5px;">';
+																				echo '<fieldset style="border-color:#666;border-width:1px;"><legend style="font-weight:bold"><img src="../images/singleuser.gif" height="16" width="16" align="absmiddle"/> '.$arrUsers[$user_id]["strUserId"].'</legend>';
 																				if ($arrRow["nType"] == 1)
 																				{
 																					if ( ($arrSlot["nID"] == $arrCirculationProcess["nSlotId"]) &&
@@ -1173,7 +1178,7 @@
 																						<?php	
 																					}
 																				}
-																				echo '</span></div>';
+																				echo '</fieldset>';
 																				}
 																				echo "</td>";
 																													
