@@ -38,70 +38,27 @@
 	$nCirculationProcessId 	= strip_tags($_REQUEST['cpid']);
 	
 	// get all entries from the current circulation process
-	$strQuery 	= "SELECT *
-					FROM cf_circulationprocess
-					WHERE nCirculationFormId = '$nCirculationFormId'
-					ORDER BY dateInProcessSince DESC;";
+	$strQuery 	= "SELECT * FROM cf_circulationprocess WHERE nID = '$nCirculationProcessId'";
 	$nResult 	= mysql_query($strQuery);
 	
 	if ($nResult)
 	{
 		while ($arrRow = mysql_fetch_array($nResult, MYSQL_ASSOC))
 		{
-			$arrCirculationProcesses[] = $arrRow;		
+			$arrCPResult = $arrRow;
 		}
 	}
 	
-	if ($arrCirculationProcesses[0]['nIsSubstitiuteOf'] != 0)
-	{	// current station is a substitute
-		// go through the array till we find the first entry with a decission state different from "8"
-		// if we found this the entry BEFORE the one we found is the user we're looking for
-	
-		$nMax = sizeof($arrCirculationProcesses);
-		for ($nIndex = 1; $nIndex < $nMax; $nIndex++)
-		{
-			$arrCirculationProcess = $arrCirculationProcesses[$nIndex];
-			
-			if ($arrCirculationProcess[nDecissionState] != 8)
-			{	// found the entry AFTER the user we search for
-				$arrCPResult = $arrCirculationProcesses[($nIndex-1)];
-				
-				// let's end the search
-				$nIndex = $nMax;
-			}
-		}
-	}
-	else
-	{	// current station is no substitute
-		$arrCPResult = $arrCirculationProcesses[0];
-	}
-	
+
 	$nCirculationHistoryId 	= $arrCPResult['nCirculationHistoryId'];
+	$nCirculationFormId		= $arrCPResult['nCirculationFormId'];
 	$nSlotId 				= $arrCPResult['nSlotId'];
 	$nUserId				= $arrCPResult['nUserId'];
 	
-	// we need the ID of the Mailinglist
 
-	$strQuery 	= "SELECT nMailingListId
-					FROM cf_circulationform
-					WHERE nID = '$nCirculationFormId' LIMIT 1;";
-	$nResult 	= mysql_query($strQuery);
-	
-	if ($nResult)
-	{
-		$arrRow = mysql_fetch_array($nResult, MYSQL_ASSOC);
-		$nMailinglistId = $arrRow['nMailingListId'];
-	}
-	
-	// get the next User
-	//$arrNextUser = getNextUserInList($nUserId, $nMailinglistId, $nSlotId);
-	
 	// send the message
 		// set current user state to "in process"
-		$strQuery = "	UPDATE cf_circulationprocess 
-						SET nDecissionState = '0',
-							dateDecission = '$TStoday' 
-						WHERE nID = '$nCirculationProcessId'";
+		$strQuery = "	UPDATE cf_circulationprocess SET nDecissionState = '0', dateDecission = '$TStoday' WHERE nID = '$nCirculationProcessId'";
 		mysql_query($strQuery, $nConnection);
 		
 		// send
