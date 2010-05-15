@@ -248,6 +248,7 @@ class InventoryAction extends BaseAction{
 		$where = array();
 		$result = array();
 		if(!empty($_POST['submit'])) {
+			$where['erp_location_product.chg_quantity'] = array('gt',0);
 			$where['erp_location_product.type'] = 'staff';
 			$where['erp_location_product.location_id'] = $staff_id;
 			$category_id>0 && ($where['erp_category.id'] = $category_id);
