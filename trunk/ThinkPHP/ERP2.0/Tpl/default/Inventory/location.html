@@ -7,6 +7,7 @@
 	<th>Type</th>
 	<th>Quantity</th>
 	<th>Unit</th>
+	<th>Last Enter Time</th>
 	<th>Comment</th>
 	<th>OP</th>
 </tr>
@@ -19,6 +20,7 @@
 	<td><if condition="$item['product']['fixed'] eq 1">Fixed-Assets<else />Floating-Assets</if></td>
 	<td align="center">{$item['chg_quantity']}</td>
 	<td>{$item['unit_name']}</td>
+	<td>{$item['last_enter_time']}</td>
 	<td valign="top"><a style="float:right;" href="__APP__/Public/remark/product_id/{$item['product']['id']}?width=600&height=300&modal=true" class="thickbox" title="Click to view all comment"><img src="../Public/Images/comments.gif"/></a>{$item['lastRemark']}</td>
 	<td><if condition="$_SESSION[C('ADMIN_AUTH_NAME')] eq true or (array_key_exists($location_id, $_SESSION[C('MANAGER_AUTH_NAME')]) and ($_SESSION[C('MANAGER_AUTH_NAME')][$location_id]['fixed'] eq '01' or (strlen($_SESSION[C('MANAGER_AUTH_NAME')][$location_id]['fixed'])==1 and $item['product']['fixed'] eq $_SESSION[C('MANAGER_AUTH_NAME')][$location_id]['fixed'])))"><a href="__APP__/ProductOut/form/action/return/lp_id/{$item['id']}">Return</a></if></td>
 </tr>

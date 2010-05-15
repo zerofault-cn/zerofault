@@ -35,11 +35,30 @@ class TemplateAction extends BaseAction{
 	public function index(){
 		$this->assign('ACTION_TITLE', 'List');
 
-		$result = array();
+		$result = array(
+			'apply' => array(
+				'new' => array(),
+				'edit' => array(),
+				'delete' => array(),
+				'approve' => array(),
+				'reject' => array(),
+				'confirm' => array()
+				),
+			'transfer' => array(
+				'new' => array(),
+				'edit' => array(),
+				'delete' => array(),
+				'reject' => array(),
+				'confirm' => array()
+				),
+			'return' => array(
+				'new' => array(),
+				'edit' => array(),
+				'delete' => array(),
+				'confirm' => array()
+				)
+			);
 		foreach($this->dao->select() as $item) {
-			if (!array_key_exists($item['action'], $result)) {
-				$result[$item['action']] = array();
-			}
 			$result[$item['action']][$item['do']] = array(
 				'id' => $item['id'],
 				'subject' => $item['subject'],
@@ -55,8 +74,13 @@ class TemplateAction extends BaseAction{
 	}
 	public function form() {
 		$this->assign('ACTION_TITLE', 'Edit');
-		$id = empty($_REQUEST['id']) ? 0 : intval($_REQUEST['id']);
-		$this->assign('info', $this->dao->find($id));
+		if (empty($_REQUEST['id'])) {
+			$this->assign('info', array('action'=>$_REQUEST['action'],'do'=>$_REQUEST['do']));
+		}
+		else {
+			$id = intval($_REQUEST['id']);
+			$this->assign('info', $this->dao->find($id));
+		}
 		$this->assign('content', 'Template:form');
 		$this->display('Layout:ERP_layout');
 	}
@@ -80,11 +104,24 @@ class TemplateAction extends BaseAction{
 				self::_error('Update fail!'.(C('APP_DEBUG')?$this->dao->getLastSql():''));
 			}
 		}
+		else {
+			$data = array();
+			$data['action'] = $_REQUEST['action'];
+			$data['do'] = $_REQUEST['do'];
+			$data['subject'] = trim($_REQUEST['subject']);
+			$data['body'] =  trim($_REQUEST['body']);
+			$data['status'] = 1;
+			if ($this->dao->add($data)) {
+				self::_success('Template created!', __URL__);
+			}
+			else {
+				self::_error('Create fail!'.(C('APP_DEBUG')?$this->dao->getLastSql():''));
+			}
+		}
 		return;
 	}
 	public function update(){
 		parent::_update();
 	}
-
 }
 ?>

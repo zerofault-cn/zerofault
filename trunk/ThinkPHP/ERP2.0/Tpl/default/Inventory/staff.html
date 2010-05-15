@@ -41,6 +41,7 @@
 	<th>Type</th>
 	<th>Quantity</th>
 	<th>Unit</th>
+	<th>Last Enter Time</th>
 	<th>Comment</th>
 </tr>
 <iterate name="result" id="item">
@@ -54,6 +55,7 @@
 	<td><if condition="$item['fixed'] eq 1">Fixed-Assets<else />Floating-Assets</if></td>
 	<td align="center">{$item['chg_quantity']}</td>
 	<td>{$item['unit_name']}</td>
+	<td>{$item['last_enter_time']}</td>
 	<td valign="top"><a style="float:right;" href="__APP__/Public/remark/product_id/{$item['product_id']}?width=600&height=300&modal=true" class="thickbox" title="Click to view all comment"><img src="../Public/Images/comments.gif"/></a>{$item['lastRemark']}</td>
 </tr>
 </iterate>

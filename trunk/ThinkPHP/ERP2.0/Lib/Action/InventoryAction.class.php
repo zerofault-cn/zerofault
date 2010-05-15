@@ -153,9 +153,13 @@ class InventoryAction extends BaseAction{
 			$where['type'] = 'location';
 			$where['location_id'] =1;
 			$result[$i]['inventory'] = M('LocationProduct')->where($where)->find();
-
+			//物品的所有供应商
 			$result[$i]['suppliers'] = explode(',', $val['supplier_names']);
-
+			//获取物品的最后入库时间
+			$where = array();
+			$where['product_id'] = $val['product_id'];
+			$where['action'] = 'enter';
+			$result[$i]['last_enter_time'] = M('ProductFlow')->where($where)->getField('max(confirm_time)');
 			//获取物品的Owner
 			$where = array();
 			$where['product_id'] = $val['product_id'];
@@ -220,6 +224,13 @@ class InventoryAction extends BaseAction{
 			$lastRemark = self::getLastComment($item['product_id'])."\n";
 			$item['lastRemark'] = substr($lastRemark, 0, strpos($lastRemark, "\n"));
 			$item['unit_name'] = M('Options')->where('id='.$item['product']['unit_id'])->getField('name');
+			//获取物品的最后入库时间
+			$where = array();
+			$where['product_id'] = $item['product_id'];
+			$where['action'] = 'transfer';
+			$where['to_type'] = 'location';
+			$where['to_id'] = $location_id;
+			$item['last_enter_time'] = M('ProductFlow')->where($where)->getField('max(confirm_time)');
 			$result[] = $item;
 		}
 		//dump($rs);
@@ -252,6 +263,12 @@ class InventoryAction extends BaseAction{
 				//获取最后一次Remark
 				$lastRemark = self::getLastComment($val['product_id'])."\n";
 				$result[$i]['lastRemark'] = substr($lastRemark, 0, strpos($lastRemark, "\n"));
+				//获取物品的最后入库时间
+				$where = array();
+				$where['product_id'] = $val['product_id'];
+				$where['to_type'] = 'staff';
+				$where['to_id'] = $staff_id;
+				$result[$i]['last_enter_time'] = M('ProductFlow')->where($where)->getField('max(confirm_time)');
 			}
 		}
 		if ($_SESSION[C('ADMIN_AUTH_NAME')]) {

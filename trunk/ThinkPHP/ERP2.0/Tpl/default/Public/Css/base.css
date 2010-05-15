@@ -46,10 +46,10 @@ i{color:red;font-style:normal;}
 .a_right{
 	text-align:right;
 }
-.disabled, .disabled a:link, .disabled a:visited{
+.status0, .status0 a:link, .status0 a:visited{
 	color:#a0a0a0;
 }
- .disabled a:hover, .disabled a:active{
+ .status0 a:hover, .status0 a:active{
 	color:#00f;text-decoration: underline;
 }
 table {
