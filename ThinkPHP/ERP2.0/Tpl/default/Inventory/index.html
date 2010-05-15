@@ -32,7 +32,7 @@
 </table>
 <table cellpadding="3" border="1" bordercolor="#FFFFFF" style="border-collapse:collapse;">
 <tr>
-	<td colspan="16">{$page}</td>
+	<td colspan="17">{$page}</td>
 </tr>
 <tr>
 	<th rowspan="2"><input type="checkbox" id="checkall" onclick="checkAll2();"/></th>
@@ -40,6 +40,7 @@
 	<th rowspan="2" colspan="2">Product</th>
 	<th rowspan="2">Type</th>
 	<th rowspan="2">Supplier(s)</th>
+	<th rowspan="2">Last Enter Time</th>
 	<th colspan="8">Quantity</th>
 	<th rowspan="2">Owner(s)</th>
 	<th rowspan="2">Comment</th>
@@ -69,6 +70,7 @@
 		<span style="padding:3px;">{$supplier}</span>
 	</foreach>
 	</td>
+	<td>{$item['last_enter_time']}</td>
 	<td><notempty name="item['inventory']['chg_quantity']"><a href="__APP__/Asset/form/action/apply/lp_id/{$item['inventory']['id']}" title="Apply this product">{$item['inventory']['chg_quantity']}</a><else />{$item['inventory']['chg_quantity']}</notempty></td><!-- {$item['quantity']['enter']-$item['quantity']['reject']-$item['quantity']['apply']-$item['quantity']['transfer']-$item['quantity']['release']-$item['quantity']['scrap']+$item['quantity']['return']} -->
 	<td><a id="enter{$item['product_id']}" href="__URL__/query/action/enter/product_id/{$item['product_id']}?width=600" class="jTip" name="Enter Entries">{$item['quantity']['enter']}</a></td>
 	<td><empty name="item['quantity']['reject']">0<else /><a id="reject{$item['product_id']}" href="__URL__/query/action/reject/product_id/{$item['product_id']}?width=600" class="jTip" name="Reject Entries">{$item['quantity']['reject']}</a></empty></td>
@@ -83,7 +85,7 @@
 </iterate>
 <empty name="result">
 <tr>
-	<td colspan="16" align="center">No Record</td>
+	<td colspan="17" align="center">No Record</td>
 </tr>
 </empty>
 <tr>
@@ -91,7 +93,7 @@
 		<input type="button" name="transfer" value="Transfer Selected" onclick="batch_form();" disabled="true" />
 		<input type="button" name="release" value="Release Selected" onclick="batch_form('release');" disabled="true" />
 	</td>
-	<td colspan="12">{$page}</td>
+	<td colspan="13">{$page}</td>
 </tr>
 </table>
 <p class="center"></p>

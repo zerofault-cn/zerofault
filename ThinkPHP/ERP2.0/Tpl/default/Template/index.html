@@ -12,26 +12,26 @@
 		<if condition="$j eq 0">
 	<td rowspan="{$action|2*count}" align="center">{$key|ucfirst}</td>
 		</if>
-		<if condition="$item['status'] eq 1">
-	<td rowspan="2">{$do|ucfirst}</td>
-	<td align="right" class="trbg0">Subject:&nbsp;</td>
-	<td class="trbg0">{$item['subject']}</td>
-	<td rowspan="2"><a href="__URL__/form/id/{$item['id']}" title="Click to Edit">Edit</a> <a href="__URL__/update/id/{$item['id']}/f/status/v/0" target="_iframe" title="Disable mail notification of this case">Disable</a></td>
+	<td rowspan="2" class="status{$item['status']|default=0}">{$do|ucfirst}</td>
+	<td align="right" class="trbg0 status{$item['status']|default=0}">Subject:&nbsp;</td>
+	<td class="trbg0 status{$item['status']|default=0}">{$item['subject']}</td>
+	<td rowspan="2" class="status{$item['status']}">
+		<empty name="item.id">
+		<a href="__URL__/form/action/{$key}/do/{$do}" title="Click to Create" class="status1">Create</a>
 		<else />
-	<td rowspan="2" class="disabled">{$do|ucfirst}</td>
-	<td align="right" class="trbg0 disabled">Subject:&nbsp;</td>
-	<td class="trbg0 disabled">{$item['subject']}</td>
-	<td rowspan="2" class="disabled"><a href="__URL__/form/id/{$item['id']}" title="Click to Edit">Edit</a> <a href="__URL__/update/id/{$item['id']}/f/status/v/1" target="_iframe" title="Enable mail notification of this case">Enable</a></td>
+		<a href="__URL__/form/id/{$item['id']}" title="Click to Edit">Edit</a>
+		<if condition="$item['status'] eq 1">
+		<a href="__URL__/update/id/{$item['id']}/f/status/v/0" target="_iframe" title="Disable mail notification of this case">Disable</a>
+		<else />
+		<a href="__URL__/update/id/{$item['id']}/f/status/v/1" target="_iframe" title="Enable mail notification of this case">Enable</a>
 		</if>
+		</empty>
+	</td>
+		
 </tr>
 <tr class="trbg1">
-		<if condition="$item['status'] eq 1">
-	<td align="right">Body:&nbsp;</td>
-	<td>{$item['body']}</td>
-		<else />
-	<td align="right" class="disabled">Body:&nbsp;</td>
-	<td class="disabled">{$item['body']}</td>
-		</if>
+	<td align="right" class="status{$item['status']|default=0}">Body:&nbsp;</td>
+	<td class="status{$item['status']|default=0}">{$item['body']}</td>
 </tr>
 	<php>$j++;</php>
 	</foreach>
@@ -43,11 +43,11 @@
 	<td style="padding:0"></td>
 </tr>
 </table>
-<center>Notice: Disable means dont't send the notification mail.</center>
+<center>P.S.: Disable means dont't send the notification mail.</center>
 <br />
 <table cellpadding="5" border="1" bordercolor="#FFFFFF" style="border-collapse:collapse;">
 <tr>
-	<th colspan="2">Support Tags</th>
+	<th colspan="2">Supported Tags</th>
 </tr>
 <iterate name="tags" id="item">
 <tr class="trbg{$mod}">
