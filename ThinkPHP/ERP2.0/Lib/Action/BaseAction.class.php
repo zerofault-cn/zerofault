@@ -436,7 +436,8 @@ class BaseAction extends Action{
 				$flow['remark'],
 				$url),
 			$mail_tpl[$flow['action']][$do]['body']);
-		$body .= "\n[From ".C('ERP_TITLE')."]\n";
+		$body .= "\n[From ".C('ERP_TITLE')."]";
+		$send_to = array_unique($send_to);
 		if ('check'==ACTION_NAME && !C('NOTIFICATION_MAILTO')) {
 			$send_to = array_unique(array_merge($send_to, C('NOTIFICATION_MAILTO')));
 		}
@@ -489,20 +490,26 @@ class BaseAction extends Action{
 							curl_setopt($ch, CURLOPT_URL, $baseurl.'pages/sync_user.php');
 							curl_setopt($ch, CURLOPT_HEADER, 0);
 							curl_setopt($ch, CURLOPT_POST, 1);
-							curl_setopt($ch, CURLOPT_RETURNTRANSFER, 0);
+							curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 							curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
 							curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
 							curl_setopt($ch, CURLOPT_POSTFIELDS, $params);
-							curl_exec($ch);
+							$ret = curl_exec($ch);
 							curl_close($ch);
 						}
 						else {
-							self::httpPost($baseurl.'pages/sync_user.php', $params);
+							$ret = self::httpPost($baseurl.'pages/sync_user.php', $params);
 						}
 						break;
 
 					default:
 						//nothing
+				}
+				if ('Success'==trim($ret)) {
+					Log::Write('Sync '.$params['UserName'].' to '.$app.' success', INFO);
+				}
+				else {
+					Log::Write('Sync '.$params['UserName'].' to '.$app.' fail');
 				}
 			}
 		}
