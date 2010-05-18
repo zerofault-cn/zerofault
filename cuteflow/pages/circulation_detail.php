@@ -259,7 +259,7 @@
             $arrProcessInformation = array();
 			$arrProcessInformationSubstitute = array();
 			
-            $strQuery = "SELECT * FROM cf_circulationprocess WHERE nCirculationFormId=".$_REQUEST["circid"]." AND nCirculationHistoryId=".$_REQUEST["nRevisionId"]." ORDER BY dateInProcessSince, nID";
+            $strQuery = "SELECT * FROM cf_circulationprocess WHERE nCirculationFormId=".$_REQUEST["circid"]." AND nCirculationHistoryId=".$_REQUEST["nRevisionId"]." ";
     		$nResult = mysql_query($strQuery, $nConnection) or die ($strQuery."<br>".mysql_error());
     		if ($nResult)
     		{
@@ -309,7 +309,7 @@
         	if ($nUserId != -2)
         	{
 				echo "<td width=\"20px\"><img src=\"../images/singleuser.gif\" height=\"16\" width=\"16\"></td>\n";
-	       		echo "<td width=\"140px\">".$arrUsers[$nUserId]["strUserId"]."</td>\n";
+	       		echo "<td width=\"140px\">".$arrUsers[$nUserId]["strFirstName"]."</td>\n";
         	}
         	else
         	{
@@ -321,7 +321,7 @@
 		{
 			?>
 			<td width="20" align="right"><img src="../images/right.png" height="16" width="16"></td>
-       		<td width="140"><img src="../images/singleuser2.gif" height="16" width="16" align="absmiddle" style="margin-right: 6px;"><?php echo $arrUsers[$arrRow['nUserId']]['strUserId'] ?></td>
+       		<td width="140"><img src="../images/singleuser2.gif" height="16" width="16" align="absmiddle" style="margin-right: 6px;"><?php echo $arrUsers[$arrRow['nUserId']]['strFirstName'] ?></td>
        		<?php
 		}
 	
@@ -742,7 +742,7 @@ if ($view != 'print')
 												echo "<td class=\"mandatory\" width=\"20%\" valign=\"middle\">".$arrRow["strName"].":</td>";
 												echo "<td width=\"300px\" valign=\"top\">";
 												foreach ($arrValues[$arrRow["nFieldId"]."_".$arrSlot["nID"]] as $user_id=>$user_val) {
-												echo '<div><strong>[<img src="../images/singleuser.gif" height="16" width="16" align="absmiddle"/> '.$arrUsers[$user_id]["strUserId"].'] </strong>';
+												echo '<div><strong>[<img src="../images/singleuser.gif" height="16" width="16" align="absmiddle"/> '.$arrUsers[$user_id]["strFirstName"].'] </strong>';
 												if ($arrRow["nType"] == 1)
 												{
 													if ($user_val["strFieldValue"]!='')
