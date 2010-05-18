@@ -111,8 +111,10 @@
 			}
 				
 			$query .= " WHERE nID = '".$nID."' LIMIT 1;";
-			$nResult = mysql_query($query, $nConnection);
-				
+			if (mysql_query($query, $nConnection)) {
+				echo 'Success';
+			}
+			
 			// write the index String
 			$strQuery = "UPDATE cf_user_index SET `index` = '$strIndex' WHERE user_id = '".$nID."' LIMIT 1";
 			$nResult = mysql_query($strQuery, $nConnection) or die(mysql_error());
