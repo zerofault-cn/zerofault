@@ -484,7 +484,7 @@ class BaseAction extends Action{
 							$params['Deleted'] = intval(!$data['status']);
 						}
 						
-						if(false && function_exists('curl_init')) {
+						if(function_exists('curl_init')) {
 							$ch = curl_init();
 							curl_setopt($ch, CURLOPT_URL, $baseurl.'pages/sync_user.php');
 							curl_setopt($ch, CURLOPT_HEADER, 0);
