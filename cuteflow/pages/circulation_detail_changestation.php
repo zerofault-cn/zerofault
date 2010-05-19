@@ -78,11 +78,12 @@
 	else // false: the selected station is after the current station
 	{
 		$arrMailinglist 	= $objMyCirculation->getMailinglist($nCURMailinglistID);		// corresponding mailinglist
+	//	echo '<pre>';print_r($arrMailinglist);echo '</pre>';
 		$nFormTemplateID 	= $arrMailinglist['nTemplateId'];							// FormTemplate ID
 		
 		$arrUsers			= $objMyCirculation->getUsers();
 		$arrSlots			= $objMyCirculation->getFormslots($nFormTemplateID);		// corresponding formslots
-		
+	//	echo '<pre>';print_r($arrSlots);echo '</pre>';
 		$nMyIndex = 0;
 		foreach ($arrSlots as $arrSlot)
 		{		
@@ -109,7 +110,7 @@
 				}
 			}
 		}
-		
+	//	echo '<pre>';print_r($arr1337);echo '</pre>';
 		$nStart = sizeof($arrCirculationProcess);
 		$nMax = 1000;
 		
@@ -124,12 +125,21 @@
 			$nCurUserID			= $arrCurPosition['nUserID'];
 			$nCurPosition		= $arrCurPosition['nPosition'];
 			
-			if (($nCurSlotID == $nMySlotID) && ($nCurUserID == $nMyUserID) && ($nCurPosition == $nMyPosition))
+			if ($nCurSlotID == $nMySlotID) {
+				$hit_Slot = true;
+			}
+			if ($hit_Slot && $nCurSlotID != $nMySlotID) {
+				$next_Slot = true;
+			}
+			if ($hit_Slot && $nCurUserID == $nMyUserID && $nCurPosition == $nMyPosition) {
+				$hit_User = true;
+			}
+			if (!$next_Slot && $hit_Slot && $hit_User)
 			{
 				sendToUser($nCurUserID, $nCirculationFormID, $nCurSlotID, $nCURCirculationProcessID, $nCirculationHistoryID, $tsDateInProcessSince);
-				$nIndex = 10000;
+			//	$nIndex = 10000;
 			}
-			else
+			elseif (!$hit_User)
 			{
 				$objMyCirculation->addCirculationProcess($nCirculationFormID, $nCirculationHistoryID, $nCurSlotID, $nCurUserID, $tsDateInProcessSince, $tsDateDecission);
 			}
