@@ -259,7 +259,7 @@
             $arrProcessInformation = array();
 			$arrProcessInformationSubstitute = array();
 			
-            $strQuery = "SELECT * FROM cf_circulationprocess WHERE nCirculationFormId=".$_REQUEST["circid"]." AND nCirculationHistoryId=".$_REQUEST["nRevisionId"]." ";
+            $strQuery = "SELECT * FROM cf_circulationprocess WHERE nCirculationFormId=".$_REQUEST["circid"]." AND nCirculationHistoryId=".$_REQUEST["nRevisionId"]." order by nID";
     		$nResult = mysql_query($strQuery, $nConnection) or die ($strQuery."<br>".mysql_error());
     		if ($nResult)
     		{
