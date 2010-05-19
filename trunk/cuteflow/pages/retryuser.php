@@ -54,31 +54,20 @@
 				}
 			}
 			
-			$strQuery = "SELECT * FROM cf_mailinglist INNER JOIN cf_circulationform ON cf_mailinglist.nID = cf_circulationform.nMailingListId WHERE cf_circulationform.nID=".$arrProcessInfo["nCirculationFormId"];
-			$nResult = mysql_query($strQuery, $nConnection);
-			if ($nResult)
-			{
-				if (mysql_num_rows($nResult) > 0)
-				{
-					$arrRow = mysql_fetch_array($nResult);
-					
-					$nListId = $arrRow[0];
-				}
-			}
 
 			//-----------------------------------------------
 			//--- remove user entry in process information
 			//--- cause send_mail() adds a new one after
 			//--- sending the mail 
 			//-----------------------------------------------
-			$strQuery = "DELETE FROM cf_circulationprocess WHERE nID=".$_REQUEST["cpid"];
+			$strQuery = "update cf_circulationprocess SET nDecissionState = '0' WHERE nID=".$_REQUEST["cpid"];
 			mysql_query($strQuery, $nConnection);
 			
 			
 			//-----------------------------------------------
 			//--- send mail to next user in mailing list
 			//-----------------------------------------------
-			sendToUser($arrProcessInfo["nUserId"], $arrProcessInfo["nCirculationFormId"], $arrProcessInfo["nSlotId"], $arrProcessInfo["nIsSubstitiuteOf"], $arrProcessInfo["nCirculationHistoryId"]);
+			sendToUser($arrProcessInfo["nUserId"], $arrProcessInfo["nCirculationFormId"], $arrProcessInfo["nSlotId"], $arrProcessInfo["nIsSubstitiuteOf"], $arrProcessInfo["nCirculationHistoryId"], '', true);
 		}
 	}
 ?>
