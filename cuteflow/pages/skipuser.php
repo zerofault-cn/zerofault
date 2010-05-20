@@ -94,26 +94,63 @@
 	}
 	
 	// get the next User
-	$arrNextUser = getNextUserInList($nUserId, $nMailinglistId, $nSlotId);
-	
-	// send the message
-	if ($arrNextUser[0] != '')
-	{
-		// set current user state to "skipped"
-		$strQuery = "	UPDATE cf_circulationprocess 
-						SET nDecissionState = '4',
-							dateDecission = '$TStoday' 
-						WHERE nID = '$nCirculationProcessId'";
-		mysql_query($strQuery, $nConnection);
-		
-		// send
-		sendToUser($arrNextUser[0], $nCirculationFormId, $arrNextUser[1], 0, $nCirculationHistoryId);
-		
-		if ($arrNextUser[2] !== false) {
-			// Slot has changed
-			// Send a notification if this is wished
+	//$arrNextUser = getNextUserInList($nUserId, $nMailinglistId, $nSlotId);
+	$arrNextUsers = getNextUsersInList($nUserId, $nMailinglistId, $nSlotId, $arrCPResult['nCirculationFormId']);
+	foreach ($arrNextUsers as $arrNextUser) {
+		// send the message
+		if ($arrNextUser[0] != '')
+		{
+			// set current user state to "skipped"
+			$strQuery = "	UPDATE cf_circulationprocess 
+							SET nDecissionState = '4',
+								dateDecission = '$TStoday' 
+							WHERE nID = '$nCirculationProcessId'";
+			mysql_query($strQuery, $nConnection);
+			
+			// send
+			sendToUser($arrNextUser[0], $nCirculationFormId, $arrNextUser[1], 0, $nCirculationHistoryId);
+			
+			if ($arrNextUser[2] !== false) {
+				// Slot has changed
+				// Send a notification if this is wished
+								
+				$strQuery = "SELECT * FROM cf_circulationform WHERE nID=".$nCirculationFormId;
+				$nResult = mysql_query($strQuery, $nConnection);
+				if ($nResult)
+				{
+					if (mysql_num_rows($nResult) > 0)
+					{
+						$arrRow = mysql_fetch_array($nResult);
+						
+						//print_r($arrRow);
+						$nSenderId		= $arrRow["nSenderId"];
+						$strCircName	= $arrRow["strName"];
+						$nEndAction		= $arrRow["nEndAction"];
+					}
+				}
+				
+				$strQuery = "SELECT * FROM cf_formslot WHERE nID=".$arrNextUser[2];
+				$nResult = mysql_query($strQuery, $nConnection);
+				if ($nResult)
+				{
+					if (mysql_num_rows($nResult) > 0)
+					{
+						$arrRow = mysql_fetch_array($nResult);
+						$slotname = $arrRow['strName'];
+					}
+				}
+				
+				if ( ($nEndAction & 8) == 8 ) {
+					sendMessageToSender($nSenderId, $arrProcessInfo["nUserId"], "done", $strCircName, "ENDSLOT", $_REQUEST["cpid"], $slotname);
+				}
+			}
 							
-			$strQuery = "SELECT * FROM cf_circulationform WHERE nID=".$nCirculationFormId;
+			
+		}
+		else
+		{
+			//--- send done email to sender if wanted
+			$strQuery = "SELECT * FROM cf_circulationform WHERE nID=".$arrCirculationProcesses["nCirculationFormId"];
 			$nResult = mysql_query($strQuery, $nConnection);
 			if ($nResult)
 			{
@@ -121,83 +158,48 @@
 				{
 					$arrRow = mysql_fetch_array($nResult);
 					
-					//print_r($arrRow);
+					$nEndAction		= $arrRow["nEndAction"];
 					$nSenderId		= $arrRow["nSenderId"];
 					$strCircName	= $arrRow["strName"];
-					$nEndAction		= $arrRow["nEndAction"];
-				}
-			}
-			
-			$strQuery = "SELECT * FROM cf_formslot WHERE nID=".$arrNextUser[2];
-			$nResult = mysql_query($strQuery, $nConnection);
-			if ($nResult)
-			{
-				if (mysql_num_rows($nResult) > 0)
-				{
-					$arrRow = mysql_fetch_array($nResult);
-					$slotname = $arrRow['strName'];
-				}
-			}
-			
-			if ( ($nEndAction & 8) == 8 ) {
-				sendMessageToSender($nSenderId, $arrProcessInfo["nUserId"], "done", $strCircName, "ENDSLOT", $_REQUEST["cpid"], $slotname);
-			}
-		}
-						
-		
-	}
-	else
-	{
-		//--- send done email to sender if wanted
-		$strQuery = "SELECT * FROM cf_circulationform WHERE nID=".$arrCirculationProcesses["nCirculationFormId"];
-		$nResult = mysql_query($strQuery, $nConnection);
-		if ($nResult)
-		{
-			if (mysql_num_rows($nResult) > 0)
-			{
-				$arrRow = mysql_fetch_array($nResult);
-				
-				$nEndAction		= $arrRow["nEndAction"];
-				$nSenderId		= $arrRow["nSenderId"];
-				$strCircName	= $arrRow["strName"];
-				
-				
-				// check the hook CF_ENDACTION
-					$circulation 	= new CCirculation();
-					$endActions		= $circulation->getExtensionsByHookId('CF_ENDACTION');
 					
-					if ($endActions)
-					{
-						foreach ($endActions as $endAction)
+					
+					// check the hook CF_ENDACTION
+						$circulation 	= new CCirculation();
+						$endActions		= $circulation->getExtensionsByHookId('CF_ENDACTION');
+						
+						if ($endActions)
 						{
-							$params		= $circulation->getEndActionParams($endAction);
-							$hookValue	= (int) $params['hookValue'];
-							
-							if (($nEndAction & $hookValue) == $hookValue)
+							foreach ($endActions as $endAction)
 							{
-								require_once $params['filename'];
+								$params		= $circulation->getEndActionParams($endAction);
+								$hookValue	= (int) $params['hookValue'];
+								
+								if (($nEndAction & $hookValue) == $hookValue)
+								{
+									require_once $params['filename'];
+								}
 							}
 						}
+					
+					$nShouldArchived 	= $nEndAction & 2;
+					$nShouldMailed 		= $nEndAction & 1;
+					$nShouldDeleted 	= 4;
+					
+					if ($nShouldMailed == 1)
+					{
+						sendMessageToSender($nSenderId, $arrProcessInfo["nUserId"], "done", $strCircName, "SUCCESS", $_REQUEST["cpid"]);
 					}
-				
-				$nShouldArchived 	= $nEndAction & 2;
-				$nShouldMailed 		= $nEndAction & 1;
-				$nShouldDeleted 	= 4;
-				
-				if ($nShouldMailed == 1)
-				{
-					sendMessageToSender($nSenderId, $arrProcessInfo["nUserId"], "done", $strCircName, "SUCCESS", $_REQUEST["cpid"]);
-				}
-				
-				if ($nShouldArchived == 2)
-				{	// archive the circulation
-					$strQuery = "UPDATE cf_circulationform SET bIsArchived=1 WHERE nID=".$arrProcessInfo["nCirculationFormId"];
-					mysql_query($strQuery, $nConnection);
-				}
-				elseif ($nShouldDeleted & $nEndAction)
-				{	// delete circulation
-					$query = "UPDATE cf_circulationform SET bDeleted = 1 WHERE nID = ".$arrProcessInfo['nCirculationFormId'];
-					mysql_query($query, $nConnection);
+					
+					if ($nShouldArchived == 2)
+					{	// archive the circulation
+						$strQuery = "UPDATE cf_circulationform SET bIsArchived=1 WHERE nID=".$arrProcessInfo["nCirculationFormId"];
+						mysql_query($strQuery, $nConnection);
+					}
+					elseif ($nShouldDeleted & $nEndAction)
+					{	// delete circulation
+						$query = "UPDATE cf_circulationform SET bDeleted = 1 WHERE nID = ".$arrProcessInfo['nCirculationFormId'];
+						mysql_query($query, $nConnection);
+					}
 				}
 			}
 		}
