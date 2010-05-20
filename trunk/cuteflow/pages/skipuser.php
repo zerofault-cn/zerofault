@@ -95,7 +95,8 @@
 	
 	// get the next User
 	//$arrNextUser = getNextUserInList($nUserId, $nMailinglistId, $nSlotId);
-	$arrNextUsers = getNextUsersInList($nUserId, $nMailinglistId, $nSlotId, $arrCPResult['nCirculationFormId']);
+	$arrNextUsers = getNextUsersInList($nUserId, $nMailinglistId, $nSlotId, $nCirculationFormId, $nCirculationHistoryId);
+	echo '<pre>';print_r($arrNextUsers);echo '</pre>';
 	foreach ($arrNextUsers as $arrNextUser) {
 		// send the message
 		if ($arrNextUser[0] != '')
@@ -220,7 +221,7 @@
 			var strParams	= "circid=<?php echo $_REQUEST["circid"];?>&language=<?php echo $_REQUEST["language"];?>&sortby=<?php echo $_REQUEST["sortby"];?>&start=<?php echo $_REQUEST["start"];?>";
 			inpdata	= strParams;
 			encodeblowfish();
-			location.href = "circulation_detail.php?key=" + outdata;
+		//	location.href = "circulation_detail.php?key=" + outdata;
 		}
 	//-->
 	</script>
