@@ -100,7 +100,7 @@
 		
 		return $arrUserInfo;
 	}
-	function getNextUsersInList($nCurUserId, $nMailingListId, $nSlotId, $nCirculationFormId)
+	function getNextUsersInList($nCurUserId, $nMailingListId, $nSlotId, $nCirculationFormId, $nCirculationHistoryId=0)
 	{
 		global $DATABASE_HOST, $DATABASE_UID, $DATABASE_PWD, $DATABASE_DB;
 		
@@ -112,13 +112,14 @@
 		if (mysql_select_db($DATABASE_DB, $nConnection))
 		{
 			$arrUserDone = array();
-			$sql = "select * from cf_circulationprocess where nCirculationFormId=$nCirculationFormId and nDecissionState!=0";
+			$sql = "select * from cf_circulationprocess where nCirculationFormId=$nCirculationFormId and nCirculationHistoryId=$nCirculationHistoryId and nDecissionState!=0";
 			$rs = mysql_query($sql, $nConnection);
 			if ($rs && mysql_num_rows($rs)) {
 				while ($r = mysql_fetch_array($rs)) {
 					$arrUserDone[] = array($r['nSlotId'], $r['nUserId']);
 				}
 			}
+			echo '<pre>arrUserDone';print_r($arrUserDone);echo '</pre>';
 			$strQuery = "SELECT * FROM cf_slottouser INNER JOIN cf_formslot ON cf_slottouser.nSlotId  = cf_formslot.nID WHERE cf_slottouser.nMailingListId=$nMailingListId ORDER BY cf_formslot.nSlotNumber ASC, cf_slottouser.nPosition ASC";
 			$nResult = mysql_query($strQuery, $nConnection);
 			
@@ -135,6 +136,7 @@
 					}
 				}
 			}
+			echo '<pre>';print_r($arrUsersInfo);echo '</pre>';
 		}
 		if (count($arrUsersInfo)) {
 			$arrUserInfo = array_shift($arrUsersInfo);
