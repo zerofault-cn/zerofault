@@ -66,11 +66,13 @@ function initialize() {
 		//map.addControl(new GOverviewMapControl());//在右下角创建可折叠的迷你型概览地图
 		map.enableScrollWheelZoom(); //鼠标滚轮缩放
 		map.enableContinuousZoom();
-		//map.addControl(new GMapTypeControl());
+		map.addControl(new GMapTypeControl());
 
 		$.getJSON("getloc", function(json){
-			geoip_latitude = json.location.latitude;
-			geoip_longitude = json.location.longitude;
+			if (json.location) {
+				geoip_latitude = json.location.latitude;
+				geoip_longitude = json.location.longitude;
+			}
 		});
 		
 		var init_point = new GLatLng(geoip_latitude, geoip_longitude);
