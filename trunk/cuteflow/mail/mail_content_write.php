@@ -897,32 +897,27 @@
 					{	// the current user is no substitute
 						if ($arrResult['nID'] == '')
 						{	// it's the sender of the circulation!!!
-							$arrNextUser = getNextUserInList(-2, $nListId, $nSlotId);
+							$arrNextUsers = getNextUsersInList(-2, $nListId, $nSlotId, $nCirculationFormId, $nCirculationHistoryId);
 						}
 						else
 						{
 							//$arrNextUser = getNextUserInList($nUserId, $nListId, $nSlotId);
-							$arrNextUsers = getNextUsersInList($nUserId, $nListId, $nSlotId, $nCirculationFormId);
+							$arrNextUsers = getNextUsersInList($nUserId, $nListId, $nSlotId, $nCirculationFormId, $nCirculationHistoryId);
 						}
 					}
 					else
 					{	// user is a substitute
 						// let's see who this substitute belongs to
 						// it's NOT saved in "nIsSubstituteOf" -.-
-			
-						$strQuery 	= "SELECT MAX(dateInProcessSince) as nMaxDateInProcessSince FROM cf_circulationprocess WHERE nCirculationFormId = '$nCirculationFormId' AND nIsSubstitiuteOf = '0' AND dateInProcessSince < '$dateInProcessSince' LIMIT 1;";
-						$result 	= mysql_query($strQuery, $nConnection);
-						$arrResult 	= mysql_fetch_array($result, MYSQL_ASSOC);
-						
-						$strQuery 	= "SELECT nUserId FROM cf_circulationprocess WHERE nCirculationFormId = '$nCirculationFormId' AND dateInProcessSince = '".$arrResult['nMaxDateInProcessSince']."' LIMIT 1;";
+						$strQuery 	= "SELECT nUserId FROM cf_circulationprocess WHERE nID = $nIsSubtituteOf";
 						$result 	= mysql_query($strQuery, $nConnection);
 						$arrResult 	= mysql_fetch_array($result, MYSQL_ASSOC);
 						
 						$nSubsUserId = $arrResult['nUserId'];
 						
-						$arrNextUser = getNextUserInList($nSubsUserId, $nListId, $nSlotId);
+						$arrNextUsers = getNextUsersInList($nSubsUserId, $nListId, $nSlotId, $nCirculationFormId, $nCirculationHistoryId);
 					}
-					//echo '<pre>';print_r($arrNextUsers);echo '</pre>';
+				//	echo '<pre>$arrNextUsers<br />';print_r($arrNextUsers);echo '</pre>';
 					foreach ($arrNextUsers as $arrNextUser) {
 						if ($arrNextUser[0] != "")
 						{

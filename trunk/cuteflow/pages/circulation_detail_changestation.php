@@ -39,6 +39,7 @@
 		{
 			//$arrLaterEntries	= $objMyCirculation->getLaterEntries($nCirculationFormID, $nCirculationHistoryID, $tsMyDateInProcessSince);
 			$arrLaterEntries	= $objMyCirculation->getLaterSlots($nCirculationFormID, $nCirculationHistoryID, $arrMyCirculationProcess['nSlotId']);
+		//	echo '<pre>arrLaterEntries<br />';print_r($arrLaterEntries);echo '</pre>';
 			$nMax = sizeof($arrLaterEntries);
 			for ($nIndex = 0; $nIndex < $nMax; $nIndex++)
 			{
@@ -47,9 +48,11 @@
 				
 				$objMyCirculation->deleteMyCirculationProcess($nDELCirculationProcessID);
 			}
-			mysql_query("Optimize table cf_circulationprocess");
 			$arrCurInfos = $objMyCirculation->getMyCirculationProcess($nMyCirculationProcessID);
+			$strQuery 	= "DELETE FROM cf_circulationprocess WHERE nIsSubstitiuteOf = $nMyCirculationProcessID";
+			@mysql_query($strQuery);
 			$objMyCirculation->resetMyCirculationProcess($nMyCirculationProcessID);
+			mysql_query("Optimize table cf_circulationprocess");
 			
 			sendToUser($arrCurInfos['nUserId'], $nCirculationFormID, $arrCurInfos['nSlotId'], 0, $nCirculationHistoryID, time(), true);
 			

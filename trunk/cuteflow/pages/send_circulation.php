@@ -119,7 +119,7 @@
 					$arrUserDone[] = array($r['nSlotId'], $r['nUserId']);
 				}
 			}
-			echo '<pre>arrUserDone';print_r($arrUserDone);echo '</pre>';
+		//	echo '<pre>arrUserDone';print_r($arrUserDone);echo '</pre>';
 			$strQuery = "SELECT * FROM cf_slottouser INNER JOIN cf_formslot ON cf_slottouser.nSlotId  = cf_formslot.nID WHERE cf_slottouser.nMailingListId=$nMailingListId ORDER BY cf_formslot.nSlotNumber ASC, cf_slottouser.nPosition ASC";
 			$nResult = mysql_query($strQuery, $nConnection);
 			
@@ -136,7 +136,63 @@
 					}
 				}
 			}
-			echo '<pre>';print_r($arrUsersInfo);echo '</pre>';
+		//	echo '<pre>';print_r($arrUsersInfo);echo '</pre>';
+		}
+		if (count($arrUsersInfo)) {
+			$arrUserInfo = array_shift($arrUsersInfo);
+			if (!array_key_exists($nSlotId, $arrUsersInfo)) {
+				foreach ($arrUserInfo as $i=>$item) {
+					$arrUserInfo[$i][2] = $item[1];
+				}
+			}
+		}
+		else {
+			$arrUserInfo = array(array(''));
+		}
+		return $arrUserInfo;
+	}
+	function getSkipUsers($nCurUserId, $nMailingListId, $nSlotId, $nCirculationFormId, $nCirculationHistoryId=0)
+	{
+		global $DATABASE_HOST, $DATABASE_UID, $DATABASE_PWD, $DATABASE_DB;
+		
+		$arrUserInfo = array();
+		$arrUsersInfo = array();
+		
+		$nConnection = mysql_connect($DATABASE_HOST, $DATABASE_UID, $DATABASE_PWD) or die('DB Connection fail');
+		
+		if (mysql_select_db($DATABASE_DB, $nConnection))
+		{
+			$arrUserDone = array();
+			$sql = "select * from cf_circulationprocess where nCirculationFormId=$nCirculationFormId and nCirculationHistoryId=$nCirculationHistoryId and ((nSlotId=$nSlotId and nUserId=$nCurUserId) or (nDecissionState!=0 and nDecissionState!=8))";
+			$rs = mysql_query($sql, $nConnection);
+			if ($rs && mysql_num_rows($rs)) {
+				while ($r = mysql_fetch_array($rs)) {
+					if ($r['nIsSubstitiuteOf']!=0) {
+						$strQuery = "select * FROM cf_circulationprocess WHERE nID = ".$r['nIsSubstitiuteOf'];
+						$nResult 	= mysql_query($strQuery);
+						$r = mysql_fetch_array($nResult, MYSQL_ASSOC);
+					}
+					$arrUserDone[] = array($r['nSlotId'], $r['nUserId']);
+				}
+			}
+		//	echo '<pre>arrUserDone<br />';print_r($arrUserDone);echo '</pre>';
+			$strQuery = "SELECT * FROM cf_slottouser INNER JOIN cf_formslot ON cf_slottouser.nSlotId  = cf_formslot.nID WHERE cf_slottouser.nMailingListId=$nMailingListId ORDER BY cf_formslot.nSlotNumber ASC, cf_slottouser.nPosition ASC";
+			$nResult = mysql_query($strQuery, $nConnection);
+			
+        	if ($nResult)
+        	{
+        		if (mysql_num_rows($nResult) > 0)
+        		{
+					while (	$arrRow = mysql_fetch_array($nResult))
+        			{
+        				if (in_array(array($arrRow['nSlotId'], $arrRow['nUserId']), $arrUserDone)) {
+        					continue;
+        				}
+        				$arrUsersInfo[$arrRow['nSlotId']][] = array($arrRow["nUserId"], $arrRow["nSlotId"], false);
+					}
+				}
+			}
+		//	echo '<pre>arrUsersInfo<br />';print_r($arrUsersInfo);echo '</pre>';
 		}
 		if (count($arrUsersInfo)) {
 			$arrUserInfo = array_shift($arrUsersInfo);
