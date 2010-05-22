@@ -37,77 +37,46 @@
 	$nCirculationFormId 	= strip_tags($_REQUEST['circid']);
 	$nCirculationProcessId 	= strip_tags($_REQUEST['cpid']);
 	
-	// get all entries from the current circulation process
-	$strQuery 	= "SELECT *
-					FROM cf_circulationprocess
-					WHERE nCirculationFormId = '$nCirculationFormId'
-					ORDER BY dateInProcessSince DESC;";
+	$strQuery = "select * FROM cf_circulationprocess
+					WHERE nID = $nCirculationProcessId";
 	$nResult 	= mysql_query($strQuery);
+	$arrProcessInfo = mysql_fetch_array($nResult, MYSQL_ASSOC);
 	
-	if ($nResult)
+	if ($arrProcessInfo['nIsSubstitiuteOf'] != 0)
 	{
-		while ($arrRow = mysql_fetch_array($nResult, MYSQL_ASSOC))
-		{
-			$arrCirculationProcesses[] = $arrRow;		
-		}
+		$strQuery = "select * FROM cf_circulationprocess WHERE nID = ".$arrProcessInfo['nIsSubstitiuteOf'];
+		$nResult 	= mysql_query($strQuery);
+		$arrProcessInfo = mysql_fetch_array($nResult, MYSQL_ASSOC);
 	}
-	
-	if ($arrCirculationProcesses[0]['nIsSubstitiuteOf'] != 0)
-	{	// current station is a substitute
-		// go through the array till we find the first entry with a decission state different from "8"
-		// if we found this the entry BEFORE the one we found is the user we're looking for
-	
-		$nMax = sizeof($arrCirculationProcesses);
-		for ($nIndex = 1; $nIndex < $nMax; $nIndex++)
-		{
-			$arrCirculationProcess = $arrCirculationProcesses[$nIndex];
-			
-			if ($arrCirculationProcess[nDecissionState] != 8)
-			{	// found the entry AFTER the user we search for
-				$arrCPResult = $arrCirculationProcesses[($nIndex-1)];
-				
-				// let's end the search
-				$nIndex = $nMax;
-			}
-		}
-	}
-	else
-	{	// current station is no substitute
-		$arrCPResult = $arrCirculationProcesses[0];
-	}
-	
-	$nCirculationHistoryId 	= $arrCPResult['nCirculationHistoryId'];
-	$nSlotId 				= $arrCPResult['nSlotId'];
-	$nUserId				= $arrCPResult['nUserId'];
-	
-	// we need the ID of the Mailinglist
 
+	// we need the ID of the Mailinglist
 	$strQuery 	= "SELECT nMailingListId
 					FROM cf_circulationform
-					WHERE nID = '$nCirculationFormId' LIMIT 1;";
+					WHERE nID = ".$arrProcessInfo['nCirculationFormId'];
 	$nResult 	= mysql_query($strQuery);
-	
 	if ($nResult)
 	{
 		$arrRow = mysql_fetch_array($nResult, MYSQL_ASSOC);
 		$nMailinglistId = $arrRow['nMailingListId'];
 	}
 	
+	// set current user state to "skipped"
+	$strQuery = "	UPDATE cf_circulationprocess 
+					SET nDecissionState = '4',
+						dateDecission = '$TStoday' 
+					WHERE nID = $nCirculationProcessId";
+	mysql_query($strQuery, $nConnection);
+	
+	$nCirculationFormId = $arrProcessInfo['nCirculationFormId'];
+	$nCirculationHistoryId = $arrProcessInfo['nCirculationHistoryId'];
 	// get the next User
 	//$arrNextUser = getNextUserInList($nUserId, $nMailinglistId, $nSlotId);
-	$arrNextUsers = getNextUsersInList($nUserId, $nMailinglistId, $nSlotId, $nCirculationFormId, $nCirculationHistoryId);
-	echo '<pre>';print_r($arrNextUsers);echo '</pre>';
+	$arrNextUsers = getSkipUsers($arrProcessInfo['nUserId'], $nMailinglistId, $arrProcessInfo['nSlotId'], $nCirculationFormId, $nCirculationHistoryId);
+//	echo '<pre>';print_r($arrNextUsers);echo '</pre>';
 	foreach ($arrNextUsers as $arrNextUser) {
 		// send the message
 		if ($arrNextUser[0] != '')
 		{
-			// set current user state to "skipped"
-			$strQuery = "	UPDATE cf_circulationprocess 
-							SET nDecissionState = '4',
-								dateDecission = '$TStoday' 
-							WHERE nID = '$nCirculationProcessId'";
-			mysql_query($strQuery, $nConnection);
-			
 			// send
 			sendToUser($arrNextUser[0], $nCirculationFormId, $arrNextUser[1], 0, $nCirculationHistoryId);
 			
@@ -221,7 +190,7 @@
 			var strParams	= "circid=<?php echo $_REQUEST["circid"];?>&language=<?php echo $_REQUEST["language"];?>&sortby=<?php echo $_REQUEST["sortby"];?>&start=<?php echo $_REQUEST["start"];?>";
 			inpdata	= strParams;
 			encodeblowfish();
-		//	location.href = "circulation_detail.php?key=" + outdata;
+			location.href = "circulation_detail.php?key=" + outdata;
 		}
 	//-->
 	</script>

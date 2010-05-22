@@ -594,11 +594,11 @@
 																				$bReadOnly = $arrRow['bReadOnly'];
 																				$bTextOnly = 0;
 																				$keyId = $arrRow["nFieldId"]."_".$arrSlot["nID"]."_".$arrCirculationProcess["nCirculationFormId"];
-																				//echo '<pre>';print_r($arrValues[$keyId]);echo '</pre>';
-																				foreach ($arrValues[$keyId] as $user_id=>$user_val) {
+																			//	echo '<pre>';print_r($arrCirculationProcess);echo '</pre>';
+																			foreach ($arrValues[$keyId] as $user_id=>$user_val) {
 																				if ($user_id!=$arrCirculationProcess['nUserId']) {
 																					if (!empty($arrCirculationProcess['SubstitiuteOfUserId']) && $user_id==$arrCirculationProcess['SubstitiuteOfUserId']) {
-																						$bTextonly = 0;
+																						$bTextOnly = 0;
 																					}
 																					else {
 																						$bTextOnly = 1;
@@ -1184,7 +1184,7 @@
 																					}
 																				}
 																				echo '</fieldset>';
-																				}
+																			}
 																				echo "</td>";
 																													
 																				if ($nRunningCounter % 2 == 0)
