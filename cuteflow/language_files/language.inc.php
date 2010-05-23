@@ -5,6 +5,10 @@
 	{
 		$strLangShort 		= $_REQUEST['strLanguage'];
 	}
+	if ($strLangShort == '')
+	{
+		$strLangShort = 'en';
+	}
 	$strFilename		= 'gui_'.$strLangShort.'.langprop';
 	$strLanguagePath	= "../language_files/".$strFilename;
 

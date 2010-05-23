@@ -1,1 +1,15 @@
-ALTER TABLE cf_fieldvalue ADD nUserId INT UNSIGNED DEFAULT "0" NOT NULL AFTER nInputFieldId
+ALTER TABLE cf_fieldvalue ADD nUserId INT UNSIGNED DEFAULT "0" NOT NULL AFTER nInputFieldId;
+
+
+CREATE TABLE IF NOT EXISTS cf_mailentry (
+  nID int(11) NOT NULL auto_increment,
+  nUserId int(11) NOT NULL DEFAULT '0' ,
+  nCirculationId int(11) NOT NULL DEFAULT '0' ,
+  nSlotId int(11) NOT NULL DEFAULT '0' ,
+  nCirculationProcessId int(11) NOT NULL DEFAULT '0' ,
+  nCirculationHistoryId int(11) NOT NULL DEFAULT '0' ,
+  timeAdd int(10) unsigned NOT NULL DEFAULT '0' ,
+  timeSend int(10) unsigned NOT NULL DEFAULT '0' ,
+  bStatus tinyint(1) NOT NULL DEFAULT '0' ,
+  PRIMARY KEY (nID)
+);
