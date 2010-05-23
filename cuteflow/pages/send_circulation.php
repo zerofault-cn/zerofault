@@ -536,7 +536,7 @@
 	    			}
 	    		}
 	    		if (empty($mail_entry)) {
-	    			echo "No mail entry to send.";
+	    			echo "No mail entry to send.\n";
 	    		}
 	    		foreach ($mail_entry as $entry) {
 	    			echo "Process mail entry: ".$entry['nID']."\t";
