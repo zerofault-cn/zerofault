@@ -62,7 +62,7 @@
 		mysql_query($strQuery, $nConnection);
 		
 		// send
-		sendToUser($nUserId, $nCirculationFormId, $nSlotId, 0, $nCirculationHistoryId, '', true);
+		sendToUserDelay($nUserId, $nCirculationFormId, $nSlotId, 0, $nCirculationHistoryId, '', true);
 		
 
 ?>

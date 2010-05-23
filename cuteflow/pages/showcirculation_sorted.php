@@ -391,6 +391,7 @@ include	('../language_files/language.inc.php');
 			}
 			
 			$arrDecissionState 	= $objCirculation->getDecissionState_arr($nCirculationFormID);
+			//var_dump($arrDecissionState);
 			$strStartDate		= $objCirculation->getStartDate($nCirculationFormID);
 			$strSender			= $objCirculation->getSender($nCirculationFormID);
 			$arrMaillist		= $objCirculation->getMailinglist($nMailingListId);
@@ -421,15 +422,25 @@ include	('../language_files/language.inc.php');
 						if ($archivemode == 0)
 						{
 							echo "<td nowrap ".getColHighlight($nIndex, $sortby, 'COL_CIRCULATION_STATION')." align=\"left\">";
-							switch ($arrDecissionState['nDecissionState'])
-							{
-								case 0: echo implode('<br />',$arrDecissionState['strCurStation']); break;
-								case 1: echo "<img src=\"../images/circ_done.gif\">&nbsp;<em>$CIRCULATION_MNGT_CIRC_DONE</em>"; break;
-								case 2: $bStopped = true; echo "<img src=\"../images/circ_stop.gif\">&nbsp;<em>$CIRCULATION_MNGT_CIRC_BREAK</em>"; break;
-								case 4: echo "<img src=\"../images/circ_done.gif\">&nbsp;<em>$CIRCULATION_MNGT_CIRC_DONE </em>"; break; //new
-								case 8: echo $arrDecissionState['strCurStation']; break;
-								case 16: $bStopped = true; echo "<img src=\"../images/circ_stop.gif\">&nbsp;<em>$CIRCULATION_MNGT_CIRC_STOP</em>"; break;
+							if (in_array(16, $arrDecissionState['nDecissionState'])) {
+								$bStopped = true;
+								echo "<img src=\"../images/circ_stop.gif\">&nbsp;<em>$CIRCULATION_MNGT_CIRC_STOP</em>";
 							}
+							elseif (in_array(0, $arrDecissionState['nDecissionState'])) {
+								foreach ($arrDecissionState['nDecissionState'] as $ii=>$state) {
+									if (0==$state) {
+										echo '<div>'.$arrDecissionState['strCurStation'][$ii].'</div>';
+									}
+								}
+							}
+							else {
+								echo "<img src=\"../images/circ_done.gif\">&nbsp;<em>$CIRCULATION_MNGT_CIRC_DONE</em>";
+							}
+							//	case 2: $bStopped = true; echo "<img src=\"../images/circ_stop.gif\">&nbsp;<em>$CIRCULATION_MNGT_CIRC_BREAK</em>"; break;
+							//	case 4: echo "<img src=\"../images/circ_done.gif\">&nbsp;<em>$CIRCULATION_MNGT_CIRC_DONE </em>"; break; //new
+							//	case 8: echo $arrDecissionState['strCurStation']; break;
+							//	case 16: $bStopped = true; echo "<img src=\"../images/circ_stop.gif\">&nbsp;<em>$CIRCULATION_MNGT_CIRC_STOP</em>"; break;
+							
 						}
 						break;
 					case 'COL_CIRCULATION_PROCESS_DAYS': 
@@ -465,7 +476,8 @@ include	('../language_files/language.inc.php');
 			
 			if ($archivemode != 1)
 			{
-				if (($arrDecissionState['nDecissionState'] != 1) || ($arrDecissionState['nDecissionState'] != 4) )
+			//	if (($arrDecissionState['nDecissionState'] != 1) || ($arrDecissionState['nDecissionState'] != 4) )
+				if (in_array(0, $arrDecissionState['nDecissionState']) || in_array(16, $arrDecissionState['nDecissionState']))
 				{
 					$arrProgress = $objCirculation->getWidth($nCirculationFormID, $nMailingListId);
 					
@@ -530,11 +542,7 @@ include	('../language_files/language.inc.php');
 				if ($archivemode == 0)
 				{
 					$SetOne = 0;
-					if ( ($arrDecissionState['nDecissionState'] != 1) && 
-						 ($arrDecissionState['nDecissionState'] != 2) &&
-						 ($arrDecissionState['nDecissionState'] != 4) &&
-						 ($arrDecissionState['nDecissionState'] != 16) &&
-						 (($_SESSION["SESSION_CUTEFLOW_ACCESSLEVEL"] == 2)||($_SESSION["SESSION_CUTEFLOW_ACCESSLEVEL"] == 8)))
+					if ($bStopped == false && (($_SESSION["SESSION_CUTEFLOW_ACCESSLEVEL"] == 2)||($_SESSION["SESSION_CUTEFLOW_ACCESSLEVEL"] == 8)))
 					{
 						?>
 						<a href="javascript:stopCirculation(<?php echo $nCirculationFormID ?>, <?php echo $start ?>)" onMouseOver="tip('stop')" onMouseOut="untip()"><img src="../images/stop.gif" border="0"height="16" width="16"></a>
@@ -542,7 +550,7 @@ include	('../language_files/language.inc.php');
 						$SetOne = 1;
 					}
 					
-					if ( ($bStopped == true) && (($_SESSION["SESSION_CUTEFLOW_ACCESSLEVEL"] == 2)||($_SESSION["SESSION_CUTEFLOW_ACCESSLEVEL"] == 8)))
+					if ( $bStopped == true && (($_SESSION["SESSION_CUTEFLOW_ACCESSLEVEL"] == 2)||($_SESSION["SESSION_CUTEFLOW_ACCESSLEVEL"] == 8)))
 					{
 						echo "<a href=\"editcirculation.php?circid=$nCirculationFormID&language=$language&bRestart=1\" onMouseOver=\"tip('restart')\" onMouseOut=\"untip()\" ><img src=\"../images/restart.gif\" border=\"0\"height=\"16\" width=\"16\"></a> ";
 						$SetOne = 1;

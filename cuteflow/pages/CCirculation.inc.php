@@ -1452,9 +1452,9 @@ class CCirculation
 	            }   
 	        }
 	    }
-		function getMaxProcessId_arr($nHistoryId)
+		function getProcessId_arr($nHistoryId)
 	    {
-	        $query = "SELECT nID FROM `cf_circulationprocess` WHERE nDecissionState=0 and `nCirculationHistoryId`=".$nHistoryId;
+	        $query = "SELECT nID FROM `cf_circulationprocess` WHERE  `nCirculationHistoryId`=".$nHistoryId;
 	        $nResult = mysql_query($query);
 	
 	        $Id_arr = array();
@@ -1533,27 +1533,25 @@ class CCirculation
 	function getDecissionState_arr($nCirculationFormID)
 	{		
 		$arrHistoryData 		= $this->getMaxHistoryData($nCirculationFormID);
-		$Id_arr					= $this->getMaxProcessId_arr($arrHistoryData);
-        foreach ($Id_arr as $nMaxId) {
-			$arrProcessInformation 	= $this->getProcessInformation($nMaxId);
-	        
-	        if (($arrProcessInformation["nDecissionState"] == 0) || ($arrProcessInformation["nDecissionState"] == 8) )
+		$Id_arr					= $this->getProcessId_arr($arrHistoryData);
+        foreach ($Id_arr as $nId) {
+			$arrProcessInformation 	= $this->getProcessInformation($nId);
+	        if (!isset($arrResults['nDaysInProgress']) && ($arrProcessInformation["nDecissionState"] == 0) || ($arrProcessInformation["nDecissionState"] == 8) )
 			{
 				$tsDateInProcessSince = $arrProcessInformation["dateInProcessSince"];
 				$tsNow = time();
-				$diff = (int)((($tsNow-$tsDateInProcessSince))/(24*60*60));
+				$arrResults['nDaysInProgress'] = (int)((($tsNow-$tsDateInProcessSince))/(24*60*60));
 			}
-			else
-			{
-				$diff = '-';
+			if ($arrProcessInformation["nDecissionState"] == 16) {
+				$arrResults['nDaysInProgress'] = '-';
 			}
-	        			
-			$arrResults['nDecissionState']	= $arrProcessInformation["nDecissionState"];
-			$arrResults['nDaysInProgress']	= $diff;
+			$arrResults['nDecissionState'][]	= $arrProcessInformation["nDecissionState"];
 			if ($arrProcessInformation["nUserId"] != -2)
 			{
 				$arrResults['strCurStation'][]	= $this->getUsername($arrProcessInformation["nUserId"]);
-				$arrResults['nCurStationID']	= $arrProcessInformation["nUserId"];
+				if (empty($arrResults['nCurStationID'])) {
+					$arrResults['nCurStationID']	= $arrProcessInformation["nUserId"];
+				}
 			}
 			else
 			{
@@ -1563,10 +1561,16 @@ class CCirculation
 				
 				$nCurUserId = $arrResult['nSenderId'];
 				
-				$arrResults['strCurStation']	= $this->getUsername($nCurUserId);
-				$arrResults['nCurStationID']	= $nCurUserId;
+				$arrResults['strCurStation'][]	= $this->getUsername($nCurUserId);
+				if (empty($arrResults['nCurStationID'])) {
+					$arrResults['nCurStationID']	= $nCurUserId;
+				}
 			}
         }
+        if (!isset($arrResults['nDaysInProgress'])) {
+			$arrResults['nDaysInProgress'] = '-';
+		}
+			
 		return $arrResults;
 	}
 	

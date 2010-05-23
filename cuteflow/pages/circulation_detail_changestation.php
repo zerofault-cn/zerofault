@@ -54,7 +54,7 @@
 			$objMyCirculation->resetMyCirculationProcess($nMyCirculationProcessID);
 			mysql_query("Optimize table cf_circulationprocess");
 			
-			sendToUser($arrCurInfos['nUserId'], $nCirculationFormID, $arrCurInfos['nSlotId'], 0, $nCirculationHistoryID, time(), true);
+			sendToUserDelay($arrCurInfos['nUserId'], $nCirculationFormID, $arrCurInfos['nSlotId'], 0, $nCirculationHistoryID, time(), true);
 			
 			
 			?>
@@ -139,7 +139,7 @@
 			}
 			if (!$next_Slot && $hit_Slot && $hit_User)
 			{
-				sendToUser($nCurUserID, $nCirculationFormID, $nCurSlotID, $nCURCirculationProcessID, $nCirculationHistoryID, $tsDateInProcessSince);
+				sendToUserDelay($nCurUserID, $nCirculationFormID, $nCurSlotID, $nCURCirculationProcessID, $nCirculationHistoryID, $tsDateInProcessSince);
 			//	$nIndex = 10000;
 			}
 			elseif (!$hit_User)

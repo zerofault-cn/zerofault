@@ -403,7 +403,6 @@
 							$message->setTo(array($arrRow["strEMail"]));
 							
 							$result = $mailer->send($message);
-
 							if (!$result)
 							{
 								$fp = @fopen ("mailerror.log", "a");
@@ -425,7 +424,259 @@
 		
 		return false;
 	}
+	function sendToUserDelay($nUserId, $nCirculationId, $nSlotId, $nCirculationProcessId, $nCirculationHistoryId, $tsDateInProcessSince = '', $force_send_mail=false)
+	{
+		global $DATABASE_HOST, $DATABASE_UID, $DATABASE_PWD, $DATABASE_DB, $MAIL_HEADER_PRE, $CUTEFLOW_SERVER;
+		global $SMTP_SERVER, $SMTP_PORT, $SMTP_USERID, $SMTP_PWD, $SMTP_USE_AUTH;
+		global $SYSTEM_REPLY_ADDRESS, $CUTEFLOW_VERSION, $TStoday, $objURL, $EMAIL_FORMAT, $EMAIL_VALUES, $MAIL_SEND_TYPE, $MTA_PATH, $SMPT_ENCRYPTION;
+		
+		global $CUTEFLOW_SERVER, $CUTEFLOW_VERSION, $EMAIL_BROWSERVIEW, $MAIL_LINK_DESCRIPTION, $MAIL_HEADER_PRE;
+		global $CIRCULATION_DONE_MESSSAGE_REJECT, $CIRCULATION_DONE_MESSSAGE_SUCCESS, $CIRCDETAIL_SENDER, $CIRCDETAIL_SENDDATE, $MAIL_ADDITION_INFORMATIONS;
+		
+		global $DEFAULT_CHARSET, $SEND_WORKFLOW_MAIL;
+		
+		$nConnection = mysql_connect($DATABASE_HOST, $DATABASE_UID, $DATABASE_PWD);
+		if ($nConnection)
+		{
+			if (mysql_select_db($DATABASE_DB, $nConnection))
+			{	
+				//------------------------------------------------------
+				//--- get the needed informations
+				//------------------------------------------------------
+				
+				//--- circulation form
+				$arrForm = array();
+				$strQuery = "SELECT * FROM cf_circulationform WHERE nID=$nCirculationId";
+				$nResult = mysql_query($strQuery, $nConnection);
+				if ($nResult)
+	    		{
+	    			if (mysql_num_rows($nResult) > 0)
+	    			{
+	    				$arrForm = mysql_fetch_array($nResult);
+					}
+				}
+				
+				//------------------------------------------------------
+				//--- update status in circulationprocess table
+				//------------------------------------------------------				
+				$sql = "select * from cf_circulationprocess where nCirculationFormId=$nCirculationId and nSlotId=$nSlotId and nUserId=$nUserId and nCirculationHistoryId=$nCirculationHistoryId";
+				$rs = mysql_query($sql);
+				if ($rs && mysql_num_rows($rs)==0) {
+					if ($tsDateInProcessSince == '')
+					{
+						$strQuery = "INSERT INTO cf_circulationprocess values (null, $nCirculationId, $nSlotId, $nUserId, $TStoday, 0, 0, $nCirculationProcessId, $nCirculationHistoryId, 0)";
+						mysql_query($strQuery, $nConnection) or die ($strQuery.mysql_error());
+					}
+					else
+					{
+						//( `nID` , `nCirculationFormId` , `nSlotId`, `nUserId` , `dateInProcessSince` , `nDecissionState`, `dateDecission` , `nIsSubstitiuteOf` , `nCirculationHistoryId`)
+						$strQuery = "INSERT INTO cf_circulationprocess values (null, $nCirculationId, $nSlotId, $nUserId, $tsDateInProcessSince, 0, 0, 0, $nCirculationHistoryId, 0)";
+						mysql_query($strQuery, $nConnection) or die ($strQuery.mysql_error());
+					}
+					$send_mail = true;
+				}
+				//record to mail entry
+				if ($force_send_mail || ($SEND_WORKFLOW_MAIL == true && $send_mail)) 
+				{
+					$strQuery = "Insert into cf_mailentry values (null, $nUserId, $nCirculationId, $nSlotId, $nCirculationProcessId, $nCirculationHistoryId, $TStoday, 0, 0)";
+					mysql_query($strQuery, $nConnection) or die ($strQuery.mysql_error());
+				}
+				return true;
+			}
+		}
+		return false;
+	}
+	function sendMailDelay()
+	{
+		global $DATABASE_HOST, $DATABASE_UID, $DATABASE_PWD, $DATABASE_DB, $MAIL_HEADER_PRE, $CUTEFLOW_SERVER;
+		global $SMTP_SERVER, $SMTP_PORT, $SMTP_USERID, $SMTP_PWD, $SMTP_USE_AUTH;
+		global $SYSTEM_REPLY_ADDRESS, $CUTEFLOW_VERSION, $TStoday, $objURL, $EMAIL_FORMAT, $EMAIL_VALUES, $MAIL_SEND_TYPE, $MTA_PATH, $SMPT_ENCRYPTION;
+		
+		global $CUTEFLOW_SERVER, $CUTEFLOW_VERSION, $EMAIL_BROWSERVIEW, $MAIL_LINK_DESCRIPTION, $MAIL_HEADER_PRE;
+		global $CIRCULATION_DONE_MESSSAGE_REJECT, $CIRCULATION_DONE_MESSSAGE_SUCCESS, $CIRCDETAIL_SENDER, $CIRCDETAIL_SENDDATE, $MAIL_ADDITION_INFORMATIONS;
+		
+		global $DEFAULT_CHARSET, $SEND_WORKFLOW_MAIL;
+		
+		$nConnection = mysql_connect($DATABASE_HOST, $DATABASE_UID, $DATABASE_PWD);
+		if ($nConnection)
+		{
+			if (mysql_select_db($DATABASE_DB, $nConnection))
+			{	
+				// Create the Transport
+				if ($MAIL_SEND_TYPE == 'SMTP') {
+					$transport = Swift_SmtpTransport::newInstance($SMTP_SERVER, $SMTP_PORT)
+			  					->setUsername($SMTP_USERID)
+			  					->setPassword($SMTP_PWD);
+			  					
+			  		if ($SMPT_ENCRYPTION != 'NONE') {
+			  			$transport = $transport->setEncryption(strtolower($SMPT_ENCRYPTION));
+			  		}
+				}
+				else if ($MAIL_SEND_TYPE == 'PHP') {
+					$transport = Swift_MailTransport::newInstance();
+				}
+				else if ($MAIL_SEND_TYPE == 'MTA') {
+					$transport = Swift_SendmailTransport::newInstance($MTA_PATH);
+				}
+				
+				// Create the Mailer using the created Transport
+				$mailer = Swift_Mailer::newInstance($transport);
+				
+				//------------------------------------------------------
+				//--- get the needed informations
+				//------------------------------------------------------
+				
+				$mail_entry = array();
+				$strQuery = "Select * from cf_mailentry where bStatus=0;";
+				$nResult = mysql_query($strQuery, $nConnection);
+				if (mysql_num_rows($nResult) > 0)
+	    		{
+	    			while (	$arrRow = mysql_fetch_array($nResult)) {
+	    				$mail_entry[] = $arrRow;
+	    			}
+	    		}
+	    		if (empty($mail_entry)) {
+	    			echo "No mail entry to send.";
+	    		}
+	    		foreach ($mail_entry as $entry) {
+	    			echo "Process mail entry: ".$entry['nID']."\t";
+	   				$message = Swift_Message::newInstance()->setCharset($DEFAULT_CHARSET);
+	   				
+	   				$nUserId = $entry['nUserId'];
+	   				$nCirculationId = $entry['nCirculationId'];
+	   				$nSlotId = $entry['nSlotId'];
+	   				$nCirculationHistoryId = $entry['nCirculationHistoryId'];
+	   				
+					//--- circulation form
+					$arrForm = array();
+					$strQuery = "SELECT * FROM cf_circulationform WHERE nID=$nCirculationId";
+					$nResult = mysql_query($strQuery, $nConnection);
+					if ($nResult)
+		    		{
+		    			if (mysql_num_rows($nResult) > 0)
+		    			{
+		    				$arrForm = mysql_fetch_array($nResult);
+						}
+					}
+					
+					//--- circulation history
+					$arrHistory = array();
+					$strQuery = "SELECT * FROM cf_circulationhistory WHERE nID=$nCirculationHistoryId";
+					$nResult = mysql_query($strQuery, $nConnection);
+					if ($nResult)
+		    		{
+		    			if (mysql_num_rows($nResult) > 0)
+		    			{
+		    				$arrHistory = mysql_fetch_array($nResult);
+						}
+					}
+				
+					//--- the attachments
+					$strQuery = "SELECT * FROM cf_attachment WHERE nCirculationHistoryId=$nCirculationHistoryId";
+					$nResult = mysql_query($strQuery, $nConnection);
+		    		if ($nResult)
+		    		{
+		    			if (mysql_num_rows($nResult) > 0)
+		    			{
+		    				while (	$arrRow = mysql_fetch_array($nResult))
+		    				{
+								$strFileName = basename($arrRow['strPath']);
+								$mimetype = new mimetype();
+						      	$filemime = $mimetype->getType($strFileName);
+								$message->attach(Swift_Attachment::fromPath(
+														$arrRow["strPath"],
+														$filemime)->setFilename($strFileName));
+							}
+						}
+					}
+				
+					$strQuery = "SELECT nID FROM cf_circulationprocess WHERE nSlotId=$nSlotId AND nUserId=$nUserId AND nCirculationFormId=$nCirculationId AND nCirculationHistoryId=$nCirculationHistoryId";
+					$nResult = mysql_query($strQuery, $nConnection);
+		    		if ($nResult)
+		    		{
+		    			if (mysql_num_rows($nResult) > 0)
+		    			{
+		    				while ($arrRow = mysql_fetch_array($nResult))
+		    				{
+		    					$arrLastRow = $arrRow;
+		    				}
+							$Circulation_cpid = $arrLastRow[0];
+						}
+					}				
+					
+					//switching Email Format
+					if ($nUserId != -2)
+					{	
+						$strQuery = "SELECT * FROM `cf_user` WHERE nID = $nUserId;";
+					}
+					else
+					{	// in this case the next user is the sender of this circulation
+						$strQuery = "SELECT * FROM `cf_user` WHERE nID = ".$arrForm['nSenderId'].";";
+					}
+					$nResult = mysql_query($strQuery, $nConnection);
+					if ($nResult)
+		    		{
+			    		$user						= mysql_fetch_array($nResult, MYSQL_ASSOC);
+			    		
+			    		$useGeneralEmailConfig		= $user['bUseGeneralEmailConfig'];
+			    		
+			    		if (!$useGeneralEmailConfig)
+			    		{
+				    		$emailFormat	= $user['strEmail_Format'];
+				    		$emailValues	= $user['strEmail_Values'];
+			    		}
+			    		else
+			    		{
+				    		$emailFormat	= $EMAIL_FORMAT;
+				    		$emailValues	= $EMAIL_VALUES;
+			    		}
+			    		
+			    		$Circulation_Name			= $arrForm['strName'];
+						$Circulation_AdditionalText = str_replace("\n", "<br>", $arrHistory['strAdditionalText']);
+	    				
+	    				//--- create mail
+						require '../mail/mail_'.$emailFormat.$emailValues.'.inc.php';
 	
+						switch ($emailFormat)
+						{
+							case PLAIN:
+								$message->setBody($strMessage, 'text/plain');
+								break;
+							case HTML:
+								$message->setBody($strMessage, 'text/html');
+								break;
+		    			}		    		
+		    		}				
+					
+					$SYSTEM_REPLY_ADDRESS = str_replace (' ', '_', $SYSTEM_REPLY_ADDRESS);
+							
+					$message->setFrom(array($SYSTEM_REPLY_ADDRESS=>'CuteFlow'));
+					$message->setSubject($MAIL_HEADER_PRE.$arrForm["strName"]);
+							
+					$message->setTo(array($user["strEMail"]));
+							
+					$result = $mailer->send($message);
+					if ($result) {
+						echo "Mail Sent\t";
+						$strQuery = "update cf_mailentry set timeSend=".time().", bStatus=1 where nID=".$entry['nID'];
+						if (mysql_query($strQuery, $nConnection)) {
+							echo "1<br />\n";
+						}
+	    			}
+	    			else {
+						$fp = @fopen ("mailerror.log", "a");
+						if ($fp)
+						{
+							@fputs ($fp, date("d.m.Y", time())." - sendToUser\n");
+							fclose($fp);
+						}
+	    			}
+				}
+			}
+		}
+		
+		return true;
+	}
 	function sendMessageToSender($nSenderId, $nLastStationId, $strMessageFile, $strCirculationName, $strEndState, $Circulation_cpid, $slotname="")
 	{
 		global $DATABASE_HOST, $DATABASE_UID, $DATABASE_PWD, $DATABASE_DB, $MAIL_HEADER_PRE, $CUTEFLOW_SERVER;

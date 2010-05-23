@@ -821,12 +821,21 @@
 	if (($_REQUEST['bRestart']) && ($_REQUEST['MailingList'][0] != 0))
 	{	// User has decided to start the circulation from a chosen Station - and not from beginning
 		// arrNextUser already exists
-		sendToUser($arrNextUser[0], $nCirculationFormID, $arrNextUser[1], 0, $nCirculationHistoryID);
+		sendToUserDelay($arrNextUser[0], $nCirculationFormID, $arrNextUser[1], 0, $nCirculationHistoryID);
+		$arrNextUser2 = $arrNextUser;
+		while ($arrNextUser2[1]==$arrNextUser[1]) {
+			$arrNextUser2 = $arrNextUser;
+			$arrNextUser = getNextUserInList($arrNextUser[0], $nMailinglistID, $arrNextUser[1]);
+			if (empty($arrNextUser) || $arrNextUser[1]!=$arrNextUser2[1]) {
+				break;
+			}
+			sendToUserDelay($arrNextUser[0], $nCirculationFormID, $arrNextUser[1], 0, $nCirculationHistoryID);
+		}
 	}
 	else
 	{
 		$arrNextUser = getNextUserInList(-1, $nMailinglistID, -1);
-		sendToUser($arrNextUser[0], $nCirculationFormID, $arrNextUser[1], 0, $nCirculationHistoryID);
+		sendToUserDelay($arrNextUser[0], $nCirculationFormID, $arrNextUser[1], 0, $nCirculationHistoryID);
 		
 		$arrNextUser2 = $arrNextUser;
 		while ($arrNextUser2[1]==$arrNextUser[1]) {
@@ -835,7 +844,7 @@
 			if (empty($arrNextUser) || $arrNextUser[1]!=$arrNextUser2[1]) {
 				break;
 			}
-			sendToUser($arrNextUser[0], $nCirculationFormID, $arrNextUser[1], 0, $nCirculationHistoryID);
+			sendToUserDelay($arrNextUser[0], $nCirculationFormID, $arrNextUser[1], 0, $nCirculationHistoryID);
 		}
 	}
 ?>

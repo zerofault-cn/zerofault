@@ -928,7 +928,7 @@
 								$arrNextUser[0] = $arrSender['nID'];
 							}
 							
-							sendToUser($arrNextUser[0], $arrProcessInfo["nCirculationFormId"], $arrNextUser[1], 0, $arrProcessInfo["nCirculationHistoryId"]);
+							sendToUserDelay($arrNextUser[0], $arrProcessInfo["nCirculationFormId"], $arrNextUser[1], 0, $arrProcessInfo["nCirculationHistoryId"]);
 							
 							if ($arrNextUser[2] !== false) {
 								// Slot has changed

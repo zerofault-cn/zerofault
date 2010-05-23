@@ -67,7 +67,7 @@
 			//-----------------------------------------------
 			//--- send mail to next user in mailing list
 			//-----------------------------------------------
-			sendToUser($arrProcessInfo["nUserId"], $arrProcessInfo["nCirculationFormId"], $arrProcessInfo["nSlotId"], $arrProcessInfo["nIsSubstitiuteOf"], $arrProcessInfo["nCirculationHistoryId"], '', true);
+			sendToUserDelay($arrProcessInfo["nUserId"], $arrProcessInfo["nCirculationFormId"], $arrProcessInfo["nSlotId"], $arrProcessInfo["nIsSubstitiuteOf"], $arrProcessInfo["nCirculationHistoryId"], '', true);
 		}
 	}
 ?>
