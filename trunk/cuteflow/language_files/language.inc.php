@@ -23,7 +23,7 @@
 		}
 	}
 	
-	$arrTranslation;
+	$arrTranslation = array();
 	if (null != $pFile)
 	{
 		while (!feof ($pFile)) 

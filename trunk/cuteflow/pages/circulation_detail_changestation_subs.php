@@ -34,7 +34,7 @@
 	
 	
 	// send
-	sendToUser($nUserID, $nCirculationFormID, $nSlotID, $nCURCirculationProcessID, $nCirculationHistoryID);
+	sendToUserDelay($nUserID, $nCirculationFormID, $nSlotID, $nCURCirculationProcessID, $nCirculationHistoryID);
 	
 	
 	//?

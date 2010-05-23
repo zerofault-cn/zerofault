@@ -51,6 +51,25 @@
             }   
         }
     }
+    function getMaxHistoryId($nFormId, $Connection)
+    {
+        $query = "SELECT MAX(nCirculationHistoryId) FROM `cf_circulationprocess` WHERE `nCirculationFormId`=".$nFormId;
+        $nResult = mysql_query($query, $Connection);
+
+        if ($nResult)
+        {
+            if (mysql_num_rows($nResult) > 0)
+            {
+                $arrRow = mysql_fetch_array($nResult);
+                
+                if ($arrRow)
+                {
+                    $nMaxId = $arrRow[0];
+                    return $nMaxId;
+                }           
+            }   
+        }
+    }
 
 	//--- write circulation to database
 	//--- open database
@@ -59,9 +78,9 @@
 	{
 		if (mysql_select_db($DATABASE_DB, $nConnection))
 		{
-			$nMaxId = getMaxProcessId($_REQUEST["circid"], $nConnection);
+			$nMaxId = getMaxHistoryId($_REQUEST["circid"], $nConnection);
 						
-			$strQuery = "UPDATE cf_circulationprocess SET nDecissionState=16 WHERE nID=".$nMaxId;
+			$strQuery = "UPDATE cf_circulationprocess SET nDecissionState=16 WHERE nDecissionState=0 and nCirculationHistoryId=".$nMaxId;
 			mysql_query($strQuery, $nConnection);	
 		}
 	}
