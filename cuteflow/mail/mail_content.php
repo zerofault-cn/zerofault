@@ -117,8 +117,8 @@
 		{
 			?>
 			<frameset cols="180,*" frameborder="1" framespacing="0" border="1">
-				<frame name="FRAME_POSITION" src="mail_content_position.php?key=<?php echo $strEncyrptedParams ?>" marginwidth="0" marginheight="0" scrolling="auto" frameborder="1">
-			    <frame name="FRAME_VALUES" src="mail_content_values.php?key=<?php echo $strEncyrptedParams ?>" frameborder="0" scrolling="Auto" marginwidth="0" marginheight="0">
+				<frame name="FRAME_POSITION" src="mail_content_position.php?key=<?php echo $strEncyrptedParams ?>&random=<?php echo mt_rand();?>" marginwidth="0" marginheight="0" scrolling="auto" frameborder="1">
+			    <frame name="FRAME_VALUES" src="mail_content_values.php?key=<?php echo $strEncyrptedParams ?>&random=<?php echo mt_rand();?>" frameborder="0" scrolling="Auto" marginwidth="0" marginheight="0">
 			</frameset>
 			<?php
 		}
