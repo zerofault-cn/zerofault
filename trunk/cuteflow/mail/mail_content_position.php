@@ -191,7 +191,7 @@
 	       			echo "<td width=\"140px\" align=\"left\" valign=\"top\">anon</td>\n";	
 	       		}
 	       		else {
-					echo "<td width=\"140px\" align=\"left\" valign=\"top\">".$arrUsers[$nUserId]["strUserId"]."</td>\n";
+					echo "<td width=\"140px\" align=\"left\" valign=\"top\">".$arrUsers[$nUserId]["strFirstName"]."</td>\n";
 	       		}
 			}
 			else
@@ -207,7 +207,7 @@
        			echo "<td width=\"140px\" align=\"left\" valign=\"top\"><img src=\"../images/singleuser2.gif\" height=\"19\" width=\"16\" align=\"absmiddle\">&nbsp;&nbsp;anon</td>\n";
        		}
        		else {
-				echo "<td width=\"140px\" align=\"left\" valign=\"top\"><img src=\"../images/singleuser2.gif\" height=\"19\" width=\"16\" align=\"absmiddle\">&nbsp;&nbsp;".$arrUsers[$arrRow["nUserId"]]["strUserId"]."</td>\n";
+				echo "<td width=\"140px\" align=\"left\" valign=\"top\"><img src=\"../images/singleuser2.gif\" height=\"19\" width=\"16\" align=\"absmiddle\">&nbsp;&nbsp;".$arrUsers[$arrRow["nUserId"]]["strFirstName"]."</td>\n";
        		}
 
 		}
