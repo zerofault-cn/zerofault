@@ -1,5 +1,5 @@
 -- 
--- Tabellenstruktur für Tabelle `cf_additional_text`
+-- Tabellenstruktur fÃ¼r Tabelle `cf_additional_text`
 -- 
 
 DROP TABLE IF EXISTS `cf_additional_text`;
@@ -8,7 +8,7 @@ CREATE TABLE `cf_additional_text` (  `id` int(11) NOT NULL auto_increment,  `tit
 -- --------------------------------------------------------
 
 -- 
--- Tabellenstruktur für Tabelle `cf_attachment`
+-- Tabellenstruktur fÃ¼r Tabelle `cf_attachment`
 -- 
 
 DROP TABLE IF EXISTS `cf_attachment`;
@@ -17,7 +17,7 @@ CREATE TABLE `cf_attachment` (  `nID` int(11) NOT NULL auto_increment,  `strPath
 -- --------------------------------------------------------
 
 -- 
--- Tabellenstruktur für Tabelle `cf_circulationform`
+-- Tabellenstruktur fÃ¼r Tabelle `cf_circulationform`
 -- 
 
 DROP TABLE IF EXISTS `cf_circulationform`;
@@ -26,7 +26,7 @@ CREATE TABLE `cf_circulationform` (  `nID` int(11) NOT NULL auto_increment,  `nS
 -- --------------------------------------------------------
 
 -- 
--- Tabellenstruktur für Tabelle `cf_circulationhistory`
+-- Tabellenstruktur fÃ¼r Tabelle `cf_circulationhistory`
 -- 
 
 DROP TABLE IF EXISTS `cf_circulationhistory`;
@@ -35,7 +35,7 @@ CREATE TABLE `cf_circulationhistory` (  `nID` int(11) NOT NULL auto_increment,  
 -- --------------------------------------------------------
 
 -- 
--- Tabellenstruktur für Tabelle `cf_circulationprocess`
+-- Tabellenstruktur fÃ¼r Tabelle `cf_circulationprocess`
 -- 
 
 DROP TABLE IF EXISTS `cf_circulationprocess`;
@@ -44,7 +44,7 @@ CREATE TABLE `cf_circulationprocess` (  `nID` int(11) NOT NULL auto_increment,  
 -- --------------------------------------------------------
 
 -- 
--- Tabellenstruktur für Tabelle `cf_config`
+-- Tabellenstruktur fÃ¼r Tabelle `cf_config`
 -- 
 
 DROP TABLE IF EXISTS `cf_config`;
@@ -53,16 +53,16 @@ CREATE TABLE `cf_config` ( `strCF_Server` text NOT NULL, `strSMTP_use_auth` text
 -- --------------------------------------------------------
 
 -- 
--- Tabellenstruktur für Tabelle `cf_fieldvalue`
+-- Tabellenstruktur fÃ¼r Tabelle `cf_fieldvalue`
 -- 
 
 DROP TABLE IF EXISTS `cf_fieldvalue`;
-CREATE TABLE `cf_fieldvalue` (  `nID` int(11) NOT NULL auto_increment,  `nInputFieldId` int(11) NOT NULL default '0',  `strFieldValue` text NOT NULL,  `nSlotId` int(11) NOT NULL default '0',  `nFormId` int(11) NOT NULL default '0',  `nCirculationHistoryId` int(11) default NULL,  PRIMARY KEY  (`nID`),  UNIQUE KEY `nID` (`nID`),  KEY `nID_2` (`nID`),  KEY `nInputFieldId` (`nInputFieldId`),  KEY `nSlotId` (`nSlotId`),  KEY `nFormId` (`nFormId`),  KEY `nCirculationHistoryId` (`nCirculationHistoryId`)) ENGINE=MyISAM  AUTO_INCREMENT=1 ;
+CREATE TABLE `cf_fieldvalue` (  `nID` int(11) NOT NULL auto_increment,  `nInputFieldId` int(11) NOT NULL default '0', nUserId INT(11) NOT NULL  DEFAULT '0', `strFieldValue` text NOT NULL,  `nSlotId` int(11) NOT NULL default '0',  `nFormId` int(11) NOT NULL default '0',  `nCirculationHistoryId` int(11) default NULL,  PRIMARY KEY  (`nID`),  UNIQUE KEY `nID` (`nID`),  KEY `nID_2` (`nID`),  KEY `nInputFieldId` (`nInputFieldId`),  KEY `nSlotId` (`nSlotId`),  KEY `nFormId` (`nFormId`),  KEY `nCirculationHistoryId` (`nCirculationHistoryId`)) ENGINE=MyISAM  AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
 -- 
--- Tabellenstruktur für Tabelle `cf_filter`
+-- Tabellenstruktur fÃ¼r Tabelle `cf_filter`
 -- 
 
 DROP TABLE IF EXISTS `cf_filter`;
@@ -71,7 +71,7 @@ CREATE TABLE `cf_filter` (  `nID` int(11) NOT NULL auto_increment,  `nUserID` in
 -- --------------------------------------------------------
 
 -- 
--- Tabellenstruktur für Tabelle `cf_formslot`
+-- Tabellenstruktur fÃ¼r Tabelle `cf_formslot`
 -- 
 
 DROP TABLE IF EXISTS `cf_formslot`;
@@ -80,7 +80,7 @@ CREATE TABLE `cf_formslot` ( `nID` int(11) NOT NULL auto_increment, `strName` ti
 -- --------------------------------------------------------
 
 -- 
--- Tabellenstruktur für Tabelle `cf_formtemplate`
+-- Tabellenstruktur fÃ¼r Tabelle `cf_formtemplate`
 -- 
 
 DROP TABLE IF EXISTS `cf_formtemplate`;
@@ -89,7 +89,7 @@ CREATE TABLE `cf_formtemplate` (  `nID` int(11) NOT NULL auto_increment,  `strNa
 -- --------------------------------------------------------
 
 -- 
--- Tabellenstruktur für Tabelle `cf_inputfield`
+-- Tabellenstruktur fÃ¼r Tabelle `cf_inputfield`
 -- 
 
 DROP TABLE IF EXISTS `cf_inputfield`;
@@ -98,7 +98,7 @@ CREATE TABLE `cf_inputfield` ( `nID` int(11) NOT NULL auto_increment, `strName` 
 -- --------------------------------------------------------
 
 -- 
--- Tabellenstruktur für Tabelle `cf_mailinglist`
+-- Tabellenstruktur fÃ¼r Tabelle `cf_mailinglist`
 -- 
 
 DROP TABLE IF EXISTS `cf_mailinglist`;
@@ -107,7 +107,7 @@ CREATE TABLE `cf_mailinglist` (  `nID` int(11) NOT NULL auto_increment,  `strNam
 -- --------------------------------------------------------
 
 -- 
--- Tabellenstruktur für Tabelle `cf_slottofield`
+-- Tabellenstruktur fÃ¼r Tabelle `cf_slottofield`
 -- 
 
 DROP TABLE IF EXISTS `cf_slottofield`;
@@ -116,7 +116,7 @@ CREATE TABLE `cf_slottofield` (  `nID` int(11) NOT NULL auto_increment,  `nSlotI
 -- --------------------------------------------------------
 
 -- 
--- Tabellenstruktur für Tabelle `cf_slottouser`
+-- Tabellenstruktur fÃ¼r Tabelle `cf_slottouser`
 -- 
 
 DROP TABLE IF EXISTS `cf_slottouser`;
@@ -125,7 +125,7 @@ CREATE TABLE `cf_slottouser` (  `nID` int(11) NOT NULL auto_increment,  `nSlotId
 -- --------------------------------------------------------
 
 -- 
--- Tabellenstruktur für Tabelle `cf_substitute`
+-- Tabellenstruktur fÃ¼r Tabelle `cf_substitute`
 -- 
 
 DROP TABLE IF EXISTS `cf_substitute`;
@@ -134,7 +134,7 @@ CREATE TABLE `cf_substitute` (  `id` int(11) NOT NULL auto_increment,  `user_id`
 -- --------------------------------------------------------
 
 -- 
--- Tabellenstruktur für Tabelle `cf_user`
+-- Tabellenstruktur fÃ¼r Tabelle `cf_user`
 -- 
 
 DROP TABLE IF EXISTS `cf_user`;
@@ -143,19 +143,22 @@ CREATE TABLE `cf_user` (  `nID` int(11) NOT NULL auto_increment,  `strLastName` 
 -- --------------------------------------------------------
 
 -- 
--- Tabellenstruktur für Tabelle `cf_user_index`
+-- Tabellenstruktur fÃ¼r Tabelle `cf_user_index`
 -- 
 
 DROP TABLE IF EXISTS `cf_user_index`;
 CREATE TABLE `cf_user_index` (  `user_id` int(11) NOT NULL,  `index` text NOT NULL,  UNIQUE KEY `user_id` (`user_id`)) ENGINE=MyISAM ;
 
 -- 
--- Daten für Tabelle `cf_user`
+-- Daten fÃ¼r Tabelle `cf_user`
 -- 
 INSERT INTO `cf_user` VALUES (1, 'None', 'Administrator', 'default@default.de', 2, 'admin', '21232f297a57a5a743894a0e4a801fc3', 'HTML', 'IFRAME', 0, 0, 0, '', '', '', '', '', '', '', '', '', '', '', '', '', 1, 'DAYS', 0, 1);
 
 -- 
--- Daten für Tabelle `cf_config`
+-- Daten fÃ¼r Tabelle `cf_config`
 -- 
 
 INSERT INTO `cf_config` VALUES ('', '', '', '', '', '', 'cuteflow@localhost.de', '', '', 'true', 'COL_CIRCULATION_PROCESS_DAYS', 'true', 'true', 'NAME---1---STATION---1---DAYS---1---START---1---SENDER---1---WHOLETIME---0---MAILLIST---0---TEMPLATE---0', 7, 10, 12, 'HTML', 'IFRAME', 1, 'DAYS', 1, 'ASC', '', 50, 60, '', 0, 0, '', '', 'm-d-Y', 'SMTP', '', 'ALL', 'NONE', 1, 0);
+
+
+CREATE TABLE IF NOT EXISTS cf_mailentry (  nID int(11) NOT NULL auto_increment,  nUserId int(11) NOT NULL DEFAULT '0' ,  nCirculationId int(11) NOT NULL DEFAULT '0' ,  nSlotId int(11) NOT NULL DEFAULT '0' ,  nCirculationProcessId int(11) NOT NULL DEFAULT '0' ,  nCirculationHistoryId int(11) NOT NULL DEFAULT '0' ,  timeAdd int(10) unsigned NOT NULL DEFAULT '0' ,  timeSend int(10) unsigned NOT NULL DEFAULT '0' ,  bStatus tinyint(1) NOT NULL DEFAULT '0' ,  PRIMARY KEY (nID));
