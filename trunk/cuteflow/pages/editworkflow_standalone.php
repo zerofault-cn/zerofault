@@ -206,7 +206,7 @@ if ($nConnection)
                     margins: '0 5 5 5',
                     xtype: 'iframepanel',
                     layout: 'fit', 
-                    defaultSrc: '../mail/mail_content.php?key=<?php echo $_REQUEST['key'];?>'
+                    defaultSrc: '../mail/mail_content.php?key=<?php echo $_REQUEST['key'];?>&random='+Math.random()
                }]
         	});
         });

@@ -477,7 +477,7 @@
 																	{
 																		?>
 																		<td width="22px" style="border-top: 1px solid silver;"><img src="../images/singleuser.gif" height="19" width="16"></td>
-																		<td style="border-top:1px solid silver;"><?php echo $arrUser['strUserId'] ?></td>
+																		<td style="border-top:1px solid silver;"><?php echo $arrUser['strFirstName'] ?></td>
 																		<?php
 																		$s2uid = $arrSlot['nID'].'_'.$arrUser['nID'].'_'.$arrRow['nPosition'];
 																	}
