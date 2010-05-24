@@ -617,7 +617,9 @@
 					if ($nResult)
 		    		{
 			    		$user						= mysql_fetch_array($nResult, MYSQL_ASSOC);
-			    		
+			    		if (empty($user)) {
+							continue;
+						}
 			    		$useGeneralEmailConfig		= $user['bUseGeneralEmailConfig'];
 			    		
 			    		if (!$useGeneralEmailConfig)
