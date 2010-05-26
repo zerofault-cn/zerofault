@@ -1,6 +1,6 @@
 ; <?php exit; ?> 
 
-auth_method = "HYBRID"
+auth_method = "DB"
 ldap_host = "localhost"
 ldap_domain = "my-domain"
 ldap_binddn = "cn=Manager,dc=my-domain,dc=com"
