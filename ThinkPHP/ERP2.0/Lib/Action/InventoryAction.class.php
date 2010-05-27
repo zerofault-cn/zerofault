@@ -58,6 +58,10 @@ class InventoryAction extends BaseAction{
 				$max_code = M('ProductFlow')->where(array('code'=>array('like','T%')))->max('code');
 				empty($max_code) && ($max_code = 'T'.sprintf("%09d",0));
 			}
+			elseif ('return' == $data['action']) {
+				$max_code = M('ProductFlow')->where(array('code'=>array('like','R%')))->max('code');
+				empty($max_code) && ($max_code = 'R'.sprintf("%09d",0));
+			}
 			else {
 				$max_code = M('ProductFlow')->where(array('code'=>array('like','Out%')))->max('code');
 				empty($max_code) && ($max_code = 'Out'.sprintf("%09d",0));
@@ -87,8 +91,14 @@ class InventoryAction extends BaseAction{
 		$url = '';
 		if (count($success_arr)>0) {
 			$url = __APP__.'/ProductOut/'.$data['action'];
+			if ('return'==$data['action']) {
+				$url = __APP__.'/ProductOut/returns';
+			}
 			if (!empty($_REQUEST['from_page']) && 'Asset'==$_REQUEST['from_page']) {
 				$url = __APP__.'/Asset/transferOut';
+				if ('return'==$data['action']) {
+					$url = __APP__.'/Asset/returns';
+				}
 			}
 		}
 		self::_success($msg, $url, 8000);

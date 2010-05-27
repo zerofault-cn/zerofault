@@ -22,7 +22,7 @@ function batch_form(action) {
 		alert('You haven\'t select any item');
 		return false;
 	}
-	if ('release'==action) {
+	if ('release'==action || 'return'==action) {
 		$("#transfer_to").hide();
 	}
 	else {
@@ -73,10 +73,12 @@ function updateCheckAll2(obj) {
 	if (s_checked == 0) {
 		$("input[name='transfer']").attr("disabled", true);
 		$("input[name='release']").attr("disabled", true);
+		$("input[name='return']").attr("disabled", true);
 	}
 	else {
 		$("input[name='transfer']").attr("disabled", false);
 		$("input[name='release']").attr("disabled", false);
+		$("input[name='return']").attr("disabled", false);
 	}
 }
 function select_location(obj) {
