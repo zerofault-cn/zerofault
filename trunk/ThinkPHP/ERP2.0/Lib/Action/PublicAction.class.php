@@ -182,5 +182,29 @@ class PublicAction extends BaseAction{
 	public function sync_users() {
 		R('Staff', 'sync_users');
 	}
+	public function fix_returns() {
+		$rs = M('ProductFlow')->where("action='return' and to_type='location' and to_id=0 and status=1")->select();
+		empty($rs) && ($rs=array());
+		echo 'Get '.count($rs)." records need to be fixed.<br /><br />\n\n";
+		foreach ($rs as $item) {
+			$quantity = $item['quantity'];
+			echo "Product_Flow.ID: ".$item['id']."<br />\n";
+			echo "&nbsp;&nbsp;quantity: ".$quantity."<br />\n";
+			$where = array(
+				'type'		  => 'location',
+				'location_id' => 1,
+				'product_id'  => $item['product_id']
+			);
+			$lp_id = M('LocationProduct')->where($where)->getField('id');
+			if(!empty($lp_id)) {
+				if (M('LocationProduct')->setInc('chg_quantity','id='.$lp_id,$item['quantity'])) {
+					echo "&nbsp;&nbsp;Inventory updated!<br />\n";
+					if (M('ProductFlow')->where('id='.$item['id'])->setField('to_id', 1)) {
+						echo "&nbsp;&nbsp;Product_Flow updated!<br /><br />\n\n";
+					}
+				}
+			}
+		}
+	}
 }
 ?>

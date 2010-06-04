@@ -39,6 +39,9 @@ class InventoryAction extends BaseAction{
 			}
 			$data['to_id'] = $_REQUEST['to_id'];
 		}
+		if ('return' == $_REQUEST['action']) {
+			$data['to_id'] = 1;
+		}
 		$where = array(
 			'type' => $_REQUEST['from_type'],
 			'location_id' => $_REQUEST['from_id']
