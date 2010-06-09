@@ -207,7 +207,7 @@ class PublicAction extends BaseAction{
 		}
 
 		echo "Delete wrong records in Location_Product<br />\n\n";
-		if (M('LocationProduct')->where(array('type'=>'location', 'location_id'=>0))->delete()) {
+		if (false !== M('LocationProduct')->where(array('type'=>'location', 'location_id'=>0))->delete()) {
 			echo "&nbsp;&nbsp;Done!<br />\n\n";
 		}
 		else {
