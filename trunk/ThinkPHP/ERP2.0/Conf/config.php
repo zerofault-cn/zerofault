@@ -22,13 +22,13 @@ $config = array_merge($config,array(
 		'ADMIN_AUTH_NAME'	=> 'administrator',
 		'SUPER_ADMIN_ID'	=> array(1), //超级管理员的ID数组
 		'NOTIFICATION_MAILTO' => array(), //重复通知邮件会额外发送给这些邮件帐号
-		'USER_SYNC_TARGET'  => array('CuteFlow'=>'http://localhost/cuteflow2.11.2/'),
+		'USER_SYNC_TARGET'  => array('CuteFlow'=>'http://192.168.8.85/cuteflow/'),
 		'USER_AUTH_GATEWAY' => '/Public/login',
 		'RBAC_ROLE_TABLE'	=> 'erp_role',
 		'RBAC_USER_TABLE'	=> 'erp_staff_role',
 		'RBAC_ACCESS_TABLE'	=> 'erp_role_node',
 		'RBAC_NODE_TABLE'	=> 'erp_node',
-		'NOT_AUTH_MODULE'	=> 'Index,Public,Script,Asset,Inventory',
+		'NOT_AUTH_MODULE'	=> 'Index,Public,Script,Asset,Inventory,Absence',
 		'IFRAME_AUTH_ACTION' => array('update','delete','edit','submit','confirm','select','import')//在Iframe中进行的且需要认证的操作
 		));
 return $config;
