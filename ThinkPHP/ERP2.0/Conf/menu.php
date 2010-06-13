@@ -66,6 +66,7 @@ $menu['System'] = array(
 		'Location'				=> 'Location',
 		'Mail Template'			=> 'Template',
 		'Options Setting'		=> 'Setting',
+		'Leave Type'			=> 'Absence/leaveType',
 		'Role'					=> 'Role',
 		'Node'					=> 'Node',
 		'Operation Logs'		=> 'ProductFlow'
