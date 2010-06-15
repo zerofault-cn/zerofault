@@ -1,7 +1,7 @@
 <?php
 /**
 *
-* 请假系统
+* Absence系统
 *
 * @author zerofault <zerofault@gmail.com>
 * @since 2009/8/5
@@ -11,60 +11,27 @@ class AbsenceAction extends BaseAction{
 	protected $dao;
 
 	public function _initialize() {
-	//	Session::set('top', 'Absence');
-	//	Session::set('sub', MODULE_NAME);
-		$this->dao = D('Staff');
+		Session::set('top', 'Absence');
+		Session::set('sub', MODULE_NAME);
+		$this->dao = D('Absence');
 		parent::_initialize();
 		$this->assign('MODULE_TITLE', 'Absence');
 	}
 
 	public function index(){
 		$this->assign('ACTION_TITLE', 'List');
-		if(isset($_REQUEST['status'])) {
-			$status = $_REQUEST['status'];
-		}
-		elseif(''!=(Session::get('staff_status'))) {
-			$status = Session::get('staff_status');
-		}
-		else{
-			$status = 1;
-		}
-		//Session::set('staff_status', $status);
-		$this->assign('status', $status);
-		$this->assign('result', $this->dao->relation(true)->where(array('status'=>$status))->order('id')->select());
-		$this->assign('content','Staff:index');
+		$this->assign('content','Absence:index');
 		$this->display('Layout:ERP_layout');
 	}
 
-	public function form() {
-		$this->assign('ACTION_TITLE', 'Add New Staff');
-		$id = empty($_REQUEST['id']) ? 0 : intval($_REQUEST['id']);
-		if ($id>0) {
-			$this->assign('ACTION_TITLE', 'Edit Supplier');
-			$info = $this->dao->relation(true)->find($id);
-			$info['dept_opts'] = self::genOptions(M('Department')->select(), $info['dept_id']);
-			$info['leader_opts'] = self::genOptions($this->dao->where(array('is_leader'=>1))->select(), $info['leader_id'],'realname');
-			$info['role_chks'] = self::genCheckbox(D("Role")->where(array('status'=>1))->select(),$info['role'],'role');
-			$code = $info['code'];
-		}
-		else {
-			$info = array(
-				'id'=>0,
-				'name'=>'',
-				'realname'=>'',
-				'password'=>'',
-				'email'=>'',
-				'dept_opts' => self::genOptions(M('Department')->select()),
-				'leader_opts'=>self::genOptions($this->dao->where(array('is_leader'=>1))->select(),'','realname'),
-				'role_chks' => self::genCheckbox(D("Role")->where(array('status'=>1))->select(),'','role')
-				);
-			$max_id = $this->dao->getField('max(id) as max_id');
-			empty($max_id) && ($max_id = 0);
-			$code = 'E'.sprintf("%04d",$max_id+1);
-		}
-		$this->assign('code', $code);
-		$this->assign('info', $info);
-		$this->assign('content', 'Staff:form');
+	public function today() {
+		Session::set('sub', MODULE_NAME.'/'.ACTION_NAME);
+		$this->assign('content', MODULE_NAME.':'.ACTION_NAME);
+		$this->display('Layout:ERP_layout');
+	}
+	public function history() {
+		Session::set('sub', MODULE_NAME.'/'.ACTION_NAME);
+		$this->assign('content', MODULE_NAME.':'.ACTION_NAME);
 		$this->display('Layout:ERP_layout');
 	}
 	public function submit() {
@@ -140,105 +107,7 @@ class AbsenceAction extends BaseAction{
 			}
 		}
 	}
-	public function profile() {
-		if (!empty($_POST['submit'])) {
-			$realname = trim($_REQUEST['realname']);
-			if($this->dao->where(array('realname'=>$realname,'id'=>array('neq',$_SESSION[C('USER_AUTH_KEY')])))->find()) {
-				self::_error('The realname \"'.$realname.'\" has been used by another staff!');
-			}
-			$id = $_SESSION[C('USER_AUTH_KEY')];
-			$this->dao->find($id);
-			if (''!=trim($_REQUEST['password'])) {
-				if(''==trim($_REQUEST['old_password'])) {
-					self::_error('You must enter your old password!');
-				}
-				if(md5(trim($_REQUEST['old_password'])) != $this->dao->password) {
-					self::_error('You old password is wrong!');
-				}
-				$this->dao->password = md5(trim($_REQUEST['password']));
-				Session::clear();
-			}
-			$this->dao->realname = $realname;
-			$this->dao->email = trim($_REQUEST['email']);
-			if (false !== $this->dao->save()) {
-				self::sync_user($this->dao);
-				self::_success('Update success!');
-			}
-		}
-		else {
-			$info = $this->dao->relation(true)->find($_SESSION[C('USER_AUTH_KEY')]);
-			$this->assign('info', $info);
-			$this->assign('content', 'Staff:profile');
-			$this->display('Layout:base');
-		}
-	}
-	public function leaveType() {
-		$where = array();
-		if (!empty($_POST['submit'])) {
-			$id = intval($_REQUEST['id']);
-			$data = array();
-			$data['name'] = trim($_REQUEST['name']);
-			$data['description'] = trim($_REQUEST['description']);
-			$data['sort'] = intval($_REQUEST['sort']);
-			if (''==$data['name']) {
-				self::_error('Your must input a name!');
-				return;
-			}
-			if ($id>0) {
-				if (false !== M('Leave')->where('id='.$id)->save($data)) {
-					self::_success('Information updated!',__ACTION__);
-				}
-				else{
-					self::_error('Update fail!'.(C('APP_DEBUG')?$this->dao->getLastSql():''));
-				}
-			}
-			else {
-				$data['status'] = 1;
-				if (false !== M('Leave')->add($data)) {
-					self::_success('New leave type added!',__ACTION__);
-				}
-				else{
-					self::_error('Add fail!'.(C('APP_DEBUG')?$this->dao->getLastSql():''));
-				}
-			}
-			return;
-		}
-		elseif (!empty($_REQUEST['id'])) {
-			$where['id'] = array('neq',$_REQUEST['id']);
-			$info = M('Leave')->find($_REQUEST['id']);
-		}
-		else {
-			$info = array(
-				'name' => '',
-				'description' => '',
-				'sort' => M('Leave')->max('sort')+1
-				);
-		}
-
-		Session::set('top', 'System');
-		Session::set('sub', 'Absence/leaveType');
-		$this->assign('ACTION_TITLE', 'Leave Type Setting');
-		$this->assign('result', M('Leave')->where($where)->order('sort')->select());
-		$this->assign('info', $info);
-		$this->assign('content','Absence:leaveType');
-		$this->display('Layout:ERP_layout');
-	}
-	public function leaveType_update() {
-		$this->dao = M('Leave');
-		parent::_update();
-	}
-	public function leaveType_delete() {
-		//判断是否已被使用
-		$id = $_REQUEST['id'];
-		$rs = M('Absence')->where("leave_id=".$id)->select();
-		if(!empty($rs) && sizeof($rs)>0) {
-			self::_error('This item is in-use, can\'t be deleted!');
-		}
-		else{
-			$this->dao = M('Leave');
-			self::_delete();
-		}
-	}
+	
 	/**
 	*
 	* 调用基类方法

@@ -54,6 +54,7 @@ class StaffAction extends BaseAction{
 				'realname'=>'',
 				'password'=>'',
 				'email'=>'',
+				'onboard' => date('Y-m-d'),
 				'dept_opts' => self::genOptions(M('Department')->select()),
 				'leader_opts'=>self::genOptions($this->dao->where(array('is_leader'=>1))->select(),'','realname'),
 				'role_chks' => self::genCheckbox(D("Role")->where(array('status'=>1))->select(),'','role')
@@ -106,6 +107,7 @@ class StaffAction extends BaseAction{
 		$this->dao->name = $name;
 		$this->dao->realname = trim($_REQUEST['realname']);
 		$this->dao->email = trim($_REQUEST['email']);
+		$this->dao->onboard = $_REQUEST['onboard'];
 		$this->dao->dept_id = $_REQUEST['dept_id'];
 		$this->dao->leader_id = $_REQUEST['leader_id'];
 		$this->dao->is_leader = intval($_REQUEST['is_leader']);
