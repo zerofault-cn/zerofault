@@ -24,7 +24,7 @@
 </tr>
 <tr>
 	<td>Onboard Date:</td>
-	<td><input type="text" maxlength="10" size="10" name="onboard" value="{$info.onboard}" /></td>
+	<td><input type="text" maxlength="10" size="10" name="onboard" id="Datepicker" value="{$info.onboard}" /></td>
 </tr>
 <tr>
 	<td>Department:</td>
@@ -49,3 +49,9 @@
 	<input type="button" value="Cancel" onclick="javascript:location.href='__URL__';"/>
 </p>
 </form>
+<!-- Datepicker -->
+<style type="text/css">@import "../Public/Css/smoothness.datepick.css";</style> 
+<script type="text/javascript" src="../Public/Js/jquery.datepick.pack.js"></script>
+<script type="text/javascript">
+$('#Datepicker').datepick(); 
+</script>
