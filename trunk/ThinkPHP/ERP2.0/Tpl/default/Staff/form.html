@@ -27,6 +27,10 @@
 	<td><input type="text" maxlength="10" size="10" name="onboard" id="Datepicker" value="{$info.onboard}" /></td>
 </tr>
 <tr>
+	<td>2009 Balance:</td>
+	<td><input type="text" maxlength="10" size="10" name="balance_2009" value="{$info.balance_2009}" /> Days</td>
+</tr>
+<tr>
 	<td>Department:</td>
 	<td><select name="dept_id"><option value="">Select One</option>{$info.dept_opts}</select></td>
 </tr>
@@ -53,5 +57,5 @@
 <style type="text/css">@import "../Public/Css/smoothness.datepick.css";</style> 
 <script type="text/javascript" src="../Public/Js/jquery.datepick.pack.js"></script>
 <script type="text/javascript">
-$('#Datepicker').datepick(); 
+$('#Datepicker').datepick({dateFormat: 'yyyy-mm-dd'}); 
 </script>

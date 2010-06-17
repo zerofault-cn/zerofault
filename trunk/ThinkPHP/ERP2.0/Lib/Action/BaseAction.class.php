@@ -106,6 +106,12 @@ class BaseAction extends Action{
 			}
 			$submenu[$sub_title] = $sub_action;
 		}
+		//根据是否leader增加Absence子菜单
+		if ('Absence' == $top) {
+			if (!empty($_SESSION[C('STAFF_AUTH_NAME')]['is_leader'])) {
+				$submenu['Management'] = 'Absence/manage';
+			}
+		}
 		//根据location增加Inventory子菜单
 		if ('Inventory Inquire'==$top) {
 			foreach($_SESSION['location'] as $location_id=>$location) {

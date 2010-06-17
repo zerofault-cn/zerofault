@@ -44,6 +44,8 @@ CREATE TABLE erp_location_manager (id SMALLINT UNSIGNED AUTO_INCREMENT, location
 
 
 ALTER TABLE erp_staff ADD onboard DATE NOT NULL AFTER email;
+ALTER TABLE erp_staff ADD balance_2009 decimal(3,1) unsigned  NOT NULL default 0 AFTER onboard;
+
 CREATE TABLE IF NOT EXISTS `erp_leave` (
   `id` smallint(5) unsigned NOT NULL auto_increment,
   `name` varchar(255) NOT NULL,
