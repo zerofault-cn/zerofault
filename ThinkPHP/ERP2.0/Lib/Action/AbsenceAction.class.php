@@ -18,9 +18,41 @@ class AbsenceAction extends BaseAction{
 		$this->assign('MODULE_TITLE', 'Absence');
 	}
 
-	public function index(){
-		$this->assign('ACTION_TITLE', 'List');
-		$this->assign('content','Absence:index');
+	public function index() {
+		$time = time();
+	//	$time = mktime(0,0,0,2,2,2011);//for test
+		$staff_info = D('Staff')->relation(true)->find($_SESSION[C('USER_AUTH_KEY')]);
+		$leave_info = array();
+		$leave_info['Annual_year'] = date('Y', $time);
+		$leave_info['Balance_year'] = date('Y', $time)-1;
+
+		if (strcmp($staff_info['onboard'], date('Y', $time).'-01-00') == 1) {//当年入职的员工，从入职之日算起
+			$leave_info['Annual'] = round(($time-strtotime($staff_info['onboard']))/86400/30*1.25, 1);
+			$leave_info['Balance'] = 0;//往年余额
+		}
+		else {//其余员工从当年01-01算起
+			$leave_info['Annual'] = round(date('z', $time)/30*1.25, 1);
+			if (date('Y', $time)==2010) {
+				//如果现在是2010年，则剩余年假不用计算
+				$leave_info['Balance'] = $staff_info['balance_2009'];
+			}
+			else {
+				//2011年或以后
+				if (strcmp($staff_info['onboard'], '2010-01-00') == 1) {
+					//该员工在2010年后入职，则剩余年假从入职日起计算至去年结束
+					$leave_info['Balance'] = round((mktime(0,0,0,1,1,date('Y', $time))-strtotime($staff_info['onboard']))/86400/30*1.25, 1);
+				}
+				else {
+					//该员工在2010年前入职，则用2009年剩余年假 ＋ 2010至去年结束年假
+					$leave_info['Balance'] = $staff_info['balance_2009'] + round((mktime(0,0,0,1,1,date('Y', $time))-mktime(0,0,0,1,1,2010))/86400/30*1.25, 1);
+				}
+			}
+		}
+	//	dump($leave_info);
+		$this->assign('staff_info', $staff_info);
+		$this->assign('leave_info', $leave_info);
+		$this->assign('ACTION_TITLE', 'Personal');
+		$this->assign('content', MODULE_NAME.':'.ACTION_NAME);
 		$this->display('Layout:ERP_layout');
 	}
 
@@ -30,6 +62,11 @@ class AbsenceAction extends BaseAction{
 		$this->display('Layout:ERP_layout');
 	}
 	public function history() {
+		Session::set('sub', MODULE_NAME.'/'.ACTION_NAME);
+		$this->assign('content', MODULE_NAME.':'.ACTION_NAME);
+		$this->display('Layout:ERP_layout');
+	}
+	public function manage() {
 		Session::set('sub', MODULE_NAME.'/'.ACTION_NAME);
 		$this->assign('content', MODULE_NAME.':'.ACTION_NAME);
 		$this->display('Layout:ERP_layout');
