@@ -54,8 +54,23 @@
 </p>
 </form>
 <!-- Datepicker -->
-<style type="text/css">@import "../Public/Css/smoothness.datepick.css";</style> 
-<script type="text/javascript" src="../Public/Js/jquery.datepick.pack.js"></script>
+<style type="text/css">@import "../Public/Css/jquery-ui-1.8.2.custom.css";</style> 
+<script type="text/javascript" src="../Public/Js/jquery-ui-1.8.2.custom.min.js"></script>
 <script type="text/javascript">
-$('#Datepicker').datepick({dateFormat: 'yyyy-mm-dd'}); 
+$(document).ready(function(){
+	$('#Datepicker').datepicker({
+		dateFormat: 'yy-mm-dd',
+		changeMonth: true,
+		changeYear: true,
+	//	showButtonPanel: true,
+		showOtherMonths: true,
+		showMonthAfterYear: true,
+		selectOtherMonths: true,
+		minDate: '-1Y',
+		maxDate: '+1Y',
+		showOn: 'both',
+		buttonImage: '../Public/Images/date.gif',
+		buttonImageOnly: true
+		});
+});
 </script>
