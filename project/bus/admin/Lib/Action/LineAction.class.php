@@ -207,7 +207,11 @@ class LineAction extends BaseAction{
 		}
 	}
 	function check() {
-		$local_list = $this->dao->where(array('status'=>1))->select();
+		$where = array(
+			'status' => 1,
+			'number' => array('not in', array(30))
+			);
+		$local_list = $this->dao->where($where)->order('number')->select();
 		foreach($local_list as $n=>$local_info) {
 			echo $n.". ".$local_info['name']."\t\n\t";
 			$remote_info = S($local_info['number']);
@@ -236,6 +240,11 @@ class LineAction extends BaseAction{
 				}
 			}
 			if(empty($remote_info)) {
+				if (str_ireplace('K', $local_info['name']) == str_ireplace('K', $info['name'])) {
+					echo "Line name diff 'K'\n";
+					$this->dao->where('id='.$local_info['id'])->setField(array('update_time','status'), array(date("Y-m-d H:i:s"),0));
+					continue;
+				}
 				echo "Wrong Data.\tPass\n";
 				continue;
 			}
