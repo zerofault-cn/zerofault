@@ -52,8 +52,14 @@ class AbsenceAction extends BaseAction{
 		$this->assign('staff_info', $staff_info);
 		$this->assign('leave_info', $leave_info);
 		$this->assign('ACTION_TITLE', 'Personal');
-		$this->assign('content', MODULE_NAME.':'.ACTION_NAME);
+		$this->assign('content', ACTION_NAME);
 		$this->display('Layout:ERP_layout');
+	}
+	
+	public function form() {
+		Session::set('sub', MODULE_NAME.'/'.ACTION_NAME);
+		$this->assign('content', ACTION_NAME);
+		$this->display('Layout:content');
 	}
 
 	public function today() {

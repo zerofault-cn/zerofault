@@ -172,7 +172,7 @@ class StaffAction extends BaseAction{
 			$info = $this->dao->relation(true)->find($_SESSION[C('USER_AUTH_KEY')]);
 			$this->assign('info', $info);
 			$this->assign('content', 'Staff:profile');
-			$this->display('Layout:base');
+			$this->display('Layout:content');
 		}
 	}
 	public function sync_users() {

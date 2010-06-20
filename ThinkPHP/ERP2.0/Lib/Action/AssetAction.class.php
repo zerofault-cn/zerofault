@@ -93,9 +93,6 @@ class AssetAction extends BaseAction{
 	public function select() {
 		R('Product', 'select');
 	}
-	public function profile() {
-		R('Staff', 'profile');
-	}
 	public function delete() {
 		R('ProductOut', 'delete');
 	}

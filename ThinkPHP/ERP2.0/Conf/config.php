@@ -7,7 +7,7 @@
 		'USER_AUTH_TYPE'	=> 2, //1:登录时一次验证，2:实时验证，默认为1
 	);
 $config = array_merge($config,array(
-		'APP_CONFIG_LIST'	=> array('menu'),
+		'APP_CONFIG_LIST'	=> array('menu', 'absence'),
 
 		'DB_TYPE'			=> 'mysql',
 		'DB_HOST'			=> 'localhost',

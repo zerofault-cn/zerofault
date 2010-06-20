@@ -1,0 +1,104 @@
+<style>
+#think_run_time,#think_page_trace{display:none;}
+</style>
+<table width="100%">
+<tr>
+	<td class="clsTab current" id="leave">New leave application</td>
+	<td class="clsTab" id="out">Out of office request</td>
+</tr>
+<tr>
+	<td colspan="2">
+		<form method="POST" id="appForm" name="appForm" action="#">
+		<input type="hidden" id="way" name="way" value="new"><input type="hidden" id="rID" name="rID" value=""><input type="hidden" id="loc" name="loc" value="3"><input type="hidden" id="userNo_applicant" name="userNo_applicant" value="284"><input type="hidden" id="userNo_deputy" name="userNo_deputy" value=""><input type="hidden" id="userNo_notify" name="userNo_notify" value=""><input type="hidden" id="userNo_notify_extra" name="userNo_notify_extra" value=""><input type="hidden" id="chk_duration" name="chk_duration" value="1"><input type="hidden" id="unit_time" name="unit_time" value="H"><input type="hidden" id="sys_totalHours" name="sys_totalHours" value="8"><input type="hidden" id="num_hoursLimit" name="num_hoursLimit" value="0"><input type="hidden" id="flag_hoursLimit" name="flag_hoursLimit" value="0"><input type="hidden" id="todayDate" name="todayDate" value="2010-06-20"><input type="hidden" id="tomorrowDate" name="tomorrowDate" value="2010-06-21"><input type="hidden" id="defTimeStart" name="defTimeStart" value="09:00"><input type="hidden" id="defTimeEnd" name="defTimeEnd" value="17:45"><input type="hidden" id="defTimeMid1" name="defTimeMid1" value="13:00"><input type="hidden" id="defTimeMid2" name="defTimeMid2" value="13:45">
+		
+		<table class="clsTab" id="leave" width="100%" border="1" cellpadding="3" cellspacing="1" bordercolor="#FFFFFF" style="border-collapse:collapse;">
+		<tr>
+			<th colspan="3">Leave application form</th>
+		</tr>
+		<tr bgcolor="#CCCCCC" align="center">
+			<td width="25%">Applicant</td>
+			<td width="25%">Creator</td>
+			<td>Type</td>
+		</tr>
+		<tr bgcolor="#EEEEEE" align="center">
+			<td><span id="div_applicantName">Adam Zhu</span><div id="div_applicantERROR"></div></td>
+			<td>Adam Zhu</td>
+			<td>
+				<select name="slt_absType" id="slt_absType" onchange="mkReq_absenceNotice();" alt="Absence type" title="Select absence type">
+					<option value="">-----------Select-----------</option>
+					<option label="Annual leave 公司特休假" value="AL">Annual leave 公司特休假</option> 
+					<option label="Yearly leave 年假" value="RL">Yearly leave 年假</option> 
+					<option label="Time off with pay 补休" value="YL">Time off with pay 补休</option> 
+					<option label="Guideline leave 弹性假期" value="GL">Guideline leave 弹性假期</option> 
+					<option label="Sick leave 病假" value="SL">Sick leave 病假</option> 
+					<option label="Personal leave 事假" value="PL">Personal leave 事假</option> 
+					<option label="Marriage leave 婚假" value="ML">Marriage leave 婚假</option> 
+					<option label="Maternity leave 产假" value="TL">Maternity leave 产假</option> 
+					<option label="Antenatal examination leave 产前检查假" value="XL">Antenatal examination leave 产前检查假</option> 
+					<option label="Paternity leave 陪产假" value="NL">Paternity leave 陪产假</option> 
+					<option label="Bereavement leave 丧假" value="BL">Bereavement leave 丧假</option> 
+				</select>
+				<div id="div_absTypeERROR"></div>
+			</td>
+		</tr>
+		<tr bgcolor="#CCCCCC" align="center">
+			<td>Hours</td>
+			<td colspan="2">Duration&nbsp;&nbsp;&nbsp; <a href='#null' onclick="quickSelectDate(1, 'todayDate', 'A')" title="Change duration date to today">Today</a> | <a href='#null' onclick="quickSelectDate(2, 'todayDate', 'A')" title="Change duration date to today AM half day">AM</a> | <a href='#null' onclick="quickSelectDate(3, 'todayDate', 'A')" title="Change duration date to today PM half day">PM</a>&nbsp;/&nbsp; <a href='#null' onclick="quickSelectDate(1, 'tomorrowDate', 'A')" title="Change duration date to tomorrow">Tomorrow</a> | <a href='#null' onclick="quickSelectDate(2, 'tomorrowDate', 'A')" title="Change duration date to tomorrow AM half day">AM</a> | <a href='#null' onclick="quickSelectDate(3, 'tomorrowDate', 'A')" title="Change duration date to tomorrow PM half day">PM</a></td>
+		</tr>
+		<tr bgcolor="#EEEEEE" align="center">
+			<td><input type="text" name="totalHours" id="totalHours" value="8" size="2" alt="Total absence hours" title="Click to edit total absence hours"> hrs<div id="div_typeNotice_hour"></div></td>
+			<td align="center" colspan="2">
+				<input name="date_from" type="text" class="w9" id="date_from" value="2010-06-21" size="12" disabled="disabled" readonly="true" alt="Absence start date" title="Click to choose absence start date" onchange="checkDuraConflict()" />
+				<select name="time_from" class="w9" id="time_from" onchange="checkDuraConflict()" disabled="disabled" alt="Absence start time" title="Select absence start time">
+					<option label="00:00" value="00:00">00:00</option> 
+					<option label="09:00" value="09:00" selected="selected">09:00</option> 
+					<option label="13:00" value="13:00">13:00</option> 
+					<option label="18:00" value="18:00">18:00</option> 
+				</select>&nbsp;~&nbsp;
+				<input name="date_to" type="text" class="w9" id="date_to" value="2010-06-21" size="12" disabled="disabled" readonly="true" alt="Absence end date" title="Click to choose absence end date" onchange="checkDuraConflict()" />
+				<select name="time_to" class="w9" id="time_to" onchange="checkDuraConflict()" disabled="disabled" alt="Absence end time" title="Select absence end time">
+					<option label="00:00" value="00:00">00:00</option> 
+					<option label="17:45" value="17:45" selected="selected">17:45</option> 
+				</select>
+				<div id="div_timeERROR"></div>
+				<div id="div_typeNotice_timeBase"></div>
+			</td>
+		</tr>
+		<tr bgcolor="#CCCCCC" align="center">
+			<td>Deputy</td>
+			<td colspan="2">Attached File</td>
+		</tr>
+		<tr bgcolor="#EEEEEE" align="center">
+			<td><div id="div_deputyQSltContent" style="display: none;"></div><img src="../Public/Images/add_member.gif" onclick="document.getElementById('div_deputyERROR').innerHTML='';subForm('ra', 'userNo_deputy', 'div_deputyName', 'userNo_applicant', '3|4|5');" width="25" height="25" align="absmiddle" onmouseover="this.style.cursor='pointer';" onmouseout="this.style.cursor='auto';" title="Click to choose deputy" /><span id="div_deputyName"></span><div id="div_deputyERROR"></div></td>
+			<td align="center" colspan="2"><div id="show_AttachFile" name="show_AttachFile"></div><img style="cursor: auto;" src="../Public/Images/attachfile.gif" onclick="attach_file('show_AttachFile', 'AttachFile');" onmouseover="this.style.cursor='pointer';" onmouseout="this.style.cursor='auto';" align="absmiddle"><div id="div_upFile_notice" name="div_upFile_notice"></div><div id="div_typeNotice_attFile"></div><span id="div_upFile_xd" name="div_upFile_xd"></span><input name="attFilesName" id="attFilesName" value="" type="hidden"><input name="attFilestmpName" id="attFilestmpName" value="" type="hidden"><input name="attFilesID" id="attFilesID" value="" type="hidden"></td>
+		</tr>
+		<tr bgcolor="#CCCCCC" align="center">
+			<td>Notifiable users</td>
+			<td colspan="2">Reason</td>
+		</tr>
+		<tr bgcolor="#EEEEEE" align="center">
+			<td valign="top"><div align="left" id="div_userNo_notify_extra">&nbsp;<input type="checkbox" name="notify_extra[]" value="devicevm-all@devicevm.com" onclick="notifiableCheck()">DVM-all<hr /></div><img src="../Public/Images/add_member.gif" onclick="subForm('ch', 'userNo_notify', 'div_notifyName', '', '');" width="25" height="25" align="absmiddle" onmouseover="this.style.cursor='pointer';" onmouseout="this.style.cursor='auto';" title="Click to choose notifiable users" /><span id="div_notifyName"></span></td>
+			<td colspan="2"><textarea id="reason" name="reason" cols="50" rows="5" alt="Absence reason" title="Click to edit absence reason" ></textarea><div id="div_reasonERROR"></div></td>
+		</tr>
+		</table>
+		<table class="clsTab" style="border-collapse:collapse;display:none" id="out">
+		<tr>
+			<td>Out of office</td>
+		</tr>
+		</table>
+		<div id="div_form_notice"></div>
+		<p class="center">
+			<input type="button" name="btn_submitla" id="btn_submitla" value="Submit" alt="Submit" title="Submit this absence apply form" />&nbsp;&nbsp;&nbsp;<input type="button" name="btn_cancella" id="btn_cancella" value="Cancel" onclick="self.parent.tb_remove()" alt="Cancel" title="Click to go previous page" />
+		</p>
+		
+		<div align="left" id="div_typeRule"></div>
+		</form>
+	</td>
+</table>
+<script language="JavaScript" type="text/javascript">
+$("td.clsTab").each(function(){
+	$(this).css("cursor", "pointer").click(function(){
+		switchTab($(this).attr("id"));
+	});
+});
+</script>
