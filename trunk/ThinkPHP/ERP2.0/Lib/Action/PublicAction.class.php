@@ -104,7 +104,9 @@ class PublicAction extends BaseAction{
 		Session::clear();
 		self::_success('Logout success!', __APP__);
 	}
-
+	public function profile() {
+		R('Staff', 'profile');
+	}
 	public function remark() {
 		if (!empty($_GET['remark_id'])) {
 			die(M('Remark2')->where('id='.$_GET['remark_id'])->getField('remark'));
@@ -152,7 +154,7 @@ class PublicAction extends BaseAction{
 		}
 		$this->assign('product_id', $product_id);
 		$this->assign('result', array_merge($remark, $remark1, $remark2));
-		$this->assign('content', 'Public:remark');
+		$this->assign('content', ACTION_NAME);
 		$this->display('Layout:content');
 	}
 	public function check(){

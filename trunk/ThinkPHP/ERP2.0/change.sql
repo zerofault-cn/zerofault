@@ -74,3 +74,5 @@ CREATE TABLE IF NOT EXISTS erp_absence (
   status tinyint(1) NOT NULL DEFAULT '0' ,
   PRIMARY KEY (id)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+ALTER TABLE erp_options ADD description TEXT NOT NULL AFTER code
