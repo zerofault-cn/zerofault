@@ -101,4 +101,6 @@ $("td.clsTab").each(function(){
 		switchTab($(this).attr("id"));
 	});
 });
+
 </script>
+<script language="JAVASCRIPT">$(document).ready(function(){var uidates = $('#date_from, #date_to').datepicker({dateFormat: 'yy-mm-dd',changeMonth: true,changeYear: true,onSelect: function(selectedDate) {var option = this.id == "date_from" ? "minDate" : "maxDate";var instance = $(this).data("datepicker");var date = $.datepicker.parseDate(instance.settings.dateFormat || $.datepicker._defaults.dateFormat, selectedDate, instance.settings);uidates.not(this).datepicker("option", option, date);},onClose: function(dateText, inst) {checkDuraConflict();}});$('#btn_submitla').bind('click', CheckForm_absenceApply);});</script>
