@@ -317,3 +317,10 @@ fieldset.addForm{
 .rightColumn #table td span.c0{
 	color:red;
 }
+td.line_name{
+	padding:2px;
+}
+td.focus{
+	padding:0;
+	border:2px solid #92D050;
+} 

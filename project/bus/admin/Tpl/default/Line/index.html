@@ -15,7 +15,7 @@
 	<iterate name="list" id="item">
 	<tr bgcolor="<eq name='mod' value='1'>#FFFFE1</eq>">
 		<td rowspan="2">{$item['number']}</td>
-		<td rowspan="2"><a href="#" id="{$item['id']}">{$item['name']}</a></td>
+		<td rowspan="2" id="{$item['id']}" class="line_name"><span>{$item['name']}</span><input type="text" value="{$item['name']}" style="display: none; width: 0;text-align:center;" /></td>
 		<td><a href="#">{$site[$item['start_sid']]}</a>－<a href="#">{$site[$item['end_sid']]}</a></td>
 		<td>{$item['start_first']}-{$item['start_last']}</label></td>
 		<td rowspan="2">{$item['fare_norm']}/{$item['fare_cond']}</td>
@@ -47,4 +47,83 @@
 		</form>
 	</div>
 <script language="JavaScript" type="text/javascript">
+$(document).ready(function(){
+	$("td.line_name").each(function(i) {
+		setEditable(this, i);
+	});
+});
+function setEditable(obj, n) {
+	$(obj).css('cursor', 'pointer').mouseover(function(){
+		$(this).addClass("focus");
+	}).mouseout(function(){
+		$(this).removeClass("focus");
+	}).click(function(){
+		if ($(this).children('input').css('display') != 'none') {
+			return;
+		}
+		$("td.editing").children('input').hide();
+		$("td.editing").children('span').show();
+		$("td.editing").removeClass('editing');
+		var width = $(this).width();
+		$(this).children('span').hide();
+		$(this).children("input").css('width', width).show().select().keydown(function(e){
+			var keyCode=e.keyCode || window.event.keyCode;
+			if(keyCode==13)
+			{
+				submit_edit(this, n);
+			}
+			else if(keyCode==27)
+			{
+				cancel_edit(this, n);
+			}
+		});
+		$(this).addClass('editing');
+	});
+}
+function submit_edit(obj, n){
+	$("#_iframe").attr("src", _URL_+"/update/f/name/v/"+str_replace('/', '|', $(obj).val())+"/id/"+$(obj).parent().attr('id')+"/");
+}
+function cancel_edit(obj, n){
+	$(obj).hide().prev().show();
+}
+function str_replace (search, replace, subject, count) {
+    // Replaces all occurrences of search in haystack with replace  
+    // 
+    // version: 909.322
+    // discuss at: http://phpjs.org/functions/str_replace    // +   original by: Kevin van Zonneveld (http://kevin.vanzonneveld.net)
+    // +   improved by: Gabriel Paderni
+    // +   improved by: Philip Peterson
+    // +   improved by: Simon Willison (http://simonwillison.net)
+    // +    revised by: Jonas Raoni Soares Silva (http://www.jsfromhell.com)    // +   bugfixed by: Anton Ongson
+    // +      input by: Onno Marsman
+    // +   improved by: Kevin van Zonneveld (http://kevin.vanzonneveld.net)
+    // +    tweaked by: Onno Marsman
+    // +      input by: Brett Zamir (http://brett-zamir.me)    // +   bugfixed by: Kevin van Zonneveld (http://kevin.vanzonneveld.net)
+    // +   input by: Oleg Eremeev
+    // +   improved by: Brett Zamir (http://brett-zamir.me)
+    // +   bugfixed by: Oleg Eremeev
+    // %          note 1: The count parameter must be passed as a string in order    // %          note 1:  to find a global variable in which the result will be given
+    // *     example 1: str_replace(' ', '.', 'Kevin van Zonneveld');
+    // *     returns 1: 'Kevin.van.Zonneveld'
+    // *     example 2: str_replace(['{name}', 'l'], ['hello', 'm'], '{name}, lars');
+    // *     returns 2: 'hemmo, mars'    var i = 0, j = 0, temp = '', repl = '', sl = 0, fl = 0,
+            f = [].concat(search),
+            r = [].concat(replace),
+            s = subject,
+            ra = r instanceof Array, sa = s instanceof Array;    s = [].concat(s);
+    if (count) {
+        this.window[count] = 0;
+    }
+     for (i=0, sl=s.length; i < sl; i++) {
+        if (s[i] === '') {
+            continue;
+        }
+        for (j=0, fl=f.length; j < fl; j++) {            temp = s[i]+'';
+            repl = ra ? (r[j] !== undefined ? r[j] : '') : r[0];
+            s[i] = (temp).split(f[j]).join(repl);
+            if (count && s[i] !== temp) {
+                this.window[count] += (temp.length-s[i].length)/f[j].length;}        }
+    }
+    return sa ? s : s[0];
+}
 </script>
