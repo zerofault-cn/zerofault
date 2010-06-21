@@ -465,6 +465,10 @@
 				$strQuery 	= "DELETE FROM cf_slottouser WHERE nMailingListId = '$nNewMailinglistID' AND nSlotId=".$arrSlot["nID"];
 				$nResult 	= mysql_query($strQuery) or die(mysql_error()."1<br> $strQuery <br>");	
 				
+				//--- first delete all fieldvalue for this slot
+				$strQuery 	= "DELETE FROM cf_fieldvalue WHERE nCirculationHistoryID = '$nCirculationHistoryID' AND nSlotId=".$arrSlot["nID"];
+				$nResult 	= mysql_query($strQuery) or die(mysql_error()."1<br> $strQuery <br>");	
+				
 				//--- After that insert all slot to user relations for this slot
 				$slot_id = $arrSlot['nID'];
 				if (array_key_exists($slot_id, $arrSlotRelations))
@@ -472,7 +476,62 @@
 					foreach ($arrSlotRelations[$arrSlot['nID']] as $nPos=>$nUserId)
 					{
 						$strQuery 	= "INSERT INTO cf_slottouser values (null, ".$arrSlot["nID"].", '$nNewMailinglistID', $nUserId, $nPos)";
-						$nResult 	= mysql_query($strQuery) or die(mysql_error()."2<br> $strQuery <br>");	
+						$nResult 	= mysql_query($strQuery) or die(mysql_error()."2<br> $strQuery <br>");
+						
+						$nMax = sizeof($arrInputFieldIDs);
+						for ($nIndex = 0; $nIndex < $nMax; $nIndex++)
+						{
+							$nCurInputFieldID 	= $arrInputFieldIDs[$nIndex]['nInputFieldID'];
+							$nCurFormSlotID		= $arrInputFieldIDs[$nIndex]['nFormSlotID'];
+							
+							$strQuery 			= "SELECT * FROM cf_inputfield WHERE nID = '$nCurInputFieldID' LIMIT 1;";
+							$nResult 			= @mysql_query($strQuery);
+							$arrCurInputField 	= @mysql_fetch_array($nResult,MYSQL_ASSOC);
+							
+							$strCurStandardValue = $arrCurInputField['strStandardValue'];
+							
+							$nPHMax = sizeof($arrPlaceholders);
+							for ($nPHIndex = 0; $nPHIndex < $nPHMax; $nPHIndex++)
+							{
+								$strCurPlaceholder = $arrPlaceholders[$nPHIndex];
+								
+								if($strCurStandardValue == $strCurPlaceholder)
+								{
+									$arrSplit = split('%', $strCurPlaceholder);
+													
+									$strCurStandardValue = replaceMyPlaceholder($arrSplit[1]);
+									
+									$nPHIndex = $nPHMax;
+								}
+							}
+							
+							$nMyFieldType = $objMyCirculation->getFieldType($nCurInputFieldID);
+							$arrSplit = '';
+							$strNewStdValue = '';
+							if (($nMyFieldType == 6) || ($nMyFieldType == 7) || ($nMyFieldType == 8))
+							{
+								$arrSplit = split('---', $strCurStandardValue);
+								
+								for ($nNewIndex = 3; $nNewIndex < sizeof($arrSplit); $nNewIndex = ($nNewIndex + 2))
+								{
+									if ($arrSplit[$nNewIndex] == '')
+									{
+										$strNewStdValue = $strNewStdValue.'0---';
+									}
+									else
+									{
+										$strNewStdValue = $strNewStdValue.$arrSplit[$nNewIndex].'---';
+									}
+								}
+								$strQuery 	= "INSERT INTO cf_fieldvalue values( null, '$nCurInputFieldID', '$nUserId', '$strNewStdValue', '$nCurFormSlotID', '$nCirculationFormID' , '$nCirculationHistoryID' )";
+								$nResult 	= @mysql_query($strQuery);
+							}
+							else
+							{
+								$strQuery 	= "INSERT INTO cf_fieldvalue values( null, '$nCurInputFieldID', '$nUserId', '$strCurStandardValue', '$nCurFormSlotID', '$nCirculationFormID' , '$nCirculationHistoryID' )";
+								$nResult 	= @mysql_query($strQuery);
+							}
+						}
 					}
 				}
 			}
