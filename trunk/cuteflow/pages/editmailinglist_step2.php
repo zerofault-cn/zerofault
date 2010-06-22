@@ -541,7 +541,7 @@
 										</td>
 									</tr>
 								</table>
-								<div style="height: 500px; width: 300px; overflow: auto;" id="available_users">
+								<div style="height: 1440px; width: 300px; overflow: auto;" id="available_users">
 									<table cellpadding="2" cellspacing="0" style="background-color:white;" width="100%">
 										<tbody id="AvailableUsers">
 										
