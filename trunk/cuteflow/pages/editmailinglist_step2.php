@@ -280,7 +280,7 @@
 							objDestinationTable.appendChild(new_row);
 							
 							//new: deselects the checkbox after adding it to the field
-							objSourceTable.childNodes[i].childNodes[nCheckboxPos].firstChild.checked = false;
+						//	objSourceTable.childNodes[i].childNodes[nCheckboxPos].firstChild.checked = false;
 						}
 					}
 				}
