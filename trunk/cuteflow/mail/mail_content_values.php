@@ -521,7 +521,7 @@
 						if (sizeof($arrSlots) != 0)
 						{
 					?>
-								<center><div style="width: 90%; height: 450px; overflow: auto; border:1px solid Gray;">
+								<center><div style="width: 90%; max-height: 1200px;_height:1200px; overflow: auto; border:1px solid Gray;">
 								<table border="0" width="100%" cellpadding="0" cellspacing="0" class="BorderSilver" style="background-color:White;">
 								    <tr>
 								        <td colspan="2">

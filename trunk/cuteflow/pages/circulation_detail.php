@@ -726,7 +726,7 @@ if ($view != 'print')
 					?>
 					    <tr>
 					        <td style="border-top: 1px solid Silver;" align="left">
-					            <table width="100%">
+					            <table width="100%" border="1" cellpadding="4" style="border-collapse:collapse;border:1px solid #999999;">
 								<tr><td style="font-weight: bold;background: #666666; color: #fff; padding:1px; width: 50px;" colspan="16"><?php echo $arrSlot['strName']; ?></td></tr>
 								<tr>
 								<?php
@@ -977,7 +977,7 @@ if ($view != 'print')
 												}
 												else
 												{
-													echo "<td width=\"10px\">&nbsp;</td>";
+												//	echo "<td width=\"10px\">&nbsp;</td>";
 												}
 												
 												$nRunningCounter++;

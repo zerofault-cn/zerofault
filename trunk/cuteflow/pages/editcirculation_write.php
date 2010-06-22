@@ -464,10 +464,12 @@
 				//--- first delete all entries for this slot
 				$strQuery 	= "DELETE FROM cf_slottouser WHERE nMailingListId = '$nNewMailinglistID' AND nSlotId=".$arrSlot["nID"];
 				$nResult 	= mysql_query($strQuery) or die(mysql_error()."1<br> $strQuery <br>");	
-				
+			//	echo $strQuery.'|'.mysql_affected_rows().'<br />';
+
 				//--- first delete all fieldvalue for this slot
-				$strQuery 	= "DELETE FROM cf_fieldvalue WHERE nCirculationHistoryID = '$nCirculationHistoryID' AND nSlotId=".$arrSlot["nID"];
+				$strQuery 	= "DELETE FROM cf_fieldvalue WHERE nCirculationHistoryID = $nCirculationHistoryID AND nSlotId=".$arrSlot["nID"];
 				$nResult 	= mysql_query($strQuery) or die(mysql_error()."1<br> $strQuery <br>");	
+			//	echo $strQuery.'|'.mysql_affected_rows().'<br />';
 				
 				//--- After that insert all slot to user relations for this slot
 				$slot_id = $arrSlot['nID'];
@@ -478,11 +480,12 @@
 						$strQuery 	= "INSERT INTO cf_slottouser values (null, ".$arrSlot["nID"].", '$nNewMailinglistID', $nUserId, $nPos)";
 						$nResult 	= mysql_query($strQuery) or die(mysql_error()."2<br> $strQuery <br>");
 						
-						$nMax = sizeof($arrInputFieldIDs);
-						for ($nIndex = 0; $nIndex < $nMax; $nIndex++)
+						$strQuery	= "SELECT * FROM cf_slottofield WHERE nSlotId = ".$arrSlot['nID'];
+						$result		= @mysql_query($strQuery);
+						while ($arrRow = mysql_fetch_row($result))
 						{
-							$nCurInputFieldID 	= $arrInputFieldIDs[$nIndex]['nInputFieldID'];
-							$nCurFormSlotID		= $arrInputFieldIDs[$nIndex]['nFormSlotID'];
+							$nCurInputFieldID 	= $arrRow[2];
+							$nCurFormSlotID		= $arrSlot['nID'];
 							
 							$strQuery 			= "SELECT * FROM cf_inputfield WHERE nID = '$nCurInputFieldID' LIMIT 1;";
 							$nResult 			= @mysql_query($strQuery);
