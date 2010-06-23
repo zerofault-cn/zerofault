@@ -648,12 +648,15 @@
 								$message->setBody($strMessage, 'text/html');
 								break;
 		    			}		    		
-		    		}				
+		    		}
+		    		$strQuery = "Select strName from `cf_formslot` where nID=".$nSlotId;
+		    		$nResult = mysql_query($strQuery, $nConnection);
+					$slotName = mysql_result($nResult, 0, 0);
 					
 					$SYSTEM_REPLY_ADDRESS = str_replace (' ', '_', $SYSTEM_REPLY_ADDRESS);
 							
 					$message->setFrom(array($SYSTEM_REPLY_ADDRESS=>'CuteFlow'));
-					$message->setSubject($MAIL_HEADER_PRE.$arrForm["strName"]);
+					$message->setSubject($MAIL_HEADER_PRE.$arrForm["strName"].', Slot: '.$slotName);
 							
 					$message->setTo(array($user["strEMail"]));
 							
