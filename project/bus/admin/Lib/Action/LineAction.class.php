@@ -95,6 +95,7 @@ class LineAction extends BaseAction{
 			$remote_info = self::getRemoteData($name);
 			S($local_info['number'], $remote_info, 7*86400);
 		}
+	//	dump($remote_info);
 		foreach($remote_info as $info) {
 			if($local_info['name'] == $info['name']) {
 				$remote_info = $info;
@@ -330,17 +331,32 @@ class LineAction extends BaseAction{
 		//$data = mb_convert_encoding($data,'UTF-8','GBK');
 		$data=str_get_html($data);
 		$table=$data->find('table[width="98%"] table',0);
-		$descr=$table->children(1)->plaintext;
-		if(strlen(trim($descr))>=2) {//表示存在此条线路的信息
+		$descr0=$table->children(0)->plaintext;
+//	echo '0:'.$descr0.'<br /><br />';
+		$descr1=$table->children(1)->plaintext;
+//	echo '1:'.$descr1.'<br /><br />';
+		$descr2=$table->children(2)->plaintext;
+//	echo '2:'.$descr2.'<br /><br />';
+		if(strlen(trim($descr1))>=2) {//表示存在此条线路的信息
 			$offset = 0;
-			if(strlen(trim($descr))<20) {//表示至少有两条同名线路
+			if(strlen(trim($descr0))<20 && strlen(trim($descr1))<20 && strlen(trim($descr2))>20) {//表示有两条同名线路
 				$offset=2;
+			}
+			elseif (strlen(trim($descr0))<20 && strlen(trim($descr1))<20 && strlen(trim($descr2))<20) {//有三条
+				$offset = 3;
 			}
 			$descr=$table->children(1+$offset)->plaintext;
 			self::parseLineInfo($descr,2+$offset);
 			if($offset==2) {
 				$descr=$table->children(4+$offset)->plaintext;
 				self::parseLineInfo($descr,5+$offset);
+			}
+			elseif ($offset == 3) {
+				$descr=$table->children(4+$offset)->plaintext;
+				self::parseLineInfo($descr,5+$offset);
+
+				$descr=$table->children(7+$offset)->plaintext;
+				self::parseLineInfo($descr,8+$offset);
 			}
 		}
 		$data->clear();
