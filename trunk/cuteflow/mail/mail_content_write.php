@@ -917,7 +917,7 @@
 						
 						$arrNextUsers = getNextUsersInList($nSubsUserId, $nListId, $nSlotId, $nCirculationFormId, $nCirculationHistoryId);
 					}
-					echo '<pre>$arrNextUsers<br />';var_dump($arrNextUsers);echo '</pre>';
+				//	echo '<pre>$arrNextUsers<br />';var_dump($arrNextUsers);echo '</pre>';
 					$sendMessageToSender = false;
 					foreach ($arrNextUsers as $arrNextUser) {
 						if ($arrNextUser[0] != "")
@@ -961,7 +961,7 @@
 								}
 								
 								if ( ($nEndAction & 8) == 8 && !$sendMessageToSender) {
-									echo 'sendMessageToSender1<br />';
+								//	echo 'sendMessageToSender1<br />';
 									sendMessageToSender($nSenderId, $arrProcessInfo["nUserId"], "done", $strCircName, "ENDSLOT", $_REQUEST["cpid"], $slotname);
 									$sendMessageToSender = true;
 								}
@@ -1007,7 +1007,7 @@
 									
 									if ($nShouldMailed == 1)
 									{
-										echo 'sendMessageToSender2<br />';
+									//	echo 'sendMessageToSender2<br />';
 										sendMessageToSender($nSenderId, $arrProcessInfo["nUserId"], "done", $strCircName, "SUCCESS", $_REQUEST["cpid"]);
 										$sendMessageToSender = true;
 									}
