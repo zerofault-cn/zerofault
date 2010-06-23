@@ -46,6 +46,7 @@
 						$arrCirculationProcess = mysql_fetch_array($nResult);				
 					}
 				}
+				$nSlotId = $arrCirculationProcess['nSlotId'];
 				//-----------------------------------------------
 				//--- get the single circulation form
 				//-----------------------------------------------
@@ -74,7 +75,7 @@
 					}
 				}
 				
-				$strQuery = "SELECT nID FROM `cf_circulationprocess` WHERE nUserId=".$_REQUEST['uid']." and nCirculationFormId = '".$_REQUEST['cfid']."' AND ( nDecissionState = '0' OR nDecissionState = '2' OR nDecissionState = '16') order by dateInProcessSince limit 1";
+				$strQuery = "SELECT nID,nSlotId FROM `cf_circulationprocess` WHERE nUserId=".$_REQUEST['uid']." and nCirculationFormId = '".$_REQUEST['cfid']."' AND ( nDecissionState = '0' OR nDecissionState = '2' OR nDecissionState = '16') order by dateInProcessSince limit 1";
 				$nResult = mysql_query($strQuery, $nConnection);
 	    		if ($nResult)
 	    		{
@@ -87,6 +88,7 @@
 	    					$arrLastRow = $arrRow;
 	    				}
 						$Circulation_cpid = $arrLastRow[0];
+						$nSlotId = $arrLastRow[1];
 						$_REQUEST['cpid'] = $Circulation_cpid;
 					}
 				}
@@ -118,7 +120,7 @@
 			?>
 			<frameset cols="180,*" frameborder="1" framespacing="0" border="1">
 				<frame name="FRAME_POSITION" src="mail_content_position.php?key=<?php echo $strEncyrptedParams ?>&random=<?php echo mt_rand();?>" marginwidth="0" marginheight="0" scrolling="auto" frameborder="1">
-			    <frame name="FRAME_VALUES" src="mail_content_values.php?key=<?php echo $strEncyrptedParams ?>&random=<?php echo mt_rand();?>" frameborder="0" scrolling="Auto" marginwidth="0" marginheight="0">
+			    <frame name="FRAME_VALUES" src="mail_content_values.php?key=<?php echo $strEncyrptedParams ?>&random=<?php echo mt_rand();?>#slot<?php echo $nSlotId;?>" frameborder="0" scrolling="Auto" marginwidth="0" marginheight="0">
 			</frameset>
 			<?php
 		}
@@ -126,7 +128,7 @@
 		{
 			?>	
 			<frameset cols="*" frameborder="0" framespacing="0" border="0">
-				<frame name="FRAME_VALUES" src="mail_content_values.php?key=<?php echo $strEncyrptedParams ?>" frameborder="0" scrolling="Auto" marginwidth="0" marginheight="0">
+				<frame name="FRAME_VALUES" src="mail_content_values.php?key=<?php echo $strEncyrptedParams ?>#slot<?php echo $nSlotId;?>" frameborder="0" scrolling="Auto" marginwidth="0" marginheight="0">
 			</frameset>
 			<?php 
 		}

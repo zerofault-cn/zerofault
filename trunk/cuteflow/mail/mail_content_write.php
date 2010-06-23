@@ -917,7 +917,8 @@
 						
 						$arrNextUsers = getNextUsersInList($nSubsUserId, $nListId, $nSlotId, $nCirculationFormId, $nCirculationHistoryId);
 					}
-				//	echo '<pre>$arrNextUsers<br />';print_r($arrNextUsers);echo '</pre>';
+					echo '<pre>$arrNextUsers<br />';var_dump($arrNextUsers);echo '</pre>';
+					$sendMessageToSender = false;
 					foreach ($arrNextUsers as $arrNextUser) {
 						if ($arrNextUser[0] != "")
 						{
@@ -930,7 +931,7 @@
 							
 							sendToUserDelay($arrNextUser[0], $arrProcessInfo["nCirculationFormId"], $arrNextUser[1], 0, $arrProcessInfo["nCirculationHistoryId"]);
 							
-							if ($arrNextUser[2] !== false) {
+							if ($arrNextUser[2] !== false && $arrNextUser[2] != $nSlotId) {
 								// Slot has changed
 								// Send a notification if this is wished
 												
@@ -959,8 +960,10 @@
 									}
 								}
 								
-								if ( ($nEndAction & 8) == 8 ) {
+								if ( ($nEndAction & 8) == 8 && !$sendMessageToSender) {
+									echo 'sendMessageToSender1<br />';
 									sendMessageToSender($nSenderId, $arrProcessInfo["nUserId"], "done", $strCircName, "ENDSLOT", $_REQUEST["cpid"], $slotname);
+									$sendMessageToSender = true;
 								}
 							}
 						}
@@ -1004,7 +1007,9 @@
 									
 									if ($nShouldMailed == 1)
 									{
+										echo 'sendMessageToSender2<br />';
 										sendMessageToSender($nSenderId, $arrProcessInfo["nUserId"], "done", $strCircName, "SUCCESS", $_REQUEST["cpid"]);
+										$sendMessageToSender = true;
 									}
 									
 									if ($nShouldArchived == 2)
