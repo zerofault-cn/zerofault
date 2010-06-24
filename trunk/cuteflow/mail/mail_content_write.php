@@ -949,7 +949,7 @@
 									}
 								}
 								
-								$strQuery = "SELECT * FROM cf_formslot WHERE nID=".$arrNextUser[2];
+								$strQuery = "SELECT * FROM cf_formslot WHERE nID=".$nSlotId;
 								$nResult = mysql_query($strQuery, $nConnection);
 								if ($nResult)
 								{

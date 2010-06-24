@@ -754,8 +754,7 @@
 				$mail_message->setFrom(array($SYSTEM_REPLY_ADDRESS=>'CuteFlow'));
 				eval ("\$strEndSubject = \"\$MAIL_ENDACTION_DONE_$strEndState\";");
 				
-				$mail_message->setSubject($MAIL_HEADER_PRE.$strCirculationName.
-											$strEndSubject);
+				$mail_message->setSubject($MAIL_HEADER_PRE.$strCirculationName.$strEndSubject.': '.$slotname);
 				
 				$mail_message->setTo(array($user["strEMail"]));
 				$result = $mailer->send($mail_message);
