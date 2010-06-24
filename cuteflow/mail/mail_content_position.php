@@ -311,7 +311,7 @@
 											$arrSubstitute = $arrProcessInformationSubstitute[$nCurPiId];
 											
 											?>
-											<tr style="<?php if ($bLastUser && !$arrSubstitute) echo 'background-color: #FFE88E;'; ?> height:22px;">
+											<tr style="<?php if ($arrCirculationProcess['nSlotId']==$arrSlot['nID'] && $arrCirculationProcess['nUserId']==$arrRow['nUserId'] && !$arrSubstitute) echo 'background-color: #FFE88E;'; ?> height:22px;">
 											<?php
 											
 											printUser($arrCurPi, false, $arrRow['nUserId'], $bLastUser);

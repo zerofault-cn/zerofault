@@ -3,7 +3,12 @@
 	include_once ("../language_files/language.inc.php");
 	include_once ('../pages/CCirculation.inc.php');
 	include_once ("../pages/version.inc.php");
-    
+if (!function_exists('replaceLinks')) {
+	function replaceLinks($value) {
+		$linktext = preg_replace('/(([a-zA-Z]+:\/\/)([a-zA-Z0-9?&%.;:\/=+_-]*))/i', "<a href=\"$1\" target=\"_blank\">$1</a>", $value);
+            return $linktext;
+	}
+}
     $objMyCirculation = new CCirculation();
 	//--- open database
 	$nConnection = mysql_connect($DATABASE_HOST, $DATABASE_UID, $DATABASE_PWD);
@@ -148,7 +153,8 @@
 	$nCirculationHistoryId;
 	
 	$nCounterOut = 0;
-	foreach ($arrFormSlots as $arrCurFormSlot)
+//	echo '<pre>';print_r($arrFormSlots);echo '</pre>';
+/*	foreach ($arrFormSlots as $arrCurFormSlot)
 	{
 		$nCurFormSlotID		= $arrCurFormSlot['nID'];
 		$strCurFormSlotName	= $arrCurFormSlot['strName'];
@@ -415,6 +421,300 @@
 		$nCounterOut++;
 		$strMessage_MIDDLE = $strMessage_MIDDLE."<tr><td colspan=\"2\" height=\"12\"></td></tr>";
 	}
+	*/
+			//-----------------------------------------------
+    		//--- get all users
+            //-----------------------------------------------
+            $arrUsers = array();
+    		$strQuery = "SELECT * FROM cf_user  WHERE bDeleted <> 1";
+    		$nResult = mysql_query($strQuery, $nConnection);
+    		if ($nResult)
+    		{
+    			if (mysql_num_rows($nResult) > 0)
+    			{
+    				while (	$arrRow = mysql_fetch_array($nResult))
+    				{
+    					$arrUsers[$arrRow["nID"]] = $arrRow;
+    				}
+    			}
+    		}
+    		//-----------------------------------------------
+            //--- get the field values
+            //-----------------------------------------------	
+			            
+            $arrValues = array();
+            $strQuery = "SELECT * FROM cf_fieldvalue WHERE nFormId=".$nCirculationId." AND nCirculationHistoryId=".$nCurCircHistoryID;
+    		$nResult = mysql_query($strQuery, $nConnection);
+    		if ($nResult)
+    		{
+    			if (mysql_num_rows($nResult) > 0)
+    			{
+    				while (	$arrRow = mysql_fetch_array($nResult))
+    				{
+    					$arrValues[$arrRow["nInputFieldId"]."_".$arrRow["nSlotId"]][$arrRow['nUserId']] = $arrRow;
+    				}
+    			}
+    		}
+    		
+    	//	print_r($arrValues);
+$strMessage_MIDDLE2 = '<table border="0" width="95%" cellpadding="0" cellspacing="0" class="BorderSilver">';
+
+$nConnection = mysql_connect($DATABASE_HOST, $DATABASE_UID, $DATABASE_PWD);
+if ($nConnection) {
+	if (mysql_select_db($DATABASE_DB, $nConnection)) {
+		foreach ($arrFormSlots as $arrSlot) {
+			$strMessage_MIDDLE2 .= '<tr>
+				<td style="border-top: 1px solid Silver;" align="left">
+					<table width="100%" border="1" cellpadding="4" style="border-collapse:collapse;border:1px solid #999999;">
+					<tr>
+						<td style="font-weight: bold;background: #666666; color: #fff; padding:1px; " colspan="16">'.$arrSlot['strName'].'</td>
+					</tr><tr>';
+			$strQuery = "SELECT * FROM cf_inputfield INNER JOIN cf_slottofield ON cf_inputfield.nID = cf_slottofield.nFieldId WHERE cf_slottofield.nSlotId = ".$arrSlot["nID"]."  ORDER BY cf_slottofield.nPosition ASC";
+			$nResult = mysql_query($strQuery, $nConnection) or die ($strQuery."<br>".mysql_error());
+			if ($nResult) {
+				if (mysql_num_rows($nResult) > 0) {
+					$nRunningCounter = 1;
+					while (	$arrRow = mysql_fetch_array($nResult)) {
+						$strMessage_MIDDLE2 .= "<td class=\"mandatory\" width=\"20%\" valign=\"middle\">".$arrRow["strName"].":</td>";
+						$strMessage_MIDDLE2 .= "<td width=\"300px\" valign=\"top\">";
+						foreach ($arrValues[$arrRow["nFieldId"]."_".$arrSlot["nID"]] as $user_id=>$user_val) {
+							$strMessage_MIDDLE2 .= '<div><strong>['.$arrUsers[$user_id]["strFirstName"].'] </strong>';
+							if ($arrRow["nType"] == 1) {
+								if ($user_val["strFieldValue"]!=''){
+									$arrValue = split('rrrrr',$user_val["strFieldValue"]);
+									$output = replaceLinks($arrValue[0]); 
+									if ($arrRow['strBgColor'] != "") {
+										$output = '<span style="background-color: #'.$arrRow['strBgColor'].'">'.$output.'<span>';
+									}
+									$strMessage_MIDDLE2 .=  $output; 
+								}
+								else {
+									$arrValue = split('rrrrr',$arrRow['strStandardValue']);
+									$output = replaceLinks($arrValue[0]); 
+									if ($arrRow['strBgColor'] != "") {
+										$output = '<span style="background-color: #'.$arrRow['strBgColor'].'">'.$output.'<span>';
+									}
+									$strMessage_MIDDLE2 .=  $output;
+								}
+							}
+							else if ($arrRow["nType"] == 2) {
+								if ($user_val["strFieldValue"] != "on") {
+									$strMessage_MIDDLE2 .= '<input type="checkbox" disabled />';
+								}
+								else {
+									$strMessage_MIDDLE2 .= '<input type="checkbox" checked="checked" disabled />';
+								}
+							}
+							else if ($arrRow["nType"] == 3) {
+								if ($user_val["strFieldValue"]!='') {
+									$arrValue = split('xx',$user_val["strFieldValue"]);
+									$nNumGroup 	= $arrValue[1];
+									$arrValue1 = split('rrrrr',$arrValue[2]);
+									$strMyValue	= $arrValue1[0];
+								}
+								else {
+									$arrValue = split('xx',$arrRow['strStandardValue']);
+									$nNumGroup 	= $arrValue[1];
+									$arrValue1 = split('rrrrr',$arrValue[2]);
+									$strMyValue	= $arrValue1[0];
+								}
+								$output = replaceLinks($strMyValue); 
+								if ($arrRow['strBgColor'] != "") {
+									$output = '<span style="background-color: #'.$arrRow['strBgColor'].'">'.$output.'<span>';
+								}																
+								$strMessage_MIDDLE2 .= $output;
+							}
+							else if ($arrRow["nType"] == 4)
+							{
+								if ($user_val["strFieldValue"]!='')
+								{
+									$arrValue = split('xx',$user_val["strFieldValue"]);
+									$nDateGroup 	= $arrValue[1];
+									$arrValue2 = split('rrrrr',$arrValue[2]);
+									$strMyValue 	= $arrValue2[0];
+								}
+								else
+								{
+									$arrValue 		= split('xx',$arrRow['strStandardValue']);
+									$nDateGroup 	= $arrValue[1];
+									$arrValue2 		= split('rrrrr',$arrValue[2]);
+									$strMyValue 	= $arrValue2[0];
+								}
+								$output = replaceLinks($strMyValue); 
+								if ($arrRow['strBgColor'] != "") {
+									$output = '<span style="background-color: #'.$arrRow['strBgColor'].'">'.$output.'<span>';
+								}																
+								$strMessage_MIDDLE2 .= $output;
+							}
+							else if ($arrRow["nType"] == 5)
+							{
+								if ($user_val["strFieldValue"]!='')
+								{
+									echo replaceLinks($user_val["strFieldValue"]);
+								}
+								else
+								{
+									echo replaceLinks($arrRow['strStandardValue']);
+								}
+							}
+							else if ($arrRow["nType"] == 6)
+							{
+								if ($user_val["strFieldValue"]!='')
+								{
+									$strValue = $user_val["strFieldValue"];
+									$arrMySplit = split('---', $strValue);
+									
+									if ($arrMySplit[1] > 1)
+									{	// edited field values
+										
+										$strValue = '';
+										$nMax = (sizeof($arrMySplit));
+										for ($nIndex = 3; $nIndex < $nMax; $nIndex = $nIndex + 2)
+										{
+											$strValue .= $arrMySplit[$nIndex].'---';
+										}
+										$keyId = rand(1, 150);
+									}
+									else
+									{	// we have to use the standard value
+										$strValue = $user_val["strFieldValue"];
+										$keyId = rand(1, 150);
+									}
+								}
+								else
+								{
+									$strValue = $arrRow['strStandardValue'];
+								}
+								
+								$nInputfieldID 	= $arrRow["nFieldId"];
+								$bIsEnabled 	= 0;
+								
+								$strEcho = $objMyCirculation->getRadioGroup($nInputfieldID, $strValue, $bIsEnabled, $keyId, $nRunningCounter);
+								
+								$strMessage_MIDDLE2 .= $strEcho;
+							}
+							else if ($arrRow["nType"] == 7)
+							{
+								if ($user_val["strFieldValue"]!='')
+								{
+								$strValue = $user_val["strFieldValue"];
+									$arrMySplit = split('---', $strValue);
+									
+									if ($arrMySplit[1] > 1)
+									{	// edited field values
+										
+										$strValue = '';
+										$nMax = (sizeof($arrMySplit));
+										for ($nIndex = 3; $nIndex < $nMax; $nIndex = $nIndex + 2)
+										{
+											$strValue .= $arrMySplit[$nIndex].'---';
+										}
+										$keyId = rand(1, 150);
+									}
+									else
+									{	// we have to use the standard value
+										$strValue = $user_val["strFieldValue"];
+										$keyId = rand(1, 150);
+									}
+								}
+								else
+								{
+									$strValue = $arrRow['strStandardValue'];
+								}
+								
+								$nInputfieldID 	= $arrRow["nFieldId"];
+								$bIsEnabled 	= 0;
+								
+								
+								$strEcho = $objMyCirculation->getCheckboxGroup($nInputfieldID, $strValue, $bIsEnabled, $keyId, $nRunningCounter);
+								
+								$strMessage_MIDDLE2 .= $strEcho;
+							}
+							elseif($arrRow["nType"] == 8)
+							{
+								if ($user_val["strFieldValue"]!='')
+								{
+									$strValue = $user_val["strFieldValue"];
+									$arrMySplit = split('---', $strValue);
+									
+									if ($arrMySplit[1] > 1)
+									{	// edited field values
+										
+										$strValue = '';
+										$nMax = (sizeof($arrMySplit));
+										for ($nIndex = 3; $nIndex < $nMax; $nIndex = $nIndex + 2)
+										{
+											$strValue .= $arrMySplit[$nIndex].'---';
+										}
+										$keyId = rand(1, 150);
+									}
+									else
+									{	// we have to use the standard value
+										$strValue = $user_val["strFieldValue"];
+										$keyId = rand(1, 150);
+									}
+								}
+								else
+								{
+									$strValue = $arrRow['strStandardValue'];
+								}
+								
+								$nInputfieldID 	= $arrRow["nFieldId"];
+								$bIsEnabled 	= 0;
+								
+								
+								$strEcho = $objMyCirculation->getComboBoxGroup($nInputfieldID, $strValue, $bIsEnabled, $keyId, $nRunningCounter);
+								
+								$strMessage_MIDDLE2 .= $strEcho;
+							}
+							elseif($arrRow["nType"] == 9)
+							{
+								if ($user_val["strFieldValue"]!='')
+								{
+									$arrSplit = split('---',$user_val["strFieldValue"]);
+								}
+								else
+								{
+									$arrSplit = split('---',$arrRow['strStandardValue']);
+								}
+								
+								$nNumberOfUploads 	= $arrSplit[1];
+								$strDirectory		= $arrSplit[2].'_'.$nNumberOfUploads;
+								
+								$arrValue22 = split('rrrrr',$arrSplit[3]);
+								
+								$strFilename		= $arrValue22[0];
+								
+								$strUploadPath 		= $CUTEFLOW_SERVER.'/upload/';
+								$strLink			= $strUploadPath.$strDirectory.'/'.$strFilename;
+								
+								$strMessage_MIDDLE2 .= "<a href=\"$strLink\" target=\"_blank\">$strFilename</a>";
+							}
+							$strMessage_MIDDLE2 .= '</div>';
+						}
+						$strMessage_MIDDLE2 .= "</td>";
+															
+						if ($nRunningCounter % 2 == 0)
+						{
+							$strMessage_MIDDLE2 .= "</tr>\n<tr>\n";
+						}
+						else
+						{
+						//	echo "<td width=\"10px\">&nbsp;</td>";
+						}
+						
+						$nRunningCounter++;
+					}
+					$strMessage_MIDDLE2 .= "<td></td>";
+				}
+			}
+			$strMessage_MIDDLE2 .= '</tr></table></td></tr>';
+
+		}
+	}
+}
+$strMessage_MIDDLE2 .= '</table>';
+
 
 
 //init vars
@@ -534,6 +834,6 @@ $strMessage_BOTTOM = "
 </body>
 </html>";
 
-$strMessage = $strMessage_TOP.$strMessage_MIDDLE.$strMessage_BOTTOM;
+$strMessage = $strMessage_TOP.$strMessage_MIDDLE2.$strMessage_BOTTOM;
 
 ?>
