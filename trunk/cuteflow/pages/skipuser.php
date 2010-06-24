@@ -73,6 +73,7 @@
 	//$arrNextUser = getNextUserInList($nUserId, $nMailinglistId, $nSlotId);
 	$arrNextUsers = getSkipUsers($arrProcessInfo['nUserId'], $nMailinglistId, $arrProcessInfo['nSlotId'], $nCirculationFormId, $nCirculationHistoryId);
 //	echo '<pre>';print_r($arrNextUsers);echo '</pre>';
+	$sendMessageToSender = false;
 	foreach ($arrNextUsers as $arrNextUser) {
 		// send the message
 		if ($arrNextUser[0] != '')
@@ -80,7 +81,7 @@
 			// send
 			sendToUserDelay($arrNextUser[0], $nCirculationFormId, $arrNextUser[1], 0, $nCirculationHistoryId);
 			
-			if ($arrNextUser[2] !== false) {
+			if ($arrNextUser[2] !== false && $arrNextUser[2]!=$arrProcessInfo['nSlotId']) {
 				// Slot has changed
 				// Send a notification if this is wished
 								
@@ -99,7 +100,7 @@
 					}
 				}
 				
-				$strQuery = "SELECT * FROM cf_formslot WHERE nID=".$arrNextUser[2];
+				$strQuery = "SELECT * FROM cf_formslot WHERE nID=".$arrProcessInfo['nSlotId'];
 				$nResult = mysql_query($strQuery, $nConnection);
 				if ($nResult)
 				{
@@ -110,12 +111,11 @@
 					}
 				}
 				
-				if ( ($nEndAction & 8) == 8 ) {
+				if ( ($nEndAction & 8) == 8 && !$sendMessageToSender) {
 					sendMessageToSender($nSenderId, $arrProcessInfo["nUserId"], "done", $strCircName, "ENDSLOT", $_REQUEST["cpid"], $slotname);
+					$sendMessageToSender = true;
 				}
 			}
-							
-			
 		}
 		else
 		{
@@ -158,6 +158,7 @@
 					if ($nShouldMailed == 1)
 					{
 						sendMessageToSender($nSenderId, $arrProcessInfo["nUserId"], "done", $strCircName, "SUCCESS", $_REQUEST["cpid"]);
+						$sendMessageToSender = true;
 					}
 					
 					if ($nShouldArchived == 2)
