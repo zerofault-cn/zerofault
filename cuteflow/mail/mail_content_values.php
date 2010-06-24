@@ -576,7 +576,7 @@
 													        	?>
 													        	
 													            <table width="100%" <?php echo $background;?>>
-																<tr><td style="font-weight: bold;background: #666666; color: #fff; padding:1px;" colspan="5" id="slot<?php echo $arrSlot['nID']; ?>"><?php echo $arrSlot['strName']; ?></td></tr>
+																<tr><td style="font-weight: bold;background: #666666; color: #fff; padding:1px;" colspan="5" id="slot<?php echo $arrSlot['nID']; ?>"><?php echo $arrSlot['strName']; ?><a name="slot<?php echo $arrSlot['nID']; ?>"></a></td></tr>
 																<tr>
 																<?php
 																	$strQuery = "SELECT * FROM cf_inputfield INNER JOIN cf_slottofield ON cf_inputfield.nID = cf_slottofield.nFieldId WHERE cf_slottofield.nSlotId = ".$arrSlot["nID"]."  ORDER BY cf_slottofield.nPosition ASC";
