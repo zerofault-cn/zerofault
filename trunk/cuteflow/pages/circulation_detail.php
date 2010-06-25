@@ -741,6 +741,7 @@ if ($view != 'print')
             			       				{
 												echo "<td class=\"mandatory\" width=\"20%\" valign=\"middle\">".$arrRow["strName"].":</td>";
 												echo "<td width=\"300px\" valign=\"top\">";
+												echo $arrRow["nFieldId"]."_".$arrSlot["nID"];echo '<br />';
 												foreach ($arrValues[$arrRow["nFieldId"]."_".$arrSlot["nID"]] as $user_id=>$user_val) {
 												echo '<div><strong>[<img src="../images/singleuser.gif" height="16" width="16" align="absmiddle"/> '.$arrUsers[$user_id]["strFirstName"].'] </strong>';
 												if ($arrRow["nType"] == 1)
