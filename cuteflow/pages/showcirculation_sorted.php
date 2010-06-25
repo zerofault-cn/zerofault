@@ -509,7 +509,7 @@ include	('../language_files/language.inc.php');
 			
 			if (!$_REQUEST['bOwnCirculations'])
 			{	// show the general options
-				if (($_SESSION["SESSION_CUTEFLOW_ACCESSLEVEL"] == 2)||($_SESSION["SESSION_CUTEFLOW_ACCESSLEVEL"] == 8))
+				if (($_SESSION["SESSION_CUTEFLOW_ACCESSLEVEL"] == 2)||($_SESSION["SESSION_CUTEFLOW_ACCESSLEVEL"] == 2))
 				{
 					echo "<a href=\"javascript:deleteCirculation($nCirculationFormID, $start)\" onMouseOver=\"tip('delete')\" onMouseOut=\"untip()\"><img src=\"../images/edit_remove.gif\" border=\"0\"height=\"16\" width=\"16\" style=\"margin-right: 4px;\"></a>";
 				}
@@ -523,7 +523,7 @@ include	('../language_files/language.inc.php');
 					echo "<a $strTarget href=\"#\" onMouseOver=\"tip('detail')\" onMouseOut=\"untip()\" onClick=\"showCirculationDetails(".$nCirculationFormID.", 0); return false\"><img src=\"../images/act_view.gif\" border=\"0\"height=\"16\" width=\"16\"></a> ";
 				}
 				
-				if (($_SESSION["SESSION_CUTEFLOW_ACCESSLEVEL"] == 2)||($_SESSION["SESSION_CUTEFLOW_ACCESSLEVEL"] == 8))
+				if (($_SESSION["SESSION_CUTEFLOW_ACCESSLEVEL"] == 2)||($_SESSION["SESSION_CUTEFLOW_ACCESSLEVEL"] == 2))
 				{
 					$archivebit = 0;
 					$tip = 'unarchive';
@@ -542,7 +542,7 @@ include	('../language_files/language.inc.php');
 				if ($archivemode == 0)
 				{
 					$SetOne = 0;
-					if ($bStopped == false && (($_SESSION["SESSION_CUTEFLOW_ACCESSLEVEL"] == 2)||($_SESSION["SESSION_CUTEFLOW_ACCESSLEVEL"] == 8)))
+					if ($bStopped == false && (($_SESSION["SESSION_CUTEFLOW_ACCESSLEVEL"] == 2)||($_SESSION["SESSION_CUTEFLOW_ACCESSLEVEL"] == 2)))
 					{
 						?>
 						<a href="javascript:stopCirculation(<?php echo $nCirculationFormID ?>, <?php echo $start ?>)" onMouseOver="tip('stop')" onMouseOut="untip()"><img src="../images/stop.gif" border="0"height="16" width="16"></a>
@@ -550,7 +550,7 @@ include	('../language_files/language.inc.php');
 						$SetOne = 1;
 					}
 					
-					if ( $bStopped == true && (($_SESSION["SESSION_CUTEFLOW_ACCESSLEVEL"] == 2)||($_SESSION["SESSION_CUTEFLOW_ACCESSLEVEL"] == 8)))
+					if ( $bStopped == true && (($_SESSION["SESSION_CUTEFLOW_ACCESSLEVEL"] == 2)||($_SESSION["SESSION_CUTEFLOW_ACCESSLEVEL"] == 2)))
 					{
 						echo "<a href=\"editcirculation.php?circid=$nCirculationFormID&language=$language&bRestart=1\" onMouseOver=\"tip('restart')\" onMouseOut=\"untip()\" ><img src=\"../images/restart.gif\" border=\"0\"height=\"16\" width=\"16\"></a> ";
 						$SetOne = 1;
@@ -565,7 +565,7 @@ include	('../language_files/language.inc.php');
 			}
 			else
 			{	// show the options for "Own Circulations" only
-				if (($_SESSION["SESSION_CUTEFLOW_ACCESSLEVEL"] == 2)||($_SESSION["SESSION_CUTEFLOW_ACCESSLEVEL"] == 8))
+				if (($_SESSION["SESSION_CUTEFLOW_ACCESSLEVEL"] == 2)||($_SESSION["SESSION_CUTEFLOW_ACCESSLEVEL"] == 2))
 				{
 					?>
 					<a href="javascript: deleteCirculation(<?php echo $nCirculationFormID ?>, <?php echo $start ?>)" onMouseOver="tip('delete')" onMouseOut="untip()"><img src="../images/edit_remove.gif" border="0" height="16" width="16" style="margin-right: 4px;"></a>
