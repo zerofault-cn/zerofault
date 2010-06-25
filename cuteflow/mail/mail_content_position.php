@@ -137,7 +137,7 @@
             $arrProcessInformation = array();
 			$arrProcessInformationSubstitute = array();
 			
-            $strQuery = "SELECT * FROM cf_circulationprocess WHERE nCirculationFormId=".$arrCirculationProcess["nCirculationFormId"]." AND nCirculationHistoryId=".$_REQUEST["nRevisionId"]." ORDER BY dateInProcessSince";
+            $strQuery = "SELECT * FROM cf_circulationprocess WHERE nCirculationFormId=".$arrCirculationProcess["nCirculationFormId"]." AND nCirculationHistoryId=".$_REQUEST["nRevisionId"]." ORDER BY nID";
             //$strQuery = "SELECT * FROM cf_circulationprocess WHERE nCirculationFormId=".$_REQUEST["circid"]." AND nCirculationHistoryId=".$_REQUEST["nRevisionId"]." ORDER BY dateInProcessSince";
     		$nResult = mysql_query($strQuery, $nConnection);
     		if ($nResult)
@@ -173,7 +173,7 @@
     		}
 		}
 	}
-	
+//	echo '<pre>';print_r($arrProcessInformation);echo '</pre>';
 	function printUser($arrRow, $bIsSubstitute, $nUserId, $bLastUser)
 	{
 		global $arrUsers, $_REQUEST;
@@ -211,7 +211,7 @@
        		}
 
 		}
-	
+	//	echo '<pre>';print_r($arrRow);echo '</pre>';
 		//--- The process state
 		if (!$arrRow)
 		{
@@ -290,7 +290,8 @@
 						                <?php
 			                           	while (	$arrRow = mysql_fetch_array($nResult))
 			                        	{
-			                        		if ($arrRow['nUserId'] != -2)
+			                        	//	echo '['.$arrRow['nUserId'].'_'.$arrSlot['nID'].'_'.$nPosInSlot.']<br />';
+											if ($arrRow['nUserId'] != -2)
 			                        		{
 			                        			$arrCurPi = $arrProcessInformation[$arrRow['nUserId'].'_'.$arrSlot['nID'].'_'.$nPosInSlot];
 			                        		}
