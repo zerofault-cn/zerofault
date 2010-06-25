@@ -664,7 +664,7 @@ if ($view != 'print')
 									//$arrSubstitutes = $objMyCirculation->getSubstitutes($nUserId);
 									
 									
-									$strQuery 	= "SELECT * FROM cf_circulationprocess WHERE nCirculationFormId = '$nCirculationFormId' AND nCirculationHistoryId = '$nCirculationHistoryId' ORDER BY dateInProcessSince ASC";
+									$strQuery 	= "SELECT * FROM cf_circulationprocess WHERE nCirculationFormId = '$nCirculationFormId' AND nCirculationHistoryId = '$nCirculationHistoryId' ORDER BY nID ASC";
 									$result		= mysql_query($strQuery, $nConnection);
 									$arrCPResult = NULL;
 									while ($arrRow2 = mysql_fetch_array($result))

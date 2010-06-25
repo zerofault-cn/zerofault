@@ -543,18 +543,18 @@ if ($nConnection) {
 								$output = replaceLinks($strMyValue); 
 								if ($arrRow['strBgColor'] != "") {
 									$output = '<span style="background-color: #'.$arrRow['strBgColor'].'">'.$output.'<span>';
-								}																
+								}
 								$strMessage_MIDDLE2 .= $output;
 							}
 							else if ($arrRow["nType"] == 5)
 							{
 								if ($user_val["strFieldValue"]!='')
 								{
-									echo replaceLinks($user_val["strFieldValue"]);
+									$strMessage_MIDDLE2 .= replaceLinks($user_val["strFieldValue"]);
 								}
 								else
 								{
-									echo replaceLinks($arrRow['strStandardValue']);
+									$strMessage_MIDDLE2 .= replaceLinks($arrRow['strStandardValue']);
 								}
 							}
 							else if ($arrRow["nType"] == 6)
