@@ -222,7 +222,7 @@
 				
 				$nInputFieldId 			= $arrFieldvalue['nInputFieldId'];
 				$nUserId				= $arrFieldvalue['nUserId'];
-				$strFieldValue 			= $arrFieldvalue['strFieldValue'];
+				$strFieldValue 			= addslashes($arrFieldvalue['strFieldValue']);
 				$nSlotId 				= $arrFieldvalue['nSlotId'];
 				$nFormId 				= $arrFieldvalue['nFormId'];
 				$nCirculationHistoryId 	= $nCirculationHistoryID;
@@ -234,7 +234,7 @@
 															'$nSlotId',
 															'$nFormId',
 															'$nNewCirculationHistoryID')";
-				echo $query.'<br>';
+			//	echo $query.'<br>';
 				mysql_query($query, $nConnection);
 			}
 		}
@@ -350,7 +350,7 @@
 					$nPHIndex = $nPHMax;
 				}
 			}
-			
+			$strCurStandardValue = addslashes($strCurStandardValue);
 			$nMyFieldType = $objMyCirculation->getFieldType($nCurInputFieldID);
 			
 			foreach ($Slot_User_arr[$nCurFormSlotID] as $user_id) {
@@ -507,7 +507,7 @@
 									$nPHIndex = $nPHMax;
 								}
 							}
-							
+							$strCurStandardValue = addslashes($strCurStandardValue);
 							$nMyFieldType = $objMyCirculation->getFieldType($nCurInputFieldID);
 							$arrSplit = '';
 							$strNewStdValue = '';

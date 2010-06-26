@@ -25,7 +25,6 @@
 			}
 		}
 	}
-	
 	$nConnection = mysql_connect($DATABASE_HOST, $DATABASE_UID, $DATABASE_PWD);
 	if ($nConnection)
 	{
@@ -75,7 +74,7 @@
 					}
 				}
 				
-				$strQuery = "SELECT nID,nSlotId FROM `cf_circulationprocess` WHERE nUserId=".$_REQUEST['uid']." and nCirculationFormId = '".$_REQUEST['cfid']."' AND ( nDecissionState = '0' OR nDecissionState = '2' OR nDecissionState = '16') order by dateInProcessSince limit 1";
+				$strQuery = "SELECT nID,nSlotId FROM `cf_circulationprocess` WHERE nUserId=".$_REQUEST['uid']." and nCirculationFormId = '".$_REQUEST['cfid']."' AND ( nDecissionState = '0' OR nDecissionState = '2' OR nDecissionState = '16') order by nCirculationHistoryId";
 				$nResult = mysql_query($strQuery, $nConnection);
 	    		if ($nResult)
 	    		{
