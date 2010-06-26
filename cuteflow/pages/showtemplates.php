@@ -173,8 +173,10 @@
             				
             	echo "<td align=\"left\" nowrap>".$arrRow["strName"]."</td>";
 				
-                echo "<td align=\"right\">";							
-            	echo "<a href=\"javascript:deleteTemplate($arrRow[0])\" alt=\"L�schen\" onMouseOver=\"tip('delete')\" onMouseOut=\"untip()\"><img src=\"../images/edit_remove.gif\" border=\"0\" height=\"16\" width=\"16\" style=\"margin-right: 4px;\"></a>";
+                echo "<td align=\"right\">";
+				if ($_SESSION["SESSION_CUTEFLOW_ACCESSLEVEL"] == 2) {
+					echo "<a href=\"javascript:deleteTemplate($arrRow[0])\" alt=\"L�schen\" onMouseOver=\"tip('delete')\" onMouseOut=\"untip()\"><img src=\"../images/edit_remove.gif\" border=\"0\" height=\"16\" width=\"16\" style=\"margin-right: 4px;\"></a>";
+				}
             	echo "<a href=\"edittemplate_step1.php?templateid=$arrRow[0]&language=".$_REQUEST["language"]."&sortby=".$_REQUEST["sortby"]."&start=".$_REQUEST["start"]."\" onMouseOver=\"tip('detail')\" onMouseOut=\"untip()\" alt=\"Anzeigen\"><img src=\"../images/edit.png\" border=\"0\"></a>";
             	echo "</td></tr>";
             											

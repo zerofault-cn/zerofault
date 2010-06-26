@@ -150,7 +150,7 @@ switch ($strEndState)
 				</tr>
 				<tr><td><br></td></tr>
 				<tr>
-				<td  colspan=\"2\" class=\"note\" style=\"background-color:white;\">$EMAIL_BROWSERVIEW
+				<td  colspan=\"2\" class=\"note\" style=\"background-color:white;\">
 				<a href=\"$strEncryptedBrowserview\">$EMAIL_BROWSERVIEW</a>
 				</td>
 				</tr>
@@ -173,7 +173,7 @@ switch ($strEndState)
 				</tr>
 				<tr><td><br></td></tr>
 				<tr>
-				<td  colspan=\"2\" class=\"note\" style=\"background-color:white;\">$EMAIL_BROWSERVIEW
+				<td  colspan=\"2\" class=\"note\" style=\"background-color:white;\">
 				<a href=\"$strEncryptedBrowserview\">$EMAIL_BROWSERVIEW</a>
 				</td>
 				</tr>
@@ -196,7 +196,7 @@ switch ($strEndState)
 			</tr>
 			<tr><td><br></td></tr>
 			<tr>
-				<td  colspan=\"2\" class=\"note\" style=\"background-color:white;\">$EMAIL_BROWSERVIEW
+				<td  colspan=\"2\" class=\"note\" style=\"background-color:white;\">
 				<a href=\"$strEncryptedBrowserview\">$EMAIL_BROWSERVIEW</a>
 				</td>
 			</tr>
@@ -219,7 +219,7 @@ switch ($strEndState)
 			</tr>
 			<tr><td><br></td></tr>
 			<tr>
-				<td  colspan=\"2\" class=\"note\" style=\"background-color:white;\">$EMAIL_BROWSERVIEW
+				<td  colspan=\"2\" class=\"note\" style=\"background-color:white;\">
 				<a href=\"$strEncryptedBrowserview\">$EMAIL_BROWSERVIEW</a>
 				</td>
 			</tr>

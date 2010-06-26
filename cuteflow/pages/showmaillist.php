@@ -183,7 +183,13 @@
 	            	<td align="left" nowrap><?php echo $arrRow['strName'] ?></td>
 	            	<td align="center" nowrap><?php echo $strImage ?></td>
 					<td align="center">
-		            	<a href="javascript:deleteMailList(<?php echo $arrRow['nID'] ?>)" onMouseOver="tip('delete')" onMouseOut="untip()"><img src="../images/edit_remove.gif" border="0"height="16" width="16" style="margin-right: 4px;"></a>
+						<?php
+						if ($_SESSION["SESSION_CUTEFLOW_ACCESSLEVEL"] == 2) {
+						?>
+						<a href="javascript:deleteMailList(<?php echo $arrRow['nID'] ?>)" onMouseOver="tip('delete')" onMouseOut="untip()"><img src="../images/edit_remove.gif" border="0"height="16" width="16" style="margin-right: 4px;"></a>
+						<?php
+						}
+						?>
 		            	<a href="editmailinglist_step1.php?listid=<?php echo $arrRow['nID'] ?>&language=<?php echo $_REQUEST["language"] ?>&sortby=<?php echo $_REQUEST["sortby"] ?>&start=<?php echo $_REQUEST["start"] ?>" onMouseOver="tip('detail')" onMouseOut="untip()"><img src="../images/edit.png" border="0"></a>
 		            	<a href="editmailinglist_default.php?listid=<?php echo $arrRow['nID'] ?>&language=<?php echo $_REQUEST["language"] ?>&sortby=<?php echo $_REQUEST["sortby"] ?>&start=<?php echo $_REQUEST["start"] ?>" onMouseOver="tip('default')" onMouseOut="untip()"><img src="../images/tag_red.gif" border="0" height="16" width="16" style="margin-left: 4px;"></a>
 	            	</td>
