@@ -463,10 +463,14 @@ $nConnection = mysql_connect($DATABASE_HOST, $DATABASE_UID, $DATABASE_PWD);
 if ($nConnection) {
 	if (mysql_select_db($DATABASE_DB, $nConnection)) {
 		foreach ($arrFormSlots as $arrSlot) {
+			$strMessage_MIDDLE2 .= '<tr><td style="border-top: 1px solid Silver;" align="left">';
+			if ($nSlotId == $arrSlot['nID']) {
+				$strMessage_MIDDLE2 .= '<table width="100%" border="1" cellpadding="4" style="border-collapse:collapse;border:1px solid #999999;background-color: #ffe88e;">';
+			}
+			else {
+				$strMessage_MIDDLE2 .= '<table width="100%" border="1" cellpadding="4" style="border-collapse:collapse;border:1px solid #999999;">';
+			}
 			$strMessage_MIDDLE2 .= '<tr>
-				<td style="border-top: 1px solid Silver;" align="left">
-					<table width="100%" border="1" cellpadding="4" style="border-collapse:collapse;border:1px solid #999999;">
-					<tr>
 						<td style="font-weight: bold;background: #666666; color: #fff; padding:1px; " colspan="16">'.$arrSlot['strName'].'</td>
 					</tr><tr>';
 			$strQuery = "SELECT * FROM cf_inputfield INNER JOIN cf_slottofield ON cf_inputfield.nID = cf_slottofield.nFieldId WHERE cf_slottofield.nSlotId = ".$arrSlot["nID"]."  ORDER BY cf_slottofield.nPosition ASC";
@@ -705,7 +709,7 @@ if ($nConnection) {
 						
 						$nRunningCounter++;
 					}
-					$strMessage_MIDDLE2 .= "<td></td>";
+					$strMessage_MIDDLE2 .= "<td>&nbsp;</td>";
 				}
 			}
 			$strMessage_MIDDLE2 .= '</tr></table></td></tr>';
