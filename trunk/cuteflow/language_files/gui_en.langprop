@@ -135,7 +135,7 @@ EDIT_NEW_ERROR_LASTNAME=You must enter a Lastname@@@1152107510
 EDIT_NEW_ERROR_PASSWORD1=You must enter a password@@@1152107510
 EDIT_NEW_ERROR_PASSWORD2=You must retype the password@@@1152107510
 EDIT_NEW_ERROR_PASSWORD3=The passwords didn't match@@@1152107510
-EMAIL_BROWSERVIEW=Browser view@@@1152107510
+EMAIL_BROWSERVIEW=<u style="font-weight:bold; color: #548dd4; font-size: 18pt">Enter</u>@@@1152107510
 EMAIL_FORMAT_TEXT=Text@@@1156409220
 EMAIL_VALUES_NONE=none@@@1156409230
 EMAIL_VALUES_VALUES=only values@@@1156409243
@@ -287,7 +287,7 @@ MAIL_CONTENT_STOPPED_TEXT=The circulation was stopped by another user. You can't
 MAIL_ENDACTION_DONE_0=- rejected@@@1152107572
 MAIL_ENDACTION_DONE_SUCCESS=- successfully completed@@@1152107590
 MAIL_HEADER_PRE=Circulation: @@@1152107510
-MAIL_LINK_DESCRIPTION=Please use the following Link to edit/send the content of this Circulation in a browser:@@@1152107510
+MAIL_LINK_DESCRIPTION=Please click on the <span style="color:#548dd4;">Enter</span> link to deal with it, it will guide you to the Cuteflow system in your default browser. Use your ERP/Cuteflow username and password if it's needed.@@@1152107510
 MAIL_NACK=Your answer was saved.<br><br>Please close the e-mail.@@@1152107510
 MAIL_VALUES_HEADER=Additional information@@@1152107510
 MENU_ARCHIVE=Circulation archive@@@1152107510
