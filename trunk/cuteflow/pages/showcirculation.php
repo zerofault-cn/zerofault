@@ -90,7 +90,7 @@
 			inpdata	= strParams;
 			encodeblowfish();
 			
-			location = 'editworkflow_standalone.php?key=' + outdata;
+			location = 'editworkflow_standalone.php?key=' + outdata+'&'+Math.random();
 		}
 		
 		function deleteCirculation(nCirculationId, nStart)

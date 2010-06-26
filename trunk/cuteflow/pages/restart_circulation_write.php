@@ -170,7 +170,7 @@
 				$arrCurInputField 	= mysql_fetch_array($nResult,MYSQL_ASSOC);
 				
 				$strCurStandardValue	= $arrCurInputField['strStandardValue'];
-				
+				$strCurStandardValue = addslashes($strCurStandardValue);
 				$strQuery = "INSERT INTO cf_fieldvalue values( null, '$nCurInputFieldID', '$strCurStandardValue', '$nCurFormSlotID', '$nCirculationFormID' , '$nCirculationHistoryID' )";
 				$nResult = mysql_query($strQuery, $nConnection);			
 			}
