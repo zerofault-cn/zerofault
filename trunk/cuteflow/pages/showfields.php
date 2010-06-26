@@ -472,9 +472,11 @@
 				}
 				echo "</td>";
 				                                
-                echo "<td align=\"center\">";							
-            	echo "<a href=\"javascript:deleteField($arrRow[0])\" alt=\"L�schen\" onMouseOver=\"tip('delete')\" onMouseOut=\"untip()\"><img src=\"../images/edit_remove.gif\" border=\"0\"height=\"16\" width=\"16\" style=\"margin-right: 4px;\"></a>";
-            	echo "<a href=\"editfield.php?fieldid=$arrRow[0]&language=".$_REQUEST["language"]."&sortby=".$_REQUEST["sortby"]."&start=".$_REQUEST["start"]."\" onMouseOver=\"tip('detail')\" onMouseOut=\"untip()\" alt=\"Anzeigen\"><img src=\"../images/edit.png\" border=\"0\"height=\"16\" width=\"16\"></a>";
+				echo "<td align=\"center\">";
+				if ($_SESSION["SESSION_CUTEFLOW_ACCESSLEVEL"] == 2) {
+					echo "<a href=\"javascript:deleteField($arrRow[0])\" alt=\"L�schen\" onMouseOver=\"tip('delete')\" onMouseOut=\"untip()\"><img src=\"../images/edit_remove.gif\" border=\"0\"height=\"16\" width=\"16\" style=\"margin-right: 4px;\"></a>";
+				}
+				echo "<a href=\"editfield.php?fieldid=$arrRow[0]&language=".$_REQUEST["language"]."&sortby=".$_REQUEST["sortby"]."&start=".$_REQUEST["start"]."\" onMouseOver=\"tip('detail')\" onMouseOut=\"untip()\" alt=\"Anzeigen\"><img src=\"../images/edit.png\" border=\"0\"height=\"16\" width=\"16\"></a>";
             	echo "</td></tr>";
             											
             	$nRunningNumber++;
