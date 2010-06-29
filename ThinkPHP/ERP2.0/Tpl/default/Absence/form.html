@@ -8,9 +8,7 @@
 </tr>
 <tr>
 	<td colspan="2">
-		<form method="POST" id="appForm" name="appForm" action="#">
-		<input type="hidden" id="way" name="way" value="new"><input type="hidden" id="rID" name="rID" value=""><input type="hidden" id="loc" name="loc" value="3"><input type="hidden" id="userNo_applicant" name="userNo_applicant" value="284"><input type="hidden" id="userNo_deputy" name="userNo_deputy" value=""><input type="hidden" id="userNo_notify" name="userNo_notify" value=""><input type="hidden" id="userNo_notify_extra" name="userNo_notify_extra" value=""><input type="hidden" id="chk_duration" name="chk_duration" value="1"><input type="hidden" id="unit_time" name="unit_time" value="H"><input type="hidden" id="sys_totalHours" name="sys_totalHours" value="8"><input type="hidden" id="num_hoursLimit" name="num_hoursLimit" value="0"><input type="hidden" id="flag_hoursLimit" name="flag_hoursLimit" value="0"><input type="hidden" id="todayDate" name="todayDate" value="2010-06-20"><input type="hidden" id="tomorrowDate" name="tomorrowDate" value="2010-06-21"><input type="hidden" id="defTimeStart" name="defTimeStart" value="09:00"><input type="hidden" id="defTimeEnd" name="defTimeEnd" value="17:45"><input type="hidden" id="defTimeMid1" name="defTimeMid1" value="13:00"><input type="hidden" id="defTimeMid2" name="defTimeMid2" value="13:45">
-		
+		<form method="POST">
 		<table class="clsTab" id="leave" width="100%" border="1" cellpadding="3" cellspacing="1" bordercolor="#FFFFFF" style="border-collapse:collapse;">
 		<tr>
 			<th colspan="3">Leave application form</th>
@@ -21,29 +19,22 @@
 			<td>Type</td>
 		</tr>
 		<tr bgcolor="#EEEEEE" align="center">
-			<td><span id="div_applicantName">Adam Zhu</span><div id="div_applicantERROR"></div></td>
-			<td>Adam Zhu</td>
+			<td>{$_SESSION[C('STAFF_AUTH_NAME')]['realname']}</td>
+			<td>{$_SESSION[C('STAFF_AUTH_NAME')]['realname']}</td>
 			<td>
-				<select name="slt_absType" id="slt_absType" onchange="mkReq_absenceNotice();" alt="Absence type" title="Select absence type">
-					<option value="">-----------Select-----------</option>
-					<option label="Annual leave 公司特休假" value="AL">Annual leave 公司特休假</option> 
-					<option label="Yearly leave 年假" value="RL">Yearly leave 年假</option> 
-					<option label="Time off with pay 补休" value="YL">Time off with pay 补休</option> 
-					<option label="Guideline leave 弹性假期" value="GL">Guideline leave 弹性假期</option> 
-					<option label="Sick leave 病假" value="SL">Sick leave 病假</option> 
-					<option label="Personal leave 事假" value="PL">Personal leave 事假</option> 
-					<option label="Marriage leave 婚假" value="ML">Marriage leave 婚假</option> 
-					<option label="Maternity leave 产假" value="TL">Maternity leave 产假</option> 
-					<option label="Antenatal examination leave 产前检查假" value="XL">Antenatal examination leave 产前检查假</option> 
-					<option label="Paternity leave 陪产假" value="NL">Paternity leave 陪产假</option> 
-					<option label="Bereavement leave 丧假" value="BL">Bereavement leave 丧假</option> 
+				<select name="type" onchange="Notice(this.value);" alt="Absence type" title="Select absence type">
+					<option value="">---------Select---------</option>
+					<iterate name="result" id="item">
+					<option value="{$item['type']}">{$item['name']}</option> 
+					</iterate>
 				</select>
 				<div id="div_absTypeERROR"></div>
 			</td>
 		</tr>
 		<tr bgcolor="#CCCCCC" align="center">
 			<td>Hours</td>
-			<td colspan="2">Duration&nbsp;&nbsp;&nbsp; <a href='#null' onclick="quickSelectDate(1, 'todayDate', 'A')" title="Change duration date to today">Today</a> | <a href='#null' onclick="quickSelectDate(2, 'todayDate', 'A')" title="Change duration date to today AM half day">AM</a> | <a href='#null' onclick="quickSelectDate(3, 'todayDate', 'A')" title="Change duration date to today PM half day">PM</a>&nbsp;/&nbsp; <a href='#null' onclick="quickSelectDate(1, 'tomorrowDate', 'A')" title="Change duration date to tomorrow">Tomorrow</a> | <a href='#null' onclick="quickSelectDate(2, 'tomorrowDate', 'A')" title="Change duration date to tomorrow AM half day">AM</a> | <a href='#null' onclick="quickSelectDate(3, 'tomorrowDate', 'A')" title="Change duration date to tomorrow PM half day">PM</a></td>
+			<td colspan="2">Duration&nbsp;&nbsp;&nbsp;&nbsp;
+			[<a href='javascript:void(0);' onclick="quickSelectDate(1, 'todayDate', 'A')" title="Change duration date to today">Today</a> | <a href='javascript:void(0);' onclick="quickSelectDate(2, 'todayDate', 'A')" title="Change duration date to today AM half day">AM</a> | <a href='javascript:void(0);' onclick="quickSelectDate(3, 'todayDate', 'A')" title="Change duration date to today PM half day">PM</a>]&nbsp;/&nbsp;[<a href='javascript:void(0);' onclick="quickSelectDate(1, 'tomorrowDate', 'A')" title="Change duration date to tomorrow">Tomorrow</a> | <a href='javascript:void(0);' onclick="quickSelectDate(2, 'tomorrowDate', 'A')" title="Change duration date to tomorrow AM half day">AM</a> | <a href='javascript:void(0);' onclick="quickSelectDate(3, 'tomorrowDate', 'A')" title="Change duration date to tomorrow PM half day">PM</a>]</td>
 		</tr>
 		<tr bgcolor="#EEEEEE" align="center">
 			<td><input type="text" name="totalHours" id="totalHours" value="8" size="2" alt="Total absence hours" title="Click to edit total absence hours"> hrs<div id="div_typeNotice_hour"></div></td>
