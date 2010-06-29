@@ -57,7 +57,26 @@ class AbsenceAction extends BaseAction{
 	}
 	
 	public function form() {
-		Session::set('sub', MODULE_NAME.'/'.ACTION_NAME);
+		$Absence_Config = C('_absence_');
+		foreach($Absence_Config['leavetype'] as $key=>$val) {
+			$rs = M('Options')->where(array('type'=>$key))->find();
+			if (empty($rs)) {
+				$result[$key] = array(
+					'type' => $key,
+					'name' => $val,
+					'description' => ''
+				);
+			}
+			else {
+				$result[$key] = array(
+					'type' => $key,
+					'name' => empty($rs['name']) ? $val : $rs['name'],
+					'description' => $rs['description']
+					);
+			}
+		}
+		$this->assign('LeaveType', $result);
+
 		$this->assign('content', ACTION_NAME);
 		$this->display('Layout:content');
 	}
