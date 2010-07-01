@@ -68,29 +68,40 @@
 	
 	if ($nConnection)
 	{
+		mysql_select_db($DATABASE_DB, $nConnection);
+
 		if ('copy'==$_REQUEST['action'] && $_REQUEST['templateid']>0) {
 			$sql = "Select strName from cf_formtemplate where nID=".$_REQUEST['templateid'];
-			$nResult = mysql_query($sql, $nConnection);
-			if ($nResult) {
-				$strName = mysql_result($nResult, 0, 0);
+			$nResult1 = mysql_query($sql, $nConnection);
+			$sql = "Select * from cf_formslot where nTemplateId=".$_REQUEST['templateid'];
+			$nResult2 = mysql_query($sql, $nConnection);
+			if ($nResult1) {
+				$strName = mysql_result($nResult1, 0, 0);
+				if ('_' == substr($strName, -15, 1) && is_numeric(substr($strName, -14))) {
+					$strName = substr($strName, 0, -15);
+				}
 				$sql = "Insert into cf_formtemplate set strName='".$strName."_".date('YmdHis')."',bDeleted=0";
+				if (mysql_query($sql, $nConnection)) {
+					$new_id = mysql_insert_id();
+					while ($arr = mysql_fetch_array($nResult2)) {
+						$sql = "Insert into cf_formslot set strName='".$arr['strName']."',nTemplateId=".$new_id.",nSlotNumber=".$arr['nSlotNumber'].",nSendType=".$arr['nSendType'];
+						mysql_query($sql, $nConnection);
+					}
+				}
 			}
 		}
 		//--- get maximum count of users
-		if (mysql_select_db($DATABASE_DB, $nConnection))
-		{
-			$query = "select COUNT(*) from cf_formtemplate WHERE bDeleted=0";
-			$nResult = mysql_query($query, $nConnection);
+		$query = "select COUNT(*) from cf_formtemplate WHERE bDeleted=0";
+		$nResult = mysql_query($query, $nConnection);
 
-			if ($nResult)
+		if ($nResult)
+		{
+			if (mysql_num_rows($nResult) > 0)
 			{
-				if (mysql_num_rows($nResult) > 0)
-				{
-					while (	$arrRow = mysql_fetch_array($nResult))
-					{	
-						$nListCount = $arrRow[0];
-					}				
-				}
+				while (	$arrRow = mysql_fetch_array($nResult))
+				{	
+					$nListCount = $arrRow[0];
+				}				
 			}
 		}
 		
@@ -187,7 +198,7 @@
 					echo "<a href=\"javascript:deleteTemplate($arrRow[0])\" alt=\"L�schen\" onMouseOver=\"tip('delete')\" onMouseOut=\"untip()\"><img src=\"../images/edit_remove.gif\" border=\"0\" height=\"16\" width=\"16\" style=\"margin-right: 4px;\"></a>";
 				}
             	echo "<a href=\"edittemplate_step1.php?templateid=$arrRow[0]&language=".$_REQUEST["language"]."&sortby=".$_REQUEST["sortby"]."&start=".$_REQUEST["start"]."\" onMouseOver=\"tip('detail')\" onMouseOut=\"untip()\" alt=\"Anzeigen\"><img src=\"../images/edit.png\" border=\"0\" height=\"16\" width=\"16\" style=\"margin-right: 4px;\"></a>";
-				echo "<a href=\"?action=copy&templateid=$arrRow[0]&language=".$_REQUEST["language"]."\" onMouseOver=\"tip('copy')\" onMouseOut=\"untip()\" ><img src=\"../images/copy.png\" border=\"0\" height=\"16\" width=\"16\" style=\"margin-right: 4px;\"></a>";
+				echo "<a href=\"?action=copy&templateid=$arrRow[0]&language=".$_REQUEST["language"]."&sortby=".$_REQUEST["sortby"]."&start=".$_REQUEST["start"]."\" onMouseOver=\"tip('copy')\" onMouseOut=\"untip()\" ><img src=\"../images/copy.png\" border=\"0\" height=\"16\" width=\"16\" style=\"margin-right: 4px;\"></a>";
 				echo "</td></tr>";
             	$nRunningNumber++;
             }
