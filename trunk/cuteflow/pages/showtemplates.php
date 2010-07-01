@@ -57,8 +57,9 @@
 	</script>
 <SCRIPT LANGUAGE="JavaScript" TYPE="text/javascript" SRC="tooltip.js"></SCRIPT>
 <script type="text/javascript">
-   	maketip('delete','<?php echo escapeSingle($TEMPLATE_TIP_DELETE);?>');
-   	maketip('detail','<?php echo escapeSingle($TEMPLATE_TIP_DETAILS);?>');
+	maketip('delete','<?php echo escapeSingle($TEMPLATE_TIP_DELETE);?>');
+	maketip('detail','<?php echo escapeSingle($TEMPLATE_TIP_DETAILS);?>');
+	maketip('copy','Make a copy of this template');
 </script>
 </head>
 <?php
@@ -67,6 +68,14 @@
 	
 	if ($nConnection)
 	{
+		if ('copy'==$_REQUEST['action'] && $_REQUEST['templateid']>0) {
+			$sql = "Select strName from cf_formtemplate where nID=".$_REQUEST['templateid'];
+			$nResult = mysql_query($sql, $nConnection);
+			if ($nResult) {
+				$strName = mysql_result($nResult, 0, 0);
+				$sql = "Insert into cf_formtemplate set strName='".$strName."_".date('YmdHis')."',bDeleted=0";
+			}
+		}
 		//--- get maximum count of users
 		if (mysql_select_db($DATABASE_DB, $nConnection))
 		{
@@ -177,9 +186,9 @@
 				if ($_SESSION["SESSION_CUTEFLOW_ACCESSLEVEL"] == 2) {
 					echo "<a href=\"javascript:deleteTemplate($arrRow[0])\" alt=\"L�schen\" onMouseOver=\"tip('delete')\" onMouseOut=\"untip()\"><img src=\"../images/edit_remove.gif\" border=\"0\" height=\"16\" width=\"16\" style=\"margin-right: 4px;\"></a>";
 				}
-            	echo "<a href=\"edittemplate_step1.php?templateid=$arrRow[0]&language=".$_REQUEST["language"]."&sortby=".$_REQUEST["sortby"]."&start=".$_REQUEST["start"]."\" onMouseOver=\"tip('detail')\" onMouseOut=\"untip()\" alt=\"Anzeigen\"><img src=\"../images/edit.png\" border=\"0\"></a>";
-            	echo "</td></tr>";
-            											
+            	echo "<a href=\"edittemplate_step1.php?templateid=$arrRow[0]&language=".$_REQUEST["language"]."&sortby=".$_REQUEST["sortby"]."&start=".$_REQUEST["start"]."\" onMouseOver=\"tip('detail')\" onMouseOut=\"untip()\" alt=\"Anzeigen\"><img src=\"../images/edit.png\" border=\"0\" height=\"16\" width=\"16\" style=\"margin-right: 4px;\"></a>";
+				echo "<a href=\"?action=copy&templateid=$arrRow[0]&language=".$_REQUEST["language"]."\" onMouseOver=\"tip('copy')\" onMouseOut=\"untip()\" ><img src=\"../images/copy.png\" border=\"0\" height=\"16\" width=\"16\" style=\"margin-right: 4px;\"></a>";
+				echo "</td></tr>";
             	$nRunningNumber++;
             }
         ?>
