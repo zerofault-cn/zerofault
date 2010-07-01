@@ -743,7 +743,8 @@ if ($view != 'print')
 												echo "<td width=\"300px\" valign=\"top\">";
 											//	echo $arrRow["nFieldId"]."_".$arrSlot["nID"];echo '<br />';
 												foreach ($arrValues[$arrRow["nFieldId"]."_".$arrSlot["nID"]] as $user_id=>$user_val) {
-												echo '<div><strong>[<img src="../images/singleuser.gif" height="16" width="16" align="absmiddle"/> '.$arrUsers[$user_id]["strFirstName"].'] </strong>';
+												echo '<fieldset style="border-color:#666;border-width:1px;"><legend style="font-weight:bold"><img src="../images/singleuser.gif" height="16" width="16" align="absmiddle"/> '.$arrUsers[$user_id]["strFirstName"].'</legend>';
+											//	echo '<div><strong>[<img src="../images/singleuser.gif" height="16" width="16" align="absmiddle"/> '.$arrUsers[$user_id]["strFirstName"].'] </strong>';
 												if ($arrRow["nType"] == 1)
 												{
 													if ($user_val["strFieldValue"]!='')
@@ -828,11 +829,11 @@ if ($view != 'print')
 												{
 													if ($user_val["strFieldValue"]!='')
 													{
-														echo replaceLinks($user_val["strFieldValue"]);
+														echo replaceLinks(nl2br($user_val["strFieldValue"]));
 													}
 													else
 													{
-														echo replaceLinks($arrRow['strStandardValue']);
+														echo replaceLinks(nl2br($arrRow['strStandardValue']));
 													}
 												}
 												else if ($arrRow["nType"] == 6)
@@ -968,7 +969,7 @@ if ($view != 'print')
 													
 													echo "<a href=\"$strLink\" target=\"_blank\">$strFilename</a>";
 												}
-												echo '</div>';
+												echo '</fieldset>';
 												}
 												echo "</td>";
 																					

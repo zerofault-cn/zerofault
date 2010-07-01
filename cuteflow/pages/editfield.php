@@ -485,6 +485,15 @@
 				<td><?php echo $FIELD_EDIT_TYPE;?></td>
 				<td>
 				<select id="nType" name="nType" class="FormInput" onChange="change_field_type();">
+					<?php
+					if (-1 != $fieldid && ($nType==1 || $nType==5)) {
+						?>
+					<option value="1" <?php if ($nType == 1) echo "selected";?>><?php echo $FIELD_TYPE_TEXT;?></option>
+					<option value="5" <?php if ($nType == 5) echo "selected";?>><?php echo $FIELD_TYPE_LARGETEXT;?></option>
+					<?php
+					}
+					else {
+						?>
 					<option value="1" <?php if ($nType == 1) echo "selected";?>><?php echo $FIELD_TYPE_TEXT;?></option>
 					<option value="2" <?php if ($nType == 2) echo "selected";?>><?php echo $FIELD_TYPE_BOOLEAN;?></option>
 					<option value="3" <?php if ($nType == 3) echo "selected";?>><?php echo $FIELD_TYPE_DOUBLE;?></option>
@@ -494,6 +503,9 @@
 					<option value="7" <?php if ($nType == 7) echo "selected";?>><?php echo $FIELD_TYPE_CHECKBOXGROUP;?></option>
 					<option value="8" <?php if ($nType == 8) echo "selected";?>><?php echo $FIELD_TYPE_COMBOBOX;?></option>
 					<option value="9" <?php if ($nType == 9) echo "selected";?>><?php echo $FIELD_TYPE_FILE;?></option>
+					<?php
+					}
+					?>
 				</select>
 			</tr>
 			<tr>
