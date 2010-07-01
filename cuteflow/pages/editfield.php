@@ -333,7 +333,7 @@
 	}
 	
 	include_once ("../config/config.inc.php");
-
+	$fieldid = $_REQUEST["fieldid"];
 	if (-1 != $fieldid)
 	{
     	//--- open database
@@ -487,7 +487,7 @@
 				<select id="nType" name="nType" class="FormInput" onChange="change_field_type();">
 					<?php
 					if (-1 != $fieldid) {
-						if ($nType==1 || $nType==5) {
+						if ($nType==1) {
 						?>
 					<option value="1" <?php if ($nType == 1) echo "selected";?>><?php echo $FIELD_TYPE_TEXT;?></option>
 					<option value="5" <?php if ($nType == 5) echo "selected";?>><?php echo $FIELD_TYPE_LARGETEXT;?></option>
@@ -504,6 +504,9 @@
 									break;
 								case '4' :
 									echo $FIELD_TYPE_DATE;
+									break;
+								case '5' :
+									echo $FIELD_TYPE_LARGETEXT;
 									break;
 								case '6' :
 									echo $FIELD_TYPE_RADIOGROUP;
