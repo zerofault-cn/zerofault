@@ -162,6 +162,7 @@
 									$(layer).style.display 	= 'block';
 									
 									document.getElementById('bShowStep2').value = 'false';
+									document.getElementById('layer').style.display = 'none';
 								},
 						 		onFailure : function(resp) 
 						 		{
@@ -1108,7 +1109,7 @@
 								<input type="button" class="button" value="<?php echo $BTN_CANCEL ?>" onClick="location='showcirculation.php?language=<?php echo $language; ?>&sortDirection=<?php echo $sortDirection; ?>&sortby=<?php echo $sortby; ?>&archivemode=0&start=1&bFirstStart=true'">
 							</td>
 							<td align="left" width="25%">
-								<input type="submit" name="step1" class="button" value="<?php echo $BTN_COMPLETE ?>">
+								<input type="submit" name="step1" class="button" value="<?php echo $BTN_COMPLETE ?>" style="display:none;"/>
 							</td>
 							<td align="right" width="25%">
 								<?php if(!$_REQUEST['bRestart']): ?>

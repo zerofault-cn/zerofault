@@ -99,8 +99,8 @@
 		<tr><td height="10"></td></tr>
 		<tr>
 			<td>
-				<input type="radio" name="changeMailinglist" value="0" checked onClick="document.getElementById('layer').style.display = 'block';"><?php echo $EDITCIRC_DEF ?><br>
-				<input type="radio" name="changeMailinglist" value="1" onClick="showMailinglist();"><?php echo $EDITCIRC_ADA ?>
+				<input type="radio" name="changeMailinglist" value="0" onClick="document.getElementById('layer').style.display = 'block';" disabled="disabled" /><?php echo $EDITCIRC_DEF ?><br>
+				<input type="radio" name="changeMailinglist" value="1" checked="checked" onClick="showMailinglist();"><?php echo $EDITCIRC_ADA ?>
 			</td>
 		</tr>
 		<tr><td height="10"></td></tr>
