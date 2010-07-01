@@ -486,11 +486,42 @@
 				<td>
 				<select id="nType" name="nType" class="FormInput" onChange="change_field_type();">
 					<?php
-					if (-1 != $fieldid && ($nType==1 || $nType==5)) {
+					if (-1 != $fieldid) {
+						if ($nType==1 || $nType==5) {
 						?>
 					<option value="1" <?php if ($nType == 1) echo "selected";?>><?php echo $FIELD_TYPE_TEXT;?></option>
 					<option value="5" <?php if ($nType == 5) echo "selected";?>><?php echo $FIELD_TYPE_LARGETEXT;?></option>
 					<?php
+						}
+						else {
+							echo '<option value="'.$nType.'" selected>';
+							switch ($nType) {
+								case '2' :
+									echo $FIELD_TYPE_BOOLEAN;
+									break;
+								case '3' :
+									echo $FIELD_TYPE_DOUBLE;
+									break;
+								case '4' :
+									echo $FIELD_TYPE_DATE;
+									break;
+								case '6' :
+									echo $FIELD_TYPE_RADIOGROUP;
+									break;
+								case '7' :
+									echo $FIELD_TYPE_CHECKBOXGROUP;
+									break;
+								case '8' :
+									echo $FIELD_TYPE_COMBOBOX;
+									break;
+								case '9' :
+									echo $FIELD_TYPE_FILE;
+									break;
+								default :
+									//default
+							}
+							echo '</option>';
+						}
 					}
 					else {
 						?>
