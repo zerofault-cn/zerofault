@@ -482,7 +482,7 @@ if ($nConnection) {
 						$strMessage_MIDDLE2 .= "<td class=\"mandatory\" width=\"20%\" valign=\"middle\">".$arrRow["strName"].":</td>";
 						$strMessage_MIDDLE2 .= "<td width=\"300px\" valign=\"top\">";
 						foreach ($arrValues[$arrRow["nFieldId"]."_".$arrSlot["nID"]] as $user_id=>$user_val) {
-							$strMessage_MIDDLE2 .= '<fieldset style="border-color:#666;border-width:1px;"><legend style="font-weight:bold">'.$arrUsers[$user_id]["strFirstName"].'</legend>';
+							$strMessage_MIDDLE2 .= '<div><strong>['.$arrUsers[$user_id]["strFirstName"].']</strong>';
 							if ($arrRow["nType"] == 1) {
 								if ($user_val["strFieldValue"]!=''){
 									$arrValue = split('rrrrr',$user_val["strFieldValue"]);
@@ -552,14 +552,14 @@ if ($nConnection) {
 							}
 							else if ($arrRow["nType"] == 5)
 							{
-								echo 
+								$strMessage_MIDDLE2 .= '<br />';
 								if ($user_val["strFieldValue"]!='')
 								{
-									$strMessage_MIDDLE2 .= replaceLinks($user_val["strFieldValue"]);
+									$strMessage_MIDDLE2 .= replaceLinks(nl2br($user_val["strFieldValue"]));
 								}
 								else
 								{
-									$strMessage_MIDDLE2 .= replaceLinks($arrRow['strStandardValue']);
+									$strMessage_MIDDLE2 .= replaceLinks(nl2br($arrRow['strStandardValue']));
 								}
 							}
 							else if ($arrRow["nType"] == 6)
@@ -695,7 +695,7 @@ if ($nConnection) {
 								
 								$strMessage_MIDDLE2 .= "<a href=\"$strLink\" target=\"_blank\">$strFilename</a>";
 							}
-							$strMessage_MIDDLE2 .= '</fieldset>';
+							$strMessage_MIDDLE2 .= '</div>';
 						}
 						$strMessage_MIDDLE2 .= "</td>";
 															
