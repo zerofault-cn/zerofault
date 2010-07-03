@@ -40,7 +40,31 @@
 		if (mysql_select_db($DATABASE_DB, $nConnection))
 		{
 			$nSendType = $_REQUEST['nSendType'] == "on" ? 1 : 0;
-				
+			$number1 = intval($_REQUEST['number1']);
+			switch ($_REQUEST['unit1']) {
+				case 'day':
+					$time1 = $number1 * 86400;
+					break;
+				case 'hour':
+					$time1 = $number1 * 3600;
+					break;
+				default:
+					$time1 = $number1;
+			}
+			$number2 = intval($_REQUEST['number2']);
+			switch ($_REQUEST['unit2']) {
+				case 'day':
+					$time2 = $number2 * 86400;
+					break;
+				case 'hour':
+					$time2 = $number2 * 3600;
+					break;
+				case 'minute':
+					$time2 = $number2 * 60;
+					break;
+				default:
+					$time2 = $number2;
+			}
 			if ($_REQUEST["slotid"] == -1)
 			{
 				//--- add new slot
@@ -55,13 +79,12 @@
 						$nMaxSlotNumber = $arrRow[0];
 					}
 				}
-				
-				$query = "INSERT INTO cf_formslot values (null, \"".$_REQUEST["strName"]."\", ".$_REQUEST["templateid"].", ".($nMaxSlotNumber+1).", ".$nSendType.")";
+				$query = "INSERT INTO cf_formslot values (null, \"".$_REQUEST["strName"]."\", '".addslashes($_REQUEST['description'])."', ".$_REQUEST["templateid"].", ".($nMaxSlotNumber+1).", ".$nSendType.", ".$number1.", ".$number2.")";
 			}
 			else
 			{
 				//--- update existing slot
-				$query = "UPDATE cf_formslot SET strName=\"".$_REQUEST["strName"]."\", nSendType=".$nSendType." WHERE nID=".$_REQUEST["slotid"];
+				$query = "UPDATE cf_formslot SET strName=\"".$_REQUEST["strName"]."\", strDescr='".addslashes($_REQUEST['description'])."', nSendType=".$nSendType.", doneTime=".$time1.", remindTime=".$time2." WHERE nID=".$_REQUEST["slotid"];
 			}
 			
 			$nResult = mysql_query($query, $nConnection);

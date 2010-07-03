@@ -39,6 +39,7 @@ if (!function_exists('replaceLinks')) {
 			$nResult = mysql_query($strQuery, $nConnection);
 			if ($nResult)
 			{
+				$arrSenderDetails = array();
 				while ($row = mysql_fetch_array($nResult))
 				{
 					$arrSenderDetails[] = $row["strLastName"];
@@ -86,6 +87,10 @@ if (!function_exists('replaceLinks')) {
 			$nResult = mysql_query($strQuery, $nConnection);
 			if ($nResult)
 			{
+				$arrCurrentFormSlotID = array();
+				$arrCurrentFormSlotName = array();
+				$arrCurrentFormSlot = array();
+				$arrFormSlots = array();
 				while ($row = mysql_fetch_array($nResult,MYSQL_ASSOC))
 				{
 					$arrCurrentFormSlotID[] = $row["nID"];	
@@ -105,6 +110,7 @@ if (!function_exists('replaceLinks')) {
 				$nResult = mysql_query($strQuery, $nConnection);
 				if ($nResult)
 				{
+					$arrAllFieldIDs = array();
 					while ($row = mysql_fetch_array($nResult))
 					{
 						$arrAllFieldIDs[] = $row["nFieldId"];	
@@ -122,6 +128,9 @@ if (!function_exists('replaceLinks')) {
 				$nResult = mysql_query($strQuery, $nConnection);
 				if ($nResult)
 				{
+					$arrAllFieldNames = array();
+					$arrFieldIDtoFieldName = array();
+					$arrAllInputFields = array();
 					while ($row = mysql_fetch_array($nResult,MYSQL_ASSOC))
 					{
 						$arrAllFieldNames[] = $row["strName"];	
@@ -432,7 +441,7 @@ if (!function_exists('replaceLinks')) {
     		{
     			if (mysql_num_rows($nResult) > 0)
     			{
-    				while (	$arrRow = mysql_fetch_array($nResult))
+					while (	$arrRow = mysql_fetch_array($nResult))
     				{
     					$arrUsers[$arrRow["nID"]] = $arrRow;
     				}
@@ -470,9 +479,9 @@ if ($nConnection) {
 			else {
 				$strMessage_MIDDLE2 .= '<table width="100%" border="1" cellpadding="4" style="border-collapse:collapse;border:1px solid #999999;">';
 			}
-			$strMessage_MIDDLE2 .= '<tr>
-						<td style="font-weight: bold;background: #666666; color: #fff; padding:1px; " colspan="16">'.$arrSlot['strName'].'</td>
-					</tr><tr>';
+			$strMessage_MIDDLE2 .= '<tr><td style="font-weight: bold;background: #666666; color: #fff; padding:1px; " colspan="16">'.$arrSlot['strName'].'</td></tr>';
+			$strMessage_MIDDLE2 .= '<tr><td style="background: #999999; color: #fff; padding:1px; padding-left:2em;" colspan="16">'.nl2br($arrSlot['strDescr']).'</td></tr>';
+			$strMessage_MIDDLE2 .= '<tr>';
 			$strQuery = "SELECT * FROM cf_inputfield INNER JOIN cf_slottofield ON cf_inputfield.nID = cf_slottofield.nFieldId WHERE cf_slottofield.nSlotId = ".$arrSlot["nID"]."  ORDER BY cf_slottofield.nPosition ASC";
 			$nResult = mysql_query($strQuery, $nConnection) or die ($strQuery."<br>".mysql_error());
 			if ($nResult) {
@@ -596,7 +605,7 @@ if ($nConnection) {
 								
 								$strEcho = $objMyCirculation->getRadioGroup($nInputfieldID, $strValue, $bIsEnabled, $keyId, $nRunningCounter);
 								
-								$strMessage_MIDDLE2 .= $strEcho;
+								$strMessage_MIDDLE2 .= '<br />'.$strEcho;
 							}
 							else if ($arrRow["nType"] == 7)
 							{
@@ -633,7 +642,7 @@ if ($nConnection) {
 								
 								$strEcho = $objMyCirculation->getCheckboxGroup($nInputfieldID, $strValue, $bIsEnabled, $keyId, $nRunningCounter);
 								
-								$strMessage_MIDDLE2 .= $strEcho;
+								$strMessage_MIDDLE2 .= '<br />'.$strEcho;
 							}
 							elseif($arrRow["nType"] == 8)
 							{

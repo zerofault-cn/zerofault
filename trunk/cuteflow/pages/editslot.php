@@ -58,7 +58,7 @@
 	
 	include_once ("../config/config.inc.php");
 
-	if (-1 != $slotid)
+	if (-1 != $_REQUEST['$slotid'])
 	{
     	//--- open database
     	$nConnection = mysql_connect($DATABASE_HOST, $DATABASE_UID, $DATABASE_PWD);
@@ -76,16 +76,43 @@
         		{
         			if (mysql_num_rows($nResult) > 0)
         			{
-        				while (	$arrRow = mysql_fetch_array($nResult))
-        				{
-        					$strName = $arrRow["strName"];
-        					$nSendType = $arrRow["nSendType"];
-        				}		
+        				$arrRow = mysql_fetch_array($nResult);
+        				$strName = $arrRow["strName"];
+        				$nSendType = $arrRow["nSendType"];
+
+						$time1 = $arrRow['doneTime'];
+						if ($time1%86400 == 0) {
+							$unit1 = 'day';
+							$number1 = $time1/86400;
+						}
+						elseif ($time1%3600 == 0) {
+							$unit1 = 'hour';
+							$number1 = $time1/3600;
+						}
+
+						$time2 = $arrRow['remindTime'];
+						if ($time2%86400 == 0) {
+							$unit2 = 'day';
+							$number2 = $time2/86400;
+						}
+						elseif ($time2%3600 == 0) {
+							$unit2 = 'hour';
+							$number2 = $time2/3600;
+						}
+						elseif ($time2%60 == 0) {
+							$unit2 = 'minute';
+							$number2 = $time2/60;
+						}
         			}
         		}
     		}
     	}
-	}	
+	}
+	else {
+		$number1 = 1;
+		$number2 = 0;
+		$unit2 = 'hour';
+	}
 ?>
 <body><br>
 <span style="font-size: 14pt; color: #ffa000; font-family: Verdana; font-weight: bold;">
@@ -104,9 +131,31 @@
 				<td width="200"><?php echo $SLOT_EDIT_NAME;?></td>
 				<td><input id="strName" Name="strName" type="text" class="InputText" style="width:250px;" value="<?php echo $strName;?>"></td>
 			</tr>
-			<tr>
+			<!-- <tr>
 				<td width="200" valign="top"><?php echo $SLOT_EDIT_SEND_TYPE;?></td>
 				<td valign="top"><input disabled id="nSendType" Name="nSendType" type="checkbox" <?php echo $nSendType == 1 ? "checked" : ""; ?>></td>
+			</tr> -->
+			<tr>
+				<td>Description: </td>
+				<td><textarea name="description" cols="40" rows="3"><?php echo $arrRow['strDescr'];?></textarea></td>
+			<tr>
+				<td >Expected completion time: </td>
+				<td><input type="text" name="number1" value="<?php echo $number1;?>" size="3" />
+					<select name="unit1">
+						<option value="day" <?php if($unit1 == 'day')echo 'selected="selected"';?> >Days</option>
+						<option value="hour" <?php if($unit1 == 'hour')echo 'selected="selected"';?>>Hours</option>
+					</select> (Integer number only)
+				</td>
+			</tr>
+			<tr>
+				<td >Reminder timespan: </td>
+				<td><input type="text" name="number2" value="<?php echo $number2;?>" size="3" />
+					<select name="unit2">
+						<option value="day" <?php if($unit2 == 'day')echo 'selected="selected"';?> >Days</option>
+						<option value="hour"  <?php if($unit2 == 'hour')echo 'selected="selected"';?> >Hours</option>
+						<option value="minute" <?php if($unit2 == 'minute')echo 'selected="selected"';?> >Minutes</option>
+					</select> (Integer number only, 0 : don't remind)
+				</td>
 			</tr>
 			<tr><td height="10"></td></tr>
 		</table>
