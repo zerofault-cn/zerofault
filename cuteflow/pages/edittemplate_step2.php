@@ -33,7 +33,7 @@
 	//--- first save the last step
 	//--- open database
 	$templateid = $_REQUEST["templateid"];
-	
+	$inUse = false;
    	$nConnection = mysql_connect($DATABASE_HOST, $DATABASE_UID, $DATABASE_PWD);
    	if ($nConnection)
    	{
@@ -46,6 +46,15 @@
 				{
 					$strQuery = "UPDATE cf_formtemplate SET strName='".$_REQUEST["strName"]."' WHERE nID=".$_REQUEST["templateid"];
 					mysql_query($strQuery, $nConnection);
+					//check if used
+					$sql = "select count(*) from cf_mailinglist mail,cf_circulationform circ where mail.bDeleted=0 and mail.nTemplateId=".$_REQUEST["templateid"]." and mail.nID=circ.nMailingListId and circ.bDeleted=0";
+					$rs = mysql_query($sql);
+					if ($rs) {
+						$count = mysql_result($rs, 0, 0);
+						if ($count>0) {
+							$inUse = true;
+						}
+					}
 				}
 				else
 				{
@@ -171,10 +180,14 @@
 						echo "<td>".$arrCurSlot["strName"]."</td>";
 											
 						echo "<td width=\"100px\" align=\"right\">";
-						echo "<a href=\"javascript:deleteSlot($arrCurSlot[0])\" alt=\"L�schen\" onMouseOver=\"tip('delete')\" onMouseOut=\"untip()\"><img src=\"../images/edit_remove.gif\" border=\"0\"height=\"16\" width=\"16\" style=\"margin-right: 4px;\"></a>";
+						if ($_SESSION["SESSION_CUTEFLOW_ACCESSLEVEL"] == 2 && !$inUse) {
+							echo "<a href=\"javascript:deleteSlot($arrCurSlot[0])\" alt=\"L�schen\" onMouseOver=\"tip('delete')\" onMouseOut=\"untip()\"><img src=\"../images/edit_remove.gif\" border=\"0\"height=\"16\" width=\"16\" style=\"margin-right: 4px;\"></a>";
+						}
             			echo "<a href=\"editslot.php?slotid=$arrCurSlot[0]&templateid=".$templateid."&language=".$_REQUEST["language"]."&sortby=".$_REQUEST["sortby"]."&start=".$_REQUEST["start"]."\" onMouseOver=\"tip('detail')\" onMouseOut=\"untip()\" alt=\"Anzeigen\"><img src=\"../images/act_view.gif\" border=\"0\"height=\"16\" width=\"16\"></a>";
-            			echo "<a href=\"slotup.php?slotid=$arrCurSlot[0]&templateid=".$templateid."&language=".$_REQUEST["language"]."&sortby=".$_REQUEST["sortby"]."&start=".$_REQUEST["start"]."\" onMouseOver=\"tip('up')\" onMouseOut=\"untip()\"><img src=\"../images/up.gif\" border=\"0\" height=\"16\" width=\"16\"></a>";
-						echo "<a href=\"slotdown.php?slotid=$arrCurSlot[0]&templateid=".$templateid."&language=".$_REQUEST["language"]."&sortby=".$_REQUEST["sortby"]."&start=".$_REQUEST["start"]."\" onMouseOver=\"tip('down')\" onMouseOut=\"untip()\"><img src=\"../images/down.gif\" border=\"0\" height=\"16\" width=\"16\"></a>";
+            			if ($_SESSION["SESSION_CUTEFLOW_ACCESSLEVEL"] == 2 && !$inUse) {
+							echo "<a href=\"slotup.php?slotid=$arrCurSlot[0]&templateid=".$templateid."&language=".$_REQUEST["language"]."&sortby=".$_REQUEST["sortby"]."&start=".$_REQUEST["start"]."\" onMouseOver=\"tip('up')\" onMouseOut=\"untip()\"><img src=\"../images/up.gif\" border=\"0\" height=\"16\" width=\"16\"></a>";
+							echo "<a href=\"slotdown.php?slotid=$arrCurSlot[0]&templateid=".$templateid."&language=".$_REQUEST["language"]."&sortby=".$_REQUEST["sortby"]."&start=".$_REQUEST["start"]."\" onMouseOver=\"tip('down')\" onMouseOut=\"untip()\"><img src=\"../images/down.gif\" border=\"0\" height=\"16\" width=\"16\"></a>";
+						}
 						echo "</td></tr>";
 						
 						$nRunningNumber++;

@@ -195,9 +195,17 @@
 				
                 echo "<td align=\"right\">";
 				if ($_SESSION["SESSION_CUTEFLOW_ACCESSLEVEL"] == 2) {
-					echo "<a href=\"javascript:deleteTemplate($arrRow[0])\" alt=\"L�schen\" onMouseOver=\"tip('delete')\" onMouseOut=\"untip()\"><img src=\"../images/edit_remove.gif\" border=\"0\" height=\"16\" width=\"16\" style=\"margin-right: 4px;\"></a>";
+					//check if used
+					$sql = "select count(*) from cf_mailinglist mail,cf_circulationform circ where mail.bDeleted=0 and mail.nTemplateId=".$arrRow[0]." and mail.nID=circ.nMailingListId and circ.bDeleted=0";
+					$rs = mysql_query($sql);
+					if ($rs) {
+						$count = mysql_result($rs, 0, 0);
+						if ($count==0) {
+							echo "<a href=\"javascript:deleteTemplate($arrRow[0])\" alt=\"L�schen\" onMouseOver=\"tip('delete')\" onMouseOut=\"untip()\"><img src=\"../images/edit_remove.gif\" border=\"0\" height=\"16\" width=\"16\" style=\"margin-right: 4px;\"></a>";
+						}
+					}
 				}
-            	echo "<a href=\"edittemplate_step1.php?templateid=$arrRow[0]&language=".$_REQUEST["language"]."&sortby=".$_REQUEST["sortby"]."&start=".$_REQUEST["start"]."\" onMouseOver=\"tip('detail')\" onMouseOut=\"untip()\" alt=\"Anzeigen\"><img src=\"../images/edit.png\" border=\"0\" height=\"16\" width=\"16\" style=\"margin-right: 4px;\"></a>";
+				echo "<a href=\"edittemplate_step1.php?templateid=$arrRow[0]&language=".$_REQUEST["language"]."&sortby=".$_REQUEST["sortby"]."&start=".$_REQUEST["start"]."\" onMouseOver=\"tip('detail')\" onMouseOut=\"untip()\" alt=\"Anzeigen\"><img src=\"../images/edit.png\" border=\"0\" height=\"16\" width=\"16\" style=\"margin-right: 4px;\"></a>";
 				echo "<a href=\"?action=copy&templateid=$arrRow[0]&language=".$_REQUEST["language"]."&sortby=".$_REQUEST["sortby"]."&start=".$_REQUEST["start"]."\" onMouseOver=\"tip('copy')\" onMouseOut=\"untip()\" ><img src=\"../images/copy.png\" border=\"0\" height=\"16\" width=\"16\" style=\"margin-right: 4px;\"></a>";
 				echo "</td></tr>";
             	$nRunningNumber++;

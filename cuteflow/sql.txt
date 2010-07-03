@@ -13,3 +13,9 @@ CREATE TABLE IF NOT EXISTS cf_mailentry (
   bStatus tinyint(1) NOT NULL DEFAULT '0' ,
   PRIMARY KEY (nID)
 );
+
+ALTER TABLE cf_circulationprocess ADD lastRemindTime INT UNSIGNED NOT NULL;
+
+ALTER TABLE cf_formslot ADD strDescr TINYTEXT NOT NULL AFTER strName;
+ALTER TABLE cf_formslot ADD doneTime INT UNSIGNED DEFAULT "0" NOT NULL;
+ALTER TABLE cf_formslot ADD remindTime INT UNSIGNED DEFAULT "0" NOT NULL;

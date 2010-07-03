@@ -727,7 +727,8 @@ if ($view != 'print')
 					    <tr>
 					        <td style="border-top: 1px solid Silver;" align="left">
 					            <table width="100%" border="1" cellpadding="4" style="border-collapse:collapse;border:1px solid #999999;">
-								<tr><td style="font-weight: bold;background: #666666; color: #fff; padding:1px; width: 50px;" colspan="16"><?php echo $arrSlot['strName']; ?></td></tr>
+								<tr><td style="font-weight: bold;background: #666666; color: #fff; padding:1px;" colspan="16"><?php echo $arrSlot['strName']; ?></td></tr>
+								<tr><td style="background: #999999; color: #fff; padding:1px;padding-left:2em;" colspan="16"><?php echo nl2br($arrSlot['strDescr']); ?></td></tr>
 								<tr>
 								<?php
 									$strQuery = "SELECT * FROM cf_inputfield INNER JOIN cf_slottofield ON cf_inputfield.nID = cf_slottofield.nFieldId WHERE cf_slottofield.nSlotId = ".$arrSlot["nID"]."  ORDER BY cf_slottofield.nPosition ASC";
