@@ -112,7 +112,7 @@
 				}
 				
 				if ( ($nEndAction & 8) == 8 && !$sendMessageToSender) {
-					sendMessageToSender($nSenderId, $arrProcessInfo["nUserId"], "done", $strCircName, "ENDSLOT", $_REQUEST["cpid"], $slotname);
+					sendMessageToSenderDelay($nSenderId, $arrProcessInfo["nUserId"], "done", $strCircName, "ENDSLOT", $_REQUEST["cpid"], $slotname);
 					$sendMessageToSender = true;
 				}
 			}
@@ -157,7 +157,7 @@
 					
 					if ($nShouldMailed == 1)
 					{
-						sendMessageToSender($nSenderId, $arrProcessInfo["nUserId"], "done", $strCircName, "SUCCESS", $_REQUEST["cpid"]);
+						sendMessageToSenderDelay($nSenderId, $arrProcessInfo["nUserId"], "done", $strCircName, "SUCCESS", $_REQUEST["cpid"]);
 						$sendMessageToSender = true;
 					}
 					

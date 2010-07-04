@@ -435,7 +435,7 @@
 						$nSenderId = $arrRow["nSenderId"];
 						$strCircName = $arrRow["strName"];
 						
-						sendMessageToSender($nSenderId, $arrProcessInfo["nUserId"], "done", $strCircName, "REJECT", $_REQUEST["cpid"]);						
+						sendMessageToSenderDelay($nSenderId, $arrProcessInfo["nUserId"], "done", $strCircName, "REJECT", $_REQUEST["cpid"]);						
 					}
 				}
 			}
@@ -962,7 +962,7 @@
 								
 								if ( ($nEndAction & 8) == 8 && !$sendMessageToSender) {
 								//	echo 'sendMessageToSender1<br />';
-									sendMessageToSender($nSenderId, $arrProcessInfo["nUserId"], "done", $strCircName, "ENDSLOT", $_REQUEST["cpid"], $slotname);
+									sendMessageToSenderDelay($nSenderId, $arrProcessInfo["nUserId"], "done", $strCircName, "ENDSLOT", $_REQUEST["cpid"], $slotname);
 									$sendMessageToSender = true;
 								}
 							}
@@ -1008,7 +1008,7 @@
 									if ($nShouldMailed == 1)
 									{
 									//	echo 'sendMessageToSender2<br />';
-										sendMessageToSender($nSenderId, $arrProcessInfo["nUserId"], "done", $strCircName, "SUCCESS", $_REQUEST["cpid"]);
+										sendMessageToSenderDelay($nSenderId, $arrProcessInfo["nUserId"], "done", $strCircName, "SUCCESS", $_REQUEST["cpid"]);
 										$sendMessageToSender = true;
 									}
 									

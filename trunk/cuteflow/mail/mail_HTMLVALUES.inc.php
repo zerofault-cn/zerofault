@@ -20,7 +20,7 @@ if (!function_exists('replaceLinks')) {
 			//--- get the senders userid
 			//-----------------------------------------------
 			
-			$strQuery = "SELECT nSenderId FROM `cf_circulationform` WHERE nID=$nCirculationId";
+			$strQuery = "SELECT nSenderId FROM `cf_circulationform` WHERE nID=".$nCirculationId;
 			$nResult = mysql_query($strQuery, $nConnection);
 			if ($nResult)
 			{
@@ -35,7 +35,7 @@ if (!function_exists('replaceLinks')) {
 			//--- get sender details
 			//-----------------------------------------------				
 			
-			$strQuery = "SELECT strLastName, strFirstName FROM `cf_user` WHERE nID=$nSenderID";
+			$strQuery = "SELECT strLastName, strFirstName FROM `cf_user` WHERE nID=".$nSenderID;
 			$nResult = mysql_query($strQuery, $nConnection);
 			if ($nResult)
 			{
@@ -51,7 +51,7 @@ if (!function_exists('replaceLinks')) {
 			//--- get the sending date
 			//-----------------------------------------------
 			
-			$strQuery = "SELECT * FROM `cf_circulationhistory` WHERE nCirculationFormId=$nCirculationId";
+			$strQuery = "SELECT * FROM `cf_circulationhistory` WHERE nCirculationFormId=".$nCirculationId;
 			$nResult = mysql_query($strQuery, $nConnection);
 			if ($nResult)
 			{
@@ -60,7 +60,7 @@ if (!function_exists('replaceLinks')) {
 					$arrSendingDateResult = mysql_fetch_array($nResult);
 					$strMySendingDate = $arrSendingDateResult["dateSending"];
 					$nCurCircHistoryID = $arrSendingDateResult["nID"];
-					$strSendingDate = convertDateFromDB($strMySendingDate);							
+					$strSendingDate = convertDateFromDB($strMySendingDate);
 				}
 			}
 			
@@ -68,14 +68,14 @@ if (!function_exists('replaceLinks')) {
 			//--- get current template id
 			//-----------------------------------------------
 			
-			$strQuery = "SELECT nTemplateId FROM `cf_formslot` WHERE nID=$nSlotId";
+			$strQuery = "SELECT nTemplateId FROM `cf_formslot` WHERE nID=".$nSlotId;
 			$nResult = mysql_query($strQuery, $nConnection);
 			if ($nResult)
 			{
 				if (mysql_num_rows($nResult) > 0)
 				{
 					$arrCurrentTemplateIDResult = mysql_fetch_array($nResult);
-					$strCurrentTemplateID = $arrCurrentTemplateIDResult[0];				
+					$strCurrentTemplateID = $arrCurrentTemplateIDResult[0];
 				}
 			}
 
@@ -83,7 +83,7 @@ if (!function_exists('replaceLinks')) {
 			//--- get all formslot names and ids
 			//-----------------------------------------------
 			
-			$strQuery = "SELECT * FROM `cf_formslot` WHERE nTemplateId=$strCurrentTemplateID ORDER BY nSlotNumber ASC";
+			$strQuery = "SELECT * FROM `cf_formslot` WHERE nTemplateId=".$strCurrentTemplateID." ORDER BY nSlotNumber ASC";
 			$nResult = mysql_query($strQuery, $nConnection);
 			if ($nResult)
 			{
@@ -106,7 +106,7 @@ if (!function_exists('replaceLinks')) {
 			
 			foreach($arrCurrentFormSlotID as $myFSID)
 			{
-				$strQuery = "SELECT nFieldId FROM `cf_slottofield` WHERE nSlotId=$myFSID GROUP BY nFieldId ASC";
+				$strQuery = "SELECT nFieldId FROM `cf_slottofield` WHERE nSlotId=".$myFSID." GROUP BY nFieldId ASC";
 				$nResult = mysql_query($strQuery, $nConnection);
 				if ($nResult)
 				{
@@ -124,7 +124,7 @@ if (!function_exists('replaceLinks')) {
 			
 			foreach($arrAllFieldIDs as $myFID)
 			{
-				$strQuery = "SELECT * FROM `cf_inputfield` WHERE nID=$myFID ORDER BY nID ASC";
+				$strQuery = "SELECT * FROM `cf_inputfield` WHERE nID=".$myFID." ORDER BY nID ASC";
 				$nResult = mysql_query($strQuery, $nConnection);
 				if ($nResult)
 				{
@@ -146,7 +146,7 @@ if (!function_exists('replaceLinks')) {
 			
 			foreach($arrAllFieldIDs as $myFID)
 			{
-				$strQuery = "SELECT * FROM `cf_fieldvalue` WHERE nInputFieldId=$myFID ORDER BY nID ASC";
+				$strQuery = "SELECT * FROM `cf_fieldvalue` WHERE nInputFieldId=".$myFID." ORDER BY nID ASC";
 				$nResult = mysql_query($strQuery, $nConnection);
 				if ($nResult)
 				{
@@ -735,7 +735,7 @@ $strMessage_MIDDLE2 .= '</table>';
 $CurLang = $_REQUEST["language"];
 $SENDER = $arrSenderDetails[0].", ".$arrSenderDetails[1];
 $SENDDATE = $strSendingDate."\n";
-
+//echo $Circulation_cpid."\n";
 $strParams					= 'cpid='.$Circulation_cpid.'&language='.$CurLang;
 $strEncyrptedParams			= $objURL->encryptURL($strParams);
 $strEncryptedBrowserview	= $CUTEFLOW_SERVER.'/pages/editworkflow_standalone.php?key='.$strEncyrptedParams;

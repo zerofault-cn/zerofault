@@ -33,8 +33,9 @@
 	require_once '../config/db_connect.inc.php';
 	require_once '../lib/datetime.inc.php';
 	require_once 'send_circulation.php';
-	
-	sendMailDelay();
-		
+	echo "Remind user:\n";
+	remindUser();
+	echo "\nMail to sender:\n";
+	MailToSenderDelay();
 
 ?>
