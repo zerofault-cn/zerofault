@@ -12,10 +12,24 @@ CREATE TABLE IF NOT EXISTS cf_mailentry (
   timeSend int(10) unsigned NOT NULL DEFAULT '0' ,
   bStatus tinyint(1) NOT NULL DEFAULT '0' ,
   PRIMARY KEY (nID)
-);
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
 
 ALTER TABLE cf_circulationprocess ADD lastRemindTime INT UNSIGNED NOT NULL;
 
 ALTER TABLE cf_formslot ADD strDescr TINYTEXT NOT NULL AFTER strName;
 ALTER TABLE cf_formslot ADD doneTime INT UNSIGNED DEFAULT "0" NOT NULL;
 ALTER TABLE cf_formslot ADD remindTime INT UNSIGNED DEFAULT "0" NOT NULL;
+
+CREATE TABLE IF NOT EXISTS cf_mailToSender (
+  nID int(10) unsigned NOT NULL auto_increment,
+  nSenderId smallint(5) unsigned NOT NULL DEFAULT '0' ,
+  strCirculationName varchar(255) NOT NULL DEFAULT '' ,
+  strEndState varchar(255) NOT NULL DEFAULT '' ,
+  nCPId int(10) unsigned NOT NULL DEFAULT '0' ,
+  strSlotName varchar(255) NOT NULL DEFAULT '' ,
+  timeAdd int(10) unsigned NOT NULL DEFAULT '0' ,
+  timeSend int(10) unsigned NOT NULL DEFAULT '0' ,
+  bStatus tinyint(1) unsigned NOT NULL DEFAULT '0' ,
+  PRIMARY KEY (nID)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;

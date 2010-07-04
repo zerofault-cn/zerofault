@@ -193,7 +193,7 @@
 																						'".($tsDelayed+20)."',
 																						'0',
 																						'$nCirculationHistoryID',
-																						0)";
+																						0, 0)";
 								mysql_query($strQuery, $nConnection);
 								$tsDelayed += 50;
 							}
