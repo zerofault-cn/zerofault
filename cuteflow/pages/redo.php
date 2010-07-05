@@ -43,10 +43,7 @@
 	
 	if ($nResult)
 	{
-		while ($arrRow = mysql_fetch_array($nResult, MYSQL_ASSOC))
-		{
-			$arrCPResult = $arrRow;
-		}
+		$arrCPResult = mysql_fetch_array($nResult, MYSQL_ASSOC);
 	}
 	
 
@@ -55,15 +52,9 @@
 	$nSlotId 				= $arrCPResult['nSlotId'];
 	$nUserId				= $arrCPResult['nUserId'];
 	
-
-	// send the message
-		// set current user state to "in process"
-		$strQuery = "	UPDATE cf_circulationprocess SET nDecissionState = '0', dateDecission = '$TStoday' WHERE nID = '$nCirculationProcessId'";
-		mysql_query($strQuery, $nConnection);
-		
-		// send
-		sendToUserDelay($nUserId, $nCirculationFormId, $nSlotId, 0, $nCirculationHistoryId, '', true);
-		
+	// set current user state to "in process"
+	$strQuery = "	UPDATE cf_circulationprocess SET nDecissionState = 0, lastRemindTime=0 WHERE nID = '$nCirculationProcessId'";
+	mysql_query($strQuery, $nConnection);
 
 ?>
 <html>

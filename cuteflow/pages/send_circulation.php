@@ -461,7 +461,7 @@
 				//------------------------------------------------------				
 				$sql = "select * from cf_circulationprocess where nCirculationFormId=$nCirculationId and nSlotId=$nSlotId and nUserId=$nUserId and nCirculationHistoryId=$nCirculationHistoryId";
 				$rs = mysql_query($sql);
-				if ($rs && mysql_num_rows($rs)==0) {
+				if (mysql_num_rows($rs)==0) {
 					if ($tsDateInProcessSince == '')
 					{
 						$strQuery = "INSERT INTO cf_circulationprocess values (null, $nCirculationId, $nSlotId, $nUserId, $TStoday, 0, 0, $nCirculationProcessId, $nCirculationHistoryId, 0, 0)";
@@ -475,9 +475,10 @@
 					}
 					$send_mail = true;
 				}
-				//record to mail entry
-				if ($force_send_mail || ($SEND_WORKFLOW_MAIL == true && $send_mail)) 
-				{
+				elseif ($force_send_mail || ($SEND_WORKFLOW_MAIL == true && $send_mail)) {
+					$nID = mysql_result($rs, 0, 0);
+					$sql = "update cf_circulationprocess set lastRemindTime = 0 WHERE nID=".$nID;
+					mysql_query($sql, $nConnection) or die ($strQuery.mysql_error());
 				//	$strQuery = "Insert into cf_mailentry values (null, $nUserId, $nCirculationId, $nSlotId, $nCirculationProcessId, $nCirculationHistoryId, $TStoday, 0, 0)";
 				//	mysql_query($strQuery, $nConnection) or die ($strQuery.mysql_error());
 				}
