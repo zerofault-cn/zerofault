@@ -53,7 +53,7 @@
 	$nUserId				= $arrCPResult['nUserId'];
 	
 	// set current user state to "in process"
-	$strQuery = "	UPDATE cf_circulationprocess SET nDecissionState = 0, lastRemindTime=0 WHERE nID = '$nCirculationProcessId'";
+	$strQuery = "	UPDATE cf_circulationprocess SET dateInProcessSince=".time().", dateDecission=0, nDecissionState = 0, lastRemindTime=0 WHERE nID = ".$nCirculationProcessId;
 	mysql_query($strQuery, $nConnection);
 
 ?>

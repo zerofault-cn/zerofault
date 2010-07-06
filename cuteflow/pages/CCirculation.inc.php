@@ -370,7 +370,7 @@ class CCirculation
 	}
 	function resetMyCirculationProcess($nDELCirculationProcessID)
 	{
-		$strQuery 	= "update cf_circulationprocess set nDecissionState=0 WHERE nID = '$nDELCirculationProcessID' LIMIT 1;";
+		$strQuery 	= "update cf_circulationprocess set dateInProcessSince=".time().", dateDecission=0, nDecissionState = 0, lastRemindTime=0 WHERE nID = ".$nDELCirculationProcessID;
 		$nResult 	= @mysql_query($strQuery);
 	}
 	
