@@ -48,9 +48,29 @@
 			
 			return bResult;
 		}
+		function siteLoaded() {
+			Calendar.setup(
+				{
+				  inputField  : "deadline",         // ID of the input field
+				  ifFormat    : "%Y-%m-%d",    // the date format
+				  button      : "FILTER_Date_Start_Button"       // ID of the button
+				}
+			);
+		}
+
 	//-->
 	</script>
-	<script src="jsval.js" type="text/javascript" language="JavaScript"></script>	
+	<script src="jsval.js" type="text/javascript" language="JavaScript"></script>
+	<!-- calendar stylesheet -->
+	<link rel="stylesheet" type="text/css" media="all" href="../lib/calendar/calendar-win2k-cold-1.css" title="win2k-cold-1" />
+	<!-- main calendar program -->
+	<script type="text/javascript" src="../lib/calendar/calendar.js"></script>
+	<!-- language for the calendar -->
+	<script type="text/javascript" src="../lib/calendar/lang/calendar-en.js"></script>
+	<!-- the following script defines the Calendar.setup helper function, which makes
+	       adding a calendar a matter of 1 or 2 lines of code. -->
+	<script type="text/javascript" src="../lib/calendar/calendar-setup.js"></script>
+	
 </head>
 <?php
 	$strName = "";
@@ -58,7 +78,7 @@
 	
 	include_once ("../config/config.inc.php");
 
-	if (-1 != $_REQUEST['$slotid'])
+	if ('-1' != $_REQUEST['$slotid'])
 	{
     	//--- open database
     	$nConnection = mysql_connect($DATABASE_HOST, $DATABASE_UID, $DATABASE_PWD);
@@ -79,6 +99,7 @@
         				$arrRow = mysql_fetch_array($nResult);
         				$strName = $arrRow["strName"];
         				$nSendType = $arrRow["nSendType"];
+						$deadline = $arrRow['deadline'];
 
 						$time1 = $arrRow['doneTime'];
 						if ($time1%86400 == 0) {
@@ -109,12 +130,13 @@
     	}
 	}
 	else {
+		$deadline = date('Y-m-d');
 		$number1 = 1;
 		$number2 = 0;
 		$unit2 = 'hour';
 	}
 ?>
-<body><br>
+<body onload="siteLoaded()"><br>
 <span style="font-size: 14pt; color: #ffa000; font-family: Verdana; font-weight: bold;">
 	<?php echo $MENU_TEMPLATE;?>
 </span><br><br>
@@ -138,6 +160,12 @@
 			<tr>
 				<td>Description: </td>
 				<td><textarea name="description" cols="40" rows="3"><?php echo $arrRow['strDescr'];?></textarea></td>
+			<tr>
+				<td >Deadline: </td>
+				<td><input type="text" id="deadline" name="deadline" value="<?php echo $deadline;?>" size="10" />
+					<img style="cursor:pointer;margin: 2px 7px 0px 0px;" src="../images/calendar.gif" border="0" id="FILTER_Date_Start_Button">
+				</td>
+			</tr>
 			<tr>
 				<td >Expected completion time: </td>
 				<td><input type="text" name="number1" value="<?php echo $number1;?>" size="3" />
