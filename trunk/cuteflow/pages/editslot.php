@@ -78,7 +78,7 @@
 	
 	include_once ("../config/config.inc.php");
 
-	if ('-1' != $_REQUEST['$slotid'])
+	if ('-1' != $_REQUEST['slotid'])
 	{
     	//--- open database
     	$nConnection = mysql_connect($DATABASE_HOST, $DATABASE_UID, $DATABASE_PWD);
