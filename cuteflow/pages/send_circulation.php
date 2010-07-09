@@ -536,12 +536,12 @@
 						$startTime = $arrRow['dateInProcessSince'];
 						$lastRemindTime = $arrRow['lastRemindTime'];
 						//get Slot remind setting
-						$sql = "Select deadline,doneTime,remindTime from cf_formslot where nID=".$nSlotId;
+						$sql = "Select dueDate,doneTime,remindTime from cf_formslot where nID=".$nSlotId;
 						$rs = mysql_query($sql);
-						if (empty($rs)) {
+						if (empty($rs) || mysql_num_rows($rs)==0) {
 							continue;
 						}
-						$deadline = mysql_result($rs, 0, 0);
+						$dueDate = mysql_result($rs, 0, 0);
 						$doneTime = mysql_result($rs, 0, 1);
 						$remindTime = mysql_result($rs, 0, 2);
 						if ($lastRemindTime==0) {
@@ -550,7 +550,7 @@
 						}
 						elseif ($remindTime>0) {
 							//大于0才会提醒
-							if ((time()-$startTime>=$doneTime || strcmp(date('Y-m-d'), $deadline)>0) && time()-$lastRemindTime>=$remindTime) {
+							if ((time()-$startTime>=$doneTime || strcmp(date('Y-m-d'), $dueDate)>0) && time()-$lastRemindTime>=$remindTime) {
 								//已超过完成时间，或者超过最后期限，且距上次提醒时间已超过提醒间隔
 								$mail_entry[] = $arrRow;
 							}
@@ -877,7 +877,7 @@
 								break;
     					}
 	    				$mail_message->setFrom(array($SYSTEM_REPLY_ADDRESS=>'CuteFlow'));
-						$strEndSubject = $MAIL_ENDACTION_DONE_{$strEndState};
+						eval ("\$strEndSubject = \"\$MAIL_ENDACTION_DONE_$strEndState\";");
 						$strSubject = $MAIL_HEADER_PRE.'['.$strCirculationName.'] ';
 						if (!empty($strSlotName)) {
 							$strSubject .= '['.$strSlotName.'] ';

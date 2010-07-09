@@ -51,7 +51,7 @@
 		function siteLoaded() {
 			Calendar.setup(
 				{
-				  inputField  : "deadline",         // ID of the input field
+				  inputField  : "dueDate",         // ID of the input field
 				  ifFormat    : "%Y-%m-%d",    // the date format
 				  button      : "FILTER_Date_Start_Button"       // ID of the button
 				}
@@ -99,7 +99,7 @@
         				$arrRow = mysql_fetch_array($nResult);
         				$strName = $arrRow["strName"];
         				$nSendType = $arrRow["nSendType"];
-						$deadline = $arrRow['deadline'];
+						$dueDate = $arrRow['dueDate'];
 
 						$time1 = $arrRow['doneTime'];
 						if ($time1%86400 == 0) {
@@ -130,7 +130,7 @@
     	}
 	}
 	else {
-		$deadline = date('Y-m-d');
+		$dueDate = date('Y-m-d');
 		$number1 = 1;
 		$number2 = 0;
 		$unit2 = 'hour';
@@ -161,8 +161,8 @@
 				<td>Description: </td>
 				<td><textarea name="description" cols="40" rows="3"><?php echo $arrRow['strDescr'];?></textarea></td>
 			<tr>
-				<td >Deadline: </td>
-				<td><input type="text" id="deadline" name="deadline" value="<?php echo $deadline;?>" size="10" />
+				<td >Due Date: </td>
+				<td><input type="text" id="dueDate" name="dueDate" value="<?php echo $dueDate;?>" size="10" />
 					<img style="cursor:pointer;margin: 2px 7px 0px 0px;" src="../images/calendar.gif" border="0" id="FILTER_Date_Start_Button">
 				</td>
 			</tr>
@@ -176,7 +176,7 @@
 				</td>
 			</tr>
 			<tr>
-				<td >Reminder timespan: </td>
+				<td >Reminder interval: </td>
 				<td><input type="text" name="number2" value="<?php echo $number2;?>" size="3" />
 					<select name="unit2">
 						<option value="day" <?php if($unit2 == 'day')echo 'selected="selected"';?> >Days</option>
