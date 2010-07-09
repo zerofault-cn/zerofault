@@ -18,7 +18,7 @@ CREATE TABLE IF NOT EXISTS cf_mailentry (
 ALTER TABLE cf_circulationprocess ADD lastRemindTime INT UNSIGNED NOT NULL;
 
 ALTER TABLE cf_formslot ADD strDescr TINYTEXT NOT NULL AFTER strName;
-ALTER TABLE cf_formslot ADD deadline DATE DEFAULT "0000-00-00" NOT NULL AFTER nSendType;
+ALTER TABLE cf_formslot ADD dueDate DATE DEFAULT "0000-00-00" NOT NULL AFTER nSendType;
 ALTER TABLE cf_formslot ADD doneTime INT UNSIGNED DEFAULT "0" NOT NULL;
 ALTER TABLE cf_formslot ADD remindTime INT UNSIGNED DEFAULT "0" NOT NULL;
 

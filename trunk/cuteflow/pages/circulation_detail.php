@@ -723,12 +723,52 @@ if ($view != 'print')
    			{
 				foreach ($arrSlots as $arrSlot)
 				{
+					$time1 = $arrSlot['doneTime'];
+					if ($time1%86400 == 0) {
+						$unit1 = ' day';
+						$number1 = $time1/86400;
+					}
+					elseif ($time1%3600 == 0) {
+						$unit1 = ' hour';
+						$number1 = $time1/3600;
+					}
+
+					$time2 = $arrSlot['remindTime'];
+					if ($time2%86400 == 0) {
+						$unit2 = ' day';
+						$number2 = $time2/86400;
+					}
+					elseif ($time2%3600 == 0) {
+						$unit2 = ' hour';
+						$number2 = $time2/3600;
+					}
+					elseif ($time2%60 == 0) {
+						$unit2 = ' minute';
+						$number2 = $time2/60;
+					}
 					?>
 					    <tr>
 					        <td style="border-top: 1px solid Silver;" align="left">
 					            <table width="100%" border="1" cellpadding="4" style="border-collapse:collapse;border:1px solid #999999;">
 								<tr><td style="font-weight: bold;background: #666666; color: #fff; padding:1px;" colspan="16"><?php echo $arrSlot['strName']; ?></td></tr>
-								<tr><td style="background: #999999; color: #fff; padding:1px;padding-left:2em;" colspan="16"><?php echo nl2br($arrSlot['strDescr']); ?></td></tr>
+								<tr>
+									<td style="background-color: #999999;padding:1px;" colspan="16">
+										<table width="100%" border="1" cellpadding="2" cellspacing="0" style="border-collapse:collapse;border:1px solid #ffffff;color:#ffffff">
+										<tr>
+											<td style="color:#000000;" width="20%" nowrap="nowrap">Description:</td>
+											<td colspan="5"><?php echo nl2br($arrSlot['strDescr']); ?></td>
+										</tr>
+										<tr>
+											<td style="color:#000000;" width="20%" nowrap="nowrap">Due Date:</td>
+											<td><?php echo $arrSlot['dueDate'];?></td>
+											<td style="color:#000000;" width="20%" nowrap="nowrap">Expected completion time:</td>
+											<td><?php echo $number1.$unit1;?></td>
+											<td style="color:#000000;" width="20%" nowrap="nowrap">Reminder interval:</td>
+											<td><?php echo $number2.$unit2;?></td>
+										</tr>
+										</table>
+									</td>
+								</tr>
 								<tr>
 								<?php
 									$strQuery = "SELECT * FROM cf_inputfield INNER JOIN cf_slottofield ON cf_inputfield.nID = cf_slottofield.nFieldId WHERE cf_slottofield.nSlotId = ".$arrSlot["nID"]."  ORDER BY cf_slottofield.nPosition ASC";

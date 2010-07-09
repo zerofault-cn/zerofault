@@ -40,7 +40,7 @@
 		if (mysql_select_db($DATABASE_DB, $nConnection))
 		{
 			$nSendType = $_REQUEST['nSendType'] == "on" ? 1 : 0;
-			$deadline = $_REQUEST['deadline'];
+			$dueDate = $_REQUEST['dueDate'];
 			$number1 = intval($_REQUEST['number1']);
 			switch ($_REQUEST['unit1']) {
 				case 'day':
@@ -80,12 +80,12 @@
 						$nMaxSlotNumber = $arrRow[0];
 					}
 				}
-				$query = "INSERT INTO cf_formslot values (null, \"".$_REQUEST["strName"]."\", '".addslashes($_REQUEST['description'])."', ".$_REQUEST["templateid"].", ".($nMaxSlotNumber+1).", ".$nSendType.", '".$deadline."', ".$number1.", ".$number2.")";
+				$query = "INSERT INTO cf_formslot values (null, \"".$_REQUEST["strName"]."\", '".addslashes($_REQUEST['description'])."', ".$_REQUEST["templateid"].", ".($nMaxSlotNumber+1).", ".$nSendType.", '".$dueDate."', ".$number1.", ".$number2.")";
 			}
 			else
 			{
 				//--- update existing slot
-				$query = "UPDATE cf_formslot SET strName=\"".$_REQUEST["strName"]."\", strDescr='".addslashes($_REQUEST['description'])."', nSendType=".$nSendType.", deadline='".$deadline."', doneTime=".$time1.", remindTime=".$time2." WHERE nID=".$_REQUEST["slotid"];
+				$query = "UPDATE cf_formslot SET strName=\"".$_REQUEST["strName"]."\", strDescr='".addslashes($_REQUEST['description'])."', nSendType=".$nSendType.", dueDate='".$dueDate."', doneTime=".$time1.", remindTime=".$time2." WHERE nID=".$_REQUEST["slotid"];
 			}
 			
 			$nResult = mysql_query($query, $nConnection);
