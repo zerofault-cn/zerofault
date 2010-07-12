@@ -16,7 +16,7 @@ $strEncyrptedParams		= $objURL->encryptURL($strParams);
 
 <html>
 <head>
-	<title>CuteFlow</title>
+	<title>AgigAFlow</title>
 	<link rel="stylesheet" href="pages/format.css" type="text/css">
 </head>
 

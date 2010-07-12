@@ -85,7 +85,7 @@
 	$mailer = Swift_Mailer::newInstance($transport);
 	$message = Swift_Message::newInstance()
 						->setSubject($strSubject)
-						->setFrom(array($strSender => 'CuteFlow'))
+						->setFrom(array($strSender => 'AgigAFlow'))
 						->setBody($strContent)
 						->setTo($arrRecievers);
 	

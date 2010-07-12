@@ -105,8 +105,7 @@ switch ($strEndState)
 				</table>
 	
 			<br><br>
-			<strong style=\"font-size:8pt;font-weight:normal\">powered by</strong><br>
-			<a href=\"http://cuteflow.org\" target=\"_blank\"><img src=\"$CUTEFLOW_SERVER/images/cuteflow_logo_small.png\" border=\"0\" /></a><br>
+			<img src=\"$CUTEFLOW_SERVER/images/agiga.jpg\" border=\"0\" /><br>
 			<strong style=\"font-size:8pt;font-weight:normal\">Version $CUTEFLOW_VERSION</strong><br>
 				
 		</div>
@@ -128,8 +127,7 @@ switch ($strEndState)
 				</table>
 	
 			<br><br>
-			<strong style=\"font-size:8pt;font-weight:normal\">powered by</strong><br>
-			<a href=\"http://cuteflow.org\" target=\"_blank\"><img src=\"$CUTEFLOW_SERVER/images/cuteflow_logo_small.png\" border=\"0\" /></a><br>
+			<img src=\"$CUTEFLOW_SERVER/images/agiga.jpg\" border=\"0\" /><br>
 			<strong style=\"font-size:8pt;font-weight:normal\">Version $CUTEFLOW_VERSION</strong><br>
 				
 		</div>
@@ -151,8 +149,7 @@ switch ($strEndState)
 			</table>
 
 			<br><br>
-			<strong style=\"font-size:8pt;font-weight:normal\">powered by</strong><br>
-			<a href=\"http://cuteflow.org\" target=\"_blank\"><img src=\"$CUTEFLOW_SERVER/images/cuteflow_logo_small.png\" border=\"0\" /></a><br>
+			<img src=\"$CUTEFLOW_SERVER/images/agiga.jpg\" border=\"0\" /><br>
 			<strong style=\"font-size:8pt;font-weight:normal\">Version $CUTEFLOW_VERSION</strong><br>
 				
 		</div>
@@ -174,8 +171,7 @@ switch ($strEndState)
 			</table>
 
 			<br><br>
-			<strong style=\"font-size:8pt;font-weight:normal\">powered by</strong><br>
-			<a href=\"http://cuteflow.org\" target=\"_blank\"><img src=\"$CUTEFLOW_SERVER/images/cuteflow_logo_small.png\" border=\"0\" /></a><br>
+			<img src=\"$CUTEFLOW_SERVER/images/agiga.jpg\" border=\"0\" /><br>
 			<strong style=\"font-size:8pt;font-weight:normal\">Version $CUTEFLOW_VERSION</strong><br>
 				
 		</div>

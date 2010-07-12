@@ -119,7 +119,7 @@
 <html>
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=<?php echo $DEFAULT_CHARSET ?>">
-	<title>CuteFlow</title>
+	<title>AgigAFlow</title>
 	<link rel="stylesheet" href="pages/format.css" type="text/css">
 	<script src="pages/jsval.js" type="text/javascript" language="JavaScript"></script>
 	<script src="lib/RPL/Encryption/aamcrypt.js" type="text/javascript" language="JavaScript"></script>
@@ -299,8 +299,7 @@
 		</table>
 		<br>
 		<br>
-		<strong style="font-size:8pt;font-weight:normal">powered by</strong><br>
-		<a href="http://cuteflow.org" target="_blank"><img src="images/cuteflow_logo_small.png" border="0" /></a><br>
+		<img src="images/agiga.jpg" border="0" /><br>
 		<strong style="font-size:8pt;font-weight:normal">Version <?php echo $CUTEFLOW_VERSION ?></strong><br> 
 		
 	</div>

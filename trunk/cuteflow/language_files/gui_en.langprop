@@ -287,7 +287,7 @@ MAIL_CONTENT_STOPPED_TEXT=The circulation was stopped by another user. You can't
 MAIL_ENDACTION_DONE_0=- rejected@@@1152107572
 MAIL_ENDACTION_DONE_SUCCESS=- successfully completed@@@1152107590
 MAIL_HEADER_PRE=Circulation: @@@1152107510
-MAIL_LINK_DESCRIPTION=Please click on the <span style="color:#548dd4;">Enter</span> link to deal with it, it will guide you to the Cuteflow system in your default browser. Use your ERP/Cuteflow username and password if it's needed.@@@1152107510
+MAIL_LINK_DESCRIPTION=Please click on the <span style="color:#548dd4;">Enter</span> link to deal with it, it will guide you to the AgigAFlow system in your default browser. Use your ERP/AgigAFlow username and password if it's needed.@@@1152107510
 MAIL_NACK=Your answer was saved.<br><br>Please close the e-mail.@@@1152107510
 MAIL_VALUES_HEADER=Additional information@@@1152107510
 MENU_ARCHIVE=Circulation archive@@@1152107510
@@ -331,7 +331,7 @@ TEMPLATE_SELECT_FORM_HEADER=Select document template@@@1152107510
 TEMPLATE_SELECT_NO_SELECT=No document template selected!@@@1152107510
 TEMPLATE_TIP_DELETE=Delete template@@@1152107510
 TEMPLATE_TIP_DETAILS=Edit template@@@1152107510
-TITLE_1=CuteFlow@@@1152107510
+TITLE_1=AgigAFlow@@@1152107510
 TITLE_2=Document circulation system@@@1152107510
 UPDATE_INFO=To Start the Update press the update Button. The Update only works with Cuteflow v2.0.x. Your Cuteflow will be updated automatically when pressing the update Button.@@@1155632008
 UPDATE_INFO2=This Update only works with Cuteflow v2.0.x@@@1155632432

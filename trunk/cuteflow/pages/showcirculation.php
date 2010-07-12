@@ -68,7 +68,7 @@
 			if (bSeperateWindow)
 			{
 				destination = "circulation_detail.php?key=" + outdata;
-				newWindow = window.open(destination, "Cuteflow", "width=900,height=600,left=100,top=200,status=yes,scrollbars=yes,resizable=yes,menubar=yes,toolbar=yes,location=yes");
+				newWindow = window.open(destination, "AgigAFlow", "width=900,height=600,left=100,top=200,status=yes,scrollbars=yes,resizable=yes,menubar=yes,toolbar=yes,location=yes");
 				newWindow.focus();
 			}
 			else

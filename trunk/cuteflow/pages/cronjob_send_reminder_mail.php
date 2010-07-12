@@ -123,7 +123,7 @@
 					break;
     		}	
     		
-			$mail_message->setFrom(array($SYSTEM_REPLY_ADDRESS=>'CuteFlow'));
+			$mail_message->setFrom(array($SYSTEM_REPLY_ADDRESS=>'AgigAFlow'));
 			$mail_message->setSubject($REMINDER_MAIL_SUBJECT);
 			
 			$mail_message->setTo(array($user["strEMail"]));
