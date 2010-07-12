@@ -50,8 +50,7 @@ require_once '../language_files/language.inc.php';
 		</table>
 		<br>
 		<br>
-		<strong style="font-size:8pt;font-weight:normal">powered by</strong><br>
-		<a href="http://cuteflow.org" target="_blank"><img src="../images/cuteflow_logo_small.png" border="0" /></a><br>
+		<img src="../images/agiga.jpg" border="0" /><br>
 		<strong style="font-size:8pt;font-weight:normal">Version <?php echo $CUTEFLOW_VERSION ?></strong><br> 
 	</div>
 </body>

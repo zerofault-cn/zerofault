@@ -397,7 +397,7 @@
 							$arrRow = mysql_fetch_array($nResult);
 							$SYSTEM_REPLY_ADDRESS = str_replace (' ', '_', $SYSTEM_REPLY_ADDRESS);
 							
-							$message->setFrom(array($SYSTEM_REPLY_ADDRESS=>'CuteFlow'));
+							$message->setFrom(array($SYSTEM_REPLY_ADDRESS=>'AgigAFlow'));
 							$message->setSubject($MAIL_HEADER_PRE.$arrForm["strName"]);
 							
 							$message->setTo(array($arrRow["strEMail"]));
@@ -662,7 +662,7 @@
 					
 					$SYSTEM_REPLY_ADDRESS = str_replace (' ', '_', $SYSTEM_REPLY_ADDRESS);
 					
-					$message->setFrom(array($SYSTEM_REPLY_ADDRESS=>'CuteFlow'));
+					$message->setFrom(array($SYSTEM_REPLY_ADDRESS=>'AgigAFlow'));
 					$message->setSubject($MAIL_HEADER_PRE.'['.$arrForm["strName"].'] ['.$slotName.']');
 					
 					$message->setTo(array($user["strEMail"]));
@@ -757,7 +757,7 @@
 						break;
     			}	
 	    		
-				$mail_message->setFrom(array($SYSTEM_REPLY_ADDRESS=>'CuteFlow'));
+				$mail_message->setFrom(array($SYSTEM_REPLY_ADDRESS=>'AgigAFlow'));
 				eval ("\$strEndSubject = \"\$MAIL_ENDACTION_DONE_$strEndState\";");
 				
 				$mail_message->setSubject($MAIL_HEADER_PRE.'['.$strCirculationName.'] ['.$slotname.'] '.$strEndSubject);
@@ -876,7 +876,7 @@
 								$mail_message->setBody($strMessage, 'text/html');
 								break;
     					}
-	    				$mail_message->setFrom(array($SYSTEM_REPLY_ADDRESS=>'CuteFlow'));
+	    				$mail_message->setFrom(array($SYSTEM_REPLY_ADDRESS=>'AgigAFlow'));
 						eval ("\$strEndSubject = \"\$MAIL_ENDACTION_DONE_$strEndState\";");
 						$strSubject = $MAIL_HEADER_PRE.'['.$strCirculationName.'] ';
 						if (!empty($strSlotName)) {

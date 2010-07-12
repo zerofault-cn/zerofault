@@ -662,8 +662,7 @@
 
 
 <div align="center" style="margin-top: 40px;">
-	<strong style="font-size:8pt;font-weight:normal">powered by</strong><br>
-	<a href="http://cuteflow.org" target="_blank"><img width="95" height="37" src="../images/cuteflow_logo_small.png" border="0" /></a><br>
+	<img width="170" src="../images/agiga.jpg" border="0" /><br>
 	<strong style="font-size:8pt;font-weight:normal">Version <?php echo $CUTEFLOW_VERSION;?></strong><br> 
 </div>
 
