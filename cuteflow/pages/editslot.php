@@ -100,6 +100,7 @@
         				$strName = $arrRow["strName"];
         				$nSendType = $arrRow["nSendType"];
 						$dueDate = $arrRow['dueDate'];
+						$remindDays = $arrRow['remindDays'];
 
 						$time1 = $arrRow['doneTime'];
 						if ($time1%86400 == 0) {
@@ -132,6 +133,8 @@
 	else {
 		$dueDate = date('Y-m-d');
 		$number1 = 1;
+		$unit1 = 'day';
+		$remindDays = 0;
 		$number2 = 0;
 		$unit2 = 'hour';
 	}
@@ -176,13 +179,18 @@
 				</td>
 			</tr>
 			<tr>
-				<td >Reminder interval: </td>
+				<td>Remind days before due date: </td>
+				<td><input type="text" name="remindDays" value="<?php echo $remindDays;?>" size="3" /> days (Integer number only)
+				</td>
+			</tr>
+			<tr>
+				<td >Reminder interval after due date: </td>
 				<td><input type="text" name="number2" value="<?php echo $number2;?>" size="3" />
 					<select name="unit2">
 						<option value="day" <?php if($unit2 == 'day')echo 'selected="selected"';?> >Days</option>
 						<option value="hour"  <?php if($unit2 == 'hour')echo 'selected="selected"';?> >Hours</option>
 						<option value="minute" <?php if($unit2 == 'minute')echo 'selected="selected"';?> >Minutes</option>
-					</select> (Integer number only, 0 : don't remind)
+					</select> (Integer number only, '0' means no reminder)
 				</td>
 			</tr>
 			<tr><td height="10"></td></tr>
