@@ -536,7 +536,7 @@
 						$startTime = $arrRow['dateInProcessSince'];
 						$lastRemindTime = $arrRow['lastRemindTime'];
 						//get Slot remind setting
-						$sql = "Select dueDate,doneTime,remindTime from cf_formslot where nID=".$nSlotId;
+						$sql = "Select dueDate,doneTime,remindTime,remindDays from cf_formslot where nID=".$nSlotId;
 						$rs = mysql_query($sql);
 						if (empty($rs) || mysql_num_rows($rs)==0) {
 							continue;
@@ -544,13 +544,16 @@
 						$dueDate = mysql_result($rs, 0, 0);
 						$doneTime = mysql_result($rs, 0, 1);
 						$remindTime = mysql_result($rs, 0, 2);
+						$remindDays = mysql_result($rs, 0, 3);
 						if ($lastRemindTime==0) {
 							//都需要发邮件
 							$mail_entry[] = $arrRow;
 						}
-						elseif ($remindTime>0) {
-							//大于0才会提醒
-							if ((time()-$startTime>=$doneTime || strcmp(date('Y-m-d'), $dueDate)>0) && time()-$lastRemindTime>=$remindTime) {
+						elseif ((time()-$startTime)>=($doneTime-$remindDays*86400)) {
+							if (((time()-$startTime)<$doneTime && strcmp(date('Y-m-d'), $dueDate)<=0)) {
+							}
+							//remindTime大于0才会提醒
+							if ($remindTime>0 && ((time()-$startTime)>=$doneTime || strcmp(date('Y-m-d'), $dueDate)>0) && time()-$lastRemindTime>=$remindTime) {
 								//已超过完成时间，或者超过最后期限，且距上次提醒时间已超过提醒间隔
 								$mail_entry[] = $arrRow;
 							}
