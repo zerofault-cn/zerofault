@@ -290,8 +290,9 @@
 	}
 	$Slots_arr = $objCirculation->getFormslots($nFormTemplateID);
 	$Slot_User_arr = array();
+//	echo '<pre>';print_r($Slots_arr);echo '</pre>';
 	foreach ($Slots_arr as $slot) {
-		$strQuery 	= "SELECT * FROM cf_slottouser WHERE nMailingListId = '$nMailinglistID' AND nSlotId = '".$slot['nID']."' ORDER BY nPosition ASC";
+	echo	$strQuery 	= "SELECT * FROM cf_slottouser WHERE nMailingListId = '$nMailinglistID' AND nSlotId = '".$slot['nID']."' ORDER BY nPosition ASC";
 		$nResult 	= mysql_query($strQuery);
 		if ($nResult && mysql_num_rows($nResult) > 0)
 		{
@@ -301,9 +302,9 @@
 			}
 		}
 	}
-	//echo '<pre>';print_r($Slot_User_arr);echo '</pre>';
+//	echo '<pre>';print_r($Slot_User_arr);echo '</pre>';
 	// - - - - - - - - - - - - START STANDARDVALUES - - - - - - - - - - - - 
-	if ($_REQUEST['bUseLatestValues'] != 'on')
+	if ($_REQUEST['bUseLatestValues'] != 'on' && !empty($Slot_User_arr))
 	{
 		$arrFormSlots	= $objMyCirculation->getFormslots($nFormTemplateID);
 		
