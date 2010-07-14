@@ -146,6 +146,15 @@
 				}
 			}
 			$nSenderUserId = $arrCirculationForm['nSenderId'];
+			if ($_SESSION["SESSION_CUTEFLOW_ACCESSLEVEL"] == 4 || $_SESSION["SESSION_CUTEFLOW_ACCESSLEVEL"] == 1) {
+				$nMailingListId = $arrCirculationForm['nMailingListId'];
+				$sql = "select * from cf_slottouser where nMailingListId=".$nMailingListId." and nUserId=".$_SESSION['SESSION_CUTEFLOW_USERID'];
+				$rs = mysql_query($sql, $nConnection);
+				if (mysql_num_rows($rs) == 0) {
+					echo '<h2>You are not in this circulation.</h2>';
+					exit;
+				}
+			}
 			//-----------------------------------------------
 			//--- get history (all revisions)
 			//-----------------------------------------------
@@ -732,6 +741,9 @@ if ($view != 'print')
 						$unit1 = ' hour';
 						$number1 = $time1/3600;
 					}
+					if ($number1>1) {
+						$unit1 .= 's';
+					}
 
 					$time2 = $arrSlot['remindTime'];
 					if ($time2%86400 == 0) {
@@ -746,6 +758,9 @@ if ($view != 'print')
 						$unit2 = ' minute';
 						$number2 = $time2/60;
 					}
+					if ($number2>1) {
+						$unit2 .= 's';
+					}
 					?>
 					    <tr>
 					        <td style="border-top: 1px solid Silver;" align="left">
@@ -755,15 +770,15 @@ if ($view != 'print')
 									<td style="background-color: #999999;padding:1px;" colspan="16">
 										<table width="100%" border="1" cellpadding="2" cellspacing="0" style="border-collapse:collapse;border:1px solid #ffffff;color:#ffffff">
 										<tr>
-											<td style="color:#000000;" width="20%" nowrap="nowrap">Description:</td>
+											<td style="color:#000000;" width="20%" nowrap="nowrap">Description :</td>
 											<td colspan="5"><?php echo nl2br($arrSlot['strDescr']); ?></td>
 										</tr>
 										<tr>
-											<td style="color:#000000;" width="20%" nowrap="nowrap">Due Date:</td>
+											<td style="color:#000000;" width="20%" nowrap="nowrap">Due Date :</td>
 											<td><?php echo $arrSlot['dueDate'];?></td>
-											<td style="color:#000000;" width="20%" nowrap="nowrap">Expected completion time:</td>
+											<td style="color:#000000;" width="20%" nowrap="nowrap">Expected completion days :</td>
 											<td><?php echo $number1.$unit1;?></td>
-											<td style="color:#000000;" width="20%" nowrap="nowrap">Reminder interval:</td>
+											<td style="color:#000000;" width="20%" nowrap="nowrap">Press time interval :</td>
 											<td><?php echo $number2.$unit2;?></td>
 										</tr>
 										</table>

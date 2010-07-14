@@ -100,7 +100,7 @@
 			<tr><td height="10"></td></tr>
             <tr>
 				<td width="200"><?php echo $TEMPLATE_EDIT1_NAME;?></td>
-				<td><input id="strName" Name="strName" type="text" class="InputText" style="width:150px;" value="<?php echo $strTemplateName ?>"></td>
+				<td><input id="strName" Name="strName" type="text" class="InputText" size="60" value="<?php echo $strTemplateName ?>"></td>
 			</tr>
 			<tr><td height="10"></td></tr>
 		</table>

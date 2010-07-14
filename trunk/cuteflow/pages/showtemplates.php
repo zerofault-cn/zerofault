@@ -84,7 +84,7 @@
 				if (mysql_query($sql, $nConnection)) {
 					$new_id = mysql_insert_id();
 					while ($arr = mysql_fetch_array($nResult2)) {
-						$sql = "Insert into cf_formslot set strName='".$arr['strName']."', strDescr='".addslashes($arr['strDescr'])."', nTemplateId=".$new_id.", nSlotNumber=".$arr['nSlotNumber'].", nSendType=".$arr['nSendType'].", dueDate='".$arr['dueDate']."', doneTime=".$arr['doneTime'].", remindTime=".$arr['remindTime'].", remindDays=".$remindDays;
+						$sql = "Insert into cf_formslot set strName='".$arr['strName']."', strDescr='".addslashes($arr['strDescr'])."', nTemplateId=".$new_id.", nSlotNumber=".$arr['nSlotNumber'].", nSendType=".$arr['nSendType'].", dueDate='".$arr['dueDate']."', doneTime=".$arr['doneTime'].", remindTime=".$arr['remindTime'];
 						mysql_query($sql, $nConnection);
 					}
 				}

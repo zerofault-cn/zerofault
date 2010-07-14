@@ -575,6 +575,9 @@
 														$unit1 = ' hour';
 														$number1 = $time1/3600;
 													}
+													if ($number1>1) {
+														$unit1 .= 's';
+													}
 
 													$time2 = $arrSlot['remindTime'];
 													if ($time2%86400 == 0) {
@@ -588,6 +591,9 @@
 													elseif ($time2%60 == 0) {
 														$unit2 = ' minute';
 														$number2 = $time2/60;
+													}
+													if ($number2>1) {
+														$unit2 .= 's';
 													}
 													?>
 													    <tr>        
@@ -609,11 +615,11 @@
 											<td colspan="5"><?php echo nl2br($arrSlot['strDescr']); ?></td>
 										</tr>
 										<tr>
-											<td style="color:#000000;" width="20%" nowrap="nowrap">Due Date:</td>
+											<td style="color:#000000;" width="20%" nowrap="nowrap">Due Date :</td>
 											<td><?php echo $arrSlot['dueDate'];?></td>
-											<td style="color:#000000;" width="20%" nowrap="nowrap">Expected completion time:</td>
+											<td style="color:#000000;" width="20%" nowrap="nowrap">Expected completion days :</td>
 											<td><?php echo $number1.$unit1;?></td>
-											<td style="color:#000000;" width="20%" nowrap="nowrap">Reminder interval:</td>
+											<td style="color:#000000;" width="20%" nowrap="nowrap">Press time interval :</td>
 											<td><?php echo $number2.$unit2;?></td>
 										</tr>
 										</table>
