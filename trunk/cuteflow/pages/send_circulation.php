@@ -557,6 +557,17 @@
 							//首次邮件通知
 							$mail_entry[] = $arrRow;
 						}
+						else {
+							$tmp = $lastRemindTime+round(($endTime-$lastRemindTime)*0.618);
+							if (time()>=$tmp && time()<$endTime && time()-$lastRemindTime>86300) {//预提醒
+								$mail_entry[] = $arrRow;
+							}
+							elseif ($remindTime>0 && time()>=$endTime && time()-$lastRemindTime+100>=$remindTime && (date('G')>=9 && date('G')<18 && date('N')<=5)) {//后提醒
+								//remindTime大于0，已超过完成时间，且距上次提醒时间已超过提醒间隔
+								//100秒用于补足程序执行所耗时间
+								$mail_entry[] = $arrRow;
+							}
+						}/*
 						elseif (date('G')>=9 && date('G')<18 && date('N')<=5) {//非工作日不提醒
 							//计算预提醒时间
 							$tmp = $lastRemindTime+round(($endTime-$lastRemindTime)*0.618);
@@ -571,7 +582,7 @@
 						}
 						else {
 							//nothing
-						}
+						}*/
 					}
 				}
 				if (empty($mail_entry)) {
