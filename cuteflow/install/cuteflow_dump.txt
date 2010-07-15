@@ -161,4 +161,22 @@ INSERT INTO `cf_user` VALUES (1, 'None', 'Administrator', 'default@default.de', 
 INSERT INTO `cf_config` VALUES ('', '', '', '', '', '', 'cuteflow@localhost.de', '', '', 'true', 'COL_CIRCULATION_PROCESS_DAYS', 'true', 'true', 'NAME---1---STATION---1---DAYS---1---START---1---SENDER---1---WHOLETIME---0---MAILLIST---0---TEMPLATE---0', 7, 10, 12, 'HTML', 'IFRAME', 1, 'DAYS', 1, 'ASC', '', 50, 60, '', 0, 0, '', '', 'm-d-Y', 'SMTP', '', 'ALL', 'NONE', 1, 0);
 
 
-CREATE TABLE IF NOT EXISTS cf_mailentry (  nID int(11) NOT NULL auto_increment,  nUserId int(11) NOT NULL DEFAULT '0' ,  nCirculationId int(11) NOT NULL DEFAULT '0' ,  nSlotId int(11) NOT NULL DEFAULT '0' ,  nCirculationProcessId int(11) NOT NULL DEFAULT '0' ,  nCirculationHistoryId int(11) NOT NULL DEFAULT '0' ,  timeAdd int(10) unsigned NOT NULL DEFAULT '0' ,  timeSend int(10) unsigned NOT NULL DEFAULT '0' ,  bStatus tinyint(1) NOT NULL DEFAULT '0' ,  PRIMARY KEY (nID));
+ALTER TABLE cf_circulationprocess ADD lastRemindTime INT UNSIGNED NOT NULL;
+
+ALTER TABLE cf_formslot ADD strDescr TINYTEXT NOT NULL AFTER strName;
+ALTER TABLE cf_formslot ADD dueDate DATE DEFAULT "0000-00-00" NOT NULL AFTER nSendType;
+ALTER TABLE cf_formslot ADD doneTime INT UNSIGNED DEFAULT "0" NOT NULL;
+ALTER TABLE cf_formslot ADD remindTime INT UNSIGNED DEFAULT "0" NOT NULL;
+
+CREATE TABLE IF NOT EXISTS cf_mailToSender (
+  nID int(10) unsigned NOT NULL auto_increment,
+  nSenderId smallint(5) unsigned NOT NULL DEFAULT '0' ,
+  strCirculationName varchar(255) NOT NULL DEFAULT '' ,
+  strEndState varchar(255) NOT NULL DEFAULT '' ,
+  nCPId int(10) unsigned NOT NULL DEFAULT '0' ,
+  strSlotName varchar(255) NOT NULL DEFAULT '' ,
+  timeAdd int(10) unsigned NOT NULL DEFAULT '0' ,
+  timeSend int(10) unsigned NOT NULL DEFAULT '0' ,
+  bStatus tinyint(1) unsigned NOT NULL DEFAULT '0' ,
+  PRIMARY KEY (nID)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
