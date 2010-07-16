@@ -543,7 +543,7 @@
 						}
 						$dueDate = mysql_result($rs, 0, 0);
 						$doneTime = mysql_result($rs, 0, 1);
-						if (false === strtotime($dueDate) || time()>=strtotime($dueDate)) {//绝对完成日期无效
+						if (false === strtotime($dueDate) || strcmp($dueDate, date('Y-m-d', $startTime))<0) {//绝对完成日期无效，或者早于开始日期
 							$endTime = $startTime+$doneTime;//完成时间
 						}
 						elseif(0==$doneTime) {//预计完成时间无效
