@@ -42,7 +42,7 @@ class IndexAction extends BaseAction{
 		$line = M('Line')->where(array('status'=>array('gt',0)))->order('number')->select();
 		foreach($line as $item) {
 			if ($item['number']<1000) {
-				$str .= $item['number'].",";
+				$str .= $item['number'].($item['number']!=$item['name']?(':'.$item['name']):'').",";
 			}
 			else {
 				$str .= $item['name'].",";
