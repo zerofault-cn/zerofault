@@ -24,7 +24,7 @@
 			<td>
 				<select name="type" onchange="Notice(this.value);" alt="Absence type" title="Select absence type">
 					<option value="">---------Select---------</option>
-					<iterate name="result" id="item">
+					<iterate name="LeaveType" id="item">
 					<option value="{$item['type']}">{$item['name']}</option> 
 					</iterate>
 				</select>
@@ -39,20 +39,10 @@
 		<tr bgcolor="#EEEEEE" align="center">
 			<td><input type="text" name="totalHours" id="totalHours" value="8" size="2" alt="Total absence hours" title="Click to edit total absence hours"> hrs<div id="div_typeNotice_hour"></div></td>
 			<td align="center" colspan="2">
-				<input name="date_from" type="text" class="w9" id="date_from" value="2010-06-21" size="12" disabled="disabled" readonly="true" alt="Absence start date" title="Click to choose absence start date" onchange="checkDuraConflict()" />
-				<select name="time_from" class="w9" id="time_from" onchange="checkDuraConflict()" disabled="disabled" alt="Absence start time" title="Select absence start time">
-					<option label="00:00" value="00:00">00:00</option> 
-					<option label="09:00" value="09:00" selected="selected">09:00</option> 
-					<option label="13:00" value="13:00">13:00</option> 
-					<option label="18:00" value="18:00">18:00</option> 
-				</select>&nbsp;~&nbsp;
-				<input name="date_to" type="text" class="w9" id="date_to" value="2010-06-21" size="12" disabled="disabled" readonly="true" alt="Absence end date" title="Click to choose absence end date" onchange="checkDuraConflict()" />
-				<select name="time_to" class="w9" id="time_to" onchange="checkDuraConflict()" disabled="disabled" alt="Absence end time" title="Select absence end time">
-					<option label="00:00" value="00:00">00:00</option> 
-					<option label="17:45" value="17:45" selected="selected">17:45</option> 
-				</select>
-				<div id="div_timeERROR"></div>
-				<div id="div_typeNotice_timeBase"></div>
+				<input name="date_from" type="text" id="date_from" value="{$date_from}" size="12" disabled="disabled" alt="Absence start date" title="Click to choose absence start date" onchange="checkDuraConflict()" />
+				<input type="text" size="5" value="{$time_from}" name="time_from" id="time_from" disabled="disabled" alt="Absence start time" title="Input absence start time" />&nbsp;~&nbsp;
+				<input name="date_to" type="text" id="date_to" value="{$date_to}" size="12" disabled="disabled" alt="Absence end date" title="Click to choose absence end date" onchange="checkDuraConflict()" />
+				<input type="text" size="5" name="time_to" id="time_to" value="{$time_to}" onchange="checkDuraConflict()" disabled="disabled" alt="Absence end time" title="Input absence end time" />
 			</td>
 		</tr>
 		<tr bgcolor="#CCCCCC" align="center">
@@ -60,15 +50,33 @@
 			<td colspan="2">Attached File</td>
 		</tr>
 		<tr bgcolor="#EEEEEE" align="center">
-			<td><div id="div_deputyQSltContent" style="display: none;"></div><img src="../Public/Images/add_member.gif" onclick="document.getElementById('div_deputyERROR').innerHTML='';subForm('ra', 'userNo_deputy', 'div_deputyName', 'userNo_applicant', '3|4|5');" width="25" height="25" align="absmiddle" onmouseover="this.style.cursor='pointer';" onmouseout="this.style.cursor='auto';" title="Click to choose deputy" /><span id="div_deputyName"></span><div id="div_deputyERROR"></div></td>
-			<td align="center" colspan="2"><div id="show_AttachFile" name="show_AttachFile"></div><img style="cursor: auto;" src="../Public/Images/attachfile.gif" onclick="attach_file('show_AttachFile', 'AttachFile');" onmouseover="this.style.cursor='pointer';" onmouseout="this.style.cursor='auto';" align="absmiddle"><div id="div_upFile_notice" name="div_upFile_notice"></div><div id="div_typeNotice_attFile"></div><span id="div_upFile_xd" name="div_upFile_xd"></span><input name="attFilesName" id="attFilesName" value="" type="hidden"><input name="attFilestmpName" id="attFilestmpName" value="" type="hidden"><input name="attFilesID" id="attFilesID" value="" type="hidden"></td>
+			<td>
+				<select name="deputy">
+				<option value="">----Select----</option>
+				<foreach name="DeptStaff" key="dept" item="Staff">
+					<optgroup label="{$dept}">
+					<foreach name="Staff" item="staff">
+						<option value="{$staff['id']}">{$staff['realname']}</option>
+					</foreach>
+					</optgroup>
+				</foreach>
+				</select>
+			</td>
+			<td align="center" colspan="2"><img style="cursor: pointer;" src="../Public/Images/attachfile.gif" onclick="attach_file('show_AttachFile', 'AttachFile');" align="absmiddle"></td>
 		</tr>
 		<tr bgcolor="#CCCCCC" align="center">
 			<td>Notifiable users</td>
 			<td colspan="2">Reason</td>
 		</tr>
 		<tr bgcolor="#EEEEEE" align="center">
-			<td valign="top"><div align="left" id="div_userNo_notify_extra">&nbsp;<input type="checkbox" name="notify_extra[]" value="devicevm-all@devicevm.com" onclick="notifiableCheck()">DVM-all<hr /></div><img src="../Public/Images/add_member.gif" onclick="subForm('ch', 'userNo_notify', 'div_notifyName', '', '');" width="25" height="25" align="absmiddle" onmouseover="this.style.cursor='pointer';" onmouseout="this.style.cursor='auto';" title="Click to choose notifiable users" /><span id="div_notifyName"></span></td>
+			<td valign="top">
+				<dl>
+				<foreach name="Notification" key="name" item="email">
+					<dt><input type="checkbox" name="notification[]" value="{$email}" /> {$name}</dt>
+				</foreach>
+					<dt style="border-top:1px solid #333;"></dt>
+				</dl>
+					<img src="../Public/Images/add_member.gif" onclick="subForm('ch', 'userNo_notify', 'div_notifyName', '', '');" width="25" height="25" align="absmiddle" onmouseover="this.style.cursor='pointer';" onmouseout="this.style.cursor='auto';" title="Click to choose notifiable users" /><span id="div_notifyName"></span></td>
 			<td colspan="2"><textarea id="reason" name="reason" cols="50" rows="5" alt="Absence reason" title="Click to edit absence reason" ></textarea><div id="div_reasonERROR"></div></td>
 		</tr>
 		</table>

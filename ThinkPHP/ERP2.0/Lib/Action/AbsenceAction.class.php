@@ -77,6 +77,62 @@ class AbsenceAction extends BaseAction{
 		}
 		$this->assign('LeaveType', $result);
 
+		$time = time();
+		$time = mktime(13,1,1,7,16,2010);
+		if (date('N', $time)>5 || (date('N', $time)==5 && strcmp(date('H:i', $time), $Absence_Config['worktime'][1][0])>=0)) {//周末，或周五下午
+			$time += (8-date('N', $time))*86400;
+			$date_from = date('Y-m-d', $time);
+			$time_from = $Absence_Config['worktime'][0][0];
+			$date_to = date('Y-m-d', $time);
+			$time_to = $Absence_Config['worktime'][1][1];
+		}
+		else {
+			if (strcmp(date('H:i', $time), $Absence_Config['worktime'][0][0])<0) {//上午上班前
+				$date_from = date('Y-m-d', $time+86400);
+				$time_from = $Absence_Config['worktime'][0][0];
+				$date_to = date('Y-m-d', $time+86400);
+				$time_to = $Absence_Config['worktime'][1][1];
+			}
+			elseif (strcmp(date('H:i', $time), $Absence_Config['worktime'][1][0])<0) {//下午上班前
+				$date_from = date('Y-m-d', $time);
+				$time_from = $Absence_Config['worktime'][1][0];
+				$date_to = date('Y-m-d', $time);
+				$time_to = $Absence_Config['worktime'][1][1];
+			}
+			else {//下午上班后
+				$date_from = date('Y-m-d', $time+86400);
+				$time_from = $Absence_Config['worktime'][0][0];
+				$date_to = date('Y-m-d', $time+86400);
+				$time_to = $Absence_Config['worktime'][1][1];
+			}
+		}
+		$this->assign('date_from', $date_from);
+		$this->assign('time_from', $time_from);
+		$this->assign('date_to', $date_to);
+		$this->assign('time_to', $time_to);
+
+		$dept_staff_arr = array();
+		$has_other = false;
+		$rs = M('Staff')->where('status=1')->distinct(true)->field('dept_id')->select();
+		foreach ($rs as $arr) {
+			if (0==$arr['dept_id']) {
+				$has_other = true;
+				continue;
+			}
+			$dept = M('Department')->find($arr['dept_id']);
+			$dept_staff_arr[$dept['name']] = M('Staff')->where(array('id'=>array('neq', $dept['leader_id']),'dept_id'=>$dept['id'], 'status'=>1))->order('realname')->field('id,realname')->select();
+			if ($dept['leader_id']>0) {
+				array_unshift($dept_staff_arr[$dept['name']], M('Staff')->field('id,realname')->find($dept['leader_id']));
+			}
+		}
+		ksort($dept_staff_arr);
+		if ($has_other) {
+			$dept_staff_arr['No Department'] = M('Staff')->where(array('dept_id'=>0, 'status'=>1))->order('realname')->field('id,realname')->select();
+		}
+		$this->assign('DeptStaff', $dept_staff_arr);
+
+		$this->assign('Notification', $Absence_Config['notification']);
+
 		$this->assign('content', ACTION_NAME);
 		$this->display('Layout:content');
 	}
