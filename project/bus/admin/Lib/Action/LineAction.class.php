@@ -209,8 +209,8 @@ class LineAction extends BaseAction{
 	}
 	function check() {
 		$where = array(
-			'status' => -1,
-			'number' => array('not in', array(30))
+			'status' => 1,
+			'number' => array('not in', array(30, 323))
 			);
 		$local_list = $this->dao->where($where)->order('number')->select();
 		foreach($local_list as $n=>$local_info) {
@@ -297,16 +297,15 @@ class LineAction extends BaseAction{
 		}
 	}
 	function find() {
-		
-		for($i=1; $i<15; $i++) {
+		for($i=1; $i<1000; $i++) {
 			echo $i."\t";
-			$remote_info = S(4000+$i);
+			$remote_info = S($i);
 			if(false === $remote_info){
-				$remote_info = self::getRemoteData('J'.$i);
-				S(4000+$i, $remote_info, 7*86400);
+				$remote_info = self::getRemoteData($i);
+				S($i, $remote_info, 7*86400);
 			}
 			if(!empty($remote_info)) {
-				if ($this->dao->where('number='.(4000+$i))->count()==0) {
+				if ($this->dao->where('number='.$i)->count()==0) {
 					echo "missed\n";
 				}
 			}
