@@ -2,6 +2,7 @@
 if(defined('CLI') || $_SERVER["SERVER_NAME"]=='localhost') {
 	$config = array(
 		'APP_DEBUG'			=> false,
+		'URL_DISPATCH_ON'	=> false,
 
 		'DB_TYPE'			=> 'mysql',
 		'DB_HOST'			=> 'localhost',
@@ -11,14 +12,14 @@ if(defined('CLI') || $_SERVER["SERVER_NAME"]=='localhost') {
 		'DB_PREFIX'			=> 'bus_hz_',
 	);
 }
-elseif($_SERVER["SERVER_NAME"]=='zerofault.oxyhost.com') {
+elseif($_SERVER["SERVER_NAME"]=='zerofault.co.cc') {
 	$config = array(
 		'APP_DEBUG'			=> false,
 
 		'DB_TYPE'			=> 'mysql',
-		'DB_HOST'			=> 'localhost',
-		'DB_NAME'			=> 'zerofault_bus',
-		'DB_USER'			=> 'zerofault_root',
+		'DB_HOST'			=> 'fdb2.agilityhoster.com',
+		'DB_NAME'			=> '465102_bus',
+		'DB_USER'			=> '465102_bus',
 		'DB_PWD'			=> '123456',
 		'DB_PREFIX'			=> 'bus_hz_',
 	);
