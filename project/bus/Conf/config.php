@@ -15,6 +15,7 @@ if(defined('CLI') || $_SERVER["SERVER_NAME"]=='localhost') {
 elseif($_SERVER["SERVER_NAME"]=='zerofault.co.cc') {
 	$config = array(
 		'APP_DEBUG'			=> false,
+		'URL_DISPATCH_ON'	=> false,
 
 		'DB_TYPE'			=> 'mysql',
 		'DB_HOST'			=> 'fdb2.agilityhoster.com',
