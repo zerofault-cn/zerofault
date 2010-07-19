@@ -54,7 +54,7 @@ class IndexAction extends Action{
 				$result = '<br />您查询的关键字有多个可能，请选择最接近的一个：<ol>';
 				foreach($rs as $item)
 				{
-					$result .= '<li><a href="'.__URL__.'/site/id/'.$item['id'].'">'.$item['name'].'</a></li>';
+					$result .= '<li><a href="'.__APP__.'?m=Index&a=site&id='.$item['id'].'">'.$item['name'].'</a></li>';
 				}
 				$result .= '</ol>';
 			}
@@ -76,7 +76,8 @@ class IndexAction extends Action{
 				$result = self::route($from_sid,$to_sid);
 			}
 			else{
-				$result = '<form action="'.__URL__.'/route" method="get">';
+				$result = '<form action="'.__APP__.'" method="get">';
+				$result .= '<input type="hidden" name="m" value="Index" /><input type="hidden" name="a" value="route" />';
 				$result .= '您查询的起点或终点有多个可能，请选择最准确的一个：<br />';
 				$result .= '选择起点：';
 				foreach($from_rs as $item)
@@ -111,10 +112,10 @@ class IndexAction extends Action{
 		$this->assign('line_name', $line_info['name']);
 
 		$result .= $line_info['name'].'&nbsp;&nbsp;';
-		$result .= '<a href="'.__URL__.'/site/id/'.$line_info['start_sid'].'" title="查看经过【'.$site[$line_info['start_sid']].'】的所有线路">'.$Site[$line_info['start_sid']].'</a>(';
+		$result .= '<a href="'.__APP__.'?m=Index&a=site&id='.$line_info['start_sid'].'" title="查看经过【'.$site[$line_info['start_sid']].'】的所有线路">'.$Site[$line_info['start_sid']].'</a>(';
 		$result .= $line_info['start_first'].'-';
 		$result .= $line_info['start_last'].') ';
-		$result .= '<a href="'.__URL__.'/site/id/'.$line_info['end_sid'].'" title="查看经过【'.$Site[$line_info['end_sid']].'】的所有线路">'.$Site[$line_info['end_sid']].'</a>(';
+		$result .= '<a href="'.__APP__.'?m=Index&a=site&id='.$line_info['end_sid'].'" title="查看经过【'.$Site[$line_info['end_sid']].'】的所有线路">'.$Site[$line_info['end_sid']].'</a>(';
 		$result .= $line_info['end_first'].'-';
 		$result .= $line_info['end_last'].') ';
 		$result .= '普通车:'.$line_info['fare_norm'].' ';
@@ -125,7 +126,7 @@ class IndexAction extends Action{
 		$route = M('Route')->where(array('lid'=>$id,'dir'=>1))->order('sort')->select();
 		$site_info = array();
 		foreach($route as $item) {
-			$site_info[] = '<a href="'.__URL__.'/site/id/'.$item['sid'].'" title="查看经过【'.$Site[$item['sid']].'】的所有线路">'.$Site[$item['sid']].'</a>';
+			$site_info[] = '<a href="'.__APP__.'?m=Index&a=site&id='.$item['sid'].'" title="查看经过【'.$Site[$item['sid']].'】的所有线路">'.$Site[$item['sid']].'</a>';
 		}
 		$route = M('Route')->where(array('lid'=>$id,'dir'=>-1))->order('sort')->select();
 		if(empty($route)) {
@@ -140,7 +141,7 @@ class IndexAction extends Action{
 
 			$site_info = array();
 			foreach($route as $item) {
-				$site_info[] = '<a href="'.__URL__.'/site/id/'.$item['sid'].'" title="查看经过【'.$Site[$item['sid']].'】的所有线路">'.$Site[$item['sid']].'</a>';
+				$site_info[] = '<a href="'.__APP__.'?m=Index&a=site&id='.$item['sid'].'" title="查看经过【'.$Site[$item['sid']].'】的所有线路">'.$Site[$item['sid']].'</a>';
 			}
 			$result .= '<span style="color:#FF00FF">下行：</span>';
 			$result .= implode('→',$site_info);
@@ -174,8 +175,8 @@ class IndexAction extends Action{
 		foreach($rs as $i=>$item) {
 			$result .= '<tr bgcolor="#ffffff">';
 			$result .= '<td>'.($i+1).'</td>';
-			$result .= '<td><a href="'.__URL__.'/line/id/'.$item['id'].'" title="查看线路【'.$item['name'].'】的详细信息">'.$item['name'].'</a></td>';
-			$result .= '<td><a href="'.__URL__.'/site/id/'.$item['start_sid'].'" title="查看经过【'.$Site[$item['start_sid']].'】的所有线路">'.$Site[$item['start_sid']].'</a>→<a href="'.__URL__.'/site/id/'.$item['end_sid'].'" title="查看经过【'.$Site[$item['end_sid']].'】的所有线路">'.$Site[$item['end_sid']].'</a></td>';
+			$result .= '<td><a href="'.__APP__.'?m=Index&a=line&id='.$item['id'].'" title="查看线路【'.$item['name'].'】的详细信息">'.$item['name'].'</a></td>';
+			$result .= '<td><a href="'.__APP__.'?m=Index&a=site&id='.$item['start_sid'].'" title="查看经过【'.$Site[$item['start_sid']].'】的所有线路">'.$Site[$item['start_sid']].'</a>→<a href="'.__APP__.'?m=Index&a=site&id='.$item['end_sid'].'" title="查看经过【'.$Site[$item['end_sid']].'】的所有线路">'.$Site[$item['end_sid']].'</a></td>';
 			$result .= '</tr>';
 		}
 		$result .= '</table>';
@@ -203,7 +204,7 @@ class IndexAction extends Action{
 		$this->assign('from', $Site[$from_sid]);
 		$this->assign('to', $Site[$to_sid]);
 
-		$rs = M('Line')->select();
+		$rs = M('Line')->where('status=1')->select();
 		$Line = array();
 		foreach($rs as $item) {
 			$Line[$item['id']] = $item['name'];
@@ -227,7 +228,7 @@ class IndexAction extends Action{
 		else{
 			$result .= '<td colspan="6" align="center">';
 		}
-		$result .= '[<a href="'.__URL__.'/site/id/'.$from_sid.'" title="查看经过【'.$Site[$from_sid].'】的所有线路">'.$Site[$from_sid].'</a>]→[<a href="'.__URL__.'/site/id/'.$to_sid.'" title="查看经过【'.$Site[$to_sid].'】的所有线路">'.$Site[$to_sid].'</a>]</td></tr>';
+		$result .= '[<a href="'.__APP__.'?m=Index&a=site&id='.$from_sid.'" title="查看经过【'.$Site[$from_sid].'】的所有线路">'.$Site[$from_sid].'</a>]→[<a href="'.__APP__.'?m=Index&a=site&id='.$to_sid.'" title="查看经过【'.$Site[$to_sid].'】的所有线路">'.$Site[$to_sid].'</a>]</td></tr>';
 		$result .= '<tr>';
 		$result .= '<th>序号</th>';
 		$result .= '<th>乘坐线路</th>';
@@ -254,29 +255,30 @@ class IndexAction extends Action{
 			$result .= '<tr>';
 			$result .= '<td align="center">'.($i+1).'</td>';
 			if(!empty($item['lid'])) {
-				$result .= '<td><a href="'.__URL__.'/line/id/'.$item['lid'].'">'.$Line[$item['lid']].'</a></td>';
+				$result .= '<td><a href="'.__APP__.'?m=Index&a=line&id='.$item['lid'].'">'.$Line[$item['lid']].'</a></td>';
 				$result .= '<td align="center">'.$item['count'].'</td>';
-				$result .= '<td><a href="'.__URL__.'/transfer/from_sid/'.$from_sid.'/from_lid/'.$item['lid'].'/from_dir/'.$item['dir'].'/to_sid/'.$to_sid.'">查看</a></td>';
+				$result .= '<td><a href="'.__APP__.'?m=Index&a=transfer&from_sid='.$from_sid.'&from_lid='.$item['lid'].'&from_dir='.$item['dir'].'&to_sid='.$to_sid.'">查看</a></td>';
 			}
 			else{
-				$result .= '<td><a href="'.__URL__.'/line/id/'.$item['from_lid'].'">'.$Line[$item['from_lid']].'</a></td>';
+				$result .= '<td><a href="'.__APP__.'?m=Index&a=line&id='.$item['from_lid'].'">'.$Line[$item['from_lid']].'</a></td>';
 				
 				$tmp = array();
 				foreach(explode(',', $item['trans_sids']) as $trans_sid) {
-					$tmp[] = '<a href="'.__URL__.'/site/id/'.$trans_sid.'">'.$Site[$trans_sid].'</a>';
+					$tmp[] = '<a href="'.__APP__.'?m=Index&a=site&id='.$trans_sid.'">'.$Site[$trans_sid].'</a>';
 				}
-				$result .= '<td>'.implode(', ',$tmp).'</td>';
-				$result .= '<td><a href="'.__URL__.'/line/id/'.$item['to_lid'].'">'.$Line[$item['to_lid']].'</a></td>';
+				$tmp_size = count($tmp);
+				$result .= '<td>'.implode('/',array_slice($tmp,0,3)).($tmp_size>3?'/...':'').'</td>';
+				$result .= '<td><a href="'.__APP__.'?m=Index&a=line&id='.$item['to_lid'].'">'.$Line[$item['to_lid']].'</a></td>';
 				
 				$result .= '<td align="center">'.$item['count'].'</td>';
-				$result .= '<td><a href="'.__URL__.'/transfer/from_sid/'.$item['from_sid'].'/from_lid/'.$item['from_lid'].'/to_sid/'.$item['to_sid'].'/to_lid/'.$item['to_lid'].'">查看</a></td>';
+				$result .= '<td><a href="'.__APP__.'?m=Index&a=transfer&from_sid='.$item['from_sid'].'&from_lid='.$item['from_lid'].'&to_sid='.$item['to_sid'].'&to_lid='.$item['to_lid'].'">查看</a></td>';
 			}
 			
 			$result .= "</tr>";
 		}
 		if(!empty($rs[0]['lid'])) {
 			$result .= '<tr><td colspan="4">';
-			$result .= '<a href="'.__URL__.'/route/from_sid/'.$from_sid.'/to_sid/'.$to_sid.'/trans/1">搜索更多路线</a>';
+			$result .= '<a href="'.__APP__.'?m=Index&a=route&from_sid='.$from_sid.'&to_sid='.$to_sid.'&trans=1">搜索更多路线</a>';
 			$result .= '</td></tr>';
 		}
 		$result .= '</table>';
@@ -315,11 +317,10 @@ class IndexAction extends Action{
 					$data['to_sort1'] = $next_item['sort1'];
 					$data['to_sort2'] = $next_item['sort2'];
 					$data['id'] = M('Trans')->add($data);
-					//$result[] = $data;
 				}
 			}
 		}
-		return M('Trans')->where(array('from_sid'=>$from_sid,'to_sid'=>$to_sid))->order('from_lid,from_sid,to_sid,trans_sid')->group('from_lid,to_lid')->field('*,group_concat(trans_sid) as trans_sids')->select();
+		return M('Trans')->where(array('from_sid'=>$from_sid,'to_sid'=>$to_sid))->order('from_lid,from_sid,to_sid,trans_sid')->group('from_lid,to_lid')->field('*,group_concat(distinct trans_sid) as trans_sids')->select();
 	}
 	
 	function transfer($f_sid='',$f_lid='',$t_sid='',$t_lid='') {
@@ -352,14 +353,15 @@ class IndexAction extends Action{
 		}
 		else{
 			$where['to_lid'] = $to_lid;
-			$trans = M('Trans')->where($where)->order('from_sid,to_sid,trans_sid')->group('from_lid,to_lid')->field('*,group_concat(trans_sid) as trans_sids')->find();
+			$trans = M('Trans')->where($where)->order('from_sid,to_sid,trans_sid')->group('from_lid,to_lid')->field('*,group_concat(distinct trans_sid) as trans_sids')->find();
 			$from_line = M('Line')->find($trans['from_lid']);
 			$from_route = M('Route')->where(array('lid'=>$trans['from_lid'],'dir'=>$trans['from_dir']))->order('sort')->select();
 			$to_line = M('Line')->find($trans['to_lid']);
 			$to_route = M('Route')->where(array('lid'=>$trans['to_lid'],'dir'=>$trans['to_dir']))->order('sort')->select();
 		}
-		$result .= '搭乘：<a href="'.__URL__.'/line/id/'.$from_line['id'].'">'.$from_line['name'].'</a> ('.(1==$trans['from_dir']?('上行，'.$from_line['start_first'].'~'.$from_line['start_last']):('下行，'.$from_line['end_first'].'~'.$from_line['end_last'])).')<br />';
+		$result .= '搭乘：<a href="'.__APP__.'?m=Index&a=line&id='.$from_line['id'].'">'.$from_line['name'].'</a> ('.(1==$trans['from_dir']?('上行，'.$from_line['start_first'].'~'.$from_line['start_last']):('下行，'.$from_line['end_first'].'~'.$from_line['end_last'])).')<br />';
 		
+		$end = false;
 		$color = '#BBBBBB';
 		$end_flag = 999;
 		$tmp = array();
@@ -367,14 +369,14 @@ class IndexAction extends Action{
 			if(!$end && $item['sid']==$from_sid) {
 				$color = 'auto';
 			}
-			if(in_array($item['sid'], explode(',', $trans['trans_sids']))) {
+			if($i>0 && in_array($item['sid'], explode(',', $trans['trans_sids']))) {
 				$end_flag = $i;
 			}
 			if(($end_flag+1) == $i) {
 				$color = '#BBBBBB';
 				$end = true;
 			}
-			$tmp[] = '<a style="color:'.$color.'" href="'.__URL__.'/site/id/'.$item['sid'].'">'.$Site[$item['sid']].'</a>';
+			$tmp[] = '<a style="color:'.$color.'" href="'.__APP__.'?m=Index&a=site&id='.$item['sid'].'">'.$Site[$item['sid']].'</a>';
 		}
 
 		if(empty($to_lid)) {
@@ -384,11 +386,11 @@ class IndexAction extends Action{
 			$result .= '经由：'.implode('→', $tmp).'<br />';
 			$tmp = array();
 			foreach(explode(',', $trans['trans_sids']) as $trans_sid) {
-				$tmp[] = '<a style="color:#ff00ff" href="'.__URL__.'/site/id/'.$trans_sid.'">'.$Site[$trans_sid].'</a>';
+				$tmp[] = '<a style="color:#ff00ff" href="'.__APP__.'?m=Index&a=site&id='.$trans_sid.'">'.$Site[$trans_sid].'</a>';
 			}
 			$result .= '　在：'.implode('、', $tmp).' 下车，<br />';
 			
-			$result .= '换乘：<a href="'.__URL__.'/line/id/'.$to_line['id'].'">'.$to_line['name'].'</a> ('.(1==$trans['to_dir']?('上行，'.$to_line['start_first'].'~'.$to_line['start_last']):('下行，'.$to_line['end_first'].'~'.$to_line['end_last'])).')<br />';
+			$result .= '换乘：<a href="'.__APP__.'?m=Index&a=line&id='.$to_line['id'].'">'.$to_line['name'].'</a> ('.(1==$trans['to_dir']?('上行，'.$to_line['start_first'].'~'.$to_line['start_last']):('下行，'.$to_line['end_first'].'~'.$to_line['end_last'])).')<br />';
 
 			$color = '#BBBBBB';
 			$end = false;
@@ -407,7 +409,7 @@ class IndexAction extends Action{
 					$color = '#BBBBBB';
 					$end = true;
 				}
-				$tmp[] = '<a style="color:'.$color.'" href="'.__URL__.'/site/id/'.$item['sid'].'">'.$Site[$item['sid']].'</a>';
+				$tmp[] = '<a style="color:'.$color.'" href="'.__APP__.'?m=Index&a=site&id='.$item['sid'].'">'.$Site[$item['sid']].'</a>';
 			}
 		}
 		$result .= '经由：'.implode('→', $tmp).' 到达目的地。';
