@@ -13,10 +13,10 @@ error_reporting(E_ALL ^ E_NOTICE);
 
  #DEFAULT db connection settings
  $DB=array(
- 'user'=>"22366_root",#required
+ 'user'=>"465102_bus",#required
  'pwd'=>"123456", #required
- 'db'=>"zerofault_zzl_bus",  #default DB, optional
- 'host'=>"localhost",#optional
+ 'db'=>"465102_bus",  #default DB, optional
+ 'host'=>"fdb2.agilityhoster.com",#optional
  'port'=>"",#optional
  'chset'=>"utf8",#default charset, optional
  );

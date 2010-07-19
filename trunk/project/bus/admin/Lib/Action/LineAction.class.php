@@ -516,6 +516,45 @@ class LineAction extends BaseAction{
 		}
 		return $sid;
 	}
+	function repair() {
+		$line_arr = M('Route')->distinct(true)->field('lid')->select();
+		foreach ($line_arr as $arr) {
+			$lid = $arr['lid'];
+			echo 'LineID: '.$lid."\t";
+			$rs = M('Line')->where('status=1 and id='.$lid)->find();
+			//dump($rs);
+			if (empty($rs)) {
+				echo "Useless\t";
+				if (false !== M('Route')->where('lid='.$lid)->delete()) {
+					echo "Deleted\n";
+				}
+			}
+			else {
+				echo $rs['name']."\n";
+			}
+		}
+		M('Route')->query("optimize table __TABLE__");
+
+		$site_arr = M('Site')->select();
+		foreach ($site_arr as $arr) {
+			$sid = $arr['id'];
+			echo 'Site: '.$arr['name']."\t";
+			$rs = M('Route')->where('sid='.$sid)->find();
+			//dump($rs);
+			if (empty($rs)) {
+				echo "Useless\t";
+				if (false !== M('Site')->where('id='.$sid)->delete()) {
+					echo "Deleted\n";
+				}
+			}
+			else {
+				echo "\n";
+			}
+		}
+		M('Site')->query("optimize table __TABLE__");
+	}
+
+
 
 	/**
 	*
