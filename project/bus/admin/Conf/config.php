@@ -16,9 +16,9 @@ elseif($_SERVER["SERVER_NAME"]=='zerofault.oxyhost.com') {
 		'APP_DEBUG'			=> false,
 		'APP_CONFIG_LIST'	=> array('config_hz'),
 		'DB_TYPE'			=> 'mysql',
-		'DB_HOST'			=> 'localhost',
-		'DB_NAME'			=> 'zerofault_bus',
-		'DB_USER'			=> 'zerofault_root',
+		'DB_HOST'			=> 'fdb2.agilityhoster.com',
+		'DB_NAME'			=> '465102_bus',
+		'DB_USER'			=> '465102_bus',
 		'DB_PWD'			=> '123456',
 		'DB_PREFIX'			=> 'bus_hz_',
 	);
