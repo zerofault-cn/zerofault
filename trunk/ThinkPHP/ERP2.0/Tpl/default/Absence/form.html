@@ -72,12 +72,12 @@
 			<td valign="top">
 				<dl>
 				<foreach name="Notification" key="name" item="email">
-					<dt><input type="checkbox" name="notification[]" value="{$email}" /> {$name}</dt>
+					<dt><input type="checkbox" name="notification[]" value="{$email}" checked="checked"/> {$name}</dt>
 				</foreach>
-					<dt style="border-top:1px solid #333;"></dt>
 				</dl>
-					<img src="../Public/Images/add_member.gif" onclick="subForm('ch', 'userNo_notify', 'div_notifyName', '', '');" width="25" height="25" align="absmiddle" onmouseover="this.style.cursor='pointer';" onmouseout="this.style.cursor='auto';" title="Click to choose notifiable users" /><span id="div_notifyName"></span></td>
-			<td colspan="2"><textarea id="reason" name="reason" cols="50" rows="5" alt="Absence reason" title="Click to edit absence reason" ></textarea><div id="div_reasonERROR"></div></td>
+				<img src="../Public/Images/add_member.gif" onclick="" width="25" height="25" align="absmiddle" onmouseover="this.style.cursor='pointer';" title="Click to choose notifiable users" />
+			</td>
+			<td colspan="2"><textarea id="reason" name="reason" cols="50" rows="5" alt="Absence reason" title="Click to edit absence reason" ></textarea></td>
 		</tr>
 		</table>
 		<table class="clsTab" style="border-collapse:collapse;display:none" id="out">
@@ -87,9 +87,8 @@
 		</table>
 		<div id="div_form_notice"></div>
 		<p class="center">
-			<input type="button" name="btn_submitla" id="btn_submitla" value="Submit" alt="Submit" title="Submit this absence apply form" />&nbsp;&nbsp;&nbsp;<input type="button" name="btn_cancella" id="btn_cancella" value="Cancel" onclick="self.parent.tb_remove()" alt="Cancel" title="Click to go previous page" />
+			<input type="submit" value="Submit" title="Submit this absence apply form" />&nbsp;&nbsp;&nbsp;<input type="button" value="Cancel" onclick="self.parent.tb_remove()" alt="Cancel" title="Click to go previous page" />
 		</p>
-		
 		<div align="left" id="div_typeRule"></div>
 		</form>
 	</td>
