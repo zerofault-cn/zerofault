@@ -58,6 +58,7 @@ class AbsenceAction extends BaseAction{
 	
 	public function form() {
 		$Absence_Config = C('_absence_');
+		$result = array();
 		foreach($Absence_Config['leavetype'] as $key=>$val) {
 			$rs = M('Options')->where(array('type'=>$key))->find();
 			if (empty($rs)) {
@@ -71,14 +72,14 @@ class AbsenceAction extends BaseAction{
 				$result[$key] = array(
 					'type' => $key,
 					'name' => empty($rs['name']) ? $val : $rs['name'],
-					'description' => $rs['description']
+					'description' => str_replace(array("'", "\r\n"), array("\'", "<br />"), $rs['description'])
 					);
 			}
 		}
 		$this->assign('LeaveType', $result);
 
 		$time = time();
-		$time = mktime(13,1,1,7,16,2010);
+	//	$time = mktime(13,1,1,7,16,2010);
 		if (date('N', $time)>5 || (date('N', $time)==5 && strcmp(date('H:i', $time), $Absence_Config['worktime'][1][0])>=0)) {//周末，或周五下午
 			$time += (8-date('N', $time))*86400;
 			$date_from = date('Y-m-d', $time);
@@ -120,14 +121,14 @@ class AbsenceAction extends BaseAction{
 				continue;
 			}
 			$dept = M('Department')->find($arr['dept_id']);
-			$dept_staff_arr[$dept['name']] = M('Staff')->where(array('id'=>array('neq', $dept['leader_id']),'dept_id'=>$dept['id'], 'status'=>1))->order('realname')->field('id,realname')->select();
+			$dept_staff_arr[$dept['name']] = M('Staff')->where(array('id'=>array('neq', $dept['leader_id']), 'dept_id'=>$dept['id'], 'status'=>1))->order('realname')->field('id,realname,email')->select();
 			if ($dept['leader_id']>0) {
-				array_unshift($dept_staff_arr[$dept['name']], M('Staff')->field('id,realname')->find($dept['leader_id']));
+				array_unshift($dept_staff_arr[$dept['name']], M('Staff')->field('id,realname,email')->find($dept['leader_id']));
 			}
 		}
 		ksort($dept_staff_arr);
 		if ($has_other) {
-			$dept_staff_arr['No Department'] = M('Staff')->where(array('dept_id'=>0, 'status'=>1))->order('realname')->field('id,realname')->select();
+			$dept_staff_arr['No Department'] = M('Staff')->where(array('dept_id'=>0, 'status'=>1))->order('realname')->field('id,realname,email')->select();
 		}
 		$this->assign('DeptStaff', $dept_staff_arr);
 
@@ -156,9 +157,33 @@ class AbsenceAction extends BaseAction{
 		if(empty($_POST['submit'])) {
 			return;
 		}
-		$name = trim($_REQUEST['name']);
-		!$name && self::_error('Staff Name required!');
-		$password = trim($_REQUEST['password']);
+		$type = $_REQUEST['type'];
+		!$type && self::_error('Absense Type didn\'t select!');
+		$date_from = trim($_REQUEST['date_from']);
+		$time_from = trim($_REQUEST['time_from']);
+		$date_to = trim($_REQUEST['date_to']);
+		$time_to = trim($_REQUEST['time_to']);
+		if (false === strtotime($date_from.' '.$time_from.':00')) {
+			self::_error('The begin date/time of the duration is not invalid!');
+		}
+		elseif (false === strtotime($date_to.' '.$time_to.':00')) {
+			self::_error('The end date/time of the duration is not invalid!');
+		}
+		elseif (strcmp($date_from.$time_from, $date_to.$time_to)>=0) {
+			self::_error('The end datetime must be later then the begin datetime');
+		}
+		$deputy = $_REQUEST['deputy'];
+		$file_arr = array();
+		foreach ($_FILES['file']['size'] as $i=>$size) {
+			if ($size>0) {
+				$file_arr[] = array(
+					'name' => $_FILES['file']['name'][$i],
+					'tmp_name' => $_FILES['file']['tmp_name'][$i]
+					);
+			}
+		}
+		$notification = $_REQUEST['notification'];
+		$reason = trim($_REQUEST['reason']);
 		$id = empty($_REQUEST['id']) ? 0 : intval($_REQUEST['id']);
 		if ($id>0) {
 			//for edit
@@ -176,24 +201,15 @@ class AbsenceAction extends BaseAction{
 		}
 		else {
 			//for add
-			empty($password) && self::_error('Password required!');
-			$rs = $this->dao->where(array('name'=>$name))->find();
-			if($rs && sizeof($rs)>0){
-				self::_error('The name: '.$name.' has been used by another staff!');
-			}
-			$max_id = $this->dao->getField('max(id) as max_id');
-			empty($max_id) && ($max_id = 0);
-			$code = 'E'.sprintf("%04d",$max_id+1);
-			$this->dao->code = $code;
-			$this->dao->password = md5($password);
 			$this->dao->create_time = date("Y-m-d H:i:s");
 		}
-		$this->dao->name = $name;
-		$this->dao->realname = trim($_REQUEST['realname']);
-		$this->dao->email = trim($_REQUEST['email']);
-		$this->dao->dept_id = $_REQUEST['dept_id'];
-		$this->dao->leader_id = $_REQUEST['leader_id'];
-		$this->dao->is_leader = intval($_REQUEST['is_leader']);
+		$this->dao->type = $type;
+		$this->dao->staff_id = $_SESSION[C('STAFF_AUTH_NAME')]['id'];
+		$this->dao->creator_id = $_SESSION[C('STAFF_AUTH_NAME')]['id'];
+		$this->dao->time_from = $date_from.' '.$time_from.':00';
+		$this->dao->time_to = $date_to.' '.$time_to.':00';
+		$this->dao->deputy_id = $deputy;
+		$this->dao->notification = implode(';', $notification);
 		$this->dao->status = 1;
 		if (empty($_REQUEST['role'])) {
 			$role_arr = array();
