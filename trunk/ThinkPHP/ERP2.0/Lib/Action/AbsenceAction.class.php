@@ -55,7 +55,22 @@ class AbsenceAction extends BaseAction{
 		$this->assign('content', ACTION_NAME);
 		$this->display('Layout:ERP_layout');
 	}
-	
+
+	public function today() {
+		Session::set('sub', MODULE_NAME.'/'.ACTION_NAME);
+		$this->assign('content', MODULE_NAME.':'.ACTION_NAME);
+		$this->display('Layout:ERP_layout');
+	}
+	public function history() {
+		Session::set('sub', MODULE_NAME.'/'.ACTION_NAME);
+		$this->assign('content', MODULE_NAME.':'.ACTION_NAME);
+		$this->display('Layout:ERP_layout');
+	}
+	public function manage() {
+		Session::set('sub', MODULE_NAME.'/'.ACTION_NAME);
+		$this->assign('content', MODULE_NAME.':'.ACTION_NAME);
+		$this->display('Layout:ERP_layout');
+	}
 	public function form() {
 		$Absence_Config = C('_absence_');
 		$result = array();
@@ -138,21 +153,6 @@ class AbsenceAction extends BaseAction{
 		$this->display('Layout:content');
 	}
 
-	public function today() {
-		Session::set('sub', MODULE_NAME.'/'.ACTION_NAME);
-		$this->assign('content', MODULE_NAME.':'.ACTION_NAME);
-		$this->display('Layout:ERP_layout');
-	}
-	public function history() {
-		Session::set('sub', MODULE_NAME.'/'.ACTION_NAME);
-		$this->assign('content', MODULE_NAME.':'.ACTION_NAME);
-		$this->display('Layout:ERP_layout');
-	}
-	public function manage() {
-		Session::set('sub', MODULE_NAME.'/'.ACTION_NAME);
-		$this->assign('content', MODULE_NAME.':'.ACTION_NAME);
-		$this->display('Layout:ERP_layout');
-	}
 	public function submit() {
 		if(empty($_POST['submit'])) {
 			return;
@@ -173,6 +173,7 @@ class AbsenceAction extends BaseAction{
 			self::_error('The end datetime must be later then the begin datetime');
 		}
 		$deputy = $_REQUEST['deputy'];
+		$file_path = 'Attach/Absence/';
 		$file_arr = array();
 		foreach ($_FILES['file']['size'] as $i=>$size) {
 			if ($size>0) {
@@ -201,6 +202,15 @@ class AbsenceAction extends BaseAction{
 		}
 		else {
 			//for add
+			$file_name = array();
+			foreach ($file_arr as $i=>$file) {
+				$file_name[$i] = date("YmdHis").substr(microtime(),1,7).'.'.pathinfo($file['name'], PATHINFO_EXTENSION);
+				if(!move_uploaded_file($file['tmp_name'], $file_path.$file_name[$i])) {
+					self::_error('Attachment upload fail!');
+				}
+				$i++;
+			}
+			$this->dao->attachment = implode(';', $file_name);
 			$this->dao->create_time = date("Y-m-d H:i:s");
 		}
 		$this->dao->type = $type;
@@ -210,18 +220,8 @@ class AbsenceAction extends BaseAction{
 		$this->dao->time_to = $date_to.' '.$time_to.':00';
 		$this->dao->deputy_id = $deputy;
 		$this->dao->notification = implode(';', $notification);
-		$this->dao->status = 1;
-		if (empty($_REQUEST['role'])) {
-			$role_arr = array();
-			//删除已有role
-			M('StaffRole')->where('staff_id='.$id)->delete();
-		}
-		else{
-			foreach($_REQUEST['role'] as $role_id) {
-				$role_arr[] = array('id'=>$role_id);
-			}
-		}
-		$this->dao->role = $role_arr;
+		$this->dao->note = $reason;
+		$this->dao->status = 0;
 		if(!empty($id) && $id>0) {
 			if(false !== $this->dao->relation(true)->save()){
 				self::sync_user($this->dao);
@@ -232,12 +232,11 @@ class AbsenceAction extends BaseAction{
 			}
 		}
 		else{
-			if($this->dao->relation(true)->add()) {
-				self::sync_user($this->dao);
-				self::_success('Add staff success!',__URL__);
+			if($this->dao->add()) {
+				self::_success('Absence apply success!',__URL__);
 			}
 			else{
-				self::_error('Add staff fail!'.(C('APP_DEBUG')?$this->dao->getLastSql():''));
+				self::_error('Absence apply fail!'.(C('APP_DEBUG')?$this->dao->getLastSql():''));
 			}
 		}
 	}
