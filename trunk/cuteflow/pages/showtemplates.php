@@ -91,7 +91,7 @@
 			}
 		}
 		//--- get maximum count of users
-		$query = "select COUNT(*) from cf_formtemplate WHERE bDeleted=0";
+		$query = "select COUNT(*) from cf_formtemplate WHERE bIsCopied=0 and bDeleted=0";
 		$nResult = mysql_query($query, $nConnection);
 
 		if ($nResult)
@@ -137,7 +137,7 @@
 			$toggledSortAs = "DESC";
 		}
 		
-		$strQuery = "SELECT * FROM cf_formtemplate WHERE bDeleted=0 ORDER BY $sortCol $sortAs LIMIT ".($_REQUEST["start"]-1).", ".$end."";
+		$strQuery = "SELECT * FROM cf_formtemplate WHERE bIsCopied=0 and bDeleted=0 ORDER BY $sortCol $sortAs LIMIT ".($_REQUEST["start"]-1).", ".$end."";
 		
 		$nResult = mysql_query($strQuery, $nConnection);
 		if ($nResult)

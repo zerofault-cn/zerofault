@@ -59,7 +59,7 @@
 				}
 				else
 				{
-					$strQuery = "INSERT INTO cf_formtemplate VALUES(null, '".$_REQUEST["strName"]."', 0)";
+					$strQuery = "INSERT INTO cf_formtemplate VALUES(null, '".$_REQUEST["strName"]."', 0, 0)";
 					mysql_query($strQuery, $nConnection);
 					
 					//--- get the new template id

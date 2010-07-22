@@ -69,7 +69,7 @@
 	
 	$objMyCirculation 	= new CCirculation();
 			
-	$arrMailinglist 	= $objMyCirculation->getMailinglist($nMailinglistID);									// corresponding mailinglist
+	$arrMailinglist 	= $objMyCirculation->getMailinglist($nMailinglistID);// corresponding mailinglist
 	$nFormTemplateID 	= $arrMailinglist['nTemplateId'];
 	
 	if ($_REQUEST['bRestart'])
@@ -79,46 +79,17 @@
 		//-----------------------------------------
 		//--- Write next history
 		//-----------------------------------------
-		$strQuery = "SELECT MAX(nRevisionNumber) FROM cf_circulationhistory WHERE nCirculationFormId=".$nCirculationFormID;
+		$strQuery = "SELECT * From cf_circulationhistory WHERE nCirculationFormId=".$nCirculationFormID." order by nRevisionNumber desc limit 1";
 		$nResult = mysql_query($strQuery, $nConnection);
-		
-		if ($nResult)
-		{
-			if (mysql_num_rows($nResult) > 0)
-			{
-				$arrRow = mysql_fetch_array($nResult);
-				$nRevisionNumber = $arrRow[0] +1;
-			}
+		if ($nResult && mysql_num_rows($nResult) > 0) {
+			$arrOld = mysql_fetch_array($nResult);
 		}
-		$dateSending = mktime(date("H"),date("i"),date("s"),date("m"),date("d"),date("Y"));
+		$dateSending = time();
 		
-		// get History Id
-		$strQuery = "SELECT nID FROM cf_circulationhistory WHERE nCirculationFormId = '$nCirculationFormID' AND nRevisionNumber = '".($nRevisionNumber-1)."'";
-		$nResult = mysql_query($strQuery, $nConnection);
-		
-		if ($nResult)
-		{
-			if (mysql_num_rows($nResult) > 0)
-			{
-				$arrRow = mysql_fetch_array($nResult);
-				$nOldHistoryId = $arrRow[0];
-			}
-		}
-		
-		$strQuery = "INSERT INTO cf_circulationhistory VALUES(null, $nRevisionNumber, '$dateSending', '$strAdditionalText', $nCirculationFormID)";
+		$strQuery = "INSERT INTO cf_circulationhistory VALUES(null, ".($arrOld['nRevisionNumber']+1).", '".$dateSending."', '".$strAdditionalText."', ".$nCirculationFormID.")";
 		mysql_query($strQuery, $nConnection);
-		
-		$strQuery = "SELECT MAX(nID) FROM cf_circulationhistory";
-		$nResult = mysql_query($strQuery, $nConnection);
-		
-		if ($nResult)
-		{
-			if (mysql_num_rows($nResult) > 0)
-			{
-				$arrRow = mysql_fetch_array($nResult);
-				$nCirculationHistoryID = $arrRow[0];
-			}
-		}
+		$nCirculationHistoryID = mysql_insert_id($nConnection);
+
 		// - - - - - - - - - - - - START RESTART OPTIONS - - - - - - - - - - - - 
 
 		if ($_REQUEST['MailingList'][0] != 0)
@@ -206,14 +177,7 @@
 		if ($_REQUEST['bUseLatestValues'] == 'on')
 		{
 			$nNewCirculationHistoryID = $nCirculationHistoryID;
-			$nOldCirculationHistoryID = $nOldHistoryId;
-			
-			$query 		= "SELECT * FROM cf_fieldvalue WHERE nFormId = '$nCirculationFormID' AND nCirculationHistoryId = '$nOldCirculationHistoryID'";
-			$result		= mysql_query($query, $nConnection);
-			while($row = mysql_fetch_array($result, MYSQL_ASSOC))
-			{
-				$arrFieldvalues[] = $row;
-			}
+			$arrFieldvalues = $arrOld;
 			
 			$nMax = sizeof($arrFieldvalues);
 			for ($nIndex = 0; $nIndex < $nMax; $nIndex++)
@@ -238,20 +202,51 @@
 				mysql_query($query, $nConnection);
 			}
 		}
-		
 		// - - - - - - - - - - - - END RESTART OPTIONS - - - - - - - - - - - -
 		
 	}
 	else
 	{
+		//copy Template
+		$sql1 = "Select strName from cf_formtemplate where nID=".$nFormTemplateID;
+		$rs1 = mysql_query($sql1, $nConnection);
+		$sql2 = "Select * from cf_formslot where nTemplateId=".$nFormTemplateID;
+		$rs2 = mysql_query($sql2, $nConnection);
+		if (!$rs1 || !$rs2 || mysql_num_rows($rs1)==0 || mysql_num_rows($rs2)==0) {
+			die('Error: '.$sql1.' or '.$sql2);
+		}
+		$strName = mysql_result($rs1, 0, 0);
+		$sql = "Insert into cf_formtemplate set strName='".addslashes($strName)."',bIsCopied=1,bDeleted=0";
+		if (!mysql_query($sql, $nConnection)) {
+			die('Error: '.$sql);
+		}
+		$nNewFormTemplateID = mysql_insert_id($nConnection);
+		while ($arr2 = mysql_fetch_array($rs2)) {
+			$sql = "Insert into cf_formslot set strName='".$arr2['strName']."', strDescr='".addslashes($arr2['strDescr'])."', nTemplateId=".$nNewFormTemplateID.", nSlotNumber=".$arr2['nSlotNumber'].", nSendType=".$arr2['nSendType'].", dueDate='".$arr2['dueDate']."', doneTime=".$arr2['doneTime'].", remindTime=".$arr2['remindTime'];
+			if (!mysql_query($sql, $nConnection)) {
+				die('Error: '.$sql);
+			}
+			$new_slot_id = mysql_insert_id($nConnection);
+			$sql = "select * from cf_slottofield where nSlotId=".$arr2['nID'];
+			$rs = mysql_query($sql);
+			while ($arr = mysql_fetch_array($rs)) {
+				$sql = "Insert into cf_slottofield set nSlotId=".$new_slot_id.", nFieldId=".$arr['nFieldId'].", nPosition=".$arr['nPosition'];
+				if (!mysql_query($sql, $nConnection)) {
+					die('Error: '.$sql);
+				}
+			}
+		}
+
+		//copy MailList
+		$strQuery = "INSERT INTO cf_mailinglist values( null, '".addslashes($arrMailinglist['strName'])."', ".$nNewFormTemplateID.", 1, 0, 0)";
+		$nResult = mysql_query($strQuery, $nConnection) or die(mysql_error());
+		$nNewMailinglistID = mysql_insert_id($nConnection);
+
 		//--- write form
-			
-			$nCirculationFormID = $objMyCirculation->addCirculationForm($strCirculationName, $nMailinglistID, $nSenderID, $SuccessMail, $SuccessArchive, $SuccessDelete, $bAnonymize);	
+		$nCirculationFormID = $objMyCirculation->addCirculationForm($strCirculationName, $nNewMailinglistID, $nSenderID, $SuccessMail, $SuccessArchive, $SuccessDelete, $bAnonymize);	
 	
-		
 		//--- Write the starting history
-		
-			$nCirculationHistoryID = $objMyCirculation->addCirculationHistory($nCirculationFormID, $strAdditionalText);
+		$nCirculationHistoryID = $objMyCirculation->addCirculationHistory($nCirculationFormID, $strAdditionalText);
 	}
 	
 	
@@ -288,11 +283,11 @@
 		$strQuery = "INSERT INTO cf_attachment values (null, '$strFolderName".$_FILES["attachment4"]["name"]."', ".$nCirculationHistoryID.")";
 		@mysql_query($strQuery);
 	}
-	$Slots_arr = $objCirculation->getFormslots($nFormTemplateID);
+	$arrFormSlots = $objCirculation->getFormslots($nNewFormTemplateID);
 	$Slot_User_arr = array();
-//	echo '<pre>';print_r($Slots_arr);echo '</pre>';
-	foreach ($Slots_arr as $slot) {
-	echo	$strQuery 	= "SELECT * FROM cf_slottouser WHERE nMailingListId = '$nMailinglistID' AND nSlotId = '".$slot['nID']."' ORDER BY nPosition ASC";
+//	echo '<pre>';print_r($arrFormSlots);echo '</pre>';
+	foreach ($arrFormSlots as $slot) {
+		$strQuery 	= "SELECT * FROM cf_slottouser WHERE nMailingListId = ".$nNewMailinglistID." AND nSlotId = ".$slot['nID']." ORDER BY nPosition ASC";
 		$nResult 	= mysql_query($strQuery);
 		if ($nResult && mysql_num_rows($nResult) > 0)
 		{
@@ -306,8 +301,6 @@
 	// - - - - - - - - - - - - START STANDARDVALUES - - - - - - - - - - - - 
 	if ($_REQUEST['bUseLatestValues'] != 'on' && !empty($Slot_User_arr))
 	{
-		$arrFormSlots	= $objMyCirculation->getFormslots($nFormTemplateID);
-		
 		$nMax = sizeof($arrFormSlots);
 		$nMyIndex = 0;
 		for ($nIndex = 0; $nIndex < $nMax; $nIndex++)
@@ -413,30 +406,13 @@
 
 		if ($_REQUEST['changeMailinglist'])
 		{
-			$nOldMailinglistID 	= $arrMailinglist['nID'];
-			$strMailinglistName	= $arrMailinglist['strName'];
-			$bIsDefault 		= $arrMailinglist['bIsDefault'];
-			
-			$strQuery = "INSERT INTO cf_mailinglist values( null, '$strMailinglistName', '$nFormTemplateID', '1', 0, 0)";
-			$nResult = mysql_query($strQuery) or die(mysql_error());
-			
-			$strQuery = "SELECT MAX(nID) FROM cf_mailinglist";
-			$nResult = mysql_query($strQuery) or die(mysql_error());
-			
-			$arrRow = mysql_fetch_array($nResult);
-			$nNewMailinglistID = $arrRow[0];						// the new Mailinglist ID
-			$nMailinglistID = $nNewMailinglistID;
-			
-			$strQuery = "UPDATE cf_circulationform SET nMailinglistId = '$nMailinglistID' WHERE nID = '$nCirculationFormID'";
-			$nResult = mysql_query($strQuery) or die(mysql_error());	
-			
 			//-----------------------------------------------
 			//--- get all slots for the given template
 	        //-----------------------------------------------
 			$arrSlots 			= array();
 			$arrSlotRelations 	= array();
 			
-	        $strQuery 	= "SELECT * FROM cf_formslot WHERE nTemplateID = '$nFormTemplateID'  ORDER BY nSlotNumber ASC";
+	        $strQuery 	= "SELECT * FROM cf_formslot WHERE nTemplateID = ".$nFormTemplateID." ORDER BY nSlotNumber ASC";
 			$nResult 	= @mysql_query($strQuery);	
 			if ($nResult)
 			{
@@ -462,33 +438,28 @@
 			//--- cf_slottouser
 			foreach ($arrSlots as $arrSlot)
 			{
-				//--- first delete all entries for this slot
-				$strQuery 	= "DELETE FROM cf_slottouser WHERE nMailingListId = '$nNewMailinglistID' AND nSlotId=".$arrSlot["nID"];
-				$nResult 	= mysql_query($strQuery) or die(mysql_error()."1<br> $strQuery <br>");	
-			//	echo $strQuery.'|'.mysql_affected_rows().'<br />';
-
-				//--- first delete all fieldvalue for this slot
-				$strQuery 	= "DELETE FROM cf_fieldvalue WHERE nCirculationHistoryID = $nCirculationHistoryID AND nSlotId=".$arrSlot["nID"];
-				$nResult 	= mysql_query($strQuery) or die(mysql_error()."1<br> $strQuery <br>");	
-			//	echo $strQuery.'|'.mysql_affected_rows().'<br />';
 				
 				//--- After that insert all slot to user relations for this slot
 				$slot_id = $arrSlot['nID'];
 				if (array_key_exists($slot_id, $arrSlotRelations))
-				{					
-					foreach ($arrSlotRelations[$arrSlot['nID']] as $nPos=>$nUserId)
+				{
+					//get new Slot ID
+					$sql = "select nID from cf_formslot where nTemplateID = ".$nNewFormTemplateID." and nSlotNumber=".$arrSlot['nSlotNumber'];
+					$rs = mysql_query($sql);
+					$new_slot_id = mysql_result($rs, 0, 0);
+					foreach ($arrSlotRelations[$slot_id] as $nPos=>$nUserId)
 					{
-						$strQuery 	= "INSERT INTO cf_slottouser values (null, ".$arrSlot["nID"].", '$nNewMailinglistID', $nUserId, $nPos)";
+						$strQuery 	= "INSERT INTO cf_slottouser values (null, ".$new_slot_id.", '$nNewMailinglistID', $nUserId, $nPos)";
 						$nResult 	= mysql_query($strQuery) or die(mysql_error()."2<br> $strQuery <br>");
 						
-						$strQuery	= "SELECT * FROM cf_slottofield WHERE nSlotId = ".$arrSlot['nID'];
+						$strQuery	= "SELECT * FROM cf_slottofield WHERE nSlotId = ".$new_slot_id;
 						$result		= @mysql_query($strQuery);
 						while ($arrRow = mysql_fetch_row($result))
 						{
 							$nCurInputFieldID 	= $arrRow[2];
-							$nCurFormSlotID		= $arrSlot['nID'];
+							$nCurFormSlotID		= $new_slot_id;
 							
-							$strQuery 			= "SELECT * FROM cf_inputfield WHERE nID = '$nCurInputFieldID' LIMIT 1;";
+							$strQuery 			= "SELECT * FROM cf_inputfield WHERE nID = ".$nCurInputFieldID." LIMIT 1;";
 							$nResult 			= @mysql_query($strQuery);
 							$arrCurInputField 	= @mysql_fetch_array($nResult,MYSQL_ASSOC);
 							
@@ -897,13 +868,13 @@
 	}
 	else
 	{
-		$arrNextUser = getNextUserInList(-1, $nMailinglistID, -1);
+		$arrNextUser = getNextUserInList(-1, $nNewMailinglistID, -1);
 		sendToUserDelay($arrNextUser[0], $nCirculationFormID, $arrNextUser[1], 0, $nCirculationHistoryID);
 		
 		$arrNextUser2 = $arrNextUser;
 		while ($arrNextUser2[1]==$arrNextUser[1]) {
 			$arrNextUser2 = $arrNextUser;
-			$arrNextUser = getNextUserInList($arrNextUser[0], $nMailinglistID, $arrNextUser[1]);
+			$arrNextUser = getNextUserInList($arrNextUser[0], $nNewMailinglistID, $arrNextUser[1]);
 			if (empty($arrNextUser) || $arrNextUser[1]!=$arrNextUser2[1]) {
 				break;
 			}
