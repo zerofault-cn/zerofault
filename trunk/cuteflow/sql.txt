@@ -34,3 +34,5 @@ CREATE TABLE IF NOT EXISTS cf_mailToSender (
   bStatus tinyint(1) unsigned NOT NULL DEFAULT '0' ,
   PRIMARY KEY (nID)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+ALTER TABLE cf_formtemplate ADD bIsCopied TINYINT(1)  UNSIGNED DEFAULT "0" NOT NULL AFTER strName;
