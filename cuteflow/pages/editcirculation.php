@@ -737,7 +737,6 @@
 		            }
 		        }
 		        $nMailingListID = $arrCirculationData["nMailingListId"];
-		        		        
 		        $query = "SELECT * FROM cf_mailinglist WHERE nID = '$nMailingListID'";
 				$nResult = mysql_query($query, $nConnection);
 	
@@ -749,7 +748,7 @@
 		                
 		                if ($arrRow)
 		                { 
-		                	$strMailingListName = $arrRow["strName"];
+							$strMailingListName = $arrRow["strName"];
 		                }
 		            }
 		        }
@@ -876,14 +875,19 @@
 			<tr valign="top">
 				<td class="mandatory"><?php echo $CIRCULATION_EDIT_MAILINGLIST;?></td>
 				<td>
+					<?php
+					if($_REQUEST['bRestart']) {
+						echo $strMailingListName;
+					}
+					else {
+						?>
 					<select style="width: 200px" onchange="setMailingList(this.value)">
 						<option><?php echo $FILTER_MAILINGLIST;?></option>
 						<option disabled="disabled">---</option>
 						<?php 
 						$strQuery = "SELECT * FROM cf_mailinglist WHERE bIsEdited <> '1' AND bDeleted=0 ORDER BY strName ASC";
                     	$nResult = mysql_query($strQuery, $nConnection);
-                            
-                            if ($nResult) {
+						if ($nResult) {
                             if (mysql_num_rows($nResult) > 0) {
                             	while (	$arrRow = mysql_fetch_array($nResult)) {
                          			echo "<option value=\"".$arrRow["nID"].'"';
@@ -895,10 +899,12 @@
                          			echo ">".$arrRow["strName"]."</option>";
                             	}		
                             }
-                            }
+						}
                             ?>
 					</select>
-		
+						<?php
+					}
+						?>
 				</td>
 			</tr>
 			<tr>

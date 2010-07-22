@@ -80,7 +80,7 @@
                         		if (mysql_select_db($DATABASE_DB, $nConnection))
                         		{
                         			//--- read the values of the user
-                    				$strQuery = "SELECT * FROM cf_formtemplate WHERE bDeleted=0 ORDER BY strName ASC";
+                    				$strQuery = "SELECT * FROM cf_formtemplate WHERE bIsCopied=0 and bDeleted=0 ORDER BY strName ASC";
                     				$nResult = mysql_query($strQuery, $nConnection);
                             
                             		if ($nResult)
