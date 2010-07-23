@@ -539,7 +539,7 @@ include	('../language_files/language.inc.php');
 					<?php
 				}
 				
-				if ($archivemode == 0)
+				if (false && $archivemode == 0)
 				{
 					$SetOne = 0;
 					if ($bStopped == false && (($_SESSION["SESSION_CUTEFLOW_ACCESSLEVEL"] == 2)||($_SESSION["SESSION_CUTEFLOW_ACCESSLEVEL"] == 2)))

@@ -35,6 +35,56 @@
     require_once '../lib/viewutils.inc.php';
     require_once 'CCirculation.inc.php';
     
+	if ('set_slot' == $_REQUEST['action']) {
+		$nID = intval(trim($_REQUEST['nID']));
+		$field = trim($_REQUEST['field']);
+		$value = trim($_REQUEST['value']);
+		$unit = str_replace('s', '', trim($_REQUEST['unit']));
+		switch ($field) {
+			case 'strName':
+			case 'strDescr':
+				$value = addslashes($value);
+				break;
+			
+			case 'dueDate':
+				if (false === strtotime($value)) {
+					die('-1');
+				}
+				break;
+			
+			case 'doneTime':
+				if ('day'==$unit) {
+					$value = intval(86400*floatval($value));
+				}
+				elseif ('hour' == $unit) {
+					$value = intval(3600*intval($value));
+				}
+				break;
+			
+			case 'remindTime':
+				if ('day'==$unit) {
+					$value = intval(86400*floatval($value));
+				}
+				elseif ('hour' == $unit) {
+					$value = intval(3600*floatval($value));
+				}
+				elseif ('minute' == $unit) {
+					$value = intval(60*intval($value));
+				}
+				break;
+			
+			default:
+				//nothing
+		}
+		$sql = "Update cf_formslot set ".$field."='".$value."' where nID=".$nID;
+		if (mysql_query($sql)) {
+			echo '1';
+		}
+		else {
+			echo '0';
+		}
+		exit;
+	}
 	if (!$ALLOW_UNENCRYPTED_REQUEST)
 	{
 		// clear $_REQUEST to ensure that only the encryptet "key" is used
@@ -284,9 +334,13 @@ td.focus{
     			{
     				$nPosInSlot = -1;
     				$nLastSlotId = -1;
+					$current_Slot = array();
     				while (	$arrRow = mysql_fetch_array($nResult))
     				{
-    					if ($arrRow["nIsSubstitiuteOf"] != 0)
+    					if ($arrRow['nDecissionState'] ==0) {
+							$current_Slot[$arrRow['nSlotId']] = '';
+						}
+						if ($arrRow["nIsSubstitiuteOf"] != 0)
 						{
 							if ($arrRow["nSlotId"] != $nLastSlotId)
 	    					{
@@ -306,7 +360,7 @@ td.focus{
 	    					$nPosInSlot++;
     						$arrProcessInformation[$arrRow["nUserId"]."_".$arrRow["nSlotId"]."_".$nPosInSlot] = $arrRow;
     					}
-    				}    				
+    				}
     			}
     		}
 		}
@@ -721,6 +775,9 @@ if ($view != 'print')
 <?php
 }	//--- end if ($view != "print")
 ?>
+<?php if ($_SESSION["SESSION_CUTEFLOW_ACCESSLEVEL"] == 2 || $_SESSION["SESSION_CUTEFLOW_ACCESSLEVEL"] == 8): ?>
+<span style="color:blue;">Tips: the following slot's <u>Name</u>/<u>Description</u>/<u>Due Date</u>/<u>Expected completion days</u>/<u>Press time interval</u> can be edited by clicking, Enter to submit, ESC to cancel.</span>
+<?php endif;?>
 <table border="0" width="95%" cellpadding="0" cellspacing="0" class="BorderSilver">
     <tr>
         <td colspan="2" align="left">
@@ -769,25 +826,29 @@ if ($view != 'print')
 					if ($number2>1) {
 						$unit2 .= 's';
 					}
+					$bg = '';
+					if (array_key_exists($arrSlot['nID'], $current_Slot)) {
+						$bg = 'background-color: #ffe88e;';
+					}
 					?>
 					    <tr>
 					        <td style="border-top: 1px solid Silver;" align="left">
-					            <table width="100%" border="1" cellpadding="4" style="border-collapse:collapse;border:1px solid #999999;">
-								<tr><td style="font-weight: bold;background: #666666; color: #fff; padding:1px;" colspan="16" class="edit"><span class="input"><?php echo $arrSlot['strName']; ?></span><input type="text" name="strName" id="<?php echo $arrSlot['nID'];?>" value="<?php echo $arrSlot['strName']; ?>" style="display:none;width:0;"/></td></tr>
+					            <table width="100%" border="1" cellpadding="4" style="border-collapse:collapse;border:1px solid #999999;<?php echo $bg;?>">
+								<tr><td style="font-weight: bold;background: #666666; color: #fff; padding:1px;" colspan="16" class="edit" title="Click to Edit, Enter to submit"><span><?php echo $arrSlot['strName']; ?></span><input type="text" name="strName" id="<?php echo $arrSlot['nID'];?>" value="<?php echo $arrSlot['strName']; ?>" style="display:none;width:0;"/></td></tr>
 								<tr>
 									<td style="background-color: #999999;padding:1px;" colspan="16">
 										<table width="100%" border="1" cellpadding="2" cellspacing="0" style="border-collapse:collapse;border:1px solid #ffffff;color:#ffffff">
 										<tr>
 											<td style="color:#000000;" width="20%" nowrap="nowrap">Description :</td>
-											<td colspan="5" class="edit"><span class="textarea"><?php echo nl2br($arrSlot['strDescr']); ?></span><textarea name="strDescr"  id="<?php echo $arrSlot['nID'];?>" style="display:none;width:0;height:0;"><?php echo $arrSlot['strDescr']; ?></textarea></td>
+											<td colspan="5" class="edit" title="Click to Edit, Ctrl+Enter to submit"><span class="textarea"><?php echo nl2br($arrSlot['strDescr']); ?></span><textarea name="strDescr" id="<?php echo $arrSlot['nID'];?>" style="display:none;width:0;height:0;"><?php echo $arrSlot['strDescr']; ?></textarea></td>
 										</tr>
 										<tr>
 											<td style="color:#000000;" width="20%" nowrap="nowrap">Due Date :</td>
-											<td><?php echo $arrSlot['dueDate'];?></td>
+											<td class="edit" title="Click to Edit, Enter to submit"><span><?php echo $arrSlot['dueDate'];?></span><input type="text" name="dueDate" id="<?php echo $arrSlot['nID'];?>" value="<?php echo $arrSlot['dueDate']; ?>" style="display:none;width:0;"/></td>
 											<td style="color:#000000;" width="20%" nowrap="nowrap">Expected completion days :</td>
-											<td><?php echo $number1.$unit1;?></td>
+											<td class="edit" title="Click to Edi, Enter to submitt"><span><?php echo $number1;?></span><input type="text" name="doneTime" id="<?php echo $arrSlot['nID'];?>" value="<?php echo $number1; ?>" style="display:none;width:0;" title="<?php echo $unit1;?>"/><?php echo $unit1;?></td>
 											<td style="color:#000000;" width="20%" nowrap="nowrap">Press time interval :</td>
-											<td><?php echo $number2.$unit2;?></td>
+											<td class="edit" title="Click to Edi, Enter to submitt"><span><?php echo $number2;?></span><input type="text" name="remindTime" id="<?php echo $arrSlot['nID'];?>" value="<?php echo $number2; ?>" style="display:none;width:0;" title="<?php echo $unit2;?>"/><?php echo $unit2;?></td>
 										</tr>
 										</table>
 									</td>
@@ -1080,6 +1141,7 @@ $(document).ready(function(){
 	});
 });
 <?php endif;?>
+var last_element = '';
 function setEditable(obj, n) {
 	$(obj).css('cursor', 'pointer').mouseover(function(){
 		$(this).addClass("focus");
@@ -1087,19 +1149,32 @@ function setEditable(obj, n) {
 		$(this).removeClass("focus");
 	}).click(function(){
 		var element = $(this).children('span').attr('class');
+		if (''==element) {
+			element = 'input';
+		}
 		if ($(this).children(element).css('display') != 'none') {
 			return;
 		}
-		$("td.editing").children(element).hide();
-		$("td.editing").children('span').show();
-		$("td.editing").removeClass('editing');
+		if (''!=last_element) {
+			$("td.editing").children(last_element).hide();
+			$("td.editing").children('span').show();
+			$("td.editing").removeClass('editing');
+		}
 		var width = $(this).width();
 		var height = $(this).height();
 		$(this).children('span').hide();
-		$(this).children(element).css('width', width).css('height', height).show().select().keydown(function(e){
+		var element_obj = $(this).children(element);
+		element_obj.css('width', width);
+		if ('textarea' == element) {
+			element_obj.css('height', height*2).css('overflow-y','scroll');
+		}
+		element_obj.show().select().keydown(function(e){
 			var keyCode=e.keyCode || window.event.keyCode;
 			if(keyCode==13)//回车键
 			{
+				if ('textarea' == element && !e.ctrlKey && !window.event.ctrlKey) {
+					return;
+				}
 				submit_edit(this, n);
 			}
 			else if(keyCode==27)//取消健
@@ -1108,41 +1183,31 @@ function setEditable(obj, n) {
 			}
 		});
 		$(this).addClass('editing');
+		last_element = element;
 	});
 }
 function submit_edit(obj, n){
-	$("#tips").show().html('Saving...');
-
-	$.post('?Mod=<!--{$Module}-->&op=<!--{$op}-->&action=set_volume', {
-		'submit' : 1,
-		'OEM' : $(obj).parent().parent().attr('id'),
-		'month' : $(obj).attr('name'),
-		'value' : $(obj).val()
+	$.post('?action=set_slot', {
+		'nID' : $(obj).attr('id'),
+		'field' : $(obj).attr('name'),
+		'value' : $(obj).val(),
+		'unit'  : $(obj).attr('title')
 	}, function(str) {
 			if ('1'==str) {
-				$(obj).val(parseInt($(obj).val())).hide().prev().html(parseInt($(obj).val())).show();
-				$("#tips").html('Success!');
-				setTimeout(function() {
-					$("#tips").hide('slow').html('');
-				}, 2000);
-			}
-			else if ('0'==str) {
-				$(obj).hide().val('').prev().html('').show();
-				$("#tips").html('Zero ignored!');
-				setTimeout(function() {
-					$("#tips").hide('slow').html('');
-				}, 2000);
+				$(obj).hide().prev().html($(obj).val().replace(/[\r\n]/g, '<br />')).show();
+				alert('Update Success!');
 			}
 			else if ('-1'==str) {
-				$("#tips").html('Unexpected input!');
+				alert('Invalid input!');
 			}
 			else {
-				$("#tips").html('Oops, failure!');
+				alert('Oops, failure!');
 			}
 		});
 }
 function cancel_edit(obj, n){
 	$(obj).hide().prev().show();
 }
+
 </script>
 </html>
