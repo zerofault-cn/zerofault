@@ -56,6 +56,14 @@
 	<meta http-equiv="content-type" content="text/html; charset=<?php echo $DEFAULT_CHARSET ?>">
 	<title></title>
    	<link rel="stylesheet" href="format.css" type="text/css">
+<style>
+td.edit{
+	padding:2px;
+}
+td.focus{
+	border:1px solid #92D050;
+}
+</style>
 	<SCRIPT LANGUAGE="JavaScript" TYPE="text/javascript" SRC="tooltip.js"></SCRIPT>
 	<script src="../lib/RPL/Encryption/aamcrypt.js" type="text/javascript" language="JavaScript"></script>
 	<script src="../lib/RPL/Encryption/boxes.js?<?php echo time();?>" type="text/javascript" language="JavaScript"></script>
@@ -765,13 +773,13 @@ if ($view != 'print')
 					    <tr>
 					        <td style="border-top: 1px solid Silver;" align="left">
 					            <table width="100%" border="1" cellpadding="4" style="border-collapse:collapse;border:1px solid #999999;">
-								<tr><td style="font-weight: bold;background: #666666; color: #fff; padding:1px;" colspan="16"><?php echo $arrSlot['strName']; ?></td></tr>
+								<tr><td style="font-weight: bold;background: #666666; color: #fff; padding:1px;" colspan="16" class="edit"><span class="input"><?php echo $arrSlot['strName']; ?></span><input type="text" name="strName" id="<?php echo $arrSlot['nID'];?>" value="<?php echo $arrSlot['strName']; ?>" style="display:none;width:0;"/></td></tr>
 								<tr>
 									<td style="background-color: #999999;padding:1px;" colspan="16">
 										<table width="100%" border="1" cellpadding="2" cellspacing="0" style="border-collapse:collapse;border:1px solid #ffffff;color:#ffffff">
 										<tr>
 											<td style="color:#000000;" width="20%" nowrap="nowrap">Description :</td>
-											<td colspan="5"><?php echo nl2br($arrSlot['strDescr']); ?></td>
+											<td colspan="5" class="edit"><span class="textarea"><?php echo nl2br($arrSlot['strDescr']); ?></span><textarea name="strDescr"  id="<?php echo $arrSlot['nID'];?>" style="display:none;width:0;height:0;"><?php echo $arrSlot['strDescr']; ?></textarea></td>
 										</tr>
 										<tr>
 											<td style="color:#000000;" width="20%" nowrap="nowrap">Due Date :</td>
@@ -1061,8 +1069,80 @@ if ($view != 'print')
 		?>
 </table>
 <br>
-<br>
-<br>
 </center>
 </body>
+<script language="javascript" type="text/javascript" src="../src/jquery-1.2.6.pack.js"></script>
+<script language="JavaScript" type="text/javascript">
+<?php if ($_SESSION["SESSION_CUTEFLOW_ACCESSLEVEL"] == 2 || $_SESSION["SESSION_CUTEFLOW_ACCESSLEVEL"] == 8): ?>
+$(document).ready(function(){
+	$("td.edit").each(function(i) { //设置数字可编辑
+		setEditable(this, i);
+	});
+});
+<?php endif;?>
+function setEditable(obj, n) {
+	$(obj).css('cursor', 'pointer').mouseover(function(){
+		$(this).addClass("focus");
+	}).mouseout(function(){
+		$(this).removeClass("focus");
+	}).click(function(){
+		var element = $(this).children('span').attr('class');
+		if ($(this).children(element).css('display') != 'none') {
+			return;
+		}
+		$("td.editing").children(element).hide();
+		$("td.editing").children('span').show();
+		$("td.editing").removeClass('editing');
+		var width = $(this).width();
+		var height = $(this).height();
+		$(this).children('span').hide();
+		$(this).children(element).css('width', width).css('height', height).show().select().keydown(function(e){
+			var keyCode=e.keyCode || window.event.keyCode;
+			if(keyCode==13)//回车键
+			{
+				submit_edit(this, n);
+			}
+			else if(keyCode==27)//取消健
+			{
+				cancel_edit(this, n);
+			}
+		});
+		$(this).addClass('editing');
+	});
+}
+function submit_edit(obj, n){
+	$("#tips").show().html('Saving...');
+
+	$.post('?Mod=<!--{$Module}-->&op=<!--{$op}-->&action=set_volume', {
+		'submit' : 1,
+		'OEM' : $(obj).parent().parent().attr('id'),
+		'month' : $(obj).attr('name'),
+		'value' : $(obj).val()
+	}, function(str) {
+			if ('1'==str) {
+				$(obj).val(parseInt($(obj).val())).hide().prev().html(parseInt($(obj).val())).show();
+				$("#tips").html('Success!');
+				setTimeout(function() {
+					$("#tips").hide('slow').html('');
+				}, 2000);
+			}
+			else if ('0'==str) {
+				$(obj).hide().val('').prev().html('').show();
+				$("#tips").html('Zero ignored!');
+				setTimeout(function() {
+					$("#tips").hide('slow').html('');
+				}, 2000);
+			}
+			else if ('-1'==str) {
+				$("#tips").html('Unexpected input!');
+			}
+			else {
+				$("#tips").html('Oops, failure!');
+			}
+		});
+}
+function cancel_edit(obj, n){
+	$(obj).hide().prev().show();
+}
+</script>
 </html>
