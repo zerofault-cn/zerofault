@@ -12,7 +12,7 @@ return array(
 		'Bereavement' => '丧假'
 		),
 	'CashOutMonth' => array(2,8), //Cash out的月份，纯数字数组
-	'worktime' => array(array('09:00','12:00'), array('13:00', '18:00')),
-	'notification' => array('Tracy'=>'jali@agigatech.com', 'Matty'=>'fan@agigatech.com')
+	'worktime' => array(array('09:00','12:00'), array('13:00', '18:00')),//工作时间区间
+	'notification' => array('Tracy'=>'jali@agigatech.com', 'Matty'=>'fan@agigatech.com')//默认通知邮件
 	);
 ?>

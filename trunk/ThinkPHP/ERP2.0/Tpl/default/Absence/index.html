@@ -1,15 +1,15 @@
-<p class="page_title_text"></p>
+<p class="page_title_text">{$ACTION_TITLE}</p>
 <table width="90%">
 <tr>
 	<td>
 		<table width="100%" cellpadding="3" border="1" bordercolor="#FFFFFF" style="border-collapse:collapse;">
 		<tr>
-			<th width="16%">Name</th>
+			<th width="18%">Name</th>
 			<td width="16%">{$staff_info.realname}</td>
-			<th width="16%">Department</th>
-			<td width="16%">[{$info['dept']['code']}] {$info['dept']['name']}</td>
-			<th width="16%">Onboard Date</th>
-			<td width="16%">{$staff_info.onboard}</td>
+			<th width="15%">Department</th>
+			<td width="16%">[{$staff_info['dept']['code']}] {$staff_info['dept']['name']}</td>
+			<th width="15%">Onboard Date</th>
+			<td width="20%">{$staff_info.onboard}</td>
 		</tr>
 		</table>
 	</td>
@@ -21,199 +21,92 @@
 	<td>
 		<table width="100%" cellpadding="3" border="1" bordercolor="#FFFFFF" style="border-collapse:collapse;">
 		<tr>
-			<td width="16%">&nbsp;</td>
-			<th width="16%" style="background-color:#EEEEEE;">{$leave_info['Balance_year']} balance</th>
-			<th width="16%" style="background-color:#CCCCCC;">{$leave_info['Balance_year']} available</th>
-			<th width="16%" style="background-color:#EEEEEE;">{$leave_info['Annual_year']}</th>
-			<th width="16%" style="background-color:#CCCCCC;">{$leave_info['Annual_year']} available</th>
-			<th width="16%" style="background-color:#EEEEEE;">total available</th>
+			<td width="18%">&nbsp;</td>
+			<th width="31%" style="background-color:#EEEEEE;">{$leave_info['Balance_year']} balance</th>
+			<th width="31%" style="background-color:#CCCCCC;">{$leave_info['Annual_year']} available</th>
+			<th width="20%" style="background-color:#EEEEEE;">total available</th>
 		</tr>
 		<tr>
 			<th>Annual leave 年假</th>
-			<td style="background-color:#EEEEEE;">{$leave_info['Balance']+0}</td>
-			<td style="background-color:#CCCCCC;"><font color="#D4D4D4">0 hr</font></td>
-			<td style="background-color:#EEEEEE;">{$leave_info['Annual']}</td>
-			<td style="background-color:#CCCCCC;"></td>
-			<td style="background-color:#EEEEEE;">{$leave_info['Balance']+$leave_info['Annual']}</td>
+			<td style="background-color:#EEEEEE;">{$leave_info['Balance']}</td>
+			<td style="background-color:#CCCCCC;">{$leave_info['Annual']}</td>
+			<td style="background-color:#EEEEEE;">{$total_leave}</td>
 		</tr>
 		<tr>
-			<th>Time off with pay 补休 </th>
-			<td style="background-color:#EEEEEE;">{$leave_info['Balance']+0}</td>
-			<td style="background-color:#CCCCCC;"><font color="#D4D4D4">0 hr</font></td>
-			<td style="background-color:#EEEEEE;">{$leave_info['Annual']}</td>
-			<td style="background-color:#CCCCCC;"></td>
-			<td style="background-color:#EEEEEE;">{$leave_info['Balance']+$leave_info['Annual']}</td>
+			<td>&nbsp;</td>
+			<th style="background-color:#EEEEEE;">3 months ago</th>
+			<th style="background-color:#CCCCCC;">last 3 months</th>
+			<th style="background-color:#EEEEEE;">total available</th>
 		</tr>
 		<tr>
-			<td bgcolor="#FFFFFF" colspan="5" align="right">sum of total available (Annual leave + Yearly leave + Time off with pay + Guideline leave)&nbsp;</td>
-			<td bgcolor="#FFFFFF">59.5 hrs(7.44 days)</td>
+			<th>Compensatory leave 补休 </th>
+			<td style="background-color:#EEEEEE;">{$leave_info['Compensatory']['past']}</td>
+			<td style="background-color:#CCCCCC;">{$leave_info['Compensatory']['recent']}</td>
+			<td style="background-color:#EEEEEE;">{$leave_info['Compensatory']['recent']}</td>
 		</tr>
-		</table>
-
-		<table width="90%" border="0" cellpadding="0" cellspacing="0">
 		<tr>
-			<td height="18" align="right" valign="top"><font color="#CC0000">(*1) available until 2010/03/31 &nbsp;&nbsp; (*2) available until 2011/03/31 &nbsp;&nbsp; (*3) available until 2010/12/31 </font></td>
+			<td style="text-align:right;font-weight:bold;" colspan="3">sum of total available &nbsp;</td>
+			<td bgcolor="#EEEEEE">{$total_all}</td>
 		</tr>
 		</table>
 	</td>
 </tr>
 </table>
 &nbsp;
-
 <table width="90%" border="0" align="center" cellpadding="0" cellspacing="0">
 <tr>
-	<td valign="top" id="td_contentColumn">
-		<div id="div_contentColumn_notice"></div>
-		<div id="div_contentColumn">
-			<div id="main3">
-				<div id="div_OTdetail" style="background-color: #E8E8E8;"></div>
-				<table width="100%" border="0" cellpadding="3" cellspacing="1" bgcolor="#999999" class="w9"><tbody><tr><td height="20" colspan="7" background="images/gra.png"><table width="100%" border="0" cellpadding="0" cellspacing="0"><tbody><tr><td align="left"><strong>Got approval</strong></td><td width="20%" align="right"><font color="gray">Since 2009-12-17</font></td></tr></tbody></table></td></tr><tr><td width="8%" bgcolor="#EBEBEB" align="center">Type</td><td width="28%" bgcolor="#EBEBEB" align="center">Duration</td><td width="8%" bgcolor="#EBEBEB" align="center">Hours</td><td bgcolor="#EBEBEB" align="center">Comment</td><td width="20%" bgcolor="#EBEBEB" align="center">Attache file</td><td width="8%" bgcolor="#EBEBEB" align="center">Modify</td><td width="8%" bgcolor="#EBEBEB" align="center">Cancel</td></tr><tr><td bgcolor="#FFFFFF" align="center">Yearly leave<br>年假</td><td bgcolor="#FFFFFF" align="center"><a href="abs_getApplyContent.php?rID=AB_2010022000059&amp;width=650&amp;height=600&amp;KeepThis=true&amp;TB_iframe=true&amp;modal=true" class="">Sat ~ Sun, 2 days, 2010-02-20 09:00 ~ 2010-02-21 17:45</a></td><td bgcolor="#FFFFFF" align="center">16</td><td bgcolor="#FFFFFF" align="center">approved</td><td bgcolor="#FFFFFF" align="center"><font color="#d4d4d4">N/A</font></td><td bgcolor="#FFFFFF" align="center"><a href="abs_apply.php?id=AB_2010022000059&amp;width=650&amp;height=560&amp;KeepThis=true&amp;TB_iframe=true&amp;modal=true" class=""><img src="images/edit.gif" alt="Modify this apply" title="Click to modify this apply" width="25" height="25" border="0"></a></td><td bgcolor="#FFFFFF" align="center"></td></tr></tbody></table><br>
-			</div>
-		</div>
+	<td valign="top" bgcolor="#FFFFFF">
+		<foreach name="apply_info" key="label" item="items">
+		<table width="100%" border="0" cellpadding="3" cellspacing="1">
+		<tr>
+			<td height="20" colspan="6" align="left" id="status_{$label_status[$label]}"><strong>{$label}</strong></td>
+		</tr>
+		<tr>
+			<th width="140">Type</th>
+			<th width="250">Duration</th>
+			<th width="8%">Hours</th>
+			<if condition="'Waiting for Approval' neq $label">
+			<th>Comment</th>
+			</if>
+			<th nowrap="nowrap">Attached files</th>
+			<th width="12%">Operation</th>
+		</tr>
+			<iterate name="items" id="item">
+		<tr align="center" class="trbg{$mod}">
+			<td>{$LeaveType[$item['type']]}</td>
+			<td nowrap="nowrap">{$item['time_from']|substr=0,-3} ~ {$item['time_to']|substr=0,-3}</td>
+			<td>{$item['hours']|trim='.0'}</td>
+			<if condition="'Waiting for Approval' neq $label">
+			<td align="left">{$item['comment']|nl2br}</td>
+			</if>
+			<td>{$item['attachment_url']|default='<font color="#d4d4d4">N/A</font>'}</td>
+			<td nowrap="nowrap">
+				<a href="" class="thickbox">Edit</a>
+				<if condition="'Waiting for Approval' eq $label">
+				<a href="" class="thickbox">Cancel</a>
+				</if>
+			</td>
+		</tr>
+			</iterate>
+		</table>
+		<div style="background-color:#fff;">&nbsp;</div>
+		</foreach>
 		<input type="button" value="New Absence Application" class="thickbox" alt="__URL__/form?width=600&height=450&modal=true"/>
 	</td>
-	<td width="5"><img src="images/spacer.gif" width="5" height="100"></td>
-	<td width="220" valign="top" id="td_sideColumn" align="right">
-		<div id="main">
-  <table width="100%" border="0" cellpadding="3" cellspacing="1" bgcolor="#999999" class="w9">
-    <tbody><tr>
-      <td height="20" colspan="6" background="images/gra.png" bgcolor="#CCCCCC" align="right">Aggregated Hours of Absence (2010)</td>
-    </tr>
-    <tr>
-      <td width="60%" bgcolor="#EBEBEB" align="left">Type</td>
-      <td bgcolor="#EBEBEB" align="center">Used</td>
-      <td bgcolor="#EBEBEB" align="center">Available</td>
-    </tr>
-			    <tr>
-      <td bgcolor="#FFFFFF" align="left">&nbsp;Annual leave<br>&nbsp;公司特休假(2009)</td>
-      <td bgcolor="#FFFFFF" align="center">
-      	      		16
-      	      </td>
-      <td bgcolor="#FFFFFF" align="center">
-      	<font color="#D4D4D4">	      	0
-	      </font>      </td>
-   	</tr>
-			    <tr>
-      <td bgcolor="#FFFFFF" align="left">&nbsp;Yearly leave<br>&nbsp;年假(2009)</td>
-      <td bgcolor="#FFFFFF" align="center">
-      	<font color="#D4D4D4">      		0
-      	</font>      </td>
-      <td bgcolor="#FFFFFF" align="center">
-      	<font color="#D4D4D4">	      	0
-	      </font>      </td>
-   	</tr>
-			    <tr>
-      <td bgcolor="#FFFFFF" align="left">&nbsp;Time off with pay<br>&nbsp;补休(2009)</td>
-      <td bgcolor="#FFFFFF" align="center">
-      	<font color="#D4D4D4">      		0
-      	</font>      </td>
-      <td bgcolor="#FFFFFF" align="center">
-      	<font color="#D4D4D4">	      	0
-	      </font>      </td>
-   	</tr>
-			    <tr>
-      <td bgcolor="#FFFFFF" align="left">&nbsp;Annual leave<br>&nbsp;公司特休假(2010)</td>
-      <td bgcolor="#FFFFFF" align="center">
-      	<font color="#D4D4D4">      		0
-      	</font>      </td>
-      <td bgcolor="#FFFFFF" align="center">
-      		      	16
-	            </td>
-   	</tr>
-			    <tr>
-      <td bgcolor="#FFFFFF" align="left">&nbsp;Yearly leave<br>&nbsp;年假(2010)</td>
-      <td bgcolor="#FFFFFF" align="center">
-      	<font color="#D4D4D4">      		0
-      	</font>      </td>
-      <td bgcolor="#FFFFFF" align="center">
-      		      	40
-	            </td>
-   	</tr>
-			    <tr>
-      <td bgcolor="#FFFFFF" align="left">&nbsp;Time off with pay<br>&nbsp;补休(2010)</td>
-      <td bgcolor="#FFFFFF" align="center">
-      	<font color="#D4D4D4">      		0
-      	</font>      </td>
-      <td bgcolor="#FFFFFF" align="center">
-      		      	3.5
-	            </td>
-   	</tr>
-			    <tr>
-      <td bgcolor="#FFFFFF" align="left">&nbsp;Guideline leave<br>&nbsp;弹性假期</td>
-      <td bgcolor="#FFFFFF" align="center">
-      	<font color="#D4D4D4">      		0
-      	</font>      </td>
-      <td bgcolor="#FFFFFF" align="center">
-      	<font color="#D4D4D4">	      	0
-	      </font>      </td>
-   	</tr>
-			    <tr>
-      <td bgcolor="#FFFFFF" align="left">&nbsp;Sick leave<br>&nbsp;病假</td>
-      <td bgcolor="#FFFFFF" align="center">
-      	<font color="#D4D4D4">      		0
-      	</font>      </td>
-      <td bgcolor="#FFFFFF" align="center">
-      	<font color="#D4D4D4">	      	N/A
-	      </font>      </td>
-   	</tr>
-			    <tr>
-      <td bgcolor="#FFFFFF" align="left">&nbsp;Personal leave<br>&nbsp;事假</td>
-      <td bgcolor="#FFFFFF" align="center">
-      	<font color="#D4D4D4">      		0
-      	</font>      </td>
-      <td bgcolor="#FFFFFF" align="center">
-      	<font color="#D4D4D4">	      	N/A
-	      </font>      </td>
-   	</tr>
-			    <tr>
-      <td bgcolor="#FFFFFF" align="left">&nbsp;Marriage leave<br>&nbsp;婚假</td>
-      <td bgcolor="#FFFFFF" align="center">
-      	<font color="#D4D4D4">      		0
-      	</font>      </td>
-      <td bgcolor="#FFFFFF" align="center">
-      	<font color="#D4D4D4">	      	N/A
-	      </font>      </td>
-   	</tr>
-			    <tr>
-      <td bgcolor="#FFFFFF" align="left">&nbsp;Maternity leave<br>&nbsp;产假</td>
-      <td bgcolor="#FFFFFF" align="center">
-      	<font color="#D4D4D4">      		0
-      	</font>      </td>
-      <td bgcolor="#FFFFFF" align="center">
-      	<font color="#D4D4D4">	      	N/A
-	      </font>      </td>
-   	</tr>
-			    <tr>
-      <td bgcolor="#FFFFFF" align="left">&nbsp;Antenatal examination leave<br>&nbsp;产前检查假</td>
-      <td bgcolor="#FFFFFF" align="center">
-      	<font color="#D4D4D4">      		0
-      	</font>      </td>
-      <td bgcolor="#FFFFFF" align="center">
-      	<font color="#D4D4D4">	      	N/A
-	      </font>      </td>
-   	</tr>
-			    <tr>
-      <td bgcolor="#FFFFFF" align="left">&nbsp;Paternity leave<br>&nbsp;陪产假</td>
-      <td bgcolor="#FFFFFF" align="center">
-      	<font color="#D4D4D4">      		0
-      	</font>      </td>
-      <td bgcolor="#FFFFFF" align="center">
-      	<font color="#D4D4D4">	      	N/A
-	      </font>      </td>
-   	</tr>
-			    <tr>
-      <td bgcolor="#FFFFFF" align="left">&nbsp;Bereavement leave<br>&nbsp;丧假</td>
-      <td bgcolor="#FFFFFF" align="center">
-      	<font color="#D4D4D4">      		0
-      	</font>      </td>
-      <td bgcolor="#FFFFFF" align="center">
-      	<font color="#D4D4D4">	      	N/A
-	      </font>      </td>
-   	</tr>
-	  </tbody></table>
-	<table border="0" cellpadding="0" cellspacing="0"><tbody><tr><td height="6"> </td></tr></tbody></table>
-</div>
+	<td width="8" bgcolor="#FFFFFF">&nbsp;</td>
+	<td width="220" valign="top">
+		<table width="100%" border="0" cellpadding="3" cellspacing="1">
+		<tr>
+			<th height="40" colspan="2" style="text-align:right;line-height:20px;">Aggregated Hours of Absence (<php>echo date('Y');</php>)</th>
+		</tr>
+		<iterate name="LeaveType" id="item">
+		<tr class="trbg{$i%2}">
+			<td>{$item}</td>
+			<td width="50" align="center">{$absence_summary[$key]|number_format|default=0}</td>
+		</tr>
+		</iterate>
+		</table>
 		</td>
 	</tr>
-</tbody></table>
+</table>
 <p class="center"></p>
