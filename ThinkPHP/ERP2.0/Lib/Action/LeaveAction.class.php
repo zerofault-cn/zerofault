@@ -20,7 +20,6 @@ class LeaveAction extends BaseAction{
 	public function index() {
 		$Absence_Config = C('_absence_');
 		
-		$where = array();
 		if (!empty($_POST['submit'])) {
 			$id = intval($_REQUEST['id']);
 			$data = array();

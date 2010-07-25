@@ -1,4 +1,5 @@
 <p class="page_title_text">{$ACTION_TITLE}</p>
+<form method="post" target="_iframe">
 <table cellpadding="3" border="1" bordercolor="#FFFFFF" style="border-collapse:collapse;">
 <tr>
 	<th>No.</th>
@@ -7,7 +8,6 @@
 	<th>Description</th>
 	<th>OP</th>
 </tr>
-<form method="post" target="_iframe">
 <iterate name="result" id="item">
 <tr class="trbg{$mod}">
 	<td>{$i}</td>
@@ -15,8 +15,8 @@
 	<td>{$item['type']}</td>
 	<td><input type="text" class="name" name="name" size="25" value="{$item['name']}" /></td>
 	<td><textarea name="description" rows="7" cols="80">{$item['description']}</textarea></td>
-	<td><input type="hidden" class="id" value="{$item['id']}"/>
-		<input type="hidden" class="type" value="{$item['type']}"/>
+	<td><input type="hidden" name="id" value="{$item['id']}"/>
+		<input type="hidden" name="type" value="{$item['type']}"/>
 		<input type="submit" name="submit" value="Submit" />
 		<input type="button" value="Cancel" onclick="javascript:location.href='__URL__';"/></td>
 	<else />

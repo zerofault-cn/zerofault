@@ -78,14 +78,20 @@ class BaseAction extends Action{
 		}
 		//确定可显示的子菜单项
 		$submenu = array();
-		//根据是否manager增加Asset子菜单
 		if ('Assets Management' == $top) {
+			//根据是否manager增加Location子菜单
 			foreach($_SESSION[C('MANAGER_AUTH_NAME')] as $location_id=>$location) {
 				$submenu['Transfer to '.ucfirst($location['name'])] = 'Asset/location/id/'.$location_id;
 			}
 			//判断是否Leader，以增加request子菜单
 			if (!empty($_SESSION[C('STAFF_AUTH_NAME')]['is_leader'])) {
 				$submenu['Staff Apply Request'] = 'Asset/request';
+			}
+		}
+		//根据是否Leader增加staff application子菜单
+		if ('Absence' == $top) {
+			if (!empty($_SESSION[C('STAFF_AUTH_NAME')]['is_leader'])) {
+				$submenu['Staff Application'] = 'Absence/approve';
 			}
 		}
 
@@ -106,9 +112,9 @@ class BaseAction extends Action{
 			}
 			$submenu[$sub_title] = $sub_action;
 		}
-		//根据是否leader增加Absence子菜单
+		//根据是否Manager增加management子菜单
 		if ('Absence' == $top) {
-			if (!empty($_SESSION[C('STAFF_AUTH_NAME')]['is_leader'])) {
+			if (in_array($_SESSION[C('USER_AUTH_KEY')], C('SUPER_ADMIN_ID'))) {
 				$submenu['Management'] = 'Absence/manage';
 			}
 		}

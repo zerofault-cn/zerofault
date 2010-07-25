@@ -1,4 +1,4 @@
-﻿CREATE TABLE erp_location (id SMALLINT (3) UNSIGNED AUTO_INCREMENT, name VARCHAR (255) NOT NULL, descr VARCHAR(255)  NOT NULL, PRIMARY KEY(id)) ;
+CREATE TABLE erp_location (id SMALLINT (3) UNSIGNED AUTO_INCREMENT, name VARCHAR (255) NOT NULL, descr VARCHAR(255)  NOT NULL, PRIMARY KEY(id)) ;
 
 CREATE TABLE erp_location_product (id INT UNSIGNED AUTO_INCREMENT, location_id SMALLINT UNSIGNED NOT NULL, product_id SMALLINT UNSIGNED NOT NULL, ori_quantity INT DEFAULT '0' NOT NULL, chg_quantity INT DEFAULT '0' NOT NULL, PRIMARY KEY(id)) ;
 
@@ -44,7 +44,7 @@ CREATE TABLE erp_location_manager (id SMALLINT UNSIGNED AUTO_INCREMENT, location
 
 
 ALTER TABLE erp_staff ADD onboard DATE NOT NULL AFTER email;
-ALTER TABLE erp_staff ADD balance_2009 decimal(3,1) unsigned  NOT NULL default 0 AFTER onboard;
+ALTER TABLE erp_staff ADD balance_2009 decimal(3,2) unsigned  NOT NULL default 0 AFTER onboard;
 
 
 CREATE TABLE IF NOT EXISTS erp_absence (
@@ -54,11 +54,11 @@ CREATE TABLE IF NOT EXISTS erp_absence (
   creator_id smallint(5) unsigned NOT NULL DEFAULT '0' ,
   time_begin datetime NOT NULL ,
   time_end datetime NOT NULL  ,
-  hours decimal(2,1) NOT NULL DEFAULT 0 ,
-  deputy_staff_id smallint(5) unsigned NOT NULL DEFAULT '0' ,
+  hours decimal(3,2) NOT NULL DEFAULT 0 ,
+  deputy_id smallint(5) unsigned NOT NULL DEFAULT '0' ,
   attachment varchar(255) NOT NULL DEFAULT '' ,
-  note tinytext NOT NULL DEFAULT '' ,
-  approve_staff_id smallint(5) unsigned NOT NULL DEFAULT '0' ,
+  reason tinytext NOT NULL DEFAULT '' ,
+  approver_id smallint(5) unsigned NOT NULL DEFAULT '0' ,
   status tinyint(1) NOT NULL DEFAULT '0' ,
   PRIMARY KEY (id)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;

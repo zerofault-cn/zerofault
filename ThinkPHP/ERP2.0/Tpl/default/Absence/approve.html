@@ -1,0 +1,47 @@
+<p class="page_title_text">{$ACTION_TITLE}</p>
+<table cellpadding="3" border="1" bordercolor="#FFFFFF" style="border-collapse:collapse;">
+<tr>
+	<th width="8%">Staff</th>
+	<th width="160" nowrap="nowrap">Application Type</th>
+	<th width="250">Duration</th>
+	<th width="5%">Hours</th>
+	<th width="20%">Reason</th>
+	<th width="8%" nowrap="nowrap">Attached files</th>
+	<th>Comment</th>
+	<th width="8%">Operation</th>
+</tr>
+<iterate name="result" id="item">
+<form id="form{$item['id']}" action="__URL__/confirm" method="post" target="_iframe">
+<tr align="center" class="trbg{$mod}">
+	<td>{$staff[$item['staff_id']]}</td>
+	<td>{$LeaveType[$item['type']]}</td>
+	<td nowrap="nowrap">{$item['time_from']|substr=0,-3} ~ {$item['time_to']|substr=0,-3}</td>
+	<td>{$item['hours']|number_format}</td>
+	<td align="left">{$item['reason']|nl2br}</td>
+	<td>{$item['attachment_url']|default='<font color="#d4d4d4">N/A</font>'}</td>
+	<td><textarea name="comment" cols="20" rows="3"></textarea></td>
+	<td nowrap="nowrap">
+		<input type="hidden" name="id" value="{$item['id']}" />
+		<input type="hidden" id="status{$item['id']}" name="status" value="0" />
+		<input type="button" value="Edit" class="thickbox" alt="__URL__/form/id/{$item['id']}?width=600&height=450&modal=true"/>
+		<input type="button" onclick="confirm('{$item['id']}', 1);" value="Approve" />
+		<input type="button" onclick="confirm('{$item['id']}', -1);" value="Reject" />
+	</td>
+</tr>
+</form>
+</iterate>
+<empty name="result">
+<tr>
+	<td colspan="8" align="center">No Record</td>
+</tr>
+</empty>
+</table>
+<p class="center">
+	<input type="button" value="Apply Compensatory Leave for Staff" class="thickbox" alt="__URL__/form/action/apply?width=600&height=450&modal=true"/>
+</p>
+<script type="text/javascript"> 
+function confirm(n, status) {
+	$('#status'+n).val(status);
+	$('#form'+n).submit();
+}
+</script>

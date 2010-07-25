@@ -265,6 +265,9 @@ td.clsTab {
 td#status_0, td#fixed1{
 	background:#92D050;
 }
+td#status_1{
+	background:#548DD4;
+}
 td#status_-1{
 	background:#9966FF;
 }
