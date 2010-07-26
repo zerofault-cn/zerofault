@@ -130,8 +130,8 @@
     	}
 	}
 	else {
-		$dueDate = date('Y-m-d');
-		$number1 = 1;
+		$dueDate = '0000-00-00';
+		$number1 = 0;
 		$unit1 = 'day';
 		$number2 = 0;
 		$unit2 = 'hour';
