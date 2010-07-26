@@ -33,6 +33,10 @@ class ProductOutAction extends BaseAction{
 		$this->assign('MODULE_TITLE', 'Floating-Assets Apply');
 		$this->index('apply',0);
 	}
+	Public function applyBoard() {
+		$this->assign('MODULE_TITLE', 'Board Apply');
+		$this->index('apply', 0, 'Board');
+	}
 	Public function transfer() {
 		$this->assign('MODULE_TITLE', 'Product Transfer');
 		$this->index('transfer');
@@ -49,7 +53,7 @@ class ProductOutAction extends BaseAction{
 		$this->assign('MODULE_TITLE', 'Product Return');
 		$this->index('return');
 	}
-	private function index($action='apply',$fixed='') {
+	private function index($action='apply', $fixed='', $type='') {
 		global $location_id;
 		if (empty($location_id)) {
 			Session::set('sub', MODULE_NAME.'/'.ACTION_NAME);
@@ -99,7 +103,13 @@ class ProductOutAction extends BaseAction{
 			'action' => $action,
 			'status' => $status
 			);
-		if(strlen($fixed)!=0) {
+		if ('Board'==$type) {
+			$where['type'] = 'Board';
+		}
+		else {
+			$where['type'] = 'Component';
+		}
+		if(''!=$fixed) {
 			$where['fixed'] = $fixed;
 		}
 		if(MODULE_NAME == 'Asset') {
