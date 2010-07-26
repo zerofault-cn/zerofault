@@ -1170,23 +1170,21 @@ function setEditable(obj, n) {
 		}
 		element_obj.show().select().keydown(function(e){
 			var keyCode=e.keyCode || window.event.keyCode;
-			if(keyCode==13)//回车键
-			{
+			if (keyCode==13) {
 				if ('textarea' == element && !e.ctrlKey && !window.event.ctrlKey) {
 					return;
 				}
-				submit_edit(this, n);
+				submit_edit(this);
 			}
-			else if(keyCode==27)//取消健
-			{
-				cancel_edit(this, n);
+			else if (keyCode==27) {
+				cancel_edit(this);
 			}
 		});
 		$(this).addClass('editing');
 		last_element = element;
 	});
 }
-function submit_edit(obj, n){
+function submit_edit(obj){
 	$.post('?action=set_slot', {
 		'nID' : $(obj).attr('id'),
 		'field' : $(obj).attr('name'),
@@ -1205,7 +1203,7 @@ function submit_edit(obj, n){
 			}
 		});
 }
-function cancel_edit(obj, n){
+function cancel_edit(obj){
 	$(obj).hide().prev().show();
 }
 
