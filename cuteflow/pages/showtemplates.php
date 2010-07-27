@@ -71,21 +71,34 @@
 		mysql_select_db($DATABASE_DB, $nConnection);
 
 		if ('copy'==$_REQUEST['action'] && $_REQUEST['templateid']>0) {
-			$sql = "Select strName from cf_formtemplate where nID=".$_REQUEST['templateid'];
-			$nResult1 = mysql_query($sql, $nConnection);
-			$sql = "Select * from cf_formslot where nTemplateId=".$_REQUEST['templateid'];
-			$nResult2 = mysql_query($sql, $nConnection);
-			if ($nResult1) {
-				$strName = mysql_result($nResult1, 0, 0);
-				if ('_' == substr($strName, -15, 1) && is_numeric(substr($strName, -14))) {
-					$strName = substr($strName, 0, -15);
+			$sql1 = "Select strName from cf_formtemplate where nID=".$_REQUEST['templateid'];
+			$rs1 = mysql_query($sql1, $nConnection);
+			$sql2 = "Select * from cf_formslot where nTemplateId=".$_REQUEST['templateid'];
+			$rs2 = mysql_query($sql2, $nConnection);
+			if (!$rs1 || !$rs2 || mysql_num_rows($rs1)==0 || mysql_num_rows($rs2)==0) {
+				die('Error: '.$sql1.' or '.$sql2);
+			}
+			$strName = mysql_result($rs1, 0, 0);
+			if ('_' == substr($strName, -15, 1) && is_numeric(substr($strName, -14))) {
+				$strName = substr($strName, 0, -15);
+			}
+			$sql = "Insert into cf_formtemplate set strName='".$strName."_".date('YmdHis')."',bDeleted=0";
+			if (!mysql_query($sql, $nConnection)) {
+				die('Error: '.$sql);
+			}
+			$new_id = mysql_insert_id();
+			while ($arr2 = mysql_fetch_array($rs2)) {
+				$sql = "Insert into cf_formslot set strName='".$arr2['strName']."', strDescr='".addslashes($arr2['strDescr'])."', nTemplateId=".$new_id.", nSlotNumber=".$arr2['nSlotNumber'].", nSendType=".$arr2['nSendType'].", dueDate='".$arr2['dueDate']."', doneTime=".$arr2['doneTime'].", remindTime=".$arr2['remindTime'];
+				if (!mysql_query($sql, $nConnection)) {
+					die('Error: '.$sql);
 				}
-				$sql = "Insert into cf_formtemplate set strName='".$strName."_".date('YmdHis')."',bDeleted=0";
-				if (mysql_query($sql, $nConnection)) {
-					$new_id = mysql_insert_id();
-					while ($arr = mysql_fetch_array($nResult2)) {
-						$sql = "Insert into cf_formslot set strName='".$arr['strName']."', strDescr='".addslashes($arr['strDescr'])."', nTemplateId=".$new_id.", nSlotNumber=".$arr['nSlotNumber'].", nSendType=".$arr['nSendType'].", dueDate='".$arr['dueDate']."', doneTime=".$arr['doneTime'].", remindTime=".$arr['remindTime'];
-						mysql_query($sql, $nConnection);
+				$new_slot_id = mysql_insert_id($nConnection);
+				$sql = "select * from cf_slottofield where nSlotId=".$arr2['nID'];
+				$rs = mysql_query($sql);
+				while ($arr = mysql_fetch_array($rs)) {
+					$sql = "Insert into cf_slottofield set nSlotId=".$new_slot_id.", nFieldId=".$arr['nFieldId'].", nPosition=".$arr['nPosition'];
+					if (!mysql_query($sql, $nConnection)) {
+						die('Error: '.$sql);
 					}
 				}
 			}
