@@ -69,7 +69,7 @@
 			</tr>
 			<tr>
 				<td style="padding: 8px 4px 8px 4px;">
-					<select id="Template" class="FormInput" size="7" style="width:250px;">
+					<select id="Template" class="FormInput" size="14" style="width:450px;">
     					<?php
     						//--- open database
                         	$nConnection = mysql_connect($DATABASE_HOST, $DATABASE_UID, $DATABASE_PWD);
@@ -101,7 +101,7 @@
 			</tr>
 		</table>
 		
-		<table cellspacing="0" cellpadding="3" align="center" width="260">
+		<table cellspacing="0" cellpadding="3" align="center" width="460">
 		<tr>
 			<td align="left">
 				<input type="button" value="<?php echo $BTN_CANCEL;?>" class="Button" onClick="window.close()">

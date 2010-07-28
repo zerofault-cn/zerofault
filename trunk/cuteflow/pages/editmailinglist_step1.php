@@ -81,7 +81,7 @@
 		function BrowseTemplate()
 		{
 			url="selecttemplate.php?language=<?php echo $_REQUEST["language"];?>";
-			open(url,"BrowseTemplate","width=300,height=190,status=no,menubar=no,resizable=no,scrollbars=no");		
+			open(url,"BrowseTemplate","width=500,height=300,status=no,menubar=no,resizable=no,scrollbars=no");		
 		}
 
 		function SetTemplate(nId, strName)
