@@ -526,7 +526,12 @@
 				//------------------------------------------------------
 				//--- get the needed informations
 				//------------------------------------------------------
-				$mail_entry = array();
+				$mail_entry = array(
+					'normal' => array(),
+					'remind' => array(),
+					'press' => array(),
+					'notify' => array()
+					);
 				$strQuery = "Select * from cf_circulationprocess where nDecissionState=0";
 				$nResult = mysql_query($strQuery, $nConnection);
 				if (mysql_num_rows($nResult) > 0)
@@ -555,17 +560,28 @@
 						$remindTime = mysql_result($rs, 0, 2);
 						if ($lastRemindTime==0) {
 							//首次邮件通知
-							$mail_entry[] = $arrRow;
+							//判断通知类型
+							$sql = "Select * from cf_slottofield slotfield, cf_inputfield field where slotfield.nSlotId=".$nSlotId." and slotfield.nFieldId=field.nID and field.bReadOnly=0";
+							$rs = mysql_query($sql);
+							if (mysql_num_rows($rs)>0) {
+								//有可编辑Field，需发送普通通知
+								$mail_entry['normal'][] = $arrRow;
+							}
+							else {
+								$mail_entry['notify'][] = $arrRow;
+							}
 						}
 						else {
 							$tmp = $lastRemindTime+round(($endTime-$lastRemindTime)*0.618);
 							if (time()>=$tmp && time()<$endTime && time()-$lastRemindTime>86300) {//预提醒
-								$mail_entry[] = $arrRow;
+								$remain = round(($endTime-time())/86400);
+								$mail_entry['remind'][] = array($remain, $arrRow);
 							}
 							elseif ($remindTime>0 && time()>=$endTime && time()-$lastRemindTime+100>=$remindTime && (date('G')>=9 && date('G')<18 && date('N')<=5)) {//后提醒
 								//remindTime大于0，已超过完成时间，且距上次提醒时间已超过提醒间隔
 								//100秒用于补足程序执行所耗时间
-								$mail_entry[] = $arrRow;
+								$past = round(($endTime-time())/86400);
+								$mail_entry['press'][] = array($past, $arrRow);
 							}
 						}/*
 						elseif (date('G')>=9 && date('G')<18 && date('N')<=5) {//非工作日不提醒
@@ -588,46 +604,44 @@
 				if (empty($mail_entry)) {
 					echo "No process to be reminded.\n";
 				}
-				foreach ($mail_entry as $entry) {
-					echo "Process ID: ".$entry['nID']."\t";
-					$message = Swift_Message::newInstance()->setCharset($DEFAULT_CHARSET);
-					$Circulation_cpid = $entry['nID'];
-					$nUserId = $entry['nUserId'];
-					$nCirculationId = $entry['nCirculationFormId'];
-					$nSlotId = $entry['nSlotId'];
-					$nCirculationHistoryId = $entry['nCirculationHistoryId'];
-					
-					//--- circulation form
-					$arrForm = array();
-					$strQuery = "SELECT * FROM cf_circulationform WHERE nID=".$nCirculationId;
-					$nResult = mysql_query($strQuery, $nConnection);
-					if ($nResult)
-					{
-						if (mysql_num_rows($nResult) > 0)
-						{
+				foreach ($mail_entry as $type=>$entry_arr) {
+					echo "Process ".$type." mail:\n";
+					foreach ($entry_arr as $val) {
+						if ('remind' == $type || 'press' == $type) {
+							$day = $val[0];
+							$entry = $val[1];
+						}
+						else {
+							$entry = $val;
+						}
+						echo "\tID: ".$entry['nID']."\t";
+						$message = Swift_Message::newInstance()->setCharset($DEFAULT_CHARSET);
+						$Circulation_cpid = $entry['nID'];
+						$nUserId = $entry['nUserId'];
+						$nCirculationId = $entry['nCirculationFormId'];
+						$nSlotId = $entry['nSlotId'];
+						$nCirculationHistoryId = $entry['nCirculationHistoryId'];
+						
+						//--- circulation form
+						$arrForm = array();
+						$strQuery = "SELECT * FROM cf_circulationform WHERE nID=".$nCirculationId;
+						$nResult = mysql_query($strQuery, $nConnection);
+						if ($nResult && mysql_num_rows($nResult) > 0) {
 							$arrForm = mysql_fetch_array($nResult);
 						}
-					}
-					
-					//--- circulation history
-					$arrHistory = array();
-					$strQuery = "SELECT * FROM cf_circulationhistory WHERE nID=".$nCirculationHistoryId;
-					$nResult = mysql_query($strQuery, $nConnection);
-					if ($nResult)
-					{
-						if (mysql_num_rows($nResult) > 0)
-						{
+						
+						//--- circulation history
+						$arrHistory = array();
+						$strQuery = "SELECT * FROM cf_circulationhistory WHERE nID=".$nCirculationHistoryId;
+						$nResult = mysql_query($strQuery, $nConnection);
+						if ($nResult && mysql_num_rows($nResult) > 0) {
 							$arrHistory = mysql_fetch_array($nResult);
 						}
-					}
-				
-					//--- the attachments
-					$strQuery = "SELECT * FROM cf_attachment WHERE nCirculationHistoryId=".$nCirculationHistoryId;
-					$nResult = mysql_query($strQuery, $nConnection);
-					if ($nResult)
-					{
-						if (mysql_num_rows($nResult) > 0)
-						{
+					
+						//--- the attachments
+						$strQuery = "SELECT * FROM cf_attachment WHERE nCirculationHistoryId=".$nCirculationHistoryId;
+						$nResult = mysql_query($strQuery, $nConnection);
+						if ($nResult && mysql_num_rows($nResult) > 0) {
 							while ($arrRow = mysql_fetch_array($nResult))
 							{
 								$strFileName = basename($arrRow['strPath']);
@@ -637,82 +651,245 @@
 										->setFilename($strFileName));
 							}
 						}
-					}
-					//switching Email Format
-					if ($nUserId != -2)
-					{	
-						$strQuery = "SELECT * FROM `cf_user` WHERE nID = ".$nUserId;
-					}
-					else
-					{	// in this case the next user is the sender of this circulation
-						$strQuery = "SELECT * FROM `cf_user` WHERE nID = ".$arrForm['nSenderId'];
-					}
-					$nResult = mysql_query($strQuery, $nConnection);
-					if ($nResult)
-					{
-						$user = mysql_fetch_array($nResult, MYSQL_ASSOC);
-						if (empty($user)) {
-							continue;
+						//switching Email Format
+						if ($nUserId != -2) {
+							$strQuery = "SELECT * FROM `cf_user` WHERE nID = ".$nUserId;
 						}
-						$useGeneralEmailConfig = $user['bUseGeneralEmailConfig'];
-						if (!$useGeneralEmailConfig)
-						{
-							$emailFormat	= $user['strEmail_Format'];
-							$emailValues	= $user['strEmail_Values'];
+						else { // in this case the next user is the sender of this circulation
+							$strQuery = "SELECT * FROM `cf_user` WHERE nID = ".$arrForm['nSenderId'];
 						}
-						else
-						{
-							$emailFormat	= $EMAIL_FORMAT;
-							$emailValues	= $EMAIL_VALUES;
+						$nResult = mysql_query($strQuery, $nConnection);
+						if ($nResult) {
+							$user = mysql_fetch_array($nResult, MYSQL_ASSOC);
+							if (empty($user)) {
+								continue;
+							}
+							$useGeneralEmailConfig = $user['bUseGeneralEmailConfig'];
+							if (!$useGeneralEmailConfig) {
+								$emailFormat	= $user['strEmail_Format'];
+								$emailValues	= $user['strEmail_Values'];
+							}
+							else {
+								$emailFormat	= $EMAIL_FORMAT;
+								$emailValues	= $EMAIL_VALUES;
+							}
+							
+							$Circulation_Name			= $arrForm['strName'];
+							$Circulation_AdditionalText = nl2br($arrHistory['strAdditionalText']);
+							
+							//--- create mail
+							require '../mail/mail_'.$emailFormat.$emailValues.'.inc.php';
+							switch ($emailFormat) {
+								case 'PLAIN':
+									$message->setBody($strMessage, 'text/plain');
+									break;
+								case 'HTML':
+									$message->setBody($strMessage, 'text/html');
+									break;
+							}
 						}
+						$strQuery = "Select strName from `cf_formslot` where nID=".$nSlotId;
+						$nResult = mysql_query($strQuery, $nConnection);
+						$slotName = mysql_result($nResult, 0, 0);
 						
-						$Circulation_Name			= $arrForm['strName'];
-						$Circulation_AdditionalText = nl2br($arrHistory['strAdditionalText']);
+						$SYSTEM_REPLY_ADDRESS = str_replace (' ', '_', $SYSTEM_REPLY_ADDRESS);
 						
-						//--- create mail
-						require '../mail/mail_'.$emailFormat.$emailValues.'.inc.php';
-						switch ($emailFormat)
-						{
-							case 'PLAIN':
-								$message->setBody($strMessage, 'text/plain');
+						$message->setFrom(array($SYSTEM_REPLY_ADDRESS=>'AgigAFlow'));
+
+						$prefix = '';
+						switch ($type) {
+							case 'normal':
 								break;
-							case 'HTML':
-								$message->setBody($strMessage, 'text/html');
+							case 'remind':
+								$prefix = '['.$day.' Days Left] ';
 								break;
+							case 'press':
+								$prefix = '[Exceed Time Limit '.$day.' Days] ';
+								break;
+							case 'notify':
+								$prefix = '[Notification] ';
+								break;
+							default :
+								//
+						}
+						$message->setSubject($prefix.$MAIL_HEADER_PRE.'['.$arrForm["strName"].'] ['.$slotName.']');
+						
+						$message->setTo(array($user["strEMail"]));
+						
+						$result = $mailer->send($message);
+						if ($result) {
+							echo "Mail Sent\t";
+							if ('notify' == $type) {
+								$strQuery = "update cf_circulationprocess set nDecissionState=1, dateDecission='".$TStoday."', lastRemindTime=".time()." where nID=".$entry['nID'];
+								if (mysql_query($strQuery, $nConnection)) {
+									turnToNext($entry);
+									echo "1<br />\n";
+								}
+							}
+							else {
+								$strQuery = "update cf_circulationprocess set lastRemindTime=".time()." where nID=".$entry['nID'];
+								if (mysql_query($strQuery, $nConnection)) {
+									echo "1<br />\n";
+								}
+							}
+						}
+						else {
+							$fp = @fopen ("mail_delay.log", "a");
+							if ($fp)
+							{
+								@fputs ($fp, date("d.m.Y", time())." - cf_circulationprocess.nID:".$entry['nID']."\n");
+								fclose($fp);
+							}
 						}
 					}
-					$strQuery = "Select strName from `cf_formslot` where nID=".$nSlotId;
-					$nResult = mysql_query($strQuery, $nConnection);
-					$slotName = mysql_result($nResult, 0, 0);
-					
-					$SYSTEM_REPLY_ADDRESS = str_replace (' ', '_', $SYSTEM_REPLY_ADDRESS);
-					
-					$message->setFrom(array($SYSTEM_REPLY_ADDRESS=>'AgigAFlow'));
-					$message->setSubject($MAIL_HEADER_PRE.'['.$arrForm["strName"].'] ['.$slotName.']');
-					
-					$message->setTo(array($user["strEMail"]));
-					
-					$result = $mailer->send($message);
-					if ($result) {
-						echo "Mail Sent\t";
-						$strQuery = "update cf_circulationprocess set lastRemindTime=".time()." where nID=".$entry['nID'];
-						if (mysql_query($strQuery, $nConnection)) {
-							echo "1<br />\n";
-						}
-					}
-					else {
-						$fp = @fopen ("mail_delay.log", "a");
-						if ($fp)
-						{
-							@fputs ($fp, date("d.m.Y", time())." - cf_circulationprocess.nID:".$entry['nID']."\n");
-							fclose($fp);
-						}
-	    			}
 				}
 			}
 		}
 		return true;
 	}
+	function turnToNext($arrProcessInfo) {
+		//-----------------------------------------------
+		//--- send mail to next user in list
+		//-----------------------------------------------
+		$strQuery = "SELECT * FROM cf_mailinglist INNER JOIN cf_circulationform ON cf_mailinglist.nID = cf_circulationform.nMailingListId WHERE cf_circulationform.nID=".$arrProcessInfo["nCirculationFormId"];
+		$nResult = mysql_query($strQuery, $nConnection);
+		if ($nResult && mysql_num_rows($nResult) > 0) {
+			$arrRow = mysql_fetch_array($nResult);
+			$nListId = $arrRow[0];
+		}
+
+		$arrCirculationProcess 	= $arrProcessInfo;
+		$nCirculationProcessId 	= $arrCirculationProcess['nID'];
+		$nCirculationFormId 	= $arrCirculationProcess['nCirculationFormId'];
+		$nSlotId			 	= $arrCirculationProcess['nSlotId'];
+		$nUserId 				= $arrCirculationProcess['nUserId'];
+		$nIsSubtituteOf	 		= $arrCirculationProcess['nIsSubstitiuteOf'];
+		$nCirculationHistoryId 	= $arrCirculationProcess['nCirculationHistoryId'];
+		$dateInProcessSince		= $arrCirculationProcess['dateInProcessSince'];
+		
+		// get the Position in current Slot
+		$query 		= "SELECT nMailingListId FROM cf_circulationform WHERE nID = ".$nCirculationFormId." LIMIT 1;";
+		$result 	= mysql_query($query, $nConnection);
+		$arrResult 	= mysql_fetch_array($result, MYSQL_ASSOC);
+		$nMailingListId = $arrResult['nMailingListId'];
+		
+		if ($nIsSubtituteOf == 0)  {	// the current user is no substitute
+			$query 		= "SELECT * FROM cf_slottouser WHERE nSlotId = ".$nSlotId." AND nMailingListId = ".$nMailingListId." AND nUserId = ".$nUserId." LIMIT 1;";
+			$result 	= mysql_query($query, $nConnection);
+			$arrResult 	= mysql_fetch_array($result, MYSQL_ASSOC);
+			if ($arrResult['nID'] == '') {
+				// it's the sender of the circulation!!!
+				$arrNextUsers = getNextUsersInList(-2, $nListId, $nSlotId, $nCirculationFormId, $nCirculationHistoryId);
+			}
+			else {
+				//$arrNextUser = getNextUserInList($nUserId, $nListId, $nSlotId);
+				$arrNextUsers = getNextUsersInList($nUserId, $nListId, $nSlotId, $nCirculationFormId, $nCirculationHistoryId);
+			}
+		}
+		else {
+			// user is a substitute
+			// let's see who this substitute belongs to
+			// it's NOT saved in "nIsSubstituteOf" -.-
+			$strQuery 	= "SELECT nUserId FROM cf_circulationprocess WHERE nID = $nIsSubtituteOf";
+			$result 	= mysql_query($strQuery, $nConnection);
+			$arrResult 	= mysql_fetch_array($result, MYSQL_ASSOC);
+			
+			$nSubsUserId = $arrResult['nUserId'];
+			
+			$arrNextUsers = getNextUsersInList($nSubsUserId, $nListId, $nSlotId, $nCirculationFormId, $nCirculationHistoryId);
+		}
+	//	echo '<pre>$arrNextUsers<br />';var_dump($arrNextUsers);echo '</pre>';
+		$sendMessageToSender = false;
+		foreach ($arrNextUsers as $arrNextUser) {
+			if ($arrNextUser[0] != "") {
+				if ($arrNextUser[0] == -2) {
+					// let's get the Sender User ID
+					$objCirculation	= new CCirculation();
+					$arrSender 		= $objCirculation->getSenderDetails($nCirculationFormId);
+					$arrNextUser[0] = $arrSender['nID'];
+				}
+				
+				sendToUserDelay($arrNextUser[0], $arrProcessInfo["nCirculationFormId"], $arrNextUser[1], 0, $arrProcessInfo["nCirculationHistoryId"]);
+				
+				if ($arrNextUser[2] !== false && $arrNextUser[2] != $nSlotId) {
+					// Slot has changed
+					// Send a notification if this is wished
+					$strQuery = "SELECT * FROM cf_circulationform WHERE nID=".$arrProcessInfo["nCirculationFormId"];
+					$nResult = mysql_query($strQuery, $nConnection);
+					if ($nResult && mysql_num_rows($nResult) > 0)
+					{
+						$arrRow = mysql_fetch_array($nResult);
+
+						$nSenderId		= $arrRow["nSenderId"];
+						$strCircName	= $arrRow["strName"];
+						$nEndAction		= $arrRow["nEndAction"];
+					}
+					
+					$strQuery = "SELECT * FROM cf_formslot WHERE nID=".$nSlotId;
+					$nResult = mysql_query($strQuery, $nConnection);
+					if ($nResult && mysql_num_rows($nResult) > 0) {
+						$arrRow = mysql_fetch_array($nResult);
+						$slotname = $arrRow['strName'];
+					}
+					
+					if ( ($nEndAction & 8) == 8 && !$sendMessageToSender) {
+					//	echo 'sendMessageToSender1<br />';
+						sendMessageToSenderDelay($nSenderId, $arrProcessInfo["nUserId"], "done", $strCircName, "ENDSLOT", $_REQUEST["cpid"], $slotname);
+						$sendMessageToSender = true;
+					}
+				}
+			}
+			else {
+				//--- send done email to sender if wanted
+				$strQuery = "SELECT * FROM cf_circulationform WHERE nID=".$arrProcessInfo["nCirculationFormId"];
+				$nResult = mysql_query($strQuery, $nConnection);
+				if ($nResult && mysql_num_rows($nResult) > 0)
+				{
+					$arrRow = mysql_fetch_array($nResult);
+
+					$nEndAction		= $arrRow["nEndAction"];
+					$nSenderId		= $arrRow["nSenderId"];
+					$strCircName	= $arrRow["strName"];
+						
+					// check the hook CF_ENDACTION
+					$circulation 	= new CCirculation();
+					$endActions		= $circulation->getExtensionsByHookId('CF_ENDACTION');
+
+					if ($endActions) {
+						foreach ($endActions as $endAction) {
+							$params		= $circulation->getEndActionParams($endAction);
+							$hookValue	= (int) $params['hookValue'];
+							if (($nEndAction & $hookValue) == $hookValue) {
+								require $params['filename'];
+							}
+						}
+					}
+						
+					$nShouldArchived 	= $nEndAction & 2;
+					$nShouldMailed 		= $nEndAction & 1;
+					$nShouldDeleted 	= 4;
+						
+					if ($nShouldMailed == 1) {
+						//	echo 'sendMessageToSender2<br />';
+						sendMessageToSenderDelay($nSenderId, $arrProcessInfo["nUserId"], "done", $strCircName, "SUCCESS", $_REQUEST["cpid"]);
+						$sendMessageToSender = true;
+					}
+						
+					if ($nShouldArchived == 2) {
+						// archive the circulation
+						$strQuery = "UPDATE cf_circulationform SET bIsArchived=1 WHERE nID=".$arrProcessInfo["nCirculationFormId"];
+						mysql_query($strQuery, $nConnection) or die ($strQuery.mysql_error());
+					}
+					elseif ($nShouldDeleted & $nEndAction) {
+						// delete circulation
+						$query = "UPDATE cf_circulationform SET bDeleted = 1 WHERE nID = ".$arrProcessInfo['nCirculationFormId'];
+						mysql_query($query, $nConnection) or die ($query.mysql_error());
+					}
+				}
+			}
+		}
+	}
+
 	function sendMessageToSender($nSenderId, $nLastStationId, $strMessageFile, $strCirculationName, $strEndState, $Circulation_cpid, $slotname="")
 	{
 		global $DATABASE_HOST, $DATABASE_UID, $DATABASE_PWD, $DATABASE_DB, $MAIL_HEADER_PRE, $CUTEFLOW_SERVER;
