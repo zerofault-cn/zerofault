@@ -82,13 +82,13 @@
 			if ('_' == substr($strName, -15, 1) && is_numeric(substr($strName, -14))) {
 				$strName = substr($strName, 0, -15);
 			}
-			$sql = "Insert into cf_formtemplate set strName='".$strName."_".date('YmdHis')."',bDeleted=0";
+			$sql = "Insert into cf_formtemplate set strName='".addslashes($strName)."_".date('YmdHis')."',bDeleted=0";
 			if (!mysql_query($sql, $nConnection)) {
 				die('Error: '.$sql);
 			}
 			$new_id = mysql_insert_id();
 			while ($arr2 = mysql_fetch_array($rs2)) {
-				$sql = "Insert into cf_formslot set strName='".$arr2['strName']."', strDescr='".addslashes($arr2['strDescr'])."', nTemplateId=".$new_id.", nSlotNumber=".$arr2['nSlotNumber'].", nSendType=".$arr2['nSendType'].", dueDate='".$arr2['dueDate']."', doneTime=".$arr2['doneTime'].", remindTime=".$arr2['remindTime'];
+				$sql = "Insert into cf_formslot set strName='".addslashes($arr2['strName'])."', strDescr='".addslashes($arr2['strDescr'])."', nTemplateId=".$new_id.", nSlotNumber=".$arr2['nSlotNumber'].", nSendType=".$arr2['nSendType'].", dueDate='".$arr2['dueDate']."', doneTime=".$arr2['doneTime'].", remindTime=".$arr2['remindTime'];
 				if (!mysql_query($sql, $nConnection)) {
 					die('Error: '.$sql);
 				}

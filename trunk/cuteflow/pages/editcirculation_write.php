@@ -222,7 +222,7 @@
 		}
 		$nNewFormTemplateID = mysql_insert_id($nConnection);
 		while ($arr2 = mysql_fetch_array($rs2)) {
-			$sql = "Insert into cf_formslot set strName='".$arr2['strName']."', strDescr='".addslashes($arr2['strDescr'])."', nTemplateId=".$nNewFormTemplateID.", nSlotNumber=".$arr2['nSlotNumber'].", nSendType=".$arr2['nSendType'].", dueDate='".$arr2['dueDate']."', doneTime=".$arr2['doneTime'].", remindTime=".$arr2['remindTime'];
+			$sql = "Insert into cf_formslot set strName='".addslashes($arr2['strName'])."', strDescr='".addslashes($arr2['strDescr'])."', nTemplateId=".$nNewFormTemplateID.", nSlotNumber=".$arr2['nSlotNumber'].", nSendType=".$arr2['nSendType'].", dueDate='".$arr2['dueDate']."', doneTime=".$arr2['doneTime'].", remindTime=".$arr2['remindTime'];
 			if (!mysql_query($sql, $nConnection)) {
 				die('Error: '.$sql);
 			}
