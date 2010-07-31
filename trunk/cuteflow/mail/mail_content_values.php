@@ -609,7 +609,7 @@
 																<tr><td style="font-weight: bold;background: #666666; color: #fff; padding:1px;" colspan="5" id="slot<?php echo $arrSlot['nID']; ?>"><?php echo $arrSlot['strName']; ?><a name="slot<?php echo $arrSlot['nID']; ?>"></a></td></tr>
 								<tr>
 									<td style="background-color: #999999;padding:1px;" colspan="16">
-										<table width="100%" border="1" cellpadding="2" cellspacing="0" style="border-collapse:collapse;border:1px solid #ffffff;color:#ffffff">
+										<table width="100%" border="1" cellpadding="2" cellspacing="0" style="border-collapse:collapse;border:1px solid #ffffff;color:#0000BB">
 										<tr>
 											<td style="color:#000000;" width="20%" nowrap="nowrap">Description:</td>
 											<td colspan="5"><?php echo nl2br($arrSlot['strDescr']); ?></td>

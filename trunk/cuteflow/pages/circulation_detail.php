@@ -837,7 +837,7 @@ if ($view != 'print')
 								<tr><td style="font-weight: bold;background: #666666; color: #fff; padding:1px;" colspan="16" class="edit" title="Click to Edit, Enter to submit"><span><?php echo $arrSlot['strName']; ?></span><input type="text" name="strName" id="<?php echo $arrSlot['nID'];?>" value="<?php echo $arrSlot['strName']; ?>" style="display:none;width:0;"/></td></tr>
 								<tr>
 									<td style="background-color: #999999;padding:1px;" colspan="16">
-										<table width="100%" border="1" cellpadding="2" cellspacing="0" style="border-collapse:collapse;border:1px solid #ffffff;color:#ffffff">
+										<table width="100%" border="1" cellpadding="2" cellspacing="0" style="border-collapse:collapse;border:1px solid #ffffff;color:#0000BB">
 										<tr>
 											<td style="color:#000000;" width="20%" nowrap="nowrap">Description :</td>
 											<td colspan="5" class="edit" title="Click to Edit, Ctrl+Enter to submit"><span class="textarea"><?php echo nl2br($arrSlot['strDescr']); ?></span><textarea name="strDescr" id="<?php echo $arrSlot['nID'];?>" style="display:none;width:0;height:0;"><?php echo $arrSlot['strDescr']; ?></textarea></td>
@@ -874,7 +874,7 @@ if ($view != 'print')
 												{
 													if ($user_val["strFieldValue"]!='')
 													{
-														$arrValue = split('rrrrr',$user_val["strFieldValue"]);
+														$arrValue = explode('rrrrr',$user_val["strFieldValue"]);
 														
 														$output = replaceLinks($arrValue[0]); 
 														if ($arrRow['strBgColor'] != "") {
@@ -884,7 +884,7 @@ if ($view != 'print')
 													}
 													else
 													{
-														$arrValue = split('rrrrr',$arrRow['strStandardValue']);
+														$arrValue = explode('rrrrr',$arrRow['strStandardValue']);
 														
 														$output = replaceLinks($arrValue[0]); 
 														if ($arrRow['strBgColor'] != "") {
@@ -910,16 +910,16 @@ if ($view != 'print')
 												{
 													if ($user_val["strFieldValue"]!='')
 													{
-														$arrValue = split('xx',$user_val["strFieldValue"]);								
+														$arrValue = explode('xx',$user_val["strFieldValue"]);								
 														$nNumGroup 	= $arrValue[1];														
-														$arrValue1 = split('rrrrr',$arrValue[2]);														
+														$arrValue1 = explode('rrrrr',$arrValue[2]);														
 														$strMyValue	= $arrValue1[0];
 													}
 													else
 													{
-														$arrValue = split('xx',$arrRow['strStandardValue']);								
+														$arrValue = explode('xx',$arrRow['strStandardValue']);								
 														$nNumGroup 	= $arrValue[1];														
-														$arrValue1 = split('rrrrr',$arrValue[2]);														
+														$arrValue1 = explode('rrrrr',$arrValue[2]);														
 														$strMyValue	= $arrValue1[0];
 													}
 													$output = replaceLinks($strMyValue); 
@@ -932,16 +932,16 @@ if ($view != 'print')
 												{
 													if ($user_val["strFieldValue"]!='')
 													{
-														$arrValue = split('xx',$user_val["strFieldValue"]);
+														$arrValue = explode('xx',$user_val["strFieldValue"]);
 														$nDateGroup 	= $arrValue[1];
-														$arrValue2 = split('rrrrr',$arrValue[2]);
+														$arrValue2 = explode('rrrrr',$arrValue[2]);
 														$strMyValue 	= $arrValue2[0];
 													}
 													else
 													{
-														$arrValue 		= split('xx',$arrRow['strStandardValue']);
+														$arrValue 		= explode('xx',$arrRow['strStandardValue']);
 														$nDateGroup 	= $arrValue[1];
-														$arrValue2 		= split('rrrrr',$arrValue[2]);
+														$arrValue2 		= explode('rrrrr',$arrValue[2]);
 														$strMyValue 	= $arrValue2[0];
 													}
 													$output = replaceLinks($strMyValue); 
@@ -966,7 +966,7 @@ if ($view != 'print')
 													if ($user_val["strFieldValue"]!='')
 													{
 														$strValue = $user_val["strFieldValue"];
-														$arrMySplit = split('---', $strValue);
+														$arrMySplit = explode('---', $strValue);
 														
 														if ($arrMySplit[1] > 1)
 														{	// edited field values
@@ -1002,7 +1002,7 @@ if ($view != 'print')
 													if ($user_val["strFieldValue"]!='')
 													{
 													$strValue = $user_val["strFieldValue"];
-														$arrMySplit = split('---', $strValue);
+														$arrMySplit = explode('---', $strValue);
 														
 														if ($arrMySplit[1] > 1)
 														{	// edited field values
@@ -1039,7 +1039,7 @@ if ($view != 'print')
 													if ($user_val["strFieldValue"]!='')
 													{
 														$strValue = $user_val["strFieldValue"];
-														$arrMySplit = split('---', $strValue);
+														$arrMySplit = explode('---', $strValue);
 														
 														if ($arrMySplit[1] > 1)
 														{	// edited field values
@@ -1075,17 +1075,17 @@ if ($view != 'print')
 												{
 													if ($user_val["strFieldValue"]!='')
 													{
-														$arrSplit = split('---',$user_val["strFieldValue"]);
+														$arrSplit = explode('---',$user_val["strFieldValue"]);
 													}
 													else
 													{
-														$arrSplit = split('---',$arrRow['strStandardValue']);
+														$arrSplit = explode('---',$arrRow['strStandardValue']);
 													}
 													
 													$nNumberOfUploads 	= $arrSplit[1];
 													$strDirectory		= $arrSplit[2].'_'.$nNumberOfUploads;
 													
-													$arrValue22 = split('rrrrr',$arrSplit[3]);
+													$arrValue22 = explode('rrrrr',$arrSplit[3]);
 													
 													$strFilename		= $arrValue22[0];
 													
