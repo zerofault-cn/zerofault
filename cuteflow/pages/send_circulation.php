@@ -574,14 +574,14 @@
 						else {
 							$tmp = $lastRemindTime+round(($endTime-$lastRemindTime)*0.618);
 							if (time()>=$tmp && time()<$endTime && time()-$lastRemindTime>86300) {//预提醒
-								$remain = round(($endTime-time())/86400);
-								$mail_entry['remind'][] = array($remain, $arrRow);
+								$time = $endTime-time();
+								$mail_entry['remind'][] = array($time, $arrRow);
 							}
-							elseif ($remindTime>0 && time()>=$endTime && time()-$lastRemindTime+100>=$remindTime && (date('G')>=9 && date('G')<18 && date('N')<=5)) {//后提醒
+							elseif ($remindTime>0 && time()>=$endTime && time()-$lastRemindTime+100>=$remindTime) {// && (date('G')>=9 && date('G')<18 && date('N')<=5)) {//后提醒
 								//remindTime大于0，已超过完成时间，且距上次提醒时间已超过提醒间隔
 								//100秒用于补足程序执行所耗时间
-								$past = round(($endTime-time())/86400);
-								$mail_entry['press'][] = array($past, $arrRow);
+								$time = time() - $endTime;
+								$mail_entry['press'][] = array($time, $arrRow);
 							}
 						}/*
 						elseif (date('G')>=9 && date('G')<18 && date('N')<=5) {//非工作日不提醒
@@ -608,7 +608,22 @@
 					echo "Process ".$type." mail:\n";
 					foreach ($entry_arr as $val) {
 						if ('remind' == $type || 'press' == $type) {
-							$day = $val[0];
+							$time = $val[0];
+							if ($time>=86400) {
+								$unit = ' Day';
+								$number = round($time/86400);
+							}
+							elseif ($time>=3600) {
+								$unit = ' Hour';
+								$number = round($time/3600);
+							}
+							elseif ($time>=60) {
+								$unit = ' Minute';
+								$number = round($time/60);
+							}
+							if ($number>1) {
+								$unit .= 's';
+							}
 							$entry = $val[1];
 						}
 						else {
@@ -701,10 +716,10 @@
 							case 'normal':
 								break;
 							case 'remind':
-								$prefix = '['.$day.' Days Left] ';
+								$prefix = '['.$number.$unit.' Left] ';
 								break;
 							case 'press':
-								$prefix = '[Exceed Time Limit '.$day.' Days] ';
+								$prefix = '[Exceed Time Limit '.$number.$unit.'] ';
 								break;
 							case 'notify':
 								$prefix = '[Notification] ';
@@ -748,6 +763,7 @@
 		return true;
 	}
 	function turnToNext($arrProcessInfo) {
+		global $nConnection;
 		//-----------------------------------------------
 		//--- send mail to next user in list
 		//-----------------------------------------------
@@ -834,7 +850,7 @@
 					
 					if ( ($nEndAction & 8) == 8 && !$sendMessageToSender) {
 					//	echo 'sendMessageToSender1<br />';
-						sendMessageToSenderDelay($nSenderId, $arrProcessInfo["nUserId"], "done", $strCircName, "ENDSLOT", $_REQUEST["cpid"], $slotname);
+						sendMessageToSenderDelay($nSenderId, $arrProcessInfo["nUserId"], "done", $strCircName, "ENDSLOT", $nCirculationProcessId, $slotname);
 						$sendMessageToSender = true;
 					}
 				}
@@ -871,7 +887,7 @@
 						
 					if ($nShouldMailed == 1) {
 						//	echo 'sendMessageToSender2<br />';
-						sendMessageToSenderDelay($nSenderId, $arrProcessInfo["nUserId"], "done", $strCircName, "SUCCESS", $_REQUEST["cpid"]);
+						sendMessageToSenderDelay($nSenderId, $arrProcessInfo["nUserId"], "done", $strCircName, "SUCCESS", $nCirculationProcessId);
 						$sendMessageToSender = true;
 					}
 						
