@@ -577,7 +577,7 @@
 								$time = $endTime-time();
 								$mail_entry['remind'][] = array($time, $arrRow);
 							}
-							elseif ($remindTime>0 && time()>=$endTime && time()-$lastRemindTime+100>=$remindTime) && (date('G')>=9 && date('G')<18 && date('N')<=5)) {//后提醒
+							elseif ($remindTime>0 && time()>=$endTime && time()-$lastRemindTime+100>=$remindTime && date('G')>=9 && date('G')<18 && date('N')<=5) {//后提醒
 								//remindTime大于0，已超过完成时间，且距上次提醒时间已超过提醒间隔
 								//100秒用于补足程序执行所耗时间
 								$time = time() - $endTime;

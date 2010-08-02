@@ -203,7 +203,7 @@
 					mysql_query($strQuery, $nConnection);
 							
 					//--- send substitute mail
-					sendToUser($nSubstituteId, $nCirculationFormId, $nSlotId, $nCirculationProcessId, $nCirculationHistoryId);
+					sendToUserDelay($nSubstituteId, $nCirculationFormId, $nSlotId, $nCirculationProcessId, $nCirculationHistoryId);
 				}
 			}
 		}
@@ -281,7 +281,7 @@
 								mysql_query($strQuery, $nConnection);
 										
 								//--- send substitute mail
-								sendToUser($nSubstituteId, $nCirculationFormId, $nSlotId, $nCirculationProcessId, $nCirculationHistoryId);
+								sendToUserDelay($nSubstituteId, $nCirculationFormId, $nSlotId, $nCirculationProcessId, $nCirculationHistoryId);
 							}
 						}
 						$nIndex2 = $nMax2;
