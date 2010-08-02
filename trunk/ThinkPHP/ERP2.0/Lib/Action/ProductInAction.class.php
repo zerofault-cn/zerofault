@@ -17,18 +17,28 @@ class ProductInAction extends BaseAction{
 	}
 	Public function fixed() {
 		$this->assign('MODULE_TITLE', 'Fixed-Assets Entering');
-		$this->index(1);
+		$this->index('enter', 1);
 	}
 	Public function floating() {
 		$this->assign('MODULE_TITLE', 'Floating-Assets Entering');
-		$this->index(0);
+		$this->index('enter', 0);
+	}
+	public function enter() {
+		$this->assign('MODULE_TITLE', 'Product Enter');
+		$this->index('enter');
 	}
 	public function reject() {
 		$this->assign('MODULE_TITLE', 'Product Reject');
-		$this->index();
+		$this->index('reject');
 	}
-	private function index($fixed='') {
-		Session::set('sub', MODULE_NAME.'/'.ACTION_NAME);
+	private function index($action='enter', $fixed='') {
+		global $category_id;
+		if (!empty($category_id)) {
+			Session::set('sub', MODULE_NAME.'/'.ACTION_NAME.'/action/'.$action.'/id/'.$category_id);
+		}
+		else {
+			Session::set('sub', MODULE_NAME.'/'.ACTION_NAME);
+		}
 		$this->assign('ACTION_TITLE', 'List');
 		$rs = M('Options')->where(array('type'=>'unit'))->order('sort')->select();
 		$unit = array();
@@ -49,14 +59,13 @@ class ProductInAction extends BaseAction{
 		//Session::set(ACTION_NAME.'_status', $status);
 		$this->assign('status', $status);
 		
-		$action = 'enter';
 		$where = array();
 		$where['status'] = $status;
-		if ('reject' == ACTION_NAME) {
-			$action = 'reject';
-		}
-		else {
+		if(''!=$fixed) {
 			$where['fixed'] = $fixed;
+		}
+		if (!empty($category_id)) {
+			$where['category_id'] = $category_id;
 		}
 		$where['action'] = $action;
 		$this->assign('action', $action);

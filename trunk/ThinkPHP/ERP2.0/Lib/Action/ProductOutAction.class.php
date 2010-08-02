@@ -33,10 +33,6 @@ class ProductOutAction extends BaseAction{
 		$this->assign('MODULE_TITLE', 'Floating-Assets Apply');
 		$this->index('apply',0);
 	}
-	Public function applyBoard() {
-		$this->assign('MODULE_TITLE', 'Board Apply');
-		$this->index('apply', 0, 'Board');
-	}
 	Public function transfer() {
 		$this->assign('MODULE_TITLE', 'Product Transfer');
 		$this->index('transfer');
@@ -53,13 +49,16 @@ class ProductOutAction extends BaseAction{
 		$this->assign('MODULE_TITLE', 'Product Return');
 		$this->index('return');
 	}
-	private function index($action='apply', $fixed='', $type='') {
-		global $location_id;
-		if (empty($location_id)) {
-			Session::set('sub', MODULE_NAME.'/'.ACTION_NAME);
+	private function index($action='apply', $fixed='') {
+		global $location_id, $category_id;
+		if (!empty($location_id)) {
+			Session::set('sub', MODULE_NAME.'/'.ACTION_NAME.'/id/'.$location_id);
+		}
+		elseif (!empty($category_id)) {
+			Session::set('sub', MODULE_NAME.'/'.ACTION_NAME.'/action/'.str_replace('return', 'returns', $action).'/id/'.$category_id);
 		}
 		else {
-			Session::set('sub', MODULE_NAME.'/'.ACTION_NAME.'/id/'.$location_id);
+			Session::set('sub', MODULE_NAME.'/'.ACTION_NAME);
 		}
 		$this->assign('ACTION_TITLE', 'List');
 		$rs = M('Options')->where(array('type'=>'unit'))->order('sort')->select();
@@ -103,12 +102,6 @@ class ProductOutAction extends BaseAction{
 			'action' => $action,
 			'status' => $status
 			);
-		if ('Board'==$type) {
-			$where['type'] = 'Board';
-		}
-		else {
-			$where['type'] = 'Component';
-		}
 		if(''!=$fixed) {
 			$where['fixed'] = $fixed;
 		}
@@ -126,11 +119,14 @@ class ProductOutAction extends BaseAction{
 				$where['_string'] = "staff_id in (".implode(',', array_keys($lead_staff_arr)).")";
 			}
 			elseif (ACTION_NAME == 'location') {
-				if (strlen($_SESSION[C('MANAGER_AUTH_NAME')][$location_id]['fixed'])==1) {
-					$where['fixed'] = $_SESSION[C('MANAGER_AUTH_NAME')][$location_id]['fixed'];
+				if (strlen($_SESSION[C('LMANAGER_AUTH_NAME')][$location_id]['fixed'])==1) {
+					$where['fixed'] = $_SESSION[C('LMANAGER_AUTH_NAME')][$location_id]['fixed'];
 				}
 				$where['to_type'] = 'location';
 				$where['to_id'] = $location_id;
+			}
+			elseif (ACTION_NAME == 'category') {
+				$where['category_id'] = $category_id;
 			}
 			else {
 				$where['_string'] = "(from_type='staff' and from_id =".$_SESSION[C('USER_AUTH_KEY')].") or (to_type='staff' and to_id = ".$_SESSION[C('USER_AUTH_KEY')].") or staff_id = ".$_SESSION[C('USER_AUTH_KEY')];
