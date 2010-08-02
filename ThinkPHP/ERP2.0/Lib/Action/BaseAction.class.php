@@ -8,7 +8,7 @@
 * @author zerofault <zerofault@gmail.com>
 * @since 2009/8/5
 */
-class BaseAction extends Action{
+class BaseAction extends Action {
 	/**
 	*
 	* 对象初始化时自动执行
@@ -16,7 +16,7 @@ class BaseAction extends Action{
 	public function _initialize() {
 		header("Content-Type:text/html; charset=utf-8");
 		//判断是否登录
-		if(!$_SESSION[C('USER_AUTH_KEY')] && 'Public'!=MODULE_NAME) {
+		if (!$_SESSION[C('USER_AUTH_KEY')] && 'Public'!=MODULE_NAME) {
 			//记下Module
 			//Session::set('lastModule', MODULE_NAME);
 			//跳转到认证网关
@@ -25,10 +25,10 @@ class BaseAction extends Action{
 
 		import('@.RBAC');
 		// 认证当前操作
-		if(RBAC::checkAccess()) {
+		if (RBAC::checkAccess()) {
 			// 检查权限
-			if(!RBAC::AccessDecision()) {
-				if(in_array(ACTION_NAME,C('IFRAME_AUTH_ACTION'))) {
+			if (!RBAC::AccessDecision()) {
+				if (in_array(ACTION_NAME,C('IFRAME_AUTH_ACTION'))) {
 					die(self::_error('Permission denied!', 3000));
 				}
 				$this->assign('message','Permission denied!');
@@ -48,27 +48,35 @@ class BaseAction extends Action{
 		$_menu_ = C('_menu_');//载入menu.php的内容
 		$menu = $_menu_['menu'];
 		$topmenu = array();
-		foreach($menu as $key=>$val) {
-			if(empty($val['submenu'])) {//单层菜单
-				if(RBAC::AccessDecision($val['name'], 'index')) {
+		foreach ($menu as $key=>$val) {
+			if (empty($val['submenu'])) {//单层菜单
+				if (RBAC::AccessDecision($val['name'], 'index')) {
 					$topmenu[$key] = $val['name'];
 				}
 			}
 			else {//有子菜单
+				if (!empty($_SESSION[C('CMANAGER_AUTH_NAME')])) {
+					if ('Inventory&nbsp;Input Management' == $key) {
+						$topmenu[$key] = 'Asset/category/action/enter/id/'.array_shift(array_keys($_SESSION[C('CMANAGER_AUTH_NAME')]));
+					}
+					elseif ('Inventory&nbsp;Output Management' == $key) {
+						$topmenu[$key] = 'Asset/category/action/apply/id/'.array_shift(array_keys($_SESSION[C('CMANAGER_AUTH_NAME')]));
+					}
+				}
 				if(str_replace('&nbsp;',' ',$key) == $top) {//获取当前子菜单所有项目，供再次过滤
 					$tmp_submenu = $menu[$key]['submenu'];
 				}
 				//确定顶部可显示的菜单项
-				foreach($val['submenu'] as $sub_title=>$sub_action) {
-					if(false === strpos($sub_action, '/')) {//子菜单是Module，如Supplier
-						if(RBAC::AccessDecision($sub_action, 'index')) {
+				foreach ($val['submenu'] as $sub_title=>$sub_action) {
+					if (false === strpos($sub_action, '/')) {//子菜单是Module，如Supplier
+						if (RBAC::AccessDecision($sub_action, 'index')) {
 							$topmenu[$key] = $sub_action;
 							break;
 						}
 					}
-					else{
+					else {
 						$sub_action_arr = explode('/', $sub_action);
-						if(RBAC::AccessDecision($sub_action_arr[0], $sub_action_arr[1])) {
+						if (RBAC::AccessDecision($sub_action_arr[0], $sub_action_arr[1])) {
 							$topmenu[$key] = $sub_action;
 							break;
 						}
@@ -78,9 +86,23 @@ class BaseAction extends Action{
 		}
 		//确定可显示的子菜单项
 		$submenu = array();
+		//根据是否manager增加Category子菜单
+		foreach ($_SESSION[C('CMANAGER_AUTH_NAME')] as $category_id=>$category_name) {
+			if ('Inventory Input Management' == $top) {
+				$submenu[$category_name.' Enter'] = 'Asset/category/action/enter/id/'.$category_id;
+				$submenu[$category_name.' Reject'] = 'Asset/category/action/reject/id/'.$category_id;
+			}
+			elseif ('Inventory Output Management' == $top) {
+				$submenu[$category_name.' Apply'] = 'Asset/category/action/apply/id/'.$category_id;
+				$submenu[$category_name.' Transfer'] = 'Asset/category/action/transfer/id/'.$category_id;
+				$submenu[$category_name.' Release'] = 'Asset/category/action/release/id/'.$category_id;
+				$submenu[$category_name.' Scrap'] = 'Asset/category/action/scrap/id/'.$category_id;
+				$submenu[$category_name.' Return'] = 'Asset/category/action/returns/id/'.$category_id;
+			}
+		}
 		if ('Assets Management' == $top) {
 			//根据是否manager增加Location子菜单
-			foreach($_SESSION[C('MANAGER_AUTH_NAME')] as $location_id=>$location) {
+			foreach ($_SESSION[C('LMANAGER_AUTH_NAME')] as $location_id=>$location) {
 				$submenu['Transfer to '.ucfirst($location['name'])] = 'Asset/location/id/'.$location_id;
 			}
 			//判断是否Leader，以增加request子菜单

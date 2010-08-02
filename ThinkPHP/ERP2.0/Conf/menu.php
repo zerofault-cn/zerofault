@@ -16,8 +16,8 @@ $menu['Basic&nbsp;Data'] = array(
 $menu['Inventory&nbsp;Input Management'] = array(
 	'name'    => 'ProductIn',
 	'submenu' => array(
-		'Fixed-Assets Entering'	=> 'ProductIn/fixed',
-		'Floating-Assets Entering' => 'ProductIn/floating',
+		'Fixed-Assets Enter'	=> 'ProductIn/fixed',
+		'Floating-Assets Enter' => 'ProductIn/floating',
 		'Product Reject'		=> 'ProductIn/reject'
 		)
 	);

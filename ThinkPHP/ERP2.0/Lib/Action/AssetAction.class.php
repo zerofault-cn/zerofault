@@ -58,8 +58,26 @@ class AssetAction extends BaseAction{
 	public function location() {
 		global $location_id;
 		$location_id = intval($_REQUEST['id']);
-		$this->assign('location_id', $location_id);
+		$this->assign('id', $location_id);
 		R('ProductOut', 'transfer');
+	}
+	public function category() {
+		global $category_id;
+		$action = $_REQUEST['action'];
+		empty($action) && ($action='enter');
+		switch ($action) {
+			case 'enter':
+			case 'reject':
+				$module = 'ProductIn';
+				Session::set('top', 'Inventory Input Management');
+				break;
+			default :
+				$module = 'ProductOut';
+				Session::set('top', 'Inventory Output Management');
+		}
+		$category_id = intval($_REQUEST['id']);
+		$this->assign('id', $category_id);
+		R($module, $action);
 	}
 	public function request() {
 		R('ProductOut', 'request');
@@ -88,7 +106,17 @@ class AssetAction extends BaseAction{
 		R('ProductOut', 'submit');
 	}
 	public function confirm() {
-		R('ProductOut', 'confirm');
+		empty($_REQUEST['action']) && self::_error('No action parameter');
+		$action = $_REQUEST['action'];
+		switch ($action) {
+			case 'enter':
+			case 'reject':
+				$module = 'ProductIn';
+				break;
+			default :
+				$module = 'ProductOut';
+		}
+		R($module, 'confirm');
 	}
 	public function select() {
 		R('Product', 'select');
