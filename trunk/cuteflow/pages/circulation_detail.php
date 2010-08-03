@@ -59,6 +59,7 @@
 				elseif ('hour' == $unit) {
 					$value = intval(3600*intval($value));
 				}
+				$value -= $value%3600;
 				break;
 			
 			case 'remindTime':
@@ -71,6 +72,7 @@
 				elseif ('minute' == $unit) {
 					$value = intval(60*intval($value));
 				}
+				$value -= $value%60;
 				break;
 			
 			default:
