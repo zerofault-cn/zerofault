@@ -130,7 +130,7 @@
 						document.getElementById('loading').style.display = 'block';
 						new Ajax.Request
 						(
-							"ajax_getmailinglist.php",
+							"ajax_getmailinglist.php?"+Math.random(),
 							{
 								onSuccess : function(resp) 
 								{
