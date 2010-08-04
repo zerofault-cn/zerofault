@@ -44,7 +44,7 @@
 	
 	// get all users
 	$arrUsers = array();
-	$strQuery = "SELECT * FROM cf_user WHERE bDeleted <> 1 ORDER BY strLastName ASC";
+	$strQuery = "SELECT * FROM cf_user WHERE bDeleted <> 1 ORDER BY strFirstName ASC";
 	$nResult = mysql_query($strQuery, $nConnection);
 	if ($nResult)
 	{
