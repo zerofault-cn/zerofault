@@ -99,8 +99,18 @@ class AssetAction extends BaseAction{
 		R('ProductOut', 'returns');
 	}
 	public function form() {
-		Session::set('sub', 'Asset/apply');
-		R('ProductOut', 'form');
+		//Session::set('sub', 'Asset/apply');
+		empty($_REQUEST['action']) && self::_error('No action parameter');
+		$action = $_REQUEST['action'];
+		switch ($action) {
+			case 'enter':
+			case 'reject':
+				$module = 'ProductIn';
+				break;
+			default :
+				$module = 'ProductOut';
+		}
+		R($module, 'form');
 	}
 	public function submit() {
 		R('ProductOut', 'submit');
