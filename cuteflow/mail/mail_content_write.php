@@ -417,25 +417,25 @@
 					}
 				
 				
-				
-				//--- send done email to sender if wanted
-												
-				$strQuery = "UPDATE cf_circulationprocess SET nDecissionState=2, dateDecission='$TStoday' WHERE nID=".$_REQUEST["cpid"];
-				mysql_query($strQuery, $nConnection);
-				
-				$strQuery = "SELECT nEndAction, nSenderId, strName FROM cf_circulationform WHERE nID=".$arrProcessInfo["nCirculationFormId"];
-				$nResult = mysql_query($strQuery, $nConnection);
-				if ($nResult)
-				{
-					if (mysql_num_rows($nResult) > 0)
+				if (!empty($_POST['approve'])) {
+					//--- send done email to sender if wanted
+					$strQuery = "UPDATE cf_circulationprocess SET nDecissionState=2, dateDecission='$TStoday' WHERE nID=".$_REQUEST["cpid"];
+					mysql_query($strQuery, $nConnection);
+					
+					$strQuery = "SELECT nEndAction, nSenderId, strName FROM cf_circulationform WHERE nID=".$arrProcessInfo["nCirculationFormId"];
+					$nResult = mysql_query($strQuery, $nConnection);
+					if ($nResult)
 					{
-						$arrRow = mysql_fetch_array($nResult);
-												
-						$nEndAction = $arrRow["nEndAction"];
-						$nSenderId = $arrRow["nSenderId"];
-						$strCircName = $arrRow["strName"];
-						
-						sendMessageToSenderDelay($nSenderId, $arrProcessInfo["nUserId"], "done", $strCircName, "REJECT", $_REQUEST["cpid"]);						
+						if (mysql_num_rows($nResult) > 0)
+						{
+							$arrRow = mysql_fetch_array($nResult);
+													
+							$nEndAction = $arrRow["nEndAction"];
+							$nSenderId = $arrRow["nSenderId"];
+							$strCircName = $arrRow["strName"];
+							
+							sendMessageToSenderDelay($nSenderId, $arrProcessInfo["nUserId"], "done", $strCircName, "REJECT", $_REQUEST["cpid"]);						
+						}
 					}
 				}
 			}
@@ -464,8 +464,10 @@
 				
 				if ($bAlreadySend == false)
 				{
-					$strQuery = "UPDATE cf_circulationprocess SET nDecissionState=1, dateDecission='$TStoday'  WHERE nID=".$_REQUEST["cpid"];
-					mysql_query($strQuery, $nConnection);
+					if (!empty($_POST['approve'])) {
+						$strQuery = "UPDATE cf_circulationprocess SET nDecissionState=1, dateDecission='$TStoday'  WHERE nID=".$_REQUEST["cpid"];
+						mysql_query($strQuery, $nConnection);
+					}
 	
 					$strQuery = "SELECT * FROM cf_circulationprocess WHERE nID=".$_REQUEST["cpid"];
 					$nResult = mysql_query($strQuery, $nConnection);
@@ -1049,6 +1051,9 @@
 						if ($bAlreadySend == 1)
 						{
 							echo $MAIL_CONTENT_SENT_ALREADY;
+						}
+						elseif (!empty($_POST['edit'])) {
+							echo 'Your data was transfered successfully';
 						}
 						else
 						{
