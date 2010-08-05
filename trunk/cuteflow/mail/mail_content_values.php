@@ -428,7 +428,6 @@
 				alert(Error);
 				return false;	
 			}
-			
 		}
 	</script>
 	<?php 
@@ -1163,9 +1162,9 @@ if (sizeof($arrSlots) != 0) {
 					?>
 				<tr bgcolor="#EAEAEA">
 					<td colspan="4" align="center" height="30">
-						<input type="button" value="Edit" class="Button">
+						<input type="submit" name="edit" value="Edit" class="Button" />
 						&nbsp;&nbsp;&nbsp;&nbsp;
-						<input type="submit" value="<?php echo $BTN_SAVE;?>" class="Button">
+						<input type="submit" name="approve" value="<?php echo $BTN_SAVE;?>" class="Button" />
 					</td>
 				</tr>
 				<?php
