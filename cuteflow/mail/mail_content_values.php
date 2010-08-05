@@ -621,6 +621,19 @@ if (sizeof($arrSlots) != 0) {
 							<td style="color:#000000;" width="20%" nowrap="nowrap">Press time interval :</td>
 							<td><?php echo $number2.$unit2;?></td>
 						</tr>
+						<?php
+						if ($arrSlot["nID"] == $arrCirculationProcess["nSlotId"] && $ShowSendButton) {
+						?>
+						<tr bgcolor="#EAEAEA">
+							<td colspan="6" align="center" height="30">
+								<input type="submit" name="edit" value="Commit Modification" class="Button" style="font-size:14px"/>
+								&nbsp;&nbsp;&nbsp;&nbsp;
+								<input type="submit" name="approve" value="<?php echo $BTN_SAVE;?>" class="Button" style="font-size:14px"/>
+							</td>
+						</tr>
+						<?php
+						}
+						?>
 						</table>
 					</td>
 				</tr>
@@ -1157,19 +1170,7 @@ if (sizeof($arrSlots) != 0) {
 				}
 				?>
 				</tr>
-				<?php
-				if ($arrSlot["nID"] == $arrCirculationProcess["nSlotId"] && $ShowSendButton) {
-					?>
-				<tr bgcolor="#EAEAEA">
-					<td colspan="4" align="center" height="30">
-						<input type="submit" name="edit" value="Edit" class="Button" />
-						&nbsp;&nbsp;&nbsp;&nbsp;
-						<input type="submit" name="approve" value="<?php echo $BTN_SAVE;?>" class="Button" />
-					</td>
-				</tr>
-				<?php
-				}
-				?>
+				
 				</table>
 			</td>
 		</tr>
@@ -1194,7 +1195,13 @@ if (sizeof($arrSlots) != 0) {
 			<a href="<?php echo $CUTEFLOW_SERVER;?>/pages/print/print.php?key=<?php echo $strKey ?>" target="_blank"><img src="<?php echo $CUTEFLOW_SERVER;?>/images/printer_small.png" border="0" align="absmiddle"> <?php echo $MAIL_CONTENT_PRINTVIEW;?></a>
 		</td>
 		<td align="right">
-			&nbsp;
+			<?php
+			if ($ShowSendButton) {
+				?>
+				<input type="submit" name="approve" value="<?php echo $BTN_SAVE;?>" class="Button" />
+				<?php
+			}
+			?>
 		</td>
 	</tr>
 	</table>
