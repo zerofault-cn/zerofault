@@ -93,7 +93,7 @@ class CategoryAction extends BaseAction{
 		}
 		$this->dao->type = $type;
 		$this->dao->name = $name;
-		!empty($manager_id) && ($this->dao->manager_id = $manager_id);
+		$this->dao->manager_id = $manager_id;
 		if ($id>0) {
 			if(false !== $this->dao->save()){
 				self::_success('Category information updated!',__URL__);
