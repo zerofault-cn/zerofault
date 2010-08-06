@@ -558,47 +558,47 @@
 							$endTime = min(strtotime($dueDate)+86400, $startTime+$doneTime);
 						}
 						$remindTime = mysql_result($rs, 0, 2);
-						if ($lastRemindTime==0) {
-							//首次邮件通知
-							//判断通知类型
-							$sql = "Select * from cf_slottofield slotfield, cf_inputfield field where slotfield.nSlotId=".$nSlotId." and slotfield.nFieldId=field.nID and field.bReadOnly=0";
-							$rs = mysql_query($sql);
-							if (mysql_num_rows($rs)>0) {
-								//有可编辑Field，需发送普通通知
+						//判断通知类型
+						$sql = "Select * from cf_slottofield slotfield, cf_inputfield field where slotfield.nSlotId=".$nSlotId." and slotfield.nFieldId=field.nID and field.bReadOnly=0";
+						$rs = mysql_query($sql);
+						if (mysql_num_rows($rs)>0) {//有可编辑的Field
+							if ($lastRemindTime==0) {
+								//首次邮件通知
 								$mail_entry['normal'][] = $arrRow;
 							}
 							else {
-								$mail_entry['notify'][] = $arrRow;
+								$tmp = $lastRemindTime+round(($endTime-$lastRemindTime)*0.618);
+								if (time()>=$tmp && time()<$endTime && time()-$lastRemindTime>86300) {//预提醒
+									$time = $endTime-time();
+									$mail_entry['remind'][] = array($time, $arrRow);
+								}
+								elseif ($remindTime>0 && time()>=$endTime && time()-$lastRemindTime+100>=$remindTime && date('G')>=9 && date('G')<18 && date('N')<=5) {//后提醒
+									//remindTime大于0，已超过完成时间，且距上次提醒时间已超过提醒间隔
+									//100秒用于补足程序执行所耗时间
+									$time = time() - $endTime;
+									$mail_entry['press'][] = array($time, $arrRow);
+								}
 							}
+							/*
+							elseif (date('G')>=9 && date('G')<18 && date('N')<=5) {//非工作日不提醒
+								//计算预提醒时间
+								$tmp = $lastRemindTime+round(($endTime-$lastRemindTime)*0.618);
+								if (time()>=$tmp && time()<$endTime) {//预提醒
+									$mail_entry[] = $arrRow;
+								}
+								elseif ($remindTime>0 && time()>=$endTime && time()-$lastRemindTime+100>=$remindTime) {//后提醒
+									//remindTime大于0，已超过完成时间，且距上次提醒时间已超过提醒间隔
+									//100秒用于补足程序执行所耗时间
+									$mail_entry[] = $arrRow;
+								}
+							}
+							else {
+								//nothing
+							}*/
 						}
 						else {
-							$tmp = $lastRemindTime+round(($endTime-$lastRemindTime)*0.618);
-							if (time()>=$tmp && time()<$endTime && time()-$lastRemindTime>86300) {//预提醒
-								$time = $endTime-time();
-								$mail_entry['remind'][] = array($time, $arrRow);
-							}
-							elseif ($remindTime>0 && time()>=$endTime && time()-$lastRemindTime+100>=$remindTime && date('G')>=9 && date('G')<18 && date('N')<=5) {//后提醒
-								//remindTime大于0，已超过完成时间，且距上次提醒时间已超过提醒间隔
-								//100秒用于补足程序执行所耗时间
-								$time = time() - $endTime;
-								$mail_entry['press'][] = array($time, $arrRow);
-							}
-						}/*
-						elseif (date('G')>=9 && date('G')<18 && date('N')<=5) {//非工作日不提醒
-							//计算预提醒时间
-							$tmp = $lastRemindTime+round(($endTime-$lastRemindTime)*0.618);
-							if (time()>=$tmp && time()<$endTime) {//预提醒
-								$mail_entry[] = $arrRow;
-							}
-							elseif ($remindTime>0 && time()>=$endTime && time()-$lastRemindTime+100>=$remindTime) {//后提醒
-								//remindTime大于0，已超过完成时间，且距上次提醒时间已超过提醒间隔
-								//100秒用于补足程序执行所耗时间
-								$mail_entry[] = $arrRow;
-							}
+							$mail_entry['notify'][] = $arrRow;
 						}
-						else {
-							//nothing
-						}*/
 					}
 				}
 				if (empty($mail_entry)) {
