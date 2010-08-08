@@ -13,7 +13,7 @@ class AbsenceAction extends BaseAction{
 	public function _initialize() {
 		Session::set('top', 'Absence');
 		Session::set('sub', MODULE_NAME);
-		$this->dao = D('Absence');
+		$this->dao = M('Absence');
 		parent::_initialize();
 		$this->assign('MODULE_TITLE', 'Absence');
 		$this->Absence_Config = C('_absence_');
@@ -113,6 +113,9 @@ class AbsenceAction extends BaseAction{
 			$rs = $this->dao->where($where)->order('id desc')->select();
 			foreach ($rs as $i=>$item) {
 				$rs[$i]['attachment_url'] = '';
+				if (''==trim($item['attachment'])) {
+					continue;
+				}
 				foreach (explode(';', $item['attachment']) as $j=>$file_name) {
 					$rs[$i]['attachment_url'] .= '[<a href="'.$file_path.$file_name.'" target="_blank"> '.($j+1).' </a>] ';
 				}
@@ -504,8 +507,8 @@ class AbsenceAction extends BaseAction{
 			}
 		}
 		$hour += (strtotime($date_to)-strtotime($date_from))/86400*8;
-		echo $from_i.'-'.$from_j.'-'.$to_i.'-'.$to_j;
-		echo "\r\n".$hour;
+	//	echo $from_i.'-'.$from_j.'-'.$to_i.'-'.$to_j;
+	//	echo "\r\n".$hour;
 		return $hour;
 	}
 	/**

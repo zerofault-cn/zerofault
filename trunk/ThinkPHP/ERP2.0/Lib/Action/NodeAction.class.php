@@ -26,12 +26,11 @@ class NodeAction extends BaseAction{
 		$i = 0;
 		
 		$dir = LIB_PATH.'Action/';
-		$handle=opendir($dir);
-		while($file=readdir($handle))
-		{
-			if(!is_file($dir.$file)) {
+		foreach (glob($dir.'*.php') as $file) {
+			if(!is_file($file)) {
 				continue;
 			}
+			$file = basename($file);
 			$class_name = substr($file,0,-10);
 			$module_name = substr($file,0,-16);
 			if(in_array($module_name, $skip_modules)) {
@@ -74,7 +73,7 @@ class NodeAction extends BaseAction{
 			$i++;
 		}
 		//dump($modules);
-		Session::set('top', 'System');
+		//Session::set('top', 'System');//top由最后一个Action来决定
 		Session::set('sub', 'Node');
 		$this->assign('MODULE_TITLE', 'System Node');
 		$this->assign('ACTION_TITLE', 'Definition');

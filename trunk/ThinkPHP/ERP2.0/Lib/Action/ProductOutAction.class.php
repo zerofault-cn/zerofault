@@ -23,6 +23,7 @@ class ProductOutAction extends BaseAction{
 		$this->index('apply');
 	}
 	Public function apply() {
+		$this->assign('MODULE_TITLE', 'Product Apply');
 		$this->index('apply');
 	}
 	Public function applyFixed() {
@@ -50,23 +51,19 @@ class ProductOutAction extends BaseAction{
 		$this->index('return');
 	}
 	private function index($action='apply', $fixed='') {
-		global $location_id, $category_id;
+		global $location_id;
 		if (!empty($location_id)) {
 			Session::set('sub', MODULE_NAME.'/'.ACTION_NAME.'/id/'.$location_id);
-		}
-		elseif (!empty($category_id)) {
-			Session::set('sub', MODULE_NAME.'/'.ACTION_NAME.'/action/'.str_replace('return', 'returns', $action).'/id/'.$category_id);
 		}
 		else {
 			Session::set('sub', MODULE_NAME.'/'.ACTION_NAME);
 		}
 		$this->assign('ACTION_TITLE', 'List');
-		$rs = M('Options')->where(array('type'=>'unit'))->order('sort')->select();
-		$unit = array();
-		foreach($rs as $i=>$item) {
-			$unit[$item['id']] = $item['name'];
-		}
-		$this->assign('unit', $unit);
+
+		//prepare unit.id=>unit.name
+		$this->assign('unit', M('Options')->where(array('type'=>'unit'))->getField('id,name'));
+		//prepare category.id=>category.name
+		$this->assign('category', M('Category')->getField('id,name'));
 
 		if(!empty($_REQUEST['action'])) {
 			$action = $_REQUEST['action'];
@@ -105,6 +102,14 @@ class ProductOutAction extends BaseAction{
 		if(''!=$fixed) {
 			$where['fixed'] = $fixed;
 		}
+		if (!empty($_SESSION[C('CMANAGER_AUTH_NAME')])) {
+			if (count($_SESSION[C('CMANAGER_AUTH_NAME')]) == 1) {
+				$where['category_id'] = array_keys($_SESSION[C('CMANAGER_AUTH_NAME')]);
+			}
+			else {
+				$where['category_id'] = array('In', array_keys($_SESSION[C('CMANAGER_AUTH_NAME')]));
+			}
+		}
 		if(MODULE_NAME == 'Asset') {
 			if(ACTION_NAME == 'transferIn') {
 				$where['to_type'] = 'staff';
@@ -124,9 +129,6 @@ class ProductOutAction extends BaseAction{
 				}
 				$where['to_type'] = 'location';
 				$where['to_id'] = $location_id;
-			}
-			elseif (ACTION_NAME == 'category') {
-				$where['category_id'] = $category_id;
 			}
 			else {
 				$where['_string'] = "(from_type='staff' and from_id =".$_SESSION[C('USER_AUTH_KEY')].") or (to_type='staff' and to_id = ".$_SESSION[C('USER_AUTH_KEY')].") or staff_id = ".$_SESSION[C('USER_AUTH_KEY')];

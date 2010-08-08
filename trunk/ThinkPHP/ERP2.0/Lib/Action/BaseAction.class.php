@@ -20,7 +20,7 @@ class BaseAction extends Action {
 			//记下Module
 			//Session::set('lastModule', MODULE_NAME);
 			//跳转到认证网关
-			redirect(PHP_FILE.C('USER_AUTH_GATEWAY'));
+			redirect(__APP__.C('USER_AUTH_GATEWAY'));
 		}
 
 		import('@.RBAC');
@@ -31,7 +31,7 @@ class BaseAction extends Action {
 				if (in_array(ACTION_NAME,C('IFRAME_AUTH_ACTION'))) {
 					die(self::_error('Permission denied!', 3000));
 				}
-				$this->assign('message','Permission denied!');
+				$this->assign('message','<div style="font-weight:bold;font-size:14px;text-align:center;padding:10px;color:red;">Permission denied!</div>');
 				$this->assign('content','Public:error');
 				$this->display('Layout:ERP_layout');
 				exit;
@@ -39,10 +39,6 @@ class BaseAction extends Action {
 		}
 
 		//准备导航菜单
-	//	$top = empty($_REQUEST['top']) ? '' : $_REQUEST['top'];
-	//	!$top && ($top = Session::get('top'));
-	//	!$top && ($top = 'Assets Management');
-	//	Session::set('top', urldecode($top));
 		$top = Session::get('top');
 
 		$_menu_ = C('_menu_');//载入menu.php的内容
@@ -55,14 +51,6 @@ class BaseAction extends Action {
 				}
 			}
 			else {//有子菜单
-				if (!empty($_SESSION[C('CMANAGER_AUTH_NAME')])) {
-					if ('Inventory&nbsp;Input Management' == $key) {
-						$topmenu[$key] = 'Asset/category/action/enter/id/'.array_shift(array_keys($_SESSION[C('CMANAGER_AUTH_NAME')]));
-					}
-					elseif ('Inventory&nbsp;Output Management' == $key) {
-						$topmenu[$key] = 'Asset/category/action/apply/id/'.array_shift(array_keys($_SESSION[C('CMANAGER_AUTH_NAME')]));
-					}
-				}
 				if(str_replace('&nbsp;',' ',$key) == $top) {//获取当前子菜单所有项目，供再次过滤
 					$tmp_submenu = $menu[$key]['submenu'];
 				}
@@ -86,20 +74,6 @@ class BaseAction extends Action {
 		}
 		//确定可显示的子菜单项
 		$submenu = array();
-		//根据是否manager增加Category子菜单
-		foreach ($_SESSION[C('CMANAGER_AUTH_NAME')] as $category_id=>$category_name) {
-			if ('Inventory Input Management' == $top) {
-				$submenu[$category_name.' Enter'] = 'Asset/category/action/enter/id/'.$category_id;
-				$submenu[$category_name.' Reject'] = 'Asset/category/action/reject/id/'.$category_id;
-			}
-			elseif ('Inventory Output Management' == $top) {
-				$submenu[$category_name.' Apply'] = 'Asset/category/action/apply/id/'.$category_id;
-				$submenu[$category_name.' Transfer'] = 'Asset/category/action/transfer/id/'.$category_id;
-				$submenu[$category_name.' Release'] = 'Asset/category/action/release/id/'.$category_id;
-				$submenu[$category_name.' Scrap'] = 'Asset/category/action/scrap/id/'.$category_id;
-				$submenu[$category_name.' Return'] = 'Asset/category/action/returns/id/'.$category_id;
-			}
-		}
 		if ('Assets Management' == $top) {
 			//根据是否manager增加Location子菜单
 			foreach ($_SESSION[C('LMANAGER_AUTH_NAME')] as $location_id=>$location) {

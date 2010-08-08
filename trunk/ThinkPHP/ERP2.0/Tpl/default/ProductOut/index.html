@@ -5,10 +5,10 @@
 	<if condition="($_SESSION[C('STAFF_AUTH_NAME')]['leader_id'] gt 0 and MODULE_NAME eq 'Asset' and ACTION_NAME eq 'apply') or (MODULE_NAME eq 'Asset' and ACTION_NAME eq 'request') or (MODULE_NAME eq 'ProductOut' and (ACTION_NAME eq 'applyFixed' or ACTION_NAME eq 'applyFloating') and $_SESSION[C('ADMIN_AUTH_NAME')])">
 	<td class="clsTab" id="status_-2"><a href="__ACTION__/status/-2">Waiting for Leader's approval</a></td>
 	</if>
-	<td class="clsTab" id="status_0"><a href="__ACTION__/id/{$id|default=0}/status/0">Ready to confirm</a></td>
-	<td class="clsTab" id="status_1"><a href="__ACTION__/id/{$id|default=0}/status/1">Confirmed</a></td>
+	<td class="clsTab" id="status_0"><a href="__ACTION__/id/{$location_id|default=0}/status/0">Ready to confirm</a></td>
+	<td class="clsTab" id="status_1"><a href="__ACTION__/id/{$location_id|default=0}/status/1">Confirmed</a></td>
 	<if condition="(MODULE_NAME eq 'ProductOut' and (ACTION_NAME eq 'transfer' or ACTION_NAME eq 'returns')) or (MODULE_NAME eq 'Asset')">
-	<td class="clsTab" id="status_-1"><a href="__ACTION__/id/{$id|default=0}/status/-1">Rejected</a></td>
+	<td class="clsTab" id="status_-1"><a href="__ACTION__/id/{$location_id|default=0}/status/-1">Rejected</a></td>
 	</if>
 </tr>
 <tr>
@@ -18,15 +18,13 @@
 			<td colspan="16">{$page}</td>
 		</tr>
 		<tr>
-			<if condition="(ACTION_NAME eq 'category' and ($status eq 0 or $status eq -2)) or (MODULE_NAME eq 'ProductOut' and ($status eq 0 or $status eq -2)) or (ACTION_NAME eq 'location' and $status eq 0) or (ACTION_NAME eq 'request' and $status eq -2) or (ACTION_NAME eq 'transferIn' and $status eq 0)">
+			<if condition="(MODULE_NAME eq 'ProductOut' and ($status eq 0 or $status eq -2)) or (ACTION_NAME eq 'location' and $status eq 0) or (ACTION_NAME eq 'request' and $status eq -2) or (ACTION_NAME eq 'transferIn' and $status eq 0)">
 			<th><input type="checkbox" id="checkall" onclick="checkAll();"/></th>
 			</if>
 			<th>No.</th>
 			<th>Code</th>
-			<th class="basic_data">Internal P/N</th>
-			<th class="basic_data">Description</th>
-			<th class="basic_data">Manufacture</th>
-			<th class="basic_data">MPN</th>
+			<th colspan="2">Product</th>
+			<th>Category</th>
 			<th>Quantity</th>
 			<th>Unit</th>
 			<if condition="$action eq 'transfer'">
@@ -45,15 +43,14 @@
 		</tr>
 		<iterate name="result" id="item">
 		<tr class="trbg{$mod}">
-			<if condition="(ACTION_NAME eq 'category' and ($status eq 0 or $status eq -2)) or (MODULE_NAME eq 'ProductOut' and ($status eq 0 or $status eq -2)) or (ACTION_NAME eq 'location' and $status eq 0) or (ACTION_NAME eq 'request' and $status eq -2) or (ACTION_NAME eq 'transferIn' and $status eq 0)">
+			<if condition="(MODULE_NAME eq 'ProductOut' and ($status eq 0 or $status eq -2)) or (ACTION_NAME eq 'location' and $status eq 0) or (ACTION_NAME eq 'request' and $status eq -2) or (ACTION_NAME eq 'transferIn' and $status eq 0)">
 			<td><input type="checkbox" name="chk[]" value="{$item['id']}" onclick="updateCheckAll(this);"/></td>
 			</if>
 			<td align="center">{$i}</td>
 			<td>{$item['code']}</td>
 			<td class="basic_data">{$item['product']['Internal_PN']}</td>
 			<td class="basic_data">{$item['product']['description']}</td>
-			<td class="basic_data">{$item['product']['manufacture']}</td>
-			<td class="basic_data">{$item['product']['MPN']}</td>
+			<td>{$category[$item['product']['category_id']]}</td>
 			<td>{$item['quantity']}</td>
 			<td>{$unit[$item['product']['unit_id']]}</td>
 			<if condition="$action eq 'transfer'">
@@ -87,15 +84,15 @@
 		</empty>
 		<tr>
 			<td colspan="6">
-				<if condition="($status eq 0 or $status eq -2) and (ACTION_NAME eq 'category' or MODULE_NAME eq 'ProductOut')">
+				<if condition="($status eq 0 or $status eq -2) and MODULE_NAME eq 'ProductOut'">
 					<input type="submit" name="confirm" value="Confirm Selected" />
 					<if condition="ACTION_NAME eq 'returns'">
 					<input type="submit" name="reject" value="Reject Selected" />
 					</if>
-				<elseif condition="$status eq 0 and MODULE_NAME eq 'Asset' and (ACTION_NAME eq 'category' or ACTION_NAME eq 'transferIn' or ACTION_NAME eq 'location')" />
+				<elseif condition="$status eq 0 and MODULE_NAME eq 'Asset' and (ACTION_NAME eq 'transferIn' or ACTION_NAME eq 'location')" />
 					<input type="submit" name="confirm" value="Confirm Selected" />
 					<input type="submit" name="reject" value="Reject Selected" />
-				<elseif condition="$status eq -2 and MODULE_NAME eq 'Asset' and (ACTION_NAME eq 'category' or ACTION_NAME eq 'request')" />
+				<elseif condition="$status eq -2 and MODULE_NAME eq 'Asset' and ACTION_NAME eq 'request'" />
 					<input type="submit" name="approve" value="Approve Selected" />
 					<input type="submit" name="reject" value="Reject Selected" />
 				</if>
@@ -109,8 +106,6 @@
 <p class="center">
 	<if condition="(MODULE_NAME eq 'Asset' and ACTION_NAME eq 'apply') or (MODULE_NAME eq 'ProductOut' and (ACTION_NAME eq 'transfer' or ACTION_NAME eq 'release' or ACTION_NAME eq 'scrap'))">
 		<input type="button" onclick="javascript:document.location='__URL__/form/action/{$action}';" value="{$Think.ACTION_NAME|ucfirst} a Product" />
-	<elseif condition="ACTION_NAME eq 'category'" />
-		<input type="button" onclick="javascript:document.location='__URL__/form/action/{$action}';" value="{$action|ucfirst} a Product" />
 	</if>
 </p>
 </form>
