@@ -3,8 +3,8 @@
 <input type="hidden" name="action" value="{$action}" />
 <table >
 <tr>
-	<td class="clsTab" id="status_0"><a href="__ACTION__/id/{$id|default=0}/status/0">Ready to confirm</a></td>
-	<td class="clsTab" id="status_1"><a href="__ACTION__/id/{$id|default=0}/status/1">Confirmed</a></td>
+	<td class="clsTab" id="status_0"><a href="__ACTION__/status/0">Ready to confirm</a></td>
+	<td class="clsTab" id="status_1"><a href="__ACTION__/status/1">Confirmed</a></td>
 </tr>
 <tr>
 	<td colspan="2">
@@ -16,10 +16,8 @@
 			<neq name="status" value="1"><th><input type="checkbox" id="checkall" onclick="checkAll();"/></th></neq>
 			<th>No.</th>
 			<th>Code</th>
-			<th class="basic_data">Internal P/N</th>
-			<th class="basic_data">Description</th>
-			<th class="basic_data">Manufacture</th>
-			<th class="basic_data">MPN</th>
+			<th colspan="2">Product</th>
+			<th>Category</th>
 			<th>Supplier</th>
 			<th>Quantity<if condition="$action neq 'reject' and $status eq 1">/Rejected</if></th>
 			<th>Unit</th>
@@ -38,8 +36,7 @@
 			<td>{$item['code']}</td>
 			<td class="basic_data">{$item['product']['Internal_PN']}</td>
 			<td class="basic_data">{$item['product']['description']}</td>
-			<td class="basic_data">{$item['product']['manufacture']}</td>
-			<td class="basic_data">{$item['product']['MPN']}</td>
+			<td>{$category[$item['product']['category_id']]}</td>
 			<td>{$item['supplier']['name']}</td>
 			<td>{$item['quantity']}<if condition="$action neq 'reject' and $status eq 1">/{$item['rejected_quantity']}</if></td>
 			<td>{$unit[$item['product']['unit_id']]}</td>
@@ -83,8 +80,11 @@
 <if condition="ACTION_NAME eq 'fixed'">
 		<input type="button" onclick="javascript:document.location='__URL__/form/fixed/1';" value="Enter Fixed-Assets" />
 		<input type="hidden" name="Fixed" value="Yes" />
-<else />
+<elseif condition="ACTION_NAME eq 'floating'" />
 		<input type="button" onclick="javascript:document.location='__URL__/form/fixed/0';" value="Enter Floating-Assets" />
+		<input type="hidden" name="Fixed" value="No" />
+<else />
+		<input type="button" onclick="javascript:document.location='__URL__/form/fixed/0';" value="Enter Product" />
 		<input type="hidden" name="Fixed" value="No" />
 </if>
 	</td>

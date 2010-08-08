@@ -32,20 +32,12 @@ class ProductInAction extends BaseAction{
 		$this->index('reject');
 	}
 	private function index($action='enter', $fixed='') {
-		global $category_id;
-		if (!empty($category_id)) {
-			Session::set('sub', MODULE_NAME.'/'.ACTION_NAME.'/action/'.$action.'/id/'.$category_id);
-		}
-		else {
-			Session::set('sub', MODULE_NAME.'/'.ACTION_NAME);
-		}
+		Session::set('sub', MODULE_NAME.'/'.ACTION_NAME);
 		$this->assign('ACTION_TITLE', 'List');
-		$rs = M('Options')->where(array('type'=>'unit'))->order('sort')->select();
-		$unit = array();
-		foreach($rs as $i=>$item) {
-			$unit[$item['id']] = $item['name'];
-		}
-		$this->assign('unit', $unit);
+		//prepare unit.id=>unit.name
+		$this->assign('unit', M('Options')->where(array('type'=>'unit'))->getField('id,name'));
+		//prepare category.id=>category.name
+		$this->assign('category', M('Category')->getField('id,name'));
 
 		if(isset($_REQUEST['status'])) {
 			$status = $_REQUEST['status'];
@@ -56,7 +48,7 @@ class ProductInAction extends BaseAction{
 		else{
 			$status = 0;
 		}
-		//Session::set(ACTION_NAME.'_status', $status);
+		//Session::set(ACTION_NAME.'_status', $status);//用于保存Tab选中状态
 		$this->assign('status', $status);
 		
 		$where = array();
@@ -64,8 +56,13 @@ class ProductInAction extends BaseAction{
 		if(''!=$fixed) {
 			$where['fixed'] = $fixed;
 		}
-		if (!empty($category_id)) {
-			$where['category_id'] = $category_id;
+		if (!empty($_SESSION[C('CMANAGER_AUTH_NAME')])) {
+			if (count($_SESSION[C('CMANAGER_AUTH_NAME')]) == 1) {
+				$where['category_id'] = array_keys($_SESSION[C('CMANAGER_AUTH_NAME')]);
+			}
+			else {
+				$where['category_id'] = array('In', array_keys($_SESSION[C('CMANAGER_AUTH_NAME')]));
+			}
 		}
 		$where['action'] = $action;
 		$this->assign('action', $action);

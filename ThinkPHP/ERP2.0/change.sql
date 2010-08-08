@@ -49,18 +49,25 @@ ALTER TABLE erp_staff ADD balance_2009 decimal(3,2) unsigned  NOT NULL default 0
 
 CREATE TABLE IF NOT EXISTS erp_absence (
   id int(10) unsigned NOT NULL auto_increment,
-  type smallint(3) unsigned NOT NULL DEFAULT '0' ,
+  type varchar(255) NOT NULL DEFAULT '' ,
   staff_id smallint(5) unsigned NOT NULL DEFAULT '0' ,
   creator_id smallint(5) unsigned NOT NULL DEFAULT '0' ,
-  time_begin datetime NOT NULL ,
-  time_end datetime NOT NULL  ,
+  time_from datetime NOT NULL ,
+  time_to datetime NOT NULL  ,
   hours decimal(3,2) NOT NULL DEFAULT 0 ,
   deputy_id smallint(5) unsigned NOT NULL DEFAULT '0' ,
+  notification varchar(255) NOT NULL DEFAULT '' ,
   attachment varchar(255) NOT NULL DEFAULT '' ,
-  reason tinytext NOT NULL DEFAULT '' ,
+  note tinytext NOT NULL DEFAULT '' ,
   approver_id smallint(5) unsigned NOT NULL DEFAULT '0' ,
+  comment tinytext NOT NULL DEFAULT '' ,
   status tinyint(1) NOT NULL DEFAULT '0' ,
   PRIMARY KEY (id)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 ALTER TABLE erp_options ADD description TEXT NOT NULL AFTER code;
+
+2010/8/7
+ALTER TABLE erp_category ADD manager_id SMALLINT UNSIGNED NOT NULL;
+
+ALTER TABLE erp_product_flow ADD category_id SMALLINT UNSIGNED DEFAULT "0" NOT NULL AFTER fixed;

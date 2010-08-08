@@ -91,9 +91,7 @@ class PublicAction extends BaseAction{
 			}
 			$_SESSION[C('LMANAGER_AUTH_NAME')] = $manager;
 			//获取当前用户管理的Category
-			$rs = M('Category')->where(array('manager_id'=>$authInfo['id']))->getField('id,name');
-			empty($rs) && ($rs = array());
-			$_SESSION[C('CMANAGER_AUTH_NAME')] = $rs;
+			$_SESSION[C('CMANAGER_AUTH_NAME')] = M('Category')->where(array('manager_id'=>$authInfo['id']))->getField('id,name');
 			// 缓存访问权限
 			RBAC::saveAccessList($authInfo['id']);
 			self::_success('', __APP__, 0);
@@ -218,6 +216,20 @@ class PublicAction extends BaseAction{
 		}
 		else {
 			echo "&nbsp;&nbsp;Fail!<br />\n\n";
+		}
+	}
+	public function fix_category() {
+		$rs = M('Product')->getField('id,category_id');
+		empty($rs) && ($rs=array());
+		$dao = M('ProductFlow');
+		foreach ($rs as $id=>$category_id) {
+			echo "For ProductID: ".$id;
+			if (false !== $dao->where('product_id='.$id)->setField('category_id', $category_id)) {
+				echo " -> updated!<br />\n";
+			}
+			else {
+				echo "error:".$dao->getLastSql()."<br /><br />\n\n";
+			}
 		}
 	}
 }
