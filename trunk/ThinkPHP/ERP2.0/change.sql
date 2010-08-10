@@ -59,6 +59,7 @@ CREATE TABLE IF NOT EXISTS erp_absence (
   notification varchar(255) NOT NULL DEFAULT '' ,
   attachment varchar(255) NOT NULL DEFAULT '' ,
   note tinytext NOT NULL DEFAULT '' ,
+  create_time datetime NOT NULL  ,
   approver_id smallint(5) unsigned NOT NULL DEFAULT '0' ,
   comment tinytext NOT NULL DEFAULT '' ,
   status tinyint(1) NOT NULL DEFAULT '0' ,
