@@ -12,7 +12,13 @@
 <if condition="$action neq 'reject' and $info['action'] neq 'reject'">
 <tr>
 	<td></td>
-	<td><input type="button" value="Select Component/Board" class="thickbox" alt="__URL__/select/fixed/{$fixed}/action/{$action}?width=800&height=600&modal=true"/></td>
+	<td>
+	<if condition="$fixed eq ''">
+		<input type="button" value="Select Component/Board" class="thickbox" alt="__URL__/select/action/{$action}?width=800&height=600&modal=true"/>
+	<else />
+		<input type="button" value="Select Component/Board" class="thickbox" alt="__URL__/select/fixed/{$fixed}/action/{$action}?width=800&height=600&modal=true"/>
+	</if>
+	</td>
 </tr>
 </if>
 <tr>

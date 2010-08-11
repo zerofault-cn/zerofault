@@ -72,8 +72,8 @@
 </tr>
 </table>
 </form>
-<form id="Import" name="Import" action="__URL__/import" enctype="multipart/form-data" target="_iframe" method="post">
 <neq name="action" value="reject">
+<form id="Import" name="Import" action="__URL__/import" enctype="multipart/form-data" target="_iframe" method="post">
 <table align="center" style="background-color:#FFFFFF;padding:10px;margin:12px auto;">
 <tr>
 	<td align="right" valign="top" width="340">
@@ -84,8 +84,8 @@
 		<input type="button" onclick="javascript:document.location='__URL__/form/fixed/0';" value="Enter Floating-Assets" />
 		<input type="hidden" name="Fixed" value="No" />
 <else />
-		<input type="button" onclick="javascript:document.location='__URL__/form/fixed/0';" value="Enter Product" />
-		<input type="hidden" name="Fixed" value="No" />
+		<input type="button" onclick="javascript:document.location='__URL__/form';" value="Enter Product" />
+		<input type="hidden" name="Fixed" value="All" />
 </if>
 	</td>
 	<td width="10">&nbsp;</td>
@@ -99,9 +99,9 @@
 	</td>
 </tr>
 </table>
-</neq>
 <input type="hidden" name="confirm" value="" />
 </form>
+</neq>
 <script type="text/javascript"> 
 $(document).ready(function(){
 	$("td#status_{$status}").addClass("current");
