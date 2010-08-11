@@ -219,12 +219,12 @@ class PublicAction extends BaseAction{
 		}
 	}
 	public function fix_category() {
-		$rs = M('Product')->getField('id,category_id');
+		$rs = M('Product')->select();
 		empty($rs) && ($rs=array());
 		$dao = M('ProductFlow');
-		foreach ($rs as $id=>$category_id) {
-			echo "For ProductID: ".$id;
-			if (false !== $dao->where('product_id='.$id)->setField('category_id', $category_id)) {
+		foreach ($rs as $item) {
+			echo "For ProductID: ".$item['id'];
+			if (false !== $dao->where('product_id='.$item['id'])->setField(array('fixed','category_id'), array($item['fixed'], $item['category_id']))) {
 				echo " -> updated!<br />\n";
 			}
 			else {

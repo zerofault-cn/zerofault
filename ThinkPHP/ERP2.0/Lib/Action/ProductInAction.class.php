@@ -377,6 +377,22 @@ class ProductInAction extends BaseAction{
 			//$where['manufacture'] = $value_arr['manufacture'];
 			//$where['MPN'] = $value_arr['MPN'];
 			$product_id = M('Product')->where($where)->getField('id');
+
+			$category_data = array('type'=>$value_arr['type'],'name'=>$value_arr['category_name']);
+			if(!($category_id = M('Category')->where($category_data)->getField('id'))) {
+				$max_code = M('Category')->max('code');
+				empty($max_code) && ($max_code = 'P'.sprintf("%03d",0));
+				$category_data['code'] = ++ $max_code;
+				$category_id = M('Category')->add($category_data);
+			}
+			unset($value_arr['category_name']);
+			$value_arr['category_id'] = $category_id;
+
+			$value_arr['fixed'] = 0;
+			if ('YES' == strtoupper($value_arr['Fixed']) || 'Y'== strtoupper($value_arr['Fixed'])) {
+				$value_arr['fixed'] = 1;
+			}
+			unset($value_arr['Fixed']);
 			if (empty($product_id)) {
 				//parse field: unit_name,category_name,Fixed,status_name,currency_name
 				$unit_data = array('type'=>'unit','name'=>$value_arr['unit_name']);
@@ -388,22 +404,6 @@ class ProductInAction extends BaseAction{
 				unset($value_arr['unit_name']);
 				$value_arr['unit_id'] = $unit_id;
 
-				$category_data = array('type'=>'Component','name'=>$value_arr['category_name']);
-				if(!($category_id = M('Category')->where($category_data)->getField('id'))) {
-					$max_code = M('Category')->max('code');
-					empty($max_code) && ($max_code = 'P'.sprintf("%03d",0));
-					$category_data['code'] = ++ $max_code;
-					$category_id = M('Category')->add($category_data);
-				}
-				unset($value_arr['category_name']);
-				$value_arr['category_id'] = $category_id;
-
-				$value_arr['fixed'] = 0;
-				if ('YES' == strtoupper($value_arr['Fixed']) || 'Y'== strtoupper($value_arr['Fixed'])) {
-					$value_arr['fixed'] = 1;
-				}
-				unset($value_arr['Fixed']);
-				
 				$value_arr['status_id'] = 0;
 
 				$value_arr['currency_id'] = $currency_id;
@@ -432,12 +432,10 @@ class ProductInAction extends BaseAction{
 			$this->dao->to_type = 'location';
 			$this->dao->to_id = 1;
 
-			$this->dao->fixed = 0;
-			if ('YES' == strtoupper($value_arr['Fixed']) || 'Y'== strtoupper($value_arr['Fixed'])) {
-				$this->dao->fixed = 1;
-			}
+			$this->dao->fixed = $value_arr['fixed'];
 			$this->dao->staff_id = $_SESSION[C('USER_AUTH_KEY')];
 			$this->dao->create_time = date("Y-m-d H:i:s");
+			$this->dao->category_id = $category_id;
 			$this->dao->product_id = $product_id;
 			$this->dao->supplier_id = $supplier_id;
 			$this->dao->currency_id = $currency_id;
