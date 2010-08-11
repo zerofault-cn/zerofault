@@ -94,7 +94,7 @@ class PublicAction extends BaseAction{
 			$_SESSION[C('CMANAGER_AUTH_NAME')] = M('Category')->where(array('manager_id'=>$authInfo['id']))->getField('id,name');
 			// 缓存访问权限
 			RBAC::saveAccessList($authInfo['id']);
-			self::_success('', __APP__, 0);
+			redirect(__URL__);
 		}
 	}
 
