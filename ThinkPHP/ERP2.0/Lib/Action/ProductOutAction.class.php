@@ -102,15 +102,7 @@ class ProductOutAction extends BaseAction{
 		if(''!=$fixed) {
 			$where['fixed'] = $fixed;
 		}
-		if (!empty($_SESSION[C('CMANAGER_AUTH_NAME')])) {
-			if (count($_SESSION[C('CMANAGER_AUTH_NAME')]) == 1) {
-				$where['category_id'] = array_keys($_SESSION[C('CMANAGER_AUTH_NAME')]);
-			}
-			else {
-				$where['category_id'] = array('In', array_keys($_SESSION[C('CMANAGER_AUTH_NAME')]));
-			}
-		}
-		if(MODULE_NAME == 'Asset') {
+		if (MODULE_NAME == 'Asset') {
 			if(ACTION_NAME == 'transferIn') {
 				$where['to_type'] = 'staff';
 				$where['to_id'] = $_SESSION[C('USER_AUTH_KEY')];
@@ -134,8 +126,13 @@ class ProductOutAction extends BaseAction{
 				$where['_string'] = "(from_type='staff' and from_id =".$_SESSION[C('USER_AUTH_KEY')].") or (to_type='staff' and to_id = ".$_SESSION[C('USER_AUTH_KEY')].") or staff_id = ".$_SESSION[C('USER_AUTH_KEY')];
 			}
 		}
-		elseif(!$_SESSION[C('ADMIN_AUTH_NAME')]) {
-		//	$where['_string'] = "(from_type='staff' and to_id =".$_SESSION[C('USER_AUTH_KEY')].") or (to_type='staff' and to_id = ".$_SESSION[C('USER_AUTH_KEY')].") or staff_id = ".$_SESSION[C('USER_AUTH_KEY')];
+		elseif (!empty($_SESSION[C('CMANAGER_AUTH_NAME')])) {
+			if (count($_SESSION[C('CMANAGER_AUTH_NAME')]) == 1) {
+				$where['category_id'] = array_keys($_SESSION[C('CMANAGER_AUTH_NAME')]);
+			}
+			else {
+				$where['category_id'] = array('In', array_keys($_SESSION[C('CMANAGER_AUTH_NAME')]));
+			}
 		}
 		$count = $this->dao->where($where)->getField('count(*)');
 		$p = new Paginator($count,$limit);
@@ -159,6 +156,7 @@ class ProductOutAction extends BaseAction{
 		$this->assign('status', $status);
 		$this->assign('result', $result);
 		$this->assign('page', $p->showMultiNavi());
+
 		$this->assign('content','ProductOut:index');
 		$this->display('Layout:ERP_layout');
 	}
@@ -276,8 +274,8 @@ class ProductOutAction extends BaseAction{
 		$this->assign('id', $id);
 		$this->assign('action', $action);
 		$this->assign('code', $code);
-
 		$this->assign('info', $info);
+
 		$this->assign('content', 'ProductOut:form');
 		$this->display('Layout:ERP_layout');
 	}
@@ -289,6 +287,9 @@ class ProductOutAction extends BaseAction{
 		$email_arr = array();
 		$action = $_REQUEST['action'];
 		empty($_REQUEST['product_id']) && self::_error('Select a Component/Board first!');
+		$product_id = $_REQUEST['product_id'];
+		$product_info = M('product')->find($product_id);
+		
 		intval($_REQUEST['quantity'])<=0 && self::_error('Quantity number must be larger than 0.');
 		($_REQUEST['quantity']>$_REQUEST['ori_quantity']) && self::_error(ucfirst($action).'quantity can\'t be larger than '.$_REQUEST['ori_quantity']);
 
@@ -343,8 +344,9 @@ class ProductOutAction extends BaseAction{
 			$this->dao->to_type = 'location';
 			$this->dao->to_id = 1;
 		}
-		$this->dao->fixed = $_REQUEST['fixed'];
-		$this->dao->product_id = $_REQUEST['product_id'];
+		$this->dao->fixed = $product_info['fixed'];
+		$this->dao->category_id = $product_info['category_id'];
+		$this->dao->product_id = $product_id;
 		$this->dao->quantity = $_REQUEST['quantity'];
 		//check quantity again
 		switch ($this->dao->action) {

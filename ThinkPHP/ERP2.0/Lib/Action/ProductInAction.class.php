@@ -91,7 +91,8 @@ class ProductInAction extends BaseAction{
 		}
 		$this->assign('result', $result);
 		$this->assign('page', $p->showMultiNavi());
-		$this->assign('content', ACTION_NAME);
+
+		$this->assign('content', 'ProductIn:index');
 		$this->display('Layout:ERP_layout');
 	}
 
@@ -151,19 +152,19 @@ class ProductInAction extends BaseAction{
 		$this->assign('action', $action);
 		$this->assign('fixed', $fixed);
 		$this->assign('code', $code);
-
 		$this->assign('info', $info);
-		$this->assign('content', ACTION_NAME);
+
+		$this->assign('content', 'ProductIn:form');
 		$this->display('Layout:ERP_layout');
 	}
 	public function submit() {
 		if(empty($_POST['submit'])) {
 			return;
 		}
-		$fixed = $_REQUEST['fixed'];
 		$action = $_REQUEST['action'];
 		empty($_REQUEST['product_id']) && self::_error('Please select a component/board first!');
 		$product_id = $_REQUEST['product_id'];
+		$product_info = M('product')->find($product_id);
 		$PN = trim($_REQUEST['Internal_PN']);
 		$MPN = trim($_REQUEST['MPN']);//board series number
 		empty($_REQUEST['supplier_id']) && self::_error('Please select the supplier!');
@@ -193,12 +194,10 @@ class ProductInAction extends BaseAction{
 				$this->dao->to_id = 1;
 
 				if (empty($_POST['direct_input'])) {
-					//get product data
-					$data = M('Product')->find($product_id);
-					if ('Board'==$data['type'] && $PN!=$data['Internal_PN']) {//save new board
-						$data['id'] = 0;
-						$data['Internal_PN'] = $PN;
-						$data['MPN'] = $MPN;
+					if ('Board'==$product_info['type'] && $PN!=$product_info['Internal_PN']) {//save new board
+						$product_info['id'] = 0;
+						$product_info['Internal_PN'] = $PN;
+						$product_info['MPN'] = $MPN;
 
 						$max_code = M('Product')->where(array('type'=>'Board'))->max('code');
 						empty($max_code) && ($max_code = 'B'.sprintf("%09d",0));
@@ -208,10 +207,11 @@ class ProductInAction extends BaseAction{
 					}
 				}
 			}
-			$this->dao->fixed = $fixed;
 			$this->dao->staff_id = $_SESSION[C('USER_AUTH_KEY')];
 			$this->dao->create_time = date("Y-m-d H:i:s");
 		}
+		$this->dao->fixed = $product_id['fixed'];
+		$this->dao->category_id = $product_id['category_id'];
 		$this->dao->product_id = $product_id;
 		$this->dao->supplier_id = $_REQUEST['supplier_id'];
 		$this->dao->currency_id = $_REQUEST['currency_id'];
@@ -226,7 +226,7 @@ class ProductInAction extends BaseAction{
 					$loc = __APP__.'/Board';
 				}
 				else {
-					$loc = __URL__.('reject'==$this->dao->action?'/reject':($this->dao->fixed ? '/fixed' : '/floating'));
+					$loc = __URL__.('reject'==$this->dao->action?'/reject':(empty($_SESSION[C('CMANAGER_AUTH_NAME')])?($this->dao->fixed ? '/fixed' : '/floating'):'/enter'));
 				}
 				self::_success('Product information updated!', $loc);
 			}
@@ -244,7 +244,7 @@ class ProductInAction extends BaseAction{
 						$loc = __APP__.'/Board';
 					}
 					else {
-						$loc = __URL__.($fixed ? '/fixed' : '/floating');
+						$loc = __URL__.(''==$_REQUEST['fixed'] ? '/enter':('1'==$_REQUEST['fixed']?'/fixed' : '/floating'));
 					}
 					self::_success('Product entering request ready for confirm!', $loc);
 				}
@@ -259,7 +259,7 @@ class ProductInAction extends BaseAction{
 			}
 		}
 	}
-	public function import($fixed='') {
+	public function import() {
 		//define header
 		$header_arr = array(
 			'Type',
@@ -336,7 +336,7 @@ class ProductInAction extends BaseAction{
 					self::_error('The imported file isn\'t well-formatted. (Line:'.($i+1).')');
 				}
 				$values_arr[$i] = array_combine($fields_arr, $value_arr);
-				if (strtoupper($Fixed) != strtoupper($values_arr[$i]['Fixed'])) {
+				if ('All'!=strtoupper($Fixed) && strtoupper($Fixed) != strtoupper($values_arr[$i]['Fixed'])) {
 					self::_error('The product in line '.($i+1).' is not '.('YES'==strtoupper($Fixed)?'Fixed-Assets':'Floating-Assets'));
 				}
 			}

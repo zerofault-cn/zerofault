@@ -61,7 +61,7 @@
 			<td align="center">{$item['staff']['realname']}</td>
 			<if condition="$item['status'] eq 1 or $item['status'] eq -1"><td align="center">{$item['confirmed_staff']['realname']}&nbsp;</td></if>
 			<td>{$item['remark']}</td>
-			<td><if condition="(MODULE_NAME eq 'ProductOut' and $item['status'] lt 1)
+			<td><if condition="(MODULE_NAME eq 'ProductOut' and $item['status'] eq '0')
 			or (MODULE_NAME eq 'Asset' and (ACTION_NAME eq 'transferOut' or ACTION_NAME eq 'returns') and $item['status'] eq 0)
 			or (MODULE_NAME eq 'Asset' and ACTION_NAME eq 'apply' and (($_SESSION[C('STAFF_AUTH_NAME')]['leader_id'] eq 0 and $item['status'] eq 0) or ($_SESSION[C('STAFF_AUTH_NAME')]['leader_id'] gt 0 and $item['status'] eq -2)))">
 				<a href="__URL__/form/id/{$item['id']}">Edit</a>
