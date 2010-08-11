@@ -16,11 +16,11 @@ class ProductInAction extends BaseAction{
 		parent::_initialize();
 	}
 	Public function fixed() {
-		$this->assign('MODULE_TITLE', 'Fixed-Assets Entering');
+		$this->assign('MODULE_TITLE', 'Fixed-Assets Enter');
 		$this->index('enter', 1);
 	}
 	Public function floating() {
-		$this->assign('MODULE_TITLE', 'Floating-Assets Entering');
+		$this->assign('MODULE_TITLE', 'Floating-Assets Enter');
 		$this->index('enter', 0);
 	}
 	public function enter() {
@@ -34,9 +34,9 @@ class ProductInAction extends BaseAction{
 	private function index($action='enter', $fixed='') {
 		Session::set('sub', MODULE_NAME.'/'.ACTION_NAME);
 		$this->assign('ACTION_TITLE', 'List');
-		//prepare unit.id=>unit.name
+		// unit.id=>unit.name
 		$this->assign('unit', M('Options')->where(array('type'=>'unit'))->getField('id,name'));
-		//prepare category.id=>category.name
+		// category.id=>category.name
 		$this->assign('category', M('Category')->getField('id,name'));
 
 		if(isset($_REQUEST['status'])) {
@@ -91,17 +91,20 @@ class ProductInAction extends BaseAction{
 		}
 		$this->assign('result', $result);
 		$this->assign('page', $p->showMultiNavi());
-		$this->assign('content','ProductIn:index');
+		$this->assign('content', ACTION_NAME);
 		$this->display('Layout:ERP_layout');
 	}
 
 	public function form() {
-		$this->assign('ACTION_TITLE', 'Enter new Fixed-Assets');
-		$fixed = isset($_REQUEST['fixed']) ? $_REQUEST['fixed'] : '';
+		$this->assign('ACTION_TITLE', 'Enter new Product');
+		$fixed = isset($_REQUEST['fixed']) ? trim($_REQUEST['fixed']) : '';
 		if('0' == $fixed) {
 			$this->assign('ACTION_TITLE', 'Enter new Floating-Assets');
 		}
-		$action = empty($_REQUEST['action']) ? 'enter' : $_REQUEST['action'];
+		elseif ('1' == $fixed) {
+			$this->assign('ACTION_TITLE', 'Enter new Fixed-Assets');
+		}
+		$action = empty($_REQUEST['action']) ? 'enter' : trim($_REQUEST['action']);
 		$id = empty($_REQUEST['id']) ? 0 : intval($_REQUEST['id']);
 		if ($id>0) {
 			$info = $this->dao->relation(true)->find($id);
@@ -124,9 +127,12 @@ class ProductInAction extends BaseAction{
 				$info['ori_quantity'] =  M("LocationProduct")->where(array('type'=>'location', 'location_id'=>1, 'product_id'=>$info['product_id']))->getField('chg_quantity');
 			}
 			else {//edit enter
-				$this->assign('ACTION_TITLE', 'Edit Fixed-Assets Entering');
+				$this->assign('ACTION_TITLE', 'Edit Product Entering');
 				if(0 == $info['fixed']) {
 					$this->assign('ACTION_TITLE', 'Edit Floating-Assets Entering');
+				}
+				elseif (1 == $info['fixed']) {
+					$this->assign('ACTION_TITLE', 'Edit Fixed-Assets Entering');
 				}
 				$code = $info['code'];
 				$info['ori_quantity'] = 0;
@@ -135,8 +141,8 @@ class ProductInAction extends BaseAction{
 		else {//new enter
 			$info = array(
 				'supplier_opts' => self::genOptions(D('Supplier')->select()),
-				'currency_opts' => self::genOptions(M('Options')->where(array('type'=>'currency'))->order('sort')->select()),
-			);
+				'currency_opts' => self::genOptions(M('Options')->where(array('type'=>'currency'))->order('sort')->select())
+				);
 			$max_code = $this->dao->where(array('action'=>'enter'))->max('code');
 			empty($max_code) && ($max_code = 'A'.sprintf("%09d",0));
 			$code = ++ $max_code;
@@ -147,7 +153,7 @@ class ProductInAction extends BaseAction{
 		$this->assign('code', $code);
 
 		$this->assign('info', $info);
-		$this->assign('content', 'ProductIn:form');
+		$this->assign('content', ACTION_NAME);
 		$this->display('Layout:ERP_layout');
 	}
 	public function submit() {
