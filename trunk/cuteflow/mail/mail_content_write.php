@@ -23,6 +23,32 @@
 		{
 			mysql_select_db($DATABASE_DB, $nConnection2);
 			
+			//处理删除文件的请求
+			if ('empty_fieldvalue'==$_REQUEST['action']) {
+				$id = intval($_REQUEST['id']);
+				$rs = mysql_query("select strFieldValue from cf_fieldvalue where nID=".$id);
+				$value = mysql_result($rs, 0, 0);
+				if (''!=trim($value)) {
+					$arrValue = split('rrrrr',$value);
+					$REG_File		= $arrValue[1];
+					$arrSplit = split('---',$arrValue[0]);
+					
+					$nNumberOfUploads 	= $arrSplit[1];
+					$strDirectory		= $arrSplit[2].'_'.$nNumberOfUploads;
+					$strFilename		= $arrSplit[3];
+					if (mysql_query("update cf_fieldvalue set strFieldValue='' where nID=".$id)) {
+						if (unlink('../upload/'.$strDirectory.'/'.$strFilename)) {
+							exit('<script>parent.location.reload();</script>');
+						}
+						else {
+							exit('<script>parent.alert("Fail to delete file: '.$strFilename.'");</script>');
+						}
+					}
+					else {
+						exit('<script>parent.alert("SQL error!");</script>');
+					}
+				}
+			}
 			//-----------------------------------------------
 			//--- Write user inputs to database
 			//-----------------------------------------------
