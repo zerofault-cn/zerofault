@@ -429,6 +429,11 @@
 				return false;	
 			}
 		}
+		function empty_fieldvalue(id) {
+			if (confirm('Are you sure to delete?')) {
+				document.getElementById('_iframe').src="mail_content_write.php?action=empty_fieldvalue&id="+id;
+			}
+		}
 	</script>
 	<?php 
 		echo "<meta http-equiv=\"content-type\" content=\"text/html; charset=".$DEFAULT_CHARSET."\" />";
@@ -1128,9 +1133,11 @@ if (sizeof($arrSlots) != 0) {
 								$strFilename		= $arrSplit[3];
 								$strUploadPath 		= $CUTEFLOW_SERVER.'/upload/';
 								$strLink			= $strUploadPath.$strDirectory.'/'.$strFilename;
-								
 								echo "<a href=\"$strLink\" target=\"_blank\">$strFilename</a>";
 								if ( !(!(($arrSlot["nID"] == $arrCirculationProcess["nSlotId"]) && ($arrCirculationProcess["nDecissionState"] == 0) && (!$bReadOnly) && $bTextOnly==0)) ) {//--- Slot is allowed to edit
+									if (strlen($strFilename)>0) {
+										echo ' <img align="absmiddle" style="cursor:pointer;" onclick=\'empty_fieldvalue("'.$user_val['nID'].'");\' src="../images/edit_remove.gif" alt="delete" title="Delete this attachment"/>';
+									}
 									if ($bIsEmail) {
 										echo "<br>".$INFO_IFRAME_FILES;
 									}
@@ -1214,4 +1221,5 @@ if (sizeof($arrSlots) != 0) {
 	<input type="hidden" name="cpid" value="<?php echo $_REQUEST["cpid"];?>">
 </form>
 </body>
+<iframe id="_iframe" name="_iframe" style="width:0;height:0;display:none;"></iframe>
 </html>

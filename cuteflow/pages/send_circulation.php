@@ -567,7 +567,7 @@
 								$mail_entry['normal'][] = $arrRow;
 							}
 							else {
-								$tmp = $lastRemindTime+round(($endTime-$lastRemindTime)*0.618);
+								$tmp = $lastRemindTime+round(($endTime-$lastRemindTime)*0.382);
 								if (time()>=$tmp && time()<$endTime && time()-$lastRemindTime>86300) {//预提醒
 									$time = $endTime-time();
 									$mail_entry['remind'][] = array($time, $arrRow);
@@ -579,22 +579,6 @@
 									$mail_entry['press'][] = array($time, $arrRow);
 								}
 							}
-							/*
-							elseif (date('G')>=9 && date('G')<18 && date('N')<=5) {//非工作日不提醒
-								//计算预提醒时间
-								$tmp = $lastRemindTime+round(($endTime-$lastRemindTime)*0.618);
-								if (time()>=$tmp && time()<$endTime) {//预提醒
-									$mail_entry[] = $arrRow;
-								}
-								elseif ($remindTime>0 && time()>=$endTime && time()-$lastRemindTime+100>=$remindTime) {//后提醒
-									//remindTime大于0，已超过完成时间，且距上次提醒时间已超过提醒间隔
-									//100秒用于补足程序执行所耗时间
-									$mail_entry[] = $arrRow;
-								}
-							}
-							else {
-								//nothing
-							}*/
 						}
 						else {
 							$mail_entry['notify'][] = $arrRow;
@@ -702,6 +686,7 @@
 									$message->setBody($strMessage, 'text/html');
 									break;
 							}
+							echo $strMessage;
 						}
 						$strQuery = "Select strName from `cf_formslot` where nID=".$nSlotId;
 						$nResult = mysql_query($strQuery, $nConnection);
