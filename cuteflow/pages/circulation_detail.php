@@ -719,14 +719,13 @@ if ($view != 'print')
                         				$arrCurPi = $arrProcessInformation['-2'.'_'.$arrSlot['nID'].'_'.$nPosInSlot];
                         			}
                         		}
-								
 								$nPICount++;
 								$bLastUser = ($nPICount == sizeof($arrProcessInformation)) ? true : false;
 								printUser($arrCurPi, false, $arrRow["nUserId"], $bLastUser);
 								$printed_users = $printed_users+1;
 								$nCurPiId 		= $arrCurPi["nID"];
 								$arrSubstitute 	= $arrProcessInformationSubstitute[$nCurPiId];
-								
+
 								if ($arrSubstitute)
 								{
 									$nUserId 				= $arrRow['nUserId'];
@@ -737,30 +736,15 @@ if ($view != 'print')
 									//$arrSubstitutes = $objMyCirculation->getSubstitutes($nUserId);
 									
 									
-									$strQuery 	= "SELECT * FROM cf_circulationprocess WHERE nCirculationFormId = '$nCirculationFormId' AND nCirculationHistoryId = '$nCirculationHistoryId' ORDER BY nID ASC";
+									$strQuery 	= "SELECT * FROM cf_circulationprocess WHERE nIsSubstitiuteOf = '".$nCurPiId."' ORDER BY nID ASC";
 									$result		= mysql_query($strQuery, $nConnection);
 									$arrCPResult = NULL;
 									while ($arrRow2 = mysql_fetch_array($result))
                         			{
-                        				$arrCPResult[] = $arrRow2;
+                        				$arrCPResult = $arrRow2;
                         			}
-									
-									$print_next = 0;
-									$nMax2 = sizeof($arrCPResult);
-									for ($nIndex2 = 0; $nIndex2 < $nMax2; $nIndex2++)
-									{
-										$arrCurCP = $arrCPResult[$nIndex2];
-										if ($print_next && ($arrCurCP['nIsSubstitiuteOf'] != 0))
-										{
-											printUser($arrCurCP, true, $nSubstituteId, $bLastUser);
-										}
-										else
-										{
-											$print_next = 0;
-										}
-										if ($arrCurCP['nID'] == $nCurPiId) $print_next = 1;
-									}
-								}	
+									printUser($arrCPResult, true, $nSubstituteId, $bLastUser);
+								}
 								$nPosInSlot++;
                          	}
     		           }
