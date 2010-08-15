@@ -65,10 +65,10 @@
 			<th width="140">Type</th>
 			<th width="250">Duration</th>
 			<th width="8%">Hours</th>
+			<th nowrap="nowrap">Attached files</th>
 			<if condition="'Waiting for Approval' neq $label">
 			<th>Comment</th>
 			</if>
-			<th nowrap="nowrap">Attached files</th>
 			<th width="12%">Operation</th>
 		</tr>
 			<iterate name="items" id="item">
@@ -76,14 +76,14 @@
 			<td>{$LeaveType[$item['type']]}</td>
 			<td nowrap="nowrap">{$item['time_from']|substr=0,-3} ~ {$item['time_to']|substr=0,-3}</td>
 			<td>{$item['hours']|trim='.0'}</td>
+			<td>{$item['attachment_url']|default='<font color="#d4d4d4">N/A</font>'}</td>
 			<if condition="'Waiting for Approval' neq $label">
 			<td align="left">{$item['comment']|nl2br}</td>
 			</if>
-			<td>{$item['attachment_url']|default='<font color="#d4d4d4">N/A</font>'}</td>
 			<td nowrap="nowrap">
-				<a href="" class="thickbox">Edit</a>
+				<a href="__URL__/form/id/{$item['id']}?width=500&height=450&modal=true" class="thickbox">Edit</a>
 				<if condition="'Waiting for Approval' eq $label">
-				<a href="" class="thickbox">Cancel</a>
+				<a href="__URL__/delete/id/{$item['id']}" target="_iframe">Cancel</a>
 				</if>
 			</td>
 		</tr>
@@ -91,7 +91,7 @@
 		</table>
 		<div style="background-color:#fff;">&nbsp;</div>
 		</foreach>
-		<input type="button" value="New Absence Application" class="thickbox" alt="__URL__/form?width=600&height=450&modal=true"/>
+		<input type="button" value="New Absence Application" class="thickbox" alt="__URL__/form?width=500&height=450&modal=true"/>
 	</td>
 	<td width="8" bgcolor="#FFFFFF">&nbsp;</td>
 	<td width="220" valign="top">

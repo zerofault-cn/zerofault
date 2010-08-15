@@ -13,7 +13,7 @@ class AbsenceAction extends BaseAction{
 	public function _initialize() {
 		Session::set('top', 'Absence');
 		Session::set('sub', MODULE_NAME);
-		$this->dao = M('Absence');
+		$this->dao = D('Absence');
 		parent::_initialize();
 		$this->assign('MODULE_TITLE', 'Absence');
 		$this->Absence_Config = C('_absence_');
@@ -36,20 +36,28 @@ class AbsenceAction extends BaseAction{
 		$staff_info = D('Staff')->relation(true)->find($_SESSION[C('USER_AUTH_KEY')]);
 		$this->assign('staff_info', $staff_info);
 
+		$where = array(
+			'type' => 'Annual',
+			'staff_id' => $_SESSION[C('USER_AUTH_KEY')],
+			'status' => 1,
+			'time_from' => array('egt', date('Y', $time).'-01-01'),
+			'time_from' => array('lt', (date('Y', $time)+1).'-01-01')
+			);
+		$used_annual_hours = $this->dao->where($where)->sum('hours');
 		$leave_info = array();
-		$total_leave = 0;
+		$total_leave = 0 - $used_annual_hours;
 		$leave_info['Annual_year'] = date('Y', $time);
 		$leave_info['Balance_year'] = date('Y', $time)-1;
 		if (strcmp($staff_info['onboard'], date('Y', $time).'-01-00') == 1) {//当年入职的员工，从入职之日算起
 			$hour = round(($time-strtotime($staff_info['onboard']))*360/365/86400/30*1.25*8);
 			$total_leave += $hour;
-			$leave_info['Annual'] = self::parseHour($hour);
+			$leave_info['Annual'] = self::parseHour($hour - $used_annual_hours);
 			$leave_info['Balance'] = 'N/A';//往年余额
 		}
 		else {//其余员工从当年01-01算起
 			$hour = round(date('z', $time)*360/365/30*1.25*8);
 			$total_leave += $hour;
-			$leave_info['Annual'] =  self::parseHour($hour);
+			$leave_info['Annual'] =  self::parseHour($hour - $used_annual_hours);
 			if (date('Y', $time)==2010) {
 				//如果现在是2010年，则剩余年假不用计算
 				$total_leave += round($staff_info['balance_2009']*8);
@@ -144,6 +152,15 @@ class AbsenceAction extends BaseAction{
 			'status' => 0
 			);
 		$rs = $this->dao->where($where)->order('id desc')->select();
+		foreach ($rs as $i=>$item) {
+			$rs[$i]['attachment_url'] = '';
+			if (''==trim($item['attachment'])) {
+				continue;
+			}
+			foreach (explode(';', $item['attachment']) as $j=>$file_name) {
+				$rs[$i]['attachment_url'] .= '[<a href="'.$file_path.$file_name.'" target="_blank"> '.($j+1).' </a>] ';
+			}
+		}
 		$this->assign('result', $rs);
 
 		$this->assign('ACTION_TITLE', 'Staff Application');
@@ -201,34 +218,50 @@ class AbsenceAction extends BaseAction{
 			}
 		}
 		$this->assign('LeaveType', $result);
+		$this->assign('Notification', $this->Absence_Config['notification']);
 
-		$time = time();
-	//	$time = mktime(13,1,1,7,16,2010);
-		if (date('N', $time)>5 || (date('N', $time)==5 && strcmp(date('H:i', $time), $this->Absence_Config['worktime'][1][0])>=0)) {//周末，或周五下午
-			$time += (8-date('N', $time))*86400;
-			$date_from = date('Y-m-d', $time);
-			$time_from = $this->Absence_Config['worktime'][0][0];
-			$date_to = date('Y-m-d', $time);
-			$time_to = $this->Absence_Config['worktime'][1][1];
+		$id = empty($_REQUEST['id']) ? 0 : intval($_REQUEST['id']);
+		if ($id>0) {
+			$info = $this->dao->relation(true)->find($id);
+			$notification_arr = array();
+			foreach (explode(';', $info['notification']) as $item) {
+				$tmp = explode(':', $item);
+				if (count($tmp)==2) {
+					$notification_arr[$tmp[0]] = $tmp[1];
+				}
+			}
+			$this->assign('Notification_Ext', $notification_arr);
+			$this->assign('info', $info);
 		}
 		else {
-			if (strcmp(date('H:i', $time), $this->Absence_Config['worktime'][0][0])<0) {//上午上班前
-				$date_from = date('Y-m-d', $time+86400);
-				$time_from = $this->Absence_Config['worktime'][0][0];
-				$date_to = date('Y-m-d', $time+86400);
-				$time_to = $this->Absence_Config['worktime'][1][1];
-			}
-			elseif (strcmp(date('H:i', $time), $this->Absence_Config['worktime'][1][0])<0) {//下午上班前
+			$time = time();
+		//	$time = mktime(13,1,1,7,16,2010);
+			if (date('N', $time)>5 || (date('N', $time)==5 && strcmp(date('H:i', $time), $this->Absence_Config['worktime'][1][0])>=0)) {//周末，或周五下午
+				$time += (8-date('N', $time))*86400;
 				$date_from = date('Y-m-d', $time);
-				$time_from = $this->Absence_Config['worktime'][1][0];
+				$time_from = $this->Absence_Config['worktime'][0][0];
 				$date_to = date('Y-m-d', $time);
 				$time_to = $this->Absence_Config['worktime'][1][1];
 			}
-			else {//下午上班后
-				$date_from = date('Y-m-d', $time+86400);
-				$time_from = $this->Absence_Config['worktime'][0][0];
-				$date_to = date('Y-m-d', $time+86400);
-				$time_to = $this->Absence_Config['worktime'][1][1];
+			else {
+				if (strcmp(date('H:i', $time), $this->Absence_Config['worktime'][0][0])<0) {//上午上班前
+					$date_from = date('Y-m-d', $time+86400);
+					$time_from = $this->Absence_Config['worktime'][0][0];
+					$date_to = date('Y-m-d', $time+86400);
+					$time_to = $this->Absence_Config['worktime'][1][1];
+				}
+				elseif (strcmp(date('H:i', $time), $this->Absence_Config['worktime'][1][0])<0) {//下午上班前
+					$date_from = date('Y-m-d', $time);
+					$time_from = $this->Absence_Config['worktime'][1][0];
+					$date_to = date('Y-m-d', $time);
+					$time_to = $this->Absence_Config['worktime'][1][1];
+				}
+				else {//下午上班后
+					$date_from = date('Y-m-d', $time+86400);
+					$time_from = $this->Absence_Config['worktime'][0][0];
+					$date_to = date('Y-m-d', $time+86400);
+					$time_to = $this->Absence_Config['worktime'][1][1];
+				}
 			}
 		}
 		$this->assign('date_from', $date_from);
@@ -256,7 +289,6 @@ class AbsenceAction extends BaseAction{
 		}
 		$this->assign('DeptStaff', $dept_staff_arr);
 
-		$this->assign('Notification', $this->Absence_Config['notification']);
 
 		$this->assign('content', ACTION_NAME);
 		$this->display('Layout:content');
@@ -296,22 +328,31 @@ class AbsenceAction extends BaseAction{
 					);
 			}
 		}
-		$notification = $_REQUEST['notification'];
-		$reason = trim($_REQUEST['reason']);
+		$notification_arr = array();
+		$notification = array();
+		foreach ($_REQUEST['notification'] as $item) {
+			if (''!=$item) {
+				$tmp = explode(':', $item);
+				if (!in_array($tmp[1], $notification_arr)) {
+					$notification_arr[$tmp[0]] = $tmp[1];
+					$notification[] = $item;
+				}
+			}
+		}
+		$note = trim($_REQUEST['note']);
 		$id = empty($_REQUEST['id']) ? 0 : intval($_REQUEST['id']);
 		if ($id>0) {
 			//for edit
-			if(1==$id && 1!=$_SESSION[C('USER_AUTH_KEY')]) {
-				self::_error("You can\'t edit Super Administrator");
-			}
-			$rs = $this->dao->where(array('name'=>$name,'id'=>array('neq',$id)))->find();
-			if($rs && sizeof($rs)>0){
-				self::_error('The name: '.$name.' has been used by another staff!');
-			}
 			$this->dao->find($id);
-			if(''!=$password) {
-				$this->dao->password = md5($password);
+			$file_name = array();
+			foreach ($file_arr as $i=>$file) {
+				$file_name[$i] = date("YmdHis").substr(microtime(),1,7).'.'.pathinfo($file['name'], PATHINFO_EXTENSION);
+				if(!move_uploaded_file($file['tmp_name'], $file_path.$file_name[$i])) {
+					self::_error('Attachment upload fail!');
+				}
+				$i++;
 			}
+			!empty($_REQUEST['new_attachment']) && ($this->dao->attachment = implode(';', $file_name));
 		}
 		else {
 			//for add
@@ -325,6 +366,7 @@ class AbsenceAction extends BaseAction{
 			}
 			$this->dao->attachment = implode(';', $file_name);
 			$this->dao->create_time = date("Y-m-d H:i:s");
+			$this->dao->status = 0;
 		}
 		$this->dao->type = $type;
 		$this->dao->staff_id = $_SESSION[C('STAFF_AUTH_NAME')]['id'];
@@ -334,12 +376,10 @@ class AbsenceAction extends BaseAction{
 		$this->dao->hours = $hour;
 		$this->dao->deputy_id = $deputy;
 		$this->dao->notification = implode(';', $notification);
-		$this->dao->note = $reason;
-		$this->dao->status = 0;
-		if(!empty($id) && $id>0) {
-			if(false !== $this->dao->relation(true)->save()){
-				self::sync_user($this->dao);
-				self::_success('Staff information updated!',__URL__);
+		$this->dao->note = $note;
+		if($id>0) {
+			if(false !== $this->dao->save()) {
+				self::_success('Application updated!',__URL__);
 			}
 			else{
 				self::_error('Update fail!'.(C('APP_DEBUG')?$this->dao->getLastSql():''));
@@ -507,8 +547,8 @@ class AbsenceAction extends BaseAction{
 			}
 		}
 		$hour += (strtotime($date_to)-strtotime($date_from))/86400*8;
-	//	echo $from_i.'-'.$from_j.'-'.$to_i.'-'.$to_j;
-	//	echo "\r\n".$hour;
+		echo $from_i.'-'.$from_j.'-'.$to_i.'-'.$to_j;
+		echo "\r\n".$hour;
 		return $hour;
 	}
 	/**
@@ -519,16 +559,7 @@ class AbsenceAction extends BaseAction{
 		parent::_update();
 	}
 	public function delete() {
-		//判断是否已被使用
-		$id = $_REQUEST['id'];
-		$rs = M('ProductFlow')->where("to_type='staff' and to_id=".$id." and status=1")->select();
-		if(!empty($rs) && sizeof($rs)>0) {
-			self::_error('Something relate to him, can\'t be deleted!');
-		}
-		else{
-			self::_delete();
-		//	self::sync_user($this->dao, 'delete');
-		}
+		self::_delete();
 	}
 }
 ?>
