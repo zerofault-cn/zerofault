@@ -5,7 +5,7 @@
 	<th width="160" nowrap="nowrap">Application Type</th>
 	<th width="250">Duration</th>
 	<th width="5%">Hours</th>
-	<th width="20%">Reason</th>
+	<th width="20%">Note</th>
 	<th width="8%" nowrap="nowrap">Attached files</th>
 	<th>Comment</th>
 	<th width="8%">Operation</th>
@@ -17,7 +17,7 @@
 	<td>{$LeaveType[$item['type']]}</td>
 	<td nowrap="nowrap">{$item['time_from']|substr=0,-3} ~ {$item['time_to']|substr=0,-3}</td>
 	<td>{$item['hours']|number_format}</td>
-	<td align="left">{$item['reason']|nl2br}</td>
+	<td align="left">{$item['note']|nl2br}</td>
 	<td>{$item['attachment_url']|default='<font color="#d4d4d4">N/A</font>'}</td>
 	<td><textarea name="comment" cols="20" rows="3"></textarea></td>
 	<td nowrap="nowrap">

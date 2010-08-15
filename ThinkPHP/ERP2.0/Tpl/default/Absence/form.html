@@ -2,52 +2,75 @@
 #think_run_time,#think_page_trace{display:none;}
 </style>
 <table width="100%">
+<notpresent name="info">
 <tr>
 	<td class="clsTab current" id="leave">New leave application</td>
 	<td class="clsTab" id="out">Out of office request</td>
 </tr>
+</notpresent>
 <tr>
 	<td colspan="2">
 		<form action="__URL__/submit" method="post" target="_iframe" enctype="multipart/form-data">
 		<table class="clsTab" id="leave" width="100%" border="1" cellpadding="3" cellspacing="1" bordercolor="#FFFFFF" style="border-collapse:collapse;">
 		<tr>
-			<th colspan="3">Leave application form</th>
+			<th colspan="2">Leave application form</th>
 		</tr>
 		<tr bgcolor="#CCCCCC" align="center">
-			<td width="25%">Applicant</td>
-			<td width="25%">Creator</td>
+			<td width="30%">Applicant</td>
 			<td>Type</td>
 		</tr>
 		<tr bgcolor="#EEEEEE" align="center">
-			<td>{$_SESSION[C('STAFF_AUTH_NAME')]['realname']}</td>
-			<td>{$_SESSION[C('STAFF_AUTH_NAME')]['realname']}</td>
+			<td><present name="info">
+				{$info['staff']['realname']}
+				<input type="hidden" name="id" value="{$info['id']}" />
+				<else />
+				{$_SESSION[C('STAFF_AUTH_NAME')]['realname']}
+				</present>
+			</td>
 			<td>
 				<select name="type" onchange="ChangeType(this.value);" alt="Absence type" title="Select absence type">
 					<option value="">---------Select---------</option>
 					<iterate name="LeaveType" id="item">
+						<if condition="!empty($info['type']) and $item['type'] eq $info['type']">
+					<option value="{$item['type']}" selected="selected">{$item['name']}</option> 
+						<else />
 					<option value="{$item['type']}">{$item['name']}</option> 
+						</if>
 					</iterate>
 				</select>
 				<div id="div_absTypeERROR"></div>
 			</td>
 		</tr>
 		<tr bgcolor="#CCCCCC" align="center">
-			<td>Hours</td>
-			<td colspan="2">Duration&nbsp;&nbsp;&nbsp;&nbsp;
+			<td>Creator</td>
+			<td>Duration&nbsp;&nbsp;&nbsp;&nbsp;
 			[<a href='javascript:void(0);' onclick="quickSelectDate(1, 'todayDate', 'A')" title="Change duration date to today">Today</a> | <a href='javascript:void(0);' onclick="quickSelectDate(2, 'todayDate', 'A')" title="Change duration date to today AM half day">AM</a> | <a href='javascript:void(0);' onclick="quickSelectDate(3, 'todayDate', 'A')" title="Change duration date to today PM half day">PM</a>]&nbsp;/&nbsp;[<a href='javascript:void(0);' onclick="quickSelectDate(1, 'tomorrowDate', 'A')" title="Change duration date to tomorrow">Tomorrow</a> | <a href='javascript:void(0);' onclick="quickSelectDate(2, 'tomorrowDate', 'A')" title="Change duration date to tomorrow AM half day">AM</a> | <a href='javascript:void(0);' onclick="quickSelectDate(3, 'tomorrowDate', 'A')" title="Change duration date to tomorrow PM half day">PM</a>]</td>
 		</tr>
 		<tr bgcolor="#EEEEEE" align="center">
-			<td><input type="text" name="totalHours" id="totalHours" value="8" size="2" alt="Total absence hours" title="Click to edit total absence hours"> hrs<div id="div_typeNotice_hour"></div></td>
-			<td align="center" colspan="2">
+			<td>
+				<present name="info">
+				{$info['creator']['realname']}
+				<else />
+				{$_SESSION[C('STAFF_AUTH_NAME')]['realname']}
+				</present>
+			</td>
+			<td align="center" nowrap="nowrap">
+				<present name="info">
+				<input name="date_from" type="text" id="date_from" value="{$info['time_from']|substr=0,10}" size="10" alt="Absence start date" title="Click to choose absence start date" />
+				<input type="text" size="5" value="{$info['time_from']|substr=11,5}" name="time_from" id="time_from" alt="Absence start time" title="Input absence start time" />&nbsp;~&nbsp;
+				<input name="date_to" type="text" id="date_to" value="{$info['time_to']|substr=0,10}" size="10" alt="Absence end date" title="Click to choose absence end date"  />
+				<input type="text" size="5" name="time_to" id="time_to" value="{$info['time_to']|substr=11,5}" alt="Absence end time" title="Input absence end time" />
+				<else />
 				<input name="date_from" type="text" id="date_from" value="{$date_from}" size="12" disabled="disabled" alt="Absence start date" title="Click to choose absence start date" />
 				<input type="text" size="5" value="{$time_from}" name="time_from" id="time_from" disabled="disabled" alt="Absence start time" title="Input absence start time" />&nbsp;~&nbsp;
 				<input name="date_to" type="text" id="date_to" value="{$date_to}" size="12" disabled="disabled" alt="Absence end date" title="Click to choose absence end date"  />
 				<input type="text" size="5" name="time_to" id="time_to" value="{$time_to}" disabled="disabled" alt="Absence end time" title="Input absence end time" />
+				</present>
 			</td>
 		</tr>
 		<tr bgcolor="#CCCCCC" align="center">
 			<td>Deputy</td>
-			<td colspan="2">Attached File</td>
+			<td>Attached File</td>
 		</tr>
 		<tr bgcolor="#EEEEEE" align="center">
 			<td>
@@ -56,31 +79,52 @@
 				<foreach name="DeptStaff" key="dept" item="Staff">
 					<optgroup label="{$dept}">
 					<foreach name="Staff" item="staff" key="j">
-						<neq name="staff['id']" value="$_SESSION[C('STAFF_AUTH_NAME')]['id']">
-							<if condition="$j eq 0">
+						<if condition="$j eq 0">
+							<if condition="!empty($info['deputy_id']) and $info['deputy_id'] eq $staff['id']">
+						<option value="{$staff['id']}" selected="selected" style="background-color:#FABF8F;">{$staff['realname']}</option>
+							<else />
 						<option value="{$staff['id']}" style="background-color:#FABF8F;">{$staff['realname']}</option>
+							</if>
+						<else />
+							<if condition="!empty($info['deputy_id']) and $info['deputy_id'] eq $staff['id']">
+						<option value="{$staff['id']}" selected="selected">{$staff['realname']}</option>
 							<else />
 						<option value="{$staff['id']}">{$staff['realname']}</option>
 							</if>
-						</neq>
+						</if>
 					</foreach>
 					</optgroup>
 				</foreach>
 				</select>
 			</td>
-			<td align="center" colspan="2">
+			<td align="center">
+				<present name="info">
+				<div style="text-align:left"><input type="checkbox" name="new_attachment" value="1" />Upload new attachment<br />
+				(all the old attachment will be deleted)</div>
+				</present>
 				<input id="file" type="file" name="file[]" size="30" style="display:none;"/>&nbsp;<img style="cursor: pointer;" src="../Public/Images/attachfile.gif" onclick="addFile(this);" align="absmiddle"></td>
 		</tr>
 		<tr bgcolor="#CCCCCC" align="center">
 			<td>Notifiable users</td>
-			<td colspan="2">Reason</td>
+			<td>Note</td>
 		</tr>
 		<tr bgcolor="#EEEEEE" align="center">
 			<td valign="top">
 				<dl>
 				<foreach name="Notification" key="name" item="email">
-					<dt><input type="checkbox" name="notification[]" value="{$email}" checked="checked"/> {$name}</dt>
+					<if condition="empty($Notification_Ext) or in_array($email, $Notification_Ext)">
+					<dt><input type="checkbox" name="notification[]" value="{$name}:{$email}" checked="checked"/> {$name}</dt>
+					<else />
+					<dt><input type="checkbox" name="notification[]" value="{$name}:{$email}" /> {$name}</dt>
+					</if>
 				</foreach>
+				<notempty name="Notification_Ext">
+					<foreach name="Notification_Ext" key="name" item="email">
+						<if condition="!in_array($email, $Notification)">
+						<dt><input type="checkbox" name="notification[]" value="{$name}:{$email}" checked="checked"/> {$name}</dt>
+						</if>
+					</foreach>
+				</notempty>
 				</dl>
 				<select id="notification" name="notification[]" style="display:none;">
 				<option value="">----Select----</option>
@@ -89,9 +133,9 @@
 					<foreach name="Staff" item="staff" key="j">
 						<if condition="in_array($staff['email'], $Notification) neq true and $staff['id'] neq $_SESSION[C('STAFF_AUTH_NAME')]['id']">
 							<if condition="$j eq 0">
-						<option value="{$staff['email']}" style="background-color:#FABF8F;">{$staff['realname']}</option>
+						<option value="{$staff['realname']}:{$staff['email']}" style="background-color:#FABF8F;">{$staff['realname']}</option>
 							<else />
-						<option value="{$staff['email']}">{$staff['realname']}</option>
+						<option value="{$staff['realname']}:{$staff['email']}">{$staff['realname']}</option>
 							</if>
 						</if>
 					</foreach>
@@ -99,7 +143,7 @@
 				</foreach>
 				</select><img src="../Public/Images/add_member.gif" onclick="addNotify(this);" width="25" height="25" align="absmiddle" style="cursor: pointer;" title="Click to show user selection" />
 			</td>
-			<td colspan="2"><textarea id="reason" name="reason" cols="50" rows="5" alt="Absence reason" title="Click to edit absence reason" ></textarea></td>
+			<td><textarea id="note" name="note" cols="50" rows="5"><present name="info">{$info['note']}</present></textarea></td>
 		</tr>
 		</table>
 		<table class="clsTab" style="border-collapse:collapse;display:none" id="out">
@@ -107,7 +151,6 @@
 			<td>Out of office</td>
 		</tr>
 		</table>
-		<div id="div_form_notice"></div>
 		<p class="center">
 			<input type="submit" name="submit" value="Submit" title="Submit this absence apply form" />&nbsp;&nbsp;&nbsp;<input type="button" value="Cancel" onclick="self.parent.tb_remove()" alt="Cancel" title="Click to go previous page" />
 		</p>
