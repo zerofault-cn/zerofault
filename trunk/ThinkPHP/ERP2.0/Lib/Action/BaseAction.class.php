@@ -471,25 +471,27 @@ class BaseAction extends Action {
 			foreach ($USER_SYNC_TARGET as $app=>$baseurl) {
 				switch ($app) {
 					case 'CuteFlow':
-						echo "Start to sync to CuteFlow\n";
+						echo "Start to sync to CuteFlow\t";
 						$params = array();
 						$params['strLastName'] = 'AGIGA';
 						if (is_object($data)) {
-							echo "User: ".$data->name."\n";
+							echo "User: ".$data->name."\t";
+							$params['StaffId'] = $data->id;
 							$params['UserName'] = $data->name;
 							$params['strFirstName'] = $data->realname;
 							$params['strEMail'] = $data->email;
 							$params['Password'] = $data->password;
-							$params['UserAccessLevel'] = $data->is_leader?8:1;
+							$params['UserAccessLevel'] = $data->is_leader?8:4;
 							$params['Deleted'] = intval(!$data->status);
 						}
 						elseif (is_array($data)) {
 							echo "User: ".$data['name']."\n";
+							$params['StaffId'] = $data['id'];
 							$params['UserName'] = $data['name'];
 							$params['strFirstName'] = $data['realname'];
 							$params['strEMail'] = $data['email'];
 							$params['Password'] = $data['password'];
-							$params['UserAccessLevel'] = $data['is_leader']?8:1;
+							$params['UserAccessLevel'] = $data['is_leader']?8:4;
 							$params['Deleted'] = intval(!$data['status']);
 						}
 						
@@ -508,6 +510,7 @@ class BaseAction extends Action {
 						else {
 							$ret = self::httpPost($baseurl.'pages/sync_user.php', $params);
 						}
+						echo "Done:".$ret."<br />\n";
 						break;
 
 					default:
@@ -543,10 +546,14 @@ class BaseAction extends Action {
 		$fp = fsockopen($URL_Info["host"], $URL_Info["port"]);
 		fputs($fp, $request);
 		while(!feof($fp)) {
-			$result .= fgets($fp, 1024);
+			$line = fgets($fp, 1024);
+			if ('Content-Length:'==substr($line, 0, 15)) {
+				$length = substr($line, 15);
+			}
+			$result .= $line;
 		}
 		fclose($fp);
-		return $result;
+		return substr(trim($result), -1*$length);
 	}
 	protected function getParametersAsString(array $parameters)
 	{
