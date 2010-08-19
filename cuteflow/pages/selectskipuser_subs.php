@@ -9,6 +9,18 @@
 	$nCirculationProcessID	= $_REQUEST['nCirculationProcessID'];
 	$language				= $_REQUEST['strLanguage'];
 	$nMailinglistID			= $_REQUEST['nMailinglistID'];
+
+	$sql ="select nSlotId,nCirculationHistoryId from cf_circulationprocess where nID=".$nCirculationProcessID;
+	$rs = mysql_query($sql);
+	$nSlotId = mysql_result($rs, 0, 0);
+	$nCirculationHistoryId = mysql_result($rs, 0, 1);
+
+	$sql = "select nUserId from cf_circulationprocess where nCirculationFormID=".$nCirculationFormID." and nSlotId=".$nSlotId." and nCirculationHistoryId=".$nCirculationHistoryId;
+	$rs = mysql_query($sql);
+	$userId_arr = array();
+	while($row=mysql_fetch_row($rs)) {
+		$userId_arr[] =$row[0];
+	}
 ?>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <html>
@@ -50,7 +62,7 @@
 					<td style="padding: 8px 4px 8px 4px;">
 						<select id="MailingList" class="FormInput" size="10" style="width:250px;">
         					<?php
-        					$strQuery = "SELECT * FROM cf_user  WHERE bDeleted <> 1 ORDER BY strLastName ASC";
+        					$strQuery = "SELECT * FROM cf_user  WHERE bDeleted <> 1 and nID not in (".implode(',', $userId_arr).") ORDER BY strLastName ASC";
             				$nResult = mysql_query($strQuery, $nConnection);
                     
                     		if ($nResult)
