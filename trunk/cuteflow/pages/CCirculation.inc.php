@@ -246,7 +246,7 @@ class CCirculation
 		$strQuery 	= "	SELECT *
 						FROM cf_circulationprocess
 						WHERE nCirculationFormId = '$nCirculationFormID' AND nCirculationHistoryId = '$nCirculationHistoryID' AND nIsSubstitiuteOf = '0'
-						ORDER BY dateInProcessSince ASC;";
+						ORDER BY nID ASC;";
 		$nResult 	= mysql_query($strQuery);
 		
 		if ($nResult)
