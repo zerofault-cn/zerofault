@@ -881,7 +881,7 @@
 					}
 					else {
 						?>
-					<select style="width: 200px" onchange="setMailingList(this.value)">
+					<select onchange="setMailingList(this.value)">
 						<option><?php echo $FILTER_MAILINGLIST;?></option>
 						<option disabled="disabled">---</option>
 						<?php 

@@ -906,7 +906,7 @@ class CCirculation
 				$strQuery .= " WHERE cf.bIsArchived = '$archivemode' AND bDeleted = 0";
 				if ($FILTER_Name != '')
 				{	// extended Filter is active
-					$strQuery .= " AND cf.strName LIKE '".$FILTER_Name."%'";
+					$strQuery .= " AND cf.strName LIKE '%".$FILTER_Name."%'";
 				}
 				if ($FILTER_Station)
 				{
@@ -963,7 +963,7 @@ class CCirculation
 				$strQuery .= " WHERE cf.bIsArchived = '$archivemode' AND cf.bDeleted = 0";
 				if ($FILTER_Name != '')
 				{	// extended Filter is active
-					$strQuery .= " AND cf.strName LIKE '".$FILTER_Name."%'";
+					$strQuery .= " AND cf.strName LIKE '%".$FILTER_Name."%'";
 				}
 				if ($FILTER_Station)
 				{
@@ -1034,7 +1034,7 @@ class CCirculation
 				$strQuery .=	" WHERE cf.bIsArchived = '$archivemode' AND cf.bDeleted = 0";
 				if ($FILTER_Name != '')
 				{	// extended Filter is active
-					$strQuery .= " AND cf.strName LIKE '".$FILTER_Name."%'";
+					$strQuery .= " AND cf.strName LIKE '%".$FILTER_Name."%'";
 				}
 				if ($FILTER_Station)
 				{
@@ -1102,7 +1102,7 @@ class CCirculation
 				$strQuery .=	" WHERE cf.bIsArchived = '$archivemode' AND cf.bDeleted = 0";
 				if ($FILTER_Name != '')
 				{	// extended Filter is active
-					$strQuery .= " AND cf.strName LIKE '".$FILTER_Name."%'";
+					$strQuery .= " AND cf.strName LIKE '%".$FILTER_Name."%'";
 				}
 				if ($FILTER_Station)
 				{
@@ -1171,7 +1171,7 @@ class CCirculation
 				$strQuery .=	" WHERE cf.bIsArchived = '$archivemode' AND cf.bDeleted = 0";
 				if ($FILTER_Name != '')
 				{	// extended Filter is active
-					$strQuery .= " AND cf.strName LIKE '".$FILTER_Name."%'";
+					$strQuery .= " AND cf.strName LIKE '%".$FILTER_Name."%'";
 				}
 				if ($FILTER_Station)
 				{
@@ -1233,7 +1233,7 @@ class CCirculation
 				$strQuery .=	" WHERE cf.bIsArchived = '$archivemode' AND cf.bDeleted = 0";
 				if ($FILTER_Name != '')
 				{	// extended Filter is active
-					$strQuery .= " AND cf.strName LIKE '".$FILTER_Name."%'";
+					$strQuery .= " AND cf.strName LIKE '%".$FILTER_Name."%'";
 				}
 				if ($FILTER_Station)
 				{
@@ -1299,7 +1299,7 @@ class CCirculation
 				$strQuery .=	" WHERE cf.bIsArchived = '$archivemode' AND cf.bDeleted = 0";
 				if ($FILTER_Name != '')
 				{	// extended Filter is active
-					$strQuery .= " AND cf.strName LIKE '".$FILTER_Name."%'";
+					$strQuery .= " AND cf.strName LIKE '%".$FILTER_Name."%'";
 				}
 				if ($FILTER_Station)
 				{
@@ -1372,7 +1372,7 @@ class CCirculation
 				$strQuery .=	" WHERE cf.bIsArchived = '$archivemode' AND cf.bDeleted = 0";
 				if ($FILTER_Name != '')
 				{	// extended Filter is active
-					$strQuery .= " AND cf.strName LIKE '".$FILTER_Name."%'";
+					$strQuery .= " AND cf.strName LIKE '%".$FILTER_Name."%'";
 				}
 				if ($FILTER_Station)
 				{

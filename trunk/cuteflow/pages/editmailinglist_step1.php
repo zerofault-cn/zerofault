@@ -122,7 +122,7 @@
 </head>
 <?php
 	//--- load data from database
-	$strTemplateName = "&nbsp;";
+	$strTemplateName = "";
 	$templateid = -1;
 	$bHasRunningCirculations = false;
 	
@@ -235,10 +235,10 @@
 					<table cellpadding="0" cellspacing="0">
 						<tr>
 							<td>
-								<div id="TemplateName" style="background-color:#F7F7F7; border:1px solid #B8B8B8; width:146px; padding: 1px 2px 1px 0px;"><?php echo $strTemplateName;?></div>
+								<div id="TemplateName" style="background-color:#F7F7F7; border:1px solid #B8B8B8; min-width:146px; padding: 1px 2px 1px 2px;"><?php echo empty($strTemplateName)?'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;':$strTemplateName;?></div>
 							</td>
 							<td>
-								<a href="javascript:BrowseTemplate();"><img border="0" style="padding-left:3px;" src="../images/browsetemplate.png"/></a>
+								&nbsp;<a href="javascript:BrowseTemplate();"><img border="0" style="padding-left:3px;" src="../images/browsetemplate.png"/></a>
 							</td>
 						</tr>
 					</table>
