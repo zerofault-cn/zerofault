@@ -1041,7 +1041,7 @@
                     				<?php echo $MENU_MAILINGLIST; ?>
                     			</td>
                     			<td valign="top">
-                    				<select style="width: 155px; font-family: arial; font-size: 12px;" name="FILTER_Mailinglist" id="FILTER_Mailinglist">
+                    				<select style="font-family: arial; font-size: 12px;" name="FILTER_Mailinglist" id="FILTER_Mailinglist">
                     					<option value="0"><?php echo $FILTER_MAILINGLIST; ?></option>
                     					<?php
                     						$nMax = sizeof($arrAllMailingLists);
@@ -1062,7 +1062,7 @@
                     				<?php echo $SHOW_CIRCULATION_TEMPLATE; ?>
                     			</td>
                     			<td valign="top">
-                    				<select style="width: 155px; font-family: arial; font-size: 12px;" name="FILTER_Template" id="FILTER_Template">
+                    				<select style="font-family: arial; font-size: 12px;" name="FILTER_Template" id="FILTER_Template">
                     					<option value="0"><?php echo $FILTER_TEMPLATE; ?></option>
                     					<?php
                     						$nMax = sizeof($arrAllTemplates);
@@ -1129,7 +1129,7 @@
 	                        				<tr>
 	                        					<td valign="middle" align="left" nowrap="nowrap" width="420">
 			                        				<div style="float:left;">
-			                        				<select style="width: 155px; font-family: arial; font-size: 12px;" name="FILTERCustom_Field--0" id="FILTERCustom_Field--0" onChange="startExtendedFilter(0)">
+			                        				<select style="font-family: arial; font-size: 12px;" name="FILTERCustom_Field--0" id="FILTERCustom_Field--0" onChange="startExtendedFilter(0)">
 			                        					<option value="0"><?php echo $FILTER_FIELD; ?></option>
 			                        					<?php
 			                        						$nMax = sizeof($arrAllInputFields);
