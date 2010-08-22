@@ -105,6 +105,12 @@ class AbsenceAction extends BaseAction{
 		$this->assign('leave_info', $leave_info);
 
 		$where = array(
+			'type' => 'Out',
+			'staff_id' => $_SESSION[C('USER_AUTH_KEY')],
+			);
+		$this->assign('out_list', $this->dao->where($where)->order('id desc')->select());
+
+		$where = array(
 			'type' => array('not in', array('Overtime', 'Out')),
 			'staff_id' => $_SESSION[C('USER_AUTH_KEY')],
 			);
@@ -130,7 +136,7 @@ class AbsenceAction extends BaseAction{
 			}
 			!empty($rs) && ($result[$key] = $rs);
 		}
-		$this->assign('apply_info', $result);
+		$this->assign('apply_list', $result);
 
 		$where = array(
 			'staff_id' => $_SESSION[C('USER_AUTH_KEY')],

@@ -64,7 +64,7 @@ function switchTab(id) {
 			$(this).removeClass("current");
 		}
 	});
-	$("table.clsTab").each(function(){
+	$("form.clsTab,table.clsTab").each(function(){
 		if($(this).attr("id") == id) {
 			$(this).show();
 		}
