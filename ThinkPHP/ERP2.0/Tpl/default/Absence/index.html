@@ -56,36 +56,65 @@
 <table width="90%" border="0" align="center" cellpadding="0" cellspacing="0">
 <tr>
 	<td valign="top" bgcolor="#FFFFFF">
-		<foreach name="apply_info" key="label" item="items">
+		<table width="100%" border="0" cellpadding="3" cellspacing="1">
+		<tr>
+			<td height="20" colspan="6" align="left" style="background-color:#FFC000;"><strong>Out of Office</strong></td>
+		</tr>
+		<tr>
+			<th width="437">Duration</th>
+			<th width="8%">Hours</th>
+			<th>Note</th>
+			<th width="10%">Operation</th>
+		</tr>
+			<iterate name="out_list" id="item">
+		<tr align="center" class="trbg{$mod}">
+			<td nowrap="nowrap">{$item['time_from']|substr=0,-3} ~ {$item['time_to']|substr=0,-3}</td>
+			<td>{$item['hours']|trim='.0'}</td>
+			<td align="left">{$item['note']|nl2br}</td>
+			<td nowrap="nowrap">
+				<a href="__URL__/form/id/{$item['id']}?width=500&height=450&modal=true" class="thickbox">Edit</a>
+				<if condition="strcmp(date('Y-m-d'), $item['time_to']) elt 0">
+				<a href="__URL__/delete/id/{$item['id']}" target="_iframe">Cancel</a>
+				</if>
+			</td>
+		</tr>
+			</iterate>
+		</table>
+		<div style="background-color:#fff;">&nbsp;</div>
+		<foreach name="apply_list" key="label" item="items">
 		<table width="100%" border="0" cellpadding="3" cellspacing="1">
 		<tr>
 			<td height="20" colspan="6" align="left" id="status_{$label_status[$label]}"><strong>{$label}</strong></td>
 		</tr>
 		<tr>
-			<th width="140">Type</th>
-			<th width="250">Duration</th>
+			<th width="160">Type</th>
+			<th width="270">Duration</th>
 			<th width="8%">Hours</th>
-			<th nowrap="nowrap">Attached files</th>
+			<th>Note</th>
+			<th width="10%"nowrap="nowrap">Attached files</th>
 			<if condition="'Waiting for Approval' neq $label">
-			<th>Comment</th>
+			<th width="10%">Comment</th>
 			</if>
-			<th width="12%">Operation</th>
+			<if condition="'Waiting for Approval' eq $label">
+			<th width="10%">Operation</th>
+			</if>
 		</tr>
 			<iterate name="items" id="item">
 		<tr align="center" class="trbg{$mod}">
 			<td>{$LeaveType[$item['type']]}</td>
 			<td nowrap="nowrap">{$item['time_from']|substr=0,-3} ~ {$item['time_to']|substr=0,-3}</td>
 			<td>{$item['hours']|trim='.0'}</td>
+			<td valign="top" align="left">{$item['note']|nl2br}</td>
 			<td>{$item['attachment_url']|default='<font color="#d4d4d4">N/A</font>'}</td>
 			<if condition="'Waiting for Approval' neq $label">
-			<td align="left">{$item['comment']|nl2br}</td>
+			<td>{$item['comment']|nl2br}</td>
 			</if>
+			<if condition="'Waiting for Approval' eq $label">
 			<td nowrap="nowrap">
 				<a href="__URL__/form/id/{$item['id']}?width=500&height=450&modal=true" class="thickbox">Edit</a>
-				<if condition="'Waiting for Approval' eq $label">
 				<a href="__URL__/delete/id/{$item['id']}" target="_iframe">Cancel</a>
-				</if>
 			</td>
+			</if>
 		</tr>
 			</iterate>
 		</table>
@@ -94,10 +123,10 @@
 		<input type="button" value="New Absence Application" class="thickbox" alt="__URL__/form?width=500&height=450&modal=true"/>
 	</td>
 	<td width="8" bgcolor="#FFFFFF">&nbsp;</td>
-	<td width="220" valign="top">
+	<td width="220" valign="top" bgcolor="#FFFFFF">
 		<table width="100%" border="0" cellpadding="3" cellspacing="1">
 		<tr>
-			<th height="40" colspan="2" style="text-align:right;line-height:20px;">Aggregated Hours of Absence (<php>echo date('Y');</php>)</th>
+			<th height="38" colspan="2" style="text-align:right;line-height:18px;">Aggregated Hours of Absence (<php>echo date('Y');</php>)</th>
 		</tr>
 		<iterate name="LeaveType" id="item">
 		<tr class="trbg{$i%2}">
