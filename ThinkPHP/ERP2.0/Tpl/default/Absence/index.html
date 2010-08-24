@@ -72,8 +72,8 @@
 			<td>{$item['hours']|trim='.0'}</td>
 			<td align="left">{$item['note']|nl2br}</td>
 			<td nowrap="nowrap">
-				<a href="__URL__/form/id/{$item['id']}?width=500&height=450&modal=true" class="thickbox">Edit</a>
 				<if condition="strcmp(date('Y-m-d'), $item['time_to']) elt 0">
+				<a href="__URL__/form/id/{$item['id']}?width=500&height=450&modal=true" class="thickbox">Edit</a>
 				<a href="__URL__/delete/id/{$item['id']}" target="_iframe">Cancel</a>
 				</if>
 			</td>
