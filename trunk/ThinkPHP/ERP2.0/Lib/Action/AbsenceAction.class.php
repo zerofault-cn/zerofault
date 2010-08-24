@@ -415,6 +415,15 @@ class AbsenceAction extends BaseAction{
 		}
 		return $hour.$unit1.' ('.$day.$unit2.')';
 	}
+	private function calculateHour2($date_from, $time_from, $date_to, $time_to) {
+		$Time_SP = array(
+			$date_from.' '.$this->Absence_Config['worktime'][0][0].':00',
+			$date_from.' '.$this->Absence_Config['worktime'][0][1].':00',
+			$date_from.' '.$this->Absence_Config['worktime'][1][0].':00',
+			$date_from.' '.$this->Absence_Config['worktime'][1][1].':00'
+		);
+
+	}
 	private function calculateHour($date_from, $time_from, $date_to, $time_to) {
 		//计算总小时数
 		$hour = 0;
@@ -467,6 +476,13 @@ class AbsenceAction extends BaseAction{
 		}
 		$to_i = $i;
 		$to_j = $j;
+
+		/********************\
+		i:    0  |   1     
+		j: 0| 1  |0| 1  |2 
+		    | AM | | PM |  
+		\********************/
+
 		if ($from_i==0) {// 0-
 			if ($from_j==0) {// 0-0
 				if ($to_i==0) {// 0-0 0-
@@ -492,7 +508,7 @@ class AbsenceAction extends BaseAction{
 					if ($to_j == 0) {//0-1 0-0
 						$hour = (strtotime($date_to.' '.$this->Absence_Config['worktime'][0][0].':00') - strtotime($date_to.' '.$time_from.':00'))/3600;
 					}
-					else {//0-0 0-1
+					else {//0-1 0-1
 						$hour = (strtotime($date_to.' '.$time_to.':00') - strtotime($date_to.' '.$time_from.':00'))/3600;
 					}
 				}
@@ -552,7 +568,17 @@ class AbsenceAction extends BaseAction{
 				}
 			}
 		}
-		$hour += (strtotime($date_to)-strtotime($date_from))/86400*8;
+		$stamp_from = strtotime($date_from);
+		$stamp_to = strtotime($date_to);
+		if (date('W', $stamp_from) != date('W', $stamp_to)) {
+			if (date('o', $stamp_from)==date('o', $stamp_to)) {//同一年
+				$stamp_to -= 86400*2*(date('W', $stamp_to)-date('W', $stamp_from));
+			}
+			else {
+				$stamp_to -= 86400*2*(date('W', $stamp_to)-date('W', $stamp_from));
+			}
+		}
+		$hour += ($stamp_to-$stamp_from)/86400*8;
 		echo $from_i.'-'.$from_j.'-'.$to_i.'-'.$to_j;
 		echo "\r\n".$hour;
 		return $hour;

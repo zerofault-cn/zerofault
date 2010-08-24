@@ -10,7 +10,11 @@
 </notpresent>
 <tr>
 	<td colspan="2">
+		<if condition="!empty($info) and $info['type'] eq 'Out'">
+		<form class="clsTab" id="leave" action="__URL__/submit" method="post" target="_iframe" enctype="multipart/form-data" style="display:none;">
+		<else />
 		<form class="clsTab" id="leave" action="__URL__/submit" method="post" target="_iframe" enctype="multipart/form-data">
+		</if>
 		<table width="100%" border="1" cellpadding="3" cellspacing="1" bordercolor="#FFFFFF" style="border-collapse:collapse;">
 		<tr>
 			<th colspan="2">Leave application form</th>
@@ -56,15 +60,15 @@
 			</td>
 			<td align="center" nowrap="nowrap">
 				<present name="info">
-				<input name="date_from" type="text" id="date_from" value="{$info['time_from']|substr=0,10}" size="10" alt="Absence start date" title="Click to choose absence start date" />
-				<input type="text" size="5" value="{$info['time_from']|substr=11,5}" name="time_from" id="time_from" alt="Absence start time" title="Input absence start time" />&nbsp;~&nbsp;
-				<input name="date_to" type="text" id="date_to" value="{$info['time_to']|substr=0,10}" size="10" alt="Absence end date" title="Click to choose absence end date"  />
-				<input type="text" size="5" name="time_to" id="time_to" value="{$info['time_to']|substr=11,5}" alt="Absence end time" title="Input absence end time" />
+				<input name="date_from" type="text" class="date_from" value="{$info['time_from']|substr=0,10}" size="10" alt="Absence start date" title="Click to choose absence start date" />
+				<input type="text" size="5" value="{$info['time_from']|substr=11,5}" name="time_from" class="time_from" alt="Absence start time" title="Input absence start time" />&nbsp;~&nbsp;
+				<input name="date_to" type="text" class="date_to" value="{$info['time_to']|substr=0,10}" size="10" alt="Absence end date" title="Click to choose absence end date"  />
+				<input type="text" size="5" name="time_to" class="time_to" value="{$info['time_to']|substr=11,5}" alt="Absence end time" title="Input absence end time" />
 				<else />
-				<input name="date_from" type="text" id="date_from" value="{$date_from}" size="12" disabled="disabled" alt="Absence start date" title="Click to choose absence start date" />
-				<input type="text" size="5" value="{$time_from}" name="time_from" id="time_from" disabled="disabled" alt="Absence start time" title="Input absence start time" />&nbsp;~&nbsp;
-				<input name="date_to" type="text" id="date_to" value="{$date_to}" size="12" disabled="disabled" alt="Absence end date" title="Click to choose absence end date"  />
-				<input type="text" size="5" name="time_to" id="time_to" value="{$time_to}" disabled="disabled" alt="Absence end time" title="Input absence end time" />
+				<input name="date_from" type="text" class="date_from" value="{$date_from}" size="12" disabled="disabled" alt="Absence start date" title="Click to choose absence start date" />
+				<input type="text" size="5" value="{$time_from}" name="time_from" class="time_from" disabled="disabled" alt="Absence start time" title="Input absence start time" />&nbsp;~&nbsp;
+				<input name="date_to" type="text" class="date_to" value="{$date_to}" size="12" disabled="disabled" alt="Absence end date" title="Click to choose absence end date"  />
+				<input type="text" size="5" name="time_to" class="time_to" value="{$time_to}" disabled="disabled" alt="Absence end time" title="Input absence end time" />
 				</present>
 			</td>
 		</tr>
@@ -151,7 +155,11 @@
 		</p>
 		<div align="left" id="div_typeRule" style="color:red;"></div>
 		</form>
+		<if condition="empty($info) or $info['type'] neq 'Out'">
 		<form class="clsTab" id="out" action="__URL__/submit" method="post" target="_iframe" style="display:none;">
+		</else />
+		<form class="clsTab" id="out" action="__URL__/submit" method="post" target="_iframe">
+		</if>
 		<table width="100%" border="1" cellpadding="3" cellspacing="1" bordercolor="#FFFFFF" style="border-collapse:collapse;">
 		<tr>
 			<th colspan="2">Out of office request form</th>
@@ -171,15 +179,15 @@
 			</td>
 			<td align="center" nowrap="nowrap">
 				<present name="info">
-				<input name="date_from" type="text" id="date_from" value="{$info['time_from']|substr=0,10}" size="10" alt="Absence start date" title="Click to choose absence start date" />
-				<input type="text" size="5" value="{$info['time_from']|substr=11,5}" name="time_from" id="time_from" alt="Absence start time" title="Input absence start time" />&nbsp;~&nbsp;
-				<input name="date_to" type="text" id="date_to" value="{$info['time_to']|substr=0,10}" size="10" alt="Absence end date" title="Click to choose absence end date"  />
-				<input type="text" size="5" name="time_to" id="time_to" value="{$info['time_to']|substr=11,5}" alt="Absence end time" title="Input absence end time" />
+				<input name="date_from" type="text" class="date_from" value="{$info['time_from']|substr=0,10}" size="10" />
+				<input type="text" size="5" value="{$info['time_from']|substr=11,5}" name="time_from" class="time_from" />&nbsp;~&nbsp;
+				<input name="date_to" type="text" class="date_to" value="{$info['time_to']|substr=0,10}" size="10" />
+				<input type="text" size="5" name="time_to" class="time_to" value="{$info['time_to']|substr=11,5}"/>
 				<else />
-				<input name="date_from" type="text" id="date_from" value="{$date_from}" size="12"/>
-				<input type="text" size="5" value="{$time_from}" name="time_from" id="time_from"/>&nbsp;~&nbsp;
-				<input name="date_to" type="text" id="date_to" value="{$date_to}" size="12"/>
-				<input type="text" size="5" name="time_to" id="time_to" value="{$time_to}"/>
+				<input name="date_from" type="text" class="date_from" value="{$date_from}" size="12"/>
+				<input type="text" size="5" value="{$time_from}" name="time_from" class="time_from"/>&nbsp;~&nbsp;
+				<input name="date_to" type="text" class="date_to" value="{$date_to}" size="12"/>
+				<input type="text" size="5" name="time_to" class="time_to" value="{$time_to}"/>
 				</present>
 			</td>
 		</tr>
@@ -250,7 +258,7 @@
 <script type="text/javascript" src="../Public/Js/jquery-ui-1.8.2.custom.min.js?20100620"></script>
 <script language="JavaScript" type="text/javascript">
 $(document).ready(function(){
-	var uidates = $('#date_from, #date_to').datepicker({
+	var uidates = $('.date_from, .date_to').datepicker({
 		dateFormat: 'yy-mm-dd',
 		changeMonth: true,
 		changeYear: true,
@@ -260,7 +268,7 @@ $(document).ready(function(){
 		minDate: '{$date_from}',
 		maxDate: '+1Y',
 		onSelect: function(selectedDate) {
-			var option = this.id == "date_from" ? "minDate" : "maxDate";
+			var option = this.className == "date_from" ? "minDate" : "maxDate";
 			var instance = $(this).data("datepicker");
 			var date = $.datepicker.parseDate(instance.settings.dateFormat || $.datepicker._defaults.dateFormat, selectedDate, instance.settings);
 			uidates.not(this).datepicker("option", option, date);
@@ -280,7 +288,7 @@ descr_arr['{$item["type"]}'] = '{$item["description"]}';
 </iterate>
 function ChangeType(type) {
 	if (type!='') {
-		$('#date_from, #time_from, #date_to, #time_to').attr('disabled', false);
+		$('.date_from, .time_from, .date_to, .time_to').attr('disabled', false);
 		$('#div_typeRule').html(descr_arr[type]);
 	}
 }
