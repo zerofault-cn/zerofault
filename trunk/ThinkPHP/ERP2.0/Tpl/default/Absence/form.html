@@ -267,12 +267,12 @@ $(document).ready(function(){
 		selectOtherMonths: true,
 		minDate: '{$date_from}',
 		maxDate: '+1Y',
-		onSelect: function(selectedDate) {
+	/*	onSelect: function(selectedDate) {
 			var option = this.className == "date_from" ? "minDate" : "maxDate";
 			var instance = $(this).data("datepicker");
 			var date = $.datepicker.parseDate(instance.settings.dateFormat || $.datepicker._defaults.dateFormat, selectedDate, instance.settings);
 			uidates.not(this).datepicker("option", option, date);
-		},
+		},*/
 	});
 	$("td.clsTab").each(function(){
 		$(this).css("cursor", "pointer").click(function(){
