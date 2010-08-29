@@ -34,6 +34,18 @@
 		</tr>
 		<tr>
 			<td>&nbsp;</td>
+			<th style="background-color:#EEEEEE;">the first half-year</th>
+			<th style="background-color:#CCCCCC;">the second half-year</th>
+			<th style="background-color:#EEEEEE;"></th>
+		</tr>
+		<tr>
+			<th>Cash Out Days </th>
+			<td style="background-color:#EEEEEE;">{$leave_info['CashOut']['first_half']}</td>
+			<td style="background-color:#CCCCCC;">{$leave_info['CashOut']['second_half']}</td>
+			<td style="background-color:#EEEEEE;"></td>
+		</tr>
+		<tr>
+			<td>&nbsp;</td>
 			<th style="background-color:#EEEEEE;">3 months ago</th>
 			<th style="background-color:#CCCCCC;">last 3 months</th>
 			<th style="background-color:#EEEEEE;">total available</th>
@@ -103,7 +115,7 @@
 		<tr align="center" class="trbg{$mod}">
 			<td>{$LeaveType[$item['type']]}</td>
 			<td nowrap="nowrap">{$item['time_from']|substr=0,-3} ~ {$item['time_to']|substr=0,-3}</td>
-			<td>{$item['hours']|trim='.0'}</td>
+			<td>{$item['hours']|round='1'}</td>
 			<td valign="top" align="left">{$item['note']|nl2br}</td>
 			<td>{$item['attachment_url']|default='<font color="#d4d4d4">N/A</font>'}</td>
 			<if condition="'Waiting for Approval' neq $label">
