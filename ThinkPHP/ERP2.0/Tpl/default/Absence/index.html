@@ -58,7 +58,7 @@
 		</tr>
 		<tr>
 			<td style="text-align:right;font-weight:bold;" colspan="3">sum of total available &nbsp;</td>
-			<td bgcolor="#EEEEEE">{$total_all}</td>
+			<td bgcolor="#EEEEEE">{$total_leave}</td>
 		</tr>
 		</table>
 	</td>
@@ -75,13 +75,15 @@
 		<tr>
 			<th width="437">Duration</th>
 			<th width="8%">Hours</th>
+			<th width="10%">Deputy</th>
 			<th>Note</th>
 			<th width="10%">Operation</th>
 		</tr>
 			<iterate name="out_list" id="item">
 		<tr align="center" class="trbg{$mod}">
 			<td nowrap="nowrap">{$item['time_from']|substr=0,-3} ~ {$item['time_to']|substr=0,-3}</td>
-			<td>{$item['hours']|trim='.0'}</td>
+			<td>{$item['hours']|round='1'}</td>
+			<td>{$item['deputy']['realname']}</td>
 			<td align="left">{$item['note']|nl2br}</td>
 			<td nowrap="nowrap">
 				<if condition="strcmp(date('Y-m-d'), $item['time_to']) elt 0">
@@ -96,14 +98,15 @@
 		<foreach name="apply_list" key="label" item="items">
 		<table width="100%" border="0" cellpadding="3" cellspacing="1">
 		<tr>
-			<td height="20" colspan="6" align="left" id="status_{$label_status[$label]}"><strong>{$label}</strong></td>
+			<td height="20" colspan="8" align="left" id="status_{$label_status[$label]}"><strong>{$label}</strong></td>
 		</tr>
 		<tr>
 			<th width="160">Type</th>
 			<th width="270">Duration</th>
 			<th width="8%">Hours</th>
+			<th width="10%">Deputy</th>
 			<th>Note</th>
-			<th width="10%"nowrap="nowrap">Attached files</th>
+			<th width="10%" nowrap="nowrap">Attached files</th>
 			<if condition="'Waiting for Approval' neq $label">
 			<th width="10%">Comment</th>
 			</if>
@@ -116,8 +119,9 @@
 			<td>{$LeaveType[$item['type']]}</td>
 			<td nowrap="nowrap">{$item['time_from']|substr=0,-3} ~ {$item['time_to']|substr=0,-3}</td>
 			<td>{$item['hours']|round='1'}</td>
+			<td>{$item['deputy']['realname']}</td>
 			<td valign="top" align="left">{$item['note']|nl2br}</td>
-			<td>{$item['attachment_url']|default='<font color="#d4d4d4">N/A</font>'}</td>
+			<td>{$item['attachment_url']|default='<font color="#a4a4a4">N/A</font>'}</td>
 			<if condition="'Waiting for Approval' neq $label">
 			<td>{$item['comment']|nl2br}</td>
 			</if>
@@ -141,10 +145,12 @@
 			<th height="38" colspan="2" style="text-align:right;line-height:18px;">Aggregated Hours of Absence (<php>echo date('Y');</php>)</th>
 		</tr>
 		<iterate name="LeaveType" id="item">
+			<if condition="$key neq 'Overtime' and $key neq 'Out'">
 		<tr class="trbg{$i%2}">
 			<td>{$item}</td>
 			<td width="50" align="center">{$absence_summary[$key]|number_format|default=0}</td>
 		</tr>
+			</if>
 		</iterate>
 		</table>
 		</td>

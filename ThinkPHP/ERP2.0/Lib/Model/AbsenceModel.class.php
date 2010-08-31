@@ -6,25 +6,25 @@ class AbsenceModel extends RelationModel{
 			'mapping_type' => BELONGS_TO,
 			'mapping_name' => 'staff',
 			'class_name'   => 'Staff',
-			'parent_key'  => 'staff_id',
+			'foreign_key'  => 'staff_id',
 			),
 		'Staff2' => array(
 			'mapping_type' => BELONGS_TO,
 			'mapping_name' => 'creator',
 			'class_name'   => 'Staff',
-			'parent_key'  => 'creator_id',
+			'foreign_key'  => 'creator_id',
 			),
 		'Staff3' => array(
 			'mapping_type' => BELONGS_TO,
 			'mapping_name' => 'deputy',
 			'class_name'   => 'Staff',
-			'parent_key'  => 'deputy_id',
+			'foreign_key'  => 'deputy_id',
 			),
 		'Staff4' => array(
 			'mapping_type' => BELONGS_TO,
 			'mapping_name' => 'approver',
 			'class_name'   => 'Staff',
-			'parent_key'  => 'approver_id',
+			'foreign_key'  => 'approver_id',
 			)
 
 	);

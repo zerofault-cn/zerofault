@@ -8,12 +8,14 @@
 */
 class AbsenceAction extends BaseAction{
 
-	protected $dao, $Absence_Config;
+	protected $dao, $Absence_Config,$time;
 
 	public function _initialize() {
 		Session::set('top', 'Absence');
 		Session::set('sub', MODULE_NAME);
 		$this->dao = D('Absence');
+		$this->time = time();
+		$this->time = mktime(0,0,0,8,23,2010);
 		parent::_initialize();
 		$this->assign('MODULE_TITLE', 'Absence');
 		$this->Absence_Config = C('_absence_');
@@ -27,12 +29,12 @@ class AbsenceAction extends BaseAction{
 				$LeaveType[$key] = empty($rs['name']) ? $val : $rs['name'];
 			}
 		}
+		$LeaveType['Overtime'] = 'Overtime';
+		$LeaveType['Out'] ='Out of office';
 		$this->assign('LeaveType', $LeaveType);
 	}
 
 	public function index() {
-		$time = time();
-		//$time = mktime(0,0,0,8,31,2011);//for test
 		$staff_info = D('Staff')->relation(true)->find($_SESSION[C('USER_AUTH_KEY')]);
 		$this->assign('staff_info', $staff_info);
 
@@ -44,19 +46,19 @@ class AbsenceAction extends BaseAction{
 		$used_annual_hours = $this->dao->where($where)->sum('hours');
 		$leave_info = array();
 		$total_leave = 0;
-		$leave_info['Annual_year'] = date('Y', $time);
-		$leave_info['Balance_year'] = date('Y', $time)-1;
-		if (strcmp($staff_info['onboard'], date('Y', $time).'-01-00')>0) {
+		$leave_info['Annual_year'] = date('Y', $this->time);
+		$leave_info['Balance_year'] = date('Y', $this->time)-1;
+		if (strcmp($staff_info['onboard'], date('Y', $this->time).'-01-00')>0) {
 			//当年入职的员工，从入职之日算起
-			$added_annual_hour = round(($time-strtotime($staff_info['onboard']))*360/365/86400/30*1.25*8);//每个月1.25天
+			$added_annual_hour = round(($this->time-strtotime($staff_info['onboard']))*360/365/86400/30*1.25*8);//每个月1.25天
 			$total_leave = $added_annual_hour - $used_annual_hours;
 			$leave_info['Annual'] = self::parseHour($added_annual_hour - $used_annual_hours);
 			$leave_info['Balance'] = 'N/A';//往年余额
 		}
 		else {
 			//当年之前入职的员工，从当年01-01算起
-			$added_annual_hour = round(date('z', $time)*360/365/30*1.25*8);
-			if (date('Y', $time)==2010) {
+			$added_annual_hour = round(date('z', $this->time)*360/365/30*1.25*8);
+			if (date('Y', $this->time)==2010) {
 				//如果现在是2010年，则读取2009剩余年假，并减除已使用假期
 				$balance_hour_2009 = max(0, round($staff_info['balance_2009']*8-$used_annual_hours));
 				$total_leave += $balance_hour_2009;
@@ -68,11 +70,11 @@ class AbsenceAction extends BaseAction{
 				//2011年或以后
 				if (strcmp($staff_info['onboard'], '2010-01-00')>0) {
 					//该员工在2010年后入职，则剩余年假从入职日起计算至去年结束
-					$balance_hour = round((mktime(0,0,0,1,1,date('Y', $time))-strtotime($staff_info['onboard']))*360/365/86400/30*1.25*8);
+					$balance_hour = round((mktime(0,0,0,1,1,date('Y', $this->time))-strtotime($staff_info['onboard']))*360/365/86400/30*1.25*8);
 				}
 				else {
 					//该员工在2010年前入职，则用2009年剩余年假 ＋ 2010年到去年的整年假
-					$balance_hour = round($staff_info['balance_2009']*8) + (date('Y', $time)-2010)*12*1.25*8;
+					$balance_hour = round($staff_info['balance_2009']*8) + (date('Y', $this->time)-2010)*12*1.25*8;
 				}
 				$hour = max(0, $balance_hour-$used_annual_hours);
 				$total_leave += $hour;
@@ -91,12 +93,12 @@ class AbsenceAction extends BaseAction{
 			);
 		$arr = array(
 			'first_half' => array(
-				array('egt', date('Y', $time).'-01-01'),
-				array('lt', date('Y', $time).'-07-01')
+				array('egt', date('Y', $this->time).'-01-01'),
+				array('lt', date('Y', $this->time).'-07-01')
 				),
 			'second_half' => array(
-				array('egt', date('Y', $time).'-07-01'),
-				array('lt', (date('Y', $time)+1).'-01-01')
+				array('egt', date('Y', $this->time).'-07-01'),
+				array('lt', (date('Y', $this->time)+1).'-01-01')
 				)
 			);
 		foreach ($arr as $key=>$val) {
@@ -105,37 +107,44 @@ class AbsenceAction extends BaseAction{
 			$leave_info['CashOut'][$key] = self::parseHour($hour);
 		}
 		$leave_info['Compensatory'] = array();
-		$total_all = $total_leave;
+		$date_3month_ago = date('Y-m-d', mktime(0,0,0,date('m', $this->time)-3, date('d', $this->time), date('Y', $this->time)));
 		$where = array(
-			'type' => 'Overtime',
+			'type'=> 'Compensatory',
 			'staff_id' => $_SESSION[C('USER_AUTH_KEY')],
+			'time_from' => array('egt', $date_3month_ago),
 			'status' => 1
-			);
-		$date_3month_ago = date('Y-m-d', mktime(0,0,0,date('m', $time)-3, date('d', $time), date('Y', $time)));
-		$arr = array(
-			'past' => array('lt', $date_3month_ago),
-			'recent' => array('egt', $date_3month_ago)
-			);
-		foreach ($arr as $key=>$val) {
-			$where['time_from'] = $val;
+		);
+		$last_apply_time = $this->dao->where($where)->max('time_from');
+		$where['type'] = 'Overtime';
+		if (!empty($last_apply_time)) {
+			$where['time_from'] = array('egt', $last_apply_time);
 			$hour = $this->dao->where($where)->sum('hours');
-			if ('recent' == $key) {
-				$total_all += $hour;
-			}
-			$leave_info['Compensatory'][$key] = self::parseHour($hour);
+			$total_leave += $hour;
+			$leave_info['Compensatory']['recent'] = self::parseHour($hour);
+			$leave_info['Compensatory']['past'] = self::parseHour(0);
 		}
-		$this->assign('total_all', self::parseHour($total_all));
+		else {
+			$where['time_from'] = array('egt', $date_3month_ago);
+			$hour = $this->dao->where($where)->sum('hours');
+			$total_leave += $hour;
+			$leave_info['Compensatory']['recent'] = self::parseHour($hour);
+			$where['time_from'] = array('lt', $date_3month_ago);
+			$hour = $this->dao->where($where)->sum('hours');
+			$leave_info['Compensatory']['past'] = self::parseHour($hour);
+		}
+		$this->assign('total_leave', self::parseHour($total_leave));
 		$this->assign('leave_info', $leave_info);
 
 		$where = array(
 			'type' => 'Out',
 			'staff_id' => $_SESSION[C('USER_AUTH_KEY')],
 			);
-		$this->assign('out_list', $this->dao->where($where)->order('id desc')->select());
+		$this->assign('out_list', $this->dao->relation(true)->where($where)->order('id desc')->select());
 
 		$where = array(
 			'type' => array('not in', array('Overtime', 'Out', 'CashOut')),
 			'staff_id' => $_SESSION[C('USER_AUTH_KEY')],
+			'time_from' => array('egt', date('Y', $this->time).'-01-01')
 			);
 		$arr = array(
 			'Waiting for Approval' => 0,
@@ -147,7 +156,7 @@ class AbsenceAction extends BaseAction{
 		$result = array();
 		foreach ($arr as $key => $val) {
 			$where['status'] = $val;
-			$rs = $this->dao->where($where)->order('id desc')->select();
+			$rs = $this->dao->relation(true)->where($where)->order('id desc')->select();
 			foreach ($rs as $i=>$item) {
 				$rs[$i]['attachment_url'] = '';
 				if (''==trim($item['attachment'])) {
@@ -164,7 +173,7 @@ class AbsenceAction extends BaseAction{
 		$where = array(
 			'staff_id' => $_SESSION[C('USER_AUTH_KEY')],
 			'status' => 1,
-			'time_from' => array(array('egt', date('Y', $time).'-01-01'), array('lt', (date('Y', $time)+1).'-01-01'))
+			'time_from' => array(array('egt', date('Y', $this->time).'-01-01'), array('lt', (date('Y', $this->time)+1).'-01-01'))
 			);
 		$rs = $this->dao->where($where)->group('type')->getField("type,sum(hours)");
 		$this->assign('absence_summary', $rs);
@@ -174,7 +183,6 @@ class AbsenceAction extends BaseAction{
 		$this->display('Layout:ERP_layout');
 	}
 	private function get_avaliable($type, $staff_id) {
-		$time = time();
 		switch ($type) {
 			case 'Annual':
 				$staff_info = D('Staff')->find($staff_id);
@@ -185,15 +193,15 @@ class AbsenceAction extends BaseAction{
 					);
 				$used_annual_hours = $this->dao->where($where)->sum('hours');
 				$total_leave = 0;
-				if (strcmp($staff_info['onboard'], date('Y', $time).'-01-00')>0) {
+				if (strcmp($staff_info['onboard'], date('Y', $this->time).'-01-00')>0) {
 					//当年入职的员工，从入职之日算起
-					$added_annual_hour = round(($time-strtotime($staff_info['onboard']))*360/365/86400/30*1.25*8);//每个月1.25天
+					$added_annual_hour = round(($this->time-strtotime($staff_info['onboard']))*360/365/86400/30*1.25*8);//每个月1.25天
 					$total_leave = $added_annual_hour - $used_annual_hours;
 				}
 				else {
 					//当年之前入职的员工，从当年01-01算起
-					$added_annual_hour = round(date('z', $time)*360/365/30*1.25*8);
-					if (date('Y', $time)==2010) {
+					$added_annual_hour = round(date('z', $this->time)*360/365/30*1.25*8);
+					if (date('Y', $this->time)==2010) {
 						//如果现在是2010年，则读取2009剩余年假，并减除已使用假期
 						$balance_hour_2009 = max(0, round($staff_info['balance_2009']*8-$used_annual_hours));
 						$total_leave += $balance_hour_2009;
@@ -203,11 +211,11 @@ class AbsenceAction extends BaseAction{
 						//2011年或以后
 						if (strcmp($staff_info['onboard'], '2010-01-00')>0) {
 							//该员工在2010年后入职，则剩余年假从入职日起计算至去年结束
-							$balance_hour = round((mktime(0,0,0,1,1,date('Y', $time))-strtotime($staff_info['onboard']))*360/365/86400/30*1.25*8);
+							$balance_hour = round((mktime(0,0,0,1,1,date('Y', $this->time))-strtotime($staff_info['onboard']))*360/365/86400/30*1.25*8);
 						}
 						else {
 							//该员工在2010年前入职，则用2009年剩余年假 ＋ 2010年到去年的整年假
-							$balance_hour = round($staff_info['balance_2009']*8) + (date('Y', $time)-2010)*12*1.25*8;
+							$balance_hour = round($staff_info['balance_2009']*8) + (date('Y', $this->time)-2010)*12*1.25*8;
 						}
 						$hour = max(0, $balance_hour-$used_annual_hours);
 						$total_leave += $hour;
@@ -216,7 +224,7 @@ class AbsenceAction extends BaseAction{
 				}
 				break;
 			case 'Compensatory':
-				$date_3month_ago = date('Y-m-d', mktime(0,0,0,date('m', $time)-3, date('d', $time), date('Y', $time)));
+				$date_3month_ago = date('Y-m-d', mktime(0,0,0,date('m', $this->time)-3, date('d', $this->time), date('Y', $this->time)));
 				$where = array(
 					'type'=> 'Compensatory',
 					'staff_id' => $staff_id,
@@ -239,7 +247,7 @@ class AbsenceAction extends BaseAction{
 		$lead_staff_arr = M('Staff')->where(array('leader_id'=>$_SESSION[C('USER_AUTH_KEY')],'status'=>1))->getField('id,realname');
 		$this->assign('staff', $lead_staff_arr);
 		$where = array(
-			'type' => array('not in', array('Overtime', 'Out')),
+			'type' => array('not in', array('Out')),
 			'staff_id' => array('in', implode(',', array_keys($lead_staff_arr))),
 			'status' => 0
 			);
@@ -277,17 +285,46 @@ class AbsenceAction extends BaseAction{
 
 	public function today() {
 		Session::set('sub', MODULE_NAME.'/'.ACTION_NAME);
-		$this->assign('content', MODULE_NAME.':'.ACTION_NAME);
+
+		$where = array(
+			'type' => array('not in', array('Overtime', 'CashOut')),
+			'time_from' => array('lt', date('Y-m-d', $this->time+86400)),
+			'time_to' => array('egt', date('Y-m-d', $this->time))
+			);
+		$rs = $this->dao->relation(true)->where($where)->select();
+		$this->assign('result', $rs);
+
+		$this->assign('ACTION_TITLE', 'Today\'s absence');
+		$this->assign('content', ACTION_NAME);
 		$this->display('Layout:ERP_layout');
 	}
 	public function history() {
 		Session::set('sub', MODULE_NAME.'/'.ACTION_NAME);
-		$this->assign('content', MODULE_NAME.':'.ACTION_NAME);
+
+		$where = array(
+			'type' => array('not in', array('Overtime', 'CashOut')),
+			'staff_id' => $_SESSION[C('USER_AUTH_KEY')],
+			'time_to' => array('lt', date('Y', $this->time).'-01-01')
+			);
+		$rs = $this->dao->relation(true)->where($where)->select();
+				foreach ($rs as $i=>$item) {
+			$rs[$i]['attachment_url'] = '';
+			if (''==trim($item['attachment'])) {
+				continue;
+			}
+			foreach (explode(';', $item['attachment']) as $j=>$file_name) {
+				$rs[$i]['attachment_url'] .= '[<a href="'.$file_path.$file_name.'" target="_blank"> '.($j+1).' </a>] ';
+			}
+		}
+		$this->assign('result', $rs);
+
+		$this->assign('ACTION_TITLE', 'My absence history');
+		$this->assign('content', ACTION_NAME);
 		$this->display('Layout:ERP_layout');
 	}
 	public function manage() {
 		Session::set('sub', MODULE_NAME.'/'.ACTION_NAME);
-		$this->assign('content', MODULE_NAME.':'.ACTION_NAME);
+		$this->assign('content', ACTION_NAME);
 		$this->display('Layout:ERP_layout');
 	}
 	public function form() {
@@ -312,6 +349,9 @@ class AbsenceAction extends BaseAction{
 		$this->assign('LeaveType', $result);
 		$this->assign('Notification', $this->Absence_Config['notification']);
 
+		if (!empty($_REQUEST['type'])) {
+			$this->assign('type', $_REQUEST['type']);
+		}
 		$id = empty($_REQUEST['id']) ? 0 : intval($_REQUEST['id']);
 		if ($id>0) {
 			$info = $this->dao->relation(true)->find($id);
@@ -326,32 +366,30 @@ class AbsenceAction extends BaseAction{
 			$this->assign('info', $info);
 		}
 		else {
-			$time = time();
-		//	$time = mktime(13,1,1,7,16,2010);
-			if (date('N', $time)>5 || (date('N', $time)==5 && strcmp(date('H:i', $time), $this->Absence_Config['worktime'][1][0])>=0)) {//周末，或周五下午
-				$time += (8-date('N', $time))*86400;
-				$date_from = date('Y-m-d', $time);
+			if (date('N', $this->time)>5 || (date('N', $this->time)==5 && strcmp(date('H:i', $this->time), $this->Absence_Config['worktime'][1][0])>=0)) {//周末，或周五下午
+				$this->time += (8-date('N', $this->time))*86400;
+				$date_from = date('Y-m-d', $this->time);
 				$time_from = $this->Absence_Config['worktime'][0][0];
-				$date_to = date('Y-m-d', $time);
+				$date_to = date('Y-m-d', $this->time);
 				$time_to = $this->Absence_Config['worktime'][1][1];
 			}
 			else {
-				if (strcmp(date('H:i', $time), $this->Absence_Config['worktime'][0][0])<0) {//上午上班前
-					$date_from = date('Y-m-d', $time+86400);
+				if (strcmp(date('H:i', $this->time), $this->Absence_Config['worktime'][0][0])<0) {//上午上班前
+					$date_from = date('Y-m-d', $this->time+86400);
 					$time_from = $this->Absence_Config['worktime'][0][0];
-					$date_to = date('Y-m-d', $time+86400);
+					$date_to = date('Y-m-d', $this->time+86400);
 					$time_to = $this->Absence_Config['worktime'][1][1];
 				}
-				elseif (strcmp(date('H:i', $time), $this->Absence_Config['worktime'][1][0])<0) {//下午上班前
-					$date_from = date('Y-m-d', $time);
+				elseif (strcmp(date('H:i', $this->time), $this->Absence_Config['worktime'][1][0])<0) {//下午上班前
+					$date_from = date('Y-m-d', $this->time);
 					$time_from = $this->Absence_Config['worktime'][1][0];
-					$date_to = date('Y-m-d', $time);
+					$date_to = date('Y-m-d', $this->time);
 					$time_to = $this->Absence_Config['worktime'][1][1];
 				}
 				else {//下午上班后
-					$date_from = date('Y-m-d', $time+86400);
+					$date_from = date('Y-m-d', $this->time+86400);
 					$time_from = $this->Absence_Config['worktime'][0][0];
-					$date_to = date('Y-m-d', $time+86400);
+					$date_to = date('Y-m-d', $this->time+86400);
 					$time_to = $this->Absence_Config['worktime'][1][1];
 				}
 			}
@@ -380,7 +418,6 @@ class AbsenceAction extends BaseAction{
 			$dept_staff_arr['No Department'] = M('Staff')->where(array('dept_id'=>0, 'status'=>1))->order('realname')->field('id,realname,email')->select();
 		}
 		$this->assign('DeptStaff', $dept_staff_arr);
-
 
 		$this->assign('content', ACTION_NAME);
 		$this->display('Layout:content');
@@ -601,165 +638,7 @@ class AbsenceAction extends BaseAction{
 				break;
 		}
 	}
-	private function calculateHour0($date_from, $time_from, $date_to, $time_to) {
-		//计算总小时数
-		$hour = 0;
-		$in = $out = false;
-		foreach ($this->Absence_Config['worktime'] as $i=>$arr) {
-			foreach ($arr as $j=>$time) {
-				if (strcmp($time_from, $time)>=0) {
-					$in = true;
-				}
-				else {
-					$out = true;
-					break;
-				}
-				if ($in && strcmp($time_from, $time)<0) {
-					$out = true;
-					break;
-				}
-			}
-			if ($out) {
-				break;
-			}
-		}
-		if (!$out) {
-			$j ++;
-		}
-		$from_i = $i;
-		$from_j = $j;
 
-		$in = $out = false;
-		foreach ($this->Absence_Config['worktime'] as $i=>$arr) {
-			foreach ($arr as $j=>$time) {
-				if (strcmp($time_to, $time)>=0) {
-					$in = true;
-				}
-				else {
-					$out = true;
-					break;
-				}
-				if ($in && strcmp($time_to, $time)<0) {
-					$out = true;
-					break;
-				}
-			}
-			if ($out) {
-				break;
-			}
-		}
-		if (!$out) {
-			$j ++;
-		}
-		$to_i = $i;
-		$to_j = $j;
-
-		/********************\
-		i:    0  |   1     
-		j: 0| 1  |0| 1  |2 
-		    | AM | | PM |  
-		\********************/
-
-		if ($from_i==0) {// 0-
-			if ($from_j==0) {// 0-0
-				if ($to_i==0) {// 0-0 0-
-					if ($to_j==0) {// 0-0 0-0
-						$hour = 0;
-					}
-					else {// 0-0 0-1
-						$hour = (strtotime($date_to.' '.$time_to.':00') - strtotime($date_to.' '.$this->Absence_Config['worktime'][0][0].':00'))/3600;
-					}
-				}
-				else {// 0-0 1-
-					$hour = (strtotime($date_to.' '.$this->Absence_Config['worktime'][0][1].':00') - strtotime($date_to.' '.$this->Absence_Config['worktime'][0][0].':00'))/3600;
-					if ($to_j == 1) {// 0-0 1-1
-						$hour += (strtotime($date_to.' '.$time_to.':00') - strtotime($date_to.' '.$this->Absence_Config['worktime'][1][0].':00'))/3600;
-					}
-					elseif ($to_j == 2) {// 0-0 1-2
-						$hour += (strtotime($date_to.' '.$this->Absence_Config['worktime'][1][1].':00') - strtotime($date_to.' '.$this->Absence_Config['worktime'][1][0].':00'))/3600;
-					}
-				}
-			}
-			else {// 0-1
-				if ($to_i==0) {// 0-1 0-
-					if ($to_j == 0) {//0-1 0-0
-						$hour = (strtotime($date_to.' '.$this->Absence_Config['worktime'][0][0].':00') - strtotime($date_to.' '.$time_from.':00'))/3600;
-					}
-					else {//0-1 0-1
-						$hour = (strtotime($date_to.' '.$time_to.':00') - strtotime($date_to.' '.$time_from.':00'))/3600;
-					}
-				}
-				else {// 0-1 1-
-					$hour = (strtotime($date_to.' '.$this->Absence_Config['worktime'][0][1].':00') - strtotime($date_to.' '.$time_from.':00'))/3600;
-					if ($to_j == 1) {// 0-1 1-1
-						$hour += (strtotime($date_to.' '.$time_to.':00') - strtotime($date_to.' '.$this->Absence_Config['worktime'][1][0].':00'))/3600;
-					}
-					elseif ($to_j == 2) {// 0-1 1-2
-						$hour += (strtotime($date_to.' '.$this->Absence_Config['worktime'][1][1].':00') - strtotime($date_to.' '.$this->Absence_Config['worktime'][1][0].':00'))/3600;
-					}
-				}
-			}
-		}
-		else {//1-
-			if ($from_j==0) {// 1-0
-				if ($to_i==0) {// 1-0 0-
-					if ($to_j==0) {// 1-0 0-0
-						$hour = (strtotime($date_to.' '.$this->Absence_Config['worktime'][0][0].':00') - strtotime($date_to.' '.$this->Absence_Config['worktime'][0][1].':00'))/3600;
-					}
-					else {// 1-0 0-1
-						$hour = (strtotime($date_to.' '.$time_to.':00') - strtotime($date_to.' '.$this->Absence_Config['worktime'][0][1].':00'))/3600;
-					}
-				}
-				else {// 1-0 1-
-					if ($to_j == 0) {// 1-0 1-0
-						$hour = 0;
-					}
-					if ($to_j == 1) {// 1-0 1-1
-						$hour = (strtotime($date_to.' '.$time_to.':00') - strtotime($date_to.' '.$this->Absence_Config['worktime'][1][0].':00'))/3600;
-					}
-					elseif ($to_j == 2) {// 1-0 1-2
-						$hour = (strtotime($date_to.' '.$this->Absence_Config['worktime'][1][1].':00') - strtotime($date_to.' '.$this->Absence_Config['worktime'][1][0].':00'))/3600;
-					}
-				}
-			}
-			else {// 1-1
-				if ($to_i==0) {// 1-1 0-
-					if ($to_j == 0) {//1-1 0-0
-						$hour = (strtotime($date_to.' '.$time_to.':00') - strtotime($date_to.' '.$this->Absence_Config['worktime'][1][1].':00'))/3600;
-					}
-					else {//1-1 0-1
-						$hour = (strtotime($date_to.' '.$this->Absence_Config['worktime'][1][0].':00') - strtotime($date_to.' '.$time_from.':00'))/3600;
-						$hour += (strtotime($date_to.' '.$time_to.':00') - strtotime($date_to.' '.$this->Absence_Config['worktime'][0][1].':00'))/3600;
-					}
-				}
-				else {// 1-1 1-
-					if ($to_j == 0) {// 1-1 1-0
-						$hour = (strtotime($date_to.' '.$this->Absence_Config['worktime'][1][0].':00') - strtotime($date_to.' '.$time_from.':00'))/3600;
-					}
-					elseif ($to_j == 1) {// 1-1 1-1
-						$hour = (strtotime($date_to.' '.$time_to.':00') - strtotime($date_to.' '.$time_from.':00'))/3600;
-					}
-					elseif ($to_j == 2) {// 1-1 1-2
-						$hour = (strtotime($date_to.' '.$this->Absence_Config['worktime'][1][1].':00') - strtotime($date_to.' '.$time_from.':00'))/3600;
-					}
-				}
-			}
-		}
-		$stamp_from = strtotime($date_from);
-		$stamp_to = strtotime($date_to);
-		if (date('W', $stamp_from) != date('W', $stamp_to)) {
-			if (date('o', $stamp_from)==date('o', $stamp_to)) {//同一年
-				$stamp_to -= 86400*2*(date('W', $stamp_to)-date('W', $stamp_from));
-			}
-			else {
-				$stamp_to -= 86400*2*(date('W', $stamp_to)-date('W', $stamp_from));
-			}
-		}
-		$hour += ($stamp_to-$stamp_from)/86400*8;
-		echo $from_i.'-'.$from_j.'-'.$to_i.'-'.$to_j;
-		echo "\r\n".$hour;
-		return $hour;
-	}
 	/**
 	*
 	* 调用基类方法

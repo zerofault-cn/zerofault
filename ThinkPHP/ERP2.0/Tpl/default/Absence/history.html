@@ -1,9 +1,39 @@
-<p class="page_title_text">History</p>
-<table id="table" border="1" cellpadding="3" cellspacing="0">
+<p class="page_title_text">{$ACTION_TITLE}</p>
+<table cellpadding="3" border="1" bordercolor="#FFFFFF" style="border-collapse:collapse;">
 <tr>
-	<th width="5%">ID</th>
-	<th width="15%">Role Name</th>
-	<th>Privileges</th>
-	<th width="15%"></th>
+	<th>Duration</th>
+	<th>Hours</th>
+	<th>Deputy</th>
+	<th nowrap="nowrap">Type</th>
+	<th>Note</th>
+	<th nowrap="nowrap">Attached files</th>
+	<th>Status</th>
 </tr>
+<iterate name="result" id="item">
+<tr align="center" class="trbg{$mod}">
+	<td nowrap="nowrap">{$item['time_from']|substr=0,-3} ~ {$item['time_to']|substr=0,-3}</td>
+	<td>{$item['hours']}</td>
+	<td>{$item['deputy']['realname']}</td>
+	<td>{$LeaveType[$item['type']]}</td>
+	<td align="left">{$item['note']|nl2br}</td>
+	<td>{$item['attachment_url']|default='<font color="#a4a4a4">N/A</font>'}</td>
+	<td nowrap="nowrap">
+		<if condition="$item['status'] eq 0">
+		Waiting for approve
+		<elseif condition="$item['status'] eq -1"/>
+		Rejected
+		<elseif condition="$item['status'] eq 1"/>
+		Approved
+		<else />
+		Unknown
+		</if>
+	</td>
+</tr>
+</iterate>
+<empty name="result">
+<tr>
+	<td colspan="8" align="center">No Record</td>
+</tr>
+</empty>
 </table>
+<p class="center"></p>
