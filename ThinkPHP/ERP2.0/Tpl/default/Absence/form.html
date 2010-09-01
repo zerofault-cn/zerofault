@@ -341,11 +341,11 @@
 	</td>
 </table>
 <!-- Datepicker -->
-<style type="text/css">@import "../Public/Css/jquery-ui-1.8.2.custom.css?20100620";</style> 
-<script type="text/javascript" src="../Public/Js/jquery-ui-1.8.2.custom.min.js?20100620"></script>
+<link type="text/css" rel="stylesheet" href="../Public/Css/jquery-ui-1.8.2.custom.css?20100901" />
+<script type="text/javascript" src="../Public/Js/jquery-ui-1.8.2.custom.min.js?20100901"></script>
 <script language="JavaScript" type="text/javascript">
 $(document).ready(function(){
-	var uidates = $('.date_from, .date_to').datepicker({
+	$('.date_from, .date_to').datepicker({
 		dateFormat: 'yy-mm-dd',
 		changeMonth: true,
 		changeYear: true,
@@ -353,28 +353,19 @@ $(document).ready(function(){
 		showMonthAfterYear: true,
 		selectOtherMonths: true,
 		minDate: '{$date_from}',
-		maxDate: '+1Y',
-	/*	onSelect: function(selectedDate) {
-			var option = this.className == "date_from" ? "minDate" : "maxDate";
-			var instance = $(this).data("datepicker");
-			var date = $.datepicker.parseDate(instance.settings.dateFormat || $.datepicker._defaults.dateFormat, selectedDate, instance.settings);
-			uidates.not(this).datepicker("option", option, date);
-		},*/
+		maxDate: '+1Y'
 	});
 	$("td.clsTab").each(function(){
 		$(this).css("cursor", "pointer").click(function(){
 			switchTab($(this).attr("id"));
 		});
 	});
-//	$('#btn_submitla').bind('click', CheckForm_absenceApply);});
 });
 
 var descr_arr = new Array();
 <iterate name="LeaveType" id="item">
 descr_arr['{$item["type"]}'] = '{$item["description"]}';
-
 </iterate>
-
 function ChangeType(type) {
 	if (type!='') {
 		$('.date_from, .time_from, .date_to, .time_to').attr('disabled', false);
