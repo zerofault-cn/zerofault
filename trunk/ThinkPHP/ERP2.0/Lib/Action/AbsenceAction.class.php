@@ -15,7 +15,7 @@ class AbsenceAction extends BaseAction{
 		Session::set('sub', MODULE_NAME);
 		$this->dao = D('Absence');
 		$this->time = time();
-		$this->time = mktime(0,0,0,8,23,2010);
+//		$this->time = mktime(0,0,0,8,23,2010);
 		parent::_initialize();
 		$this->assign('MODULE_TITLE', 'Absence');
 		$this->Absence_Config = C('_absence_');
@@ -557,7 +557,7 @@ class AbsenceAction extends BaseAction{
 			$time_from = $this->Absence_Config['worktime'][0][0];
 			$from = $date_from.' '.$time_from;
 		}
-	//	echo $from."\n";
+		echo $from."\n";
 		$to = $date_to.' '.$time_to;
 		$stamp_to = strtotime($to);
 		if (date('N', $stamp_to)>5) {
@@ -565,7 +565,7 @@ class AbsenceAction extends BaseAction{
 			$time_to = $this->Absence_Config['worktime'][1][1];
 			$to = $date_to.' '.$time_to;
 		}
-	//	echo $to."\n";
+		echo $to."\n";
 		if (strcmp($from, $to)>=0) {
 			return;
 		}
