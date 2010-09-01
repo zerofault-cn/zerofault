@@ -40,7 +40,7 @@ class StaffAction extends BaseAction{
 		$this->assign('ACTION_TITLE', 'Add New Staff');
 		$id = empty($_REQUEST['id']) ? 0 : intval($_REQUEST['id']);
 		if ($id>0) {
-			$this->assign('ACTION_TITLE', 'Edit Supplier');
+			$this->assign('ACTION_TITLE', 'Edit Staff');
 			$info = $this->dao->relation(true)->find($id);
 			$info['dept_opts'] = self::genOptions(M('Department')->select(), $info['dept_id']);
 			$info['leader_opts'] = self::genOptions($this->dao->where(array('is_leader'=>1))->select(), $info['leader_id'],'realname');

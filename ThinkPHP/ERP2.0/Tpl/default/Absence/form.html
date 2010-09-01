@@ -102,7 +102,7 @@
 				</present>
 			</td>
 			<td>
-				<select name="type" onchange="ChangeType(this.value);" alt="Absence type" title="Select absence type">
+				<select name="type" onchange="javascript:ChangeType(this.value);" alt="Absence type" title="Select absence type">
 					<option value="">---------Select---------</option>
 					<iterate name="LeaveType" id="item">
 						<if condition="!empty($info['type']) and $item['type'] eq $info['type']">
@@ -372,7 +372,9 @@ $(document).ready(function(){
 var descr_arr = new Array();
 <iterate name="LeaveType" id="item">
 descr_arr['{$item["type"]}'] = '{$item["description"]}';
+
 </iterate>
+
 function ChangeType(type) {
 	if (type!='') {
 		$('.date_from, .time_from, .date_to, .time_to').attr('disabled', false);
