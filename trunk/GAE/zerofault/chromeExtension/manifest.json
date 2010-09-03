@@ -1,0 +1,10 @@
+{
+	"name": "My Favorite loader",
+	"description": "Add link/note/pic to http://zerofault.appspot.com/",
+	"version": "0.2",
+	"permissions": ["contextMenus", "tabs"],
+	"background_page": "background.html",
+	"icons": {
+		"16": "favicon.png"
+	}
+}
