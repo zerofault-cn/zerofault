@@ -72,3 +72,29 @@ ALTER TABLE erp_options ADD description TEXT NOT NULL AFTER code;
 ALTER TABLE erp_category ADD manager_id SMALLINT UNSIGNED NOT NULL;
 
 ALTER TABLE erp_product_flow ADD category_id SMALLINT UNSIGNED DEFAULT "0" NOT NULL AFTER fixed;
+
+
+2010-09-03
+erp_bundle:
+	id
+	name
+	staff
+	addtime
+	result
+
+CREATE TABLE IF NOT EXISTS `erp_bundle_entry` (
+  `id` int(10) unsigned NOT NULL auto_increment,
+  `bundle_id` smallint(5) unsigned NOT NULL default '0',
+  `part_type` varchar(255) NOT NULL default '',
+  `version_type` varchar(255) NOT NULL default '',
+  `string` varchar(255) NOT NULL default '',
+  PRIMARY KEY  (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 ;
+
+
+INSERT INTO `erp_bundle_entry` (`id`, `bundle_id`, `part_type`, `version_type`, `string`) VALUES
+(1, 1, 'DIMM', 'HW', 'HW-MADADIMM(REV01)'),
+(2, 1, 'PowerGEM', 'HW', 'HW-PGMMADA(REV-01)'),
+(3, 1, 'DIMM', 'SW', 'SW-MADADIMM(REV-0.33)'),
+(4, 1, 'PowerGEM', 'SW', 'SW-PGMMADA(REV-0.33)'),
+(5, 1, 'DIMM', 'LG', 'LG-MADADIMM(V0.5.13)');
