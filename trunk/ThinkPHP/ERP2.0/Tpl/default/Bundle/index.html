@@ -1,3 +1,9 @@
+<style>
+em {
+	background-color:yellow;
+	font-style:normal;
+}
+</style>
 <p class="page_title_text"></p>
 <table>
 <tr>
@@ -39,14 +45,27 @@
 			<th style="text-align:left">Creator</th>
 			<td>{$item['staff']['realname']}</td>
 			<th style="text-align:left">Result</th>
-			<td>{$item['result']}</td>
+			<td id="{$item['id']}">
+				<if condition="$item['result'] eq 1">
+				<strong style="color:green">Passed</strong>
+				<elseif condition="$item['result'] eq 0" />
+				<strong style="color:blue;">Pending</strong>
+				<elseif condition="$item['result'] eq -1" />
+				<strong style="color:red">Failed</strong>
+				</if>
+				<if condition="$item['staff_id'] eq $_SESSION[C('USER_AUTH_KEY')]">
+				[<img class="result" id="1" src="../Public/images/sign_tick.png" alt="passed" title="mark as passed" align="absmiddle" />
+				<img class="result" id="0" src="../Public/images/sign_question.png" alt="pending" title="mark as pendding" align="absmiddle" />
+				<img class="result" id="-1" src="../Public/images/sign_cancel.png" alt="failed" title="mark as failed" align="absmiddle" />]
+				</if>
+			</td>
 		</tr>
 		</table>
 	</td>
 </tr>
 <tr>
 	<td>
-		<table width="100%" cellpadding="3" border="1" bordercolor="#FFFFFF" style="border-collapse:collapse;">
+		<table width="100%" cellpadding="4" border="1" bordercolor="#FFFFFF" style="border-collapse:collapse;">
 		<tr>
 			<td>&nbsp;</td>
 			<foreach name="parts" item="part">
@@ -54,10 +73,15 @@
 			</foreach>
 		</tr>
 			<iterate name="item.entry" id="row">
+			<php>$version = $key;</php>
 		<tr>
-			<th>{$key}</th>
+			<th>{$version}</th>
 				<foreach name="parts" item="part">
-			<td>{$row[$part]}</td>
+					<if condition="$item['staff_id'] eq $_SESSION[C('USER_AUTH_KEY')]">
+			<td class="edit"><span>{$row[$part]['string']}</span><input type="text" id="{$row[$part]['id']|intval}" class="{$item['id']}" name="{$version}|{$part}" value="{$row[$part]['string']}" style="display:none;width:0;" /></td>
+					<else />
+			<td>{$row[$part]['string']}</td>
+					</if>
 				</foreach>
 		</tr>
 			</iterate>
@@ -67,4 +91,62 @@
 </table>
 </iterate>
 {$page}
+<notempty name="result">
+<div class="clear"></div>
+<small style="font-size:9pt;">
+Tips: For green table cells, "Mouse Click" to edit, "Enter" to save, "Esc" to cancel.
+</small>
 <p class="center">&nbsp;</p>
+<else />
+<p class="center">No Record</p>
+</notempty>
+<script language="JavaScript" type="text/javascript">
+$(document).ready(function(){
+	$("td.edit").each(function(i) {
+		setEditable(this, i);
+	});
+
+	$("img.result").each(function() {
+		$(this).css('cursor', 'pointer').click(function() {
+			changeResult(this);
+		});
+	});
+});
+function setEditable(obj, n) {
+	$(obj).css('cursor', 'pointer').mouseover(function(){
+		$(this).addClass("focus");
+	}).mouseout(function(){
+		$(this).removeClass("focus");
+	}).click(function(){
+		if ($(this).children('input').css('display') != 'none') {
+			return;
+		}
+		$("td.editing").children('input').hide();
+		$("td.editing").children('span').show();
+		$("td.editing").removeClass('editing');
+		var width = $(this).width();
+		$(this).children('span').hide();
+		$(this).children("input").css('width', width).show().select().keydown(function(e){
+			var keyCode=e.keyCode || window.event.keyCode;
+			if(keyCode==13)//回车键
+			{
+				submit_edit(this);
+			}
+			else if(keyCode==27)//取消健
+			{
+				cancel_edit(this);
+			}
+		});
+		$(this).addClass('editing');
+	});
+}
+function submit_edit(obj){
+	$("#_iframe").attr('src', '__URL__/edit/submit/1/id/'+$(obj).attr('id')+'/bundle_id/'+$(obj).attr('class')+'/name/'+$(obj).attr('name')+'/f/string/v/'+$(obj).val());
+}
+function cancel_edit(obj){
+	$(obj).hide().prev().show();
+}
+function changeResult(obj) {
+	$("#_iframe").attr('src', '__URL__/update/id/'+$(obj).parent().attr('id')+'/f/result/v/'+$(obj).attr('id'));
+}
+</script> 
