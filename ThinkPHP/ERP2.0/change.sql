@@ -75,12 +75,15 @@ ALTER TABLE erp_product_flow ADD category_id SMALLINT UNSIGNED DEFAULT "0" NOT N
 
 
 2010-09-03
-erp_bundle:
-	id
-	name
-	staff
-	addtime
-	result
+CREATE TABLE erp_bundle (
+id SMALLINT UNSIGNED AUTO_INCREMENT,
+ name VARCHAR (255) NOT NULL,
+ staff SMALLINT UNSIGNED DEFAULT '0' NOT NULL,
+ addtime DATETIME NOT NULL,
+ result TINYINT (1) DEFAULT '0' NOT NULL,
+ status TINYINT (1) DEFAULT '0' NOT NULL,
+ PRIMARY KEY(id)) ;
+
 
 CREATE TABLE IF NOT EXISTS `erp_bundle_entry` (
   `id` int(10) unsigned NOT NULL auto_increment,
