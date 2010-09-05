@@ -1,0 +1,76 @@
+<p class="page_title_text"></p>
+<table>
+<tr>
+	<td>
+		<form action="__URL__/index" method="post">
+		<table id="search_table" cellpadding="3" border="1" bordercolor="#FFFFFF" style="border-collapse:collapse;">
+		<tr>
+			<th>Category</th>
+			<th>Supplier</th>
+			<th>Internal P/N</th>
+			<th>Description</th>
+			<th>Manufacture</th>
+			<th>MPN</th>
+			<th>Value/Package</th>
+			<th>Project</td>
+			<td rowspan="2" ><input type="submit" name="submit" value="Filter" /></td>
+		</tr>
+		<tr>
+			<td><select name="category_id"><option value="">All</option>{$category_opts}</select></td>
+			<td><select name="supplier_id"><option value="">All</option>{$supplier_opts}</select></td>
+			<td><input type="text" name="Internal_PN" size="10" value="{$request['Internal_PN']}"/></td>
+			<td><input type="text" name="description" size="10" value="{$request['description']}"/></td>
+			<td><input type="text" name="manufacture" size="10" value="{$request['manufacture']}"/></td>
+			<td><input type="text" name="MPN" size="10" value="{$request['MPN']}"/></td>
+			<td><input type="text" name="value" size="10" value="{$request['value']}"/></td>
+			<td><input type="text" name="project" size="10" value="{$request['project']}"/></td>
+		</tr>
+		</table>
+		</form>
+	</td>
+</tr>
+</table>
+{$page}
+<iterate name="result" id="item">
+<table cellpadding="3" border="1" bordercolor="#FFFFFF" style="float:left;border-collapse:collapse;margin:5px;">
+<tr>
+	<td>
+		<table width="100%" cellpadding="3" border="1" bordercolor="#FFFFFF" style="border-collapse:collapse;">
+		<tr>
+			<th>Test NO.</th>
+			<td>{$item['name']}</td>
+			<th>Create Time</th>
+			<td>{$item['addtime']}</td>
+		</tr>
+		<tr>
+			<th>Creator</th>
+			<td>{$item['staff']['realname']}</td>
+			<th>Result</th>
+			<td>{$item['result']}</td>
+		</tr>
+		</table>
+	</td>
+</tr>
+<tr>
+	<td>
+		<table width="100%" cellpadding="3" border="1" bordercolor="#FFFFFF" style="border-collapse:collapse;">
+		<tr>
+			<td>&nbsp;</td>
+			<foreach name="parts" item="part">
+			<th>{$part}</th>
+			</foreach>
+		</tr>
+			<iterate name="item.entry" id="row">
+		<tr>
+			<th>{$key}</th>
+				<foreach name="parts" item="part">
+			<td>{$row[$part]}</td>
+				</foreach>
+		</tr>
+			</iterate>
+		</table>
+	</td>
+</tr>
+</table>
+</iterate>
+<p class="center"></p>
