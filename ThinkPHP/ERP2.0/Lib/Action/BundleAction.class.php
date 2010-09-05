@@ -51,9 +51,12 @@ class BundleAction extends BaseAction{
 			$entry = array_combine($this->config['versions'], array_fill(0, count($this->config['versions']), array()));
 			foreach ($rs as $arr) {
 				if(!empty($key)) {
-					$arr['string'] = str_replace($key, '<em>'.$key.'</em>', $arr['string']);
+					$arr['string'] = eregi_replace('('.$key.')', '<em>\\1</em>', $arr['string']);
 				}
-				$entry[$arr['version_type']][$arr['part_type']] = $arr['string'];
+				$entry[$arr['version_type']][$arr['part_type']] = array(
+					'id' => $arr['id'],
+					'string' => $arr['string']
+					);
 				if (!in_array($arr['part_type'], $this->config['parts'])) {
 					array_push($this->config['parts'], $arr['part_type']);
 				}
@@ -93,6 +96,31 @@ class BundleAction extends BaseAction{
 		else{
 			self::_error('Create fail!'.(C('APP_DEBUG')?$this->dao->getLastSql():''));
 		}
+	}
+	public function edit(){
+		if (empty($_REQUEST['submit'])) {
+			return;
+		}
+		$this->dao = M('BundleEntry');
+		if (empty($_REQUEST['id'])) {
+			$this->dao->bundle_id = $_REQUEST['bundle_id'];
+			$tmp = explode('|', $_REQUEST['name']);
+			$this->dao->part_type = $tmp[1];
+			$this->dao->version_type = $tmp[0];
+			$this->dao->string = $_REQUEST['v'];
+			if($this->dao->add()) {
+				self::_success('Update success!',__URL__);
+			}
+			else{
+				self::_error('Update fail!'.(C('APP_DEBUG')?$this->dao->getLastSql():''));
+			}
+		}
+		else {
+			parent::_update();
+		}
+	}
+	public function update(){
+		parent::_update();
 	}
 }
 ?>

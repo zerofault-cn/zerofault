@@ -168,7 +168,7 @@ class Paginator extends Think{
 		}
 		$pagenav .= '<td class="a_right">'.$this->record_count.' Records, '.$this->page_count.' Pages';
 		$perPage = ', <select onChange="change_limit(this.value);">';
-		foreach(array(20,50,100,150,200,300) as $num) {
+		foreach(array(10,20,50,100,150,200,300) as $num) {
 			$perPage .= '<option value="'.$num.'" ';
 			if ($this->limit == $num) {
 				$perPage .= ' selected="selected"';

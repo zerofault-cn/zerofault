@@ -316,3 +316,10 @@ div.spline{
 	margin:3px 0;
 	border-top:1px #FFFFFF solid;
 }
+td.edit{
+	padding:2px;
+}
+td.focus{
+	padding:0;
+	border:2px solid #92D050;
+}
