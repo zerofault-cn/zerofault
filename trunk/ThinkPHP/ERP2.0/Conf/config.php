@@ -1,13 +1,13 @@
 <?php
-	$config = array(
+$config = array(
 		'APP_DEBUG'			=> true,
 		'DB_NAME'			=> 'ERP2',
 		'DB_USER'			=> 'root',
 		'DB_PWD'			=> '',
 		'USER_AUTH_TYPE'	=> 2, //1:登录时一次验证，2:实时验证，默认为1
 	);
-$config = array_merge($config,array(
-		'APP_CONFIG_LIST'	=> array('menu', 'absence'),
+$config = array_merge($config, array(
+		'APP_CONFIG_LIST'	=> array('menu', 'absence', 'bundle'),
 
 		'DB_TYPE'			=> 'mysql',
 		'DB_HOST'			=> 'localhost',
@@ -32,7 +32,7 @@ $config = array_merge($config,array(
 		'RBAC_USER_TABLE'	=> 'erp_staff_role',
 		'RBAC_ACCESS_TABLE'	=> 'erp_role_node',
 		'RBAC_NODE_TABLE'	=> 'erp_node',
-		'NOT_AUTH_MODULE'	=> 'Index,Public,Script,Asset,Inventory,Absence',
+		'NOT_AUTH_MODULE'	=> 'Index,Public,Script,Asset,Inventory,Absence,Bundle',
 		'IFRAME_AUTH_ACTION' => array('update','delete','edit','submit','confirm','select','import')//在Iframe中进行的且需要认证的操作
 		));
 return $config;
