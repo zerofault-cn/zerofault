@@ -73,23 +73,25 @@ class BundleAction extends BaseAction{
 		$this->display('Layout:ERP_layout');
 	}
 	
-	public function add() {
+	public function create() {
 		if (empty($_REQUEST['submit'])) {
 			return;
 		}
 		$name = $_REQUEST['name'];
 		if (''==trim($name)) {
-			self::_error('Test No. can\'t be empty!');
+			self::_error('Test NO. can\'t be empty!');
 		}
 		$rs = $this->dao->where("name='".$name."'")->find();
 		if (count($rs)>0) {
-			self::_error('The test No.: '.$name.' has been used');
+			self::_error('The test NO.: '.$name.' has been used');
 		}
 		$this->dao->name = $name;
+		$this->dao->project = $_REQUEST['project'];
+		$this->dao->sw_version = $_REQUEST['sw_version'];
+		$this->dao->release_date = $_REQUEST['release_date'];
 		$this->dao->staff_id = $_SESSION[C('USER_AUTH_KEY')];
-		$this->dao->addtime = date('Y-m-d H:i:s');
+		$this->dao->add_time = date('Y-m-d H:i:s');
 		$this->dao->status = 0;
-		$this->dao->result = 0;
 		if($this->dao->add()) {
 			self::_success('Create new test bundle success!',__URL__);
 		}

@@ -1,6 +1,6 @@
 <?php
 return array(
-	'parts' => array('DIMM', 'Host', 'FCT', 'PowerGEM'),
-	'versions' => array('HW', 'SW', 'LG')
+	'parts' => array('RAM', 'PowerGem', 'Host', 'FCT'),
+	'versions' => array('SW', 'LG', 'HW', 'Comments')
 	);
 ?>
