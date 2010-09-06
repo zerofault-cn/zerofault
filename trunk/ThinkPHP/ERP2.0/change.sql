@@ -79,8 +79,10 @@ CREATE TABLE erp_bundle (
 id SMALLINT UNSIGNED AUTO_INCREMENT,
  name VARCHAR (255) NOT NULL,
  staff_id SMALLINT UNSIGNED DEFAULT '0' NOT NULL,
- addtime DATETIME NOT NULL,
- result TINYINT (1) DEFAULT '0' NOT NULL,
+ create_time DATETIME NOT NULL,
+ project varchar (255) DEFAULT '' NOT NULL,
+ sw_version varchar(255) default '' not null,
+ release_date varchar(255) default '' not null,
  status TINYINT (1) DEFAULT '0' NOT NULL,
  PRIMARY KEY(id)
  ) 
@@ -93,6 +95,7 @@ CREATE TABLE IF NOT EXISTS `erp_bundle_entry` (
   `part_type` varchar(255) NOT NULL default '',
   `version_type` varchar(255) NOT NULL default '',
   `string` varchar(255) NOT NULL default '',
+  edit_time  DATETIME NOT NULL,
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 ;
 

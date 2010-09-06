@@ -3,25 +3,52 @@ em {
 	background-color:yellow;
 	font-style:normal;
 }
+fieldset {
+	line-height:200%;
+}
+fieldset input,fieldset select{
+	float:right;
+}
+fieldset label{
+	float:left;
+}
 </style>
-<p class="page_title_text"></p>
-<table>
+<table style="margin:8px auto;">
 <tr>
 	<td>
 		<table id="search_table" cellpadding="3" border="1" bordercolor="#FFFFFF" style="border-collapse:collapse;">
 		<tr>
-			<td>
-				<form action="__URL__/add" method="post" target="_iframe">
-				Test No.<input type="text" name="name" value="{$new_name}"/>
-				<input type="submit" name="submit" value="Create" />
+			<td valign="top">
+				<form action="__URL__/create" method="post" target="_iframe">
+				<fieldset>
+					<legend>Create New Form</legend>
+					<input type="text" id="name" name="name" value="{$new_name}" size="16"/><label for="name">Test No.</label>
+					<div class="clear"></div>
+					<input type="text" id="project" name="project" value="" size="16" /><label for="project">Project ID</label>
+					<div class="clear"></div>
+					<input type="text" id="sw_version" name="sw_version" size="16" /><label for="sw_version">SW Version</label>
+					<div class="clear"></div>
+					<input type="text" id="release" name="release_date" size="16" /><label for="release">Release Date</label>
+					<div class="clear"></div>
+					<input type="submit" name="submit" value="Create" />
+				</fieldset>
 				</form>
 			</td>
-			<td>
+			<td valign="top">
 				<form action="__URL__/index" method="get">
-				keyword
-				<input tye="text" name="key" size="20" value="{$request['key']}"/>
-				<input type="submit" value="Search" />
-				<input type="button" onclick="window.location='__URL__';" value="Reset" />
+				<fieldset>
+					<legend>Search by keywords</legend>
+					<input type="text" id="sname" name="name" size="16" value="{$request['name']}" /><label for="sname">Test NO.</label>
+					<div class="clear"></div>
+					<select id="staff_id" name="staff_id"><option value="">All</option>{$staff_opts}</select><label for="staff_id">Creator</label>
+					<div class="clear"></div>
+					<input type="text" id="sproject" name="project" size="16" value="{$request['project']}" /><label for="sproject">Project ID</label>
+					<div class="clear"></div>
+					<input type="text" id="sversion" name="sw_version" size="16" value="{$request['sw_version']}" /><label for="sversion">SW Version&nbsp;</label>
+					<div class="clear"></div>
+					<input type="button" onclick="window.location='__URL__';" value="Reset" />
+					<input type="submit" value="Search" />
+				</fieldset>
 				</form>
 			</td>
 		</tr>
@@ -31,41 +58,50 @@ em {
 </table>
 {$page}
 <iterate name="result" id="item">
-<table cellpadding="3" border="1" bordercolor="#FFFFFF" style="float:left;border-collapse:collapse;margin:5px;">
+	<php>if ($item['staff_id'] == $_SESSION[C('USER_AUTH_KEY')])$editable = true;</php>
+<table cellpadding="0" cellspacing="0" bgcolor="#FFFFFF" style="border:1px solid #00CCFF;margin:5px auto;">
 <tr>
 	<td>
-		<table width="100%" cellpadding="3" border="1" bordercolor="#FFFFFF" style="border-collapse:collapse;">
+		<table id="{item['id']}" width="100%" cellpadding="3" cellspacing="2" border="2" bordercolor="#FFFFFF" style="border-collapse:collapse;">
 		<tr>
 			<th style="text-align:left">Test NO.</th>
+			<empty name="editable">
 			<td>{$item['name']}</td>
+			<else />
+			<td class="header"><span>{$item['name']}</span><input type="text" name="name" value="{$item['name']|str_replace=array('<em>','</em>'),'',###}" style="display:none;width:0;" /></td>
+			</empty>
 			<th style="text-align:left">Create Time</th>
-			<td>{$item['addtime']}</td>
+			<td>{$item['create_time']}</td>
 		</tr>
 		<tr>
 			<th style="text-align:left">Creator</th>
 			<td>{$item['staff']['realname']}</td>
-			<th style="text-align:left">Result</th>
-			<td id="{$item['id']}">
-				<if condition="$item['result'] eq 1">
-				<strong style="color:green">Passed</strong>
-				<elseif condition="$item['result'] eq 0" />
-				<strong style="color:blue;">Pending</strong>
-				<elseif condition="$item['result'] eq -1" />
-				<strong style="color:red">Failed</strong>
-				</if>
-				<if condition="$item['staff_id'] eq $_SESSION[C('USER_AUTH_KEY')]">
-				[<img class="result" id="1" src="../Public/Images/sign_tick.png" alt="passed" title="mark as passed" align="absmiddle" />
-				<img class="result" id="0" src="../Public/Images/sign_question.png" alt="pending" title="mark as pendding" align="absmiddle" />
-				<img class="result" id="-1" src="../Public/Images/sign_cancel.png" alt="failed" title="mark as failed" align="absmiddle" />]
-				</if>
-			</td>
+			<th style="text-align:left">Project ID</th>
+			<empty name="editable">
+			<td>{$item['project']}</td>
+			<else />
+			<td class="header"><span>{$item['project']}</span><input type="text" name="project" value="{$item['project']|str_replace=array('<em>','</em>'),'',###}" style="display:none;width:0;" /></td>
+			</empty>
 		</tr>
+		<tr>
+			<th style="text-align:left;">SW Version</th>
+			<empty name="editable">
+			<td>{$item['sw_version']}</td>
+			<else />
+			<td class="header"><span>{$item['sw_version']}</span><input type="text" name="sw_version" value="{$item['sw_version']|str_replace=array('<em>','</em>'),'',###}" style="display:none;width:0;" /></td>
+			</empty>
+			<th style="text-align:left;">Release Date</th>
+			<empty name="editable">
+			<td>{$item['release_date']}</td>
+			<else />
+			<td class="header"><span>{$item['release_date']}</span><input type="text" name="release_date" value="{$item['release_date']|str_replace=array('<em>','</em>'),'',###}" style="display:none;width:0;" /></td>
+			</empty>
 		</table>
 	</td>
 </tr>
 <tr>
 	<td>
-		<table width="100%" cellpadding="4" border="1" bordercolor="#FFFFFF" style="border-collapse:collapse;">
+		<table id="{item['id']}" width="100%" cellpadding="3" border="1" bordercolor="#FFFFFF" style="border-collapse:collapse;">
 		<tr>
 			<td>&nbsp;</td>
 			<foreach name="parts" item="part">
@@ -77,11 +113,11 @@ em {
 		<tr>
 			<th>{$version}</th>
 				<foreach name="parts" item="part">
-					<if condition="$item['staff_id'] eq $_SESSION[C('USER_AUTH_KEY')]">
-			<td class="edit"><span>{$row[$part]['string']}</span><input type="text" id="{$row[$part]['id']|intval}" class="{$item['id']}" name="{$version}|{$part}" value="{$row[$part]['string']}" style="display:none;width:0;" /></td>
-					<else />
+					<empty name="editable">
 			<td>{$row[$part]['string']}</td>
-					</if>
+					<else />
+			<td class="entry"><span>{$row[$part]['string']}</span><input type="text" id="{$row[$part]['id']|intval}" name="{$version}|{$part}" value="{$row[$part]['string']|str_replace=array('<em>','</em>'),'',###}" style="display:none;width:0;" /></td>
+					</empty>
 				</foreach>
 		</tr>
 			</iterate>
@@ -91,53 +127,64 @@ em {
 </table>
 </iterate>
 {$page}
-<notempty name="result">
+<empty name="result">
 <div class="clear"></div>
+<p class="center">No Record</p>
+<else />
 <small style="font-size:9pt;">
 Tips: For green table cells, "Mouse Click" to edit, "Enter" to save, "Esc" to cancel.
 </small>
 <p class="center">&nbsp;</p>
-<else />
-<p class="center">No Record</p>
-</notempty>
+</empty>
 <script language="JavaScript" type="text/javascript">
 $(document).ready(function(){
-	$("td.edit").each(function(i) {
-		setEditable(this, i);
-	});
-
-	$("img.result").each(function() {
-		$(this).css('cursor', 'pointer').click(function() {
-			changeResult(this);
-		});
+	$("td.header, td.entry").each(function() {
+		setEditable(this);
 	});
 });
-function setEditable(obj, n) {
+var last_class = '';
+//var curr_class = '';
+function setEditable(obj) {
 	$(obj).css('cursor', 'pointer').mouseover(function(){
 		$(this).addClass("focus");
 	}).mouseout(function(){
 		$(this).removeClass("focus");
 	}).click(function(){
+		var curr_class = $(this).attr('class').replace(/([ ].+)/, '');
+//		alert(curr_class+','+last_class);
+		if (last_class!='' && last_class!=curr_class) {
+			if (confirm('Last '+last_class+' form hasn\'t been saved, continue?')) {
+				$("td."+last_class).each(function() {
+					$(this).children('input').hide();
+					$(this).children('span').show();
+					$(this).removeClass('editing');
+				});
+			}
+			else {
+				return;
+			}
+		}
 		if ($(this).children('input').css('display') != 'none') {
 			return;
 		}
-		$("td.editing").children('input').hide();
-		$("td.editing").children('span').show();
-		$("td.editing").removeClass('editing');
+	//	$("td.editing").children('input').hide();
+	//	$("td.editing").children('span').show();
+	//	$("td.editing").removeClass('editing');
 		var width = $(this).width();
 		$(this).children('span').hide();
 		$(this).children("input").css('width', width).show().select().keydown(function(e){
 			var keyCode=e.keyCode || window.event.keyCode;
-			if(keyCode==13)//回车键
+			if(keyCode==13)
 			{
 				submit_edit(this);
 			}
-			else if(keyCode==27)//取消健
+			else if(keyCode==27)
 			{
 				cancel_edit(this);
 			}
 		});
 		$(this).addClass('editing');
+		last_class = curr_class;
 	});
 }
 function submit_edit(obj){
