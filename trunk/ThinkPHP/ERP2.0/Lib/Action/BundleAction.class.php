@@ -19,6 +19,10 @@ class BundleAction extends BaseAction{
 		$new_name = ++ $max_name;
 		$this->assign('new_name', $new_name);
 
+		$M = new Model();
+		$rs = $M->query("select * from erp_staff where id in (select distinct staff_id from erp_bundle)");
+		$this->assign('staff_opts', self::genOptions($rs, $_REQUEST['staff_id'], 'realname'));
+
 		import("@.Paginator");
 		$limit = 10;
 		if (!empty($_SESSION[MODULE_NAME.'_'.ACTION_NAME.'_limit'])) {
@@ -122,7 +126,7 @@ class BundleAction extends BaseAction{
 		}
 	}
 	public function update(){
-		parent::_update();
+		dump($_REQUEST);
 	}
 }
 ?>
