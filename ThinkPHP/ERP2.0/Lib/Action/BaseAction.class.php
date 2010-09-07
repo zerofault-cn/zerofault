@@ -44,6 +44,7 @@ class BaseAction extends Action {
 		$_menu_ = C('_menu_');//载入menu.php的内容
 		$menu = $_menu_['menu'];
 		$topmenu = array();
+		$tmp_submenu = array();
 		foreach ($menu as $key=>$val) {
 			if (empty($val['submenu'])) {//单层菜单
 				if (RBAC::AccessDecision($val['name'], 'index')) {

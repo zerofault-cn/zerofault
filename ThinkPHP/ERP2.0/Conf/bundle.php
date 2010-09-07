@@ -1,6 +1,6 @@
 <?php
 return array(
-	'parts' => array('RAM', 'PowerGem', 'Host', 'FCT'),
-	'versions' => array('SW', 'LG', 'HW', 'Comments')
+	'x-axis' => array('RAM', 'PowerGem', 'Host', 'FCT'),
+	'y-axis' => array('SW', 'LG', 'HW', 'Comments')
 	);
 ?>
