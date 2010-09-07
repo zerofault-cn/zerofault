@@ -316,10 +316,12 @@ div.spline{
 	margin:3px 0;
 	border-top:1px #FFFFFF solid;
 }
-td.edit{
-	padding:2px;
+table.header th{
+	background-color:#FFFFE1;
+}
+table.entry th{
+	background-color:#D4D4D4;
 }
 td.focus{
-	padding:2px;
-	border:2px solid #92D050;
+	background-color:#92D050;
 }

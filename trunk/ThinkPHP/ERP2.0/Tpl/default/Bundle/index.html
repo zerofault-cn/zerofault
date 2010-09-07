@@ -16,9 +16,11 @@ td.editing input{
 	padding:0;
 }
 </style>
+<p class="page_title_text">{$ACTION_TITLE}</p>
 <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color:#FFFFFF;">
 <tr>
-	<td width="260" valign="top">
+	<td width="10">&nbsp;</td>
+	<td width="250" valign="top">
 		<form action="__URL__/create" method="post" target="_iframe">
 		<fieldset>
 			<legend>Create New Form</legend>
@@ -43,26 +45,30 @@ td.editing input{
 			<div class="clear"></div>
 			<input type="text" id="sproject" name="project" size="16" value="{$request['project']}" /><label for="sproject">Project ID</label>
 			<div class="clear"></div>
-			<input type="text" id="sversion" name="sw_version" size="16" value="{$request['sw_version']}" /><label for="sversion">SW Version&nbsp;</label>
+			<input type="text" id="sversion" name="sw_version" size="16" value="{$request['sw_version']}" /><label for="sversion">SW Version</label>
+			<div class="clear"></div>
+			<input type="text" id="string" name="string" size="16" value="{$request['string']}" /><label for="string">Keyword</label>
 			<div class="clear"></div>
 			<input type="button" onclick="window.location='__URL__';" value="Reset" />
 			<input type="submit" value="Search" />
 		</fieldset>
 		</form>
+		<br />
 		<small style="font-size:9pt;">
 		Tips: For green table cells, "Mouse Click" to edit, "Enter" to save, "Esc" to cancel.
 		</small>
 	</td>
-	<td width="20">&nbsp;</td>
+	<td width="10">&nbsp;</td>
 	<td valign="top">
 		{$page}
 		<iterate name="result" id="item">
 			<php>if ($item['staff_id'] == $_SESSION[C('USER_AUTH_KEY')])$editable = true;</php>
-		<form id="form{$item['id']}" action="__URL__/update" method="post" target="_iframe">
-		<table cellpadding="0" cellspacing="0" bgcolor="#FFFFFF" style="border:1px solid #00CCFF;margin:5px 10px;">
+		<form id="form{$item['id']}" action="__URL__/edit" method="post" target="_iframe">
+		<input type="hidden" name="id" value="{$item['id']}" />
+		<table cellpadding="0" cellspacing="0" style="border:1px solid #999999;margin:5px 10px;">
 		<tr>
 			<td>
-				<table id="{$item['id']}" width="100%" cellpadding="3" cellspacing="2" border="2" bordercolor="#FFFFFF" style="border-collapse:collapse;">
+				<table id="{$item['id']}" class="header" width="100%" cellpadding="5" cellspacing="0" border="1" bordercolor="#999999" style="border-collapse:collapse;background-color:#FFFFFF;">
 				<tr>
 					<th style="text-align:left">Test NO.</th>
 					<empty name="editable">
@@ -101,22 +107,28 @@ td.editing input{
 		</tr>
 		<tr>
 			<td>
-				<table id="{$item['id']}" width="100%" cellpadding="3" border="2" bordercolor="#FFFFFF" style="border-collapse:collapse;">
+				<table id="{$item['id']}" class="entry" width="100%" cellpadding="3" cellspacing="0" border="1" bordercolor="#999999" style="border-collapse:collapse;background-color:#FFFFFF;">
 				<tr>
 					<td>&nbsp;</td>
-					<foreach name="parts" item="part">
-					<th>{$part}</th>
+					<foreach name="x_axis" item="x">
+					<th>{$x}</th>
 					</foreach>
 				</tr>
 					<iterate name="item.entry" id="row">
-					<php>$version = $key;</php>
+					<php>$y = $key;</php>
 				<tr>
-					<th>{$version}</th>
-						<foreach name="parts" item="part">
+					<th>{$y}</th>
+						<foreach name="x_axis" item="x">
 							<empty name="editable">
-					<td>{$row[$part]['string']}</td>
+					<td>{$row[$x]['string']|default='&nbsp;'}</td>
 							<else />
-					<td class="entry"><span>{$row[$part]['string']}</span><input type="text" id="{$row[$part]['id']|intval}" name="{$version}|{$part}" value="{$row[$part]['string']|str_replace=array('<em>','</em>'),'',###}" style="display:none;width:0;" /></td>
+					<td class="entry">
+							<empty name="row[$x]">
+						<span></span><input type="text" name="entry[{$x}][{$y}]" value="" style="display:none;width:0;" />
+							<else />
+						<span>{$row[$x]['string']}</span><input type="text" name="entry[{$row[$x]['id']}]" value="{$row[$x]['string']|str_replace=array('<em>','</em>'),'',###}" style="display:none;width:0;" />
+							</empty>
+					</td>
 							</empty>
 						</foreach>
 				</tr>
@@ -143,12 +155,13 @@ $(document).ready(function(){
 	});
 });
 window.onbeforeunload = function() {
-	if ($('td.editing').length>0) {
+	if (!has_submit && $('td.editing').length>0) {
 		return 'Last form hasn\'t been saved, continue?';
 	}
 }
 var last_id = 0;
 var last_obj = 0;
+var has_submit = false;
 function setEditable(obj) {
 	$(obj).css('cursor', 'pointer').mouseover(function(){
 		$(this).addClass("focus");
@@ -182,6 +195,7 @@ function setEditable(obj) {
 			var keyCode=e.keyCode || window.event.keyCode;
 			if(keyCode==13)
 			{
+				has_submit = true;
 				$("#form"+curr_id).submit();
 			}
 			else if(keyCode==27)
