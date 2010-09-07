@@ -287,6 +287,7 @@ class AbsenceAction extends BaseAction{
 		Session::set('sub', MODULE_NAME.'/'.ACTION_NAME);
 
 		$where = array(
+			'status' => 1,
 			'type' => array('not in', array('Overtime', 'CashOut')),
 			'time_from' => array('lt', date('Y-m-d', $this->time+86400)),
 			'time_to' => array('egt', date('Y-m-d', $this->time))
@@ -506,10 +507,10 @@ class AbsenceAction extends BaseAction{
 			$this->dao->attachment = implode(';', $file_name);
 			$this->dao->create_time = date("Y-m-d H:i:s");
 			$this->dao->status = 0;
+			$this->dao->creator_id = $_SESSION[C('STAFF_AUTH_NAME')]['id'];
 		}
 		$this->dao->type = $type;
 		$this->dao->staff_id = $staff_id;
-		$this->dao->creator_id = $_SESSION[C('STAFF_AUTH_NAME')]['id'];
 		$this->dao->time_from = $date_from.' '.$time_from.':00';
 		$this->dao->time_to = $date_to.' '.$time_to.':00';
 		$this->dao->hours = $hour;
@@ -636,6 +637,81 @@ class AbsenceAction extends BaseAction{
 					self::calculateHour($date_from, $time_from, $date_to, $time_to);
 				}
 				break;
+		}
+	}
+	public function notify(){
+		$where = array(
+			'mail_status' => 0,
+			'status' => 1,
+			'type' => array('not in', array('Overtime', 'CashOut')),
+			'time_from' => array('lt', date('Y-m-d', $this->time+86400)),
+			'time_to' => array('egt', date('Y-m-d', $this->time))
+			);
+		$rs = $this->dao->relation(true)->where($where)->select();
+		empty($rs) && ($rs = array());
+		echo 'Get '.count($rs)." records.<br />\n";
+		foreach ($rs as $item) {
+			echo "\tFor ID:".$item['id']."\t";
+			//get leader's email
+			$cc_mail = array();
+			if (!empty($item['staff']['leader_id'])) {
+				$leader_email = M('Staff')->where('id='.$item['staff']['leader_id'])->getField('email');
+				if (!empty($leader_email) && $leader_email!=$item['staff']['email']) {
+					$cc_mail[] = $leader_email;
+				}
+			}
+			//get deputy email
+			if (!empty($item['deputy_id'])) {
+				$deputy_email = M('Staff')->where('id='.$item['deputy_id'])->getField('email');
+				if (!empty($deputy_email) && $deputy_email!=$item['staff']['email'] && !in_array($deputy_email, $cc_mail)) {
+					$cc_mail[] = $deputy_email;
+				}
+			}
+			//parse notification
+			foreach (explode(';', $item['notification']) as $notification) {
+				$tmp = explode(':', $notification);
+				if (''!=$tmp[1] && $tmp[1]!=$item['staff']['email'] && !in_array($tmp[1], $cc_mail)) {
+					$cc_mail[] = $tmp[1];
+				}
+			}
+			$subject = '[Absence]Notification: '.$item['staff']['realname'].', '.substr($item['time_from'], 0, 16).' ~ '.substr($item['time_to'], 0, 16);
+			$body = '<table width="700" border="0" cellspacing="1" cellpadding="7" bgcolor="#CCCCCC">';
+			if ('Out'==$item['type']) {
+				$body .= '<tr><td colspan="2">'.$item['staff']['realname'].' made an out of office request.</td></tr>';
+				$body .= '<tr bgcolor="#FFFFFF"><td width="177">Creator :</td><td width="492">'.$item['creator']['realname'].'</td></tr>';
+			}
+			else {
+				$body .= '<tr><td colspan="2">'.$item['staff']['realname'].' will be absent on '.substr($item['time_from'], 0, 16).' ~ '.substr($item['time_to'], 0, 16).'</td></tr>';
+				$body .= '<tr bgcolor="#FFFFFF"><td width="177">Applicant :</td><td width="492">'.$item['creator']['realname'].'</td></tr>';
+				$body .= '<tr bgcolor="#FFFFFF"><td>Type : </td><td>'.$item['type'].' leave</td></tr>';
+			}
+			$body .= '<tr bgcolor="#FFFFFF"><td>Duration : </td><td>'.substr($item['time_from'], 0, 16).' ~ '.substr($item['time_to'], 0, 16).'</td></tr>';
+			if ('Out'==$item['type']) {
+				$body .= '<tr bgcolor="#FFFFFF"><td>Members : </td><td>'.$item['staff']['realname'].'</td></tr>';
+			}
+			elseif(!empty($item['deputy_id'])) {
+				$body .= '<tr bgcolor="#FFFFFF"><td>Deputy : </td><td>'.$item['deputy']['realname'].'</td></tr>';
+			}
+			if (''!=$item['note']) {
+				$body .= '<tr bgcolor="#FFFFFF"><td>Note :</td><td>'.nl2br($item['note']).'</td></tr>';
+			}
+			$body .= '</table>';
+			$cmd = 'echo "'.addslashes($body).'"|/usr/bin/mutt -s "'.$subject.'" -e \'set Content-Type="text/html"\' '.$item['staff']['email'];
+			if (count($cc_mail)>1) {
+				$cmd .= ' -c '.implode(' -c ', $ee_mail);
+			}
+			Log::Write($cmd, INFO);
+			system($cmd,$ret);
+			if('0'==$ret && false !== $this->dao->where('id='.$item['id'])->setField('mail_status',1)) {
+				echo "Success!<br />\n";
+				Log::Write('Success', INFO);
+				return true;
+			}
+			else{
+				echo "Fail!<br />\n";
+				Log::Write('Fail');
+				return false;
+			}
 		}
 	}
 
