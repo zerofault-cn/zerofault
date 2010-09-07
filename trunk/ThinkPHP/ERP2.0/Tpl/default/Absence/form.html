@@ -85,6 +85,9 @@
 			<else />
 		<form class="clsTab" id="leave" action="__URL__/submit" method="post" target="_iframe" enctype="multipart/form-data">
 			</if>
+			<present name="info">
+		<input type="hidden" name="id" value="{$info['id']}" />
+			</present>
 		<table width="100%" border="1" cellpadding="3" cellspacing="1" bordercolor="#FFFFFF" style="border-collapse:collapse;">
 		<tr>
 			<th colspan="2">Leave application form</th>
@@ -94,12 +97,28 @@
 			<td>Type</td>
 		</tr>
 		<tr bgcolor="#EEEEEE" align="center">
-			<td><present name="info">
-				{$info['staff']['realname']}
-				<input type="hidden" name="id" value="{$info['id']}" />
-				<else />
-				{$_SESSION[C('STAFF_AUTH_NAME')]['realname']}
-				</present>
+			<td><select name="staff_id">
+				<option value="">----Select----</option>
+				<foreach name="DeptStaff" key="dept" item="Staff">
+					<optgroup label="{$dept}">
+					<foreach name="Staff" item="staff" key="j">
+						<if condition="$j eq 0">
+							<if condition="!empty($info['staff_id']) and $info['staff_id'] eq $staff['id']">
+						<option value="{$staff['id']}" selected="selected" style="background-color:#FABF8F;">{$staff['realname']}</option>
+							<else />
+						<option value="{$staff['id']}" style="background-color:#FABF8F;">{$staff['realname']}</option>
+							</if>
+						<else />
+							<if condition="!empty($info['staff_id']) and $info['staff_id'] eq $staff['id']">
+						<option value="{$staff['id']}" selected="selected">{$staff['realname']}</option>
+							<else />
+						<option value="{$staff['id']}">{$staff['realname']}</option>
+							</if>
+						</if>
+					</foreach>
+					</optgroup>
+				</foreach>
+				</select>
 			</td>
 			<td>
 				<select name="type" onchange="javascript:ChangeType(this.value);" alt="Absence type" title="Select absence type">
@@ -117,8 +136,7 @@
 		</tr>
 		<tr bgcolor="#CCCCCC" align="center">
 			<td>Creator</td>
-			<td>Duration&nbsp;&nbsp;&nbsp;&nbsp;
-			[<a href='javascript:void(0);' onclick="quickSelectDate(1, 'todayDate', 'A')" title="Change duration date to today">Today</a> | <a href='javascript:void(0);' onclick="quickSelectDate(2, 'todayDate', 'A')" title="Change duration date to today AM half day">AM</a> | <a href='javascript:void(0);' onclick="quickSelectDate(3, 'todayDate', 'A')" title="Change duration date to today PM half day">PM</a>]&nbsp;/&nbsp;[<a href='javascript:void(0);' onclick="quickSelectDate(1, 'tomorrowDate', 'A')" title="Change duration date to tomorrow">Tomorrow</a> | <a href='javascript:void(0);' onclick="quickSelectDate(2, 'tomorrowDate', 'A')" title="Change duration date to tomorrow AM half day">AM</a> | <a href='javascript:void(0);' onclick="quickSelectDate(3, 'tomorrowDate', 'A')" title="Change duration date to tomorrow PM half day">PM</a>]</td>
+			<td>Duration</td>
 		</tr>
 		<tr bgcolor="#EEEEEE" align="center">
 			<td>
@@ -186,7 +204,7 @@
 			<td valign="top">
 				<dl>
 				<foreach name="Notification" key="name" item="email">
-					<if condition="empty($Notification_Ext) or in_array($email, $Notification_Ext)">
+					<if condition="!isset($Notification_Ext) or in_array($email, $Notification_Ext)">
 					<dt><input type="checkbox" name="notification[]" value="{$name}:{$email}" checked="checked"/> {$name}</dt>
 					<else />
 					<dt><input type="checkbox" name="notification[]" value="{$name}:{$email}" /> {$name}</dt>
@@ -236,8 +254,7 @@
 		</tr>
 		<tr bgcolor="#CCCCCC" align="center">
 			<td>Creator</td>
-			<td>Duration&nbsp;&nbsp;&nbsp;&nbsp;
-			[<a href='javascript:void(0);' onclick="quickSelectDate(1, 'todayDate', 'A')" title="Change duration date to today">Today</a> | <a href='javascript:void(0);' onclick="quickSelectDate(2, 'todayDate', 'A')" title="Change duration date to today AM half day">AM</a> | <a href='javascript:void(0);' onclick="quickSelectDate(3, 'todayDate', 'A')" title="Change duration date to today PM half day">PM</a>]&nbsp;/&nbsp;[<a href='javascript:void(0);' onclick="quickSelectDate(1, 'tomorrowDate', 'A')" title="Change duration date to tomorrow">Tomorrow</a> | <a href='javascript:void(0);' onclick="quickSelectDate(2, 'tomorrowDate', 'A')" title="Change duration date to tomorrow AM half day">AM</a> | <a href='javascript:void(0);' onclick="quickSelectDate(3, 'tomorrowDate', 'A')" title="Change duration date to tomorrow PM half day">PM</a>]</td>
+			<td>Duration</td>
 		</tr>
 		<tr bgcolor="#EEEEEE" align="center">
 			<td>
