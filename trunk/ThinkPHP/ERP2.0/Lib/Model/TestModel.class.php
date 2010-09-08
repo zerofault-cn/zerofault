@@ -1,6 +1,6 @@
 <?php
 import('RelationModel');
-class BundleModel extends RelationModel{
+class TestModel extends RelationModel{
 	protected $_link = array(
 		'Staff' => array(
 			'mapping_type' => BELONGS_TO,

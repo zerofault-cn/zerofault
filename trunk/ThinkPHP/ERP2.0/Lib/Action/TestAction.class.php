@@ -1,26 +1,26 @@
 <?php
-class BundleAction extends BaseAction{
+class TestAction extends BaseAction{
 
 	protected $dao, $config;
 
 	public function _initialize() {
-		Session::set('top', 'Test Bundle');
-		$this->dao = D('Bundle');
-		$this->config = C('_bundle_');
+		Session::set('top', 'Test Log');
+		$this->dao = D('Test');
+		$this->config = C('_test_');
 		parent::_initialize();
-		$this->assign('MODULE_TITLE', 'Test Bundle');
+		$this->assign('MODULE_TITLE', 'Test Log');
 	}
 
 	public function index() {
 		Session::set('sub', MODULE_NAME);
 		
 		$max_name = $this->dao->max('name');
-		empty($max_name) && ($max_name = 'BN_'.sprintf("%03d", 0));
+		empty($max_name) && ($max_name = 'T'.sprintf("%08d", 0));
 		$new_name = ++ $max_name;
 		$this->assign('new_name', $new_name);
 
 		$M = new Model();
-		$rs = $M->query("select * from erp_staff where id in (select distinct staff_id from erp_bundle)");
+		$rs = $M->query("select * from erp_staff where id in (select distinct staff_id from erp_test)");
 		$this->assign('staff_opts', self::genOptions($rs, empty($_REQUEST['staff_id'])?0:$_REQUEST['staff_id'], 'realname'));
 
 		import("@.Paginator");
@@ -45,28 +45,31 @@ class BundleAction extends BaseAction{
 		if (!empty($_REQUEST['project'])) {
 			$where['project'] = array('like', '%'.trim($_REQUEST['project']).'%');
 		}
-		if (!empty($_REQUEST['sw_version'])) {
-			$where['sw_version'] = array('like', '%'.trim($_REQUEST['sw_version']).'%');
-		}
+		$join = '';
+		$field = '*';
 		if(!empty($_REQUEST['string'])) {
 			$wild_search = true;
 			$limit = 300;
 			$string = trim($_REQUEST['string']);
-			$rs = $this->dao->where($where)->join("inner join erp_bundle_entry entry on entry.bundle_id=erp_bundle.id and entry.string like '%".$string."%'")->field("distinct erp_bundle.*")->select();
+			$join = "inner join erp_test_entry entry on entry.test_id=erp_test.id and entry.string like '%".$string."%'";
+			$field = "distinct erp_test.*";
+		}
+		if (''!=$join) {
+			$total = $this->dao->where($where)->join($join)->getField("count(distinct erp_test.id)");
 		}
 		else {
-			$rs = $this->dao->where($where)->select();
+			$total = $this->dao->where($where)->count();
 		}
-		$p = new Paginator(count($rs),$limit);
 
-		if ($wild_search) {
-			$result = $this->dao->relation(true)->where($where)->join("inner join erp_bundle_entry entry on entry.bundle_id=erp_bundle.id and entry.string like '%".$string."%'")->order('id desc')->limit($p->offset.','.$p->limit)->field("distinct erp_bundle.*")->select();
+		$p = new Paginator($total,$limit);
+		if (''!=$join) {
+			$result = $this->dao->relation(true)->where($where)->join($join)->order('id desc')->limit($p->offset.','.$p->limit)->field($field)->select();
 		}
 		else {
-			$result = $this->dao->relation(true)->where($where)->order('id desc')->limit($p->offset.','.$p->limit)->field("distinct erp_bundle.*")->select();
+			$result = $this->dao->relation(true)->where($where)->order('id desc')->limit($p->offset.','.$p->limit)->field($field)->select();
 		}
 		foreach ($result as $i=>$item) {
-			$rs = M('BundleEntry')->where('bundle_id='.$item['id'])->select();
+			$rs = M('TestEntry')->where('test_id='.$item['id'])->select();
 			empty($rs) && ($rs = array());
 			$entry = array_combine($this->config['y-axis'], array_fill(0, count($this->config['y-axis']), array()));
 			foreach ($rs as $arr) {
@@ -87,7 +90,7 @@ class BundleAction extends BaseAction{
 		$this->assign('y_axis', $this->config['y-axis']);
 		$this->assign('page', $p->showMultiNavi());
 
-		$this->assign('ACTION_TITLE', '&nbsp;');
+		$this->assign('ACTION_TITLE', '');
 		$this->assign('content', ACTION_NAME);
 		$this->display('Layout:ERP_layout');
 	}
@@ -108,11 +111,10 @@ class BundleAction extends BaseAction{
 		$this->dao->staff_id = $_SESSION[C('USER_AUTH_KEY')];
 		$this->dao->create_time = date('Y-m-d H:i:s');
 		$this->dao->project = trim($_REQUEST['project']);
-		$this->dao->sw_version = trim($_REQUEST['sw_version']);
-		$this->dao->release_date = trim($_REQUEST['release_date']);
+		$this->dao->result = 0;
 		$this->dao->status = 0;
 		if($this->dao->add()) {
-			self::_success('Create new test bundle success!',__URL__);
+			self::_success('Create  success!',__URL__);
 		}
 		else{
 			self::_error('Create fail!'.(C('APP_DEBUG')?$this->dao->getLastSql():''));
@@ -133,12 +135,12 @@ class BundleAction extends BaseAction{
 		}
 		$rs = $this->dao->where("name='".$name."' and id!=".$this->dao->id)->find();
 		if (count($rs)>0) {
-			self::_error('The test NO.: '.$name.' has been used');
+			self::_error('The test NO. '.$name.' has been used');
 		}
 		$this->dao->name = $name;
 		$this->dao->project = trim($_REQUEST['project']);
-		$this->dao->sw_version = trim($_REQUEST['sw_version']);
-		$this->dao->release_date = trim($_REQUEST['release_date']);
+		$this->dao->comment = trim($_REQUEST['comment']);
+		unset($this->dao->edit_time);
 		if(false !== $this->dao->save()) {
 			foreach ($_REQUEST['entry'] as $key=>$val) {
 				if (is_array($val)) {
@@ -147,8 +149,8 @@ class BundleAction extends BaseAction{
 						if (''==trim($string)) {
 							continue;
 						}
-						$entry = new Model('BundleEntry');
-						$entry->bundle_id = $id;
+						$entry = new Model('TestEntry');
+						$entry->test_id = $id;
 						$entry->x = $key;
 						$entry->y = $y;
 						$entry->string = $string;
@@ -159,7 +161,7 @@ class BundleAction extends BaseAction{
 					}
 				}
 				elseif (is_numeric($key)) {
-					$entry = new Model('BundleEntry');
+					$entry = new Model('TestEntry');
 					$entry->find($key);
 					$entry->string = $val;
 					unset($entry->edit_time);
@@ -173,6 +175,9 @@ class BundleAction extends BaseAction{
 		else {
 			self::_error('Update fail!'.(C('APP_DEBUG')?$this->dao->getLastSql():''));
 		}
+	}
+	public function update(){
+		parent::_update();
 	}
 }
 ?>
