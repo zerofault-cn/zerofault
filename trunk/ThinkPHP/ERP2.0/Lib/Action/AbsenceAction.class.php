@@ -640,7 +640,6 @@ class AbsenceAction extends BaseAction{
 		}
 	}
 	public function notify(){
-
 		$where = array(
 			'mail_status' => 0,
 			'status' => 1,
