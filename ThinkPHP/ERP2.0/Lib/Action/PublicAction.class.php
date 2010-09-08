@@ -186,6 +186,9 @@ class PublicAction extends BaseAction{
 	public function sync_users() {
 		R('Staff', 'sync_users');
 	}
+	public function notify() {
+		R('Absence', 'notify');
+	}
 	public function fix_returns() {
 		$rs = M('ProductFlow')->where("action='return' and to_type='location' and to_id=0 and status=1")->select();
 		empty($rs) && ($rs=array());
