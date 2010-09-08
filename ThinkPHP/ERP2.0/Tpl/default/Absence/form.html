@@ -97,7 +97,8 @@
 			<td>Type</td>
 		</tr>
 		<tr bgcolor="#EEEEEE" align="center">
-			<td><select name="staff_id">
+			<td><present name="info">
+				<select name="staff_id">
 				<option value="">----Select----</option>
 				<foreach name="DeptStaff" key="dept" item="Staff">
 					<optgroup label="{$dept}">
@@ -119,6 +120,9 @@
 					</optgroup>
 				</foreach>
 				</select>
+				<else />
+				{$_SESSION[C('STAFF_AUTH_NAME')]['realname']}
+				</present>
 			</td>
 			<td>
 				<select name="type" onchange="javascript:ChangeType(this.value);" alt="Absence type" title="Select absence type">
