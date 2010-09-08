@@ -640,6 +640,7 @@ class AbsenceAction extends BaseAction{
 		}
 	}
 	public function notify(){
+
 		$where = array(
 			'mail_status' => 0,
 			'status' => 1,
@@ -648,33 +649,51 @@ class AbsenceAction extends BaseAction{
 			'time_to' => array('egt', date('Y-m-d', $this->time))
 			);
 		$rs = $this->dao->relation(true)->where($where)->select();
-		empty($rs) && ($rs = array());
+		if (empty($rs)) {
+			echo 'No absence to notify';
+			return;
+		}
+		$smtp_config = C('_smtp_');
+		include_once (LIB_PATH.'class.phpmailer.php');
+		$mail = new PHPMailer();
+		$mail->IsSMTP();
+		$mail->SMTPDebug  = 1;  // 2 = messages only
+		$mail->SMTPAuth   = false;                  // enable SMTP authentication
+		$mail->Host       = $smtp_config['host'];
+		$mail->Port       = $smtp_config['port'];
+		$mail->Username   = $smtp_config['username'];
+		$mail->Password   = $smtp_config['password'];
+		$mail->SetFrom($smtp_config['from_mail'], $smtp_config['from_name']);
+
 		echo 'Get '.count($rs)." records.<br />\n";
 		foreach ($rs as $item) {
 			echo "\tFor ID:".$item['id']."\t";
+			$mail->ClearAllRecipients();
+			$mail->AddAddress($item['staff']['email'], $item['staff']['realname']);
 			//get leader's email
-			$cc_mail = array();
 			if (!empty($item['staff']['leader_id'])) {
-				$leader_email = M('Staff')->where('id='.$item['staff']['leader_id'])->getField('email');
-				if (!empty($leader_email) && $leader_email!=$item['staff']['email']) {
-					$cc_mail[] = $leader_email;
+				$leader = M('Staff')->find($item['staff']['leader_id']);
+				if (!empty($leader['email'])) {
+					$mail->AddCC($leader['email'], $leader['realname']);
 				}
 			}
 			//get deputy email
 			if (!empty($item['deputy_id'])) {
-				$deputy_email = M('Staff')->where('id='.$item['deputy_id'])->getField('email');
-				if (!empty($deputy_email) && $deputy_email!=$item['staff']['email'] && !in_array($deputy_email, $cc_mail)) {
-					$cc_mail[] = $deputy_email;
+				$deputy = M('Staff')->find($item['deputy_id']);
+				if (!empty($deputy['mail'])) {
+					$mail->AddCC($deputy['email'], $deputy['realname']);
 				}
 			}
 			//parse notification
 			foreach (explode(';', $item['notification']) as $notification) {
-				$tmp = explode(':', $notification);
-				if (''!=$tmp[1] && $tmp[1]!=$item['staff']['email'] && !in_array($tmp[1], $cc_mail)) {
-					$cc_mail[] = $tmp[1];
+				$arr = explode(':', $notification);
+				if (''!=$arr[1]) {
+					$mail->AddCC($arr[1], $arr[0]);
 				}
 			}
 			$subject = '[Absence]Notification: '.$item['staff']['realname'].', '.substr($item['time_from'], 0, 16).' ~ '.substr($item['time_to'], 0, 16);
+			$mail->Subject    = $subject;
+
 			$body = '<table width="700" border="0" cellspacing="1" cellpadding="7" bgcolor="#CCCCCC">';
 			if ('Out'==$item['type']) {
 				$body .= '<tr><td colspan="2">'.$item['staff']['realname'].' made an out of office request.</td></tr>';
@@ -696,21 +715,19 @@ class AbsenceAction extends BaseAction{
 				$body .= '<tr bgcolor="#FFFFFF"><td>Note :</td><td>'.nl2br($item['note']).'</td></tr>';
 			}
 			$body .= '</table>';
-			$cmd = 'echo "'.addslashes($body).'"|/usr/bin/mutt -s "'.$subject.'" -e \'set Content-Type="text/html"\' '.$item['staff']['email'];
-			if (count($cc_mail)>1) {
-				$cmd .= ' -c '.implode(' -c ', $ee_mail);
+			$mail->MsgHTML($body);
+			if(!$mail->Send()) {
+				echo "Mailer Error: " . $mail->ErrorInfo;
+				Log::Write('Mail to '.$item['staff']['email'].' Fail');
 			}
-			Log::Write($cmd, INFO);
-			system($cmd,$ret);
-			if('0'==$ret && false !== $this->dao->where('id='.$item['id'])->setField('mail_status',1)) {
-				echo "Success!<br />\n";
-				Log::Write('Success', INFO);
-				return true;
-			}
-			else{
-				echo "Fail!<br />\n";
-				Log::Write('Fail');
-				return false;
+			else {
+				if(false !== $this->dao->where('id='.$item['id'])->setField('mail_status',1)) {
+					echo "Success!<br />\n";
+					Log::Write('Mail to '.$item['staff']['email'].' Success', INFO);
+				}
+				else{
+					echo 'SQL error'.(C('APP_DEBUG')?$this->dao->getLastSql():'');
+				}
 			}
 		}
 	}
