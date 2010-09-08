@@ -61,8 +61,8 @@ $menu['Absence'] = array(
 		'History'				=> 'Absence/history'
 		)
 	);
-$menu['Test Bundle'] = array(
-	'name'    => 'Bundle',
+$menu['Test Log'] = array(
+	'name'    => 'Test',
 	);
 $menu['System'] = array(
 	'name'    => 'Setting',
