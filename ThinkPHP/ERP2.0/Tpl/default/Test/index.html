@@ -21,135 +21,155 @@ td.editing input{
 <tr>
 	<td valign="top">
 		<form action="__URL__/create" method="post" target="_iframe">
-		<fieldset>
-			<legend>Create New Form</legend>
-			<input type="text" id="name" name="name" value="{$new_name}" size="16"/><label for="name">Test NO.</label>
-			<div class="clear"></div>
-			<input type="text" id="project" name="project" value="" size="16" /><label for="project">Project Code</label>
-			<div class="clear"></div>
-			<input type="submit" name="submit" value="Create" />
-		</fieldset>
-		</form>
-	</td>
-	<td>
-		<form action="__URL__/index" method="get">
-		<fieldset>
-			<legend>Search by keywords</legend>
-			<input type="text" id="sname" name="name" size="16" value="{$request['name']}" /><label for="sname">Test NO.</label>
-			<div class="clear"></div>
-			<select id="staff_id" name="staff_id"><option value="">All</option>{$staff_opts}</select><label for="staff_id">Creator</label>
-			<div class="clear"></div>
-			<input type="text" id="sproject" name="project" size="16" value="{$request['project']}" /><label for="sproject">Project Code</label>
-			<div class="clear"></div>
-			<input type="text" id="string" name="string" size="16" value="{$request['string']}" /><label for="string">Keyword</label>
-			<div class="clear"></div>
-			<input type="button" onclick="window.location='__URL__';" value="Reset" />
-			<input type="submit" value="Search" />
-		</fieldset>
-		</form>
-	</td>
-</tr>
-</table>
-		{$page}
-		<iterate name="result" id="item">
-			<php>if ($item['staff_id'] == $_SESSION[C('USER_AUTH_KEY')])$editable = true;</php>
-		<form id="form{$item['id']}" action="__URL__/edit" method="post" target="_iframe">
-		<input type="hidden" name="id" value="{$item['id']}" />
-		<table width="80%"  cellpadding="0" cellspacing="0" style="border:1px solid #999999;margin:5px auto">
+		<table cellpadding="3" border="1" bordercolor="#FFFFFF" style="border-collapse:collapse;">
 		<tr>
-			<td>
-				<table id="{$item['id']}" class="header" width="100%" cellpadding="4" cellspacing="0" border="1" bordercolor="#999999" style="border-collapse:collapse;background-color:#FFFFFF;">
-				<tr>
-					<th style="width:100px;text-align:left;">Test NO.</th>
-					<empty name="editable">
-					<td>{$item['name']}</td>
-					<else />
-					<td class="header"><span>{$item['name']}</span><input type="text" name="name" value="{$item['name']|str_replace=array('<em>','</em>'),'',###}" style="display:none;width:0;" /></td>
-					</empty>
-					<th style="width:100px;text-align:left;">Create Time</th>
-					<td>{$item['create_time']}</td>
-				</tr>
-				<tr>
-					<th style="text-align:left">Project Code</th>
-					<empty name="editable">
-					<td>{$item['project']}</td>
-					<else />
-					<td class="header"><span>{$item['project']}</span><input type="text" name="project" value="{$item['project']|str_replace=array('<em>','</em>'),'',###}" style="display:none;width:0;" /></td>
-					</empty>
-					<th style="text-align:left;">Update Time</th>
-					<td>{$item['edit_time']}</td>
-				</tr>
-				<tr>
-					<th style="text-align:left">Creator</th>
-					<td>{$item['staff']['realname']}</td>
-					<th style="text-align:left;">Result</th>
-					<td>
-					<if condition="$item['result'] eq 1">
-						<strong style="color:green">Passed</strong>
-					<elseif condition="$item['result'] eq 0" />
-						<strong style="color:blue;">Pending</strong>
-					<elseif condition="$item['result'] eq -1" />
-						<strong style="color:red">Failed</strong>
-					</if>
-					<notempty name="editable">
-						[<img class="result" id="1" src="../Public/Images/sign_tick.png" alt="passed" title="mark as passed" align="absmiddle" />
-						<img class="result" id="0" src="../Public/Images/sign_question.png" alt="pending" title="mark as pendding" align="absmiddle" />
-						<img class="result" id="-1" src="../Public/Images/sign_cancel.png" alt="failed" title="mark as failed" align="absmiddle" />]
-					</notempty>
-					</td>
-				</tr>
-				</table>
-			</td>
+			<th>Test NO.</th>
+			<th>Project Code</th>
+			<td rowspan="2" ><input type="submit" name="submit" value="Create" /></td>
 		</tr>
 		<tr>
 			<td>
-				<table id="{$item['id']}" class="entry" width="100%" cellpadding="4" cellspacing="0" border="1" bordercolor="#999999" style="border-collapse:collapse;background-color:#FFFFFF;">
-				<tr>
-					<td width="100">&nbsp;</td>
-					<foreach name="x_axis" item="x">
-					<th width="<php>echo round(100/(count($x_axis)+1)).'%';</php>">{$x}</th>
-					</foreach>
-				</tr>
-					<iterate name="item.entry" id="row">
-					<php>$y = $key;</php>
-				<tr>
-					<th>{$y}</th>
-						<foreach name="x_axis" item="x">
-							<empty name="editable">
-					<td>{$row[$x]['string']|default='&nbsp;'}</td>
-							<else />
-					<td class="entry">
-							<empty name="row[$x]">
-						<span></span><input type="text" name="entry[{$x}][{$y}]" value="" style="display:none;width:0;" />
-							<else />
-						<span>{$row[$x]['string']}</span><input type="text" name="entry[{$row[$x]['id']}]" value="{$row[$x]['string']|str_replace=array('<em>','</em>'),'',###}" style="display:none;width:0;" />
-							</empty>
-					</td>
-							</empty>
-						</foreach>
-				</tr>
-					</iterate>
-				<tr>
-					<th>Comments</th>
-					<empty name="editable">
-					<td colspan="{$x_axis|count}">{$item['comment']|nl2br}</td>
-					<else />
-					<td colspan="{$x_axis|count}" class="entry">
-						<span class="textarea">{$item['comment']|nl2br}</span><textarea name="comment" style="display:none;width:0;height:0;">{$item['comment']}</textarea><i style="display:none;">"Ctrl+Enter" to submit.</i></td>
-					</empty>
-				</tr>
-				</table>
+				<input type="text" name="name" value="{$new_name}" size="12"/>
+			</td>
+			<td>
+				<input type="text" name="project" value="" size="12" />
 			</td>
 		</tr>
 		</table>
 		</form>
-		</iterate>
-		{$page}
-		<empty name="result">
-		<p class="center">No Record</p>
-		<else />
-		<p class="center">&nbsp;</p>
-		</empty>
+	</td>
+	<td>
+		<form action="__URL__/index" method="get">
+		<table cellpadding="3" border="1" bordercolor="#FFFFFF" style="border-collapse:collapse;">
+		<tr>
+			<th>Creator</th>
+			<!-- <th>Test NO.</th> -->
+			<th>Project Code</th>
+			<th>Keyword</th>
+			<td rowspan="2">
+				<input type="submit" value="Search" />
+				<input type="button" onclick="window.location='__URL__';" value="Reset" />
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<select id="staff_id" name="staff_id"><option value="">All</option>{$staff_opts}</select>
+			</td>
+			<!-- <td>
+				<input type="text" name="name" size="12" value="{$request['name']}" />
+			</td> -->
+			<td>
+				<input type="text" name="project" size="12" value="{$request['project']}" />
+			</td>
+			<td>
+				<input type="text" name="string" size="12" value="{$request['string']}" />
+			</td>
+		</tr>
+		</table>
+		</form>
+	</td>
+</tr>
+</table>
+{$page}
+<iterate name="result" id="item" key="n">
+	<php>$MOD=$mod;if ($item['staff_id'] == $_SESSION[C('USER_AUTH_KEY')])$editable = true;</php>
+<form id="form{$item['id']}" action="__URL__/edit" method="post" target="_iframe">
+<input type="hidden" name="id" value="{$item['id']}" />
+<table width="80%"  cellpadding="0" cellspacing="0" style="margin:5px auto" class="table_border{$MOD}">
+<tr>
+	<td>
+		<table id="{$item['id']}" class="header" width="100%" cellpadding="4" cellspacing="0" border="1" bordercolor="<php>if ($MOD==0)echo '#9999FF';else echo '#FFCC00';</php>" style="border-collapse:collapse;">
+		<tr>
+			<th style="width:100px;text-align:left;">Test NO.</th>
+			<empty name="noeditable">
+			<td>{$item['name']}</td>
+			<else />
+			<td class="header"><span>{$item['name']}</span><input type="text" name="name" value="{$item['name']|str_replace=array('<em>','</em>'),'',###}" style="display:none;width:0;" /></td>
+			</empty>
+			<th style="width:100px;text-align:left;">Create Time</th>
+			<td>{$item['create_time']}</td>
+		</tr>
+		<tr>
+			<th style="text-align:left">Creator</th>
+			<td>{$item['staff']['realname']}</td>
+			<th style="text-align:left;">Update Time</th>
+			<td>{$item['edit_time']}</td>
+		</tr>
+		<tr>
+			<th style="text-align:left">Project Code</th>
+			<empty name="editable">
+			<td>{$item['project']}</td>
+			<else />
+			<td class="header"><span>{$item['project']}</span><input type="text" name="project" value="{$item['project']|str_replace=array('<em>','</em>'),'',###}" style="display:none;width:0;" /></td>
+			</empty>
+			<th style="text-align:left;">Result</th>
+			<td>
+			<if condition="$item['result'] eq 1">
+				<strong style="color:green">Passed</strong>
+			<elseif condition="$item['result'] eq 0" />
+				<strong style="color:blue;">Pending</strong>
+			<elseif condition="$item['result'] eq -1" />
+				<strong style="color:red">Failed</strong>
+			</if>
+			<notempty name="editable">
+				[<img class="result" id="1" src="../Public/Images/sign_tick.png" alt="passed" title="mark as passed" align="absmiddle" />
+				<img class="result" id="0" src="../Public/Images/sign_question.png" alt="pending" title="mark as pending" align="absmiddle" />
+				<img class="result" id="-1" src="../Public/Images/sign_cancel.png" alt="failed" title="mark as failed" align="absmiddle" />]
+			</notempty>
+			</td>
+		</tr>
+		</table>
+	</td>
+</tr>
+<tr>
+	<td>
+		<table id="{$item['id']}" class="entry" width="100%" cellpadding="4" cellspacing="0" border="1" bordercolor="<php>if ($MOD==0)echo '#9999FF';else echo '#FFCC00';</php>" style="border-collapse:collapse;">
+		<tr>
+			<th width="100">&nbsp;</th>
+			<foreach name="x_axis" item="x">
+			<th width="<php>echo round(100/(count($x_axis)+1)).'%';</php>">{$x}</th>
+			</foreach>
+		</tr>
+			<iterate name="item.entry" id="row">
+			<php>$y = $key;</php>
+		<tr>
+			<th>{$y}</th>
+				<foreach name="x_axis" item="x">
+					<empty name="editable">
+			<td>{$row[$x]['string']|default='&nbsp;'}</td>
+					<else />
+			<td class="entry">
+					<empty name="row[$x]">
+				<span></span><input type="text" name="entry[{$x}][{$y}]" value="" style="display:none;width:0;" />
+					<else />
+				<span>{$row[$x]['string']}</span><input type="text" name="entry[{$row[$x]['id']}]" value="{$row[$x]['string']|str_replace=array('<em>','</em>'),'',###}" style="display:none;width:0;" />
+					</empty>
+			</td>
+					</empty>
+				</foreach>
+		</tr>
+			</iterate>
+		<tr>
+			<th>Comments</th>
+			<empty name="editable">
+			<td colspan="{$x_axis|count}">{$item['comment']|nl2br}</td>
+			<else />
+			<td colspan="{$x_axis|count}" class="entry">
+				<span class="textarea">{$item['comment']|nl2br}</span><textarea name="comment" style="display:none;width:0;height:0;">{$item['comment']}</textarea><i style="display:none;">"Ctrl+Enter" to submit.</i></td>
+			</empty>
+		</tr>
+		</table>
+	</td>
+</tr>
+</table>
+</form>
+</iterate>
+{$page}
+<empty name="result">
+<p class="center">No Record</p>
+<else />
+<p class="center">&nbsp;</p>
+</empty>
 <script language="JavaScript" type="text/javascript">
 $(document).ready(function(){
 	$("td.header, td.entry").each(function() {
@@ -205,7 +225,7 @@ function setEditable(obj) {
 		var input_obj = $(this).children(input);
 		input_obj.css('width', width);
 		if ('textarea' == input) {
-			input_obj.css('height', height*2).css('overflow-y','scroll');
+			input_obj.css('height', height+40).css('overflow-y','scroll');
 			$(this).children('i').show();
 		}
 		input_obj.show().select().keydown(function(e) {
