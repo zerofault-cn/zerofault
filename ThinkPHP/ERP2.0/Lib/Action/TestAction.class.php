@@ -4,7 +4,9 @@ class TestAction extends BaseAction{
 	protected $dao, $config;
 
 	public function _initialize() {
-		Session::set('top', 'Test Log');
+		if ('Node'!= MODULE_NAME) {
+			Session::set('top', 'Test Log');
+		}
 		$this->dao = D('Test');
 		$this->config = C('_test_');
 		parent::_initialize();

@@ -341,3 +341,9 @@ table.entry th{
 td.focus{
 	background-color:#92D050;
 }
+td.comment{
+	word-wrap:break-word;
+	word-break:break-all;
+	max-width:800px;
+	overflow-x:hidden;
+}
