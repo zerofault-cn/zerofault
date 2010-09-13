@@ -37,6 +37,22 @@ i{color:red;font-style:normal;}
 .trbg1{
 	background-color:#EEEEEE;
 }
+.table_bg0{
+	background-color:#FFFFFF;
+}
+.table_bg1{
+	background-color:#ffffef;
+}
+.table_border0{
+	border:3px solid #9999FF;
+}
+
+.table_border1{
+	border:3px solid #FFCC00;
+}
+.table_border0 td, .table_border1 td{
+	background-color:#FFFFFF;
+}
 .red{
 	color:red;
 }
@@ -317,10 +333,10 @@ div.spline{
 	border-top:1px #FFFFFF solid;
 }
 table.header th{
-	background-color:#FFFFE1;
+	background-color:#D4D4D4;
 }
 table.entry th{
-	background-color:#D4D4D4;
+	background-color:#E6E6E6;
 }
 td.focus{
 	background-color:#92D050;

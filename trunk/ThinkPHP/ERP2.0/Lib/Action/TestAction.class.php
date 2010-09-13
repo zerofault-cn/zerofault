@@ -129,15 +129,6 @@ class TestAction extends BaseAction{
 			return;
 		}
 		$this->dao->find($id);
-		$name = trim($_REQUEST['name']);
-		if (''==$name) {
-			self::_error('Test NO. can\'t be empty!');
-		}
-		$rs = $this->dao->where("name='".$name."' and id!=".$this->dao->id)->find();
-		if (count($rs)>0) {
-			self::_error('The test NO. '.$name.' has been used');
-		}
-		$this->dao->name = $name;
 		$this->dao->project = trim($_REQUEST['project']);
 		$this->dao->comment = trim($_REQUEST['comment']);
 		unset($this->dao->edit_time);
