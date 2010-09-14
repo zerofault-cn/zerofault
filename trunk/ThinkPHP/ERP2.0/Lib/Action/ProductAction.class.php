@@ -383,10 +383,10 @@ class ProductAction extends BaseAction{
 		}
 		$field = trim($_REQUEST['f']);
 		$value = trim($_REQUEST['v']);
-		if (''==$value) {
+		$info = $this->dao->find($id);
+		if (strlen($info['Internal_PN']) > strlen($value)) {
 			exit('0');
 		}
-		$info = $this->dao->find($id);
 	//	if ((1==$info['fixed'] && RBAC::AccessDecision('ProductIn', 'fixed')) || (0==$info['fixed'] && RBAC::AccessDecision('ProductIn', 'floating'))) {
 			$rs = $this->dao->where('id='.$id)->setField($field,$value);
 			if(false !== $rs) {

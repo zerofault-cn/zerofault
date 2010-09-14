@@ -49,7 +49,7 @@
 <iterate name="result" id="item">
 <tr class="trbg{$mod}">
 	<td>{$item['code']}</td>
-	<td>{$item['Internal_PN']}</td>
+	<td nowrap="nowrap">{$item['Internal_PN']|str_replace=' (','<br />(',###}</td>
 	<td>{$item['description']}</td>
 	<td>{$item['manufacture']}</td>
 	<td>{$item['MPN']}</td>
