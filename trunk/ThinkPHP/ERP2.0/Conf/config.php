@@ -33,7 +33,7 @@ $config = array_merge($config, array(
 		'RBAC_ACCESS_TABLE'	=> 'erp_role_node',
 		'RBAC_NODE_TABLE'	=> 'erp_node',
 		'NOT_AUTH_MODULE'	=> 'Index,Public,Script,Asset,Inventory,Absence',
-		'IFRAME_AUTH_ACTION' => array('update','delete','edit','submit','confirm','select','import')//在Iframe中进行的且需要认证的操作
+		'IFRAME_AUTH_ACTION' => array('update','delete','edit','submit','confirm','select','import','create')//在Iframe中进行的且需要认证的操作
 		));
 return $config;
 ?>

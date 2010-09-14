@@ -75,34 +75,29 @@ ALTER TABLE erp_product_flow ADD category_id SMALLINT UNSIGNED DEFAULT "0" NOT N
 
 
 2010-09-03
-CREATE TABLE erp_bundle (
+CREATE TABLE erp_test (
 id SMALLINT UNSIGNED AUTO_INCREMENT,
  name VARCHAR (255) NOT NULL,
  staff_id SMALLINT UNSIGNED DEFAULT '0' NOT NULL,
- create_time DATETIME NOT NULL,
  project varchar (255) DEFAULT '' NOT NULL,
- sw_version varchar(255) default '' not null,
- release_date varchar(255) default '' not null,
+ version varchar(255) default '' not null,
+ comment text not null default '',
+ create_time DATETIME NOT NULL,
+ edit_time timestamp not null default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
+ result tinyint(1) not null default 0,
  status TINYINT (1) DEFAULT '0' NOT NULL,
  PRIMARY KEY(id)
  ) 
  ENGINE=MyISAM DEFAULT CHARSET=utf8 ;
 
 
-CREATE TABLE IF NOT EXISTS `erp_bundle_entry` (
+CREATE TABLE IF NOT EXISTS `erp_test_entry` (
   `id` int(10) unsigned NOT NULL auto_increment,
-  `bundle_id` smallint(5) unsigned NOT NULL default '0',
-  `part_type` varchar(255) NOT NULL default '',
-  `version_type` varchar(255) NOT NULL default '',
+  `test_id` smallint(5) unsigned NOT NULL default '0',
+  `x` varchar(255) NOT NULL default '',
+  `y` varchar(255) NOT NULL default '',
   `string` varchar(255) NOT NULL default '',
-  edit_time  DATETIME NOT NULL,
+  edit_time timestamp not null default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 ;
 
-
-INSERT INTO `erp_bundle_entry` (`id`, `bundle_id`, `part_type`, `version_type`, `string`) VALUES
-(1, 1, 'DIMM', 'HW', 'HW-MADADIMM(REV01)'),
-(2, 1, 'PowerGEM', 'HW', 'HW-PGMMADA(REV-01)'),
-(3, 1, 'DIMM', 'SW', 'SW-MADADIMM(REV-0.33)'),
-(4, 1, 'PowerGEM', 'SW', 'SW-PGMMADA(REV-0.33)'),
-(5, 1, 'DIMM', 'LG', 'LG-MADADIMM(V0.5.13)');
