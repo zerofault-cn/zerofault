@@ -163,7 +163,7 @@ class TestAction extends BaseAction{
 					}
 				}
 			}
-			self::_success('Update success!',__URL__);
+			self::_success('Update success!');
 		}
 		else {
 			self::_error('Update fail!'.(C('APP_DEBUG')?$this->dao->getLastSql():''));

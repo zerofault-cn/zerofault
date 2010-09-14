@@ -98,9 +98,9 @@ td.editing input{
 		<tr>
 			<th style="text-align:left">Project Code</th>
 			<empty name="editable">
-			<td>{$item['project']}</td>
+			<td nowrap="nowrap">{$item['project']}</td>
 			<else />
-			<td class="header"><span>{$item['project']}</span><input type="text" name="project" value="{$item['project']|str_replace=array('<em>','</em>'),'',###}" style="display:none;width:0;" /></td>
+			<td nowrap="nowrap" class="header"><span>{$item['project']}</span><input type="text" name="project" value="{$item['project']|str_replace=array('<em>','</em>'),'',###}" style="display:none;width:0;" /></td>
 			</empty>
 			<th style="text-align:left;">Result</th>
 			<td>
@@ -136,9 +136,9 @@ td.editing input{
 			<th>{$y}</th>
 				<foreach name="x_axis" item="x">
 					<empty name="editable">
-			<td>{$row[$x]['string']|default='&nbsp;'}</td>
+			<td nowrap="nowrap">{$row[$x]['string']|default='&nbsp;'}</td>
 					<else />
-			<td class="entry">
+			<td nowrap="nowrap" class="entry">
 					<empty name="row[$x]">
 				<span></span><input type="text" name="entry[{$x}][{$y}]" value="" style="display:none;width:0;" />
 					<else />
@@ -155,7 +155,7 @@ td.editing input{
 			<td colspan="{$x_axis|count}" class="comment">{$item['comment']|nl2br}</td>
 			<else />
 			<td colspan="{$x_axis|count}" class="entry comment">
-				<span class="textarea">{$item['comment']|nl2br}</span><textarea name="comment" style="display:none;width:0;height:0;">{$item['comment']}</textarea><i style="display:none;">"Ctrl+Enter" to submit.</i></td>
+				<span class="textarea">{$item['comment']|nl2br}</span><textarea name="comment" style="display:none;width:0;height:0;">{$item['comment']}</textarea><br /><i style="display:none;">"Ctrl+Enter" to submit.</i></td>
 			</empty>
 		</tr>
 		</table>
@@ -168,6 +168,7 @@ td.editing input{
 <empty name="result">
 <p class="center">No Record</p>
 <else />
+<small>Tips: "Click" to edit, "Enter" to submit, "ESC" to cancel.</small>
 <p class="center">&nbsp;</p>
 </empty>
 <script language="JavaScript" type="text/javascript">
@@ -242,6 +243,7 @@ function setEditable(obj) {
 				}
 			}
 			else if(keyCode==27) {
+				last_id = 0;
 				cancel_edit(this);
 			}
 		});
@@ -258,7 +260,7 @@ function cancel_edit(obj){
 	$(obj).parent().removeClass('editing');
 	$(obj).hide().prev().show();
 	if ($(obj).prev().attr('class')=='textarea') {
-		$(obj).next().hide();
+		$(obj).next().next().hide();
 	}
 }
 function changeResult(obj) {
