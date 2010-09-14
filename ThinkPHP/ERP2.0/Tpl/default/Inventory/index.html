@@ -1,3 +1,8 @@
+<style>
+td.editing input{
+	padding:0;
+}
+</style>
 <p class="page_title_text">Inventory Inquire</p>
 <table>
 <tr>
@@ -57,10 +62,14 @@
 </tr>
 <iterate name="result" id="item">
 <tr class="trbg{$mod}">
-	<td><gt name="item['inventory']['chg_quantity']" value="0"><if condition="$_SESSION[C('ADMIN_AUTH_NAME')] eq true or (array_key_exists(1, $_SESSION[C('MANAGER_AUTH_NAME')]) and ($_SESSION[C('MANAGER_AUTH_NAME')][1]['fixed'] eq '01' or (strlen($_SESSION[C('MANAGER_AUTH_NAME')][1]['fixed'])==1 and $item['fixed'] eq $_SESSION[C('MANAGER_AUTH_NAME')][1]['fixed'])))"><input type="checkbox" name="chk[]" value="{$item['product_id']}" onclick="updateCheckAll2(this);" /></if></gt></td>
+	<td><gt name="item['inventory']['chg_quantity']" value="0"><if condition="$_SESSION[C('ADMIN_AUTH_NAME')] eq true or (!empty($_SESSION[C('LMANAGER_AUTH_NAME')][1]) and ($_SESSION[C('LMANAGER_AUTH_NAME')][1]['fixed'] heq '01' or (strlen($_SESSION[C('LMANAGER_AUTH_NAME')][1]['fixed'])==1 and $item['fixed'] eq $_SESSION[C('LMANAGER_AUTH_NAME')][1]['fixed'])))"><input type="checkbox" name="chk[]" value="{$item['product_id']}" onclick="updateCheckAll2(this);" /></if></gt></td>
 	<td align="center">{$i}</td>
-	<td><a href="__URL__/info/id/{$item['product_id']}?width=400" class="jTip" id="product{$item['product_id']}" name="Product Detail">{$item['Internal_PN']}</a></td>
-	<td>{$item['description']}</td>
+	<if condition="$_SESSION[C('ADMIN_AUTH_NAME')] eq true or (!empty($_SESSION[C('LMANAGER_AUTH_NAME')][1]) and ($_SESSION[C('LMANAGER_AUTH_NAME')][1]['fixed'] heq '01' or (strlen($_SESSION[C('LMANAGER_AUTH_NAME')][1]['fixed'])==1 and $item['fixed'] eq $_SESSION[C('LMANAGER_AUTH_NAME')][1]['fixed'])))">
+	<td class="edit" nowrap="nowrap"><span>{$item['Internal_PN']|str_replace=' (','<br />(',###}</span><input type="text" id="{$item['product_id']}" value="{$item['Internal_PN']}" style="display:none;width:0;" /></td>
+	<else />
+	<td nowrap="nowrap">{$item['Internal_PN']|str_replace=' (','<br />(',###}</td>
+	</if>
+	<td class="jTip" headers="__URL__/info/id/{$item['product_id']}?width=400" id="product{$item['product_id']}" title="Product Detail">{$item['description']}</td>
 	<td><if condition="$item['fixed'] eq 1">Fixed-Assets<else />Floating-Assets</if></td>
 	<td style="padding:0;">
 	<foreach name="item['suppliers']" key="j" item="supplier">
@@ -96,6 +105,8 @@
 	<td colspan="13">{$page}</td>
 </tr>
 </table>
+<small>Tips: For green cells, "Click" to edit, "Enter" to submit, "ESC" to cancel.</small>
+
 <p class="center"></p>
 <div style="display:none" id="batch_form">
 <p class="page_title_text"></p>
@@ -108,7 +119,7 @@
 </tr>
 <iterate name="result" id="item">
 	<gt name="item['inventory']['chg_quantity']" value="0">
-		<if condition="$_SESSION[C('ADMIN_AUTH_NAME')] eq true or (array_key_exists(1, $_SESSION[C('MANAGER_AUTH_NAME')]) and ($_SESSION[C('MANAGER_AUTH_NAME')][1]['fixed'] eq '01' or (strlen($_SESSION[C('MANAGER_AUTH_NAME')][1]['fixed'])==1 and $item['fixed'] eq $_SESSION[C('MANAGER_AUTH_NAME')][1]['fixed'])))">
+		<if condition="$_SESSION[C('ADMIN_AUTH_NAME')] eq true or (!empty($_SESSION[C('LMANAGER_AUTH_NAME')][1]) and ($_SESSION[C('LMANAGER_AUTH_NAME')][1]['fixed'] eq '01' or (strlen($_SESSION[C('LMANAGER_AUTH_NAME')][1]['fixed'])==1 and $item['fixed'] eq $_SESSION[C('LMANAGER_AUTH_NAME')][1]['fixed'])))">
 <tr id="tr_{$item['product_id']}" style="display:none">
 	<td>{$item['Internal_PN']}</td>
 	<td>{$item['description']}</td>
@@ -136,4 +147,75 @@
 </p>
 </form>
 </div>
+<div id="tips" style="position:fixed;left:200px;top:182px;display:none;white-space:nowrap;padding:5px 10px;-moz-border-radius:3px;-webkit-border-radius:3px;background-color:#FFF1A8;font-weight:bold;color:black;text-align:center;line-height:20px;"></div>
 <script language="JavaScript" type="text/javascript" src="../Public/Js/batch.js"></script>
+<script language="JavaScript" type="text/javascript">
+$(document).ready(function(){
+	$("td.edit").each(function() {
+		setEditable(this);
+	});
+});
+function setEditable(obj) {
+	$(obj).css('cursor', 'pointer').mouseover(function(){
+		$(this).addClass("focus");
+	}).mouseout(function(){
+		$(this).removeClass("focus");
+	}).click(function(){
+		if ($(this).children('input').css('display') != 'none') {
+			return;
+		}
+		$("td.editing").children('input').hide();
+		$("td.editing").children('span').show();
+		$("td.editing").removeClass('editing');
+		var width = $(this).width();
+		$(this).children('span').hide();
+		$(this).children("input").css('width', width+80).show().focus().keydown(function(e){
+			var keyCode=e.keyCode || window.event.keyCode;
+			if(keyCode==13)
+			{
+				submit_edit(this);
+			}
+			else if(keyCode==27)
+			{
+				cancel_edit(this);
+			}
+		});
+		$(this).addClass('editing');
+	});
+}
+function submit_edit(obj){
+	$("#tips").show().html('Saving...');
+
+	$.post('__APP__/Product/update', {
+		'id' : $(obj).attr('id'),
+		'f' : 'Internal_PN',
+		'v' : $(obj).val()
+	}, function(str) {
+			if ('1'==str) {
+				$(obj).hide().prev().html($(obj).val().replace(' (','<br />(')).show();
+				$("#tips").html('Success!');
+				setTimeout(function() {
+					$("#tips").hide('slow').html('');
+				}, 2000);
+			}
+			else if ('-1'==str) {
+				$("#tips").html('Permission denied!');
+				setTimeout(function() {
+					$("#tips").hide('slowest').html('');
+				}, 10000);
+			}
+			else if ('0'==str) {
+				$("#tips").html('Empty string not allowed!');
+				setTimeout(function() {
+					$("#tips").hide('slowest').html('');
+				}, 10000);
+			}
+			else {
+				$("#tips").html('Oops, failure!'+str);
+			}
+		});
+}
+function cancel_edit(obj){
+	$(obj).hide().prev().show();
+}
+</script>

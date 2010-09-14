@@ -9,8 +9,8 @@
 $(document).ready(JT_init);
 
 function JT_init(){
-	       $("a.jTip")
-		   .hover(function(){JT_show(this.href,this.id,this.name)},function(){$('#JT').remove()})
+	       $("td.jTip,a.jTip")
+		   .hover(function(){JT_show(this.href||this.headers,this.id,this.name||this.title)},function(){$('#JT').remove()})
            .click(function(){return false});	   
 }
 
