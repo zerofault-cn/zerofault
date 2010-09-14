@@ -376,6 +376,30 @@ class ProductAction extends BaseAction{
 		$this->assign('content', 'Product:info');
 		$this->display('Layout:content');
 	}
+	public function update() {
+		$id = intval($_REQUEST['id']);
+		if (!$id>0) {
+			exit();
+		}
+		$field = trim($_REQUEST['f']);
+		$value = trim($_REQUEST['v']);
+		if (''==$value) {
+			exit('0');
+		}
+		$info = $this->dao->find($id);
+	//	if ((1==$info['fixed'] && RBAC::AccessDecision('ProductIn', 'fixed')) || (0==$info['fixed'] && RBAC::AccessDecision('ProductIn', 'floating'))) {
+			$rs = $this->dao->where('id='.$id)->setField($field,$value);
+			if(false !== $rs) {
+				exit('1');
+			}
+			else {
+				exit(C('APP_DEBUG')?$this->dao->getLastSql():'');
+			}
+	//	}
+	//	else {
+	//		exit('-1');
+	//	}
+	}
 	public function delete() {
 		//判断是否已被使用
 		$id = $_REQUEST['id'];
