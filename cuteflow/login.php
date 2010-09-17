@@ -52,7 +52,7 @@
 				{
 					$strMd5Password = md5($_REQUEST["Password"]);
 
-					$query = sprintf("SELECT * FROM cf_user WHERE strUserId='%s' AND strPassword='%s'",
+					$query = sprintf("SELECT * FROM cf_user WHERE strUserId='%s' AND strPassword='%s' and bDeleted=0",
             						mysql_real_escape_string($_REQUEST["UserId"]),
             						mysql_real_escape_string($strMd5Password));
             
@@ -95,7 +95,7 @@
 				{
 					$strMd5Password = md5($_REQUEST["Password"]);
 
-					$query = sprintf("SELECT * FROM cf_user WHERE strUserId='%s' AND strPassword='%s'",
+					$query = sprintf("SELECT * FROM cf_user WHERE strUserId='%s' AND strPassword='%s' and bDeleted=0",
             						mysql_real_escape_string($_REQUEST["UserId"]),
             						mysql_real_escape_string($strMd5Password));
             						

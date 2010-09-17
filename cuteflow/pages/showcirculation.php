@@ -56,6 +56,8 @@
 		maketip('unarchive','<?php echo escapeSingle($CIRCULATION_TIP_UNARCHIVE);?>');
 		maketip('stop','<?php echo escapeSingle($CIRCULATION_TIP_STOP);?>');
 		maketip('restart','<?php echo escapeSingle($CIRCULATION_TIP_RESTART);?>');
+		maketip('pause','Pause this circulation.');
+		maketip('start','Start the paused circulation again.');
 	</script>
 	<script language="JavaScript">
 	<!--
@@ -149,6 +151,46 @@
 			new Ajax.Request
 			(
 				"ajax_stop_circulation.php",
+				{
+					onSuccess : function(resp) 
+					{
+						sortResult('<?php echo $sortDirection;?>', '<?php echo $sortby;?>', nStart);
+					},
+			 		onFailure : function(resp) 
+			 		{
+			   			alert("Oops, there's been an error.");
+			 		},
+			 		parameters : strParams
+				}
+			);
+		}
+		function pauseCirculation(nHistoryId, nStart)
+		{
+			var strParams	= 'historyid='+nHistoryId+'&language=<?php echo $_REQUEST['language'] ?>';
+			
+			new Ajax.Request
+			(
+				"ajax_pause_circulation.php",
+				{
+					onSuccess : function(resp) 
+					{
+						sortResult('<?php echo $sortDirection;?>', '<?php echo $sortby;?>', nStart);
+					},
+			 		onFailure : function(resp) 
+			 		{
+			   			alert("Oops, there's been an error.");
+			 		},
+			 		parameters : strParams
+				}
+			);
+		}
+		function startCirculation(nHistoryId, nStart)
+		{
+			var strParams	= 'historyid='+nHistoryId+'&language=<?php echo $_REQUEST['language'] ?>';
+			
+			new Ajax.Request
+			(
+				"ajax_start_circulation.php",
 				{
 					onSuccess : function(resp) 
 					{
