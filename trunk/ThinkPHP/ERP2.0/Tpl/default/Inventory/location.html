@@ -15,7 +15,7 @@
 <tr class="trbg{$mod}">
 	<td><if condition="$_SESSION[C('ADMIN_AUTH_NAME')] eq true or (!empty($_SESSION[C('LMANAGER_AUTH_NAME')][$location_id]) and ($_SESSION[C('LMANAGER_AUTH_NAME')][$location_id]['fixed'] eq '01' or (strlen($_SESSION[C('LMANAGER_AUTH_NAME')][$location_id]['fixed'])==1 and $item['product']['fixed'] eq $_SESSION[C('LMANAGER_AUTH_NAME')][$location_id]['fixed'])))"><input type="checkbox" name="chk[]" value="{$item['product']['id']}" onclick="updateCheckAll2(this);" /></if></td>
 	<td align="center">{$i}</td>
-	<td><a href="__URL__/info/id/{$item['product']['id']}?width=400" class="jTip" id="product{$i}" name="Product Detail">{$item['product']['Internal_PN']}</a></td>
+	<td><a href="__URL__/info/id/{$item['product']['id']}?width=400" class="jTip" id="product{$i}" name="Product Detail">{$item['product']['Internal_PN']|str_replace=' (','<br />(',###}</a></td>
 	<td>{$item['product']['description']}</td>
 	<td><if condition="$item['product']['fixed'] eq 1">Fixed-Assets<else />Floating-Assets</if></td>
 	<td align="center">{$item['chg_quantity']}</td>
