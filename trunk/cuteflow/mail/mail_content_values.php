@@ -483,7 +483,15 @@ else
 		<td align="left">
 			<table border="0" width="100%">
 			<?php
-			if ($arrCirculationProcess["nDecissionState"] == 0)
+			if ($arrCirculationHistory['isPaused']==1) {
+				$ShowSendButton = false;
+				?>
+			<tr>
+				<td align="left">
+					<strong style="color:red;">&nbsp;&nbsp;Circulation paused!</strong>
+				<?php
+			}
+			elseif ($arrCirculationProcess["nDecissionState"] == 0)
 			{
 				$ShowSendButton = true;
 			?>
@@ -667,6 +675,9 @@ if (sizeof($arrSlots) != 0) {
 							}
 							else{
 								$bTextOnly = 0;
+							}
+							if ($arrCirculationHistory['isPaused']==1) {
+								$bTextOnly = 1;
 							}
 							echo '<fieldset style="border-color:#666;border-width:1px;"><legend style="font-weight:bold"><img src="../images/singleuser.gif" height="16" width="16" align="absmiddle"/> '.$arrUsers[$user_id]["strFirstName"].'</legend>';
 							if ($arrRow["nType"] == 1) {

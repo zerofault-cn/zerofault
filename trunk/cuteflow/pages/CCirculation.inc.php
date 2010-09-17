@@ -1533,6 +1533,7 @@ class CCirculation
 	function getDecissionState_arr($nCirculationFormID)
 	{		
 		$arrHistoryData 		= $this->getMaxHistoryData($nCirculationFormID);
+		$arrHistory				= $this->getCirculationHistory($arrHistoryData);
 		$Id_arr					= $this->getProcessId_arr($arrHistoryData);
         foreach ($Id_arr as $nId) {
 			$arrProcessInformation 	= $this->getProcessInformation($nId);
@@ -1540,7 +1541,7 @@ class CCirculation
 			{
 				$tsDateInProcessSince = $arrProcessInformation["dateInProcessSince"];
 				$tsNow = time();
-				$arrResults['nDaysInProgress'] = (int)((($tsNow-$tsDateInProcessSince))/(24*60*60));
+				$arrResults['nDaysInProgress'] = (int)(($tsNow-$tsDateInProcessSince-$arrHistory['pausedInterval'])/(24*60*60));
 			}
 			if ($arrProcessInformation["nDecissionState"] == 16) {
 				$arrResults['nDaysInProgress'] = '-';

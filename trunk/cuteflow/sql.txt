@@ -38,3 +38,9 @@ CREATE TABLE IF NOT EXISTS cf_mailToSender (
 ALTER TABLE cf_formtemplate ADD bIsCopied TINYINT(1)  UNSIGNED DEFAULT "0" NOT NULL AFTER strName;
 
 ALTER TABLE cf_user ADD nStaffId INT UNSIGNED DEFAULT "0" NOT NULL;
+
+
+2010/9/17(ÔÝÍ£¹¦ÄÜ)
+ALTER TABLE cf_circulationhistory ADD isPaused TINYINT(1)  UNSIGNED DEFAULT "0" NOT NULL;
+ALTER TABLE cf_circulationhistory ADD pausedTime INT UNSIGNED DEFAULT "0" NOT NULL;
+ALTER TABLE cf_circulationhistory ADD pausedInterval INT UNSIGNED DEFAULT "0" NOT NULL;

@@ -87,6 +87,19 @@
 		}
 		exit;
 	}
+	elseif ('set_name'==$_REQUEST['action']) {
+		$nID = intval(trim($_REQUEST['nID']));
+		$strName = addslashes(trim($_REQUEST['strName']));
+		$sql = "Update cf_circulationform set strName='".$strName."' where nID=".$nID;
+		if (mysql_query($sql)) {
+			echo '1';
+		}
+		else {
+			echo $sql;
+		}
+		exit;
+	}
+
 	if (!$ALLOW_UNENCRYPTED_REQUEST)
 	{
 		// clear $_REQUEST to ensure that only the encryptet "key" is used
@@ -370,7 +383,7 @@ td.focus{
 
 	function printUser($arrRow, $bIsSubstitute, $nUserId, $bLastUser)
 	{
-		global $arrUsers, $_REQUEST;
+		global $arrUsers, $_REQUEST, $arrHistoryData;
 		global $CIRCDETAIL_RECEIVE, $CIRCDETAIL_STATE_WAITING, $CIRCDETAIL_STATE_OK, $CIRCDETAIL_STATE_STOP;
 		global $CIRCDETAIL_STATE_SKIPPED, $CIRCDETAIL_STATE_SUBSTITUTE, $CIRCDETAIL_PROCESS_DURATION;
 		global $CIRCDETAIL_DAYS, $CIRCDETAIL_STATE_DENIED, $nMailingListID, $SELF_DELEGATE_USER;
@@ -433,7 +446,7 @@ td.focus{
 						$strText = $CIRCDETAIL_STATE_SKIPPED;
 						break;
 				case 8: $strImage = "state_skip.png";
-						$strText = $CIRCDETAIL_STATE_SUBSTITUTE;													
+						$strText = $CIRCDETAIL_STATE_SUBSTITUTE;
 						break;
 				case 16: $strImage = "stop.gif";
 						$strText = "<strong style=\"color:Red;\">$CIRCDETAIL_STATE_STOP</strong>";
@@ -451,15 +464,37 @@ td.focus{
 		{
 			if ($arrRow["nDecissionState"] == 0)
 			{
-				$diff = abs(time() - $arrRow["dateInProcessSince"]);
+				$time = time();
+				if ($arrRow['dateInProcessSince']<$arrHistoryData[$_REQUEST["nRevisionId"]]['pausedTime']) {
+					//这个process是在暂停之前开始的
+					if ($arrHistoryData[$_REQUEST["nRevisionId"]]['isPaused']==0) {
+						//已从暂停中恢复
+						$time -= $arrHistoryData[$_REQUEST["nRevisionId"]]['pausedInterval'];
+					}
+					else {
+						//正在暂停中
+						$time = $arrHistoryData[$_REQUEST["nRevisionId"]]['pausedTime'];
+					}
+				}
+				$diff = abs($time - $arrRow["dateInProcessSince"]);
 				$nDays = floor($diff / (60 * 60 * 24) );
 			}
 			else
 			{
 				if ($arrRow["nDecissionState"] != 16)
 				{					
-					$dateDecission = $arrRow["dateDecission"];
-					$diff = abs($dateDecission - $arrRow["dateInProcessSince"]);
+					$time = $arrRow["dateDecission"];
+					if ($arrRow['dateInProcessSince']<$arrHistoryData[$_REQUEST["nRevisionId"]]['pausedTime'] && $arrHistoryData[$_REQUEST["nRevisionId"]]['pausedTime']<$arrRow["dateDecission"]) {
+						if ($arrHistoryData[$_REQUEST["nRevisionId"]]['isPaused']==0) {
+							//已从暂停中恢复
+							$time -= $arrHistoryData[$_REQUEST["nRevisionId"]]['pausedInterval'];
+						}
+						else {
+							//正在暂停中
+							$time = $arrHistoryData[$_REQUEST["nRevisionId"]]['pausedTime'];
+						}
+					}
+					$diff = abs($time - $arrRow["dateInProcessSince"]);
 					$nDays = floor($diff / (60 * 60 * 24) );
 				}
 				else
@@ -474,11 +509,10 @@ td.focus{
 		{
             echo "<td>&nbsp;</td>\n";
 		}
-		
 		//--- the actions
 		global $objURL;
 		echo "<td nowrap>";
-		if (($_SESSION["SESSION_CUTEFLOW_ACCESSLEVEL"] == 2)||($_SESSION["SESSION_CUTEFLOW_ACCESSLEVEL"] == 8))
+		if ($arrHistoryData[$_REQUEST["nRevisionId"]]['isPaused']==0 && ($_SESSION["SESSION_CUTEFLOW_ACCESSLEVEL"]==2 || $_SESSION["SESSION_CUTEFLOW_ACCESSLEVEL"]==8))
 		{
 			if ($dateReceive != "-")
 			{
@@ -513,7 +547,7 @@ td.focus{
 					<a onMouseOver="tip('redo')" onMouseOut="untip()" href="redo.php?key=<?php echo $strEncyrptedParams ?>"><img src="../images/128.png" border="0" height="16" width="16"></a>
 					<?php
 				}
-				/*else if (($bLastUser == true) && ($bIsSubstitute == false) && ($nState != 16) && ($nState != 8))
+				elseif (false && ($bLastUser == true) && ($bIsSubstitute == false) && ($nState != 16) && ($nState != 8))
 				{
 					$strParams				= 'circid='.$_REQUEST['circid'].'&language='.$_REQUEST['language'].'&cpid='.$arrRow['nID'].'&start='.$_REQUEST['start'].'&sortby='.$_REQUEST['sortby'].'&archivemode='.$_REQUEST['archivemode'];
 					$strEncyrptedParams		= $objURL->encryptURL($strParams);
@@ -522,8 +556,11 @@ td.focus{
 					<img src="../images/retry.png" border="0" height="16" width="16">
 					</a>
 					<?php
-				}*/
+				}
 			}
+		}
+		elseif ($arrHistoryData[$_REQUEST["nRevisionId"]]['isPaused']==1 && $dateReceive != "-") {
+			echo 'Paused';
 		}
 		echo "&nbsp;</td>";
         echo "</tr>\n";
@@ -545,7 +582,15 @@ td.focus{
 	            <table bgcolor="Silver" width="100%">
 	                <tr>
 	                    <td width="20px" align="left"><img src="../images/circulate.png" height="16" width="16"></td>
-	                    <td style="font-weight:bold;" align="left"><?php echo $arrCirculationForm["strName"];?></td>
+	                    <td style="font-weight:bold;" align="left">
+						<?php
+						if ($arrCirculationForm["nSenderId"] != $_SESSION['SESSION_CUTEFLOW_USERID']) {
+							echo $arrCirculationForm["strName"];
+						}
+						else {
+							echo '<input type="text" size="40" id="'.$arrCirculationForm["nID"].'" value="'.$arrCirculationForm["strName"].'" /><input type="button" value="Update Name" onclick="update_name(this);" />';
+						}
+						?></td>
 	                </tr>
 	            </table>
 	        </td>
@@ -1192,6 +1237,18 @@ function submit_edit(obj){
 function cancel_edit(obj){
 	$(obj).hide().prev().show();
 }
-
+function update_name(obj) {
+	$.post('?action=set_name', {
+		'nID' : $(obj).prev().attr('id'),
+		'strName' : $(obj).prev().val()
+	}, function(str) {
+			if ('1'==str) {
+				alert('Update Success!');
+			}
+			else {
+				alert('Oops, failure!');
+			}
+		});
+}
 </script>
 </html>
