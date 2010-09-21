@@ -65,7 +65,7 @@
    				}
     		}
 			
-			$strQuery = "INSERT INTO cf_circulationhistory VALUES(null, $nRevisionNumber, '$dateSending', '".$_REQUEST["strAdditionalText"]."', $cfid)";
+			$strQuery = "INSERT INTO cf_circulationhistory set nRevisionNumber=".$nRevisionNumber.", dateSending=".$dateSending.", strAdditionalText='".$_REQUEST["strAdditionalText"]."', nCirculationFormID=".$cfid;
 			mysql_query($strQuery, $nConnection);
 			
 			$strQuery = "SELECT MAX(nID) FROM cf_circulationhistory";

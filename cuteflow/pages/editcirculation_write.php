@@ -86,7 +86,7 @@
 		}
 		$dateSending = time();
 		
-		$strQuery = "INSERT INTO cf_circulationhistory VALUES(null, ".($arrOld['nRevisionNumber']+1).", '".$dateSending."', '".$strAdditionalText."', ".$nCirculationFormID.")";
+		$strQuery = "INSERT INTO cf_circulationhistory set nRevisionNumber=".($arrOld['nRevisionNumber']+1).", dateSending=".$dateSending.", strAdditionalText='".$strAdditionalText."', nCirculationFormID=".$nCirculationFormID;
 		mysql_query($strQuery, $nConnection);
 		$nCirculationHistoryID = mysql_insert_id($nConnection);
 
@@ -221,12 +221,14 @@
 			die('Error: '.$sql);
 		}
 		$nNewFormTemplateID = mysql_insert_id($nConnection);
+		$NewSlotID_arr = array();//SlotµÄ¾ÉidÓ³Éäµ½ÐÂid
 		while ($arr2 = mysql_fetch_array($rs2)) {
 			$sql = "Insert into cf_formslot set strName='".addslashes($arr2['strName'])."', strDescr='".addslashes($arr2['strDescr'])."', nTemplateId=".$nNewFormTemplateID.", nSlotNumber=".$arr2['nSlotNumber'].", nSendType=".$arr2['nSendType'].", dueDate='".$arr2['dueDate']."', doneTime=".$arr2['doneTime'].", remindTime=".$arr2['remindTime'];
 			if (!mysql_query($sql, $nConnection)) {
 				die('Error: '.$sql);
 			}
 			$new_slot_id = mysql_insert_id($nConnection);
+			$NewSlotID_arr[$arr2['nID']] = $new_slot_id;
 			$sql = "select * from cf_slottofield where nSlotId=".$arr2['nID'];
 			$rs = mysql_query($sql);
 			while ($arr = mysql_fetch_array($rs)) {
@@ -563,7 +565,7 @@
 					$arrValues = explode("_", $key);
 					
 					$nFieldId 	= $arrValues[0];
-					$nSlotId 	= $arrValues[1];
+					$nSlotId 	= $NewSlotID_arr[$arrValues[1]];
 					$nFormId	= $arrValues[2];
 					
 					$strMyFile = $_FILES[$key]['name'];
@@ -585,7 +587,7 @@
 						
 						move_uploaded_file($_FILES[$key]['tmp_name'], $uploadfile);
 						
-						$strQuery = "UPDATE cf_fieldvalue SET strFieldValue='$value' WHERE nInputFieldId=".$arrValues[0]." AND nSlotId=".$arrValues[1]." AND nFormId = '$nCirculationFormID' AND nCirculationHistoryId = '$nCirculationHistoryID'; ";
+						$strQuery = "UPDATE cf_fieldvalue SET strFieldValue='$value' WHERE nInputFieldId=".$arrValues[0]." AND nSlotId=".$nSlotId." AND nFormId = '$nCirculationFormID' AND nCirculationHistoryId = '$nCirculationHistoryID'; ";
 						@mysql_query($strQuery, $nConnection);
 					}					
 				}
@@ -621,7 +623,7 @@
 							
 							$strState = $_REQUEST[$strReq];
 							addRB($nMyGroupID, $strValue, $strState, $nFieldId, $nSlotId, $nFormId);
-						}							
+						}
 						elseif ($arrValues[0] == 'CBName')
 						{
 							$nFieldId	= $arrValues[1];
@@ -662,7 +664,7 @@
 							addCOMBO($nMyGroupID, $strValue, $strState, $nFieldId, $nSlotId, $nFormId);
 						}
 						else
-						{								
+						{
 							//--- Test if value already exists
 							$nFieldId 	= $arrValues[0];
 							$nSlotId 	= $arrValues[1];
@@ -737,7 +739,7 @@
 							
 							if (($nFieldType == 1) || ($nFieldType == 2) || ($nFieldType == 3) || ($nFieldType == 4) || ($nFieldType == 5))
 							{
-								$strQuery = "UPDATE cf_fieldvalue SET strFieldValue='$value' WHERE nInputFieldId=".$arrValues[0]." AND nSlotId=".$arrValues[1]." AND nFormId = '$nCirculationFormID' AND nCirculationHistoryId = '$nCirculationHistoryID'; ";
+								$strQuery = "UPDATE cf_fieldvalue SET strFieldValue='$value' WHERE nInputFieldId=".$arrValues[0]." AND nSlotId=".$NewSlotID_arr[$nSlotId]." AND nFormId = '$nCirculationFormID' AND nCirculationHistoryId = '$nCirculationHistoryID'; ";
 						   		mysql_query($strQuery, $nConnection);
 							}
 						}					
@@ -763,7 +765,7 @@
 								$nCurState = 1;
 							}
 							$nFieldId	= $arrCurRBEntries['nFieldId'];
-							$nSlotId	= $arrCurRBEntries['nSlotId'];
+							$nSlotId	= $NewSlotID_arr[$arrCurRBEntries['nSlotId']];
 							$nFormId	= $arrCurRBEntries['nFormId'];
 							
 							$strCrazyValue = $strCrazyValue.'---'.$strCurName.'---'.$nCurState;
@@ -792,8 +794,8 @@
 								$nCurState = 1;
 							}
 							$nFieldId	= $arrCurRBEntries['nFieldId'];
-							$nSlotId	= $arrCurRBEntries['nSlotId'];;
-							$nFormId	= $arrCurRBEntries['nFormId'];;
+							$nSlotId	= $NewSlotID_arr[$arrCurRBEntries['nSlotId']];
+							$nFormId	= $arrCurRBEntries['nFormId'];
 							
 							$strCrazyValue = $strCrazyValue.'---'.$strCurName.'---'.$nCurState;
 						}
@@ -821,8 +823,8 @@
 								$nCurState = 1;
 							}
 							$nFieldId	= $arrCurCOMBOEntries['nFieldId'];
-							$nSlotId	= $arrCurCOMBOEntries['nSlotId'];;
-							$nFormId	= $arrCurCOMBOEntries['nFormId'];;
+							$nSlotId	= $NewSlotID_arr[$arrCurCOMBOEntries['nSlotId']];
+							$nFormId	= $arrCurCOMBOEntries['nFormId'];
 							
 							$strCrazyValue = $strCrazyValue.'---'.$strCurName.'---'.$nCurState;
 							$nCounter++;
