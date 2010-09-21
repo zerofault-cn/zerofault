@@ -213,7 +213,7 @@ class CCirculation
 	{	
 		$dateSending = mktime(date("H"),date("i"),date("s"),date("m"),date("d"),date("Y"));
 		
-		$strQuery 	= "INSERT INTO cf_circulationhistory VALUES(null, 1, '$dateSending', '$strAdditionalText', $nCirculationFormID)";
+		$strQuery 	= "INSERT INTO cf_circulationhistory set nRevisionNumber=1, dateSending=".$dateSending.", strAdditionalText='".$strAdditionalText."', nCirculationFormID=".$nCirculationFormID;
 		$nResult 	= @mysql_query($strQuery);
 		
 		$strQuery 	= "SELECT MAX(nID) FROM cf_circulationhistory";
