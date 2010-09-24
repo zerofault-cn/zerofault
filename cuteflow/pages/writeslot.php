@@ -80,7 +80,7 @@
 						$nMaxSlotNumber = $arrRow[0];
 					}
 				}
-				$query = "INSERT INTO cf_formslot values (null, \"".$_REQUEST["strName"]."\", '".addslashes($_REQUEST['description'])."', ".$_REQUEST["templateid"].", ".($nMaxSlotNumber+1).", ".$nSendType.", '".$dueDate."', ".$number1.", ".$number2.")";
+				$query = "INSERT INTO cf_formslot values (null, \"".$_REQUEST["strName"]."\", '".addslashes($_REQUEST['description'])."', ".$_REQUEST["templateid"].", ".($nMaxSlotNumber+1).", ".$nSendType.", '".$dueDate."', ".$time1.", ".$time2.")";
 			}
 			else
 			{

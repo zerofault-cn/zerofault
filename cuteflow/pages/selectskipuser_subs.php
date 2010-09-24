@@ -62,7 +62,7 @@
 					<td style="padding: 8px 4px 8px 4px;">
 						<select id="MailingList" class="FormInput" size="10" style="width:250px;">
         					<?php
-        					$strQuery = "SELECT * FROM cf_user  WHERE bDeleted <> 1 and nID not in (".implode(',', $userId_arr).") ORDER BY strLastName ASC";
+        					$strQuery = "SELECT * FROM cf_user  WHERE bDeleted <> 1 and nID not in (".implode(',', $userId_arr).") ORDER BY strFirstName ASC";
             				$nResult = mysql_query($strQuery, $nConnection);
                     
                     		if ($nResult)
@@ -71,7 +71,7 @@
                     			{
                     				while (	$arrRow = mysql_fetch_array($nResult))
                     				{
-                 						echo "<option value=\"".$arrRow["nID"]."\">".$arrRow["strUserId"]." (".$arrRow["strLastName"].", ".$arrRow["strFirstName"].")</option>";   					
+                 						echo "<option value=\"".$arrRow["nID"]."\">".$arrRow["strUserId"]." (".$arrRow["strLastName"].", ".$arrRow["strFirstName"].")</option>";
                     				}		
                     			}
                     		}
