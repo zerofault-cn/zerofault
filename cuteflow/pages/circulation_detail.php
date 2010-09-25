@@ -864,6 +864,7 @@ if ($view != 'print')
 		<?php
 		$strQuery = "SELECT * FROM cf_slottouser WHERE nMailingListId=".$arrCirculationForm["nMailingListId"]." AND nSlotId=".$arrSlot["nID"]." ORDER BY nPosition ASC";
 		$nResult = mysql_query($strQuery, $nConnection) or die ($strQuery."<br>".mysql_error());
+		$arrCurPi = array();
 		if (mysql_num_rows($nResult) > 0) {
 			while ($arrRow = mysql_fetch_array($nResult)) {
 				if ($arrRow['nUserId'] != -2) {

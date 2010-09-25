@@ -193,7 +193,7 @@ if ($nConnection)
                 items: [{
                     region:'north',
                     xtype: 'panel',
-                    title: '<?php echo $arrCirculationForm['strName'];?>',
+                    title: '<?php echo addslashes($arrCirculationForm['strName']);?>',
                     split:true,
                     contentEl: 'header',
                     height: 'auto',
