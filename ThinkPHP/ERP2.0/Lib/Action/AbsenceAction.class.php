@@ -506,7 +506,6 @@ class AbsenceAction extends BaseAction{
 			}
 			$this->dao->attachment = implode(';', $file_name);
 			$this->dao->create_time = date("Y-m-d H:i:s");
-			$this->dao->status = 0;
 			$this->dao->creator_id = $_SESSION[C('STAFF_AUTH_NAME')]['id'];
 		}
 		$this->dao->type = $type;
@@ -517,6 +516,15 @@ class AbsenceAction extends BaseAction{
 		$this->dao->deputy_id = $deputy;
 		$this->dao->notification = implode(';', $notification);
 		$this->dao->note = $note;
+		if ($hour<=8) {
+			$this->dao->status = 0;
+		}
+		elseif ($hour<=16) {
+			$this->dao->status = -1;
+		}
+		else {
+			$this->dao->status = -2;
+		}
 		if($id>0) {
 			if(false !== $this->dao->save()) {
 				self::_success('Application updated!',__URL__);
