@@ -865,6 +865,7 @@ if ($view != 'print')
 		$strQuery = "SELECT * FROM cf_slottouser WHERE nMailingListId=".$arrCirculationForm["nMailingListId"]." AND nSlotId=".$arrSlot["nID"]." ORDER BY nPosition ASC";
 		$nResult = mysql_query($strQuery, $nConnection) or die ($strQuery."<br>".mysql_error());
 		$arrCurPi = array();
+		$InProcess = false;
 		if (mysql_num_rows($nResult) > 0) {
 			while ($arrRow = mysql_fetch_array($nResult)) {
 				if ($arrRow['nUserId'] != -2) {
@@ -876,6 +877,9 @@ if ($view != 'print')
 					if (sizeof($arrCurPi) < 1) {
 						$arrCurPi = $arrProcessInformation['-2'.'_'.$arrSlot['nID'].'_'.$nPosInSlot];
 					}
+				}
+				if ($arrCurPi['nDecissionState']==0) {
+					$InProcess = true;
 				}
 				$nPICount++;
 				$bLastUser = ($nPICount == sizeof($arrProcessInformation)) ? true : false;
@@ -902,11 +906,14 @@ if ($view != 'print')
 						$arrCPResult = $arrRow2;
 					}
 					printUser($arrCPResult, true, $nSubstituteId, $bLastUser);
+					if ($arrCPResult['nDecissionState']==0) {
+						$InProcess = true;
+					}
 				}
 				$nPosInSlot++;
 			}
 		}
-		if ($arrCirculationForm["nSenderId"] == $_SESSION['SESSION_CUTEFLOW_USERID']) {
+		if ($arrCirculationForm["nSenderId"] == $_SESSION['SESSION_CUTEFLOW_USERID'] && (empty($arrCurPi) || $InProcess)) {
 			?>
 		<tr>
 			<td><img src="../images/adduser.gif" height="16" width="16" align="absmiddle"></td>
@@ -1221,7 +1228,7 @@ foreach ($arrSlots as $slotIndex=>$arrSlot) {
 <tr bgcolor="#FFFFFF">
 	<td>
 		<img src="../images/addtemplate.png" width="16" height="16" align="absmiddle" style="cursor:pointer;" onclick="$(this).next().show();"/>
-		<form style="display:none;margin:0;" action="?action=add_slot" method="post" target="_iframe" onsubmit="return confirm('Do you confirm to submit?')&&confirm('Notice: once saved, it cant\'t be changed!\nContinue?');">
+		<form style="display:none;margin:0;" action="?action=add_slot" method="post" target="_iframe" onsubmit="return confirm('Do you confirm to submit?')&&confirm('Notice: once saved, it cant\'t be deleted!\nContinue?');">
 		<table width="100%" cellspacing="1" cellpadding="3" bgcolor="#c8c8c8">
 		<tr bgcolor="#FFFFFF">
 			<td valign="top">
