@@ -26,9 +26,9 @@
 	$nCirculationHistoryID	= $objMyCirculation->getCirculationHistoryID($nCURCirculationProcessID);
 	$arrCirculationProcess	= $objMyCirculation->getCirculationProcess($nCirculationFormID, $nCirculationHistoryID);
 	
-	
+//	echo '<pre>';print_r($_REQUEST);print_r($arrCirculationProcess);echo '</pre>';
+//	exit;
 	$nMyIndex = $_REQUEST['nMyIndex'];
-	
 	if ($arrCirculationProcess[$nMyIndex] != '') // if true the selected new station is before the current station or the same
 	{
 		$arrMyCirculationProcess 	= $arrCirculationProcess[$nMyIndex];
@@ -40,6 +40,7 @@
 			//$arrLaterEntries	= $objMyCirculation->getLaterEntries($nCirculationFormID, $nCirculationHistoryID, $tsMyDateInProcessSince);
 			$arrLaterEntries	= $objMyCirculation->getLaterSlots($nCirculationFormID, $nCirculationHistoryID, $arrMyCirculationProcess['nSlotId']);
 		//	echo '<pre>arrLaterEntries<br />';print_r($arrLaterEntries);echo '</pre>';
+		//	exit;
 			$nMax = sizeof($arrLaterEntries);
 			for ($nIndex = 0; $nIndex < $nMax; $nIndex++)
 			{

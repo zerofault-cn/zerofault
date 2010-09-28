@@ -286,10 +286,10 @@ class CCirculation
 	function getLaterSlots($nCirculationFormID, $nCirculationHistoryID, $nSlotId)	
 	{
 		$arrRows = array();
-		$strQuery 	= "	SELECT *
-						FROM cf_circulationprocess
-						WHERE nCirculationFormId = '$nCirculationFormID' AND nCirculationHistoryId = '$nCirculationHistoryID' AND nSlotId > '$nSlotId'
-						ORDER BY dateInProcessSince ASC;";
+		$sql = "select nSlotNumber from cf_formslot where nID=".$nSlotId;
+		$rs = mysql_query($sql);
+		$number = mysql_result($rs, 0, 0);
+		$strQuery 	= "SELECT process.* FROM cf_circulationprocess process, cf_formslot slot WHERE process.nCirculationFormId =".$nCirculationFormID." AND process.nCirculationHistoryId =".$nCirculationHistoryID." AND process.nSlotId=slot.nID and slot.nSlotNumber > ".$number;
 		$nResult 	= mysql_query($strQuery) or die(mysql_error());
 		if ($nResult)
 		{
