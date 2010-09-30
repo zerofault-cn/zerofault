@@ -527,6 +527,7 @@ class AbsenceAction extends BaseAction{
 		}
 		if($id>0) {
 			if(false !== $this->dao->save()) {
+				self::mail_application($this->dao);
 				self::_success('Application updated!',__URL__);
 			}
 			else{
@@ -534,7 +535,9 @@ class AbsenceAction extends BaseAction{
 			}
 		}
 		else{
-			if($this->dao->add()) {
+			if($ab_id = $this->dao->add()) {
+				$this->dao->id = $ab_id;
+				self::mail_application($this->dao);
 				self::_success('Absence apply success!',__URL__);
 			}
 			else{
@@ -645,6 +648,36 @@ class AbsenceAction extends BaseAction{
 					self::calculateHour($date_from, $time_from, $date_to, $time_to);
 				}
 				break;
+		}
+	}
+	private function mail_application($dao) {
+		$smtp_config = C('_smtp_');
+		include_once (LIB_PATH.'class.phpmailer.php');
+		$mail = new PHPMailer();
+		$mail->IsSMTP();
+	//	$mail->SMTPDebug  = 1;  // 2 = messages only
+		$mail->Host       = $smtp_config['host'];
+		$mail->Port       = $smtp_config['port'];
+		$mail->SetFrom($smtp_config['from_mail'], $smtp_config['from_name']);
+
+		/*
+		day<=1			Supervisor					Matty+Tracy+ Bin 
+		1< day <= 2		Supervisor->Bin				Matty+Tracy+Yingnan
+		day > 2			Supervisor->Bin->Yingnan	Matty+Tracy
+		*/
+		$mail->AddAddress('mzhu@agigatech.com');
+		$subject = 'Test mail with form';
+		$mail->Subject    = $subject;
+
+		$body = '<form action="http://localhost/test.php" method="post" target="_blank">';
+		$body .= '<input name="text" /><input type="submit"/>';
+		$body .= '</form>';
+		$mail->MsgHTML($body);
+		if(!$mail->Send()) {
+			echo "Mailer Error: " . $mail->ErrorInfo;
+		}
+		else {
+			echo "Success!<br />\n";
 		}
 	}
 	public function notify(){
