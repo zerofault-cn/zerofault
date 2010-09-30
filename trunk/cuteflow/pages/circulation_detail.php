@@ -1226,8 +1226,8 @@ foreach ($arrSlots as $slotIndex=>$arrSlot) {
 	if ($add_slot && $arrCirculationForm["nSenderId"] == $_SESSION['SESSION_CUTEFLOW_USERID']) {
 		?>
 <tr bgcolor="#FFFFFF">
-	<td>
-		<img src="../images/addtemplate.png" width="16" height="16" align="absmiddle" style="cursor:pointer;" onclick="$(this).next().show();"/>
+	<td style="padding:3px;">
+		<!-- <img src="../images/addtemplate.png" width="16" height="16" align="absmiddle" /> --><input type="button" onclick="$(this).next().show();" value="Insert a slot here" />
 		<form style="display:none;margin:0;" action="?action=add_slot" method="post" target="_iframe" onsubmit="return confirm('Do you confirm to submit?')&&confirm('Notice: once saved, it cant\'t be deleted!\nContinue?');">
 		<table width="100%" cellspacing="1" cellpadding="3" bgcolor="#c8c8c8">
 		<tr bgcolor="#FFFFFF">
