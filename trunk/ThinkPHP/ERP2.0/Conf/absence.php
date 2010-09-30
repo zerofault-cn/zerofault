@@ -11,8 +11,45 @@ return array(
 		'Paternity' => '陪产假',
 		'Bereavement' => '丧假'
 		),
-	'CashOutMonth' => array(2,8), //Cash out的月份，纯数字数组
-	'worktime' => array(array('09:00','12:00'), array('13:00', '18:00')),//工作时间区间
-	'notification' => array('Tracy'=>'jali@agigatech.com', 'Matty'=>'fan@agigatech.com')//默认通知邮件
+	'CashOutMonth' => array(2,8), //Cash out的月份，纯数字数组，默认2月和8月
+	'worktime' => array( //工作时间区间
+		array('09:00','12:00'),
+		array('13:00', '18:00')
+		),
+	'application' => array( //请假申请时，需发给哪些人审批
+		'level_0' => array( //请假时间小于等于1天
+			'approver' => array(
+				),
+			'cc' => array(
+				'Tracy'=>'jali@agigatech.com',
+				'Matty'=>'fan@agigatech.com',
+				'Bin' => 'bin.li@agigatech.com'
+				)
+			),
+		'level_1' => array( //请假时间大于1天，小于等于2天
+			'approver' => array(
+				'Bin' => 'bin.li@agigatech.com'
+				),
+			'cc' => array(
+				'Tracy' => 'jali@agigatech.com',
+				'Matty' => 'fan@agigatech.com',
+				'Yingnan' => 'li@agigatech.com'
+				)
+			),
+		'level_2' => array( //请假时间大于2天
+			'approver' => array(
+				'Bin' => 'bin.li@agigatech.com',
+				'Yingnan' => 'li@agigatech.com'
+				),
+			'cc' => array(
+				'Tracy'=>'jali@agigatech.com',
+				'Matty'=>'fan@agigatech.com'
+				)
+			)
+		),
+	'notification' => array( //请假申请被批准后，默认通知哪些人
+		'Tracy' => 'jali@agigatech.com',
+		'Matty' => 'fan@agigatech.com'
+		)
 	);
 ?>
