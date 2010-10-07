@@ -38,7 +38,7 @@ class LineAction extends BaseAction{
 		$where['status'] = array('gt', 0);
 		if(''!=$_REQUEST['status']) {
 			$where['status'] = $_REQUEST['status'];
-			$order = 'update_time';
+		//	$order = 'update_time';
 		}
 		$count = $this->dao->where($where)->getField('count(*)');
 		import("@.Paginator");
