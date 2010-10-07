@@ -189,51 +189,8 @@ class PublicAction extends BaseAction{
 	public function notify() {
 		R('Absence', 'notify');
 	}
-	public function fix_returns() {
-		$rs = M('ProductFlow')->where("action='return' and to_type='location' and to_id=0 and status=1")->select();
-		empty($rs) && ($rs=array());
-		echo 'Get '.count($rs)." records need to be fixed.<br /><br />\n\n";
-		foreach ($rs as $item) {
-			$quantity = $item['quantity'];
-			echo "Product_Flow.ID: ".$item['id']."<br />\n";
-			echo "&nbsp;&nbsp;quantity: ".$quantity."<br />\n";
-			$where = array(
-				'type'		  => 'location',
-				'location_id' => 1,
-				'product_id'  => $item['product_id']
-			);
-			$lp_id = M('LocationProduct')->where($where)->getField('id');
-			if(!empty($lp_id)) {
-				if (M('LocationProduct')->setInc('chg_quantity','id='.$lp_id,$item['quantity'])) {
-					echo "&nbsp;&nbsp;Inventory updated!<br />\n";
-					if (M('ProductFlow')->where('id='.$item['id'])->setField('to_id', 1)) {
-						echo "&nbsp;&nbsp;Product_Flow updated!<br /><br />\n\n";
-					}
-				}
-			}
-		}
-
-		echo "Delete wrong records in Location_Product<br />\n\n";
-		if (false !== M('LocationProduct')->where(array('type'=>'location', 'location_id'=>0))->delete()) {
-			echo "&nbsp;&nbsp;Done!<br />\n\n";
-		}
-		else {
-			echo "&nbsp;&nbsp;Fail!<br />\n\n";
-		}
-	}
-	public function fix_category() {
-		$rs = M('Product')->select();
-		empty($rs) && ($rs=array());
-		$dao = M('ProductFlow');
-		foreach ($rs as $item) {
-			echo "For ProductID: ".$item['id'];
-			if (false !== $dao->where('product_id='.$item['id'])->setField(array('fixed','category_id'), array($item['fixed'], $item['category_id']))) {
-				echo " -> updated!<br />\n";
-			}
-			else {
-				echo "error:".$dao->getLastSql()."<br /><br />\n\n";
-			}
-		}
+	public function absence_confirm() {
+		R('Absence', 'confirm');
 	}
 }
 ?>
