@@ -147,9 +147,9 @@ class AbsenceAction extends BaseAction{
 			'time_from' => array('egt', date('Y', $this->time).'-01-01')
 			);
 		$arr = array(
-			'Waiting for Approval' => 0,
+			'Waiting for Approval' => array('elt',0),
 			'Get Approved' => 1,
-			'Rejected' => -1
+			'Rejected' => 2
 			);
 		$this->assign('label_status', $arr);
 		$file_path = '../Attach/Absence/';
@@ -275,11 +275,24 @@ class AbsenceAction extends BaseAction{
 		if (empty($id)) {
 			return;
 		}
+		
 		if ($this->dao->where('id='.$id)->setField(array('approver_id','comment','status'),array($_SESSION[C('USER_AUTH_KEY')],$comment, $status))) {
-			self::_success('Operation success!','',1000);
+			$this->dao->find($id);
+			self::mail_application($this->dao);
+			if (!empty($_REQUEST['from']) && 'mail'==$_REQUEST['from']) {
+				exit('Operation success!');
+			}
+			else {
+				self::_success('Operation success!','',1000);
+			}
 		}
 		else {
-			self::_error('Operation fail!'.(C('APP_DEBUG')?$this->dao->getLastSql():''));
+			if (!empty($_REQUEST['from']) && 'mail'==$_REQUEST['from']) {
+				exit('Operation fail!'.(C('APP_DEBUG')?$this->dao->getLastSql():''));
+			}
+			else {
+				self::_error('Operation fail!'.(C('APP_DEBUG')?$this->dao->getLastSql():''));
+			}
 		}
 	}
 
@@ -507,6 +520,15 @@ class AbsenceAction extends BaseAction{
 			$this->dao->attachment = implode(';', $file_name);
 			$this->dao->create_time = date("Y-m-d H:i:s");
 			$this->dao->creator_id = $_SESSION[C('STAFF_AUTH_NAME')]['id'];
+			if ($hour<=8) {
+				$this->dao->status = 0;
+			}
+			elseif ($hour<=16) {
+				$this->dao->status = -1;
+			}
+			else {
+				$this->dao->status = -2;
+			}
 		}
 		$this->dao->type = $type;
 		$this->dao->staff_id = $staff_id;
@@ -516,18 +538,9 @@ class AbsenceAction extends BaseAction{
 		$this->dao->deputy_id = $deputy;
 		$this->dao->notification = implode(';', $notification);
 		$this->dao->note = $note;
-		if ($hour<=8) {
-			$this->dao->status = 0;
-		}
-		elseif ($hour<=16) {
-			$this->dao->status = -1;
-		}
-		else {
-			$this->dao->status = -2;
-		}
 		if($id>0) {
 			if(false !== $this->dao->save()) {
-				self::mail_application($this->dao);
+//				self::mail_application($this->dao);//不允许员工编辑，因此不需要重发application
 				self::_success('Application updated!',__URL__);
 			}
 			else{
@@ -665,19 +678,121 @@ class AbsenceAction extends BaseAction{
 		1< day <= 2		Supervisor->Bin				Matty+Tracy+Yingnan
 		day > 2			Supervisor->Bin->Yingnan	Matty+Tracy
 		*/
-		$mail->AddAddress('mzhu@agigatech.com');
-		$subject = 'Test mail with form';
-		$mail->Subject    = $subject;
-
-		$body = '<form action="http://localhost/test.php" method="post" target="_blank">';
-		$body .= '<input name="text" /><input type="submit"/>';
-		$body .= '</form>';
-		$mail->MsgHTML($body);
-		if(!$mail->Send()) {
-			echo "Mailer Error: " . $mail->ErrorInfo;
+		//get staff info
+		$staff = M('Staff')->find($dao->staff_id);
+		if ($dao->staff_id != $dao->creator_id) {
+			$creator = M('Staff')->find($dao->creator_id);
 		}
 		else {
-			echo "Success!<br />\n";
+			$creator = $staff;
+		}
+		if(!empty($dao->deputy_id)) {
+			$deputy = M('Staff')->find($dao->deputy_id);
+		}
+		//get leader info
+		if (!empty($staff['leader_id'])) {
+			$leader = M('Staff')->find($staff['leader_id']);
+			if (''==$leader['email']) {
+				$leader = array(
+					'email' => 'bin.li@agigatech.com',
+					'realname' => 'Bin.Li'
+				);
+			}
+		}
+		else {
+			$leader = array(
+				'email' => 'bin.li@agigatech.com',
+				'realname' => 'Bin.Li'
+			);
+		}
+
+		if ($dao->hours <= 8) {
+			if ($dao->status == 0) {
+				$mail->AddAddress($leader['email'], $leader['realname']);
+				$new_status = 1;
+			}
+			else {
+				return;
+			}
+		}
+		elseif ($dao->hours <= 16) {
+			if ($dao->status == -1) {
+				$mail->AddAddress($leader['email'], $leader['realname']);
+				$new_status = 0;
+			}
+			elseif ($dao->status == 0) {
+				list($name, $email) = each($this->Absence_Config['application']['level_1']['approver']);
+				$mail->AddAddress($email, $name);
+				$new_status = 1;
+			}
+			else {
+				return;
+			}
+		}
+		else {
+			if ($dao->status == -2) {
+				$mail->AddAddress($leader['email'], $leader['realname']);
+				$new_status = -1;
+			}
+			elseif ($dao->status == -1) {
+				list($name, $email) = each($this->Absence_Config['application']['level_2']['approver']);
+				$mail->AddAddress($email, $name);
+				$new_status = 0;
+			}
+			elseif ($dao->status == 0) {
+				list($name, $email) = each($this->Absence_Config['application']['level_2']['approver']);
+				list($name, $email) = each($this->Absence_Config['application']['level_2']['approver']);
+				$mail->AddAddress($email, $name);
+				$new_status = 1;
+			}
+			else {
+				return;
+			}
+		}
+		if ($dao->status <= 0) {
+			$subject = '[Absence]Application: '.$staff['realname'].' apply for leave, '.substr($dao->time_from, 0, 16).' ~ '.substr($dao->time_to, 0, 16);
+		}
+		else {
+			$subject = '[Absence]Notification: '.$item['staff']['realname'].', '.substr($item['time_from'], 0, 16).' ~ '.substr($item['time_to'], 0, 16);
+		}
+		$mail->Subject    = $subject;
+		
+		$body = '';
+//		$body  = '<form name="_form" id="_form" action="http://localhost/ERP2.0/index.php/Public/absence_confirm" method="post" target="_blank">';
+//		$body .= '<input type="hidden" name="id" value="'.$dao->id.'" />';
+//		$body .= '<input type="hidden" name="status" value="'.$new_status.'" />';
+//		$body .= '<input type="hidden" name="from" value="mail" />';
+		$body .= '<table width="700" border="0" cellspacing="1" cellpadding="7" bgcolor="#CCCCCC">';
+		if ('Out'==$dao->type) {
+			$body .= '<tr><td colspan="2">'.$staff['realname'].' made an out of office request.</td></tr>';
+			$body .= '<tr bgcolor="#FFFFFF"><td width="177">Creator :</td><td width="492">'.$creator['realname'].'</td></tr>';
+		}
+		else {
+			$body .= '<tr><td colspan="2">'.$staff['realname'].' will be absent on '.substr($dao->time_from, 0, 16).' ~ '.substr($dao->time_to, 0, 16).'</td></tr>';
+			$body .= '<tr bgcolor="#FFFFFF"><td width="177">Applicant :</td><td width="492">'.$creator['realname'].'</td></tr>';
+			$body .= '<tr bgcolor="#FFFFFF"><td>Type : </td><td>'.$dao->type.' leave</td></tr>';
+		}
+		$body .= '<tr bgcolor="#FFFFFF"><td>Duration : </td><td>'.substr($dao->time_from, 0, 16).' ~ '.substr($dao->time_to, 0, 16).'</td></tr>';
+		if ('Out'==$dao->type) {
+			$body .= '<tr bgcolor="#FFFFFF"><td>Members : </td><td>'.$staff['realname'].'</td></tr>';
+		}
+		elseif(!empty($dao->deputy_id)) {
+			$body .= '<tr bgcolor="#FFFFFF"><td>Deputy : </td><td>'.$deputy['realname'].'</td></tr>';
+		}
+		if (''!=$dao->note) {
+			$body .= '<tr bgcolor="#FFFFFF"><td>Note :</td><td>'.nl2br($dao->note).'</td></tr>';
+		}
+		if ($dao->status <= 0) {
+			$body .= '<tr bgcolor="#FFFFFF"><td colspan="2">Please approve the application in our <a target="_blank" href="http://localhost/ERP2.0/index.php/Absence/approve">ERP System</a></td></tr>';
+		}
+//		$body .= '<tr bgcolor="#FFFFFF"><td>Operation :</td><td><input type="submit" value="Approve" />&nbsp;&nbsp;<input id="reject" style="display:none;" type="button" value="Reject" onclick="window.document._form.status.value=2;window.document._form.submit();"/><br />You can also do the operation in our <a target="_blank" href="http://localhost/ERP2.0/index.php/Absence/approve">ERP System</a></td></tr>';
+		$body .= '</table>';
+//		$body .= '</form>';
+
+		$mail->MsgHTML($body);
+		if(!$mail->Send()) {
+		//	echo "Mailer Error: " . $mail->ErrorInfo;
+			Log::Write('Mail Error '.$mail->ErrorInfo);
 		}
 	}
 	public function notify(){
@@ -693,82 +808,11 @@ class AbsenceAction extends BaseAction{
 			echo 'No absence to notify';
 			return;
 		}
-		$smtp_config = C('_smtp_');
-		include_once (LIB_PATH.'class.phpmailer.php');
-		$mail = new PHPMailer();
-		$mail->IsSMTP();
-		$mail->SMTPDebug  = 1;  // 2 = messages only
-		$mail->SMTPAuth   = false;                  // enable SMTP authentication
-		$mail->Host       = $smtp_config['host'];
-		$mail->Port       = $smtp_config['port'];
-		$mail->Username   = $smtp_config['username'];
-		$mail->Password   = $smtp_config['password'];
-		$mail->SetFrom($smtp_config['from_mail'], $smtp_config['from_name']);
-
 		echo 'Get '.count($rs)." records.<br />\n";
 		foreach ($rs as $item) {
 			echo "\tFor ID:".$item['id']."\t";
-			$mail->ClearAllRecipients();
-			$mail->AddAddress($item['staff']['email'], $item['staff']['realname']);
-			//get leader's email
-			if (!empty($item['staff']['leader_id'])) {
-				$leader = M('Staff')->find($item['staff']['leader_id']);
-				if (!empty($leader['email'])) {
-					$mail->AddCC($leader['email'], $leader['realname']);
-				}
-			}
-			//get deputy email
-			if (!empty($item['deputy_id'])) {
-				$deputy = M('Staff')->find($item['deputy_id']);
-				if (!empty($deputy['mail'])) {
-					$mail->AddCC($deputy['email'], $deputy['realname']);
-				}
-			}
-			//parse notification
-			foreach (explode(';', $item['notification']) as $notification) {
-				$arr = explode(':', $notification);
-				if (''!=$arr[1]) {
-					$mail->AddCC($arr[1], $arr[0]);
-				}
-			}
-			$subject = '[Absence]Notification: '.$item['staff']['realname'].', '.substr($item['time_from'], 0, 16).' ~ '.substr($item['time_to'], 0, 16);
-			$mail->Subject    = $subject;
-
-			$body = '<table width="700" border="0" cellspacing="1" cellpadding="7" bgcolor="#CCCCCC">';
-			if ('Out'==$item['type']) {
-				$body .= '<tr><td colspan="2">'.$item['staff']['realname'].' made an out of office request.</td></tr>';
-				$body .= '<tr bgcolor="#FFFFFF"><td width="177">Creator :</td><td width="492">'.$item['creator']['realname'].'</td></tr>';
-			}
-			else {
-				$body .= '<tr><td colspan="2">'.$item['staff']['realname'].' will be absent on '.substr($item['time_from'], 0, 16).' ~ '.substr($item['time_to'], 0, 16).'</td></tr>';
-				$body .= '<tr bgcolor="#FFFFFF"><td width="177">Applicant :</td><td width="492">'.$item['creator']['realname'].'</td></tr>';
-				$body .= '<tr bgcolor="#FFFFFF"><td>Type : </td><td>'.$item['type'].' leave</td></tr>';
-			}
-			$body .= '<tr bgcolor="#FFFFFF"><td>Duration : </td><td>'.substr($item['time_from'], 0, 16).' ~ '.substr($item['time_to'], 0, 16).'</td></tr>';
-			if ('Out'==$item['type']) {
-				$body .= '<tr bgcolor="#FFFFFF"><td>Members : </td><td>'.$item['staff']['realname'].'</td></tr>';
-			}
-			elseif(!empty($item['deputy_id'])) {
-				$body .= '<tr bgcolor="#FFFFFF"><td>Deputy : </td><td>'.$item['deputy']['realname'].'</td></tr>';
-			}
-			if (''!=$item['note']) {
-				$body .= '<tr bgcolor="#FFFFFF"><td>Note :</td><td>'.nl2br($item['note']).'</td></tr>';
-			}
-			$body .= '</table>';
-			$mail->MsgHTML($body);
-			if(!$mail->Send()) {
-				echo "Mailer Error: " . $mail->ErrorInfo;
-				Log::Write('Mail to '.$item['staff']['email'].' Fail');
-			}
-			else {
-				if(false !== $this->dao->where('id='.$item['id'])->setField('mail_status',1)) {
-					echo "Success!<br />\n";
-					Log::Write('Mail to '.$item['staff']['email'].' Success', INFO);
-				}
-				else{
-					echo 'SQL error'.(C('APP_DEBUG')?$this->dao->getLastSql():'');
-				}
-			}
+			$this->dao->find($item['id']);
+			self::mail_application($this->dao);
 		}
 	}
 
