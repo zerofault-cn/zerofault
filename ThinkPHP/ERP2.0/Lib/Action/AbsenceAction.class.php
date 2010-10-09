@@ -147,7 +147,7 @@ class AbsenceAction extends BaseAction{
 			'time_from' => array('egt', date('Y', $this->time).'-01-01')
 			);
 		$arr = array(
-			'Waiting for Approval' => array('elt',0),
+			'Waiting for Approval' => array('lt', 1),
 			'Get Approved' => 1,
 			'Rejected' => 2
 			);

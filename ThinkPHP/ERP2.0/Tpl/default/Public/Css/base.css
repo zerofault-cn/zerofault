@@ -278,13 +278,13 @@ td.clsTab {
 	text-align:center;
 	background:#548DD4;
 }
-td#status_0, td#fixed1{
+td#status_0, td#status_Array, td#fixed1{
 	background:#92D050;
 }
 td#status_1{
 	background:#548DD4;
 }
-td#status_-1{
+td#status_-1, td#status_2{
 	background:#9966FF;
 }
 td#status_-2{
