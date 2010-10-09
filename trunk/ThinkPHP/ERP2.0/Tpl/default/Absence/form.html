@@ -169,8 +169,7 @@
 			<td>Attached File</td>
 		</tr>
 		<tr bgcolor="#EEEEEE" align="center">
-			<td>
-				<select name="deputy">
+			<td><select name="deputy">
 				<option value="">----Select----</option>
 				<foreach name="DeptStaff" key="dept" item="Staff">
 					<optgroup label="{$dept}">
@@ -193,53 +192,7 @@
 				</foreach>
 				</select>
 			</td>
-			<td align="center">
-				<present name="info">
-				<div style="text-align:left"><input type="checkbox" name="new_attachment" value="1" />Upload new attachment<br />
-				(all the old attachment will be deleted)</div>
-				</present>
-				<input id="file" type="file" name="file[]" size="30" style="display:none;"/>&nbsp;<img style="cursor: pointer;" src="../Public/Images/attachfile.gif" onclick="addFile(this);" align="absmiddle"></td>
-		</tr>
-		<tr bgcolor="#CCCCCC" align="center">
-			<td>Notifiable users</td>
-			<td>Note</td>
-		</tr>
-		<tr bgcolor="#EEEEEE" align="center">
-			<td valign="top">
-				<dl>
-				<foreach name="Notification" key="name" item="email">
-					<if condition="!isset($Notification_Ext) or in_array($email, $Notification_Ext)">
-					<dt><input type="checkbox" name="notification[]" value="{$name}:{$email}" checked="checked"/> {$name}</dt>
-					<else />
-					<dt><input type="checkbox" name="notification[]" value="{$name}:{$email}" /> {$name}</dt>
-					</if>
-				</foreach>
-				<notempty name="Notification_Ext">
-					<foreach name="Notification_Ext" key="name" item="email">
-						<if condition="!in_array($email, $Notification)">
-						<dt><input type="checkbox" name="notification[]" value="{$name}:{$email}" checked="checked"/> {$name}</dt>
-						</if>
-					</foreach>
-				</notempty>
-				</dl>
-				<select id="notification" name="notification[]" style="display:none;">
-				<option value="">----Select----</option>
-				<foreach name="DeptStaff" key="dept" item="Staff">
-					<optgroup label="{$dept}">
-					<foreach name="Staff" item="staff" key="j">
-						<if condition="in_array($staff['email'], $Notification) neq true and $staff['id'] neq $_SESSION[C('STAFF_AUTH_NAME')]['id']">
-							<if condition="$j eq 0">
-						<option value="{$staff['realname']}:{$staff['email']}" style="background-color:#FABF8F;">{$staff['realname']}</option>
-							<else />
-						<option value="{$staff['realname']}:{$staff['email']}">{$staff['realname']}</option>
-							</if>
-						</if>
-					</foreach>
-					</optgroup>
-				</foreach>
-				</select><img src="../Public/Images/add_member.gif" onclick="addNotify(this);" width="25" height="25" align="absmiddle" style="cursor: pointer;" title="Click to show user selection" />
-			</td>
-			<td><textarea id="note" name="note" cols="50" rows="5"><present name="info">{$info['note']}</present></textarea></td>
+			<td align="center"><textarea id="note" name="note" cols="50" rows="5"><present name="info">{$info['note']}</present></textarea></td>
 		</tr>
 		</table>
 		<p class="center">
@@ -310,46 +263,7 @@
 				</foreach>
 				</select>
 			</td>
-			<td rowspan="3"><textarea id="note" name="note" cols="50" rows="5"><present name="info">{$info['note']}</present></textarea></td>
-		</tr>
-		<tr bgcolor="#CCCCCC" align="center">
-			<td>Notifiable users</td>
-		</tr>
-		<tr bgcolor="#EEEEEE" align="center">
-			<td valign="top">
-				<dl>
-				<foreach name="Notification" key="name" item="email">
-					<if condition="empty($Notification_Ext) or in_array($email, $Notification_Ext)">
-					<dt><input type="checkbox" name="notification[]" value="{$name}:{$email}" checked="checked"/> {$name}</dt>
-					<else />
-					<dt><input type="checkbox" name="notification[]" value="{$name}:{$email}" /> {$name}</dt>
-					</if>
-				</foreach>
-				<notempty name="Notification_Ext">
-					<foreach name="Notification_Ext" key="name" item="email">
-						<if condition="!in_array($email, $Notification)">
-						<dt><input type="checkbox" name="notification[]" value="{$name}:{$email}" checked="checked"/> {$name}</dt>
-						</if>
-					</foreach>
-				</notempty>
-				</dl>
-				<select id="notification" name="notification[]" style="display:none;">
-				<option value="">----Select----</option>
-				<foreach name="DeptStaff" key="dept" item="Staff">
-					<optgroup label="{$dept}">
-					<foreach name="Staff" item="staff" key="j">
-						<if condition="in_array($staff['email'], $Notification) neq true and $staff['id'] neq $_SESSION[C('STAFF_AUTH_NAME')]['id']">
-							<if condition="$j eq 0">
-						<option value="{$staff['realname']}:{$staff['email']}" style="background-color:#FABF8F;">{$staff['realname']}</option>
-							<else />
-						<option value="{$staff['realname']}:{$staff['email']}">{$staff['realname']}</option>
-							</if>
-						</if>
-					</foreach>
-					</optgroup>
-				</foreach>
-				</select><img src="../Public/Images/add_member.gif" onclick="addNotify(this);" width="25" height="25" align="absmiddle" style="cursor: pointer;" title="Click to show user selection" />
-			</td>
+			<td><textarea id="note" name="note" cols="50" rows="5"><present name="info">{$info['note']}</present></textarea></td>
 		</tr>
 		</table>
 		<p class="center">

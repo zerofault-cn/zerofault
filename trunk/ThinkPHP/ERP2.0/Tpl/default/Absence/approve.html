@@ -4,27 +4,25 @@
 	<th width="8%">Staff</th>
 	<th width="160" nowrap="nowrap">Application Type</th>
 	<th width="250">Duration</th>
-	<th width="5%">Hours</th>
+	<th width="50">Hours</th>
 	<th width="20%">Note</th>
-	<th width="8%" nowrap="nowrap">Attached files</th>
 	<th>Comment</th>
-	<th width="8%">Operation</th>
+	<th>Operation</th>
 </tr>
 <iterate name="result" id="item">
 <form id="form{$item['id']}" action="__URL__/confirm" method="post" target="_iframe">
 <tr align="center" class="trbg{$mod}">
-	<td>{$staff[$item['staff_id']]}</td>
+	<td>{$item['staff']['realname']}</td>
 	<td>{$LeaveType[$item['type']]}</td>
 	<td nowrap="nowrap">{$item['time_from']|substr=0,-3} ~ {$item['time_to']|substr=0,-3}</td>
 	<td>{$item['hours']|number_format}</td>
 	<td align="left">{$item['note']|nl2br}</td>
-	<td>{$item['attachment_url']|default='<font color="#d4d4d4">N/A</font>'}</td>
-	<td><textarea name="comment" cols="20" rows="3"></textarea></td>
+	<td><textarea name="comment" cols="30" rows="3"></textarea></td>
 	<td nowrap="nowrap">
 		<input type="hidden" name="id" value="{$item['id']}" />
 		<input type="hidden" id="status{$item['id']}" name="status" value="0" />
 		<input type="button" value="Edit" class="thickbox" alt="__URL__/form/id/{$item['id']}?width=600&height=450&modal=true"/>
-		<input type="button" onclick="confirm('{$item['id']}', 1);" value="Approve" />
+		<input type="button" onclick="confirm('{$item['id']}', {$item['status']+1});" value="Approve" />
 		<input type="button" onclick="confirm('{$item['id']}', 2);" value="Reject" />
 	</td>
 </tr>
