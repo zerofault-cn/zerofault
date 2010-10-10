@@ -142,7 +142,7 @@
 	<?php echo $MENU_TEMPLATE;?>
 </span><br><br>
 
-	<form action="writeslot.php" id="EditSlot" name="EditSlot" onsubmit="return validate(this);">
+	<form action="writeslot.php" id="EditSlot" name="EditSlot" method="post" onsubmit="return validate(this);">
 		<table width="620" style="border: 1px solid #c8c8c8;" cellspacing="0" cellpadding="3">
 			<tr>
 				<td class="table_header" colspan="2">
