@@ -10,15 +10,16 @@
 </if>
 <tr>
 	<td colspan="2">
-		<if condition="!empty($type) and $type eq 'Overtime'">
+		<if condition="!empty($type)">
 		<form class="clsTab" id="leave" action="__URL__/submit" method="post" target="_iframe">
 		<table width="100%" border="1" cellpadding="3" cellspacing="1" bordercolor="#FFFFFF" style="border-collapse:collapse;">
+			<if condition="$type eq 'Overtime'">
 		<tr>
 			<th colspan="2">Overtime application form</th>
 		</tr>
 		<tr bgcolor="#CCCCCC" align="center">
-			<td>Creator</td>
-			<td>Duration</td>
+			<td><b>Creator</b></td>
+			<td><b>Duration</b></td>
 		</tr>
 		<tr bgcolor="#EEEEEE" align="center">
 			<td>
@@ -43,8 +44,8 @@
 			</td>
 		</tr>
 		<tr bgcolor="#CCCCCC" align="center">
-			<td>Staff</td>
-			<td>Note</td>
+			<td><b>Staff</b></td>
+			<td><b>Note</b></td>
 		</tr>
 		<tr bgcolor="#EEEEEE" align="center">
 			<td><select name="staff_id">
@@ -79,11 +80,34 @@
 			<input type="submit" name="submit" value="Submit" title="Submit this form" />&nbsp;&nbsp;&nbsp;<input type="button" value="Cancel" onclick="self.parent.tb_remove()" alt="Cancel" title="Click to go previous page" />
 		</p>
 		</form>
+			<elseif condition="$type eq 'CashOut'" />
+		<tr>
+			<th colspan="2">Cash Out application form</th>
+		</tr>
+		<tr>
+			<td bgcolor="#CCCCCC" width="30%"><b>Annual leave available: </b></td>
+			<td bgcolor="#EEEEEE">{$total_leave}</td>
+		</tr>
+		<tr>
+			<td bgcolor="#CCCCCC"><b>Reserved days: </b></td>
+			<td bgcolor="#EEEEEE">{$reserved}</td>
+		</tr>
+		<tr>
+			<td bgcolor="#CCCCCC"><b>Your cash out days: </b></td>
+			<td bgcolor="#EEEEEE"><input type="text" name="days" value="" size="5"/> max: {$available}</td>
+		</tr>
+		</table>
+		<p class="center">
+			<input type="hidden" name="type" value="CashOut" />
+			<input type="submit" name="submit" value="Submit" title="Submit this form" />&nbsp;&nbsp;&nbsp;<input type="button" value="Cancel" onclick="self.parent.tb_remove()" alt="Cancel" title="Click to go previous page" />
+		</p>
+		</form>
+			</if>
 		<else />
-			<if condition="!empty($info) and $info['type'] eq 'Out'">
-		<form class="clsTab" id="leave" action="__URL__/submit" method="post" target="_iframe" enctype="multipart/form-data" style="display:none;">
-			<else />
+			<if condition="empty($info) or $info['type'] neq 'Out'">
 		<form class="clsTab" id="leave" action="__URL__/submit" method="post" target="_iframe" enctype="multipart/form-data">
+			<else />
+		<form class="clsTab" id="leave" action="__URL__/submit" method="post" target="_iframe" enctype="multipart/form-data" style="display:none;">
 			</if>
 			<present name="info">
 		<input type="hidden" name="id" value="{$info['id']}" />
@@ -93,8 +117,8 @@
 			<th colspan="2">Leave application form</th>
 		</tr>
 		<tr bgcolor="#CCCCCC" align="center">
-			<td width="30%">Applicant</td>
-			<td>Type</td>
+			<td width="30%"><b>Applicant</b></td>
+			<td><b>Type</b></td>
 		</tr>
 		<tr bgcolor="#EEEEEE" align="center">
 			<td><present name="info">
@@ -139,8 +163,8 @@
 			</td>
 		</tr>
 		<tr bgcolor="#CCCCCC" align="center">
-			<td>Creator</td>
-			<td>Duration</td>
+			<td><b>Creator</b></td>
+			<td><b>Duration</b></td>
 		</tr>
 		<tr bgcolor="#EEEEEE" align="center">
 			<td>
@@ -165,8 +189,8 @@
 			</td>
 		</tr>
 		<tr bgcolor="#CCCCCC" align="center">
-			<td>Deputy</td>
-			<td>Attached File</td>
+			<td><b>Deputy</b></td>
+			<td><b>Note</b></td>
 		</tr>
 		<tr bgcolor="#EEEEEE" align="center">
 			<td><select name="deputy">
@@ -202,16 +226,19 @@
 		</form>
 			<if condition="empty($info) or $info['type'] neq 'Out'">
 		<form class="clsTab" id="out" action="__URL__/submit" method="post" target="_iframe" style="display:none;">
-			</else />
+			<else />
 		<form class="clsTab" id="out" action="__URL__/submit" method="post" target="_iframe">
 			</if>
+			<present name="info">
+		<input type="hidden" name="id" value="{$info['id']}" />
+			</present>
 		<table width="100%" border="1" cellpadding="3" cellspacing="1" bordercolor="#FFFFFF" style="border-collapse:collapse;">
 		<tr>
 			<th colspan="2">Out of office request form</th>
 		</tr>
 		<tr bgcolor="#CCCCCC" align="center">
-			<td>Creator</td>
-			<td>Duration</td>
+			<td><b>Creator</b></td>
+			<td><b>Duration</b></td>
 		</tr>
 		<tr bgcolor="#EEEEEE" align="center">
 			<td>
@@ -236,8 +263,8 @@
 			</td>
 		</tr>
 		<tr bgcolor="#CCCCCC" align="center">
-			<td>Deputy</td>
-			<td>Note</td>
+			<td><b>Deputy</b></td>
+			<td><b>Note</b></td>
 		</tr>
 		<tr bgcolor="#EEEEEE" align="center">
 			<td><select name="deputy">

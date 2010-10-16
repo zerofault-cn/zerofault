@@ -11,7 +11,8 @@ return array(
 		'Paternity' => '陪产假',
 		'Bereavement' => '丧假'
 		),
-	'CashOutMonth' => array(2,8), //Cash out的月份，纯数字数组，默认2月和8月
+	'CashoutMonth' => array(2,10), //Cash out的月份，纯数字数组，默认2月和8月
+	'ReservedHours' => 40, //Cash out最少保留小时数，默认5天
 
 	'worktime' => array( //工作时间区间
 		array('09:00','12:00'),
