@@ -8,6 +8,7 @@ $config = array(
 	);
 $config = array_merge($config, array(
 		'APP_CONFIG_LIST'	=> array('menu', 'absence', 'smtp', 'test'),
+		'TAG_NESTED_LEVEL'	=> 6,
 
 		'DB_TYPE'			=> 'mysql',
 		'DB_HOST'			=> 'localhost',

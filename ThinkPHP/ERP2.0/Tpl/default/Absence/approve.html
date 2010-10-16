@@ -13,10 +13,10 @@
 <form id="form{$item['id']}" action="__URL__/confirm" method="post" target="_iframe">
 <tr align="center" class="trbg{$mod}">
 	<td>{$item['staff']['realname']}</td>
-	<td>{$LeaveType[$item['type']]}</td>
-	<td nowrap="nowrap">{$item['time_from']|substr=0,-3} ~ {$item['time_to']|substr=0,-3}</td>
-	<td>{$item['hours']|number_format}</td>
-	<td align="left">{$item['note']|nl2br}</td>
+	<td><empty name="LeaveType[$item['type']]">{$item['type']}<else />{$LeaveType[$item['type']]}</empty></td>
+	<td nowrap="nowrap"><if condition="$item['type'] eq 'CashOut'"><font color="#a4a4a4">N/A</font><else />{$item['time_from']|substr=0,-3} ~ {$item['time_to']|substr=0,-3}</if></td>
+	<td>{$item['hours']|round}</td>
+	<td align="left"><if condition="$item['type'] eq 'CashOut'"><font color="#a4a4a4">N/A</font><else />{$item['note']|nl2br}</if></td>
 	<td><textarea name="comment" cols="30" rows="3"></textarea></td>
 	<td nowrap="nowrap">
 		<input type="hidden" name="id" value="{$item['id']}" />
