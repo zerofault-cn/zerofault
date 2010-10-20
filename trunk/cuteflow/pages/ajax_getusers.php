@@ -95,11 +95,11 @@
 		
 			<?php $sid = -2 ?>
 			
-			<tr>
+			<!-- <tr>
 			<td width="16px" style="border-top:1px solid Silver;" valign="middle"><input type="checkbox" id="<?php echo $sid ?>" name="<?php echo $sid ?>" value="<?php echo $sid ?>"></td>
 			<td width="20px" style="border-top:1px solid Silver;" valign="middle"><img src="../images/user_green.gif" height="19" width="16"></td>
 			<td style="border-top:1px solid Silver;" valign="middle"><?php echo $SELF_DELEGATE_USER ?></td>
-			</tr>
+			</tr> -->
 			
 			<?php
 			$nMax = sizeof($arrIndex);
