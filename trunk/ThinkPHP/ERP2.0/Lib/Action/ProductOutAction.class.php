@@ -160,6 +160,60 @@ class ProductOutAction extends BaseAction{
 		$this->assign('content','ProductOut:index');
 		$this->display('Layout:ERP_layout');
 	}
+	public function export() {
+		header("Content-type:application/vnd.ms-excel;charset=iso-8859-1");
+		header("Content-Disposition:filename=Product_".('return'==$_REQUEST['action']?'Return':'Out')."_".date("Ymd").".csv");
+		echo "Date&Time,Action,Type,Fixed Assets,Category,Internal P/N,Description,Manufacture,MPN,Quantity,Unit,From,To,Value/Package,RoHS,LT days,MOQ,SPQ,MSL,Project,Accessories,Remark\r\n";
+
+		$UnitArray = M('Options')->where(array('type'=>'unit'))->getField('id,name');
+		$FixedArray = array('No', 'Yes');
+		$where = array();
+		if (!empty($_REQUEST['action'])) {
+			$where['action'] = $_REQUEST['action'];
+		}
+		else {
+			$where['action'] = array('not in', array('enter','reject','return'));
+		}
+		$where['status'] = 1;
+		$rs = $this->dao->relation(true)->where($where)->select();
+		empty($rs) && ($rs = array());
+		foreach($rs as $row) {
+			echo $row['create_time'].',';
+			echo ucfirst($row['action']).',';
+			echo $row['product']['type'].',';
+			echo $FixedArray[$row['fixed']].',';
+			echo $row['category']['name'].',';
+			echo $row['product']['Internal_PN'].',';
+			echo $row['product']['description'].',';
+			echo $row['product']['manufacture'].',';
+			echo $row['product']['MPN'].',';
+			echo $row['quantity'].',';
+			echo $UnitArray[$row['product']['unit_id']].',';
+			
+			if ('location' == $row['from_type']) {
+				echo M('Location')->where('id='.$row['from_id'])->getField('name').',';
+			}
+			else {
+				echo M('Staff')->where('id='.$row['from_id'])->getField('realname').',';
+			}
+			if ('location' == $row['to_type']) {
+				echo M('Location')->where('id='.$row['to_id'])->getField('name').',';
+			}
+			else {
+				echo M('Staff')->where('id='.$row['to_id'])->getField('realname').',';
+			}
+			echo $row['product']['value'].',';
+			echo $row['product']['Rohs'].',';
+			echo $row['product']['LT_days'].',';
+			echo $row['product']['MOQ'].',';
+			echo $row['product']['SPQ'].',';
+			echo $row['product']['MSL'].',';
+			echo $row['product']['project'].',';
+			echo $row['accessories'].',';
+			echo '"'.iconv("UTF-8","GB2312", $row['remark'])." \"\r\n";
+		}
+		exit;
+	}
 
 	public function form() {
 		$action = $_REQUEST['action'];
