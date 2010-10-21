@@ -95,6 +95,47 @@ class ProductInAction extends BaseAction{
 		$this->assign('content', 'ProductIn:index');
 		$this->display('Layout:ERP_layout');
 	}
+	public function export() {
+		header("Content-type:application/vnd.ms-excel");
+		header("Content-Disposition:filename=Product_".$_REQUEST['action']."_".date("Ymd").".csv");
+		echo "Date&Time,Type,Internal P/N,Description,Manufacture,MPN,Value/Package,Supplier,Quantity,Unit,Category,Fixed Assets,RoHS,LT days,MOQ,SPQ,MSL,Project,Currency,Price,Accessories,Remark\r\n";
+
+		$UnitArray = M('Options')->where(array('type'=>'unit'))->getField('id,name');
+		$FixedArray = array('No', 'Yes');
+		$where = array();
+		if(isset($_REQUEST['fixed'])) {
+			$where['fixed'] = $_REQUEST['fixed'];
+		}
+		$where['action'] = $_REQUEST['action'];
+		$where['status'] = 1;
+		$rs = $this->dao->relation(true)->where($where)->select();
+		empty($rs) && ($rs = array());
+		foreach($rs as $row) {
+			echo $row['create_time'].',';
+			echo $row['product']['type'].',';
+			echo $row['product']['Internal_PN'].',';
+			echo $row['product']['description'].',';
+			echo $row['product']['manufacture'].',';
+			echo $row['product']['MPN'].',';
+			echo $row['product']['value'].',';
+			echo $row['supplier']['name'].',';
+			echo $row['quantity'].',';
+			echo $UnitArray[$row['product']['unit_id']].',';
+			echo $row['category']['name'].',';
+			echo $FixedArray[$row['fixed']].',';
+			echo $row['product']['Rohs'].',';
+			echo $row['product']['LT_days'].',';
+			echo $row['product']['MOQ'].',';
+			echo $row['product']['SPQ'].',';
+			echo $row['product']['MSL'].',';
+			echo $row['product']['project'].',';
+			echo $row['currency']['name'].',';
+			echo $row['price'].',';
+			echo $row['accessories'].',';
+			echo '"'.iconv("UTF-8","GB2312", $row['remark'])."\"\r\n";
+		}
+		exit;
+	}
 
 	public function form() {
 		$this->assign('ACTION_TITLE', 'Enter new Product');

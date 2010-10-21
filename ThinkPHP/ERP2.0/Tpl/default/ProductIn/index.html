@@ -72,24 +72,24 @@
 </tr>
 </table>
 </form>
-<neq name="action" value="reject">
+<if condition="$action neq 'reject'">
 <form id="Import" name="Import" action="__URL__/import" enctype="multipart/form-data" target="_iframe" method="post">
 <table align="center" style="background-color:#FFFFFF;padding:10px;margin:12px auto;">
 <tr>
-	<td align="right" valign="top" width="340">
-<if condition="ACTION_NAME eq 'fixed'">
+	<td align="right" valign="top" width="30%">
+	<if condition="ACTION_NAME eq 'fixed'">
 		<input type="button" onclick="javascript:document.location='__URL__/form/fixed/1';" value="Enter Fixed-Assets" />
 		<input type="hidden" name="Fixed" value="Yes" />
-<elseif condition="ACTION_NAME eq 'floating'" />
+	<elseif condition="ACTION_NAME eq 'floating'" />
 		<input type="button" onclick="javascript:document.location='__URL__/form/fixed/0';" value="Enter Floating-Assets" />
 		<input type="hidden" name="Fixed" value="No" />
-<else />
+	<else />
 		<input type="button" onclick="javascript:document.location='__URL__/form';" value="Enter Product" />
 		<input type="hidden" name="Fixed" value="All" />
-</if>
+	</if>
 	</td>
 	<td width="10">&nbsp;</td>
-	<td width="340" nowrap="nowrap">
+	<td nowrap="nowrap">
 		<input type="button" id="batch" onclick="$('input#batch').hide();$('div#select_file').show();" value="Batch Entering" />
 		<div id="select_file" style="display:none;">
 			<input type="file" name="file" size="15" />
@@ -97,11 +97,25 @@
 			<input type="button" onclick="$('div#select_file').hide();$('input#batch').show();" value="Cancel" />
 		</div>
 	</td>
+	<td width="10">&nbsp;</td>
+	<td width="30%">
+	<if condition="ACTION_NAME eq 'fixed'">
+		<input type="button" onclick="javascript:document.location='__URL__/export/action/enter/fixed/1';" value="Export as Excel" />
+	<elseif condition="ACTION_NAME eq 'floating'" />
+		<input type="button" onclick="javascript:document.location='__URL__/export/action/enter/fixed/0';" value="Export as Excel" />
+	<else />
+		<input type="button" onclick="javascript:document.location='__URL__/export/action/enter';" value="Export as Excel" />
+	</if>
+	</td>
 </tr>
 </table>
 <input type="hidden" name="confirm" value="" />
 </form>
-</neq>
+<else />
+<p class="center">
+	<input type="button" onclick="javascript:document.location='__URL__/export/action/reject';" value="Export as Excel" />
+</p>
+</if>
 <script type="text/javascript"> 
 $(document).ready(function(){
 	$("td#status_{$status}").addClass("current");
