@@ -217,6 +217,66 @@ class InventoryAction extends BaseAction{
 		$this->assign('content','Inventory:index');
 		$this->display('Layout:ERP_layout');
 	}
+	public function export() {
+		header("Content-type:application/vnd.ms-excel");
+		header("Content-Disposition:filename=Inventory_".date("Ymd").".csv");
+		echo "Internal P/N,Description,Manufacture,MPN,Category,Fixed-Assets,Supplier,Last Enter Time,Inventory Quantity,Owner(Quantity),Remark\r\n";
+
+		$FixedArray = array('No', 'Yes');
+
+		$where = array();
+		$where['action'] = 'enter';
+		$where['status'] = 1;
+		$result = D('ProductFlow')->relation(true)->where($where)->group('product_id')->order('product_id')->field("*,group_concat(distinct supplier_id) as supplier_ids")->select();
+		foreach ($result as $row) {
+			echo $row['product']['Internal_PN'].',';
+			echo $row['product']['description'].',';
+			echo $row['product']['manufacture'].',';
+			echo $row['product']['MPN'].',';
+
+			echo $row['category']['name'].',';
+			echo $FixedArray[$row['fixed']].',';
+
+			echo implode('/', M('Supplier')->where('id in ('.$row['supplier_ids'].')')->GetField('id,name')).',';
+
+			//获取物品的最后入库时间
+			$where = array();
+			$where['product_id'] = $row['product_id'];
+			$where['action'] = 'enter';
+			echo M('ProductFlow')->where($where)->getField('max(confirm_time)').',';
+
+			//获取物品库存
+			$where = array();
+			$where['product_id'] = $row['product_id'];
+			$where['type'] = 'location';
+			$where['location_id'] =1;
+			echo M('LocationProduct')->where($where)->getField('chg_quantity').',';
+
+			//获取物品的Owner
+			$where = array();
+			$where['product_id'] = $row['product_id'];
+			$where['chg_quantity'] = array('gt',0);
+			$where['_string'] = "(type='location' and location_id!=1) or type='staff'";
+			$owner_rs = M('LocationProduct')->where($where)->select();
+			empty($owner_rs) && ($owner_rs = array());
+			echo '"';
+			foreach ($owner_rs as $j=>$owner_row) {
+				$j>0 && print("\r\n");
+				if ('location' == $owner_row['type']) {
+					echo M('Location')->where('id='.$owner_row['location_id'])->getField('name');
+				}
+				else {
+					echo M('Staff')->where('id='.$owner_row['location_id'])->getField('realname');
+				}
+				echo '('.$owner_row['chg_quantity'].')';
+			}
+			echo '",';
+			
+			//获取最后一次Remark
+			echo '"'.self::getLastComment($row['product_id'])." \"\r\n";
+		}
+		exit;
+	}
 
 	public function location() {
 		//for batch transfer
