@@ -66,7 +66,7 @@ CREATE TABLE IF NOT EXISTS erp_absence (
   PRIMARY KEY (id)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
-ALTER TABLE erp_options ADD description TEXT NOT NULL AFTER code;
+ALTER TABLE erp_options ADD descr TEXT NOT NULL AFTER code;
 
 2010/8/7
 ALTER TABLE erp_category ADD manager_id SMALLINT UNSIGNED NOT NULL;

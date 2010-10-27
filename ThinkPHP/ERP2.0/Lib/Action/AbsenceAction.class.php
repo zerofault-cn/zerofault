@@ -207,7 +207,7 @@ class AbsenceAction extends BaseAction{
 				$result[$key] = array(
 					'type' => $key,
 					'name' => empty($rs['name']) ? $val : $rs['name'],
-					'description' => str_replace(array("'", "\r\n"), array("\'", "<br />"), $rs['description'])
+					'description' => str_replace(array("'", "\r\n"), array("\'", "<br />"), $rs['descr'])
 					);
 			}
 		}

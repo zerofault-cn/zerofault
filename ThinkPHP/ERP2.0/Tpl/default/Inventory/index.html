@@ -107,9 +107,20 @@ td.editing input{
 </table>
 <small>Tips: For green cells, "Click" to edit, "Enter" to submit, "ESC" to cancel.</small>
 
+<form action="__URL__/index" method="post">
 <p class="center">
-	<input type="button" onclick="javascript:document.location='__URL__/export';" value="Export as Excel" />
+	<input type="hidden" name="category_id" value="{$request['category_id']}" />
+	<input type="hidden" name="supplier_id" value="{$request['supplier_id']}" />
+	<input type="hidden" name="Internal_PN" value="{$request['Internal_PN']}" />
+	<input type="hidden" name="description" value="{$request['description']}" />
+	<input type="hidden" name="manufacture" value="{$request['manufacture']}" />
+	<input type="hidden" name="MPN" value="{$request['MPN']}" />
+	<input type="hidden" name="value" value="{$request['value']}" />
+	<input type="hidden" name="project" value="{$request['project']}" />
+	<input type="hidden" name="export" value="1" />
+	<input type="submit" name="submit" value="Export as Excel" />
 </p>
+</form>
 <div style="display:none" id="batch_form">
 <p class="page_title_text"></p>
 <form name="Batch" action="__URL__/batch" method="post" target="_iframe">
