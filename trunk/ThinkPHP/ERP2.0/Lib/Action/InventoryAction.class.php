@@ -108,6 +108,13 @@ class InventoryAction extends BaseAction{
 	}
 
 	public function index() {
+		if (!empty($_REQUEST['export'])) {
+			header("Content-type:application/vnd.ms-excel");
+			header("Content-Disposition:filename=Inventory_".date("Ymd").".csv");
+			echo "Internal P/N,Description,Manufacture,MPN,Category,Fixed-Assets,Supplier,Last Enter Time,Inventory Quantity,Owner(Quantity),Remark\r\n";
+		}
+		$FixedArray = array('No', 'Yes');
+
 		Session::set('sub', MODULE_NAME.'/'.ACTION_NAME);
 		$this->assign('ACTION_TITLE', 'List');
 		$this->assign('category_opts', self::genOptions(M('Category')->select(), $_REQUEST['category_id']) );
@@ -148,10 +155,13 @@ class InventoryAction extends BaseAction{
 				$limit = 1000;
 			}
 		}
+		if (!empty($_REQUEST['export'])) {
+			$limit = 9999;
+		}
 		$rs = $this->dao->where($where)->group('product_id')->select();
 		$p = new Paginator(count($rs),$limit);
 
-		$result = $this->dao->field("Options.name as unit_name, Category.name as category_name, Product.id as product_id, Product.fixed as fixed, Product.type as type, Product.Internal_PN as Internal_PN, Product.description as description, group_concat(distinct Supplier.name) as supplier_names")->where($where)->group('product_id')->order('Internal_PN')->limit($p->offset.','.$p->limit)->select();
+		$result = $this->dao->field("Options.name as unit_name, Category.name as category_name, Product.id as product_id, Product.fixed as fixed, Product.type as type, Product.Internal_PN as Internal_PN, Product.description as description, Product.manufacture as manufacture, Product.MPN as MPN, group_concat(distinct Supplier.name) as supplier_names")->where($where)->group('product_id')->order('Internal_PN')->limit($p->offset.','.$p->limit)->select();
 		foreach ($result as $i=>$val) {
 			$where = array();
 			$where['product_id'] = $val['product_id'];
@@ -208,6 +218,36 @@ class InventoryAction extends BaseAction{
 			//获取最后一次Remark
 			$lastRemark = self::getLastComment($val['product_id'])."\n";
 			$result[$i]['lastRemark'] = substr($lastRemark, 0, strpos($lastRemark, "\n"));
+
+			if (!empty($_REQUEST['export'])) {
+				echo $val['Internal_PN'].',';
+				echo $val['description'].',';
+				echo $val['manufacture'].',';
+				echo $val['MPN'].',';
+				echo $val['category_name'].',';
+				echo $FixedArray[$row['fixed']].',';
+				echo '"'.implode("\r\n", explode(',', $val['supplier_names'])).'",';
+				echo $result[$i]['last_enter_time'].',';
+				echo $result[$i]['inventory']['chg_quantity'].',';
+
+				echo '"';
+				empty($owner_arr) && ($owner_arr = array());
+				foreach ($owner_arr as $j=>$owner_row) {
+					$j>0 && print("\r\n");
+					if ('location' == $owner_row['type']) {
+						echo M('Location')->where('id='.$owner_row['location_id'])->getField('name');
+					}
+					else {
+						echo M('Staff')->where('id='.$owner_row['location_id'])->getField('realname');
+					}
+					echo '('.$owner_row['chg_quantity'].')';
+				}
+				echo '",';
+				echo '"'.$lastRemark." \"\r\n";
+			}
+		}
+		if (!empty($_REQUEST['export'])) {
+			exit;
 		}
 		
 		//dump($_SESSION);

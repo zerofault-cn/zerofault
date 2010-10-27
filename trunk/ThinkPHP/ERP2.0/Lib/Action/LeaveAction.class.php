@@ -25,7 +25,7 @@ class LeaveAction extends BaseAction{
 			$data = array();
 			$data['type'] = trim($_REQUEST['type']);
 			$data['name'] = trim($_REQUEST['name']);
-			$data['description'] = trim($_REQUEST['description']);
+			$data['descr'] = trim($_REQUEST['description']);
 			if (''==$data['name']) {
 				self::_error('Your must input a name!');
 				return;
@@ -64,7 +64,7 @@ class LeaveAction extends BaseAction{
 					'id' => $rs['id'],
 					'type' => $key,
 					'name' => empty($rs['name']) ? $val : $rs['name'],
-					'description' => $rs['description']
+					'description' => $rs['descr']
 					);
 			}
 		}
