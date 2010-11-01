@@ -118,7 +118,7 @@ td.editing input{
 	<input type="hidden" name="value" value="{$request['value']}" />
 	<input type="hidden" name="project" value="{$request['project']}" />
 	<input type="hidden" name="export" value="1" />
-	<input type="submit" name="submit" value="Export as Excel" />
+	<if condition="$_SESSION[C('ADMIN_AUTH_NAME')] eq true or !empty($_SESSION[C('LMANAGER_AUTH_NAME')][1])"><input type="submit" name="submit" value="Export as Excel" /></if>
 </p>
 </form>
 <div style="display:none" id="batch_form">
