@@ -111,7 +111,7 @@ class InventoryAction extends BaseAction{
 		if (!empty($_REQUEST['export'])) {
 			header("Content-type:application/vnd.ms-excel");
 			header("Content-Disposition:filename=Inventory_".date("Ymd").".csv");
-			echo "Internal P/N,Description,Manufacture,MPN,Category,Fixed-Assets,Supplier,Last Enter Time,Inventory Quantity,Owner(Quantity),Remark\r\n";
+			echo "Internal P/N,Description,Manufacture,MPN,Category,Fixed-Assets,Supplier,Last Enter Time,Inventory Quantity,Owner(Quantity),Value/Package,RoHS,LT days,MOQ,SPQ,MSL,Project,Accessories,Remark\r\n";
 		}
 		$FixedArray = array('No', 'Yes');
 
@@ -142,7 +142,7 @@ class InventoryAction extends BaseAction{
 		$where['action'] = 'enter';
 		$where['status'] = 1;
 		$result = array();
-		if(!empty($_POST['submit'])) {
+		if(!empty($_REQUEST['submit'])) {
 			(''!=$_REQUEST['category_id']) && ($where['category_id'] = $_REQUEST['category_id']);
 			(''!=$_REQUEST['supplier_id']) && ($where['supplier_id'] = $_REQUEST['supplier_id']);
 			(''!=trim($_REQUEST['Internal_PN'])) && ($where['Internal_PN'] = array('like', '%'.trim($_REQUEST['Internal_PN']).'%'));
@@ -243,6 +243,15 @@ class InventoryAction extends BaseAction{
 					echo '('.$owner_row['chg_quantity'].')';
 				}
 				echo '",';
+				$product_info = M('Product')->find($val['product_id']);
+				echo $product_info['value'].',';
+				echo $product_info['Rohs'].',';
+				echo $product_info['LT_days'].',';
+				echo $product_info['MOQ'].',';
+				echo $product_info['SPQ'].',';
+				echo $product_info['MSL'].',';
+				echo $product_info['project'].',';
+				echo $product_info['accessories'].',';
 				echo '"'.$lastRemark." \"\r\n";
 			}
 		}
