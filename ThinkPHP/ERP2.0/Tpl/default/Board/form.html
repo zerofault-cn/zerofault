@@ -165,4 +165,9 @@ function direct_input(id) {
 	$("input#fixed").val($("input.fixed:checked").val());
 	tb_show('','#TB_inline?width=360&height=360&modal=true&inlineId=direct_input','')
 }
+function calc_total() {
+	if($('#price').val()!='' && $('#quantity').val()!='') {
+		$('#total').val(parseFloat($('#price').val())*parseInt($('#quantity').val()));
+	}
+}
 </script>
