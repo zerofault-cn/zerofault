@@ -89,9 +89,8 @@ class PublicAction extends BaseAction{
 			foreach($rs as $location_id=>$fixed) {
 				$manager[$location_id] = array('name'=>$rs2[$location_id],'fixed'=>$fixed);
 			}
-			$_SESSION[C('LMANAGER_AUTH_NAME')] = $manager;
-			//获取当前用户管理的Category
-			$_SESSION[C('CMANAGER_AUTH_NAME')] = M('Category')->where(array('manager_id'=>$authInfo['id']))->getField('id,name');
+			$_SESSION[C('MANAGER_AUTH_NAME')] = $manager;
+			
 			// 缓存访问权限
 			RBAC::saveAccessList($authInfo['id']);
 			self::_success('', __APP__, 0);

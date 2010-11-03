@@ -56,14 +56,6 @@ class ProductInAction extends BaseAction{
 		if(''!=$fixed) {
 			$where['fixed'] = $fixed;
 		}
-		if (!empty($_SESSION[C('CMANAGER_AUTH_NAME')])) {
-			if (count($_SESSION[C('CMANAGER_AUTH_NAME')]) == 1) {
-				$where['category_id'] = array_keys($_SESSION[C('CMANAGER_AUTH_NAME')]);
-			}
-			else {
-				$where['category_id'] = array('In', array_keys($_SESSION[C('CMANAGER_AUTH_NAME')]));
-			}
-		}
 		$where['action'] = $action;
 		$this->assign('action', $action);
 
@@ -252,7 +244,6 @@ class ProductInAction extends BaseAction{
 			$this->dao->create_time = date("Y-m-d H:i:s");
 		}
 		$this->dao->fixed = $product_id['fixed'];
-		$this->dao->category_id = $product_id['category_id'];
 		$this->dao->product_id = $product_id;
 		$this->dao->supplier_id = $_REQUEST['supplier_id'];
 		$this->dao->currency_id = $_REQUEST['currency_id'];
@@ -267,7 +258,7 @@ class ProductInAction extends BaseAction{
 					$loc = __APP__.'/Board';
 				}
 				else {
-					$loc = __URL__.('reject'==$this->dao->action?'/reject':(empty($_SESSION[C('CMANAGER_AUTH_NAME')])?($this->dao->fixed ? '/fixed' : '/floating'):'/enter'));
+					$loc = __URL__.('reject'==$this->dao->action?'/reject':($this->dao->fixed ? '/fixed' : '/floating'));
 				}
 				self::_success('Product information updated!', $loc);
 			}
@@ -482,7 +473,6 @@ class ProductInAction extends BaseAction{
 			$this->dao->fixed = $value_arr['fixed'];
 			$this->dao->staff_id = $_SESSION[C('USER_AUTH_KEY')];
 			$this->dao->create_time = date("Y-m-d H:i:s");
-			$this->dao->category_id = $category_id;
 			$this->dao->product_id = $product_id;
 			$this->dao->supplier_id = $supplier_id;
 			$this->dao->currency_id = $currency_id;

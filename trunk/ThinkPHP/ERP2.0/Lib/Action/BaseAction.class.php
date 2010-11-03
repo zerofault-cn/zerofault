@@ -77,7 +77,7 @@ class BaseAction extends Action {
 		$submenu = array();
 		if ('Assets Management' == $top) {
 			//根据是否manager增加Location子菜单
-			foreach ($_SESSION[C('LMANAGER_AUTH_NAME')] as $location_id=>$location) {
+			foreach ($_SESSION[C('MANAGER_AUTH_NAME')] as $location_id=>$location) {
 				$submenu['Transfer to '.ucfirst($location['name'])] = 'Asset/location/id/'.$location_id;
 			}
 			//判断是否Leader，以增加request子菜单
@@ -109,7 +109,7 @@ class BaseAction extends Action {
 			}
 			$submenu[$sub_title] = $sub_action;
 		}
-		//根据是否Manager增加management子菜单
+		//判断是否super admin增加management子菜单
 		if ('Absence' == $top) {
 			if (in_array($_SESSION[C('USER_AUTH_KEY')], C('SUPER_ADMIN_ID'))) {
 				$submenu['Management'] = 'Absence/manage';
