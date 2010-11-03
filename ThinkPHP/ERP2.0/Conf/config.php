@@ -22,8 +22,8 @@ $config = array_merge($config, array(
 		'USER_AUTH_GATEWAY' => '/Public/login',
 		//用户session，用于区分不同APP
 		'STAFF_AUTH_NAME'   => 'staff',
-		'LMANAGER_AUTH_NAME'=> 'location_manager',
-		'CMANAGER_AUTH_NAME'=> 'category_manager',
+		'MANAGER_AUTH_NAME'=> 'location_manager',
+
 		'ADMIN_AUTH_NAME'	=> 'administrator',
 		
 		'SUPER_ADMIN_ID'	=> array(1), //超级管理员的ID数组

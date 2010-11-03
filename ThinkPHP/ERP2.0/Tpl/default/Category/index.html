@@ -18,7 +18,6 @@
 			<th>No.</th>
 			<th>Category Code</th>
 			<th>Category Name</th>
-			<th>Manager</th>
 			<th>OP</th>
 		</tr>
 		<iterate name="type_item" id="item">
@@ -26,7 +25,6 @@
 			<td>{$i}</td>
 			<td class="code">{$item['code']}</td>
 			<td class="name">{$item['name']}</td>
-			<td class="staff"><notempty name="item['manager']">[{$item['manager']['code']}]</notempty><span>{$item['manager']['realname']}</span></td>
 			<td>
 				<a href="javascript:void(0);" onclick="edit(this,'{$item['id']}');">Edit</a>
 				<a href="javascript:void(0);" onclick="myConfirm('Are you sure to delete this item?', '__URL__/delete/id/{$item['id']}');" target="_iframe">Delete</a>
@@ -36,14 +34,13 @@
 		</iterate>
 		<empty name="type_item">
 		<tr>
-			<td colspan="5" align="center">No Record</td>
+			<td colspan="4" align="center">No Record</td>
 		</tr>
 		</empty>
 		<tr id="{$item.type}">
 			<td>{$i+1}</td>
 			<td><input type="text" name="code" class="code" readonly="true" value="{$code}"/></td>
 			<td><input type="text" name="name" class="name" /></td>
-			<td><select name="manager_id" class="staff"><option value="">None</option>{$staff_opts}</select></td>
 			<td><input type="hidden" name="id" class="id" value="" />
 				<input type="submit" name="submit" class="submit" value="Add" /></td>
 		</tr>
@@ -69,19 +66,10 @@ function edit(obj,id) {
 	var parent = $(obj).parent().parent();
 	var code = parent.children(".code").text();
 	var name = parent.children(".name").text();
-	var staff = parent.children(".staff").children("span").html();
-	if (''==staff) {
-		staff = 'None';
-	}
 
 	var table = parent.parent();
 	table.find("tr:last").children().children(".code").val(code);
 	table.find("tr:last").children().children(".name").val(name);
-	table.find("tr:last").children().children(".staff").children().each(function(i){
-		if($(this).text() == staff) {
-			$(this).attr("selected","selected");
-		}
-	});
 
 	table.find("tr:last").children().children(".id").val(id);
 	table.find("tr:last").children().children(".submit").val('Save');

@@ -116,22 +116,14 @@ class ProductOutAction extends BaseAction{
 				$where['_string'] = "staff_id in (".implode(',', array_keys($lead_staff_arr)).")";
 			}
 			elseif (ACTION_NAME == 'location') {
-				if (strlen($_SESSION[C('LMANAGER_AUTH_NAME')][$location_id]['fixed'])==1) {
-					$where['fixed'] = $_SESSION[C('LMANAGER_AUTH_NAME')][$location_id]['fixed'];
+				if (strlen($_SESSION[C('MANAGER_AUTH_NAME')][$location_id]['fixed'])==1) {
+					$where['fixed'] = $_SESSION[C('MANAGER_AUTH_NAME')][$location_id]['fixed'];
 				}
 				$where['to_type'] = 'location';
 				$where['to_id'] = $location_id;
 			}
 			else {
 				$where['_string'] = "(from_type='staff' and from_id =".$_SESSION[C('USER_AUTH_KEY')].") or (to_type='staff' and to_id = ".$_SESSION[C('USER_AUTH_KEY')].") or staff_id = ".$_SESSION[C('USER_AUTH_KEY')];
-			}
-		}
-		elseif (!empty($_SESSION[C('CMANAGER_AUTH_NAME')])) {
-			if (count($_SESSION[C('CMANAGER_AUTH_NAME')]) == 1) {
-				$where['category_id'] = array_keys($_SESSION[C('CMANAGER_AUTH_NAME')]);
-			}
-			else {
-				$where['category_id'] = array('In', array_keys($_SESSION[C('CMANAGER_AUTH_NAME')]));
 			}
 		}
 		$count = $this->dao->where($where)->getField('count(*)');
@@ -399,7 +391,6 @@ class ProductOutAction extends BaseAction{
 			$this->dao->to_id = 1;
 		}
 		$this->dao->fixed = $product_info['fixed'];
-		$this->dao->category_id = $product_info['category_id'];
 		$this->dao->product_id = $product_id;
 		$this->dao->quantity = $_REQUEST['quantity'];
 		//check quantity again

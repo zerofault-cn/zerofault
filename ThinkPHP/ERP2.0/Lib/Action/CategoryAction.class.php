@@ -72,7 +72,6 @@ class CategoryAction extends BaseAction{
 		Session::set('default_category_type', $type);
 		$name = trim($_REQUEST['name']);
 		!$name && self::_error('Category Name required');
-		$manager_id = intval($_REQUEST['manager_id']);
 		$id = empty($_REQUEST['id']) ? 0 : intval($_REQUEST['id']);
 		if ($id>0) {
 			$rs = $this->dao->where(array('type'=>$type,'name'=>$name,'id'=>array('neq',$id)))->find();
@@ -93,7 +92,6 @@ class CategoryAction extends BaseAction{
 		}
 		$this->dao->type = $type;
 		$this->dao->name = $name;
-		$this->dao->manager_id = $manager_id;
 		if ($id>0) {
 			if(false !== $this->dao->save()){
 				self::_success('Category information updated!',__URL__);
