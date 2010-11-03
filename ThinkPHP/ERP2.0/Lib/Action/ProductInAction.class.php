@@ -243,7 +243,7 @@ class ProductInAction extends BaseAction{
 			$this->dao->staff_id = $_SESSION[C('USER_AUTH_KEY')];
 			$this->dao->create_time = date("Y-m-d H:i:s");
 		}
-		$this->dao->fixed = $product_id['fixed'];
+		$this->dao->fixed = $product_info['fixed'];
 		$this->dao->product_id = $product_id;
 		$this->dao->supplier_id = $_REQUEST['supplier_id'];
 		$this->dao->currency_id = $_REQUEST['currency_id'];
