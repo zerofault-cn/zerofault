@@ -8,12 +8,6 @@ class ProductFlowModel extends RelationModel{
 			'class_name'   => 'Product',
 			'foreign_key'  => 'product_id',
 			),
-		'Category' => array(
-			'mapping_type' => BELONGS_TO,
-			'mapping_name' => 'category',
-			'class_name'   => 'Category',
-			'foreign_key'  => 'category_id',
-			),
 		'Supplier' => array(
 			'mapping_type' => BELONGS_TO,
 			'mapping_name' => 'supplier',
