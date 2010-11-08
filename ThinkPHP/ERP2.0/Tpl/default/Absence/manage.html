@@ -1,2 +1,39 @@
-<p class="page_title_text">Manage</p>
-<p class="center">Under construction!</p>
+<p class="page_title_text">Staff Leave Summary</p>
+<table cellpadding="3" border="1" bordercolor="#FFFFFF" style="border-collapse:collapse;">
+<tr>
+	<th rowspan="2">Staff</th>
+	<th rowspan="2">Onboard Date</th>
+	<th colspan="6">Annual Leave</th>
+	<th colspan="3">Compensatory Leave</th>
+	<th rowspan="2">Total Available</th>
+</tr>
+<tr>
+	<th>{$leave_info['Balance_year']} Balance</th>
+	<th>{$leave_info['Annual_year']} Accumulated</th>
+	<th>{$leave_info['Annual_year']} Consumed</th>
+	<th>Cash out Days in {$leave_info['CashOut'][0]['Month']}</th>
+	<th>Cash out Days in {$leave_info['CashOut'][1]['Month']}</th>
+	<th>Available</th>
+	<th>3 months ago</th>
+	<th>last 3 months</th>
+	<th>Available</th>
+</tr>
+<iterate name="result" id="item">
+<tr class="trbg{$mod}">
+	<td align="center" nowrap="nowrap">{$item['realname']}</td>
+	<td>{$item['onboard']}</td>
+	<td>{$item['Balance']}</td>
+	<td>{$item['Annual']}</td>
+	<td>{$item['Annual_available']}</td>
+	<td></td>
+	<td>
+	</td>
+</tr>
+</iterate>
+<empty name="result">
+<tr>
+	<td colspan="8" align="center">No Record</td>
+</tr>
+</empty>
+</table>
+<p class="center"></p>

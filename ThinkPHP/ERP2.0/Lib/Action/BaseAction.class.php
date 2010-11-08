@@ -111,7 +111,7 @@ class BaseAction extends Action {
 		}
 		//判断是否super admin增加management子菜单
 		if ('Absence' == $top) {
-			if (in_array($_SESSION[C('USER_AUTH_KEY')], C('SUPER_ADMIN_ID'))) {
+			if (in_array($_SESSION[C('USER_AUTH_KEY')], C('SUPER_ADMIN_ID')) || !empty($_SESSION[C('STAFF_AUTH_NAME')]['is_leader'])) {
 				$submenu['Management'] = 'Absence/manage';
 			}
 		}
