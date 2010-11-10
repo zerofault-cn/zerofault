@@ -623,7 +623,8 @@ class AbsenceAction extends BaseAction{
 			$where = array(
 				'type' => array('in', array('Annual','CashOut')),
 				'staff_id' => $row['id'],
-				'status' => 1
+				'status' => 1,
+				'time_from' => array(array('egt', date('Y', $this->time).'-01-01'), array('lt', (date('Y', $this->time)+1).'-01-01'))
 				);
 			$used_annual_hours = $this->dao->where($where)->sum('hours');
 			
@@ -633,19 +634,15 @@ class AbsenceAction extends BaseAction{
 				$balance_hour = 'N/A';
 				//今年入职的员工，从入职之日算起
 				$added_annual_hour = round(($this->time - strtotime($row['onboard']))/86400*360/(365+date('L', $this->time))/30*1.25*8);//每个月1.25天
-				$left_annual_hour = $added_annual_hour - $used_annual_hours;
-				$total_annual += $left_annual_hour;
+				$total_annual += $added_annual_hour;
 			}
 			else {
 				//今年之前入职的员工，从今年01-01算起
 				$added_annual_hour = round(date('z', $this->time)*360/(365+date('L', $this->time))/30*1.25*8);
+				$total_annual += $added_annual_hour;
 				if (date('Y', $this->time)==2010) {
 					//如果现在是2010年，则读取2009剩余年假，并减除已使用假期
-					$balance_hour = max(0, round($row['balance_2009']*8-$used_annual_hours));
-					$total_annual += $balance_hour;
-				
-					$left_annual_hour = $added_annual_hour - max(0, $used_annual_hours-round($row['balance_2009']*8));
-					$total_annual += $left_annual_hour;
+					$total_annual += round($row['balance_2009']*8);
 				}
 				else {
 					//2011年或以后
@@ -657,16 +654,57 @@ class AbsenceAction extends BaseAction{
 						//该员工在2010年前入职，则用2009年剩余年假 ＋ 2010年到去年的整年假
 						$tmp_balance_hour = round($row['balance_2009']*8) + (date('Y', $this->time)-2010)*12*1.25*8;
 					}
-					$balance_hour = max(0, $tmp_balance_hour-$used_annual_hours);
-					$total_annual += $hour;
-
-					$left_annual_hour = $added_annual_hour - max(0, $used_annual_hours-$tmp_balance_hour);
-					$total_annual += $left_annual_hour;
+					$total_annual += $tmp_balance_hour;
 				}
 			}
 			$rs[$i]['Balance'] = self::parseHour($balance_hour);
-			$rs[$i]['Annual'] =  self::parseHour($left_annual_hour);
-			$rs[$i]['Annual_available'] = self::parseHour($total_annual);
+			$rs[$i]['Annual'] =  self::parseHour($total_annual);
+			$rs[$i]['Annual_used'] = self::parseHour($used_annual_hours);
+			$rs[$i]['Annual_available'] = self::parseHour($total_annual-$used_annual_hours);
+			$total_leave = $total_annual;
+
+			unset($where['time_from']);
+			$where['type'] = 'CashOut';
+			$arr = array(
+				array(
+					array('egt', date('Y', $this->time).'-01-01'),
+					array('lt', date('Y', $this->time).'-07-01')
+					),
+				array(
+					array('egt', date('Y', $this->time).'-07-01'),
+					array('lt', (date('Y', $this->time)+1).'-01-01')
+					)
+				);
+			foreach ($arr as $key=>$val) {
+				$where['create_time'] = $val;
+				$hour = $this->dao->where($where)->sum('hours');
+				$rs[$i]['CashOut'][$key] = self::parseHour($hour);
+			}
+
+			$date_3month_ago = date('Y-m-d', mktime(0,0,0,date('m', $this->time)-3, date('d', $this->time), date('Y', $this->time)));
+			unset($where['create_time']);
+			$where['type'] = 'Compensatory';
+			$where['time_from'] = array('egt', $date_3month_ago);
+			$last_apply_time = $this->dao->where($where)->max('time_from');
+			$where['type'] = 'Overtime';
+			if (!empty($last_apply_time)) {
+				$where['time_from'] = array('egt', $last_apply_time);
+				$hour = $this->dao->where($where)->sum('hours');
+				$total_leave += $hour;
+				$rs[$i]['Compensatory']['recent'] = self::parseHour($hour);
+				$rs[$i]['Compensatory']['past'] = self::parseHour(0);
+			}
+			else {
+				$where['time_from'] = array('egt', $date_3month_ago);
+				$hour = $this->dao->where($where)->sum('hours');
+				$total_leave += $hour;
+				$rs[$i]['Compensatory']['recent'] = self::parseHour($hour);
+				$where['time_from'] = array('lt', $date_3month_ago);
+				$hour = $this->dao->where($where)->sum('hours');
+				$rs[$i]['Compensatory']['past'] = self::parseHour($hour);
+			}
+			$rs[$i]['Total'] = self::parseHour($total_leave);
+
 		}
 		$this->assign('result', $rs);
 
@@ -746,10 +784,10 @@ class AbsenceAction extends BaseAction{
 		if ($hour>1) {
 			$unit1 = ' hours';
 		}
-		$day = round($hour/8, 2);
-		$unit2 = ' day';
+		$day = round($hour/8, 1);
+		$unit2 = '&nbsp;day';
 		if ($day>1) {
-			$unit2 = ' days';
+			$unit2 = '&nbsp;days';
 		}
 		return round($hour).$unit1.' ('.$day.$unit2.')';
 	}

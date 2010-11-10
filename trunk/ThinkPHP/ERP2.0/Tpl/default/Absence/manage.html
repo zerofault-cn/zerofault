@@ -4,7 +4,7 @@
 	<th rowspan="2">Staff</th>
 	<th rowspan="2">Onboard Date</th>
 	<th colspan="6">Annual Leave</th>
-	<th colspan="3">Compensatory Leave</th>
+	<th colspan="2">Compensatory Leave</th>
 	<th rowspan="2">Total Available</th>
 </tr>
 <tr>
@@ -16,7 +16,6 @@
 	<th>Available</th>
 	<th>3 months ago</th>
 	<th>last 3 months</th>
-	<th>Available</th>
 </tr>
 <iterate name="result" id="item">
 <tr class="trbg{$mod}">
@@ -24,10 +23,13 @@
 	<td>{$item['onboard']}</td>
 	<td>{$item['Balance']}</td>
 	<td>{$item['Annual']}</td>
+	<td>{$item['Annual_used']}</td>
+	<td>{$item['CashOut'][0]}</td>
+	<td>{$item['CashOut'][1]}</td>
 	<td>{$item['Annual_available']}</td>
-	<td></td>
-	<td>
-	</td>
+	<td>{$item['Compensatory']['past']}</td>
+	<td>{$item['Compensatory']['recent']}</td>
+	<td>{$item['Total']}</td>
 </tr>
 </iterate>
 <empty name="result">
