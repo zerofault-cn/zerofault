@@ -661,7 +661,7 @@ class AbsenceAction extends BaseAction{
 			$rs[$i]['Annual'] =  self::parseHour($total_annual);
 			$rs[$i]['Annual_used'] = self::parseHour($used_annual_hours);
 			$rs[$i]['Annual_available'] = self::parseHour($total_annual-$used_annual_hours);
-			$total_leave = $total_annual;
+			$total_leave = $total_annual-$used_annual_hours;
 
 			unset($where['time_from']);
 			$where['type'] = 'CashOut';
