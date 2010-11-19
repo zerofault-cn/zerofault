@@ -356,7 +356,7 @@ class AbsenceAction extends BaseAction{
 				self::_error('The end date/time of the duration is not invalid!');
 			}
 			elseif (strcmp($date_from.$time_from, $date_to.$time_to)>=0) {
-				self::_error('The end datetime must be later then the begin datetime!');
+				self::_error('The end datetime must be later than the begin datetime!');
 			}
 			global $hour;
 			$hour = 0;
@@ -365,10 +365,10 @@ class AbsenceAction extends BaseAction{
 			$avaliable_hour = self::get_avaliable($type, $staff_id);
 			echo 'avaliable hour:'.$avaliable_hour."\n";
 			if ($hour<=0) {
-				self::_error('The hours must be larger then 0!');
+				self::_error('The hours must be larger than 0!');
 			}
 			elseif ($hour>$avaliable_hour) {
-				self::_error('You can\'t apply more then '.$avaliable_hour.' hours');
+				self::_error('You can\'t apply more than '.$avaliable_hour.' hours');
 			}
 			$deputy = $_REQUEST['deputy'];
 			$file_path = 'Attach/Absence/';
