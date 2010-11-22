@@ -10,8 +10,11 @@
 </if>
 <tr>
 	<td colspan="2">
-		<if condition="!empty($type)">
+		<if condition="!empty($type) and ($type eq 'Overtime' or $type eq 'CashOut')">
 		<form class="clsTab" id="leave" action="__URL__/submit" method="post" target="_iframe">
+			<present name="info">
+		<input type="hidden" name="id" value="{$info['id']}" />
+			</present>
 		<table width="100%" border="1" cellpadding="3" cellspacing="1" bordercolor="#FFFFFF" style="border-collapse:collapse;">
 			<if condition="$type eq 'Overtime'">
 		<tr>
@@ -48,7 +51,14 @@
 			<td><b>Note</b></td>
 		</tr>
 		<tr bgcolor="#EEEEEE" align="center">
-			<td><select name="staff_id">
+			<td><if condition="$_GET.staff eq 'self'">
+					<present name="info">
+					{$info['creator']['realname']}
+					<else />
+					{$_SESSION[C('STAFF_AUTH_NAME')]['realname']}
+					</present>
+				<else />
+				<select name="staff_id">
 				<option value="">----Select----</option>
 				<foreach name="DeptStaff" key="dept" item="Staff">
 					<optgroup label="{$dept}">
@@ -70,6 +80,7 @@
 					</optgroup>
 				</foreach>
 				</select>
+				</if>
 			</td>
 			<td><textarea id="note" name="note" cols="50" rows="5"><present name="info">{$info['note']}</present></textarea></td>
 		</tr>
@@ -94,7 +105,7 @@
 		</tr>
 		<tr>
 			<td bgcolor="#CCCCCC"><b>Your cash out days: </b></td>
-			<td bgcolor="#EEEEEE"><input type="text" name="days" value="" size="5"/> max: {$available}</td>
+			<td bgcolor="#EEEEEE"><input type="text" name="days" value="{$info['hours']/8}" size="4"/> max: {$available}</td>
 		</tr>
 		</table>
 		<p class="center">
