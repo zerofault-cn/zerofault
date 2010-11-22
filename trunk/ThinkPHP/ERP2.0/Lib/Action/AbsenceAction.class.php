@@ -150,7 +150,7 @@ class AbsenceAction extends BaseAction{
 		$this->assign('out_list', $this->dao->relation(true)->where($where)->order('id desc')->select());
 
 		$where = array(
-			'type' => array('not in', array('Overtime', 'Out')),
+			'type' => array('neq', 'Out'),
 			'staff_id' => $_SESSION[C('USER_AUTH_KEY')],
 			'create_time' => array('gt', (date('Y', $this->time)-1).'-'.date('m', $this->time).'-'.date('d', $this->time))
 			);
@@ -222,6 +222,14 @@ class AbsenceAction extends BaseAction{
 			//edit form
 			$info = $this->dao->relation(true)->find($id);
 			$this->assign('info', $info);
+
+			if ('CashOut' == $type) {
+				$total = self::get_avaliable('Annual', $info['staff_id']);
+				$reserved = $this->Absence_Config['reservedhours'];
+				$this->assign('total_leave', self::parseHour($total));
+				$this->assign('reserved', self::parseHour($reserved));
+				$this->assign('available', self::parseHour($total-$reserved));
+			}
 		}
 		else {
 			//new form
@@ -329,7 +337,7 @@ class AbsenceAction extends BaseAction{
 			$this->dao->hours = $days*8;
 			if($id>0) {
 				if(false !== $this->dao->save()) {
-					self::_success('Application updated!',__URL__);
+					self::_success('Application updated!',__URL__.'/approve');//因只有leader可以编辑
 				}
 				else{
 					self::_error('Update fail!'.(C('APP_DEBUG')?$this->dao->getLastSql():''));
@@ -360,7 +368,12 @@ class AbsenceAction extends BaseAction{
 			}
 			global $hour;
 			$hour = 0;
-			self::calculateHour($date_from, $time_from, $date_to, $time_to);
+			if ('Overtime'==$type) {
+				$hour = (strtotime($date_to.' '.$time_to.':00') - strtotime($date_from.' '.$time_from.':00'))/3600;
+			}
+			else {
+				self::calculateHour($date_from, $time_from, $date_to, $time_to);
+			}
 			echo 'applied hour:'.$hour."\n";
 			$avaliable_hour = self::get_avaliable($type, $staff_id);
 			echo 'avaliable hour:'.$avaliable_hour."\n";
@@ -442,10 +455,10 @@ class AbsenceAction extends BaseAction{
 					if ($type != 'Out' && $type!= 'CashOut') {
 						self::mail_application($this->dao);
 					}
-					self::_success('Absence apply success!',__URL__);
+					self::_success('Application created success!',__URL__);
 				}
 				else{
-					self::_error('Absence apply fail!'.(C('APP_DEBUG')?$this->dao->getLastSql():''));
+					self::_error('Application created fail!'.(C('APP_DEBUG')?$this->dao->getLastSql():''));
 				}
 			}
 		}
