@@ -370,6 +370,9 @@ class AbsenceAction extends BaseAction{
 			$hour = 0;
 			if ('Overtime'==$type) {
 				$hour = (strtotime($date_to.' '.$time_to.':00') - strtotime($date_from.' '.$time_from.':00'))/3600;
+				if (strcmp($date_from.' '.$time_from, $date_from.' '.$this->Absence_Config['worktime'][0][1])<=0 && strcmp($date_to.' '.$time_to, $date_from.' '.$this->Absence_Config['worktime'][1][0])>=0) {
+					$hour -= 1;
+				}
 			}
 			else {
 				self::calculateHour($date_from, $time_from, $date_to, $time_to);
