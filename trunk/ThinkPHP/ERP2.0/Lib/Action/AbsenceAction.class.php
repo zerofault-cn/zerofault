@@ -154,19 +154,45 @@ class AbsenceAction extends BaseAction{
 			'staff_id' => $_SESSION[C('USER_AUTH_KEY')],
 			'create_time' => array('gt', (date('Y', $this->time)-1).'-'.date('m', $this->time).'-'.date('d', $this->time))
 			);
-		$arr = array(
+		$label_arr = array(
 			'Waiting for Approval' => array('lt', 1),
 			'Get Approved' => 1,
 			'Rejected' => 2
 			);
-		$this->assign('label_status', $arr);
+		$this->assign('label_status', $label_arr);
 		$file_path = '../Attach/Absence/';
 		$result = array();
-		foreach ($arr as $key => $val) {
+		foreach ($label_arr as $label => $val) {
 			$where['status'] = $val;
 			$rs = $this->dao->relation(true)->where($where)->order('id desc')->select();
 			foreach ($rs as $i=>$item) {
 				$rs[$i]['days'] = self::parseHour($item['hours']);
+				if ($item['hours'] <= 8) {
+					$rs[$i]['approver'] = $staff_info['leader']['realname'];
+				}
+				elseif ($item['hours'] <= 16) {
+					if ($item['status'] == -1) {
+						$rs[$i]['approver'] = $staff_info['leader']['realname'];
+					}
+					else {
+						list($name, $email) = each($this->Absence_Config['application']['level_1']['approver']);
+						$rs[$i]['approver'] = $name;
+					}
+				}
+				else {
+					if ($item['status'] == -2) {
+						$rs[$i]['approver'] = $staff_info['leader']['realname'];
+					}
+					elseif ($item['status'] == -1) {
+						list($name, $email) = each($this->Absence_Config['application']['level_2']['approver']);
+						$rs[$i]['approver'] = $name;
+					}
+					else {
+						list($name, $email) = each($this->Absence_Config['application']['level_2']['approver']);
+						list($name, $email) = each($this->Absence_Config['application']['level_2']['approver']);
+						$rs[$i]['approver'] = $name;
+					}
+				}
 				$rs[$i]['attachment_url'] = '';
 				if (''==trim($item['attachment'])) {
 					continue;
@@ -175,7 +201,7 @@ class AbsenceAction extends BaseAction{
 					$rs[$i]['attachment_url'] .= '[<a href="'.$file_path.$file_name.'" target="_blank"> '.($j+1).' </a>] ';
 				}
 			}
-			!empty($rs) && ($result[$key] = $rs);
+			!empty($rs) && ($result[$label] = $rs);
 		}
 		$this->assign('apply_list', $result);
 
@@ -933,16 +959,16 @@ class AbsenceAction extends BaseAction{
 				$leader = M('Staff')->find($staff['leader_id']);
 				if (''==$leader['email']) {
 					$leader = array(
-					//	'email' => 'bin.li@agigatech.com',
-						'email' => 'mzhu@agigatech.com',
+						'email' => 'bin.li@agigatech.com',
+					//	'email' => 'mzhu@agigatech.com',
 						'realname' => 'Bin.Li'
 					);
 				}
 			}
 			else {
 				$leader = array(
-				//	'email' => 'bin.li@agigatech.com',
-					'email' => 'mzhu@agigatech.com',
+					'email' => 'bin.li@agigatech.com',
+				//	'email' => 'mzhu@agigatech.com',
 					'realname' => 'Bin.Li'
 				);
 			}

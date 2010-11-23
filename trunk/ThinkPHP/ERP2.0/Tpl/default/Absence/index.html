@@ -112,6 +112,7 @@
 			<th width="10%">Comment</th>
 			</if>
 			<if condition="'Waiting for Approval' eq $label">
+			<th>Waiting approver</th>
 			<th width="10%">Operation</th>
 			</if>
 		</tr>
@@ -126,6 +127,7 @@
 			<td valign="top" align="left">{$item['comment']|nl2br}</td>
 			</if>
 			<if condition="'Waiting for Approval' eq $label">
+			<td>{$item['approver']}</td>
 			<td nowrap="nowrap">
 				<!-- <a href="__URL__/form/id/{$item['id']}?width=500&height=450&modal=true" class="thickbox">Edit</a> -->
 				<a href="javascript:void(0);" onclick="myConfirm('Are you sure to cancel this application?', '__URL__/delete/id/{$item['id']}');" target="_iframe">Cancel</a>
