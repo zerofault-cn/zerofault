@@ -175,6 +175,7 @@ class AbsenceAction extends BaseAction{
 						$rs[$i]['approver'] = $staff_info['leader']['realname'];
 					}
 					else {
+						reset($this->Absence_Config['application']['level_1']['approver']);
 						list($name, $email) = each($this->Absence_Config['application']['level_1']['approver']);
 						$rs[$i]['approver'] = $name;
 					}
@@ -184,10 +185,12 @@ class AbsenceAction extends BaseAction{
 						$rs[$i]['approver'] = $staff_info['leader']['realname'];
 					}
 					elseif ($item['status'] == -1) {
+						reset($this->Absence_Config['application']['level_2']['approver']);
 						list($name, $email) = each($this->Absence_Config['application']['level_2']['approver']);
 						$rs[$i]['approver'] = $name;
 					}
 					else {
+						reset($this->Absence_Config['application']['level_2']['approver']);
 						list($name, $email) = each($this->Absence_Config['application']['level_2']['approver']);
 						list($name, $email) = each($this->Absence_Config['application']['level_2']['approver']);
 						$rs[$i]['approver'] = $name;
@@ -267,7 +270,7 @@ class AbsenceAction extends BaseAction{
 				$this->assign('available', self::parseHour($total-$reserved));
 			}
 			else {
-					if (date('N', $this->time)>5 || (date('N', $this->time)==5 && strcmp(date('H:i', $this->time), $this->Absence_Config['worktime'][1][0])>=0)) {//周末，或周五下午
+				if (date('N', $this->time)>5 || (date('N', $this->time)==5 && strcmp(date('H:i', $this->time), $this->Absence_Config['worktime'][1][0])>=0)) {//周末，或周五下午
 					$this->time += (8-date('N', $this->time))*86400;
 					$date_from = date('Y-m-d', $this->time);
 					$time_from = $this->Absence_Config['worktime'][0][0];
