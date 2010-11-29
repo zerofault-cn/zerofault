@@ -529,7 +529,7 @@ class AbsenceAction extends BaseAction{
 		}
 		//approve for level_1
 		list($name, $email) = each($this->Absence_Config['application']['level_1']['approver']);
-		if ($_SESSION[C('STAFF_AUTH_NAME')]['email'] == $email) {
+		if (strtoupper($_SESSION[C('STAFF_AUTH_NAME')]['name']) == $name) {
 			$where = array(
 				'type' => array('neq', 'Out'),
 				'hours' => array(array('gt', 8), array('elt',16)),
@@ -540,7 +540,7 @@ class AbsenceAction extends BaseAction{
 		}
 		//approve for level_2
 		list($name, $email) = each($this->Absence_Config['application']['level_2']['approver']);
-		if ($_SESSION[C('STAFF_AUTH_NAME')]['email'] == $email) {
+		if (strtoupper($_SESSION[C('STAFF_AUTH_NAME')]['name']) == $name) {
 			$where = array(
 				'type' => array('neq', 'Out'),
 				'hours' => array('gt', 16),
@@ -550,7 +550,7 @@ class AbsenceAction extends BaseAction{
 			!empty($rs) && ($result = array_merge($result, $rs));
 		}
 		list($name, $email) = each($this->Absence_Config['application']['level_2']['approver']);
-		if ($_SESSION[C('STAFF_AUTH_NAME')]['email'] == $email) {
+		if (strtoupper($_SESSION[C('STAFF_AUTH_NAME')]['name']) == $name) {
 			$where = array(
 				'type' => array('neq', 'Out'),
 				'hours' => array('gt', 16),

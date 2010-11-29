@@ -24,29 +24,29 @@ return array(
 			'approver' => array(
 				),
 			'cc' => array(
-				'Tracy'=>'jali@agigatech.com',
-				'Matty'=>'fan@agigatech.com',
-				'Bin' => 'bin.li@agigatech.com'
+				'JALI'=>'jali@agigatech.com',
+				'JFAN'=>'fan@agigatech.com',
+				'BINL' => 'bin.li@agigatech.com'
 				)
 			),
 		'level_1' => array( //请假时间大于1天，小于等于2天
 			'approver' => array(
-				'Bin' => 'bin.li@agigatech.com',//'mzhu@agigatech.com',//
+				'BINL' => 'bin.li@agigatech.com',//'mzhu@agigatech.com',//
 				),
 			'cc' => array(
-				'Tracy' => 'jali@agigatech.com',
-				'Matty' => 'fan@agigatech.com',
-				'Yingnan' => 'li@agigatech.com'
+				'JALI' => 'jali@agigatech.com',
+				'JFAN' => 'fan@agigatech.com',
+				'NLIU' => 'li@agigatech.com'
 				)
 			),
 		'level_2' => array( //请假时间大于2天
 			'approver' => array(
-				'Bin' => 'bin.li@agigatech.com',//'mzhu@agigatech.com',//
-				'Yingnan' => 'li@agigatech.com',//'mzhu@agigatech.com',//
+				'BINL' => 'bin.li@agigatech.com',//'mzhu@agigatech.com',//
+				'NLIU' => 'li@agigatech.com',//'mzhu@agigatech.com',//
 				),
 			'cc' => array(
-				'Tracy'=>'jali@agigatech.com',
-				'Matty'=>'fan@agigatech.com'
+				'JALI'=>'jali@agigatech.com',
+				'JFAN'=>'fan@agigatech.com'
 				)
 			)
 		)
