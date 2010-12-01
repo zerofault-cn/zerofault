@@ -1,6 +1,6 @@
 <?php
 @session_start();
-if (empty($_SESSION['SESSION_CUTEFLOW_USERID'])) {
+if (!isset($mailer) && empty($_SESSION['SESSION_CUTEFLOW_USERID'])) {
 	header('Location: '.$CUTEFLOW_SERVER);
 	//header('location: missing_credentials.php?language='.$_REQUEST['language']);
 	exit;
