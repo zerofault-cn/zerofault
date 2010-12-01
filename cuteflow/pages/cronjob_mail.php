@@ -37,5 +37,5 @@
 	remindUser();
 	echo "\nMail to sender:\n";
 	MailToSenderDelay();
-
+	echo "Done\n";
 ?>
