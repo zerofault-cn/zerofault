@@ -1058,8 +1058,16 @@
 						$mail_message = Swift_Message::newInstance()->setCharset($DEFAULT_CHARSET);
 						//switching Email Format
 						$strQuery	= "SELECT * FROM `cf_user` WHERE nID =".$nSenderId;
-						$nResult	= mysql_query($strQuery, $nConnection) or die ("<b>A fatal MySQL error occured</b>.\n<br />Query: " . $strQuery . "<br />\nError: (" . mysql_errno() . ") " . mysql_error());
-						$user = mysql_fetch_array($nResult, MYSQL_ASSOC);
+						$rs	= mysql_query($strQuery, $nConnection);
+						$user = mysql_fetch_array($rs, MYSQL_ASSOC);
+						if (empty($user)) {
+							echo "Skiped\n";
+							$strQuery = "update cf_mailToSender set timeSend=".time().",bStatus=1 where nID=".$nID;
+							if (mysql_query($strQuery, $nConnection)) {
+								echo "1<br />\n";
+							}
+							continue;
+						}
 	    				$useGeneralEmailConfig	= $user['bUseGeneralEmailConfig'];
 	    				if (!$useGeneralEmailConfig)
 	    				{
