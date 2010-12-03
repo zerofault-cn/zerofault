@@ -475,7 +475,7 @@ class AbsenceAction extends BaseAction{
 			if($id>0) {
 				if(false !== $this->dao->save()) {
 	//				self::mail_application($this->dao);//不允许员工编辑，因此不需要重发application
-					self::_success('Application updated!',__URL__);
+					self::_success('Application updated!',__URL__.'/approve');
 				}
 				else{
 					self::_error('Update fail!'.(C('APP_DEBUG')?$this->dao->getLastSql():''));
@@ -502,13 +502,26 @@ class AbsenceAction extends BaseAction{
 		$where = array(
 			'type' => array('neq', 'Out'),
 			'staff_id' => array('in', implode(',', array_keys($lead_staff_arr))),
-			'status' => array('lt', 1)
+		//	'status' => array('lt', 1)
 			);
+		if(isset($_REQUEST['status'])) {
+			$status = $_REQUEST['status'];
+		}
+		else{
+			$status = 0;
+		}
+		if ($status == 0) {
+			$where['status'] = array('lt', 1);
+		}
+		else {
+			$where['status'] = $status;
+		}
+		$this->assign('status', $status);
 		$rs = $this->dao->relation(true)->where($where)->order('id desc')->select();
 		empty($rs) && ($rs = array());
 		$result = array();
 		foreach ($rs as $row) {
-			if ($row['type'] == 'CashOut') {
+			if ($row['type'] == 'CashOut' || $row['status']>0) {
 				$result[] = $row;
 			}
 			elseif ($row['hours'] <= 8) {
@@ -588,6 +601,8 @@ class AbsenceAction extends BaseAction{
 		}
 		if (false !== $this->dao->where('id='.$id)->setField(array('approver_id','comment','status'), array($_SESSION[C('USER_AUTH_KEY')], $comment, $status))) {
 			if ($info['type']!= 'CashOut') {
+				$this->dao->comment = $comment;
+				$this->dao->status = $status;
 				self::mail_application($this->dao);
 			}
 			if (!empty($_REQUEST['from']) && 'mail'==$_REQUEST['from']) {
@@ -926,7 +941,7 @@ class AbsenceAction extends BaseAction{
 				break;
 		}
 	}
-	private function mail_application($dao) {
+	private function mail_application($dao, $type='normal') {
 		if (!defined('APP_ROOT')) {
 			define('APP_ROOT', 'http://'.$_SERVER['SERVER_ADDR'].__APP__);
 		}
@@ -941,6 +956,7 @@ class AbsenceAction extends BaseAction{
 		$mail->SetFrom($smtp_config['from_mail'], $smtp_config['from_name']);
 
 		/*
+		timespan		approvor					notification CC list
 		day<=1			Supervisor					Matty+Tracy+ Bin 
 		1< day <= 2		Supervisor->Bin				Matty+Tracy+Yingnan
 		day > 2			Supervisor->Bin->Yingnan	Matty+Tracy
@@ -957,13 +973,12 @@ class AbsenceAction extends BaseAction{
 			$deputy = M('Staff')->find($dao->deputy_id);
 		}
 		if ($dao->status < 1) {
-			//get leader info
+			//get leader info, 如果没有leader或leader没有email，将默认发给Bin.Li
 			if (!empty($staff['leader_id'])) {
 				$leader = M('Staff')->find($staff['leader_id']);
 				if (''==$leader['email']) {
 					$leader = array(
 						'email' => 'bin.li@agigatech.com',
-					//	'email' => 'mzhu@agigatech.com',
 						'realname' => 'Bin.Li'
 					);
 				}
@@ -971,7 +986,6 @@ class AbsenceAction extends BaseAction{
 			else {
 				$leader = array(
 					'email' => 'bin.li@agigatech.com',
-				//	'email' => 'mzhu@agigatech.com',
 					'realname' => 'Bin.Li'
 				);
 			}
@@ -1097,9 +1111,10 @@ class AbsenceAction extends BaseAction{
 		$mail->MsgHTML($body);
 		if(!$mail->Send()) {
 		//	echo "Mailer Error: " . $mail->ErrorInfo;
-			Log::Write('Mail Error '.$mail->ErrorInfo);
+			Log::Write('Mail Error: '.$mail->ErrorInfo);
 			return false;
 		}
+		Log::Write('Mail Success: '.$dao->id, INFO);
 		return true;
 	}
 	public function notify(){
