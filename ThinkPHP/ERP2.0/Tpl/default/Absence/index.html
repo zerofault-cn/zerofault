@@ -74,6 +74,7 @@
 			<td height="20" colspan="6" align="left" style="background-color:#FFC000;"><strong>Out of Office</strong></td>
 		</tr>
 		<tr>
+			<th>ID</th>
 			<th width="437">Duration</th>
 			<th width="8%">Hours</th>
 			<th width="10%">Deputy</th>
@@ -82,6 +83,7 @@
 		</tr>
 			<iterate name="out_list" id="item">
 		<tr align="center" class="trbg{$mod}">
+			<td>A{$item['id']|sprintf='%05d',###}</td>
 			<td nowrap="nowrap">{$item['time_from']|substr=0,-3} ~ {$item['time_to']|substr=0,-3}</td>
 			<td>{$item['hours']|round='1'}</td>
 			<td>{$item['deputy']['realname']}</td>
@@ -103,6 +105,7 @@
 			<td height="20" colspan="8" align="left" id="status_{$label_status[$label]}"><strong>{$label}</strong></td>
 		</tr>
 		<tr>
+			<th>ID</th>
 			<th width="160">Type</th>
 			<th width="270">Duration</th>
 			<th width="140">Hours</th>
@@ -118,6 +121,7 @@
 		</tr>
 			<iterate name="items" id="item">
 		<tr align="center" class="trbg{$mod}">
+			<td>A{$item['id']|sprintf='%05d',###}</td>
 			<td><empty name="LeaveType[$item['type']]">{$item['type']}<else />{$LeaveType[$item['type']]}</empty></td>
 			<td nowrap="nowrap"><if condition="$item['type'] eq 'CashOut'"><font color="#a4a4a4">N/A</font><else />{$item['time_from']|substr=0,-3} ~ {$item['time_to']|substr=0,-3}</if></td>
 			<td>{$item['days']}</td>
