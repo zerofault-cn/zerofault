@@ -39,8 +39,8 @@
     require_once 'placeholder_tags_addtext.php';
     
 	$nMailinglistID			= $_REQUEST['listid'];
-	$strCirculationName		= $_REQUEST['strCirculationName'];
-	$strAdditionalText		= $_REQUEST['strAdditionalText'];
+	$strCirculationName		= addslashes($_REQUEST['strCirculationName']);
+	$strAdditionalText		= addslashes($_REQUEST['strAdditionalText']);
 	$language 				= $_REQUEST['language'];
 	$start 					= 1;
 	
