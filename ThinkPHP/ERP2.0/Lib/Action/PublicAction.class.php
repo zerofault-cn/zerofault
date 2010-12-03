@@ -25,32 +25,46 @@ class PublicAction extends BaseAction{
 	* 发送重置密码请求、验证并保存登录信息
 	*/
 	public function checkLogin() {
-		if (!defined('APP_ROOT')) {
-			define('APP_ROOT', 'http://'.$_SERVER['SERVER_ADDR'].__APP__);
-		}
 		$action = $_REQUEST['action'];
 		$name = trim($_REQUEST['name']);
 		$password = trim($_REQUEST['password']);
 		if ('getPWD' == $action) {
+			if (!defined('APP_ROOT')) {
+				define('APP_ROOT', 'http://'.$_SERVER['SERVER_NAME'].__APP__);
+			}
 			if (''==$name) {
 				self::_error('Enter your User ID first!');
 			}
-			$staff = M('Staff')->where(array('name'=>$name))->select();
+			$staff = M('Staff')->where("name='".$name."'")->find();
+			$url = APP_ROOT."/Public/resetPWD/token/".self::authcode($staff['id'], 'ENCODE', 'key', 3600);
+
+			$smtp_config = C('_smtp_');
+			include_once (LIB_PATH.'class.phpmailer.php');
+			$mail = new PHPMailer();
+			$mail->IsSMTP();
+		//	$mail->SMTPDebug  = 1;  // 2 = messages only
+			$mail->Host       = $smtp_config['host'];
+			$mail->Port       = $smtp_config['port'];
+			$mail->SetFrom($smtp_config['from_mail'], $smtp_config['from_name']);
+
+			$mail->AddAddress($staff['email'], $staff['realname']);
+
+			$mail->Subject = '[ERP] You have requested to reset password!';
+			$body = 'Hi '.$staff['realname'].',<br /><br />';
+			$body .= 'If you want to reset your password of ERP System at '.$_SERVER['SERVER_NAME'].', please click the following link in an hour, then set your new password.<br />';
+			$body .= '<a href="'.$url.'" target="_blank">'.$url.'</a><br /><br />';
+			$body .= 'Before you reset your new password, the old password is always available.<br /><br />';
+			$body .= 'If this request is not launched by yourself, please ignore it.';
+			$body .= '<br /><br /><br />This mail was sent by the ERP system automatically, please don\'t reply it.';
 			
-			$title = '[ERP] You have requested to reset password!';
-			$body = "Hi ".$staff['realname'].",\n  If you want to reset your password of ERP System@".$_SERVER['SERVER_ADDR'].", please click the following link, and set your new password.\n\n  Before you have set your new password, the old password is always available.\n\n";
-			$body .= "  ".APP_ROOT."/Public/resetPWD/token/".self::authcode($staff['id'], 'ENCODE', 'key', 86400)."\n\n";
-			$body .= "  If this request is not launched by yourself, please ignore it.\n\n";
-			$mail_body_ext = "\n\n\nThis mail was sent by the ERP system automatically, please don't reply it.";
-			
-			$cmd = 'echo "'.$body.$mail_body_ext.'"|/usr/bin/mutt -s "'.$title.'" '.$staff['email'];
-			Log::Write($cmd, INFO);
-			system($cmd,$ret);
-			if ('0'==$ret) {
-				self::_success('Please check your email, and follow the instruction.');
+			$mail->MsgHTML($body);
+			if(!$mail->Send()) {
+				Log::Write('Mail Error: '.$mail->ErrorInfo);
+				self::_error('mail send failed.');
 			}
-			else{
-				self::_error('send request fail.');
+			else {
+				Log::Write('Mail Success: '.$staff['email'], INFO);
+				self::_success('Please check your email, and follow the instruction.');
 			}
 			return;
 		}
@@ -96,6 +110,13 @@ class PublicAction extends BaseAction{
 			RBAC::saveAccessList($authInfo['id']);
 			self::_success('', __APP__, 0);
 		}
+	}
+
+	public function resetPWD() {
+		$token = $_REQUEST['token'];
+		var_dump(self::authcode($token, 'DECODE', 'key'));
+	//	$this->assign('content','reset_password');
+	//	$this->display('Layout:base');
 	}
 
 	/**
