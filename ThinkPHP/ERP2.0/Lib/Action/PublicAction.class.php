@@ -33,7 +33,7 @@ class PublicAction extends BaseAction{
 				define('APP_ROOT', 'http://'.$_SERVER['SERVER_NAME'].__APP__);
 			}
 			if (''==$name) {
-				self::_error('Enter your User ID first!');
+				self::_error('Input your Username first!');
 			}
 			$staff = M('Staff')->where("name='".$name."'")->find();
 			$url = APP_ROOT."/Public/resetPWD/token/".self::authcode($staff['id'], 'ENCODE', 'key', 3600);
@@ -51,10 +51,10 @@ class PublicAction extends BaseAction{
 
 			$mail->Subject = '[ERP] You have requested to reset password!';
 			$body = 'Hi '.$staff['realname'].',<br /><br />';
-			$body .= 'If you want to reset your password of ERP System at '.$_SERVER['SERVER_NAME'].', please click the following link in an hour, then set your new password.<br />';
-			$body .= '<a href="'.$url.'" target="_blank">'.$url.'</a><br /><br />';
-			$body .= 'Before you reset your new password, the old password is always available.<br /><br />';
-			$body .= 'If this request is not launched by yourself, please ignore it.';
+			$body .= '&nbsp;&nbsp;If you want to reset your password of ERP System['.$_SERVER['SERVER_NAME'].'], please click the following link in an hour (<span style="color:red">before '.date('Y-m-d H:i', time()+3600).'</span>), then set your new password.<br />';
+			$body .= '&nbsp;&nbsp;&nbsp;&nbsp;<a href="'.$url.'" target="_blank">'.$url.'</a><br /><br />';
+			$body .= '&nbsp;&nbsp;Before you have reseted your new password, the old password is always available.<br /><br />';
+			$body .= '&nbsp;&nbsp;If this request is not launched by yourself, please ignore it.';
 			$body .= '<br /><br /><br />This mail was sent by the ERP system automatically, please don\'t reply it.';
 			
 			$mail->MsgHTML($body);
@@ -113,10 +113,31 @@ class PublicAction extends BaseAction{
 	}
 
 	public function resetPWD() {
+		if(!empty($_POST['submit'])) {
+			$id = $_REQUEST['id'];
+			$password = $_REQUEST['password'];
+			$password2 = $_REQUEST['password2'];
+			empty($password) && self::_error('You haven\'t input any characters!');
+			$password != $password2 && self::_error('Your two passwords are not match!');
+			$rs = M('Staff')->where('id='.$id)->setField('password', md5($password));
+			if(false !== $rs)
+			{
+				self::_success('Reset success!', __APP__.C('USER_AUTH_GATEWAY'), 2000);
+			}
+			else
+			{
+				self::_error('Reset fail!'.(C('APP_DEBUG')?$this->dao->getLastSql():''));
+			}
+			return;
+		}
 		$token = $_REQUEST['token'];
-		var_dump(self::authcode($token, 'DECODE', 'key'));
-	//	$this->assign('content','reset_password');
-	//	$this->display('Layout:base');
+		$id = self::authcode($token, 'DECODE', 'key');
+		if (empty($id)) {
+			die('<h3 style="color:red;text-align:center;">Sorry, your request token is expired!</h3>');
+		}
+		$this->assign('info', M('Staff')->find($id));
+		$this->assign('content','reset_password');
+		$this->display('Layout:base');
 	}
 
 	/**
