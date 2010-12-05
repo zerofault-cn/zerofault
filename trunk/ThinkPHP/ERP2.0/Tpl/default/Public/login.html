@@ -30,29 +30,31 @@ label {
 	<form name="login" method="post" action="__APP__/Public/checkLogin" target="_iframe">
 	<table height="221" cellspacing="0" cellpadding="0" border="0" >
 	<tr>
-		<td height="40" width="290"> </td>
+		<td height="40" width="280"> </td>
 		<td colspan="2"></td>
 	</tr>
 	<tr>
 		<td height="25"> </td>
-		<td width="68" nowrap="nowrap">User ID :&nbsp;</td>
+		<td nowrap="nowrap">Username:&nbsp;</td>
 		<td width="130" nowrap="nowrap"><input type="text" size="15" value="" class="text" tabindex="1" name="name"/></td>
 	</tr>
 	<tr>
 		<td height="25"> </td>
-		<td nowrap="nowrap">Password :&nbsp;</td>
+		<td nowrap="nowrap">Password:&nbsp;</td>
 		<td><input type="password" size="15" value="" tabindex="2" class="text" name="password"/></td>
 	</tr>
 	<tr>
 		<td rowspan="2"> </td>
-		<td height="11" colspan="2"><!-- <label><input type="checkbox" value="yes" id="signed" tabindex="3" name="signed"/>Keep me signed in.</label> --></td>
+		<td height="11" colspan="2" height="10">&nbsp;</td>
 	</tr>
 	<tr>
-		<td colspan="2" valign="top">
-			<input type="hidden" name="action" value="login"/>
-			&nbsp;&nbsp;<input type="button" tabindex="5" onclick="getPWD();" style="padding:0;text-indent:-1000px;border:none;width:83px;height:27px;background:url(../Public/Images/loginGetpw.gif) no-repeat;" align="absbottom" hidefocus="true"/>&nbsp;&nbsp;<input type="image" tabindex="4" src="../Public/Images/loginLogin.gif" align="absbottom" hidefocus="true"/></td>
+		<td colspan="2" valign="top" >
+			<input type="button" value="Reset Password" tabindex="4" onclick="getPWD();" style="cursor:pointer;background-color:transparent;padding:4px;border:1px solid #AE2F27;color:#AE2F27;" align="absbottom" hidefocus="true"/>&nbsp;&nbsp;
+			<input type="submit" value="Login" tabindex="3" style="cursor:pointer;width:60px;background-color:transparent;padding:4px;border:1px solid #AE2F27;color:#AE2F27;" align="absbottom" hidefocus="true"/>
+		</td>
 	</tr>
 	</table>
+	<input type="hidden" name="action" value="login"/>
 	</form>
 	</td>
 </tr>
@@ -60,7 +62,7 @@ label {
 <script>
 function getPWD() {
 	if (''==$("input[name='name']").val()) {
-		myAlert('Enter your User ID first!');
+		myAlert('Input your Username first!');
 		return;
 	}
 	jQuery.prompt('Do you realy forget your password?',{submit:send,buttons:{Yes:true, Cancel:false}});
