@@ -32,10 +32,9 @@ class PublicAction extends BaseAction{
 			if (!defined('APP_ROOT')) {
 				define('APP_ROOT', 'http://'.$_SERVER['SERVER_NAME'].__APP__);
 			}
-			if (''==$name) {
-				self::_error('Input your Username first!');
-			}
+			empty($name) && self::_error('Input your username first!');
 			$staff = M('Staff')->where("name='".$name."'")->find();
+			empty($staff) && self::_error('The username is not exists!');
 			$url = APP_ROOT."/Public/resetPWD/token/".self::authcode($staff['id'], 'ENCODE', 'key', 3600);
 
 			$smtp_config = C('_smtp_');
@@ -113,8 +112,13 @@ class PublicAction extends BaseAction{
 	}
 
 	public function resetPWD() {
+		$token = $_REQUEST['token'];
+		$id = self::authcode($token, 'DECODE', 'key');
 		if(!empty($_POST['submit'])) {
-			$id = $_REQUEST['id'];
+			if (empty($id)) {
+				self::_error('Sorry, your session token is expired!');
+				return;
+			}
 			$password = $_REQUEST['password'];
 			$password2 = $_REQUEST['password2'];
 			empty($password) && self::_error('You haven\'t input any characters!');
@@ -130,12 +134,11 @@ class PublicAction extends BaseAction{
 			}
 			return;
 		}
-		$token = $_REQUEST['token'];
-		$id = self::authcode($token, 'DECODE', 'key');
 		if (empty($id)) {
 			die('<h3 style="color:red;text-align:center;">Sorry, your request token is expired!</h3>');
 		}
 		$this->assign('info', M('Staff')->find($id));
+		$this->assign('token', $token);
 		$this->assign('content','reset_password');
 		$this->display('Layout:base');
 	}
