@@ -63,6 +63,7 @@ CREATE TABLE IF NOT EXISTS erp_absence (
   approver_id smallint(5) unsigned NOT NULL DEFAULT '0' ,
   comment tinytext NOT NULL DEFAULT '' ,
   status tinyint(1) NOT NULL DEFAULT '0' ,
+  mail_status tinyint(1) unsigned NOT NULL DEFAULT '0' ,
   PRIMARY KEY (id)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 

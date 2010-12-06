@@ -11,6 +11,7 @@ class AbsenceAction extends BaseAction{
 	protected $dao, $Absence_Config,$time;
 
 	public function _initialize() {
+		global $LeaveType;
 		Session::set('top', 'Absence');
 		Session::set('sub', MODULE_NAME);
 		$this->dao = D('Absence');
@@ -949,6 +950,7 @@ class AbsenceAction extends BaseAction{
 	notify:休假当日通知所有相关人员
 	*/
 	private function mail_application($dao, $type='') {
+		global $LeaveType;
 		if (!defined('APP_ROOT')) {
 			define('APP_ROOT', 'http://'.$_SERVER['SERVER_ADDR'].__APP__);
 		}
@@ -983,12 +985,10 @@ class AbsenceAction extends BaseAction{
 			'email' => 'bin.li@agigatech.com',
 			'realname' => 'Bin.Li'
 		);
-		if ($dao->status < 1 && !empty($staff['leader_id'])) {
+		if (!empty($staff['leader_id'])) {
 			//get leader info, 如果没有leader或leader没有email，将默认发给Bin.Li
 			$rs = M('Staff')->find($staff['leader_id']);
-			if (!empty($rs['email']) {
-				$leader = $rs;
-			}
+			!empty($rs['email']) && ($leader = $rs);
 		}
 
 		switch($type) {
@@ -998,8 +998,11 @@ class AbsenceAction extends BaseAction{
 				break;
 
 			case 'notify':
-				$subject = '[Absence] Notification: '.$staff['realname'].', '.substr($dao->time_from, 0, 16).' ~ '.substr($dao->time_to, 0, 16);
-				if ($dao->hours <= 8) {
+				$subject = '[Absence] Absent: '.$staff['realname'].', '.substr($dao->time_from, 0, 16).' ~ '.substr($dao->time_to, 0, 16);
+				if ('Out'==$dao->type) {
+					$subject = '[Absence] Out of Office: '.$staff['realname'].', '.substr($dao->time_from, 0, 16).' ~ '.substr($dao->time_to, 0, 16);
+				}
+				if ('Out'==$dao->type || $dao->hours <= 8) {
 					$mail->AddAddress($leader['email'], $leader['realname']);
 					if (!empty($deputy)) {
 						$mail->AddCC($deputy['email'], $deputy['realname']);
@@ -1030,12 +1033,15 @@ class AbsenceAction extends BaseAction{
 
 			default:
 				$subject = '[Absence] Application: '.$staff['realname'].' apply for leave, '.substr($dao->time_from, 0, 16).' ~ '.substr($dao->time_to, 0, 16);
+				if ('Overtime' == $dao->type) {
+					$subject = '[Absence] Application: '.$staff['realname'].' apply for overtime, '.substr($dao->time_from, 0, 16).' ~ '.substr($dao->time_to, 0, 16);
+				}
 				if ($dao->hours <= 8) {
 					if ($dao->status == 0) {//待批准，通知leader
 						$mail->AddAddress($leader['email'], $leader['realname']);
 						$new_status = 1;
 					}
-					elseif ($dao->status == 1) {//通过，通知staff
+					elseif ($dao->status == 1) {//通过，通知staff+deputy
 						$subject = '[Absence] Notification: '.$staff['realname'].', your application is approved.';
 						$mail->AddAddress($staff['email'], $staff['realname']);
 						if (!empty($deputy)) {
@@ -1106,30 +1112,33 @@ class AbsenceAction extends BaseAction{
 					}
 				}
 		}
-		if ('Out'==$dao->type) {
-			$subject = '[Absence] Out of Office: '.$staff['realname'].', '.substr($dao->time_from, 0, 16).' ~ '.substr($dao->time_to, 0, 16);
-		}
 		$mail->Subject    = $subject;
 		
-		$body  = '<form name="_form" id="_form" action="'.APP_ROOT.'/Public/absence_confirm" method="post" target="_blank">';
+		$body = '<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /></head><body>';
+		$body .= '<form name="_form" id="_form" action="'.APP_ROOT.'/Public/absence_confirm" method="post" target="_blank">';
 		$body .= '<input type="hidden" name="id" value="'.$dao->id.'" />';
 		$body .= '<input type="hidden" name="status" value="'.$new_status.'" />';
 		$body .= '<input type="hidden" name="from" value="mail" />';
-		$body .= '<table width="700" border="0" cellspacing="1" cellpadding="7" bgcolor="#CCCCCC">';
-		if ('Out'==$dao->type) {
-			$body .= '<tr><td colspan="2">'.$staff['realname'].' made an out of office request.</td></tr>';
-			$body .= '<tr bgcolor="#FFFFFF"><td width="177">Creator :</td><td width="492">'.$creator['realname'].'</td></tr>';
+		$body .= '<table border="0" cellspacing="1" cellpadding="7" bgcolor="#CCCCCC">';
+		if ('deputy' == $type) {
+			$body .= '<tr><td colspan="2">'.$staff['realname'].' need deputy: '.substr($dao->time_from, 0, 16).' ~ '.substr($dao->time_to, 0, 16).'</td></tr>';
+		}
+		elseif ('notify' == $type) {
+			$body .= '<tr><td colspan="2">'.$staff['realname'].' Absent: '.substr($dao->time_from, 0, 16).' ~ '.substr($dao->time_to, 0, 16).'</td></tr>';
 		}
 		else {
-			$body .= '<tr><td colspan="2">'.$staff['realname'].' will be absent on '.substr($dao->time_from, 0, 16).' ~ '.substr($dao->time_to, 0, 16).'</td></tr>';
-			$body .= '<tr bgcolor="#FFFFFF"><td width="177">Applicant :</td><td width="492">'.$creator['realname'].'</td></tr>';
-			$body .= '<tr bgcolor="#FFFFFF"><td>Type : </td><td>'.$dao->type.' leave</td></tr>';
+			if ('Overtime' == $dao->type) {
+				$body .= '<tr><td colspan="2">'.$staff['realname'].' apply for overtime: '.substr($dao->time_from, 0, 16).' ~ '.substr($dao->time_to, 0, 16).'</td></tr>';
+			}
+			else {
+				$body .= '<tr><td colspan="2">'.$staff['realname'].' apply for leave: '.substr($dao->time_from, 0, 16).' ~ '.substr($dao->time_to, 0, 16).'</td></tr>';
+			}
 		}
+		$body .= '<tr bgcolor="#FFFFFF"><td>Absence ID : </td><td>A'.sprintf('%05d', $dao->id).'</td></tr>';
+		$body .= '<tr bgcolor="#FFFFFF"><td width="120">Applicant :</td><td width="400">'.$staff['realname'].'</td></tr>';
+		$body .= '<tr bgcolor="#FFFFFF"><td>Type : </td><td>'.$LeaveType[$dao->type].'</td></tr>';
 		$body .= '<tr bgcolor="#FFFFFF"><td>Duration : </td><td>'.substr($dao->time_from, 0, 16).' ~ '.substr($dao->time_to, 0, 16).'</td></tr>';
-		if ('Out'==$dao->type) {
-			$body .= '<tr bgcolor="#FFFFFF"><td>Members : </td><td>'.$staff['realname'].'</td></tr>';
-		}
-		elseif(!empty($dao->deputy_id)) {
+		if(!empty($dao->deputy_id)) {
 			$body .= '<tr bgcolor="#FFFFFF"><td>Deputy : </td><td>'.$deputy['realname'].'</td></tr>';
 		}
 		if (''!=$dao->note) {
@@ -1143,7 +1152,9 @@ class AbsenceAction extends BaseAction{
 			$body .= '<tr bgcolor="#FFFFFF"><td>Comment :</td><td>'.nl2br($dao->comment).'</td></tr>';
 		}
 		$body .= '</table>';
+		$body .= '<br /><br />Best Regards,<br />ERP Absence System';
 		$body .= '</form>';
+		$body .= '</body></html>';
 
 		$mail->MsgHTML($body);
 		if(!$mail->Send()) {
@@ -1157,7 +1168,7 @@ class AbsenceAction extends BaseAction{
 		$where = array(
 			'mail_status' => 0,
 			'status' => 1,
-			'type' => array('not in', array('Out','Overtime', 'CashOut')),
+			'type' => array('not in', array('Out', 'Overtime', 'CashOut')),
 			'time_from' => array('lt', date('Y-m-d', $this->time+86400)),
 			'time_to' => array('egt', date('Y-m-d', $this->time))
 			);
@@ -1171,7 +1182,7 @@ class AbsenceAction extends BaseAction{
 			echo "\tFor ID:".$item['id']."\t";
 			$this->dao->find($item['id']);
 			if (self::mail_application($this->dao, 'notify')) {
-				if(false !== $this->dao->setField('mail_status',1)) {
+				if(false !== $this->dao->where('id='.$item['id'])->setField('mail_status',1)) {
 					echo "Success!<br />\n";
 					Log::Write('Notify '.$item['staff']['email'].' success', INFO);
 				}
