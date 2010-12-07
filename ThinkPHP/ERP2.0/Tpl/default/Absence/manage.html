@@ -48,9 +48,9 @@
 	<td nowrap="nowrap"><if condition="$item['type'] eq 'CashOut'"><font color="#a4a4a4">N/A</font><else />{$item['time_from']|substr=0,-3} ~ {$item['time_to']|substr=0,-3}</if></td>
 	<td>{$item['hours']|round}</td>
 	<td nowrap="nowrap"><empty name="item['deputy_id']"><font color="#a4a4a4">N/A</font><else />{$item['deputy']['realname']}</empty></td>
-	<td align="left"><if condition="$item['type'] eq 'CashOut'"><font color="#a4a4a4">N/A</font><else />{$item['note']|nl2br}</if></td>
+	<td align="left" valign="top" class="note"><if condition="$item['type'] eq 'CashOut'"><font color="#a4a4a4">N/A</font><else />{$item['note']|nl2br}</if></td>
 	<td><if condition="$item['status'] lt 1">Non-approved<elseif condition="$item['status'] eq 1"/>Approved<else />Rejected</if></td>
-	<td>{$item['comment']|nl2br}</td>
+	<td align="left" valign="top" class="note">{$item['comment']|nl2br}</td>
 	<td nowrap="nowrap">
 		<a href="__URL__/form/id/{$item['id']}?width=500&height=450&modal=true" class="thickbox">Edit</a>
 		<a href="javascript:void(0);" onclick="myConfirm('Are you sure to delete this item?', '__URL__/delete/id/{$item['id']}');" target="_iframe">Delete</a>
