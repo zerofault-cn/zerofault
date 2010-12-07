@@ -1262,7 +1262,7 @@ class AbsenceAction extends BaseAction{
 		$where = array(
 			'mail_status' => 0,
 			'status' => 1,
-			'type' => array('not in', array('Out', 'Overtime', 'CashOut')),
+			'type' => array('not in', array('Overtime', 'CashOut')),
 			'time_from' => array('lt', date('Y-m-d', $this->time+86400)),
 			'time_to' => array('egt', date('Y-m-d', $this->time))
 			);
