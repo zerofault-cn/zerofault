@@ -559,7 +559,6 @@ class AbsenceAction extends BaseAction{
 		else{
 			$status = '-';
 		}
-		echo $status;
 		Session::set(ACTION_NAME.'_status', $status);
 		$status_arr = array(
 			array('id'=>'0', 'name'=>'Non-approved'),

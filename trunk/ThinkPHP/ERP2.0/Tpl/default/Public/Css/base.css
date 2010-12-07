@@ -347,3 +347,9 @@ td.comment{
 	max-width:800px;
 	overflow-x:hidden;
 }
+td.note {
+	word-wrap:break-word;
+	word-break:break-all;
+	max-width:200px;
+	overflow-x:hidden;
+}

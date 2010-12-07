@@ -14,7 +14,7 @@
 	<td nowrap="nowrap">{$item['time_from']|substr=0,-3} ~ {$item['time_to']|substr=0,-3}</td>
 	<td>{$item['deputy']['realname']}</td>
 	<td>{$LeaveType[$item['type']]}</td>
-	<td align="left">{$item['note']|nl2br}</td>
+	<td align="left" class="note">{$item['note']|nl2br}</td>
 	<td nowrap="nowrap">
 		<if condition="$item['status'] eq 0">
 		Waiting for approve
