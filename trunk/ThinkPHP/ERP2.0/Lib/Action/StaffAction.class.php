@@ -77,7 +77,7 @@ class StaffAction extends BaseAction{
 		$password = trim($_REQUEST['password']);
 		$email = trim($_REQUEST['email']);
 		empty($email) && self::_error('E-mail required!');
-		!eregi("^[_.0-9a-z-]+@([0-9a-z][0-9a-z-]+.)+[a-z]$", $email) && self::_error('E-mail address is abnormal!');
+		!eregi("^[_.0-9a-z-]+@([0-9a-z][0-9a-z-]+.)+[a-z]{2,3}$", $email) && self::_error('E-mail address is abnormal!');
 		$id = empty($_REQUEST['id']) ? 0 : intval($_REQUEST['id']);
 		if ($id>0) {
 			//for edit
