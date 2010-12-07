@@ -35,7 +35,14 @@ class PublicAction extends BaseAction{
 			empty($name) && self::_error('Input your username first!');
 			$staff = M('Staff')->where("name='".$name."'")->find();
 			empty($staff) && self::_error('The username is not exists!');
-			$url = APP_ROOT."/Public/resetPWD/token/".self::authcode($staff['id'], 'ENCODE', 'key', 3600);
+			while(true) {
+				$token = self::authcode($staff['id'], 'ENCODE', 'key', 3600);
+				if (false === strpos($token, '/')) {
+					break;
+				}
+				sleep(1);
+			}
+			$url = APP_ROOT."/Public/resetPWD/token/".$token;
 
 			$smtp_config = C('_smtp_');
 			include_once (LIB_PATH.'class.phpmailer.php');

@@ -1,41 +1,85 @@
-<p class="page_title_text">Staff Leave Summary</p>
+<p class="page_title_text">{$ACTION_TITLE}</p>
+<table>
+<tr>
+	<td>
+		<form action="__URL__/manage" method="post">
+		<table id="search_table" cellpadding="3" border="1" bordercolor="#FFFFFF" style="border-collapse:collapse;">
+		<tr>
+			<th rowspan="2">Staff</th>
+			<th rowspan="2">Application Type</th>
+			<th colspan="2">Absence Time</th>
+			<th rowspan="2">Status</th>
+			<td rowspan="3" ><input type="submit" name="submit" value="Search"/></td>
+		</tr>
+		<tr>
+			<th>From</th>
+			<th>To</th>
+		</tr>
+		<tr>
+			<td><select name="staff_id"><option value="0">All</option>{$staff_opts}</select></td>
+			<td><select name="type"><option value="">Any</option>{$type_opts}</select></td>
+			<td><input type="text" name="from" size="10" value="{$from}" class="date_from"/></td>
+			<td><input type="text" name="to" size="10" value="{$to}" class="date_to"/></td>
+			<td><select name="status"><option value="-">Any</option>{$status_opts}</select></td>
+		</tr>
+		</table>
+		</form>
+	</td>
+</tr>
+</table>
 <table cellpadding="3" border="1" bordercolor="#FFFFFF" style="border-collapse:collapse;">
 <tr>
-	<th rowspan="2">Staff</th>
-	<th rowspan="2">Onboard Date</th>
-	<th colspan="6">Annual Leave</th>
-	<th colspan="2">Compensatory Leave</th>
-	<th rowspan="2">Total Available</th>
-</tr>
-<tr>
-	<th>{$leave_info['Balance_year']} Balance</th>
-	<th>{$leave_info['Annual_year']} Accumulated</th>
-	<th>{$leave_info['Annual_year']} Consumed</th>
-	<th>Cash out Days in {$leave_info['CashOut'][0]['Month']}</th>
-	<th>Cash out Days in {$leave_info['CashOut'][1]['Month']}</th>
-	<th>Available</th>
-	<th>3 months ago</th>
-	<th>last 3 months</th>
+	<th>ID</th>
+	<th width="8%">Staff</th>
+	<th width="160" nowrap="nowrap">Application Type</th>
+	<th width="250">Duration</th>
+	<th width="50">Hours</th>
+	<th>Deputy</th>
+	<th>Note</th>
+	<th>Status</th>
+	<th>Comment</th>
+	<th>Operation</th>
 </tr>
 <iterate name="result" id="item">
-<tr class="trbg{$mod}">
-	<td align="center" nowrap="nowrap">{$item['realname']}</td>
-	<td>{$item['onboard']}</td>
-	<td>{$item['Balance']}</td>
-	<td>{$item['Annual']}</td>
-	<td>{$item['Annual_used']}</td>
-	<td>{$item['CashOut'][0]}</td>
-	<td>{$item['CashOut'][1]}</td>
-	<td>{$item['Annual_available']}</td>
-	<td>{$item['Compensatory']['past']}</td>
-	<td>{$item['Compensatory']['recent']}</td>
-	<td>{$item['Total']}</td>
+<tr align="center" class="trbg{$mod}">
+	<td>A{$item['id']|sprintf='%05d',###}</td>
+	<td nowrap="nowrap">{$item['staff']['realname']}</td>
+	<td><empty name="LeaveType[$item['type']]">{$item['type']}<else />{$LeaveType[$item['type']]}</empty></td>
+	<td nowrap="nowrap"><if condition="$item['type'] eq 'CashOut'"><font color="#a4a4a4">N/A</font><else />{$item['time_from']|substr=0,-3} ~ {$item['time_to']|substr=0,-3}</if></td>
+	<td>{$item['hours']|round}</td>
+	<td nowrap="nowrap"><empty name="item['deputy_id']"><font color="#a4a4a4">N/A</font><else />{$item['deputy']['realname']}</empty></td>
+	<td align="left"><if condition="$item['type'] eq 'CashOut'"><font color="#a4a4a4">N/A</font><else />{$item['note']|nl2br}</if></td>
+	<td><if condition="$item['status'] lt 1">Non-approved<elseif condition="$item['status'] eq 1"/>Approved<else />Rejected</if></td>
+	<td>{$item['comment']|nl2br}</td>
+	<td nowrap="nowrap">
+		<a href="__URL__/form/id/{$item['id']}?width=500&height=450&modal=true" class="thickbox">Edit</a>
+		<a href="javascript:void(0);" onclick="myConfirm('Are you sure to delete this item?', '__URL__/delete/id/{$item['id']}');" target="_iframe">Delete</a>
+	</td>
 </tr>
 </iterate>
 <empty name="result">
 <tr>
-	<td colspan="8" align="center">No Record</td>
+	<td colspan="10" align="center">No Record</td>
 </tr>
 </empty>
 </table>
-<p class="center"></p>
+
+<p class="center">
+</p>
+<!-- Datepicker -->
+<style type="text/css">@import "../Public/Css/jquery-ui-1.8.2.custom.css?20100620";</style> 
+<script type="text/javascript" src="../Public/Js/jquery-ui-1.8.2.custom.min.js?20100620"></script>
+<script type="text/javascript">
+$(document).ready(function(){
+	$('.date_from, .date_to').datepicker({
+		dateFormat: 'yy-mm-dd',
+		changeMonth: true,
+		changeYear: true,
+		showOtherMonths: true,
+		showMonthAfterYear: true,
+		selectOtherMonths: true,
+		minDate: '-1Y',
+		maxDate: '+1Y'
+	});
+});
+</script>
