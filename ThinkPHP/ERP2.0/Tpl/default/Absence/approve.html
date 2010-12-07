@@ -16,8 +16,8 @@
 			<th width="160" nowrap="nowrap">Application Type</th>
 			<th width="250">Duration</th>
 			<th width="50">Hours</th>
-			<th width="20%">Note</th>
 			<th>Deputy</th>
+			<th width="20%">Note</th>
 			<th>Comment</th>
 			<th>Operation</th>
 		</tr>
@@ -29,8 +29,8 @@
 			<td><empty name="LeaveType[$item['type']]">{$item['type']}<else />{$LeaveType[$item['type']]}</empty></td>
 			<td nowrap="nowrap"><if condition="$item['type'] eq 'CashOut'"><font color="#a4a4a4">N/A</font><else />{$item['time_from']|substr=0,-3} ~ {$item['time_to']|substr=0,-3}</if></td>
 			<td>{$item['hours']|round}</td>
-			<td align="left"><if condition="$item['type'] eq 'CashOut'"><font color="#a4a4a4">N/A</font><else />{$item['note']|nl2br}</if></td>
 			<td nowrap="nowrap"><empty name="item['deputy_id']"><font color="#a4a4a4">N/A</font><else />{$item['deputy']['realname']}</empty></td>
+			<td align="left"><if condition="$item['type'] eq 'CashOut'"><font color="#a4a4a4">N/A</font><else />{$item['note']|nl2br}</if></td>
 			<td><if condition="$item['status'] lt 1"><textarea name="comment" cols="30" rows="3"></textarea><else />{$item['comment']|nl2br}</if></td>
 			<td nowrap="nowrap">
 				<if condition="$item['status'] lt 1">

@@ -90,6 +90,9 @@ class BaseAction extends Action {
 			if (!empty($_SESSION[C('STAFF_AUTH_NAME')]['is_leader'])) {
 				$submenu['Staff Application'] = 'Absence/approve';
 			}
+			if (in_array($_SESSION[C('USER_AUTH_KEY')], C('SUPER_ADMIN_ID')) || !empty($_SESSION[C('STAFF_AUTH_NAME')]['is_leader'])) {
+				$submenu['Staff Summary'] = 'Absence/summary';
+			}
 		}
 
 		foreach($tmp_submenu as $sub_title=>$sub_action) {
@@ -111,7 +114,7 @@ class BaseAction extends Action {
 		}
 		//判断是否super admin增加management子菜单
 		if ('Absence' == $top) {
-			if (in_array($_SESSION[C('USER_AUTH_KEY')], C('SUPER_ADMIN_ID')) || !empty($_SESSION[C('STAFF_AUTH_NAME')]['is_leader'])) {
+			if (in_array($_SESSION[C('USER_AUTH_KEY')], C('ABSENCE_ADMIN_ID'))) {
 				$submenu['Management'] = 'Absence/manage';
 			}
 		}

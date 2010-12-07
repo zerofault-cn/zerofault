@@ -73,13 +73,16 @@ class StaffAction extends BaseAction{
 			return;
 		}
 		$name = trim($_REQUEST['name']);
-		!$name && self::_error('Staff Name required!');
+		empty($name) && self::_error('Staff Name required!');
 		$password = trim($_REQUEST['password']);
+		$email = trim($_REQUEST['email']);
+		empty($email) && self::_error('E-mail required!');
+		!eregi("^[_.0-9a-z-]+@([0-9a-z][0-9a-z-]+.)+[a-z]$", $email) && self::_error('E-mail address is abnormal!');
 		$id = empty($_REQUEST['id']) ? 0 : intval($_REQUEST['id']);
 		if ($id>0) {
 			//for edit
 			if(1==$id && 1!=$_SESSION[C('USER_AUTH_KEY')]) {
-				self::_error("You can\'t edit Super Administrator");
+				self::_error('You can\'t edit Super Administrator');
 			}
 			$rs = $this->dao->where(array('name'=>$name,'id'=>array('neq',$id)))->find();
 			if($rs && sizeof($rs)>0){
@@ -106,7 +109,7 @@ class StaffAction extends BaseAction{
 		}
 		$this->dao->name = $name;
 		$this->dao->realname = trim($_REQUEST['realname']);
-		$this->dao->email = trim($_REQUEST['email']);
+		$this->dao->email = $email;
 		$this->dao->onboard = $_REQUEST['onboard'];
 		$this->dao->balance_2009 = $_REQUEST['balance_2009'];
 		$this->dao->dept_id = $_REQUEST['dept_id'];

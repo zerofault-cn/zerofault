@@ -255,7 +255,7 @@ class AbsenceAction extends BaseAction{
 			$this->assign('info', $info);
 
 			if ('CashOut' == $type) {
-				$total = self::get_avaliable('Annual', $info['staff_id']);
+				$total = self::get_avaliable('Annual', $info['staff_id'], $id);
 				$reserved = $this->Absence_Config['reservedhours'];
 				$this->assign('total_leave', self::parseHour($total));
 				$this->assign('reserved', self::parseHour($reserved));
@@ -343,17 +343,17 @@ class AbsenceAction extends BaseAction{
 		!$type && self::_error('Absense Type didn\'t select!');
 		$staff_id = empty($_REQUEST['staff_id'])?$_SESSION[C('USER_AUTH_KEY')]:$_REQUEST['staff_id'];
 
+		$id = empty($_REQUEST['id']) ? 0 : intval($_REQUEST['id']);
 		if ('CashOut' == $type) {
 			$days = intval($_REQUEST['days']);
 			if ($days <= 0) {
 				self::_error('Your input is not a positive number!');
 			}
-			$total = self::get_avaliable('Annual', $_SESSION[C('USER_AUTH_KEY')]);
+			$total = self::get_avaliable('Annual', $_SESSION[C('USER_AUTH_KEY')], $id);
 			$reserved = $this->Absence_Config['reservedhours'];
 			if ($days*8 > $total-$reserved) {
 				self::_error('Your input is out of limit!');
 			}
-			$id = empty($_REQUEST['id']) ? 0 : intval($_REQUEST['id']);
 			if ($id>0) {
 				//for edit
 				$this->dao->find($id);
@@ -368,7 +368,7 @@ class AbsenceAction extends BaseAction{
 			$this->dao->hours = $days*8;
 			if($id>0) {
 				if(false !== $this->dao->save()) {
-					self::_success('Application updated!',__URL__.'/approve');//因只有leader可以编辑
+					self::_success('Application updated!', $_SERVER["HTTP_REFERER"]);
 				}
 				else{
 					self::_error('Update fail!'.(C('APP_DEBUG')?$this->dao->getLastSql():''));
@@ -409,7 +409,7 @@ class AbsenceAction extends BaseAction{
 				self::calculateHour($date_from, $time_from, $date_to, $time_to);
 			}
 			echo 'applied hour:'.$hour."\n";
-			$avaliable_hour = self::get_avaliable($type, $staff_id);
+			$avaliable_hour = self::get_avaliable($type, $staff_id, $id);
 			echo 'avaliable hour:'.$avaliable_hour."\n";
 			if ($hour<=0) {
 				self::_error('The hours must be larger than 0!');
@@ -429,7 +429,6 @@ class AbsenceAction extends BaseAction{
 				}
 			}
 			$note = trim($_REQUEST['note']);
-			$id = empty($_REQUEST['id']) ? 0 : intval($_REQUEST['id']);
 			if ($id>0) {
 				//for edit
 				$this->dao->find($id);
@@ -477,7 +476,7 @@ class AbsenceAction extends BaseAction{
 			if($id>0) {
 				if(false !== $this->dao->save()) {
 	//				self::mail_application($this->dao);//不允许员工编辑，因此不需要重发application
-					self::_success('Application updated!',__URL__.'/approve');
+					self::_success('Application updated!', $_SERVER["HTTP_REFERER"]);
 				}
 				else{
 					self::_error('Update fail!'.(C('APP_DEBUG')?$this->dao->getLastSql():''));
@@ -496,6 +495,98 @@ class AbsenceAction extends BaseAction{
 				}
 			}
 		}
+	}
+	public function manage() {
+		if (isset($_REQUEST['staff_id'])) {
+			$staff_id = intval($_REQUEST['staff_id']);
+		}
+		elseif('' != $tmp=Session::get(ACTION_NAME.'_staff_id')) {
+			$staff_id = $tmp;
+		}
+		else {
+			$staff_id = 0;
+		}
+		Session::set(ACTION_NAME.'_staff_id', $staff_id);
+		$this->assign('staff_opts', self::genOptions(M('Staff')->where(array('status'=>1))->select(), $staff_id, 'realname'));
+
+		if (isset($_REQUEST['type'])) {
+			$type = $_REQUEST['type'];
+		}
+		elseif('' != $tmp=Session::get(ACTION_NAME.'_type')) {
+			$type = $tmp;
+		}
+		else {
+			$type = '';
+		}
+		Session::set(ACTION_NAME.'_type', $type);
+		global $LeaveType;
+		$type_arr = array();
+		foreach ($LeaveType as $key=>$val) {
+			$type_arr[] = array('type'=>$key, 'alias'=>$val);
+		}
+		$this->assign('type_opts', self::genOptions($type_arr, $type, 'alias', 'type'));
+		
+		if(isset($_REQUEST['from'])) {
+			$from = $_REQUEST['from'];
+		}
+		elseif(''!= $tmp=Session::get(ACTION_NAME.'_from')) {
+			$from = Session::get(ACTION_NAME.'_from');
+		}
+		else{
+			$from = date('Y-m-d', $this->time-15*86400);
+		}
+		Session::set(ACTION_NAME.'_from', $from);
+		$this->assign('from', $from);
+
+		if(isset($_REQUEST['to'])) {
+			$to = $_REQUEST['to'];
+		}
+		elseif(''!= $tmp=Session::get(ACTION_NAME.'_to')) {
+			$to = Session::get(ACTION_NAME.'_to');
+		}
+		else{
+			$to = date('Y-m-d', $this->time+15*86400);
+		}
+		Session::set(ACTION_NAME.'_to', $to);
+		$this->assign('to', $to);
+
+		if(isset($_REQUEST['status'])) {
+			$status = $_REQUEST['status'];
+		}
+		elseif(''!= $tmp=Session::get(ACTION_NAME.'_status')) {
+			$status = Session::get(ACTION_NAME.'_status');
+		}
+		else{
+			$status = '-';
+		}
+		echo $status;
+		Session::set(ACTION_NAME.'_status', $status);
+		$status_arr = array(
+			array('id'=>'0', 'name'=>'Non-approved'),
+			array('id'=>'1', 'name'=>'Approved'),
+			array('id'=>'2', 'name'=>'Rejected')
+			);
+		$this->assign('status_opts', self::genOptions($status_arr, $status));
+
+		$where = array();
+		!empty($staff_id) && ($where['staff_id'] = $staff_id);
+		!empty($type) && ($where['type'] = $type);
+		!empty($_REQUEST['to']) && ($where['time_from'] = array('lt', $_REQUEST['to']));
+		!empty($_REQUEST['from']) && ($where['time_to'] = array('egt', $_REQUEST['from']));
+		if ('-'!=$status) {
+			$where['status'] = $status;
+			if ('0' == $status) {
+				$where['status'] = array('lt', 1);
+			}
+		}
+		$rs = $this->dao->relation(true)->where($where)->order('id desc')->select();
+		empty($rs) && ($rs = array());
+		$this->assign('result', $rs);
+
+		$this->assign('ACTION_TITLE', 'Staff Application Management');
+		Session::set('sub', MODULE_NAME.'/'.ACTION_NAME);
+		$this->assign('content', ACTION_NAME);
+		$this->display('Layout:ERP_layout');
 	}
 	public function approve() {
 		//approve for level_0
@@ -665,7 +756,7 @@ class AbsenceAction extends BaseAction{
 		$this->assign('content', ACTION_NAME);
 		$this->display('Layout:ERP_layout');
 	}
-	public function manage() {
+	public function summary() {
 		Session::set('sub', MODULE_NAME.'/'.ACTION_NAME);
 
 		$leave_info = array();
@@ -774,11 +865,12 @@ class AbsenceAction extends BaseAction{
 		$this->display('Layout:ERP_layout');
 	}
 
-	private function get_avaliable($type, $staff_id) {
+	private function get_avaliable($type, $staff_id, $id=0) {
 		switch ($type) {
 			case 'Annual':
 				$staff_info = D('Staff')->find($staff_id);
 				$where = array(
+					'id' => array('neq', $id),
 					'type' => array('in', array('Annual','CashOut')),
 					'staff_id' => $staff_id,
 					'status' => 1
@@ -815,9 +907,11 @@ class AbsenceAction extends BaseAction{
 					}
 				}
 				break;
+			
 			case 'Compensatory':
 				$date_3month_ago = date('Y-m-d', mktime(0,0,0,date('m', $this->time)-3, date('d', $this->time), date('Y', $this->time)));
 				$where = array(
+					'id' => array('neq', $id),
 					'type'=> 'Compensatory',
 					'staff_id' => $staff_id,
 					'time_from' => array('egt', $date_3month_ago),
@@ -830,6 +924,7 @@ class AbsenceAction extends BaseAction{
 				}
 				$total_leave = intval($this->dao->where($where)->sum('hours'));
 				break;
+			
 			default:
 				$total_leave = 999999;
 		}

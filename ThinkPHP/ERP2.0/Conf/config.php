@@ -27,6 +27,7 @@ $config = array_merge($config, array(
 		'ADMIN_AUTH_NAME'	=> 'administrator',
 		
 		'SUPER_ADMIN_ID'	=> array(1), //超级管理员的ID数组
+		'ABSENCE_ADMIN_ID'	=> array(1, 3), //Absence管理员的ID数组
 		'NOTIFICATION_MAILTO' => array(), //重复通知邮件会额外发送给这些邮件帐号
 		'USER_SYNC_TARGET'  => array('CuteFlow'=>'http://192.168.9.159/cuteflow/'),
 		'RBAC_ROLE_TABLE'	=> 'erp_role',
