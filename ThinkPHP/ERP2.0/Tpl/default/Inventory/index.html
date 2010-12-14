@@ -62,9 +62,9 @@ td.editing input{
 </tr>
 <iterate name="result" id="item">
 <tr class="trbg{$mod}">
-	<td><gt name="item['inventory']['chg_quantity']" value="0"><if condition="$_SESSION[C('ADMIN_AUTH_NAME')] eq true or (!empty($_SESSION[C('LMANAGER_AUTH_NAME')][1]) and ($_SESSION[C('LMANAGER_AUTH_NAME')][1]['fixed'] heq '01' or (strlen($_SESSION[C('LMANAGER_AUTH_NAME')][1]['fixed'])==1 and $item['fixed'] eq $_SESSION[C('LMANAGER_AUTH_NAME')][1]['fixed'])))"><input type="checkbox" name="chk[]" value="{$item['product_id']}" onclick="updateCheckAll2(this);" /></if></gt></td>
+	<td><gt name="item['inventory']['chg_quantity']" value="0"><if condition="$_SESSION[C('ADMIN_AUTH_NAME')] eq true or (!empty($_SESSION[C('MANAGER_AUTH_NAME')][1]) and ($_SESSION[C('MANAGER_AUTH_NAME')][1]['fixed'] heq '01' or (strlen($_SESSION[C('MANAGER_AUTH_NAME')][1]['fixed'])==1 and $item['fixed'] eq $_SESSION[C('MANAGER_AUTH_NAME')][1]['fixed'])))"><input type="checkbox" name="chk[]" value="{$item['product_id']}" onclick="updateCheckAll2(this);" /></if></gt></td>
 	<td align="center">{$i}</td>
-	<if condition="$_SESSION[C('ADMIN_AUTH_NAME')] eq true or (!empty($_SESSION[C('LMANAGER_AUTH_NAME')][1]) and ($_SESSION[C('LMANAGER_AUTH_NAME')][1]['fixed'] heq '01' or (strlen($_SESSION[C('LMANAGER_AUTH_NAME')][1]['fixed'])==1 and $item['fixed'] eq $_SESSION[C('LMANAGER_AUTH_NAME')][1]['fixed'])))">
+	<if condition="$_SESSION[C('ADMIN_AUTH_NAME')] eq true or (!empty($_SESSION[C('MANAGER_AUTH_NAME')][1]) and ($_SESSION[C('MANAGER_AUTH_NAME')][1]['fixed'] heq '01' or (strlen($_SESSION[C('MANAGER_AUTH_NAME')][1]['fixed'])==1 and $item['fixed'] eq $_SESSION[C('MANAGER_AUTH_NAME')][1]['fixed'])))">
 	<td class="edit" nowrap="nowrap"><span>{$item['Internal_PN']|str_replace=' (','<br />(',###}</span><input type="text" id="{$item['product_id']}" value="{$item['Internal_PN']}" style="display:none;width:0;" /></td>
 	<else />
 	<td nowrap="nowrap">{$item['Internal_PN']|str_replace=' (','<br />(',###}</td>
@@ -118,7 +118,7 @@ td.editing input{
 	<input type="hidden" name="value" value="{$request['value']}" />
 	<input type="hidden" name="project" value="{$request['project']}" />
 	<input type="hidden" name="export" value="1" />
-	<if condition="$_SESSION[C('ADMIN_AUTH_NAME')] eq true or !empty($_SESSION[C('LMANAGER_AUTH_NAME')][1])"><input type="submit" name="submit" value="Export as Excel" /></if>
+	<if condition="$_SESSION[C('ADMIN_AUTH_NAME')] eq true or !empty($_SESSION[C('MANAGER_AUTH_NAME')][1])"><input type="submit" name="submit" value="Export as Excel" /></if>
 </p>
 </form>
 <div style="display:none" id="batch_form">
@@ -132,7 +132,7 @@ td.editing input{
 </tr>
 <iterate name="result" id="item">
 	<gt name="item['inventory']['chg_quantity']" value="0">
-		<if condition="$_SESSION[C('ADMIN_AUTH_NAME')] eq true or (!empty($_SESSION[C('LMANAGER_AUTH_NAME')][1]) and ($_SESSION[C('LMANAGER_AUTH_NAME')][1]['fixed'] eq '01' or (strlen($_SESSION[C('LMANAGER_AUTH_NAME')][1]['fixed'])==1 and $item['fixed'] eq $_SESSION[C('LMANAGER_AUTH_NAME')][1]['fixed'])))">
+		<if condition="$_SESSION[C('ADMIN_AUTH_NAME')] eq true or (!empty($_SESSION[C('MANAGER_AUTH_NAME')][1]) and ($_SESSION[C('MANAGER_AUTH_NAME')][1]['fixed'] eq '01' or (strlen($_SESSION[C('MANAGER_AUTH_NAME')][1]['fixed'])==1 and $item['fixed'] eq $_SESSION[C('MANAGER_AUTH_NAME')][1]['fixed'])))">
 <tr id="tr_{$item['product_id']}" style="display:none">
 	<td>{$item['Internal_PN']}</td>
 	<td>{$item['description']}</td>
