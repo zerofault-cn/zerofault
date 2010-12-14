@@ -789,44 +789,38 @@ class AbsenceAction extends BaseAction{
 				'status' => 1,
 				'time_from' => array(array('egt', date('Y', $this->time).'-01-01'), array('lt', (date('Y', $this->time)+1).'-01-01'))
 				);
-			$used_annual_hours = $this->dao->where($where)->sum('hours');
+			$annual_used = $this->dao->where($where)->sum('hours');
 			
-			$total_annual = 0;
-			$total_leave = 0;
+			$annual_available = 0;
 			if (strcmp($row['onboard'], date('Y', $this->time).'-01-00')>0) {
-				$balance_hour = max(0, round($row['balance']*8-$used_annual_hours));
-				$total_annual += $balance_hour;
+				$balance = round($row['balance']*8);
 				//今年入职的员工，从入职之日算起
-				$added_annual_hour = round(($this->time - strtotime($row['onboard']))/86400*360/(365+date('L', $this->time))/30*1.25*8);//每个月1.25天
-				$total_annual += $added_annual_hour;
+				$annual_added = round(($this->time - strtotime($row['onboard']))/86400*360/(365+date('L', $this->time))/30*1.25*8);//每个月1.25天
+				$annual_available += $annual_added;
 			}
 			else {
 				//今年之前入职的员工，从今年01-01算起
-				$added_annual_hour = round(date('z', $this->time)*360/(365+date('L', $this->time))/30*1.25*8);
-				$total_annual += $added_annual_hour;
+				$annual_added = round(date('z', $this->time)*360/(365+date('L', $this->time))/30*1.25*8);
+				$annual_available += $annual_added;
 				if (date('Y', $this->time)==2010) {
-					//如果现在是2010年，则读取2009剩余年假，并减除已使用假期
-					$total_annual += round($row['balance']*8);
+					$balance = round($row['balance']*8);
 				}
 				else {
 					//2011年或以后
 					if (strcmp($row['onboard'], '2010-01-00')>0) {
 						//该员工在2010年后入职，则剩余年假从入职日起计算至去年结束
-						$tmp_balance_hour = round($row['balance']*8 + (mktime(0,0,0,1,1,date('Y', $this->time))-strtotime($row['onboard']))*360/(365+date('L', $this->time))/86400/30*1.25*8);
+						$balance = round($row['balance']*8 + (mktime(0,0,0,1,1,date('Y', $this->time))-strtotime($row['onboard']))*360/(365+date('L', $this->time))/86400/30*1.25*8);
 					}
 					else {
 						//该员工在2010年前入职，则用2009年剩余年假 ＋ 2010年到去年的整年假
-						$tmp_balance_hour = round($row['balance']*8 + (date('Y', $this->time)-2010)*12*1.25*8);
+						$balance = round($row['balance']*8 + (date('Y', $this->time)-2010)*12*1.25*8);
 					}
-					$balance_hour = max(0, $tmp_balance_hour-$used_annual_hours);
-					$total_annual += $tmp_balance_hour;
 				}
 			}
-			$rs[$i]['Balance'] = self::parseHour($balance_hour);
-			$rs[$i]['Annual'] =  self::parseHour($added_annual_hour);
-			$rs[$i]['Annual_used'] = self::parseHour($used_annual_hours);
-			$rs[$i]['Annual_available'] = self::parseHour($total_annual-$used_annual_hours);
-			$total_leave = $total_annual-$used_annual_hours;
+			$annual_available += max(0, $balance-$annual_used);
+			$rs[$i]['Balance'] = self::parseHour($balance);
+			$rs[$i]['Annual'] =  self::parseHour($annual_added);
+			$rs[$i]['Annual_used'] = self::parseHour($annual_used);
 
 			unset($where['time_from']);
 			$where['type'] = 'CashOut';
@@ -843,8 +837,11 @@ class AbsenceAction extends BaseAction{
 			foreach ($arr as $key=>$val) {
 				$where['create_time'] = $val;
 				$hour = $this->dao->where($where)->sum('hours');
+				$annual_available -= $hour;
 				$rs[$i]['CashOut'][$key] = self::parseHour($hour);
 			}
+			$rs[$i]['Annual_available'] = self::parseHour($annual_available);
+			$leave_available = $annual_available;
 
 			$date_3month_ago = date('Y-m-d', mktime(0,0,0,date('m', $this->time)-3, date('d', $this->time), date('Y', $this->time)));
 			unset($where['create_time']);
@@ -855,20 +852,20 @@ class AbsenceAction extends BaseAction{
 			if (!empty($last_apply_time)) {
 				$where['time_from'] = array('egt', $last_apply_time);
 				$hour = $this->dao->where($where)->sum('hours');
-				$total_leave += $hour;
+				$leave_available += $hour;
 				$rs[$i]['Compensatory']['recent'] = self::parseHour($hour);
 				$rs[$i]['Compensatory']['past'] = self::parseHour(0);
 			}
 			else {
 				$where['time_from'] = array('egt', $date_3month_ago);
 				$hour = $this->dao->where($where)->sum('hours');
-				$total_leave += $hour;
+				$leave_available += $hour;
 				$rs[$i]['Compensatory']['recent'] = self::parseHour($hour);
 				$where['time_from'] = array('lt', $date_3month_ago);
 				$hour = $this->dao->where($where)->sum('hours');
 				$rs[$i]['Compensatory']['past'] = self::parseHour($hour);
 			}
-			$rs[$i]['Total'] = self::parseHour($total_leave);
+			$rs[$i]['Total'] = self::parseHour($leave_available);
 
 		}
 		$this->assign('result', $rs);
