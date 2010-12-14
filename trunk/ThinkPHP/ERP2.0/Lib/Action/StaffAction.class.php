@@ -113,7 +113,7 @@ class StaffAction extends BaseAction{
 		$this->dao->realname = trim($_REQUEST['realname']);
 		$this->dao->email = $email;
 		$this->dao->onboard = $_REQUEST['onboard'];
-		$this->dao->balance_2009 = $_REQUEST['balance_2009'];
+		$this->dao->balance = $_REQUEST['balance'];
 		$this->dao->dept_id = $_REQUEST['dept_id'];
 		$this->dao->leader_id = $_REQUEST['leader_id'];
 		$this->dao->is_leader = intval($_REQUEST['is_leader']);
