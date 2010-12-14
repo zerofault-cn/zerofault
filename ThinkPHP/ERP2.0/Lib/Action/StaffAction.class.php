@@ -8,12 +8,13 @@
 */
 class StaffAction extends BaseAction{
 
-	protected $dao;
+	protected $dao, $time;
 
 	public function _initialize() {
 		Session::set('top', 'Basic Data');
 		Session::set('sub', MODULE_NAME);
 		$this->dao = D('Staff');
+		$this->time = time();
 		parent::_initialize();
 		$this->assign('MODULE_TITLE', 'Staff');
 	}
@@ -38,6 +39,7 @@ class StaffAction extends BaseAction{
 
 	public function form() {
 		$this->assign('ACTION_TITLE', 'Add New Staff');
+		$this->assign('Balance_year', date('Y', $this->time)-1);
 		$id = empty($_REQUEST['id']) ? 0 : intval($_REQUEST['id']);
 		if ($id>0) {
 			$this->assign('ACTION_TITLE', 'Edit Staff');
