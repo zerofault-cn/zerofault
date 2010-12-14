@@ -105,7 +105,11 @@
 		</tr>
 		<tr>
 			<td bgcolor="#CCCCCC"><b>Your cash out days: </b></td>
-			<td bgcolor="#EEEEEE"><input type="text" name="days" value="{$info['hours']/8}" size="4"/> max: {$available}</td>
+			<td bgcolor="#EEEEEE"><input type="text" name="days" value="{$info['hours']/8}" size="4" onkeyup="this.value=this.value.replace(/[^0-9]/g,'')"/>days, max: {$available}</td>
+		</tr>
+		<tr>
+			<td bgcolor="#CCCCCC"><b>Type again to confirm: </b></td>
+			<td bgcolor="#EEEEEE"><input type="text" name="days2" size="4" onkeyup="this.value=this.value.replace(/[^0-9]/g,'')"/> <span style="color:red">(The days can't be changed once you submited)</span></td>
 		</tr>
 		</table>
 		<p class="center">

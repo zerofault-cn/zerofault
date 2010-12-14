@@ -109,7 +109,6 @@ class AbsenceAction extends BaseAction{
 		foreach ($arr as $key=>$val) {
 			$where['create_time'] = $val;
 			$hour = $this->dao->where($where)->sum('hours');
-			$total_leave -= $hour;
 			$leave_info['CashOut'][$key]['days'] = self::parseHour($hour);
 			$leave_info['CashOut'][$key]['Month'] = date('M', mktime(0,0,0,$this->Absence_Config['cashoutmonth'][$key],1,date('Y', $this->time)));
 			if ($hour==0 && date('n', $this->time) == $this->Absence_Config['cashoutmonth'][$key]) {
@@ -349,6 +348,10 @@ class AbsenceAction extends BaseAction{
 			if ($days <= 0) {
 				self::_error('Your input is not a positive number!');
 			}
+			$days2 = intval($_REQUEST['days2']);
+			if ($days2 != $days) {
+				self::_error('Your two input are not match!');
+			}
 			$total = self::get_avaliable('Annual', $_SESSION[C('USER_AUTH_KEY')], $id);
 			$reserved = $this->Absence_Config['reservedhours'];
 			if ($days*8 > $total-$reserved) {
@@ -364,6 +367,7 @@ class AbsenceAction extends BaseAction{
 				$this->dao->create_time = date("Y-m-d H:i:s");
 				$this->dao->creator_id = $_SESSION[C('USER_AUTH_KEY')];
 				$this->dao->staff_id = $_SESSION[C('USER_AUTH_KEY')];
+				$this->dao->status = 1;
 			}
 			$this->dao->hours = $days*8;
 			if($id>0) {
@@ -464,6 +468,9 @@ class AbsenceAction extends BaseAction{
 				else {
 					$this->dao->status = -2;
 				}
+				if ('Out' == $type) {
+					$this->dao->status = 1;
+				}
 			}
 			$this->dao->type = $type;
 			$this->dao->staff_id = $staff_id;
@@ -561,13 +568,15 @@ class AbsenceAction extends BaseAction{
 		}
 		Session::set(ACTION_NAME.'_status', $status);
 		$status_arr = array(
-			array('id'=>'0', 'name'=>'Non-approved'),
+			array('id'=>'0', 'name'=>'Un-approved'),
 			array('id'=>'1', 'name'=>'Approved'),
 			array('id'=>'2', 'name'=>'Rejected')
 			);
+		$this->assign('status_arr', $status_arr);
 		$this->assign('status_opts', self::genOptions($status_arr, $status));
 
 		$where = array();
+		$where['type'] = array('neq', 'CashOut');
 		!empty($staff_id) && ($where['staff_id'] = $staff_id);
 		!empty($type) && ($where['type'] = $type);
 		!empty($_REQUEST['to']) && ($where['time_from'] = array('lt', $_REQUEST['to']));
@@ -1135,16 +1144,22 @@ class AbsenceAction extends BaseAction{
 						$mail->AddAddress($leader['email'], $leader['realname']);
 						$new_status = 1;
 					}
-					elseif ($dao->status == 1) {//通过，通知staff+deputy
+					elseif ($dao->status == 1) {//通过，通知staff+deputy+HR
 						$subject = '[Absence] Notification: '.$staff['realname'].', your application is approved.';
 						$mail->AddAddress($staff['email'], $staff['realname']);
+						foreach ($this->Absence_Config['notification'] as $name=>$email) {
+							$mail->AddCC($email, $name);
+						}
 						if (!empty($deputy)) {
 							self::mail_application($dao, 'deputy');
 						}
 					}
-					elseif ($dao->status == 2) {//拒绝，通知staff
+					elseif ($dao->status == 2) {//拒绝，通知staff+HR
 						$subject = '[Absence] Notification: '.$staff['realname'].', your application is rejected.';
 						$mail->AddAddress($staff['email'], $staff['realname']);
+						foreach ($this->Absence_Config['notification'] as $name=>$email) {
+							$mail->AddCC($email, $name);
+						}
 					}
 				}
 				elseif ($dao->hours <= 16) {
@@ -1157,18 +1172,24 @@ class AbsenceAction extends BaseAction{
 						$mail->AddAddress($email, $name);
 						$new_status = 1;
 					}
-					elseif ($dao->status == 1) {//通过，通知staff+leader+deputy
+					elseif ($dao->status == 1) {//通过，通知staff+leader+deputy+HR
 						$subject = '[Absence] Notification: '.$staff['realname'].', your application is approved.';
 						$mail->AddAddress($staff['email'], $staff['realname']);
 						$mail->AddCC($leader['email'], $leader['realname']);
+						foreach ($this->Absence_Config['notification'] as $name=>$email) {
+							$mail->AddCC($email, $name);
+						}
 						if (!empty($deputy)) {
 							self::mail_application($dao, 'deputy');
 						}
 					}
-					elseif ($dao->status == 2) {//拒绝，通知staff+leader
+					elseif ($dao->status == 2) {//拒绝，通知staff+leader+HR
 						$subject = '[Absence] Notification: '.$staff['realname'].', your application is rejected.';
 						$mail->AddAddress($staff['email'], $staff['realname']);
 						$mail->AddCC($leader['email'], $leader['realname']);
+						foreach ($this->Absence_Config['notification'] as $name=>$email) {
+							$mail->AddCC($email, $name);
+						}
 					}
 				}
 				else {
@@ -1187,22 +1208,28 @@ class AbsenceAction extends BaseAction{
 						$mail->AddAddress($email, $name);
 						$new_status = 1;
 					}
-					elseif ($dao->status == 1) {//通过，通知staff+leader+director+deputy
+					elseif ($dao->status == 1) {//通过，通知staff+leader+director+deputy+HR
 						$subject = '[Absence] Notification: '.$staff['realname'].', your application is approved.';
 						$mail->AddAddress($staff['email'], $staff['realname']);
 						$mail->AddCC($leader['email'], $leader['realname']);
 						list($name, $email) = each($this->Absence_Config['application']['level_2']['approver']);
 						$mail->AddCC($email, $name);
+						foreach ($this->Absence_Config['notification'] as $name=>$email) {
+							$mail->AddCC($email, $name);
+						}
 						if (!empty($deputy)) {
 							self::mail_application($dao, 'deputy');
 						}
 					}
-					elseif ($dao->status == 2) {//拒绝，通知staff+leader+director
+					elseif ($dao->status == 2) {//拒绝，通知staff+leader+director+HR
 						$subject = '[Absence] Notification: '.$staff['realname'].', your application is rejected.';
 						$mail->AddAddress($staff['email'], $staff['realname']);
 						$mail->AddCC($leader['email'], $leader['realname']);
 						list($name, $email) = each($this->Absence_Config['application']['level_2']['approver']);
 						$mail->AddCC($email, $name);
+						foreach ($this->Absence_Config['notification'] as $name=>$email) {
+							$mail->AddCC($email, $name);
+						}
 					}
 				}
 		}
