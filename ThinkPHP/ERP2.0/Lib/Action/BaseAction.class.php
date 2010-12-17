@@ -90,7 +90,7 @@ class BaseAction extends Action {
 			if (!empty($_SESSION[C('STAFF_AUTH_NAME')]['is_leader'])) {
 				$submenu['Staff Application'] = 'Absence/approve';
 			}
-			if (in_array($_SESSION[C('USER_AUTH_KEY')], C('SUPER_ADMIN_ID')) || !empty($_SESSION[C('STAFF_AUTH_NAME')]['is_leader'])) {
+			if (in_array($_SESSION[C('USER_AUTH_KEY')], C('SUPER_ADMIN_ID')) || in_array($_SESSION[C('USER_AUTH_KEY')], C('ABSENCE_ADMIN_ID')) || !empty($_SESSION[C('STAFF_AUTH_NAME')]['is_leader'])) {
 				$submenu['Staff Summary'] = 'Absence/summary';
 			}
 		}

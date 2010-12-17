@@ -778,7 +778,7 @@ class AbsenceAction extends BaseAction{
 		
 		$where = array();
 		$where['status'] = 1;
-		if (!in_array($_SESSION[C('USER_AUTH_KEY')], C('SUPER_ADMIN_ID')) && !empty($_SESSION[C('STAFF_AUTH_NAME')]['is_leader'])) {
+		if (!in_array($_SESSION[C('USER_AUTH_KEY')], C('SUPER_ADMIN_ID')) && !in_array($_SESSION[C('USER_AUTH_KEY')], C('ABSENCE_ADMIN_ID'))) {//不是超级管理员，也不是Absence管理员，那么只能看自己的部下
 			$where['leader_id'] = $_SESSION[C('USER_AUTH_KEY')];
 		}
 		$rs = (array)M('Staff')->where($where)->select();
