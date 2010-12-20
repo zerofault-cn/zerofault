@@ -891,7 +891,7 @@ class AbsenceAction extends BaseAction{
 					$total_leave += $balance_hour;
 					//当年入职的员工，从入职之日算起
 					$added_annual_hour = round(($this->time - strtotime($staff_info['onboard']))/86400*360/(365+date('L', $this->time))/30*1.25*8);//每个月1.25天
-					$total_leave = $added_annual_hour - $used_annual_hours;
+					$total_leave += $added_annual_hour - $used_annual_hours;
 				}
 				else {
 					//当年之前入职的员工，从当年01-01算起
