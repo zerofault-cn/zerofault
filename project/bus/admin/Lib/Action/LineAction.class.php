@@ -42,7 +42,7 @@ class LineAction extends BaseAction{
 		}
 		$count = $this->dao->where($where)->getField('count(*)');
 		import("@.Paginator");
-		$limit = 10;
+		$limit = 20;
 		$p = new Paginator($count,$limit);
 		$rs = $this->dao->where($where)->order($order)->limit($p->offset.','.$p->limit)->select();
 
@@ -320,14 +320,18 @@ class LineAction extends BaseAction{
 			curl_setopt($c, CURLOPT_REFERER, "http://www.hzbus.com.cn/");
 			curl_setopt($c, CURLOPT_RETURNTRANSFER, 1);
 			curl_setopt($c, CURLOPT_URL, "http://www.hzbus.com.cn/content/busline/line_search.jsp");
-			curl_setopt($c, CURLOPT_POSTFIELDS,"line_name=".iconv('UTF-8','GBK',$name));
+			curl_setopt($c, CURLOPT_POSTFIELDS,"line_name=".mb_convert_encoding($name,'GBK','UTF-8'));
 			$data = curl_exec($c);
 		}
 		else{
-			$data = self::httpPost("http://www.hzbus.com.cn/content/busline/line_search.jsp","line_name=".iconv('UTF-8','GBK',$name),"http://www.hzbus.com.cn/");
+			$data = self::httpPost("http://www.hzbus.com.cn/content/busline/line_search.jsp","line_name=".function_exists('iconv')?iconv('UTF-8','GBK',$name):mb_convert_encoding($name,'GBK','UTF-8'),"http://www.hzbus.com.cn/");
 		}
-		$data = iconv('GBK','UTF-8',$data);
-		//$data = mb_convert_encoding($data,'UTF-8','GBK');
+		if (function_exists('iconv')) {
+			$data = iconv('GBK','UTF-8',$data);
+		}
+		else {
+			$data = mb_convert_encoding($data,'UTF-8','GBK');
+		}
 		$data=str_get_html($data);
 		$table=$data->find('table[width="98%"] table',0);
 		$descr0=$table->children(0)->plaintext;
