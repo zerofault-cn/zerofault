@@ -48,7 +48,7 @@
 	<td nowrap="nowrap">{$item['staff']['realname']}</td>
 	<td><empty name="LeaveType[$item['type']]">{$item['type']}<else />{$LeaveType[$item['type']]}</empty></td>
 	<td nowrap="nowrap"><if condition="$item['type'] eq 'CashOut'"><font color="#a4a4a4">N/A</font><else />{$item['time_from']|substr=0,-3} ~ {$item['time_to']|substr=0,-3}</if></td>
-	<td>{$item['hours']|round}</td>
+	<td>{$item['hours']}</td>
 	<td nowrap="nowrap"><empty name="item['deputy_id']"><font color="#a4a4a4">N/A</font><else />{$item['deputy']['realname']}</empty></td>
 	<td align="left" valign="top" class="note"><if condition="$item['type'] eq 'CashOut'"><font color="#a4a4a4">N/A</font><else />{$item['note']|nl2br}</if></td>
 	<td><if condition="$item['status'] lt 1">Un-approved<elseif condition="$item['status'] eq 1"/>Approved<elseif condition="$item['status'] eq 2"/>Rejected</if></td>
