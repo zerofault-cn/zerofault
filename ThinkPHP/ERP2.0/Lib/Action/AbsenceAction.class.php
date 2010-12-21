@@ -149,13 +149,14 @@ class AbsenceAction extends BaseAction{
 		$where = array(
 			'type' => 'Out',
 			'staff_id' => $_SESSION[C('USER_AUTH_KEY')],
+			'create_time' => array('gt', date('Y-m-d', $this->time-30*86400))//最近1月
 			);
 		$this->assign('out_list', $this->dao->relation(true)->where($where)->order('id desc')->select());
 
 		$where = array(
 			'type' => array('neq', 'Out'),
 			'staff_id' => $_SESSION[C('USER_AUTH_KEY')],
-			'create_time' => array('gt', (date('Y', $this->time)-1).'-'.date('m', $this->time).'-'.date('d', $this->time))
+			'create_time' => array('gt', (date('Y', $this->time)-1).'-'.date('m', $this->time).'-'.date('d', $this->time))//最近1年
 			);
 		$label_arr = array(
 			'Waiting for Approval' => array('lt', 1),
@@ -219,7 +220,7 @@ class AbsenceAction extends BaseAction{
 		$rs = $this->dao->where($where)->group('type')->getField("type,sum(hours)");
 		$this->assign('absence_summary', $rs);
 
-		$this->assign('ACTION_TITLE', 'My Absence');
+		$this->assign('ACTION_TITLE', 'My Leave Summary');
 		$this->assign('content', ACTION_NAME);
 		$this->display('Layout:ERP_layout');
 	}
@@ -574,7 +575,6 @@ class AbsenceAction extends BaseAction{
 			array('id'=>'1', 'name'=>'Approved'),
 			array('id'=>'2', 'name'=>'Rejected')
 			);
-		$this->assign('status_arr', $status_arr);
 		$this->assign('status_opts', self::genOptions($status_arr, $status));
 
 		$where = array();
@@ -593,7 +593,7 @@ class AbsenceAction extends BaseAction{
 		empty($rs) && ($rs = array());
 		$this->assign('result', $rs);
 
-		$this->assign('ACTION_TITLE', 'Staff Application Management');
+		$this->assign('ACTION_TITLE', 'Team Absence Query');
 		Session::set('sub', MODULE_NAME.'/'.ACTION_NAME);
 		$this->assign('content', ACTION_NAME);
 		$this->display('Layout:ERP_layout');
@@ -744,25 +744,28 @@ class AbsenceAction extends BaseAction{
 	public function history() {
 		Session::set('sub', MODULE_NAME.'/'.ACTION_NAME);
 
+		import("@.Paginator");
+		$limit = 10;
+		if (!empty($_SESSION[MODULE_NAME.'_'.ACTION_NAME.'_limit'])) {
+			$limit = $_SESSION[MODULE_NAME.'_'.ACTION_NAME.'_limit'];
+		}
+		if (!empty($_REQUEST['limit'])) {
+			$limit = $_REQUEST['limit'];
+		}
+		$_SESSION[MODULE_NAME.'_'.ACTION_NAME.'_limit'] = $limit;
+
 		$where = array(
 			'type' => array('not in', array('Overtime', 'CashOut')),
 			'staff_id' => $_SESSION[C('USER_AUTH_KEY')],
-		//	'time_to' => array('lt', date('Y', $this->time).'-01-01')
-			'create_time' => array('gt', (date('Y', $this->time)-1).'-'.date('m', $this->time).'-'.date('d', $this->time))
 			);
-		$rs = $this->dao->relation(true)->where($where)->select();
-				foreach ($rs as $i=>$item) {
-			$rs[$i]['attachment_url'] = '';
-			if (''==trim($item['attachment'])) {
-				continue;
-			}
-			foreach (explode(';', $item['attachment']) as $j=>$file_name) {
-				$rs[$i]['attachment_url'] .= '[<a href="'.$file_path.$file_name.'" target="_blank"> '.($j+1).' </a>] ';
-			}
-		}
-		$this->assign('result', $rs);
+		$count = $this->dao->where($where)->getField('count(*)');
+		$p = new Paginator($count,$limit);
 
-		$this->assign('ACTION_TITLE', 'My absence history (6 month ago)');
+		$rs = $this->dao->relation(true)->where($where)->order('id desc')->limit($p->offset.','.$p->limit)->select();
+		$this->assign('result', $rs);
+		$this->assign('page', $p->showMultiNavi());
+
+		$this->assign('ACTION_TITLE', 'My absence history');
 		$this->assign('content', ACTION_NAME);
 		$this->display('Layout:ERP_layout');
 	}

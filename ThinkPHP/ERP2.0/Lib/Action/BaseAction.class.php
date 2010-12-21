@@ -112,12 +112,12 @@ class BaseAction extends Action {
 			}
 			$submenu[$sub_title] = $sub_action;
 		}
-		//判断是否super admin增加management子菜单
+		/*判断是否super admin增加management子菜单
 		if ('Absence' == $top) {
 			if (in_array($_SESSION[C('USER_AUTH_KEY')], C('ABSENCE_ADMIN_ID'))) {
 				$submenu['Management'] = 'Absence/manage';
 			}
-		}
+		}*/
 		//根据location增加Inventory子菜单
 		if ('Inventory Inquire'==$top) {
 			foreach($_SESSION['location'] as $location_id=>$location) {

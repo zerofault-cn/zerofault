@@ -54,9 +54,10 @@ $menu['Assets Management'] = array(
 $menu['Absence'] = array(
 	'name'    => 'Absence',
 	'submenu' => array(
-		'Personal'				=> 'Absence',
-		'Today'					=> 'Absence/today',
-		'History'				=> 'Absence/history'
+		'Apply Leave'			=> 'Absence',
+		'Today Absence'			=> 'Absence/today',
+		'My Absence'			=> 'Absence/history',
+		'Team Absence'			=> 'Absence/manage'
 		)
 	);
 
