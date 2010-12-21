@@ -422,7 +422,7 @@ class AbsenceAction extends BaseAction{
 				self::_error('The hours must be larger than 0!');
 			}
 			elseif ($hour>$avaliable_hour) {
-				self::_error('You can\'t apply more than '.$avaliable_hour.' hours');
+			//	self::_error('You can\'t apply more than '.$avaliable_hour.' hours');
 			}
 			$deputy = $_REQUEST['deputy'];
 			$file_path = 'Attach/Absence/';
