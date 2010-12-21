@@ -1,5 +1,8 @@
 <?php
 $config = array(
+	'APP_DEBUG'			=> true,
+	'USER_AUTH_TYPE'	=> 2,
+
 	'APP_CONFIG_LIST'	=> array('menu', 'absence', 'smtp', 'test'),
 	'TAG_NESTED_LEVEL'	=> 6,
 
@@ -19,7 +22,7 @@ $config = array(
 	'ADMIN_AUTH_NAME'	=> 'administrator',
 	
 	'SUPER_ADMIN_ID'	=> array(1), //超级管理员的ID数组
-	'ABSENCE_ADMIN_ID'	=> array(1, 3), //Absence管理员(HR)的帐号ID，纯数字数组
+	'ABSENCE_ADMIN_ID'	=> array(7), //Absence管理员(HR)的帐号ID，纯数字数组
 	'NOTIFICATION_MAILTO' => array(), //资产申请时的重复通知邮件会额外发送给这些邮件帐号
 	'USER_SYNC_TARGET'  => array('CuteFlow'=>'http://192.168.9.159/cuteflow/'), //AgigaFlow系统的根路径
 
