@@ -319,6 +319,8 @@ class LineAction extends BaseAction{
 			$c = curl_init();
 			curl_setopt($c, CURLOPT_REFERER, "http://www.hzbus.com.cn/");
 			curl_setopt($c, CURLOPT_RETURNTRANSFER, 1);
+		//	curl_setopt($c, CURLOPT_URL, "http://www3.hzbus.cn/hzbus/HzBus_Inq_Line_List_S.aspx");
+		//	curl_setopt($c, CURLOPT_POSTFIELDS,"line=".mb_convert_encoding($name,'GBK','UTF-8'));
 			curl_setopt($c, CURLOPT_URL, "http://www.hzbus.com.cn/content/busline/line_search.jsp");
 			curl_setopt($c, CURLOPT_POSTFIELDS,"line_name=".mb_convert_encoding($name,'GBK','UTF-8'));
 			$data = curl_exec($c);
@@ -373,7 +375,7 @@ class LineAction extends BaseAction{
 
 		$tmp_remote_info = array();
 		$line_arr=explode("\n",$descr);
-		$tmp_remote_info['name'] = trim($line_arr[1]);
+		$tmp_remote_info['name'] = str_replace('路', '', trim($line_arr[1]));
 		
 		$numbers= explode("/",$tmp_remote_info['name']);
 		$number = str_ireplace("K",'',$numbers[0]);
@@ -402,6 +404,7 @@ class LineAction extends BaseAction{
 		$tmp_remote_info['ic_card'] = trim($line_arr[26]);
 		$tmp_remote_info['service_day'] = trim($line_arr[30]);
 		$route_arr=$table->children($tmp_offset)->find('table[bgcolor="3E89C0"]');
+	//	$route_arr=$table->parent()->find('table[bgcolor="3E89C0"]');
 		$tmp_arr = array();
 		$tmp_arr['_0'] = array();
 		$tmp_arr['_1'] = array();
