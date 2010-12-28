@@ -28,6 +28,7 @@ class IndexAction extends Action{
 		$result = '';
 		if(!empty($_REQUEST['line_name'])) {
 			$line_name = trim($_REQUEST['line_name']);
+			!get_magic_quotes_gpc() && addslashes($line_name);
 			$this->assign('line_name', $line_name);
 			$rs = M('Line')->where("(number='".$line_name."' or name='".$line_name."') and status=1")->field('id')->select();
 			if($rs) {
@@ -42,6 +43,7 @@ class IndexAction extends Action{
 		}
 		elseif(!empty($_REQUEST['site_name'])) {
 			$site_name = trim($_REQUEST['site_name']);
+			!get_magic_quotes_gpc() && addslashes($site_name);
 			$this->assign('site_name', $site_name);
 			$rs = M('Site')->where("name like '%".$site_name."%'")->select();
 			if(empty($rs)) {
@@ -62,6 +64,7 @@ class IndexAction extends Action{
 		elseif(!empty($_REQUEST['from']) && !empty($_REQUEST['to'])) {
 			$from = trim($_REQUEST['from']);
 			$to = trim($_REQUEST['to']);
+			!get_magic_quotes_gpc() && addslashes($from) && addslashes($to);
 			$this->assign('from', $from);
 			$this->assign('to', $to);
 
@@ -98,7 +101,7 @@ class IndexAction extends Action{
 		$this->display('index');
 	}
 	public function line($refer_id='') {
-		$id = $_REQUEST['id'];
+		$id = intval($_REQUEST['id']);
 		$return = false;
 		if(''!=$refer_id) {
 			$id = $refer_id;
@@ -156,7 +159,7 @@ class IndexAction extends Action{
 	}
 
 	public function site($refer_id) {
-		$id = $_REQUEST['id'];
+		$id = intval($_REQUEST['id']);
 		$return = false;
 		if(''!=$refer_id) {
 			$id = $refer_id;
@@ -188,9 +191,8 @@ class IndexAction extends Action{
 	}
 
 	public function route($f_sid='', $t_sid='') {
-		$from_sid = $_REQUEST['from_sid'];
-		$to_sid = $_REQUEST['to_sid'];
-		$trans = $_REQUEST['trans'];
+		$from_sid = intval($_REQUEST['from_sid']);
+		$to_sid = intval($_REQUEST['to_sid']);
 		$return = false;
 		if(''!=$f_sid  && ''!=$t_sid) {
 			$from_sid = $f_sid;
@@ -324,11 +326,11 @@ class IndexAction extends Action{
 	}
 	
 	function transfer($f_sid='',$f_lid='',$t_sid='',$t_lid='') {
-		$from_sid = $_REQUEST['from_sid'];
-		$from_lid = $_REQUEST['from_lid'];
-		$from_dir = $_REQUEST['from_dir'];
-		$to_sid = $_REQUEST['to_sid'];
-		$to_lid = $_REQUEST['to_lid'];
+		$from_sid = intval($_REQUEST['from_sid']);
+		$from_lid = intval($_REQUEST['from_lid']);
+		$from_dir = intval($_REQUEST['from_dir']);
+		$to_sid = intval($_REQUEST['to_sid']);
+		$to_lid = intval($_REQUEST['to_lid']);
 		$return = false;
 		if(''!=$f_sid) {
 			$from_sid = $f_sid;
