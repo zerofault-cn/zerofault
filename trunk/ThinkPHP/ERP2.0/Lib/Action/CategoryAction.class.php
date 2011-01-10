@@ -13,19 +13,20 @@ class CategoryAction extends BaseAction{
 	public function _initialize() {
 		Session::set('top', 'Basic Data');
 		Session::set('sub', MODULE_NAME);
-		$this->dao = D('Category');
+		$this->dao = M('Category');
 		parent::_initialize();
 		$this->assign('MODULE_TITLE', 'Category');
 	}
 
 	public function index(){
 		$this->assign('ACTION_TITLE', 'List');
-		$this->assign('staff_opts', self::genOptions(M('Staff')->where(array('status'=>1))->select(), '', 'realname'));
 
-		$arr = $this->dao->group('type')->field('type')->select();
-		$result = array('Component'=>array(), 'Board'=>array());
-		foreach($arr as $val) {
-			$result[$val['type']] = $this->dao->relation(true)->where(array('type'=>$val['type']))->order('id')->select();
+		$result = array(
+			'Component'=>array(),
+			'Board'=>array()
+			);
+		foreach($result as $key=>$val) {
+			$result[$key] = $this->dao->where(array('type'=>$key))->order('id')->select();
 		}
 		$default_category_type = Session::get('default_category_type');
 		empty($default_category_type) && ($default_category_type = 'Component');

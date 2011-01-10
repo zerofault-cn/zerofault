@@ -43,10 +43,9 @@ CREATE TABLE IF NOT EXISTS `erp_remark2` (
 CREATE TABLE erp_location_manager (id SMALLINT UNSIGNED AUTO_INCREMENT, location_id SMALLINT UNSIGNED DEFAULT '0' NOT NULL, fixed TINYINT (1) UNSIGNED DEFAULT '0' NOT NULL, staff_id SMALLINT UNSIGNED DEFAULT '0' NOT NULL, PRIMARY KEY(id)) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 
+#For absence
 ALTER TABLE erp_staff ADD onboard DATE NOT NULL AFTER email;
 ALTER TABLE erp_staff ADD balance_2009 decimal(5,1) unsigned  NOT NULL default 0 AFTER onboard;
-
-
 CREATE TABLE IF NOT EXISTS erp_absence (
   id int(10) unsigned NOT NULL auto_increment,
   type varchar(255) NOT NULL DEFAULT '' ,
@@ -69,13 +68,8 @@ CREATE TABLE IF NOT EXISTS erp_absence (
 
 ALTER TABLE erp_options ADD descr TEXT NOT NULL AFTER code;
 
-2010/8/7
-ALTER TABLE erp_category ADD manager_id SMALLINT UNSIGNED NOT NULL;
 
-ALTER TABLE erp_product_flow ADD category_id SMALLINT UNSIGNED DEFAULT "0" NOT NULL AFTER fixed;
-
-
-2010-09-03
+2010-09-03 For Test Log
 CREATE TABLE erp_test (
 id SMALLINT UNSIGNED AUTO_INCREMENT,
  name VARCHAR (255) NOT NULL,
@@ -90,8 +84,6 @@ id SMALLINT UNSIGNED AUTO_INCREMENT,
  PRIMARY KEY(id)
  ) 
  ENGINE=MyISAM DEFAULT CHARSET=utf8 ;
-
-
 CREATE TABLE IF NOT EXISTS `erp_test_entry` (
   `id` int(10) unsigned NOT NULL auto_increment,
   `test_id` smallint(5) unsigned NOT NULL default '0',
@@ -102,3 +94,46 @@ CREATE TABLE IF NOT EXISTS `erp_test_entry` (
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 ;
 
+2011/1/10 For Task
+CREATE TABLE `erp_attachment` (
+  `id` int(10) unsigned NOT NULL auto_increment,
+  `name` varchar(255) NOT NULL default '',
+  `type` varchar(255) NOT NULL default '',
+  `size` int(10) unsigned NOT NULL default '0',
+  `path` varchar(255) NOT NULL default '',
+  `model_name` varchar(255) NOT NULL default '',
+  `model_id` int(10) unsigned NOT NULL default '0',
+  `staff_id` int(10) unsigned NOT NULL default '0',
+  `upload_time` datetime NOT NULL default '0000-00-00 00:00:00',
+  `status` tinyint(1) unsigned NOT NULL default '0',
+  PRIMARY KEY  (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+CREATE TABLE `erp_comment` (
+  `id` int(10) unsigned NOT NULL auto_increment,
+  `model_name` varchar(255) NOT NULL default '',
+  `model_id` int(10) unsigned NOT NULL default '0',
+  `staff_id` int(10) unsigned NOT NULL default '0',
+  `create_time` datetime NOT NULL default '0000-00-00 00:00:00',
+  `status` tinyint(1) unsigned NOT NULL default '0',
+  PRIMARY KEY  (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+CREATE TABLE `erp_task` (
+  `id` int(10) unsigned NOT NULL auto_increment,
+  `project` varchar(255) NOT NULL default '',
+  `descr` text NOT NULL,
+  `model_id` smallint(5) unsigned NOT NULL default '0',
+  `create_time` datetime NOT NULL default '0000-00-00 00:00:00',
+  `due_date` date NOT NULL default '0000-00-00',
+  `press_interval` int(10) unsigned NOT NULL default '0',
+  `done_time` datetime NOT NULL default '0000-00-00 00:00:00',
+  `status` tinyint(1) NOT NULL default '0',
+  PRIMARY KEY  (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+CREATE TABLE `erp_task_owner` (
+  `id` int(10) unsigned NOT NULL auto_increment,
+  `task_id` int(10) unsigned NOT NULL default '0',
+  `staff_id` int(10) unsigned NOT NULL default '0',
+  `position` smallint(5) unsigned NOT NULL default '0',
+  `status` tinyint(3) NOT NULL default '0',
+  PRIMARY KEY  (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;

@@ -65,6 +65,14 @@ $menu['Test Log'] = array(
 	'name'    => 'Test',
 	);
 
+$menu['Tasks'] = array(
+	'name' => 'Task',
+	'submenu' => array(
+		'All Tasks'				=> 'Task',
+		'My Tasks'				=> 'Task/my',
+		'Management'			=> 'Task/manage'
+		)
+	);
 $menu['System'] = array(
 	'name'    => 'Setting',
 	'submenu' => array(

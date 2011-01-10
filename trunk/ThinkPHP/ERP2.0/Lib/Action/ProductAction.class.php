@@ -30,7 +30,7 @@ class ProductAction extends BaseAction{
 		}
 		$_SESSION[MODULE_NAME.'_'.ACTION_NAME.'_limit'] = $limit;
 
-		$this->assign('category_opts', self::genOptions(M('Category')->select(), $_REQUEST['category_id']) );
+		$this->assign('category_opts', self::genOptions(M('Category')->where(array('type'=>'Component'))->select(), $_REQUEST['category_id']) );
 
 		$where = array();
 		$where['type'] = 'Component';
@@ -61,7 +61,7 @@ class ProductAction extends BaseAction{
 		$this->assign('ACTION_TITLE', 'Add New Component');
 		$id = empty($_REQUEST['id']) ? 0 : intval($_REQUEST['id']);
 		if ($id>0) {
-			$this->assign('ACTION_TITLE', 'Edit Component');
+			$this->assign('ACTION_TITLE', 'Edit basic component data');
 			$info = $this->dao->find($id);
 			$info['category_opts'] = self::genOptions(M('Category')->where(array('type'=>'Component'))->select(),$info['category_id'],'name');
 			$info['currency_opts'] = self::genOptions(M('Options')->where(array('type'=>'currency'))->order('sort')->select(), $info['currency_id']);
