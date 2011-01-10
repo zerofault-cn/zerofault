@@ -117,7 +117,7 @@ class InventoryAction extends BaseAction{
 
 		Session::set('sub', MODULE_NAME.'/'.ACTION_NAME);
 		$this->assign('ACTION_TITLE', 'List');
-		$this->assign('category_opts', self::genOptions(M('Category')->select(), $_REQUEST['category_id']) );
+		$this->assign('category_opts', self::genOptions(M('Category')->where("type='Component' or type='Board'")->select(), $_REQUEST['category_id']) );
 		$this->assign('supplier_opts', self::genOptions(D('Supplier')->select(), $_REQUEST['supplier_id']));
 
 		//for batch transfer

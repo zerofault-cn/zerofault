@@ -8,7 +8,7 @@ $config = array(
 
 	'DB_TYPE'			=> 'mysql',
 	'DB_HOST'			=> 'localhost', //数据库地址
-	'DB_NAME'			=> 'ERP2', //数据库名
+	'DB_NAME'			=> 'ERP', //数据库名
 	'DB_USER'			=> 'root', //访问数据库的帐号
 	'DB_PWD'			=> '', //访问数据库的密码
 	'DB_PREFIX'			=> 'erp_',

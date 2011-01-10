@@ -30,7 +30,7 @@ class BoardAction extends BaseAction{
 		}
 		$_SESSION[MODULE_NAME.'_'.ACTION_NAME.'_limit'] = $limit;
 
-		$this->assign('category_opts', self::genOptions(M('Category')->select(), $_REQUEST['category_id']) );
+		$this->assign('category_opts', self::genOptions(M('Category')->where(array('type'=>'Board'))->select(), $_REQUEST['category_id']) );
 		$this->assign('status_opts', self::genOptions(M('Options')->where(array('type'=>'status'))->order('sort')->select(), $_REQUEST['status_id']));
 
 		$where = array();
@@ -78,8 +78,8 @@ class BoardAction extends BaseAction{
 		$id = empty($_REQUEST['id']) ? 0 : intval($_REQUEST['id']);
 		if ($id>0) {
 			$info = $this->dao->find($id);
-			$this->assign('ACTION_TITLE', 'Edit '.ucfirst($info['type']).' Data');
-			$info['category_opts'] = self::genOptions(M('Category')->where(array('type'=>ucfirst($info['type'])))->select(), $info['category_id'], 'name');
+			$this->assign('ACTION_TITLE', 'Edit basic board data');
+			$info['category_opts'] = self::genOptions(M('Category')->where(array('type'=>'Board'))->select(), $info['category_id'], 'name');
 			$info['supplier_opts'] = self::genOptions(D('Supplier')->select());
 			$info['currency_opts'] = self::genOptions(M('Options')->where(array('type'=>'currency'))->order('sort')->select(), $info['currency_id']);
 			$info['unit_opts'] = self::genOptions(M('Options')->where(array('type'=>'unit'))->order('sort')->select(), $info['unit_id']);

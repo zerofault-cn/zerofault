@@ -44,11 +44,11 @@ i{color:red;font-style:normal;}
 	background-color:#ffffef;
 }
 .table_border0{
-	border:3px solid #9999FF;
+	border:1px solid #9999FF;
 }
 
 .table_border1{
-	border:3px solid #FFCC00;
+	border:1px solid #FFCC00;
 }
 .table_border0 td, .table_border1 td{
 	background-color:#FFFFFF;
