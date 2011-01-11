@@ -110,6 +110,7 @@ CREATE TABLE `erp_attachment` (
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 CREATE TABLE `erp_comment` (
   `id` int(10) unsigned NOT NULL auto_increment,
+  `content` TEXT NOT NULL default '',
   `model_name` varchar(255) NOT NULL default '',
   `model_id` int(10) unsigned NOT NULL default '0',
   `staff_id` int(10) unsigned NOT NULL default '0',
@@ -119,9 +120,10 @@ CREATE TABLE `erp_comment` (
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 CREATE TABLE `erp_task` (
   `id` int(10) unsigned NOT NULL auto_increment,
-  `project` varchar(255) NOT NULL default '',
+  `title` varchar(255) NOT NULL default '',
   `descr` text NOT NULL,
   `model_id` smallint(5) unsigned NOT NULL default '0',
+  `creator_id` SMALLINT UNSIGNED DEFAULT "0" NOT NULL,
   `create_time` datetime NOT NULL default '0000-00-00 00:00:00',
   `due_date` date NOT NULL default '0000-00-00',
   `press_interval` int(10) unsigned NOT NULL default '0',
@@ -133,7 +135,6 @@ CREATE TABLE `erp_task_owner` (
   `id` int(10) unsigned NOT NULL auto_increment,
   `task_id` int(10) unsigned NOT NULL default '0',
   `staff_id` int(10) unsigned NOT NULL default '0',
-  `position` smallint(5) unsigned NOT NULL default '0',
   `status` tinyint(3) NOT NULL default '0',
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
