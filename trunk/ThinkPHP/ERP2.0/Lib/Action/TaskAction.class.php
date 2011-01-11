@@ -4,6 +4,9 @@ class TaskAction extends BaseAction{
 	protected $dao, $config;
 
 	public function _initialize() {
+		if ('Node'!= MODULE_NAME) {
+			Session::set('top', 'Tasks');
+		}
 		$this->dao = D('Task');
 		parent::_initialize();
 		$this->assign('MODULE_TITLE', 'Task System');
@@ -11,9 +14,8 @@ class TaskAction extends BaseAction{
 
 	public function index() {
 		Session::set('sub', MODULE_NAME);
-		
-		
 
+		$this->assign('category_opts', self::genOptions(M('Category')->where(array('type'=>'Task'))->select(), $_REQUEST['category_id']) );
 		import("@.Paginator");
 		$limit = 10;
 		if (!empty($_SESSION[MODULE_NAME.'_'.ACTION_NAME.'_limit'])) {
@@ -24,64 +26,18 @@ class TaskAction extends BaseAction{
 		}
 		$_SESSION[MODULE_NAME.'_'.ACTION_NAME.'_limit'] = $limit;
 
-		$result = array();
 		$where = array();
-		$wild_search = false;
-		if (!empty($_REQUEST['name'])) {
-			$where['name'] = array('like', '%'.trim($_REQUEST['name']).'%');
-		}
-		if (!empty($_REQUEST['staff_id'])) {
-			$where['staff_id'] = $_REQUEST['staff_id'];
-		}
-		if (!empty($_REQUEST['project'])) {
-			$where['project'] = array('like', '%'.trim($_REQUEST['project']).'%');
-		}
-		$join = '';
-		$field = '*';
-		if(!empty($_REQUEST['string'])) {
-			$wild_search = true;
-			$limit = 300;
-			$string = trim($_REQUEST['string']);
-			$join = "inner join erp_test_entry entry on entry.test_id=erp_test.id and entry.string like '%".$string."%'";
-			$field = "distinct erp_test.*";
-		}
-		if (''!=$join) {
-			$total = $this->dao->where($where)->join($join)->getField("count(distinct erp_test.id)");
-		}
-		else {
-			$total = $this->dao->where($where)->count();
-		}
-
+		$total = $this->dao->where($where)->count();
 		$p = new Paginator($total,$limit);
-		if (''!=$join) {
-			$result = $this->dao->relation(true)->where($where)->join($join)->order('id desc')->limit($p->offset.','.$p->limit)->field($field)->select();
-		}
-		else {
-			$result = $this->dao->relation(true)->where($where)->order('id desc')->limit($p->offset.','.$p->limit)->field($field)->select();
-		}
-		foreach ($result as $i=>$item) {
-			$rs = M('TestEntry')->where('test_id='.$item['id'])->select();
-			empty($rs) && ($rs = array());
-			$entry = array_combine($this->config['y-axis'], array_fill(0, count($this->config['y-axis']), array()));
-			foreach ($rs as $arr) {
-				if ($wild_search) {
-					$arr['string'] = eregi_replace('('.$string.')', '<em>\\1</em>', $arr['string']);
-				}
-				$entry[$arr['y']][$arr['x']] = array(
-					'id' => $arr['id'],
-					'string' => $arr['string']
-					);
-			}
-			$result[$i]['entry'] = $entry;
-		}
+		
+		$result = (array)$this->dao->where($where)->order('id desc')->limit($p->offset.','.$p->limit)->field($field)->select();
+
 		$this->assign('request', $_REQUEST);
 		$this->assign('result', $result);
 
-		$this->assign('x_axis', $this->config['x-axis']);
-		$this->assign('y_axis', $this->config['y-axis']);
-		$this->assign('page', $p->showMultiNavi());
+		$this->assign('page', $p->showLinkNavi());
 
-		$this->assign('ACTION_TITLE', '');
+		$this->assign('ACTION_TITLE', 'All Tasks');
 		$this->assign('content', ACTION_NAME);
 		$this->display('Layout:ERP_layout');
 	}

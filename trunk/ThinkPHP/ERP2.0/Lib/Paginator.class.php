@@ -181,5 +181,102 @@ class Paginator extends Think{
 
 		return $pagenav;
 	}
+	function showLinkNavi() //仅显示链接
+	{
+		//页码风格：1 2 ... 11 12 13 14 15 16 17 ... 21 22
+		if($this->record_count<=0) return;
+	
+		
+		if($this->page_count>1){
+			$pagenav = '<table class="paginator" width="100%"><tr>';
+			$pagenav .= '<td class="a_left">';
+
+			if($this->current_page>1){
+				$pagenav .= '<a href="?p=1">'.$this->config['first'].'</a>&nbsp;&nbsp;';
+				$pagenav .= '<a href="?p='.($this->current_page-1).'">'.$this->config['prev'].'</a>&nbsp;&nbsp;';
+			}
+			else{
+				$pagenav .= $this->config['first'].'&nbsp;&nbsp;';
+				$pagenav .= $this->config['prev'].'&nbsp;&nbsp;';
+			}
+			if($this->page_count < $this->config['show_num']){
+				for($i=1;$i<$this->page_count+1;$i++){
+					if($i==$this->current_page){
+						$pagenav .= ''.$i.'&nbsp;&nbsp;';
+					}
+					else{
+						$pagenav .= '<a href="?p='.$i.'">'.$i.'</a>&nbsp;&nbsp;';
+					}
+				}
+			}
+			else{
+				if($this->current_page <= $this->config['side_num']+floor($this->config['show_num']/2)+1){
+					for($i=1;$i<max(1,$this->current_page-floor($this->config['show_num']/2));$i++){
+						if($i==$this->current_page){
+							$pagenav .= ''.$i.'&nbsp;&nbsp;';
+						}
+						else{
+							$pagenav .= '<a href="?p='.$i.'">'.$i.'</a>&nbsp;&nbsp;';
+						}
+					}
+				}
+				else{
+					for($i=1;$i<$this->config['side_num']+1;$i++){
+						if($i==$this->current_page){
+							$pagenav .= ''.$i.'&nbsp;';
+						}
+						else{
+							$pagenav .= '<a href="?p='.$i.'">'.$i.'</a>&nbsp;&nbsp;';
+						}
+					}
+					$pagenav .= '<span class="dot">...</span>&nbsp;&nbsp;';
+				}
+				for($i=max(1,$this->current_page-floor($this->config['show_num']/2));$i<min($this->current_page+ceil($this->config['show_num']/2),$this->page_count+1);$i++){
+					if($i==$this->current_page){
+						$pagenav .= ''.$i.'&nbsp;&nbsp;';
+					}
+					else{
+						$pagenav .= '<a href="?p='.$i.'">'.$i.'</a>&nbsp;&nbsp;';
+					}
+				}
+				if($this->current_page >= $this->page_count-$this->config['side_num']-ceil($this->config['show_num']/2)+1){
+					for($i=min($this->current_page+$this->config['show_num']-$this->config['side_num']-1,$this->page_count+1);$i<$this->page_count+1;$i++){
+						if($i==$this->current_page){
+							$pagenav .= ''.$i.'&nbsp;&nbsp;';
+						}
+						else{
+							$pagenav .= '<a href="?p='.$i.'">'.$i.'</a>&nbsp;&nbsp;';
+						}
+					}
+				}
+				else{
+					$pagenav .= '<span class="dot">...</span>&nbsp;&nbsp;';
+					for($i=$this->page_count-$this->config['side_num']+1;$i<$this->page_count+1;$i++){
+						if($i==$this->current_page){
+							$pagenav .= ''.$i.'&nbsp;&nbsp;';
+						}
+						else{
+							$pagenav .= '<a href="?p='.$i.'">'.$i.'</a>&nbsp;&nbsp;';
+						}
+					}
+				}
+			}
+			if($this->current_page!=$this->page_count) {
+				$pagenav .= '<a href="?p='.($this->current_page+1).'">'.$this->config['next'].'</a>&nbsp;&nbsp;';
+				$pagenav .= '<a href="?p='.$this->page_count.'">'.$this->config['last'].'</a>';
+			}
+			else
+			{
+				$pagenav .= $this->config['next'].'&nbsp;&nbsp;';
+				$pagenav .= $this->config['last'];
+			}
+
+
+			$pagenav .= '</td>';
+			$pagenav .= '</tr></table>';
+		}
+
+		return $pagenav;
+	}
 }
 ?>
