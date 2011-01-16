@@ -1,0 +1,175 @@
+<style>
+#showOwner li {
+	height:20px;
+	line-height:20px;
+	clear:both;
+}
+#showOwner li span,#showOwner li b{
+	float:left;
+	width:80px;
+}
+table.staff span{
+	float:left;
+	width:100px;
+}
+table.staff b {
+	font-weight:normal;
+
+}
+
+</style>
+<p class="page_title_text">{$ACTION_TITLE}</p>
+<form action="__URL__/submit" method="post" enctype="multipart/form-data" target="_iframe">
+<input type="hidden" name="id" value="{$info.id}" />
+
+<table border="0" align="center" cellpadding="4" cellspacing="2" class="w9">
+<tr bgcolor="#78A3DF">
+	<td width="12%">Title</td>
+	<td width="38%" bgcolor="#DADADA"><input name="title" size="30" maxlength="50" type="text" value="{$info.title}" /></td>
+	<td width="12%">Category</td>
+	<td width="38%" bgcolor="#DADADA">
+		<select name="project" id="project">
+			<option value="">----Please select-----</option>
+			<option value="80">Zoho Viewer</option>
+		</select>
+	</td>
+</tr>
+<tr bgcolor="#BCD1EF">
+	<td>Create Date</td>
+	<td bgcolor="#E9E9E9"><php>echo date("Y-m-d")</php></td>
+	<td >Due Date</td>
+	<td bgcolor="#E9E9E9">
+		<input type="text" name="due_date" value="{$info.due_date}" size="8" id="Datepicker"/>
+	</td>
+</tr>
+<tr bgcolor="#78A3DF">
+	<td>Assigner</td>
+	<td bgcolor="#DADADA">
+		<present name="info.creator">
+		{$info['creator']['realname']}
+		<else />
+		{$_SESSION[C('STAFF_AUTH_NAME')]['realname']}
+		</present>
+	</td>
+	<td>Press Interval</td>
+	<td bgcolor="#DADADA">
+		<input type="text" name="press_interval" size="3" value="{$info.press_time}" /> {$info.press_unit}
+	</td>
+</tr>
+<tr bgcolor="#BCD1EF">
+	<td>Owner</td>
+	<td bgcolor="#E9E9E9">
+		<ul id="showOwner">
+			<li><span><input type="checkbox" name="owner[]" value="1" checked="checked" />Admin</span><b>Open</b></li>
+			<li><span><input type="checkbox" name="owner[]" value="2" checked="checked" />test</span><b>Pending</b></li>
+		</ul>
+		<div class="clear"></div>
+		<img src="../Public/images/add_member.gif" border="0" align="absmiddle" style="cursor:pointer;" onClick="select_owner(this);" />
+	</td>
+	<td>Attached Files</td>
+	<td bgcolor="#E9E9E9">
+		<input id="file" type="file" name="file[]" size="20" />
+		<img src="../Public/images/attachfile.gif"  alt="add attach file" align="absmiddle" style="cursor:pointer;" onClick="addFile(this);" />
+	</td>
+</tr>
+
+<tr bgcolor="#78A3DF">
+	<td >Description</td>
+	<td colspan="3" bgcolor="#DADADA"><textarea name="description" id="description" cols="100" rows="20"><h1>adfasd</h1><p>dfasd</p></textarea></td>
+</tr>
+</table>
+<p class="center">
+	<input type="submit" value="Submit" name="submit"/>
+	&nbsp;&nbsp;&nbsp;&nbsp;
+	<input type="button" value="Cancel" onclick="javascript:location.href='__URL__';"/>
+</p>
+</form>
+
+<!-- #TB_inline -->
+<div id="selector" style="display:none;">
+<p class="page_title_text">Select Staff</p>
+<table class="staff" border="0" cellpadding="4" cellspacing="2">
+<tr bgcolor="#C6C6C6">
+	<th>Dept.</th>
+	<th>Staff</th>
+</tr>
+<iterate name="DeptStaff" id="Staff">
+<tr class="trbg{$mod}">
+	<td>{$key}</td>
+	<td>
+	<foreach name="Staff" item="staff" key="j">
+		<span>
+		<if condition="!empty($info['owner']) && in_array($staff['id'], $info['owner'])">
+		<input type="checkbox" value="{$staff['id']}" checked="checked"/>
+		<else />
+		<input type="checkbox" value="{$staff['id']}" />
+		</if>
+		<if condition="$j eq 0">
+			<strong>{$staff['realname']}</strong>
+		<else />
+			<b>{$staff['realname']}</b>
+		</if>
+		</span>
+	</foreach>
+	</td>
+</tr>
+</iterate>
+</table>
+<p class="center">
+	<input type="submit" value="Submit" name="submit"/>
+	<input type="button" value="Cancel" onclick="self.parent.tb_remove();"/>
+</p>
+</div>
+<!-- Datepicker -->
+<style type="text/css">@import "../Public/Css/jquery-ui-1.8.2.custom.css?20100620";</style> 
+<script type="text/javascript" src="../Public/Js/jquery-ui-1.8.2.custom.min.js?20100620"></script>
+<script language="javascript" type="text/javascript" src="../Public/js/tiny_mce/tiny_mce.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){
+	$('#Datepicker').datepicker({
+		dateFormat: 'yy-mm-dd',
+		changeMonth: true,
+		changeYear: true,
+	//	showButtonPanel: true,
+		showOtherMonths: true,
+		showMonthAfterYear: true,
+		selectOtherMonths: true,
+		minDate: '-3M',
+		maxDate: '+1Y',
+		showOn: 'both',
+		buttonImage: '../Public/Images/date.gif',
+		buttonImageOnly: true
+		});
+});
+<!-- initial tinyMCE editor -->
+tinyMCE.init({
+	mode : "textareas",
+	theme : "advanced",
+	plugins : "media,advimage,table",
+	extended_valid_elements : "embed[quality|type|pluginspage|width|height|src|align|wmode|autostart|flashvars|allowscriptaccess|bgcolor|EnableContextMenu|loop|showpostplaybackad|custommode|autoplay],object[classid|codebase|width|height|align],param[name|value],link[rel|href|type],style[]",
+	theme_advanced_toolbar_location : "top",
+	theme_advanced_toolbar_align : "left",
+	theme_advanced_buttons1 : "fontsizeselect,bold,italic,underline,separator,forecolor,backcolor,link,unlink,separator,justifyleft,justifycenter,justifyright,table,separator,image,media,separator,removeformat,code",
+	theme_advanced_buttons2 : "",
+	theme_advanced_buttons3 : "",
+	force_p_newlines : false,
+	force_br_newlines : true,
+	forced_root_block : false,
+	convert_urls : false,
+	
+	theme_advanced_buttons1_add : ""
+});
+
+function addFile(obj) {
+	$(obj).before('<br /><input type="file" name="file[]" size="20" /> ');
+}
+function select_owner(obj){
+	var selected_owner = new Array();
+	$("#showOwner").children().each(function(i){
+		if ($(this).children('span').children('input').attr('checked')) {
+			selected_owner[i] = $(this).children('span').children('input').val();
+		}
+	});
+	tb_show('','#TB_inline?width=500&height=400&modal=true&inlineId=selector','')
+}
+</script>
