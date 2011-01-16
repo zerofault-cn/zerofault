@@ -42,31 +42,61 @@ class TaskAction extends BaseAction{
 		$this->display('Layout:ERP_layout');
 	}
 	
-	public function create() {
-		if (empty($_REQUEST['submit'])) {
-			return;
+	public function form() {
+		$this->assign('ACTION_TITLE', 'Create a new task');
+		$id = empty($_REQUEST['id']) ? 0 : intval($_REQUEST['id']);
+		if ($id>0) {
+			$info = $this->dao->find($id);
+			$this->assign('ACTION_TITLE', 'Edit task');
+			$info['category_opts'] = self::genOptions(M('Category')->where(array('type'=>'Board'))->select(), $info['category_id'], 'name');
+			$info['supplier_opts'] = self::genOptions(D('Supplier')->select());
+			$info['currency_opts'] = self::genOptions(M('Options')->where(array('type'=>'currency'))->order('sort')->select(), $info['currency_id']);
+			$info['unit_opts'] = self::genOptions(M('Options')->where(array('type'=>'unit'))->order('sort')->select(), $info['unit_id']);
+			$info['status_opts'] = self::genOptions(M('Options')->where(array('type'=>'status'))->order('sort')->select(), $info['status_id']);
+			$code = $info['code'];
 		}
-		$name = trim($_REQUEST['name']);
-		if ('' == $name) {
-			self::_error('Test NO. can\'t be empty!');
+		else {
+			$info = array(
+				'id' => 0,
+				'' => self::genOptions(M('Category')->where(array('type'=>'Board'))->select()),
+				'supplier_opts' => self::genOptions(D('Supplier')->select()),
+				'currency_opts' => self::genOptions(M('Options')->where(array('type'=>'currency'))->order('sort')->select()),
+				'unit_opts' => self::genOptions(M('Options')->where(array('type'=>'unit'))->order('sort')->select()),
+				'status_opts' => self::genOptions(M('Options')->where(array('type'=>'status'))->order('sort')->select())
+				);
+			$max_code = $this->dao->where(array('type'=>'Board'))->max('code');
+			empty($max_code) && ($max_code = 'B'.sprintf("%09d",0));
+			$code = ++ $max_code;
 		}
-		$rs = $this->dao->where("name='".$name."'")->find();
-		if (count($rs)>0) {
-			self::_error('The test NO.: '.$name.' has been used');
+		$this->assign('code', $code);
+		$this->assign('info', $info);
+		$this->assign('MAX_FILE_SIZE', self::MAX_FILE_SIZE());
+		$this->assign('upload_max_filesize', min(ini_get('memory_limit'), ini_get('post_max_size'), ini_get('upload_max_filesize')));
+
+		$dept_staff_arr = array();
+		$has_other = false;
+		$rs = M('Staff')->where('status=1')->distinct(true)->field('dept_id')->select();
+		foreach ($rs as $arr) {
+			if (0==$arr['dept_id']) {
+				$has_other = true;
+				continue;
+			}
+			$dept = M('Department')->find($arr['dept_id']);
+			$dept_staff_arr[$dept['name']] = M('Staff')->where(array('id'=>array('neq', $dept['leader_id']), 'dept_id'=>$dept['id'], 'status'=>1))->order('realname')->field('id,realname,email')->select();
+			if ($dept['leader_id']>0) {
+				array_unshift($dept_staff_arr[$dept['name']], M('Staff')->field('id,realname,email')->find($dept['leader_id']));
+			}
 		}
-		$this->dao->name = $name;
-		$this->dao->staff_id = $_SESSION[C('USER_AUTH_KEY')];
-		$this->dao->create_time = date('Y-m-d H:i:s');
-		$this->dao->project = trim($_REQUEST['project']);
-		$this->dao->result = 0;
-		$this->dao->status = 0;
-		if($this->dao->add()) {
-			self::_success('Create  success!',__URL__);
+		ksort($dept_staff_arr);
+		if ($has_other) {
+			$dept_staff_arr['No Department'] = M('Staff')->where(array('dept_id'=>0, 'status'=>1))->order('realname')->field('id,realname,email')->select();
 		}
-		else{
-			self::_error('Create fail!'.(C('APP_DEBUG')?$this->dao->getLastSql():''));
-		}
+		$this->assign('DeptStaff', $dept_staff_arr);
+
+		$this->assign('content', ACTION_NAME);
+		$this->display('Layout:ERP_layout');
 	}
+
 	public function edit(){
 		if (empty($_POST['id'])) {
 			return;
