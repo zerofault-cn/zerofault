@@ -18,7 +18,7 @@
 		</tr>
 		<iterate name="result" id="item">
 		<tr class="trbg{$mod}">
-			<td>{$item.title}</td>
+			<td>{$item.title} <a href="__URL__/form/id/{$item.id}">Edit</a></td>
 		</tr>
 		</iterate>
 		<empty name="result">
