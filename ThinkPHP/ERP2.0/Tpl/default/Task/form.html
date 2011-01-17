@@ -6,13 +6,13 @@
 }
 #showOwner li span,#showOwner li b{
 	float:left;
-	width:80px;
+	width:120px;
 }
-table.staff span{
+table#staff span{
 	float:left;
 	width:100px;
 }
-table.staff b {
+table#staff b {
 	font-weight:normal;
 
 }
@@ -28,18 +28,18 @@ table.staff b {
 	<td width="38%" bgcolor="#DADADA"><input name="title" size="30" maxlength="50" type="text" value="{$info.title}" /></td>
 	<td width="12%">Category</td>
 	<td width="38%" bgcolor="#DADADA">
-		<select name="project" id="project">
-			<option value="">----Please select-----</option>
-			<option value="80">Zoho Viewer</option>
+		<select name="category_id">
+			<option value="">----Please select----</option>
+			{$info.category_opts}
 		</select>
 	</td>
 </tr>
 <tr bgcolor="#BCD1EF">
 	<td>Create Date</td>
-	<td bgcolor="#E9E9E9"><php>echo date("Y-m-d")</php></td>
+	<td bgcolor="#E9E9E9">{$info.create_time|substr=0,10}</td>
 	<td >Due Date</td>
 	<td bgcolor="#E9E9E9">
-		<input type="text" name="due_date" value="{$info.due_date}" size="8" id="Datepicker"/>
+		<input type="text" name="due_date" value="{$info.due_date}" size="9" id="Datepicker"/>
 	</td>
 </tr>
 <tr bgcolor="#78A3DF">
@@ -51,23 +51,39 @@ table.staff b {
 		{$_SESSION[C('STAFF_AUTH_NAME')]['realname']}
 		</present>
 	</td>
-	<td>Press Interval</td>
+	<td nowrap="nowrap">Press Interval</td>
 	<td bgcolor="#DADADA">
-		<input type="text" name="press_interval" size="3" value="{$info.press_time}" /> {$info.press_unit}
+		<input type="text" name="press_time" size="3" value="{$info.press_time}" />
+		<select name="press_unit">
+			<option value="day" <if condition="$info.press_unit == 'day'">selected="selected"</if> >Days</option>
+			<option value="hour" <if condition="$info.press_unit == 'hour'">selected="selected"</if> >Hours</option>
+			<option value="minute" <if condition="$info.press_unit == 'minute'">selected="selected"</if> >Minutes</option>
+		</select>(Integer number only)
 	</td>
 </tr>
 <tr bgcolor="#BCD1EF">
 	<td>Owner</td>
-	<td bgcolor="#E9E9E9">
+	<td bgcolor="#E9E9E9" valign="top">
 		<ul id="showOwner">
-			<li><span><input type="checkbox" name="owner[]" value="1" checked="checked" />Admin</span><b>Open</b></li>
-			<li><span><input type="checkbox" name="owner[]" value="2" checked="checked" />test</span><b>Pending</b></li>
+			<foreach name="info.owner" item="owner">
+			<li><span><input type="checkbox" name="owner[]" value="{$owner.id}" checked="checked" />{$owner.realname}</span><b>{$status_arr[$owner['status']]}</b></li>
+			</foreach>
 		</ul>
+		<empty name="info.id">
 		<div class="clear"></div>
-		<img src="../Public/images/add_member.gif" border="0" align="absmiddle" style="cursor:pointer;" onClick="select_owner(this);" />
+		<img src="../Public/images/add_member.gif" border="0" align="absmiddle" style="cursor:pointer;" onClick="show_selector(this);" />
+		</empty>
 	</td>
 	<td>Attached Files</td>
-	<td bgcolor="#E9E9E9">
+	<td bgcolor="#E9E9E9" valign="top">
+		<input type="hidden" name="MAX_FILE_SIZE" value="{$MAX_FILE_SIZE}"/>
+		<empty name="info.attachment">
+		Single file mustn't larger than {$upload_max_filesize}!<br />
+		<else />
+		<foreach name="info.attachment" item="file">
+		<a href="__APP__/../{$file.path}" target="_blank" title="View attachment in new window">{$file.name}</a><br />
+		</foreach>
+		</empty>
 		<input id="file" type="file" name="file[]" size="20" />
 		<img src="../Public/images/attachfile.gif"  alt="add attach file" align="absmiddle" style="cursor:pointer;" onClick="addFile(this);" />
 	</td>
@@ -75,7 +91,7 @@ table.staff b {
 
 <tr bgcolor="#78A3DF">
 	<td >Description</td>
-	<td colspan="3" bgcolor="#DADADA"><textarea name="description" id="description" cols="100" rows="20"><h1>adfasd</h1><p>dfasd</p></textarea></td>
+	<td colspan="3" bgcolor="#DADADA"><textarea name="description" cols="100" rows="20">{$info.descr}</textarea></td>
 </tr>
 </table>
 <p class="center">
@@ -88,7 +104,7 @@ table.staff b {
 <!-- #TB_inline -->
 <div id="selector" style="display:none;">
 <p class="page_title_text">Select Staff</p>
-<table class="staff" border="0" cellpadding="4" cellspacing="2">
+<table id="staff" border="0" cellpadding="4" cellspacing="2">
 <tr bgcolor="#C6C6C6">
 	<th>Dept.</th>
 	<th>Staff</th>
@@ -99,7 +115,7 @@ table.staff b {
 	<td>
 	<foreach name="Staff" item="staff" key="j">
 		<span>
-		<if condition="!empty($info['owner']) && in_array($staff['id'], $info['owner'])">
+		<if condition="!empty($info['owner']) && in_array($staff['id'], $info['owners_id'])">
 		<input type="checkbox" value="{$staff['id']}" checked="checked"/>
 		<else />
 		<input type="checkbox" value="{$staff['id']}" />
@@ -116,7 +132,7 @@ table.staff b {
 </iterate>
 </table>
 <p class="center">
-	<input type="submit" value="Submit" name="submit"/>
+	<input type="button" value="Submit" onclick="self.parent.do_select()"/>
 	<input type="button" value="Cancel" onclick="self.parent.tb_remove();"/>
 </p>
 </div>
@@ -163,13 +179,21 @@ tinyMCE.init({
 function addFile(obj) {
 	$(obj).before('<br /><input type="file" name="file[]" size="20" /> ');
 }
-function select_owner(obj){
-	var selected_owner = new Array();
+function show_selector(obj){
+/*	var selected_owner = new Array();
 	$("#showOwner").children().each(function(i){
 		if ($(this).children('span').children('input').attr('checked')) {
 			selected_owner[i] = $(this).children('span').children('input').val();
 		}
 	});
+*/
 	tb_show('','#TB_inline?width=500&height=400&modal=true&inlineId=selector','')
+}
+function do_select() {
+	$("ul#showOwner").empty();
+	$("table#staff").find("input:checked").each(function(i){
+		$("ul#showOwner").append('<li><span><input type="checkbox" name="owner[]" value="'+$(this).val()+'" checked="checked" />'+$(this).next().text()+'</span></li>');
+	});
+	tb_remove();
 }
 </script>

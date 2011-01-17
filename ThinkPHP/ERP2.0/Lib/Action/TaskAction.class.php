@@ -10,6 +10,11 @@ class TaskAction extends BaseAction{
 		$this->dao = D('Task');
 		parent::_initialize();
 		$this->assign('MODULE_TITLE', 'Task System');
+		$status_arr = array(
+			'0' => 'Open',
+			'1' => 'Close'
+		);
+		$this->assign('status_arr', $status_arr);
 	}
 
 	public function index() {
@@ -46,29 +51,41 @@ class TaskAction extends BaseAction{
 		$this->assign('ACTION_TITLE', 'Create a new task');
 		$id = empty($_REQUEST['id']) ? 0 : intval($_REQUEST['id']);
 		if ($id>0) {
-			$info = $this->dao->find($id);
+			$info = $this->dao->relation(true)->find($id);
 			$this->assign('ACTION_TITLE', 'Edit task');
-			$info['category_opts'] = self::genOptions(M('Category')->where(array('type'=>'Board'))->select(), $info['category_id'], 'name');
-			$info['supplier_opts'] = self::genOptions(D('Supplier')->select());
-			$info['currency_opts'] = self::genOptions(M('Options')->where(array('type'=>'currency'))->order('sort')->select(), $info['currency_id']);
-			$info['unit_opts'] = self::genOptions(M('Options')->where(array('type'=>'unit'))->order('sort')->select(), $info['unit_id']);
-			$info['status_opts'] = self::genOptions(M('Options')->where(array('type'=>'status'))->order('sort')->select(), $info['status_id']);
-			$code = $info['code'];
+			$info['category_opts'] = self::genOptions(M('Category')->where(array('type'=>'Task'))->select(), $info['category_id'], 'name');
+			if ($info['press_interval']%86400 == 0) {
+				$info['press_unit'] = 'day';
+				$info['press_time'] = $info['press_interval']/86400;
+			}
+			elseif ($info['press_interval']%3600 == 0) {
+				$info['press_unit'] = 'hour';
+				$info['press_time'] = $info['press_interval']/3600;
+			}
+			elseif ($info['press_interval']%60 == 0) {
+				$info['press_unit'] = 'minute';
+				$info['press_time'] = $info['press_interval']/60;
+			}
+
+			$info['owners_id'] = array();
+			foreach($info['owner'] as $i=>$owner) {
+				$info['owner'][$i]['realname'] = M('Staff')->where('id='.$owner['staff_id'])->getField('realname');
+				$info['owners_id'][] = $owner['staff_id'];
+			}
 		}
 		else {
 			$info = array(
 				'id' => 0,
-				'' => self::genOptions(M('Category')->where(array('type'=>'Board'))->select()),
-				'supplier_opts' => self::genOptions(D('Supplier')->select()),
-				'currency_opts' => self::genOptions(M('Options')->where(array('type'=>'currency'))->order('sort')->select()),
-				'unit_opts' => self::genOptions(M('Options')->where(array('type'=>'unit'))->order('sort')->select()),
-				'status_opts' => self::genOptions(M('Options')->where(array('type'=>'status'))->order('sort')->select())
+				'title' => '',
+				'category_opts' => self::genOptions(M('Category')->where(array('type'=>'Task'))->select()),
+				'create_time' => date('Y-m-d'),
+				'due_date' => '',
+				'press_time' => 1,
+				'press_unit' => 'day',
+				'owners' => array(),
 				);
-			$max_code = $this->dao->where(array('type'=>'Board'))->max('code');
-			empty($max_code) && ($max_code = 'B'.sprintf("%09d",0));
-			$code = ++ $max_code;
 		}
-		$this->assign('code', $code);
+	//	dump($info);
 		$this->assign('info', $info);
 		$this->assign('MAX_FILE_SIZE', self::MAX_FILE_SIZE());
 		$this->assign('upload_max_filesize', min(ini_get('memory_limit'), ini_get('post_max_size'), ini_get('upload_max_filesize')));
@@ -97,52 +114,109 @@ class TaskAction extends BaseAction{
 		$this->display('Layout:ERP_layout');
 	}
 
-	public function edit(){
-		if (empty($_POST['id'])) {
+	public function submit(){
+		if (empty($_POST['submit'])) {
 			return;
 		}
-		$id = intval($_REQUEST['id']);
-		if ($id==0) {
-			return;
-		}
-		$this->dao->find($id);
-		$this->dao->project = trim($_REQUEST['project']);
-		$this->dao->comment = trim($_REQUEST['comment']);
-		unset($this->dao->edit_time);
-		if(false !== $this->dao->save()) {
-			foreach ($_REQUEST['entry'] as $key=>$val) {
-				if (is_array($val)) {
-					//create new entry
-					foreach ($val as $y=>$string) {
-						if (''==trim($string)) {
-							continue;
-						}
-						$entry = new Model('TestEntry');
-						$entry->test_id = $id;
-						$entry->x = $key;
-						$entry->y = $y;
-						$entry->string = $string;
-						$entry->edit_time = date('Y-m-d H:i:s');
-						if (false === $entry->add()) {
-							self::_error('Insert fail!'.(C('APP_DEBUG')?$this->dao->getLastSql():''));
-						}
-					}
-				}
-				elseif (is_numeric($key)) {
-					$entry = new Model('TestEntry');
-					$entry->find($key);
-					$entry->string = $val;
-					unset($entry->edit_time);
-					if(false === $entry->save()) {
-						self::_error('Update fail!'.(C('APP_DEBUG')?$this->dao->getLastSql():''));
-					}
-				}
-			}
-			self::_success('Update success!');
+		$id = empty($_REQUEST['id']) ? 0 : intval($_REQUEST['id']);
+		$title = trim($_REQUEST['title']);
+		empty($title) && self::_error('Input title first!');
+		empty($_REQUEST['category_id']) && self::_error('Category must be specified!');
+		empty($_REQUEST['owner']) && self::_error('No owner specified!');
+		if ($id>0) {
+			$this->dao->find($id);
 		}
 		else {
-			self::_error('Update fail!'.(C('APP_DEBUG')?$this->dao->getLastSql():''));
+			$this->dao->creator_id = $_SESSION[C('USER_AUTH_KEY')];
+			$this->dao->create_time = date("Y-m-d H:i:s");
+			$this->dao->status = 0;
 		}
+		$this->dao->title = $title;
+		$this->dao->category_id = $_REQUEST['category_id'];
+		$this->dao->descr = $_REQUEST['description'];
+		$this->dao->due_date = $_REQUEST['due_date'];
+		$time = intval($_REQUEST['press_time']);
+		switch ($_REQUEST['press_unit']) {
+			case 'day':
+				$interval = $time * 86400;
+				break;
+			case 'hour':
+				$interval = $time * 3600;
+				break;
+			case 'minute':
+				$interval = $time * 60;
+				break;
+			default:
+				//nothing
+		}
+		$this->dao->press_interval = $interval;
+		if ($id>0) {
+			if(false !== $this->dao->save()){
+				//process multi-file
+				foreach ($_FILES['file']['size'] as $i=>$size) {
+					if($size > 0) {
+						$data = array(
+							'name' => $_FILES['file']['name'][$i],
+							'type' => $_FILES['file']['type'][$i],
+							'size' => $size,
+							'path' => 'Attach/Task/'.uniqid().'_'.$_FILES['file']['name'][$i],
+							'model_name' => MODULE_NAME,
+							'model_id' => $id,
+							'staff_id' => $_SESSION[C('USER_AUTH_KEY')],
+							'upload_time' => date('Y-m-d H:i:s'),
+							'status' => 1
+							);
+						if (move_uploaded_file($_FILES['file']['tmp_name'][$i], $data['path'])) {
+							M('Attachment')->add($data);
+						}
+					}
+				}
+				self::_success('Task information updated!',__URL__);
+			}
+			else{
+				self::_error('Update fail!'.$this->dao->getLastSql());
+			}
+		}
+		else{
+			if($id=$this->dao->add()) {
+				//process multi-owner
+				foreach ($_REQUEST['owner'] as $staff_id) {
+					$data = array(
+						'task_id'=>$id,
+						'staff_id'=>$staff_id,
+						'status' => 0
+						);
+					M('TaskOwner')->add($data);
+				}
+
+				//process multi-file
+				foreach ($_FILES['file']['size'] as $i=>$size) {
+					if($size > 0) {
+						$data = array(
+							'name' => $_FILES['file']['name'][$i],
+							'type' => $_FILES['file']['type'][$i],
+							'size' => $size,
+							'path' => 'Attach/Task/'.uniqid().'_'.$_FILES['file']['name'][$i],
+							'model_name' => MODULE_NAME,
+							'model_id' => $id,
+							'staff_id' => $_SESSION[C('USER_AUTH_KEY')],
+							'upload_time' => date('Y-m-d H:i:s'),
+							'status' => 1
+							);
+						if (!move_uploaded_file($_FILES['file']['tmp_name'][$i], $data['path'])) {
+							M('Attachment')->add($data);
+						}
+					}
+				}
+				self::_success('Create task success!',__URL__);
+			}
+			else{
+				self::_error('Create task fail!'.(C('APP_DEBUG')?$this->dao->getLastSql():''));
+			}
+		}
+		
+
+
 	}
 	public function update(){
 		parent::_update();
