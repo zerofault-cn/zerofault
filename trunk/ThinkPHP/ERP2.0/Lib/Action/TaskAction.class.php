@@ -20,11 +20,11 @@ class TaskAction extends BaseAction{
 	public function index() {
 		Session::set('sub', MODULE_NAME);
 
-		$this->assign('category_opts', self::genOptions(M('Category')->where(array('type'=>'Task'))->select(), $_REQUEST['category_id']) );
+		$this->assign('category_opts', self::genOptions(M('Category')->where(array('type'=>'Task'))->select(), $_REQUEST['category_id']));
 		import("@.Paginator");
-		$limit = 10;
+		$limit = 4;
 		if (!empty($_SESSION[MODULE_NAME.'_'.ACTION_NAME.'_limit'])) {
-			$limit = $_SESSION[MODULE_NAME.'_'.ACTION_NAME.'_limit'];
+	//		$limit = $_SESSION[MODULE_NAME.'_'.ACTION_NAME.'_limit'];
 		}
 		if (!empty($_REQUEST['limit'])) {
 			$limit = $_REQUEST['limit'];
@@ -32,6 +32,9 @@ class TaskAction extends BaseAction{
 		$_SESSION[MODULE_NAME.'_'.ACTION_NAME.'_limit'] = $limit;
 
 		$where = array();
+		if (!empty($_REQUEST['category_id'])) {
+			$where['category_id'] = intval($_REQUEST['category_id']);
+		}
 		$total = $this->dao->where($where)->count();
 		$p = new Paginator($total,$limit);
 		
@@ -214,10 +217,70 @@ class TaskAction extends BaseAction{
 				self::_error('Create task fail!'.(C('APP_DEBUG')?$this->dao->getLastSql():''));
 			}
 		}
-		
-
-
 	}
+	public function category(){
+		Session::set('sub', MODULE_NAME.'/'.ACTION_NAME);
+		$type = 'Task';
+		$dao = M('Category');
+		if (!empty($_POST['submit'])) {
+			$name = trim($_REQUEST['name']);
+			!$name && self::_error('Category Name required');
+			$id = empty($_REQUEST['id']) ? 0 : intval($_REQUEST['id']);
+			if ($id>0) {
+				$rs = $dao->where(array('type'=>$type,'name'=>$name,'id'=>array('neq',$id)))->find();
+				if($rs && sizeof($rs)>0){
+					self::_error('Category Name: "'.$name.'" already exists!');
+				}
+				$dao->find($id);
+			}
+			else {
+				$rs = $dao->where(array('type'=>$type,'name'=>$name))->find();
+				if($rs && sizeof($rs)>0){
+					self::_error('Category Name: "'.$name.'" already exists!');
+				}
+			}
+			$dao->type = $type;
+			$dao->code = '';
+			$dao->name = $name;
+			if ($id>0) {
+				if(false !== $dao->save()){
+					self::_success('Category information updated!',__URL__.'/category');
+				}
+				else{
+					self::_error('Update fail!'.(C('APP_DEBUG')?$dao->getLastSql():''));
+				}
+			}
+			else {
+				if($dao->add()) {
+					self::_success('Add category success!',__URL__.'/category');
+				}
+				else{
+					self::_error('Add category fail!'.(C('APP_DEBUG')?$dao->getLastSql():''));
+				}
+			}
+			exit;
+		}
+		elseif (!empty($_REQUEST['id'])) {
+			$id = $_REQUEST['id'];
+			$rs = $this->dao->where(array('category_id'=>$id))->select();
+			if(!empty($rs) && sizeof($rs)>0) {
+				self::_error('It\'s in use, can\'t be deleted!');
+			}
+			else{
+				$this->dao = M('Category');
+				self::_delete();
+			}
+			exit;
+		}
+		$this->assign('ACTION_TITLE', 'Task Category');
+		$result = $dao->where(array('type'=>'Task'))->order('id')->select();
+
+		$this->assign('result', $result);
+		$this->assign('content', ACTION_NAME);
+		$this->display('Layout:ERP_layout');
+	}
+
+
 	public function update(){
 		parent::_update();
 	}
