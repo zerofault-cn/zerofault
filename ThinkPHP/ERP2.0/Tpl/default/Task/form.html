@@ -12,10 +12,6 @@ table#staff span{
 	float:left;
 	width:100px;
 }
-table#staff b {
-	font-weight:normal;
-
-}
 
 </style>
 <p class="page_title_text">{$ACTION_TITLE}</p>
@@ -81,7 +77,7 @@ table#staff b {
 		Single file mustn't larger than {$upload_max_filesize}!<br />
 		<else />
 		<foreach name="info.attachment" item="file">
-		<a href="__APP__/../{$file.path}" target="_blank" title="View attachment in new window">{$file.name}</a><br />
+		<a href="__APP__/../{$file.path}" target="_blank" title="View attachment in new window">{$file.name}</a> <a href="javascript:void(0);" onclick="myConfirm('Are you sure to delete this attachment?', '__APP__/Attachment/delete/id/{$file.id}');" target="_iframe"><img src="../Public/Images/del.png" align="absmiddle" border="0" /></a><br />
 		</foreach>
 		</empty>
 		<input id="file" type="file" name="file[]" size="20" />
@@ -116,14 +112,14 @@ table#staff b {
 	<foreach name="Staff" item="staff" key="j">
 		<span>
 		<if condition="!empty($info['owner']) && in_array($staff['id'], $info['owners_id'])">
-		<input type="checkbox" value="{$staff['id']}" checked="checked"/>
+		<input id="chk_{$staff['id']}" type="checkbox" value="{$staff['id']}" checked="checked"/>
 		<else />
-		<input type="checkbox" value="{$staff['id']}" />
+		<input id="chk_{$staff['id']}" type="checkbox" value="{$staff['id']}" />
 		</if>
 		<if condition="$j eq 0">
-			<strong>{$staff['realname']}</strong>
+			<label for="chk_{$staff['id']}" style="font-weight:bold;">{$staff['realname']}</label>
 		<else />
-			<b>{$staff['realname']}</b>
+			<label for="chk_{$staff['id']}">{$staff['realname']}</label>
 		</if>
 		</span>
 	</foreach>
