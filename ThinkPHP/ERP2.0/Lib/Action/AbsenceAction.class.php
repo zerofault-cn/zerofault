@@ -786,6 +786,15 @@ class AbsenceAction extends BaseAction{
 		}
 		$rs = (array)M('Staff')->where($where)->select();
 		foreach ($rs as $i=>$row) {
+			//历史用掉的年假
+			$where = array(
+				'type' => array('in', array('Annual','CashOut')),
+				'staff_id' => $row['id'],
+				'status' => 1,
+				'time_from' => array('lt', date('Y', $this->time).'-01-01')
+				);
+			$history_annual_used = $this->dao->where($where)->sum('hours');
+			//今年用掉的年假
 			$where = array(
 				'type' => array('in', array('Annual','CashOut')),
 				'staff_id' => $row['id'],
@@ -820,8 +829,8 @@ class AbsenceAction extends BaseAction{
 					}
 				}
 			}
-			$annual_available += max(0, $balance-$annual_used);
-			$rs[$i]['Balance'] = self::parseHour($balance);
+			$annual_available += max(0, $balance-$annual_used-$history_annual_used);
+			$rs[$i]['Balance'] = self::parseHour($balance-$history_annual_used);
 			$rs[$i]['Annual'] =  self::parseHour($annual_added);
 			$rs[$i]['Annual_used'] = self::parseHour($annual_used);
 
