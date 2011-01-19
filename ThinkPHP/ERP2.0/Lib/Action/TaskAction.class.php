@@ -38,7 +38,7 @@ class TaskAction extends BaseAction{
 		$total = $this->dao->where($where)->count();
 		$p = new Paginator($total,$limit);
 		
-		$result = (array)$this->dao->where($where)->order('id desc')->limit($p->offset.','.$p->limit)->field($field)->select();
+		$result = $this->dao->where($where)->order('id desc')->limit($p->offset.','.$p->limit)->field($field)->select();
 
 		$this->assign('request', $_REQUEST);
 		$this->assign('result', $result);

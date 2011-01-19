@@ -122,7 +122,7 @@ CREATE TABLE `erp_task` (
   `id` int(10) unsigned NOT NULL auto_increment,
   `title` varchar(255) NOT NULL default '',
   `descr` text NOT NULL,
-  `model_id` smallint(5) unsigned NOT NULL default '0',
+  `category_id` smallint(5) unsigned NOT NULL default '0',
   `creator_id` SMALLINT UNSIGNED DEFAULT "0" NOT NULL,
   `create_time` datetime NOT NULL default '0000-00-00 00:00:00',
   `due_date` date NOT NULL default '0000-00-00',
