@@ -8,11 +8,11 @@ class TaskModel extends RelationModel{
 			'class_name'   => 'Staff',
 			'foreign_key'  => 'creator_id',
 			),
-//		'Category' => array(
-//			'mapping_type' => BELONGS_TO,
-//			'mapping_name' => 'category',
-//			'class_name'   => 'Category',
-//			),
+		'Category' => array(
+			'mapping_type' => BELONGS_TO,
+			'mapping_name' => 'category',
+			'class_name'   => 'Category',
+			),
 		'Owner' => array(
 			'mapping_type' => HAS_MANY,
 			'mapping_name' => 'owner',
