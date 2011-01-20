@@ -50,6 +50,17 @@ class TaskAction extends BaseAction{
 		$this->display('Layout:ERP_layout');
 	}
 	
+	public function detail() {
+		$this->assign('ACTION_TITLE', 'Task detail');
+		$id = intval($_REQUEST['id']);
+		$info = $this->dao->relation(true)->find($id);
+		foreach($info['owner'] as $i=>$owner) {
+			$info['owner'][$i]['realname'] = M('Staff')->where('id='.$owner['staff_id'])->getField('realname');
+		}
+		$this->assign('info', $info);
+		$this->assign('content', ACTION_NAME);
+		$this->display('Layout:content');
+	}
 	public function form() {
 		$this->assign('ACTION_TITLE', 'Create a new task');
 		$id = empty($_REQUEST['id']) ? 0 : intval($_REQUEST['id']);
@@ -114,7 +125,7 @@ class TaskAction extends BaseAction{
 		$this->assign('DeptStaff', $dept_staff_arr);
 
 		$this->assign('content', ACTION_NAME);
-		$this->display('Layout:ERP_layout');
+		$this->display('Layout:content');
 	}
 
 	public function submit(){
@@ -153,27 +164,37 @@ class TaskAction extends BaseAction{
 				//nothing
 		}
 		$this->dao->press_interval = $interval;
+		//process multi-owner
+		foreach ($_REQUEST['owner'] as $staff_id) {
+			$data = array(
+				'task_id'=>$id,
+				'staff_id'=>$staff_id,
+				'status' => 0
+				);
+			M('TaskOwner')->add($data);
+		}
+
+		//process multi-file
+		foreach ($_FILES['file']['size'] as $i=>$size) {
+			if($size > 0) {
+				$data = array(
+					'name' => $_FILES['file']['name'][$i],
+					'type' => $_FILES['file']['type'][$i],
+					'size' => $size,
+					'path' => 'Attach/Task/'.uniqid().'_'.$_FILES['file']['name'][$i],
+					'model_name' => MODULE_NAME,
+					'model_id' => $id,
+					'staff_id' => $_SESSION[C('USER_AUTH_KEY')],
+					'upload_time' => date('Y-m-d H:i:s'),
+					'status' => 1
+					);
+				if (!move_uploaded_file($_FILES['file']['tmp_name'][$i], $data['path'])) {
+					M('Attachment')->add($data);
+				}
+			}
+		}
 		if ($id>0) {
 			if(false !== $this->dao->save()){
-				//process multi-file
-				foreach ($_FILES['file']['size'] as $i=>$size) {
-					if($size > 0) {
-						$data = array(
-							'name' => $_FILES['file']['name'][$i],
-							'type' => $_FILES['file']['type'][$i],
-							'size' => $size,
-							'path' => 'Attach/Task/'.uniqid().'_'.$_FILES['file']['name'][$i],
-							'model_name' => MODULE_NAME,
-							'model_id' => $id,
-							'staff_id' => $_SESSION[C('USER_AUTH_KEY')],
-							'upload_time' => date('Y-m-d H:i:s'),
-							'status' => 1
-							);
-						if (move_uploaded_file($_FILES['file']['tmp_name'][$i], $data['path'])) {
-							M('Attachment')->add($data);
-						}
-					}
-				}
 				self::_success('Task information updated!',__URL__);
 			}
 			else{
@@ -182,35 +203,6 @@ class TaskAction extends BaseAction{
 		}
 		else{
 			if($id=$this->dao->add()) {
-				//process multi-owner
-				foreach ($_REQUEST['owner'] as $staff_id) {
-					$data = array(
-						'task_id'=>$id,
-						'staff_id'=>$staff_id,
-						'status' => 0
-						);
-					M('TaskOwner')->add($data);
-				}
-
-				//process multi-file
-				foreach ($_FILES['file']['size'] as $i=>$size) {
-					if($size > 0) {
-						$data = array(
-							'name' => $_FILES['file']['name'][$i],
-							'type' => $_FILES['file']['type'][$i],
-							'size' => $size,
-							'path' => 'Attach/Task/'.uniqid().'_'.$_FILES['file']['name'][$i],
-							'model_name' => MODULE_NAME,
-							'model_id' => $id,
-							'staff_id' => $_SESSION[C('USER_AUTH_KEY')],
-							'upload_time' => date('Y-m-d H:i:s'),
-							'status' => 1
-							);
-						if (!move_uploaded_file($_FILES['file']['tmp_name'][$i], $data['path'])) {
-							M('Attachment')->add($data);
-						}
-					}
-				}
 				self::_success('Create task success!',__URL__);
 			}
 			else{
@@ -280,9 +272,33 @@ class TaskAction extends BaseAction{
 		$this->display('Layout:ERP_layout');
 	}
 
-
-	public function update(){
-		parent::_update();
+	public function delete_owner() {
+		$id = $_REQUEST['id'];
+		$staff_id = $_REQUEST['staff_id'];
+		if (false !== M('TaskOwner')->where(array('task_id'=>$id, 'staff_id'=>$staff_id))->delete()) {
+			$html  = '<script language="JavaScript" type="text/javascript">';
+			$html .= 'parent.myAlert("Delete success!");';
+			$html .= 'parent.myOK(500);';
+			$html .= 'parent.remove_owner('.$staff_id.');';
+			$html .= '</script>';
+			die($html);
+		}
+		else {
+			die(self::_error('Delete fail!'.(C('APP_DEBUG')?M('TaskOwner')->getLastSql():'')));
+		}
+	}
+	public function delete() {
+		$id = $_REQUEST['id'];
+		M('TaskOwner')->where('task_id='.$id)->delete();
+		$rs = (array)M('Attachment')->where(array('model_name'=>'Task', 'model_id'=>$id))->select();
+		foreach ($rs as $row) {
+			@unlink($row['path']);
+			M('Attachment')->where('id='.$row['id'])->delete();
+		}
+		self::_delete();
+	}
+	public function update() {
+		self::_update();
 	}
 }
 ?>

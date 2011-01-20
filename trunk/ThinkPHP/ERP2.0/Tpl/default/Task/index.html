@@ -1,7 +1,7 @@
-<p class="page_title_text">{$ACTION_TITLE}</p>
+<p class="page_title_text"></p>
 <table width="90%" cellpadding="0" cellspacing="0" border="0" style="background-color:#FFFFFF;">
 <tr>
-	<td width="360">
+	<td width="460" valign="top">
 		<table width="100%" cellpadding="3" border="1" bordercolor="#FFFFFF" style="border-collapse:collapse;margin-bottom:5px;">
 		<tr>
 			<th align="center">Category:
@@ -12,13 +12,18 @@
 			</th>
 		</tr>
 		</table>
-		<table width="100%" cellpadding="3" border="1" bordercolor="#FFFFFF" style="border-collapse:collapse;">
+		<table width="100%" cellpadding="3" border="0" bordercolor="#FFFFFF" style="border-collapse:collapse;">
 		<tr>
-			<td>{$page}</td>
+			<td colspan="3">{$page}</td>
 		</tr>
 		<iterate name="result" id="item">
 		<tr class="trbg{$mod}">
-			<td>{$item.title} <a href="__URL__/form/id/{$item.id}">Edit</a></td>
+			<td width="5%">T{$item.id|sprintf='%06s',###}: </td>
+			<td><a href="javascript:void(0);" onclick="show_detail({$item.id});">{$item.title}</td>
+			<td width="5%" nowrap="nowrap">
+				<if condition="$_SESSION[C('ADMIN_AUTH_NAME')] eq true or $_SESSION[C('USER_AUTH_KEY')] eq $item.creator_id or in_array($_SESSION[C('USER_AUTH_KEY')], C('TASK_ADMIN_ID')) eq true"><img src="../Public/Images/form_edit.gif" border="0" alt="Edit" align="absmiddle" style="cursor:pointer;" onClick="show_form({$item.id});" /></if>
+				<if condition="$_SESSION[C('ADMIN_AUTH_NAME')] eq true or $_SESSION[C('USER_AUTH_KEY')] eq $item.creator_id"><img src="../Public/Images/cross.gif" align="absmiddle" border="0" style="cursor:pointer;" onclick="myConfirm('Are you sure to delete this task', '__URL__/delete/id/{$item.id}');"/></if>
+			</td>
 		</tr>
 		</iterate>
 		<empty name="result">
@@ -27,11 +32,50 @@
 		</tr>
 		</empty>
 		</table>
+		<br />&nbsp;
+		<input type="button" onclick="javascript:show_form(0);" value="Create Task" />
 	</td>
 	<td width="5">&nbsp;</td>
-	<td valign="top">&nbsp;
+	<td valign="top" id="task_main">&nbsp;
 	</td>
 </tr>
 </table>
 
-<p class="center"><input type="button" onclick="javascript:document.location='__URL__/form';" value="Create Task" /></p>
+<p class="center"></p>
+<script language="javascript" type="text/javascript" src="../Public/Js/tiny_mce/tiny_mce.js"></script>
+<script type="text/javascript">
+function show_form(id) {
+	$.get(
+		'__URL__/form/id/'+id,
+		function(html) {
+			$("#task_main").html(html);
+			tinyMCE.init({
+				mode : "textareas",
+				theme : "advanced",
+				plugins : "media,advimage,table",
+				extended_valid_elements : "embed[quality|type|pluginspage|width|height|src|align|wmode|autostart|flashvars|allowscriptaccess|bgcolor|EnableContextMenu|loop|showpostplaybackad|custommode|autoplay],object[classid|codebase|width|height|align],param[name|value],link[rel|href|type],style[]",
+				theme_advanced_toolbar_location : "top",
+				theme_advanced_toolbar_align : "left",
+				theme_advanced_buttons1 : "fontsizeselect,bold,italic,underline,separator,forecolor,backcolor,link,unlink,separator,justifyleft,justifycenter,justifyright,table,separator,image,media,separator,removeformat,code",
+				theme_advanced_buttons2 : "",
+				theme_advanced_buttons3 : "",
+				force_p_newlines : false,
+				force_br_newlines : true,
+				forced_root_block : false,
+				convert_urls : false,
+				
+				theme_advanced_buttons1_add : ""
+			});
+		}
+	);
+}
+function show_detail(id) {
+	$.get(
+		'__URL__/detail/id/'+id,
+		function(html) {
+			$("#task_main").html(html);
+		}
+	);
+}
+
+</script>
