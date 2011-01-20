@@ -136,7 +136,7 @@ class TaskAction extends BaseAction{
 		$title = trim($_REQUEST['title']);
 		empty($title) && self::_error('Input title first!');
 		empty($_REQUEST['category_id']) && self::_error('Category must be specified!');
-		empty($_REQUEST['owner']) && self::_error('No owner specified!');
+		//empty($_REQUEST['owner']) && self::_error('No owner specified!');
 		if ($id>0) {
 			$this->dao->find($id);
 		}
@@ -164,37 +164,41 @@ class TaskAction extends BaseAction{
 				//nothing
 		}
 		$this->dao->press_interval = $interval;
-		//process multi-owner
-		foreach ($_REQUEST['owner'] as $staff_id) {
-			$data = array(
-				'task_id'=>$id,
-				'staff_id'=>$staff_id,
-				'status' => 0
-				);
-			M('TaskOwner')->add($data);
-		}
-
-		//process multi-file
-		foreach ($_FILES['file']['size'] as $i=>$size) {
-			if($size > 0) {
-				$data = array(
-					'name' => $_FILES['file']['name'][$i],
-					'type' => $_FILES['file']['type'][$i],
-					'size' => $size,
-					'path' => 'Attach/Task/'.uniqid().'_'.$_FILES['file']['name'][$i],
-					'model_name' => MODULE_NAME,
-					'model_id' => $id,
-					'staff_id' => $_SESSION[C('USER_AUTH_KEY')],
-					'upload_time' => date('Y-m-d H:i:s'),
-					'status' => 1
-					);
-				if (!move_uploaded_file($_FILES['file']['tmp_name'][$i], $data['path'])) {
-					M('Attachment')->add($data);
-				}
-			}
-		}
 		if ($id>0) {
 			if(false !== $this->dao->save()){
+				//process multi-owner
+				foreach ($_REQUEST['owner'] as $staff_id) {
+					$data = array(
+						'task_id'=>$id,
+						'staff_id'=>$staff_id,
+						'status' => 0
+						);
+					M('TaskOwner')->add($data);
+				}
+				//process multi-file
+				foreach ($_FILES['file']['size'] as $i=>$size) {
+					if($size > 0) {
+						$data = array(
+							'name' => $_FILES['file']['name'][$i],
+							'type' => $_FILES['file']['type'][$i],
+							'size' => $size,
+							'path' => 'Attach/Task/'.uniqid().'_'.$_FILES['file']['name'][$i],
+							'model_name' => MODULE_NAME,
+							'model_id' => $id,
+							'staff_id' => $_SESSION[C('USER_AUTH_KEY')],
+							'upload_time' => date('Y-m-d H:i:s'),
+							'status' => 1
+							);
+						if (move_uploaded_file($_FILES['file']['tmp_name'][$i], $data['path'])) {
+							if (!M('Attachment')->add($data)) {
+								self::_error('Insert fail!'.$this->dao->getLastSql());
+							}
+						}
+						else {
+							self::_error('Move '.$_FILES['file']['tmp_name'][$i].' to '.$data['path'].' fail!');
+						}
+					}
+				}
 				self::_success('Task information updated!',__URL__);
 			}
 			else{
@@ -203,6 +207,39 @@ class TaskAction extends BaseAction{
 		}
 		else{
 			if($id=$this->dao->add()) {
+				//process multi-owner
+				foreach ($_REQUEST['owner'] as $staff_id) {
+					$data = array(
+						'task_id'=>$id,
+						'staff_id'=>$staff_id,
+						'status' => 0
+						);
+					M('TaskOwner')->add($data);
+				}
+				//process multi-file
+				foreach ($_FILES['file']['size'] as $i=>$size) {
+					if($size > 0) {
+						$data = array(
+							'name' => $_FILES['file']['name'][$i],
+							'type' => $_FILES['file']['type'][$i],
+							'size' => $size,
+							'path' => 'Attach/Task/'.uniqid().'_'.$_FILES['file']['name'][$i],
+							'model_name' => MODULE_NAME,
+							'model_id' => $id,
+							'staff_id' => $_SESSION[C('USER_AUTH_KEY')],
+							'upload_time' => date('Y-m-d H:i:s'),
+							'status' => 1
+							);
+						if (move_uploaded_file($_FILES['file']['tmp_name'][$i], $data['path'])) {
+							if (!M('Attachment')->add($data)) {
+								self::_error('Insert fail!'.$this->dao->getLastSql());
+							}
+						}
+						else {
+							self::_error('Move '.$_FILES['file']['tmp_name'][$i].' to '.$data['path'].' fail!');
+						}
+					}
+				}
 				self::_success('Create task success!',__URL__);
 			}
 			else{
