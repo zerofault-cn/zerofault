@@ -12,7 +12,7 @@ return array(
 		'Bereavement'	=> '丧假'
 		),
 
-	'CashoutMonth' => array(2,12), //Cash out的月份，纯数字数组，默认2月和8月
+	'CashoutMonth' => array(2,8), //Cash out的月份，纯数字数组，默认2月和8月
 
 	'ReservedHours' => 40, //Cash out最少保留小时数，默认40小时（5天）
 
@@ -27,6 +27,7 @@ return array(
 	'holiday' => array( //法定休息日，即原本是工作日，被调为休假
 		'2011-02-02', '2011-02-03', '2011-02-04', '2011-02-07', '2011-02-08'
 		),
+
 	'notification' => array( //即时通知邮件的cc list，不论请假多少天，不论审批或拒绝
 		'BINL' => 'bin.li@agigatech.com',
 		'JALI' => 'jali@agigatech.com',
