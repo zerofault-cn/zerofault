@@ -12,7 +12,8 @@ class TaskAction extends BaseAction{
 		$this->assign('MODULE_TITLE', 'Task System');
 		$status_arr = array(
 			'0' => 'Open',
-			'1' => 'Close'
+			'1' => 'Close',
+			'-1' => 'Pending'
 		);
 		$this->assign('status_arr', $status_arr);
 	}
@@ -20,7 +21,15 @@ class TaskAction extends BaseAction{
 	public function index() {
 		Session::set('sub', MODULE_NAME);
 
-		$this->assign('category_opts', self::genOptions(M('Category')->where(array('type'=>'Task'))->select(), $_REQUEST['category_id']));
+		if (!empty($_SESSION[MODULE_NAME.'_'.ACTION_NAME.'_category_id'])) {
+			$category_id = $_SESSION[MODULE_NAME.'_'.ACTION_NAME.'_category_id'];
+		}
+		if (!empty($_REQUEST['category_id'])) {
+			$category_id = $_REQUEST['category_id'];
+		}
+		$_SESSION[MODULE_NAME.'_'.ACTION_NAME.'_category_id'] = $category_id;
+		$this->assign('category_opts', self::genOptions(M('Category')->where(array('type'=>'Task'))->select(), $category_id));
+
 		import("@.Paginator");
 		$limit = 4;
 		if (!empty($_SESSION[MODULE_NAME.'_'.ACTION_NAME.'_limit'])) {
@@ -38,7 +47,19 @@ class TaskAction extends BaseAction{
 		$total = $this->dao->where($where)->count();
 		$p = new Paginator($total,$limit);
 		
-		$result = $this->dao->where($where)->order('id desc')->limit($p->offset.','.$p->limit)->field($field)->select();
+		$result = (array)$this->dao->where($where)->order('id desc')->limit($p->offset.','.$p->limit)->field($field)->select();
+		foreach ($result as $i=>$row) {
+			if ($row['status'] == 0) {
+				$rs = M('TaskOwner')->where(array('task_id'=>$row['id']))->getField('id,status');
+				$status = 1;
+				foreach ($rs as $status) {
+					if ($status == -1 || $status == 0) {
+						break;
+					}
+				}
+				$result[$i]['status'] = $status;
+			}
+		}
 
 		$this->assign('request', $_REQUEST);
 		$this->assign('result', $result);
@@ -322,6 +343,24 @@ class TaskAction extends BaseAction{
 		}
 		else {
 			die(self::_error('Delete fail!'.(C('APP_DEBUG')?M('TaskOwner')->getLastSql():'')));
+		}
+	}
+	public function update_owner() {
+		$id = $_REQUEST['id'];
+		$task_id = $_REQUEST['task_id'];
+		$field=$_REQUEST['f'];
+		$value=$_REQUEST['v'];
+		$rs = M('TaskOwner')->where('id='.$id)->setField(array($field, 'action_time'), array($value, date('Y-m-d H:i:s')));
+		if(false !== $rs) {
+			$html  = '<script language="JavaScript" type="text/javascript">';
+			$html .= 'parent.myAlert("Update success!");';
+			$html .= 'parent.myOK(1000);';
+			$html .= 'setTimeout(function() {parent.show_detail('.$task_id.');}, 500);';
+			$html .= '</script>';
+			die($html);
+		}
+		else {
+			die(self::_error('Update fail!'.(C('APP_DEBUG')?M('TaskOwner')->getLastSql():'')));
 		}
 	}
 	public function delete() {

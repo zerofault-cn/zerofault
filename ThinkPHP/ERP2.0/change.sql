@@ -135,6 +135,7 @@ CREATE TABLE `erp_task_owner` (
   `id` int(10) unsigned NOT NULL auto_increment,
   `task_id` int(10) unsigned NOT NULL default '0',
   `staff_id` int(10) unsigned NOT NULL default '0',
+  `action_time` datetime NOT NULL default '0000-00-00 00:00:00',
   `status` tinyint(3) NOT NULL default '0',
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;

@@ -21,6 +21,12 @@ return array(
 		array('13:00', '18:00')
 		),
 	
+	'workday' => array( //法定工作日，即原本是周末，被调为上班
+		'2011-01-30', '2011-02-12'
+		),
+	'holiday' => array( //法定休息日，即原本是工作日，被调为休假
+		'2011-02-02', '2011-02-03', '2011-02-04', '2011-02-07', '2011-02-08'
+		),
 	'notification' => array( //即时通知邮件的cc list，不论请假多少天，不论审批或拒绝
 		'BINL' => 'bin.li@agigatech.com',
 		'JALI' => 'jali@agigatech.com',
