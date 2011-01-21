@@ -1,26 +1,16 @@
 <style>
-#think_run_time,#think_page_trace{display:none;}
-
-#showOwner li {
-	height:20px;
-	line-height:20px;
-	clear:both;
+#owner_list td.Open {
+	color: #00FF00;
 }
-#showOwner li span,#showOwner li b{
-	float:left;
-	width:120px;
+#owner_list td.Pending {
+	color: #0000FF;
 }
-table#staff span{
-	float:left;
-	width:100px;
+#owner_list td.Close {
+	color: #FF0000;
 }
-
 </style>
 <p class="page_title_text">{$ACTION_TITLE}</p>
-<form action="__URL__/submit" method="post" enctype="multipart/form-data" target="_iframe">
-<input type="hidden" name="id" value="{$info.id}" />
-
-<table border="0" align="center" cellpadding="4" cellspacing="1" style="background-color:#9999FF">
+<table border="0" align="center" cellpadding="4" cellspacing="1" style="background-color:#808080">
 <tr bgcolor="#DADADA">
 	<td width="12%">Task No.</td>
 	<td width="38%" bgcolor="#FFFFFF">T{$info.id|sprintf='%06s',###}</td>
@@ -42,11 +32,16 @@ table#staff span{
 <tr bgcolor="#E9E9E9">
 	<td>Owner</td>
 	<td bgcolor="#FFFFFF" valign="top">
-		<ul id="showOwner">
-			<foreach name="info.owner" item="owner">
-			<li><span>{$owner.realname}</span><b>{$status_arr[$owner['status']]}</b></li>
-			</foreach>
-		</ul>
+		<table id="owner_list" style="background-color: #FFFFFF;">
+		<foreach name="info.owner" item="owner">
+		<tr>
+			<td>{$owner.realname}</td>
+			<td width="5%" class="{$status_arr[$owner['status']]}">{$status_arr[$owner['status']]}</td>
+			<td width="5%" nowrap="nowrap">
+				[<img src="../Public/Images/open.png" alt="open" align="absmiddle" <if condition="$owner['status'] neq 0"> title="change status to open" style="cursor:pointer;" onclick="changeOwnerStatus({$owner.id}, {$info.id}, 0)"</if> /><img src="../Public/Images/pause.png" alt="pending" align="absmiddle" <if condition="$owner['status'] neq -1"> title="change status to pending" style="cursor:pointer;" onclick="changeOwnerStatus({$owner.id}, {$info.id}, -1)"</if> /><img src="../Public/Images/close.png" alt="close" align="absmiddle" <if condition="$owner['status'] neq 1"> title="change status to close" style="cursor:pointer;" onclick="changeOwnerStatus({$owner.id}, {$info.id}, 1)"</if> />]</td>
+		</tr>
+		</foreach>
+		</table>
 	</td>
 	<td>Attached Files</td>
 	<td bgcolor="#FFFFFF" valign="top">
@@ -55,15 +50,54 @@ table#staff span{
 		</foreach>
 	</td>
 </tr>
-
 <tr bgcolor="#DADADA">
 	<td >Description</td>
 	<td colspan="3" bgcolor="#FFFFFF">{$info.descr}</td>
 </tr>
 </table>
+ <br />
+<table width="100%" border="0" cellpadding="0" cellspacing="0" style="background-color: #FFFFFF;">
+<tr>
+	<td width="8" height="8"><img src="../Public/Images/talk_01.gif" width="8" height="8" alt=""></td>
+	<td background="../Public/Images/talk_02.gif"><img src="../Public/Images/spacer.gif" width="400" height="8" alt=""></td>
+	<td width="8"><img src="../Public/Images/talk_03.gif" width="8" height="8" alt=""></td>
+</tr>
+<tr>
+	<td background="../Public/Images/talk_04.gif"><img src="../Public/Images/spacer.gif" width="8" height="20" alt=""></td>
+	<td valign="top">
+		<div>approved<br />dfasdfasdfsa<br />dfasdfasdfafffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff<br />dfasdfasdfasd</div>
+	</td>
+	<td background="../Public/Images/talk_06.gif"><img src="../Public/Images/spacer.gif" width="8" alt=""></td>
+</tr>
+<tr>
+	<td height="8"><img src="../Public/Images/talk_07.gif" width="8" height="8" alt=""></td>
+	<td background="../Public/Images/talk_08.gif"><img src="../Public/Images/spacer.gif" width="400" height="8" alt=""></td>
+	<td><img src="../Public/Images/talk_09.gif" width="8" height="8" alt=""></td>
+</tr>
+<tr>
+	<td height="41"><img src="../Public/Images/spacer.gif" width="8" height="41" alt=""></td>
+	<td valign="top">
+		<div style="height:41px;line-height:30px;padding-left:56px;background:url(../Public/Images/talk_11.gif) left top no-repeat;">Allen Tsao <font color="gray">at</font> 2011-01-06 00:04:21 GMT+0800
+	</td>
+	<td><img src="../Public/Images/spacer.gif" width="8" height="41" alt=""></td>
+</tr>
+</table>
+<form action="__URL__/comment" method="post" target="_iframe">
+<input type="hidden" name="id" value="{$info.id}" />
+<textarea name="comment" cols="60" rows="5"></textarea>
+<input type="submit" value="Post my comment" name="submit" />
 </form>
-
 <script type="text/javascript">
+$(document).ready(function(){
+	$("img.result").each(function() {
+		$(this).css('cursor', 'pointer').click(function() {
+			changeStatus(this);
+		});
+	});
+});
+function changeOwnerStatus(id, task_id, status) {
+	$("#_iframe").attr('src', '__URL__/update_owner/id/'+id+'/task_id/'+task_id+'/f/status/v/'+status);
+}
 function addFile(obj) {
 	$(obj).before('<br /><input type="file" name="file[]" size="20" /> ');
 }

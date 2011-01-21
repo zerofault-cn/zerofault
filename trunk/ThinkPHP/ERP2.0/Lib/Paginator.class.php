@@ -29,7 +29,7 @@ class Paginator extends Think{
 		$this->record_count = $record_count; 
 		$this->parameter = $parameter;
 		$this->limit = $limit;
-		$this->page_count = ceil($this->record_count/$this->limit);
+		$this->page_count = max(1, ceil($this->record_count/$this->limit));
 		$this->current_page = min(!empty($_GET['p'])&&($_GET['p']>0) ? $_GET['p']:1, $this->page_count);
 
 		$this->offset = $this->limit*($this->current_page-1);

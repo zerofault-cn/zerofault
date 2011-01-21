@@ -1,7 +1,26 @@
+<style>
+td.status div {
+	height:16px;
+	line-height:16px;
+	text-align:center;
+}
+td.status div.open {
+	background-color:#00FF00;
+	color: #FFFFFF;
+}
+td.status div.pending {
+	background-color:#0000FF;
+	color: #FFFFFF;
+}
+td.status div.close {
+	background-color:#FF0000;
+	color: #FFFFFF;
+}
+</style>
 <p class="page_title_text"></p>
 <table width="90%" cellpadding="0" cellspacing="0" border="0" style="background-color:#FFFFFF;">
 <tr>
-	<td width="460" valign="top">
+	<td width="420" valign="top">
 		<table width="100%" cellpadding="3" border="1" bordercolor="#FFFFFF" style="border-collapse:collapse;margin-bottom:5px;">
 		<tr>
 			<th align="center">Category:
@@ -13,13 +32,22 @@
 		</tr>
 		</table>
 		<table width="100%" cellpadding="3" border="0" bordercolor="#FFFFFF" style="border-collapse:collapse;">
-		<tr>
+		<tr bgcolor="#FFFFFF">
 			<td colspan="3">{$page}</td>
 		</tr>
 		<iterate name="result" id="item">
 		<tr class="trbg{$mod}">
 			<td width="5%">T{$item.id|sprintf='%06s',###}: </td>
 			<td><a href="javascript:void(0);" onclick="show_detail({$item.id});">{$item.title}</td>
+			<td class="status" width="16" nowrap="nowrap">
+				<if condition="$item.status eq 0">
+				<div class="open" title="Open">O</div>
+				<elseif condition="$item.status eq -1" />
+				<div class="pending" title="Pending">P</div>
+				<elseif condition="$item.status eq 1" />
+				<div class="close" title="Close">C</div>
+				</if>
+			</td>
 			<td width="5%" nowrap="nowrap">
 				<if condition="$_SESSION[C('ADMIN_AUTH_NAME')] eq true or $_SESSION[C('USER_AUTH_KEY')] eq $item.creator_id or in_array($_SESSION[C('USER_AUTH_KEY')], C('TASK_ADMIN_ID')) eq true"><img src="../Public/Images/form_edit.gif" border="0" alt="Edit" align="absmiddle" style="cursor:pointer;" onClick="show_form({$item.id});" /></if>
 				<if condition="$_SESSION[C('ADMIN_AUTH_NAME')] eq true or $_SESSION[C('USER_AUTH_KEY')] eq $item.creator_id"><img src="../Public/Images/cross.gif" align="absmiddle" border="0" style="cursor:pointer;" onclick="myConfirm('Are you sure to delete this task', '__URL__/delete/id/{$item.id}');"/></if>
@@ -28,7 +56,7 @@
 		</iterate>
 		<empty name="result">
 		<tr>
-			<td>No Task</td>
+			<td colspan="3" align="center">No Task</td>
 		</tr>
 		</empty>
 		</table>
@@ -44,6 +72,18 @@
 <p class="center"></p>
 <script language="javascript" type="text/javascript" src="../Public/Js/tiny_mce/tiny_mce.js"></script>
 <script type="text/javascript">
+$(document).ready(function(){
+	$(".trbg0, .trbg1").each(function(i) {
+		$(this).mousedown(function() {
+			$(this).siblings("tr[class]").each(function(i) {
+				$(this).removeAttr('style');
+			});
+			$(this).attr('style','background-color:#FFCC99');
+		});
+	});
+//	
+//	
+});
 function show_form(id) {
 	$.get(
 		'__URL__/form/id/'+id,
@@ -77,5 +117,4 @@ function show_detail(id) {
 		}
 	);
 }
-
 </script>

@@ -498,7 +498,7 @@ class AbsenceAction extends BaseAction{
 					if ($type != 'Out' && $type!= 'CashOut') {
 						self::mail_application($this->dao);
 					}
-					self::_success('Application created success!',__URL__);
+				//	self::_success('Application created success!',__URL__);
 				}
 				else{
 					self::_error('Application created fail!'.(C('APP_DEBUG')?$this->dao->getLastSql():''));
@@ -974,18 +974,57 @@ class AbsenceAction extends BaseAction{
 	}
 	private function calculateHour($date_from, $time_from, $date_to, $time_to) {
 		global $hour;
+		echo $hour."\n";
 		$from = $date_from.' '.$time_from;
 		$stamp_from = strtotime($from);
-		if (date('N', $stamp_from)>5) {
-			$date_from = date('Y-m-d', $stamp_from+86400*(8-date('N', $stamp_from)));
+		while (date('N', $stamp_from)>=6 && !in_array($date_from, $this->Absence_Config['workday'])) {//如果开始时间在周末，且不是法定上班日，则跳过该日
+			$stamp_from += 86400;
+			$date_from = date('Y-m-d', $stamp_from);
+			$time_from = $this->Absence_Config['worktime'][0][0];
+			$from = $date_from.' '.$time_from;
+		}
+		while (date('N', $stamp_from)<=5 && in_array($date_from, $this->Absence_Config['holiday'])) {//如果是工作日，但却是法定休息日，则跳过该日
+			$stamp_from += 86400;
+			$date_from = date('Y-m-d', $stamp_from);
+			$time_from = $this->Absence_Config['worktime'][0][0];
+			$from = $date_from.' '.$time_from;
+		}
+		while (date('N', $stamp_from)>=6 && !in_array($date_from, $this->Absence_Config['workday'])) {//如果开始时间在周末，且不是法定上班日，则跳过该日
+			$stamp_from += 86400;
+			$date_from = date('Y-m-d', $stamp_from);
+			$time_from = $this->Absence_Config['worktime'][0][0];
+			$from = $date_from.' '.$time_from;
+		}
+		while (date('N', $stamp_from)<=5 && in_array($date_from, $this->Absence_Config['holiday'])) {//如果是工作日，但却是法定休息日，则跳过该日
+			$stamp_from += 86400;
+			$date_from = date('Y-m-d', $stamp_from);
 			$time_from = $this->Absence_Config['worktime'][0][0];
 			$from = $date_from.' '.$time_from;
 		}
 		echo $from."\n";
 		$to = $date_to.' '.$time_to;
 		$stamp_to = strtotime($to);
-		if (date('N', $stamp_to)>5) {
-			$date_to = date('Y-m-d', $stamp_to-86400*(date('N', $stamp_to)-5));
+		while (date('N', $stamp_to)<=5 && in_array($date_to, $this->Absence_Config['holiday'])) {//如果是工作日，但却是法定休息日，则后退一日
+			$stamp_to -= 86400;
+			$date_to = date('Y-m-d', $stamp_to);
+			$time_to = $this->Absence_Config['worktime'][1][1];
+			$to = $date_to.' '.$time_to;
+		}
+		while (date('N', $stamp_to)>=6 && !in_array($date_to, $this->Absence_Config['workday'])) {//如果结束时间在周末，且不是法定上班日，则后退一日
+			$stamp_to -= 86400;
+			$date_to = date('Y-m-d', $stamp_to);
+			$time_to = $this->Absence_Config['worktime'][1][1];
+			$to = $date_to.' '.$time_to;
+		}
+		while (date('N', $stamp_to)<=5 && in_array($date_to, $this->Absence_Config['holiday'])) {//如果是工作日，但却是法定休息日，则后退一日
+			$stamp_to -= 86400;
+			$date_to = date('Y-m-d', $stamp_to);
+			$time_to = $this->Absence_Config['worktime'][1][1];
+			$to = $date_to.' '.$time_to;
+		}
+		while (date('N', $stamp_to)>=6 && !in_array($date_to, $this->Absence_Config['workday'])) {//如果结束时间在周末，且不是法定上班日，则后退一日
+			$stamp_to -= 86400;
+			$date_to = date('Y-m-d', $stamp_to);
 			$time_to = $this->Absence_Config['worktime'][1][1];
 			$to = $date_to.' '.$time_to;
 		}
@@ -1018,7 +1057,7 @@ class AbsenceAction extends BaseAction{
 				break;
 			case 1:
 				if (strcmp($to, $date_from.' '.$this->Absence_Config['worktime'][0][1])<=0) {
-					//09:01~11:00
+					//09:01~12:00
 					$hour += (strtotime($to) - strtotime($date_from.' '.$time_from))/3600;
 					return;
 				}
