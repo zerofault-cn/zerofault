@@ -498,7 +498,7 @@ class AbsenceAction extends BaseAction{
 					if ($type != 'Out' && $type!= 'CashOut') {
 						self::mail_application($this->dao);
 					}
-				//	self::_success('Application created success!',__URL__);
+					self::_success('Application created success!',__URL__);
 				}
 				else{
 					self::_error('Application created fail!'.(C('APP_DEBUG')?$this->dao->getLastSql():''));
