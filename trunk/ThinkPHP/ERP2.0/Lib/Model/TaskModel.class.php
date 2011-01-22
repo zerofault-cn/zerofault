@@ -21,8 +21,15 @@ class TaskModel extends RelationModel{
 		'Attachment' => array(
 			'mapping_type' => HAS_MANY,
 			'class_name'   => 'Attachment',
-			'foreign_key'  => 'model_id',
 			'mapping_name' => 'attachment',
+			'foreign_key'  => 'model_id',
+			'condition'    => "model_name='Task'",
+			),
+		'Comment' => array(
+			'mapping_type' => HAS_MANY,
+			'class_name'   => 'Comment',
+			'mapping_name' => 'comment',
+			'foreign_key'  => 'model_id',
 			'condition'    => "model_name='Task'",
 			),
 	);

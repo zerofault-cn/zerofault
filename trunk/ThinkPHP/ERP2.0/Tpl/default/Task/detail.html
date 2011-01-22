@@ -10,83 +10,107 @@
 }
 </style>
 <p class="page_title_text">{$ACTION_TITLE}</p>
-<table border="0" align="center" cellpadding="4" cellspacing="1" style="background-color:#808080">
-<tr bgcolor="#DADADA">
-	<td width="12%">Task No.</td>
-	<td width="38%" bgcolor="#FFFFFF">T{$info.id|sprintf='%06s',###}</td>
-	<td width="12%">Category</td>
-	<td width="38%" bgcolor="#FFFFFF">{$info.category.name}</td>
-</tr>
-<tr bgcolor="#E9E9E9">
-	<td>Title</td>
-	<td bgcolor="#FFFFFF">{$info.title}</td>
-	<td >Due Date</td>
-	<td bgcolor="#FFFFFF">{$info.due_date}</td>
-</tr>
-<tr bgcolor="#DADADA">
-	<td>Assigner</td>
-	<td bgcolor="#FFFFFF">{$info['creator']['realname']}</td>
-	<td nowrap="nowrap">Cteate Time</td>
-	<td bgcolor="#FFFFFF">{$info.create_time}</td>
-</tr>
-<tr bgcolor="#E9E9E9">
-	<td>Owner</td>
-	<td bgcolor="#FFFFFF" valign="top">
-		<table id="owner_list" style="background-color: #FFFFFF;">
-		<foreach name="info.owner" item="owner">
-		<tr>
-			<td>{$owner.realname}</td>
-			<td width="5%" class="{$status_arr[$owner['status']]}">{$status_arr[$owner['status']]}</td>
-			<td width="5%" nowrap="nowrap">
-				[<img src="../Public/Images/open.png" alt="open" align="absmiddle" <if condition="$owner['status'] neq 0"> title="change status to open" style="cursor:pointer;" onclick="changeOwnerStatus({$owner.id}, {$info.id}, 0)"</if> /><img src="../Public/Images/pause.png" alt="pending" align="absmiddle" <if condition="$owner['status'] neq -1"> title="change status to pending" style="cursor:pointer;" onclick="changeOwnerStatus({$owner.id}, {$info.id}, -1)"</if> /><img src="../Public/Images/close.png" alt="close" align="absmiddle" <if condition="$owner['status'] neq 1"> title="change status to close" style="cursor:pointer;" onclick="changeOwnerStatus({$owner.id}, {$info.id}, 1)"</if> />]</td>
+<table style="background-color:#FFFFFF">
+<tr>
+	<td>
+		<table width="100%" border="0" align="center" cellpadding="4" cellspacing="1" style="background-color:#808080">
+		<tr bgcolor="#DADADA">
+			<td width="12%">Task No.</td>
+			<td bgcolor="#FFFFFF">T{$info.id|sprintf='%06s',###}</td>
+			<td width="12%">Category</td>
+			<td bgcolor="#FFFFFF">{$info.category.name}</td>
 		</tr>
-		</foreach>
+		<tr bgcolor="#E9E9E9">
+			<td>Title</td>
+			<td bgcolor="#FFFFFF">{$info.title}</td>
+			<td >Due Date</td>
+			<td bgcolor="#FFFFFF">{$info.due_date}</td>
+		</tr>
+		<tr bgcolor="#DADADA">
+			<td>Assigner</td>
+			<td bgcolor="#FFFFFF">{$info['creator']['realname']}</td>
+			<td nowrap="nowrap">Cteate Time</td>
+			<td bgcolor="#FFFFFF">{$info.create_time}</td>
+		</tr>
+		<tr bgcolor="#E9E9E9">
+			<td>Owner</td>
+			<td bgcolor="#FFFFFF" valign="top">
+				<table width="100%" id="owner_list" style="background-color: #FFFFFF;">
+				<foreach name="info.owner" item="item">
+				<tr>
+					<td>{$item.realname}</td>
+					<td width="5%" class="{$status_arr[$item['status']]}">{$status_arr[$item['status']]}</td>
+					<td width="5%" nowrap="nowrap">
+						<if condition="$_SESSION[C('USER_AUTH_KEY')] eq $item['staff_id'] or $_SESSION[C('ADMIN_AUTH_NAME')] or in_array($_SESSION[C('USER_AUTH_KEY')], C('TASK_ADMIN_ID'))">
+						[<img src="../Public/Images/open.png" alt="open" align="absmiddle" <if condition="$item['status'] neq 0"> title="change status to open" style="cursor:pointer;" onclick="changeOwnerStatus({$item.id}, {$info.id}, 0)"</if> /><img src="../Public/Images/pause.png" alt="pending" align="absmiddle" <if condition="$item['status'] neq -1"> title="change status to pending" style="cursor:pointer;" onclick="changeOwnerStatus({$item.id}, {$info.id}, -1)"</if> /><img src="../Public/Images/close.png" alt="close" align="absmiddle" <if condition="$item['status'] neq 1"> title="change status to close" style="cursor:pointer;" onclick="changeOwnerStatus({$item.id}, {$info.id}, 1)"</if> />]
+						</if>
+					</td>
+				</tr>
+				</foreach>
+				</table>
+			</td>
+			<td>Attached Files</td>
+			<td bgcolor="#FFFFFF" valign="top">
+				<foreach name="info.attachment" item="file">
+				<a href="__APP__/../{$file.path}" target="_blank" title="View attachment in new window">{$file.name}</a> <br />
+				</foreach>
+			</td>
+		</tr>
+		<tr bgcolor="#DADADA">
+			<td >Description</td>
+			<td colspan="3" bgcolor="#FFFFFF">{$info.descr}</td>
+		</tr>
 		</table>
-	</td>
-	<td>Attached Files</td>
-	<td bgcolor="#FFFFFF" valign="top">
-		<foreach name="info.attachment" item="file">
-		<a href="__APP__/../{$file.path}" target="_blank" title="View attachment in new window">{$file.name}</a> <br />
+		<br />
+		<foreach name="info.comment" item="item">
+		<table width="100%" border="0" cellpadding="0" cellspacing="0" style="background-color: #FFFFFF;">
+		<tr>
+			<td width="8" height="8"><img src="../Public/Images/talk_01.gif" width="8" height="8" alt=""></td>
+			<td background="../Public/Images/talk_02.gif"><img src="../Public/Images/spacer.gif" width="400" height="8" alt=""></td>
+			<td width="8"><img src="../Public/Images/talk_03.gif" width="8" height="8" alt=""></td>
+		</tr>
+		<tr>
+			<td background="../Public/Images/talk_04.gif"><img src="../Public/Images/spacer.gif" width="8" height="20" alt=""></td>
+			<td valign="top">
+				{$item.content|nl2br}
+			</td>
+			<td background="../Public/Images/talk_06.gif"><img src="../Public/Images/spacer.gif" width="8" alt=""></td>
+		</tr>
+		<tr>
+			<td height="8"><img src="../Public/Images/talk_07.gif" width="8" height="8" alt=""></td>
+			<td background="../Public/Images/talk_08.gif"><img src="../Public/Images/spacer.gif" width="400" height="8" alt=""></td>
+			<td><img src="../Public/Images/talk_09.gif" width="8" height="8" alt=""></td>
+		</tr>
+		<tr>
+			<td height="41"><img src="../Public/Images/spacer.gif" width="8" height="41" alt=""></td>
+			<td valign="top">
+				<div style="height:41px;line-height:30px;padding-left:56px;background:url(../Public/Images/talk_11.gif) left top no-repeat;">
+					<span style="float:right;">
+						<if condition="$_SESSION[C('USER_AUTH_KEY')] eq $item['staff_id']">
+						<img src="../Public/Images/form_edit.gif" border="0" alt="Edit" align="absmiddle" style="cursor:pointer;" onClick="edit_comment({$item.id});" />
+						</if>
+						<if condition="$_SESSION[C('USER_AUTH_KEY')] eq $item['staff_id'] or $_SESSION[C('ADMIN_AUTH_NAME')] or in_array($_SESSION[C('USER_AUTH_KEY')], C('TASK_ADMIN_ID'))">
+						<img src="../Public/Images/cross.gif" align="absmiddle" border="0" style="cursor:pointer;" onclick="myConfirm('Are you sure to delete this comment?', '__URL__/delete_comment/id/{$item.id}');"/>
+						</if>
+					</span>
+					{$item.realname}<font color="gray"> at </font>{$item.create_time}
+				</div>
+			</td>
+			<td><img src="../Public/Images/spacer.gif" width="8" height="41" alt=""></td>
+		</tr>
+		</table>
 		</foreach>
+		<if condition="$_SESSION[C('USER_AUTH_KEY')] eq $info.creator_id or in_array($_SESSION[C('USER_AUTH_KEY')], $owner_list)">
+		<form action="__URL__/comment" method="post" target="_iframe">
+		<input type="hidden" name="task_id" value="{$info.id}" />
+		<input type="hidden" name="id" value="" />
+		<textarea name="content" cols="55" rows="5"></textarea>
+		<input type="submit" value="Post my comment" name="submit" />
+		</form>
+		</if>
 	</td>
-</tr>
-<tr bgcolor="#DADADA">
-	<td >Description</td>
-	<td colspan="3" bgcolor="#FFFFFF">{$info.descr}</td>
 </tr>
 </table>
- <br />
-<table width="100%" border="0" cellpadding="0" cellspacing="0" style="background-color: #FFFFFF;">
-<tr>
-	<td width="8" height="8"><img src="../Public/Images/talk_01.gif" width="8" height="8" alt=""></td>
-	<td background="../Public/Images/talk_02.gif"><img src="../Public/Images/spacer.gif" width="400" height="8" alt=""></td>
-	<td width="8"><img src="../Public/Images/talk_03.gif" width="8" height="8" alt=""></td>
-</tr>
-<tr>
-	<td background="../Public/Images/talk_04.gif"><img src="../Public/Images/spacer.gif" width="8" height="20" alt=""></td>
-	<td valign="top">
-		<div>approved<br />dfasdfasdfsa<br />dfasdfasdfafffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff<br />dfasdfasdfasd</div>
-	</td>
-	<td background="../Public/Images/talk_06.gif"><img src="../Public/Images/spacer.gif" width="8" alt=""></td>
-</tr>
-<tr>
-	<td height="8"><img src="../Public/Images/talk_07.gif" width="8" height="8" alt=""></td>
-	<td background="../Public/Images/talk_08.gif"><img src="../Public/Images/spacer.gif" width="400" height="8" alt=""></td>
-	<td><img src="../Public/Images/talk_09.gif" width="8" height="8" alt=""></td>
-</tr>
-<tr>
-	<td height="41"><img src="../Public/Images/spacer.gif" width="8" height="41" alt=""></td>
-	<td valign="top">
-		<div style="height:41px;line-height:30px;padding-left:56px;background:url(../Public/Images/talk_11.gif) left top no-repeat;">Allen Tsao <font color="gray">at</font> 2011-01-06 00:04:21 GMT+0800
-	</td>
-	<td><img src="../Public/Images/spacer.gif" width="8" height="41" alt=""></td>
-</tr>
-</table>
-<form action="__URL__/comment" method="post" target="_iframe">
-<input type="hidden" name="id" value="{$info.id}" />
-<textarea name="comment" cols="60" rows="5"></textarea>
-<input type="submit" value="Post my comment" name="submit" />
-</form>
 <script type="text/javascript">
 $(document).ready(function(){
 	$("img.result").each(function() {
@@ -98,7 +122,26 @@ $(document).ready(function(){
 function changeOwnerStatus(id, task_id, status) {
 	$("#_iframe").attr('src', '__URL__/update_owner/id/'+id+'/task_id/'+task_id+'/f/status/v/'+status);
 }
-function addFile(obj) {
-	$(obj).before('<br /><input type="file" name="file[]" size="20" /> ');
+var has_reset = false;
+function edit_comment(id) {
+	$("input[name='id']").val(id);
+	$.get('__URL__/comment', {
+		'id' : id
+	}, function(str) {
+			$("textarea[name='content']").val(str).focus();
+		});
+	$("input[name='submit']").val('Submit');
+	if(!has_reset) {
+		$("input[name='submit']").after('<input type="button" id="reset_remark" value="Cancel"/>');
+		$("input#reset_remark").click(function(){
+			$("input[name='id']").val('');
+			$("textarea[name='content']").val('');
+			$("input[name='submit']").val('Post my comment');
+			$(this).remove();
+			has_reset = false;
+		});
+		has_reset = true;
+	}
 }
+
 </script>
