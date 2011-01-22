@@ -17,33 +17,67 @@ class TaskAction extends BaseAction{
 		);
 		$this->assign('status_arr', $status_arr);
 	}
+	Public function all() {
+		$this->assign('MODULE_TITLE', 'All Task');
+		$this->index('all');
+	}
 
-	public function index() {
-		Session::set('sub', MODULE_NAME);
-
-		if (!empty($_SESSION[MODULE_NAME.'_'.ACTION_NAME.'_category_id'])) {
-			$category_id = $_SESSION[MODULE_NAME.'_'.ACTION_NAME.'_category_id'];
-		}
-		if (!empty($_REQUEST['category_id'])) {
-			$category_id = $_REQUEST['category_id'];
-		}
-		$_SESSION[MODULE_NAME.'_'.ACTION_NAME.'_category_id'] = $category_id;
-		$this->assign('category_opts', self::genOptions(M('Category')->where(array('type'=>'Task'))->select(), $category_id));
-
-		import("@.Paginator");
-		$limit = 4;
-		if (!empty($_SESSION[MODULE_NAME.'_'.ACTION_NAME.'_limit'])) {
-	//		$limit = $_SESSION[MODULE_NAME.'_'.ACTION_NAME.'_limit'];
-		}
-		if (!empty($_REQUEST['limit'])) {
-			$limit = $_REQUEST['limit'];
-		}
-		$_SESSION[MODULE_NAME.'_'.ACTION_NAME.'_limit'] = $limit;
-
+	public function index($type='') {
 		$where = array();
-		if (!empty($_REQUEST['category_id'])) {
-			$where['category_id'] = intval($_REQUEST['category_id']);
+		if (''==$type) {
+			Session::set('sub', MODULE_NAME);
+			if (!empty($_SESSION[MODULE_NAME.'_'.ACTION_NAME.'_character'])) {
+				$character = $_SESSION[MODULE_NAME.'_'.ACTION_NAME.'_character'];
+			}
+			if (isset($_REQUEST['character'])) {
+				$character = $_REQUEST['character'];
+			}
+			$_SESSION[MODULE_NAME.'_'.ACTION_NAME.'_character'] = $character;
+			$character_arr = array(
+				array(
+					'id' => 'A',
+					'name' => 'Any'
+				),
+				array(
+					'id' => 'C',
+					'name' => 'Creator'
+				),
+				array(
+					'id' => 'O',
+					'name' => 'Owner'
+				)
+			);
+			$this->assign('character_opts', self::genOptions($character_arr, $character));
+			if (empty($character) || 'A'==$character) {
+				$rs = M('TaskOwner')->where('staff_id='.$_SESSION[C('USER_AUTH_KEY')])->getField('id,task_id');
+				$where['_string'] = "creator_id=".$_SESSION[C('USER_AUTH_KEY')]." or id in (".implode(',',  $rs).")";
+			}
+			elseif ('C'==$character) {
+				$where['creator_id'] = $_SESSION[C('USER_AUTH_KEY')];
+			}
+			elseif ('O'==$character) {
+				$rs = M('TaskOwner')->where('staff_id='.$_SESSION[C('USER_AUTH_KEY')])->getField('id,task_id');
+				$where['id'] = array('in', array_values($rs));
+			}
 		}
+		else {
+			Session::set('sub', MODULE_NAME.'/all');
+
+			if (!empty($_SESSION[MODULE_NAME.'_'.ACTION_NAME.'_category_id'])) {
+				$category_id = $_SESSION[MODULE_NAME.'_'.ACTION_NAME.'_category_id'];
+			}
+			if (isset($_REQUEST['category_id'])) {
+				$category_id = intval($_REQUEST['category_id']);
+			}
+			$_SESSION[MODULE_NAME.'_'.ACTION_NAME.'_category_id'] = $category_id;
+			$this->assign('category_opts', self::genOptions(M('Category')->where(array('type'=>'Task'))->select(), $category_id));
+			if (!empty($category_id)) {
+				$where['category_id'] = $category_id;
+			}
+		}
+		import("@.Paginator");
+		$limit = 20;
+
 		$total = $this->dao->where($where)->count();
 		$p = new Paginator($total,$limit);
 		
@@ -51,11 +85,14 @@ class TaskAction extends BaseAction{
 		foreach ($result as $i=>$row) {
 			if ($row['status'] == 0) {
 				$rs = M('TaskOwner')->where(array('task_id'=>$row['id']))->getField('id,status');
-				$status = 1;
-				foreach ($rs as $status) {
-					if ($status == -1 || $status == 0) {
-						break;
-					}
+				if (in_array(-1, $rs)) {
+					$status = -1;
+				}
+				elseif (in_array(0, $rs)) {
+					$status = 0;
+				}
+				else {
+					$status = 1;
 				}
 				$result[$i]['status'] = $status;
 			}
@@ -66,8 +103,8 @@ class TaskAction extends BaseAction{
 
 		$this->assign('page', $p->showLinkNavi());
 
-		$this->assign('ACTION_TITLE', 'All Tasks');
-		$this->assign('content', ACTION_NAME);
+		$this->assign('type', $type);
+		$this->assign('content', 'index');
 		$this->display('Layout:ERP_layout');
 	}
 	
@@ -75,10 +112,16 @@ class TaskAction extends BaseAction{
 		$this->assign('ACTION_TITLE', 'Task detail');
 		$id = intval($_REQUEST['id']);
 		$info = $this->dao->relation(true)->find($id);
-		foreach($info['owner'] as $i=>$owner) {
-			$info['owner'][$i]['realname'] = M('Staff')->where('id='.$owner['staff_id'])->getField('realname');
+		$owner_list = array();
+		foreach($info['owner'] as $key=>$val) {
+			$info['owner'][$key]['realname'] = M('Staff')->where('id='.$val['staff_id'])->getField('realname');
+			$owner_list[] = $val['staff_id'];
+		}
+		foreach ($info['comment'] as $key=>$val) {
+			$info['comment'][$key]['realname'] = M('Staff')->where('id='.$val['staff_id'])->getField('realname');
 		}
 		$this->assign('info', $info);
+		$this->assign('owner_list', $owner_list);
 		$this->assign('content', ACTION_NAME);
 		$this->display('Layout:content');
 	}
@@ -120,7 +163,6 @@ class TaskAction extends BaseAction{
 				'owners' => array(),
 				);
 		}
-	//	dump($info);
 		$this->assign('info', $info);
 		$this->assign('MAX_FILE_SIZE', self::MAX_FILE_SIZE());
 		$this->assign('upload_max_filesize', min(ini_get('memory_limit'), ini_get('post_max_size'), ini_get('upload_max_filesize')));
@@ -268,6 +310,46 @@ class TaskAction extends BaseAction{
 			}
 		}
 	}
+	public function comment() {
+		if (!empty($_GET['id'])) {
+			die(M('Comment')->where('id='.$_GET['id'])->getField('content'));
+		}
+		if (empty($_POST['submit'])) {
+			return;
+		}
+		$dao = M('Comment');
+		$id = empty($_REQUEST['id']) ? 0 : intval($_REQUEST['id']);
+		$task_id = empty($_REQUEST['task_id']) ? 0 : intval($_REQUEST['task_id']);
+		$content = trim($_REQUEST['content']);
+		!$content && self::_error('Comment can\'t be empty!');
+		if ($id>0) {
+			$dao->find($id);
+		}
+		else {
+			$dao->model_name = 'Task';
+			$dao->model_id = $task_id;
+			$dao->staff_id = $_SESSION[C('USER_AUTH_KEY')];
+			$dao->create_time = date('Y-m-d H:i:s');
+			$dao->status = 1;
+		}
+		$dao->content = $content;
+		if ($id>0) {
+			if(false !== $dao->save()){
+				self::task_detail_success($task_id, 'Comment updated!');
+			}
+			else{
+				self::_error('Update fail!'.(C('APP_DEBUG')?$dao->getLastSql():''));
+			}
+		}
+		else {
+			if($dao->add()) {
+				self::task_detail_success($task_id, 'Post comment success!');
+			}
+			else{
+				self::_error('Add category fail!'.(C('APP_DEBUG')?$dao->getLastSql():''));
+			}
+		}
+	}
 	public function category(){
 		Session::set('sub', MODULE_NAME.'/'.ACTION_NAME);
 		$type = 'Task';
@@ -308,7 +390,6 @@ class TaskAction extends BaseAction{
 					self::_error('Add category fail!'.(C('APP_DEBUG')?$dao->getLastSql():''));
 				}
 			}
-			exit;
 		}
 		elseif (!empty($_REQUEST['id'])) {
 			$id = $_REQUEST['id'];
@@ -320,7 +401,6 @@ class TaskAction extends BaseAction{
 				$this->dao = M('Category');
 				self::_delete();
 			}
-			exit;
 		}
 		$this->assign('ACTION_TITLE', 'Task Category');
 		$result = $dao->where(array('type'=>'Task'))->order('id')->select();
@@ -342,7 +422,7 @@ class TaskAction extends BaseAction{
 			die($html);
 		}
 		else {
-			die(self::_error('Delete fail!'.(C('APP_DEBUG')?M('TaskOwner')->getLastSql():'')));
+			self::_error('Delete fail!'.(C('APP_DEBUG')?M('TaskOwner')->getLastSql():''));
 		}
 	}
 	public function update_owner() {
@@ -352,15 +432,10 @@ class TaskAction extends BaseAction{
 		$value=$_REQUEST['v'];
 		$rs = M('TaskOwner')->where('id='.$id)->setField(array($field, 'action_time'), array($value, date('Y-m-d H:i:s')));
 		if(false !== $rs) {
-			$html  = '<script language="JavaScript" type="text/javascript">';
-			$html .= 'parent.myAlert("Update success!");';
-			$html .= 'parent.myOK(1000);';
-			$html .= 'setTimeout(function() {parent.show_detail('.$task_id.');}, 500);';
-			$html .= '</script>';
-			die($html);
+			self::task_detail_success($task_id, 'Update success!');
 		}
 		else {
-			die(self::_error('Update fail!'.(C('APP_DEBUG')?M('TaskOwner')->getLastSql():'')));
+			self::_error('Update fail!'.(C('APP_DEBUG')?M('TaskOwner')->getLastSql():''));
 		}
 	}
 	public function delete() {
@@ -376,5 +451,6 @@ class TaskAction extends BaseAction{
 	public function update() {
 		self::_update();
 	}
+
 }
 ?>

@@ -23,17 +23,25 @@ td.status div.close {
 	<td width="420" valign="top">
 		<table width="100%" cellpadding="3" border="1" bordercolor="#FFFFFF" style="border-collapse:collapse;margin-bottom:5px;">
 		<tr>
-			<th align="center">Category:
+			<th style="text-align:left;">&nbsp;&nbsp;
+				<if condition="$type eq ''">
+				Character as 
+				<select name="character" onchange="javascript:location.href='__URL__?character='+this.value;">
+					{$character_opts}
+				</select>
+				<else />
+				Category:
 				<select name="category" style="width:200px;" onchange="javascript:location.href='__URL__?category_id='+this.value;">
 					<option value="0">All Category</option>
 					{$category_opts}
 				</select>
+				</if>
 			</th>
 		</tr>
 		</table>
 		<table width="100%" cellpadding="3" border="0" bordercolor="#FFFFFF" style="border-collapse:collapse;">
 		<tr bgcolor="#FFFFFF">
-			<td colspan="3">{$page}</td>
+			<td colspan="4">{$page}</td>
 		</tr>
 		<iterate name="result" id="item">
 		<tr class="trbg{$mod}">
@@ -49,14 +57,14 @@ td.status div.close {
 				</if>
 			</td>
 			<td width="5%" nowrap="nowrap">
-				<if condition="$_SESSION[C('ADMIN_AUTH_NAME')] eq true or $_SESSION[C('USER_AUTH_KEY')] eq $item.creator_id or in_array($_SESSION[C('USER_AUTH_KEY')], C('TASK_ADMIN_ID')) eq true"><img src="../Public/Images/form_edit.gif" border="0" alt="Edit" align="absmiddle" style="cursor:pointer;" onClick="show_form({$item.id});" /></if>
-				<if condition="$_SESSION[C('ADMIN_AUTH_NAME')] eq true or $_SESSION[C('USER_AUTH_KEY')] eq $item.creator_id"><img src="../Public/Images/cross.gif" align="absmiddle" border="0" style="cursor:pointer;" onclick="myConfirm('Are you sure to delete this task', '__URL__/delete/id/{$item.id}');"/></if>
+				<if condition="$_SESSION[C('ADMIN_AUTH_NAME')] or $_SESSION[C('USER_AUTH_KEY')] eq $item.creator_id or in_array($_SESSION[C('USER_AUTH_KEY')], C('TASK_ADMIN_ID'))"><img src="../Public/Images/form_edit.gif" border="0" alt="Edit" align="absmiddle" style="cursor:pointer;" onClick="show_form({$item.id});" />
+				<img src="../Public/Images/cross.gif" align="absmiddle" border="0" style="cursor:pointer;" onclick="myConfirm('Are you sure to delete this task?', '__URL__/delete/id/{$item.id}');"/></if>
 			</td>
 		</tr>
 		</iterate>
 		<empty name="result">
 		<tr>
-			<td colspan="3" align="center">No Task</td>
+			<td colspan="4" align="center">No Task</td>
 		</tr>
 		</empty>
 		</table>

@@ -29,7 +29,7 @@ class BaseAction extends Action {
 			// 检查权限
 			if (!RBAC::AccessDecision()) {
 				if (in_array(ACTION_NAME,C('IFRAME_AUTH_ACTION'))) {
-					die(self::_error('Permission denied!', 3000));
+					self::_error('Permission denied!', 3000);
 				}
 				$this->assign('message','<div style="font-weight:bold;font-size:14px;text-align:center;padding:10px;color:red;">Permission denied!</div>');
 				$this->assign('content','Public:error');
@@ -151,6 +151,16 @@ class BaseAction extends Action {
 		$html .= '</script>';
 		die($html);
 	}
+	protected function task_detail_success($task_id, $msg='', $url='', $timeout=2000) {
+		$html  = '<script language="JavaScript" type="text/javascript">';
+		if($msg) {
+			$html .= 'parent.myAlert("'.$msg.'");';
+		}
+		$html .= 'parent.myOK(1000);';
+		$html .= 'setTimeout(function() {parent.show_detail('.$task_id.');}, 500);';
+		$html .= '</script>';
+		die($html);
+	}
 	/**
 	*
 	* 生成弹出“操作失败”提示的js代码
@@ -194,11 +204,11 @@ class BaseAction extends Action {
 		$rs = $this->dao->where('id='.$id)->setField($field,$value);
 		if(false !== $rs)
 		{
-			die(self::_success('Update success!','',1000));
+			self::_success('Update success!','',1000);
 		}
 		else
 		{
-			die(self::_error('Update fail!'.(C('APP_DEBUG')?$this->dao->getLastSql():'')));
+			self::_error('Update fail!'.(C('APP_DEBUG')?$this->dao->getLastSql():''));
 		}
 	}
 	/**
@@ -210,11 +220,11 @@ class BaseAction extends Action {
 		$id=$_REQUEST['id'];
 		if($this->dao->find($id) && $this->dao->delete())
 		{
-			print(self::_success('Delete success!','',1000));
+			self::_success('Delete success!','',1000);
 		}
 		else
 		{
-			die(self::_error('Delete fail!'.(C('APP_DEBUG')?$this->dao->getLastSql():'')));
+			self::_error('Delete fail!'.(C('APP_DEBUG')?$this->dao->getLastSql():''));
 		}
 	}
 

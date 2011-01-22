@@ -68,8 +68,8 @@ $menu['Test Log'] = array(
 $menu['Tasks'] = array(
 	'name' => 'Task',
 	'submenu' => array(
-		'All Tasks'				=> 'Task',
-		'My Tasks'				=> 'Task/my',
+		'My Tasks'				=> 'Task',
+		'All Tasks'				=> 'Task/all',
 		'Category'				=> 'Task/category'
 		)
 	);
