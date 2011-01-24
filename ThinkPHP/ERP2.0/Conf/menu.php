@@ -70,7 +70,6 @@ $menu['Tasks'] = array(
 	'submenu' => array(
 		'My Tasks'				=> 'Task',
 		'All Tasks'				=> 'Task/all',
-		'Category'				=> 'Task/category'
 		)
 	);
 $menu['System'] = array(

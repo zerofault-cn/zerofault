@@ -120,6 +120,27 @@ class TaskAction extends BaseAction{
 		foreach ($info['comment'] as $key=>$val) {
 			$info['comment'][$key]['realname'] = M('Staff')->where('id='.$val['staff_id'])->getField('realname');
 		}
+		if ($info['press_interval']%86400 == 0) {
+			$info['press_unit'] = 'Day';
+			$info['press_time'] = $info['press_interval']/86400;
+			if ($info['press_time']>1) {
+				$info['press_unit'] = 'Days';
+			}
+		}
+		elseif ($info['press_interval']%3600 == 0) {
+			$info['press_unit'] = 'Hour';
+			$info['press_time'] = $info['press_interval']/3600;
+			if ($info['press_time']>1) {
+				$info['press_unit'] = 'Hours';
+			}
+		}
+		elseif ($info['press_interval']%60 == 0) {
+			$info['press_unit'] = 'Minute';
+			$info['press_time'] = $info['press_interval']/60;
+			if ($info['press_time']>1) {
+				$info['press_unit'] = 'Minutes';
+			}
+		}
 		$this->assign('info', $info);
 		$this->assign('owner_list', $owner_list);
 		$this->assign('content', ACTION_NAME);
@@ -425,12 +446,16 @@ class TaskAction extends BaseAction{
 			self::_error('Delete fail!'.(C('APP_DEBUG')?M('TaskOwner')->getLastSql():''));
 		}
 	}
-	public function update_owner() {
+	public function update_status() {
 		$id = $_REQUEST['id'];
 		$task_id = $_REQUEST['task_id'];
-		$field=$_REQUEST['f'];
 		$value=$_REQUEST['v'];
-		$rs = M('TaskOwner')->where('id='.$id)->setField(array($field, 'action_time'), array($value, date('Y-m-d H:i:s')));
+		if ($id > 0) {
+			$rs = M('TaskOwner')->where('id='.$id)->setField(array('status', 'action_time'), array($value, date('Y-m-d H:i:s')));
+		}
+		else {
+			$rs = $this->dao->where('id='.$task_id)->setField(array('status', 'done_time'), array($value, date('Y-m-d H:i:s')));
+		}
 		if(false !== $rs) {
 			self::task_detail_success($task_id, 'Update success!');
 		}
@@ -448,9 +473,16 @@ class TaskAction extends BaseAction{
 		}
 		self::_delete();
 	}
-	public function update() {
-		self::_update();
+	public function delete_comment() {
+		$id = $_REQUEST['id'];
+		$task_id = $_REQUEST['task_id'];
+		$dao = M('Comment');
+		if($dao->find($id) && $dao->delete()) {
+			self::task_detail_success($task_id, 'Delete success!');
+		}
+		else {
+			self::_error('Delete fail!'.(C('APP_DEBUG')?$dao->getLastSql():''));
+		}
 	}
-
 }
 ?>

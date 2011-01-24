@@ -1,11 +1,11 @@
 <style>
-#owner_list td.Open {
+#owner_list td.Open, strong.Open {
 	color: #00FF00;
 }
-#owner_list td.Pending {
+#owner_list td.Pending, strong.Pending {
 	color: #0000FF;
 }
-#owner_list td.Close {
+#owner_list td.Close, strong.Close {
 	color: #FF0000;
 }
 </style>
@@ -23,26 +23,37 @@
 		<tr bgcolor="#E9E9E9">
 			<td>Title</td>
 			<td bgcolor="#FFFFFF">{$info.title}</td>
-			<td >Due Date</td>
-			<td bgcolor="#FFFFFF">{$info.due_date}</td>
+			<td nowrap="nowrap">Cteate Time</td>
+			<td bgcolor="#FFFFFF">{$info.create_time}</td>
 		</tr>
 		<tr bgcolor="#DADADA">
 			<td>Assigner</td>
 			<td bgcolor="#FFFFFF">{$info['creator']['realname']}</td>
-			<td nowrap="nowrap">Cteate Time</td>
-			<td bgcolor="#FFFFFF">{$info.create_time}</td>
+			<td nowrap="nowrap">Due Date</td>
+			<td bgcolor="#FFFFFF">{$info.due_date}</td>
 		</tr>
 		<tr bgcolor="#E9E9E9">
+			<td nowrap="nowrap">Task status</td>
+			<td bgcolor="#FFFFFF">
+				<strong class="{$status_arr[$info['status']]}">{$status_arr[$info['status']]}</strong>
+				<if condition="$_SESSION[C('USER_AUTH_KEY')] eq $info['creator_id'] or $_SESSION[C('ADMIN_AUTH_NAME')] or in_array($_SESSION[C('USER_AUTH_KEY')], C('TASK_ADMIN_ID'))">
+				[<img src="../Public/Images/open.png" alt="open" align="absmiddle" <if condition="$info['status'] neq 0"> title="change status to open" style="cursor:pointer;" onclick="changeStatus(0, {$info.id}, 0)"</if> /><img src="../Public/Images/pause.png" alt="pending" align="absmiddle" <if condition="$info['status'] neq -1"> title="change status to pending" style="cursor:pointer;" onclick="changeStatus(0, {$info.id}, -1)"</if> /><img src="../Public/Images/close.png" alt="close" align="absmiddle" <if condition="$info['status'] neq 1"> title="change status to close" style="cursor:pointer;" onclick="changeStatus(0, {$info.id}, 1)"</if> />]
+				</if>
+			</td>
+			<td nowrap="nowrap">Press Interval</td>
+			<td bgcolor="#FFFFFF">{$info.press_time} {$info.press_unit}</td>
+		</tr>
+		<tr bgcolor="#DADADA">
 			<td>Owner</td>
 			<td bgcolor="#FFFFFF" valign="top">
 				<table width="100%" id="owner_list" style="background-color: #FFFFFF;">
 				<foreach name="info.owner" item="item">
 				<tr>
 					<td>{$item.realname}</td>
-					<td width="5%" class="{$status_arr[$item['status']]}">{$status_arr[$item['status']]}</td>
+					<td width="5%" class="{$status_arr[$item['status']]}"><strong>{$status_arr[$item['status']]}</strong></td>
 					<td width="5%" nowrap="nowrap">
-						<if condition="$_SESSION[C('USER_AUTH_KEY')] eq $item['staff_id'] or $_SESSION[C('ADMIN_AUTH_NAME')] or in_array($_SESSION[C('USER_AUTH_KEY')], C('TASK_ADMIN_ID'))">
-						[<img src="../Public/Images/open.png" alt="open" align="absmiddle" <if condition="$item['status'] neq 0"> title="change status to open" style="cursor:pointer;" onclick="changeOwnerStatus({$item.id}, {$info.id}, 0)"</if> /><img src="../Public/Images/pause.png" alt="pending" align="absmiddle" <if condition="$item['status'] neq -1"> title="change status to pending" style="cursor:pointer;" onclick="changeOwnerStatus({$item.id}, {$info.id}, -1)"</if> /><img src="../Public/Images/close.png" alt="close" align="absmiddle" <if condition="$item['status'] neq 1"> title="change status to close" style="cursor:pointer;" onclick="changeOwnerStatus({$item.id}, {$info.id}, 1)"</if> />]
+						<if condition="$_SESSION[C('USER_AUTH_KEY')] eq $info['creator_id'] or $_SESSION[C('USER_AUTH_KEY')] eq $item['staff_id'] or $_SESSION[C('ADMIN_AUTH_NAME')] or in_array($_SESSION[C('USER_AUTH_KEY')], C('TASK_ADMIN_ID'))">
+						[<img src="../Public/Images/open.png" alt="open" align="absmiddle" <if condition="$item['status'] neq 0"> title="change status to open" style="cursor:pointer;" onclick="changeStatus({$item.id}, {$info.id}, 0)"</if> /><img src="../Public/Images/pause.png" alt="pending" align="absmiddle" <if condition="$item['status'] neq -1"> title="change status to pending" style="cursor:pointer;" onclick="changeStatus({$item.id}, {$info.id}, -1)"</if> /><img src="../Public/Images/close.png" alt="close" align="absmiddle" <if condition="$item['status'] neq 1"> title="change status to close" style="cursor:pointer;" onclick="changeStatus({$item.id}, {$info.id}, 1)"</if> />]
 						</if>
 					</td>
 				</tr>
@@ -56,7 +67,7 @@
 				</foreach>
 			</td>
 		</tr>
-		<tr bgcolor="#DADADA">
+		<tr bgcolor="#E9E9E9">
 			<td >Description</td>
 			<td colspan="3" bgcolor="#FFFFFF">{$info.descr}</td>
 		</tr>
@@ -87,10 +98,10 @@
 				<div style="height:41px;line-height:30px;padding-left:56px;background:url(../Public/Images/talk_11.gif) left top no-repeat;">
 					<span style="float:right;">
 						<if condition="$_SESSION[C('USER_AUTH_KEY')] eq $item['staff_id']">
-						<img src="../Public/Images/form_edit.gif" border="0" alt="Edit" align="absmiddle" style="cursor:pointer;" onClick="edit_comment({$item.id});" />
+						<img src="../Public/Images/form_edit.gif" border="0" alt="Edit" align="absmiddle" style="cursor:pointer;" onClick="edit_comment({$item.id});" title="Click to edit this comment" />
 						</if>
-						<if condition="$_SESSION[C('USER_AUTH_KEY')] eq $item['staff_id'] or $_SESSION[C('ADMIN_AUTH_NAME')] or in_array($_SESSION[C('USER_AUTH_KEY')], C('TASK_ADMIN_ID'))">
-						<img src="../Public/Images/cross.gif" align="absmiddle" border="0" style="cursor:pointer;" onclick="myConfirm('Are you sure to delete this comment?', '__URL__/delete_comment/id/{$item.id}');"/>
+						<if condition="$_SESSION[C('USER_AUTH_KEY')] eq $info['creator_id'] or $_SESSION[C('USER_AUTH_KEY')] eq $item['staff_id'] or $_SESSION[C('ADMIN_AUTH_NAME')] or in_array($_SESSION[C('USER_AUTH_KEY')], C('TASK_ADMIN_ID'))">
+						<img src="../Public/Images/cross.gif" alt="Delete" align="absmiddle" border="0" style="cursor:pointer;" onclick="myConfirm('Are you sure to delete this comment?', '__URL__/delete_comment/id/{$item.id}/task_id/{$info.id}');" title="Click to delete this comment" />
 						</if>
 					</span>
 					{$item.realname}<font color="gray"> at </font>{$item.create_time}
@@ -100,14 +111,12 @@
 		</tr>
 		</table>
 		</foreach>
-		<if condition="$_SESSION[C('USER_AUTH_KEY')] eq $info.creator_id or in_array($_SESSION[C('USER_AUTH_KEY')], $owner_list)">
 		<form action="__URL__/comment" method="post" target="_iframe">
 		<input type="hidden" name="task_id" value="{$info.id}" />
 		<input type="hidden" name="id" value="" />
 		<textarea name="content" cols="55" rows="5"></textarea>
 		<input type="submit" value="Post my comment" name="submit" />
 		</form>
-		</if>
 	</td>
 </tr>
 </table>
@@ -119,8 +128,8 @@ $(document).ready(function(){
 		});
 	});
 });
-function changeOwnerStatus(id, task_id, status) {
-	$("#_iframe").attr('src', '__URL__/update_owner/id/'+id+'/task_id/'+task_id+'/f/status/v/'+status);
+function changeStatus(id, task_id, status) {
+	$("#_iframe").attr('src', '__URL__/update_status/id/'+id+'/task_id/'+task_id+'/v/'+status);
 }
 var has_reset = false;
 function edit_comment(id) {
