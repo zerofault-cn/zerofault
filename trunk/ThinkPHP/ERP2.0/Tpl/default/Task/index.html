@@ -46,8 +46,8 @@ td.status div.close {
 		<iterate name="result" id="item">
 		<tr class="trbg{$mod}">
 			<td width="5%">T{$item.id|sprintf='%06s',###}: </td>
-			<td><a href="javascript:void(0);" onclick="show_detail({$item.id});">{$item.title}</td>
-			<td class="status" width="16" nowrap="nowrap">
+			<td><a href="javascript:void(0);" onclick="show_detail({$item.id});" title="Click to show task detail">{$item.title}</td>
+			<td class="status" width="16" nowrap="nowrap" style="cursor:default;">
 				<if condition="$item.status eq 0">
 				<div class="open" title="Open">O</div>
 				<elseif condition="$item.status eq -1" />
@@ -57,8 +57,8 @@ td.status div.close {
 				</if>
 			</td>
 			<td width="5%" nowrap="nowrap">
-				<if condition="$_SESSION[C('ADMIN_AUTH_NAME')] or $_SESSION[C('USER_AUTH_KEY')] eq $item.creator_id or in_array($_SESSION[C('USER_AUTH_KEY')], C('TASK_ADMIN_ID'))"><img src="../Public/Images/form_edit.gif" border="0" alt="Edit" align="absmiddle" style="cursor:pointer;" onClick="show_form({$item.id});" />
-				<img src="../Public/Images/cross.gif" align="absmiddle" border="0" style="cursor:pointer;" onclick="myConfirm('Are you sure to delete this task?', '__URL__/delete/id/{$item.id}');"/></if>
+				<if condition="$_SESSION[C('ADMIN_AUTH_NAME')] or $_SESSION[C('USER_AUTH_KEY')] eq $item.creator_id or in_array($_SESSION[C('USER_AUTH_KEY')], C('TASK_ADMIN_ID'))"><img src="../Public/Images/form_edit.gif" border="0" alt="Edit" align="absmiddle" title="Edit this task" style="cursor:pointer;" onClick="show_form({$item.id});" />
+				<img src="../Public/Images/cross.gif" align="absmiddle" border="0" alt="Delete" title="Delete this task" style="cursor:pointer;" onclick="myConfirm('Are you sure to delete this task?', '__URL__/delete/id/{$item.id}');"/></if>
 			</td>
 		</tr>
 		</iterate>

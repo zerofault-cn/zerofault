@@ -112,12 +112,12 @@ class BaseAction extends Action {
 			}
 			$submenu[$sub_title] = $sub_action;
 		}
-		/*判断是否super admin增加management子菜单
-		if ('Absence' == $top) {
-			if (in_array($_SESSION[C('USER_AUTH_KEY')], C('ABSENCE_ADMIN_ID'))) {
-				$submenu['Management'] = 'Absence/manage';
+		//判断是否Task admin增加category菜单
+		if ('Tasks' == $top) {
+			if ($_SESSION[C('ADMIN_AUTH_NAME')] or in_array($_SESSION[C('USER_AUTH_KEY')], C('TASK_ADMIN_ID'))) {
+				$submenu['Category'] = 'Task/category';
 			}
-		}*/
+		}
 		//根据location增加Inventory子菜单
 		if ('Inventory Inquire'==$top) {
 			foreach($_SESSION['location'] as $location_id=>$location) {
@@ -265,12 +265,27 @@ class BaseAction extends Action {
 		foreach($rs as $val) {
 			$str .= '<input type="checkbox" name="'.$chk_name.'[]" value="'.$val['id'].'" ';
 			if(in_array($val['id'], $checked_id_arr)) {
-				$str .= ' checked="true"';
+				$str .= ' checked="checked"';
 			}
 			$str .= '/>'.$val['name'].' ';
 		}
 		return $str;
 	}
+	protected function genRadio($rs=array(), $checked = '', $radio_name='') {
+		$str = '';
+		if(empty($rs) || !is_array($rs)) {
+			return $str;
+		}
+		foreach($rs as $val) {
+			$str .= '<input type="radio" name="'.$radio_name.'" value="'.$val['id'].'" ';
+			if($val['id'] == $checked) {
+				$str .= ' checked="checked"';
+			}
+			$str .= '/>'.$val['name'].' ';
+		}
+		return $str;
+	}
+
 	protected function MAX_FILE_SIZE($k=NULL){
 		$tmp = 1024*1024*min(ini_get('memory_limit'), ini_get('post_max_size'), ini_get('upload_max_filesize'));
 		if(is_null($k)) {
