@@ -367,7 +367,10 @@ include	('../language_files/language.inc.php');
         		<?php echo $CIRCULATION_VIEW_PROCESS; ?>
         	</td>
         	<?php
-        } 
+        }
+		else {
+			echo '<td class="table_header"></td>';
+		}
         ?>
         <td class="table_header" width="80" align="center"><?php echo $TABLE_OPTIONS;?></td>
     </tr>
@@ -449,6 +452,9 @@ include	('../language_files/language.inc.php');
 						if ($archivemode == 0)
 						{
 							echo "<td nowrap ".getColHighlight($nIndex, $sortby, 'COL_CIRCULATION_PROCESS_DAYS')." align=\"left\">";
+							if ($arrHistory['isPaused'] == 1) {
+								echo '<span style="float:right;color:#FFA000;font-weight:bold;">Paused</span>';
+							}
 							echo "<span style=\"color:".getDelayColor($arrDecissionState["nDaysInProgress"]).";\">".$arrDecissionState["nDaysInProgress"]."</span>";
 						}						
 						break;
@@ -504,6 +510,13 @@ include	('../language_files/language.inc.php');
 				{
 					echo "	<td> - </td>";
 				}
+			}
+			else {
+				echo '<td style="color:#FFA000;font-weight:bold;">';
+				if ($arrHistory['isPaused'] == 1) {
+					echo 'Paused';
+				}
+				echo '</td>';
 			}
 			
 			// at least the options column
