@@ -27,7 +27,8 @@
 	* OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, 
 	* EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 	*/
-	
+	error_reporting(E_ALL ^ E_NOTICE);
+
 	require_once '../config/config.inc.php';
 	require_once '../language_files/language.inc.php';
 	require_once '../config/db_connect.inc.php';

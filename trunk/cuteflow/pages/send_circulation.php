@@ -686,7 +686,7 @@
 									$message->setBody($strMessage, 'text/html');
 									break;
 							}
-							echo $strMessage;
+						//	echo $strMessage;
 						}
 						$strQuery = "Select strName from `cf_formslot` where nID=".$nSlotId;
 						$nResult = mysql_query($strQuery, $nConnection);
