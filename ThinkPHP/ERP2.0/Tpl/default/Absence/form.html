@@ -62,21 +62,22 @@
 				<option value="">----Select----</option>
 				<foreach name="DeptStaff" key="dept" item="Staff">
 					<optgroup label="{$dept}">
-					<foreach name="Staff" item="staff" key="j">
-						<if condition="$j eq 0">
-							<if condition="!empty($info['staff_id']) and $info['staff_id'] eq $staff['id']">
-						<option value="{$staff['id']}" selected="selected" style="background-color:#FABF8F;">{$staff['realname']}</option>
-							<else />
-						<option value="{$staff['id']}" style="background-color:#FABF8F;">{$staff['realname']}</option>
-							</if>
+					<if condition="!empty($Staff['leader'])">
+						<if condition="!empty($info['staff_id']) and $info['staff_id'] eq $Staff['leader']['id']">
+						<option value="{$Staff['leader']['id']}" selected="selected" style="background-color:#FABF8F;">{$Staff['leader']['realname']}</option>
 						<else />
+						<option value="{$Staff['leader']['id']}" style="background-color:#FABF8F;">{$Staff['leader']['realname']}</option>
+						</if>
+					</if>
+					<if condition="!empty($Staff['staff'])">
+						<foreach name="Staff.staff" item="staff">
 							<if condition="!empty($info['staff_id']) and $info['staff_id'] eq $staff['id']">
 						<option value="{$staff['id']}" selected="selected">{$staff['realname']}</option>
 							<else />
 						<option value="{$staff['id']}">{$staff['realname']}</option>
 							</if>
-						</if>
-					</foreach>
+						</foreach>
+					</if>
 					</optgroup>
 				</foreach>
 				</select>
@@ -141,21 +142,22 @@
 				<option value="">----Select----</option>
 				<foreach name="DeptStaff" key="dept" item="Staff">
 					<optgroup label="{$dept}">
-					<foreach name="Staff" item="staff" key="j">
-						<if condition="$j eq 0">
-							<if condition="!empty($info['staff_id']) and $info['staff_id'] eq $staff['id']">
-						<option value="{$staff['id']}" selected="selected" style="background-color:#FABF8F;">{$staff['realname']}</option>
-							<else />
-						<option value="{$staff['id']}" style="background-color:#FABF8F;">{$staff['realname']}</option>
-							</if>
+					<if condition="!empty($Staff['leader'])">
+						<if condition="!empty($info['staff_id']) and $info['staff_id'] eq $Staff['leader']['id']">
+						<option value="{$Staff['leader']['id']}" selected="selected" style="background-color:#FABF8F;">{$Staff['leader']['realname']}</option>
 						<else />
+						<option value="{$Staff['leader']['id']}" style="background-color:#FABF8F;">{$Staff['leader']['realname']}</option>
+						</if>
+					</if>
+					<if condition="!empty($Staff['staff'])">
+						<foreach name="Staff.staff" item="staff">
 							<if condition="!empty($info['staff_id']) and $info['staff_id'] eq $staff['id']">
 						<option value="{$staff['id']}" selected="selected">{$staff['realname']}</option>
 							<else />
 						<option value="{$staff['id']}">{$staff['realname']}</option>
 							</if>
-						</if>
-					</foreach>
+						</foreach>
+					</if>
 					</optgroup>
 				</foreach>
 				</select>
@@ -212,21 +214,22 @@
 				<option value="">----Select----</option>
 				<foreach name="DeptStaff" key="dept" item="Staff">
 					<optgroup label="{$dept}">
-					<foreach name="Staff" item="staff" key="j">
-						<if condition="$j eq 0">
-							<if condition="!empty($info['deputy_id']) and $info['deputy_id'] eq $staff['id']">
-						<option value="{$staff['id']}" selected="selected" style="background-color:#FABF8F;">{$staff['realname']}</option>
-							<else />
-						<option value="{$staff['id']}" style="background-color:#FABF8F;">{$staff['realname']}</option>
-							</if>
+					<if condition="!empty($Staff['leader'])">
+						<if condition="!empty($info['staff_id']) and $info['staff_id'] eq $Staff['leader']['id']">
+						<option value="{$Staff['leader']['id']}" selected="selected" style="background-color:#FABF8F;">{$Staff['leader']['realname']}</option>
 						<else />
-							<if condition="!empty($info['deputy_id']) and $info['deputy_id'] eq $staff['id']">
+						<option value="{$Staff['leader']['id']}" style="background-color:#FABF8F;">{$Staff['leader']['realname']}</option>
+						</if>
+					</if>
+					<if condition="!empty($Staff['staff'])">
+						<foreach name="Staff.staff" item="staff">
+							<if condition="!empty($info['staff_id']) and $info['staff_id'] eq $staff['id']">
 						<option value="{$staff['id']}" selected="selected">{$staff['realname']}</option>
 							<else />
 						<option value="{$staff['id']}">{$staff['realname']}</option>
 							</if>
-						</if>
-					</foreach>
+						</foreach>
+					</if>
 					</optgroup>
 				</foreach>
 				</select>
@@ -286,21 +289,22 @@
 				<option value="">----Select----</option>
 				<foreach name="DeptStaff" key="dept" item="Staff">
 					<optgroup label="{$dept}">
-					<foreach name="Staff" item="staff" key="j">
-						<if condition="$j eq 0">
-							<if condition="!empty($info['deputy_id']) and $info['deputy_id'] eq $staff['id']">
-						<option value="{$staff['id']}" selected="selected" style="background-color:#FABF8F;">{$staff['realname']}</option>
-							<else />
-						<option value="{$staff['id']}" style="background-color:#FABF8F;">{$staff['realname']}</option>
-							</if>
+					<if condition="!empty($Staff['leader'])">
+						<if condition="!empty($info['staff_id']) and $info['staff_id'] eq $Staff['leader']['id']">
+						<option value="{$Staff['leader']['id']}" selected="selected" style="background-color:#FABF8F;">{$Staff['leader']['realname']}</option>
 						<else />
-							<if condition="!empty($info['deputy_id']) and $info['deputy_id'] eq $staff['id']">
+						<option value="{$Staff['leader']['id']}" style="background-color:#FABF8F;">{$Staff['leader']['realname']}</option>
+						</if>
+					</if>
+					<if condition="!empty($Staff['staff'])">
+						<foreach name="Staff.staff" item="staff">
+							<if condition="!empty($info['staff_id']) and $info['staff_id'] eq $staff['id']">
 						<option value="{$staff['id']}" selected="selected">{$staff['realname']}</option>
 							<else />
 						<option value="{$staff['id']}">{$staff['realname']}</option>
 							</if>
-						</if>
-					</foreach>
+						</foreach>
+					</if>
 					</optgroup>
 				</foreach>
 				</select>

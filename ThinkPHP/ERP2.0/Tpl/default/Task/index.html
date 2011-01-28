@@ -16,113 +16,85 @@ td.status div.close {
 	background-color:#FF0000;
 	color: #FFFFFF;
 }
+.owner_list td.Open, strong.Open {
+	color: #339900;
+}
+.owner_list td.Pending, strong.Pending {
+	color: #0000FF;
+}
+.owner_list td.Close, strong.Close {
+	color: #FF0000;
+}
 </style>
 <p class="page_title_text"></p>
-<table width="90%" cellpadding="0" cellspacing="0" border="0" style="background-color:#FFFFFF;">
+<table>
 <tr>
-	<td width="420" valign="top">
-		<table width="100%" cellpadding="3" border="1" bordercolor="#FFFFFF" style="border-collapse:collapse;margin-bottom:5px;">
+	<td>
+		<form action="__URL__/index" method="post">
+		<table id="search_table" cellpadding="3" border="1" bordercolor="#FFFFFF" style="border-collapse:collapse;">
 		<tr>
-			<th style="text-align:left;">&nbsp;&nbsp;
-				<if condition="$type eq ''">
-				Character as 
-				<select name="character" onchange="javascript:location.href='__URL__?character='+this.value;">
-					{$character_opts}
-				</select>
-				<else />
-				Category:
-				<select name="category" style="width:200px;" onchange="javascript:location.href='__URL__?category_id='+this.value;">
-					<option value="0">All Category</option>
-					{$category_opts}
-				</select>
-				</if>
-			</th>
+			<th>Project</th>
+			<th>Category</th>
+			<th>Creator</th>
+			<th>Owner</th>
+			<td rowspan="2"><input type="submit" name="submit" value="Filter"/></td>
+			<td rowspan="2"><input type="button" onclick="javascript:document.location='__URL__/form';" value="Create Task" /></td>
+
+		</tr>
+		<tr>
+			<td><input type="text" name="title" size="10" value="{$request['title']}"/></td>
+			<td><select name="category_id"><option value="">All</option>{$category_opts}</select></td>
+			<td><select name="category_id"><option value="">All</option>{$category_opts}</select></td>
+			<td><select name="category_id"><option value="">All</option>{$category_opts}</select></td>
 		</tr>
 		</table>
-		<table width="100%" cellpadding="3" border="0" bordercolor="#FFFFFF" style="border-collapse:collapse;">
-		<tr bgcolor="#FFFFFF">
-			<td colspan="4">{$page}</td>
-		</tr>
-		<iterate name="result" id="item">
-		<tr class="trbg{$mod}">
-			<td width="5%">T{$item.id|sprintf='%06s',###}: </td>
-			<td><a href="javascript:void(0);" onclick="show_detail({$item.id});" title="Click to show task detail">{$item.title}</td>
-			<td class="status" width="16" nowrap="nowrap" style="cursor:default;">
-				<if condition="$item.status eq 0">
-				<div class="open" title="Open">O</div>
-				<elseif condition="$item.status eq -1" />
-				<div class="pending" title="Pending">P</div>
-				<elseif condition="$item.status eq 1" />
-				<div class="close" title="Close">C</div>
-				</if>
-			</td>
-			<td width="5%" nowrap="nowrap">
-				<if condition="$_SESSION[C('ADMIN_AUTH_NAME')] or $_SESSION[C('USER_AUTH_KEY')] eq $item.creator_id or in_array($_SESSION[C('USER_AUTH_KEY')], C('TASK_ADMIN_ID'))"><img src="../Public/Images/form_edit.gif" border="0" alt="Edit" align="absmiddle" title="Edit this task" style="cursor:pointer;" onClick="show_form({$item.id});" />
-				<img src="../Public/Images/cross.gif" align="absmiddle" border="0" alt="Delete" title="Delete this task" style="cursor:pointer;" onclick="myConfirm('Are you sure to delete this task?', '__URL__/delete/id/{$item.id}');"/></if>
-			</td>
-		</tr>
-		</iterate>
-		<empty name="result">
-		<tr>
-			<td colspan="4" align="center">No Task</td>
-		</tr>
-		</empty>
-		</table>
-		<br />&nbsp;
-		<input type="button" onclick="javascript:show_form(0);" value="Create Task" />
-	</td>
-	<td width="5">&nbsp;</td>
-	<td valign="top" id="task_main">&nbsp;
+		</form>
 	</td>
 </tr>
 </table>
-
-<p class="center"></p>
-<script language="javascript" type="text/javascript" src="../Public/Js/tiny_mce/tiny_mce.js"></script>
-<script type="text/javascript">
-$(document).ready(function(){
-	$(".trbg0, .trbg1").each(function(i) {
-		$(this).mousedown(function() {
-			$(this).siblings("tr[class]").each(function(i) {
-				$(this).removeAttr('style');
-			});
-			$(this).attr('style','background-color:#FFCC99');
-		});
-	});
-//	
-//	
-});
-function show_form(id) {
-	$.get(
-		'__URL__/form/id/'+id,
-		function(html) {
-			$("#task_main").html(html);
-			tinyMCE.init({
-				mode : "textareas",
-				theme : "advanced",
-				plugins : "media,advimage,table",
-				extended_valid_elements : "embed[quality|type|pluginspage|width|height|src|align|wmode|autostart|flashvars|allowscriptaccess|bgcolor|EnableContextMenu|loop|showpostplaybackad|custommode|autoplay],object[classid|codebase|width|height|align],param[name|value],link[rel|href|type],style[]",
-				theme_advanced_toolbar_location : "top",
-				theme_advanced_toolbar_align : "left",
-				theme_advanced_buttons1 : "fontsizeselect,bold,italic,underline,separator,forecolor,backcolor,link,unlink,separator,justifyleft,justifycenter,justifyright,table,separator,image,media,separator,removeformat,code",
-				theme_advanced_buttons2 : "",
-				theme_advanced_buttons3 : "",
-				force_p_newlines : false,
-				force_br_newlines : true,
-				forced_root_block : false,
-				convert_urls : false,
-				
-				theme_advanced_buttons1_add : ""
-			});
-		}
-	);
-}
-function show_detail(id) {
-	$.get(
-		'__URL__/detail/id/'+id,
-		function(html) {
-			$("#task_main").html(html);
-		}
-	);
-}
-</script>
+<table cellpadding="3" cellspacing="0" border="1" bordercolor="#FFFFFF" style="border-collapse:collapse;">
+<tr>
+	<td colspan="7">{$page}</td>
+</tr>
+<tr>
+	<th>Task No.</th>
+	<th>Project</th>
+	<th>Category</th>
+	<th>Creator</th>
+	<th>Owners</th>
+	<th>Due Date</th>
+	<th>OP</th>
+</tr>
+<iterate name="result" id="item">
+<tr class="trbg{$mod}">
+	<td>T{$item.id|sprintf='%06s',###}: </td>
+	<td><a href="__URL__/detail/id/{$item['id']}?width=600&height=600&modal=true" class="thickbox" title="Click to show task detail">{$item.title}</td>
+	<td>{$item['category']['name']}</td>
+	<td>{$item['creator']['realname']}</td>
+	<td>
+		<table width="100%" class="owner_list" style="background-color:transparent;">
+		<foreach name="item.owner" item="owner">
+		<tr>
+			<td width="100" nowrap="nowrap">{$owner.realname}</td>
+			<td width="60"class="{$status_arr[$owner['status']]}"><strong>{$status_arr[$owner['status']]}</strong></td>
+			
+		</tr>
+		</foreach>
+		</table>
+	</td>
+	<td>{$item['due_date']}</td>
+	<td>
+		<if condition="$_SESSION[C('ADMIN_AUTH_NAME')] or $_SESSION[C('USER_AUTH_KEY')] eq $item.creator_id or in_array($_SESSION[C('USER_AUTH_KEY')], C('TASK_ADMIN_ID'))"><a href="__URL__/form/id/{$item.id}" title="Edit this task"><img src="../Public/Images/form_edit.gif" border="0" alt="Edit" align="absmiddle" /></a>
+		<img src="../Public/Images/cross.gif" align="absmiddle" border="0" alt="Delete" title="Delete this task" style="cursor:pointer;" onclick="myConfirm('Are you sure to delete this task?', '__URL__/delete/id/{$item.id}');"/></if>
+	</td>
+</tr>
+</iterate>
+<empty name="result">
+<tr>
+	<td colspan="7" align="center">No Task</td>
+</tr>
+</empty>
+<tr>
+	<td colspan="7">{$page}</td>
+</tr>
+</table>

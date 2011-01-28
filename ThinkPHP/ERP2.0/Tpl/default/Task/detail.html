@@ -1,13 +1,27 @@
 <style>
-#owner_list td.Open, strong.Open {
-	color: #00FF00;
+legend {
+	line-height:24px;
 }
-#owner_list td.Pending, strong.Pending {
-	color: #0000FF;
+dt {
+	padding:3px;border-left:3px solid #CC0000;background-color:#BEBEBE;
 }
-#owner_list td.Close, strong.Close {
-	color: #FF0000;
+dl{
+	height:199px;
+	overflow-y:auto;
 }
+dd {
+	padding:5px;
+}
+dt span,dd span{
+	float:right;
+}
+textarea {
+	width:240px;
+	height:42px;
+	margin-top:4px;
+}
+#think_run_time,#think_page_trace{display:none;}
+
 </style>
 <p class="page_title_text">{$ACTION_TITLE}</p>
 <table style="background-color:#FFFFFF">
@@ -72,50 +86,34 @@
 			<td colspan="3" bgcolor="#FFFFFF">{$info.descr}</td>
 		</tr>
 		</table>
-		<br />
-		<foreach name="info.comment" item="item">
-		<table width="100%" border="0" cellpadding="0" cellspacing="0" style="background-color: #FFFFFF;">
-		<tr>
-			<td width="8" height="8"><img src="../Public/Images/talk_01.gif" width="8" height="8" alt=""></td>
-			<td background="../Public/Images/talk_02.gif"><img src="../Public/Images/spacer.gif" width="400" height="8" alt=""></td>
-			<td width="8"><img src="../Public/Images/talk_03.gif" width="8" height="8" alt=""></td>
-		</tr>
-		<tr>
-			<td background="../Public/Images/talk_04.gif"><img src="../Public/Images/spacer.gif" width="8" height="20" alt=""></td>
-			<td valign="top">
-				{$item.content|nl2br}
-			</td>
-			<td background="../Public/Images/talk_06.gif"><img src="../Public/Images/spacer.gif" width="8" alt=""></td>
-		</tr>
-		<tr>
-			<td height="8"><img src="../Public/Images/talk_07.gif" width="8" height="8" alt=""></td>
-			<td background="../Public/Images/talk_08.gif"><img src="../Public/Images/spacer.gif" width="400" height="8" alt=""></td>
-			<td><img src="../Public/Images/talk_09.gif" width="8" height="8" alt=""></td>
-		</tr>
-		<tr>
-			<td height="41"><img src="../Public/Images/spacer.gif" width="8" height="41" alt=""></td>
-			<td valign="top">
-				<div style="height:41px;line-height:30px;padding-left:56px;background:url(../Public/Images/talk_11.gif) left top no-repeat;">
-					<span style="float:right;">
-						<if condition="$_SESSION[C('USER_AUTH_KEY')] eq $item['staff_id']">
+		<fieldset>
+			<legend>Comment</legend>
+			<dl id="comment_list">
+				<foreach name="info.comment" item="item">
+				<dt id="dt_{$item['id']}">
+					<span>{$item['create_time']}</span>{$item['realname']}
+				</dt>
+				<dd id="dd_{$item['id']}">
+					<span><if condition="$_SESSION[C('USER_AUTH_KEY')] eq $item['staff_id']">
 						<img src="../Public/Images/form_edit.gif" border="0" alt="Edit" align="absmiddle" style="cursor:pointer;" onClick="edit_comment({$item.id});" title="Click to edit this comment" />
 						</if>
 						<if condition="$_SESSION[C('USER_AUTH_KEY')] eq $info['creator_id'] or $_SESSION[C('USER_AUTH_KEY')] eq $item['staff_id'] or $_SESSION[C('ADMIN_AUTH_NAME')] or in_array($_SESSION[C('USER_AUTH_KEY')], C('TASK_ADMIN_ID'))">
 						<img src="../Public/Images/cross.gif" alt="Delete" align="absmiddle" border="0" style="cursor:pointer;" onclick="myConfirm('Are you sure to delete this comment?', '__URL__/delete_comment/id/{$item.id}/task_id/{$info.id}');" title="Click to delete this comment" />
 						</if>
 					</span>
-					{$item.realname}<font color="gray"> at </font>{$item.create_time}
-				</div>
-			</td>
-			<td><img src="../Public/Images/spacer.gif" width="8" height="41" alt=""></td>
-		</tr>
-		</table>
-		</foreach>
+					<div>{$item['content']|nl2br}</div></dd>
+				</foreach>
+				<empty name="info.comment">
+				<p class="center">No Comment</p>
+				</empty>
+			</dl>
+		</fieldset>
 		<form action="__URL__/comment" method="post" target="_iframe">
 		<input type="hidden" name="task_id" value="{$info.id}" />
 		<input type="hidden" name="id" value="" />
-		<textarea name="content" cols="55" rows="5"></textarea>
+		<textarea name="content" cols="40" rows="4"></textarea>
 		<input type="submit" value="Post my comment" name="submit" />
+		<input type="button" value="Close" onclick="self.parent.tb_remove();"/>
 		</form>
 	</td>
 </tr>
