@@ -81,8 +81,11 @@ class TaskAction extends BaseAction{
 		$total = $this->dao->where($where)->count();
 		$p = new Paginator($total,$limit);
 		
-		$result = (array)$this->dao->where($where)->order('id desc')->limit($p->offset.','.$p->limit)->field($field)->select();
+		$result = (array)$this->dao->relation(true)->where($where)->order('id desc')->limit($p->offset.','.$p->limit)->field($field)->select();
 		foreach ($result as $i=>$row) {
+			foreach($row['owner'] as $key=>$val) {
+				$result[$i]['owner'][$key]['realname'] = M('Staff')->where('id='.$val['staff_id'])->getField('realname');
+			}
 			if ($row['status'] == 0) {
 				$rs = M('TaskOwner')->where(array('task_id'=>$row['id']))->getField('id,status');
 				if (in_array(-1, $rs)) {
@@ -101,7 +104,7 @@ class TaskAction extends BaseAction{
 		$this->assign('request', $_REQUEST);
 		$this->assign('result', $result);
 
-		$this->assign('page', $p->showLinkNavi());
+		$this->assign('page', $p->showMultiNavi());
 
 		$this->assign('type', $type);
 		$this->assign('content', 'index');
@@ -209,7 +212,7 @@ class TaskAction extends BaseAction{
 		$this->assign('DeptStaff', $dept_staff_arr);
 
 		$this->assign('content', ACTION_NAME);
-		$this->display('Layout:content');
+		$this->display('Layout:ERP_layout');
 	}
 
 	public function submit(){

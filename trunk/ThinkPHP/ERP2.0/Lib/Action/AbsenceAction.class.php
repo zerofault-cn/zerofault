@@ -314,22 +314,15 @@ class AbsenceAction extends BaseAction{
 		$this->assign('time_to', $time_to);
 
 		$dept_staff_arr = array();
-		$has_other = false;
-		$rs = M('Staff')->where('status=1')->distinct(true)->field('dept_id')->select();
-		foreach ($rs as $arr) {
-			if (0==$arr['dept_id']) {
-				$has_other = true;
-				continue;
-			}
-			$dept = M('Department')->find($arr['dept_id']);
-			$dept_staff_arr[$dept['name']] = M('Staff')->where(array('id'=>array('neq', $dept['leader_id']), 'dept_id'=>$dept['id'], 'status'=>1))->order('realname')->field('id,realname,email')->select();
-			if ($dept['leader_id']>0) {
-				array_unshift($dept_staff_arr[$dept['name']], M('Staff')->field('id,realname,email')->find($dept['leader_id']));
-			}
+		foreach ((array)M('Department')->order('name')->select() as $dept) {
+			$dept_staff_arr[$dept['name']] = array(
+				'leader' => M('Staff')->field('id, realname')->find($dept['leader_id']),
+				'staff'  => M('Staff')->field('id, realname')->where(array('id'=>array('neq', $dept['leader_id']), 'dept_id'=>$dept['id'], 'status'=>1))->order('realname')->select()
+			);
 		}
-		ksort($dept_staff_arr);
-		if ($has_other) {
-			$dept_staff_arr['No Department'] = M('Staff')->where(array('dept_id'=>0, 'status'=>1))->order('realname')->field('id,realname,email')->select();
+		$rs = M('Staff')->where(array('dept_id'=>0, 'status'=>1))->order('realname')->field('id,realname')->select();
+		if (!empty($rs)) {
+			$dept_staff_arr['No Department']['staff'] = $rs;
 		}
 		$this->assign('DeptStaff', $dept_staff_arr);
 
