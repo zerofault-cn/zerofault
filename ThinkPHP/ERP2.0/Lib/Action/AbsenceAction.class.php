@@ -679,6 +679,20 @@ class AbsenceAction extends BaseAction{
 	public function confirm() {
 		$id = $_REQUEST['id'];
 		$status = intval($_REQUEST['status']);
+		if ($status != '2') {
+			list($name, $email) = each($this->Absence_Config['application']['level_2']['approver']);
+			if (strtoupper($_SESSION[C('STAFF_AUTH_NAME')]['name']) == $name) {
+				$status += 1;
+				$status = min($status, 1);
+			}
+			else {
+				list($name, $email) = each($this->Absence_Config['application']['level_2']['approver']);
+				if (strtoupper($_SESSION[C('STAFF_AUTH_NAME')]['name']) == $name) {
+					$status += 2;
+					$status = min($status, 1);
+				}
+			}
+		}
 		$comment = $_REQUEST['comment'];
 		if (empty($id)) {
 			return;
