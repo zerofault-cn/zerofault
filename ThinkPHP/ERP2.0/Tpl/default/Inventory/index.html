@@ -106,7 +106,6 @@ td.editing input{
 </tr>
 </table>
 <small>Tips: For green cells, "Click" to edit, "Enter" to submit, "ESC" to cancel.</small>
-
 <form action="__URL__/index">
 <p class="center">
 	<input type="hidden" name="category_id" value="{$request['category_id']}" />
@@ -121,6 +120,7 @@ td.editing input{
 	<if condition="$_SESSION[C('ADMIN_AUTH_NAME')] eq true or !empty($_SESSION[C('MANAGER_AUTH_NAME')][1])"><input type="submit" name="submit" value="Export as Excel" /></if>
 </p>
 </form>
+<br /><br /><br /><br /><br /><br /><br /><br />
 <div style="display:none" id="batch_form">
 <p class="page_title_text"></p>
 <form name="Batch" action="__URL__/batch" method="post" target="_iframe">
