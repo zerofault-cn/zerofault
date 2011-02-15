@@ -793,34 +793,40 @@ class AbsenceAction extends BaseAction{
 		}
 		$rs = (array)M('Staff')->where($where)->select();
 		foreach ($rs as $i=>$row) {
-			//历史用掉的年假
+			//历年用掉的年假
 			$where = array(
-				'type' => array('in', array('Annual','CashOut')),
+				'type' => 'Annual',
 				'staff_id' => $row['id'],
 				'status' => 1,
 				'time_from' => array('lt', date('Y', $this->time).'-01-01')
 				);
-			$history_annual_used = $this->dao->where($where)->sum('hours');
+			$history_used = $this->dao->where($where)->sum('hours');
+			//历年的Cash Out
+			$where = array(
+				'type' => 'CashOut',
+				'staff_id' => $row['id'],
+				'status' => 1,
+				'create_time' => array('lt', date('Y', $this->time).'-01-01')
+				);
+			$history_used += $this->dao->where($where)->sum('hours');
 			//今年用掉的年假
 			$where = array(
-				'type' => array('in', array('Annual','CashOut')),
+				'type' => 'Annual',
 				'staff_id' => $row['id'],
 				'status' => 1,
 				'time_from' => array(array('egt', date('Y', $this->time).'-01-01'), array('lt', (date('Y', $this->time)+1).'-01-01'))
 				);
 			$annual_used = $this->dao->where($where)->sum('hours');
 			
-			$annual_available = 0;
+			$balance = $annual_added = 0;
 			if (strcmp($row['onboard'], date('Y', $this->time).'-01-00')>0) {
 				$balance = round($row['balance']*8);
 				//今年入职的员工，从入职之日算起
 				$annual_added = round(($this->time - strtotime($row['onboard']))/86400*360/(365+date('L', $this->time))/30*1.25*8);//每个月1.25天
-				$annual_available += $annual_added;
 			}
 			else {
 				//今年之前入职的员工，从今年01-01算起
 				$annual_added = round(date('z', $this->time)*360/(365+date('L', $this->time))/30*1.25*8);
-				$annual_available += $annual_added;
 				if (date('Y', $this->time)==2010) {
 					$balance = round($row['balance']*8);
 				}
@@ -836,11 +842,11 @@ class AbsenceAction extends BaseAction{
 					}
 				}
 			}
-			$annual_available += max(0, $balance-$annual_used-$history_annual_used);
-			$rs[$i]['Balance'] = self::parseHour($balance-$history_annual_used);
+			$rs[$i]['Balance'] = self::parseHour($balance-$history_used);
 			$rs[$i]['Annual'] =  self::parseHour($annual_added);
 			$rs[$i]['Annual_used'] = self::parseHour($annual_used);
 
+			$cashout_used = 0;
 			unset($where['time_from']);
 			$where['type'] = 'CashOut';
 			$arr = array(
@@ -856,9 +862,11 @@ class AbsenceAction extends BaseAction{
 			foreach ($arr as $key=>$val) {
 				$where['create_time'] = $val;
 				$hour = $this->dao->where($where)->sum('hours');
-				$annual_available -= $hour;
+				$cashout_used += $hour;
 				$rs[$i]['CashOut'][$key] = self::parseHour($hour);
 			}
+
+			$annual_available = $balance-$history_used+$annual_added-$annual_used-$cashout_used;
 			$rs[$i]['Annual_available'] = self::parseHour($annual_available);
 			$leave_available = $annual_available;
 

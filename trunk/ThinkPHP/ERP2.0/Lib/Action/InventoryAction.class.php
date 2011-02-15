@@ -117,6 +117,7 @@ class InventoryAction extends BaseAction{
 
 		Session::set('sub', MODULE_NAME.'/'.ACTION_NAME);
 		$this->assign('ACTION_TITLE', 'List');
+
 		$this->assign('category_opts', self::genOptions(M('Category')->where("type='Component' or type='Board'")->select(), $_REQUEST['category_id']) );
 		$this->assign('supplier_opts', self::genOptions(D('Supplier')->select(), $_REQUEST['supplier_id']));
 
@@ -276,16 +277,28 @@ class InventoryAction extends BaseAction{
 		$info['staff_opts'] = self::genOptions(M('Staff')->where(array('status'=>1, 'id'=>array('neq',$_SESSION[C('USER_AUTH_KEY')])))->select(), '', 'realname');
 		$this->assign('info', $info);
 
+		$this->assign('category_opts', self::genOptions(M('Category')->where("type='Component' or type='Board'")->select(), $_REQUEST['category_id']) );
+		$this->assign('request', $_REQUEST);
+
 		$location_id = intval($_REQUEST['id']);
 		$this->assign('location_id', $location_id);
 		Session::set('sub', MODULE_NAME.'/'.ACTION_NAME.'/id/'.$location_id);
-		$rs = D('LocationProduct')->relation(true)->where(array('type'=>'location','location_id'=>$location_id,'chg_quantity'=>array('gt',0)))->select();
-		empty($rs) && ($rs = array());
+		$sql = "select LocationProduct.product_id, LocationProduct.chg_quantity, Product.Internal_PN, Product.description, Product.fixed, Product.unit_id from erp_location_product LocationProduct, erp_product Product where LocationProduct.type='location' and LocationProduct.location_id=".$location_id." and LocationProduct.chg_quantity>0 and LocationProduct.product_id=Product.id";
+		if(!empty($_REQUEST['submit'])) {
+			(''!=$_REQUEST['category_id']) && ($sql .= " and Product.category_id=".$_REQUEST['category_id']);
+			(''!=trim($_REQUEST['Internal_PN'])) && ($sql .= " and Product.Internal_PN like '%".trim($_REQUEST['Internal_PN'])."%'");
+			(''!=trim($_REQUEST['description'])) && ($sql .= " and Product.description like '%".trim($_REQUEST['description'])."%'");
+			(''!=trim($_REQUEST['manufacture'])) && ($sql .= " and Product.manufacture like '%".trim($_REQUEST['manufacture'])."%'");
+			(''!=trim($_REQUEST['MPN'])) 		 && ($sql .= " and Product.MPN like '%".trim($_REQUEST['MPN'])."%'");
+			(''!=trim($_REQUEST['value'])) 		 && ($sql .= " and Product.value='".trim($_REQUEST['value'])."'");
+			(''!=trim($_REQUEST['project'])) 	 && ($sql .= " and Product.project like '%".trim($_REQUEST['project'])."%'");
+		}
+		$rs = (array)$this->dao->query($sql);
 		$result = array();
 		foreach ($rs as $item) {
 			$lastRemark = self::getLastComment($item['product_id'])."\n";
 			$item['lastRemark'] = substr($lastRemark, 0, strpos($lastRemark, "\n"));
-			$item['unit_name'] = M('Options')->where('id='.$item['product']['unit_id'])->getField('name');
+			$item['unit_name'] = M('Options')->where('id='.$item['unit_id'])->getField('name');
 			//获取物品的最后入库时间
 			$where = array();
 			$where['product_id'] = $item['product_id'];

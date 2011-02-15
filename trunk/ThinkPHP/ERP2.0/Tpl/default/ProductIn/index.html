@@ -23,6 +23,7 @@
 			<th>Unit</th>
 			<th>Price</th>
 			<th>Total</th>
+			<th>Currency</th>
 			<th>OP Time</th>
 			<th>OP Staff</th>
 			<eq name="status" value="1"><th>Confirm Staff</th></eq>
@@ -41,7 +42,8 @@
 			<td>{$item['quantity']}<if condition="$action neq 'reject' and $status eq 1">/{$item['rejected_quantity']}</if></td>
 			<td>{$unit[$item['product']['unit_id']]}</td>
 			<td>{$item['price']}</td>
-			<td>{$item['quantity']*$item['price']}</td>
+			<td>{$item['quantity']*$item['price']|round=2}</td>
+			<td>{$item['currency']['code']}</td>
 			<td>{$item['create_time']}</td>
 			<td align="center">{$item['staff']['realname']}</td>
 			<eq name="status" value="1"><td align="center">{$item['confirmed_staff']['realname']}</td></eq>
