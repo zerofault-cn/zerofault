@@ -372,7 +372,9 @@ class ProductAction extends BaseAction{
 	}
 	public function info() {
 		$id = $_REQUEST['id'];
-		$this->assign("info", $this->dao->relation(true)->find($id));
+		$info = $this->dao->relation(true)->find($id);
+		$info['flow'] = D('ProductFlow')->relation(true)->where('product_id='.$id)->find();
+		$this->assign("info", $info);
 		$this->assign('content', 'Product:info');
 		$this->display('Layout:content');
 	}

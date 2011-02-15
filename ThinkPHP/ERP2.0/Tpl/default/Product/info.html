@@ -33,6 +33,14 @@
 	<td class="attribute">Value/Package:</td>
 	<td>{$info['value']}</td>
 </tr>
+<tr class="trbg1">
+	<td class="attribute">Price:</td>
+	<td>{$info['flow']['price']|round=2} {$info['flow']['currency']['code']}</td>
+</tr>
+<tr class="trbg0">
+	<td class="attribute">Accessories:</td>
+	<td>{$info['flow']['accessories']|nl2br}</td>
+</tr>
 </table>
 <style>
 #think_run_time,#think_page_trace{display:none;}

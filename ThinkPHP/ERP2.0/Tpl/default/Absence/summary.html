@@ -5,17 +5,17 @@
 	<th rowspan="2">Enroll Date</th>
 	<th colspan="6">Annual Leave</th>
 	<th colspan="2">Compensatory Leave</th>
-	<th rowspan="2">Total Available</th>
+	<th rowspan="2">Total Available<br />(= <span style="background-color:#00CC00">　</span> - <span style="background-color:#CCCC00">　</span> + <span style="background-color:#33CCCC">　</span>)</th>
 </tr>
 <tr>
-	<th>{$leave_info['Balance_year']} Balance</th>
-	<th>{$leave_info['Annual_year']} Accumulated</th>
-	<th>{$leave_info['Annual_year']} Consumed</th>
-	<th>Cash out Days in {$leave_info['CashOut'][0]['Month']}</th>
-	<th>Cash out Days in {$leave_info['CashOut'][1]['Month']}</th>
-	<th>Available</th>
-	<th>3 months ago</th>
-	<th>last 3 months</th>
+	<th style="background-color:#00CC00">{$leave_info['Balance_year']} Balance</th>
+	<th style="background-color:#00CC00">{$leave_info['Annual_year']} Accumulated</th>
+	<th style="background-color:#CCCC00">{$leave_info['Annual_year']} Consumed</th>
+	<th style="background-color:#CCCC00">Cash out Days in {$leave_info['CashOut'][0]['Month']}</th>
+	<th style="background-color:#CCCC00">Cash out Days in {$leave_info['CashOut'][1]['Month']}</th>
+	<th>Available<br />(= <span style="background-color:#00CC00">　</span> - <span style="background-color:#CCCC00">　</span>)</th>
+	<th style="background-color:#33CCCC">3 months ago</th>
+	<th style="background-color:#33CCCC">last 3 months</th>
 </tr>
 <iterate name="result" id="item">
 <tr class="trbg{$mod}">
