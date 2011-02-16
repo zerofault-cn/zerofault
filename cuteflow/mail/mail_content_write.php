@@ -961,8 +961,11 @@
 							
 							if ($arrNextUser[2] !== false && $arrNextUser[2] != $nSlotId) {
 								// Slot has changed
+								//reset pause flag
+								$sql = "Update cf_circulationhistory set pausedTime=0, pausedInterval=0 where nCirculationFormId=".$arrProcessInfo["nCirculationFormId"]." and nID=".$arrProcessInfo["nCirculationHistoryId"];
+								mysql_query($sql);
+
 								// Send a notification if this is wished
-												
 								$strQuery = "SELECT * FROM cf_circulationform WHERE nID=".$arrProcessInfo["nCirculationFormId"];
 								$nResult = mysql_query($strQuery, $nConnection);
 								if ($nResult)
@@ -997,6 +1000,10 @@
 						}
 						else
 						{
+							//reset pause flag
+							$sql = "Update cf_circulationhistory set pausedTime=0, pausedInterval=0 where nCirculationFormId=".$arrProcessInfo["nCirculationFormId"]." and nID=".$arrProcessInfo["nCirculationHistoryId"];
+							mysql_query($sql);
+							
 							//--- send done email to sender if wanted
 							$strQuery = "SELECT * FROM cf_circulationform WHERE nID=".$arrProcessInfo["nCirculationFormId"];
 							$nResult = mysql_query($strQuery, $nConnection);
