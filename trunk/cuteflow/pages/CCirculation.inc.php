@@ -1543,7 +1543,7 @@ class CCirculation
 		$Id_arr					= $this->getProcessId_arr($arrHistoryData);
         foreach ($Id_arr as $nId) {
 			$arrProcessInformation 	= $this->getProcessInformation($nId);
-	        if (!isset($arrResults['nDaysInProgress']) && ($arrProcessInformation["nDecissionState"] == 0) || ($arrProcessInformation["nDecissionState"] == 8) )
+	        if (!isset($arrResults['nDaysInProgress']) && ($arrProcessInformation["nDecissionState"] == 0))
 			{
 				$tsDateInProcessSince = $arrProcessInformation["dateInProcessSince"];
 				$tsNow = time();
