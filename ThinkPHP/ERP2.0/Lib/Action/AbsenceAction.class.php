@@ -1383,6 +1383,26 @@ class AbsenceAction extends BaseAction{
 			}
 		}
 	}
+	public function press(){
+		$where = array(
+			'status' => array('lt', 1),
+			'create_time' => array('lt', date("Y-m-d"))
+			);
+		$rs = $this->dao->relation(true)->where($where)->select();
+		if (empty($rs)) {
+			echo 'No application to press';
+			return;
+		}
+		echo 'Get '.count($rs)." records.<br />\n";
+		foreach ($rs as $item) {
+			echo "\tFor ID:".$item['id']."\t";
+			$this->dao->find($item['id']);
+			if (self::mail_application($this->dao)) {
+				echo "Success!<br />\n";
+				Log::Write('Press '.$item['staff']['email'].' success', INFO);
+			}
+		}
+	}
 
 	/**
 	*
