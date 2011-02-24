@@ -151,16 +151,6 @@ class BaseAction extends Action {
 		$html .= '</script>';
 		die($html);
 	}
-	protected function task_detail_success($task_id, $msg='', $url='', $timeout=2000) {
-		$html  = '<script language="JavaScript" type="text/javascript">';
-		if($msg) {
-			$html .= 'parent.myAlert("'.$msg.'");';
-		}
-		$html .= 'parent.myOK(1000);';
-		$html .= 'setTimeout(function() {parent.show_detail('.$task_id.');}, 500);';
-		$html .= '</script>';
-		die($html);
-	}
 	/**
 	*
 	* 生成弹出“操作失败”提示的js代码
