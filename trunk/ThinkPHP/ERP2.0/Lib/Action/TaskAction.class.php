@@ -24,41 +24,12 @@ class TaskAction extends BaseAction{
 
 	public function index($type='') {
 		$where = array();
-		if (''==$type) {
+		if (''==$type) { //my task
 			Session::set('sub', MODULE_NAME);
-			if (!empty($_SESSION[MODULE_NAME.'_'.ACTION_NAME.'_character'])) {
-				$character = $_SESSION[MODULE_NAME.'_'.ACTION_NAME.'_character'];
-			}
-			if (isset($_REQUEST['character'])) {
-				$character = $_REQUEST['character'];
-			}
-			$_SESSION[MODULE_NAME.'_'.ACTION_NAME.'_character'] = $character;
-			$character_arr = array(
-				array(
-					'id' => 'A',
-					'name' => 'Any'
-				),
-				array(
-					'id' => 'C',
-					'name' => 'Creator'
-				),
-				array(
-					'id' => 'O',
-					'name' => 'Owner'
-				)
-			);
-			$this->assign('character_opts', self::genOptions($character_arr, $character));
-			if (empty($character) || 'A'==$character) {
-				$rs = M('TaskOwner')->where('staff_id='.$_SESSION[C('USER_AUTH_KEY')])->getField('id,task_id');
-				$where['_string'] = "creator_id=".$_SESSION[C('USER_AUTH_KEY')]." or id in (".implode(',',  $rs).")";
-			}
-			elseif ('C'==$character) {
-				$where['creator_id'] = $_SESSION[C('USER_AUTH_KEY')];
-			}
-			elseif ('O'==$character) {
-				$rs = M('TaskOwner')->where('staff_id='.$_SESSION[C('USER_AUTH_KEY')])->getField('id,task_id');
-				$where['id'] = array('in', array_values($rs));
-			}
+			
+			$rs = M('TaskOwner')->where('staff_id='.$_SESSION[C('USER_AUTH_KEY')])->getField('id,task_id');
+			$where['_string'] = "creator_id=".$_SESSION[C('USER_AUTH_KEY')]." or id in (".implode(',',  $rs).")";
+			
 		}
 		else {
 			Session::set('sub', MODULE_NAME.'/all');
@@ -74,6 +45,34 @@ class TaskAction extends BaseAction{
 			if (!empty($category_id)) {
 				$where['category_id'] = $category_id;
 			}
+
+			if (!empty($_SESSION[MODULE_NAME.'_'.ACTION_NAME.'_creator_id'])) {
+				$creator_id = $_SESSION[MODULE_NAME.'_'.ACTION_NAME.'_creator_id'];
+			}
+			if (isset($_REQUEST['creator_id'])) {
+				$creator_id = intval($_REQUEST['creator_id']);
+			}
+			$_SESSION[MODULE_NAME.'_'.ACTION_NAME.'_creator_id'] = $creator_id;
+			$creator_arr = $this->dao->join("Inner Join erp_staff on erp_staff.id=erp_task.creator_id")->distinct(true)->field("erp_staff.id as id, erp_staff.realname as realname")->select();
+			$this->assign('creator_opts', self::genOptions($creator_arr, $category_id, 'realname'));
+			if (!empty($creator_id)) {
+				$where['creator_id'] = $creator_id;
+			}
+
+			if (!empty($_SESSION[MODULE_NAME.'_'.ACTION_NAME.'_owner_id'])) {
+				$owner_id = $_SESSION[MODULE_NAME.'_'.ACTION_NAME.'_owner_id'];
+			}
+			if (isset($_REQUEST['owner_id'])) {
+				$owner_id = intval($_REQUEST['owner_id']);
+			}
+			$_SESSION[MODULE_NAME.'_'.ACTION_NAME.'_owner_id'] = $owner_id;
+			$owner_arr = M('TaskOwner')->join("Inner Join erp_staff on erp_staff.id=erp_task_owner.staff_id")->distinct(true)->field("erp_staff.id as id, erp_staff.realname as realname")->select();
+			$this->assign('owner_opts', self::genOptions($owner_arr, $owner_id, 'realname'));
+			if (!empty($owner_id)) {
+				$rs = M('TaskOwner')->where('staff_id='.$owner_id)->getField('id,task_id');
+				$where['id'] = array('in', array_values($rs));
+			}
+			
 		}
 		import("@.Paginator");
 		$limit = 20;
@@ -81,7 +80,7 @@ class TaskAction extends BaseAction{
 		$total = $this->dao->where($where)->count();
 		$p = new Paginator($total,$limit);
 		
-		$result = (array)$this->dao->relation(true)->where($where)->order('id desc')->limit($p->offset.','.$p->limit)->field($field)->select();
+		$result = (array)$this->dao->relation(true)->where($where)->order('status, id desc')->limit($p->offset.','.$p->limit)->field($field)->select();
 		foreach ($result as $i=>$row) {
 			foreach($row['owner'] as $key=>$val) {
 				$result[$i]['owner'][$key]['realname'] = M('Staff')->where('id='.$val['staff_id'])->getField('realname');
@@ -97,7 +96,7 @@ class TaskAction extends BaseAction{
 				else {
 					$status = 1;
 				}
-				$result[$i]['status'] = $status;
+			//	$result[$i]['status'] = $status;
 			}
 		}
 
@@ -359,18 +358,28 @@ class TaskAction extends BaseAction{
 		$dao->content = $content;
 		if ($id>0) {
 			if(false !== $dao->save()){
-				self::task_detail_success($task_id, 'Comment updated!');
+				$html  = '<script language="JavaScript" type="text/javascript">';
+				$html .= 'parent.myAlert("Update comment success!");';
+				$html .= 'parent.myOK(500);';
+				$html .= 'parent.show_comment('.$id.', "'.str_replace(array("\r\n", "\n"), '<br />', $content).'");';
+				$html .= '</script>';
+				die($html);
 			}
 			else{
-				self::_error('Update fail!'.(C('APP_DEBUG')?$dao->getLastSql():''));
+				self::_error('Update comment fail!'.(C('APP_DEBUG')?$dao->getLastSql():''));
 			}
 		}
 		else {
-			if($dao->add()) {
-				self::task_detail_success($task_id, 'Post comment success!');
+			if($id=$dao->add()) {
+				$html  = '<script language="JavaScript" type="text/javascript">';
+				$html .= 'parent.myAlert("Post comment success!");';
+				$html .= 'parent.myOK(500);';
+				$html .= 'parent.show_comment('.$id.', "'.nl2br($content).'");';
+				$html .= '</script>';
+				die($html);
 			}
 			else{
-				self::_error('Add category fail!'.(C('APP_DEBUG')?$dao->getLastSql():''));
+				self::_error('Post comment fail!'.(C('APP_DEBUG')?$dao->getLastSql():''));
 			}
 		}
 	}
@@ -434,36 +443,24 @@ class TaskAction extends BaseAction{
 		$this->display('Layout:ERP_layout');
 	}
 
-	public function delete_owner() {
-		$id = $_REQUEST['id'];
-		$staff_id = $_REQUEST['staff_id'];
-		if (false !== M('TaskOwner')->where(array('task_id'=>$id, 'staff_id'=>$staff_id))->delete()) {
-			$html  = '<script language="JavaScript" type="text/javascript">';
-			$html .= 'parent.myAlert("Delete success!");';
-			$html .= 'parent.myOK(500);';
-			$html .= 'parent.remove_owner('.$staff_id.');';
-			$html .= '</script>';
-			die($html);
-		}
-		else {
-			self::_error('Delete fail!'.(C('APP_DEBUG')?M('TaskOwner')->getLastSql():''));
-		}
-	}
-	public function update_status() {
+	public function update() {
 		$id = $_REQUEST['id'];
 		$task_id = $_REQUEST['task_id'];
-		$value=$_REQUEST['v'];
+		$field = $_REQUEST['f'];
+		$value = $_REQUEST['v'];
 		if ($id > 0) {
-			$rs = M('TaskOwner')->where('id='.$id)->setField(array('status', 'action_time'), array($value, date('Y-m-d H:i:s')));
+			$dao = M('TaskOwner');
+			$rs = $dao->where('id='.$id)->setField(array($field, 'action_time'), array($value, date('Y-m-d H:i:s')));
 		}
 		else {
-			$rs = $this->dao->where('id='.$task_id)->setField(array('status', 'done_time'), array($value, date('Y-m-d H:i:s')));
+			$dao = $this->dao;
+			$rs = $dao->where('id='.$task_id)->setField(array($field, 'done_time'), array($value, date('Y-m-d H:i:s')));
 		}
 		if(false !== $rs) {
-			self::task_detail_success($task_id, 'Update success!');
+			self::_success('Update success!');
 		}
 		else {
-			self::_error('Update fail!'.(C('APP_DEBUG')?M('TaskOwner')->getLastSql():''));
+			self::_error('Update fail!'.(C('APP_DEBUG')? $dao->getLastSql() : ''));
 		}
 	}
 	public function delete() {
@@ -476,15 +473,35 @@ class TaskAction extends BaseAction{
 		}
 		self::_delete();
 	}
-	public function delete_comment() {
+	public function delete_owner() {
 		$id = $_REQUEST['id'];
-		$task_id = $_REQUEST['task_id'];
-		$dao = M('Comment');
-		if($dao->find($id) && $dao->delete()) {
-			self::task_detail_success($task_id, 'Delete success!');
+		$staff_id = $_REQUEST['staff_id'];
+		$dao = M('TaskOwner');
+		if (false !== $dao->where(array('task_id'=>$id, 'staff_id'=>$staff_id))->delete()) {
+			$html  = '<script language="JavaScript" type="text/javascript">';
+			$html .= 'parent.myAlert("Delete success!");';
+			$html .= 'parent.myOK(500);';
+			$html .= 'parent.remove_owner('.$staff_id.');';
+			$html .= '</script>';
+			die($html);
 		}
 		else {
 			self::_error('Delete fail!'.(C('APP_DEBUG')?$dao->getLastSql():''));
+		}
+	}
+	public function delete_comment() {
+		$id = $_REQUEST['id'];
+		$dao = M('Comment');
+		if($dao->find($id) && $dao->delete()) {
+			$html  = '<script language="JavaScript" type="text/javascript">';
+			$html .= 'parent.myAlert("Delete comment success!");';
+			$html .= 'parent.myOK(500);';
+			$html .= 'parent.remove_comment('.$id.');';
+			$html .= '</script>';
+			die($html);
+		}
+		else {
+			self::_error('Delete comment fail!'.(C('APP_DEBUG')?$dao->getLastSql():''));
 		}
 	}
 }

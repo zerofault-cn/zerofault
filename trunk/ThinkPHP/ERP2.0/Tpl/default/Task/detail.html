@@ -101,7 +101,8 @@ textarea {
 						<img src="../Public/Images/cross.gif" alt="Delete" align="absmiddle" border="0" style="cursor:pointer;" onclick="myConfirm('Are you sure to delete this comment?', '__URL__/delete_comment/id/{$item.id}/task_id/{$info.id}');" title="Click to delete this comment" />
 						</if>
 					</span>
-					<div>{$item['content']|nl2br}</div></dd>
+					<div>{$item['content']|nl2br}</div>
+				</dd>
 				</foreach>
 				<empty name="info.comment">
 				<p class="center">No Comment</p>
@@ -112,22 +113,15 @@ textarea {
 		<input type="hidden" name="task_id" value="{$info.id}" />
 		<input type="hidden" name="id" value="" />
 		<textarea name="content" cols="40" rows="4"></textarea>
-		<input type="submit" value="Post my comment" name="submit" />
+		<input type="submit" value="Post comment" name="submit" />
 		<input type="button" value="Close" onclick="self.parent.tb_remove();"/>
 		</form>
 	</td>
 </tr>
 </table>
 <script type="text/javascript">
-$(document).ready(function(){
-	$("img.result").each(function() {
-		$(this).css('cursor', 'pointer').click(function() {
-			changeStatus(this);
-		});
-	});
-});
 function changeStatus(id, task_id, status) {
-	$("#_iframe").attr('src', '__URL__/update_status/id/'+id+'/task_id/'+task_id+'/v/'+status);
+	$("#_iframe").attr('src', '__URL__/update/id/'+id+'/task_id/'+task_id+'/f/status/v/'+status);
 }
 var has_reset = false;
 function edit_comment(id) {
@@ -139,16 +133,36 @@ function edit_comment(id) {
 		});
 	$("input[name='submit']").val('Submit');
 	if(!has_reset) {
-		$("input[name='submit']").after('<input type="button" id="reset_remark" value="Cancel"/>');
-		$("input#reset_remark").click(function(){
+		$("input[name='submit']").after('<input type="button" id="reset_comment" value="Cancel"/>');
+		$("input#reset_comment").click(function(){
 			$("input[name='id']").val('');
 			$("textarea[name='content']").val('');
-			$("input[name='submit']").val('Post my comment');
+			$("input[name='submit']").val('Post comment');
 			$(this).remove();
 			has_reset = false;
 		});
 		has_reset = true;
 	}
 }
-
+function show_comment(id, content) {
+	var dd_html = '<span><img src="../Public/Images/form_edit.gif" border="0" alt="Edit" align="absmiddle" style="cursor:pointer;" onClick="edit_comment('+id+');" title="Click to edit this comment" /> <img src="../Public/Images/cross.gif" alt="Delete" align="absmiddle" border="0" style="cursor:pointer;" onclick="myConfirm(\'Are you sure to delete this comment?\', \'__URL__/delete_comment/id/'+id+');" title="Click to delete this comment" /></span><div>'+content+'</div>';
+	if ($("dd#dd_"+id).length>0) {
+		$("dd#dd_"+id).html(dd_html);
+		$("input[name='id']").val('');
+		$("textarea[name='content']").val('');
+		$("input[name='submit']").val('Post comment');
+		$("input#reset_comment").remove();
+		has_reset = false;
+	}
+	else {
+		var dt_html = '<dt id="dt_'+id+'"><span>&nbsp;</span>{$_SESSION[C('STAFF_AUTH_NAME')]['realname']}</dt>';
+		$("dl#comment_list").append(dt_html+'<dd id="dd_'+id+'">'+dd_html+'</dd>');
+	}
+}
+function remove_comment(id) {
+	if ($("dd#dd_"+id).length>0) {
+		$("dt#dt_"+id).remove();
+		$("dd#dd_"+id).remove();
+	}
+}
 </script>

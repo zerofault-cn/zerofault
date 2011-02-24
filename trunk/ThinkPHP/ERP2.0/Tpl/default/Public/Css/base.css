@@ -62,7 +62,7 @@ i{color:red;font-style:normal;}
 .a_right{
 	text-align:right;
 }
-.status0, .status0 a:link, .status0 a:visited{
+.status0, .status0 a:link, .status0 a:visited, .task_status1, .task_status1 a:link, .task_status1 a:visited{
 	color:#a0a0a0;
 }
  .status0 a:hover, .status0 a:active{
