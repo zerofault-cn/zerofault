@@ -24,6 +24,12 @@ class TaskAction extends BaseAction{
 
 	public function index($type='') {
 		$where = array();
+		if (!empty($_REQUEST['title'])) {
+			$title = trim($_REQUEST['title']);
+			if (strlen($title)>0) {
+				$where['title'] = array('like', '%'.$title.'%');
+			}
+		}
 		if (''==$type) { //my task
 			Session::set('sub', MODULE_NAME);
 			
@@ -53,7 +59,7 @@ class TaskAction extends BaseAction{
 				$creator_id = intval($_REQUEST['creator_id']);
 			}
 			$_SESSION[MODULE_NAME.'_'.ACTION_NAME.'_creator_id'] = $creator_id;
-			$creator_arr = $this->dao->join("Inner Join erp_staff on erp_staff.id=erp_task.creator_id")->distinct(true)->field("erp_staff.id as id, erp_staff.realname as realname")->select();
+			$creator_arr = $this->dao->join("Inner Join erp_staff on erp_staff.id=erp_task.creator_id")->distinct(true)->field("erp_staff.id as id, erp_staff.realname as realname")->order("realname")->select();
 			$this->assign('creator_opts', self::genOptions($creator_arr, $category_id, 'realname'));
 			if (!empty($creator_id)) {
 				$where['creator_id'] = $creator_id;
@@ -66,7 +72,7 @@ class TaskAction extends BaseAction{
 				$owner_id = intval($_REQUEST['owner_id']);
 			}
 			$_SESSION[MODULE_NAME.'_'.ACTION_NAME.'_owner_id'] = $owner_id;
-			$owner_arr = M('TaskOwner')->join("Inner Join erp_staff on erp_staff.id=erp_task_owner.staff_id")->distinct(true)->field("erp_staff.id as id, erp_staff.realname as realname")->select();
+			$owner_arr = M('TaskOwner')->join("Inner Join erp_staff on erp_staff.id=erp_task_owner.staff_id")->distinct(true)->field("erp_staff.id as id, erp_staff.realname as realname")->order("realname")->select();
 			$this->assign('owner_opts', self::genOptions($owner_arr, $owner_id, 'realname'));
 			if (!empty($owner_id)) {
 				$rs = M('TaskOwner')->where('staff_id='.$owner_id)->getField('id,task_id');
