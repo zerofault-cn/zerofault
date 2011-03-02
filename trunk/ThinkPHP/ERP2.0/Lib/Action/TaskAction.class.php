@@ -184,6 +184,7 @@ class TaskAction extends BaseAction{
 			$info = array(
 				'id' => 0,
 				'title' => '',
+				'project' => '',
 				'category_opts' => self::genOptions(M('Category')->where(array('type'=>'Task'))->select()),
 				'create_time' => date('Y-m-d'),
 				'due_date' => '',
@@ -238,6 +239,7 @@ class TaskAction extends BaseAction{
 			$this->dao->status = 0;
 		}
 		$this->dao->title = $title;
+		$this->dao->project = trim($_REQUEST['project']);
 		$this->dao->category_id = $_REQUEST['category_id'];
 		$this->dao->descr = $_REQUEST['description'];
 		$this->dao->due_date = $_REQUEST['due_date'];
@@ -509,6 +511,8 @@ class TaskAction extends BaseAction{
 		else {
 			self::_error('Delete comment fail!'.(C('APP_DEBUG')?$dao->getLastSql():''));
 		}
+	}
+	public function mail_task($type='', $task_id=0, $staff_id=0) {
 	}
 }
 ?>

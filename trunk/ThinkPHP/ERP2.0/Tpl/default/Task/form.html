@@ -4,7 +4,7 @@
 
 <table border="0" align="center" cellpadding="4" cellspacing="2" class="w9">
 <tr bgcolor="#78A3DF">
-	<td width="12%">Project</td>
+	<td width="12%">Task Name</td>
 	<td width="38%" bgcolor="#DADADA"><input name="title" size="30" maxlength="50" type="text" value="{$info.title}" /></td>
 	<td width="12%">Category</td>
 	<td width="38%" bgcolor="#DADADA">
@@ -15,8 +15,8 @@
 	</td>
 </tr>
 <tr bgcolor="#BCD1EF">
-	<td>Create Date</td>
-	<td bgcolor="#E9E9E9">{$info.create_time|substr=0,10}</td>
+	<td>Project</td>
+	<td bgcolor="#E9E9E9"><input name="project" size="30" maxlength="50" type="text" value="{$info.project}" /></td>
 	<td >Due Date</td>
 	<td bgcolor="#E9E9E9">
 		<input type="text" name="due_date" value="{$info.due_date}" size="9" id="Datepicker"/>

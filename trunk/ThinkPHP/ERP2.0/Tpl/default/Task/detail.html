@@ -32,25 +32,25 @@ textarea {
 	<td>
 		<table width="100%" border="0" align="center" cellpadding="4" cellspacing="1" style="background-color:#808080">
 		<tr bgcolor="#DADADA">
-			<td width="12%">Task No.</td>
-			<td bgcolor="#FFFFFF">T{$info.id|sprintf='%06s',###}</td>
+			<td width="12%">Task Name</td>
+			<td bgcolor="#FFFFFF">{$info.title}</td>
 			<td width="12%">Category</td>
 			<td bgcolor="#FFFFFF">{$info.category.name}</td>
 		</tr>
 		<tr bgcolor="#E9E9E9">
-			<td>Title</td>
-			<td bgcolor="#FFFFFF">{$info.title}</td>
+			<td>Project</td>
+			<td bgcolor="#FFFFFF">{$info.project}</td>
 			<td nowrap="nowrap">Cteate Time</td>
 			<td bgcolor="#FFFFFF">{$info.create_time}</td>
 		</tr>
 		<tr bgcolor="#DADADA">
-			<td>Assigner</td>
+			<td>Creator</td>
 			<td bgcolor="#FFFFFF">{$info['creator']['realname']}</td>
 			<td nowrap="nowrap">Due Date</td>
 			<td bgcolor="#FFFFFF">{$info.due_date}</td>
 		</tr>
 		<tr bgcolor="#E9E9E9">
-			<td nowrap="nowrap">Task status</td>
+			<td nowrap="nowrap">Task Status</td>
 			<td bgcolor="#FFFFFF">
 				<strong class="{$status_arr[$info['status']]}">{$status_arr[$info['status']]}</strong>
 				<if condition="$_SESSION[C('USER_AUTH_KEY')] eq $info['creator_id'] or $_SESSION[C('ADMIN_AUTH_NAME')] or in_array($_SESSION[C('USER_AUTH_KEY')], C('TASK_ADMIN_ID'))">
