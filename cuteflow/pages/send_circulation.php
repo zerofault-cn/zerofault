@@ -605,6 +605,10 @@
 								$unit = ' Minute';
 								$number = round($time/60);
 							}
+							else {
+								$unit = ' Second';
+								$number = $time;
+							}
 							if ($number>1) {
 								$unit .= 's';
 							}
