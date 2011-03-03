@@ -548,13 +548,13 @@
 						}
 						$dueDate = mysql_result($rs, 0, 0);
 						$doneTime = mysql_result($rs, 0, 1);
-						if (false === strtotime($dueDate) || strcmp($dueDate, date('Y-m-d', $startTime))<0) {//绝对完成日期无效，或者早于开始日期
+						if (false === strtotime($dueDate)) {//绝对完成日期无效
 							$endTime = $startTime+$doneTime;//完成时间
 						}
 						elseif(0==$doneTime) {//预计完成时间无效
 							$endTime = strtotime($dueDate)+86400;
 						}
-						else {
+						else {//以先到的时间为结束时间
 							$endTime = min(strtotime($dueDate)+86400, $startTime+$doneTime);
 						}
 						$remindTime = mysql_result($rs, 0, 2);
@@ -572,7 +572,7 @@
 									$time = $endTime-time();
 									$mail_entry['remind'][] = array($time, $arrRow);
 								}
-								elseif ($dueDate!='0000-00-00' && $doneTime>0 && $remindTime>0 && time()>=$endTime && time()-$lastRemindTime+100>=$remindTime && date('G')>=9 && date('G')<18 && date('N')<=5) {//后提醒
+								elseif ((false !== strtotime($dueDate) || $doneTime>0) && $remindTime>0 && time()>=$endTime && time()-$lastRemindTime+100>=$remindTime && date('G')>=9 && date('G')<18 && date('N')<=5) {//后提醒
 									//remindTime大于0，已超过完成时间，且距上次提醒时间已超过提醒间隔
 									//100秒用于补足程序执行所耗时间
 									$time = time() - $endTime;
