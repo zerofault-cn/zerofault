@@ -513,6 +513,35 @@ class TaskAction extends BaseAction{
 		}
 	}
 	public function mail_task($type='', $task_id=0, $staff_id=0) {
+		if (!defined('APP_ROOT')) {
+			define('APP_ROOT', 'http://'.$_SERVER['SERVER_ADDR'].__APP__);
+		}
+		$smtp_config = C('_smtp_');
+		include_once (LIB_PATH.'class.phpmailer.php');
+		$mail = new PHPMailer();
+		$mail->IsSMTP();
+	//	$mail->SMTPDebug  = 1;  // 2 = messages only
+		$mail->Host       = $smtp_config['host'];
+		$mail->Port       = $smtp_config['port'];
+		$mail->SetFrom($smtp_config['from_mail'], $smtp_config['from_name']);
+
+		/*type²ÎÊý£º
+			task_add
+			owner_add
+			owner_remove
+			task_status
+			owner_status
+			remind
+			press
+		*/
+		$mail->MsgHTML($body);
+		if(!$mail->Send()) {
+			Log::Write('Mail task Error: '.$mail->ErrorInfo);
+			return false;
+		}
+		Log::Write('Mail task Success: '.$type.' '.$task_id, INFO);
+		return true;
+
 	}
 }
 ?>
