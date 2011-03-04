@@ -191,6 +191,7 @@ class TaskAction extends BaseAction{
 				'press_time' => 1,
 				'press_unit' => 'day',
 				'owners' => array(),
+				'notification' => '11'
 				);
 		}
 		$this->assign('info', $info);
@@ -258,6 +259,7 @@ class TaskAction extends BaseAction{
 				//nothing
 		}
 		$this->dao->press_interval = $interval;
+		$this->dao->notification = strval((empty($_REQUEST['chk1'])?'0':'1').(empty($_REQUEST['chk2'])?'0':'1'));
 		if ($id>0) {
 			if(false !== $this->dao->save()){
 				//process multi-owner
@@ -462,7 +464,7 @@ class TaskAction extends BaseAction{
 		}
 		else {
 			$dao = $this->dao;
-			$rs = $dao->where('id='.$task_id)->setField(array($field, 'done_time'), array($value, date('Y-m-d H:i:s')));
+			$rs = $dao->where('id='.$task_id)->setField(array($field, 'update_time'), array($value, date('Y-m-d H:i:s')));
 		}
 		if(false !== $rs) {
 			self::_success('Update success!');
@@ -534,6 +536,73 @@ class TaskAction extends BaseAction{
 			remind
 			press
 		*/
+		switch ($type) {
+			case 'task_add':
+				$info = $this->dao->relation(true)->find($task_id);
+				$creator = M('Staff')->find($info['creator_id']);
+				$owner_arr = array();
+				foreach($info['owner'] as $val) {
+					$owner_arr[] = M('Staff')->find($val['staff_id']);
+				}
+				$subject = '[Task] Create: '.$info['title'];
+				$owners = array();
+				foreach ($owner_arr as $staff) {
+					$mail->AddAddress($staff['email'], $staff['realname']);
+					$owners[] = $staff['realname'];
+				}
+				if ($info['notification'][0] == '1') {
+					$manager_arr = M('Staff')->where(array('id'=>array('in', C('TASK_ADMIN_ID'))))->select();
+					foreach ($manager_arr as $staff) {
+						$mail->AddCC($staff['email'], $staff['realname']);
+					}
+				}
+				if ($info['notification'][1] == '1') {
+					$leader = M('Staff')->find($creator['leader_id']);
+					$mail->AddCC($leader['email'], $leader['realname']);
+				}
+
+				$body = '<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /></head><body>';
+				$body .= '<table border="1" cellspacing="1" cellpadding="7" style="border-collapse:collapse;border:1px solid #999999;">';
+				$body .= '<tr bgcolor="#CCCCCC"><td colspan="2">'.$creator['realname'].' Create: '.$info['title'].'</td></tr>';
+				$body .= '<tr><td width="120">Task Name</td><td width="500">'.$info['title'].' (T'.sprintf('%06s', $info['id']).')</td></tr>';
+				$body .= '<tr><td">Category</td><td>'.$info['category']['name'].'</td></tr>';
+				$body .= '<tr><td>Project</td><td>'.$info['project'].'</td></tr>';
+				$body .= '<tr><td>Cteate Time</td><td>'.$info['create_time'].'</td></tr>';
+				$body .= '<tr><td>Creator</td><td>'.$info['creator']['realname'].'</td></tr>';
+				$body .= '<tr><td>Due Date</td><td>'.$info['due_date'].'</td></tr>';
+				$body .= '<tr><td>Press Interval</td><td>'.$info['press_time'].' '.$info['press_unit'].'</td></tr>';
+				$body .= '<tr><td>Owners</td><td>'.implode(', ', $owners).'</td></tr>';
+				$body .= '<tr><td>Attached Files</td><td>';
+				foreach ($info['attachment'] as $file) {
+					$body .= '<a href="'.APP_ROOT.'/../'.$file['path'].'" target="_blank" title="View attachment in new window">'.$file['name'].'</a> <br />';
+				}
+				$body .= '</td></tr>';
+				$body .= '<tr><td>Description</td><td>'.nl2br($info['descr']).'</td></tr>';
+				$body .= '</table>';
+				break;
+
+			case 'task_status':
+				break;
+
+			case 'owner_add':
+				break;
+
+			case 'owner_remove':
+				break;
+
+			case 'owner_status':
+				break;
+
+			case 'remind':
+				break;
+
+			case 'press':
+				break;
+
+			default:
+				//nothing
+		}
+		$mail->Subject = $subject;
 		$mail->MsgHTML($body);
 		if(!$mail->Send()) {
 			Log::Write('Mail task Error: '.$mail->ErrorInfo);
