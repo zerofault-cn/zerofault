@@ -129,6 +129,7 @@ CREATE TABLE `erp_task` (
   `due_date` date NOT NULL default '0000-00-00',
   `press_interval` int(10) unsigned NOT NULL default '0',
   `done_time` datetime NOT NULL default '0000-00-00 00:00:00',
+  `notification` char(2) NOT NULL DEFAULT '';
   `status` tinyint(1) NOT NULL default '0',
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;

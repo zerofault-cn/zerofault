@@ -23,7 +23,7 @@
 	</td>
 </tr>
 <tr bgcolor="#78A3DF">
-	<td>Assigner</td>
+	<td>Creator</td>
 	<td bgcolor="#DADADA">
 		<present name="info.creator">
 		{$info['creator']['realname']}
@@ -42,8 +42,17 @@
 	</td>
 </tr>
 <tr bgcolor="#BCD1EF">
+	<td>Create Date</td>
+	<td bgcolor="#E9E9E9">{$info.create_time}</td>
+	<td nowrap="nowrap">Notification</td>
+	<td bgcolor="#E9E9E9">
+		<input type="checkbox" name="chk1" value="1" <if condition="$info['notification'][0] eq '1'">checked="checked"</if> /> cc to Task Manager<br />
+		<input type="checkbox" name="chk2" value="1" <if condition="$info['notification'][1] eq '1'">checked="checked"</if> /> cc to creator's leader<br />
+	</td>
+</tr>
+<tr bgcolor="#78A3DF">
 	<td>Owner</td>
-	<td bgcolor="#E9E9E9" valign="top">
+	<td bgcolor="#DADADA" valign="top">
 		<ul id="existed_owner">
 		<foreach name="info.owner" item="owner">
 		<li id="li_{$owner.staff_id}">{$owner.realname} <img src="../Public/Images/del.png" align="absmiddle" border="0" style="cursor:pointer;" onclick="myConfirm('Are you sure to delete this staff?', '__URL__/delete_owner/id/{$info.id}/staff_id/{$owner.staff_id}');"/></li>
@@ -54,7 +63,7 @@
 		<img src="../Public/Images/add_member.gif" border="0" alt="add staff" align="absmiddle" style="cursor:pointer;" onClick="show_selector(this);" />
 	</td>
 	<td>Attached Files</td>
-	<td bgcolor="#E9E9E9" valign="top">
+	<td bgcolor="#DADADA" valign="top">
 		<input type="hidden" name="MAX_FILE_SIZE" value="{$MAX_FILE_SIZE}"/>
 		<empty name="info.attachment">
 		Single file mustn't larger than {$upload_max_filesize}!<br />
@@ -67,10 +76,9 @@
 		<img src="../Public/Images/attachfile.gif"  alt="add file" align="absmiddle" style="cursor:pointer;" onClick="addFile(this);" />
 	</td>
 </tr>
-
-<tr bgcolor="#78A3DF">
+<tr bgcolor="#BCD1EF">
 	<td >Description</td>
-	<td colspan="3" bgcolor="#DADADA"><textarea name="description" cols="100" rows="20">{$info.descr}</textarea></td>
+	<td colspan="3" bgcolor="#E9E9E9"><textarea name="description" cols="100" rows="20">{$info.descr}</textarea></td>
 </tr>
 </table>
 <p class="center">
