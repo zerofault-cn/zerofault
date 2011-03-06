@@ -27,7 +27,7 @@
 			</tr>
 			</table>
 			<div id="contact_content">
-				<h3>CONTACT 联系方式</h3>
+				<h3>CONTACT <b>联系方式</b></h3>
 				<h4>欧颂(上海)装饰设计有限公司</h4>
 				<h5>TEL: 0086 0575 8586 2000</h5>
 				<h5>MOB: 0086 1367 5786 018</h5>
