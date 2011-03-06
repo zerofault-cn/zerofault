@@ -92,9 +92,9 @@ a:hover,a:active,a.active {
 	font-family: 黑体, simhei;
 }
 #navigation li#en {
-	height: 34px;
+	height: 36px;
 	padding-top: 2px;
-	line-height:12px;
+	line-height:10px;
 	font-family: Arial;
 	font-size:10px;
 }
