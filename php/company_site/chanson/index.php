@@ -1,3 +1,7 @@
+<?php
+list($module, $action) = each($_REQUEST);
+empty($module) && ($module = 'index');
+?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
@@ -17,10 +21,10 @@
 				EXPERIENCE NAVIGATION
 			</div>
 			<ul id="navigation">
-				<li class="focus"><a href="javascript:void(0);" onclick="load('index');">主<span class="placeholder">页主</span>页</a></li>
-				<li><a href="culture.php">企业文件</a></li>
-				<li><a href="stylist.php">设 计 师</a></li>
-				<li><a href="javascript:void(0);" onclick="load('contact');">联系方式</a></li>
+				<li id="li_index"><a href="?index">主　　页</a></li>
+				<li id="li_culture"><a href="?culture">企业文化</a></li>
+				<li id="li_stylist"><a href="?stylist">设 计 师</a></li>
+				<li id="li_contact"><a href="?contact">联系方式</a></li>
 				<li id="en">CHANSON <br />EUROPÉENNE <br />DÉCOR</li>
 				<li>欧颂全球</li>
 			</ul>
@@ -29,17 +33,27 @@
 			</div>
 		</div>
 		<div id="right_wrapper">
-			<?php include_once('index.inc');?>
+			<?php
+			if (!empty($action)) {
+				include_once($module.'_'.$action.'.inc');
+			}
+			else {
+				include_once($module.'.inc');
+			}
+			?>
 		</div>
 		<img id="float_banner" src="images/banner.gif" />
 	</div>
 </body>
 <script language="JavaScript" type="text/javascript" src="js/jquery-1.4.2.min.js?20110305"></script>
+<script type="text/javascript" src="js/coin-slider.min.js"></script>
+<link rel="stylesheet" href="css/coin-slider-styles.css" type="text/css" /> 
 <script type="text/javascript" src="js/cufon-yui.js"></script>
 <script type="text/javascript" src="js/Andale_Mono_400.font.js"></script>
 <script type="text/javascript" src="js/GillSans_500.font.js"></script>
 <script language="JavaScript" type="text/javascript" src="js/function.js?20110305"></script>
 <script language="JavaScript" type="text/javascript">
+var module = '<?php echo $module;?>';
 $(document).ready(function(){
 	init();
 	Cufon.set('fontFamily', 'Andale Mono').replace('#navigation_title');

@@ -48,7 +48,7 @@ a:hover,a:active,a.active {
 	position: absolute;
 	top: 84px;
 	right: 0;
-	z-index: 999;
+	z-index: 9999;
 }
 /* left column */
 #audio_control {
@@ -61,11 +61,12 @@ a:hover,a:active,a.active {
 	color:#9E9E9E;
 }
 #navigation_title {
-	height:21px;
-	line-height:21px;
+	height:17px;
+	line-height:14px;
 	border-top: solid 1px #EFEFEF;
 	border-bottom: solid 1px #EFEFEF;
 	padding-left: 26px;
+	padding-top:4px;
 	margin-left: 80px;
 	font-size:14px;
 	font-family: Consolas;
@@ -73,7 +74,13 @@ a:hover,a:active,a.active {
 }
 #navigation {
 	padding-top:208px;
-	height: 315px;
+	height: 315px; /*Firefox*/
+	height: 318px\9; /*所有IE*/
+}
+@media screen and (-webkit-min-device-pixel-ratio:0) {/*Chrome*/
+	body:nth-of-type(1) #navigation {
+		height: 318px;
+	}
 }
 #navigation li {
 	height: 22px;
@@ -84,7 +91,8 @@ a:hover,a:active,a.active {
 	font-family: 黑体, simhei;
 }
 #navigation li#en {
-	height: 38px;
+	height: 34px;
+	padding-top: 2px;
 	line-height:12px;
 	font-family: Arial;
 	font-size:10px;
@@ -138,6 +146,12 @@ table.icon_table img:hover {
 	font-size: 24px;
 	background-color: #636363;
 }
+#contact_content h3 b {
+	font-family: 黑体, simhei;
+	font-style:normal;
+	font-size:18px;
+	line-height:24px;
+}
 #contact_content h4 {
 	margin-top: 12px;
 	margin-bottom: 3px;
@@ -145,11 +159,119 @@ table.icon_table img:hover {
 }
 #contact_content h5, #contact_content h6{
 	font-size: 11px;
-	
 }
 #contact_content h6 {
 	color: #A8A8A8;
 }
 #contact_content img {
 	margin-top: 18px;
+}
+
+#culture_content {
+	padding: 24px 14px;
+	color: #FFFFFF;
+	font-family: Arial, 黑体, simhei;
+}
+#culture_content h2 {
+	height: 48px;
+	padding-left: 28px;
+	padding-right: 80px;
+	margin-bottom: 15px;
+	border-bottom: solid 1px #969696;
+	background: url(../images/icon3.gif) no-repeat left center;
+	font-size:18px;
+}
+#culture_content h2 i {
+	font-style: normal;
+	font-family: Arial;
+}
+#culture_content h4 {
+	margin-top: 12px;
+	margin-bottom: 3px;
+	font-size: 14px;
+}
+#culture_content h5{
+	font-size: 10px;
+}
+#culture_pic {
+	position: absolute;
+	width: 455px;
+	top: 142px;
+	left: 533px;
+}
+#culture_pic #slider {
+	width: 455px;
+	height: 353px;
+	zoom: 1;
+	overflow: hidden;
+}
+#culture_pic #culture_name {
+	width: 220px;
+	margin-left: 230px;
+	border-top: solid 1px #AEAEAE;
+	line-height: 24px;
+	text-align: right;
+	color: #FFFFFF;
+	font-size: 12px;
+	font-family: 黑体, simhei;
+}
+
+#stylist_list li {
+	padding-left: 21px;
+	line-height: 22px;
+	font-family: Arial;
+	font-size: 14px;
+}
+#stylist_list li:hover {
+	background-color: #636363;
+}
+#stylist_list li a {
+	color: #D6D6D6;
+}
+#stylist_list li a:hover, #stylist_list li a:active {
+	color: #FFFFFF;
+}
+
+.stylist_header {
+	padding: 10px 0;
+	color: #FFFFFF;
+	font-family: Arial;
+	font-size:14px;
+	line-height:30px;
+}
+.stylist_header b {
+	float: left;
+	height: 30px;
+	padding: 0 4px;
+	border-right: solid 1px #595959;
+	margin-right: 3px;
+	font-family: 黑体, simhei;
+	font-style:normal;
+	font-size:14px;
+	line-height:30px;
+}
+.stylist_intro {
+	padding: 30px 10px;
+	color: #FFFFFF;
+	font-family: Arial, 黑体, simhei;
+	font-size: 10px;
+}
+.stylist_intro h2 {
+	height: 28px;
+	padding-left: 15px;
+	padding-bottom: 8px;
+	margin-bottom: 15px;
+	border-bottom: solid 1px #969696;
+	font-size:14px;
+	font-family: Arial;
+	line-height: 28px;
+}
+.stylist_intro h2 img {
+	margin-right: 6px;
+}
+.stylist_photo {
+	position: absolute;
+	top: 140px;
+	right: 36px;
+	z-index: 9998;
 }
