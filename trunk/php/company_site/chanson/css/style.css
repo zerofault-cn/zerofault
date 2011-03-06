@@ -46,6 +46,7 @@ a:hover,a:active,a.active {
 }
 #float_banner {
 	position: absolute;
+	clear: both;
 	top: 84px;
 	right: 0;
 	z-index: 9999;
