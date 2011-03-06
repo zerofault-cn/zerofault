@@ -40,7 +40,7 @@ function stylist_init() {
 		$("#stylist_list a").each(function() {
 			var href = $(this).attr('href');
 			var m = 'stylist';
-			var s = href.substring(9);
+			var s = href.substring(href.indexOf('?')+9);
 			$(this).click(function() {
 					load(m+'_'+s);
 					return false;
