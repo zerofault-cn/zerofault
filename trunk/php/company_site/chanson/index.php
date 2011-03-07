@@ -1,6 +1,9 @@
 <?php
 list($module, $action) = each($_REQUEST);
-empty($module) && ($module = 'index');
+if (empty($module) || !in_array($module, array('index', 'culture', 'stylist', 'contact'))) {
+	$module = 'index';
+	$action = '';
+}
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -35,10 +38,10 @@ empty($module) && ($module = 'index');
 		<div id="right_wrapper">
 			<?php
 			if (!empty($action)) {
-				include_once($module.'_'.$action.'.inc');
+				include_once($module.'_'.$action.'.inc.php');
 			}
 			else {
-				include_once($module.'.inc');
+				include_once($module.'.inc.php');
 			}
 			?>
 		</div>
@@ -46,19 +49,19 @@ empty($module) && ($module = 'index');
 	</div>
 </body>
 <script language="JavaScript" type="text/javascript" src="js/jquery-1.4.2.min.js?20110305"></script>
-<script type="text/javascript" src="js/coin-slider.min.js"></script>
-<link rel="stylesheet" href="css/coin-slider-styles.css" type="text/css" /> 
-<script type="text/javascript" src="js/cufon-yui.js"></script>
-<script type="text/javascript" src="js/Andale_Mono_400.font.js"></script>
-<script type="text/javascript" src="js/GillSans_500.font.js"></script>
+<script language="JavaScript" type="text/javascript" src="js/cufon-yui.js"></script>
+<script language="JavaScript" type="text/javascript" src="js/GillSans_500.font.js"></script>
+<script language="JavaScript" type="text/javascript" src="js/coin-slider.min.js"></script>
+<link rel="stylesheet" type="text/css" href="css/coin-slider-styles.css" /> 
 <script language="JavaScript" type="text/javascript" src="js/function.js?20110305"></script>
 <script language="JavaScript" type="text/javascript">
 var module = '<?php echo $module;?>';
 $(document).ready(function(){
 	init();
-	Cufon.set('fontFamily', 'Andale Mono').replace('#navigation_title');
-	Cufon.set('fontFamily', 'GillSans').replace('#navigation li#en');
 });
+Cufon.replace('#audio_control', {hover: true});
+Cufon.replace('#navigation_title');
+Cufon.replace('#navigation #en');
 </script>
 </html>
 

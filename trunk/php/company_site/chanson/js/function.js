@@ -20,7 +20,7 @@ function init() {
 	stylist_init();
 }
 function load(module) {
-	$.get(module+'.inc',
+	$.get(module+'.inc.php',
 		function(html) {
 			$("#right_wrapper").html(html);
 			slider();
@@ -31,7 +31,8 @@ function slider() {
 	if ($('#slider').length>0) {
 		$('#slider').coinslider({
 			width: 455,
-			height: 353
+			height: 353,
+			sDelay: 10
 		});
 	}
 }

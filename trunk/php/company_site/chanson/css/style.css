@@ -11,6 +11,7 @@ ol,ul,li{
 }
 h1, h2, h3, h4, h5, h6 {
 	margin:0;
+	font-weight: normal;
 }
 img {
 	border:0;
@@ -58,7 +59,7 @@ a:hover,a:active,a.active {
 	padding-left: 26px;
 	margin-left: 80px;
 	font-size:14px;
-	font-family: Consolas;
+	font-family: Arial;
 	color:#9E9E9E;
 }
 #navigation_title {
@@ -70,7 +71,7 @@ a:hover,a:active,a.active {
 	padding-top:4px;
 	margin-left: 80px;
 	font-size:14px;
-	font-family: Consolas;
+	font-family: Arial;
 	color:#E8E8E8;
 }
 #navigation {
@@ -124,7 +125,7 @@ table.icon_table img {
 	-moz-opacity:0.5;
 	opacity:0.5;
 }
-table.icon_table img:hover {
+table.icon_table img:hover, table.icon_table img.hover{
 	filter:alpha(opacity=100); /* IE */
 	-moz-opacity:1; /* Moz + FF */
 	opacity:1; /* 支持CSS3*/
@@ -145,12 +146,13 @@ table.icon_table img:hover {
 	line-height:30px;
 	padding-left: 3px;
 	font-size: 24px;
+	font-weight: normal;
 	background-color: #636363;
 }
 #contact_content h3 b {
 	font-family: 黑体, simhei;
 	font-style:normal;
-	font-size:18px;
+	font-size:20px;
 	line-height:24px;
 }
 #contact_content h4 {
