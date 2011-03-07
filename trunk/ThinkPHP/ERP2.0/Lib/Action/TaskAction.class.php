@@ -336,6 +336,7 @@ class TaskAction extends BaseAction{
 						}
 					}
 				}
+				self::mail_task('task_add', $id);
 				self::_success('Create task success!',__URL__);
 			}
 			else{
@@ -514,7 +515,7 @@ class TaskAction extends BaseAction{
 			self::_error('Delete comment fail!'.(C('APP_DEBUG')?$dao->getLastSql():''));
 		}
 	}
-	public function mail_task($type='', $task_id=0, $staff_id=0) {
+	public function mail_task($type='', $task_id=0, $owner_ids=array()) {
 		if (!defined('APP_ROOT')) {
 			define('APP_ROOT', 'http://'.$_SERVER['SERVER_ADDR'].__APP__);
 		}
@@ -539,6 +540,27 @@ class TaskAction extends BaseAction{
 		switch ($type) {
 			case 'task_add':
 				$info = $this->dao->relation(true)->find($task_id);
+				if ($info['press_interval']%86400 == 0) {
+					$info['press_unit'] = 'Day';
+					$info['press_time'] = $info['press_interval']/86400;
+					if ($info['press_time']>1) {
+						$info['press_unit'] = 'Days';
+					}
+				}
+				elseif ($info['press_interval']%3600 == 0) {
+					$info['press_unit'] = 'Hour';
+					$info['press_time'] = $info['press_interval']/3600;
+					if ($info['press_time']>1) {
+						$info['press_unit'] = 'Hours';
+					}
+				}
+				elseif ($info['press_interval']%60 == 0) {
+					$info['press_unit'] = 'Minute';
+					$info['press_time'] = $info['press_interval']/60;
+					if ($info['press_time']>1) {
+						$info['press_unit'] = 'Minutes';
+					}
+				}
 				$creator = M('Staff')->find($info['creator_id']);
 				$owner_arr = array();
 				foreach($info['owner'] as $val) {
@@ -564,27 +586,106 @@ class TaskAction extends BaseAction{
 				$body = '<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /></head><body>';
 				$body .= '<table border="1" cellspacing="1" cellpadding="7" style="border-collapse:collapse;border:1px solid #999999;">';
 				$body .= '<tr bgcolor="#CCCCCC"><td colspan="2">'.$creator['realname'].' Create: '.$info['title'].'</td></tr>';
-				$body .= '<tr><td width="120">Task Name</td><td width="500">'.$info['title'].' (T'.sprintf('%06s', $info['id']).')</td></tr>';
-				$body .= '<tr><td">Category</td><td>'.$info['category']['name'].'</td></tr>';
-				$body .= '<tr><td>Project</td><td>'.$info['project'].'</td></tr>';
-				$body .= '<tr><td>Cteate Time</td><td>'.$info['create_time'].'</td></tr>';
-				$body .= '<tr><td>Creator</td><td>'.$info['creator']['realname'].'</td></tr>';
-				$body .= '<tr><td>Due Date</td><td>'.$info['due_date'].'</td></tr>';
-				$body .= '<tr><td>Press Interval</td><td>'.$info['press_time'].' '.$info['press_unit'].'</td></tr>';
-				$body .= '<tr><td>Owners</td><td>'.implode(', ', $owners).'</td></tr>';
-				$body .= '<tr><td>Attached Files</td><td>';
+				$body .= '<tr><td width="120">Task Name: </td><td width="500">'.$info['title'].' (T'.sprintf('%06s', $info['id']).')</td></tr>';
+				$body .= '<tr><td>Category: </td><td>'.$info['category']['name'].'</td></tr>';
+				$body .= '<tr><td>Project: </td><td>'.$info['project'].'</td></tr>';
+				$body .= '<tr><td>Create Time: </td><td>'.$info['create_time'].'</td></tr>';
+				$body .= '<tr><td>Creator: </td><td>'.$info['creator']['realname'].'</td></tr>';
+				$body .= '<tr><td>Due Date: </td><td>'.$info['due_date'].'</td></tr>';
+				$body .= '<tr><td>Press Interval: </td><td>'.$info['press_time'].' '.$info['press_unit'].'</td></tr>';
+				$body .= '<tr><td>Owners: </td><td>'.implode(', ', $owners).'</td></tr>';
+				$body .= '<tr><td valign="top">Attached Files: </td><td>';
 				foreach ($info['attachment'] as $file) {
 					$body .= '<a href="'.APP_ROOT.'/../'.$file['path'].'" target="_blank" title="View attachment in new window">'.$file['name'].'</a> <br />';
 				}
 				$body .= '</td></tr>';
-				$body .= '<tr><td>Description</td><td>'.nl2br($info['descr']).'</td></tr>';
+				$body .= '<tr><td valign="top">Description: </td><td>'.nl2br($info['descr']).'</td></tr>';
 				$body .= '</table>';
 				break;
 
 			case 'task_status':
+				$info = $this->dao->relation(true)->find($task_id);
+				$creator = M('Staff')->find($info['creator_id']);
+				$owner_arr = array();
+				foreach($info['owner'] as $val) {
+					$owner_arr[] = M('Staff')->find($val['staff_id']);
+				}
+				$subject = '[Task] Change Status : '.$info['title'];
+				if ('0' == $info['status']) {
+					$subject .= ' is open';
+				}
+				elseif ('1' == $info['status']) {
+					$subject .= 'is close';
+				}
+				elseif ('-1' == $info['status']) {
+					$subject .= 'is pending';
+				}
+				$owners = array();
+				foreach ($owner_arr as $staff) {
+					$mail->AddAddress($staff['email'], $staff['realname']);
+					$owners[] = $staff['realname'];
+				}
+				if ($info['notification'][0] == '1') {
+					$manager_arr = M('Staff')->where(array('id'=>array('in', C('TASK_ADMIN_ID'))))->select();
+					foreach ($manager_arr as $staff) {
+						$mail->AddCC($staff['email'], $staff['realname']);
+					}
+				}
+				if ($info['notification'][1] == '1') {
+					$leader = M('Staff')->find($creator['leader_id']);
+					$mail->AddCC($leader['email'], $leader['realname']);
+				}
+
+				$body = '<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /></head><body>';
+				$body .= '<table border="1" cellspacing="1" cellpadding="7" style="border-collapse:collapse;border:1px solid #999999;">';
+				$body .= '<tr bgcolor="#CCCCCC"><td colspan="2"> Task Summary</td></tr>';
+				$body .= '<tr><td width="120">Task Name: </td><td width="500">'.$info['title'].' (T'.sprintf('%06s', $info['id']).')</td></tr>';
+				$body .= '<tr><td>Category: </td><td>'.$info['category']['name'].'</td></tr>';
+				$body .= '<tr><td>Project: </td><td>'.$info['project'].'</td></tr>';
+				$body .= '<tr><td>Create Time: </td><td>'.$info['create_time'].'</td></tr>';
+				$body .= '<tr><td>Creator: </td><td>'.$info['creator']['realname'].'</td></tr>';
+				$body .= '<tr><td>Update Time: </td><td>'.$info['create_time'].'</td></tr>';
+				$body .= '<tr><td>Current Status: </td><td>'.$status_arr[$info['status']].'</td></tr>';
+				$body .= '<tr><td>Owners: </td><td>'.implode(', ', $owners).'</td></tr>';
+				$body .= '<tr><td>Due Date: </td><td>'.$info['due_date'].'</td></tr>';
+				$body .= '<tr><td valign="top">Description: </td><td>'.nl2br($info['descr']).'</td></tr>';
+				$body .= '</table>';
 				break;
 
 			case 'owner_add':
+				$info = $this->dao->relation(true)->find($task_id);
+				$creator = M('Staff')->find($info['creator_id']);
+				$owner_arr = M('Staff')->where(array('id', array('in', $info['owner'])))->getField('email', 'realname');
+				
+				$add_owner_arr = M('Staff')->where(array('id', array('in', $owner_ids)))->getField('email', 'realname');
+				$subject = '[Task] Add '.implode(',', $add_owner_arr).' to : '.$info['title'];
+				foreach ($add_owner_arr as $email=>$realname) {
+					$mail->AddAddress($email, $realname);
+				}
+				if ($info['notification'][0] == '1') {
+					$manager_arr = M('Staff')->where(array('id'=>array('in', C('TASK_ADMIN_ID'))))->select();
+					foreach ($manager_arr as $staff) {
+						$mail->AddCC($staff['email'], $staff['realname']);
+					}
+				}
+				if ($info['notification'][1] == '1') {
+					$leader = M('Staff')->find($creator['leader_id']);
+					$mail->AddCC($leader['email'], $leader['realname']);
+				}
+
+				$body = '<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /></head><body>';
+				$body .= '<table border="1" cellspacing="1" cellpadding="7" style="border-collapse:collapse;border:1px solid #999999;">';
+				$body .= '<tr bgcolor="#CCCCCC"><td colspan="2"> Task Summary</td></tr>';
+				$body .= '<tr><td width="120">Task Name: </td><td width="500">'.$info['title'].' (T'.sprintf('%06s', $info['id']).')</td></tr>';
+				$body .= '<tr><td>Category: </td><td>'.$info['category']['name'].'</td></tr>';
+				$body .= '<tr><td>Project: </td><td>'.$info['project'].'</td></tr>';
+				$body .= '<tr><td>Create Time: </td><td>'.$info['create_time'].'</td></tr>';
+				$body .= '<tr><td>Creator: </td><td>'.$info['creator']['realname'].'</td></tr>';
+				$body .= '<tr><td>Current Status: </td><td>'.$status_arr[$info['status']].'</td></tr>';
+				$body .= '<tr><td>Current Owners: </td><td>'.implode(', ', $owners).'</td></tr>';
+				$body .= '<tr><td>Due Date: </td><td>'.$info['due_date'].'</td></tr>';
+				$body .= '<tr><td valign="top">Description: </td><td>'.nl2br($info['descr']).'</td></tr>';
+				$body .= '</table>';
 				break;
 
 			case 'owner_remove':
