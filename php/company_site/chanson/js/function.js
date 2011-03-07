@@ -32,6 +32,9 @@ function slider() {
 		$('#slider').coinslider({
 			width: 455,
 			height: 353,
+			spw: 1,
+			sph: 1,
+			delay: 5000,
 			sDelay: 10
 		});
 	}

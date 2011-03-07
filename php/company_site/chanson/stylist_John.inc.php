@@ -7,8 +7,18 @@
 				<td width="226">&nbsp;</td>
 			</tr>
 			<tr>
-				<td height="160"><img src="images/stylist-1.gif" /></td>
-				<td rowspan="4" valign="top">
+				<td height="160" rowspan="4">
+					<div id="product_list">
+						<img src="images/stylist-1.gif" />
+						<img src="images/stylist-2.gif" />
+						<img src="images/stylist-3.gif" />
+						<img src="images/stylist-4.gif" />
+						<img src="images/stylist-5.gif" />
+						<img src="images/stylist-6.gif" />
+						<img src="images/stylist-7.gif" />
+					</div>
+				</td>
+				<td rowspan="4" valign="top" bgcolor="#000000">
 					<div class="stylist_intro">
 						<h2><a href="?stylist"><img src="images/icon4.gif" align="absmiddle"/></a>John Kennedy</h2>
 						<h3>职位：中国区行政总监</h3>
@@ -22,19 +32,16 @@
 						</dl>
 					</div>
 				</td>
-				<td>&nbsp;</td>
+				<td height="230" align="right" valign="top"><img src="images/photo_John.jpg" /></td>
 			</tr>
 			<tr>
-				<td height="160"><img src="images/stylist-2.gif" /></td>
-				<td>&nbsp;</td>
+				<td height="90">&nbsp;</td>
 			</tr>
 			<tr>
-				<td height="160"><img src="images/stylist-3.gif" /></td>
-				<td>&nbsp;</td>
+				<td height="160">&nbsp;</td>
 			</tr>
 			<tr>
-				<td height="136"><img src="images/stylist-4.gif" /></td>
-				<td>&nbsp;</td>
+				<td height="136">&nbsp;</td>
 			</tr>
 			</table>
-			<img class="stylist_photo" src="images/photo_John.jpg" />
+			
