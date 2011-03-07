@@ -28,8 +28,8 @@ if (empty($module) || !in_array($module, array('index', 'culture', 'stylist', 'c
 				<li id="li_culture"><a href="?culture">企业文化</a></li>
 				<li id="li_stylist"><a href="?stylist">设 计 师</a></li>
 				<li id="li_contact"><a href="?contact">联系方式</a></li>
-				<li id="en">CHANSON <br />EUROPÉENNE <br />DÉCOR</li>
-				<li>欧颂全球</li>
+				<li id="en"><a href="?culture">CHANSON <br />EUROPÉENNE <br />DÉCOR</a></li>
+				<li><a href="?culture">欧颂全球</a></li>
 			</ul>
 			<div id="contact_label">
 				CONTACTS
@@ -61,7 +61,7 @@ $(document).ready(function(){
 });
 Cufon.replace('#audio_control', {hover: true});
 Cufon.replace('#navigation_title');
-Cufon.replace('#navigation #en');
+Cufon.replace('#navigation #en', {hover: true});
 </script>
 </html>
 

@@ -1,5 +1,5 @@
 
-			<table class="icon_table" cellpadding="0" cellspacing="0" style="border-collapse:collapse;border:2px solid #141414;">
+			<table width="686" class="icon_table" cellpadding="0" cellspacing="0" style="border-collapse:collapse;border:2px solid #141414;">
 			<tr>
 				<td width="226" height="140">&nbsp;</td>
 				<td width="226">&nbsp;</td>
@@ -8,12 +8,11 @@
 			<tr>
 				<td height="603" bgcolor="#000000" valign="top">
 					<div id="culture_content">
-						<h2><i>CULTURE</i> 企业文化</h2>
+						<h2><i>CULTURE</i><br />企业文化</h2>
 						<h4>欧颂(上海)装饰设计有限公司</h4>
 						<h5>TEL: 0086 0575 8586 2000</h5>
-						<h5>MOB: 0086 1367 5786 018</h5>
-						<h5>EMAIL: yyaff@hotmail.com</h5>
-						<h5>绍兴市迪荡湖路北辰广场1号楼903室</h5>
+						<h5>EMAIL: chanson_sh@163.com</h5>
+						<h6>绍兴市胜利东路366号北辰广场1幢903室</h6>
 					</div>
 				</td>
 				<td>&nbsp;</td>

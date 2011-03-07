@@ -173,7 +173,7 @@ table.icon_table img:hover, table.icon_table img.hover{
 #culture_content {
 	padding: 24px 14px;
 	color: #FFFFFF;
-	font-family: Arial, 黑体, simhei;
+	font-family: 黑体, simhei;
 }
 #culture_content h2 {
 	height: 48px;
@@ -194,7 +194,13 @@ table.icon_table img:hover, table.icon_table img.hover{
 	font-size: 14px;
 }
 #culture_content h5{
+	font-size: 12px;
+	line-height: 12px;
+}
+#culture_content h6{
 	font-size: 10px;
+	padding-top:4px;
+	font-family: 黑体, simhei;
 }
 #culture_pic {
 	position: absolute;
@@ -210,6 +216,7 @@ table.icon_table img:hover, table.icon_table img.hover{
 }
 #culture_pic #culture_name {
 	width: 220px;
+	margin-top:24px;
 	margin-left: 230px;
 	border-top: solid 1px #AEAEAE;
 	line-height: 24px;
@@ -253,11 +260,33 @@ table.icon_table img:hover, table.icon_table img.hover{
 	font-size:14px;
 	line-height:30px;
 }
+#product_list {
+	width: 226px;
+	height: 622px;
+	background-color:#000000;
+	overflow-x: hidden;
+	overflow-y: scroll;
+	SCROLLBAR-FACE-COLOR: #666; 
+	SCROLLBAR-HIGHLIGHT-COLOR: #666; 
+	SCROLLBAR-SHADOW-COLOR: #666; 
+	SCROLLBAR-3DLIGHT-COLOR: #666; 
+	SCROLLBAR-ARROW-COLOR: #FFFFFF; 
+	SCROLLBAR-TRACK-COLOR: #969696; 
+	SCROLLBAR-DARKSHADOW-COLOR: #666;
+}
+#product_list img {
+	padding: 1px 0;
+	filter:alpha(opacity=100); /* IE */
+	-moz-opacity:1; /* Moz + FF */
+	opacity:1; /* 支持CSS3*/
+
+}
 .stylist_intro {
 	padding: 30px 10px;
 	color: #FFFFFF;
-	font-family: Arial, 黑体, simhei;
-	font-size: 10px;
+	font-family: 黑体, simhei, Arial;
+	font-size: 11px;
+	line-height: 120%;
 }
 .stylist_intro h2 {
 	height: 28px;
@@ -266,11 +295,15 @@ table.icon_table img:hover, table.icon_table img.hover{
 	margin-bottom: 15px;
 	border-bottom: solid 1px #969696;
 	font-size:14px;
+	font-weight: bold;
 	font-family: Arial;
 	line-height: 28px;
 }
 .stylist_intro h2 img {
 	margin-right: 6px;
+}
+.stylist_intro h3 {
+	font-size: 14px;
 }
 .stylist_photo {
 	position: absolute;
