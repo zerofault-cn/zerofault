@@ -1,4 +1,4 @@
-			<table width="686" class="icon_table" cellpadding="0" cellspacing="0" style="border-collapse:collapse;border:2px solid #141414;">
+			<table width="686" class="stylist_table" cellpadding="0" cellspacing="0" style="border-collapse:collapse;border:2px solid #141414;">
 			<tr>
 				<td width="226" height="140" valign="bottom">
 					<div class="stylist_header"><b>设　计　师</b>John Kennedy</div>
