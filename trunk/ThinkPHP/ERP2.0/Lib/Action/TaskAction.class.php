@@ -1,7 +1,7 @@
 <?php
 class TaskAction extends BaseAction{
 
-	protected $dao, $config;
+	protected $dao, $config, $status_arr;
 
 	public function _initialize() {
 		if ('Node'!= MODULE_NAME) {
@@ -10,12 +10,12 @@ class TaskAction extends BaseAction{
 		$this->dao = D('Task');
 		parent::_initialize();
 		$this->assign('MODULE_TITLE', 'Task System');
-		$status_arr = array(
+		$this->status_arr = array(
 			'0' => 'Open',
 			'1' => 'Close',
 			'-1' => 'Pending'
 		);
-		$this->assign('status_arr', $status_arr);
+		$this->assign('status_arr', $this->status_arr);
 	}
 	Public function all() {
 		$this->assign('MODULE_TITLE', 'All Task');
@@ -295,6 +295,9 @@ class TaskAction extends BaseAction{
 						}
 					}
 				}
+				if (!empty($_REQUEST['owner']) && count($_REQUEST['owner'])>0) {
+					self::mail_task('owner_add', $id, $_REQUEST['owner']);
+				}
 				self::_success('Task information updated!',__URL__);
 			}
 			else{
@@ -455,17 +458,19 @@ class TaskAction extends BaseAction{
 	}
 
 	public function update() {
-		$id = $_REQUEST['id'];
+		$staff_id = $_REQUEST['staff_id'];
 		$task_id = $_REQUEST['task_id'];
 		$field = $_REQUEST['f'];
 		$value = $_REQUEST['v'];
-		if ($id > 0) {
+		if ($staff_id > 0) {
 			$dao = M('TaskOwner');
-			$rs = $dao->where('id='.$id)->setField(array($field, 'action_time'), array($value, date('Y-m-d H:i:s')));
+			$rs = $dao->where("task_id=".$task_id." and staff_id=".$staff_id)->setField(array($field, 'action_time'), array($value, date('Y-m-d H:i:s')));
+			self::mail_task('owner_status', $task_id, $staff_id);
 		}
 		else {
 			$dao = $this->dao;
 			$rs = $dao->where('id='.$task_id)->setField(array($field, 'update_time'), array($value, date('Y-m-d H:i:s')));
+			self::mail_task('task_status', $task_id);
 		}
 		if(false !== $rs) {
 			self::_success('Update success!');
@@ -485,10 +490,11 @@ class TaskAction extends BaseAction{
 		self::_delete();
 	}
 	public function delete_owner() {
-		$id = $_REQUEST['id'];
+		$task_id = $_REQUEST['id'];
 		$staff_id = $_REQUEST['staff_id'];
 		$dao = M('TaskOwner');
-		if (false !== $dao->where(array('task_id'=>$id, 'staff_id'=>$staff_id))->delete()) {
+		if (false !== $dao->where(array('task_id'=>$task_id, 'staff_id'=>$staff_id))->delete()) {
+			self::mail_task('owner_remove', $task_id, $staff_id);
 			$html  = '<script language="JavaScript" type="text/javascript">';
 			$html .= 'parent.myAlert("Delete success!");';
 			$html .= 'parent.myOK(500);';
@@ -515,7 +521,7 @@ class TaskAction extends BaseAction{
 			self::_error('Delete comment fail!'.(C('APP_DEBUG')?$dao->getLastSql():''));
 		}
 	}
-	public function mail_task($type='', $task_id=0, $owner_ids=array()) {
+	public function mail_task($type='', $task_id=0, $owner_id) {
 		if (!defined('APP_ROOT')) {
 			define('APP_ROOT', 'http://'.$_SERVER['SERVER_ADDR'].__APP__);
 		}
@@ -526,20 +532,26 @@ class TaskAction extends BaseAction{
 	//	$mail->SMTPDebug  = 1;  // 2 = messages only
 		$mail->Host       = $smtp_config['host'];
 		$mail->Port       = $smtp_config['port'];
-		$mail->SetFrom($smtp_config['from_mail'], $smtp_config['from_name']);
+		$mail->SetFrom($smtp_config['from_mail'], 'ERP Task');
 
 		/*type²ÎÊý£º
 			task_add
+			task_status
 			owner_add
 			owner_remove
-			task_status
 			owner_status
 			remind
 			press
 		*/
+		$info = $this->dao->relation(true)->find($task_id);
+		$creator = M('Staff')->find($info['creator_id']);
+		$all_owner_id = array();
+		foreach ($info['owner'] as $val) {
+			$all_owner_id[] = $val['staff_id'];
+		}
+		$all_owner_arr = M('Staff')->where(array('id' => array('in', $all_owner_id)))->getField('realname,email');
 		switch ($type) {
 			case 'task_add':
-				$info = $this->dao->relation(true)->find($task_id);
 				if ($info['press_interval']%86400 == 0) {
 					$info['press_unit'] = 'Day';
 					$info['press_time'] = $info['press_interval']/86400;
@@ -561,26 +573,9 @@ class TaskAction extends BaseAction{
 						$info['press_unit'] = 'Minutes';
 					}
 				}
-				$creator = M('Staff')->find($info['creator_id']);
-				$owner_arr = array();
-				foreach($info['owner'] as $val) {
-					$owner_arr[] = M('Staff')->find($val['staff_id']);
-				}
 				$subject = '[Task] Create: '.$info['title'];
-				$owners = array();
-				foreach ($owner_arr as $staff) {
-					$mail->AddAddress($staff['email'], $staff['realname']);
-					$owners[] = $staff['realname'];
-				}
-				if ($info['notification'][0] == '1') {
-					$manager_arr = M('Staff')->where(array('id'=>array('in', C('TASK_ADMIN_ID'))))->select();
-					foreach ($manager_arr as $staff) {
-						$mail->AddCC($staff['email'], $staff['realname']);
-					}
-				}
-				if ($info['notification'][1] == '1') {
-					$leader = M('Staff')->find($creator['leader_id']);
-					$mail->AddCC($leader['email'], $leader['realname']);
+				foreach ($all_owner_arr as $realname=>$email) {
+					$mail->AddAddress($email, $realname);
 				}
 
 				$body = '<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /></head><body>';
@@ -593,7 +588,7 @@ class TaskAction extends BaseAction{
 				$body .= '<tr><td>Creator: </td><td>'.$info['creator']['realname'].'</td></tr>';
 				$body .= '<tr><td>Due Date: </td><td>'.$info['due_date'].'</td></tr>';
 				$body .= '<tr><td>Press Interval: </td><td>'.$info['press_time'].' '.$info['press_unit'].'</td></tr>';
-				$body .= '<tr><td>Owners: </td><td>'.implode(', ', $owners).'</td></tr>';
+				$body .= '<tr><td>Owners: </td><td>'.implode(', ', array_keys($all_owner_arr)).'</td></tr>';
 				$body .= '<tr><td valign="top">Attached Files: </td><td>';
 				foreach ($info['attachment'] as $file) {
 					$body .= '<a href="'.APP_ROOT.'/../'.$file['path'].'" target="_blank" title="View attachment in new window">'.$file['name'].'</a> <br />';
@@ -604,39 +599,13 @@ class TaskAction extends BaseAction{
 				break;
 
 			case 'task_status':
-				$info = $this->dao->relation(true)->find($task_id);
-				$creator = M('Staff')->find($info['creator_id']);
-				$owner_arr = array();
-				foreach($info['owner'] as $val) {
-					$owner_arr[] = M('Staff')->find($val['staff_id']);
-				}
-				$subject = '[Task] Change Status : '.$info['title'];
-				if ('0' == $info['status']) {
-					$subject .= ' is open';
-				}
-				elseif ('1' == $info['status']) {
-					$subject .= 'is close';
-				}
-				elseif ('-1' == $info['status']) {
-					$subject .= 'is pending';
-				}
-				$owners = array();
-				foreach ($owner_arr as $staff) {
-					$mail->AddAddress($staff['email'], $staff['realname']);
-					$owners[] = $staff['realname'];
-				}
-				if ($info['notification'][0] == '1') {
-					$manager_arr = M('Staff')->where(array('id'=>array('in', C('TASK_ADMIN_ID'))))->select();
-					foreach ($manager_arr as $staff) {
-						$mail->AddCC($staff['email'], $staff['realname']);
-					}
-				}
-				if ($info['notification'][1] == '1') {
-					$leader = M('Staff')->find($creator['leader_id']);
-					$mail->AddCC($leader['email'], $leader['realname']);
+				$subject = '[Task] Change Status of Task: '.$info['title'].' to '.$this->status_arr[$info['status']];
+				foreach ($all_owner_arr as $realname=>$email) {
+					$mail->AddAddress($email, $realname);
 				}
 
 				$body = '<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /></head><body>';
+				$body .= 'Hi all, '.$_SESSION[C('STAFF_AUTH_NAME')]['realname'].' has changed the task status.<br />';
 				$body .= '<table border="1" cellspacing="1" cellpadding="7" style="border-collapse:collapse;border:1px solid #999999;">';
 				$body .= '<tr bgcolor="#CCCCCC"><td colspan="2"> Task Summary</td></tr>';
 				$body .= '<tr><td width="120">Task Name: </td><td width="500">'.$info['title'].' (T'.sprintf('%06s', $info['id']).')</td></tr>';
@@ -644,36 +613,23 @@ class TaskAction extends BaseAction{
 				$body .= '<tr><td>Project: </td><td>'.$info['project'].'</td></tr>';
 				$body .= '<tr><td>Create Time: </td><td>'.$info['create_time'].'</td></tr>';
 				$body .= '<tr><td>Creator: </td><td>'.$info['creator']['realname'].'</td></tr>';
-				$body .= '<tr><td>Update Time: </td><td>'.$info['create_time'].'</td></tr>';
-				$body .= '<tr><td>Current Status: </td><td>'.$status_arr[$info['status']].'</td></tr>';
-				$body .= '<tr><td>Owners: </td><td>'.implode(', ', $owners).'</td></tr>';
+				$body .= '<tr><td>Update Time: </td><td>'.$info['update_time'].'</td></tr>';
+				$body .= '<tr><td>Current Status: </td><td>'.$this->status_arr[$info['status']].'</td></tr>';
+				$body .= '<tr><td>Owners: </td><td>'.implode(', ', array_keys($all_owner_arr)).'</td></tr>';
 				$body .= '<tr><td>Due Date: </td><td>'.$info['due_date'].'</td></tr>';
 				$body .= '<tr><td valign="top">Description: </td><td>'.nl2br($info['descr']).'</td></tr>';
 				$body .= '</table>';
 				break;
 
 			case 'owner_add':
-				$info = $this->dao->relation(true)->find($task_id);
-				$creator = M('Staff')->find($info['creator_id']);
-				$owner_arr = M('Staff')->where(array('id', array('in', $info['owner'])))->getField('email', 'realname');
-				
-				$add_owner_arr = M('Staff')->where(array('id', array('in', $owner_ids)))->getField('email', 'realname');
-				$subject = '[Task] Add '.implode(',', $add_owner_arr).' to : '.$info['title'];
-				foreach ($add_owner_arr as $email=>$realname) {
+				$owner_arr = M('Staff')->where(array('id' => array('in', $owner_id)))->getField('realname,email');
+				$subject = '[Task] Add Owner to Task: '.$info['title'];
+				foreach ($owner_arr as $realname=>$email) {
 					$mail->AddAddress($email, $realname);
-				}
-				if ($info['notification'][0] == '1') {
-					$manager_arr = M('Staff')->where(array('id'=>array('in', C('TASK_ADMIN_ID'))))->select();
-					foreach ($manager_arr as $staff) {
-						$mail->AddCC($staff['email'], $staff['realname']);
-					}
-				}
-				if ($info['notification'][1] == '1') {
-					$leader = M('Staff')->find($creator['leader_id']);
-					$mail->AddCC($leader['email'], $leader['realname']);
 				}
 
 				$body = '<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /></head><body>';
+				$body .= 'Hi '.implode('/', array_keys($owner_arr)).', you have been added to the task.<br />';
 				$body .= '<table border="1" cellspacing="1" cellpadding="7" style="border-collapse:collapse;border:1px solid #999999;">';
 				$body .= '<tr bgcolor="#CCCCCC"><td colspan="2"> Task Summary</td></tr>';
 				$body .= '<tr><td width="120">Task Name: </td><td width="500">'.$info['title'].' (T'.sprintf('%06s', $info['id']).')</td></tr>';
@@ -681,27 +637,129 @@ class TaskAction extends BaseAction{
 				$body .= '<tr><td>Project: </td><td>'.$info['project'].'</td></tr>';
 				$body .= '<tr><td>Create Time: </td><td>'.$info['create_time'].'</td></tr>';
 				$body .= '<tr><td>Creator: </td><td>'.$info['creator']['realname'].'</td></tr>';
-				$body .= '<tr><td>Current Status: </td><td>'.$status_arr[$info['status']].'</td></tr>';
-				$body .= '<tr><td>Current Owners: </td><td>'.implode(', ', $owners).'</td></tr>';
+				$body .= '<tr><td>Current Status: </td><td>'.$this->status_arr[$info['status']].'</td></tr>';
+				$body .= '<tr><td>Current Owners: </td><td>'.implode(', ', array_keys($all_owner_arr)).'</td></tr>';
 				$body .= '<tr><td>Due Date: </td><td>'.$info['due_date'].'</td></tr>';
 				$body .= '<tr><td valign="top">Description: </td><td>'.nl2br($info['descr']).'</td></tr>';
 				$body .= '</table>';
 				break;
 
 			case 'owner_remove':
+				$owner = M('Staff')->find($owner_id);
+				$subject = '[Task] Remove '.$owner['realname'].' from : '.$info['title'];
+				$mail->AddAddress($owner['email'], $owner['realname']);
+
+				$body = '<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /></head><body>';
+				$body .= 'Hi '.$owner['realname'].', you have been removed from the task.<br />';
+				$body .= '<table border="1" cellspacing="1" cellpadding="7" style="border-collapse:collapse;border:1px solid #999999;">';
+				$body .= '<tr bgcolor="#CCCCCC"><td colspan="2"> Task Summary</td></tr>';
+				$body .= '<tr><td width="120">Task Name: </td><td width="500">'.$info['title'].' (T'.sprintf('%06s', $info['id']).')</td></tr>';
+				$body .= '<tr><td>Category: </td><td>'.$info['category']['name'].'</td></tr>';
+				$body .= '<tr><td>Project: </td><td>'.$info['project'].'</td></tr>';
+				$body .= '<tr><td>Create Time: </td><td>'.$info['create_time'].'</td></tr>';
+				$body .= '<tr><td>Creator: </td><td>'.$info['creator']['realname'].'</td></tr>';
+				$body .= '<tr><td>Current Status: </td><td>'.$this->status_arr[$info['status']].'</td></tr>';
+				$body .= '<tr><td>Current Owners: </td><td>'.implode(', ', array_keys($all_owner_arr)).'</td></tr>';
+				$body .= '<tr><td>Due Date: </td><td>'.$info['due_date'].'</td></tr>';
+				$body .= '<tr><td valign="top">Description: </td><td>'.nl2br($info['descr']).'</td></tr>';
+				$body .= '</table>';
 				break;
 
 			case 'owner_status':
+				$subject = '[Task] Owner Change Status : '.$info['title'];
+				$owner = M('Staff')->find($owner_id);
+				$owner_info = M('TaskOwner')->where("task_id=".$task_id." and staff_id=".$owner_id)->find();
+				foreach ($all_owner_arr as $realname=>$email) {
+					$mail->AddAddress($email, $realname);
+				}
+
+				$body = '<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /></head><body>';
+				$body .= $owner['realname'] .' change his status to '.$this->status_arr[$owner_info['status']].'<br />';
+				$body .= '<table border="1" cellspacing="1" cellpadding="7" style="border-collapse:collapse;border:1px solid #999999;">';
+				$body .= '<tr bgcolor="#CCCCCC"><td colspan="2"> Task Summary</td></tr>';
+				$body .= '<tr><td width="120">Task Name: </td><td width="500">'.$info['title'].' (T'.sprintf('%06s', $info['id']).')</td></tr>';
+				$body .= '<tr><td>Category: </td><td>'.$info['category']['name'].'</td></tr>';
+				$body .= '<tr><td>Project: </td><td>'.$info['project'].'</td></tr>';
+				$body .= '<tr><td>Create Time: </td><td>'.$info['create_time'].'</td></tr>';
+				$body .= '<tr><td>Creator: </td><td>'.$info['creator']['realname'].'</td></tr>';
+				$body .= '<tr><td>Current Status: </td><td>'.$this->status_arr[$info['status']].'</td></tr>';
+				$body .= '<tr><td>Owners: </td><td>'.implode(', ', array_keys($all_owner_arr)).'</td></tr>';
+				$body .= '<tr><td>Due Date: </td><td>'.$info['due_date'].'</td></tr>';
+				$body .= '<tr><td valign="top">Description: </td><td>'.nl2br($info['descr']).'</td></tr>';
+				$body .= '</table>';
 				break;
 
 			case 'remind':
+				$owner = M('Staff')->find($owner_id);
+				$owner_info = M('TaskOwner')->where("task_id=".$task_id." and staff_id=".$owner_id)->find();
+				
+				$endTime = strtotime($info['due_date'])+86400;
+				$time = $endTime - time();
+				$subject = '[Task] Remind: '.self::formatSecond($time).' Left for Task: '.$info['title'];
+				
+				$mail->AddAddress($owner['email'], $owner['realname']);
+
+				$body = '<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /></head><body>';
+				$body .= 'Hi '.$owner['realname'] .', its '.self::formatSecond($time).' left for you to close the task.<br />';
+				$body .= '<table border="1" cellspacing="1" cellpadding="7" style="border-collapse:collapse;border:1px solid #999999;">';
+				$body .= '<tr bgcolor="#CCCCCC"><td colspan="2"> Task Summary</td></tr>';
+				$body .= '<tr><td width="120">Task Name: </td><td width="500">'.$info['title'].' (T'.sprintf('%06s', $info['id']).')</td></tr>';
+				$body .= '<tr><td>Category: </td><td>'.$info['category']['name'].'</td></tr>';
+				$body .= '<tr><td>Project: </td><td>'.$info['project'].'</td></tr>';
+				$body .= '<tr><td>Create Time: </td><td>'.$info['create_time'].'</td></tr>';
+				$body .= '<tr><td>Creator: </td><td>'.$info['creator']['realname'].'</td></tr>';
+				$body .= '<tr><td>Current Status: </td><td>'.$this->status_arr[$info['status']].'</td></tr>';
+				$body .= '<tr><td>Owners: </td><td>'.implode(', ', array_keys($all_owner_arr)).'</td></tr>';
+				$body .= '<tr><td>Due Date: </td><td>'.$info['due_date'].'</td></tr>';
+				$body .= '<tr><td valign="top">Description: </td><td>'.nl2br($info['descr']).'</td></tr>';
+				$body .= '</table>';
 				break;
 
 			case 'press':
+				$owner = M('Staff')->find($owner_id);
+				$owner_info = M('TaskOwner')->where("task_id=".$task_id." and staff_id=".$owner_id)->find();
+				
+				$endTime = strtotime($info['due_date'])+86400;
+				$time = time() - $endTime;
+				$subject = '[Task] Exceed Time Limit: '.self::formatSecond($time).' for Task: '.$info['title'];
+				
+				$mail->AddAddress($owner['email'], $owner['realname']);
+
+				$body = '<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /></head><body>';
+				$body .= 'Hi '.$owner['realname'] .', its '.self::formatSecond($time).' exceeded the time limit of the task.<br />';
+				$body .= '<table border="1" cellspacing="1" cellpadding="7" style="border-collapse:collapse;border:1px solid #999999;">';
+				$body .= '<tr bgcolor="#CCCCCC"><td colspan="2"> Task Summary</td></tr>';
+				$body .= '<tr><td width="120">Task Name: </td><td width="500">'.$info['title'].' (T'.sprintf('%06s', $info['id']).')</td></tr>';
+				$body .= '<tr><td>Category: </td><td>'.$info['category']['name'].'</td></tr>';
+				$body .= '<tr><td>Project: </td><td>'.$info['project'].'</td></tr>';
+				$body .= '<tr><td>Create Time: </td><td>'.$info['create_time'].'</td></tr>';
+				$body .= '<tr><td>Creator: </td><td>'.$info['creator']['realname'].'</td></tr>';
+				$body .= '<tr><td>Current Status: </td><td>'.$this->status_arr[$info['status']].'</td></tr>';
+				$body .= '<tr><td>Owners: </td><td>'.implode(', ', array_keys($all_owner_arr)).'</td></tr>';
+				$body .= '<tr><td>Due Date: </td><td>'.$info['due_date'].'</td></tr>';
+				$body .= '<tr><td valign="top">Description: </td><td>'.nl2br($info['descr']).'</td></tr>';
+				$body .= '</table>';
 				break;
 
 			default:
 				//nothing
+		}
+		$body .= 'For more information, please visit <a target="_blank" href="'.APP_ROOT.'/Task">ERP Task System</a>';
+		$body .= '<br /><br />Best Regards,<br />ERP System';
+
+		if ($info['notification'][0] == '1') {
+			$manager_arr = M('Staff')->where(array('id'=>array('in', C('TASK_ADMIN_ID'))))->select();
+			foreach ($manager_arr as $staff) {
+				$mail->AddCC($staff['email'], $staff['realname']);
+			}
+		}
+		if ($info['notification'][1] == '1') {
+			$leader = M('Staff')->find($creator['leader_id']);
+			$mail->AddCC($leader['email'], $leader['realname']);
+			foreach ($info['owner'] as $owner) {
+				$leader = M('Staff')->find($owner['staff_id']);
+				$mail->AddCC($leader['email'], $leader['realname']);
+			}
 		}
 		$mail->Subject = $subject;
 		$mail->MsgHTML($body);
@@ -711,7 +769,92 @@ class TaskAction extends BaseAction{
 		}
 		Log::Write('Mail task Success: '.$type.' '.$task_id, INFO);
 		return true;
-
 	}
+	private function formatSecond($second) {
+		if ($second>=86400) {
+			$unit = ' Day';
+			$number = round($second/86400);
+		}
+		elseif ($second>=3600) {
+			$unit = ' Hour';
+			$number = round($second/3600);
+		}
+		elseif ($second>=60) {
+			$unit = ' Minute';
+			$number = round($second/60);
+		}
+		else {
+			$unit = ' Second';
+			$number = $second;
+		}
+		if ($number>1) {
+			$unit .= 's';
+		}
+		return $number.$unit;
+	}
+	public function notify(){
+		$where = array(
+			'status' => 0,
+			'due_date' => array('neq', '0000-00-00')
+			);
+		$rs = $this->dao->relation(true)->where($where)->select();
+		if (empty($rs)) {
+			echo 'No task to notify';
+			return;
+		}
+		echo 'Get '.count($rs)." records.\n";
+		$dao = M('TaskOwner');
+		foreach ($rs as $item) {
+			echo "For Task ID: ".$item['id']."\n";
+			$endTime = strtotime($item['due_date'])+86400;
+			$press_interval = $item['press_interval'];
+			foreach ($item['owner'] as $owner) {
+				echo "\tStaff ID: ".$owner['staff_id']."\t";
+				if ($owner['status'] != 0) {
+					echo $this->status_arr[$owner['status']]." Skip\n";
+					continue;
+				}
+				$lastMailTime = intval($owner['mail_time']);
+				if ($lastMailTime==0) {
+					$lastMailTime = strtotime($item['create_time']);
+				}
+				$tmp = $lastMailTime+round(($endTime-$lastMailTime)*0.382);
+				if (time()>=$tmp && time()<$endTime && time()-$lastMailTime>86400) {//ÌáÐÑ
+					echo "remind\t";
+					if (self::mail_task('remind', $item['id'], $owner['staff_id'])) {
+						if(false !== $dao->where('id='.$owner['id'])->setField('mail_time', time())) {
+							echo "Success!\n";
+							Log::Write('Notify task:'.$item['id'].'/staff:'.$owner['staff_id'].' success', INFO);
+						}
+						else {
+							echo 'SQL error'.(C('APP_DEBUG')?$dao->getLastSql():'');
+						}
+					}
+					else {
+						echo "Fail\n";
+					}
+				}
+				elseif ($press_interval>0 && time()>=$endTime && time()-$lastMailTime+10>=$press_interval && date('G')>=9 && date('G')<18 && date('N')<=5) {//´ß´Ù
+					echo "press\t";
+					if (self::mail_task('press', $item['id'], $owner['staff_id'])) {
+						if(false !== $dao->where('id='.$owner['id'])->setField('mail_time', time())) {
+							echo "Success!\n";
+							Log::Write('Notify task:'.$item['id'].'/staff:'.$owner['staff_id'].' success', INFO);
+						}
+						else {
+							echo 'SQL error'.(C('APP_DEBUG')?$dao->getLastSql():'');
+						}
+					}
+					else {
+						echo "Fail\n";
+					}
+				}
+				else {
+					echo "nothing\n";
+				}
+			}
+		}
+	}
+
 }
 ?>

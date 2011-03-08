@@ -17,6 +17,9 @@ define('CLI',true);
 define('MODULE_NAME','Public');
 define('ACTION_NAME','press');
 
+//设置web服务器的IP及路径
+define('APP_ROOT', 'http://172.23.57.20/ERP2.0/index.php');
+
 $App = new App(); 
 $App->run();
 
