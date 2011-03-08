@@ -126,9 +126,9 @@ CREATE TABLE `erp_task` (
   `category_id` smallint(5) unsigned NOT NULL default '0',
   `creator_id` SMALLINT UNSIGNED DEFAULT "0" NOT NULL,
   `create_time` datetime NOT NULL default '0000-00-00 00:00:00',
+  `update_time` datetime NOT NULL default '0000-00-00 00:00:00',
   `due_date` date NOT NULL default '0000-00-00',
   `press_interval` int(10) unsigned NOT NULL default '0',
-  `done_time` datetime NOT NULL default '0000-00-00 00:00:00',
   `notification` char(2) NOT NULL DEFAULT '';
   `status` tinyint(1) NOT NULL default '0',
   PRIMARY KEY  (`id`)
