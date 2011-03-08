@@ -312,5 +312,8 @@ class PublicAction extends BaseAction{
 	public function absence_confirm() {
 		R('Absence', 'confirm');
 	}
+	public function task_notify() {
+		R('Task', 'notify');
+	}
 }
 ?>

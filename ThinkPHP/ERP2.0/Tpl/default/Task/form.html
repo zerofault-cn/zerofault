@@ -55,7 +55,7 @@
 	<td bgcolor="#DADADA" valign="top">
 		<ul id="existed_owner">
 		<foreach name="info.owner" item="owner">
-		<li id="li_{$owner.staff_id}">{$owner.realname} <img src="../Public/Images/del.png" align="absmiddle" border="0" style="cursor:pointer;" onclick="myConfirm('Are you sure to delete this staff?', '__URL__/delete_owner/id/{$info.id}/staff_id/{$owner.staff_id}');"/></li>
+		<li id="li_{$owner.staff_id}">{$owner.realname} <img src="../Public/Images/del.png" align="absmiddle" border="0" style="cursor:pointer;" onclick="myConfirm('Are you sure to remove this staff?', '__URL__/delete_owner/id/{$info.id}/staff_id/{$owner.staff_id}');"/></li>
 		</foreach>
 		</ul>
 		<ul id="added_owner">

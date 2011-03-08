@@ -26,7 +26,7 @@ td.Close, strong.Close {
 	color: #FF0000;
 }
 </style>
-<p class="page_title_text"></p>
+<p class="page_title_text">
 <if condition="ACTION_NAME eq 'all'">
 <table>
 <tr>
@@ -53,7 +53,10 @@ td.Close, strong.Close {
 	</td>
 </tr>
 </table>
+<else />
+<input type="button" onclick="javascript:document.location='__URL__/form';" value="Create Task" />
 </if>
+</p>
 <table cellpadding="3" cellspacing="0" border="1" bordercolor="#FFFFFF" style="border-collapse:collapse;">
 <tr>
 	<td colspan="9">{$page}</td>
