@@ -84,7 +84,7 @@ a:hover,a:active,a.active {
 #navigation {
 	padding-top:208px;
 	height: 315px; /*Firefox*/
-	height: 318px\9; /*所有IE*/
+	height: 318px\9; /*IE*/
 }
 @media screen and (-webkit-min-device-pixel-ratio:0) {/*Chrome*/
 	body:nth-of-type(1) #navigation {
@@ -134,7 +134,7 @@ table.icon_table img {
 table.icon_table img:hover, table.icon_table img.hover{
 	filter:alpha(opacity=100); /* IE */
 	-moz-opacity:1; /* Moz + FF */
-	opacity:1; /* 支持CSS3*/
+	opacity:1; /* CSS3*/
 }
 
 #contact_content {
