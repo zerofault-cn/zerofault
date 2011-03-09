@@ -24,9 +24,9 @@
 						<h3>职位：中国区行政总监</h3>
 						<dl>
 							<dt>个人简介：</dt>
-							<dd>毕业于法国巴黎国家高等建筑学院马拉甘分校(Ecole National Superieure d’Architecture de  Paris Malaquais)</dd>
+							<dd>毕业于法国巴黎国家高等建筑学院马拉甘分校<i>(Ecole National Superieure d’Architecture de  Paris Malaquais)</i></dd>
 							<dt>代 表 作：</dt>
-							<dd>法国巴黎百泉主题餐厅（位于法国商业中心拉德芳斯）<br />(Fontaine Blanche,La,Defense,Paris)</dd>
+							<dd>法国巴黎百泉主题餐厅（位于法国商业中心拉德芳斯）<br /><i>(Fontaine Blanche,La,Defense,Paris)</i></dd>
 							<dt>作品风格：</dt>
 							<dd>善于驾驭纯粹法式风格，激进，拒绝添加其他元素的设计理念。</dd>
 						</dl>

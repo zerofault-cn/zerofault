@@ -1,8 +1,10 @@
 body {
-	color:#909090;
-	background-color: #171717;
 	padding:0;
 	margin:0;
+	color:#909090;
+	font-family: Tahoma, Verdana, Arial, sans-serif;
+	line-height:1.231;
+	background-color: #171717;
 }
 ol,ul,li{
 	list-style:none;
@@ -12,6 +14,14 @@ ol,ul,li{
 h1, h2, h3, h4, h5, h6 {
 	margin:0;
 	font-weight: normal;
+}
+b {
+	font-weight: normal;
+	font-family: \5FAE\8F6F\96C5\9ED1, \9ED1\4F53, sans-serif;
+}
+i {
+	font-style: normal;
+	font-family: Verdana, Tahoma, Arial, sans-serif;
 }
 img {
 	border:0;
@@ -59,19 +69,16 @@ a:hover,a:active,a.active {
 	padding-left: 26px;
 	margin-left: 80px;
 	font-size:14px;
-	font-family: Arial;
 	color:#9E9E9E;
 }
 #navigation_title {
-	height:17px;
-	line-height:14px;
+	height:21px;
+	line-height:21px;
 	border-top: solid 1px #EFEFEF;
 	border-bottom: solid 1px #EFEFEF;
 	padding-left: 26px;
-	padding-top:4px;
 	margin-left: 80px;
 	font-size:14px;
-	font-family: Arial;
 	color:#E8E8E8;
 }
 #navigation {
@@ -90,13 +97,13 @@ a:hover,a:active,a.active {
 	padding-left: 129px;
 	background: transparent url(../images/icon2.gif) no-repeat 110px 10px;
 	font-size:16px;
-	font-family: 黑体, simhei;
+	font-family: \5FAE\8F6F\96C5\9ED1, \9ED1\4F53, sans-serif;
 }
 #navigation li#en {
-	height: 36px;
+	height: auto;
 	padding-top: 2px;
-	line-height:10px;
-	font-family: Arial;
+	line-height:12px;
+	font-family:Verdana, Tahoma, Arial, sans-serif;
 	font-size:10px;
 }
 #navigation li.focus {
@@ -112,7 +119,6 @@ a:hover,a:active,a.active {
 	padding-left: 26px;
 	margin-left: 103px;
 	font-size:14px;
-	font-family: Consolas;
 	color:#E0E0E0;
 }
 
@@ -138,7 +144,6 @@ table.icon_table img:hover, table.icon_table img.hover{
 	left: 305px;
 	padding: 24px 30px 50px;
 	color: #FFFFFF;
-	font-family: Arial, 黑体, simhei;
 	background-color: #000000;
 }
 #contact_content h3 {
@@ -146,13 +151,10 @@ table.icon_table img:hover, table.icon_table img.hover{
 	line-height:30px;
 	padding-left: 3px;
 	font-size: 24px;
-	font-weight: normal;
 	background-color: #636363;
 }
 #contact_content h3 b {
-	font-family: 黑体, simhei;
-	font-style:normal;
-	font-size:20px;
+	font-size:22px;
 	line-height:24px;
 }
 #contact_content h4 {
@@ -160,8 +162,16 @@ table.icon_table img:hover, table.icon_table img.hover{
 	margin-bottom: 3px;
 	font-size: 14px;
 }
+#contact_content h4 b {
+	margin-top: 12px;
+	margin-bottom: 3px;
+	font-size: 14px;
+}
 #contact_content h5, #contact_content h6{
 	font-size: 11px;
+}
+#contact_content h5 b {
+	line-height: 18px;
 }
 #contact_content h6 {
 	color: #A8A8A8;
@@ -181,17 +191,11 @@ table.icon_table img:hover, table.icon_table img.hover{
 	margin-bottom: 15px;
 	border-bottom: solid 1px #969696;
 	background: url(../images/icon3.gif) no-repeat left center;
-	font-family: 黑体, simhei;
 	font-size:18px;
-}
-#culture_content h2 i {
-	font-style: normal;
-	font-family: Arial;
 }
 #culture_content h4 {
 	margin-top: 12px;
 	margin-bottom: 3px;
-	font-family: 黑体, simhei;
 	font-size: 14px;
 }
 #culture_content h5{
@@ -223,13 +227,12 @@ table.icon_table img:hover, table.icon_table img.hover{
 	text-align: right;
 	color: #FFFFFF;
 	font-size: 12px;
-	font-family: 黑体, simhei;
+	font-family: \5FAE\8F6F\96C5\9ED1, \9ED1\4F53, sans-serif;
 }
 
 #stylist_list li {
 	padding-left: 21px;
 	line-height: 22px;
-	font-family: Arial;
 	font-size: 14px;
 }
 #stylist_list li:hover {
@@ -245,7 +248,6 @@ table.icon_table img:hover, table.icon_table img.hover{
 .stylist_header {
 	padding: 10px 0;
 	color: #FFFFFF;
-	font-family: Arial;
 	font-size:14px;
 	line-height:30px;
 }
@@ -255,8 +257,6 @@ table.icon_table img:hover, table.icon_table img.hover{
 	padding: 0 4px;
 	border-right: solid 1px #595959;
 	margin-right: 3px;
-	font-family: 黑体, simhei;
-	font-style:normal;
 	font-size:14px;
 	line-height:30px;
 }
@@ -282,7 +282,8 @@ table.icon_table img:hover, table.icon_table img.hover{
 	padding: 30px 10px;
 	color: #FFFFFF;
 	font-size: 11px;
-	line-height: 120%;
+	line-height: 1.231;
+	font-family: \5FAE\8F6F\96C5\9ED1, \9ED1\4F53, sans-serif;
 }
 .stylist_intro h2 {
 	height: 28px;
@@ -291,7 +292,6 @@ table.icon_table img:hover, table.icon_table img.hover{
 	margin-bottom: 15px;
 	border-bottom: solid 1px #969696;
 	font-size:14px;
-	font-family: Arial;
 	font-weight: bold;
 	line-height: 28px;
 }

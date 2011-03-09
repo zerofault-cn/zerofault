@@ -24,7 +24,7 @@
 						<h3>职位：全球总裁</h3>
 						<dl>
 							<dt>个人简介：</dt>
-							<dd>毕业于法国凡尔赛高等建筑工程师学院(ENSA Versailles)</dd>
+							<dd>毕业于法国凡尔赛高等建筑工程师学院<i>(ENSA Versailles)</i></dd>
 							<dt>代 表 作：</dt>
 							<dd>普罗旺斯.紫餐厅</dd>
 							<dt>作品风格：</dt>

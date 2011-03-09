@@ -1,4 +1,3 @@
-
 			<table class="icon_table" cellpadding="0" cellspacing="0" style="background:url(images/company_bg.gif) no-repeat;border-collapse:collapse;border:2px solid #141414;">
 			<tr>
 				<td width="226" height="140">&nbsp;</td>
@@ -28,10 +27,10 @@
 			</table>
 			<div id="contact_content">
 				<h3>CONTACT <b>联系方式</b></h3>
-				<h4>欧颂(上海)装饰设计有限公司</h4>
+				<h4><b>欧颂(上海)装饰设计有限公司</b></h4>
 				<h5>TEL: 0086 0575 8586 2000</h5>
 				<h5>EMAIL: chanson_sh@163.com</h5>
-				<h5>绍兴市胜利东路366号北辰广场1幢903室</h5>
+				<h5><b>绍兴市胜利东路366号北辰广场1幢903室</b></h5>
 				<h4>CHANSON EUROPÉENNE DÉCOR(Shanghai)Co.,Ltd.</h4>
 				<h5>Block B,Floor 11,Shanghai Fei Chau International Building,</h5>
 				<h5>No.899,Lingling Road,Xuhui District,Shanghai,China</h5>
