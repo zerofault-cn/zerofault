@@ -8,11 +8,11 @@
 			<tr>
 				<td height="603" bgcolor="#000000" valign="top">
 					<div id="culture_content">
-						<h2><i>CULTURE</i><br />企业文化</h2>
-						<h4>欧颂(上海)装饰设计有限公司</h4>
+						<h2>CULTURE<br /><b>企业文化</b></h2>
+						<h4><b>欧颂(上海)装饰设计有限公司</b></h4>
 						<h5>TEL: 0086 0575 8586 2000</h5>
 						<h5>EMAIL: chanson_sh@163.com</h5>
-						<h6>绍兴市胜利东路366号北辰广场1幢903室</h6>
+						<h6><b>绍兴市胜利东路366号北辰广场1幢903室</b></h6>
 					</div>
 				</td>
 				<td>&nbsp;</td>

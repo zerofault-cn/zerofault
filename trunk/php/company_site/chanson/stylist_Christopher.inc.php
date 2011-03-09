@@ -24,9 +24,9 @@
 						<h3>职位：欧洲区行政总监</h3>
 						<dl>
 							<dt>个人简介：</dt>
-							<dd>毕业于法国巴黎国家高等建筑学院维莱特分校(Ecole National Superieure d’Architecture de  Paris La Villette)</dd>
+							<dd>毕业于法国巴黎国家高等建筑学院维莱特分校<i>(Ecole National Superieure d’Architecture de  Paris La Villette)</i></dd>
 							<dt>代 表 作：</dt>
-							<dd>德国法兰克福人鱼餐厅<br />(Mermaiden Resto,Frankfort,Germay.)</dd>
+							<dd>德国法兰克福人鱼餐厅<br /><i>(Mermaiden Resto,Frankfort,Germay.)</i></dd>
 							<dt>作品风格：</dt>
 							<dd>擅长复杂的搭配与明亮的勾勒。</dd>
 						</dl>

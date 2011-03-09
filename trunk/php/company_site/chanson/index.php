@@ -59,9 +59,9 @@ var module = '<?php echo $module;?>';
 $(document).ready(function(){
 	init();
 });
-Cufon.replace('#audio_control', {hover: true});
-Cufon.replace('#navigation_title');
-Cufon.replace('#navigation #en', {hover: true});
+//Cufon.replace('#audio_control', {hover: true});
+//Cufon.replace('#navigation_title');
+//Cufon.replace('#navigation #en', {hover: true});
 </script>
 </html>
 
