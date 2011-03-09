@@ -86,7 +86,8 @@ class TaskAction extends BaseAction{
 		$total = $this->dao->where($where)->count();
 		$p = new Paginator($total,$limit);
 		
-		$result = (array)$this->dao->relation(true)->where($where)->order('status, id desc')->limit($p->offset.','.$p->limit)->field($field)->select();
+		$result = $this->dao->relation(true)->where($where)->order('status, id desc')->limit($p->offset.','.$p->limit)->field($field)->select();
+		empty($result) && ($result = array());
 		foreach ($result as $i=>$row) {
 			foreach($row['owner'] as $key=>$val) {
 				$result[$i]['owner'][$key]['realname'] = M('Staff')->where('id='.$val['staff_id'])->getField('realname');
