@@ -209,6 +209,9 @@ class TaskAction extends BaseAction{
 			}
 			$dept = M('Department')->find($arr['dept_id']);
 			$dept_staff_arr[$dept['name']] = M('Staff')->where(array('id'=>array('neq', $dept['leader_id']), 'dept_id'=>$dept['id'], 'status'=>1))->order('realname')->field('id,realname,email')->select();
+			if (empty($dept_staff_arr[$dept['name']])) {
+				$dept_staff_arr[$dept['name']] = array();
+			}
 			if ($dept['leader_id']>0) {
 				array_unshift($dept_staff_arr[$dept['name']], M('Staff')->field('id,realname,email')->find($dept['leader_id']));
 			}
