@@ -32,10 +32,11 @@ class TaskAction extends BaseAction{
 		}
 		if (''==$type) { //my task
 			Session::set('sub', MODULE_NAME);
-			
+			$where['_string'] = "creator_id=".$_SESSION[C('USER_AUTH_KEY')];
 			$rs = M('TaskOwner')->where('staff_id='.$_SESSION[C('USER_AUTH_KEY')])->getField('id,task_id');
-			$where['_string'] = "creator_id=".$_SESSION[C('USER_AUTH_KEY')]." or id in (".implode(',',  $rs).")";
-			
+			if (!empty($rs)) {
+				$where['_string'] .= " or id in (".implode(',',  $rs).")";
+			}
 		}
 		else {
 			Session::set('sub', MODULE_NAME.'/all');
@@ -582,24 +583,24 @@ class TaskAction extends BaseAction{
 					$mail->AddAddress($email, $realname);
 				}
 
-				$body = '<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /></head><body>';
-				$body .= '<table border="1" cellspacing="1" cellpadding="7" style="border-collapse:collapse;border:1px solid #999999;">';
-				$body .= '<tr bgcolor="#CCCCCC"><td colspan="2">'.$creator['realname'].' Create: '.$info['title'].'</td></tr>';
-				$body .= '<tr><td width="120">Task Name: </td><td width="500">'.$info['title'].' (T'.sprintf('%06s', $info['id']).')</td></tr>';
-				$body .= '<tr><td>Category: </td><td>'.$info['category']['name'].'</td></tr>';
-				$body .= '<tr><td>Project: </td><td>'.$info['project'].'</td></tr>';
-				$body .= '<tr><td>Create Time: </td><td>'.$info['create_time'].'</td></tr>';
-				$body .= '<tr><td>Creator: </td><td>'.$info['creator']['realname'].'</td></tr>';
-				$body .= '<tr><td>Due Date: </td><td>'.$info['due_date'].'</td></tr>';
-				$body .= '<tr><td>Press Interval: </td><td>'.$info['press_time'].' '.$info['press_unit'].'</td></tr>';
-				$body .= '<tr><td>Owners: </td><td>'.implode(', ', array_keys($all_owner_arr)).'</td></tr>';
-				$body .= '<tr><td valign="top">Attached Files: </td><td>';
+				$body = '<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /></head><body>'."\n";
+				$body .= '<table border="1" cellspacing="1" cellpadding="7" style="border-collapse:collapse;border:1px solid #999999;">'."\n";
+				$body .= '<tr bgcolor="#CCCCCC">'."\n".'<td colspan="2">'.$creator['realname'].' Create: '.$info['title'].'</td>'."\n</tr>\n";
+				$body .= "<tr>\n".'<td width="120">Task Name: </td><td width="500">'.$info['title'].' (T'.sprintf('%06s', $info['id']).')</td>'."\n</tr>\n";
+				$body .= "<tr>\n".'<td>Category: </td><td>'.$info['category']['name'].'</td>'."\n</tr>\n";
+				$body .= "<tr>\n".'<td>Project: </td><td>'.$info['project'].'</td>'."\n</tr>\n";
+				$body .= "<tr>\n".'<td>Create Time: </td><td>'.$info['create_time'].'</td>'."\n</tr>\n";
+				$body .= "<tr>\n".'<td>Creator: </td><td>'.$info['creator']['realname'].'</td>'."\n</tr>\n";
+				$body .= "<tr>\n".'<td>Due Date: </td><td>'.$info['due_date'].'</td>'."\n</tr>\n";
+				$body .= "<tr>\n".'<td>Press Interval: </td><td>'.$info['press_time'].' '.$info['press_unit'].'</td>'."\n</tr>\n";
+				$body .= "<tr>\n".'<td>Owners: </td><td>'.implode(', ', array_keys($all_owner_arr)).'</td>'."\n</tr>\n";
+				$body .= "<tr>\n".'<td valign="top">Attached Files: </td><td>';
 				foreach ($info['attachment'] as $file) {
-					$body .= '<a href="'.APP_ROOT.'/../'.$file['path'].'" target="_blank" title="View attachment in new window">'.$file['name'].'</a> <br />';
+					$body .= '<a href="'.APP_ROOT.'/../'.$file['path'].'" target="_blank" title="View attachment in new window">'.$file['name']."</a><br />\n";
 				}
-				$body .= '</td></tr>';
-				$body .= '<tr><td valign="top">Description: </td><td>'.nl2br($info['descr']).'</td></tr>';
-				$body .= '</table>';
+				$body .= '</td>'."\n</tr>\n";
+				$body .= "<tr>\n".'<td valign="top">Description: </td><td>'.nl2br($info['descr']).'</td>'."\n</tr>\n";
+				$body .= "</table>\n";
 				break;
 
 			case 'task_status':
@@ -619,7 +620,7 @@ class TaskAction extends BaseAction{
 				$body .= '<tr><td>Creator: </td><td>'.$info['creator']['realname'].'</td></tr>';
 				$body .= '<tr><td>Update Time: </td><td>'.$info['update_time'].'</td></tr>';
 				$body .= '<tr><td>Current Status: </td><td>'.$this->status_arr[$info['status']].'</td></tr>';
-				$body .= '<tr><td>Owners: </td><td>'.implode(', ', array_keys($all_owner_arr)).'</td></tr>';
+				$body .= '<tr><td valign="top">Owners: </td><td>'.implode(', ', array_keys($all_owner_arr)).'</td></tr>';
 				$body .= '<tr><td>Due Date: </td><td>'.$info['due_date'].'</td></tr>';
 				$body .= '<tr><td valign="top">Description: </td><td>'.nl2br($info['descr']).'</td></tr>';
 				$body .= '</table>';
