@@ -550,80 +550,89 @@ class TaskAction extends BaseAction{
 		*/
 		$info = $this->dao->relation(true)->find($task_id);
 		$creator = M('Staff')->find($info['creator_id']);
-		$all_owner_id = array();
-		foreach ($info['owner'] as $val) {
-			$all_owner_id[] = $val['staff_id'];
+		$all_owner_name = array();
+		foreach ($info['owner'] as $i=>$owner) {
+			$tmp = M('Staff')->find($owner['staff_id']);
+			$info['owner'][$i]['email'] = $tmp['email'];
+			$info['owner'][$i]['realname'] = $tmp['realname'];
+			$all_owner_name[] = $tmp['realname'];
 		}
-		$all_owner_arr = M('Staff')->where(array('id' => array('in', $all_owner_id)))->getField('realname,email');
+		$body = "<style>\ntd.Open{color: #339900;font-weight:bold;}\ntd.Pending{color: #0000FF;font-weight:bold;}\ntd.Close{color: #FF0000;font-weight:bold;}\n</style>\n";
+		$body .= '<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /></head><body>'."\n";
 		switch ($type) {
 			case 'task_add':
 				if ($info['press_interval']%86400 == 0) {
 					$info['press_unit'] = 'Day';
 					$info['press_time'] = $info['press_interval']/86400;
 					if ($info['press_time']>1) {
-						$info['press_unit'] = 'Days';
+						$info['press_unit'] = ' Days';
 					}
 				}
 				elseif ($info['press_interval']%3600 == 0) {
 					$info['press_unit'] = 'Hour';
 					$info['press_time'] = $info['press_interval']/3600;
 					if ($info['press_time']>1) {
-						$info['press_unit'] = 'Hours';
+						$info['press_unit'] = ' Hours';
 					}
 				}
 				elseif ($info['press_interval']%60 == 0) {
 					$info['press_unit'] = 'Minute';
 					$info['press_time'] = $info['press_interval']/60;
 					if ($info['press_time']>1) {
-						$info['press_unit'] = 'Minutes';
+						$info['press_unit'] = ' Minutes';
 					}
 				}
 				$subject = '[Task] Create: '.$info['title'];
-				foreach ($all_owner_arr as $realname=>$email) {
-					$mail->AddAddress($email, $realname);
+				foreach ($info['owner'] as $owner) {
+					$mail->AddAddress($owner['email'], $owner['realname']);
 				}
 
-				$body = '<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /></head><body>'."\n";
+				$body .= "Hi all, ".$creator['realname']." create a new task: ".$info['title']."<br />\n";
 				$body .= '<table border="1" cellspacing="1" cellpadding="7" style="border-collapse:collapse;border:1px solid #999999;">'."\n";
-				$body .= '<tr bgcolor="#CCCCCC">'."\n".'<td colspan="2">'.$creator['realname'].' Create: '.$info['title'].'</td>'."\n</tr>\n";
-				$body .= "<tr>\n".'<td width="120">Task Name: </td><td width="500">'.$info['title'].' (T'.sprintf('%06s', $info['id']).')</td>'."\n</tr>\n";
-				$body .= "<tr>\n".'<td>Category: </td><td>'.$info['category']['name'].'</td>'."\n</tr>\n";
-				$body .= "<tr>\n".'<td>Project: </td><td>'.$info['project'].'</td>'."\n</tr>\n";
-				$body .= "<tr>\n".'<td>Create Time: </td><td>'.$info['create_time'].'</td>'."\n</tr>\n";
-				$body .= "<tr>\n".'<td>Creator: </td><td>'.$info['creator']['realname'].'</td>'."\n</tr>\n";
-				$body .= "<tr>\n".'<td>Due Date: </td><td>'.$info['due_date'].'</td>'."\n</tr>\n";
-				$body .= "<tr>\n".'<td>Press Interval: </td><td>'.$info['press_time'].' '.$info['press_unit'].'</td>'."\n</tr>\n";
-				$body .= "<tr>\n".'<td>Owners: </td><td>'.implode(', ', array_keys($all_owner_arr)).'</td>'."\n</tr>\n";
+				$body .= '<tr bgcolor="#CCCCCC">'."\n".'<td colspan="2">Task Summary (T'.sprintf('%06s', $info['id']).")</td>\n</tr>\n";
+				$body .= "<tr>\n".'<td width="120">Task Name: </td><td width="500">'.$info['title']."</td>\n</tr>\n";
+				$body .= "<tr>\n<td>Category: </td><td>".$info['category']['name']."</td>\n</tr>\n";
+				$body .= "<tr>\n<td>Project: </td><td>".$info['project']."</td>\n</tr>\n";
+				$body .= "<tr>\n<td>Create Time: </td><td>".$info['create_time']."</td>\n</tr>\n";
+				$body .= "<tr>\n<td>Creator: </td><td>".$info['creator']['realname']."</td>\n</tr>\n";
+				$body .= "<tr>\n<td>Due Date: </td><td>".$info['due_date'].'</td>'."\n</tr>\n";
+				$body .= "<tr>\n<td>Press Interval: </td><td>".$info['press_time'].$info['press_unit']."</td>\n</tr>\n";
+				$body .= "<tr>\n<td>Owners: </td><td>".implode(', ', array_keys($all_owner_name))."</td>\n</tr>\n";
 				$body .= "<tr>\n".'<td valign="top">Attached Files: </td><td>';
 				foreach ($info['attachment'] as $file) {
 					$body .= '<a href="'.APP_ROOT.'/../'.$file['path'].'" target="_blank" title="View attachment in new window">'.$file['name']."</a><br />\n";
 				}
-				$body .= '</td>'."\n</tr>\n";
-				$body .= "<tr>\n".'<td valign="top">Description: </td><td>'.nl2br($info['descr']).'</td>'."\n</tr>\n";
+				$body .= "</td>\n</tr>\n";
+				$body .= "<tr>\n".'<td valign="top">Description: </td><td>'.nl2br($info['descr'])."</td>\n</tr>\n";
 				$body .= "</table>\n";
 				break;
 
 			case 'task_status':
 				$subject = '[Task] Change Status of Task: '.$info['title'].' to '.$this->status_arr[$info['status']];
-				foreach ($all_owner_arr as $realname=>$email) {
-					$mail->AddAddress($email, $realname);
+				foreach ($info['owner'] as $owner) {
+					$mail->AddAddress($owner['email'], $owner['realname']);
 				}
 
-				$body = '<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /></head><body>';
-				$body .= 'Hi all, '.$_SESSION[C('STAFF_AUTH_NAME')]['realname'].' has changed the task status.<br />';
-				$body .= '<table border="1" cellspacing="1" cellpadding="7" style="border-collapse:collapse;border:1px solid #999999;">';
-				$body .= '<tr bgcolor="#CCCCCC"><td colspan="2"> Task Summary</td></tr>';
-				$body .= '<tr><td width="120">Task Name: </td><td width="500">'.$info['title'].' (T'.sprintf('%06s', $info['id']).')</td></tr>';
-				$body .= '<tr><td>Category: </td><td>'.$info['category']['name'].'</td></tr>';
-				$body .= '<tr><td>Project: </td><td>'.$info['project'].'</td></tr>';
-				$body .= '<tr><td>Create Time: </td><td>'.$info['create_time'].'</td></tr>';
-				$body .= '<tr><td>Creator: </td><td>'.$info['creator']['realname'].'</td></tr>';
-				$body .= '<tr><td>Update Time: </td><td>'.$info['update_time'].'</td></tr>';
-				$body .= '<tr><td>Current Status: </td><td>'.$this->status_arr[$info['status']].'</td></tr>';
-				$body .= '<tr><td valign="top">Owners: </td><td>'.implode(', ', array_keys($all_owner_arr)).'</td></tr>';
-				$body .= '<tr><td>Due Date: </td><td>'.$info['due_date'].'</td></tr>';
-				$body .= '<tr><td valign="top">Description: </td><td>'.nl2br($info['descr']).'</td></tr>';
-				$body .= '</table>';
+				$body .= "Hi all, ".$_SESSION[C('STAFF_AUTH_NAME')]['realname']." has changed the task status.<br />\n";
+				$body .= '<table border="1" cellspacing="1" cellpadding="7" style="border-collapse:collapse;border:1px solid #999999;">'."\n";
+				$body .= '<tr bgcolor="#CCCCCC">'."\n".'<td colspan="2">Task Summary (T'.sprintf('%06s', $info['id']).")</td>\n</tr>\n";
+				$body .= "<tr>\n".'<td width="120">Task Name: </td><td width="500">'.$info['title']."</td>\n</tr>\n";
+				$body .= "<tr>\n<td>Category: </td><td>".$info['category']['name']."</td>\n</tr>\n";
+				$body .= "<tr>\n<td>Project: </td><td>".$info['project']."</td>\n</tr>\n";
+				$body .= "<tr>\n<td>Create Time: </td><td>".$info['create_time']."</td>\n</tr>\n";
+				$body .= "<tr>\n<td>Creator: </td><td>".$info['creator']['realname']."</td>\n</tr>\n";
+				$body .= "<tr>\n<td>Update Time: </td><td>".$info['update_time']."</td>\n</tr>\n";
+				$body .= "<tr>\n<td>Current Status: </td><td class='".$this->status_arr[$info['status']]."'>".$this->status_arr[$info['status']]."</td>\n</tr>\n";
+				$body .= "<tr>\n<td valign='top'>Owners: </td><td>";
+				$body .= "\n\t<table>\n";
+				foreach ($info['owner'] as $owner) {
+					$body .= "<tr>\n".'<td width="100" nowrap="nowrap">'.$owner['realname'].'</td><td width="60" class="'.$this->status_arr[$owner['status']].'">'.$this->status_arr[$owner['status']]."</td>\n</tr>\n";
+				}
+				$body .= "</table>\n";
+				$body .= "</td>\n</tr>\n";
+				$body .= "<tr>\n<td>Due Date: </td><td>".$info['due_date']."</td>\n</tr>\n";
+				$body .= "<tr>\n<td valign='top'>Description: </td><td>".nl2br($info['descr'])."</td></tr>\n";
+				$body .= "</table>\n";
 				break;
 
 			case 'owner_add':
@@ -633,20 +642,25 @@ class TaskAction extends BaseAction{
 					$mail->AddAddress($email, $realname);
 				}
 
-				$body = '<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /></head><body>';
-				$body .= 'Hi '.implode('/', array_keys($owner_arr)).', you have been added to the task.<br />';
-				$body .= '<table border="1" cellspacing="1" cellpadding="7" style="border-collapse:collapse;border:1px solid #999999;">';
-				$body .= '<tr bgcolor="#CCCCCC"><td colspan="2"> Task Summary</td></tr>';
-				$body .= '<tr><td width="120">Task Name: </td><td width="500">'.$info['title'].' (T'.sprintf('%06s', $info['id']).')</td></tr>';
-				$body .= '<tr><td>Category: </td><td>'.$info['category']['name'].'</td></tr>';
-				$body .= '<tr><td>Project: </td><td>'.$info['project'].'</td></tr>';
-				$body .= '<tr><td>Create Time: </td><td>'.$info['create_time'].'</td></tr>';
-				$body .= '<tr><td>Creator: </td><td>'.$info['creator']['realname'].'</td></tr>';
-				$body .= '<tr><td>Current Status: </td><td>'.$this->status_arr[$info['status']].'</td></tr>';
-				$body .= '<tr><td>Current Owners: </td><td>'.implode(', ', array_keys($all_owner_arr)).'</td></tr>';
-				$body .= '<tr><td>Due Date: </td><td>'.$info['due_date'].'</td></tr>';
-				$body .= '<tr><td valign="top">Description: </td><td>'.nl2br($info['descr']).'</td></tr>';
-				$body .= '</table>';
+				$body .= "Hi ".implode('/', array_keys($owner_arr)).", you have been added to the task.<br />";
+				$body .= '<table border="1" cellspacing="1" cellpadding="7" style="border-collapse:collapse;border:1px solid #999999;">'."\n";
+				$body .= '<tr bgcolor="#CCCCCC">'."\n".'<td colspan="2">Task Summary (T'.sprintf('%06s', $info['id']).")</td>\n</tr>\n";
+				$body .= "<tr>\n".'<td width="120">Task Name: </td><td width="500">'.$info['title']."</td>\n</tr>\n";
+				$body .= "<tr>\n<td>Category: </td><td>".$info['category']['name']."</td>\n</tr>\n";
+				$body .= "<tr>\n<td>Project: </td><td>".$info['project']."</td>\n</tr>\n";
+				$body .= "<tr>\n<td>Create Time: </td><td>".$info['create_time']."</td>\n</tr>\n";
+				$body .= "<tr>\n<td>Creator: </td><td>".$info['creator']['realname']."</td>\n</tr>\n";
+				$body .= "<tr>\n<td>Status: </td><td class='".$this->status_arr[$info['status']]."'>".$this->status_arr[$info['status']]."</td></tr>\n";
+				$body .= "<tr>\n<td valign='top'>Current Owners: </td><td>";
+				$body .= "\n\t<table>\n";
+				foreach ($info['owner'] as $owner) {
+					$body .= "<tr>\n".'<td width="100" nowrap="nowrap">'.$owner['realname'].'</td><td width="60" class="'.$this->status_arr[$owner['status']].'">'.$this->status_arr[$owner['status']]."</td>\n</tr>\n";
+				}
+				$body .= "</table>\n";
+				$body .= "</td>\n</tr>\n";
+				$body .= "<tr>\n<td>Due Date: </td><td>".$info['due_date']."</td>\n</tr>\n";
+				$body .= "<tr>\n<td valign='top'>Description: </td><td>".nl2br($info['descr'])."</td>\n</tr>\n";
+				$body .= "</table>\n";
 				break;
 
 			case 'owner_remove':
@@ -654,44 +668,54 @@ class TaskAction extends BaseAction{
 				$subject = '[Task] Remove '.$owner['realname'].' from : '.$info['title'];
 				$mail->AddAddress($owner['email'], $owner['realname']);
 
-				$body = '<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /></head><body>';
-				$body .= 'Hi '.$owner['realname'].', you have been removed from the task.<br />';
-				$body .= '<table border="1" cellspacing="1" cellpadding="7" style="border-collapse:collapse;border:1px solid #999999;">';
-				$body .= '<tr bgcolor="#CCCCCC"><td colspan="2"> Task Summary</td></tr>';
-				$body .= '<tr><td width="120">Task Name: </td><td width="500">'.$info['title'].' (T'.sprintf('%06s', $info['id']).')</td></tr>';
-				$body .= '<tr><td>Category: </td><td>'.$info['category']['name'].'</td></tr>';
-				$body .= '<tr><td>Project: </td><td>'.$info['project'].'</td></tr>';
-				$body .= '<tr><td>Create Time: </td><td>'.$info['create_time'].'</td></tr>';
-				$body .= '<tr><td>Creator: </td><td>'.$info['creator']['realname'].'</td></tr>';
-				$body .= '<tr><td>Current Status: </td><td>'.$this->status_arr[$info['status']].'</td></tr>';
-				$body .= '<tr><td>Current Owners: </td><td>'.implode(', ', array_keys($all_owner_arr)).'</td></tr>';
-				$body .= '<tr><td>Due Date: </td><td>'.$info['due_date'].'</td></tr>';
-				$body .= '<tr><td valign="top">Description: </td><td>'.nl2br($info['descr']).'</td></tr>';
-				$body .= '</table>';
+				$body .= 'Hi '.$owner['realname'].", you have been removed from the task.<br />\n";
+				$body .= '<table border="1" cellspacing="1" cellpadding="7" style="border-collapse:collapse;border:1px solid #999999;">'."\n";
+				$body .= '<tr bgcolor="#CCCCCC">'."\n".'<td colspan="2">Task Summary (T'.sprintf('%06s', $info['id']).")</td>\n</tr>\n";
+				$body .= "<tr>\n".'<td width="120">Task Name: </td><td width="500">'.$info['title']."</td>\n</tr>\n";
+				$body .= "<tr>\n<td>Category: </td><td>".$info['category']['name']."</td>\n</tr>\n";
+				$body .= "<tr>\n<td>Project: </td><td>".$info['project']."</td>\n</tr>\n";
+				$body .= "<tr>\n<td>Create Time: </td><td>".$info['create_time']."</td>\n</tr>\n";
+				$body .= "<tr>\n<td>Creator: </td><td>".$info['creator']['realname']."</td>\n</tr>\n";
+				$body .= "<tr>\n<td>Status: </td><td class='".$this->status_arr[$info['status']]."'>".$this->status_arr[$info['status']]."</td></tr>\n";
+				$body .= "<tr>\n<td valign='top'>Current Owners: </td><td>";
+				$body .= "\n\t<table>\n";
+				foreach ($info['owner'] as $owner) {
+					$body .= "<tr>\n".'<td width="100" nowrap="nowrap">'.$owner['realname'].'</td><td width="60" class="'.$this->status_arr[$owner['status']].'">'.$this->status_arr[$owner['status']]."</td>\n</tr>\n";
+				}
+				$body .= "</table>\n";
+				$body .= "</td>\n</tr>\n";
+				$body .= "<tr>\n<td>Due Date: </td><td>".$info['due_date']."</td>\n</tr>\n";
+				$body .= "<tr>\n<td valign='top'>Description: </td><td>".nl2br($info['descr'])."</td>\n</tr>\n";
+				$body .= "</table>\n";
 				break;
 
 			case 'owner_status':
 				$subject = '[Task] Owner Change Status : '.$info['title'];
 				$owner = M('Staff')->find($owner_id);
 				$owner_info = M('TaskOwner')->where("task_id=".$task_id." and staff_id=".$owner_id)->find();
-				foreach ($all_owner_arr as $realname=>$email) {
-					$mail->AddAddress($email, $realname);
+				foreach ($info['owner'] as $owner) {
+					$mail->AddAddress($owner['email'], $owner['realname']);
 				}
 
-				$body = '<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /></head><body>';
 				$body .= $owner['realname'] .' change his status to '.$this->status_arr[$owner_info['status']].'<br />';
-				$body .= '<table border="1" cellspacing="1" cellpadding="7" style="border-collapse:collapse;border:1px solid #999999;">';
-				$body .= '<tr bgcolor="#CCCCCC"><td colspan="2"> Task Summary</td></tr>';
-				$body .= '<tr><td width="120">Task Name: </td><td width="500">'.$info['title'].' (T'.sprintf('%06s', $info['id']).')</td></tr>';
-				$body .= '<tr><td>Category: </td><td>'.$info['category']['name'].'</td></tr>';
-				$body .= '<tr><td>Project: </td><td>'.$info['project'].'</td></tr>';
-				$body .= '<tr><td>Create Time: </td><td>'.$info['create_time'].'</td></tr>';
-				$body .= '<tr><td>Creator: </td><td>'.$info['creator']['realname'].'</td></tr>';
-				$body .= '<tr><td>Current Status: </td><td>'.$this->status_arr[$info['status']].'</td></tr>';
-				$body .= '<tr><td>Owners: </td><td>'.implode(', ', array_keys($all_owner_arr)).'</td></tr>';
-				$body .= '<tr><td>Due Date: </td><td>'.$info['due_date'].'</td></tr>';
-				$body .= '<tr><td valign="top">Description: </td><td>'.nl2br($info['descr']).'</td></tr>';
-				$body .= '</table>';
+				$body .= '<table border="1" cellspacing="1" cellpadding="7" style="border-collapse:collapse;border:1px solid #999999;">'."\n";
+				$body .= '<tr bgcolor="#CCCCCC">'."\n".'<td colspan="2">Task Summary (T'.sprintf('%06s', $info['id']).")</td>\n</tr>\n";
+				$body .= "<tr>\n".'<td width="120">Task Name: </td><td width="500">'.$info['title']."</td>\n</tr>\n";
+				$body .= "<tr>\n<td>Category: </td><td>".$info['category']['name']."</td>\n</tr>\n";
+				$body .= "<tr>\n<td>Project: </td><td>".$info['project']."</td>\n</tr>\n";
+				$body .= "<tr>\n<td>Create Time: </td><td>".$info['create_time']."</td>\n</tr>\n";
+				$body .= "<tr>\n<td>Creator: </td><td>".$info['creator']['realname']."</td>\n</tr>\n";
+				$body .= "<tr>\n<td>Status: </td><td class='".$this->status_arr[$info['status']]."'>".$this->status_arr[$info['status']]."</td></tr>\n";
+				$body .= "<tr>\n<td valign='top'>Owners: </td><td>";
+				$body .= "\n\t<table>\n";
+				foreach ($info['owner'] as $owner) {
+					$body .= "<tr>\n".'<td width="100" nowrap="nowrap">'.$owner['realname'].'</td><td width="60" class="'.$this->status_arr[$owner['status']].'">'.$this->status_arr[$owner['status']]."</td>\n</tr>\n";
+				}
+				$body .= "</table>\n";
+				$body .= "</td>\n</tr>\n";
+				$body .= "<tr>\n<td>Due Date: </td><td>".$info['due_date']."</td>\n</tr>\n";
+				$body .= "<tr>\n<td valign='top'>Description: </td><td>".nl2br($info['descr'])."</td>\n</tr>\n";
+				$body .= "</table>\n";
 				break;
 
 			case 'remind':
@@ -704,20 +728,25 @@ class TaskAction extends BaseAction{
 				
 				$mail->AddAddress($owner['email'], $owner['realname']);
 
-				$body = '<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /></head><body>';
-				$body .= 'Hi '.$owner['realname'] .', its '.self::formatSecond($time).' left for you to close the task.<br />';
-				$body .= '<table border="1" cellspacing="1" cellpadding="7" style="border-collapse:collapse;border:1px solid #999999;">';
-				$body .= '<tr bgcolor="#CCCCCC"><td colspan="2"> Task Summary</td></tr>';
-				$body .= '<tr><td width="120">Task Name: </td><td width="500">'.$info['title'].' (T'.sprintf('%06s', $info['id']).')</td></tr>';
-				$body .= '<tr><td>Category: </td><td>'.$info['category']['name'].'</td></tr>';
-				$body .= '<tr><td>Project: </td><td>'.$info['project'].'</td></tr>';
-				$body .= '<tr><td>Create Time: </td><td>'.$info['create_time'].'</td></tr>';
-				$body .= '<tr><td>Creator: </td><td>'.$info['creator']['realname'].'</td></tr>';
-				$body .= '<tr><td>Current Status: </td><td>'.$this->status_arr[$info['status']].'</td></tr>';
-				$body .= '<tr><td>Owners: </td><td>'.implode(', ', array_keys($all_owner_arr)).'</td></tr>';
-				$body .= '<tr><td>Due Date: </td><td>'.$info['due_date'].'</td></tr>';
-				$body .= '<tr><td valign="top">Description: </td><td>'.nl2br($info['descr']).'</td></tr>';
-				$body .= '</table>';
+				$body .= 'Hi '.$owner['realname'] .', its '.self::formatSecond($time)."' left for you to close the task.<br />\n";
+				$body .= '<table border="1" cellspacing="1" cellpadding="7" style="border-collapse:collapse;border:1px solid #999999;">'."\n";
+				$body .= '<tr bgcolor="#CCCCCC">'."\n".'<td colspan="2">Task Summary (T'.sprintf('%06s', $info['id']).")</td>\n</tr>\n";
+				$body .= "<tr>\n".'<td width="120">Task Name: </td><td width="500">'.$info['title']."</td>\n</tr>\n";
+				$body .= "<tr>\n<td>Category: </td><td>".$info['category']['name']."</td>\n</tr>\n";
+				$body .= "<tr>\n<td>Project: </td><td>".$info['project']."</td>\n</tr>\n";
+				$body .= "<tr>\n<td>Create Time: </td><td>".$info['create_time']."</td>\n</tr>\n";
+				$body .= "<tr>\n<td>Creator: </td><td>".$info['creator']['realname']."</td>\n</tr>\n";
+				$body .= "<tr>\n<td>Status: </td><td class='".$this->status_arr[$info['status']]."'>".$this->status_arr[$info['status']]."</td></tr>\n";
+				$body .= "<tr>\n<td valign='top'>Owners: </td><td>";
+				$body .= "\n\t<table>\n";
+				foreach ($info['owner'] as $owner) {
+					$body .= "<tr>\n".'<td width="100" nowrap="nowrap">'.$owner['realname'].'</td><td width="60" class="'.$this->status_arr[$owner['status']].'">'.$this->status_arr[$owner['status']]."</td>\n</tr>\n";
+				}
+				$body .= "</table>\n";
+				$body .= "</td>\n</tr>\n";
+				$body .= "<tr>\n<td>Due Date: </td><td>".$info['due_date']."</td>\n</tr>\n";
+				$body .= "<tr>\n<td valign='top'>Description: </td><td>".nl2br($info['descr'])."</td>\n</tr>\n";
+				$body .= "</table>\n";
 				break;
 
 			case 'press':
@@ -730,20 +759,25 @@ class TaskAction extends BaseAction{
 				
 				$mail->AddAddress($owner['email'], $owner['realname']);
 
-				$body = '<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /></head><body>';
-				$body .= 'Hi '.$owner['realname'] .', its '.self::formatSecond($time).' exceeded the time limit of the task.<br />';
-				$body .= '<table border="1" cellspacing="1" cellpadding="7" style="border-collapse:collapse;border:1px solid #999999;">';
-				$body .= '<tr bgcolor="#CCCCCC"><td colspan="2"> Task Summary</td></tr>';
-				$body .= '<tr><td width="120">Task Name: </td><td width="500">'.$info['title'].' (T'.sprintf('%06s', $info['id']).')</td></tr>';
-				$body .= '<tr><td>Category: </td><td>'.$info['category']['name'].'</td></tr>';
-				$body .= '<tr><td>Project: </td><td>'.$info['project'].'</td></tr>';
-				$body .= '<tr><td>Create Time: </td><td>'.$info['create_time'].'</td></tr>';
-				$body .= '<tr><td>Creator: </td><td>'.$info['creator']['realname'].'</td></tr>';
-				$body .= '<tr><td>Current Status: </td><td>'.$this->status_arr[$info['status']].'</td></tr>';
-				$body .= '<tr><td>Owners: </td><td>'.implode(', ', array_keys($all_owner_arr)).'</td></tr>';
-				$body .= '<tr><td>Due Date: </td><td>'.$info['due_date'].'</td></tr>';
-				$body .= '<tr><td valign="top">Description: </td><td>'.nl2br($info['descr']).'</td></tr>';
-				$body .= '</table>';
+				$body .= 'Hi '.$owner['realname'] .', its '.self::formatSecond($time)." exceeded the time limit of the task.<br />\n";
+				$body .= '<table border="1" cellspacing="1" cellpadding="7" style="border-collapse:collapse;border:1px solid #999999;">'."\n";
+				$body .= '<tr bgcolor="#CCCCCC">'."\n".'<td colspan="2">Task Summary (T'.sprintf('%06s', $info['id']).")</td>\n</tr>\n";
+				$body .= "<tr>\n".'<td width="120">Task Name: </td><td width="500">'.$info['title']."</td>\n</tr>\n";
+				$body .= "<tr>\n<td>Category: </td><td>".$info['category']['name']."</td>\n</tr>\n";
+				$body .= "<tr>\n<td>Project: </td><td>".$info['project']."</td>\n</tr>\n";
+				$body .= "<tr>\n<td>Create Time: </td><td>".$info['create_time']."</td>\n</tr>\n";
+				$body .= "<tr>\n<td>Creator: </td><td>".$info['creator']['realname']."</td>\n</tr>\n";
+				$body .= "<tr>\n<td>Status: </td><td class='".$this->status_arr[$info['status']]."'>".$this->status_arr[$info['status']]."</td></tr>\n";
+				$body .= "<tr>\n<td valign='top'>Current Owners: </td><td>";
+				$body .= "\n\t<table>\n";
+				foreach ($info['owner'] as $owner) {
+					$body .= "<tr>\n".'<td width="100" nowrap="nowrap">'.$owner['realname'].'</td><td width="60" class="'.$this->status_arr[$owner['status']].'">'.$this->status_arr[$owner['status']]."</td>\n</tr>\n";
+				}
+				$body .= "</table>\n";
+				$body .= "</td>\n</tr>\n";
+				$body .= "<tr>\n<td>Due Date: </td><td>".$info['due_date']."</td>\n</tr>\n";
+				$body .= "<tr>\n<td valign='top'>Description: </td><td>".nl2br($info['descr'])."</td>\n</tr>\n";
+				$body .= "</table>\n";
 				break;
 
 			default:
