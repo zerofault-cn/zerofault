@@ -12,7 +12,7 @@ class TaskAction extends BaseAction{
 		$this->assign('MODULE_TITLE', 'Task System');
 		$this->status_arr = array(
 			'0' => 'Open',
-			'1' => 'Close',
+			'1' => 'Closed',
 			'-1' => 'Pending'
 		);
 		$this->assign('status_arr', $this->status_arr);
@@ -361,7 +361,8 @@ class TaskAction extends BaseAction{
 		}
 		$dao = M('Comment');
 		$id = empty($_REQUEST['id']) ? 0 : intval($_REQUEST['id']);
-		$task_id = empty($_REQUEST['task_id']) ? 0 : intval($_REQUEST['task_id']);
+		empty($_REQUEST['task_id']) && self::_error('No task id specified!');
+		$task_id = intval($_REQUEST['task_id']);
 		$content = trim($_REQUEST['content']);
 		!$content && self::_error('Comment can\'t be empty!');
 		if ($id>0) {
@@ -382,6 +383,7 @@ class TaskAction extends BaseAction{
 				$html .= 'parent.myOK(500);';
 				$html .= 'parent.show_comment('.$id.', "'.str_replace(array("\r\n", "\n"), '<br />', $content).'");';
 				$html .= '</script>';
+				self::mail_task('comment_modify', $task_id, $_SESSION[C('USER_AUTH_KEY')]);
 				die($html);
 			}
 			else{
@@ -395,6 +397,7 @@ class TaskAction extends BaseAction{
 				$html .= 'parent.myOK(500);';
 				$html .= 'parent.show_comment('.$id.', "'.nl2br($content).'");';
 				$html .= '</script>';
+				self::mail_task('comment_add', $task_id, $_SESSION[C('USER_AUTH_KEY')]);
 				die($html);
 			}
 			else{
@@ -520,6 +523,7 @@ class TaskAction extends BaseAction{
 			$html .= 'parent.myOK(500);';
 			$html .= 'parent.remove_comment('.$id.');';
 			$html .= '</script>';
+			self::mail_task('comment_delete', $dao->model_id, $dao->staff_id);
 			die($html);
 		}
 		else {
@@ -530,6 +534,11 @@ class TaskAction extends BaseAction{
 		if (!defined('APP_ROOT')) {
 			define('APP_ROOT', 'http://'.$_SERVER['SERVER_ADDR'].__APP__);
 		}
+		$this->status_arr = array(
+			'0' => 'Open',
+			'1' => 'Closed',
+			'-1' => 'Pending'
+		);
 		$smtp_config = C('_smtp_');
 		include_once (LIB_PATH.'class.phpmailer.php');
 		$mail = new PHPMailer();
@@ -557,7 +566,10 @@ class TaskAction extends BaseAction{
 			$info['owner'][$i]['realname'] = $tmp['realname'];
 			$all_owner_name[] = $tmp['realname'];
 		}
-		$body = "<style>\ntd.Open{color: #339900;font-weight:bold;}\ntd.Pending{color: #0000FF;font-weight:bold;}\ntd.Close{color: #FF0000;font-weight:bold;}\n</style>\n";
+		foreach ($info['comment'] as $key=>$val) {
+			$info['comment'][$key]['realname'] = M('Staff')->where('id='.$val['staff_id'])->getField('realname');
+		}
+		$body = "<style>\ntd.Open{color: #339900;font-weight:bold;} \ntd.Pending{color: #0000FF;font-weight:bold;} \ntd.Closed{color: #FF0000;font-weight:bold;} \ndt{padding:3px;border-left:3px solid #CC0000;background-color:#BEBEBE;} \ndd{padding:3px;margin:0;word-wrap:break-word;word-break:break-all;} \ndt span{float:right;}\n</style>\n";
 		$body .= '<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /></head><body>'."\n";
 		switch ($type) {
 			case 'task_add':
@@ -603,8 +615,6 @@ class TaskAction extends BaseAction{
 					$body .= '<a href="'.APP_ROOT.'/../'.$file['path'].'" target="_blank" title="View attachment in new window">'.$file['name']."</a><br />\n";
 				}
 				$body .= "</td>\n</tr>\n";
-				$body .= "<tr>\n".'<td valign="top">Description: </td><td>'.nl2br($info['descr'])."</td>\n</tr>\n";
-				$body .= "</table>\n";
 				break;
 
 			case 'task_status':
@@ -631,8 +641,6 @@ class TaskAction extends BaseAction{
 				$body .= "</table>\n";
 				$body .= "</td>\n</tr>\n";
 				$body .= "<tr>\n<td>Due Date: </td><td>".$info['due_date']."</td>\n</tr>\n";
-				$body .= "<tr>\n<td valign='top'>Description: </td><td>".nl2br($info['descr'])."</td></tr>\n";
-				$body .= "</table>\n";
 				break;
 
 			case 'owner_add':
@@ -659,8 +667,6 @@ class TaskAction extends BaseAction{
 				$body .= "</table>\n";
 				$body .= "</td>\n</tr>\n";
 				$body .= "<tr>\n<td>Due Date: </td><td>".$info['due_date']."</td>\n</tr>\n";
-				$body .= "<tr>\n<td valign='top'>Description: </td><td>".nl2br($info['descr'])."</td>\n</tr>\n";
-				$body .= "</table>\n";
 				break;
 
 			case 'owner_remove':
@@ -685,19 +691,17 @@ class TaskAction extends BaseAction{
 				$body .= "</table>\n";
 				$body .= "</td>\n</tr>\n";
 				$body .= "<tr>\n<td>Due Date: </td><td>".$info['due_date']."</td>\n</tr>\n";
-				$body .= "<tr>\n<td valign='top'>Description: </td><td>".nl2br($info['descr'])."</td>\n</tr>\n";
-				$body .= "</table>\n";
 				break;
 
 			case 'owner_status':
 				$subject = '[Task] Owner Change Status : '.$info['title'];
-				$owner = M('Staff')->find($owner_id);
 				$owner_info = M('TaskOwner')->where("task_id=".$task_id." and staff_id=".$owner_id)->find();
+				$owner = M('Staff')->find($owner_id);
+				$body .= $owner['realname'] .' change his status to '.$this->status_arr[$owner_info['status']].'<br />';
 				foreach ($info['owner'] as $owner) {
 					$mail->AddAddress($owner['email'], $owner['realname']);
 				}
 
-				$body .= $owner['realname'] .' change his status to '.$this->status_arr[$owner_info['status']].'<br />';
 				$body .= '<table border="1" cellspacing="1" cellpadding="7" style="border-collapse:collapse;border:1px solid #999999;">'."\n";
 				$body .= '<tr bgcolor="#CCCCCC">'."\n".'<td colspan="2">Task Summary (T'.sprintf('%06s', $info['id']).")</td>\n</tr>\n";
 				$body .= "<tr>\n".'<td width="120">Task Name: </td><td width="500">'.$info['title']."</td>\n</tr>\n";
@@ -714,8 +718,6 @@ class TaskAction extends BaseAction{
 				$body .= "</table>\n";
 				$body .= "</td>\n</tr>\n";
 				$body .= "<tr>\n<td>Due Date: </td><td>".$info['due_date']."</td>\n</tr>\n";
-				$body .= "<tr>\n<td valign='top'>Description: </td><td>".nl2br($info['descr'])."</td>\n</tr>\n";
-				$body .= "</table>\n";
 				break;
 
 			case 'remind':
@@ -745,8 +747,6 @@ class TaskAction extends BaseAction{
 				$body .= "</table>\n";
 				$body .= "</td>\n</tr>\n";
 				$body .= "<tr>\n<td>Due Date: </td><td>".$info['due_date']."</td>\n</tr>\n";
-				$body .= "<tr>\n<td valign='top'>Description: </td><td>".nl2br($info['descr'])."</td>\n</tr>\n";
-				$body .= "</table>\n";
 				break;
 
 			case 'press':
@@ -776,14 +776,62 @@ class TaskAction extends BaseAction{
 				$body .= "</table>\n";
 				$body .= "</td>\n</tr>\n";
 				$body .= "<tr>\n<td>Due Date: </td><td>".$info['due_date']."</td>\n</tr>\n";
-				$body .= "<tr>\n<td valign='top'>Description: </td><td>".nl2br($info['descr'])."</td>\n</tr>\n";
+				break;
+			
+			case 'comment_add':
+				$subject = '[Task] Post Comment to Task: '.$info['title'];
+				$staff = M('Staff')->find($owner_id);
+				$header = 'Hi all, '.$staff['realname']." has posted a new comment to the task.<br />\n";
+			case 'comment_modify':
+				empty($subject) && ($subject = '[Task] Modify Comment of Task: '.$info['title']);
+				$staff = M('Staff')->find($owner_id);
+				empty($header) && ($header = 'Hi all, '.$staff['realname']." has modified one of his comments to the task.<br />\n");
+			case 'comment_delete':
+				empty($subject) && ($subject = '[Task] Delete Comment of Task: '.$info['title']);
+				$staff = M('Staff')->find($owner_id);
+				empty($header) && ($header = 'Hi all, '.$staff['realname']." has deleted one of his comments to the task.<br />\n");
+
+				foreach ($info['owner'] as $owner) {
+					$mail->AddAddress($owner['email'], $owner['realname']);
+				}
+				$body .= $header;
+				$body .= '<table border="1" cellspacing="1" cellpadding="7" style="border-collapse:collapse;border:1px solid #999999;">'."\n";
+				$body .= '<tr bgcolor="#CCCCCC">'."\n".'<td colspan="2">Task Summary (T'.sprintf('%06s', $info['id']).")</td>\n</tr>\n";
+				$body .= "<tr>\n".'<td width="120">Task Name: </td><td width="500">'.$info['title']."</td>\n</tr>\n";
+				$body .= "<tr>\n<td>Category: </td><td>".$info['category']['name']."</td>\n</tr>\n";
+				$body .= "<tr>\n<td>Project: </td><td>".$info['project']."</td>\n</tr>\n";
+				$body .= "<tr>\n<td>Create Time: </td><td>".$info['create_time']."</td>\n</tr>\n";
+				$body .= "<tr>\n<td>Creator: </td><td>".$info['creator']['realname']."</td>\n</tr>\n";
+				$body .= "<tr>\n<td>Status: </td><td class='".$this->status_arr[$info['status']]."'>".$this->status_arr[$info['status']]."</td></tr>\n";
+				$body .= "<tr>\n<td valign='top'>Owners: </td><td>";
+				$body .= "\n\t<table>\n";
+				foreach ($info['owner'] as $owner) {
+					$body .= "<tr>\n".'<td width="100" nowrap="nowrap">'.$owner['realname'].'</td><td width="60" class="'.$this->status_arr[$owner['status']].'">'.$this->status_arr[$owner['status']]."</td>\n</tr>\n";
+				}
 				$body .= "</table>\n";
+				$body .= "</td>\n</tr>\n";
+				$body .= "<tr>\n<td>Due Date: </td><td>".$info['due_date']."</td>\n</tr>\n";
 				break;
 
 			default:
 				//nothing
 		}
-		$body .= 'For more information, please visit <a target="_blank" href="'.APP_ROOT.'/Task">ERP Task System</a>';
+		$body .= "<tr>\n".'<td valign="top">Description: </td><td>'.nl2br($info['descr'])."</td>\n</tr>\n";
+		$body .= "<tr>\n<td colspan='2'>\n";
+		if (empty($info['comment'])) {
+			$body .= '<p class="center">No Comment</p>';
+		}
+		else {
+			$body .= "<dl>\n";
+			foreach ($info['comment'] as $item) {
+				$body .= '<dt><span>'.$item['create_time'].'</span>'.$item['realname'].'</dt>'."\n";
+				$body .= '<dd>'.nl2br($item['content']).'</dd>'."\n";
+			}
+			$body .= "</dl>\n";
+		}
+		$body .= "</td></tr>\n";
+		$body .= "</table>\n";
+		$body .= '<br /><br />For more information, please visit <a target="_blank" href="'.APP_ROOT.'/Task">ERP Task System</a>';
 		$body .= '<br /><br />Best Regards,<br />ERP System';
 
 		if ($info['notification'][0] == '1') {

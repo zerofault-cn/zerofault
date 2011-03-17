@@ -54,7 +54,7 @@ textarea {
 			<td bgcolor="#FFFFFF">
 				<strong class="{$status_arr[$info['status']]}">{$status_arr[$info['status']]}</strong>
 				<if condition="$_SESSION[C('USER_AUTH_KEY')] eq $info['creator_id'] or $_SESSION[C('ADMIN_AUTH_NAME')] or in_array($_SESSION[C('USER_AUTH_KEY')], C('TASK_ADMIN_ID'))">
-				[<img src="../Public/Images/open.png" alt="open" align="absmiddle" <if condition="$info['status'] neq 0"> title="change status to open" style="cursor:pointer;" onclick="changeStatus(0, {$info.id}, 0)"</if> /><img src="../Public/Images/pause.png" alt="pending" align="absmiddle" <if condition="$info['status'] neq -1"> title="change status to pending" style="cursor:pointer;" onclick="changeStatus(0, {$info.id}, -1)"</if> /><img src="../Public/Images/close.png" alt="close" align="absmiddle" <if condition="$info['status'] neq 1"> title="change status to close" style="cursor:pointer;" onclick="changeStatus(0, {$info.id}, 1)"</if> />]
+				[<img src="../Public/Images/open.png" alt="open" align="absmiddle" <if condition="$info['status'] neq 0"> title="change status to open" style="cursor:pointer;" onclick="changeStatus(0, {$info.id}, 0)"</if> /><img src="../Public/Images/pause.png" alt="pending" align="absmiddle" <if condition="$info['status'] neq -1"> title="change status to pending" style="cursor:pointer;" onclick="changeStatus(0, {$info.id}, -1)"</if> /><img src="../Public/Images/close.png" alt="close" align="absmiddle" <if condition="$info['status'] neq 1"> title="change status to closed" style="cursor:pointer;" onclick="changeStatus(0, {$info.id}, 1)"</if> />]
 				</if>
 			</td>
 			<td nowrap="nowrap">Press Interval</td>
@@ -151,7 +151,7 @@ function show_comment(id, content) {
 	if ($("#comment_list p").length>0) {
 		$("#comment_list p").remove();
 	}
-	var dd_html = '<span><img src="../Public/Images/form_edit.gif" border="0" alt="Edit" align="absmiddle" style="cursor:pointer;" onClick="edit_comment('+id+');" title="Click to edit this comment" /> <img src="../Public/Images/cross.gif" alt="Delete" align="absmiddle" border="0" style="cursor:pointer;" onclick="myConfirm(\'Are you sure to delete this comment?\', \'__URL__/delete_comment/id/'+id+');" title="Click to delete this comment" /></span><div>'+content+'</div>';
+	var dd_html = '<span><img src="../Public/Images/form_edit.gif" border="0" alt="Edit" align="absmiddle" style="cursor:pointer;" onClick="edit_comment('+id+');" title="Click to edit this comment" /> <img src="../Public/Images/cross.gif" alt="Delete" align="absmiddle" border="0" style="cursor:pointer;" onclick="myConfirm(\'Are you sure to delete this comment?\', \'__URL__/delete_comment/id/'+id+'\');" title="Click to delete this comment" /></span><div>'+content+'</div>';
 	if ($("dd#dd_"+id).length>0) {
 		$("dd#dd_"+id).html(dd_html);
 		$("input[name='id']").val('');
