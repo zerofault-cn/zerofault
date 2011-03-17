@@ -31,6 +31,7 @@ class TaskModel extends RelationModel{
 			'mapping_name' => 'comment',
 			'foreign_key'  => 'model_id',
 			'condition'    => "model_name='Task'",
+			'mapping_order'=> 'id'
 			),
 	);
 }
