@@ -37,7 +37,10 @@
 		if (mysql_select_db($DATABASE_DB, $nConnection))
 		{
 			$strQuery = "UPDATE cf_circulationhistory SET isPaused=0,pausedInterval=(pausedInterval+UNIX_TIMESTAMP()-pausedTime) WHERE nID=".$_REQUEST['historyid']." and isPaused=1";
-			mysql_query($strQuery, $nConnection);
+			if (mysql_query($strQuery, $nConnection)) {
+				$act = 'start';
+				include_once('mailall.php');
+			}
 		}
 	}
 ?>

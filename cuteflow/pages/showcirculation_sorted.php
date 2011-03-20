@@ -581,7 +581,7 @@ include	('../language_files/language.inc.php');
 					if ($arrHistory['isPaused'] == 0 && ($_SESSION["SESSION_CUTEFLOW_ACCESSLEVEL"] == 2 || $_SESSION['SESSION_CUTEFLOW_USERID']==$arrRow['nSenderId']))
 					{
 						?>
-						<a href="javascript:pauseCirculation(<?php echo $arrHistory['nID']; ?>, <?php echo $start ?>)" onMouseOver="tip('pause')" onMouseOut="untip()"><img src="../images/pause.png" border="0" height="16" width="16"></a>
+						<a href="javascript:void(0);" onclick="if(confirm('Are you sure to pause this circulation?')){pauseCirculation(<?php echo $arrHistory['nID']; ?>, <?php echo $start ?>)}else{return false;}" onMouseOver="tip('pause')" onMouseOut="untip()"><img src="../images/pause.png" border="0" height="16" width="16"></a>
 						<?php
 						$SetOne = 1;
 					}
@@ -589,7 +589,7 @@ include	('../language_files/language.inc.php');
 					if ($arrHistory['isPaused'] == 1 && ($_SESSION["SESSION_CUTEFLOW_ACCESSLEVEL"] == 2 || $_SESSION['SESSION_CUTEFLOW_USERID']==$arrRow['nSenderId']))
 					{
 						?>
-						<a href="javascript:startCirculation(<?php echo $arrHistory['nID']; ?>, <?php echo $start ?>)" onMouseOver="tip('start')" onMouseOut="untip()" ><img src="../images/start.png" border="0" height="16" width="16"></a>
+						<a href="javascript:void(0);" onclick="if(confirm('Are you sure to start this circulation?')){startCirculation(<?php echo $arrHistory['nID']; ?>, <?php echo $start ?>)}else{return false;}" onMouseOver="tip('start')" onMouseOut="untip()" ><img src="../images/start.png" border="0" height="16" width="16"></a>
 						<?php
 					}
 				}
