@@ -3,6 +3,10 @@
 *
 * 入库，退货
 *
+* status值：
+*	0：ready
+*	1：confirmed
+*
 * @author zerofault <zerofault@gmail.com>
 * @since 2009/8/5
 */
@@ -505,6 +509,9 @@ class ProductInAction extends BaseAction{
 		empty($_POST['chk']) && self::_error('You haven\'t select any item!');
 		foreach ($_POST['chk'] as $id) {
 			$info = $this->dao->find($id);
+			if (0 != $info['status']) {
+				continue;
+			}
 			$where = array(
 				'type' => 'location',
 				'location_id' => 1,

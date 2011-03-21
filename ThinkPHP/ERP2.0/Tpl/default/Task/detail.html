@@ -19,8 +19,8 @@ dt span,dd span{
 	float:right;
 }
 textarea {
-	width:240px;
-	height:42px;
+	width: 400px;
+	height: 100px;
 	margin-top:4px;
 }
 #think_run_time,#think_page_trace{display:none;}
@@ -115,7 +115,7 @@ textarea {
 		<form action="__URL__/comment" method="post" target="_iframe">
 		<input type="hidden" name="task_id" value="{$info.id}" />
 		<input type="hidden" name="id" value="" />
-		<textarea name="content" cols="40" rows="4"></textarea>
+		<textarea name="content" cols="50" rows="8"></textarea>
 		<input type="submit" value="Post comment" name="submit" />
 		<input type="button" value="Close" onclick="self.parent.tb_remove();"/>
 		</form>

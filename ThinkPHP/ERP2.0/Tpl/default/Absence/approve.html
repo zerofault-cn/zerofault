@@ -31,7 +31,7 @@
 			<td>{$item['hours']|round}</td>
 			<td nowrap="nowrap"><empty name="item['deputy_id']"><font color="#a4a4a4">N/A</font><else />{$item['deputy']['realname']}</empty></td>
 			<td align="left"><if condition="$item['type'] eq 'CashOut'"><font color="#a4a4a4">N/A</font><else />{$item['note']|nl2br}</if></td>
-			<td><if condition="$item['status'] lt 1"><textarea name="comment" cols="30" rows="3"></textarea><else />{$item['comment']|nl2br}</if></td>
+			<td align="left" valign="top"><if condition="$item['status'] lt 1"><textarea name="comment" cols="30" rows="3"></textarea><else />{$item['comment']|nl2br}</if></td>
 			<td nowrap="nowrap">
 				<if condition="$item['status'] lt 1">
 				<input type="hidden" name="id" value="{$item['id']}" />
