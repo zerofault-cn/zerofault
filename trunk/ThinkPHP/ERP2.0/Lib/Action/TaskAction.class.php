@@ -395,7 +395,7 @@ class TaskAction extends BaseAction{
 				$html  = '<script language="JavaScript" type="text/javascript">';
 				$html .= 'parent.myAlert("Post comment success!");';
 				$html .= 'parent.myOK(500);';
-				$html .= 'parent.show_comment('.$id.', "'.nl2br($content).'");';
+				$html .= 'parent.show_comment('.$id.', "'.str_replace(array("\r\n", "\n"), '<br />', $content).'");';
 				$html .= '</script>';
 				self::mail_task('comment_add', $task_id, $_SESSION[C('USER_AUTH_KEY')]);
 				die($html);
@@ -574,21 +574,21 @@ class TaskAction extends BaseAction{
 		switch ($type) {
 			case 'task_add':
 				if ($info['press_interval']%86400 == 0) {
-					$info['press_unit'] = 'Day';
+					$info['press_unit'] = ' Day';
 					$info['press_time'] = $info['press_interval']/86400;
 					if ($info['press_time']>1) {
 						$info['press_unit'] = ' Days';
 					}
 				}
 				elseif ($info['press_interval']%3600 == 0) {
-					$info['press_unit'] = 'Hour';
+					$info['press_unit'] = ' Hour';
 					$info['press_time'] = $info['press_interval']/3600;
 					if ($info['press_time']>1) {
 						$info['press_unit'] = ' Hours';
 					}
 				}
 				elseif ($info['press_interval']%60 == 0) {
-					$info['press_unit'] = 'Minute';
+					$info['press_unit'] = ' Minute';
 					$info['press_time'] = $info['press_interval']/60;
 					if ($info['press_time']>1) {
 						$info['press_unit'] = ' Minutes';
@@ -599,7 +599,7 @@ class TaskAction extends BaseAction{
 					$mail->AddAddress($owner['email'], $owner['realname']);
 				}
 
-				$body .= "Hi all, ".$creator['realname']." create a new task: ".$info['title']."<br />\n";
+				$body .= "Hi all, ".$creator['realname']." has created a new task: ".$info['title']."<br />\n";
 				$body .= '<table border="1" cellspacing="1" cellpadding="7" style="border-collapse:collapse;border:1px solid #999999;">'."\n";
 				$body .= '<tr bgcolor="#CCCCCC">'."\n".'<td colspan="2">Task Summary (T'.sprintf('%06s', $info['id']).")</td>\n</tr>\n";
 				$body .= "<tr>\n".'<td width="120">Task Name: </td><td width="500">'.$info['title']."</td>\n</tr>\n";
@@ -609,7 +609,7 @@ class TaskAction extends BaseAction{
 				$body .= "<tr>\n<td>Creator: </td><td>".$info['creator']['realname']."</td>\n</tr>\n";
 				$body .= "<tr>\n<td>Due Date: </td><td>".$info['due_date'].'</td>'."\n</tr>\n";
 				$body .= "<tr>\n<td>Press Interval: </td><td>".$info['press_time'].$info['press_unit']."</td>\n</tr>\n";
-				$body .= "<tr>\n<td>Owners: </td><td>".implode(', ', array_keys($all_owner_name))."</td>\n</tr>\n";
+				$body .= "<tr>\n<td>Owners: </td><td>".implode(', ', $all_owner_name)."</td>\n</tr>\n";
 				$body .= "<tr>\n".'<td valign="top">Attached Files: </td><td>';
 				foreach ($info['attachment'] as $file) {
 					$body .= '<a href="'.APP_ROOT.'/../'.$file['path'].'" target="_blank" title="View attachment in new window">'.$file['name']."</a><br />\n";
@@ -697,7 +697,7 @@ class TaskAction extends BaseAction{
 				$subject = '[Task] Owner Change Status : '.$info['title'];
 				$owner_info = M('TaskOwner')->where("task_id=".$task_id." and staff_id=".$owner_id)->find();
 				$owner = M('Staff')->find($owner_id);
-				$body .= $owner['realname'] .' change his status to '.$this->status_arr[$owner_info['status']].'<br />';
+				$body .= $owner['realname'] .' has changed his status to '.$this->status_arr[$owner_info['status']].'<br />';
 				foreach ($info['owner'] as $owner) {
 					$mail->AddAddress($owner['email'], $owner['realname']);
 				}

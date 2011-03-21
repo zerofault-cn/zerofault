@@ -3,6 +3,12 @@
 *
 * 出库，退库
 *
+* status值：
+*	-2: waiting for leader
+*	-1: rejected
+*	 0: ready
+*	 1: confirmed
+*
 * @author zerofault <zerofault@gmail.com>
 * @since 2009/8/5
 */
@@ -503,6 +509,9 @@ class ProductOutAction extends BaseAction{
 		}
 		foreach ($_POST['chk'] as $id) {
 			$info = $this->dao->find($id);
+			if (0 != $info['status']) {
+				continue;
+			}
 			//减库存，或减资产
 			$where = array(
 				'type' => $info['from_type'],

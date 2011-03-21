@@ -21,11 +21,11 @@ return array(
 		array('13:00', '18:00')
 		),
 	
-	'workday' => array( //法定工作日，即原本是周末，被调为上班
-		'2011-01-30', '2011-02-12'
+	'workday' => array( //原本是周末，被调为上班
+		'2011-01-30', '2011-02-12', '2011-04-02', '2011-04-30', '2011-10-08', '2011-10-09'
 		),
-	'holiday' => array( //法定休息日，即原本是工作日，被调为休假
-		'2011-02-02', '2011-02-03', '2011-02-04', '2011-02-07', '2011-02-08'
+	'holiday' => array( //原本是工作日，被调为假日
+		'2011-02-02', '2011-02-03', '2011-02-04', '2011-02-07', '2011-02-08', '2011-04-04', '2011-04-05', '2011-05-02', '2011-05-03', '2011-06-06', '2011-09-12', '2011-10-03', '2011-10-04', '2011-10-05', '2011-10-06', '2011-10-07'
 		),
 
 	'notification' => array( //即时通知邮件的cc list，不论请假多少天，不论审批或拒绝
@@ -49,7 +49,7 @@ return array(
 				'BINL' => 'bin.li@agigatech.com',
 				),
 			'cc' => array(
-				'NLIU' => 'li@agigatech.com',
+				'NLIU' => 'yingnan.liu@agigatech.com',
 				'JALI' => 'jali@agigatech.com',
 				'JFAN' => 'fan@agigatech.com'
 				)
@@ -57,7 +57,7 @@ return array(
 		'level_2' => array( //请假时间大于2天
 			'approver' => array(
 				'BINL' => 'bin.li@agigatech.com',
-				'NLIU' => 'li@agigatech.com',
+				'NLIU' => 'yingnan.liu@agigatech.com',
 				),
 			'cc' => array(
 				'JALI' => 'jali@agigatech.com',

@@ -693,7 +693,17 @@ class AbsenceAction extends BaseAction{
 				}
 			}
 		}
+		$comment_prefix = '['.date('Y-m-d H:i:s').' by '.$_SESSION[C('STAFF_AUTH_NAME')]['realname'].'] ';
 		$comment = $_REQUEST['comment'];
+		if (''==trim($comment)) {
+			if ('2'==$status) {
+				$comment = 'Rejected';
+			}
+			elseif ('1'==$status) {
+				$comment = 'Approved';
+			}
+		}
+		$comment = $comment_prefix.$comment;
 		if (empty($id)) {
 			return;
 		}
