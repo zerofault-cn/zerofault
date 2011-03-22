@@ -38,7 +38,7 @@
 		{
 			$strQuery = "UPDATE cf_circulationhistory SET isPaused=1,pausedTime=".time()." WHERE nID=".$_REQUEST['historyid']." and isPaused=0";
 			if (mysql_query($strQuery, $nConnection)) {
-				$act = 'start';
+				$act = 'pause';
 				include_once('mailall.php');
 			}
 		}
