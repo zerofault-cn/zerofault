@@ -57,6 +57,26 @@ $nCirculationId = $arrHistory['nCirculationFormId'];
 $emailFormat = 'HTML';
 $emailValues = 'VALUES';
 
+
+
+//get users in process
+$sql = "Select cf_circulationprocess.nSlotId,cf_user.strEMail,cf_user.strFirstName from cf_user,cf_circulationprocess where cf_user.nID=cf_circulationprocess.nUserId and cf_circulationprocess.nDecissionState=0 and cf_circulationprocess.nCirculationHistoryId=".$_REQUEST['historyid'];
+$rs = mysql_query($sql);
+$i = 0;
+while ($row = mysql_fetch_assoc($rs)) {
+	$nSlotId = $row['nSlotId'];
+	if ($i==0) {
+		$message->setTo(array($row["strEMail"]=>$row['strFirstName']));
+	}
+	else {
+		$message->addTo($row["strEMail"], $row['strFirstName']);
+	}
+	$i++;
+	
+}
+//print_r($message->getTo());
+//exit;
+require '../mail/mail_'.$emailFormat.$emailValues.'.inc.php';
 switch ($emailFormat) {
 	case PLAIN:
 		$message->setBody($strMessage, 'text/plain');
@@ -66,18 +86,13 @@ switch ($emailFormat) {
 		break;
 }
 $message->setFrom(array($SYSTEM_REPLY_ADDRESS=>'AgigAFlow'));
-$message->setSubject($MAIL_HEADER_PRE.$arrForm["strName"]);
-
-
-//get users in process
-$sql = "Select cf_circulationprocess.nSlotId,cf_user.strEMail,cf_user.strFirstName from cf_user,cf_circulationprocess where cf_user.nID=cf_circulationprocess.nUserId and cf_circulationprocess.nDecissionState=0 and cf_circulationprocess.nCirculationHistoryId=".$_REQUEST['historyid'];
-$rs = mysql_query($sql);
-while ($row = mysql_fetch_assoc($rs)) {
-	$nSlotId = $row['nSlotId'];
-	$message->addTo(array($row["strEMail"]=>$row['strFirstName']));
+if ($act == 'pause') {
+	$subject = '[Flow Paused] Circulation: '.$arrForm["strName"];
 }
-
-require '../mail/mail_'.$emailFormat.$emailValues.'.inc.php';
+elseif ('start' == $act) {
+	$subject = '[Flow Started] Circulation: '.$arrForm["strName"];
+}
+$message->setSubject($subject);
 
 //get maillist ID
 $sql = "Select nMailingListId from cf_circulationform where nID=".$arrHistory['nCirculationFormId'];
