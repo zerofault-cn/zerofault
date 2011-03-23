@@ -215,7 +215,7 @@
 				<foreach name="DeptStaff" key="dept" item="Staff">
 					<optgroup label="{$dept}">
 					<if condition="!empty($Staff['leader'])">
-						<if condition="!empty($info['staff_id']) and $info['staff_id'] eq $Staff['leader']['id']">
+						<if condition="!empty($info['deputy_id']) and $info['deputy_id'] eq $Staff['leader']['id']">
 						<option value="{$Staff['leader']['id']}" selected="selected" style="background-color:#FABF8F;">{$Staff['leader']['realname']}</option>
 						<else />
 						<option value="{$Staff['leader']['id']}" style="background-color:#FABF8F;">{$Staff['leader']['realname']}</option>
@@ -223,7 +223,7 @@
 					</if>
 					<if condition="!empty($Staff['staff'])">
 						<foreach name="Staff.staff" item="staff">
-							<if condition="!empty($info['staff_id']) and $info['staff_id'] eq $staff['id']">
+							<if condition="!empty($info['deputy_id']) and $info['deputy_id'] eq $staff['id']">
 						<option value="{$staff['id']}" selected="selected">{$staff['realname']}</option>
 							<else />
 						<option value="{$staff['id']}">{$staff['realname']}</option>
@@ -255,13 +255,14 @@
 			<th colspan="2">Out of office request form</th>
 		</tr>
 		<tr bgcolor="#CCCCCC" align="center">
-			<td><b>Creator</b></td>
+			<td><b>Applicant</b></td>
 			<td><b>Duration</b></td>
 		</tr>
 		<tr bgcolor="#EEEEEE" align="center">
 			<td>
 				<present name="info">
-				{$info['creator']['realname']}
+				{$info['staff']['realname']}
+				<input type="hidden" name="staff_id" value="{$info['staff_id']}" />
 				<else />
 				{$_SESSION[C('STAFF_AUTH_NAME')]['realname']}
 				</present>
@@ -290,7 +291,7 @@
 				<foreach name="DeptStaff" key="dept" item="Staff">
 					<optgroup label="{$dept}">
 					<if condition="!empty($Staff['leader'])">
-						<if condition="!empty($info['staff_id']) and $info['staff_id'] eq $Staff['leader']['id']">
+						<if condition="!empty($info['deputy_id']) and $info['deputy_id'] eq $Staff['leader']['id']">
 						<option value="{$Staff['leader']['id']}" selected="selected" style="background-color:#FABF8F;">{$Staff['leader']['realname']}</option>
 						<else />
 						<option value="{$Staff['leader']['id']}" style="background-color:#FABF8F;">{$Staff['leader']['realname']}</option>
@@ -298,7 +299,7 @@
 					</if>
 					<if condition="!empty($Staff['staff'])">
 						<foreach name="Staff.staff" item="staff">
-							<if condition="!empty($info['staff_id']) and $info['staff_id'] eq $staff['id']">
+							<if condition="!empty($info['deputy_id']) and $info['deputy_id'] eq $staff['id']">
 						<option value="{$staff['id']}" selected="selected">{$staff['realname']}</option>
 							<else />
 						<option value="{$staff['id']}">{$staff['realname']}</option>
