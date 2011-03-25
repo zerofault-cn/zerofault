@@ -102,8 +102,15 @@ $nMailingListId = mysql_result($rs, 0, 0);
 //get user
 $sql = "Select distinct cf_user.strEMail,cf_user.strFirstName from cf_user,cf_slottouser where cf_user.nID=cf_slottouser.nUserId and cf_slottouser.nMailingListId=".$nMailingListId;
 $rs = mysql_query($sql);
-while ($row = mysql_fetch_row($rs)) {
-	$message->addCc(array($row["strEMail"]=>$row['strFirstName']));
+$i = 0;
+while ($row = mysql_fetch_assoc($rs)) {
+	if ($i == 0) {
+		$message->setCc($row["strEMail"], $row['strFirstName']);
+	}
+	else {
+		$message->addCc($row["strEMail"], $row['strFirstName']);
+	}
+	$i++;
 }
 
 $result = $mailer->send($message);
