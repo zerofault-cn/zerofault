@@ -678,19 +678,27 @@ class AbsenceAction extends BaseAction{
 	}
 	public function confirm() {
 		$id = $_REQUEST['id'];
+		if (empty($id)) {
+			return;
+		}
+		$info = $this->dao->find($id);
 		$status = intval($_REQUEST['status']);
-		if ($status != '2') {
+		if ($status == '-1' && $info['hours']>16) {
 			list($name, $email) = each($this->Absence_Config['application']['level_2']['approver']);
 			if (strtoupper($_SESSION[C('STAFF_AUTH_NAME')]['name']) == $name) {
-				$status += 1;
-				$status = min($status, 1);
+				$status = 0;
 			}
 			else {
 				list($name, $email) = each($this->Absence_Config['application']['level_2']['approver']);
 				if (strtoupper($_SESSION[C('STAFF_AUTH_NAME')]['name']) == $name) {
-					$status += 2;
-					$status = min($status, 1);
+					$status = 1;
 				}
+			}
+		}
+		elseif ($status == '0' && $info['hours']>8 && $info['hours']<=16) {
+			list($name, $email) = each($this->Absence_Config['application']['level_1']['approver']);
+			if (strtoupper($_SESSION[C('STAFF_AUTH_NAME')]['name']) == $name) {
+				$status = 1;
 			}
 		}
 		$comment_prefix = '['.date('Y-m-d H:i:s').' by '.$_SESSION[C('STAFF_AUTH_NAME')]['realname'].'] ';
@@ -704,10 +712,6 @@ class AbsenceAction extends BaseAction{
 			}
 		}
 		$comment = $comment_prefix.$comment;
-		if (empty($id)) {
-			return;
-		}
-		$info = $this->dao->find($id);
 		if ($info['status']>=$status) {
 			if (!empty($_REQUEST['from']) && 'mail'==$_REQUEST['from']) {
 				exit('You have approved.');
