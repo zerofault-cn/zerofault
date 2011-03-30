@@ -824,7 +824,7 @@ class TaskAction extends BaseAction{
 		else {
 			$body .= "<dl>\n";
 			foreach ($info['comment'] as $item) {
-				$body .= '<dt><span>'.$item['create_time'].'</span>'.$item['realname'].'</dt>'."\n";
+				$body .= '<dt><span>'.$item['create_time'].'</span>&nbsp;&nbsp;'.$item['realname'].'</dt>'."\n";
 				$body .= '<dd>'.nl2br($item['content']).'</dd>'."\n";
 			}
 			$body .= "</dl>\n";
