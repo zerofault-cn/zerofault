@@ -670,11 +670,11 @@ class TaskAction extends BaseAction{
 				break;
 
 			case 'owner_remove':
-				$owner = M('Staff')->find($owner_id);
-				$subject = '[Task] Remove '.$owner['realname'].' from : '.$info['title'];
-				$mail->AddAddress($owner['email'], $owner['realname']);
+				$staff = M('Staff')->find($owner_id);
+				$subject = '[Task] Remove '.$staff['realname'].' from : '.$info['title'];
+				$mail->AddAddress($staff['email'], $staff['realname']);
 
-				$body .= 'Hi '.$owner['realname'].", you have been removed from the task.<br />\n";
+				$body .= 'Hi '.$s_owner['realname'].", you have been removed from the task.<br />\n";
 				$body .= '<table border="1" cellspacing="1" cellpadding="7" style="border-collapse:collapse;border:1px solid #999999;">'."\n";
 				$body .= '<tr bgcolor="#CCCCCC">'."\n".'<td colspan="2">Task Summary (T'.sprintf('%06s', $info['id']).")</td>\n</tr>\n";
 				$body .= "<tr>\n".'<td width="120">Task Name: </td><td width="500">'.$info['title']."</td>\n</tr>\n";
@@ -721,16 +721,16 @@ class TaskAction extends BaseAction{
 				break;
 
 			case 'remind':
-				$owner = M('Staff')->find($owner_id);
-				$owner_info = M('TaskOwner')->where("task_id=".$task_id." and staff_id=".$owner_id)->find();
-				
 				$endTime = strtotime($info['due_date'])+86400;
 				$time = $endTime - time();
 				$subject = '[Task] Remind: '.self::formatSecond($time).' Left for Task: '.$info['title'];
-				
-				$mail->AddAddress($owner['email'], $owner['realname']);
 
-				$body .= 'Hi '.$owner['realname'] .', its '.self::formatSecond($time)."' left for you to close the task.<br />\n";
+				$owner_info = M('TaskOwner')->where("task_id=".$task_id." and staff_id=".$owner_id)->find();
+
+				$staff = M('Staff')->find($owner_id);
+				$mail->AddAddress($staff['email'], $staff['realname']);
+
+				$body .= 'Hi '.$staff['realname'] .', its '.self::formatSecond($time)."' left for you to close the task.<br />\n";
 				$body .= '<table border="1" cellspacing="1" cellpadding="7" style="border-collapse:collapse;border:1px solid #999999;">'."\n";
 				$body .= '<tr bgcolor="#CCCCCC">'."\n".'<td colspan="2">Task Summary (T'.sprintf('%06s', $info['id']).")</td>\n</tr>\n";
 				$body .= "<tr>\n".'<td width="120">Task Name: </td><td width="500">'.$info['title']."</td>\n</tr>\n";
@@ -750,16 +750,16 @@ class TaskAction extends BaseAction{
 				break;
 
 			case 'press':
-				$owner = M('Staff')->find($owner_id);
-				$owner_info = M('TaskOwner')->where("task_id=".$task_id." and staff_id=".$owner_id)->find();
-				
 				$endTime = strtotime($info['due_date'])+86400;
 				$time = time() - $endTime;
 				$subject = '[Task] Exceed Time Limit: '.self::formatSecond($time).' for Task: '.$info['title'];
-				
-				$mail->AddAddress($owner['email'], $owner['realname']);
 
-				$body .= 'Hi '.$owner['realname'] .', its '.self::formatSecond($time)." exceeded the time limit of the task.<br />\n";
+				$owner_info = M('TaskOwner')->where("task_id=".$task_id." and staff_id=".$owner_id)->find();
+
+				$staff = M('Staff')->find($owner_id);
+				$mail->AddAddress($staff['email'], $staff['realname']);
+
+				$body .= 'Hi '.$staff['realname'] .', its '.self::formatSecond($time)." exceeded the time limit of the task.<br />\n";
 				$body .= '<table border="1" cellspacing="1" cellpadding="7" style="border-collapse:collapse;border:1px solid #999999;">'."\n";
 				$body .= '<tr bgcolor="#CCCCCC">'."\n".'<td colspan="2">Task Summary (T'.sprintf('%06s', $info['id']).")</td>\n</tr>\n";
 				$body .= "<tr>\n".'<td width="120">Task Name: </td><td width="500">'.$info['title']."</td>\n</tr>\n";
@@ -843,9 +843,15 @@ class TaskAction extends BaseAction{
 		if ($info['notification'][1] == '1') {
 			$leader = M('Staff')->find($creator['leader_id']);
 			$mail->AddCC($leader['email'], $leader['realname']);
-			foreach ($info['owner'] as $owner) {
-				$leader = M('Staff')->find($owner['staff_id']);
+			if (in_array($type, array('owner_remove', 'remind', 'press'))) {
+				$leader = M('Staff')->find($staff['staff_id']);
 				$mail->AddCC($leader['email'], $leader['realname']);
+			}
+			else {
+				foreach ($info['owner'] as $owner) {
+					$leader = M('Staff')->find($owner['staff_id']);
+					$mail->AddCC($leader['email'], $leader['realname']);
+				}
 			}
 		}
 		$mail->Subject = $subject;
