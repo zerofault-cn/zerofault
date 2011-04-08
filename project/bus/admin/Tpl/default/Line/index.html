@@ -21,7 +21,7 @@
 		<td rowspan="2">{$item['fare_norm']}/{$item['fare_cond']}</td>
 		<td rowspan="2">{$item['ic_card']}</td>
 		<td rowspan="2">{$item['service_day']}</td>
-		<td rowspan="2">
+		<td rowspan="2" nowrap="nowrap">
 			<if condition="_GET.status eq -1">
 			<a href="__URL__/update/id/{$item['id']}/f/status/v/0" target="_iframe" title="恢复"><img src="../Public/Image/tick.gif" alt="tick" align="absmiddle"/></a>
 			<else />
