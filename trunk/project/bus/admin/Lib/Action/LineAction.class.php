@@ -489,7 +489,7 @@ class LineAction extends BaseAction{
 			self::_success('更新成功','',0);
 			
 		}
-		else{
+		else {
 			$id=$_REQUEST['id'];
 			$field=$_REQUEST['f'];
 			$value=str_replace('|', '/', $_REQUEST['v']);
@@ -500,17 +500,27 @@ class LineAction extends BaseAction{
 				$value = str_replace('_','/',$value);
 			}
 			$rs = $this->dao->where('id='.$id)->setField(array('update_time',$field), array(date("Y-m-d H:i:s"),$value));
-			if($rs)
-			{
+			if (false !== $rs) {
+				if('name'== $field) {
+					$numbers= explode("/",$value);
+					$number = str_ireplace("K",'',$numbers[0]);
+					$number = str_ireplace("(夜间线)",'',$number);
+					$number = str_ireplace("(区间)",'',$number);
+					$number = substr($number,0,3)=='B支'? (2000+intval(str_ireplace("B支",'',$number))) : $number;
+					$number = substr($number,0,1)=='B' ? (1000+intval(str_ireplace("B",'',$number))) : $number;
+					$number = substr($number,0,1)=='Y' ? (3000+intval(str_ireplace("Y",'',$number))) : $number;
+					$number = substr($number,0,1)=='J' ? (4000+intval(str_ireplace("J",'',$number))) : $number;
+					$number = intval($number);
+					$this->dao->where('id='.$id)->setField('number', $number);
+				}
 				if($field=='status') {
 					self::_success('操作成功！',__URL__.'/index/status/0',0);
 				}
-				else{
+				else {
 					self::_success('操作成功！','',0);
 				}
 			}
-			else
-			{
+			else {
 				self::_error('发生错误！<br />sql:'.$this->dao->getLastSql());
 			}
 		}
