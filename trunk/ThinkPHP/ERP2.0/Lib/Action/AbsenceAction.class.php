@@ -71,13 +71,13 @@ class AbsenceAction extends BaseAction{
 				$total_annual += $left_annual_hour;
 			}
 			else {
-				//2011年或以后
+				//现在是2011年或以后
 				if (strcmp($staff_info['onboard'], '2010-01-00')>0) {
 					//该员工在2010年后入职，则剩余年假从入职日起计算至去年结束
 					$tmp_balance_hour = round($staff_info['balance']*8 + (mktime(0,0,0,1,1,date('Y', $this->time))-strtotime($staff_info['onboard']))*360/(365+date('L', $this->time))/86400/30*1.25*8);
 				}
 				else {
-					//该员工在2010年前入职，则用2009年剩余年假 ＋ 2010年到去年的整年假
+					//该员工在2010年前入职，则用2009年剩余年假 ＋ 2010整年假
 					$tmp_balance_hour = round($staff_info['balance']*8 + (date('Y', $this->time)-2010)*12*1.25*8);
 				}
 				$balance_hour = max(0, $tmp_balance_hour-$used_annual_hours);
