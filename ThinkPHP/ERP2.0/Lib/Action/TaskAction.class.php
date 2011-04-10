@@ -725,12 +725,26 @@ class TaskAction extends BaseAction{
 				$time = $endTime - time();
 				$subject = '[Task] Remind: '.self::formatSecond($time).' Left for Task: '.$info['title'];
 
-				$owner_info = M('TaskOwner')->where("task_id=".$task_id." and staff_id=".$owner_id)->find();
+				if (!empty($owner_id)) {
+					$staff = M('Staff')->find($owner_id);
+					$mail->AddAddress($staff['email'], $staff['realname']);
+					$staff_name = $staff['realname'];
+				}
+				else {
+					$staff_name_arr = array();
+					foreach ($info['owner'] as $i=>$owner) {
+						if (0!=$owner['status']) {
+							continue;
+						}
+						$tmp = M('Staff')->find($owner['staff_id']);
+						$mail->AddAddress($tmp['email'], $tmp['realname']);
+						$staff_name_arr[] = $tmp['realname'];
+					}
+					$staff_name = implode('/', $staff_name_arr);
+				}
 
-				$staff = M('Staff')->find($owner_id);
-				$mail->AddAddress($staff['email'], $staff['realname']);
 
-				$body .= 'Hi '.$staff['realname'] .', its '.self::formatSecond($time)."' left for you to close the task.<br />\n";
+				$body .= 'Hi '.$staff_name .', its '.self::formatSecond($time)."' left for you to close the task.<br />\n";
 				$body .= '<table border="1" cellspacing="1" cellpadding="7" style="border-collapse:collapse;border:1px solid #999999;">'."\n";
 				$body .= '<tr bgcolor="#CCCCCC">'."\n".'<td colspan="2">Task Summary (T'.sprintf('%06s', $info['id']).")</td>\n</tr>\n";
 				$body .= "<tr>\n".'<td width="120">Task Name: </td><td width="500">'.$info['title']."</td>\n</tr>\n";
@@ -741,8 +755,11 @@ class TaskAction extends BaseAction{
 				$body .= "<tr>\n<td>Status: </td><td class='".$this->status_arr[$info['status']]."'>".$this->status_arr[$info['status']]."</td></tr>\n";
 				$body .= "<tr>\n<td valign='top'>Owners: </td><td>";
 				$body .= "\n\t<table>\n";
-				foreach ($info['owner'] as $owner) {
+				foreach ($info['owner'] as $i=>$owner) {
 					$body .= "<tr>\n".'<td width="100" nowrap="nowrap">'.$owner['realname'].'</td><td width="60" class="'.$this->status_arr[$owner['status']].'">'.$this->status_arr[$owner['status']]."</td>\n</tr>\n";
+					if (0!=$owner['status']) {
+						unset($info['owner'][$i]);
+					}
 				}
 				$body .= "</table>\n";
 				$body .= "</td>\n</tr>\n";
@@ -754,12 +771,23 @@ class TaskAction extends BaseAction{
 				$time = time() - $endTime;
 				$subject = '[Task] Exceed Time Limit: '.self::formatSecond($time).' for Task: '.$info['title'];
 
-				$owner_info = M('TaskOwner')->where("task_id=".$task_id." and staff_id=".$owner_id)->find();
-
-				$staff = M('Staff')->find($owner_id);
-				$mail->AddAddress($staff['email'], $staff['realname']);
-
-				$body .= 'Hi '.$staff['realname'] .', its '.self::formatSecond($time)." exceeded the time limit of the task.<br />\n";
+				if (!empty($owner_id)) {
+					$staff = M('Staff')->find($owner_id);
+					$mail->AddAddress($staff['email'], $staff['realname']);
+				}
+				else {
+					$staff_name_arr = array();
+					foreach ($info['owner'] as $i=>$owner) {
+						if (0!=$owner['status']) {
+							continue;
+						}
+						$tmp = M('Staff')->find($owner['staff_id']);
+						$mail->AddAddress($tmp['email'], $tmp['realname']);
+						$staff_name_arr[] = $tmp['realname'];
+					}
+					$staff_name = implode('/', $staff_name_arr);
+				}
+				$body .= 'Hi '.$staff_name .', its '.self::formatSecond($time)." exceeded the time limit of the task.<br />\n";
 				$body .= '<table border="1" cellspacing="1" cellpadding="7" style="border-collapse:collapse;border:1px solid #999999;">'."\n";
 				$body .= '<tr bgcolor="#CCCCCC">'."\n".'<td colspan="2">Task Summary (T'.sprintf('%06s', $info['id']).")</td>\n</tr>\n";
 				$body .= "<tr>\n".'<td width="120">Task Name: </td><td width="500">'.$info['title']."</td>\n</tr>\n";
@@ -772,6 +800,9 @@ class TaskAction extends BaseAction{
 				$body .= "\n\t<table>\n";
 				foreach ($info['owner'] as $owner) {
 					$body .= "<tr>\n".'<td width="100" nowrap="nowrap">'.$owner['realname'].'</td><td width="60" class="'.$this->status_arr[$owner['status']].'">'.$this->status_arr[$owner['status']]."</td>\n</tr>\n";
+					if (0!=$owner['status']) {
+						unset($info['owner'][$i]);
+					}
 				}
 				$body .= "</table>\n";
 				$body .= "</td>\n</tr>\n";
@@ -832,7 +863,7 @@ class TaskAction extends BaseAction{
 		$body .= "</td></tr>\n";
 		$body .= "</table>\n";
 		$body .= '<br /><br />For more information, please visit <a target="_blank" href="'.APP_ROOT.'/Task">ERP Task System</a>';
-		$body .= '<br /><br />Best Regards,<br />ERP System';
+		$body .= '<br /><br />Best Regards,<br />'.C('ERP_TITLE');
 
 		if ($info['notification'][0] == '1') {
 			$manager_arr = M('Staff')->where(array('id'=>array('in', C('TASK_ADMIN_ID'))))->select();
@@ -841,9 +872,11 @@ class TaskAction extends BaseAction{
 			}
 		}
 		if ($info['notification'][1] == '1') {
-			$leader = M('Staff')->find($creator['leader_id']);
-			$mail->AddCC($leader['email'], $leader['realname']);
-			if (in_array($type, array('owner_remove', 'remind', 'press'))) {
+			if ('task_add' == $type) {
+				$leader = M('Staff')->find($creator['leader_id']);
+				$mail->AddCC($leader['email'], $leader['realname']);
+			}
+			if (in_array($type, array('owner_remove'))) {
 				$leader = M('Staff')->find($staff['staff_id']);
 				$mail->AddCC($leader['email'], $leader['realname']);
 			}
@@ -914,10 +947,11 @@ class TaskAction extends BaseAction{
 				$tmp = $lastMailTime+round(($endTime-$lastMailTime)*0.382);
 				if (time()>=$tmp && time()<$endTime && time()-$lastMailTime>86400) {//ÌáÐÑ
 					echo "remind\t";
-					if (self::mail_task('remind', $item['id'], $owner['staff_id'])) {
+					if (self::mail_task('remind', $item['id'])) {
 						if(false !== $dao->where('id='.$owner['id'])->setField('mail_time', time())) {
 							echo "Success!\n";
 							Log::Write('Notify task:'.$item['id'].'/staff:'.$owner['staff_id'].' success', INFO);
+							break;
 						}
 						else {
 							echo 'SQL error'.(C('APP_DEBUG')?$dao->getLastSql():'');
@@ -929,10 +963,11 @@ class TaskAction extends BaseAction{
 				}
 				elseif ($press_interval>0 && time()>=$endTime && time()-$lastMailTime+10>=$press_interval && date('G')>=9 && date('G')<18 && date('N')<=5) {//´ß´Ù
 					echo "press\t";
-					if (self::mail_task('press', $item['id'], $owner['staff_id'])) {
+					if (self::mail_task('press', $item['id'])) {
 						if(false !== $dao->where('id='.$owner['id'])->setField('mail_time', time())) {
 							echo "Success!\n";
 							Log::Write('Notify task:'.$item['id'].'/staff:'.$owner['staff_id'].' success', INFO);
+							break;
 						}
 						else {
 							echo 'SQL error'.(C('APP_DEBUG')?$dao->getLastSql():'');
