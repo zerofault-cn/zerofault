@@ -564,6 +564,7 @@ class TaskAction extends BaseAction{
 			$tmp = M('Staff')->find($owner['staff_id']);
 			$info['owner'][$i]['email'] = $tmp['email'];
 			$info['owner'][$i]['realname'] = $tmp['realname'];
+			$info['owner'][$i]['leader_id'] = $tmp['leader_id'];
 			$all_owner_name[] = $tmp['realname'];
 		}
 		foreach ($info['comment'] as $key=>$val) {
@@ -876,13 +877,13 @@ class TaskAction extends BaseAction{
 				$leader = M('Staff')->find($creator['leader_id']);
 				$mail->AddCC($leader['email'], $leader['realname']);
 			}
-			if (in_array($type, array('owner_remove'))) {
-				$leader = M('Staff')->find($staff['staff_id']);
+			if ('owner_remove' == $type || (in_array($type, array('remind', 'press')) && !empty($owner_id))) {
+				$leader = M('Staff')->find($staff['leader_id']);
 				$mail->AddCC($leader['email'], $leader['realname']);
 			}
 			else {
 				foreach ($info['owner'] as $owner) {
-					$leader = M('Staff')->find($owner['staff_id']);
+					$leader = M('Staff')->find($owner['leader_id']);
 					$mail->AddCC($leader['email'], $leader['realname']);
 				}
 			}
@@ -948,10 +949,9 @@ class TaskAction extends BaseAction{
 				if (time()>=$tmp && time()<$endTime && time()-$lastMailTime>86400) {//ÌáÐÑ
 					echo "remind\t";
 					if (self::mail_task('remind', $item['id'])) {
-						if(false !== $dao->where('id='.$owner['id'])->setField('mail_time', time())) {
+						if(false !== $dao->where('task_id='.$item['id'].' and status=0')->setField('mail_time', time())) {
 							echo "Success!\n";
 							Log::Write('Notify task:'.$item['id'].'/staff:'.$owner['staff_id'].' success', INFO);
-							break;
 						}
 						else {
 							echo 'SQL error'.(C('APP_DEBUG')?$dao->getLastSql():'');
@@ -964,10 +964,9 @@ class TaskAction extends BaseAction{
 				elseif ($press_interval>0 && time()>=$endTime && time()-$lastMailTime+10>=$press_interval && date('G')>=9 && date('G')<18 && date('N')<=5) {//´ß´Ù
 					echo "press\t";
 					if (self::mail_task('press', $item['id'])) {
-						if(false !== $dao->where('id='.$owner['id'])->setField('mail_time', time())) {
+						if(false !== $dao->where('task_id='.$item['id'].' and status=0')->setField('mail_time', time())) {
 							echo "Success!\n";
 							Log::Write('Notify task:'.$item['id'].'/staff:'.$owner['staff_id'].' success', INFO);
-							break;
 						}
 						else {
 							echo 'SQL error'.(C('APP_DEBUG')?$dao->getLastSql():'');
@@ -980,6 +979,7 @@ class TaskAction extends BaseAction{
 				else {
 					echo "nothing\n";
 				}
+				break;
 			}
 		}
 	}

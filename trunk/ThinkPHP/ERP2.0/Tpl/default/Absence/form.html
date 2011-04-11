@@ -193,10 +193,10 @@
 			</td>
 			<td align="center" nowrap="nowrap">
 				<present name="info">
-				<input name="date_from" type="text" class="date_from" value="{$info['time_from']|substr=0,10}" size="10" alt="Absence start date" title="Click to choose absence start date" />
-				<input type="text" size="5" value="{$info['time_from']|substr=11,5}" name="time_from" class="time_from" alt="Absence start time" title="Input absence start time" />&nbsp;~&nbsp;
-				<input name="date_to" type="text" class="date_to" value="{$info['time_to']|substr=0,10}" size="10" alt="Absence end date" title="Click to choose absence end date"  />
-				<input type="text" size="5" name="time_to" class="time_to" value="{$info['time_to']|substr=11,5}" alt="Absence end time" title="Input absence end time" />
+				<input name="date_from" type="text" class="date_from_readonly" value="{$info['time_from']|substr=0,10}" size="10" alt="Absence start date" title="Click to choose absence start date" readonly="readonly"/>
+				<input type="text" size="5" value="{$info['time_from']|substr=11,5}" name="time_from" class="time_from" alt="Absence start time" title="Input absence start time" readonly="readonly"/>&nbsp;~&nbsp;
+				<input name="date_to" type="text" class="date_to_readonly" value="{$info['time_to']|substr=0,10}" size="10" alt="Absence end date" title="Click to choose absence end date" readonly="readonly"/>
+				<input type="text" size="5" name="time_to" class="time_to" value="{$info['time_to']|substr=11,5}" alt="Absence end time" title="Input absence end time"  readonly="readonly"/>
 				<else />
 				<input name="date_from" type="text" class="date_from" value="{$date_from}" size="12" disabled="disabled" alt="Absence start date" title="Click to choose absence start date" />
 				<input type="text" size="5" value="{$time_from}" name="time_from" class="time_from" disabled="disabled" alt="Absence start time" title="Input absence start time" />&nbsp;~&nbsp;
