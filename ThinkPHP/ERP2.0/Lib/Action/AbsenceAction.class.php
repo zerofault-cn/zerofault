@@ -39,6 +39,14 @@ class AbsenceAction extends BaseAction{
 		$staff_info = D('Staff')->relation(true)->find($_SESSION[C('USER_AUTH_KEY')]);
 		$this->assign('staff_info', $staff_info);
 
+		//计算用户可分配的年假限额
+		$Accrual = array(0, 0);
+		foreach ($this->Absence_Config['AccrualRate'] as $key=>$val) {
+			if ($this->time - strtotime($staff_info['onboard']) > $key) {
+				$Accrual = $val;
+			}
+		}
+
 		$where = array(
 			'type' => array('in', array('Annual','CashOut')),
 			'staff_id' => $_SESSION[C('USER_AUTH_KEY')],
@@ -54,14 +62,15 @@ class AbsenceAction extends BaseAction{
 		if (strcmp($staff_info['onboard'], date('Y', $this->time).'-01-00')>0) {
 			$balance_hour = max(0, round($staff_info['balance']*8-$used_annual_hours));
 			$total_annual += $balance_hour;
-			//今年入职的员工，从入职之日算起
-			$added_annual_hour = round(($this->time - strtotime($staff_info['onboard']))/86400*360/(365+date('L', $this->time))/30*1.25*8);//每个月1.25天
+			
+			//今年入职的员工，从入职之日算起，每年分配15/20/25天
+			$added_annual_hour = round(($this->time - strtotime($staff_info['onboard']))/86400/(365+date('L', $this->time))*$Accrual[0]*8);
 			$left_annual_hour = $added_annual_hour - max(0, $used_annual_hours-round($staff_info['balance']*8));
 			$total_annual += $left_annual_hour;
 		}
 		else {
 			//今年之前入职的员工，从今年01-01算起
-			$added_annual_hour = round(date('z', $this->time)*360/(365+date('L', $this->time))/30*1.25*8);
+			$added_annual_hour = round(date('z', $this->time)*(365+date('L', $this->time))*$Accrual[0]*8);
 			if (date('Y', $this->time)==2010) {
 				//如果现在是2010年，则读取2009剩余年假，并减除已使用假期
 				$balance_hour = max(0, round($staff_info['balance']*8-$used_annual_hours));

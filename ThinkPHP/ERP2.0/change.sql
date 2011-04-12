@@ -142,3 +142,13 @@ CREATE TABLE `erp_task_owner` (
   `mail_time` int(10) unsigned not null default 0,
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+CREATE TABLE `erp_task_participant` (
+  `id` int(10) unsigned NOT NULL auto_increment,
+  `task_id` int(10) unsigned NOT NULL default '0',
+  `staff_id` int(10) unsigned NOT NULL default '0',
+  `status` tinyint(3) NOT NULL default '0',
+  PRIMARY KEY  (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+ALTER TABLE erp_task CHANGE notification notification CHAR(4)  NOT NULL

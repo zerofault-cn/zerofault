@@ -17,20 +17,10 @@
 <tr bgcolor="#BCD1EF">
 	<td>Project</td>
 	<td bgcolor="#E9E9E9"><input name="project" size="30" maxlength="50" type="text" value="{$info.project}" /></td>
-	<td >Due Date</td>
-	<td bgcolor="#E9E9E9">
-		<input type="text" name="due_date" value="{$info.due_date}" size="9" id="Datepicker"/>
-	</td>
+	<td>Create Date</td>
+	<td bgcolor="#E9E9E9">{$info.create_time}</td>
 </tr>
 <tr bgcolor="#78A3DF">
-	<td>Creator</td>
-	<td bgcolor="#DADADA">
-		<present name="info.creator">
-		{$info['creator']['realname']}
-		<else />
-		{$_SESSION[C('STAFF_AUTH_NAME')]['realname']}
-		</present>
-	</td>
 	<td nowrap="nowrap">Press Interval</td>
 	<td bgcolor="#DADADA">
 		<input type="text" name="press_time" size="3" value="{$info.press_time}" />
@@ -40,30 +30,20 @@
 			<option value="minute" <if condition="$info.press_unit == 'minute'">selected="selected"</if> >Minutes</option>
 		</select>(Integer number only)
 	</td>
+	<td >Due Date</td>
+	<td bgcolor="#DADADA">
+		<input type="text" name="due_date" value="{$info.due_date}" size="9" id="Datepicker"/>
+	</td>
 </tr>
 <tr bgcolor="#BCD1EF">
-	<td>Create Date</td>
-	<td bgcolor="#E9E9E9">{$info.create_time}</td>
 	<td nowrap="nowrap">Notification</td>
 	<td bgcolor="#E9E9E9">
 		<input type="checkbox" name="chk1" value="1" <if condition="$info['notification'][0] eq '1'">checked="checked"</if> /> cc to Task Manager<br />
-		<input type="checkbox" name="chk2" value="1" <if condition="$info['notification'][1] eq '1'">checked="checked"</if> /> cc to all participants' leader<br />
-	</td>
-</tr>
-<tr bgcolor="#78A3DF">
-	<td>Owner</td>
-	<td bgcolor="#DADADA" valign="top">
-		<ul id="existed_owner">
-		<foreach name="info.owner" item="owner">
-		<li id="li_{$owner.staff_id}">{$owner.realname} <img src="../Public/Images/del.png" align="absmiddle" border="0" style="cursor:pointer;" onclick="myConfirm('Are you sure to remove this staff?', '__URL__/delete_owner/id/{$info.id}/staff_id/{$owner.staff_id}');"/></li>
-		</foreach>
-		</ul>
-		<ul id="added_owner">
-		</ul>
-		<img src="../Public/Images/add_member.gif" border="0" alt="add staff" align="absmiddle" style="cursor:pointer;" onClick="show_selector(this);" />
+		<input type="checkbox" name="chk2" value="1" <if condition="$info['notification'][1] eq '1'">checked="checked"</if> /> cc to each owners' leader<br />
+		<input type="checkbox" name="chk3" value="1" <if condition="$info['notification'][2] eq '1'">checked="checked"</if> /> cc to participants<br />
 	</td>
 	<td>Attached Files</td>
-	<td bgcolor="#DADADA" valign="top">
+	<td bgcolor="#E9E9E9" valign="top">
 		<input type="hidden" name="MAX_FILE_SIZE" value="{$MAX_FILE_SIZE}"/>
 		<empty name="info.attachment">
 		Single file mustn't larger than {$upload_max_filesize}!<br />
@@ -74,6 +54,30 @@
 		</empty>
 		<input id="file" type="file" name="file[]" size="20" />
 		<img src="../Public/Images/attachfile.gif"  alt="add file" align="absmiddle" style="cursor:pointer;" onClick="addFile(this);" />
+	</td>
+</tr>
+<tr bgcolor="#78A3DF">
+	<td>Owner</td>
+	<td bgcolor="#DADADA" valign="top">
+		<ul id="existed_owner">
+		<foreach name="info.owner" item="owner">
+		<li id="owner_{$owner.staff_id}">{$owner.realname} <img src="../Public/Images/del.png" align="absmiddle" border="0" style="cursor:pointer;" onclick="myConfirm('Are you sure to remove this staff?', '__URL__/delete_owner/id/{$info.id}/staff_id/{$owner.staff_id}');"/></li>
+		</foreach>
+		</ul>
+		<ul id="added_owner">
+		</ul>
+		<img src="../Public/Images/add_member.gif" border="0" alt="add staff" align="absmiddle" style="cursor:pointer;" onClick="show_selector('owner');" />
+	</td>
+	<td>Participant</td>
+	<td bgcolor="#DADADA" valign="top">
+		<ul id="existed_owner">
+		<foreach name="info.participant" item="participant">
+		<li id="participant_{$participant.staff_id}">{$participant.realname} <img src="../Public/Images/del.png" align="absmiddle" border="0" style="cursor:pointer;" onclick="myConfirm('Are you sure to remove this staff?', '__URL__/delete_participant/id/{$info.id}/staff_id/{$participant.staff_id}');"/></li>
+		</foreach>
+		</ul>
+		<ul id="added_participant">
+		</ul>
+		<img src="../Public/Images/add_member.gif" border="0" alt="add staff" align="absmiddle" style="cursor:pointer;" onClick="show_selector('participant');" />
 	</td>
 </tr>
 <tr bgcolor="#BCD1EF">
@@ -88,10 +92,10 @@
 </p>
 </form>
 
-<!-- #TB_inline -->
-<div id="selector" style="display:none;">
+<!-- #TB_inline of Owner -->
+<div id="owner_selector" style="display:none;">
 <p class="page_title_text">Select Staff</p>
-<table id="staff" border="0" cellpadding="4" cellspacing="2">
+<table id="owner_staff" border="0" cellpadding="4" cellspacing="2">
 <tr bgcolor="#C6C6C6">
 	<th>Dept.</th>
 	<th>Staff</th>
@@ -103,14 +107,14 @@
 	<foreach name="Staff" item="staff" key="j">
 		<span>
 		<if condition="!empty($info['owner']) && in_array($staff['id'], $info['owners_id'])">
-		<input id="chk_{$staff['id']}" type="checkbox" value="{$staff['id']}" disabled="disabled"/>
+		<input id="owner_chk_{$staff['id']}" type="checkbox" value="{$staff['id']}" disabled="disabled"/>
 		<else />
-		<input id="chk_{$staff['id']}" type="checkbox" value="{$staff['id']}" />
+		<input id="owner_chk_{$staff['id']}" type="checkbox" value="{$staff['id']}" />
 		</if>
 		<if condition="$j eq 0">
-			<label for="chk_{$staff['id']}" style="font-weight:bold;">{$staff['realname']}</label>
+			<label for="owner_chk_{$staff['id']}" style="font-weight:bold;">{$staff['realname']}</label>
 		<else />
-			<label for="chk_{$staff['id']}">{$staff['realname']}</label>
+			<label for="owner_chk_{$staff['id']}">{$staff['realname']}</label>
 		</if>
 		</span>
 	</foreach>
@@ -119,7 +123,42 @@
 </iterate>
 </table>
 <p class="center">
-	<input type="button" value="Submit" onclick="self.parent.do_select()"/>
+	<input type="button" value="Submit" onclick="self.parent.do_select('owner')"/>
+	<input type="button" value="Cancel" onclick="self.parent.tb_remove();"/>
+</p>
+</div>
+<!-- #TB_inline of Participant -->
+<div id="participant_selector" style="display:none;">
+<p class="page_title_text">Select Staff</p>
+<table id="participant_staff" border="0" cellpadding="4" cellspacing="2">
+<tr bgcolor="#C6C6C6">
+	<th>Dept.</th>
+	<th>Staff</th>
+</tr>
+<iterate name="DeptStaff" id="Staff">
+<tr class="trbg{$mod}">
+	<td>{$key}</td>
+	<td>
+	<foreach name="Staff" item="staff" key="j">
+		<span>
+		<if condition="!empty($info['participant']) && in_array($staff['id'], $info['participants_id'])">
+		<input id="participant_chk_{$staff['id']}" type="checkbox" value="{$staff['id']}" disabled="disabled"/>
+		<else />
+		<input id="participant_chk_{$staff['id']}" type="checkbox" value="{$staff['id']}" />
+		</if>
+		<if condition="$j eq 0">
+			<label for="participant_chk_{$staff['id']}" style="font-weight:bold;">{$staff['realname']}</label>
+		<else />
+			<label for="participant_chk_{$staff['id']}">{$staff['realname']}</label>
+		</if>
+		</span>
+	</foreach>
+	</td>
+</tr>
+</iterate>
+</table>
+<p class="center">
+	<input type="button" value="Submit" onclick="self.parent.do_select('participant')"/>
 	<input type="button" value="Cancel" onclick="self.parent.tb_remove();"/>
 </p>
 </div>
@@ -164,18 +203,22 @@ tinyMCE.init({
 function addFile(obj) {
 	$(obj).before('<br /><input type="file" name="file[]" size="20" /> ');
 }
-function show_selector(obj){
-	tb_show('','#TB_inline?width=500&height=400&modal=true&inlineId=selector','')
+function show_selector(id){
+	tb_show('','#TB_inline?width=500&height=400&modal=true&inlineId='+id+'_selector','')
 }
-function do_select() {
-	$("ul#added_owner").empty();
-	$("table#staff").find("input:checked").each(function(i){
-		$("ul#added_owner").append('<li><input type="hidden" name="owner[]" value="'+$(this).val()+'" />'+$(this).next().text()+'</li>');
+function do_select(id) {
+	$("ul#added_"+id).empty();
+	$("table#"+id+"_staff").find("input:checked").each(function(i){
+		$("ul#added_"+id).append('<li><input type="hidden" name="'+id+'[]" value="'+$(this).val()+'" />'+$(this).next().text()+'</li>');
 	});
 	tb_remove();
 }
 function remove_owner(id) {
-	$("#li_"+id).remove();
-	$("#chk_"+id).removeAttr('disabled');
+	$("#owner_"+id).remove();
+	$("#owner_chk_"+id).removeAttr('disabled');
+}
+function remove_participant(id) {
+	$("#participant_"+id).remove();
+	$("#participant_chk_"+id).removeAttr('disabled');
 }
 </script>
