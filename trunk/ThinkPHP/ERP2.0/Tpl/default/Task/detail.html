@@ -44,8 +44,8 @@ textarea {
 			<td bgcolor="#FFFFFF">{$info.create_time}</td>
 		</tr>
 		<tr bgcolor="#DADADA">
-			<td>Creator</td>
-			<td bgcolor="#FFFFFF">{$info['creator']['realname']}</td>
+			<td nowrap="nowrap">Press Interval</td>
+			<td bgcolor="#FFFFFF">{$info.press_time} {$info.press_unit}</td>
 			<td nowrap="nowrap">Due Date</td>
 			<td bgcolor="#FFFFFF">{$info.due_date}</td>
 		</tr>
@@ -57,11 +57,15 @@ textarea {
 				[<img src="../Public/Images/open.png" alt="open" align="absmiddle" <if condition="$info['status'] neq 0"> title="change status to open" style="cursor:pointer;" onclick="changeStatus(0, {$info.id}, 0)"</if> /><img src="../Public/Images/pause.png" alt="pending" align="absmiddle" <if condition="$info['status'] neq -1"> title="change status to pending" style="cursor:pointer;" onclick="changeStatus(0, {$info.id}, -1)"</if> /><img src="../Public/Images/close.png" alt="close" align="absmiddle" <if condition="$info['status'] neq 1"> title="change status to closed" style="cursor:pointer;" onclick="changeStatus(0, {$info.id}, 1)"</if> />]
 				</if>
 			</td>
-			<td nowrap="nowrap">Press Interval</td>
-			<td bgcolor="#FFFFFF">{$info.press_time} {$info.press_unit}</td>
+			<td>Attached Files</td>
+			<td bgcolor="#FFFFFF" valign="top">
+				<foreach name="info.attachment" item="file">
+				<a href="__APP__/../{$file.path}" target="_blank" title="View attachment in new window">{$file.name}</a> <br />
+				</foreach>
+			</td>
 		</tr>
 		<tr bgcolor="#DADADA">
-			<td>Owner</td>
+			<td>Owners</td>
 			<td bgcolor="#FFFFFF" valign="top">
 				<table width="100%" id="owner_list" style="background-color: #FFFFFF;">
 				<foreach name="info.owner" item="item">
@@ -77,12 +81,8 @@ textarea {
 				</foreach>
 				</table>
 			</td>
-			<td>Attached Files</td>
-			<td bgcolor="#FFFFFF" valign="top">
-				<foreach name="info.attachment" item="file">
-				<a href="__APP__/../{$file.path}" target="_blank" title="View attachment in new window">{$file.name}</a> <br />
-				</foreach>
-			</td>
+			<td>Participants</td>
+			<td bgcolor="#FFFFFF" valign="top">{$participants}</td>
 		</tr>
 		<tr bgcolor="#E9E9E9">
 			<td >Description</td>

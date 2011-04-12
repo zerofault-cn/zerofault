@@ -18,6 +18,11 @@ class TaskModel extends RelationModel{
 			'mapping_name' => 'owner',
 			'class_name'   => 'TaskOwner',
 			),
+		'Participant' => array(
+			'mapping_type' => HAS_MANY,
+			'mapping_name' => 'participant',
+			'class_name'   => 'TaskParticipant',
+			),
 		'Attachment' => array(
 			'mapping_type' => HAS_MANY,
 			'class_name'   => 'Attachment',

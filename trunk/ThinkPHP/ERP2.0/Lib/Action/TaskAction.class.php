@@ -125,7 +125,9 @@ class TaskAction extends BaseAction{
 		$owner_list = array();
 		foreach($info['owner'] as $key=>$val) {
 			$info['owner'][$key]['realname'] = M('Staff')->where('id='.$val['staff_id'])->getField('realname');
-			$owner_list[] = $val['staff_id'];
+		}
+		foreach($info['participant'] as $key=>$val) {
+			$participants[] = M('Staff')->where('id='.$val['staff_id'])->getField('realname');
 		}
 		foreach ($info['comment'] as $key=>$val) {
 			$info['comment'][$key]['realname'] = M('Staff')->where('id='.$val['staff_id'])->getField('realname');
@@ -152,7 +154,7 @@ class TaskAction extends BaseAction{
 			}
 		}
 		$this->assign('info', $info);
-		$this->assign('owner_list', $owner_list);
+		$this->assign('participants', implode(', ', $participants));
 		$this->assign('content', ACTION_NAME);
 		$this->display('Layout:content');
 	}
@@ -180,6 +182,10 @@ class TaskAction extends BaseAction{
 			foreach($info['owner'] as $i=>$owner) {
 				$info['owner'][$i]['realname'] = M('Staff')->where('id='.$owner['staff_id'])->getField('realname');
 				$info['owners_id'][] = $owner['staff_id'];
+			}
+			foreach($info['participant'] as $i=>$participant) {
+				$info['participant'][$i]['realname'] = M('Staff')->where('id='.$participant['staff_id'])->getField('realname');
+				$info['participants_id'][] = $participant['staff_id'];
 			}
 		}
 		else {
@@ -264,7 +270,7 @@ class TaskAction extends BaseAction{
 				//nothing
 		}
 		$this->dao->press_interval = $interval;
-		$this->dao->notification = strval((empty($_REQUEST['chk1'])?'0':'1').(empty($_REQUEST['chk2'])?'0':'1'));
+		$this->dao->notification = strval((empty($_REQUEST['chk1'])?'0':'1').(empty($_REQUEST['chk2'])?'0':'1').(empty($_REQUEST['chk3'])?'0':'1'));
 		if ($id>0) {
 			if(false !== $this->dao->save()){
 				//process multi-owner
@@ -275,6 +281,15 @@ class TaskAction extends BaseAction{
 						'status' => 0
 						);
 					M('TaskOwner')->add($data);
+				}
+				//process multi-participant
+				foreach ($_REQUEST['participant'] as $staff_id) {
+					$data = array(
+						'task_id'=>$id,
+						'staff_id'=>$staff_id,
+						'status' => 0
+						);
+					M('TaskParticipant')->add($data);
 				}
 				//process multi-file
 				foreach ($_FILES['file']['size'] as $i=>$size) {
@@ -319,6 +334,15 @@ class TaskAction extends BaseAction{
 						'status' => 0
 						);
 					M('TaskOwner')->add($data);
+				}
+				//process multi-participant
+				foreach ($_REQUEST['participant'] as $staff_id) {
+					$data = array(
+						'task_id'=>$id,
+						'staff_id'=>$staff_id,
+						'status' => 0
+						);
+					M('TaskParticipant')->add($data);
 				}
 				//process multi-file
 				foreach ($_FILES['file']['size'] as $i=>$size) {
@@ -514,6 +538,23 @@ class TaskAction extends BaseAction{
 			self::_error('Delete fail!'.(C('APP_DEBUG')?$dao->getLastSql():''));
 		}
 	}
+	public function delete_participant() {
+		$task_id = $_REQUEST['id'];
+		$staff_id = $_REQUEST['staff_id'];
+		$dao = M('TaskParticipant');
+		if (false !== $dao->where(array('task_id'=>$task_id, 'staff_id'=>$staff_id))->delete()) {
+		//	self::mail_task('owner_remove', $task_id, $staff_id);
+			$html  = '<script language="JavaScript" type="text/javascript">';
+			$html .= 'parent.myAlert("Delete success!");';
+			$html .= 'parent.myOK(500);';
+			$html .= 'parent.remove_participant('.$staff_id.');';
+			$html .= '</script>';
+			die($html);
+		}
+		else {
+			self::_error('Delete fail!'.(C('APP_DEBUG')?$dao->getLastSql():''));
+		}
+	}
 	public function delete_comment() {
 		$id = $_REQUEST['id'];
 		$dao = M('Comment');
@@ -567,6 +608,11 @@ class TaskAction extends BaseAction{
 			$info['owner'][$i]['leader_id'] = $tmp['leader_id'];
 			$all_owner_name[] = $tmp['realname'];
 		}
+		$all_participant_name = array();
+		foreach ($info['participant'] as $i=>$owner) {
+			$tmp = M('Staff')->find($owner['staff_id']);
+			$all_participant_name[] = $tmp['realname'];
+		}
 		foreach ($info['comment'] as $key=>$val) {
 			$info['comment'][$key]['realname'] = M('Staff')->where('id='.$val['staff_id'])->getField('realname');
 		}
@@ -611,6 +657,7 @@ class TaskAction extends BaseAction{
 				$body .= "<tr>\n<td>Due Date: </td><td>".$info['due_date'].'</td>'."\n</tr>\n";
 				$body .= "<tr>\n<td>Press Interval: </td><td>".$info['press_time'].$info['press_unit']."</td>\n</tr>\n";
 				$body .= "<tr>\n<td>Owners: </td><td>".implode(', ', $all_owner_name)."</td>\n</tr>\n";
+				$body .= "<tr>\n<td>Participants: </td><td>".implode(', ', $all_participant_name)."</td>\n</tr>\n";
 				$body .= "<tr>\n".'<td valign="top">Attached Files: </td><td>';
 				foreach ($info['attachment'] as $file) {
 					$body .= '<a href="'.APP_ROOT.'/../'.$file['path'].'" target="_blank" title="View attachment in new window">'.$file['name']."</a><br />\n";
@@ -634,13 +681,14 @@ class TaskAction extends BaseAction{
 				$body .= "<tr>\n<td>Creator: </td><td>".$info['creator']['realname']."</td>\n</tr>\n";
 				$body .= "<tr>\n<td>Update Time: </td><td>".$info['update_time']."</td>\n</tr>\n";
 				$body .= "<tr>\n<td>Current Status: </td><td class='".$this->status_arr[$info['status']]."'>".$this->status_arr[$info['status']]."</td>\n</tr>\n";
-				$body .= "<tr>\n<td valign='top'>Owners: </td><td>";
+				$body .= "<tr>\n<td>Owners: </td><td>";
 				$body .= "\n\t<table>\n";
 				foreach ($info['owner'] as $owner) {
 					$body .= "<tr>\n".'<td width="100" nowrap="nowrap">'.$owner['realname'].'</td><td width="60" class="'.$this->status_arr[$owner['status']].'">'.$this->status_arr[$owner['status']]."</td>\n</tr>\n";
 				}
 				$body .= "</table>\n";
 				$body .= "</td>\n</tr>\n";
+				$body .= "<tr>\n<td>Participants: </td><td>".implode(', ', $all_participant_name)."</td>\n</tr>\n";
 				$body .= "<tr>\n<td>Due Date: </td><td>".$info['due_date']."</td>\n</tr>\n";
 				break;
 
@@ -660,13 +708,14 @@ class TaskAction extends BaseAction{
 				$body .= "<tr>\n<td>Create Time: </td><td>".$info['create_time']."</td>\n</tr>\n";
 				$body .= "<tr>\n<td>Creator: </td><td>".$info['creator']['realname']."</td>\n</tr>\n";
 				$body .= "<tr>\n<td>Status: </td><td class='".$this->status_arr[$info['status']]."'>".$this->status_arr[$info['status']]."</td></tr>\n";
-				$body .= "<tr>\n<td valign='top'>Current Owners: </td><td>";
+				$body .= "<tr>\n<td>Current Owners: </td><td>";
 				$body .= "\n\t<table>\n";
 				foreach ($info['owner'] as $owner) {
 					$body .= "<tr>\n".'<td width="100" nowrap="nowrap">'.$owner['realname'].'</td><td width="60" class="'.$this->status_arr[$owner['status']].'">'.$this->status_arr[$owner['status']]."</td>\n</tr>\n";
 				}
 				$body .= "</table>\n";
 				$body .= "</td>\n</tr>\n";
+				$body .= "<tr>\n<td>Participants: </td><td>".implode(', ', $all_participant_name)."</td>\n</tr>\n";
 				$body .= "<tr>\n<td>Due Date: </td><td>".$info['due_date']."</td>\n</tr>\n";
 				break;
 
@@ -684,13 +733,14 @@ class TaskAction extends BaseAction{
 				$body .= "<tr>\n<td>Create Time: </td><td>".$info['create_time']."</td>\n</tr>\n";
 				$body .= "<tr>\n<td>Creator: </td><td>".$info['creator']['realname']."</td>\n</tr>\n";
 				$body .= "<tr>\n<td>Status: </td><td class='".$this->status_arr[$info['status']]."'>".$this->status_arr[$info['status']]."</td></tr>\n";
-				$body .= "<tr>\n<td valign='top'>Current Owners: </td><td>";
+				$body .= "<tr>\n<td>Current Owners: </td><td>";
 				$body .= "\n\t<table>\n";
 				foreach ($info['owner'] as $owner) {
 					$body .= "<tr>\n".'<td width="100" nowrap="nowrap">'.$owner['realname'].'</td><td width="60" class="'.$this->status_arr[$owner['status']].'">'.$this->status_arr[$owner['status']]."</td>\n</tr>\n";
 				}
 				$body .= "</table>\n";
 				$body .= "</td>\n</tr>\n";
+				$body .= "<tr>\n<td>Participants: </td><td>".implode(', ', $all_participant_name)."</td>\n</tr>\n";
 				$body .= "<tr>\n<td>Due Date: </td><td>".$info['due_date']."</td>\n</tr>\n";
 				break;
 
@@ -711,13 +761,14 @@ class TaskAction extends BaseAction{
 				$body .= "<tr>\n<td>Create Time: </td><td>".$info['create_time']."</td>\n</tr>\n";
 				$body .= "<tr>\n<td>Creator: </td><td>".$info['creator']['realname']."</td>\n</tr>\n";
 				$body .= "<tr>\n<td>Status: </td><td class='".$this->status_arr[$info['status']]."'>".$this->status_arr[$info['status']]."</td></tr>\n";
-				$body .= "<tr>\n<td valign='top'>Owners: </td><td>";
+				$body .= "<tr>\n<td>Owners: </td><td>";
 				$body .= "\n\t<table>\n";
 				foreach ($info['owner'] as $owner) {
 					$body .= "<tr>\n".'<td width="100" nowrap="nowrap">'.$owner['realname'].'</td><td width="60" class="'.$this->status_arr[$owner['status']].'">'.$this->status_arr[$owner['status']]."</td>\n</tr>\n";
 				}
 				$body .= "</table>\n";
 				$body .= "</td>\n</tr>\n";
+				$body .= "<tr>\n<td>Participants: </td><td>".implode(', ', $all_participant_name)."</td>\n</tr>\n";
 				$body .= "<tr>\n<td>Due Date: </td><td>".$info['due_date']."</td>\n</tr>\n";
 				break;
 
@@ -754,7 +805,7 @@ class TaskAction extends BaseAction{
 				$body .= "<tr>\n<td>Create Time: </td><td>".$info['create_time']."</td>\n</tr>\n";
 				$body .= "<tr>\n<td>Creator: </td><td>".$info['creator']['realname']."</td>\n</tr>\n";
 				$body .= "<tr>\n<td>Status: </td><td class='".$this->status_arr[$info['status']]."'>".$this->status_arr[$info['status']]."</td></tr>\n";
-				$body .= "<tr>\n<td valign='top'>Owners: </td><td>";
+				$body .= "<tr>\n<td>Owners: </td><td>";
 				$body .= "\n\t<table>\n";
 				foreach ($info['owner'] as $i=>$owner) {
 					$body .= "<tr>\n".'<td width="100" nowrap="nowrap">'.$owner['realname'].'</td><td width="60" class="'.$this->status_arr[$owner['status']].'">'.$this->status_arr[$owner['status']]."</td>\n</tr>\n";
@@ -764,6 +815,7 @@ class TaskAction extends BaseAction{
 				}
 				$body .= "</table>\n";
 				$body .= "</td>\n</tr>\n";
+				$body .= "<tr>\n<td>Participants: </td><td>".implode(', ', $all_participant_name)."</td>\n</tr>\n";
 				$body .= "<tr>\n<td>Due Date: </td><td>".$info['due_date']."</td>\n</tr>\n";
 				break;
 
@@ -797,7 +849,7 @@ class TaskAction extends BaseAction{
 				$body .= "<tr>\n<td>Create Time: </td><td>".$info['create_time']."</td>\n</tr>\n";
 				$body .= "<tr>\n<td>Creator: </td><td>".$info['creator']['realname']."</td>\n</tr>\n";
 				$body .= "<tr>\n<td>Status: </td><td class='".$this->status_arr[$info['status']]."'>".$this->status_arr[$info['status']]."</td></tr>\n";
-				$body .= "<tr>\n<td valign='top'>Current Owners: </td><td>";
+				$body .= "<tr>\n<td>Current Owners: </td><td>";
 				$body .= "\n\t<table>\n";
 				foreach ($info['owner'] as $owner) {
 					$body .= "<tr>\n".'<td width="100" nowrap="nowrap">'.$owner['realname'].'</td><td width="60" class="'.$this->status_arr[$owner['status']].'">'.$this->status_arr[$owner['status']]."</td>\n</tr>\n";
@@ -807,6 +859,7 @@ class TaskAction extends BaseAction{
 				}
 				$body .= "</table>\n";
 				$body .= "</td>\n</tr>\n";
+				$body .= "<tr>\n<td>Participants: </td><td>".implode(', ', $all_participant_name)."</td>\n</tr>\n";
 				$body .= "<tr>\n<td>Due Date: </td><td>".$info['due_date']."</td>\n</tr>\n";
 				break;
 			
@@ -835,13 +888,14 @@ class TaskAction extends BaseAction{
 				$body .= "<tr>\n<td>Create Time: </td><td>".$info['create_time']."</td>\n</tr>\n";
 				$body .= "<tr>\n<td>Creator: </td><td>".$info['creator']['realname']."</td>\n</tr>\n";
 				$body .= "<tr>\n<td>Status: </td><td class='".$this->status_arr[$info['status']]."'>".$this->status_arr[$info['status']]."</td></tr>\n";
-				$body .= "<tr>\n<td valign='top'>Owners: </td><td>";
+				$body .= "<tr>\n<td>Owners: </td><td>";
 				$body .= "\n\t<table>\n";
 				foreach ($info['owner'] as $owner) {
 					$body .= "<tr>\n".'<td width="100" nowrap="nowrap">'.$owner['realname'].'</td><td width="60" class="'.$this->status_arr[$owner['status']].'">'.$this->status_arr[$owner['status']]."</td>\n</tr>\n";
 				}
 				$body .= "</table>\n";
 				$body .= "</td>\n</tr>\n";
+				$body .= "<tr>\n<td>Participants: </td><td>".implode(', ', $all_participant_name)."</td>\n</tr>\n";
 				$body .= "<tr>\n<td>Due Date: </td><td>".$info['due_date']."</td>\n</tr>\n";
 				break;
 
