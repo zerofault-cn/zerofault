@@ -611,6 +611,8 @@ class TaskAction extends BaseAction{
 		$all_participant_name = array();
 		foreach ($info['participant'] as $i=>$owner) {
 			$tmp = M('Staff')->find($owner['staff_id']);
+			$info['participant'][$i]['email'] = $tmp['email'];
+			$info['participant'][$i]['realname'] = $tmp['realname'];
 			$all_participant_name[] = $tmp['realname'];
 		}
 		foreach ($info['comment'] as $key=>$val) {
@@ -942,6 +944,11 @@ class TaskAction extends BaseAction{
 				}
 			}
 		}
+		if ($info['notification'][2] == '1') {
+			foreach ($info['participant'] as $owner) {
+				$mail->AddCC($owner['email'], $owner['realname']);
+			}
+		}
 		$mail->Subject = $subject;
 		$mail->MsgHTML($body);
 		if(!$mail->Send()) {
@@ -974,6 +981,7 @@ class TaskAction extends BaseAction{
 		return $number.$unit;
 	}
 	public function notify(){
+		echo "======== [".date("Y-m-d H:i:s").'] '.MODULE_NAME.'.'.ACTION_NAME." ========\n";
 		$where = array(
 			'status' => 0,
 			'due_date' => array('neq', '0000-00-00')
@@ -1036,6 +1044,7 @@ class TaskAction extends BaseAction{
 				break;
 			}
 		}
+		echo "\n";
 	}
 
 }
