@@ -5,7 +5,6 @@
 	<th rowspan="2">Enroll Date</th>
 	<th colspan="6">Annual Leave</th>
 	<th colspan="2">Compensatory Leave</th>
-	<th rowspan="2">Total Available<br />(= <span style="background-color:#00CC00">　</span> - <span style="background-color:#CCCC00">　</span> + <span style="background-color:#33CCCC">　</span>)</th>
 </tr>
 <tr>
 	<th style="background-color:#00CC00">{$leave_info['Balance_year']} Balance</th>
@@ -14,8 +13,8 @@
 	<th style="background-color:#CCCC00">Cash out Days in {$leave_info['CashOut'][0]['Month']}</th>
 	<th style="background-color:#CCCC00">Cash out Days in {$leave_info['CashOut'][1]['Month']}</th>
 	<th>Available<br />(= <span style="background-color:#00CC00">　</span> - <span style="background-color:#CCCC00">　</span>)</th>
-	<th style="background-color:#33CCCC">3 months ago</th>
-	<th style="background-color:#33CCCC">last 3 months</th>
+	<th style="background-color:#33CCFF">Accumulated<br />in last 3 months</th>
+	<th style="background-color:#33CCFF">Consumed</th>
 </tr>
 <iterate name="result" id="item">
 <tr class="trbg{$mod}">
@@ -27,14 +26,13 @@
 	<td>{$item['CashOut'][0]}</td>
 	<td>{$item['CashOut'][1]}</td>
 	<td>{$item['Annual_available']}</td>
-	<td>{$item['Compensatory']['past']}</td>
-	<td>{$item['Compensatory']['recent']}</td>
-	<td>{$item['Total']}</td>
+	<td>{$item['Overtime']['recent']}</td>
+	<td>{$item['Compensatory']}</td>
 </tr>
 </iterate>
 <empty name="result">
 <tr>
-	<td colspan="8" align="center">No Record</td>
+	<td colspan="10" align="center">No Record</td>
 </tr>
 </empty>
 </table>
