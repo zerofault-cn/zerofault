@@ -151,4 +151,4 @@ CREATE TABLE `erp_task_participant` (
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
-ALTER TABLE erp_task CHANGE notification notification CHAR(4)  NOT NULL
+ALTER TABLE erp_task CHANGE notification notification CHAR(4)  NOT NULL default '';
