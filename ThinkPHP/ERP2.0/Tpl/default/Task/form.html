@@ -57,17 +57,6 @@
 	</td>
 </tr>
 <tr bgcolor="#78A3DF">
-	<td>Owner</td>
-	<td bgcolor="#DADADA" valign="top">
-		<ul id="existed_owner">
-		<foreach name="info.owner" item="owner">
-		<li id="owner_{$owner.staff_id}">{$owner.realname} <img src="../Public/Images/del.png" align="absmiddle" border="0" style="cursor:pointer;" onclick="myConfirm('Are you sure to remove this staff?', '__URL__/delete_owner/id/{$info.id}/staff_id/{$owner.staff_id}');"/></li>
-		</foreach>
-		</ul>
-		<ul id="added_owner">
-		</ul>
-		<img src="../Public/Images/add_member.gif" border="0" alt="add staff" align="absmiddle" style="cursor:pointer;" onClick="show_selector('owner');" />
-	</td>
 	<td>Participant</td>
 	<td bgcolor="#DADADA" valign="top">
 		<ul id="existed_owner">
@@ -78,6 +67,17 @@
 		<ul id="added_participant">
 		</ul>
 		<img src="../Public/Images/add_member.gif" border="0" alt="add staff" align="absmiddle" style="cursor:pointer;" onClick="show_selector('participant');" />
+	</td>
+	<td>Owner</td>
+	<td bgcolor="#DADADA" valign="top">
+		<ul id="existed_owner">
+		<foreach name="info.owner" item="owner">
+		<li id="owner_{$owner.staff_id}">{$owner.realname} <img src="../Public/Images/del.png" align="absmiddle" border="0" style="cursor:pointer;" onclick="myConfirm('Are you sure to remove this staff?', '__URL__/delete_owner/id/{$info.id}/staff_id/{$owner.staff_id}');"/></li>
+		</foreach>
+		</ul>
+		<ul id="added_owner">
+		</ul>
+		<img src="../Public/Images/add_member.gif" border="0" alt="add staff" align="absmiddle" style="cursor:pointer;" onClick="show_selector('owner');" />
 	</td>
 </tr>
 <tr bgcolor="#BCD1EF">
