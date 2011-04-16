@@ -1,3 +1,8 @@
+<style>
+.exceed1 {
+	background-color: #FF00FF;
+}
+</style>
 <p class="page_title_text">Staff Leave Summary</p>
 <table cellpadding="3" border="1" bordercolor="#FFFFFF" style="border-collapse:collapse;">
 <tr>
@@ -25,7 +30,7 @@
 	<td>{$item['Annual_used']}</td>
 	<td>{$item['CashOut'][0]}</td>
 	<td>{$item['CashOut'][1]}</td>
-	<td>{$item['Annual_available']}</td>
+	<td class="exceed{$item['Exceed']}" <eq name="item['Exceed']" value="1">title="It will accumulate {$item['Accrual']} days, will exceed your Maximum Accrual: {$item['MaxAccrual']} days"</eq>>{$item['Annual_available']}</td>
 	<td>{$item['Overtime']['recent']}</td>
 	<td>{$item['Compensatory']}</td>
 </tr>
