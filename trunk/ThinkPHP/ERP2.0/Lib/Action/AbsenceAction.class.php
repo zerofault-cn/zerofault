@@ -16,7 +16,7 @@ class AbsenceAction extends BaseAction{
 		Session::set('sub', MODULE_NAME);
 		$this->dao = D('Absence');
 		$this->time = time();
-	//	$this->time = mktime(0,0,0,5,1,2012);
+	//	$this->time = mktime(0,0,0,7,1,2012);
 		parent::_initialize();
 		$this->assign('MODULE_TITLE', 'Absence');
 		$this->Absence_Config = C('_absence_');
@@ -157,14 +157,14 @@ class AbsenceAction extends BaseAction{
 		$where = array(
 			'type' => 'Out',
 			'staff_id' => $_SESSION[C('USER_AUTH_KEY')],
-			'create_time' => array('gt', date('Y-m-d', $this->time-30*86400))//最近1月
+			'time_to' => array('gt', date('Y-m-d', $this->time-30*86400))//最近1月
 			);
 		$this->assign('out_list', $this->dao->relation(true)->where($where)->order('id desc')->select());
 
 		$where = array(
 			'type' => array('neq', 'Out'),
 			'staff_id' => $_SESSION[C('USER_AUTH_KEY')],
-			'create_time' => array('gt', (date('Y', $this->time)-1).'-'.date('m', $this->time).'-'.date('d', $this->time))//最近1年
+			'time_to' => array('gt', (date('Y', $this->time)-1).'-'.date('m', $this->time).'-'.date('d', $this->time))//最近1年
 			);
 		$label_arr = array(
 			'Waiting for Approval' => array('lt', 1),
@@ -393,9 +393,13 @@ class AbsenceAction extends BaseAction{
 		}
 		else {
 			$date_from = trim($_REQUEST['date_from']);
-			$time_from = trim($_REQUEST['time_from']);
+			$tmp_str = trim($_REQUEST['time_from']);
+			$tmp = explode(':', $tmp_str);
+			$time_from = sprintf('%02d', intval($tmp[0])).':'.sprintf('%02d', intval($tmp[1]));
 			$date_to = trim($_REQUEST['date_to']);
-			$time_to = trim($_REQUEST['time_to']);
+			$tmp_str = trim($_REQUEST['time_to']);
+			$tmp = explode(':', $tmp_str);
+			$time_to = sprintf('%02d', intval($tmp[0])).':'.sprintf('%02d', intval($tmp[1]));
 			if (false === strtotime($date_from.' '.$time_from.':00')) {
 				self::_error('The begin date/time of the duration is not invalid!');
 			}
@@ -481,6 +485,7 @@ class AbsenceAction extends BaseAction{
 			$this->dao->time_from = $date_from.' '.$time_from.':00';
 			$this->dao->time_to = $date_to.' '.$time_to.':00';
 			$this->dao->hours = $hour;
+			$this->dao->hours_remain = $hour;
 			$this->dao->deputy_id = $deputy;
 			$this->dao->notification = '';
 			$this->dao->note = $note;
@@ -737,6 +742,9 @@ class AbsenceAction extends BaseAction{
 				$this->dao->status = $status;
 				self::mail_application($this->dao);
 			}
+			if (1==$status && 'Compensatory'==$this->dao->type) {
+				//从Overtime记录的hours_remain中减除相应hour数
+			}
 			if (!empty($_REQUEST['from']) && 'mail'==$_REQUEST['from']) {
 				exit('Operation success!');
 			}
@@ -915,6 +923,24 @@ class AbsenceAction extends BaseAction{
 			}
 			$rs[$i]['Total'] = self::parseHour($leave_available);
 
+			//预估到下次CashOut时可获得的年假
+			if ($this->Absence_Config['cashoutmonth'][0]<date('n', $this->time) && date('n', $this->time)<=$this->Absence_Config['cashoutmonth'][1]) {
+				$future_annual_hour = round((mktime(0,0,0,$this->Absence_Config['cashoutmonth'][1]+1,1,date('Y', $this->time)) - $this->time)/86400/365*$Accrual[0]*8);
+			}
+			elseif (date('n', $this->time) <= $this->Absence_Config['cashoutmonth'][0]) {
+				$future_annual_hour = round((mktime(0,0,0,$this->Absence_Config['cashoutmonth'][0]+1,1,date('Y', $this->time)) - $this->time)/86400/365*$Accrual[0]*8);
+			}
+			else {
+				$future_annual_hour = round((mktime(0,0,0,$this->Absence_Config['cashoutmonth'][0]+1,1,date('Y', $this->time)+1) - $this->time)/86400/365*$Accrual[0]*8);
+			}
+			if ($leave_available+$future_annual_hour > $Accrual[1]*8) {
+				$rs[$i]['Exceed'] = 1;
+			}
+			else {
+				$rs[$i]['Exceed'] = 0;
+			}
+			$rs[$i]['Accrual'] = round(($leave_available+$future_annual_hour)/8, 1);
+			$rs[$i]['MaxAccrual'] = $Accrual[1];
 		}
 		$this->assign('result', $rs);
 
