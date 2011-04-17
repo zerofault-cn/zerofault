@@ -16,7 +16,7 @@ class AbsenceAction extends BaseAction{
 		Session::set('sub', MODULE_NAME);
 		$this->dao = D('Absence');
 		$this->time = time();
-	//	$this->time = mktime(0,0,0,7,1,2012);
+	//	$this->time = mktime(0,0,0,7,16,2011);
 		parent::_initialize();
 		$this->assign('MODULE_TITLE', 'Absence');
 		$this->Absence_Config = C('_absence_');
@@ -125,32 +125,21 @@ class AbsenceAction extends BaseAction{
 				$leave_info['CashOut'][$key]['enable'] = true;
 			}
 		}
-		$leave_info['Compensatory'] = array();
+		$leave_info['Overtime'] = array();
 		$date_3month_ago = date('Y-m-d', mktime(0,0,0,date('m', $this->time)-3, date('d', $this->time), date('Y', $this->time)));
 		$where = array(
-			'type'=> 'Compensatory',
+			'type'=> 'Overtime',
 			'staff_id' => $_SESSION[C('USER_AUTH_KEY')],
-			'time_from' => array('egt', $date_3month_ago),
+			'time_from' => array('lt', $date_3month_ago),
 			'status' => 1
 		);
-		$last_apply_time = $this->dao->where($where)->max('time_from');
-		$where['type'] = 'Overtime';
-		if (!empty($last_apply_time)) {
-			$where['time_from'] = array('egt', $last_apply_time);
-			$hour = $this->dao->where($where)->sum('hours');
-			$total_leave += $hour;
-			$leave_info['Overtime']['recent'] = self::parseHour($hour);
-			$leave_info['Overtime']['past'] = self::parseHour(0);
-		}
-		else {
-			$where['time_from'] = array('egt', $date_3month_ago);
-			$hour = $this->dao->where($where)->sum('hours');
-			$total_leave += $hour;
-			$leave_info['Overtime']['recent'] = self::parseHour($hour);
-			$where['time_from'] = array('lt', $date_3month_ago);
-			$hour = $this->dao->where($where)->sum('hours');
-			$leave_info['Overtime']['past'] = self::parseHour($hour);
-		}
+		$leave_info['Overtime']['past'] = self::parseHour($this->dao->where($where)->sum('hours_remain')); 
+		
+		$where['time_from'] = array('egt', $date_3month_ago);
+		$hour = $this->dao->where($where)->sum('hours_remain');
+		$total_leave += $hour;
+		$leave_info['Overtime']['recent'] = self::parseHour($hour);
+
 		$this->assign('total_leave', self::parseHour($total_leave));
 		$this->assign('leave_info', $leave_info);
 
@@ -426,7 +415,7 @@ class AbsenceAction extends BaseAction{
 			if ($hour<=0) {
 				self::_error('The hours must be larger than 0!');
 			}
-			elseif ('Compensatory'==$type && $hour>$avaliable_hour) {
+			elseif ('Compensatory'==$type && $hour>$avaliable_hour && $id==0) {
 				self::_error('You can\'t apply more than '.$avaliable_hour.' hours');
 			}
 			$deputy = $_REQUEST['deputy'];
@@ -487,7 +476,6 @@ class AbsenceAction extends BaseAction{
 			$this->dao->hours = $hour;
 			$this->dao->hours_remain = $hour;
 			$this->dao->deputy_id = $deputy;
-			$this->dao->notification = '';
 			$this->dao->note = $note;
 			if($id>0) {
 				if(false !== $this->dao->save()) {
@@ -742,8 +730,25 @@ class AbsenceAction extends BaseAction{
 				$this->dao->status = $status;
 				self::mail_application($this->dao);
 			}
-			if (1==$status && 'Compensatory'==$this->dao->type) {
+			if (1==$status && 'Compensatory'==$info['type']) {
 				//从Overtime记录的hours_remain中减除相应hour数
+				$time = strtotime($info['time_from']);
+				$date_3month_ago = date('Y-m-d', mktime(0,0,0,date('m', $time)-3, date('d', $time), date('Y', $time)));
+				$where = array(
+					'type'=> 'Overtime',
+					'staff_id' => $info['staff_id'],
+					'time_from' => array('egt', $date_3month_ago),
+					'status' => 1
+					);
+				$rs = $this->dao->where($where)->order('time_from')->select();
+				foreach ($rs as $row) {
+					$remain = $row['hours_remain'];
+					$this->dao->where('id='.$row['id'])->setField('hours_remain', max(0, $remain-$info['hours']));
+					if ($remain-$info['hours']>=0) {
+						break;
+					}
+					$info['hours'] -= $remain;
+				}
 			}
 			if (!empty($_REQUEST['from']) && 'mail'==$_REQUEST['from']) {
 				exit('Operation success!');
@@ -901,26 +906,13 @@ class AbsenceAction extends BaseAction{
 
 			$date_3month_ago = date('Y-m-d', mktime(0,0,0,date('m', $this->time)-3, date('d', $this->time), date('Y', $this->time)));
 			unset($where['create_time']);
-			$where['type'] = 'Compensatory';
+			$where['type'] = 'Overtime';
 			$where['time_from'] = array('egt', $date_3month_ago);
+			$rs[$i]['Overtime'] = self::parseHour($this->dao->where($where)->sum('hours'));
+
+			$where['type'] = 'Compensatory';
 			$rs[$i]['Compensatory'] = self::parseHour($this->dao->where($where)->sum('hours'));
 
-			$last_apply_time = $this->dao->where($where)->max('time_from');
-			$where['type'] = 'Overtime';
-			if (!empty($last_apply_time)) {
-				$where['time_from'] = array('egt', $last_apply_time);
-				$hour = $this->dao->where($where)->sum('hours');
-				$rs[$i]['Overtime']['recent'] = self::parseHour($hour);
-				$rs[$i]['Overtime']['past'] = self::parseHour(0);
-			}
-			else {
-				$where['time_from'] = array('egt', $date_3month_ago);
-				$hour = $this->dao->where($where)->sum('hours');
-				$rs[$i]['Overtime']['recent'] = self::parseHour($hour);
-				$where['time_from'] = array('lt', $date_3month_ago);
-				$hour = $this->dao->where($where)->sum('hours');
-				$rs[$i]['Overtime']['past'] = self::parseHour($hour);
-			}
 			$rs[$i]['Total'] = self::parseHour($leave_available);
 
 			//预估到下次CashOut时可获得的年假
@@ -998,17 +990,12 @@ class AbsenceAction extends BaseAction{
 				$date_3month_ago = date('Y-m-d', mktime(0,0,0,date('m', $this->time)-3, date('d', $this->time), date('Y', $this->time)));
 				$where = array(
 					'id' => array('neq', $id),
-					'type'=> 'Compensatory',
+					'type'=> 'Overtime',
 					'staff_id' => $staff_id,
 					'time_from' => array('egt', $date_3month_ago),
 					'status' => 1
 					);
-				$last_apply_time = $this->dao->where($where)->max('time_from');
-				$where['type'] = 'Overtime';
-				if (!empty($last_apply_time)) {
-					$where['time_from'] = array('egt', $last_apply_time);
-				}
-				$total_leave = intval($this->dao->where($where)->sum('hours'));
+				$total_leave = intval($this->dao->where($where)->sum('hours_remain'));
 				break;
 			
 			default:
@@ -1459,6 +1446,35 @@ class AbsenceAction extends BaseAction{
 		parent::_update();
 	}
 	public function delete() {
+		$id = $_REQUEST['id'];
+		$op = $_REQUEST['op'];
+		$info = $this->dao->find($id);
+		if (1==$info['status']) {
+			if ('cancel'==$op) {
+				self::_error('The application has been approved, you can\'t cancel it now!');
+			}
+			elseif ('Compensatory'==$info['type']) {
+				//给Overtime记录的hours_remain中补回相应hour数
+				$time = strtotime($info['time_from']);
+				$date_3month_ago = date('Y-m-d', mktime(0,0,0,date('m', $time)-3, date('d', $time), date('Y', $time)));
+				$where = array(
+					'type'=> 'Overtime',
+					'staff_id' => $info['staff_id'],
+					'time_from' => array('egt', $date_3month_ago),
+					'status' => 1
+					);
+				$rs = $this->dao->where($where)->order('time_from')->select();
+				foreach ($rs as $row) {
+					$add = min($row['hours'] - $row['hours_remain'], $info['hours']);
+					$new_remain = $row['hours_remain']+$add;
+					$this->dao->where('id='.$row['id'])->setField('hours_remain', $new_remain);
+					$info['hours'] -= $add;
+					if ($info['hours']<=0) {
+						break;
+					}
+				}
+			}
+		}
 		self::_delete();
 	}
 }

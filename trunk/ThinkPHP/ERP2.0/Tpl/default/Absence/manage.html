@@ -56,7 +56,7 @@
 	<if condition="in_array($_SESSION[C('USER_AUTH_KEY')], C('ABSENCE_ADMIN_ID')) eq true">
 	<td nowrap="nowrap">
 		<a href="__URL__/form/id/{$item['id']}?width=500&height=450&modal=true" class="thickbox">Edit</a>
-		<a href="javascript:void(0);" onclick="myConfirm('Are you sure to delete this item?', '__URL__/delete/id/{$item['id']}');" target="_iframe">Delete</a>
+		<a href="javascript:void(0);" onclick="myConfirm('Are you sure to delete this item?', '__URL__/delete/op/delete/id/{$item['id']}');" target="_iframe">Delete</a>
 	</td>
 	</if>
 </tr>

@@ -92,7 +92,7 @@
 			<td nowrap="nowrap">
 				<if condition="strcmp(date('Y-m-d'), $item['time_to']) elt 0">
 				<a href="__URL__/form/id/{$item['id']}?width=500&height=450&modal=true" class="thickbox">Edit</a>
-				<a href="javascript:void(0);" onclick="myConfirm('Are you sure to cancel this item?', '__URL__/delete/id/{$item['id']}');" target="_iframe">Cancel</a>
+				<a href="javascript:void(0);" onclick="myConfirm('Are you sure to cancel this item?', '__URL__/delete/op/cancel/id/{$item['id']}');" target="_iframe">Cancel</a>
 				</if>
 			</td>
 		</tr>
