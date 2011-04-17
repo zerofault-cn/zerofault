@@ -19,7 +19,7 @@
 	<th style="background-color:#CCCC00">Cash out Days in {$leave_info['CashOut'][1]['Month']}</th>
 	<th>Available<br />(= <span style="background-color:#00CC00">　</span> - <span style="background-color:#CCCC00">　</span>)</th>
 	<th style="background-color:#33CCFF">Accumulated<br />in last 3 months</th>
-	<th style="background-color:#33CCFF">Consumed</th>
+	<th style="background-color:#33CCFF">Consumed<br />in last 3 months</th>
 </tr>
 <iterate name="result" id="item">
 <tr class="trbg{$mod}">
@@ -31,7 +31,7 @@
 	<td>{$item['CashOut'][0]}</td>
 	<td>{$item['CashOut'][1]}</td>
 	<td class="exceed{$item['Exceed']}" <eq name="item['Exceed']" value="1">title="It will accumulate {$item['Accrual']} days, will exceed your Maximum Accrual: {$item['MaxAccrual']} days"</eq>>{$item['Annual_available']}</td>
-	<td>{$item['Overtime']['recent']}</td>
+	<td>{$item['Overtime']}</td>
 	<td>{$item['Compensatory']}</td>
 </tr>
 </iterate>
