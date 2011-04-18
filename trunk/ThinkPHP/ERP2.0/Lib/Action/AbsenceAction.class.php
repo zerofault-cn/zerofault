@@ -59,10 +59,10 @@ class AbsenceAction extends BaseAction{
 		$leave_info['Balance_year'] = date('Y', $this->time)-1;
 		
 		if (strcmp($staff_info['onboard'], date('Y', $this->time).'-01-00')>0) {
-			$balance_hour = max(0, round($staff_info['balance']*8-$used_annual_hours));
-			$total_annual += $balance_hour;
+		//	$balance_hour = max(0, round($staff_info['balance']*8-$used_annual_hours));
+		//	$total_annual += $balance_hour;
 			
-			//今年入职的员工，从入职之日算起
+			//今年入职的员工，从入职之日算起，忽略预设Balance
 			$added_annual_hour = round(($this->time - strtotime($staff_info['onboard']))/86400/365*$Accrual[0]*8);
 			$left_annual_hour = $added_annual_hour - max(0, $used_annual_hours-round($staff_info['balance']*8));
 			$total_annual += $left_annual_hour;
@@ -916,14 +916,14 @@ class AbsenceAction extends BaseAction{
 			$rs[$i]['Total'] = self::parseHour($leave_available);
 
 			//预估到下次CashOut时可获得的年假
-			if ($this->Absence_Config['cashoutmonth'][0]<date('n', $this->time) && date('n', $this->time)<=$this->Absence_Config['cashoutmonth'][1]) {
-				$future_annual_hour = round((mktime(0,0,0,$this->Absence_Config['cashoutmonth'][1]+1,1,date('Y', $this->time)) - $this->time)/86400/365*$Accrual[0]*8);
+			if ($this->Absence_Config['cashoutmonth'][0]<=date('n', $this->time) && date('n', $this->time)<$this->Absence_Config['cashoutmonth'][1]) {
+				$future_annual_hour = round((mktime(0,0,0,$this->Absence_Config['cashoutmonth'][1],1,date('Y', $this->time)) - $this->time)/86400/365*$Accrual[0]*8);
 			}
-			elseif (date('n', $this->time) <= $this->Absence_Config['cashoutmonth'][0]) {
-				$future_annual_hour = round((mktime(0,0,0,$this->Absence_Config['cashoutmonth'][0]+1,1,date('Y', $this->time)) - $this->time)/86400/365*$Accrual[0]*8);
+			elseif (date('n', $this->time) < $this->Absence_Config['cashoutmonth'][0]) {
+				$future_annual_hour = round((mktime(0,0,0,$this->Absence_Config['cashoutmonth'][0],1,date('Y', $this->time)) - $this->time)/86400/365*$Accrual[0]*8);
 			}
 			else {
-				$future_annual_hour = round((mktime(0,0,0,$this->Absence_Config['cashoutmonth'][0]+1,1,date('Y', $this->time)+1) - $this->time)/86400/365*$Accrual[0]*8);
+				$future_annual_hour = round((mktime(0,0,0,$this->Absence_Config['cashoutmonth'][0],1,date('Y', $this->time)+1) - $this->time)/86400/365*$Accrual[0]*8);
 			}
 			if ($leave_available+$future_annual_hour > $Accrual[1]*8) {
 				$rs[$i]['Exceed'] = 1;
