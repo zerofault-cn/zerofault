@@ -154,3 +154,4 @@ CREATE TABLE `erp_task_participant` (
 ALTER TABLE erp_task CHANGE notification notification CHAR(4)  NOT NULL default '';
 
 ALTER TABLE erp_absence ADD hours_remain DECIMAL(5,2)  DEFAULT "0" NOT NULL AFTER hours;
+update erp_absence set hours_remain=hours;
