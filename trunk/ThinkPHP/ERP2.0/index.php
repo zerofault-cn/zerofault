@@ -7,7 +7,8 @@
 * @since  2009/9/2
 */
 
-define('THINK_PATH', '../ThinkPHP/ThinkPHP');
+define('THINK_PATH', dirname(__FILE__).'/Core');
+//define('THINK_PATH', dirname(__FILE__).'/../ThinkPHP/ThinkPHP');
 require(THINK_PATH."/ThinkPHP.php");
 
 $App = new App(); 
