@@ -1,0 +1,377 @@
+<style>
+#think_run_time,#think_page_trace{display:none;}
+</style>
+<table width="100%">
+<if condition="empty($info) and empty($type)">
+<tr>
+	<td class="clsTab current" id="leave">New leave application</td>
+	<td class="clsTab" id="out">Out of office request</td>
+</tr>
+</if>
+<tr>
+	<td colspan="2">
+		<if condition="!empty($type) and ($type eq 'Overtime' or $type eq 'CashOut')">
+		<form class="clsTab" id="leave" action="__URL__/submit" method="post" target="_iframe">
+			<present name="info">
+		<input type="hidden" name="id" value="{$info['id']}" />
+			</present>
+		<table width="100%" border="1" cellpadding="3" cellspacing="1" bordercolor="#FFFFFF" style="border-collapse:collapse;">
+			<if condition="$type eq 'Overtime'">
+		<tr>
+			<th colspan="2">Overtime application form</th>
+		</tr>
+		<tr bgcolor="#CCCCCC" align="center">
+			<td><b>Creator</b></td>
+			<td><b>Duration</b></td>
+		</tr>
+		<tr bgcolor="#EEEEEE" align="center">
+			<td>
+				<present name="info">
+				{$info['creator']['realname']}
+				<else />
+				{$_SESSION[C('STAFF_AUTH_NAME')]['realname']}
+				</present>
+			</td>
+			<td align="center" nowrap="nowrap">
+				<present name="info">
+				<input name="date_from" type="text" class="date_from" value="{$info['time_from']|substr=0,10}" size="10" />
+				<input type="text" size="5" value="{$info['time_from']|substr=11,5}" name="time_from" class="time_from" />&nbsp;~&nbsp;
+				<input name="date_to" type="text" class="date_to" value="{$info['time_to']|substr=0,10}" size="10" />
+				<input type="text" size="5" name="time_to" class="time_to" value="{$info['time_to']|substr=11,5}"/>
+				<else />
+				<input name="date_from" type="text" class="date_from" value="{$date_from}" size="12"/>
+				<input type="text" size="5" value="{$time_from}" name="time_from" class="time_from"/>&nbsp;~&nbsp;
+				<input name="date_to" type="text" class="date_to" value="{$date_to}" size="12"/>
+				<input type="text" size="5" name="time_to" class="time_to" value="{$time_to}"/>
+				</present>
+			</td>
+		</tr>
+		<tr bgcolor="#CCCCCC" align="center">
+			<td><b>Staff</b></td>
+			<td><b>Note</b></td>
+		</tr>
+		<tr bgcolor="#EEEEEE" align="center">
+			<td><if condition="$_GET.staff eq 'self'">
+					<present name="info">
+					{$info['creator']['realname']}
+					<else />
+					{$_SESSION[C('STAFF_AUTH_NAME')]['realname']}
+					</present>
+				<else />
+				<select name="staff_id">
+				<option value="">----Select----</option>
+				<foreach name="DeptStaff" key="dept" item="Staff">
+					<optgroup label="{$dept}">
+					<if condition="!empty($Staff['leader'])">
+						<if condition="!empty($info['staff_id']) and $info['staff_id'] eq $Staff['leader']['id']">
+						<option value="{$Staff['leader']['id']}" selected="selected" style="background-color:#FABF8F;">{$Staff['leader']['realname']}</option>
+						<else />
+						<option value="{$Staff['leader']['id']}" style="background-color:#FABF8F;">{$Staff['leader']['realname']}</option>
+						</if>
+					</if>
+					<if condition="!empty($Staff['staff'])">
+						<foreach name="Staff.staff" item="staff">
+							<if condition="!empty($info['staff_id']) and $info['staff_id'] eq $staff['id']">
+						<option value="{$staff['id']}" selected="selected">{$staff['realname']}</option>
+							<else />
+						<option value="{$staff['id']}">{$staff['realname']}</option>
+							</if>
+						</foreach>
+					</if>
+					</optgroup>
+				</foreach>
+				</select>
+				</if>
+			</td>
+			<td><textarea id="note" name="note" cols="50" rows="5"><present name="info">{$info['note']}</present></textarea></td>
+		</tr>
+		</table>
+		<p class="center">
+			<input type="hidden" name="deputy" value="0" />
+			<input type="hidden" name="type" value="Overtime" />
+			<input type="submit" name="submit" value="Submit" title="Submit this form" />&nbsp;&nbsp;&nbsp;<input type="button" value="Cancel" onclick="self.parent.tb_remove()" alt="Cancel" title="Click to go previous page" />
+		</p>
+		</form>
+			<elseif condition="$type eq 'CashOut'" />
+		<tr>
+			<th colspan="2">Cash Out application form</th>
+		</tr>
+		<tr>
+			<td bgcolor="#CCCCCC" width="30%"><b>Annual leave available: </b></td>
+			<td bgcolor="#EEEEEE">{$total_leave}</td>
+		</tr>
+		<tr>
+			<td bgcolor="#CCCCCC"><b>Reserved days: </b></td>
+			<td bgcolor="#EEEEEE">{$reserved}</td>
+		</tr>
+		<tr>
+			<td bgcolor="#CCCCCC"><b>Your cash out days: </b></td>
+			<td bgcolor="#EEEEEE"><input type="text" name="days" value="{$info['hours']/8}" size="4" onkeyup="this.value=this.value.replace(/[^0-9]/g,'')"/>days, max: {$available}</td>
+		</tr>
+		<tr>
+			<td bgcolor="#CCCCCC"><b>Type again to confirm: </b></td>
+			<td bgcolor="#EEEEEE"><input type="text" name="days2" size="4" onkeyup="this.value=this.value.replace(/[^0-9]/g,'')"/> <span style="color:red">(The days can't be changed once you submited)</span></td>
+		</tr>
+		</table>
+		<p class="center">
+			<input type="hidden" name="type" value="CashOut" />
+			<input type="submit" name="submit" value="Submit" title="Submit this form" />&nbsp;&nbsp;&nbsp;<input type="button" value="Cancel" onclick="self.parent.tb_remove()" alt="Cancel" title="Click to go previous page" />
+		</p>
+		</form>
+			</if>
+		<else />
+			<if condition="empty($info) or $info['type'] neq 'Out'">
+		<form class="clsTab" id="leave" action="__URL__/submit" method="post" target="_iframe" enctype="multipart/form-data">
+			<else />
+		<form class="clsTab" id="leave" action="__URL__/submit" method="post" target="_iframe" enctype="multipart/form-data" style="display:none;">
+			</if>
+			<present name="info">
+		<input type="hidden" name="id" value="{$info['id']}" />
+			</present>
+		<table width="100%" border="1" cellpadding="3" cellspacing="1" bordercolor="#FFFFFF" style="border-collapse:collapse;">
+		<tr>
+			<th colspan="2">Leave application form</th>
+		</tr>
+		<tr bgcolor="#CCCCCC" align="center">
+			<td width="30%"><b>Applicant</b></td>
+			<td><b>Type</b></td>
+		</tr>
+		<tr bgcolor="#EEEEEE" align="center">
+			<td><present name="info">
+				<select name="staff_id">
+				<option value="">----Select----</option>
+				<foreach name="DeptStaff" key="dept" item="Staff">
+					<optgroup label="{$dept}">
+					<if condition="!empty($Staff['leader'])">
+						<if condition="!empty($info['staff_id']) and $info['staff_id'] eq $Staff['leader']['id']">
+						<option value="{$Staff['leader']['id']}" selected="selected" style="background-color:#FABF8F;">{$Staff['leader']['realname']}</option>
+						<else />
+						<option value="{$Staff['leader']['id']}" style="background-color:#FABF8F;">{$Staff['leader']['realname']}</option>
+						</if>
+					</if>
+					<if condition="!empty($Staff['staff'])">
+						<foreach name="Staff.staff" item="staff">
+							<if condition="!empty($info['staff_id']) and $info['staff_id'] eq $staff['id']">
+						<option value="{$staff['id']}" selected="selected">{$staff['realname']}</option>
+							<else />
+						<option value="{$staff['id']}">{$staff['realname']}</option>
+							</if>
+						</foreach>
+					</if>
+					</optgroup>
+				</foreach>
+				</select>
+				<else />
+				{$_SESSION[C('STAFF_AUTH_NAME')]['realname']}
+				</present>
+			</td>
+			<td>
+				<select name="type" onchange="javascript:ChangeType(this.value);" alt="Absence type" title="Select absence type">
+					<option value="">---------Select---------</option>
+					<iterate name="LeaveType" id="item">
+						<if condition="!empty($info['type']) and $item['type'] eq $info['type']">
+					<option value="{$item['type']}" selected="selected">{$item['name']}</option> 
+						<else />
+					<option value="{$item['type']}">{$item['name']}</option> 
+						</if>
+					</iterate>
+				</select>
+				<div id="div_absTypeERROR"></div>
+			</td>
+		</tr>
+		<tr bgcolor="#CCCCCC" align="center">
+			<td><b>Creator</b></td>
+			<td><b>Duration</b></td>
+		</tr>
+		<tr bgcolor="#EEEEEE" align="center">
+			<td>
+				<present name="info">
+				{$info['creator']['realname']}
+				<else />
+				{$_SESSION[C('STAFF_AUTH_NAME')]['realname']}
+				</present>
+			</td>
+			<td align="center" nowrap="nowrap">
+				<present name="info">
+				<input name="date_from" type="text" class="date_from_readonly" value="{$info['time_from']|substr=0,10}" size="10" alt="Absence start date" title="Click to choose absence start date" readonly="readonly"/>
+				<input type="text" size="5" value="{$info['time_from']|substr=11,5}" name="time_from" class="time_from" alt="Absence start time" title="Input absence start time" readonly="readonly"/>&nbsp;~&nbsp;
+				<input name="date_to" type="text" class="date_to_readonly" value="{$info['time_to']|substr=0,10}" size="10" alt="Absence end date" title="Click to choose absence end date" readonly="readonly"/>
+				<input type="text" size="5" name="time_to" class="time_to" value="{$info['time_to']|substr=11,5}" alt="Absence end time" title="Input absence end time"  readonly="readonly"/>
+				<else />
+				<input name="date_from" type="text" class="date_from" value="{$date_from}" size="12" disabled="disabled" alt="Absence start date" title="Click to choose absence start date" />
+				<input type="text" size="5" value="{$time_from}" name="time_from" class="time_from" disabled="disabled" alt="Absence start time" title="Input absence start time" />&nbsp;~&nbsp;
+				<input name="date_to" type="text" class="date_to" value="{$date_to}" size="12" disabled="disabled" alt="Absence end date" title="Click to choose absence end date"  />
+				<input type="text" size="5" name="time_to" class="time_to" value="{$time_to}" disabled="disabled" alt="Absence end time" title="Input absence end time" />
+				</present>
+			</td>
+		</tr>
+		<tr bgcolor="#CCCCCC" align="center">
+			<td><b>Deputy</b></td>
+			<td><b>Note</b></td>
+		</tr>
+		<tr bgcolor="#EEEEEE" align="center">
+			<td><select name="deputy">
+				<option value="">----Select----</option>
+				<foreach name="DeptStaff" key="dept" item="Staff">
+					<optgroup label="{$dept}">
+					<if condition="!empty($Staff['leader'])">
+						<if condition="!empty($info['deputy_id']) and $info['deputy_id'] eq $Staff['leader']['id']">
+						<option value="{$Staff['leader']['id']}" selected="selected" style="background-color:#FABF8F;">{$Staff['leader']['realname']}</option>
+						<else />
+						<option value="{$Staff['leader']['id']}" style="background-color:#FABF8F;">{$Staff['leader']['realname']}</option>
+						</if>
+					</if>
+					<if condition="!empty($Staff['staff'])">
+						<foreach name="Staff.staff" item="staff">
+							<if condition="!empty($info['deputy_id']) and $info['deputy_id'] eq $staff['id']">
+						<option value="{$staff['id']}" selected="selected">{$staff['realname']}</option>
+							<else />
+						<option value="{$staff['id']}">{$staff['realname']}</option>
+							</if>
+						</foreach>
+					</if>
+					</optgroup>
+				</foreach>
+				</select>
+			</td>
+			<td align="center"><textarea id="note" name="note" cols="50" rows="5"><present name="info">{$info['note']}</present></textarea></td>
+		</tr>
+		</table>
+		<p class="center">
+			<input type="submit" name="submit" value="Submit" title="Submit this absence apply form" />&nbsp;&nbsp;&nbsp;<input type="button" value="Cancel" onclick="self.parent.tb_remove()" alt="Cancel" title="Click to go previous page" />
+		</p>
+		<div align="left" id="div_typeRule" style="color:red;"></div>
+		</form>
+			<if condition="empty($info) or $info['type'] neq 'Out'">
+		<form class="clsTab" id="out" action="__URL__/submit" method="post" target="_iframe" style="display:none;">
+			<else />
+		<form class="clsTab" id="out" action="__URL__/submit" method="post" target="_iframe">
+			</if>
+			<present name="info">
+		<input type="hidden" name="id" value="{$info['id']}" />
+			</present>
+		<table width="100%" border="1" cellpadding="3" cellspacing="1" bordercolor="#FFFFFF" style="border-collapse:collapse;">
+		<tr>
+			<th colspan="2">Out of office request form</th>
+		</tr>
+		<tr bgcolor="#CCCCCC" align="center">
+			<td><b>Applicant</b></td>
+			<td><b>Duration</b></td>
+		</tr>
+		<tr bgcolor="#EEEEEE" align="center">
+			<td>
+				<present name="info">
+				{$info['staff']['realname']}
+				<input type="hidden" name="staff_id" value="{$info['staff_id']}" />
+				<else />
+				{$_SESSION[C('STAFF_AUTH_NAME')]['realname']}
+				</present>
+			</td>
+			<td align="center" nowrap="nowrap">
+				<present name="info">
+				<input name="date_from" type="text" class="date_from" value="{$info['time_from']|substr=0,10}" size="10" />
+				<input type="text" size="5" value="{$info['time_from']|substr=11,5}" name="time_from" class="time_from" />&nbsp;~&nbsp;
+				<input name="date_to" type="text" class="date_to" value="{$info['time_to']|substr=0,10}" size="10" />
+				<input type="text" size="5" name="time_to" class="time_to" value="{$info['time_to']|substr=11,5}"/>
+				<else />
+				<input name="date_from" type="text" class="date_from" value="{$date_from}" size="12"/>
+				<input type="text" size="5" value="{$time_from}" name="time_from" class="time_from"/>&nbsp;~&nbsp;
+				<input name="date_to" type="text" class="date_to" value="{$date_to}" size="12"/>
+				<input type="text" size="5" name="time_to" class="time_to" value="{$time_to}"/>
+				</present>
+			</td>
+		</tr>
+		<tr bgcolor="#CCCCCC" align="center">
+			<td><b>Deputy</b></td>
+			<td><b>Note</b></td>
+		</tr>
+		<tr bgcolor="#EEEEEE" align="center">
+			<td><select name="deputy">
+				<option value="">----Select----</option>
+				<foreach name="DeptStaff" key="dept" item="Staff">
+					<optgroup label="{$dept}">
+					<if condition="!empty($Staff['leader'])">
+						<if condition="!empty($info['deputy_id']) and $info['deputy_id'] eq $Staff['leader']['id']">
+						<option value="{$Staff['leader']['id']}" selected="selected" style="background-color:#FABF8F;">{$Staff['leader']['realname']}</option>
+						<else />
+						<option value="{$Staff['leader']['id']}" style="background-color:#FABF8F;">{$Staff['leader']['realname']}</option>
+						</if>
+					</if>
+					<if condition="!empty($Staff['staff'])">
+						<foreach name="Staff.staff" item="staff">
+							<if condition="!empty($info['deputy_id']) and $info['deputy_id'] eq $staff['id']">
+						<option value="{$staff['id']}" selected="selected">{$staff['realname']}</option>
+							<else />
+						<option value="{$staff['id']}">{$staff['realname']}</option>
+							</if>
+						</foreach>
+					</if>
+					</optgroup>
+				</foreach>
+				</select>
+			</td>
+			<td><textarea id="note" name="note" cols="50" rows="5"><present name="info">{$info['note']}</present></textarea></td>
+		</tr>
+		</table>
+		<p class="center">
+			<input type="hidden" name="deputy" value="0" />
+			<input type="hidden" name="type" value="Out" />
+			<input type="submit" name="submit" value="Submit" title="Submit this form" />&nbsp;&nbsp;&nbsp;<input type="button" value="Cancel" onclick="self.parent.tb_remove()" alt="Cancel" title="Click to go previous page" />
+		</p>
+		</form>
+		</if>
+	</td>
+</table>
+<!-- Datepicker -->
+<link type="text/css" rel="stylesheet" href="../Public/Css/jquery-ui-1.8.2.custom.css?20100901" />
+<script type="text/javascript" src="../Public/Js/jquery-ui-1.8.2.custom.min.js?20100901"></script>
+<script language="JavaScript" type="text/javascript">
+$(document).ready(function(){
+	$('.date_from, .date_to').datepicker({
+		dateFormat: 'yy-mm-dd',
+		changeMonth: true,
+		changeYear: true,
+		showOtherMonths: true,
+		showMonthAfterYear: true,
+		selectOtherMonths: true,
+		minDate: '-1W',
+		maxDate: '+1Y'
+	});
+	$("td.clsTab").each(function(){
+		$(this).css("cursor", "pointer").click(function(){
+			switchTab($(this).attr("id"));
+		});
+	});
+});
+
+var descr_arr = new Array();
+<iterate name="LeaveType" id="item">
+descr_arr['{$item["type"]}'] = '{$item["description"]}';
+</iterate>
+function ChangeType(type) {
+	if (type!='') {
+		$('.date_from, .time_from, .date_to, .time_to').attr('disabled', false);
+		$('#div_typeRule').html(descr_arr[type]);
+	}
+}
+function addFile(obj) {
+	if ($('#file').css('display')=='none') {
+		$('#file').show();
+	}
+	else {
+		$(obj).before('<img src="../Public/Images/attachfile.gif" align="absmiddle" style="visibility:hidden;"><br /><input type="file" name="file[]" size="30" />&nbsp;');
+	}
+}
+function addNotify(obj) {
+	if ($('#notification').css('display')=='none') {
+		$('#notification').show();
+	}
+	else {
+		var html = '<br /><select name="notification[]">';
+		html += $('#notification').html();
+		html += '</select> ';
+		$(obj).before(html);
+	}
+}
+
+</script>

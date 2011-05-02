@@ -1,0 +1,44 @@
+<p class="page_title_text">{$ACTION_TITLE}</p>
+<form method="post" target="_iframe">
+<table cellpadding="3" border="1" bordercolor="#FFFFFF" style="border-collapse:collapse;">
+<tr>
+	<th>No.</th>
+	<th>Leave Type</th>
+	<th>Display Name</th>
+	<th>Description</th>
+	<th>OP</th>
+</tr>
+<iterate name="result" id="item">
+<tr class="trbg{$mod}">
+	<td>{$i}</td>
+	<if condition="(!empty($_GET['id']) and $_GET['id'] eq $item['id']) or (!empty($_GET['type']) and $_GET['type'] eq $item['type'])">
+	<td>{$item['type']}</td>
+	<td><input type="text" class="name" name="name" size="25" value="{$item['name']}" /></td>
+	<td><textarea name="description" rows="7" cols="80">{$item['description']}</textarea></td>
+	<td><input type="hidden" name="id" value="{$item['id']}"/>
+		<input type="hidden" name="type" value="{$item['type']}"/>
+		<input type="submit" name="submit" value="Submit" />
+		<input type="button" value="Cancel" onclick="javascript:location.href='__URL__';"/></td>
+	<else />
+	<td>{$item['type']}</td>
+	<td>{$item['name']}</td>
+	<td>{$item['description']|nl2br}</td>
+	<td>
+		<if condition="$item['id'] gt 0">
+		<a href="__ACTION__/id/{$item['id']}">Edit</a>
+		<else />
+		<a href="__ACTION__/type/{$item['type']}">Define</a>
+		</if>
+	</td>
+	</if>
+</tr>
+</iterate>
+<empty name="result">
+<tr>
+	<td colspan="8" align="center">No Record</td>
+</tr>
+</empty>
+</table>
+</form>
+<p class="center">
+</p>

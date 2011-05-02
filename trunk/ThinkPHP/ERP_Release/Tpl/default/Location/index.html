@@ -1,0 +1,87 @@
+<p class="page_title_text">Location List</p>
+<form id="_form" action="__URL__/submit" method="post" target="_iframe">
+<table cellpadding="3" border="1" bordercolor="#FFFFFF" style="border-collapse:collapse;">
+<tr>
+	<th>No.</th>
+	<th>Name</th>
+	<th>Description</th>
+	<th>Fixed-Assets Manager</th>
+	<th>Floating-Assets Manager</th>
+	<th>OP</th>
+</tr>
+<iterate name="result" id="item">
+<tr class="trbg{$mod}">
+	<td align="center">{$i}</td>
+	<td class="name" align="center">{$item['name']}</td>
+	<td class="descr">{$item['descr']}</td>
+	<td class="staff1">
+	<iterate name="item['fixed_manager']" key="j" id="staff">
+		<gt name="j" value="1">
+		<div class="spline"></div>
+		</gt>
+		[{$staff['code']}]<span>{$staff['realname']}</span>
+	</iterate>
+	</td>
+	<td class="staff0">
+	<iterate name="item['floating_manager']" key="j" id="staff">
+		<gt name="j" value="1">
+		<div class="spline"></div>
+		</gt>
+		[{$staff['code']}]<span>{$staff['realname']}</span>
+	</iterate>
+	</td>
+	<td><a href="javascript:void(0);" onclick="edit(this,'{$item['id']}');">Edit</a>
+		<gt name="i" value="1"><a href="javascript:void(0);" onclick="myConfirm('Are you sure to delete this item?', '__URL__/delete/id/{$item['id']}');" target="_iframe">Delete</a></gt></td>
+</tr>
+</iterate>
+<tr id="last">
+	<td align="center">{$i+1}</td>
+	<td><input type="text" name="name" class="name" /></td>
+	<td><input type="text" name="descr" class="descr" /></td>
+	<td><select name="staff1_id" class="staff1">{$staff_opts}</select></td>
+	<td><select name="staff0_id" class="staff0">{$staff_opts}</select></td>
+	<td><input type="hidden" name="id" class="id" value="" />
+		<input type="submit" name="submit" class="submit" value="Add" /></td>
+</tr>
+</table>
+</form>
+<p class="center"></p>
+<script language="JavaScript" type="text/javascript">
+$(document).ready(function(){
+	document.forms[0].reset();
+});
+var has_reset = false;
+function edit(obj,id) {
+	var parent = $(obj).parent().parent();
+	var name = parent.children(".name").text();
+	var descr = parent.children(".descr").text();
+	var staff1 = parent.children(".staff1").children("span").text();
+	var staff0 = parent.children(".staff0").children("span").text();
+
+	$("tr#last td:eq(1)").children(".name").val(name);
+	$("tr#last td:eq(2)").children(".descr").val(descr);
+	$("tr#last td:eq(3)").children(".staff1").children().each(function(i){
+		if($(this).text() == staff1) {
+			$(this).attr("selected","selected");
+		}
+	});
+	$("tr#last td:eq(4)").children(".staff0").children().each(function(i){
+		if($(this).text() == staff0) {
+			$(this).attr("selected","selected");
+		}
+	});
+	$("tr#last td:eq(5)").children(".id").val(id);
+	$("tr#last td:eq(5)").children(".submit").val('Save');
+	if(!has_reset) {
+		$("tr#last td:eq(5)").children(".submit").after('<input type="reset" class="reset" value="Cancel"/>');
+		$("input.reset").click(function(){
+			document.forms[0].reset();
+			$("tr#last td:eq(5)").children(".id").val('');
+			$("tr#last td:eq(5)").children(".submit").val('Add');
+			$(this).remove();
+			has_reset = false;
+		});
+		has_reset = true;
+	}
+}
+</script>

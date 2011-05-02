@@ -1,0 +1,234 @@
+<style>
+td.editing input{
+	padding:0;
+}
+</style>
+<p class="page_title_text">Inventory Inquire</p>
+<table>
+<tr>
+	<td>
+		<form action="__URL__/index" method="post">
+		<table id="search_table" cellpadding="3" border="1" bordercolor="#FFFFFF" style="border-collapse:collapse;">
+		<tr>
+			<th>Category</th>
+			<th>Supplier</th>
+			<th>Internal P/N</th>
+			<th>Description</th>
+			<th>Manufacture</th>
+			<th>MPN</th>
+			<th>Value/Package</th>
+			<th>Project</td>
+			<td rowspan="2" ><input type="submit" name="submit" value="Filter" /></td>
+		</tr>
+		<tr>
+			<td><select name="category_id"><option value="">All</option>{$category_opts}</select></td>
+			<td><select name="supplier_id"><option value="">All</option>{$supplier_opts}</select></td>
+			<td><input type="text" name="Internal_PN" size="10" value="{$request['Internal_PN']}"/></td>
+			<td><input type="text" name="description" size="10" value="{$request['description']}"/></td>
+			<td><input type="text" name="manufacture" size="10" value="{$request['manufacture']}"/></td>
+			<td><input type="text" name="MPN" size="10" value="{$request['MPN']}"/></td>
+			<td><input type="text" name="value" size="10" value="{$request['value']}"/></td>
+			<td><input type="text" name="project" size="10" value="{$request['project']}"/></td>
+		</tr>
+		</table>
+		</form>
+	</td>
+</tr>
+</table>
+<table cellpadding="3" border="1" bordercolor="#FFFFFF" style="border-collapse:collapse;">
+<tr>
+	<td colspan="17">{$page}</td>
+</tr>
+<tr>
+	<th rowspan="2"><input type="checkbox" id="checkall" onclick="checkAll2();"/></th>
+	<th rowspan="2">No.</th>
+	<th rowspan="2" colspan="2">Product</th>
+	<th rowspan="2">Type</th>
+	<th rowspan="2">Supplier(s)</th>
+	<th rowspan="2">Last Enter Time</th>
+	<th colspan="8">Quantity</th>
+	<th rowspan="2">Owner(s)</th>
+	<th rowspan="2">Comment</th>
+</tr>
+<tr>
+	<th>Remain</th>
+	<th><abbr title="Entered Quantity">ENT</abbr></th>
+	<th><abbr title="Rejected Quantity">REJ</abbr></th>
+	<th><abbr title="Applied Quantity">APP</abbr></th>
+	<th><abbr title="Transfered Quantity">TRA</abbr></th>
+	<th><abbr title="Released Quantity">REL</abbr></th>
+	<th><abbr title="Scraped Quantity">SCR</abbr></th>
+	<th><abbr title="Returned Back Quantity">BACK</abbr></th>
+</tr>
+<iterate name="result" id="item">
+<tr class="trbg{$mod}">
+	<td><gt name="item['inventory']['chg_quantity']" value="0"><if condition="$_SESSION[C('ADMIN_AUTH_NAME')] eq true or (!empty($_SESSION[C('MANAGER_AUTH_NAME')][1]) and ($_SESSION[C('MANAGER_AUTH_NAME')][1]['fixed'] heq '01' or (strlen($_SESSION[C('MANAGER_AUTH_NAME')][1]['fixed'])==1 and $item['fixed'] eq $_SESSION[C('MANAGER_AUTH_NAME')][1]['fixed'])))"><input type="checkbox" name="chk[]" value="{$item['product_id']}" onclick="updateCheckAll2(this);" /></if></gt></td>
+	<td align="center">{$i}</td>
+	<if condition="$_SESSION[C('ADMIN_AUTH_NAME')] eq true or (!empty($_SESSION[C('MANAGER_AUTH_NAME')][1]) and ($_SESSION[C('MANAGER_AUTH_NAME')][1]['fixed'] heq '01' or (strlen($_SESSION[C('MANAGER_AUTH_NAME')][1]['fixed'])==1 and $item['fixed'] eq $_SESSION[C('MANAGER_AUTH_NAME')][1]['fixed'])))">
+	<td class="edit" nowrap="nowrap"><span>{$item['Internal_PN']|str_replace=' (','<br />(',###}</span><input type="text" id="{$item['product_id']}" value="{$item['Internal_PN']}" style="display:none;width:0;" /></td>
+	<else />
+	<td nowrap="nowrap">{$item['Internal_PN']|str_replace=' (','<br />(',###}</td>
+	</if>
+	<td class="jTip" headers="__URL__/info/id/{$item['product_id']}?width=400" id="product{$item['product_id']}" title="Product Detail">{$item['description']}</td>
+	<td><if condition="$item['fixed'] eq 1">Fixed-Assets<else />Floating-Assets</if></td>
+	<td style="padding:0;">
+	<foreach name="item['suppliers']" key="j" item="supplier">
+		<gt name="j" value="0">
+		<div class="spline"></div>
+		</gt>
+		<span style="padding:3px;">{$supplier}</span>
+	</foreach>
+	</td>
+	<td>{$item['last_enter_time']}</td>
+	<td><notempty name="item['inventory']['chg_quantity']"><a href="__APP__/Asset/form/action/apply/lp_id/{$item['inventory']['id']}" title="Apply this product">{$item['inventory']['chg_quantity']}</a><else />{$item['inventory']['chg_quantity']}</notempty></td><!-- {$item['quantity']['enter']-$item['quantity']['reject']-$item['quantity']['apply']-$item['quantity']['transfer']-$item['quantity']['release']-$item['quantity']['scrap']+$item['quantity']['return']} -->
+	<td><a id="enter{$item['product_id']}" href="__URL__/query/action/enter/product_id/{$item['product_id']}?width=600" class="jTip" name="Enter Entries">{$item['quantity']['enter']}</a></td>
+	<td><empty name="item['quantity']['reject']">0<else /><a id="reject{$item['product_id']}" href="__URL__/query/action/reject/product_id/{$item['product_id']}?width=600" class="jTip" name="Reject Entries">{$item['quantity']['reject']}</a></empty></td>
+	<td><empty name="item['quantity']['apply']">0<else /><a id="apply{$item['product_id']}" href="__URL__/query/action/apply/product_id/{$item['product_id']}?width=600" class="jTip" name="Apply Entries">{$item['quantity']['apply']}</a></empty></td>
+	<td><empty name="item['quantity']['transfer']">0<else /><a id="transfer{$item['product_id']}" href="__URL__/query/action/transfer/product_id/{$item['product_id']}?width=600" class="jTip" name="Transfer Entries">{$item['quantity']['transfer']}</a></empty></td>
+	<td><empty name="item['quantity']['release']">0<else /><a id="release{$item['product_id']}" href="__URL__/query/action/release/product_id/{$item['product_id']}?width=600" class="jTip" name="Release Entries">{$item['quantity']['release']}</a></empty></td>
+	<td><empty name="item['quantity']['scrap']">0<else /><a id="scrap{$item['product_id']}" href="__URL__/query/action/scrap/product_id/{$item['product_id']}?width=600" class="jTip" name="Scrap Entries">{$item['quantity']['scrap']}</a></empty></td>
+	<td><empty name="item['quantity']['return']">0<else /><a id="return{$item['product_id']}" href="__URL__/query/action/return/product_id/{$item['product_id']}?width=600" class="jTip" name="Return Entries">{$item['quantity']['return']}</a></empty></td>
+	<td nowrap="nowrap"><notempty name="item['owner']"><if condition="$item['owner']['more'] eq 1"><a id="owner{$item['product_id']}" href="__URL__/owner/product_id/{$item['product_id']}?width=300" class="jTip" name="Product Owners">{$item['owner']['name']}({$item['owner']['quantity']} {$item['unit_name']})</a><else />{$item['owner']['name']}({$item['owner']['quantity']} {$item['unit_name']})</if></notempty></td>
+	<td valign="top"><a style="float:right;" href="__APP__/Public/remark/product_id/{$item['product_id']}?width=600&height=300&modal=true" class="thickbox" title="Click to view all comment"><img src="../Public/Images/comments.gif"/></a>{$item['lastRemark']}</td>
+</tr>
+</iterate>
+<empty name="result">
+<tr>
+	<td colspan="17" align="center">No Record</td>
+</tr>
+</empty>
+<tr>
+	<td colspan="4">
+		<input type="button" name="transfer" value="Transfer Selected" onclick="batch_form();" disabled="true" />
+		<input type="button" name="release" value="Release Selected" onclick="batch_form('release');" disabled="true" />
+	</td>
+	<td colspan="13">{$page}</td>
+</tr>
+</table>
+<small>Tips: For green cells, "Click" to edit, "Enter" to submit, "ESC" to cancel.</small>
+<form action="__URL__/index">
+<p class="center">
+	<input type="hidden" name="category_id" value="{$request['category_id']}" />
+	<input type="hidden" name="supplier_id" value="{$request['supplier_id']}" />
+	<input type="hidden" name="Internal_PN" value="{$request['Internal_PN']}" />
+	<input type="hidden" name="description" value="{$request['description']}" />
+	<input type="hidden" name="manufacture" value="{$request['manufacture']}" />
+	<input type="hidden" name="MPN" value="{$request['MPN']}" />
+	<input type="hidden" name="value" value="{$request['value']}" />
+	<input type="hidden" name="project" value="{$request['project']}" />
+	<input type="hidden" name="export" value="1" />
+	<if condition="$_SESSION[C('ADMIN_AUTH_NAME')] eq true or !empty($_SESSION[C('MANAGER_AUTH_NAME')][1])"><input type="submit" name="submit" value="Export as Excel" /></if>
+</p>
+</form>
+<br /><br /><br /><br /><br /><br /><br /><br />
+<div style="display:none" id="batch_form">
+<p class="page_title_text"></p>
+<form name="Batch" action="__URL__/batch" method="post" target="_iframe">
+<table width="96%" cellpadding="3" border="1" bordercolor="#FFFFFF" style="border-collapse:collapse;">
+<tr>
+	<th>Internal P/N</th>
+	<th>Description</th>
+	<th>Quantity</th>
+</tr>
+<iterate name="result" id="item">
+	<gt name="item['inventory']['chg_quantity']" value="0">
+		<if condition="$_SESSION[C('ADMIN_AUTH_NAME')] eq true or (!empty($_SESSION[C('MANAGER_AUTH_NAME')][1]) and ($_SESSION[C('MANAGER_AUTH_NAME')][1]['fixed'] eq '01' or (strlen($_SESSION[C('MANAGER_AUTH_NAME')][1]['fixed'])==1 and $item['fixed'] eq $_SESSION[C('MANAGER_AUTH_NAME')][1]['fixed'])))">
+<tr id="tr_{$item['product_id']}" style="display:none">
+	<td>{$item['Internal_PN']}</td>
+	<td>{$item['description']}</td>
+	<td><input type="text" id="input_{$item['product_id']}" name="quantity[{$item['product_id']}]" size="3" value="{$item['inventory']['chg_quantity']}" disabled="true"/></td>
+</tr>
+		</if>
+	</gt>
+</iterate>
+<tr id="transfer_to" bgcolor="#FFFFFF">
+	<td align="right">Transfer to:</td>
+	<td colspan="2">
+		<select id="location_opts" onchange="select_location(this);"><option value="">Select One</option>{$info.location_opts}</select>
+		<select id="staff_opts" onchange="select_staff(this);" style="display:none;"><option value="">Select One</option>{$info.staff_opts}</select>
+	</td>
+</tr>
+</table>
+<p class="center">
+	<input type="hidden" name="action" value="" />
+	<input type="hidden" name="from_type" id="from_type" value="location" />
+	<input type="hidden" name="from_id" id="from_id" value="1" />
+	<input type="hidden" name="to_type" id="to_type" value="" />
+	<input type="hidden" name="to_id" id="to_id" value="" />
+	<input type="submit" value="Submit" name="submit"/>
+	<input type="button" value="Cancel" onclick="tb_remove();"/>
+</p>
+</form>
+</div>
+<div id="tips" style="position:fixed;left:200px;top:182px;display:none;white-space:nowrap;padding:5px 10px;-moz-border-radius:3px;-webkit-border-radius:3px;background-color:#FFF1A8;font-weight:bold;color:black;text-align:center;line-height:20px;"></div>
+<script language="JavaScript" type="text/javascript" src="../Public/Js/batch.js"></script>
+<script language="JavaScript" type="text/javascript">
+$(document).ready(function(){
+	$("td.edit").each(function() {
+		setEditable(this);
+	});
+});
+function setEditable(obj) {
+	$(obj).css('cursor', 'pointer').mouseover(function(){
+		$(this).addClass("focus");
+	}).mouseout(function(){
+		$(this).removeClass("focus");
+	}).click(function(){
+		if ($(this).children('input').css('display') != 'none') {
+			return;
+		}
+		$("td.editing").children('input').hide();
+		$("td.editing").children('span').show();
+		$("td.editing").removeClass('editing');
+		var width = $(this).width();
+		$(this).children('span').hide();
+		$(this).children("input").css('width', width+80).show().focus().keydown(function(e){
+			var keyCode=e.keyCode || window.event.keyCode;
+			if(keyCode==13)
+			{
+				submit_edit(this);
+			}
+			else if(keyCode==27)
+			{
+				cancel_edit(this);
+			}
+		});
+		$(this).addClass('editing');
+	});
+}
+function submit_edit(obj){
+	$("#tips").show().html('Saving...');
+
+	$.post('__APP__/Product/update', {
+		'id' : $(obj).attr('id'),
+		'f' : 'Internal_PN',
+		'v' : $(obj).val()
+	}, function(str) {
+			if ('1'==str) {
+				$(obj).hide().prev().html($(obj).val().replace(' (','<br />(')).show();
+				$("#tips").html('Success!');
+				setTimeout(function() {
+					$("#tips").hide('slow').html('');
+				}, 2000);
+			}
+			else if ('-1'==str) {
+				$("#tips").html('Permission denied!');
+				setTimeout(function() {
+					$("#tips").hide('slowest').html('');
+				}, 10000);
+			}
+			else if ('0'==str) {
+				$("#tips").html('Shorter string not allowed!');
+				setTimeout(function() {
+					$("#tips").hide('slowest').html('');
+				}, 10000);
+			}
+			else {
+				$("#tips").html('Oops, failure!'+str);
+			}
+		});
+}
+function cancel_edit(obj){
+	$(obj).hide().prev().show();
+}
+</script>
