@@ -78,7 +78,7 @@ if(!empty($_POST['submit'])) {
 	if(!file_put_contents('config.php', $content)) {
 		error('Write config file fail!');
 	}
-	rename(__FILE__, __FILE__.'.del');
+//	rename(__FILE__, __FILE__.'.del');
 	if (rename('config.php', $config_file)) {
 		echo '<script>parent.alert("Install complete!");parent.location.href="../index.php";</script>';
 	}
