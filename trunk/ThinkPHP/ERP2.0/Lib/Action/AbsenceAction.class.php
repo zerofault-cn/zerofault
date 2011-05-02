@@ -835,14 +835,22 @@ class AbsenceAction extends BaseAction{
 					$Accrual = $val;
 				}
 			}
-			//历年用掉的年假及Cash Out
+			//历年用掉的年假
 			$where = array(
-				'type' => array('in', array('Annual', 'CashOut')),
+				'type' => 'Annual',
 				'staff_id' => $staff_info['id'],
 				'status' => 1,
 				'time_from' => array('lt', date('Y', $this->time).'-01-01')
 				);
 			$history_used = $this->dao->where($where)->sum('hours');
+			//历年的Cash Out
+			$where = array(
+				'type' => 'CashOut',
+				'staff_id' => $staff_info['id'],
+				'status' => 1,
+				'create_time' => array('lt', date('Y', $this->time).'-01-01')
+				);
+			$history_used += $this->dao->where($where)->sum('hours');
 			//今年用掉的年假
 			$where = array(
 				'type' => 'Annual',
@@ -936,6 +944,7 @@ class AbsenceAction extends BaseAction{
 		}
 		$this->assign('result', $rs);
 
+		$this->assign('ACTION_TITLE', 'Staff Leave Summary');
 		$this->assign('content', ACTION_NAME);
 		$this->display('Layout:ERP_layout');
 	}
