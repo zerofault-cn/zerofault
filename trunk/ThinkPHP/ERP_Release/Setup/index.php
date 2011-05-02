@@ -37,18 +37,35 @@ if(!empty($_POST['submit'])) {
 		}
 		mysql_select_db(trim($_POST['DB_NAME']));
 	}
-	$sql_file=file_get_contents('init.sql');
-	if(empty($sql_file)) {
-		error('Schema file not exists!');
+
+	if (!is_file('schema.sql')) {
+		error('Schema SQL file is not exists!');
 	}
+	$sql_file=file_get_contents('schema.sql');
 	foreach (explode(';', $sql_file) as $sql) {
 		$sql = trim($sql);
+		if (empty($sql)) {
+			continue;
+		}
+		if(!mysql_query(trim($sql))) {
+			error('SQL error: '.$sql.' '.mysql_errno().': '.mysql_error());
+		}
+	}
+
+	if (!is_file('init.sql')) {
+		error('Init SQL file is not exists!');
+	}
+	$sql_file=file_get_contents('init.sql');
+	foreach (explode(';', $sql_file) as $sql) {
+		$sql = trim($sql);
+		if (empty($sql)) {
+			continue;
+		}
 		$sql = str_replace('~admin_name~', trim($_POST['admin_name']), $sql);
 		$sql = str_replace('~admin_pass~', md5(trim($_POST['admin_pass'])), $sql);
-		if ($sql) {
-			if(!mysql_query($sql)) {
-				error('SQL error:'.$sql.'<br />'.mysql_errno().': '.mysql_error());
-			}
+		$sql = str_replace('~admin_email~', trim($_POST['admin_email']), $sql);
+		if(!mysql_query($sql)) {
+			error('SQL error: '.$sql.' '.mysql_errno().': '.mysql_error());
 		}
 	}
 	$arr = array(
@@ -58,11 +75,16 @@ if(!empty($_POST['submit'])) {
 		'~DB_PWD~'  => trim($_POST['DB_PWD']),
 		);
 	$content = str_replace(array_keys($arr), array_values($arr), $config_tpl);
-	if(!file_put_contents($config_file, $content)) {
+	if(!file_put_contents('config.php', $content)) {
 		error('Write config file fail!');
 	}
-	rename(__FILE__, __FILE__.'.old');
-	echo '<script>parent.alert("Install complete!");parent.location.href="../index.php";</script>';
+	rename(__FILE__, __FILE__.'.del');
+	if (rename('config.php', $config_file)) {
+		echo '<script>parent.alert("Install complete!");parent.location.href="../index.php";</script>';
+	}
+	else {
+		echo '<script>parent.alert("Install complete!\nPlease copy Setup/config.php to Conf/ then continue!");parent.location.href="../index.php";</script>';
+	}
 	exit;
 }
 ?>
@@ -124,7 +146,7 @@ b{
 </tr>
 <tr>
 	<td>Database name:</td>
-	<td><input type="text" name="DB_NAME" id="DB_NAME" size="20" value="<?php echo $config['DB_NAME'];?>" /></td>
+	<td><input type="text" name="DB_NAME" id="DB_NAME" size="20" value="<?php echo $config['DB_NAME'];?>" /><br />If the database isn't exists, it will be created automatic.</td>
 </tr>
 <tr>
 	<td colspan="2" bgcolor="#DDDDDD">Admin Account Setting</td>
@@ -138,7 +160,8 @@ b{
 	<td><input type="password" name="admin_pass" size="20" /></td>
 </tr>
 <tr>
-	<td colspan="2">When you login, you can change your account and password!</td>
+	<td>SuperAdmin E-mail:</td>
+	<td><input type="text" name="admin_email" size="20" /></td>
 </tr>
 <tr>
 	<td colspan="2" bgcolor="#DDDDDD" height="10"></td>

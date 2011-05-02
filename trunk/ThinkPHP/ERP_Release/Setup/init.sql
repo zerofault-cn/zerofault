@@ -1,62 +1,5 @@
-SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
-
-
-CREATE TABLE IF NOT EXISTS `erp_category` (
-  `id` smallint(5) unsigned NOT NULL auto_increment,
-  `type` enum('Component','Board') NOT NULL,
-  `code` varchar(255) NOT NULL,
-  `name` varchar(255) NOT NULL,
-  PRIMARY KEY  (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
-CREATE TABLE IF NOT EXISTS `erp_department` (
-  `id` smallint(5) unsigned NOT NULL auto_increment,
-  `code` varchar(255) NOT NULL,
-  `name` varchar(255) NOT NULL,
-  `function` varchar(255) NOT NULL,
-  `leader_id` smallint(5) unsigned NOT NULL,
-  PRIMARY KEY  (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
-CREATE TABLE IF NOT EXISTS `erp_location` (
-  `id` smallint(3) unsigned NOT NULL auto_increment,
-  `name` varchar(255) NOT NULL,
-  `descr` varchar(255) NOT NULL,
-  PRIMARY KEY  (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 INSERT INTO `erp_location` (`id`, `name`, `descr`) VALUES (1, 'Local', 'Default Storage');
-
-CREATE TABLE IF NOT EXISTS `erp_location_product` (
-  `id` int(10) unsigned NOT NULL auto_increment,
-  `type` enum('location','staff') NOT NULL,
-  `location_id` smallint(5) unsigned NOT NULL,
-  `product_id` smallint(5) unsigned NOT NULL,
-  `ori_quantity` int(11) NOT NULL default '0',
-  `chg_quantity` int(11) NOT NULL default '0',
-  PRIMARY KEY  (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
-CREATE TABLE IF NOT EXISTS `erp_node` (
-  `id` smallint(6) unsigned NOT NULL auto_increment,
-  `pid` smallint(6) unsigned NOT NULL,
-  `name` varchar(20) NOT NULL,
-  `title` varchar(50) NOT NULL,
-  `descr` tinytext,
-  `level` tinyint(1) unsigned NOT NULL,
-  `type` tinyint(1) NOT NULL default '0',
-  PRIMARY KEY  (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
-CREATE TABLE IF NOT EXISTS `erp_options` (
-  `id` smallint(5) unsigned NOT NULL auto_increment,
-  `type` varchar(255) NOT NULL,
-  `name` varchar(255) NOT NULL,
-  `code` varchar(255) NOT NULL,
-  `sort` smallint(5) unsigned NOT NULL default '0',
-  PRIMARY KEY  (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
 
 INSERT INTO `erp_options` (`id`, `type`, `name`, `code`, `sort`) VALUES
 (1, 'character', 'Agent', '', 1),
@@ -83,120 +26,84 @@ INSERT INTO `erp_options` (`id`, `type`, `name`, `code`, `sort`) VALUES
 (22, 'status', 'Need to Repair', '', 3);
 
 
+INSERT INTO `erp_staff` (`id`, `dept_id`, `leader_id`, `code`, `name`, `realname`, `password`, `email`, `onboard`, `create_time`, `login_time`, `is_leader`, `status`) VALUES
+(1, 0, 0, 'E0001', '~admin_name~', 'Super Admin', '~admin_pass~', '~admin_email~', CURDATE(), NOW(), NOW(), 0, 1);
 
-CREATE TABLE IF NOT EXISTS `erp_product` (
-  `id` smallint(5) unsigned NOT NULL auto_increment,
-  `type` enum('Component','Board') NOT NULL,
-  `fixed` tinyint(1) unsigned NOT NULL default '0',
-  `code` varchar(255) NOT NULL,
-  `Internal_PN` varchar(255) NOT NULL,
-  `description` varchar(255) NOT NULL,
-  `manufacture` varchar(255) NOT NULL,
-  `MPN` varchar(255) NOT NULL,
-  `value` varchar(255) NOT NULL default '',
-  `category_id` smallint(5) unsigned NOT NULL,
-  `status_id` smallint(5) unsigned NOT NULL,
-  `unit_id` smallint(5) unsigned NOT NULL,
-  `Rohs` tinyint(1) NOT NULL,
-  `LT_days` smallint(5) unsigned NOT NULL,
-  `MOQ` varchar(255) NOT NULL,
-  `SPQ` varchar(255) NOT NULL,
-  `MSL` varchar(255) NOT NULL,
-  `project` varchar(255) NOT NULL,
-  `inventory_limit` int(10) unsigned NOT NULL,
-  `currency_id` smallint(5) unsigned NOT NULL,
-  `price` float NOT NULL,
-  `quantity` int(10) unsigned NOT NULL default '0',
-  `accessories` varchar(255) NOT NULL,
-  `attachment` varchar(255) NOT NULL,
-  `remark` tinytext NOT NULL,
-  PRIMARY KEY  (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
-CREATE TABLE IF NOT EXISTS `erp_product_flow` (
-  `id` int(10) unsigned NOT NULL auto_increment,
-  `code` varchar(255) NOT NULL,
-  `action` enum('enter','return','apply','transfer','release','scrap','back') NOT NULL,
-  `fixed` tinyint(1) unsigned NOT NULL default '0',
-  `product_id` smallint(5) unsigned NOT NULL,
-  `from_type` enum('location','staff') NOT NULL,
-  `from_id` smallint(5) unsigned NOT NULL,
-  `to_type` enum('location','staff') NOT NULL,
-  `to_id` smallint(5) unsigned NOT NULL,
-  `supplier_id` smallint(5) unsigned NOT NULL,
-  `staff_id` smallint(5) unsigned NOT NULL,
-  `currency_id` smallint(5) unsigned NOT NULL,
-  `quantity` int(10) unsigned NOT NULL default '0',
-  `price` float(10,4) NOT NULL default '0.0000',
-  `Lot` varchar(255) NOT NULL,
-  `accessories` varchar(255) NOT NULL default '',
-  `remark` tinytext NOT NULL,
-  `create_time` datetime NOT NULL,
-  `confirm_time` datetime NOT NULL,
-  `confirmed_staff_id` smallint(5) unsigned NOT NULL,
-  `status` tinyint(1) NOT NULL default '0',
-  PRIMARY KEY  (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
-CREATE TABLE IF NOT EXISTS `erp_role` (
-  `id` smallint(6) unsigned NOT NULL auto_increment,
-  `name` varchar(20) NOT NULL,
-  `descr` varchar(255) default NULL,
-  `status` tinyint(1) NOT NULL,
-  PRIMARY KEY  (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
-CREATE TABLE IF NOT EXISTS `erp_role_node` (
-  `role_id` smallint(5) unsigned NOT NULL,
-  `node_id` smallint(5) unsigned NOT NULL,
-  KEY `groupId` (`role_id`),
-  KEY `nodeId` (`node_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
-CREATE TABLE IF NOT EXISTS `erp_staff` (
-  `id` smallint(5) unsigned NOT NULL auto_increment,
-  `dept_id` smallint(5) unsigned NOT NULL,
-  `leader_id` smallint(5) unsigned NOT NULL,
-  `code` varchar(255) NOT NULL,
-  `name` varchar(255) NOT NULL,
-  `realname` varchar(255) NOT NULL,
-  `password` varchar(32) NOT NULL,
-  `email` varchar(255) NOT NULL,
-  `create_time` datetime NOT NULL,
-  `login_time` datetime NOT NULL,
-  `is_leader` tinyint(1) unsigned NOT NULL,
-  `status` tinyint(1) unsigned NOT NULL,
-  PRIMARY KEY  (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
-INSERT INTO `erp_staff` (`id`, `dept_id`, `leader_id`, `code`, `name`, `realname`, `password`, `email`, `create_time`, `login_time`, `is_leader`, `status`) VALUES
-(1, 0, 0, 'E0001', '~admin_name~', 'Super Admin', '~admin_pass~', '', '0000-00-00 00:00:00', now(), 0, 1);
-
-CREATE TABLE IF NOT EXISTS `erp_staff_role` (
-  `staff_id` smallint(5) unsigned NOT NULL,
-  `role_id` smallint(5) unsigned NOT NULL,
-  KEY `userId` (`staff_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
-CREATE TABLE IF NOT EXISTS `erp_supplier` (
-  `id` smallint(5) unsigned NOT NULL auto_increment,
-  `code` varchar(255) NOT NULL,
-  `name` varchar(255) NOT NULL,
-  `character_id` smallint(5) unsigned NOT NULL,
-  `address` varchar(255) NOT NULL,
-  `contact` varchar(255) NOT NULL,
-  `postcode` varchar(255) NOT NULL,
-  `telephone` varchar(255) NOT NULL,
-  `cellphone` varchar(255) NOT NULL,
-  `fax` varchar(255) NOT NULL,
-  `email` varchar(255) NOT NULL,
-  `bank` varchar(255) NOT NULL,
-  `account` varchar(255) NOT NULL,
-  `payment_terms_id` smallint(5) unsigned NOT NULL,
-  `tax_id` smallint(5) unsigned NOT NULL,
-  `currency_id` smallint(5) unsigned NOT NULL,
-  `website` varchar(255) NOT NULL,
-  `remark` tinytext NOT NULL,
-  PRIMARY KEY  (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
+INSERT INTO `erp_node` VALUES("1", "0", "Board", "Board Basic Data", NULL, "0", "0");
+INSERT INTO `erp_node` VALUES("2", "0", "Category", "Category Management", NULL, "0", "0");
+INSERT INTO `erp_node` VALUES("3", "0", "Dept", "Department Management", NULL, "0", "0");
+INSERT INTO `erp_node` VALUES("4", "0", "Location", "Location Setting", NULL, "0", "0");
+INSERT INTO `erp_node` VALUES("5", "0", "Product", "Component Basic Data", NULL, "0", "0");
+INSERT INTO `erp_node` VALUES("6", "0", "ProductIn", "Inventory Input Management", NULL, "0", "0");
+INSERT INTO `erp_node` VALUES("7", "0", "ProductOut", "Inventory output Management", NULL, "0", "0");
+INSERT INTO `erp_node` VALUES("8", "0", "Setting", "Options Setting", NULL, "0", "0");
+INSERT INTO `erp_node` VALUES("9", "0", "Staff", "Staff Management", NULL, "0", "0");
+INSERT INTO `erp_node` VALUES("10", "0", "Supplier", "Supplier Management", NULL, "0", "0");
+INSERT INTO `erp_node` VALUES("11", "1", "index", "List", NULL, "0", "0");
+INSERT INTO `erp_node` VALUES("12", "1", "form", "Form", NULL, "0", "0");
+INSERT INTO `erp_node` VALUES("13", "1", "submit", "Submit", NULL, "0", "0");
+INSERT INTO `erp_node` VALUES("14", "1", "delete", "Delete", NULL, "0", "0");
+INSERT INTO `erp_node` VALUES("15", "2", "index", "List", NULL, "0", "0");
+INSERT INTO `erp_node` VALUES("16", "2", "submit", "Submit", NULL, "0", "0");
+INSERT INTO `erp_node` VALUES("17", "2", "delete", "Delete", NULL, "0", "0");
+INSERT INTO `erp_node` VALUES("18", "3", "index", "List", NULL, "0", "0");
+INSERT INTO `erp_node` VALUES("19", "3", "submit", "Submit", NULL, "0", "0");
+INSERT INTO `erp_node` VALUES("20", "3", "delete", "Delete", NULL, "0", "0");
+INSERT INTO `erp_node` VALUES("21", "4", "index", "List", NULL, "0", "0");
+INSERT INTO `erp_node` VALUES("22", "4", "submit", "Submit", NULL, "0", "0");
+INSERT INTO `erp_node` VALUES("23", "4", "delete", "Delete", NULL, "0", "0");
+INSERT INTO `erp_node` VALUES("24", "5", "index", "List", NULL, "0", "0");
+INSERT INTO `erp_node` VALUES("25", "5", "form", "Form", NULL, "0", "0");
+INSERT INTO `erp_node` VALUES("26", "5", "submit", "Submit", NULL, "0", "0");
+INSERT INTO `erp_node` VALUES("27", "5", "delete", "Delete", NULL, "0", "0");
+INSERT INTO `erp_node` VALUES("28", "6", "fixed", "Fixed-Assets Entering", NULL, "0", "0");
+INSERT INTO `erp_node` VALUES("29", "6", "floating", "Floating-Assets Entering", NULL, "0", "0");
+INSERT INTO `erp_node` VALUES("30", "6", "reject", "Product Reject", NULL, "0", "0");
+INSERT INTO `erp_node` VALUES("31", "6", "form", "Form", NULL, "0", "0");
+INSERT INTO `erp_node` VALUES("32", "6", "submit", "Submit", NULL, "0", "0");
+INSERT INTO `erp_node` VALUES("33", "6", "confirm", "Confirm", NULL, "0", "0");
+INSERT INTO `erp_node` VALUES("34", "6", "select", "Select Basic Data", NULL, "0", "0");
+INSERT INTO `erp_node` VALUES("35", "6", "delete", "Delete", NULL, "0", "0");
+INSERT INTO `erp_node` VALUES("36", "7", "applyFixed", "Fixed-Assets Apply Management", NULL, "0", "0");
+INSERT INTO `erp_node` VALUES("37", "7", "applyFloating", "Floating-Assets Apply Management", NULL, "0", "0");
+INSERT INTO `erp_node` VALUES("38", "7", "transfer", "Transfer Management", NULL, "0", "0");
+INSERT INTO `erp_node` VALUES("39", "7", "release", "Release Management", NULL, "0", "0");
+INSERT INTO `erp_node` VALUES("40", "7", "scrap", "Scrap Management", NULL, "0", "0");
+INSERT INTO `erp_node` VALUES("41", "7", "returns", "Return management", NULL, "0", "0");
+INSERT INTO `erp_node` VALUES("42", "7", "form", "Form", NULL, "0", "0");
+INSERT INTO `erp_node` VALUES("43", "7", "submit", "Submit", NULL, "0", "0");
+INSERT INTO `erp_node` VALUES("44", "7", "confirm", "Confirm", NULL, "0", "0");
+INSERT INTO `erp_node` VALUES("45", "7", "select", "Select Basic Data", NULL, "0", "0");
+INSERT INTO `erp_node` VALUES("46", "7", "delete", "Delete", NULL, "0", "0");
+INSERT INTO `erp_node` VALUES("47", "8", "index", "List", NULL, "0", "0");
+INSERT INTO `erp_node` VALUES("48", "8", "submit", "Submit", NULL, "0", "0");
+INSERT INTO `erp_node` VALUES("49", "8", "delete", "Delete", NULL, "0", "0");
+INSERT INTO `erp_node` VALUES("50", "9", "index", "List", NULL, "0", "0");
+INSERT INTO `erp_node` VALUES("51", "9", "form", "Form", NULL, "0", "0");
+INSERT INTO `erp_node` VALUES("52", "9", "submit", "Submit", NULL, "0", "0");
+INSERT INTO `erp_node` VALUES("53", "9", "update", "Update", NULL, "0", "0");
+INSERT INTO `erp_node` VALUES("54", "9", "delete", "Delete", NULL, "0", "0");
+INSERT INTO `erp_node` VALUES("55", "10", "index", "List", NULL, "0", "0");
+INSERT INTO `erp_node` VALUES("56", "10", "form", "Form", NULL, "0", "0");
+INSERT INTO `erp_node` VALUES("57", "10", "submit", "Submit", NULL, "0", "0");
+INSERT INTO `erp_node` VALUES("58", "10", "delete", "Delete", NULL, "0", "0");
+INSERT INTO `erp_node` VALUES("59", "1", "import", "Batch Import", NULL, "0", "0");
+INSERT INTO `erp_node` VALUES("60", "0", "Leave", "Leave Type Management", NULL, "0", "0");
+INSERT INTO `erp_node` VALUES("61", "60", "index", "List", NULL, "0", "0");
+INSERT INTO `erp_node` VALUES("62", "60", "update", "Update", NULL, "0", "0");
+INSERT INTO `erp_node` VALUES("63", "60", "delete", "Delete", NULL, "0", "0");
+INSERT INTO `erp_node` VALUES("64", "0", "ProductFlow", "Assets Operation Log", NULL, "0", "0");
+INSERT INTO `erp_node` VALUES("65", "64", "index", "List", NULL, "0", "0");
+INSERT INTO `erp_node` VALUES("66", "5", "import", "Batch Import", NULL, "0", "0");
+INSERT INTO `erp_node` VALUES("67", "5", "select", "Select", NULL, "0", "0");
+INSERT INTO `erp_node` VALUES("68", "5", "info", "Info", NULL, "0", "0");
+INSERT INTO `erp_node` VALUES("69", "5", "update", "Update", NULL, "0", "0");
+INSERT INTO `erp_node` VALUES("70", "6", "enter", "Assets Entering", NULL, "0", "0");
+INSERT INTO `erp_node` VALUES("71", "6", "export", "Batch Export", NULL, "0", "0");
+INSERT INTO `erp_node` VALUES("72", "6", "import", "Batch Import", NULL, "0", "0");
+INSERT INTO `erp_node` VALUES("73", "0", "Test", "Test Log", NULL, "0", "0");
+INSERT INTO `erp_node` VALUES("74", "73", "index", "List", NULL, "0", "0");
+INSERT INTO `erp_node` VALUES("75", "73", "create", "Create Log", NULL, "0", "0");
+INSERT INTO `erp_node` VALUES("76", "73", "edit", "Edit Log", NULL, "0", "0");
+INSERT INTO `erp_node` VALUES("77", "73", "update", "Update", NULL, "0", "0");
+INSERT INTO `erp_node` VALUES("78", "7", "export", "Batch Export", NULL, "0", "0");
