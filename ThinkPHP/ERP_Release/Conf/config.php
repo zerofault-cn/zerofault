@@ -1,35 +1,47 @@
 <?php
 $config = array(
-	'APP_DEBUG'			=> true,
-	'USER_AUTH_TYPE'	=> 2,
+	//µ÷ÊÔÄ£Ê½£¬Ä¬ÈÏfalse
+	'APP_DEBUG'			=> false,
 
+	//À©Õ¹ÅäÖÃÎÄ¼þ
 	'APP_CONFIG_LIST'	=> array('menu', 'absence', 'smtp', 'test'),
+	
+	//±êÇ©Ç¶Ì×¼¶±ð£¬Ä¬ÈÏÎª3
 	'TAG_NESTED_LEVEL'	=> 6,
 
+	//Êý¾Ý¿â²ÎÊý
 	'DB_TYPE'			=> 'mysql',
-	'DB_HOST'			=> 'localhost', //æ•°æ®åº“åœ°å€
-	'DB_NAME'			=> 'ERP', //æ•°æ®åº“å
-	'DB_USER'			=> 'root', //è®¿é—®æ•°æ®åº“çš„å¸å·
-	'DB_PWD'			=> '', //è®¿é—®æ•°æ®åº“çš„å¯†ç 
+	'DB_HOST'			=> 'localhost',
+	'DB_NAME'			=> 'ERP2',
+	'DB_USER'			=> 'root',
+	'DB_PWD'			=> '',
 	'DB_PREFIX'			=> 'erp_',
 
-	//æ˜¾ç¤ºæ ‡é¢˜ï¼Œç”¨äºŽåŒºåˆ†ä¸åŒçš„ERP site
+	//ÏÔÊ¾±êÌâ£¬ÓÃÓÚÇø·Ö²»Í¬µÄERP site
 	'ERP_TITLE'			=> 'AGIGA Tech ERP System',
 
-	//ç”¨æˆ·sessionï¼Œç”¨äºŽåŒºåˆ†ä¸åŒERP site
+	//ÓÃ»§session±äÁ¿Ãû£¬ÓÃÓÚÔÚÍ¬Ò»Õ¾µãÉÏÇø·Ö²»Í¬Ä¿Â¼ÏÂµÄERPÏµÍ³
 	'STAFF_AUTH_NAME'   => 'staff',
 	'MANAGER_AUTH_NAME' => 'location_manager',
 	'ADMIN_AUTH_NAME'	=> 'administrator',
 	
-	'SUPER_ADMIN_ID'	=> array(1), //è¶…çº§ç®¡ç†å‘˜çš„IDæ•°ç»„
-	'ABSENCE_ADMIN_ID'	=> array(7), //Absenceç®¡ç†å‘˜(HR)çš„å¸å·IDï¼Œçº¯æ•°å­—æ•°ç»„
-	'TASK_ADMIN_ID'		=> array(7), //Taskç®¡ç†å‘˜çš„å¸å·ID
+	//³¬¼¶¹ÜÀíÔ±µÄIDÊý×é£¬ÓÃÓ¢ÎÄ¶ººÅ·Ö¸ô
+	'SUPER_ADMIN_ID'	=> array(1),
+	//Absence¹ÜÀíÔ±(HR)µÄIDÊý×é
+	'ABSENCE_ADMIN_ID'	=> array(1),
+	//Task¹ÜÀíÔ±µÄIDÊý×é
+	'TASK_ADMIN_ID'		=> array(1),
 
-	'NOTIFICATION_MAILTO' => array(), //èµ„äº§ç”³è¯·æ—¶çš„é‡å¤é€šçŸ¥é‚®ä»¶ä¼šé¢å¤–å‘é€ç»™è¿™äº›é‚®ä»¶å¸å·
-	'USER_SYNC_TARGET'  => array('CuteFlow'=>'http://192.168.9.159/cuteflow/'), //AgigaFlowç³»ç»Ÿçš„æ ¹è·¯å¾„
+	//×Ê²úÉêÇëÊ±µÄÌáÐÑÍ¨ÖªÓÊ¼þ»á¶îÍâ·¢ËÍ¸øÕâÐ©ÓÊ¼þÕÊºÅ£¬ÓÃÓ¢ÎÄµ¥ÒýºÅ°üº¬£¬Ó¢ÎÄ¶ººÅ·Ö¸ô
+	'NOTIFICATION_MAILTO' => array(),
 
-	//æƒé™è®¤è¯æ‰€éœ€å‚æ•°ï¼Œè¯·ä¸è¦æ›´æ”¹
+	//AgigaFlowÏµÍ³µÄ¸ùÂ·¾¶
+	'USER_SYNC_TARGET'  => array('CuteFlow'=>'http://172.23.57.20/cuteflow/'),
+
+	//È¨ÏÞÈÏÖ¤ËùÐè²ÎÊý£¬Çë²»ÒªËæÒâ¸ü¸Ä
 	'USER_AUTH_ON'		=> true,
+	//È¨ÏÞÈÏÖ¤Ä£Ê½£¬Ä¬ÈÏÎª1£ºµÇÂ¼Ê±ÈÏÖ¤Ò»´Î£»2£ºÊµÊ±ÈÏÖ¤
+	'USER_AUTH_TYPE'	=> 1,
 	'USER_AUTH_MODEL'	=> 'Staff',
 	'USER_AUTH_KEY'		=> 'authId',
 	'USER_AUTH_GATEWAY' => '/Public/login',
@@ -37,7 +49,10 @@ $config = array(
 	'RBAC_USER_TABLE'	=> 'erp_staff_role',
 	'RBAC_ACCESS_TABLE'	=> 'erp_role_node',
 	'RBAC_NODE_TABLE'	=> 'erp_node',
-	'NOT_AUTH_MODULE'	=> 'Index,Public,Script,Asset,Inventory,Absence,Task',
+
+	//ÒÔÏÂÄ£¿é²»ÐèÒªÈ¨ÏÞÈÏÖ¤£¬¼´Ä¬ÈÏÇé¿öÏÂËùÓÐStaffÕÊºÅ¶¼¿ÉÒÔ·ÃÎÊ
+	'NOT_AUTH_MODULE'	=> 'Index,Public,Script,Asset,Inventory,Absence,Task,Attachment',
+	//ÔÚiframeÖÐ´¦ÀíÇëÇó£¬²¢ÒÔµ¯³öÏûÏ¢·½Ê½ÌáÊ¾´¦Àí½á¹ûµÄActionÃû
 	'IFRAME_AUTH_ACTION' => array('update','delete','edit','submit','confirm','select','import','create')
 	);
 
