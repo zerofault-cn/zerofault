@@ -1,0 +1,115 @@
+<p class="page_title_text">Staff Assets Inquire</p>
+<table>
+<tr>
+	<td>
+		<form action="__URL__/staff" method="post">
+		<table id="search_table" cellpadding="3" border="1" bordercolor="#FFFFFF" style="border-collapse:collapse;">
+		<tr>
+			<th>Staff</th>
+			<th>Category</th>
+			<th>Internal P/N</th>
+			<th>Description</th>
+			<th>Manufacture</th>
+			<th>MPN</th>
+			<th>Value/Package</th>
+			<th>Project</td>
+			<td rowspan="2" ><input type="submit" name="submit" value="Search"/></td>
+		</tr>
+		<tr>
+			<td><select name="staff_id">{$staff_opts}</select></td>
+			<td><select name="category_id"><option value="">All</option>{$category_opts}</select></td>
+			<td><input type="text" name="Internal_PN" size="10" value="{$request['Internal_PN']}"/></td>
+			<td><input type="text" name="description" size="10" value="{$request['description']}"/></td>
+			<td><input type="text" name="manufacture" size="10" value="{$request['manufacture']}"/></td>
+			<td><input type="text" name="MPN" size="10" value="{$request['MPN']}"/></td>
+			<td><input type="text" name="value" size="10" value="{$request['value']}"/></td>
+			<td><input type="text" name="project" size="10" value="{$request['project']}"/></td>
+		</tr>
+		</table>
+		</form>
+	</td>
+</tr>
+</table>
+<notempty name="_POST['submit']">
+<table cellpadding="3" border="1" bordercolor="#FFFFFF" style="border-collapse:collapse;">
+<tr>
+	<if condition="$_SESSION[C('ADMIN_AUTH_NAME')] eq true">
+	<th><input type="checkbox" id="checkall" onclick="checkAll2();"/></th>
+	</if>
+	<th>No.</th>
+	<th colspan="2">Product</th>
+	<th>Type</th>
+	<th>Quantity</th>
+	<th>Unit</th>
+	<th>Last Enter Time</th>
+	<th>Comment</th>
+</tr>
+<iterate name="result" id="item">
+<tr class="trbg{$mod}">
+	<if condition="$_SESSION[C('ADMIN_AUTH_NAME')] eq true">
+	<td><input type="checkbox" name="chk[]" value="{$item['product_id']}" onclick="updateCheckAll2(this);" /></td>
+	</if>
+	<td align="center">{$i}</td>
+	<td><a href="__URL__/info/id/{$item['product_id']}?width=400" class="jTip" id="product{$i}" name="Product Detail">{$item['Internal_PN']}</a></td>
+	<td>{$item['description']}</td>
+	<td><if condition="$item['fixed'] eq 1">Fixed-Assets<else />Floating-Assets</if></td>
+	<td align="center">{$item['chg_quantity']}</td>
+	<td>{$item['unit_name']}</td>
+	<td>{$item['last_enter_time']}</td>
+	<td valign="top"><a style="float:right;" href="__APP__/Public/remark/product_id/{$item['product_id']}?width=600&height=300&modal=true" class="thickbox" title="Click to view all comment"><img src="../Public/Images/comments.gif"/></a>{$item['lastRemark']}</td>
+</tr>
+</iterate>
+<empty name="result">
+<tr>
+	<td colspan="8" align="center">No Record</td>
+</tr>
+</empty>
+<if condition="$_SESSION[C('ADMIN_AUTH_NAME')] eq true">
+<tr>
+	<td colspan="8">
+		<input type="button" name="transfer" value="Transfer Selected" onclick="batch_form();" disabled="true" />
+		<input type="button" name="transfer" value="Return Selected" onclick="batch_form('return');" disabled="true" />
+	</td>
+</tr>
+</if>
+</table>
+</notempty>
+<p class="center">&nbsp;</p>
+<if condition="$_SESSION[C('ADMIN_AUTH_NAME')] eq true">
+<div style="display:none" id="batch_form">
+<p class="page_title_text"></p>
+<form name="Batch" action="__URL__/batch" method="post" target="_iframe">
+<table width="96%" cellpadding="3" border="1" bordercolor="#FFFFFF" style="border-collapse:collapse;">
+<tr>
+	<th>Internal P/N</th>
+	<th>Description</th>
+	<th>Quantity</th>
+</tr>
+<iterate name="result" id="item">
+<tr id="tr_{$item['product_id']}" style="display:none">
+	<td>{$item['Internal_PN']}</td>
+	<td>{$item['description']}</td>
+	<td><input type="text" id="input_{$item['product_id']}" name="quantity[{$item['product_id']}]" size="3" value="{$item['chg_quantity']}" disabled="true"/></td>
+</tr>
+</iterate>
+<tr id="transfer_to" bgcolor="#FFFFFF">
+	<td align="right">Transfer to:</td>
+	<td colspan="2">
+		<select id="location_opts" onchange="select_location(this);"><option value="">Select One</option>{$info.location_opts}</select>
+		<select id="staff_opts" onchange="select_staff(this);" style="display:none;"><option value="">Select One</option>{$info.staff_opts}</select>
+	</td>
+</tr>
+</table>
+<p class="center">
+	<input type="hidden" name="action" value="transfer" />
+	<input type="hidden" name="from_type" id="from_type" value="staff" />
+	<input type="hidden" name="from_id" id="from_id" value="{$request['staff_id']}" />
+	<input type="hidden" name="to_type" id="to_type" value="" />
+	<input type="hidden" name="to_id" id="to_id" value="" />
+	<input type="submit" value="Submit" name="submit"/>
+	<input type="button" value="Cancel" onclick="tb_remove();"/>
+</p>
+</form>
+</div>
+<script language="JavaScript" type="text/javascript" src="../Public/Js/batch.js"></script>
+</if>

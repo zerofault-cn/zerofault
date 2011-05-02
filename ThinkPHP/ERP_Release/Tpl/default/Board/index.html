@@ -1,0 +1,175 @@
+<style>
+ul.toggle li.ext, ul.toggle li.ext a:link, ul.toggle li.ext a:visited{
+	color:#6699ff;
+}
+</style>
+<p class="page_title_text">Board and Fixed-Assets List</p>
+<table>
+<tr>
+	<td>
+		<form action="__URL__/index" method="post">
+		<table id="search_table" cellpadding="3" border="1" bordercolor="#FFFFFF" style="border-collapse:collapse;">
+		<tr>
+			<th>Board&nbsp;Code</th>
+			<th>Board&nbsp;Name</th>
+			<th>Manufacture</th>
+			<th>Series Number</th>
+			<th>Value/Package</th>
+			<th>Category</th>
+			<th>Project</td>
+			<th>Board Status</th>
+			<td rowspan="2" ><input type="submit" name="submit" value="Filter"/></td>
+		</tr>
+		<tr>
+			<td><input type="text" name="Internal_PN" size="10" value="{$request['Internal_PN']}"/></td>
+			<td><input type="text" name="description" size="10" value="{$request['description']}"/></td>
+			<td><input type="text" name="manufacture" size="10" value="{$request['manufacture']}"/></td>
+			<td><input type="text" name="MPN" size="12" value="{$request['MPN']}"/></td>
+			<td><input type="text" name="value" size="12" value="{$request['value']}"/></td>
+			<td><select name="category_id"><option value="">All</option>{$category_opts}</select></td>
+			<td><input type="text" name="project" size="10" value="{$request['project']}"/></td>
+			<td><select name="status_id"><option value="">All</option>{$status_opts}</select></td>
+		</tr>
+		</table>
+		</form>
+	</td>
+</tr>
+</table>
+<table cellpadding="3" border="1" bordercolor="#FFFFFF" style="border-collapse:collapse;">
+<tr>
+	<td colspan="13">{$page}</td>
+</tr>
+<tr>
+	<th>Code</th>
+	<th>Board&nbsp;Code  (Internal&nbsp;P/N) </th>
+	<th>Board Name</th>
+	<th>Manufacture</th>
+	<th>Board Series Number</th>
+	<th>Value/ Package</th>
+	<th>Unit</th>
+	<th>Category</th>
+	<th>Type</th>
+	<th><abbr title="Attachment">ATT</abbr></th>
+	<th>Board Status</th>
+	<th>Remark</th>
+	<th>OP</th>
+</tr>
+<iterate name="result" id="board">
+<tr class="trbg{$mod}">
+	<td style="padding:0;"><ul class="toggle {$key}">
+	<foreach name="board" key="j" item="item">
+		<if condition="$j gt 0">
+		<li class="ext">
+		<else />
+		<li>
+		</if>{$item['code']}</li>
+	</foreach></ul>
+	</td>
+	<td style="padding:0;"><ul class="toggle {$key}">
+	<foreach name="board" key="j" item="item">
+		<if condition="$j gt 0">
+		<li class="ext">
+		<else />
+		<li>
+		</if>{$item['Internal_PN']}</li>
+	</foreach></ul>
+	</td>
+	<if condition="count($board) gt 1">
+		<td style="padding-right:20px;cursor:pointer;background:url(../Public/Images/sort.gif) center right no-repeat;" onclick="toggle(this,'{$key}');">{$item['description']}</td>
+	<else />
+		<td>{$item['description']}</td>
+	</if>
+	<td>{$item['manufacture']}</td>
+	<td style="padding:0;"><ul class="toggle {$key}">
+	<foreach name="board" key="j" item="item">
+		<if condition="$j gt 0">
+		<li class="ext">
+		<else />
+		<li>
+		</if>{$item['MPN']}</li>
+	</foreach></ul>
+	</td>
+	<td>{$item['value']}</td>
+	<td>{$item['unit']['name']}</td>
+	<td>{$item['category']['name']}</td>
+	<td><if condition="$item['fixed'] eq 1">Fixed Assets<else />Floating Assets</if></td>
+	<td align="center"><a href="__APP__/../{$item.attachment}" target="_blank" title="View attachment in new window">{$item.attachment|pathinfo=PATHINFO_EXTENSION}</a></td>
+	<td style="padding:0;"><ul class="toggle {$key}">
+	<foreach name="board" key="j" item="item">
+		<if condition="$j gt 0">
+		<li class="ext">
+		<else />
+		<li>
+		</if>{$item['status']['name']}</li>
+	</foreach></ul>
+	</td>
+	<td style="padding:0;"><ul class="toggle {$key}">
+	<foreach name="board" key="j" item="item">
+		<if condition="$j gt 0">
+		<li class="ext">
+		<else />
+		<li>
+		</if>{$item['remark']}</li>
+	</foreach></ul>
+	</td>
+	<td style="padding:0;"><ul class="toggle {$key}">
+	<foreach name="board" key="j" item="item">
+		<if condition="$j gt 0">
+		<li class="ext">
+		<else />
+		<li>
+		</if><a href="__URL__/form/id/{$item['id']}">Edit</a>
+		<a href="javascript:void(0);" onclick="myConfirm('Are you sure to delete this item?', '__URL__/delete/id/{$item['id']}');" target="_iframe">Delete</a></li>
+	</foreach></ul>
+	</td>
+</tr>
+</iterate>
+<empty name="item">
+<tr>
+	<td colspan="13" align="center">No Record</td>
+</tr>
+</empty>
+<tr>
+	<td colspan="13">{$page}</td>
+</tr>
+</table>
+<form name="Import" action="__URL__/import" enctype="multipart/form-data" target="_iframe" method="post">
+<table align="center" style="background-color:#FFFFFF;padding:10px;margin:12px auto;">
+<tr>
+	<td align="right" valign="top" width="340">
+		<input type="button" onclick="javascript:document.location='__URL__/form';" value="Add a New Board" />
+	</td>
+	<td width="10">&nbsp;</td>
+	<td width="340" nowrap="nowrap">
+		<input type="button" id="batch" onclick="$('input#batch').hide();$('div#select_file').show();" value="Import From CSV" />
+		<div id="select_file" style="display:none;">
+			<input type="file" name="file" size="15" />
+			<input type="submit" value="Submit" />
+			<input type="button" onclick="$('div#select_file').hide();$('input#batch').show();" value="Cancel" />
+		</div>
+	</td>
+</tr>
+</table>
+<input type="hidden" name="confirm" value="" />
+</form>
+<script type="text/javascript">
+var toggle_arr = new Array();
+function toggle(obj,name) {
+	if (toggle_arr[name])
+	{
+		toggle_arr[name] = false;
+		$(obj).css('background-image', 'url(../Public/Images/sort.gif)');
+		$("."+name).each(function(){
+			$(this).css('height','21px').css('overflow','hidden');
+		});
+	}
+	else {
+		toggle_arr[name] = true;
+		$(obj).css('background-image', 'url(../Public/Images/fold.gif)');
+		$("."+name).each(function(){
+			$(this).css('height','auto').css('overflow','visible');
+		});
+	}
+	//lert(toggle_arr[name]);
+}
+</script>

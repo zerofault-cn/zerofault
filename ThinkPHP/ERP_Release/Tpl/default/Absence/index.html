@@ -1,0 +1,167 @@
+<p class="page_title_text">{$ACTION_TITLE}</p>
+<table width="90%">
+<tr>
+	<td>
+		<table width="100%" cellpadding="3" border="1" bordercolor="#FFFFFF" style="border-collapse:collapse;">
+		<tr>
+			<th width="18%">Name</th>
+			<td width="16%">{$staff_info.realname}</td>
+			<th width="15%">Department</th>
+			<td width="16%">[{$staff_info['dept']['code']}] {$staff_info['dept']['name']}</td>
+			<th width="15%">Enroll Date</th>
+			<td width="20%">{$staff_info.onboard}</td>
+		</tr>
+		</table>
+	</td>
+</tr>
+</table>
+&nbsp;
+<table width="90%">
+<tr>
+	<td>
+		<table width="100%" cellpadding="3" border="1" bordercolor="#FFFFFF" style="border-collapse:collapse;">
+		<tr>
+			<td width="18%">&nbsp;</td>
+			<th width="31%" style="background-color:#EEEEEE;">{$leave_info['Balance_year']} balance</th>
+			<th width="31%" style="background-color:#CCCCCC;">{$leave_info['Annual_year']} available</th>
+			<th width="20%" style="background-color:#EEEEEE;">Total available</th>
+		</tr>
+		<tr>
+			<th>Annual leave 年假</th>
+			<td style="background-color:#EEEEEE;">{$leave_info['Balance']}</td>
+			<td style="background-color:#CCCCCC;">{$leave_info['Annual']}</td>
+			<td style="background-color:#EEEEEE;">{$total_annual}</td>
+		</tr>
+		<tr>
+			<td>&nbsp;</td>
+			<th style="background-color:#EEEEEE;">Cash out days in {$leave_info['CashOut'][0]['Month']}</th>
+			<th style="background-color:#CCCCCC;">Cash out days in {$leave_info['CashOut'][1]['Month']}</th>
+			<th style="background-color:#EEEEEE;"></th>
+		</tr>
+		<tr>
+			<th>Cash Out Days </th>
+			<td style="background-color:#EEEEEE;">{$leave_info['CashOut'][0]['days']}<notempty name="leave_info['CashOut'][0]['enable']"><input type="button" value="Apply for Cash Out" class="thickbox" alt="__URL__/form/type/CashOut?width=500&height=450&modal=true"/></notempty></td>
+			<td style="background-color:#CCCCCC;">{$leave_info['CashOut'][1]['days']}<notempty name="leave_info['CashOut'][1]['enable']"><input type="button" value="Apply for Cash Out" class="thickbox" alt="__URL__/form/type/CashOut?width=500&height=450&modal=true"/></notempty></td>
+			<td style="background-color:#EEEEEE;"></td>
+		</tr>
+		<tr>
+			<td>&nbsp;</td>
+			<th style="background-color:#EEEEEE;">3 months ago</th>
+			<th style="background-color:#CCCCCC;">Last 3 months</th>
+			<th style="background-color:#EEEEEE;"></th>
+		</tr>
+		<tr>
+			<th>OverTime 加班 </th>
+			<td style="background-color:#EEEEEE;color:#909090">{$leave_info['Overtime']['past']} (Unavailable)</td>
+			<td style="background-color:#CCCCCC;">{$leave_info['Overtime']['recent']}</td>
+			<td style="background-color:#EEEEEE;">{$leave_info['Overtime']['recent']}</td>
+		</tr>
+		<tr>
+			<td style="text-align:right;font-weight:bold;" colspan="3">sum of total available &nbsp;</td>
+			<td bgcolor="#EEEEEE">{$total_leave}</td>
+		</tr>
+		</table>
+	</td>
+</tr>
+</table>
+&nbsp;
+<table width="90%" border="0" align="center" cellpadding="0" cellspacing="0">
+<tr>
+	<td valign="top" bgcolor="#FFFFFF">
+		<p class="page_title_text">My Application History (Last 12 Months)</p>
+		<notempty name="out_list">
+		<table width="100%" border="0" cellpadding="3" cellspacing="1">
+		<tr>
+			<td height="20" colspan="6" align="left" style="background-color:#FFC000;"><strong>Out of Office (Last 30 days)</strong></td>
+		</tr>
+		<tr>
+			<th>ID</th>
+			<th width="437">Duration</th>
+			<th width="8%">Hours</th>
+			<th width="10%">Deputy</th>
+			<th>Note</th>
+			<th width="10%">Operation</th>
+		</tr>
+			<iterate name="out_list" id="item">
+		<tr align="center" class="trbg{$mod}">
+			<td>A{$item['id']|sprintf='%05d',###}</td>
+			<td nowrap="nowrap">{$item['time_from']|substr=0,-3} ~ {$item['time_to']|substr=0,-3}</td>
+			<td>{$item['hours']|round='1'}</td>
+			<td>{$item['deputy']['realname']}</td>
+			<td align="left">{$item['note']|nl2br}</td>
+			<td nowrap="nowrap">
+				<if condition="strcmp(date('Y-m-d'), $item['time_to']) elt 0">
+				<a href="__URL__/form/id/{$item['id']}?width=500&height=450&modal=true" class="thickbox">Edit</a>
+				<a href="javascript:void(0);" onclick="myConfirm('Are you sure to cancel this item?', '__URL__/delete/op/cancel/id/{$item['id']}');" target="_iframe">Cancel</a>
+				</if>
+			</td>
+		</tr>
+			</iterate>
+		</table>
+		<div style="background-color:#fff;">&nbsp;</div>
+		</notempty>
+		<foreach name="apply_list" key="label" item="items">
+		<table width="100%" border="0" cellpadding="3" cellspacing="1">
+		<tr>
+			<td height="20" colspan="8" align="left" id="status_{$label_status[$label]}"><strong>{$label}</strong></td>
+		</tr>
+		<tr>
+			<th>ID</th>
+			<th width="160">Type</th>
+			<th width="270">Duration</th>
+			<th width="140">Hours</th>
+			<th width="10%">Deputy</th>
+			<th>Note</th>
+			<if condition="'Waiting for Approval' neq $label">
+			<th width="10%">Comment</th>
+			</if>
+			<if condition="'Waiting for Approval' eq $label">
+			<th>Waiting approver</th>
+			<th width="10%">Operation</th>
+			</if>
+		</tr>
+			<iterate name="items" id="item">
+		<tr align="center" class="trbg{$mod}">
+			<td>A{$item['id']|sprintf='%05d',###}</td>
+			<td><empty name="LeaveType[$item['type']]">{$item['type']}<else />{$LeaveType[$item['type']]}</empty></td>
+			<td nowrap="nowrap"><if condition="$item['type'] eq 'CashOut'"><font color="#a4a4a4">N/A</font><else />{$item['time_from']|substr=0,-3} ~ {$item['time_to']|substr=0,-3}</if></td>
+			<td>{$item['days']}</td>
+			<td><if condition="$item['type'] eq 'CashOut'"><font color="#a4a4a4">N/A</font><else />{$item['deputy']['realname']}</if></td>
+			<td valign="top" align="left"><if condition="$item['type'] eq 'CashOut'"><font color="#a4a4a4">N/A</font><else />{$item['note']|nl2br}</if></td>
+			<if condition="'Waiting for Approval' neq $label">
+			<td valign="top" align="left">{$item['comment']|nl2br}</td>
+			</if>
+			<if condition="'Waiting for Approval' eq $label">
+			<td>{$item['approver']}</td>
+			<td nowrap="nowrap">
+				<!-- <a href="__URL__/form/id/{$item['id']}?width=500&height=450&modal=true" class="thickbox">Edit</a> -->
+				<a href="javascript:void(0);" onclick="myConfirm('Are you sure to cancel this application?', '__URL__/delete/id/{$item['id']}');" target="_iframe">Cancel</a>
+			</td>
+			</if>
+		</tr>
+			</iterate>
+		</table>
+		<div style="background-color:#fff;">&nbsp;</div>
+		</foreach>
+		<input type="button" value="New Absence Application" class="thickbox" alt="__URL__/form?width=540&height=450&modal=true"/>
+		<input type="button" value="Overtime Application" class="thickbox" alt="__URL__/form/type/Overtime/staff/self?width=500&height=350&modal=true"/>
+	</td>
+	<td width="8" bgcolor="#FFFFFF">&nbsp;</td>
+	<td width="220" valign="top" bgcolor="#FFFFFF">
+		<table width="100%" border="0" cellpadding="3" cellspacing="1">
+		<tr>
+			<th height="38" colspan="2" style="text-align:right;line-height:18px;">Aggregated Hours of Absence (<php>echo date('Y');</php>)</th>
+		</tr>
+		<iterate name="LeaveType" id="item">
+			<if condition="$key neq 'Overtime' and $key neq 'Out'">
+		<tr class="trbg{$i%2}">
+			<td>{$item}</td>
+			<td width="50" align="center">{$absence_summary[$key]|number_format|default=0}</td>
+		</tr>
+			</if>
+		</iterate>
+		</table>
+		</td>
+	</tr>
+</table>
+<p class="center"></p>

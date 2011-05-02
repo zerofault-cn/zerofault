@@ -1,0 +1,104 @@
+<p class="page_title_text">{$MODULE_TITLE} - {$ACTION_TITLE}</p>
+<table>
+</table>
+<table >
+<tr>
+	<td class="clsTab" id="status_0"><a href="__ACTION__/status/0">Not Confirmed</a></td>
+	<td class="clsTab" id="status_1"><a href="__ACTION__/status/1">Confirmed</a></td>
+	<td class="clsTab" id="status_-1"><a href="__ACTION__/status/-1">Rejected</a></td>
+</tr>
+<tr>
+	<td colspan="3">
+		<form action="__URL__">
+		<table id="search_table" cellpadding="3" border="1" bordercolor="#FFFFFF" style="border-collapse:collapse;">
+		<tr>
+			<th>OP Staff</th>
+			<th>Internal P/N(Board Code)</th>
+			<th>Description(Board Name)</th>
+			<td rowspan="2" ><input type="submit" name="submit" value="Filter" /></td>
+		</tr>
+		<tr>
+			<td><select name="staff_id"><option value="0">All</option>{$staff_opts}</select></td>
+			<td><input type="text" name="Internal_PN" size="24" value="{$request['Internal_PN']}"/></td>
+			<td><input type="text" name="description" size="24" value="{$request['description']}"/></td>
+		</tr>
+		</table>
+		</form>
+	</td>
+</tr>
+<tr>
+	<td colspan="3">
+		<table cellpadding="3" border="1" bordercolor="#FFFFFF" style="border-collapse:collapse;">
+		<tr>
+			<td colspan="17">{$page}</td>
+		</tr>
+		<tr>
+			<th rowspan="2">ID</th>
+			<th rowspan="2">Code</th>
+			<th rowspan="2" colspan="2">Product</th>
+			<th rowspan="2">Action</th>
+			<th colspan="2">Relative</th>
+			<th rowspan="2">Quantity</th>
+			<th rowspan="2">Unit</th>
+			<th rowspan="2">Currency</th>
+			<th rowspan="2">Price</th>
+			<th rowspan="2">Total</th>
+			<th rowspan="2">OP Staff</th>
+			<th rowspan="2">OP Time</th>
+			<if condition="$status eq 1">
+			<th rowspan="2">Confirm Staff</th>
+			<th rowspan="2">Confirm Time</th>
+			<elseif condition="$status eq -1" />
+			<th rowspan="2">Reject Staff</th>
+			<th rowspan="2">Reject Time</th>
+			</if>
+			<th rowspan="2">Remark</th>
+		</tr>
+		<tr>
+			<th>From</th>
+			<th>To</td>
+		</tr>
+		<iterate name="result" id="item">
+		<tr class="trbg{$mod}">
+			<td align="center">{$item['id']}</td>
+			<td align="right">{$item['code']}</td>
+			<td><a href="__APP__/Product/info/id/{$item['product']['id']}?width=400" class="jTip" id="product{$item['id']}" name="Product Detail">{$item['product']['Internal_PN']}</td>
+			<td>{$item['product']['description']}</td>
+			<td>{$item['action']|ucfirst}</td>
+			<td><if condition="$item['action'] eq 'enter'">{$item['supplier']['name']}<elseif condition="$item['action'] eq 'reject'" />Local<else />{$item['from_name']}</if></td>
+			<td><if condition="$item['action'] eq 'enter'">Local<elseif condition="$item['action'] eq 'reject'" />{$item['supplier']['name']}<elseif condition="$item['action'] neq 'release' and $item['action'] neq 'scrap'" />{$item['to_name']}</if></td>
+			<td align="center">{$item['quantity']}</td>
+			<td>{$unit[$item['product']['unit_id']]}</td>
+			<td>{$item['currency']['name']}</td>
+			<td>{$item['price']}</td>
+			<td>{$item['quantity']*$item['price']}</td>
+			<td align="center">{$item['staff']['realname']}</td>
+			<td>{$item['create_time']}</td>
+			<if condition="$status eq 1 or $status eq -1">
+			<td align="center">{$item['confirmed_staff']['realname']}</td>
+			<td>{$item['confirm_time']}</td>
+			</if>
+			<td>{$item['remark']}</td>
+		</tr>
+		</iterate>
+		<empty name="result">
+		<tr>
+			<td colspan="17" align="center">No Record</td>
+		</tr>
+		</empty>
+		<tr>
+			<td colspan="17">{$page}</td>
+		</tr>
+		</table>
+	</td>
+</tr>
+</table>
+<p class="center">
+</p>
+</form>
+<script type="text/javascript"> 
+$(document).ready(function(){
+	$("td#status_{$status}").addClass("current");
+});
+
+</script>
