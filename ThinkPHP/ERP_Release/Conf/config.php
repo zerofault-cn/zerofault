@@ -35,9 +35,6 @@ $config = array(
 	//资产申请时的提醒通知邮件会额外发送给这些邮件帐号，用英文单引号包含，英文逗号分隔
 	'NOTIFICATION_MAILTO' => array(),
 
-	//AgigaFlow系统的根路径
-	'USER_SYNC_TARGET'  => array('CuteFlow'=>'http://172.23.57.20/cuteflow/'),
-
 	//权限认证所需参数，请不要随意更改
 	'USER_AUTH_ON'		=> true,
 	//权限认证模式，默认为1：登录时认证一次；2：实时认证

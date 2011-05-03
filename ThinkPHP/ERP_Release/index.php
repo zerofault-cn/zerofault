@@ -8,9 +8,7 @@
 */
 
 define('THINK_PATH', dirname(__FILE__).'/Core');
-
 require(THINK_PATH."/ThinkPHP.php");
-
 
 $App = new App(); 
 $App->run();
