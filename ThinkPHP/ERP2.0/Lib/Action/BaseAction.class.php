@@ -485,62 +485,53 @@ class BaseAction extends Action {
 	}
 
 	protected function sync_user($data) {
-		$USER_SYNC_TARGET = C('USER_SYNC_TARGET');
-		if (!empty($data) && !empty($USER_SYNC_TARGET) && is_array($USER_SYNC_TARGET)) {
-			foreach ($USER_SYNC_TARGET as $app=>$baseurl) {
-				switch ($app) {
-					case 'CuteFlow':
-						echo "Start to sync to CuteFlow\t";
-						$params = array();
-						$params['strLastName'] = 'AGIGA';
-						if (is_object($data)) {
-							echo "User: ".$data->name."\t";
-							$params['StaffId'] = $data->id;
-							$params['UserName'] = $data->name;
-							$params['strFirstName'] = $data->realname;
-							$params['strEMail'] = $data->email;
-							$params['Password'] = $data->password;
-							$params['UserAccessLevel'] = $data->is_leader?8:4;
-							$params['Deleted'] = intval(!$data->status);
-						}
-						elseif (is_array($data)) {
-							echo "User: ".$data['name']."\n";
-							$params['StaffId'] = $data['id'];
-							$params['UserName'] = $data['name'];
-							$params['strFirstName'] = $data['realname'];
-							$params['strEMail'] = $data['email'];
-							$params['Password'] = $data['password'];
-							$params['UserAccessLevel'] = $data['is_leader']?8:4;
-							$params['Deleted'] = intval(!$data['status']);
-						}
-						
-						if(function_exists('curl_init')) {
-							$ch = curl_init();
-							curl_setopt($ch, CURLOPT_URL, $baseurl.'pages/sync_user.php');
-							curl_setopt($ch, CURLOPT_HEADER, 0);
-							curl_setopt($ch, CURLOPT_POST, 1);
-							curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-							curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-							curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
-							curl_setopt($ch, CURLOPT_POSTFIELDS, $params);
-							$ret = curl_exec($ch);
-							curl_close($ch);
-						}
-						else {
-							$ret = self::httpPost($baseurl.'pages/sync_user.php', $params);
-						}
-						echo "Done:".$ret."<br />\n";
-						break;
-
-					default:
-						//nothing
-				}
-				if ('Success'==trim($ret)) {
-					Log::Write('Sync '.$params['UserName'].' to '.$app.' success', INFO);
-				}
-				else {
-					Log::Write('Sync '.$params['UserName'].' to '.$app.' fail');
-				}
+		if (!empty($data) && defined('CF_ROOT')) {
+			$target_url = CF_ROOT . 'pages/sync_user.php';
+			
+			$params = array();
+			$params['strLastName'] = 'AGIGA';
+			if (is_object($data)) {
+				echo "User: ".$data->name."\t";
+				$params['StaffId'] = $data->id;
+				$params['UserName'] = $data->name;
+				$params['strFirstName'] = $data->realname;
+				$params['strEMail'] = $data->email;
+				$params['Password'] = $data->password;
+				$params['UserAccessLevel'] = $data->is_leader?8:4;
+				$params['Deleted'] = intval(!$data->status);
+			}
+			elseif (is_array($data)) {
+				echo "User: ".$data['name']."\t";
+				$params['StaffId'] = $data['id'];
+				$params['UserName'] = $data['name'];
+				$params['strFirstName'] = $data['realname'];
+				$params['strEMail'] = $data['email'];
+				$params['Password'] = $data['password'];
+				$params['UserAccessLevel'] = $data['is_leader']?8:4;
+				$params['Deleted'] = intval(!$data['status']);
+			}
+			
+			if(function_exists('curl_init')) {
+				$ch = curl_init();
+				curl_setopt($ch, CURLOPT_URL, $target_url);
+				curl_setopt($ch, CURLOPT_HEADER, 0);
+				curl_setopt($ch, CURLOPT_POST, 1);
+				curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+				curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+				curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+				curl_setopt($ch, CURLOPT_POSTFIELDS, $params);
+				$ret = curl_exec($ch);
+				curl_close($ch);
+			}
+			else {
+				$ret = self::httpPost($target_url, $params);
+			}
+			echo "Done:".$ret."<br />\n";
+			if ('Success'==trim($ret)) {
+				Log::Write('Sync '.$params['UserName'].' success', INFO);
+			}
+			else {
+				Log::Write('Sync '.$params['UserName'].' fail');
 			}
 		}
 	}
