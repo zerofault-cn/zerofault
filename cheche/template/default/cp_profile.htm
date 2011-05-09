@@ -69,7 +69,7 @@
 			<option value="0">请选择身份</option>
 			$car_role_opts
 		</select>
-		<span id="car_number" <!--{if $space['car_role']!=1}-->style="display:none;"<!--{/if}-->>您的车牌号：<input type="text" size="10" name="car_number" value="<!--{eval echo stripslashes($space['name']);}-->"/></span>
+		<span id="car_number" <!--{if $space['car_role']!=1}-->style="display:none;"<!--{/if}-->>您的车牌号：<input type="text" size="10" name="car_number" value="<!--{eval echo stripslashes($space['car_number']);}-->"/></span>
 	</td>
 	<td>&nbsp;</td>
 </tr>
@@ -77,12 +77,12 @@
 	<th style="width:10em;">我喜欢的车型:</th>
 	<td>
 		品牌：
-		<select id="car_brand" name="car_brand" onchange="javascript:show('model');">
+		<select id="car_brand" name="car_brand" onchange="javascript:load_car_opts('car_model', this.value);">
 			<option value="0">请选择品牌</option>
 			$car_brand_opts
 		</select>
 		车型：
-		<select id="car_model" name="car_model" onchange="javascript:show('profile');">
+		<select id="car_model" name="car_model" onchange="javascript:load_car_opts('car_profile', this.value);">
 			<option value="0">请选择车型</option>
 			$car_model_opts
 		</select>
@@ -565,6 +565,18 @@ function add_tbody() {
 		newnode = $("oldtbody").rows[i].cloneNode(true);
 		$("newtbody").appendChild(newnode);
 	}
+}
+function load_car_opts(field, id) {
+	var x = new Ajax();
+	x.get('do.php?ac=ajax&op=get_car_model', function(s) {
+		var sel = document.getElementById(field);
+		sel.length = 1;
+		var json = eval(s);
+		for (var i=0; i<json.length; i++) {
+			sel.options.add(new Option(json[i].name, json[i].id));
+		}
+		
+	});
 }
 </script>
 

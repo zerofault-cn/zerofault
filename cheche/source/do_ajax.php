@@ -205,6 +205,9 @@ if($op == 'comment') {
 	}
 	
 }
+elseif ($op == 'get_car_model') {
+	echo '[{id:1,name:"ABC"},{id:2,name:"DEF"}]';
+}
 
 include template('do_ajax');
 
