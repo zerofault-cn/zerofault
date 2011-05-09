@@ -65,15 +65,35 @@
 <tr>
 	<th style="width:10em;">我现在的身份:</th>
 	<td>
-		<select id="car_role" name="car_role">
+		<select id="car_role" name="car_role" onchange="javascript:if(this.value=='1'){document.getElementById('car_number').style.display='';}else{document.getElementById('car_number').style.display='none';};">
 			<option value="0">请选择身份</option>
-			<option value="1">车主</option>
-			<option value="2">准车主</option>
+			$car_role_opts
+		</select>
+		<span id="car_number" <!--{if $space['car_role']!=1}-->style="display:none;"<!--{/if}-->>您的车牌号：<input type="text" size="10" name="car_number" value="<!--{eval echo stripslashes($space['name']);}-->"/></span>
+	</td>
+	<td>&nbsp;</td>
+</tr>
+<tr>
+	<th style="width:10em;">我喜欢的车型:</th>
+	<td>
+		品牌：
+		<select id="car_brand" name="car_brand" onchange="javascript:show('model');">
+			<option value="0">请选择品牌</option>
+			$car_brand_opts
+		</select>
+		车型：
+		<select id="car_model" name="car_model" onchange="javascript:show('profile');">
+			<option value="0">请选择车型</option>
+			$car_model_opts
+		</select>
+		配置：
+		<select id="car_profile" name="car_profile">
+			<option value="0">请选择配置</option>
+			$car_profile_opts
 		</select>
 	</td>
 	<td>&nbsp;</td>
 </tr>
-
 <tr>
 	<th style="width:10em;">婚恋状态:</th>
 	<td>

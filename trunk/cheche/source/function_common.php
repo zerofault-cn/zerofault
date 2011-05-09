@@ -2160,4 +2160,46 @@ function ckspacelog() {
 	}
 }
 
+
+/**
+*
+* 根据数组生成HTML格式的下拉列表选项
+*/
+function genOptions($rs=array(), $selected_id='') {
+	$str = '';
+	if(empty($rs) || !is_array($rs)) {
+		return $str;
+	}
+	foreach($rs as $key=>$val) {
+		$str .= '<option value="'.$key.'" ';
+		if($selected_id == $key) {
+			$str .= ' selected="true"';
+		}
+		$str .= '>'.$val.'</option>';
+	}
+	return $str;
+}
+/**
+*
+* 根据数组生成HTML格式的带Group的下拉列表选项
+*/
+function genOptionGrp($rs=array(), $selected_id='') {
+	$str = '';
+	if(empty($rs) || !is_array($rs)) {
+		return $str;
+	}
+	foreach($rs as $group=>$arr) {
+		$str .= '<optgroup label="'.$group.'">';
+		foreach ($arr as $key=>$val) {
+			$str .= '<option value="'.$key.'" ';
+			if($selected_id == $key) {
+				$str .= ' selected="true"';
+			}
+			$str .= '>'.$val.'</option>';
+		}
+		$str .= '</optgroup>';
+	}
+	return $str;
+}
+
 ?>
