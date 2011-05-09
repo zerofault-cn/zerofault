@@ -129,6 +129,22 @@ if($_GET['op'] == 'base') {
 	//性别
 	$sexarr = array($space['sex']=>' checked');
 	
+	//车主身份
+	$profile = parse_ini_file(S_ROOT.'profile.ini', true);
+	$car_role_opts = genOptions($profile['car_role'], $space['car_role']);
+
+	//车型
+	$car_brand_arr = array();
+	$query = $_SGLOBAL['db']->query("SELECT * FROM ".tname('carmodel')." where type='brand' ORDER BY initials");
+	while ($v = $_SGLOBAL['db']->fetch_array($query)) {
+		$a = $v['initials'];
+		if (!array_key_exists($a, $car_brand_arr)) {
+			$car_brand_arr[$a] = array();
+		}
+		$car_brand_arr[$a][$v['id']] = $v['name'];
+	}
+	$car_brand_opts = genOptionGrp($car_brand_arr, $space['car_brand']);
+
 	//生日:年
 	$birthyeayhtml = '';
 	$nowy = sgmdate('Y');
