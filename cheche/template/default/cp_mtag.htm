@@ -460,6 +460,7 @@
 				<td></td><td>
 					<input type="hidden" name="tagname" value="$newtagname">
 					<input type="hidden" name="fieldid" value="$fieldid">
+					<input type="hidden" name="ext_id" value="$ext_id">
 					<input type="hidden" name="joinmode" value="1">
 					<input type="submit" id="textsubmit" name="textsubmit" value="创建群组" class="submit"></td>
 			</tr>
@@ -484,11 +485,37 @@
 	<tr>
 		<th>选择一个合适的分类</th>
 		<td>
-		<select name="fieldid">
-		<!--{loop $textarr $value}-->
-		<option value="$value[fieldid]">$value[title]</option>
-		<!--{/loop}-->
-		</select>
+			<select name="fieldid" onchange="javascript:show_ext(this.value);">
+				<!--{loop $textarr $value}-->
+				<option value="$value[fieldid]">$value[title]</option>
+				<!--{/loop}-->
+			</select>
+			<div id="div_region" style="display:none;">
+				选择所属地区：
+				<select onchange="javascript:load_region_opts('sel_city', this.value);">
+					<option value="0">请选择</option>
+					$province_opts
+				</select>省
+				<select id="sel_city" onchange="javascript:load_region_opts('sel_region', this.value);">
+					<option value="0">请选择</option>
+				</select>市
+				<select id="sel_region" name="ext_id">
+					<option value="0">请选择</option>
+				</select>区/县
+			</div>
+			<div id="div_car" style="display:none;">
+				选择所属车型：
+				品牌:<select onchange="javascript:load_car_opts('sel_model', this.value);">
+					<option value="0">请选择</option>
+					$car_brand_opts
+				</select>
+				车系:<select id="sel_model" onchange="javascript:load_car_opts('sel_profile', this.value);">
+					<option value="0">请选择</option>
+				</select>
+				配置:<select id="sel_profile" name="ext_id">
+					<option value="0">请选择</option>
+				</select>
+			</div>
 		</td>
 	</tr>
 	<tr>
@@ -562,4 +589,66 @@
 	<!--{/if}-->
 
 <!--{/if}-->
+<script>
+function show_ext(i) {
+	var div_region = document.getElementById('div_region');
+	var sel_region = document.getElementById('sel_region');
+	var div_car = document.getElementById('div_car');
+	var sel_profile = document.getElementById('sel_profile');
+	if ('1' == i) {
+		div_region.style.display='none';
+		sel_region.disabled = true;
+		div_car.style.display='none';
+		sel_profile.disabled = true;
+	}
+	else if ('2' == i) {
+		div_region.style.display='';
+		sel_region.disabled = false;
+		div_car.style.display='none';
+		sel_profile.disabled = true;
+	}
+	else if ('3' == i) {
+		div_region.style.display='none';
+		sel_region.disabled = true;
+		div_car.style.display='';
+		sel_profile.disabled = false;
+	}
+}
+function load_car_opts(field, pid) {
+	if ('0' == pid) {
+		document.getElementById(field).length = 1;
+		if ('sel_model' == field) {
+			document.getElementById('sel_profile').length = 1;
+		}
+		return;
+	}
+	var x = new Ajax('HTML');
+	x.get('do.php?ac=ajax&op=get_car_model&pid='+pid, function(s) {
+		var sel = document.getElementById(field);
+		sel.length = 1;
+		var json = eval('('+s+')');
+		for (var i=0; i<json.length; i++) {
+			sel.options.add(new Option(json[i].name, json[i].id));
+		}
+	});
+}
+function load_region_opts(field, pid) {
+	if ('0' == pid) {
+		document.getElementById(field).length = 1;
+		if ('sel_city' == field) {
+			document.getElementById('sel_region').length = 1;
+		}
+		return;
+	}
+	var x = new Ajax('HTML');
+	x.get('do.php?ac=ajax&op=get_region&pid='+pid, function(s) {
+		var sel = document.getElementById(field);
+		sel.length = 1;
+		var json = eval('('+s+')');
+		for (var i=0; i<json.length; i++) {
+			sel.options.add(new Option(json[i].name, json[i].id));
+		}
+	});
+}
+</script>
 <!--{template footer}-->
