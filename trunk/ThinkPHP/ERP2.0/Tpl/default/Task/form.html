@@ -38,9 +38,10 @@
 <tr bgcolor="#BCD1EF">
 	<td nowrap="nowrap">Notification</td>
 	<td bgcolor="#E9E9E9">
-		<input type="checkbox" name="chk1" value="1" <if condition="$info['notification'][0] eq '1'">checked="checked"</if> /> cc to Task Manager<br />
-		<input type="checkbox" name="chk2" value="1" <if condition="$info['notification'][1] eq '1'">checked="checked"</if> /> cc to each owners' leader<br />
-		<input type="checkbox" name="chk3" value="1" <if condition="$info['notification'][2] eq '1'">checked="checked"</if> /> cc to participants<br />
+		<input type="checkbox" name="chk0" value="1" <if condition="$info['notification'][0] eq '1'">checked="checked"</if> /> cc to Task Manager<br />
+		<input type="checkbox" name="chk1" value="1" <if condition="$info['notification'][1] eq '1'">checked="checked"</if> /> cc to each owners' leader<br />
+		<input type="checkbox" name="chk2" value="1" <if condition="$info['notification'][2] eq '1'">checked="checked"</if> /> cc to participants<br />
+		<input type="checkbox" name="chk3" value="1" <if condition="$info['notification'][3] eq '1'">checked="checked"</if> /> cc to all owners when anybody change his status<br />
 	</td>
 	<td>Attached Files</td>
 	<td bgcolor="#E9E9E9" valign="top">
