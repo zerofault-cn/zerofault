@@ -54,7 +54,13 @@ textarea {
 			<td bgcolor="#FFFFFF">
 				<strong class="{$status_arr[$info['status']]}">{$status_arr[$info['status']]}</strong>
 				<if condition="$_SESSION[C('USER_AUTH_KEY')] eq $info['creator_id'] or $_SESSION[C('ADMIN_AUTH_NAME')] or in_array($_SESSION[C('USER_AUTH_KEY')], C('TASK_ADMIN_ID'))">
-				[<img src="../Public/Images/open.png" alt="open" align="absmiddle" <if condition="$info['status'] neq 0"> title="change status to open" style="cursor:pointer;" onclick="changeStatus(0, {$info.id}, 0)"</if> /><img src="../Public/Images/pause.png" alt="pending" align="absmiddle" <if condition="$info['status'] neq -1"> title="change status to pending" style="cursor:pointer;" onclick="changeStatus(0, {$info.id}, -1)"</if> /><img src="../Public/Images/close.png" alt="close" align="absmiddle" <if condition="$info['status'] neq 1"> title="change status to closed" style="cursor:pointer;" onclick="changeStatus(0, {$info.id}, 1)"</if> />]
+				[<img src="../Public/Images/open.png" alt="open" align="absmiddle"
+				<neq name="info['status']" value="0">title="change status to open" style="cursor:pointer;" onclick="changeStatus(0, {$info.id}, 0)"</neq>
+				/><img src="../Public/Images/pause.png" alt="pending" align="absmiddle"
+				<neq name="info['status']" value="-1">title="change status to pending" style="cursor:pointer;" onclick="changeStatus(0, {$info.id}, -1)"</neq>
+				/><img src="../Public/Images/close.png" alt="close" align="absmiddle"
+				<neq name="info['status']" value="1">title="change status to closed" style="cursor:pointer;" onclick="changeStatus(0, {$info.id}, 1)"</neq>
+				/>]
 				</if>
 			</td>
 			<td>Attached Files</td>
@@ -74,7 +80,13 @@ textarea {
 					<td width="5%" class="{$status_arr[$item['status']]}"><strong>{$status_arr[$item['status']]}</strong></td>
 					<td width="5%" nowrap="nowrap">
 						<if condition="$_SESSION[C('USER_AUTH_KEY')] eq $info['creator_id'] or $_SESSION[C('USER_AUTH_KEY')] eq $item['staff_id'] or $_SESSION[C('ADMIN_AUTH_NAME')] or in_array($_SESSION[C('USER_AUTH_KEY')], C('TASK_ADMIN_ID'))">
-						[<img src="../Public/Images/open.png" alt="open" align="absmiddle" <if condition="$item['status'] neq 0"> title="change status to open" style="cursor:pointer;" onclick="changeStatus({$item.staff_id}, {$item.task_id}, 0)"</if> /><img src="../Public/Images/pause.png" alt="pending" align="absmiddle" <if condition="$item['status'] neq -1"> title="change status to pending" style="cursor:pointer;" onclick="changeStatus({$item.staff_id}, {$item.task_id}, -1)"</if> /><img src="../Public/Images/close.png" alt="close" align="absmiddle" <if condition="$item['status'] neq 1"> title="change status to close" style="cursor:pointer;" onclick="changeStatus({$item.staff_id}, {$item.task_id}, 1)"</if> />]
+						[<img src="../Public/Images/open.png" alt="open" align="absmiddle"
+						<neq name="item['status']" value="0">title="change status to open" style="cursor:pointer;" onclick="changeStatus({$item.staff_id}, {$item.task_id}, 0)"</neq>
+						/><img src="../Public/Images/pause.png" alt="pending" align="absmiddle"
+						<neq name="item['status']" value="-1">title="change status to pending" style="cursor:pointer;" onclick="changeStatus({$item.staff_id}, {$item.task_id}, -1)"</neq>
+						/><img src="../Public/Images/close.png" alt="close" align="absmiddle"
+						<neq name="item['status']" value="1">title="change status to close" style="cursor:pointer;" onclick="changeStatus({$item.staff_id}, {$item.task_id}, 1)"</neq>
+						/>]
 						</if>
 					</td>
 				</tr>

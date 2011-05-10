@@ -270,7 +270,7 @@ class TaskAction extends BaseAction{
 				//nothing
 		}
 		$this->dao->press_interval = $interval;
-		$this->dao->notification = strval((empty($_REQUEST['chk1'])?'0':'1').(empty($_REQUEST['chk2'])?'0':'1').(empty($_REQUEST['chk3'])?'0':'1'));
+		$this->dao->notification = strval((empty($_REQUEST['chk0'])?'0':'1').(empty($_REQUEST['chk1'])?'0':'1').(empty($_REQUEST['chk2'])?'0':'1').(empty($_REQUEST['chk3'])?'0':'1'));
 		if ($id>0) {
 			if(false !== $this->dao->save()){
 				//process multi-owner
@@ -496,13 +496,21 @@ class TaskAction extends BaseAction{
 		$value = $_REQUEST['v'];
 		if ($staff_id > 0) {
 			$dao = M('TaskOwner');
-			$rs = $dao->where("task_id=".$task_id." and staff_id=".$staff_id)->setField(array($field, 'action_time'), array($value, date('Y-m-d H:i:s')));
-			self::mail_task('owner_status', $task_id, $staff_id);
+			$info = $dao->where("task_id=".$task_id." and staff_id=".$staff_id)->find();
+			$rs = true;
+			if ($info[$field] != $value) {
+				$rs = $dao->where('id='.$info['id'])->setField(array($field, 'action_time'), array($value, date('Y-m-d H:i:s')));
+				self::mail_task('owner_status', $task_id, $staff_id);
+			}
 		}
 		else {
 			$dao = $this->dao;
-			$rs = $dao->where('id='.$task_id)->setField(array($field, 'update_time'), array($value, date('Y-m-d H:i:s')));
-			self::mail_task('task_status', $task_id);
+			$info = $dao->where('id='.$task_id)->find();
+			$rs = true;
+			if ($info[$field] != $value) {
+				$rs = $dao->where('id='.$task_id)->setField(array($field, 'update_time'), array($value, date('Y-m-d H:i:s')));
+				self::mail_task('task_status', $task_id);
+			}
 		}
 		if(false !== $rs) {
 			self::_success('Update success!');
@@ -751,8 +759,11 @@ class TaskAction extends BaseAction{
 				$owner_info = M('TaskOwner')->where("task_id=".$task_id." and staff_id=".$owner_id)->find();
 				$owner = M('Staff')->find($owner_id);
 				$body .= $owner['realname'] .' has changed his status to '.$this->status_arr[$owner_info['status']].'<br />';
-				foreach ($info['owner'] as $owner) {
-					$mail->AddAddress($owner['email'], $owner['realname']);
+				$mail->AddAddress($creator['email'], $creator['realname']);
+				if ($info['notification'][3] == '1') {
+					foreach ($info['owner'] as $owner) {
+						$mail->AddCC($owner['email'], $owner['realname']);
+					}
 				}
 
 				$body .= '<table border="1" cellspacing="1" cellpadding="7" style="border-collapse:collapse;border:1px solid #999999;">'."\n";
