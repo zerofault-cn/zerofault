@@ -455,6 +455,7 @@ if($_GET['op'] == 'manage') {
 		//自由输入
 		$_POST['tagname'] = $tagname = getstr($_POST['tagname'], 40, 1, 1, 1);
 		$_POST['fieldid'] = $fieldid = intval($_POST['fieldid']);
+	echo	$_POST['ext_id'] = $ext_id = intval($_POST['ext_id']);
 		
 		$profield = $_SGLOBAL['profield'][$fieldid];
 		if(empty($profield) || $profield['formtype'] != 'text') {
@@ -466,7 +467,7 @@ if($_GET['op'] == 'manage') {
 		
 		if(!empty($_POST['joinmode'])) {
 			//二次确认
-			$mtag = mtag_join('tagname', stripslashes($tagname), $fieldid);
+			$mtag = mtag_join('tagname', stripslashes($tagname), $fieldid, $ext_id);
 			if(empty($mtag)) {
 				showmessage('mtag_join_error');
 			} else {
@@ -528,6 +529,26 @@ if($_GET['op'] == 'manage') {
 		}
 	}
 	
+	//地区
+	$province_arr = array();
+	$query = $_SGLOBAL['db']->query("SELECT * FROM ".tname('region')." where pid=1");
+	while ($v = $_SGLOBAL['db']->fetch_array($query)) {
+		$province_arr[$v['id']] = $v['name'];
+	}
+	$province_opts = genOptions($province_arr);
+
+	//车型
+	$car_brand_arr = array();
+	$query = $_SGLOBAL['db']->query("SELECT * FROM ".tname('carmodel')." where pid=0 ORDER BY initials");
+	while ($v = $_SGLOBAL['db']->fetch_array($query)) {
+		$a = $v['initials'];
+		if (!array_key_exists($a, $car_brand_arr)) {
+			$car_brand_arr[$a] = array();
+		}
+		$car_brand_arr[$a][$v['id']] = $v['name'];
+	}
+	$car_brand_opts = genOptionGrp($car_brand_arr);
+
 	//已经加入的
 	$existmtag = array();
 	$query = $_SGLOBAL['db']->query("SELECT mtag.tagname, mtag.fieldid FROM ".tname('tagspace')." main
@@ -541,7 +562,7 @@ if($_GET['op'] == 'manage') {
 include template("cp_mtag");
 
 //加入
-function mtag_join($type, $key, $fieldid=0) {
+function mtag_join($type, $key, $fieldid=0, $ext_id=0) {
 	global $_SGLOBAL, $space;
 	
 	//判断用户是否已经加入
@@ -573,7 +594,8 @@ function mtag_join($type, $key, $fieldid=0) {
 		//创建
 		$mtag = array(
 			'tagname' => $key,
-			'fieldid' => $fieldid
+			'fieldid' => $fieldid,
+			'ext_id' => $ext_id
 		);
 		$tagid = inserttable('mtag', $mtag, 1);
 		$mtag['tagid'] = $tagid;

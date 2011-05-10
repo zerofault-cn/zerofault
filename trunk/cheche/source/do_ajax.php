@@ -206,9 +206,25 @@ if($op == 'comment') {
 	
 }
 elseif ($op == 'get_car_model') {
-	echo '[{id:1,name:"ABC"},{id:2,name:"DEF"}]';
+	$pid = $_REQUEST['pid'];
+	$query = $_SGLOBAL['db']->query("SELECT * FROM ".tname('carmodel')." WHERE pid='".$pid."' ORDER BY name");
+	$arr = array();
+	while ($value = $_SGLOBAL['db']->fetch_array($query)) {
+		$arr[] = '{"id":"'.$value['id'].'","name":"'.$value['name'].'"}';
+	}
+	$str = '['.implode(',', $arr).']';
+	exit($str);
 }
-
+elseif ($op == 'get_region') {
+	$pid = $_REQUEST['pid'];
+	$query = $_SGLOBAL['db']->query("SELECT * FROM ".tname('region')." WHERE pid='".$pid."' ");
+	$arr = array();
+	while ($value = $_SGLOBAL['db']->fetch_array($query)) {
+		$arr[] = '{"id":"'.$value['id'].'","name":"'.$value['name'].'"}';
+	}
+	$str = '['.implode(',', $arr).']';
+	exit($str);
+}
 include template('do_ajax');
 
 ?>

@@ -26,6 +26,11 @@ if($_GET['op'] == 'base') {
 	
 		//提交检查
 		$setarr = array(
+			'car_role' => intval($_POST['car_role']),
+			'car_number' => getstr($_POST['car_number'], 10, 1, 1),
+			'car_brand' => intval($_POST['car_brand']),
+			'car_model' => intval($_POST['car_model']),
+			'car_profile' => intval($_POST['car_profile']),
 			'birthyear' => intval($_POST['birthyear']),
 			'birthmonth' => intval($_POST['birthmonth']),
 			'birthday' => intval($_POST['birthday']),
@@ -135,7 +140,7 @@ if($_GET['op'] == 'base') {
 
 	//车型
 	$car_brand_arr = array();
-	$query = $_SGLOBAL['db']->query("SELECT * FROM ".tname('carmodel')." where type='brand' ORDER BY initials");
+	$query = $_SGLOBAL['db']->query("SELECT * FROM ".tname('carmodel')." where pid=0 ORDER BY initials");
 	while ($v = $_SGLOBAL['db']->fetch_array($query)) {
 		$a = $v['initials'];
 		if (!array_key_exists($a, $car_brand_arr)) {
@@ -144,6 +149,24 @@ if($_GET['op'] == 'base') {
 		$car_brand_arr[$a][$v['id']] = $v['name'];
 	}
 	$car_brand_opts = genOptionGrp($car_brand_arr, $space['car_brand']);
+
+	$car_model_arr = array();
+	if (!empty($space['car_brand'])) {
+		$query = $_SGLOBAL['db']->query("SELECT * FROM ".tname('carmodel')." where pid=".$space['car_brand']." ORDER BY name");
+		while ($v = $_SGLOBAL['db']->fetch_array($query)) {
+			$car_model_arr[$v['id']] = $v['name'];
+		}
+	}
+	$car_model_opts = genOptions($car_model_arr, $space['car_model']);
+
+	$car_profile_arr = array();
+	if (!empty($space['car_model'])) {
+		$query = $_SGLOBAL['db']->query("SELECT * FROM ".tname('carmodel')." where pid=".$space['car_model']." ORDER BY name");
+		while ($v = $_SGLOBAL['db']->fetch_array($query)) {
+			$car_profile_arr[$v['id']] = $v['name'];
+		}
+	}
+	$car_profile_opts = genOptions($car_profile_arr, $space['car_profile']);
 
 	//生日:年
 	$birthyeayhtml = '';
