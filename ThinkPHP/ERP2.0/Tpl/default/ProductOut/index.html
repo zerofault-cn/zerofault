@@ -86,9 +86,9 @@
 			<td colspan="6">
 				<if condition="($status eq 0 or $status eq -2) and MODULE_NAME eq 'ProductOut'">
 					<input type="submit" name="confirm" value="Confirm Selected" />
-					<if condition="ACTION_NAME eq 'returns'">
+					<eq name="ACTION_NAME" value="returns">
 					<input type="submit" name="reject" value="Reject Selected" />
-					</if>
+					</eq>
 				<elseif condition="$status eq 0 and MODULE_NAME eq 'Asset' and (ACTION_NAME eq 'transferIn' or ACTION_NAME eq 'location')" />
 					<input type="submit" name="confirm" value="Confirm Selected" />
 					<input type="submit" name="reject" value="Reject Selected" />

@@ -2,8 +2,9 @@
 $config = array(
 	'APP_DEBUG'			=> true,
 	'USER_AUTH_TYPE'	=> 2,
+	'USER_AUTH_METHOD'	=> 'LDAP', //可选LDAP或DB，如果无此参数，或者设为其他值，均使用DB方式
 
-	'APP_CONFIG_LIST'	=> array('menu', 'absence', 'smtp', 'test'),
+	'APP_CONFIG_LIST'	=> array('menu', 'absence', 'smtp', 'test', 'ldap'),
 	'TAG_NESTED_LEVEL'	=> 6,
 
 	'DB_TYPE'			=> 'mysql',
@@ -22,11 +23,10 @@ $config = array(
 	'ADMIN_AUTH_NAME'	=> 'administrator',
 	
 	'SUPER_ADMIN_ID'	=> array(1), //超级管理员的ID数组
-	'ABSENCE_ADMIN_ID'	=> array(7), //Absence管理员(HR)的帐号ID，纯数字数组
+	'ABSENCE_ADMIN_ID'	=> array(1, 7), //Absence管理员(HR)的帐号ID，纯数字数组
 	'TASK_ADMIN_ID'		=> array(7), //Task管理员的帐号ID
 
 	'NOTIFICATION_MAILTO' => array(), //资产申请时的重复通知邮件会额外发送给这些邮件帐号
-	'USER_SYNC_TARGET'  => array('CuteFlow'=>'http://192.168.9.159/cuteflow/'), //AgigaFlow系统的根路径
 
 	//权限认证所需参数，请不要更改
 	'USER_AUTH_ON'		=> true,
