@@ -98,13 +98,13 @@ body { background: #FFF; }
 
 /*************************************************HEADER***/
 #header { margin: 0 0 20px; }
-  .headerwarp { margin: 0 auto; padding: 0 20px; width: 930px; height: 40px; background: #FF8E00 url(image/header_bg.gif); color: #FFF; }
-    .headerwarp a { color: #FFF; }
-      .headerwarp .logo { float: left; margin: 0 30px 0 0; }
+.headerwrap { margin: 0 auto; padding: 0 20px; width: 930px; height: 40px; background-color: #005EAC; color: #FFF; }
+.headerwrap a { color: #FFF; }
+.headerwrap .logo { float: left; margin: 0 30px 0 0; }
 
-.menu { float: left; height: 40px; font-size: 14px; font-weight: bold; }
-  .menu li { float: left; padding: 10px; line-height: 20px; vertical-align: top; }
-    .menu .edit { padding-left: 4px; color: #FFF; font-size: 12px; font-weight: normal; }
+.menu { float: right; height: 40px; font-size: 14px; font-weight: bold; }
+.menu li { float: left; padding: 10px; line-height: 20px; vertical-align: top; }
+.menu .edit { padding-left: 4px; color: #FFF; font-size: 12px; font-weight: normal; }
 
 .nav_account { float: right; width: 200px; white-space:nowrap; overflow: hidden; }
   .login_thumb { float: left; margin: 6px 6px 0 0; padding: 3px 0 0 3px; width: 24px; height: 24px; background: url(image/thumb20bg.gif) no-repeat; display: block; }
