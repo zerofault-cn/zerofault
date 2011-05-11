@@ -77,13 +77,18 @@ class PublicAction extends BaseAction{
 		'' == $name && self::_error('User ID required');
 		'' == $password && self::_error('Password Required');
 		
-		//生成认证条件
-		$map			= array();
-		$map["name"]	= $name;
+		// 进行委托认证
+		if ('LDAP' == C('USER_AUTH_METHOD')) {
+			import('@.LDAP');
+			$LDAPInfo = LDAP::authenticate($name, $password);
+			if (!$LDAPInfo['passed']) {
+				self::_error('Error: LDAP authenticate failed!');
+			}
+		}
+		$map = array();
+		$map['name']	= $name;
 		$map['password']= md5($password);
 		$map["status"]	= 1;
-
-		// 进行委托认证
 		$authInfo = RBAC::authenticate($map);
 //		dump($authInfo);
 		if(empty($authInfo)) {
