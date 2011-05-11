@@ -37,7 +37,7 @@ $config = array(
 	'RBAC_USER_TABLE'	=> 'erp_staff_role',
 	'RBAC_ACCESS_TABLE'	=> 'erp_role_node',
 	'RBAC_NODE_TABLE'	=> 'erp_node',
-	'NOT_AUTH_MODULE'	=> 'Index,Public,Script,Asset,Inventory,Absence,Task',
+	'NOT_AUTH_MODULE'	=> 'Index,Public,Script,Asset,Inventory,Absence,Task,Attachment',
 	'IFRAME_AUTH_ACTION' => array('update','delete','edit','submit','confirm','select','import','create')
 	);
 
