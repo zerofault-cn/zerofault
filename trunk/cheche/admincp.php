@@ -34,7 +34,7 @@ if(checkperm('banvisit')) {
 $isfounder = ckfounder($_SGLOBAL['supe_uid']);
 
 $acs = array(
-	array('index','config', 'privacy', 'ip', 'spam', 'hotuser', 'defaultuser', 'usergroup', 'credit', 'magic', 'magiclog', 'profield', 'ad', 'userapp'),
+	array('index','config', 'privacy', 'ip', 'spam', 'hotuser', 'defaultuser', 'usergroup', 'credit', 'magic', 'magiclog', 'profield', 'school', 'ad', 'userapp'),
 	array('tag', 'mtag', 'event', 'report', 'space'),
 	array('cache', 'network', 'profilefield', 'eventclass', 'click', 'task', 'censor', 'stat', 'block', 'cron', 'app', 'log'),
 	array('feed', 'blog', 'album', 'pic', 'comment', 'thread', 'post', 'doing', 'share', 'poll')
