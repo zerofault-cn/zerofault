@@ -1,0 +1,143 @@
+<!--{template admin/tpl/header}-->
+
+<div class="mainarea">
+	<div class="maininner">
+		<div class="tabs_header">
+			<ul class="tabs">
+				<li$actives[view]><a href="admincp.php?ac=school"><span>驾校列表</span></a></li>
+				<li class="null"><a href="admincp.php?ac=school&op=add">添加驾校</a></li>
+			</ul>
+		</div>
+
+<!--{if $_GET['op'] == 'delete'}-->
+		<form method="post" action="admincp.php?ac=profield&op=delete&fieldid=$_GET[fieldid]">
+		<input type="hidden" name="formhash" value="<!--{eval echo formhash();}-->" />
+		<div class="bdrcontent">
+			<div class="topactions">
+				该栏目删除后，请选择该栏目下面已有的群组会归类到那个新栏目。
+			</div>
+			<table cellspacing="0" cellpadding="0" class="formtable">
+			<tr>
+				<th width="150">栏目下的群组新归类</th>
+				<td>
+					<select name="newfieldid">
+					<!--{loop $newfield $value}-->
+						<option value="$value[fieldid]">$value[title]</option>
+					<!--{/loop}-->
+					</select>
+				</td>
+			</tr>
+			</table>
+		</div>
+	
+		<div class="footactions">
+			<input type="submit" name="deletesubmit" value="确定删除" class="submit">
+		</div>
+
+<!--{else}-->
+
+		<form method="post" action="admincp.php?ac=school&fieldid=$thevalue[id]">
+		<input type="hidden" name="formhash" value="<!--{eval echo formhash();}-->" />
+		<div class="bdrcontent">
+
+	<!--{if empty($thevalue)}-->
+			<table cellspacing="0" cellpadding="0" class="formtable">
+			<tr>
+				<th>驾校简称</th>
+				<th>全称/地址</th>
+				<th>所属区域</th>
+				<th width="80">操作</th>
+			</tr>
+			<!--{loop $list $value}-->
+			<tr>
+				<th>$value[name]</th>
+				<td>$value[fullname]<br />$value[address]</td>
+				<td>{$value[province]}省-{$value[city]}市-{$value[region]}</td>
+				<td width="80">
+				<a href="admincp.php?ac=school&op=edit&id=$value[id]">编辑</a> | 
+				<a href="admincp.php?ac=school&op=delete&id=$value[id]">删除</a></td>
+			</tr>
+			<!--{/loop}-->
+			</table>
+		</div>
+		</form>
+	
+	<!--{else}-->
+
+			<table cellspacing="0" cellpadding="0" class="formtable">
+			<tr>
+				<th style="width:15em;">驾校简称</th>
+				<td><input type="text" name="title" value="$thevalue[name]"></td>
+			</tr>
+			<tr>
+				<th>驾校全称</th>
+				<td><input type="text" name="note" value="$thevalue[fullname]" size="60"></td>
+			</tr>
+			<tr>
+				<th>驾校地址</th>
+				<td><input type="text" name="note" value="$thevalue[address]" size="60"></td>
+			</tr>
+			<tr>
+				<th>训练场地</th>
+				<td><textarea cols="60" rows="3">$thevalue['training']</textarea></td>
+			</tr>
+			<tr>
+				<th>驾校简介</th>
+				<td><textarea cols="60" rows="8">$thevalue['description']</textarea></td>
+			</tr>
+			<tr>
+				<th>所在地区</th>
+				<td>
+					<select onchange="javascript:load_region_opts('sel_city', this.value);">
+						<option value="0">请选择</option>
+						$province_opts
+					</select>省
+					<select id="sel_city" onchange="javascript:load_region_opts('sel_region', this.value);">
+						<option value="0">请选择</option>
+						$city_opts
+					</select>市
+					<select id="sel_region" name="ext_id">
+						<option value="0">请选择</option>
+						$region_opts
+					</select>区/县
+				</td>
+			</tr>
+			</table>
+		</div>
+		
+		<div class="footactions">
+			<input type="submit" name="submit" value="提交" class="submit">
+		</div>
+	
+		</form>
+<!--{/if}-->
+
+<!--{/if}-->
+
+	</div>
+</div>
+
+<div class="side">
+	<!--{template admin/tpl/side}-->
+</div>
+<script>
+function load_region_opts(field, pid) {
+	if ('0' == pid) {
+		document.getElementById(field).length = 1;
+		if ('sel_city' == field) {
+			document.getElementById('sel_region').length = 1;
+		}
+		return;
+	}
+	var x = new Ajax('HTML');
+	x.get('do.php?ac=ajax&op=get_region&pid='+pid, function(s) {
+		var sel = document.getElementById(field);
+		sel.length = 1;
+		var json = eval('('+s+')');
+		for (var i=0; i<json.length; i++) {
+			sel.options.add(new Option(json[i].name, json[i].id));
+		}
+	});
+}
+</script>
+<!--{template admin/tpl/footer}-->

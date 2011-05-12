@@ -40,21 +40,28 @@ $_SGLOBAL[space_css]
 	<!--{/if}-->
 	<div class="headerwrap">
 		<h1 class="logo"><a href="index.php"><img src="template/$_SCONFIG[template]/image/logo.gif" alt="$_SCONFIG[sitename]" /></a></h1>
-		<ul class="menu">
 		<!--{if $_SGLOBAL[supe_uid]}-->
+		<ul class="navi">
 			<li><a href="space.php?do=home">首页</a></li>
 			<li><a href="space.php">个人主页</a></li>
 			<li><a href="space.php?do=friend">好友</a></li>
-			<li><a href="network.php">随便看看</a></li>
+			<li><a href="#">应用</a></li>
+		</ul>
+		<ul class="menu">
+			<li>搜索<input type="text" name="keyword" size="8" /></li>
+			<li><a href="cp.php">设置</a></li>
+			<li><a href="cp.php?ac=common&op=logout&uhash=$_SGLOBAL[uhash]">退出</a></li>
+		</ul>
 		<!--{else}-->
+		<ul class="menu">
 			<li><a href="do.php?ac=$_SCONFIG[register_action]">注册</a></li>
 			<li><a href="do.php?ac=$_SCONFIG[login_action]">登录</a></li>
 			<li><a href="help.php">帮助</a></li>
 			<li><a href="help.php">提建议</a></li>
+		</ul>
 		<!--{/if}-->
 			
 
-		</ul>
 	</div>
 </div>
 
