@@ -17,18 +17,20 @@
 		<li$actives[manage]><a href="space.php?do=mtag&view=manage"><span>我管理的群组</span></a></li>
 		<li$actives[hot]><a href="space.php?do=mtag&view=hot"><span>热门群组</span></a></li>
 		<li$actives[recommend]><a href="space.php?do=mtag&view=recommend"><span>推荐群组</span></a></li>
+		<li$actives[school]><a href="space.php?do=mtag&view=school"><span>驾校群组</span></a></li>
 		<li class="null"><a href="cp.php?ac=thread">发起新话题</a></li>
 		<li class="null"><a href="cp.php?ac=mtag">创建群组</a></li>
 	</ul>
 </div>
-
+<!--{if 'school'==$_GET[view]}-->
+<!--{else}-->
 <div class="h_status">
 	排序方式：
 	<a href="space.php?do=mtag&view=$_GET[view]&fieldid=$_GET[fieldid]&orderby=threadnum"$orderbyarr[threadnum]>话题数排行</a><span class="pipe">|</span>
 	<a href="space.php?do=mtag&view=$_GET[view]&fieldid=$_GET[fieldid]&orderby=postnum"$orderbyarr[postnum]>回帖数排行</a><span class="pipe">|</span>
 	<a href="space.php?do=mtag&view=$_GET[view]&fieldid=$_GET[fieldid]&orderby=membernum"$orderbyarr[membernum]>成员数排行</a>
 </div>
-
+<!--{/if}-->
 <!--{if $searchkey}-->
 <div class="h_status">以下是搜索群组 <span style="color:red;font-weight:bold;">$searchkey</span> 结果列表</div>
 <!--{/if}-->
@@ -60,9 +62,18 @@
 	</div>
 <!--{/if}-->
 
+<!--{if 'school'==$_GET[view]}-->
+	<!--{if empty($_GET['province_id'])}-->
+	<img src="image/map.gif"  width="540" height="434" border="0" usemap="#Map">
+	<map name="Map" id="Map">
+		$map_str
+	</map>
+	<!--{else}-->
+	城市列表？
+	<!--{/if}-->
+<!--{/if}-->
 <!--{if $list}-->
-
-	<div>
+<div>
 		<!--{if $rlist}-->
 		<h3 class="l_status">
 			我的群组
@@ -89,7 +100,9 @@
 	<div class="page">$multi</div>
 
 <!--{else}-->
+	<!--{if 'school'!=$_GET[view]}-->
 	<div class="c_form">还没有群组。</div>
+	<!--{/if}-->
 <!--{/if}-->
 
 </div>

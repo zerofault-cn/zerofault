@@ -31,6 +31,9 @@ if($_GET['op'] == 'base') {
 			'car_brand' => intval($_POST['car_brand']),
 			'car_model' => intval($_POST['car_model']),
 			'car_profile' => intval($_POST['car_profile']),
+			'province_id' => intval($_POST['province_id']),
+			'city_id' => intval($_POST['city_id']),
+			'region_id' => intval($_POST['region_id']),
 			'birthyear' => intval($_POST['birthyear']),
 			'birthmonth' => intval($_POST['birthmonth']),
 			'birthday' => intval($_POST['birthday']),
@@ -167,6 +170,32 @@ if($_GET['op'] == 'base') {
 		}
 	}
 	$car_profile_opts = genOptions($car_profile_arr, $space['car_profile']);
+
+	//地区
+	$province_arr = array();
+	$query = $_SGLOBAL['db']->query("SELECT * FROM ".tname('region')." where pid=1");
+	while ($v = $_SGLOBAL['db']->fetch_array($query)) {
+		$province_arr[$v['id']] = $v['name'];
+	}
+	$province_opts = genOptions($province_arr, $space['province_id']);
+	//城市
+	$city_arr = array();
+	if (!empty($space['province_id'])) {
+		$query = $_SGLOBAL['db']->query("SELECT * FROM ".tname('region')." where pid=".$space['province_id']);
+		while ($v = $_SGLOBAL['db']->fetch_array($query)) {
+			$city_arr[$v['id']] = $v['name'];
+		}
+	}
+	$city_opts = genOptions($city_arr, $space['city_id']);
+	//区域
+	$region_arr = array();
+	if (!empty($space['city_id'])) {
+		$query = $_SGLOBAL['db']->query("SELECT * FROM ".tname('region')." where pid=".$space['city_id']);
+		while ($v = $_SGLOBAL['db']->fetch_array($query)) {
+			$region_arr[$v['id']] = $v['name'];
+		}
+	}
+	$region_opts = genOptions($region_arr, $space['region_id']);
 
 	//生日:年
 	$birthyeayhtml = '';

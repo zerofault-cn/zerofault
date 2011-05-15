@@ -154,42 +154,27 @@
 	</td>
 </tr>
 <tr>
-	<th>家乡:</th>
-	<td id="birthcitybox">
-		<script type="text/javascript" src="source/script_city.js"></script>
-		<script type="text/javascript">
-		<!--
-		showprovince('birthprovince', 'birthcity', '$space[birthprovince]', 'birthcitybox');
-		showcity('birthcity', '$space[birthcity]', 'birthprovince', 'birthcitybox');
-		
-		//-->
-		</script>
-		<a href="cp.php?ac=friend&op=search&view=birth" target="_blank">&raquo; 查找老乡</a>
-	</td>
+	<th>所在地</th>
 	<td>
-		<select name="friend[birthcity]">
-			<option value="0"{$friendarr[birthcity][0]}>全用户可见</option>
-			<option value="1"{$friendarr[birthcity][1]}>仅好友可见</option>
-			<option value="3"{$friendarr[birthcity][3]}>仅自己可见</option>
+		<select name="province_id" onchange="javascript:load_region_opts('sel_city', this.value);">
+			<option value="0">请选择</option>
+			$province_opts
+		</select>省
+		<select name="city_id" id="sel_city" onchange="javascript:load_region_opts('sel_region', this.value);">
+			<option value="0">请选择</option>
+			$city_opts
+		</select>市
+		<select name="region_id" id="sel_region">
+			<option value="0">请选择</option>
+			$region_opts
 		</select>
-	</td>
-</tr>
-<tr>
-	<th>居住地:</th>
-	<td id="residecitybox">
-		<script type="text/javascript">
-		<!--
-		showprovince('resideprovince', 'residecity', '$space[resideprovince]', 'residecitybox');
-		showcity('residecity', '$space[residecity]', 'resideprovince', 'residecitybox');
-		//-->
-		</script>
 		<a href="cp.php?ac=friend&op=search&view=reside" target="_blank">&raquo; 查找同城</a>
 	</td>
 	<td>
-		<select name="friend[residecity]">
-			<option value="0"{$friendarr[residecity][0]}>全用户可见</option>
-			<option value="1"{$friendarr[residecity][1]}>仅好友可见</option>
-			<option value="3"{$friendarr[residecity][3]}>仅自己可见</option>
+		<select name="friend[region]">
+			<option value="0"{$friendarr[region][0]}>全用户可见</option>
+			<option value="1"{$friendarr[region][1]}>仅好友可见</option>
+			<option value="3"{$friendarr[region][3]}>仅自己可见</option>
 		</select>
 	</td>
 </tr>
@@ -220,7 +205,26 @@
 	<td>&nbsp;</td>
 </tr>
 </table>
-
+<script>
+function load_region_opts(field, pid) {
+	if ('0' == pid) {
+		document.getElementById(field).length = 1;
+		if ('sel_city' == field) {
+			document.getElementById('sel_region').length = 1;
+		}
+		return;
+	}
+	var x = new Ajax('HTML');
+	x.get('do.php?ac=ajax&op=get_region&pid='+pid, function(s) {
+		var sel = document.getElementById(field);
+		sel.length = 1;
+		var json = eval('('+s+')');
+		for (var i=0; i<json.length; i++) {
+			sel.options.add(new Option(json[i].name, json[i].id));
+		}
+	});
+}
+</script>
 <!--{elseif $_GET['op'] == 'contact'}-->
 
 <table cellspacing="0" cellpadding="0" class="formtable">

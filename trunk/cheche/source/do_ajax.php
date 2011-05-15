@@ -225,6 +225,16 @@ elseif ($op == 'get_region') {
 	$str = '['.implode(',', $arr).']';
 	exit($str);
 }
+elseif ($op == 'get_school') {
+	$pid = $_REQUEST['pid'];
+	$query = $_SGLOBAL['db']->query("SELECT * FROM ".tname('school')." WHERE region_id='".$pid."' ");
+	$arr = array();
+	while ($value = $_SGLOBAL['db']->fetch_array($query)) {
+		$arr[] = '{"id":"'.$value['id'].'","name":"'.$value['name'].'"}';
+	}
+	$str = '['.implode(',', $arr).']';
+	exit($str);
+}
 include template('do_ajax');
 
 ?>

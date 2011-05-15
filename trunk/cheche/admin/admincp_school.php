@@ -26,28 +26,26 @@ if(!empty($_GET['op']) && $_GET['op'] != 'add' && empty($thevalue)) {
 
 if(submitcheck('submit')) {
 	$setarr = array(
-		'title' => shtmlspecialchars(trim($_POST['title'])),
-		'note' => shtmlspecialchars(trim($_POST['note'])),
-		'formtype' => shtmlspecialchars(trim($_POST['formtype'])),
-		'inputnum' => intval($_POST['inputnum']),
-		'choice' => shtmlspecialchars(trim($_POST['choice'])),
-		'mtagminnum' => intval($_POST['mtagminnum']),
-		'manualmoderator' => intval($_POST['manualmoderator']),
-		'manualmember' => intval($_POST['manualmember']),
-		'displayorder' => intval($_POST['displayorder'])
+		'name' => shtmlspecialchars(trim($_POST['name'])),
+		'fullname' => shtmlspecialchars(trim($_POST['fullname'])),
+		'address' => shtmlspecialchars(trim($_POST['address'])),
+		'training' => shtmlspecialchars($_POST['training']),
+		'description' => shtmlspecialchars($_POST['description']),
+		'province_id' => intval($_POST['province_id']),
+		'city_id' => intval($_POST['city_id']),
+		'region_id' => intval($_POST['region_id'])
 	);
-	$_POST['fieldid'] = intval($_POST['fieldid']);
-	if(empty($thevalue['fieldid'])) {
-		inserttable('profield', $setarr);
+	if(empty($thevalue['id'])) {
+		inserttable('school', $setarr);
 	} else {
-		updatetable('profield', $setarr, array('fieldid'=>$thevalue['fieldid']));
+		updatetable('school', $setarr, array('id'=>$thevalue['id']));
 	}
 	
 	//更新缓存
 	include_once(S_ROOT.'./source/function_cache.php');
 	profield_cache();
 	
-	cpmessage('do_success', 'admincp.php?ac=profield');
+	cpmessage('do_success', 'admincp.php?ac=school');
 	
 } elseif (submitcheck('ordersubmit')) {
 	foreach ($_POST['displayorder'] as $fieldid => $value) {
@@ -115,12 +113,7 @@ if(empty($_GET['op'])) {
 	
 } elseif($_GET['op'] == 'delete') {
 	
-	$_GET['fieldid'] = intval($_GET['fieldid']);
-	
-	//至少保留一个栏目
-	if(count($_SGLOBAL['profield']) < 2) {
-		cpmessage('have_one_mtag');
-	}
+	$_GET['id'] = intval($_GET['id']);
 	
 	if(submitcheck('deletesubmit')) {
 		
