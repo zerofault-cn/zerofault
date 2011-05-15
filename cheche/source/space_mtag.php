@@ -303,7 +303,7 @@ if($tagname) {
 	$theurl = "space.php?uid=$space[uid]&do=mtag";
 	
 	if(empty($_GET['view'])) $_GET['view'] = 'me';
-	if(!in_array($_GET['view'], array('me', 'hot', 'recommend', 'manage'))) $_GET['view'] = 'hot';
+	if(!in_array($_GET['view'], array('me', 'hot', 'recommend', 'manage', 'school'))) $_GET['view'] = 'hot';
 	
 	$theurl .= "&view=$_GET[view]";
 	$actives = array($_GET['view'] => ' class="active"');		
@@ -337,7 +337,18 @@ if($tagname) {
 	if($page < 1) $page = 1;
 	$start = ($page-1)*$perpage;
 
-	if($_GET['view'] == 'me' || $_GET['view'] == 'manage') {
+	if('school'==$_GET['view']) {
+		//获取省份热点形状
+		$map_str = '';
+		$sql = "select * from ".tname('region')." where pid=1";
+		$query = $_SGLOBAL['db']->query($sql);
+		while ($value = $_SGLOBAL['db']->fetch_array($query)) {
+			$map_str .= '<area shape="'.$value['shape'].'" coords="'.$value['coords'].'" href="?do=mtag&view=school&province_id='.$value['id'].'">';
+		}
+		$countsql = "select 0";
+
+	}
+	elseif($_GET['view'] == 'me' || $_GET['view'] == 'manage') {
 		$sqlplus = $_GET['view'] == 'manage'?' AND main.grade=\'9\'':'';
 		if($_GET['fieldid']) {
 			$countsql = "SELECT COUNT(*) FROM ".tname('tagspace')." main, ".tname('mtag')." mt
