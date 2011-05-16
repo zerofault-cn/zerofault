@@ -338,15 +338,38 @@ if($tagname) {
 	$start = ($page-1)*$perpage;
 
 	if('school'==$_GET['view']) {
-		//获取省份热点形状
-		$map_str = '';
-		$sql = "select * from ".tname('region')." where pid=1";
-		$query = $_SGLOBAL['db']->query($sql);
-		while ($value = $_SGLOBAL['db']->fetch_array($query)) {
-			$map_str .= '<area shape="'.$value['shape'].'" coords="'.$value['coords'].'" href="?do=mtag&view=school&province_id='.$value['id'].'">';
-		}
 		$countsql = "select 0";
-
+		if (empty($_GET['province_id'])) {
+			//获取省份热点形状
+			$map_str = '';
+			$sql = "select * from ".tname('region')." where pid=1";
+			$query = $_SGLOBAL['db']->query($sql);
+			while ($value = $_SGLOBAL['db']->fetch_array($query)) {
+				$map_str .= '<area shape="'.$value['shape'].'" coords="'.$value['coords'].'" href="?do=mtag&view=school&province_id='.$value['id'].'">';
+			}
+		}
+		else {
+			$province_name = $_SGLOBAL['db']->result($_SGLOBAL['db']->query("select name from ".tname('region')." where id=".intval($_GET['province_id'])), 0);
+			if (empty($_GET['city_id'])) {
+				//获取某省下的城市列表
+				$city_list = array();
+				$query = $_SGLOBAL['db']->query("select * from ".tname('region')." where pid=".intval($_GET['province_id']));
+				while ($value = $_SGLOBAL['db']->fetch_array($query)) {
+					$city_list[] = $value;
+				}
+			}
+			else {
+				$city_name = $_SGLOBAL['db']->result($_SGLOBAL['db']->query("select name from ".tname('region')." where id=".intval($_GET['city_id'])), 0);
+				if (empty($_GET['region_id'])) {
+					//获取市下面的区域
+					$region_list = array();
+					$query = $_SGLOBAL['db']->query("select * from ".tname('region')." where pid=".intval($_GET['city_id']));
+					while ($value = $_SGLOBAL['db']->fetch_array($query)) {
+						$region_list[] = $value;
+					}
+				}
+			}
+		}
 	}
 	elseif($_GET['view'] == 'me' || $_GET['view'] == 'manage') {
 		$sqlplus = $_GET['view'] == 'manage'?' AND main.grade=\'9\'':'';
