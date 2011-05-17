@@ -62,7 +62,7 @@ class LineAction extends BaseAction{
 	function clear() {
 		$number = $_REQUEST['number'];
 		S($number, NULL);
-		$this->dao->where('number='.$number)->setField('status',0);
+	//	$this->dao->where('number='.$number)->setField('status',0);
 		self::_success('缓存已清除','',0);
 	}
 	function edit() {
@@ -87,7 +87,7 @@ class LineAction extends BaseAction{
 		$local_list2 = $dRoute->where(array('lid'=>$id,'dir'=>-1))->order('sort')->select();
 
 		$remote_info = S($local_info['number']);
-		if(false === $remote_info && $local_info['status']!=1) {
+		if(false === $remote_info) {// && $local_info['status']!=1) {
 			$name = $local_info['name'];
 			if($local_info['number']<1000) {
 				$name = $local_info['number'];
