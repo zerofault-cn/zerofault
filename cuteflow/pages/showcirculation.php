@@ -1,6 +1,6 @@
 <?php
-	session_start();
-    
+	@session_start();
+
 	require_once '../config/config.inc.php';
 	require_once '../language_files/language.inc.php';
 	require_once '../config/db_connect.inc.php';

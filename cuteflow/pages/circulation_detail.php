@@ -535,7 +535,7 @@ td.focus{
 		}
 	
 		//--- The receiving date
-		$dateReceive = convertDateFromDB($arrRow["dateInProcessSince"]);
+		$dateReceive = date($GLOBALS['DATE_FORMAT'].' H:i', $arrRow["dateInProcessSince"]);
 		if (0 == $arrRow["dateInProcessSince"])
 		{
 			$dateReceive = "-";
@@ -576,10 +576,11 @@ td.focus{
 						break;
 						
 			}
+			$dateEnd = $arrRow['dateDecission']>0?(" [".date($GLOBALS['DATE_FORMAT'].' H:i', $arrRow['dateDecission'])."] "):'';
 			echo "<td width=\"16px\">";
 			echo "<img src=\"../images/$strImage\" height=\"16\" width=\"16\">";
 			echo "</td>\n";
-	       	echo "<td width=\"200px\" nowrap>$strText</td>\n";
+			echo "<td width=\"200px\" nowrap>".$strText.$dateEnd."</td>\n";
 		}
 		
 		//--- the working duration
