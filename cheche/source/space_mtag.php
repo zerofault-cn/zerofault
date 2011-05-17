@@ -349,16 +349,20 @@ if($tagname) {
 			}
 		}
 		else {
+			$school_ext = " and province_id=".intval($_GET['province_id']);
 			$province_name = $_SGLOBAL['db']->result($_SGLOBAL['db']->query("select name from ".tname('region')." where id=".intval($_GET['province_id'])), 0);
 			if (empty($_GET['city_id'])) {
 				//获取某省下的城市列表
 				$city_list = array();
 				$query = $_SGLOBAL['db']->query("select * from ".tname('region')." where pid=".intval($_GET['province_id']));
 				while ($value = $_SGLOBAL['db']->fetch_array($query)) {
+					//统计每个市下的驾校数
+					$value['count'] = $_SGLOBAL['db']->result($_SGLOBAL['db']->query("select count(*) from ".tname('school')." where city_id=".$value['id']));
 					$city_list[] = $value;
 				}
 			}
 			else {
+				$school_ext = " and city_id=".intval($_GET['city_id']);
 				$city_name = $_SGLOBAL['db']->result($_SGLOBAL['db']->query("select name from ".tname('region')." where id=".intval($_GET['city_id'])), 0);
 				if (empty($_GET['region_id'])) {
 					//获取市下面的区域
@@ -368,7 +372,16 @@ if($tagname) {
 						$region_list[] = $value;
 					}
 				}
+				else {
+					$school_ext = " and region_id=".intval($_GET['region_id']);
+					$region_name = $_SGLOBAL['db']->result($_SGLOBAL['db']->query("select name from ".tname('region')." where id=".intval($_GET['region_id'])), 0);
+				}
 			}
+		}
+		$school_list = array();
+		$query = $_SGLOBAL['db']->query("select * from ".tname('school')." where 1 ".$school_ext);
+		while ($value = $_SGLOBAL['db']->fetch_array($query)) {
+			$school_list[] = $value;
 		}
 	}
 	elseif($_GET['view'] == 'me' || $_GET['view'] == 'manage') {
