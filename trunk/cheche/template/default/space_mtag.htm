@@ -77,8 +77,8 @@
 		根据区域查找驾校群组：<a href="?do=mtag&view=school">全国</a> &gt;&gt; $province_name
 	</div>
 	<ul class="city_list">
-	<!--{loop $city_list $key $val}-->
-		<li><a href="?do=mtag&view=school&province_id={$_GET[province_id]}&city_id={$val[id]}">$val[name]</a></li>
+	<!--{loop $city_list $i $city}-->
+		<li>·<a href="?do=mtag&view=school&province_id={$_GET[province_id]}&city_id={$city[id]}">{$city[name]}({$city[count]})</a></li>
 	<!--{/loop}-->
 	</ul>
 		<!--{else}-->
@@ -87,12 +87,22 @@
 		根据区域查找驾校群组：<a href="?do=mtag&view=school">全国</a> &gt;&gt; <a href="?do=mtag&view=school&province_id={$_GET[province_id]}">$province_name</a> &gt;&gt; $city_name
 	</div>
 	<ul class="region_list">
-	<!--{loop $region_list $key $val}-->
-		<li><a href="?do=mtag&view=school&province_id={$_GET[province_id]}&city_id={$_GET[region_id]}&region_id={$val[id]}">$val[name]</a></li>
+	<!--{loop $region_list $i $region}-->
+		<li><a href="?do=mtag&view=school&province_id={$_GET[province_id]}&city_id={$_GET[city_id]}&region_id={$region[id]}">{$region[name]}</a></li>
 	<!--{/loop}-->
 	</ul>
+			<!--{else}-->
+	<div class="h_status">
+		根据区域查找驾校群组：<a href="?do=mtag&view=school">全国</a> &gt;&gt; <a href="?do=mtag&view=school&province_id={$_GET[province_id]}">$province_name</a> &gt;&gt; <a href="?do=mtag&view=school&province_id={$_GET[province_id]}&city_id={$_GET[city_id]}">$city_name</a> &gt;&gt; $region_name
+	</div>
 			<!--{/if}-->
 		<!--{/if}-->
+		<dl class="school_list">
+		<!--{loop $school_list $i $school}-->
+			<dt>$school[name]</dt>
+			<dd>$school[fullname]</dd>
+		<!--{/loop}-->
+		</dl>
 	<!--{/if}-->
 <!--{/if}-->
 <!--{if $list}-->
