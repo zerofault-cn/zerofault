@@ -299,6 +299,7 @@ a.button { padding: 5px; }
 .formtable caption p { margin-top: 8px; }
 .formtable td, .formtable th { padding: 5px; }
 .formtable th { padding-right: 1em; text-align: right; }
+.formtable em { font-style:normal; color: red;}
 
 .infotable { width: 100%; }
 .infotable th { padding-right: 1em; text-align: right; color:#999; }
