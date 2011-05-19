@@ -333,11 +333,13 @@ if($tagname) {
 	$count = 0;
 	
 	$perpage = 20;
+	$school_perpage = 10;
 	$page = intval($_GET['page']);
 	if($page < 1) $page = 1;
 	$start = ($page-1)*$perpage;
 
 	if('school'==$_GET['view']) {
+		$theurl = 'space.php?do=mtag&view=school';
 		$countsql = "select 0";
 		if (empty($_GET['province_id'])) {
 			//获取省份热点形状
@@ -349,6 +351,7 @@ if($tagname) {
 			}
 		}
 		else {
+			$theurl .= '&province_id='.intval($_GET['province_id']);
 			$school_ext = " and province_id=".intval($_GET['province_id']);
 			$province_name = $_SGLOBAL['db']->result($_SGLOBAL['db']->query("select name from ".tname('region')." where id=".intval($_GET['province_id'])), 0);
 			if (empty($_GET['city_id'])) {
@@ -357,11 +360,12 @@ if($tagname) {
 				$query = $_SGLOBAL['db']->query("select * from ".tname('region')." where pid=".intval($_GET['province_id']));
 				while ($value = $_SGLOBAL['db']->fetch_array($query)) {
 					//统计每个市下的驾校数
-					$value['count'] = $_SGLOBAL['db']->result($_SGLOBAL['db']->query("select count(*) from ".tname('school')." where city_id=".$value['id']));
+					$value['count'] = $_SGLOBAL['db']->result($_SGLOBAL['db']->query("select count(*) from ".tname('school')." where city_id=".$value['id']), 0);
 					$city_list[] = $value;
 				}
 			}
 			else {
+				$theurl .= '&city_id='.intval($_GET['city_id']);
 				$school_ext = " and city_id=".intval($_GET['city_id']);
 				$city_name = $_SGLOBAL['db']->result($_SGLOBAL['db']->query("select name from ".tname('region')." where id=".intval($_GET['city_id'])), 0);
 				if (empty($_GET['region_id'])) {
@@ -369,19 +373,26 @@ if($tagname) {
 					$region_list = array();
 					$query = $_SGLOBAL['db']->query("select * from ".tname('region')." where pid=".intval($_GET['city_id']));
 					while ($value = $_SGLOBAL['db']->fetch_array($query)) {
+						//统计每个区下的驾校数
+						$value['count'] = $_SGLOBAL['db']->result($_SGLOBAL['db']->query("select count(*) from ".tname('school')." where region_id=".$value['id']), 0);
 						$region_list[] = $value;
 					}
 				}
 				else {
+					$theurl .= '&region_id='.intval($_GET['region_id']);
 					$school_ext = " and region_id=".intval($_GET['region_id']);
 					$region_name = $_SGLOBAL['db']->result($_SGLOBAL['db']->query("select name from ".tname('region')." where id=".intval($_GET['region_id'])), 0);
 				}
 			}
 		}
+		$count = $_SGLOBAL['db']->result($_SGLOBAL['db']->query("select count(*) from ".tname('school')." where 1 ".$school_ext), 0);
 		$school_list = array();
-		$query = $_SGLOBAL['db']->query("select * from ".tname('school')." where 1 ".$school_ext);
-		while ($value = $_SGLOBAL['db']->fetch_array($query)) {
-			$school_list[] = $value;
+		if ($count > 0) {
+			$query = $_SGLOBAL['db']->query("select * from ".tname('school')." where 1 ".$school_ext." LIMIT ".$start.", ".$school_perpage);
+			while ($value = $_SGLOBAL['db']->fetch_array($query)) {
+				$school_list[] = $value;
+			}
+			$multi = multi($count, $school_perpage, $page, $theurl);
 		}
 	}
 	elseif($_GET['view'] == 'me' || $_GET['view'] == 'manage') {

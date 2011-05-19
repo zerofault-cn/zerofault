@@ -66,18 +66,65 @@ while ($v = $_SGLOBAL['db']->fetch_array($query)) {
 }
 
 if(empty($_GET['op'])) {
-	//列表
-	$query = $_SGLOBAL['db']->query("SELECT * FROM ".tname('school')." ORDER BY name");
-	while ($value = $_SGLOBAL['db']->fetch_array($query)) {
-		$rs = $_SGLOBAL['db']->query("select name from ".tname('region')." where id=".$value['province_id']);
-		$value['province'] = $_SGLOBAL['db']->result($rs, 0);
-		$rs = $_SGLOBAL['db']->query("select name from ".tname('region')." where id=".$value['city_id']);
-		$value['city'] = $_SGLOBAL['db']->result($rs, 0);
-		$rs = $_SGLOBAL['db']->query("select name from ".tname('region')." where id=".$value['region_id']);
-		$value['region'] = $_SGLOBAL['db']->result($rs, 0);
-		$list[] = $value;
-	}
+	$theurl = 'admincp.php?ac=school';
 	
+	//处理搜索选项
+	$sql_ext = "";
+	$s_name = "";
+	if (!empty($_REQUEST['s_name'])) {
+		$s_name = shtmlspecialchars(trim($_REQUEST['s_name']));
+		$sql_ext .= " and (name like '%".$s_name."%' or fullname like '%".$s_name."%')";
+	}
+	if (!empty($_REQUEST['s_region_id'])) {
+		$sql_ext .= " and region_id=".intval($_REQUEST['s_region_id']);
+	}
+	elseif (!empty($_REQUEST['s_city_id'])) {
+		$sql_ext .= " and city_id=".intval($_REQUEST['s_city_id']);
+		$region_arr = array();
+		$query = $_SGLOBAL['db']->query("SELECT * FROM ".tname('region')." where pid=".intval($_REQUEST['s_city_id']));
+		while ($v = $_SGLOBAL['db']->fetch_array($query)) {
+			$region_arr[$v['id']] = $v['name'];
+		}
+		$region_opts = genOptions($region_arr, intval($_REQUEST['s_region_id']));
+	}
+	elseif (!empty($_REQUEST['s_province_id'])) {
+		$sql_ext .= " and province_id=".intval($_REQUEST['s_province_id']);
+		$city_arr = array();
+		$query = $_SGLOBAL['db']->query("SELECT * FROM ".tname('region')." where pid=".intval($_REQUEST['s_province_id']));
+		while ($v = $_SGLOBAL['db']->fetch_array($query)) {
+			$city_arr[$v['id']] = $v['name'];
+		}
+		$city_opts = genOptions($city_arr, intval($_REQUEST['s_city_id']));
+	}
+	$province_opts = genOptions($province_arr, intval($_REQUEST['s_province_id']));
+
+	//驾校列表
+	$count = $_SGLOBAL['db']->result($_SGLOBAL['db']->query("select count(*) from ".tname('school')." where 1 ".$sql_ext), 0);
+	$perpage = 20;
+	if (''!=$sql_ext) {
+		$perpage = 10000;
+	}
+	$page = intval($_GET['page']);
+	if($page < 1) $page = 1;
+	$start = ($page-1)*$perpage;
+	$list = array();
+	if ($count > 0) {
+		$query = $_SGLOBAL['db']->query("SELECT * FROM ".tname('school')." where 1 ".$sql_ext." order by id desc LIMIT ".$start.", ".$perpage);
+		while ($value = $_SGLOBAL['db']->fetch_array($query)) {
+			$rs = $_SGLOBAL['db']->query("select name from ".tname('region')." where id=".$value['province_id']);
+			$value['province'] = $_SGLOBAL['db']->result($rs, 0);
+			$rs = $_SGLOBAL['db']->query("select name from ".tname('region')." where id=".$value['city_id']);
+			$value['city'] = $_SGLOBAL['db']->result($rs, 0);
+			$rs = $_SGLOBAL['db']->query("select name from ".tname('region')." where id=".$value['region_id']);
+			$value['region'] = $_SGLOBAL['db']->result($rs, 0);
+			if (!empty($s_name)) {
+				$value['name'] = str_replace($s_name, '<em>'.$s_name.'</em>', $value['name']);
+				$value['fullname'] = str_replace($s_name, '<em>'.$s_name.'</em>', $value['fullname']);
+			}
+			$list[] = $value;
+		}
+		$multi = multi($count, $perpage, $page, $theurl);
+	}
 	$actives = array('view' => ' class="active"');
 
 } elseif($_GET['op'] == 'add') {

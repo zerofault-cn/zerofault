@@ -10,6 +10,7 @@
 		</div>
 
 <!--{if $_GET['op'] == 'delete'}-->
+
 		<form method="post" action="admincp.php?ac=school&op=delete&id=$_GET[id]">
 		<input type="hidden" name="formhash" value="<!--{eval echo formhash();}-->" />
 		<div class="bdrcontent">
@@ -29,18 +30,40 @@
 			</tr>
 			</table>
 		</div>
-	
 		<div class="footactions">
 			<input type="submit" name="deletesubmit" value="确定删除" class="submit">
 		</div>
+		</form>
 
 <!--{else}-->
 
-		<form method="post" action="admincp.php?ac=school&id=$thevalue[id]">
-		<input type="hidden" name="formhash" value="<!--{eval echo formhash();}-->" />
-		<div class="bdrcontent">
-
 	<!--{if empty($thevalue)}-->
+		<div class="block style4">
+			<form>
+			<input type="hidden" name="formhash" value="<!--{eval echo formhash();}-->" />
+			<table cellspacing="3" cellpadding="3">
+			<tr>
+				<td>
+					按名称关键字<input type="text" name="s_name" value="$_GET[s_name]">
+					和 区域<select name="s_province_id" onchange="javascript:load_region_opts('sel_city', this.value);">
+						<option value="0">请选择</option>
+						$province_opts
+					</select>省
+					<select name="s_city_id" id="sel_city" onchange="javascript:load_region_opts('sel_region', this.value);">
+						<option value="0">请选择</option>
+						$city_opts
+					</select>市
+					<select name="s_region_id" id="sel_region">
+						<option value="0">请选择</option>
+						$region_opts
+					</select>
+					<input type="hidden" name="ac" value="school" />
+					<input type="submit" value="搜索" class="submit"></td>
+			</tr>
+			</table>
+			</form>
+		</div>
+		<div class="bdrcontent">
 			<table cellspacing="0" cellpadding="0" class="formtable">
 			<tr>
 				<th>驾校简称</th>
@@ -60,10 +83,16 @@
 			<!--{/loop}-->
 			</table>
 		</div>
-		</form>
-	
-	<!--{else}-->
+		<div class="footactions">
+			<!--{if isset($multi)}-->
+			<div class="page">$multi</div>
+			<!--{/if}-->
+		</div>
 
+	<!--{else}-->
+		<form method="post" action="admincp.php?ac=school&id=$thevalue[id]">
+		<div class="bdrcontent">
+			<input type="hidden" name="formhash" value="<!--{eval echo formhash();}-->" />
 			<table cellspacing="0" cellpadding="0" class="formtable">
 			<tr>
 				<th style="width:15em;">驾校简称</th>
@@ -104,13 +133,12 @@
 			</tr>
 			</table>
 		</div>
-		
 		<div class="footactions">
 			<input type="submit" name="submit" value="提交" class="submit">
 		</div>
-	
 		</form>
-<!--{/if}-->
+
+	<!--{/if}-->
 
 <!--{/if}-->
 

@@ -88,7 +88,7 @@
 	</div>
 	<ul class="region_list">
 	<!--{loop $region_list $i $region}-->
-		<li><a href="?do=mtag&view=school&province_id={$_GET[province_id]}&city_id={$_GET[city_id]}&region_id={$region[id]}">{$region[name]}</a></li>
+		<li><a href="?do=mtag&view=school&province_id={$_GET[province_id]}&city_id={$_GET[city_id]}&region_id={$region[id]}">{$region[name]}({$region[count]})</a></li>
 	<!--{/loop}-->
 	</ul>
 			<!--{else}-->
@@ -97,12 +97,13 @@
 	</div>
 			<!--{/if}-->
 		<!--{/if}-->
-		<dl class="school_list">
 		<!--{loop $school_list $i $school}-->
+		<dl class="school_list">
 			<dt>$school[name]</dt>
 			<dd>$school[fullname]</dd>
-		<!--{/loop}-->
 		</dl>
+		<!--{/loop}-->
+		<div class="page">$multi</div>
 	<!--{/if}-->
 <!--{/if}-->
 <!--{if $list}-->
