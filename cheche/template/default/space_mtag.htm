@@ -63,7 +63,8 @@
 <!--{/if}-->
 
 <!--{if 'school'==$_GET[view]}-->
-	<!--{if empty($_GET['province_id'])}-->
+	<!--{if empty($_GET['school_id'])}-->
+		<!--{if empty($_GET['province_id'])}-->
 	<div class="h_status">
 		根据区域查找驾校群组：全国
 	</div>
@@ -71,41 +72,65 @@
 	<map name="Map" id="Map">
 		$map_str
 	</map>
-	<!--{else}-->
-		<!--{if empty($_GET['city_id'])}-->
+		<!--{else}-->
+			<!--{if empty($_GET['city_id'])}-->
 	<div class="h_status">
 		根据区域查找驾校群组：<a href="?do=mtag&view=school">全国</a> &gt;&gt; $province_name
 	</div>
 	<ul class="city_list">
-	<!--{loop $city_list $i $city}-->
+				<!--{loop $city_list $i $city}-->
 		<li>·<a href="?do=mtag&view=school&province_id={$_GET[province_id]}&city_id={$city[id]}">{$city[name]}({$city[count]})</a></li>
-	<!--{/loop}-->
+				<!--{/loop}-->
 	</ul>
-		<!--{else}-->
-			<!--{if empty($_GET['region_id'])}-->
+			<!--{else}-->
+				<!--{if empty($_GET['region_id'])}-->
 	<div class="h_status">
 		根据区域查找驾校群组：<a href="?do=mtag&view=school">全国</a> &gt;&gt; <a href="?do=mtag&view=school&province_id={$_GET[province_id]}">$province_name</a> &gt;&gt; $city_name
 	</div>
 	<ul class="region_list">
-	<!--{loop $region_list $i $region}-->
+					<!--{loop $region_list $i $region}-->
 		<li><a href="?do=mtag&view=school&province_id={$_GET[province_id]}&city_id={$_GET[city_id]}&region_id={$region[id]}">{$region[name]}({$region[count]})</a></li>
-	<!--{/loop}-->
+					<!--{/loop}-->
 	</ul>
-			<!--{else}-->
+				<!--{else}-->
 	<div class="h_status">
 		根据区域查找驾校群组：<a href="?do=mtag&view=school">全国</a> &gt;&gt; <a href="?do=mtag&view=school&province_id={$_GET[province_id]}">$province_name</a> &gt;&gt; <a href="?do=mtag&view=school&province_id={$_GET[province_id]}&city_id={$_GET[city_id]}">$city_name</a> &gt;&gt; $region_name
 	</div>
+				<!--{/if}-->
 			<!--{/if}-->
+			<!--{loop $school_list $i $school}-->
+	<dl class="school_list">
+		<dt><a href="?do=mtag&view=school&school_id={$school[id]}">$school[name]</a></dt>
+		<dd>[有 {$school[member_count]}个车友]</dd>
+		<dd>[有 {$school[mtag_count]}个群组数]</dd>
+		<div class="clear"></div>
+	</dl>
+			<!--{/loop}-->
+	<div class="page">$multi</div>
 		<!--{/if}-->
-		<!--{loop $school_list $i $school}-->
-		<dl class="school_list">
-			<dt>$school[name]</dt>
-			<dd>$school[fullname]</dd>
-		</dl>
-		<!--{/loop}-->
-		<div class="page">$multi</div>
+	<!--{else}-->
+		<!-- 驾校信息，及驾校下的群组 -->
+	<h3>{$school[fullname]}（{$school[name]}）</h3>
+	<dl class="school_info">
+		<dt>驾校地址：</dt>
+		<dd>{$school[address]}</dd>
+		<dt>训练场地：</dt>
+		<dd>{$school[training]}</dd>
+		<dt>驾校评价：</dt>
+		<dd>{$school[vote]}</dd>
+		<dt>驾校简介：</dt>
+		<dd>{$school[description]}</dd>
+	</dl>
+	<table>
+	<tr>
+		<th>群组名称</th>
+		<th>创建者</th>
+		<th>创建日期</th>
+	</tr>
+	</table>
 	<!--{/if}-->
 <!--{/if}-->
+<!-- 原始的群组列表 -->
 <!--{if $list}-->
 <div>
 		<!--{if $rlist}-->
