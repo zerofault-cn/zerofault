@@ -166,13 +166,15 @@ body { background: #FFF; }
 }
 #content dl.school_list {
 	border-bottom: 1px dotted #A7ADBA;
-	height: 50px;
-	min-height: 50px;
-	overflow: hidden;
-	padding-bottom: 10px;
-	padding-top: 15px;
-	text-align: left;
-	width: 99%;
+	padding: 5px;
+	clear: both;
+}
+#content dl.school_list dt {
+	float:left;
+}
+#content dl.school_list dd {
+	float:right;
+	padding-left:10px;
 }
 /*************************************************COMPOSER***/
 .index_name { font-size: 14px; line-height: 30px; border-bottom: 1px solid #EBE6C9; }
