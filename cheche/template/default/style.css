@@ -142,8 +142,23 @@ body { background: #FFF; }
 .chostlp_drop { border: 1px solid #CCC; border-bottom: none; }
 .chostlp_drop li{ padding: 5px; width: 16px; height: 16px; }
 
-#content { float: left; margin: 0 20px 0 0; width: 540px; overflow: hidden; }
+#content { float: left; margin: 0 10px 0 0; width: 644px; overflow: hidden; }
 
+map#Map .area_overlay{
+	position:absolute;
+	height:17px;
+	border:1px solid #007492;
+	text-align:center;
+	font-weight:bold;
+	color:#08617F;
+	background:#73ECF5;
+	display:none;
+}
+map#Map .area_overlay a {
+	text-decoration: none;
+	width:100%;
+	height:100%;
+}
 #content ul.city_list, #content ul.region_list {
 	display: inline-block;
 	background-color: #F8F8F8;
@@ -175,6 +190,21 @@ body { background: #FFF; }
 #content dl.school_list dd {
 	float:right;
 	padding-left:10px;
+}
+#content dl.school_info {
+	padding: 3px;
+	border-top: 1px solid #303030;
+	border-bottom: 1px solid #303030;
+	margin-top: 5px;
+	margin-bottom: 5px;
+}
+#content dl.school_info dt {
+	font-weight: bold;
+	padding-top:3px;
+}
+#content dl.school_info dd {
+	padding-left: 2em;
+	
 }
 /*************************************************COMPOSER***/
 .index_name { font-size: 14px; line-height: 30px; border-bottom: 1px solid #EBE6C9; }
@@ -407,7 +437,7 @@ a.button { padding: 5px; }
 .topic_list p { padding-top: 6px; }
 
 /*************************************************CP SIDEBAR***/
-#sidebar { float: right; padding: 0; width: 250px; overflow: hidden; }
+#sidebar { float: right; padding: 0; width: 156px; overflow: hidden; }
     #sidebar .ye_r_t { margin: 0 0 20px; }
 .task_notice { position: relative; padding: 5px; background: #FCF9E6; }
 .task_notice a.float_cancel { position: absolute; width: 16px; height: 16px; background: url(image/cancel.gif) no-repeat; line-height: 200px; top: 5px; right: -8px; overflow: hidden; display: block; }
