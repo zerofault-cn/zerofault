@@ -348,7 +348,8 @@ if($tagname) {
 				$sql = "select * from ".tname('region')." where pid=1";
 				$query = $_SGLOBAL['db']->query($sql);
 				while ($value = $_SGLOBAL['db']->fetch_array($query)) {
-					$map_str .= '<area shape="'.$value['shape'].'" coords="'.$value['coords'].'" href="?do=mtag&view=school&province_id='.$value['id'].'">';
+					$tmp = explode(',', $value['coords']);
+					$map_str .= '<area shape="'.$value['shape'].'" coords="'.$value['coords'].'" href="?do=mtag&view=school&province_id='.$value['id'].'" alt="'.$value['name'].'"><div class="area_overlay" style="left:'.$tmp[0].'px;top:'.$tmp[1].'px;width:'.($tmp[2]-$tmp[0]).'px;"><a href="?do=mtag&view=school&province_id='.$value['id'].'">'.$value['name'].'</a></div>'."\n";
 				}
 			}
 			else {
@@ -402,6 +403,9 @@ if($tagname) {
 		else {
 			$query = $_SGLOBAL['db']->query("select * from ".tname('school')." where id=".$_REQUEST['school_id']." limit 1");
 			$school = $_SGLOBAL['db']->fetch_array($query);
+
+			$countsql = "select count(*) from ".tname('mtag')." where fieldid=4 and ext_id=".$_REQUEST['school_id'];
+			$sql = "SELECT mt.* FROM ".tname('mtag')." mt WHERE fieldid=4 and ext_id=".$_REQUEST['school_id']." ORDER BY mt.".$_GET['orderby']." DESC LIMIT ".$start.", ".$perpage;
 		}
 	}
 	elseif($_GET['view'] == 'me' || $_GET['view'] == 'manage') {
