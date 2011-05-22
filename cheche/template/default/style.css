@@ -1,7 +1,7 @@
 /*************************************************GLOBALS***/
 * { word-wrap: break-word; word-break: break-all; }
 body, th, td, input, select, textarea, button { font: 12px/1.5em Verdana, "Lucida Grande", Arial, Helvetica, sans-serif; }
-body, h1, h2, h3, h4, h5, h6, p, ul, dl, dt, dd, form, fieldset { margin: 0; padding: 0; }
+body, h1, h2, h3, h4, h5, h6, p, ul, dl, dt, dd, form { margin: 0; padding: 0; }
 h1, h2, h3, h4, h5, h6 { font-size: 1em; }
 ul li { list-style: none; }
 select { margin-right: 2px; }
@@ -204,7 +204,108 @@ map#Map .area_overlay a {
 }
 #content dl.school_info dd {
 	padding-left: 2em;
-	
+}
+dl.vote dt, dl.vote dd {
+	float:left;
+}
+
+ul.starrating{
+	position:relative;
+	display:block;
+	width:100px;
+	height:21px;
+	padding:0;
+	border:none;
+	background:transparent url(../../image/starrating.gif) repeat-x scroll left top;
+}
+ul.starrating li{
+	float:left;
+	margin:0;
+	padding:0;
+	border:none;
+}
+ul.starrating li#currentrating {
+	background:transparent url(../../image/starrating.gif) repeat scroll left bottom;
+	display:block;
+	height:21px;
+	position:absolute;
+	text-indent:-9000px;
+	width:0;
+	z-index:1;
+}
+ul.starrating li a {
+	display:block;
+	height:21px;
+	overflow:hidden;
+	position:absolute;
+	text-indent:-9000px;
+	width:10px;
+	z-index:20;
+}
+ul.starrating li a:hover {
+	background:transparent url(../../image/starrating.gif) repeat scroll left 21px;
+	left:0;
+	z-index:2;
+}
+ul.starrating a.star1 {
+	left:0;
+}
+ul.starrating a.star1:hover {
+	width:10px;
+}
+ul.starrating a.star2 {
+	left:10px;
+}
+ul.starrating a.star2:hover {
+	width:20px;
+}
+ul.starrating a.star3 {
+	left:20px;
+}
+ul.starrating a.star3:hover {
+	width:30px;
+}
+ul.starrating a.star4 {
+	left:30px;
+}
+ul.starrating a.star4:hover {
+	width:40px;
+}
+ul.starrating a.star5 {
+	left:40px;
+}
+ul.starrating a.star5:hover {
+	width:50px;
+}
+ul.starrating a.star6 {
+	left:50px;
+}
+ul.starrating a.star6:hover {
+	width:60px;
+}
+ul.starrating a.star7 {
+	left:60px;
+}
+ul.starrating a.star7:hover {
+	width:70px;
+}
+ul.starrating a.star8 {
+	left:70px;
+}
+ul.starrating a.star8:hover {
+	width:80px;
+}
+ul.starrating a.star9 {
+	left:80px;
+}
+ul.starrating a.star9:hover {
+	width:90px;
+}
+ul.starrating a.star10 {
+	left:90px;
+}
+ul.starrating a.star10:hover {
+	width:100px;
 }
 /*************************************************COMPOSER***/
 .index_name { font-size: 14px; line-height: 30px; border-bottom: 1px solid #EBE6C9; }

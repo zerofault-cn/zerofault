@@ -126,11 +126,16 @@
 		<dt>驾校地址：</dt>
 		<dd>{$school[address]}</dd>
 		<dt>训练场地：</dt>
-		<dd>{$school[training]}</dd>
+		<dd><!--{eval echo nl2br($school['training'])}--></dd>
 		<dt>驾校评价：</dt>
-		<dd>{$school[vote]}</dd>
+		<dd>
+			<a href="?do=schoolvote&id={$school[id]}" target="_blank" title="查看详细评价"><ul class="starrating">
+				<li style="width: {$school[vote_width]}px;" id="currentrating"></li>
+			</ul>
+			</a>
+		</dd>
 		<dt>驾校简介：</dt>
-		<dd>{$school[description]}</dd>
+		<dd><!--{eval echo nl2br($school['description'])}--></dd>
 	</dl>
 	
 	<!--{/if}-->
