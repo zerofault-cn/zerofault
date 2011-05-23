@@ -1,0 +1,119 @@
+<!--{eval $_TPL['titles'] = array('驾校评价');}-->
+<!--{template header}-->
+
+<div id="content">
+	<fieldset>
+		<legend>发表评价</legend>
+		<form name="comment_form"  method="post">
+		<input type="hidden" name="school_id" value="{$_GET[id]}" />
+		<dl class="rating">
+			<dt>价格评分：</dt>
+			<dd>
+				<ul class="starrating" id="price">
+					<li><a  href="javascript:void(0);" class="star1">1</a></li>
+					<li><a  href="javascript:void(0);" class="star2">2</a></li>
+					<li><a  href="javascript:void(0);" class="star3">3</a></li>
+					<li><a  href="javascript:void(0);" class="star4">4</a></li>
+					<li><a  href="javascript:void(0);" class="star5">5</a></li>
+				</ul>
+				<span class="result"></span>
+			</dd>
+			<div class="clear"></div>
+			<dt>服务评分：</dt>
+			<dd>
+				<ul class="starrating" id="service">
+					<li><a  href="javascript:void(0);" class="star1">1</a></li>
+					<li><a  href="javascript:void(0);" class="star2">2</a></li>
+					<li><a  href="javascript:void(0);" class="star3">3</a></li>
+					<li><a  href="javascript:void(0);" class="star4">4</a></li>
+					<li><a  href="javascript:void(0);" class="star5">5</a></li>
+				</ul>
+				<span class="result"></span>
+			</dd>
+			<div class="clear"></div>
+			<dt>环境评分：</dt>
+			<dd>
+				<ul class="starrating" id="environment">
+					<li><a  href="javascript:void(0);" class="star1">1</a></li>
+					<li><a  href="javascript:void(0);" class="star2">2</a></li>
+					<li><a  href="javascript:void(0);" class="star3">3</a></li>
+					<li><a  href="javascript:void(0);" class="star4">4</a></li>
+					<li><a  href="javascript:void(0);" class="star5">5</a></li>
+				</ul>
+				<span class="result"></span>
+			</dd>
+			<div class="clear"></div>
+			<dt>教练评分：</dt>
+			<dd>
+				<ul class="starrating" id="coach">
+					<li><a  href="javascript:void(0);" class="star1">1</a></li>
+					<li><a  href="javascript:void(0);" class="star2">2</a></li>
+					<li><a  href="javascript:void(0);" class="star3">3</a></li>
+					<li><a  href="javascript:void(0);" class="star4">4</a></li>
+					<li><a  href="javascript:void(0);" class="star5">5</a></li>
+				</ul>
+				<span class="result"></span>
+			</dd>
+			<div class="clear"></div>
+			<dt>评价内容:</dt>
+			<dd><textarea cols="55" rows="5" name="comment"></textarea></dd>
+			<div class="clear"></div>
+			<dt>验证码：</dt>
+			<dd>
+				<script>seccode();</script>
+			<p>请输入上面的4位字母或数字，看不清可<a href="javascript:updateseccode()">更换一张</a></p>
+			<input type="text" id="seccode" name="seccode" value="" class="t_input" onBlur="checkSeccode()" tabindex="1" autocomplete="off" />&nbsp;<span id="checkseccode">&nbsp;</span>
+			&nbsp;&nbsp;
+				<input type="submit" name="submit" class="submit" value="提交"/>
+			</dd>
+		</dl>
+		<input type="hidden" name="price" value="" />
+		<input type="hidden" name="service" value="" />
+		<input type="hidden" name="environment" value="" />
+		<input type="hidden" name="coach" value="" />
+		</form>
+	</fieldset>
+</div>
+
+<div id="sidebar">
+	<div class="sidebox">
+		<h2 class="title">驾校评分</h2>
+	</div>
+</div>
+<div style="visibility: hidden;" id="RatingPopTip" class="rating-pop-tip">
+</div>
+<script language="JavaScript" type="text/javascript" src="source/jquery-1.4.2.min.js"></script>
+<script language="JavaScript" type="text/javascript">
+$(document).ready(function(){
+	$(".starrating a").each(function(i) {
+		var t = $(this).parent().parent().attr('id');
+		var r = $(this).text();
+		$(this).mouseover(function() {
+			$(this).parent().parent().next().show().html(t+r);
+			$(this).parent().siblings().each(function(n) {
+				$(this).removeClass('current');
+			});
+		}).click(function() {
+			$(this).parent().addClass('current');
+			$("input[name='"+t+"']").val(r);
+		});
+	});
+	$(".starrating").each(function() {
+		$(this).mouseout(function() {
+		//	alert($(this).children('.current').length);
+			var t=$(this).attr('id');
+			var r = $("input[name='"+t+"']").val();
+			if (r!='') {
+				$(this).children(":eq("+(r-1)+")").addClass('current');
+				$(this).next().show().html(t+r);
+			}
+			if ($(this).children('.current').length==0) {
+				$(this).next().hide();
+			}
+		});
+	});
+	
+	
+});
+</script>
+<!--{template footer}-->

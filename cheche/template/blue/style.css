@@ -43,7 +43,8 @@ a { color: #3B5998; }
                 .chostlp_drop li{ padding: 5px; width: 16px; height: 16px; }
 
 
-#content { float: left; margin: 0 10px 0 0; width: 644px; overflow: hidden; }
+#content { float: left; margin: 0 20px 0 0; width: 540px; overflow: hidden; }
+#content2 { float: left; margin: 0 10px 0 0; width: 644px; overflow: hidden; }
 
 /*************************************************COMPOSER***/
     .mgs_list div { border: 1px solid #CCC; }

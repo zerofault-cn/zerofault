@@ -142,7 +142,8 @@ body { background: #FFF; }
 .chostlp_drop { border: 1px solid #CCC; border-bottom: none; }
 .chostlp_drop li{ padding: 5px; width: 16px; height: 16px; }
 
-#content { float: left; margin: 0 10px 0 0; width: 644px; overflow: hidden; }
+#content { float: left; margin: 0 20px 0 0; width: 540px; overflow: hidden; }
+#content2 { float: left; margin: 0 10px 0 0; width: 644px; overflow: hidden; }
 
 map#Map .area_overlay{
 	position:absolute;
@@ -205,17 +206,19 @@ map#Map .area_overlay a {
 #content dl.school_info dd {
 	padding-left: 2em;
 }
-dl.vote dt, dl.vote dd {
+dl.rating dt, dl.rating dd {
 	float:left;
 }
 
+dl.rating span {
+	float:left;
+}
 ul.starrating{
 	position:relative;
-	display:block;
+	float:left;
 	width:100px;
 	height:21px;
 	padding:0;
-	border:none;
 	background:transparent url(../../image/starrating.gif) repeat-x scroll left top;
 }
 ul.starrating li{
@@ -239,10 +242,10 @@ ul.starrating li a {
 	overflow:hidden;
 	position:absolute;
 	text-indent:-9000px;
-	width:10px;
+	width:20px;
 	z-index:20;
 }
-ul.starrating li a:hover {
+ul.starrating li a:hover, ul.starrating li.current a {
 	background:transparent url(../../image/starrating.gif) repeat scroll left 21px;
 	left:0;
 	z-index:2;
@@ -250,63 +253,34 @@ ul.starrating li a:hover {
 ul.starrating a.star1 {
 	left:0;
 }
-ul.starrating a.star1:hover {
-	width:10px;
-}
-ul.starrating a.star2 {
-	left:10px;
-}
-ul.starrating a.star2:hover {
+ul.starrating a.star1:hover, ul.starrating li.current a.star1{
 	width:20px;
 }
-ul.starrating a.star3 {
+ul.starrating a.star2 {
 	left:20px;
 }
-ul.starrating a.star3:hover {
-	width:30px;
-}
-ul.starrating a.star4 {
-	left:30px;
-}
-ul.starrating a.star4:hover {
+ul.starrating a.star2:hover, ul.starrating li.current a.star2{
 	width:40px;
 }
-ul.starrating a.star5 {
+ul.starrating a.star3 {
 	left:40px;
 }
-ul.starrating a.star5:hover {
-	width:50px;
-}
-ul.starrating a.star6 {
-	left:50px;
-}
-ul.starrating a.star6:hover {
+ul.starrating a.star3:hover, ul.starrating li.current a.star3 {
 	width:60px;
 }
-ul.starrating a.star7 {
+ul.starrating a.star4 {
 	left:60px;
 }
-ul.starrating a.star7:hover {
-	width:70px;
-}
-ul.starrating a.star8 {
-	left:70px;
-}
-ul.starrating a.star8:hover {
+ul.starrating a.star4:hover, ul.starrating li.current a.star4 {
 	width:80px;
 }
-ul.starrating a.star9 {
+ul.starrating a.star5 {
 	left:80px;
 }
-ul.starrating a.star9:hover {
-	width:90px;
-}
-ul.starrating a.star10 {
-	left:90px;
-}
-ul.starrating a.star10:hover {
+ul.starrating a.star5:hover, ul.starrating li.current a.star5{
 	width:100px;
 }
+
 /*************************************************COMPOSER***/
 .index_name { font-size: 14px; line-height: 30px; border-bottom: 1px solid #EBE6C9; }
 .index_note { padding-bottom: 15px; color: #999; }
@@ -538,7 +512,8 @@ a.button { padding: 5px; }
 .topic_list p { padding-top: 6px; }
 
 /*************************************************CP SIDEBAR***/
-#sidebar { float: right; padding: 0; width: 156px; overflow: hidden; }
+#sidebar { float: right; padding: 0; width: 250px; overflow: hidden; }
+#sidebar2 { float: right; padding: 0; width: 156px; overflow: hidden; }
     #sidebar .ye_r_t { margin: 0 0 20px; }
 .task_notice { position: relative; padding: 5px; background: #FCF9E6; }
 .task_notice a.float_cancel { position: absolute; width: 16px; height: 16px; background: url(image/cancel.gif) no-repeat; line-height: 200px; top: 5px; right: -8px; overflow: hidden; display: block; }
