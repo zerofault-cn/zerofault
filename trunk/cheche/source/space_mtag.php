@@ -403,9 +403,9 @@ if($tagname) {
 		else {
 			$query = $_SGLOBAL['db']->query("select * from ".tname('school')." where id=".$_REQUEST['school_id']." limit 1");
 			$school = $_SGLOBAL['db']->fetch_array($query);
-			$vote_count = $_SGLOBAL['db']->result($_SGLOBAL['db']->query("select count(*) from ".tname('vote')." where school_id=".$_REQUEST['school_id']), 0);
-			$vote_sum = $_SGLOBAL['db']->result($_SGLOBAL['db']->query("select sum(vote_avg) from ".tname('vote')." where school_id=".$_REQUEST['school_id']), 0);
-			$school['vote_width'] = $vote_sum/max(1,$vote_count)*10;
+			$rate_count = $_SGLOBAL['db']->result($_SGLOBAL['db']->query("select count(*) from ".tname('rate')." where school_id=".$_REQUEST['school_id']), 0);
+			$rate_sum = $_SGLOBAL['db']->result($_SGLOBAL['db']->query("select sum(rate) from ".tname('rate')." where school_id=".$_REQUEST['school_id']), 0);
+			$school['width'] = $rate_sum/max(1,$rate_count)*10;
 
 			$countsql = "select count(*) from ".tname('mtag')." where fieldid=4 and ext_id=".$_REQUEST['school_id'];
 			$sql = "SELECT mt.* FROM ".tname('mtag')." mt WHERE fieldid=4 and ext_id=".$_REQUEST['school_id']." ORDER BY mt.".$_GET['orderby']." DESC LIMIT ".$start.", ".$perpage;

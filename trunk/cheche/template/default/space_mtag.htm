@@ -24,8 +24,12 @@
 <!--{if $searchkey}-->
 <div class="h_status">以下是搜索群组 <span style="color:red;font-weight:bold;">$searchkey</span> 结果列表</div>
 <!--{/if}-->
-	
+
+<!--{if 'school'==$_GET[view] && empty($_GET['school_id']) && empty($_GET['province_id'])}-->
+<div id="content2">
+<!--{else}-->
 <div id="content">
+<!--{/if}-->
 
 <!--{if $rlist}-->
 	<div>
@@ -130,7 +134,7 @@
 		<dt>驾校评价：</dt>
 		<dd>
 			<a href="?do=schoolvote&id={$school[id]}" target="_blank" title="查看详细评价"><ul class="starrating">
-				<li style="width: {$school[vote_width]}px;" id="currentrating"></li>
+				<li style="width: {$school[width]}px;" id="currentrating"></li>
 			</ul>
 			</a>
 		</dd>
@@ -142,13 +146,13 @@
 <!--{/if}-->
 <!-- 原始的群组列表 -->
 <!--{if $list}-->
-<div class="h_status">
-	排序方式：
-	<a href="space.php?do=mtag&view=$_GET[view]&fieldid=$_GET[fieldid]&orderby=threadnum"$orderbyarr[threadnum]>话题数排行</a><span class="pipe">|</span>
-	<a href="space.php?do=mtag&view=$_GET[view]&fieldid=$_GET[fieldid]&orderby=postnum"$orderbyarr[postnum]>回帖数排行</a><span class="pipe">|</span>
-	<a href="space.php?do=mtag&view=$_GET[view]&fieldid=$_GET[fieldid]&orderby=membernum"$orderbyarr[membernum]>成员数排行</a>
-</div>
-<div>
+	<div class="h_status">
+		排序方式：
+		<a href="space.php?do=mtag&view=$_GET[view]&fieldid=$_GET[fieldid]&orderby=threadnum"$orderbyarr[threadnum]>话题数排行</a><span class="pipe">|</span>
+		<a href="space.php?do=mtag&view=$_GET[view]&fieldid=$_GET[fieldid]&orderby=postnum"$orderbyarr[postnum]>回帖数排行</a><span class="pipe">|</span>
+		<a href="space.php?do=mtag&view=$_GET[view]&fieldid=$_GET[fieldid]&orderby=membernum"$orderbyarr[membernum]>成员数排行</a>
+	</div>
+	<div>
 		<!--{if $rlist}-->
 		<h3 class="l_status">
 			我的群组
@@ -181,9 +185,11 @@
 <!--{/if}-->
 
 </div>
-
+<!--{if 'school'==$_GET[view] && empty($_GET['school_id']) && empty($_GET['province_id'])}-->
+<div id="sidebar2">
+<!--{else}-->
 <div id="sidebar">
-
+<!--{/if}-->
 	<div class="sidebox">
 	<h2 class="title">群组分类</h2>
 	<ul class="post_list line_list">
