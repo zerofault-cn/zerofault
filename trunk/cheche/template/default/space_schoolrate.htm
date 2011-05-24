@@ -76,34 +76,37 @@
 	<!--{loop $list $i $item}-->
 	<dl class="comment_list">
 		<dt>
+			<span><b>点评时间：</b>{$item['addtime']}</span>
+			<span><b>IP：</b>{$item['ip']}</span>
+			<b>点评人：</b>{$item['username']}
+		</dt>
+		<dd>
 			<ul class="rate">
-				<li>价格：
+				<li>
+					<label>价格：</label>
 					<ul class="starrating">
 						<li style="width: {$item[width_price]}px;" id="currentrating"></li>
 					</ul>
 				</li>
-				<li>服务：
+				<li>
+					<label>服务：</label>
 					<ul class="starrating">
 						<li style="width: {$item[width_service]}px;" id="currentrating"></li>
 					</ul>
 				</li>
-				<li>环境：
+				<li>
+					<label>环境：</label>
 					<ul class="starrating">
 						<li style="width: {$item[width_environment]}px;" id="currentrating"></li>
 					</ul>
 				</li>
-				<li>教练：
+				<li>
+					<label>教练：</label>
 					<ul class="starrating">
 						<li style="width: {$item[width_coach]}px;" id="currentrating"></li>
 					</ul>
 				</li>
 			</ul>
-		</dt>
-		<dd>
-			<span>{$item['act_time']}</span>
-			{$item['username']}
-		</dd>
-		<dd>
 			<!--{eval echo nl2br($item['comment'])}-->
 		</dd>
 		<div class="clear"></div>
@@ -121,12 +124,18 @@
 </div>
 <script language="JavaScript" type="text/javascript" src="source/jquery-1.4.2.min.js"></script>
 <script language="JavaScript" type="text/javascript">
+var rating_str = {
+	'price':{'1':'差', '2':'中', '3':'好', '4':'很好', '5':'非常好'},
+	'service':{'1':'差', '2':'中', '3':'好', '4':'很好', '5':'非常好'},
+	'environment':{'1':'差', '2':'中', '3':'好', '4':'很好', '5':'非常好'},
+	'coach':{'1':'差', '2':'中', '3':'好', '4':'很好', '5':'非常好'},
+	}
 $(document).ready(function(){
-	$(".starrating a").each(function(i) {
+	$(".rating .starrating a").each(function(i) {
 		var t = $(this).parent().parent().attr('id');
 		var r = $(this).text();
 		$(this).mouseover(function() {
-			$(this).parent().parent().next().show().html(t+r);
+			$(this).parent().parent().next().show().html(rating_str[t][r]);
 			$(this).parent().siblings().each(function(n) {
 				$(this).removeClass('current');
 			});
@@ -135,14 +144,14 @@ $(document).ready(function(){
 			$("input[name='"+t+"']").val(r);
 		});
 	});
-	$(".starrating").each(function() {
+	$(".rating .starrating").each(function() {
 		$(this).mouseout(function() {
 		//	alert($(this).children('.current').length);
 			var t=$(this).attr('id');
 			var r = $("input[name='"+t+"']").val();
 			if (r!='') {
 				$(this).children(":eq("+(r-1)+")").addClass('current');
-				$(this).next().show().html(t+r);
+				$(this).next().show().html(rating_str[t][r]);
 			}
 			if ($(this).children('.current').length==0) {
 				$(this).next().hide();

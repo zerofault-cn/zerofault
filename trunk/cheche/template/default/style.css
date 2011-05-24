@@ -208,10 +208,12 @@ map#Map .area_overlay a {
 }
 dl.rating dt, dl.rating dd {
 	float:left;
+	padding:3px;
 }
 
 dl.rating span {
 	float:left;
+	padding-left: 5px;
 }
 ul.starrating{
 	position:relative;
@@ -280,7 +282,30 @@ ul.starrating a.star5 {
 ul.starrating a.star5:hover, ul.starrating li.current a.star5{
 	width:100px;
 }
-
+dl.comment_list {
+	border-bottom: 1px dotted #A7ADBA;
+	padding: 5px;
+	clear: both;
+}
+dl.comment_list dt {
+	background:#ddd;
+	padding: 3px;
+}
+dl.comment_list dt span{
+	float:right;
+	padding-left:20px;
+}
+dl.comment_list dd {
+	padding:5px;
+}
+	
+dl.comment_list ul.rate {
+	float:right;
+	width: 140px;
+}
+dl.comment_list ul.rate li label {
+	float:left;
+}
 /*************************************************COMPOSER***/
 .index_name { font-size: 14px; line-height: 30px; border-bottom: 1px solid #EBE6C9; }
 .index_note { padding-bottom: 15px; color: #999; }
