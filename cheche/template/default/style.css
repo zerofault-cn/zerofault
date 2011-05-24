@@ -206,13 +206,17 @@ map#Map .area_overlay a {
 #content dl.school_info dd {
 	padding-left: 2em;
 }
-dl.rating dt, dl.rating dd {
+dl.rating dt {
 	float:left;
+	width:72px;
 	padding:3px;
 }
-
-dl.rating span {
+dl.rating dd {
 	float:left;
+	width:430px;
+	padding:3px;
+}
+dl.rating span {
 	padding-left: 5px;
 }
 ul.starrating{

@@ -18,7 +18,6 @@
 				</ul>
 				<span class="result"></span>
 			</dd>
-			<div class="clear"></div>
 			<dt>服务评分：</dt>
 			<dd>
 				<ul class="starrating" id="service">
@@ -30,7 +29,6 @@
 				</ul>
 				<span class="result"></span>
 			</dd>
-			<div class="clear"></div>
 			<dt>环境评分：</dt>
 			<dd>
 				<ul class="starrating" id="environment">
@@ -42,7 +40,6 @@
 				</ul>
 				<span class="result"></span>
 			</dd>
-			<div class="clear"></div>
 			<dt>教练评分：</dt>
 			<dd>
 				<ul class="starrating" id="coach">
@@ -54,7 +51,6 @@
 				</ul>
 				<span class="result"></span>
 			</dd>
-			<div class="clear"></div>
 			<dt>评价内容:</dt>
 			<dd><textarea cols="55" rows="5" name="comment"></textarea></dd>
 			<div class="clear"></div>
@@ -128,8 +124,8 @@ var rating_str = {
 	'price':{'1':'差', '2':'中', '3':'好', '4':'很好', '5':'非常好'},
 	'service':{'1':'差', '2':'中', '3':'好', '4':'很好', '5':'非常好'},
 	'environment':{'1':'差', '2':'中', '3':'好', '4':'很好', '5':'非常好'},
-	'coach':{'1':'差', '2':'中', '3':'好', '4':'很好', '5':'非常好'},
-	}
+	'coach':{'1':'差', '2':'中', '3':'好', '4':'很好', '5':'非常好'}
+	};
 $(document).ready(function(){
 	$(".rating .starrating a").each(function(i) {
 		var t = $(this).parent().parent().attr('id');
@@ -140,6 +136,7 @@ $(document).ready(function(){
 				$(this).removeClass('current');
 			});
 		}).click(function() {
+		//	alert(r);
 			$(this).parent().addClass('current');
 			$("input[name='"+t+"']").val(r);
 		});
