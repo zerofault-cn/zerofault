@@ -420,13 +420,13 @@
 	
 		<form method="post" action="cp.php?ac=mtag" class="c_form">
 		<input type="hidden" name="formhash" value="<!--{eval echo formhash();}-->" />
-		<!--{if $likemtags}-->
+			<!--{if $likemtags}-->
 		<table cellspacing="0" cellpadding="0" class="formtable">
 			<caption>
 				<h2>相似热门群组推荐</h2>
 				<p>以下热门的群组与您要创建的群组很接近，您可以不用创建新群组，而选择直接加入热门群组来与更多人一起讨论话题。</p>
 			</caption>
-			<!--{loop $likemtags $value}-->
+				<!--{loop $likemtags $value}-->
 			<tr>
 				<td><a href="space.php?do=mtag&tagid=$value[tagid]" target="_blank">$value[tagname]</a></td>
 				<td>$value[membernum] 位成员</td>
@@ -440,9 +440,9 @@
 					<!--{/if}-->
 				</td>
 			</tr>
-			<!--{/loop}-->
+				<!--{/loop}-->
 		</table>
-		<!--{/if}-->
+			<!--{/if}-->
 		
 		<table cellspacing="0" cellpadding="0" class="formtable">
 			<caption>
@@ -470,7 +470,7 @@
 
 	<!--{else}-->
 
-	<!--{if $textarr}-->
+		<!--{if $textarr}-->
 	<form method="post" action="cp.php?ac=mtag" class="c_form">
 	<input type="hidden" name="formhash" value="<!--{eval echo formhash();}-->" />
 	<table cellspacing="6" cellpadding="6" class="formtable">
@@ -540,71 +540,6 @@
 	</tr>
 	</table>
 	</form>
-	<!--{/if}-->
-	
-	<!--{if $choicearr}-->
-	<form method="post" action="cp.php?ac=mtag" class="c_form">
-	<input type="hidden" name="formhash" value="<!--{eval echo formhash();}-->" />
-	<table cellspacing="6" cellpadding="6" class="formtable">
-	<caption>
-		<h2>加入站点固定群组</h2>
-		<p>您可以选择加入感兴趣的站点群组，与更多志同道合的朋友一起讨论相关话题。<br>对于已经加入的群组，如果您想取消选择，请访问相应群组首页后选择“退出群组”操作。</p>
-	</caption>
-	<!--{loop $choicearr $fid $value}-->
-	<tr>
-		<th width="120">$value[title]</th>
-		<td>
-		<!--{if $value['formtype']=='multi'}-->
-			<table><tr>
-			<!--{loop $value['choice'] $sk $sv}-->
-			<td><input type="checkbox" name="tagname[$fid][]" value="$sv" <!--{if $existmtag[$fid] && in_array($sv, $existmtag[$fid])}-->checked disabled<!--{/if}-->> <a href="space.php?do=mtag&fieldid=$fid&tagname=<!--{eval echo urlencode($sv);}-->" target="_blank">$sv</a></td>
-			<!--{if $sk%3==2}--></tr><tr><!--{/if}-->
-			<!--{/loop}-->
-			</tr></table>
-		<!--{else}-->
-			<table><tr>
-			<!--{loop $value['choice'] $sk $sv}-->
-			<td><input type="radio" name="tagname[$fid]" value="$sv" <!--{if $existmtag[$fid] && in_array($sv, $existmtag[$fid])}--> checked <!--{/if}--> <!--{if $existmtag[$fid]}-->disabled<!--{/if}-->> <a href="space.php?do=mtag&fieldid=$fid&tagname=<!--{eval echo urlencode($sv);}-->" target="_blank">$sv</a></td>
-			<!--{if $sk%3==2}--></tr><tr><!--{/if}-->
-			<!--{/loop}-->
-			</tr></table>
-		<!--{/if}-->
-		</td>
-	</tr>
-	<!--{/loop}-->
-	<tr>
-		<th>&nbsp;</th>
-		<td><input type="submit" name="choicesubmit" value="加入群组" class="submit"></td>
-	</tr>
-	</table>
-	</form>
-	<!--{/if}-->
-	
-	<form method="get" action="space.php" class="c_form">
-	<table cellspacing="6" cellpadding="6" class="formtable">
-	<caption>
-		<h2>搜索现有群组</h2>
-		<p>可以搜索一下，看看有没有自己感兴趣的群组，并申请成为成员。</p>
-	</caption>
-	<tr>
-		<th width="120">搜索群组名</th>
-		<td>
-		<input name="searchkey" value="" class="t_input" type="text">
-		</td>
-	</tr>
-	<tr>
-		<th>&nbsp;</th>
-		<td><input name="searchsubmit" value="搜索群组" class="submit" type="submit"></td>
-	</tr>
-	</table>
-	<input type="hidden" name="searchmode" value="1" />
-	<input type="hidden" name="do" value="mtag" />
-	<input type="hidden" name="view" value="hot" />
-	</form>
-
-	<!--{/if}-->
-
-<!--{/if}-->
 <script>
 function show_ext(i) {
 	var div_region = document.getElementById('div_region');
@@ -705,4 +640,69 @@ function load_school_opts(field, pid) {
 	});
 }
 </script>
+		<!--{/if}-->
+	
+		<!--{if $choicearr}-->
+	<form method="post" action="cp.php?ac=mtag" class="c_form">
+	<input type="hidden" name="formhash" value="<!--{eval echo formhash();}-->" />
+	<table cellspacing="6" cellpadding="6" class="formtable">
+	<caption>
+		<h2>加入站点固定群组</h2>
+		<p>您可以选择加入感兴趣的站点群组，与更多志同道合的朋友一起讨论相关话题。<br>对于已经加入的群组，如果您想取消选择，请访问相应群组首页后选择“退出群组”操作。</p>
+	</caption>
+			<!--{loop $choicearr $fid $value}-->
+	<tr>
+		<th width="120">$value[title]</th>
+		<td>
+				<!--{if $value['formtype']=='multi'}-->
+			<table><tr>
+					<!--{loop $value['choice'] $sk $sv}-->
+			<td><input type="checkbox" name="tagname[$fid][]" value="$sv" <!--{if $existmtag[$fid] && in_array($sv, $existmtag[$fid])}-->checked disabled<!--{/if}-->> <a href="space.php?do=mtag&fieldid=$fid&tagname=<!--{eval echo urlencode($sv);}-->" target="_blank">$sv</a></td>
+						<!--{if $sk%3==2}--></tr><tr><!--{/if}-->
+					<!--{/loop}-->
+			</tr></table>
+				<!--{else}-->
+			<table><tr>
+					<!--{loop $value['choice'] $sk $sv}-->
+			<td><input type="radio" name="tagname[$fid]" value="$sv" <!--{if $existmtag[$fid] && in_array($sv, $existmtag[$fid])}--> checked <!--{/if}--> <!--{if $existmtag[$fid]}-->disabled<!--{/if}-->> <a href="space.php?do=mtag&fieldid=$fid&tagname=<!--{eval echo urlencode($sv);}-->" target="_blank">$sv</a></td>
+			<!--{if $sk%3==2}--></tr><tr><!--{/if}-->
+					<!--{/loop}-->
+			</tr></table>
+				<!--{/if}-->
+		</td>
+	</tr>
+			<!--{/loop}-->
+	<tr>
+		<th>&nbsp;</th>
+		<td><input type="submit" name="choicesubmit" value="加入群组" class="submit"></td>
+	</tr>
+	</table>
+	</form>
+		<!--{/if}-->
+	
+	<form method="get" action="space.php" class="c_form">
+	<table cellspacing="6" cellpadding="6" class="formtable">
+	<caption>
+		<h2>搜索现有群组</h2>
+		<p>可以搜索一下，看看有没有自己感兴趣的群组，并申请成为成员。</p>
+	</caption>
+	<tr>
+		<th width="120">搜索群组名</th>
+		<td>
+		<input name="searchkey" value="" class="t_input" type="text">
+		</td>
+	</tr>
+	<tr>
+		<th>&nbsp;</th>
+		<td><input name="searchsubmit" value="搜索群组" class="submit" type="submit"></td>
+	</tr>
+	</table>
+	<input type="hidden" name="searchmode" value="1" />
+	<input type="hidden" name="do" value="mtag" />
+	<input type="hidden" name="view" value="hot" />
+	</form>
+
+	<!--{/if}-->
+
+<!--{/if}-->
 <!--{template footer}-->

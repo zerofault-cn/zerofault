@@ -455,7 +455,7 @@ if($_GET['op'] == 'manage') {
 		//◊‘”… ‰»Î
 		$_POST['tagname'] = $tagname = getstr($_POST['tagname'], 40, 1, 1, 1);
 		$_POST['fieldid'] = $fieldid = intval($_POST['fieldid']);
-	echo	$_POST['ext_id'] = $ext_id = intval($_POST['ext_id']);
+		$_POST['ext_id'] = $ext_id = intval($_POST['ext_id']);
 		
 		$profield = $_SGLOBAL['profield'][$fieldid];
 		if(empty($profield) || $profield['formtype'] != 'text') {
