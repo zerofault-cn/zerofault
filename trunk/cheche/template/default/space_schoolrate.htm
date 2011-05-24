@@ -73,6 +73,43 @@
 		<input type="hidden" name="coach" value="" />
 		</form>
 	</fieldset>
+	<!--{loop $list $i $item}-->
+	<dl class="comment_list">
+		<dt>
+			<ul class="rate">
+				<li>价格：
+					<ul class="starrating">
+						<li style="width: {$item[width_price]}px;" id="currentrating"></li>
+					</ul>
+				</li>
+				<li>服务：
+					<ul class="starrating">
+						<li style="width: {$item[width_service]}px;" id="currentrating"></li>
+					</ul>
+				</li>
+				<li>环境：
+					<ul class="starrating">
+						<li style="width: {$item[width_environment]}px;" id="currentrating"></li>
+					</ul>
+				</li>
+				<li>教练：
+					<ul class="starrating">
+						<li style="width: {$item[width_coach]}px;" id="currentrating"></li>
+					</ul>
+				</li>
+			</ul>
+		</dt>
+		<dd>
+			<span>{$item['act_time']}</span>
+			{$item['username']}
+		</dd>
+		<dd>
+			<!--{eval echo nl2br($item['comment'])}-->
+		</dd>
+		<div class="clear"></div>
+	</dl>
+	<!--{/loop}-->
+	<div class="page">$multi</div>
 </div>
 
 <div id="sidebar">

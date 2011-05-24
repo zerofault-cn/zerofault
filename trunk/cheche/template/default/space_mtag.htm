@@ -133,7 +133,8 @@
 		<dd><!--{eval echo nl2br($school['training'])}--></dd>
 		<dt>驾校评价：</dt>
 		<dd>
-			<a href="?do=schoolvote&id={$school[id]}" target="_blank" title="查看详细评价"><ul class="starrating">
+			<a href="?do=schoolrate&id={$school[id]}" target="_blank" title="查看详细评价">
+			<ul class="starrating">
 				<li style="width: {$school[width]}px;" id="currentrating"></li>
 			</ul>
 			</a>
