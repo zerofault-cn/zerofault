@@ -180,22 +180,26 @@ map#Map .area_overlay a {
 	list-style: none outside none;
 	text-decoration: none;
 }
-#content dl.school_list {
+dl.school_list {
 	border-bottom: 1px dotted #A7ADBA;
 	padding: 5px;
 	clear: both;
 }
-#content dl.school_list dt {
+dl.school_list em {
+	font-style:normal;
+	color: red;
+}
+dl.school_list dt {
 	float:left;
 }
-#content dl.school_list dd {
+dl.school_list dd {
 	float:right;
 	padding-left:10px;
 }
 #content dl.school_info {
 	padding: 3px;
-	border-top: 1px solid #303030;
-	border-bottom: 1px solid #303030;
+	border-top: 1px solid #afafaf;
+	border-bottom: 1px solid #afafaf;
 	margin-top: 5px;
 	margin-bottom: 5px;
 }
@@ -451,6 +455,7 @@ a.button { padding: 5px; }
 
 .h_status { margin-bottom: 8px; padding: 5px; border-bottom: 1px solid #F5F5F5; color: #999; }
 .h_status .active { font-weight: bold; }
+.h_status em {font-weight:bold; color:red;}
 .d_content form { padding: 4px 9px; background: #EEE; }
 
 .ajax_selector { position: relative; z-index: 999; }

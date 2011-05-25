@@ -337,78 +337,113 @@ if($tagname) {
 	$page = intval($_GET['page']);
 	if($page < 1) $page = 1;
 	$start = ($page-1)*$perpage;
+	$school_start = ($page-1)*$school_perpage;
 
 	if('school'==$_GET['view']) {
-		$theurl = 'space.php?do=mtag&view=school';
 		$countsql = "select 0";
-		if (empty($_REQUEST['school_id'])) {
-			if (empty($_GET['province_id'])) {
-				//获取省份热点形状
-				$map_str = '';
-				$sql = "select * from ".tname('region')." where pid=1";
-				$query = $_SGLOBAL['db']->query($sql);
-				while ($value = $_SGLOBAL['db']->fetch_array($query)) {
-					$tmp = explode(',', $value['coords']);
-					$map_str .= '<area shape="'.$value['shape'].'" coords="'.$value['coords'].'" href="?do=mtag&view=school&province_id='.$value['id'].'" alt="'.$value['name'].'"><div class="area_overlay" style="left:'.$tmp[0].'px;top:'.$tmp[1].'px;width:'.($tmp[2]-$tmp[0]).'px;"><a href="?do=mtag&view=school&province_id='.$value['id'].'">'.$value['name'].'</a></div>'."\n";
-				}
+		if (!empty($_REQUEST['s_school_name']) && ''!=trim($_REQUEST['s_school_name'])) {
+			//搜索驾校
+			$s_school_name = shtmlspecialchars(trim($_REQUEST['s_school_name']));
+			$school_ext .= " and (name like '%".$s_school_name."%' or fullname like '%".$s_school_name."%')";
+			if (!empty($_REQUEST['province_id'])) {
+				$province_name = $_SGLOBAL['db']->result($_SGLOBAL['db']->query("select name from ".tname('region')." where id=".intval($_REQUEST['province_id'])), 0);
+				$school_ext .= " and province_id=".intval($_REQUEST['province_id']);
 			}
-			else {
-				$theurl .= '&province_id='.intval($_GET['province_id']);
-				$school_ext = " and province_id=".intval($_GET['province_id']);
-				$province_name = $_SGLOBAL['db']->result($_SGLOBAL['db']->query("select name from ".tname('region')." where id=".intval($_GET['province_id'])), 0);
-				if (empty($_GET['city_id'])) {
-					//获取某省下的城市列表
-					$city_list = array();
-					$query = $_SGLOBAL['db']->query("select * from ".tname('region')." where pid=".intval($_GET['province_id']));
-					while ($value = $_SGLOBAL['db']->fetch_array($query)) {
-						//统计每个市下的驾校数
-						$value['count'] = $_SGLOBAL['db']->result($_SGLOBAL['db']->query("select count(*) from ".tname('school')." where city_id=".$value['id']), 0);
-						$city_list[] = $value;
-					}
-				}
-				else {
-					$theurl .= '&city_id='.intval($_GET['city_id']);
-					$school_ext = " and city_id=".intval($_GET['city_id']);
-					$city_name = $_SGLOBAL['db']->result($_SGLOBAL['db']->query("select name from ".tname('region')." where id=".intval($_GET['city_id'])), 0);
-					if (empty($_GET['region_id'])) {
-						//获取市下面的区域
-						$region_list = array();
-						$query = $_SGLOBAL['db']->query("select * from ".tname('region')." where pid=".intval($_GET['city_id']));
-						while ($value = $_SGLOBAL['db']->fetch_array($query)) {
-							//统计每个区下的驾校数
-							$value['count'] = $_SGLOBAL['db']->result($_SGLOBAL['db']->query("select count(*) from ".tname('school')." where region_id=".$value['id']), 0);
-							$region_list[] = $value;
-						}
-					}
-					else {
-						$theurl .= '&region_id='.intval($_GET['region_id']);
-						$school_ext = " and region_id=".intval($_GET['region_id']);
-						$region_name = $_SGLOBAL['db']->result($_SGLOBAL['db']->query("select name from ".tname('region')." where id=".intval($_GET['region_id'])), 0);
-					}
-				}
+			if (!empty($_REQUEST['city_id'])) {
+				$city_name = $_SGLOBAL['db']->result($_SGLOBAL['db']->query("select name from ".tname('region')." where id=".intval($_REQUEST['city_id'])), 0);
+				$school_ext .= " and city_id=".intval($_REQUEST['city_id']);
 			}
-			$count = $_SGLOBAL['db']->result($_SGLOBAL['db']->query("select count(*) from ".tname('school')." where 1 ".$school_ext), 0);
-			$school_list = array();
-			if ($count > 0) {
-				$query = $_SGLOBAL['db']->query("select * from ".tname('school')." where 1 ".$school_ext." LIMIT ".$start.", ".$school_perpage);
-				while ($value = $_SGLOBAL['db']->fetch_array($query)) {
-					//统计驾校下的群组数、话题数
-					$value['mtag_count'] = $_SGLOBAL['db']->result($_SGLOBAL['db']->query("select count(*) from ".tname('mtag')." where fieldid=4 and ext_id=".$value['id']), 0);
-					$value['member_count'] = intval($_SGLOBAL['db']->result($_SGLOBAL['db']->query("select sum(membernum) from ".tname('mtag')." where fieldid=4 and ext_id=".$value['id']), 0));
-					$school_list[] = $value;
-				}
-				$multi = multi($count, $school_perpage, $page, $theurl);
+			if (!empty($_REQUEST['region_id'])) {
+				$region_name = $_SGLOBAL['db']->result($_SGLOBAL['db']->query("select name from ".tname('region')." where id=".intval($_REQUEST['region_id'])), 0);
+				$school_ext .= " and region_id=".intval($_REQUEST['region_id']);
+			}
+			$query = $_SGLOBAL['db']->query("select * from ".tname('school')." where 1 ".$school_ext);
+			while ($value = $_SGLOBAL['db']->fetch_array($query)) {
+				//统计驾校下的群组数、话题数
+				$value['mtag_count'] = $_SGLOBAL['db']->result($_SGLOBAL['db']->query("select count(*) from ".tname('mtag')." where fieldid=4 and ext_id=".$value['id']), 0);
+				$value['member_count'] = intval($_SGLOBAL['db']->result($_SGLOBAL['db']->query("select sum(membernum) from ".tname('mtag')." where fieldid=4 and ext_id=".$value['id']), 0));
+
+				$value['name'] = str_replace($s_school_name, '<em>'.$s_school_name.'</em>', $value['name']);
+				$value['fullname'] = str_replace($s_school_name, '<em>'.$s_school_name.'</em>', $value['fullname']);
+				$school_list[] = $value;
 			}
 		}
 		else {
-			$query = $_SGLOBAL['db']->query("select * from ".tname('school')." where id=".$_REQUEST['school_id']." limit 1");
-			$school = $_SGLOBAL['db']->fetch_array($query);
-			$rate_count = $_SGLOBAL['db']->result($_SGLOBAL['db']->query("select count(*) from ".tname('rate')." where school_id=".$_REQUEST['school_id']), 0);
-			$rate_sum = $_SGLOBAL['db']->result($_SGLOBAL['db']->query("select sum(rate) from ".tname('rate')." where school_id=".$_REQUEST['school_id']), 0);
-			$school['width'] = $rate_sum/max(1,$rate_count)*10;
+			$theurl = 'space.php?do=mtag&view=school';
+			if (empty($_REQUEST['school_id'])) {
+				if (empty($_REQUEST['province_id'])) {
+					//获取省份热点形状
+					$map_str = '';
+					$sql = "select * from ".tname('region')." where pid=1";
+					$query = $_SGLOBAL['db']->query($sql);
+					while ($value = $_SGLOBAL['db']->fetch_array($query)) {
+						$tmp = explode(',', $value['coords']);
+						$map_str .= '<area shape="'.$value['shape'].'" coords="'.$value['coords'].'" href="?do=mtag&view=school&province_id='.$value['id'].'" alt="'.$value['name'].'"><div class="area_overlay" style="left:'.$tmp[0].'px;top:'.$tmp[1].'px;width:'.($tmp[2]-$tmp[0]).'px;"><a href="?do=mtag&view=school&province_id='.$value['id'].'">'.$value['name'].'</a></div>'."\n";
+					}
+				}
+				else {
+					$theurl .= '&province_id='.intval($_GET['province_id']);
+					$school_ext = " and province_id=".intval($_GET['province_id']);
+					$province_name = $_SGLOBAL['db']->result($_SGLOBAL['db']->query("select name from ".tname('region')." where id=".intval($_GET['province_id'])), 0);
+					if (empty($_GET['city_id'])) {
+						//获取某省下的城市列表
+						$city_list = array();
+						$query = $_SGLOBAL['db']->query("select * from ".tname('region')." where pid=".intval($_GET['province_id']));
+						while ($value = $_SGLOBAL['db']->fetch_array($query)) {
+							//统计每个市下的驾校数
+							$value['count'] = $_SGLOBAL['db']->result($_SGLOBAL['db']->query("select count(*) from ".tname('school')." where city_id=".$value['id']), 0);
+							$city_list[] = $value;
+						}
+					}
+					else {
+						$theurl .= '&city_id='.intval($_GET['city_id']);
+						$school_ext = " and city_id=".intval($_GET['city_id']);
+						$city_name = $_SGLOBAL['db']->result($_SGLOBAL['db']->query("select name from ".tname('region')." where id=".intval($_GET['city_id'])), 0);
+						if (empty($_GET['region_id'])) {
+							//获取市下面的区域
+							$region_list = array();
+							$query = $_SGLOBAL['db']->query("select * from ".tname('region')." where pid=".intval($_GET['city_id']));
+							while ($value = $_SGLOBAL['db']->fetch_array($query)) {
+								//统计每个区下的驾校数
+								$value['count'] = $_SGLOBAL['db']->result($_SGLOBAL['db']->query("select count(*) from ".tname('school')." where region_id=".$value['id']), 0);
+								$region_list[] = $value;
+							}
+						}
+						else {
+							$theurl .= '&region_id='.intval($_GET['region_id']);
+							$school_ext = " and region_id=".intval($_GET['region_id']);
+							$region_name = $_SGLOBAL['db']->result($_SGLOBAL['db']->query("select name from ".tname('region')." where id=".intval($_GET['region_id'])), 0);
+						}
+					}
+					$count = $_SGLOBAL['db']->result($_SGLOBAL['db']->query("select count(*) from ".tname('school')." where 1 ".$school_ext), 0);
+					$school_list = array();
+					if ($count > 0) {
+						$query = $_SGLOBAL['db']->query("select * from ".tname('school')." where 1 ".$school_ext." LIMIT ".$school_start.", ".$school_perpage);
+						while ($value = $_SGLOBAL['db']->fetch_array($query)) {
+							//统计驾校下的群组数、话题数
+							$value['mtag_count'] = $_SGLOBAL['db']->result($_SGLOBAL['db']->query("select count(*) from ".tname('mtag')." where fieldid=4 and ext_id=".$value['id']), 0);
+							$value['member_count'] = intval($_SGLOBAL['db']->result($_SGLOBAL['db']->query("select sum(membernum) from ".tname('mtag')." where fieldid=4 and ext_id=".$value['id']), 0));
+							$school_list[] = $value;
+						}
+						$multi = multi($count, $school_perpage, $page, $theurl);
+					}
+				}
+			}
+			else {
+				$query = $_SGLOBAL['db']->query("select * from ".tname('school')." where id=".$_REQUEST['school_id']." limit 1");
+				$school = $_SGLOBAL['db']->fetch_array($query);
+				$rate_count = $_SGLOBAL['db']->result($_SGLOBAL['db']->query("select count(*) from ".tname('rate')." where school_id=".$_REQUEST['school_id']), 0);
+				$rate_sum = $_SGLOBAL['db']->result($_SGLOBAL['db']->query("select sum(rate) from ".tname('rate')." where school_id=".$_REQUEST['school_id']), 0);
+				$school['width'] = $rate_sum/max(1,$rate_count)*20;
 
-			$countsql = "select count(*) from ".tname('mtag')." where fieldid=4 and ext_id=".$_REQUEST['school_id'];
-			$sql = "SELECT mt.* FROM ".tname('mtag')." mt WHERE fieldid=4 and ext_id=".$_REQUEST['school_id']." ORDER BY mt.".$_GET['orderby']." DESC LIMIT ".$start.", ".$perpage;
+				$province_name = $_SGLOBAL['db']->result($_SGLOBAL['db']->query("select name from ".tname('region')." where id=".$school['province_id']), 0);
+				$city_name = $_SGLOBAL['db']->result($_SGLOBAL['db']->query("select name from ".tname('region')." where id=".$school['city_id']), 0);
+				$region_name = $_SGLOBAL['db']->result($_SGLOBAL['db']->query("select name from ".tname('region')." where id=".$school['region_id']), 0);
+				
+				//驾校下的群组
+				$countsql = "select count(*) from ".tname('mtag')." where fieldid=4 and ext_id=".$_REQUEST['school_id'];
+				$sql = "SELECT mt.* FROM ".tname('mtag')." mt WHERE fieldid=4 and ext_id=".$_REQUEST['school_id']." ORDER BY mt.".$_GET['orderby']." DESC LIMIT ".$start.", ".$perpage;
+			}
 		}
 	}
 	elseif($_GET['view'] == 'me' || $_GET['view'] == 'manage') {
