@@ -159,7 +159,7 @@
 		以下是您搜索 <em>{$s_school_name}</em> 的结果：
 	</div>
 		<!--{/if}-->
-		<!--{if empty($school_list)}-->
+		<!--{if !empty($s_school_name) && empty($school_list)}-->
 		暂无驾校
 		<!--{else}-->
 			<!--{loop $school_list $i $school}-->

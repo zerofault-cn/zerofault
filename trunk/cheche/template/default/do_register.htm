@@ -72,7 +72,7 @@
 		<td colspan="2" style="border-top: 1px solid #CCCCCC"></td>
 	</tr>
 	<tr>
-		<th>您的真实姓名：</th>
+		<th nowrap="nowrap">您的真实姓名：</th>
 		<td><input type="text" name="name" value="" /></td>
 	</tr>
 	<tr>
@@ -84,24 +84,7 @@
 		</td>
 	</tr>
 	<tr>
-		<th>出生日期：</th>
-		<td>
-			<select id="birthyear" name="birthyear" onchange="showbirthday();">
-				<option value="0">----</option>
-				$birthyeayhtml
-			</select> 年 
-			<select id="birthmonth" name="birthmonth" onchange="showbirthday();">
-				<option value="0">--</option>
-				$birthmonthhtml
-			</select> 月 
-			<select id="birthday" name="birthday">
-				<option value="0">--</option>
-				$birthdayhtml
-			</select> 日
-		</td>
-	</tr>
-	<tr>
-		<th style="width:10em;">我现在的身份：</th>
+		<th>我现在的身份：</th>
 		<td>
 			<select id="car_role" name="car_role" onchange="javascript:if(this.value=='1'){document.getElementById('car_number').style.display='';}else{document.getElementById('car_number').style.display='none';};">
 				<option value="0">请选择身份</option>
@@ -112,7 +95,7 @@
 		<td>&nbsp;</td>
 	</tr>
 	<tr>
-		<th style="width:10em;">我喜欢的车型：</th>
+		<th>我喜欢的车型：</th>
 		<td>
 			品牌:
 			<select name="car_brand" onchange="javascript:load_car_opts('sel_model', this.value);">
@@ -131,6 +114,21 @@
 			</select>
 		</td>
 		<td>&nbsp;</td>
+	</tr>
+	<tr>
+		<th>所在地区：</th>
+		<td>
+			<select onchange="javascript:load_region_opts('sel_city', this.value);">
+				<option value="0">请选择</option>
+				$province_opts
+			</select>省
+			<select id="sel_city" onchange="javascript:load_region_opts('sel_region', this.value);">
+				<option value="0">请选择</option>
+			</select>市
+			<select id="sel_region" name="ext_id">
+				<option value="0">请选择</option>
+			</select>区/县
+		</td>
 	</tr>
 	<!--{if $_SCONFIG['seccode_register']}-->
 	<tr>
