@@ -60,13 +60,13 @@
 	<!--{if empty($_GET['school_id'])}-->
 		<!--{if empty($_GET['province_id'])}-->
 	<div class="h_status">
-		根据区域查找驾校群组：全国
 		<form style="float:right;">
 			<input type="hidden" name="do" value="mtag" />
 			<input type="hidden" name="view" value="school" />
-			<input type="text" size="8" name="s_school_name" value="{$s_school_name}" />
+			<input type="text" size="10" name="s_school_name" class="t_input" value="{$s_school_name}" />
 			<input type="submit" class="submit" value="搜索驾校" />
 		</form>
+		根据区域查找驾校群组：全国
 		<div class="clear"></div>
 	</div>
 			<!--{if empty($s_school_name)}-->
@@ -99,14 +99,14 @@
 		<!--{else}-->
 			<!--{if empty($_GET['city_id'])}-->
 	<div class="h_status">
-		根据区域查找驾校群组：<a href="?do=mtag&view=school">全国</a> &gt;&gt; $province_name
 		<form style="float:right;" action="?do=mtag&view=school">
 			<input type="hidden" name="do" value="mtag" />
 			<input type="hidden" name="view" value="school" />
 			<input type="hidden" name="province_id" value="{$_REQUEST[province_id]}" />
-			<input type="text" size="8" name="s_school_name" value="{$s_school_name}" />
+			<input type="text" size="10" name="s_school_name" class="t_input" value="{$s_school_name}" />
 			<input type="submit" class="submit" value="搜索驾校" />
 		</form>
+		根据区域查找驾校群组：<a href="?do=mtag&view=school">全国</a> &gt;&gt; $province_name
 		<div class="clear"></div>
 	</div>
 				<!--{if !empty($city_list)}-->
@@ -119,15 +119,15 @@
 			<!--{else}-->
 				<!--{if empty($_GET['region_id'])}-->
 	<div class="h_status">
-		根据区域查找驾校群组：<a href="?do=mtag&view=school">全国</a> &gt;&gt; <a href="?do=mtag&view=school&province_id={$_GET[province_id]}">$province_name</a> &gt;&gt; $city_name
 		<form style="float:right;" action="?do=mtag&view=school">
 			<input type="hidden" name="do" value="mtag" />
 			<input type="hidden" name="view" value="school" />
 			<input type="hidden" name="province_id" value="{$_REQUEST[province_id]}" />
 			<input type="hidden" name="city_id" value="{$_REQUEST[city_id]}" />
-			<input type="text" size="8" name="s_school_name" value="{$s_school_name}" />
+			<input type="text" size="10" name="s_school_name" class="t_input" value="{$s_school_name}" />
 			<input type="submit" class="submit" value="搜索驾校" />
 		</form>
+		根据区域查找驾校群组：<a href="?do=mtag&view=school">全国</a> &gt;&gt; <a href="?do=mtag&view=school&province_id={$_GET[province_id]}">$province_name</a> &gt;&gt; $city_name
 		<div class="clear"></div>
 	</div>
 					<!--{if !empty($region_list)}-->
@@ -139,16 +139,16 @@
 					<!--{/if}-->
 				<!--{else}-->
 	<div class="h_status">
-		根据区域查找驾校群组：<a href="?do=mtag&view=school">全国</a> &gt;&gt; <a href="?do=mtag&view=school&province_id={$_GET[province_id]}">$province_name</a> &gt;&gt; <a href="?do=mtag&view=school&province_id={$_GET[province_id]}&city_id={$_GET[city_id]}">$city_name</a> &gt;&gt; $region_name
 		<form style="float:right;" action="?do=mtag&view=school">
 			<input type="hidden" name="do" value="mtag" />
 			<input type="hidden" name="view" value="school" />
 			<input type="hidden" name="province_id" value="{$_REQUEST[province_id]}" />
 			<input type="hidden" name="city_id" value="{$_REQUEST[city_id]}" />
 			<input type="hidden" name="region_id" value="{$_REQUEST[region_id]}" />
-			<input type="text" size="8" name="s_school_name" value="{$s_school_name}" />
+			<input type="text" size="10" name="s_school_name" class="t_input" value="{$s_school_name}" />
 			<input type="submit" class="submit" value="搜索驾校" />
 		</form>
+		根据区域查找驾校群组：<a href="?do=mtag&view=school">全国</a> &gt;&gt; <a href="?do=mtag&view=school&province_id={$_GET[province_id]}">$province_name</a> &gt;&gt; <a href="?do=mtag&view=school&province_id={$_GET[province_id]}&city_id={$_GET[city_id]}">$city_name</a> &gt;&gt; $region_name
 		<div class="clear"></div>
 	</div>
 				<!--{/if}-->
@@ -164,10 +164,9 @@
 		<!--{else}-->
 			<!--{loop $school_list $i $school}-->
 	<dl class="school_list">
-		<dt><a href="?do=mtag&view=school&school_id={$school[id]}">$school[name]</a></dt>
 		<dd>[有 {$school[member_count]}个车友]</dd>
 		<dd>[有 {$school[mtag_count]}个群组数]</dd>
-		<div class="clear"></div>
+		<dt><a href="?do=mtag&view=school&school_id={$school[id]}">$school[name]</a></dt>
 	</dl>
 			<!--{/loop}-->
 			<!--{if !empty($multi)}-->
