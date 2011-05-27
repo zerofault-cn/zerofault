@@ -1254,7 +1254,7 @@ function siconv($str, $out_charset, $in_charset='') {
 }
 
 //获取用户数据
-function getpassport($username, $password) {
+function getpassport($username, $password, $email='') {
 	global $_SGLOBAL, $_SC;
 
 	$passport = array();
@@ -1262,7 +1262,7 @@ function getpassport($username, $password) {
 		showmessage('system_error');
 	}
 
-	$ucresult = uc_user_login($username, $password);
+	$ucresult = uc_user_login($username, $password, 0, 0, '', '', $email);
 	if($ucresult[0] > 0) {
 		$passport['uid'] = $ucresult[0];
 		$passport['username'] = $ucresult[1];

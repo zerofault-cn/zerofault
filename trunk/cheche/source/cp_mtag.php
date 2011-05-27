@@ -545,7 +545,7 @@ if($_GET['op'] == 'manage') {
 		if (!array_key_exists($a, $car_brand_arr)) {
 			$car_brand_arr[$a] = array();
 		}
-		$car_brand_arr[$a][$v['id']] = $v['name'];
+		$car_brand_arr[$a][$v['id']] = $a.' '.$v['name'];
 	}
 	$car_brand_opts = genOptionGrp($car_brand_arr);
 

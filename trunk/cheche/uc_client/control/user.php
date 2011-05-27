@@ -116,9 +116,14 @@ class usercontrol extends base {
 		$checkques = $this->input('checkques');
 		$questionid = $this->input('questionid');
 		$answer = $this->input('answer');
+		$email = $this->input('email');
 		if($isuid) {
 			$user = $_ENV['user']->get_user_by_uid($username);
-		} else {
+		}
+		elseif (''!=$email) {
+			$user = $_ENV['user']->get_user_by_email($email);
+		}
+		else {
 			$user = $_ENV['user']->get_user_by_username($username);
 		}
 

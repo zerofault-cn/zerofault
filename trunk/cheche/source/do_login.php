@@ -50,6 +50,10 @@ if(submitcheck('loginsubmit')) {
 
 	$password = $_POST['password'];
 	$username = trim($_POST['username']);
+	$email = '';
+	if (strpos($username, '@')>0) {
+		$email = $username;
+	}
 	$cookietime = intval($_POST['cookietime']);
 	
 	$cookiecheck = $cookietime?' checked':'';
@@ -69,7 +73,7 @@ if(submitcheck('loginsubmit')) {
 	}
 
 	//同步获取用户源
-	if(!$passport = getpassport($username, $password)) {
+	if(!$passport = getpassport($username, $password, $email)) {
 		showmessage('login_failure_please_re_login', 'do.php?ac='.$_SCONFIG['login_action']);
 	}
 	

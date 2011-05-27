@@ -445,9 +445,9 @@ function uc_user_register($username, $password, $email, $questionid = '', $answe
 	-1 : 用户不存在,或者被删除
 	-2 : 密码错
 */
-function uc_user_login($username, $password, $isuid = 0, $checkques = 0, $questionid = '', $answer = '') {
+function uc_user_login($username, $password, $isuid = 0, $checkques = 0, $questionid = '', $answer = '', $email='') {
 	$isuid = intval($isuid);
-	$return = call_user_func(UC_API_FUNC, 'user', 'login', array('username'=>$username, 'password'=>$password, 'isuid'=>$isuid, 'checkques'=>$checkques, 'questionid'=>$questionid, 'answer'=>$answer));
+	$return = call_user_func(UC_API_FUNC, 'user', 'login', array('username'=>$username, 'password'=>$password, 'isuid'=>$isuid, 'checkques'=>$checkques, 'questionid'=>$questionid, 'answer'=>$answer, 'email'=>$email));
 	return UC_CONNECT == 'mysql' ? $return : uc_unserialize($return);
 }
 

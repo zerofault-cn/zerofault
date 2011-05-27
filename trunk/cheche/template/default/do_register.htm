@@ -28,31 +28,19 @@
 	</tr>
 	<!--{/if}-->
 	
-	<!--{if $_SCONFIG['seccode_register']}-->
-	<!--{if $_SCONFIG['questionmode']}-->
-	<tr>
-		<th style="vertical-align: top;">请先回答问题</th>
-		<td>
-			<p><!--{eval question();}--></p>
-			<input type="text" id="seccode" name="seccode" value="" class="t_input" onBlur="checkSeccode()" tabindex="1" autocomplete="off" />&nbsp;<span id="checkseccode">&nbsp;</span>
-		</td>
-	</tr>
-	<!--{else}-->
-	<tr>
-		<th style="vertical-align: top;">验证码</th>
-		<td>
-			<script>seccode();</script>
-			<p>请输入上面的4位字母或数字，看不清可<a href="javascript:updateseccode()">更换一张</a></p>
-			<input type="text" id="seccode" name="seccode" value="" class="t_input" onBlur="checkSeccode()" tabindex="1" autocomplete="off" />&nbsp;<span id="checkseccode">&nbsp;</span>
-		</td>
-	</tr>
-	<!--{/if}-->
-	<!--{/if}-->
 	
-	<tr><th width="100">用户名</th><td><input type="text" id="username" name="username" value="" class="t_input" onBlur="checkUserName()" tabindex="2" />&nbsp;<span id="checkusername">&nbsp;</span></td></tr>
 	<tr>
-		<th>注册密码</th>
-		<td>
+		<th width="100"><span id="label_email">注册邮箱：</span><span id="label_username" style="display:none;">注册帐号：</span></th>
+		<td><em>*</em>
+			<input type="text" id="username" name="username" value="" class="t_input" onBlur="checkUserName()" style="display:none;"/>
+			<input type="text" id="email" name="email" value="" class="t_input" onBlur="checkEmail()" />&nbsp;<span id="checkusername">&nbsp;</span><br />
+			<span id="tip_username" style="display:none;">您还可以使用 <a href="javascript:void(0);" onclick="switchTo('username', 'email');">邮箱</a> 进行注册</span>
+			<span id="tip_email">如果没有邮箱，您还可以使用 <a href="javascript:void(0);" onclick="switchTo('email', 'username')">帐号</a> 注册</span>
+		</td>
+	</tr>
+	<tr>
+		<th valign="top">创建车车网密码：</th>
+		<td><em>*</em>
 			<input type="password" name="password" id="password" value="" class="t_input" onBlur="checkPassword()" onkeyup="checkPwd(this.value);" tabindex="3" />&nbsp;<span id="checkpassword">&nbsp;</span><br/>
 			<style>
 				.psdiv0,.psdiv1,.psdiv2,.psdiv3,.psdiv4{position:relative;height:30px;color:#666}/*密码强度容器*/
@@ -80,9 +68,80 @@
 			</div>
 		</td>
 	</tr>
-	<tr><th>再次输入密码</th><td><input type="password" id="password2" name="password2" value="" class="t_input"  onBlur="checkPassword2()" tabindex="4" />&nbsp;<span id="checkpassword2">&nbsp;</span></td></tr>
-	<tr><th>邮箱</th><td><input type="text" id="email" name="email" value="@" class="t_input" tabindex="5" />
-		<br>请准确填入您的邮箱，在忘记密码，或者您使用邮件通知功能时，会发送邮件到该邮箱。</td></tr>
+	<tr>
+		<td colspan="2" style="border-top: 1px solid #CCCCCC"></td>
+	</tr>
+	<tr>
+		<th>您的真实姓名：</th>
+		<td><input type="text" name="name" value="" /></td>
+	</tr>
+	<tr>
+		<th>性别：</th>
+		<td>
+			<input type="radio" name="sex" value="1" id="sex1"/><label for="sex1">男</label>
+			&nbsp;&nbsp;&nbsp;&nbsp;
+			<input type="radio" name="sex" value="2" id="sex2"/><label for="sex2">女</label>
+		</td>
+	</tr>
+	<tr>
+		<th>出生日期：</th>
+		<td>
+			<select id="birthyear" name="birthyear" onchange="showbirthday();">
+				<option value="0">----</option>
+				$birthyeayhtml
+			</select> 年 
+			<select id="birthmonth" name="birthmonth" onchange="showbirthday();">
+				<option value="0">--</option>
+				$birthmonthhtml
+			</select> 月 
+			<select id="birthday" name="birthday">
+				<option value="0">--</option>
+				$birthdayhtml
+			</select> 日
+		</td>
+	</tr>
+	<tr>
+		<th style="width:10em;">我现在的身份：</th>
+		<td>
+			<select id="car_role" name="car_role" onchange="javascript:if(this.value=='1'){document.getElementById('car_number').style.display='';}else{document.getElementById('car_number').style.display='none';};">
+				<option value="0">请选择身份</option>
+				$car_role_opts
+			</select>
+			<span id="car_number" <!--{if $space['car_role']!=1}-->style="display:none;"<!--{/if}-->>您的车牌号：<input type="text" size="10" name="car_number" value="<!--{eval echo stripslashes($space['car_number']);}-->"/></span>
+		</td>
+		<td>&nbsp;</td>
+	</tr>
+	<tr>
+		<th style="width:10em;">我喜欢的车型：</th>
+		<td>
+			品牌:
+			<select name="car_brand" onchange="javascript:load_car_opts('sel_model', this.value);">
+				<option value="0">请选择品牌</option>
+				$car_brand_opts
+			</select>&nbsp;&nbsp;&nbsp;&nbsp;
+			车型:
+			<select id="sel_model" name="car_model" onchange="javascript:load_car_opts('sel_profile', this.value);">
+				<option value="0">请选择车型</option>
+				$car_model_opts
+			</select>&nbsp;&nbsp;&nbsp;&nbsp;
+			配置:
+			<select id="sel_profile" name="car_profile">
+				<option value="0">请选择配置</option>
+				$car_profile_opts
+			</select>
+		</td>
+		<td>&nbsp;</td>
+	</tr>
+	<!--{if $_SCONFIG['seccode_register']}-->
+	<tr>
+		<th style="vertical-align: top;">验证码：</th>
+		<td>
+			<script>seccode();</script>
+			<p>请输入上面的4位字母或数字，看不清可<a href="javascript:updateseccode()">更换一张</a></p>
+			<input type="text" id="seccode" name="seccode" value="" class="t_input" onBlur="checkSeccode()" tabindex="1" autocomplete="off" />&nbsp;<span id="checkseccode">&nbsp;</span>
+		</td>
+	</tr>
+	<!--{/if}-->
 	
 	<!--{if $register_rule}-->
 	<tr><th>服务条款</th>
@@ -132,6 +191,20 @@
 		}
 		ajaxresponse('checkusername', 'op=checkusername&username=' + (is_ie && document.charset == 'utf-8' ? encodeURIComponent(userName) : userName));
 	}
+	function checkEmail() {
+		var email = $('email').value;
+		if(email == lastEmail) {
+			return;
+		} else {
+			lastEmail = email;
+		}
+		var cu = $('checkusername');
+		if (!new RegExp(/^\w+((-\w+)|(\.\w+))*\@[A-Za-z0-9]+((\.|-)[A-Za-z0-9]+)*\.[A-Za-z0-9]+$/).test(email)) {
+			warning(cu, '邮箱地址格式不正确');
+			return;
+		}
+		ajaxresponse('checkusername', 'op=checkemail&email=' + email);
+	}
 	function checkPassword(confirm) {
 		var password = $('password').value;
 		if(!confirm && password == lastPassword) {
@@ -147,7 +220,7 @@
 			cp.style.display = '';
 			cp.innerHTML = '<img src="image/check_right.gif" width="13" height="13">';
 			if(!confirm) {
-				checkPassword2(true);
+			//	checkPassword2(true);
 			}
 			return true;
 		}
@@ -270,6 +343,56 @@
 		} 
 		return bitTotal(modes);
 	}
+
+	function switchTo(type0, type1) {
+		document.getElementById('label_'+type0).style.display = 'none';
+		document.getElementById(type0).style.display = 'none';
+		document.getElementById(type0).value = '';
+		document.getElementById('tip_'+type0).style.display = 'none';
+
+		document.getElementById('label_'+type1).style.display = '';
+		document.getElementById(type1).style.display = '';
+		document.getElementById('tip_'+type1).style.display = '';
+	}
+
+	function load_car_opts(field, pid) {
+		if ('0' == pid) {
+			document.getElementById(field).length = 1;
+			if ('sel_model' == field) {
+				document.getElementById('sel_profile').length = 1;
+			}
+			return;
+		}
+		var x = new Ajax('HTML');
+		x.get('do.php?ac=ajax&op=get_car_model&pid='+pid, function(s) {
+			var sel = document.getElementById(field);
+			sel.length = 1;
+			var json = eval('('+s+')');
+			for (var i=0; i<json.length; i++) {
+				sel.options.add(new Option(json[i].name, json[i].id));
+			}
+		});
+	}
+
+	function load_region_opts(field, pid) {
+		if ('0' == pid) {
+			document.getElementById(field).length = 1;
+			if ('sel_city' == field) {
+				document.getElementById('sel_region').length = 1;
+			}
+			return;
+		}
+		var x = new Ajax('HTML');
+		x.get('do.php?ac=ajax&op=get_region&pid='+pid, function(s) {
+			var sel = document.getElementById(field);
+			sel.length = 1;
+			var json = eval('('+s+')');
+			for (var i=0; i<json.length; i++) {
+				sel.options.add(new Option(json[i].name, json[i].id));
+			}
+		});
+	}
+
 //-->
 </script>
 

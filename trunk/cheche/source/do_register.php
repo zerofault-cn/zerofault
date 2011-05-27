@@ -14,10 +14,10 @@ if($_SGLOBAL['supe_uid']) {
 	showmessage('do_success', 'space.php?do=home', 0);
 }
 
-//Ã»ÓĞµÇÂ¼±íµ¥
+//æ²¡æœ‰ç™»å½•è¡¨å•
 $_SGLOBAL['nologinform'] = 1;
 
-//ºÃÓÑÑûÇë
+//å¥½å‹é‚€è¯·
 $uid = empty($_GET['uid'])?0:intval($_GET['uid']);
 $code = empty($_GET['code'])?'':$_GET['code'];
 $app = empty($_GET['app'])?'':intval($_GET['app']);
@@ -29,7 +29,7 @@ $pay = $app ? 0 : $invitepay['credit'];
 
 if($uid && $code && !$pay) {
 	$m_space = getspace($uid);
-	if($code == space_key($m_space, $app)) {//ÑéÖ¤Í¨¹ı
+	if($code == space_key($m_space, $app)) {//éªŒè¯é€šè¿‡
 		$invitearr['uid'] = $uid;
 		$invitearr['username'] = $m_space['username'];
 	}
@@ -52,12 +52,12 @@ if(empty($op)) {
 		}
 	}
 
-	//ÊÇ·ñ¹Ø±ÕÕ¾µã
+	//æ˜¯å¦å…³é—­ç«™ç‚¹
 	checkclose();
 
 	if(submitcheck('registersubmit')) {
 
-		//ÒÑ¾­×¢²áÓÃ»§
+		//å·²ç»æ³¨å†Œç”¨æˆ·
 		if($_SGLOBAL['supe_uid']) {
 			showmessage('registered', 'space.php');
 		}
@@ -74,7 +74,7 @@ if(empty($op)) {
 		}
 
 		if($_POST['password'] != $_POST['password2']) {
-			showmessage('password_inconsistency');
+		//	showmessage('password_inconsistency');
 		}
 
 		if(!$_POST['password'] || $_POST['password'] != addslashes($_POST['password'])) {
@@ -84,17 +84,22 @@ if(empty($op)) {
 		$username = trim($_POST['username']);
 		$password = $_POST['password'];
 		
-		$email = isemail($_POST['email'])?$_POST['email']:'';
-		if(empty($email)) {
-			showmessage('email_format_is_wrong');
-		}
-		//¼ì²éÓÊ¼ş
-		if($_SCONFIG['checkemail']) {
-			if($count = getcount('spacefield', array('email'=>$email))) {
-				showmessage('email_has_been_registered');
+		if (''==$username) {
+			$email = trim($_POST['email']);
+			if (''==$email) {
+				showmessage('é‚®ç®±åœ°å€æˆ–å¸å·å¿…é¡»å¡«å†™ä¸€ä¸ª');
 			}
+			elseif (!isemail($email)) {
+				showmessage('email_format_is_wrong');
+			}
+			else {
+				if($count = getcount('spacefield', array('email'=>$email))) {
+					showmessage('email_has_been_registered');
+				}
+			}
+			$username = substr($email, 0, strpos($email, '@'));
 		}
-		//¼ì²éIP
+		//æ£€æŸ¥IP
 		$onlineip = getonlineip();
 		if($_SCONFIG['regipdate']) {
 			$query = $_SGLOBAL['db']->query("SELECT dateline FROM ".tname('space')." WHERE regip='$onlineip' ORDER BY dateline DESC LIMIT 1");
@@ -126,16 +131,28 @@ if(empty($op)) {
 			$setarr = array(
 				'uid' => $newuid,
 				'username' => $username,
-				'password' => md5("$newuid|$_SGLOBAL[timestamp]")//±¾µØÃÜÂëËæ»úÉú³É
+				'password' => md5("$newuid|$_SGLOBAL[timestamp]")//æœ¬åœ°å¯†ç éšæœºç”Ÿæˆ
 			);
-			//¸üĞÂ±¾µØÓÃ»§¿â
+			//æ›´æ–°æœ¬åœ°ç”¨æˆ·åº“
 			inserttable('member', $setarr, 0, true);
 
-			//¿ªÍ¨¿Õ¼ä
+			//å¼€é€šç©ºé—´
 			include_once(S_ROOT.'./source/function_space.php');
-			$space = space_open($newuid, $username, 0, $email);
+			$space_field = array(
+				'sex' => intval($_POST['sex']),
+				'car_role' => intval($_POST['car_role']),
+				'car_number' => getstr($_POST['car_number'], 10, 1, 1),
+				'car_brand' => intval($_POST['car_brand']),
+				'car_model' => intval($_POST['car_model']),
+				'car_profile' => intval($_POST['car_profile']),
+				'birthyear' => intval($_POST['birthyear']),
+				'birthmonth' => intval($_POST['birthmonth']),
+				'birthday' => intval($_POST['birthday'])
+				);
 
-			//Ä¬ÈÏºÃÓÑ
+			$space = space_open($newuid, $username, 0, $email, getstr($_POST['name'], 10, 1, 1, 1), $space_field);
+
+			//é»˜è®¤å¥½å‹
 			$flog = $inserts = $fuids = $pokes = array();
 			if(!empty($_SCONFIG['defaultfusername'])) {
 				$query = $_SGLOBAL['db']->query("SELECT uid,username FROM ".tname('space')." WHERE username IN (".simplode(explode(',', $_SCONFIG['defaultfusername'])).")");
@@ -145,7 +162,7 @@ if(empty($op)) {
 					$inserts[] = "('$newuid','$value[uid]','$value[username]','1','$_SGLOBAL[timestamp]')";
 					$inserts[] = "('$value[uid]','$newuid','$username','1','$_SGLOBAL[timestamp]')";
 					$pokes[] = "('$newuid','$value[uid]','$value[username]','".addslashes($_SCONFIG['defaultpoke'])."','$_SGLOBAL[timestamp]')";
-					//Ìí¼ÓºÃÓÑ±ä¸ü¼ÇÂ¼
+					//æ·»åŠ å¥½å‹å˜æ›´è®°å½•
 					$flog[] = "('$value[uid]','$newuid','add','$_SGLOBAL[timestamp]')";
 				}
 				if($inserts) {
@@ -153,12 +170,12 @@ if(empty($op)) {
 					$_SGLOBAL['db']->query("REPLACE INTO ".tname('poke')." (uid,fromuid,fromusername,note,dateline) VALUES ".implode(',', $pokes));
 					$_SGLOBAL['db']->query("REPLACE INTO ".tname('friendlog')." (uid,fuid,action,dateline) VALUES ".implode(',', $flog));
 
-					//Ìí¼Óµ½¸½¼Ó±í
+					//æ·»åŠ åˆ°é™„åŠ è¡¨
 					$friendstr = empty($fuids)?'':implode(',', $fuids);
 					updatetable('space', array('friendnum'=>count($fuids), 'pokenum'=>count($pokes)), array('uid'=>$newuid));
 					updatetable('spacefield', array('friend'=>$friendstr, 'feedfriend'=>$friendstr), array('uid'=>$newuid));
 
-					//¸üĞÂÄ¬ÈÏÓÃ»§ºÃÓÑ»º´æ
+					//æ›´æ–°é»˜è®¤ç”¨æˆ·å¥½å‹ç¼“å­˜
 					include_once(S_ROOT.'./source/function_cp.php');
 					foreach ($fuids as $fuid) {
 						friend_cache($fuid);
@@ -166,24 +183,24 @@ if(empty($op)) {
 				}
 			}
 
-			//ÔÚÏßsession
+			//åœ¨çº¿session
 			insertsession($setarr);
 
-			//ÉèÖÃcookie
+			//è®¾ç½®cookie
 			ssetcookie('auth', authcode("$setarr[password]\t$setarr[uid]", 'ENCODE'), 2592000);
 			ssetcookie('loginuser', $username, 31536000);
 			ssetcookie('_refer', '');
 
-			//ºÃÓÑÑûÇë
+			//å¥½å‹é‚€è¯·
 			if($invitearr) {
 				include_once(S_ROOT.'./source/function_cp.php');
 				invite_update($invitearr['id'], $setarr['uid'], $setarr['username'], $invitearr['uid'], $invitearr['username'], $app);
-				//Èç¹ûÌá½»µÄÓÊÏäµØÖ·ÓëÑûÇëÏà·ûµÄÔòÖ±½ÓÍ¨¹ıÓÊÏäÑéÖ¤
+				//å¦‚æœæäº¤çš„é‚®ç®±åœ°å€ä¸é‚€è¯·ç›¸ç¬¦çš„åˆ™ç›´æ¥é€šè¿‡é‚®ç®±éªŒè¯
 				if($invitearr['email'] == $email) {
 					updatetable('spacefield', array('emailcheck'=>1), array('uid'=>$newuid));
 				}
 				
-				//Í³¼Æ¸üĞÂ
+				//ç»Ÿè®¡æ›´æ–°
 				include_once(S_ROOT.'./source/function_cp.php');
 				if($app) {
 					updatestat('appinvite');
@@ -192,14 +209,48 @@ if(empty($op)) {
 				}
 			}
 
-			//±ä¸ü¼ÇÂ¼
+			//å˜æ›´è®°å½•
 			if($_SCONFIG['my_status']) inserttable('userlog', array('uid'=>$newuid, 'action'=>'add', 'dateline'=>$_SGLOBAL['timestamp']), 0, true);
 
 			showmessage('registered', $jumpurl);
 		}
-
 	}
-	
+	//ç”Ÿæ—¥:å¹´
+	$birthyeayhtml = '';
+	$nowy = sgmdate('Y');
+	for ($i=0; $i<100; $i++) {
+		$they = $nowy - $i;
+		$selectstr = $they == $space['birthyear']?' selected':'';
+		$birthyeayhtml .= "<option value=\"$they\"$selectstr>$they</option>";
+	}
+	//ç”Ÿæ—¥:æœˆ
+	$birthmonthhtml = '';
+	for ($i=1; $i<13; $i++) {
+		$selectstr = $i == $space['birthmonth']?' selected':'';
+		$birthmonthhtml .= "<option value=\"$i\"$selectstr>$i</option>";
+	}
+	//ç”Ÿæ—¥:æ—¥
+	$birthdayhtml = '';
+	for ($i=1; $i<32; $i++) {
+		$selectstr = $i == $space['birthday']?' selected':'';
+		$birthdayhtml .= "<option value=\"$i\"$selectstr>$i</option>";
+	}
+	//è½¦ä¸»èº«ä»½
+	$profile = parse_ini_file(S_ROOT.'profile.ini', true);
+	$car_role_opts = genOptions($profile['car_role'], $space['car_role']);
+
+	//è½¦å‹
+	$car_brand_arr = array();
+	$query = $_SGLOBAL['db']->query("SELECT * FROM ".tname('carmodel')." where pid=0 ORDER BY initials");
+	while ($v = $_SGLOBAL['db']->fetch_array($query)) {
+		$a = $v['initials'];
+		if (!array_key_exists($a, $car_brand_arr)) {
+			$car_brand_arr[$a] = array();
+		}
+		$car_brand_arr[$a][$v['id']] = $v['name'];
+	}
+	$car_brand_opts = genOptionGrp($car_brand_arr, $space['car_brand']);
+
 	$register_rule = data_get('registerrule');
 
 	include template('do_register');
@@ -219,6 +270,24 @@ if(empty($op)) {
 		showmessage('include_not_registered_words');
 	} elseif($ucresult == -3) {
 		showmessage('user_name_already_exists');
+	} else {
+		showmessage('succeed');
+	}
+} elseif($op == "checkemail") {
+
+	$email = trim($_GET['email']);
+	if(empty($email)) {
+		showmessage('email_is_not_legitimate');
+	}
+	@include_once (S_ROOT.'./uc_client/client.php');
+	$ucresult = uc_user_checkemail($email);
+
+	if($ucresult == -4) {
+		showmessage('é‚®ç®±åœ°å€æ ¼å¼ä¸æ­£ç¡®');
+	} elseif($ucresult == -5) {
+		showmessage('è¯¥é‚®ç®±åœ°å€è¢«ç¦æ­¢ä½¿ç”¨');
+	} elseif($ucresult == -6) {
+		showmessage('è¯¥é‚®ç®±åœ°å€å·²è¢«æ³¨å†Œ');
 	} else {
 		showmessage('succeed');
 	}

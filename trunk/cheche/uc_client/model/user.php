@@ -33,6 +33,11 @@ class usermodel {
 		return $arr;
 	}
 
+	function get_user_by_email($email) {
+		$arr = $this->db->fetch_first("SELECT * FROM ".UC_DBTABLEPRE."members WHERE email='$email'");
+		return $arr;
+	}
+
 	function check_username($username) {
 		$guestexp = '\xA1\xA1|\xAC\xA3|^Guest|^\xD3\xCE\xBF\xCD|\xB9\x43\xAB\xC8';
 		$len = strlen($username);
