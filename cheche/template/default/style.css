@@ -183,7 +183,7 @@ map#Map .area_overlay a {
 dl.school_list {
 	border-bottom: 1px dotted #A7ADBA;
 	padding: 5px;
-	clear: both;
+	height: 18px;
 }
 dl.school_list em {
 	font-style:normal;
