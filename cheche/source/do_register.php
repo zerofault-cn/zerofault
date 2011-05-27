@@ -247,9 +247,17 @@ if(empty($op)) {
 		if (!array_key_exists($a, $car_brand_arr)) {
 			$car_brand_arr[$a] = array();
 		}
-		$car_brand_arr[$a][$v['id']] = $v['name'];
+		$car_brand_arr[$a][$v['id']] = $a.' '.$v['name'];
 	}
-	$car_brand_opts = genOptionGrp($car_brand_arr, $space['car_brand']);
+	$car_brand_opts = genOptionGrp($car_brand_arr);
+
+	//地区
+	$province_arr = array();
+	$query = $_SGLOBAL['db']->query("SELECT * FROM ".tname('region')." where pid=1");
+	while ($v = $_SGLOBAL['db']->fetch_array($query)) {
+		$province_arr[$v['id']] = $v['name'];
+	}
+	$province_opts = genOptions($province_arr);
 
 	$register_rule = data_get('registerrule');
 
