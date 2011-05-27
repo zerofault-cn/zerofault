@@ -9,7 +9,7 @@ if(!defined('IN_UCHOME')) {
 }
 
 //开通空间
-function space_open($uid, $username, $gid=0, $email='') {
+function space_open($uid, $username, $gid=0, $email='', $name='', $space_field=array()) {
 	global $_SGLOBAL, $_SCONFIG;
 
 	if(empty($uid) || empty($username)) return array();
@@ -23,6 +23,7 @@ function space_open($uid, $username, $gid=0, $email='') {
 	$space = array(
 		'uid' => $uid,
 		'username' => $username,
+		'name' => $name,
 		'dateline' => $_SGLOBAL['timestamp'],
 		'groupid' => $gid,
 		'regip' => getonlineip()
@@ -36,7 +37,7 @@ function space_open($uid, $username, $gid=0, $email='') {
 		$space['experience'] = $reward['experience'];
 	}
 	inserttable('space', $space, 0, true);
-	inserttable('spacefield', array('uid'=>$uid, 'email'=>$email), 0, true);
+	inserttable('spacefield', array_merge(array('uid'=>$uid, 'email'=>$email), $space_field), 0, true);
 
 	//发送PM
 	if($_SGLOBAL['supe_uid'] && $_SGLOBAL['supe_uid'] != $uid) {

@@ -15,6 +15,7 @@
 				<!--{/if}-->
 			</h2>
 			<!--{if $value[sex]==2}--><p>美女</p><!--{elseif $value[sex]==1}--><p>帅哥</p><!--{/if}--></p>
+			<p>{$value['car_str']} {$value['region_str']}</p>
 			<p>
 				<!--{if $_GET['view']=='show'}-->竞价<!--{/if}-->积分：$value[credit] / <!--{if $value[experience]}-->经验：$value[experience] / <!--{/if}-->人气：$value[viewnum] / 好友：$value[friendnum]</p>
 			<!--{if $value[note]}-->$value[note]<!--{/if}-->
