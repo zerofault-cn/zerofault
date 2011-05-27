@@ -1,0 +1,92 @@
+<!--{template admin/tpl/header}-->
+
+<div class="mainarea">
+	<div class="maininner">
+		<div class="tabs_header">
+			<ul class="tabs">
+				<li$actives[view]><a href="admincp.php?ac=car"><span>车型列表</span></a></li>
+				<li class="null"><a href="admincp.php?ac=car&op=add">添加车型</a></li>
+			</ul>
+		</div>
+
+<!--{if $_GET['op'] == 'delete'}-->
+
+		<form method="post" action="admincp.php?ac=car&op=delete&id=$_GET[id]">
+		<input type="hidden" name="formhash" value="<!--{eval echo formhash();}-->" />
+		<div class="bdrcontent">
+			<div class="topactions">
+				该驾校删除后，请选择该驾校下面已有的群组会归属到哪个新驾校。
+			</div>
+			<table cellspacing="0" cellpadding="0" class="formtable">
+			<tr>
+				<th width="150">驾校下的群组新归属</th>
+				<td>
+					<select name="newid">
+					<!--{loop $newfield $value}-->
+						<option value="$value[fieldid]">$value[title]</option>
+					<!--{/loop}-->
+					</select>
+				</td>
+			</tr>
+			</table>
+		</div>
+		<div class="footactions">
+			<input type="submit" name="deletesubmit" value="确定删除" class="submit">
+		</div>
+		</form>
+
+<!--{else}-->
+
+	<!--{if empty($thevalue)}-->
+		<div class="bdrcontent">
+			<table cellspacing="0" cellpadding="0" class="formtable">
+			<tr>
+				<th>品牌</th>
+				<th>车型</th>
+				<th>配置</th>
+				<th width="80">操作</th>
+			</tr>
+			<!--{loop $list $value}-->
+			<tr>
+				<th>$value[name]</th>
+				<td>$value[fullname]<br />$value[address]</td>
+				<td>{$value[province]}省-{$value[city]}市-{$value[region]}</td>
+				<td width="80">
+				<a href="admincp.php?ac=school&op=edit&id=$value[id]">编辑</a> | 
+				<a href="admincp.php?ac=school&op=delete&id=$value[id]">删除</a></td>
+			</tr>
+			<!--{/loop}-->
+			</table>
+		</div>
+		<div class="footactions">
+			<!--{if isset($multi)}-->
+			<div class="page">$multi</div>
+			<!--{/if}-->
+		</div>
+
+	<!--{else}-->
+		<form method="post" action="admincp.php?ac=school&id=$thevalue[id]">
+		<div class="bdrcontent">
+			<input type="hidden" name="formhash" value="<!--{eval echo formhash();}-->" />
+			<table cellspacing="0" cellpadding="0" class="formtable">
+
+			</table>
+		</div>
+		<div class="footactions">
+			<input type="submit" name="submit" value="提交" class="submit">
+		</div>
+		</form>
+
+	<!--{/if}-->
+
+<!--{/if}-->
+
+	</div>
+</div>
+
+<div class="side">
+	<!--{template admin/tpl/side}-->
+</div>
+<script>
+</script>
+<!--{template admin/tpl/footer}-->
