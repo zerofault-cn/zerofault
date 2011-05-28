@@ -20,7 +20,7 @@
 	</caption>
 	<!--{if $invitearr}-->
 	<tr>
-		<th width="100">好友邀请</th>
+		<th valign="top">好友邀请</th>
 		<td>
 			<a href="space.php?$url_plus" target="_blank"><!--{avatar($invitearr[uid],small)}--></a>
 			<a href="space.php?$url_plus" target="_blank">{$_SN[$invitearr[uid]]}</a>
@@ -30,8 +30,8 @@
 	
 	
 	<tr>
-		<th width="100"><span id="label_email">注册邮箱：</span><span id="label_username" style="display:none;">注册帐号：</span></th>
-		<td><em>*</em>
+		<th width="100"><span id="label_email">注册邮箱：</span><span id="label_username" style="display:none;">注册帐号：</span><em>*</em></th>
+		<td>
 			<input type="text" id="username" name="username" value="" class="t_input" onBlur="checkUserName()" style="display:none;"/>
 			<input type="text" id="email" name="email" value="" class="t_input" onBlur="checkEmail()" />&nbsp;<span id="checkusername">&nbsp;</span><br />
 			<span id="tip_username" style="display:none;">您还可以使用 <a href="javascript:void(0);" onclick="switchTo('username', 'email');">邮箱</a> 进行注册</span>
@@ -39,8 +39,8 @@
 		</td>
 	</tr>
 	<tr>
-		<th valign="top">创建车车网密码：</th>
-		<td><em>*</em>
+		<th valign="top" nowrap="nowrap">创建车车网密码：<em>*</em></th>
+		<td>
 			<input type="password" name="password" id="password" value="" class="t_input" onBlur="checkPassword()" onkeyup="checkPwd(this.value);" tabindex="3" />&nbsp;<span id="checkpassword">&nbsp;</span><br/>
 			<style>
 				.psdiv0,.psdiv1,.psdiv2,.psdiv3,.psdiv4{position:relative;height:30px;color:#666}/*密码强度容器*/
@@ -72,11 +72,11 @@
 		<td colspan="2" style="border-top: 1px solid #CCCCCC"></td>
 	</tr>
 	<tr>
-		<th nowrap="nowrap">您的真实姓名：</th>
+		<th>您的真实姓名：<em>*</em></th>
 		<td><input type="text" name="name" value="" /></td>
 	</tr>
 	<tr>
-		<th>性别：</th>
+		<th>性别：<em>*</em></th>
 		<td>
 			<input type="radio" name="sex" value="1" id="sex1"/><label for="sex1">男</label>
 			&nbsp;&nbsp;&nbsp;&nbsp;
@@ -84,55 +84,79 @@
 		</td>
 	</tr>
 	<tr>
-		<th>我现在的身份：</th>
+		<th>我现在的身份：<em>*</em></th>
 		<td>
-			<select id="car_role" name="car_role" onchange="javascript:if(this.value=='1'){document.getElementById('car_number').style.display='';}else{document.getElementById('car_number').style.display='none';};">
+			<select id="car_role" name="car_role" onchange="javascript:if(this.value=='1'){$('car_number').style.display='';$('car_type1').style.display='';$('car_type0').style.display='none';}else{$('car_number').style.display='none';$('car_type1').style.display='none';$('car_type0').style.display='';};">
 				<option value="0">请选择身份</option>
 				$car_role_opts
 			</select>
-			<span id="car_number" <!--{if $space['car_role']!=1}-->style="display:none;"<!--{/if}-->>您的车牌号：<input type="text" size="10" name="car_number" value="<!--{eval echo stripslashes($space['car_number']);}-->"/></span>
+			<span id="car_number" <!--{if $space['car_role']!=1}-->style="display:none;"<!--{/if}-->>
+				您的车牌号：
+				<!--{if false}-->
+				<select name="car_number_prefix">
+					<option value="">---</option>
+					<!--{loop $car_number $P $C_arr}-->
+					<optgroup label="{$P}">
+						<!--{loop $C_arr $i $c}-->
+						<option value="{$P}{$c}">{$P} {$c}&nbsp;&nbsp;</option>
+						<!--{/loop}-->
+					</optgroup>
+					<!--{/loop}-->
+				</select>
+				<!--{/if}-->
+				<select onchange="change_prefix(this);">
+					<option value="">--</option>
+					<!--{loop $car_number $P $C_arr}-->
+					<option value="{$P}">{$P}</option>
+					<!--{/loop}-->
+				</select>
+				<select name="car_number_prefix" id="car_number_prefix">
+				<select>-
+				<input type="text" size="6" maxlength="6" name="car_number" value="" onkeyup="this.value=this.value.replace(/[^0-9a-zA-Z]/g, '');" onblur="checkNumber(this);"/>
+				<span id="car_number_msg"></span>
+			</span>
 		</td>
 		<td>&nbsp;</td>
 	</tr>
 	<tr>
-		<th>我喜欢的车型：</th>
+		<th><span id="car_type1">我现在的车型：</span><span id="car_type0" style="display:none;">我喜欢的车型：</span><em>*</em></th>
 		<td>
 			品牌:
 			<select name="car_brand" onchange="javascript:load_car_opts('sel_model', this.value);">
-				<option value="0">请选择品牌</option>
+				<option value="0">选择品牌</option>
 				$car_brand_opts
 			</select>&nbsp;&nbsp;&nbsp;&nbsp;
-			车型:
+			车系:
 			<select id="sel_model" name="car_model" onchange="javascript:load_car_opts('sel_profile', this.value);">
-				<option value="0">请选择车型</option>
+				<option value="0">选择车系</option>
 				$car_model_opts
 			</select>&nbsp;&nbsp;&nbsp;&nbsp;
-			配置:
+			车型:
 			<select id="sel_profile" name="car_profile">
-				<option value="0">请选择配置</option>
+				<option value="0">选择车型</option>
 				$car_profile_opts
 			</select>
 		</td>
 		<td>&nbsp;</td>
 	</tr>
 	<tr>
-		<th>所在地区：</th>
+		<th>所在地区：<em>*</em></th>
 		<td>
-			<select onchange="javascript:load_region_opts('sel_city', this.value);">
+			<select name="province_id" onchange="javascript:load_region_opts('sel_city', this.value);">
 				<option value="0">请选择</option>
 				$province_opts
 			</select>省
-			<select id="sel_city" onchange="javascript:load_region_opts('sel_region', this.value);">
+			<select name="city_id" id="sel_city" onchange="javascript:load_region_opts('sel_region', this.value);">
 				<option value="0">请选择</option>
 			</select>市
-			<select id="sel_region" name="ext_id">
+			<select id="sel_region" name="region_id">
 				<option value="0">请选择</option>
 			</select>区/县
 		</td>
 	</tr>
 	<!--{if $_SCONFIG['seccode_register']}-->
 	<tr>
-		<th style="vertical-align: top;">验证码：</th>
+		<th style="vertical-align: top;">验证码：<em>*</em></th>
 		<td>
 			<script>seccode();</script>
 			<p>请输入上面的4位字母或数字，看不清可<a href="javascript:updateseccode()">更换一张</a></p>
@@ -241,6 +265,16 @@
 			cp2.innerHTML = '<img src="image/check_right.gif" width="13" height="13">';
 		}
 	}
+	function checkNumber(obj) {
+		var number = obj.value;
+		if (number.length<5) {
+			warning($('car_number_msg'), '车牌号位数至少5位');
+			return;
+		}
+		else {
+			$('car_number_msg').innerHTML = '<img src="image/check_right.gif" width="13" height="13">';
+		}
+	}
 	function checkSeccode() {
 		var seccodeVerify = $('seccode').value;
 		if(seccodeVerify == lastSecCode) {
@@ -266,7 +300,7 @@
 	}
 	function warning(obj, msg) {
 		if((ton = obj.id.substr(5, obj.id.length)) != 'password2') {
-			$(ton).select();
+		//	$(ton).select();
 		}
 		obj.style.display = '';
 		obj.innerHTML = '<img src="image/check_error.gif" width="13" height="13"> &nbsp; ' + msg;
@@ -390,7 +424,26 @@
 			}
 		});
 	}
+var car_number_arr = new Array();
+<!--{loop $car_number $P $C_arr}-->
+car_number_arr['{$P}'] = new Array();
+	<!--{loop $C_arr $i $c}-->
+	car_number_arr['{$P}']['{$P}{$c}'] = '{$c}';
+	<!--{/loop}-->
+<!--{/loop}-->
 
+var car_number_prefix = $('car_number_prefix');
+function change_prefix(obj) {
+	var P = obj.value;
+	var c;
+	car_number_prefix.length = 0;
+	if (''!=P) {
+		for(var key in car_number_arr[P]) {
+			c = car_number_arr[P][key];
+			car_number_prefix.options.add(new Option(key, key));
+		}
+	}
+}
 //-->
 </script>
 

@@ -16,7 +16,7 @@
 
 <table cellspacing="0" cellpadding="0" class="formtable">
 <tr>
-	<th style="width:10em;">您的登录用户名:</th>
+	<th nowrap="nowrap">您的登录用户名:</th>
 	<td>
 		<!--{eval echo stripslashes($space['username']);}--> (<a href="cp.php?ac=password">修改登录密码</a>)
 	</td>
@@ -24,7 +24,7 @@
 </tr>
 <!--{if !$_SCONFIG['realname']}-->
 <tr>
-	<th style="width:10em;">真实姓名:</th>
+	<th>真实姓名:</th>
 	<td>
 		<input type="text" id="name" name="name" value="<!--{eval echo stripslashes($space['name']);}-->" class="t_input" />
 	</td>
@@ -32,7 +32,7 @@
 </tr>
 <!--{else}-->
 <tr>
-	<th style="width:10em;">真实姓名:</th>
+	<th>真实姓名:</th>
 	<td>
 	<!--{if $space[name] && empty($_GET['namechange'])}-->
 	<span style="font-weight:bold;"><!--{eval echo stripslashes($space['name']);}--></span>
@@ -50,7 +50,7 @@
 </tr>
 <!--{/if}-->
 <tr>
-	<th style="width:10em;">性别:</th>
+	<th>性别:</th>
 	<td>
 	<!--{if empty($space[sex])}-->
 		<label for="sexm"><input id="sexm" type="radio" value="1" name="sex"$sexarr[1] />男</label> 
@@ -63,32 +63,53 @@
 	<td>&nbsp;</td>
 </tr>
 <tr>
-	<th style="width:10em;">我现在的身份:</th>
+	<th>我现在的身份:</th>
 	<td>
-		<select id="car_role" name="car_role" onchange="javascript:if(this.value=='1'){document.getElementById('car_number').style.display='';}else{document.getElementById('car_number').style.display='none';};">
+		<select id="car_role" name="car_role" onchange="javascript:if(this.value=='1'){$('car_number').style.display='';$('car_type1').style.display='';$('car_type0').style.display='none';}else{$('car_number').style.display='none';$('car_type1').style.display='none';$('car_type0').style.display='';};">
 			<option value="0">请选择身份</option>
 			$car_role_opts
 		</select>
-		<span id="car_number" <!--{if $space['car_role']!=1}-->style="display:none;"<!--{/if}-->>您的车牌号：<input type="text" size="10" name="car_number" value="<!--{eval echo stripslashes($space['car_number']);}-->"/></span>
+		<span id="car_number" <!--{if $space['car_role']!=1}-->style="display:none;"<!--{/if}-->>
+			您的车牌号：
+				<!--{if false}-->
+				<select name="car_number_prefix">
+					<option value="">---</option>
+					<!--{loop $car_number $P $C_arr}-->
+					<optgroup label="{$P}">
+						<!--{loop $C_arr $i $c}-->
+						<option value="{$P}{$c}">{$P} {$c}&nbsp;&nbsp;</option>
+						<!--{/loop}-->
+					</optgroup>
+					<!--{/loop}-->
+				</select>
+				<!--{/if}-->
+				<select onchange="change_prefix(this);">
+					<option value="">--</option>
+					<!--{loop $car_number $P $C_arr}-->
+					<option value="{$P}">{$P}</option>
+					<!--{/loop}-->
+				</select>
+				<select name="car_number_prefix" id="car_number_prefix">
+				<select>-
+				<input type="text" size="6" maxlength="6" name="car_number" value="" onkeyup="this.value=this.value.replace(/[^0-9a-zA-Z]/g, '');" onblur="checkNumber(this);"/>
+				<span id="car_number_msg"></span>
+		</span>
 	</td>
 	<td>&nbsp;</td>
 </tr>
 <tr>
-	<th style="width:10em;">我喜欢的车型:</th>
+	<th><span id="car_type1">我现在的车型：</span><span id="car_type0" style="display:none;">我喜欢的车型：</span></th>
 	<td>
-		品牌:
 		<select name="car_brand" onchange="javascript:load_car_opts('sel_model', this.value);">
-			<option value="0">请选择品牌</option>
+			<option value="0">选择品牌</option>
 			$car_brand_opts
-		</select><br />
-		车型:
+		</select>
 		<select id="sel_model" name="car_model" onchange="javascript:load_car_opts('sel_profile', this.value);">
-			<option value="0">请选择车型</option>
+			<option value="0">选择车系</option>
 			$car_model_opts
-		</select><br />
-		配置:
+		</select>
 		<select id="sel_profile" name="car_profile">
-			<option value="0">请选择配置</option>
+			<option value="0">选择车型</option>
 			$car_profile_opts
 		</select>
 	</td>
@@ -98,7 +119,7 @@
 	<th style="width:10em;">婚恋状态:</th>
 	<td>
 		<select id="marry" name="marry">
-			<option value="0">&nbsp;</option>
+			<option value="0">--</option>
 			<option value="1"$marryarr[1]>单身</option>
 			<option value="2"$marryarr[2]>非单身</option>
 		</select>
@@ -116,15 +137,15 @@
 	<th>生日:</th>
 	<td>
 		<select id="birthyear" name="birthyear" onchange="showbirthday();">
-			<option value="0">&nbsp;</option>
+			<option value="0">--</option>
 			$birthyeayhtml
 		</select> 年 
 		<select id="birthmonth" name="birthmonth" onchange="showbirthday();">
-			<option value="0">&nbsp;</option>
+			<option value="0">--</option>
 			$birthmonthhtml
 		</select> 月 
 		<select id="birthday" name="birthday">
-			<option value="0">&nbsp;</option>
+			<option value="0">--</option>
 			$birthdayhtml
 		</select> 日
 		<a href="cp.php?ac=friend&op=search&view=birthyear" target="_blank">&raquo; 查找同生日朋友</a>
@@ -141,7 +162,7 @@
 	<th>血型:</th>
 	<td>
 		<select id="blood" name="blood">
-			<option value="">&nbsp;</option>
+			<option value="">--</option>
 			$bloodhtml
 		</select>
 	</td>

@@ -62,12 +62,6 @@ if(empty($op)) {
 			showmessage('registered', 'space.php');
 		}
 
-		if($_SCONFIG['seccode_register']) {
-			include_once(S_ROOT.'./source/function_cp.php');
-			if(!ckseccode($_POST['seccode'])) {
-				showmessage('incorrect_code');
-			}
-		}
 
 		if(!@include_once S_ROOT.'./uc_client/client.php') {
 			showmessage('system_error');
@@ -99,6 +93,30 @@ if(empty($op)) {
 			}
 			$username = substr($email, 0, strpos($email, '@'));
 		}
+		if (''==trim($_POST['name'])) {
+			showmessage('您的真实姓名必须填写！');
+		}
+		if (empty($_POST['sex'])) {
+			showmessage('您的性别必须选择！');
+		}
+		if (empty($_POST['car_role'])) {
+			showmessage('您的身份必须选择！');
+		}
+		if ('1'==$POST['car_role'] && (empty($_POST['car_number_prefix']) || ''==trim($_POST['car_number']))) {
+			showmessage('车牌号必须输入！');
+		}
+		if (empty($_POST['car_brand']) && empty($_POST['car_model']) && empty($_POST['car_profile'])) {
+			if ('1'==$POST['car_role']) {
+				showmessage('您现有的车型必须选择！');
+			}
+			else {
+				showmessage('必须选择您喜欢的车型！');
+			}
+		}
+		if (empty($_POST['province_id']) && empty($_POST['city_id']) && empty($_POST['region_id'])) {
+			showmessage('必须选择您的所在地区！');
+		}
+		
 		//检查IP
 		$onlineip = getonlineip();
 		if($_SCONFIG['regipdate']) {
@@ -107,6 +125,12 @@ if(empty($op)) {
 				if($_SGLOBAL['timestamp'] - $value['dateline'] < $_SCONFIG['regipdate']*3600) {
 					showmessage('regip_has_been_registered', '', 1, array($_SCONFIG['regipdate']));
 				}
+			}
+		}
+		if($_SCONFIG['seccode_register']) {
+			include_once(S_ROOT.'./source/function_cp.php');
+			if(!ckseccode($_POST['seccode'])) {
+				showmessage('incorrect_code');
 			}
 		}
 
@@ -141,13 +165,13 @@ if(empty($op)) {
 			$space_field = array(
 				'sex' => intval($_POST['sex']),
 				'car_role' => intval($_POST['car_role']),
-				'car_number' => getstr($_POST['car_number'], 10, 1, 1),
+				'car_number' => $_POST['car_number_prefix'].'-'.getstr($_POST['car_number'], 10, 1, 1),
 				'car_brand' => intval($_POST['car_brand']),
 				'car_model' => intval($_POST['car_model']),
 				'car_profile' => intval($_POST['car_profile']),
-				'birthyear' => intval($_POST['birthyear']),
-				'birthmonth' => intval($_POST['birthmonth']),
-				'birthday' => intval($_POST['birthday'])
+				'province_id' => intval($_POST['province_id']),
+				'city_id' => intval($_POST['city_id']),
+				'region_id' => intval($_POST['region_id'])
 				);
 
 			$space = space_open($newuid, $username, 0, $email, getstr($_POST['name'], 10, 1, 1, 1), $space_field);
@@ -238,7 +262,12 @@ if(empty($op)) {
 	//车主身份
 	$profile = parse_ini_file(S_ROOT.'profile.ini', true);
 	$car_role_opts = genOptions($profile['car_role'], $space['car_role']);
-
+	
+	$car_number = array();
+	foreach($profile['car_number'] as $p=>$c) {
+		$car_number[$p] = explode(',', $c);
+	}
+	
 	//车型
 	$car_brand_arr = array();
 	$query = $_SGLOBAL['db']->query("SELECT * FROM ".tname('carmodel')." where pid=0 ORDER BY initials");
