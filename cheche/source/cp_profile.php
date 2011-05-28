@@ -141,6 +141,11 @@ if($_GET['op'] == 'base') {
 	$profile = parse_ini_file(S_ROOT.'profile.ini', true);
 	$car_role_opts = genOptions($profile['car_role'], $space['car_role']);
 
+	$car_number = array();
+	foreach($profile['car_number'] as $p=>$c) {
+		$car_number[$p] = explode(',', $c);
+	}
+
 	//³µÐÍ
 	$car_brand_arr = array();
 	$query = $_SGLOBAL['db']->query("SELECT * FROM ".tname('carmodel')." where pid=0 ORDER BY initials");
