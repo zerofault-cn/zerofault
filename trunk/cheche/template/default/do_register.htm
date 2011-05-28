@@ -424,26 +424,26 @@
 			}
 		});
 	}
-var car_number_arr = new Array();
-<!--{loop $car_number $P $C_arr}-->
-car_number_arr['{$P}'] = new Array();
-	<!--{loop $C_arr $i $c}-->
-	car_number_arr['{$P}']['{$P}{$c}'] = '{$c}';
+	var car_number_arr = new Array();
+	<!--{loop $car_number $P $C_arr}-->
+	car_number_arr['{$P}'] = new Array();
+		<!--{loop $C_arr $i $c}-->
+		car_number_arr['{$P}']['{$P}{$c}'] = '{$c}';
+		<!--{/loop}-->
 	<!--{/loop}-->
-<!--{/loop}-->
 
-var car_number_prefix = $('car_number_prefix');
-function change_prefix(obj) {
-	var P = obj.value;
-	var c;
-	car_number_prefix.length = 0;
-	if (''!=P) {
-		for(var key in car_number_arr[P]) {
-			c = car_number_arr[P][key];
-			car_number_prefix.options.add(new Option(key, key));
+	var car_number_prefix = $('car_number_prefix');
+	function change_prefix(obj) {
+		var P = obj.value;
+		var c;
+		car_number_prefix.length = 0;
+		if (''!=P) {
+			for(var key in car_number_arr[P]) {
+				c = car_number_arr[P][key];
+				car_number_prefix.options.add(new Option(key, key));
+			}
 		}
 	}
-}
 //-->
 </script>
 
