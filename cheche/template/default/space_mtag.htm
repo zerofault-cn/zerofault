@@ -78,18 +78,19 @@
 	</div>
 	<script language="JavaScript" type="text/javascript" src="source/jquery-1.4.2.min.js"></script>
 	<script language="JavaScript" type="text/javascript">
-	$(document).ready(function(){
-		$("map > area").each(function(i) {
-			$(this).mouseover(function() {
-				$(".area_overlay").each(function() {
-					$(this).hide();
+	jQuery.noConflict();
+	jQuery(document).ready(function(){
+		jQuery("map > area").each(function(i) {
+			jQuery(this).mouseover(function() {
+				jQuery(".area_overlay").each(function() {
+					jQuery(this).hide();
 				});
-				$(this).next().show();
+				jQuery(this).next().show();
 			});
 		});
-		$(".area_overlay").each(function(i) {
-			$(this).mouseout(function() {
-				$(this).hide();
+		jQuery(".area_overlay").each(function(i) {
+			jQuery(this).mouseout(function() {
+				jQuery(this).hide();
 			});
 		});
 		

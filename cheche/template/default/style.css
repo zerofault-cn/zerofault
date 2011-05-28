@@ -168,17 +168,17 @@ map#Map .area_overlay a {
 	margin: -1px 0 0;
 	padding: 6px 0 6px 15px;
 }
-#content ul.city_list li {
+#content ul.city_list li, #content ul.region_list li {
 	float: left;
-	width: 75px;
+	width: 87px;
 	list-style: none outside none;
 	text-decoration: none;
+	word-wrap: normal;
+	word-break: keep-all;
+	white-space: nowrap;
 }
 #content ul.region_list li {
-	float: left;
-	width: 95px;
-	list-style: none outside none;
-	text-decoration: none;
+	width: 105px;
 }
 dl.school_list {
 	border-bottom: 1px dotted #A7ADBA;
