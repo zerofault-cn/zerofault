@@ -30,7 +30,7 @@
 	
 	
 	<tr>
-		<th width="100"><span id="label_email">注册邮箱：</span><span id="label_username" style="display:none;">注册帐号：</span><em>*</em></th>
+		<th><span id="label_email">注册邮箱：</span><span id="label_username" style="display:none;">注册帐号：</span><em>*</em></th>
 		<td>
 			<input type="text" id="username" name="username" value="" class="t_input" onBlur="checkUserName()" style="display:none;"/>
 			<input type="text" id="email" name="email" value="" class="t_input" onBlur="checkEmail()" />&nbsp;<span id="checkusername">&nbsp;</span><br />
@@ -440,7 +440,7 @@
 		if (''!=P) {
 			for(var key in car_number_arr[P]) {
 				c = car_number_arr[P][key];
-				car_number_prefix.options.add(new Option(key, key));
+				car_number_prefix.options.add(new Option(c, key));
 			}
 		}
 	}
