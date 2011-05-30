@@ -112,7 +112,7 @@
 				</select>
 				<select name="car_number_prefix" id="car_number_prefix">
 				<select>-
-				<input type="text" size="6" maxlength="6" name="car_number" value="" onkeyup="this.value=this.value.replace(/[^0-9a-zA-Z]/g, '');" onblur="checkNumber(this);"/>
+				<input type="text" size="6" maxlength="6" name="car_number" value="" onkeyup="this.value=this.value.replace(/[^0-9A-Z]/g, '');" onblur="checkNumber(this);"/>(只能输入数字0-9和大写字母A-Z)
 				<span id="car_number_msg"></span>
 			</span>
 		</td>
@@ -195,7 +195,7 @@
 
 <script type="text/javascript">
 <!--
-	$('username').focus();
+//	$('username').focus();
 	var lastUserName = lastPassword = lastEmail = lastSecCode = '';
 	function checkUserName() {
 		var userName = $('username').value;
