@@ -93,7 +93,7 @@
 			<span id="car_number" <!--{if $space['car_role']!=1}-->style="display:none;"<!--{/if}-->>
 				您的车牌号：
 				<!--{if false}-->
-				<select name="car_number_prefix">
+				<select name="car_number_prefix" id="car_number_prefix">
 					<option value="">---</option>
 					<!--{loop $car_number $P $C_arr}-->
 					<optgroup label="{$P}">
