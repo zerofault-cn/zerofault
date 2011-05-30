@@ -43,6 +43,26 @@ CREATE TABLE `uchome_school` (
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
+DROP TABLE IF EXISTS uc_pms;
+CREATE TABLE uc_pms (
+  pmid int(10) unsigned NOT NULL auto_increment,
+  msgfrom varchar(15) NOT NULL default '',
+  msgfromid mediumint(8) unsigned NOT NULL default '0',
+  msgtoid mediumint(8) unsigned NOT NULL default '0',
+  folder enum('inbox','outbox') NOT NULL default 'inbox',
+  new tinyint(1) NOT NULL default '0',
+  subject varchar(75) NOT NULL default '',
+  dateline int(10) unsigned NOT NULL default '0',
+  message text NOT NULL,
+  delstatus tinyint(1) unsigned NOT NULL default '0',
+  related int(10) unsigned NOT NULL default '0',
+  fromappid SMALLINT(6) UNSIGNED NOT NULL DEFAULT '0',
+  PRIMARY KEY(pmid),
+  KEY msgtoid(msgtoid,folder,dateline),
+  KEY msgfromid(msgfromid,folder,dateline),
+  KEY related (related),
+  KEY getnum (msgtoid,folder,delstatus)
+) TYPE=MyISAM DEFAULT CHARSET=utf8;
 
 drop table if exists `uchome_rate`;
 CREATE TABLE `uchome_rate` (

@@ -32,16 +32,6 @@ function setintro(type) {
 </script>
 
 <div id="guestbar" class="nbox">
-	<div class="nbox_c">
-		<p id="guest_intro">马上注册，与好友分享日志、照片，一起玩转游戏......</p>
-		<a href="do.php?ac=$_SCONFIG[register_action]" id="regbutton" onmouseover="setintro('register');">马上注册</a>
-		<p id="guest_app">
-			<a href="javascript:;" class="appdoing" onmouseover="setintro('doing');">记录</a>
-			<a href="javascript:;" class="appphotos" onmouseover="setintro('pic');">照片</a>
-			<a href="javascript:;" class="appgames" onmouseover="setintro('app');">游戏</a>
-			<a href="javascript:;" class="appgroups" onmouseover="setintro('mtag');">群组</a> 
-		</p>
-	</div>	
 	<div class="nbox_s side_rbox" id="nlogin_box">
 		<h3 class="ntitle">请登录</h3>
 		<div class="side_rbox_c">
@@ -56,7 +46,20 @@ function setintro(type) {
 					<input type="hidden" name="formhash" value="<!--{eval echo formhash();}-->" />
 				</p>
 			</form>
+			<div class="regnow">
+				<input type="button" value="立即注册" class="submit" onclick="javascript:window.location='do.php?ac=$_SCONFIG[register_action]';">
+			</div>
 		</div>
+	</div>
+	<div class="nbox_c">
+		<p id="guest_intro">马上注册，与好友分享日志、照片，一起玩转游戏......</p>
+		<a href="do.php?ac=$_SCONFIG[register_action]" id="regbutton" onmouseover="setintro('register');">马上注册</a>
+		<p id="guest_app">
+			<a href="javascript:;" class="appdoing" onmouseover="setintro('doing');">记录</a>
+			<a href="javascript:;" class="appphotos" onmouseover="setintro('pic');">照片</a>
+			<a href="javascript:;" class="appgames" onmouseover="setintro('app');">游戏</a>
+			<a href="javascript:;" class="appgroups" onmouseover="setintro('mtag');">群组</a> 
+		</p>
 	</div>
 </div>
 
