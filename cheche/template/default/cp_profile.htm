@@ -280,7 +280,7 @@ function change_prefix(obj) {
 	if (''!=P) {
 		for(var key in car_number_arr[P]) {
 			c = car_number_arr[P][key];
-			car_number_prefix.options.add(new Option(key, key));
+			car_number_prefix.options.add(new Option(c, key));
 		}
 	}
 }
