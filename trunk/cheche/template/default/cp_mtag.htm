@@ -478,6 +478,7 @@
 		<h2>创建自己的新群组</h2>
 		<p>您可以自由创建一个属于自己的群组，并邀请好友，前来进行交流讨论。</p>
 	</caption>
+	<!--{if empty($_REQUEST['school_id'])}-->
 	<tr>
 		<th width="120">要创建的群组名</th>
 		<td><input type="text" name="tagname" value="" class="t_input"></td>
@@ -534,6 +535,23 @@
 			</div>
 		</td>
 	</tr>
+	<!--{else}-->
+	<tr>
+		<th width="120">当前选中驾校</th>
+		<td>{$school_info['name']}
+			<input type="hidden" name="fieldid" value="4"/>
+			<input type="hidden" name="ext_id" value="{$school_info['id']}" />
+		</td>
+	</tr>
+	<tr>
+		<th width="120">驾校所在地区</th>
+		<td>{$province_name}省 - {$city_name}市 - {$region_name}</td>
+	</tr>
+	<tr>
+		<th width="120">要创建的群组名</th>
+		<td><input type="text" name="tagname" value="" class="t_input"></td>
+	</tr>
+	<!--{/if}-->
 	<tr>
 		<th>&nbsp;</th>
 		<td><input type="submit" name="textsubmit" value="创建群组" class="submit"></td>

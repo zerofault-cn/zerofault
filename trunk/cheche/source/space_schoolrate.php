@@ -41,6 +41,7 @@ $start = ($page-1)*$perpage;
 //检查开始数
 ckstart($start, $perpage);
 
+$school = $_SGLOBAL['db']->fetch_array($_SGLOBAL['db']->query("select * from ".tname('school')." where id=".$id));
 $list = array();
 $count = $_SGLOBAL['db']->result($_SGLOBAL['db']->query("SELECT COUNT(*) FROM ".tname('rate')." WHERE school_id=".$id), 0);
 if($count) {
