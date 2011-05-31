@@ -528,27 +528,33 @@ if($_GET['op'] == 'manage') {
 			exit();
 		}
 	}
-	
-	//地区
-	$province_arr = array();
-	$query = $_SGLOBAL['db']->query("SELECT * FROM ".tname('region')." where pid=1");
-	while ($v = $_SGLOBAL['db']->fetch_array($query)) {
-		$province_arr[$v['id']] = $v['name'];
+	if (!empty($_REQUEST['school_id'])) {
+		$school_info = $_SGLOBAL['db']->fetch_array($_SGLOBAL['db']->query("select * from ".tname('school')." where id=".intval($_REQUEST['school_id'])));
+		$province_name = $_SGLOBAL['db']->result($_SGLOBAL['db']->query("select name from ".tname('region')." where id=".intval($school_info['province_id'])), 0);
+		$city_name = $_SGLOBAL['db']->result($_SGLOBAL['db']->query("select name from ".tname('region')." where id=".intval($school_info['city_id'])), 0);
+		$region_name = $_SGLOBAL['db']->result($_SGLOBAL['db']->query("select name from ".tname('region')." where id=".intval($school_info['region_id'])), 0);
 	}
-	$province_opts = genOptions($province_arr);
-
-	//车型
-	$car_brand_arr = array();
-	$query = $_SGLOBAL['db']->query("SELECT * FROM ".tname('carmodel')." where pid=0 ORDER BY initials");
-	while ($v = $_SGLOBAL['db']->fetch_array($query)) {
-		$a = $v['initials'];
-		if (!array_key_exists($a, $car_brand_arr)) {
-			$car_brand_arr[$a] = array();
+	else {
+		//地区
+		$province_arr = array();
+		$query = $_SGLOBAL['db']->query("SELECT * FROM ".tname('region')." where pid=1");
+		while ($v = $_SGLOBAL['db']->fetch_array($query)) {
+			$province_arr[$v['id']] = $v['name'];
 		}
-		$car_brand_arr[$a][$v['id']] = $a.' '.$v['name'];
-	}
-	$car_brand_opts = genOptionGrp($car_brand_arr);
+		$province_opts = genOptions($province_arr);
 
+		//车型
+		$car_brand_arr = array();
+		$query = $_SGLOBAL['db']->query("SELECT * FROM ".tname('carmodel')." where pid=0 ORDER BY initials");
+		while ($v = $_SGLOBAL['db']->fetch_array($query)) {
+			$a = $v['initials'];
+			if (!array_key_exists($a, $car_brand_arr)) {
+				$car_brand_arr[$a] = array();
+			}
+			$car_brand_arr[$a][$v['id']] = $a.' '.$v['name'];
+		}
+		$car_brand_opts = genOptionGrp($car_brand_arr);
+	}
 	//已经加入的
 	$existmtag = array();
 	$query = $_SGLOBAL['db']->query("SELECT mtag.tagname, mtag.fieldid FROM ".tname('tagspace')." main
