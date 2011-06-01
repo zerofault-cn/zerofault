@@ -227,7 +227,13 @@
 			</td>
 			<td width="200">
 				<a href="space.php?do=mtag&tagid=$value[tagid]" style="font-weight:bold;">$value[tagname]</a>
-				<div class="gray">$value[title]</div>
+				<div class="gray">$value[title]
+				<!--{if !empty($value['ext_id'])}-->：
+					<!--{if $value['fieldid']==3}-->{$value[ext_name]}
+					<!--{elseif $value['fieldid']==4}--><a href="space.php?do=mtag&view=school&school_id={$value[ext_id]}" title="查看该驾校其它群组">{$value[ext_name]}</a>
+					<!--{/if}-->
+				<!--{/if}-->
+				</div>
 				已有 <span class="num">$value[membernum]</span> 人加入
 				<div class="gray">
 					话题: $value[threadnum], 回帖: $value[postnum]

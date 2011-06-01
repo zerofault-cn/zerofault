@@ -172,6 +172,15 @@ if($id) {
 			while ($value = $_SGLOBAL['db']->fetch_array($query)) {
 				$value['title'] = $_SGLOBAL['profield'][$value['fieldid']]['title'];
 				if(empty($value['pic'])) $value['pic'] = 'image/nologo.jpg';
+				if (3==$value['fieldid']) {
+					//车系联盟
+					$car_model_id = $_SGLOBAL['db']->result($_SGLOBAL['db']->query("SELECT pid FROM ".tname('carmodel')." WHERE id='".$value['ext_id']."'"), 0);
+					$value['ext_name'] = $_SGLOBAL['db']->result($_SGLOBAL['db']->query("SELECT name FROM ".tname('carmodel')." WHERE id='".$car_model_id."'"), 0);
+				}
+				elseif (4==$value['fieldid']) {
+					//驾校联盟
+					$value['ext_name'] = $_SGLOBAL['db']->result($_SGLOBAL['db']->query("SELECT name FROM ".tname('school')." WHERE id='".$value['ext_id']."'"), 0);
+				}
 				$rlist[] = $value;
 			}
 		}

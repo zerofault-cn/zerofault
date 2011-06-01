@@ -212,7 +212,77 @@ if($_GET['op'] == 'manage') {
 		$multi = multi($count, $perpage, $page, "cp.php?ac=mtag&op=manage&tagid=$mtag[tagid]&subop=invite&group=$_GET[group]&key=$_GET[key]");
 		
 	} else {
-		//显示
+		//base
+		$fieldid_arr = array();
+		$query = $_SGLOBAL['db']->query("SELECT * FROM ".tname('profield')." where formtype='text' ORDER BY displayorder");
+		while ($arr = $_SGLOBAL['db']->fetch_array($query)) {
+			$fieldid_arr[$arr['fieldid']] = $arr['title'];
+		}
+		$fieldid_opts = genOptions($fieldid_arr, $mtag['fieldid']);
+		
+		//从ext_id还原
+		if (3==$mtag['fieldid']) {
+			//车系联盟
+			$car_profile_id = $mtag['ext_id'];
+			if ($car_profile_id)>0) {
+				$car_model_id = $_SGLOBAL['db']->result($_SGLOBAL['db']->query("SELECT pid FROM ".tname('carmodel')." WHERE id='".$car_profile_id."'"), 0);
+				if ($car_model_id>0) {
+					$car_brand_id = $_SGLOBAL['db']->result($_SGLOBAL['db']->query("SELECT pid FROM ".tname('carmodel')." WHERE id='".$car_model_id."'"), 0);
+				}
+			}
+		}
+		elseif (3==$mtag['fieldid']) {
+			//车系联盟
+			$car_profile_id = $mtag['ext_id'];
+			if ($car_profile_id)>0) {
+				$car_model_id = $_SGLOBAL['db']->result($_SGLOBAL['db']->query("SELECT pid FROM ".tname('carmodel')." WHERE id='".$car_profile_id."'"), 0);
+				if ($car_model_id>0) {
+					$car_brand_id = $_SGLOBAL['db']->result($_SGLOBAL['db']->query("SELECT pid FROM ".tname('carmodel')." WHERE id='".$car_model_id."'"), 0);
+				}
+			}
+		}
+		elseif (4==$mtag['fieldid']) {
+			//驾校联盟
+			$school = array(
+				'province_id' => 0,
+				'city_id' => 0,
+				'region_id' => 0
+				);
+			if ($mtag['ext_id']>0) {
+				$school = $_SGLOBAL['db']->result($_SGLOBAL['db']->query("SELECT * FROM ".tname('school')." WHERE id='".$mtag['ext_id']."'"), 0);
+			}
+		}
+		//车型
+		$car_brand_arr = array();
+		$query = $_SGLOBAL['db']->query("SELECT * FROM ".tname('carmodel')." where pid=0 ORDER BY initials");
+		while ($arr = $_SGLOBAL['db']->fetch_array($query)) {
+			$a = $arr['initials'];
+			if (!array_key_exists($a, $car_brand_arr)) {
+				$car_brand_arr[$a] = array();
+			}
+			$car_brand_arr[$a][$arr['id']] = $arr['name'];
+		}
+		$car_brand_opts = genOptionGrp($car_brand_arr, $space['car_brand']);
+
+		$car_model_arr = array();
+		if (!empty($space['car_brand'])) {
+			$query = $_SGLOBAL['db']->query("SELECT * FROM ".tname('carmodel')." where pid=".$space['car_brand']." ORDER BY name");
+			while ($v = $_SGLOBAL['db']->fetch_array($query)) {
+				$car_model_arr[$v['id']] = $v['name'];
+			}
+		}
+		$car_model_opts = genOptions($car_model_arr, $space['car_model']);
+
+		$car_profile_arr = array();
+		if (!empty($space['car_model'])) {
+			$query = $_SGLOBAL['db']->query("SELECT * FROM ".tname('carmodel')." where pid=".$space['car_model']." ORDER BY name");
+			while ($v = $_SGLOBAL['db']->fetch_array($query)) {
+				$car_profile_arr[$v['id']] = $v['name'];
+			}
+		}
+		$car_profile_opts = genOptions($car_profile_arr, $space['car_profile']);
+
+
 		include_once(S_ROOT.'./source/function_bbcode.php');
 		$mtag['announcement'] = html2bbcode($mtag['announcement']);
 	

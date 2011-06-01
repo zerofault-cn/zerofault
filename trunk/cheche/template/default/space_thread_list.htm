@@ -37,7 +37,6 @@
 		<li><a href="space.php?do=mtag&view=me"><span>我参与的群组</span></a></li>
 		<li><a href="space.php?do=mtag&view=manage"><span>我管理的群组</span></a></li>
 		<li><a href="space.php?do=mtag&view=hot"><span>热门群组</span></a></li>
-		<li><a href="space.php?do=mtag&view=school"><span>驾校群组</span></a></li>
 		<li class="null"><a href="cp.php?ac=thread">发起新话题</a></li>
 		<li class="null"><a href="cp.php?ac=mtag">创建群组</a></li>
 	</ul>
@@ -112,7 +111,13 @@
 				</td>
 				<td>
 					<a href="space.php?do=mtag&tagid=$value[tagid]" style="font-weight:bold;">$value[tagname]</a>
-					<div class="gray">$value[title]</div>
+					<div class="gray">$value[title]
+					<!--{if !empty($value['ext_id'])}-->：
+						<!--{if $value['fieldid']==3}-->{$value[ext_name]}
+						<!--{elseif $value['fieldid']==4}--><a href="space.php?do=mtag&view=school&school_id={$value[ext_id]}" title="查看该驾校其它群组">{$value[ext_name]}</a>
+						<!--{/if}-->
+					<!--{/if}-->
+					</div>
 					已有 <span class="num">$value[membernum]</span> 人加入
 					<div class="gray">
 						话题: $value[threadnum], 回帖: $value[postnum]
