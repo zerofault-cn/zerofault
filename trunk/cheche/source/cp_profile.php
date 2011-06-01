@@ -27,7 +27,7 @@ if($_GET['op'] == 'base') {
 		//提交检查
 		$setarr = array(
 			'car_role' => intval($_POST['car_role']),
-			'car_number' => getstr($_POST['car_number'], 10, 1, 1),
+			'car_number' => ''==$_POST['car_number_prefix']?'':($_POST['car_number_prefix'].getstr($_POST['car_number'], 10, 1, 1)),
 			'car_brand' => intval($_POST['car_brand']),
 			'car_model' => intval($_POST['car_model']),
 			'car_profile' => intval($_POST['car_profile']),
@@ -137,15 +137,36 @@ if($_GET['op'] == 'base') {
 	//性别
 	$sexarr = array($space['sex']=>' checked');
 	
+	mb_internal_encoding("UTF-8");
+	$car_number_prefix_p = mb_substr($space['car_number'], 0, 1);
+	$car_number_prefix = mb_substr($space['car_number'], 0, 2);
+	$car_number = mb_substr($space['car_number'], 2);
 	//车主身份
 	$profile = parse_ini_file(S_ROOT.'profile.ini', true);
 	$car_role_opts = genOptions($profile['car_role'], $space['car_role']);
 
-	$car_number = array();
+	$car_number_arr = array();
 	foreach($profile['car_number'] as $p=>$c) {
-		$car_number[$p] = explode(',', $c);
+		$car_number_arr[$p] = explode(',', $c);
 	}
-
+	$car_number_prefix_p_opts = '';
+	foreach(array_keys($profile['car_number']) as $val) {
+		$car_number_prefix_p_opts .= '<option value="'.$val.'" ';
+		if($car_number_prefix_p == $val) {
+			$car_number_prefix_p_opts .= ' selected="true"';
+		}
+		$car_number_prefix_p_opts .= '>'.$val.'</option>';
+	}
+	$car_number_prefix_opts = '';
+	if (!empty($car_number_arr[$car_number_prefix_p])) {
+		foreach($car_number_arr[$car_number_prefix_p] as $val) {
+			$car_number_prefix_opts .= '<option value="'.$car_number_prefix_p.$val.'" ';
+			if($car_number_prefix == $car_number_prefix_p.$val) {
+				$car_number_prefix_opts .= ' selected="true"';
+			}
+			$car_number_prefix_opts .= '>'.$val.'</option>';
+		}
+	}
 	//车型
 	$car_brand_arr = array();
 	$query = $_SGLOBAL['db']->query("SELECT * FROM ".tname('carmodel')." where pid=0 ORDER BY initials");

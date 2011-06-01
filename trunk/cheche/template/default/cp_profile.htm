@@ -85,13 +85,12 @@
 				<!--{/if}-->
 				<select onchange="change_prefix(this);">
 					<option value="">--</option>
-					<!--{loop $car_number $P $C_arr}-->
-					<option value="{$P}">{$P}</option>
-					<!--{/loop}-->
+					{$car_number_prefix_p_opts}
 				</select>
 				<select name="car_number_prefix" id="car_number_prefix">
-				<select>-
-				<input type="text" size="6" maxlength="6" name="car_number" value="" onkeyup="this.value=this.value.replace(/[^0-9a-zA-Z]/g, '');" />
+					{$car_number_prefix_opts}
+				</select> -
+				<input type="text" size="6" maxlength="6" name="car_number" value="{$car_number}" onkeyup="this.value=this.value.replace(/[^0-9A-Z]/g, '');" />
 				<span id="car_number_msg"></span>
 		</span>
 	</td>
@@ -265,7 +264,7 @@ function load_car_opts(field, pid) {
 }
 
 var car_number_arr = new Array();
-<!--{loop $car_number $P $C_arr}-->
+<!--{loop $car_number_arr $P $C_arr}-->
 car_number_arr['{$P}'] = new Array();
 	<!--{loop $C_arr $i $c}-->
 	car_number_arr['{$P}']['{$P}{$c}'] = '{$c}';
