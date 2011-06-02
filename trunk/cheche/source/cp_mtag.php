@@ -62,6 +62,8 @@ if($_GET['op'] == 'manage') {
 			$setarr['postperm'] = intval($_POST['postperm']);
 			$setarr['closeapply'] = intval($_POST['closeapply']);
 		}
+		$setarr['fieldid'] = intval($_POST['fieldid']);
+		$setarr['ext_id'] = intval($_POST['ext_id']);
 		$setarr['pic'] = picurl_get($_POST['pic'], 150);
 		$setarr['announcement'] = getstr($_POST['announcement'], 5000, 1, 1, 1, 1);
 		updatetable('mtag', $setarr, array('tagid'=>$tagid));
@@ -221,20 +223,20 @@ if($_GET['op'] == 'manage') {
 		$fieldid_opts = genOptions($fieldid_arr, $mtag['fieldid']);
 		
 		//从ext_id还原
-		if (3==$mtag['fieldid']) {
-			//车系联盟
-			$car_profile_id = $mtag['ext_id'];
-			if ($car_profile_id)>0) {
-				$car_model_id = $_SGLOBAL['db']->result($_SGLOBAL['db']->query("SELECT pid FROM ".tname('carmodel')." WHERE id='".$car_profile_id."'"), 0);
-				if ($car_model_id>0) {
-					$car_brand_id = $_SGLOBAL['db']->result($_SGLOBAL['db']->query("SELECT pid FROM ".tname('carmodel')." WHERE id='".$car_model_id."'"), 0);
+		if (2==$mtag['fieldid']) {
+			//区域联盟
+			$region_id = $mtag['ext_id'];
+			if ($region_id>0) {
+				$city_id = $_SGLOBAL['db']->result($_SGLOBAL['db']->query("SELECT pid FROM ".tname('region')." WHERE id='".$region_id."'"), 0);
+				if ($city_id>0) {
+					$province_id = $_SGLOBAL['db']->result($_SGLOBAL['db']->query("SELECT pid FROM ".tname('region')." WHERE id='".$city_id."'"), 0);
 				}
 			}
 		}
 		elseif (3==$mtag['fieldid']) {
 			//车系联盟
 			$car_profile_id = $mtag['ext_id'];
-			if ($car_profile_id)>0) {
+			if ($car_profile_id>0) {
 				$car_model_id = $_SGLOBAL['db']->result($_SGLOBAL['db']->query("SELECT pid FROM ".tname('carmodel')." WHERE id='".$car_profile_id."'"), 0);
 				if ($car_model_id>0) {
 					$car_brand_id = $_SGLOBAL['db']->result($_SGLOBAL['db']->query("SELECT pid FROM ".tname('carmodel')." WHERE id='".$car_model_id."'"), 0);
@@ -243,15 +245,42 @@ if($_GET['op'] == 'manage') {
 		}
 		elseif (4==$mtag['fieldid']) {
 			//驾校联盟
-			$school = array(
-				'province_id' => 0,
-				'city_id' => 0,
-				'region_id' => 0
-				);
+			$school_id = $mtag['ext_id'];
 			if ($mtag['ext_id']>0) {
-				$school = $_SGLOBAL['db']->result($_SGLOBAL['db']->query("SELECT * FROM ".tname('school')." WHERE id='".$mtag['ext_id']."'"), 0);
+				$school = $_SGLOBAL['db']->result($_SGLOBAL['db']->query("SELECT * FROM ".tname('school')." WHERE id='".$school_id."'"), 0);
+				if (!empty($school)) {
+					$province_id = $school['province_id'];
+					$city_id = $school['city_id'];
+					$region_id = $school['region_id'];
+				}
 			}
 		}
+		//地区
+		$province_arr = array();
+		$query = $_SGLOBAL['db']->query("SELECT * FROM ".tname('region')." where pid=1");
+		while ($arr = $_SGLOBAL['db']->fetch_array($query)) {
+			$province_arr[$arr['id']] = $arr['name'];
+		}
+		$province_opts = genOptions($province_arr, $province_id);
+		//城市
+		$city_arr = array();
+		if (!empty($province_id)) {
+			$query = $_SGLOBAL['db']->query("SELECT * FROM ".tname('region')." where pid=".$province_id);
+			while ($arr = $_SGLOBAL['db']->fetch_array($query)) {
+				$city_arr[$arr['id']] = $arr['name'];
+			}
+		}
+		$city_opts = genOptions($city_arr, $city_id);
+		//区域
+		$region_arr = array();
+		if (!empty($city_id)) {
+			$query = $_SGLOBAL['db']->query("SELECT * FROM ".tname('region')." where pid=".$city_id);
+			while ($arr = $_SGLOBAL['db']->fetch_array($query)) {
+				$region_arr[$arr['id']] = $arr['name'];
+			}
+		}
+		$region_opts = genOptions($region_arr, $region_id);
+
 		//车型
 		$car_brand_arr = array();
 		$query = $_SGLOBAL['db']->query("SELECT * FROM ".tname('carmodel')." where pid=0 ORDER BY initials");
@@ -262,26 +291,35 @@ if($_GET['op'] == 'manage') {
 			}
 			$car_brand_arr[$a][$arr['id']] = $arr['name'];
 		}
-		$car_brand_opts = genOptionGrp($car_brand_arr, $space['car_brand']);
-
+		$car_brand_opts = genOptionGrp($car_brand_arr, $car_brand_id);
+		//车系
 		$car_model_arr = array();
-		if (!empty($space['car_brand'])) {
-			$query = $_SGLOBAL['db']->query("SELECT * FROM ".tname('carmodel')." where pid=".$space['car_brand']." ORDER BY name");
-			while ($v = $_SGLOBAL['db']->fetch_array($query)) {
-				$car_model_arr[$v['id']] = $v['name'];
+		if (!empty($car_brand_id)) {
+			$query = $_SGLOBAL['db']->query("SELECT * FROM ".tname('carmodel')." where pid=".$car_brand_id." ORDER BY name");
+			while ($arr = $_SGLOBAL['db']->fetch_array($query)) {
+				$car_model_arr[$arr['id']] = $arr['name'];
 			}
 		}
-		$car_model_opts = genOptions($car_model_arr, $space['car_model']);
-
+		$car_model_opts = genOptions($car_model_arr, $car_model_id);
+		//车型
 		$car_profile_arr = array();
-		if (!empty($space['car_model'])) {
-			$query = $_SGLOBAL['db']->query("SELECT * FROM ".tname('carmodel')." where pid=".$space['car_model']." ORDER BY name");
-			while ($v = $_SGLOBAL['db']->fetch_array($query)) {
-				$car_profile_arr[$v['id']] = $v['name'];
+		if (!empty($car_model_id)) {
+			$query = $_SGLOBAL['db']->query("SELECT * FROM ".tname('carmodel')." where pid=".$car_model_id." ORDER BY name");
+			while ($arr = $_SGLOBAL['db']->fetch_array($query)) {
+				$car_profile_arr[$arr['id']] = $arr['name'];
 			}
 		}
-		$car_profile_opts = genOptions($car_profile_arr, $space['car_profile']);
+		$car_profile_opts = genOptions($car_profile_arr, $car_profile_id);
 
+		//驾校
+		$school_arr = array();
+		if (4==$mtag['fieldid'] && !empty($region_id)) {
+			$query = $_SGLOBAL['db']->query("SELECT * FROM ".tname('school')." where region_id=".$region_id." ");
+			while ($arr = $_SGLOBAL['db']->fetch_array($query)) {
+				$school_arr[$arr['id']] = $arr['name'];
+			}
+		}
+		$school_opts = genOptions($school_arr, $school_id);
 
 		include_once(S_ROOT.'./source/function_bbcode.php');
 		$mtag['announcement'] = html2bbcode($mtag['announcement']);

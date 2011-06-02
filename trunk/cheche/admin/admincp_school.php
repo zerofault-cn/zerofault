@@ -8,12 +8,12 @@ if(!defined('IN_UCHOME') || !defined('IN_ADMINCP')) {
 	exit('Access Denied');
 }
 
-//È¨ÏÞ
+//æƒé™
 if(!checkperm('manageprofield')) {
 	cpmessage('no_authority_management_operation');
 }
 
-//È¡µÃµ¥¸öÊý¾Ý
+//å–å¾—å•ä¸ªæ•°æ®
 $thevalue = $list = array();
 $_GET['id'] = empty($_GET['id'])?0:intval($_GET['id']);
 if($_GET['id']) {
@@ -41,7 +41,7 @@ if(submitcheck('submit')) {
 		updatetable('school', $setarr, array('id'=>$thevalue['id']));
 	}
 	
-	//¸üÐÂ»º´æ
+	//æ›´æ–°ç¼“å­˜
 	include_once(S_ROOT.'./source/function_cache.php');
 	profield_cache();
 	
@@ -52,13 +52,13 @@ if(submitcheck('submit')) {
 		updatetable('profield', array('displayorder'=>intval($value)), array('fieldid'=>intval($fieldid)));
 	}
 	
-	//¸üÐÂ»º´æ
+	//æ›´æ–°ç¼“å­˜
 	include_once(S_ROOT.'./source/function_cache.php');
 	profield_cache();
 	
 	cpmessage('do_success', 'admincp.php?ac=profield');
 }
-//µØÇø
+//åœ°åŒº
 $province_arr = array();
 $query = $_SGLOBAL['db']->query("SELECT * FROM ".tname('region')." where pid=1");
 while ($v = $_SGLOBAL['db']->fetch_array($query)) {
@@ -68,7 +68,7 @@ while ($v = $_SGLOBAL['db']->fetch_array($query)) {
 if(empty($_GET['op'])) {
 	$theurl = 'admincp.php?ac=school';
 	
-	//´¦ÀíËÑË÷Ñ¡Ïî
+	//å¤„ç†æœç´¢é€‰é¡¹
 	$sql_ext = "";
 	$s_name = "";
 	if (!empty($_REQUEST['s_name'])) {
@@ -98,7 +98,7 @@ if(empty($_GET['op'])) {
 	}
 	$province_opts = genOptions($province_arr, intval($_REQUEST['s_province_id']));
 
-	//¼ÝÐ£ÁÐ±í
+	//é©¾æ ¡åˆ—è¡¨
 	$count = $_SGLOBAL['db']->result($_SGLOBAL['db']->query("select count(*) from ".tname('school')." where 1 ".$sql_ext), 0);
 	$perpage = 20;
 	if (''!=$sql_ext) {
@@ -129,14 +129,14 @@ if(empty($_GET['op'])) {
 
 } elseif($_GET['op'] == 'add') {
 	$province_opts = genOptions($province_arr);
-	//Ìí¼Ó
+	//æ·»åŠ 
 	$thevalue = array('filedid' => 0, 'formtype' => 'text');
 	$formtypearr = array();
 
 } elseif($_GET['op'] == 'edit') {
 	$province_opts = genOptions($province_arr, $thevalue['province_id']);
 
-	//³ÇÊÐ
+	//åŸŽå¸‚
 	$city_arr = array();
 	if (!empty($thevalue['province_id'])) {
 		$query = $_SGLOBAL['db']->query("SELECT * FROM ".tname('region')." where pid=".$thevalue['province_id']);
@@ -146,7 +146,7 @@ if(empty($_GET['op'])) {
 	}
 	$city_opts = genOptions($city_arr, $thevalue['city_id']);
 
-	//ÇøÓò
+	//åŒºåŸŸ
 	$region_arr = array();
 	if (!empty($thevalue['city_id'])) {
 		$query = $_SGLOBAL['db']->query("SELECT * FROM ".tname('region')." where pid=".$thevalue['city_id']);
@@ -159,33 +159,65 @@ if(empty($_GET['op'])) {
 	$formtypearr = array($thevalue['formtype'] => ' selected');
 	
 } elseif($_GET['op'] == 'delete') {
-	
-	$_GET['id'] = intval($_GET['id']);
-	
-	if(submitcheck('deletesubmit')) {
-		
-		$newfieldid = intval($_POST['newfieldid']);
-		if(empty($_SGLOBAL['profield'][$newfieldid])) {
-			cpmessage('there_is_no_designated_users_columns');
+	$id = intval($_GET['id']);
+	//æ£€æŸ¥æ”¹é©¾æ ¡ä¸‹æ˜¯å¦æœ‰ç¾¤ç»„å…³è”
+	$query = "select count(*) from ".tname('mtag')." where fieldid=4 and ext_id=".$id;
+	if ($_SGLOBAL['db']->result($_SGLOBAL['db']->query($query), 0) >0) {
+		$school = $_SGLOBAL['db']->result($_SGLOBAL['db']->query("SELECT * FROM ".tname('school')." WHERE id='".$id."'"), 0);
+		$province_opts = genOptions($province_arr, $school['province_id']);
+
+		//åŸŽå¸‚
+		$city_arr = array();
+		if (!empty($school['province_id'])) {
+			$query = $_SGLOBAL['db']->query("SELECT * FROM ".tname('region')." where pid=".$school['province_id']);
+			while ($arr = $_SGLOBAL['db']->fetch_array($query)) {
+				$city_arr[$arr['id']] = $arr['name'];
+			}
 		}
-		
-		include_once(S_ROOT.'./source/function_delete.php');
-		if($_GET['fieldid'] && deleteprofield(array($_GET['fieldid']), $newfieldid)) {
-			//¸üÐÂ»º´æ
-			include_once(S_ROOT.'./source/function_cache.php');
-			profield_cache();
-	
-			cpmessage('do_success', 'admincp.php?ac=profield');
-		} else {
-			cpmessage('choose_to_delete_the_columns', 'admincp.php?ac=profield');
+		$city_opts = genOptions($city_arr, $school['city_id']);
+
+		//åŒºåŸŸ
+		$region_arr = array();
+		if (!empty($school['city_id'])) {
+			$query = $_SGLOBAL['db']->query("SELECT * FROM ".tname('region')." where pid=".$school['city_id']);
+			while ($arr = $_SGLOBAL['db']->fetch_array($query)) {
+				$region_arr[$arr['id']] = $arr['name'];
+			}
+		}
+		$region_opts = genOptions($region_arr, $school['region_id']);
+
+		//é©¾æ ¡
+		$school_arr = array();
+		if (!empty($school['region_id'])) {
+			$query = $_SGLOBAL['db']->query("SELECT * FROM ".tname('school')." where region_id=".$school['region_id']." ");
+			while ($arr = $_SGLOBAL['db']->fetch_array($query)) {
+				if ($arr['id'] == $_GET['id']) {
+					continue;
+				}
+				$school_arr[$arr['id']] = $arr['name'];
+			}
+		}
+		$school_opts = genOptions($school_arr);
+
+		if(submitcheck('deletesubmit')) {
+			
+			$ext_id = intval($_POST['ext_id']);
+			if(empty($ext_id)) {
+				cpmessage('æ‚¨å¿…é¡»ç»™åŽŸé©¾æ ¡ä¸‹çš„ç¾¤ç»„é€‰æ‹©ä¸€ä¸ªæ–°å½’å®¿ï¼');
+			}
+			$query0= "update ".tname('mtag')." set ext_id=".$ext_id." where fieldid=4 and ext_id=".$id;
+			$query = "delete from ".tname('school')." where id=".$id;
+			if ($_SGLOBAL['db']->query($query0) && $_SGLOBAL['db']->query($query)) {
+				cpmessage('do_success', 'admincp.php?ac=school');
+			}
 		}
 	}
-	
-	$newfield = $_SGLOBAL['profield'];
-	if(isset($newfield[$_GET['fieldid']])) {
-		unset($newfield[$_GET['fieldid']]);
+	else {
+		$query = "delete from ".tname('school')." where id=".$id;
+		if ($_SGLOBAL['db']->query($query)) {
+			cpmessage('do_success', 'admincp.php?ac=school');
+		}
 	}
-	
 }
 
 ?>

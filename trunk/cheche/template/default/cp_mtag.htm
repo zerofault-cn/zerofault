@@ -58,55 +58,60 @@
 		<th valign="top">所属分类</th>
 		<td>
 			<select name="fieldid" id="fieldid" onchange="javascript:show_ext(this.value);">
-				<!--{loop $textarr $value}-->
-				<option value="$value[fieldid]">$value[title]</option>
-				<!--{/loop}-->
+				{$fieldid_opts}
 			</select>
 			<div id="div_region" style="display:none;">
 				选择所属地区：
 				<select onchange="javascript:load_region_opts('sel_city', this.value);">
 					<option value="0">请选择</option>
-					$province_opts
+					{$province_opts}
 				</select>省
 				<select id="sel_city" onchange="javascript:load_region_opts('sel_region', this.value);">
 					<option value="0">请选择</option>
+					{$city_opts}
 				</select>市
 				<select id="sel_region" name="ext_id">
 					<option value="0">请选择</option>
-				</select>区/县
+					{$region_opts}
+				</select>
 			</div>
 			<div id="div_car" style="display:none;">
 				选择所属车型：
 				品牌:<select onchange="javascript:load_car_opts('sel_model', this.value);">
 					<option value="0">请选择</option>
-					$car_brand_opts
+					{$car_brand_opts}
 				</select>
 				车系:<select id="sel_model" onchange="javascript:load_car_opts('sel_profile', this.value);">
 					<option value="0">请选择</option>
+					{$car_model_opts}
 				</select>
 				配置:<select id="sel_profile" name="ext_id">
 					<option value="0">请选择</option>
+					{$car_profile_opts}
 				</select>
 			</div>
 			<div id="div_school" style="display:none;">
 				根据地区选择驾校：
 				<select onchange="javascript:load_region_opts('sel_school_city', this.value);">
 					<option value="0">请选择</option>
-					$province_opts
+					{$province_opts}
 				</select>省
 				<select id="sel_school_city" onchange="javascript:load_region_opts('sel_school_region', this.value);">
 					<option value="0">请选择</option>
+					{$city_opts}
 				</select>市
 				<select id="sel_school_region" onchange="javascript:load_school_opts('sel_school', this.value);">
 					<option value="0">请选择</option>
+					{$region_opts}
 				</select>
 				<select id="sel_school" name="ext_id">
 					<option value="0">请选择</option>
+					{$school_opts}
 				</select>
 		</td>
 	</tr>
 	<tr>
-		<th width="100"><label for="pic">封面图片</label></th>
+		<th width="100" valign="top"><label for="pic">封面图片</label></th>
 		<td><input id="pic" type="text" name="pic" value="$mtag[pic]" size="80" class="t_input" /><br />请输入 http:// 开头的图片URL地址</td>
 	</tr>
 	<tr>

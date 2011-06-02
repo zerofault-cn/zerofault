@@ -21,10 +21,21 @@
 			<tr>
 				<th width="150">驾校下的群组新归属</th>
 				<td>
-					<select name="newid">
-					<!--{loop $newfield $value}-->
-						<option value="$value[fieldid]">$value[title]</option>
-					<!--{/loop}-->
+					<select onchange="javascript:load_region_opts('sel_school_city', this.value);">
+						<option value="0">请选择</option>
+						{$province_opts}
+					</select>省
+					<select id="sel_school_city" onchange="javascript:load_region_opts('sel_school_region', this.value);">
+						<option value="0">请选择</option>
+						{$city_opts}
+					</select>市
+					<select id="sel_school_region" onchange="javascript:load_school_opts('sel_school', this.value);">
+						<option value="0">请选择</option>
+						{$region_opts}
+					</select>
+					<select id="sel_school" name="ext_id">
+						<option value="0">请选择</option>
+						{$school_opts}
 					</select>
 				</td>
 			</tr>
@@ -78,7 +89,7 @@
 				<td>{$value[province]}省-{$value[city]}市-{$value[region]}</td>
 				<td width="80">
 				<a href="admincp.php?ac=school&op=edit&id=$value[id]">编辑</a> | 
-				<a href="admincp.php?ac=school&op=delete&id=$value[id]">删除</a></td>
+				<a href="javascript:if(confirm('确定删除该驾校？')){document.location='admincp.php?ac=school&op=delete&id={$value[id]}';}else{return false;}">删除</a></td>
 			</tr>
 			<!--{/loop}-->
 			</table>
@@ -155,10 +166,32 @@ function load_region_opts(field, pid) {
 		if ('sel_city' == field) {
 			document.getElementById('sel_region').length = 1;
 		}
+		if ('sel_school_city' == field) {
+			document.getElementById('sel_school_region').length = 1;
+			document.getElementById('sel_school').length = 1;
+		}
+		if ('sel_school_region' == field) {
+			document.getElementById('sel_school').length = 1;
+		}
 		return;
 	}
 	var x = new Ajax('HTML');
 	x.get('do.php?ac=ajax&op=get_region&pid='+pid, function(s) {
+		var sel = document.getElementById(field);
+		sel.length = 1;
+		var json = eval('('+s+')');
+		for (var i=0; i<json.length; i++) {
+			sel.options.add(new Option(json[i].name, json[i].id));
+		}
+	});
+}
+function load_school_opts(field, pid) {
+	if ('0' == pid) {
+		document.getElementById(field).length = 1;
+		return;
+	}
+	var x = new Ajax('HTML');
+	x.get('do.php?ac=ajax&op=get_school&pid='+pid, function(s) {
 		var sel = document.getElementById(field);
 		sel.length = 1;
 		var json = eval('('+s+')');
