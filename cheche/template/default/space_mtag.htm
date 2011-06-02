@@ -229,7 +229,7 @@
 				<a href="space.php?do=mtag&tagid=$value[tagid]" style="font-weight:bold;">$value[tagname]</a>
 				<div class="gray">$value[title]
 				<!--{if !empty($value['ext_id'])}-->：
-					<!--{if $value['fieldid']==3}-->{$value[ext_name]}
+					<!--{if $value['fieldid']==3 or $value['fieldid']==2}-->{$value[ext_name]}
 					<!--{elseif $value['fieldid']==4}--><a href="space.php?do=mtag&view=school&school_id={$value[ext_id]}" title="查看该驾校其它群组">{$value[ext_name]}</a>
 					<!--{/if}-->
 				<!--{/if}-->

@@ -492,7 +492,13 @@ if($tagname) {
 			if(empty($value['pic'])) $value['pic'] = 'image/nologo.jpg';
 			$tagids[] = $value['tagid'];
 			$tagnames[$value['tagid']] = $value['tagname'];
-			if (3==$value['fieldid']) {
+			if (2==$value['fieldid']) {
+				//区域联盟
+				$city_id = $_SGLOBAL['db']->result($_SGLOBAL['db']->query("SELECT pid FROM ".tname('region')." WHERE id='".$value['ext_id']."'"), 0);
+				$value['ext_name'] = $_SGLOBAL['db']->result($_SGLOBAL['db']->query("SELECT name FROM ".tname('region')." WHERE id='".$city_id."'"), 0);
+				$value['ext_name'] .= $_SGLOBAL['db']->result($_SGLOBAL['db']->query("SELECT name FROM ".tname('region')." WHERE id='".$value['ext_id']."'"), 0);
+			}
+			elseif (3==$value['fieldid']) {
 				//车系联盟
 				$car_model_id = $_SGLOBAL['db']->result($_SGLOBAL['db']->query("SELECT pid FROM ".tname('carmodel')." WHERE id='".$value['ext_id']."'"), 0);
 				$value['ext_name'] = $_SGLOBAL['db']->result($_SGLOBAL['db']->query("SELECT name FROM ".tname('carmodel')." WHERE id='".$car_model_id."'"), 0);
