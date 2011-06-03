@@ -40,7 +40,14 @@
 	<!--{loop $list $value}-->
 		<li>
 			<div class="threadimg60"><a href="space.php?do=mtag&tagid=$value[tagid]"><img src="$value[pic]" style="width:60px;"></a></div>
-			<a href="space.php?do=mtag&tagid=$value[tagid]">$value[tagname]</a><br />
+			<a href="space.php?do=mtag&tagid=$value[tagid]">$value[tagname]</a>
+			<div class="gray">
+			<!--{if !empty($value['ext_id'])}-->
+				<!--{if $value['fieldid']==3 or $value['fieldid']==2}-->{$value[ext_name]}
+				<!--{elseif $value['fieldid']==4}--><a href="space.php?do=mtag&view=school&school_id={$value[ext_id]}" title="查看该驾校其它群组">{$value[ext_name]}</a>
+				<!--{/if}-->
+			<!--{/if}-->
+			</div>
 			已有 <span class="num">$value[membernum]</span> 人加入
 			<div class="gray">
 				话题: $value[threadnum], 回帖: $value[postnum]
