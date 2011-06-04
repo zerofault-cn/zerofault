@@ -324,109 +324,6 @@
 
 	<input type="hidden" name="formhash" value="<!--{eval echo formhash();}-->" />
 	</form>
-<script>
-window.onload = function() {
-	show_ext($('fieldid').value);
-}
-function show_ext(i) {
-	var div_region = document.getElementById('div_region');
-	var sel_region = document.getElementById('sel_region');
-	var div_car = document.getElementById('div_car');
-	var sel_profile = document.getElementById('sel_profile');
-	var div_school = document.getElementById('div_school');
-	var sel_school = document.getElementById('sel_school');
-	if ('1' == i) {
-		div_region.style.display='none';
-		sel_region.disabled = true;
-		div_car.style.display='none';
-		sel_profile.disabled = true;
-		div_school.style.display='none';
-		sel_school.disabled = true;
-	}
-	else if ('2' == i) {
-		div_region.style.display='';
-		sel_region.disabled = false;
-		div_car.style.display='none';
-		sel_profile.disabled = true;
-		div_school.style.display='none';
-		sel_school.disabled = true;
-	}
-	else if ('3' == i) {
-		div_region.style.display='none';
-		sel_region.disabled = true;
-		div_car.style.display='';
-		sel_profile.disabled = false;
-		div_school.style.display='none';
-		sel_school.disabled = true;
-	}
-	else if ('4' == i) {
-		div_region.style.display='none';
-		sel_region.disabled = true;
-		div_car.style.display='none';
-		sel_profile.disabled = true;
-		div_school.style.display='';
-		sel_school.disabled = false;
-	}
-}
-function load_car_opts(field, pid) {
-	if ('0' == pid) {
-		document.getElementById(field).length = 1;
-		if ('sel_model' == field) {
-			document.getElementById('sel_profile').length = 1;
-		}
-		return;
-	}
-	var x = new Ajax('HTML');
-	x.get('do.php?ac=ajax&op=get_car_model&pid='+pid, function(s) {
-		var sel = document.getElementById(field);
-		sel.length = 1;
-		var json = eval('('+s+')');
-		for (var i=0; i<json.length; i++) {
-			sel.options.add(new Option(json[i].name, json[i].id));
-		}
-	});
-}
-function load_region_opts(field, pid) {
-	if ('0' == pid) {
-		document.getElementById(field).length = 1;
-		if ('sel_city' == field) {
-			document.getElementById('sel_region').length = 1;
-		}
-		if ('sel_school_city' == field) {
-			document.getElementById('sel_school_region').length = 1;
-			document.getElementById('sel_school').length = 1;
-		}
-		if ('sel_school_region' == field) {
-			document.getElementById('sel_school').length = 1;
-		}
-		return;
-	}
-	var x = new Ajax('HTML');
-	x.get('do.php?ac=ajax&op=get_region&pid='+pid, function(s) {
-		var sel = document.getElementById(field);
-		sel.length = 1;
-		var json = eval('('+s+')');
-		for (var i=0; i<json.length; i++) {
-			sel.options.add(new Option(json[i].name, json[i].id));
-		}
-	});
-}
-function load_school_opts(field, pid) {
-	if ('0' == pid) {
-		document.getElementById(field).length = 1;
-		return;
-	}
-	var x = new Ajax('HTML');
-	x.get('do.php?ac=ajax&op=get_school&pid='+pid, function(s) {
-		var sel = document.getElementById(field);
-		sel.length = 1;
-		var json = eval('('+s+')');
-		for (var i=0; i<json.length; i++) {
-			sel.options.add(new Option(json[i].name, json[i].id));
-		}
-	});
-}
-</script>
 <!--{elseif $_GET[op]=='mtaginvite'}-->
 	
 	<h2 class="title"><img src="image/app/mtag.gif" />群组邀请</h2>
@@ -781,4 +678,107 @@ function load_school_opts(field, pid) {
 	<!--{/if}-->
 
 <!--{/if}-->
+<script>
+window.onload = function() {
+	show_ext($('fieldid').value);
+}
+function show_ext(i) {
+	var div_region = document.getElementById('div_region');
+	var sel_region = document.getElementById('sel_region');
+	var div_car = document.getElementById('div_car');
+	var sel_profile = document.getElementById('sel_profile');
+	var div_school = document.getElementById('div_school');
+	var sel_school = document.getElementById('sel_school');
+	if ('1' == i) {
+		div_region.style.display='none';
+		sel_region.disabled = true;
+		div_car.style.display='none';
+		sel_profile.disabled = true;
+		div_school.style.display='none';
+		sel_school.disabled = true;
+	}
+	else if ('2' == i) {
+		div_region.style.display='';
+		sel_region.disabled = false;
+		div_car.style.display='none';
+		sel_profile.disabled = true;
+		div_school.style.display='none';
+		sel_school.disabled = true;
+	}
+	else if ('3' == i) {
+		div_region.style.display='none';
+		sel_region.disabled = true;
+		div_car.style.display='';
+		sel_profile.disabled = false;
+		div_school.style.display='none';
+		sel_school.disabled = true;
+	}
+	else if ('4' == i) {
+		div_region.style.display='none';
+		sel_region.disabled = true;
+		div_car.style.display='none';
+		sel_profile.disabled = true;
+		div_school.style.display='';
+		sel_school.disabled = false;
+	}
+}
+function load_car_opts(field, pid) {
+	if ('0' == pid) {
+		document.getElementById(field).length = 1;
+		if ('sel_model' == field) {
+			document.getElementById('sel_profile').length = 1;
+		}
+		return;
+	}
+	var x = new Ajax('HTML');
+	x.get('do.php?ac=ajax&op=get_car_model&pid='+pid, function(s) {
+		var sel = document.getElementById(field);
+		sel.length = 1;
+		var json = eval('('+s+')');
+		for (var i=0; i<json.length; i++) {
+			sel.options.add(new Option(json[i].name, json[i].id));
+		}
+	});
+}
+function load_region_opts(field, pid) {
+	if ('0' == pid) {
+		document.getElementById(field).length = 1;
+		if ('sel_city' == field) {
+			document.getElementById('sel_region').length = 1;
+		}
+		if ('sel_school_city' == field) {
+			document.getElementById('sel_school_region').length = 1;
+			document.getElementById('sel_school').length = 1;
+		}
+		if ('sel_school_region' == field) {
+			document.getElementById('sel_school').length = 1;
+		}
+		return;
+	}
+	var x = new Ajax('HTML');
+	x.get('do.php?ac=ajax&op=get_region&pid='+pid, function(s) {
+		var sel = document.getElementById(field);
+		sel.length = 1;
+		var json = eval('('+s+')');
+		for (var i=0; i<json.length; i++) {
+			sel.options.add(new Option(json[i].name, json[i].id));
+		}
+	});
+}
+function load_school_opts(field, pid) {
+	if ('0' == pid) {
+		document.getElementById(field).length = 1;
+		return;
+	}
+	var x = new Ajax('HTML');
+	x.get('do.php?ac=ajax&op=get_school&pid='+pid, function(s) {
+		var sel = document.getElementById(field);
+		sel.length = 1;
+		var json = eval('('+s+')');
+		for (var i=0; i<json.length; i++) {
+			sel.options.add(new Option(json[i].name, json[i].id));
+		}
+	});
+}
+</script>
 <!--{template footer}-->

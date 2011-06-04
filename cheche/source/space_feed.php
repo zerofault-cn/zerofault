@@ -302,7 +302,7 @@ if($space['self'] && empty($start)) {
 
 	//ÌáĞÑ×ÜÊı
 	$space['allnum'] = 0;
-	foreach (array('notenum', 'addfriendnum', 'mtaginvitenum', 'eventinvitenum', 'myinvitenum', 'pokenum', 'reportnum', 'namestatusnum', 'eventverifynum') as $value) {
+	foreach (array('notenum', 'addfriendnum', 'mtaginvitenum', 'eventinvitenum', 'myinvitenum', 'pokenum', 'reportnum', 'namestatusnum', 'eventverifynum', 'pmnum') as $value) {
 		$space['allnum'] = $space['allnum'] + $space[$value];
 	}
 }
