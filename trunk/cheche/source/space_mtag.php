@@ -387,7 +387,7 @@ if($tagname) {
 				$region_name = $_SGLOBAL['db']->result($_SGLOBAL['db']->query("select name from ".tname('region')." where id=".intval($_REQUEST['region_id'])), 0);
 				$school_ext .= " and region_id=".intval($_REQUEST['region_id']);
 			}
-			$query = $_SGLOBAL['db']->query("select * from ".tname('school')." where 1 ".$school_ext);
+			$query = $_SGLOBAL['db']->query("select * from ".tname('school')." where 1 ".$school_ext."  order by displayorder desc");
 			while ($value = $_SGLOBAL['db']->fetch_array($query)) {
 				//统计驾校下的群组数、话题数
 				$value['mtag_count'] = $_SGLOBAL['db']->result($_SGLOBAL['db']->query("select count(*) from ".tname('mtag')." where fieldid=4 and ext_id=".$value['id']), 0);
@@ -448,7 +448,7 @@ if($tagname) {
 					$count = $_SGLOBAL['db']->result($_SGLOBAL['db']->query("select count(*) from ".tname('school')." where 1 ".$school_ext), 0);
 					$school_list = array();
 					if ($count > 0) {
-						$query = $_SGLOBAL['db']->query("select * from ".tname('school')." where 1 ".$school_ext." LIMIT ".$school_start.", ".$school_perpage);
+						$query = $_SGLOBAL['db']->query("select * from ".tname('school')." where 1 ".$school_ext."  order by displayorder desc LIMIT ".$school_start.", ".$school_perpage);
 						while ($value = $_SGLOBAL['db']->fetch_array($query)) {
 							//统计驾校下的群组数、话题数
 							$value['mtag_count'] = $_SGLOBAL['db']->result($_SGLOBAL['db']->query("select count(*) from ".tname('mtag')." where fieldid=4 and ext_id=".$value['id']), 0);

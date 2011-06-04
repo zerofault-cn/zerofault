@@ -75,11 +75,14 @@
 			</form>
 		</div>
 		<div class="bdrcontent">
+			<form method="post" action="admincp.php?ac=school&id=$thevalue[id]">
+			<input type="hidden" name="formhash" value="<!--{eval echo formhash();}-->" />
 			<table cellspacing="0" cellpadding="0" class="formtable">
 			<tr>
 				<th>驾校简称</th>
 				<th>全称/地址</th>
 				<th>所属区域</th>
+				<th>显示顺序</th>
 				<th width="80">操作</th>
 			</tr>
 			<!--{loop $list $value}-->
@@ -87,12 +90,18 @@
 				<th>$value[name]</th>
 				<td>$value[fullname]<br />$value[address]</td>
 				<td>{$value[province]}省-{$value[city]}市-{$value[region]}</td>
+				<td><input type="text" name="displayorder[{$value[id]}]" value="$value[displayorder]" size="5"></td>
 				<td width="80">
-				<a href="admincp.php?ac=school&op=edit&id=$value[id]">编辑</a> | 
-				<a href="javascript:if(confirm('确定删除该驾校？')){document.location='admincp.php?ac=school&op=delete&id={$value[id]}';}else{return false;}">删除</a></td>
+					<a href="admincp.php?ac=school&op=edit&id=$value[id]">编辑</a> | 
+					<a href="javascript:if(confirm('确定删除该驾校？')){document.location='admincp.php?ac=school&op=delete&id={$value[id]}';}else{return false;}">删除</a>
+				</td>
 			</tr>
 			<!--{/loop}-->
 			</table>
+			<div class="footactions">
+				<input type="submit" name="ordersubmit" value="更新排序" class="submit">
+			</div>
+			</form>
 		</div>
 		<div class="footactions">
 			<!--{if isset($multi)}-->

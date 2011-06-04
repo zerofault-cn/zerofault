@@ -668,7 +668,7 @@ a.button { padding: 5px; }
   .feed li { padding: 10px 20px; border-bottom: 1px solid #EBE6C9; }
 
 .feed .type { position: absolute; margin: 1px 0 0 -20px !important; margin: 3px 0 0 -20px;}
-.feed_content img { max-width: 70px; max-height: 100px; }
+.feed_content img { max-width: 120px; max-height: 120px; }
   * html .feed_content img { width: expression(this.width > 70 && this.width/this.height > 0.7 ? 70 : true); height: expression(this.height > 100 && this.width/this.height < 0.7 ? 100 : true); }
 .feed .detail { padding: 10px 0 0; color: #999; }
 .feed a img.summaryimg { float: left; margin: 10px 10px 10px 0; padding: 2px; border: 1px solid #DDD; }

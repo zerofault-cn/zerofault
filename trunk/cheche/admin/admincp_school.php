@@ -48,15 +48,11 @@ if(submitcheck('submit')) {
 	cpmessage('do_success', 'admincp.php?ac=school');
 	
 } elseif (submitcheck('ordersubmit')) {
-	foreach ($_POST['displayorder'] as $fieldid => $value) {
-		updatetable('profield', array('displayorder'=>intval($value)), array('fieldid'=>intval($fieldid)));
+	foreach ($_POST['displayorder'] as $id => $value) {
+		updatetable('school', array('displayorder'=>intval($value)), array('id'=>intval($id)));
 	}
 	
-	//更新缓存
-	include_once(S_ROOT.'./source/function_cache.php');
-	profield_cache();
-	
-	cpmessage('do_success', 'admincp.php?ac=profield');
+	cpmessage('do_success', 'admincp.php?ac=school');
 }
 //地区
 $province_arr = array();
@@ -99,7 +95,7 @@ if(empty($_GET['op'])) {
 	$province_opts = genOptions($province_arr, intval($_REQUEST['s_province_id']));
 
 	//驾校列表
-	$count = $_SGLOBAL['db']->result($_SGLOBAL['db']->query("select count(*) from ".tname('school')." where 1 ".$sql_ext), 0);
+	$count = $_SGLOBAL['db']->result($_SGLOBAL['db']->query("select count(*) from ".tname('school')." where 1 ".$sql_ext." "), 0);
 	$perpage = 20;
 	if (''!=$sql_ext) {
 		$perpage = 10000;
@@ -109,7 +105,7 @@ if(empty($_GET['op'])) {
 	$start = ($page-1)*$perpage;
 	$list = array();
 	if ($count > 0) {
-		$query = $_SGLOBAL['db']->query("SELECT * FROM ".tname('school')." where 1 ".$sql_ext." order by id desc LIMIT ".$start.", ".$perpage);
+		$query = $_SGLOBAL['db']->query("SELECT * FROM ".tname('school')." where 1 ".$sql_ext." order by displayorder desc LIMIT ".$start.", ".$perpage);
 		while ($value = $_SGLOBAL['db']->fetch_array($query)) {
 			$rs = $_SGLOBAL['db']->query("select name from ".tname('region')." where id=".$value['province_id']);
 			$value['province'] = $_SGLOBAL['db']->result($rs, 0);

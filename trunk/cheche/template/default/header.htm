@@ -56,7 +56,7 @@ $_SGLOBAL[space_css]
 		<!--{/if}-->
 		
 		<!--{if $_SGLOBAL[supe_uid]}-->
-			<li><a href="space.php?do=pm<!--{if !empty($_SGLOBAL['member']['newpm'])}-->&filter=newpm<!--{/if}-->">消息<!--{if !empty($_SGLOBAL['member']['newpm'])}-->(新)<!--{/if}--></a></li>
+			<li><a href="space.php?do=pm<!--{if !empty($_SGLOBAL['member']['newpm'])}-->&filter=newpm<!--{/if}-->">短消息<!--{if !empty($_SGLOBAL['member']['newpm'])}-->(新)<!--{/if}--></a></li>
 			<!--{if $_SGLOBAL['member']['allnotenum']}--><li class="notify" id="membernotemenu" onmouseover="showMenu(this.id)"><a href="space.php?do=notice">{$_SGLOBAL[member][allnotenum]}个提醒</a></li><!--{/if}-->
 		<!--{else}-->
 			<li><a href="help.php">帮助</a></li>

@@ -63,14 +63,14 @@
 	<!--{if empty($_GET['school_id'])}-->
 		<!--{if empty($_GET['province_id'])}-->
 	<div class="h_status">
-		<form style="float:right;">
+		<form >
+			根据驾校名称搜索：
 			<input type="hidden" name="do" value="mtag" />
 			<input type="hidden" name="view" value="school" />
-			<input type="text" size="10" name="s_school_name" class="t_input" value="{$s_school_name}" />
+			<input type="text" size="40" name="s_school_name" class="t_input" value="{$s_school_name}" />
 			<input type="submit" class="submit" value="搜索驾校" />
 		</form>
-		根据区域查找驾校群组：全国
-		<div class="clear"></div>
+		当前位置：中国
 	</div>
 			<!--{if empty($s_school_name)}-->
 	<div style="position:relative;">
@@ -103,15 +103,15 @@
 		<!--{else}-->
 			<!--{if empty($_GET['city_id'])}-->
 	<div class="h_status">
-		<form style="float:right;" action="?do=mtag&view=school">
+		<form action="?do=mtag&view=school">
+			根据驾校名称搜索：
 			<input type="hidden" name="do" value="mtag" />
 			<input type="hidden" name="view" value="school" />
 			<input type="hidden" name="province_id" value="{$_REQUEST[province_id]}" />
-			<input type="text" size="10" name="s_school_name" class="t_input" value="{$s_school_name}" />
+			<input type="text" size="40" name="s_school_name" class="t_input" value="{$s_school_name}" />
 			<input type="submit" class="submit" value="搜索驾校" />
 		</form>
-		根据区域查找驾校群组：<a href="?do=mtag&view=school">全国</a> &gt;&gt; $province_name
-		<div class="clear"></div>
+		当前位置：<a href="?do=mtag&view=school">中国</a> &gt;&gt; $province_name
 	</div>
 				<!--{if !empty($city_list)}-->
 	<ul class="city_list">
@@ -123,16 +123,16 @@
 			<!--{else}-->
 				<!--{if empty($_GET['region_id'])}-->
 	<div class="h_status">
-		<form style="float:right;" action="?do=mtag&view=school">
+		<form action="?do=mtag&view=school">
+			根据驾校名称搜索：
 			<input type="hidden" name="do" value="mtag" />
 			<input type="hidden" name="view" value="school" />
 			<input type="hidden" name="province_id" value="{$_REQUEST[province_id]}" />
 			<input type="hidden" name="city_id" value="{$_REQUEST[city_id]}" />
-			<input type="text" size="10" name="s_school_name" class="t_input" value="{$s_school_name}" />
+			<input type="text" size="40" name="s_school_name" class="t_input" value="{$s_school_name}" />
 			<input type="submit" class="submit" value="搜索驾校" />
 		</form>
-		根据区域查找驾校群组：<a href="?do=mtag&view=school">全国</a> &gt;&gt; <a href="?do=mtag&view=school&province_id={$_GET[province_id]}">$province_name</a> &gt;&gt; $city_name
-		<div class="clear"></div>
+		当前位置：<a href="?do=mtag&view=school">中国</a> &gt;&gt; <a href="?do=mtag&view=school&province_id={$_GET[province_id]}">$province_name</a> &gt;&gt; $city_name
 	</div>
 					<!--{if !empty($region_list)}-->
 	<ul class="region_list">
@@ -143,17 +143,17 @@
 					<!--{/if}-->
 				<!--{else}-->
 	<div class="h_status">
-		<form style="float:right;" action="?do=mtag&view=school">
+		<form  action="?do=mtag&view=school">
+			根据驾校名称搜索：
 			<input type="hidden" name="do" value="mtag" />
 			<input type="hidden" name="view" value="school" />
 			<input type="hidden" name="province_id" value="{$_REQUEST[province_id]}" />
 			<input type="hidden" name="city_id" value="{$_REQUEST[city_id]}" />
 			<input type="hidden" name="region_id" value="{$_REQUEST[region_id]}" />
-			<input type="text" size="10" name="s_school_name" class="t_input" value="{$s_school_name}" />
+			<input type="text" size="40" name="s_school_name" class="t_input" value="{$s_school_name}" />
 			<input type="submit" class="submit" value="搜索驾校" />
 		</form>
-		根据区域查找驾校群组：<a href="?do=mtag&view=school">全国</a> &gt;&gt; <a href="?do=mtag&view=school&province_id={$_GET[province_id]}">$province_name</a> &gt;&gt; <a href="?do=mtag&view=school&province_id={$_GET[province_id]}&city_id={$_GET[city_id]}">$city_name</a> &gt;&gt; $region_name
-		<div class="clear"></div>
+		当前位置：<a href="?do=mtag&view=school">中国</a> &gt;&gt; <a href="?do=mtag&view=school&province_id={$_GET[province_id]}">$province_name</a> &gt;&gt; <a href="?do=mtag&view=school&province_id={$_GET[province_id]}&city_id={$_GET[city_id]}">$city_name</a> &gt;&gt; $region_name
 	</div>
 				<!--{/if}-->
 			<!--{/if}-->
