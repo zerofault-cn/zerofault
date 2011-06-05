@@ -12,6 +12,7 @@
 </div>
 <h2 class="title">
 	<img src="image/app/mtag.gif"><a href="space.php?do=mtag&id=$mtag[fieldid]">$mtag[title]</a> -
+	<!--{if empty($mtag['ext_link'])}-->{$mtag[ext_name]}<!--{else}-->{$mtag[ext_link]}<!--{/if}--> -
 	<a href="space.php?do=mtag&tagid=$mtag[tagid]">$mtag[tagname]</a>
 </h2>
 
