@@ -664,18 +664,33 @@ a.button { padding: 5px; }
 .feed_header { position: relative; padding: 5px 10px 0 15px; height: 30px; background: url(image/c_title.gif) no-repeat; line-height: 20px; }
 .feed_header .active{ font-weight: bold; }
 .feed { margin: 0 0 20px; width: 100%; line-height: 20px; overflow: hidden; }
-  .feedtime { margin: 20px 0 10px; color: #000; }
-  .feed li { padding: 10px 20px; border-bottom: 1px solid #EBE6C9; }
+.feedtime { margin: 20px 0 10px; color: #000; }
+.feed li { padding: 10px 20px; border-bottom: 1px solid #EBE6C9; }
 
 .feed .type { position: absolute; margin: 1px 0 0 -20px !important; margin: 3px 0 0 -20px;}
 .feed_content img { max-width: 120px; max-height: 120px; }
-  * html .feed_content img { width: expression(this.width > 70 && this.width/this.height > 0.7 ? 70 : true); height: expression(this.height > 100 && this.width/this.height < 0.7 ? 100 : true); }
+* html .feed_content img { width: expression(this.width > 70 && this.width/this.height > 0.7 ? 70 : true); height: expression(this.height > 100 && this.width/this.height < 0.7 ? 100 : true); }
 .feed .detail { padding: 10px 0 0; color: #999; }
 .feed a img.summaryimg { float: left; margin: 10px 10px 10px 0; padding: 2px; border: 1px solid #DDD; }
-  .feed a img.summaryimg:hover { border-color: #DDD; }
+.feed a img.summaryimg:hover { border-color: #DDD; }
 
- .hotspot{ float: right; margin: 10px 0 0 10px; width: 55px; height: 50px; }
- .hotspot a{ display: block; padding: 0 0 20px; height: 30px; text-align: center; line-height: 30px; background: url('image/hotspot.gif'); font-size: 16px; color: #F60;}
+.feed .avatar {
+	float:left;
+	margin-right: 10px;
+}
+.feed h5 {
+	font-weight: normal;
+	font-size: 14px;
+	line-height: 1.4em;
+	margin-left: 58px;
+	margin-right: 40px;
+	padding-bottom: 5px;
+}
+.feed .feed_content {
+	margin-left: 58px;
+}
+.hotspot{ float: right; margin: 10px 0 0 10px; width: 55px; height: 50px; }
+.hotspot a{ display: block; padding: 0 0 20px; height: 30px; text-align: center; line-height: 30px; background: url('image/hotspot.gif'); font-size: 16px; color: #F60;}
 
 .feedread { color: #CCC; }
 .feedread * { color: #CCC; }
@@ -686,7 +701,7 @@ a.button { padding: 5px; }
 .feedcomment td { border-bottom: 1px solid #FFF; }
 
 .feedop{ margin: 10px 0 0; padding: 0 0 0 20px; background: url(image/reply.gif) no-repeat 0 2px; }
-.fcomment { margin: 10px 0 0; padding: 10px 0 0; width: 477px; background: #E9F2FC url(image/subdoing_top.gif) no-repeat left top; color: #333; clear: both; }
+.fcomment { margin: 10px 0 0; padding: 10px 0 0; background: #E9F2FC url(image/subdoing_top.gif) no-repeat left top; color: #333; clear: both; }
 .fcomment .fc { padding: 0 10px 10px; background: #E9F2FC url(image/subdoing_bottom.gif) no-repeat left bottom; overflow: hidden; }
 
 .fcomment .comments_list li { margin: 0; padding:0 0 10px 42px; width: auto; border: none; line-height: 150%;}

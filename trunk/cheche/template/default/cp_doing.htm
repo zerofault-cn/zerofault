@@ -27,7 +27,7 @@
 		<input type="text" id="do_message_{$doid}_{$id}" name="message" size="35" class="t_input" onkeydown="return ctrlEnter(event, 'docommform_btn_{$doid}_{$id}', 1);">
 		<input type="hidden" name="commentsubmit" value="true" />
 		<input type="button" name="do_button" class="submit" id="docommform_btn_{$doid}_{$id}" onclick="ajaxpost('docommform_{$doid}_{$id}', 'docomment_get', 1)" value="回复">
-		<button type="button" name="btncancel" class="button" onclick="docomment_form_close($doid, $id);">取消</button>
+		<!-- <button type="button" name="btncancel" class="button" onclick="docomment_form_close($doid, $id);">取消</button> -->
 		<input type="hidden" name="formhash" value="<!--{eval echo formhash();}-->" />
 	</form>
 	<div id="__docommform_{$doid}_{$id}"></div>

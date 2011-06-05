@@ -3,22 +3,21 @@
 		<!--{if $value[uid] && empty($_TPL[hidden_more])}-->
 		<a href="cp.php?ac=feed&op=menu&feedid=$value[feedid]" class="float_more" id="a_feed_menu_$value[feedid]"  onmouseover="feed_menu($value[feedid],1);" onmouseout="feed_menu($value[feedid],0);" onclick="ajaxmenu(event, this.id)" title="显示更多选项" style="display:none;">菜单</a>
 		<!--{/if}-->
-		<a class="type" href="space.php?uid=$_GET[uid]&do=feed&view=$_GET[view]&appid=$value[appid]&icon=$value[icon]" title="只看此类动态"><img src="$value[icon_image]" /></a>
-		$value[title_template] 
-		
-		<!--{if empty($_TPL[hidden_time])}-->
-		<span class="gray"><!--{date('m-d H:i',$value[dateline],1)}--></span>
-		<!--{/if}-->
-		
-		<!--{if empty($_TPL[hidden_menu])}-->
-		<!--{if $value['idtype']=='doid'}-->
-		(<a href="javascript:;" onclick="docomment_get('docomment_$value[id]', 1);" id="do_a_op_$value[id]">回复</a>)
-		<!--{elseif in_array($value['idtype'], array('blogid','picid','sid','pid','eventid'))}-->
-		(<a href="javascript:;" onclick="feedcomment_get($value[feedid]);" id="feedcomment_a_op_$value[feedid]">评论</a>)
-		<!--{/if}-->
-		<!--{/if}-->
-		
+		<!-- <a class="type" href="space.php?uid=$_GET[uid]&do=feed&view=$_GET[view]&appid=$value[appid]&icon=$value[icon]" title="只看此类动态"><img src="$value[icon_image]" /></a> -->
+		<a class="avatar" target="_blank" title="" href="space.php?uid={$feed['uid']}"><!--{avatar($feed['uid'])}--></a>
+		<h5>$value[title_template] </h5>
 		<div class="feed_content">
+			<!--{if empty($_TPL[hidden_time])}-->
+			<span class="gray"><!--{date('m-d H:i',$value[dateline],1)}--></span>
+			<!--{/if}-->
+			<!--{if empty($_TPL[hidden_menu])}-->
+				<!--{if $value['idtype']=='doid'}-->
+			(<a href="javascript:;" onclick="docomment_get('docomment_$value[id]', 1);" id="do_a_op_$value[id]">回复</a>)
+				<!--{elseif in_array($value['idtype'], array('blogid','picid','sid','pid','eventid'))}-->
+			(<a href="javascript:;" onclick="feedcomment_get($value[feedid]);" id="feedcomment_a_op_$value[feedid]">评论</a>)
+				<!--{/if}-->
+			<!--{/if}-->
+		
 		
 			<!--{if empty($_TPL[hidden_hot]) && $value[hot]}-->
 			<div class="hotspot"><a href="cp.php?ac=feed&feedid=$value[feedid]">$value[hot]</a></div>
@@ -60,14 +59,14 @@
 			<!--{if $value['body_general']}-->
 			<div class="quote"><span class="q">$value[body_general]</span></div>
 			<!--{/if}-->
+			<!--{if $value['idtype']=='doid'}-->
+			<div id="docomment_$value[id]" style="display:none;"></div>
+			<!--{elseif $value['idtype']}-->
+			<div id="feedcomment_$value[feedid]" style="display:none;"></div>
+			<!--{/if}-->
 		</div>
 	</div>
 	
-	<!--{if $value['idtype']=='doid'}-->
-	<div id="docomment_$value[id]" style="display:none;"></div>
-	<!--{elseif $value['idtype']}-->
-	<div id="feedcomment_$value[feedid]" style="display:none;"></div>
-	<!--{/if}-->
 	
 	<!--{if !empty($hiddenfeed_num[$value[icon]])}-->
 	<div id="appfeed_open_$value[feedid]"><a href="javascript:;" id="feed_a_more_$value[feedid]" onclick="feed_more_show('$value[feedid]');">&raquo; 更多动态({$hiddenfeed_num[$value[icon]]})</a></div>
