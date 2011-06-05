@@ -298,7 +298,7 @@
 			<ul class="line_list">
 			<!--{loop $bloglist $value}-->
 				<li>
-					<a class="avatar" target="_blank" title="" href="space.php?uid={$feed['uid']}"><!--{avatar($feed['uid'])}--></a>
+					<a class="avatar" target="_blank" title="" href="space.php?uid={$value['uid']}"><!--{avatar($value['uid'])}--></a>
 					<h4>
 						<span class="gray r_option"><!--{date('m-d H:i',$value[dateline],1)}--></span>
 						<a href="space.php?uid=$space[uid]&do=blog&id=$value[blogid]" target="_blank">$value[subject]</a>
