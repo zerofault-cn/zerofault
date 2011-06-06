@@ -1,18 +1,289 @@
 <!--{template admin/tpl/header}-->
-
+<style>
+dl.car_brand, dl.car_model {
+	padding-top: 4px;
+	padding-bottom: 8px;
+	border-bottom: 1px dotted #aaa;
+}
+dl.car_brand dt {
+	float: left;
+	width: 60px;
+	font-size: 16px;
+	font-weight: bold;
+	text-align:center;
+}
+dl.car_brand dd {
+	margin-left: 60px;
+}
+dl.car_brand li {
+	float:left;
+	position: relative;
+	width: 100px;
+	margin: 3px;
+	padding: 5px;
+	border: 1px dashed #ddd;
+	line-height: 24px;
+	text-align: center;
+}
+dl.car_brand li em {
+	position:absolute;
+	left:0;
+	top:-5px;
+	font-weight: normal;
+	font-style: normal;
+}
+dl.car_brand li img, dl.car_model li img{
+	cursor: pointer;
+	position: absolute;
+	right: 0;
+	bottom: 0;
+}
+dl.car_brand li span.editForm {
+	position:absolute;
+	left:1px;
+	top:1px;
+	z-index:999;
+}
+.editForm div{
+	display:none;
+	width:150px;
+	padding:0px 4px 5px;
+	_padding-top:8px;
+	
+	background:#F0F0F0;
+	text-align:left;
+	color:#006;
+	line-height:240%;
+}
+.editForm fieldset{
+	border:2px solid #FCD410;
+	background:#FFFFFF;
+}
+dl.car_model dt {
+	float: left;
+	width: 100px;
+	font-size: 16px;
+	font-weight: bold;
+	text-align:center;
+}
+dl.car_model dd {
+	margin-left: 100px;
+}
+dl.car_model li {
+	float:left;
+	position: relative;
+	margin: 3px;
+	padding: 5px 20px 5px 5px;
+	border: 1px dashed #ddd;
+	line-height: 24px;
+}
+</style>
 <div class="mainarea">
 	<div class="maininner">
 		<div class="tabs_header">
-			<ul class="tabs">
-				<li$actives[view]><a href="admincp.php?ac=car"><span>车型列表</span></a></li>
-			</ul>
+			<!--{if empty($_GET['brand_id'])}-->
+			<form id="addBrand" style="float:right;">
+				品牌名称：<input type="text" class="name" size="10" />
+				拼音首字母：<input type="text" class="initials" size="2" />
+				显示顺序：<input type="text" class="displayorder" size="3" value="0"/>
+				<input type="button" class="submit" value="添加" />
+			</form>
+			<!--{/if}-->
+			车型列表：<a href="admincp.php?ac=car">所有品牌</a>
+			<!--{if $_GET['brand_id']}-->
+			&gt;&gt; <a href="">{$brand_name}</a>
+			<!--{/if}-->
 		</div>
+		<!--{if empty($_GET['brand_id'])}-->
+		注：左上角数字越大，显示越靠前
+			<!--{loop $brand_arr $a $arr}-->
+		<dl class="car_brand">
+			<dt id="{$a}">{$a}</dt>
+			<dd>
+				<ul>
+				<!--{loop $arr $item}-->
+					<li id="{$item['id']}">
+						<a href="admincp.php?ac=car&brand_id={$item['id']}">{$item['name']}</a>
+						<em>{$item['displayorder']}</em>
+						<img src="image/form_edit.gif" />
+					</li>
+				<!--{/loop}-->
+				</ul>
+				<div class="clear"></div>
+			</dd>
+		</dl>
+			<!--{/loop}-->
+		<!--{else}-->
+			<!--{loop $model_arr $model_item}-->
+		<dl class="car_model">
+			<dt id="{$model_item['id']}">{$model_item['name']}</dt>
+			<dd>
+				<ul>
+				<!--{loop $model_item['profile_arr'] $profile_item}-->
+					<li id="{$profile_item['id']}">
+						{$profile_item['name']}
+					</li>
+				<!--{/loop}-->
+					<li id="addProfile">
+						<input type="text" class="name" size="20" value="添加新车型" onfocus="if(this.value=='添加新车型')this.value='';" onblur="if(this.value=='')this.value='添加新车型';"/>
+						<input type="button" class="submit" value="提交" />
+					</li>
+				</ul>
+				<div class="clear"></div>
+			</dd>
+		</dl>
+			<!--{/loop}-->
+		<dl id="addModel" class="car_model">
+			<input type="text" class="name" size="20" value="添加新车系" onfocus="if(this.value=='添加新车系')this.value='';" onblur="if(this.value=='')this.value='添加新车系';"/>
+			<input type="button" class="submit" value="提交" />
+		</dl>
+		<!--{/if}-->
+		
 	</div>
 </div>
 
 <div class="side">
 	<!--{template admin/tpl/side}-->
 </div>
-<script>
+<iframe name="_iframe" id="_iframe" style="display:none;"></iframe>
+<script language="JavaScript" type="text/javascript" src="source/jquery-1.4.2.min.js"></script>
+<script language="JavaScript" type="text/javascript">
+jQuery.noConflict();
+jQuery(document).ready(function(){
+	jQuery("#addBrand .submit").click(function() {
+		submitAddBrand();
+	});
+
+	jQuery(".car_brand li img").each(function(i) {
+		setBrandEditable(this, i);
+	});
+
+	jQuery("#addModel .submit").click(function() {
+		submitAddModel();
+	});
+
+	jQuery(".car_model .submit").each(function(i) {
+		jQuery(this).click(function() {
+			submitAddProfile(this);
+		});
+	});
+
+});
+function submitAddBrand() {
+	var name = jQuery("#addBrand .name").val();
+	var initials = jQuery("#addBrand .initials").val();
+	var displayorder = jQuery("#addBrand .displayorder").val();
+	jQuery.post("admincp.php?ac=car", {
+		'name' : name,
+		'type' : 'brand',
+		'initials' : initials,
+		'displayorder' : displayorder,
+		'submit' : 1
+	},function(str) {
+			if(str=='-1') {
+				alert("该名称已经添加过了!");
+			}
+			else if(str=='1') {
+				alert("添加成功!");
+				myLocation('');
+			}
+			else {
+				alert(str);
+			}
+		});
+}
+function submitAddModel() {
+	var name = jQuery("#addModel .name").val();
+	jQuery.post("admincp.php?ac=car", {
+		'name' : name,
+		'type' : 'model',
+		'pid' : {$_REQUEST['brand_id']},
+		'submit' : 1
+	},function(str) {
+			if(str=='-1') {
+				alert("该名称已经添加过了!");
+			}
+			else if(str=='1') {
+				alert("添加成功!");
+				myLocation('');
+			}
+			else {
+				alert(str);
+			}
+		});
+}
+function submitAddProfile(obj) {
+	var name = jQuery(obj).prev().val();
+	jQuery.post("admincp.php?ac=car", {
+		'name' : name,
+		'type' : 'profile',
+		'pid' : jQuery(obj).parent().parent().parent().prev().attr('id'),
+		'submit' : 1
+	},function(str) {
+			if(str=='-1') {
+				alert("该名称已经添加过了!");
+			}
+			else if(str=='1') {
+				alert("添加成功!");
+				myLocation('');
+			}
+			else {
+				alert(str);
+			}
+		});
+}
+function setBrandEditable(obj, i) {
+	jQuery(obj).click(function() {
+		var id = jQuery(this).parent().attr('id');
+		var name = jQuery(this).prev().prev().text();
+		var initials = jQuery(this).parent().parent().parent().prev().attr('id');
+		var displayorder = jQuery(this).prev().text();
+		jQuery(".editForm").remove();
+		var html = '<span class="editForm"><div>';
+		html +='<fieldset><legend>编辑品牌信息</legend>';
+		html += '名称：<input type="text" class="name" size="10" value="'+name+'"/><br />';
+		html += '字母：<input type="text" class="initials" value="'+initials+'" size="2"/><br />';
+		html += '顺序：<input type="text" class="displayorder" value="'+displayorder+'" size="2"/><br />';
+		html += '<input type="button" value="提交" class="submit"/> <input type="button" value="取消" class="cancel"/>';
+		html += '</fieldset></div></span>';
+				
+		jQuery(this).after(html);
+		jQuery(".editForm > div").show('fast');
+		jQuery(".editForm input.submit").click(function(){
+			jQuery.post("admincp.php?ac=car",{
+				'id' : id,
+				'name' : jQuery(".editForm .name").val(),
+				'initials' : jQuery(".editForm .initials").val(),
+				'displayorder' : jQuery(".editForm .displayorder").val(),
+				'submit' : 1
+			},function(str) {
+					if(str=='-1') {
+						alert("该名称已经添加过了!");
+					}
+					else if(str=='1') {
+						alert("更新成功!");
+						myLocation('');
+					}
+					else {
+						alert(str);
+					}
+				});
+		});
+		jQuery(".editForm input.cancel").click(function(){
+			jQuery(".editForm>div").hide('slow');
+		});
+		jQuery(document).keydown(function(e){
+			var keyCode=e.keyCode ||window.event.keyCode;
+			if(keyCode==27)//取消健
+			{
+				jQuery(".editForm>div").hide('slow');
+			}
+		});
+	});
+}
+function myLocation(loc)
+{
+	window.location.href = (loc==''? window.location.href : loc);
+}
 </script>
 <!--{template admin/tpl/footer}-->
