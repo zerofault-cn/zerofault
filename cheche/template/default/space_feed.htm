@@ -242,7 +242,55 @@
 		</ul>
 	</div>
 	<!--{/if}-->
-	
+
+	<!--{if $relatedSchool}-->
+	<div class="sidebox">
+		<h2 class="title">
+			推荐驾校
+		</h2>
+		<ul class="school_list">
+			<!--{loop $relatedSchool $key $value}-->
+			<li>
+				<span style="float:right">{$value[mtag_count]}个群组 / {$value[member_count]}个车友</span>
+				<a href="space.php?do=mtag&view=school&school_id={$value['id']}">{$value[name]}</a>
+			</li>
+			<!--{/loop}-->
+		</ul>
+	</div>
+	<!--{/if}-->
+
+	<!--{if $relatedMtag}-->
+	<div class="sidebox">
+		<h2 class="title">
+			推荐群组
+		</h2>
+		<ul class="mtag_list">
+			<!--{loop $relatedMtag $key $value}-->
+			<li>
+				<span style="float:right">{$value[membernum]}个车友 / {$value[threadnum]}个话题</span>
+				<a href="space.php?do=mtag&tagid={$value['tagid']}">{$value[tagname]}</a>
+			</li>
+			<!--{/loop}-->
+		</ul>
+	</div>
+	<!--{/if}-->
+
+	<!--{if $relatedUser}-->
+	<div class="sidebox">
+		<h2 class="title">
+			车友推荐
+		</h2>
+		<ul class="avatar_list">
+			<!--{loop $relatedUser $key $value}-->
+			<li>
+				<div class="avatar48"><a href="space.php?uid=$value[uid]"><!--{avatar($value[uid],small)}--></a></div>
+				<p<!--{if $ols[$value[uid]]}--> class="online_icon_p" title="在线"<!--{/if}-->><a href="space.php?uid=$value[uid]" title="{$_SN[$value[uid]]}">{$_SN[$value[uid]]}</a></p>
+			</li>
+			<!--{/loop}-->
+		</ul>
+	</div>
+	<!--{/if}-->
+
 	<!--{if $visitorlist}-->
 	<div class="sidebox">
 		<h2 class="title">
