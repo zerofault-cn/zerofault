@@ -227,31 +227,44 @@ if($_GET['op'] == 'manage') {
 			//区域联盟
 			$region_id = $mtag['ext_id'];
 			if ($region_id>0) {
-				$city_id = $_SGLOBAL['db']->result($_SGLOBAL['db']->query("SELECT pid FROM ".tname('region')." WHERE id='".$region_id."'"), 0);
-				if ($city_id>0) {
-					$province_id = $_SGLOBAL['db']->result($_SGLOBAL['db']->query("SELECT pid FROM ".tname('region')." WHERE id='".$city_id."'"), 0);
+				$region = $_SGLOBAL['db']->fetch_array($_SGLOBAL['db']->query("SELECT * FROM ".tname('region')." WHERE id='".$region_id."'"));
+				if (!empty($region)) {
+					$city_id = $region['pid'];
+					$city = $_SGLOBAL['db']->fetch_array($_SGLOBAL['db']->query("SELECT * FROM ".tname('region')." WHERE id='".$city_id."'"));
+					if (!empty($city)) {
+						$province_id = $city['pid'];
+						$province_name = $_SGLOBAL['db']->result($_SGLOBAL['db']->query("SELECT name FROM ".tname('region')." WHERE id='".$province_id."'"), 0);
+					}
 				}
 			}
+			$mtag['ext_name'] = $province_name.$city['name'];
 		}
 		elseif (3==$mtag['fieldid']) {
 			//车系联盟
 			$car_profile_id = $mtag['ext_id'];
 			if ($car_profile_id>0) {
-				$car_model_id = $_SGLOBAL['db']->result($_SGLOBAL['db']->query("SELECT pid FROM ".tname('carmodel')." WHERE id='".$car_profile_id."'"), 0);
-				if ($car_model_id>0) {
-					$car_brand_id = $_SGLOBAL['db']->result($_SGLOBAL['db']->query("SELECT pid FROM ".tname('carmodel')." WHERE id='".$car_model_id."'"), 0);
+				$car_profile = $_SGLOBAL['db']->fetch_array($_SGLOBAL['db']->query("SELECT * FROM ".tname('carmodel')." WHERE id='".$car_profile_id."'"));
+				if (!empty($car_profile)) {
+					$car_model_id = $car_profile['pid'];
+					$car_model = $_SGLOBAL['db']->fetch_array($_SGLOBAL['db']->query("SELECT * FROM ".tname('carmodel')." WHERE id='".$car_model_id."'"));
+					if (!empty($car_model)) {
+						$car_brand_id = $car_model['pid'];
+						$car_brand_name = $_SGLOBAL['db']->result($_SGLOBAL['db']->query("SELECT name FROM ".tname('carmodel')." WHERE id='".$car_brand_id."'"), 0);
+					}
 				}
 			}
+			$mtag['ext_name'] = $car_brand_name.$car_model['name'];
 		}
 		elseif (4==$mtag['fieldid']) {
 			//驾校联盟
 			$school_id = $mtag['ext_id'];
 			if ($mtag['ext_id']>0) {
-				$school = $_SGLOBAL['db']->result($_SGLOBAL['db']->query("SELECT * FROM ".tname('school')." WHERE id='".$school_id."'"), 0);
+				$school = $_SGLOBAL['db']->fetch_array($_SGLOBAL['db']->query("SELECT * FROM ".tname('school')." WHERE id='".$school_id."'"));
 				if (!empty($school)) {
 					$province_id = $school['province_id'];
 					$city_id = $school['city_id'];
 					$region_id = $school['region_id'];
+					$mtag['ext_name'] = $school['name'];
 				}
 			}
 		}
@@ -441,6 +454,7 @@ if($_GET['op'] == 'manage') {
 					
 					$fs['title_template'] = cplang('feed_mtag_join_invite');
 					$fs['title_data'] = array(
+							'tagid' => $tagid,
 							'mtag' => "<a href=\"space.php?do=mtag&tagid=$tagid\">$mtag[tagname]</a>",
 							'field' => "<a href=\"space.php?do=mtag&id=$mtag[fieldid]\">$mtag[title]</a>",
 							'fromusername' => "<a href=\"space.php?uid=$invite[fromuid]\">{$_SN[$invite['fromuid']]}</a>"
@@ -762,6 +776,7 @@ function mtag_join($type, $key, $fieldid=0, $ext_id=0) {
 			$fs['icon'] = 'mtag';
 			$fs['title_template'] = cplang('feed_mtag_join');
 			$fs['title_data'] = array(
+					'tagid' => $tagid,
 					'mtag' => "<a href=\"space.php?do=mtag&tagid=$tagid\">$mtag[tagname]</a>",
 					'field' => "<a href=\"space.php?do=mtag&id=$mtag[fieldid]\">$mtag[title]</a>"
 				);

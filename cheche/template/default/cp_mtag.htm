@@ -3,7 +3,7 @@
 <!--{if $_GET[op]=='manage'}-->
 
 	<!--{if $_GET['subop'] != 'member'}-->
-	<h2 class="title"><img src="image/app/mtag.gif" />群组 - $mtag[tagname]</h2>
+	<h2 class="title"><img src="image/app/mtag.gif" />群组 - {$mtag[ext_name]} - $mtag[tagname]</h2>
 	<div class="tabs_header">
 		<ul class="tabs">
 		<!--{if $mtag['grade'] >= 8}-->
@@ -678,6 +678,7 @@
 	<!--{/if}-->
 
 <!--{/if}-->
+<!--{if !$_SGLOBAL[inajax]}-->
 <script>
 window.onload = function() {
 	show_ext($('fieldid').value);
@@ -781,4 +782,5 @@ function load_school_opts(field, pid) {
 	});
 }
 </script>
+<!--{/if}-->
 <!--{template footer}-->
