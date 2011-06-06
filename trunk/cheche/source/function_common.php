@@ -1509,7 +1509,11 @@ function mkfeed($feed, $actors=array()) {
 	if($feed['appid'] == UC_APPID) {
 		$feed['thisapp'] = 1;
 	}
-
+	
+	//读取群组图片和公告
+	if ('mtag' == $feed['icon'] && !empty($feed['title_data']['tagid'])) {
+		$feed['body_data'] = getmtag($feed['title_data']['tagid']);
+	}
 	return $feed;
 }
 

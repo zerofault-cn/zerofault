@@ -18,11 +18,20 @@
 				<!--{/if}-->
 			<!--{/if}-->
 			<div class="clear"></div>
+
+			<!--{if 'mtag'==$value['icon'] && !empty($value['body_data'])}-->
+			<div class="figure"><a href="space.php?do=mtag&tagid={$value['body_data']['tagid']}" target="_blank"><img src="$value['body_data']['pic']" alt="{$value['body_data']['tagname']}" /></a></div>
+			<p class="announcement">
+				<!--{if $value['body_data']['announcement']}-->$value['body_data']['announcement']<!--{else}-->还没有公告<!--{/if}-->
+				<br>
+				{$value['body_data']['membernum']}人参加 | {$value['body_data']['threadnum']}个帖子
+			</p>
+			<!--{/if}-->
 		
 			<!--{if empty($_TPL[hidden_hot]) && $value[hot]}-->
 			<div class="hotspot"><a href="cp.php?ac=feed&feedid=$value[feedid]">$value[hot]</a></div>
-			<!--{/if}-->	
-		
+			<!--{/if}-->
+
 			<!--{if $value['image_1']}-->
 			<a href="$value[image_1_link]"{$value[target]}><img src="$value[image_1]" class="summaryimg" /></a>
 			<!--{/if}-->
@@ -44,7 +53,7 @@
 			
 			<!--{if $value['thisapp'] && !empty($value['body_data']['flashvar'])}-->
 			<div class="media">
-				<img src="{$value['body_data']['pic']}" alt="点击播放" onclick="javascript:showFlash('{$value['body_data']['host']}', '{$value['body_data']['flashvar']}', this, '{$value['feedid']}');" style="cursor:pointer;" />
+				<img src="<!--{if empty({$value['body_data']['pic']})}-->image/vd.gif<!--{else}-->{$value['body_data']['pic']}<!--{/if}-->" onerror="this.onerror=null;this.src='image/vd.gif';" alt="点击播放" onclick="javascript:showFlash('{$value['body_data']['host']}', '{$value['body_data']['flashvar']}', this, '{$value['feedid']}');" style="cursor:pointer;" />
 			</div>
 			<!--{elseif $value['thisapp'] && !empty($value['body_data']['musicvar'])}-->
 			<div class="media">
