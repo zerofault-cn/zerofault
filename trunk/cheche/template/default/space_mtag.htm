@@ -1,4 +1,8 @@
-<!--{eval $_TPL['titles'] = array('群组');}-->
+<!--{if 'school'==$_GET[view]}-->
+	<!--{eval $_TPL['titles'] = array('驾校');}-->
+<!--{else}-->
+	<!--{eval $_TPL['titles'] = array('群组');}-->
+<!--{/if}-->
 <!--{template header}-->
 <div class="searchbar floatright">
 <form method="get" action="space.php">
@@ -247,7 +251,9 @@
 	<div class="page">$multi</div>
 
 <!--{else}-->
-	<!--{if 'school'!=$_GET[view]}-->
+	<!--{if 'school'==$_GET[view]}-->
+	该驾校下还没有群组，<a href="cp.php?ac=mtag&school_id={$school[id]}">创建一个群组</a>
+	<!--{else}-->
 	<div class="c_form">还没有群组。</div>
 	<!--{/if}-->
 <!--{/if}-->
