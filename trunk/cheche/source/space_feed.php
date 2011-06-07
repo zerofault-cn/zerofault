@@ -225,79 +225,84 @@ if($space['self'] && empty($start)) {
 	}
 
 	$relatedSchool = array();
-	//根据地域推荐驾校
-	$where = array();
-	if (!empty($space['province_id'])) {
-		$where['province'] = "province_id=".$space['province_id'];
-		if (!empty($space['city_id'])) {
-			$where['city'] = "city_id=".$space['city_id'];
-			if (!empty($space['region_id'])) {
-				$where['region'] = "region_id=".$space['region_id'];
+	//想学车的，根据地域推荐驾校
+	$maxSchool = 3;
+	if (4==$space['car_role']) {
+		$field_arr = array('region_id', 'city_id', 'province_id');
+		foreach ($field_arr as $field) {
+			if (count($relatedSchool)>=$maxSchool) {
+				break;
 			}
-		}
-	}
-	if (!empty($where)) {
-		$sql = "Select * from ".tname('school')." where ".implode(" and ", $where)." order by displayorder desc";
-		$rs = $_SGLOBAL['db']->query($sql);
-		if ($_SGLOBAL['db']->num_rows($rs) == 0) {
-			unset($where['region']);
-			$sql = "Select * from ".tname('school')." where ".implode(" and ", $where)." order by displayorder desc";
-			$rs = $_SGLOBAL['db']->query($sql);
-			if ($_SGLOBAL['db']->num_rows($rs) == 0) {
-				unset($where['city']);
-				$sql = "Select * from ".tname('school')." where ".implode(" and ", $where)." order by displayorder desc";
+			if (!empty($space[$field])) {
+				$where = ($field . "=".$space[$field]);
+				$sql = "Select * from ".tname('school')." where ".$where." order by displayorder desc";
 				$rs = $_SGLOBAL['db']->query($sql);
-			}
-		}
-		if ($_SGLOBAL['db']->num_rows($rs) > 0) {
-			while ($row = $_SGLOBAL['db']->fetch_array($rs)) {
-				if ($i>2) {
-					break;
+				if ($_SGLOBAL['db']->num_rows($rs) > 0) {
+					while ($row = $_SGLOBAL['db']->fetch_array($rs)) {
+						if (count($relatedSchool)>=$maxSchool) {
+							break;
+						}
+						$row['mtag_count'] = $_SGLOBAL['db']->result($_SGLOBAL['db']->query("select count(*) from ".tname('mtag')." where fieldid=4 and ext_id=".$row['id']), 0);
+						$row['member_count'] = intval($_SGLOBAL['db']->result($_SGLOBAL['db']->query("select sum(membernum) from ".tname('mtag')." where fieldid=4 and ext_id=".$row['id']), 0));
+						$relatedSchool[] = $row;
+					}
 				}
-				$row['mtag_count'] = $_SGLOBAL['db']->result($_SGLOBAL['db']->query("select count(*) from ".tname('mtag')." where fieldid=4 and ext_id=".$row['id']), 0);
-				$row['member_count'] = intval($_SGLOBAL['db']->result($_SGLOBAL['db']->query("select sum(membernum) from ".tname('mtag')." where fieldid=4 and ext_id=".$row['id']), 0));
-				$relatedSchool[] = $row;
-				$i++;
 			}
 		}
 	}
 
+	//已加入的群组
+	$tagid_str = $_SGLOBAL['db']->result($_SGLOBAL['db']->query("Select group_concat(tagid) from ".tname('tagspace')." where uid=".$space['uid']), 0);
+	if (!empty($tagid_str)) {
+		$sql_ext = " and tagid not in (".$tagid_str.")";
+	}
+
 	$relatedMtag = array();
-	//根据地域、车系相关性推荐群组
-	$where = array();
-	if (!empty($space['province_id'])) {
-		$where['region'] = "(fieldid=2 and ext_id=".$space['province_id'].")";
-		if (!empty($space['city_id'])) {
-			$where['region'] = "(fieldid=2 and ext_id=".$space['city_id'].")";
-		}
-	}
-	if (!empty($space['car_brand'])) {
-		$where['car'] = "(fieldid=3 and ext_id=".$space['car_brand'].")";
-		if (!empty($space['car_model'])) {
-			$where['car'] = "(fieldid=3 and ext_id=".$space['car_model'].")";
-		}
-	}
-	if (!empty($where)) {
-		//已加入的群组
-		$tagid_str = $_SGLOBAL['db']->result($_SGLOBAL['db']->query("Select group_concat(tagid) from ".tname('tagspace')." where uid=".$space['uid']), 0);
-		$sql = "Select * from ".tname('mtag')." where ".(!empty($tagid_str)?" tagid not in (".$tagid_str.") and ":"").implode(" or ", $where)." order by recommend desc, membernum desc";
-		$rs = $_SGLOBAL['db']->query($sql);
-		if ($_SGLOBAL['db']->num_rows($rs) == 0) {
-			unset($where['car']);
-			$sql = "Select * from ".tname('mtag')." where ".(!empty($tagid_str)?" tagid not in (".$tagid_str.") and ":"").implode(" or ", $where)." order by recommend desc, membernum desc";
-			$rs = $_SGLOBAL['db']->query($sql);
-		}
-		if ($_SGLOBAL['db']->num_rows($rs) > 0) {
-			$i = 0;
-			while ($row = $_SGLOBAL['db']->fetch_array($rs)) {
-				if ($i>2) {
-					break;
+	$maxMtag = 3;
+	if (1==$space['car_role']) {
+		//根据车系相关性推荐群组
+		$field_arr = array('car_profile', 'car_model', 'car_brand');
+		foreach ($field_arr as $field) {
+			if (count($relatedMtag)>=$maxMtag) {
+				break;
+			}
+			if (!empty($space[$field])) {
+				$where = " fieldid=3 and ext_id=".$space[$field];
+				$sql = "Select * from ".tname('mtag')." where ".$where . $sql_ext. " order by recommend desc, membernum desc";
+				$rs = $_SGLOBAL['db']->query($sql);
+				if ($_SGLOBAL['db']->num_rows($rs) > 0) {
+					while ($row = $_SGLOBAL['db']->fetch_array($rs)) {
+						if (count($relatedMtag)>=$maxMtag) {
+							break;
+						}
+						$relatedMtag[] = $row;
+					}
 				}
-				$relatedMtag[] = $row;
-				$i++;
 			}
 		}
 	}
+
+	//根据地域相关性推荐群组
+	$field_arr = array('region_id', 'city_id', 'province_id');
+	foreach ($field_arr as $field) {
+		if (count($relatedMtag)>=$maxMtag) {
+			break;
+		}
+		if (!empty($space[$field])) {
+			$where = " fieldid=2 and ext_id=".$space[$field];
+			$sql = "Select * from ".tname('mtag')." where ".$where . $sql_ext. " order by recommend desc, membernum desc";
+			$rs = $_SGLOBAL['db']->query($sql);
+			if ($_SGLOBAL['db']->num_rows($rs) > 0) {
+				while ($row = $_SGLOBAL['db']->fetch_array($rs)) {
+					if (count($relatedMtag)>=$maxMtag) {
+						break;
+					}
+					$relatedMtag[] = $row;
+				}
+			}
+		}
+	}
+
 	$relatedUser = array();
 	//根据地域、车型相关性推荐车友
 	$where = array();
