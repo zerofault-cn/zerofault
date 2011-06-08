@@ -424,7 +424,7 @@ h2.title img { margin: 0 5px 0 0; vertical-align: middle; }
 textarea { border: 1px solid #ddd; overflow: auto; }
 .t_input, select { padding: 3px 2px; border: 1px solid #ddd; line-height: 16px; }
 .button { padding: 0 5px; margin: 0 0 0 3px; height: 24px; border: none; background: #DDD; color: #333; line-height: 20px; letter-spacing: 1px; cursor: pointer; }
-.submit { padding: 0 5px; height: 24px; border: none; background: #FF8901; color: #FFF; line-height: 20px; letter-spacing: 1px; cursor: pointer; }
+input.submit { padding: 0 5px; height: 24px; border: none; background: #FF8901; color: #FFF; line-height: 20px; letter-spacing: 1px; cursor: pointer; }
 a.submit { padding: 5px; }
 a.button { padding: 5px; }
 .c_form { padding: 0.5em 3em; }

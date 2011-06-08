@@ -34,10 +34,6 @@ if(!empty($_POST['submit'])) {
 			die('名称拼音首字母必须填写！');
 		}
 	}
-	elseif ('model' == $type) {
-	}
-	elseif ('profile' == $type) {
-	}
 	$setarr = array(
 		'pid' => $pid,
 		'type' => $type,
@@ -53,7 +49,7 @@ if(!empty($_POST['submit'])) {
 	die('1');
 }
 
-if(empty($_GET['op'])) {
+if(empty($_REQUEST['op'])) {
 	if (empty($_REQUEST['brand_id'])) {
 		//brand list
 		$sql = "Select *from ".tname('carmodel')." where pid=0 order by initials, displayorder desc";
@@ -85,12 +81,56 @@ if(empty($_GET['op'])) {
 		}
 	}
 
-} elseif($_GET['op'] == 'add') {
+} elseif($_REQUEST['op'] == 'add') {
 
-} elseif($_GET['op'] == 'edit') {
-
-} elseif($_GET['op'] == 'delete') {
+} elseif($_REQUEST['op'] == 'edit') {
+	$id = empty($_POST['id'])? 0 : intval($_POST['id']);
+	$type = empty($_POST['type'])? '' : $_POST['type'];
+	$name = trim($_POST['name']);
+	if (empty($id) || empty($type)) {
+		die('参数错误！');
+	}
+	if (''==$name) {
+		die('名称必须填写！');
+	}
+	$tmp = explode(' ', $type);
+	$type = $tmp[0];
 	
+	//检查名称是否已存在
+	$sql = "Select * from ".tname('carmodel')." where id!=".$id." and type='".$type."' and name='".$name."'";
+	$rs = $_SGLOBAL['db']->query($sql);
+	if ($_SGLOBAL['db']->num_rows($rs)>0) {
+		die('-1');
+	}
+	$setarr = array(
+		'type' => $type,
+		'name' => $name
+		);
+	updatetable('carmodel', $setarr, array('id'=>$id));
+	die('1');
+	
+
+} elseif($_REQUEST['op'] == 'delete') {
+	$id = empty($_POST['id'])? 0 : intval($_POST['id']);
+	$type = empty($_POST['type'])? '' : $_POST['type'];
+	if (empty($id) || empty($type)) {
+		die('参数错误！');
+	}
+	$tmp = explode(' ', $type);
+	$type = $tmp[0];
+	//检测是否已被用户使用
+	$sql = "Select * from ".tname('spacefield')." where car_".$type."=".$id;
+	$rs = $_SGLOBAL['db']->query($sql);
+	if ($_SGLOBAL['db']->num_rows($rs) > 0) {
+		die('-1');
+	}
+	$sql = "Delete from ".tname('carmodel')." where id=".$id;
+	if ($_SGLOBAL['db']->query($sql)) {
+		die('1');
+	}
+	else {
+		die('系统错误！');
+	}
 }
 
 ?>
