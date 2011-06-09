@@ -537,6 +537,13 @@
 				if (mysql_num_rows($nResult) > 0)
 				{
 					while ($arrRow = mysql_fetch_array($nResult)) {
+						//ºÏ≤‚Form «∑Ò“—‘›Õ£
+						$nCirculationHistoryId = $arrRow['nCirculationHistoryId'];
+						$isPaused = mysql_result(mysql_query("Select isPaused from cf_circulationhistory where nID=".$nCirculationHistoryId), 0);
+						if ('1'==$isPaused) {
+							echo "CirculationHistory: ".$nCirculationHistoryId." is paused\n";
+							continue;
+						}
 						$nSlotId = $arrRow['nSlotId'];
 						$startTime = $arrRow['dateInProcessSince'];
 						$lastRemindTime = $arrRow['lastRemindTime'];
