@@ -27,7 +27,7 @@ if($_GET['op'] == 'base') {
 		//Ìá½»¼ì²é
 		$setarr = array(
 			'car_role' => intval($_POST['car_role']),
-			'car_number' => ''==$_POST['car_number_prefix']?'':($_POST['car_number_prefix'].getstr($_POST['car_number'], 10, 1, 1)),
+			'car_number' => (''==$_POST['car_number_prefix'] || 1!=intval($_POST['car_role']))?'':($_POST['car_number_prefix'].getstr($_POST['car_number'], 10, 1, 1)),
 			'car_brand' => intval($_POST['car_brand']),
 			'car_model' => intval($_POST['car_model']),
 			'car_profile' => intval($_POST['car_profile']),

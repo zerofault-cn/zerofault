@@ -95,7 +95,7 @@
 		<!--{if $newnum}-->
 		<div class="mgs_list">
 			<!--{if $space[notenum]}--><div><img src="image/icon/notice.gif"><a href="space.php?do=notice"><strong>$space[notenum]</strong> 条新通知</a></div><!--{/if}-->
-			<!--{if $space[addfriendnum]}--><div><img src="image/icon/friend.gif" alt="" /><a href="cp.php?ac=friend&op=request"><strong>$space[addfriendnum]</strong> 个好友请求</a></div><!--{/if}-->
+			<!--{if $space[addfriendnum]}--><div><img src="image/icon/friend.gif" alt="" /><a href="cp.php?ac=friend&op=request"><strong>$space[addfriendnum]</strong> 个车友请求</a></div><!--{/if}-->
 			<!--{if $space[mtaginvitenum]}--><div><img src="image/icon/mtag.gif" alt="" /><a href="cp.php?ac=mtag&op=mtaginvite"><strong>$space[mtaginvitenum]</strong> 个群组邀请</a></div><!--{/if}-->
 			<!--{if $space[eventinvitenum]}--><div><img src="image/icon/event.gif" alt="" /><a href="cp.php?ac=event&op=eventinvite"><strong>$space[eventinvitenum]</strong> 个活动邀请</a></div><!--{/if}-->
 			<!--{if $space[myinvitenum]}--><div><img src="image/icon/userapp.gif" alt="" /><a href="space.php?do=notice&view=userapp"><strong>$space[myinvitenum]</strong> 个应用消息</a></div><!--{/if}-->
@@ -132,7 +132,7 @@
 					
 					<!--{if $value[authorid] && !$value[isfriend]}-->
 					<p>
-						<a href="cp.php?ac=friend&op=add&uid=$value[authorid]" id="add_note_friend_$value[authorid]" onclick="ajaxmenu(event, this.id, 1)">加为好友</a>
+						<a href="cp.php?ac=friend&op=add&uid=$value[authorid]" id="add_note_friend_$value[authorid]" onclick="ajaxmenu(event, this.id, 1)">加为车友</a>
 						<span class="pipe">|</span>
 						<a href="cp.php?ac=poke&op=send&uid=$value[authorid]" id="a_poke_$value[authorid]" onclick="ajaxmenu(event, this.id, 1)">打个招呼</a>
 					</p>

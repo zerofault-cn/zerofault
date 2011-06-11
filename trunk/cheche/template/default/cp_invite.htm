@@ -27,7 +27,7 @@
 <div class="popupmenu_inner" id="__deleteform_{$id}">
 <form method="post" id="deleteform_{$id}" name="deleteform_{$id}" action="cp.php?ac=invite&op=delete&id=$id">
 	<p>确定要删除该邀请记录吗？</p>
-	<p>删除该邀请记录后,您的好友将不能通过<br/>原邀请记录链接注册成为您的好友!</p>
+	<p>删除该邀请记录后,您的车友将不能通过<br/>原邀请记录链接注册成为您的车友!</p>
 	<p class="btn_line">
 		<input type="hidden" name="refer" value="$_SGLOBAL[refer]">
 		<!--{if $_SGLOBAL[inajax]}-->
@@ -44,14 +44,14 @@
 
 <!--{else}-->
 
-<h2 class="title"><img src="image/icon/friend.gif">好友</h2>
+<h2 class="title"><img src="image/icon/friend.gif">车友</h2>
 <div class="tabs_header">
 	<ul class="tabs">
-		<li><a href="space.php?uid=$space[uid]&do=friend"><span>好友列表</span></a></li>
-		<li><a href="cp.php?ac=friend&op=search"><span>查找好友</span></a></li>
+		<li><a href="space.php?uid=$space[uid]&do=friend"><span>车友列表</span></a></li>
+		<li><a href="cp.php?ac=friend&op=search"><span>查找车友</span></a></li>
 		<li><a href="cp.php?ac=friend&op=find"><span>可能认识的人</span></a></li>
-		<li class="active"><a href="cp.php?ac=invite"><span>邀请好友</span></a></li>
-		<li><a href="cp.php?ac=friend&op=request"><span>好友请求</span></a></li>
+		<li class="active"><a href="cp.php?ac=invite"><span>邀请车友</span></a></li>
+		<li><a href="cp.php?ac=friend&op=request"><span>车友请求</span></a></li>
 		<li><a href="space.php?do=top"><span>排行榜</span></a></li>
 	</ul>
 </div>
@@ -60,19 +60,19 @@
 	<form method="post" action="cp.php?ac=invite&appid=$appid&ref" class="c_form">
 		<!--{if $get_invite}-->
 		<div class="c_mgs"><div class="ye_r_t"><div class="ye_l_t"><div class="ye_r_b"><div class="ye_l_b">
-			每邀请成功一个好友，就可获得 <strong>$get_invite</strong> 个奖励积分。赶快行动吧！
+			每邀请成功一个车友，就可获得 <strong>$get_invite</strong> 个奖励积分。赶快行动吧！
 		</div></div></div></div></div>
 		<!--{/if}-->
 		<table cellspacing="0" cellpadding="0" class="formtable" width="100%">
 			<caption>
-				<h2><!--{if $appid}-->邀请我的好友一起玩$appinfo[appname]<!--{else}-->我的好友邀请链接<!--{/if}--></h2>
+				<h2><!--{if $appid}-->邀请我的车友一起玩$appinfo[appname]<!--{else}-->我的车友邀请链接<!--{/if}--></h2>
 				<p>
 				<div class="composer_header">
 					<!--{if $appid}-->
 					<div class="ar_r_t"><div class="ar_l_t"><div class="ar_r_b"><div class="ar_l_b"><img src="http://appicon.manyou.com/logos/{$appid}" alt="{$appinfo[appname]}" /></div></div></div></div>
 					<!--{/if}-->
 					<p>
-						您可以通过QQ、MSN等IM工具，或者发送邮件，把下面的链接告诉你的好友，邀请他们加入进来。
+						您可以通过QQ、MSN等IM工具，或者发送邮件，把下面的链接告诉你的车友，邀请他们加入进来。
 						<table cellspacing="0" cellpadding="0" >
 						<!--{if $reward['credit']}-->
 							<!--{if $list_str}-->
@@ -107,8 +107,8 @@
 	<form method="post" action="cp.php?ac=invite&type=mail&appid=$appid&ref" class="c_form">
 		<table cellspacing="0" cellpadding="0" class="formtable" width="100%">
 			<caption>
-				<h2>给好友发送 Email 邀请<!--{if $appid}-->好友一起玩$appinfo[appname]<!--{/if}--></h2>
-				<p>通过Email发送邮件的方式，邀请你的好友。<br>多个Email使用","分割。</p>
+				<h2>给车友发送 Email 邀请<!--{if $appid}-->车友一起玩$appinfo[appname]<!--{/if}--></h2>
+				<p>通过Email发送邮件的方式，邀请你的车友。<br>多个Email使用","分割。</p>
 				<!--{if $pay[invite]}-->
 				<p>
 					<img src="image/credit.gif" align="absmiddle"> 发送一个邮件需要<strong>扣减积分 $pay[invite] 个/每条</strong>，您现在拥有积分 <a href="cp.php?ac=credit">$space[credit]</a> 个。
@@ -118,13 +118,13 @@
 			<tr>
 				<td>
 					
-					<div class="r_option"><a href="#"  onclick="MYABC.showChooser('email', '{$uri}api/getmaillist.htm', null, false, false, null); return false"><img src="http://widgets.manyou.com/misc/images/ab/ab_button.gif" style="margin: 5px 0 0;" alt="从地址簿添加" /></a></div><div><br />好友Email地址</div>
+					<div class="r_option"><a href="#"  onclick="MYABC.showChooser('email', '{$uri}api/getmaillist.htm', null, false, false, null); return false"><img src="http://widgets.manyou.com/misc/images/ab/ab_button.gif" style="margin: 5px 0 0;" alt="从地址簿添加" /></a></div><div><br />车友Email地址</div>
 					<textarea name="email" id="email" rows="5" style="width:99%;"></textarea>
 				</td>
 			</tr>
 			<tr>
 				<td>
-					想对好友说的话<br/>
+					想对车友说的话<br/>
 					<input type="text" name="saymsg" id="saymsg" onkeyup="showPreview(this.value, 'sayPreview')" class="t_input" style="width:98%;">
 				</td>
 			</tr>
@@ -142,14 +142,14 @@
 						<!--{if $appid}-->
 						<h3>Hi，我是{$mailvar[1]}，在{$mailvar[2]}上玩{$appinfo[appname]}，邀请您也加入一起玩。</h3><br>
 						<!--{else}-->
-						<h3>Hi，我是{$mailvar[1]}，在{$mailvar[2]}上建立了个人主页，邀请你也加入并成为我的好友。</h3><br>
-						请加入到我的好友中，你就可以通过我的个人主页了解我的近况，分享我的照片，随时与我保持联系。<br>
+						<h3>Hi，我是{$mailvar[1]}，在{$mailvar[2]}上建立了个人主页，邀请你也加入并成为我的车友。</h3><br>
+						请加入到我的车友中，你就可以通过我的个人主页了解我的近况，分享我的照片，随时与我保持联系。<br>
 						<!--{/if}-->
 						<br>
 						邀请附言：<br>
 						<span id="sayPreview">{$mailvar[3]}</span>
 						<br><br>
-						<strong>请你点击以下链接，接受好友邀请<!--{if $appid}-->一起玩$appinfo[appname]<!--{/if}-->：</strong><br>
+						<strong>请你点击以下链接，接受车友邀请<!--{if $appid}-->一起玩$appinfo[appname]<!--{/if}-->：</strong><br>
 						{$mailvar[4]}<br>
 						<br>
 						<strong>如果你拥有{$mailvar[2]}上面的账号，请点击以下链接查看我的个人主页：</strong><br>
@@ -167,7 +167,7 @@
 <div id="sidebar">
 		
 		<div class="sidebox">
-			<h2 class="title">已邀请好友</h2>
+			<h2 class="title">已邀请车友</h2>
 			<!--{if count($flist) < 24}-->
 			<ul class="avatar_list">
 				<!--{loop $flist $key $value}-->
@@ -190,7 +190,7 @@
 
 		<!--{if $maillist}-->
 		<div class="sidebox">
-			<h2 class="title">尚未邀请成功的好友邮件</h2>
+			<h2 class="title">尚未邀请成功的车友邮件</h2>
 			<ul class="sendmail">
 				<!--{loop $maillist $key $value}-->
 				<li id="sendmail_$value[id]_li">

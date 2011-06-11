@@ -42,7 +42,8 @@ if($_GET['op'] == 'manage') {
 		if(empty($mtag['allowinvite'])) {
 			showmessage('no_privilege');//不允许邀请
 		}
-	} else {
+	}
+	else {
 		if($mtag['grade'] < 8) {
 			showmessage('no_privilege');//吧主/副吧主
 		}
@@ -62,7 +63,11 @@ if($_GET['op'] == 'manage') {
 			$setarr['postperm'] = intval($_POST['postperm']);
 			$setarr['closeapply'] = intval($_POST['closeapply']);
 		}
+		$setarr['tagname'] = getstr($_POST['tagname'], 40, 1, 1, 1);
 		$setarr['fieldid'] = intval($_POST['fieldid']);
+		$setarr['region_field'] = $_POST['region_field'];
+		$setarr['region_id'] = intval($_POST['region_id']);
+		$setarr['ext_field'] = $_POST['ext_field'];
 		$setarr['ext_id'] = intval($_POST['ext_id']);
 		$setarr['pic'] = picurl_get($_POST['pic'], 150);
 		$setarr['announcement'] = getstr($_POST['announcement'], 5000, 1, 1, 1, 1);
@@ -70,14 +75,16 @@ if($_GET['op'] == 'manage') {
 
 		showmessage('do_success', "cp.php?ac=mtag&op=manage&tagid=$tagid&subop=$_GET[subop]");
 		
-	} elseif (submitcheck('memberssubmit')) {
+	}
+	elseif (submitcheck('memberssubmit')) {
 
 		//人员管理
 		mtag_managemember($mtag, $_POST['ids'], $_POST['newgrade']);
 		
 		showmessage('do_success', "cp.php?ac=mtag&op=manage&tagid=$tagid&subop=$_GET[subop]&grade=$_GET[grade]");
 	
-	} elseif (submitcheck('invitesubmit')) {
+	}
+	elseif (submitcheck('invitesubmit')) {
 		//邀请
 		$ids = empty($_POST['ids'])?array():$_POST['ids'];
 		$inserts = array();
@@ -104,7 +111,8 @@ if($_GET['op'] == 'manage') {
 		}
 		showmessage('do_success', "cp.php?ac=mtag&op=manage&tagid=$tagid&subop=invite&page=$_GET[page]&group=$_GET[group]&start=$_GET[start]");
 		
-	} elseif (submitcheck('membersubmit')) {
+	}
+	elseif (submitcheck('membersubmit')) {
 		//人员管理
 		mtag_managemember($mtag, array($_GET['uid']), $_POST['grade']);
 		showmessage('do_success', $_POST['refer'], 0);
@@ -121,7 +129,8 @@ if($_GET['op'] == 'manage') {
             $grades = array($value['grade'] => ' selected');
         }
 		
-	} elseif($_GET['subop'] == 'members') {
+	}
+	elseif($_GET['subop'] == 'members') {
 		
 		//分页
 		$perpage = 24;
@@ -151,7 +160,8 @@ if($_GET['op'] == 'manage') {
 		
 		$multi = smulti($start, $perpage, $count, "cp.php?ac=mtag&op=manage&tagid=$mtag[tagid]&subop=members&grade=$_GET[grade]&key=$_GET[key]");
 		
-	} elseif($_GET['subop'] == 'invite') {
+	}
+	elseif($_GET['subop'] == 'invite') {
 		//邀请
 		
 		//分页
@@ -213,7 +223,8 @@ if($_GET['op'] == 'manage') {
 		
 		$multi = multi($count, $perpage, $page, "cp.php?ac=mtag&op=manage&tagid=$mtag[tagid]&subop=invite&group=$_GET[group]&key=$_GET[key]");
 		
-	} else {
+	}
+	else {
 		//base
 		$fieldid_arr = array();
 		$query = $_SGLOBAL['db']->query("SELECT * FROM ".tname('profield')." where formtype='text' ORDER BY displayorder");
@@ -222,38 +233,57 @@ if($_GET['op'] == 'manage') {
 		}
 		$fieldid_opts = genOptions($fieldid_arr, $mtag['fieldid']);
 		
-		//从ext_id还原
-		if (2==$mtag['fieldid']) {
+		if (2==$mtag['fieldid'] || 3==$mtag['fieldid']) {
 			//区域联盟
-			$region_id = $mtag['ext_id'];
-			if ($region_id>0) {
-				$region = $_SGLOBAL['db']->fetch_array($_SGLOBAL['db']->query("SELECT * FROM ".tname('region')." WHERE id='".$region_id."'"));
-				if (!empty($region)) {
-					$city_id = $region['pid'];
-					$city = $_SGLOBAL['db']->fetch_array($_SGLOBAL['db']->query("SELECT * FROM ".tname('region')." WHERE id='".$city_id."'"));
-					if (!empty($city)) {
-						$province_id = $city['pid'];
-						$province_name = $_SGLOBAL['db']->result($_SGLOBAL['db']->query("SELECT name FROM ".tname('region')." WHERE id='".$province_id."'"), 0);
-					}
-				}
+			//还原地区信息
+			$region = $_SGLOBAL['db']->fetch_array($_SGLOBAL['db']->query("SELECT * FROM ".tname('region')." WHERE id='".$mtag['region_id']."'"));
+			if ('region' == $mtag['region_field']) {
+				$region_id = $mtag['region_id'];
+				$region_name = $region['name'];
+				$city_id = $region['pid'];
 			}
-			$mtag['ext_name'] = $province_name.$city['name'];
+			elseif ('city' == $mtag['region_field']) {
+				$city_id =  $mtag['region_id'];
+				$city_name = $region['name'];
+				$province_id = $region['pid'];
+			}
+			elseif ('province' == $mtag['region_field']) {
+				$province_id =  $mtag['region_id'];
+				$province_name = $region['name'];
+			}
+			if (!empty($region_id)) {
+				$city = $_SGLOBAL['db']->fetch_array($_SGLOBAL['db']->query("SELECT * FROM ".tname('region')." WHERE id='".$city_id."'"));
+				$city_name = $city['name'];
+				$province_id = $city['pid'];
+			}
+			$mtag['ext_name'] = $city_name.$region_name;
 		}
-		elseif (3==$mtag['fieldid']) {
-			//车系联盟
-			$car_profile_id = $mtag['ext_id'];
-			if ($car_profile_id>0) {
-				$car_profile = $_SGLOBAL['db']->fetch_array($_SGLOBAL['db']->query("SELECT * FROM ".tname('carmodel')." WHERE id='".$car_profile_id."'"));
-				if (!empty($car_profile)) {
-					$car_model_id = $car_profile['pid'];
-					$car_model = $_SGLOBAL['db']->fetch_array($_SGLOBAL['db']->query("SELECT * FROM ".tname('carmodel')." WHERE id='".$car_model_id."'"));
-					if (!empty($car_model)) {
-						$car_brand_id = $car_model['pid'];
-						$car_brand_name = $_SGLOBAL['db']->result($_SGLOBAL['db']->query("SELECT name FROM ".tname('carmodel')." WHERE id='".$car_brand_id."'"), 0);
-					}
-				}
+		if (3==$mtag['fieldid']) {
+			//还原车系信息
+			$car = $_SGLOBAL['db']->fetch_array($_SGLOBAL['db']->query("SELECT * FROM ".tname('carmodel')." WHERE id='".$mtag['ext_id']."'"));
+			if ('profile' == $mtag['ext_field']) {
+				$car_profile_id = $mtag['ext_id'];
+				$car_model_id = $car['pid'];
 			}
-			$mtag['ext_name'] = $car_brand_name.$car_model['name'];
+			elseif ('model' == $mtag['ext_field']) {
+				$car_model_id = $mtag['ext_id'];
+				$car_model_name = $car['name'];
+				$car_brand_id = $car['pid'];
+			}
+			elseif ('brand' == $mtag['ext_field']) {
+				$car_brand_id =  $mtag['ext_id'];
+				$car_brand_name = $car['name'];
+			}
+			if (!empty($car_profile_id)) {
+				$car_model = $_SGLOBAL['db']->fetch_array($_SGLOBAL['db']->query("SELECT * FROM ".tname('carmodel')." WHERE id='".$car_model_id."'"));
+				$car_model_name = $car_model['name'];
+				$car_brand_id = $car_model['pid'];
+			//	$car_brand_name = $_SGLOBAL['db']->result($_SGLOBAL['db']->query("SELECT name FROM ".tname('carmodel')." WHERE id='".$car_brand_id."'"), 0);
+			}
+			elseif (!empty($car_model_id)) {
+			//	$car_brand_name = $_SGLOBAL['db']->result($_SGLOBAL['db']->query("SELECT name FROM ".tname('carmodel')." WHERE id='".$car_brand_id."'"), 0);
+			}
+			$mtag['ext_name'] .= ' '.$car_model_name;
 		}
 		elseif (4==$mtag['fieldid']) {
 			//驾校联盟

@@ -576,14 +576,38 @@ if($op == 'add') {
 
 		$searchkey = stripsearchkey($_GET['searchkey']);
 
-		
-		mb_internal_encoding("UTF-8");
-		$profile = parse_ini_file(S_ROOT.'profile.ini', true);
-		$car_number_prefix = array_keys($profile['car_number']);
-		if (in_array(mb_substr($searchkey, 0, 1), $car_number_prefix)) {
+		if (!empty($_REQUEST['smart'])) {
+			$arr = explode(' ', $searchkey);
+			foreach ($arr as $val) {
+				$key_arr = array();
+				//分别查找车牌, 区域，车系，人名，
+				$key_arr[] = "sf.car_number like '%".$val."%'";
+
+				$rs = $_SGLOBAL['db']->query("SELECT * FROM ".tname('region')." WHERE name like '%".$val."%'");
+				$region_arr = array();
+				while ($row = $_SGLOBAL['db']->fetch_array($rs)) {
+					$region_arr[] = "sf.".$row['type']."_id=".$row['id'];
+				}
+				if (!empty($region_arr)) {
+					$key_arr[] .= "(".implode(' or ', $region_arr).")";
+				}
+
+				$rs = $_SGLOBAL['db']->query("SELECT * FROM ".tname('carmodel')." WHERE name like '%".$val."%'");
+				$car_arr = array();
+				while ($row = $_SGLOBAL['db']->fetch_array($rs)) {
+					$car_arr[] = "sf.car_".$row['type']."=".$row['id'];
+				}
+				if (!empty($car_arr)) {
+					$key_arr[] .= "(".implode(' or ', $car_arr).")";
+				}
+
+				$key_arr[] = "(s.name like '%".$val."%' OR s.username like '%".$val."%')";
+
+				$wherearr[] = "(".implode(" or ", $key_arr).")";
+			}
+
 			$fromarr['spacefield'] = tname('spacefield').' sf';
 			$wherearr['spacefield'] = "sf.uid=s.uid";
-			$wherearr[] = "sf.car_number like '".$searchkey."%'";
 			$fsql .= ", sf.car_role, sf.car_number, sf.car_brand, sf.car_model, sf.car_profile, sf.province_id, sf.city_id, sf.region_id";
 		}
 		else {
@@ -659,7 +683,7 @@ if($op == 'add') {
 			while ($value = $_SGLOBAL['db']->fetch_array($query)) {
 				realname_set($value['uid'], $value['username'], $value['name'], $value['namestatus']);
 				$value['isfriend'] = ($value['uid']==$space['uid'] || ($space['friends'] && in_array($value['uid'], $space['friends'])))?1:0;
-				$value['car_str'] = '当前身份：'.$profile['car_role'][$value['car_role']];
+				!empty($value['car_role']) && ($value['car_str'] = '当前身份：'.$profile['car_role'][$value['car_role']]);
 				if (1==$value['car_role'] && !empty($value['car_number'])) {
 					$value['car_str'] .= '/车牌号：'.$value['car_number'];
 				}

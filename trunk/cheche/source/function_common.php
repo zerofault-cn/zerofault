@@ -1716,7 +1716,7 @@ function getmtag($id) {
 
 	$query = $_SGLOBAL['db']->query("SELECT * FROM ".tname('mtag')." WHERE tagid='$id'");
 	if(!$mtag = $_SGLOBAL['db']->fetch_array($query)) {
-		showmessage('designated_election_it_does_not_exist');
+	//	showmessage('designated_election_it_does_not_exist');
 	}
 	//¿ÕÈº×é
 	if($mtag['membernum']<1 && ($mtag['joinperm'] || $mtag['viewperm'])) {

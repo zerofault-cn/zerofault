@@ -50,13 +50,13 @@
 			<li><a href="cp.php?ac=privacy">隐私筛选</a></li>
 		<!--{else}-->
 			<!--{if !$space['isfriend']}-->
-			<li><img src="image/icon/friend.gif"><a href="cp.php?ac=friend&op=add&uid=$space[uid]" id="a_friend_li" onclick="ajaxmenu(event, this.id, 1)">加为好友</a></li>
+			<li><img src="image/icon/friend.gif"><a href="cp.php?ac=friend&op=add&uid=$space[uid]" id="a_friend_li" onclick="ajaxmenu(event, this.id, 1)">加为车友</a></li>
 			<!--{/if}-->
 			<li><img src="image/icon/wall.gif"><a href="#comment">给我留言</a></li>
 			<li><img src="image/icon/poke.gif"><a href="cp.php?ac=poke&op=send&uid=$space[uid]" id="a_poke" onclick="ajaxmenu(event, this.id, 1)">打个招呼</a></li>
 			<li><img src="image/icon/pm.gif"><a href="cp.php?ac=pm&uid=$space[uid]" id="a_pm" onclick="ajaxmenu(event, this.id, 1)">发送消息</a></li>
 			<!--{if $space['isfriend']}-->
-			<li><img src="image/icon/friend.gif"><a href="cp.php?ac=friend&op=ignore&uid=$space[uid]" id="a_ignore" onclick="ajaxmenu(event, this.id)">解除好友</a></li>
+			<li><img src="image/icon/friend.gif"><a href="cp.php?ac=friend&op=ignore&uid=$space[uid]" id="a_ignore" onclick="ajaxmenu(event, this.id)">解除车友</a></li>
 			<!--{/if}-->
 			<li><img src="image/icon/report.gif"><a href="cp.php?ac=common&op=report&idtype=uid&id=$space[uid]" id="a_report" onclick="ajaxmenu(event, this.id, 1)">违规举报</a></li>
 			<!--{if checkperm('managename')||checkperm('managespacegroup')||checkperm('managespaceinfo')||checkperm('managespacecredit')||checkperm('managespacenote')}-->
@@ -109,7 +109,7 @@
 				<li><!--{if $space[self]}-->
 					<a href="cp.php?ac=friend&op=search" class="r_option" target="_blank">寻找</a>
 					<!--{/if}-->
-					<img src="image/icon/friend.gif"><a href="javascript:;" onclick="getindex('friend');">好友</a><!--{if $space[friendnum]}--><em>($space[friendnum])</em><!--{/if}--></li>
+					<img src="image/icon/friend.gif"><a href="javascript:;" onclick="getindex('friend');">车友</a><!--{if $space[friendnum]}--><em>($space[friendnum])</em><!--{/if}--></li>
 			</ul>
 		</div>
 
@@ -199,8 +199,8 @@
 
 		<!--{if !$space['isfriend']}-->
 		<div class="borderbox">
-			<p style="padding-bottom:10px;">如果您认识{$_SN[$space[uid]]}，可以给TA留个言，或者打个招呼，或者添加为好友。<br />成为好友后，您就可以第一时间关注到TA的更新动态。</p>
-			<a href="cp.php?ac=friend&op=add&uid=$space[uid]" id="a_friend_notice" onclick="ajaxmenu(event, this.id, 1)" class="submit">加为好友</a></p>
+			<p style="padding-bottom:10px;">如果您认识{$_SN[$space[uid]]}，可以给TA留个言，或者打个招呼，或者添加为车友。<br />成为车友后，您就可以第一时间关注到TA的更新动态。</p>
+			<a href="cp.php?ac=friend&op=add&uid=$space[uid]" id="a_friend_notice" onclick="ajaxmenu(event, this.id, 1)" class="submit">加为车友</a></p>
 		</div><br>
 		<!--{/if}-->
 
@@ -436,7 +436,7 @@
 			<span class="r_option">
 				<a href="space.php?uid=$space[uid]&do=friend&view=me" class="action">全部($space[friendnum])</a>
 			</span>
-			好友
+			车友
 			</h2>
 			<ul class="avatar_list">
 				<!--{loop $friendlist $value}-->
