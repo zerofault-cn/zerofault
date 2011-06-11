@@ -1,5 +1,9 @@
 <!--{template admin/tpl/header}-->
 <style>
+* {
+	word-wrap: normal;
+	word-break: keep-all;
+}
 dl.car_brand, dl.car_model {
 	padding-top: 4px;
 	padding-bottom: 8px;
@@ -94,6 +98,9 @@ dl.car_model li {
 	border: 1px dashed #ddd;
 	line-height: 24px;
 }
+dl.car_model li label {
+	white-space: nowrap;
+}
 dl.car_model li.editable {
 	border:1px dashed #999;
 	background-color:#ffffd3;
@@ -103,7 +110,10 @@ dl.car_model li.editable label {
 }
 dl.car_model li.editing {
 	padding: 4px;
-	
+}
+dl.car_model #addProfile {
+	position: static;
+	width: 170px;
 }
 img.submit, img.cancel {
 	cursor:pointer;
@@ -161,19 +171,13 @@ input.quickedit{
 						<img class="delete" src="image/delete.gif" />
 					</li>
 				<!--{/loop}-->
-					<li id="addProfile">
-						<input type="text" class="name" size="20" value="添加新车型" onfocus="if(this.value=='添加新车型')this.value='';" onblur="if(this.value=='')this.value='添加新车型';"/>
-						<img src="image/accept.gif" class="submit" align="absmiddle"/>
-					</li>
+					<li class="clear"><div id="addProfile"><input type="text" class="name" size="20" value="添加新车型" onfocus="if(this.value=='添加新车型')this.value='';" onblur="if(this.value=='')this.value='添加新车型';"/><img src="image/accept.gif" class="submit" align="absmiddle"/></div></li>
 				</ul>
 				<div class="clear"></div>
 			</dd>
 		</dl>
 			<!--{/loop}-->
-		<dl id="addModel" class="car_model">
-			<input type="text" class="name" size="20" value="添加新车系" onfocus="if(this.value=='添加新车系')this.value='';" onblur="if(this.value=='')this.value='添加新车系';"/>
-			<img src="image/accept.gif" class="submit" align="absmiddle"/>
-		</dl>
+		<dl id="addModel" class="car_model"><input type="text" class="name" size="20" value="添加新车系" onfocus="if(this.value=='添加新车系')this.value='';" onblur="if(this.value=='')this.value='添加新车系';"/><img src="image/accept.gif" class="submit" align="absmiddle"/></dl>
 		<!--{/if}-->
 		
 	</div>
@@ -297,7 +301,7 @@ function submitAddProfile(obj) {
 	jQuery.post("admincp.php?ac=car", {
 		'name' : name,
 		'type' : 'profile',
-		'pid' : jQuery(obj).parent().parent().parent().prev().attr('id'),
+		'pid' : jQuery(obj).parent().parent().parent().parent().prev().attr('id'),
 		'submit' : 1
 	},function(str) {
 			if(str=='-1') {

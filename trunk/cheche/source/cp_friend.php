@@ -563,6 +563,9 @@ if($op == 'add') {
 		realname_get();
 	}
 } elseif($op == 'search') {
+	mb_internal_encoding("UTF-8");
+	$profile = parse_ini_file(S_ROOT.'profile.ini', true);
+	$car_number_prefix_arr = array_keys($profile['car_number']);
 
 	@include_once(S_ROOT.'./data/data_profilefield.php');
 	$fields = empty($_SGLOBAL['profilefield'])?array():$_SGLOBAL['profilefield'];
@@ -579,10 +582,23 @@ if($op == 'add') {
 		if (!empty($_REQUEST['smart'])) {
 			$arr = explode(' ', $searchkey);
 			foreach ($arr as $val) {
+				if (''==trim($val)) {
+					continue;
+				}
 				$key_arr = array();
 				//分别查找车牌, 区域，车系，人名，
-				$key_arr[] = "sf.car_number like '%".$val."%'";
-
+				if (in_array(mb_substr($val, 0, 1), $car_number_prefix_arr)) {
+					if (preg_match("/[A-Z]/", strtoupper(mb_substr($val, 1, 1)))) {
+						//第二个是字母
+						$key_arr[] = "sf.car_number like '%".mb_substr($val, 0, 2)."%".mb_substr($val, 2)."%'";
+					}
+					else {
+						$key_arr[] = "sf.car_number like '%".mb_substr($val, 0, 1)."%".mb_substr($val, 1)."%'";
+					}
+				}
+				else {
+					$key_arr[] = "sf.car_number like '%".$val."%'";
+				}
 				$rs = $_SGLOBAL['db']->query("SELECT * FROM ".tname('region')." WHERE name like '%".$val."%'");
 				$region_arr = array();
 				while ($row = $_SGLOBAL['db']->fetch_array($rs)) {
@@ -677,8 +693,6 @@ if($op == 'add') {
 		}
 		$list = array();
 		if($wherearr) {
-			$profile = parse_ini_file(S_ROOT.'profile.ini', true);
-			
 			$query = $_SGLOBAL['db']->query("SELECT s.* $fsql FROM ".implode(',', $fromarr)." WHERE ".implode(' AND ', $wherearr)." LIMIT 0,500");
 			while ($value = $_SGLOBAL['db']->fetch_array($query)) {
 				realname_set($value['uid'], $value['username'], $value['name'], $value['namestatus']);
