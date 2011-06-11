@@ -3,9 +3,10 @@
 
 <div class="searchbar floatright">
 <form method="get" action="cp.php">
-	<input name="searchkey" value="" size="15" class="t_input" type="text">
+	<input name="searchkey" value="车牌/车系/地区/人名(用空格分隔)" onclick="this.value='';" size="35" class="t_input" type="text">
 	<input name="searchsubmit" value="找人" class="submit" type="submit">
 	<input type="hidden" name="searchmode" value="1" />
+	<input type="hidden" name="smart" value="1" />
 	<input type="hidden" name="ac" value="friend" />
 	<input type="hidden" name="op" value="search" />
 </form>

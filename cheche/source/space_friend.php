@@ -145,7 +145,7 @@ if($_GET['view'] == 'online') {
 		}
 	}
 	if($_GET['searchkey']) {
-		$wheresql = "AND main.fusername='$_GET[searchkey]'";
+		$wheresql = "AND main.fusername like '%".$_GET[searchkey]."%'";
 		$theurl .= "&searchkey=$_GET[searchkey]";
 	}
 

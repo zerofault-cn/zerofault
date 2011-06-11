@@ -52,7 +52,7 @@
 	<table cellspacing="4" cellpadding="4" class="formtable">
 	<tr>
 		<th width="100">群组名</th>
-		<td>$mtag[tagname]</td>
+		<td><input type="text" name="tagname" value="{$mtag[tagname]}" /></td>
 	</tr>
 	<tr>
 		<th valign="top">所属分类</th>
@@ -60,54 +60,59 @@
 			<select name="fieldid" id="fieldid" onchange="javascript:show_ext(this.value);">
 				{$fieldid_opts}
 			</select>
-			<div id="div_region" style="display:none;">
-				选择所属地区：
-				<select onchange="javascript:load_region_opts('sel_city', this.value);">
-					<option value="0">请选择</option>
-					{$province_opts}
-				</select>省
-				<select id="sel_city" onchange="javascript:load_region_opts('sel_region', this.value);">
-					<option value="0">请选择</option>
-					{$city_opts}
-				</select>市
-				<select id="sel_region" name="ext_id">
-					<option value="0">请选择</option>
-					{$region_opts}
-				</select>
-			</div>
 			<div id="div_car" style="display:none;">
 				选择所属车型：
-				品牌:<select onchange="javascript:load_car_opts('sel_model', this.value);">
-					<option value="0">请选择</option>
+				<select onchange="javascript:load_car_opts('sel_model', this.value);$('ext_field').value='brand';$('ext_id').value=this.value;">
+					<option value="0">请选择品牌</option>
 					{$car_brand_opts}
 				</select>
-				车系:<select id="sel_model" onchange="javascript:load_car_opts('sel_profile', this.value);">
-					<option value="0">请选择</option>
+				<select id="sel_model" onchange="javascript:load_car_opts('sel_profile', this.value);$('ext_field').value='model';if(this.value>0){$('ext_id').value=this.value;}">
+					<option value="0">请选择车系</option>
 					{$car_model_opts}
 				</select>
-				配置:<select id="sel_profile" name="ext_id">
-					<option value="0">请选择</option>
+				<select id="sel_profile" onchange="$('ext_field').value='profile';if(this.value>0){$('ext_id').value=this.value;}">
+					<option value="0">请选择配置</option>
 					{$car_profile_opts}
 				</select>
 			</div>
 			<div id="div_school" style="display:none;">
 				根据地区选择驾校：
-				<select onchange="javascript:load_region_opts('sel_school_city', this.value);">
+				<select onchange="javascript:load_region_opts('sel_school_city', this.value);$('region_field').value='province';$('region_id').value=this.value;">
 					<option value="0">请选择</option>
 					{$province_opts}
 				</select>省
-				<select id="sel_school_city" onchange="javascript:load_region_opts('sel_school_region', this.value);">
+				<select id="sel_school_city" onchange="javascript:load_region_opts('sel_school_region', this.value);$('region_field').value='city';if(this.value>0){$('region_id').value=this.value;}">
 					<option value="0">请选择</option>
 					{$city_opts}
 				</select>市
-				<select id="sel_school_region" onchange="javascript:load_school_opts('sel_school', this.value);">
+				<select id="sel_school_region" onchange="javascript:load_school_opts('sel_school', this.value);$('region_field').value='region';if(this.value>0){$('region_id').value=this.value;}">
 					<option value="0">请选择</option>
 					{$region_opts}
 				</select>
-				<select id="sel_school" name="ext_id">
+				<select id="sel_school" onchange="$('ext_field').value='school';if(this.value>0){$('ext_id').value=this.value;}">
 					<option value="0">请选择</option>
 					{$school_opts}
 				</select>
+			</div>
+			<div id="div_region" style="display:none;">
+				选择所在地区：
+				<select onchange="javascript:load_region_opts('sel_city', this.value);$('region_field').value='province';$('region_id').value=this.value;">
+					<option value="0">请选择</option>
+					{$province_opts}
+				</select>省
+				<select id="sel_city" onchange="javascript:load_region_opts('sel_region', this.value);$('region_field').value='city';if(this.value>0){$('region_id').value=this.value;}">
+					<option value="0">请选择</option>
+					{$city_opts}
+				</select>市
+				<select id="sel_region" onchange="$('region_field').value='region';if(this.value>0){$('region_id').value=this.value;}">
+					<option value="0">请选择</option>
+					{$region_opts}
+				</select>
+			</div>
+			<input type="hidden" name="region_field" id="region_field" value="{$mtag[region_field]}" />
+			<input type="hidden" name="region_id" id="region_id" value="{$mtag[region_id]}" />
+			<input type="hidden" name="ext_field" id="ext_field" value="{$mtag[ext_field]}" />
+			<input type="hidden" name="ext_id" id="ext_id" value="{$mtag[ext_id]}" />
 		</td>
 	</tr>
 	<tr>
@@ -546,48 +551,52 @@
 				<option value="$value[fieldid]">$value[title]</option>
 				<!--{/loop}-->
 			</select>
-			<div id="div_region" style="display:none;">
-				选择所属地区：
-				<select onchange="javascript:load_region_opts('sel_city', this.value);">
-					<option value="0">请选择</option>
-					$province_opts
-				</select>省
-				<select id="sel_city" onchange="javascript:load_region_opts('sel_region', this.value);">
-					<option value="0">请选择</option>
-				</select>市
-				<select id="sel_region" name="ext_id">
-					<option value="0">请选择</option>
-				</select>区/县
-			</div>
 			<div id="div_car" style="display:none;">
 				选择所属车型：
-				品牌:<select onchange="javascript:load_car_opts('sel_model', this.value);">
-					<option value="0">请选择</option>
+				<select onchange="javascript:load_car_opts('sel_model', this.value);$('ext_field').value='brand';$('ext_id').value=this.value;">
+					<option value="0">请选择品牌</option>
 					$car_brand_opts
 				</select>
-				车系:<select id="sel_model" onchange="javascript:load_car_opts('sel_profile', this.value);">
-					<option value="0">请选择</option>
+				<select id="sel_model" onchange="javascript:load_car_opts('sel_profile', this.value);$('ext_field').value='model';if(this.value>0){$('ext_id').value=this.value;}">
+					<option value="0">请选择车系</option>
 				</select>
-				配置:<select id="sel_profile" name="ext_id">
-					<option value="0">请选择</option>
+				<select id="sel_profile" onchange="$('ext_field').value='profile';if(this.value>0){$('ext_id').value=this.value;}">
+					<option value="0">请选择配置</option>
 				</select>
 			</div>
 			<div id="div_school" style="display:none;">
 				根据地区选择驾校：
-				<select onchange="javascript:load_region_opts('sel_school_city', this.value);">
+				<select onchange="javascript:load_region_opts('sel_school_city', this.value);$('region_field').value='province';$('region_id').value=this.value;">
 					<option value="0">请选择</option>
 					$province_opts
 				</select>省
-				<select id="sel_school_city" onchange="javascript:load_region_opts('sel_school_region', this.value);">
+				<select id="sel_school_city" onchange="javascript:load_region_opts('sel_school_region', this.value);$('region_field').value='city';if(this.value>0){$('region_id').value=this.value;}">
 					<option value="0">请选择</option>
 				</select>市
-				<select id="sel_school_region" onchange="javascript:load_school_opts('sel_school', this.value);">
+				<select id="sel_school_region" onchange="javascript:load_school_opts('sel_school', this.value);$('region_field').value='region';if(this.value>0){$('region_id').value=this.value;}">
 					<option value="0">请选择</option>
 				</select>
-				<select id="sel_school" name="ext_id">
+				<select id="sel_school" onchange="$('ext_field').value='school';if(this.value>0){$('ext_id').value=this.value;}">
 					<option value="0">请选择</option>
 				</select>
 			</div>
+			<div id="div_region" style="display:none;">
+				选择所属地区：
+				<select onchange="javascript:load_region_opts('sel_city', this.value);$('region_field').value='province';$('region_id').value=this.value;">
+					<option value="0">请选择</option>
+					$province_opts
+				</select>省
+				<select id="sel_city" onchange="javascript:load_region_opts('sel_region', this.value);$('region_field').value='city';if(this.value>0){$('region_id').value=this.value;}">
+					<option value="0">请选择</option>
+				</select>市
+				<select id="sel_region" onchange="$('region_field').value='region';if(this.value>0){$('region_id').value=this.value;}">
+					<option value="0">请选择</option>
+				</select>
+			</div>
+			<input type="hidden" name="region_field" id="region_field" value="" />
+			<input type="hidden" name="region_id" id="region_id" value="" />
+			<input type="hidden" name="ext_field" id="ext_field" value="" />
+			<input type="hidden" name="ext_id" id="ext_id" value="" />
 		</td>
 	</tr>
 	<!--{else}-->
@@ -595,7 +604,10 @@
 		<th width="120">当前选中驾校</th>
 		<td>{$school_info['name']}
 			<input type="hidden" name="fieldid" value="4"/>
-			<input type="hidden" name="ext_id" value="{$school_info['id']}" />
+			<input type="hidden" name="ext_field" value="school" />
+			<input type="hidden" name="ext_id" value="{$school_info[id]}" />
+			<input type="hidden" name="region_field" value="region" />
+			<input type="hidden" name="region_id" value="{$school_info[region_id]}" />
 		</td>
 	</tr>
 	<tr>
@@ -684,43 +696,31 @@ window.onload = function() {
 	show_ext($('fieldid').value);
 }
 function show_ext(i) {
-	var div_region = document.getElementById('div_region');
-	var sel_region = document.getElementById('sel_region');
-	var div_car = document.getElementById('div_car');
-	var sel_profile = document.getElementById('sel_profile');
-	var div_school = document.getElementById('div_school');
-	var sel_school = document.getElementById('sel_school');
+	var div_region = $('div_region');
+	var div_car = $('div_car');
+	var div_school = $('div_school');
 	if ('1' == i) {
 		div_region.style.display='none';
-		sel_region.disabled = true;
 		div_car.style.display='none';
-		sel_profile.disabled = true;
 		div_school.style.display='none';
-		sel_school.disabled = true;
 	}
 	else if ('2' == i) {
+		//区域联盟
 		div_region.style.display='';
-		sel_region.disabled = false;
 		div_car.style.display='none';
-		sel_profile.disabled = true;
 		div_school.style.display='none';
-		sel_school.disabled = true;
 	}
 	else if ('3' == i) {
-		div_region.style.display='none';
-		sel_region.disabled = true;
+		//车系联盟
+		div_region.style.display='';
 		div_car.style.display='';
-		sel_profile.disabled = false;
 		div_school.style.display='none';
-		sel_school.disabled = true;
 	}
 	else if ('4' == i) {
+		//驾校联盟
 		div_region.style.display='none';
-		sel_region.disabled = true;
 		div_car.style.display='none';
-		sel_profile.disabled = true;
 		div_school.style.display='';
-		sel_school.disabled = false;
 	}
 }
 function load_car_opts(field, pid) {

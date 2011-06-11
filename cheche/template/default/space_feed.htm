@@ -61,7 +61,7 @@
 	<!--{if $space[allnum]}-->
 	<div class="mgs_list">
 		<!--{if $space[notenum]}--><div><img src="image/icon/notice.gif"><a href="space.php?do=notice"><strong>$space[notenum]</strong> 条新通知</a></div><!--{/if}-->
-		<!--{if $space[addfriendnum]}--><div><img src="image/icon/friend.gif" alt="" /><a href="cp.php?ac=friend&op=request"><strong>$space[addfriendnum]</strong> 个好友请求</a></div><!--{/if}-->
+		<!--{if $space[addfriendnum]}--><div><img src="image/icon/friend.gif" alt="" /><a href="cp.php?ac=friend&op=request"><strong>$space[addfriendnum]</strong> 个车友请求</a></div><!--{/if}-->
 		<!--{if $space[mtaginvitenum]}--><div><img src="image/icon/mtag.gif" alt="" /><a href="cp.php?ac=mtag&op=mtaginvite"><strong>$space[mtaginvitenum]</strong> 个群组邀请</a></div><!--{/if}-->
 		<!--{if $space[eventinvitenum]}--><div><img src="image/icon/event.gif" alt="" /><a href="cp.php?ac=event&op=eventinvite"><strong>$space[eventinvitenum]</strong> 个活动邀请</a></div><!--{/if}-->
 		<!--{if $space[myinvitenum]}--><div><img src="image/icon/userapp.gif" alt="" /><a href="space.php?do=notice&view=userapp"><strong>$space[myinvitenum]</strong> 个应用消息</a></div><!--{/if}-->
@@ -104,7 +104,7 @@
 		<!--{/if}-->
 
 		<ul class="tabs">
-			<!--{if $space[friendnum]}--><li$actives[we]><a href="space.php?do=home&view=we"><span>好友动态</span></a></li><!--{/if}-->
+			<!--{if $space[friendnum]}--><li$actives[we]><a href="space.php?do=home&view=we"><span>车友动态</span></a></li><!--{/if}-->
 			<li$actives[hot]><a href="space.php?do=home&view=hot"><span>热门推荐</span></a></li>
 			<li$actives[me]><a href="space.php?do=home&view=me"><span>我的动态</span></a></li>
 			<li$actives[all]><a href="space.php?do=home&view=all"><span>全站动态</span></a></li>
@@ -326,7 +326,7 @@
 			<p class="r_option">
 				<a href="space.php?uid=$space[uid]&do=friend">全部</a>
 			</p>
-			我的好友
+			我的车友
 			<!--{if $_SGLOBAL[magic][visit]}-->
 			<span class="gray"><img src="image/magic/visit.small.gif" title="{$_SGLOBAL[magic][visit]}" /><a id="a_magic_visit" href="magic.php?mid=visit" onclick="ajaxmenu(event,this.id,1)">{$_SGLOBAL[magic][visit]}</a></span>
 			<!--{/if}-->
@@ -346,7 +346,7 @@
 	<!--{if $birthlist}-->
 	<div class="searchfriend">
 		<div class="ye_r_t"><div class="ye_l_t"><div class="ye_r_b"><div class="ye_l_b">
-			<h3>好友生日提醒</h3>
+			<h3>车友生日提醒</h3>
 			<div class="box">
 			<table cellpadding="2" cellspacing="4">
 			<!--{loop $birthlist $key $values}-->
@@ -373,16 +373,17 @@
 		<div class="ye_r_t"><div class="ye_l_t"><div class="ye_r_b"><div class="ye_l_b">
 			<h3>搜索用户</h3>
 			<form method="get" action="cp.php" style="padding:10px 0 5px 0;">
-				<input name="searchkey" value="" size="20" class="t_input" type="text">
+				<input name="searchkey" value="车牌/车系/地区/人名(用空格分隔)" onclick="this.value='';" size="30" class="t_input" type="text">
 				<input name="searchsubmit" value="找人" class="submit" type="submit">
 				<input type="hidden" name="searchmode" value="1" />
+				<input type="hidden" name="smart" value="1" />
 				<input type="hidden" name="ac" value="friend" />
 				<input type="hidden" name="op" value="search" />
 			</form>
 			<p>
 				<a href="cp.php?ac=friend&op=search">高级搜索</a><span class="pipe">|</span>
 				<a href="cp.php?ac=friend&op=find">可能认识的人</a><span class="pipe">|</span>
-				<a href="cp.php?ac=invite">邀请好友</a></p>
+				<a href="cp.php?ac=invite">邀请车友</a></p>
 		</div></div></div></div>
 	</div>
 
