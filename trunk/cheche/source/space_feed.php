@@ -336,7 +336,7 @@ if($space['self'] && empty($start)) {
 			}
 			$i = 0;
 			while ($row = $_SGLOBAL['db']->fetch_array($rs)) {
-				if ($i>3) {
+				if ($i>2) {
 					break;
 				}
 				if (in_array($row['uid'], $friend_arr)) {
