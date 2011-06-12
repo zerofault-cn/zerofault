@@ -204,10 +204,10 @@ jQuery(document).ready(function(){
 		});
 	});
 
-	jQuery("#addModel > input.name").click(function() {
+	jQuery("#addModel > .submit").click(function() {
 		submitAddModel();
 	});
-	jQuery("#addModel > .submit").keydown(function(e){
+	jQuery("#addModel > .name").keydown(function(e){
 		var keyCode=e.keyCode ||window.event.keyCode;
 		if(keyCode==13) {
 			submitAddModel();
