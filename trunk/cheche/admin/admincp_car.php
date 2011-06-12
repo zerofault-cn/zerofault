@@ -24,7 +24,7 @@ if(!empty($_POST['submit'])) {
 		die('名称必须填写！');
 	}
 	//检查名称是否已存在
-	$sql = "Select * from ".tname('carmodel')." where id!=".$id." and type='".$type."' and name='".$name."'";
+	$sql = "Select * from ".tname('carmodel')." where id!=".$id." and pid='".$pid."' and name='".$name."'";
 	$rs = $_SGLOBAL['db']->query($sql);
 	if ($_SGLOBAL['db']->num_rows($rs)>0) {
 		die('-1');
