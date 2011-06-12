@@ -1,185 +1,123 @@
 <!--{template admin/tpl/header}-->
 <style>
-* {
-	word-wrap: normal;
-	word-break: keep-all;
+div.bdrcontent .initials {
+	padding-left: 30px;
 }
-dl.car_brand, dl.car_model {
-	padding-top: 4px;
-	padding-bottom: 8px;
-	border-bottom: 1px dotted #aaa;
+div.bdrcontent tr.bg_1 {
+	background-color: #FFFFEF;
 }
-dl.car_brand dt {
-	float: left;
-	width: 60px;
-	font-size: 16px;
-	font-weight: bold;
-	text-align:center;
-}
-dl.car_brand dd {
-	margin-left: 60px;
-}
-dl.car_brand li {
-	float:left;
-	position: relative;
-	width: 100px;
-	margin: 3px 24px 0 0;
-	padding: 5px 18px 5px 5px;
-	border: 1px dashed #ddd;
-	line-height: 24px;
-	text-align: center;
-}
-dl.car_brand li em {
-	position:absolute;
-	left:0;
-	top:-5px;
-	font-weight: normal;
-	font-style: normal;
-}
-dl li img.edit, dl li img.delete{
-	cursor: pointer;
-	position: absolute;
-	right: 0;
-	bottom: 0;
-}
-dl li img.delete {
-	right: -17px;
-}
-dl dt.model img.delete {
-	cursor: pointer;
-}
-dl.car_brand li span.editForm {
-	position:absolute;
-	left:1px;
-	top:1px;
-	z-index:999;
-}
-.editForm div{
-	display:none;
-	width:150px;
-	padding:0px 4px 5px;
-	_padding-top:8px;
-	
-	background:#F0F0F0;
-	text-align:left;
-	color:#006;
-	line-height:240%;
-}
-.editForm fieldset{
-	border:2px solid #FCD410;
-	background:#FFFFFF;
-}
-dl.car_model dt {
-	float: left;
-	width: 120px;
-	font-size: 16px;
-	font-weight: bold;
-	text-align:center;
-}
-dl.car_model dt label.editable{
-	cursor:pointer;
-	padding:2px;
-	border:1px solid #999;
-	background-color:#ffffd3;
-}
-dl.car_model dt input {
-	font-size: 14px;
-	line-height:150%;
-	padding:3px 6px;
-}
-dl.car_model dd {
-	margin-left: 120px;
-}
-dl.car_model li {
-	float:left;
-	position: relative;
-	margin: 3px 24px 0 0;
-	padding: 4px 20px;
-	border: 1px dashed #ddd;
-	line-height: 24px;
-}
-dl.car_model li label {
-	white-space: nowrap;
-}
-dl.car_model li.editable {
-	border:1px dashed #999;
-	background-color:#ffffd3;
-}
-dl.car_model li.editable label {
-	cursor:pointer;
-}
-dl.car_model li.editing {
-	padding: 4px;
-}
-dl.car_model #addProfile {
-	position: static;
-	width: 170px;
-}
-img.submit, img.cancel {
-	cursor:pointer;
-}
-input.quickedit{
-	border:1px inset threedface;
-}
-
 </style>
 <div class="mainarea">
 	<div class="maininner">
 		<div class="tabs_header">
+			<form id="addForm" method="post" style="float:right;" target="_iframe">
 			<!--{if empty($_GET['brand_id'])}-->
-			<form id="addBrand" style="float:right;">
-				品牌名称：<input type="text" class="name" size="10" />
-				拼音首字母：<input type="text" class="initials" size="2" />
-				显示顺序：<input type="text" class="displayorder" size="3" value="0"/>
-				<input type="button" class="submit" value="添加" />
+				品牌名称：<input type="text" class="name" name="name" size="10" />
+				拼音首字母：<input type="text" class="initials" name="initials" size="2" />
+				显示顺序：<input type="text" class="displayorder" name="displayorder" size="3" value="0"/>
+				<input type="hidden" class="type" name="type" value="brand" />
+				<input type="hidden" class="id" name="id" value="0" />
+				<input type="submit" class="submit" name="submit" value="添加品牌" />
+			<!--{elseif empty($_GET['model_id'])}-->
+				车系名称：<input type="text" class="name" name="name" size="10" />
+				显示顺序：<input type="text" class="displayorder" name="displayorder" size="3" value="0"/>
+				<input type="hidden" class="initials" name="initials" value="" />
+				<input type="hidden" class="pid" name="pid" value="{$_REQUEST['brand_id']}" />
+				<input type="hidden" class="type" name="type" value="model" />
+				<input type="hidden" class="id" name="id" value="0" />
+				<input type="submit" class="submit" name="submit" value="添加车系" />
 			</form>
+			<!--{elseif empty($_GET['profile_id'])}-->
+				车型名称：<input type="text" class="name" name="name" size="20" />
+				显示顺序：<input type="text" class="displayorder" name="displayorder" size="3" value="0"/>
+				<input type="hidden" class="initials" name="initials" value="" />
+				<input type="hidden" class="pid" name="pid" value="{$_REQUEST['model_id']}" />
+				<input type="hidden" class="type" name="type" value="profile" />
+				<input type="hidden" class="id" name="id" value="0" />
+				<input type="submit" class="submit" name="submit" value="添加车型" />
 			<!--{/if}-->
-			车型列表：<a href="admincp.php?ac=car">所有品牌</a>
-			<!--{if $_GET['brand_id']}-->
-			&gt;&gt; <a href="">{$brand_name}</a>
+			</form>
+			车型列表：<a href="?ac=car">所有品牌</a>
+			<!--{if !empty($_REQUEST['brand_id'])}-->
+			&gt;&gt; <a href="?ac=car&brand_id={$_REQUEST['brand_id']}">{$brand_name}</a>
+			<!--{/if}-->
+			<!--{if !empty($_REQUEST['model_id'])}-->
+			&gt;&gt; <a href="?ac=car&brand_id={$_REQUEST['brand_id']}&model_id={$_REQUEST['model_id']}">{$model_name}</a>
 			<!--{/if}-->
 		</div>
+		<div class="bdrcontent">
+			<form method="post" action="admincp.php?ac=car" target="_iframe">
+			<input type="hidden" name="formhash" value="<!--{eval echo formhash();}-->" />
 		<!--{if empty($_GET['brand_id'])}-->
-		注：左上角数字越大，显示越靠前
-			<!--{loop $brand_arr $a $arr}-->
-		<dl class="car_brand">
-			<dt id="{$a}">{$a}</dt>
-			<dd>
-				<ul>
-				<!--{loop $arr $item}-->
-					<li id="{$item['id']}" class="brand">
-						<a href="admincp.php?ac=car&brand_id={$item['id']}">{$item['name']}</a>
-						<em>{$item['displayorder']}</em>
-						<img class="edit" src="image/form_edit.gif" />
-						<img class="delete" src="image/delete.gif" />
-					</li>
-				<!--{/loop}-->
-				</ul>
-				<div class="clear"></div>
-			</dd>
-		</dl>
+			<table cellspacing="0" cellpadding="0" class="formtable">
+			<tr>
+				<th width="120">名称首字母</th>
+				<th>品牌名称</th>
+				<th>车系数量</th>
+				<th>显示顺序</th>
+				<th width="80">操作</th>
+			</tr>
+			<!--{loop $brand_arr $item}-->
+			<tr class="bg_<!--{eval echo ord($item['initials'])%2;}-->">
+				<td class="initials">{$item['initials']}</td>
+				<td class="name"><a href="admincp.php?ac=car&brand_id={$item['id']}">{$item['name']}</a></td>
+				<td>{$item['count']}</td>
+				<td class="displayorder"><input type="text" name="displayorder[{$item[id]}]" value="$item[displayorder]" size="5"></td>
+				<td>
+					<a href="javascript:void(0);" onclick="editForm(this, {$item[id]}, 'brand');">编辑</a>&nbsp;&nbsp;&nbsp;&nbsp;
+					<!--{if empty($item['count'])}-->
+					<a href="javascript:void(0);" onclick="if(confirm('确定删除该品牌？')){jQuery('#_iframe').attr('src', 'admincp.php?ac=car&op=delete&type=brand&id={$item[id]}');}else{return false;}">删除</a>
+					<!--{/if}-->
+				</td>
+			</tr>
 			<!--{/loop}-->
-		<!--{else}-->
-			<!--{loop $model_arr $model_item}-->
-		<dl class="car_model">
-			<dt id="{$model_item['id']}" class="model"><label>{$model_item['name']}</label><!--{if empty($model_item['profile_arr'])}--><img class="delete" src="image/delete.gif" align="absmiddle"/><!--{/if}--></dt>
-			<dd>
-				<ul>
-				<!--{loop $model_item['profile_arr'] $profile_item}-->
-					<li id="{$profile_item['id']}" class="profile">
-						<label>{$profile_item['name']}</label>
-						<img class="delete" src="image/delete.gif" />
-					</li>
-				<!--{/loop}-->
-					<li class="clear"><div id="addProfile"><input type="text" class="name" size="20" value="添加新车型" onfocus="if(this.value=='添加新车型')this.value='';" onblur="if(this.value=='')this.value='添加新车型';"/><img src="image/accept.gif" class="submit" align="absmiddle"/></div></li>
-				</ul>
-				<div class="clear"></div>
-			</dd>
-		</dl>
+			</table>
+		<!--{elseif empty($_REQUEST['model_id'])}-->
+			<table cellspacing="0" cellpadding="0" class="formtable">
+			<tr>
+				<th>车系名称</th>
+				<th>车型数量</th>
+				<th>显示顺序</th>
+				<th width="80">操作</th>
+			</tr>
+			<!--{loop $model_arr $item}-->
+			<tr>
+				<td class="name"><a href="admincp.php?ac=car&brand_id={$_REQUEST['brand_id']}&model_id={$item['id']}">{$item['name']}</a></td>
+				<td>{$item['count']}</td>
+				<td class="displayorder"><input type="text" name="displayorder[{$item[id]}]" value="$item[displayorder]" size="5"></td>
+				<td>
+					<a href="javascript:void(0);" onclick="editForm(this, {$item[id]}, 'model');">编辑</a>&nbsp;&nbsp;&nbsp;&nbsp;
+					<!--{if empty($item['count'])}-->
+					<a href="javascript:void(0);" onclick="if(confirm('确定删除该车系？')){jQuery('#_iframe').attr('src', 'admincp.php?ac=car&op=delete&type=model&id={$item[id]}');}else{return false;}">删除</a>
+					<!--{/if}-->
+				</td>
+			</tr>
 			<!--{/loop}-->
-		<dl id="addModel" class="car_model"><input type="text" class="name" size="20" value="添加新车系" onfocus="if(this.value=='添加新车系')this.value='';" onblur="if(this.value=='')this.value='添加新车系';"/><img src="image/accept.gif" class="submit" align="absmiddle"/></dl>
+			</table>
+		<!--{elseif empty($_REQUEST['profile_id'])}-->
+			<table cellspacing="0" cellpadding="0" class="formtable">
+			<tr>
+				<th>车型名称</th>
+				<th>显示顺序</th>
+				<th width="80">操作</th>
+			</tr>
+			<!--{loop $profile_arr $item}-->
+			<tr>
+				<td class="name">{$item['name']}</td>
+				<td class="displayorder"><input type="text" name="displayorder[{$item[id]}]" value="$item[displayorder]" size="5"></td>
+				<td>
+					<a href="javascript:void(0);" onclick="editForm(this, {$item[id]}, 'profile');">编辑</a>&nbsp;&nbsp;&nbsp;&nbsp;
+					<a href="javascript:void(0);" onclick="if(confirm('确定删除该车型？')){jQuery('#_iframe').attr('src', 'admincp.php?ac=car&op=delete&type=profile&id={$item[id]}');}else{return false;}">删除</a>
+				</td>
+			</tr>
+			<!--{/loop}-->
+			</table>
 		<!--{/if}-->
-		
+			<center>
+				<input type="submit" name="ordersubmit" value="更新排序" class="submit">
+			</center>
+			</form>
+		</div>
 	</div>
 </div>
 
@@ -191,62 +129,13 @@ input.quickedit{
 <script language="JavaScript" type="text/javascript">
 jQuery.noConflict();
 jQuery(document).ready(function(){
-	jQuery("#addBrand .submit").click(function() {
-		submitAddBrand();
-	});
 
-	jQuery(".car_brand li img.edit").each(function(i) {
-		setBrandEditable(this, i);
-	});
-	jQuery(".car_brand li img.delete").each(function(i) {
-		jQuery(this).click(function(i) {
-			confirmDelete(this, i);
-		});
-	});
-
-	jQuery("#addModel > .submit").click(function() {
-		submitAddModel();
-	});
-	jQuery("#addModel > .name").keydown(function(e){
-		var keyCode=e.keyCode ||window.event.keyCode;
-		if(keyCode==13) {
-			submitAddModel();
-		}
-	});
-
-	jQuery(".car_model li .submit").each(function(i) {
-		jQuery(this).click(function() {
-			submitAddProfile(this);
-		});
-	});
-	jQuery(".car_model li input.name").each(function(i) {
-		jQuery(this).keydown(function(e) {
-			var keyCode=e.keyCode ||window.event.keyCode;
-			if(keyCode==13) {
-				submitAddProfile(this);
-			}
-		});
-	});
-
-
-	jQuery(".car_model dt label").each(function(i) {
-		setModelEditable(this, i);
-	});
-
-	jQuery(".car_model dd label").each(function(i) {
-		setProfileEditable(this, i);
-	});
-
-	jQuery(".car_model img.delete").each(function(i) {
-		jQuery(this).click(function(i) {
-			confirmDelete(this, i);
-		});
-	});
 });
-function submitAddBrand() {
+function submitAdd() {
 	var name = jQuery("#addBrand .name").val();
 	var initials = jQuery("#addBrand .initials").val();
 	var displayorder = jQuery("#addBrand .displayorder").val();
+	var name = jQuery("#addBrand .name").val();
 	jQuery.post("admincp.php?ac=car", {
 		'name' : name,
 		'type' : 'brand',
@@ -266,221 +155,25 @@ function submitAddBrand() {
 			}
 		});
 }
-function submitAddModel() {
-	var name = jQuery("#addModel .name").val();
-	if (''==jQuery.trim(name) || '添加新车系'==jQuery.trim(name)) {
-		alert("名称必须填写！");
-		jQuery("#addModel .name").focus();
-		return false;
+function editForm(obj, id, type) {
+	var old_submit = jQuery("#addForm .submit").val();
+	if ('brand' == type) {
+		jQuery("#addForm .initials").val(jQuery(obj).parent().parent().children(".initials").text());
 	}
-	jQuery.post("admincp.php?ac=car", {
-		'name' : name,
-		'type' : 'model',
-		'pid' : '{$_REQUEST['brand_id']}',
-		'submit' : 1
-	},function(str) {
-			if(str=='-1') {
-				alert("该名称已经添加过了!");
-			}
-			else if(str=='1') {
-				alert("添加成功!");
-				myLocation('');
-			}
-			else {
-				alert(str);
-			}
-		});
-}
-function submitAddProfile(obj) {
-	var name = jQuery(obj).parent().children('input').val();
-	if (''==jQuery.trim(name) || '添加新车型'==jQuery.trim(name)) {
-		alert("名称必须填写！");
-		jQuery(obj).prev().focus();
-		return false;
-	}
-	jQuery.post("admincp.php?ac=car", {
-		'name' : name,
-		'type' : 'profile',
-		'pid' : jQuery(obj).parent().parent().parent().parent().prev().attr('id'),
-		'submit' : 1
-	},function(str) {
-			if(str=='-1') {
-				alert("该名称已经添加过了!");
-			}
-			else if(str=='1') {
-				alert("添加成功!");
-				myLocation('');
-			}
-			else {
-				alert(str);
-			}
-		});
-}
-function setBrandEditable(obj, n) {
-	jQuery(obj).click(function() {
-		var id = jQuery(this).parent().attr('id');
-		var name = jQuery(this).prev().prev().text();
-		var initials = jQuery(this).parent().parent().parent().prev().attr('id');
-		var displayorder = jQuery(this).prev().text();
-		jQuery(".editForm").remove();
-		var html = '<span class="editForm"><div>';
-		html +='<fieldset><legend>编辑品牌信息</legend>';
-		html += '名称：<input type="text" class="name" size="10" value="'+name+'"/><br />';
-		html += '字母：<input type="text" class="initials" value="'+initials+'" size="2"/><br />';
-		html += '顺序：<input type="text" class="displayorder" value="'+displayorder+'" size="2"/><br />';
-		html += '<input type="button" value="提交" class="submit"/> <input type="button" value="取消" class="cancel"/>';
-		html += '</fieldset></div></span>';
-				
-		jQuery(this).after(html);
-		jQuery(".editForm > div").show('fast');
-		jQuery(".editForm input.submit").click(function(){
-			jQuery.post("admincp.php?ac=car",{
-				'id' : id,
-				'name' : jQuery(".editForm .name").val(),
-				'type' : 'brand',
-				'initials' : jQuery(".editForm .initials").val(),
-				'displayorder' : jQuery(".editForm .displayorder").val(),
-				'submit' : 1
-			},function(str) {
-					if(str=='-1') {
-						alert("该名称已经添加过了!");
-					}
-					else if(str=='1') {
-						alert("更新成功!");
-						myLocation('');
-					}
-					else {
-						alert(str);
-					}
-				});
-		});
-		jQuery(".editForm input.cancel").click(function(){
-			jQuery(".editForm>div").hide('slow');
-		});
-		jQuery(document).keydown(function(e){
-			var keyCode=e.keyCode ||window.event.keyCode;
-			if(keyCode==27)//取消健
-			{
-				jQuery(".editForm>div").hide('slow');
-			}
-		});
-	});
-}
+	jQuery("#addForm .name").val(jQuery(obj).parent().parent().children(".name").text()).focus();
+	jQuery("#addForm .displayorder").val(jQuery(obj).parent().parent().children(".displayorder").children("input").val());
 
-function setModelEditable(obj,n){
-	jQuery(obj).mouseover(function(){
-		jQuery(this).addClass("editable");
-	}).mouseout(function(){
-		jQuery(this).removeClass("editable");
-	}).click(function(){
-		jQuery(this).next().hide();
-		var old_value = jQuery(this).text();
-		html='<span><input class="quickedit" type="text" value="'+old_value+'" size="'+old_value.length+'"><br /><img class="submit" src="image/accept.gif" alt="提交" align="absmiddle"/> <img class="cancel" src="image/cancel.gif" alt="取消" align="absmiddle"/></span>';
-		jQuery(this).after(html).hide();
-		jQuery(this).next().children("input").select().keydown(function(e){
-			var keyCode=e.keyCode ||window.event.keyCode;
-			if(keyCode==13) {
-				submitEdit(this, n);
-			}
-			else if(keyCode==27) {
-				cancelEdit(this, n);
-			}
-		});
-		jQuery(this).next().children(".submit").click(function(){
-			submitEdit(this, n);
-		});
-		jQuery(this).next().children(".cancel").click(function(){
-			cancelEdit(this, n);
-		});
+	jQuery("#addForm .id").val(id);
+	var cancel_btn = jQuery("<input />").attr('type', 'button').val('取消修改').click(function() {
+		jQuery("#addForm .initials").val('');
+		jQuery("#addForm .name").val('');
+		jQuery("#addForm .displayorder").val(0);
+		jQuery("#addForm .submit").val(old_submit);
+		jQuery(this).remove();
 	});
+	jQuery("#addForm .submit").val("提交修改").next().remove();
+	jQuery("#addForm .submit").after(cancel_btn);
 }
-function setProfileEditable(obj,n){
-	jQuery(obj).mouseover(function(){
-		jQuery(this).parent().addClass("editable");
-	}).mouseout(function(){
-		jQuery(this).parent().removeClass("editable");
-	}).click(function() {
-		jQuery(this).parent().addClass('editing');
-		jQuery(this).next().hide();
-		var old_value = jQuery(this).text();
-		html='<span><input class="quickedit" type="text" value="'+old_value+'" size="'+old_value.length+'"><img class="submit" src="image/accept.gif" alt="提交" align="absmiddle"/><img class="cancel" src="image/cancel.gif" alt="取消" align="absmiddle"/></span>';
-		jQuery(this).after(html).hide();
-		jQuery(this).next().children("input").select().keydown(function(e){
-			var keyCode=e.keyCode ||window.event.keyCode;
-			if(keyCode==13) {
-				submitEdit(this, n);
-			}
-			else if(keyCode==27) {
-				cancelEdit(this, n);
-			}
-		});
-		jQuery(this).next().children(".submit").click(function(){
-			submitEdit(this, n);
-		});
-		jQuery(this).next().children(".cancel").click(function(){
-			cancelEdit(this, n);
-		});
-	});
-}
-function submitEdit(obj, n) {
-	var id = jQuery(obj).parent().parent().attr('id');
-	var type = jQuery(obj).parent().parent().attr('class');
-	var name = jQuery(obj).parent().children("input").val();
-	if (''==jQuery.trim(name)) {
-		alert("名称不能为空！");
-		jQuery(obj).parent().children("input").focus();
-		return false;
-	}
-	jQuery.post("admincp.php?ac=car",{
-			'id' : id,
-			'name' : name,
-			'type' : type,
-			'op' : 'edit'
-		},function(str) {
-				if(str=='-1') {
-					alert("该名称已被使用！");
-				}
-				else if(str=='1') {
-					alert("修改成功！");
-					myLocation('');
-				}
-				else {
-					alert(str);
-				}
-			});
-}
-function cancelEdit(obj, n) {
-	jQuery(obj).parent().parent().removeClass('editing');
-	jQuery(obj).parent().next().show();
-	jQuery(obj).parent().prev().show();
-	jQuery(obj).parent().remove();
-}
-function confirmDelete(obj, i) {
-	if (confirm('确认删除此项？')) {
-		var id = jQuery(obj).parent().attr('id');
-		var type = jQuery(obj).parent().attr('class');
-		jQuery.post("admincp.php?ac=car",{
-				'id' : id,
-				'type' : type,
-				'op' : 'delete'
-			},function(str) {
-					if(str=='-1') {
-						alert("已在使用中，不能直接删除！");
-					}
-					else if(str=='1') {
-						alert("删除成功！");
-						myLocation('');
-					}
-					else {
-						alert(str);
-					}
-				});
-	}
-	else {
-		return false;
-	}
-}
-
 function myLocation(loc)
 {
 	window.location.href = (loc==''? window.location.href : loc);

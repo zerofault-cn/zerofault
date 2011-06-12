@@ -3,7 +3,19 @@
 	[UCenter Home] (C) 2007-2008 Comsenz Inc.
 	$Id: admincp_profield.php 11954 2009-04-17 09:29:53Z liguode $
 */
-
+function success($msg) {
+	$html = '<script>';
+	$html.= 'alert("'.$msg.'");';
+	$html.= 'parent.myLocation("");';
+	$html.= '</script>';
+	die($html);
+}
+function error($msg) {
+	$html = '<script>';
+	$html.= 'alert("'.$msg.'");';
+	$html.= '</script>';
+	die($html);
+}
 if(!defined('IN_UCHOME') || !defined('IN_ADMINCP')) {
 	exit('Access Denied');
 }
@@ -21,17 +33,17 @@ if(!empty($_POST['submit'])) {
 	$initials = empty($_POST['initials'])?'':strtoupper(trim($_POST['initials']));
 	$displayorder = empty($_POST['displayorder'])?0:intval($_POST['displayorder']);
 	if (''==$name) {
-		die('名称必须填写！');
+		error('名称必须填写！');
 	}
 	//检查名称是否已存在
 	$sql = "Select * from ".tname('carmodel')." where id!=".$id." and pid='".$pid."' and name='".$name."'";
 	$rs = $_SGLOBAL['db']->query($sql);
 	if ($_SGLOBAL['db']->num_rows($rs)>0) {
-		die('-1');
+		error('该名称已经添加过了！');
 	}
 	if ('brand' == $type) {
 		if (''==$initials) {
-			die('名称拼音首字母必须填写！');
+			error('名称拼音首字母必须填写！');
 		}
 	}
 	$setarr = array(
@@ -46,9 +58,14 @@ if(!empty($_POST['submit'])) {
 	} else {
 		inserttable('carmodel', $setarr);
 	}
-	die('1');
+	success('提交成功！');
 }
-
+elseif (submitcheck('ordersubmit')) {
+	foreach ($_POST['displayorder'] as $id => $value) {
+		updatetable('carmodel', array('displayorder'=>intval($value)), array('id'=>intval($id)));
+	}
+	success('更新排序成功！');
+}
 if(empty($_REQUEST['op'])) {
 	if (empty($_REQUEST['brand_id'])) {
 		//brand list
@@ -56,28 +73,36 @@ if(empty($_REQUEST['op'])) {
 		$rs = $_SGLOBAL['db']->query($sql);
 		$brand_arr = array();
 		while ($row = $_SGLOBAL['db']->fetch_array($rs)) {
-			$a = $row['initials'];
-			if (!array_key_exists($a, $brand_arr)) {
-				$brand_arr[$a] = array();
-			}
-			$brand_arr[$a][] = $row;
+			$row['count'] = $_SGLOBAL['db']->result($_SGLOBAL['db']->query("select count(*) from ".tname('carmodel')." where pid=".$row['id']), 0);
+			$brand_arr[] = $row;
 		}
 	}
-	else {
+	elseif (empty($_REQUEST['model_id'])) {
 		$brand_id = intval($_REQUEST['brand_id']);
 		$brand_name = $_SGLOBAL['db']->result($_SGLOBAL['db']->query("select name from ".tname('carmodel')." where id=".$brand_id), 0);
 
 		//model list
-		$sql = "Select * from ".tname('carmodel')." where pid=".$brand_id." order by name";
+		$sql = "Select * from ".tname('carmodel')." where pid=".$brand_id." order by displayorder desc";
 		$rs = $_SGLOBAL['db']->query($sql);
 		$model_arr = array();
 		while ($row = $_SGLOBAL['db']->fetch_array($rs)) {
-			$row['profile_arr'] = array();
-			$rs2 = $_SGLOBAL['db']->query("Select * from ".tname('carmodel')." where pid=".$row['id']." order by name");
-			while ($row2 = $_SGLOBAL['db']->fetch_array($rs2)) {
-				$row['profile_arr'][] = $row2;
-			}
+			$row['count'] = $_SGLOBAL['db']->result($_SGLOBAL['db']->query("select count(*) from ".tname('carmodel')." where pid=".$row['id']), 0);
 			$model_arr[] = $row;
+		}
+	}
+	elseif (empty($_REQUEST['profile_id'])) {
+		$brand_id = intval($_REQUEST['brand_id']);
+		$brand_name = $_SGLOBAL['db']->result($_SGLOBAL['db']->query("select name from ".tname('carmodel')." where id=".$brand_id), 0);
+
+		$model_id = intval($_REQUEST['model_id']);
+		$model_name = $_SGLOBAL['db']->result($_SGLOBAL['db']->query("select name from ".tname('carmodel')." where id=".$model_id), 0);
+
+		$sql = "Select * from ".tname('carmodel')." where pid=".$model_id." order by displayorder desc";
+		$rs = $_SGLOBAL['db']->query($sql);
+		$profile_arr = array();
+		while ($row = $_SGLOBAL['db']->fetch_array($rs)) {
+			$row['count'] = $_SGLOBAL['db']->result($_SGLOBAL['db']->query("select count(*) from ".tname('carmodel')." where pid=".$row['id']), 0);
+			$profile_arr[] = $row;
 		}
 	}
 
@@ -111,25 +136,23 @@ if(empty($_REQUEST['op'])) {
 	
 
 } elseif($_REQUEST['op'] == 'delete') {
-	$id = empty($_POST['id'])? 0 : intval($_POST['id']);
-	$type = empty($_POST['type'])? '' : $_POST['type'];
+	$id = empty($_REQUEST['id'])? 0 : intval($_REQUEST['id']);
+	$type = empty($_REQUEST['type'])? '' : $_REQUEST['type'];
 	if (empty($id) || empty($type)) {
-		die('参数错误！');
+		error('参数错误！');
 	}
-	$tmp = explode(' ', $type);
-	$type = $tmp[0];
 	//检测是否已被用户使用
 	$sql = "Select * from ".tname('spacefield')." where car_".$type."=".$id;
 	$rs = $_SGLOBAL['db']->query($sql);
 	if ($_SGLOBAL['db']->num_rows($rs) > 0) {
-		die('-1');
+		error('已在使用中，不能直接删除！');
 	}
 	$sql = "Delete from ".tname('carmodel')." where id=".$id;
 	if ($_SGLOBAL['db']->query($sql)) {
-		die('1');
+		success('删除成功！');
 	}
 	else {
-		die('系统错误！');
+		error('系统错误！');
 	}
 }
 
