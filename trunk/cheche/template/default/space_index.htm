@@ -151,8 +151,12 @@
 			
 		<h3 id="spaceindex_name">
 		<!--{if $_SCONFIG[realname]}-->
-			<!--{if $space[name]}--><a href="space.php?uid=$space[uid]"<!--{eval g_color($space[groupid]);}-->>$space[name]</a><!--{else}-->未填写实名<!--{/if}-->
-			&nbsp;<em>(用户名: $space[username])</em>
+			<!--{if $space[name]}--><a href="space.php?uid=$space[uid]"<!--{eval g_color($space[groupid]);}-->>$space[name]</a><!--{else}-->$space[username]<!--{/if}-->
+			<em>
+			<!--{if $space['car_role']==1 && !empty($space['car_number'])}-->&nbsp;($space[car_number])<!--{/if}-->
+			
+			<!--{if !empty($space['car_info'])}-->&nbsp;{$space[car_info]}<!--{/if}-->
+			</em>
 		<!--{else}-->
 			<a href="space.php?uid=$space[uid]"<!--{eval g_color($space[groupid]);}-->>$space[username]</a>
 			<!--{if $space[name]}-->&nbsp;<em>(姓名: $space[name])</em><!--{/if}-->

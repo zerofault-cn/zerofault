@@ -358,6 +358,17 @@ function getspace($key, $indextype='uid', $auto_open=0) {
 			$space['name'] = addslashes($space['name']);
 			$space['privacy'] = empty($space['privacy'])?(empty($_SCONFIG['privacy'])?array():$_SCONFIG['privacy']):unserialize($space['privacy']);
 
+			$space['car_info'] = '';
+			if (!empty($space['car_brand'])) {
+				$space['car_info'] = $_SGLOBAL['db']->result($_SGLOBAL['db']->query("Select name from ".tname('carmodel')." where id=".$space['car_brand']), 0);
+			}
+			if (!empty($space['car_model'])) {
+				$space['car_info'] = $_SGLOBAL['db']->result($_SGLOBAL['db']->query("Select name from ".tname('carmodel')." where id=".$space['car_model']), 0);
+			}
+			if (!empty($space['car_profile'])) {
+				$space['car_info'] .= ' '.$_SGLOBAL['db']->result($_SGLOBAL['db']->query("Select name from ".tname('carmodel')." where id=".$space['car_profile']), 0);
+			}
+
 			//Í¨ÖªÊý
 			$space['allnotenum'] = 0;
 			foreach (array('notenum','pokenum','addfriendnum','mtaginvitenum','eventinvitenum','myinvitenum') as $value) {
