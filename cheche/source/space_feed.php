@@ -329,7 +329,7 @@ if($space['self'] && empty($start)) {
 		}
 		if ($_SGLOBAL['db']->num_rows($rs) > 0) {
 			//获取所有好友
-			$friend_ids = $_SGLOBAL['db']->result($_SGLOBAL['db']->query("select group_concat('fuid') from ".tname('friend')." where uid=".$space['uid']), 0);
+			$friend_ids = $_SGLOBAL['db']->result($_SGLOBAL['db']->query("select group_concat(fuid) from ".tname('friend')." where uid=".$space['uid']), 0);
 			$friend_arr = array();
 			if (!empty($friend_ids)) {
 				$friend_arr = explode(',', $friend_ids);
