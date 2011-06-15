@@ -192,6 +192,10 @@
 	<dl class="school_info">
 		<dt>驾校地址：</dt>
 		<dd>{$school[address]}</dd>
+		<!--{if !empty($school['telenum'])}-->
+		<dt>联系电话：</dt>
+		<dd>{$school[telenum]}</dd>
+		<!--{/if}-->
 		<dt>训练场地：</dt>
 		<dd><!--{eval echo nl2br($school['training'])}--></dd>
 		<dt>驾校评价：</dt>
