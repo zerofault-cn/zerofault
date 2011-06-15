@@ -3521,3 +3521,6 @@ ALTER TABLE `uchome_carmodel`  ADD COLUMN `displayorder` smallint(5) unsigned NO
 ALTER TABLE `uchome_mtag`  ADD COLUMN `region_field` varchar(255) NOT NULL DEFAULT '' AFTER `moderator`;
 ALTER TABLE `uchome_mtag`  ADD COLUMN `region_id` smallint(5) NOT NULL DEFAULT 0 AFTER `region_field`;
 ALTER TABLE `uchome_mtag`  ADD COLUMN `ext_field` varchar(255) NOT NULL DEFAULT '' AFTER `region_id`;
+
+ALTER TABLE `uchome_school`  ADD COLUMN `telenum` varchar(255) NOT NULL DEFAULT '' AFTER `fullname`;
+ALTER TABLE `uchome_spacefield`  ADD COLUMN `car_color` varchar(255) NOT NULL DEFAULT '' AFTER `car_profile`;

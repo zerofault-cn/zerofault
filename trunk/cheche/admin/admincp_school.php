@@ -28,6 +28,7 @@ if(submitcheck('submit')) {
 	$setarr = array(
 		'name' => shtmlspecialchars(trim($_POST['name'])),
 		'fullname' => shtmlspecialchars(trim($_POST['fullname'])),
+		'telenum' => shtmlspecialchars(trim($_POST['telenum'])),
 		'address' => shtmlspecialchars(trim($_POST['address'])),
 		'training' => shtmlspecialchars($_POST['training']),
 		'description' => shtmlspecialchars($_POST['description']),

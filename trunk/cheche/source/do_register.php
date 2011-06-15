@@ -102,7 +102,7 @@ if(empty($op)) {
 		if (empty($_POST['car_role'])) {
 			showmessage('您的身份必须选择！');
 		}
-		if ('1'==$POST['car_role'] && (empty($_POST['car_number_prefix']) || ''==trim($_POST['car_number']))) {
+		if ('1'==$_POST['car_role'] && (empty($_POST['car_number_prefix']) || ''==trim($_POST['car_number']))) {
 			showmessage('车牌号必须输入！');
 		}
 		if (empty($_POST['car_brand']) && empty($_POST['car_model']) && empty($_POST['car_profile'])) {

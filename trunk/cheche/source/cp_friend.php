@@ -579,6 +579,7 @@ if($op == 'add') {
 
 		$searchkey = stripsearchkey($_GET['searchkey']);
 
+		$fsql .= ", sf.car_role, sf.car_number, sf.car_brand, sf.car_model, sf.car_profile, sf.car_color, sf.province_id, sf.city_id, sf.region_id";
 		if (!empty($_REQUEST['smart'])) {
 			$arr = explode(' ', $searchkey);
 			foreach ($arr as $val) {
@@ -624,7 +625,6 @@ if($op == 'add') {
 
 			$fromarr['spacefield'] = tname('spacefield').' sf';
 			$wherearr['spacefield'] = "sf.uid=s.uid";
-			$fsql .= ", sf.car_role, sf.car_number, sf.car_brand, sf.car_model, sf.car_profile, sf.province_id, sf.city_id, sf.region_id";
 		}
 		else {
 			if(''!=$searchkey) {
@@ -637,7 +637,7 @@ if($op == 'add') {
 				}
 			}
 			//附表
-			foreach (array('sex','qq','msn','birthyear','birthmonth','birthday','blood','marry','birthprovince','birthcity','resideprovince','residecity') as $value) {
+			foreach (array('sex','qq','msn','birthyear','birthmonth','birthday','blood','marry','province_id','city_id', 'region_id') as $value) {
 				if($_GET[$value]) {
 					$fromarr['spacefield'] = tname('spacefield').' sf';
 					$wherearr['spacefield'] = "sf.uid=s.uid";
@@ -743,7 +743,31 @@ if($op == 'add') {
 			$they = $nowy - $i;
 			$yearhtml .= "<option value=\"$they\">$they</option>";
 		}
-		
+		//地区
+		$province_arr = array();
+		$query = $_SGLOBAL['db']->query("SELECT * FROM ".tname('region')." where pid=1");
+		while ($v = $_SGLOBAL['db']->fetch_array($query)) {
+			$province_arr[$v['id']] = $v['name'];
+		}
+		$province_opts = genOptions($province_arr, $space['province_id']);
+		//城市
+		$city_arr = array();
+		if (!empty($space['province_id'])) {
+			$query = $_SGLOBAL['db']->query("SELECT * FROM ".tname('region')." where pid=".$space['province_id']);
+			while ($v = $_SGLOBAL['db']->fetch_array($query)) {
+				$city_arr[$v['id']] = $v['name'];
+			}
+		}
+		$city_opts = genOptions($city_arr, $space['city_id']);
+		//区域
+		$region_arr = array();
+		if (!empty($space['city_id'])) {
+			$query = $_SGLOBAL['db']->query("SELECT * FROM ".tname('region')." where pid=".$space['city_id']);
+			while ($v = $_SGLOBAL['db']->fetch_array($query)) {
+				$region_arr[$v['id']] = $v['name'];
+			}
+		}
+		$region_opts = genOptions($region_arr, $space['region_id']);
 		//性别
 		$sexarr = array($space['sex']=>' checked');
 		
