@@ -95,7 +95,17 @@ $_SGLOBAL[space_css]
 		<div id="app_sidebar">
 		<!--{if $_SGLOBAL[supe_uid]}-->
 			<ul class="app_list" id="default_userapp">
-				<li><img src="image/app/mtag.gif"><a href="space.php?do=mtag">群组</a><em><a href="cp.php?ac=thread" class="gray">话题</a></em></li>
+				<li id="mtag">
+					<img src="image/app/mtag.gif"><a href="space.php?do=mtag">群组</a><em><img src="image/arr.gif" align="absmiddle"  /></em>
+					<div id="mtag_list">
+					<!--{loop $space['mtag_list'] $field_name $mtag_list}-->
+						<h5>{$field_name}</h5>
+						<!--{loop $mtag_list $item}-->
+						<p><a href="?do=mtag&tagid={$item['tagid']}">{$item['tagname']}</a></p>
+						<!--{/loop}-->
+					<!--{/loop}-->
+					</div>
+				</li>
 				<li><img src="image/app/house.png"><a href="space.php?do=mtag&view=school">驾校</a></li>
 				<li><img src="image/app/doing.gif"><a href="space.php?do=doing">记录</a></li>
 				<li><img src="image/app/album.gif"><a href="space.php?do=album">相册</a><em><a href="cp.php?ac=upload" class="gray">上传</a></em></li>
@@ -134,7 +144,19 @@ $_SGLOBAL[space_css]
 				</ul>
 			</div>
 			<!--{/if}-->
-		
+			<script language="JavaScript" type="text/javascript" src="source/jquery-1.4.2.min.js"></script>
+			<script language="JavaScript" type="text/javascript">
+			$(document).ready(function() {
+				jQuery("#app_sidebar #mtag").hover(
+					function() {
+						jQuery("#app_sidebar #mtag_list").show();
+					},
+					function() {
+						jQuery("#app_sidebar #mtag_list").hide();
+					}
+				);
+			});
+			</script>
 		<!--{else}-->
 			<div class="bar_text">
 				<form id="loginform" name="loginform" action="do.php?ac=$_SCONFIG[login_action]&ref" method="post">

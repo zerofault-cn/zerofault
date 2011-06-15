@@ -191,6 +191,23 @@
 <!--/content-->
 
 <div id="sidebar">
+	<div class="searchfriend">
+		<div class="ye_r_t"><div class="ye_l_t"><div class="ye_r_b"><div class="ye_l_b">
+			<h3>搜索用户</h3>
+			<form method="get" action="cp.php" style="padding:10px 0 5px 0;">
+				<input name="searchkey" value="车牌/车系/地区/人名(用空格分隔)" onclick="this.value='';" size="30" class="t_input" type="text">
+				<input name="searchsubmit" value="找人" class="submit" type="submit">
+				<input type="hidden" name="searchmode" value="1" />
+				<input type="hidden" name="smart" value="1" />
+				<input type="hidden" name="ac" value="friend" />
+				<input type="hidden" name="op" value="search" />
+			</form>
+			<p>
+				<a href="cp.php?ac=friend&op=search">高级搜索</a><span class="pipe">|</span>
+				<a href="cp.php?ac=friend&op=find">可能认识的人</a><span class="pipe">|</span>
+				<a href="cp.php?ac=invite">邀请车友</a></p>
+		</div></div></div></div>
+	</div>
 	<!--{if !$isnewer && $task}-->
 	<div class="ye_r_t"><div class="ye_l_t"><div class="ye_r_b"><div class="ye_l_b">
 		<div class="task_notice" style="width:230px;">
@@ -369,23 +386,6 @@
 	</div>
 	<!--{/if}-->
 
-	<div class="searchfriend">
-		<div class="ye_r_t"><div class="ye_l_t"><div class="ye_r_b"><div class="ye_l_b">
-			<h3>搜索用户</h3>
-			<form method="get" action="cp.php" style="padding:10px 0 5px 0;">
-				<input name="searchkey" value="车牌/车系/地区/人名(用空格分隔)" onclick="this.value='';" size="30" class="t_input" type="text">
-				<input name="searchsubmit" value="找人" class="submit" type="submit">
-				<input type="hidden" name="searchmode" value="1" />
-				<input type="hidden" name="smart" value="1" />
-				<input type="hidden" name="ac" value="friend" />
-				<input type="hidden" name="op" value="search" />
-			</form>
-			<p>
-				<a href="cp.php?ac=friend&op=search">高级搜索</a><span class="pipe">|</span>
-				<a href="cp.php?ac=friend&op=find">可能认识的人</a><span class="pipe">|</span>
-				<a href="cp.php?ac=invite">邀请车友</a></p>
-		</div></div></div></div>
-	</div>
 
 </div>
 <!--/sidebar-->

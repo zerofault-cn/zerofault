@@ -10,7 +10,7 @@
 </div>
 
 <!--{eval $farr = array(0=>'全用户','1'=>'仅好友','3'=>'仅自己');}-->
-<form method="post" action="$theurl&ref" class="c_form">
+<form method="post" action="$theurl&ref" class="c_form2">
 
 <!--{if $_GET['op'] == 'base'}-->
 
@@ -70,28 +70,29 @@
 			$car_role_opts
 		</select>
 		<span id="car_number" <!--{if $space['car_role']!=1}-->style="display:none;"<!--{/if}-->>
-			您的车牌号：
-				<!--{if false}-->
-				<select name="car_number_prefix">
-					<option value="">---</option>
-					<!--{loop $car_number $P $C_arr}-->
-					<optgroup label="{$P}">
-						<!--{loop $C_arr $i $c}-->
-						<option value="{$P}{$c}">{$P} {$c}&nbsp;&nbsp;</option>
-						<!--{/loop}-->
-					</optgroup>
+			车牌号：
+			<!--{if false}-->
+			<select name="car_number_prefix">
+				<option value="">---</option>
+				<!--{loop $car_number $P $C_arr}-->
+				<optgroup label="{$P}">
+					<!--{loop $C_arr $i $c}-->
+					<option value="{$P}{$c}">{$P} {$c}&nbsp;&nbsp;</option>
 					<!--{/loop}-->
-				</select>
-				<!--{/if}-->
-				<select onchange="change_prefix(this);">
-					<option value="">--</option>
-					{$car_number_prefix_p_opts}
-				</select>
-				<select name="car_number_prefix" id="car_number_prefix">
-					{$car_number_prefix_opts}
-				</select> -
-				<input type="text" size="6" maxlength="6" name="car_number" value="{$car_number}" onkeyup="this.value=this.value.replace(/[^0-9A-Z]/g, '');" />
-				<span id="car_number_msg"></span>
+				</optgroup>
+				<!--{/loop}-->
+			</select>
+			<!--{/if}-->
+			<select onchange="change_prefix(this);">
+				<option value="">--</option>
+				{$car_number_prefix_p_opts}
+			</select>
+			<select name="car_number_prefix" id="car_number_prefix">
+				{$car_number_prefix_opts}
+			</select> -
+			<input type="text" size="6" maxlength="6" name="car_number" value="{$car_number}" onkeyup="this.value=this.value.replace(/[^0-9A-Z]/g, '');" />
+			<span id="car_number_msg"></span>
+			车颜色：<input type="text" name="car_color" value="{$space[car_color]}" size="4"/>
 		</span>
 	</td>
 	<td>&nbsp;</td>

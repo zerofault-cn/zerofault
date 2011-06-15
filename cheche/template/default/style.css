@@ -122,8 +122,8 @@ body { background: #FFF; }
 /*************************************************APP SIDEBAR***/
 #app_sidebar { float: left; margin: 0 20px 0 0; padding: 10px 0 0; width: 140px; background: url(image/appSidebar_top_bg.gif) no-repeat 0 0; font-size: 14px; }
   #app_sidebar .topline { border-top: 1px dashed #CCC; }
-  .app_list { margin: 0 10px 0 10px; padding: 5px 5px 0 5px; overflow: hidden; }
-.app_list li { position: relative; margin: 0 0 12px; width: 110px; height: 20px; line-height: 21px; overflow: hidden; }
+  .app_list { margin: 0 10px 0 10px; padding: 5px 5px 0 5px; }
+.app_list li { position: relative; margin: 0 0 12px; width: 110px; height: 20px; line-height: 21px; }
   .app_list li img { margin: 0 5px 0 0; vertical-align: middle; }
   .app_list em { position: absolute; font-size: 12px; font-style: normal; font-weight: normal; right: 0px; }
 
@@ -145,6 +145,39 @@ body { background: #FFF; }
 #content { float: left; margin: 0 20px 0 0; width: 540px; overflow: hidden; }
 #content2 { float: left; margin: 0 10px 0 0; width: 644px; overflow: hidden; }
 
+
+#app_sidebar #mtag em img{
+	cursor:pointer;
+	padding-top:8px;
+}
+#mtag_list {
+	background: #FFFFFF;
+	border: 1px solid #F5DF78;
+	display: none;
+	left: 110px;
+	top: 0;
+	padding: 3px;
+	position: absolute;
+	z-index: 1000;
+	font-size: 12px;
+	word-wrap: normal;
+	word-break: keep-all;
+	white-space: nowrap;
+}
+#mtag_list h5 {
+	background: #F6F6F6;
+    margin: 0;
+    padding: 2px 5px;
+    font-weight: 700;
+}
+#mtag_list p {
+    margin: 0;
+    padding: 5px;
+}
+#mtag_list a {
+    color: #376B88;
+    outline: medium none;
+}
 map#Map .area_overlay{
 	position:absolute;
 	height:17px;

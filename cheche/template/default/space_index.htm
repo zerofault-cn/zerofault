@@ -156,6 +156,7 @@
 			<!--{if $space['car_role']==1 && !empty($space['car_number'])}-->&nbsp;($space[car_number])<!--{/if}-->
 			
 			<!--{if !empty($space['car_info'])}-->&nbsp;{$space[car_info]}<!--{/if}-->
+			<!--{if !empty($space['car_color'])}-->({$space[car_color]})<!--{/if}-->
 			</em>
 		<!--{else}-->
 			<a href="space.php?uid=$space[uid]"<!--{eval g_color($space[groupid]);}-->>$space[username]</a>

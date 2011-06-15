@@ -31,6 +31,7 @@ if($_GET['op'] == 'base') {
 			'car_brand' => intval($_POST['car_brand']),
 			'car_model' => intval($_POST['car_model']),
 			'car_profile' => intval($_POST['car_profile']),
+			'car_color' => getstr($_POST['car_color'], 20, 1, 1),
 			'province_id' => intval($_POST['province_id']),
 			'city_id' => intval($_POST['city_id']),
 			'region_id' => intval($_POST['region_id']),

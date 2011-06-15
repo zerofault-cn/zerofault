@@ -79,17 +79,17 @@
 			<input type="hidden" name="formhash" value="<!--{eval echo formhash();}-->" />
 			<table cellspacing="0" cellpadding="0" class="formtable">
 			<tr>
-				<th>驾校简称</th>
+				<th>驾校简称/电话</th>
 				<th>全称/地址</th>
-				<th>所属区域</th>
+				<th>&nbsp;&nbsp;&nbsp;&nbsp;所属区域</th>
 				<th>显示顺序</th>
 				<th width="80">操作</th>
 			</tr>
 			<!--{loop $list $value}-->
 			<tr>
-				<th>$value[name]</th>
-				<td>$value[fullname]<br />$value[address]</td>
-				<td>{$value[province]}省-{$value[city]}市-{$value[region]}</td>
+				<td>$value[name]<br /><Em>{$value[telenum]}</em></td>
+				<td nowrap="nowrap">$value[fullname]<br />$value[address]</td>
+				<td>&nbsp;&nbsp;&nbsp;&nbsp;{$value[province]}省-{$value[city]}市-{$value[region]}</td>
 				<td><input type="text" name="displayorder[{$value[id]}]" value="$value[displayorder]" size="5"></td>
 				<td width="80">
 					<a href="admincp.php?ac=school&op=edit&id=$value[id]">编辑</a> | 
@@ -115,12 +115,16 @@
 			<input type="hidden" name="formhash" value="<!--{eval echo formhash();}-->" />
 			<table cellspacing="0" cellpadding="0" class="formtable">
 			<tr>
-				<th style="width:15em;">驾校简称</th>
-				<td><input type="text" name="name" value="$thevalue[name]"></td>
+				<th width="100">驾校简称</th>
+				<td><input type="text" name="name" value="$thevalue[name]" maxlength="30"></td>
 			</tr>
 			<tr>
 				<th>驾校全称</th>
 				<td><input type="text" name="fullname" value="$thevalue[fullname]" size="60"></td>
+			</tr>
+			<tr>
+				<th>联系电话</th>
+				<td><input type="text" name="telenum" value="$thevalue[telenum]" size="60" maxlength="30"></td>
 			</tr>
 			<tr>
 				<th>驾校地址</th>

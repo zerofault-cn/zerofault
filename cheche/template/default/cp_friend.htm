@@ -325,19 +325,26 @@
 		<table>
 		<tr>
 			<td align="right" width="150">居住地：</td>
-			<td id="residecitybox"></td>
+			<td id="residecitybox">
+				<select name="province_id" onchange="javascript:load_region_opts('sel_city', this.value);">
+					<option value="0">请选择</option>
+					$province_opts
+				</select>省
+				<select name="city_id" id="sel_city" onchange="javascript:load_region_opts('sel_region', this.value);">
+					<option value="0">请选择</option>
+					$city_opts
+				</select>市
+				<select name="region_id" id="sel_region">
+					<option value="0">请选择</option>
+					$region_opts
+				</select>
+			</td>
 		</tr>
 		<tr><td align="right">姓名：</td><td><input type="text" name="name" value="" class="t_input"></td></tr>
 		<tr><td align="right">用户名：</td><td><input type="text" name="username" value="" class="t_input"></td></tr>
 		<tr><td></td><td><input type="submit" name="searchsubmit" value="查找" class="submit"></td></tr>
 		</table>
-		<script type="text/javascript" src="source/script_city.js"></script>
-		<script type="text/javascript">
-		<!--
-		showprovince('resideprovince', 'residecity', '$space[resideprovince]', 'residecitybox');
-		showcity('residecity', '$space[residecity]', 'resideprovince', 'residecitybox');
-		//-->
-		</script>
+		
 		<input type="hidden" name="ac" value="friend">
 		<input type="hidden" name="op" value="search">
 		<input type="hidden" name="type" value="base">
@@ -346,7 +353,7 @@
 	</tr>
 	</tbody>
 	
-
+<!-- 
 	<tr>
 		<th><img src="image/search.gif" align="absmiddle">
 			<a href="javascript:;" onclick="showtbody('birth');">查找老乡</a></th>
@@ -364,13 +371,7 @@
 		<tr><td align="right">用户名：</td><td><input type="text" name="username" value="" class="t_input"></td></tr>
 		<tr><td></td><td><input type="submit" name="searchsubmit" value="查找" class="submit"></td></tr>
 		</table>
-		<script type="text/javascript" src="source/script_city.js"></script>
-		<script type="text/javascript">
-		<!--
-		showprovince('birthprovince', 'birthcity', '$space[birthprovince]', 'birthcitybox');
-		showcity('birthcity', '$space[birthcity]', 'birthprovince', 'birthcitybox');
-		//-->
-		</script>
+		
 		<input type="hidden" name="ac" value="friend">
 		<input type="hidden" name="op" value="search">
 		<input type="hidden" name="type" value="base">
@@ -378,7 +379,7 @@
 		</td>
 	</tr>
 	</tbody>
-
+ -->
 	
 	<tr>
 		<th><img src="image/search.gif" align="absmiddle">
@@ -503,6 +504,24 @@
 </div>
 
 <script>
+function load_region_opts(field, pid) {
+	if ('0' == pid) {
+		document.getElementById(field).length = 1;
+		if ('sel_city' == field) {
+			document.getElementById('sel_region').length = 1;
+		}
+		return;
+	}
+	var x = new Ajax('HTML');
+	x.get('do.php?ac=ajax&op=get_region&pid='+pid, function(s) {
+		var sel = document.getElementById(field);
+		sel.length = 1;
+		var json = eval('('+s+')');
+		for (var i=0; i<json.length; i++) {
+			sel.options.add(new Option(json[i].name, json[i].id));
+		}
+	});
+}
 function showtbody(id) {
 	var obj = $('s_'+id);
 	if(obj.style.display == 'none') {
