@@ -4,16 +4,18 @@
 	$Id: admincp_profield.php 11954 2009-04-17 09:29:53Z liguode $
 */
 function success($msg) {
-	$html = '<script>';
-	$html.= 'alert("'.$msg.'");';
-	$html.= 'parent.myLocation("");';
-	$html.= '</script>';
+	header('Content-type: text/html; charset=utf-8');
+	$html = "<script>\n";
+	$html.= "alert('".$msg."');\n";
+	$html.= "parent.myLocation('');\n";
+	$html.= "</script>";
 	die($html);
 }
 function error($msg) {
-	$html = '<script>';
-	$html.= 'alert("'.$msg.'");';
-	$html.= '</script>';
+	header('Content-type: text/html; charset=utf-8');
+	$html = "<script>\n";
+	$html.= "alert('".$msg."');\n";
+	$html.= "</script>\n";
 	die($html);
 }
 if(!defined('IN_UCHOME') || !defined('IN_ADMINCP')) {
