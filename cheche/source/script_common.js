@@ -587,7 +587,7 @@ function selector(pattern, context) {
 			conditions.push([cc[1], cc[2], cc[3]]);
 		}
 	}
-	var list = document.getElementsByTagName(match[1] || "*");
+	var list = (context || document).getElementsByTagName(match[1] || "*");
 	
 	if(conditions) {
 		var elements = [];

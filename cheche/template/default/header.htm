@@ -146,7 +146,8 @@ $_SGLOBAL[space_css]
 			<!--{/if}-->
 			<script language="JavaScript" type="text/javascript" src="source/jquery-1.4.2.min.js"></script>
 			<script language="JavaScript" type="text/javascript">
-			$(document).ready(function() {
+			jQuery.noConflict();
+			jQuery(document).ready(function() {
 				jQuery("#app_sidebar #mtag").hover(
 					function() {
 						jQuery("#app_sidebar #mtag_list").show();

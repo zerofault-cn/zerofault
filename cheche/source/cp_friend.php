@@ -697,9 +697,9 @@ if($op == 'add') {
 			while ($value = $_SGLOBAL['db']->fetch_array($query)) {
 				realname_set($value['uid'], $value['username'], $value['name'], $value['namestatus']);
 				$value['isfriend'] = ($value['uid']==$space['uid'] || ($space['friends'] && in_array($value['uid'], $space['friends'])))?1:0;
-				!empty($value['car_role']) && ($value['car_str'] = '当前身份：'.$profile['car_role'][$value['car_role']]);
+				!empty($value['car_role']) && ($value['car_str'] = $profile['car_role'][$value['car_role']]);
 				if (1==$value['car_role'] && !empty($value['car_number'])) {
-					$value['car_str'] .= '/车牌号：'.$value['car_number'];
+					$value['car_str'] .= ' ('.$value['car_number'].')';
 				}
 				if (!empty($value['car_brand'])) {
 					$car_brand = $_SGLOBAL['db']->result($_SGLOBAL['db']->query("SELECT name FROM ".tname('carmodel')." WHERE id=".$value['car_brand']), 0);
@@ -712,15 +712,18 @@ if($op == 'add') {
 				}
 				if (!empty($car_model) || !empty($car_brand) || !empty($car_profile)) {
 					if (1==$value['car_role']) {
-						$value['car_str'] .= '/车型：';
+						$value['car_str'] .= '<br />车型：';
 					}
 					else {
-						$value['car_str'] .= '/喜欢的车型：';
+						$value['car_str'] .= '<br />喜欢的车型：';
 					}
 				}
 				$value['car_str'] .= (empty($car_model)?$car_brand:$car_model).' '.$car_profile;
+				if (!empty($value['car_color'])) {
+					$value['car_str'] .= ' ('.$value['car_color'].')';
+				}
 				if (!empty($value['province_id'])) {
-					$value['region_str'] = '<br />所属区域：';
+					$value['region_str'] = '<br />区域：';
 					$value['region_str'] .= $_SGLOBAL['db']->result($_SGLOBAL['db']->query("select name from ".tname('region')." where id=".$value['province_id']), 0).'省';
 				}
 				if (!empty($value['city_id'])) {
