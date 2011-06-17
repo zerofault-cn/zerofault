@@ -73,6 +73,7 @@ if($space) {
 	if($space['flag'] == -1) {
 		showmessage('space_has_been_locked');
 	}
+	//左侧驾校列表
 	$space['mtag_list'] = array();
 	$tagspace_list = $_SGLOBAL['db']->result($_SGLOBAL['db']->query("select group_concat(tagid) from ".tname('tagspace')." where uid=".$space['uid']), 0);
 	if (!empty($tagspace_list)) {
@@ -85,6 +86,9 @@ if($space) {
 			$space['mtag_list'][$field_name][] = $row;
 		}
 	}
+	//取出城市，供查询天气
+	$space['city_name'] = $_SGLOBAL['db']->result($_SGLOBAL['db']->query("select name from ".tname('region')." where id=".$space['city_id']), 0);
+	
 	//隐私检查
 	if(empty($isinvite) || ($isinvite<0 && $code != space_key($space, $_GET['app']))) {
 		//游客
