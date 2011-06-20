@@ -151,7 +151,13 @@ body { background: #FFF; }
 	white-space: nowrap;
 }
 #app_sidebar #mtag {
+	
+	padding: 3px 0;
+	margin-bottom: 6px;
 	z-index: 1000;
+}
+#app_sidebar #mtag.over {
+	background-color: #F5DF78;
 }
 #app_sidebar #mtag em img{
 	cursor:pointer;
