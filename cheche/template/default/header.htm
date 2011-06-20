@@ -104,6 +104,10 @@ $_SGLOBAL[space_css]
 						<p><a href="?do=mtag&tagid={$item['tagid']}">{$item['tagname']}</a></p>
 						<!--{/loop}-->
 					<!--{/loop}-->
+					<!--{if empty($space['mtag_list'])}-->
+						<h5>未加入任何群组</h5>
+						<p><a href="space.php?do=mtag&view=hot">查看热门群组</a></p>
+					<!--{/if}-->
 					</div>
 				</li>
 				<li><img src="image/app/house.png"><a href="space.php?do=mtag&view=school">驾校</a></li>
@@ -150,9 +154,11 @@ $_SGLOBAL[space_css]
 			jQuery(document).ready(function() {
 				jQuery("#app_sidebar #mtag").hover(
 					function() {
+						jQuery(this).addClass('over');
 						jQuery("#app_sidebar #mtag_list").show();
 					},
 					function() {
+						jQuery(this).removeClass('over');
 						jQuery("#app_sidebar #mtag_list").hide();
 					}
 				);
