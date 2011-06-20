@@ -6,7 +6,7 @@
 function success($msg) {
 	header('Content-type: text/html; charset=utf-8');
 	$html = "<script>\n";
-	$html.= "alert('".$msg."');\n";
+//	$html.= "alert('".$msg."');\n";
 	$html.= "parent.myLocation('');\n";
 	$html.= "</script>";
 	die($html);

@@ -1,12 +1,16 @@
 <?php
 header('Content-type: text/html; charset=utf-8');
+include_once("simple_html_dom.php");
 $content = file_get_contents('http://php.weather.sina.com.cn/search.php?c=1&city='.$_REQUEST['city'].'&dpc=1');
 if (!empty($content) && ''!=trim($content)) {
 	$content = mb_convert_encoding($content, "UTF-8", "GB2312");
-	preg_match('/(<h5>今天白天<\/h5>.*)<ul class="detail">/isU', $content, $matches);
-	$weather = preg_replace('/.+[\s]title=\'(.+)\'[\s].+/ism', "\\1", $matches[1]);
-	preg_match('/url\([\"\']?([%+\*\w\/:\._-]+)[\"\']?\)/ism', $matches[1], $arr);
-	$url = $arr[1];
+	$data = str_get_html($content);
+
+	$today = $data->find('.mod_today');
+//	print_r($today);
+//	exit;
+	$today_day_str = $today->children(0)->chindren(0)->chindren(1);
+	print_r($today_day_str);
 	mb_internal_encoding("UTF-8");
 	if (false !== mb_strpos($weather, '雨')) {
 		$tip = '<em>不适于洗车</em>';
