@@ -172,7 +172,7 @@ if($space['self'] && empty($start)) {
 		if(!is_array($newspacelist)) $newspacelist = array();
 		foreach ($newspacelist as $value) {
 			$oluids[] = $value['uid'];
-			realname_set($value['uid'], $value['username'], $value['name'], $value['namestatus']);
+		//	realname_set($value['uid'], $value['username'], $value['name'], $value['namestatus']);
 		}
 	}
 
