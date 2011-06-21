@@ -28,11 +28,11 @@ if (!empty($content) && ''!=trim($content)) {
 	$night_str = $night->children(2)->children(1)->plaintext;
 	
 	mb_internal_encoding("UTF-8");
-	if (false !== mb_strpos($day_str, '雨') && false !== mb_strpos($night_str, '雨')) {
-		$tip = '<em>不适于洗车</em>';
+	if (false !== mb_strpos($day_str, '雨') || false !== mb_strpos($night_str, '雨')) {
+		$tip = '<em>不适宜洗车</em>';
 	}
 	else {
-		$tip = '<i>适于洗车</i>';
+		$tip = '<i>适宜洗车</i>';
 	}
 }
 ?>
