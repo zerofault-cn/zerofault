@@ -21,11 +21,11 @@ if (!empty($content) && ''!=trim($content)) {
 	$day_str = $day->children(3)->children(1)->plaintext;
 
 	$night = $data->find('.night', 0);
-	$night_style = $day->children(2)->style;
-	$start = strpos($day_style, '(')+1;
-	$end = strpos($day_style, ')');
-	$night_pic = substr($day_style, $start, $end-$start);
-	$night_str = $day->children(3)->children(1)->plaintext;
+	$night_style = $night->children(1)->style;
+	$start = strpos($night_style, '(')+1;
+	$end = strpos($night_style, ')');
+	$night_pic = substr($night_style, $start, $end-$start);
+	$night_str = $night->children(2)->children(1)->plaintext;
 	
 	mb_internal_encoding("UTF-8");
 	if (false !== mb_strpos($day_str, '雨') && false !== mb_strpos($night_str, '雨')) {
