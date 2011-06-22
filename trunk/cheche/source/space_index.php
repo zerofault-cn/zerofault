@@ -34,8 +34,17 @@ $space['sex_org'] = $space['sex'];
 $space['sex'] = $space['sex']=='1'?'<a href="cp.php?ac=friend&op=search&sex=1&searchmode=1">'.lang('man').'</a>':($space['sex']=='2'?'<a href="cp.php?ac=friend&op=search&sex=2&searchmode=1">'.lang('woman').'</a>':'');
 $space['birth'] = ($space['birthyear']?"$space[birthyear]".lang('year'):'').($space['birthmonth']?"$space[birthmonth]".lang('month'):'').($space['birthday']?"$space[birthday]".lang('day'):'');
 $space['marry'] = $space['marry']=='1'?'<a href="cp.php?ac=friend&op=search&marry=1&searchmode=1">'.lang('unmarried').'</a>':($space['marry']=='2'?'<a href="cp.php?ac=friend&op=search&marry=2&searchmode=1">'.lang('married').'</a>':'');
-$space['birthcity'] = trim(($space['birthprovince']?"<a href=\"cp.php?ac=friend&op=search&birthprovince=".rawurlencode($space['birthprovince'])."&searchmode=1\">$space[birthprovince]</a>":'').($space['birthcity']?" <a href=\"cp.php?ac=friend&op=search&birthcity=".rawurlencode($space['birthcity'])."&searchmode=1\">$space[birthcity]</a>":''));
-$space['residecity'] = trim(($space['resideprovince']?"<a href=\"cp.php?ac=friend&op=search&resideprovince=".rawurlencode($space['resideprovince'])."&searchmode=1\">$space[resideprovince]</a>":'').($space['residecity']?" <a href=\"cp.php?ac=friend&op=search&residecity=".rawurlencode($space['residecity'])."&searchmode=1\">$space[residecity]</a>":''));
+
+$space['region'] = '';
+if (!empty($space['province_id'])) {
+	$space['region'] .= $_SGLOBAL['db']->result($_SGLOBAL['db']->query("select name from ".tname('region')." where id=".$space['province_id']), 0);
+	if (!empty($space['city_id'])) {
+		$space['region'] .= ' - '.$_SGLOBAL['db']->result($_SGLOBAL['db']->query("select name from ".tname('region')." where id=".$space['city_id']), 0);
+		if (!empty($space['region_id'])) {
+			$space['region'] .= ' - '.$_SGLOBAL['db']->result($_SGLOBAL['db']->query("select name from ".tname('region')." where id=".$space['region_id']), 0);
+		}
+	}
+}
 $space['qq'] = empty($space['qq'])?'':"<a target=\"_blank\" href=\"http://wpa.qq.com/msgrd?V=1&Uin=$space[qq]&Site=$space[username]&Menu=yes\">$space[qq]</a>";
 
 //ÒþË½

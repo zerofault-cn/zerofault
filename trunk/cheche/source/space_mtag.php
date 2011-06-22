@@ -457,6 +457,10 @@ if($tagname) {
 					$theurl .= '&province_id='.intval($_GET['province_id']);
 					$school_ext = " and province_id=".intval($_GET['province_id']);
 					$province_name = $_SGLOBAL['db']->result($_SGLOBAL['db']->query("select name from ".tname('region')." where id=".intval($_GET['province_id'])), 0);
+					$profile = parse_ini_file(S_ROOT.'profile.ini', true);
+					if (in_array($province_name, $profile['direct_city'])) {
+						$_GET['city_id'] = $_SGLOBAL['db']->result($_SGLOBAL['db']->query("select id from ".tname('region')." where pid=".intval($_GET['province_id'])), 0);
+					}
 					if (empty($_GET['city_id'])) {
 						//获取某省下的城市列表
 						$city_list = array();
