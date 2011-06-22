@@ -120,7 +120,11 @@
 				<!--{if !empty($city_list)}-->
 	<ul class="city_list">
 					<!--{loop $city_list $i $city}-->
+						<!--{if true || $city['count']>0}-->
 		<li>·<a href="?do=mtag&view=school&province_id={$_GET[province_id]}&city_id={$city[id]}">{$city[name]}({$city[count]})</a></li>
+						<!--{else}-->
+		<li>{$city[name]}({$city[count]})</li>
+						<!--{/if}-->
 					<!--{/loop}-->
 	</ul>
 				<!--{/if}-->
@@ -141,7 +145,11 @@
 					<!--{if !empty($region_list)}-->
 	<ul class="region_list">
 						<!--{loop $region_list $i $region}-->
+							<!--{if true || $region['count']>0}-->
 		<li><a href="?do=mtag&view=school&province_id={$_GET[province_id]}&city_id={$_GET[city_id]}&region_id={$region[id]}">{$region[name]}({$region[count]})</a></li>
+							<!--{else}-->
+		<li>{$region[name]}({$region[count]})</li>
+							<!--{/if}-->
 						<!--{/loop}-->
 	</ul>
 					<!--{/if}-->
@@ -256,9 +264,14 @@
 
 <!--{else}-->
 	<!--{if 'school'==$_GET[view]}-->
-	该驾校下还没有群组，<a href="cp.php?ac=mtag&school_id={$school[id]}">创建一个群组</a>
-	<!--{else}-->
-	<div class="c_form">还没有群组。</div>
+		<!--{if !empty($_GET['school_id'])}-->
+	<div class="c_form">该驾校下还没有群组，<a href="cp.php?ac=mtag&school_id={$school[id]}">创建一个群组</a></div>
+		<!--{elseif !empty($_GET['province_id']) && empty($school_list)}-->
+	<div class="c_form">暂无驾校</div>
+		<!--{/if}-->
+	
+	<!--{elseif 'school'!=$_GET[view]}-->
+	<div class="c_form">暂无群组</div>
 	<!--{/if}-->
 <!--{/if}-->
 

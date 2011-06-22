@@ -105,7 +105,7 @@ if(empty($op)) {
 		if ('1'==$_POST['car_role'] && (empty($_POST['car_number_prefix']) || ''==trim($_POST['car_number']))) {
 			showmessage('车牌号必须输入！');
 		}
-		if (empty($_POST['car_brand']) && empty($_POST['car_model']) && empty($_POST['car_profile'])) {
+		if (empty($_POST['car_brand']) || empty($_POST['car_model']) || empty($_POST['car_profile'])) {
 			if ('1'==$POST['car_role']) {
 				showmessage('您现有的车型必须选择！');
 			}
@@ -113,7 +113,7 @@ if(empty($op)) {
 				showmessage('必须选择您喜欢的车型！');
 			}
 		}
-		if (empty($_POST['province_id']) && empty($_POST['city_id']) && empty($_POST['region_id'])) {
+		if (empty($_POST['province_id']) || empty($_POST['city_id']) || empty($_POST['region_id'])) {
 			showmessage('必须选择您的所在地区！');
 		}
 		
