@@ -93,7 +93,7 @@
 				<td><input type="text" name="displayorder[{$value[id]}]" value="$value[displayorder]" size="5"></td>
 				<td width="80">
 					<a href="admincp.php?ac=school&op=edit&id=$value[id]">编辑</a> | 
-					<a href="javascript:if(confirm('确定删除该驾校？')){document.location='admincp.php?ac=school&op=delete&id={$value[id]}';}else{return false;}">删除</a>
+					<a href="javascript:void(0);" onclick="javascript:if(confirm('确定删除该驾校？')){document.location='admincp.php?ac=school&op=delete&id={$value[id]}';}else{return false;}">删除</a>
 				</td>
 			</tr>
 			<!--{/loop}-->
