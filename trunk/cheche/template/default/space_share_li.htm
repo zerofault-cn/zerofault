@@ -20,7 +20,7 @@
 	</div>
 	<!--{if 'video' == $value['type']}-->
 	<div class="media">
-	<img src="image/vd.gif" alt="点击播放" onclick="javascript:showFlash('{$value['body_data']['host']}', '{$value['body_data']['flashvar']}', this, '{$value['sid']}');" style="cursor:pointer;" />
+		<img src="<!--{if !empty($value['body_data']['pic'])}-->{$value['body_data']['pic']}<!--{else}-->image/vd.gif<!--{/if}-->" alt="点击播放" onclick="javascript:showFlash('{$value['body_data']['host']}', '{$value['body_data']['flashvar']}', this, '{$value['sid']}');" style="cursor:pointer;" />
 	</div>
 	<!--{elseif 'music' == $value['type']}-->
 	<div class="media">
