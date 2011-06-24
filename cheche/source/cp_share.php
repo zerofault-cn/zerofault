@@ -499,6 +499,12 @@ function getflash($link, $host) {
 		if(!empty($matches[1][0])) {
 			$return = $matches[1][0];
 		}
+	} elseif('tudou.com' == $host) {
+		// http://www.tudou.com/programs/view/IjJOJKIeDC8/
+		preg_match_all("/view\/(\w+)\//", $link, $matches);
+		if(!empty($matches[1][0])) {
+			$return = $matches[1][0];
+		}
 	} elseif('ku6.com' == $host) {
 		// http://v.ku6.com/show/bjbJKPEex097wVtC.html
 		preg_match_all("/\/([\w\-]+)\.html/", $link, $matches);
@@ -552,68 +558,12 @@ function getThumb($link, $host) {
 		$pic = $params_arr['pic'];
 	}
 	elseif ('tudou.com' == $host) {
-		//http://www.tudou.com/playlist/p/l12486678.html
-		//http://www.tudou.com/playlist/p/l12486678i88325920.html
-		$basename =  basename($link);
-		if (strpos($basename, 'i')) {
-			$start = strpos($basename, 'i')+1;
-			$end = strpos($basename, '.');
-			$iid = substr($basename, $start, $end-$start);
-			
-		}
-		else {
-			$start = strpos($content, 'defaultIid')+12;
-			$iid = intval(trim(substr($content, $start, 10)));
-		}
-		$start = strpos($content, 'listData =')+10;
-		$end = strpos($content, '(function(iid');
-		$json_str = substr($content, $start, $end-$start);
-		$json_str = implode('', array_map('trim', explode("\n", str_replace("\r\n", "\n", $json_str))));
-		$tmp_arr = explode('},', $json_str);
-		foreach ($tmp_arr as $val) {
-			if (strpos($val, $iid)) {
-				$start = strpos($val, ',pic')+6;
-				$end = strpos($val, ',time')-1;
-				$pic = substr($val, $start, $end-$start);
-			}
-		}
-	}
-	elseif('ku6.com' == $host) {
-		// http://v.ku6.com/show/bjbJKPEex097wVtC.html
-		preg_match_all("/\/([\w\-]+)\.html/", $link, $matches);
-		if(1 > preg_match("/\/index_([\w\-]+)\.html/", $link) && !empty($matches[1][0])) {
-			$return = $matches[1][0];
-		}
-	} elseif('youtube.com' == $host) {
-		// http://tw.youtube.com/watch?v=hwHhRcRDAN0
-		preg_match_all("/v\=([\w\-]+)/", $link, $matches);
-		if(!empty($matches[1][0])) {
-			$return = $matches[1][0];
-		}
-	} elseif('5show.com' == $host) {
-		// http://www.5show.com/show/show/160944.shtml
-		preg_match_all("/\/(\d+)\.shtml/", $link, $matches);
-		if(!empty($matches[1][0])) {
-			$return = $matches[1][0];
-		}
-	} elseif('mofile.com' == $host) {
-		// http://tv.mofile.com/PPU3NTYW/
-		preg_match_all("/\/(\w+)\/*$/", $link, $matches);
-		if(!empty($matches[1][0])) {
-			$return = $matches[1][0];
-		}
-	} elseif('sina.com.cn' == $host) {
-		// http://you.video.sina.com.cn/b/16776316-1338697621.html
-		preg_match_all("/\/(\d+)-(\d+)\.html/", $link, $matches);
-		if(!empty($matches[1][0])) {
-			$return = $matches[1][0];
-		}
-	} elseif('sohu.com' == $host) {
-		// http://v.blog.sohu.com/u/vw/1785928
-		preg_match_all("/\/(\d+)\/*$/", $link, $matches);
-		if(!empty($matches[1][0])) {
-			$return = $matches[1][0];
-		}
+		//http://www.tudou.com/programs/view/IjJOJKIeDC8/
+		$start = strpos($content, 'thumbnail =');
+		$content = substr($content, $start);
+		$content = substr($content, strpos($content, "'")+1);
+		$end = strpos($content, "'");
+		$pic = substr($content, 0, $end);
 	}
 	return $pic;
 }

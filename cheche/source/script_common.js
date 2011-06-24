@@ -334,6 +334,7 @@ function stopMusic(preID, playerID) {
 function showFlash(host, flashvar, obj, shareid) {
 	var flashAddr = {
 		'youku.com' : 'http://player.youku.com/player.php/sid/FLASHVAR=/v.swf',
+		'tudou.com' : 'http://www.tudou.com/v/FLASHVAR/v.swf',
 		'ku6.com' : 'http://player.ku6.com/refer/FLASHVAR/v.swf',
 		'youtube.com' : 'http://www.youtube.com/v/FLASHVAR',
 		'5show.com' : 'http://www.5show.com/swf/5show_player.swf?flv_id=FLASHVAR',
