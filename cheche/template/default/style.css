@@ -176,9 +176,21 @@ body { background: #FFF; }
 	line-height: 20px;
 	background:url(image/subscription-v2.png) no-repeat left center;
 }
+.nav_account #account_menu ul li.invite {
+	background-image: url(image/invite.png);
+}
+.nav_account #account_menu ul li.task {
+	background-image: url(image/task.png);
+}
+.nav_account #account_menu ul li.magic {
+	background-image: url(image/magic.png);
+}
+.nav_account #account_menu ul li.cp {
+	background-image: url(image/cp.png);
+}
 .nav_account #account_menu a.logout {
 	padding-left: 24px;
-	margin-left: 10px;
+	margin-left: 5px;
 	background:url(image/logout.png) no-repeat left center;
 }
 .menu li.dropmenu { margin: 0 10px 0 0; padding: 10px 15px 10px 10px; height: 20px; background: url(image/triangle.gif) no-repeat right center; overflow: hidden; }
@@ -781,10 +793,21 @@ a.button { padding: 5px; }
 .feed_header .active{ font-weight: bold; }
 .feed { margin: 0 0 20px; width: 100%; line-height: 20px; overflow: hidden; }
 .feedtime { margin: 20px 0 10px; color: #000; }
-.feed li { padding: 10px 20px; border-bottom: 1px solid #EBE6C9; }
-
+.feed li { padding: 10px 10px; border-bottom: 1px solid #EBE6C9; position:relative;}
 .feed .type { position: absolute; margin: 1px 0 0 -20px !important; margin: 3px 0 0 -20px;}
-.feed_content img { max-width: 120px; max-height: 120px; }
+.feed_content img { max-width: 120px; max-height: 120px;}
+.feed_content a.big {
+	cursor: url("image/cursor_minify.cur"), pointer !important;
+	background-color:#FFFFFF;
+	z-index: 20;
+}
+.feed_content a.big img{ max-width: 460px; max-height: 1000px; position: absolute;left:68px;top: 56px; padding: 2px; border: 1px solid #999; }
+.feed_content a.small {
+	cursor: url("image/cursor_zoom.cur"), pointer !important;
+}
+.feed_content .media{
+	position:relative;
+}
 * html .feed_content img { width: expression(this.width > 70 && this.width/this.height > 0.7 ? 70 : true); height: expression(this.height > 100 && this.width/this.height < 0.7 ? 100 : true); }
 .feed .detail { padding: 10px 0 0; color: #999; }
 .feed a img.summaryimg { float: left; margin: 10px 10px 10px 0; padding: 2px; border: 1px solid #DDD; }

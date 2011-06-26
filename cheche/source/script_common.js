@@ -344,16 +344,16 @@ function showFlash(host, flashvar, obj, shareid) {
 		'music' : 'FLASHVAR',
 		'flash' : 'FLASHVAR'
 	};
-	var flash = '<object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" codebase="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=7,0,19,0" width="480" height="400">'
+	var flash = '<object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" codebase="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=7,0,19,0" width="462" height="400">'
 	    + '<param name="movie" value="FLASHADDR" />'
 	    + '<param name="quality" value="high" />'
 	    + '<param name="bgcolor" value="#FFFFFF" />'
-	    + '<embed width="480" height="400" menu="false" quality="high" src="FLASHADDR" type="application/x-shockwave-flash" />'
+	    + '<embed width="462" height="400" menu="false" quality="high" src="FLASHADDR" type="application/x-shockwave-flash" />'
 	    + '</object>';
-	var videoFlash = '<object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" width="480" height="450">'
+	var videoFlash = '<object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" width="462" height="400">'
         + '<param value="transparent" name="wmode"/>'
 		+ '<param value="FLASHADDR" name="movie" />'
-		+ '<embed src="FLASHADDR" wmode="transparent" allowfullscreen="true" type="application/x-shockwave-flash" width="480" height="450"></embed>'
+		+ '<embed src="FLASHADDR" wmode="transparent" allowfullscreen="true" type="application/x-shockwave-flash" width="462" height="400"></embed>'
 		+ '</object>';
 	var musicFlash = '<object id="audioplayer_SHAREID" height="24" width="290" data="image/player.swf" type="application/x-shockwave-flash">'
 		+ '<param value="image/player.swf" name="movie"/>'
