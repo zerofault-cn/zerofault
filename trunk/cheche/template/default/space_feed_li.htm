@@ -1,5 +1,5 @@
-<li class="s_clear $value[magic_class]" id="feed_{$value[feedid]}_li" onmouseover="feed_menu($value[feedid],1);" onmouseout="feed_menu($value[feedid],0);">
-	<div style="width:100%;overflow:hidden;" {$value[style]}>
+<li class="s_clear $value[magic_class]" id="feed_{$value[feedid]}_li" onmouseover="feed_menu($value[feedid],1);" onmouseout="feed_menu($value[feedid],0);" style="z-index:{$value[feedid]}">
+	<div {$value[style]}>
 		<!--{if $value[uid] && empty($_TPL[hidden_more])}-->
 		<a href="cp.php?ac=feed&op=menu&feedid=$value[feedid]" class="float_more" id="a_feed_menu_$value[feedid]"  onmouseover="feed_menu($value[feedid],1);" onmouseout="feed_menu($value[feedid],0);" onclick="ajaxmenu(event, this.id)" title="显示更多选项" style="display:none;">菜单</a>
 		<!--{/if}-->
@@ -32,17 +32,17 @@
 			<div class="hotspot"><a href="cp.php?ac=feed&feedid=$value[feedid]">$value[hot]</a></div>
 			<!--{/if}-->
 
-			<!--{if $value['image_1']}-->
-			<a href="$value[image_1_link]"{$value[target]}><img src="$value[image_1]" class="summaryimg" /></a>
+			<!--{if $value['image_1'] && file_exists($value['image_1'])}-->
+			<a href="javascript:void(0);" class="small"><img src="$value[image_1]" class="summaryimg" /></a>
 			<!--{/if}-->
-			<!--{if $value['image_2']}-->
-			<a href="$value[image_2_link]"{$value[target]}><img src="$value[image_2]" class="summaryimg" /></a>
+			<!--{if $value['image_2'] && file_exists($value['image_2'])}-->
+			<a href="javascript:void(0);" class="small"><img src="$value[image_2]" class="summaryimg"/></a>
 			<!--{/if}-->
-			<!--{if $value['image_3']}-->
-			<a href="$value[image_3_link]"{$value[target]}><img src="$value[image_3]" class="summaryimg" /></a>
+			<!--{if $value['image_3'] && file_exists($value['image_3'])}-->
+			<a href="javascript:void(0);" class="small"><img src="$value[image_3]" class="summaryimg"/></a>
 			<!--{/if}-->
-			<!--{if $value['image_4']}-->
-			<a href="$value[image_4_link]"{$value[target]}><img src="$value[image_4]" class="summaryimg" /></a>
+			<!--{if $value['image_4'] && file_exists($value['image_4'])}-->
+			<a href="javascript:void(0);" class="small"><img src="$value[image_4]" class="summaryimg" /></a>
 			<!--{/if}-->
 			
 			<!--{if $value['body_template']}-->
@@ -54,6 +54,7 @@
 			<!--{if $value['thisapp'] && !empty($value['body_data']['flashvar'])}-->
 			<div class="media">
 				<img src="<!--{if empty({$value['body_data']['pic']})}-->image/vd.gif<!--{else}-->{$value['body_data']['pic']}<!--{/if}-->" onerror="this.onerror=null;this.src='image/vd.gif';" alt="点击播放" onclick="javascript:showFlash('{$value['body_data']['host']}', '{$value['body_data']['flashvar']}', this, '{$value['feedid']}');" style="cursor:pointer;" />
+				<img src="image/feedvideoplay.gif" style="cursor: pointer; position: absolute; top: 50%; left: 47px; margin-top: -16.5px; opacity: 0.5; "/>
 			</div>
 			<!--{elseif $value['thisapp'] && !empty($value['body_data']['musicvar'])}-->
 			<div class="media">
