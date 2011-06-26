@@ -244,7 +244,7 @@ if($space['self'] && empty($start)) {
 						}
 						$row['mtag_count'] = $_SGLOBAL['db']->result($_SGLOBAL['db']->query("select count(*) from ".tname('mtag')." where fieldid=4 and ext_id=".$row['id']), 0);
 						$row['member_count'] = intval($_SGLOBAL['db']->result($_SGLOBAL['db']->query("select sum(membernum) from ".tname('mtag')." where fieldid=4 and ext_id=".$row['id']), 0));
-						$relatedSchool[] = $row;
+						$relatedSchool[$row['id']] = $row;
 					}
 				}
 			}

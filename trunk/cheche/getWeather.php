@@ -2,6 +2,7 @@
 header('Content-type: text/html; charset=utf-8');
 include_once("simple_html_dom.php");
 $city = $_REQUEST['city'];
+empty($city) && die('');
 //$city = '杭州';
 $content = file_get_contents('http://php.weather.sina.com.cn/search.php?c=1&city='.$city.'&dpc=1');
 if (!empty($content) && ''!=trim($content)) {
@@ -19,6 +20,7 @@ if (!empty($content) && ''!=trim($content)) {
 	$end = strpos($day_style, ')');
 	$day_pic = substr($day_style, $start, $end-$start);
 	$day_str = $day->children(3)->children(1)->plaintext;
+	$day_temp_str = $day->children(3)->children(0)->children(0)->plaintext;
 
 	$night = $data->find('.night', 0);
 	$night_style = $night->children(1)->style;
@@ -26,6 +28,7 @@ if (!empty($content) && ''!=trim($content)) {
 	$end = strpos($night_style, ')');
 	$night_pic = substr($night_style, $start, $end-$start);
 	$night_str = $night->children(2)->children(1)->plaintext;
+	$night_temp_str = $night->children(2)->children(0)->children(0)->plaintext;
 	
 	mb_internal_encoding("UTF-8");
 	if (false !== mb_strpos($day_str, '雨') || false !== mb_strpos($night_str, '雨')) {
@@ -76,12 +79,12 @@ if (!empty($content) && ''!=trim($content)) {
 		<div class="left">
 			白天<br />
 			<div><img src="<?php echo $day_pic;?>" width="90" height="80"/></div>
-			<?php echo $day_str;?>
+			<?php echo $day_str;?> <?php echo $day_temp_str;?>
 		</div>
 		<div class="right">
 			夜间<br />
 			<div><img src="<?php echo $night_pic;?>" width="90" height="80"/></div>
-			<?php echo $night_str;?>
+			<?php echo $night_str;?>  <?php echo $night_temp_str;?>
 		</div>
 		<div class="clear"></div>
 </div>
