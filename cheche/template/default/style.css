@@ -797,13 +797,11 @@ a.button { padding: 5px; }
 .feed .type { position: absolute; margin: 1px 0 0 -20px !important; margin: 3px 0 0 -20px;}
 .feed_content img { max-width: 120px; max-height: 120px;}
 .feed_content a.big {
-	cursor: url("image/cursor_minify.cur"), pointer !important;
-	background-color:#FFFFFF;
-	z-index: 20;
+	cursor: url("image/cursor_minify.cur"), pointer;
 }
 .feed_content a.big img{ max-width: 460px; max-height: 1000px; position: absolute;left:68px;top: 56px; padding: 2px; border: 1px solid #999; }
 .feed_content a.small {
-	cursor: url("image/cursor_zoom.cur"), pointer !important;
+	cursor: url("image/cursor_zoom.cur"), pointer;
 }
 .feed_content .media{
 	position:relative;
