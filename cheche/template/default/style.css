@@ -106,11 +106,81 @@ body { background: #FFF; }
   .menu li { float: left; padding: 10px; line-height: 20px; vertical-align: top; }
 .menu .edit { padding-left: 4px; color: #FFF; font-size: 12px; font-weight: normal; }
 
-.nav_account { float: right; width: 200px; white-space:nowrap; overflow: hidden; }
+.nav_account { float: right;  white-space:nowrap;  position:relative; line-height: 40px;}
   .login_thumb { float: left; margin: 6px 6px 0 0; padding: 3px 0 0 3px; width: 24px; height: 24px; background: url(image/thumb20bg.gif) no-repeat; display: block; }
   .login_thumb img{ width: 20px; height: 20px; }
     li.notify { margin: 9px 0 0; padding: 0 0 0 18px; width: 72px; height: 20px; background: url(image/notify_bg.gif); color: #FFF; font-size: 12px; font-weight: normal; }
 
+.header_search {
+	float:right;
+	position: relative;
+	text-align: right;
+	padding-right: 20px;
+}
+.header_search .t_input {
+	width: 140px;
+	height: 13px;
+	line-height: 13px;
+	padding: 2px 2px 4px 2px;
+	color: #888888;
+}
+.header_search #search_tip {
+	position: absolute;
+	top: 30px;
+	border: #bdc7d8;
+	text-align: center;
+	padding-bottom: 3px;
+	padding-left: 0px;
+	width: 146px;
+	padding-right: 0px;
+	background: #eee;
+	padding-top: 3px;
+	opacity: 0.8;
+	filter:Alpha(Opacity=80);
+	z-index: 2000;
+
+}
+.nav_account #account {
+	cursor: pointer;
+	padding: 10px;
+	line-height: 20px;
+	background:url(image/arrow-down-white.png) 35px center  no-repeat;
+}
+.nav_account #account_menu {
+	display: none;
+	position: absolute;
+	left: -64px;
+	top: 40px;
+	width: 110px;
+	color: #005EAC;
+	z-index:1000;
+	border: 1px solid #005EAC;
+	padding: 8px;
+	background: #FFFFFF;
+}
+.nav_account #account_menu .avatar48 {
+	float:left;
+}
+.nav_account #account_menu a {
+	color: #005EAC;
+}
+.nav_account #account_menu ul {
+	list-style-type: none;
+	border-top: 1px solid #DDDDDD;
+	border-bottom: 1px solid #DDDDDD;
+	padding: 5px;
+	
+}
+.nav_account #account_menu ul li {
+	padding-left: 24px;
+	line-height: 20px;
+	background:url(image/subscription-v2.png) no-repeat left center;
+}
+.nav_account #account_menu a.logout {
+	padding-left: 24px;
+	margin-left: 10px;
+	background:url(image/logout.png) no-repeat left center;
+}
 .menu li.dropmenu { margin: 0 10px 0 0; padding: 10px 15px 10px 10px; height: 20px; background: url(image/triangle.gif) no-repeat right center; overflow: hidden; }
   .dropmenu_drop { margin: -1px 0 0; padding: 0 10px 10px; width: 150px; border: 1px solid #EBE6C9; background: #FFF; z-index: 200; }
   .dropmenu_drop li { padding: 5px 10px; border-bottom: 1px solid #EEE; }

@@ -23,11 +23,9 @@ a { color: #3B5998; }
   .headerwarp { background: #3B5998 url(image/header_bg.gif); color: #3B5998; }
 
 .menu { font-size: 12px; }
-
 .nav_account { color: #FFF; }
-  .login_thumb { background: url(image/thumb20bg.gif) no-repeat; }
- 
-  .dropmenu_drop { border: 1px solid #CCC; }
+.login_thumb { background: url(image/thumb20bg.gif) no-repeat; }
+.dropmenu_drop { border: 1px solid #CCC; }
 
 
 #main { background: url(image/appSidebar_bg.gif) repeat-y 0 0; }
@@ -180,7 +178,7 @@ input.submit { padding: 0 5px; height: 24px; border: none; background: #3B5998; 
 .searchfriend { background: #F7F7F7; }
 
 
-    .searchfriend .t_input { border-color: #CCC; }
+    .searchfriend .t_input { border-color: #CCC; color: #888888;width: 170px;}
 .showmessage { background: #F7F7F7; }
 
 
