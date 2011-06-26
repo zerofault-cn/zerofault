@@ -266,6 +266,22 @@
 				<!--{/loop}-->
 				</ul>
 			</div>
+			<script language="JavaScript" type="text/javascript" src="source/jquery-1.4.2.min.js"></script>
+			<script type="text/javascript">
+				jQuery.noConflict();
+				jQuery(document).ready(function() {
+					jQuery(".feed_content .small img").each(function() {
+						jQuery(this).click(function() {
+							var src = jQuery(this).attr('src');
+							var big = src.substr(0, src.length-10);
+							jQuery(this).parent().parent().find('.big').remove();
+							jQuery(this).parent().parent().prepend(jQuery('<a href="javascript:void(0);" class="big" />').html(jQuery('<img />').attr('src', big)).click(function() {
+								jQuery(this).hide();
+							}));
+						});
+					});
+				});
+			</script>
 		</div>
 		<!--{/if}-->
 
