@@ -127,7 +127,7 @@ body { background: #FFF; }
 .header_search #search_tip {
 	position: absolute;
 	top: 30px;
-	border: #bdc7d8;
+	border:1px solid #bdc7d8;
 	text-align: center;
 	padding-bottom: 3px;
 	padding-left: 0px;
@@ -247,7 +247,7 @@ body { background: #FFF; }
 }
 #mtag_list {
 	background: #FFFFFF;
-	border: 1px solid #F5DF78;
+	border: 1px solid #005EAC;
 	display: none;
 	left: 110px;
 	top: 0;
@@ -674,7 +674,7 @@ a.button { padding: 5px; }
 .topic_list p { padding-top: 6px; }
 
 /*************************************************CP SIDEBAR***/
-#sidebar { float: right; padding: 0; width: 250px; overflow: hidden; }
+#sidebar { float: right; padding: 0; width: 250px;  }
 #sidebar2 { float: right; padding: 0; width: 156px; overflow: hidden; }
     #sidebar .ye_r_t { margin: 0 0 20px; }
 .task_notice { position: relative; padding: 5px; background: #FCF9E6; }
@@ -884,7 +884,19 @@ a.button { padding: 5px; }
 
 .media img { width: auto; max-width: none; height: auto; max-height: none; }
 * html .media img { width: expression(this.width > 200 && this.width/this.height > 2 ? 200 : true); height: expression(this.height > 100 && this.width/this.height < 2 ? 200 : true); }
-
+.media img.feedvideoplay {
+	cursor: pointer;
+	position: absolute;
+	top: 50%;
+	left: 47px;
+	margin-top: -16.5px;
+	opacity: 0.5;
+	filter:Alpha(Opacity=50);
+}
+.media img.feedvideoplay:hover {
+	opacity: 1;
+	filter:Alpha(Opacity=100);
+}
   .borderbox { margin: 0; padding: 10px; border: 1px solid #CCC; }
   .borderbox h2 { padding: 0 0 5px 0; border-bottom: 1px solid #CCC; color: #333; font-size: 12px; }
 
