@@ -10,9 +10,9 @@ if (!empty($content) && ''!=trim($content)) {
 
 	$start = strpos($content, '<div class="m_left">');
 	$end = strpos($content, '<ul class="m_right">');
-	$content = substr($content, $start, $end-$start);
+	$content1 = substr($content, $start, $end-$start);
 //	echo $content;
-	$data = str_get_html($content);
+	$data = str_get_html($content1);
 
 	$day = $data->find('.day', 0);
 	$day_style = $day->children(2)->style;
@@ -30,8 +30,12 @@ if (!empty($content) && ''!=trim($content)) {
 	$night_str = $night->children(2)->children(1)->plaintext;
 	$night_temp_str = $night->children(2)->children(0)->children(0)->plaintext;
 	
+	$start = strpos($content, '<div class="weather_list')+35;
+	$end = strpos($content, '<ul class="list_01">')-20;
+	$content2 = substr($content, $start, $end-$start);
+
 	mb_internal_encoding("UTF-8");
-	if (false !== mb_strpos($day_str, '雨') || false !== mb_strpos($night_str, '雨')) {
+	if (false !== mb_strpos($day_str, '雨') || false !== mb_strpos($night_str, '雨') || false !== mb_strpos($content2, '雨') || false !== mb_strpos($content2, '雨')) {
 		$tip = '<em>不适宜洗车</em>';
 	}
 	else {
@@ -50,7 +54,7 @@ if (!empty($content) && ''!=trim($content)) {
 .weather span {
 	float: right;
 }
-.weather div div {
+.weather div.left div, .weather div.right div {
 	height: 60px;
 	overflow-y: hidden;
 }
@@ -71,6 +75,24 @@ if (!empty($content) && ''!=trim($content)) {
 .weather em, .weather i {
 	font-style: normal;
 }
+.weather .weather_list {
+	display: none;
+	position: absolute;
+	width: 685px;
+	height: 256px;
+	top: 57px;
+	left:50%;
+	margin-left: -340px;
+	z-index: 3000;
+}
+.weather .weather_list .mod_02{float: left;width: 158px;height: 243px;padding: 5px;margin-top: 3px;background: url(http://php.weather.sina.com.cn/images/weather_yc_01.jpg) -510px 0 no-repeat;color: #fff;}
+.weather .weather_list .mod_02 .mod_03{float: left;width: 78px;text-align: center;font-family: 'Microsoft YaHei';}/*2010/9/1*/
+.weather .weather_list .icon_mid_weather{width: 78px;height: 78px;margin: auto;}
+.weather .weather_list .mod_03 h5{margin-bottom: 5px;font-size: 14px;}
+.weather .weather_list .mod_03 ul{margin-top: -20px;}
+.weather .weather_list .mod_03 ul{margin-top: -20px;}
+.weather .weather_list .mod_02 h4{margin: 20px 0 15px;font:16px/30px 'Microsoft YaHei', "黑体", sans-serif;text-align: center;}
+
 </style>
 <div class="sidebox weather">
 		<h2 class="title">
@@ -86,5 +108,6 @@ if (!empty($content) && ''!=trim($content)) {
 			<div><img src="<?php echo $night_pic;?>" width="90" height="80"/></div>
 			<?php echo $night_str;?>  <?php echo $night_temp_str;?>
 		</div>
-		<div class="clear"></div>
+		<div class="clear"><a href="javascript:void(0);" onclick="jQuery('.weather .weather_list').toggle();">未来四天</a></div>
+		<div class="weather_list" style="display:none;"><?php echo $content2;?></div>
 </div>
