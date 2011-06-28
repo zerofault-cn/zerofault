@@ -53,8 +53,7 @@
 			
 			<!--{if $value['thisapp'] && !empty($value['body_data']['flashvar'])}-->
 			<div class="media">
-				<img src="<!--{if empty({$value['body_data']['pic']})}-->image/vd.gif<!--{else}-->{$value['body_data']['pic']}<!--{/if}-->" onerror="this.onerror=null;this.src='image/vd.gif';" alt="点击播放" onclick="javascript:showFlash('{$value['body_data']['host']}', '{$value['body_data']['flashvar']}', this, '{$value['feedid']}');" style="cursor:pointer;" />
-				<img class="feedvideoplay" src="image/feedvideoplay.gif"/>
+				<img class="feedvideoplay" src="image/feedvideoplay.gif" alt="点击播放" onclick="javascript:showFlash('{$value['body_data']['host']}', '{$value['body_data']['flashvar']}', this, '{$value['feedid']}');"/><img src="<!--{if empty({$value['body_data']['pic']})}-->image/vd.gif<!--{else}-->{$value['body_data']['pic']}<!--{/if}-->" onerror="this.onerror=null;this.src='image/vd.gif';" />
 			</div>
 			<!--{elseif $value['thisapp'] && !empty($value['body_data']['musicvar'])}-->
 			<div class="media">

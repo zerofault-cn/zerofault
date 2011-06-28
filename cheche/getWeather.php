@@ -108,6 +108,6 @@ if (!empty($content) && ''!=trim($content)) {
 			<div><img src="<?php echo $night_pic;?>" width="90" height="80"/></div>
 			<?php echo $night_str;?>  <?php echo $night_temp_str;?>
 		</div>
-		<div class="clear"><a href="javascript:void(0);" onclick="jQuery('.weather .weather_list').toggle();">未来四天</a></div>
+		<div class="clear"><a href="javascript:void(0);" onclick="jQuery('.weather .weather_list').toggle();jQuery(this).toggle();jQuery(this).next().toggle();">未来四天</a><a style="display:none;" href="javascript:void(0);" onclick="jQuery('.weather .weather_list').toggle();jQuery(this).toggle();jQuery(this).prev().toggle();">关闭</a></div>
 		<div class="weather_list" style="display:none;"><?php echo $content2;?></div>
 </div>
