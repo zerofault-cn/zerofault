@@ -401,6 +401,7 @@ function showFlash(host, flashvar, obj, shareid) {
 		$('flash_div_' + shareid).style.display = '';
 		$('flash_hide_' + shareid).style.display = '';
 		obj.style.display = 'none';
+		obj.nextSibling.style.display = 'none';
 		return true;
 	}
 	if(flashAddr[host]) {
@@ -409,6 +410,7 @@ function showFlash(host, flashvar, obj, shareid) {
 		obj.parentNode.insertBefore(flashObj, obj);
 		flashObj.innerHTML = flashHtml;
 		obj.style.display = 'none';
+		obj.nextSibling.style.display = 'none';
 		var hideObj = document.createElement('div');
 		hideObj.id = 'flash_hide_' + shareid;
 		var nodetxt = document.createTextNode("收起");
@@ -425,6 +427,7 @@ function showFlash(host, flashvar, obj, shareid) {
 				hideObj.style.display = 'none';
 			}
 			obj.style.display = '';
+			obj.nextSibling.style.display = '';
 		}
 	}
 }
