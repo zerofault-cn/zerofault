@@ -11,7 +11,6 @@ if (!empty($content) && ''!=trim($content)) {
 	$start = strpos($content, '<div class="m_left">');
 	$end = strpos($content, '<ul class="m_right">');
 	$content1 = substr($content, $start, $end-$start);
-//	echo $content;
 	$data = str_get_html($content1);
 
 	$day = $data->find('.day', 0);
@@ -29,11 +28,11 @@ if (!empty($content) && ''!=trim($content)) {
 	$night_pic = substr($night_style, $start, $end-$start);
 	$night_str = $night->children(2)->children(1)->plaintext;
 	$night_temp_str = $night->children(2)->children(0)->children(0)->plaintext;
-	
+	/*
 	$start = strpos($content, '<div class="weather_list')+35;
 	$end = strpos($content, '<ul class="list_01">')-20;
 	$content2 = substr($content, $start, $end-$start);
-
+	*/
 	mb_internal_encoding("UTF-8");
 	if (false !== mb_strpos($day_str, '雨') || false !== mb_strpos($night_str, '雨') || false !== mb_strpos($content2, '雨') || false !== mb_strpos($content2, '雨')) {
 		$tip = '<em>不适宜洗车</em>';
@@ -108,6 +107,6 @@ if (!empty($content) && ''!=trim($content)) {
 			<div><img src="<?php echo $night_pic;?>" width="90" height="80"/></div>
 			<?php echo $night_str;?>  <?php echo $night_temp_str;?>
 		</div>
-		<div class="clear"><a href="javascript:void(0);" onclick="jQuery('.weather .weather_list').toggle();jQuery(this).toggle();jQuery(this).next().toggle();">未来四天</a><a style="display:none;" href="javascript:void(0);" onclick="jQuery('.weather .weather_list').toggle();jQuery(this).toggle();jQuery(this).prev().toggle();">关闭</a></div>
+		<div class="clear"><a href="space.php?do=weather">未来四天</a><!-- <a href="javascript:void(0);" onclick="jQuery('.weather .weather_list').toggle();jQuery(this).toggle();jQuery(this).next().toggle();">未来四天</a><a style="display:none;" href="javascript:void(0);" onclick="jQuery('.weather .weather_list').toggle();jQuery(this).toggle();jQuery(this).prev().toggle();">关闭</a> --></div>
 		<div class="weather_list" style="display:none;"><?php echo $content2;?></div>
 </div>
