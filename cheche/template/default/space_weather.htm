@@ -1,0 +1,55 @@
+<!--{eval $_TPL['titles'] = array('未来天气');}-->
+<!--{template header}-->
+<style>
+.weather .m_left {
+    font: 14px/28px 'Microsoft YaHei';
+    height: 268px;
+    margin-left: 90px;
+    border: 1px solid #888;
+    padding: 5px;
+    width: 496px;
+}
+.weather .icon_weather {
+    height: 180px;
+    margin: auto;
+    text-align: center;
+    width: 180px;
+}
+.weather .day, .weather .night {
+    float: left;
+    width: 248px;
+}
+.weather .detail {
+    font-size: 18px;
+    margin-top: -45px;
+    position: relative;
+    text-align: center;
+}
+.weather .mod_02{float: left;width: 158px;height: 243px;padding: 5px;margin: 3px;border: 1px solid #999;}
+.weather .mod_02 .mod_03{float: left;width: 78px;text-align: center;}
+.weather .icon_mid_weather{width: 78px;height: 78px;margin: auto;}
+.weather .mod_03 h5{margin-bottom: 5px;font-size: 14px;}
+.weather .mod_03 ul{margin-top: -15px;}
+.weather .mod_02 h4{margin: 20px 0 15px;font:16px/30px 'Microsoft YaHei', "黑体", sans-serif;text-align: center;}
+.weather h3 {
+    color: #094C9F;
+    font: 24px/30px 'Microsoft YaHei',"黑体",sans-serif;
+    margin: 0 12px;
+	font-weight: normal;
+}
+.weather h5 {
+    font-family: 'Microsoft YaHei',"黑体",sans-serif;
+    font-size: 20px;
+	text-align:center;
+    margin: 10px 10px 0;
+	font-weight: normal;
+}
+</style>
+<div class="weather">
+<h3>{$city} 今天</h3>
+{$content1}
+<h3>未来四天</h3>
+{$content2}
+</div>
+
+<!--{template footer}-->

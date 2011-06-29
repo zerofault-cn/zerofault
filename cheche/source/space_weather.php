@@ -1,9 +1,16 @@
 <?php
-header('Content-type: text/html; charset=utf-8');
+/*
+	[UCenter Home] (C) 2007-2008 Comsenz Inc.
+	$Id: space_mtag.php 13083 2009-08-10 09:35:23Z xupeng $
+*/
+
+if(!defined('IN_UCHOME')) {
+	exit('Access Denied');
+}
+
 include_once("simple_html_dom.php");
-$city = $_REQUEST['city'];
-empty($city) && die('');
-//$city = 'æ­å·';
+$city = $space['city_name'];
+empty($city) && ($city='º¼Öİ');
 $content = file_get_contents('http://php.weather.sina.com.cn/search.php?c=1&city='.$city.'&dpc=1');
 if (!empty($content) && ''!=trim($content)) {
 	$content = mb_convert_encoding($content, "UTF-8", "GB2312");
@@ -11,6 +18,8 @@ if (!empty($content) && ''!=trim($content)) {
 	$start = strpos($content, '<div class="m_left">');
 	$end = strpos($content, '<ul class="m_right">');
 	$content1 = substr($content, $start, $end-$start);
+//	echo $content1;
+/*
 	$data = str_get_html($content1);
 
 	$day = $data->find('.day', 0);
@@ -28,18 +37,14 @@ if (!empty($content) && ''!=trim($content)) {
 	$night_pic = substr($night_style, $start, $end-$start);
 	$night_str = $night->children(2)->children(1)->plaintext;
 	$night_temp_str = $night->children(2)->children(0)->children(0)->plaintext;
-	/*
+	*/
 	$start = strpos($content, '<div class="weather_list')+35;
 	$end = strpos($content, '<ul class="list_01">')-20;
 	$content2 = substr($content, $start, $end-$start);
-	*/
-	mb_internal_encoding("UTF-8");
-	if (false !== mb_strpos($day_str, 'é›¨') || false !== mb_strpos($night_str, 'é›¨') || false !== mb_strpos($content2, 'é›¨') || false !== mb_strpos($content2, 'é›¨')) {
-		$tip = '<em>ä¸é€‚å®œæ´—è½¦</em>';
-	}
-	else {
-		$tip = '<i>é€‚å®œæ´—è½¦</i>';
-	}
+
+	include_once template("space_weather");
+
+	exit;
 }
 ?>
 
@@ -90,23 +95,23 @@ if (!empty($content) && ''!=trim($content)) {
 .weather .weather_list .mod_03 h5{margin-bottom: 5px;font-size: 14px;}
 .weather .weather_list .mod_03 ul{margin-top: -20px;}
 .weather .weather_list .mod_03 ul{margin-top: -20px;}
-.weather .weather_list .mod_02 h4{margin: 20px 0 15px;font:16px/30px 'Microsoft YaHei', "é»‘ä½“", sans-serif;text-align: center;}
+.weather .weather_list .mod_02 h4{margin: 20px 0 15px;font:16px/30px 'Microsoft YaHei', "ºÚÌå", sans-serif;text-align: center;}
 
 </style>
 <div class="sidebox weather">
 		<h2 class="title">
-			<span><?php echo $tip;?></span>ä»Šæ—¥å¤©æ°” (<?php echo $_REQUEST['city'];?>)
+			<span><?php echo $tip;?></span>½ñÈÕÌìÆø (<?php echo $_REQUEST['city'];?>)
 		</h2>
 		<div class="left">
-			ç™½å¤©<br />
+			°×Ìì<br />
 			<div><img src="<?php echo $day_pic;?>" width="90" height="80"/></div>
 			<?php echo $day_str;?> <?php echo $day_temp_str;?>
 		</div>
 		<div class="right">
-			å¤œé—´<br />
+			Ò¹¼ä<br />
 			<div><img src="<?php echo $night_pic;?>" width="90" height="80"/></div>
 			<?php echo $night_str;?>  <?php echo $night_temp_str;?>
 		</div>
-		<div class="clear"><a href="space.php?do=weather">æœªæ¥å››å¤©</a><!-- <a href="javascript:void(0);" onclick="jQuery('.weather .weather_list').toggle();jQuery(this).toggle();jQuery(this).next().toggle();">æœªæ¥å››å¤©</a><a style="display:none;" href="javascript:void(0);" onclick="jQuery('.weather .weather_list').toggle();jQuery(this).toggle();jQuery(this).prev().toggle();">å…³é—­</a> --></div>
+		<div class="clear"><a href="javascript:void(0);" onclick="jQuery('.weather .weather_list').toggle();jQuery(this).toggle();jQuery(this).next().toggle();">Î´À´ËÄÌì</a><a style="display:none;" href="javascript:void(0);" onclick="jQuery('.weather .weather_list').toggle();jQuery(this).toggle();jQuery(this).prev().toggle();">¹Ø±Õ</a></div>
 		<div class="weather_list" style="display:none;"><?php echo $content2;?></div>
 </div>
