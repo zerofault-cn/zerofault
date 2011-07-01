@@ -51,6 +51,19 @@ if(!in_array($ac, array('common', 'pm'))) {
 		showmessage('no_privilege');
 	}
 }
+	//左侧群组列表
+	$space['mtag_list'] = array();
+	$tagspace_list = $_SGLOBAL['db']->result($_SGLOBAL['db']->query("select group_concat(tagid) from ".tname('tagspace')." where uid=".$_SGLOBAL['supe_uid']), 0);
+	if (!empty($tagspace_list)) {
+		$rs = $_SGLOBAL['db']->query("select tagid, tagname, fieldid from ".tname('mtag')." where tagid in(".$tagspace_list.") order by tagid");
+		while ($row = $_SGLOBAL['db']->fetch_array($rs)) {
+			$field_name = $_SGLOBAL['db']->result($_SGLOBAL['db']->query("select title from ".tname('profield')." where fieldid=".$row['fieldid']), 0);
+			if (!array_key_exists($field_name, $space['mtag_list'])) {
+				$space['mtag_list'][$field_name] = array();
+			}
+			$space['mtag_list'][$field_name][] = $row;
+		}
+	}
 
 //菜单
 $actives = array($ac => ' class="active"');

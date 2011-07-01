@@ -73,9 +73,9 @@ if($space) {
 	if($space['flag'] == -1) {
 		showmessage('space_has_been_locked');
 	}
-	//左侧驾校列表
+	//左侧群组列表
 	$space['mtag_list'] = array();
-	$tagspace_list = $_SGLOBAL['db']->result($_SGLOBAL['db']->query("select group_concat(tagid) from ".tname('tagspace')." where uid=".$space['uid']), 0);
+	$tagspace_list = $_SGLOBAL['db']->result($_SGLOBAL['db']->query("select group_concat(tagid) from ".tname('tagspace')." where uid=".$_SGLOBAL['supe_uid']), 0);
 	if (!empty($tagspace_list)) {
 		$rs = $_SGLOBAL['db']->query("select tagid, tagname, fieldid from ".tname('mtag')." where tagid in(".$tagspace_list.") order by tagid");
 		while ($row = $_SGLOBAL['db']->fetch_array($rs)) {
