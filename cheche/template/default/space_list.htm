@@ -3,7 +3,10 @@
 	<!--{loop $list $key $value}-->
 	<table cellspacing="0" cellpadding="0" width="100%">
 	<tr>
-		<td width="65"><div class="threadimg60"><a href="space.php?uid=$value[uid]"><!--{avatar($value[uid],small)}--></a></div></td>
+		<td width="100" class="avatar">
+			<!-- <div class="avatar48"><a href="space.php?uid=$value[uid]"><!--{avatar($value[uid],small)}--></a></div> -->
+			<div class="ar_r_t"><div class="ar_l_t"><div class="ar_r_b"><div class="ar_l_b"><a href="space.php?uid=$value[uid]"><!--{avatar($value[uid], middle)}--></a></div></div></div></div>
+		</td>
 		<td>
 			<h2>
 				<!--{if $ols[$value[uid]]}--><img src="image/online_icon.gif" align="absmiddle"> <!--{/if}-->

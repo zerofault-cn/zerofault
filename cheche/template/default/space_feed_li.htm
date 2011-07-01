@@ -4,7 +4,7 @@
 		<a href="cp.php?ac=feed&op=menu&feedid=$value[feedid]" class="float_more" id="a_feed_menu_$value[feedid]"  onmouseover="feed_menu($value[feedid],1);" onmouseout="feed_menu($value[feedid],0);" onclick="ajaxmenu(event, this.id)" title="显示更多选项" style="display:none;">菜单</a>
 		<!--{/if}-->
 		<!-- <a class="type" href="space.php?uid=$_GET[uid]&do=feed&view=$_GET[view]&appid=$value[appid]&icon=$value[icon]" title="只看此类动态"><img src="$value[icon_image]" /></a> -->
-		<a class="avatar" target="_blank" title="" href="space.php?uid={$value['uid']}"><!--{avatar($value['uid'])}--></a>
+		<div class="avatar48"><a class="avatar" target="_blank" title="" href="space.php?uid={$value['uid']}"><!--{avatar($value['uid'])}--></a></div>
 		<h5>$value[title_template] </h5>
 		<div class="feed_content">
 			<!--{if empty($_TPL[hidden_time])}-->
@@ -32,6 +32,7 @@
 			<div class="hotspot"><a href="cp.php?ac=feed&feedid=$value[feedid]">$value[hot]</a></div>
 			<!--{/if}-->
 
+			<div class="picbox">
 			<!--{if $value['image_1'] && file_exists($value['image_1'])}-->
 			<a href="javascript:void(0);" class="small"><img src="$value[image_1]" class="summaryimg" /></a>
 			<!--{/if}-->
@@ -44,6 +45,7 @@
 			<!--{if $value['image_4'] && file_exists($value['image_4'])}-->
 			<a href="javascript:void(0);" class="small"><img src="$value[image_4]" class="summaryimg" /></a>
 			<!--{/if}-->
+			</div>
 			
 			<!--{if $value['body_template']}-->
 			<div class="detail"<!--{if $value['image_3']}--> style="clear: both;"<!--{/if}-->>

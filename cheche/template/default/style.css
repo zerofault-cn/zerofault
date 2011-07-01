@@ -64,7 +64,7 @@ a.c_link { background-position: 0 -64px; }
 .float_more{ float: right; margin: 0 10px 0 0; padding: 0; width: 16px; height: 16px; background: url(image/settingicon.gif) no-repeat; color: #DABAA9; line-height: 200px; overflow: hidden; display: block; }
   .float_cancel { background-position: 0 -14px; }
   .float_delete { background-position: 0 -31px; }
-  .float_more { position: absolute; margin: 5px 0 0 505px; background: url(image/feedmoreicon.gif) no-repeat 0 0; color: #DABAA9; }
+  .float_more { position: absolute; margin: 5px 0 0 470px; background: url(image/feedmoreicon.gif) no-repeat 0 0; color: #DABAA9; }
 
 /*avatar bg*/
 .ar_r_t,
@@ -520,6 +520,8 @@ h2.title img { margin: 0 5px 0 0; vertical-align: middle; }
 
 .space_list table { border: 1px solid #EBE6C9; margin:10px 0; }
 .space_list td { padding: 5px; color: #999; overflow: hidden; }
+.space_list td.avatar img {width:83px;height: 83px;}
+
 .space_list thead td { background: #FCF9E6; color: #333; }
 .space_list .topline { padding: 5px; }
 .space_list tbody tr.alt td { background: #FCF9E6; }
@@ -793,10 +795,14 @@ a.button { padding: 5px; }
 .feed_header .active{ font-weight: bold; }
 .feed { margin: 0 0 20px; width: 100%; line-height: 20px; overflow: hidden; }
 .feedtime { margin: 20px 0 10px; color: #000; }
-.feed li { padding: 10px 10px; border-bottom: 1px solid #EBE6C9; position:relative;}
+.feed li { padding: 10px 3px; border-bottom: 1px solid #EBE6C9; position:relative;}
 .feed .type { position: absolute; margin: 1px 0 0 -20px !important; margin: 3px 0 0 -20px;}
+
+.feed_content .pic_box {font-size: 0;line-height: 0;}
 .feed_content img { max-width: 120px; max-height: 120px;}
 .feed_content a.big {
+	display:block;
+	clear: both;
 	cursor: url("image/cursor_minify.cur"), pointer;
 }
 .feed_content a.small {
@@ -811,20 +817,19 @@ a.button { padding: 5px; }
 .feed a img.summaryimg { float: left; margin: 10px 10px 10px 0; padding: 2px; border: 1px solid #DDD; }
 .feed a img.summaryimg:hover { border-color: #DDD; }
 
-.feed .avatar {
+#feed_div .avatar48, #space_feed .avatar48 {
 	float:left;
-	margin-right: 10px;
 }
 .feed h5 {
 	font-weight: normal;
 	font-size: 14px;
 	line-height: 1.4em;
-	margin-left: 58px;
+	margin-left: 68px;
 	margin-right: 40px;
 	padding-bottom: 5px;
 }
 .feed .feed_content {
-	margin-left: 58px;
+	margin-left: 68px;
 }
 .feed .feed_content .figure {
 	float:left;
