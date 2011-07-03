@@ -1,0 +1,64 @@
+<!--{template header}-->
+
+<h2 class="title">
+	<img src="image/app/mtag.gif" />群组－{$tagname}－特约合作商
+</h2>
+<div class="tabs_header">
+	<ul class="tabs">
+	<!--{if $id}-->
+		<li class="active"><a href="javascript:void(0);"><span>编辑合作商</span></a></li>
+	<!--{else}-->
+		<li class="active"><a href="javascript:void(0);"><span>添加合作商</span></a></li>
+	<!--{/if}-->
+		<li><a href="space.php?do=mtag&tagid={$tagid}&view=partner"><span>返回合作商列表</span></a></li>
+	</ul>
+</div>
+
+<div class="c_form">
+	<form method="post" action="cp.php?ac=partner&tagid=$tagid">
+	<table cellspacing="4" cellpadding="4" width="100%" class="infotable">
+	<input type="hidden" name="id" maxlength="100" value="{$id}" />
+	<tr>
+		<td align="right">标题：</td>
+		<td><input type="text" class="t_input" name="title" value="$info[title]" size="60" /></td>
+	</tr>
+	<tr>
+		<td align="right">店名：</td>
+		<td><input type="text" class="t_input" name="name" value="$info[name]" size="60" /></td>
+	</tr>
+	<tr>
+		<td align="right">描述：</td>
+		<td><input type="text" class="t_input" name="desc" value="$info[desc]" size="60" /></td>
+	</tr>
+	<tr>
+		<td align="right">联系人：</td>
+		<td><input type="text" class="t_input" name="contact" value="$info[contact]" size="60" /></td>
+	</tr>
+	<tr>
+		<td align="right">地址：</td>
+		<td><input type="text" class="t_input" name="address" value="$info[address]" size="60" /></td>
+	</tr>
+	<tr>
+		<td align="right">电话：</td>
+		<td><input type="text" class="t_input" name="telephone" value="$info[telephone]" size="60" /></td>
+	</tr>
+	<tr>
+		<td align="right">网址：</td>
+		<td><input type="text" class="t_input" name="link" value="$info[link]" size="60" /></td>
+	</tr>
+	<tr>
+		<td align="right" valign="top">备注：</td>
+		<td><textarea name="remark" rows="5" cols="60">{$info[remark]}</textarea></td>
+	</tr>
+	<tr>
+		<td align="right">显示顺序：</td>
+		<td><input type="text" class="t_input" name="displayorder" value="$info[displayorder]" size="10" />(数字越大越靠前)</td>
+	</tr>
+	<tr>
+		<td>&nbsp;</td>
+		<td><input type="submit" value="提交" name="submit" class="submit" /></td>
+	</tr>
+	</table>
+	</form>
+</div>
+<!--{template footer}-->

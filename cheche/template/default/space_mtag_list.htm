@@ -25,6 +25,7 @@
 		<li$actives[event]><a href="space.php?do=mtag&tagid=$mtag[tagid]&view=event"><span>群组活动</span></a></li>
 		<!--{/if}-->
 		<li$actives[member]><a href="space.php?do=mtag&tagid=$mtag[tagid]&view=member"><span>成员列表</span></a></li>
+		<li><a href="space.php?do=mtag&tagid=$mtag[tagid]&view=partner"><span>特约合作商</span></a></li>
 		<!--{if empty($mtag['ismember']) && $mtag['joinperm'] < 2}-->
 		<li class="null"><a href="cp.php?ac=mtag&op=join&tagid=$mtag[tagid]" id="mtag_join_$mtag[tagid]" onclick="ajaxmenu(event, this.id)">加入该群组</a></li>	
 		<!--{elseif $mtag['allowpost']}-->

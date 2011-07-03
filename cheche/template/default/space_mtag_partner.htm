@@ -1,0 +1,82 @@
+<!--{eval $_TPL['titles'] = array($mtag['tagname'], $mtag['title'], '讨论区');}-->
+<!--{template header}-->
+
+<h2 class="title">
+	<img src="image/app/mtag.gif"><a href="space.php?do=mtag&id=$mtag[fieldid]">$mtag[title]</a> -
+	<!--{if empty($mtag['ext_link'])}-->{$mtag[ext_name]}<!--{else}-->{$mtag[ext_link]}<!--{/if}--> -
+	<a href="space.php?do=mtag&tagid=$mtag[tagid]">$mtag[tagname]</a>
+</h2>
+
+<div class="tabs_header">
+	<ul class="tabs">
+		<li><a href="space.php?do=mtag&tagid=$mtag[tagid]"><span>首页</span></a></li>
+		<li><a href="space.php?do=mtag&tagid=$mtag[tagid]&view=list"><span>讨论区</span></a></li>
+		<li><a href="space.php?do=mtag&tagid=$mtag[tagid]&view=digest"><span>精华区</span></a></li>
+		<!--{if $eventnum}-->
+		<li><a href="space.php?do=mtag&tagid=$mtag[tagid]&view=event"><span>群组活动</span></a></li>
+		<!--{/if}-->
+		<li><a href="space.php?do=mtag&tagid=$mtag[tagid]&view=member"><span>成员列表</span></a></li>
+		<li class="active"><a href="space.php?do=mtag&tagid=$mtag[tagid]&view=partner"><span>特约合作商</span></a></li>
+		<!--{if empty($mtag['ismember']) && $mtag['joinperm'] < 2}-->
+		<li class="null"><a href="cp.php?ac=mtag&op=join&tagid=$mtag[tagid]" id="mtag_join_$mtag[tagid]" onclick="ajaxmenu(event, this.id)">加入该群组</a></li>
+		<!--{/if}-->
+		<!--{if $mtag['grade'] >= 8}-->
+		<li class="null"><a href="cp.php?ac=partner&tagid=$mtag[tagid]">添加合作商</a></li>
+		<!--{/if}-->
+	</ul>
+</div>
+
+<!--{if $list}-->
+<style>
+.partner_list dl {
+	padding: 10px;
+}
+.partner_list dl.bg0 {
+	background-color: #FFFFEF;
+}
+.partner_list dl h3{
+	font-size: 16px;
+	line-height: 24px;
+}
+.partner_list dl h3 a{
+	float: right;
+	font-size: 12px;
+	font-weight: normal;
+}
+.partner_list dt {
+	float:left;
+	width: 80px;
+	text-align:right;
+}
+.partner_list dd {
+	margin-left: 88px;
+}
+</style>
+<div class="partner_list">
+	<!--{loop $list $key $value}-->
+	<dl class="bg<!--{eval echo $key%2;}-->">
+		<h3>
+			<!--{if $mtag['grade'] >= 8}-->
+			<a href="cp.php?ac=partner&tagid={$mtag[tagid]}&id={$value[id]}">编辑</a>
+			<!--{/if}-->
+			{$value['title']}
+		</h3>
+		<dt class="name">店名：</dt><dd>{$value['name']}</dd>
+		<dt class="name">描述：</dt><dd>{$value['desc']}</dd>
+		<dt class="name">联系人：</dt><dd>{$value['contact']}</dd>
+		<dt class="name">地址：</dt><dd>{$value['address']}</dd>
+		<dt class="name">电话：</dt><dd>{$value['telephone']}</dd>
+		<!--{if $value['link']}-->
+		<dt class="name">网址：</dt><dd><a href="{$value['link']}" target="_blank">{$value['link']}</a></dd>
+		<!--{/if}-->
+		<!--{if $value['remark']}-->
+		<dt class="name">备注：</dt><dd><!--{eval echo nl2br($value['remark']);}--></dd>
+		<!--{/if}-->
+	</dl>
+	<!--{/loop}-->
+</div>
+<!--{else}-->
+<div class="c_form">还没有特约合作商</div>
+<!--{/if}-->
+
+<!--{template footer}-->
