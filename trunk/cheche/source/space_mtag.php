@@ -317,7 +317,17 @@ if($tagname) {
 		$_TPL['css'] = 'thread';
 		include_once template("space_mtag_event");
 		
-	} else {
+	}
+	elseif ($_GET['view'] == 'partner') {
+		
+		$list = array();
+		$query = $_SGLOBAL['db']->query("SELECT * FROM ".tname("partner")." WHERE tagid='$tagid' ORDER BY displayorder DESC");
+		while($value=$_SGLOBAL['db']->fetch_array($query)) {
+			$list[] = $value;
+		}
+		include_once template("space_mtag_partner");
+	}
+	else {
 
 		//群组首页
 		$list = $starlist = $modlist = $memberlist = $checklist = array();

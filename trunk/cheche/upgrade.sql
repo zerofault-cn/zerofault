@@ -3524,3 +3524,18 @@ ALTER TABLE `uchome_mtag`  ADD COLUMN `ext_field` varchar(255) NOT NULL DEFAULT 
 
 ALTER TABLE `uchome_school`  ADD COLUMN `telenum` varchar(255) NOT NULL DEFAULT '' AFTER `fullname`;
 ALTER TABLE `uchome_spacefield`  ADD COLUMN `car_color` varchar(255) NOT NULL DEFAULT '' AFTER `car_profile`;
+
+CREATE TABLE `uchome_partner` (
+  `id` int(11) unsigned NOT NULL auto_increment,
+  `tagid` smallint(5) unsigned NOT NULL default '0',
+  `title` varchar(255) NOT NULL DEFAULT '' ,
+  `name` varchar(255) NOT NULL default '',
+  `desc` varchar(255) NOT NULL default '',
+  `contact` varchar(255) NOT NULL default '',
+  `address` varchar(255) NOT NULL default '',
+  `telephone` varchar(255) NOT NULL default '',
+  `link` varchar(255) NOT NULL default '',
+  `remark` text NOT NULL default '',
+  `displayorder` tinyint(3) NOT NULL default '0',
+  PRIMARY KEY  (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
