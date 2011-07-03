@@ -30,9 +30,11 @@
 <style>
 .partner_list dl {
 	padding: 10px;
+	margin: 4px;
+	border: 1px solid #ddd;
 }
 .partner_list dl.bg0 {
-	background-color: #FFFFEF;
+	
 }
 .partner_list dl h3{
 	font-size: 16px;
@@ -42,6 +44,7 @@
 	float: right;
 	font-size: 12px;
 	font-weight: normal;
+	margin-left: 8px;
 }
 .partner_list dt {
 	float:left;
@@ -58,6 +61,7 @@
 		<h3>
 			<!--{if $mtag['grade'] >= 8}-->
 			<a href="cp.php?ac=partner&tagid={$mtag[tagid]}&id={$value[id]}">编辑</a>
+			<a href="javascript:void(0);" onclick="if(confirm('确定删除该记录？')){window.location.href='cp.php?ac=partner&op=delete&tagid={$mtag[tagid]}&id={$value[id]}';}else{return false;}">删除</a>
 			<!--{/if}-->
 			{$value['title']}
 		</h3>
