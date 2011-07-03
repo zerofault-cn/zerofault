@@ -9,7 +9,10 @@ if(!defined('IN_UCHOME')) {
 }
 $tagid = intval($_REQUEST['tagid']);
 $id = empty($_REQUEST['id'])? 0 : intval($_REQUEST['id']);
-
+if (!empty($_REQUEST['op']) && 'delete'==$_REQUEST['op']) {
+	$_SGLOBAL['db']->query("delete from ".tname('partner')." where tagid=".$tagid." and id=".$id);
+	showmessage('do_success', "space.php?do=mtag&tagid=".$tagid."&view=partner");
+}
 if(!empty($_REQUEST['submit'])) {
 	$setarr = array();
 	
@@ -38,7 +41,7 @@ if ($id>0) {
 	$info = $_SGLOBAL['db']->fetch_array($_SGLOBAL['db']->query("Select * from ".tname('partner')." where id=".$id));
 }
 else {
-	$info = array();
+	$info = array('displayorder'=>0);
 }
 include template("cp_partner");
 
