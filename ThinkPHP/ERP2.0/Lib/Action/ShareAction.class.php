@@ -5,21 +5,11 @@ class ShareAction extends BaseAction{
 
 	public function _initialize() {
 		if ('Node'!= MODULE_NAME) {
-			Session::set('top', 'Tasks');
+			Session::set('top', 'Experience');
 		}
-		$this->dao = D('Task');
+		$this->dao = D('Share');
 		parent::_initialize();
-		$this->assign('MODULE_TITLE', 'Task System');
-		$this->status_arr = array(
-			'0' => 'Open',
-			'1' => 'Closed',
-			'-1' => 'Pending'
-		);
-		$this->assign('status_arr', $this->status_arr);
-	}
-	Public function all() {
-		$this->assign('MODULE_TITLE', 'All Task');
-		$this->index('all');
+		$this->assign('MODULE_TITLE', 'Experience Share');
 	}
 
 	public function index($type='') {
@@ -30,83 +20,13 @@ class ShareAction extends BaseAction{
 				$where['title'] = array('like', '%'.$title.'%');
 			}
 		}
-		if (''==$type) { //my task
-			Session::set('sub', MODULE_NAME);
-			$where['_string'] = "creator_id=".$_SESSION[C('USER_AUTH_KEY')];
-			$rs = M('TaskOwner')->where('staff_id='.$_SESSION[C('USER_AUTH_KEY')])->getField('id,task_id');
-			if (!empty($rs)) {
-				$where['_string'] .= " or id in (".implode(',',  $rs).")";
-			}
-		}
-		else {
-			Session::set('sub', MODULE_NAME.'/all');
 
-			if (!empty($_SESSION[MODULE_NAME.'_'.ACTION_NAME.'_category_id'])) {
-				$category_id = $_SESSION[MODULE_NAME.'_'.ACTION_NAME.'_category_id'];
-			}
-			if (isset($_REQUEST['category_id'])) {
-				$category_id = intval($_REQUEST['category_id']);
-			}
-			$_SESSION[MODULE_NAME.'_'.ACTION_NAME.'_category_id'] = $category_id;
-			$this->assign('category_opts', self::genOptions(M('Category')->where(array('type'=>'Task'))->select(), $category_id));
-			if (!empty($category_id)) {
-				$where['category_id'] = $category_id;
-			}
-
-			if (!empty($_SESSION[MODULE_NAME.'_'.ACTION_NAME.'_creator_id'])) {
-				$creator_id = $_SESSION[MODULE_NAME.'_'.ACTION_NAME.'_creator_id'];
-			}
-			if (isset($_REQUEST['creator_id'])) {
-				$creator_id = intval($_REQUEST['creator_id']);
-			}
-			$_SESSION[MODULE_NAME.'_'.ACTION_NAME.'_creator_id'] = $creator_id;
-			$creator_arr = $this->dao->join("Inner Join erp_staff on erp_staff.id=erp_task.creator_id")->distinct(true)->field("erp_staff.id as id, erp_staff.realname as realname")->order("realname")->select();
-			$this->assign('creator_opts', self::genOptions($creator_arr, $category_id, 'realname'));
-			if (!empty($creator_id)) {
-				$where['creator_id'] = $creator_id;
-			}
-
-			if (!empty($_SESSION[MODULE_NAME.'_'.ACTION_NAME.'_owner_id'])) {
-				$owner_id = $_SESSION[MODULE_NAME.'_'.ACTION_NAME.'_owner_id'];
-			}
-			if (isset($_REQUEST['owner_id'])) {
-				$owner_id = intval($_REQUEST['owner_id']);
-			}
-			$_SESSION[MODULE_NAME.'_'.ACTION_NAME.'_owner_id'] = $owner_id;
-			$owner_arr = M('TaskOwner')->join("Inner Join erp_staff on erp_staff.id=erp_task_owner.staff_id")->distinct(true)->field("erp_staff.id as id, erp_staff.realname as realname")->order("realname")->select();
-			$this->assign('owner_opts', self::genOptions($owner_arr, $owner_id, 'realname'));
-			if (!empty($owner_id)) {
-				$rs = M('TaskOwner')->where('staff_id='.$owner_id)->getField('id,task_id');
-				$where['id'] = array('in', array_values($rs));
-			}
-			
-		}
 		import("@.Paginator");
 		$limit = 20;
 
 		$total = $this->dao->where($where)->count();
 		$p = new Paginator($total,$limit);
 		
-		$result = $this->dao->relation(true)->where($where)->order('status, id desc')->limit($p->offset.','.$p->limit)->field($field)->select();
-		empty($result) && ($result = array());
-		foreach ($result as $i=>$row) {
-			foreach($row['owner'] as $key=>$val) {
-				$result[$i]['owner'][$key]['realname'] = M('Staff')->where('id='.$val['staff_id'])->getField('realname');
-			}
-			if ($row['status'] == 0) {
-				$rs = M('TaskOwner')->where(array('task_id'=>$row['id']))->getField('id,status');
-				if (in_array(-1, $rs)) {
-					$status = -1;
-				}
-				elseif (in_array(0, $rs)) {
-					$status = 0;
-				}
-				else {
-					$status = 1;
-				}
-			//	$result[$i]['status'] = $status;
-			}
-		}
 
 		$this->assign('request', $_REQUEST);
 		$this->assign('result', $result);

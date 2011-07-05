@@ -72,6 +72,11 @@ $menu['Tasks'] = array(
 		'All Tasks'				=> 'Task/all',
 		)
 	);
+
+$menu['Experience'] = array(
+	'name'    => 'Share',
+	);
+
 $menu['System'] = array(
 	'name'    => 'Setting',
 	'submenu' => array(
