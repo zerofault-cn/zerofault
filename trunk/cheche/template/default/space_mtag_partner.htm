@@ -36,11 +36,11 @@
 .partner_list dl.bg0 {
 	
 }
-.partner_list dl h3{
+.partner_list h3{
 	font-size: 16px;
 	line-height: 24px;
 }
-.partner_list dl h3 a{
+.partner_list dd.edit a{
 	float: right;
 	font-size: 12px;
 	font-weight: normal;
@@ -56,27 +56,29 @@
 }
 </style>
 <div class="partner_list">
-	<!--{loop $list $key $value}-->
+	<!--{loop $list $key $arr}-->
+	<h3>{$key}</h3>
+		<!--{loop $arr $i $value}-->
 	<dl class="bg<!--{eval echo $key%2;}-->">
-		<h3>
-			<!--{if $mtag['grade'] >= 8}-->
-			<a href="cp.php?ac=partner&tagid={$mtag[tagid]}&id={$value[id]}">编辑</a>
-			<a href="javascript:void(0);" onclick="if(confirm('确定删除该记录？')){window.location.href='cp.php?ac=partner&op=delete&tagid={$mtag[tagid]}&id={$value[id]}';}else{return false;}">删除</a>
-			<!--{/if}-->
-			{$value['title']}
-		</h3>
-		<dt class="name">店名：</dt><dd>{$value['name']}</dd>
-		<dt class="name">描述：</dt><dd>{$value['desc']}</dd>
-		<dt class="name">联系人：</dt><dd>{$value['contact']}</dd>
-		<dt class="name">地址：</dt><dd>{$value['address']}</dd>
-		<dt class="name">电话：</dt><dd>{$value['telephone']}</dd>
+		<dt>店名：</dt>
+		<dd class="edit">
+		<!--{if $mtag['grade'] >= 8}-->
+		<a href="cp.php?ac=partner&tagid={$mtag[tagid]}&id={$value[id]}">编辑</a>
+		<a href="javascript:void(0);" onclick="if(confirm('确定删除该记录？')){window.location.href='cp.php?ac=partner&op=delete&tagid={$mtag[tagid]}&id={$value[id]}';}else{return false;}">删除</a>
+		<!--{/if}-->
+		{$value['name']}</dd>
+		<dt>描述：</dt><dd>{$value['desc']}</dd>
+		<dt>联系人：</dt><dd>{$value['contact']}</dd>
+		<dt>地址：</dt><dd>{$value['address']}</dd>
+		<dt>电话：</dt><dd>{$value['telephone']}</dd>
 		<!--{if $value['link']}-->
-		<dt class="name">网址：</dt><dd><a href="{$value['link']}" target="_blank">{$value['link']}</a></dd>
+		<dt>网址：</dt><dd><a href="{$value['link']}" target="_blank">{$value['link']}</a></dd>
 		<!--{/if}-->
 		<!--{if $value['remark']}-->
-		<dt class="name">备注：</dt><dd><!--{eval echo nl2br($value['remark']);}--></dd>
+		<dt>备注：</dt><dd><!--{eval echo nl2br($value['remark']);}--></dd>
 		<!--{/if}-->
 	</dl>
+		<!--{/loop}-->
 	<!--{/loop}-->
 </div>
 <!--{else}-->

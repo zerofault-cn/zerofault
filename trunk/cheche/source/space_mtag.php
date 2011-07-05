@@ -323,7 +323,11 @@ if($tagname) {
 		$list = array();
 		$query = $_SGLOBAL['db']->query("SELECT * FROM ".tname("partner")." WHERE tagid='$tagid' ORDER BY displayorder DESC");
 		while($value=$_SGLOBAL['db']->fetch_array($query)) {
-			$list[] = $value;
+			$title = trim($value['title']);
+			if (!array_key_exists($title, $list)) {
+				$list[$title] = array();
+			}
+			$list[$title][] = $value;
 		}
 		include_once template("space_mtag_partner");
 	}
