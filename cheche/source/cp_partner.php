@@ -17,7 +17,14 @@ if(!empty($_REQUEST['submit'])) {
 	$setarr = array();
 	
 	$setarr['tagid'] = $tagid;
-	$setarr['title'] = getstr($_POST['title'], 40, 1, 1, 1);
+	$title_src = $_POST['title_src'];
+	if ('title_select' == $title_src) {
+		$title = $_SGLOBAL['db']->result($_SGLOBAL['db']->query("Select title from ".tname('partner')." where id=".intval($_POST['title_select'])), 0);
+	}
+	else {
+		$title = getstr($_POST['title_input'], 40, 1, 1, 1);
+	}
+	$setarr['title'] = $title;
 	$setarr['name'] = getstr($_POST['name'], 40, 1, 1, 1);
 	$setarr['desc'] = getstr($_POST['desc'], 40, 1, 1, 1);
 	$setarr['contact'] = getstr($_POST['contact'], 40, 1, 1, 1);
@@ -39,10 +46,26 @@ $tagname = $_SGLOBAL['db']->result($_SGLOBAL['db']->query("Select tagname from "
 
 if ($id>0) {
 	$info = $_SGLOBAL['db']->fetch_array($_SGLOBAL['db']->query("Select * from ".tname('partner')." where id=".$id));
+	$rs = $_SGLOBAL['db']->query("select id, title from ".tname('partner')." where title!='".$info['title']."' group by title");
+	$title_arr = array();
+	while ($row = $_SGLOBAL['db']->fetch_array($rs)) {
+		$title_arr[$row['id']] = $row['title'];
+	}
+	$title_opts = genOptions($title_arr);
 }
 else {
-	$info = array('displayorder'=>0);
+	$info = array(
+		'title'=> '',
+		'displayorder'=>0
+	);
+	$rs = $_SGLOBAL['db']->query("select id, title from ".tname('partner')." group by title");
+	$title_arr = array();
+	while ($row = $_SGLOBAL['db']->fetch_array($rs)) {
+		$title_arr[$row['id']] = $row['title'];
+	}
+	$title_opts = genOptions($title_arr);
 }
+
 include template("cp_partner");
 
 ?>

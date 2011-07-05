@@ -15,12 +15,18 @@
 </div>
 
 <div class="c_form">
-	<form method="post" action="cp.php?ac=partner&tagid=$tagid">
+	<form method="post" action="cp.php?ac=partner&tagid=$tagid" autocomplete="off">
 	<table cellspacing="4" cellpadding="4" width="100%" class="infotable">
 	<input type="hidden" name="id" maxlength="100" value="{$id}" />
 	<tr>
-		<td align="right">标题：</td>
-		<td><input type="text" class="t_input" name="title" value="$info[title]" size="60" /></td>
+		<td align="right" >类型：</td>
+		<td>
+			<input type="radio" name="title_src" value="title_select" <!--{if $info['title']==''}--> checked="checked"<!--{/if}-->/>
+			选择：<select name="title_select"><option value="0">请选择已有分类</option><!--{$title_opts}--></select>
+			<br />
+			<input type="radio" name="title_src" value="title_input" <!--{if $info['title']!=''}--> checked="checked"<!--{/if}-->/>
+			输入：<input type="text" class="t_input" name="title_input" value="$info[title]" size="50" />
+		</td>
 	</tr>
 	<tr>
 		<td align="right">店名：</td>
