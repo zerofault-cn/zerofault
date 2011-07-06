@@ -12,7 +12,13 @@ class ShareAction extends BaseAction{
 		$this->assign('MODULE_TITLE', 'Experience Share');
 	}
 
+	Public function all() {
+		$this->assign('MODULE_TITLE', 'All Share');
+		$this->index('all');
+	}
+
 	public function index($type='') {
+		Session::set('sub', MODULE_NAME.(''==$type?'':'/'.$type));
 		$where = array();
 		if (!empty($_REQUEST['title'])) {
 			$title = trim($_REQUEST['title']);
@@ -79,7 +85,7 @@ class ShareAction extends BaseAction{
 		$this->display('Layout:content');
 	}
 	public function form() {
-		$this->assign('ACTION_TITLE', 'Create a new task');
+		$this->assign('ACTION_TITLE', 'Post My Experience');
 		$id = empty($_REQUEST['id']) ? 0 : intval($_REQUEST['id']);
 		if ($id>0) {
 			$info = $this->dao->relation(true)->find($id);
@@ -112,42 +118,14 @@ class ShareAction extends BaseAction{
 			$info = array(
 				'id' => 0,
 				'title' => '',
-				'project' => '',
-				'category_opts' => self::genOptions(M('Category')->where(array('type'=>'Task'))->select()),
-				'create_time' => date('Y-m-d'),
-				'due_date' => '',
-				'press_time' => 1,
-				'press_unit' => 'day',
-				'owners' => array(),
+				'project_opts' => self::genOptions(M('Category')->where(array('type'=>'ShareProject'))->select()),
+				'category_opts' => self::genOptions(M('Category')->where(array('type'=>'ShareCategory'))->select()),
 				'notification' => '11'
 				);
 		}
 		$this->assign('info', $info);
 		$this->assign('MAX_FILE_SIZE', self::MAX_FILE_SIZE());
 		$this->assign('upload_max_filesize', min(ini_get('memory_limit'), ini_get('post_max_size'), ini_get('upload_max_filesize')));
-
-		$dept_staff_arr = array();
-		$has_other = false;
-		$rs = M('Staff')->where('status=1')->distinct(true)->field('dept_id')->select();
-		foreach ($rs as $arr) {
-			if (0==$arr['dept_id']) {
-				$has_other = true;
-				continue;
-			}
-			$dept = M('Department')->find($arr['dept_id']);
-			$dept_staff_arr[$dept['name']] = M('Staff')->where(array('id'=>array('neq', $dept['leader_id']), 'dept_id'=>$dept['id'], 'status'=>1))->order('realname')->field('id,realname,email')->select();
-			if (empty($dept_staff_arr[$dept['name']])) {
-				$dept_staff_arr[$dept['name']] = array();
-			}
-			if ($dept['leader_id']>0) {
-				array_unshift($dept_staff_arr[$dept['name']], M('Staff')->field('id,realname,email')->find($dept['leader_id']));
-			}
-		}
-		ksort($dept_staff_arr);
-		if ($has_other) {
-			$dept_staff_arr['No Department'] = M('Staff')->where(array('dept_id'=>0, 'status'=>1))->order('realname')->field('id,realname,email')->select();
-		}
-		$this->assign('DeptStaff', $dept_staff_arr);
 
 		$this->assign('content', ACTION_NAME);
 		$this->display('Layout:ERP_layout');
@@ -349,25 +327,28 @@ class ShareAction extends BaseAction{
 			}
 		}
 	}
-	public function category(){
+	public function project() {
+		$this->assign('MODULE_TITLE', 'Experience Project');
+		$this->category('ShareProject');
+	}
+	public function category($type = 'ShareCategory'){
 		Session::set('sub', MODULE_NAME.'/'.ACTION_NAME);
-		$type = 'Task';
 		$dao = M('Category');
 		if (!empty($_POST['submit'])) {
 			$name = trim($_REQUEST['name']);
-			!$name && self::_error('Category Name required');
+			!$name && self::_error(ucfirst(ACTION_NAME).' Name required');
 			$id = empty($_REQUEST['id']) ? 0 : intval($_REQUEST['id']);
 			if ($id>0) {
 				$rs = $dao->where(array('type'=>$type,'name'=>$name,'id'=>array('neq',$id)))->find();
 				if($rs && sizeof($rs)>0){
-					self::_error('Category Name: "'.$name.'" already exists!');
+					self::_error(ucfirst(ACTION_NAME).' Name: "'.$name.'" already exists!');
 				}
 				$dao->find($id);
 			}
 			else {
 				$rs = $dao->where(array('type'=>$type,'name'=>$name))->find();
 				if($rs && sizeof($rs)>0){
-					self::_error('Category Name: "'.$name.'" already exists!');
+					self::_error(ucfirst(ACTION_NAME).' Name: "'.$name.'" already exists!');
 				}
 			}
 			$dao->type = $type;
@@ -375,7 +356,7 @@ class ShareAction extends BaseAction{
 			$dao->name = $name;
 			if ($id>0) {
 				if(false !== $dao->save()){
-					self::_success('Category information updated!',__URL__.'/category');
+					self::_success(ucfirst(ACTION_NAME).' information updated!');
 				}
 				else{
 					self::_error('Update fail!'.(C('APP_DEBUG')?$dao->getLastSql():''));
@@ -383,10 +364,10 @@ class ShareAction extends BaseAction{
 			}
 			else {
 				if($dao->add()) {
-					self::_success('Add category success!',__URL__.'/category');
+					self::_success('Add '.ACTION_NAME.' success!');
 				}
 				else{
-					self::_error('Add category fail!'.(C('APP_DEBUG')?$dao->getLastSql():''));
+					self::_error('Add '.ACTION_NAME.' fail!'.(C('APP_DEBUG')?$dao->getLastSql():''));
 				}
 			}
 		}
@@ -401,11 +382,16 @@ class ShareAction extends BaseAction{
 				self::_delete();
 			}
 		}
-		$this->assign('ACTION_TITLE', 'Task Category');
-		$result = $dao->where(array('type'=>'Task'))->order('id')->select();
+		if ('category' == ACTION_NAME) {
+			$this->assign('ACTION_TITLE', 'Experience Category');
+		}
+		elseif ('project' == ACTION_NAME) {
+			$this->assign('ACTION_TITLE', 'Experience Project');
+		}
+		$result = $dao->where(array('type'=>$type))->order('id')->select();
 
 		$this->assign('result', $result);
-		$this->assign('content', ACTION_NAME);
+		$this->assign('content', 'category');
 		$this->display('Layout:ERP_layout');
 	}
 

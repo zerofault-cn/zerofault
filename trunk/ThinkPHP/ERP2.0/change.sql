@@ -155,3 +155,25 @@ ALTER TABLE erp_task CHANGE notification notification CHAR(4)  NOT NULL default 
 
 ALTER TABLE erp_absence ADD hours_remain DECIMAL(5,2)  DEFAULT "0" NOT NULL AFTER hours;
 update erp_absence set hours_remain=hours;
+
+
+CREATE TABLE `erp_share` (
+  `id` int(11) unsigned NOT NULL auto_increment,
+  `staff_id` smallint(5) unsigned NOT NULL default '0',
+  `dept_id` smallint(5) unsigned NOT NULL default '0',
+  `category_id` smallint(5) unsigned NOT NULL default '0',
+  `project_id` smallint(5) unsigned NOT NULL default '0',
+  `title` varchar(255) NOT NULL default '',
+  `keywords` varchar(255) NOT NULL default '',
+  `create_time` datetime NOT NULL default '0000-00-00 00:00:00',
+  `modify_time` datetime NOT NULL default '0000-00-00 00:00:00',
+  PRIMARY KEY  (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+CREATE TABLE `erp_share_entry` (
+  `id` int(11) unsigned NOT NULL auto_increment,
+  `share_id` int(11) unsigned NOT NULL default '0',
+  `field` varchar(255) NOT NULL default '',
+  `value` text NOT NULL,
+  PRIMARY KEY  (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;

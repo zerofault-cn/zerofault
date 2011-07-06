@@ -2,9 +2,9 @@
 $config = array(
 	'APP_DEBUG'			=> true,
 	'USER_AUTH_TYPE'	=> 2,
-	'USER_AUTH_METHOD'	=> 'LDAP', //可选LDAP或DB，如果无此参数，或者设为其他值，均使用DB方式
+//	'USER_AUTH_METHOD'	=> 'LDAP', //可选LDAP或DB，如果无此参数，或者设为其他值，均使用DB方式
 
-	'APP_CONFIG_LIST'	=> array('menu', 'absence', 'smtp', 'test', 'ldap'),
+	'APP_CONFIG_LIST'	=> array('menu', 'absence', 'smtp', 'test', 'ldap', 'share'),
 	'TAG_NESTED_LEVEL'	=> 6,
 
 	'DB_TYPE'			=> 'mysql',
@@ -15,7 +15,7 @@ $config = array(
 	'DB_PREFIX'			=> 'erp_',
 
 	//显示标题，用于区分不同的ERP site
-	'ERP_TITLE'			=> 'AGIGA Tech ERP System',
+	'ERP_TITLE'			=> 'Local ERP',
 
 	//用户session，用于区分不同ERP site
 	'STAFF_AUTH_NAME'   => 'staff',
@@ -37,7 +37,7 @@ $config = array(
 	'RBAC_USER_TABLE'	=> 'erp_staff_role',
 	'RBAC_ACCESS_TABLE'	=> 'erp_role_node',
 	'RBAC_NODE_TABLE'	=> 'erp_node',
-	'NOT_AUTH_MODULE'	=> 'Index,Public,Script,Asset,Inventory,Absence,Task,Attachment',
+	'NOT_AUTH_MODULE'	=> 'Index,Public,Script,Asset,Inventory,Absence,Task,Attachment,Share',
 	'IFRAME_AUTH_ACTION' => array('update','delete','edit','submit','confirm','select','import','create')
 	);
 
