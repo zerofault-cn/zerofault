@@ -495,6 +495,7 @@ class TaskAction extends BaseAction{
 		$field = $_REQUEST['f'];
 		$value = $_REQUEST['v'];
 		if ($staff_id > 0) {
+			//改变Owner状态
 			$dao = M('TaskOwner');
 			$info = $dao->where("task_id=".$task_id." and staff_id=".$staff_id)->find();
 			$rs = true;
@@ -502,14 +503,33 @@ class TaskAction extends BaseAction{
 				$rs = $dao->where('id='.$info['id'])->setField(array($field, 'action_time'), array($value, date('Y-m-d H:i:s')));
 				self::mail_task('owner_status', $task_id, $staff_id);
 			}
+			if ('status'==$field && 0==$value) {
+				//有Owner改变状态为Open，则检查Task状态，如果为Close，则自动Open
+				if (1 == $this->dao->where('id='.$task_id)->getField('status')) {
+					$this->dao->where('id='.$task_id)->setField(array('status', 'update_time'), array(0, date('Y-m-d H:i:s')));
+					self::mail_task('task_status', $task_id);
+				}
+			}
+			else {
+				//检查是否已没有Open或Pending
+				if ($dao->where("task_id=".$task_id." and (status=0 or status=-1)")->count() == 0) {
+					$this->dao->where('id='.$task_id)->setField(array('status', 'update_time'), array(1, date('Y-m-d H:i:s')));
+					self::mail_task('task_status', $task_id);
+				}
+			}
 		}
 		else {
+			//改变Task状态
 			$dao = $this->dao;
 			$info = $dao->where('id='.$task_id)->find();
 			$rs = true;
 			if ($info[$field] != $value) {
-				$rs = $dao->where('id='.$task_id)->setField(array($field, 'update_time'), array($value, date('Y-m-d H:i:s')));
+				$dao->where('id='.$task_id)->setField(array($field, 'update_time'), array($value, date('Y-m-d H:i:s')));
 				self::mail_task('task_status', $task_id);
+			}
+			if ('status'==$field && 1==$value) {
+				//总任务Close，则全部Owner状态自动Close
+				M('TaskOwner')->where('task_id='.$task_id)->setField(array('status', 'action_time'), array(1, date('Y-m-d H:i:s')));
 			}
 		}
 		if(false !== $rs) {
