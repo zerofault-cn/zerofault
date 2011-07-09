@@ -157,16 +157,20 @@ ALTER TABLE erp_absence ADD hours_remain DECIMAL(5,2)  DEFAULT "0" NOT NULL AFTE
 update erp_absence set hours_remain=hours;
 
 
+DROP TABLE IF EXISTS `erp_share`;
 CREATE TABLE `erp_share` (
   `id` int(11) unsigned NOT NULL auto_increment,
   `staff_id` smallint(5) unsigned NOT NULL default '0',
   `dept_id` smallint(5) unsigned NOT NULL default '0',
   `category_id` smallint(5) unsigned NOT NULL default '0',
   `project_id` smallint(5) unsigned NOT NULL default '0',
+  `notification` char(4) NOT NULL default '',
   `title` varchar(255) NOT NULL default '',
   `keywords` varchar(255) NOT NULL default '',
   `create_time` datetime NOT NULL default '0000-00-00 00:00:00',
   `modify_time` datetime NOT NULL default '0000-00-00 00:00:00',
+  `hit` smallint(5) unsigned NOT NULL default '0',
+  `status` tinyint(1) unsigned NOT NULL default '0',
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
@@ -177,3 +181,5 @@ CREATE TABLE `erp_share_entry` (
   `value` text NOT NULL,
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+

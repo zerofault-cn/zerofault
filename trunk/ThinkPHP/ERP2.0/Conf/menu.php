@@ -76,8 +76,8 @@ $menu['Tasks'] = array(
 $menu['Experience'] = array(
 	'name'    => 'Share',
 	'submenu' => array(
-		'My Share'	=> 'Share',
-		'All Share' => 'Share/all',
+		'My Experience'	=> 'Share',
+		'All Experience' => 'Share/all',
 		'Project'	=> 'Share/project',
 		'Category'	=> 'Share/category'
 		)

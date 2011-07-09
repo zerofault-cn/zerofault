@@ -1,47 +1,99 @@
+<style>
+#tTable th {
+	text-align: left;
+}
+#tTable .op {
+	text-align: center;
+}
+#tTable td.title {
+	padding-left: 24px;
+	background:url("../Public/Images/article.png") 4px center no-repeat;
+}
+#tTable td.project {
+	background: #F5CBAD;
+	font-weight: bold;
+	font-size: 14px;
+}
+</style>
 <p class="page_title_text">
+<if condition="ACTION_NAME eq 'all'">
 <table>
 <tr>
 	<td>
 		<form method="post">
 		<table id="search_table" cellpadding="3" border="1" bordercolor="#FFFFFF" style="border-collapse:collapse;">
 		<tr>
-			<th>Task Name</th>
+			<th>Project</th>
 			<th>Category</th>
-			<th>Creator</th>
-			<th>Owner</th>
+			<th>Department</th>
+			<th>Auther</th>
+			<th>Keywords</th>
 			<td rowspan="2"><input type="submit" value="Filter"/></td>
-			<td rowspan="2"><input type="button" onclick="javascript:document.location='__URL__/form';" value="Create Task" /></td>
+			<td rowspan="2"><input type="button" onclick="javascript:document.location='__URL__/form';" value="Share my Experience" /></td>
 
 		</tr>
 		<tr>
-			<td><input type="text" name="title" size="14" value="{$request['title']}"/></td>
+			<td><select name="project_id"><option value="">All</option>{$project_opts}</select></td>
 			<td><select name="category_id"><option value="">All</option>{$category_opts}</select></td>
-			<td><select name="creator_id"><option value="">All</option>{$creator_opts}</select></td>
-			<td><select name="owner_id"><option value="">All</option>{$owner_opts}</select></td>
+			<td><select name="dept_id"><option value="">All</option>{$dept_opts}</select></td>
+			<td><select name="staff_id"><option value="">All</option>{$staff_opts}</select></td>
+			<td><input type="text" name="keyword" size="14" value="{$request['keyword']}"/></td>
 		</tr>
 		</table>
 		</form>
 	</td>
 </tr>
 </table>
-<input type="button" onclick="javascript:document.location='__URL__/form';" value="Create Task" />
+<else />
+<input type="button" onclick="javascript:document.location='__URL__/form';" value="Share my Experience" />
+</if>
 </p>
-<table cellpadding="3" cellspacing="0" border="1" bordercolor="#FFFFFF" style="border-collapse:collapse;">
-<tr>
-	<td colspan="9">{$page}</td>
-</tr>
-<iterate name="result" id="item">
-<tr class="trbg{$mod}">
-
-</tr>
-</iterate>
-<empty name="result">
-<tr>
-	<td colspan="9" align="center">No Task</td>
-</tr>
-</empty>
-<tr>
-	<td colspan="9">{$page}</td>
-</tr>
-</table>
+		<table id="tTable" width="90%" cellpadding="5" cellspacing="0" border="0" style="border-collapse:collapse;border-space:0;">
+		<tr>
+			<td colspan="5">{$page}</td>
+		</tr>
+		<tr>
+			<th class="title">[分类] 标题</th>
+			<th width="140" class="author">[部门] 作者/发表时间</th>
+			<th width="70" class="comment">评论/点击</th>
+			<th width="90" class="last_comment">最后评论</th>
+			<if condition="ACTION_NAME neq 'all' or $_SESSION[C('ADMIN_AUTH_NAME')]">
+			<th width="48" class="op">操作</th>
+			</if>
+		</tr>
+		<iterate name="result" key="i" id="arr1">
+			<empty name="request.project_id">
+		<tr>
+			<td class="project">
+			{$project_arr.$key}
+			</td>
+			<td colspan="3">&nbsp;</td>
+		</tr>
+			</empty>
+			<iterate name="arr1" key="j" id="item">
+		<tr class="trbg{$mod}">
+			<td class="title">[<a href="__ACTION__/category_id/{$item.category_id}">{$item['category']['name']}</a>]&nbsp;<a href="__URL__/view/id/{$item.id}">{$item['title']}</a></td>
+			<td class="author">[<a href="__ACTION__/dept_id/{$item.dept_id}">{$item['dept']['name']}</a>]&nbsp;<a href="__ACTION__/staff_id/{$item.staff_id}">{$item['staff']['realname']}</a><br />{$item['create_date']}</td>
+			<td class="comment">{$item.comment_count}/{$item.hit}</td>
+			<td class="last_comment"><empty name="item.comment_count">暂无<else />{$item.comment_staff}<br />{$item.comment_date}</empty></td>
+			<if condition="ACTION_NAME neq 'all' or $_SESSION[C('ADMIN_AUTH_NAME')]">
+			<td class="op">
+				<a href="__URL__/form/id/{$item.id}" title="Edit"><img src="../Public/Images/form_edit.gif" border="0" alt="Edit" align="absmiddle" /></a>
+				<img src="../Public/Images/cross.gif" align="absmiddle" border="0" alt="Delete" title="Delete this experience" style="cursor:pointer;" onclick="myConfirm('Are you sure to delete this experience?', '__URL__/delete/id/{$item.id}');"/>
+			</td>
+			</if>
+		</tr>
+			</iterate>
+		</iterate>
+		<empty name="result">
+		<tr>
+			<td colspan="5" align="center">No Record</td>
+		</tr>
+		</empty>
+		<tr>
+			<td colspan="5">{$page}</td>
+		</tr>
+		</table>
+	</div>
+</div>
 <p class="center"></p>

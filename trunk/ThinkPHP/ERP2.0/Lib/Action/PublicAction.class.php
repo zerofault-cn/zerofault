@@ -100,10 +100,10 @@ class PublicAction extends BaseAction{
 			$_SESSION[C('STAFF_AUTH_NAME')]	= $authInfo;
 			if(in_array($authInfo['id'], C('SUPER_ADMIN_ID'))) {
 				// 管理员不受权限控制影响
-				$_SESSION[C('ADMIN_AUTH_NAME')]	=	true;
+				$_SESSION[C('ADMIN_AUTH_NAME')] = true;
 			}
 			else{
-				$_SESSION[C('ADMIN_AUTH_NAME')]	=	false;
+				$_SESSION[C('ADMIN_AUTH_NAME')] = false;
 			}
 			//获取当前用户管理的Location信息
 			$rs = M('LocationManager')->where(array('staff_id'=>$authInfo['id']))->group('location_id')->getField('location_id,group_concat(fixed order by fixed separator "")');
