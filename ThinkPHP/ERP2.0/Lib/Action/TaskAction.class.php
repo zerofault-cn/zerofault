@@ -23,6 +23,7 @@ class TaskAction extends BaseAction{
 	}
 
 	public function index($type='') {
+		$this->assign('ACTION_TITLE', 'Task List');
 		$where = array();
 		if (!empty($_REQUEST['title'])) {
 			$title = trim($_REQUEST['title']);
@@ -61,7 +62,7 @@ class TaskAction extends BaseAction{
 			}
 			$_SESSION[MODULE_NAME.'_'.ACTION_NAME.'_creator_id'] = $creator_id;
 			$creator_arr = $this->dao->join("Inner Join erp_staff on erp_staff.id=erp_task.creator_id")->distinct(true)->field("erp_staff.id as id, erp_staff.realname as realname")->order("realname")->select();
-			$this->assign('creator_opts', self::genOptions($creator_arr, $category_id, 'realname'));
+			$this->assign('creator_opts', self::genOptions($creator_arr, $creator_id, 'realname'));
 			if (!empty($creator_id)) {
 				$where['creator_id'] = $creator_id;
 			}
@@ -83,11 +84,18 @@ class TaskAction extends BaseAction{
 		}
 		import("@.Paginator");
 		$limit = 20;
+		if (!empty($_SESSION[MODULE_NAME.'_'.ACTION_NAME.'_limit'])) {
+			$limit = $_SESSION[MODULE_NAME.'_'.ACTION_NAME.'_limit'];
+		}
+		if (!empty($_REQUEST['limit'])) {
+			$limit = $_REQUEST['limit'];
+		}
+		$_SESSION[MODULE_NAME.'_'.ACTION_NAME.'_limit'] = $limit;
 
 		$total = $this->dao->where($where)->count();
 		$p = new Paginator($total,$limit);
 		
-		$result = $this->dao->relation(true)->where($where)->order('status, id desc')->limit($p->offset.','.$p->limit)->field($field)->select();
+		$result = $this->dao->relation(true)->where($where)->order('status, id desc')->limit($p->offset.','.$p->limit)->select();
 		empty($result) && ($result = array());
 		foreach ($result as $i=>$row) {
 			foreach($row['owner'] as $key=>$val) {
@@ -440,14 +448,14 @@ class TaskAction extends BaseAction{
 			if ($id>0) {
 				$rs = $dao->where(array('type'=>$type,'name'=>$name,'id'=>array('neq',$id)))->find();
 				if($rs && sizeof($rs)>0){
-					self::_error('Category Name: "'.$name.'" already exists!');
+					self::_error('Category Name: \''.$name.'\' already exists!');
 				}
 				$dao->find($id);
 			}
 			else {
 				$rs = $dao->where(array('type'=>$type,'name'=>$name))->find();
 				if($rs && sizeof($rs)>0){
-					self::_error('Category Name: "'.$name.'" already exists!');
+					self::_error('Category Name: \''.$name.'\' already exists!');
 				}
 			}
 			$dao->type = $type;
@@ -542,6 +550,10 @@ class TaskAction extends BaseAction{
 	public function delete() {
 		$id = $_REQUEST['id'];
 		M('TaskOwner')->where('task_id='.$id)->delete();
+		//delete comment
+		M('Comment')->where(array('model_name'=>MODULE_NAME, 'model_id'=>$id))->delete();
+
+		//delete attachment
 		$rs = (array)M('Attachment')->where(array('model_name'=>'Task', 'model_id'=>$id))->select();
 		foreach ($rs as $row) {
 			@unlink($row['path']);

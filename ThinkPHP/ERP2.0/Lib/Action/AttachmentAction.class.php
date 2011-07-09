@@ -14,7 +14,6 @@ class AttachmentAction extends BaseAction{
 		$path = $this->dao->where('id='.$id)->getField('path');
 		@unlink($path);
 		self::_delete();
-		
 	}
 }
 ?>

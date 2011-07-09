@@ -8,120 +8,195 @@ class ShareAction extends BaseAction{
 			Session::set('top', 'Experience');
 		}
 		$this->dao = D('Share');
+		$this->config = C('_share_');
+		$this->assign('entry_field', $this->config['entry_field']);
 		parent::_initialize();
 		$this->assign('MODULE_TITLE', 'Experience Share');
 	}
 
 	Public function all() {
-		$this->assign('MODULE_TITLE', 'All Share');
+		$this->assign('MODULE_TITLE', 'All Experience');
 		$this->index('all');
 	}
 
 	public function index($type='') {
+		$this->assign('ACTION_TITLE', 'Experience List');
 		Session::set('sub', MODULE_NAME.(''==$type?'':'/'.$type));
 		$where = array();
-		if (!empty($_REQUEST['title'])) {
-			$title = trim($_REQUEST['title']);
-			if (strlen($title)>0) {
-				$where['title'] = array('like', '%'.$title.'%');
+		if (!empty($_REQUEST['keyword']) && ''!=trim($_REQUEST['keyword'])) {
+			$keyword = trim($_REQUEST['keyword']);
+			$tmp = explode(' ', $keyword);
+			
+			foreach ($tmp as $key) {
+				$title_arr[] = "title like '%".$key."%'";
+				$keywords_arr[] = "keywords like '%".$key."%'";
+			}
+			$where['_string'] = implode(' and ', $title_arr).' or '.implode(' and ', $keywords_arr);
+		}
+		if (''==$type) {
+			//my share
+			$where['_string'] = "staff_id=".$_SESSION[C('USER_AUTH_KEY')];
+		}
+		else {
+			if (!empty($_SESSION[C('ADMIN_AUTH_NAME')])) {
+				$where['status'] = 1;
+			}
+			if (!empty($_SESSION[MODULE_NAME.'_'.ACTION_NAME.'_category_id'])) {
+				$category_id = $_SESSION[MODULE_NAME.'_'.ACTION_NAME.'_category_id'];
+			}
+			if (isset($_REQUEST['category_id'])) {
+				$category_id = intval($_REQUEST['category_id']);
+			}
+			$_SESSION[MODULE_NAME.'_'.ACTION_NAME.'_category_id'] = $category_id;
+			$this->assign('category_opts', self::genOptions(M('Category')->where(array('type'=>'ShareCategory'))->select(), $category_id));
+			if (!empty($category_id)) {
+				$where['category_id'] = $category_id;
+			}
+
+			if (!empty($_SESSION[MODULE_NAME.'_'.ACTION_NAME.'_project_id'])) {
+				$project_id = $_SESSION[MODULE_NAME.'_'.ACTION_NAME.'_project_id'];
+			}
+			if (isset($_REQUEST['project_id'])) {
+				$project_id = intval($_REQUEST['project_id']);
+			}
+			$_SESSION[MODULE_NAME.'_'.ACTION_NAME.'_project_id'] = $project_id;
+			$this->assign('project_opts', self::genOptions(M('Category')->where(array('type'=>'ShareProject'))->select(), $project_id));
+			if (!empty($project_id)) {
+				$where['project_id'] = $project_id;
+			}
+
+			if (!empty($_SESSION[MODULE_NAME.'_'.ACTION_NAME.'_staff_id'])) {
+				$staff_id = $_SESSION[MODULE_NAME.'_'.ACTION_NAME.'_staff_id'];
+			}
+			if (isset($_REQUEST['staff_id'])) {
+				$staff_id = intval($_REQUEST['staff_id']);
+			}
+			$_SESSION[MODULE_NAME.'_'.ACTION_NAME.'_staff_id'] = $staff_id;
+			$staff_arr = $this->dao->join("Inner Join erp_staff on erp_staff.id=erp_share.staff_id")->distinct(true)->field("erp_staff.id as id, erp_staff.realname as realname")->order("realname")->select();
+			$this->assign('staff_opts', self::genOptions($staff_arr, $staff_id, 'realname'));
+			if (!empty($staff_id)) {
+				$where['staff_id'] = $staff_id;
+			}
+
+			if (!empty($_SESSION[MODULE_NAME.'_'.ACTION_NAME.'_dept_id'])) {
+				$dept_id = $_SESSION[MODULE_NAME.'_'.ACTION_NAME.'_dept_id'];
+			}
+			if (isset($_REQUEST['dept_id'])) {
+				$dept_id = intval($_REQUEST['dept_id']);
+			}
+			$_SESSION[MODULE_NAME.'_'.ACTION_NAME.'_dept_id'] = $dept_id;
+			$dept_arr = $this->dao->join("Inner Join erp_department on erp_department.id=erp_share.dept_id")->distinct(true)->field("erp_department.id as id, erp_department.name as name")->order("name")->select();
+			$this->assign('dept_opts', self::genOptions($dept_arr, $dept_id));
+			if (!empty($dept_id)) {
+				$where['dept_id'] = $dept_id;
 			}
 		}
 
 		import("@.Paginator");
 		$limit = 20;
+		if (!empty($_SESSION[MODULE_NAME.'_'.ACTION_NAME.'_limit'])) {
+			$limit = $_SESSION[MODULE_NAME.'_'.ACTION_NAME.'_limit'];
+		}
+		if (!empty($_REQUEST['limit'])) {
+			$limit = $_REQUEST['limit'];
+		}
+		$_SESSION[MODULE_NAME.'_'.ACTION_NAME.'_limit'] = $limit;
 
 		$total = $this->dao->where($where)->count();
 		$p = new Paginator($total,$limit);
-		
 
-		$this->assign('request', $_REQUEST);
+		$rs = $this->dao->relation(true)->where($where)->order('status desc, id desc')->limit($p->offset.','.$p->limit)->select();
+		empty($rs) && ($rs = array());
+		$result = array();
+		$project_arr = array();
+		foreach ($rs as $i=>$item) {
+			if (empty($result[$item['project_id']])) {
+				$result[$item['project_id']] = array();
+				$project_arr[$item['project_id']] = $item['project']['name'];
+			}
+			$item['create_date'] = $this->kindlyTime($item['create_time']);
+			$item['comment_count'] = M('Comment')->where(array('model_name'=>MODULE_NAME, 'model_id'=>$item['id'], 'status'=>1))->count();
+			if ($item['comment_count']>0) {
+				$tmp = M('Comment')->where(array('model_name'=>MODULE_NAME, 'model_id'=>$item['id'], 'status'=>1))->order('id desc')->find();
+				$item['comment_staff'] = M('Staff')->where("id=".$tmp['staff_id'])->getField('realname');
+				$item['comment_date'] = $this->kindlyTime($tmp['create_time']);
+			}
+			$result[$item['project_id']][] = $item;
+		}
+		array_multisort($project_arr, SORT_ASC, SORT_REGULAR, $result);
 		$this->assign('result', $result);
+		$this->assign('project_arr', $project_arr);
 
 		$this->assign('page', $p->showMultiNavi());
 
+		$this->assign('request', $_REQUEST);
 		$this->assign('type', $type);
 		$this->assign('content', 'index');
 		$this->display('Layout:ERP_layout');
 	}
+	private function kindlyTime($time) {
+		$date = substr($time, 0, 10);
+		switch ($date) {
+			case date('Y-m-d') :
+				return 'ä»Šå¤© '.substr($time, 11, 5);
+				break;
+			
+			case date('Y-m-d', time()-86400) :
+				return 'æ˜¨å¤© '.substr($time, 11, 5);
+				break;
+
+			default :
+				return $date;
+		}
+	}
 	
-	public function detail() {
-		$this->assign('ACTION_TITLE', 'Task detail');
+	public function view() {
 		$id = intval($_REQUEST['id']);
 		$info = $this->dao->relation(true)->find($id);
-		$owner_list = array();
-		foreach($info['owner'] as $key=>$val) {
-			$info['owner'][$key]['realname'] = M('Staff')->where('id='.$val['staff_id'])->getField('realname');
-		}
-		foreach($info['participant'] as $key=>$val) {
-			$participants[] = M('Staff')->where('id='.$val['staff_id'])->getField('realname');
-		}
-		foreach ($info['comment'] as $key=>$val) {
-			$info['comment'][$key]['realname'] = M('Staff')->where('id='.$val['staff_id'])->getField('realname');
-		}
-		if ($info['press_interval']%86400 == 0) {
-			$info['press_unit'] = 'Day';
-			$info['press_time'] = $info['press_interval']/86400;
-			if ($info['press_time']>1) {
-				$info['press_unit'] = 'Days';
+		$this->dao->setInc('hit', "id=".$id);
+		$this->assign('ACTION_TITLE', $info['title']);
+		$entry = M('ShareEntry')->where("share_id=".$id)->getField('field,value');
+		$info['entry'] = array();
+		foreach ($this->config['entry_field'] as $field=>$arr) {
+			if (!empty($entry[$field]) && ''!=trim($entry[$field])) {
+				$info['entry'][$field] = $entry[$field];
 			}
 		}
-		elseif ($info['press_interval']%3600 == 0) {
-			$info['press_unit'] = 'Hour';
-			$info['press_time'] = $info['press_interval']/3600;
-			if ($info['press_time']>1) {
-				$info['press_unit'] = 'Hours';
-			}
-		}
-		elseif ($info['press_interval']%60 == 0) {
-			$info['press_unit'] = 'Minute';
-			$info['press_time'] = $info['press_interval']/60;
-			if ($info['press_time']>1) {
-				$info['press_unit'] = 'Minutes';
-			}
-		}
+		$info['comment'] = D('Comment')->relation(true)->where(array('model_name'=>MODULE_NAME, 'model_id'=>$id, 'status'=>1))->select();
+		$info['attachment'] = M('Attachment')->where(array('model_name'=>MODULE_NAME, 'model_id'=>$id, 'status'=>1))->select();
+
 		$this->assign('info', $info);
-		$this->assign('participants', implode(', ', $participants));
 		$this->assign('content', ACTION_NAME);
-		$this->display('Layout:content');
+		$this->display('Layout:ERP_layout');
 	}
 	public function form() {
-		$this->assign('ACTION_TITLE', 'Post My Experience');
+		$this->assign('ACTION_TITLE', 'Share my Experience');
 		$id = empty($_REQUEST['id']) ? 0 : intval($_REQUEST['id']);
 		if ($id>0) {
-			$info = $this->dao->relation(true)->find($id);
-			$this->assign('ACTION_TITLE', 'Edit task');
-			$info['category_opts'] = self::genOptions(M('Category')->where(array('type'=>'Task'))->select(), $info['category_id'], 'name');
-			if ($info['press_interval']%86400 == 0) {
-				$info['press_unit'] = 'day';
-				$info['press_time'] = $info['press_interval']/86400;
+			$info = $this->dao->find($id);
+			$this->assign('ACTION_TITLE', 'Edit my Experience');
+			$info['project_opts'] = self::genOptions(M('Category')->where(array('type'=>'ShareProject'))->select(), $info['project_id'], 'name');
+			$info['category_opts'] = self::genOptions(M('Category')->where(array('type'=>'ShareCategory'))->select(), $info['category_id'], 'name');
+			$info['entry'] = $this->config['entry_field'];
+			$entry = M('ShareEntry')->where("share_id=".$info['id'])->getField('field,value');
+			foreach ($info['entry'] as $field=>$arr) {
+				if (!empty($entry[$field])) {
+					$info['entry'][$field]['value'] = $entry[$field];
+				}
 			}
-			elseif ($info['press_interval']%3600 == 0) {
-				$info['press_unit'] = 'hour';
-				$info['press_time'] = $info['press_interval']/3600;
-			}
-			elseif ($info['press_interval']%60 == 0) {
-				$info['press_unit'] = 'minute';
-				$info['press_time'] = $info['press_interval']/60;
-			}
-
-			$info['owners_id'] = array();
-			foreach($info['owner'] as $i=>$owner) {
-				$info['owner'][$i]['realname'] = M('Staff')->where('id='.$owner['staff_id'])->getField('realname');
-				$info['owners_id'][] = $owner['staff_id'];
-			}
-			foreach($info['participant'] as $i=>$participant) {
-				$info['participant'][$i]['realname'] = M('Staff')->where('id='.$participant['staff_id'])->getField('realname');
-				$info['participants_id'][] = $participant['staff_id'];
-			}
+			$info['attachment'] = M('Attachment')->where(array('model_name'=>MODULE_NAME, 'model_id'=>$id, 'status'=>1))->select();
 		}
 		else {
 			$info = array(
 				'id' => 0,
 				'title' => '',
+				'keywords' => '',
 				'project_opts' => self::genOptions(M('Category')->where(array('type'=>'ShareProject'))->select()),
 				'category_opts' => self::genOptions(M('Category')->where(array('type'=>'ShareCategory'))->select()),
-				'notification' => '11'
+				'notification' => '11',
+				'entry' => $this->config['entry_field']
 				);
+			
 		}
 		$this->assign('info', $info);
 		$this->assign('MAX_FILE_SIZE', self::MAX_FILE_SIZE());
@@ -135,59 +210,50 @@ class ShareAction extends BaseAction{
 		if (empty($_POST['submit'])) {
 			return;
 		}
+		print_r($_REQUEST);
+	//	exit;
 		$id = empty($_REQUEST['id']) ? 0 : intval($_REQUEST['id']);
-		$title = trim($_REQUEST['title']);
-		empty($title) && self::_error('Input title first!');
+		empty($_REQUEST['project_id']) && self::_error('Project must be specified!');
 		empty($_REQUEST['category_id']) && self::_error('Category must be specified!');
-		//empty($_REQUEST['owner']) && self::_error('No owner specified!');
+		$title = trim($_REQUEST['title']);
+		empty($title) && self::_error('Please type your title first!');
 		if ($id>0) {
 			$this->dao->find($id);
 		}
 		else {
-			$this->dao->creator_id = $_SESSION[C('USER_AUTH_KEY')];
+			$this->dao->staff_id = $_SESSION[C('USER_AUTH_KEY')];
+			$this->dao->dept_id = $_SESSION[C('STAFF_AUTH_NAME')]['dept_id'];
 			$this->dao->create_time = date("Y-m-d H:i:s");
-			$this->dao->status = 0;
+			$this->dao->status = 1;
 		}
+		$this->dao->project_id = intval($_REQUEST['project_id']);
+		$this->dao->category_id = intval($_REQUEST['category_id']);
+		$this->dao->notification = strval((empty($_REQUEST['chk0'])?'0':'1').(empty($_REQUEST['chk1'])?'0':'1'));
 		$this->dao->title = $title;
-		$this->dao->project = trim($_REQUEST['project']);
-		$this->dao->category_id = $_REQUEST['category_id'];
-		$this->dao->descr = $_REQUEST['description'];
-		$this->dao->due_date = $_REQUEST['due_date'];
-		$time = intval($_REQUEST['press_time']);
-		switch ($_REQUEST['press_unit']) {
-			case 'day':
-				$interval = $time * 86400;
-				break;
-			case 'hour':
-				$interval = $time * 3600;
-				break;
-			case 'minute':
-				$interval = $time * 60;
-				break;
-			default:
-				//nothing
-		}
-		$this->dao->press_interval = $interval;
-		$this->dao->notification = strval((empty($_REQUEST['chk0'])?'0':'1').(empty($_REQUEST['chk1'])?'0':'1').(empty($_REQUEST['chk2'])?'0':'1').(empty($_REQUEST['chk3'])?'0':'1'));
+		$this->dao->keywords = trim($_REQUEST['keywords']);
+		$this->dao->modify_time = date("Y-m-d H:i:s");
 		if ($id>0) {
 			if(false !== $this->dao->save()){
-				//process multi-owner
-				foreach ($_REQUEST['owner'] as $staff_id) {
-					$data = array(
-						'task_id'=>$id,
-						'staff_id'=>$staff_id,
-						'status' => 0
-						);
-					M('TaskOwner')->add($data);
-				}
-				//process multi-participant
-				foreach ($_REQUEST['participant'] as $staff_id) {
-					$data = array(
-						'task_id'=>$id,
-						'staff_id'=>$staff_id,
-						'status' => 0
-						);
-					M('TaskParticipant')->add($data);
+				$entry_dao = M('ShareEntry');
+				//process entry
+				foreach ($_REQUEST['entry'] as $key=>$val) {
+					$val = trim($val);
+					if ('' != $val) {
+						if ($entry_dao->where("share_id=".$id." and field='".$key."'")->find()) {
+							//update entry
+							$entry_id = $entry_dao->id;
+							$entry_dao->where("id=".$entry_id)->setField('value', $val);
+						}
+						else {
+							//insert entry
+							$data = array(
+								'share_id' => $id,
+								'field' => $key,
+								'value' => $val
+							);
+							$entry_dao->add($data);
+						}
+					}
 				}
 				//process multi-file
 				foreach ($_FILES['file']['size'] as $i=>$size) {
@@ -196,7 +262,7 @@ class ShareAction extends BaseAction{
 							'name' => $_FILES['file']['name'][$i],
 							'type' => $_FILES['file']['type'][$i],
 							'size' => $size,
-							'path' => 'Attach/Task/'.uniqid().'_'.$_FILES['file']['name'][$i],
+							'path' => 'Attach/'.MODULE_NAME.'/'.uniqid().'_'.$_FILES['file']['name'][$i],
 							'model_name' => MODULE_NAME,
 							'model_id' => $id,
 							'staff_id' => $_SESSION[C('USER_AUTH_KEY')],
@@ -213,34 +279,27 @@ class ShareAction extends BaseAction{
 						}
 					}
 				}
-				if (!empty($_REQUEST['owner']) && count($_REQUEST['owner'])>0) {
-					self::mail_task('owner_add', $id, $_REQUEST['owner']);
-				}
-				self::_success('Task information updated!',__URL__);
+				self::_success('Experience updated!',__URL__);
 			}
 			else{
 				self::_error('Update fail!'.$this->dao->getLastSql());
 			}
 		}
 		else{
-			if($id=$this->dao->add()) {
-				//process multi-owner
-				foreach ($_REQUEST['owner'] as $staff_id) {
-					$data = array(
-						'task_id'=>$id,
-						'staff_id'=>$staff_id,
-						'status' => 0
+			if($id = $this->dao->add()) {
+				$entry_dao = M('ShareEntry');
+				//process entry
+				foreach ($_REQUEST['entry'] as $key=>$val) {
+					$val = trim($val);
+					if ('' != $val) {
+						//insert entry
+						$data = array(
+							'share_id' => $id,
+							'field' => $key,
+							'value' => $val
 						);
-					M('TaskOwner')->add($data);
-				}
-				//process multi-participant
-				foreach ($_REQUEST['participant'] as $staff_id) {
-					$data = array(
-						'task_id'=>$id,
-						'staff_id'=>$staff_id,
-						'status' => 0
-						);
-					M('TaskParticipant')->add($data);
+						$entry_dao->add($data);
+					}
 				}
 				//process multi-file
 				foreach ($_FILES['file']['size'] as $i=>$size) {
@@ -249,7 +308,7 @@ class ShareAction extends BaseAction{
 							'name' => $_FILES['file']['name'][$i],
 							'type' => $_FILES['file']['type'][$i],
 							'size' => $size,
-							'path' => 'Attach/Task/'.uniqid().'_'.$_FILES['file']['name'][$i],
+							'path' => 'Attach/'.MODULE_NAME.'/'.uniqid().'_'.$_FILES['file']['name'][$i],
 							'model_name' => MODULE_NAME,
 							'model_id' => $id,
 							'staff_id' => $_SESSION[C('USER_AUTH_KEY')],
@@ -266,11 +325,10 @@ class ShareAction extends BaseAction{
 						}
 					}
 				}
-				self::mail_task('task_add', $id);
-				self::_success('Create task success!',__URL__);
+				self::_success('Experience share success!',__URL__);
 			}
-			else{
-				self::_error('Create task fail!'.(C('APP_DEBUG')?$this->dao->getLastSql():''));
+			else {
+				self::_error('Experience share fail!'.(C('APP_DEBUG')?$this->dao->getLastSql():''));
 			}
 		}
 	}
@@ -283,16 +341,16 @@ class ShareAction extends BaseAction{
 		}
 		$dao = M('Comment');
 		$id = empty($_REQUEST['id']) ? 0 : intval($_REQUEST['id']);
-		empty($_REQUEST['task_id']) && self::_error('No task id specified!');
-		$task_id = intval($_REQUEST['task_id']);
+		empty($_REQUEST['share_id']) && self::_error('No experience id specified!');
+		$share_id = intval($_REQUEST['share_id']);
 		$content = trim($_REQUEST['content']);
 		!$content && self::_error('Comment can\'t be empty!');
 		if ($id>0) {
 			$dao->find($id);
 		}
 		else {
-			$dao->model_name = 'Task';
-			$dao->model_id = $task_id;
+			$dao->model_name = MODULE_NAME;
+			$dao->model_id = $share_id;
 			$dao->staff_id = $_SESSION[C('USER_AUTH_KEY')];
 			$dao->create_time = date('Y-m-d H:i:s');
 			$dao->status = 1;
@@ -300,13 +358,7 @@ class ShareAction extends BaseAction{
 		$dao->content = $content;
 		if ($id>0) {
 			if(false !== $dao->save()){
-				$html  = '<script language="JavaScript" type="text/javascript">';
-				$html .= 'parent.myAlert("Update comment success!");';
-				$html .= 'parent.myOK(500);';
-				$html .= 'parent.show_comment('.$id.', "'.str_replace(array("\r\n", "\n"), '<br />', $content).'");';
-				$html .= '</script>';
-				self::mail_task('comment_modify', $task_id, $_SESSION[C('USER_AUTH_KEY')]);
-				die($html);
+				self::_success('Update comment success!');
 			}
 			else{
 				self::_error('Update comment fail!'.(C('APP_DEBUG')?$dao->getLastSql():''));
@@ -314,13 +366,7 @@ class ShareAction extends BaseAction{
 		}
 		else {
 			if($id=$dao->add()) {
-				$html  = '<script language="JavaScript" type="text/javascript">';
-				$html .= 'parent.myAlert("Post comment success!");';
-				$html .= 'parent.myOK(500);';
-				$html .= 'parent.show_comment('.$id.', "'.str_replace(array("\r\n", "\n"), '<br />', $content).'");';
-				$html .= '</script>';
-				self::mail_task('comment_add', $task_id, $_SESSION[C('USER_AUTH_KEY')]);
-				die($html);
+				self::_success("Post comment success!");
 			}
 			else{
 				self::_error('Post comment fail!'.(C('APP_DEBUG')?$dao->getLastSql():''));
@@ -341,14 +387,14 @@ class ShareAction extends BaseAction{
 			if ($id>0) {
 				$rs = $dao->where(array('type'=>$type,'name'=>$name,'id'=>array('neq',$id)))->find();
 				if($rs && sizeof($rs)>0){
-					self::_error(ucfirst(ACTION_NAME).' Name: "'.$name.'" already exists!');
+					self::_error(ucfirst(ACTION_NAME).' Name: \''.$name.'\' already exists!');
 				}
 				$dao->find($id);
 			}
 			else {
 				$rs = $dao->where(array('type'=>$type,'name'=>$name))->find();
 				if($rs && sizeof($rs)>0){
-					self::_error(ucfirst(ACTION_NAME).' Name: "'.$name.'" already exists!');
+					self::_error(ucfirst(ACTION_NAME).' Name: \''.$name.'\' already exists!');
 				}
 			}
 			$dao->type = $type;
@@ -388,7 +434,7 @@ class ShareAction extends BaseAction{
 		elseif ('project' == ACTION_NAME) {
 			$this->assign('ACTION_TITLE', 'Experience Project');
 		}
-		$result = $dao->where(array('type'=>$type))->order('id')->select();
+		$result = $dao->where(array('type'=>$type))->order('name')->select();
 
 		$this->assign('result', $result);
 		$this->assign('content', 'category');
@@ -427,541 +473,45 @@ class ShareAction extends BaseAction{
 	}
 	public function delete() {
 		$id = $_REQUEST['id'];
-		M('TaskOwner')->where('task_id='.$id)->delete();
-		$rs = (array)M('Attachment')->where(array('model_name'=>'Task', 'model_id'=>$id))->select();
+		M('ShareEntry')->where('share_id='.$id)->delete();
+		
+		//delete comment
+		M('Comment')->where(array('model_name'=>MODULE_NAME, 'model_id'=>$id))->delete();
+
+		//delete attachment
+		$rs = (array)M('Attachment')->where(array('model_name'=>MODULE_NAME, 'model_id'=>$id))->select();
 		foreach ($rs as $row) {
 			@unlink($row['path']);
 			M('Attachment')->where('id='.$row['id'])->delete();
 		}
 		self::_delete();
 	}
-	public function delete_owner() {
-		$task_id = $_REQUEST['id'];
-		$staff_id = $_REQUEST['staff_id'];
-		$dao = M('TaskOwner');
-		if (false !== $dao->where(array('task_id'=>$task_id, 'staff_id'=>$staff_id))->delete()) {
-			self::mail_task('owner_remove', $task_id, $staff_id);
-			$html  = '<script language="JavaScript" type="text/javascript">';
-			$html .= 'parent.myAlert("Delete success!");';
-			$html .= 'parent.myOK(500);';
-			$html .= 'parent.remove_owner('.$staff_id.');';
-			$html .= '</script>';
-			die($html);
-		}
-		else {
-			self::_error('Delete fail!'.(C('APP_DEBUG')?$dao->getLastSql():''));
-		}
-	}
-	public function delete_participant() {
-		$task_id = $_REQUEST['id'];
-		$staff_id = $_REQUEST['staff_id'];
-		$dao = M('TaskParticipant');
-		if (false !== $dao->where(array('task_id'=>$task_id, 'staff_id'=>$staff_id))->delete()) {
-		//	self::mail_task('owner_remove', $task_id, $staff_id);
-			$html  = '<script language="JavaScript" type="text/javascript">';
-			$html .= 'parent.myAlert("Delete success!");';
-			$html .= 'parent.myOK(500);';
-			$html .= 'parent.remove_participant('.$staff_id.');';
-			$html .= '</script>';
-			die($html);
-		}
-		else {
-			self::_error('Delete fail!'.(C('APP_DEBUG')?$dao->getLastSql():''));
-		}
-	}
 	public function delete_comment() {
 		$id = $_REQUEST['id'];
 		$dao = M('Comment');
 		if($dao->find($id) && $dao->delete()) {
-			$html  = '<script language="JavaScript" type="text/javascript">';
-			$html .= 'parent.myAlert("Delete comment success!");';
-			$html .= 'parent.myOK(500);';
-			$html .= 'parent.remove_comment('.$id.');';
-			$html .= '</script>';
-			self::mail_task('comment_delete', $dao->model_id, $dao->staff_id);
-			die($html);
+			self::_success('Delete comment success!');
 		}
 		else {
 			self::_error('Delete comment fail!'.(C('APP_DEBUG')?$dao->getLastSql():''));
 		}
 	}
-	public function mail_task($type='', $task_id=0, $owner_id) {
-		if (!defined('APP_ROOT')) {
-			define('APP_ROOT', 'http://'.$_SERVER['SERVER_ADDR'].__APP__);
-		}
-		$this->status_arr = array(
-			'0' => 'Open',
-			'1' => 'Closed',
-			'-1' => 'Pending'
-		);
-		$smtp_config = C('_smtp_');
-		include_once (LIB_PATH.'class.phpmailer.php');
-		$mail = new PHPMailer();
-		$mail->IsSMTP();
-	//	$mail->SMTPDebug  = 1;  // 2 = messages only
-		$mail->Host       = $smtp_config['host'];
-		$mail->Port       = $smtp_config['port'];
-		$mail->SetFrom($smtp_config['from_mail'], 'ERP Task');
-
-		/*type²ÎÊý£º
-			task_add
-			task_status
-			owner_add
-			owner_remove
-			owner_status
-			remind
-			press
-		*/
-		$info = $this->dao->relation(true)->find($task_id);
-		$creator = M('Staff')->find($info['creator_id']);
-		$all_owner_name = array();
-		foreach ($info['owner'] as $i=>$owner) {
-			$tmp = M('Staff')->find($owner['staff_id']);
-			$info['owner'][$i]['email'] = $tmp['email'];
-			$info['owner'][$i]['realname'] = $tmp['realname'];
-			$info['owner'][$i]['leader_id'] = $tmp['leader_id'];
-			$all_owner_name[] = $tmp['realname'];
-		}
-		$all_participant_name = array();
-		foreach ($info['participant'] as $i=>$owner) {
-			$tmp = M('Staff')->find($owner['staff_id']);
-			$info['participant'][$i]['email'] = $tmp['email'];
-			$info['participant'][$i]['realname'] = $tmp['realname'];
-			$all_participant_name[] = $tmp['realname'];
-		}
-		foreach ($info['comment'] as $key=>$val) {
-			$info['comment'][$key]['realname'] = M('Staff')->where('id='.$val['staff_id'])->getField('realname');
-		}
-		$body = "<style>\ntd.Open{color: #339900;font-weight:bold;} \ntd.Pending{color: #0000FF;font-weight:bold;} \ntd.Closed{color: #FF0000;font-weight:bold;} \ndt{padding:3px;border-left:3px solid #CC0000;background-color:#BEBEBE;} \ndd{padding:3px;margin:0;word-wrap:break-word;word-break:break-all;} \ndt span{float:right;}\n</style>\n";
-		$body .= '<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /></head><body>'."\n";
-		switch ($type) {
-			case 'task_add':
-				if ($info['press_interval']%86400 == 0) {
-					$info['press_unit'] = ' Day';
-					$info['press_time'] = $info['press_interval']/86400;
-					if ($info['press_time']>1) {
-						$info['press_unit'] = ' Days';
-					}
-				}
-				elseif ($info['press_interval']%3600 == 0) {
-					$info['press_unit'] = ' Hour';
-					$info['press_time'] = $info['press_interval']/3600;
-					if ($info['press_time']>1) {
-						$info['press_unit'] = ' Hours';
-					}
-				}
-				elseif ($info['press_interval']%60 == 0) {
-					$info['press_unit'] = ' Minute';
-					$info['press_time'] = $info['press_interval']/60;
-					if ($info['press_time']>1) {
-						$info['press_unit'] = ' Minutes';
-					}
-				}
-				$subject = '[Task] Create: '.$info['title'];
-				foreach ($info['owner'] as $owner) {
-					$mail->AddAddress($owner['email'], $owner['realname']);
-				}
-
-				$body .= "Hi all, ".$creator['realname']." has created a new task: ".$info['title']."<br />\n";
-				$body .= '<table border="1" cellspacing="1" cellpadding="7" style="border-collapse:collapse;border:1px solid #999999;">'."\n";
-				$body .= '<tr bgcolor="#CCCCCC">'."\n".'<td colspan="2">Task Summary (T'.sprintf('%06s', $info['id']).")</td>\n</tr>\n";
-				$body .= "<tr>\n".'<td width="120">Task Name: </td><td width="500">'.$info['title']."</td>\n</tr>\n";
-				$body .= "<tr>\n<td>Category: </td><td>".$info['category']['name']."</td>\n</tr>\n";
-				$body .= "<tr>\n<td>Project: </td><td>".$info['project']."</td>\n</tr>\n";
-				$body .= "<tr>\n<td>Create Time: </td><td>".$info['create_time']."</td>\n</tr>\n";
-				$body .= "<tr>\n<td>Creator: </td><td>".$info['creator']['realname']."</td>\n</tr>\n";
-				$body .= "<tr>\n<td>Due Date: </td><td>".$info['due_date'].'</td>'."\n</tr>\n";
-				$body .= "<tr>\n<td>Press Interval: </td><td>".$info['press_time'].$info['press_unit']."</td>\n</tr>\n";
-				$body .= "<tr>\n<td>Owners: </td><td>".implode(', ', $all_owner_name)."</td>\n</tr>\n";
-				$body .= "<tr>\n<td>Participants: </td><td>".implode(', ', $all_participant_name)."</td>\n</tr>\n";
-				$body .= "<tr>\n".'<td valign="top">Attached Files: </td><td>';
-				foreach ($info['attachment'] as $file) {
-					$body .= '<a href="'.APP_ROOT.'/../'.$file['path'].'" target="_blank" title="View attachment in new window">'.$file['name']."</a><br />\n";
-				}
-				$body .= "</td>\n</tr>\n";
-				break;
-
-			case 'task_status':
-				$subject = '[Task] Change Status of Task: '.$info['title'].' to '.$this->status_arr[$info['status']];
-				foreach ($info['owner'] as $owner) {
-					$mail->AddAddress($owner['email'], $owner['realname']);
-				}
-
-				$body .= "Hi all, ".$_SESSION[C('STAFF_AUTH_NAME')]['realname']." has changed the task status.<br />\n";
-				$body .= '<table border="1" cellspacing="1" cellpadding="7" style="border-collapse:collapse;border:1px solid #999999;">'."\n";
-				$body .= '<tr bgcolor="#CCCCCC">'."\n".'<td colspan="2">Task Summary (T'.sprintf('%06s', $info['id']).")</td>\n</tr>\n";
-				$body .= "<tr>\n".'<td width="120">Task Name: </td><td width="500">'.$info['title']."</td>\n</tr>\n";
-				$body .= "<tr>\n<td>Category: </td><td>".$info['category']['name']."</td>\n</tr>\n";
-				$body .= "<tr>\n<td>Project: </td><td>".$info['project']."</td>\n</tr>\n";
-				$body .= "<tr>\n<td>Create Time: </td><td>".$info['create_time']."</td>\n</tr>\n";
-				$body .= "<tr>\n<td>Creator: </td><td>".$info['creator']['realname']."</td>\n</tr>\n";
-				$body .= "<tr>\n<td>Update Time: </td><td>".$info['update_time']."</td>\n</tr>\n";
-				$body .= "<tr>\n<td>Current Status: </td><td class='".$this->status_arr[$info['status']]."'>".$this->status_arr[$info['status']]."</td>\n</tr>\n";
-				$body .= "<tr>\n<td>Owners: </td><td>";
-				$body .= "\n\t<table>\n";
-				foreach ($info['owner'] as $owner) {
-					$body .= "<tr>\n".'<td width="100" nowrap="nowrap">'.$owner['realname'].'</td><td width="60" class="'.$this->status_arr[$owner['status']].'">'.$this->status_arr[$owner['status']]."</td>\n</tr>\n";
-				}
-				$body .= "</table>\n";
-				$body .= "</td>\n</tr>\n";
-				$body .= "<tr>\n<td>Participants: </td><td>".implode(', ', $all_participant_name)."</td>\n</tr>\n";
-				$body .= "<tr>\n<td>Due Date: </td><td>".$info['due_date']."</td>\n</tr>\n";
-				break;
-
-			case 'owner_add':
-				$owner_arr = M('Staff')->where(array('id' => array('in', $owner_id)))->getField('realname,email');
-				$subject = '[Task] Add Owner to Task: '.$info['title'];
-				foreach ($owner_arr as $realname=>$email) {
-					$mail->AddAddress($email, $realname);
-				}
-
-				$body .= "Hi ".implode('/', array_keys($owner_arr)).", you have been added to the task.<br />";
-				$body .= '<table border="1" cellspacing="1" cellpadding="7" style="border-collapse:collapse;border:1px solid #999999;">'."\n";
-				$body .= '<tr bgcolor="#CCCCCC">'."\n".'<td colspan="2">Task Summary (T'.sprintf('%06s', $info['id']).")</td>\n</tr>\n";
-				$body .= "<tr>\n".'<td width="120">Task Name: </td><td width="500">'.$info['title']."</td>\n</tr>\n";
-				$body .= "<tr>\n<td>Category: </td><td>".$info['category']['name']."</td>\n</tr>\n";
-				$body .= "<tr>\n<td>Project: </td><td>".$info['project']."</td>\n</tr>\n";
-				$body .= "<tr>\n<td>Create Time: </td><td>".$info['create_time']."</td>\n</tr>\n";
-				$body .= "<tr>\n<td>Creator: </td><td>".$info['creator']['realname']."</td>\n</tr>\n";
-				$body .= "<tr>\n<td>Status: </td><td class='".$this->status_arr[$info['status']]."'>".$this->status_arr[$info['status']]."</td></tr>\n";
-				$body .= "<tr>\n<td>Current Owners: </td><td>";
-				$body .= "\n\t<table>\n";
-				foreach ($info['owner'] as $owner) {
-					$body .= "<tr>\n".'<td width="100" nowrap="nowrap">'.$owner['realname'].'</td><td width="60" class="'.$this->status_arr[$owner['status']].'">'.$this->status_arr[$owner['status']]."</td>\n</tr>\n";
-				}
-				$body .= "</table>\n";
-				$body .= "</td>\n</tr>\n";
-				$body .= "<tr>\n<td>Participants: </td><td>".implode(', ', $all_participant_name)."</td>\n</tr>\n";
-				$body .= "<tr>\n<td>Due Date: </td><td>".$info['due_date']."</td>\n</tr>\n";
-				break;
-
-			case 'owner_remove':
-				$staff = M('Staff')->find($owner_id);
-				$subject = '[Task] Remove '.$staff['realname'].' from : '.$info['title'];
-				$mail->AddAddress($staff['email'], $staff['realname']);
-
-				$body .= 'Hi '.$s_owner['realname'].", you have been removed from the task.<br />\n";
-				$body .= '<table border="1" cellspacing="1" cellpadding="7" style="border-collapse:collapse;border:1px solid #999999;">'."\n";
-				$body .= '<tr bgcolor="#CCCCCC">'."\n".'<td colspan="2">Task Summary (T'.sprintf('%06s', $info['id']).")</td>\n</tr>\n";
-				$body .= "<tr>\n".'<td width="120">Task Name: </td><td width="500">'.$info['title']."</td>\n</tr>\n";
-				$body .= "<tr>\n<td>Category: </td><td>".$info['category']['name']."</td>\n</tr>\n";
-				$body .= "<tr>\n<td>Project: </td><td>".$info['project']."</td>\n</tr>\n";
-				$body .= "<tr>\n<td>Create Time: </td><td>".$info['create_time']."</td>\n</tr>\n";
-				$body .= "<tr>\n<td>Creator: </td><td>".$info['creator']['realname']."</td>\n</tr>\n";
-				$body .= "<tr>\n<td>Status: </td><td class='".$this->status_arr[$info['status']]."'>".$this->status_arr[$info['status']]."</td></tr>\n";
-				$body .= "<tr>\n<td>Current Owners: </td><td>";
-				$body .= "\n\t<table>\n";
-				foreach ($info['owner'] as $owner) {
-					$body .= "<tr>\n".'<td width="100" nowrap="nowrap">'.$owner['realname'].'</td><td width="60" class="'.$this->status_arr[$owner['status']].'">'.$this->status_arr[$owner['status']]."</td>\n</tr>\n";
-				}
-				$body .= "</table>\n";
-				$body .= "</td>\n</tr>\n";
-				$body .= "<tr>\n<td>Participants: </td><td>".implode(', ', $all_participant_name)."</td>\n</tr>\n";
-				$body .= "<tr>\n<td>Due Date: </td><td>".$info['due_date']."</td>\n</tr>\n";
-				break;
-
-			case 'owner_status':
-				$subject = '[Task] Owner Change Status : '.$info['title'];
-				$owner_info = M('TaskOwner')->where("task_id=".$task_id." and staff_id=".$owner_id)->find();
-				$owner = M('Staff')->find($owner_id);
-				$body .= $owner['realname'] .' has changed his status to '.$this->status_arr[$owner_info['status']].'<br />';
-				$mail->AddAddress($creator['email'], $creator['realname']);
-				if ($info['notification'][3] == '1') {
-					foreach ($info['owner'] as $owner) {
-						$mail->AddCC($owner['email'], $owner['realname']);
-					}
-				}
-
-				$body .= '<table border="1" cellspacing="1" cellpadding="7" style="border-collapse:collapse;border:1px solid #999999;">'."\n";
-				$body .= '<tr bgcolor="#CCCCCC">'."\n".'<td colspan="2">Task Summary (T'.sprintf('%06s', $info['id']).")</td>\n</tr>\n";
-				$body .= "<tr>\n".'<td width="120">Task Name: </td><td width="500">'.$info['title']."</td>\n</tr>\n";
-				$body .= "<tr>\n<td>Category: </td><td>".$info['category']['name']."</td>\n</tr>\n";
-				$body .= "<tr>\n<td>Project: </td><td>".$info['project']."</td>\n</tr>\n";
-				$body .= "<tr>\n<td>Create Time: </td><td>".$info['create_time']."</td>\n</tr>\n";
-				$body .= "<tr>\n<td>Creator: </td><td>".$info['creator']['realname']."</td>\n</tr>\n";
-				$body .= "<tr>\n<td>Status: </td><td class='".$this->status_arr[$info['status']]."'>".$this->status_arr[$info['status']]."</td></tr>\n";
-				$body .= "<tr>\n<td>Owners: </td><td>";
-				$body .= "\n\t<table>\n";
-				foreach ($info['owner'] as $owner) {
-					$body .= "<tr>\n".'<td width="100" nowrap="nowrap">'.$owner['realname'].'</td><td width="60" class="'.$this->status_arr[$owner['status']].'">'.$this->status_arr[$owner['status']]."</td>\n</tr>\n";
-				}
-				$body .= "</table>\n";
-				$body .= "</td>\n</tr>\n";
-				$body .= "<tr>\n<td>Participants: </td><td>".implode(', ', $all_participant_name)."</td>\n</tr>\n";
-				$body .= "<tr>\n<td>Due Date: </td><td>".$info['due_date']."</td>\n</tr>\n";
-				break;
-
-			case 'remind':
-				$endTime = strtotime($info['due_date'])+86400;
-				$time = $endTime - time();
-				$subject = '[Task] Remind: '.self::formatSecond($time).' Left for Task: '.$info['title'];
-
-				if (!empty($owner_id)) {
-					$staff = M('Staff')->find($owner_id);
-					$mail->AddAddress($staff['email'], $staff['realname']);
-					$staff_name = $staff['realname'];
-				}
-				else {
-					$staff_name_arr = array();
-					foreach ($info['owner'] as $i=>$owner) {
-						if (0!=$owner['status']) {
-							continue;
-						}
-						$tmp = M('Staff')->find($owner['staff_id']);
-						$mail->AddAddress($tmp['email'], $tmp['realname']);
-						$staff_name_arr[] = $tmp['realname'];
-					}
-					$staff_name = implode('/', $staff_name_arr);
-				}
-
-
-				$body .= 'Hi '.$staff_name .', its '.self::formatSecond($time)."' left for you to close the task.<br />\n";
-				$body .= '<table border="1" cellspacing="1" cellpadding="7" style="border-collapse:collapse;border:1px solid #999999;">'."\n";
-				$body .= '<tr bgcolor="#CCCCCC">'."\n".'<td colspan="2">Task Summary (T'.sprintf('%06s', $info['id']).")</td>\n</tr>\n";
-				$body .= "<tr>\n".'<td width="120">Task Name: </td><td width="500">'.$info['title']."</td>\n</tr>\n";
-				$body .= "<tr>\n<td>Category: </td><td>".$info['category']['name']."</td>\n</tr>\n";
-				$body .= "<tr>\n<td>Project: </td><td>".$info['project']."</td>\n</tr>\n";
-				$body .= "<tr>\n<td>Create Time: </td><td>".$info['create_time']."</td>\n</tr>\n";
-				$body .= "<tr>\n<td>Creator: </td><td>".$info['creator']['realname']."</td>\n</tr>\n";
-				$body .= "<tr>\n<td>Status: </td><td class='".$this->status_arr[$info['status']]."'>".$this->status_arr[$info['status']]."</td></tr>\n";
-				$body .= "<tr>\n<td>Owners: </td><td>";
-				$body .= "\n\t<table>\n";
-				foreach ($info['owner'] as $i=>$owner) {
-					$body .= "<tr>\n".'<td width="100" nowrap="nowrap">'.$owner['realname'].'</td><td width="60" class="'.$this->status_arr[$owner['status']].'">'.$this->status_arr[$owner['status']]."</td>\n</tr>\n";
-					if (0!=$owner['status']) {
-						unset($info['owner'][$i]);
-					}
-				}
-				$body .= "</table>\n";
-				$body .= "</td>\n</tr>\n";
-				$body .= "<tr>\n<td>Participants: </td><td>".implode(', ', $all_participant_name)."</td>\n</tr>\n";
-				$body .= "<tr>\n<td>Due Date: </td><td>".$info['due_date']."</td>\n</tr>\n";
-				break;
-
-			case 'press':
-				$endTime = strtotime($info['due_date'])+86400;
-				$time = time() - $endTime;
-				$subject = '[Task] Exceed Time Limit: '.self::formatSecond($time).' for Task: '.$info['title'];
-
-				if (!empty($owner_id)) {
-					$staff = M('Staff')->find($owner_id);
-					$mail->AddAddress($staff['email'], $staff['realname']);
-				}
-				else {
-					$staff_name_arr = array();
-					foreach ($info['owner'] as $i=>$owner) {
-						if (0!=$owner['status']) {
-							continue;
-						}
-						$tmp = M('Staff')->find($owner['staff_id']);
-						$mail->AddAddress($tmp['email'], $tmp['realname']);
-						$staff_name_arr[] = $tmp['realname'];
-					}
-					$staff_name = implode('/', $staff_name_arr);
-				}
-				$body .= 'Hi '.$staff_name .', its '.self::formatSecond($time)." exceeded the time limit of the task.<br />\n";
-				$body .= '<table border="1" cellspacing="1" cellpadding="7" style="border-collapse:collapse;border:1px solid #999999;">'."\n";
-				$body .= '<tr bgcolor="#CCCCCC">'."\n".'<td colspan="2">Task Summary (T'.sprintf('%06s', $info['id']).")</td>\n</tr>\n";
-				$body .= "<tr>\n".'<td width="120">Task Name: </td><td width="500">'.$info['title']."</td>\n</tr>\n";
-				$body .= "<tr>\n<td>Category: </td><td>".$info['category']['name']."</td>\n</tr>\n";
-				$body .= "<tr>\n<td>Project: </td><td>".$info['project']."</td>\n</tr>\n";
-				$body .= "<tr>\n<td>Create Time: </td><td>".$info['create_time']."</td>\n</tr>\n";
-				$body .= "<tr>\n<td>Creator: </td><td>".$info['creator']['realname']."</td>\n</tr>\n";
-				$body .= "<tr>\n<td>Status: </td><td class='".$this->status_arr[$info['status']]."'>".$this->status_arr[$info['status']]."</td></tr>\n";
-				$body .= "<tr>\n<td>Current Owners: </td><td>";
-				$body .= "\n\t<table>\n";
-				foreach ($info['owner'] as $owner) {
-					$body .= "<tr>\n".'<td width="100" nowrap="nowrap">'.$owner['realname'].'</td><td width="60" class="'.$this->status_arr[$owner['status']].'">'.$this->status_arr[$owner['status']]."</td>\n</tr>\n";
-					if (0!=$owner['status']) {
-						unset($info['owner'][$i]);
-					}
-				}
-				$body .= "</table>\n";
-				$body .= "</td>\n</tr>\n";
-				$body .= "<tr>\n<td>Participants: </td><td>".implode(', ', $all_participant_name)."</td>\n</tr>\n";
-				$body .= "<tr>\n<td>Due Date: </td><td>".$info['due_date']."</td>\n</tr>\n";
-				break;
-			
-			case 'comment_add':
-				$subject = '[Task] Post Comment to Task: '.$info['title'];
-				$staff = M('Staff')->find($owner_id);
-				$header = 'Hi all, '.$staff['realname']." has posted a new comment to the task.<br />\n";
-			case 'comment_modify':
-				empty($subject) && ($subject = '[Task] Modify Comment of Task: '.$info['title']);
-				$staff = M('Staff')->find($owner_id);
-				empty($header) && ($header = 'Hi all, '.$staff['realname']." has modified one of his comments to the task.<br />\n");
-			case 'comment_delete':
-				empty($subject) && ($subject = '[Task] Delete Comment of Task: '.$info['title']);
-				$staff = M('Staff')->find($owner_id);
-				empty($header) && ($header = 'Hi all, '.$staff['realname']." has deleted one of his comments to the task.<br />\n");
-
-				foreach ($info['owner'] as $owner) {
-					$mail->AddAddress($owner['email'], $owner['realname']);
-				}
-				$body .= $header;
-				$body .= '<table border="1" cellspacing="1" cellpadding="7" style="border-collapse:collapse;border:1px solid #999999;">'."\n";
-				$body .= '<tr bgcolor="#CCCCCC">'."\n".'<td colspan="2">Task Summary (T'.sprintf('%06s', $info['id']).")</td>\n</tr>\n";
-				$body .= "<tr>\n".'<td width="120">Task Name: </td><td width="500">'.$info['title']."</td>\n</tr>\n";
-				$body .= "<tr>\n<td>Category: </td><td>".$info['category']['name']."</td>\n</tr>\n";
-				$body .= "<tr>\n<td>Project: </td><td>".$info['project']."</td>\n</tr>\n";
-				$body .= "<tr>\n<td>Create Time: </td><td>".$info['create_time']."</td>\n</tr>\n";
-				$body .= "<tr>\n<td>Creator: </td><td>".$info['creator']['realname']."</td>\n</tr>\n";
-				$body .= "<tr>\n<td>Status: </td><td class='".$this->status_arr[$info['status']]."'>".$this->status_arr[$info['status']]."</td></tr>\n";
-				$body .= "<tr>\n<td>Owners: </td><td>";
-				$body .= "\n\t<table>\n";
-				foreach ($info['owner'] as $owner) {
-					$body .= "<tr>\n".'<td width="100" nowrap="nowrap">'.$owner['realname'].'</td><td width="60" class="'.$this->status_arr[$owner['status']].'">'.$this->status_arr[$owner['status']]."</td>\n</tr>\n";
-				}
-				$body .= "</table>\n";
-				$body .= "</td>\n</tr>\n";
-				$body .= "<tr>\n<td>Participants: </td><td>".implode(', ', $all_participant_name)."</td>\n</tr>\n";
-				$body .= "<tr>\n<td>Due Date: </td><td>".$info['due_date']."</td>\n</tr>\n";
-				break;
-
-			default:
-				//nothing
-		}
-		$body .= "<tr>\n".'<td valign="top">Description: </td><td>'.nl2br($info['descr'])."</td>\n</tr>\n";
-		$body .= "<tr>\n<td colspan='2'>\n";
-		if (empty($info['comment'])) {
-			$body .= '<p class="center">No Comment</p>';
+	public function delete_attachment() {
+		$id = $_REQUEST['id'];
+		$dao = M('Attachment');
+		$path = $dao->where('id='.$id)->getField('path');
+		@unlink($path);
+		if ($dao->where("id=".$id)->delete()) {
+			$html  = '<script language="JavaScript" type="text/javascript">';
+			$html .= 'parent.myAlert("Delete success!");';
+			$html .= 'parent.myOK(500);';
+			$html .= 'parent.remove_attachment('.$id.');';
+			$html .= '</script>';
+			die($html);
 		}
 		else {
-			$body .= "<dl>\n";
-			foreach ($info['comment'] as $item) {
-				$body .= '<dt><span>'.$item['create_time'].'</span>&nbsp;&nbsp;'.$item['realname'].'</dt>'."\n";
-				$body .= '<dd>'.nl2br($item['content']).'</dd>'."\n";
-			}
-			$body .= "</dl>\n";
+			self::_error('Delete attachment fail!'.(C('APP_DEBUG')?$dao->getLastSql():''));
 		}
-		$body .= "</td></tr>\n";
-		$body .= "</table>\n";
-		$body .= '<br /><br />For more information, please visit <a target="_blank" href="'.APP_ROOT.'/Task">ERP Task System</a>';
-		$body .= '<br /><br />Best Regards,<br />'.C('ERP_TITLE');
-
-		if ($info['notification'][0] == '1') {
-			$manager_arr = M('Staff')->where(array('id'=>array('in', C('TASK_ADMIN_ID'))))->select();
-			foreach ($manager_arr as $staff) {
-				$mail->AddCC($staff['email'], $staff['realname']);
-			}
-		}
-		if ($info['notification'][1] == '1') {
-			if ('task_add' == $type) {
-				$leader = M('Staff')->find($creator['leader_id']);
-				$mail->AddCC($leader['email'], $leader['realname']);
-			}
-			if ('owner_remove' == $type || (in_array($type, array('remind', 'press')) && !empty($owner_id))) {
-				$leader = M('Staff')->find($staff['leader_id']);
-				$mail->AddCC($leader['email'], $leader['realname']);
-			}
-			else {
-				foreach ($info['owner'] as $owner) {
-					$leader = M('Staff')->find($owner['leader_id']);
-					$mail->AddCC($leader['email'], $leader['realname']);
-				}
-			}
-		}
-		if ($info['notification'][2] == '1') {
-			foreach ($info['participant'] as $owner) {
-				$mail->AddCC($owner['email'], $owner['realname']);
-			}
-		}
-		$mail->Subject = $subject;
-		$mail->MsgHTML($body);
-		if(!$mail->Send()) {
-			Log::Write('Mail task Error: '.$mail->ErrorInfo);
-			return false;
-		}
-		Log::Write('Mail task Success: '.$type.' '.$task_id, INFO);
-		return true;
-	}
-	private function formatSecond($second) {
-		if ($second>=86400) {
-			$unit = ' Day';
-			$number = round($second/86400);
-		}
-		elseif ($second>=3600) {
-			$unit = ' Hour';
-			$number = round($second/3600);
-		}
-		elseif ($second>=60) {
-			$unit = ' Minute';
-			$number = round($second/60);
-		}
-		else {
-			$unit = ' Second';
-			$number = $second;
-		}
-		if ($number>1) {
-			$unit .= 's';
-		}
-		return $number.$unit;
-	}
-	public function notify(){
-		echo "======== [".date("Y-m-d H:i:s").'] '.MODULE_NAME.'.'.ACTION_NAME." ========\n";
-		$where = array(
-			'status' => 0,
-			'due_date' => array('neq', '0000-00-00')
-			);
-		$rs = $this->dao->relation(true)->where($where)->select();
-		if (empty($rs)) {
-			echo 'No task to notify';
-			return;
-		}
-		echo 'Get '.count($rs)." records.\n";
-		$dao = M('TaskOwner');
-		foreach ($rs as $item) {
-			echo "For Task ID: ".$item['id']."\n";
-			$endTime = strtotime($item['due_date'])+86400;
-			$press_interval = $item['press_interval'];
-			foreach ($item['owner'] as $owner) {
-				echo "\tStaff ID: ".$owner['staff_id']."\t";
-				if ($owner['status'] != 0) {
-					echo $this->status_arr[$owner['status']]." Skip\n";
-					continue;
-				}
-				$lastMailTime = intval($owner['mail_time']);
-				if ($lastMailTime==0) {
-					$lastMailTime = strtotime($item['create_time']);
-				}
-				$tmp = $lastMailTime+round(($endTime-$lastMailTime)*0.382);
-				if (time()>=$tmp && time()<$endTime && time()-$lastMailTime>86400) {//ÌáÐÑ
-					echo "remind\t";
-					if (self::mail_task('remind', $item['id'])) {
-						if(false !== $dao->where('task_id='.$item['id'].' and status=0')->setField('mail_time', time())) {
-							echo "Success!\n";
-							Log::Write('Notify task:'.$item['id'].'/staff:'.$owner['staff_id'].' success', INFO);
-						}
-						else {
-							echo 'SQL error'.(C('APP_DEBUG')?$dao->getLastSql():'');
-						}
-					}
-					else {
-						echo "Fail\n";
-					}
-				}
-				elseif ($press_interval>0 && time()>=$endTime && time()-$lastMailTime+10>=$press_interval && date('G')>=9 && date('G')<18 && date('N')<=5) {//´ß´Ù
-					echo "press\t";
-					if (self::mail_task('press', $item['id'])) {
-						if(false !== $dao->where('task_id='.$item['id'].' and status=0')->setField('mail_time', time())) {
-							echo "Success!\n";
-							Log::Write('Notify task:'.$item['id'].'/staff:'.$owner['staff_id'].' success', INFO);
-						}
-						else {
-							echo 'SQL error'.(C('APP_DEBUG')?$dao->getLastSql():'');
-						}
-					}
-					else {
-						echo "Fail\n";
-					}
-				}
-				else {
-					echo "nothing\n";
-				}
-				break;
-			}
-		}
-		echo "\n";
 	}
 
 }

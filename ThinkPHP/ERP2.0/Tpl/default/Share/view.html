@@ -1,0 +1,138 @@
+<style>
+.content dl dt {
+	padding-bottom: 8px;
+	color: #006600;
+	font-size: 14px;
+	font-weight: 150%;
+}
+.content dl dd {
+	padding-left: 24px;
+	padding-bottom: 24px;
+}
+</style>
+<p class="page_title_text">{$ACTION_TITLE}</p>
+<table class="defaultCSS" width="90%" border="0" align="center" cellpadding="8" cellspacing="1">
+<tr>
+	<td width="80" bgcolor="#BCD1EF" align="right">项目</td>
+	<td bgcolor="#E9E9E9">{$info['project']['name']}</td>
+	<td width="80" bgcolor="#BCD1EF" align="right">作者</td>
+	<td bgcolor="#E9E9E9">{$info.staff.realname}</td>
+</tr>
+<tr>
+	<td bgcolor="#BCD1EF" align="right">分类</td>
+	<td bgcolor="#E9E9E9">{$info['category']['name']}</td>
+	<td bgcolor="#BCD1EF" align="right">部门</td>
+	<td bgcolor="#E9E9E9">{$info.dept.name}</td>
+</tr>
+<tr>
+	<td bgcolor="#BCD1EF" align="right">发表时间</td>
+	<td bgcolor="#E9E9E9">{$info.create_time}</td>
+	<if condition="$info['create_time'] neq $info['modify_time']">
+	<td bgcolor="#BCD1EF" align="right">最后编辑时间</td>
+	<td bgcolor="#E9E9E9">{$info.modify_time}</td>
+	<else />
+	<td bgcolor="#E9E9E9" colspan="2">&nbsp;</td>
+	</if>
+</tr>
+<tr>
+	<td bgcolor="#BCD1EF" align="right">关键字</td>
+	<td bgcolor="#E9E9E9" colspan="3">{$info.keywords}</td>
+</tr>
+<tr>
+	<td bgcolor="#BCD1EF" align="right">文章正文</td>
+	<td bgcolor="#FFFFFF" colspan="3" class="content">
+		<dl>
+			<foreach name="info.entry" item="entry">
+			<dt>{$entry_field[$key]['label']}&nbsp;·&nbsp;·&nbsp;·&nbsp;·&nbsp;·&nbsp;·&nbsp;</dt>
+			<dd>{$entry}</dd>
+			</foreach>
+		</dl>
+	</td>
+</tr>
+<notempty name="info.attachment">
+<tr>
+	<td bgcolor="#BCD1EF" align="right">相关附件</td>
+	<td bgcolor="#E9E9E9" colspan="3">
+		<foreach name="info.attachment" item="file">
+		<a href="__APP__/../{$file.path}" target="_blank" title="View attachment in new window">{$file.name}</a> <br />
+		</foreach>
+	</td>
+</tr>
+</notempty>
+<tr>
+	<td bgcolor="#BCD1EF" align="right">评论</td>
+	<td bgcolor="#FFFFFF" colspan="3" class="comment">
+		
+		<foreach name="info.comment" item="item">
+		<table width="100%" border="0" cellpadding="0" cellspacing="0" style="background-color: #FFFFFF;">
+		<tr>
+			<td width="8" height="8"><img src="../Public/Images/talk_01.gif" width="8" height="8" alt=""></td>
+			<td background="../Public/Images/talk_02.gif"><img src="../Public/Images/spacer.gif" width="400" height="8" alt=""></td>
+			<td width="8"><img src="../Public/Images/talk_03.gif" width="8" height="8" alt=""></td>
+		</tr>
+		<tr>
+			<td background="../Public/Images/talk_04.gif"><img src="../Public/Images/spacer.gif" width="8" height="20" alt=""></td>
+			<td valign="top">
+				{$item.content}
+			</td>
+			<td background="../Public/Images/talk_06.gif"><img src="../Public/Images/spacer.gif" width="8" alt=""></td>
+		</tr>
+		<tr>
+			<td height="8"><img src="../Public/Images/talk_07.gif" width="8" height="8" alt=""></td>
+			<td background="../Public/Images/talk_08.gif"><img src="../Public/Images/spacer.gif" width="400" height="8" alt=""></td>
+			<td><img src="../Public/Images/talk_09.gif" width="8" height="8" alt=""></td>
+		</tr>
+		<tr>
+			<td height="41"><img src="../Public/Images/spacer.gif" width="8" height="41" alt=""></td>
+			<td valign="top">
+				<div style="height:41px;line-height:30px;padding-left:56px;background:url(../Public/Images/talk_11.gif) left top no-repeat;">
+					<span style="float:right;">
+						<if condition="$_SESSION[C('USER_AUTH_KEY')] eq $item['staff_id']">
+						<img src="../Public/Images/form_edit.gif" border="0" alt="Edit" align="absmiddle" style="cursor:pointer;" onClick="edit_comment({$item.id});" />
+						</if>
+						<if condition="$_SESSION[C('USER_AUTH_KEY')] eq $item['staff_id'] or $_SESSION[C('ADMIN_AUTH_NAME')]">
+						<img src="../Public/Images/cross.gif" align="absmiddle" border="0" style="cursor:pointer;" onclick="myConfirm('Are you sure to delete this comment?', '__URL__/delete_comment/id/{$item.id}');"/>
+						</if>
+					</span>
+					{$item.staff.realname}<font color="gray"> at </font>{$item.create_time}
+				</div>
+			</td>
+			<td><img src="../Public/Images/spacer.gif" width="8" height="41" alt=""></td>
+		</tr>
+		</table>
+		</foreach>
+		<form action="__URL__/comment" method="post" target="_iframe" name="addComment">
+		<input type="hidden" name="share_id" value="{$info.id}" />
+		<input type="hidden" name="id" value="" />
+		<textarea class="tinymce" name="content" cols="100" rows="6"></textarea><br />
+		<input type="submit" value="发表评论" name="submit" />
+		<input type="reset" value="重置" />
+		</form>
+	</td>
+</tr>
+</table>
+<p class="center"></p>
+<script language="javascript" type="text/javascript" src="../Public/Js/tiny_mce-3.4.3.2/tiny_mce.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){
+});
+var has_reset = false;
+function edit_comment(id) {
+	$("input[name=id]").val(id);
+	$.get('__URL__/comment/id/'+id, {}, function(str) {
+			$("textarea[name=content]").val(str).focus();
+		});
+	$("input[name=submit]").val('提交修改');
+	if(!has_reset) {
+		$("input[name=submit]").after('<input type="button" id="reset_comment" value="取消修改"/>');
+		$("input#reset_comment").click(function(){
+			$("input[name=id]").val('');
+			$("textarea[name=content]").val('');
+			$("input[name=submit]").val('发表评论');
+			$(this).remove();
+			has_reset = false;
+		});
+		has_reset = true;
+	}
+}
+</script>
