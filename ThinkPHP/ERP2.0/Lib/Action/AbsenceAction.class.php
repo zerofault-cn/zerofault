@@ -1392,13 +1392,14 @@ class AbsenceAction extends BaseAction{
 
 		$mail->MsgHTML($body);
 		if(!$mail->Send()) {
-			Log::Write('Mail Error: '.$mail->ErrorInfo);
+			Log::Write('Mail Error: '.$mail->ErrorInfo, LOG::ERR);
 			return false;
 		}
-		Log::Write('Mail Success: '.$type.' '.$dao->id, INFO);
+		Log::Write('Mail Success: '.$type.' '.$dao->id, LOG::INFO);
 		return true;
 	}
 	public function notify(){
+		echo "======== [".date("Y-m-d H:i:s").'] '.MODULE_NAME.'.'.ACTION_NAME." ========\n";
 		$where = array(
 			'mail_status' => 0,
 			'status' => 1,
@@ -1418,7 +1419,7 @@ class AbsenceAction extends BaseAction{
 			if (self::mail_application($this->dao, 'notify')) {
 				if(false !== $this->dao->where('id='.$item['id'])->setField('mail_status',1)) {
 					echo "Success!<br />\n";
-					Log::Write('Notify '.$item['staff']['email'].' success', INFO);
+					Log::Write('Notify '.$item['staff']['email'].' success', LOG::INFO);
 				}
 				else{
 					echo 'SQL error'.(C('APP_DEBUG')?$this->dao->getLastSql():'');
@@ -1427,6 +1428,7 @@ class AbsenceAction extends BaseAction{
 		}
 	}
 	public function press(){
+		echo "======== [".date("Y-m-d H:i:s").'] '.MODULE_NAME.'.'.ACTION_NAME." ========\n";
 		$where = array(
 			'status' => array('lt', 1),
 			'create_time' => array('lt', date("Y-m-d"))
@@ -1442,7 +1444,7 @@ class AbsenceAction extends BaseAction{
 			$this->dao->find($item['id']);
 			if (self::mail_application($this->dao)) {
 				echo "Success!<br />\n";
-				Log::Write('Press '.$item['staff']['email'].' success', INFO);
+				Log::Write('Press '.$item['staff']['email'].' success', LOG::INFO);
 			}
 		}
 	}

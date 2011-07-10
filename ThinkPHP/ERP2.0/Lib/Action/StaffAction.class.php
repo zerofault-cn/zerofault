@@ -182,6 +182,7 @@ class StaffAction extends BaseAction{
 		}
 	}
 	public function sync_users() {
+		echo "======== [".date("Y-m-d H:i:s").'] '.MODULE_NAME.'.'.ACTION_NAME." ========\n";
 		$rs = $this->dao->select();
 		empty($rs) && ($rs = array());
 		foreach ($rs as $user) {

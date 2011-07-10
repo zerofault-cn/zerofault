@@ -65,11 +65,11 @@ class PublicAction extends BaseAction{
 			
 			$mail->MsgHTML($body);
 			if(!$mail->Send()) {
-				Log::Write('Mail Error: '.$mail->ErrorInfo);
+				Log::Write('Mail Error: '.$mail->ErrorInfo, LOG::ERR);
 				self::_error('mail send failed.');
 			}
 			else {
-				Log::Write('Mail Success: '.$staff['email'], INFO);
+				Log::Write('Mail Success: '.$staff['email'], LOG::INFO);
 				self::_success('Please check your email, and follow the instruction.');
 			}
 			return;
@@ -217,27 +217,30 @@ class PublicAction extends BaseAction{
 		$this->display('Layout:content');
 	}
 	public function check(){
+		echo "======== [".date("Y-m-d H:i:s").'] '.MODULE_NAME.'.'.ACTION_NAME." ========\n";
 		$rs = M('ProductFlow')->where('status=-2 or status=0')->select();
 		empty($rs) && ($rs = array());
 		echo 'Get :'.count($rs)."\n";
 		foreach ($rs as $item) {
+			echo "\t_mail(id=".$item['id'].", action=".$item['action'].", status=".$item['status'].")\t";
 			if (-2 == $item['status']) {
-				self::_mail($item['id']);
+				echo self::_mail($item['id']);
 			}
 			else {
 				if ('apply' == $item['action']) {
-					self::_mail($item['id'], 'approve');
+				echo self::_mail($item['id'], 'approve');
 				}
 				elseif ('transfer' == $item['action']) {
-					self::_mail($item['id']);
+				echo self::_mail($item['id']);
 				}
 				elseif ('return' == $item['action']) {
-					self::_mail($item['id']);
+				echo self::_mail($item['id']);
 				}
 				else{
 					//nothing
 				}
 			}
+			echo "\n";
 		}
 	}
 	// 参数解释  

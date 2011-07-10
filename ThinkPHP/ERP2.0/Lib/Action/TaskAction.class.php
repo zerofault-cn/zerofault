@@ -995,10 +995,10 @@ class TaskAction extends BaseAction{
 		$mail->Subject = $subject;
 		$mail->MsgHTML($body);
 		if(!$mail->Send()) {
-			Log::Write('Mail task Error: '.$mail->ErrorInfo);
+			Log::Write('Mail task Error: '.$mail->ErrorInfo, LOG::ERR);
 			return false;
 		}
-		Log::Write('Mail task Success: '.$type.' '.$task_id, INFO);
+		Log::Write('Mail task Success: '.$type.' '.$task_id, LOG::INFO);
 		return true;
 	}
 	private function formatSecond($second) {
@@ -1056,7 +1056,7 @@ class TaskAction extends BaseAction{
 					if (self::mail_task('remind', $item['id'])) {
 						if(false !== $dao->where('task_id='.$item['id'].' and status=0')->setField('mail_time', time())) {
 							echo "Success!\n";
-							Log::Write('Notify task:'.$item['id'].'/staff:'.$owner['staff_id'].' success', INFO);
+							Log::Write('Notify task:'.$item['id'].'/staff:'.$owner['staff_id'].' success', LOG::INFO);
 						}
 						else {
 							echo 'SQL error'.(C('APP_DEBUG')?$dao->getLastSql():'');
@@ -1071,7 +1071,7 @@ class TaskAction extends BaseAction{
 					if (self::mail_task('press', $item['id'])) {
 						if(false !== $dao->where('task_id='.$item['id'].' and status=0')->setField('mail_time', time())) {
 							echo "Success!\n";
-							Log::Write('Notify task:'.$item['id'].'/staff:'.$owner['staff_id'].' success', INFO);
+							Log::Write('Notify task:'.$item['id'].'/staff:'.$owner['staff_id'].' success', LOG::INFO);
 						}
 						else {
 							echo 'SQL error'.(C('APP_DEBUG')?$dao->getLastSql():'');
