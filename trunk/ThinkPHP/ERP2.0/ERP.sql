@@ -326,23 +326,3 @@ CREATE TABLE IF NOT EXISTS erp_template (
   PRIMARY KEY (id)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
-
-CREATE TABLE `erp_share` (
-  `id` int(11) unsigned NOT NULL auto_increment,
-  `staff_id` smallint(5) unsigned NOT NULL default '0',
-  `dept_id` smallint(5) unsigned NOT NULL default '0',
-  `category` varchar(255) NOT NULL default '',
-  `project` varchar(255) NOT NULL default '',
-  `title` varchar(255) NOT NULL default '',
-  `tags` varchar(255) NOT NULL default '',
-  `create_time` datetime NOT NULL default '0000-00-00 00:00:00',
-  `modify_time` datetime NOT NULL default '0000-00-00 00:00:00',
-  PRIMARY KEY  (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-CREATE TABLE `erp_share_entry` (
-  `id` int(11) unsigned NOT NULL auto_increment,
-  `share_id` int(11) unsigned NOT NULL default '0',
-  `field` varchar(255) NOT NULL default '',
-  `value` text NOT NULL,
-  PRIMARY KEY  (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
