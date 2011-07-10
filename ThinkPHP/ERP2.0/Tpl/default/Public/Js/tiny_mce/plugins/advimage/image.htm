@@ -8,6 +8,7 @@
 	<script type="text/javascript" src="../../utils/validate.js"></script>
 	<script type="text/javascript" src="../../utils/editable_selects.js"></script>
 	<script type="text/javascript" src="js/image.js"></script>
+	<script type="text/javascript" src="../../../jquery-1.4.2.min.js"></script>
 	<link href="css/advimage.css" rel="stylesheet" type="text/css" />
 </head>
 <body id="advimage" style="display: none">
@@ -27,7 +28,11 @@
 
 						<table class="properties">
 							<tr>
-								<td class="column1"><label id="srclabel" for="src">{#advimage_dlg.src}</label></td>
+								<td class="column1"><label id="filelabel" for="select_file">Upload Image file</label></td>
+								<td colspan="2"><input type="file" id="select_file" name="select_file" style="width:auto;"/><input type="button" id="upload_file" value="Submit" style="width:auto;" onclick='ImageDialog.upload_file();'/><img id="upload_status" src="../../../../Images/loader.gif" style="display:none;" align="absmiddle"/></td>
+							</tr>
+							<tr>
+								<td class="column1">or <label id="srclabel" for="src">{#advimage_dlg.src}</label></td>
 								<td colspan="2"><table border="0" cellspacing="0" cellpadding="0">
 									<tr> 
 									  <td><input name="src" type="text" id="src" value="" class="mceFocus" onchange="ImageDialog.showPreviewImage(this.value);" /></td> 
