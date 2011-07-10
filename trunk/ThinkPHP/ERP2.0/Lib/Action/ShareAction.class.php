@@ -39,7 +39,7 @@ class ShareAction extends BaseAction{
 		}
 		else {
 			if (!empty($_SESSION[C('ADMIN_AUTH_NAME')])) {
-				$where['status'] = 1;
+			//	$where['status'] = 1;
 			}
 			if (!empty($_SESSION[MODULE_NAME.'_'.ACTION_NAME.'_category_id'])) {
 				$category_id = $_SESSION[MODULE_NAME.'_'.ACTION_NAME.'_category_id'];
