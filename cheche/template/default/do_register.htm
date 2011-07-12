@@ -15,8 +15,7 @@
 <form id="registerform" name="registerform" action="do.php?ac=$_SCONFIG[register_action]&$url_plus&ref" method="post" class="c_form2">
 <table cellpadding="0" cellspacing="0" class="formtable">
 	<caption>
-		<h2>注册本站帐号</h2>
-		<p>请完整填写以下信息进行注册。<br>注册完成后，该帐号将作为您在本站的通行帐号，您可以享受本站提供的各种服务。</p>
+		<h2>注册本站帐号：<span>请完整填写以下信息进行注册。注册完成后，该帐号将作为您在本站的通行帐号，您可以享受本站提供的各种服务。</span></h2>
 	</caption>
 	<!--{if $invitearr}-->
 	<tr>
@@ -27,21 +26,19 @@
 		</td>
 	</tr>
 	<!--{/if}-->
-	
-	
 	<tr>
-		<th><span id="label_email">注册邮箱：</span><span id="label_username" style="display:none;">注册帐号：</span><em>*</em></th>
+		<th width="330" valign="top"><span id="label_email">注册邮箱</span><span id="label_username" style="display:none;">注册帐号</span><em>*</em></th>
 		<td>
-			<input type="text" id="username" name="username" value="" class="t_input" onBlur="checkUserName()" style="display:none;"/>
-			<input type="text" id="email" name="email" value="" class="t_input" onBlur="checkEmail()" />&nbsp;<span id="checkusername">&nbsp;</span><br />
+			<input type="text" size="30" id="username" name="username" value="" class="t_input" onBlur="checkUserName()" style="display:none;"/>
+			<input type="text" size="30" id="email" name="email" value="" class="t_input" onBlur="checkEmail()" />&nbsp;<span id="checkusername">&nbsp;</span><br />
 			<span id="tip_username" style="display:none;">您还可以使用 <a href="javascript:void(0);" onclick="switchTo('username', 'email');">邮箱</a> 进行注册</span>
 			<span id="tip_email">如果没有邮箱，您还可以使用 <a href="javascript:void(0);" onclick="switchTo('email', 'username')">帐号</a> 注册</span>
 		</td>
 	</tr>
 	<tr>
-		<th valign="top" nowrap="nowrap" width="145">创建车车网密码：<em>*</em></th>
+		<th valign="top" nowrap="nowrap" width="145">车车友密码<em>*</em></th>
 		<td>
-			<input type="password" name="password" id="password" value="" class="t_input" onBlur="checkPassword()" onkeyup="checkPwd(this.value);" tabindex="3" />&nbsp;<span id="checkpassword">&nbsp;</span><br/>
+			<input type="password" size="30" name="password" id="password" value="" class="t_input" onBlur="checkPassword()" onkeyup="checkPwd(this.value);" tabindex="3" />&nbsp;<span id="checkpassword">&nbsp;</span><br/>
 			<style>
 				.psdiv0,.psdiv1,.psdiv2,.psdiv3,.psdiv4{position:relative;height:30px;color:#666}/*密码强度容器*/
 				.strongdepict{position:absolute; width:300px;left:0px;top:3px}/*密码强度固定文字*/
@@ -69,31 +66,31 @@
 		</td>
 	</tr>
 	<tr>
-		<td colspan="2" style="border-top: 1px solid #CCCCCC"></td>
+		<th>姓 名<em>*</em></th>
+		<td><input type="text" name="name" size="30" value="" /></td>
 	</tr>
 	<tr>
-		<th>真实姓名：<em>*</em></th>
-		<td><input type="text" name="name" value="" /></td>
-	</tr>
-	<tr>
-		<th>性别：<em>*</em></th>
+		<th>性 别<em>*</em></th>
 		<td>
-			<input type="radio" name="sex" value="1" id="sex1" selected="selected"/><label for="sex1">男</label>
+			<input type="radio" name="sex" value="1" id="sex1" checked="checked"/><label for="sex1">男</label>
 			&nbsp;&nbsp;&nbsp;&nbsp;
 			<input type="radio" name="sex" value="2" id="sex2"/><label for="sex2">女</label>
 		</td>
 	</tr>
 	<tr>
-		<th>我现在的身份：<em>*</em></th>
+		<th>我现在的身份<em>*</em></th>
 		<td>
 			<select id="car_role" name="car_role" onchange="javascript:if(this.value=='1'){$('car_number').style.display='';$('car_type1').style.display='';$('car_type0').style.display='none';}else{$('car_number').style.display='none';$('car_type1').style.display='none';$('car_type0').style.display='';};">
 				<option value="0">请选择身份</option>
 				$car_role_opts
 			</select>
-			<span id="car_number" <!--{if $space['car_role']!=1}-->style="display:none;"<!--{/if}-->>
-				您的车牌号：
+		</td>
+	</tr>
+	<tr id="car_number" style="display:none;">
+		<th>我现在的车牌号<em>*</em></th>
+		<td><span>
 				<!--{if false}-->
-				<select name="car_number_prefix" id="car_number_prefix">
+				<select name="car_number_prefix" id="car_number_prefix" style="width:60px;">
 					<option value="">---</option>
 					<!--{loop $car_number $P $C_arr}-->
 					<optgroup label="{$P}">
@@ -104,34 +101,32 @@
 					<!--{/loop}-->
 				</select>
 				<!--{/if}-->
-				<select onchange="change_prefix(this);">
-					<option value="">--</option>
+				<select onchange="change_prefix(this);" style="width:60px;">
+					<option value="">前缀</option>
 					<!--{loop $car_number $P $C_arr}-->
 					<option value="{$P}">{$P}</option>
 					<!--{/loop}-->
 				</select>
-				<select name="car_number_prefix" id="car_number_prefix">
+				<select name="car_number_prefix" id="car_number_prefix" style="width:60px;">
+					<option value="">字母</option>
 				<select>-
-				<input type="text" size="6" maxlength="6" name="car_number" value="" onkeyup="this.value=this.value.replace(/[^0-9A-Z]/g, '');" onblur="checkNumber(this);"/>(请输入5~6位由数字和大写字母组成的车牌号)
+				<input type="text" size="6" maxlength="6" name="car_number" value="" onkeyup="this.value=this.value.replace(/[^0-9A-Z]/g, '');" onblur="checkNumber(this);"/>(请输入5~6位由数字或大写字母)
 				<span id="car_number_msg"></span>
 			</span>
 		</td>
 		<td>&nbsp;</td>
 	</tr>
 	<tr>
-		<th><span id="car_type1">我现在的车型：</span><span id="car_type0" style="display:none;">我喜欢的车型：</span><em>*</em></th>
+		<th><span id="car_type1">我现在的车型</span><span id="car_type0" style="display:none;">我喜欢的车型</span><em>*</em></th>
 		<td>
-			品牌:
 			<select name="car_brand" onchange="javascript:load_car_opts('sel_model', this.value);">
 				<option value="0">选择品牌</option>
 				$car_brand_opts
-			</select>&nbsp;&nbsp;&nbsp;&nbsp;
-			车系:
+			</select>
 			<select id="sel_model" name="car_model" onchange="javascript:load_car_opts('sel_profile', this.value);">
 				<option value="0">选择车系</option>
 				$car_model_opts
-			</select>&nbsp;&nbsp;&nbsp;&nbsp;
-			车型:
+			</select>
 			<select id="sel_profile" name="car_profile">
 				<option value="0">选择车型</option>
 				$car_profile_opts
@@ -140,27 +135,27 @@
 		<td>&nbsp;</td>
 	</tr>
 	<tr>
-		<th>所在地区：<em>*</em></th>
+		<th>所在地区<em>*</em></th>
 		<td>
 			<select name="province_id" onchange="javascript:load_region_opts('sel_city', this.value);">
-				<option value="0">请选择</option>
+				<option value="0">选择省份</option>
 				$province_opts
-			</select>省
+			</select>
 			<select name="city_id" id="sel_city" onchange="javascript:load_region_opts('sel_region', this.value);">
-				<option value="0">请选择</option>
-			</select>市
+				<option value="0">选择地市</option>
+			</select>
 			<select id="sel_region" name="region_id">
-				<option value="0">请选择</option>
-			</select>区/县
+				<option value="0">选择区县</option>
+			</select>
 		</td>
 	</tr>
 	<!--{if $_SCONFIG['seccode_register']}-->
 	<tr>
-		<th style="vertical-align: top;">验证码：<em>*</em></th>
-		<td>
-			<script>seccode();</script>
-			<p>请输入上面的4位字母或数字，看不清可<a href="javascript:updateseccode()">更换一张</a></p>
-			<input type="text" id="seccode" name="seccode" value="" class="t_input" onBlur="checkSeccode()" tabindex="1" autocomplete="off" />&nbsp;<span id="checkseccode">&nbsp;</span>
+		<th style="vertical-align: top;">验证码<em>*</em></th>
+		<td><input type="text" id="seccode" size="16" name="seccode" value="" class="t_input" onBlur="checkSeccode()" autocomplete="off" />&nbsp;<span id="checkseccode">&nbsp;</span>
+			
+			<p><script>seccode();</script>请输入左边的4位字母或数字，看不清可<a href="javascript:updateseccode()">更换一张</a></p>
+			
 		</td>
 	</tr>
 	<!--{/if}-->
