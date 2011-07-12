@@ -35,7 +35,7 @@ $_SGLOBAL[space_css]
 <div id="header">
 	<!--{if $_SGLOBAL['ad']['header']}--><div id="ad_header"><!--{ad/header}--></div><!--{/if}-->
 	<div class="headerwarp">
-		<h1 class="logo"><a href="index.php"><img src="template/$_SCONFIG[template]/image/logo.gif" alt="$_SCONFIG[sitename]" /></a></h1>
+		<h1 class="logo"><a href="index.php"></a></h1>
 		<ul class="menu">
 		<!--{if $_SGLOBAL[supe_uid]}-->
 			<li><a href="space.php?do=home">首页</a></li>
@@ -65,30 +65,12 @@ $_SGLOBAL[space_css]
 		
 		<div class="nav_account">
 		<!--{if $_SGLOBAL[supe_uid]}-->
-			<div id="account">帐号
-				<div id="account_menu">
-					<div class="avatar48">
-						<a href="space.php?uid=$_SGLOBAL[supe_uid]" ><!--{avatar($_SGLOBAL[supe_uid])}--></a>
-					</div>
-					<a href="space.php?uid=$_SGLOBAL[supe_uid]" class="loginName">{$_SN[$_SGLOBAL[supe_uid]]}</a>
-					<!--{if $_SGLOBAL[member][credit]}-->
-					<br /><a href="cp.php?ac=credit" style="font-size:11px;padding:0 0 0 5px;"><img src="image/credit.gif">{$_SGLOBAL[member][credit]}</a>
-					<!--{/if}-->
-					<div class="clear"></div>
-					<ul>
-						<!--{if empty($_SCONFIG['closeinvite'])}-->
-						<li class="invite"><a href="cp.php?ac=invite">邀请</a></li>
-						<!--{/if}-->
-						<li class="task"><a href="cp.php?ac=task">任务</a></li>
-						<li class="magic"><a href="cp.php?ac=magic">道具</a></li>
-						<li class="cp"><a href="cp.php">设置</a></li>
-					</ul>
-					<a class="logout" href="cp.php?ac=common&op=logout&uhash=$_SGLOBAL[uhash]">退出</a>
-				</div>
-			</div>
+			<a href="cp.php">设置</a>&nbsp;&nbsp;
+			<a class="logout" href="cp.php?ac=common&op=logout&uhash=$_SGLOBAL[uhash]">退出</a>&nbsp;&nbsp;
+			
 		<!--{else}-->
-			<a href="do.php?ac=$_SCONFIG[login_action]">登录</a> | 
-			<a href="do.php?ac=$_SCONFIG[register_action]">注册</a>
+			<a href="do.php?ac=$_SCONFIG[login_action]">登录</a>&nbsp;&nbsp;
+			<a href="do.php?ac=$_SCONFIG[register_action]">注册</a>&nbsp;&nbsp;
 		<!--{/if}-->
 		</div>
 		
@@ -134,6 +116,39 @@ $_SGLOBAL[space_css]
 	<div id="main">
 		<div id="app_sidebar">
 		<!--{if $_SGLOBAL[supe_uid]}-->
+			<div id="account_menu" style="font-size: 12px;padding-bottom:18px;position:relative;">
+				<div class="avatar48" style="float:left;">
+					<a href="space.php?uid=$_SGLOBAL[supe_uid]" ><!--{avatar($_SGLOBAL[supe_uid])}--></a>
+				</div>
+				<a href="space.php?uid=$_SGLOBAL[supe_uid]" class="loginName">{$_SN[$_SGLOBAL[supe_uid]]}</a><a href="cp.php?ac=credit">{$_SGLOBAL[member][star]}</a>
+				<br /><a href="cp.php?ac=credit" style="font-size:11px;color:#666;">积分:{$_SGLOBAL[member][credit]}&nbsp;经验:{$_SGLOBAL[member][experience]}</a>
+				<br />
+				<span style="font-size:11px;color:#666;">已有 {$_SGLOBAL[member][viewnum]} 人次访问</span>
+				<div class="clear"></div>
+				<a href="javascript:;" onclick="jQuery('#usettingli_menu').toggle().hover(function(){jQuery(this).show();},function(){jQuery(this).hide();});">个人设置<img src="image/more.gif" align="absmiddle"></a>
+				<ul id="usettingli_menu" class="dropmenu_drop" style="display:none;left: 0px; top: 78px; filter: progid:DXImageTransform.Microsoft.shadow(direction=135,color=#CCCCCC,strength=2); position: absolute;">
+					<li><a href="cp.php?ac=avatar">我的头像</a></li>
+					<li><a href="cp.php?ac=profile">个人资料</a></li>
+					<li><a href="cp.php?ac=theme">主页风格</a></li>
+					<li><a href="cp.php?ac=credit">我的积分</a></li>
+					<!--{if $_SCONFIG[sendmailday]}-->
+					<li><a href="cp.php?ac=sendmail">邮件提醒</a></li>
+					<!--{/if}-->
+					<li><a href="cp.php?ac=privacy">隐私筛选</a></li>
+					<!--{if checkperm('admin')}-->
+					<li><a href="admincp.php">站点管理</a></li>
+					<!--{/if}-->
+					<!--{if checkperm('allowstat')}-->
+					<li><a href="do.php?ac=stat">趋势统计</a></li>
+					<!--{/if}-->
+				</ul>
+				<!--{if $_SGLOBAL[session][magichidden]}-->当前隐身<!--{else}-->当前在线<!--{/if}-->
+				<!--{if $_SGLOBAL[session][magichidden]}-->
+				<img src="image/magic/invisible.small.gif" class="magicicon"><a id="a_magic_appear" href="cp.php?ac=magic&op=appear" onclick="ajaxmenu(event,this.id)" class="gray">上线</a>
+				<!--{else}-->
+				<img src="image/magic/invisible.small.gif" alt="{$_SGLOBAL[magic][invisible]}" class="magicicon"><a id="a_magic_invisible" href="magic.php?mid=invisible" onclick="ajaxmenu(event,this.id,1)" class="gray">隐身</a>
+				<!--{/if}-->
+			</div>
 			<ul class="app_list" id="default_userapp">
 				<li id="mtag">
 					<img src="image/app/mtag.gif"><a href="space.php?do=mtag">群组</a><em><img src="image/arr.gif" align="absmiddle"  /></em>

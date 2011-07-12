@@ -10,14 +10,6 @@
 	<!--{/if}-->
 
 	<div id="footer">
-		<!--{if $_TPL['templates']}-->
-		<div class="chostlp" title="切换风格"><img id="chostlp" src="{$_TPL['default_template']['icon']}" onmouseover="showMenu(this.id)" alt="{$_TPL['default_template']['name']}" /></div>
-		<ul id="chostlp_menu" class="chostlp_drop" style="display: none">
-		<!--{loop $_TPL['templates'] $value}-->
-			<li><a href="cp.php?ac=common&op=changetpl&name=$value[name]" title="$value[name]"><img src="$value[icon]" alt="$value[name]" /></a></li>
-		<!--{/loop}-->
-		</ul>
-		<!--{/if}-->
 		
 		<p class="r_option">
 			<a href="javascript:;" onclick="window.scrollTo(0,0);" id="a_top" title="TOP"><img src="image/top.gif" alt="" style="padding: 5px 6px 6px;" /></a>

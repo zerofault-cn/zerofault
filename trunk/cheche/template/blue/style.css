@@ -28,10 +28,10 @@ a { color: #3B5998; }
 .dropmenu_drop { border: 1px solid #CCC; }
 
 
-#main { background: url(image/appSidebar_bg.gif) repeat-y 0 0; }
+#main { }
 
 /*************************************************APP SIDEBAR***/
-#app_sidebar { background: url(image/appSidebar_top_bg.gif) no-repeat 0 0; }
+#app_sidebar { }
     .app_more a { background: url(image/tri.gif) no-repeat; }
 
   .chostlp img{ float: right; padding: 5px; border: 1px solid #FFF; border-top: none; vertical-align: middle; }
@@ -123,7 +123,7 @@ a { color: #3B5998; }
 input.submit { padding: 0 5px; height: 24px; border: none; background: #3B5998; color: #FFF; line-height: 20px; letter-spacing: 1px; cursor: pointer; }
 
 /*************************************************CP SIDEBAR***/
-.task_notice { background: #F7F7F7; }
+.task_notice { }
   .sidebox h2.title { background: url(image/sidebar_title.gif) no-repeat; color: #333; }
   .sidebox h3.title { border-bottom: 1px solid #CCC; background: #F7F7F7; }
 
@@ -139,12 +139,12 @@ input.submit { padding: 0 5px; height: 24px; border: none; background: #3B5998; 
 
 
 
-#bottom { background: url(image/appSidebar_bottom_bg.gif) no-repeat; }
-#footer { border-top: 1px solid #CCC; }
+#bottom {  }
+#footer {  }
 
 
 
-.notice { border-bottom: 1px solid #CCC; background: #F7F7F7; }
+.notice { border-bottom: 1px solid #CCC;  }
 
 
 
@@ -217,7 +217,6 @@ input.submit { padding: 0 5px; height: 24px; border: none; background: #3B5998; 
 .showflash{ background: #F7F7F7; border: 1px solid #CCC; }
 
 .atitle{ background: #F7F7F7; }
-#header .logo a{ background:transparent url(image/logo.gif) no-repeat scroll left center; }
 
 
 .susb .fuser{ background: #F7F7F7; }
