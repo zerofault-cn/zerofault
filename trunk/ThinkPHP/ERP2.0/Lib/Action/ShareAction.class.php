@@ -262,7 +262,7 @@ class ShareAction extends BaseAction{
 							'name' => $_FILES['file']['name'][$i],
 							'type' => $_FILES['file']['type'][$i],
 							'size' => $size,
-							'path' => 'Attach/'.MODULE_NAME.'/'.uniqid().'_'.$_FILES['file']['name'][$i],
+							'path' => 'Attach/'.MODULE_NAME.'/'.date("YmdHis").substr(microtime(),1,7).'.'.strtolower(pathinfo($_FILES['file']['name'][$i], PATHINFO_EXTENSION)),
 							'model_name' => MODULE_NAME,
 							'model_id' => $id,
 							'staff_id' => $_SESSION[C('USER_AUTH_KEY')],

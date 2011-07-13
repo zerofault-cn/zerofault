@@ -20,7 +20,7 @@ class AttachmentAction extends BaseAction{
 				'name' => $file['name'],
 				'type' => $file['type'],
 				'size' => $file['size'] ,
-				'path' => 'Attach/'.$model_name.'/'.uniqid().'_'.$file['name'],
+				'path' => 'Attach/'.$model_name.'/'.date("YmdHis").substr(microtime(),1,7).'.'.strtolower(pathinfo($file['name'], PATHINFO_EXTENSION)),
 				'model_name' => $model_name,
 				'model_id' => $model_id,
 				'staff_id' => $_SESSION[C('USER_AUTH_KEY')],
