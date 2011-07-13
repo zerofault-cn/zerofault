@@ -219,7 +219,7 @@ body { background: #FFF; }
   .app_more a.off { background-position: 0 50%; }
   .app_more a.on { background-position: -100px 50%; }
   #app_sidebar .t_input{ width: 110px; }
-  #mainarea { float: left; width: 810px; overflow: hidden; border-left: #CAD6E0 1px solid; padding-left: 10px;padding-top:10px}
+  #mainarea { float: left; width: 830px; overflow: hidden; border-left: #CAD6E0 1px solid; padding-left: 13px;padding-top:10px}
 
   .chostlp img{ float: right; padding: 5px; border: 1px solid #FFF; border-top: none; vertical-align: middle; }
  .chostlp img.hover{ background: #FFF; border-color: #CCC;  }
@@ -227,7 +227,7 @@ body { background: #FFF; }
 .chostlp_drop { border: 1px solid #CCC; border-bottom: none; }
 .chostlp_drop li{ padding: 5px; width: 16px; height: 16px; }
 
-#content { float: left; margin: 0 20px 0 0; width: 540px; overflow: hidden; }
+#content { float: left; margin: 0 20px 0 0; width: 560px; overflow: hidden; }
 #content2 { float: left; margin: 0 10px 0 0; width: 644px; overflow: hidden; }
 
 .app_list {
