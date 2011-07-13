@@ -67,10 +67,18 @@
 		<a href="javascript:void(0);" onclick="if(confirm('确定删除该记录？')){window.location.href='cp.php?ac=partner&op=delete&tagid={$mtag[tagid]}&id={$value[id]}';}else{return false;}">删除</a>
 		<!--{/if}-->
 		{$value['name']}</dd>
-		<dt>描述：</dt><dd>{$value['desc']}</dd>
+		<!--{if $value['desc']}-->
+		<dt>描述：</dt><dd><!--{eval echo nl2br($value['desc']);}--></dd>
+		<!--{/if}-->
+		<!--{if $value['contact']}-->
 		<dt>联系人：</dt><dd>{$value['contact']}</dd>
+		<!--{/if}-->
+		<!--{if $value['address']}-->
 		<dt>地址：</dt><dd>{$value['address']}</dd>
+		<!--{/if}-->
+		<!--{if $value['telephone']}-->
 		<dt>电话：</dt><dd>{$value['telephone']}</dd>
+		<!--{/if}-->
 		<!--{if $value['link']}-->
 		<dt>网址：</dt><dd><a href="{$value['link']}" target="_blank">{$value['link']}</a></dd>
 		<!--{/if}-->

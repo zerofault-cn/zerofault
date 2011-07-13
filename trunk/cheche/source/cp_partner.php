@@ -24,6 +24,9 @@ if(!empty($_REQUEST['submit'])) {
 	else {
 		$title = getstr($_POST['title_input'], 40, 1, 1, 1);
 	}
+	if (''==trim($title)) {
+		showmessage('合作商类型必须输入（或选择）');
+	}
 	$setarr['title'] = $title;
 	$setarr['name'] = getstr($_POST['name'], 40, 1, 1, 1);
 	$setarr['desc'] = getstr($_POST['desc'], 40, 1, 1, 1);
