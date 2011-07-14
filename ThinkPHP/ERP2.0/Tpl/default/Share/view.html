@@ -1,14 +1,22 @@
 <style>
-.content dl dt {
-	padding-bottom: 8px;
+.content h2.sub {
 	color: #006600;
 	font-size: 14px;
 	font-weight: 150%;
 }
-.content dl dd {
-	padding-left: 24px;
-	padding-bottom: 24px;
+
+.comment dt {
+	padding:4px;border-left:3px solid #CC0000;background-color:#BEBEBE;
 }
+.comment dd {
+	padding:5px;
+	word-wrap:break-word;
+	word-break:break-all;
+}
+.comment dt span, .comment dd span{
+	float:right;
+}
+
 </style>
 <p class="page_title_text">{$ACTION_TITLE}</p>
 <table class="defaultCSS" width="90%" border="0" align="center" cellpadding="8" cellspacing="1">
@@ -40,19 +48,12 @@
 </tr>
 <tr>
 	<td bgcolor="#BCD1EF" align="right">文章正文</td>
-	<td bgcolor="#FFFFFF" colspan="3" class="content">
-		<dl>
-			<foreach name="info.entry" item="entry">
-			<dt>{$entry_field[$key]['label']}&nbsp;·&nbsp;·&nbsp;·&nbsp;·&nbsp;·&nbsp;·&nbsp;</dt>
-			<dd>{$entry}</dd>
-			</foreach>
-		</dl>
-	</td>
+	<td bgcolor="#FFFFFF" colspan="3" class="content">{$info.content}</td>
 </tr>
 <notempty name="info.attachment">
 <tr>
 	<td bgcolor="#BCD1EF" align="right">相关附件</td>
-	<td bgcolor="#E9E9E9" colspan="3">
+	<td bgcolor="#E9E9E9" colspan="3" class="attachment">
 		<foreach name="info.attachment" item="file">
 		<a href="__APP__/../{$file.path}" target="_blank" title="View attachment in new window">{$file.name}</a> <br />
 		</foreach>
@@ -62,45 +63,23 @@
 <tr>
 	<td bgcolor="#BCD1EF" align="right">评论</td>
 	<td bgcolor="#FFFFFF" colspan="3" class="comment">
-		
+		<dl>
 		<foreach name="info.comment" item="item">
-		<table width="100%" border="0" cellpadding="0" cellspacing="0" style="background-color: #FFFFFF;">
-		<tr>
-			<td width="8" height="8"><img src="../Public/Images/talk_01.gif" width="8" height="8" alt=""></td>
-			<td background="../Public/Images/talk_02.gif"><img src="../Public/Images/spacer.gif" width="400" height="8" alt=""></td>
-			<td width="8"><img src="../Public/Images/talk_03.gif" width="8" height="8" alt=""></td>
-		</tr>
-		<tr>
-			<td background="../Public/Images/talk_04.gif"><img src="../Public/Images/spacer.gif" width="8" height="20" alt=""></td>
-			<td valign="top">
-				{$item.content}
-			</td>
-			<td background="../Public/Images/talk_06.gif"><img src="../Public/Images/spacer.gif" width="8" alt=""></td>
-		</tr>
-		<tr>
-			<td height="8"><img src="../Public/Images/talk_07.gif" width="8" height="8" alt=""></td>
-			<td background="../Public/Images/talk_08.gif"><img src="../Public/Images/spacer.gif" width="400" height="8" alt=""></td>
-			<td><img src="../Public/Images/talk_09.gif" width="8" height="8" alt=""></td>
-		</tr>
-		<tr>
-			<td height="41"><img src="../Public/Images/spacer.gif" width="8" height="41" alt=""></td>
-			<td valign="top">
-				<div style="height:41px;line-height:30px;padding-left:56px;background:url(../Public/Images/talk_11.gif) left top no-repeat;">
-					<span style="float:right;">
-						<if condition="$_SESSION[C('USER_AUTH_KEY')] eq $item['staff_id']">
-						<img src="../Public/Images/form_edit.gif" border="0" alt="Edit" align="absmiddle" style="cursor:pointer;" onClick="edit_comment({$item.id});" />
-						</if>
-						<if condition="$_SESSION[C('USER_AUTH_KEY')] eq $item['staff_id'] or $_SESSION[C('ADMIN_AUTH_NAME')]">
-						<img src="../Public/Images/cross.gif" align="absmiddle" border="0" style="cursor:pointer;" onclick="myConfirm('Are you sure to delete this comment?', '__URL__/delete_comment/id/{$item.id}');"/>
-						</if>
-					</span>
-					{$item.staff.realname}<font color="gray"> at </font>{$item.create_time}
-				</div>
-			</td>
-			<td><img src="../Public/Images/spacer.gif" width="8" height="41" alt=""></td>
-		</tr>
-		</table>
+			<dt id="dt_{$item['id']}">
+				<span>{$item.create_time}</span>{$item.staff.realname}
+			</dt>
+			<dd id="dd_{$item['id']}">
+				<span><if condition="$_SESSION[C('USER_AUTH_KEY')] eq $item['staff_id']">
+					<img src="../Public/Images/form_edit.gif" border="0" alt="Edit" align="absmiddle" style="cursor:pointer;" onClick="edit_comment({$item.id});" title="Click to edit this comment" />
+					</if>
+					<if condition="$_SESSION[C('USER_AUTH_KEY')] eq $info['creator_id'] or $_SESSION[C('USER_AUTH_KEY')] eq $item['staff_id'] or $_SESSION[C('ADMIN_AUTH_NAME')] or in_array($_SESSION[C('USER_AUTH_KEY')], C('TASK_ADMIN_ID'))">
+					<img src="../Public/Images/cross.gif" alt="Delete" align="absmiddle" border="0" style="cursor:pointer;" onclick="myConfirm('Are you sure to delete this comment?', '__URL__/delete_comment/id/{$item.id}/task_id/{$info.id}');" title="Click to delete this comment" />
+					</if>
+				</span>
+				<div>{$item['content']|nl2br}</div>
+			</dd>
 		</foreach>
+		</dl>
 		<form action="__URL__/comment" method="post" target="_iframe" name="addComment">
 		<input type="hidden" name="share_id" value="{$info.id}" />
 		<input type="hidden" name="id" value="" />
@@ -114,7 +93,40 @@
 <p class="center"></p>
 <script language="javascript" type="text/javascript" src="../Public/Js/tiny_mce-3.4.3.2/tiny_mce.js"></script>
 <script type="text/javascript">
+var musicFlash = '<object id="audioplayer_SHAREID" height="24" width="290" data="../Public/Images/player.swf" type="application/x-shockwave-flash">'
+	+ '<param value="../Public/Images/player.swf" name="movie"/>'
+	+ '<param value="autostart=AUTOSTART&bg=0xCDDFF3&leftbg=0x357DCE&lefticon=0xF2F2F2&rightbg=0xF06A51&rightbghover=0xAF2910&righticon=0xF2F2F2&righticonhover=0xFFFFFF&text=0x357DCE&slider=0x357DCE&track=0xFFFFFF&border=0xFFFFFF&loader=0xAF2910&soundFile=FLASHADDR" name="FlashVars"/>'
+	+ '<param value="high" name="quality"/>'
+	+ '<param value="false" name="menu"/>'
+	+ '<param value="#E9E9E9" name="bgcolor"/>'
+	+ '</object>';
 $(document).ready(function(){
+	$(".content img").each(function() {
+		var w = parseInt($(this).width());
+	//	alert(w);
+		var h = parseInt($(this).height());
+		if (w > 800) {
+			h =  800*h/w;
+			$(this).width(800).height(h).css('cursor', 'pointer').attr('title', '点击在新窗口打开原图').click(function() {
+				window.open($(this).attr('src'));
+			});
+		}
+	});
+	$(".attachment a").each(function(i) {
+		var href = $(this).attr('href');
+		var l = href.length;
+		var ext = href.substr(href.length-4);
+		var autostart = 'yes';
+		if (i>0) {
+			autostart = 'no';
+		}
+		var flashHtml = musicFlash.replace(/FLASHADDR/g, encodeURI(href));
+		flashHtml = flashHtml.replace(/SHAREID/g, i);
+		flashHtml = flashHtml.replace(/AUTOSTART/g, autostart);
+		if ('.mp3'==ext) {
+			$(this).after(flashHtml);
+		}
+	});
 });
 var has_reset = false;
 function edit_comment(id) {

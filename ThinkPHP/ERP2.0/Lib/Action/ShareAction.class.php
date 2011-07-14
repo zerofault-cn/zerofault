@@ -8,8 +8,6 @@ class ShareAction extends BaseAction{
 			Session::set('top', 'Experience');
 		}
 		$this->dao = D('Share');
-		$this->config = C('_share_');
-		$this->assign('entry_field', $this->config['entry_field']);
 		parent::_initialize();
 		$this->assign('MODULE_TITLE', 'Experience Share');
 	}
@@ -25,13 +23,13 @@ class ShareAction extends BaseAction{
 		$where = array();
 		if (!empty($_REQUEST['keyword']) && ''!=trim($_REQUEST['keyword'])) {
 			$keyword = trim($_REQUEST['keyword']);
-			$tmp = explode(' ', $keyword);
-			
-			foreach ($tmp as $key) {
+			$keyword_arr = explode(' ', $keyword);
+			foreach ($keyword_arr as $key) {
 				$title_arr[] = "title like '%".$key."%'";
 				$keywords_arr[] = "keywords like '%".$key."%'";
+				$content_arr[] = "content like '%".$key."%'";
 			}
-			$where['_string'] = implode(' and ', $title_arr).' or '.implode(' and ', $keywords_arr);
+			$where['_string'] = implode(' and ', $title_arr).' or '.implode(' and ', $keywords_arr).' or '.implode(' and ', $content_arr);
 		}
 		if (''==$type) {
 			//my share
@@ -121,6 +119,11 @@ class ShareAction extends BaseAction{
 				$item['comment_staff'] = M('Staff')->where("id=".$tmp['staff_id'])->getField('realname');
 				$item['comment_date'] = $this->kindlyTime($tmp['create_time']);
 			}
+			if (!empty($keyword_arr)) {
+				foreach ($keyword_arr as $key) {
+					$item['title'] = eregi_replace('('.$key.')', '<em>\\1</em>', $item['title']);
+				}
+			}
 			$result[$item['project_id']][] = $item;
 		}
 		array_multisort($project_arr, SORT_ASC, SORT_REGULAR, $result);
@@ -155,13 +158,7 @@ class ShareAction extends BaseAction{
 		$info = $this->dao->relation(true)->find($id);
 		$this->dao->setInc('hit', "id=".$id);
 		$this->assign('ACTION_TITLE', $info['title']);
-		$entry = M('ShareEntry')->where("share_id=".$id)->getField('field,value');
-		$info['entry'] = array();
-		foreach ($this->config['entry_field'] as $field=>$arr) {
-			if (!empty($entry[$field]) && ''!=trim($entry[$field])) {
-				$info['entry'][$field] = $entry[$field];
-			}
-		}
+
 		$info['comment'] = D('Comment')->relation(true)->where(array('model_name'=>MODULE_NAME, 'model_id'=>$id, 'status'=>1))->select();
 		$info['attachment'] = M('Attachment')->where(array('model_name'=>MODULE_NAME, 'model_id'=>$id, 'status'=>1))->select();
 
@@ -170,6 +167,11 @@ class ShareAction extends BaseAction{
 		$this->display('Layout:ERP_layout');
 	}
 	public function form() {
+		$default_content = '<h2 class="sub">背景介绍&nbsp;·&nbsp;·&nbsp;·&nbsp;·&nbsp;·&nbsp;·</h2><p>在此输入内容...<br /><br /></p>';
+		$default_content .= '<h2 class="sub">现象描述&nbsp;·&nbsp;·&nbsp;·&nbsp;·&nbsp;·&nbsp;·</h2><p>在此输入内容...<br /><br /></p>';
+		$default_content .= '<h2 class="sub">原因分析&nbsp;·&nbsp;·&nbsp;·&nbsp;·&nbsp;·&nbsp;·</h2><p>在此输入内容...<br /><br /></p>';
+		$default_content .= '<h2 class="sub">解决方法&nbsp;·&nbsp;·&nbsp;·&nbsp;·&nbsp;·&nbsp;·</h2><p>在此输入内容...<br /><br /></p>';
+		$default_content .= '<h2 class="sub">总结心得&nbsp;·&nbsp;·&nbsp;·&nbsp;·&nbsp;·&nbsp;·</h2><p>在此输入内容...<br /><br /></p>';
 		$this->assign('ACTION_TITLE', 'Share my Experience');
 		$id = empty($_REQUEST['id']) ? 0 : intval($_REQUEST['id']);
 		if ($id>0) {
@@ -177,12 +179,8 @@ class ShareAction extends BaseAction{
 			$this->assign('ACTION_TITLE', 'Edit my Experience');
 			$info['project_opts'] = self::genOptions(M('Category')->where(array('type'=>'ShareProject'))->select(), $info['project_id'], 'name');
 			$info['category_opts'] = self::genOptions(M('Category')->where(array('type'=>'ShareCategory'))->select(), $info['category_id'], 'name');
-			$info['entry'] = $this->config['entry_field'];
-			$entry = M('ShareEntry')->where("share_id=".$info['id'])->getField('field,value');
-			foreach ($info['entry'] as $field=>$arr) {
-				if (!empty($entry[$field])) {
-					$info['entry'][$field]['value'] = $entry[$field];
-				}
+			if (''==trim($info['content'])) {
+				$info['content'] = $default_content;
 			}
 			$info['attachment'] = M('Attachment')->where(array('model_name'=>MODULE_NAME, 'model_id'=>$id, 'status'=>1))->select();
 		}
@@ -191,6 +189,7 @@ class ShareAction extends BaseAction{
 				'id' => 0,
 				'title' => '',
 				'keywords' => '',
+				'content' => $default_content,
 				'project_opts' => self::genOptions(M('Category')->where(array('type'=>'ShareProject'))->select()),
 				'category_opts' => self::genOptions(M('Category')->where(array('type'=>'ShareCategory'))->select()),
 				'notification' => '11',
@@ -231,30 +230,10 @@ class ShareAction extends BaseAction{
 		$this->dao->notification = strval((empty($_REQUEST['chk0'])?'0':'1').(empty($_REQUEST['chk1'])?'0':'1'));
 		$this->dao->title = $title;
 		$this->dao->keywords = trim($_REQUEST['keywords']);
+		$this->dao->content = trim($_REQUEST['content']);
 		$this->dao->modify_time = date("Y-m-d H:i:s");
 		if ($id>0) {
 			if(false !== $this->dao->save()){
-				$entry_dao = M('ShareEntry');
-				//process entry
-				foreach ($_REQUEST['entry'] as $key=>$val) {
-					$val = trim($val);
-					if ('' != $val) {
-						if ($entry_dao->where("share_id=".$id." and field='".$key."'")->find()) {
-							//update entry
-							$entry_id = $entry_dao->id;
-							$entry_dao->where("id=".$entry_id)->setField('value', $val);
-						}
-						else {
-							//insert entry
-							$data = array(
-								'share_id' => $id,
-								'field' => $key,
-								'value' => $val
-							);
-							$entry_dao->add($data);
-						}
-					}
-				}
 				//process multi-file
 				foreach ($_FILES['file']['size'] as $i=>$size) {
 					if($size > 0) {
@@ -287,20 +266,6 @@ class ShareAction extends BaseAction{
 		}
 		else{
 			if($id = $this->dao->add()) {
-				$entry_dao = M('ShareEntry');
-				//process entry
-				foreach ($_REQUEST['entry'] as $key=>$val) {
-					$val = trim($val);
-					if ('' != $val) {
-						//insert entry
-						$data = array(
-							'share_id' => $id,
-							'field' => $key,
-							'value' => $val
-						);
-						$entry_dao->add($data);
-					}
-				}
 				//process multi-file
 				foreach ($_FILES['file']['size'] as $i=>$size) {
 					if($size > 0) {

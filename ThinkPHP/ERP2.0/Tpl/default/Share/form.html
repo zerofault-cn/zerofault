@@ -1,3 +1,15 @@
+<style>
+.content dl dt {
+	padding-bottom: 8px;
+	color: #006600;
+	font-size: 14px;
+	font-weight: 150%;
+}
+.content dl dd {
+	padding-left: 24px;
+	padding-bottom: 24px;
+}
+</style>
 <p class="page_title_text">{$ACTION_TITLE}</p>
 <form action="__URL__/submit" method="post" enctype="multipart/form-data" target="_iframe">
 <input type="hidden" name="id" value="{$info.id}" />
@@ -33,14 +45,12 @@
 	<td bgcolor="#BCD1EF">关键字</td>
 	<td bgcolor="#E9E9E9" colspan="3"><input type="text" name="keywords" size="80" maxlength="100" value="{$info.keywords}" />（用空格分隔）</td>
 </tr>
-<foreach name="info.entry" item="entry">
 <tr>
-	<td bgcolor="#BCD1EF">{$entry.label}</td>
-	<td bgcolor="#E9E9E9" colspan="3"><textarea name="entry[{$key}]" rows="{$entry.rows}" cols="{$entry.cols}" >{$entry.value}</textarea></td>
+	<td bgcolor="#BCD1EF">正文</td>
+	<td bgcolor="#E9E9E9" colspan="3"><textarea name="content" rows="40" cols="100" >{$info.content}</textarea></td>
 </tr>
-</foreach>
 <tr bgcolor="#BCD1EF">
-	<td>添加附件</td>
+	<td>附件</td>
 	<td bgcolor="#E9E9E9" valign="top" colspan="3">
 		<input type="hidden" name="MAX_FILE_SIZE" value="{$MAX_FILE_SIZE}"/>
 		<empty name="info.attachment">
