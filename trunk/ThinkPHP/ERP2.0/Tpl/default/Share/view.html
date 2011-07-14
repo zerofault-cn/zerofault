@@ -112,19 +112,16 @@ $(document).ready(function(){
 			});
 		}
 	});
+	var autostart = 'yes';
 	$(".attachment a").each(function(i) {
 		var href = $(this).attr('href');
-		var l = href.length;
 		var ext = href.substr(href.length-4);
-		var autostart = 'yes';
-		if (i>0) {
-			autostart = 'no';
-		}
-		var flashHtml = musicFlash.replace(/FLASHADDR/g, encodeURI(href));
-		flashHtml = flashHtml.replace(/SHAREID/g, i);
-		flashHtml = flashHtml.replace(/AUTOSTART/g, autostart);
 		if ('.mp3'==ext) {
+			var flashHtml = musicFlash.replace(/FLASHADDR/g, encodeURI(href));
+			flashHtml = flashHtml.replace(/SHAREID/g, i);
+			flashHtml = flashHtml.replace(/AUTOSTART/g, autostart);
 			$(this).after(flashHtml);
+			autostart = 'no';
 		}
 	});
 });
