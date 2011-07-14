@@ -167,10 +167,12 @@ CREATE TABLE `erp_share` (
   `notification` char(4) NOT NULL default '',
   `title` varchar(255) NOT NULL default '',
   `keywords` varchar(255) NOT NULL default '',
+  `content` text not null default '',
   `create_time` datetime NOT NULL default '0000-00-00 00:00:00',
   `modify_time` datetime NOT NULL default '0000-00-00 00:00:00',
   `hit` smallint(5) unsigned NOT NULL default '0',
   `status` tinyint(1) unsigned NOT NULL default '0',
+  `mail_status` tinyint(1) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
