@@ -323,7 +323,12 @@ class ShareAction extends BaseAction{
 		$dao->content = $content;
 		if ($id>0) {
 			if(false !== $dao->save()){
-				self::_success('Update comment success!');
+				$html  = '<script language="JavaScript" type="text/javascript">';
+				$html .= 'parent.myAlert("Update comment success!");';
+				$html .= 'parent.myOK(500);';
+				$html .= 'parent.show_comment('.$id.', "'.str_replace(array("\r\n", "\n"), '<br />', $content).'");';
+				$html .= '</script>';
+				die($html);
 			}
 			else{
 				self::_error('Update comment fail!'.(C('APP_DEBUG')?$dao->getLastSql():''));
@@ -331,7 +336,12 @@ class ShareAction extends BaseAction{
 		}
 		else {
 			if($id=$dao->add()) {
-				self::_success("Post comment success!");
+				$html  = '<script language="JavaScript" type="text/javascript">';
+				$html .= 'parent.myAlert("Post comment success!");';
+				$html .= 'parent.myOK(500);';
+				$html .= 'parent.show_comment('.$id.', "'.str_replace(array("\r\n", "\n"), '<br />', $content).'");';
+				$html .= '</script>';
+				die($html);
 			}
 			else{
 				self::_error('Post comment fail!'.(C('APP_DEBUG')?$dao->getLastSql():''));
@@ -455,7 +465,12 @@ class ShareAction extends BaseAction{
 		$id = $_REQUEST['id'];
 		$dao = M('Comment');
 		if($dao->find($id) && $dao->delete()) {
-			self::_success('Delete comment success!');
+			$html  = '<script language="JavaScript" type="text/javascript">';
+			$html .= 'parent.myAlert("Delete comment success!");';
+			$html .= 'parent.myOK(500);';
+			$html .= 'parent.remove_comment('.$id.');';
+			$html .= '</script>';
+			die($html);
 		}
 		else {
 			self::_error('Delete comment fail!'.(C('APP_DEBUG')?$dao->getLastSql():''));
