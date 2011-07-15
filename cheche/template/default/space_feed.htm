@@ -31,31 +31,51 @@
 	letter-spacing: 2px;
 	cursor: pointer;
 }
-#content #msgOpt li span.icon_pic {
+#content #msgOpt li.icon_pic {
+	position:relative;
+}
+#content #msgOpt li.icon_pic input {
+	position:absolute;
+	cursor:pointer;
+	filter:alpha(opacity=0);
+	right:10px;
+	opacity:0;
+}
+#content #msgOpt li.icon_pic #pic_float {
+	left: 0;
+	top:25px;
+	width:120px;
+	padding:2px 10px 10px;
+	border: 1px solid #adadad;
+	position: absolute;
+	background:#FFFFFF;
+	z-index: 400;
+}
+#content #msgOpt li.icon_pic span {
 	float:left;
 	width:18px;
 	height:25px;
 	background: url("image/icon_pic.png") left center no-repeat;
 }
-#content #msgOpt li span.icon_video {
+#content #msgOpt li.icon_video span {
 	float:left;
 	width:18px;
 	height:25px;
 	background: url("image/icon_video.png") left center no-repeat;
 }
-#content #msgOpt li span.icon_vote {
+#content #msgOpt li.icon_vote span {
 	float:left;
 	width:18px;
 	height:25px;
 	background: url("image/icon_vote.png") left center no-repeat;
 }
-#content #msgOpt li span.icon_at {
+#content #msgOpt li.icon_at span {
 	float:left;
 	width:18px;
 	height:25px;
 	background: url("image/icon_at.png") left center no-repeat;
 }
-#content #msgOpt li span.icon_attach {
+#content #msgOpt li.icon_attach span {
 	float:left;
 	width:18px;
 	height:25px;
@@ -87,18 +107,22 @@
 		<!--{if $space[eventverifynum]}--><div><img src="image/icon/event.gif" alt="" /><a href="admincp.php?ac=event&perpage=20&grade=0&searchsubmit=1"><strong>$space[eventverifynum]</strong> 个待审核活动</a></div><!--{/if}-->
 	</div>
 	<!--{/if}-->
+	<form method="post" action="cp.php?ac=doing" id="mood_addform">
 	<div class="ye_r_t"><div class="ye_l_t"><div class="ye_r_b"><div class="ye_l_b">
-		<textarea id="msgTxt" name="content" tabindex="1" rows="3" cols="80" style="width:528px;height:48px;"></textarea>
+		<div id="mood_statusinput_new" class="statusinput_new"><textarea id="mood_message" name="message" tabindex="1" rows="3" cols="70" style="width:544px;height:48px;font-size:14px;color:#999;" onclick="statusFace();">你可以更新状态, 让好友们知道你在做什么...</textarea></div>
 		<ul id="msgOpt">
-			<li class="btn"><input type="button" value="发表" id="msgSubmit" /></li>
+			<li class="btn"><input type="button" value="发表" id="msgSubmit" onclick="ajaxpost('mood_addform', 'reloadMood');$('mood_message').value='';"/></li>
 			<li class="tips">200字以内</li>
-			<li><span class="icon_pic">&nbsp;</span>图片</li>
-			<li><span class="icon_video"></span>视频</li>
-			<li><span class="icon_vote"></span>投票</li>
-			<li><span class="icon_at"></span>朋友</li>
-			<li><span class="icon_attach"></span>附件</li>
+			<li class="icon_pic"><input name="picfile" title="支持jpg、jpeg、gif、png格式，文件小于5M" type="file" onchange="$('mood_message').value='图片描述';$('pic_float').innerHTML='已选择图片: ';$('pic_float').style.display=''"/><div id="pic_float" style="display:none;"></div><span></span>图片</li>
+			<li class="icon_video"><span></span>视频</li>
+			<li class="icon_vote"><span></span>投票</li>
+			<li class="icon_at"><span></span>朋友</li>
+			<li class="icon_attach"><span></span>附件</li>
 		</ul>
-	</div></div></div></div><br>
+	</div></div></div></div>
+	<input type="hidden" name="addsubmit" value="true" />
+	<input type="hidden" name="formhash" value="<!--{eval echo formhash();}-->" />
+	</form>
 	
 	<!--{if empty($_SCOOKIE['closefeedbox']) && $_SGLOBAL['ad']['feedbox']}-->
 	<div id="feed_box" class="ye_r_t"><div class="ye_l_t"><div class="ye_r_b"><div class="ye_l_b">
@@ -453,6 +477,86 @@
 		});
 	}
 	
+	function statusFace() {
+		if($('mood_message').value == '你可以更新状态, 让好友们知道你在做什么...'){
+			$('mood_message').value = '';
+		}
+		$('mood_statusinput_new').style.zIndex = '20005';
+	//	$('mood_statusinput_new').className = 'statusinput_new';
+	//	$('mood_add').style.display = 'block';
+		
+		
+		var div = $('mood_face_bg');
+		if(div) {
+			div.parentNode.removeChild(div);
+		}
+		div = document.createElement('div');
+		div.id = 'mood_face_bg';
+		div.style.position = 'absolute';
+		div.style.left = div.style.top = '0px';
+		div.style.width = '100%';
+		div.style.height = document.body.scrollHeight + 'px';
+		div.style.backgroundColor = '#000';
+		div.style.zIndex = 10000;
+		div.style.display = 'none';
+		div.style.filter = 'alpha(opacity=0)';
+		div.style.opacity = 0;
+		div.onclick = function() {
+			hiddenstatus();
+		}
+		$('append_parent').appendChild(div);
+	
+	
+		if($('mood_message_menu') != null) {
+			$('mood_message_menu').style.display = '';
+		//	$('mood_add').style.display = '';
+		} else {
+			var faceDiv = document.createElement("div");
+			faceDiv.id = 'mood_message_menu';
+			faceDiv.className = 'facebox';
+			faceDiv.style.position = 'absolute';
+			var faceul = document.createElement("ul");
+			for(i=1; i<31; i++) {
+				getStatusFace(i, faceul);	
+			}
+			faceDiv.appendChild(faceul);
+			$('append_parent').appendChild(faceDiv);
+		}
+		//定位菜单
+		setMenuPosition('mood_message', 0);
+		div.style.display = '';
+	}
+	
+	function hiddenstatus() {
+		if($('mood_message_menu') != null) {
+			$('mood_message_menu').style.display = 'none';
+		}
+		$('mood_face_bg').style.display = 'none';
+	//	$('mood_add').style.display = 'none';
+	//	$('mood_statusinput_new').className = 'statusinput';
+		if($('mood_message').value == ''){
+			$('mood_message').value = '你可以更新状态, 让好友们知道你在做什么...';
+		}
+		$('mood_statusinput_new').style.zIndex = '1';
+	}
+	
+	function getStatusFace(i, faceul) {
+		var faceli = document.createElement("li");
+		faceli.innerHTML = '<img src="image/face/'+i+'.gif" style="cursor:pointer; position:relative;" />';
+		faceli.getElementsByTagName('img').item(0).onclick = function(){var faceText = '[em:'+i+':]'; if($('mood_message') != null) { insertContent('mood_message', faceText); }};
+		faceul.appendChild(faceli);
+	}
+	
+	function reloadMood(showid, result) {
+		var x = new Ajax();
+		x.get('cp.php?ac=doing&op=getmood', function(s){
+		//	$('mood_mystatus').innerHTML = s;
+		});
+		//提示获得积分
+		showreward();
+		hiddenstatus();
+	}
+
 	var elems = selector('li[class~=magicthunder]', $('feed_div')); 
 	for(var i=0; i<elems.length; i++){		
 		magicColor(elems[i]); 
