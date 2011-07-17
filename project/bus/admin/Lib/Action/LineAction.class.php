@@ -446,6 +446,7 @@ class LineAction extends BaseAction{
 		$number = str_ireplace("K",'',$numbers[0]);
 		$number = str_ireplace("(夜间线)",'',$number);
 		$number = str_ireplace("(区间)",'',$number);
+		$number = substr($number,0,3)=='B1区'? (1100+intval(str_ireplace("B1区",'',$number))) : $number;
 		$number = substr($number,0,3)=='B支'? (2000+intval(str_ireplace("B支",'',$number))) : $number;
 		$number = substr($number,0,1)=='B' ? (1000+intval(str_ireplace("B",'',$number))) : $number;
 		$number = substr($number,0,1)=='Y' ? (3000+intval(str_ireplace("Y",'',$number))) : $number;
@@ -506,6 +507,7 @@ class LineAction extends BaseAction{
 					$number = str_ireplace("K",'',$numbers[0]);
 					$number = str_ireplace("(夜间线)",'',$number);
 					$number = str_ireplace("(区间)",'',$number);
+					$number = substr($number,0,3)=='B1区'? (1100+intval(str_ireplace("B1区",'',$number))) : $number;
 					$number = substr($number,0,3)=='B支'? (2000+intval(str_ireplace("B支",'',$number))) : $number;
 					$number = substr($number,0,1)=='B' ? (1000+intval(str_ireplace("B",'',$number))) : $number;
 					$number = substr($number,0,1)=='Y' ? (3000+intval(str_ireplace("Y",'',$number))) : $number;

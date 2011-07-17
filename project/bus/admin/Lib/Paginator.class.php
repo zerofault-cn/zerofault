@@ -131,8 +131,8 @@ class Paginator extends Think{
 						$pagenav .= '<a href="?p='.$i.'">'.$i.'</a>&nbsp;&nbsp;';
 					}
 				}
-				if($this->current_page >= $this->page_count-$this->config['side_num']-ceil($this->config['show_num']/2)+1){
-					for($i=min($this->current_page+$this->config['show_num']-$this->config['side_num']-1,$this->page_count+1);$i<$this->page_count+1;$i++){
+				if($this->current_page >= $this->page_count-$this->config['side_num']-ceil($this->config['show_num']/2)+1) {
+					for($i=min($this->current_page+ceil($this->config['show_num']/2),$this->page_count+1);$i<$this->page_count+1;$i++){
 						if($i==$this->current_page){
 							$pagenav .= ''.$i.'&nbsp;&nbsp;';
 						}
