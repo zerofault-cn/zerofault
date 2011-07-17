@@ -170,8 +170,7 @@ class IndexAction extends Action{
 		$Site = $this->Site;
 		$this->assign('site_name', $Site[$id]);
 
-		$rs = M('Route')->where(array('sid'=>$id))->join('bus_hz_line l on l.id=lid and l.status=1')->order('l.number')->field('distinct l.*')->select();
-	//	dump($rs);
+		$rs = M('Route')->where(array('sid'=>$id))->join('inner join bus_hz_line l on l.id=lid and l.status=1')->order('l.number')->field('distinct l.*')->select();
 		$result .= '<table borer="0" cellspacing="1" cellpadding="1" bgcolor="#0099CC">';
 		$result .= '<tr bgcolor="#ffffff"><th colspan="3">经过【'.$Site[$id].'】的线路('.count($rs).'条)</td></tr>';
 		$result .= '<tr bgcolor="#ffffff"><th align="left">序号</th><th>线路名称</th><th>起点－终点</th></tr>';
