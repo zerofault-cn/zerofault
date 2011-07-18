@@ -209,8 +209,6 @@ class ShareAction extends BaseAction{
 		if (empty($_POST['submit'])) {
 			return;
 		}
-		print_r($_REQUEST);
-	//	exit;
 		$id = empty($_REQUEST['id']) ? 0 : intval($_REQUEST['id']);
 		empty($_REQUEST['project_id']) && self::_error('Project must be specified!');
 		empty($_REQUEST['category_id']) && self::_error('Category must be specified!');
@@ -218,6 +216,9 @@ class ShareAction extends BaseAction{
 		empty($title) && self::_error('Please type your title first!');
 		if ($id>0) {
 			$this->dao->find($id);
+			if (intval($this->dao->notification) == 0 && ($_REQUEST['chk0'] || $_REQUEST['chk1'])) {
+				$this->dao->mail_status = 0;
+			}
 		}
 		else {
 			$this->dao->staff_id = $_SESSION[C('USER_AUTH_KEY')];
@@ -258,6 +259,7 @@ class ShareAction extends BaseAction{
 						}
 					}
 				}
+				$this->mail_share($id);
 				self::_success('Experience updated!',__URL__);
 			}
 			else{
@@ -290,6 +292,7 @@ class ShareAction extends BaseAction{
 						}
 					}
 				}
+				$this->mail_share($id);
 				self::_success('Experience share success!',__URL__);
 			}
 			else {
@@ -416,40 +419,9 @@ class ShareAction extends BaseAction{
 		$this->display('Layout:ERP_layout');
 	}
 
-	public function update() {
-		$staff_id = $_REQUEST['staff_id'];
-		$task_id = $_REQUEST['task_id'];
-		$field = $_REQUEST['f'];
-		$value = $_REQUEST['v'];
-		if ($staff_id > 0) {
-			$dao = M('TaskOwner');
-			$info = $dao->where("task_id=".$task_id." and staff_id=".$staff_id)->find();
-			$rs = true;
-			if ($info[$field] != $value) {
-				$rs = $dao->where('id='.$info['id'])->setField(array($field, 'action_time'), array($value, date('Y-m-d H:i:s')));
-				self::mail_task('owner_status', $task_id, $staff_id);
-			}
-		}
-		else {
-			$dao = $this->dao;
-			$info = $dao->where('id='.$task_id)->find();
-			$rs = true;
-			if ($info[$field] != $value) {
-				$rs = $dao->where('id='.$task_id)->setField(array($field, 'update_time'), array($value, date('Y-m-d H:i:s')));
-				self::mail_task('task_status', $task_id);
-			}
-		}
-		if(false !== $rs) {
-			self::_success('Update success!');
-		}
-		else {
-			self::_error('Update fail!'.(C('APP_DEBUG')? $dao->getLastSql() : ''));
-		}
-	}
 	public function delete() {
 		$id = $_REQUEST['id'];
-		M('ShareEntry')->where('share_id='.$id)->delete();
-		
+
 		//delete comment
 		M('Comment')->where(array('model_name'=>MODULE_NAME, 'model_id'=>$id))->delete();
 
@@ -493,6 +465,64 @@ class ShareAction extends BaseAction{
 			self::_error('Delete attachment fail!'.(C('APP_DEBUG')?$dao->getLastSql():''));
 		}
 	}
+	public function mail_share($id=0) {
+		if (!defined('APP_ROOT')) {
+			define('APP_ROOT', 'http://'.$_SERVER['SERVER_ADDR'].__APP__);
+		}
+		if (empty($id)) {
+			echo "No ID specified\n";
+			return;
+		}
+		$info = $this->dao->relation(true)->find($id);
 
+		if ($info['notification'][0]=='1' || $info['notification'][1]=='1') {
+		
+			$smtp_config = C('_smtp_');
+			include_once (LIB_PATH.'class.phpmailer.php');
+			$mail = new PHPMailer();
+			$mail->IsSMTP();
+		//	$mail->SMTPDebug  = 1;  // 2 = messages only
+			$mail->Host       = $smtp_config['host'];
+			$mail->Port       = $smtp_config['port'];
+			$mail->SetFrom($smtp_config['from_mail'], 'ERP Task');
+
+			$mail->AddAddress($info['staff']['email'], $info['staff']['realname']);
+			$subject = '[Notification] ['.$info['staff']['realname'].'] share ['.$info['title'].'] to you';
+			
+			$body = '<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /></head><body>'."\n";
+			$body .= 'Hi all, <br />'."\n";
+			$body .= '&nbsp;&nbsp;&nbsp;&nbsp;Please click on the <span style="color:#548dd4;">Enter</span> link to view it, it will guide you to the ERP system in your default browser. Use your ERP/AgigAFlow username and password if it\'s needed. <br />'."\n";
+			$body .= '<a href="'.APP_ROOT.'/Share/view/id/'.$id.'" target="_blank"><u style="font-weight:bold; color: #548dd4; font-size: 18pt">Enter</u></a>'."\n";
+			$body .= '<br /><br />Best Regards,<br />'.C('ERP_TITLE')."\n";
+			$body .= '</body></html>'."\n";
+
+			
+			if ($info['notification'][0] == '1') {
+				$tmp_rs = M('Staff')->where("is_leader=1")->select();
+				empty($tmp_rs) && ($tmp_rs = array());
+				foreach ($tmp_rs as $row) {
+					$mail->AddCC($row['email'], $row['realname']);
+				}
+			}
+			if ($info['notification'][1] == '1') {
+				$tmp_rs = M('Staff')->where("dept_id=".$info['staff']['dept_id'])->select();
+				empty($tmp_rs) && ($tmp_rs = array());
+				foreach ($tmp_rs as $row) {
+					$mail->AddCC($row['email'], $row['realname']);
+				}
+			}
+			
+			$mail->Subject = $subject;
+			$mail->MsgHTML($body);
+			if(!$mail->Send()) {
+				Log::Write('Mail Experience(ID: '.$id.') Error: '.$mail->ErrorInfo, LOG::ERR);
+				return false;
+			}
+			Log::Write('Mail Experience(ID: '.$id.') Success!', LOG::INFO);
+		}
+		//update mail_status
+		$this->dao->setField('mail_status', 1);
+		return true;
+	}
 }
 ?>
