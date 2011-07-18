@@ -176,12 +176,3 @@ CREATE TABLE `erp_share` (
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
-CREATE TABLE `erp_share_entry` (
-  `id` int(11) unsigned NOT NULL auto_increment,
-  `share_id` int(11) unsigned NOT NULL default '0',
-  `field` varchar(255) NOT NULL default '',
-  `value` text NOT NULL,
-  PRIMARY KEY  (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
-
