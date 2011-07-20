@@ -192,7 +192,7 @@ class ShareAction extends BaseAction{
 				'content' => $default_content,
 				'project_opts' => self::genOptions(M('Category')->where(array('type'=>'ShareProject'))->select()),
 				'category_opts' => self::genOptions(M('Category')->where(array('type'=>'ShareCategory'))->select()),
-				'notification' => '11',
+				'notification' => '000',
 				'entry' => $this->config['entry_field']
 				);
 			
@@ -216,7 +216,7 @@ class ShareAction extends BaseAction{
 		empty($title) && self::_error('Please type your title first!');
 		if ($id>0) {
 			$this->dao->find($id);
-			if (intval($this->dao->notification) == 0 && ($_REQUEST['chk0'] || $_REQUEST['chk1'])) {
+			if (intval($this->dao->notification) == 0 && ($_REQUEST['chk0'] || $_REQUEST['chk1'] || $_REQUEST['chk2'])) {
 				$this->dao->mail_status = 0;
 			}
 		}
@@ -228,7 +228,7 @@ class ShareAction extends BaseAction{
 		}
 		$this->dao->project_id = intval($_REQUEST['project_id']);
 		$this->dao->category_id = intval($_REQUEST['category_id']);
-		$this->dao->notification = strval((empty($_REQUEST['chk0'])?'0':'1').(empty($_REQUEST['chk1'])?'0':'1'));
+		$this->dao->notification = strval((empty($_REQUEST['chk0'])?'0':'1').(empty($_REQUEST['chk1'])?'0':'1').(empty($_REQUEST['chk2'])?'0':'1'));
 		$this->dao->title = $title;
 		$this->dao->keywords = trim($_REQUEST['keywords']);
 		$this->dao->content = trim($_REQUEST['content']);
@@ -475,7 +475,7 @@ class ShareAction extends BaseAction{
 		}
 		$info = $this->dao->relation(true)->find($id);
 
-		if ($info['notification'][0]=='1' || $info['notification'][1]=='1') {
+		if ($info['notification'][0]=='1' || $info['notification'][1]=='1' || $info['notification'][2]=='1') {
 		
 			$smtp_config = C('_smtp_');
 			include_once (LIB_PATH.'class.phpmailer.php');
@@ -497,18 +497,27 @@ class ShareAction extends BaseAction{
 			$body .= '</body></html>'."\n";
 
 			
-			if ($info['notification'][0] == '1') {
-				$tmp_rs = M('Staff')->where("is_leader=1")->select();
+			if ($info['notification'][2] == '1') {
+				$tmp_rs = M('Staff')->where("status=1")->select();
 				empty($tmp_rs) && ($tmp_rs = array());
 				foreach ($tmp_rs as $row) {
 					$mail->AddCC($row['email'], $row['realname']);
 				}
 			}
-			if ($info['notification'][1] == '1') {
-				$tmp_rs = M('Staff')->where("dept_id=".$info['staff']['dept_id'])->select();
-				empty($tmp_rs) && ($tmp_rs = array());
-				foreach ($tmp_rs as $row) {
-					$mail->AddCC($row['email'], $row['realname']);
+			else {
+				if ($info['notification'][1] == '1') {
+					$tmp_rs = M('Staff')->where("status=1 and is_leader=1")->select();
+					empty($tmp_rs) && ($tmp_rs = array());
+					foreach ($tmp_rs as $row) {
+						$mail->AddCC($row['email'], $row['realname']);
+					}
+				}
+				if ($info['notification'][0] == '1') {
+					$tmp_rs = M('Staff')->where("status=1 and dept_id=".$info['staff']['dept_id'])->select();
+					empty($tmp_rs) && ($tmp_rs = array());
+					foreach ($tmp_rs as $row) {
+						$mail->AddCC($row['email'], $row['realname']);
+					}
 				}
 			}
 			
