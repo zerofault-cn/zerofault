@@ -65,9 +65,27 @@ $_SGLOBAL[space_css]
 		
 		<div class="nav_account">
 		<!--{if $_SGLOBAL[supe_uid]}-->
-			<a href="cp.php">设置</a>&nbsp;&nbsp;
-			<a class="logout" href="cp.php?ac=common&op=logout&uhash=$_SGLOBAL[uhash]">退出</a>&nbsp;&nbsp;
-			
+			<div id="account">帐号
+				<div id="account_menu">
+					<div class="avatar48">
+						<a href="space.php?uid=$_SGLOBAL[supe_uid]" ><!--{avatar($_SGLOBAL[supe_uid])}--></a>
+					</div>
+					<a href="space.php?uid=$_SGLOBAL[supe_uid]" class="loginName">{$_SN[$_SGLOBAL[supe_uid]]}</a>
+					<!--{if $_SGLOBAL[member][credit]}-->
+					<br /><a href="cp.php?ac=credit" style="font-size:11px;padding:0 0 0 5px;"><img src="image/credit.gif">{$_SGLOBAL[member][credit]}</a>
+					<!--{/if}-->
+					<div class="clear"></div>
+					<ul>
+						<!--{if empty($_SCONFIG['closeinvite'])}-->
+						<li class="invite"><a href="cp.php?ac=invite">邀请</a></li>
+						<!--{/if}-->
+						<li class="task"><a href="cp.php?ac=task">任务</a></li>
+						<li class="magic"><a href="cp.php?ac=magic">道具</a></li>
+						<li class="cp"><a href="cp.php">设置</a></li>
+					</ul>
+					<a class="logout" href="cp.php?ac=common&op=logout&uhash=$_SGLOBAL[uhash]">退出</a>
+				</div>
+			</div>
 		<!--{else}-->
 			<a href="do.php?ac=$_SCONFIG[login_action]">登录</a>&nbsp;&nbsp;
 			<a href="do.php?ac=$_SCONFIG[register_action]">注册</a>&nbsp;&nbsp;
@@ -103,7 +121,7 @@ $_SGLOBAL[space_css]
 			}
 		);
 		jQuery(".nav_account #account").hover(
-			function() { jQuery(this).css('background-color', '#3777BC'); jQuery("#account_menu").show();},
+			function() { jQuery(this).css('background-color', '#0066CC'); jQuery("#account_menu").show();},
 			function() { jQuery(this).css('background-color', 'transparent'); jQuery("#account_menu").hide();}
 		);
 	});

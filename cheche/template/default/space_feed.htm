@@ -1,87 +1,6 @@
 <!--{if empty($_TPL['getmore'])}-->	
 <!--{eval $_TPL['titles'] = array('首页');}-->
 <!--{template header}-->
-<style>
-#content #msgOpt {
-	height: 25px;
-	line-height: 25px;
-	color: #909195;
-	background-color: #F7F7F7;
-	padding-left: 10px;
-}
-#content #msgOpt li {
-	float:left;
-	padding-right:20px;
-}
-#content #msgOpt li.tips {
-	float:right;
-	padding-right:20px;
-	color: 
-}
-#content #msgOpt li.btn {
-	float:right;
-}
-#content #msgOpt li.btn input{
-	padding: 0 4px 2px 4px;
-	height: 22px;
-	border: 1px solid #7C93D4;
-	background: #CDD7EE;
-	color: #3E4E90;
-	line-height: 20px;
-	letter-spacing: 2px;
-	cursor: pointer;
-}
-#content #msgOpt li.icon_pic {
-	position:relative;
-}
-#content #msgOpt li.icon_pic input {
-	position:absolute;
-	cursor:pointer;
-	filter:alpha(opacity=0);
-	right:10px;
-	opacity:0;
-}
-#content #msgOpt li.icon_pic #pic_float {
-	left: 0;
-	top:25px;
-	width:120px;
-	padding:2px 10px 10px;
-	border: 1px solid #adadad;
-	position: absolute;
-	background:#FFFFFF;
-	z-index: 400;
-}
-#content #msgOpt li.icon_pic span {
-	float:left;
-	width:18px;
-	height:25px;
-	background: url("image/icon_pic.png") left center no-repeat;
-}
-#content #msgOpt li.icon_video span {
-	float:left;
-	width:18px;
-	height:25px;
-	background: url("image/icon_video.png") left center no-repeat;
-}
-#content #msgOpt li.icon_vote span {
-	float:left;
-	width:18px;
-	height:25px;
-	background: url("image/icon_vote.png") left center no-repeat;
-}
-#content #msgOpt li.icon_at span {
-	float:left;
-	width:18px;
-	height:25px;
-	background: url("image/icon_at.png") left center no-repeat;
-}
-#content #msgOpt li.icon_attach span {
-	float:left;
-	width:18px;
-	height:25px;
-	background: url("image/icon_attach.png") left center no-repeat;
-}
-</style>
 <div id="content">
 
 <!--{if $space['uid'] && $space[self]}-->
@@ -107,23 +26,57 @@
 		<!--{if $space[eventverifynum]}--><div><img src="image/icon/event.gif" alt="" /><a href="admincp.php?ac=event&perpage=20&grade=0&searchsubmit=1"><strong>$space[eventverifynum]</strong> 个待审核活动</a></div><!--{/if}-->
 	</div>
 	<!--{/if}-->
-	<form method="post" action="cp.php?ac=doing" id="mood_addform">
-	<div class="ye_r_t"><div class="ye_l_t"><div class="ye_r_b"><div class="ye_l_b">
-		<div id="mood_statusinput_new" class="statusinput_new"><textarea id="mood_message" name="message" tabindex="1" rows="3" cols="70" style="width:544px;height:48px;font-size:14px;color:#999;" onclick="statusFace();">你可以更新状态, 让好友们知道你在做什么...</textarea></div>
-		<ul id="msgOpt">
-			<li class="btn"><input type="button" value="发表" id="msgSubmit" onclick="ajaxpost('mood_addform', 'reloadMood');$('mood_message').value='';"/></li>
-			<li class="tips">200字以内</li>
-			<li class="icon_pic"><input name="picfile" title="支持jpg、jpeg、gif、png格式，文件小于5M" type="file" onchange="$('mood_message').value='图片描述';$('pic_float').innerHTML='已选择图片: ';$('pic_float').style.display=''"/><div id="pic_float" style="display:none;"></div><span></span>图片</li>
-			<li class="icon_video"><span></span>视频</li>
-			<li class="icon_vote"><span></span>投票</li>
-			<li class="icon_at"><span></span>朋友</li>
-			<li class="icon_attach"><span></span>附件</li>
-		</ul>
-	</div></div></div></div>
-	<input type="hidden" name="addsubmit" value="true" />
-	<input type="hidden" name="formhash" value="<!--{eval echo formhash();}-->" />
-	</form>
-	
+	<div style="position:relative;">
+		<form method="post" action="cp.php?ac=doing" id="mood_addform">
+		<div class="ye_r_t"><div class="ye_l_t"><div class="ye_r_b"><div class="ye_l_b">
+			<div id="mood_statusinput_new" class="statusinput_new"><textarea id="mood_message" name="message" tabindex="1" rows="3" cols="70">你可以更新状态, 让好友们知道你在做什么...</textarea></div>
+			<ul id="msgOpt">
+				<li class="btn"><input type="button" value="发表" id="msgSubmit" onclick="ajaxpost('mood_addform', 'reloadMood');$('mood_message').value='';"/></li>
+				<li class="count">200</li>
+				<li class="icon_face" onclick="statusFace();"><span></span>表情</li>
+				<li class="icon_pic" onclick="$('box_pic').style.display='';"><span></span>图片</li>
+				<li class="icon_video"><span></span>视频</li>
+				<li class="icon_vote"><span></span>投票</li>
+			</ul>
+		</div></div></div></div>
+		<input type="hidden" name="addsubmit" value="true" />
+		<input type="hidden" name="formhash" value="<!--{eval echo formhash();}-->" />
+		</form>
+		<div id="box_face" class="pop-bubble" style="position: absolute; display:none;">
+		<ul><li><img style="cursor:pointer; position:relative;" src="image/face/1.gif"></li><li><img style="cursor:pointer; position:relative;" src="image/face/2.gif"></li><li><img style="cursor:pointer; position:relative;" src="image/face/3.gif"></li><li><img style="cursor:pointer; position:relative;" src="image/face/4.gif"></li><li><img style="cursor:pointer; position:relative;" src="image/face/5.gif"></li><li><img style="cursor:pointer; position:relative;" src="image/face/6.gif"></li><li><img style="cursor:pointer; position:relative;" src="image/face/7.gif"></li><li><img style="cursor:pointer; position:relative;" src="image/face/8.gif"></li><li><img style="cursor:pointer; position:relative;" src="image/face/9.gif"></li><li><img style="cursor:pointer; position:relative;" src="image/face/10.gif"></li><li><img style="cursor:pointer; position:relative;" src="image/face/11.gif"></li><li><img style="cursor:pointer; position:relative;" src="image/face/12.gif"></li><li><img style="cursor:pointer; position:relative;" src="image/face/13.gif"></li><li><img style="cursor:pointer; position:relative;" src="image/face/14.gif"></li><li><img style="cursor:pointer; position:relative;" src="image/face/15.gif"></li><li><img style="cursor:pointer; position:relative;" src="image/face/16.gif"></li><li><img style="cursor:pointer; position:relative;" src="image/face/17.gif"></li><li><img style="cursor:pointer; position:relative;" src="image/face/18.gif"></li><li><img style="cursor:pointer; position:relative;" src="image/face/19.gif"></li><li><img style="cursor:pointer; position:relative;" src="image/face/20.gif"></li><li><img style="cursor:pointer; position:relative;" src="image/face/21.gif"></li><li><img style="cursor:pointer; position:relative;" src="image/face/22.gif"></li><li><img style="cursor:pointer; position:relative;" src="image/face/23.gif"></li><li><img style="cursor:pointer; position:relative;" src="image/face/24.gif"></li><li><img style="cursor:pointer; position:relative;" src="image/face/25.gif"></li><li><img style="cursor:pointer; position:relative;" src="image/face/26.gif"></li><li><img style="cursor:pointer; position:relative;" src="image/face/27.gif"></li><li><img style="cursor:pointer; position:relative;" src="image/face/28.gif"></li><li><img style="cursor:pointer; position:relative;" src="image/face/29.gif"></li><li><img style="cursor:pointer; position:relative;" src="image/face/30.gif"></li></ul>
+		</div>
+		<div id="box_pic" class="pop-bubble" style="position: absolute; display:none; top:82px; left:40px;">
+			<div class="pop-bubble-inner">
+				<div class="pop-bubble-bd">
+					<ul>
+						<li class="hidden-file">
+							<a class="js_local" href="#">上传照片</a>
+							<div class="file-mask">
+								<form method="post" enctype="multipart/form-data" action="http://up.photo.pengyou.com/cgi-bin/upload/cgi_upload_image">
+								<input type="file" name="filename">
+								</form>
+							</div>
+						</li>
+						<li><a href="#" class="js_album">从相册选择</a></li>
+						<div class="clear"></div>
+					</ul>
+				</div>
+				<div class="pop-bubble-bd" style="display:none;">
+					<p><img class="py-load-s" src="http://ctc.qzonestyle.gtimg.cn/qzonestyle/xiaoyou_portal_v2/css/img/py-loading-12.gif">正在上传...<a href="#" class="js_abort">取消</a></p>
+				</div>
+				<div class="pop-bubble-bd" style="display:none;">
+					<p class="media-info"><span class="js_title"></span> <a class="js_cancel" href="#">取消</a></p>
+					<div class="media-preview">
+						<div class="media-preview-inner js_preview"></div>
+					</div>
+					<p class="btn"></p>
+				</div>
+				<s class="t-arrow"><s class="t-arrow-inner"></s></s>
+				<a href="#" class="close js_close" onclick="$('box_pic').style.display='none';">关闭</a>
+			</div>
+		</div>
+	</div>
+
 	<!--{if empty($_SCOOKIE['closefeedbox']) && $_SGLOBAL['ad']['feedbox']}-->
 	<div id="feed_box" class="ye_r_t"><div class="ye_l_t"><div class="ye_r_b"><div class="ye_l_b">
 		<div class="task_notice">
