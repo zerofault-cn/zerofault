@@ -1,21 +1,25 @@
 <li class="s_clear $value[magic_class]" id="feed_{$value[feedid]}_li" onmouseover="feed_menu($value[feedid],1);" onmouseout="feed_menu($value[feedid],0);" style="z-index:{$value[feedid]}">
 	<div {$value[style]}>
-		<!--{if $value[uid] && empty($_TPL[hidden_more])}-->
+		<!--{if false && $value[uid] && empty($_TPL[hidden_more])}-->
 		<a href="cp.php?ac=feed&op=menu&feedid=$value[feedid]" class="float_more" id="a_feed_menu_$value[feedid]"  onmouseover="feed_menu($value[feedid],1);" onmouseout="feed_menu($value[feedid],0);" onclick="ajaxmenu(event, this.id)" title="显示更多选项" style="display:none;">菜单</a>
 		<!--{/if}-->
 		<!-- <a class="type" href="space.php?uid=$_GET[uid]&do=feed&view=$_GET[view]&appid=$value[appid]&icon=$value[icon]" title="只看此类动态"><img src="$value[icon_image]" /></a> -->
 		<div class="avatar48"><a class="avatar" target="_blank" title="" href="space.php?uid={$value['uid']}"><!--{avatar($value['uid'])}--></a></div>
 		<h5>$value[title_template] </h5>
 		<div class="feed_content">
+			<!--{if in_array($value['idtype'], array('blogid','picid','sid','pid','eventid'))}-->
+				<a onclick="ajaxmenu(event, this.id, 1)" class="a_share" id="a_share_{$value['id']}" href="cp.php?ac=share&amp;type=<!--{eval echo str_replace('album','pic',$value['icon']);}-->&amp;id={$value['id']}">分享</a>
+			<!--{/if}-->
 			<!--{if empty($_TPL[hidden_time])}-->
 			<span class="gray"><!--{date('m-d H:i',$value[dateline],1)}--></span>
 			<!--{/if}-->
 			<!--{if empty($_TPL[hidden_menu])}-->
 				<!--{if $value['idtype']=='doid'}-->
-			(<a href="javascript:;" onclick="docomment_get('docomment_$value[id]', 1);" id="do_a_op_$value[id]">回复</a>)
+			<a href="javascript:;" onclick="docomment_get('docomment_$value[id]', 1);" id="do_a_op_$value[id]">回复</a>
 				<!--{elseif in_array($value['idtype'], array('blogid','picid','sid','pid','eventid'))}-->
-			(<a href="javascript:;" onclick="feedcomment_get($value[feedid]);" id="feedcomment_a_op_$value[feedid]">评论</a>)
+			<a href="javascript:;" onclick="feedcomment_get($value[feedid]);" id="feedcomment_a_op_$value[feedid]">评论</a>
 				<!--{/if}-->
+			
 			<!--{/if}-->
 			<div class="clear"></div>
 

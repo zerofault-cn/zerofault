@@ -69,83 +69,95 @@ if(submitcheck('addsubmit')) {
 	$mood = empty($ms[1])?0:intval($ms[1]);
 
 	$message = getstr($_POST['message'], 200, 1, 1, 1);
+	$message = str_replace('你可以更新状态, 让好友们知道你在做什么...', '', $message);
 	//替换表情
 	$message = preg_replace("/\[em:(\d+):]/is", "<img src=\"image/face/\\1.gif\" class=\"face\">", $message);
 	$message = preg_replace("/\<br.*?\>/is", ' ', $message);
 	
-	if(strlen($message) < 1) {
-		showmessage('should_write_that');
-	}
-	
-	if($add_doing) {
-		$setarr = array(
-			'uid' => $_SGLOBAL['supe_uid'],
-			'username' => $_SGLOBAL['supe_username'],
-			'dateline' => $_SGLOBAL['timestamp'],
-			'message' => $message,
-			'mood' => $mood,
-			'ip' => getonlineip()
-		);
-		//入库
-		$newdoid = inserttable('doing', $setarr, 1);
-	}
-	
-	//更新空间note
-	$setarr = array('note'=>$message);
-	$credit = $experience = 0;
-	if(!empty($_POST['spacenote'])) {
-		$reward = getreward('updatemood', 0);
-		$setarr['spacenote'] = $message;
-	} else {
-		$reward = getreward('doing', 0);
-	}
-	updatetable('spacefield', $setarr, array('uid'=>$_SGLOBAL['supe_uid']));
-	
-	if($reward['credit']) {
-		$credit = $reward['credit'];
-	}
-	if($reward['experience']) {
-		$experience = $reward['experience'];
-	}
-	$setarr = array(
-		'mood' => "mood='$mood'",
-		'updatetime' => "updatetime='$_SGLOBAL[timestamp]'",
-		'credit' => "credit=credit+$credit",
-		'experience' => "experience=experience+$experience",
-		'lastpost' => "lastpost='$_SGLOBAL[timestamp]'"
-	);
-	if($add_doing) {
-		if(empty($space['doingnum'])) {//第一次
-			$doingnum = getcount('doing', array('uid'=>$space['uid']));
-			$setarr['doingnum'] = "doingnum='$doingnum'";
-		} else {
-			$setarr['doingnum'] = "doingnum=doingnum+1";
+	if (!empty($_POST['picid'])) {
+		//更新图片title及feed
+		if (strlen($message)>0) {
+			$sql = "update ".tname('pic')." set title='".$message."' where picid=".$_POST['picid'];
+			$_SGLOBAL['db']->query($sql);
 		}
+		include_once(S_ROOT.'./source/function_feed.php');
+		feed_publish($_POST['picid'], 'picid');
 	}
-	$_SGLOBAL['db']->query("UPDATE ".tname('space')." SET ".implode(',', $setarr)." WHERE uid='$_SGLOBAL[supe_uid]'");
-	
-	//事件feed
-	if($add_doing && ckprivacy('doing', 1)) {
-		$feedarr = array(
-			'appid' => UC_APPID,
-			'icon' => 'doing',
-			'uid' => $_SGLOBAL['supe_uid'],
-			'username' => $_SGLOBAL['supe_username'],
-			'dateline' => $_SGLOBAL['timestamp'],
-			'title_template' => cplang('feed_doing_title'),
-			'title_data' => saddslashes(serialize(sstripslashes(array('message'=>$message)))),
-			'body_template' => '',
-			'body_data' => '',
-			'id' => $newdoid,
-			'idtype' => 'doid'
+	else {
+		if(strlen($message) < 1) {
+			showmessage('should_write_that');
+		}
+		
+		if($add_doing) {
+			$setarr = array(
+				'uid' => $_SGLOBAL['supe_uid'],
+				'username' => $_SGLOBAL['supe_username'],
+				'dateline' => $_SGLOBAL['timestamp'],
+				'message' => $message,
+				'mood' => $mood,
+				'ip' => getonlineip()
+			);
+			//入库
+			$newdoid = inserttable('doing', $setarr, 1);
+		}
+		
+		//更新空间note
+		$setarr = array('note'=>$message);
+		$credit = $experience = 0;
+		if(!empty($_POST['spacenote'])) {
+			$reward = getreward('updatemood', 0);
+			$setarr['spacenote'] = $message;
+		} else {
+			$reward = getreward('doing', 0);
+		}
+		updatetable('spacefield', $setarr, array('uid'=>$_SGLOBAL['supe_uid']));
+		
+		if($reward['credit']) {
+			$credit = $reward['credit'];
+		}
+		if($reward['experience']) {
+			$experience = $reward['experience'];
+		}
+		$setarr = array(
+			'mood' => "mood='$mood'",
+			'updatetime' => "updatetime='$_SGLOBAL[timestamp]'",
+			'credit' => "credit=credit+$credit",
+			'experience' => "experience=experience+$experience",
+			'lastpost' => "lastpost='$_SGLOBAL[timestamp]'"
 		);
-		$feedarr['hash_template'] = md5($feedarr['title_template']."\t".$feedarr['body_template']);//喜好hash
-		$feedarr['hash_data'] = md5($feedarr['title_template']."\t".$feedarr['title_data']."\t".$feedarr['body_template']."\t".$feedarr['body_data']);//合并hash
-		inserttable('feed', $feedarr);
-	}
+		if($add_doing) {
+			if(empty($space['doingnum'])) {//第一次
+				$doingnum = getcount('doing', array('uid'=>$space['uid']));
+				$setarr['doingnum'] = "doingnum='$doingnum'";
+			} else {
+				$setarr['doingnum'] = "doingnum=doingnum+1";
+			}
+		}
+		$_SGLOBAL['db']->query("UPDATE ".tname('space')." SET ".implode(',', $setarr)." WHERE uid='$_SGLOBAL[supe_uid]'");
+		
+		//事件feed
+		if($add_doing && ckprivacy('doing', 1)) {
+			$feedarr = array(
+				'appid' => UC_APPID,
+				'icon' => 'doing',
+				'uid' => $_SGLOBAL['supe_uid'],
+				'username' => $_SGLOBAL['supe_username'],
+				'dateline' => $_SGLOBAL['timestamp'],
+				'title_template' => cplang('feed_doing_title'),
+				'title_data' => saddslashes(serialize(sstripslashes(array('message'=>$message)))),
+				'body_template' => '',
+				'body_data' => '',
+				'id' => $newdoid,
+				'idtype' => 'doid'
+			);
+			$feedarr['hash_template'] = md5($feedarr['title_template']."\t".$feedarr['body_template']);//喜好hash
+			$feedarr['hash_data'] = md5($feedarr['title_template']."\t".$feedarr['title_data']."\t".$feedarr['body_template']."\t".$feedarr['body_data']);//合并hash
+			inserttable('feed', $feedarr);
+		}
 
-	//统计
-	updatestat('doing');
+		//统计
+		updatestat('doing');
+	}
 	
 	showmessage('do_success', $_POST['refer'], 0);
 

@@ -124,7 +124,7 @@ function showMenu(ctrlid, click, offset, duration, timeout, layer, showid, maxh,
 	if(!is_opera) {
 		menuobj.style.clip = 'rect(auto, auto, auto, auto)';
 	}
-
+	menuobj.style.zIndex = 20000; 
 	setMenuPosition(showid, offset);
 
 	if(maxh && menuobj.scrollHeight > maxh) {

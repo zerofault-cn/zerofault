@@ -29,50 +29,59 @@
 	<div style="position:relative;">
 		<form method="post" action="cp.php?ac=doing" id="mood_addform">
 		<div class="ye_r_t"><div class="ye_l_t"><div class="ye_r_b"><div class="ye_l_b">
-			<div id="mood_statusinput_new" class="statusinput_new"><textarea id="mood_message" name="message" tabindex="1" rows="3" cols="70">你可以更新状态, 让好友们知道你在做什么...</textarea></div>
+			<div id="mood_statusinput_new" class="statusinput_new"><textarea id="mood_message" name="message" rows="3" cols="70">你可以更新状态, 让好友们知道你在做什么...</textarea></div>
 			<ul id="msgOpt">
-				<li class="btn"><input type="button" value="发表" id="msgSubmit" onclick="ajaxpost('mood_addform', 'reloadMood');$('mood_message').value='';"/></li>
-				<li class="count">200</li>
-				<li class="icon_face" onclick="statusFace();"><span></span>表情</li>
-				<li class="icon_pic" onclick="$('box_pic').style.display='';"><span></span>图片</li>
-				<li class="icon_video"><span></span>视频</li>
-				<li class="icon_vote"><span></span>投票</li>
+				<li id="btn"><input type="button" value="发表" id="msgSubmit" onclick="if (default_msg!=$('mood_message').value){ajaxpost('mood_addform', 'reloadMood');$('mood_message').value='';closeBox();}"/></li>
+				<li id="wordcount">200</li>
+				<li id="opt_face" class="tab">表情</li>
+				<li id="opt_pic" class="tab">图片</li>
+				<li id="opt_video" class="tab">视频</li>
+				<li id="opt_vote" class="tab">投票</li>
 			</ul>
 		</div></div></div></div>
 		<input type="hidden" name="addsubmit" value="true" />
+		<input type="hidden" name="picid" id="picic" value="" />
 		<input type="hidden" name="formhash" value="<!--{eval echo formhash();}-->" />
 		</form>
-		<div id="box_face" class="pop-bubble" style="position: absolute; display:none;">
-		<ul><li><img style="cursor:pointer; position:relative;" src="image/face/1.gif"></li><li><img style="cursor:pointer; position:relative;" src="image/face/2.gif"></li><li><img style="cursor:pointer; position:relative;" src="image/face/3.gif"></li><li><img style="cursor:pointer; position:relative;" src="image/face/4.gif"></li><li><img style="cursor:pointer; position:relative;" src="image/face/5.gif"></li><li><img style="cursor:pointer; position:relative;" src="image/face/6.gif"></li><li><img style="cursor:pointer; position:relative;" src="image/face/7.gif"></li><li><img style="cursor:pointer; position:relative;" src="image/face/8.gif"></li><li><img style="cursor:pointer; position:relative;" src="image/face/9.gif"></li><li><img style="cursor:pointer; position:relative;" src="image/face/10.gif"></li><li><img style="cursor:pointer; position:relative;" src="image/face/11.gif"></li><li><img style="cursor:pointer; position:relative;" src="image/face/12.gif"></li><li><img style="cursor:pointer; position:relative;" src="image/face/13.gif"></li><li><img style="cursor:pointer; position:relative;" src="image/face/14.gif"></li><li><img style="cursor:pointer; position:relative;" src="image/face/15.gif"></li><li><img style="cursor:pointer; position:relative;" src="image/face/16.gif"></li><li><img style="cursor:pointer; position:relative;" src="image/face/17.gif"></li><li><img style="cursor:pointer; position:relative;" src="image/face/18.gif"></li><li><img style="cursor:pointer; position:relative;" src="image/face/19.gif"></li><li><img style="cursor:pointer; position:relative;" src="image/face/20.gif"></li><li><img style="cursor:pointer; position:relative;" src="image/face/21.gif"></li><li><img style="cursor:pointer; position:relative;" src="image/face/22.gif"></li><li><img style="cursor:pointer; position:relative;" src="image/face/23.gif"></li><li><img style="cursor:pointer; position:relative;" src="image/face/24.gif"></li><li><img style="cursor:pointer; position:relative;" src="image/face/25.gif"></li><li><img style="cursor:pointer; position:relative;" src="image/face/26.gif"></li><li><img style="cursor:pointer; position:relative;" src="image/face/27.gif"></li><li><img style="cursor:pointer; position:relative;" src="image/face/28.gif"></li><li><img style="cursor:pointer; position:relative;" src="image/face/29.gif"></li><li><img style="cursor:pointer; position:relative;" src="image/face/30.gif"></li></ul>
-		</div>
-		<div id="box_pic" class="pop-bubble" style="position: absolute; display:none; top:82px; left:40px;">
+		<div id="box_face" class="pop-bubble" style="display:none;">
 			<div class="pop-bubble-inner">
 				<div class="pop-bubble-bd">
+					<ul><li><img src="image/face/1.gif"></li><li><img src="image/face/2.gif"></li><li><img src="image/face/3.gif"></li><li><img src="image/face/4.gif"></li><li><img src="image/face/5.gif"></li><li><img src="image/face/6.gif"></li><li><img src="image/face/7.gif"></li><li><img src="image/face/8.gif"></li><li><img src="image/face/9.gif"></li><li><img src="image/face/10.gif"></li><li><img src="image/face/11.gif"></li><li><img src="image/face/12.gif"></li><li><img src="image/face/13.gif"></li><li><img src="image/face/14.gif"></li><li><img src="image/face/15.gif"></li><li><img src="image/face/16.gif"></li><li><img src="image/face/17.gif"></li><li><img src="image/face/18.gif"></li><li><img src="image/face/19.gif"></li><li><img src="image/face/20.gif"></li><li><img src="image/face/21.gif"></li><li><img src="image/face/22.gif"></li><li><img src="image/face/23.gif"></li><li><img src="image/face/24.gif"></li><li><img src="image/face/25.gif"></li><li><img src="image/face/26.gif"></li><li><img src="image/face/27.gif"></li><li><img src="image/face/28.gif"></li><li><img src="image/face/29.gif"></li><li><img src="image/face/30.gif"></li></ul>
+				</div>
+				<s class="t-arrow"><s class="t-arrow-inner"></s></s>
+				<a href="javascript:void(0);" class="close js_close" onclick="closeBox('face');">关闭</a>
+			</div>
+		</div>
+		<div id="box_pic" class="pop-bubble" style="display:none; top:82px; left:40px;">
+			<div class="pop-bubble-inner">
+				<div class="pop-bubble-bd" id="upload_form">
 					<ul>
 						<li class="hidden-file">
-							<a class="js_local" href="#">上传照片</a>
+							<a class="js_local" href="javascript:void(0);">上传照片</a>
 							<div class="file-mask">
-								<form method="post" enctype="multipart/form-data" action="http://up.photo.pengyou.com/cgi-bin/upload/cgi_upload_image">
+								<form name="UploadForm" id="UploadForm" method="post" enctype="multipart/form-data" action="cp.php?ac=upload" target="_iframe">
+								<input type="hidden" name="ajaxupload" value="true"/>
+								<input type="hidden" name="formhash" value="<!--{eval echo formhash();}-->" />
 								<input type="file" name="filename">
 								</form>
 							</div>
 						</li>
-						<li><a href="#" class="js_album">从相册选择</a></li>
+						<li><a href="javascript:void(0);" class="js_album">从相册选择</a></li>
 						<div class="clear"></div>
 					</ul>
 				</div>
-				<div class="pop-bubble-bd" style="display:none;">
-					<p><img class="py-load-s" src="http://ctc.qzonestyle.gtimg.cn/qzonestyle/xiaoyou_portal_v2/css/img/py-loading-12.gif">正在上传...<a href="#" class="js_abort">取消</a></p>
+				<div class="pop-bubble-bd" id="upload_status" style="display:none;">
+					<p><img class="py-load-s" src="image/loading.gif" align="absmiddle">正在上传...<a href="javascript:void(0);" class="js_abort">取消</a></p>
 				</div>
-				<div class="pop-bubble-bd" style="display:none;">
-					<p class="media-info"><span class="js_title"></span> <a class="js_cancel" href="#">取消</a></p>
+				<div class="pop-bubble-bd" id="upload_result" style="display:none;">
+					<p class="media-info"><span class="js_title"></span> <a class="js_cancel" href="javascript:void(0);">取消</a></p>
 					<div class="media-preview">
 						<div class="media-preview-inner js_preview"></div>
 					</div>
 					<p class="btn"></p>
 				</div>
 				<s class="t-arrow"><s class="t-arrow-inner"></s></s>
-				<a href="#" class="close js_close" onclick="$('box_pic').style.display='none';">关闭</a>
+				<a href="javascript:void(0);" class="close js_close" onclick="closeBox('pic');">关闭</a>
 			</div>
 		</div>
 	</div>
@@ -379,6 +388,7 @@
 	</div>
 
 </div>
+<iframe id="_iframe" name="_iframe" style="width:0;height:0;display:none;"></iframe>
 <!--/sidebar-->
 <script language="JavaScript" type="text/javascript" src="source/jquery-1.4.2.min.js"></script>
 <script type="text/javascript">
@@ -388,6 +398,9 @@
 		}, function(str) {
 			jQuery("#sidebar").prepend(str);
 	});
+
+	var default_msg = "你可以更新状态, 让好友们知道你在做什么...";
+	var last_tab = "";
 	jQuery(document).ready(function() {
 		jQuery(".feed_content .small img").each(function() {
 			var src = jQuery(this).attr('src');
@@ -401,7 +414,88 @@
 				}
 			});
 		});
+		jQuery("#mood_message").keyup(function() {
+			jQuery("#msgOpt #wordcount").html(200-jQuery.trim(jQuery("#mood_message").val()).length);
+		}).focus(function() {
+			if (default_msg == jQuery.trim(jQuery(this).val())) {
+				jQuery(this).val("");
+			}
+		}).blur(function() {
+			if ("" == jQuery.trim(jQuery(this).val())) {
+				jQuery(this).val(default_msg);
+			}
+		});
+		jQuery("#msgOpt li.tab").each(function() {
+			var tab = jQuery(this).attr('id').substring(4);
+			jQuery(this).click(function() {
+				if (default_msg == jQuery.trim(jQuery("#mood_message").val())) {
+					jQuery("#mood_message").val("");
+				}
+				if ("" != last_tab) {
+					jQuery("#box_"+last_tab).hide();
+				}
+				jQuery("#box_"+tab).show();
+				last_tab = tab;
+			});
+		});
+		jQuery("#box_face li img").each(function(i) {
+			jQuery(this).click(function() {
+				var val = jQuery("#mood_message").val();
+				if (default_msg == jQuery.trim(val)) {
+					val = "";
+				}
+				jQuery("#mood_message").val(val+"[em:"+(i+1)+":]");
+			})
+		});
+		jQuery("#UploadForm input:file").change(function() {
+			if ("" == jQuery(this).val()) {
+				return;
+			}
+			jQuery("#UploadForm").submit();
+			jQuery("#upload_form").hide();
+			jQuery("#upload_status").show();
+		});
+		jQuery("#box_pic a.js_abort").click(function() {
+			jQuery("#upload_form").show();
+			jQuery("#UploadForm input:file").val("");
+			jQuery("#upload_status").hide();
+		});
+		jQuery("#box_pic a.js_cancel").click(function() {
+			jQuery("#upload_form").show();
+			jQuery("#UploadForm input:file").val("");
+			jQuery("#mood_addform input[name=picid]").val("");
+			jQuery("#upload_result").hide();
+		});
+		
 	});
+	function closeBox(tab) {
+		if (""==tab) {
+			jQuery(".pop-bubble").hide();
+		}
+		else {
+			jQuery("#box_"+tab).hide();
+		}
+		last_tab = "";
+		jQuery("#mood_addform input[name=picid]").val("");
+		jQuery("#upload_form").hide();
+		jQuery("#upload_status").hide();
+		jQuery("#upload_result").hide();
+		
+	}
+	function successUpload(pic_id, pic_name, pic_path) {
+		jQuery("#UploadForm input:file").val("");
+		jQuery("#mood_addform input[name=picid]").val(pic_id);
+		jQuery("#upload_status").hide();
+		jQuery("#upload_result .js_title").html(pic_name);
+		jQuery("#upload_result div.js_preview").append(jQuery("<img />").attr("src", "attachment/"+pic_path));
+		jQuery("#upload_result").show();
+	}
+	function failUpload() {
+		jQuery("#UploadForm input:file").val("");
+		jQuery("#upload_status").hide();
+		jQuery("#upload_result .js_title").html('上传失败...');
+		jQuery("#upload_result").show();
+	}
 	var next = $start;
 	function feed_more() {
 		var x = new Ajax('XML', 'ajax_wait');
@@ -429,85 +523,19 @@
 			$('feed_box').style.display = 'none';
 		});
 	}
-	
-	function statusFace() {
-		if($('mood_message').value == '你可以更新状态, 让好友们知道你在做什么...'){
-			$('mood_message').value = '';
-		}
-		$('mood_statusinput_new').style.zIndex = '20005';
-	//	$('mood_statusinput_new').className = 'statusinput_new';
-	//	$('mood_add').style.display = 'block';
-		
-		
-		var div = $('mood_face_bg');
-		if(div) {
-			div.parentNode.removeChild(div);
-		}
-		div = document.createElement('div');
-		div.id = 'mood_face_bg';
-		div.style.position = 'absolute';
-		div.style.left = div.style.top = '0px';
-		div.style.width = '100%';
-		div.style.height = document.body.scrollHeight + 'px';
-		div.style.backgroundColor = '#000';
-		div.style.zIndex = 10000;
-		div.style.display = 'none';
-		div.style.filter = 'alpha(opacity=0)';
-		div.style.opacity = 0;
-		div.onclick = function() {
-			hiddenstatus();
-		}
-		$('append_parent').appendChild(div);
-	
-	
-		if($('mood_message_menu') != null) {
-			$('mood_message_menu').style.display = '';
-		//	$('mood_add').style.display = '';
-		} else {
-			var faceDiv = document.createElement("div");
-			faceDiv.id = 'mood_message_menu';
-			faceDiv.className = 'facebox';
-			faceDiv.style.position = 'absolute';
-			var faceul = document.createElement("ul");
-			for(i=1; i<31; i++) {
-				getStatusFace(i, faceul);	
-			}
-			faceDiv.appendChild(faceul);
-			$('append_parent').appendChild(faceDiv);
-		}
-		//定位菜单
-		setMenuPosition('mood_message', 0);
-		div.style.display = '';
-	}
-	
-	function hiddenstatus() {
-		if($('mood_message_menu') != null) {
-			$('mood_message_menu').style.display = 'none';
-		}
-		$('mood_face_bg').style.display = 'none';
-	//	$('mood_add').style.display = 'none';
-	//	$('mood_statusinput_new').className = 'statusinput';
-		if($('mood_message').value == ''){
-			$('mood_message').value = '你可以更新状态, 让好友们知道你在做什么...';
-		}
-		$('mood_statusinput_new').style.zIndex = '1';
-	}
-	
-	function getStatusFace(i, faceul) {
-		var faceli = document.createElement("li");
-		faceli.innerHTML = '<img src="image/face/'+i+'.gif" style="cursor:pointer; position:relative;" />';
-		faceli.getElementsByTagName('img').item(0).onclick = function(){var faceText = '[em:'+i+':]'; if($('mood_message') != null) { insertContent('mood_message', faceText); }};
-		faceul.appendChild(faceli);
-	}
-	
+
 	function reloadMood(showid, result) {
-		var x = new Ajax();
-		x.get('cp.php?ac=doing&op=getmood', function(s){
+		//var x = new Ajax();
+		//x.get('cp.php?ac=doing&op=getmood', function(s){
 		//	$('mood_mystatus').innerHTML = s;
-		});
+		//});
 		//提示获得积分
+		var x = new Ajax('XML', 'ajax_wait');
+		x.get('cp.php?ac=feed&op=get&start=0', function(s){
+			$('feed_div').innerHTML = s;
+		});
 		showreward();
-		hiddenstatus();
+
 	}
 
 	var elems = selector('li[class~=magicthunder]', $('feed_div')); 
