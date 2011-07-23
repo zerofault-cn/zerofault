@@ -70,8 +70,8 @@ if($_GET['op'] == 'delete') {
 	$cp_mode = 1;
 	$_GET['start'] = intval($_GET['start']);
 	if($_GET['start'] < 1) {
-		$_GET['start'] = $_SCONFIG['feedmaxnum']<50?50:$_SCONFIG['feedmaxnum'];
-		$_GET['start'] = $_GET['start'] + 1;
+	//	$_GET['start'] = $_SCONFIG['feedmaxnum']<50?50:$_SCONFIG['feedmaxnum'];
+	//	$_GET['start'] = $_GET['start'] + 1;
 	}
 	$_TPL['getmore'] = 1;
 	include_once(S_ROOT.'./source/space_feed.php');

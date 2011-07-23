@@ -243,21 +243,15 @@ body { background: #FFF; }
 	background-color: #F7F7F7;
 	padding-left: 10px;
 }
-#content #msgOpt li {
-	float:left;
-	cursor:pointer;
-	padding-right:10px;
-	margin-right:5px;
-}
-#content #msgOpt li.count {
+#content #msgOpt li#wordcount {
 	float:right;
 	padding-right:20px;
-	color: 
 }
-#content #msgOpt li.btn {
+#content #msgOpt li#btn {
 	float:right;
+	padding-right:20px;
 }
-#content #msgOpt li.btn input{
+#content #msgOpt li#btn input{
 	padding: 0 4px 2px 4px;
 	height: 22px;
 	border: 1px solid #7C93D4;
@@ -267,64 +261,38 @@ body { background: #FFF; }
 	letter-spacing: 2px;
 	cursor: pointer;
 }
-#content #msgOpt li.icon_pic {
-	position:relative;
-}
-#content #msgOpt li.icon_pic input {
-	position:absolute;
-	cursor:pointer;
-	filter:alpha(opacity=0);
-	right:10px;
-	opacity:0;
-}
-#content #msgOpt li.icon_pic #pic_float {
-	left: 0;
-	top:25px;
-	width:120px;
-	padding:2px 10px 10px;
-	border: 1px solid #adadad;
-	position: absolute;
-	background:#FFFFFF;
-	z-index: 400;
-}
-#content #msgOpt li.icon_face span {
+
+#content #msgOpt li.tab {
 	float:left;
-	width:18px;
-	height:25px;
+	cursor:pointer;
+	padding-left:20px;
+	margin-right:15px;
+}
+
+#content #msgOpt li#opt_face {
 	background: url("image/icon_smile.png") left center no-repeat;
 }
-#content #msgOpt li.icon_pic span {
-	float:left;
-	width:18px;
-	height:25px;
+#content #msgOpt li#opt_pic {
 	background: url("image/icon_pic.png") left center no-repeat;
+	position:relative;
 }
-#content #msgOpt li.icon_video span {
-	float:left;
-	width:18px;
-	height:25px;
+#content #msgOpt li#opt_video {
 	background: url("image/icon_video.png") left center no-repeat;
 }
-#content #msgOpt li.icon_vote span {
-	float:left;
-	width:18px;
-	height:25px;
+#content #msgOpt li#opt_vote {
 	background: url("image/icon_vote.png") left center no-repeat;
 }
-#content #msgOpt li.icon_at span {
-	float:left;
-	width:18px;
-	height:25px;
+#content #msgOpt li#opt_at {
 	background: url("image/icon_at.png") left center no-repeat;
 }
-#content #msgOpt li.icon_attach span {
-	float:left;
-	width:18px;
-	height:25px;
+#content #msgOpt li#opt_attach {
 	background: url("image/icon_attach.png") left center no-repeat;
 }
 .pop-bubble{
-	position:absolute;z-index:20;float:left;padding:5px;background:rgba(0,0,0,.2);
+	position:absolute;
+	z-index:100000;
+	padding:5px;
+	background:rgba(0,0,0,.2);
 	#background:transparent;
 	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr=#33000000,endColorstr=#33000000);
 	border-radius:8px;
@@ -350,10 +318,12 @@ body { background: #FFF; }
 	background-position:-737px 0;
 }
 .pop-bubble-bd {
-	padding:18px 20px 20px;color:#414141;_float:left;
+	padding:18px 20px 10px 10px;
+	color:#414141;
+	_float:left;
 }
 .pop-bubble .t-arrow, .pop-bubble .t-arrow-inner {
-	position:absolute;z-index:21;border:7px dotted transparent;border-top:0 none;border-bottom:7px solid #999;width:0;height:0;font-size:0;line-height:0!important;
+	position:absolute;z-index:100001;border:7px dotted transparent;border-top:0 none;border-bottom:7px solid #999;width:0;height:0;font-size:0;line-height:0!important;
 }
 .pop-bubble .t-arrow {top:-8px;left:40px;}
 .pop-bubble .t-arrow-inner {border-bottom-color:#fff;top:1px;left:-7px;}
@@ -363,7 +333,33 @@ body { background: #FFF; }
 .pop-bubble .btn input,.pop-bubble .btn label,.pop-bubble .btn span {font-size:12px;line-height:1.2;}
 .pop-bubble .btn .chk-lomo {margin-right:5px;}
 .pop-bubble-ft {padding:5px 10px;text-align:right;background-color:#EFEFEF;}
-
+.pop-bubble .pb-media-view .media-preview-inner {
+    font-size: 0;
+    line-height: 0;
+    text-align: center;
+}
+.pop-bubble .pb-media-view .media-preview-inner img{
+	background-color: #FFFFFF;
+    border: 1px solid #CACACA;
+    margin: 0;
+    padding: 2px;
+}
+#box_face {
+	top:82px; left:0px;
+}
+#box_face ul {
+	width: 250px;
+	height: 75px;
+}
+#box_face ul li {
+	float: left;
+	height: 25px;
+	overflow: hidden;
+	width: 25px;
+}
+#box_face ul li img {
+	cursor:pointer;
+}
 #box_pic {
 	width: 190px;
 }
@@ -425,6 +421,7 @@ body { background: #FFF; }
 	opacity: 0;
 	filter: alpha(opacity=0);
 }
+
 .app_list {
 	word-wrap: normal;
 	word-break: keep-all;
