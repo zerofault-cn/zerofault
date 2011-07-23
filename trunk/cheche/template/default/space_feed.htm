@@ -31,7 +31,7 @@
 		<div class="ye_r_t"><div class="ye_l_t"><div class="ye_r_b"><div class="ye_l_b">
 			<div id="mood_statusinput_new" class="statusinput_new"><textarea id="mood_message" name="message" rows="3" cols="70">你可以更新状态, 让好友们知道你在做什么...</textarea></div>
 			<ul id="msgOpt">
-				<li id="btn"><input type="button" value="发表" id="msgSubmit" onclick="if (default_msg!=$('mood_message').value){ajaxpost('mood_addform', 'reloadMood');$('mood_message').value='';closeBox();}"/></li>
+				<li id="btn"><input type="button" value="发表" id="msgSubmit" onclick="if (default_msg!=$('mood_message').value){ajaxpost('mood_addform', 'reloadMood');$('mood_message').value='';closeBox('');}"/></li>
 				<li id="wordcount">200</li>
 				<li id="opt_face" class="tab">表情</li>
 				<li id="opt_pic" class="tab">图片</li>
@@ -470,14 +470,16 @@
 	});
 	function closeBox(tab) {
 		if (""==tab) {
-			jQuery(".pop-bubble").hide();
+			jQuery(".pop-bubble").each(function() {
+				jQuery(this).hide();
+			});
 		}
 		else {
 			jQuery("#box_"+tab).hide();
 		}
 		last_tab = "";
 		jQuery("#mood_addform input[name=picid]").val("");
-		jQuery("#upload_form").hide();
+		jQuery("#upload_form").show();
 		jQuery("#upload_status").hide();
 		jQuery("#upload_result").hide();
 		
