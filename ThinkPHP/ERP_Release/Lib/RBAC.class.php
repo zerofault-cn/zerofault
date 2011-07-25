@@ -112,10 +112,10 @@ class RBAC extends Think
 			$_action	=	array();
             if("" != C('REQUIRE_AUTH_MODULE')) {
                 //需要认证的模块
-                $_module['yes'] = explode(',',strtoupper(C('REQUIRE_AUTH_MODULE')));
+                $_module['yes'] = array_map('strtoupper', C('REQUIRE_AUTH_MODULE'));
             }else {
                 //无需认证的模块
-                $_module['no'] = explode(',',strtoupper(C('NOT_AUTH_MODULE')));
+                $_module['no'] = array_map('strtoupper',C('NOT_AUTH_MODULE'));
             }
             //检查当前模块是否需要认证
             if((!empty($_module['no']) && !in_array(strtoupper($ModuleName),$_module['no'])) || (!empty($_module['yes']) && in_array(strtoupper($ModuleName),$_module['yes']))) {

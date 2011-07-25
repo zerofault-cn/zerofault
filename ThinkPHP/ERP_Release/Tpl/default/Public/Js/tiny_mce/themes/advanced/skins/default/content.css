@@ -1,8 +1,17 @@
-body, td, pre {color:#000; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:10px; margin:8px;}
+body, td, pre {color:#000; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:12px; margin:8px;}
 body {background:#FFF;}
 body.mceForceColors {background:#FFF; color:#000;}
 h1 {font-size: 2em}
 h2 {font-size: 1.5em}
+.mceContentBody h2.sub {
+	margin:0;
+	padding-top: 12px;
+	padding-bottom: 8px;
+	color: #006600;
+	font-size: 14px;
+	font-weight: 150%;
+}
+
 h3 {font-size: 1.17em}
 h4 {font-size: 1em}
 h5 {font-size: .83em}
