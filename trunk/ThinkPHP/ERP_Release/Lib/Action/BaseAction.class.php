@@ -418,11 +418,11 @@ class BaseAction extends Action {
 
 			default :
 				//do not send any mail
-				Log::Write('Not in case :'.$flow['action'].'->'.$do);
+				Log::Write('Not in case :'.$flow['action'].'->'.$do, LOG::DEBUG);
 				return;
 		}
 		if (empty($mail_tpl[$flow['action']][$do])) {
-			Log::Write('Mail template of Action: '.$flow['action'].'->'.$do.' not exists!', INFO);
+			Log::Write('Mail template of Action: '.$flow['action'].'->'.$do.' not exists!', LOG::INFO);
 			return;
 		}
 		$subject = str_replace(
@@ -472,14 +472,14 @@ class BaseAction extends Action {
 		if (count($send_to)>1) {
 			$cmd .= ' -c '.implode(' -c ', array_slice($send_to,1));
 		}
-		Log::Write($cmd, INFO);
+		Log::Write($cmd, LOG::DEBUG);
 		system($cmd,$ret);
 		if('0'==$ret) {
-			Log::Write('Success', INFO);
+			Log::Write('Success', LOG::INFO);
 			return true;
 		}
 		else{
-			Log::Write('Fail');
+			Log::Write('Fail', LOG::INFO);
 			return false;
 		}
 	}
@@ -528,10 +528,10 @@ class BaseAction extends Action {
 			}
 			echo "Done:".$ret."<br />\n";
 			if ('Success'==trim($ret)) {
-				Log::Write('Sync '.$params['UserName'].' success', INFO);
+				Log::Write('Sync '.$params['UserName'].' success', LOG::INFO);
 			}
 			else {
-				Log::Write('Sync '.$params['UserName'].' fail');
+				Log::Write('Sync '.$params['UserName'].' fail', LOG::INFO);
 			}
 		}
 	}

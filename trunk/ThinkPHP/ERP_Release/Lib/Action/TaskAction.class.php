@@ -23,6 +23,7 @@ class TaskAction extends BaseAction{
 	}
 
 	public function index($type='') {
+		$this->assign('ACTION_TITLE', 'Task List');
 		$where = array();
 		if (!empty($_REQUEST['title'])) {
 			$title = trim($_REQUEST['title']);
@@ -61,7 +62,7 @@ class TaskAction extends BaseAction{
 			}
 			$_SESSION[MODULE_NAME.'_'.ACTION_NAME.'_creator_id'] = $creator_id;
 			$creator_arr = $this->dao->join("Inner Join erp_staff on erp_staff.id=erp_task.creator_id")->distinct(true)->field("erp_staff.id as id, erp_staff.realname as realname")->order("realname")->select();
-			$this->assign('creator_opts', self::genOptions($creator_arr, $category_id, 'realname'));
+			$this->assign('creator_opts', self::genOptions($creator_arr, $creator_id, 'realname'));
 			if (!empty($creator_id)) {
 				$where['creator_id'] = $creator_id;
 			}
@@ -83,11 +84,18 @@ class TaskAction extends BaseAction{
 		}
 		import("@.Paginator");
 		$limit = 20;
+		if (!empty($_SESSION[MODULE_NAME.'_'.ACTION_NAME.'_limit'])) {
+			$limit = $_SESSION[MODULE_NAME.'_'.ACTION_NAME.'_limit'];
+		}
+		if (!empty($_REQUEST['limit'])) {
+			$limit = $_REQUEST['limit'];
+		}
+		$_SESSION[MODULE_NAME.'_'.ACTION_NAME.'_limit'] = $limit;
 
 		$total = $this->dao->where($where)->count();
 		$p = new Paginator($total,$limit);
 		
-		$result = $this->dao->relation(true)->where($where)->order('status, id desc')->limit($p->offset.','.$p->limit)->field($field)->select();
+		$result = $this->dao->relation(true)->where($where)->order('status, id desc')->limit($p->offset.','.$p->limit)->select();
 		empty($result) && ($result = array());
 		foreach ($result as $i=>$row) {
 			foreach($row['owner'] as $key=>$val) {
@@ -440,14 +448,14 @@ class TaskAction extends BaseAction{
 			if ($id>0) {
 				$rs = $dao->where(array('type'=>$type,'name'=>$name,'id'=>array('neq',$id)))->find();
 				if($rs && sizeof($rs)>0){
-					self::_error('Category Name: "'.$name.'" already exists!');
+					self::_error('Category Name: \''.$name.'\' already exists!');
 				}
 				$dao->find($id);
 			}
 			else {
 				$rs = $dao->where(array('type'=>$type,'name'=>$name))->find();
 				if($rs && sizeof($rs)>0){
-					self::_error('Category Name: "'.$name.'" already exists!');
+					self::_error('Category Name: \''.$name.'\' already exists!');
 				}
 			}
 			$dao->type = $type;
@@ -495,6 +503,7 @@ class TaskAction extends BaseAction{
 		$field = $_REQUEST['f'];
 		$value = $_REQUEST['v'];
 		if ($staff_id > 0) {
+			//改变Owner状态
 			$dao = M('TaskOwner');
 			$info = $dao->where("task_id=".$task_id." and staff_id=".$staff_id)->find();
 			$rs = true;
@@ -502,14 +511,33 @@ class TaskAction extends BaseAction{
 				$rs = $dao->where('id='.$info['id'])->setField(array($field, 'action_time'), array($value, date('Y-m-d H:i:s')));
 				self::mail_task('owner_status', $task_id, $staff_id);
 			}
+			if ('status'==$field && 0==$value) {
+				//有Owner改变状态为Open，则检查Task状态，如果为Close，则自动Open
+				if (1 == $this->dao->where('id='.$task_id)->getField('status')) {
+					$this->dao->where('id='.$task_id)->setField(array('status', 'update_time'), array(0, date('Y-m-d H:i:s')));
+					self::mail_task('task_status', $task_id);
+				}
+			}
+			else {
+				//检查是否已没有Open或Pending
+				if ($dao->where("task_id=".$task_id." and (status=0 or status=-1)")->count() == 0) {
+					$this->dao->where('id='.$task_id)->setField(array('status', 'update_time'), array(1, date('Y-m-d H:i:s')));
+					self::mail_task('task_status', $task_id);
+				}
+			}
 		}
 		else {
+			//改变Task状态
 			$dao = $this->dao;
 			$info = $dao->where('id='.$task_id)->find();
 			$rs = true;
 			if ($info[$field] != $value) {
-				$rs = $dao->where('id='.$task_id)->setField(array($field, 'update_time'), array($value, date('Y-m-d H:i:s')));
+				$dao->where('id='.$task_id)->setField(array($field, 'update_time'), array($value, date('Y-m-d H:i:s')));
 				self::mail_task('task_status', $task_id);
+			}
+			if ('status'==$field && 1==$value) {
+				//总任务Close，则全部Owner状态自动Close
+				M('TaskOwner')->where('task_id='.$task_id)->setField(array('status', 'action_time'), array(1, date('Y-m-d H:i:s')));
 			}
 		}
 		if(false !== $rs) {
@@ -522,6 +550,10 @@ class TaskAction extends BaseAction{
 	public function delete() {
 		$id = $_REQUEST['id'];
 		M('TaskOwner')->where('task_id='.$id)->delete();
+		//delete comment
+		M('Comment')->where(array('model_name'=>MODULE_NAME, 'model_id'=>$id))->delete();
+
+		//delete attachment
 		$rs = (array)M('Attachment')->where(array('model_name'=>'Task', 'model_id'=>$id))->select();
 		foreach ($rs as $row) {
 			@unlink($row['path']);
@@ -963,10 +995,10 @@ class TaskAction extends BaseAction{
 		$mail->Subject = $subject;
 		$mail->MsgHTML($body);
 		if(!$mail->Send()) {
-			Log::Write('Mail task Error: '.$mail->ErrorInfo);
+			Log::Write('Mail task Error: '.$mail->ErrorInfo, LOG::ERR);
 			return false;
 		}
-		Log::Write('Mail task Success: '.$type.' '.$task_id, INFO);
+		Log::Write('Mail task Success: '.$type.' '.$task_id, LOG::INFO);
 		return true;
 	}
 	private function formatSecond($second) {
@@ -1024,7 +1056,7 @@ class TaskAction extends BaseAction{
 					if (self::mail_task('remind', $item['id'])) {
 						if(false !== $dao->where('task_id='.$item['id'].' and status=0')->setField('mail_time', time())) {
 							echo "Success!\n";
-							Log::Write('Notify task:'.$item['id'].'/staff:'.$owner['staff_id'].' success', INFO);
+							Log::Write('Notify task:'.$item['id'].'/staff:'.$owner['staff_id'].' success', LOG::INFO);
 						}
 						else {
 							echo 'SQL error'.(C('APP_DEBUG')?$dao->getLastSql():'');
@@ -1039,7 +1071,7 @@ class TaskAction extends BaseAction{
 					if (self::mail_task('press', $item['id'])) {
 						if(false !== $dao->where('task_id='.$item['id'].' and status=0')->setField('mail_time', time())) {
 							echo "Success!\n";
-							Log::Write('Notify task:'.$item['id'].'/staff:'.$owner['staff_id'].' success', INFO);
+							Log::Write('Notify task:'.$item['id'].'/staff:'.$owner['staff_id'].' success', LOG::INFO);
 						}
 						else {
 							echo 'SQL error'.(C('APP_DEBUG')?$dao->getLastSql():'');
