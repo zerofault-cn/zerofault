@@ -51,14 +51,12 @@ if (ENV == 'LOCAL') {
 
 	$config['ERP_TITLE'] = 'Local ERP';
 
-	$config['APP_CONFIG_LIST'][] = 'share';
 	$config['NOT_AUTH_MODULE'][] = 'Share';
 }
 elseif (ENV == 'TEST') {
 	$config['ERP_TITLE'] = 'ERP Test';
 	$config['DB_PWD'] = 'erp4ctu';
 
-	$config['APP_CONFIG_LIST'][] = 'share';
 	$config['NOT_AUTH_MODULE'][] = 'Share';
 
 	$config['ABSENCE_ADMIN_ID'] = array(1,9);
