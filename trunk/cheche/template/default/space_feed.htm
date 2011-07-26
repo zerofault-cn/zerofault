@@ -76,12 +76,37 @@
 				<div class="pop-bubble-bd" id="upload_result" style="display:none;">
 					<p class="media-info"><span class="js_title"></span> <a class="js_cancel" href="javascript:void(0);">取消</a></p>
 					<div class="media-preview">
-						<div class="media-preview-inner js_preview"></div>
 					</div>
-					<p class="btn"></p>
 				</div>
 				<s class="t-arrow"><s class="t-arrow-inner"></s></s>
 				<a href="javascript:void(0);" class="close js_close" onclick="closeBox('pic');">关闭</a>
+			</div>
+		</div>
+		<div id="box_album" class="pop-bubble" style="display:none; top:88px; left:128px;">
+			<div class="pop-bubble-inner">
+				<div class="box_header"><a href="javascript:void(0);" class="close js_close">关闭</a>选择图片</div>
+				&nbsp;<select id="album_select"></select>
+				<ul id="pic_list">
+					<li><img src="attachment/201107/15/1_1310728010rMmM.jpg.thumb.jpg"></li>
+					<li><img src="attachment/201107/15/1_1310728010rMmM.jpg.thumb.jpg"></li>
+					<li><img src="attachment/201107/15/1_1310728010rMmM.jpg.thumb.jpg"></li>
+					<li><img src="attachment/201107/15/1_1310728010rMmM.jpg.thumb.jpg"></li>
+					<li><img src="attachment/201107/15/1_1310728010rMmM.jpg.thumb.jpg"></li>
+					<li><img src="attachment/201107/15/1_1310728010rMmM.jpg.thumb.jpg"></li>
+					<li><img src="attachment/201107/15/1_1310728010rMmM.jpg.thumb.jpg"></li>
+					<li><img src="attachment/201107/15/1_1310728010rMmM.jpg.thumb.jpg"></li>
+					<li><img src="attachment/201107/15/1_1310728010rMmM.jpg.thumb.jpg"></li>
+					<li><img src="attachment/201107/15/1_1310728010rMmM.jpg.thumb.jpg"></li>
+					<li><img src="attachment/201107/15/1_1310728010rMmM.jpg.thumb.jpg"></li>
+					<li><img src="attachment/201107/15/1_1310728010rMmM.jpg.thumb.jpg"></li>
+					<li><img src="attachment/201107/15/1_1310728010rMmM.jpg.thumb.jpg"></li>
+					<li><img src="attachment/201107/15/1_1310728010rMmM.jpg.thumb.jpg"></li>
+				</ul>
+				<div class="box_footer">
+					<button id="album_submit">确定</button>
+					<button id="album_cancel">取消</button>
+					&nbsp;&nbsp;
+				</div>
 			</div>
 		</div>
 	</div>
@@ -388,6 +413,7 @@
 	</div>
 
 </div>
+<div id="mask_frame"></div>
 <iframe id="_iframe" name="_iframe" style="width:0;height:0;display:none;"></iframe>
 <!--/sidebar-->
 <script language="JavaScript" type="text/javascript" src="source/jquery-1.4.2.min.js"></script>
@@ -466,7 +492,58 @@
 			jQuery("#mood_addform input[name=picid]").val("");
 			jQuery("#upload_result").hide();
 		});
-		
+		jQuery("#box_pic a.js_album").click(function() {
+			jQuery("#mask_frame").show();
+			jQuery("#box_album").show();
+			var last_checked = null;
+			jQuery.get("space.php?ajax=1&do=album", {}, function(str) {
+				jQuery("#album_select").empty().html(str);
+				jQuery("#album_select").change(function() {
+					if (jQuery(this).val() != "") {
+						jQuery.get("space.php?ajax=1&do=album", {albumid : jQuery(this).val()}, function(str) {
+							jQuery("#pic_list").empty().html(str);
+						});
+					}
+				});
+			});
+			jQuery("#box_album #pic_list li").each(function() {
+				jQuery(this).click(function() {
+					if (jQuery(this).hasClass("checked")) {
+						last_checked = this;
+						jQuery(this).removeClass("checked");
+						jQuery(this).children("span").remove();
+					}
+					else {
+						if (last_checked) {
+							jQuery(last_checked).removeClass("checked");
+							jQuery(last_checked).children("span").remove();
+						}
+						last_checked = this;
+						jQuery(this).addClass("checked");
+						jQuery(this).append(jQuery('<span class="checked_icon"/>'));
+					}
+				});
+			});
+			jQuery("#box_album .box_footer button").each(function() {
+				jQuery(this).click(function() {
+					if ("album_submit"==jQuery(this).attr("id") && last_checked) {
+						jQuery("#upload_form").hide();
+						jQuery("#upload_result").show();
+						jQuery("#mood_addform input[name=picid]").val('pic_id');
+						jQuery("#upload_result .js_title").html('pic_name');
+						jQuery("#upload_result div.media-preview").html(jQuery("<img />").attr("src", jQuery(last_checked).children("img").attr("src")));
+					}
+					jQuery("#box_album #pic_list").empty();
+					jQuery("#mask_frame").hide();
+					jQuery("#box_album").hide();
+				})
+			});
+			jQuery("#box_album .js_close").click(function() {
+				jQuery("#box_album #pic_list").empty();
+				jQuery("#mask_frame").hide();
+				jQuery("#box_album").hide();
+			});
+		});
 	});
 	function closeBox(tab) {
 		if (""==tab) {
@@ -489,7 +566,7 @@
 		jQuery("#mood_addform input[name=picid]").val(pic_id);
 		jQuery("#upload_status").hide();
 		jQuery("#upload_result .js_title").html(pic_name);
-		jQuery("#upload_result div.js_preview").append(jQuery("<img />").attr("src", "attachment/"+pic_path));
+		jQuery("#upload_result div.media-preview").html(jQuery("<img />").attr("src", "attachment/"+pic_path));
 		jQuery("#upload_result").show();
 	}
 	function failUpload() {
