@@ -19,7 +19,27 @@ if($page<1) $page=1;
 //表态分类
 @include_once(S_ROOT.'./data/data_click.php');
 $clicks = empty($_SGLOBAL['click']['picid'])?array():$_SGLOBAL['click']['picid'];
-
+if (!empty($_REQUEST['ajax'])) {
+	if (empty($_REQUEST['albumid'])) {
+		$query = $_SGLOBAL['db']->query("SELECT * FROM ".tname('album')." WHERE uid=".$_SGLOBAL['supe_uid']." ORDER BY albumid");
+		if ($_SGLOBAL['db']->num_rows($query) == 0) {
+			echo '<option value="">尚无相册</option>';
+		}
+		else {
+			while ($row = $_SGLOBAL['db']->fetch_array($query)) {
+				echo '<option value="'.$row['albumid'].'">'.$row['albumname'].'</option>';
+			}
+		}
+	}
+	else {
+		$query = $_SGLOBAL['db']->query("SELECT * FROM ".tname('pic')." WHERE albumid=".intval($_REQUEST['albumid'])." ORDER BY dateline DESC");
+		while ($value = $_SGLOBAL['db']->fetch_array($query)) {
+			$src = pic_get($value['filepath'], $value['thumb'], $value['remote']);
+			echo '<li id="'.$value['picid'].'"><img src="'.$src.'" title="'.$value['title'].'"/></li>';
+		}
+	}
+	exit;
+}
 if($id) {
 	//图片列表
 	$perpage = 20;

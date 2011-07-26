@@ -1,4 +1,4 @@
-<li class="s_clear $value[magic_class]" id="feed_{$value[feedid]}_li" onmouseover="feed_menu($value[feedid],1);" onmouseout="feed_menu($value[feedid],0);" style="z-index:{$value[feedid]}">
+<li class="s_clear $value[magic_class]" id="feed_{$value[feedid]}_li" onmouseover="feed_menu($value[feedid],1);" onmouseout="feed_menu($value[feedid],0);">
 	<div {$value[style]}>
 		<!--{if false && $value[uid] && empty($_TPL[hidden_more])}-->
 		<a href="cp.php?ac=feed&op=menu&feedid=$value[feedid]" class="float_more" id="a_feed_menu_$value[feedid]"  onmouseover="feed_menu($value[feedid],1);" onmouseout="feed_menu($value[feedid],0);" onclick="ajaxmenu(event, this.id)" title="显示更多选项" style="display:none;">菜单</a>
