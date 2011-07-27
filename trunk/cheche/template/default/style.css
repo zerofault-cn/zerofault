@@ -768,7 +768,7 @@ dl.comment_list ul.rate li label {
 
 .tabs_header ul.tabs li a,
 .tabs_header ul.tabs li a span{ background: url(image/tab_bg.gif) no-repeat;  display: block; }
-.tabs_header ul.tabs { position: absolute; z-index: 10; }
+.tabs_header ul.tabs { pposition: absolute; zz-index: 10; }
 .tabs_header ul.tabs li { float: left; margin: 0 1px 0 0; display: inline; }
 .tabs_header ul.tabs li a { float: left; padding: 0 0 0 10px; height: 30px; background-position: left top;  }
 .tabs_header ul.tabs li a span { padding: 9px 10px 7px 0; background-position: right top; font-size: 14px; line-height: 14px; }

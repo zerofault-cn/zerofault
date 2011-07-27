@@ -158,6 +158,10 @@ if(submitcheck('addsubmit')) {
 		//Í³¼Æ
 		updatestat('doing');
 	}
+	$html = '<script>';
+	$html .= 'parent.reloadMood();';
+	$html .= '</script>';
+	die($html);
 	
 	showmessage('do_success', $_POST['refer'], 0);
 

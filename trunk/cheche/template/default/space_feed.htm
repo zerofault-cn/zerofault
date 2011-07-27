@@ -31,7 +31,7 @@
 		<div class="ye_r_t"><div class="ye_l_t"><div class="ye_r_b"><div class="ye_l_b">
 			<div id="mood_statusinput_new" class="statusinput_new"><textarea id="mood_message" name="message" rows="3" cols="70">你可以更新状态, 让好友们知道你在做什么...</textarea></div>
 			<ul id="msgOpt">
-				<li id="btn"><input type="button" value="发表" id="msgSubmit" onclick="if (default_msg!=$('mood_message').value){ajaxpost('mood_addform', 'reloadMood');$('mood_message').value='';closeBox('');}"/></li>
+				<li id="btn"><input type="button" value="发表" id="msgSubmit" onclick="if (default_msg!=$('mood_message').value || $('picid').value!=''){ajaxpost('mood_addform');$('mood_message').value='';closeBox('');}"/></li>
 				<li id="wordcount">200</li>
 				<li id="opt_face" class="tab">表情</li>
 				<li id="opt_pic" class="tab">图片</li>
@@ -40,7 +40,7 @@
 			</ul>
 		</div></div></div></div>
 		<input type="hidden" name="addsubmit" value="true" />
-		<input type="hidden" name="picid" id="picic" value="" />
+		<input type="hidden" name="picid" id="picid" value="" />
 		<input type="hidden" name="formhash" value="<!--{eval echo formhash();}-->" />
 		</form>
 		<div id="box_face" class="pop-bubble" style="display:none;">
@@ -85,28 +85,36 @@
 		<div id="box_album" class="pop-bubble" style="display:none; top:88px; left:128px;">
 			<div class="pop-bubble-inner">
 				<div class="box_header"><a href="javascript:void(0);" class="close js_close">关闭</a>选择图片</div>
-				&nbsp;<select id="album_select"></select>
+				&nbsp;<select id="album_select"><option value="">选择相册</option></select>
 				<ul id="pic_list">
-					<li><img src="attachment/201107/15/1_1310728010rMmM.jpg.thumb.jpg"></li>
-					<li><img src="attachment/201107/15/1_1310728010rMmM.jpg.thumb.jpg"></li>
-					<li><img src="attachment/201107/15/1_1310728010rMmM.jpg.thumb.jpg"></li>
-					<li><img src="attachment/201107/15/1_1310728010rMmM.jpg.thumb.jpg"></li>
-					<li><img src="attachment/201107/15/1_1310728010rMmM.jpg.thumb.jpg"></li>
-					<li><img src="attachment/201107/15/1_1310728010rMmM.jpg.thumb.jpg"></li>
-					<li><img src="attachment/201107/15/1_1310728010rMmM.jpg.thumb.jpg"></li>
-					<li><img src="attachment/201107/15/1_1310728010rMmM.jpg.thumb.jpg"></li>
-					<li><img src="attachment/201107/15/1_1310728010rMmM.jpg.thumb.jpg"></li>
-					<li><img src="attachment/201107/15/1_1310728010rMmM.jpg.thumb.jpg"></li>
-					<li><img src="attachment/201107/15/1_1310728010rMmM.jpg.thumb.jpg"></li>
-					<li><img src="attachment/201107/15/1_1310728010rMmM.jpg.thumb.jpg"></li>
-					<li><img src="attachment/201107/15/1_1310728010rMmM.jpg.thumb.jpg"></li>
-					<li><img src="attachment/201107/15/1_1310728010rMmM.jpg.thumb.jpg"></li>
 				</ul>
 				<div class="box_footer">
 					<button id="album_submit">确定</button>
 					<button id="album_cancel">取消</button>
 					&nbsp;&nbsp;
 				</div>
+			</div>
+		</div>
+		<div id="box_video" class="pop-bubble" style="display:none; top:82px; left:100px;">
+			<div class="pop-bubble-inner">
+				<div class="pop-bubble-bd" id="upload_form">
+					<form name="ShareForm" id="ShareForm" method="post" action="cp.php?ac=share&type=link" target="_iframe">
+					<input type="hidden" name="ajaxupload" value="true"/>
+					<input type="hidden" name="formhash" value="<!--{eval echo formhash();}-->" />
+					粘贴视频播放页链接地址或MP3路径：<br />
+					<input type="text" size="50" name="link"/>
+					<input type="submit" value="确定" /><br />
+					目前已支持优酷、土豆、酷6、新浪、搜狐、youtube、mofile等视频网站
+					</form>
+					<div class="clear"></div>
+				</div>
+				<div class="pop-bubble-bd" id="upload_result" style="display:none;">
+					<p class="media-info"><span class="js_title"></span> <a class="js_cancel" href="javascript:void(0);">取消</a></p>
+					<div class="media-preview">
+					</div>
+				</div>
+				<s class="t-arrow"><s class="t-arrow-inner"></s></s>
+				<a href="javascript:void(0);" class="close js_close" onclick="closeBox('pic');">关闭</a>
 			</div>
 		</div>
 	</div>
@@ -447,7 +455,7 @@
 				jQuery(this).val("");
 			}
 		}).blur(function() {
-			if ("" == jQuery.trim(jQuery(this).val())) {
+			if ("" == jQuery.trim(jQuery(this).val()) && jQuery("#mood_addform input[name=picid]").val()!="") {
 				jQuery(this).val(default_msg);
 			}
 		});
@@ -496,41 +504,41 @@
 			jQuery("#mask_frame").show();
 			jQuery("#box_album").show();
 			var last_checked = null;
-			jQuery.get("space.php?ajax=1&do=album", {}, function(str) {
-				jQuery("#album_select").empty().html(str);
-				jQuery("#album_select").change(function() {
-					if (jQuery(this).val() != "") {
-						jQuery.get("space.php?ajax=1&do=album", {albumid : jQuery(this).val()}, function(str) {
-							jQuery("#pic_list").empty().html(str);
+			jQuery("#album_select").change(function() {
+				if (jQuery(this).val() != "") {
+					jQuery.get("space.php?ajax=1&do=album&albumid="+jQuery(this).val()+"&&rand="+Math.random(), {}, function(str) {
+						jQuery("#box_album #pic_list").empty().html(str);
+						jQuery("#box_album #pic_list li").each(function() {
+							jQuery(this).click(function() {
+								if (jQuery(this).hasClass("checked")) {
+									last_checked = this;
+									jQuery(this).removeClass("checked");
+									jQuery(this).children("span").remove();
+								}
+								else {
+									if (last_checked) {
+										jQuery(last_checked).removeClass("checked");
+										jQuery(last_checked).children("span").remove();
+									}
+									last_checked = this;
+									jQuery(this).addClass("checked");
+									jQuery(this).append(jQuery('<span class="checked_icon"/>'));
+								}
+							});
 						});
-					}
-				});
+					});
+				}
 			});
-			jQuery("#box_album #pic_list li").each(function() {
-				jQuery(this).click(function() {
-					if (jQuery(this).hasClass("checked")) {
-						last_checked = this;
-						jQuery(this).removeClass("checked");
-						jQuery(this).children("span").remove();
-					}
-					else {
-						if (last_checked) {
-							jQuery(last_checked).removeClass("checked");
-							jQuery(last_checked).children("span").remove();
-						}
-						last_checked = this;
-						jQuery(this).addClass("checked");
-						jQuery(this).append(jQuery('<span class="checked_icon"/>'));
-					}
-				});
+			jQuery.get("space.php?ajax=1&do=album&rand="+Math.random(), {}, function(str) {
+				jQuery("#album_select").empty().html(str).trigger("change");
 			});
 			jQuery("#box_album .box_footer button").each(function() {
 				jQuery(this).click(function() {
 					if ("album_submit"==jQuery(this).attr("id") && last_checked) {
 						jQuery("#upload_form").hide();
 						jQuery("#upload_result").show();
-						jQuery("#mood_addform input[name=picid]").val('pic_id');
-						jQuery("#upload_result .js_title").html('pic_name');
+						jQuery("#mood_addform input[name=picid]").val(jQuery(last_checked).attr("id"));
+						jQuery("#upload_result .js_title").html(jQuery(last_checked).children("img").attr("title"));
 						jQuery("#upload_result div.media-preview").html(jQuery("<img />").attr("src", jQuery(last_checked).children("img").attr("src")));
 					}
 					jQuery("#box_album #pic_list").empty();
@@ -614,7 +622,6 @@
 			$('feed_div').innerHTML = s;
 		});
 		showreward();
-
 	}
 
 	var elems = selector('li[class~=magicthunder]', $('feed_div')); 
