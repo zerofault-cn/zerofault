@@ -469,6 +469,7 @@ class ShareAction extends BaseAction{
 		if (!defined('APP_ROOT')) {
 			define('APP_ROOT', 'http://'.$_SERVER['SERVER_ADDR'].__APP__);
 		}
+		empty($id) && ($id = intval($_REQUEST['id']));
 		if (empty($id)) {
 			echo "No ID specified\n";
 			return;
@@ -476,7 +477,6 @@ class ShareAction extends BaseAction{
 		$info = $this->dao->relation(true)->find($id);
 
 		if ($info['notification'][0]=='1' || $info['notification'][1]=='1' || $info['notification'][2]=='1') {
-		
 			$smtp_config = C('_smtp_');
 			include_once (LIB_PATH.'class.phpmailer.php');
 			$mail = new PHPMailer();
@@ -484,7 +484,7 @@ class ShareAction extends BaseAction{
 		//	$mail->SMTPDebug  = 1;  // 2 = messages only
 			$mail->Host       = $smtp_config['host'];
 			$mail->Port       = $smtp_config['port'];
-			$mail->SetFrom($smtp_config['from_mail'], 'ERP Task');
+			$mail->SetFrom($smtp_config['from_mail'], 'ERP Experience');
 
 			$mail->AddAddress($info['staff']['email'], $info['staff']['realname']);
 			$subject = '[Notification] ['.$info['staff']['realname'].'] share ['.$info['title'].'] to you';
@@ -527,10 +527,12 @@ class ShareAction extends BaseAction{
 				Log::Write('Mail Experience(ID: '.$id.') Error: '.$mail->ErrorInfo, LOG::ERR);
 				return false;
 			}
+			echo "Mail Experience(ID: ".$id.") Success!\n";
 			Log::Write('Mail Experience(ID: '.$id.') Success!', LOG::INFO);
 		}
 		//update mail_status
 		$this->dao->setField('mail_status', 1);
+		echo "Update mail_status done!\n";
 		return true;
 	}
 }
