@@ -230,7 +230,7 @@ body { background: #FFF; }
 #content { float: left; margin: 0 20px 0 0; width: 560px; ooverflow: hidden; }
 #content2 { float: left; margin: 0 10px 0 0; width: 644px; ooverflow: hidden; }
 
-#content #mood_message {
+#content #message {
 	width:544px;
 	height:48px;
 	font-size:14px;
@@ -279,7 +279,7 @@ body { background: #FFF; }
 #content #msgOpt li#opt_video {
 	background: url("image/icon_video.png") left center no-repeat;
 }
-#content #msgOpt li#opt_vote {
+#content #msgOpt li#opt_poll {
 	background: url("image/icon_vote.png") left center no-repeat;
 }
 #content #msgOpt li#opt_at {
@@ -421,17 +421,18 @@ body { background: #FFF; }
 	opacity: 0;
 	filter: alpha(opacity=0);
 }
-#box_pic .media-info {
+.pop-bubble-bd .media-info {
 	height: 14px;
 }
-#box_pic .media-info span {
+.pop-bubble-bd .media-info span {
 	float: left;
 }
-#box_pic .media-info a {
+.pop-bubble-bd .media-info a {
 	float: right;
+	padding-left: 8px;
 	margin-right: 8px;
 }
-#box_pic .media-preview {
+.pop-bubble-bd .media-preview {
 	padding-top: 8px;
 	text-align: center;
 }
@@ -514,7 +515,9 @@ body { background: #FFF; }
 	left: 2px;
 	cursor: pointer;
 }
-
+#box_poll .poll_options input {
+	margin-bottom:4px;
+}
 
 
 

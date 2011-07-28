@@ -314,6 +314,9 @@ function ajaxpost_load() {
 	} else {
 		var s = $('ajaxframe').contentWindow.document.documentElement.firstChild.nodeValue;
 	}
+	if (!s) {
+		var s = "";
+	}
 	evaled = false;
 	if(s.indexOf('ajaxerror') != -1) {
 		evalscript(s);
