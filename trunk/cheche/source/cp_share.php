@@ -8,6 +8,76 @@ if(!defined('IN_UCHOME')) {
 	exit('Access Denied');
 }
 
+if (submitcheck('ajaxupload')) {
+	$type = empty($_REQUEST['type'])?'':$_REQUEST['type'];
+	$link = shtmlspecialchars(trim($_REQUEST['link']));
+	if($link) {
+		if(!preg_match("/^(http|ftp|https|mms)\:\/\/.{4,300}$/i", $link)) $link = '';
+	}
+	if(empty($link)) {
+		$html = '<script>';
+		$html .= 'parent.alert("链接地址格式不正确!");';
+		$html .= '</script>';
+		die($html);
+	}
+	$arr['title_template'] = cplang('share_link');
+	$arr['body_template'] = '{link}';
+
+	$link_text = sub_url($link, 45);
+
+	$arr['body_data'] = array('link'=>"<a href=\"$link\" target=\"_blank\">$link_text</a>", 'data'=>$link);
+	$parseLink = parse_url($link);
+	if(preg_match("/(youku.com|tudou.com|youtube.com|5show.com|ku6.com|sohu.com|mofile.com|sina.com.cn)$/i", $parseLink['host'], $hosts)) {
+		$flashvar = getflash($link, $hosts[1]);
+		if(!empty($flashvar)) {
+			$arr['title_template'] = cplang('share_video');
+			$type = 'video';
+			$arr['body_data']['flashvar'] = $flashvar;
+			$arr['body_data']['host'] = $hosts[1];
+		}
+		$thumb_pic = getThumb($link, $hosts[1]);
+		if (!empty($thumb_pic)) {
+			$arr['body_data']['pic'] = $thumb_pic;
+		}
+	}
+	// 判断是否音乐 mp3、wma
+	if(preg_match("/\.(mp3|wma)$/i", $link)) {
+		$arr['title_template'] = cplang('share_music');
+		$arr['body_data']['musicvar'] = $link;
+		$type = 'music';
+	}
+	// 判断是否 Flash
+	if(preg_match("/\.swf$/i", $link)) {
+		$arr['title_template'] = cplang('share_flash');
+		$arr['body_data']['flashaddr'] = $link;
+		$type = 'flash';
+	}
+	$arr['body_general'] = '';
+	$arr['type'] = $type;
+	$arr['uid'] = $_SGLOBAL['supe_uid'];
+	$arr['username'] = $_SGLOBAL['supe_username'];
+	$arr['dateline'] = $_SGLOBAL['timestamp'];
+	$arr['topicid'] = 0;
+	$arr['body_data'] = serialize($arr['body_data']);//数组转化
+
+	//入库
+	$setarr = saddslashes($arr);//增加转义
+	$sid = inserttable('share', $setarr, 1);
+
+	//统计
+	updatestat('share');
+
+	$html = '<script>';
+	if ($sid>0) {
+		$html .= 'parent.successShare("'.$sid.'", "'.$type.'", "'.$link.'", "'.$thumb_pic.'");';
+	}
+	else {
+		$html .= 'parent.failShare();';
+	}
+	$html .= '</script>';
+	die($html);
+}
+
 $sid = intval($_GET['sid']);
 
 if($_GET['op'] == 'delete') {
@@ -431,7 +501,9 @@ if($_GET['op'] == 'delete') {
 				$type = 'flash';
 			}
 		}
-		
+		if (empty($_POST['general'])) {
+			$_POST['general'] = $_POST['message'];
+		}
 		$arr['body_general'] = getstr($_POST['general'], 150, 1, 1, 1, 1);
 
 		$arr['type'] = $type;

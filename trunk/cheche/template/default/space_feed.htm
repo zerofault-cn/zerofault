@@ -29,18 +29,20 @@
 	<div style="position:relative;">
 		<form method="post" action="cp.php?ac=doing" id="mood_addform">
 		<div class="ye_r_t"><div class="ye_l_t"><div class="ye_r_b"><div class="ye_l_b">
-			<div id="mood_statusinput_new" class="statusinput_new"><textarea id="mood_message" name="message" rows="3" cols="70">你可以更新状态, 让好友们知道你在做什么...</textarea></div>
+			<div id="mood_statusinput_new" class="statusinput_new"><textarea id="message" name="message" rows="3" cols="70">你可以更新状态, 让好友们知道你在做什么...</textarea></div>
 			<ul id="msgOpt">
-				<li id="btn"><input type="button" value="发表" id="msgSubmit" onclick="if (default_msg!=$('mood_message').value || $('picid').value!=''){ajaxpost('mood_addform');$('mood_message').value='';closeBox('');}"/></li>
+				<li id="btn"><input type="button" value="发表" id="msgSubmit" onclick="if (default_msg!=$('message').value || $('picid').value!=''){ajaxpost('mood_addform');$('message').value='';closeBox('');}"/></li>
 				<li id="wordcount">200</li>
 				<li id="opt_face" class="tab">表情</li>
 				<li id="opt_pic" class="tab">图片</li>
 				<li id="opt_video" class="tab">视频</li>
-				<li id="opt_vote" class="tab">投票</li>
+				<li id="opt_poll" class="tab">投票</li>
 			</ul>
 		</div></div></div></div>
 		<input type="hidden" name="addsubmit" value="true" />
 		<input type="hidden" name="picid" id="picid" value="" />
+		<input type="hidden" name="sid" id="sid" value="" />
+		<input type="hidden" name="pid" id="pid" value="" />
 		<input type="hidden" name="formhash" value="<!--{eval echo formhash();}-->" />
 		</form>
 		<div id="box_face" class="pop-bubble" style="display:none;">
@@ -97,24 +99,78 @@
 		</div>
 		<div id="box_video" class="pop-bubble" style="display:none; top:82px; left:100px;">
 			<div class="pop-bubble-inner">
-				<div class="pop-bubble-bd" id="upload_form">
+				<div class="pop-bubble-bd" id="share_form">
 					<form name="ShareForm" id="ShareForm" method="post" action="cp.php?ac=share&type=link" target="_iframe">
 					<input type="hidden" name="ajaxupload" value="true"/>
 					<input type="hidden" name="formhash" value="<!--{eval echo formhash();}-->" />
-					粘贴视频播放页链接地址或MP3路径：<br />
+					粘贴视频播放页链接地址或MP3链接地址：<br />
 					<input type="text" size="50" name="link"/>
 					<input type="submit" value="确定" /><br />
-					目前已支持优酷、土豆、酷6、新浪、搜狐、youtube、mofile等视频网站
+					<span id="share_tips">目前已支持优酷、土豆、酷6、新浪、搜狐、youtube、mofile等视频网站</span>
 					</form>
 					<div class="clear"></div>
 				</div>
-				<div class="pop-bubble-bd" id="upload_result" style="display:none;">
+				<div class="pop-bubble-bd" id="share_result" style="display:none;">
 					<p class="media-info"><span class="js_title"></span> <a class="js_cancel" href="javascript:void(0);">取消</a></p>
 					<div class="media-preview">
 					</div>
 				</div>
 				<s class="t-arrow"><s class="t-arrow-inner"></s></s>
-				<a href="javascript:void(0);" class="close js_close" onclick="closeBox('pic');">关闭</a>
+				<a href="javascript:void(0);" class="close js_close" onclick="closeBox('video');">关闭</a>
+			</div>
+		</div>
+		<div id="box_poll" class="pop-bubble" style="display:none; top:82px; left:160px;">
+			<div class="pop-bubble-inner">
+				<div class="pop-bubble-bd" id="poll_form">
+					<form name="PollForm" id="PollForm" method="post" action="cp.php?ac=poll" target="_iframe">
+					<input type="hidden" name="ajaxupload" value="true"/>
+					<input type="hidden" name="formhash" value="<!--{eval echo formhash();}-->" />
+					<table>
+					<tr>
+						<td>投票主题：</td>
+						<td><input type="text" name="subject" size="30" /></td>
+					</tr>
+					<tr>
+						<td colspan="2"><div style="height:1px; border-bottom:1px solid #DDDDDD;"></div></td>
+					</tr>
+					<tr>
+						<td align="right">投票选项：</td>
+						<td class="poll_options">
+							<input type="text" name="option[]" size="30" /><br />
+							<input type="text" name="option[]" size="30" /><br />
+							<input type="text" name="option[]" size="30" /><br />
+							<input type="text" name="option[]" size="30" /><br />
+							<input type="text" name="option[]" size="30" /><br />
+							<a href="javascript:void(0);" id="add_option">增加更多选项</a>
+						</td>
+					</tr>
+					<tr>
+						<td colspan="2"><div style="height:1px; border-bottom:1px solid #DDDDDD;"></div></td>
+					</tr>
+					<tr>
+						<td valign="top">投票方式：</td>
+						<td><select name="maxchoice">
+								<option value="1">单选</option>
+								<option value="2">多选(最多2项)</option>
+								<option value="3">多选(最多3项)</option>
+								<option value="4">多选(最多4项)</option>
+								<option value="5">多选(最多5项)</option>
+							</select>
+							&nbsp;&nbsp;<input type="submit" value="确定" /><br />
+							<span id="poll_tips" style="color:red;"></span>
+						</td>
+					</tr>
+					</table>
+					</form>
+					<div class="clear"></div>
+				</div>
+				<div class="pop-bubble-bd" id="poll_result" style="display:none;">
+					<p class="media-info"><span class="js_title"></span> <a class="js_cancel" href="javascript:void(0);">取消</a></p>
+					<div class="media-preview">
+					</div>
+				</div>
+				<s class="t-arrow"><s class="t-arrow-inner"></s></s>
+				<a href="javascript:void(0);" class="close js_close" onclick="closeBox('poll');">关闭</a>
 			</div>
 		</div>
 	</div>
@@ -448,8 +504,8 @@
 				}
 			});
 		});
-		jQuery("#mood_message").keyup(function() {
-			jQuery("#msgOpt #wordcount").html(200-jQuery.trim(jQuery("#mood_message").val()).length);
+		jQuery("#message").keyup(function() {
+			jQuery("#msgOpt #wordcount").html(200-jQuery.trim(jQuery("#message").val()).length);
 		}).focus(function() {
 			if (default_msg == jQuery.trim(jQuery(this).val())) {
 				jQuery(this).val("");
@@ -462,8 +518,8 @@
 		jQuery("#msgOpt li.tab").each(function() {
 			var tab = jQuery(this).attr('id').substring(4);
 			jQuery(this).click(function() {
-				if (default_msg == jQuery.trim(jQuery("#mood_message").val())) {
-					jQuery("#mood_message").val("");
+				if (default_msg == jQuery.trim(jQuery("#message").val())) {
+					jQuery("#message").val("");
 				}
 				if ("" != last_tab) {
 					jQuery("#box_"+last_tab).hide();
@@ -474,11 +530,11 @@
 		});
 		jQuery("#box_face li img").each(function(i) {
 			jQuery(this).click(function() {
-				var val = jQuery("#mood_message").val();
+				var val = jQuery("#message").val();
 				if (default_msg == jQuery.trim(val)) {
 					val = "";
 				}
-				jQuery("#mood_message").val(val+"[em:"+(i+1)+":]");
+				jQuery("#message").val(val+"[em:"+(i+1)+":]");
 			})
 		});
 		jQuery("#UploadForm input:file").change(function() {
@@ -499,6 +555,18 @@
 			jQuery("#UploadForm input:file").val("");
 			jQuery("#mood_addform input[name=picid]").val("");
 			jQuery("#upload_result").hide();
+		});
+		jQuery("#box_video a.js_cancel").click(function() {
+			jQuery("#share_form").show();
+			jQuery("#ShareForm input:text").val("");
+			jQuery("#mood_addform input[name=sid]").val("");
+			jQuery("#share_result").hide();
+		});
+		jQuery("#box_poll a.js_cancel").click(function() {
+			jQuery("#poll_form").show();
+			jQuery("#PollForm input:text").val("");
+			jQuery("#mood_addform input[name=pid]").val("");
+			jQuery("#poll_result").hide();
 		});
 		jQuery("#box_pic a.js_album").click(function() {
 			jQuery("#mask_frame").show();
@@ -552,6 +620,11 @@
 				jQuery("#box_album").hide();
 			});
 		});
+		jQuery("#box_poll #add_option").click(function() {
+			jQuery(this).before('<input type="text" name="option[]" size="30" /><br />');
+			var l = jQuery("#box_poll .poll_options input").length;
+			jQuery("#box_poll select[name=maxchoice]").append('<option value="'+l+'">多选(最多'+l+'项)</option>');
+		});
 	});
 	function closeBox(tab) {
 		if (""==tab) {
@@ -564,10 +637,15 @@
 		}
 		last_tab = "";
 		jQuery("#mood_addform input[name=picid]").val("");
+		jQuery("#mood_addform input[name=sid]").val("");
+		jQuery("#mood_addform input[name=pid]").val("");
 		jQuery("#upload_form").show();
 		jQuery("#upload_status").hide();
 		jQuery("#upload_result").hide();
-		
+		jQuery("#share_form").show();
+		jQuery("#share_result").hide();
+		jQuery("#poll_form").show();
+		jQuery("#poll_result").hide();
 	}
 	function successUpload(pic_id, pic_name, pic_path) {
 		jQuery("#UploadForm input:file").val("");
@@ -582,6 +660,32 @@
 		jQuery("#upload_status").hide();
 		jQuery("#upload_result .js_title").html('上传失败...');
 		jQuery("#upload_result").show();
+	}
+	function successShare(sid, type, link, pic) {
+		jQuery("#mood_addform input[name=sid]").val(sid);
+		jQuery("#share_form").hide();
+		jQuery("#share_result .js_title").html(link);
+		if ('video' == type) {
+			if (pic) {
+				jQuery("#share_result div.media-preview").html(jQuery("<img />").attr("src", pic));
+			}
+			else {
+				jQuery("#share_result div.media-preview").html('<p>未能取得视频截图</p>');
+			}
+		}
+		jQuery("#share_result").show();
+	}
+	function failShare() {
+		jQuery("#share_tips").html('分析URL失败！');
+	}
+	function successPoll(pid) {
+		jQuery("#mood_addform input[name=pid]").val(pid);
+		jQuery("#poll_form").hide();
+		jQuery("#poll_result .js_title").html('创建完成！');
+		jQuery("#poll_result").show();
+	}
+	function failPoll() {
+		jQuery("#poll_tips").html('创建失败！');
 	}
 	var next = $start;
 	function feed_more() {

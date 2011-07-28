@@ -8,6 +8,71 @@ if(!defined('IN_UCHOME')) {
 	exit('Access Denied');
 }
 
+if (submitcheck('ajaxupload')) {
+	//限制最多20项
+	$maxoption = 20;
+	$newoption = $preview = $optionarr = $setarr = array();
+	$_POST['subject'] = getstr(trim($_POST['subject']), 80, 1, 1, 1);
+	
+	//整理投票项
+	$_POST['option'] = array_unique($_POST['option']);
+	foreach($_POST['option'] as $key => $val) {
+		$option = getstr(trim($val), 80, 1, 1, 1);
+		if(strlen($option) && count($newoption) < $maxoption) {
+			$newoption[] = $option;
+			$preview[] = $option;
+		}
+	}
+
+	$maxoption = count($newoption);
+
+	$_POST['message'] = getstr(trim($_POST['message']), 0, 1, 1, 1, 2);
+	$maxchoice = $_POST['maxchoice'] < $maxoption ? intval($_POST['maxchoice']) : $maxoption;
+	$expiration = 0;
+	$setarr = array(
+		'uid' => $_SGLOBAL['supe_uid'],
+		'username' => $_SGLOBAL['supe_username'],
+		'subject' => $_POST['subject'],
+		'multiple' => $maxchoice > 1 ? 1 : 0,
+		'maxchoice' => $maxchoice,
+		'sex' => intval($_POST['sex']),
+		'noreply' => intval($_POST['noreply']),
+		'credit' => $_POST['credit'],
+		'percredit' => $_POST['percredit'],
+		'expiration' => $expiration,
+		'dateline' => $_SGLOBAL['timestamp'],
+		'topicid' => $_POST['topicid']
+	);
+	
+	$pid = inserttable('poll', $setarr, 1);
+	$setarr = array(
+		'pid' => $pid,
+		'message' => $_POST['message'],
+		'option' => saddslashes(serialize($preview))
+	);
+	inserttable('pollfield', $setarr);
+	
+	foreach($newoption as $key => $value) {
+		$optionarr[] = "('$pid', '$value')";
+	}
+	
+	//插入选项值
+	$_SGLOBAL['db']->query("INSERT INTO ".tname('polloption')." (`pid`, `option`) VALUES ".implode(',', $optionarr));
+	
+	//统计
+	updatestat('poll');
+
+	$html = '<script>';
+	if ($pid>0) {
+		$html .= 'parent.successPoll("'.$pid.'");';
+	}
+	else {
+		$html .= 'parent.failPoll();';
+	}
+	$html .= '</script>';
+	die($html);
+
+}
 //检查信息
 $pid = empty($_GET['pid'])?0:intval($_GET['pid']);
 $op = empty($_GET['op'])?'':$_GET['op'];
@@ -75,9 +140,9 @@ if(submitcheck('pollsubmit')) {
 		$option = getstr(trim($val), 80, 1, 1, 1);
 		if(strlen($option) && count($newoption) < $maxoption) {
 			$newoption[] = $option;
-			if(count($preview) < 2 ) {
+		//	if(count($preview) < 2 ) {
 				$preview[] = $option;
-			}
+		//	}
 		}
 	}
 

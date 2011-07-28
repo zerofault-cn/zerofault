@@ -201,7 +201,7 @@ function feed_publish($id, $idtype, $add=0) {
 				$setarr['body_template'] = '<a href="{url}"><strong>{subject}</strong></a>{option}';
 				
 				$optionstr = '';
-				$opquery = $_SGLOBAL['db']->query("SELECT * FROM ".tname("polloption")." WHERE pid='$value[pid]' LIMIT 0,2");
+				$opquery = $_SGLOBAL['db']->query("SELECT * FROM ".tname("polloption")." WHERE pid='$value[pid]' ");
 				while ($opt = $_SGLOBAL['db']->fetch_array($opquery)) {
 					$optionstr .= '<br><input type="'.($value['maxchoice'] > 1 ? 'checkbox' : 'radio').'" disabled name="poll_'.$opt['oid'].'"/>'.$opt['option'];
 				}

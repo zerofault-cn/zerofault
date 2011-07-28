@@ -83,6 +83,22 @@ if(submitcheck('addsubmit')) {
 		include_once(S_ROOT.'./source/function_feed.php');
 		feed_publish($_POST['picid'], 'picid');
 	}
+	elseif (!empty($_POST['sid'])) {
+		if (strlen($message)>0) {
+			$sql = "update ".tname('share')." set title_template=concat(title_template, ': ".addslashes($message)."') where sid=".$_POST['sid'];
+			$_SGLOBAL['db']->query($sql);
+		}
+		include_once(S_ROOT.'./source/function_feed.php');
+		feed_publish($_POST['sid'], 'sid', 1);
+	}
+	elseif (!empty($_POST['pid'])) {
+		if (strlen($message)>0) {
+			$sql = "update ".tname('pollfield')." set message='".addslashes($message)."' where pid=".$_POST['pid'];
+			$_SGLOBAL['db']->query($sql);
+		}
+		include_once(S_ROOT.'./source/function_feed.php');
+		feed_publish($_POST['pid'], 'pid', 1);
+	}
 	else {
 		if(strlen($message) < 1) {
 			showmessage('should_write_that');
