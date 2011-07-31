@@ -52,6 +52,7 @@ if (!empty($content) && ''!=trim($content)) {
 }
 .weather span {
 	float: right;
+	font-weight:normal;
 }
 .weather div.left div, .weather div.right div {
 	height: 60px;
@@ -95,7 +96,7 @@ if (!empty($content) && ''!=trim($content)) {
 </style>
 <div class="sidebox weather">
 		<h2 class="title">
-			<span><?php echo $tip;?></span>今日天气 (<?php echo $_REQUEST['city'];?>)
+			<span><a href="space.php?do=weather">未来四天&gt;&gt;</a></span>今日天气 (<?php echo $_REQUEST['city'];?>)
 		</h2>
 		<div class="left">
 			白天<br />
@@ -107,6 +108,6 @@ if (!empty($content) && ''!=trim($content)) {
 			<div><img src="<?php echo $night_pic;?>" width="90" height="80"/></div>
 			<?php echo $night_str;?>  <?php echo $night_temp_str;?>
 		</div>
-		<div class="clear"><a href="space.php?do=weather">未来四天</a><!-- <a href="javascript:void(0);" onclick="jQuery('.weather .weather_list').toggle();jQuery(this).toggle();jQuery(this).next().toggle();">未来四天</a><a style="display:none;" href="javascript:void(0);" onclick="jQuery('.weather .weather_list').toggle();jQuery(this).toggle();jQuery(this).prev().toggle();">关闭</a> --></div>
+		<div class="clear" style="font-weight:bold;padding:4px;">洗车指数：<?php echo $tip;?></div></div>
 		<div class="weather_list" style="display:none;"><?php echo $content2;?></div>
 </div>

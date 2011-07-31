@@ -20,9 +20,7 @@ a { color: #3B5998; }
 
 
 /*************************************************HEADER***/
-  .headerwarp { background: #3B5998 url(image/header_bg.gif); color: #3B5998; }
 
-.menu { font-size: 12px; }
 .nav_account { color: #FFF; }
 .login_thumb { background: url(image/thumb20bg.gif) no-repeat; }
 .dropmenu_drop { border: 1px solid #CCC; }

@@ -97,7 +97,7 @@ body { background: #FFF; }
 #ad_contentbottom { margin: 10px 0 0 0; padding: 10px 0 0 0; width: 100%; border-top: 1px solid #EBE6C9; overflow: hidden; }
 
 /*************************************************HEADER***/
-  .headerwarp { margin: 0 auto; padding: 19px 0px 0; width: 1004px; height: 40px; background: #FF8E00 url(image/header_bg.gif) center no-repeat; color: #FFF; }
+  .headerwarp { margin: 0 auto; width: 1004px; height: 50px; background: #3B5997; color: #3B5998; }
 .headerwarp a { color: #FFF; }
   .headerwarp .logo { float: left; margin: 0 190px 0 0; }
   .headerwarp .logo a{
@@ -105,11 +105,12 @@ body { background: #FFF; }
 	  width:160px;
 	  height: 40px;
   }
-.menu { float: left; height: 40px; font-size: 14px; font-weight: bold; }
+.headerwarp .logoimg {float:left; border-left:1px solid #809ECE;border-bottom:1px solid #809ECE;}
+.menu { float: left; padding-top:10px; height: 40px; font-size: 14px; font-weight: bold; }
   .menu li { float: left; padding: 10px; line-height: 20px; vertical-align: top; }
 .menu .edit { padding-left: 4px; color: #FFF; font-size: 12px; font-weight: normal; }
 
-.nav_account { float: right;  white-space:nowrap;  position:relative; line-height: 40px; padding-right:38px;}
+.nav_account { float: right;  white-space:nowrap;  position:relative; line-height: 60px; height:50px;}
   .login_thumb { float: left; margin: 6px 6px 0 0; padding: 3px 0 0 3px; width: 24px; height: 24px; background: url(image/thumb20bg.gif) no-repeat; display: block; }
   .login_thumb img{ width: 20px; height: 20px; }
     li.notify { margin: 9px 0 0; padding: 0 0 0 18px; width: 72px; height: 20px; background: url(image/notify_bg.gif); color: #FFF; font-size: 12px; font-weight: normal; }
@@ -118,18 +119,29 @@ body { background: #FFF; }
 	float:right;
 	position: relative;
 	text-align: right;
-	padding-right: 20px;
+	height:40px;
+	padding-right: 10px;
+	padding-top: 10px;
+}
+.header_search div.f_input{
+	float:left;
+}
+.header_search div.f_image{
+	float:left;
+	padding-top:1px;
 }
 .header_search .t_input {
 	width: 140px;
 	height: 13px;
-	line-height: 13px;
-	padding: 2px 2px 4px 2px;
+	line-height: 12px;
+	padding: 1px 2px 5px 2px;
+	margin-right: 1px;
 	color: #888888;
 }
 .header_search #search_tip {
 	position: absolute;
-	top: 30px;
+	left: 28px;
+	top: 40px;
 	border:1px solid #bdc7d8;
 	text-align: center;
 	padding-bottom: 3px;
@@ -145,15 +157,16 @@ body { background: #FFF; }
 }
 .nav_account #account {
 	cursor: pointer;
-	padding: 10px;
+	padding: 20px 20px 10px 10px;
 	line-height: 20px;
-	background:url(image/arrow-down-white.png) 35px center  no-repeat;
+	height:20px;
+	background:url(image/arrow-down-white.png) 35px 30px  no-repeat;
 }
 .nav_account #account_menu {
 	display: none;
 	position: absolute;
-	left: -64px;
-	top: 40px;
+	left: -74px;
+	top: 50px;
 	width: 110px;
 	color: #005EAC;
 	z-index:1000;
@@ -526,6 +539,10 @@ body { background: #FFF; }
 	word-break: keep-all;
 	white-space: nowrap;
 }
+#app_sidebar #account_menu .loginName {
+	font-size: 14px;
+	font-weight:bold;
+}
 #app_sidebar #mtag {
 	
 	padding: 3px 0;
@@ -846,7 +863,7 @@ h2.title img { margin: 0 5px 0 0; vertical-align: middle; }
 .page a { color: #C60; }
 .page a:hover { background: #FEE4AB; text-decoration: none; }
 textarea { border: 1px solid #ddd; overflow: auto; }
-.t_input, select { padding: 3px 2px; border: 1px solid #ddd; line-height: 16px; }
+.t_input, select { padding: 3px 2px; border: 1px solid #ddd; line-height: 16px; color:#888888;}
 .button { padding: 0 5px; margin: 0 0 0 3px; height: 24px; border: none; background: #DDD; color: #333; line-height: 20px; letter-spacing: 1px; cursor: pointer; }
 input.submit { padding: 0 5px; height: 24px; border: none; background: #FF8901; color: #FFF; line-height: 20px; letter-spacing: 1px; cursor: pointer; }
 a.submit { padding: 5px; }
