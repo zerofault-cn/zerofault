@@ -387,7 +387,7 @@
 			<p class="r_option">
 				<a href="space.php?uid=$space[uid]&do=friend&view=visitor">全部</a>
 			</p>
-			最近来访
+			最近来访({$_SGLOBAL[member][viewnum]})
 			<!--{if $_SGLOBAL[magic][detector]}-->
 			<span class="gray"><img src="image/magic/detector.small.gif" title="{$_SGLOBAL[magic][detector]}" /><a id="a_magic_detector" href="magic.php?mid=detector" onclick="ajaxmenu(event,this.id,1)">{$_SGLOBAL[magic][detector]}</a></span>
 			<!--{/if}-->
@@ -458,11 +458,13 @@
 		</div></div></div></div>
 	</div>
 	<!--{/if}-->
-	<div class="searchfriend">
-		<div class="ye_r_t"><div class="ye_l_t"><div class="ye_r_b"><div class="ye_l_b">
-			<h3>搜索用户</h3>
-			<form method="get" action="cp.php" style="padding:10px 0 5px 0;">
-				<input name="searchkey" value="可输入车牌、车系、地区、人名" onclick="this.value='';" class="t_input" type="text">
+	<div class="sidebox">
+		<h2 class="title">
+			搜索用户
+		</h2>
+		<div style="padding-left:5px;">
+			<form method="get" action="cp.php" style="padding-bottom:5px;">
+				<input name="searchkey" value="车牌、车系、地区、人名" onclick="this.value='';" size="25" class="t_input" type="text">
 				<input name="searchsubmit" value="找人" class="submit" type="submit">
 				<input type="hidden" name="searchmode" value="1" />
 				<input type="hidden" name="smart" value="1" />
@@ -472,8 +474,9 @@
 			<p>
 				<a href="cp.php?ac=friend&op=search">高级搜索</a><span class="pipe">|</span>
 				<a href="cp.php?ac=friend&op=find">可能认识的人</a><span class="pipe">|</span>
-				<a href="cp.php?ac=invite">邀请车友</a></p>
-		</div></div></div></div>
+				<a href="cp.php?ac=invite">邀请车友</a>
+			</p>
+		</div>
 	</div>
 
 </div>

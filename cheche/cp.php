@@ -33,7 +33,7 @@ $space = getspace($_SGLOBAL['supe_uid']);
 if(empty($space)) {
 	showmessage('space_does_not_exist');
 }
-
+$space['star'] = getstar($space['experience']);
 // «∑Òπÿ±’’æµ„
 if(!in_array($ac, array('common', 'pm'))) {
 	checkclose();

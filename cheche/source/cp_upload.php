@@ -158,6 +158,7 @@ if(submitcheck('albumsubmit')) {
 
 }
 elseif (submitcheck('ajaxupload')) {
+	header("Content-type: text/html; charset=utf-8"); 
 	$albumname = '贴图相册';
 	$friend = 0;
 

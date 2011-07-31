@@ -1338,7 +1338,6 @@ function pic_cover_get($pic, $picflag) {
 //处理积分星星
 function getstar($experience) {
 	global $_SCONFIG;
-
 	$starimg = '';
 	if($_SCONFIG['starcredit'] > 1) {
 		//计算星星数

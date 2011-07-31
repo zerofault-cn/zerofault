@@ -36,33 +36,9 @@
 		</td>
 	</tr>
 	<tr>
-		<th valign="top" nowrap="nowrap" width="145">车车友密码<em>*</em></th>
+		<th valign="top" nowrap="nowrap">创建密码<em>*</em></th>
 		<td>
-			<input type="password" size="30" name="password" id="password" value="" class="t_input" onBlur="checkPassword()" onkeyup="checkPwd(this.value);" tabindex="3" />&nbsp;<span id="checkpassword">&nbsp;</span><br/>
-			<style>
-				.psdiv0,.psdiv1,.psdiv2,.psdiv3,.psdiv4{position:relative;height:30px;color:#666}/*密码强度容器*/
-				.strongdepict{position:absolute; width:300px;left:0px;top:3px}/*密码强度固定文字*/
-				.strongbg{position:absolute;left:0px;top:22px;width:235px!important;width:234px;height:10px;background-color:#E0E0E0; font-size:0px;line-height:0px}/*灰色强度背景*/
-				.strong{float:left;font-size:0px;line-height:0px;height:10px}/*色块背景*/
-				
-				.psdiv0 span{display:none}
-				.psdiv1 span{display:inline;color:#F00}
-				.psdiv2 span{display:inline;color:#C48002}
-				.psdiv3 span{display:inline;color:#2CA4DE}
-				.psdiv4 span{display:inline;color:#063}
-				
-				.psdiv0 .strong{ width:0px}
-				.psdiv1 .strong{ width:25%;background-color:#F00}
-				.psdiv2 .strong{ width:50%;background-color:#F90}
-				.psdiv3 .strong{ width:75%;background-color:#2CA4DE}
-				.psdiv4 .strong{ width:100%;background-color:#063}
-			</style>
-			<div class="psdiv0" id="chkpswd">
-				<div class="strongdepict">密码安全程度：<span id="chkpswdcnt">太短</span></div>
-				<div class="strongbg">
-					<div class="strong"></div>			
-				</div>		
-			</div>
+			<input type="password" size="30" name="password" id="password" value="" class="t_input" onBlur="checkPassword()" tabindex="3" />&nbsp;<span class="box-error" id="pwd_error_span" style="display: none;"><b id="pwd_error_span_i">密码必须由6-20个字符组成</b></span>
 		</td>
 	</tr>
 	<tr>

@@ -35,7 +35,7 @@ $_SGLOBAL[space_css]
 <div id="header">
 	<!--{if $_SGLOBAL['ad']['header']}--><div id="ad_header"><!--{ad/header}--></div><!--{/if}-->
 	<div class="headerwarp">
-		<h1 class="logo"><a href="index.php"></a></h1>
+		<a href="index.php"><img src="image/logo_red.gif" class="logoimg"/></a>
 		<ul class="menu">
 		<!--{if $_SGLOBAL[supe_uid]}-->
 			<li><a href="space.php?do=home">首页</a></li>
@@ -94,8 +94,9 @@ $_SGLOBAL[space_css]
 		
 		<!--{if $_SGLOBAL[supe_uid]}-->
 		<div class="header_search">
-			<form method="get" action="cp.php" style="padding:10px 0 5px 0;">
-				<input name="searchkey" value="车牌/车系/地区/人名" style="color: #888888;" onclick="this.value='';this.style.color='#333333';$('search_tip').style.display='';" onblur="if(this.value=='')this.value='车牌/车系/地区/人名';this.style.color='#888888';$('search_tip').style.display='none';" size="30" class="t_input" type="text" autocomplete="off"><input type="image" src="image/search.png" align="absmiddle" /> 
+			<form method="get" action="cp.php" style="padding:10px 0 5px 0;color:#fff">
+				<div class="f_input"><a href="http://localhost/cheche/cp.php?ac=friend&op=search">搜索</a> <input name="searchkey" value="车牌、车系、地区、人名" style="color: #888888;" onclick="this.value='';this.style.color='#333333';$('search_tip').style.display='';" onblur="if(this.value=='')this.value='车牌/车系/地区/人名';this.style.color='#888888';$('search_tip').style.display='none';" size="30" class="t_input" type="text" autocomplete="off"></div>
+				<div class="f_image"><input type="image" src="image/search.png" align="absmiddle" /></div>
 				<input name="searchsubmit" value="找人" type="hidden" />
 				<input type="hidden" name="searchmode" value="1" />
 				<input type="hidden" name="smart" value="1" />
@@ -129,19 +130,17 @@ $_SGLOBAL[space_css]
 </div>
 
 <div id="wrap">
-
 	<!--{if empty($_TPL['nosidebar'])}-->
 	<div id="main">
 		<div id="app_sidebar">
 		<!--{if $_SGLOBAL[supe_uid]}-->
-			<div id="account_menu" style="font-size: 12px;padding-bottom:18px;position:relative;">
+			<div id="account_menu" style="font-size: 12px;padding-bottom:18px;position:relative;z-index:1001;">
 				<div class="avatar48" style="float:left;">
 					<a href="space.php?uid=$_SGLOBAL[supe_uid]" ><!--{avatar($_SGLOBAL[supe_uid])}--></a>
 				</div>
-				<a href="space.php?uid=$_SGLOBAL[supe_uid]" class="loginName">{$_SN[$_SGLOBAL[supe_uid]]}</a><a href="cp.php?ac=credit">{$_SGLOBAL[member][star]}</a>
-				<br /><a href="cp.php?ac=credit" style="font-size:10px;color:#666;">积分:{$_SGLOBAL[member][credit]}&nbsp;经验:{$_SGLOBAL[member][experience]}</a>
-				<br />
-				<span style="font-size:11px;color:#666;">已有 {$_SGLOBAL[member][viewnum]} 人次访问</span>
+				<a href="space.php?uid=$_SGLOBAL[supe_uid]" class="loginName">{$_SN[$_SGLOBAL[supe_uid]]}</a><br />
+				状态：<!--{if $_SGLOBAL[session][magichidden]}-->隐身<!--{else}-->在线<!--{/if}--><br />
+				<a href="cp.php?ac=credit">{$space[star]}</a>
 				<div class="clear"></div>
 				<a href="javascript:;" onclick="jQuery('#usettingli_menu').toggle().hover(function(){jQuery(this).show();},function(){jQuery(this).hide();});">个人设置<img src="image/more.gif" align="absmiddle"></a>
 				<ul id="usettingli_menu" class="dropmenu_drop" style="display:none;left: 0px; top: 78px; filter: progid:DXImageTransform.Microsoft.shadow(direction=135,color=#CCCCCC,strength=2); position: absolute;">
@@ -160,7 +159,7 @@ $_SGLOBAL[space_css]
 					<li><a href="do.php?ac=stat">趋势统计</a></li>
 					<!--{/if}-->
 				</ul>
-				<!--{if $_SGLOBAL[session][magichidden]}-->当前隐身<!--{else}-->当前在线<!--{/if}-->
+				
 				<!--{if $_SGLOBAL[session][magichidden]}-->
 				<img src="image/magic/invisible.small.gif" class="magicicon"><a id="a_magic_appear" href="cp.php?ac=magic&op=appear" onclick="ajaxmenu(event,this.id)" class="gray">上线</a>
 				<!--{else}-->
