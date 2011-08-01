@@ -68,7 +68,8 @@ if($uid) {
 }
 
 if($space) {
-	
+	$space['star'] = getstar($space['experience']);
+
 	//验证空间是否被锁定
 	if($space['flag'] == -1) {
 		showmessage('space_has_been_locked');
