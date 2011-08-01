@@ -54,7 +54,7 @@
 				<a href="javascript:void(0);" class="close js_close" onclick="closeBox('face');">关闭</a>
 			</div>
 		</div>
-		<div id="box_pic" class="pop-bubble" style="display:none; top:82px; left:40px;">
+		<div id="box_pic" class="pop-bubble" style="display:none; top:85px; left:45px;">
 			<div class="pop-bubble-inner">
 				<div class="pop-bubble-bd" id="upload_form">
 					<ul>
@@ -84,7 +84,8 @@
 				<a href="javascript:void(0);" class="close js_close" onclick="closeBox('pic');">关闭</a>
 			</div>
 		</div>
-		<div id="box_album" class="pop-bubble" style="display:none; top:58px; left:8px;">
+		<div id="mask_frame"></div>
+		<div id="box_album" class="pop-bubble" style="display:none; top:88px; left:128px;">
 			<div class="pop-bubble-inner">
 				<div class="box_header"><a href="javascript:void(0);" class="close js_close">关闭</a>选择图片</div>
 				&nbsp;<select id="album_select"><option value="">选择相册</option></select>
@@ -97,7 +98,7 @@
 				</div>
 			</div>
 		</div>
-		<div id="box_video" class="pop-bubble" style="display:none; top:82px; left:100px;">
+		<div id="box_video" class="pop-bubble" style="display:none; top:85px; left:110px;">
 			<div class="pop-bubble-inner">
 				<div class="pop-bubble-bd" id="share_form">
 					<form name="ShareForm" id="ShareForm" method="post" action="cp.php?ac=share&type=link" target="_iframe">
@@ -119,7 +120,7 @@
 				<a href="javascript:void(0);" class="close js_close" onclick="closeBox('video');">关闭</a>
 			</div>
 		</div>
-		<div id="box_poll" class="pop-bubble" style="display:none; top:82px; left:160px;">
+		<div id="box_poll" class="pop-bubble" style="display:none; top:85px; left:180px;">
 			<div class="pop-bubble-inner">
 				<div class="pop-bubble-bd" id="poll_form">
 					<form name="PollForm" id="PollForm" method="post" action="cp.php?ac=poll" target="_iframe">
@@ -387,7 +388,7 @@
 			<p class="r_option">
 				<a href="space.php?uid=$space[uid]&do=friend&view=visitor">全部</a>
 			</p>
-			最近来访({$_SGLOBAL[member][viewnum]})
+			最近来访
 			<!--{if $_SGLOBAL[magic][detector]}-->
 			<span class="gray"><img src="image/magic/detector.small.gif" title="{$_SGLOBAL[magic][detector]}" /><a id="a_magic_detector" href="magic.php?mid=detector" onclick="ajaxmenu(event,this.id,1)">{$_SGLOBAL[magic][detector]}</a></span>
 			<!--{/if}-->
@@ -480,7 +481,6 @@
 	</div>
 
 </div>
-<div id="mask_frame"></div>
 <iframe id="_iframe" name="_iframe" style="width:0;height:0;display:none;"></iframe>
 <!--/sidebar-->
 <script language="JavaScript" type="text/javascript" src="source/jquery-1.4.2.min.js"></script>
@@ -572,7 +572,7 @@
 			jQuery("#poll_result").hide();
 		});
 		jQuery("#box_pic a.js_album").click(function() {
-		//	jQuery("#mask_frame").show();
+			jQuery("#mask_frame").show();
 			jQuery("#box_album").show();
 			var last_checked = null;
 			jQuery("#album_select").change(function() {
@@ -613,13 +613,13 @@
 						jQuery("#upload_result div.media-preview").html(jQuery("<img />").attr("src", jQuery(last_checked).children("img").attr("src")));
 					}
 					jQuery("#box_album #pic_list").empty();
-				//	jQuery("#mask_frame").hide();
+					jQuery("#mask_frame").hide();
 					jQuery("#box_album").hide();
 				})
 			});
 			jQuery("#box_album .js_close").click(function() {
 				jQuery("#box_album #pic_list").empty();
-			//	jQuery("#mask_frame").hide();
+				jQuery("#mask_frame").hide();
 				jQuery("#box_album").hide();
 			});
 		});
