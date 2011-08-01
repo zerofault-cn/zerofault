@@ -26,7 +26,7 @@
 		<!--{if $space[eventverifynum]}--><div><img src="image/icon/event.gif" alt="" /><a href="admincp.php?ac=event&perpage=20&grade=0&searchsubmit=1"><strong>$space[eventverifynum]</strong> 个待审核活动</a></div><!--{/if}-->
 	</div>
 	<!--{/if}-->
-	<div style="position:relative;">
+	<div style="position:relative;z-index:1500;">
 		<form method="post" action="cp.php?ac=doing" id="mood_addform">
 		<div class="ye_r_t"><div class="ye_l_t"><div class="ye_r_b"><div class="ye_l_b">
 			<div id="mood_statusinput_new" class="statusinput_new"><textarea id="message" name="message" rows="3" cols="70">你可以更新状态, 让好友们知道你在做什么...</textarea></div>
@@ -84,7 +84,7 @@
 				<a href="javascript:void(0);" class="close js_close" onclick="closeBox('pic');">关闭</a>
 			</div>
 		</div>
-		<div id="box_album" class="pop-bubble" style="display:none; top:88px; left:128px;">
+		<div id="box_album" class="pop-bubble" style="display:none; top:58px; left:8px;">
 			<div class="pop-bubble-inner">
 				<div class="box_header"><a href="javascript:void(0);" class="close js_close">关闭</a>选择图片</div>
 				&nbsp;<select id="album_select"><option value="">选择相册</option></select>
@@ -572,7 +572,7 @@
 			jQuery("#poll_result").hide();
 		});
 		jQuery("#box_pic a.js_album").click(function() {
-			jQuery("#mask_frame").show();
+		//	jQuery("#mask_frame").show();
 			jQuery("#box_album").show();
 			var last_checked = null;
 			jQuery("#album_select").change(function() {
@@ -613,13 +613,13 @@
 						jQuery("#upload_result div.media-preview").html(jQuery("<img />").attr("src", jQuery(last_checked).children("img").attr("src")));
 					}
 					jQuery("#box_album #pic_list").empty();
-					jQuery("#mask_frame").hide();
+				//	jQuery("#mask_frame").hide();
 					jQuery("#box_album").hide();
 				})
 			});
 			jQuery("#box_album .js_close").click(function() {
 				jQuery("#box_album #pic_list").empty();
-				jQuery("#mask_frame").hide();
+			//	jQuery("#mask_frame").hide();
 				jQuery("#box_album").hide();
 			});
 		});
