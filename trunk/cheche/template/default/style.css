@@ -874,10 +874,13 @@ a.button { padding: 5px; }
 .quickpost td { padding: 0.2em 0; }
 .quickpost textarea { width: 99%; height: 70px; font-size: 1.17em; }
 
+#registerform table th,#registerform table td {
+	padding-top:12px;
+}
 #registerform select {
 	width: 120px;
-	padding:4 10px;
 }
+
 .formtable { width: 100%; }
 .formtable caption { padding: 10px 0; color: #666; font-size: 12px; }
 .formtable caption h2 { padding-bottom: 8px;  color: #333; font-size: 14px; }
