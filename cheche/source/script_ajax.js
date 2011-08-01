@@ -309,12 +309,14 @@ function ajaxpost_load() {
 	
 	showloading('none');
 	
-	if(is_ie) {
-		var s = $('ajaxframe').contentWindow.document.XMLDocument.text;
-	} else {
-		var s = $('ajaxframe').contentWindow.document.documentElement.firstChild.nodeValue;
+	if ($('ajaxframe').contentWindow) {
+		if(is_ie) {
+			var s = $('ajaxframe').contentWindow.document.XMLDocument.text;
+		} else {
+			var s = $('ajaxframe').contentWindow.document.documentElement.firstChild.nodeValue;
+		}
 	}
-	if (!s) {
+	else {
 		var s = "";
 	}
 	evaled = false;
