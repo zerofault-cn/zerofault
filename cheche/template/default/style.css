@@ -864,7 +864,7 @@ h2.title img { margin: 0 5px 0 0; vertical-align: middle; }
 .page a { color: #C60; }
 .page a:hover { background: #FEE4AB; text-decoration: none; }
 textarea { border: 1px solid #ddd; overflow: auto; }
-.t_input, select { padding: 3px 2px; border: 1px solid #ddd; line-height: 16px; color:#888888;}
+.t_input, select { padding: 3px 2px; border: 1px solid #ddd; line-height: 16px; color:#888888;vertical-align: middle;}
 .button { padding: 0 5px; margin: 0 0 0 3px; height: 24px; border: none; background: #DDD; color: #333; line-height: 20px; letter-spacing: 1px; cursor: pointer; }
 input.submit { padding: 0 5px; height: 24px; border: none; background: #FF8901; color: #FFF; line-height: 20px; letter-spacing: 1px; cursor: pointer; }
 a.submit { padding: 5px; }
