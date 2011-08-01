@@ -1,21 +1,40 @@
 <!--{eval $_TPL['nosidebar']=1;}-->
 <!--{template header}-->
-
-<script>
-	function register(id, result) {
-		if(result) {
-			$('registersubmit').disabled = true;
-			window.location.href = "$jumpurl";
-		} else {
-			updateseccode();
-		}
-	}
-</script>
-
-<form id="registerform" name="registerform" action="do.php?ac=$_SCONFIG[register_action]&$url_plus&ref" method="post" class="c_form2">
+<style type="text/css">
+.tip {
+	padding: 3px 5px;
+	border:1px solid #A3A0A0;
+	margin-left:5px;
+	background-color:#FCFCFC;
+	color:#999999;
+}
+.tip_ok
+{
+	padding: 8px;
+	margin-left:5px;
+	background:url(image/accept.gif) center left no-repeat;
+}
+.tip_loading
+{
+	padding:3px 5px 3px 25px;
+	background:url(image/loading2.gif) 5px center no-repeat #FFEEE5;
+	border:1px solid #FFA475;
+	color:#C0C0C0;
+	margin-left:5px;
+}
+.tip_err
+{
+	padding: 3px 5px;
+	border:1px solid #FFA475;
+	color:#ff0000;
+	margin-left:5px;
+	background:#FFEEE5;
+}
+</style>
+<form id="registerform" name="registerform" action="do.php?ac=$_SCONFIG[register_action]&$url_plus&ref" method="post" class="c_form2" AutoComplete="off">
 <table cellpadding="0" cellspacing="0" class="formtable">
 	<caption>
-		<h2>注册本站帐号：<span>请完整填写以下信息进行注册。注册完成后，该帐号将作为您在本站的通行帐号，您可以享受本站提供的各种服务。</span></h2>
+		<h2 style="padding:20px 40px;">注册本站帐号：<span>请完整填写以下信息进行注册。注册完成后，该帐号将作为您在本站的通行帐号，您可以享受本站提供的各种服务。</span></h2>
 	</caption>
 	<!--{if $invitearr}-->
 	<tr>
@@ -27,10 +46,11 @@
 	</tr>
 	<!--{/if}-->
 	<tr>
-		<th width="330" valign="top"><span id="label_email">注册邮箱</span><span id="label_username" style="display:none;">注册帐号</span><em>*</em></th>
+		<th width="280" valign="top"><span id="label_email">注册邮箱</span><span id="label_username" style="display:none;">注册帐号</span><em>*</em></th>
 		<td>
-			<input type="text" size="30" id="username" name="username" value="" class="t_input" onBlur="checkUserName()" style="display:none;"/>
-			<input type="text" size="30" id="email" name="email" value="" class="t_input" onBlur="checkEmail()" />&nbsp;<span id="checkusername">&nbsp;</span><br />
+			<input type="text" size="30" id="username" name="username" value="" class="t_input" onfocus="foc(this);" onBlur="blu(this);" ckName="帐号名" style="display:none;"/>
+			<input type="text" size="30" id="email" name="email" value="" class="t_input" onfocus="foc(this);" onBlur="blu(this)" ckName="邮箱地址"/><span id="username_tip"></span>
+			<br />
 			<span id="tip_username" style="display:none;">您还可以使用 <a href="javascript:void(0);" onclick="switchTo('username', 'email');">邮箱</a> 进行注册</span>
 			<span id="tip_email">如果没有邮箱，您还可以使用 <a href="javascript:void(0);" onclick="switchTo('email', 'username')">帐号</a> 注册</span>
 		</td>
@@ -38,15 +58,15 @@
 	<tr>
 		<th valign="top" nowrap="nowrap">创建密码<em>*</em></th>
 		<td>
-			<input type="password" size="30" name="password" id="password" value="" class="t_input" onBlur="checkPassword()" tabindex="3" />&nbsp;<span class="box-error" id="pwd_error_span" style="display: none;"><b id="pwd_error_span_i">密码必须由6-20个字符组成</b></span>
+			<input type="password" size="30" maxlength="20" name="password" id="password" value="" class="t_input" onfocus="foc(this);" onBlur="blu(this);" ckName="密码" /><span id="password_tip"></span>
 		</td>
 	</tr>
 	<tr>
-		<th>姓 名<em>*</em></th>
-		<td><input type="text" name="name" size="30" value="" /></td>
+		<th>真实姓名<em>*</em></th>
+		<td><input type="text" name="name" size="30" maxlength="10" value="" class="t_input" onfocus="foc(this);" onBlur="blu(this);" ckName="真实姓名"/><span id="name_tip"></span></td>
 	</tr>
 	<tr>
-		<th>性 别<em>*</em></th>
+		<th>性别<em>*</em></th>
 		<td>
 			<input type="radio" name="sex" value="1" id="sex1" checked="checked"/><label for="sex1">男</label>
 			&nbsp;&nbsp;&nbsp;&nbsp;
@@ -86,7 +106,7 @@
 				<select name="car_number_prefix" id="car_number_prefix" style="width:60px;">
 					<option value="">字母</option>
 				<select>-
-				<input type="text" size="6" maxlength="6" name="car_number" value="" onkeyup="this.value=this.value.replace(/[^0-9A-Z]/g, '');" onblur="checkNumber(this);"/>(请输入5~6位由数字或大写字母)
+				<input type="text" size="6" maxlength="6" name="car_number" value="" onkeyup="this.value=this.value.replace(/[^0-9A-Z]/g, '');" class="t_input" onfocus="foc(this);" onBlur="blu(this);" ckName="车牌号码"/><span id="car_number_tip"></span>
 				<span id="car_number_msg"></span>
 			</span>
 		</td>
@@ -111,7 +131,7 @@
 		<td>&nbsp;</td>
 	</tr>
 	<tr>
-		<th>所在地区<em>*</em></th>
+		<th>我所在的地区<em>*</em></th>
 		<td>
 			<select name="province_id" onchange="javascript:load_region_opts('sel_city', this.value);">
 				<option value="0">选择省份</option>
@@ -128,9 +148,8 @@
 	<!--{if $_SCONFIG['seccode_register']}-->
 	<tr>
 		<th style="vertical-align: top;">验证码<em>*</em></th>
-		<td><input type="text" id="seccode" size="16" name="seccode" value="" class="t_input" onBlur="checkSeccode()" autocomplete="off" />&nbsp;<span id="checkseccode">&nbsp;</span>
-			
-			<p><script>seccode();</script>请输入左边的4位字母或数字，看不清可<a href="javascript:updateseccode()">更换一张</a></p>
+		<td><input type="text" id="seccode" size="16" name="seccode" value="" class="t_input" onfocus="foc(this);" onBlur="blu(this);" ckName="验证码"/><span id="seccode_tip"></span>
+			<p><script>seccode();</script>看不清？<a href="javascript:updateseccode()">更换一张</a></p>
 			
 		</td>
 	</tr>
@@ -167,6 +186,196 @@
 <script type="text/javascript">
 <!--
 //	$('username').focus();
+	function register(id, result) {
+		if(result) {
+			$('registersubmit').disabled = true;
+			window.location.href = "$jumpurl";
+		} else {
+			updateseccode();
+		}
+	}
+function check()
+{
+	fields=document.getElementsByTagName("input");
+	for(i=0;i<fields.length;i++)
+	{
+		val=fields[i].getAttribute('name');
+		ckValue=fields[i].getAttribute('ckName');
+		if(ckValue!=null)
+		{
+			if( fields[i].value=='')
+			{
+				alert(ckValue+'不能为空！');
+				eval('document.form1.'+val).focus();
+				return false;
+			}
+			else if($(val+'_tip').className=='tip_err')
+			{
+				alert($(val+'_tip').innerHTML);
+				return false;
+			}
+		}
+	}
+	
+	return true;
+}
+/**
+*检验邮件地址是否合法
+*/
+function isEmail(mail) 
+{
+	return(new RegExp(/^\w+((-\w+)|(\.\w+))*\@[A-Za-z0-9]+((\.|-)[A-Za-z0-9]+)*\.[A-Za-z0-9]+$/).test(mail)); 
+}
+function foc(obj) {
+	var label=obj.getAttribute('name');
+	var value = obj.value;
+	if(value.length>0) {
+		return;
+	}
+	switch (label) {
+		case 'username':
+			tips='帐号由4-16个小写字母、数字或下划线组成';
+			break;
+		case 'email':
+			label = 'username';
+			tips = '请输入真实有效的邮箱地址';
+			break;
+		case 'password':
+			tips='密码必须由6－20个字符组成';
+			break;
+		case 'name':
+			tips='请输入真实姓名';
+			break;
+		case 'seccode':
+			tips = "请输入下方图片中的字母或数字";
+			break;
+		case 'car_number':
+			tips = "输入由5-6位数字或字母组成的车牌号码";
+			break
+		default :
+			//
+	}
+	$(label+'_tip').style.display='';
+	$(label+'_tip').className='tip';
+	$(label+'_tip').innerHTML=tips;
+}
+var tips = "";
+var last_value = "";
+
+function blu(obj) {
+	var label=obj.getAttribute('name');
+	var value = obj.value;
+	var len = value.length;
+	if(value=='') {
+		if ('email' == label) {
+			label = 'username';
+		}
+		$(label+'_tip').style.display='none';
+		return;
+	}
+	if(value == last_value) {
+		return;
+	} else {
+		last_value = value;
+	}
+	switch (label) {
+		case 'username':
+			if(len<4 || len>16) {
+				$(label+'_tip').className='tip_err';
+				tips='你输入的长度不符合要求，请输入4-16个字符！';
+			}
+			else if(!new RegExp(/^[a-z]+[a-z0-9_]+$/).test(value)) {
+				$(label+'_tip').className='tip_err';
+				tips='您的输入不合要求，只能输入数字，字母或下划线！';
+			}
+			else {
+				$(label+'_tip').style.display='';
+				$(label+'_tip').className='tip_loading';
+				$(label+'_tip').innerHTML=tips='正在验证帐号是否可用';
+				ajaxCheck('username', value);
+			}
+			break;
+		case 'car_number':
+			if(len<5 || len>6) {
+				$(label+'_tip').className='tip_err';
+				tips='号码位数应该在5-6位之间';
+			}
+			else {
+				$(label+'_tip').className='tip_ok';
+				tips='';
+			}
+			break;
+		case 'password':
+			if(len<6) {
+				$(label+'_tip').className='tip_err';
+				tips='密码不能少于6个字符';
+			}
+			else {
+				$(label+'_tip').className='tip_ok';
+				tips='';
+			}
+			break;
+		case 'name':
+			if(len<2) {
+				$(label+'_tip').className='tip_err';
+				tips='真实姓名太短了';
+			}
+			else {
+				$(label+'_tip').className='tip_ok';
+				tips='';
+			}
+			break;
+		case 'email':
+			label = 'username';
+			if(!isEmail(value)) {
+				$(label+'_tip').className='tip_err';
+				tips='您填写邮箱格式不对';
+			}
+			else {
+				$(label+'_tip').style.display='';
+				$(label+'_tip').className='tip_loading';
+				$(label+'_tip').innerHTML=tips='正在验证邮箱地址是否已注册';
+				ajaxCheck('email', value);
+			}
+			break;
+		case 'seccode':
+			if (len>0) {
+				$(label+'_tip').style.display='';
+				$(label+'_tip').className='tip_loading';
+				$(label+'_tip').innerHTML=tips='验证校验中';
+				ajaxCheck('seccode', value);
+			}
+			break;
+	}
+	$(label+'_tip').style.display='';
+	$(label+'_tip').innerHTML=tips;
+}
+function ajaxCheck(label, value) {
+	var x = new Ajax('XML');
+	var param = "";
+	if ('username' == label) {
+		param = "op=checkusername&username="+value;
+	}
+	else if ('email' == label) {
+		label = 'username';
+		param = 'op=checkemail&email=' + value;
+	}
+	else if ('seccode' == label) {
+		param = 'op=checkseccode&seccode='+value;
+	}
+	x.get('do.php?ac=$_SCONFIG[register_action]&' + param, function(s) {
+		s = trim(s)
+		if(s=='succeed') {
+			$(label+'_tip').className='tip_ok';
+			tips = "";
+		}
+		else {
+			$(label+'_tip').className='tip_err';
+			tips = s;
+		}
+		$(label+'_tip').innerHTML=tips;
+	});
+}
 	var lastUserName = lastPassword = lastEmail = lastSecCode = '';
 	function checkUserName() {
 		var userName = $('username').value;
