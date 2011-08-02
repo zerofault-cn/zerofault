@@ -699,7 +699,7 @@ if($op == 'add') {
 				$value['isfriend'] = ($value['uid']==$space['uid'] || ($space['friends'] && in_array($value['uid'], $space['friends'])))?1:0;
 				!empty($value['car_role']) && ($value['car_str'] = $profile['car_role'][$value['car_role']]);
 				if (1==$value['car_role'] && !empty($value['car_number'])) {
-				//	$value['car_str'] .= ' ('.$value['car_number'].')';
+					$value['car_str'] .= ' ('.mb_substr($value['car_number'], 0, 2).'-XXXXXX)';
 				}
 				if (!empty($value['car_brand'])) {
 					$car_brand = $_SGLOBAL['db']->result($_SGLOBAL['db']->query("SELECT name FROM ".tname('carmodel')." WHERE id=".$value['car_brand']), 0);
