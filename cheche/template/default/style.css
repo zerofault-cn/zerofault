@@ -210,7 +210,7 @@ body { background: #FFF; }
 	background:url(image/logout.png) no-repeat left center;
 }
 .menu li.dropmenu { margin: 0 10px 0 0; padding: 10px 15px 10px 10px; height: 20px; background: url(image/triangle.gif) no-repeat right center; overflow: hidden; }
-  .dropmenu_drop { margin: -1px 0 0; padding: 0 10px 10px; width: 100px; border: 1px solid #EBE6C9; background: #FFF; z-index: 2000; }
+  .dropmenu_drop { margin: -1px 0 0; padding: 0 10px 10px; width: 120px; border: 1px solid #EBE6C9; background: #FFF; z-index: 2000; }
   .dropmenu_drop li { padding: 5px 10px; border-bottom: 1px solid #EEE; }
 .dropmenu_drop li a { color: #2C629E; font-size: 12px; font-weight: normal; }
 .dropmenu_drop .active { font-weight: bold; }
