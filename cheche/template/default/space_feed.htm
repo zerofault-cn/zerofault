@@ -76,9 +76,12 @@
 					<p><img class="py-load-s" src="image/loading.gif" align="absmiddle">正在上传...<a href="javascript:void(0);" class="js_abort">取消</a></p>
 				</div>
 				<div class="pop-bubble-bd" id="upload_result" style="display:none;">
-					<p class="media-info"><span class="js_title"></span> <a class="js_cancel" href="javascript:void(0);">取消</a></p>
-					<div class="media-preview">
-					</div>
+					<p class="media-info">
+						<span class="js_title"></span>
+						<a class="js_cancel" href="javascript:void(0);">取消</a>
+						<div class="clear"></div>
+					</p>
+					<div class="media-preview"></div>
 				</div>
 				<s class="t-arrow"><s class="t-arrow-inner"></s></s>
 				<a href="javascript:void(0);" class="close js_close" onclick="closeBox('pic');">关闭</a>
@@ -490,7 +493,8 @@
 			'city' : '{$space[city_name]}'
 		}, function(str) {
 			jQuery("#sidebar").prepend(str);
-	});
+		}
+	);
 
 	var default_msg = "你可以更新状态, 让好友们知道你在做什么...";
 	var last_tab = "";

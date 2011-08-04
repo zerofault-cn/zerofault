@@ -1,5 +1,5 @@
 <?php
-header('Content-type: text/html; charset=utf-8');
+header('Content-type: text/html; charset=UTF-8');
 include_once("simple_html_dom.php");
 $city = $_REQUEST['city'];
 empty($city) && die('');
@@ -42,72 +42,37 @@ if (!empty($content) && ''!=trim($content)) {
 	}
 }
 ?>
-
 <style>
-.weather {
-	text-align: center;
-}
-.weather h2 {
-	text-align: left;
-}
-.weather span {
-	float: right;
-	font-weight:normal;
-}
-.weather div.left div, .weather div.right div {
-	height: 60px;
-	overflow-y: hidden;
-}
-
-.weather div.left {
-	float:left;
-	padding-left: 10px;
-}
-.weather div.right {
-	float:right;
-	padding-right: 10px;
-}
-
-.weather img {
-	padding-right: 10px;
-	padding-left: 10px;
-}
-.weather em, .weather i {
-	font-style: normal;
-}
-.weather .weather_list {
-	display: none;
-	position: absolute;
-	width: 685px;
-	height: 256px;
-	top: 57px;
-	left:50%;
-	margin-left: -340px;
-	z-index: 3000;
-}
+.weather {text-align: center;}
+.weather h2 {text-align: left;}
+.weather span {float: right;font-weight:normal;}
+.weather div.left div, .weather div.right div {height: 60px;overflow-y: hidden;}
+.weather div.left {float:left;padding-left: 10px;}
+.weather div.right {float:right;padding-right: 10px;}
+.weather img {padding-right: 10px;padding-left: 10px;}
+.weather em, .weather i {font-style: normal;}
+.weather .weather_list {display: none;position: absolute;width: 685px;height: 256px;top: 57px;left:50%;margin-left: -340px;z-index: 3000;}
 .weather .weather_list .mod_02{float: left;width: 158px;height: 243px;padding: 5px;margin-top: 3px;background: url(http://php.weather.sina.com.cn/images/weather_yc_01.jpg) -510px 0 no-repeat;color: #fff;}
-.weather .weather_list .mod_02 .mod_03{float: left;width: 78px;text-align: center;font-family: 'Microsoft YaHei';}/*2010/9/1*/
+.weather .weather_list .mod_02 .mod_03{float: left;width: 78px;text-align: center;font-family: "Microsoft YaHei";}
 .weather .weather_list .icon_mid_weather{width: 78px;height: 78px;margin: auto;}
 .weather .weather_list .mod_03 h5{margin-bottom: 5px;font-size: 14px;}
 .weather .weather_list .mod_03 ul{margin-top: -20px;}
 .weather .weather_list .mod_03 ul{margin-top: -20px;}
-.weather .weather_list .mod_02 h4{margin: 20px 0 15px;font:16px/30px 'Microsoft YaHei', "黑体", sans-serif;text-align: center;}
-
+.weather .weather_list .mod_02 h4{margin: 20px 0 15px;font:16px/30px "Microsoft YaHei", "黑体", sans-serif;text-align: center;}
 </style>
 <div class="sidebox weather">
-		<h2 class="title">
-			<span><a href="space.php?do=weather">未来四天&gt;&gt;</a></span>今日天气 (<?php echo $_REQUEST['city'];?>)
-		</h2>
-		<div class="left">
-			白天<br />
-			<div><img src="<?php echo $day_pic;?>" width="90" height="80"/></div>
-			<?php echo $day_str;?> <?php echo $day_temp_str;?>
-		</div>
-		<div class="right">
-			夜间<br />
-			<div><img src="<?php echo $night_pic;?>" width="90" height="80"/></div>
-			<?php echo $night_str;?>  <?php echo $night_temp_str;?>
-		</div>
-		<div class="clear" style="font-weight:bold;padding:4px;">洗车指数：<?php echo $tip;?></div></div>
-		<div class="weather_list" style="display:none;"><?php echo $content2;?></div>
+	<h2 class="title">
+		<span><a href="space.php?do=weather">未来四天&gt;&gt;</a></span>今日天气 (<?php echo $_REQUEST['city'];?>)
+	</h2>
+	<div class="left">
+		白天<br />
+		<div><img src="<?php echo $day_pic;?>" width="90" height="80" /></div>
+		<?php echo $day_str;?> <?php echo $day_temp_str;?>
+	</div>
+	<div class="right">
+		夜间<br />
+		<div><img src="<?php echo $night_pic;?>" width="90" height="80" /></div>
+		<?php echo $night_str;?> <?php echo $night_temp_str;?>
+	</div>
+	<div class="clear" style="font-weight:bold;padding:4px;">洗车指数：<?php echo $tip;?></div>
 </div>

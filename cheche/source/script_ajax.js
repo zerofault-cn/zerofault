@@ -309,7 +309,7 @@ function ajaxpost_load() {
 	
 	showloading('none');
 	
-	if ($('ajaxframe').contentWindow) {
+	if ($('ajaxframe').contentWindow.document.XMLDocument) {
 		if(is_ie) {
 			var s = $('ajaxframe').contentWindow.document.XMLDocument.text;
 		} else {

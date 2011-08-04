@@ -432,9 +432,6 @@ body { background: #FFF; }
 	opacity: 0;
 	filter: alpha(opacity=0);
 }
-.pop-bubble-bd .media-info {
-	height: 14px;
-}
 .pop-bubble-bd .media-info span {
 	float: left;
 }
