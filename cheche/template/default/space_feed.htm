@@ -499,18 +499,8 @@
 	var default_msg = "你可以更新状态, 让好友们知道你在做什么...";
 	var last_tab = "";
 	jQuery(document).ready(function() {
-		jQuery(".feed_content .small img").each(function() {
-			var src = jQuery(this).attr('src');
-			var big = src.substr(0, src.length-10);
-			jQuery(this).click(function() {
-				if ('small' == jQuery(this).parent().attr('class')) {
-					jQuery(this).attr('src', big).parent().attr('class', 'big');
-				}
-				else {
-					jQuery(this).attr('src', src).parent().attr('class', 'small');
-				}
-			});
-		});
+		zoom_func();
+
 		jQuery("#message").keyup(function() {
 			jQuery("#msgOpt #wordcount").html(200-jQuery.trim(jQuery("#message").val()).length);
 		}).focus(function() {
@@ -633,6 +623,20 @@
 			jQuery("#box_poll select[name=maxchoice]").append('<option value="'+l+'">多选(最多'+l+'项)</option>');
 		});
 	});
+	function zoom_func() {
+		jQuery(".feed_content .small img").each(function() {
+			var src = jQuery(this).attr('src');
+			var big = src.substr(0, src.length-10);
+			jQuery(this).click(function() {
+				if ('small' == jQuery(this).parent().attr('class')) {
+					jQuery(this).attr('src', big).parent().attr('class', 'big');
+				}
+				else {
+					jQuery(this).attr('src', src).parent().attr('class', 'small');
+				}
+			});
+		});
+	}
 	function closeBox(tab) {
 		if (""==tab) {
 			jQuery(".pop-bubble").each(function() {
@@ -731,6 +735,7 @@
 		var x = new Ajax('XML', 'ajax_wait');
 		x.get('cp.php?ac=feed&op=get&start=0', function(s){
 			$('feed_div').innerHTML = s;
+			zoom_func();
 		});
 		showreward();
 	}

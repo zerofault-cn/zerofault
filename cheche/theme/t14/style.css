@@ -8,9 +8,11 @@ a { color: #999; }
 .quote { background-image: url(images/q_start.gif); }
 .quote .q, .quote blockquote { background-image: url(images/q_end.gif); }
 .time { color: #333; }
-.avatar48 { padding: 1px; width: 48px; height: 48px; border: 1px solid #333; background: none; overflow: hidden; }
-#header { margin: 0; background: url(images/top_bg.jpg) repeat-x left top; color: #CCC; }
+.avatar48 { margin-bottom:3px;padding: 1px; width: 48px; height: 48px; border: 1px solid #333; background: none; overflow: hidden; }
+.avatar48 img{border:none;}
+#header { margin: 0; background: #ffffff url(images/top_bg.jpg) left bottom repeat-x ; color: #CCC; }
 .headerwarp { background: none; }
+.headerwarp .logoimg {width:160px; height:49px;border:none;}
 #header a { color: #2C629E; }
 #header .logo a { width: 82px; height: 40px; background: url(images/logo.gif) no-repeat left center; overflow: hidden; display: block; }
 #header .logo a img { margin: -200px; }
@@ -45,3 +47,7 @@ a#i_rss { background-image: url(images/rss_icon.gif); color:#FC0; }
 #footer { padding: 20px; width: 950px; background: transparent url(images/ybg2.gif) no-repeat scroll 0 0; border:medium none; color:#FC0; }
 #footer a{ color:#FC0; }
 
+.nav_account #account.hover {
+	background-color: #212121;
+	color:#999999;
+}

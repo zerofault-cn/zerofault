@@ -7,7 +7,8 @@ a{ color: #900; }
 body { padding: 0 0 50px; background:  url(images/body_bg.gif); color: #666; }
 #wrap { padding: 15px 10px; border: 3px solid #EDC18A; background: #FFF; }
 #header { margin: 0; background: url(images/top_bg.jpg) repeat-x; color: #CCC; }
-.headerwarp { height: 140px; background: url(images/header.gif) no-repeat 0 40px; }
+.headerwarp { height: 140px; background: url(images/header.gif) no-repeat 0 50px; }
+.headerwarp .logoimg {width:160px; height:49px;border:none;}
 #header a { color: #2C629E; }
 #header .logo a { width: 82px; height: 40px; background: url(images/logo.gif) no-repeat left center; overflow: hidden; display: block; }
 #header .logo a img { margin: -200px; }
@@ -27,4 +28,7 @@ body { padding: 0 0 50px; background:  url(images/body_bg.gif); color: #666; }
 
 .tabs_header ul.tabs li{
   margin: 0 5px 0 0;
+}
+.nav_account #account.hover {
+	background-color: #EDC18A;
 }

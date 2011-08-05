@@ -242,7 +242,7 @@ if($_GET['op'] == 'delete') {
 			
 			break;
 		case 'pic':
-			$query = $_SGLOBAL['db']->query("SELECT album.username, album.albumid, album.albumname, album.friend, pic.*, pf.*
+			$query = $_SGLOBAL['db']->query("SELECT album.username, album.albumid, album.albumname, album.friend, pic.*, pf.hotuser
 				FROM ".tname('pic')." pic
 				LEFT JOIN ".tname('picfield')." pf ON pf.picid=pic.picid
 				LEFT JOIN ".tname('album')." album ON album.albumid=pic.albumid
@@ -275,7 +275,7 @@ if($_GET['op'] == 'delete') {
 				'title' => getstr($pic['title'], 100, 0, 1, 0, 0, -1)
 			);
 			$arr['image'] = pic_get($pic['filepath'], $pic['thumb'], $pic['remote']);
-			$arr['image_link'] = "space.php?uid=$pic[uid]&do=album&picid=$pic[picid]";
+			$arr['image_link'] = "space.php?uid=".$pic['uid']."&do=album&picid=".$pic['picid'];
 			//通知
 			$note_uid = $pic['uid'];
 			$note_message = cplang('note_share_pic', array("space.php?uid=$pic[uid]&do=album&picid=$pic[picid]", $pic['albumname']));

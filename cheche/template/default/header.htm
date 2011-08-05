@@ -33,7 +33,7 @@ $_SGLOBAL[space_css]
 <div id="header">
 	<!--{if $_SGLOBAL['ad']['header']}--><div id="ad_header"><!--{ad/header}--></div><!--{/if}-->
 	<div class="headerwarp">
-		<a href="index.php"><img src="image/logo.jpg" class="logoimg"/></a>
+		<a href="index.php" class="logoimg"></a>
 		<ul class="menu">
 		<!--{if $_SGLOBAL[supe_uid]}-->
 			<li><a href="space.php?do=home">首页</a></li>
@@ -120,8 +120,8 @@ $_SGLOBAL[space_css]
 			}
 		);
 		jQuery(".nav_account #account").hover(
-			function() { jQuery(this).css('background-color', '#0066CC'); jQuery("#account_menu").show();},
-			function() { jQuery(this).css('background-color', 'transparent'); jQuery("#account_menu").hide();}
+			function() { jQuery(this).addClass('hover'); jQuery("#account_menu").show();},
+			function() { jQuery(this).removeClass('hover'); jQuery("#account_menu").hide();}
 		);
 	});
 	</script>
@@ -132,7 +132,7 @@ $_SGLOBAL[space_css]
 	<div id="main">
 		<div id="app_sidebar">
 		<!--{if $_SGLOBAL[supe_uid]}-->
-			<div id="account_menu" style="font-size: 12px;padding-bottom:18px;position:relative;z-index:1001;">
+			<div id="account_menu" style="font-size: 12px;padding-bottom:18px;position:relative;z-index:2001;">
 				<div class="avatar48" style="float:left;">
 					<a href="space.php?uid=$_SGLOBAL[supe_uid]" ><!--{avatar($_SGLOBAL[supe_uid])}--></a>
 				</div>

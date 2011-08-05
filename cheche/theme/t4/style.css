@@ -3,9 +3,10 @@
 Powered by Ucenter Home
 */
 body { background: url(images/body_bg.gif) fixed repeat left top; color: #666; }
-#wrap { padding: 10px; border: 5px solid #5D422E; border-top: none; border-bottom: none; background: #FFF; }
-#header { margin: 0; background: url(images/top_bg.jpg) repeat-x left top; color: #CCC; }
+#wrap { padding: 10px 0; border: 5px solid #5D422E; border-top: none; border-bottom: none; background: #FFF; }
+#header { margin: 0; background:#F15429 url(images/top_bg.jpg) repeat-x left bottom; color: #CCC; }
 .headerwarp { background: none; }
+.headerwarp .logoimg {width:160px; height:49px;border:none;}
 #header a { color: #FFF; }
 #header .logo a { width: 82px; height: 40px; background: url(images/logo.gif) no-repeat left center; overflow: hidden; display: block; }
 #header .logo a img { margin: -200px; }
@@ -25,3 +26,10 @@ body { background: url(images/body_bg.gif) fixed repeat left top; color: #666; }
 .ulist { background: #F8F2EF; }
 .tabs_header ul.tabs li a { border: 1px solid #EBD8CF; border-bottom: none; background: #F8F2EF; }
 .tabs_header { height: 31px; }
+.nav_account #account{
+	color:#FFFFFF;
+}
+.nav_account #account.hover {
+	background-color: #F8F2EF;
+	color:#3b5998
+}
