@@ -97,7 +97,7 @@ body { background: #FFF; }
 #ad_contentbottom { margin: 10px 0 0 0; padding: 10px 0 0 0; width: 100%; border-top: 1px solid #EBE6C9; overflow: hidden; }
 
 /*************************************************HEADER***/
-  .headerwarp { margin: 0 auto; width: 1004px; height: 50px; background: #3B5997; color: #3B5998; }
+  .headerwarp { margin: 0 auto; width: 1004px; height: 49px; background: #3B5997; color: #3B5998; }
 .headerwarp a { color: #FFF; }
   .headerwarp .logo { float: left; margin: 0 190px 0 0; }
   .headerwarp .logo a{
@@ -105,8 +105,8 @@ body { background: #FFF; }
 	  width:160px;
 	  height: 40px;
   }
-.headerwarp .logoimg {float:left; }
-.menu { float: left; padding-top:10px; height: 40px; font-size: 14px; font-weight: bold; }
+.headerwarp .logoimg {float:left; width:159px; height:48px;background:url(image/logo.jpg) 0 0 no-repeat;border-left:1px solid #055393;border-bottom:1px solid #055393;}
+.menu { float: left; padding-top:9px; height: 40px; font-size: 14px; font-weight: bold; }
   .menu li { float: left; padding: 10px; line-height: 20px; vertical-align: top; }
 .menu .edit { padding-left: 4px; color: #FFF; font-size: 12px; font-weight: normal; }
 
@@ -121,7 +121,7 @@ body { background: #FFF; }
 	text-align: right;
 	height:40px;
 	padding-right: 10px;
-	padding-top: 10px;
+	padding-top: 9px;
 }
 .header_search div.f_input{
 	float:left;
@@ -157,17 +157,20 @@ body { background: #FFF; }
 }
 .nav_account #account {
 	cursor: pointer;
-	padding: 20px 20px 10px 10px;
+	padding: 19px 20px 10px 10px;
 	line-height: 24px;
 	height:20px;
 	background:url(image/arrow-down-white.png) 35px 30px  no-repeat;
 }
+.nav_account #account.hover {
+	background-color: #0066CC;
+}
 .nav_account #account_menu {
 	display: none;
 	position: absolute;
-	left: -74px;
-	top: 50px;
-	width: 110px;
+	right: 0;
+	top: 49px;
+	width: 130px;
 	color: #005EAC;
 	z-index:1000;
 	border: 1px solid #005EAC;
@@ -210,7 +213,7 @@ body { background: #FFF; }
 	background:url(image/logout.png) no-repeat left center;
 }
 .menu li.dropmenu { margin: 0 10px 0 0; padding: 10px 15px 10px 10px; height: 20px; background: url(image/triangle.gif) no-repeat right center; overflow: hidden; }
-  .dropmenu_drop { margin: -1px 0 0; padding: 0 10px 10px; width: 120px; border: 1px solid #EBE6C9; background: #FFF; z-index: 2000; }
+  .dropmenu_drop { margin: -1px 0 0; padding: 0 10px 10px; width: 120px; border: 1px solid #EBE6C9; background: #FFF; z-index: 2002; }
   .dropmenu_drop li { padding: 5px 10px; border-bottom: 1px solid #EEE; }
 .dropmenu_drop li a { color: #2C629E; font-size: 12px; font-weight: normal; }
 .dropmenu_drop .active { font-weight: bold; }
@@ -866,7 +869,7 @@ textarea { border: 1px solid #ddd; overflow: auto; }
 input.submit { padding: 0 5px; height: 24px; border: none; background: #FF8901; color: #FFF; line-height: 20px; letter-spacing: 1px; cursor: pointer; }
 a.submit { padding: 5px; }
 a.button { padding: 5px; }
-.c_form { padding: 0.5em 3em; }
+.c_form { padding: 0.5em 3em; text-align:center;padding-right:100px;}
 .quickpost table { width: 100%; }
 .quickpost td { padding: 0.2em 0; }
 .quickpost textarea { width: 99%; height: 70px; font-size: 1.17em; }
