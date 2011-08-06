@@ -869,7 +869,7 @@ textarea { border: 1px solid #ddd; overflow: auto; }
 input.submit { padding: 0 5px; height: 24px; border: none; background: #FF8901; color: #FFF; line-height: 20px; letter-spacing: 1px; cursor: pointer; }
 a.submit { padding: 5px; }
 a.button { padding: 5px; }
-.c_form { padding: 0.5em 3em; text-align:center;padding-right:100px;}
+.c_form { padding: 0.5em 3em; padding-right:100px;}
 .quickpost table { width: 100%; }
 .quickpost td { padding: 0.2em 0; }
 .quickpost textarea { width: 99%; height: 70px; font-size: 1.17em; }
