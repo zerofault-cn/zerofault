@@ -7,7 +7,7 @@
 		<div class="avatar48"><a class="avatar" target="_blank" title="" href="space.php?uid={$value['uid']}"><!--{avatar($value['uid'])}--></a></div>
 		<h5>$value[title_template] </h5>
 		<div class="feed_content">
-			<!--{if in_array($value['idtype'], array('blogid','picid','sid','pid','eventid'))}-->
+			<!--{if in_array($value['idtype'], array('blogid','picid','pid','eventid'))}-->
 				<a onclick="ajaxmenu(event, this.id, 1)" class="a_share" id="a_share_{$value['id']}" href="cp.php?ac=share&amp;type=<!--{eval echo str_replace('album','pic',$value['icon']);}-->&amp;id={$value['id']}">分享</a>
 			<!--{/if}-->
 			<!--{if empty($_TPL[hidden_time])}-->
