@@ -1,0 +1,117 @@
+body {
+	padding:0;
+	margin:0;
+	color:#666666;
+	font-family: "Microsoft Yahei","微软雅黑", SimHei, Tahoma, Verdana, Arial, STHeiti, sans-serif;
+	font-size:12px;
+	line-height:180%;
+	background-color: #F7F7F7;
+}
+a {
+	color:#666666;
+	text-decoration:none;
+}
+input, a {
+    outline: medium none;
+}
+.container {
+	width: 920px;
+	padding: 17px 40px;
+	border-top: 3px solid #005193;
+	margin:0 auto;
+}
+.header {
+	height:62px;
+	padding-top: 10px;
+	padding-bottom: 90px;
+	background:url(image/login_logo.gif) left top no-repeat;
+	text-align: right;
+	font-size: 16px;
+	line-height: 200%;
+}
+.header a {
+	color: #034E8B;
+}
+.ad_pic {
+	float: left;
+	width: 559px;
+	height:368px;
+	padding-right: 70px
+}
+.ad_pic #slider {
+	width: 559px;
+	height: 368px;
+	zoom: 1;
+	overflow: hidden;
+}
+.form {
+	float: right;
+	width:290px;
+	padding-top: 40px;
+}
+.stage-holder {
+	height: 50px;
+	font-size: 16px;
+}
+.stage-holder a {
+	margin-left: 50px;
+}
+.input-wrapper {
+    background: url("image/reg-input-bg.png") no-repeat scroll 0 0 transparent;
+    border: medium none;
+    height: 34px;
+    overflow: hidden;
+    padding: 4px;
+    position: relative;
+    width: 262px;
+	margin-bottom: 35px;
+}
+.input-wrapper.focus {
+    background-position: 0 -42px;
+}
+.input-wrapper .input {
+    background: none repeat scroll 0 0 transparent;
+    border: medium none;
+    color: #324F65;
+    font-size: 18px;
+    height: 34px;
+    line-height: 34px;
+    width: 254px;
+}
+.input-wrapper.focus .input {
+    cursor: text;
+}
+.input-wrapper .label {
+    color: #92A2AF;
+    cursor: text;
+    font-size: 18px;
+    left: 8px;
+    position: absolute;
+    top: 10px;
+}
+.input-wrapper.typed .label {
+    visibility: hidden;
+}
+.form .button {
+    background: url("image/login_btn_bg0.gif") no-repeat scroll 0 0 transparent;
+    border: medium none;
+    cursor: pointer;
+    width: 105px;
+	height: 37px;
+	padding-bottom:6px;
+	padding-left:10px;
+	margin: 0 12px;
+	font-family: "Microsoft Yahei","微软雅黑", SimHei, Tahoma, Verdana, Arial, STHeiti, sans-serif;
+	font-size: 18px;
+	letter-spacing: 0.5em;
+	color: #FFFFFF;
+}
+.form .button:active, .form .button:hover {
+    background: url("image/login_btn_bg1.gif")
+}
+
+.footer {
+	clear: both;
+	padding-top: 50px;
+	text-align: center;
+}

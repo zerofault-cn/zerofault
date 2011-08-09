@@ -41,11 +41,11 @@ define('UC_DBNAME', 'ucenter'); // UCenter 数据库名称
 define('UC_DBCHARSET', 'utf8'); // UCenter 数据库字符集
 define('UC_DBTABLEPRE', '`ucenter`.uc_'); // UCenter 数据库表前缀
 define('UC_DBCONNECT', '0'); // UCenter 数据库持久连接 0=关闭, 1=打开
-define('UC_KEY', 'g3W2FcM8dbXdkfgfp0C7hdx8d1m1q3183aHc1amckbd4M1ddk8R7v538i2g6I4T6'); // 与 UCenter 的通信密钥, 要与 UCenter 保持一致
+define('UC_KEY', 'F67d07g6i51692G8r9IfN1ic1944dc77g7ebEeYcuft7Md7cFfV4c5qeTfV6Ab8d'); // 与 UCenter 的通信密钥, 要与 UCenter 保持一致
 define('UC_API', 'http://localhost/ucenter'); // UCenter 的 URL 地址, 在调用头像时依赖此常量
 define('UC_CHARSET', 'utf-8'); // UCenter 的字符集
 define('UC_IP', '127.0.0.1'); // UCenter 的 IP, 当 UC_CONNECT 为非 mysql 方式时, 并且当前应用服务器解析域名有问题时, 请设置此值
-define('UC_APPID', '2'); // 当前应用的 ID
+define('UC_APPID', '1'); // 当前应用的 ID
 define('UC_PPP', 20);
 
 ?>
