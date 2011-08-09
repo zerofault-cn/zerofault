@@ -1,109 +1,101 @@
-<!--{eval $_TPL['titles'] = array(); $_TPL['nosidebar']=1;}-->
-<!--{template header}-->
-<div id="network">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<title>请登录 - 车车友 - checheyou.com</title>
 <style type="text/css">
-#radomuser .nbox_c { width: 970px; w\idth: 966px; }
-	#radomuser ul { padding: 10px 0 0 10px; }
-		#radomuser li { float: left; width: 190px; height: 70px; color: #999; overflow: hidden; }
+@import url(template/default/login.css);
+@import url(template/default/coin-slider-styles.css);
 </style>
-<script type="text/javascript">
-function setintro(type) {
-	var intro = '';
-	var bPosition = '';
-	if(type == 'doing') {
-		intro = '用一句话记录自己生活中的点点滴滴';
-		bPosition = '0';
-	} else if(type == 'mtag') {
-		intro = '创建自己的小圈子，与大家交流感兴趣的话题';
-		bPosition = '175px';
-	} else if(type == 'pic') {
-		intro = '上传照片，分享生活中的精彩瞬间';
-		bPosition = '55px';
-	} else if(type == 'app') {
-		intro = '与好友一起玩转游戏和应用，增加好友感情';
-		bPosition = '118px';
-	} else {
-		intro = '马上注册，与好友分享日志、照片，一起玩转游戏';
-		bPosition = '0';
-	}
-	$('guest_intro').innerHTML = intro + '......';
-	$('guest_intro').style.backgroundPosition = bPosition + ' 100%'
-}
-</script>
-
-<div id="guestbar" class="nbox">
-	<div class="nbox_s side_rbox" id="nlogin_box">
-		<h3 class="ntitle">请登录</h3>
-		<div class="side_rbox_c">
-			<form name="loginform" action="do.php?ac=$_SCONFIG[login_action]&$url_plus&ref" method="post">
-				<p><label for="username">用户名</label> <input type="text" name="username" id="username" class="t_input" value="$membername" /></p>
-				<p><label for="password">密　码</label> <input type="password" name="password" id="password" class="t_input" value="$password" /></p>
-				<p class="checkrow"><input type="checkbox" id="cookietime" name="cookietime" value="315360000" $cookiecheck style="margin-bottom: -2px;" /><label for="cookietime">下次自动登录</label></p>
-				<p class="submitrow">
-					<input type="hidden" name="refer" value="space.php?do=home" />
-					<input type="submit" id="loginsubmit" name="loginsubmit" value="登录" class="submit" />
-					<a href="do.php?ac=lostpasswd">忘记密码?</a>
-					<input type="hidden" name="formhash" value="<!--{eval echo formhash();}-->" />
-				</p>
-			</form>
-			<div class="regnow">
-				<input type="button" value="立即注册" class="submit" onclick="javascript:window.location='do.php?ac=$_SCONFIG[register_action]';">
-			</div>
+<link rel="shortcut icon" href="image/favicon.ico" />
+</head>
+<body>
+<div class="container">
+	<div class="header">
+		<a href="help.php">帮助</a>
+		<img src="template/default/image/sep.gif" align="absmiddle" />
+		<a href="#">建议</a>
+	</div>
+	<div class="ad_pic">
+		<div id="slider">
+			<img src="image/ad1.gif" />
+			<img src="image/ad2.gif" />
+			<img src="image/ad3.gif" />
+			<img src="image/ad4.gif" />
 		</div>
 	</div>
-	<div class="nbox_c">
-		<p id="guest_intro">马上注册，与好友分享日志、照片，一起玩转游戏......</p>
-		<a href="do.php?ac=$_SCONFIG[register_action]" id="regbutton" onmouseover="setintro('register');">马上注册</a>
-		<p id="guest_app">
-			<a href="javascript:;" class="appdoing" onmouseover="setintro('doing');">记录</a>
-			<a href="javascript:;" class="appphotos" onmouseover="setintro('pic');">照片</a>
-			<a href="javascript:;" class="appgames" onmouseover="setintro('app');">游戏</a>
-			<a href="javascript:;" class="appgroups" onmouseover="setintro('mtag');">群组</a> 
-		</p>
+	<div class="form">
+		<form name="loginform" action="do.php?ac=$_SCONFIG[login_action]&$url_plus&ref" method="post">
+		<div class="input-wrapper"> 
+			<input name="username" id="username" class="input" value="" type="text"/>
+			<label for="username" class="label">登录帐号</label> 
+		</div>
+		<div class="input-wrapper"> 
+			<input id="password" name="password" class="input" type="password"/> 
+			<label for="password" class="label">登录密码</label> 
+		</div>
+		<div class="stage-holder">
+			<input type="checkbox" id="cookietime" name="cookietime" value="315360000" $cookiecheck /><label for="cookietime">下次自动登录</label>
+			<a href="do.php?ac=lostpasswd">忘记密码?</a>
+		</div>
+		<div class="stage-holder"> 
+			<input type="submit" id="loginsubmit" name="loginsubmit" value="登录" class="button" />
+			<input type="button" value="注册" class="button" onclick="javascript:window.location='do.php?ac=$_SCONFIG[register_action]';">
+		</div>
+		<input type="hidden" name="refer" value="space.php?do=home" />
+		<input type="hidden" name="formhash" value="<!--{eval echo formhash();}-->" />
+		</form> 
+	</div>
+	<div class="footer">
+		www.checheyou.com 版权所有<br />
+		<a href="#about">关于车车友</a>
+		<a href="#contact">联系我们</a>
+		<a href="#jobs">招贤纳士</a>
+		<a href="#service">服务条款</a>
+		<a href="#privacy">隐私政策</a>
 	</div>
 </div>
-
-<!--{if false && $myappcount}-->
-<div class="nbox">
-	<div class="nbox_c" style="border: none;">
-		<ul class="applist">
-		<!--{loop $myapplist $value}-->
-			<li>
-				<p class="aimg"><a href="userapp.php?id=$value[appid]" target="_blank"><img src="http://appicon.manyou.com/logos/$value[appid]" alt="$value[appname]" /></a></p>
-				<p><a href="userapp.php?id=$value[appid]" target="_blank">$value[appname]</a></p>
-			</li>
-		<!--{/loop}-->
-		</ul>
-	</div>
-	<div class="susb">
-		<div class="ye_r_t"><div class="ye_l_t"><div class="ye_r_b"><div class="ye_l_b">
-			<div class="appmo">
-				<p>共有 <span>$myappcount</span> 个应用</p>
-				<p class="appmobutton"><a href="cp.php?ac=userapp&my_suffix=%2Fapp%2Flist">查看更多应用</a></p>
-			</div>
-		</div></div></div></div>	
-	</div>
-</div>
-<!--{/if}-->
-
-<!-- 
-<div id="radomuser" class="nbox">
-	<div class="nbox_c">
-		<h2 class="ntitle">欢迎您，与大家一起交流与分享吧</h2>
-		<ul class="s_clear">
-		<!--{loop $spacelist $value}-->
-			<li>
-				<div class="d_avatar avatar48"><a href="space.php?uid=$value[uid]" title="{$_SN[$value[uid]]}" target="_blank"><!--{avatar($value[uid],small)}--></a></div>
-				<p><a href="space.php?uid=$value[uid]" target="_blank">{$_SN[$value[uid]]}</a></p>
-				<p>$value[resideprovince] $value[residecity]</p>
-				<p>$value[friendnum] 位好友</p>
-			</li>
-		<!--{/loop}-->
-		</ul>
-	</div>
-</div> -->
-
-
-</div>
-
-<!--{template footer}-->
+</body>
+<script language="JavaScript" type="text/javascript" src="source/jquery-1.4.2.min.js"></script>
+<script language="JavaScript" type="text/javascript" src="source/coin-slider.min.js"></script>
+<script language="JavaScript" type="text/javascript">
+$(document).ready(function() {
+	$('#slider').coinslider({
+		width: 559,
+		height: 368,
+		spw: 1,
+		sph: 1,
+		delay: 5000,
+		sDelay: 10
+	});
+	$(".input-wrapper input").each(function() {
+		if ($(this).val().length>0) {
+			$(this).next().css("visibility", "hidden");
+		}
+		else {
+			$(this).next().css("visibility", "visible");
+		}
+		$(this).focus(function() {
+			$(this).parent().addClass('focus');
+		}).blur(function() {
+			$(this).parent().removeClass('focus');
+			if ($(this).val().length>0) {
+				$(this).next().css("visibility", "hidden");
+			}
+			else {
+				$(this).next().css("visibility", "visible");
+			}
+		}).keyup(function() {
+			$(this).parent().addClass('typed');
+			if ($(this).val().length>0) {
+				$(this).next().css("visibility", "hidden");
+			}
+			else {
+				$(this).next().css("visibility", "visible");
+			}
+		});
+	});
+});
+function B(a,b) {}
+</script>
+</html>

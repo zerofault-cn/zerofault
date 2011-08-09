@@ -10,6 +10,9 @@ if (!empty($content) && ''!=trim($content)) {
 
 	$start = strpos($content, '<div class="m_left">');
 	$end = strpos($content, '<ul class="m_right">');
+	if (empty($start) || empty($end)) {
+		die('<div class="sidebox weather"><h2 class="title">暂时不提供“'.$_REQUEST['city'].'”地区的天气</h2></div>');
+	}
 	$content1 = substr($content, $start, $end-$start);
 	$data = str_get_html($content1);
 

@@ -219,14 +219,27 @@ class uc_note {
 	
 		$cookietime = 31536000;
 		$uid = intval($get['uid']);
+		include_once S_ROOT.'./source/function_space.php'; //原222行移到此
 		$query = $_SGLOBAL['db']->query("SELECT uid, username, password FROM ".tname('member')." WHERE uid='$uid'");
 		if($member = $_SGLOBAL['db']->fetch_array($query)) {
-			include_once S_ROOT.'./source/function_space.php';
 			$member = saddslashes($member);
 			$space = insertsession($member);
 			//设置cookie
 			ssetcookie('auth', authcode("$member[password]\t$member[uid]", 'ENCODE'), $cookietime);
-		}
+		} else { //注册同步新增用户 --20090930 alpha   //新增
+			include_once S_ROOT.'./uc_client/client.php';  //新增
+			$userinfo=uc_get_user($uid,1); //新增
+			$setarr = array( //新增
+				'uid' => $uid, //新增
+				'username' => addslashes($userinfo[1]), //新增
+				'password' => md5("$uid|$_SGLOBAL[timestamp]")//新增
+			);
+			//更新用户表
+			inserttable('member', $setarr, 0, true); //新增
+			//开空间
+			$space = space_open($setarr['uid'], $setarr['username'], 0, $userinfo[2]); //新增
+			ssetcookie('auth', authcode("$setarr[password]\t$setarr[uid]", 'ENCODE'), $cookietime); //新增
+		} //新增
 		ssetcookie('loginuser', $get['username'], $cookietime);
 	}
 	
