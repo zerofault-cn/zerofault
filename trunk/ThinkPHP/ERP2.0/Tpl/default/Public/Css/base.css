@@ -360,3 +360,8 @@ td.note {
 	max-width:200px;
 	overflow-x:hidden;
 }
+td.comment dl#comment_list {
+	border-bottom: 1px solid #BEBEBE;
+	padding-bottom: 5px;
+	margin-bottom: 5px;
+}

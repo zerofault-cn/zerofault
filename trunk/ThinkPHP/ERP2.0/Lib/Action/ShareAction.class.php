@@ -159,7 +159,7 @@ class ShareAction extends BaseAction{
 		$this->dao->setInc('hit', "id=".$id);
 		$this->assign('ACTION_TITLE', $info['title']);
 
-		$info['comment'] = D('Comment')->relation(true)->where(array('model_name'=>MODULE_NAME, 'model_id'=>$id, 'status'=>1))->select();
+		$info['comment'] = D('Comment')->relation(true)->where(array('model_name'=>MODULE_NAME, 'model_id'=>$id, 'status'=>1))->order('id')->select();
 		$info['attachment'] = M('Attachment')->where(array('model_name'=>MODULE_NAME, 'model_id'=>$id, 'status'=>1))->select();
 
 		$this->assign('info', $info);
@@ -275,7 +275,7 @@ class ShareAction extends BaseAction{
 							'name' => $_FILES['file']['name'][$i],
 							'type' => $_FILES['file']['type'][$i],
 							'size' => $size,
-							'path' => 'Attach/'.MODULE_NAME.'/'.uniqid().'_'.$_FILES['file']['name'][$i],
+							'path' => 'Attach/'.MODULE_NAME.'/'.date("YmdHis").substr(microtime(),1,7).'.'.strtolower(pathinfo($_FILES['file']['name'][$i], PATHINFO_EXTENSION)),
 							'model_name' => MODULE_NAME,
 							'model_id' => $id,
 							'staff_id' => $_SESSION[C('USER_AUTH_KEY')],
@@ -325,7 +325,31 @@ class ShareAction extends BaseAction{
 		}
 		$dao->content = $content;
 		if ($id>0) {
-			if(false !== $dao->save()){
+			if(false !== $dao->save()) {
+				//process multi-file
+				foreach ($_FILES['file']['size'] as $i=>$size) {
+					if($size > 0) {
+						$data = array(
+							'name' => $_FILES['file']['name'][$i],
+							'type' => $_FILES['file']['type'][$i],
+							'size' => $size,
+							'path' => 'Attach/Comment/'.date("YmdHis").substr(microtime(),1,7).'.'.strtolower(pathinfo($_FILES['file']['name'][$i], PATHINFO_EXTENSION)),
+							'model_name' => 'Comment',
+							'model_id' => $id,
+							'staff_id' => $_SESSION[C('USER_AUTH_KEY')],
+							'upload_time' => date('Y-m-d H:i:s'),
+							'status' => 1
+							);
+						if (move_uploaded_file($_FILES['file']['tmp_name'][$i], $data['path'])) {
+							if (!M('Attachment')->add($data)) {
+								self::_error('Insert fail!'.$this->dao->getLastSql());
+							}
+						}
+						else {
+							self::_error('Move '.$_FILES['file']['tmp_name'][$i].' to '.$data['path'].' fail!');
+						}
+					}
+				}
 				$html  = '<script language="JavaScript" type="text/javascript">';
 				$html .= 'parent.myAlert("Update comment success!");';
 				$html .= 'parent.myOK(500);';
@@ -339,10 +363,36 @@ class ShareAction extends BaseAction{
 		}
 		else {
 			if($id=$dao->add()) {
+				$attachment_html = "";
+				//process multi-file
+				foreach ($_FILES['file']['size'] as $i=>$size) {
+					if($size > 0) {
+						$data = array(
+							'name' => $_FILES['file']['name'][$i],
+							'type' => $_FILES['file']['type'][$i],
+							'size' => $size,
+							'path' => 'Attach/Comment/'.date("YmdHis").substr(microtime(),1,7).'.'.strtolower(pathinfo($_FILES['file']['name'][$i], PATHINFO_EXTENSION)),
+							'model_name' => 'Comment',
+							'model_id' => $id,
+							'staff_id' => $_SESSION[C('USER_AUTH_KEY')],
+							'upload_time' => date('Y-m-d H:i:s'),
+							'status' => 1
+							);
+						if (move_uploaded_file($_FILES['file']['tmp_name'][$i], $data['path'])) {
+							if (!$att_id = M('Attachment')->add($data)) {
+								self::_error('Insert fail!'.$this->dao->getLastSql());
+							}
+						}
+						else {
+							self::_error('Move '.$_FILES['file']['tmp_name'][$i].' to '.$data['path'].' fail!');
+						}
+						$attachment_html .= '<div id="attachment_'.$att_id.'" class="new_attachment"><a title="View attachment in new window" target="_blank" href="'.__APP__.'/'.$data['path'].'">'.$data['name'].'</a><img border="0" align="top" title="Click to delete this attachment" onclick="myConfirm(\'Are you sure to delete this attachment?\', \''.__URL__.'/delete_attachment/id/'.$att_id.'\');" style="cursor:pointer;" alt="Delete" src="'.APP_PUBLIC_PATH.'/Images/cross.gif"></div>';
+					}
+				}
 				$html  = '<script language="JavaScript" type="text/javascript">';
 				$html .= 'parent.myAlert("Post comment success!");';
 				$html .= 'parent.myOK(500);';
-				$html .= 'parent.show_comment('.$id.', "'.str_replace(array("\r\n", "\n"), '<br />', $content).'");';
+				$html .= 'parent.show_comment('.$id.', "'.str_replace(array("\r\n", "\n"), '<br />', $content).'", "'.addslashes($attachment_html).'");';
 				$html .= '</script>';
 				die($html);
 			}

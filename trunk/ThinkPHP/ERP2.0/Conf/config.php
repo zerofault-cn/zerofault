@@ -49,17 +49,17 @@ if (ENV == 'LOCAL') {
 //	$config['USER_AUTH_METHOD'] = 'LDAP'; //可选LDAP或DB，如果无此参数，或者设为其他值，均使用DB方式
 //	$config['APP_CONFIG_LIST'][] = 'ldap';
 
-	$config['STAFF_AUTH_NAME'] => 'local_staff',
-	$config['MANAGER_AUTH_NAME'] => 'local_manager',
-	$config['ADMIN_AUTH_NAME'] => 'local_administrator',
+	$config['STAFF_AUTH_NAME'] = 'local_staff';
+	$config['MANAGER_AUTH_NAME'] = 'local_manager';
+	$config['ADMIN_AUTH_NAME'] = 'local_administrator';
 	$config['ERP_TITLE'] = 'Local ERP';
 }
 elseif (ENV == 'TEST') {
 	$config['DB_PWD'] = 'erp4ctu';
 
-	$config['STAFF_AUTH_NAME'] => 'test_staff',
-	$config['MANAGER_AUTH_NAME'] => 'tes_manager',
-	$config['ADMIN_AUTH_NAME'] => 'test_administrator',
+	$config['STAFF_AUTH_NAME'] = 'test_staff';
+	$config['MANAGER_AUTH_NAME'] = 'tes_manager';
+	$config['ADMIN_AUTH_NAME'] = 'test_administrator';
 	$config['ERP_TITLE'] = 'ERP Test';
 
 	$config['ABSENCE_ADMIN_ID'] = array(1,9);
