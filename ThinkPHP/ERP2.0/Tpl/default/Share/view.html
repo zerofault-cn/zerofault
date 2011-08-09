@@ -72,18 +72,26 @@
 				<span><if condition="$_SESSION[C('USER_AUTH_KEY')] eq $item['staff_id']">
 					<img src="../Public/Images/form_edit.gif" border="0" alt="Edit" align="absmiddle" style="cursor:pointer;" onClick="edit_comment({$item.id});" title="Click to edit this comment" />
 					</if>
-					<if condition="$_SESSION[C('USER_AUTH_KEY')] eq $info['creator_id'] or $_SESSION[C('USER_AUTH_KEY')] eq $item['staff_id'] or $_SESSION[C('ADMIN_AUTH_NAME')] or in_array($_SESSION[C('USER_AUTH_KEY')], C('TASK_ADMIN_ID'))">
+					<if condition="$_SESSION[C('USER_AUTH_KEY')] eq $item['staff_id'] or $_SESSION[C('ADMIN_AUTH_NAME')]">
 					<img src="../Public/Images/cross.gif" alt="Delete" align="absmiddle" border="0" style="cursor:pointer;" onclick="myConfirm('Are you sure to delete this comment?', '__URL__/delete_comment/id/{$item.id}/task_id/{$info.id}');" title="Click to delete this comment" />
 					</if>
 				</span>
 				<div>{$item['content']|nl2br}</div>
+				<div class="attachment">
+				<foreach name="item.attachment" item="file">
+				<div id="attachment_{$file.id}"><a href="__APP__/../{$file.path}" target="_blank" title="View attachment in new window">{$file.name}</a><if condition="$_SESSION[C('USER_AUTH_KEY')] eq $file['staff_id'] or $_SESSION[C('ADMIN_AUTH_NAME')]"><img src="../Public/Images/cross.gif" alt="Delete" align="top" border="0" style="cursor:pointer;" onclick="myConfirm('Are you sure to delete this attachment?', '__URL__/delete_attachment/id/{$file.id}');" title="Click to delete this attachment" /></if></div>
+				</foreach>
+				</div>
 			</dd>
 		</foreach>
 		</dl>
-		<form action="__URL__/comment" method="post" target="_iframe" name="addComment">
+		<form action="__URL__/comment" method="post" target="_iframe" name="addComment" enctype="multipart/form-data">
 		<input type="hidden" name="share_id" value="{$info.id}" />
 		<input type="hidden" name="id" value="" />
-		<textarea class="tinymce" name="content" cols="100" rows="6"></textarea><br />
+		<textarea class="tinymce" name="content" cols="100" rows="5"></textarea><br />
+		<input id="file" type="file" name="file[]" size="80" />
+		<img src="../Public/Images/attachfile.gif"  alt="add file" align="absmiddle" style="cursor:pointer;" onClick="addFile(this);" />
+		<br />
 		<input type="submit" value="发表评论" name="submit" />
 		<input type="reset" value="重置" />
 		</form>
@@ -100,6 +108,7 @@ var musicFlash = '<object id="audioplayer_SHAREID" height="24" width="290" data=
 	+ '<param value="false" name="menu"/>'
 	+ '<param value="#E9E9E9" name="bgcolor"/>'
 	+ '</object>';
+var autostart = 'yes';
 $(document).ready(function(){
 	$(".content img").each(function() {
 		var w = parseInt($(this).width());
@@ -111,7 +120,6 @@ $(document).ready(function(){
 			});
 		}
 	});
-	var autostart = 'yes';
 	$(".attachment a").each(function(i) {
 		var href = $(this).attr('href');
 		var ext = href.substr(href.length-4);
@@ -159,11 +167,13 @@ function edit_comment(id) {
 		has_reset = true;
 	}
 }
-function show_comment(id, content) {
+function show_comment(id, content, attachment) {
 	if ($("#comment_list p").length>0) {
 		$("#comment_list p").remove();
 	}
 	var dd_html = '<span><img src="../Public/Images/form_edit.gif" border="0" alt="Edit" align="absmiddle" style="cursor:pointer;" onClick="edit_comment('+id+');" title="Click to edit this comment" /> <img src="../Public/Images/cross.gif" alt="Delete" align="absmiddle" border="0" style="cursor:pointer;" onclick="myConfirm(\'Are you sure to delete this comment?\', \'__URL__/delete_comment/id/'+id+'\');" title="Click to delete this comment" /></span><div>'+content+'</div>';
+	dd_html += attachment;
+	
 	if ($("dd#dd_"+id).length>0) {
 		$("dd#dd_"+id).html(dd_html);
 		$("input[name='id']").val('');
@@ -176,13 +186,49 @@ function show_comment(id, content) {
 		var dt_html = '<dt id="dt_'+id+'"><span>&nbsp;</span>{$_SESSION[C('STAFF_AUTH_NAME')]['realname']}</dt>';
 		$("dl#comment_list").append(dt_html+'<dd id="dd_'+id+'">'+dd_html+'</dd>');
 	}
-	$("textarea[name='content']").val('');
+	$("textarea[name='content']").nextUntil("img").remove();
+	$("textarea[name='content']").val('').after('<br /><input type="file" name="file[]" size="80"/> ');
+	
+	$(".new_attachment a").each(function(i) {
+		var href = $(this).attr('href');
+		var ext = href.substr(href.length-4);
+		if ('.mp3'==ext) {
+			var flashHtml = musicFlash.replace(/FLASHADDR/g, encodeURI(href));
+			flashHtml = flashHtml.replace(/SHAREID/g, i);
+			flashHtml = flashHtml.replace(/AUTOSTART/g, autostart);
+			$(this).after(flashHtml);
+			autostart = 'no';
+		}
+		else if ('.gif'==ext || '.png'==ext || '.jpg'==ext) {
+			var link = $(this);
+			var image = new Image();
+			image.onload = function() {
+				image.onload = null;
+				var w = image.width;
+				var h = image.height;
+				if (w > 600) {
+					h = 600*h/w;
+					w = 600;
+				}
+				var img = $("<img />").attr({"src": href, "width": w, "height": h}).css({'padding': '3px', 'border':'1px solid #000000','margin':'5px'});
+				link.html(img);
+			}
+			image.src = href;
+		}
+	//	$(this).parent().removeClass("new_attachment");
+	});
 }
 function remove_comment(id) {
 	if ($("dd#dd_"+id).length>0) {
 		$("dt#dt_"+id).remove();
 		$("dd#dd_"+id).remove();
 	}
+}
+function addFile(obj) {
+	$(obj).before('<br /><input type="file" name="file[]" size="80" /> ');
+}
+function remove_attachment(id) {
+	$("#attachment_"+id).remove();
 }
 
 </script>
