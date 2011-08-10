@@ -187,7 +187,7 @@ function show_comment(id, content, attachment) {
 		$("dl#comment_list").append(dt_html+'<dd id="dd_'+id+'">'+dd_html+'</dd>');
 	}
 	$("textarea[name='content']").nextUntil("img").remove();
-	$("textarea[name='content']").val('').after('<br /><input type="file" name="file[]" size="80"/> ');
+	$("textarea[name='content']").val('').after('<br /><input type="file" name="file[]" size="80"/>');
 	
 	$(".new_attachment a").each(function(i) {
 		var href = $(this).attr('href');
@@ -215,7 +215,7 @@ function show_comment(id, content, attachment) {
 			}
 			image.src = href;
 		}
-	//	$(this).parent().removeClass("new_attachment");
+		$(this).parent().removeClass("new_attachment");
 	});
 }
 function remove_comment(id) {
@@ -225,7 +225,7 @@ function remove_comment(id) {
 	}
 }
 function addFile(obj) {
-	$(obj).before('<br /><input type="file" name="file[]" size="80" /> ');
+	$(obj).before('<br /><input type="file" name="file[]" size="80" />');
 }
 function remove_attachment(id) {
 	$("#attachment_"+id).remove();
