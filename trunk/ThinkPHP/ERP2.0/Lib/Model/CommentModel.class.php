@@ -13,7 +13,7 @@ class CommentModel extends RelationModel{
 			'class_name'   => 'Attachment',
 			'mapping_name' => 'attachment',
 			'foreign_key'  => 'model_id',
-			'condition'    => "model_name='Comment' and Status='1'",
+			'condition'    => "model_name='Comment' and status='1'",
 		)
 	);
 }

@@ -314,9 +314,11 @@ class ShareAction extends BaseAction{
 		$content = trim($_REQUEST['content']);
 		!$content && self::_error('Comment can\'t be empty!');
 		if ($id>0) {
-			$info = $dao->relation(true)->find($id);
+			$dao->find($id);
 			$attachment_html = "";
-			foreach ($info['attachment'] as $att) {
+			$att_arr = M('Attachment')->where("model_name='Comment' and model_id=".$id." and status=1")->select();
+			empty($att_arr) && ($att_arr = array());
+			foreach ($att_arr as $att) {
 				$attachment_html .= '<div id="attachment_'.$att['id'].'" class="new_attachment"><a title="View attachment in new window" target="_blank" href="'.__APP__.'/../'.$att['path'].'">'.$att['name'].'</a><img border="0" align="top" title="Click to delete this attachment" onclick="myConfirm(\'Are you sure to delete this attachment?\', \''.__URL__.'/delete_attachment/id/'.$att['id'].'\');" style="cursor:pointer;" alt="Delete" src="'.APP_PUBLIC_PATH.'/Images/cross.gif"></div>';
 			}
 		}
