@@ -3,8 +3,11 @@ $config = array(
 	//调试模式，默认false
 	'APP_DEBUG'			=> false,
 
+	//是否启用LDAP认证，如果无此参数，或者设为其他值，则不启用
+//	'USER_AUTH_METHOD'	=> 'LDAP', 
+
 	//扩展配置文件
-	'APP_CONFIG_LIST'	=> array('menu', 'absence', 'smtp', 'test'),
+	'APP_CONFIG_LIST'	=> array('menu', 'absence', 'smtp', 'test', 'ldap'),
 	
 	//标签嵌套级别，默认为3
 	'TAG_NESTED_LEVEL'	=> 6,
