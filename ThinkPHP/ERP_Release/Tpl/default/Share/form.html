@@ -1,0 +1,101 @@
+<style>
+.content dl dt {
+	padding-bottom: 8px;
+	color: #006600;
+	font-size: 14px;
+	font-weight: 150%;
+}
+.content dl dd {
+	padding-left: 24px;
+	padding-bottom: 24px;
+}
+</style>
+<p class="page_title_text">{$ACTION_TITLE}</p>
+<form action="__URL__/submit" method="post" enctype="multipart/form-data" target="_iframe">
+<input type="hidden" name="id" value="{$info.id}" />
+<table border="0" align="center" cellpadding="4" cellspacing="2">
+<tr>
+	<td bgcolor="#78A3DF" width="12%">Project</td>
+	<td bgcolor="#DADADA">
+		<select name="project_id">
+			<option value="">----Please select----</option>
+			{$info.project_opts}
+		</select>
+	</td>
+	<td nowrap="nowrap" rowspan="2" bgcolor="#78A3DF">Notification</td>
+	<td bgcolor="#DADADA" rowspan="2">
+		<input type="checkbox" name="chk0" value="1" <if condition="$info['notification'][0] eq '1'">checked="checked"</if> /> cc to my department<br />
+		<input type="checkbox" name="chk1" value="1" <if condition="$info['notification'][1] eq '1'">checked="checked"</if> /> cc to all leaders<br />
+		<input type="checkbox" name="chk2" value="1" <if condition="$info['notification'][2] eq '1'">checked="checked"</if> /> cc to all<br />
+	</td>
+</tr>
+<tr>
+	<td bgcolor="#78A3DF">Category</td>
+	<td bgcolor="#DADADA" >
+		<select name="category_id">
+			<option value="">----Please select----</option>
+			{$info.category_opts}
+		</select>
+	</td>
+</tr>
+<tr>
+	<td bgcolor="#BCD1EF">标题</td>
+	<td bgcolor="#E9E9E9" colspan="3"><input type="text" name="title" size="80" maxlength="100" value="{$info.title}" /></td>
+</tr>
+<tr>
+	<td bgcolor="#BCD1EF">关键字</td>
+	<td bgcolor="#E9E9E9" colspan="3"><input type="text" name="keywords" size="80" maxlength="100" value="{$info.keywords}" />（用空格分隔）</td>
+</tr>
+<tr>
+	<td bgcolor="#BCD1EF">正文</td>
+	<td bgcolor="#E9E9E9" colspan="3"><textarea name="content" rows="40" cols="100" >{$info.content}</textarea></td>
+</tr>
+<tr bgcolor="#BCD1EF">
+	<td>附件</td>
+	<td bgcolor="#E9E9E9" valign="top" colspan="3">
+		<input type="hidden" name="MAX_FILE_SIZE" value="{$MAX_FILE_SIZE}"/>
+		<empty name="info.attachment">
+		Single file mustn't larger than {$upload_max_filesize}!<br />
+		<else />
+		<foreach name="info.attachment" item="file">
+		<div id="attachment_{$file.id}"><a href="__APP__/../{$file.path}" target="_blank" title="View attachment in new window">{$file.name}</a> <img src="../Public/Images/del.png" align="absmiddle" border="0" style="cursor:pointer;" onclick="myConfirm('Are you sure to delete this attachment?', '__URL__/delete_attachment/id/{$file.id}');"/></div>
+		</foreach>
+		</empty>
+		<input id="file" type="file" name="file[]" size="80" />
+		<img src="../Public/Images/attachfile.gif"  alt="add file" align="absmiddle" style="cursor:pointer;" onClick="addFile(this);" />
+	</td>
+</tr>
+</table>
+<p class="center">
+	<input type="submit" value="Submit" name="submit"/>
+	&nbsp;&nbsp;&nbsp;&nbsp;
+	<input type="button" value="Cancel" onclick="javascript:location.href='__URL__';"/>
+</p>
+</form>
+
+<script language="javascript" type="text/javascript" src="../Public/Js/tiny_mce/tiny_mce.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){
+	tinyMCE.init({
+		// General options
+		mode : "textareas",
+		theme : "advanced",
+		plugins : "advlist,advimage,table,preview,paste",
+		theme_advanced_toolbar_location : "top",
+		theme_advanced_toolbar_align : "left",
+		theme_advanced_buttons1 : "fontselect,fontsizeselect,bold,italic,underline,strikethrough,separator,forecolor,backcolor,link,unlink,separator,bullist,numlist,justifyleft,justifycenter,justifyright,justifyfull,table,separator,image,pastetext,pasteword,separator,removeformat,code,preview",
+		theme_advanced_buttons2 : "",
+		theme_advanced_buttons3 : "",
+		force_br_newlines : true,
+		forced_root_block : false,
+		convert_urls : false
+	});
+});
+function addFile(obj) {
+	$(obj).before('<br /><input type="file" name="file[]" size="80" /> ');
+}
+function remove_attachment(id) {
+	$("#attachment_"+id).remove();
+}
+
+</script>
