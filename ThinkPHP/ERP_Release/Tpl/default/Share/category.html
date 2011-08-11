@@ -3,7 +3,7 @@
 <table cellpadding="3" border="1" bordercolor="#FFFFFF" style="border-collapse:collapse;">
 <tr>
 	<th>No.</th>
-	<th>Category Name</th>
+	<th>{$Think.ACTION_NAME|ucfirst} Name</th>
 	<th>OP</th>
 </tr>
 <iterate name="result" id="item">
@@ -12,7 +12,7 @@
 	<td class="name">{$item['name']}</td>
 	<td>
 		<a href="javascript:void(0);" onclick="edit(this,'{$item['id']}');">Edit</a>
-		<a href="javascript:void(0);" onclick="myConfirm('Are you sure to delete this item?', '__URL__/category/id/{$item['id']}');" target="_iframe">Delete</a>
+		<a href="javascript:void(0);" onclick="myConfirm('Are you sure to delete this item?', '__URL__/{$Think.ACTION_NAME}/id/{$item['id']}');" target="_iframe">Delete</a>
 		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 	</td>
 </tr>
