@@ -454,7 +454,7 @@ class ShareAction extends BaseAction{
 		}
 		elseif (!empty($_REQUEST['id'])) {
 			$id = $_REQUEST['id'];
-			$rs = $this->dao->where(array('category_id'=>$id))->select();
+			$rs = $this->dao->where(array(ACTION_NAME.'_id'=>$id))->select();
 			if(!empty($rs) && sizeof($rs)>0) {
 				self::_error('It\'s in use, can\'t be deleted!');
 			}
