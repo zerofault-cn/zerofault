@@ -12,7 +12,7 @@ $config = array(
 	//数据库参数
 	'DB_TYPE'			=> 'mysql',
 	'DB_HOST'			=> 'localhost',
-	'DB_NAME'			=> 'ERP2',
+	'DB_NAME'			=> 'ERP',
 	'DB_USER'			=> 'root',
 	'DB_PWD'			=> '',
 	'DB_PREFIX'			=> 'erp_',
@@ -22,7 +22,7 @@ $config = array(
 
 	//用户session变量名，用于在同一站点上区分不同目录下的ERP系统
 	'STAFF_AUTH_NAME'   => 'staff',
-	'MANAGER_AUTH_NAME' => 'location_manager',
+	'MANAGER_AUTH_NAME' => 'manager',
 	'ADMIN_AUTH_NAME'	=> 'administrator',
 	
 	//超级管理员的ID数组，用英文逗号分隔
@@ -48,10 +48,10 @@ $config = array(
 	'RBAC_NODE_TABLE'	=> 'erp_node',
 
 	//以下模块不需要权限认证，即默认情况下所有Staff帐号都可以访问
-	'NOT_AUTH_MODULE'	=> 'Index,Public,Script,Asset,Inventory,Absence,Task,Attachment',
+	'NOT_AUTH_MODULE'	=> array('Index', 'Public', 'Script', 'Asset', 'Inventory', 'Absence', 'Task', 'Attachment', 'Share'),
 	//在iframe中处理请求，并以弹出消息方式提示处理结果的Action名
 	'IFRAME_AUTH_ACTION' => array('update','delete','edit','submit','confirm','select','import','create')
-	);
+);
 
 return $config;
 ?>
