@@ -90,7 +90,7 @@ a.c_link { background-position: 0 -64px; }
 .ybg table { width: 100%; }
 
 body { background: #FFF; }
-#wrap, .wrap { margin: 0 auto; width: 1004px; }
+#wrap, .wrap { margin: 0 auto; width: 1004px; padding-top:8px;}
 #ad_header { margin: 0 auto; padding: 1px; width: 966px; background: #FCF9E6; border: 1px solid #FF8E00; line-height:150%; }
     #ad_header a{ color: #000; }
 #ad_contenttop { margin: 0 0 10px 0; padding: 0 0 10px 0; width: 100%; border-bottom: 1px solid #EBE6C9; overflow: hidden; }

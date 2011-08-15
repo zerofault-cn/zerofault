@@ -25,7 +25,7 @@
 		</div>
 	</div>
 	<div class="form">
-		<form name="loginform" action="do.php?ac=$_SCONFIG[login_action]&$url_plus&ref" method="post">
+		<form name="loginform" action="do.php?ac=$_SCONFIG[login_action]&$url_plus&ref" method="post" autocomplete="off">
 		<div class="input-wrapper"> 
 			<input name="username" id="username" class="input" value="" type="text"/>
 			<label for="username" class="label">登录帐号</label> 
@@ -77,25 +77,16 @@ $(document).ready(function() {
 		}
 		$(this).focus(function() {
 			$(this).parent().addClass('focus');
+			$(this).next().css("visibility", "hidden");
 		}).blur(function() {
 			$(this).parent().removeClass('focus');
-			if ($(this).val().length>0) {
-				$(this).next().css("visibility", "hidden");
-			}
-			else {
+			if ($(this).val().length==0) {
 				$(this).next().css("visibility", "visible");
 			}
 		}).keyup(function() {
 			$(this).parent().addClass('typed');
-			if ($(this).val().length>0) {
-				$(this).next().css("visibility", "hidden");
-			}
-			else {
-				$(this).next().css("visibility", "visible");
-			}
 		});
 	});
 });
-function B(a,b) {}
 </script>
 </html>

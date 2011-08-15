@@ -7,11 +7,11 @@
 .coin-slider { overflow: hidden; zoom: 1; position: relative; }
 .coin-slider a{ text-decoration: none; outline: none; border: none; }
 
-.cs-buttons { font-size: 0px; padding: 10px; text-align: center}
-.cs-buttons a { margin-left: 20px; fone-size:0;line-height:0; padding:8px; background:url(image/slide_off.gif) no-repeat; }
-.cs-buttons a.cs-active { background:url(image/slide_on.gif) no-repeat }
+.cs-buttons { font-size: 0px; padding: 10px; text-align: center;}
+.cs-buttons a { margin: 0 10px;  padding:8px; font-size:0; color:#F7F7F7;background:url(image/slide_off.gif) center no-repeat; text-indent: -1000px;}
+.cs-buttons a.cs-active { background:url(image/slide_on.gif) center no-repeat }
 
-.cs-title { width: 545px; padding: 10px; background-color: #000000; color: #FFFFFF; }
+.cs-slider {display:none;}
+.cs-title {display: none;}
 
-.cs-prev, 
-.cs-next { display:none; background-color: #000000; color: #FFFFFF; padding: 0px 10px; }
+.cs-prev, .cs-next { display:none; background-color: #000000; color: #FFFFFF; padding: 0px 10px; }
