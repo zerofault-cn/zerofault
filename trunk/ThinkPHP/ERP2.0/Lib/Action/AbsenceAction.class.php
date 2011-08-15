@@ -16,7 +16,7 @@ class AbsenceAction extends BaseAction{
 		Session::set('sub', MODULE_NAME);
 		$this->dao = D('Absence');
 		$this->time = time();
-	//	$this->time = mktime(0,0,0,7,16,2011);
+	//	$this->time = mktime(0,0,0,8,31,2012);
 		parent::_initialize();
 		$this->assign('MODULE_TITLE', 'Absence');
 		$this->Absence_Config = C('_absence_');
@@ -59,12 +59,11 @@ class AbsenceAction extends BaseAction{
 		$leave_info['Balance_year'] = date('Y', $this->time)-1;
 		
 		if (strcmp($staff_info['onboard'], date('Y', $this->time).'-01-00')>0) {
-		//	$balance_hour = max(0, round($staff_info['balance']*8-$used_annual_hours));
-		//	$total_annual += $balance_hour;
-			
 			//今年入职的员工，从入职之日算起，忽略预设Balance
+			$leave_info['Balance'] = 'N/A';
+		
 			$added_annual_hour = round(($this->time - strtotime($staff_info['onboard']))/86400/365*$Accrual[0]*8);
-			$left_annual_hour = $added_annual_hour - max(0, $used_annual_hours-round($staff_info['balance']*8));
+			$left_annual_hour = $added_annual_hour - $used_annual_hours;
 			$total_annual += $left_annual_hour;
 		}
 		else {
@@ -72,30 +71,29 @@ class AbsenceAction extends BaseAction{
 			$added_annual_hour = round(date('z', $this->time)/365*$Accrual[0]*8);
 			if (date('Y', $this->time)==2011) {
 				//如果现在是2011年，则读取2010剩余年假，并减除已使用假期
-				$balance_hour = max(0, round($staff_info['balance']*8-$used_annual_hours));
-				$total_annual += $balance_hour;
+				$balance_hour = max(0, round($staff_info['balance']*8)-$used_annual_hours);
 			
-				$left_annual_hour = $added_annual_hour - max(0, $used_annual_hours-round($staff_info['balance']*8));
+				$left_annual_hour = $added_annual_hour + round($staff_info['balance']*8) - $used_annual_hours;
 				$total_annual += $left_annual_hour;
 			}
 			else {
 				//现在是2012年或以后
 				if (strcmp($staff_info['onboard'], '2011-01-00')>0) {
-					//该员工在2011年后入职，则用2010年剩余年假 + 从入职日起计算至去年结束的年假
-					$tmp_balance_hour = round($staff_info['balance']*8 + (mktime(0,0,0,1,1,date('Y', $this->time))-strtotime($staff_info['onboard']))/86400/365*$Accrual[0]*8);
+					//该员工在2011年后入职，则从入职日起计算至去年结束的年假
+					$tmp_balance_hour = round((mktime(0,0,0,1,1,date('Y', $this->time))-strtotime($staff_info['onboard']))/86400/365*$Accrual[0]*8);
 				}
 				else {
 					//该员工在2011年前入职，则用2010年剩余年假 + 2011年至去年的整年假
 					$tmp_balance_hour = round($staff_info['balance']*8 + (date('Y', $this->time)-2011)*$Accrual[0]*8);
 				}
 				$balance_hour = max(0, $tmp_balance_hour-$used_annual_hours);
-				$total_annual += $balance_hour;
 
-				$left_annual_hour = $added_annual_hour - max(0, $used_annual_hours-$tmp_balance_hour);
+				$left_annual_hour = $added_annual_hour + $tmp_balance_hour - $used_annual_hours;
 				$total_annual += $left_annual_hour;
 			}
+			$leave_info['Balance'] = self::parseHour($balance_hour);
 		}
-		$leave_info['Balance'] = self::parseHour($balance_hour);
+		
 		$leave_info['Annual'] =  self::parseHour($left_annual_hour);
 		$this->assign('total_annual', self::parseHour($total_annual));
 		$total_leave = $total_annual;
@@ -300,7 +298,7 @@ class AbsenceAction extends BaseAction{
 				}
 			}
 		}
-		if (!empty($_REQUEST['type'])) {
+		if (!empty($type)) {
 			$this->assign('date_from', date('Y-m-d', $this->time-30*86400));
 		}
 		else {
@@ -311,11 +309,24 @@ class AbsenceAction extends BaseAction{
 		$this->assign('time_to', $time_to);
 
 		$dept_staff_arr = array();
-		foreach ((array)M('Department')->order('name')->select() as $dept) {
-			$dept_staff_arr[$dept['name']] = array(
-				'leader' => M('Staff')->field('id, realname')->find($dept['leader_id']),
-				'staff'  => M('Staff')->field('id, realname')->where(array('id'=>array('neq', $dept['leader_id']), 'dept_id'=>$dept['id'], 'status'=>1))->order('realname')->select()
+		$dept_arr = M('Department')->order('name')->select();
+		empty($dept_arr) && ($dept_arr = array());
+		foreach ($dept_arr as $dept) {
+			$dept_staff_arr[$dept['name']] = array();
+			if (!empty($dept['leader_id'])) {
+				$dept_staff_arr[$dept['name']]['leader'] = M('Staff')->field('id, realname')->find($dept['leader_id']);
+			}
+			$where = array(
+				'dept_id' => $dept['id'],
+				'status' => 1
 			);
+			if (!empty($dept['leader_id'])) {
+				$where['id'] = array('neq', $dept['leader_id']);
+			}
+			$rs = M('Staff')->field('id, realname')->where($where)->order('realname')->select();
+			if (!empty($rs)) {
+				$dept_staff_arr[$dept['name']]['staff']  = $rs;
+			}
 		}
 		$rs = M('Staff')->where(array('dept_id'=>0, 'status'=>1))->order('realname')->field('id,realname')->select();
 		if (!empty($rs)) {
@@ -323,7 +334,7 @@ class AbsenceAction extends BaseAction{
 		}
 		$this->assign('DeptStaff', $dept_staff_arr);
 
-		$this->assign('content', ACTION_NAME);
+		$this->assign('content', ACTION_NAME.(empty($type)?'':'-'.$type));
 		$this->display('Layout:content');
 	}
 
@@ -862,8 +873,8 @@ class AbsenceAction extends BaseAction{
 			
 			$balance_hour = $added_annual_hour = 0;
 			if (strcmp($staff_info['onboard'], date('Y', $this->time).'-01-00')>0) {
-				$balance_hour = round($staff_info['balance']*8);
-				//今年入职的员工，从入职之日算起
+				//今年入职的员工，从入职之日算起，忽略预设Balance
+				$rs[$i]['Balance'] = 'N/A';
 				$added_annual_hour = round(($this->time - strtotime($staff_info['onboard']))/86400/365*$Accrual[0]*8);
 			}
 			else {
@@ -883,8 +894,8 @@ class AbsenceAction extends BaseAction{
 						$balance_hour = round($staff_info['balance']*8 + (date('Y', $this->time)-2011)*$Accrual[0]*8);
 					}
 				}
+				$rs[$i]['Balance'] = self::parseHour($balance_hour-$history_used);
 			}
-			$rs[$i]['Balance'] = self::parseHour($balance_hour-$history_used);
 			$rs[$i]['Annual'] =  self::parseHour($added_annual_hour);
 			$rs[$i]['Annual_used'] = self::parseHour($annual_used);
 
@@ -950,9 +961,17 @@ class AbsenceAction extends BaseAction{
 	}
 
 	private function get_avaliable($type, $staff_id, $id=0) {
+		$total_leave = 0;
 		switch ($type) {
 			case 'Annual':
 				$staff_info = D('Staff')->find($staff_id);
+				//计算用户可分配的年假限额，每年分配15/20/25天
+				$Accrual = array(0, 0);
+				foreach ($this->Absence_Config['accrualrate'] as $key=>$val) {
+					if ($this->time - strtotime($staff_info['onboard']) > $key) {
+						$Accrual = $val;
+					}
+				}
 				$where = array(
 					'id' => array('neq', $id),
 					'type' => array('in', array('Annual','CashOut')),
@@ -960,36 +979,30 @@ class AbsenceAction extends BaseAction{
 					'status' => 1
 					);
 				$used_annual_hours = $this->dao->where($where)->sum('hours');
-				$total_leave = 0;
 				if (strcmp($staff_info['onboard'], date('Y', $this->time).'-01-00')>0) {
-					$balance_hour = max(0, round($staff_info['balance']*8-$used_annual_hours));
-					$total_leave += $balance_hour;
-					//当年入职的员工，从入职之日算起
-					$added_annual_hour = round(($this->time - strtotime($staff_info['onboard']))/86400*360/(365+date('L', $this->time))/30*1.25*8);//每个月1.25天
+					//当年入职的员工，从入职之日算起，忽略预设Balance
+					$added_annual_hour = round(($this->time - strtotime($staff_info['onboard']))/86400/365*$Accrual[0]*8);
 					$total_leave += $added_annual_hour - $used_annual_hours;
 				}
 				else {
 					//当年之前入职的员工，从当年01-01算起
-					$added_annual_hour = round(date('z', $this->time)*360/(365+date('L', $this->time))/30*1.25*8);
-					if (date('Y', $this->time)==2010) {
-						//如果现在是2010年，则读取2009剩余年假，并减除已使用假期
+					$added_annual_hour = round(date('z', $this->time)/365*$Accrual[0]*8);
+					if (date('Y', $this->time)==2011) {
+						//如果现在是2011年，则读取2010剩余年假，并减除已使用假期
 						$balance_hour = max(0, round($staff_info['balance']*8-$used_annual_hours));
-						$total_leave += $balance_hour;
 
-						$total_leave += $added_annual_hour - max(0, $used_annual_hours-round($staff_info['balance']*8));
+						$total_leave += $added_annual_hour + round($staff_info['balance']*8) - $used_annual_hours;
 					}
 					else {
-						//2011年或以后
-						if (strcmp($staff_info['onboard'], '2010-01-00')>0) {
-							//该员工在2010年后入职，则剩余年假从入职日起计算至去年结束
-							$tmp_balance_hour = round($staff_info['balance']*8 + (mktime(0,0,0,1,1,date('Y', $this->time))-strtotime($staff_info['onboard']))*360/(365+date('L', $this->time))/86400/30*1.25*8);
+						//2012年或以后
+						if (strcmp($staff_info['onboard'], '2011-01-00')>0) {
+							//该员工在2011年后入职，则从入职日起计算至去年结束
+							$tmp_balance_hour = round((mktime(0,0,0,1,1,date('Y', $this->time))-strtotime($staff_info['onboard']))/86400/365*$Accrual[0]*8);
 						}
 						else {
-							//该员工在2010年前入职，则用2009年剩余年假 ＋ 2010年到去年的整年假
-							$tmp_balance_hour = round($staff_info['balance']*8 + (date('Y', $this->time)-2010)*12*1.25*8);
+							//该员工在2011年前入职，则用2010年剩余年假 ＋ 2011年到去年的整年假
+							$tmp_balance_hour = round($staff_info['balance']*8 + (date('Y', $this->time)-2011)*$Accrual[0]*8);
 						}
-						$balance_hour = max(0, $tmp_balance_hour-$used_annual_hours);
-						$total_leave += $balance_hour;
 						$total_leave += $added_annual_hour - max(0, $used_annual_hours-$tmp_balance_hour);
 					}
 				}
