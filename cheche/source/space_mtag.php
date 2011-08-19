@@ -426,31 +426,6 @@ if($tagname) {
 	$school_start = ($page-1)*$school_perpage;
 
 	if('school'==$_GET['view']) {
-		$relatedSchool = array();
-		//根据地域推荐驾校
-		$maxSchool = 6;
-		$field_arr = array('region_id', 'city_id', 'province_id');
-		foreach ($field_arr as $field) {
-			if (count($relatedSchool)>=$maxSchool) {
-				break;
-			}
-			if (!empty($space[$field])) {
-				$where = ($field . "=".$space[$field]);
-				$sql = "Select * from ".tname('school')." where ".$where." order by displayorder desc";
-				$rs = $_SGLOBAL['db']->query($sql);
-				if ($_SGLOBAL['db']->num_rows($rs) > 0) {
-					while ($row = $_SGLOBAL['db']->fetch_array($rs)) {
-						if (count($relatedSchool)>=$maxSchool) {
-							break;
-						}
-						$row['mtag_count'] = $_SGLOBAL['db']->result($_SGLOBAL['db']->query("select count(*) from ".tname('mtag')." where fieldid=4 and ext_id=".$row['id']), 0);
-						$row['member_count'] = intval($_SGLOBAL['db']->result($_SGLOBAL['db']->query("select sum(membernum) from ".tname('mtag')." where fieldid=4 and ext_id=".$row['id']), 0));
-						$relatedSchool[$row['id']] = $row;
-					}
-				}
-			}
-		}
-		
 		$countsql = "select 0";
 		if (!empty($_REQUEST['s_school_name']) && ''!=trim($_REQUEST['s_school_name'])) {
 			//搜索驾校
@@ -483,7 +458,7 @@ if($tagname) {
 			$theurl = 'space.php?do=mtag&view=school';
 			if (empty($_REQUEST['school_id'])) {
 				if (empty($_REQUEST['province_id'])) {
-					//获取省份热点形状
+					//全国地图
 					$map_str = '';
 					$sql = "select * from ".tname('region')." where pid=1";
 					$query = $_SGLOBAL['db']->query($sql);
@@ -498,6 +473,7 @@ if($tagname) {
 					$province_name = $_SGLOBAL['db']->result($_SGLOBAL['db']->query("select name from ".tname('region')." where id=".intval($_GET['province_id'])), 0);
 					$profile = parse_ini_file(S_ROOT.'profile.ini', true);
 					if (in_array($province_name, $profile['direct_city'])) {
+						//直辖市，需要直接取出city_id
 						$_GET['city_id'] = $_SGLOBAL['db']->result($_SGLOBAL['db']->query("select id from ".tname('region')." where pid=".intval($_GET['province_id'])), 0);
 					}
 					if (empty($_GET['city_id'])) {
@@ -545,6 +521,7 @@ if($tagname) {
 				}
 			}
 			else {
+				//驾校信息页
 				$query = $_SGLOBAL['db']->query("select * from ".tname('school')." where id=".$_REQUEST['school_id']." limit 1");
 				$school = $_SGLOBAL['db']->fetch_array($query);
 				$rate_count = $_SGLOBAL['db']->result($_SGLOBAL['db']->query("select count(*) from ".tname('rate')." where school_id=".$_REQUEST['school_id']), 0);
@@ -554,11 +531,26 @@ if($tagname) {
 				$province_name = $_SGLOBAL['db']->result($_SGLOBAL['db']->query("select name from ".tname('region')." where id=".$school['province_id']), 0);
 				$city_name = $_SGLOBAL['db']->result($_SGLOBAL['db']->query("select name from ".tname('region')." where id=".$school['city_id']), 0);
 				$region_name = $_SGLOBAL['db']->result($_SGLOBAL['db']->query("select name from ".tname('region')." where id=".$school['region_id']), 0);
-				
+				$school_ext = " and region_id=".$school['region_id'];
+
 				//驾校下的群组
 				$countsql = "select count(*) from ".tname('mtag')." where fieldid=4 and ext_id=".$_REQUEST['school_id'];
 				$sql = "SELECT mt.* FROM ".tname('mtag')." mt WHERE fieldid=4 and ext_id=".$_REQUEST['school_id']." ORDER BY mt.".$_GET['orderby']." DESC LIMIT ".$start.", ".$perpage;
 			}
+			//读取所有驾校及其群组数、话题数，供选出热门驾校
+			$query = $_SGLOBAL['db']->query("select * from ".tname('school')." where 1 ".$school_ext." order by displayorder desc");
+			$hot_school_list = $mtag_count_arr = $member_count_arr = array();
+			while ($value = $_SGLOBAL['db']->fetch_array($query)) {
+				//统计驾校下的群组数、话题数
+				$value['mtag_count'] = $_SGLOBAL['db']->result($_SGLOBAL['db']->query("select count(*) from ".tname('mtag')." where fieldid=4 and ext_id=".$value['id']), 0);
+				$value['member_count'] = intval($_SGLOBAL['db']->result($_SGLOBAL['db']->query("select sum(membernum) from ".tname('mtag')." where fieldid=4 and ext_id=".$value['id']), 0));
+				$hot_school_list[] = $value;
+				$mtag_count_arr[] = $value['mtag_count'];
+				$member_count_arr[] = $value['member_count'];
+			}
+			array_multisort($mtag_count_arr, SORT_DESC, SORT_NUMERIC, $member_count_arr, SORT_DESC, SORT_NUMERIC, $hot_school_list);
+			$hot_school_list = array_slice($hot_school_list, 0, 6, true);
+
 		}
 	}
 	elseif($_GET['view'] == 'me' || $_GET['view'] == 'manage') {

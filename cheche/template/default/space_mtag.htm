@@ -285,10 +285,10 @@
 	<!--{/if}-->
 	<div class="sidebox">
 		<h2 class="title">
-			推荐驾校
+			热门驾校
 		</h2>
 		<ul class="school_list">
-			<!--{loop $relatedSchool $key $value}-->
+			<!--{loop $hot_school_list $key $value}-->
 			<li>
 				<span style="float:right">{$value[mtag_count]}个群组 / {$value[member_count]}个车友</span>
 				<a href="space.php?do=mtag&view=school&school_id={$value['id']}">{$value[name]}</a>
