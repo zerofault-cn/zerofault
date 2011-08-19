@@ -235,7 +235,7 @@ body { background: #FFF; }
   .app_more a.off { background-position: 0 50%; }
   .app_more a.on { background-position: -100px 50%; }
   #app_sidebar .t_input{ width: 110px; }
-  #mainarea { float: left; width: 830px; ooverflow: hidden; border-left: #CAD6E0 1px solid; padding-left: 13px;padding-top:10px;}
+  #mainarea { float: left; width: 830px; ooverflow: hidden; border-left: #CAD6E0 1px solid; padding-left: 13px;padding-top:10px;padding-bottom:10px;}
 
   .chostlp img{ float: right; padding: 5px; border: 1px solid #FFF; border-top: none; vertical-align: middle; }
  .chostlp img.hover{ background: #FFF; border-color: #CCC;  }
@@ -244,7 +244,7 @@ body { background: #FFF; }
 .chostlp_drop li{ padding: 5px; width: 16px; height: 16px; }
 
 #content { float: left; margin: 0 20px 0 0; width: 560px; ooverflow: hidden; }
-#content2 { float: left; margin: 0 10px 0 0; width: 644px; ooverflow: hidden; }
+#content2 { float: left; margin: 0 6px 0 0; width: 644px; ooverflow: hidden; }
 
 #content #message {
 	width:544px;
@@ -998,7 +998,7 @@ a.button { padding: 5px; }
 
 /*************************************************CP SIDEBAR***/
 #sidebar { float: right; padding: 0; width: 250px;  }
-#sidebar2 { float: right; padding: 0; width: 156px; overflow: hidden; }
+#sidebar2 { float: right; padding: 0; width: 180px;}
     #sidebar .ye_r_t { margin: 0 0 20px; }
 .task_notice { position: relative; padding: 5px;}
 .task_notice a.float_cancel { position: absolute; width: 16px; height: 16px; background: url(image/cancel.gif) no-repeat; line-height: 200px; top: 5px; right: -8px; overflow: hidden; display: block; }
