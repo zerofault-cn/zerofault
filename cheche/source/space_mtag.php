@@ -426,6 +426,31 @@ if($tagname) {
 	$school_start = ($page-1)*$school_perpage;
 
 	if('school'==$_GET['view']) {
+		$relatedSchool = array();
+		//根据地域推荐驾校
+		$maxSchool = 6;
+		$field_arr = array('region_id', 'city_id', 'province_id');
+		foreach ($field_arr as $field) {
+			if (count($relatedSchool)>=$maxSchool) {
+				break;
+			}
+			if (!empty($space[$field])) {
+				$where = ($field . "=".$space[$field]);
+				$sql = "Select * from ".tname('school')." where ".$where." order by displayorder desc";
+				$rs = $_SGLOBAL['db']->query($sql);
+				if ($_SGLOBAL['db']->num_rows($rs) > 0) {
+					while ($row = $_SGLOBAL['db']->fetch_array($rs)) {
+						if (count($relatedSchool)>=$maxSchool) {
+							break;
+						}
+						$row['mtag_count'] = $_SGLOBAL['db']->result($_SGLOBAL['db']->query("select count(*) from ".tname('mtag')." where fieldid=4 and ext_id=".$row['id']), 0);
+						$row['member_count'] = intval($_SGLOBAL['db']->result($_SGLOBAL['db']->query("select sum(membernum) from ".tname('mtag')." where fieldid=4 and ext_id=".$row['id']), 0));
+						$relatedSchool[$row['id']] = $row;
+					}
+				}
+			}
+		}
+		
 		$countsql = "select 0";
 		if (!empty($_REQUEST['s_school_name']) && ''!=trim($_REQUEST['s_school_name'])) {
 			//搜索驾校

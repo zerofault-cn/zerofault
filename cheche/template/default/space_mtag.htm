@@ -83,6 +83,7 @@
 			$map_str
 		</map>
 	</div>
+	<br />
 	<script language="JavaScript" type="text/javascript" src="source/jquery-1.4.2.min.js"></script>
 	<script language="JavaScript" type="text/javascript">
 	jQuery.noConflict();
@@ -276,11 +277,28 @@
 <!--{/if}-->
 
 </div>
-<!--{if 'school'==$_GET[view] && empty($_GET['school_id']) && empty($_GET['province_id'])}-->
+<!--{if 'school'==$_GET[view]}-->
+	<!--{if empty($_GET['school_id']) and empty($_GET['province_id'])}-->
 <div id="sidebar2">
+	<!--{else}-->
+<div id="sidebar">
+	<!--{/if}-->
+	<div class="sidebox">
+		<h2 class="title">
+			推荐驾校
+		</h2>
+		<ul class="school_list">
+			<!--{loop $relatedSchool $key $value}-->
+			<li>
+				<span style="float:right">{$value[mtag_count]}个群组 / {$value[member_count]}个车友</span>
+				<a href="space.php?do=mtag&view=school&school_id={$value['id']}">{$value[name]}</a>
+			</li>
+			<!--{/loop}-->
+		</ul>
+	</div>
+</div>
 <!--{else}-->
 <div id="sidebar">
-<!--{/if}-->
 	<div class="sidebox">
 	<h2 class="title">群组分类</h2>
 	<ul class="post_list line_list">
@@ -290,8 +308,6 @@
 		<!--{/loop}-->
 	</ul>
 	</div>
-	
-	
 	<!--{if $threadlist}-->
 	<div class="sidebox">
 	<h2 class="title">这些群组的话题更新</h2>
@@ -307,8 +323,8 @@
 	</ul>
 	</div>
 	<!--{/if}-->
-
 </div>
+<!--{/if}-->
 
 <!--/sidebar-->
 <!--{template footer}-->
