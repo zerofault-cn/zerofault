@@ -5,7 +5,7 @@
 <title>请登录 - 车车友 - checheyou.com</title>
 <style type="text/css">
 @import url(template/default/login.css);
-@import url(template/default/coin-slider-styles.css);
+@import url(template/default/nivo-slider.css);
 </style>
 <link rel="shortcut icon" href="image/favicon.ico" />
 </head>
@@ -17,7 +17,7 @@
 		<a href="#">建议</a>
 	</div>
 	<div class="ad_pic">
-		<div id="slider">
+		<div id="slider" class="nivoSlider">
 			<img src="image/ad1.gif" />
 			<img src="image/ad2.gif" />
 			<img src="image/ad3.gif" />
@@ -57,17 +57,36 @@
 </div>
 </body>
 <script language="JavaScript" type="text/javascript" src="source/jquery-1.4.2.min.js"></script>
-<script language="JavaScript" type="text/javascript" src="source/coin-slider.min.js"></script>
+<script language="JavaScript" type="text/javascript" src="source/jquery.nivo.slider.pack.js"></script>
 <script language="JavaScript" type="text/javascript">
 $(document).ready(function() {
-	$('#slider').coinslider({
-		width: 559,
-		height: 368,
-		spw: 1,
-		sph: 1,
-		delay: 5000,
-		sDelay: 10
-	});
+	 $('#slider').nivoSlider({
+        effect:'fade', // Specify sets like: 'fold,fade,sliceDown'
+        slices:15, // For slice animations
+        boxCols: 8, // For box animations
+        boxRows: 4, // For box animations
+        animSpeed:500, // Slide transition speed
+        pauseTime:5000, // How long each slide will show
+        startSlide:0, // Set starting Slide (0 index)
+        directionNav:false, // Next & Prev navigation
+        directionNavHide:false, // Only show on hover
+        controlNav:true, // 1,2,3... navigation
+        controlNavThumbs:false, // Use thumbnails for Control Nav
+        controlNavThumbsFromRel:false, // Use image rel for thumbs
+        controlNavThumbsSearch: '.jpg', // Replace this with...
+        controlNavThumbsReplace: '_thumb.jpg', // ...this in thumb Image src
+        keyboardNav:false, // Use left & right arrows
+        pauseOnHover:false, // Stop animation while hovering
+        manualAdvance:false, // Force manual transitions
+        captionOpacity:0.8, // Universal caption opacity
+        prevText: 'Prev', // Prev directionNav text
+        nextText: 'Next', // Next directionNav text
+        beforeChange: function(){}, // Triggers before a slide transition
+        afterChange: function(){}, // Triggers after a slide transition
+        slideshowEnd: function(){}, // Triggers after all slides have been shown
+        lastSlide: function(){}, // Triggers when last slide is shown
+        afterLoad: function(){} // Triggers when slider has loaded
+    });
 	$(".input-wrapper input").each(function() {
 		if ($(this).val().length>0) {
 			$(this).next().css("visibility", "hidden");

@@ -23,7 +23,7 @@ input, a {
 .header {
 	height:62px;
 	padding-top: 10px;
-	padding-bottom: 90px;
+	padding-bottom: 70px;
 	background:url(image/login_logo.gif) left top no-repeat;
 	text-align: right;
 	font-size: 16px;
@@ -41,8 +41,6 @@ input, a {
 .ad_pic #slider {
 	width: 559px;
 	height: 368px;
-	zoom: 1;
-	overflow: hidden;
 }
 .form {
 	float: right;
