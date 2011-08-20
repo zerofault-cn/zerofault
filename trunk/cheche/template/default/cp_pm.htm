@@ -51,7 +51,7 @@
 					<a href="javascript:;" onclick="$('username_menu').style.display='none';" class="float_del" style="margin-right: 5px;">a</a>
 					<ul id="friendlist" class="blocklink">
 						<!--{loop $friends $key $value}-->
-							<!--{eval $fs[] = $value['username'];}-->
+							<!--{eval $fs[] = $value['username'].' ('.$value['name'].')';}-->
 							<li>$value[username]</li>
 						<!--{/loop}-->
 					</ul>

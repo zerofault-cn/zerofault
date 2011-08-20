@@ -75,7 +75,7 @@ sAutoComplete.prototype.append = function(item, filtrate) {
 		instance = eval(obj);
 	 	var liObj = document.createElement("li");
 		liObj.onclick = function(){instance.doClick(this)};
-		liObj.val = item;
+		liObj.val = item.substring(0, item.indexOf(" ("));
 		if(filtrate) {
 			var reg  = new RegExp("(" + sVal + ")","ig");
 			if(sVal) liObj.innerHTML = '<a href="###">' + item.replace(reg , "<strong>$1</strong>") + '</a>';

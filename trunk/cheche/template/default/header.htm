@@ -172,7 +172,7 @@ $_SGLOBAL[space_css]
 					<!--{loop $space['mtag_list'] $field_name $mtag_list}-->
 						<h5>{$field_name}</h5>
 						<!--{loop $mtag_list $item}-->
-						<p><a href="?do=mtag&tagid={$item['tagid']}">{$item['tagname']}</a></p>
+						<p><a href="space.php?do=mtag&tagid={$item['tagid']}">{$item['tagname']}</a></p>
 						<!--{/loop}-->
 					<!--{/loop}-->
 					<!--{if empty($space['mtag_list'])}-->
