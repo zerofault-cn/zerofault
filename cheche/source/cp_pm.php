@@ -140,9 +140,10 @@ if($_GET['op'] == 'checknewpm') {
 	//·¢ËÍ
 	$friends = array();
 	if($space['friendnum']) {
-		$query = $_SGLOBAL['db']->query("SELECT fuid AS uid, fusername AS username FROM ".tname('friend')." WHERE uid=$_SGLOBAL[supe_uid] AND status='1' ORDER BY num DESC, dateline DESC LIMIT 0,100");
+		$query = $_SGLOBAL['db']->query("SELECT friend.fuid AS uid, friend.fusername AS username, space.name as name FROM ".tname('friend')." friend, ".tname('space')." space WHERE friend.uid=".$_SGLOBAL['supe_uid']." AND friend.status=1 and friend.fuid=space.uid ORDER BY num DESC, friend.dateline DESC LIMIT 0,100");
 		while ($value = $_SGLOBAL['db']->fetch_array($query)) {
 			$value['username'] = saddslashes($value['username']);
+			$value['name'] = saddslashes($value['name']);
 			$friends[] = $value;
 		}
 	}
