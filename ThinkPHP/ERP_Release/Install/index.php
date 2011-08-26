@@ -83,7 +83,7 @@ if(!empty($_POST['submit'])) {
 		echo '<script>parent.alert("Install complete!");parent.location.href="../index.php";</script>';
 	}
 	else {
-		echo '<script>parent.alert("Install complete!\nPlease copy Setup/config.php to Conf/ then continue!");parent.location.href="../index.php";</script>';
+		echo '<script>parent.alert("Install complete!\nPlease copy Install/config.php to Conf/ then continue!");parent.location.href="../index.php";</script>';
 	}
 	exit;
 }
