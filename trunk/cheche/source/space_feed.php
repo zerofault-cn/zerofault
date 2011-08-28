@@ -318,6 +318,12 @@ if($space['self'] && empty($start)) {
 			$where['car'] = "car_model=".$space['car_model'];
 		}
 	}
+	//获取所有好友
+	$friend_ids = $_SGLOBAL['db']->result($_SGLOBAL['db']->query("select group_concat(fuid) from ".tname('friend')." where uid=".$space['uid']), 0);
+	$friend_arr = array();
+	if (!empty($friend_ids)) {
+		$friend_arr = explode(',', $friend_ids);
+	}
 	if (!empty($where)) {
 		$where['uid'] = "uid!=".$space['uid'];
 		$sql = "Select * from ".tname('spacefield')." where ".implode(" and ", $where);
@@ -328,12 +334,6 @@ if($space['self'] && empty($start)) {
 			$rs = $_SGLOBAL['db']->query($sql);
 		}
 		if ($_SGLOBAL['db']->num_rows($rs) > 0) {
-			//获取所有好友
-			$friend_ids = $_SGLOBAL['db']->result($_SGLOBAL['db']->query("select group_concat(fuid) from ".tname('friend')." where uid=".$space['uid']), 0);
-			$friend_arr = array();
-			if (!empty($friend_ids)) {
-				$friend_arr = explode(',', $friend_ids);
-			}
 			$i = 0;
 			while ($row = $_SGLOBAL['db']->fetch_array($rs)) {
 				if ($i>2) {
@@ -346,12 +346,36 @@ if($space['self'] && empty($start)) {
 				//根据uid获取username,realname
 				$info = $_SGLOBAL['db']->fetch_array($_SGLOBAL['db']->query("Select username,name from ".tname('space')." where uid=".$row['uid']));
 				realname_set($row['uid'], $info['username'], $info['name'], $info['name']);
-				$relatedUser[] = array(
+				$relatedUser[$row['uid']] = array(
 					'uid' => $row['uid'],
 					'username' => $info['username'],
 					'name' => $info['name']
 					);
 				$i++;
+			}
+		}
+	}
+	if (count($relatedUser)<3) {
+		$sql = "Select * from ".tname('spacefield')." where sex!=".$space['sex'];
+		$rs = $_SGLOBAL['db']->query($sql);
+		$num = $_SGLOBAL['db']->num_rows($rs);
+		if ($num>0) {
+			while ($row = $_SGLOBAL['db']->fetch_array($rs)) {
+				if (count($relatedUser)>2) {
+					break;
+				}
+				if (in_array($row['uid'], $friend_arr) || in_array($row['uid'], $relatedUser)) {
+					//过滤自己和好友
+					continue;
+				}
+				//根据uid获取username,realname
+				$info = $_SGLOBAL['db']->fetch_array($_SGLOBAL['db']->query("Select username,name from ".tname('space')." where uid=".$row['uid']));
+				realname_set($row['uid'], $info['username'], $info['name'], $info['name']);
+				$relatedUser[$row['uid']] = array(
+					'uid' => $row['uid'],
+					'username' => $info['username'],
+					'name' => $info['name']
+					);
 			}
 		}
 	}
