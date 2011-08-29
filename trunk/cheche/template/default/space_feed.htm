@@ -615,7 +615,12 @@
 	function zoom_func() {
 		jQuery(".feed_content .small img").each(function() {
 			var src = jQuery(this).attr('src');
-			var big = src.substr(0, src.length-10);
+			if (src.indexOf('thumb')>0) {
+				var big = src.substr(0, src.length-10);
+			}
+			else {
+				var big = src;
+			}
 			jQuery(this).click(function() {
 				if ('small' == jQuery(this).parent().attr('class')) {
 					jQuery(this).attr('src', big).parent().attr('class', 'big');

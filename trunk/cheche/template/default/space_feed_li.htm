@@ -38,16 +38,32 @@
 
 			<div class="picbox">
 			<!--{if $value['image_1'] && file_exists($value['image_1'])}-->
+				<!--{if strpos($value['image_1'], 'thumb')>0}-->
 			<a href="javascript:void(0);" class="small"><img src="$value[image_1]" class="summaryimg" /></a>
+				<!--{else}-->
+			<img src="$value[image_1]" class="summaryimg" />
+				<!--{/if}-->
 			<!--{/if}-->
 			<!--{if $value['image_2'] && file_exists($value['image_2'])}-->
+				<!--{if strpos($value['image_2'], 'thumb')>0}-->
 			<a href="javascript:void(0);" class="small"><img src="$value[image_2]" class="summaryimg"/></a>
+				<!--{else}-->
+			<img src="$value[image_2]" class="summaryimg" />
+				<!--{/if}-->
 			<!--{/if}-->
 			<!--{if $value['image_3'] && file_exists($value['image_3'])}-->
+				<!--{if strpos($value['image_3'], 'thumb')>0}-->
 			<a href="javascript:void(0);" class="small"><img src="$value[image_3]" class="summaryimg"/></a>
+				<!--{else}-->
+			<img src="$value[image_3]" class="summaryimg" />
+				<!--{/if}-->
 			<!--{/if}-->
 			<!--{if $value['image_4'] && file_exists($value['image_4'])}-->
+				<!--{if strpos($value['image_4'], 'thumb')>0}-->
 			<a href="javascript:void(0);" class="small"><img src="$value[image_4]" class="summaryimg" /></a>
+				<!--{else}-->
+			<img src="$value[image_4]" class="summaryimg" />
+				<!--{/if}-->
 			<!--{/if}-->
 			</div>
 			
