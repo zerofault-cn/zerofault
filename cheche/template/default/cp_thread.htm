@@ -214,9 +214,9 @@
 			</tr>
 			<tr>
 				<td>
-				<a id="doodleBox" href="magic.php?mid=doodle&showid=blog_doodle&target=uchome-ttHtmlEditor&from=editor" style="display:none"></a>
-				<textarea class="userData" name="message" id="uchome-ttHtmlEditor" style="height:100%;width:100%;display:none;border:0px">$post[message]</textarea>
-				<iframe src="editor.php?charset=$_SC[charset]&allowhtml=<!--{eval echo checkperm('allowhtml')}-->&doodle=<!--{if isset($_SGLOBAL[magic][doodle])}-->1<!--{/if}-->" name="uchome-ifrHtmlEditor" id="uchome-ifrHtmlEditor" scrolling="no" border="0" frameborder="0" style="width:100%;border: 1px solid #C5C5C5;" height="400"></iframe>
+					<a id="doodleBox" href="magic.php?mid=doodle&showid=blog_doodle&target=uchome-ttHtmlEditor&from=editor" style="display:none"></a>
+					<textarea class="userData" name="message" id="uchome-ttHtmlEditor" style="height:100%;width:100%;display:none;border:0px">$post[message]</textarea>
+					<iframe src="editor.php?charset=$_SC[charset]&allowhtml=<!--{eval echo checkperm('allowhtml')}-->&doodle=<!--{if isset($_SGLOBAL[magic][doodle])}-->1<!--{/if}-->" name="uchome-ifrHtmlEditor" id="uchome-ifrHtmlEditor" scrolling="no" border="0" frameborder="0" style="width:100%;border: 1px solid #C5C5C5;" height="420"></iframe>
 				</td>
 			</tr>
 
@@ -254,7 +254,7 @@
 		<input type="hidden" name="topicid" value="$_GET[topicid]" />
 		<input type="hidden" name="formhash" value="<!--{eval echo formhash();}-->" />
 	</form>
-	<!--{if !$thread['uid'] || $thread['uid']==$_SGLOBAL['supe_uid']}-->
+	<!--{if false && (!$thread['uid'] || $thread['uid']==$_SGLOBAL['supe_uid'])}-->
 	<table cellspacing="4" cellpadding="4" width="100%" class="infotable">
 		<tr><td>
 		<input type="button" name="clickbutton[]" value="上传图片" class="button" onclick="edit_album_show('pic')">
@@ -322,7 +322,6 @@
 		</tr>
 	</table>
 </div>
-
 <!--{/if}-->
 
 <!--{template footer}-->

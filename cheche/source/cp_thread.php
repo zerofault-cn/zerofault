@@ -303,14 +303,13 @@ if(submitcheck('threadsubmit')) {
 		}
 	}
 
-	$message = getstr($message, 0, 1, 1, 1, 2);
+	$message = getstr($message, 0, 1, 0, 1, 0, 1);
 	if(strlen($message) < 2) {
 		showmessage('content_is_not_less_than_four_characters');
 	}
 
 	//摘要
 	$summay = getstr($message, 150, 1, 1);
-
 	//引用回复
 	$pid = empty($_POST['pid'])?0:intval($_POST['pid']);
 	$query = $_SGLOBAL['db']->query("SELECT * FROM ".tname('post')." WHERE pid='$pid' AND tid='$tid' AND isthread='0'");
@@ -329,7 +328,7 @@ if(submitcheck('threadsubmit')) {
 		$post['message'] = preg_replace("/\<div class=\"quote\"\>\<span class=\"q\"\>.*?\<\/span\>\<\/div\>/is", '', $post['message']);
 		//移除编辑记录
 		$post['message'] = preg_replace("/<ins class=\"modify\".+?<\/ins>/is", '',$post['message']);
-		$post['message'] = html2bbcode($post['message']);//显示用
+		//$post['message'] = html2bbcode($post['message']);//显示用
 		$message = addslashes("<div class=\"quote\"><span class=\"q\"><b>".$_SN[$post['uid']]."</b>: ".getstr($post['message'], 150, 0, 0, 0, 2, 1).'</span></div>').$message;
 	}
 

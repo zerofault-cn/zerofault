@@ -77,7 +77,7 @@ if(submitcheck('addsubmit')) {
 	if (!empty($_POST['picid'])) {
 		//¸üÐÂÍ¼Æ¬title¼°feed
 		if (strlen($message)>0) {
-			$sql = "update ".tname('pic')." set title='".$message."' where picid=".$_POST['picid'];
+			$sql = "update ".tname('pic')." set title='".strip_tags($message)."' where picid=".$_POST['picid'];
 			$_SGLOBAL['db']->query($sql);
 		}
 		include_once(S_ROOT.'./source/function_feed.php');
