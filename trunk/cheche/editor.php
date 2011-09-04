@@ -3,7 +3,9 @@
 	[UCenter Home] (C) 2007-2008 Comsenz Inc.
 	$Id: editor.php 12727 2009-07-16 03:23:01Z zhengqingpeng $
 */
-
+define('IN_UCHOME', TRUE);
+$_SGLOBAL = $_SCONFIG = $_SBLOCK = array();
+include_once('source/function_common.php');
 if(empty($_GET['charset']) || !in_array(strtolower($_GET['charset']), array('gbk', 'big5', 'utf-8'))) $_GET['charset'] = '';
 $allowhtml = empty($_GET['allowhtml'])?0:1;
 
@@ -15,8 +17,8 @@ if(empty($_GET['op'])) {
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html;charset=<?=$_GET['charset']?>" />
-<title>Editor</title>
 <script language="javascript" src="image/editor/editor_base.js"></script>
+<title>Editor</title>
 <style type="text/css">
 body{margin:0;padding:0;}
 body, td, input, button, select {font: 12px/1.5em Tahoma, Arial, Helvetica, snas-serif;}
@@ -115,6 +117,28 @@ a.icoSwitchMdi{background-position:-671px 0px;width:23px}
 
 .edTb{border-bottom:1px solid #c5c5c5;background-position:0 -28px}
 .sepline{width:4px;height:20px;margin-top:2px;margin-right:3px;background-position:-476px 0;background-repeat:no-repeat;float:left }
+#createImg #pic_list {
+	display: none;
+	width: 345px;
+	max-height: 264px;
+	overflow-y: auto;
+}
+#createImg #pic_list li {
+	position: relative;
+	float:left;
+	width: 106px;
+	height: 86px;
+	border: 1px solid #FFFFFF;
+	overflow: hidden;
+	text-align:center;
+}
+#createImg #pic_list li img {
+	cursor: pointer;
+	max-width: 100px;
+	max-height:80px;
+	padding: 2px;
+}
+
 -->
 </style>
 <script language="JavaScript">
@@ -251,9 +275,21 @@ function fontsize(size,obj){format('fontsize',size);obj.parentNode.style.display
 	请输入选定文字链接地址:<br/>
 	<input type="text" id="insertUrl" name="url" value="http://" class="t_input" style="width: 190px;"> <input type="button" onclick="createLink();" name="createURL" value="确定" class="submit" /> <a href="javascript:;" onclick="fHide($('createUrl'));">取消</a>
 </div>
-<div id="createImg" class="eMenu" style="display:none;top:35px;left:26px;width:300px;font-size:12px">
-	请输入图片URL地址:<br/>
-	<input type="text" id="imgUrl" name="imgUrl" value="http://" class="t_input" style="width: 190px;" /> <input type="button" onclick="createImg();" name="createURL" value="确定" class="submit" /> <a href="javascript:;" onclick="fHide($('createImg'));">取消</a>
+<div id="createImg" class="eMenu" style="display:none;top:35px;left:26px;width:345px;font-size:12px">
+	<a style="position:absolute;right:4px;top:2px;" href="javascript:;" onclick="fHide($('createImg'));">取消</a>
+	输入图片URL地址：<br/>
+	<input type="text" id="imgUrl" name="imgUrl" value="http://" class="t_input" style="width: 220px;" /> <input type="button" onclick="createImg();" name="createURL" value="确定" class="submit" /> 
+	<form name="UploadForm" id="UploadForm" method="post" enctype="multipart/form-data" action="cp.php?ac=upload" target="_iframe" style="margin:5px 0;">
+	<input type="hidden" name="ajaxupload" value="true"/>
+	<input type="hidden" name="formhash" value="<?php echo formhash()?>" />
+	或者从本地上传：<br />
+	<input type="file" size="23" style="width: 220px;" name="filename">
+	<input type="submit" value="上传" class="submit" />
+	<img id="upload_status" src="image/loading.gif" align="absmiddle" style="display:none;">
+	</form>
+	从相册选择：<select id="album_select"><option value="">选择相册</option></select><br />
+	<ul id="pic_list">
+	</ul>
 </div>
 <div id="createSwf" class="eMenu" style="display:none;top:35px;left:26px;width:400px;font-size:12px">
 	请输入视频URL地址:<br/>
@@ -267,7 +303,7 @@ function fontsize(size,obj){format('fontsize',size);obj.parentNode.style.display
 	<a href="javascript:;" onclick="fHide($('createSwf'));">取消</a>
 </div>
 
-</td></tr>	 
+</td></tr>
 <tr><td>
 <table cellpadding="0" cellspacing="0" style=" background-color:#999999;height:100%;width:100%;overflow:hidden">
 <tr>
@@ -301,7 +337,54 @@ function fontsize(size,obj){format('fontsize',size);obj.parentNode.style.display
 </table>
 </div>
 <input type="hidden" name="uchome-editstatus" id="uchome-editstatus" value="html">
+<iframe id="_iframe" name="_iframe" style="width:0;height:0;display:none;"></iframe>
 </body>
+<script language="JavaScript" type="text/javascript" src="source/jquery-1.4.2.min.js"></script>
+<script type="text/javascript">
+jQuery.noConflict();
+jQuery(document).ready(function() {
+	jQuery.get("space.php?ajax=1&do=album&rand="+Math.random(), {}, function(str) {
+		jQuery("#createImg #album_select").append(str);
+	});
+	jQuery("#createImg #album_select").change(function() {
+		if (jQuery(this).val() != "") {
+			jQuery.get("space.php?ajax=1&do=album&albumid="+jQuery(this).val()+"&&rand="+Math.random(), {}, function(str) {
+				jQuery("#createImg #pic_list").empty().show().html(str);
+				jQuery("#createImg #pic_list li img").each(function() {
+					jQuery(this).click(function() {
+						var src = jQuery(this).attr('src');
+						if (src.indexOf('thumb')>0) {
+							var big = src.substr(0, src.length-10);
+						}
+						else {
+							var big = src;
+						}
+						parent.insertImage(big);
+					});
+				});
+			});
+		}
+		else {
+			jQuery("#createImg #pic_list").empty().hide();
+		}
+	});
+});
+function successUpload(pic_id, pic_name, pic_path) {
+	jQuery("#createImg #UploadForm input:file").val("");
+	jQuery("#upload_status").hide();
+	var src = pic_path;
+	if (src.indexOf('thumb')>0) {
+		var big = src.substr(0, src.length-10);
+	}
+	else {
+		var big = src;
+	}
+	parent.insertImage("attachment/"+big);
+}
+function failUpload() {
+}
+
+</script>
 </html>
 <?php
 

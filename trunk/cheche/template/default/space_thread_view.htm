@@ -162,39 +162,21 @@
 
 		<!--{if (!$eventid && $mtag[allowpost]) || ($eventid && $userevent[status]>1)}-->
 
-		<div class="quickpost" id="postform">
-			<form method="post" action="cp.php?ac=thread<!--{if $eventid}-->&eventid=$eventid<!--{/if}-->" class="quickpost" id="quickpostform_{$thread[tid]}" name="quickpostform_{$thread[tid]}">
+		<div class="quickpost" id="postform" style="padding-right:200px;">
+			<form method="post" action="cp.php?ac=thread<!--{if $eventid}-->&eventid=$eventid<!--{/if}-->" id="quickpostform_{$thread[tid]}" name="quickpostform_{$thread[tid]}">
 				<table>
 					<tr>
 						<td>
-							<a href="###" id="quickpost" onclick="showFace(this.id, 'message');return false;"><img src="image/facelist.gif" align="absmiddle" /></a>
-							<!--{if $_SGLOBAL['magic']['doodle']}-->
-							<a id="a_magic_doodle" href="magic.php?mid=doodle&showid=comment_doodle&target=message" onclick="ajaxmenu(event, this.id, 1)"><img src="image/magic/doodle.small.gif" class="magicicon" />涂鸦板</a>
-							<!--{/if}-->
-							<br />
-							<textarea id="message" name="message" onkeydown="ctrlEnter(event, 'postsubmit_btn');" col="50" rows="6" style="width: 430px; height: 6em;"></textarea>
+							<a id="doodleBox" href="magic.php?mid=doodle&showid=blog_doodle&target=uchome-ttHtmlEditor&from=editor" style="display:none"></a>
+							<textarea class="userData" name="message" id="uchome-ttHtmlEditor" style="height:100%;width:100%;display:none;border:0px"></textarea>
+							<iframe src="editor.php?charset=$_SC[charset]&allowhtml=<!--{eval echo checkperm('allowhtml')}-->&doodle=<!--{if isset($_SGLOBAL[magic][doodle])}-->1<!--{/if}-->" name="uchome-ifrHtmlEditor" id="uchome-ifrHtmlEditor" scrolling="no" border="0" frameborder="0" style="width:100%;border: 1px solid #C5C5C5;" height="420"></iframe>
 						</td>
-					</tr>
-					<tr>
-						<td>插入图片</td>
-					</tr>
-					<tbody id="quickpostimg">
-						<tr>
-							<td>
-								<input type="text" name="pics[]" onfocus="if(this.value == 'http://')this.value='';" onblur="if(this.value=='')this.value='http://'" value="http://" class="t_input" size="55" style="width: 350px" />&nbsp;
-								<a href="javascript:;" onclick="insertWebImg(this.previousSibling.previousSibling)">插入</a> &nbsp;
-								<a href="javascript:;" onclick="delRow(this, 'quickpostimg')">删除</a>
-							</td>
-						</tr>
-					</tbody>
-					<tr>
-						<td><a href="javascript:;" onclick="copyRow('quickpostimg')">+增加图片</a> <span class="gray">只支持 .jpg、.gif、.png为结尾的URL地址</span></td>
 					</tr>
 					<tr>
 						<td>
 							<input type="hidden" name="tid" value="$thread[tid]" />
 							<input type="hidden" name="postsubmit" value="true" />
-							<input type="button" id="postsubmit_btn" name="postsubmit_btn" value="回复" class="submit" onclick="ajaxpost('quickpostform_{$thread[tid]}', 'post_add')" />
+							<input type="button" id="postsubmit_btn" name="postsubmit_btn" value="回复" class="submit" onclick="edit_save();ajaxpost('quickpostform_{$thread[tid]}', 'post_add')" />
 							<div id="__quickpostform_{$thread[tid]}"></div>
 						</td>
 					</tr>
@@ -218,6 +200,7 @@
 		<!--{/if}-->
 	</div>
 </div>
+<script language="javascript" src="image/editor/editor_function.js"></script>
 
 <script type="text/javascript">
 	resizeImg('div_post','600');

@@ -456,6 +456,7 @@ body { background: #FFF; }
 	height: 142px;
 	z-index: 2100;
 	background:#FFFFFF;
+	opacity: 0;
 	filter: alpha(opacity=0);
 }
 #box_album {
@@ -532,8 +533,6 @@ body { background: #FFF; }
 #box_poll .poll_options input {
 	margin-bottom:4px;
 }
-
-
 
 .app_list {
 	word-wrap: normal;
