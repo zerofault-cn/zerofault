@@ -13,6 +13,14 @@ if(!checkperm('manageprofield')) {
 	cpmessage('no_authority_management_operation');
 }
 
+if (!empty($_POST['import'])) {
+	$header_arr = array('驾校简称', '驾校全称', '联系电话', '驾校地址', '训练场地', '驾校简介', '归属省', '归属地市', '归属区县');
+	$fields_arr = array('name', 'fullname', 'telenum', 'address', 'training', 'description', 'province', 'city', 'region');
+	if (empty($_FILES['file']) || $_FILES['file']['size']==0) {
+		error('Please select a file to upload.');
+	}
+	exit;
+}
 //取得单个数据
 $thevalue = $list = array();
 $_GET['id'] = empty($_GET['id'])?0:intval($_GET['id']);

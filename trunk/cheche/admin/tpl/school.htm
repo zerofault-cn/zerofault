@@ -50,6 +50,12 @@
 
 	<!--{if empty($thevalue)}-->
 		<div class="block style4">
+			<form enctype="multipart/form-data" target="_iframe" method="post">
+			从CSV文件导入：<input type="file" name="file"/>
+			<input type="submit" name="import" class="submit" value="提交" />
+			<input type="hidden" name="ac" value="school" />
+			</form>
+			<iframe id="_iframe" name="_iframe" style="width:0;height:0;display:none;"></iframe>
 			<form>
 			<input type="hidden" name="formhash" value="<!--{eval echo formhash();}-->" />
 			<table cellspacing="3" cellpadding="3">
