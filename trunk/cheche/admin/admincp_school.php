@@ -7,18 +7,81 @@
 if(!defined('IN_UCHOME') || !defined('IN_ADMINCP')) {
 	exit('Access Denied');
 }
-
+header("Content-type: text/html; charset=utf-8"); 
 //权限
 if(!checkperm('manageprofield')) {
 	cpmessage('no_authority_management_operation');
 }
-
+function error($msg) {
+	$html  = '<script language="JavaScript" type="text/javascript">';
+	$html .= 'parent.alert("'.$msg.'");';
+	$html .= '</script>';
+	die($html);
+}
+function success($msg){
+	$html  = '<script language="JavaScript" type="text/javascript">';
+	if($msg) {
+		$html .= 'parent.alert("'.$msg.'");';
+	}
+	$html .= 'parent.window.location.href = parent.window.location.href;';
+	$html .= '</script>';
+	die($html);
+}
+function convert($data) {
+	if (function_exists('iconv')) {
+		$data = iconv('GBK','UTF-8',$data);
+	}
+	else {
+		$data = mb_convert_encoding($data,'UTF-8','GBK');
+	}
+	return $data;
+}
 if (!empty($_POST['import'])) {
 	$header_arr = array('驾校简称', '驾校全称', '联系电话', '驾校地址', '训练场地', '驾校简介', '归属省', '归属地市', '归属区县');
 	$fields_arr = array('name', 'fullname', 'telenum', 'address', 'training', 'description', 'province', 'city', 'region');
 	if (empty($_FILES['file']) || $_FILES['file']['size']==0) {
-		error('Please select a file to upload.');
+		error('您上传的文件是空的！');
 	}
+	$file = $_FILES['file'];
+	$fp = fopen($file['tmp_name'], "r");
+	$i=0;
+	$values_arr = array();//to save the validated line array
+	setlocale(LC_ALL, NULL);
+	while($value_arr = fgetcsv($fp)) {
+		if (empty($value_arr) || ''==trim($value_arr[0])) {
+			continue;
+		}
+		$value_arr = array_map('convert', array_map('trim', $value_arr));
+		if ($i == 0) {
+			if ($value_arr != $header_arr) {
+				error('您上传的文件头不正确！');
+			}
+		}
+		else {
+			if (count($value_arr) != count($header_arr)) {
+				error('文件内容格式不正确(第'.($i+1).'行)');
+			}
+			$values_arr[$i] = array_combine($fields_arr, $value_arr);
+		}
+		$i++;
+	}
+	foreach ($values_arr as $i=>$value_arr) {
+		//转换省市区到region_id
+		$province_arr = $_SGLOBAL['db']->fetch_array($_SGLOBAL['db']->query("Select * from ".tname('region')." where type='province' and name='".$value_arr['province']."'"));
+		unset($value_arr['province']);
+		$value_arr['province_id'] = intval($province_arr['id']);
+
+		$city_arr = $_SGLOBAL['db']->fetch_array($_SGLOBAL['db']->query("Select * from ".tname('region')." where type='city' and pid='".$province_arr['id']."' and name='".$value_arr['city']."'"));
+		unset($value_arr['city']);
+		$value_arr['city_id'] = intval($city_arr['id']);
+
+		$region_arr = $_SGLOBAL['db']->fetch_array($_SGLOBAL['db']->query("Select * from ".tname('region')." where type='region' and pid='".$city_arr['id']."' and name='".$value_arr['region']."'"));
+		unset($value_arr['region']);
+		$value_arr['region_id'] = intval($region_arr['id']);
+
+		inserttable('school', array_map('addslashes', $value_arr));
+	}
+	success();
 	exit;
 }
 //取得单个数据
@@ -114,7 +177,7 @@ if(empty($_GET['op'])) {
 	$start = ($page-1)*$perpage;
 	$list = array();
 	if ($count > 0) {
-		$query = $_SGLOBAL['db']->query("SELECT * FROM ".tname('school')." where 1 ".$sql_ext." order by displayorder desc LIMIT ".$start.", ".$perpage);
+		$query = $_SGLOBAL['db']->query("SELECT * FROM ".tname('school')." where 1 ".$sql_ext." order by displayorder desc, id desc LIMIT ".$start.", ".$perpage);
 		while ($value = $_SGLOBAL['db']->fetch_array($query)) {
 			$rs = $_SGLOBAL['db']->query("select name from ".tname('region')." where id=".$value['province_id']);
 			$value['province'] = $_SGLOBAL['db']->result($rs, 0);
