@@ -37,7 +37,7 @@ if($_GET['op'] == 'manage') {
 	$tagid = empty($_GET['tagid'])?0:intval($_GET['tagid']);
 	
 	$mtag = getmtag($tagid);
-	
+
 	if(submitcheck('invitesubmit') || $_GET['subop']=='invite') {
 		if(empty($mtag['allowinvite'])) {
 			showmessage('no_privilege');//不允许邀请
@@ -233,7 +233,55 @@ if($_GET['op'] == 'manage') {
 		}
 		$fieldid_opts = genOptions($fieldid_arr, $mtag['fieldid']);
 		
-		
+		if (2==$mtag['fieldid'] || 3==$mtag['fieldid']) {
+			//区域联盟或车系联盟，需要根据region_id反推city_id和province_id
+			if ('region' == $mtag['region_field']) {
+				$region_id = $mtag['region_id'];
+				$city_id = $_SGLOBAL['db']->result($_SGLOBAL['db']->query("SELECT pid FROM ".tname('region')." WHERE id='".$region_id."'"), 0);
+				$province_id = $_SGLOBAL['db']->result($_SGLOBAL['db']->query("SELECT pid FROM ".tname('region')." WHERE id='".$city_id."'"), 0);
+			}
+			elseif ('city' == $mtag['region_field']) {
+				$region_id = 0;
+				$city_id =  $mtag['region_id'];
+				$province_id = $_SGLOBAL['db']->result($_SGLOBAL['db']->query("SELECT pid FROM ".tname('region')." WHERE id='".$city_id."'"), 0);
+			}
+			elseif ('province' == $mtag['region_field']) {
+				$region_id = 0;
+				$city_id = 0;
+				$province_id =  $mtag['region_id'];
+			}
+		}
+		if (3==$mtag['fieldid']) {
+			//车系：根据ext_id反推car_brand_id,car_model_id,car_profile_id
+			if ('profile' == $mtag['ext_field']) {
+				$car_profile_id = $mtag['ext_id'];
+				$car_model_id = $_SGLOBAL['db']->result($_SGLOBAL['db']->query("SELECT pid FROM ".tname('carmodel')." WHERE id='".$car_profile_id."'"), 0);
+				$car_brand_id = $_SGLOBAL['db']->result($_SGLOBAL['db']->query("SELECT pid FROM ".tname('carmodel')." WHERE id='".$car_model_id."'"), 0);
+			}
+			elseif ('model' == $mtag['ext_field']) {
+				$car_profile_id = 0;
+				$car_model_id = $mtag['ext_id'];
+				$car_brand_id = $_SGLOBAL['db']->result($_SGLOBAL['db']->query("SELECT pid FROM ".tname('carmodel')." WHERE id='".$car_model_id."'"), 0);
+			}
+			elseif ('brand' == $mtag['ext_field']) {
+				$car_profile_id = 0;
+				$car_model_id = 0;
+				$car_brand_id =  $mtag['ext_id'];
+			}
+		}
+		elseif (4==$mtag['fieldid']) {
+			//驾校：根据ext_id反推school_id,school_province,school_region
+			$school_id = $mtag['ext_id'];
+			if ($mtag['ext_id']>0) {
+				$school = $_SGLOBAL['db']->fetch_array($_SGLOBAL['db']->query("Select * FROM ".tname('school')." WHERE id='".$school_id."'"));
+				
+				if (!empty($school)) {
+					$province_id = $school['province_id'];
+					$city_id = $school['city_id'];
+					$region_id = $school['region_id'];
+				}
+			}
+		}
 		//地区
 		$province_arr = array();
 		$query = $_SGLOBAL['db']->query("SELECT * FROM ".tname('region')." where pid=1");
@@ -608,6 +656,9 @@ if($_GET['op'] == 'manage') {
 		//自由输入
 		$_POST['tagname'] = $tagname = getstr($_POST['tagname'], 40, 1, 1, 1);
 		$_POST['fieldid'] = $fieldid = intval($_POST['fieldid']);
+		$region_field = $_POST['region_field'];
+		$region_id = $_POST['region_id'] = intval($_POST['region_id']);
+		$ext_field = $_POST['ext_field'];
 		$_POST['ext_id'] = $ext_id = intval($_POST['ext_id']);
 		
 		$profield = $_SGLOBAL['profield'][$fieldid];
@@ -620,7 +671,7 @@ if($_GET['op'] == 'manage') {
 		
 		if(!empty($_POST['joinmode'])) {
 			//二次确认
-			$mtag = mtag_join('tagname', stripslashes($tagname), $fieldid, $ext_id);
+			$mtag = mtag_join('tagname', stripslashes($tagname), $fieldid, $region_field, $region_id, $ext_field, $ext_id);
 			if(empty($mtag)) {
 				showmessage('mtag_join_error');
 			} else {
@@ -721,7 +772,7 @@ if($_GET['op'] == 'manage') {
 include template("cp_mtag");
 
 //加入
-function mtag_join($type, $key, $fieldid=0, $ext_id=0) {
+function mtag_join($type, $key, $fieldid=0, $region_field='', $region_id=0, $ext_field='', $ext_id=0) {
 	global $_SGLOBAL, $space;
 	
 	//判断用户是否已经加入
@@ -754,6 +805,9 @@ function mtag_join($type, $key, $fieldid=0, $ext_id=0) {
 		$mtag = array(
 			'tagname' => $key,
 			'fieldid' => $fieldid,
+			'region_field' => $region_field,
+			'region_id' => $region_id,
+			'ext_field' => $ext_field,
 			'ext_id' => $ext_id
 		);
 		$tagid = inserttable('mtag', $mtag, 1);
