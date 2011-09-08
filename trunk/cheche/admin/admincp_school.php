@@ -46,12 +46,14 @@ if (!empty($_POST['import'])) {
 	$fp = fopen($file['tmp_name'], "r");
 	$i=0;
 	$values_arr = array();//to save the validated line array
-	setlocale(LC_ALL, NULL);
+	//setlocale(LC_ALL, NULL);
+	setlocale(LC_ALL, 'en_US.UTF-8');
 	while($value_arr = fgetcsv($fp)) {
+		//var_dump($value_arr);
 		if (empty($value_arr) || ''==trim($value_arr[0])) {
 			continue;
 		}
-		$value_arr = array_map('convert', array_map('trim', $value_arr));
+		$value_arr = array_map('trim', $value_arr);
 		if ($i == 0) {
 			if ($value_arr != $header_arr) {
 				error('您上传的文件头不正确！');
@@ -65,6 +67,7 @@ if (!empty($_POST['import'])) {
 		}
 		$i++;
 	}
+	//echo count($values_arr);
 	foreach ($values_arr as $i=>$value_arr) {
 		//转换省市区到region_id
 		$province_arr = $_SGLOBAL['db']->fetch_array($_SGLOBAL['db']->query("Select * from ".tname('region')." where type='province' and name='".$value_arr['province']."'"));
@@ -81,7 +84,7 @@ if (!empty($_POST['import'])) {
 
 		inserttable('school', array_map('addslashes', $value_arr));
 	}
-	success();
+//	success();
 	exit;
 }
 //取得单个数据
