@@ -2187,7 +2187,7 @@ function genOptions($rs=array(), $selected_id='') {
 	foreach($rs as $key=>$val) {
 		$str .= '<option value="'.$key.'" ';
 		if($selected_id == $key) {
-			$str .= ' selected="true"';
+			$str .= ' selected="selected"';
 		}
 		$str .= '>'.$val.'</option>';
 	}
@@ -2207,7 +2207,7 @@ function genOptionGrp($rs=array(), $selected_id='') {
 		foreach ($arr as $key=>$val) {
 			$str .= '<option value="'.$key.'" ';
 			if($selected_id == $key) {
-				$str .= ' selected="true"';
+				$str .= ' selected="selected"';
 			}
 			$str .= '>'.$val.'</option>';
 		}
