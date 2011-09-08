@@ -49,7 +49,7 @@ if (!empty($_POST['import'])) {
 	//setlocale(LC_ALL, NULL);
 	setlocale(LC_ALL, 'en_US.UTF-8');
 	while($value_arr = fgetcsv($fp)) {
-		//var_dump($value_arr);
+	//	var_dump($value_arr);
 		if (empty($value_arr) || ''==trim($value_arr[0])) {
 			continue;
 		}
@@ -67,13 +67,20 @@ if (!empty($_POST['import'])) {
 		}
 		$i++;
 	}
-	//echo count($values_arr);
+	echo count($values_arr);
+	mb_internal_encoding("UTF-8");
 	foreach ($values_arr as $i=>$value_arr) {
 		//转换省市区到region_id
+		if ('省'==mb_substr($value_arr['province'], -1) || '市'==mb_substr($value_arr['province'], -1)) {
+			$value_arr['province'] = mb_substr($value_arr['province'], 0, -1);
+		}
 		$province_arr = $_SGLOBAL['db']->fetch_array($_SGLOBAL['db']->query("Select * from ".tname('region')." where type='province' and name='".$value_arr['province']."'"));
 		unset($value_arr['province']);
 		$value_arr['province_id'] = intval($province_arr['id']);
 
+		if ('市'==mb_substr($value_arr['city'], -1)) {
+			$value_arr['city'] = mb_substr($value_arr['city'], 0, -1);
+		}
 		$city_arr = $_SGLOBAL['db']->fetch_array($_SGLOBAL['db']->query("Select * from ".tname('region')." where type='city' and pid='".$province_arr['id']."' and name='".$value_arr['city']."'"));
 		unset($value_arr['city']);
 		$value_arr['city_id'] = intval($city_arr['id']);
@@ -84,7 +91,7 @@ if (!empty($_POST['import'])) {
 
 		inserttable('school', array_map('addslashes', $value_arr));
 	}
-//	success();
+	success();
 	exit;
 }
 //取得单个数据
