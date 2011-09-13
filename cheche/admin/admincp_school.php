@@ -55,7 +55,7 @@ if (!empty($_POST['import'])) {
 		}
 		$value_arr = array_map('trim', $value_arr);
 		if ($i == 0) {
-			if ($value_arr != $header_arr) {
+			if (count($value_arr) != count($header_arr)) {
 				error('您上传的文件头不正确！');
 			}
 		}

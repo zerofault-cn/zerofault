@@ -38,8 +38,8 @@ if($id) {
 	}
 	
 	//验证空间是否被锁定
-	$space = getspace($thread['uid']);
-	if($space['flag'] == -1) {
+	$user_space = getspace($thread['uid']);
+	if($user_space['flag'] == -1) {
 		showmessage('space_has_been_locked');
 	}
 	
@@ -109,9 +109,9 @@ if($id) {
 	$multi = multi($count, $perpage, $page, "space.php?uid=$thread[uid]&do=$do&id=$id");
 
 	//访问统计
-	if(!$space['self'] && $_SCOOKIE['view_tid'] != $id) {
+	if(!$user_space['self'] && $_SCOOKIE['view_tid'] != $id) {
 		$_SGLOBAL['db']->query("UPDATE ".tname('thread')." SET viewnum=viewnum+1 WHERE tid='$id'");
-		inserttable('log', array('id'=>$space['uid'], 'idtype'=>'uid'));//延迟更新
+		inserttable('log', array('id'=>$user_space['uid'], 'idtype'=>'uid'));//延迟更新
 		ssetcookie('view_tid', $id);
 	}
 	
