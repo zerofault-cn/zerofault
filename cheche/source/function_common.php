@@ -1577,10 +1577,14 @@ function ckstart($start, $perpage) {
 //处理头像
 function avatar($uid, $size='small', $returnsrc = FALSE) {
 	global $_SCONFIG, $_SN;
+	global $_SGLOBAL;
+	//get sex
+	$query = $_SGLOBAL['db']->query("SELECT sex FROM ".tname('spacefield')." WHERE uid=".$uid." LIMIT 1");
+	$sex = max(1, $_SGLOBAL['db']->result($query, 0));
 	
 	$size = in_array($size, array('big', 'middle', 'small')) ? $size : 'small';
 	$avatarfile = avatar_file($uid, $size);
-	return $returnsrc ? UC_API.'/data/avatar/'.$avatarfile : '<img src="'.UC_API.'/data/avatar/'.$avatarfile.'" onerror="this.onerror=null;this.src=\''.UC_API.'/images/noavatar_'.$size.'.gif\'">';
+	return $returnsrc ? UC_API.'/data/avatar/'.$avatarfile : '<img src="'.UC_API.'/data/avatar/'.$avatarfile.'" onerror="this.onerror=null;this.src=\''.UC_API.'/images/noavatar_'.$size.'_'.$sex.'.gif\'">';
 }
 
 //得到头像
