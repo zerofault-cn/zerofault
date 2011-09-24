@@ -309,15 +309,10 @@ function ajaxpost_load() {
 	
 	showloading('none');
 	
-	if ($('ajaxframe').contentWindow.document.XMLDocument) {
-		if(is_ie) {
-			var s = $('ajaxframe').contentWindow.document.XMLDocument.text;
-		} else {
-			var s = $('ajaxframe').contentWindow.document.documentElement.firstChild.nodeValue;
-		}
-	}
-	else {
-		var s = "";
+	if(is_ie) {
+		var s = $('ajaxframe').contentWindow.document.XMLDocument.text;
+	} else {
+		var s = $('ajaxframe').contentWindow.document.documentElement.firstChild.nodeValue;
 	}
 	evaled = false;
 	if(s.indexOf('ajaxerror') != -1) {
