@@ -183,7 +183,7 @@ function post_add(pid, result) {
 }
 //编辑回帖
 function post_edit(id, result) {
-	if(result) {
+	if(true || result) {
 		var ids = explode('_', id);
 		var pid = ids[1];
 

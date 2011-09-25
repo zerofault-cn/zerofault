@@ -147,7 +147,7 @@
 		<div class="page">$multi</div>
 		<div id="post_ul">
 
-			<!--{if $pid}-->
+			<!--{if 'edit'!=$op && $pid}-->
 			<div class="notice">
 				当前只显示与你操作相关的单个帖子，<a href="space.php?uid=$thread[uid]&do=thread&id=$thread[tid]<!--{if $eventid}-->&eventid=$eventid<!--{/if}-->">点击此处查看全部回帖</a>
 			</div>
@@ -159,10 +159,32 @@
 		</div>
 
 		<div class="page">$multi</div>
-
+		<a name="editor"></a>
 		<!--{if (!$eventid && $mtag[allowpost]) || ($eventid && $userevent[status]>1)}-->
-
 		<div class="quickpost" id="postform" style="padding-right:200px;">
+			<!--{if 'edit' == $op}-->
+			<form method="post" action="cp.php?ac=thread<!--{if $eventid}-->&eventid=$eventid<!--{/if}-->" id="quickpostform{$thread[tid]}_{$pid}" name="quickpostform{$thread[tid]}_{$pid}">
+				<table>
+					<tr>
+						<td>
+							<a id="doodleBox" href="magic.php?mid=doodle&showid=blog_doodle&target=uchome-ttHtmlEditor&from=editor" style="display:none"></a>
+							<textarea class="userData" name="message" id="uchome-ttHtmlEditor" style="height:100%;width:100%;display:none;border:0px">{$message}</textarea>
+							<iframe src="editor.php?charset=$_SC[charset]&allowhtml=<!--{eval echo checkperm('allowhtml')}-->&doodle=<!--{if isset($_SGLOBAL[magic][doodle])}-->1<!--{/if}-->" name="uchome-ifrHtmlEditor" id="uchome-ifrHtmlEditor" scrolling="no" border="0" frameborder="0" style="width:100%;border: 1px solid #C5C5C5;" height="420"></iframe>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<input type="hidden" name="tid" value="$thread[tid]" />
+							<input type="hidden" name="pid" value="$pid" />
+							<input type="hidden" name="posteditsubmit" value="true" />
+							<input type="button" id="postsubmit_btn" name="postsubmit_btn" value="提交" class="submit" onclick="edit_save();ajaxpost('quickpostform{$thread[tid]}_{$pid}', 'post_edit')" />
+							<div id="__quickpostform{$thread[tid]}_{$pid}"></div>
+						</td>
+					</tr>
+				</table>
+				<input type="hidden" name="formhash" value="<!--{eval echo formhash();}-->" />
+			</form>
+			<!--{else}-->
 			<form method="post" action="cp.php?ac=thread<!--{if $eventid}-->&eventid=$eventid<!--{/if}-->" id="quickpostform_{$thread[tid]}" name="quickpostform_{$thread[tid]}">
 				<table>
 					<tr>
@@ -183,6 +205,7 @@
 				</table>
 				<input type="hidden" name="formhash" value="<!--{eval echo formhash();}-->" />
 			</form>
+			<!--{/if}-->
 		</div>
 		<!--{else}-->
 		<div class="c_form">
