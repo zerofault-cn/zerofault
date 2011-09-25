@@ -26,8 +26,26 @@ function edit_save() {
 		$('uchome-ttHtmlEditor').value = obj.document.body.innerHTML;
 	}
 	backupContent($('uchome-ttHtmlEditor').value);
+	clear_editor();
 }
-
+function clear_editor() {
+	var p = window.frames['uchome-ifrHtmlEditor'];
+	var obj = p.window.frames['HtmlEditor'];
+	var status = p.document.getElementById('uchome-editstatus').value;
+	if(status == 'code') {
+		p.document.getElementById('sourceEditor').value = "";
+	} else if(status == 'text') {
+		if(is_ie) {
+			p.document.getElementById('dvtext').value = "";
+			obj.document.body.innerHTML = "";
+		} else {
+			p.document.getElementById('dvtext').value = ""
+			obj.document.body.innerHTML = "";
+		}
+	} else {
+		obj.document.body.innerHTML = "";
+	}
+}
 //获取关键字
 function relatekw() {
 	edit_save();

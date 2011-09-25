@@ -10,7 +10,7 @@
 			<div class="title">
 				<div class="r_option">
 					<!--{if $mtag[grade]>=8 || $value[uid]==$_SGLOBAL[supe_uid] || ($eventid && $userevent[status]>=3)}-->
-					<a href="cp.php?ac=thread&op=edit&pid=$value[pid]" id="p_$value[pid]_edit" onclick="ajaxmenu(event, this.id, 1)">编辑</a>
+					<a href="space.php?uid=$value[uid]&do=thread&op=edit&id=$value[tid]&pid=$value[pid]&rand=<!--{eval echo rand()}-->#editor">编辑</a>
 					<a href="cp.php?ac=thread&op=delete&pid=$value[pid]&tagid=$thread[tagid]" id="p_$value[pid]_delete" onclick="ajaxmenu(event, this.id)">删除</a>
 					<!--{/if}-->
 					<!--{if $value[uid]!=$_SGLOBAL[supe_uid] && (($mtag[allowpost] && !$eventid) || ($eventid && $userevent[status]>1))}--><a href="cp.php?ac=thread&op=reply&pid=$value[pid]" id="p_$value[pid]_reply" onclick="ajaxmenu(event, this.id, 1)">回复</a> <!--{/if}-->

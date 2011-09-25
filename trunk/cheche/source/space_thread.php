@@ -83,7 +83,13 @@ if($id) {
 	ckstart($start, $perpage);
 
 	$pid = empty($_GET['pid'])?0:intval($_GET['pid']);
-	$psql = $pid?"(isthread='1' OR pid='$pid') AND":'';
+	$op = empty($_GET['op']) ? '' : $_GET['op'];
+	if ('edit' == $op) {
+		$message = $_SGLOBAL['db']->result($_SGLOBAL['db']->query("SELECT message FROM ".tname('post')." WHERE pid=".$pid), 0);
+	}
+	else {
+		$psql = $pid?"(isthread='1' OR pid='$pid') AND":'';
+	}
 
 	$list = array();
 	$postnum = $start;
