@@ -1,0 +1,494 @@
+<!--{eval $_TPL['nosidebar']=1;}-->
+<!--{template header}-->
+<style type="text/css">
+.tip {
+	padding: 3px 5px;
+	border:1px solid #A3A0A0;
+	margin-left:5px;
+	background-color:#FCFCFC;
+	color:#999999;
+}
+.tip_ok
+{
+	padding: 8px;
+	margin-left:5px;
+	background:url(image/accept.gif) center left no-repeat;
+}
+.tip_loading
+{
+	padding:3px 5px 3px 25px;
+	background:url(image/loading2.gif) 5px center no-repeat #FFEEE5;
+	border:1px solid #FFA475;
+	color:#C0C0C0;
+	margin-left:5px;
+}
+.tip_err
+{
+	padding: 3px 5px;
+	border:1px solid #FFA475;
+	color:#ff0000;
+	margin-left:5px;
+	background:#FFEEE5;
+}
+</style>
+<form id="registerform" name="registerform" action="do.php?ac=$_SCONFIG[register_action]&$url_plus&ref" method="post" class="c_form2" AutoComplete="off">
+<table cellpadding="0" cellspacing="0" class="formtable">
+	<caption>
+		<h2 style="padding:20px 40px;">您已成功注册！<span>以下是我们根据您的个人资料推荐的本站车友，您可以申请添加他们为好友。</span></h2>
+	</caption>
+	
+	<tr><th>&nbsp;</th>
+		<td>
+		<input type="hidden" name="refer" value="space.php?do=home" />
+		<input type="submit" id="registersubmit" name="registersubmit" value="注册新用户" class="submit" onclick="<!--{if $register_rule}-->if(!checkClause()){return false;}<!--{/if}-->ajaxpost('registerform', 'register');" tabindex="6" />
+		</td>
+	</tr>
+	<tr><th>&nbsp;</th><td id="__registerform" style="color:red; font-weight:bold;"></td></tr>
+</table>
+<input type="hidden" name="formhash" value="<!--{eval echo formhash();}-->" /></form>
+
+<script type="text/javascript">
+<!--
+//	$('username').focus();
+	function register(id, result) {
+		if(result) {
+			$('registersubmit').disabled = true;
+			window.location.href = "$jumpurl";
+		} else {
+			updateseccode();
+		}
+	}
+function check()
+{
+	fields=document.getElementsByTagName("input");
+	for(i=0;i<fields.length;i++)
+	{
+		val=fields[i].getAttribute('name');
+		ckValue=fields[i].getAttribute('ckName');
+		if(ckValue!=null)
+		{
+			if( fields[i].value=='')
+			{
+				alert(ckValue+'不能为空！');
+				eval('document.form1.'+val).focus();
+				return false;
+			}
+			else if($(val+'_tip').className=='tip_err')
+			{
+				alert($(val+'_tip').innerHTML);
+				return false;
+			}
+		}
+	}
+	
+	return true;
+}
+/**
+*检验邮件地址是否合法
+*/
+function isEmail(mail) 
+{
+	return(new RegExp(/^\w+((-\w+)|(\.\w+))*\@[A-Za-z0-9]+((\.|-)[A-Za-z0-9]+)*\.[A-Za-z0-9]+$/).test(mail)); 
+}
+function foc(obj) {
+	var label=obj.getAttribute('name');
+	var value = obj.value;
+	if(value.length>0) {
+		return;
+	}
+	switch (label) {
+		case 'username':
+			tips='帐号由4-16个小写字母、数字或下划线组成';
+			break;
+		case 'email':
+			label = 'username';
+			tips = '请输入真实有效的邮箱地址';
+			break;
+		case 'password':
+			tips='密码必须由6－20个字符组成';
+			break;
+		case 'name':
+			tips='请输入真实姓名';
+			break;
+		case 'seccode':
+			tips = "请输入下方图片中的字母或数字";
+			break;
+		case 'car_number':
+			tips = "输入由5-6位数字或字母组成的车牌号码";
+			break
+		default :
+			//
+	}
+	$(label+'_tip').style.display='';
+	$(label+'_tip').className='tip';
+	$(label+'_tip').innerHTML=tips;
+}
+var tips = "";
+var last_value = "";
+
+function blu(obj) {
+	var label=obj.getAttribute('name');
+	var value = obj.value;
+	var len = value.length;
+	if(value=='') {
+		if ('email' == label) {
+			label = 'username';
+		}
+		$(label+'_tip').style.display='none';
+		return;
+	}
+	if(value == last_value) {
+		return;
+	} else {
+		last_value = value;
+	}
+	switch (label) {
+		case 'username':
+			if(len<4 || len>16) {
+				$(label+'_tip').className='tip_err';
+				tips='你输入的长度不符合要求，请输入4-16个字符！';
+			}
+			else if(!new RegExp(/^[a-z]+[a-z0-9_]+$/).test(value)) {
+				$(label+'_tip').className='tip_err';
+				tips='您的输入不合要求，只能输入数字，字母或下划线！';
+			}
+			else {
+				$(label+'_tip').style.display='';
+				$(label+'_tip').className='tip_loading';
+				$(label+'_tip').innerHTML=tips='正在验证帐号是否可用';
+				ajaxCheck('username', value);
+			}
+			break;
+		case 'car_number':
+			if(len<5 || len>6) {
+				$(label+'_tip').className='tip_err';
+				tips='号码位数应该在5-6位之间';
+			}
+			else {
+				$(label+'_tip').className='tip_ok';
+				tips='';
+			}
+			break;
+		case 'password':
+			if(len<6) {
+				$(label+'_tip').className='tip_err';
+				tips='密码不能少于6个字符';
+			}
+			else {
+				$(label+'_tip').className='tip_ok';
+				tips='';
+			}
+			break;
+		case 'name':
+			if(len<2) {
+				$(label+'_tip').className='tip_err';
+				tips='真实姓名太短了';
+			}
+			else {
+				$(label+'_tip').className='tip_ok';
+				tips='';
+			}
+			break;
+		case 'email':
+			label = 'username';
+			if(!isEmail(value)) {
+				$(label+'_tip').className='tip_err';
+				tips='您填写邮箱格式不对';
+			}
+			else {
+				$(label+'_tip').style.display='';
+				$(label+'_tip').className='tip_loading';
+				$(label+'_tip').innerHTML=tips='正在验证邮箱地址是否已注册';
+				ajaxCheck('email', value);
+			}
+			break;
+		case 'seccode':
+			if (len>0) {
+				$(label+'_tip').style.display='';
+				$(label+'_tip').className='tip_loading';
+				$(label+'_tip').innerHTML=tips='验证校验中';
+				ajaxCheck('seccode', value);
+			}
+			break;
+	}
+	$(label+'_tip').style.display='';
+	$(label+'_tip').innerHTML=tips;
+}
+function ajaxCheck(label, value) {
+	var x = new Ajax('XML');
+	var param = "";
+	if ('username' == label) {
+		param = "op=checkusername&username="+value;
+	}
+	else if ('email' == label) {
+		label = 'username';
+		param = 'op=checkemail&email=' + value;
+	}
+	else if ('seccode' == label) {
+		param = 'op=checkseccode&seccode='+value;
+	}
+	x.get('do.php?ac=$_SCONFIG[register_action]&' + param, function(s) {
+		s = trim(s)
+		if(s=='succeed') {
+			$(label+'_tip').className='tip_ok';
+			tips = "";
+		}
+		else {
+			$(label+'_tip').className='tip_err';
+			tips = s;
+		}
+		$(label+'_tip').innerHTML=tips;
+	});
+}
+	var lastUserName = lastPassword = lastEmail = lastSecCode = '';
+	function checkUserName() {
+		var userName = $('username').value;
+		if(userName == lastUserName) {
+			return;
+		} else {
+			lastUserName = userName;
+		}
+		var cu = $('checkusername');
+		var unLen = userName.replace(/[^\x00-\xff]/g, "**").length;
+
+		if(unLen < 3 || unLen > 15) {
+			warning(cu, unLen < 3 ? '用户名小于3个字符' : '用户名超过 15 个字符');
+			return;
+		}
+		ajaxresponse('checkusername', 'op=checkusername&username=' + (is_ie && document.charset == 'utf-8' ? encodeURIComponent(userName) : userName));
+	}
+	function checkEmail() {
+		var email = $('email').value;
+		if(email == lastEmail) {
+			return;
+		} else {
+			lastEmail = email;
+		}
+		var cu = $('checkusername');
+		if (!new RegExp(/^\w+((-\w+)|(\.\w+))*\@[A-Za-z0-9]+((\.|-)[A-Za-z0-9]+)*\.[A-Za-z0-9]+$/).test(email)) {
+			warning(cu, '邮箱地址格式不正确');
+			return;
+		}
+		ajaxresponse('checkusername', 'op=checkemail&email=' + email);
+	}
+	function checkPassword(confirm) {
+		var password = $('password').value;
+		if(!confirm && password == lastPassword) {
+			return;
+		} else {
+			lastPassword = password;
+		}
+		var cp = $('checkpassword');
+		if(password == '' || /[\'\"\\]/.test(password)) {
+			warning(cp, '密码空或包含非法字符');
+			return false;
+		} else {
+			cp.style.display = '';
+			cp.innerHTML = '<img src="image/check_right.gif" width="13" height="13">';
+			if(!confirm) {
+			//	checkPassword2(true);
+			}
+			return true;
+		}
+	}
+	function checkPassword2(confirm) {
+		var password = $('password').value;
+		var password2 = $('password2').value;
+		var cp2 = $('checkpassword2');
+		if(password2 != '') {
+			checkPassword(true);
+		}
+		if(password == '' || (confirm && password2 == '')) {
+			cp2.style.display = 'none';
+			return;
+		}
+		if(password != password2) {
+			warning(cp2, '两次输入的密码不一致');
+		} else {
+			cp2.style.display = '';
+			cp2.innerHTML = '<img src="image/check_right.gif" width="13" height="13">';
+		}
+	}
+	function checkNumber(obj) {
+		var number = obj.value;
+		if (number.length<5) {
+			warning($('car_number_msg'), '车牌号位数至少5位');
+			return;
+		}
+		else {
+			$('car_number_msg').innerHTML = '<img src="image/check_right.gif" width="13" height="13">';
+		}
+	}
+	function checkSeccode() {
+		var seccodeVerify = $('seccode').value;
+		if(seccodeVerify == lastSecCode) {
+			return;
+		} else {
+			lastSecCode = seccodeVerify;
+		}
+		ajaxresponse('checkseccode', 'op=checkseccode&seccode=' + (is_ie && document.charset == 'utf-8' ? encodeURIComponent(seccodeVerify) : seccodeVerify));
+	}
+	function ajaxresponse(objname, data) {
+		var x = new Ajax('XML', objname);
+		x.get('do.php?ac=$_SCONFIG[register_action]&' + data, function(s){
+			var obj = $(objname);
+			s = trim(s);
+			if(s.indexOf('succeed') > -1) {
+				obj.style.display = '';
+				obj.innerHTML = '<img src="image/check_right.gif" width="13" height="13">';
+				obj.className = "warning";
+			} else {
+				warning(obj, s);
+			}
+		});
+	}
+	function warning(obj, msg) {
+		if((ton = obj.id.substr(5, obj.id.length)) != 'password2') {
+		//	$(ton).select();
+		}
+		obj.style.display = '';
+		obj.innerHTML = '<img src="image/check_error.gif" width="13" height="13"> &nbsp; ' + msg;
+		obj.className = "warning";
+	}
+
+	function checkPwd(pwd){
+
+		if (pwd == "") {
+			$("chkpswd").className = "psdiv0";
+			$("chkpswdcnt").innerHTML = "";
+		} else if (pwd.length < 3) {
+			$("chkpswd").className = "psdiv1";
+			$("chkpswdcnt").innerHTML = "太短";
+		} else if(!isPassword(pwd) || !/^[^%&]*$/.test(pwd)) {
+			$("chkpswd").className = "psdiv0";
+			$("chkpswdcnt").innerHTML = "";
+		} else {
+			var csint = checkStrong(pwd);
+			switch(csint) {
+				case 1:
+					$("chkpswdcnt").innerHTML = "很弱";
+					$( "chkpswd" ).className = "psdiv"+(csint + 1);
+					break;
+				case 2:
+					$("chkpswdcnt").innerHTML = "一般";
+					$( "chkpswd" ).className = "psdiv"+(csint + 1);
+					break;
+				case 3:		
+					$("chkpswdcnt").innerHTML = "很强";
+					$("chkpswd").className = "psdiv"+(csint + 1);
+					break;
+			}
+		}
+	}
+	function isPassword(str){
+		if (str.length < 3) return false;
+		var len;
+		var i;
+		len = 0;
+		for (i=0;i<str.length;i++){
+			if (str.charCodeAt(i)>255) return false;
+		}
+		return true;
+	}
+	function charMode(iN){ 
+		if (iN>=48 && iN <=57) //数字 
+		return 1; 
+		if (iN>=65 && iN <=90) //大写字母 
+		return 2; 
+		if (iN>=97 && iN <=122) //小写 
+		return 4; 
+		else 
+		return 8; //特殊字符 
+	} 
+	//计算出当前密码当中一共有多少种模式 
+	function bitTotal(num){ 
+		modes=0; 
+		for (i=0;i<4;i++){ 
+			if (num & 1) modes++; 
+			num>>>=1; 
+		} 
+		return modes; 
+	} 
+
+	//返回密码的强度级别 
+	function checkStrong(pwd){ 
+		modes=0; 
+		for (i=0;i<pwd.length;i++){ 
+			//测试每一个字符的类别并统计一共有多少种模式. 
+			modes|=charMode(pwd.charCodeAt(i)); 
+		} 
+		return bitTotal(modes);
+	}
+
+	function switchTo(type0, type1) {
+		document.getElementById('label_'+type0).style.display = 'none';
+		document.getElementById(type0).style.display = 'none';
+		document.getElementById(type0).value = '';
+		document.getElementById('tip_'+type0).style.display = 'none';
+
+		document.getElementById('label_'+type1).style.display = '';
+		document.getElementById(type1).style.display = '';
+		document.getElementById('tip_'+type1).style.display = '';
+	}
+
+	function load_car_opts(field, pid) {
+		if ('0' == pid) {
+			document.getElementById(field).length = 1;
+			if ('sel_model' == field) {
+				document.getElementById('sel_profile').length = 1;
+			}
+			return;
+		}
+		var x = new Ajax('HTML');
+		x.get('do.php?ac=ajax&op=get_car_model&pid='+pid, function(s) {
+			var sel = document.getElementById(field);
+			sel.length = 1;
+			var json = eval('('+s+')');
+			for (var i=0; i<json.length; i++) {
+				sel.options.add(new Option(json[i].name, json[i].id));
+			}
+		});
+	}
+
+	function load_region_opts(field, pid) {
+		if ('0' == pid) {
+			document.getElementById(field).length = 1;
+			if ('sel_city' == field) {
+				document.getElementById('sel_region').length = 1;
+			}
+			return;
+		}
+		var x = new Ajax('HTML');
+		x.get('do.php?ac=ajax&op=get_region&pid='+pid, function(s) {
+			var sel = document.getElementById(field);
+			sel.length = 1;
+			var json = eval('('+s+')');
+			for (var i=0; i<json.length; i++) {
+				sel.options.add(new Option(json[i].name, json[i].id));
+			}
+		});
+	}
+	var car_number_arr = new Array();
+	<!--{loop $car_number $P $C_arr}-->
+	car_number_arr['{$P}'] = new Array();
+		<!--{loop $C_arr $i $c}-->
+		car_number_arr['{$P}']['{$P}{$c}'] = '{$c}';
+		<!--{/loop}-->
+	<!--{/loop}-->
+
+	var car_number_prefix = $('car_number_prefix');
+	function change_prefix(obj) {
+		var P = obj.value;
+		var c;
+		car_number_prefix.length = 0;
+		if (''!=P) {
+			for(var key in car_number_arr[P]) {
+				c = car_number_arr[P][key];
+				car_number_prefix.options.add(new Option(c, key));
+			}
+		}
+	}
+//-->
+</script>
+
+<!--{template footer}-->
