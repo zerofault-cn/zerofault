@@ -8,6 +8,26 @@ if(!defined('IN_UCHOME')) {
 	exit('Access Denied');
 }
 
+if(!empty($_POST['submit'])) {
+	if (!empty($_REQUEST['sel_uid'])) {
+		$setarr = array(
+			'uid' => $space['uid'],
+			'fusername' => '',
+			'status' => 0,
+			'gid' => 1,
+			'note' => '',
+			'num' => 0,
+			'dateline' => time()
+		);
+
+		foreach (array_unique($_REQUEST['sel_uid']) as $fuid) {
+			$setarr['fuid'] = $fuid;
+			inserttable('friend', $setarr);
+		}
+	}
+	showmessage('您的请求已经提交，请等待对方确认', "space.php?do=home", 2);
+	exit;
+}
 $result = array();
 
 //获取所有好友

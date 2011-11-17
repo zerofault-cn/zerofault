@@ -40,7 +40,7 @@ if($uid && $code && !$pay) {
 	$url_plus = "uid=$uid&invite=$invite";
 }
 
-$jumpurl = $app?"userapp.php?id=$app&my_extra=invitedby_bi_{$uid}_{$code}&my_suffix=Lw%3D%3D":'space.php?do=home';
+$jumpurl = $app?"userapp.php?id=$app&my_extra=invitedby_bi_{$uid}_{$code}&my_suffix=Lw%3D%3D":'space.php?do=recommend';
 
 if(empty($op)) {
 
