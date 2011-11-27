@@ -146,6 +146,10 @@ if (!empty($space['province_id'])) {
 		}
 	}
 }
+if (empty($result)) {
+	header("Location: space.php?do=home");
+	exit;
+}
 include_once template("space_recommend");
 
 ?>
