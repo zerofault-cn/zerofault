@@ -176,3 +176,67 @@ CREATE TABLE `erp_share` (
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
+
+2012/1/6
+DROP TABLE IF EXISTS `erp_status`;
+CREATE TABLE `erp_status` (
+  `id` int(10) NOT NULL auto_increment,
+  `board_id` smallint(5) unsigned NOT NULL default '0',
+  `board_sn` varchar(255) NOT NULL default '',
+  `board_info` text NOT NULL,
+  `result` varchar(255) NOT NULL default '',
+  `creator_id` smallint(5) unsigned NOT NULL default '0',
+  `create_time` datetime NOT NULL default '0000-00-00 00:00:00',
+  PRIMARY KEY  (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS `erp_status_board`;
+CREATE TABLE `erp_status_board` (
+  `id` int(10) unsigned NOT NULL auto_increment,
+  `name` varchar(255) NOT NULL default '',
+  `information` text NOT NULL,
+  PRIMARY KEY  (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS `erp_status_flow`;
+CREATE TABLE `erp_status_flow` (
+  `id` int(10) unsigned NOT NULL auto_increment,
+  `status_id` int(10) unsigned NOT NULL default '0',
+  `slot_id` smallint(5) unsigned NOT NULL default '0',
+  `owner_id` smallint(5) unsigned NOT NULL default '0',
+  `staff_id` smallint(5) unsigned NOT NULL default '0',
+  `sort` tinyint(3) unsigned NOT NULL default '0',
+  `result` varchar(255) NOT NULL default '',
+  `update_time` datetime NOT NULL default '0000-00-00 00:00:00',
+  PRIMARY KEY  (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS `erp_status_slot`;
+CREATE TABLE `erp_status_slot` (
+  `id` int(10) unsigned NOT NULL auto_increment,
+  `name` varchar(255) NOT NULL default '',
+  `description` text NOT NULL,
+  `owner_id` smallint(5) unsigned NOT NULL default '0',
+  `type` varchar(255) NOT NULL default '',
+  `sort` tinyint(3) unsigned NOT NULL default '0',
+  PRIMARY KEY  (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+INSERT INTO `erp_status_slot` VALUES (1,'Summary','',0,'text',0);
+INSERT INTO `erp_status_slot` VALUES (2,'test1 test1 test1','Test1',2,'radio',4);
+INSERT INTO `erp_status_slot` VALUES (4,'test2','Test2',0,'radio',3);
+INSERT INTO `erp_status_slot` VALUES (5,'test3','Test3',0,'radio',4);
+INSERT INTO `erp_status_slot` VALUES (6,'test4','Test4',0,'radio',5);
+DROP TABLE IF EXISTS `erp_status_template`;
+CREATE TABLE `erp_status_template` (
+  `id` int(10) unsigned NOT NULL auto_increment,
+  `name` varchar(255) NOT NULL default '',
+  `slot_ids` text NOT NULL,
+  `owner_ids` text NOT NULL,
+  `creator_id` smallint(5) unsigned NOT NULL default '0',
+  `create_time` datetime NOT NULL default '0000-00-00 00:00:00',
+  `update_time` datetime NOT NULL default '0000-00-00 00:00:00',
+  PRIMARY KEY  (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+INSERT INTO `erp_status_template` VALUES (2,'test template 1','5,4,2,1,6','0,0,2,0,1',1,'2012-01-06 16:41:58','2012-01-06 16:46:34');
