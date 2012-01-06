@@ -1,0 +1,116 @@
+<style>
+.highlight, .tDnD_whileDrag {
+	background-color: #FFCC33;
+}
+.slot_list {
+	border: 1px solid #ddd;
+	border-bottom: none;
+	background-color: #ffffff;
+}
+.slot_list li{
+	padding:5px;
+	line-height: 16px;
+	border-bottom: 1px solid #ddd;
+}
+.slot_list li.caption {
+	font-weight:bold;
+	background-color: #9999CC;
+}
+</style>
+<p class="page_title_text">Create Flow Template</p>
+<table cellpadding="3" border="1" bordercolor="#FFFFFF" style="border-collapse:collapse;">
+<tr>
+	<td valign="top">
+		<form id="_form" action="__URL__/template" method="post" target="_iframe">
+		<input type="hidden" name="id" value="{$info['id']}" />
+		<table cellpadding="3" border="1" bordercolor="#FFFFFF" style="border-collapse:collapse;">
+		<tr bgcolor="#78A3DF">
+			<td nowrap="nowrap">Template Name</td>
+			<td bgcolor="#DADADA"><input type="text" name="name" size="40" value="{$info['name']}"/></td>
+		</tr>
+		<tr bgcolor="#BCD1EF">
+			<td>Slots</td>
+			<td bgcolor="#E9E9E9">
+				<table id="slots_table" width="100%" cellpadding="3" border="1" bordercolor="#FFFFFF" style="border-collapse:collapse;">
+				<tr class="nodrop nodrag">
+					<th>Slot Name</th>
+					<th nowrap="nowrap">Default Owner</th>
+				</tr>
+				<iterate name="info.slot_list" id="item">
+				<tr class="slot" id="{$item['id']}">
+					<td nowrap="nowrap">
+						<img align="absmiddle" src="../Public/Images/104.png"/>&nbsp;{$item['name']}<input type="hidden" value="{$item['id']}" name="slot_id[]"/>
+					</td>
+					<td>
+						<select name="owner_id[]"><option value="0">None</option>
+						{$item['staff_opts']}
+						</select>
+					</td>
+				</tr>
+				</iterate>
+				<empty name="info.slot_list">
+				<tr id="tip" class="nodrop nodrag" bgcolor="#FFFFFF">
+					<td colspan="2" align="center">Add slots from right side!</td>
+				</tr>
+				</empty>
+				</table>
+			</td>
+		</tr>
+		<tr>
+			<td colspan="2" align="center">
+				<input type="submit" value="Submit" name="submit"/>
+				&nbsp;&nbsp;&nbsp;&nbsp;
+				<input type="button" value="Cancel" onclick="javascript:location.href='__URL__/template';"/>
+			</td>
+		</tr>
+		</table>
+		</form>
+	</td>
+	<td width="300" valign="top">
+		<ul class="slot_list">
+			<li class="caption">Defined Slots:</li>
+		<iterate name="slot_list" id="item">
+			<li id="{$item['id']}"><img src="../Public/Images/103.png" align="absmiddle"/>&nbsp;{$item['name']}</li>
+		</iterate>
+		<empty name="slot_list">
+			<li>define slot</li>
+		</empty>
+		</ul>
+	</td>
+</tr>
+</table>
+<p class="center"></p>
+<script language="JavaScript" type="text/javascript" src="../Public/Js/jquery-tablednd-0.5.js"></script>
+<script language="JavaScript" type="text/javascript">
+$(document).ready(function() {
+	$("#slots_table").tableDnD({
+		onDragClass: "highlight"
+	});
+	$(".slot_list li img").each(function() {
+		$(this).css({"cursor": "pointer"}).click(function() {
+			add_slot($(this).parent().attr('id'));
+		});
+	});
+});
+function add_slot(id) {
+	$.getJSON("__URL__/template", {
+		"op": "get_slot",
+		"id": id
+	}, function(json) {
+		var tr = $("<tr/>").attr({"id": json.id, "class": "slot"});
+		var icon = $("<img/>").attr({"src": "../Public/Images/104.png", "align": "absmiddle"}).css({"cursor": "pointer", "margin-left": "3px"}).click(function() {
+			$(this).parent().parent().remove();
+		});
+		tr.append($("<td/>").attr("nowrap", "nowrap").append(icon).append('&nbsp;'+json.name+'<input type="hidden" name="slot_id[]" value="'+json.id+'"/>'));
+		tr.append($("<td/>").append('<select name="owner_id[]"><option value="0">None</option>'+json.staff_opts+'</select>'));
+		$("#slots_table").append(tr);
+		if ($("#slots_table tr.slot").length>0) {
+			$("#slots_table tr#tip").hide();
+		}
+		else {
+			$("#slots_table tr#tip").show();
+		}
+		$("#slots_table").tableDnD();
+	});
+}
+</script>

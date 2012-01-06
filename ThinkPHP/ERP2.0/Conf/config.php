@@ -39,7 +39,7 @@ $config = array(
 	'RBAC_ACCESS_TABLE'	=> 'erp_role_node',
 	'RBAC_NODE_TABLE'	=> 'erp_node',
 	//以下模块不需要权限认证，即默认情况下所有Staff帐号都可以访问
-	'NOT_AUTH_MODULE'	=> array('Index', 'Public', 'Script', 'Asset', 'Inventory', 'Absence', 'Task', 'Attachment', 'Share'),
+	'NOT_AUTH_MODULE'	=> array('Index', 'Public', 'Script', 'Asset', 'Inventory', 'Absence', 'Task', 'Attachment', 'Share', 'Status'),
 	//在iframe中处理请求，并以弹出消息方式提示处理结果的Action名
 	'IFRAME_AUTH_ACTION' => array('update','delete','edit','submit','confirm','select','import','create')
 );

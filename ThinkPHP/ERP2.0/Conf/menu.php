@@ -10,8 +10,8 @@ $menu['Basic&nbsp;Data'] = array(
 		'Category'				=> 'Category',
 		'Component Data'		=> 'Product',
 		'Board and Fixed-Assets'=> 'Board'
-		)
-	);
+	)
+);
 
 $menu['Inventory&nbsp;Input Management'] = array(
 	'name'    => 'ProductIn',
@@ -19,14 +19,14 @@ $menu['Inventory&nbsp;Input Management'] = array(
 		'Fixed-Assets Enter'	=> 'ProductIn/fixed',
 		'Floating-Assets Enter' => 'ProductIn/floating',
 		'Product Reject'		=> 'ProductIn/reject'
-		)
-	);
+	)
+);
 $menu['Inventory Inquire'] = array(
 	'name'    => 'Inventory',
 	'submenu' => array(
 		'Local Inventory'		=> 'Inventory/index'
-		)
-	);
+	)
+);
 
 $menu['Inventory&nbsp;Output Management'] = array(
 	'name'    => 'ProductOut/apply',
@@ -37,8 +37,8 @@ $menu['Inventory&nbsp;Output Management'] = array(
 		'Components Release'	=> 'ProductOut/release',
 		'Product Scrap'			=> 'ProductOut/scrap',
 		'Product Return'		=> 'ProductOut/returns'
-		)
-	);
+	)
+);
 
 $menu['Assets Management'] = array(
 	'name'    => 'Asset',
@@ -48,8 +48,8 @@ $menu['Assets Management'] = array(
 		'Transfer To Me'		=> 'Asset/transferIn',
 		'My Transfer Out'		=> 'Asset/transferOut',
 		'My Returns'			=> 'Asset/returns'
-		)
-	);
+	)
+);
 
 $menu['Absence'] = array(
 	'name'    => 'Absence',
@@ -58,8 +58,8 @@ $menu['Absence'] = array(
 		'Today Absence'			=> 'Absence/today',
 		'My Absence'			=> 'Absence/history',
 		'Team Absence'			=> 'Absence/manage'
-		)
-	);
+	)
+);
 
 $menu['Test Log'] = array(
 	'name'    => 'Test',
@@ -70,18 +70,26 @@ $menu['Tasks'] = array(
 	'submenu' => array(
 		'My Tasks'				=> 'Task',
 		'All Tasks'				=> 'Task/all',
-		)
-	);
-
+	)
+);
+$menu['Board Status'] = array(
+	'name' => 'Status',
+	'submenu' => array(
+		'Board Status'			=> 'Status',
+		'Board Basic Info'		=> 'Status/board',
+		'Flow Template'			=> 'Status/template',
+		'Flow Slot'				=> 'Status/slot',
+	)
+);
 $menu['Experience'] = array(
 	'name'    => 'Share',
 	'submenu' => array(
-		'My Experience'	=> 'Share',
-		'All Experience' => 'Share/all',
-		'Project'	=> 'Share/project',
-		'Category'	=> 'Share/category'
-		)
-	);
+		'My Experience'			=> 'Share',
+		'All Experience'		=> 'Share/all',
+		'Project'				=> 'Share/project',
+		'Category'				=> 'Share/category'
+	)
+);
 
 $menu['System'] = array(
 	'name'    => 'Setting',
@@ -93,8 +101,8 @@ $menu['System'] = array(
 		'Role'					=> 'Role',
 		'Node'					=> 'Node',
 		'Operation Logs'		=> 'ProductFlow'
-		)
-	);
+	)
+);
 
 return array('menu'=>$menu);
 ?>
