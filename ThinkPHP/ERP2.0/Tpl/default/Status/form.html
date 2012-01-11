@@ -23,17 +23,39 @@
 	background-color: #FFFFE1;
 }
 </style>
-<p class="page_title_text">Create Flow Template</p>
+<p class="page_title_text"><if condition="$info['id'] gt 0">Edit Flow<else />Create Flow</if></p>
 <table cellpadding="3" border="1" bordercolor="#FFFFFF" style="border-collapse:collapse;">
 <tr>
 	<td valign="top">
-		<form id="_form" action="__URL__/template" method="post" target="_iframe">
+		<form id="_form" action="__URL__/submit" method="post" target="_iframe">
 		<input type="hidden" name="id" value="{$info['id']}" />
 		<table cellpadding="3" border="1" bordercolor="#FFFFFF" style="border-collapse:collapse;">
-		<tr bgcolor="#78A3DF">
-			<td nowrap="nowrap">Template Name</td>
-			<td bgcolor="#DADADA"><input type="text" name="name" size="40" value="{$info['name']}"/></td>
+		<tr bgcolor="#BCD1EF">
+			<td nowrap="nowrap">Flow Name</td>
+			<td bgcolor="#E9E9E9"><input type="text" name="name" size="60" value="{$info['name']}"/></td>
 		</tr>
+		<empty name="info.id">
+		<tr bgcolor="#BCD1EF">
+			<td nowrap="nowrap">Board Info</td>
+			<td bgcolor="#E9E9E9">
+				<table width="100%" cellpadding="3" border="1" bordercolor="#FFFFFF" style="border-collapse:collapse;">
+				<tr>
+					<th>Board Name</th>
+					<th>Information</th>
+					<th nowrap="nowrap">Owner</th>
+				</tr>
+				<tr>
+					<td><input type="text" name="board_name" size="25" /><br />(Without Ext. No.)</td>
+					<td><textarea name="board_info" rows="4" cols="30"></textarea></td>
+					<td><select name="board_owner_id"><option value="0">None</option>
+						{$staff_opts}
+						</select>
+					</td>
+				</tr>
+				</table>
+			</td>
+		</tr>
+		</empty>
 		<tr bgcolor="#BCD1EF">
 			<td>Test Items</td>
 			<td bgcolor="#E9E9E9">
@@ -41,7 +63,7 @@
 				<tr class="nodrop nodrag">
 					<th> </th>
 					<th>Item Name</th>
-					<th nowrap="nowrap">Default Owner</th>
+					<th nowrap="nowrap">Owner</th>
 				</tr>
 				<iterate name="info.item_list" id="item">
 				<tr class="item" id="item_{$item['id']}">
@@ -51,14 +73,14 @@
 					</td>
 					<td>
 						<select name="owner_id[]"><option value="0">None</option>
-						{$item['staff_opts']}
+						{$item['owner_opts']}
 						</select>
 					</td>
 				</tr>
 				</iterate>
 				<empty name="info.item_list">
 				<tr id="tip" class="nodrop nodrag" bgcolor="#FFFFFF">
-					<td colspan="3" align="center">Add item from right side!</td>
+					<td colspan="3" align="center">Add test item from right side!</td>
 				</tr>
 				</empty>
 				</table>
@@ -66,9 +88,9 @@
 		</tr>
 		<tr>
 			<td colspan="2" align="center">
-				<input type="submit" value="Submit" name="submit"/>
+				<input type="submit" value="Submit" name="submit" disabled="disabled"/>
 				&nbsp;&nbsp;&nbsp;&nbsp;
-				<input type="button" value="Cancel" onclick="javascript:location.href='__URL__/template';"/>
+				<input type="button" value="Cancel" onclick="javascript:location.href='__URL__';"/>
 			</td>
 		</tr>
 		</table>
@@ -107,6 +129,7 @@ $(document).ready(function() {
 			add_item($(this).val(), $(this).attr("checked"));
 		});
 	});
+	$("#_form input:submit").attr("disabled", false);
 });
 function add_item(id, checked) {
 	if (!checked) {

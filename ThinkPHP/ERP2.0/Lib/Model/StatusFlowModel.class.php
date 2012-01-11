@@ -1,12 +1,12 @@
 <?php
 import('RelationModel');
-class StatusSlotModel extends RelationModel{
+class StatusFlowModel extends RelationModel{
 	protected $_link = array(
 		'Staff' => array(
 			'mapping_type' => BELONGS_TO,
-			'mapping_name' => 'owner',
+			'mapping_name' => 'creator',
 			'class_name'   => 'Staff',
-			'foreign_key'  => 'owner_id',
+			'foreign_key'  => 'creator_id',
 			)
 	);
 }

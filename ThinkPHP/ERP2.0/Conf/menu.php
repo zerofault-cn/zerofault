@@ -75,10 +75,9 @@ $menu['Tasks'] = array(
 $menu['Board Status'] = array(
 	'name' => 'Status',
 	'submenu' => array(
-		'Board Status'			=> 'Status',
-		'Board Basic Info'		=> 'Status/board',
-		'Flow Template'			=> 'Status/template',
-		'Flow Slot'				=> 'Status/slot',
+		'Test Flow List'		=> 'Status',
+		'Test Flow Template'	=> 'Status/template',
+		'Test Items'			=> 'Status/item',
 	)
 );
 $menu['Experience'] = array(
