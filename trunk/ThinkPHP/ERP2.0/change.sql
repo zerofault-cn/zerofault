@@ -178,41 +178,33 @@ CREATE TABLE `erp_share` (
 
 
 2012/1/6
-DROP TABLE IF EXISTS `erp_status`;
-CREATE TABLE `erp_status` (
-  `id` int(10) NOT NULL auto_increment,
-  `board_id` smallint(5) unsigned NOT NULL default '0',
-  `board_sn` varchar(255) NOT NULL default '',
-  `board_info` text NOT NULL,
-  `result` varchar(255) NOT NULL default '',
-  `creator_id` smallint(5) unsigned NOT NULL default '0',
-  `create_time` datetime NOT NULL default '0000-00-00 00:00:00',
-  PRIMARY KEY  (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
 DROP TABLE IF EXISTS `erp_status_board`;
 CREATE TABLE `erp_status_board` (
   `id` int(10) unsigned NOT NULL auto_increment,
+  `flow_id` smallint(5) unsigned NOT NULL default '0',
   `name` varchar(255) NOT NULL default '',
-  `information` text NOT NULL,
+  `info` text NOT NULL,
+  `owner_id` smallint(5) unsigned NOT NULL default '0',
+  `create_time` datetime NOT NULL default '0000-00-00 00:00:00',
+  `update_time` datetime NOT NULL default '0000-00-00 00:00:00',
+  `status` tinyint(3) NOT NULL default '0',
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS `erp_status_flow`;
 CREATE TABLE `erp_status_flow` (
   `id` int(10) unsigned NOT NULL auto_increment,
-  `status_id` int(10) unsigned NOT NULL default '0',
-  `slot_id` smallint(5) unsigned NOT NULL default '0',
-  `owner_id` smallint(5) unsigned NOT NULL default '0',
-  `staff_id` smallint(5) unsigned NOT NULL default '0',
-  `sort` tinyint(3) unsigned NOT NULL default '0',
-  `result` varchar(255) NOT NULL default '',
+  `name` varchar(255) NOT NULL default '',
+  `item_ids` text NOT NULL,
+  `owner_ids` text NOT NULL,
+  `creator_id` smallint(5) unsigned NOT NULL default '0',
+  `create_time` datetime NOT NULL default '0000-00-00 00:00:00',
   `update_time` datetime NOT NULL default '0000-00-00 00:00:00',
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
-DROP TABLE IF EXISTS `erp_status_slot`;
-CREATE TABLE `erp_status_slot` (
+DROP TABLE IF EXISTS `erp_status_item`;
+CREATE TABLE `erp_status_item` (
   `id` int(10) unsigned NOT NULL auto_increment,
   `name` varchar(255) NOT NULL default '',
   `description` text NOT NULL,
@@ -221,22 +213,43 @@ CREATE TABLE `erp_status_slot` (
   `sort` tinyint(3) unsigned NOT NULL default '0',
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+INSERT INTO `erp_status_item` VALUES (7,'Power voltage','test all voltage class',0,'radio',2);
+INSERT INTO `erp_status_item` VALUES (8,'Power ripple','',0,'radio',3);
+INSERT INTO `erp_status_item` VALUES (9,'Clock frequency','make sure 50Mhz crystal frequency are good',0,'radio',4);
+INSERT INTO `erp_status_item` VALUES (10,'reset timing','check reset waveform of reset input',0,'radio',5);
+INSERT INTO `erp_status_item` VALUES (11,'FPGA JTAG port test','Set up communication with FPGA through JTAG',0,'radio',6);
+INSERT INTO `erp_status_item` VALUES (12,'Download image to SPI Flash','Test the connection between FPGA and SPI flash.',0,'radio',7);
+INSERT INTO `erp_status_item` VALUES (13,'CPLD program','',0,'radio',8);
+INSERT INTO `erp_status_item` VALUES (14,'Data read and write validation','Test whether host read and write to DDR3 Memory are OK?',0,'radio',9);
+INSERT INTO `erp_status_item` VALUES (15,'Run on Intel Server Board S5520HC(DDR3-1333)','',0,'radio',10);
+INSERT INTO `erp_status_item` VALUES (16,'Run on Intel Oak Creek Canyan Platform(DDR3-1333)','',0,'radio',11);
+INSERT INTO `erp_status_item` VALUES (17,'Run on SuperMicro Server Board H8SGL(DDR3-1333)','',0,'radio',12);
 
-INSERT INTO `erp_status_slot` VALUES (1,'Summary','',0,'text',0);
-INSERT INTO `erp_status_slot` VALUES (2,'test1 test1 test1','Test1',2,'radio',4);
-INSERT INTO `erp_status_slot` VALUES (4,'test2','Test2',0,'radio',3);
-INSERT INTO `erp_status_slot` VALUES (5,'test3','Test3',0,'radio',4);
-INSERT INTO `erp_status_slot` VALUES (6,'test4','Test4',0,'radio',5);
+DROP TABLE IF EXISTS `erp_status_status`;
+CREATE TABLE `erp_status_status` (
+  `id` int(10) unsigned NOT NULL auto_increment,
+  `flow_id` smallint(5) unsigned NOT NULL default '0',
+  `board_id` smallint(5) unsigned NOT NULL default '0',
+  `item_id` smallint(5) unsigned NOT NULL default '0',
+  `owner_id` smallint(5) unsigned NOT NULL default '0',
+  `substitute_id` smallint(5) unsigned NOT NULL default '0',
+  `sort` tinyint(3) unsigned NOT NULL default '0',
+  `status` tinyint(3) NOT NULL default '0',
+  `update_time` datetime NOT NULL default '0000-00-00 00:00:00',
+  `mail_status` tinyint(3) unsigned NOT NULL default '0',
+  `comment` text NOT NULL,
+  PRIMARY KEY  (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+
 DROP TABLE IF EXISTS `erp_status_template`;
 CREATE TABLE `erp_status_template` (
   `id` int(10) unsigned NOT NULL auto_increment,
   `name` varchar(255) NOT NULL default '',
-  `slot_ids` text NOT NULL,
+  `item_ids` text NOT NULL,
   `owner_ids` text NOT NULL,
   `creator_id` smallint(5) unsigned NOT NULL default '0',
   `create_time` datetime NOT NULL default '0000-00-00 00:00:00',
   `update_time` datetime NOT NULL default '0000-00-00 00:00:00',
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
-INSERT INTO `erp_status_template` VALUES (2,'test template 1','5,4,2,1,6','0,0,2,0,1',1,'2012-01-06 16:41:58','2012-01-06 16:46:34');
