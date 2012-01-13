@@ -1,0 +1,139 @@
+<style>
+#title_layer {
+	position: absolute;
+	border: 1px solid #767676;
+	padding: 6px;
+	background-color: #FFFFDD;
+	border-radius: 6px;
+	-moz-border-radius: 6px;
+	-webkit-border-radius: 6px;
+	z-index: 200;
+}
+th.board {
+	font-weight: normal;
+	background-color: #FFCC00;
+}
+th.sp, td.sp {
+	background-color: #FFCC99;
+}
+td.Pass, strong.Pass, option.Pass{
+	color: #339900;
+}
+td.Pending, strong.Pending, option.Pending {
+	color: #0000FF;
+}
+td.Failed, strong.Failed, option.Failed{
+	color: #FF0000;
+}
+select.status option, select.board_status option {
+	font-weight:bold;
+}
+</style>
+<p class="page_title_text">{$flow_info['name']}</p>
+<table id="status_table" cellpadding="3" border="1" bordercolor="#FFFFFF" style="border-collapse:collapse;">
+<tr>
+	<th>No.</th>
+	<th>Test Item</th>
+	<th>Default Owner</th>
+	<th class="sp"> </th>
+	<foreach name="board_list" item="board">
+	<th class="board"><a href="__URL__/board/id/{$board['id']}" title="{$board['info']|nl2br}">{$board['name']}</a></th>
+	</foreach>
+</tr>
+<iterate name="item_board_status" id="item">
+<tr class="trbg{$mod}">
+	<td align="center">{$i}</td>
+	<td title="{$item['item_info']['description']}">{$item['item_info']['name']}</td>
+	<td>{$item['owner']}</td>
+	<td class="sp"> </td>
+	<foreach name="item.board_status" item="status">
+	<td><if condition="$_SESSION[C('USER_AUTH_KEY')] eq (empty($status['substitute_id'])?$status['owner_id']:$status['substitute_id']) or $_SESSION[C('ADMIN_AUTH_NAME')] or in_array($_SESSION[C('USER_AUTH_KEY')], C('STATUS_ADMIN_ID'))">
+			<if condition="$status['status'] egt 0">
+		<select name="board_status_{$item['item_info']['id']}_{$status['id']}" class="status" id="{$status['id']}">
+			<option value="0" class="Pending" <eq name="status.status" value="0">selected="selected"</eq>>Pending</option>
+			<option value="1" class="Pass" <eq name="status.status" value="1">selected="selected"</eq>>Pass</option>
+			<option value="2" class="Failed" <eq name="status.status" value="2">selected="selected"</eq>>Failed</option>
+		</select>
+			<else />
+			--
+			</if>
+		<else />
+		<strong class="{$status_arr[$status['status']]}">{$status_arr[$status['status']]}</strong>
+		</if>
+	</td>
+	</foreach>
+</tr>
+</iterate>
+</table>
+<p class="center"></p>
+<div id="title_layer" class="w10" style="display:none;"></div>
+<script language="JavaScript" type="text/javascript" src="../Public/Js/title_tip.js"></script>
+
+<script language="JavaScript" type="text/javascript">
+$(document).ready(function() {
+	$("th[title], td[title], a[title]").each(function() {
+		$(this).hover(
+			function(event) { showTitle(this, event);},
+			function() { hideTitle(this);}
+		).mousemove(function(event) {
+			moveTitle(event);
+		});
+	});
+
+	$("#status_table select").each(function() {
+		$(this).change(function() {
+			var status_id = $(this).attr("id");
+			var field = 'status';
+			var value = $(this).val();
+			var text = $(this).find("option:selected").text();
+			myConfirm('Change the status to "'+text+'"?', "__URL__/update/id/"+status_id+"/f/"+field+"/v/"+value);
+		});
+	});
+})
+var has_reset = false;
+function edit_comment(id) {
+	$("#CommentForm input[name=id]").val(id);
+	$.get('__URL__/comment/id/'+id, function(str) {
+			$("#CommentForm textarea[name=content]").val(str).focus();
+		});
+	$("#CommentForm input[name=submit]").val("Submit");
+	if(!has_reset) {
+		$("#CommentForm input[name=submit]").after('<input type="button" id="reset_comment" value="Cancel"/>');
+		$("#CommentForm input#reset_comment").click(function(){
+			$("#CommentForm input[name=id]").val("");
+			$("#CommentForm textarea[name=content]").val("");
+			$("#CommentForm input[name=submit]").val("Post Comment");
+			$(this).remove();
+			has_reset = false;
+		});
+		has_reset = true;
+	}
+}
+function show_comment(id, content) {
+	if ($("#comment_list p").length>0) {
+		$("#comment_list p").remove();
+	}
+	var dd_html = '<span><img src="../Public/Images/form_edit.gif" border="0" alt="Edit" align="absmiddle" style="cursor:pointer;" onClick="edit_comment('+id+');" title="Click to edit this comment" /> <img src="../Public/Images/cross.gif" alt="Delete" align="absmiddle" border="0" style="cursor:pointer;" onclick="myConfirm(\'Are you sure to delete this comment?\', \'__URL__/delete_comment/id/'+id+'\');" title="Click to delete this comment" /></span><div>'+content+'</div>';
+	
+	if ($("#comment_list dd#dd_"+id).length>0) {
+		$("#comment_list dd#dd_"+id).html(dd_html);
+		$("#CommentForm input[name=id]").val("");
+		$("#CommentForm textarea[name=content]").val("");
+		$("#CommentForm input[name=submit]").val("Post Comment");
+		$("input#reset_comment").remove();
+		has_reset = false;
+	}
+	else {
+		var dt_html = '<dt id="dt_'+id+'"><span>&nbsp;</span>{$_SESSION[C('STAFF_AUTH_NAME')]['realname']}</dt>';
+		$("#comment_list").append(dt_html+'<dd id="dd_'+id+'">'+dd_html+'</dd>');
+	}
+	$("#CommentForm textarea[name=content]").val("");
+}
+function remove_comment(id) {
+	if ($("#comment_list dd#dd_"+id).length>0) {
+		$("#comment_list dt#dt_"+id).remove();
+		$("#comment_list dd#dd_"+id).remove();
+	}
+}
+
+</script>

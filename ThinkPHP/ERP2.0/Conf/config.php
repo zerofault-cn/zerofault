@@ -25,6 +25,8 @@ $config = array(
 	'ABSENCE_ADMIN_ID'	=> array(1),
 	//Task管理员的ID数组
 	'TASK_ADMIN_ID'		=> array(1),
+	//Board Status管理员的ID数组
+	'STATUS_ADMIN_ID'	=> array(1),
 	//资产申请时的提醒通知邮件会额外发送给这些邮件帐号，用英文单引号包含，英文逗号分隔
 	'NOTIFICATION_MAILTO' => array(),
 	//权限认证所需参数，请不要随意更改
@@ -62,8 +64,9 @@ elseif (ENV == 'TEST') {
 	$config['ADMIN_AUTH_NAME'] = 'test_administrator';
 	$config['ERP_TITLE'] = 'ERP Test';
 
-	$config['ABSENCE_ADMIN_ID'] = array(1,9);
-	$config['TASK_ADMIN_ID'] = array(3,9);
+	$config['ABSENCE_ADMIN_ID'] = array(3);
+	$config['TASK_ADMIN_ID'] = array(3);
+	$config['STATUS_ADMIN_ID'] = array(3);
 }
 return $config;
 ?>

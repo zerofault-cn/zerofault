@@ -213,17 +213,17 @@ CREATE TABLE `erp_status_item` (
   `sort` tinyint(3) unsigned NOT NULL default '0',
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-INSERT INTO `erp_status_item` VALUES (7,'Power voltage','test all voltage class',0,'radio',2);
-INSERT INTO `erp_status_item` VALUES (8,'Power ripple','',0,'radio',3);
-INSERT INTO `erp_status_item` VALUES (9,'Clock frequency','make sure 50Mhz crystal frequency are good',0,'radio',4);
-INSERT INTO `erp_status_item` VALUES (10,'reset timing','check reset waveform of reset input',0,'radio',5);
-INSERT INTO `erp_status_item` VALUES (11,'FPGA JTAG port test','Set up communication with FPGA through JTAG',0,'radio',6);
-INSERT INTO `erp_status_item` VALUES (12,'Download image to SPI Flash','Test the connection between FPGA and SPI flash.',0,'radio',7);
-INSERT INTO `erp_status_item` VALUES (13,'CPLD program','',0,'radio',8);
-INSERT INTO `erp_status_item` VALUES (14,'Data read and write validation','Test whether host read and write to DDR3 Memory are OK?',0,'radio',9);
-INSERT INTO `erp_status_item` VALUES (15,'Run on Intel Server Board S5520HC(DDR3-1333)','',0,'radio',10);
-INSERT INTO `erp_status_item` VALUES (16,'Run on Intel Oak Creek Canyan Platform(DDR3-1333)','',0,'radio',11);
-INSERT INTO `erp_status_item` VALUES (17,'Run on SuperMicro Server Board H8SGL(DDR3-1333)','',0,'radio',12);
+INSERT INTO `erp_status_item` VALUES (1,'Power voltage','test all voltage class',0,'radio',1);
+INSERT INTO `erp_status_item` VALUES (2,'Power ripple','',0,'radio',2);
+INSERT INTO `erp_status_item` VALUES (3,'Clock frequency','make sure 50Mhz crystal frequency are good',0,'radio',3);
+INSERT INTO `erp_status_item` VALUES (4,'reset timing','check reset waveform of reset input',0,'radio',4);
+INSERT INTO `erp_status_item` VALUES (5,'FPGA JTAG port test','Set up communication with FPGA through JTAG',0,'radio',5);
+INSERT INTO `erp_status_item` VALUES (6,'Download image to SPI Flash','Test the connection between FPGA and SPI flash.',0,'radio',6);
+INSERT INTO `erp_status_item` VALUES (7,'CPLD program','',0,'radio',7);
+INSERT INTO `erp_status_item` VALUES (8,'Data read and write validation','Test whether host read and write to DDR3 Memory are OK?',0,'radio',8);
+INSERT INTO `erp_status_item` VALUES (9,'Run on Intel Server Board S5520HC(DDR3-1333)','',0,'radio',9);
+INSERT INTO `erp_status_item` VALUES (10,'Run on Intel Oak Creek Canyan Platform(DDR3-1333)','',0,'radio',10);
+INSERT INTO `erp_status_item` VALUES (11,'Run on SuperMicro Server Board H8SGL(DDR3-1333)','',0,'radio',11);
 
 DROP TABLE IF EXISTS `erp_status_status`;
 CREATE TABLE `erp_status_status` (
@@ -234,9 +234,9 @@ CREATE TABLE `erp_status_status` (
   `owner_id` smallint(5) unsigned NOT NULL default '0',
   `substitute_id` smallint(5) unsigned NOT NULL default '0',
   `sort` tinyint(3) unsigned NOT NULL default '0',
-  `status` tinyint(3) NOT NULL default '0',
   `update_time` datetime NOT NULL default '0000-00-00 00:00:00',
-  `mail_status` tinyint(3) unsigned NOT NULL default '0',
+  `status` tinyint(3) NOT NULL default '-1',
+  `mail_status` tinyint(3) NOT NULL default '-1',
   `comment` text NOT NULL,
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
