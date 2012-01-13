@@ -54,7 +54,7 @@ strong.Failed {
 </tr>
 <iterate name="result" id="flow">
 <tr bgcolor="#F5CBAD">
-	<td>F{$item['id']|sprintf='%05s',###}</td>
+	<td>F{$flow['id']|sprintf='%05s',###}</td>
 	<td colspan="2"><a href="__URL__/flow/id/{$flow['id']}">{$flow['name']}</a></td>
 	<td>{$flow['creator']['realname']}</td>
 	<td>{$flow['create_time']}</td>
