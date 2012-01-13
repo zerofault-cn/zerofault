@@ -33,26 +33,27 @@ select.status option, select.board_status option {
 <table cellpadding="3" border="1" bordercolor="#FFFFFF" style="border-collapse:collapse;">
 <tr>
 	<td bgcolor="#BCD1EF">In The Flow:</td>
-	<td bgcolor="#E9E9E9"><a href="__URL__">{$info['flow']['name']}</a></td>
+	<td bgcolor="#E9E9E9"><a href="__URL__/flow/id/{$info['flow']['id']}">{$info['flow']['name']}</a></td>
+	<td align="right" width="50"><a href="__URL__">&lt;&lt;Back</a></td>
 </tr>
 <tr>
 	<td bgcolor="#BCD1EF">Board Name:</td>
-	<td bgcolor="#E9E9E9"><input type="text" id="board_name" value="{$info['name']}" size="30"/></td>
+	<td bgcolor="#E9E9E9" colspan="2"><input type="text" id="board_name" value="{$info['name']}" size="30"/></td>
 </tr>
 <tr>
 	<td bgcolor="#BCD1EF" nowrap="nowrap">Board Information:</td>
-	<td bgcolor="#E9E9E9"><textarea id="board_info" rows="4" cols="40">{$info['info']}</textarea></td>
+	<td bgcolor="#E9E9E9" colspan="2"><textarea id="board_info" rows="4" cols="40">{$info['info']}</textarea></td>
 <tr>
 	<td bgcolor="#BCD1EF">Owner:</td>
-	<td bgcolor="#E9E9E9">{$info['owner']['realname']}</td>
+	<td bgcolor="#E9E9E9" colspan="2">{$info['owner']['realname']}</td>
 </tr>
 <tr>
 	<td bgcolor="#BCD1EF">Create Time:</td>
-	<td bgcolor="#E9E9E9">{$info['create_time']}</td>
+	<td bgcolor="#E9E9E9" colspan="2">{$info['create_time']}</td>
 </tr>
 <tr>
 	<td bgcolor="#BCD1EF">Item Status:</td>
-	<td bgcolor="#E9E9E9">
+	<td bgcolor="#E9E9E9" colspan="2">
 		<table id="status_table" cellpadding="3" border="1" bordercolor="#FFFFFF" style="border-collapse:collapse;margin:0;">
 		<tr>
 			<th>No.</th>
@@ -64,8 +65,8 @@ select.status option, select.board_status option {
 		<iterate name="info.status_list" id="item">
 		<tr class="trbg{$mod}" id="{$item['id']}">
 			<td align="center">{$item['sort']+1}</td>
-			<td nowrap="nowrap">{$item['item']['name']}</td>
-			<td><if condition="empty($item['substitute_id']) eq true">
+			<td>{$item['item']['name']}</td>
+			<td nowrap="nowrap"><if condition="empty($item['substitute_id'])">
 					<if condition="$_SESSION[C('USER_AUTH_KEY')] eq $info['owner_id'] or $_SESSION[C('ADMIN_AUTH_NAME')] or in_array($_SESSION[C('USER_AUTH_KEY')], C('STATUS_ADMIN_ID'))">
 					<select name="owner_{$info['id']}_{$item['id']}" class="owner_id">
 					{$item['owner_opts']}
@@ -79,7 +80,8 @@ select.status option, select.board_status option {
 				{$item['substitute']['realname']}
 				</if>
 			</td>
-			<td><if condition="$_SESSION[C('USER_AUTH_KEY')] eq $info['owner_id'] or $_SESSION[C('USER_AUTH_KEY')] eq $item['owner_id'] or $_SESSION[C('USER_AUTH_KEY')] eq $info['substitute_id'] or $_SESSION[C('ADMIN_AUTH_NAME')] or in_array($_SESSION[C('USER_AUTH_KEY')], C('STATUS_ADMIN_ID'))">
+			<td>
+				<if condition="($item['status'] elt 0 && ($_SESSION[C('USER_AUTH_KEY')] eq $info['owner_id'] or $_SESSION[C('USER_AUTH_KEY')] eq $item['owner_id'] or $_SESSION[C('USER_AUTH_KEY')] eq $item['substitute_id'])) or $_SESSION[C('ADMIN_AUTH_NAME')] or in_array($_SESSION[C('USER_AUTH_KEY')], C('STATUS_ADMIN_ID'))">
 				<select name="substitute_{$info['id']}_{$item['id']}" class="substitute_id"><option value="0">None</option>
 				{$item['substitute_opts']}
 				</select>
@@ -87,14 +89,18 @@ select.status option, select.board_status option {
 				--
 				</if>
 			</td>
-			<td><if condition="$item['status'] egt 0">
+			<td><if condition="$_SESSION[C('USER_AUTH_KEY')] eq (empty($item['substitute_id'])?$item['owner_id']:$item['substitute_id']) or $_SESSION[C('ADMIN_AUTH_NAME')] or in_array($_SESSION[C('USER_AUTH_KEY')], C('STATUS_ADMIN_ID'))">
+					<if condition="$item['status'] egt 0">
 				<select name="status_{$info['id']}_{$item['id']}" class="status">
 					<option value="0" class="Pending" <eq name="item.status" value="0">selected="selected"</eq>>Pending</option>
 					<option value="1" class="Pass" <eq name="item.status" value="1">selected="selected"</eq>>Pass</option>
 					<option value="2" class="Failed" <eq name="item.status" value="2">selected="selected"</eq>>Failed</option>
 				</select>
+					<else />
+					--
+					</if>
 				<else />
-				--
+				{$status_arr[$item['status']]}
 				</if>
 			</td>
 		</tr>
@@ -104,17 +110,20 @@ select.status option, select.board_status option {
 </tr>
 <tr>
 	<td bgcolor="#BCD1EF">Final Result:</td>
-	<td bgcolor="#E9E9E9"><strong class="{$status_arr[$info['status']]}">{$status_arr[$info['status']]}</strong>
+	<td bgcolor="#E9E9E9" colspan="2">
+		<strong class="{$status_arr[$info['status']]}">{$status_arr[$info['status']]}</strong>
+		<if condition="$_SESSION[C('USER_AUTH_KEY')] eq $info['owner_id'] or $_SESSION[C('ADMIN_AUTH_NAME')] or in_array($_SESSION[C('USER_AUTH_KEY')], C('STATUS_ADMIN_ID'))">
 		<select name="board_status_{$info['id']}" class="board_status" id="{$info['id']}">
-			<option value="0" class="Pending" <eq name="item.status" value="0">selected="selected"</eq>>Pending</option>
-			<option value="1" class="Pass" <eq name="item.status" value="1">selected="selected"</eq>>Pass</option>
-			<option value="2" class="Failed" <eq name="item.status" value="2">selected="selected"</eq>>Failed</option>
+			<option value="0" class="Pending" <eq name="info.status" value="0">selected="selected"</eq>>Pending</option>
+			<option value="1" class="Pass" <eq name="info.status" value="1">selected="selected"</eq>>Pass</option>
+			<option value="2" class="Failed" <eq name="info.status" value="2">selected="selected"</eq>>Failed</option>
 		</select>
+		</if>
 	</td>
 </tr>
 <tr>
 	<td bgcolor="#BCD1EF">Comment:</td>
-	<td bgcolor="#FFFFFF" class="comment">
+	<td bgcolor="#FFFFFF" class="comment" colspan="2">
 		<dl id="comment_list">
 		<foreach name="info.comment" item="item">
 			<dt id="dt_{$item['id']}">
@@ -156,7 +165,7 @@ $(document).ready(function() {
 			var field = $(this).attr("class");
 			var value = $(this).val();
 			var text = $(this).find("option:selected").text();
-			myConfirm('Change the '+field.replace("_id", "")+' to "'+text+'"?', "__URL__/update/m/status/id/"+status_id+"/f/"+field+"/v/"+value);
+			myConfirm('Change the '+field.replace("_id", "")+' to "'+text+'"?', "__URL__/update/id/"+status_id+"/f/"+field+"/v/"+value);
 		});
 	});
 	$("select.board_status").change(function() {

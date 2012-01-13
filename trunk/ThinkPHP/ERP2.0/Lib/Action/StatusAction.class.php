@@ -146,7 +146,8 @@ class StatusAction extends BaseAction{
 								'owner_id' => $owner_id,
 								'substitute_id' => 0,
 								'sort' => $i,
-								'status' => $i==0 ? 0 : -1
+								'status' => $i==0 ? 0 : -1,
+								'mail_status' => $i==0 ? 0 : -1
 							);
 							if (!M('StatusStatus')->add($status_data)) {
 								self::_error('Add status fail!'.$this->dao->getLastSql());
@@ -195,7 +196,8 @@ class StatusAction extends BaseAction{
 						'owner_id' => $owner_id,
 						'substitute_id' => 0,
 						'sort' => $i,
-						'status' => $i==0 ? 0 : -1
+						'status' => $i==0 ? 0 : -1,
+						'mail_status' => $i==0 ? 0 : -1
 					);
 					if (!M('StatusStatus')->add($status_data)) {
 						self::_error('Add status fail!'.$this->dao->getLastSql());
@@ -209,6 +211,32 @@ class StatusAction extends BaseAction{
 		}
 	}
 
+	public function flow() {
+		Session::set('sub', MODULE_NAME);
+		
+		$id = empty($_REQUEST['id']) ? 0 : intval($_REQUEST['id']);
+		
+		$flow_info = $this->dao->find($id);
+		$this->assign('flow_info', $flow_info);
+
+		$board_list = D('StatusBoard')->relation(true)->where("flow_id=".$id)->order('id')->select();
+		$this->assign('board_list', $board_list);
+
+		$owner_arr = explode(',', $flow_info['owner_ids']);
+		$item_board_status = array();
+		foreach (explode(',', $flow_info['item_ids']) as $i=>$item_id) {
+			$item_board_status[$i] = array(
+				'item_info' => M('StatusItem')->find($item_id),
+				'owner' => M('Staff')->where("id=".$owner_arr[$i])->getField('realname'),
+				'board_status' => D('StatusStatus')->relation(true)->where("flow_id=".$id." and item_id=".$item_id." and sort=".$i)->order("board_id")->select()
+			);
+		}
+		$this->assign('item_board_status', $item_board_status);
+
+		$this->assign('ACTION_TITLE', 'Flow Detail');
+		$this->assign('content', ACTION_NAME);
+		$this->display('Layout:ERP_layout');
+	}
 	public function board() {
 		Session::set('sub', MODULE_NAME);
 		$dao = D('StatusBoard');
@@ -255,7 +283,8 @@ class StatusAction extends BaseAction{
 						'owner_id' => $owner_id,
 						'substitute_id' => 0,
 						'sort' => $i,
-						'status' => $i==0 ? 0 : -1
+						'status' => $i==0 ? 0 : -1,
+						'mail_status' => $i==0 ? 0 : -1
 					);
 					if (!M('StatusStatus')->add($status_data)) {
 						self::_error('Add status fail!'.$this->dao->getLastSql());
@@ -319,7 +348,66 @@ class StatusAction extends BaseAction{
 			$this->display('Layout:ERP_layout');
 		}
 	}
-
+	public function update() {
+		$board_id = empty($_REQUEST['board_id']) ? 0 : intval($_REQUEST['board_id']);
+		$status_id = empty($_REQUEST['id']) ? 0 : intval($_REQUEST['id']);
+		$field = $_REQUEST['f'];
+		$value = $_REQUEST['v'];
+		if ($status_id > 0) {
+			//改变Status状态
+			$dao = M('StatusStatus');
+			$info = $dao->where("id=".$status_id)->find();
+			$rs = true;
+			if ($info[$field] != $value) {
+				$rs = $dao->where("id=".$status_id)->setField(array($field, 'update_time'), array($value, date('Y-m-d H:i:s')));
+				//self::mail_task('owner_status', $task_id, $staff_id);
+			}
+			if ('status'==$field) {
+				if (0==$value) {
+					//有Owner改变状态为Pending，则检查Board状态，如果不为Pending，则改为Pending
+					if (0 != M('StatusBoard')->where("id=".$info['board_id'])->getField('status')) {
+						M('StatusBoard')->where("id=".$info['board_id'])->setField(array('status', 'update_time'), array(0, date('Y-m-d H:i:s')));
+						//self::mail_task('task_status', $task_id);
+					}
+				}
+				elseif (1==$value) {
+					//Turn to next
+					if ($dao->where("board_id=".$info['board_id']." and sort>".$info['sort']." and status=0")->count()==0) {
+						$dao->where("board_id=".$info['board_id']." and sort>".$info['sort']." and status=-1")->order('sort')->limit(1)->setField('status', 0);
+					}
+					//如果所有Status都为Pass，则设置Board为Pass
+					if ($dao->where("board_id=".$info['board_id'])->count() == $dao->where("board_id=".$info['board_id']." and status=1")->count()) {
+						M('StatusBoard')->where('id='.$info['board_id'])->setField(array('status', 'update_time'), array(1, date('Y-m-d H:i:s')));
+					}
+				}
+				else {
+					//设置Board状态为Failed
+					M('StatusBoard')->where('id='.$info['board_id'])->setField(array('status', 'update_time'), array(2, date('Y-m-d H:i:s')));
+					//self::mail_task('task_status', $task_id);
+				}
+			}
+		}
+		else {
+			//改变Board状态
+			$dao = M('StatusBoard');
+			$info = $dao->where('id='.$board_id)->find();
+			$rs = true;
+			if ($info[$field] != $value) {
+				$dao->where('id='.$board_id)->setField(array($field, 'update_time'), array($value, date('Y-m-d H:i:s')));
+				//self::mail_task('task_status', $task_id);
+			}
+			if ('status'==$field && 1==$value) {
+				//总任务Close，则全部Owner状态自动Close
+				//M('TaskOwner')->where('task_id='.$task_id)->setField(array('status', 'action_time'), array(1, date('Y-m-d H:i:s')));
+			}
+		}
+		if(false !== $rs) {
+			self::_success('Update success!');
+		}
+		else {
+			self::_error('Update fail!'.(C('APP_DEBUG')? $dao->getLastSql() : ''));
+		}
+	}
 	public function template() {
 		Session::set('sub', MODULE_NAME.'/'.ACTION_NAME);
 		$dao = D('StatusTemplate');
@@ -440,7 +528,7 @@ class StatusAction extends BaseAction{
 			$dao->name = $name;
 			$dao->description = trim($_REQUEST['description']);
 			$dao->owner_id = intval($_REQUEST['owner_id']);
-			$dao->type = $type;
+			$dao->type = 'radio';
 			$dao->sort = max(1, intval($_REQUEST['sort']));
 			if ($id>0) {
 				if(false !== $dao->save()){
@@ -561,55 +649,6 @@ class StatusAction extends BaseAction{
 			self::_error('Delete comment fail!'.(C('APP_DEBUG')?$dao->getLastSql():''));
 		}
 	}
-	public function update() {
-		$board_id = empty($_REQUEST['board_id']) ? 0 : intval($_REQUEST['board_id']);
-		$status_id = empty($_REQUEST['id']) ? 0 : intval($_REQUEST['id']);
-		$field = $_REQUEST['f'];
-		$value = $_REQUEST['v'];
-		if ($status_id > 0) {
-			//改变Status状态
-			$dao = M('StatusStatus');
-			$info = $dao->where("id=".$status_id)->find();
-			$rs = true;
-			if ($info[$field] != $value) {
-				$rs = $dao->where("id=".$status_id)->setField(array($field, 'update_time'), array($value, date('Y-m-d H:i:s')));
-				//self::mail_task('owner_status', $task_id, $staff_id);
-			}
-			if ('status'==$field && 0==$value) {
-				//有Owner改变状态为Pending，则检查Board状态，如果不为Pending，则改为Pending
-				if (0 != M('StatusBoard')->where("id=".$info['board_id'])->getField('status')) {
-					M('StatusBoard')->where("id=".$info['board_id'])->setField(array('status', 'update_time'), array(0, date('Y-m-d H:i:s')));
-					//self::mail_task('task_status', $task_id);
-				}
-			}
-			else {
-				//检查是否已没有Pending和Failed
-				if ($dao->where("board_id=".$info['board_id']." and (status=0 or status=-1)")->count() == 0) {
-					M('StatusBoard')->where('id='.$info['board_id'])->setField(array('status', 'update_time'), array(1, date('Y-m-d H:i:s')));
-					//self::mail_task('task_status', $task_id);
-				}
-			}
-		}
-		else {
-			//改变Board状态
-			$dao = M('StatusBoard');
-			$info = $dao->where('id='.$board_id)->find();
-			$rs = true;
-			if ($info[$field] != $value) {
-				$dao->where('id='.$board_id)->setField(array($field, 'update_time'), array($value, date('Y-m-d H:i:s')));
-				//self::mail_task('task_status', $task_id);
-			}
-			if ('status'==$field && 1==$value) {
-				//总任务Close，则全部Owner状态自动Close
-				//M('TaskOwner')->where('task_id='.$task_id)->setField(array('status', 'action_time'), array(1, date('Y-m-d H:i:s')));
-			}
-		}
-		if(false !== $rs) {
-			self::_success('Update success!');
-		}
-		else {
-			self::_error('Update fail!'.(C('APP_DEBUG')? $dao->getLastSql() : ''));
-		}
-	}
+
 }
 ?>

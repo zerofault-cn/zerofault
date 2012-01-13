@@ -5,7 +5,6 @@
 	<th>Sort</th>
 	<th>Name</th>
 	<th>Description</th>
-	<th>Type</th>
 	<th>Default Owner</th>
 	<th>OP</th>
 </tr>
@@ -14,7 +13,6 @@
 	<td class="sort" align="center">{$item['sort']}</td>
 	<td class="name">{$item['name']}</td>
 	<td class="description">{$item['description']}</td>
-	<td>{$item['type']}</td>
 	<td class="owner">{$item['owner']['realname']}</td>
 	<td>
 		<gt name="item.id" value="1">
@@ -26,14 +24,13 @@
 </iterate>
 <empty name="result">
 <tr>
-	<td colspan="6" align="center">No Record</td>
+	<td colspan="5" align="center">No Record</td>
 </tr>
 </empty>
 <tr>
 	<td><input type="text" name="sort" class="sort" value="{$i+1}" size="3"/></td>
 	<td><input type="text" name="name" class="name" /></td>
 	<td><input type="text" name="description" class="description" /></td>
-	<td><input type="radio" name="type" value="radio" checked="checked" />radio</td>
 	<td><select name="owner_id" class="owner"><option value="0">None</option>{$staff_opts}</select></td>
 	<td><input type="hidden" name="id" class="id" value="" />
 		<input type="submit" name="submit" class="submit" value="Add" />
