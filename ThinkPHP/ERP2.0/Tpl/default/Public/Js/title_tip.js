@@ -11,7 +11,7 @@ function showTitle(obj, event) {
 		if ($(obj).is('a')) {
 			offset_top += 10;
 		}
-		$("#title_layer").html(title).css({
+		$("#title_layer").html(title.replace(/\n/ig, "<br />")).css({
 			"left" : offset_left+e.clientX+$(document).scrollLeft(),
 			"top" : offset_top+e.clientY+$(document).scrollTop()
 		}).show();

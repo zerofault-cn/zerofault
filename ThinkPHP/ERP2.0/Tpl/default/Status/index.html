@@ -1,7 +1,20 @@
 <style>
+#title_layer {
+	position: absolute;
+	border: 1px solid #767676;
+	padding: 6px;
+	background-color: #FFFFDD;
+	border-radius: 6px;
+	-moz-border-radius: 6px;
+	-webkit-border-radius: 6px;
+	z-index: 200;
+}
 #tTable td.board_name {
 	padding-left: 58px;
 	background: 38px center no-repeat;
+}
+#tTable td.None {
+	background-image:url("../Public/Images/159.png");
 }
 #tTable td.Pending {
 	background-image:url("../Public/Images/153.png");
@@ -12,7 +25,9 @@
 #tTable td.Failed {
 	background-image:url("../Public/Images/151.png");
 }
-
+strong.None{
+	color: #808080;
+}
 strong.Pass {
 	color: #339900;
 }
@@ -32,15 +47,6 @@ strong.Failed {
 </p>
 
 <table id="tTable" cellpadding="3" border="1" bordercolor="#FFFFFF" style="border-collapse:collapse;">
-<tr>
-	<td></td>
-	<td></td>
-	<td></td>
-	<td></td>
-	<td></td>
-	<td></td>
-	<td></td>
-</tr>
 <tr>
 	<td colspan="7">{$page}</td>
 </tr>
@@ -70,7 +76,7 @@ strong.Failed {
 <notempty name="flow.board_list">
 	<iterate name="flow.board_list" id="board">
 <tr class="trbg{$mod}">
-	<td colspan="2" class="board_name {$status_arr[$board['status']]}"><a href="__URL__/board/id/{$board['id']}" title="View board status detail">{$board['name']}</a></td>
+	<td colspan="2" class="board_name {$status_arr[$board['status']]}"><a href="__URL__/board/id/{$board['id']}" title="{$board['info']}">{$board['name']}</a></td>
 	<td width="50"><strong class="{$status_arr[$board['status']]}">{$status_arr[$board['status']]}</strong></td>
 	<td>{$board['owner']['realname']}</td>
 	<td>{$board['create_time']}</td>
@@ -91,11 +97,28 @@ strong.Failed {
 <tr>
 	<td colspan="7">{$page}</td>
 </tr>
+<tr>
+	<td style="padding:0;"></td>
+	<td style="padding:0;"></td>
+	<td style="padding:0;"></td>
+	<td style="padding:0;"></td>
+	<td style="padding:0;"></td>
+	<td style="padding:0;"></td>
+	<td style="padding:0;"></td>
+</tr>
 </table>
 <p class="center"></p>
+<div id="title_layer" class="w10" style="display:none;"></div>
+<script language="JavaScript" type="text/javascript" src="../Public/Js/title_tip.js"></script>
 <script language="JavaScript" type="text/javascript">
 $(document).ready(function(){
-
+	$("th[title], td[title], a[title]").each(function() {
+		$(this).hover(
+			function(event) { showTitle(this, event);},
+			function() { hideTitle(this);}
+		).mousemove(function(event) {
+			moveTitle(event);
+		});
+	});
 });
-
 </script>

@@ -15,6 +15,10 @@
 .comment dt span, .comment dd span{
 	float:right;
 }
+
+td.None, strong.None, option.None{
+	color: #808080;
+}
 td.Pass, strong.Pass, option.Pass{
 	color: #339900;
 }
@@ -38,11 +42,11 @@ select.status option, select.board_status option {
 </tr>
 <tr>
 	<td bgcolor="#BCD1EF">Board Name:</td>
-	<td bgcolor="#E9E9E9" colspan="2"><input type="text" id="board_name" value="{$info['name']}" size="30"/></td>
+	<td bgcolor="#E9E9E9" colspan="2"><input type="text" class="edit_field" id="name" value="{$info['name']}" size="30"/><img src="../Public/Images/sign_tick.png" align="absmiddle"/></td>
 </tr>
 <tr>
 	<td bgcolor="#BCD1EF" nowrap="nowrap">Board Information:</td>
-	<td bgcolor="#E9E9E9" colspan="2"><textarea id="board_info" rows="4" cols="40">{$info['info']}</textarea></td>
+	<td bgcolor="#E9E9E9" colspan="2"><textarea class="edit_field" id="info" rows="4" cols="40">{$info['info']}</textarea><img src="../Public/Images/sign_tick.png" align="absmiddle"/></td>
 <tr>
 	<td bgcolor="#BCD1EF">Owner:</td>
 	<td bgcolor="#E9E9E9" colspan="2">{$info['owner']['realname']}</td>
@@ -66,7 +70,8 @@ select.status option, select.board_status option {
 		<tr class="trbg{$mod}" id="{$item['id']}">
 			<td align="center">{$item['sort']+1}</td>
 			<td>{$item['item']['name']}</td>
-			<td nowrap="nowrap"><if condition="empty($item['substitute_id'])">
+			<td nowrap="nowrap">
+				<if condition="empty($item['substitute_id'])">
 					<if condition="$_SESSION[C('USER_AUTH_KEY')] eq $info['owner_id'] or $_SESSION[C('ADMIN_AUTH_NAME')] or in_array($_SESSION[C('USER_AUTH_KEY')], C('STATUS_ADMIN_ID'))">
 					<select name="owner_{$info['id']}_{$item['id']}" class="owner_id">
 					{$item['owner_opts']}
@@ -81,7 +86,7 @@ select.status option, select.board_status option {
 				</if>
 			</td>
 			<td>
-				<if condition="($item['status'] elt 0 && ($_SESSION[C('USER_AUTH_KEY')] eq $info['owner_id'] or $_SESSION[C('USER_AUTH_KEY')] eq $item['owner_id'] or $_SESSION[C('USER_AUTH_KEY')] eq $item['substitute_id'])) or $_SESSION[C('ADMIN_AUTH_NAME')] or in_array($_SESSION[C('USER_AUTH_KEY')], C('STATUS_ADMIN_ID'))">
+				<if condition="$_SESSION[C('USER_AUTH_KEY')] eq $info['owner_id'] or $_SESSION[C('USER_AUTH_KEY')] eq $item['owner_id'] or $_SESSION[C('USER_AUTH_KEY')] eq $item['substitute_id'] or $_SESSION[C('ADMIN_AUTH_NAME')] or in_array($_SESSION[C('USER_AUTH_KEY')], C('STATUS_ADMIN_ID'))">
 				<select name="substitute_{$info['id']}_{$item['id']}" class="substitute_id"><option value="0">None</option>
 				{$item['substitute_opts']}
 				</select>
@@ -89,16 +94,13 @@ select.status option, select.board_status option {
 				--
 				</if>
 			</td>
-			<td><if condition="$_SESSION[C('USER_AUTH_KEY')] eq (empty($item['substitute_id'])?$item['owner_id']:$item['substitute_id']) or $_SESSION[C('ADMIN_AUTH_NAME')] or in_array($_SESSION[C('USER_AUTH_KEY')], C('STATUS_ADMIN_ID'))">
-					<if condition="$item['status'] egt 0">
+			<td><if condition="$_SESSION[C('USER_AUTH_KEY')] eq $item['owner_id'] or $_SESSION[C('USER_AUTH_KEY')] eq $item['substitute_id'] or $_SESSION[C('ADMIN_AUTH_NAME')] or in_array($_SESSION[C('USER_AUTH_KEY')], C('STATUS_ADMIN_ID'))">
 				<select name="status_{$info['id']}_{$item['id']}" class="status">
+					<option value="-1" class="None">None</option>
 					<option value="0" class="Pending" <eq name="item.status" value="0">selected="selected"</eq>>Pending</option>
 					<option value="1" class="Pass" <eq name="item.status" value="1">selected="selected"</eq>>Pass</option>
 					<option value="2" class="Failed" <eq name="item.status" value="2">selected="selected"</eq>>Failed</option>
 				</select>
-					<else />
-					--
-					</if>
 				<else />
 				{$status_arr[$item['status']]}
 				</if>
@@ -114,6 +116,7 @@ select.status option, select.board_status option {
 		<strong class="{$status_arr[$info['status']]}">{$status_arr[$info['status']]}</strong>
 		<if condition="$_SESSION[C('USER_AUTH_KEY')] eq $info['owner_id'] or $_SESSION[C('ADMIN_AUTH_NAME')] or in_array($_SESSION[C('USER_AUTH_KEY')], C('STATUS_ADMIN_ID'))">
 		<select name="board_status_{$info['id']}" class="board_status" id="{$info['id']}">
+			<option value="-1" class="None">None</option>
 			<option value="0" class="Pending" <eq name="info.status" value="0">selected="selected"</eq>>Pending</option>
 			<option value="1" class="Pass" <eq name="info.status" value="1">selected="selected"</eq>>Pass</option>
 			<option value="2" class="Failed" <eq name="info.status" value="2">selected="selected"</eq>>Failed</option>
@@ -168,6 +171,19 @@ $(document).ready(function() {
 			myConfirm('Change the '+field.replace("_id", "")+' to "'+text+'"?', "__URL__/update/id/"+status_id+"/f/"+field+"/v/"+value);
 		});
 	});
+	$(".edit_field").each(function() {
+		var field = $(this).attr("id");
+		$(this).next().css({"cursor": "pointer"}).click(function() {
+			$.post("__URL__/update/", {
+				"board_id" : {$info['id']},
+				"f" : field,
+				"v" : $(this).prev().val()
+			}, function(str) {
+				myAlert(str);
+			});
+		});
+	});
+
 	$("select.board_status").change(function() {
 		var board_id = $(this).attr("id");
 		var field = 'status';
@@ -179,7 +195,7 @@ $(document).ready(function() {
 var has_reset = false;
 function edit_comment(id) {
 	$("#CommentForm input[name=id]").val(id);
-	$.get('__URL__/comment/id/'+id, function(str) {
+	$.get("__URL__/comment/id/"+id, function(str) {
 			$("#CommentForm textarea[name=content]").val(str).focus();
 		});
 	$("#CommentForm input[name=submit]").val("Submit");
