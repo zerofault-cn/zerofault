@@ -16,6 +16,9 @@ th.board {
 th.sp, td.sp {
 	background-color: #FFCC99;
 }
+td.None, strong.None, option.None{
+	color: #808080;
+}
 td.Pass, strong.Pass, option.Pass{
 	color: #339900;
 }
@@ -37,7 +40,7 @@ select.status option, select.board_status option {
 	<th>Default Owner</th>
 	<th class="sp"> </th>
 	<foreach name="board_list" item="board">
-	<th class="board"><a href="__URL__/board/id/{$board['id']}" title="{$board['info']|nl2br}">{$board['name']}</a></th>
+	<th class="board"><a href="__URL__/board/id/{$board['id']}" title="<b>Owner: </b>{$board['owner']['realname']}<br /><b>Information:<br /></b>{$board['info']|nl2br}">{$board['name']}</a></th>
 	</foreach>
 </tr>
 <iterate name="item_board_status" id="item">
@@ -47,16 +50,13 @@ select.status option, select.board_status option {
 	<td>{$item['owner']}</td>
 	<td class="sp"> </td>
 	<foreach name="item.board_status" item="status">
-	<td><if condition="$_SESSION[C('USER_AUTH_KEY')] eq (empty($status['substitute_id'])?$status['owner_id']:$status['substitute_id']) or $_SESSION[C('ADMIN_AUTH_NAME')] or in_array($_SESSION[C('USER_AUTH_KEY')], C('STATUS_ADMIN_ID'))">
-			<if condition="$status['status'] egt 0">
+	<td><if condition="$_SESSION[C('USER_AUTH_KEY')] eq $status['owner_id'] or $_SESSION[C('USER_AUTH_KEY')] eq $status['substitute_id'] or $_SESSION[C('ADMIN_AUTH_NAME')] or in_array($_SESSION[C('USER_AUTH_KEY')], C('STATUS_ADMIN_ID'))">
 		<select name="board_status_{$item['item_info']['id']}_{$status['id']}" class="status" id="{$status['id']}">
+			<option value="-1" class="None">None</option>
 			<option value="0" class="Pending" <eq name="status.status" value="0">selected="selected"</eq>>Pending</option>
 			<option value="1" class="Pass" <eq name="status.status" value="1">selected="selected"</eq>>Pass</option>
 			<option value="2" class="Failed" <eq name="status.status" value="2">selected="selected"</eq>>Failed</option>
 		</select>
-			<else />
-			--
-			</if>
 		<else />
 		<strong class="{$status_arr[$status['status']]}">{$status_arr[$status['status']]}</strong>
 		</if>
@@ -64,6 +64,22 @@ select.status option, select.board_status option {
 	</foreach>
 </tr>
 </iterate>
+<tr>
+	<td colspan="3" align="right">Final Board Status:</td>
+	<td class="sp"> </td>
+	<foreach name="board_list" item="board">
+		<td>
+			<if condition="$_SESSION[C('USER_AUTH_KEY')] eq $board['owner_id'] or $_SESSION[C('ADMIN_AUTH_NAME')] or in_array($_SESSION[C('USER_AUTH_KEY')], C('STATUS_ADMIN_ID'))">
+			<select name="board_status_{$board['id']}" class="board_status" id="{$board['id']}">
+				<option value="-1" class="None">None</option>
+				<option value="0" class="Pending" <eq name="board.status" value="0">selected="selected"</eq>>Pending</option>
+				<option value="1" class="Pass" <eq name="board.status" value="1">selected="selected"</eq>>Pass</option>
+				<option value="2" class="Failed" <eq name="board.status" value="2">selected="selected"</eq>>Failed</option>
+			</select>
+			</if>
+		</td>
+	</foreach>
+</tr>
 </table>
 <p class="center"></p>
 <div id="title_layer" class="w10" style="display:none;"></div>
@@ -89,6 +105,14 @@ $(document).ready(function() {
 			myConfirm('Change the status to "'+text+'"?', "__URL__/update/id/"+status_id+"/f/"+field+"/v/"+value);
 		});
 	});
+	$("select.board_status").change(function() {
+		var board_id = $(this).attr("id");
+		var field = 'status';
+		var value = $(this).val();
+		var text = $(this).find("option:selected").text();
+		myConfirm('Change the board '+field+' to "'+text+'"?', "__URL__/update/board_id/"+board_id+"/f/"+field+"/v/"+value);
+	});
+
 })
 var has_reset = false;
 function edit_comment(id) {
