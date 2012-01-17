@@ -22,10 +22,49 @@ class StatusAction extends BaseAction{
 	public function index() {
 		Session::set('sub', MODULE_NAME);
 
+		$this->assign('request', $_REQUEST);
 		//load template
 		$this->assign('template_opts', self::genOptions(M('StatusTemplate')->order('id')->select()));
 		
 		$where = array();
+		if (!empty($_REQUEST['flow_name'])) {
+			$flow_name = trim($_REQUEST['flow_name']);
+			if (strlen($flow_name)>0) {
+				$where['name'] = array('like', '%'.$flow_name.'%');
+			}
+		}
+		if (!empty($_SESSION[MODULE_NAME.'_'.ACTION_NAME.'_creator_id'])) {
+			$creator_id = $_SESSION[MODULE_NAME.'_'.ACTION_NAME.'_creator_id'];
+		}
+		if (isset($_REQUEST['creator_id'])) {
+			$creator_id = intval($_REQUEST['creator_id']);
+		}
+		$_SESSION[MODULE_NAME.'_'.ACTION_NAME.'_creator_id'] = $creator_id;
+		$creator_arr = $this->dao->join("Inner Join erp_staff on erp_staff.id=erp_status_flow.creator_id")->distinct(true)->field("erp_staff.id as id, erp_staff.realname as realname")->order("realname")->select();
+		$this->assign('creator_opts', self::genOptions($creator_arr, $creator_id, 'realname'));
+		if (!empty($creator_id)) {
+			$where['creator_id'] = $creator_id;
+		}
+
+		$board_where = array();
+		if (!empty($_REQUEST['board_name'])) {
+			$board_name = trim($_REQUEST['board_name']);
+			if (strlen($board_name)>0) {
+				$board_where['name'] = array('like', '%'.$board_name.'%');
+			}
+		}
+		if (!empty($_SESSION[MODULE_NAME.'_'.ACTION_NAME.'_owner_id'])) {
+			$owner_id = $_SESSION[MODULE_NAME.'_'.ACTION_NAME.'_owner_id'];
+		}
+		if (isset($_REQUEST['owner_id'])) {
+			$owner_id = intval($_REQUEST['owner_id']);
+		}
+		$_SESSION[MODULE_NAME.'_'.ACTION_NAME.'_owner_id'] = $owner_id;
+		$owner_arr = M('StatusBoard')->join("Inner Join erp_staff on erp_staff.id=erp_status_board.owner_id")->distinct(true)->field("erp_staff.id as id, erp_staff.realname as realname")->order("realname")->select();
+		$this->assign('owner_opts', self::genOptions($owner_arr, $owner_id, 'realname'));
+		if (!empty($owner_id)) {
+			$board_where['owner_id'] = $owner_id;
+		}
 
 		import("@.Paginator");
 		$limit = 20;
@@ -45,12 +84,13 @@ class StatusAction extends BaseAction{
 		$result = array();
 		foreach ($rs as $i=>$row) {
 			$result[$i] = $row;
-			$result[$i]['board_list'] = D('StatusBoard')->relation(true)->where(array('flow_id'=>$row['id']))->order('name')->select();
+			$board_where['flow_id'] = $row['id'];
+			$result[$i]['board_list'] = D('StatusBoard')->relation(true)->where($board_where)->order('name')->select();
 		}
 		$this->assign('result', $result);
 
 		$this->assign('page', $p->showMultiNavi());
-
+		
 		$this->assign('ACTION_TITLE', 'Flow List');
 		$this->assign('content', ACTION_NAME);
 		$this->display('Layout:ERP_layout');
@@ -153,6 +193,7 @@ class StatusAction extends BaseAction{
 							if (!M('StatusStatus')->add($status_data)) {
 								self::_error('Add status fail!'.$this->dao->getLastSql());
 							}
+							M('StatusBoard')->where("id=".$board_id)->setField(array('status', 'update_time'), array(-1, date('Y-m-d H:i:s')));
 						}
 					}
 					else {
@@ -175,7 +216,7 @@ class StatusAction extends BaseAction{
 					'owner_id' => intval($_REQUEST['board_owner_id']),
 					'create_time' => date('Y-m-d H:i:s'),
 					'update_time' => date('Y-m-d H:i:s'),
-					'status' => 0
+					'status' => -1
 				);
 				if (!$board_id=M('StatusBoard')->add($board_data)) {
 					self::_error('Add board fail!'.$this->dao->getLastSql());
@@ -226,10 +267,14 @@ class StatusAction extends BaseAction{
 		$owner_arr = explode(',', $flow_info['owner_ids']);
 		$item_board_status = array();
 		foreach (explode(',', $flow_info['item_ids']) as $i=>$item_id) {
+			$board_status = D('StatusStatus')->relation(true)->where("flow_id=".$id." and item_id=".$item_id." and sort=".$i)->order("board_id")->select();
+			foreach ($board_status as $j=>$status) {
+				$board_status[$j]['last_comment'] = D('Comment')->relation(true)->where(array('model_name'=>'StatusStatus', 'model_id'=>$status['id']))->order('id desc')->find();
+			}
 			$item_board_status[$i] = array(
 				'item_info' => M('StatusItem')->find($item_id),
 				'owner' => M('Staff')->where("id=".$owner_arr[$i])->getField('realname'),
-				'board_status' => D('StatusStatus')->relation(true)->where("flow_id=".$id." and item_id=".$item_id." and sort=".$i)->order("board_id")->select()
+				'board_status' => $board_status
 			);
 		}
 		$this->assign('item_board_status', $item_board_status);
@@ -262,7 +307,7 @@ class StatusAction extends BaseAction{
 			$dao->info = trim($_REQUEST['board_info']);
 			$dao->owner_id = intval($_REQUEST['owner_id']);
 			$dao->create_time = date('Y-m-d H:i:s');
-			$dao->status = 0;
+			$dao->status = -1;
 			if($board_id = $dao->add()) {
 				//add item status
 				$flow_info = $this->dao->find($flow_id);
@@ -342,7 +387,7 @@ class StatusAction extends BaseAction{
 				$status_list[$i]['substitute_opts'] = self::genOptions(M('Staff')->where(array('status'=>1, 'id'=>array('neq', $status['owner_id'])))->order('realname')->select(), $status['substitute_id'], 'realname');
 			}
 			$info['status_list'] = $status_list;
-			$info['comment'] = D('Comment')->relation(true)->where(array('model_name'=>MODULE_NAME, 'model_id'=>$id, 'status'=>1))->order('id')->select();
+			$info['comment'] = D('Comment')->relation(true)->where(array('model_name'=>'StatusBoard', 'model_id'=>$id, 'status'=>1))->order('id')->select();
 			$this->assign('info', $info);
 			$this->assign('ACTION_TITLE', 'Board Detail');
 			$this->assign('content', ACTION_NAME);
@@ -582,6 +627,13 @@ class StatusAction extends BaseAction{
 
 		self::_delete();
 	}
+	public function status_comment() {
+		$id = empty($_REQUEST['id']) ? 0 : intval($_REQUEST['id']);
+		$this->assign('id', $id);
+		$this->assign('comment', D('Comment')->relation(true)->where(array('model_name'=>'StatusStatus', 'model_id'=>$id, 'status'=>1))->order('id')->select());
+		$this->assign('content', ACTION_NAME);
+		$this->display('Layout:content');
+	}
 	public function comment() {
 		if (!empty($_GET['id'])) {
 			die(M('Comment')->where('id='.$_GET['id'])->getField('content'));
@@ -591,6 +643,7 @@ class StatusAction extends BaseAction{
 		}
 		$dao = D('Comment');
 		$id = empty($_REQUEST['id']) ? 0 : intval($_REQUEST['id']);
+		$model_name = empty($_REQUEST['model_name']) ? MODULE_NAME : trim($_REQUEST['model_name']);
 		empty($_REQUEST['model_id']) && self::_error('No board id specified!');
 		$model_id = intval($_REQUEST['model_id']);
 		$content = trim($_REQUEST['content']);
@@ -599,7 +652,7 @@ class StatusAction extends BaseAction{
 			$dao->find($id);
 		}
 		else {
-			$dao->model_name = MODULE_NAME;
+			$dao->model_name = $model_name;
 			$dao->model_id = $model_id;
 			$dao->staff_id = $_SESSION[C('USER_AUTH_KEY')];
 			$dao->create_time = date('Y-m-d H:i:s');
