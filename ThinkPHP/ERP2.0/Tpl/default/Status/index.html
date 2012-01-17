@@ -45,7 +45,29 @@ strong.Failed {
 	</select>
 	<input type="button" value="Create" onclick="javascript:document.location='__URL__/form/template_id/'+$('#template_id').val();" />
 </p>
-
+<table>
+<tr>
+	<td>
+		<form method="post">
+		<table id="search_table" cellpadding="3" border="1" bordercolor="#FFFFFF" style="border-collapse:collapse;">
+		<tr>
+			<th>Flow Name</th>
+			<th>Flow Creator</th>
+			<th>Board Name</th>
+			<th>Board Owner</th>
+			<td rowspan="2"><input type="submit" value="Filter"/></td>
+		</tr>
+		<tr>
+			<td><input type="text" name="flow_name" size="14" value="{$request['flow_name']}"/></td>
+			<td><select name="creator_id"><option value="">All</option>{$creator_opts}</select></td>
+			<td><input type="text" name="board_name" size="14" value="{$request['board_name']}"/></td>
+			<td><select name="owner_id"><option value="">All</option>{$owner_opts}</select></td>
+		</tr>
+		</table>
+		</form>
+	</td>
+</tr>
+</table>
 <table id="tTable" cellpadding="3" border="1" bordercolor="#FFFFFF" style="border-collapse:collapse;">
 <tr>
 	<td colspan="7">{$page}</td>

@@ -31,6 +31,9 @@ td.Failed, strong.Failed, option.Failed{
 select.status option, select.board_status option {
 	font-weight:bold;
 }
+td.focus {
+	background-color: #FFCC33;
+}
 </style>
 <p class="page_title_text">Board Status Detail</p>
 <table cellpadding="3" border="1" bordercolor="#FFFFFF" style="border-collapse:collapse;"><tr><td>
@@ -66,44 +69,41 @@ select.status option, select.board_status option {
 			<th>Substitute</th>
 			<th>Status</th>
 		</tr>
-		<iterate name="info.status_list" id="item">
-		<tr class="trbg{$mod}" id="{$item['id']}">
-			<td align="center">{$item['sort']+1}</td>
-			<td>{$item['item']['name']}</td>
+		<iterate name="info.status_list" id="status">
+		<tr class="trbg{$mod}" id="{$status['id']}">
+			<td align="center">{$status['sort']+1}</td>
+			<td>{$status['item']['name']}</td>
 			<td nowrap="nowrap">
-				<if condition="empty($item['substitute_id'])">
+				<if condition="empty($status['substitute_id'])">
 					<if condition="$_SESSION[C('USER_AUTH_KEY')] eq $info['owner_id'] or $_SESSION[C('ADMIN_AUTH_NAME')] or in_array($_SESSION[C('USER_AUTH_KEY')], C('STATUS_ADMIN_ID'))">
-					<select name="owner_{$info['id']}_{$item['id']}" class="owner_id">
-					{$item['owner_opts']}
+					<select name="owner_{$info['id']}_{$status['id']}" class="owner_id">
+					{$status['owner_opts']}
 					</select>
 					<else />
-					{$item['owner']['realname']}
+					{$status['owner']['realname']}
 					</if>
 				<else />
-				{$item['owner']['realname']}
+				{$status['owner']['realname']}
 				<img src="../Public/Images/105.png" alt="Transfer To" align="absmiddle"/>
-				{$item['substitute']['realname']}
+				{$status['substitute']['realname']}
 				</if>
 			</td>
 			<td>
-				<if condition="$_SESSION[C('USER_AUTH_KEY')] eq $info['owner_id'] or $_SESSION[C('USER_AUTH_KEY')] eq $item['owner_id'] or $_SESSION[C('USER_AUTH_KEY')] eq $item['substitute_id'] or $_SESSION[C('ADMIN_AUTH_NAME')] or in_array($_SESSION[C('USER_AUTH_KEY')], C('STATUS_ADMIN_ID'))">
-				<select name="substitute_{$info['id']}_{$item['id']}" class="substitute_id"><option value="0">None</option>
-				{$item['substitute_opts']}
+				<if condition="$_SESSION[C('USER_AUTH_KEY')] eq $info['owner_id'] or $_SESSION[C('USER_AUTH_KEY')] eq $status['owner_id'] or $_SESSION[C('USER_AUTH_KEY')] eq $status['substitute_id'] or $_SESSION[C('ADMIN_AUTH_NAME')] or in_array($_SESSION[C('USER_AUTH_KEY')], C('STATUS_ADMIN_ID'))">
+				<select name="substitute_{$info['id']}_{$status['id']}" class="substitute_id"><option value="0">None</option>
+				{$status['substitute_opts']}
 				</select>
 				<else />
 				--
 				</if>
 			</td>
-			<td><if condition="$_SESSION[C('USER_AUTH_KEY')] eq $item['owner_id'] or $_SESSION[C('USER_AUTH_KEY')] eq $item['substitute_id'] or $_SESSION[C('ADMIN_AUTH_NAME')] or in_array($_SESSION[C('USER_AUTH_KEY')], C('STATUS_ADMIN_ID'))">
-				<select name="status_{$info['id']}_{$item['id']}" class="status">
+			<td <if condition="$_SESSION[C('USER_AUTH_KEY')] eq $status['owner_id'] or $_SESSION[C('USER_AUTH_KEY')] eq $status['substitute_id'] or $_SESSION[C('ADMIN_AUTH_NAME')] or in_array($_SESSION[C('USER_AUTH_KEY')], C('STATUS_ADMIN_ID'))">class="edit"</if>>
+				<strong class="{$status_arr[$status['status']]}">{$status_arr[$status['status']]}</strong><select name="status_{$info['id']}_{$status['id']}" class="status" style="display:none;">
 					<option value="-1" class="None">None</option>
-					<option value="0" class="Pending" <eq name="item.status" value="0">selected="selected"</eq>>Pending</option>
-					<option value="1" class="Pass" <eq name="item.status" value="1">selected="selected"</eq>>Pass</option>
-					<option value="2" class="Failed" <eq name="item.status" value="2">selected="selected"</eq>>Failed</option>
+					<option value="0" class="Pending" <eq name="status.status" value="0">selected="selected"</eq>>Pending</option>
+					<option value="1" class="Pass" <eq name="status.status" value="1">selected="selected"</eq>>Pass</option>
+					<option value="2" class="Failed" <eq name="status.status" value="2">selected="selected"</eq>>Failed</option>
 				</select>
-				<else />
-				{$status_arr[$item['status']]}
-				</if>
 			</td>
 		</tr>
 		</iterate>
@@ -147,7 +147,8 @@ select.status option, select.board_status option {
 		<p>No Comment!</p>
 		</empty>
 		</dl>
-		<form id="CommentForm" action="__URL__/comment" method="post" target="_iframe" name="addComment" enctype="multipart/form-data">
+		<form id="CommentForm" action="__URL__/comment" method="post" target="_iframe">
+		<input type="hidden" name="model_name" value="StatusBoard" />
 		<input type="hidden" name="model_id" value="{$info['id']}" />
 		<input type="hidden" name="id" value="" />
 		<textarea class="tinymce" name="content" cols="80" rows="5"></textarea>
@@ -162,6 +163,10 @@ select.status option, select.board_status option {
 <p class="center"></p>
 <script language="JavaScript" type="text/javascript">
 $(document).ready(function() {
+	$("td.edit").each(function(i) {
+		setEditable(this, i);
+	});
+
 	$("#status_table select").each(function() {
 		$(this).change(function() {
 			var status_id = $(this).parent().parent().attr("id");
@@ -191,7 +196,35 @@ $(document).ready(function() {
 		var text = $(this).find("option:selected").text();
 		myConfirm('Change the board '+field+' to "'+text+'"?', "__URL__/update/board_id/"+board_id+"/f/"+field+"/v/"+value);
 	});
-})
+});
+
+function setEditable(obj, n) {
+	$(obj).css('cursor', 'pointer').mouseover(function(){
+		$(this).addClass("focus");
+	}).mouseout(function(){
+		$(this).removeClass("focus");
+	}).click(function(){
+		if ($(this).children('select').css('display') != 'none') {
+			return;
+		}
+		$("td.editing").children('select').hide();
+		$("td.editing").children('strong').show();
+		$("td.editing").removeClass('editing');
+		var width = $(this).width();
+		$(this).children('strong').hide();
+		$(this).children("select").show().focus().keydown(function(e){
+			var keyCode=e.keyCode || window.event.keyCode;
+			if(keyCode==27) {
+				cancel_edit(this);
+			}
+		});
+		$(this).addClass('editing');
+	});
+}
+function cancel_edit(obj){
+	$(obj).hide().prev().show();
+}
+
 var has_reset = false;
 function edit_comment(id) {
 	$("#CommentForm input[name=id]").val(id);
@@ -237,5 +270,4 @@ function remove_comment(id) {
 		$("#comment_list dd#dd_"+id).remove();
 	}
 }
-
 </script>
