@@ -89,11 +89,11 @@ strong.Failed {
 <iterate name="result" id="flow">
 <tr bgcolor="#F5CBAD" class="flow">
 	<td>F{$flow['id']|sprintf='%05s',###}</td>
-	<td colspan="2"><a href="__URL__/flow/id/{$flow['id']}">{$flow['name']}</a></td>
+	<td colspan="2" nowrap="nowrap"><a href="__URL__/flow/id/{$flow['id']}">{$flow['name']}</a></td>
 	<td>{$flow['creator']['realname']}</td>
 	<td>{$flow['create_time']}</td>
 	<td>{$flow['update_time']}</td>
-	<td>
+	<td style="padding: 4px;">
 		<if condition="$_SESSION[C('USER_AUTH_KEY')] eq $flow['owner_id'] or $_SESSION[C('ADMIN_AUTH_NAME')] or in_array($_SESSION[C('USER_AUTH_KEY')], C('STATUS_ADMIN_ID'))">
 		<a href="__URL__/form/id/{$flow['id']}">Edit</a>
 		<a href="javascript:void(0);" onclick="myConfirm('Are you sure to delete this item?', '__URL__/delete/id/{$flow['id']}');" target="_iframe">Delete</a>
