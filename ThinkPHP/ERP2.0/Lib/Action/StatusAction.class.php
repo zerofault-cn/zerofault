@@ -262,6 +262,9 @@ class StatusAction extends BaseAction{
 		$this->assign('flow_info', $flow_info);
 
 		$board_list = D('StatusBoard')->relation(true)->where("flow_id=".$id)->order('id')->select();
+		foreach ($board_list as $i=>$board) {
+			$board_list[$i]['last_comment'] = M('Comment')->where(array('model_name'=>'StatusBoard', 'model_id'=>$board['id']))->order('id desc')->find();
+		}
 		$this->assign('board_list', $board_list);
 
 		$owner_arr = explode(',', $flow_info['owner_ids']);
@@ -269,7 +272,7 @@ class StatusAction extends BaseAction{
 		foreach (explode(',', $flow_info['item_ids']) as $i=>$item_id) {
 			$board_status = D('StatusStatus')->relation(true)->where("flow_id=".$id." and item_id=".$item_id." and sort=".$i)->order("board_id")->select();
 			foreach ($board_status as $j=>$status) {
-				$board_status[$j]['last_comment'] = D('Comment')->relation(true)->where(array('model_name'=>'StatusStatus', 'model_id'=>$status['id']))->order('id desc')->find();
+				$board_status[$j]['last_comment'] = M('Comment')->where(array('model_name'=>'StatusStatus', 'model_id'=>$status['id']))->order('id desc')->find();
 			}
 			$item_board_status[$i] = array(
 				'item_info' => M('StatusItem')->find($item_id),
@@ -627,13 +630,17 @@ class StatusAction extends BaseAction{
 
 		self::_delete();
 	}
-	public function status_comment() {
+
+	public function list_comment() {
 		$id = empty($_REQUEST['id']) ? 0 : intval($_REQUEST['id']);
 		$this->assign('id', $id);
-		$this->assign('comment', D('Comment')->relation(true)->where(array('model_name'=>'StatusStatus', 'model_id'=>$id, 'status'=>1))->order('id')->select());
+		$model = empty($_REQUEST['model']) ? 'StatusStatus' : trim($_REQUEST['model']);
+		$this->assign('model', $model);
+		$this->assign('comment', D('Comment')->relation(true)->where(array('model_name'=>$model, 'model_id'=>$id, 'status'=>1))->order('id')->select());
 		$this->assign('content', ACTION_NAME);
 		$this->display('Layout:content');
 	}
+
 	public function comment() {
 		if (!empty($_GET['id'])) {
 			die(M('Comment')->where('id='.$_GET['id'])->getField('content'));
