@@ -9,6 +9,12 @@
 	-webkit-border-radius: 6px;
 	z-index: 200;
 }
+#tTable tr.flow, #tTable tr.flow a {
+	font-weight: bold;
+}
+#tTable tr.flow td {
+	padding: 4px 60px 4px 4px;
+}
 #tTable td.board_name {
 	padding-left: 58px;
 	background: 38px center no-repeat;
@@ -81,7 +87,7 @@ strong.Failed {
 	<th>OP</th>
 </tr>
 <iterate name="result" id="flow">
-<tr bgcolor="#F5CBAD">
+<tr bgcolor="#F5CBAD" class="flow">
 	<td>F{$flow['id']|sprintf='%05s',###}</td>
 	<td colspan="2"><a href="__URL__/flow/id/{$flow['id']}">{$flow['name']}</a></td>
 	<td>{$flow['creator']['realname']}</td>

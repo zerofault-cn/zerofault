@@ -35,19 +35,13 @@ td.focus {
 <p class="page_title_text">{$flow_info['name']}</p>
 <table cellpadding="3" border="1" bordercolor="#FFFFFF" style="border-collapse:collapse;">
 <tr bgcolor="#CCFFFF">
-	<td colspan="4" align="right">Board Name:&nbsp;</td>
+	<td colspan="4" align="right" bgcolor="#CCCCFF"><strong>Board Name:&nbsp;</strong></td>
 	<foreach name="board_list" item="board">
 	<td colspan="2"><a href="__URL__/board/id/{$board['id']}" title="Edit/View Board Detail"><strong>{$board['name']}</strong></a></td>
 	</foreach>
 </tr>
 <tr bgcolor="#CCFFFF">
-	<td colspan="4" align="right">Board Owner:&nbsp;</td>
-	<foreach name="board_list" item="board">
-	<td colspan="2">{$board['owner']['realname']}</td>
-	</foreach>
-</tr>
-<tr bgcolor="#CCFFFF">
-	<td colspan="4" align="right">Board Information:&nbsp;</td>
+	<td colspan="4" align="right" bgcolor="#CCCCFF"><strong>Board Information:&nbsp;</strong></td>
 	<foreach name="board_list" item="board">
 	<td colspan="2" valign="top">{$board['info']|nl2br}</td>
 	</foreach>
@@ -55,10 +49,10 @@ td.focus {
 <tr>
 	<th>No.</th>
 	<th>Test Item</th>
-	<th>Default Owner</th>
+	<th>Default Test Owner</th>
 	<td class="sp"> </td>
 	<foreach name="board_list" item="board">
-	<th style="background-color: #CCCCFF;">Status</th>
+	<th style="background-color: #CC99FF;">Status</th>
 	<th style="background-color: #CCCCFF;">Comment</th>
 	</foreach>
 </tr>
@@ -78,7 +72,7 @@ td.focus {
 			<option value="2" class="Failed" <eq name="status.status" value="2">selected="selected"</eq>>Failed</option>
 		</select>
 	</td>
-	<td><a style="float:right;" href="__URL__/status_comment/id/{$status['id']}?width=480&height=360&modal=true" class="thickbox" title="Click to view comment"><img src="../Public/Images/comments.gif"/></a><notempty name="status.last_comment">[{$status['last_comment']['staff']['realname']}]{$status['last_comment']['content']}</notempty></td>
+	<td valign="top"><a style="float:right;" href="__URL__/list_comment/model/StatusStatus/id/{$status['id']}?width=480&height=360&modal=true" class="thickbox" title="Click to view comment"><img src="../Public/Images/comments.gif"/></a><notempty name="status.last_comment">{$status['last_comment']['content']}</notempty></td>
 	</foreach>
 </tr>
 </iterate>
@@ -86,7 +80,7 @@ td.focus {
 	<th colspan="3" style="text-align:right">Board Final Status:</th>
 	<td class="sp"> </td>
 	<foreach name="board_list" item="board">
-	<td colspan="2" <if condition="$_SESSION[C('USER_AUTH_KEY')] eq $board['owner_id'] or $_SESSION[C('ADMIN_AUTH_NAME')] or in_array($_SESSION[C('USER_AUTH_KEY')], C('STATUS_ADMIN_ID'))">class="edit"</if>>
+	<td <if condition="$_SESSION[C('USER_AUTH_KEY')] eq $board['owner_id'] or $_SESSION[C('ADMIN_AUTH_NAME')] or in_array($_SESSION[C('USER_AUTH_KEY')], C('STATUS_ADMIN_ID'))">class="edit"</if>>
 		<strong class="{$status_arr[$board['status']]}">{$status_arr[$board['status']]}</strong>
 		<select name="board_status_{$board['id']}" class="board_status" id="{$board['id']}" style="display:none;">
 			<option value="-1" class="None">None</option>
@@ -95,6 +89,7 @@ td.focus {
 			<option value="2" class="Failed" <eq name="board.status" value="2">selected="selected"</eq>>Failed</option>
 		</select>
 	</td>
+	<td valign="top"><a style="float:right;" href="__URL__/list_comment/model/StatusBoard/id/{$board['id']}?width=480&height=360&modal=true" class="thickbox" title="Click to view board comment"><img src="../Public/Images/comments.gif"/></a><notempty name="board.last_comment">{$board['last_comment']['content']}</notempty></td>
 	</foreach>
 </tr>
 </table>
