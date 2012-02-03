@@ -253,3 +253,16 @@ CREATE TABLE `erp_status_template` (
   `update_time` datetime NOT NULL default '0000-00-00 00:00:00',
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+
+CREATE TABLE `erp_status_revision` (
+  `id` int(10) unsigned NOT NULL auto_increment,
+  `board_id` smallint(5) unsigned NOT NULL default '0',
+  `status_id` smallint(5) unsigned NOT NULL default '0',
+  `field` varchar(255) NOT NULL default '',
+  `value` varchar(255) NOT NULL default '',
+  `sort` tinyint(3) unsigned NOT NULL default '0',
+  `staff_id` smallint(5) unsigned NOT NULL default '0',
+  `update_time` datetime NOT NULL default '0000-00-00 00:00:00',
+  PRIMARY KEY  (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
