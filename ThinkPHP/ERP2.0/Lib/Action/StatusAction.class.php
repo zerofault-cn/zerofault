@@ -262,6 +262,7 @@ class StatusAction extends BaseAction{
 
 		$board_list = D('StatusBoard')->relation(true)->where("flow_id=".$id)->order('id')->select();
 		foreach ($board_list as $i=>$board) {
+			$board_list[$i]['comment'] = D('Comment')->relation(true)->where(array('model_name'=>'StatusBoard', 'model_id'=>$board['id']))->order('id')->select();
 			$board_list[$i]['last_comment'] = M('Comment')->where(array('model_name'=>'StatusBoard', 'model_id'=>$board['id']))->order('id desc')->find();
 		}
 
@@ -487,12 +488,12 @@ class StatusAction extends BaseAction{
 					empty($status['comment']) && $status['comment']=array();
 					foreach ($status['comment'] as $comment) {
 						$objPHPExcel->getActiveSheet()->getComment($COLS[3+$k].(4+$j))->setAuthor($comment['staff']['realname']);
-						$objCommentRichText = $objPHPExcel->getActiveSheet()->getComment($COLS[3+$k].(4+$j))->getText()->createTextRun('['.$comment['staff']['realname'].' '.$comment['create_time'].']');
+						$objCommentRichText = $objPHPExcel->getActiveSheet()->getComment($COLS[3+$k].(4+$j))->getText()->createTextRun('['.$comment['staff']['realname'].']@'.$comment['create_time'].':');
 						$objCommentRichText->getFont()->setBold(true);
 						$objPHPExcel->getActiveSheet()->getComment($COLS[3+$k].(4+$j))->getText()->createTextRun("\r\n");
-						$objPHPExcel->getActiveSheet()->getComment($COLS[3+$k].(4+$j))->getText()->createTextRun("abc\r\n");
-						$objPHPExcel->getActiveSheet()->getComment($COLS[3+$k].(4+$j))->setWidth('120pt');
-						$objPHPExcel->getActiveSheet()->getComment($COLS[3+$k].(4+$j))->setHeight('160pt');
+						$objPHPExcel->getActiveSheet()->getComment($COLS[3+$k].(4+$j))->getText()->createTextRun($comment['content']."\r\n");
+						$objPHPExcel->getActiveSheet()->getComment($COLS[3+$k].(4+$j))->setWidth('180pt');
+						$objPHPExcel->getActiveSheet()->getComment($COLS[3+$k].(4+$j))->setHeight('180pt');
 					}
 				}
 				$objPHPExcel->getActiveSheet()->getStyle('A'.(4+$j).':'.$COLS[3+$k].(4+$j))->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID);
@@ -518,6 +519,16 @@ class StatusAction extends BaseAction{
 						break;
 					default:
 						//
+				}
+				empty($board['comment']) && $board['comment']=array();
+				foreach ($board['comment'] as $comment) {
+					$objPHPExcel->getActiveSheet()->getComment($COLS[3+$i].(5+$j))->setAuthor($comment['staff']['realname']);
+					$objCommentRichText = $objPHPExcel->getActiveSheet()->getComment($COLS[3+$i].(5+$j))->getText()->createTextRun('['.$comment['staff']['realname'].']@'.$comment['create_time'].':');
+					$objCommentRichText->getFont()->setBold(true);
+					$objPHPExcel->getActiveSheet()->getComment($COLS[3+$i].(5+$j))->getText()->createTextRun("\r\n");
+					$objPHPExcel->getActiveSheet()->getComment($COLS[3+$i].(5+$j))->getText()->createTextRun($comment['content']."\r\n");
+					$objPHPExcel->getActiveSheet()->getComment($COLS[3+$i].(5+$j))->setWidth('180pt');
+					$objPHPExcel->getActiveSheet()->getComment($COLS[3+$i].(5+$j))->setHeight('180pt');
 				}
 			}
 			$objPHPExcel->getActiveSheet()->getStyle('D'.(5+$j).':'.$COLS[3+$i].(5+$j))->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID);
@@ -653,6 +664,14 @@ class StatusAction extends BaseAction{
 			$this->assign('content', ACTION_NAME);
 			$this->display('Layout:ERP_layout');
 		}
+	}
+	public function revision() {
+		$status_id = empty($_REQUEST['status_id']) ? 0 : intval($_REQUEST['status_id']);
+		$this->assign('status_id', $status_id);
+		$board_id = empty($_REQUEST['board_id']) ? 0 : intval($_REQUEST['board_id']);
+		$this->assign('board_id', $board_id);
+		$this->assign('content', ACTION_NAME);
+		$this->display('Layout:content');
 	}
 	public function update() {
 		$board_id = empty($_REQUEST['board_id']) ? 0 : intval($_REQUEST['board_id']);

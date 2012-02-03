@@ -64,14 +64,7 @@ td.focus {
 	<td>{$item['owner']}</td>
 	<td class="sp"> </td>
 	<foreach name="item.board_status" item="status">
-	<td <if condition="$_SESSION[C('USER_AUTH_KEY')] eq $status['owner_id'] or $_SESSION[C('USER_AUTH_KEY')] eq $status['substitute_id'] or $_SESSION[C('ADMIN_AUTH_NAME')] or in_array($_SESSION[C('USER_AUTH_KEY')], C('STATUS_ADMIN_ID'))">class="edit"</if>>
-		<strong class="{$status_arr[$status['status']]}">{$status_arr[$status['status']]}</strong><select name="board_status_{$item['item_info']['id']}_{$status['id']}" class="status" id="{$status['id']}" style="display:none;">
-			<option value="-1" class="None">None</option>
-			<option value="0" class="Pending" <eq name="status.status" value="0">selected="selected"</eq>>Pending</option>
-			<option value="1" class="Pass" <eq name="status.status" value="1">selected="selected"</eq>>Pass</option>
-			<option value="2" class="Failed" <eq name="status.status" value="2">selected="selected"</eq>>Failed</option>
-		</select>
-	</td>
+	<td><a href="__URL__/revision/status_id/{$status['id']}?width=400&height=360&modal=true" class="thickbox"><strong class="{$status_arr[$status['status']]}">{$status_arr[$status['status']]}</strong></a></td>
 	<td valign="top"><a style="float:right;" href="__URL__/list_comment/model/StatusStatus/id/{$status['id']}?width=480&height=360&modal=true" class="thickbox" title="Click to view comment"><img src="../Public/Images/comments.gif"/></a><notempty name="status.last_comment">{$status['last_comment']['content']}</notempty></td>
 	</foreach>
 </tr>
@@ -93,7 +86,9 @@ td.focus {
 	</foreach>
 </tr>
 </table>
-<p class="center"></p>
+<p class="center"><input type="button" value="Export as Excel" onclick="document.location='?op=export';" /></p>
+<div id="tips" style="position:fixed;left:200px;top:182px;display:none;white-space:nowrap;padding:5px 10px;-moz-border-radius:3px;-webkit-border-radius:3px;background-color:#FFF1A8;font-weight:bold;color:black;text-align:center;line-height:20px;"></div>
+
 <div id="title_layer" class="w10" style="display:none;"></div>
 <script language="JavaScript" type="text/javascript" src="../Public/Js/title_tip.js"></script>
 
