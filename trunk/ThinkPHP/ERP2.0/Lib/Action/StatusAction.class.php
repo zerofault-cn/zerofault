@@ -25,7 +25,7 @@ class StatusAction extends BaseAction{
 		$this->assign('request', $_REQUEST);
 		//load template
 		$this->assign('template_opts', self::genOptions(M('StatusTemplate')->order('id')->select()));
-		
+
 		$where = array();
 		if (!empty($_REQUEST['flow_name'])) {
 			$flow_name = trim($_REQUEST['flow_name']);
@@ -90,12 +90,12 @@ class StatusAction extends BaseAction{
 		$this->assign('result', $result);
 
 		$this->assign('page', $p->showMultiNavi());
-		
+
 		$this->assign('ACTION_TITLE', 'Flow List');
 		$this->assign('content', ACTION_NAME);
 		$this->display('Layout:ERP_layout');
 	}
-	
+
 	public function form() {
 		Session::set('sub', MODULE_NAME);
 		//load item
@@ -255,9 +255,9 @@ class StatusAction extends BaseAction{
 
 	public function flow() {
 		Session::set('sub', MODULE_NAME);
-		
+
 		$id = empty($_REQUEST['id']) ? 0 : intval($_REQUEST['id']);
-		
+
 		$flow_info = $this->dao->find($id);
 
 		$board_list = D('StatusBoard')->relation(true)->where("flow_id=".$id)->order('id')->select();
@@ -294,7 +294,7 @@ class StatusAction extends BaseAction{
 				->setTitle('Board Status Test Flow: '.$flow_info['name'])
 				->setSubject('Board Status Test Flow: '.$flow_info['name']);
 			$objPHPExcel->setActiveSheetIndex(0);
-			
+
 			$Style_BoardTH = new PHPExcel_Style();
 			$Style_BoardTH->applyFromArray(
 				array(
@@ -416,7 +416,7 @@ class StatusAction extends BaseAction{
 					)
 				)
 			);
-			
+
 			$Style_BoardStatusTH = new PHPExcel_Style();
 			$Style_BoardStatusTH->applyFromArray(
 				array(
@@ -453,7 +453,7 @@ class StatusAction extends BaseAction{
 			}
 			$objPHPExcel->getActiveSheet()->setSharedStyle($Style_BoardTD, 'D1:'.$COLS[3+$i].'1');
 			$objPHPExcel->getActiveSheet()->setSharedStyle($Style_BoardInfo, 'D2:'.$COLS[3+$i].'2');
-			
+
 			$objPHPExcel->getActiveSheet()->setCellValue('D3', 'Board Status');
 			$objPHPExcel->getActiveSheet()->mergeCells('D3:'.$COLS[3+$i].'3');
 			$objPHPExcel->getActiveSheet()->setSharedStyle($Style_StatusTH, 'D3:'.$COLS[3+$i].'3');
@@ -619,14 +619,14 @@ class StatusAction extends BaseAction{
 			if ('delete' == $op) {
 				//delete status
 				M('StatusStatus')->where(array('board_id'=>$id))->delete();
-			
+
 				$this->dao = $dao;
 				self::_delete();
 			}
 			elseif ('add' == $op) {
 				$flow_id = intval($_REQUEST['flow_id']);
 				$this->assign('flow_info', $this->dao->relation(true)->find($flow_id));
-				
+
 				$rs = $dao->where("flow_id=".$flow_id)->order("name desc")->find();
 				$name = '';
 				$name_ext = '';
@@ -651,7 +651,7 @@ class StatusAction extends BaseAction{
 		}
 		else {
 			$info = $dao->relation(true)->find($id);
-			
+
 			$status_list = D('StatusStatus')->relation(true)->where(array('flow_id'=>$info['flow_id'], 'board_id'=>$id))->order('sort')->select();
 			foreach ($status_list as $i=>$status) {
 				$status_list[$i]['owner_opts'] = self::genOptions(M('Staff')->where(array('status'=>1))->order('realname')->select(), $status['owner_id'], 'realname');
@@ -666,10 +666,151 @@ class StatusAction extends BaseAction{
 		}
 	}
 	public function revision() {
+		$RevArray = array(
+			'Software' => 'Software Rev',
+			'Logic' => 'Logic Rev',
+			'FCT' => 'FCT Rev',
+			'Host' => 'Host Rev'
+		);
+		$RevSort = array(
+			'Software' => 1,
+			'Logic' => 2,
+			'FCT' => 3,
+			'Host' => 4
+		);
+		$this->assign('RevArray', $RevArray);
 		$status_id = empty($_REQUEST['status_id']) ? 0 : intval($_REQUEST['status_id']);
 		$this->assign('status_id', $status_id);
 		$board_id = empty($_REQUEST['board_id']) ? 0 : intval($_REQUEST['board_id']);
 		$this->assign('board_id', $board_id);
+
+		if (!empty($_POST['submit'])) {
+			if (!empty($_REQUEST['field'])) {
+				foreach ($_REQUEST['field'] as $i=>$field) {
+					if (''==trim($field) || ''==trim($_REQUEST['value'][$i])) {
+						continue;
+					}
+					if (array_key_exists(trim($field), $RevArray)) {
+						self::_error('The field name: "'.$field.'" is not allowed');
+					}
+					$data = array(
+						'board_id' => $board_id,
+						'status_id' => $status_id,
+						'field' => $field,
+						'value' => trim($_REQUEST['value'][$i]),
+						'sort' => 10,
+						'staff_id' => $_SESSION[C('USER_AUTH_KEY')],
+						'update_time' => date('Y-m-d H:i:s')
+					);
+					if (!M('StatusRevision')->add($data)) {
+						self::_error('Add ext revision entry fail!<br />'.$this->dao->getLastSql());
+					}
+				}
+			}
+			if (!empty($_REQUEST['_field'])) {
+				foreach ($_REQUEST['_field'] as $i=>$field) {
+					if (''==trim($_REQUEST['_value'][$i])) {
+						continue;
+					}
+					$data = array(
+						'board_id' => $board_id,
+						'status_id' => $status_id,
+						'field' => $field,
+						'value' => trim($_REQUEST['_value'][$i]),
+						'sort' => $RevSort[$field],
+						'staff_id' => $_SESSION[C('USER_AUTH_KEY')],
+						'update_time' => date('Y-m-d H:i:s')
+					);
+					if (!M('StatusRevision')->add($data)) {
+						self::_error('Add revision entry fail!<br />'.$this->dao->getLastSql());
+					}
+				}
+			}
+			if (!empty($_REQUEST['_id'])) {
+				foreach ($_REQUEST['_id'] as $id=>$value) {
+					if (empty($id)) {
+						continue;
+					}
+					$dao = M('StatusRevision');
+					$dao->find($id);
+					if (''==trim($value)) {
+						//delete the entry
+						$dao->delete();
+					}
+					else {
+						if ($dao->value == trim($value)) {
+							continue;
+						}
+						$dao->value = trim($value);
+						$dao->update_time = date('Y-m-d H:i:s');
+						if (false === $dao->save()) {
+							self::_error('Update revision entry fail!<br />'.$this->dao->getLastSql());
+						}
+					}
+				}
+			}
+			$status = intval($_REQUEST['status']);
+			if ($board_id > 0) {
+				//改变Board状态
+				$dao = M('StatusBoard');
+				$info = $dao->find($board_id);
+				if ($info['status'] != $status) {
+					$rs = $dao->where('id='.$board_id)->setField(array('status', 'update_time'), array($status, date('Y-m-d H:i:s')));
+				}
+			}
+			elseif ($status_id > 0) {
+				//改变Status状态
+				$dao = M('StatusStatus');
+				$info = $dao->find($status_id);
+				if ($info['status'] != $status) {
+					$rs = $dao->where("id=".$status_id)->setField(array('status', 'update_time'), array($status, date('Y-m-d H:i:s')));
+				}
+
+				if ($status <= 0) {
+					//有Owner改变状态为Pending或None，则自动调整Board状态
+					if ($status != M('StatusBoard')->where("id=".$info['board_id'])->getField('status')) {
+						M('StatusBoard')->where("id=".$info['board_id'])->setField(array('status', 'update_time'), array($status, date('Y-m-d H:i:s')));
+					}
+				}
+				elseif (1==$status) {
+					//如果所有Status都为Pass，则设置Board为Pass
+					if ($dao->where("board_id=".$info['board_id'])->count() == $dao->where("board_id=".$info['board_id']." and status=1")->count()) {
+						M('StatusBoard')->where('id='.$info['board_id'])->setField(array('status', 'update_time'), array(1, date('Y-m-d H:i:s')));
+					}
+				}
+				else {
+					//设置Board状态为Failed
+					M('StatusBoard')->where('id='.$info['board_id'])->setField(array('status', 'update_time'), array(2, date('Y-m-d H:i:s')));
+				}
+			}
+
+			self::_success('Revision and Status updated!');
+		}
+
+		$result = array();
+		if (!empty($status_id)) {
+			$where = "status_id=".$status_id;
+			$result['Status'] = D('StatusStatus')->relation(true)->find($status_id);
+		}
+		if (!empty($board_id)) {
+			$where = "board_id=".$board_id;
+			$result['Status'] = D('StatusBoard')->relation(true)->find($board_id);
+		}
+
+		$rs = M('StatusRevision')->where($where)->order('sort')->select();
+		empty($rs) && ($rs = array());
+		$result['System'] = array_fill_keys(array_keys($RevArray), '');
+		$result['User'] = array();
+		foreach ($rs as $i=>$row) {
+			if (array_key_exists($row['field'], $RevArray)) {
+				$result['System'][$row['field']] = $row;
+			}
+			else {
+				$result['User'][$row['field']] = $row;
+			}
+		}
+		$this->assign('result', $result);
+
 		$this->assign('content', ACTION_NAME);
 		$this->display('Layout:content');
 	}
@@ -682,17 +823,15 @@ class StatusAction extends BaseAction{
 		if ($board_id > 0) {
 			//改变Board状态
 			$dao = M('StatusBoard');
-			$info = $dao->where('id='.$board_id)->find();
+			$info = $dao->find($board_id);
 			if ($info[$field] != $value) {
 				$rs = $dao->where('id='.$board_id)->setField(array($field, 'update_time'), array($value, date('Y-m-d H:i:s')));
-			}
-			if ('status'==$field && 1==$value) {
 			}
 		}
 		elseif ($status_id > 0) {
 			//改变Status状态
 			$dao = M('StatusStatus');
-			$info = $dao->where("id=".$status_id)->find();
+			$info = $dao->find($status_id);
 			if ($info[$field] != $value) {
 				$rs = $dao->where("id=".$status_id)->setField(array($field, 'update_time'), array($value, date('Y-m-d H:i:s')));
 			}
@@ -704,10 +843,6 @@ class StatusAction extends BaseAction{
 					}
 				}
 				elseif (1==$value) {
-					//Turn to next
-					//if ($dao->where("board_id=".$info['board_id']." and sort>".$info['sort']." and status=0")->count()==0) {
-					//	$dao->where("board_id=".$info['board_id']." and sort>".$info['sort']." and status=-1")->order('sort')->limit(1)->setField('status', 0);
-					//}
 					//如果所有Status都为Pass，则设置Board为Pass
 					if ($dao->where("board_id=".$info['board_id'])->count() == $dao->where("board_id=".$info['board_id']." and status=1")->count()) {
 						M('StatusBoard')->where('id='.$info['board_id'])->setField(array('status', 'update_time'), array(1, date('Y-m-d H:i:s')));
@@ -888,7 +1023,7 @@ class StatusAction extends BaseAction{
 		}
 
 		$this->assign('staff_opts', self::genOptions(M('Staff')->where(array('status'=>1))->order('realname')->select(), '', 'realname'));
-		
+
 		$result = $dao->relation(true)->order('sort')->select();
 		$this->assign('result', $result);
 

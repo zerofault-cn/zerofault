@@ -1,0 +1,119 @@
+<style>
+#think_run_time,#think_page_trace{display:none;}
+legend {
+	font-weight:bold;
+	line-height:24px;
+}
+td.field {
+	font-weight: bold;
+}
+</style>
+<fieldset>
+	<legend>Revision & Status</legend>
+	<form id="_form" action="__URL__/revision" method="post" target="_iframe">
+	<input type="hidden" name="status_id" value="{$status_id}" />
+	<input type="hidden" name="board_id" value="{$board_id}" />
+	<table width="100%" cellpadding="3" border="1" bordercolor="#FFFFFF" style="border-collapse:collapse;">
+	<tr>
+		<th>Field</th>
+		<th>Value</th>
+		<th nowrap="nowrap">Update Time</th>
+	</tr>
+	<tr bgcolor="#CCFFFF">
+		<if condition="$status_id gt 0">
+		<td class="field">Current Owner:</td>
+		<td>
+			<if condition="empty($result['Status']['substitute_id'])">
+			{$result['Status']['owner']['realname']}
+			<else />
+			{$result['Status']['owner']['realname']}
+			<img src="../Public/Images/105.png" alt="Transfer To" align="absmiddle"/>
+			{$result['Status']['substitute']['realname']}
+			</if>
+		</td>
+		<td>{$result['Status']['update_time']}</td>
+		<elseif condition="$board_id gt 0" />
+		<td class="field">Board owner: </td>
+		<td colspan="2">{$result['Status']['owner']['realname']}</td>
+		</if>
+	</tr>
+	<iterate name="result.System" id="item">
+	<tr class="trbg{$mod}">
+		<td class="field">{$RevArray[$key]}: </td>
+		<td>
+		<if condition="$_SESSION[C('USER_AUTH_KEY')] eq $result['Status']['owner_id'] or $_SESSION[C('USER_AUTH_KEY')] eq $result['Status']['substitute_id'] or $_SESSION[C('ADMIN_AUTH_NAME')] or in_array($_SESSION[C('USER_AUTH_KEY')], C('STATUS_ADMIN_ID'))">
+			<empty name="item.id">
+			<input type="hidden" name="_field[]" value="{$key}" />
+			<input type="text" name="_value[]" value="{$item['value']}" />
+			<else />
+			<input type="text" name="_id[{$item['id']}]" value="{$item['value']}" />
+			</empty>
+		<else />
+			<notempty name="item.id">
+			<input type="hidden" name="_id[{$item['id']}]" value="{$item['value']}" />{$item['value']}
+			</notempty>
+		</if>
+		</td>
+		<td>{$item['update_time']}</td>
+	</tr>
+	</iterate>
+	<iterate name="result.User" id="item">
+	<tr class="trbg{$mod}">
+		<td class="field">{$key}: </td>
+		<td>
+		<if condition="$_SESSION[C('USER_AUTH_KEY')] eq $result['Status']['owner_id'] or $_SESSION[C('USER_AUTH_KEY')] eq $result['Status']['substitute_id'] or $_SESSION[C('ADMIN_AUTH_NAME')] or in_array($_SESSION[C('USER_AUTH_KEY')], C('STATUS_ADMIN_ID'))">
+			<notempty name="item.id">
+			<input type="text" name="_id[{$item['id']}]" value="{$item['value']}" />
+			</notempty>
+		<else />
+			<notempty name="item.id">
+			<input type="hidden" name="_id[{$item['id']}]" value="{$item['value']}" />{$item['value']}
+			</notempty>
+		</if>
+		</td>
+		<td>{$item['update_time']}</td>
+	</tr>
+	</iterate>
+	<if condition="$_SESSION[C('USER_AUTH_KEY')] eq $result['Status']['owner_id'] or $_SESSION[C('USER_AUTH_KEY')] eq $result['Status']['substitute_id'] or $_SESSION[C('ADMIN_AUTH_NAME')] or in_array($_SESSION[C('USER_AUTH_KEY')], C('STATUS_ADMIN_ID'))">
+	<tr>
+		<td class="field"><input type="text" name="field[]" value="" size="10"/></td>
+		<td colspan="2"><input type="text" name="value[]" value="" /> <img src="../Public/Images/text_field_add.png"  alt="Add a input field" align="absmiddle" style="cursor:pointer;" onClick="addField(this);" /></td>
+	</tr>
+	</if>
+	<tr bgcolor="#99CCFF">
+		<td class="field">Change Status:</td>
+		<td><if condition="$_SESSION[C('USER_AUTH_KEY')] eq $result['Status']['owner_id'] or $_SESSION[C('USER_AUTH_KEY')] eq $result['Status']['substitute_id'] or $_SESSION[C('ADMIN_AUTH_NAME')] or in_array($_SESSION[C('USER_AUTH_KEY')], C('STATUS_ADMIN_ID'))">
+			<select name="status">
+				<option value="-1" class="None">None</option>
+				<option value="0" class="Pending" <eq name="result.Status.status" value="0">selected="selected"</eq>>Pending</option>
+				<option value="1" class="Pass" <eq name="result.Status.status" value="1">selected="selected"</eq>>Pass</option>
+				<option value="2" class="Failed" <eq name="result.Status.status" value="2">selected="selected"</eq>>Failed</option>
+			</select>
+			<else />
+			<strong class="{$status_arr[$result['Status']['status']]}">{$status_arr[$result['Status']['status']]}</strong>
+			</if>
+		</td>
+		<td>{$result['Status']['update_time']}</td>
+	</tr>
+	<tr>
+		<td colspan="3" align="center">
+			<if condition="$_SESSION[C('USER_AUTH_KEY')] eq $result['Status']['owner_id'] or $_SESSION[C('USER_AUTH_KEY')] eq $result['Status']['substitute_id'] or $_SESSION[C('ADMIN_AUTH_NAME')] or in_array($_SESSION[C('USER_AUTH_KEY')], C('STATUS_ADMIN_ID'))">
+			<input type="submit" value="Submit" name="submit" />
+			&nbsp;&nbsp;&nbsp;&nbsp;
+			<input type="button" value="Cancel" onclick="tb_remove();"/>
+			<else />
+			<input type="button" value="Close" onclick="tb_remove();"/>
+			</if>
+		</td>
+	</tr>
+	</table>
+	</form>
+</fieldset>
+<script language="JavaScript" type="text/javascript">
+function addField(obj) {
+	$(obj).parent().parent().after('<tr><td class="field"><input type="text" name="field[]" value="" size="10"/></td><td colspan="2"><input type="text" name="value[]" value="" /> <img src="../Public/Images/text_field_remove.png"  alt="Remote this input field" align="absmiddle" style="cursor:pointer;" onClick="removeField(this);" /></td></tr>');
+}
+function removeField(obj) {
+	$(obj).parent().parent().remove();
+}
+</script>
