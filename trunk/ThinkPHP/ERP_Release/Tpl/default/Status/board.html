@@ -1,0 +1,256 @@
+<style>
+.comment dl {
+	border-bottom: 1px solid #BEBEBE;
+	padding-bottom: 5px;
+	margin-bottom: 5px;
+}
+.comment dt {
+	padding:4px;border-left:3px solid #CC0000;background-color:#BEBEBE;
+}
+.comment dd {
+	padding:5px;
+	word-wrap:break-word;
+	word-break:break-all;
+}
+.comment dt span, .comment dd span{
+	float:right;
+}
+
+td.None, strong.None, option.None{
+	color: #808080;
+}
+td.Pass, strong.Pass, option.Pass{
+	color: #339900;
+}
+td.Pending, strong.Pending, option.Pending {
+	color: #0000FF;
+}
+td.Failed, strong.Failed, option.Failed{
+	color: #FF0000;
+}
+select.status option, select.board_status option {
+	font-weight:bold;
+}
+td.focus {
+	background-color: #FFCC33;
+}
+</style>
+<p class="page_title_text">Board Status Detail</p>
+<table cellpadding="3" border="1" bordercolor="#FFFFFF" style="border-collapse:collapse;"><tr><td>
+<table cellpadding="3" border="1" bordercolor="#FFFFFF" style="border-collapse:collapse;">
+<tr>
+	<td bgcolor="#BCD1EF">In The Flow:</td>
+	<td bgcolor="#E9E9E9"><a href="__URL__/flow/id/{$info['flow']['id']}">{$info['flow']['name']}</a></td>
+	<td align="right" width="50"><a href="__URL__">&lt;&lt;Back</a></td>
+</tr>
+<tr>
+	<td bgcolor="#BCD1EF">Board Name:</td>
+	<td bgcolor="#E9E9E9" colspan="2"><input type="text" class="edit_field" id="name" value="{$info['name']}" size="30"/><img src="../Public/Images/sign_tick.png" align="absmiddle"/></td>
+</tr>
+<tr>
+	<td bgcolor="#BCD1EF" nowrap="nowrap">Board Information:</td>
+	<td bgcolor="#E9E9E9" colspan="2"><textarea class="edit_field" id="info" rows="4" cols="40">{$info['info']}</textarea><img src="../Public/Images/sign_tick.png" align="absmiddle"/></td>
+<tr>
+	<td bgcolor="#BCD1EF">Owner:</td>
+	<td bgcolor="#E9E9E9" colspan="2">{$info['owner']['realname']}</td>
+</tr>
+<tr>
+	<td bgcolor="#BCD1EF">Create Time:</td>
+	<td bgcolor="#E9E9E9" colspan="2">{$info['create_time']}</td>
+</tr>
+<tr>
+	<td bgcolor="#BCD1EF">Item Status:</td>
+	<td bgcolor="#E9E9E9" colspan="2">
+		<table id="status_table" cellpadding="3" border="1" bordercolor="#FFFFFF" style="border-collapse:collapse;margin:0;">
+		<tr>
+			<th>No.</th>
+			<th>Test Item</th>
+			<th>Owner</th>
+			<th>Substitute</th>
+			<th>Status</th>
+		</tr>
+		<iterate name="info.status_list" id="status">
+		<tr class="trbg{$mod}" id="{$status['id']}">
+			<td align="center">{$status['sort']+1}</td>
+			<td>{$status['item']['name']}</td>
+			<td nowrap="nowrap">
+				<if condition="empty($status['substitute_id'])">
+					<if condition="$_SESSION[C('USER_AUTH_KEY')] eq $info['owner_id'] or $_SESSION[C('ADMIN_AUTH_NAME')] or in_array($_SESSION[C('USER_AUTH_KEY')], C('STATUS_ADMIN_ID'))">
+					<select name="owner_{$info['id']}_{$status['id']}" class="owner_id">
+					{$status['owner_opts']}
+					</select>
+					<else />
+					{$status['owner']['realname']}
+					</if>
+				<else />
+				{$status['owner']['realname']}
+				<img src="../Public/Images/105.png" alt="Transfer To" align="absmiddle"/>
+				{$status['substitute']['realname']}
+				</if>
+			</td>
+			<td>
+				<if condition="$_SESSION[C('USER_AUTH_KEY')] eq $info['owner_id'] or $_SESSION[C('USER_AUTH_KEY')] eq $status['owner_id'] or $_SESSION[C('USER_AUTH_KEY')] eq $status['substitute_id'] or $_SESSION[C('ADMIN_AUTH_NAME')] or in_array($_SESSION[C('USER_AUTH_KEY')], C('STATUS_ADMIN_ID'))">
+				<select name="substitute_{$info['id']}_{$status['id']}" class="substitute_id"><option value="0">None</option>
+				{$status['substitute_opts']}
+				</select>
+				<else />
+				--
+				</if>
+			</td>
+			<td><a href="__URL__/revision/status_id/{$status['id']}?width=420&height=360&modal=true" class="thickbox"><strong class="{$status_arr[$status['status']]}">{$status_arr[$status['status']]}</strong></a></td>
+		</tr>
+		</iterate>
+		</table>
+	</td>
+</tr>
+<tr>
+	<td bgcolor="#BCD1EF">Final Result:</td>
+	<td bgcolor="#E9E9E9" colspan="2"><a href="__URL__/revision/board_id/{$info['id']}?width=420&height=360&modal=true" class="thickbox"><strong class="{$status_arr[$info['status']]}">{$status_arr[$info['status']]}</strong></a></td>
+</tr>
+<tr>
+	<td bgcolor="#BCD1EF">Comment:</td>
+	<td bgcolor="#FFFFFF" class="comment" colspan="2">
+		<dl id="comment_list">
+		<foreach name="info.comment" item="item">
+			<dt id="dt_{$item['id']}">
+				<span>{$item.create_time}</span>{$item.staff.realname}
+			</dt>
+			<dd id="dd_{$item['id']}">
+				<span><if condition="$_SESSION[C('USER_AUTH_KEY')] eq $item['staff_id']">
+					<img src="../Public/Images/form_edit.gif" border="0" alt="Edit" align="absmiddle" style="cursor:pointer;" onClick="edit_comment({$item.id});" title="Click to edit this comment" />
+					</if>
+					<if condition="$_SESSION[C('USER_AUTH_KEY')] eq $item['staff_id'] or $_SESSION[C('ADMIN_AUTH_NAME')]">
+					<img src="../Public/Images/cross.gif" alt="Delete" align="absmiddle" border="0" style="cursor:pointer;" onclick="myConfirm('Are you sure to delete this comment?', '__URL__/delete_comment/id/{$item.id}/task_id/{$info.id}');" title="Click to delete this comment" />
+					</if>
+				</span>
+				<div>{$item['content']|nl2br}</div>
+			</dd>
+		</foreach>
+		<empty name="info.comment">
+		<p>No Comment!</p>
+		</empty>
+		</dl>
+		<form id="CommentForm" action="__URL__/comment" method="post" target="_iframe">
+		<input type="hidden" name="model_name" value="StatusBoard" />
+		<input type="hidden" name="model_id" value="{$info['id']}" />
+		<input type="hidden" name="id" value="" />
+		<textarea class="tinymce" name="content" cols="80" rows="5"></textarea>
+		<br />
+		<input type="submit" value="Post Comment" name="submit" />
+		<input type="reset" value="Reset" />
+		</form>
+	</td>
+</tr>
+</table>
+</td></tr></table>
+<p class="center"></p>
+<script language="JavaScript" type="text/javascript">
+$(document).ready(function() {
+	$("td.edit").each(function(i) {
+		setEditable(this, i);
+	});
+
+	$("#status_table select").each(function() {
+		$(this).change(function() {
+			var status_id = $(this).parent().parent().attr("id");
+			var field = $(this).attr("class");
+			var value = $(this).val();
+			var text = $(this).find("option:selected").text();
+			myConfirm('Change the '+field.replace("_id", "")+' to "'+text+'"?', "__URL__/update/id/"+status_id+"/f/"+field+"/v/"+value);
+		});
+	});
+	$(".edit_field").each(function() {
+		var field = $(this).attr("id");
+		$(this).next().css({"cursor": "pointer"}).click(function() {
+			$.post("__URL__/update/", {
+				"board_id" : {$info['id']},
+				"f" : field,
+				"v" : $(this).prev().val()
+			}, function(str) {
+				myAlert(str);
+			});
+		});
+	});
+
+	$("select.board_status").change(function() {
+		var board_id = $(this).attr("id");
+		var field = 'status';
+		var value = $(this).val();
+		var text = $(this).find("option:selected").text();
+		myConfirm('Change the board '+field+' to "'+text+'"?', "__URL__/update/board_id/"+board_id+"/f/"+field+"/v/"+value);
+	});
+});
+
+function setEditable(obj, n) {
+	$(obj).css('cursor', 'pointer').mouseover(function(){
+		$(this).addClass("focus");
+	}).mouseout(function(){
+		$(this).removeClass("focus");
+	}).click(function(){
+		if ($(this).children('select').css('display') != 'none') {
+			return;
+		}
+		$("td.editing").children('select').hide();
+		$("td.editing").children('strong').show();
+		$("td.editing").removeClass('editing');
+		var width = $(this).width();
+		$(this).children('strong').hide();
+		$(this).children("select").show().focus().keydown(function(e){
+			var keyCode=e.keyCode || window.event.keyCode;
+			if(keyCode==27) {
+				cancel_edit(this);
+			}
+		});
+		$(this).addClass('editing');
+	});
+}
+function cancel_edit(obj){
+	$(obj).hide().prev().show();
+}
+
+var has_reset = false;
+function edit_comment(id) {
+	$("#CommentForm input[name=id]").val(id);
+	$.get("__URL__/comment/id/"+id, function(str) {
+			$("#CommentForm textarea[name=content]").val(str).focus();
+		});
+	$("#CommentForm input[name=submit]").val("Submit");
+	if(!has_reset) {
+		$("#CommentForm input[name=submit]").after('<input type="button" id="reset_comment" value="Cancel"/>');
+		$("#CommentForm input#reset_comment").click(function(){
+			$("#CommentForm input[name=id]").val("");
+			$("#CommentForm textarea[name=content]").val("");
+			$("#CommentForm input[name=submit]").val("Post Comment");
+			$(this).remove();
+			has_reset = false;
+		});
+		has_reset = true;
+	}
+}
+function show_comment(id, content) {
+	if ($("#comment_list p").length>0) {
+		$("#comment_list p").remove();
+	}
+	var dd_html = '<span><img src="../Public/Images/form_edit.gif" border="0" alt="Edit" align="absmiddle" style="cursor:pointer;" onClick="edit_comment('+id+');" title="Click to edit this comment" /> <img src="../Public/Images/cross.gif" alt="Delete" align="absmiddle" border="0" style="cursor:pointer;" onclick="myConfirm(\'Are you sure to delete this comment?\', \'__URL__/delete_comment/id/'+id+'\');" title="Click to delete this comment" /></span><div>'+content+'</div>';
+	
+	if ($("#comment_list dd#dd_"+id).length>0) {
+		$("#comment_list dd#dd_"+id).html(dd_html);
+		$("#CommentForm input[name=id]").val("");
+		$("#CommentForm textarea[name=content]").val("");
+		$("#CommentForm input[name=submit]").val("Post Comment");
+		$("input#reset_comment").remove();
+		has_reset = false;
+	}
+	else {
+		var dt_html = '<dt id="dt_'+id+'"><span>&nbsp;</span>{$_SESSION[C('STAFF_AUTH_NAME')]['realname']}</dt>';
+		$("#comment_list").append(dt_html+'<dd id="dd_'+id+'">'+dd_html+'</dd>');
+	}
+	$("#CommentForm textarea[name=content]").val("");
+}
+function remove_comment(id) {
+	if ($("#comment_list dd#dd_"+id).length>0) {
+		$("#comment_list dt#dt_"+id).remove();
+		$("#comment_list dd#dd_"+id).remove();
+	}
+}
+</script>

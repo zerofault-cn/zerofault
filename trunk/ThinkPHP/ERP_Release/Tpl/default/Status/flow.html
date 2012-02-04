@@ -1,0 +1,144 @@
+<style>
+#title_layer {
+	position: absolute;
+	border: 1px solid #767676;
+	padding: 6px;
+	background-color: #FFFFDD;
+	border-radius: 6px;
+	-moz-border-radius: 6px;
+	-webkit-border-radius: 6px;
+	z-index: 200;
+}
+
+th.sp, td.sp {
+	background-color: #FFFF99;
+}
+td.None, strong.None, option.None{
+	color: #808080;
+}
+td.Pass, strong.Pass, option.Pass{
+	color: #339900;
+}
+td.Pending, strong.Pending, option.Pending {
+	color: #0000FF;
+}
+td.Failed, strong.Failed, option.Failed{
+	color: #FF0000;
+}
+select.status option, select.board_status option {
+	font-weight:bold;
+}
+td.focus {
+	background-color: #FFCC33;
+}
+</style>
+<p class="page_title_text">{$flow_info['name']}</p>
+<table cellpadding="3" border="1" bordercolor="#FFFFFF" style="border-collapse:collapse;">
+<tr bgcolor="#CCFFFF">
+	<td colspan="4" align="right" bgcolor="#CCCCFF"><strong>Board Name:&nbsp;</strong></td>
+	<foreach name="board_list" item="board">
+	<td colspan="2"><a href="__URL__/board/id/{$board['id']}" title="Edit/View Board Detail"><strong>{$board['name']}</strong></a></td>
+	</foreach>
+</tr>
+<tr bgcolor="#CCFFFF">
+	<td colspan="4" align="right" bgcolor="#CCCCFF"><strong>Board Information:&nbsp;</strong></td>
+	<foreach name="board_list" item="board">
+	<td colspan="2" valign="top">{$board['info']|nl2br}</td>
+	</foreach>
+</tr>
+<tr>
+	<th>No.</th>
+	<th>Test Item</th>
+	<th>Default Test Owner</th>
+	<td class="sp"> </td>
+	<foreach name="board_list" item="board">
+	<th style="background-color: #CC99FF;">Status</th>
+	<th style="background-color: #CCCCFF;">Comment</th>
+	</foreach>
+</tr>
+
+<iterate name="item_board_status" id="item">
+<tr class="trbg{$mod}">
+	<td align="center">{$i}</td>
+	<td title="{$item['item_info']['description']}">{$item['item_info']['name']}</td>
+	<td>{$item['owner']}</td>
+	<td class="sp"> </td>
+	<foreach name="item.board_status" item="status">
+	<td><a href="__URL__/revision/status_id/{$status['id']}?width=420&height=360&modal=true" class="thickbox"><strong class="{$status_arr[$status['status']]}">{$status_arr[$status['status']]}</strong></a></td>
+	<td valign="top"><a style="float:right;" href="__URL__/list_comment/model/StatusStatus/id/{$status['id']}?width=480&height=360&modal=true" class="thickbox" title="Click to view comment"><img src="../Public/Images/comments.gif"/></a><notempty name="status.last_comment">{$status['last_comment']['content']}</notempty></td>
+	</foreach>
+</tr>
+</iterate>
+<tr bgcolor="#99CCFF">
+	<th colspan="3" style="text-align:right">Board Final Status:</th>
+	<td class="sp"> </td>
+	<foreach name="board_list" item="board">
+	<td><a href="__URL__/revision/board_id/{$board['id']}?width=420&height=360&modal=true" class="thickbox"><strong class="{$status_arr[$board['status']]}">{$status_arr[$board['status']]}</strong></a></td>
+	<td valign="top"><a style="float:right;" href="__URL__/list_comment/model/StatusBoard/id/{$board['id']}?width=480&height=360&modal=true" class="thickbox" title="Click to view board comment"><img src="../Public/Images/comments.gif"/></a><notempty name="board.last_comment">{$board['last_comment']['content']}</notempty></td>
+	</foreach>
+</tr>
+</table>
+<p class="center"><input type="button" value="Export as Excel" onclick="document.location='?op=export';" /></p>
+
+<div id="title_layer" class="w10" style="display:none;"></div>
+<script language="JavaScript" type="text/javascript" src="../Public/Js/title_tip.js"></script>
+
+<script language="JavaScript" type="text/javascript">
+$(document).ready(function() {
+	$("td.edit").each(function(i) {
+		setEditable(this, i);
+	});
+
+	$("th[title], td[title]").each(function() {
+		$(this).hover(
+			function(event) { showTitle(this, event);},
+			function() { hideTitle(this);}
+		).mousemove(function(event) {
+			moveTitle(event);
+		});
+	});
+
+	$("select.status").each(function() {
+		$(this).change(function() {
+			var status_id = $(this).attr("id");
+			var field = 'status';
+			var value = $(this).val();
+			var text = $(this).find("option:selected").text();
+			myConfirm('Change the status to "'+text+'"?', "__URL__/update/id/"+status_id+"/f/"+field+"/v/"+value);
+		});
+	});
+	$("select.board_status").change(function() {
+		var board_id = $(this).attr("id");
+		var field = 'status';
+		var value = $(this).val();
+		var text = $(this).find("option:selected").text();
+		myConfirm('Change the board '+field+' to "'+text+'"?', "__URL__/update/board_id/"+board_id+"/f/"+field+"/v/"+value);
+	});
+});
+function setEditable(obj, n) {
+	$(obj).css('cursor', 'pointer').mouseover(function(){
+		$(this).addClass("focus");
+	}).mouseout(function(){
+		$(this).removeClass("focus");
+	}).click(function(){
+		if ($(this).children('select').css('display') != 'none') {
+			return;
+		}
+		$("td.editing").children('select').hide();
+		$("td.editing").children('strong').show();
+		$("td.editing").removeClass('editing');
+		var width = $(this).width();
+		$(this).children('strong').hide();
+		$(this).children("select").show().focus().keydown(function(e){
+			var keyCode=e.keyCode || window.event.keyCode;
+			if(keyCode==27) {
+				cancel_edit(this);
+			}
+		});
+		$(this).addClass('editing');
+	});
+}
+function cancel_edit(obj){
+	$(obj).hide().prev().show();
+}
+</script>

@@ -162,7 +162,7 @@ class BaseAction extends Action {
 	*/
 	protected function _error($msg,$timeout=0){
 		$html  = '<script language="JavaScript" type="text/javascript">';
-		$html .= 'parent.myAlert("'.$msg.'");';
+		$html .= 'parent.myAlert("<i>'.$msg.'</i>");';
 		!empty($timeout) && $html .= 'parent.myOK('.$timeout.');';
 		$html .= '</script>';
 		die($html);
@@ -235,7 +235,7 @@ class BaseAction extends Action {
 		foreach($rs as $key=>$val) {
 			$str .= '<option value="'.$val[$value].'" ';
 			if($selected_id == $val[$value]) {
-				$str .= ' selected="true"';
+				$str .= ' selected="selected"';
 			}
 			$str .= '>'.$val[$title].'</option>';
 		}

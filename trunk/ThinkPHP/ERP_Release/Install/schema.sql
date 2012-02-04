@@ -320,3 +320,74 @@ CREATE TABLE IF NOT EXISTS `erp_share` (
   `mail_status` tinyint(1) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+CREATE TABLE IF NOT EXISTS `erp_status_board` (
+  `id` int(10) unsigned NOT NULL auto_increment,
+  `flow_id` smallint(5) unsigned NOT NULL default '0',
+  `name` varchar(255) NOT NULL default '',
+  `info` text NOT NULL,
+  `owner_id` smallint(5) unsigned NOT NULL default '0',
+  `create_time` datetime NOT NULL default '0000-00-00 00:00:00',
+  `update_time` datetime NOT NULL default '0000-00-00 00:00:00',
+  `status` tinyint(3) NOT NULL default '0',
+  PRIMARY KEY  (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+CREATE TABLE IF NOT EXISTS `erp_status_flow` (
+  `id` int(10) unsigned NOT NULL auto_increment,
+  `name` varchar(255) NOT NULL default '',
+  `item_ids` text NOT NULL,
+  `owner_ids` text NOT NULL,
+  `creator_id` smallint(5) unsigned NOT NULL default '0',
+  `create_time` datetime NOT NULL default '0000-00-00 00:00:00',
+  `update_time` datetime NOT NULL default '0000-00-00 00:00:00',
+  PRIMARY KEY  (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+CREATE TABLE IF NOT EXISTS `erp_status_item` (
+  `id` int(10) unsigned NOT NULL auto_increment,
+  `name` varchar(255) NOT NULL default '',
+  `description` text NOT NULL,
+  `owner_id` smallint(5) unsigned NOT NULL default '0',
+  `type` varchar(255) NOT NULL default '',
+  `sort` tinyint(3) unsigned NOT NULL default '0',
+  PRIMARY KEY  (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+CREATE TABLE IF NOT EXISTS `erp_status_status` (
+  `id` int(10) unsigned NOT NULL auto_increment,
+  `flow_id` smallint(5) unsigned NOT NULL default '0',
+  `board_id` smallint(5) unsigned NOT NULL default '0',
+  `item_id` smallint(5) unsigned NOT NULL default '0',
+  `owner_id` smallint(5) unsigned NOT NULL default '0',
+  `substitute_id` smallint(5) unsigned NOT NULL default '0',
+  `sort` tinyint(3) unsigned NOT NULL default '0',
+  `update_time` datetime NOT NULL default '0000-00-00 00:00:00',
+  `status` tinyint(3) NOT NULL default '-1',
+  `mail_status` tinyint(3) NOT NULL default '-1',
+  `comment` text NOT NULL,
+  PRIMARY KEY  (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+CREATE TABLE IF NOT EXISTS `erp_status_template` (
+  `id` int(10) unsigned NOT NULL auto_increment,
+  `name` varchar(255) NOT NULL default '',
+  `item_ids` text NOT NULL,
+  `owner_ids` text NOT NULL,
+  `creator_id` smallint(5) unsigned NOT NULL default '0',
+  `create_time` datetime NOT NULL default '0000-00-00 00:00:00',
+  `update_time` datetime NOT NULL default '0000-00-00 00:00:00',
+  PRIMARY KEY  (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+CREATE TABLE IF NOT EXISTS `erp_status_revision` (
+  `id` int(10) unsigned NOT NULL auto_increment,
+  `board_id` smallint(5) unsigned NOT NULL default '0',
+  `status_id` smallint(5) unsigned NOT NULL default '0',
+  `field` varchar(255) NOT NULL default '',
+  `value` varchar(255) NOT NULL default '',
+  `sort` tinyint(3) unsigned NOT NULL default '0',
+  `staff_id` smallint(5) unsigned NOT NULL default '0',
+  `update_time` datetime NOT NULL default '0000-00-00 00:00:00',
+  PRIMARY KEY  (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
