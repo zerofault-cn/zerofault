@@ -97,14 +97,7 @@ td.focus {
 				--
 				</if>
 			</td>
-			<td <if condition="$_SESSION[C('USER_AUTH_KEY')] eq $status['owner_id'] or $_SESSION[C('USER_AUTH_KEY')] eq $status['substitute_id'] or $_SESSION[C('ADMIN_AUTH_NAME')] or in_array($_SESSION[C('USER_AUTH_KEY')], C('STATUS_ADMIN_ID'))">class="edit"</if>>
-				<strong class="{$status_arr[$status['status']]}">{$status_arr[$status['status']]}</strong><select name="status_{$info['id']}_{$status['id']}" class="status" style="display:none;">
-					<option value="-1" class="None">None</option>
-					<option value="0" class="Pending" <eq name="status.status" value="0">selected="selected"</eq>>Pending</option>
-					<option value="1" class="Pass" <eq name="status.status" value="1">selected="selected"</eq>>Pass</option>
-					<option value="2" class="Failed" <eq name="status.status" value="2">selected="selected"</eq>>Failed</option>
-				</select>
-			</td>
+			<td><a href="__URL__/revision/status_id/{$status['id']}?width=420&height=360&modal=true" class="thickbox"><strong class="{$status_arr[$status['status']]}">{$status_arr[$status['status']]}</strong></a></td>
 		</tr>
 		</iterate>
 		</table>
@@ -112,17 +105,7 @@ td.focus {
 </tr>
 <tr>
 	<td bgcolor="#BCD1EF">Final Result:</td>
-	<td bgcolor="#E9E9E9" colspan="2">
-		<strong class="{$status_arr[$info['status']]}">{$status_arr[$info['status']]}</strong>
-		<if condition="$_SESSION[C('USER_AUTH_KEY')] eq $info['owner_id'] or $_SESSION[C('ADMIN_AUTH_NAME')] or in_array($_SESSION[C('USER_AUTH_KEY')], C('STATUS_ADMIN_ID'))">
-		<select name="board_status_{$info['id']}" class="board_status" id="{$info['id']}">
-			<option value="-1" class="None">None</option>
-			<option value="0" class="Pending" <eq name="info.status" value="0">selected="selected"</eq>>Pending</option>
-			<option value="1" class="Pass" <eq name="info.status" value="1">selected="selected"</eq>>Pass</option>
-			<option value="2" class="Failed" <eq name="info.status" value="2">selected="selected"</eq>>Failed</option>
-		</select>
-		</if>
-	</td>
+	<td bgcolor="#E9E9E9" colspan="2"><a href="__URL__/revision/board_id/{$info['id']}?width=420&height=360&modal=true" class="thickbox"><strong class="{$status_arr[$info['status']]}">{$status_arr[$info['status']]}</strong></a></td>
 </tr>
 <tr>
 	<td bgcolor="#BCD1EF">Comment:</td>
