@@ -4,11 +4,11 @@ $config = array(
 	'APP_DEBUG'			=> false,
 
 	//是否启用LDAP认证，如果无此参数，或者设为其他值，则不启用
-//	'USER_AUTH_METHOD'	=> 'LDAP', 
+//	'USER_AUTH_METHOD'	=> 'LDAP',
 
 	//扩展配置文件
 	'APP_CONFIG_LIST'	=> array('menu', 'absence', 'smtp', 'test', 'ldap'),
-	
+
 	//标签嵌套级别，默认为3
 	'TAG_NESTED_LEVEL'	=> 6,
 
@@ -27,7 +27,7 @@ $config = array(
 	'STAFF_AUTH_NAME'   => 'staff',
 	'MANAGER_AUTH_NAME' => 'manager',
 	'ADMIN_AUTH_NAME'	=> 'administrator',
-	
+
 	//超级管理员的ID数组，用英文逗号分隔
 	'SUPER_ADMIN_ID'	=> array(1),
 	//Absence管理员(HR)的ID数组
@@ -51,7 +51,7 @@ $config = array(
 	'RBAC_NODE_TABLE'	=> 'erp_node',
 
 	//以下模块不需要权限认证，即默认情况下所有Staff帐号都可以访问
-	'NOT_AUTH_MODULE'	=> array('Index', 'Public', 'Script', 'Asset', 'Inventory', 'Absence', 'Task', 'Attachment', 'Share'),
+	'NOT_AUTH_MODULE'	=> array('Index', 'Public', 'Script', 'Asset', 'Inventory', 'Absence', 'Task', 'Attachment', 'Share', 'Status'),
 	//在iframe中处理请求，并以弹出消息方式提示处理结果的Action名
 	'IFRAME_AUTH_ACTION' => array('update','delete','edit','submit','confirm','select','import','create')
 );

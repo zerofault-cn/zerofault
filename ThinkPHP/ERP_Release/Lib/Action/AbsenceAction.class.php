@@ -1209,7 +1209,7 @@ class AbsenceAction extends BaseAction{
 					'time_from' => array('egt', $date_3month_ago),
 					'status' => 1
 					);
-				$total_leave = intval($this->dao->where($where)->sum('hours_remain'));
+				$total_leave = $this->dao->where($where)->sum('hours_remain');
 				break;
 			
 			default:
