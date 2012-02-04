@@ -81,7 +81,7 @@ td.field {
 	</tr>
 	</if>
 	<tr bgcolor="#99CCFF">
-		<td class="field">Change Status:</td>
+		<td class="field">Status:</td>
 		<td><if condition="$_SESSION[C('USER_AUTH_KEY')] eq $result['Status']['owner_id'] or $_SESSION[C('USER_AUTH_KEY')] eq $result['Status']['substitute_id'] or $_SESSION[C('ADMIN_AUTH_NAME')] or in_array($_SESSION[C('USER_AUTH_KEY')], C('STATUS_ADMIN_ID'))">
 			<select name="status">
 				<option value="-1" class="None">None</option>
