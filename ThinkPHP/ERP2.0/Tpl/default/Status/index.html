@@ -113,6 +113,7 @@ strong.Failed {
 		<if condition="$_SESSION[C('USER_AUTH_KEY')] eq $board['owner_id'] or $_SESSION[C('ADMIN_AUTH_NAME')] or in_array($_SESSION[C('USER_AUTH_KEY')], C('STATUS_ADMIN_ID'))">
 		<a href="javascript:void(0);" onclick="myConfirm('Are you sure to delete this item?', '__URL__/board/op/delete/id/{$board['id']}');" target="_iframe">Delete</a>
 		</if>
+		<a href="__URL__/check_mail/type/board_new/board_id/{$board['id']}" target="_iframe" title="Send notification mail">Mail</a>
 	</td>
 </tr>
 	</iterate>

@@ -59,7 +59,7 @@ class AbsenceAction extends BaseAction{
 		$total_leave = 0;
 		$leave_info['Annual_year'] = date('Y', $this->time);
 		$leave_info['Balance_year'] = date('Y', $this->time)-1;
-		
+
 		if (strcmp($staff_info['onboard'], date('Y', $this->time).'-01-00')>0) {
 			//今年入职的员工，从入职之日算起，忽略预设Balance
 			$leave_info['Balance'] = 'N/A';
@@ -88,7 +88,7 @@ class AbsenceAction extends BaseAction{
 			if (date('Y', $this->time)==2011) {
 				//如果现在是2011年，则读取2010剩余年假，并减除已使用假期
 				$balance_hour = max(0, round($staff_info['balance']*8)-$used_annual_hours);
-			
+
 				$left_annual_hour = $added_annual_hour + round($staff_info['balance']*8) - $used_annual_hours;
 				$total_annual += $left_annual_hour;
 			}
@@ -156,7 +156,7 @@ class AbsenceAction extends BaseAction{
 			}
 			$leave_info['Balance'] = self::parseHour($balance_hour);
 		}
-		
+
 		$leave_info['Annual'] =  self::parseHour($left_annual_hour);
 		$this->assign('total_annual', self::parseHour($total_annual));
 		$total_leave = $total_annual;
@@ -194,8 +194,8 @@ class AbsenceAction extends BaseAction{
 			'time_from' => array('lt', $date_3month_ago),
 			'status' => 1
 		);
-		$leave_info['Overtime']['past'] = self::parseHour($this->dao->where($where)->sum('hours_remain')); 
-		
+		$leave_info['Overtime']['past'] = self::parseHour($this->dao->where($where)->sum('hours_remain'));
+
 		$where['time_from'] = array('egt', $date_3month_ago);
 		$hour = $this->dao->where($where)->sum('hours_remain');
 		$total_leave += $hour;
@@ -603,7 +603,7 @@ class AbsenceAction extends BaseAction{
 			$type_arr[] = array('type'=>$key, 'alias'=>$val);
 		}
 		$this->assign('type_opts', self::genOptions($type_arr, $type, 'alias', 'type'));
-		
+
 		if(isset($_REQUEST['from'])) {
 			$from = $_REQUEST['from'];
 		}
@@ -894,7 +894,7 @@ class AbsenceAction extends BaseAction{
 		$leave_info['CashOut'][0]['Month'] = date('M', mktime(0,0,0,$this->Absence_Config['cashoutmonth'][0],1,date('Y', $this->time)));
 		$leave_info['CashOut'][1]['Month'] = date('M', mktime(0,0,0,$this->Absence_Config['cashoutmonth'][1],1,date('Y', $this->time)));
 		$this->assign('leave_info', $leave_info);
-		
+
 		$where = array();
 		$where['status'] = 1;
 		if (!in_array($_SESSION[C('USER_AUTH_KEY')], C('SUPER_ADMIN_ID')) && !in_array($_SESSION[C('USER_AUTH_KEY')], C('ABSENCE_ADMIN_ID'))) {//不是超级管理员，也不是Absence管理员，那么只能看自己的下属
@@ -935,7 +935,7 @@ class AbsenceAction extends BaseAction{
 				'time_from' => array(array('egt', date('Y', $this->time).'-01-01'), array('lt', (date('Y', $this->time)+1).'-01-01'))
 				);
 			$annual_used = $this->dao->where($where)->sum('hours');
-			
+
 			$balance_hour = $added_annual_hour = 0;
 			if (strcmp($staff_info['onboard'], date('Y', $this->time).'-01-00')>0) {
 				//今年入职的员工，从入职之日算起，忽略预设Balance
@@ -1199,7 +1199,7 @@ class AbsenceAction extends BaseAction{
 					}
 				}
 				break;
-			
+
 			case 'Compensatory':
 				$date_3month_ago = date('Y-m-d', mktime(0,0,0,date('m', $this->time)-3, date('d', $this->time), date('Y', $this->time)));
 				$where = array(
@@ -1211,7 +1211,7 @@ class AbsenceAction extends BaseAction{
 					);
 				$total_leave = $this->dao->where($where)->sum('hours_remain');
 				break;
-			
+
 			default:
 				$total_leave = 999999;
 		}
@@ -1383,11 +1383,11 @@ class AbsenceAction extends BaseAction{
 	//	$mail->SMTPDebug  = 1;  // 2 = messages only
 		$mail->Host       = $smtp_config['host'];
 		$mail->Port       = $smtp_config['port'];
-		$mail->SetFrom($smtp_config['from_mail'], $smtp_config['from_name']);
+		$mail->SetFrom($smtp_config['from_mail'], 'ERP Absence');
 
 		/*
 		timespan		approvor					notification CC list
-		day<=1			Supervisor					Matty+Tracy+ Bin 
+		day<=1			Supervisor					Matty+Tracy+ Bin
 		1< day <= 2		Supervisor->Bin				Matty+Tracy+Yingnan
 		day > 2			Supervisor->Bin->Yingnan	Matty+Tracy
 		*/
@@ -1552,7 +1552,7 @@ class AbsenceAction extends BaseAction{
 				}
 		}
 		$mail->Subject    = $subject;
-		
+
 		$body = '<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /></head><body>';
 		$body .= '<form name="_form" id="_form" action="'.APP_ROOT.'/Public/absence_confirm" method="post" target="_blank">';
 		$body .= '<input type="hidden" name="id" value="'.$dao->id.'" />';
