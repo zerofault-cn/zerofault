@@ -1188,7 +1188,7 @@ class StatusAction extends BaseAction{
 						continue;
 					}
 					$subject = '[Board Status]: ['.$board['flow']['name'].'] need ['.(empty($row['substitute_id'])?$row['owner']['realname']:$row['substitute']['realname']).'] to update the test status';
-					$style .= '<style>.staff_'.(empty($row['substitute_id'])?$row['owner_id']:$row['substitute_id']).'{background-color:#ffff66;}</style>';
+					$style2 = '<style>.staff_'.(empty($row['substitute_id'])?$row['owner_id']:$row['substitute_id']).'{background-color:#ffff66;}</style>';
 					$header = 'Hi '.(empty($row['substitute_id'])?$row['owner']['realname']:$row['substitute']['realname']).',<br />'."\n";
 					$header .= '&nbsp;&nbsp;The below rows in yellow need you to update.<br />'."\n";
 
@@ -1200,11 +1200,13 @@ class StatusAction extends BaseAction{
 						$mail->AddAddress($row['substitute']['email'], $row['substitute']['realname']);
 					}
 					$mail->Subject = $subject;
-					$mail->MsgHTML($style.$header.$body);
+					$mail->MsgHTML($style.$style2.$header.$body);
+					$debug = 'type='.$type.', board_id='.$board_id.', item_id='.$row['item_id'].', owner_id='.$row['owner_id'].', substitute_id='.$row['substitute_id'];
 					if(!$mail->Send()) {
-						Log::Write('Mail status Error: '.$mail->ErrorInfo, LOG::ERR);
+						Log::Write('Mail status Error: '.$debug."\n".$mail->ErrorInfo, LOG::ERR);
 					}
-					Log::Write('Mail status Success: type='.$type.', board_id='.$board_id, LOG::INFO);
+					echo $debug."\n";
+					Log::Write('Mail status Success: '.$debug, LOG::INFO);
 				}
 				break;
 
