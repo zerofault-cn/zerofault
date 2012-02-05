@@ -245,6 +245,7 @@ class StatusAction extends BaseAction{
 						self::_error('Add status fail!'.$this->dao->getLastSql());
 					}
 				}
+				self::send_mail('board_new', $board_id);
 				self::_success('Create flow success!',__URL__);
 			}
 			else {
@@ -607,6 +608,7 @@ class StatusAction extends BaseAction{
 						self::_error('Add status fail!'.$this->dao->getLastSql());
 					}
 				}
+				self::send_mail('board_new', $board_id);
 				self::_success('Add board success!',__URL__);
 			}
 			else{
@@ -1120,6 +1122,100 @@ class StatusAction extends BaseAction{
 			self::_error('Delete comment fail!'.(C('APP_DEBUG')?$dao->getLastSql():''));
 		}
 	}
+	public function send_mail($type='board_new', $board_id='', $status_id='') {
+		if (!defined('APP_ROOT')) {
+			define('APP_ROOT', 'http://'.$_SERVER['SERVER_ADDR'].__APP__);
+		}
+		$smtp_config = C('_smtp_');
+		include_once (LIB_PATH.'class.phpmailer.php');
+		$mail = new PHPMailer();
+		$mail->IsSMTP();
+	//	$mail->SMTPDebug  = 1;  // 2 = messages only
+		$mail->Host       = $smtp_config['host'];
+		$mail->Port       = $smtp_config['port'];
+		$mail->SetFrom($smtp_config['from_mail'], 'ERP System');
 
+		switch ($type) {
+			case 'board_new':
+				$board = D('StatusBoard')->relation(true)->find($board_id);
+				//to board owner
+				$rs = M('Staff')->find($board['owner_id']);
+				//$mail->AddAddress($rs['email'], $rs['realname']);
+
+				//to all item owner
+				$status = D('StatusStatus')->relation(true)->where("board_id=".$board_id)->select();
+				$style = '<style>'."\n";
+				$style .= 'strong.None{color: #808080;}'."\n";
+				$style .= 'strong.Pass{color: #339900;}'."\n";
+				$style .= 'strong.Pending{color: #0000FF;}'."\n";
+				$style .= 'strong.Failed{color: #FF0000;}'."\n";
+				$style .= '</style>'."\n";
+				$body = '<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /></head><body>'."\n";
+				$body .= '<table cellpadding="5" border="1" style="border-collapse:collapse;border:1px solid #666666;">'."\n";
+				$body .= '<tr bgcolor="#CCCCCC">'."\n";
+				$body .= '<td colspan="2">Board Status Detail</td>'."\n";
+				$body .= '</tr>'."\n";
+				$body .= '<tr><td width="120">Flow Name:</td><td><a href="'.APP_ROOT.'/Status/flow/id/'.$board['flow_id'].'" target="_blank">'.$board['flow']['name'].'</a></td></tr>'."\n";
+				$body .= '<tr><td>Board Name:</td><td><a href="'.APP_ROOT.'/Status/board/id/'.$board['id'].'" target="_blank">'.$board['name'].'</a></td></tr>'."\n";
+				$body .= '<tr><td>Board Information:</td><td>'.nl2br($board['info']).'</td></tr>'."\n";
+				$body .= '<tr><td>Owner:</td><td>'.$board['owner']['realname'].'</td></tr>'."\n";
+				$body .= '<tr><td>Create Time:</td><td>'.$board['create_time'].'</td></tr>'."\n";
+				$body .= '<tr><td>Item Status:</td><td>'."\n";
+				$body .= '<table cellpadding="3" border="1" style="border-collapse:collapse;border:1px solid #999999;">'."\n";
+				$body .= '<tr><th>No.</th><th>Test Item</th><th>Owner</th><th>Status</th></tr>'."\n";
+				foreach ($status as $i=>$row) {
+					$body .= '<tr';
+					if ($row['status'] < 1) {
+						$body .= ' class="staff_'.(empty($row['substitute_id'])?$row['owner_id']:$row['substitute_id']).'"';
+					}
+					$body .= '>'."\n";
+					$body .= '<td align="center">'.($i+1).'</td>'."\n";
+					$body .= '<td nowrap="nowrap">'.$row['item']['name'].'</td>'."\n";
+					$body .= '<td nowrap="nowrap">'.$row['owner']['realname'];
+					if (!empty($row['substitute_id'])) {
+						$body .= '<img src="'.APP_ROOT.'/../..'.APP_PUBLIC_PATH.'/Images/105.png" alt=" -> " align="absmiddle"/>'.$row['substitute']['realname'];
+					}
+					$body .= '</td>';
+					$body .= '<td><strong class="'.$this->status_arr[$row['status']].'">'.$this->status_arr[$row['status']].'</strong></td></tr>'."\n";
+				}
+				$body .= '</table>'."\n";
+				$body .= '</td></tr></table>'."\n";
+				$body .= '<br /><br />For more information, please visit <a target="_blank" href="'.APP_ROOT.'/Status">ERP System -> Board Status</a>';
+				$body .= '<br /><br />Best Regards,<br />'.C('ERP_TITLE');
+				$body .= '</body></html>';
+				foreach ($status as $i=>$row) {
+					if ($row['status'] > 0) {
+						continue;
+					}
+					$subject = '[Board Status]: ['.$board['flow']['name'].'] need ['.(empty($row['substitute_id'])?$row['owner']['realname']:$row['substitute']['realname']).'] to update the test status';
+					$style .= '<style>.staff_'.(empty($row['substitute_id'])?$row['owner_id']:$row['substitute_id']).'{background-color:#ffff66;}</style>';
+					$header = 'Hi '.(empty($row['substitute_id'])?$row['owner']['realname']:$row['substitute']['realname']).',<br />'."\n";
+					$header .= '&nbsp;&nbsp;The below rows in yellow need you to update.<br />'."\n";
+
+					$mail->ClearAddresses();
+					if (empty($row['substitute_id'])) {
+						$mail->AddAddress($row['owner']['email'], $row['owner']['realname']);
+					}
+					else {
+						$mail->AddAddress($row['substitute']['email'], $row['substitute']['realname']);
+					}
+					$mail->Subject = $subject;
+					$mail->MsgHTML($style.$header.$body);
+					if(!$mail->Send()) {
+						Log::Write('Mail status Error: '.$mail->ErrorInfo, LOG::ERR);
+					}
+					Log::Write('Mail status Success: type='.$type.', board_id='.$board_id, LOG::INFO);
+				}
+				break;
+
+			default :
+				//
+		}
+	}
+	public function check_mail() {
+		$type=$_REQUEST['type'];
+		$board_id = $_REQUEST['board_id'];
+		self::send_mail($type, $board_id);
+	}
 }
 ?>

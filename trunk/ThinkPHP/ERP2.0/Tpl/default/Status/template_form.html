@@ -50,7 +50,7 @@
 						{$item['name']}<input type="hidden" value="{$item['id']}" name="item_id[]"/>
 					</td>
 					<td>
-						<select name="owner_id[]"><option value="0">None</option>
+						<select name="owner_id[]"><option value="0">*IDEM*</option>
 						{$item['staff_opts']}
 						</select>
 					</td>
@@ -118,13 +118,13 @@ function add_item(id, checked) {
 			"op": "get_item",
 			"id": id
 		}, function(json) {
-			var tr = $("<tr/>").attr({"id": json.id, "class": "item"});
+			var tr = $("<tr/>").attr({"id": "item_"+json.id, "class": "item"});
 			var icon = $("<img/>").attr({"src": "../Public/Images/delete.gif", "align": "absmiddle"}).css({"cursor": "pointer"}).click(function() {
 				$(this).parent().parent().remove();
 			});
 			tr.append($("<td/>").attr("align", "center").append(icon));
 			tr.append($("<td/>").attr("nowrap", "nowrap").append(json.name+'<input type="hidden" name="item_id[]" value="'+json.id+'"/>'));
-			tr.append($("<td/>").append('<select name="owner_id[]"><option value="0">None</option>'+json.staff_opts+'</select>'));
+			tr.append($("<td/>").append('<select name="owner_id[]"><option value="0">*IDEM*</option>'+json.staff_opts+'</select>'));
 			$("#items_table").append(tr);
 			if ($("#items_table tr.item").length>0) {
 				$("#items_table tr#tip").hide();
