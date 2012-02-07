@@ -1,7 +1,7 @@
 <?php
 class StatusAction extends BaseAction{
 
-	protected $dao, $config, $status_arr;
+	protected $dao, $config, $status_arr, $RevArray;
 
 	public function _initialize() {
 		if ('Node'!= MODULE_NAME) {
@@ -19,6 +19,12 @@ class StatusAction extends BaseAction{
 			'9' => 'Pass*'
 		);
 		$this->assign('status_arr', $this->status_arr);
+		$this->RevArray = array(
+			'Software' => 'Software Rev',
+			'Logic' => 'Logic Rev',
+			'FCT' => 'FCT Rev',
+			'Host' => 'Host Rev'
+		);
 	}
 
 	public function index() {
@@ -282,6 +288,31 @@ class StatusAction extends BaseAction{
 			foreach ($board_status as $j=>$status) {
 				$board_status[$j]['comment'] = D('Comment')->relation(true)->where(array('model_name'=>'StatusStatus', 'model_id'=>$status['id']))->order('id')->select();
 				$board_status[$j]['last_comment'] = M('Comment')->where(array('model_name'=>'StatusStatus', 'model_id'=>$status['id']))->order('id desc')->find();
+				//load revision as title
+				$tmp_rs = M('StatusRevision')->where("status_id=".$status['id'])->order('sort')->select();
+				empty($tmp_rs) && ($tmp_rs = array());
+				$tmp_result = array(
+					'System' => array_fill_keys(array_keys($this->RevArray), ''),
+					'User' => array()
+					);
+				foreach ($tmp_rs as $row) {
+					if (array_key_exists($row['field'], $tmp_result['System'])) {
+						$tmp_result['System'][$this->RevArray[$row['field']]] = $row['value'];
+					}
+					else {
+						$tmp_result['User'][$row['field']] = $row['value'];
+					}
+				}
+				$title = '';
+				foreach ($tmp_result as $tmp_arr1) {
+					foreach ($tmp_arr1 as $tmp_key=>$tmp_val) {
+						if(''==trim($tmp_val)) {
+							continue;
+						}
+						$title .= '<b>'.$tmp_key.': </b>'.$tmp_val.'<br />';
+					}
+				}
+				$board_status[$j]['title'] = $title;
 			}
 			$item_board_status[$i] = array(
 				'item_info' => M('StatusItem')->find($item_id),
@@ -809,7 +840,7 @@ class StatusAction extends BaseAction{
 					elseif (8==$value) {
 						//如果没有None、Pending、Fail了，但至少有一个Pass，则设置Board为Pass*
 						if ($dao->where("board_id=".$info['board_id']." and status=1")->count()>0 && $dao->where("board_id=".$info['board_id']." and (status=-1 or status=0 or status=2)")->count()==0) {
-							M('StatusBoard')->where('id='.$info['board_id'])->setField(array('status', 'update_time'), array($value, date('Y-m-d H:i:s')));
+							M('StatusBoard')->where('id='.$info['board_id'])->setField(array('status', 'update_time'), array(9, date('Y-m-d H:i:s')));
 						}
 					}
 				}
