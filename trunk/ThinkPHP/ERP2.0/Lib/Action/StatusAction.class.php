@@ -245,7 +245,7 @@ class StatusAction extends BaseAction{
 						self::_error('Add status fail!'.$this->dao->getLastSql());
 					}
 				}
-				self::send_mail('board_new', $board_id);
+				self::send_mail('board', $board_id);
 				self::_success('Create flow success!',__URL__);
 			}
 			else {
@@ -608,7 +608,7 @@ class StatusAction extends BaseAction{
 						self::_error('Add status fail!'.$this->dao->getLastSql());
 					}
 				}
-				self::send_mail('board_new', $board_id);
+				//self::send_mail('board', $board_id);
 				self::_success('Add board success!',__URL__);
 			}
 			else{
@@ -1122,7 +1122,7 @@ class StatusAction extends BaseAction{
 			self::_error('Delete comment fail!'.(C('APP_DEBUG')?$dao->getLastSql():''));
 		}
 	}
-	public function send_mail($type='board_new', $board_id='', $status_id='') {
+	public function _mail($type='board', $id='') {
 		if (!defined('APP_ROOT')) {
 			define('APP_ROOT', 'http://'.$_SERVER['SERVER_ADDR'].__APP__);
 		}
@@ -1136,14 +1136,14 @@ class StatusAction extends BaseAction{
 		$mail->SetFrom($smtp_config['from_mail'], 'ERP System');
 
 		switch ($type) {
-			case 'board_new':
-				$board = D('StatusBoard')->relation(true)->find($board_id);
+			case 'board':
+				$board = D('StatusBoard')->relation(true)->find($id);
 				//to board owner
 				$rs = M('Staff')->find($board['owner_id']);
 				//$mail->AddAddress($rs['email'], $rs['realname']);
 
 				//to all item owner
-				$status = D('StatusStatus')->relation(true)->where("board_id=".$board_id)->select();
+				$status = D('StatusStatus')->relation(true)->where("board_id=".$id)->select();
 				$style = '<style>'."\n";
 				$style .= 'strong.None{color: #808080;}'."\n";
 				$style .= 'strong.Pass{color: #339900;}'."\n";
@@ -1162,7 +1162,7 @@ class StatusAction extends BaseAction{
 				$body .= '<tr><td>Create Time:</td><td>'.$board['create_time'].'</td></tr>'."\n";
 				$body .= '<tr><td>Item Status:</td><td>'."\n";
 				$body .= '<table cellpadding="3" border="1" style="border-collapse:collapse;border:1px solid #999999;">'."\n";
-				$body .= '<tr><th>No.</th><th>Test Item</th><th>Owner</th><th>Status</th></tr>'."\n";
+				$body .= '<tr bgcolor="#DDDDDD"><th>No.</th><th>Test Item</th><th>Owner</th><th>Status</th></tr>'."\n";
 				foreach ($status as $i=>$row) {
 					$body .= '<tr';
 					if ($row['status'] < 1) {
@@ -1201,7 +1201,7 @@ class StatusAction extends BaseAction{
 					}
 					$mail->Subject = $subject;
 					$mail->MsgHTML($style.$style2.$header.$body);
-					$debug = 'type='.$type.', board_id='.$board_id.', item_id='.$row['item_id'].', owner_id='.$row['owner_id'].', substitute_id='.$row['substitute_id'];
+					$debug = 'type='.$type.', board_id='.$id.', item_id='.$row['item_id'].', owner_id='.$row['owner_id'].', substitute_id='.$row['substitute_id'];
 					if(!$mail->Send()) {
 						Log::Write('Mail status Error: '.$debug."\n".$mail->ErrorInfo, LOG::ERR);
 					}
@@ -1214,10 +1214,10 @@ class StatusAction extends BaseAction{
 				//
 		}
 	}
-	public function check_mail() {
+	public function send_mail() {
 		$type=$_REQUEST['type'];
-		$board_id = $_REQUEST['board_id'];
-		self::send_mail($type, $board_id);
+		$id = $_REQUEST['id'];
+		self::_mail($type, $id);
 	}
 }
 ?>
