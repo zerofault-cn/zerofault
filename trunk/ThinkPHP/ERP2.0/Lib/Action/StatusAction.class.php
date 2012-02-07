@@ -55,6 +55,12 @@ class StatusAction extends BaseAction{
 				$board_where['name'] = array('like', '%'.$board_name.'%');
 			}
 		}
+		if (!empty($_REQUEST['board_info'])) {
+			$board_info = trim($_REQUEST['board_info']);
+			if (strlen($board_info)>0) {
+				$board_where['info'] = array('like', '%'.$board_info.'%');
+			}
+		}
 		if (!empty($_SESSION[MODULE_NAME.'_'.ACTION_NAME.'_owner_id'])) {
 			$owner_id = $_SESSION[MODULE_NAME.'_'.ACTION_NAME.'_owner_id'];
 		}
