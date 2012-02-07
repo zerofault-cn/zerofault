@@ -266,3 +266,5 @@ CREATE TABLE `erp_status_revision` (
   `update_time` datetime NOT NULL default '0000-00-00 00:00:00',
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+ALTER TABLE `erp_status_board` ADD COLUMN `remark` text NOT NULL AFTER `info`;

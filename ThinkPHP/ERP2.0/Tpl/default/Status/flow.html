@@ -13,19 +13,25 @@
 th.sp, td.sp {
 	background-color: #FFFF99;
 }
-td.None, strong.None, option.None{
+strong.None, select.None, option.None {
 	color: #808080;
 }
-td.Pass, strong.Pass, option.Pass{
-	color: #339900;
+strong.Pass, select.Pass, option.Pass {
+	color: #009900;
 }
-td.Pending, strong.Pending, option.Pending {
+strong.PassX, select.PassX, option.PassX {
+	color: #009900;
+}
+strong.Pending, select.Pending, option.Pending {
 	color: #0000FF;
 }
-td.Failed, strong.Failed, option.Failed{
+strong.Failed, select.Failed, option.Failed {
 	color: #FF0000;
 }
-select.status option, select.board_status option {
+strong.Ignore, select.Ignore, option.Ignore {
+	color: #33CCFF;
+}
+select.status{
 	font-weight:bold;
 }
 td.focus {
@@ -38,6 +44,12 @@ td.focus {
 	<td colspan="4" align="right" bgcolor="#CCCCFF"><strong>Board Name:&nbsp;</strong></td>
 	<foreach name="board_list" item="board">
 	<td colspan="2"><a href="__URL__/board/id/{$board['id']}" title="Edit/View Board Detail"><strong>{$board['name']}</strong></a></td>
+	</foreach>
+</tr>
+<tr bgcolor="#CCFFFF">
+	<td colspan="4" align="right" bgcolor="#CCCCFF"><strong>Board Owner:&nbsp;</strong></td>
+	<foreach name="board_list" item="board">
+	<td colspan="2"><strong>{$board['owner']['realname']}</strong></td>
 	</foreach>
 </tr>
 <tr bgcolor="#CCFFFF">
@@ -65,7 +77,7 @@ td.focus {
 	<td class="sp"> </td>
 	<foreach name="item.board_status" item="status">
 	<td><a href="__URL__/revision/status_id/{$status['id']}?width=420&height=360&modal=true" class="thickbox"><strong class="{$status_arr[$status['status']]}">{$status_arr[$status['status']]}</strong></a></td>
-	<td valign="top"><a style="float:right;" href="__URL__/list_comment/model/StatusStatus/id/{$status['id']}?width=480&height=360&modal=true" class="thickbox" title="Click to view comment"><img src="../Public/Images/comments.gif"/></a><notempty name="status.last_comment">{$status['last_comment']['content']}</notempty></td>
+	<td valign="top" class="td_comment"><a style="float:right;" href="__URL__/list_comment/model/StatusStatus/id/{$status['id']}?width=480&height=360&modal=true" class="thickbox" title="Click to view comment"><img src="../Public/Images/comments.gif"/></a><notempty name="status.last_comment">{$status['last_comment']['content']|substr=0,12}</notempty></td>
 	</foreach>
 </tr>
 </iterate>
@@ -73,8 +85,19 @@ td.focus {
 	<th colspan="3" style="text-align:right">Board Final Status:</th>
 	<td class="sp"> </td>
 	<foreach name="board_list" item="board">
-	<td><a href="__URL__/revision/board_id/{$board['id']}?width=420&height=360&modal=true" class="thickbox"><strong class="{$status_arr[$board['status']]}">{$status_arr[$board['status']]}</strong></a></td>
-	<td valign="top"><a style="float:right;" href="__URL__/list_comment/model/StatusBoard/id/{$board['id']}?width=480&height=360&modal=true" class="thickbox" title="Click to view board comment"><img src="../Public/Images/comments.gif"/></a><notempty name="board.last_comment">{$board['last_comment']['content']}</notempty></td>
+	<td><a href="__URL__/revision/board_id/{$board['id']}?width=420&height=360&modal=true" class="thickbox"><strong class="{$status_arr[$board['status']]|str_replace='*','X',###}">{$status_arr[$board['status']]}</strong></a></td>
+	<td valign="top" class="td_comment"><a style="float:right;" href="__URL__/list_comment/model/StatusBoard/id/{$board['id']}?width=480&height=360&modal=true" class="thickbox" title="Click to view board comment"><img src="../Public/Images/comments.gif"/></a><notempty name="board.last_comment">{$board['last_comment']['content']|substr=0,12}</notempty></td>
+	</foreach>
+</tr>
+<tr bgcolor="#99CCFF">
+	<th colspan="3" style="text-align:right">Board Remark:</th>
+	<td class="sp"> </td>
+	<foreach name="board_list" item="board">
+		<if condition="$_SESSION[C('USER_AUTH_KEY')] eq $board['owner_id'] or $_SESSION[C('ADMIN_AUTH_NAME')] or in_array($_SESSION[C('USER_AUTH_KEY')], C('STATUS_ADMIN_ID'))">
+	<td colspan="2" class="edit" title="Click to Edit, Ctrl+Enter to submit"><span class="textarea">{$board['remark']|nl2br}</span><textarea class="remark" id="{$board['id']}" style="display:none;width:0;height:0;">{$board['remark']}</textarea></td>
+		<else />
+	<td colspan="2">{$board['remark']|nl2br}</td>
+		</if>
 	</foreach>
 </tr>
 </table>
@@ -97,45 +120,57 @@ $(document).ready(function() {
 			moveTitle(event);
 		});
 	});
-
-	$("select.status").each(function() {
-		$(this).change(function() {
-			var status_id = $(this).attr("id");
-			var field = 'status';
-			var value = $(this).val();
-			var text = $(this).find("option:selected").text();
-			myConfirm('Change the status to "'+text+'"?', "__URL__/update/id/"+status_id+"/f/"+field+"/v/"+value);
-		});
-	});
-	$("select.board_status").change(function() {
-		var board_id = $(this).attr("id");
-		var field = 'status';
-		var value = $(this).val();
-		var text = $(this).find("option:selected").text();
-		myConfirm('Change the board '+field+' to "'+text+'"?', "__URL__/update/board_id/"+board_id+"/f/"+field+"/v/"+value);
-	});
 });
+var last_element = '';
 function setEditable(obj, n) {
 	$(obj).css('cursor', 'pointer').mouseover(function(){
 		$(this).addClass("focus");
 	}).mouseout(function(){
 		$(this).removeClass("focus");
 	}).click(function(){
-		if ($(this).children('select').css('display') != 'none') {
+		var element = $(this).children('span').attr('class');
+		if (''==element) {
+			element = 'input';
+		}
+		if ($(this).children(element).css('display') != 'none') {
 			return;
 		}
-		$("td.editing").children('select').hide();
-		$("td.editing").children('strong').show();
-		$("td.editing").removeClass('editing');
+		if (''!=last_element) {
+			$("td.editing").children(last_element).hide();
+			$("td.editing").children('span').show();
+			$("td.editing").removeClass('editing');
+		}
 		var width = $(this).width();
-		$(this).children('strong').hide();
-		$(this).children("select").show().focus().keydown(function(e){
+		var height = $(this).height();
+		$(this).children('span').hide();
+		var element_obj = $(this).children(element);
+		element_obj.css('width', width);
+		if ('textarea' == element) {
+			element_obj.css('height', height*2).css('overflow-y','scroll');
+		}
+		element_obj.show().select().keydown(function(e){
 			var keyCode=e.keyCode || window.event.keyCode;
-			if(keyCode==27) {
+			if (keyCode==13) {
+				if ('textarea' == element && !e.ctrlKey && !window.event.ctrlKey) {
+					return;
+				}
+				submit_edit(this);
+			}
+			else if (keyCode==27) {
 				cancel_edit(this);
 			}
 		});
 		$(this).addClass('editing');
+		last_element = element;
+	});
+}
+function submit_edit(obj) {
+	$.post('__URL__/update', {
+		"board_id" : $(obj).attr("id"),
+		"f" : $(obj).attr("class"),
+		"v" : $(obj).val()
+	}, function(str) {
+		myAlert(str);
 	});
 }
 function cancel_edit(obj){

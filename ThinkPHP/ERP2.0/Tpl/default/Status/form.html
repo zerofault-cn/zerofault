@@ -120,9 +120,9 @@ $(document).ready(function() {
 	$("#items_table td.icon img").each(function() {
 		$(this).css({"cursor": "pointer"}).click(function() {
 			$(this).parent().parent().remove();
-			$("#item_list input#chk_"+$(this).attr("id")).attr("checked", false);
+			$("#item_list input#chk_"+$(this).attr("id")).attr({"checked": false, "disabled": false});
 		});
-		$("#item_list input#chk_"+$(this).attr("id")).attr("checked", true);
+		$("#item_list input#chk_"+$(this).attr("id")).attr({"checked": true, "disabled": true});
 	});
 	$("#item_list li input:checkbox").each(function() {
 		$(this).click(function() {
