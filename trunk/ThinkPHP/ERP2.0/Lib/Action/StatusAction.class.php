@@ -14,7 +14,9 @@ class StatusAction extends BaseAction{
 			'-1' => 'None',
 			'0' => 'Pending',
 			'1' => 'Pass',
-			'2' => 'Failed'
+			'2' => 'Failed',
+			'8' => 'Ignore',
+			'9' => 'Pass*'
 		);
 		$this->assign('status_arr', $this->status_arr);
 	}
@@ -198,7 +200,7 @@ class StatusAction extends BaseAction{
 					}
 					else {
 						//update the exists item
-						M('StatusStatus')->where("flow_id=".$id." and item_id=".$item_id)->setField('sort', $i);
+						M('StatusStatus')->where("flow_id=".$id." and item_id=".$item_id)->setField(array('owner_id', 'substitute_id', 'sort'), array($owner_id, 0, $i));
 					}
 				}
 				self::_success('Flow updated!',__URL__);
@@ -653,6 +655,7 @@ class StatusAction extends BaseAction{
 		}
 		else {
 			$info = $dao->relation(true)->find($id);
+			$info['owner_opts'] = self::genOptions(M('Staff')->where(array('status'=>1))->order('realname')->select(), $info['owner_id'], 'realname');
 
 			$status_list = D('StatusStatus')->relation(true)->where(array('flow_id'=>$info['flow_id'], 'board_id'=>$id))->order('sort')->select();
 			foreach ($status_list as $i=>$status) {
@@ -751,38 +754,58 @@ class StatusAction extends BaseAction{
 					}
 				}
 			}
-			$status = intval($_REQUEST['status']);
+			$value = intval($_REQUEST['status']);
 			if ($board_id > 0) {
 				//改变Board状态
 				$dao = M('StatusBoard');
 				$info = $dao->find($board_id);
-				if ($info['status'] != $status) {
-					$rs = $dao->where('id='.$board_id)->setField(array('status', 'update_time'), array($status, date('Y-m-d H:i:s')));
+				if ($info['status'] != $value) {
+					$rs = $dao->where('id='.$board_id)->setField(array('status', 'update_time'), array($value, date('Y-m-d H:i:s')));
 				}
 			}
 			elseif ($status_id > 0) {
 				//改变Status状态
 				$dao = M('StatusStatus');
 				$info = $dao->find($status_id);
-				if ($info['status'] != $status) {
-					$rs = $dao->where("id=".$status_id)->setField(array('status', 'update_time'), array($status, date('Y-m-d H:i:s')));
+				if ($info['status'] != $value) {
+					$rs = $dao->where("id=".$status_id)->setField(array('status', 'update_time'), array($value, date('Y-m-d H:i:s')));
 				}
 
-				if ($status <= 0) {
-					//有Owner改变状态为Pending或None，则自动调整Board状态
-					if ($status != M('StatusBoard')->where("id=".$info['board_id'])->getField('status')) {
-						M('StatusBoard')->where("id=".$info['board_id'])->setField(array('status', 'update_time'), array($status, date('Y-m-d H:i:s')));
+				if (1==$value || $value!=M('StatusBoard')->where("id=".$info['board_id'])->getField('status')) {
+					if (-1==$value) {
+						//没有Fail和Pending，None=>None
+						if ($dao->where("board_id=".$info['board_id']." and (status=0 or status=2)")->count()==0) {
+							M('StatusBoard')->where("id=".$info['board_id'])->setField(array('status', 'update_time'), array($value, date('Y-m-d H:i:s')));
+						}
 					}
-				}
-				elseif (1==$status) {
-					//如果所有Status都为Pass，则设置Board为Pass
-					if ($dao->where("board_id=".$info['board_id'])->count() == $dao->where("board_id=".$info['board_id']." and status=1")->count()) {
-						M('StatusBoard')->where('id='.$info['board_id'])->setField(array('status', 'update_time'), array(1, date('Y-m-d H:i:s')));
+					if (0==$value) {
+						//没有Fail， Pending=>Pending
+						if ($dao->where("board_id=".$info['board_id']." and status=2")->count()==0) {
+							M('StatusBoard')->where("id=".$info['board_id'])->setField(array('status', 'update_time'), array($value, date('Y-m-d H:i:s')));
+						}
 					}
-				}
-				else {
-					//设置Board状态为Failed
-					M('StatusBoard')->where('id='.$info['board_id'])->setField(array('status', 'update_time'), array(2, date('Y-m-d H:i:s')));
+					elseif (1==$value) {
+						//如果所有Status都为Pass，则设置Board为Pass
+						if ($dao->where("board_id=".$info['board_id'])->count() == $dao->where("board_id=".$info['board_id']." and status=1")->count()) {
+							M('StatusBoard')->where('id='.$info['board_id'])->setField(array('status', 'update_time'), array($value, date('Y-m-d H:i:s')));
+						}
+						elseif ($dao->where("board_id=".$info['board_id']." and (status=-1 or status=0 or status=2)")->count()==0) {
+							M('StatusBoard')->where('id='.$info['board_id'])->setField(array('status', 'update_time'), array(9, date('Y-m-d H:i:s')));
+						}
+						elseif ($dao->where("board_id=".$info['board_id']." and status=0")->count()>0 && $dao->where("board_id=".$info['board_id']." and status=2")->count()==0) {
+							M('StatusBoard')->where('id='.$info['board_id'])->setField(array('status', 'update_time'), array(0, date('Y-m-d H:i:s')));
+						}
+					}
+					elseif (2==$value) {
+						//设置Board状态为Failed
+						M('StatusBoard')->where('id='.$info['board_id'])->setField(array('status', 'update_time'), array($value, date('Y-m-d H:i:s')));
+					}
+					elseif (8==$value) {
+						//如果没有None、Pending、Fail了，但至少有一个Pass，则设置Board为Pass*
+						if ($dao->where("board_id=".$info['board_id']." and status=1")->count()>0 && $dao->where("board_id=".$info['board_id']." and (status=-1 or status=0 or status=2)")->count()==0) {
+							M('StatusBoard')->where('id='.$info['board_id'])->setField(array('status', 'update_time'), array($value, date('Y-m-d H:i:s')));
+						}
+					}
 				}
 			}
 
@@ -837,22 +860,40 @@ class StatusAction extends BaseAction{
 			if ($info[$field] != $value) {
 				$rs = $dao->where("id=".$status_id)->setField(array($field, 'update_time'), array($value, date('Y-m-d H:i:s')));
 			}
-			if ('status'==$field) {
-				if ($value <= 0) {
-					//有Owner改变状态为Pending或None，则自动调整Board状态
-					if ($value != M('StatusBoard')->where("id=".$info['board_id'])->getField('status')) {
+			if ('status'==$field && $value!=M('StatusBoard')->where("id=".$info['board_id'])->getField('status')) {
+				if (-1==$value) {
+					//没有Fail和Pending，None=>None
+					if ($dao->where("board_id=".$info['board_id']." and (status=0 or status=2)")->count()==0) {
+						M('StatusBoard')->where("id=".$info['board_id'])->setField(array('status', 'update_time'), array($value, date('Y-m-d H:i:s')));
+					}
+				}
+				if (0==$value) {
+					//没有Fail， Pending=>Pending
+					if ($dao->where("board_id=".$info['board_id']." and status=2")->count()==0) {
 						M('StatusBoard')->where("id=".$info['board_id'])->setField(array('status', 'update_time'), array($value, date('Y-m-d H:i:s')));
 					}
 				}
 				elseif (1==$value) {
 					//如果所有Status都为Pass，则设置Board为Pass
 					if ($dao->where("board_id=".$info['board_id'])->count() == $dao->where("board_id=".$info['board_id']." and status=1")->count()) {
-						M('StatusBoard')->where('id='.$info['board_id'])->setField(array('status', 'update_time'), array(1, date('Y-m-d H:i:s')));
+						M('StatusBoard')->where('id='.$info['board_id'])->setField(array('status', 'update_time'), array($value, date('Y-m-d H:i:s')));
+					}
+					elseif ($dao->where("board_id=".$info['board_id']." and (status=-1 or status=0 or status=2)")->count()==0) {
+						M('StatusBoard')->where('id='.$info['board_id'])->setField(array('status', 'update_time'), array(9, date('Y-m-d H:i:s')));
+					}
+					elseif ($dao->where("board_id=".$info['board_id']." and status=0")->count()>0 && $dao->where("board_id=".$info['board_id']." and status=2")->count()==0) {
+						M('StatusBoard')->where('id='.$info['board_id'])->setField(array('status', 'update_time'), array(0, date('Y-m-d H:i:s')));
 					}
 				}
-				else {
+				elseif (2==$value) {
 					//设置Board状态为Failed
-					M('StatusBoard')->where('id='.$info['board_id'])->setField(array('status', 'update_time'), array(2, date('Y-m-d H:i:s')));
+					M('StatusBoard')->where('id='.$info['board_id'])->setField(array('status', 'update_time'), array($value, date('Y-m-d H:i:s')));
+				}
+				elseif (8==$value) {
+					//如果没有None、Pending、Fail了，但至少有一个Pass，则设置Board为Pass*
+					if ($dao->where("board_id=".$info['board_id']." and status=1")->count()>0 && $dao->where("board_id=".$info['board_id']." and (status=-1 or status=0 or status=2)")->count()==0) {
+						M('StatusBoard')->where('id='.$info['board_id'])->setField(array('status', 'update_time'), array($value, date('Y-m-d H:i:s')));
+					}
 				}
 			}
 		}

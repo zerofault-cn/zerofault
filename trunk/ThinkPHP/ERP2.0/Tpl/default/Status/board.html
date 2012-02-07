@@ -16,19 +16,25 @@
 	float:right;
 }
 
-td.None, strong.None, option.None{
+strong.None, select.None, option.None {
 	color: #808080;
 }
-td.Pass, strong.Pass, option.Pass{
-	color: #339900;
+strong.Pass, select.Pass, option.Pass {
+	color: #009900;
 }
-td.Pending, strong.Pending, option.Pending {
+strong.PassX, select.PassX, option.PassX {
+	color: #009900;
+}
+strong.Pending, select.Pending, option.Pending {
 	color: #0000FF;
 }
-td.Failed, strong.Failed, option.Failed{
+strong.Failed, select.Failed, option.Failed {
 	color: #FF0000;
 }
-select.status option, select.board_status option {
+strong.Ignore, select.Ignore, option.Ignore {
+	color: #33CCFF;
+}
+select.status{
 	font-weight:bold;
 }
 td.focus {
@@ -45,14 +51,35 @@ td.focus {
 </tr>
 <tr>
 	<td bgcolor="#BCD1EF">Board Name:</td>
-	<td bgcolor="#E9E9E9" colspan="2"><input type="text" class="edit_field" id="name" value="{$info['name']}" size="30"/><img src="../Public/Images/sign_tick.png" align="absmiddle"/></td>
+	<td bgcolor="#E9E9E9" colspan="2">
+		<if condition="$_SESSION[C('USER_AUTH_KEY')] eq $info['owner_id'] or $_SESSION[C('ADMIN_AUTH_NAME')] or in_array($_SESSION[C('USER_AUTH_KEY')], C('STATUS_ADMIN_ID'))">
+		<input type="text" class="edit_field" id="name" value="{$info['name']}" size="30"/><img src="../Public/Images/sign_tick.png" align="absmiddle"/>
+		<else />
+		{$info['name']}
+		</if>
+	</td>
 </tr>
 <tr>
 	<td bgcolor="#BCD1EF" nowrap="nowrap">Board Information:</td>
-	<td bgcolor="#E9E9E9" colspan="2"><textarea class="edit_field" id="info" rows="4" cols="40">{$info['info']}</textarea><img src="../Public/Images/sign_tick.png" align="absmiddle"/></td>
+	<td bgcolor="#E9E9E9" colspan="2">
+		<if condition="$_SESSION[C('USER_AUTH_KEY')] eq $info['owner_id'] or $_SESSION[C('ADMIN_AUTH_NAME')] or in_array($_SESSION[C('USER_AUTH_KEY')], C('STATUS_ADMIN_ID'))">
+		<textarea class="edit_field" id="info" rows="4" cols="40">{$info['info']}</textarea><img src="../Public/Images/sign_tick.png" align="absmiddle"/>
+		<else />
+		{$info['info']|nl2br}
+		</if>
+	</td>
+</tr>
 <tr>
-	<td bgcolor="#BCD1EF">Owner:</td>
-	<td bgcolor="#E9E9E9" colspan="2">{$info['owner']['realname']}</td>
+	<td bgcolor="#BCD1EF">Board Owner:</td>
+	<td bgcolor="#E9E9E9" colspan="2">
+		<if condition="$_SESSION[C('USER_AUTH_KEY')] eq $info['owner_id'] or $_SESSION[C('ADMIN_AUTH_NAME')] or in_array($_SESSION[C('USER_AUTH_KEY')], C('STATUS_ADMIN_ID'))">
+		<select id="owner_id" class="edit_field">
+		{$info['owner_opts']}
+		</select><img src="../Public/Images/sign_tick.png" align="absmiddle"/>
+		<else />
+		{$info['owner']['realname']}
+		</if>
+	</td>
 </tr>
 <tr>
 	<td bgcolor="#BCD1EF">Create Time:</td>
@@ -104,8 +131,18 @@ td.focus {
 	</td>
 </tr>
 <tr>
-	<td bgcolor="#BCD1EF">Final Result:</td>
-	<td bgcolor="#E9E9E9" colspan="2"><a href="__URL__/revision/board_id/{$info['id']}?width=420&height=360&modal=true" class="thickbox"><strong class="{$status_arr[$info['status']]}">{$status_arr[$info['status']]}</strong></a></td>
+	<td bgcolor="#BCD1EF">Final Status:</td>
+	<td bgcolor="#E9E9E9" colspan="2"><a href="__URL__/revision/board_id/{$info['id']}?width=420&height=360&modal=true" class="thickbox"><strong class="{$status_arr[$info['status']]|str_replace='*','X',###}">{$status_arr[$info['status']]}</strong></a></td>
+</tr>
+<tr>
+	<td bgcolor="#BCD1EF" nowrap="nowrap">Board Remark:</td>
+	<td bgcolor="#E9E9E9" colspan="2">
+		<if condition="$_SESSION[C('USER_AUTH_KEY')] eq $info['owner_id'] or $_SESSION[C('ADMIN_AUTH_NAME')] or in_array($_SESSION[C('USER_AUTH_KEY')], C('STATUS_ADMIN_ID'))">
+		<textarea class="edit_field" id="remark" rows="4" cols="40">{$info['remark']}</textarea><img src="../Public/Images/sign_tick.png" align="absmiddle"/>
+		<else />
+		{$info['remark']|nl2br}
+		</if>
+	</td>
 </tr>
 <tr>
 	<td bgcolor="#BCD1EF">Comment:</td>

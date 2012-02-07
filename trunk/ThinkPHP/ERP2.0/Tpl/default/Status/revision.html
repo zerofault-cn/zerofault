@@ -20,7 +20,7 @@ td.field {
 		<th nowrap="nowrap">Update Time</th>
 	</tr>
 	<tr bgcolor="#CCFFFF">
-		<if condition="$status_id gt 0">
+		<gt name="status_id" value="0">
 		<td class="field">Current Owner:</td>
 		<td>
 			<if condition="empty($result['Status']['substitute_id'])">
@@ -32,10 +32,11 @@ td.field {
 			</if>
 		</td>
 		<td>{$result['Status']['update_time']}</td>
-		<elseif condition="$board_id gt 0" />
+		</gt>
+		<gt name="board_id" value="0">
 		<td class="field">Board owner: </td>
 		<td colspan="2">{$result['Status']['owner']['realname']}</td>
-		</if>
+		</gt>
 	</tr>
 	<iterate name="result.System" id="item">
 	<tr class="trbg{$mod}">
@@ -77,17 +78,23 @@ td.field {
 	<if condition="$_SESSION[C('USER_AUTH_KEY')] eq $result['Status']['owner_id'] or $_SESSION[C('USER_AUTH_KEY')] eq $result['Status']['substitute_id'] or $_SESSION[C('ADMIN_AUTH_NAME')] or in_array($_SESSION[C('USER_AUTH_KEY')], C('STATUS_ADMIN_ID'))">
 	<tr>
 		<td class="field"><input type="text" name="field[]" value="" size="10"/></td>
-		<td colspan="2"><input type="text" name="value[]" value="" /> <img src="../Public/Images/text_field_add.png"  alt="Add a input field" align="absmiddle" style="cursor:pointer;" onClick="addField(this);" /></td>
+		<td colspan="2"><input type="text" name="value[]" value="" size="23"/> <img src="../Public/Images/text_field_add.png"  alt="Add a input field" align="absmiddle" style="cursor:pointer;" onClick="addField(this);" /></td>
 	</tr>
 	</if>
 	<tr bgcolor="#99CCFF">
 		<td class="field">Status:</td>
 		<td><if condition="$_SESSION[C('USER_AUTH_KEY')] eq $result['Status']['owner_id'] or $_SESSION[C('USER_AUTH_KEY')] eq $result['Status']['substitute_id'] or $_SESSION[C('ADMIN_AUTH_NAME')] or in_array($_SESSION[C('USER_AUTH_KEY')], C('STATUS_ADMIN_ID'))">
-			<select name="status">
+			<select name="status" class="status {$status_arr[$result['Status']['status']]|str_replace='*','X',###}" onchange="javascript:this.className='status '+this.options[this.selectedIndex].className;">
 				<option value="-1" class="None">None</option>
 				<option value="0" class="Pending" <eq name="result.Status.status" value="0">selected="selected"</eq>>Pending</option>
 				<option value="1" class="Pass" <eq name="result.Status.status" value="1">selected="selected"</eq>>Pass</option>
+				<gt name="board_id" value="0">
+				<option value="9" class="PassX" <eq name="result.Status.status" value="9">selected="selected"</eq>>Pass*</option>
+				</gt>
 				<option value="2" class="Failed" <eq name="result.Status.status" value="2">selected="selected"</eq>>Failed</option>
+				<gt name="status_id" value="0">
+				<option value="8" class="Ignore" <eq name="result.Status.status" value="8">selected="selected"</eq>>Ignore</option>
+				</gt>
 			</select>
 			<else />
 			<strong class="{$status_arr[$result['Status']['status']]}">{$status_arr[$result['Status']['status']]}</strong>
@@ -111,7 +118,7 @@ td.field {
 </fieldset>
 <script language="JavaScript" type="text/javascript">
 function addField(obj) {
-	$(obj).parent().parent().after('<tr><td class="field"><input type="text" name="field[]" value="" size="10"/></td><td colspan="2"><input type="text" name="value[]" value="" /> <img src="../Public/Images/text_field_remove.png"  alt="Remote this input field" align="absmiddle" style="cursor:pointer;" onClick="removeField(this);" /></td></tr>');
+	$(obj).parent().parent().after('<tr><td class="field"><input type="text" name="field[]" value="" size="10"/></td><td colspan="2"><input type="text" name="value[]" value="" size="23"/> <img src="../Public/Images/text_field_remove.png"  alt="Remote this input field" align="absmiddle" style="cursor:pointer;" onClick="removeField(this);" /></td></tr>');
 }
 function removeField(obj) {
 	$(obj).parent().parent().remove();
