@@ -65,8 +65,7 @@ class AbsenceAction extends BaseAction{
 			$leave_info['Balance'] = 'N/A';
 
 			$added_annual_hour = round(($this->time - strtotime($staff_info['onboard']))/86400/365*$Accrual[0]*8);
-			$left_annual_hour = $added_annual_hour - $used_annual_hours;
-			$total_annual += $left_annual_hour;
+			$total_annual = $added_annual_hour - $used_annual_hours;
 		}
 		else {
 			//今年之前入职的员工，从今年01-01算起
@@ -89,8 +88,7 @@ class AbsenceAction extends BaseAction{
 				//如果现在是2011年，则读取2010剩余年假，并减除已使用假期
 				$balance_hour = max(0, round($staff_info['balance']*8)-$used_annual_hours);
 
-				$left_annual_hour = $added_annual_hour + round($staff_info['balance']*8) - $used_annual_hours;
-				$total_annual += $left_annual_hour;
+				$total_annual = $added_annual_hour + round($staff_info['balance']*8) - $used_annual_hours;
 			}
 			else {
 				//现在是2012年或以后
@@ -151,13 +149,12 @@ class AbsenceAction extends BaseAction{
 				$tmp_balance_hour = round($tmp_balance_hour);
 				$balance_hour = max(0, $tmp_balance_hour-$used_annual_hours);
 
-				$left_annual_hour = $added_annual_hour + $tmp_balance_hour - $used_annual_hours;
-				$total_annual += $left_annual_hour;
+				$total_annual = $added_annual_hour + $tmp_balance_hour - $used_annual_hours;
 			}
 			$leave_info['Balance'] = self::parseHour($balance_hour);
 		}
 
-		$leave_info['Annual'] =  self::parseHour($left_annual_hour);
+		$leave_info['Annual'] =  self::parseHour($added_annual_hour);
 		$this->assign('total_annual', self::parseHour($total_annual));
 		$total_leave = $total_annual;
 
