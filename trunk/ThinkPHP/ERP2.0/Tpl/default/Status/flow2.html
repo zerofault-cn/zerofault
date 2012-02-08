@@ -42,7 +42,7 @@ td.focus {
 <table>
 <tr>
 	<td>
-		<form action="__URL__/flow/id/{$request['id']}">
+		<form action="__URL__/flow2/id/{$request['id']}">
 		<table id="search_table" cellpadding="3" border="1" bordercolor="#FFFFFF" style="border-collapse:collapse;">
 		<tr>
 			<th>Board Name</th>
@@ -51,7 +51,7 @@ td.focus {
 			<th>Board Status</th>
 			<td rowspan="2">
 				<input type="submit" value="Filter"/>
-				<input type="button" onclick="window.location='__URL__/flow/id/{$request['id']}';" value="Reset" />
+				<input type="button" onclick="window.location='__URL__/flow2/id/{$request['id']}';" value="Reset" />
 			</td>
 		</tr>
 		<tr>
@@ -77,15 +77,15 @@ td.focus {
 </tr>
 </table>
 <table cellpadding="3" border="1" bordercolor="#FFFFFF" style="border-collapse:collapse;">
-<tr bgcolor="#CCFFFF">
+<tr bgcolor="#CCCCFF">
 	<td colspan="3" align="right" bgcolor="#CCCCFF"><strong>Test Item:&nbsp;</strong></td>
 	<foreach name="item_list" item="item">
-	<td colspan="2" title="{$item['description']}">{$key+1}.&nbsp;{$item['name']}</td>
+	<td colspan="2" title="{$item['description']}" valign="top">{$key+1}.&nbsp;{$item['name']}</td>
 	</foreach>
 	<th rowspan="3">Final Status</th>
 	<th rowspan="3">Remark</th>
 </tr>
-<tr bgcolor="#CCFFFF">
+<tr bgcolor="#CCCCFF">
 	<td colspan="3" align="right" bgcolor="#CCCCFF"><strong>Default Test Owner:&nbsp;</strong></td>
 	<foreach name="owner_list" item="owner">
 	<td colspan="2">{$owner}</td>
@@ -96,8 +96,8 @@ td.focus {
 	<th nowrap="nowrap">Information</th>
 	<th nowrap="nowrap">Board Owner</th>
 	<foreach name="item_list" item="item">
-	<th style="background-color: #CC99FF;">Status</th>
-	<th style="background-color: #CCCCFF;">Comment</th>
+	<th>Status</th>
+	<th>Comment</th>
 	</foreach>
 </tr>
 
@@ -120,7 +120,7 @@ td.focus {
 </iterate>
 
 </table>
-<p class="center"><input type="button" value="Export as Excel" onclick="document.location='?op=export';" /></p>
+<p class="center"><input type="button" value="Export as Excel" onclick="document.location='__URL__/flow/id/{$request['id']}/op/export';" /></p>
 
 <div id="title_layer" class="w10" style="display:none;"></div>
 <script language="JavaScript" type="text/javascript" src="../Public/Js/title_tip.js"></script>
@@ -165,7 +165,7 @@ function setEditable(obj, n) {
 		var element_obj = $(this).children(element);
 		element_obj.css('width', width);
 		if ('textarea' == element) {
-			element_obj.css('height', height*2).css('overflow-y','scroll');
+			element_obj.css('height', height+20).css('overflow-y','scroll');
 		}
 		element_obj.show().select().keydown(function(e){
 			var keyCode=e.keyCode || window.event.keyCode;
