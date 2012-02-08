@@ -31,6 +31,9 @@
 #tTable td.Failed {
 	background-image:url("../Public/Images/151.png");
 }
+#tTable td.Ignore {
+	background-image:url("../Public/Images/160.png");
+}
 strong.None{
 	color: #808080;
 }
@@ -42,6 +45,9 @@ strong.Pending {
 }
 strong.Failed {
 	color: #FF0000;
+}
+strong.Ignore {
+	color: #33CCFF;
 }
 </style>
 <if condition="$_SESSION[C('ADMIN_AUTH_NAME')] or in_array($_SESSION[C('USER_AUTH_KEY')], C('STATUS_ADMIN_ID'))">
