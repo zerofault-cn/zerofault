@@ -41,13 +41,9 @@ class StatusAction extends BaseAction{
 				$where['name'] = array('like', '%'.$flow_name.'%');
 			}
 		}
-		if (!empty($_SESSION[MODULE_NAME.'_'.ACTION_NAME.'_creator_id'])) {
-			$creator_id = $_SESSION[MODULE_NAME.'_'.ACTION_NAME.'_creator_id'];
-		}
 		if (isset($_REQUEST['creator_id'])) {
 			$creator_id = intval($_REQUEST['creator_id']);
 		}
-		$_SESSION[MODULE_NAME.'_'.ACTION_NAME.'_creator_id'] = $creator_id;
 		$creator_arr = $this->dao->join("Inner Join erp_staff on erp_staff.id=erp_status_flow.creator_id")->distinct(true)->field("erp_staff.id as id, erp_staff.realname as realname")->order("realname")->select();
 		$this->assign('creator_opts', self::genOptions($creator_arr, $creator_id, 'realname'));
 		if (!empty($creator_id)) {
@@ -67,13 +63,9 @@ class StatusAction extends BaseAction{
 				$board_where['info'] = array('like', '%'.$board_info.'%');
 			}
 		}
-		if (!empty($_SESSION[MODULE_NAME.'_'.ACTION_NAME.'_owner_id'])) {
-			$owner_id = $_SESSION[MODULE_NAME.'_'.ACTION_NAME.'_owner_id'];
-		}
 		if (isset($_REQUEST['owner_id'])) {
 			$owner_id = intval($_REQUEST['owner_id']);
 		}
-		$_SESSION[MODULE_NAME.'_'.ACTION_NAME.'_owner_id'] = $owner_id;
 		$owner_arr = M('StatusBoard')->join("Inner Join erp_staff on erp_staff.id=erp_status_board.owner_id")->distinct(true)->field("erp_staff.id as id, erp_staff.realname as realname")->order("realname")->select();
 		$this->assign('owner_opts', self::genOptions($owner_arr, $owner_id, 'realname'));
 		if (!empty($owner_id)) {
@@ -296,13 +288,9 @@ class StatusAction extends BaseAction{
 				$board_where['status'] = $board_status;
 			}
 		}
-		if (!empty($_SESSION[MODULE_NAME.'_'.ACTION_NAME.'_owner_id'])) {
-			$owner_id = $_SESSION[MODULE_NAME.'_'.ACTION_NAME.'_owner_id'];
-		}
 		if (isset($_REQUEST['owner_id'])) {
 			$owner_id = intval($_REQUEST['owner_id']);
 		}
-		$_SESSION[MODULE_NAME.'_'.ACTION_NAME.'_owner_id'] = $owner_id;
 		$owner_arr = M('StatusBoard')->join("Inner Join erp_staff on erp_staff.id=erp_status_board.owner_id")->distinct(true)->field("erp_staff.id as id, erp_staff.realname as realname")->order("realname")->select();
 		$this->assign('owner_opts', self::genOptions($owner_arr, $owner_id, 'realname'));
 		if (!empty($owner_id)) {
