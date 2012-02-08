@@ -92,9 +92,7 @@ td.field {
 				<option value="9" class="PassX" <eq name="result.Status.status" value="9">selected="selected"</eq>>Pass*</option>
 				</gt>
 				<option value="2" class="Failed" <eq name="result.Status.status" value="2">selected="selected"</eq>>Failed</option>
-				<gt name="status_id" value="0">
 				<option value="8" class="Ignore" <eq name="result.Status.status" value="8">selected="selected"</eq>>Ignore</option>
-				</gt>
 			</select>
 			<else />
 			<strong class="{$status_arr[$result['Status']['status']]}">{$status_arr[$result['Status']['status']]}</strong>

@@ -271,20 +271,68 @@ class StatusAction extends BaseAction{
 	public function flow() {
 		Session::set('sub', MODULE_NAME);
 
+		$this->assign('request', $_REQUEST);
+
 		$id = empty($_REQUEST['id']) ? 0 : intval($_REQUEST['id']);
+
+		$board_where = array(
+			'flow_id' => $id
+			);
+		if (!empty($_REQUEST['board_name'])) {
+			$board_name = trim($_REQUEST['board_name']);
+			if (strlen($board_name)>0) {
+				$board_where['name'] = array('like', '%'.$board_name.'%');
+			}
+		}
+		if (!empty($_REQUEST['board_info'])) {
+			$board_info = trim($_REQUEST['board_info']);
+			if (strlen($board_info)>0) {
+				$board_where['info'] = array('like', '%'.$board_info.'%');
+			}
+		}
+		if (isset($_REQUEST['board_status'])) {
+			$board_status = intval($_REQUEST['board_status']);
+			if ($board_status>-2) {
+				$board_where['status'] = $board_status;
+			}
+		}
+		if (!empty($_SESSION[MODULE_NAME.'_'.ACTION_NAME.'_owner_id'])) {
+			$owner_id = $_SESSION[MODULE_NAME.'_'.ACTION_NAME.'_owner_id'];
+		}
+		if (isset($_REQUEST['owner_id'])) {
+			$owner_id = intval($_REQUEST['owner_id']);
+		}
+		$_SESSION[MODULE_NAME.'_'.ACTION_NAME.'_owner_id'] = $owner_id;
+		$owner_arr = M('StatusBoard')->join("Inner Join erp_staff on erp_staff.id=erp_status_board.owner_id")->distinct(true)->field("erp_staff.id as id, erp_staff.realname as realname")->order("realname")->select();
+		$this->assign('owner_opts', self::genOptions($owner_arr, $owner_id, 'realname'));
+		if (!empty($owner_id)) {
+			$board_where['owner_id'] = $owner_id;
+		}
 
 		$flow_info = $this->dao->find($id);
 
-		$board_list = D('StatusBoard')->relation(true)->where("flow_id=".$id)->order('id')->select();
+		$board_list = D('StatusBoard')->relation(true)->where($board_where)->order('id')->select();
+		$board_ids = array();
 		foreach ($board_list as $i=>$board) {
 			$board_list[$i]['comment'] = D('Comment')->relation(true)->where(array('model_name'=>'StatusBoard', 'model_id'=>$board['id']))->order('id')->select();
 			$board_list[$i]['last_comment'] = M('Comment')->where(array('model_name'=>'StatusBoard', 'model_id'=>$board['id']))->order('id desc')->find();
+			$board_ids[] = $board['id'];
 		}
 
 		$owner_arr = explode(',', $flow_info['owner_ids']);
 		$item_board_status = array();
+		$board_ext = "";
+		if (count($board_where)>1) {
+			//using board filter
+			if (count($board_ids)==1) {
+				$board_ext = " and board_id=".$board_ids[0];
+			}
+			else {
+				$board_ext = " and board_id in (".implode(',', $board_ids).")";
+			}
+		}
 		foreach (explode(',', $flow_info['item_ids']) as $i=>$item_id) {
-			$board_status = D('StatusStatus')->relation(true)->where("flow_id=".$id." and item_id=".$item_id." and sort=".$i)->order("board_id")->select();
+			$board_status = D('StatusStatus')->relation(true)->where("flow_id=".$id." and item_id=".$item_id." and sort=".$i.$board_ext)->order("board_id")->select();
 			foreach ($board_status as $j=>$status) {
 				$board_status[$j]['comment'] = D('Comment')->relation(true)->where(array('model_name'=>'StatusStatus', 'model_id'=>$status['id']))->order('id')->select();
 				$board_status[$j]['last_comment'] = M('Comment')->where(array('model_name'=>'StatusStatus', 'model_id'=>$status['id']))->order('id desc')->find();
@@ -838,9 +886,16 @@ class StatusAction extends BaseAction{
 						M('StatusBoard')->where('id='.$info['board_id'])->setField(array('status', 'update_time'), array($value, date('Y-m-d H:i:s')));
 					}
 					elseif (8==$value) {
-						//如果没有None、Pending、Fail了，但至少有一个Pass，则设置Board为Pass*
-						if ($dao->where("board_id=".$info['board_id']." and status=1")->count()>0 && $dao->where("board_id=".$info['board_id']." and (status=-1 or status=0 or status=2)")->count()==0) {
-							M('StatusBoard')->where('id='.$info['board_id'])->setField(array('status', 'update_time'), array(9, date('Y-m-d H:i:s')));
+						//如果没有None、Pending、Fail了
+						if ($dao->where("board_id=".$info['board_id']." and (status=-1 or status=0 or status=2)")->count()==0) {
+							if ($dao->where("board_id=".$info['board_id']." and status=1")->count()>0) {
+								//至少有一个Pass，则设置Board为Pass*
+								M('StatusBoard')->where('id='.$info['board_id'])->setField(array('status', 'update_time'), array(9, date('Y-m-d H:i:s')));
+							}
+							else {
+								//没有Pass，那么全部为Ignore
+								M('StatusBoard')->where('id='.$info['board_id'])->setField(array('status', 'update_time'), array(8, date('Y-m-d H:i:s')));
+							}
 						}
 					}
 				}
@@ -927,9 +982,16 @@ class StatusAction extends BaseAction{
 					M('StatusBoard')->where('id='.$info['board_id'])->setField(array('status', 'update_time'), array($value, date('Y-m-d H:i:s')));
 				}
 				elseif (8==$value) {
-					//如果没有None、Pending、Fail了，但至少有一个Pass，则设置Board为Pass*
-					if ($dao->where("board_id=".$info['board_id']." and status=1")->count()>0 && $dao->where("board_id=".$info['board_id']." and (status=-1 or status=0 or status=2)")->count()==0) {
-						M('StatusBoard')->where('id='.$info['board_id'])->setField(array('status', 'update_time'), array($value, date('Y-m-d H:i:s')));
+					//如果没有None、Pending、Fail了
+					if ($dao->where("board_id=".$info['board_id']." and (status=-1 or status=0 or status=2)")->count()==0) {
+						if ($dao->where("board_id=".$info['board_id']." and status=1")->count()>0) {
+							//至少有一个Pass，则设置Board为Pass*
+							M('StatusBoard')->where('id='.$info['board_id'])->setField(array('status', 'update_time'), array(9, date('Y-m-d H:i:s')));
+						}
+						else {
+							//没有Pass，那么全部为Ignore
+							M('StatusBoard')->where('id='.$info['board_id'])->setField(array('status', 'update_time'), array(8, date('Y-m-d H:i:s')));
+						}
 					}
 				}
 			}
