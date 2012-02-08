@@ -42,7 +42,7 @@ td.focus {
 <table>
 <tr>
 	<td>
-		<form method="post" action="__URL__/flow/id/{$request['id']}">
+		<form action="__URL__/flow/id/{$request['id']}">
 		<table id="search_table" cellpadding="3" border="1" bordercolor="#FFFFFF" style="border-collapse:collapse;">
 		<tr>
 			<th>Board Name</th>
@@ -51,7 +51,7 @@ td.focus {
 			<th>Board Status</th>
 			<td rowspan="2">
 				<input type="submit" value="Filter"/>
-				<input type="button" onclick="window.location='__URL__/flow/id/{$request['id']}/owner_id/0';" value="Reset" />
+				<input type="button" onclick="window.location='__URL__/flow/id/{$request['id']}';" value="Reset" />
 			</td>
 		</tr>
 		<tr>
