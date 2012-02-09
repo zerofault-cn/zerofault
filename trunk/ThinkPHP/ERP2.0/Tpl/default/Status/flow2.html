@@ -11,7 +11,7 @@
 }
 
 th.sp, td.sp {
-	padding: 1px;
+	padding: 2px;
 	background-color: #FFFF99;
 }
 strong.None, select.None, option.None {
@@ -114,7 +114,7 @@ td.focus {
 
 <iterate name="board_list" id="board">
 <tr class="trbg{$mod}">
-	<td>{$board['name']}</td>
+	<td><a href="__URL__/board/id/{$board['id']}" title="Edit/View Board Detail"><strong>{$board['name']}</strong></a></td>
 	<td valign="top">{$board['info']|nl2br}</td>
 	<td>{$board['owner']['realname']}</td>
 	<td class="sp"></td>
@@ -204,6 +204,7 @@ function submit_edit(obj) {
 		"v" : $(obj).val()
 	}, function(str) {
 		myAlert(str);
+		myLocation("", "");
 	});
 }
 function cancel_edit(obj){

@@ -46,14 +46,14 @@ td.focus {
 <table cellpadding="3" border="1" bordercolor="#FFFFFF" style="border-collapse:collapse;">
 <tr>
 	<td bgcolor="#BCD1EF">In The Flow:</td>
-	<td bgcolor="#E9E9E9"><a href="__URL__/flow/id/{$info['flow']['id']}">{$info['flow']['name']}</a></td>
+	<td bgcolor="#E9E9E9"><a href="__URL__/flow2/id/{$info['flow']['id']}">{$info['flow']['name']}</a></td>
 	<td align="right" width="50"><a href="__URL__">&lt;&lt;Back</a></td>
 </tr>
 <tr>
 	<td bgcolor="#BCD1EF">Board Name:</td>
 	<td bgcolor="#E9E9E9" colspan="2">
 		<if condition="$_SESSION[C('USER_AUTH_KEY')] eq $info['owner_id'] or $_SESSION[C('ADMIN_AUTH_NAME')] or in_array($_SESSION[C('USER_AUTH_KEY')], C('STATUS_ADMIN_ID'))">
-		<input type="text" class="edit_field" id="name" value="{$info['name']}" size="30"/><img src="../Public/Images/sign_tick.png" align="absmiddle"/>
+		<input type="text" class="edit_field" id="name" value="{$info['name']}" size="30"/><!-- <img src="../Public/Images/sign_tick.png" align="absmiddle"/> --><input type="button" value="Submit" />
 		<else />
 		{$info['name']}
 		</if>
@@ -63,7 +63,7 @@ td.focus {
 	<td bgcolor="#BCD1EF" nowrap="nowrap">Board Information:</td>
 	<td bgcolor="#E9E9E9" colspan="2">
 		<if condition="$_SESSION[C('USER_AUTH_KEY')] eq $info['owner_id'] or $_SESSION[C('ADMIN_AUTH_NAME')] or in_array($_SESSION[C('USER_AUTH_KEY')], C('STATUS_ADMIN_ID'))">
-		<textarea class="edit_field" id="info" rows="4" cols="40">{$info['info']}</textarea><img src="../Public/Images/sign_tick.png" align="absmiddle"/>
+		<textarea class="edit_field" id="info" rows="4" cols="40">{$info['info']}</textarea><!-- <img src="../Public/Images/sign_tick.png" align="absmiddle"/> --><input type="button" value="Submit" />
 		<else />
 		{$info['info']|nl2br}
 		</if>
@@ -75,7 +75,7 @@ td.focus {
 		<if condition="$_SESSION[C('USER_AUTH_KEY')] eq $info['owner_id'] or $_SESSION[C('ADMIN_AUTH_NAME')] or in_array($_SESSION[C('USER_AUTH_KEY')], C('STATUS_ADMIN_ID'))">
 		<select id="owner_id" class="edit_field">
 		{$info['owner_opts']}
-		</select><img src="../Public/Images/sign_tick.png" align="absmiddle"/>
+		</select><!-- <img src="../Public/Images/sign_tick.png" align="absmiddle"/> --><input type="button" value="Submit" />
 		<else />
 		{$info['owner']['realname']}
 		</if>
@@ -138,7 +138,7 @@ td.focus {
 	<td bgcolor="#BCD1EF" nowrap="nowrap">Board Remark:</td>
 	<td bgcolor="#E9E9E9" colspan="2">
 		<if condition="$_SESSION[C('USER_AUTH_KEY')] eq $info['owner_id'] or $_SESSION[C('ADMIN_AUTH_NAME')] or in_array($_SESSION[C('USER_AUTH_KEY')], C('STATUS_ADMIN_ID'))">
-		<textarea class="edit_field" id="remark" rows="4" cols="40">{$info['remark']}</textarea><img src="../Public/Images/sign_tick.png" align="absmiddle"/>
+		<textarea class="edit_field" id="remark" rows="4" cols="40">{$info['remark']}</textarea><!-- <img src="../Public/Images/sign_tick.png" align="absmiddle"/> --><input type="button" value="Submit" />
 		<else />
 		{$info['remark']|nl2br}
 		</if>
@@ -205,6 +205,7 @@ $(document).ready(function() {
 				"v" : $(this).prev().val()
 			}, function(str) {
 				myAlert(str);
+				myOK("");
 			});
 		});
 	});
