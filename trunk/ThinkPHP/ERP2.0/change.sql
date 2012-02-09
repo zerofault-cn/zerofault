@@ -184,6 +184,7 @@ CREATE TABLE `erp_status_board` (
   `flow_id` smallint(5) unsigned NOT NULL default '0',
   `name` varchar(255) NOT NULL default '',
   `info` text NOT NULL,
+  `remark` text NOT NULL,
   `owner_id` smallint(5) unsigned NOT NULL default '0',
   `create_time` datetime NOT NULL default '0000-00-00 00:00:00',
   `update_time` datetime NOT NULL default '0000-00-00 00:00:00',
