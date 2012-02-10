@@ -84,18 +84,14 @@ td.focus {
 </table>
 <table cellpadding="3" border="1" bordercolor="#FFFFFF" style="border-collapse:collapse;">
 <tr bgcolor="#CCCCFF">
-	<td colspan="3" align="right" bgcolor="#CCCCFF"><strong>Test Item:&nbsp;</strong></td>
+	<td colspan="6" align="right" bgcolor="#CCCCFF"><strong>Test Item:&nbsp;</strong></td>
 	<td class="sp"></td>
 	<foreach name="item_list" item="item">
 	<td colspan="2" title="{$item['description']}" valign="top">{$key+1}.&nbsp;{$item['name']}</td>
 	</foreach>
-	<td class="sp" rowspan="3"></td>
-	<th rowspan="3">Final Status</th>
-	<th rowspan="3">Board Comment</th>
-	<th rowspan="3">Board Remark</th>
 </tr>
 <tr bgcolor="#CCCCFF">
-	<td colspan="3" align="right" bgcolor="#CCCCFF"><strong>Default Test Owner:&nbsp;</strong></td>
+	<td colspan="6" align="right" bgcolor="#CCCCFF"><strong>Default Test Owner:&nbsp;</strong></td>
 	<td class="sp"></td>
 	<foreach name="owner_list" item="owner">
 	<td colspan="2">{$owner}</td>
@@ -105,6 +101,9 @@ td.focus {
 	<th nowrap="nowrap">Board Name</th>
 	<th nowrap="nowrap">Information</th>
 	<th nowrap="nowrap">Board Owner</th>
+	<th nowrap="nowrap">Final Status</th>
+	<th nowrap="nowrap">Board Comment</th>
+	<th nowrap="nowrap">Board Remark</th>
 	<td class="sp"></td>
 	<foreach name="item_list" item="item">
 	<th>Status</th>
@@ -117,12 +116,6 @@ td.focus {
 	<td><a href="__URL__/board/id/{$board['id']}" title="Edit/View Board Detail"><strong>{$board['name']}</strong></a></td>
 	<td valign="top">{$board['info']|nl2br}</td>
 	<td>{$board['owner']['realname']}</td>
-	<td class="sp"></td>
-	<foreach name="board.board_item" item="item">
-	<td><a href="__URL__/revision/status_id/{$item['status_id']}?width=420&height=360&modal=true" class="thickbox" title="{$item['title']}"><strong class="{$status_arr[$item['status']]}">{$status_arr[$item['status']]}</strong></a></td>
-	<td valign="top" class="td_comment"><a style="float:right;" href="__URL__/list_comment/model/StatusStatus/id/{$item['status_id']}?width=480&height=360&modal=true" class="thickbox" title="Click to view comment"><img src="../Public/Images/comments.gif"/></a><notempty name="item.last_comment">{$item['last_comment']['content']|substr=0,12}</notempty></td>
-	</foreach>
-	<td class="sp"></td>
 	<td><a href="__URL__/revision/board_id/{$board['id']}?width=420&height=360&modal=true" class="thickbox"><strong class="{$status_arr[$board['status']]|str_replace='*','X',###}">{$status_arr[$board['status']]}</strong></a></td>
 	<td valign="top" class="td_comment"><a style="float:right;" href="__URL__/list_comment/model/StatusBoard/id/{$board['id']}?width=480&height=360&modal=true" class="thickbox" title="Click to view board comment"><img src="../Public/Images/comments.gif"/></a><notempty name="board.last_comment">{$board['last_comment']['content']|substr=0,12}</notempty></td>
 	<if condition="$_SESSION[C('USER_AUTH_KEY')] eq $board['owner_id'] or $_SESSION[C('ADMIN_AUTH_NAME')] or in_array($_SESSION[C('USER_AUTH_KEY')], C('STATUS_ADMIN_ID'))">
@@ -130,6 +123,11 @@ td.focus {
 	<else />
 	<td>{$board['remark']|nl2br}</td>
 	</if>
+	<td class="sp"></td>
+	<foreach name="board.board_item" item="item">
+	<td><a href="__URL__/revision/status_id/{$item['status_id']}?width=420&height=360&modal=true" class="thickbox" title="{$item['title']}"><strong class="{$status_arr[$item['status']]}">{$status_arr[$item['status']]}</strong></a></td>
+	<td valign="top" class="td_comment"><a style="float:right;" href="__URL__/list_comment/model/StatusStatus/id/{$item['status_id']}?width=480&height=360&modal=true" class="thickbox" title="Click to view comment"><img src="../Public/Images/comments.gif"/></a><notempty name="item.last_comment">{$item['last_comment']['content']|substr=0,12}</notempty></td>
+	</foreach>
 </tr>
 </iterate>
 
