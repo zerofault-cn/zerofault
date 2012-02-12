@@ -110,7 +110,7 @@ strong.Ignore {
 		<if condition="$_SESSION[C('USER_AUTH_KEY')] eq $flow['owner_id'] or $_SESSION[C('ADMIN_AUTH_NAME')] or in_array($_SESSION[C('USER_AUTH_KEY')], C('STATUS_ADMIN_ID'))">
 		<a href="__URL__/form/id/{$flow['id']}">Edit</a>
 		<a href="javascript:void(0);" onclick="myConfirm('Are you sure to delete this item?', '__URL__/delete/id/{$flow['id']}');" target="_iframe">Delete</a>
-		<!-- <a href="__URL__/send_mail/type/flow/id/{$flow['id']}" target="_iframe" title="Send notification mail">Mail</a> -->
+		<a href="javascript:void(0);" onclick="myConfirm('Are you sure to send notification mail?', '__URL__/send_mail/type/flow/id/{$flow['id']}');" target="_iframe" title="Send notification mail of this flow">Mail</a>
 		</if>
 		<if condition="$_SESSION[C('ADMIN_AUTH_NAME')] or in_array($_SESSION[C('USER_AUTH_KEY')], C('STATUS_ADMIN_ID'))">
 		<a href="__URL__/board/op/add/flow_id/{$flow['id']}?width=400&height=250&modal=true" class="thickbox" title="Add a new board to the test flow">Add</a>

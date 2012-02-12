@@ -269,3 +269,12 @@ CREATE TABLE `erp_status_revision` (
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 ALTER TABLE `erp_status_board` ADD COLUMN `remark` text NOT NULL AFTER `info`;
+
+CREATE TABLE `erp_status_log` (
+  `id` int(10) unsigned NOT NULL auto_increment,
+  `type` varchar(255) NOT NULL default '',
+  `action_time` datetime NOT NULL default '0000-00-00 00:00:00',
+  `staff_id` smallint(5) unsigned NOT NULL default '0',
+  `content` text NOT NULL,
+  PRIMARY KEY  (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;

@@ -155,6 +155,8 @@ class StatusAction extends BaseAction{
 		empty($_REQUEST['owner_id'][0]) && self::_error('You must specify an owner to the first test item!');
 		if ($id>0) {
 			$this->dao->find($id);
+			$old_name = $this->dao->name;
+			$old_item_ids = $this->dao->item_ids;
 		}
 		else {
 			$this->dao->creator_id = $_SESSION[C('USER_AUTH_KEY')];
@@ -169,10 +171,18 @@ class StatusAction extends BaseAction{
 		$this->dao->update_time = date('Y-m-d H:i:s');
 		if ($id>0) {
 			if(false !== $this->dao->save()) {
+				if ($old_name != $name) {
+					self::write_log('Manually', 'Change test flow:'.$id.' name from ['.$old_name.'] to ['.$name.'].');
+				}
+				$item_ids_diff = array_diff(explode(',', $old_item_ids), $_REQUEST['item_id']);
+				if (!empty($item_ids_diff)) {
+					$item_deleted = M('StatusItem')->where(array('id'=>array('in', $item_ids_diff)))->getField('id,name');
+					self::write_log('Manually', 'Remove test items ['.implode('/', $item_deleted).'] from the test flow('.$id.': '.$this->dao->name.').');
+				}
 				//update all status
 				M('StatusStatus')->where("flow_id=".$id." and item_id not in (".implode(',', $_REQUEST['item_id']).")")->delete();
 				//load board list in the flow
-				$board_arr = M('StatusBoard')->where("flow_id=".$id)->getField('id, name');
+				$board_rs = M('StatusBoard')->where("flow_id=".$id)->select();
 				$last_owner_id = $_REQUEST['owner_id'][0];
 				foreach ($_REQUEST['item_id'] as $i=>$item_id) {
 					if (empty($_REQUEST['owner_id'][$i])) {
@@ -182,13 +192,14 @@ class StatusAction extends BaseAction{
 						$owner_id = intval($_REQUEST['owner_id'][$i]);
 						$last_owner_id = $owner_id;
 					}
-					$tmp_rs = M('StatusStatus')->where("flow_id=".$id." and item_id=".$item_id)->select();
+					$tmp_rs = D('StatusStatus')->relation(true)->where("flow_id=".$id." and item_id=".$item_id)->find();
 					if (empty($tmp_rs)) {
+						self::write_log('Manually', 'Add test item['.M('StatusItem')->where("id=".$item_id)->getField('name').'] to the test flow('.$id.': '.$this->dao->name.').');
 						//add new item for all board
-						foreach ($board_arr as $board_id=>$null) {
+						foreach ($board_rs as $board) {
 							$status_data = array(
 								'flow_id' => $id,
-								'board_id' => $board_id,
+								'board_id' => $board['id'],
 								'item_id' => $item_id,
 								'owner_id' => $owner_id,
 								'substitute_id' => 0,
@@ -199,13 +210,57 @@ class StatusAction extends BaseAction{
 							if (!M('StatusStatus')->add($status_data)) {
 								self::_error('Add status fail!'.$this->dao->getLastSql());
 							}
-							M('StatusBoard')->where("id=".$board_id)->setField(array('status', 'update_time'), array(-1, date('Y-m-d H:i:s')));
+
+							if (-1 != $board['status']) {
+								M('StatusBoard')->where("id=".$board['id'])->setField(array('status', 'update_time'), array(-1, date('Y-m-d H:i:s')));
+								self::write_log('Automatically', 'Change board('.$board['id'].': '.$board['name'].') finnal status from ['.$this->status_arr[$board['status']].'] to ['.$this->status_arr[-1].']');
+							}
 						}
 					}
 					else {
 						//update the exists item
-						M('StatusStatus')->where("flow_id=".$id." and item_id=".$item_id)->setField(array('owner_id', 'substitute_id', 'sort'), array($owner_id, 0, $i));
+						if ($tmp_rs['owner_id'] != $owner_id) {
+							M('StatusStatus')->where("flow_id=".$id." and item_id=".$item_id)->setField(array('owner_id', 'substitute_id', 'sort'), array($owner_id, 0, $i));
+							self::write_log('Manually', 'Change the default owner of item('.$item_id.': '.$tmp_rs['item']['name'].') from ['.$tmp_rs['owner']['realname'].'] to ['.M('Staff')->where("id=".$owner_id)->getField('realname').']');
+						}
 					}
+				}
+				//check each board status
+				foreach ($board_rs as $board) {
+					$status_count = M('StatusStatus')->where("board_id=".$board['id'])->group('status')->getField('status,count(*)');
+					if ($status_count[2] > 0) {
+						//有Fail
+						$value = 2;
+					}
+					else {
+						//没有Fail
+						if ($status_count[0] > 0) {
+							//有Pending
+							$value = 0;
+						}
+						else {
+							//没有Pending
+							if ($status_count[-1] > 0) {
+								//有None
+								$value = -1;
+							}
+							else {
+								//没有None，只剩Pass和Ignore
+								if ($status_count[1] == count($_REQUEST['item_id'])) {
+									//全部Pass
+									$value = 1;
+								}
+								else {
+									$value = 9;
+								}
+							}
+						}
+					}
+					if ($board['status'] != $value) {
+						M('StatusBoard')->where("id=".$board['id'])->setField(array('status', 'update_time'), array($value, date('Y-m-d H:i:s')));
+						self::write_log('Automatically', 'Change board('.$board['id'].': '.$board['name'].') finnal status from ['.$this->status_arr[$board['status']].'] to ['.$this->status_arr[$value].']');
+					}
+
 				}
 				self::_success('Flow updated!',__URL__);
 			}
@@ -215,6 +270,7 @@ class StatusAction extends BaseAction{
 		}
 		else {
 			if($id = $this->dao->add()) {
+				self::write_log('Manually', 'Create new test flow('.$id.': '.$this->dao->name.').');
 				$board_data = array(
 					'flow_id' => $id,
 					'name' => $board_name.sprintf("%03d", 1),
@@ -227,6 +283,7 @@ class StatusAction extends BaseAction{
 				if (!$board_id=M('StatusBoard')->add($board_data)) {
 					self::_error('Add board fail!'.$this->dao->getLastSql());
 				}
+				self::write_log('Manually', 'Add a board('.$board_id.': '.$board_data['name'].') to the test flow('.$id.': '.$this->dao->name.').');
 				//add item status
 				$last_owner_id = $_REQUEST['owner_id'][0];
 				foreach ($_REQUEST['item_id'] as $i=>$item_id) {
@@ -672,7 +729,7 @@ class StatusAction extends BaseAction{
 		}
 
 		$flow_info = $this->dao->find($id);
-		
+
 		$flow_item_arr = array();
 		$item_ids = explode(',', $flow_info['item_ids']);
 		foreach ($item_ids as $i=>$item_id) {
@@ -706,7 +763,7 @@ class StatusAction extends BaseAction{
 					'status' => $status['status'],
 					'last_comment' => M('Comment')->where(array('model_name'=>'StatusStatus', 'model_id'=>$status['id']))->order('id desc')->find()
 					);
-			
+
 				//load revision as title
 				$tmp_rs = M('StatusRevision')->where("status_id=".$status['id'])->order('sort')->select();
 				empty($tmp_rs) && ($tmp_rs = array());
@@ -1388,6 +1445,11 @@ class StatusAction extends BaseAction{
 		$mail->SetFrom($smtp_config['from_mail'], 'ERP System');
 
 		switch ($type) {
+			case 'flow':
+				$board_arr = D('StatusBoard')->where("flow_id=".$id." and status<=0")->select();
+				foreach ($board_arr as $board) {
+					self::_mail('board', $board['id']);
+				}
 			case 'board':
 				$board = D('StatusBoard')->relation(true)->find($id);
 				//to board owner
@@ -1396,6 +1458,7 @@ class StatusAction extends BaseAction{
 
 				//to all item owner
 				$status = D('StatusStatus')->relation(true)->where("board_id=".$id)->select();
+
 				$style = '<style>'."\n";
 				$style .= 'strong.None{color: #808080;}'."\n";
 				$style .= 'strong.Pass{color: #339900;}'."\n";
@@ -1470,6 +1533,19 @@ class StatusAction extends BaseAction{
 		$type=$_REQUEST['type'];
 		$id = $_REQUEST['id'];
 		self::_mail($type, $id);
+	}
+	public function write_log($type, $content) {
+		$data = array(
+			'type' => $type,
+			'action_time' => date('Y-m-d H:i:s'),
+			'staff_id' =>  $_SESSION[C('USER_AUTH_KEY')],
+			'content' => $content
+			);
+		if (!M('StatusLog')->add($data)) {
+			self::_error('Add log fail!<br />'.$this->dao->getLastSql());
+		}
+	}
+	public function read_log() {
 	}
 }
 ?>
