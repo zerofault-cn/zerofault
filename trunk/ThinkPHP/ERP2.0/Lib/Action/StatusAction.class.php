@@ -155,7 +155,6 @@ class StatusAction extends BaseAction{
 		empty($_REQUEST['owner_id'][0]) && self::_error('You must specify an owner to the first test item!');
 		if ($id>0) {
 			$this->dao->find($id);
-			$old_name = $this->dao->name;
 			$old_item_ids = $this->dao->item_ids;
 		}
 		else {
@@ -171,13 +170,10 @@ class StatusAction extends BaseAction{
 		$this->dao->update_time = date('Y-m-d H:i:s');
 		if ($id>0) {
 			if(false !== $this->dao->save()) {
-				if ($old_name != $name) {
-					self::write_log('Manually', 'Change test flow:'.$id.' name from ['.$old_name.'] to ['.$name.'].');
-				}
 				$item_ids_diff = array_diff(explode(',', $old_item_ids), $_REQUEST['item_id']);
 				if (!empty($item_ids_diff)) {
 					$item_deleted = M('StatusItem')->where(array('id'=>array('in', $item_ids_diff)))->getField('id,name');
-					self::write_log('Manually', 'Remove test items ['.implode('/', $item_deleted).'] from the test flow('.$id.': '.$this->dao->name.').');
+					self::write_log('Manually', 'Remove Test Items ['.implode('/', $item_deleted).'] from the Test Flow('.$id.': '.$this->dao->name.').');
 				}
 				//update all status
 				M('StatusStatus')->where("flow_id=".$id." and item_id not in (".implode(',', $_REQUEST['item_id']).")")->delete();
@@ -194,7 +190,7 @@ class StatusAction extends BaseAction{
 					}
 					$tmp_rs = D('StatusStatus')->relation(true)->where("flow_id=".$id." and item_id=".$item_id)->find();
 					if (empty($tmp_rs)) {
-						self::write_log('Manually', 'Add test item['.M('StatusItem')->where("id=".$item_id)->getField('name').'] to the test flow('.$id.': '.$this->dao->name.').');
+						self::write_log('Manually', 'Add Test Item['.M('StatusItem')->where("id=".$item_id)->getField('name').'] to the Test Flow('.$id.': '.$this->dao->name.').');
 						//add new item for all board
 						foreach ($board_rs as $board) {
 							$status_data = array(
@@ -213,7 +209,7 @@ class StatusAction extends BaseAction{
 
 							if (-1 != $board['status']) {
 								M('StatusBoard')->where("id=".$board['id'])->setField(array('status', 'update_time'), array(-1, date('Y-m-d H:i:s')));
-								self::write_log('Automatically', 'Change board('.$board['id'].': '.$board['name'].') finnal status from ['.$this->status_arr[$board['status']].'] to ['.$this->status_arr[-1].']');
+								self::write_log('Automatically', 'Change Board('.$board['id'].': '.$board['name'].') finnal status from ['.$this->status_arr[$board['status']].'] to ['.$this->status_arr[-1].']');
 							}
 						}
 					}
@@ -221,7 +217,7 @@ class StatusAction extends BaseAction{
 						//update the exists item
 						if ($tmp_rs['owner_id'] != $owner_id) {
 							M('StatusStatus')->where("flow_id=".$id." and item_id=".$item_id)->setField(array('owner_id', 'substitute_id', 'sort'), array($owner_id, 0, $i));
-							self::write_log('Manually', 'Change the default owner of item('.$item_id.': '.$tmp_rs['item']['name'].') from ['.$tmp_rs['owner']['realname'].'] to ['.M('Staff')->where("id=".$owner_id)->getField('realname').']');
+							self::write_log('Manually', 'Change the default owner of Item('.$item_id.': '.$tmp_rs['item']['name'].') from ['.$tmp_rs['owner']['realname'].'] to ['.M('Staff')->where("id=".$owner_id)->getField('realname').']');
 						}
 					}
 				}
@@ -258,7 +254,7 @@ class StatusAction extends BaseAction{
 					}
 					if ($board['status'] != $value) {
 						M('StatusBoard')->where("id=".$board['id'])->setField(array('status', 'update_time'), array($value, date('Y-m-d H:i:s')));
-						self::write_log('Automatically', 'Change board('.$board['id'].': '.$board['name'].') finnal status from ['.$this->status_arr[$board['status']].'] to ['.$this->status_arr[$value].']');
+						self::write_log('Automatically', 'Change Board('.$board['id'].': '.$board['name'].') finnal status from ['.$this->status_arr[$board['status']].'] to ['.$this->status_arr[$value].']');
 					}
 
 				}
@@ -270,7 +266,6 @@ class StatusAction extends BaseAction{
 		}
 		else {
 			if($id = $this->dao->add()) {
-				self::write_log('Manually', 'Create new test flow('.$id.': '.$this->dao->name.').');
 				$board_data = array(
 					'flow_id' => $id,
 					'name' => $board_name.sprintf("%03d", 1),
@@ -283,7 +278,6 @@ class StatusAction extends BaseAction{
 				if (!$board_id=M('StatusBoard')->add($board_data)) {
 					self::_error('Add board fail!'.$this->dao->getLastSql());
 				}
-				self::write_log('Manually', 'Add a board('.$board_id.': '.$board_data['name'].') to the test flow('.$id.': '.$this->dao->name.').');
 				//add item status
 				$last_owner_id = $_REQUEST['owner_id'][0];
 				foreach ($_REQUEST['item_id'] as $i=>$item_id) {
@@ -1014,45 +1008,55 @@ class StatusAction extends BaseAction{
 				$dao = M('StatusBoard');
 				$info = $dao->find($board_id);
 				if ($info['status'] != $value) {
-					$rs = $dao->where('id='.$board_id)->setField(array('status', 'update_time'), array($value, date('Y-m-d H:i:s')));
+					$dao->where('id='.$board_id)->setField(array('status', 'update_time'), array($value, date('Y-m-d H:i:s')));
+					self::write_log('Manually', 'Change finnal status of Board('.$info['id'].': '.$info['name'].') from ['.$this->status_arr[$info['status']].'] to ['.$this->status_arr[$value].']');
 				}
 			}
 			elseif ($status_id > 0) {
 				//改变Status状态
 				$dao = M('StatusStatus');
 				$info = $dao->find($status_id);
+				$item = M('StatusItem')->find($info['item_id']);
+				$board = M('StatusBoard')->find($info['board_id']);
 				if ($info['status'] != $value) {
-					$rs = $dao->where("id=".$status_id)->setField(array('status', 'update_time'), array($value, date('Y-m-d H:i:s')));
+					$dao->where("id=".$status_id)->setField(array('status', 'update_time'), array($value, date('Y-m-d H:i:s')));
+					self::write_log('Manually', 'Change status of Item('.$item['id'].': '.$item['name'].') of Board('.$board['id'].': '.$board['name'].') from ['.$this->status_arr[$info['status']].'] to ['.$this->status_arr[$value].']');
 				}
 
-				if (1==$value || $value!=M('StatusBoard')->where("id=".$info['board_id'])->getField('status')) {
+				if (1==$value || $value!=$board['status']) {
 					if (-1==$value) {
 						//没有Fail和Pending，None=>None
 						if ($dao->where("board_id=".$info['board_id']." and (status=0 or status=2)")->count()==0) {
 							M('StatusBoard')->where("id=".$info['board_id'])->setField(array('status', 'update_time'), array($value, date('Y-m-d H:i:s')));
+							self::write_log('Automatically', 'Change final status of Board('.$board['id'].': '.$board['name'].') from ['.$this->status_arr[$board['status']].'] to ['.$this->status_arr[$value].']');
 						}
 					}
-					if (0==$value) {
+					elseif (0==$value) {
 						//没有Fail， Pending=>Pending
 						if ($dao->where("board_id=".$info['board_id']." and status=2")->count()==0) {
 							M('StatusBoard')->where("id=".$info['board_id'])->setField(array('status', 'update_time'), array($value, date('Y-m-d H:i:s')));
+							self::write_log('Automatically', 'Change final status of Board('.$board['id'].': '.$board['name'].') from ['.$this->status_arr[$board['status']].'] to ['.$this->status_arr[$value].']');
 						}
 					}
 					elseif (1==$value) {
 						//如果所有Status都为Pass，则设置Board为Pass
 						if ($dao->where("board_id=".$info['board_id'])->count() == $dao->where("board_id=".$info['board_id']." and status=1")->count()) {
 							M('StatusBoard')->where('id='.$info['board_id'])->setField(array('status', 'update_time'), array($value, date('Y-m-d H:i:s')));
+							self::write_log('Automatically', 'Change final status of Board('.$board['id'].': '.$board['name'].') from ['.$this->status_arr[$board['status']].'] to ['.$this->status_arr[$value].']');
 						}
 						elseif ($dao->where("board_id=".$info['board_id']." and (status=-1 or status=0 or status=2)")->count()==0) {
 							M('StatusBoard')->where('id='.$info['board_id'])->setField(array('status', 'update_time'), array(9, date('Y-m-d H:i:s')));
+							self::write_log('Automatically', 'Change final status of Board('.$board['id'].': '.$board['name'].') from ['.$this->status_arr[$board['status']].'] to ['.$this->status_arr[9].']');
 						}
 						elseif ($dao->where("board_id=".$info['board_id']." and status=0")->count()>0 && $dao->where("board_id=".$info['board_id']." and status=2")->count()==0) {
 							M('StatusBoard')->where('id='.$info['board_id'])->setField(array('status', 'update_time'), array(0, date('Y-m-d H:i:s')));
+							self::write_log('Automatically', 'Change final status of Board('.$board['id'].': '.$board['name'].') from ['.$this->status_arr[$board['status']].'] to ['.$this->status_arr[0].']');
 						}
 					}
 					elseif (2==$value) {
 						//设置Board状态为Failed
 						M('StatusBoard')->where('id='.$info['board_id'])->setField(array('status', 'update_time'), array($value, date('Y-m-d H:i:s')));
+						self::write_log('Automatically', 'Change final status of Board('.$board['id'].': '.$board['name'].') from ['.$this->status_arr[$board['status']].'] to ['.$this->status_arr[$value].']');
 					}
 					elseif (8==$value) {
 						//如果没有None、Pending、Fail了
@@ -1060,10 +1064,12 @@ class StatusAction extends BaseAction{
 							if ($dao->where("board_id=".$info['board_id']." and status=1")->count()>0) {
 								//至少有一个Pass，则设置Board为Pass*
 								M('StatusBoard')->where('id='.$info['board_id'])->setField(array('status', 'update_time'), array(9, date('Y-m-d H:i:s')));
+								self::write_log('Automatically', 'Change final status of Board('.$board['id'].': '.$board['name'].') from ['.$this->status_arr[$board['status']].'] to ['.$this->status_arr[9].']');
 							}
 							else {
 								//没有Pass，那么全部为Ignore
 								M('StatusBoard')->where('id='.$info['board_id'])->setField(array('status', 'update_time'), array(8, date('Y-m-d H:i:s')));
+								self::write_log('Automatically', 'Change final status of Board('.$board['id'].': '.$board['name'].') from ['.$this->status_arr[$board['status']].'] to ['.$this->status_arr[8].']');
 							}
 						}
 					}
@@ -1107,7 +1113,7 @@ class StatusAction extends BaseAction{
 		$value = $_REQUEST['v'];
 		$rs = true;
 		if ($board_id > 0) {
-			//改变Board状态
+			//改变Board表栏位
 			$dao = M('StatusBoard');
 			$info = $dao->find($board_id);
 			if ($info[$field] != $value) {
@@ -1115,55 +1121,21 @@ class StatusAction extends BaseAction{
 			}
 		}
 		elseif ($status_id > 0) {
-			//改变Status状态
+			//改变Status表栏位
 			$dao = M('StatusStatus');
 			$info = $dao->find($status_id);
+			$old_value = $info[$field];
 			if ($info[$field] != $value) {
 				$rs = $dao->where("id=".$status_id)->setField(array($field, 'update_time'), array($value, date('Y-m-d H:i:s')));
-			}
-			if ('status'==$field && $value!=M('StatusBoard')->where("id=".$info['board_id'])->getField('status')) {
-				if (-1==$value) {
-					//没有Fail和Pending，None=>None
-					if ($dao->where("board_id=".$info['board_id']." and (status=0 or status=2)")->count()==0) {
-						M('StatusBoard')->where("id=".$info['board_id'])->setField(array('status', 'update_time'), array($value, date('Y-m-d H:i:s')));
-					}
-				}
-				if (0==$value) {
-					//没有Fail， Pending=>Pending
-					if ($dao->where("board_id=".$info['board_id']." and status=2")->count()==0) {
-						M('StatusBoard')->where("id=".$info['board_id'])->setField(array('status', 'update_time'), array($value, date('Y-m-d H:i:s')));
-					}
-				}
-				elseif (1==$value) {
-					//如果所有Status都为Pass，则设置Board为Pass
-					if ($dao->where("board_id=".$info['board_id'])->count() == $dao->where("board_id=".$info['board_id']." and status=1")->count()) {
-						M('StatusBoard')->where('id='.$info['board_id'])->setField(array('status', 'update_time'), array($value, date('Y-m-d H:i:s')));
-					}
-					elseif ($dao->where("board_id=".$info['board_id']." and (status=-1 or status=0 or status=2)")->count()==0) {
-						M('StatusBoard')->where('id='.$info['board_id'])->setField(array('status', 'update_time'), array(9, date('Y-m-d H:i:s')));
-					}
-					elseif ($dao->where("board_id=".$info['board_id']." and status=0")->count()>0 && $dao->where("board_id=".$info['board_id']." and status=2")->count()==0) {
-						M('StatusBoard')->where('id='.$info['board_id'])->setField(array('status', 'update_time'), array(0, date('Y-m-d H:i:s')));
-					}
-				}
-				elseif (2==$value) {
-					//设置Board状态为Failed
-					M('StatusBoard')->where('id='.$info['board_id'])->setField(array('status', 'update_time'), array($value, date('Y-m-d H:i:s')));
-				}
-				elseif (8==$value) {
-					//如果没有None、Pending、Fail了
-					if ($dao->where("board_id=".$info['board_id']." and (status=-1 or status=0 or status=2)")->count()==0) {
-						if ($dao->where("board_id=".$info['board_id']." and status=1")->count()>0) {
-							//至少有一个Pass，则设置Board为Pass*
-							M('StatusBoard')->where('id='.$info['board_id'])->setField(array('status', 'update_time'), array(9, date('Y-m-d H:i:s')));
-						}
-						else {
-							//没有Pass，那么全部为Ignore
-							M('StatusBoard')->where('id='.$info['board_id'])->setField(array('status', 'update_time'), array(8, date('Y-m-d H:i:s')));
-						}
-					}
+				if ('owner_id'==$field || 'substitute_id'==$field) {
+					$old_owner = M('Staff')->where("id=".$old_value)->getField('realname');
+					$new_owner = M('Staff')->where("id=".$value)->getField('realname');
+					$item = M('StatusItem')->find($info['item_id']);
+					$board = M('StatusBoard')->find($info['board_id']);
+					self::write_log('Manually', 'Change the '.str_replace('_id', '', $field).' of Item('.$item['id'].': '.$item['name'].') of Board('.$board['id'].': '.$board['name'].') from ['.$old_owner.'] to ['.$new_owner.']');
 				}
 			}
+			
 		}
 		if(false !== $rs) {
 			if ('POST' == strtoupper($_SERVER["REQUEST_METHOD"])) {
@@ -1546,6 +1518,46 @@ class StatusAction extends BaseAction{
 		}
 	}
 	public function read_log() {
+		Session::set('sub', MODULE_NAME.'/'.ACTION_NAME);
+		$dao = D('StatusLog');
+
+		$this->assign('request', $_REQUEST);
+
+		import("@.Paginator");
+		$limit = 50;
+		if (!empty($_SESSION[MODULE_NAME.'_'.ACTION_NAME.'_limit'])) {
+			$limit = $_SESSION[MODULE_NAME.'_'.ACTION_NAME.'_limit'];
+		}
+		if (!empty($_REQUEST['limit'])) {
+			$limit = $_REQUEST['limit'];
+		}
+		$_SESSION[MODULE_NAME.'_'.ACTION_NAME.'_limit'] = $limit;
+
+		$where = array();
+		if (isset($_REQUEST['staff_id'])) {
+			$staff_id = intval($_REQUEST['staff_id']);
+		}
+		$staff_arr = $dao->join("Inner Join erp_staff on erp_staff.id=erp_status_log.staff_id")->distinct(true)->field("erp_staff.id as id, erp_staff.realname as realname")->order("realname")->select();
+		$this->assign('staff_opts', self::genOptions($staff_arr, $staff_id, 'realname'));
+		if (!empty($staff_id)) {
+			$where['staff_id'] = $staff_id;
+		}
+
+		!empty($_REQUEST['from']) && ($where['action_time'] = array('egt', $_REQUEST['from']));
+		!empty($_REQUEST['to']) && ($where['action_time'] = array('lt', $_REQUEST['to']));
+		
+		$count = $dao->where($where)->getField('count(*)');
+		$p = new Paginator($count,$limit);
+
+		$rs = $dao->relation(true)->where($where)->order('id desc')->limit($p->offset.','.$p->limit)->select();
+		
+		$this->assign('result', $rs);
+		$this->assign('page', $p->showMultiNavi());
+		$this->assign('content', ACTION_NAME);
+
+		$this->assign('ACTION_TITLE', 'Operation Log');
+		$this->display('Layout:ERP_layout');
+
 	}
 }
 ?>
