@@ -1,0 +1,74 @@
+<p class="page_title_text">{$ACTION_TITLE}</p>
+<table >
+<tr>
+	<td>
+		<form action="__URL__/read_log">
+		<table id="search_table" cellpadding="3" border="1" bordercolor="#FFFFFF" style="border-collapse:collapse;">
+		<tr>
+			<th rowspan="2">Operator</th>
+			<th colspan="2">Action Time</th>
+			<td rowspan="3" >
+				<input type="submit" name="submit" value="Filter" />
+				<input type="button" onclick="window.location='__URL__/real_log';" value="Reset" />
+			</td>
+		</tr>
+		<tr>
+			<th>From</th>
+			<th>To</th>
+		</tr>
+		<tr>
+			<td><select name="staff_id"><option value="0">All</option>{$staff_opts}</select></td>
+			<td><input type="text" name="from" size="10" value="{$request['from']}" class="date_from"/></td>
+			<td><input type="text" name="to" size="10" value="{$request['to']}" class="date_to"/></td>
+		</tr>
+		</table>
+		</form>
+	</td>
+</tr>
+</table>
+<table cellpadding="3" border="1" bordercolor="#FFFFFF" style="border-collapse:collapse;">
+<tr>
+	<td colspan="4">{$page}</td>
+</tr>
+<tr>
+	<th>Action Time</th>
+	<th>Action Type</th>
+	<th>Operator</th>
+	<th>Action</th>
+</tr>
+<iterate name="result" id="item">
+<tr class="trbg{$mod}">
+	<td nowrap="nowrap">{$item['action_time']}</td>
+	<td>{$item['type']}</td>
+	<td>{$item['staff']['realname']}</td>
+	<td>{$item['content']}</td>
+</tr>
+</iterate>
+<empty name="result">
+<tr>
+	<td colspan="4" align="center">No Record</td>
+</tr>
+</empty>
+<tr>
+	<td colspan="4">{$page}</td>
+</tr>
+</table>
+<p class="center">
+</p>
+<!-- Datepicker -->
+<style type="text/css">@import "../Public/Css/jquery-ui-1.8.2.custom.css?20100620";</style> 
+<script type="text/javascript" src="../Public/Js/jquery-ui-1.8.2.custom.min.js?20100620"></script>
+<script type="text/javascript">
+$(document).ready(function(){
+	$('.date_from, .date_to').datepicker({
+		dateFormat: 'yy-mm-dd',
+		changeMonth: true,
+		changeYear: true,
+		showOtherMonths: true,
+		showMonthAfterYear: true,
+		selectOtherMonths: true,
+		minDate: '-1Y',
+		maxDate: '+1Y'
+	});
+});
+</script>
