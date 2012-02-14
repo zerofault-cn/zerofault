@@ -278,3 +278,16 @@ CREATE TABLE `erp_status_log` (
   `content` text NOT NULL,
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+2012/2/14
+ALTER TABLE `erp_status_status` CHANGE `mail_status` `mail_time` INT( 10 ) UNSIGNED NOT NULL DEFAULT '0'
+
+CREATE TABLE `erp_status_remind` (
+  `id` int(10) unsigned NOT NULL auto_increment,
+  `flow_id` smallint(5) unsigned NOT NULL default '0',
+  `item_id` smallint(5) unsigned NOT NULL default '0',
+  `costTime` int(10) unsigned NOT NULL default '0',
+  `remindInterval` int(10) unsigned NOT NULL default '0',
+  PRIMARY KEY  (`id`),
+  KEY `flow_id` (`flow_id`,`item_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;

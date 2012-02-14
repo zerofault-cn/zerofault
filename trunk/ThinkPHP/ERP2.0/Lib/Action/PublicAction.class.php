@@ -323,5 +323,8 @@ class PublicAction extends BaseAction{
 	public function task_notify() {
 		R('Task', 'notify');
 	}
+	public function status_remind() {
+		R('Status', 'remind_mail');
+	}
 }
 ?>
