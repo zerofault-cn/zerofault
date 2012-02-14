@@ -134,7 +134,8 @@ class StatusAction extends BaseAction{
 			$info['item_list'][] = array(
 				'id' => $item_id,
 				'name' => $item['name'],
-				'owner_opts' => self::genOptions(M('Staff')->where(array('status'=>1))->order('realname')->select(), $owner_arr[$i], 'realname')
+				'owner_opts' => self::genOptions(M('Staff')->where(array('status'=>1))->order('realname')->select(), $owner_arr[$i], 'realname'),
+				'reminder' => M('StatusRemind')->where("flow_id=".$id." and item_id=".$item_id)->find()
 			);
 		}
 		$this->assign('info', $info);
@@ -142,6 +143,33 @@ class StatusAction extends BaseAction{
 		$this->assign('ACTION_TITLE', 'Flow Form');
 		$this->assign('content', ACTION_NAME);
 		$this->display('Layout:ERP_layout');
+	}
+	public function get_owner($name='') {
+		$return = false;
+		if ('' != $name) {
+			$return = true;
+		}
+		else {
+			$name = $_REQUEST['name'];
+		}
+		$product_id = M('Product')->where("Internal_PN='".$name."'")->getField('id');
+		if (empty($product_id)) {
+			if ($return) {
+				return '0';
+			}
+			die('0');
+		}
+		$staff_id = M('ProductFlow')->where("product_id=".$product_id." and status=1 and to_type='staff'")->order('id desc')->getField('to_id');
+		if (empty($staff_id)) {
+			if ($return) {
+				return '0';
+			}
+			die('0');
+		}
+		if ($return) {
+			return $staff_id;
+		}
+		die($staff_id);
 	}
 
 	public function submit() {
@@ -220,6 +248,31 @@ class StatusAction extends BaseAction{
 							self::write_log('Manually', 'Change the default owner of Item('.$item_id.': '.$tmp_rs['item']['name'].') from ['.$tmp_rs['owner']['realname'].'] to ['.M('Staff')->where("id=".$owner_id)->getField('realname').']');
 						}
 					}
+					//set reminder
+					$tmp_rs = M('StatusRemind')->where("flow_id=".$id." and item_id=".$item_id)->find();
+					if (empty($tmp_rs)) {
+						if ($_REQUEST['costTime'][$i] > 0) {
+							//add
+							$data = array(
+								'flow_id' => $id,
+								'item_id' => $item_id,
+								'costTime' => intval($_REQUEST['costTime'][$i]),
+								'remindInterval' => intval($_REQUEST['remindInterval'][$i])
+								);
+							M('StatusRemind')->data($data)->add();
+							dump($this->dao->getLastSql()); 
+						}
+					}
+					else {
+						if ($_REQUEST['costTime'][$i] > 0) {
+							//update
+							M('StatusRemind')->where("id=".$tmp_rs['id'])->setField(array('costTime', 'remindInterval'), array(intval($_REQUEST['costTime'][$i]), intval($_REQUEST['remindInterval'][$i])));
+						}
+						else {
+							//delete
+							M('StatusRemind')->where("id=".$tmp_rs['id'])->delete();
+						}
+					}
 				}
 				//check each board status
 				foreach ($board_rs as $board) {
@@ -268,7 +321,7 @@ class StatusAction extends BaseAction{
 			if($id = $this->dao->add()) {
 				$board_data = array(
 					'flow_id' => $id,
-					'name' => $board_name.sprintf("%03d", 1),
+					'name' => $board_name,
 					'info' => trim($_REQUEST['board_info']),
 					'owner_id' => intval($_REQUEST['board_owner_id']),
 					'create_time' => date('Y-m-d H:i:s'),
@@ -301,8 +354,19 @@ class StatusAction extends BaseAction{
 					if (!M('StatusStatus')->add($status_data)) {
 						self::_error('Add status fail!'.$this->dao->getLastSql());
 					}
+					//set reminder
+					if ($_REQUEST['costTime'][$i] > 0) {
+						//add
+						$data = array(
+							'flow_id' => $id,
+							'item_id' => $item_id,
+							'costTime' => intval($_REQUEST['costTime'][$i]),
+							'remindInterval' => intval($_REQUEST['remindInterval'][$i])
+							);
+						M('StatusRemind')->add($data);
+					}
 				}
-				self::send_mail('board', $board_id);
+				self::_mail('board', $board_id);
 				self::_success('Create flow success!',__URL__);
 			}
 			else {
@@ -827,7 +891,7 @@ class StatusAction extends BaseAction{
 			$dao->flow_id = $flow_id;
 			$dao->name = $board_name;
 			$dao->info = trim($_REQUEST['board_info']);
-			$dao->owner_id = intval($_REQUEST['owner_id']);
+			$dao->owner_id = intval($_REQUEST['board_owner_id']);
 			$dao->create_time = date('Y-m-d H:i:s');
 			$dao->status = -1;
 			if($board_id = $dao->add()) {
@@ -858,7 +922,6 @@ class StatusAction extends BaseAction{
 						self::_error('Add status fail!'.$this->dao->getLastSql());
 					}
 				}
-				//self::send_mail('board', $board_id);
 				self::_success('Add board success!',__URL__);
 			}
 			else{
@@ -1422,11 +1485,12 @@ class StatusAction extends BaseAction{
 				foreach ($board_arr as $board) {
 					self::_mail('board', $board['id']);
 				}
+				break;
+
 			case 'board':
 				$board = D('StatusBoard')->relation(true)->find($id);
 				//to board owner
 				$rs = M('Staff')->find($board['owner_id']);
-				//$mail->AddAddress($rs['email'], $rs['realname']);
 
 				//to all item owner
 				$status = D('StatusStatus')->relation(true)->where("board_id=".$id)->select();
@@ -1442,7 +1506,7 @@ class StatusAction extends BaseAction{
 				$body .= '<tr bgcolor="#CCCCCC">'."\n";
 				$body .= '<td colspan="2">Board Status Detail</td>'."\n";
 				$body .= '</tr>'."\n";
-				$body .= '<tr><td width="120">Flow Name:</td><td><a href="'.APP_ROOT.'/Status/flow/id/'.$board['flow_id'].'" target="_blank">'.$board['flow']['name'].'</a></td></tr>'."\n";
+				$body .= '<tr><td width="120">Flow Name:</td><td><a href="'.APP_ROOT.'/Status/flow2/id/'.$board['flow_id'].'" target="_blank">'.$board['flow']['name'].'</a></td></tr>'."\n";
 				$body .= '<tr><td>Board Name:</td><td><a href="'.APP_ROOT.'/Status/board/id/'.$board['id'].'" target="_blank">'.$board['name'].'</a></td></tr>'."\n";
 				$body .= '<tr><td>Board Information:</td><td>'.nl2br($board['info']).'</td></tr>'."\n";
 				$body .= '<tr><td>Owner:</td><td>'.$board['owner']['realname'].'</td></tr>'."\n";
@@ -1471,7 +1535,7 @@ class StatusAction extends BaseAction{
 				$body .= '<br /><br />Best Regards,<br />'.C('ERP_TITLE');
 				$body .= '</body></html>';
 				foreach ($status as $i=>$row) {
-					if ($row['status'] > 0) {
+					if ($row['status'] >= 0) {
 						continue;
 					}
 					$subject = '[Board Status]: ['.$board['flow']['name'].'] need ['.(empty($row['substitute_id'])?$row['owner']['realname']:$row['substitute']['realname']).'] to update the test status';
@@ -1492,6 +1556,86 @@ class StatusAction extends BaseAction{
 					if(!$mail->Send()) {
 						Log::Write('Mail status Error: '.$debug."\n".$mail->ErrorInfo, LOG::ERR);
 					}
+					else {
+						//update mail_time
+						M('StatusStatus')->where("id=".$row['id'])->setField('mail_time', time());
+						Log::Write('Mail status Success: '.$debug, LOG::INFO);
+					}
+				}
+				break;
+
+			case 'status':
+				$status_info = D('StatusStatus')->relation(true)->find($id);
+
+				$board = D('StatusBoard')->relation(true)->find($status_info['board_id']);
+				//to board owner
+				$rs = M('Staff')->find($board['owner_id']);
+
+				//to all item owner
+				$status = D('StatusStatus')->relation(true)->where("board_id=".$status_info['board_id'])->select();
+
+				$style = '<style>'."\n";
+				$style .= 'strong.None{color: #808080;}'."\n";
+				$style .= 'strong.Pass{color: #339900;}'."\n";
+				$style .= 'strong.Pending{color: #0000FF;}'."\n";
+				$style .= 'strong.Failed{color: #FF0000;}'."\n";
+				$style .= '</style>'."\n";
+				$body = '<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /></head><body>'."\n";
+				$body .= '<table cellpadding="5" border="1" style="border-collapse:collapse;border:1px solid #666666;">'."\n";
+				$body .= '<tr bgcolor="#CCCCCC">'."\n";
+				$body .= '<td colspan="2">Board Status Detail</td>'."\n";
+				$body .= '</tr>'."\n";
+				$body .= '<tr><td width="120">Flow Name:</td><td><a href="'.APP_ROOT.'/Status/flow2/id/'.$board['flow_id'].'" target="_blank">'.$board['flow']['name'].'</a></td></tr>'."\n";
+				$body .= '<tr><td>Board Name:</td><td><a href="'.APP_ROOT.'/Status/board/id/'.$board['id'].'" target="_blank">'.$board['name'].'</a></td></tr>'."\n";
+				$body .= '<tr><td>Board Information:</td><td>'.nl2br($board['info']).'</td></tr>'."\n";
+				$body .= '<tr><td>Owner:</td><td>'.$board['owner']['realname'].'</td></tr>'."\n";
+				$body .= '<tr><td>Create Time:</td><td>'.$board['create_time'].'</td></tr>'."\n";
+				$body .= '<tr><td>Item Status:</td><td>'."\n";
+				$body .= '<table cellpadding="3" border="1" style="border-collapse:collapse;border:1px solid #999999;">'."\n";
+				$body .= '<tr bgcolor="#DDDDDD"><th>No.</th><th>Test Item</th><th>Owner</th><th>Status</th></tr>'."\n";
+				foreach ($status as $i=>$row) {
+					$body .= '<tr';
+					if ($row['status'] < 1) {
+						$body .= ' class="staff_'.(empty($row['substitute_id'])?$row['owner_id']:$row['substitute_id']).'"';
+					}
+					$body .= '>'."\n";
+					$body .= '<td align="center">'.($i+1).'</td>'."\n";
+					$body .= '<td nowrap="nowrap">'.$row['item']['name'].'</td>'."\n";
+					$body .= '<td nowrap="nowrap">'.$row['owner']['realname'];
+					if (!empty($row['substitute_id'])) {
+						$body .= '<img src="'.APP_ROOT.'/../..'.APP_PUBLIC_PATH.'/Images/105.png" alt=" -> " align="absmiddle"/>'.$row['substitute']['realname'];
+					}
+					$body .= '</td>';
+					$body .= '<td><strong class="'.$this->status_arr[$row['status']].'">'.$this->status_arr[$row['status']].'</strong></td></tr>'."\n";
+				}
+				$body .= '</table>'."\n";
+				$body .= '</td></tr></table>'."\n";
+				$body .= '<br /><br />For more information, please visit <a target="_blank" href="'.APP_ROOT.'/Status">ERP System -> Board Status</a>';
+				$body .= '<br /><br />Best Regards,<br />'.C('ERP_TITLE');
+				$body .= '</body></html>';
+
+				//send mail to one staff
+				$subject = '[Board Status]: ['.$board['flow']['name'].'] need ['.(empty($status_info['substitute_id'])?$status_info['owner']['realname']:$status_info['substitute']['realname']).'] to update the test status';
+				$style2 = '<style>.staff_'.(empty($status_info['substitute_id'])?$status_info['owner_id']:$status_info['substitute_id']).'{background-color:#ffff66;}</style>';
+				$header = 'Hi '.(empty($status_info['substitute_id'])?$status_info['owner']['realname']:$status_info['substitute']['realname']).',<br />'."\n";
+				$header .= '&nbsp;&nbsp;The below rows in yellow need you to update.<br />'."\n";
+
+				$mail->ClearAddresses();
+				if (empty($status_info['substitute_id'])) {
+					$mail->AddAddress($status_info['owner']['email'], $tatus_info['owner']['realname']);
+				}
+				else {
+					$mail->AddAddress($status_info['substitute']['email'], $status_info['substitute']['realname']);
+				}
+				$mail->Subject = $subject;
+				$mail->MsgHTML($style.$style2.$header.$body);
+				$debug = 'type='.$type.', status_id='.$id.', item_id='.$status_info['item_id'].', owner_id='.$status_info['owner_id'].', substitute_id='.$status_info['substitute_id'];
+				if(!$mail->Send()) {
+					Log::Write('Mail status Error: '.$debug."\n".$mail->ErrorInfo, LOG::ERR);
+				}
+				else {
+					//update mail_time
+					M('StatusStatus')->where("id=".$id)->setField('mail_time', time());
 					echo $debug."\n";
 					Log::Write('Mail status Success: '.$debug, LOG::INFO);
 				}
@@ -1505,6 +1649,30 @@ class StatusAction extends BaseAction{
 		$type=$_REQUEST['type'];
 		$id = $_REQUEST['id'];
 		self::_mail($type, $id);
+	}
+	public function remind_mail() {
+		$rs = M('StatusRemind')->select();
+		empty($rs) && ($rs = array());
+		echo "There are ".count($rs)." reminder\n";
+		foreach ($rs as $row) {
+			$status_rs = M('StatusStatus')->where("flow_id=".$row['flow_id']." and item_id=".$row['item_id']." and status=-1")->select();
+			empty($status_rs) && ($status_rs = array());
+			foreach ($status_rs as $status) {
+				if ($status['mail_time'] <= 0) {
+					$create_time = M('StatusBoard')->where("id=".$status['board_id'])->getField('create_time');
+					if (time() > strtotime($create_time)+$row['costTime']*86400) {
+						//first remind
+						self::_mail('status', $status['id']);
+					}
+				}
+				else {
+					if ($row['remindInterval']>0 && time()>$status['mail_time']+$row['remindInterval']*86400) {
+						//remind again
+						self::_mail('status', $status['id']);
+					}
+				}
+			}
+		}
 	}
 	public function write_log($type, $content) {
 		$data = array(

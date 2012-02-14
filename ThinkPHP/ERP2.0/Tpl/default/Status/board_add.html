@@ -20,11 +20,8 @@ fieldset legend {
 		<tr>
 			<td bgcolor="#BCD1EF">Board Name:</td>
 			<td bgcolor="#E9E9E9">
-				<if condition="empty($info['name']) eq true">
-				<input type="text" name="board_name" value="" size="30"/><br />(Without Ext. No.)
-				<else />
-				{$info['name_ext']}<input type="hidden" name="board_name" value="{$info['name']}"/>
-				</if>
+				<input type="text" name="board_name" value="{$info['name_ext']}"/>
+				<br /><input type="button" value="Sync Owner from Assets" onclick="sync_owner();" />
 			</td>
 		</tr>
 		<tr>
@@ -33,7 +30,7 @@ fieldset legend {
 		<tr>
 			<td bgcolor="#BCD1EF">Owner:</td>
 			<td bgcolor="#E9E9E9">
-				<select name="owner_id">
+				<select name="board_owner_id">
 				{$info['owner_opts']}
 				</select>
 			</td>
@@ -49,3 +46,19 @@ fieldset legend {
 	</form>
 </td></tr>
 </table>
+<script language="JavaScript" type="text/javascript">
+function sync_owner() {
+	var name = $("#_form input[name=board_name]").val();
+	if ($.trim(name) == '') {
+		myAlert('<i>Board Name is empty!</i>');
+		return;
+	}
+	$.get("__URL__/get_owner", {
+		"name" : name
+		}, function(str) {
+			if ($.trim(str) != '0') {
+				$("#_form select[name=board_owner_id]").get(0).value = str;
+			}
+		});
+}
+</script>

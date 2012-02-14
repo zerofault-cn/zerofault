@@ -45,11 +45,15 @@
 					<th nowrap="nowrap">Owner</th>
 				</tr>
 				<tr>
-					<td><input type="text" name="board_name" size="25" /><br />(Without Ext. No.)</td>
+					<td>
+						<input type="text" name="board_name" size="25" />
+						<br /><input type="button" value="Sync Owner from Assets" onclick="sync_owner();" />
+					</td>
 					<td><textarea name="board_info" rows="4" cols="30"></textarea></td>
 					<td><select name="board_owner_id">
 						{$staff_opts}
 						</select>
+						
 					</td>
 				</tr>
 				</table>
@@ -63,7 +67,9 @@
 				<tr class="nodrop nodrag">
 					<th> </th>
 					<th>Item Name</th>
-					<th nowrap="nowrap">Owner</th>
+					<th>Owner</th>
+					<th>Expected Cost Time</th>
+					<th>Remind Interval</th>
 				</tr>
 				<iterate name="info.item_list" id="item">
 				<tr class="item" id="item_{$item['id']}">
@@ -76,11 +82,13 @@
 						{$item['owner_opts']}
 						</select>
 					</td>
+					<td align="center"><input type="text" name="costTime[]" size="4" value="{$item['reminder']['costTime']}" />&nbsp;Days</td>
+					<td align="center"><input type="text" name="remindInterval[]" size="4" value="{$item['reminder']['remindInterval']}" />&nbsp;Days</td>
 				</tr>
 				</iterate>
 				<empty name="info.item_list">
 				<tr id="tip" class="nodrop nodrag" bgcolor="#FFFFFF">
-					<td colspan="3" align="center">Add test item from right side!</td>
+					<td colspan="5" align="center">Add test item from right side!</td>
 				</tr>
 				</empty>
 				</table>
@@ -131,6 +139,20 @@ $(document).ready(function() {
 	});
 	$("#_form input:submit").attr("disabled", false);
 });
+function sync_owner() {
+	var name = $("#_form input[name=board_name]").val();
+	if ($.trim(name) == '') {
+		myAlert('<i>Board Name is empty!</i>');
+		return;
+	}
+	$.get("__URL__/get_owner", {
+		"name" : name
+		}, function(str) {
+			if ($.trim(str) != '0') {
+				$("#_form select[name=board_owner_id]").get(0).value = str;
+			}
+		});
+}
 function add_item(id, checked) {
 	if (!checked) {
 		//remove from left
@@ -148,6 +170,8 @@ function add_item(id, checked) {
 			tr.append($("<td/>").attr("align", "center").append(icon));
 			tr.append($("<td/>").attr("nowrap", "nowrap").append(json.name+'<input type="hidden" name="item_id[]" value="'+json.id+'"/>'));
 			tr.append($("<td/>").append('<select name="owner_id[]"><option value="0">*IDEM*</option>'+json.staff_opts+'</select>'));
+			tr.append($("<td/>").attr({"align": "center"}).append('<input type="text" name="costTime[]" size="4" value="" />&nbsp;Days'));
+			tr.append($("<td/>").attr({"align": "center"}).append('<input type="text" name="remindInterval[]" size="4" value="" />&nbsp;Days'));
 			$("#items_table").append(tr);
 			if ($("#items_table tr.item").length>0) {
 				$("#items_table tr#tip").hide();
