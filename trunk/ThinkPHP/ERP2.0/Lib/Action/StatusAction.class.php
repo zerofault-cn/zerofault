@@ -171,6 +171,27 @@ class StatusAction extends BaseAction{
 		}
 		die($staff_id);
 	}
+	public function sync_owner() {
+		$board_rs = D('StatusBoard')->relation(true)->select();
+		foreach ($board_rs as $board) {
+			$product_id = M('Product')->where("Internal_PN='".$board['name']."'")->getField('id');
+			if (empty($product_id)) {
+				continue;
+			}
+			$staff_id = M('ProductFlow')->where("product_id=".$product_id." and status=1 and to_type='staff' and action!='reject'")->order('id desc')->getField('to_id');
+			if (empty($staff_id)) {
+				continue;
+			}
+			if ($board['owner_id'] == $staff_id) {
+				continue;
+			}
+			if (false !== M('StatusBoard')->where("id=".$board['id'])->setField(array('owner_id', 'update_time'), array($staff_id, date('Y-m-d H:i:s')))) {
+				$debug = "Change Board(".$board['id'].": ".$board['name'].") Owner from [".$board['owner']['realname']."] to [".M('Staff')->where("id=".$staff_id)->getField('realname')."]";
+				echo $debug."\n";
+				self::write_log('Automatically', $debug);
+			}
+		}
+	}
 
 	public function submit() {
 		if (empty($_POST['submit'])) {
@@ -1678,7 +1699,7 @@ class StatusAction extends BaseAction{
 		$data = array(
 			'type' => $type,
 			'action_time' => date('Y-m-d H:i:s'),
-			'staff_id' =>  $_SESSION[C('USER_AUTH_KEY')],
+			'staff_id' => empty($_SESSION[C('USER_AUTH_KEY')]) ? 1 : $_SESSION[C('USER_AUTH_KEY')],
 			'content' => $content
 			);
 		if (!M('StatusLog')->add($data)) {

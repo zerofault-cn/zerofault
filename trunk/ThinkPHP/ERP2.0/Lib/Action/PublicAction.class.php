@@ -326,5 +326,8 @@ class PublicAction extends BaseAction{
 	public function status_remind() {
 		R('Status', 'remind_mail');
 	}
+	public function sync_owner() {
+		R('Status', 'sync_owner');
+	}
 }
 ?>
