@@ -74,7 +74,8 @@
 </tr>
 </table>
 </form>
-<if condition="$action neq 'reject'">
+<neq name="action" value="reject">
+<br />
 <form id="Import" name="Import" action="__URL__/import" enctype="multipart/form-data" target="_iframe" method="post">
 <table align="center" style="background-color:#FFFFFF;padding:10px;margin:12px auto;">
 <tr>
@@ -107,11 +108,12 @@
 </table>
 <input type="hidden" name="confirm" value="" />
 </form>
-<else />
+</neq>
+<eq name="action" value="reject">
 <p class="center">
 	<input type="button" onclick="javascript:document.location='__URL__/export/action/reject';" value="Export as Excel" />
 </p>
-</if>
+</eq>
 <script type="text/javascript"> 
 $(document).ready(function(){
 	$("td#status_{$status}").addClass("current");
