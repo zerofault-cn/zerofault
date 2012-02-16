@@ -149,7 +149,7 @@ function sync_owner() {
 		"name" : name
 		}, function(str) {
 			if ($.trim(str) != '0') {
-				$("#_form select[name=board_owner_id]").get(0).value = str;
+				$("#_form select[name=board_owner_id]").val($.trim(str));
 			}
 		});
 }
