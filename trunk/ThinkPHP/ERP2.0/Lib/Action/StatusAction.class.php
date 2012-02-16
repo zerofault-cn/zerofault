@@ -1042,6 +1042,13 @@ class StatusAction extends BaseAction{
 					if (!M('StatusRevision')->add($data)) {
 						self::_error('Add ext revision entry fail!<br />'.$this->dao->getLastSql());
 					}
+					if ($board_id > 0) {
+						self::write_log('Manually', 'Set extended Revision['.$field.'='.trim($_REQUEST['value'][$i]).'] for Board('.$board_id.': '.M('StatusBoard')->where("id=".$board_id)->getField('name').')');
+					}
+					elseif($status_id > 0) {
+						$status_info = M('StatusStatus')->where("id=".$status_id)->find();
+						self::write_log('Manually', 'Set extended Revision['.$field.'='.trim($_REQUEST['value'][$i]).'] for Item('.$status_info['item_id'].': '.M('StatusItem')->where("id=".$status_info['item_id'])->getField('name').') of Board('.$status_info['board_id'].': '.M('StatusBoard')->where("id=".$status_info['board_id'])->getField('name').')');
+					}
 				}
 			}
 			if (!empty($_REQUEST['_field'])) {
@@ -1061,6 +1068,13 @@ class StatusAction extends BaseAction{
 					if (!M('StatusRevision')->add($data)) {
 						self::_error('Add revision entry fail!<br />'.$this->dao->getLastSql());
 					}
+					if ($board_id > 0) {
+						self::write_log('Manually', 'Set Revision['.$field.'='.trim($_REQUEST['_value'][$i]).'] for Board('.$board_id.': '.M('StatusBoard')->where("id=".$board_id)->getField('name').')');
+					}
+					elseif($status_id > 0) {
+						$status_info = M('StatusStatus')->where("id=".$status_id)->find();
+						self::write_log('Manually', 'Set Revision['.$field.'='.trim($_REQUEST['_value'][$i]).'] for Item('.$status_info['item_id'].': '.M('StatusItem')->where("id=".$status_info['item_id'])->getField('name').') of Board('.$status_info['board_id'].': '.M('StatusBoard')->where("id=".$status_info['board_id'])->getField('name').')');
+					}
 				}
 			}
 			if (!empty($_REQUEST['_id'])) {
@@ -1073,15 +1087,30 @@ class StatusAction extends BaseAction{
 					if (''==trim($value)) {
 						//delete the entry
 						$dao->delete();
+						if ($board_id > 0) {
+							self::write_log('Manually', 'Delete Revision['.$dao->field.'='.$dao->value.'] of Board('.$board_id.': '.M('StatusBoard')->where("id=".$board_id)->getField('name').')');
+						}
+						elseif($status_id > 0) {
+							$status_info = M('StatusStatus')->where("id=".$status_id)->find();
+							self::write_log('Manually', 'Delete Revision['.$dao->field.'='.$dao->value.'] of Item('.$status_info['item_id'].': '.M('StatusItem')->where("id=".$status_info['item_id'])->getField('name').') of Board('.$status_info['board_id'].': '.M('StatusBoard')->where("id=".$status_info['board_id'])->getField('name').')');
+						}
 					}
 					else {
 						if ($dao->value == trim($value)) {
 							continue;
 						}
+						$old_value = $dao->value;
 						$dao->value = trim($value);
 						$dao->update_time = date('Y-m-d H:i:s');
 						if (false === $dao->save()) {
 							self::_error('Update revision entry fail!<br />'.$this->dao->getLastSql());
+						}
+						if ($board_id > 0) {
+							self::write_log('Manually', 'Change Revision['.$dao->field.'] of Board('.$board_id.': '.M('StatusBoard')->where("id=".$board_id)->getField('name').') from ['.$old_value.'] to ['.trim($value).']');
+						}
+						elseif($status_id > 0) {
+							$status_info = M('StatusStatus')->where("id=".$status_id)->find();
+							self::write_log('Manually', 'Change Revision['.$dao->field.'] of Item('.$status_info['item_id'].': '.M('StatusItem')->where("id=".$status_info['item_id'])->getField('name').') of Board('.$status_info['board_id'].': '.M('StatusBoard')->where("id=".$status_info['board_id'])->getField('name').') from ['.$old_value.'] to ['.trim($value).']');
 						}
 					}
 				}
@@ -1734,6 +1763,9 @@ class StatusAction extends BaseAction{
 
 		!empty($_REQUEST['from']) && ($where['action_time'] = array('egt', $_REQUEST['from']));
 		!empty($_REQUEST['to']) && ($where['action_time'] = array('lt', $_REQUEST['to']));
+		if (!empty($_REQUEST['keyword']) && ''!=trim($_REQUEST['keyword'])) {
+			$where['content'] = array('like', '%'.trim($_REQUEST['keyword']).'%');
+		}
 		
 		$count = $dao->where($where)->getField('count(*)');
 		$p = new Paginator($count,$limit);
