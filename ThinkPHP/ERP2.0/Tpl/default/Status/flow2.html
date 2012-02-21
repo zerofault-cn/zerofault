@@ -84,23 +84,22 @@ td.focus {
 </table>
 <table cellpadding="3" border="1" bordercolor="#FFFFFF" style="border-collapse:collapse;">
 <tr bgcolor="#CCCCFF">
-	<td colspan="6" align="right" bgcolor="#CCCCFF"><strong>Test Item:&nbsp;</strong></td>
+	<td colspan="5" align="right" bgcolor="#CCCCFF"><strong>Test Item:&nbsp;</strong></td>
 	<td class="sp"></td>
 	<foreach name="item_list" item="item">
 	<td colspan="2" title="{$item['description']}" valign="top">{$key+1}.&nbsp;{$item['name']}</td>
 	</foreach>
 </tr>
 <tr bgcolor="#CCCCFF">
-	<td colspan="6" align="right" bgcolor="#CCCCFF"><strong>Default Test Owner:&nbsp;</strong></td>
+	<td colspan="5" align="right" bgcolor="#CCCCFF"><strong>Default Test Owner:&nbsp;</strong></td>
 	<td class="sp"></td>
 	<foreach name="owner_list" item="owner">
 	<td colspan="2">{$owner}</td>
 	</foreach>
 </tr>
 <tr>
-	<th nowrap="nowrap">Board Name</th>
+	<th nowrap="nowrap">Board Name/Owner</th>
 	<th nowrap="nowrap">Information</th>
-	<th nowrap="nowrap">Board Owner</th>
 	<th nowrap="nowrap">Final Status</th>
 	<th nowrap="nowrap">Board Comment</th>
 	<th nowrap="nowrap">Board Remark</th>
@@ -113,9 +112,9 @@ td.focus {
 
 <iterate name="board_list" id="board">
 <tr class="trbg{$mod}">
-	<td><a href="__URL__/board/id/{$board['id']}" title="Edit/View Board Detail"><strong>{$board['name']}</strong></a></td>
+	<td><a href="__URL__/board/id/{$board['id']}" title="Edit/View Board Detail"><strong>{$board['name']}</strong></a><br />[{$board['owner']['realname']}]
+	</td>
 	<td valign="top">{$board['info']|nl2br}</td>
-	<td>{$board['owner']['realname']}</td>
 	<td><a href="__URL__/revision/board_id/{$board['id']}?width=420&height=360&modal=true" class="thickbox"><strong class="{$status_arr[$board['status']]|str_replace='*','X',###}">{$status_arr[$board['status']]}</strong></a></td>
 	<td valign="top" class="td_comment"><a style="float:right;" href="__URL__/list_comment/model/StatusBoard/id/{$board['id']}?width=480&height=360&modal=true" class="thickbox" title="Click to view board comment"><img src="../Public/Images/comments.gif"/></a><notempty name="board.last_comment">{$board['last_comment']['content']|substr=0,12}</notempty></td>
 	<if condition="$_SESSION[C('USER_AUTH_KEY')] eq $board['owner_id'] or $_SESSION[C('ADMIN_AUTH_NAME')] or in_array($_SESSION[C('USER_AUTH_KEY')], C('STATUS_ADMIN_ID'))">
@@ -130,7 +129,6 @@ td.focus {
 	</foreach>
 </tr>
 </iterate>
-
 </table>
 <p class="center"><input type="button" value="Export as Excel" onclick="document.location='__URL__/flow/id/{$request['id']}/op/export';" /></p>
 
