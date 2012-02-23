@@ -250,7 +250,7 @@ class StatusAction extends BaseAction{
 								'substitute_id' => 0,
 								'sort' => $i,
 								'status' => -1,
-								'mail_status' => -1
+								'mail_time' => 0
 							);
 							if (!M('StatusStatus')->add($status_data)) {
 								self::_error('Add status fail!'.$this->dao->getLastSql());
@@ -370,7 +370,7 @@ class StatusAction extends BaseAction{
 						'substitute_id' => 0,
 						'sort' => $i,
 						'status' => -1,
-						'mail_status' => -1
+						'mail_time' => 0
 					);
 					if (!M('StatusStatus')->add($status_data)) {
 						self::_error('Add status fail!'.$this->dao->getLastSql());
@@ -937,7 +937,7 @@ class StatusAction extends BaseAction{
 						'substitute_id' => 0,
 						'sort' => $i,
 						'status' => -1,
-						'mail_status' => -1
+						'mail_time' => 0
 					);
 					if (!M('StatusStatus')->add($status_data)) {
 						self::_error('Add status fail!'.$this->dao->getLastSql());

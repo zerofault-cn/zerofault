@@ -15,10 +15,8 @@
 	<td class="description">{$item['description']}</td>
 	<td class="owner">{$item['owner']['realname']}</td>
 	<td>
-		<gt name="item.id" value="1">
 		<a href="javascript:void(0);" onclick="edit(this,'{$item['id']}');">Edit</a>
 		<a href="javascript:void(0);" onclick="myConfirm('Are you sure to delete this item?', '__URL__/item/id/{$item['id']}');" target="_iframe">Delete</a>
-		</gt>
 	</td>
 </tr>
 </iterate>

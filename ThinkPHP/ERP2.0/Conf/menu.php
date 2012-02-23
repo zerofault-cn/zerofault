@@ -76,8 +76,6 @@ $menu['Board Status'] = array(
 	'name' => 'Status',
 	'submenu' => array(
 		'Test Flow List'		=> 'Status',
-		'Test Flow Template'	=> 'Status/template',
-		'Test Items'			=> 'Status/item',
 		'Operation Log'			=> 'Status/read_log',
 	)
 );
