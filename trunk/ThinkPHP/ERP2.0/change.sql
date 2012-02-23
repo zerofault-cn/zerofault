@@ -291,3 +291,7 @@ CREATE TABLE `erp_status_remind` (
   PRIMARY KEY  (`id`),
   KEY `flow_id` (`flow_id`,`item_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+
+2012/2/23
+ALTER TABLE `erp_status_board` CHANGE COLUMN `owner_id` `owner_id` smallint(5) NOT NULL DEFAULT 0;

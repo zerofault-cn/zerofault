@@ -112,7 +112,7 @@ td.focus {
 
 <iterate name="board_list" id="board">
 <tr class="trbg{$mod}">
-	<td><a href="__URL__/board/id/{$board['id']}" title="Edit/View Board Detail"><strong>{$board['name']}</strong></a><br />[{$board['owner']['realname']}]
+	<td><a href="__URL__/board/id/{$board['id']}" title="Edit/View Board Detail"><strong>{$board['name']}</strong></a><br />{$board['owner']['realname']}
 	</td>
 	<td valign="top">{$board['info']|nl2br}</td>
 	<td><a href="__URL__/revision/board_id/{$board['id']}?width=420&height=360&modal=true" class="thickbox"><strong class="{$status_arr[$board['status']]|str_replace='*','X',###}">{$status_arr[$board['status']]}</strong></a></td>

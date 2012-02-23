@@ -51,6 +51,7 @@
 					</td>
 					<td><textarea name="board_info" rows="4" cols="30"></textarea></td>
 					<td><select name="board_owner_id">
+						<option value="0">None</option>
 						{$staff_opts}
 						</select>
 						
@@ -148,9 +149,7 @@ function sync_owner() {
 	$.get("__URL__/get_owner", {
 		"name" : name
 		}, function(str) {
-			if ($.trim(str) != '0') {
-				$("#_form select[name=board_owner_id]").val($.trim(str));
-			}
+			$("#_form select[name=board_owner_id]").val($.trim(str));
 		});
 }
 function add_item(id, checked) {
