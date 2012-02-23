@@ -31,6 +31,7 @@ fieldset legend {
 			<td bgcolor="#BCD1EF">Owner:</td>
 			<td bgcolor="#E9E9E9">
 				<select name="board_owner_id">
+				<option value="0">None</option>
 				{$info['owner_opts']}
 				</select>
 			</td>
@@ -56,9 +57,7 @@ function sync_owner() {
 	$.get("__URL__/get_owner", {
 		"name" : name
 		}, function(str) {
-			if ($.trim(str) != '0') {
-				$("#_form select[name=board_owner_id]").val($.trim(str));
-			}
+			$("#_form select[name=board_owner_id]").val($.trim(str));
 		});
 }
 </script>

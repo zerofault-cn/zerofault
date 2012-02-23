@@ -555,10 +555,10 @@ class ProductOutAction extends BaseAction{
 					}
 				}
 			}
-			if ('apply'==$info['action'] || ('transfer'==$info['action']&&'staff'==$info['to_type'])) {
+			if ('apply'==$info['action'] || 'transfer'==$info['action'] || 'return'==$info['action']) {
 				//自动更新Board Status的Owner
 				$product_name = M('Product')->where("id=".$info['product_id'])->getField('Internal_PN');
-				M('StatusBoard')->where("name='".$product_name."'")->setField(array('owner_id', 'update_time'), array($info['to_id'], date('Y-m-d H:i:s')));
+				M('StatusBoard')->where("name='".$product_name."'")->setField(array('owner_id', 'update_time'), array('location'==$info['to_type']?-$info['to_id']:$info['to_id'], date('Y-m-d H:i:s')));
 			}
 
 			$data = array();
