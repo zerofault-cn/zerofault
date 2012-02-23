@@ -118,6 +118,14 @@ class BaseAction extends Action {
 				$submenu['Category'] = 'Task/category';
 			}
 		}
+		//判断是否Board Status admin增加某些菜单
+		if ('Board Status' == $top) {
+			if ($_SESSION[C('ADMIN_AUTH_NAME')] or in_array($_SESSION[C('USER_AUTH_KEY')], C('STATUS_ADMIN_ID'))) {
+				$submenu['Test Flow Template'] = 'Status/template';
+				$submenu['Test Items'] = 'Status/item';
+			}
+		}
+
 		//根据location增加Inventory子菜单
 		if ('Inventory Inquire'==$top) {
 			foreach($_SESSION['location'] as $location_id=>$location) {

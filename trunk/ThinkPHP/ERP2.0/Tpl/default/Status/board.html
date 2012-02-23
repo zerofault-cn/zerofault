@@ -72,13 +72,7 @@ td.focus {
 <tr>
 	<td bgcolor="#BCD1EF">Board Owner:</td>
 	<td bgcolor="#E9E9E9" colspan="2">
-		<if condition="$_SESSION[C('USER_AUTH_KEY')] eq $info['owner_id'] or $_SESSION[C('ADMIN_AUTH_NAME')] or in_array($_SESSION[C('USER_AUTH_KEY')], C('STATUS_ADMIN_ID'))">
-		<select id="owner_id" class="edit_field">
-		{$info['owner_opts']}
-		</select><!-- <img src="../Public/Images/sign_tick.png" align="absmiddle"/> --><input type="button" value="Submit" />
-		<else />
 		{$info['owner']['realname']}
-		</if>
 	</td>
 </tr>
 <tr>
