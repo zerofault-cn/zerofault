@@ -284,11 +284,6 @@ class StatusAction extends BaseAction{
 							if (!M('StatusStatus')->add($status_data)) {
 								self::_error('Add status fail!'.$this->dao->getLastSql());
 							}
-
-							if (-1 != $board['status']) {
-								M('StatusBoard')->where("id=".$board['id'])->setField(array('status', 'update_time'), array(-1, date('Y-m-d H:i:s')));
-								self::write_log('Automatically', 'Change Board('.$board['id'].': '.$board['name'].') finnal status from ['.$this->status_arr[$board['status']].'] to ['.$this->status_arr[-1].']');
-							}
 						}
 					}
 					else {
