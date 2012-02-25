@@ -187,7 +187,7 @@ class ProductOutAction extends BaseAction{
 			echo $row['product']['MPN'].',';
 			echo $row['quantity'].',';
 			echo $UnitArray[$row['product']['unit_id']].',';
-			
+
 			if ('location' == $row['from_type']) {
 				echo M('Location')->where('id='.$row['from_id'])->getField('name').',';
 			}
@@ -341,7 +341,7 @@ class ProductOutAction extends BaseAction{
 		empty($_REQUEST['product_id']) && self::_error('Select a Component/Board first!');
 		$product_id = $_REQUEST['product_id'];
 		$product_info = M('product')->find($product_id);
-		
+
 		intval($_REQUEST['quantity'])<=0 && self::_error('Quantity number must be larger than 0.');
 		($_REQUEST['quantity']>$_REQUEST['ori_quantity']) && self::_error(ucfirst($action).'quantity can\'t be larger than '.$_REQUEST['ori_quantity']);
 
@@ -558,7 +558,24 @@ class ProductOutAction extends BaseAction{
 			if ('apply'==$info['action'] || 'transfer'==$info['action'] || 'return'==$info['action']) {
 				//自动更新Board Status的Owner
 				$product_name = M('Product')->where("id=".$info['product_id'])->getField('Internal_PN');
-				M('StatusBoard')->where("name='".$product_name."'")->setField(array('owner_id', 'update_time'), array('location'==$info['to_type']?-$info['to_id']:$info['to_id'], date('Y-m-d H:i:s')));
+
+				$dao = D('StatusBoard');
+				$board = $dao->relation(true)->where("name='".$product_name."'")->find();
+				if ($board['owner_id'] < 0) {
+					$board['owner']['realname'] = M('Location')->where("id=".abs($board['owner_id']))->getField('name');
+				}
+				$new_owner_id = $info['to_id'];
+				if ('location'==$info['to_type']) {
+					$new_owner_id *=-1;
+					$new_owner_name = M('Location')->where("id=".$info['to_id'])->getField('name');
+				}
+				else {
+					$new_owner_name = M('Staff')->where("id=".$info['to_id'])->getField('realname');
+				}
+				$dao->where("name='".$product_name."'")->setField(array('owner_id', 'update_time'), array($new_owner_id, date('Y-m-d H:i:s')));
+
+				$Status = A("Status");
+				$Status->write_log('Automatically', "Change Board(".$board['id'].": ".$board['name'].") Owner from [".$board['owner']['realname']."] to [".$new_owner_name."] by Asset ".ucfirst($info['action']));
 			}
 
 			$data = array();
