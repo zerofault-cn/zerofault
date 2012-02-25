@@ -215,6 +215,9 @@ class StatusAction extends BaseAction{
 				else {
 					$owner_name = M('Location')->where("id=".abs($staff_id))->getField('name');
 				}
+				if ($board['owner_id'] < 0) {
+					$board['owner']['realname'] = M('Location')->where("id=".abs($board['owner_id']))->getField('name');
+				}
 				$debug = "Change Board(".$board['id'].": ".$board['name'].") Owner from [".$board['owner']['realname']."] to [".$owner_name."]";
 				echo $debug."\n";
 				self::write_log('Automatically', $debug);
@@ -230,7 +233,7 @@ class StatusAction extends BaseAction{
 		$name = trim($_REQUEST['name']);
 		empty($name) && self::_error('Flow name required!');
 		empty($_REQUEST['item_id']) && self::_error('You must add at least one test item!');
-		//empty($_REQUEST['owner_id'][0]) && self::_error('You must specify an owner to the first test item!');
+		empty($_REQUEST['owner_id'][0]) && self::_error('You must specify an owner to the first test item!');
 		if ($id>0) {
 			$this->dao->find($id);
 			$old_item_ids = $this->dao->item_ids;
@@ -241,6 +244,9 @@ class StatusAction extends BaseAction{
 
 			$board_name = trim($_REQUEST['board_name']);
 			empty($board_name) && self::_error('Board name required!');
+			if (M('StatusBoard')->where("name='".$board_name."'")->count() > 0) {
+				self::_error('The board name: '.$board_name.' is exists!');
+			}
 		}
 		$this->dao->name = $name;
 		$this->dao->item_ids = implode(',', $_REQUEST['item_id']);
@@ -305,7 +311,7 @@ class StatusAction extends BaseAction{
 								'remindInterval' => intval($_REQUEST['remindInterval'][$i])
 								);
 							M('StatusRemind')->data($data)->add();
-							dump($this->dao->getLastSql()); 
+							dump($this->dao->getLastSql());
 						}
 					}
 					else {
@@ -367,7 +373,7 @@ class StatusAction extends BaseAction{
 					'flow_id' => $id,
 					'name' => $board_name,
 					'info' => trim($_REQUEST['board_info']),
-					'owner_id' => intval($_REQUEST['board_owner_id']),
+					'owner_id' => !empty($_REQUEST['board_owner_id'])?intval($_REQUEST['board_owner_id']):self::get_owner($board_name),
 					'create_time' => date('Y-m-d H:i:s'),
 					'update_time' => date('Y-m-d H:i:s'),
 					'status' => -1
@@ -928,6 +934,7 @@ class StatusAction extends BaseAction{
 			!$board_name && self::_error('Board name required!');
 
 			$flow_id = intval($_REQUEST['flow_id']);
+			/*
 			$rs = $dao->where("flow_id=".$flow_id)->order("name desc")->find();
 			if (!empty($rs)) {
 				$max_name = $rs['name'];
@@ -936,11 +943,12 @@ class StatusAction extends BaseAction{
 			else {
 				$board_name .= sprintf("%03d", 1);
 			}
+			*/
 			$dao->id = 0;
 			$dao->flow_id = $flow_id;
 			$dao->name = $board_name;
 			$dao->info = trim($_REQUEST['board_info']);
-			$dao->owner_id = intval($_REQUEST['board_owner_id']);
+			$dao->owner_id = !empty($_REQUEST['board_owner_id'])?intval($_REQUEST['board_owner_id']):self::get_owner($board_name);
 			$dao->create_time = date('Y-m-d H:i:s');
 			$dao->status = -1;
 			if($board_id = $dao->add()) {
@@ -1005,7 +1013,7 @@ class StatusAction extends BaseAction{
 					'name' => $name,
 					'name_ext' => $name_ext,
 					'info' => $info,
-					'owner_opts' => self::genOptions(M('Staff')->where(array('status'=>1))->select(), $_SESSION[C('USER_AUTH_KEY')], 'realname')
+					'owner_opts' => self::genOptions(M('Staff')->where(array('status'=>1))->select(), 0, 'realname')
 				);
 				$this->assign('info', $info);
 
@@ -1035,6 +1043,7 @@ class StatusAction extends BaseAction{
 			$this->display('Layout:ERP_layout');
 		}
 	}
+
 	public function revision() {
 		$RevArray = array(
 			'Software' => 'Software Rev',
@@ -1237,23 +1246,42 @@ class StatusAction extends BaseAction{
 		$board_id = empty($_REQUEST['board_id']) ? 0 : intval($_REQUEST['board_id']);
 		$status_id = empty($_REQUEST['id']) ? 0 : intval($_REQUEST['id']);
 		$field = $_REQUEST['f'];
-		$value = $_REQUEST['v'];
+		$value = trim($_REQUEST['v']);
 		$rs = true;
 		if ($board_id > 0) {
-			//改变Board表栏位
-			$dao = M('StatusBoard');
-			$info = $dao->find($board_id);
+			//更新Board表记录
+			$dao = D('StatusBoard');
+			$info = $dao->relation(true)->find($board_id);
 			if ($info[$field] != $value) {
-				$rs = $dao->where('id='.$board_id)->setField(array($field, 'update_time'), array($value, date('Y-m-d H:i:s')));
+				if ('name' == $field) {
+					if (M('StatusBoard')->where("id!=".$board_id." and name='".$value."'")->count() > 0) {
+						self::_error('The board name: '.$value.' is exists!');
+					}
+					$owner_id = self::get_owner($value);
+					$dao->where('id='.$board_id)->setField(array($field, 'owner_id', 'update_time'), array($value, $owner_id, date('Y-m-d H:i:s')));
+					if ($owner_id != $info['owner_id']) {
+						if ($info['owner_id'] < 0) {
+							$info['owner']['realname'] = M('Location')->where("id=".abs($info['owner_id']))->getField('name');
+						}
+						if ($owner_id < 0) {
+							$owner_name = M('Location')->where("id=".abs($owner_id))->getField('name');
+						}
+						self::write_log('Automatically', "Change Board(".$info['id'].": ".$value.") Owner from [".$info['owner']['realname']."] to [".$owner_name."]");
+					}
+				}
+				else {
+					$dao->where('id='.$board_id)->setField(array($field, 'update_time'), array($value, date('Y-m-d H:i:s')));
+				}
+
 			}
 		}
 		elseif ($status_id > 0) {
-			//改变Status表栏位
+			//更新Status表记录
 			$dao = M('StatusStatus');
 			$info = $dao->find($status_id);
 			$old_value = $info[$field];
 			if ($info[$field] != $value) {
-				$rs = $dao->where("id=".$status_id)->setField(array($field, 'update_time'), array($value, date('Y-m-d H:i:s')));
+				$dao->where("id=".$status_id)->setField(array($field, 'update_time'), array($value, date('Y-m-d H:i:s')));
 				if ('owner_id'==$field || 'substitute_id'==$field) {
 					$old_owner = M('Staff')->where("id=".$old_value)->getField('realname');
 					$new_owner = M('Staff')->where("id=".$value)->getField('realname');
@@ -1262,7 +1290,7 @@ class StatusAction extends BaseAction{
 					self::write_log('Manually', 'Change the '.str_replace('_id', '', $field).' of Item('.$item['id'].': '.$item['name'].') of Board('.$board['id'].': '.$board['name'].') from ['.$old_owner.'] to ['.$new_owner.']');
 				}
 			}
-			
+
 		}
 		if(false !== $rs) {
 			if ('POST' == strtoupper($_SERVER["REQUEST_METHOD"])) {
@@ -1780,12 +1808,12 @@ class StatusAction extends BaseAction{
 		if (!empty($_REQUEST['keyword']) && ''!=trim($_REQUEST['keyword'])) {
 			$where['content'] = array('like', '%'.trim($_REQUEST['keyword']).'%');
 		}
-		
+
 		$count = $dao->where($where)->getField('count(*)');
 		$p = new Paginator($count,$limit);
 
 		$rs = $dao->relation(true)->where($where)->order('id desc')->limit($p->offset.','.$p->limit)->select();
-		
+
 		$this->assign('result', $rs);
 		$this->assign('page', $p->showMultiNavi());
 		$this->assign('content', ACTION_NAME);
