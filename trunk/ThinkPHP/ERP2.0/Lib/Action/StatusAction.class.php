@@ -11,8 +11,8 @@ class StatusAction extends BaseAction{
 		parent::_initialize();
 		$this->assign('MODULE_TITLE', 'Board Status');
 		$this->status_arr = array(
-			'-1' => 'None',
-			'0' => 'Pending',
+			'-1' => 'TBD',
+			'0' => 'Ongoing',
 			'1' => 'Pass',
 			'2' => 'Failed',
 			'8' => 'Ignore',
