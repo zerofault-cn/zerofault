@@ -85,8 +85,8 @@ td.field {
 		<td class="field">Status:</td>
 		<td><if condition="$_SESSION[C('USER_AUTH_KEY')] eq $result['Status']['owner_id'] or $_SESSION[C('USER_AUTH_KEY')] eq $result['Status']['substitute_id'] or $_SESSION[C('ADMIN_AUTH_NAME')] or in_array($_SESSION[C('USER_AUTH_KEY')], C('STATUS_ADMIN_ID'))">
 			<select name="status" class="status {$status_arr[$result['Status']['status']]|str_replace='*','X',###}" onchange="javascript:this.className='status '+this.options[this.selectedIndex].className;">
-				<option value="-1" class="None">None</option>
-				<option value="0" class="Pending" <eq name="result.Status.status" value="0">selected="selected"</eq>>Pending</option>
+				<option value="-1" class="TBD">TBD</option>
+				<option value="0" class="Ongoing" <eq name="result.Status.status" value="0">selected="selected"</eq>>Ongoing</option>
 				<option value="1" class="Pass" <eq name="result.Status.status" value="1">selected="selected"</eq>>Pass</option>
 				<gt name="board_id" value="0">
 				<option value="9" class="PassX" <eq name="result.Status.status" value="9">selected="selected"</eq>>Pass*</option>

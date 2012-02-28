@@ -14,7 +14,7 @@ th.sp, td.sp {
 	padding: 2px;
 	background-color: #FFFF99;
 }
-strong.None, select.None, option.None {
+strong.TBD, select.TBD, option.TBD {
 	color: #808080;
 }
 strong.Pass, select.Pass, option.Pass {
@@ -23,7 +23,7 @@ strong.Pass, select.Pass, option.Pass {
 strong.PassX, select.PassX, option.PassX {
 	color: #009900;
 }
-strong.Pending, select.Pending, option.Pending {
+strong.Ongoing, select.Ongoing, option.Ongoing {
 	color: #0000FF;
 }
 strong.Failed, select.Failed, option.Failed {
@@ -62,8 +62,8 @@ td.focus {
 			<td><select name="owner_id"><option value="">All</option>{$owner_opts}</select></td>
 			<td><select name="board_status" class="status {$status_arr[$request['board_status']]|str_replace='*','X',###}" onchange="javascript:this.className='status '+this.options[this.selectedIndex].className;">
 					<option value="-2">All</option>
-					<option value="-1" class="None" <eq name="request.board_status" value="-1">selected="selected"</eq>>None</option>
-					<option value="0" class="Pending" <eq name="request.board_status" value="0">selected="selected"</eq>>Pending</option>
+					<option value="-1" class="TBD" <eq name="request.board_status" value="-1">selected="selected"</eq>>TBD</option>
+					<option value="0" class="Ongoing" <eq name="request.board_status" value="0">selected="selected"</eq>>Ongoing</option>
 					<option value="1" class="Pass" <eq name="request.board_status" value="1">selected="selected"</eq>>Pass</option>
 					<gt name="board_id" value="0">
 					<option value="9" class="PassX" <eq name="request.board_status" value="9">selected="selected"</eq>>Pass*</option>

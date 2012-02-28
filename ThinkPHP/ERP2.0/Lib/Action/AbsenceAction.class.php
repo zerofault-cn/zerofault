@@ -1230,7 +1230,7 @@ class AbsenceAction extends BaseAction{
 		if ($day>1) {
 			$unit2 = '&nbsp;days';
 		}
-		return round($hour).$unit1.' ('.$day.$unit2.')';
+		return round($hour, 2).$unit1.' ('.$day.$unit2.')';
 	}
 	private function calculateHour($date_from, $time_from, $date_to, $time_to) {
 		global $hour;
