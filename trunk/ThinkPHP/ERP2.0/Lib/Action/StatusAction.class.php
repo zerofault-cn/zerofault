@@ -330,28 +330,36 @@ class StatusAction extends BaseAction{
 					$status_count = M('StatusStatus')->where("board_id=".$board['id'])->group('status')->getField('status,count(*)');
 					if ($status_count[2] > 0) {
 						//有Fail
-						$value = 2;
+						$value = 2;//设为Fail
 					}
 					else {
 						//没有Fail
 						if ($status_count[0] > 0) {
-							//有Pending
-							$value = 0;
+							//有Ongoing
+							$value = 0;//设为Ongoing
 						}
 						else {
 							//没有Pending
 							if ($status_count[-1] > 0) {
-								//有None
-								$value = -1;
-							}
-							else {
-								//没有None，只剩Pass和Ignore
-								if ($status_count[1] == count($_REQUEST['item_id'])) {
-									//全部Pass
-									$value = 1;
+								//有TBD
+								if ($status_count[1]>0) {
+									//有Pass
+									$value = 0;//设为Ongoing 
 								}
 								else {
-									$value = 9;
+									//全部TBD，或还有Ignore
+									$value = -1;//设为TBD
+								}
+							}
+							else {
+								//没有TBD，只剩Pass和Ignore
+								if ($status_count[8]>0) {
+									//有Ignore
+									$value = 9;//设为Pass*
+								}
+								else {
+									//全部Pass
+									$value = 1;//设为Pass
 								}
 							}
 						}
@@ -1181,28 +1189,36 @@ class StatusAction extends BaseAction{
 				$status_count = M('StatusStatus')->where("board_id=".$board['id'])->group('status')->getField('status,count(*)');
 				if ($status_count[2] > 0) {
 					//有Fail
-					$value = 2;
+					$value = 2;//设为Fail
 				}
 				else {
 					//没有Fail
 					if ($status_count[0] > 0) {
-						//有Pending
-						$value = 0;
+						//有Ongoing
+						$value = 0;//设为Ongoing
 					}
 					else {
 						//没有Pending
 						if ($status_count[-1] > 0) {
-							//有None
-							$value = -1;
-						}
-						else {
-							//没有None，只剩Pass和Ignore
-							if ($status_count[1] == count($_REQUEST['item_id'])) {
-								//全部Pass
-								$value = 1;
+							//有TBD
+							if ($status_count[1]>0) {
+								//有Pass
+								$value = 0;//设为Ongoing 
 							}
 							else {
-								$value = 9;
+								//全部TBD，或还有Ignore
+								$value = -1;//设为TBD
+							}
+						}
+						else {
+							//没有TBD，只剩Pass和Ignore
+							if ($status_count[8]>0) {
+								//有Ignore
+								$value = 9;//设为Pass*
+							}
+							else {
+								//全部Pass
+								$value = 1;//设为Pass
 							}
 						}
 					}
@@ -1573,9 +1589,62 @@ class StatusAction extends BaseAction{
 
 		switch ($type) {
 			case 'flow':
-				$board_arr = D('StatusBoard')->where("flow_id=".$id." and status<=0")->select();
-				foreach ($board_arr as $board) {
-					self::_mail('board', $board['id']);
+				$flow = M('StatusFlow')->find($id);
+
+				$style = '<style>'."\n";
+				$style .= 'strong.TBD{color: #808080;}'."\n";
+				$style .= 'strong.Pass, strong.PassX{color: #009900;}'."\n";
+				$style .= 'strong.Ongoing{color: #0000FF;}'."\n";
+				$style .= 'strong.Failed{color: #FF0000;}'."\n";
+				$style .= 'strong.Ignore{color: #0099FF;}'."\n";
+				$style .= 'th{font-weight:bold;}'."\n";
+				$style .= '</style>'."\n";
+				$body = '<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /></head><body>'."\n";
+				$body .= '<table cellpadding="5" border="1" style="border-collapse:collapse;border:1px solid #666666;">'."\n";
+				$body .= '<tr bgcolor="#9999cc"><th>Board Name</th><th>Board Infomation</th><th>Board Status</th><th>Board Owner</th><th>Create Time</th><th>Last Update Time</th></tr>'."\n";
+
+				$body2 = '</table>'."\n";
+				$body2 .= '<br /><br />For more information, please visit <a target="_blank" href="'.APP_ROOT.'/Status">ERP System -> Board Status</a>';
+				$body2 .= '<br /><br />Best Regards,<br />'.C('ERP_TITLE');
+				$body2 .= '</body></html>';
+
+				$rs = D('StatusStatus')->where("flow_id=".$id." and status<=0")->field('if(substitute_id,substitute_id, owner_id) as staff_id, group_concat(distinct board_id) as board_ids')->group('staff_id')->select();
+				empty($rs) && ($rs = array());
+				foreach ($rs as $row) {
+					$staff = M('Staff')->find($row['staff_id']);
+					$subject = '[Board Status]: ['.$flow['name'].'] need ['.$staff['realname'].'] to update the test status';
+
+					$header = 'Hi '.$staff['realname'].',<br />'."\n";
+					$header .= '&nbsp;&nbsp;These boards in the below list need you to update.<br />'."\n";
+
+					$board_arr = D('StatusBoard')->relation(true)->where("id in (".$row['board_ids'].")")->select();
+					$table = '';
+					foreach ($board_arr as $i=>$board) {
+						if ($i%2) {
+							$table .= '<tr bgcolor="#CCCCCC">'."\n";
+						}
+						else {
+							$table .= '<tr bgcolor="#EEEEEE">'."\n";
+						}
+						$table .= '<td><a href="'.APP_ROOT.'/Status/board/id/'.$board['id'].'" target="_blank">'.$board['name'].'</a></td>'."\n";
+						$table .= '<td>'.nl2br($board['info']).'</td>'."\n";
+						$table .= '<td><strong class="'.$this->status_arr[$board['status']].'">'.$this->status_arr[$board['status']].'</strong></td>'."\n";
+						$table .= '<td>'.$board['owner']['realname'].'</td>'."\n";
+						$table .= '<td>'.$board['create_time'].'</td>'."\n";
+						$table .= '<td>'.$board['update_time'].'</td>'."\n";
+						$table .= '</tr>'."\n";
+					}
+					$mail->ClearAddresses();
+					$mail->AddAddress($staff['email'], $staff['realname']);
+					$mail->Subject = $subject;
+					$mail->MsgHTML($style.$header.$body.$table.$body2);
+					$debug = 'type='.$type.', flow_id='.$id.', staff_id='.$row['staff_id'];
+					if(!$mail->Send()) {
+						Log::Write('Mail status Error: '.$debug."\n".$mail->ErrorInfo, LOG::ERR);
+					}
+					else {
+						Log::Write('Mail status Success: '.$debug, LOG::INFO);
+					}
 				}
 				break;
 
@@ -1588,10 +1657,11 @@ class StatusAction extends BaseAction{
 				$status = D('StatusStatus')->relation(true)->where("board_id=".$id)->select();
 
 				$style = '<style>'."\n";
-				$style .= 'strong.None{color: #808080;}'."\n";
-				$style .= 'strong.Pass{color: #339900;}'."\n";
-				$style .= 'strong.Pending{color: #0000FF;}'."\n";
+				$style .= 'strong.TBD{color: #808080;}'."\n";
+				$style .= 'strong.Pass, strong.PassX{color: #009900;}'."\n";
+				$style .= 'strong.Ongoing{color: #0000FF;}'."\n";
 				$style .= 'strong.Failed{color: #FF0000;}'."\n";
+				$style .= 'strong.Ignore{color: #0099FF;}'."\n";
 				$style .= '</style>'."\n";
 				$body = '<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /></head><body>'."\n";
 				$body .= '<table cellpadding="5" border="1" style="border-collapse:collapse;border:1px solid #666666;">'."\n";
@@ -1667,10 +1737,11 @@ class StatusAction extends BaseAction{
 				$status = D('StatusStatus')->relation(true)->where("board_id=".$status_info['board_id'])->select();
 
 				$style = '<style>'."\n";
-				$style .= 'strong.None{color: #808080;}'."\n";
-				$style .= 'strong.Pass{color: #339900;}'."\n";
-				$style .= 'strong.Pending{color: #0000FF;}'."\n";
+				$style .= 'strong.TBD{color: #808080;}'."\n";
+				$style .= 'strong.Pass, strong.PassX{color: #009900;}'."\n";
+				$style .= 'strong.Ongoing{color: #0000FF;}'."\n";
 				$style .= 'strong.Failed{color: #FF0000;}'."\n";
+				$style .= 'strong.Ignore{color: #0099FF;}'."\n";
 				$style .= '</style>'."\n";
 				$body = '<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /></head><body>'."\n";
 				$body .= '<table cellpadding="5" border="1" style="border-collapse:collapse;border:1px solid #666666;">'."\n";
