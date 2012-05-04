@@ -47,7 +47,7 @@ class PublicAction extends BaseAction{
 			}
 			$_SESSION[C('ADMIN_ID')]	=	$info['id'];
 			$_SESSION['admin_name'] = empty($info['realname'])?$info['username']:$info['realname'];
-			$_SESSION[C('ADMIN_INFO')]	=	$info;
+			$User->where("id=".$info['id'])->setField('login_time', date('Y-m-d H:i:s'));
 			self::_success('登陆成功！',__APP__.'/'.Session::get('lastModule'),500);
 		}
 	}
@@ -56,7 +56,7 @@ class PublicAction extends BaseAction{
 	* 注销处理
 	*/
 	public function logout(){
-		Session::clear();
+		$_SESSION[C('ADMIN_ID')] = 0;
 		self::_success('注销成功！', __APP__, 500);
 	}
 	/**

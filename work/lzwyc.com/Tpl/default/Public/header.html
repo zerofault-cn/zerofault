@@ -10,11 +10,11 @@
 		<li><a href="__APP__/Company" class="<eq name='MODULE_NAME' value='Company'>active</eq>">找公司</a></li>
 		<li><a href="__APP__/Designer" class="<eq name='MODULE_NAME' value='Designer'>active</eq>">找设计师</a></li>
 		<li><a href="__APP__/Article/knowledge" class='<eq name="MODULE_NAME" value="Article"><eq name="ACTION_NAME" value="knowledge">active</eq></eq>'>装修常识</a></li>
-		<li><a href="__APP__/Indemnity" class="<eq name='MODULE_NAME' value='Indemnity'>active</eq>">装修保障</a></li>
+		<li><a href="__APP__/Static/Indemnity" class="<eq name='ACTION_NAME' value='Indemnity'>active</eq>">装修保障</a></li>
 		<li><a href="__APP__/Article/activity" class='<eq name="MODULE_NAME" value="Article"><eq name="ACTION_NAME" value="activity">active</eq></eq>'>乐装活动</a></li>
 	</ul>
 </div>
-<if condition="$MODULE_NAME eq 'Index' and empty($_SESSION[C('USER_ID')])">
+<if condition="MODULE_NAME eq 'Index' and empty($_SESSION[C('USER_ID')])">
 <div class="wrapper">
 	<div id="top">
 		<a href="__APP__/User/register">免费注册</a>
@@ -24,5 +24,10 @@
 		<label>乐装网动态：</label>上乐装网机会多多 优惠多多 即可获得精美礼品一份
 	</div>
 	<div class="clear"></div>
+</div>
+</if>
+<if condition="ACTION_NAME eq 'Indemnity'">
+<div class="wrapper">
+	<img src="../Public/Images/Indemnity_1.png" />
 </div>
 </if>

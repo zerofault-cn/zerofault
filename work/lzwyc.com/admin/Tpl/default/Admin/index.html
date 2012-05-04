@@ -1,0 +1,46 @@
+	<table id="table" border="1" cellpadding="3" cellspacing="0" width="100%" bordercolor="#999999" style="border-collapse:collapse;">
+	<tr bgcolor="#ededed">
+		<th width="5%">ID</th>
+		<th width="15%">登录帐号</th>
+		<th width="15%">实名</th>
+		<th width="15%">创建时间</th>
+		<th width="15%">上次登录</th>
+		<th width="12%">操作</th>
+	</tr>
+	<iterate name="list" id="item">
+	<tr bgcolor="<eq name='mod' value='1'>#FFFFE1</eq>" class="<eq name='item.status' value='0'>gray</eq>">
+		<td>{$item['id']}</td>
+		<td>{$item['username']}</td>
+		<td><label id="{$item['id']}">{$item['realname']}</label></td>
+		<td>{$item['create_time']|substr=2,14}</td>
+		<td>{$item['login_time']|substr=2,14}</td>
+		<td>
+			<img class="password" id="{$item['id']}" src="../Public/Images/key_edit.gif" alt="修改密码" align="absmiddle" />
+			<neq name="item['username']" value="admin">
+			<a href="__URL__/index/id/{$item['id']}" title="编辑"><img src="../Public/Images/options-edit.gif" alt="编辑" align="absmiddle"/></a>
+			<a href="__URL__/update/id/{$item['id']}/f/status/v/{:intval(!$item['status'])}" target="_iframe" title="<if condition='$item.status eq 0'>启用<else />禁用</if>"><if condition="$item['status'] eq 0"><img src="../Public/Images/add.gif" alt="启用" align="absmiddle"/><else /><img src="../Public/Images/delete.gif" alt="禁用" align="absmiddle"/></if></a>
+			<img class="delete" id="{$item['id']}" name="{$item['name']}" src="../Public/Images/cross.gif" alt="彻底删除" align="absmiddle"/>
+			</neq>
+		</td>
+	</tr>
+	</iterate>
+	</table>
+	<div class="addForm">
+		<fieldset>
+			<present name="user_info">
+			<legend>修改账号信息</legend>
+			<input type="hidden" class="user_id" value="{$user_info['id']}"/>
+			<label>帐号：</label>{$user_info['username']}<br />
+			<label>实名：</label><input type="text" class="realname" name="realname" size="10" tabindex="2" value="{$user_info['realname']}"/><br />
+			<else />
+			<legend>添加新账号</legend>
+			<input type="hidden" class="user_id" value=""/>
+			<label>帐号：</label><input type="text" class="username" name="username" size="10" tabindex="1" /><br />
+			<label>实名：</label><input type="text" class="realname" name="realname" size="10" tabindex="2" /><br />
+			<label>密码：</label><input type="password" class="password" name="password" size="10" tabindex="3" /><br />
+			</present>
+			<br />
+			<input type="button" value="提交" class="submit" />
+		</fieldset>
+	</div>
+	<script language="JavaScript" type="text/javascript" src="../Public/Js/admin_func.js"></script>

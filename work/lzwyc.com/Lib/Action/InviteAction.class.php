@@ -26,6 +26,7 @@ class InviteAction extends BaseAction {
 		$p = new Paginator($count, $limit);
 		$rs = $this->dao->where($where)->order($order)->limit($p->offset.','.$p->limit)->select();
 		foreach ($rs as $i=>$row) {
+			$rs[$i]['budget_num'] = $row['budget']*10000;
 			$rs[$i]['region'] = M('Region')->where("id=".$row['district'])->getField('name');
 			$rs[$i]['type_str'] = $options['type'][$row['type']];
 			$rs[$i]['space_str'] = $options['space'][$row['space']];

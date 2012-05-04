@@ -1,0 +1,76 @@
+#designer_list {
+	padding: 4px 0 24px 24px;
+}
+
+#designer_list h2 {
+	height: 34px;
+	line-height: 34px;
+	background:url(../Images/main_header_bg2.png) left top repeat-x;
+}
+#designer_list h2 strong {
+	float: left;
+	width: 137px;
+	font-family: "黑体", simhei;
+	color: #FFFFFF;
+	font-weight: normal;
+	padding-left: 12px;
+	background: url(../Images/main_header_bg1.png) left top no-repeat;
+}
+#designer_list h2 ul {
+	float: left;
+	width: 578px;
+	height: 29px;
+	padding-top: 5px;
+	padding-right: 9px;
+	background: url(../Images/main_header_bg3.png) right top no-repeat;
+}
+
+#designer_list .body {
+	border: 1px solid #00a604;
+	border-top: none;
+}
+#designer_list dl.designer {
+	padding: 14px 16px;
+	clear: both;
+}
+#designer_list dl.designer dt.photo {
+	float: left;
+	width: 177px;
+	height: 177px;
+}
+#designer_list dl.designer dt.photo img {
+	padding: 3px;
+	border: 1px solid #adadad;
+}
+#designer_list dl.designer dd.text {
+	float: left;
+	width: 320px;
+	font-size: 12px;
+	line-height: 24px;
+}
+#designer_list .introduction{
+	color: #919191;
+}
+#designer_list dl.designer dd.text address, #designer_list dl.designer dd.case_list address {
+	padding-bottom:4px;
+	color: #ff4800;
+	font-style: normal;
+	font-size: 14px;
+	font-family: "微软雅黑", "Microsoft YaHei";
+	line-height: 22px;
+}
+
+#designer_list dl.designer dd.case_list {
+	float: right;
+	width: 170px;
+	text-align: center;
+}
+#designer_list dl.case dt img {
+	padding:4px 5px;
+	border: 1px solid #adadad;
+}
+#designer_list dl.case dd {
+	color: #6b6b6b;
+	font-size: 12px;
+	padding-bottom: 8px;
+}
