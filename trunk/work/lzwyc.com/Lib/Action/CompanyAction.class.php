@@ -1,41 +1,22 @@
 <?php
 class CompanyAction extends BaseAction {
-	protected $dao, $category;
+	protected $dao;
 
 	public function _initialize() {
-		$this->dao = D('Article');
+		$this->dao = D('Company');
 		parent::_initialize();
-		$options = C('_options_');
-		$this->category = $options['article_category'];
-	}
-
-	public function knowledge() {
-		if (empty($_REQUEST['id'])) {
-			$this->index(2);
-		}
-		else {
-			$this->detail(intval($_REQUEST['id']));
-		}
-	}
-	public function activity() {
-		$this->index(4);
 	}
 
 	public function index($category_id=1) {
 
-		if(!empty($_REQUEST['cid'])) {
-			$category_id = $_REQUEST['cid'];
-		}
-		$this->assign('category', $this->category[$category_id]);
-		$this->assign('MODULE_TITLE', $this->category[$category_id]);
+		$this->assign('MODULE_TITLE', '装修公司');
 		$where = array(
-			'category_id' => $category_id,
 			'status' => array('gt', 0)
 			);
 		$order = 'id desc';
 		$count = $this->dao->where($where)->getField('count(*)');
 		import("@.Paginator");
-		$limit = 30;
+		$limit = 8;
 		$p = new Paginator($count, $limit);
 		$rs = $this->dao->where($where)->order($order)->limit($p->offset.','.$p->limit)->select();
 		$this->assign('list', $rs);

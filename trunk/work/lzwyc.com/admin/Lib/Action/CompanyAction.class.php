@@ -17,6 +17,7 @@ class CompanyAction extends BaseAction{
 		$topnavi[]=array(
 			'text'=> '公司列表',
 			);
+		$this->assign("topnavi",$topnavi);
 
 		$where = array();
 		$where['status'] = array('gt', -1);
@@ -34,10 +35,10 @@ class CompanyAction extends BaseAction{
 		$p = new Paginator($count,$limit);
 		$rs = $this->dao->where($where)->order($order)->limit($p->offset.','.$p->limit)->select();
 
-		$this->assign("topnavi",$topnavi);
-		$this->assign('page', $p->showMultiNavi());
 		$this->assign('list', $rs);
-		$this->assign('content',ACTION_NAME);
+		$this->assign('page', $p->showMultiNavi());
+
+		$this->assign('content', ACTION_NAME);
 		$this->display('Layout:default');
 	}
 	public function form() {

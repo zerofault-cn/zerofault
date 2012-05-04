@@ -70,7 +70,7 @@
 	<div class="body">
 		<foreach name="list" item="item">
 		<dl>
-			<dt><img src="../Public/Images/test_pic5.gif" width="106" height="126"/></dt>
+			<dt>¥{$item.budget_num}元</dt>
 			<dd class="text">
 				<address>{$item.region} {$item.address} {$item.room_str} {$item.area|round=1}m<sup>2</sup></address>
 				装修时间：{$item.reserve_date} 装修风格：{$item.space_str} 装修类型：{$item.type_str}<br />

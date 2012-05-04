@@ -30,9 +30,9 @@ if (ENV == 'LOCAL') {
 }
 else {
 	$config['DB_HOST'] = 'localhost';
-	$config['DB_NAME'] = 'lzwyc_com';
-	$config['DB_USER'] = 'root';
-	$config['DB_PWD'] = '';
+	$config['DB_NAME'] = 'lezhuang';
+	$config['DB_USER'] = 'lezhuang';
+	$config['DB_PWD'] = 'w2j7u5';
 	$config['APP_DOMAIN_DEPLOY'] = true;
 }
 return $config;

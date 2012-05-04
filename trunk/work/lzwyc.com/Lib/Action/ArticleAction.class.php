@@ -18,7 +18,12 @@ class ArticleAction extends BaseAction {
 		}
 	}
 	public function activity() {
-		$this->index(4);
+		if (empty($_REQUEST['id'])) {
+			$this->index(4);
+		}
+		else {
+			$this->detail(intval($_REQUEST['id']));
+		}
 	}
 
 	public function index($category_id=1) {

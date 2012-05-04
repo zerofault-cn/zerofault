@@ -1,19 +1,30 @@
-<link type="text/css" rel="stylesheet" href="../Public/Css/article.css" />
-<div id="article_list">
-	<h2><strong>{$category}</strong><ul><li></li></ul></h2>
+<link type="text/css" rel="stylesheet" href="../Public/Css/designer.css" />
+<div id="designer_list">
+	<h2><strong>设计师列表</strong><ul><li></li></ul></h2>
 	<div class="body">
-		<ul>
-		<foreach name="list" key="key" item="item">
-			<if condition="$key gt 0 && $key%5 eq 0">
-			<li class="line"></li>
-			</if>
-			<li>
-				<span>({$item.create_time|substr=0,10})</span>
-				<a href="__URL__/{$Think.ACTION_NAME}/id/{$item.id}" target="_blank">{$item.title}</a>
-				<div class="clear"></div>
-			</li>
+		<foreach name="list" item="item">
+		<dl class="designer">
+			<dt class="photo"><if condition="is_file('__APP__/../Html/Attach/photo/'.$item['id'].'.jpg') eq true"><img src="__APP__/../Html/Attach/photo/{$item.id}.jpg" /><else /><img src="../Public/Images/test_photo.png"/></if></dt>
+			<dd class="text">
+				<address>{$item.name}</address>
+				设计专长：{$item.feature}<br />
+				工龄：{$item.workage} 年<br />
+				职位：{$item.title}<br />
+				<div class="introduction">个人简介：{$item.introduction|nl2br}</div>
+			</dd>
+			<dd class="case_list">
+				<address>最新上传案例</address>
+				<dl class="case">
+					<dt><img src="../Public/Images/test_case.png"/></dt>
+					<dd>清江山水小区</dd>
+					<dt><img src="../Public/Images/test_case.png"/></dt>
+					<dd>清江山水小区</dd>
+				</dl>
+			</dd>
+			<div class="clear"></div>
+		</dl>
 		</foreach>
-		</ul>
+		<div class="clear"></div>
 		<div class="pagenavi">{$page}</div>
 	</div>
 </div>

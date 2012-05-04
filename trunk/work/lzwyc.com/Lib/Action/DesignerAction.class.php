@@ -9,6 +9,7 @@ class DesignerAction extends BaseAction {
 
 	public function index() {
 
+		$this->assign('MODULE_TITLE', '设计师列表');
 		$where = array(
 			'status' => array('gt', 0)
 			);
@@ -18,6 +19,10 @@ class DesignerAction extends BaseAction {
 		$limit = 5;
 		$p = new Paginator($count, $limit);
 		$rs = $this->dao->where($where)->order($order)->limit($p->offset.','.$p->limit)->select();
+		foreach ($rs as $i=>$row) {
+			$rs[$i]['workage'] = ceil((date('Y')+date('m')/12)-substr($row['workdate'], 0, 4)-substr($row['workdate'], 5,2)/12);
+		}
+
 		$this->assign('list', $rs);
 		$this->assign('page', $p->showMultiNavi());
 

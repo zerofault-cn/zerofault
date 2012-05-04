@@ -1,0 +1,76 @@
+#company_list {
+	padding: 4px 0 24px 24px;
+}
+
+#company_list h2 {
+	height: 34px;
+	line-height: 34px;
+	background:url(../Images/main_header_bg2.png) left top repeat-x;
+}
+#company_list h2 strong {
+	float: left;
+	width: 137px;
+	font-family: "黑体", simhei;
+	color: #FFFFFF;
+	font-weight: normal;
+	padding-left: 12px;
+	background: url(../Images/main_header_bg1.png) left top no-repeat;
+}
+#company_list h2 ul {
+	float: left;
+	width: 578px;
+	height: 29px;
+	padding-top: 5px;
+	padding-right: 9px;
+	background: url(../Images/main_header_bg3.png) right top no-repeat;
+}
+
+#company_list .body {
+	border: 1px solid #00a604;
+	border-top: none;
+}
+#company_list dl {
+	padding: 14px 16px;
+	clear: both;
+}
+#company_list dl dt {
+	float: left;
+	width: 183px;
+	height: 140px;
+}
+#company_list dt img {
+	border: 8px solid #9dc682;
+	border-width: 8px 9px;
+	max-width: 150px;
+}
+#company_list dd.text {
+	float: left;
+	width: 408px;
+	font-size: 12px;
+	line-height: 24px;
+}
+#company_list dd.text address {
+	padding-bottom:4px;
+	color: #464646;
+	font-style: normal;
+	font-size: 20px;
+	font-family: "微软雅黑", "Microsoft YaHei";
+	line-height: 22px;
+}
+
+#company_list dd.ext {
+	float: right;
+	width: 82px;
+	text-align: center;
+}
+#company_list dd.ext a.btn {
+	display: inline-block;
+	width: 81px;
+	height: 35px;
+	margin-top: 25px;
+	color: #FFFFFF;
+	font-size: 18px;
+	font-family: "黑体", "simHei";
+	line-height: 35px;
+	background: url(../Images/btn_bg5.png) center center no-repeat;
+}

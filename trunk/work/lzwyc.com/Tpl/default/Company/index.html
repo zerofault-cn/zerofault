@@ -1,19 +1,25 @@
-<link type="text/css" rel="stylesheet" href="../Public/Css/article.css" />
-<div id="article_list">
-	<h2><strong>{$category}</strong><ul><li></li></ul></h2>
+<link type="text/css" rel="stylesheet" href="../Public/Css/company.css" />
+<div id="company_list">
+	<h2><strong>装修公司列表</strong><ul><li></li></ul></h2>
 	<div class="body">
-		<ul>
-		<foreach name="list" key="key" item="item">
-			<if condition="$key gt 0 && $key%5 eq 0">
-			<li class="line"></li>
-			</if>
-			<li>
-				<span>({$item.create_time|substr=0,10})</span>
-				<a href="__URL__/{$Think.ACTION_NAME}/id/{$item.id}" target="_blank">{$item.title}</a>
-				<div class="clear"></div>
-			</li>
+		<foreach name="list" item="item">
+		<dl>
+			<dt><if condition="is_file('__APP__/../Html/Attach/company_logo/'.$item['id'].'.jpg') eq true"><img src="__APP__/../Html/Attach/company_logo/{$item.id}.jpg" /><else /><img src="../Public/Images/test_logo.jpg"/></if></dt>
+			<dd class="text">
+				<address>{$item.name}</address>
+				办公地址：{$item.address}<br />
+				公司介绍：{$item.introduction|nl2br}<br />
+				电话：<em>{$item.telephone} {$item.mobile}</em><br />
+			</dd>
+			<dd class="ext">
+				营业执照<br />
+				通过验证<br />
+				<a class="btn" href="__URL__/detail/id/{$item.id}">去看看</a>
+			</dd>
+			<div class="clear"></div>
+		</dl>
 		</foreach>
-		</ul>
+		<div class="clear"></div>
 		<div class="pagenavi">{$page}</div>
 	</div>
 </div>

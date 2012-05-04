@@ -83,6 +83,7 @@ class UserAction extends BaseAction {
 				if ($keepme) {
 					cookie(C('USER_ID'), $rs['id']);
 				}
+				$this->dao->where("id=".$info['id'])->setField('login_time', date('Y-m-d H:i:s'));
 				if (!empty($_REQUEST['last_url']) && substr($_REQUEST['last_url'], -8)!='register') {
 					self::_success('登录成功，即将跳转到之前的页面！', $_REQUEST['last_url']);
 				}
@@ -91,7 +92,7 @@ class UserAction extends BaseAction {
 				}
 			}
 			else {
-				self::_error('认证错误！');
+				self::_error('账号不存在或已被禁用！');
 			}
 			$this->display('Layout:default');
 			exit;
@@ -104,7 +105,7 @@ class UserAction extends BaseAction {
 		$this->display('Layout:default');
 	}
 	public function logout(){
-		Session::clear();
+		$_SESSION[C('USER_ID')] = 0;
 		cookie(C('USER_ID'), null);
 		self::_success('注销成功！', __APP__, 500, 'header_message_box');
 	}
