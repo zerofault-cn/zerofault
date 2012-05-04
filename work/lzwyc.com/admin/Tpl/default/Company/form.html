@@ -1,0 +1,39 @@
+<form action="__URL__/submit" method="post" target="_iframe">
+<input type="hidden" name="id" value="{$info.id}" />
+<table cellspacing="4" cellpadding="4" >
+<tr>
+	<td align="right" width="70">名称：</td>
+	<td><input type="text" class="t_input" name="name" value="{$info.name}" size="60" /></td>
+</tr>
+<tr>
+	<td align="right">地址：</td>
+	<td><input type="text" class="t_input" name="address" value="{$info.address}" size="60" /></td>
+</tr>
+<tr>
+	<td align="right">手机：</td>
+	<td><input type="text" class="t_input" name="mobile" value="{$info.mobile}" size="60" /></td>
+</tr>
+<tr>
+	<td align="right">座机：</td>
+	<td><input type="text" class="t_input" name="telephone" value="{$info.telephone}" size="60" /></td>
+</tr>
+<tr>
+	<td align="right" valign="top">介绍：</td>
+	<td><textarea name="introduction" rows="8" cols="60">{$info.introduction}</textarea></td>
+</tr>
+
+<tr>
+	<td align="right">显示顺序：</td>
+	<td><input type="text" class="t_input" name="sort" value="{$info.sort}" size="10" />(数字越小越靠前)</td>
+</tr>
+<tr>
+	<td>&nbsp;</td>
+	<td>
+		<input type="submit" value="提交" name="submit" />
+		<notempty name="id">
+		<input type="button" value="取消" onclick="javascript:back();"/>
+		</notempty>
+	</td>
+</tr>
+</table>
+</form>

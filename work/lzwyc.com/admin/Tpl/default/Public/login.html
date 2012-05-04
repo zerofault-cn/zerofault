@@ -1,0 +1,64 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>客户管理系统 </title>
+<style type="text/css">
+<!--
+body {
+	margin-left: 0px;
+	margin-top: 0px;
+	margin-right: 0px;
+	margin-bottom: 0px;
+	background-image: url(../Public/Images/login_bg.png);
+	background-repeat: repeat-x;
+	background-color: #3bf3ea;
+}
+-->
+</style>
+<link type="text/css" rel="stylesheet" href="../Public/Css/jquery-impromptu.css"/>
+</head>
+
+<body>
+<form method="post" action="__APP__/Public/checkLogin" target="_iframe">
+<table width="800" border="0" align="center" cellpadding="0" cellspacing="0">
+  <tr>
+    <td height="768" valign="top" background="../Public/Images/login_bg_img.jpg">
+      <table width="335" border="0" align="center" cellpadding="0" cellspacing="0">
+        <tr>
+          <td height="244">&nbsp;</td>
+        </tr>
+        <tr>
+          <td width="333" height="284"><table width="100%" border="0" cellpadding="0" cellspacing="0" background="images/login_middle_bg.jpg">
+            <tr>
+              <td width="33%" height="80">&nbsp;</td>
+              <td width="67%">&nbsp;</td>
+            </tr>
+            <tr>
+              <td height="45" align="right">用户名：&nbsp; </td>
+              <td><label>
+                <input name="username" type="text" id="textfield" size="20" maxlength="40" />
+              </label></td>
+            </tr>
+            <tr>
+              <td height="45" align="right">密码：&nbsp; </td>
+              <td><input name="password" type="password" id="textfield2" size="20" maxlength="40" /></td>
+            </tr>
+            <tr>
+              <td height="110" colspan="2" align="center"><label>
+                <input type="submit" value='登录' id="imageField" src="../Public/Images/login_btn.gif" />
+              </label></td>
+              </tr>
+          </table></td>
+          </tr>
+      </table>
+    </td>
+  </tr>
+</table>
+</form>
+</body>
+<iframe id="_iframe" name="_iframe" style="width:0px;height:0px;display:none;"></iframe>
+<script language="JavaScript" type="text/javascript" src="../Public/Js/jquery-1.4.2.min.js"></script>
+<script language="JavaScript" type="text/javascript" src="../Public/Js/myfunc.js"></script>
+<script language="JavaScript" type="text/javascript" src="../Public/Js/jquery-impromptu.1.6.js"></script>
+</html>

@@ -1,0 +1,454 @@
+#top {
+	width: 960px;
+	height:72px;
+	padding-left: 40px;
+	padding-top: 64px;
+	margin: 0 auto 10px;
+	background:url(../Images/top_bg.png) top center no-repeat;
+}
+#top a {
+	font-size: 16px;
+	font-weight: bold;
+	line-height: 24px;
+	color: #FE7200;
+	padding-right: 50px;
+}
+#site_msg {
+	float: left;
+	padding: 1px 10px;
+	border: 1px solid #9ee97e;
+	line-height: 24px;
+}
+#site_msg label {
+	font-size: 14px;
+	font-weight: bold;
+	color: #9ee97e;
+}
+
+#banner {
+	height: 396px;
+	background:url(../Images/banner_bg.png) top center repeat-x;
+}
+#banner .wrapper {
+	width: 1070px;
+}
+#banner #slider {
+	float: left;
+	width: 550px;
+	height: 352px;
+	padding-left: 40px;
+	padding-top: 30px;
+}
+#banner #quick_form {
+	position: relative;
+	float: right;
+	width: 320px;
+	height: 322px;
+	padding-top: 74px;
+	padding-left:150px;
+	background:url(../Images/form_bg.png) left top no-repeat;
+}
+#banner #quick_form table em {
+	color: #ff7200;
+	font-family: Arial;
+	font-weight: bold;
+}
+#banner #quick_form #text_ad1, #banner #quick_form #text_ad2 {
+	position: absolute;
+	left: 10px;
+	top: 60px;
+	width: 36px;
+	font-size:24px;
+	line-height: 26px;
+	font-weight: bold;
+	text-align: center;
+	color: #000;
+}
+#banner #quick_form #text_ad2 {
+	left: 60px;
+}
+#case_list {
+	width: 410px;
+	height: 285px;
+}
+#case_list h2 {
+	height: 44px;
+	text-indent: -10000px;
+	background: url(../Images/case_bg.png) left top no-repeat;
+}
+#case_list .body {
+	height: 241px;
+	margin-left: 7px;
+	background-color: #e5f2c2;
+}
+#case_list dl {
+	padding: 5px 15px;
+	clear: both;
+}
+#case_list dl dt {
+	float:left;
+	width: 102px;
+	height: 70px;
+}
+#case_list dl dd {
+	float: left;
+	padding-left: 15px;
+	line-height: 26px;
+}
+#case_list ul {
+	padding: 0 15px;
+}
+#case_list ul li {
+	padding-left: 26px;
+	border-bottom: 1px solid #7b7e74;
+	line-height: 27px;
+	background: url(../Images/icon1.png) left center no-repeat;
+}
+#company_list {
+	width: 574px;
+	height: 285px;
+	position: relative;
+}
+#company_list ul {
+	background-color: #e7f3c4;
+	height: 202px;
+}
+#company_list ul li {
+	float: left;
+	width: 132px;
+	height: 51px;
+	padding: 7px 5px;
+}
+#company_list dl {
+	height: 83px;
+	background-color: #cee8ae;
+}
+#company_list dl dt {
+	float: left;
+	width: 85px;
+	height: 33px;
+	padding: 25px 44px 26px 25px;
+	font-size: 14px;
+	font-weight: bold;
+	text-align:center;
+	text-indent: 6px;
+	line-height: 32px;
+	background: url(../Images/btn_bg1.png) 25px 25px no-repeat;
+}
+#company_list dl dd {
+	float: left;
+	width: 210px;
+	height: 26px;
+	line-height: 30px;
+}
+#company_list .label2 {
+	position: absolute;
+	left: -14px;
+	top: -9px;
+}
+
+#knowledge {
+	width: 275px;
+	height: 701px;
+}
+#knowledge h2 {
+	height:44px;
+	text-indent: -10000px;
+	background: url(../Images/knowledge_bg.png) left top no-repeat;
+}
+#knowledge .body {
+	height: 657px;
+	margin-left: 7px;
+	background-color: #e5f2c2;
+}
+#knowledge dl {
+	padding: 12px 8px;
+	clear: both;
+}
+#knowledge dl dt {
+	float: left;
+	width: 103px;
+	height: 146px;
+	padding: 6px;
+	background-color: #c3e0b2;
+}
+#knowledge dl dd {
+	float: left;
+	width: 127px;
+	padding-left: 8px;
+	line-height:24px;
+}
+#knowledge dl dd.title {
+	font-size: 16px;
+	color: #fd6e02;
+}
+#knowledge ul {
+	padding: 12px 8px;
+}
+#knowledge ul li {
+	font-size: 14px;
+	line-height: 26px;
+}
+#invite {
+	width: 716px;
+	height: 701px;
+}
+#invite h2 {
+	height: 44px;
+	text-indent: -10000px;
+	background: url(../Images/invite_bg.png) left top no-repeat;
+}
+#invite h2 a {
+	float: right;
+	padding-right: 15px;
+	text-indent: 0;
+	color: #ff5a00;
+	font-size: 14px;
+	line-height: 40px;
+}
+
+#invite .body {
+	height: 657px;
+	margin-left: 7px;
+	background-color: #e5f2c2;
+}
+#invite .summary {
+	float: right;
+	padding: 5px 20px;
+	font-size: 14px;
+}
+#invite .summary i{
+	font-style: normal;
+	color: #ee761c;
+}
+#invite .navi {
+	float: left;
+	padding: 5px 20px;
+	font-size: 14px;
+	color: #ff6000;
+}
+#invite .navi a {
+	margin-left: 10px;
+	margin-right: 10px;
+	color: #383838;
+}
+#invite .navi a:hover, #invite .navi a:active {
+	color: #ff6000;
+}
+#invite dl {
+	padding: 14px 16px;
+	clear: both;
+}
+#invite dl dt {
+	float: left;
+	width: 108px;
+	height: 128px;
+}
+#invite dl dt img {
+	border: 1px solid #d9d700;
+}
+#invite dl dd.text {
+	float: left;
+	width: 420px;
+	padding-left: 15px;
+	font-size: 14px;
+	line-height: 22px;
+}
+#invite dl dd.text address {
+	color: #008f03;
+	font-style: normal;
+	font-size: 18px;
+	font-weight: bold;
+	line-height: 24px;
+}
+#invite dl dd.text sup {
+	color: #008f03;
+}
+#invite dl dd.btn {
+	float: right;
+	width: 128px;
+}
+#invite dl dd.btn .btn1 {
+	float: left;
+	width: 87px;
+}
+#invite dl dd.btn .btn1 div {
+	height: 37px;
+	padding: 5px 0;
+	font-size: 14px;
+	font-weight: bold;
+	color: #ffffff;
+	line-height: 36px;
+	text-align: center;
+	background: url(../Images/btn_bg2.png) center center no-repeat;
+}
+#invite dl dd.btn .btn2 {
+	float: left;
+	width: 20px;
+	height: 78px;
+	padding: 10px 8px 6px;
+	font-size: 16px;
+	font-weight: bold;
+	color: #545300;
+	line-height: 22px;
+	text-align: center;
+}
+#invite dl dd.btn .open {
+	background: url(../Images/btn_bg3.png) center center no-repeat;
+}
+#invite dl dd.btn .close {
+	background: url(../Images/btn_bg4.png) center center no-repeat;
+}
+
+#company h2 {
+	height:44px;
+	text-indent: -10000px;
+	background: url(../Images/company_bg.png) left top no-repeat;
+}
+#company h2 .navi{
+	float: right;
+	padding-right: 15px;
+	text-indent: 0;
+	color: #ee761c;
+	font-size: 12px;
+	line-height: 40px;
+}
+#company h2 .navi a {
+	color: #ee761c;
+}
+#company ul {
+	margin-left: 6px;
+	background-color: #e5f2c2;
+}
+#company ul li {
+	float: left;
+	padding: 12px 4px;
+}
+#company ul li dl {
+	width: 300px;
+	height: 178px;
+	padding:5px 9px 4px 8px;
+	background: url(../Images/company_cell_bg.png) left top no-repeat;
+}
+#company ul li dl dt {
+	float: left;
+	width: 135px;
+	height: 176px;
+	text-align: center;
+	line-height: 28px;
+}
+#company ul li dl dt img {
+	width: 135px;
+	height: 148px;
+}
+#company ul li dl dd {
+	float: left;
+	width: 148px;
+	padding-left: 8px;
+	line-height: 24px;
+}
+#tips dl {
+	float: left;
+	width: 305px;
+	height: 100px;
+	background-color: #e5f2c2;
+}
+#tips .tips_sp {
+	float: left;
+	width: 42px;
+	height: 100px;
+}
+#tips dl dt {
+	height: 60px;
+	padding-left: 72px;
+	color: #ff7f00;
+	font-size: 18px;
+	line-height: 60px;
+}
+#tips dl.tip1 dt {
+	background: url(../Images/tip1_icon.png) 20px 14px no-repeat;
+}
+#tips dl.tip2 dt {
+	background: url(../Images/tip2_icon.png) 20px 14px no-repeat;
+}
+#tips dl.tip3 dt {
+	background: url(../Images/tip3_icon.png) 20px 14px no-repeat;
+}
+#designer {
+	width:676px;
+	height: 509px;
+}
+#designer h2 {
+	height: 44px;
+	text-indent: -10000px;
+	background: url(../Images/designer_bg.png) left top no-repeat;
+}
+#designer ul {
+	margin-left: 7px;
+	background-color: #e5f2c2;
+}
+#designer ul li {
+	float: left;
+	padding: 8px 3px 9px;
+}
+#designer ul li dl {
+	width: 135px;
+	height: 168px;
+	padding:14px 11px 9px 13px;
+	background: url(../Images/designer_cell_bg.png) 2px 0px no-repeat;
+}
+#designer ul li dl dd.name {
+	float: left;
+}
+#designer ul li dl dd.number {
+	float: right;
+}
+#announcement {
+	width: 308px;
+	height: 407px;
+}
+#announcement h2 {
+	height: 40px;
+	text-indent: -10000px;
+	background: url(../Images/announcement_bg.png) left top no-repeat;
+}
+#announcement ul {
+	padding: 10px 20px;
+	background-color: #e5f2c2;
+}
+#announcement ul li {
+	color: #7ec64e;
+	font-size: 14px;
+	line-height: 26px;
+
+	list-style:inside square none;
+}
+#announcement img {
+	padding: 16px 36px;
+}
+#brand h2 {
+	height: 44px;
+	text-indent: -10000px;
+	background: url(../Images/brand_bg.png) left top no-repeat;
+}
+#brand .body {
+	margin-left: 6px;
+	background-color: #e5f2c2;
+}
+#brand img {
+	margin: 10px 5px;
+}
+#link {
+	padding: 20px 8px;
+	background-color: #e4f4db;
+	font-size: 14px;
+	line-height: 28px;
+}
+#link label {
+	font-size: 16px;
+	color: #da5c00;
+	font-weight: bold;
+}
+#link a {
+	margin-left: 12px;
+	}

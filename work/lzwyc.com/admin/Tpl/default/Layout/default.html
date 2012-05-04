@@ -1,0 +1,60 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<title>网站管理系统</title>
+	<link type="text/css" rel="stylesheet" href="../Public/Css/admin.css" />
+	<link type="text/css" rel="stylesheet" href="../Public/Css/tablesorter.css" />
+	<link type="text/css" rel="stylesheet" href="../Public/Css/jquery-impromptu.css"/>
+	<script language="JavaScript" type="text/javascript" src="../Public/Js/jquery-1.4.2.min.js"></script>
+	<script language="JavaScript" type="text/javascript">
+	var _APP_ = '__APP__';
+	var _URL_ = '__URL__';
+	var APP_PUBLIC_URL = '../Public';
+	var IMAGE_FOLDER = '../Public/Images/';
+	</script>
+</head>
+<body>
+<div id="container">
+	<div id="top">
+		<div class="action">
+			您好, {@admin_name}<br />
+			<a href="__APP__/../index.php" target="_blank">网站首页</a>&nbsp;&nbsp;
+			<a href="__APP__/Public/logout" target="_iframe">退出管理</a>
+		</div>
+	</div>
+	<div id="main">
+		<div class="leftColumn">
+			<layout name="Public:left" cache="0" />
+		</div>
+		<div class="rightColumn">
+			<div class="navi">
+				<a href="__APP__">管理首页</a> &gt; 
+				<iterate name="topnavi" id="item">
+					<present name="item['url']">
+					<a href="{$item.url}">{$item.text}</a> &gt;
+					<else />
+					{$item.text}
+					</present>
+				</iterate>
+			</div>
+
+			<table width="99%" border="0" cellpadding="2" cellspacing="1" bgcolor="#999999">
+			<tr>
+				<td bgcolor="#FFFFFF">
+				<layout name="$content" cache="0" />
+				</td>
+			</tr>
+			</table>
+		</div>
+		<div class="clear"></div>
+	</div>
+	<div id="copy">
+		Powered by <a href="http://www.ycruit.com/" target="_blank">睿腾网络</a>
+	</div>
+</div>
+<iframe id="_iframe" name="_iframe" style="width:0px;height:0px;display:none;"></iframe>
+<script language="JavaScript" type="text/javascript" src="../Public/Js/jquery-impromptu.1.6.js"></script>
+<script language="JavaScript" type="text/javascript" src="../Public/Js/myfunc.js"></script>
+</body>
+</html>
