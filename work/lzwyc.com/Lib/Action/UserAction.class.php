@@ -35,10 +35,12 @@ class UserAction extends BaseAction {
 			$password2 = trim($_REQUEST['password2']);
 			$password!=$password2 && self::_error('两次输入的密码不一致！');
 
+			$this->dao->type = 1;
 			$this->dao->email = $email;
 			$this->dao->password = md5($password);
 			$this->dao->realname = $realname;
 			$this->dao->sex = $sex;
+			$this->dao->reg_time = date('Y-m-d H:i:s');
 			$this->dao->status = 1;
 			if($user_id = $this->dao->add()) {
 				$_SESSION[C('USER_ID')] = $user_id;
@@ -83,7 +85,7 @@ class UserAction extends BaseAction {
 				if ($keepme) {
 					cookie(C('USER_ID'), $rs['id']);
 				}
-				$this->dao->where("id=".$info['id'])->setField('login_time', date('Y-m-d H:i:s'));
+				$this->dao->where("id=".$rs['id'])->setField('login_time', date('Y-m-d H:i:s'));
 				if (!empty($_REQUEST['last_url']) && substr($_REQUEST['last_url'], -8)!='register') {
 					self::_success('登录成功，即将跳转到之前的页面！', $_REQUEST['last_url']);
 				}

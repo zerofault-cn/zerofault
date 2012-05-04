@@ -16,7 +16,7 @@
 	<tr bgcolor="<eq name='mod' value='1'>#FFFFE1</eq>" class="<eq name='item.status' value='0'>gray</eq>">
 		<td>{$item['id']}</td>
 		<td>
-			<a href="#" target="_blank">{$item['title']}</a>
+			<a href="__APP__/../index.php/Article/detail/id/{$item.id}" target="_blank">{$item['title']}</a>
 		</td>
 		<notpresent name="_GET['category_id']">
 		<td><a href="__URL__/index/category_id/{$item['category_id']}" title="查看本类下所有文章">{$categorys[$item['category_id']]}</a>

@@ -45,19 +45,19 @@ class InviteAction extends BaseAction {
 		if (empty($_SESSION[C('USER_ID')])) {
 			self::_error('请先登录后才能发布招标！', 'message_box', 5000);
 		}
-		if($_SESSION['verify'] != md5(trim($_REQUEST['verify']))) {
+		if(empty($_REQUEST['quick_form']) && $_SESSION['verify']!=md5(trim($_REQUEST['verify']))) {
 			self::_error('验证码错误！');
 		}
 		$district = intval($_REQUEST['district']);
 		empty($district) && self::_error('地点区域必须选择！');
 		$address = trim($_REQUEST['address']);
-		(empty($address)||'如：××小区'==$address) && self::_error('小区地址必须填写！');
+		empty($_REQUEST['quick_form'])&&(empty($address)||'如：××小区'==$address) && self::_error('小区地址必须填写！');
 		$type = intval($_REQUEST['type']);
-		empty($type) && self::_error('装修类型必须选择！');
+		empty($_REQUEST['quick_form'])&&empty($type) && self::_error('装修类型必须选择！');
 		$space = intval($_REQUEST['space']);
-		empty($space) && self::_error('户型必须选择！');
+		empty($_REQUEST['quick_form'])&&empty($space) && self::_error('户型必须选择！');
 		$room = intval($_REQUEST['room']);
-		empty($room) && self_error('空间类型必须选择！');
+		empty($_REQUEST['quick_form'])&&empty($room) && self_error('空间类型必须选择！');
 		$area = intval($_REQUEST['area']);
 		empty($area) && self::_error('面积必须填写！');
 		!is_numeric($area) && self::_error('面积必须填写数字！');
@@ -65,13 +65,15 @@ class InviteAction extends BaseAction {
 		empty($budget) && self::_error('预算必须填写！');
 		!is_numeric($budget) && self::_error('预算必须填写数字！');
 		$demand = trim($_REQUEST['demand']);
+		$demand = str_replace('请简单描述您对装修设计的要求', '', $demand);
 		$name = trim($_REQUEST['name']);
 		empty($name) && self::_error('姓名必须填写！');
 		$qq = trim($_REQUEST['qq']);
 		//empty($qq) && self::_error('QQ必须填写！');
 		$reserve_date = trim($_REQUEST['reserve_date']);
-		empty($reserve_date) && self::_error('量房时间必须填写！');
-		strtotime($reserve_date)<=0 && self::_error('量房时间日期格式错误！');
+		empty($_REQUEST['quick_form'])&&empty($reserve_date) && self::_error('预约装修时间必须填写！');
+		empty($_REQUEST['quick_form'])&&strtotime($reserve_date)<=0 && self::_error('预约装修时间格式错误！');
+		empty($reserve_date) && ($reserve_date=date('Y-m-d'));
 		$phone = trim($_REQUEST['phone']);
 		empty($phone) && self::_error('联系电话必须填写！');
 

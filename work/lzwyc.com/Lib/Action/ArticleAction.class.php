@@ -14,7 +14,7 @@ class ArticleAction extends BaseAction {
 			$this->index(2);
 		}
 		else {
-			$this->detail(intval($_REQUEST['id']));
+			$this->detail();
 		}
 	}
 	public function activity() {
@@ -22,7 +22,7 @@ class ArticleAction extends BaseAction {
 			$this->index(4);
 		}
 		else {
-			$this->detail(intval($_REQUEST['id']));
+			$this->detail();
 		}
 	}
 
@@ -49,8 +49,8 @@ class ArticleAction extends BaseAction {
 		$this->assign('content', 'index');
 		$this->display('Layout:main');
 	}
-	public function detail($id=0) {
-		if (empty($id)) {
+	public function detail() {
+		if (empty($_REQUEST['id'])) {
 			redirect(__URL__);
 		}
 		$id = intval($_REQUEST['id']);

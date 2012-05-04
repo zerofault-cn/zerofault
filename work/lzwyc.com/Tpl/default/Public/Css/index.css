@@ -32,41 +32,62 @@
 #banner .wrapper {
 	width: 1070px;
 }
-#banner #slider {
+#slider {
 	float: left;
 	width: 550px;
 	height: 352px;
 	padding-left: 40px;
 	padding-top: 30px;
 }
-#banner #quick_form {
+#quick_form {
 	position: relative;
 	float: right;
-	width: 320px;
-	height: 322px;
-	padding-top: 74px;
-	padding-left:150px;
+	width: 310px;
+	height: 326px;
+	padding-top: 70px;
+	padding-left:160px;
 	background:url(../Images/form_bg.png) left top no-repeat;
 }
-#banner #quick_form table em {
+#quick_form .name, #quick_form .phone {
+	width: 150px;
+}
+#quick_form .district, #quick_form .budget {
+	width: 156px;
+}
+#quick_form textarea {
+	width: 150px;
+	height: 52px;
+}
+#quick_form table strong {
 	color: #ff7200;
 	font-family: Arial;
 	font-weight: bold;
 }
-#banner #quick_form #text_ad1, #banner #quick_form #text_ad2 {
+#quick_form #text_ad1, #quick_form #text_ad2 {
 	position: absolute;
 	left: 10px;
 	top: 60px;
 	width: 36px;
 	font-size:24px;
+	font-family: "ºÚÌå", simhei;
 	line-height: 26px;
-	font-weight: bold;
 	text-align: center;
 	color: #000;
 }
-#banner #quick_form #text_ad2 {
+#quick_form #text_ad2 {
 	left: 60px;
 }
+#quick_form .message_box {
+	margin: 0 8px;
+	background-color: #ffcc99;
+}
+#quick_form em {
+	color: #ffcc33;
+	padding: 3px 3px 3px 22px;
+	background: url(../Images/sign_warning.png) 3px center no-repeat;
+}
+
+
 #case_list {
 	width: 410px;
 	height: 285px;
@@ -242,11 +263,16 @@
 #invite dl dt {
 	float: left;
 	width: 108px;
-	height: 128px;
+	height: 24px;
+	padding-top: 104px;
+	color: #FE7700;
+	font-family: arial;
+	font-size: 14px;
+	line-height: 24px;
+	text-align: center;
+	background: url(../Images/budget_bg.png) left top no-repeat;
 }
-#invite dl dt img {
-	border: 1px solid #d9d700;
-}
+
 #invite dl dd.text {
 	float: left;
 	width: 420px;
@@ -328,6 +354,7 @@
 	width: 300px;
 	height: 178px;
 	padding:5px 9px 4px 8px;
+	font-size: 12px;
 	background: url(../Images/company_cell_bg.png) left top no-repeat;
 }
 #company ul li dl dt {
@@ -335,6 +362,7 @@
 	width: 135px;
 	height: 176px;
 	text-align: center;
+	color: #037500;
 	line-height: 28px;
 }
 #company ul li dl dt img {
@@ -451,4 +479,4 @@
 }
 #link a {
 	margin-left: 12px;
-	}
+}
