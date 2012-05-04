@@ -1,0 +1,166 @@
+#invite_form {
+	width: 354px;
+	height: 324px;
+	padding: 18px 17px 20px 389px;
+	background: url(../Images/invite_main_bg.png) left top no-repeat;
+}
+#invite_form table {
+	padding: 6px;
+}
+#invite_form caption {
+	padding: 6px 6px 0;
+	font-size: 18px;
+	font-weight: bold;
+	color: #FE6C00;
+	text-align: left;
+}
+#invite_form .message_box {
+	background-color: #ffcc99;
+}
+#invite_form em {
+	color: #ffcc33;
+	padding: 3px 3px 3px 22px;
+	background: url(../Images/sign_warning.png) 3px center no-repeat;
+
+}
+#invite_form form .district, #invite_form form .space {
+	width: 86px;
+}
+#invite_form form .room {
+	width: 113px;
+}
+#invite_form form .address {
+	width: 166px;
+}
+#invite_form form textarea {
+	width: 268px;
+	height: 54px;
+}
+#invite_form form .name, #invite_form form .date {
+	width: 90px;
+}
+#invite_form form .qq, #invite_form form .phone {
+	width: 110px;
+}
+#invite_form form .verify {
+	width: 32px;
+}
+
+#invite_list {
+	padding: 24px 0 24px 24px;
+}
+
+#invite_list h2 {
+	height: 34px;
+	line-height: 34px;
+	background:url(../Images/main_header_bg2.png) left top repeat-x;
+}
+#invite_list h2 strong {
+	float: left;
+	width: 137px;
+	font-family: "黑体", simhei;
+	color: #FFFFFF;
+	font-weight: normal;
+	padding-left: 12px;
+	background: url(../Images/main_header_bg1.png) left top no-repeat;
+}
+#invite_list h2 ul {
+	float: left;
+	width: 578px;
+	height: 29px;
+	padding-top: 5px;
+	padding-right: 9px;
+	background: url(../Images/main_header_bg3.png) right top no-repeat;
+
+}
+#invite_list h2 li {
+	float: left;
+	font-size: 18px;
+	line-height: 28px;
+}
+#invite_list h2 li.tab {
+	display: inline-block;
+	padding: 0 20px;
+	border: 1px solid #3d9601;
+	border-bottom: none;
+	margin-right:13px;
+	color: #225500;
+	font-family: "黑体", simhei;
+	background-color: #4ba90d;
+}
+#invite_list h2 li.curr {
+	color: #327d00;
+	background-color: #FFFFFF;
+}
+#invite_list h2 li.plain {
+	float: right;
+	font-size: 14px;
+}
+#invite_list .body {
+	border: 1px solid #00a604;
+	border-top: none;
+}
+#invite_list dl {
+	padding: 14px 16px;
+	clear: both;
+}
+#invite_list dl dt {
+	float: left;
+	width: 108px;
+	height: 128px;
+}
+#invite_list dl dt img {
+	border: 1px solid #d9d700;
+}
+#invite_list dl dd.text {
+	float: left;
+	width: 420px;
+	padding-left: 15px;
+	font-size: 14px;
+	line-height: 22px;
+}
+#invite_list dl dd.text address {
+	color: #008f03;
+	font-style: normal;
+	font-size: 18px;
+	font-weight: bold;
+	line-height: 24px;
+}
+#invite_list dl dd.text sup {
+	color: #008f03;
+}
+#invite_list dl dd.btn {
+	float: right;
+	width: 128px;
+}
+#invite_list dl dd.btn .btn1 {
+	float: left;
+	width: 87px;
+}
+#invite_list dl dd.btn .btn1 div {
+	height: 37px;
+	padding: 5px 0;
+	font-size: 14px;
+	font-weight: bold;
+	color: #ffffff;
+	line-height: 36px;
+	text-align: center;
+	background: url(../Images/btn_bg2.png) center center no-repeat;
+}
+#invite_list dl dd.btn .btn2 {
+	float: left;
+	width: 20px;
+	height: 78px;
+	padding: 10px 8px 6px;
+	font-size: 16px;
+	font-weight: bold;
+	color: #545300;
+	line-height: 22px;
+	text-align: center;
+}
+#invite_list dl dd.btn .open {
+	background: url(../Images/btn_bg3.png) center center no-repeat;
+}
+#invite_list dl dd.btn .close {
+	background: url(../Images/btn_bg4.png) center center no-repeat;
+}

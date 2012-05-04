@@ -1,0 +1,42 @@
+	<form style="text-align:left">文章标题 <input type="text" name="s_title" value="{$s_title}" /> <input type="submit" value="搜索" /></form>
+	{$page}
+	<table id="table" class="list" border="1" cellpadding="3" cellspacing="0" width="100%" bordercolor="#999999" style="border-collapse:collapse;">
+	<tr bgcolor="#ededed">
+		<th width="5%">ID</th>
+		<th>标题</th>
+		<notpresent name="_GET['category_id']">
+		<th nowrap>文章类别</th>
+		</notpresent>
+		<th width="10%">查看次数</th>
+		<th width="12%">排序</th>
+		<th width="14%">添加时间</th>
+		<th width="14%">操作</th>
+	</tr>
+	<iterate name="list" id="item">
+	<tr bgcolor="<eq name='mod' value='1'>#FFFFE1</eq>" class="<eq name='item.status' value='0'>gray</eq>">
+		<td>{$item['id']}</td>
+		<td>
+			<a href="#" target="_blank">{$item['title']}</a>
+		</td>
+		<notpresent name="_GET['category_id']">
+		<td><a href="__URL__/index/category_id/{$item['category_id']}" title="查看本类下所有文章">{$categorys[$item['category_id']]}</a>
+		</notpresent>
+		<td>{$item['view']}</td>
+		<td><label id="{$item['id']}">{$item['sort']}</label></td>
+		<td nowrap="nowrap">{$item['addtime']|substr=2,14}</td>
+		<td>
+			<if condition="$item['status'] neq '-1'">
+			<a href="__URL__/form/id/{$item['id']}" title="修改"><img src="../Public/Images/form_edit.gif" alt="edit" /></a>
+			<a href="__URL__/update/t/Company/id/{$item['id']}/f/status/v/{:intval(!$item['status'])}/" target="_iframe" title="<if condition='$item.status eq 0'>设为显示<else />设为隐藏</if>"><if condition="$item['status'] eq 0"><img src="../Public/Images/add.gif" alt="显示" /><else /><img src="../Public/Images/delete.gif" alt="隐藏" /></if></a>
+			<a href="__URL__/update/t/Company/id/{$item['id']}/f/status/v/-1/"  target="_iframe" title="删除"><img src="../Public/Images/cross.gif" alt="删除" /></a>
+			<else />
+			<a href="__URL__/update/t/Company/id/{$item['id']}/f/status/v/0/" target="_iframe" title="恢复"><img src="../Public/Images/tick.gif" alt="恢复"/></a>
+			<a href="__URL__/delete/t/Company/id/{$item['id']}/" target="_iframe" title="彻底删除"><img src="../Public/Images/cross.gif" alt="彻底删除"/></a>
+			</if>
+		</td>
+	</tr>
+	</iterate>
+	</table>
+	{$page}
+	<script language="JavaScript" type="text/javascript" src="../Public/Js/ajaxfileupload.js"></script>
+	<script language="JavaScript" type="text/javascript" src="../Public/Js/company.js"></script>

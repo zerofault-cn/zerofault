@@ -1,0 +1,53 @@
+<link type="text/css" rel="stylesheet" href="../Public/Css/register.css" />
+<div class="wrapper" id="login">
+	<table width="100%" border="0" cellpadding="0" cellspacing="0" bgcolor="#FFFFF">
+	<tr>
+		<td width="16" height="50"><img src="../Public/Images/Register_03.gif"></td>
+		<td width="970" background="../Public/Images/Register_05.gif"></td>
+		<td width="14"><img src="../Public/Images/Register_07.gif"></td>
+	</tr>
+	<tr>
+		<td width="3" style="background:url(../Public/Images/Register_13.gif) left top repeat-y;"></td>
+		<td>
+			<form method="post" target="_iframe">
+			<input type="hidden" name="submit" value="1"/>
+			<input name="last_url" type="hidden" value="{$last_url}" />
+			<h2>
+				输入您的乐装网账号开始登录
+			</h2>
+			<dl>
+				<dt>登录邮箱：</dt>
+				<dd>
+					<input type="text" class="text" name="email" id="email" autocomplete="off"/>
+					<span>还没有乐装网账号？<a href="__APP__/User/register">立即注册</a></span>
+				</dd>
+				<dt>您的密码：</dt>
+				<dd>
+					<input type="password" class="text" name="password" id="password" />
+					<span>忘记密码？</span>
+				</dd>
+				<dt></dt>
+				<dd>
+					<input type="checkbox" name="keepme" value="1"/> 记住账号
+				</dd>
+				<dt></dt>
+				<dd>
+					<div id="message_box" class="message_box"></div>
+				</dd>
+				<dt></dt>
+				<dd>
+					<input type="image" class="image" src="../Public/Images/Login_07.gif">
+				</dd>
+				<div class="clear"></div>
+			</dl>
+			</form>
+		</td>
+		<td width="3" style="background:url(../Public/Images/Register_15.gif) right top repeat-y;"></td>
+	</tr>
+	<tr>
+		<td height="62"><img src="../Public/Images/Register_25.gif"></td>
+		<td background="../Public/Images/Register_26.gif"></td>
+		<td ><img src="../Public/Images/Register_29.gif"></td>
+	</tr>
+	</table>
+</div>

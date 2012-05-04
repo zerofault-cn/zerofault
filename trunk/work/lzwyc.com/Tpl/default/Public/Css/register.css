@@ -1,0 +1,85 @@
+#register form {
+	padding: 0px 90px;
+}
+#register h2 {
+	border-bottom: 1px solid #dddddd;
+	padding-bottom: 3px;
+	font-size: 20px;
+	font-weight: bold;
+	text-align: left;
+	color: #010101;
+}
+#register dl {
+	padding: 20px 0;
+}
+#register dl dt {
+	float: left;
+	width: 128px;
+	height: 28px;
+	padding-bottom: 15px;
+	text-align: right;
+	color: #000000;
+	font-size: 14px;
+	font-weight: bold;
+	line-height: 28px;
+}
+#register dl dd {
+	float: left;
+	width: 660px;
+	height: 28px;
+	padding-bottom: 15px;
+	color: #8C8B8B;
+	line-height: 28px;
+}
+#register input.text {
+	width: 223px;
+	height: 20px;
+	line-height: 20px;
+	border: 1px solid gray;
+	color: #A6A6A6;
+	padding: 3px;
+}
+#register input.verify {
+	width: 60px;
+}
+#login form {
+	padding: 30px 100px 0px 250px;
+}
+#login h2 {
+	border-bottom: 1px solid #dddddd;
+	padding-bottom: 3px;
+	font-size: 20px;
+	font-weight: bold;
+	text-align: left;
+	color: #010101;
+}
+#login dl {
+	padding: 20px 0;
+}
+#login dl dt {
+	float: left;
+	width: 100px;
+	height: 28px;
+	padding-bottom: 15px;
+	text-align: right;
+	color: #000000;
+	font-size: 14px;
+	font-weight: bold;
+	line-height: 28px;
+}
+#login dl dd {
+	float: left;
+	width: 500px;
+	height: 28px;
+	padding-bottom: 15px;
+	color: #8C8B8B;
+	line-height: 28px;
+}
+#login input.text {
+	width: 223px;
+	height: 20px;
+	line-height: 20px;
+	border: 1px solid gray;
+	color: #A6A6A6;
+	padding: 3px;
+}

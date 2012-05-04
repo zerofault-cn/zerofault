@@ -1,0 +1,67 @@
+<link type="text/css" rel="stylesheet" href="../Public/Css/register.css" />
+<div class="wrapper" id="register">
+	<table width="100%" border="0" cellpadding="0" cellspacing="0" bgcolor="#FFFFF">
+	<tr>
+		<td width="16" height="50"><img src="../Public/Images/Register_03.gif"></td>
+		<td width="970" background="../Public/Images/Register_05.gif"></td>
+		<td width="14"><img src="../Public/Images/Register_07.gif"></td>
+	</tr>
+	<tr>
+		<td width="3" style="background:url(../Public/Images/Register_13.gif) left top repeat-y;"></td>
+		<td>
+			<form method="post" target="_iframe">
+			<input type="hidden" name="submit" value="1"/>
+			<input name="last_url" type="hidden" value="{$last_url}" />
+			<h2>
+				注册乐装网业主账号，仅需30秒。
+			</h2>
+			<dl>
+				<dt>登录邮箱：</dt>
+				<dd>
+					<input type="text" class="text" name="email" id="email" autocomplete="off"/>
+					<span>将作为您的登录账号</span>
+				</dd>
+				<dt>真实姓名：</dt>
+				<dd>
+					<input type="text" class="text" name="realname" id="realname" autocomplete="off"/>
+					<input type="radio" name="sex" value="1"/>先生
+					<input type="radio" name="sex" value="2"/>女士
+					<span>为了保护业主权益，乐装网实行实名制注册</span>
+				</dd>
+				<dt>设置密码：</dt>
+				<dd>
+					<input type="password" class="text" name="password" id="password" />
+					<span>密码由6-20个字母、数字组成</span>
+				</dd>
+				<dt>确认密码：</dt>
+				<dd>
+					<input type="password" class="text" name="password2" id="password2" />
+					<span>必须与上面设置的密码一致</span>
+				</dd>
+				<dt>验证码：</dt>
+				<dd>
+					<input TYPE="text" class="text verify" name="verify" size="4" > <img src="__APP__/Public/verify" style="cursor:pointer" onclick="javascript:this.src='__APP__/Public/verify?r='+Math.random();" title="看不清？点击刷新" align="absmiddle" />
+				</dd>
+				<dt></dt>
+				<dd>
+					<div id="message_box" class="message_box"></div>
+				</dd>
+				<dt></dt>
+				<dd>
+					<input type="image" class="image" src="../Public/Images/Register_22.gif">
+					&nbsp;&nbsp;
+					已经注册？请直接<a href="__APP__/User/login">登录</a>。
+				</dd>
+				<div class="clear"></div>
+			</dl>
+			</form>
+		</td>
+		<td width="3" style="background:url(../Public/Images/Register_15.gif) right top repeat-y;"></td>
+	</tr>
+	<tr>
+		<td height="62"><img src="../Public/Images/Register_25.gif"></td>
+		<td background="../Public/Images/Register_26.gif"></td>
+		<td ><img src="../Public/Images/Register_29.gif"></td>
+	</tr>
+	</table>
+</div>
