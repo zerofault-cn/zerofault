@@ -33,8 +33,8 @@ class PublicAction extends BaseAction{
 			die(self::_error('密码必须！'));
 		}
 		$where = array(
-			'username' => trim($_REQUEST['username']),
-			'password' => md5(trim($_REQUEST['password']))
+			'username' => trim($_POST['username']),
+			'password' => md5(trim($_POST['password']))
 			);
 
 		$info = $User->where($where)->find();

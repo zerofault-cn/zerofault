@@ -21,8 +21,8 @@
 	color: #ffcc33;
 	padding: 3px 3px 3px 22px;
 	background: url(../Images/sign_warning.png) 3px center no-repeat;
-
 }
+
 #invite_form form .district, #invite_form form .space {
 	width: 86px;
 }
@@ -106,10 +106,6 @@
 }
 #invite_list dl dt {
 	float: left;
-	width: 108px;
-	height: 128px;
-}
-#invite_list dl dt {
 	width: 108px;
 	height: 24px;
 	padding-top: 104px;
