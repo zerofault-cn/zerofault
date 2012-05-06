@@ -358,14 +358,16 @@
 	background: url(../Images/company_cell_bg.png) left top no-repeat;
 }
 #company ul li dl dt {
-	float: left;
-	width: 135px;
-	height: 176px;
 	text-align: center;
 	color: #037500;
 	line-height: 28px;
 }
-#company ul li dl dt img {
+#company ul li dl dd.img {
+	float: left;
+	width: 135px;
+	height: 148px;
+}
+#company ul li dl dd.img img {
 	width: 135px;
 	height: 148px;
 }

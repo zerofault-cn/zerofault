@@ -201,11 +201,14 @@
 		<foreach name="company_list" item="item">
 		<li>
 			<dl>
-				<dt>{$item.name}<br /><if condition="is_file('__APP__/../Html/Attach/company_logo/'.$item['id'].'.jpg') eq true"><img src="__APP__/../Html/Attach/company_logo/{$item.id}.jpg" /><else /><img src="../Public/Images/test_pic6.png"/></if></dt>
-				<dd>品质：</dd>
-				<dd>浏览：{$item.view}</dd>
-				<dd>案例：</dd>
-				<dd>联系电话：{$item.telephone}</dd>
+				<dt>{$item.name}</dt>
+				<dd class="img"><if condition="is_file('__APP__/../Html/Attach/company_logo/'.$item['id'].'.jpg') eq true"><img src="__APP__/../Html/Attach/company_logo/{$item.id}.jpg" /><else /><img src="../Public/Images/test_pic6.png"/></if></dd>
+				<dd class="text">
+					品质：<br />
+					浏览：{$item.view}<br />
+					案例：<br />
+					联系电话：{$item.telephone}
+				</dd>
 			</dl>
 		</li>
 		</foreach>
