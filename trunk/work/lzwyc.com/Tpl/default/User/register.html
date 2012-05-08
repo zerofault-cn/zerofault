@@ -11,10 +11,17 @@
 		<td>
 			<form method="post" target="_iframe">
 			<input type="hidden" name="submit" value="1"/>
+			<input type="hidden" name="type" value="{$type}"/>
 			<input name="last_url" type="hidden" value="{$last_url}" />
 			<h2>
 				注册乐装网业主账号，仅需30秒。
 			</h2>
+			<if condition="$type eq 1">
+			<h4>如果您是装修公司，请<a href="__URL__/register/type/2">点击此处注册公司会员</a> </h4>
+			<else />
+			<h4>如果您是装修业主，请<a href="__URL__/register/type/1">点击此处注册个人会员</a> </h4>
+			</if>
+
 			<dl>
 				<dt>登录邮箱：</dt>
 				<dd>
@@ -24,8 +31,8 @@
 				<dt>真实姓名：</dt>
 				<dd>
 					<input type="text" class="text" name="realname" id="realname" autocomplete="off"/>
-					<input type="radio" name="sex" value="1"/>先生
-					<input type="radio" name="sex" value="2"/>女士
+					<input type="radio" name="sex" value="1" id="sex_1"/><label for="sex_1">先生</label>
+					<input type="radio" name="sex" value="2" id="sex_2"/><label for="sex_2">女士</label>
 					<span>为了保护业主权益，乐装网实行实名制注册</span>
 				</dd>
 				<dt>设置密码：</dt>
@@ -38,6 +45,31 @@
 					<input type="password" class="text" name="password2" id="password2" />
 					<span>必须与上面设置的密码一致</span>
 				</dd>
+				<if condition="$type eq 2">
+				<dt class="company">公司名称及联系方式</dt><dd class="company"></dd>
+				<dt>公司名称：</dt>
+				<dd>
+					<input type="text" class="text" name="name" id="name" />
+					<span>请填写公司全称，注册后不可修改</span>
+				</dd>
+				<dt>固定电话：</dt>
+				<dd>
+					<input type="text" class="text" name="telephone" id="telephone" />
+					<span>区号+电话号码</span>
+				</dd>
+				<dt>移动电话：</dt>
+				<dd>
+					<input type="text" class="text" name="mobile" id="mobile" />
+				</dd>
+				<dt>公司地址：</dt>
+				<dd>
+					<input type="text" class="text" name="address" id="address" />
+				</dd>
+				<dt>公司介绍：</dt>
+				<dd class="textarea">
+					<textarea name="introduction" cols="40" rows="4"></textarea>
+				</dd>
+				</if>
 				<dt>验证码：</dt>
 				<dd>
 					<input TYPE="text" class="text verify" name="verify" size="4" > <img src="__APP__/Public/verify" style="cursor:pointer" onclick="javascript:this.src='__APP__/Public/verify?r='+Math.random();" title="看不清？点击刷新" align="absmiddle" />
@@ -48,7 +80,7 @@
 				</dd>
 				<dt></dt>
 				<dd>
-					<input type="image" class="image" src="../Public/Images/Register_22.gif">
+					<input type="image" class="image" src="../Public/Images/Register_22.gif" align="absmiddle">
 					&nbsp;&nbsp;
 					已经注册？请直接<a href="__APP__/User/login">登录</a>。
 				</dd>

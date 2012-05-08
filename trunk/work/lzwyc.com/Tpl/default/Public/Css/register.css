@@ -9,6 +9,13 @@
 	text-align: left;
 	color: #010101;
 }
+#register h4 {
+	font-size: 12px;
+	text-align: left;
+	color: #8c8b8b;
+	line-height: 30px;
+}
+
 #register dl {
 	padding: 20px 0;
 }
@@ -30,6 +37,22 @@
 	padding-bottom: 15px;
 	color: #8C8B8B;
 	line-height: 28px;
+}
+#register dl dt.company {
+	width: 300px;
+	height: 14px;
+	font-size: 14px;
+	font-weight: bold;
+	text-align: left;
+	color: #72a30c;
+	line-height: 30px;
+}
+#register dl dd.company {
+	width: 488px;
+	height: 14px;
+}
+#register dl dd.textarea {
+	height: 60px;
 }
 #register input.text {
 	width: 223px;
