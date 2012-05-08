@@ -12,6 +12,8 @@ class UserAction extends BaseAction {
 		$this->display('Layout:default');
 	}
 	public function register() {
+		$type = 1;
+		!empty($_REQUEST['type']) && ($type = intval($_REQUEST['type']));
 		if (!empty($_POST['submit'])) {
 			if($_SESSION['verify'] != md5(trim($_REQUEST['verify']))) {
 				self::_error('验证码错误!');
@@ -35,7 +37,18 @@ class UserAction extends BaseAction {
 			$password2 = trim($_REQUEST['password2']);
 			$password!=$password2 && self::_error('两次输入的密码不一致！');
 
-			$this->dao->type = 1;
+			if (2==$type) {
+				$name = trim($_REQUEST['name']);
+				empty($name) && self::_error('公司名称必须填写！');
+				$telephone = trim($_REQUEST['telephone']);
+				$mobile = trim($_REQUEST['mobile']);
+				(empty($telephone)&&empty($mobile)) && self::_error('固定电话和移动电话必须至少填一种！');
+				$address = trim($_REQUEST['address']);
+				empty($address) && self::_error('公司地址必须填写！');
+				$introduction = trim($_REQUEST['introduction']);
+			}
+
+			$this->dao->type = $type;
 			$this->dao->email = $email;
 			$this->dao->password = md5($password);
 			$this->dao->realname = $realname;
@@ -43,6 +56,20 @@ class UserAction extends BaseAction {
 			$this->dao->reg_time = date('Y-m-d H:i:s');
 			$this->dao->status = 1;
 			if($user_id = $this->dao->add()) {
+				if (2==$type) {
+					$data = array();
+					$data['user_id'] = $user_id;
+					$data['name'] = $name;
+					$data['telephone'] = $telephone;
+					$data['mobile'] = $mobile;
+					$data['address'] = $address;
+					$data['introduction'] = $introduction;
+					$data['addtime'] = date('Y-m-d H:i:s');
+					$data['status'] = 1;
+					if (!M('Company')->data($data)->add()) {
+						self::_error('提交公司资料出错！');
+					}
+				}
 				$_SESSION[C('USER_ID')] = $user_id;
 				$_SESSION['user_name'] = $realname;
 				if (!empty($_REQUEST['last_url']) && substr($_REQUEST['last_url'], -8)!='register' && substr($_REQUEST['last_url'], -5)!='login') {
@@ -63,6 +90,7 @@ class UserAction extends BaseAction {
 		elseif (!empty($_SESSION[C('USER_ID')])) {
 			redirect(__APP__);
 		}
+		$this->assign('type', $type);
 		$this->assign('last_url', $_SERVER['HTTP_REFERER']);
 
 		$this->assign('content', ACTION_NAME);
