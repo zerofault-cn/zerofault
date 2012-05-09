@@ -110,6 +110,7 @@ class UserAction extends BaseAction {
 			if (!empty($rs) && count($rs)>0) {
 				$_SESSION[C('USER_ID')] = $rs['id'];
 				$_SESSION['user_name'] = $rs['realname'];
+				$_SESSION['user_type'] = $rs['type'];
 				if ($keepme) {
 					cookie(C('USER_ID'), $rs['id']);
 				}

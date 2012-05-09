@@ -13,12 +13,11 @@
 			<input type="hidden" name="submit" value="1"/>
 			<input type="hidden" name="type" value="{$type}"/>
 			<input name="last_url" type="hidden" value="{$last_url}" />
-			<h2>
-				注册乐装网业主账号，仅需30秒。
-			</h2>
 			<if condition="$type eq 1">
+			<h2>注册乐装网业主账号，仅需30秒。</h2>
 			<h4>如果您是装修公司，请<a href="__URL__/register/type/2">点击此处注册公司会员</a> </h4>
 			<else />
+			<h2>注册装修公司会员，获取装修订单。</h2>
 			<h4>如果您是装修业主，请<a href="__URL__/register/type/1">点击此处注册个人会员</a> </h4>
 			</if>
 

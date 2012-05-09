@@ -57,7 +57,7 @@
 }
 #invite_list h2 strong {
 	float: left;
-	width: 137px;
+	width: 150px;
 	font-family: "黑体", simhei;
 	color: #FFFFFF;
 	font-weight: normal;
@@ -66,7 +66,7 @@
 }
 #invite_list h2 ul {
 	float: left;
-	width: 578px;
+	width: 565px;
 	height: 29px;
 	padding-top: 5px;
 	padding-right: 9px;
@@ -102,6 +102,7 @@
 }
 #invite_list dl {
 	padding: 14px 16px;
+	height: 156px;
 	clear: both;
 }
 #invite_list dl dt {
@@ -161,6 +162,7 @@
 	color: #545300;
 	line-height: 22px;
 	text-align: center;
+	cursor: pointer;
 }
 #invite_list dl dd.btn .open {
 	background: url(../Images/btn_bg3.png) center center no-repeat;

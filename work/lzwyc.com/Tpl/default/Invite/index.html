@@ -83,11 +83,27 @@
 					<div>招标中</div>
 					<div>投标数(2)</div>
 				</div>
-				<div class="btn2 open">﹤投标</div>
+				<div onclick="tender({$item.id});" class="btn2 <if condition="$item['status'] eq 1">open<elseif condition="$item['status'] eq 2" />close</if>" >﹤投标</div>
 			</dd>
 		</dl>
 		</foreach>
 		<div class="clear"></div>
+		<div id="currentpage">1</div>
 		<div class="pagenavi">{$page}</div>
 	</div>
 </div>
+<script type="text/javascript"> 
+function to_tender(id,num){
+                var text="<fieldset><span>您确认要投【"+num+"】这个标吗？</span>";
+                text+="<div style=\"text-align:center;backgroud:#333;\"><input value=\"确认\" type=\"button\" id=\"input_go\" onclick=\"to_tender("+id+")\"/>";
+                text+="&nbsp;&nbsp;&nbsp;<input type=\"button\"  value=\"取消\" id=\"input_cacel\"onclick=\"closepopdiv()\"/><div></fieldset>";
+                dialog("投标确认","text",text,"380","","text",false);
+            }
+function tender(id){
+	var random=Math.random();
+	var url="__URL__/tender/id/"+id+"/random/"+random;
+	var content={t:"get",u:url};
+	var page=$("#currentpage").text();
+	dialog("投标确认","url",content,"180","80","text",true,"getpage('tender.php?page="+page+"')");
+}
+</script>
