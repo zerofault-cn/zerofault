@@ -1,0 +1,16 @@
+#floatBoxBg{display:none;width:100%;height:100%;background:#000;position:absolute;top:0;left:0;}
+#floatBox{position:absolute;top:50px;left:40%;display: block;}
+.floatBox .title{height:32px;color:#000;z-index: 100;position: relative;padding-left: 23px;padding-right: 23px;}
+.floatBox .title h4{float:left;padding:0;margin:0;font-size:16px;}
+.floatBox .title span{float:right;cursor:pointer;font-size:14px;color:#666; font-family:"宋体";}
+.floatBox .content{font-size:14px; line-height: 22px;position: relative;padding-left: 23px;padding-right: 23px;} 
+.floatBox .content a{ text-decoration:none; color:#03F;} 
+.floatBox .content a:hover{ text-decoration:underline; color:#03F;} 
+.floatBox .up-bar{border-top: solid #199d00 4px;border-bottom: solid #199d00 4px;position:absolute;left:22px;top:0;background: #fff;}
+.floatBox .up-left{background-image:url(../Images/z-index.png); background-position:0px 0px; width:23px; height:22px; float:left;position: absolute;left:-22px;top:-5px;}
+.floatBox .up-right{background-image:url(../Images/z-index.png);-background-image:url(../Images/z-index1.gif); background-position:-25px 0;-background-position:-26px 0;  background-repeat: no-repeat; width:23px; height:22px; float:right;position: absolute;right:-22px;top:-5px;}
+.floatBox .down-left{background-image:url(../Images/z-index.png); background-position:0px -26px; width:23px; height:20px;float:left;position: absolute;left:-22px;bottom:-4px;}
+.floatBox .down-right{background-image:url(../Images/z-index.png); -background-image:url(../Images/z-index1.gif); background-position:-25px -26px; -background-position:-26px -27px; background-repeat: no-repeat; width:23px; height:20px; float:right;position: absolute;right:-22px;bottom:-4px;}
+.floatBox .down-bar{border-left: solid #199d00 4px;border-right: solid #199d00 4px;position:absolute;top:19px;background: #fff;}
+.floatBox .popfoot{ text-align:right;position:absolute;bottom:0px;right:20px;z-index: 100;display: none;}
+.floatBox .popfoot input{ width:64px; height:24px; background:url(../Images/requre.gif); border:0; cursor:pointer;z-index: 500;position: absolute;right:10px;bottom:10px;}

@@ -101,5 +101,16 @@ class InviteAction extends BaseAction {
 			self::_error('发布失败！');
 		}
 	}
+
+	public function tender() {
+		//检验是否公司帐号
+		if (empty($_SESSION[C('USER_ID')]) || $_SESSION['user_type']!=2) {
+			die('您还没有登录公司帐号，请登录后再投标！<br /><br /><a href="'.__APP__.'/User/login">登录</a>');
+		}
+
+		//检验是否已达到招标名额
+
+		//显示投标确认表单
+	}
 }
 ?>
