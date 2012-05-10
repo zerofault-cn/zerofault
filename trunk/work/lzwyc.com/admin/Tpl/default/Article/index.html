@@ -23,7 +23,7 @@
 		</notpresent>
 		<td>{$item['view']}</td>
 		<td><label id="{$item['id']}">{$item['sort']}</label></td>
-		<td nowrap="nowrap">{$item['addtime']|substr=2,14}</td>
+		<td nowrap="nowrap">{$item['create_time']|substr=2,14}</td>
 		<td>
 			<if condition="$item['status'] neq '-1'">
 			<a href="__URL__/form/id/{$item['id']}" title="修改"><img src="../Public/Images/form_edit.gif" alt="edit" /></a>

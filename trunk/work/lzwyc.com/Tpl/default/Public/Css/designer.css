@@ -31,6 +31,7 @@
 }
 #designer_list dl.designer {
 	padding: 14px 16px;
+	height: 200px;
 	clear: both;
 }
 #designer_list dl.designer dt.photo {

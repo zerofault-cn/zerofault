@@ -58,7 +58,8 @@
 #invite_list h2 strong {
 	float: left;
 	width: 150px;
-	font-family: "黑体", simhei;
+	font-family: "黑体", simHei;
+	font-size: 22px;
 	color: #FFFFFF;
 	font-weight: normal;
 	padding-left: 12px;
@@ -134,6 +135,9 @@
 #invite_list dl dd.text sup {
 	color: #008f03;
 }
+#invite_list dl dd.text a:hover sup {
+	color: #FFCC00;
+}
 #invite_list dl dd.btn {
 	float: right;
 	width: 128px;
@@ -168,5 +172,72 @@
 	background: url(../Images/btn_bg3.png) center center no-repeat;
 }
 #invite_list dl dd.btn .close {
+	background: url(../Images/btn_bg4.png) center center no-repeat;
+}
+
+
+#invite_detail {
+	padding: 24px 0 24px 24px;
+}
+
+#invite_detail h2 {
+	height: 34px;
+	line-height: 34px;
+	background:url(../Images/main_header_bg2.png) left top repeat-x;
+}
+#invite_detail h2 strong {
+	float: left;
+	width: 150px;
+	font-family: "黑体", simHei;
+	font-size: 22px;
+	color: #FFFFFF;
+	font-weight: normal;
+	padding-left: 12px;
+	background: url(../Images/main_header_bg1.png) left top no-repeat;
+}
+
+#invite_detail .body {
+	border: 1px solid #00a604;
+	border-top: none;
+}
+#invite_detail dl {
+	padding: 14px 16px;
+	height: 156px;
+	clear: both;
+}
+#invite_detail dl dt {
+	float: left;
+	width: 108px;
+	height: 24px;
+	padding-top: 104px;
+	color: #FE7700;
+	font-family: arial;
+	font-size: 14px;
+	line-height: 24px;
+	text-align: center;
+	background: url(../Images/budget_bg.png) left top no-repeat;
+}
+#invite_detail dl dd {
+	float: left;
+	width: 420px;
+	padding-left: 15px;
+	font-size: 14px;
+	line-height: 22px;
+}
+#invite_detail dl address {
+	color: #008f03;
+	font-style: normal;
+	font-size: 18px;
+	font-weight: bold;
+	line-height: 24px;
+}
+#invite_detail dl sup {
+	color: #008f03;
+}
+
+#invite_detail dl dd.btn .open {
+	background: url(../Images/btn_bg3.png) center center no-repeat;
+}
+#invite_detail dl dd.btn .close {
 	background: url(../Images/btn_bg4.png) center center no-repeat;
 }

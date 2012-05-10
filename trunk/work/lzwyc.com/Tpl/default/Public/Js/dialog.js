@@ -17,7 +17,7 @@ function dialog(title,type,content,width,height,cssName,autofade,closefun){
         temp_float+="<div id=\"floatBox\" class=\"floatBox\" >";
         temp_float+="<div class=\"up-bar\" style=\"width:160px;height:89px;\"><div class=\"up-left png_bg\"></div><div class=\"up-right png_bg\"></div><div class=\"down-left png_bg\"></div><div class=\"down-right png_bg\"></div></div>";
         temp_float+="<div class=\"down-bar\" style=\"width:196px;height:60px;\">";
-        temp_float+="<div class=\"title\"><h4></h4><span><abbr id=\"ct\"></abbr><img src='"+IMAGE_FOLDER+"cancel.gif'/></span></div>";
+        temp_float+="<div class=\"title\"><h4></h4><span><abbr id=\"ct\"></abbr><img src='"+IMAGE_FOLDER+"cancel.gif' align='absmiddle'/></span></div>";
         temp_float+="<div class=\"content\" style=\"\"></div>";
         temp_float+="<div class=\"popfoot\"><input type=\"button\" onclick=\"closepopdiv()\">&nbsp;</div>";
         temp_float+="</div>";

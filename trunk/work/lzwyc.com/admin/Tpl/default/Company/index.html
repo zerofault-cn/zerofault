@@ -4,6 +4,7 @@
 	<tr bgcolor="#ededed">
 		<th width="5%">ID</th>
 		<th>公司名称</th>
+		<th>关联账号</th>
 		<th width="10%">关注</th>
 		<th width="12%">排序</th>
 		<th width="14%">添加时间</th>
@@ -20,6 +21,7 @@
 			<img id="{$item['id']}" class="thumb" name="company_logo" src="../Public/Images/picture_add.gif" alt="上传公司Logo" align="absmiddle"/><span class="showThumb" style="display:none"><div><img src="../Public/Images/blank.gif" width="135"></div></span>
 			</if>
 		</td>
+		<td>{$item['user']['email']}</td>
 		<td>{$item['view']}</td>
 		<td><label id="{$item['id']}">{$item['sort']}</label></td>
 		<td nowrap="nowrap">{$item['addtime']|substr=2,14}</td>

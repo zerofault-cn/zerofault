@@ -66,12 +66,16 @@ class UserAction extends BaseAction {
 					$data['introduction'] = $introduction;
 					$data['addtime'] = date('Y-m-d H:i:s');
 					$data['status'] = 1;
-					if (!M('Company')->data($data)->add()) {
+					if (!$company_id = M('Company')->data($data)->add()) {
 						self::_error('提交公司资料出错！');
 					}
 				}
 				$_SESSION[C('USER_ID')] = $user_id;
 				$_SESSION['user_name'] = $realname;
+				$_SESSION['user_type'] = $type;
+				if (!empty($company_id)) {
+					$_SESSION['company_id'] = $company_id;
+				}
 				if (!empty($_REQUEST['last_url']) && substr($_REQUEST['last_url'], -8)!='register' && substr($_REQUEST['last_url'], -5)!='login') {
 					self::_success('注册成功，即将跳转到之前的页面！', $_REQUEST['last_url']);
 				}
@@ -111,6 +115,12 @@ class UserAction extends BaseAction {
 				$_SESSION[C('USER_ID')] = $rs['id'];
 				$_SESSION['user_name'] = $rs['realname'];
 				$_SESSION['user_type'] = $rs['type'];
+				if (2 == $rs['type']) {
+					$company_id = M('Company')->where("user_id=".$rs['id'])->getField('id');
+					if (!empty($company_id)) {
+						$_SESSION['company_id'] = $company_id;
+					}
+				}
 				if ($keepme) {
 					cookie(C('USER_ID'), $rs['id']);
 				}

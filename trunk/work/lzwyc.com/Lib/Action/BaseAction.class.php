@@ -12,6 +12,13 @@ class BaseAction extends Action{
 			if (!empty($rs) && count($rs)>0) {
 				$_SESSION[C('USER_ID')] = $rs['id'];
 				$_SESSION['user_name'] = $rs['realname'];
+				$_SESSION['user_type'] = $rs['type'];
+				if (2 == $rs['type']) {
+					$company_id = M('Company')->where("user_id=".$rs['id'])->getField('id');
+					if (!empty($company_id)) {
+						$_SESSION['company_id'] = $company_id;
+					}
+				}
 			}
 		}
 	}

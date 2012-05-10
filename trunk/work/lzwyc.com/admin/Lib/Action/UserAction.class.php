@@ -20,13 +20,21 @@ class UserAction extends BaseAction{
 		$where = array();
 		$where['status'] = array('gt', -1);
 		if(!empty($_REQUEST['status'])) {
-			$where['status'] = $_REQUEST['status'];
+			$where['status'] = intval($_REQUEST['status']);
 		}
-		$count = $this->dao->where($where)->getField('count(*)');
+		if (!empty($_REQUEST['type'])) {
+			$where['type'] = intval($_REQUEST['type']);
+		}
+		$count = $this->dao->where($where)->count();
 		import("@.Paginator");
 		$limit = 20;
 		$p = new Paginator($count,$limit);
 		$rs = $this->dao->where($where)->order($order)->limit($p->offset.','.$p->limit)->select();
+		foreach ($rs as $i=>$row) {
+			if (2 == $row['type']) {
+				$rs[$i]['company_name'] = M('Company')->where("user_id=".$row['id'])->getField('name');
+			}
+		}
 
 		$this->assign('list',$rs);
 		$this->assign('page', $p->showMultiNavi());
