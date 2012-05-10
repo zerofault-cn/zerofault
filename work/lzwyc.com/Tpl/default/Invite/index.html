@@ -62,9 +62,9 @@
 <div id="invite_list">
 	<h2><strong>最新装修招标</strong>
 		<ul>
-			<li class="tab curr">预算筛选</li>
-			<li class="tab">时间筛选</li>
-			<li class="plain">家装招标() 工装招标()</li>
+			<li class="tab">预算筛选</li>
+			<li class="tab curr">时间筛选</li>
+			<li class="plain"></li>
 		</ul>
 	</h2>
 	<div class="body">
@@ -72,38 +72,37 @@
 		<dl>
 			<dt>¥{$item.budget_num}元</dt>
 			<dd class="text">
-				<address>{$item.region} {$item.address} {$item.room_str} {$item.area|round=1}m<sup>2</sup></address>
-				装修时间：{$item.reserve_date} 装修风格：{$item.space_str} 装修类型：{$item.type_str}<br />
-				量房时间：随时可量房<br />
-				招标要求：{$item.demand|nl2br}
+				<address><a href="__URL__/detail/id/{$item.id}">{$item.region} {$item.address} {$item.room_str} {$item.area|round=1}m<sup>2</sup></a></address>
+				装修时间：{$item.reserve_date} <br />
+				装修类型：{$item.type_str}<br />
+				装修空间：{$item.space_str}<br />
+				装修要求：{$item.demand|nl2br}
 			</dd>
 			<dd class="btn">
 				<div class="time">发布于{$item.create_time|substr=0,10}</div>
 				<div class="btn1">
-					<div>招标中</div>
-					<div>投标数(2)</div>
+					<div><if condition="$item['tender_count'] lt 3">招标中<else />招标结束</if></div>
+					<div>投标数({$item.tender_count})</div>
 				</div>
-				<div onclick="tender({$item.id});" class="btn2 <if condition="$item['status'] eq 1">open<elseif condition="$item['status'] eq 2" />close</if>" >﹤投标</div>
+				<div onclick="tender({$item.id});" class="btn2 <if condition="$item['tender_count'] lt 3">open<else />close</if>" >﹤投标</div>
 			</dd>
 		</dl>
 		</foreach>
 		<div class="clear"></div>
-		<div id="currentpage">1</div>
 		<div class="pagenavi">{$page}</div>
 	</div>
 </div>
 <script type="text/javascript"> 
 function to_tender(id,num){
-                var text="<fieldset><span>您确认要投【"+num+"】这个标吗？</span>";
-                text+="<div style=\"text-align:center;backgroud:#333;\"><input value=\"确认\" type=\"button\" id=\"input_go\" onclick=\"to_tender("+id+")\"/>";
-                text+="&nbsp;&nbsp;&nbsp;<input type=\"button\"  value=\"取消\" id=\"input_cacel\"onclick=\"closepopdiv()\"/><div></fieldset>";
-                dialog("投标确认","text",text,"380","","text",false);
-            }
+	var text="<fieldset><span>您确认要投【"+num+"】这个标吗？</span>";
+	text+="<div style=\"text-align:center;backgroud:#333;\"><input value=\"确认\" type=\"button\" id=\"input_go\" onclick=\"to_tender("+id+")\"/>";
+	text+="&nbsp;&nbsp;&nbsp;<input type=\"button\"  value=\"取消\" id=\"input_cacel\"onclick=\"closepopdiv()\"/><div></fieldset>";
+	dialog("投标确认","text",text,"380","","text",false);
+}
 function tender(id){
 	var random=Math.random();
 	var url="__URL__/tender/id/"+id+"/random/"+random;
 	var content={t:"get",u:url};
-	var page=$("#currentpage").text();
-	dialog("投标确认","url",content,"180","80","text",true,"getpage('tender.php?page="+page+"')");
+	dialog("投标确认","url",content,"180","80","text",true,"window.location.reload();");
 }
 </script>

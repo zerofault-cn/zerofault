@@ -9,8 +9,9 @@
 }
 #company_list h2 strong {
 	float: left;
-	width: 137px;
+	width: 150px;
 	font-family: "黑体", simhei;
+	_font-family: "宋体";
 	color: #FFFFFF;
 	font-weight: normal;
 	padding-left: 12px;
@@ -18,7 +19,7 @@
 }
 #company_list h2 ul {
 	float: left;
-	width: 578px;
+	width: 565px;
 	height: 29px;
 	padding-top: 5px;
 	padding-right: 9px;
@@ -31,6 +32,7 @@
 }
 #company_list dl {
 	padding: 14px 16px;
+	height: 160px;
 	clear: both;
 }
 #company_list dl dt {
@@ -42,10 +44,11 @@
 	border: 8px solid #9dc682;
 	border-width: 8px 9px;
 	max-width: 150px;
+	_width: 150px;
 }
 #company_list dd.text {
 	float: left;
-	width: 408px;
+	width: 395px;
 	font-size: 12px;
 	line-height: 24px;
 }

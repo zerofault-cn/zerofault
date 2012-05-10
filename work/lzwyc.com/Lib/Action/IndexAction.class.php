@@ -6,6 +6,9 @@ class IndexAction extends BaseAction{
 
 		$this->assign('district_opts', self::genOptions(M('Region')->where("pid=2")->getField('id,name')));
 
+		$rs = M('Tender')->where("status=2")->order("id desc")->select();
+		$this->assign('tender_list', $rs);
+
 		$rs = M('Invite')->where("status>0")->order("id desc")->limit(6)->select();
 		foreach ($rs as $i=>$row) {
 			$rs[$i]['budget_num'] = $row['budget']*10000;

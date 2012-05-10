@@ -31,6 +31,7 @@ class InviteAction extends BaseAction {
 			$rs[$i]['type_str'] = $options['type'][$row['type']];
 			$rs[$i]['space_str'] = $options['space'][$row['space']];
 			$rs[$i]['room_str'] = $options['room'][$row['room']];
+			$rs[$i]['tender_count'] = M('Tender')->where("invite_id=".$row['id']." and status>0")->count();
 		}
 		$this->assign('list', $rs);
 		$this->assign('page', $p->showMultiNavi());
@@ -101,16 +102,50 @@ class InviteAction extends BaseAction {
 			self::_error('发布失败！');
 		}
 	}
+	public function detail() {
+		$options = C('_options_');
+
+		$id = intval($_REQUEST['id']);
+		$rs = $this->dao->find($id);
+		$rs['tender_count'] = M('Tender')->where("invite_id=".$id." and status>0")->count();
+		$rs['budget_num'] = $rs['budget']*10000;
+		$rs['region'] = M('Region')->where("id=".$rs['district'])->getField('name');
+		$rs['type_str'] = $options['type'][$rs['type']];
+		$rs['space_str'] = $options['space'][$rs['space']];
+		$rs['room_str'] = $options['room'][$rs['room']];
+
+		$this->assign('info', $rs);
+
+		$this->assign('content', ACTION_NAME);
+		$this->display('Layout:main');
+	}
 
 	public function tender() {
 		//检验是否公司帐号
-		if (empty($_SESSION[C('USER_ID')]) || $_SESSION['user_type']!=2) {
+		if (empty($_SESSION[C('USER_ID')]) || $_SESSION['user_type']!=2 || empty($_SESSION['company_id'])) {
 			die('您还没有登录公司帐号，请登录后再投标！<br /><br /><a href="'.__APP__.'/User/login">登录</a>');
 		}
 
+		$dao = M('Tender');
+		$id = intval($_REQUEST['id']);
 		//检验是否已达到招标名额
+		$count = $dao->where("invite_id=".$id." and status>0")->count();
+		if ($count>=3) {
+			die('招标已结束！');
+		}
 
-		//显示投标确认表单
+		//检查是否重复投标
+		$rs = $dao->where("invite_id=".$id." and company_id=".$_SESSION['company_id'])->count();
+		if (!empty($rs) && $rs>0) {
+			die('贵公司已经投标，请等待业主确认！');
+		}
+		$dao->invite_id = $id;
+		$dao->company_id = $_SESSION['company_id'];
+		$dao->acttime = date('Y-m-d H:i:s');
+		$dao->status = 1;
+		if ($dao->add()) {
+			die('投标成功，请等待业主确认！');
+		}
 	}
 }
 ?>

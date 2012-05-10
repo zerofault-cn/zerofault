@@ -29,11 +29,11 @@ class CompanyAction extends BaseAction{
 			$where['name'] = array('LIKE', '%'.trim($_REQUEST['s_name']).'%');
 			$this->assign('s_name', $_REQUEST['s_name']);
 		}
-		$count = $this->dao->where($where)->getField('count(*)');
+		$count = $this->dao->where($where)->count();
 		import("@.Paginator");
 		$limit = 20;
 		$p = new Paginator($count,$limit);
-		$rs = $this->dao->where($where)->order($order)->limit($p->offset.','.$p->limit)->select();
+		$rs = $this->dao->relation(true)->where($where)->order($order)->limit($p->offset.','.$p->limit)->select();
 
 		$this->assign('list', $rs);
 		$this->assign('page', $p->showMultiNavi());

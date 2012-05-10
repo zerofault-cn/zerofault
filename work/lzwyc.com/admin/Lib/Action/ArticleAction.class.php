@@ -56,6 +56,7 @@ class ArticleAction extends BaseAction{
 				);
 			$info = $this->dao->find($id);
 			$info['category_opts'] = self::genOptions($this->categorys, $info['category_id']);
+
 		}
 		else {
 			$topnavi[]=array(

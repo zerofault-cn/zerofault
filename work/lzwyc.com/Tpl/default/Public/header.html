@@ -1,6 +1,6 @@
 <if condition="!empty($_SESSION[C('USER_ID')])">
 <div class="wrapper">
-	<label>{$_SESSION['user_name']}：{$_SESSION['user_type']}</label>，已登录，<a href="__APP__/User/logout" target="_iframe">注销</a><span id="header_message_box" class="message_box"></span>
+	<label><a href="__APP__/User">{$_SESSION['user_name']}</a>：已登录，<a href="__APP__/User/logout" target="_iframe">注销</a><span id="header_message_box" class="message_box"></span>
 </div>
 </if>
 <div id="header">

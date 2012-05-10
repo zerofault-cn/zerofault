@@ -1,23 +1,35 @@
 	{$page}
-	<table id="table" border="1" cellpadding="3" cellspacing="0" width="100%" bordercolor="#999999" style="border-collapse:collapse;">
+	<table id="table" class="list" border="1" cellpadding="3" cellspacing="0" width="100%" bordercolor="#999999" style="border-collapse:collapse;">
 	<tr bgcolor="#ededed">
 		<th width="5%">ID</th>
 		<th width="15%">Email</th>
-		<th width="15%">实名</th>
+		<th width="5%">实名</th>
 		<th>性别</th>
+		<empty name="_GET['type']">
+		<th>账号类型</th>
+		</empty>
+		<if condition="!empty($_GET['type']) and $_GET['type'] eq 2">
+		<th>关联公司</th>
+		</if>
 		<th>注册时间</th>
-		<th width="15%">上次登录</th>
-		<th width="12%">操作</th>
+		<th>上次登录</th>
+		<th>操作</th>
 	</tr>
 	<iterate name="list" id="item">
 	<tr bgcolor="<eq name='mod' value='1'>#FFFFE1</eq>" class="<eq name='item.status' value='0'>gray</eq>">
 		<td>{$item['id']}</td>
 		<td>{$item['email']}</td>
 		<td>{$item['realname']}</label></td>
-		<td>{$item['sex']}</label></td>
-		<td>{$item['reg_time']|substr=2,14}</label></td>
-		<td>{$item['login_time']|substr=2,14}</label></td>
-		<td>
+		<td><if condition="$item['sex'] eq 1">先生<elseif condition="$item['sex'] eq 2"/>女士<else />未填写</if></label></td>
+		<empty name="_GET['type']">
+		<td><if condition="$item['type'] eq 1">业主账号<elseif condition="$item['type'] eq 2"/>公司账号<else />未填写</if></label></td>
+		</empty>
+		<if condition="!empty($_GET['type']) and $_GET['type'] eq 2">
+		<td>{$item['company_name']}</td>
+		</if>
+		<td nowrap="nowrap">{$item['reg_time']|substr=2,14}</label></td>
+		<td nowrap="nowrap">{$item['login_time']|substr=2,14}</label></td>
+		<td nowrap="nowrap">
 			<if condition="$item['status'] neq '-1'">
 			<a href="__URL__/update/id/{$item['id']}/f/status/v/{:intval(!$item['status'])}" target="_iframe" title="<if condition='$item.status eq 0'>启用<else />禁用</if>"><if condition="$item['status'] eq 0"><img src="../Public/Images/add.gif" alt="启用" align="absmiddle"/><else /><img src="../Public/Images/delete.gif" alt="禁用" align="absmiddle"/></if></a>
 			<a href="__URL__/update/id/{$item['id']}/f/status/v/-1/"  target="_iframe" title="删除"><img src="../Public/Images/cross.gif" alt="删除" align="absmiddle"/></a>

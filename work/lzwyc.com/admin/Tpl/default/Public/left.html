@@ -5,14 +5,14 @@
 		</li>
 		<li>用户管理
 			<ul class="sub">
-				<li class="<eq name='MODULE_NAME' value='User'><neq name='_GET.status' value='-1'>curr</neq></eq>"><a href="__APP__/User">用户列表</a></li>
+				<li class="<eq name='MODULE_NAME' value='User'><eq name='_GET.type' value='1'>curr</eq></eq>"><a href="__APP__/User/index/type/1">普通业主</a></li>
+				<li class="<eq name='MODULE_NAME' value='User'><eq name='_GET.type' value='2'>curr</eq></eq>"><a href="__APP__/User/index/type/2">公司账户</a></li>
 				<li class="<eq name='MODULE_NAME' value='User'><eq name='_GET.status' value='-1'>curr</eq></eq>"><a href="__APP__/User/index/status/-1">回收站</a></li>
 			</ul>
 		</li>
 		<li>公司管理
 			<ul class="sub">
 				<li class="<eq name="MODULE_NAME" value="Company"><if condition="ACTION_NAME eq 'index' && empty($_GET['status'])">curr</if></eq>"><a href="__APP__/Company">公司列表</a></li>
-				<li class="<eq name="MODULE_NAME" value="Company"><eq name="ACTION_NAME" value="form">curr</eq></eq>"><a href="__APP__/Company/form">添加公司</a></li>
 				<li class="<eq name="MODULE_NAME" value="Company"><eq name="_GET['status']" value="-1">curr</eq></eq>"><a href="__APP__/Company/index/status/-1">回收站</a></li>
 			</ul>
 		</li>
