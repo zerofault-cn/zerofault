@@ -1,0 +1,56 @@
+#navi {
+	line-height: 30px;
+}
+#navi li {
+	text-align: center;
+}
+#navi li.curr {
+	background-color: #ff9933;
+}
+
+#user dl {
+	padding: 20px 0;
+}
+#user dl dt {
+	float: left;
+	width: 128px;
+	height: 28px;
+	padding-bottom: 15px;
+	text-align: right;
+	color: #000000;
+	font-size: 14px;
+	font-weight: bold;
+	line-height: 28px;
+}
+#user dl dd {
+	float: left;
+	width: 660px;
+	height: 28px;
+	padding-bottom: 15px;
+	color: #8C8B8B;
+	line-height: 28px;
+}
+#user dl dt.company {
+	width: 300px;
+	height: 14px;
+	font-size: 14px;
+	font-weight: bold;
+	text-align: left;
+	color: #72a30c;
+	line-height: 30px;
+}
+#user dl dd.company {
+	width: 488px;
+	height: 14px;
+}
+#user dl dd.textarea {
+	height: 60px;
+}
+#user input.text {
+	width: 223px;
+	height: 20px;
+	line-height: 20px;
+	border: 1px solid gray;
+	color: #A6A6A6;
+	padding: 3px;
+}

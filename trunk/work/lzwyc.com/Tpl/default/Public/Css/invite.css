@@ -187,7 +187,6 @@
 }
 #invite_detail h2 strong {
 	float: left;
-	width: 150px;
 	font-family: "黑体", simHei;
 	font-size: 22px;
 	color: #FFFFFF;
@@ -195,6 +194,17 @@
 	padding-left: 12px;
 	background: url(../Images/main_header_bg1.png) left top no-repeat;
 }
+#invite_detail h2 span {
+	float: left;
+	font-family: "黑体", simHei;
+	font-size: 16px;
+	color: #FFFFFF;
+	font-weight: normal;
+}
+#invite_detail h2 span sup {
+	color: #FFFFFF;
+}
+
 
 #invite_detail .body {
 	border: 1px solid #00a604;
@@ -207,19 +217,17 @@
 }
 #invite_detail dl dt {
 	float: left;
-	width: 108px;
-	height: 24px;
-	padding-top: 104px;
-	color: #FE7700;
-	font-family: arial;
-	font-size: 14px;
-	line-height: 24px;
+	width: 129px;
+	height: 131px;
+	color: #FFFFFF;
+	font-size: 40px;
+	line-height: 130px;
 	text-align: center;
-	background: url(../Images/budget_bg.png) left top no-repeat;
+	background: url(../Images/tender_bg.gif) left top no-repeat;
 }
 #invite_detail dl dd {
 	float: left;
-	width: 420px;
+	width: 520px;
 	padding-left: 15px;
 	font-size: 14px;
 	line-height: 22px;
@@ -234,10 +242,19 @@
 #invite_detail dl sup {
 	color: #008f03;
 }
-
-#invite_detail dl dd.btn .open {
-	background: url(../Images/btn_bg3.png) center center no-repeat;
+#invite_detail dl dd div {
+	padding: 10px;
+	text-align: right;
 }
-#invite_detail dl dd.btn .close {
-	background: url(../Images/btn_bg4.png) center center no-repeat;
+#invite_detail dl dd div img {
+	cursor: pointer;
+}
+
+#invite_detail p {
+	padding: 15px 10px;
+	margin: 10px 30px;
+	border-top: 1px solid #DEDEDE;
+	line-height: 30px;
+	color: #4D4E4C;
+	font-size: 14px;
 }

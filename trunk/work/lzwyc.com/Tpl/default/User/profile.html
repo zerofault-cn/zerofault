@@ -1,0 +1,94 @@
+<link type="text/css" rel="stylesheet" href="../Public/Css/user.css" />
+<div class="wrapper" id="user">
+	<table width="100%" border="0" cellpadding="0" cellspacing="0" bgcolor="#FFFFFF">
+	<tr>
+		<td width="16" height="50"><img src="../Public/Images/Register_03.gif"></td>
+		<td width="970" background="../Public/Images/Register_05.gif"></td>
+		<td width="14"><img src="../Public/Images/Register_07.gif"></td>
+	</tr>
+	<tr>
+		<td width="3" style="background:url(../Public/Images/Register_13.gif) left top repeat-y;"></td>
+		<td>
+			<table width="100%">
+			<tr>
+				<td width="160" valign="top">
+					<ul id="navi">
+						<li><a href="__URL__">已发布的招标</a></li>
+						<li class="curr"><a href="__URL__/profile">修改个人资料</a></li>
+					</ul>
+				</td>
+				<td>
+					<form method="post" target="_iframe">
+					<input type="hidden" name="submit" value="1"/>
+					<dl>
+						<dt>您的登录邮箱：</dt>
+						<dd>
+							{$info.email}
+						</dd>
+						<dt>真实姓名：</dt>
+						<dd>
+							<input type="text" class="text" name="realname" id="realname" autocomplete="off" value="{$info.realname}"/>
+							<input type="radio" name="sex" value="1" id="sex_1" <eq name="info.sex" value="1">checked="checked"</eq>/><label for="sex_1">先生</label>
+							<input type="radio" name="sex" value="2" id="sex_2" <eq name="info.sex" value="2">checked="checked"</eq>/><label for="sex_2">女士</label>
+						</dd>
+						<dt>原始密码：</dt>
+						<dd>
+							<input type="password" class="text" name="password0" id="password0" />
+							<span>必须提供原始密码才能修改资料</span>
+						</dd>
+						<dt>新密码：</dt>
+						<dd>
+							<input type="password" class="text" name="password" id="password" />
+							<span>密码由6-20个字母、数字组成，如果不想修改请留空</span>
+						</dd>
+						<dt>确认新密码：</dt>
+						<dd>
+							<input type="password" class="text" name="password2" id="password2" />
+							<span>必须与上面设置的密码一致</span>
+						</dd>
+						<if condition="$info['type'] eq 2">
+						<dt class="company">公司名称及联系方式</dt><dd class="company"></dd>
+						<dt>公司名称：</dt>
+						<dd>
+							<input type="text" class="text" name="name" id="name" value="{$info.company.name}"/>
+						</dd>
+						<dt>固定电话：</dt>
+						<dd>
+							<input type="text" class="text" name="telephone" id="telephone" value="{$info.company.telephone}"/>
+						</dd>
+						<dt>移动电话：</dt>
+						<dd>
+							<input type="text" class="text" name="mobile" id="mobile" value="{$info.company.mobile}"/>
+						</dd>
+						<dt>公司地址：</dt>
+						<dd>
+							<input type="text" class="text" name="address" id="address" value="{$info.company.address}"/>
+						</dd>
+						<dt>公司介绍：</dt>
+						<dd class="textarea">
+							<textarea name="introduction" cols="40" rows="4">{$info.company.introduction}</textarea>
+						</dd>
+						</if>
+						<dt></dt>
+						<dd>
+							<div id="message_box" class="message_box"></div>
+						</dd>
+						<dt></dt>
+						<dd>
+							<input type="submit" name="submit" value="提交" />
+						</dd>
+					</dl>
+					</form>
+				</td>
+			</tr>
+			</table>
+		</td>
+		<td width="3" style="background:url(../Public/Images/Register_15.gif) right top repeat-y;"></td>
+	</tr>
+	<tr>
+		<td height="62"><img src="../Public/Images/Register_25.gif"></td>
+		<td background="../Public/Images/Register_26.gif"></td>
+		<td ><img src="../Public/Images/Register_29.gif"></td>
+	</tr>
+	</table>
+</div>

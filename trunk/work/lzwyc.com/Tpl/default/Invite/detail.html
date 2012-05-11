@@ -1,20 +1,21 @@
 <link type="text/css" rel="stylesheet" href="../Public/Css/invite.css" />
 <div id="invite_detail">
-	<h2><strong>招标详情</strong>
-	</h2>
+	<h2><strong>装修招标</strong><span>&nbsp;&gt;&nbsp;{$info.region} {$info.address} {$info.room_str} {$info.area|round=1}m<sup>2</sup></span></h2>
 	<div class="body">
 		<dl>
 			<dt>{$info.tender_count}</dt>
 			<dd>
 				<address>{$info.region} {$info.address} {$info.room_str} {$info.area|round=1}m<sup>2</sup></address>
-				发布时间：{$info.create_time|substr=0,10}<br />
-				装修时间：{$info.reserve_date} <br />
-				装修类型：{$info.type_str}<br />
-				装修空间：{$info.space_str}<br />
+				发布时间：<strong>{$info.create_time|substr=0,10}</strong><br />
+				装修时间：<strong>{$info.reserve_date}</strong><br />
+				装修类型：<strong>{$info.type_str}</strong><br />
+				装修空间：<strong>{$info.space_str}</strong><br />
+				<div><img onclick="tender({$info.id});" src="../Public/Images/tender_btn.gif"/></div>
 			</dd>
 		</dl>
 		<p>
-			装修要求：{$info.demand|nl2br}
+			<strong>装修要求：</strong><br />
+			{$info.demand|nl2br}
 		</p>
 		<div class="clear"></div>
 	</div>
