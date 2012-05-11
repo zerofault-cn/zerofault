@@ -26,7 +26,7 @@ class Paginator extends Think{
 
 	public function __construct($record_count,$limit=10,$parameter='')
 	{
-		$this->record_count = $record_count; 
+		$this->record_count = $record_count;
 		$this->parameter = $parameter;
 		$this->limit = $limit;
 		$this->page_count = max(1, ceil($this->record_count/$this->limit));
@@ -48,7 +48,7 @@ class Paginator extends Think{
 		//页面风格：共 9 条/ 2 页，当前第 1 页    |<  <  >  >|
 		//链接地址为：javascript:getPage(1);
 		if($this->record_count<=0) return;
-	
+
 		$pagenav = $this->record_count.' Records / '.$this->page_count.' Pages &nbsp;&nbsp;';
 		if($this->page_count<=1){
 			return $pagenav;
@@ -77,9 +77,9 @@ class Paginator extends Think{
 	{
 		//页码风格：1 2 ... 11 12 13 14 15 16 17 ... 21 22
 		if($this->record_count<=0) return;
-	
+
 		$pagenav = '<table class="paginator" width="100%"><tr>';
-		
+
 		if($this->page_count>1){
 			$pagenav .= '<td class="a_left">';
 
@@ -168,7 +168,7 @@ class Paginator extends Think{
 		}
 		$pagenav .= '<td class="a_right">'.$this->record_count.' Records, '.$this->page_count.' Pages';
 		$perPage = ', <select onChange="change_limit(this.value);">';
-		foreach(array(10,20,50,100,150,200,300) as $num) {
+		foreach(array(1,2,5,10,20,50,100) as $num) {
 			$perPage .= '<option value="'.$num.'" ';
 			if ($this->limit == $num) {
 				$perPage .= ' selected="selected"';
@@ -185,8 +185,8 @@ class Paginator extends Think{
 	{
 		//页码风格：1 2 ... 11 12 13 14 15 16 17 ... 21 22
 		if($this->record_count<=0) return;
-	
-		
+
+
 		if($this->page_count>1){
 			$pagenav = '<table class="paginator" width="100%"><tr>';
 			$pagenav .= '<td class="a_left">';
