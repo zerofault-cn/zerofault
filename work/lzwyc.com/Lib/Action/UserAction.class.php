@@ -8,6 +8,10 @@ class UserAction extends BaseAction {
 	}
 
 	public function index() {
+		if (empty($_SESSION[C('USER_ID')])) {
+			redirect(__URL__.'/login');
+			exit;
+		}
 		$this->assign('content', ACTION_NAME);
 		$this->display('Layout:default');
 	}
@@ -142,6 +146,66 @@ class UserAction extends BaseAction {
 			redirect(__APP__);
 		}
 		$this->assign('last_url', $_SERVER['HTTP_REFERER']);
+		$this->assign('content', ACTION_NAME);
+		$this->display('Layout:default');
+	}
+	public function profile() {
+		if (empty($_SESSION[C('USER_ID')])) {
+			redirect(__URL__.'/login');
+			exit;
+		}
+		if (!empty($_POST['submit'])) {
+			$this->dao->find($_SESSION[C('USER_ID')]);
+
+			$realname = trim($_REQUEST['realname']);
+			empty($realname) && self::_error('真实姓名必须填写！');
+			$sex = intval($_REQUEST['sex']);
+			$password0 = trim($_REQUEST['password0']);
+			empty($password0) && self::_error('必须提供原始密码！');
+			md5($password0)!=$this->dao->password && self::_error('原始密码错误！');
+			$password = trim($_REQUEST['password']);
+			if (!empty($password)) {
+				strlen($password)<6 && self::_error('新密码至少需要6个字符！');
+				strlen($password)>20 && self::_error('新密码不能超过20个字符！');
+				$password2 = trim($_REQUEST['password2']);
+				$password!=$password2 && self::_error('两次输入的新密码不一致！');
+				$this->dao->password = md5($password);
+			}
+			if (2==$_SESSION['user_type']) {
+				$company_dao = M('Company')->where("user_id=".$_SESSION[C('USER_ID')])->find();
+				$name = trim($_REQUEST['name']);
+				empty($name) && self::_error('公司名称必须填写！');
+				$company_dao->name = $name;
+				$telephone = trim($_REQUEST['telephone']);
+				$mobile = trim($_REQUEST['mobile']);
+				(empty($telephone)&&empty($mobile)) && self::_error('固定电话和移动电话必须至少填一种！');
+				$company_dao->telephone = $telephone;
+				$company_dao->mobile = $mobile;
+				$address = trim($_REQUEST['address']);
+				empty($address) && self::_error('公司地址必须填写！');
+				$company_dao->address = $address;
+				$introduction = trim($_REQUEST['introduction']);
+				$company_dao->introduction = $introduction;
+			}
+
+			$this->dao->realname = $realname;
+			$this->dao->sex = $sex;
+			if(false !== $this->dao->save()) {
+				if (2==$_SESSION['user_type']) {
+					if (false === $company_dao->save()) {
+						self::_error('提交公司资料出错！');
+					}
+				}
+				self::_success('更新成功！');
+			}
+			else {
+				self::_error('提交过程中发生未知错误！');
+			}
+		}
+
+		$rs = $this->dao->relation(true)->find($_SESSION[C('USER_ID')]);
+		$this->assign('info', $rs);
+
 		$this->assign('content', ACTION_NAME);
 		$this->display('Layout:default');
 	}
