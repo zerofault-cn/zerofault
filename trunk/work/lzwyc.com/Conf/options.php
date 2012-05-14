@@ -1,5 +1,7 @@
 <?php
 return array(
+	'admin_qq' => '10000',
+	'company_point' => 20,
 	'article_category' => array(
 		'1' => '网站公告',
 		'2' => '装修常识',

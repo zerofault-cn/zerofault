@@ -8,6 +8,8 @@ class CompanyAction extends BaseAction {
 
 		$id = intval($_REQUEST['id']);
 		$info = $this->dao->relation(true)->find($id);
+		$options = C('_options_');
+		$info['qq'] = $options['admin_qq'];
 		$this->assign('info', $info);
 	}
 
