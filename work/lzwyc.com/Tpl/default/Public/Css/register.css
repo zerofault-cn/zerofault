@@ -52,7 +52,7 @@
 	height: 14px;
 }
 #register dl dd.textarea {
-	height: 60px;
+	height: 70px;
 }
 #register input.text {
 	width: 223px;
@@ -61,6 +61,9 @@
 	border: 1px solid gray;
 	color: #A6A6A6;
 	padding: 3px;
+}
+#register dl dd em {
+	color: red;
 }
 #register input.verify {
 	width: 60px;

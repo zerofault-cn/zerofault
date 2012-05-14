@@ -6,7 +6,7 @@
 		<dl>
 			<dt><if condition="is_file('__APP__/../Html/Attach/company_logo/'.$item['id'].'.jpg') eq true"><img src="__APP__/../Html/Attach/company_logo/{$item.id}.jpg" /><else /><img src="../Public/Images/test_logo.jpg"/></if></dt>
 			<dd class="text">
-				<address>{$item.name}</address>
+				<address><a href="__URL__/detail/id/{$item.id}" target="_blank">{$item.name}</a></address>
 				办公地址：{$item.address}<br />
 				公司介绍：{$item.introduction|nl2br}<br />
 				电话：<em>{$item.telephone} {$item.mobile}</em><br />
@@ -14,7 +14,7 @@
 			<dd class="ext">
 				营业执照<br />
 				通过验证<br />
-				<a class="btn" href="__URL__/detail/id/{$item.id}">去看看</a>
+				<a class="btn" href="__URL__/detail/id/{$item.id}" target="_blank">去看看</a>
 			</dd>
 			<div class="clear"></div>
 		</dl>
