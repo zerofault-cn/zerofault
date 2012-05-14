@@ -154,6 +154,7 @@ class InviteAction extends BaseAction {
 		}
 	}
 	public function view() {
+		$options = C('_options_');
 		//检验是否公司帐号
 		if (empty($_SESSION[C('USER_ID')]) || $_SESSION['user_type']!=2 || empty($_SESSION['company_id'])) {
 			die('您还没有登录公司帐号，请登录后再查看！<br /><br /><a href="'.__APP__.'/User/login">登录</a>');
@@ -171,7 +172,7 @@ class InviteAction extends BaseAction {
 		$month = ceil((time() - strtotime($addtime))/86400/30);
 		//检查点数
 		$count = $dao->where("company_id=".$_SESSION['company_id'])->count();
-		if ($count > $month*20) {
+		if ($count > $month*$options['company_point']) {
 			die('您的查看点数已用完！');
 		}
 
