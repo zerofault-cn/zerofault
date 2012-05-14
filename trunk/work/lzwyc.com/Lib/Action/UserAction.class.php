@@ -12,6 +12,28 @@ class UserAction extends BaseAction {
 			redirect(__URL__.'/login');
 			exit;
 		}
+		if (2==$_SESSION['user_type']) {
+			//显示投标记录
+			$dao = D('Tender');
+			$rs = $dao->relation(true)->where("company_id=".$_SESSION['company_id'])->select();
+			foreach ($rs as $i=>$row) {
+				$rs[$i]['invite']['region'] = M('Region')->where("id=".$row['invite']['district'])->getField('name');
+				$rs[$i]['invite']['room_str'] = $options['room'][$row['invite']['room']];
+			}
+			$this->assign('list', $rs);
+		}
+		else {
+			//显示招标记录
+			$dao = M('Invite');
+			$rs = $dao->where("user_id=".$_SESSION[C('USER_ID')])->select();
+			foreach ($rs as $i=>$row) {
+				$rs[$i]['region'] = M('Region')->where("id=".$row['district'])->getField('name');
+				$rs[$i]['room_str'] = $options['room'][$row['room']];
+				$rs[$i]['tender_list'] = D('Tender')->relation(true)->where("invite_id=".$row['id']." and status>0")->select();
+				$rs[$i]['tender_count'] = count($rs[$i]['tender_list']);
+			}
+			$this->assign('list', $rs);
+		}
 		$this->assign('content', ACTION_NAME);
 		$this->display('Layout:default');
 	}
@@ -172,27 +194,31 @@ class UserAction extends BaseAction {
 				$this->dao->password = md5($password);
 			}
 			if (2==$_SESSION['user_type']) {
-				$company_dao = M('Company')->where("user_id=".$_SESSION[C('USER_ID')])->find();
 				$name = trim($_REQUEST['name']);
 				empty($name) && self::_error('公司名称必须填写！');
-				$company_dao->name = $name;
 				$telephone = trim($_REQUEST['telephone']);
 				$mobile = trim($_REQUEST['mobile']);
 				(empty($telephone)&&empty($mobile)) && self::_error('固定电话和移动电话必须至少填一种！');
-				$company_dao->telephone = $telephone;
-				$company_dao->mobile = $mobile;
 				$address = trim($_REQUEST['address']);
 				empty($address) && self::_error('公司地址必须填写！');
-				$company_dao->address = $address;
 				$introduction = trim($_REQUEST['introduction']);
-				$company_dao->introduction = $introduction;
+				$qualifications = trim($_REQUEST['qualifications']);
 			}
 
 			$this->dao->realname = $realname;
 			$this->dao->sex = $sex;
 			if(false !== $this->dao->save()) {
 				if (2==$_SESSION['user_type']) {
-					if (false === $company_dao->save()) {
+					$company_dao = M('Company')->where("user_id=".$_SESSION[C('USER_ID')])->find();
+					$data = array();
+					$data['id'] = $_SESSION['company_id'];
+					$data['name'] = $name;
+					$data['telephone'] = $telephone;
+					$data['mobile'] = $mobile;
+					$data['address'] = $address;
+					$data['introduction'] = $introduction;
+					$data['qualifications'] = $qualifications;
+					if (false === M('Company')->save($data)) {
 						self::_error('提交公司资料出错！');
 					}
 				}

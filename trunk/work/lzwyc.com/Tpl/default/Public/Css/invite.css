@@ -212,7 +212,7 @@
 }
 #invite_detail dl {
 	padding: 14px 16px;
-	height: 156px;
+	height: auto;
 	clear: both;
 }
 #invite_detail dl dt {
@@ -257,4 +257,15 @@
 	line-height: 30px;
 	color: #4D4E4C;
 	font-size: 14px;
+}
+#invite_detail .view_btn {
+	width: 104px;
+	height: 30px;
+	font-size: 16px;
+	font-family: "黑体", simHei;
+	color: #FFFFFF;
+	line-height: 30px;
+	text-align: center;
+	border: none;
+	background: url(../Images/btn_bg6.gif) center center no-repeat;
 }

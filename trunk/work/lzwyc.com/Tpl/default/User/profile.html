@@ -13,8 +13,13 @@
 			<tr>
 				<td width="160" valign="top">
 					<ul id="navi">
+						<if condition="$_SESSION['user_type'] eq 1">
 						<li><a href="__URL__">已发布的招标</a></li>
 						<li class="curr"><a href="__URL__/profile">修改个人资料</a></li>
+						<elseif condition="$_SESSION['user_type'] eq 2" />
+						<li><a href="__URL__">已提交的投标</a></li>
+						<li class="curr"><a href="__URL__/profile">修改公司资料</a></li>
+						</if>
 					</ul>
 				</td>
 				<td>
@@ -67,6 +72,10 @@
 						<dt>公司介绍：</dt>
 						<dd class="textarea">
 							<textarea name="introduction" cols="40" rows="4">{$info.company.introduction}</textarea>
+						</dd>
+						<dt>公司资质：</dt>
+						<dd class="textarea">
+							<textarea name="qualifications" cols="40" rows="4">{$info.company.qualifications}</textarea>
 						</dd>
 						</if>
 						<dt></dt>

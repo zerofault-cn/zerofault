@@ -25,48 +25,48 @@
 				<dt>登录邮箱：</dt>
 				<dd>
 					<input type="text" class="text" name="email" id="email" autocomplete="off"/>
-					<span>将作为您的登录账号</span>
+					<span><em>*</em> 将作为您的登录账号</span>
 				</dd>
 				<dt>真实姓名：</dt>
 				<dd>
 					<input type="text" class="text" name="realname" id="realname" autocomplete="off"/>
 					<input type="radio" name="sex" value="1" id="sex_1"/><label for="sex_1">先生</label>
 					<input type="radio" name="sex" value="2" id="sex_2"/><label for="sex_2">女士</label>
-					<span>为了保护业主权益，乐装网实行实名制注册</span>
+					<span><em>*</em> 为了保护业主权益，乐装网实行实名制注册</span>
 				</dd>
 				<dt>设置密码：</dt>
 				<dd>
 					<input type="password" class="text" name="password" id="password" />
-					<span>密码由6-20个字母、数字组成</span>
+					<span><em>*</em>密码由6-20个字母、数字组成</span>
 				</dd>
 				<dt>确认密码：</dt>
 				<dd>
 					<input type="password" class="text" name="password2" id="password2" />
-					<span>必须与上面设置的密码一致</span>
+					<span><em>*</em>必须与上面设置的密码一致</span>
 				</dd>
 				<if condition="$type eq 2">
 				<dt class="company">公司名称及联系方式</dt><dd class="company"></dd>
 				<dt>公司名称：</dt>
 				<dd>
 					<input type="text" class="text" name="name" id="name" />
-					<span>请填写公司全称，注册后不可修改</span>
+					<span><em>*</em>请填写公司全称，注册后不可修改</span>
 				</dd>
 				<dt>固定电话：</dt>
 				<dd>
 					<input type="text" class="text" name="telephone" id="telephone" />
-					<span>区号+电话号码</span>
+					<span><em>*</em>区号+电话号码</span>
 				</dd>
 				<dt>移动电话：</dt>
 				<dd>
-					<input type="text" class="text" name="mobile" id="mobile" />
+					<input type="text" class="text" name="mobile" id="mobile" /> <em>*</em>
 				</dd>
 				<dt>公司地址：</dt>
 				<dd>
-					<input type="text" class="text" name="address" id="address" />
+					<input type="text" class="text" name="address" id="address" /> <em>*</em>
 				</dd>
 				<dt>公司介绍：</dt>
 				<dd class="textarea">
-					<textarea name="introduction" cols="40" rows="4"></textarea>
+					<textarea name="introduction" cols="40" rows="4"></textarea><span>可以以后再填写</span>
 				</dd>
 				</if>
 				<dt>验证码：</dt>

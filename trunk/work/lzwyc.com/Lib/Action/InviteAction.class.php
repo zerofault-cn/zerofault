@@ -113,6 +113,12 @@ class InviteAction extends BaseAction {
 		$rs['type_str'] = $options['type'][$rs['type']];
 		$rs['space_str'] = $options['space'][$rs['space']];
 		$rs['room_str'] = $options['room'][$rs['room']];
+		if (!empty($_SESSION['company_id'])) {
+			$view_rs = M('View')->where("invite_id=".$id." and company_id=".$_SESSION['company_id'])->count();
+			if ($view_rs > 0) {
+				$rs['view'] = 1;
+			}
+		}
 
 		$this->assign('info', $rs);
 
@@ -141,10 +147,39 @@ class InviteAction extends BaseAction {
 		}
 		$dao->invite_id = $id;
 		$dao->company_id = $_SESSION['company_id'];
-		$dao->acttime = date('Y-m-d H:i:s');
+		$dao->action_time = date('Y-m-d H:i:s');
 		$dao->status = 1;
 		if ($dao->add()) {
 			die('投标成功，请等待业主确认！');
+		}
+	}
+	public function view() {
+		//检验是否公司帐号
+		if (empty($_SESSION[C('USER_ID')]) || $_SESSION['user_type']!=2 || empty($_SESSION['company_id'])) {
+			die('您还没有登录公司帐号，请登录后再查看！<br /><br /><a href="'.__APP__.'/User/login">登录</a>');
+		}
+
+		$dao = M('View');
+		$id = intval($_REQUEST['id']);
+		//检验是否已看过
+		$count = $dao->where("invite_id=".$id." and company_id=".$_SESSION['company_id'])->count();
+		if (!empty($count) && $count>0) {
+			die('您已登记过，请刷新页面查看！');
+		}
+		//获取公司注册时间
+		$addtime = M('Company')->where("id=".$_SESSION['company_id'])->getField('addtime');
+		$month = ceil((time() - strtotime($addtime))/86400/30);
+		//检查点数
+		$count = $dao->where("company_id=".$_SESSION['company_id'])->count();
+		if ($count > $month*20) {
+			die('您的查看点数已用完！');
+		}
+
+		$dao->invite_id = $id;
+		$dao->company_id = $_SESSION['company_id'];
+		$dao->action_time = date('Y-m-d H:i:s');
+		if ($dao->add()) {
+			die('登记成功，请刷新页面查看！');
 		}
 	}
 }

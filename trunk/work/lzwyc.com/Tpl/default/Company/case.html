@@ -1,0 +1,14 @@
+<div id="feedback">
+	<h2></h2>
+	<div>
+		<dl>
+		<foreach name="list" item="item">
+			<dt><i>{$item.addtime}</i>{$item.name}</dt>
+			<dd>{$item.content|nl2br}</dd>
+			<notempty name="item.reply">
+				<dd style="padding-left:30px"><fieldset style="border:1px dashed red;"><legend style="color:red;">管理员回复</legend>{$item.reply}}</fieldset></dd>
+			</notempty>
+		</foreach>
+		</dl>
+	</div>
+</div>

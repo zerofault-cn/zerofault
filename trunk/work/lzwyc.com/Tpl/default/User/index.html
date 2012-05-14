@@ -11,18 +11,92 @@
 		<td>
 			<table width="100%">
 			<tr>
-				<td width="160">
+				<td width="150" valign="top">
 					<ul id="navi">
-						<li class="curr"><a href="__URL__">
-						<if condition="$_SESSION['user_type'] eq 1">已发布的招标
-						<elseif condition="$_SESSION['user_type'] eq 2" />已提交的投标
-						</if>
-						</a></li>
+						<if condition="$_SESSION['user_type'] eq 1">
+						<li class="curr"><a href="__URL__">已发布的招标</a></li>
 						<li><a href="__URL__/profile">修改个人资料</a></li>
+						<elseif condition="$_SESSION['user_type'] eq 2" />
+						<li class="curr"><a href="__URL__">已提交的投标</a></li>
+						<li><a href="__URL__/profile">修改公司资料</a></li>
+						</if>
 					</ul>
 				</td>
 				<td width="800">
-					
+					<table width="100%" cellspacing="1" bgcolor="#999999">
+					<if condition="$_SESSION['user_type'] eq 1">
+					<tr bgcolor="#ededed">
+						<th>&nbsp;&nbsp;项目名称</th>
+						<th width="11%" align="center">审核状态</th>
+						<th width="13%" align="center">招标状态</th>
+						<th width="10%" align="center">投标数</th>
+						<th width="20%" align="center">已投标公司</th>
+					</tr>
+					<iterate name="list" id="item">
+					<tr bgcolor="<eq name='mod' value='1'>#FFFFE1<else/>#FFFFFF</eq>">
+						<td><a href="__APP__/Invite/detail/id/{$item.id}">{$item.region} {$item.address} {$item.room_str} {$item.area|round=1}m<sup>2</sup></a>
+						</td>
+						<td align="center">
+							<if condition="$item.status eq -1">
+							未通过审核
+							<elseif condition="$item.status eq 0"/>
+							等待审核中
+							<else/>
+							已通过
+							</if>
+						</td>
+						<td align="center"><if condition="$item.status lt 1">未开始<elseif condition="$item.status eq 2" />已确认<else /><if condition="$item.tender_count lt 3">招标中<else />招标结束</if></if></td>
+						<td align="center">{$item.tender_count}</td>
+						<td align="center">
+							<foreach name="item.tender_list" item="tender">
+							<a href="__APP__/Company/index/id/{$tender.company_id}">{$tender.company.name}</a><br />
+							</foreach>
+							<empty name="item.tender_list">
+							目前没有公司投标
+							</empty> 
+						</td>
+					</tr>
+					</iterate>
+					<empty name="list">
+					<tr>
+						<td colspan="5" align="center">
+						您还没有发布任何招标
+						</td>
+					</empty>
+					<elseif condition="$_SESSION['user_type'] eq 2" />
+					<tr bgcolor="#ededed">
+						<th>&nbsp;&nbsp;项目名称</th>
+						<th width="11%" align="center">招标时间</th>
+						<th width="13%" align="center">投标时间</th>
+						<th width="10%" align="center">投标状态</th>
+					</tr>
+					<iterate name="list" id="item">
+					<tr bgcolor="<eq name='mod' value='1'>#FFFFE1<else/>#FFFFFF</eq>">
+						<td><a href="__APP__/Invite/detail/id/{$item.invite.id}">{$item.invite.region} {$item.invite.address} {$item.invite.room_str} {$item.invite.area|round=1}m<sup>2</sup></a>
+						</td>
+						<td align="center">
+							{$item.invite.create_time|substr=0,10}
+						</td>
+						<td align="center">{$item.action_time|substr=0,10}</td>
+						<td align="center">
+							<if condition="$item.status eq 0">
+							无效
+							<elseif condition="$item.status eq 1"/>
+							竞投中
+							<else />
+							中标
+							</if>
+						</td>
+					</tr>
+					</iterate>
+					<empty name="list">
+					<tr>
+						<td colspan="4" align="center">
+						贵公司尚未投中任何招标
+						</td>
+					</empty>
+					</if>
+					</table>
 				</td>
 			</tr>
 			</table>
