@@ -9,6 +9,14 @@ class ArticleAction extends BaseAction {
 		$this->category = $options['article_category'];
 	}
 
+	public function announcement() {
+		if (empty($_REQUEST['id'])) {
+			$this->index(1);
+		}
+		else {
+			$this->detail();
+		}
+	}
 	public function knowledge() {
 		if (empty($_REQUEST['id'])) {
 			$this->index(2);

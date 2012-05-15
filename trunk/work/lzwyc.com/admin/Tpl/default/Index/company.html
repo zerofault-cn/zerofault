@@ -1,0 +1,35 @@
+<style>
+dl {
+	position: relative;
+	padding: 15px;
+	margin: 15px;
+	border: 1px solid #b4b4b4;
+}
+input.remove {
+	position: absolute;
+	right: 0;
+	top: 0;
+}
+</style>
+<form method="post" enctype="multipart/form-data" target="_iframe" autocomplete="off">
+<foreach name="list" item="item">
+<dl>
+	<dt>图片预览：<a href="{$item.url}" target="_blank"><img src="__APP__/../{$item.img}" /></a></dt>
+	<dd><input type="hidden" name="img0[]" value="{$item.img}" />
+		更新图片：<input type="file" name="img[]" size="60"/><br />
+		公司名称：<input type="text" name="name[]" value="{$item.name}" size="60"/><br />
+		链接地址：<input type="text" name="url[]" value="{$item.url}" size="60"/><br />
+		<input type="button" class="remove" value="移除" onclick="$(this).parent().parent().remove();"/>
+	</dd>
+</dl>
+</foreach>
+<input type="button" value="增加项目" onclick="addItem(this);"/>
+
+<center><input type="submit" value="提交" name="submit" /></center>
+<br />
+</form>
+<script type="text/javascript">
+function addItem(obj) {
+	$(obj).before('<dl><dt></dt><dd>上传图片：<input type="file" name="img[]" size="60"/><br />公司名称：<input type="text" name="name[]" value="" size="60"/><br />链接地址：<input type="text" name="url[]" value="" size="60"/><br /><input type="button" class="remove" value="移除" onclick="$(this).parent().parent().remove();"/></dd></dl>');
+}
+</script>

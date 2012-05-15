@@ -1,0 +1,32 @@
+<form method="post" target="_iframe" autocomplete="off">
+<table cellpadding="5" cellspacing="1" bgcolor="#999999">
+<tr bgcolor="#FFFFFF">
+	<td>招标总金额：</td>
+	<td><input type="text" name="total" size="20" value="{$data.total}"/>万元</td>
+</tr>
+<tr bgcolor="#FFFFFF">
+	<td>业主数量：</td>
+	<td><input type="text" name="user_count" size="20" value="{$data.user_count}"/>个</td>
+</tr>
+<tr bgcolor="#FFFFFF">
+	<td>装修公司数量：</td>
+	<td><input type="text" name="company_count" size="20" value="{$data.company_count}"/>家</td>
+</tr>
+<tr bgcolor="#FFFFFF">
+	<td>招标任务：</td>
+	<td><input type="text" name="invite_count" size="20" value="{$data.invite_count}"/>个</td>
+</tr>
+<tr bgcolor="#FFFFFF">
+	<td colspan="2" style="text-align:center;">
+	<input type="submit" value="提交" name="submit" />
+	</td>
+</tr>
+</table>
+
+<br />
+</form>
+<script type="text/javascript">
+function addItem(obj) {
+	$(obj).before('<dl><dt></dt><dd>上传图片：<input type="file" name="img[]" size="60"/><br />公司名称：<input type="text" name="name[]" value="" size="60"/><br />链接地址：<input type="text" name="url[]" value="" size="60"/><br /><input type="button" class="remove" value="移除" onclick="$(this).parent().parent().remove();"/></dd></dl>');
+}
+</script>

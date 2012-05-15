@@ -1,0 +1,69 @@
+<style>
+dl {
+	position: relative;
+	padding: 10px;
+	margin: 10px;
+	border: 1px solid #b4b4b4;
+}
+dt {
+	margin-bottom: 3px;
+}
+input.remove {
+	position: absolute;
+	right: 0;
+	top: 0;
+}
+</style>
+<form method="post" target="_iframe" autocomplete="off">
+<table cellpadding="5" cellspacing="1" bgcolor="#999999">
+<tr bgcolor="#FFFFFF">
+	<td>装修名词：</td>
+	<td>
+		<foreach name="data.tip1" item="item">
+		<dl>
+			<dt>标题：<input type="text" name="title[tip1][]" value="{$item.title}" size="30"/></dt>
+			<dd>链接：<input type="text" name="url[tip1][]" value="{$item.url}" size="60"/><input type="button" class="remove" value="移除" onclick="$(this).parent().parent().remove();"/></dd>
+		</dl>
+		</foreach>
+		<input type="button" value="增加条目" onclick="addItem(this, 'tip1');"/>
+	</td>
+</tr>
+<tr bgcolor="#FFFFFF">
+	<td>合同规范：</td>
+	<td>
+		<foreach name="data.tip2" item="item">
+		<dl>
+			<dt><input type="text" name="title[tip2][]" value="{$item.title}" size="30"/></dt>
+			<dd><input type="text" name="url[tip2][]" value="{$item.url}" size="60"/><input type="button" class="remove" value="移除" onclick="$(this).parent().parent().remove();"/></dd>
+		</dl>
+		</foreach>
+		<input type="button" value="增加条目" onclick="addItem(this, 'tip2');"/>
+	</td>
+</tr>
+<tr bgcolor="#FFFFFF">
+	<td>验收规范：</td>
+	<td>
+		<foreach name="data.tip3" item="item">
+		<dl>
+			<dt><input type="text" name="title[tip3][]" value="{$item.title}" size="30"/></dt>
+			<dd><input type="text" name="url[tip3][]" value="{$item.url}" size="60"/><input type="button" class="remove" value="移除" onclick="$(this).parent().parent().remove();"/></dd>
+		</dl>
+		</foreach>
+		<input type="button" value="增加条目" onclick="addItem(this, 'tip3');"/>
+	</td>
+</tr>
+
+<tr bgcolor="#FFFFFF">
+	<td colspan="2" style="text-align:center;">
+	<input type="submit" value="提交" name="submit" />
+	</td>
+</tr>
+</table>
+
+<br />
+</form>
+<script type="text/javascript">
+function addItem(obj, n) {
+	$(obj).before('<dl><dt><input type="text" name="title['+n+'][]" value="" size="30"/></dt><dd><input type="text" name="url['+n+'][]" value="" size="60"/><input type="button" class="remove" value="移除" onclick="$(this).parent().parent().remove();"/></dd></dl>');
+}
+</script>
