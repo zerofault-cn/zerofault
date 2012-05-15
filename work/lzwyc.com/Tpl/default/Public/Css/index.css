@@ -114,8 +114,11 @@
 #case_list dl dd {
 	float: left;
 	width: 250px;
+	overflow: hidden;
+	text-overflow: ellipsis;
 	padding-left: 15px;
 	line-height: 26px;
+	white-space:nowrap;
 }
 #case_list ul {
 	padding: 0 15px;
@@ -126,6 +129,17 @@
 	line-height: 27px;
 	background: url(../Images/icon1.png) left center no-repeat;
 }
+#case_list ul li span {
+	display:inline-block;
+	vertical-align:top;
+}
+#case_list ul li span.company {
+	width: 190px;
+	overflow:hidden;
+	text-overflow: ellipsis;
+	white-space:nowrap; 
+}
+
 #company_list {
 	width: 574px;
 	height: 285px;
@@ -161,7 +175,8 @@
 	float: left;
 	width: 210px;
 	height: 26px;
-	line-height: 30px;
+	padding-top: 10px;
+	line-height: 26px;
 }
 #company_list .label2 {
 	position: absolute;
@@ -311,6 +326,7 @@
 }
 #invite dl dd.btn .btn2 {
 	float: left;
+	cursor: pointer;
 	width: 20px;
 	height: 78px;
 	padding: 10px 8px 6px;
@@ -396,6 +412,10 @@
 	font-size: 18px;
 	line-height: 60px;
 }
+#tips dl dd a{
+	margin-left: 10px;
+	margin-right: 5px;
+}
 #tips dl.tip1 dt {
 	background: url(../Images/tip1_icon.png) 20px 14px no-repeat;
 }
@@ -469,17 +489,17 @@
 #brand img {
 	margin: 10px 5px;
 }
-#link {
+#flink {
 	padding: 20px 8px;
 	background-color: #e4f4db;
 	font-size: 14px;
 	line-height: 28px;
 }
-#link label {
+#flink label {
 	font-size: 16px;
 	color: #da5c00;
 	font-weight: bold;
 }
-#link a {
+#flink a {
 	margin-left: 12px;
 }

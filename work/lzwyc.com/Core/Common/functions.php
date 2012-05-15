@@ -668,7 +668,7 @@ function F($name,$value='',$path=DATA_PATH) {
             // 目录不存在则创建
             if(!is_dir($dir))  mkdir($dir);
             $_cache[$name]   =   $value;
-            return file_put_contents($filename,"<?php\nreturn ".var_export($value,true).";\n?>");
+            return file_put_contents($filename,"<?php\r\nreturn ".var_export($value,true).";\r\n?>");
         }
     }
     if(isset($_cache[$name])) return $_cache[$name];
