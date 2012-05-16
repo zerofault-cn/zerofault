@@ -22,8 +22,8 @@
 						</if>
 					</ul>
 				</td>
-				<td width="800">
-					<table width="100%" cellspacing="1" bgcolor="#999999">
+				<td width="800" style="padding: 10px;">
+					<table id="table1" width="100%" cellspacing="1" bgcolor="#999999">
 					<if condition="$_SESSION['user_type'] eq 1">
 					<tr bgcolor="#ededed">
 						<th>&nbsp;&nbsp;项目名称</th>
@@ -47,7 +47,7 @@
 						</td>
 						<td align="center"><if condition="$item.status lt 1">未开始<elseif condition="$item.status eq 2" />已确认<else /><if condition="$item.tender_count lt 3">招标中<else />招标结束</if></if></td>
 						<td align="center">{$item.tender_count}</td>
-						<td align="center">
+						<td align="center" nowrap="nowrap">
 							<foreach name="item.tender_list" item="tender">
 							<a href="__APP__/Company/index/id/{$tender.company_id}">{$tender.company.name}</a><br />
 							</foreach>
@@ -58,7 +58,7 @@
 					</tr>
 					</iterate>
 					<empty name="list">
-					<tr>
+					<tr bgcolor="#FFFFFF">
 						<td colspan="5" align="center">
 						您还没有发布任何招标
 						</td>

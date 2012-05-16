@@ -1,4 +1,5 @@
-﻿DROP TABLE IF EXISTS `lzwyc_admin`;
+﻿
+DROP TABLE IF EXISTS `lzwyc_admin`;
 CREATE TABLE `lzwyc_admin` (
   `id` int(10) unsigned NOT NULL auto_increment,
   `username` varchar(255) NOT NULL default '',
@@ -11,9 +12,7 @@ CREATE TABLE `lzwyc_admin` (
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='系统用户';
 
-
 INSERT INTO `lzwyc_admin` VALUES (1,'admin','e10adc3949ba59abbe56e057f20f883e','','','0000-00-00 00:00:00','2012-05-10 10:56:56',1);
-
 
 DROP TABLE IF EXISTS `lzwyc_article`;
 CREATE TABLE `lzwyc_article` (
@@ -23,6 +22,7 @@ CREATE TABLE `lzwyc_article` (
   `tags` varchar(255) NOT NULL default '' COMMENT '标签',
   `source` varchar(255) NOT NULL default '' COMMENT '来源',
   `thumb` int(10) unsigned NOT NULL default '0' COMMENT '配图',
+  `summary` tinytext NOT NULL COMMENT '摘要',
   `content` text NOT NULL COMMENT '内容',
   `sort` int(11) unsigned NOT NULL default '0' COMMENT '显示排序',
   `create_time` datetime NOT NULL default '0000-00-00 00:00:00' COMMENT '添加时间',
@@ -31,7 +31,6 @@ CREATE TABLE `lzwyc_article` (
   `status` tinyint(3) NOT NULL default '0',
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='文章';
-
 
 DROP TABLE IF EXISTS `lzwyc_attachment`;
 CREATE TABLE `lzwyc_attachment` (
@@ -66,7 +65,6 @@ CREATE TABLE `lzwyc_company` (
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='装修公司';
 
-
 DROP TABLE IF EXISTS `lzwyc_designer`;
 CREATE TABLE `lzwyc_designer` (
   `id` int(10) unsigned NOT NULL auto_increment,
@@ -82,7 +80,6 @@ CREATE TABLE `lzwyc_designer` (
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='设计师';
 
-
 DROP TABLE IF EXISTS `lzwyc_feedback`;
 CREATE TABLE `lzwyc_feedback` (
   `id` int(10) unsigned NOT NULL auto_increment,
@@ -96,7 +93,6 @@ CREATE TABLE `lzwyc_feedback` (
   `status` tinyint(3) NOT NULL default '0',
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='留言咨询';
-
 
 DROP TABLE IF EXISTS `lzwyc_invite`;
 CREATE TABLE `lzwyc_invite` (
@@ -118,7 +114,6 @@ CREATE TABLE `lzwyc_invite` (
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='招标';
 
-
 DROP TABLE IF EXISTS `lzwyc_region`;
 CREATE TABLE `lzwyc_region` (
   `id` smallint(5) unsigned NOT NULL auto_increment,
@@ -128,6 +123,21 @@ CREATE TABLE `lzwyc_region` (
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='省市区';
 
+INSERT INTO `lzwyc_region` VALUES (1,0,'湖北省',0);
+INSERT INTO `lzwyc_region` VALUES (2,1,'宜昌市',0);
+INSERT INTO `lzwyc_region` VALUES (3,2,'夷陵区',0);
+INSERT INTO `lzwyc_region` VALUES (4,2,'西陵区',0);
+INSERT INTO `lzwyc_region` VALUES (5,2,'伍家岗区',0);
+INSERT INTO `lzwyc_region` VALUES (6,2,'点军区',0);
+INSERT INTO `lzwyc_region` VALUES (7,2,'猇亭区',0);
+INSERT INTO `lzwyc_region` VALUES (8,2,'宜都市',0);
+INSERT INTO `lzwyc_region` VALUES (9,2,'当阳市',0);
+INSERT INTO `lzwyc_region` VALUES (10,2,'枝江市',0);
+INSERT INTO `lzwyc_region` VALUES (11,2,'远安县',0);
+INSERT INTO `lzwyc_region` VALUES (12,2,'兴山县',0);
+INSERT INTO `lzwyc_region` VALUES (13,2,'秭归县',0);
+INSERT INTO `lzwyc_region` VALUES (14,2,'长阳土家族自治县',0);
+INSERT INTO `lzwyc_region` VALUES (15,2,'五峰土家族自治县',0);
 
 DROP TABLE IF EXISTS `lzwyc_tender`;
 CREATE TABLE `lzwyc_tender` (
@@ -151,8 +161,7 @@ CREATE TABLE `lzwyc_user` (
   `login_time` datetime NOT NULL default '0000-00-00 00:00:00',
   `status` tinyint(3) NOT NULL default '0',
   PRIMARY KEY  (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='用户';
-
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='业主客户';
 
 DROP TABLE IF EXISTS `lzwyc_view`;
 CREATE TABLE `lzwyc_view` (

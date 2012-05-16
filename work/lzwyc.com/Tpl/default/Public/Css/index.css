@@ -30,17 +30,18 @@
 	background:url(../Images/banner_bg.png) top center repeat-x;
 }
 #banner .wrapper {
+	position: relative;
 	width: 1070px;
+	height: auto;
+	margin:0 auto;
 }
 #slider {
 	float: left;
 	width: 550px;
 	height: 352px;
-	padding-left: 40px;
-	padding-top: 30px;
+	padding: 30px 0 14px 40px;
 }
 #quick_form {
-	position: relative;
 	float: right;
 	width: 310px;
 	height: 326px;
@@ -63,19 +64,19 @@
 	font-family: Arial;
 	font-weight: bold;
 }
-#quick_form #text_ad1, #quick_form #text_ad2 {
+#banner #text_ad1, #banner #text_ad2 {
 	position: absolute;
-	left: 10px;
+	left: 610px;
 	top: 60px;
 	width: 36px;
 	font-size:24px;
-	font-family: "ºÚÌå", simhei;
+	font-family: "é»‘ä½“", simhei;
 	line-height: 26px;
 	text-align: center;
 	color: #000;
 }
-#quick_form #text_ad2 {
-	left: 60px;
+#banner #text_ad2 {
+	left: 660px;
 }
 #quick_form .message_box {
 	margin: 0 8px;
@@ -104,6 +105,7 @@
 }
 #case_list dl {
 	padding: 5px 15px;
+	height: auto;
 	clear: both;
 }
 #case_list dl dt {
@@ -114,6 +116,7 @@
 #case_list dl dd {
 	float: left;
 	width: 250px;
+	height: 26px;
 	overflow: hidden;
 	text-overflow: ellipsis;
 	padding-left: 15px;
@@ -448,6 +451,10 @@
 	padding:14px 11px 9px 13px;
 	background: url(../Images/designer_cell_bg.png) 2px 0px no-repeat;
 }
+#designer ul li dt img {
+	width: 135px;
+	height: 148px;
+}
 #designer ul li dl dd.name {
 	float: left;
 }
@@ -487,7 +494,7 @@
 	background-color: #e5f2c2;
 }
 #brand img {
-	margin: 10px 5px;
+	margin: 10px 6px;
 }
 #flink {
 	padding: 20px 8px;

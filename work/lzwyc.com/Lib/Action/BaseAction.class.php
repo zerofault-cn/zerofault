@@ -22,6 +22,21 @@ class BaseAction extends Action{
 			}
 		}
 	}
+	protected function success($msg, $url='', $timeout=2000){
+		$html  = '<script language="JavaScript" type="text/javascript">';
+		$html .= 'parent.myAlert("'.$msg.'");';
+		$html .= 'parent.myLocation("'.$url.'",'.$timeout.');';
+		$html .= '</script>';
+		die($html);
+	}
+	protected function error($msg, $timeout=0){
+		$html  = '<script language="JavaScript" type="text/javascript">';
+		$html .= 'parent.myAlert("'.addslashes($msg).'");';
+		$timeout && ($html .= 'parent.myOK('.$timeout.');');
+		$html .= '</script>';
+		die($html);
+	}
+
 	protected function _success($msg='', $url='', $timeout=1000, $id='message_box'){
 		$html  = '<script language="JavaScript" type="text/javascript">';
 		if($msg) {
@@ -34,7 +49,7 @@ class BaseAction extends Action{
 	protected function _error($msg='', $id='message_box', $timeout=0){
 		$html  = '<script language="JavaScript" type="text/javascript">';
 		$html .= 'parent.show_msg("'.$id.'", "<i>'.$msg.'</i>");';
-		!empty($timeout) && $html .= 'parent.hide_msg("'.$id.'", '.$timeout.');';
+		!empty($timeout) && ($html .= 'parent.hide_msg("'.$id.'", '.$timeout.');');
 		$html .= '</script>';
 		die($html);
 	}

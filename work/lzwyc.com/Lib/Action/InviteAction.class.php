@@ -43,12 +43,12 @@ class InviteAction extends BaseAction {
 		if (empty($_POST['submit'])) {
 			return;
 		}
-		if (empty($_SESSION[C('USER_ID')])) {
-			self::_error('请先登录后才能发布招标！', 'message_box', 5000);
+		if (empty($_REQUEST['quick_form'])) {
+			empty($_SESSION[C('USER_ID')]) && self::_error('请先登录后才能发布招标！', 'message_box', 5000);
+			$_SESSION['user_type']!=1 && self::_error('只有个人账号才能发布招标！');
 		}
-		if(empty($_REQUEST['quick_form']) && $_SESSION['verify']!=md5(trim($_REQUEST['verify']))) {
-			self::_error('验证码错误！');
-		}
+		empty($_REQUEST['quick_form']) && $_SESSION['verify']!=md5(trim($_REQUEST['verify'])) && self::_error('验证码错误！');
+
 		$district = intval($_REQUEST['district']);
 		empty($district) && self::_error('地点区域必须选择！');
 		$address = trim($_REQUEST['address']);
@@ -129,7 +129,7 @@ class InviteAction extends BaseAction {
 	public function tender() {
 		//检验是否公司帐号
 		if (empty($_SESSION[C('USER_ID')]) || $_SESSION['user_type']!=2 || empty($_SESSION['company_id'])) {
-			die('您还没有登录公司帐号，请登录后再投标！<br /><br /><a href="'.__APP__.'/User/login">登录</a>');
+			self::error('您还没有登录公司帐号，请登录后再投标！<br /><br /><a href="'.__APP__.'/User/login">登录</a>');
 		}
 
 		$dao = M('Tender');
@@ -137,27 +137,27 @@ class InviteAction extends BaseAction {
 		//检验是否已达到招标名额
 		$count = $dao->where("invite_id=".$id." and status>0")->count();
 		if ($count>=3) {
-			die('招标已结束！');
+			self::error('招标已结束！');
 		}
 
 		//检查是否重复投标
 		$rs = $dao->where("invite_id=".$id." and company_id=".$_SESSION['company_id'])->count();
 		if (!empty($rs) && $rs>0) {
-			die('贵公司已经投标，请等待业主确认！');
+			self::error('贵公司已经投标，请等待业主确认！');
 		}
 		$dao->invite_id = $id;
 		$dao->company_id = $_SESSION['company_id'];
 		$dao->action_time = date('Y-m-d H:i:s');
 		$dao->status = 1;
 		if ($dao->add()) {
-			die('投标成功，请等待业主确认！');
+			self::success('投标成功，请等待业主确认！');
 		}
 	}
 	public function view() {
 		$options = C('_options_');
 		//检验是否公司帐号
 		if (empty($_SESSION[C('USER_ID')]) || $_SESSION['user_type']!=2 || empty($_SESSION['company_id'])) {
-			die('您还没有登录公司帐号，请登录后再查看！<br /><br /><a href="'.__APP__.'/User/login">登录</a>');
+			self::error('您还没有登录公司帐号，请登录后再查看！<br /><br /><a href="'.__APP__.'/User/login">登录</a>');
 		}
 
 		$dao = M('View');
@@ -165,7 +165,7 @@ class InviteAction extends BaseAction {
 		//检验是否已看过
 		$count = $dao->where("invite_id=".$id." and company_id=".$_SESSION['company_id'])->count();
 		if (!empty($count) && $count>0) {
-			die('您已登记过，请刷新页面查看！');
+			self::error('您已登记过，请刷新页面查看！');
 		}
 		//获取公司注册时间
 		$addtime = M('Company')->where("id=".$_SESSION['company_id'])->getField('addtime');
@@ -173,14 +173,14 @@ class InviteAction extends BaseAction {
 		//检查点数
 		$count = $dao->where("company_id=".$_SESSION['company_id'])->count();
 		if ($count > $month*$options['company_point']) {
-			die('您的查看点数已用完！');
+			self::error('您的查看点数已用完！');
 		}
 
 		$dao->invite_id = $id;
 		$dao->company_id = $_SESSION['company_id'];
 		$dao->action_time = date('Y-m-d H:i:s');
 		if ($dao->add()) {
-			die('登记成功，请刷新页面查看！');
+			self::success('登记成功，请刷新页面查看！');
 		}
 	}
 }

@@ -1,6 +1,13 @@
+<style>
+.KSS_titleBar {
+	display: none;
+}
+</style>
 <link type="text/css" rel="stylesheet" href="../Public/Css/index.css" />
 <div id="banner">
 	<div class="wrapper">
+		<div id="text_ad1">免费注册乐装网<br /><br /><br /><br />NO<br /> 1</div>
+		<div id="text_ad2">免费注册乐装网<br /><br /><br /><br />NO<br /> 2</div>
 		<div id="slider">
 			<div id="KinSlideshow" style="visibility:hidden;">
 				<foreach name="focus" item="item">
@@ -8,19 +15,7 @@
 				</foreach>
 			</div>
 		</div>
-		<style>
-		.KSS_titleBar {
-			display: none;
-		}
-		</style>
-		<script type="text/javascript">
-		$(function() {
-			$("#KinSlideshow").KinSlideshow();
-		});
-		</script>
 		<div id="quick_form">
-			<div id="text_ad1">免费注册乐装网<br /><br /><br /><br />NO<br /> 2</div>
-			<div id="text_ad2">免费注册乐装网<br /><br /><br /><br />NO<br /> 2</div>
 			<form method="post" action="__APP__/Invite/submit" target="_iframe">
 			<input type="hidden" name="submit" value="1" />
 			<input type="hidden" name="quick_form" value="1" />
@@ -61,9 +56,6 @@
 			</tr>
 			<tr>
 				<td colspan="2">
-					<empty name="_SESSION[C('USER_ID')]">
-					<em>请注意：您必须<a href="__APP__/User/login">登录</a>后才能发布招标</em>
-					</empty>
 					<div id="message_box" class="message_box"></div>
 				</td>
 			</tr>
@@ -78,15 +70,19 @@
 	<div class="left" id="case_list">
 		<h2>装修案例排名</h2>
 		<div class="body">
+			<table cellpadding="6" cellspacing="0">
 			<iterate name="case_list" id="item" offset="0" length="2">
-			<dl>
-				<dt><img src="__APP__/../{$item.img}" width="102" height="70"/></dt>
-				<dd>{$item.time} {$item.company}</dd>
-				<dd>中标：{$item.project|str_replace='M2','M<sup>2</sup>', ###}</dd>
-				<dd>金额：{$item.price}</dd>
-			</dl>
+			<tr>
+				<td rowspan="3"><img src="__APP__/../{$item.img}" width="102" height="70"/></td>
+				<td>{$item.time} {$item.company}</td>
+			<tr>
+				<td>中标：{$item.project|str_replace='M2','M<sup>2</sup>', ###}</td>
+			</tr>
+			<tr>
+				<td>金额：{$item.price}</td>
+			</tr>
 			</iterate>
-			<div class="clear"></div>
+			</table>
 			<ul>
 				<iterate name="case_list" id="item" offset="2" length="2">
 				<li><span>{$item.time}&nbsp;</span><span class="company">{$item.company}</span><span>&nbsp;金额：{$item.price}</span></li>
@@ -107,7 +103,6 @@
 			<dd>装修公司数量：↑{$statistic.company_count|number_format}家</dd>
 			<dd>招标任务：↑{$statistic.invite_count|number_format}个</dd>
 		</dl>
-		<img class="label2" src="../Public/Images/label2.png" />
 	</div>
 	<div class="clear"></div>
 </div>
@@ -130,6 +125,7 @@
 				<dd>{$knowledge_list[1]['summary']}</dd>
 				<div class="clear"></div>
 			</dl>
+			<div class="clear"></div>
 			<ul>
 				<iterate name="knowledge_list" id="item" offset="2" length="10">
 				<li><a href="__APP__/Article/knowledge/id/{$item.id}">&gt;&nbsp;&nbsp;{$item.title}</a></li>
@@ -138,7 +134,7 @@
 		</div>
 	</div>
 	<div class="right" id="invite">
-		<h2>最新装修招标<a href="__APP__/Invite/index">点击查看更多宜昌装修招标&gt;&gt;</a></h2>
+		<h2><a href="__APP__/Invite/index">点击查看更多宜昌装修招标&gt;&gt;</a></h2>
 		<div class="body">
 			<div class="summary">
 				
@@ -155,7 +151,7 @@
 			<dl>
 				<dt>¥{$item.budget_num}元</dt>
 				<dd class="text">
-					<address><a href="__URL__/detail/id/{$item.id}">{$item.region} {$item.address} {$item.room_str} {$item.area|round=1}m<sup>2</sup></a></address>
+					<address><a href="__APP__/Invite/detail/id/{$item.id}">{$item.region} {$item.address} {$item.room_str} {$item.area|round=1}m<sup>2</sup></a></address>
 					装修时间：{$item.reserve_date} <br />
 					装修类型：{$item.type_str}<br />
 					装修空间：{$item.space_str}<br />
@@ -177,7 +173,7 @@
 	<div class="clear"></div>
 </div>
 <div class="wrapper" id="company">
-	<h2>装修公司<span class="navi"><a href="#">质量保证单位</a> | <a href="#">装饰施工单位</a> | <a href="#">装修监理单位</a> | <a href="#">企业大全</a></span></h2>
+	<h2><span class="navi"><a href="#">质量保证单位</a> | <a href="#">装饰施工单位</a> | <a href="#">装修监理单位</a> | <a href="#">企业大全</a></span></h2>
 	<ul>
 		<foreach name="company_list" item="item">
 		<li>
@@ -271,8 +267,9 @@
 <script type="text/javascript"> 
 function tender(id){
 	var random=Math.random();
-	var url="__APP__/Invite/tender/id/"+id+"/random/"+random;
-	var content={t:"get",u:url};
-	dialog("投标确认","url",content,"180","80","text",true,"window.location.reload();");
+	$("#_iframe").attr("src", "__APP__/Invite/tender/id/"+id+"/random/"+random);
 }
+$(document).ready(function(){
+	$("#KinSlideshow").KinSlideshow();
+});
 </script>
