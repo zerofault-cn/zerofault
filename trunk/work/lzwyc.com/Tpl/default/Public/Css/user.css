@@ -24,7 +24,7 @@
 }
 #user dl dd {
 	float: left;
-	width: 660px;
+	width: 640px;
 	height: 28px;
 	padding-bottom: 15px;
 	color: #8C8B8B;
@@ -53,4 +53,7 @@
 	border: 1px solid gray;
 	color: #A6A6A6;
 	padding: 3px;
+}
+#user #table1 th, #user #table1 td {
+	padding: 5px;
 }

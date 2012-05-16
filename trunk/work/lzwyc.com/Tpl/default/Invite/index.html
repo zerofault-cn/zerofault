@@ -2,10 +2,10 @@
 <div id="invite_form">
 	<form method="post" action="__URL__/submit" target="_iframe">
 	<input type="hidden" name="submit" value="1" />
-	<table width="100%" cellspacing="4" cellpadding="0">
+	<table width="100%" cellspacing="6" cellpadding="0">
 	<caption>我要装修</caption>
 	<tr>
-		<td width="50"nowrap="nowrap">地 点：</td>
+		<td width="50" nowrap="nowrap">地 点：</td>
 		<td width="99"><select class="district" name="district"><option value="0">请选择</option>{$district_opts}</select></td>
 		<td colspan="2"><input type="text" class="address" name="address" size="20" value="如：××小区" onfocus="if('如：××小区'==this.value){this.value='';}" onblur="if(''==this.value){this.value='如：××小区';}"/></td>
 	</tr>
@@ -31,7 +31,7 @@
 	</tr>
 	<tr>
 		<td>姓 名：</td>
-		<td><input type="text" class="name" name="name" size="10"/></td>
+		<td><input type="text" class="name" name="name" size="10" value="{$_SESSION['user_name']}"/></td>
 		<td>QQ：</td>
 		<td><input type="text" class="qq" name="qq" size="11"/></td>
 	</tr>
@@ -93,16 +93,8 @@
 	</div>
 </div>
 <script type="text/javascript"> 
-function to_tender(id,num){
-	var text="<fieldset><span>您确认要投【"+num+"】这个标吗？</span>";
-	text+="<div style=\"text-align:center;backgroud:#333;\"><input value=\"确认\" type=\"button\" id=\"input_go\" onclick=\"to_tender("+id+")\"/>";
-	text+="&nbsp;&nbsp;&nbsp;<input type=\"button\"  value=\"取消\" id=\"input_cacel\"onclick=\"closepopdiv()\"/><div></fieldset>";
-	dialog("投标确认","text",text,"380","","text",false);
-}
 function tender(id){
 	var random=Math.random();
-	var url="__URL__/tender/id/"+id+"/random/"+random;
-	var content={t:"get",u:url};
-	dialog("投标确认","url",content,"180","80","text",true,"window.location.reload();");
+	$("#_iframe").attr("src", "__APP__/Invite/tender/id/"+id+"/random/"+random);
 }
 </script>

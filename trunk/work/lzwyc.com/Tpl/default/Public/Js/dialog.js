@@ -21,7 +21,7 @@ function dialog(title,type,content,width,height,cssName,autofade,closefun){
         temp_float+="<div class=\"content\" style=\"\"></div>";
         temp_float+="<div class=\"popfoot\"><input type=\"button\" onclick=\"closepopdiv()\">&nbsp;</div>";
         temp_float+="</div>";
-        $("body").append(temp_float);
+        $("body").appendTo(temp_float);
         dialogFirst=false;
     }
     maxtime=5;

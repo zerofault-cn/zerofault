@@ -32,13 +32,12 @@
 }
 #company_list dl {
 	padding: 14px 16px;
-	height: 160px;
+	height: auto;
 	clear: both;
 }
 #company_list dl dt {
 	float: left;
 	width: 183px;
-	height: 140px;
 }
 #company_list dt img {
 	border: 8px solid #9dc682;

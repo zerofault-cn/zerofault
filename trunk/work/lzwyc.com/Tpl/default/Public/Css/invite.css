@@ -4,9 +4,6 @@
 	padding: 18px 17px 20px 389px;
 	background: url(../Images/invite_main_bg.png) left top no-repeat;
 }
-#invite_form table {
-	padding: 6px;
-}
 #invite_form caption {
 	padding: 6px 6px 0;
 	font-size: 18px;
@@ -207,16 +204,11 @@
 
 
 #invite_detail .body {
+	padding: 20px;
 	border: 1px solid #00a604;
 	border-top: none;
 }
-#invite_detail dl {
-	padding: 14px 16px;
-	height: auto;
-	clear: both;
-}
-#invite_detail dl dt {
-	float: left;
+#invite_detail div.tender_count {
 	width: 129px;
 	height: 131px;
 	color: #FFFFFF;
@@ -232,7 +224,7 @@
 	font-size: 14px;
 	line-height: 22px;
 }
-#invite_detail dl address {
+#invite_detail address {
 	color: #008f03;
 	font-style: normal;
 	font-size: 18px;

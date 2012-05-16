@@ -80,6 +80,7 @@
 	color: #010101;
 }
 #login dl {
+	width: 550px;
 	padding: 20px 0;
 }
 #login dl dt {

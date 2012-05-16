@@ -39,16 +39,20 @@ class IndexAction extends BaseAction{
 					'url' => $_REQUEST['url'][$i]
 					);
 			}
-			if(F(MODULE_NAME.'-'.ACTION_NAME, $data, __ROOT__.'/Runtime/Data/')) {
+			if(F(MODULE_NAME.'-'.ACTION_NAME, $data, APP_PATH.'/../Runtime/Data/')) {
 				self::_success('提交成功！', __URL__.'/'.ACTION_NAME);
 			}
+			else {
+				self::_error('保存数据出错！');
+			}
+			exit;
 		}
 		$topnavi[]=array(
 			'text'=> '焦点图',
 			);
 		$this->assign("topnavi",$topnavi);
 
-		$data = F(MODULE_NAME.'-'.ACTION_NAME, '', __ROOT__.'/Runtime/Data/');
+		$data = F(MODULE_NAME.'-'.ACTION_NAME, '', APP_PATH.'/../Runtime/Data/');
 		if (empty($data)) {
 			$data = array(
 				array(
@@ -95,8 +99,11 @@ class IndexAction extends BaseAction{
 					'price' => trim($_REQUEST['price'][$i])
 					);
 			}
-			if(F(MODULE_NAME.'-'.ACTION_NAME, $data, __ROOT__.'/Runtime/Data/')) {
+			if(F(MODULE_NAME.'-'.ACTION_NAME, $data, APP_PATH.'/../Runtime/Data/')) {
 				self::_success('提交成功！', __URL__.'/'.ACTION_NAME);
+			}
+			else {
+				self::_error('保存数据出错！');
 			}
 		}
 		$topnavi[]=array(
@@ -104,7 +111,7 @@ class IndexAction extends BaseAction{
 			);
 		$this->assign("topnavi",$topnavi);
 
-		$data = F(MODULE_NAME.'-'.ACTION_NAME, '', __ROOT__.'/Runtime/Data/');
+		$data = F(MODULE_NAME.'-'.ACTION_NAME, '', APP_PATH.'/../Runtime/Data/');
 		if (empty($data)) {
 			$data = array(
 				array(
@@ -161,8 +168,11 @@ class IndexAction extends BaseAction{
 					'url' => trim($_REQUEST['url'][$i])
 					);
 			}
-			if(F(MODULE_NAME.'-'.ACTION_NAME, $data, __ROOT__.'/Runtime/Data/')) {
+			if(F(MODULE_NAME.'-'.ACTION_NAME, $data, APP_PATH.'/../Runtime/Data/')) {
 				self::_success('提交成功！', __URL__.'/'.ACTION_NAME);
+			}
+			else {
+				self::_error('保存数据出错！');
 			}
 		}
 		$topnavi[]=array(
@@ -170,7 +180,7 @@ class IndexAction extends BaseAction{
 			);
 		$this->assign("topnavi", $topnavi);
 
-		$data = F(MODULE_NAME.'-'.ACTION_NAME, '', __ROOT__.'/Runtime/Data/');
+		$data = F(MODULE_NAME.'-'.ACTION_NAME, '', APP_PATH.'/../Runtime/Data/');
 		if (empty($data)) {
 			$data = array_fill(0, 12,
 				array(
@@ -194,8 +204,11 @@ class IndexAction extends BaseAction{
 				'invite_count' => intval($_REQUEST['invite_count'])
 				);
 
-			if(F(MODULE_NAME.'-'.ACTION_NAME, $data, __ROOT__.'/Runtime/Data/')) {
+			if(F(MODULE_NAME.'-'.ACTION_NAME, $data, APP_PATH.'/../Runtime/Data/')) {
 				self::_success('提交成功！', __URL__.'/'.ACTION_NAME);
+			}
+			else {
+				self::_error('保存数据出错！');
 			}
 		}
 		$topnavi[]=array(
@@ -203,7 +216,7 @@ class IndexAction extends BaseAction{
 			);
 		$this->assign("topnavi", $topnavi);
 
-		$data = F(MODULE_NAME.'-'.ACTION_NAME, '', __ROOT__.'/Runtime/Data/');
+		$data = F(MODULE_NAME.'-'.ACTION_NAME, '', APP_PATH.'/../Runtime/Data/');
 		if (empty($data)) {
 			$data = array(
 				'total' => 275052,
@@ -235,8 +248,11 @@ class IndexAction extends BaseAction{
 					'url' => trim($_REQUEST['url'][$i])
 					);
 			}
-			if(F(MODULE_NAME.'-'.ACTION_NAME, $data, __ROOT__.'/Runtime/Data/')) {
+			if(F(MODULE_NAME.'-'.ACTION_NAME, $data, APP_PATH.'/../Runtime/Data/')) {
 				self::_success('提交成功！', __URL__.'/'.ACTION_NAME);
+			}
+			else {
+				self::_error('保存数据出错！');
 			}
 		}
 		$topnavi[]=array(
@@ -244,7 +260,7 @@ class IndexAction extends BaseAction{
 			);
 		$this->assign("topnavi", $topnavi);
 
-		$data = F(MODULE_NAME.'-'.ACTION_NAME, '', __ROOT__.'/Runtime/Data/');
+		$data = F(MODULE_NAME.'-'.ACTION_NAME, '', APP_PATH.'/../Runtime/Data/');
 		if (empty($data)) {
 			$data = array(
 				array(
@@ -273,8 +289,11 @@ class IndexAction extends BaseAction{
 						);
 				}
 			}
-			if(F(MODULE_NAME.'-'.ACTION_NAME, $data, __ROOT__.'/Runtime/Data/')) {
+			if(F(MODULE_NAME.'-'.ACTION_NAME, $data, APP_PATH.'/../Runtime/Data/')) {
 				self::_success('提交成功！', __URL__.'/'.ACTION_NAME);
+			}
+			else {
+				self::_error('保存数据出错！');
 			}
 		}
 		$topnavi[]=array(
@@ -282,7 +301,7 @@ class IndexAction extends BaseAction{
 			);
 		$this->assign("topnavi", $topnavi);
 
-		$data = F(MODULE_NAME.'-'.ACTION_NAME, '', __ROOT__.'/Runtime/Data/');
+		$data = F(MODULE_NAME.'-'.ACTION_NAME, '', APP_PATH.'/../Runtime/Data/');
 		if (empty($data)) {
 			$data = array(
 				'tip1' => array(
@@ -367,8 +386,11 @@ class IndexAction extends BaseAction{
 					'url' => $_REQUEST['url'][$i]
 					);
 			}
-			if(F(MODULE_NAME.'-'.ACTION_NAME, $data, __ROOT__.'/Runtime/Data/')) {
+			if(F(MODULE_NAME.'-'.ACTION_NAME, $data, APP_PATH.'/../Runtime/Data/')) {
 				self::_success('提交成功！', __URL__.'/'.ACTION_NAME);
+			}
+			else {
+				self::_error('保存数据出错！');
 			}
 		}
 		$topnavi[]=array(
@@ -376,7 +398,7 @@ class IndexAction extends BaseAction{
 			);
 		$this->assign("topnavi",$topnavi);
 
-		$data = F(MODULE_NAME.'-'.ACTION_NAME, '', __ROOT__.'/Runtime/Data/');
+		$data = F(MODULE_NAME.'-'.ACTION_NAME, '', APP_PATH.'/../Runtime/Data/');
 		if (empty($data)) {
 			$data = array(
 				array(
@@ -418,8 +440,11 @@ class IndexAction extends BaseAction{
 					'url' => $_REQUEST['url'][$i]
 					);
 			}
-			if(F(MODULE_NAME.'-'.ACTION_NAME, $data, __ROOT__.'/Runtime/Data/')) {
+			if(F(MODULE_NAME.'-'.ACTION_NAME, $data, APP_PATH.'/../Runtime/Data/')) {
 				self::_success('提交成功！', __URL__.'/'.ACTION_NAME);
+			}
+			else {
+				self::_error('保存数据出错！');
 			}
 		}
 		$topnavi[]=array(
@@ -427,7 +452,7 @@ class IndexAction extends BaseAction{
 			);
 		$this->assign("topnavi",$topnavi);
 
-		$data = F(MODULE_NAME.'-'.ACTION_NAME, '', __ROOT__.'/Runtime/Data/');
+		$data = F(MODULE_NAME.'-'.ACTION_NAME, '', APP_PATH.'/../Runtime/Data/');
 		if (empty($data)) {
 			$data = array(
 				array(

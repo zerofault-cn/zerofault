@@ -22,11 +22,11 @@
 						</if>
 					</ul>
 				</td>
-				<td>
+				<td style="padding: 10px;">
 					<form method="post" target="_iframe">
 					<input type="hidden" name="submit" value="1"/>
 					<dl>
-						<dt>您的登录邮箱：</dt>
+						<dt>您的登录账号：</dt>
 						<dd>
 							{$info.email}
 						</dd>
@@ -53,6 +53,7 @@
 						</dd>
 						<if condition="$info['type'] eq 2">
 						<dt class="company">公司名称及联系方式</dt><dd class="company"></dd>
+						<div class="clear"></div>
 						<dt>公司名称：</dt>
 						<dd>
 							<input type="text" class="text" name="name" id="name" value="{$info.company.name}"/>
