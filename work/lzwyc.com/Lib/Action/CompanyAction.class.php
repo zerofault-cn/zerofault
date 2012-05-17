@@ -50,11 +50,11 @@ class CompanyAction extends BaseAction {
 		$this->display('Layout:company');
 	}
 	public function feedback() {
+		$dao = M('Feedback');
 		if (!empty($_POST['post'])) {
 			if($_SESSION['verify']!=md5(trim($_REQUEST['verify']))) {
 				self::_error('验证码错误!');
 			}
-			$dao = M('Feedback');
 			$data['company_id'] = $_REQUEST['company_id'];
 			$name = trim($_REQUEST['name']);
 			empty($name) && self::_error('您的称呼必须填写！');
@@ -67,9 +67,9 @@ class CompanyAction extends BaseAction {
 			$data['content'] = $content;
 			$data['ip'] = $_SERVER['REMOTE_ADDR'];
 			$data['addtime'] = date("Y-m-d H:i:s");
-			$data['status'] = 1;
+			$data['status'] = 0;
 			if($dao->add($data)) {
-				self::_success('提交成功，请等待管理员回复！');
+				self::_success('提交成功，请等待管理员审核！');
 			}
 			else{
 				self::_error('提交失败！');
@@ -79,8 +79,17 @@ class CompanyAction extends BaseAction {
 		}
 		$id = intval($_REQUEST['id']);
 		//提取留言
-		$rs = M('Feedback')->where("company_id=".$id)->select();
+		$where = array();
+		$where['company_id'] = $id;
+		$where['status'] = array('gt', 0);
+		$order = 'id desc';
+		$count = $dao->where($where)->count();
+		import("@.Paginator");
+		$limit = 2;
+		$p = new Paginator($count, $limit);
+		$rs = $dao->where($where)->order($order)->limit($p->offset.','.$p->limit)->select();
 		$this->assign('list', $rs);
+		$this->assign('page', $p->showMultiNavi());
 
 		$this->assign('content', 'feedback');
 		$this->display('Layout:company');
