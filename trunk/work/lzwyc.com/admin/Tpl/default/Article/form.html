@@ -18,6 +18,11 @@
 	<td><input type="text" name="source" size="80" maxlength="100" value="{$info.source}" /></td>
 </tr>
 <tr>
+	<td>摘要：</td>
+	<td><textarea name="summary" rows="4" cols="60" >{$info.summary}</textarea></td>
+</tr>
+
+<tr>
 	<td>正文：</td>
 	<td><textarea name="content" rows="40" cols="100" >{$info.content}</textarea></td>
 </tr>
@@ -42,7 +47,8 @@
 $(document).ready(function(){
 	tinyMCE.init({
 		// General options
-		mode : "textareas",
+		mode : "exact",
+		elements : "content",
 		theme : "advanced",
 		plugins : "advlist,advimage,table,preview,paste",
 		theme_advanced_toolbar_location : "top",

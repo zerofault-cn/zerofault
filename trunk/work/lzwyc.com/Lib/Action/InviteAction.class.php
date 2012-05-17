@@ -107,7 +107,7 @@ class InviteAction extends BaseAction {
 		$this->dao->status = 0;
 
 		if ($this->dao->add()) {
-			self::_success('发布成功！', __URL__);
+			self::_success('发布成功，请等待审核！', __URL__);
 		}
 		else {
 			self::_error('发布失败！');
