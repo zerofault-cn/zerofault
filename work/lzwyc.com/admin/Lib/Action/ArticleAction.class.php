@@ -87,6 +87,7 @@ class ArticleAction extends BaseAction{
 		$tags = trim($_REQUEST['tags']);
 		$source = trim($_REQUEST['source']);
 		''==$source && ($source = '乐装网');
+		$summary = trim($_REQUEST['summary']);
 		$content = trim($_REQUEST['content']);
 		$sort = intval($_REQUEST['sort']);
 		if($id>0) {
@@ -98,6 +99,7 @@ class ArticleAction extends BaseAction{
 			$this->dao->title = $title;
 			$this->dao->tags = $tags;
 			$this->dao->source = $source;
+			$this->dao->summary = $summary;
 			$this->dao->content = $content;
 			$this->dao->sort = $sort;
 			$this->dao->modify_time = date("Y-m-d H:i:s");
