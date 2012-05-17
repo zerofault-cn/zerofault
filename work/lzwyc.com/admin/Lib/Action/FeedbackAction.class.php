@@ -12,6 +12,7 @@ class FeedbackAction extends BaseAction{
 			'url' => __APP__.'/Feedback'
 			);
 
+		$where = array();
 		$dCompany = D('Company');
 		if(!empty($_REQUEST['id'])){
 			$where['company_id'] = $_REQUEST['id'];
@@ -24,10 +25,10 @@ class FeedbackAction extends BaseAction{
 			$topnavi[]=array(
 				'text'=> '所有留言',
 				);
-		}
-		$where['status'] = 1;
-		if(!empty($_REQUEST['status'])) {
-			$where['status'] = $_REQUEST['status'];
+			$where['status'] = 0;
+			if(!empty($_REQUEST['status'])) {
+				$where['status'] = $_REQUEST['status'];
+			}
 		}
 		$order = 'id desc';
 		$count = $this->dao->where($where)->getField('count(*)');
@@ -44,6 +45,16 @@ class FeedbackAction extends BaseAction{
 		$this->assign('list', $rs);
 		$this->assign('content', ACTION_NAME);
 		$this->display('Layout:default');
+	}
+	public function reply() {
+		if (!empty($_POST['id'])) {
+			if ($this->dao->where('id='.intval($_POST['id']))->setField(array('reply','replytime'), array(trim($_REQUEST['reply']), date("Y-m-d H:i:s")))) {
+				die('1');
+			}
+			else {
+				die('Error:'.C('APP_DEBUG')?$this->dao->getLastSql():'');
+			}
+		}
 	}
 	/**
 	*

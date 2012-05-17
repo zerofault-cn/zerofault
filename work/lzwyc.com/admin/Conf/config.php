@@ -1,5 +1,7 @@
 <?php
 $config = array(
+	'APP_CONFIG_LIST'	=> array('options'),
+
 	'DB_TYPE'			=> 'mysql',
 	'DB_PREFIX'			=> 'lzwyc_',
 

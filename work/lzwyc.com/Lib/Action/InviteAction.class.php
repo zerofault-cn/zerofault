@@ -44,8 +44,19 @@ class InviteAction extends BaseAction {
 			return;
 		}
 		if (empty($_REQUEST['quick_form'])) {
+			//正常发布
 			empty($_SESSION[C('USER_ID')]) && self::_error('请先登录后才能发布招标！', 'message_box', 5000);
 			$_SESSION['user_type']!=1 && self::_error('只有个人账号才能发布招标！');
+			$user_id = $_SESSION[C('USER_ID')];
+		}
+		else {
+			//快速发布
+			if (empty($_SESSION[C('USER_ID')]) || 2==$_SESSION['user_type']) {
+				$user_id = 0;
+			}
+			else {
+				$user_id = $_SESSION[C('USER_ID')];
+			}
 		}
 		empty($_REQUEST['quick_form']) && $_SESSION['verify']!=md5(trim($_REQUEST['verify'])) && self::_error('验证码错误！');
 
@@ -78,7 +89,7 @@ class InviteAction extends BaseAction {
 		$phone = trim($_REQUEST['phone']);
 		empty($phone) && self::_error('联系电话必须填写！');
 
-		$this->dao->user_id = $_SESSION[C('USER_ID')];
+		$this->dao->user_id = $user_id;
 		$this->dao->district = $district;
 		$this->dao->address = $address;
 		$this->dao->type = $type;
@@ -93,7 +104,7 @@ class InviteAction extends BaseAction {
 		$this->dao->phone = $phone;
 
 		$this->dao->create_time = date('Y-m-d H:i:s');
-		$this->dao->status = 1;
+		$this->dao->status = 0;
 
 		if ($this->dao->add()) {
 			self::_success('发布成功！', __URL__);
@@ -106,6 +117,8 @@ class InviteAction extends BaseAction {
 		$options = C('_options_');
 
 		$id = intval($_REQUEST['id']);
+		$this->dao->setInc('view', 'id='.$id);
+
 		$rs = $this->dao->find($id);
 		$rs['tender_count'] = M('Tender')->where("invite_id=".$id." and status>0")->count();
 		$rs['budget_num'] = $rs['budget']*10000;
@@ -119,7 +132,6 @@ class InviteAction extends BaseAction {
 				$rs['view'] = 1;
 			}
 		}
-
 		$this->assign('info', $rs);
 
 		$this->assign('content', ACTION_NAME);
@@ -145,11 +157,14 @@ class InviteAction extends BaseAction {
 		if (!empty($rs) && $rs>0) {
 			self::error('贵公司已经投标，请等待业主确认！');
 		}
-		$dao->invite_id = $id;
-		$dao->company_id = $_SESSION['company_id'];
-		$dao->action_time = date('Y-m-d H:i:s');
-		$dao->status = 1;
-		if ($dao->add()) {
+		$data = array();
+		$data['invite_id'] = $id;
+		$data['company_id'] = $_SESSION['company_id'];
+		$data['action_time'] = date('Y-m-d H:i:s');
+		$data['status'] = 1;
+		if ($dao->data($data)->add()) {
+			unset($data['status']);
+			M('View')->data($data)->add();
 			self::success('投标成功，请等待业主确认！');
 		}
 	}

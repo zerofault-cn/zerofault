@@ -13,7 +13,7 @@ $(document).ready(function(){
 			var html = '';
 			html +='<fieldset style="border:1px dashed red;color:red;" class="reply"><legend>管理员回复</legend>';
 			html += '<textarea class="reply" name="reply" cols="40" rows="4"></textarea>';
-			html += '&nbsp;&nbsp;&nbsp;&nbsp;<input type="button" value="提交" class="submit"/> <input type="button" value="取消" class="cancel"/>';
+			html += '&nbsp;&nbsp;<input type="button" value="提交" class="submit"/>&nbsp;<input type="button" value="取消" class="cancel"/>';
 			html += '</fieldset>';
 			reply_btn.before(html);
 			reply_btn.hide();

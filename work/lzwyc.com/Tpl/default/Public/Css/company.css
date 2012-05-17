@@ -27,31 +27,23 @@
 }
 
 #company_list .body {
+	padding: 14px 16px;
 	border: 1px solid #00a604;
 	border-top: none;
 }
-#company_list dl {
-	padding: 14px 16px;
-	height: auto;
-	clear: both;
-}
-#company_list dl dt {
-	float: left;
-	width: 183px;
-}
-#company_list dt img {
+#company_list td.img img {
 	border: 8px solid #9dc682;
 	border-width: 8px 9px;
 	max-width: 150px;
 	_width: 150px;
 }
-#company_list dd.text {
+#company_list td.text {
 	float: left;
 	width: 395px;
 	font-size: 12px;
 	line-height: 24px;
 }
-#company_list dd.text address {
+#company_list td.text address {
 	padding-bottom:4px;
 	color: #464646;
 	font-style: normal;
@@ -60,12 +52,11 @@
 	line-height: 22px;
 }
 
-#company_list dd.ext {
-	float: right;
+#company_list td.ext {
 	width: 82px;
 	text-align: center;
 }
-#company_list dd.ext a.btn {
+#company_list td.ext a.btn {
 	display: inline-block;
 	width: 81px;
 	height: 35px;
