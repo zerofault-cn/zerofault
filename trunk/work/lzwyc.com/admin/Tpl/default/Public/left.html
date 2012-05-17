@@ -12,6 +12,13 @@
 				<li class="<eq name='MODULE_NAME' value='Index'><eq name='ACTION_NAME' value='flink'>curr</eq></eq>"><a href="__APP__/Index/flink">友情链接管理</a></li>
 			</ul>
 		</li>
+		<li>招标管理
+			<ul class="sub">
+				<li class="<eq name='MODULE_NAME' value='Invite'><empty name='_GET.status'>curr</empty></eq>"><a href="__APP__/Invite/index">待审核招标</a></li>
+				<li class="<eq name='MODULE_NAME' value='Invite'><eq name='_GET.status' value='1'>curr</eq></eq>"><a href="__APP__/Invite/index/status/1">已审核招标</a></li>
+				<li class="<eq name='MODULE_NAME' value='Invite'><eq name='_GET.status' value='-1'>curr</eq></eq>"><a href="__APP__/Invite/index/status/-1">回收站</a></li>
+			</ul>
+		</li>
 		<li>用户管理
 			<ul class="sub">
 				<li class="<eq name='MODULE_NAME' value='User'><eq name='_GET.type' value='1'>curr</eq></eq>"><a href="__APP__/User/index/type/1">普通业主</a></li>
@@ -43,8 +50,9 @@
 		</li>
 		<li>留言管理
 			<ul class="sub">
-				<li class="<eq name="MODULE_NAME" value="Feedback"><neq name="_GET['status']" value="-1">curr</neq></eq>"><a href="__APP__/Feedback">留言列表</a></li>
-				<li class="<eq name="MODULE_NAME" value="Feedback"><eq name="_GET['status']" value="-1">curr</eq></eq>"><a href="__APP__/Feedback/index/status/-1">回收站</a></li>
+				<li class="<eq name='MODULE_NAME' value='Feedback'><empty name='_GET.status'>curr</empty></eq>"><a href="__APP__/Feedback">待审核留言</a></li>
+				<li class="<eq name='MODULE_NAME' value='Feedback'><eq name='_GET.status' value='1'>curr</eq></eq>"><a href="__APP__/Feedback/index/status/1">已审核留言</a></li>
+				<li class="<eq name='MODULE_NAME' value='Feedback'><eq name='_GET.status' value='-1'>curr</eq></eq>"><a href="__APP__/Feedback/index/status/-1">回收站</a></li>
 			</ul>
 		</li>
 		<li>管理员管理

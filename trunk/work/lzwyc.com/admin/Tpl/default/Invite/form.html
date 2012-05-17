@@ -1,0 +1,62 @@
+<form action="__URL__/submit" method="post" target="_iframe">
+<input type="hidden" name="id" value="{$info.id}" />
+<table cellspacing="4" cellpadding="4" >
+<tr>
+	<td>区域：</td>
+	<td><select class="district" name="district">{$district_opts}</select></td>
+</tr>
+<tr>
+	<td>小区：</td>
+	<td><input type="text" class="t_input" name="address" value="{$info.address}" size="30" /></td>
+</tr>
+<tr>
+	<td>类型：</td>
+	<td>{$type_radios}</td>
+</tr>
+<tr>
+	<td>空间：</td>
+	<td><select class="space" name="space">{$space_options}</select></td>
+</tr>
+<tr>
+	<td>户型：</td>
+	<td><select class="room" name="room">{$room_options}</select></td>
+</tr>
+<tr>
+	<td>面积：</td>
+	<td><input type="text" class="t_input" name="area" value="{$info.area}" size="10" />m<sup>2<sup></td>
+</tr>
+<tr>
+	<td>预算：</td>
+	<td><input type="text" class="t_input" name="budget" value="{$info.budget}" size="10" />万元</td>
+</tr>
+<tr>
+	<td>时间：</td>
+	<td><input type="text" class="t_input" name="reserve_date" value="{$info.reserve_date}" size="10" />如：2012-05-12</td>
+</tr>
+<tr>
+	<td valign="top">要求：</td>
+	<td><textarea name="demand" rows="8" cols="60">{$info.demand}</textarea></td>
+</tr>
+<tr>
+	<td width="70">姓名：</td>
+	<td><input type="text" class="t_input" name="name" value="{$info.name}" size="20" /></td>
+</tr>
+<tr>
+	<td>电话：</td>
+	<td><input type="text" class="t_input" name="phone" value="{$info.phone}" size="20" /></td>
+</tr>
+<tr>
+	<td>QQ：</td>
+	<td><input type="text" class="t_input" name="qq" value="{$info.qq}" size="20" /></td>
+</tr>
+<tr>
+	<td>&nbsp;</td>
+	<td>
+		<input type="submit" value="提交" name="submit" />
+		<notempty name="info.id">
+		<input type="button" value="取消" onclick="javascript:back();"/>
+		</notempty>
+	</td>
+</tr>
+</table>
+</form>

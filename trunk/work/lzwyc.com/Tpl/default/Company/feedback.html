@@ -3,10 +3,15 @@
 	<div>
 		<dl>
 		<foreach name="list" item="item">
-			<dt><i>{$item.addtime}</i>{$item.name}</dt>
+			<dt style="margin-top: 5px;">
+				<i>{$item.addtime}</i>留言人：{$item.name}
+				<if condition="!empty($_SESSION['company_id']) and $_SESSION['company_id'] eq $item['company_id']">
+				（电话：{$item.phone}）
+				</if>
+				</dt>
 			<dd>{$item.content|nl2br}</dd>
 			<notempty name="item.reply">
-				<dd style="padding-left:30px"><fieldset style="border:1px dashed red;"><legend style="color:red;">管理员回复</legend>{$item.reply}}</fieldset></dd>
+				<dd style="padding-left:30px;"><fieldset style="border:1px dashed red;"><legend style="color:red;">管理员回复</legend>{$item.reply}</fieldset></dd>
 			</notempty>
 		</foreach>
 		</dl>

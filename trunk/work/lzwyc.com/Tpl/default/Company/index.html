@@ -2,24 +2,25 @@
 <div id="company_list">
 	<h2><strong>装修公司列表</strong><ul><li></li></ul></h2>
 	<div class="body">
+		<table cellpadding="6" cellspacing="0">
 		<foreach name="list" item="item">
-		<dl>
-			<dt><if condition="is_file('__APP__/../Html/Attach/company_logo/'.$item['id'].'.jpg') eq true"><img src="__APP__/../Html/Attach/company_logo/{$item.id}.jpg" /><else /><img src="../Public/Images/test_logo.jpg"/></if></dt>
-			<dd class="text">
+		<tr>
+			<td width="190" class="img" valign="top"><if condition="is_file('__APP__/../Html/Attach/company_logo/'.$item['id'].'.jpg') eq true"><img src="__APP__/../Html/Attach/company_logo/{$item.id}.jpg" /><else /><img src="../Public/Images/test_logo.jpg"/></if></td>
+			<td class="text">
 				<address><a href="__URL__/detail/id/{$item.id}" target="_blank">{$item.name}</a></address>
 				办公地址：{$item.address}<br />
 				公司介绍：{$item.introduction|nl2br}<br />
 				电话：<em>{$item.telephone} {$item.mobile}</em><br />
-			</dd>
-			<dd class="ext">
+			</td>
+			<td width="82" class="ext" valign="top">
 				营业执照<br />
 				通过验证<br />
 				<a class="btn" href="__URL__/detail/id/{$item.id}" target="_blank">去看看</a>
-			</dd>
-			<div class="clear"></div>
-		</dl>
+			</td>
+		</tr>
 		</foreach>
-		<div class="clear"></div>
+		</table>
+		
 		<div class="pagenavi">{$page}</div>
 	</div>
 </div>
