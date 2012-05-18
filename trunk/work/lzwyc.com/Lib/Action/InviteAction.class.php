@@ -107,7 +107,12 @@ class InviteAction extends BaseAction {
 		$this->dao->status = 0;
 
 		if ($this->dao->add()) {
-			self::_success('发布成功，请等待审核！', __URL__);
+			if (empty($_REQUEST['quick_form'])) {
+				self::_success('发布成功，请等待审核！', __URL__);
+			}
+			else {
+				self::success('您已经成功发布消息，稍后会有工作人员与您取得联系！', '', 5000);
+			}
 		}
 		else {
 			self::_error('发布失败！');
