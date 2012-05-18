@@ -21,6 +21,7 @@ input.remove {
 		金额：<input type="text" name="price[]" value="{$item.price}" size="20"/><br />
 		公司：<input type="text" name="company[]" value="{$item.company}" size="60"/><br />
 		项目：<input type="text" name="project[]" value="{$item.project}" size="60"/><br />
+		链接：<input type="text" name="url[]" value="{$item.url}" size="60"/><br />
 		<input type="button" class="remove" value="移除" onclick="$(this).parent().parent().remove();"/>
 	</dd>
 </dl>
@@ -33,6 +34,6 @@ input.remove {
 </form>
 <script type="text/javascript">
 function addItem(obj) {
-	$(obj).before('<dl><dt></dt><dd>上传图片：<input type="file" name="img[]" size="60"/><br />时间：<input type="text" name="time[]" value="" size="10"/>&nbsp;&nbsp;&nbsp;&nbsp;金额：<input type="text" name="price[]" value="" size="20"/><br />公司：<input type="text" name="company[]" value="" size="60"/><br />项目：<input type="text" name="project[]" value="" size="60"/><br /><input type="button" class="remove" value="移除" onclick="$(this).parent().parent().remove();"/></dd></dl>');
+	$(obj).before('<dl><dt></dt><dd>上传图片：<input type="file" name="img[]" size="60"/><br />时间：<input type="text" name="time[]" value="" size="10"/>&nbsp;&nbsp;&nbsp;&nbsp;金额：<input type="text" name="price[]" value="" size="20"/><br />公司：<input type="text" name="company[]" value="" size="60"/><br />项目：<input type="text" name="project[]" value="" size="60"/><br />链接：<input type="text" name="url[]" value="" size="60"/><br /><input type="button" class="remove" value="移除" onclick="$(this).parent().parent().remove();"/></dd></dl>');
 }
 </script>

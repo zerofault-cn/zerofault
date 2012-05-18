@@ -96,7 +96,8 @@ class IndexAction extends BaseAction{
 					'time' => trim($_REQUEST['time'][$i]),
 					'company' => trim($_REQUEST['company'][$i]),
 					'project' => trim($_REQUEST['project'][$i]),
-					'price' => trim($_REQUEST['price'][$i])
+					'price' => trim($_REQUEST['price'][$i]),
+					'url' => trim($_REQUEST['url'][$i])
 					);
 			}
 			if(F(MODULE_NAME.'-'.ACTION_NAME, $data, APP_PATH.'/../Runtime/Data/')) {

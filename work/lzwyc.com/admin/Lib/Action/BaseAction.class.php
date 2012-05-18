@@ -5,12 +5,8 @@ class BaseAction extends Action{
 	public function _initialize() {
 		header("Content-Type:text/html; charset=utf-8");
 
-		$this->categorys = array(
-			'1' => '网站公告',
-			'2' => '装修常识',
-			'3' => '装修术语',
-			'4' => '乐装活动'
-			);
+		$options = C('_options_');
+		$this->categorys = $options['article_category'];
 		$this->assign("categorys", $this->categorys);
 
 		if('Public'!=MODULE_NAME && empty($_SESSION[C('ADMIN_ID')])) {

@@ -1,12 +1,13 @@
 <?php
 return array(
-	'admin_qq' => '10000',
+	'admin_qq' => '272468213',
 	'company_point' => 20,
 	'article_category' => array(
 		'1' => '网站公告',
 		'2' => '装修常识',
 		'3' => '装修术语',
-		'4' => '乐装活动'
+		'4' => '乐装活动',
+		'5' => '装修案例'
 		),
 
 	'type' => array(
