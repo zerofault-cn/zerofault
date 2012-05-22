@@ -14,15 +14,33 @@
 	padding-right: 50px;
 }
 #site_msg {
-	float: left;
+	width: 978px;
+	height:24px;
 	padding: 1px 10px;
 	border: 1px solid #9ee97e;
 	line-height: 24px;
 }
 #site_msg label {
+	float: left;
+	width: 90px;
 	font-size: 14px;
 	font-weight: bold;
 	color: #9ee97e;
+}
+#site_msg div.marquee {
+	float: left;
+	width: 878px;
+	overflow: hidden;
+}
+#site_msg li {
+	float:left;
+	padding:0 10px;
+}
+#site_msg a {
+	color: #FF7200;
+}
+#site_msg a:hover, #site_msg a:active {
+	color: #008f03;
 }
 
 #banner {
@@ -373,8 +391,8 @@
 #company ul li dl {
 	width: 300px;
 	height: 178px;
-	padding:5px 9px 4px 8px;
-	font-size: 12px;
+	padding:4px 9px 3px 8px;
+	font-size: 14px;
 	background: url(../Images/company_cell_bg.png) left top no-repeat;
 }
 #company ul li dl dt {

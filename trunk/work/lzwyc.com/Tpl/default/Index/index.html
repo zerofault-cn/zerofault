@@ -73,10 +73,10 @@
 			<table cellpadding="6" cellspacing="0">
 			<iterate name="case_list" id="item" offset="0" length="2">
 			<tr>
-				<td rowspan="3"><img src="__APP__/../{$item.img}" width="102" height="70"/></td>
-				<td>{$item.time} {$item.company}</td>
+				<td rowspan="3"><a href="{$item.url}" target="_blank"><img src="__APP__/../{$item.img}" width="102" height="70"/></a></td>
+				<td>{$item.time} <a href="{$item.url}" target="_blank">{$item.company}</a></td>
 			<tr>
-				<td>中标：{$item.project|str_replace='M2','M<sup>2</sup>', ###}</td>
+				<td>中标：<a href="{$item.url}" target="_blank">{$item.project|str_replace='M2','M<sup>2</sup>', ###}</a></td>
 			</tr>
 			<tr>
 				<td>金额：{$item.price}</td>
@@ -270,6 +270,7 @@ function tender(id){
 	$("#_iframe").attr("src", "__APP__/Invite/tender/id/"+id+"/random/"+random);
 }
 $(document).ready(function(){
+	$('.marquee').kxbdMarquee({isEqual:false});
 	$("#KinSlideshow").KinSlideshow();
 });
 </script>

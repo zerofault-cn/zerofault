@@ -21,10 +21,11 @@
 		<a href="__APP__/User/login">登录</a>
 	</div>
 	<div id="site_msg">
-		<label>乐装网动态：</label>上乐装网机会多多 优惠多多 即可获得精美礼品一份
+		<label>乐装网动态：</label><div class="marquee"><ul><foreach name="marquee" item="item"><li><a href="{$item.url}" target="_blank">{$item.title}</a></li></foreach></ul></div>
 	</div>
 	<div class="clear"></div>
 </div>
+<script type="text/javascript" src="../Public/Js/kxbdMarquee.js"></script>
 </if>
 <if condition="ACTION_NAME eq 'Indemnity'">
 <div class="wrapper">

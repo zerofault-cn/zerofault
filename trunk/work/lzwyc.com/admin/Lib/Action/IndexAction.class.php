@@ -21,6 +21,40 @@ class IndexAction extends BaseAction{
 		$this->assign('content', ACTION_NAME);
 		$this->display('Layout:default');
 	}
+	public function marquee() {
+		if (!empty($_POST['submit'])) {
+			$data = array();
+			foreach ($_REQUEST['title'] as $i=>$title) {
+				$data[] = array(
+					'title' => $title,
+					'url' => $_REQUEST['url'][$i]
+					);
+			}
+			if(F(MODULE_NAME.'-'.ACTION_NAME, $data, APP_PATH.'/../Runtime/Data/')) {
+				self::_success('提交成功！', __URL__.'/'.ACTION_NAME);
+			}
+			else {
+				self::_error('保存数据出错！');
+			}
+		}
+		$topnavi[]=array(
+			'text'=> '网站滚动状态管理',
+			);
+		$this->assign("topnavi",$topnavi);
+
+		$data = F(MODULE_NAME.'-'.ACTION_NAME, '', APP_PATH.'/../Runtime/Data/');
+		if (empty($data)) {
+			$data = array(
+				array(
+					'title' => '上乐装网机会多多 优惠多多 即可获得精美礼品一份',
+					'url' => 'http://www.lzwyc.com/'
+					)
+				);
+		}
+		$this->assign('list', $data);
+		$this->assign('content', ACTION_NAME);
+		$this->display('Layout:default');
+	}
 	public function focus() {
 		if (!empty($_POST['submit'])) {
 			$data = array();
