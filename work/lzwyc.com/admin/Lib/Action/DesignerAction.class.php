@@ -32,11 +32,70 @@ class DesignerAction extends BaseAction{
 		import("@.Paginator");
 		$limit = 20;
 		$p = new Paginator($count,$limit);
-		$rs = $this->dao->where($where)->order($order)->limit($p->offset.','.$p->limit)->select();
+		$rs = $this->dao->relation(true)->where($where)->order($order)->limit($p->offset.','.$p->limit)->select();
 
 		$this->assign("topnavi",$topnavi);
 		$this->assign('page', $p->showMultiNavi());
 		$this->assign('list', $rs);
+		$this->assign('content',ACTION_NAME);
+		$this->display('Layout:default');
+	}
+	public function case_form() {
+		$id = empty($_REQUEST['id']) ? 0 : intval($_REQUEST['id']);
+		$dao = M('Case');
+		if(!empty($_POST['submit'])) {
+			$designer_id = intval($_REQUEST['designer_id']);
+			$name = trim($_REQUEST['name']);
+			''==$name && self::_error('案例名称必须填写！');
+			$url = trim($_REQUEST['url']);
+			if ($id>0) {
+				$dao->name = $name;
+				$dao->url = $url;
+				if($dao->where("id=".$id)->save()) {
+					if ($_FILES['thumb']['size']>0) {
+						move_uploaded_file($_FILES['thumb']['tmp_name'], 'html/Attach/case_thumb/'.$id.'.jpg');
+					}
+					self::_success('修改成功！', __URL__);
+				}
+				else{
+					self::_error('修改失败！'.(C('APP_DEBUG')?$dao->getLastSql():''));
+				}
+			}
+			else {
+				$dao->designer_id = $designer_id;
+				$dao->name = $name;
+				$dao->url = $url;
+				$dao->status = 1;
+				if($case_id = $dao->add()) {
+					if ($_FILES['thumb']['size']>0) {
+						move_uploaded_file($_FILES['thumb']['tmp_name'], 'html/Attach/case_thumb/'.$case_id.'.jpg');
+					}
+					self::_success('添加成功！', __URL__);
+				}
+				else {
+					self::_error('添加失败！'.(C('APP_DEBUG')?$dao->getLastSql():''));
+				}
+			}
+			exit;
+		}
+		if ($id > 0) {
+			$topnavi[]=array(
+				'text'=> '修改案例信息',
+				);
+			$info = $dao->find($id);
+		}
+		else {
+			$topnavi[]=array(
+				'text'=> '添加案例',
+				);
+			$info = array('id' => 0);
+			$info['designer_id'] = intval($_REQUEST['designer_id']);
+			$max_sort = $dao->getField("max(sort)");//获取最大sort值，用于分配给新增记录的默认sort值
+			$info['sort'] = $max_sort+2;
+		}
+		$this->assign("topnavi", $topnavi);
+		$this->assign("info", $info);
+
 		$this->assign('content',ACTION_NAME);
 		$this->display('Layout:default');
 	}

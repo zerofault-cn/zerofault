@@ -34,8 +34,6 @@
 #company_list td.img img {
 	border: 8px solid #9dc682;
 	border-width: 8px 9px;
-	max-width: 150px;
-	_width: 150px;
 }
 #company_list td.text {
 	float: left;

@@ -15,10 +15,10 @@
 			<dd class="case_list">
 				<address>最新上传案例</address>
 				<dl class="case">
-					<dt><img src="../Public/Images/test_case.png"/></dt>
-					<dd>清江山水小区</dd>
-					<dt><img src="../Public/Images/test_case.png"/></dt>
-					<dd>清江山水小区</dd>
+					<iterate name="item.Case" id="case" offset="0" length="2">
+					<dt><if condition="is_file('__APP__/../Html/Attach/case_thumb/'.$case['id'].'.jpg') eq true"><img src="__APP__/../Html/Attach/case_thumb/{$case.id}.jpg" width="157"/><else /><img src="../Public/Images/test_case.png"/></if></dt>
+					<dd><a href="{$case.url}" target="_blank">{$case.name}</a></dd>
+					</iterate>
 				</dl>
 			</dd>
 			<div class="clear"></div>

@@ -321,3 +321,16 @@ fieldset.addForm{
 .rightColumn #table td span.c0{
 	color:red;
 }
+.case_list li{
+	list-style: disc inside;
+	height: 20px;
+	line-height: 20px;
+	border-bottom: 1px dashed #bbb;
+}
+.case_list li a.edit {
+	float: right;
+}
+.case_list li.add_form {
+	list-style: none;
+	border:none;
+}
