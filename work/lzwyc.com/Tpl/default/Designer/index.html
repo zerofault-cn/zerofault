@@ -4,7 +4,7 @@
 	<div class="body">
 		<foreach name="list" item="item">
 		<dl class="designer">
-			<dt class="photo"><if condition="is_file('__APP__/../Html/Attach/photo/'.$item['id'].'.jpg') eq true"><img src="__APP__/../Html/Attach/photo/{$item.id}.jpg" /><else /><img src="../Public/Images/test_photo.png"/></if></dt>
+			<dt class="photo"><if condition="is_file('__APP__/../Html/Attach/photo/'.$item['id'].'.jpg') eq true"><img src="__APP__/../Html/Attach/photo/{$item.id}.jpg" width="147"/><else /><img src="../Public/Images/test_photo.png"/></if></dt>
 			<dd class="text">
 				<address>{$item.name}</address>
 				设计专长：{$item.feature}<br />

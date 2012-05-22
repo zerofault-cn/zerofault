@@ -6,6 +6,7 @@ class IndexAction extends BaseAction{
 
 		$this->assign('district_opts', self::genOptions(M('Region')->where("pid=2")->getField('id,name')));
 
+		$this->assign('marquee', F('Index-marquee'));
 		$this->assign('focus', F('Index-focus'));
 		$this->assign('case_list', F('Index-case_list'));
 		$this->assign('company', F('Index-company'));
