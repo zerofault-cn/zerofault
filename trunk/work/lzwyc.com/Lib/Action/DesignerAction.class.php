@@ -18,7 +18,7 @@ class DesignerAction extends BaseAction {
 		import("@.Paginator");
 		$limit = 5;
 		$p = new Paginator($count, $limit);
-		$rs = $this->dao->where($where)->order($order)->limit($p->offset.','.$p->limit)->select();
+		$rs = $this->dao->relation(true)->where($where)->order($order)->limit($p->offset.','.$p->limit)->select();
 		foreach ($rs as $i=>$row) {
 			$rs[$i]['workage'] = ceil((date('Y')+date('m')/12)-substr($row['workdate'], 0, 4)-substr($row['workdate'], 5,2)/12);
 		}

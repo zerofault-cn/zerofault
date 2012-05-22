@@ -207,7 +207,7 @@
 
 #knowledge {
 	width: 275px;
-	height: 701px;
+	height: 803px;
 }
 #knowledge h2 {
 	height:44px;
@@ -215,7 +215,7 @@
 	background: url(../Images/knowledge_bg.png) left top no-repeat;
 }
 #knowledge .body {
-	height: 657px;
+	height: 759px;
 	margin-left: 7px;
 	background-color: #e5f2c2;
 }
@@ -249,7 +249,6 @@
 }
 #invite {
 	width: 716px;
-	height: 701px;
 }
 #invite h2 {
 	height: 44px;
@@ -266,7 +265,6 @@
 }
 
 #invite .body {
-	height: 657px;
 	margin-left: 7px;
 	background-color: #e5f2c2;
 }

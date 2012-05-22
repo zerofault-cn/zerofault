@@ -34,7 +34,6 @@ class CompanyAction extends BaseAction{
 		$limit = 20;
 		$p = new Paginator($count,$limit);
 		$rs = $this->dao->relation(true)->where($where)->order($order)->limit($p->offset.','.$p->limit)->select();
-
 		$this->assign('list', $rs);
 		$this->assign('page', $p->showMultiNavi());
 

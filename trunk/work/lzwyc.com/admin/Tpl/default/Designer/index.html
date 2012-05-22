@@ -4,7 +4,7 @@
 	<tr bgcolor="#ededed">
 		<th width="5%">ID</th>
 		<th>设计师姓名</th>
-		<th width="10%">关注</th>
+		<th>案例</th>
 		<th width="12%">排序</th>
 		<th width="14%">添加时间</th>
 		<th width="14%">操作</th>
@@ -15,12 +15,19 @@
 		<td>
 			<a href="#" target="_blank">{$item['name']}</a>
 			<if condition="is_file('__APP__/../html/Attach/photo/'.$item['id'].'.jpg') eq true">
-			<img id="{$item['id']}" class="thumb" name="photo" src="../Public/Images/picture.gif" align="absmiddle"/><span class="showThumb"><div><img src="__APP__/../html/Attach/photo/{$item['id']}.jpg" width="135"></div></span>
+			<img id="{$item['id']}" class="thumb" name="photo" src="../Public/Images/picture.gif" align="absmiddle"/><span class="showThumb"><div><img src="__APP__/../html/Attach/photo/{$item['id']}.jpg" width="135"/></div></span>
 			<else />
 			<img id="{$item['id']}" class="thumb" name="photo" src="../Public/Images/picture_add.gif" alt="上传形象照" align="absmiddle"/><span class="showThumb" style="display:none"><div><img src="../Public/Images/blank.gif" width="135"></div></span>
 			</if>
 		</td>
-		<td>{$item['view']}</td>
+		<td class="a_left">
+			<ul class="case_list">
+			<foreach name="item.Case" item="case">
+				<li><a class="view" href="{$case.url}" target="_blank">{$case.name}</a><a class="edit" href="__URL__/case_form/id/{$case.id}"><img src="../Public/Images/form_edit.gif" /></a></li>
+			</foreach>
+				<li class="add_form"><a href="__URL__/case_form/designer_id/{$item.id}" ><img src="../Public/Images/form_add.gif" /></a></li>
+			</ul>
+		</td>
 		<td><label id="{$item['id']}">{$item['sort']}</label></td>
 		<td nowrap="nowrap">{$item['addtime']|substr=2,14}</td>
 		<td>

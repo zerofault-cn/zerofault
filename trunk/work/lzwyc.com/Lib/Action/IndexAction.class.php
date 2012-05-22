@@ -16,7 +16,7 @@ class IndexAction extends BaseAction{
 		$rs = M('Article')->where("category_id=2 and status>0")->order("id desc")->limit(12)->select();
 		$this->assign('knowledge_list', $rs);
 
-		$rs = M('Invite')->where("status>0")->order("id desc")->limit(6)->select();
+		$rs = M('Invite')->where("status>0")->order("id desc")->limit(5)->select();
 		foreach ($rs as $i=>$row) {
 			$rs[$i]['budget_num'] = $row['budget']*10000;
 			$rs[$i]['region'] = M('Region')->where("id=".$row['district'])->getField('name');

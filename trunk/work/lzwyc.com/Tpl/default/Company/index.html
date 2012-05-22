@@ -5,7 +5,7 @@
 		<table cellpadding="6" cellspacing="0">
 		<foreach name="list" item="item">
 		<tr>
-			<td width="190" class="img" valign="top"><if condition="is_file('__APP__/../Html/Attach/company_logo/'.$item['id'].'.jpg') eq true"><img src="__APP__/../Html/Attach/company_logo/{$item.id}.jpg" /><else /><img src="../Public/Images/test_logo.jpg"/></if></td>
+			<td width="190" class="img" valign="top"><if condition="is_file('__APP__/../Html/Attach/company_logo/'.$item['id'].'.jpg') eq true"><img src="__APP__/../Html/Attach/company_logo/{$item.id}.jpg" width="150"/><else /><img src="../Public/Images/test_logo.jpg"/></if></td>
 			<td class="text">
 				<address><a href="__URL__/detail/id/{$item.id}" target="_blank">{$item.name}</a></address>
 				办公地址：{$item.address}<br />
