@@ -1,0 +1,29 @@
+<form method="post" enctype="multipart/form-data" target="_iframe">
+<input type="hidden" name="company_id" value="{$info.company_id}" />
+<input type="hidden" name="id" value="{$info.id}" />
+<table cellpadding="4" cellspacing="4">
+<tr>
+	<td width="70">案例名称：</td>
+	<td><input type="text" name="name" size="80" maxlength="100" value="{$info.name}" /></td>
+</tr>
+<tr>
+	<td width="50">缩略图：</td>
+	<td><if condition="is_file('__APP__/../html/Attach/case_thumb/'.$info['id'].'.jpg') eq true"><img src="__APP__/../html/Attach/case_thumb/{$info['id']}.jpg" /><br />
+		</if>
+		<input type="file" name="thumb" size="50" />(jpg格式)</td>
+</tr>
+<tr>
+	<td>案例链接：</td>
+	<td><input type="text" name="url" size="80" value="{$info.url}"/></td>
+</tr>
+<tr>
+	<td>&nbsp;</td>
+	<td>
+		<input type="submit" value="提交" name="submit" />
+		<notempty name="info.id">
+		<input type="button" value="取消" onclick="javascript:back();"/>
+		</notempty>
+	</td>
+</tr>
+</table>
+</form>

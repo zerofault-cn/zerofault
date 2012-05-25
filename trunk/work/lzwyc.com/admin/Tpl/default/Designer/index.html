@@ -23,7 +23,7 @@
 		<td class="a_left">
 			<ul class="case_list">
 			<foreach name="item.Case" item="case">
-				<li><a class="view" href="{$case.url}" target="_blank">{$case.name}</a><a class="edit" href="__URL__/case_form/id/{$case.id}"><img src="../Public/Images/form_edit.gif" /></a></li>
+				<li><a class="view" href="{$case.url}" target="_blank">{$case.name}</a><a class="edit" href="javascript:void(0);" onclick="myConfirm('确定删除此案例？', '__URL__/delete_case/id/{$case.id}');"><img src="../Public/Images/cross.gif" /></a><a class="edit" href="__URL__/case_form/id/{$case.id}"><img src="../Public/Images/form_edit.gif" /></a></li>
 			</foreach>
 				<li class="add_form"><a href="__URL__/case_form/designer_id/{$item.id}" ><img src="../Public/Images/form_add.gif" /></a></li>
 			</ul>

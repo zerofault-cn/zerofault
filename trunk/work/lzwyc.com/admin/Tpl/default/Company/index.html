@@ -4,6 +4,7 @@
 	<tr bgcolor="#ededed">
 		<th width="5%">ID</th>
 		<th>公司名称</th>
+		<th>案例</th>
 		<th>关联账号</th>
 		<th width="10%">关注</th>
 		<th width="12%">排序</th>
@@ -20,6 +21,14 @@
 			<else />
 			<img id="{$item['id']}" class="thumb" name="company_logo" src="../Public/Images/picture_add.gif" alt="上传公司Logo" align="absmiddle"/><span class="showThumb" style="display:none"><div><img src="../Public/Images/blank.gif" width="135"></div></span>
 			</if>
+		</td>
+		<td class="a_left">
+			<ul class="case_list">
+			<foreach name="item.Case" item="case">
+				<li><a class="view" href="{$case.url}" target="_blank">{$case.name}</a><a class="edit" href="javascript:void(0);" onclick="myConfirm('确定删除此案例？', '__URL__/delete_case/id/{$case.id}');"><img src="../Public/Images/cross.gif" /></a><a class="edit" href="__URL__/case_form/id/{$case.id}"><img src="../Public/Images/form_edit.gif" /></a></li>
+			</foreach>
+				<li class="add_form"><a href="__URL__/case_form/company_id/{$item.id}" ><img src="../Public/Images/form_add.gif" /></a></li>
+			</ul>
 		</td>
 		<td>{$item['User']['email']}</td>
 		<td>{$item['view']}</td>
