@@ -17,13 +17,15 @@ function myLocation(loc,intval) {
 		window.location.href= (loc==''? window.location.href : loc);
 		},intval);
 }
-function myConfirm(str,url) {
-	loc=url;
-	jQuery.prompt(str,{submit:mySubmit,buttons:{Yes:true,Cancel:false}});
-}
-function mySubmit(v,m) {
-	if(v==true) {
-		document.getElementById('_iframe').src=loc;
-	}
+function myConfirm(str, url) {
+	$.prompt(str, {
+		submit: function(v, m) {
+			if (v) {
+				$("#_iframe").attr("src", url);
+			}
+			return true;
+		},
+		buttons: {Yes:true, Cancel:false}
+	});
 	return true;
 }

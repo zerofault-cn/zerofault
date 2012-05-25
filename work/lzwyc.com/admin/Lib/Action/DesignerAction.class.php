@@ -41,6 +41,11 @@ class DesignerAction extends BaseAction{
 		$this->display('Layout:default');
 	}
 	public function case_form() {
+		$topnavi[]=array(
+			'text'=> '设计师管理',
+			'url' => __APP__.'/Designer'
+			);
+
 		$id = empty($_REQUEST['id']) ? 0 : intval($_REQUEST['id']);
 		$dao = M('Case');
 		if(!empty($_POST['submit'])) {
@@ -79,12 +84,21 @@ class DesignerAction extends BaseAction{
 			exit;
 		}
 		if ($id > 0) {
+			$info = $dao->find($id);
+			$designer = $this->dao->find($info['designer_id']);
+			$topnavi[]=array(
+				'text'=> $designer['name'],
+				);
+
 			$topnavi[]=array(
 				'text'=> '修改案例信息',
 				);
-			$info = $dao->find($id);
 		}
 		else {
+			$designer = $this->dao->find($_REQUEST['designer_id']);
+			$topnavi[]=array(
+				'text'=> $designer['name'],
+				);
 			$topnavi[]=array(
 				'text'=> '添加案例',
 				);
@@ -188,6 +202,10 @@ class DesignerAction extends BaseAction{
 	* 调用基类方法
 	*/
 	public function delete(){
+		parent::_delete();
+	}
+	public function delete_case() {
+		$this->dao = M('Case');
 		parent::_delete();
 	}
 }

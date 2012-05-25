@@ -5,3 +5,8 @@ ALTER TABLE `lzwyc_invite`
 
 ALTER TABLE `lzwyc_feedback`
   ADD COLUMN `reply` text NOT NULL AFTER `content`;
+ALTER TABLE `lzwyc_feedback`
+  ADD COLUMN `replytime` datetime NOT NULL DEFAULT '0000-00-00 00:00:00';
+
+ALTER TABLE `lzwyc_case`
+  ADD COLUMN `company_id` int(10) unsigned NOT NULL DEFAULT 0 AFTER `id`;

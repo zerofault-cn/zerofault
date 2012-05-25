@@ -83,13 +83,14 @@ CREATE TABLE `lzwyc_designer` (
 DROP TABLE IF EXISTS `lzwyc_feedback`;
 CREATE TABLE `lzwyc_feedback` (
   `id` int(10) unsigned NOT NULL auto_increment,
-  `pid` int(10) unsigned NOT NULL default '0',
   `company_id` int(10) unsigned NOT NULL default '0',
   `name` varchar(255) NOT NULL default '',
   `phone` varchar(255) NOT NULL default '',
   `content` text NOT NULL,
+  `reply` text NOT NULL,
   `ip` varchar(255) NOT NULL default '',
   `addtime` datetime NOT NULL default '0000-00-00 00:00:00',
+  `replytime` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `status` tinyint(3) NOT NULL default '0',
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='留言咨询';
@@ -174,3 +175,11 @@ CREATE TABLE `lzwyc_view` (
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
+CREATE TABLE `lzwyc_case` (
+  `id` int(10) unsigned NOT NULL auto_increment,
+  `designer_id` int(10) unsigned NOT NULL default '0',
+  `name` varchar(255) NOT NULL default '',
+  `url` varchar(255) NOT NULL default '',
+  `status` tinyint(3) NOT NULL default '0',
+  PRIMARY KEY  (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='案例';
