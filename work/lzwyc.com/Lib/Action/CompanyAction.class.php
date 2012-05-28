@@ -43,9 +43,6 @@ class CompanyAction extends BaseAction {
 		$this->display('Layout:company');
 	}
 	public function caselist() {
-		$id = intval($_REQUEST['id']);
-		$info = $this->dao->find($id);
-		$this->assign('info', $info);
 		$this->assign('content', 'case');
 		$this->display('Layout:company');
 	}
@@ -85,7 +82,7 @@ class CompanyAction extends BaseAction {
 		$order = 'id desc';
 		$count = $dao->where($where)->count();
 		import("@.Paginator");
-		$limit = 2;
+		$limit = 10;
 		$p = new Paginator($count, $limit);
 		$rs = $dao->where($where)->order($order)->limit($p->offset.','.$p->limit)->select();
 		$this->assign('list', $rs);

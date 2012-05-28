@@ -115,9 +115,30 @@ a:hover,a:active,a.active{color:#ffcc00;}
 	width: 760px;
 }
 #main .right {
-	width: 222px;
+	width: 211px;
+	font-size: 0;
+	line-height: 0;
+	text-align: center;
+	background: url(../Images/right_bg.png) top center repeat-y;
 }
-
+#main .right form {
+	padding-left: 32px;
+	padding-right: 28px;
+	font-size: 12px;
+	line-height: 20px;
+	text-align: left;
+	background: url(../Images/right_form_bg2.png) top center repeat-y;
+}
+#main .right form .btn {
+	text-align: center;
+}
+#main .right form .text, #main .right form select{
+	width: 92px;
+}
+#main .right form textarea {
+	width: 92px;
+	height: 60px;
+}
 .pagenavi {
 	padding: 10px;
 }

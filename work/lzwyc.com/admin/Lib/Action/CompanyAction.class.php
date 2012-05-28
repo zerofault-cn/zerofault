@@ -132,6 +132,11 @@ class CompanyAction extends BaseAction{
 	}
 
 	public function case_form() {
+		$topnavi[]=array(
+			'text'=> '公司管理',
+			'url' => __APP__.'/Company'
+			);
+
 		$id = empty($_REQUEST['id']) ? 0 : intval($_REQUEST['id']);
 		$dao = M('Case');
 		if(!empty($_POST['submit'])) {
@@ -170,12 +175,21 @@ class CompanyAction extends BaseAction{
 			exit;
 		}
 		if ($id > 0) {
+			$info = $dao->find($id);
+			$company = $this->dao->find($info['company_id']);
+			$topnavi[]=array(
+				'text'=> $company['name'],
+				);
 			$topnavi[]=array(
 				'text'=> '修改案例信息',
 				);
 			$info = $dao->find($id);
 		}
 		else {
+			$company = $this->dao->find($_REQUEST['company_id']);
+			$topnavi[]=array(
+				'text'=> $company['name'],
+				);
 			$topnavi[]=array(
 				'text'=> '添加案例',
 				);

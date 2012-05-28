@@ -23,7 +23,50 @@
 	<div class="left">
 	<layout name="$content" cache="0" />
 	</div>
-	<div class="right"><img src="../Public/Images/flow_1.png" /><img src="../Public/Images/right_btm.png" /></div>
+	<div class="right">
+		<img src="../Public/Images/flow_1.png" />
+		<if condition="MODULE_NAME eq 'Company' or MODULE_NAME eq 'Designer'">
+		<img src="../Public/Images/right_form_bg1.png" />
+		<form action="__APP__/Invite">
+		<table>
+		<tr>
+			<td>称呼：</td>
+			<td><input type="text" class="text" name="name" size="10" value="{$_SESSION['user_name']}"/></td>
+		</tr>
+		<tr>
+			<td>电话：</td>
+			<td><input type="text" class="text" name="phone" size="11"/></td>
+		</tr>
+		<tr>
+			<td width="40" nowrap="nowrap">地点：</td>
+			<td><select class="district" name="district"><option value="0">请选择</option>{$district_opts}</select></td>
+		</tr>
+		<tr>
+			<td>面积：</td>
+			<td><input type="text" name="area" size="6"/> m<sup>2<sup></td>
+		</tr>
+		<tr>
+			<td>预算：</td>
+			<td><input type="text" name="budget" size="6"/> 万元</td>
+		</tr>
+		<tr>
+			<td>户型：</td>
+			<td><select class="room" name="room"><option value="0">请选择</option>{$room_options}</select></td>
+		</tr>
+		<tr>
+			<td valign="top">要求：</td>
+			<td><textarea name="demand" rows="2" cols="36"></textarea></td>
+		</tr>
+		<tr>
+			<td colspan="2" class="btn">
+				<input type="image" class="image" src="../Public/Images/right_form_btn.png" />
+			</td>
+		</tr>
+		</table>
+		</form>
+		<img src="../Public/Images/right_form_bg3.png" />
+		</if>
+		<img src="../Public/Images/right_btm.png" /></div>
 	<div class="clear"></div>
 </div>
 <layout name="Public:footer" cache="0" />
