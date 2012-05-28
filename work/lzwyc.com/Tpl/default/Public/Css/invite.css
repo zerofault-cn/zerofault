@@ -1,8 +1,16 @@
 #invite_form {
+	position: relative;
 	width: 354px;
 	height: 324px;
 	padding: 18px 17px 20px 389px;
 	background: url(../Images/invite_main_bg.png) left top no-repeat;
+}
+#invite_form .ad {
+	position: absolute;
+	left: 0;
+	top: 18px;
+	width: 375px;
+	height: 324px;
 }
 #invite_form caption {
 	padding: 6px 6px 0;
