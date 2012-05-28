@@ -178,6 +178,7 @@ CREATE TABLE `lzwyc_view` (
 CREATE TABLE `lzwyc_case` (
   `id` int(10) unsigned NOT NULL auto_increment,
   `designer_id` int(10) unsigned NOT NULL default '0',
+  `company_id` int(10) unsigned NOT NULL DEFAULT 0,
   `name` varchar(255) NOT NULL default '',
   `url` varchar(255) NOT NULL default '',
   `status` tinyint(3) NOT NULL default '0',

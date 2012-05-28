@@ -147,10 +147,25 @@ h2 {
 #case h2 {
 	background-image:url(../Images/company_case.png);
 }
-#case div {
-	height: 131px;
-	padding: 18px 35px 30px 25px;
+#case ul {
+	padding: 18px 12px 30px 30px;
 	background-color: #494949;
+}
+#case ul li {
+	float: left;
+	width: 150px;
+	height: 116px;
+	padding-right: 6px;
+	line-height: 24px;
+}
+#case ul li a {
+	color: #ffffff;
+}
+#case ul img {
+	width: 132px;
+	height: 83px;
+	display: block;
+	border: 2px solid #282828;
 }
 
 #contact h2 {

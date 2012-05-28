@@ -1,14 +1,12 @@
-<div id="feedback">
+<div id="case">
 	<h2></h2>
-	<div>
-		<dl>
-		<foreach name="list" item="item">
-			<dt><i>{$item.addtime}</i>{$item.name}</dt>
-			<dd>{$item.content|nl2br}</dd>
-			<notempty name="item.reply">
-				<dd style="padding-left:30px"><fieldset style="border:1px dashed red;"><legend style="color:red;">管理员回复</legend>{$item.reply}}</fieldset></dd>
-			</notempty>
-		</foreach>
-		</dl>
-	</div>
+	<ul>
+	<foreach name="info.Case" item="item">
+		<li>
+			<a href="{$item.url}" target="_blank"><if condition="is_file('__APP__/../Html/Attach/case_thumb/'.$item['id'].'.jpg') eq true"><img src="__APP__/../Html/Attach/case_thumb/{$item.id}.jpg" /><else /><img src="../Public/Images/test_case2.gif"></if></a>
+			<a href="{$item.url}" target="_blank">{$item.name}</a>
+		</li>
+	</foreach>
+	<div class="clear"></div>
+	</ul>
 </div>

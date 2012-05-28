@@ -3,9 +3,16 @@
 	<div>{$info.qualifications}</div>
 </div>
 <div id="case">
-	<h2><a href="">更多&gt;&gt;</a></h2>
-	<div>
-	</div>
+	<h2><a href="__URL__/caselist/id/{$info.id}">更多&gt;&gt;</a></h2>
+	<ul>
+	<iterate name="info.Case" id="item" offset="0" length="8">
+		<li>
+			<a href="{$item.url}" target="_blank"><if condition="is_file('__APP__/../Html/Attach/case_thumb/'.$item['id'].'.jpg') eq true"><img src="__APP__/../Html/Attach/case_thumb/{$item.id}.jpg" /><else /><img src="../Public/Images/test_case2.gif"></if></a>
+			<a href="{$item.url}" target="_blank">{$item.name}</a>
+		</li>
+	</iterate>
+		<div class="clear"></div>
+	</ul>
 </div>
 <div id="contact">
 	<h2></h2>
