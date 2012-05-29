@@ -6,7 +6,6 @@
 	<th nowrap="nowrap">时间/类型/空间</th>
 	<th>要求</th>
 	<th>招标人</th>
-	<th nowrap="nowrap">关注度</th>
 	<th nowrap="nowrap">投标数</th>
 	<th>发布时间</th>
 	<th>操作</th>
@@ -31,7 +30,6 @@
 		<notempty name="item.qq">QQ：{$item.qq}<br /></notempty>
 		(<empty name="item.user_id"><i class="red">未注册用户</i><else />注册用户ID：{$item.user_id}</empty>)
 	</td>
-	<td>{$item.view}</td>
 	<td>{$item.tender_count}</td>
 	<td nowrap="nowrap">{$item['create_time']|substr=2,14}</td>
 	<td nowrap="nowrap">

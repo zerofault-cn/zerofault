@@ -60,15 +60,48 @@
 	</table>
 	</form>
 </div>
+<a name="list"></a>
 <div id="invite_list">
 	<h2><strong>最新装修招标</strong>
 		<ul>
+			<if condition="isset($_REQUEST['date']) eq true">
 			<li class="tab">预算筛选</li>
 			<li class="tab curr">时间筛选</li>
+			<else />
+			<li class="tab curr">预算筛选</li>
+			<li class="tab">时间筛选</li>
+			</if>
 			<li class="plain"></li>
 		</ul>
 	</h2>
 	<div class="body">
+		<div class="navi">
+			<if condition="empty($_REQUEST['budget']) eq true">
+			全部
+			<else />
+			<a href="__URL__/index/budget/0#list">全部</a>
+			</if>
+			<if condition="trim($_REQUEST['budget']) eq '0~2'">
+			2万元以下
+			<else />
+			<a href="__URL__/index/budget/0~2#list">2万元以下</a>
+			</if>
+			<if condition="trim($_REQUEST['budget']) eq '2~6'">
+			2~6万元
+			<else />
+			<a href="__URL__/index/budget/2~6#list">2~6万元</a>
+			</if>
+			<if condition="trim($_REQUEST['budget']) eq '6~10'">
+			6~10万元
+			<else />
+			<a href="__URL__/index/budget/6~10#list">6~10万元</a>
+			</if>
+			<if condition="trim($_REQUEST['budget']) eq '10'">
+			10万元以上
+			<else />
+			<a href="__URL__/index/budget/10#list">10万元以上</a>
+			</if>
+		</div>
 		<foreach name="list" item="item">
 		<dl>
 			<dt>¥{$item.budget_num}元</dt>

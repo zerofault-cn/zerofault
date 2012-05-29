@@ -45,7 +45,7 @@ class ArticleAction extends BaseAction {
 			'category_id' => $category_id,
 			'status' => array('gt', 0)
 			);
-		$order = 'id desc';
+		$order = 'sort, id desc';
 		$count = $this->dao->where($where)->getField('count(*)');
 		import("@.Paginator");
 		$limit = 30;

@@ -1,8 +1,12 @@
 <?php
 class IndexAction extends BaseAction{
 
-	public function index(){
+	public function _initialize() {
+		parent::_initialize();
 		$this->assign('MODULE_TITLE', '首页');
+	}
+
+	public function index(){
 
 		$this->assign('district_opts', self::genOptions(M('Region')->where("pid=2")->getField('id,name')));
 
@@ -35,12 +39,12 @@ class IndexAction extends BaseAction{
 		$options = C('_options_');
 		$rs = M('Designer')->where("status>0")->order("sort, id desc")->limit(8)->select();
 		foreach ($rs as $i=>$row) {
-			empty($row['qq']) && ($rs[$i]['qq'] = $options['admin_qq']);
+			empty($row['qq']) && ($rs[$i]['qq'] = array_shift($this->setting));
 		}
 		$this->assign('designer_list', $rs);
 
 		//网站公告
-		$rs = M('Article')->where("category_id=1 and status>0")->order("id desc")->limit(12)->select();
+		$rs = M('Article')->where("category_id=1 and status>0")->order("sort, id desc")->limit(12)->select();
 		$this->assign('announcement_list', $rs);
 
 		$this->assign('brand', F('Index-brand'));

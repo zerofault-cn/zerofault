@@ -112,7 +112,6 @@ CREATE TABLE `lzwyc_invite` (
   `qq` varchar(255) NOT NULL DEFAULT '' COMMENT 'QQ',
   `reserve_date` date NOT NULL default '0000-00-00' COMMENT '预约日期',
   `create_time` datetime NOT NULL default '0000-00-00 00:00:00' COMMENT '创建时间',
-  `view` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '查看次数',
   `status` tinyint(3) NOT NULL default '0',
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='招标';

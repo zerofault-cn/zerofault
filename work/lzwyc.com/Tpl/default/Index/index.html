@@ -85,16 +85,16 @@
 			</table>
 			<ul>
 				<iterate name="case_list" id="item" offset="2" length="2">
-				<li><span>{$item.time}&nbsp;</span><span class="company">{$item.company}</span><span>&nbsp;金额：{$item.price}</span></li>
+				<li><span>{$item.time}&nbsp;</span><a href="{$item.url}" target="_blank"><span class="company">{$item.company}</span></a><span>&nbsp;金额：{$item.price}</span></li>
 				</iterate>
 			</ul>
 		</div>
 	</div>
 	<div class="right" id="company_list">
 		<ul>
-			<foreach name="company" item="item">
-			<li><a href="{$item.url}" target="_blank"><img src="__APP__/../{$item.img}" width="132" height="51"/></a></li>
-			</foreach>
+			<iterate name="company" id="item" offset="0" length="8">
+			<li><a href="{$item.url}" target="_blank"><img src="__APP__/../{$item.img}" width="132" height="80"/></a></li>
+			</iterate>
 		</ul>
 		<dl>
 			<dt>最新数据</dt>
@@ -141,10 +141,10 @@
 			</div>
 			<div class="navi">
 				全部
-				<a href="">2万元以下</a>
-				<a href="">2~6万元</a>
-				<a href="">6~10万元</a>
-				<a href="">10万元以下上</a>
+				<a href="__APP__/Invite/index/budget/0~2#list">2万元以下</a>
+				<a href="__APP__/Invite/index/budget/2~6#list">2~6万元</a>
+				<a href="__APP__/Invite/index/budget/6~10#list">6~10万元</a>
+				<a href="__APP__/Invite/index/budget/10#list">10万元以上</a>
 			</div>
 			<div class="clear"></div>
 			<foreach name="invite_list" item="item">
@@ -178,8 +178,8 @@
 		<foreach name="company_list" item="item">
 		<li>
 			<dl>
-				<dt><a href="__APP__/Company/detail/id/{$item.id}">{$item.name}</a></dt>
-				<dd class="img"><a href="__APP__/Company/detail/id/{$item.id}"><if condition="is_file('__APP__/../Html/Attach/company_logo/'.$item['id'].'.jpg') eq true"><img src="__APP__/../Html/Attach/company_logo/{$item.id}.jpg" /><else /><img src="../Public/Images/test_pic6.png"/></if></a></dd>
+				<dt><a href="__APP__/Company/detail/id/{$item.id}" target="_blank">{$item.name}</a></dt>
+				<dd class="img"><a href="__APP__/Company/detail/id/{$item.id}" target="_blank"><if condition="is_file('__APP__/../Html/Attach/company_logo/'.$item['id'].'.jpg') eq true"><img src="__APP__/../Html/Attach/company_logo/{$item.id}.jpg" /><else /><img src="../Public/Images/test_pic6.png"/></if></a></dd>
 				<dd class="text">
 					资质：<br />
 					浏览：{$item.view}<br />
@@ -223,12 +223,12 @@
 </div>
 <div class="wrapper">
 	<div class="left" id="designer">
-		<h2>设计师<a href="#">更多</a></h2>
+		<h2>设计师<a href="">更多&gt;&gt;</a></h2>
 		<ul>
 			<foreach name="designer_list" item="item">
 			<li>
 				<dl>
-					<dt><if condition="is_file('__APP__/../Html/Attach/photo/'.$item['id'].'.jpg') eq true"><img src="__APP__/../Html/Attach/photo/{$item.id}.jpg" /><else /><img src="../Public/Images/test_photo.png"/></if></dt>
+					<dt><a href="__APP__/Designer/#{$item.id}"><if condition="is_file('__APP__/../Html/Attach/photo/'.$item['id'].'.jpg') eq true"><img src="__APP__/../Html/Attach/photo/{$item.id}.jpg" /><else /><img src="../Public/Images/test_photo.png"/></if></a></dt>
 					<dd class="name">{$item.name}</dd>
 					<dd class="number"><a href="tencent://message/?uin={$item.qq}&Site=乐装网&Menu=yes" title="点击这里开始QQ交流"><img border="0" src="http://wpa.qq.com/pa?p=1:{$tem.qq}:1" alt="QQ在线"></a></dd>
 				</dl>
