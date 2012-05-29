@@ -21,6 +21,41 @@ class IndexAction extends BaseAction{
 		$this->assign('content', ACTION_NAME);
 		$this->display('Layout:default');
 	}
+	public function setting() {
+		if (!empty($_POST['submit'])) {
+			$data = array(
+				'qq' => trim($_REQUEST['qq']),
+				'point' => intval($_REQUEST['point']),
+				'keywords' => str_replace(array("\r\n", "\n"), ' ', trim($_REQUEST['keywords'])),
+				'description' => str_replace(array("\r\n", "\n"), ' ', trim($_REQUEST['description']))
+				);
+
+			if(F(MODULE_NAME.'-'.ACTION_NAME, $data, APP_PATH.'/../Runtime/Data/')) {
+				self::_success('提交成功！', __URL__.'/'.ACTION_NAME);
+			}
+			else {
+				self::_error('保存数据出错！');
+			}
+		}
+		$topnavi[]=array(
+			'text'=> '网站参数设置',
+			);
+		$this->assign("topnavi", $topnavi);
+
+		$data = F(MODULE_NAME.'-'.ACTION_NAME, '', APP_PATH.'/../Runtime/Data/');
+		if (empty($data)) {
+			$data = array(
+				'qq' => '272468213',
+				'point' => '20',
+				'keywords' => '宜昌装修公司排名 装修报价 宜昌乐装网 装修网 装饰网 建材网 家装公司 家装网 宜昌装潢 宜昌房子装修 宜昌二手房装修',
+				'description' => '乐装网的网站描述，通过搜索引擎抓取后方便用户了解'
+				);
+		}
+		$this->assign('data', $data);
+		$this->assign('content', ACTION_NAME);
+		$this->display('Layout:default');
+	}
+
 	public function marquee() {
 		if (!empty($_POST['submit'])) {
 			$data = array();

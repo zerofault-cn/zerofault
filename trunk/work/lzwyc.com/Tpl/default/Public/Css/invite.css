@@ -106,6 +106,21 @@
 	border: 1px solid #00a604;
 	border-top: none;
 }
+#invite_list .navi {
+	float: left;
+	padding: 5px 20px;
+	font-size: 14px;
+	color: #ff6000;
+}
+#invite_list .navi a {
+	margin-left: 10px;
+	margin-right: 10px;
+	color: #383838;
+}
+#invite_list .navi a:hover, #invite_list .navi a:active {
+	color: #ff6000;
+}
+
 #invite_list dl {
 	padding: 14px 16px;
 	height: 156px;

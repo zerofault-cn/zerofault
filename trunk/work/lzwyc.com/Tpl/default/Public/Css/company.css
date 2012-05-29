@@ -38,6 +38,8 @@
 #company_list td.text {
 	float: left;
 	width: 395px;
+	height: 160px;
+	overflow: hidden;
 	font-size: 12px;
 	line-height: 24px;
 }
@@ -53,6 +55,7 @@
 #company_list td.ext {
 	width: 82px;
 	text-align: center;
+	line-height: 160%;
 }
 #company_list td.ext a.btn {
 	display: inline-block;

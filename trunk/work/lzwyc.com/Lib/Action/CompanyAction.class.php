@@ -11,15 +11,16 @@ class CompanyAction extends BaseAction {
 		$options = C('_options_');
 		$info['qq'] = $options['admin_qq'];
 		$this->assign('info', $info);
+		$this->assign('MODULE_TITLE', '装修公司');
+		$this->assign('ACTION_TITLE', $info['name']);
 	}
 
 	public function index($category_id=1) {
 
-		$this->assign('MODULE_TITLE', '装修公司');
 		$where = array(
 			'status' => array('gt', 0)
 			);
-		$order = 'id desc';
+		$order = 'sort, id desc';
 		$count = $this->dao->where($where)->getField('count(*)');
 		import("@.Paginator");
 		$limit = 8;

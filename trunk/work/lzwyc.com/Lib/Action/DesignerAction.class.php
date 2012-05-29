@@ -13,7 +13,7 @@ class DesignerAction extends BaseAction {
 		$where = array(
 			'status' => array('gt', 0)
 			);
-		$order = 'id desc';
+		$order = 'sort, id desc';
 		$count = $this->dao->where($where)->getField('count(*)');
 		import("@.Paginator");
 		$limit = 5;

@@ -5,6 +5,7 @@ class UserAction extends BaseAction {
 	public function _initialize() {
 		$this->dao = D('User');
 		parent::_initialize();
+		$this->assign('MODULE_TITLE', '用户中心');
 	}
 
 	public function index() {
@@ -13,6 +14,7 @@ class UserAction extends BaseAction {
 			exit;
 		}
 		if (2==$_SESSION['user_type']) {
+			$this->assign('ACTION_TITLE', '已投标');
 			//显示投标记录
 			$dao = D('Tender');
 			$rs = $dao->relation(true)->where("company_id=".$_SESSION['company_id'])->select();
@@ -23,6 +25,7 @@ class UserAction extends BaseAction {
 			$this->assign('list', $rs);
 		}
 		else {
+			$this->assign('ACTION_TITLE', '发布的招标');
 			//显示招标记录
 			$dao = M('Invite');
 			$rs = $dao->where("user_id=".$_SESSION[C('USER_ID')])->select();
@@ -38,6 +41,7 @@ class UserAction extends BaseAction {
 		$this->display('Layout:default');
 	}
 	public function register() {
+		$this->assign('ACTION_TITLE', '注册账号');
 		$type = 1;
 		!empty($_REQUEST['type']) && ($type = intval($_REQUEST['type']));
 		if (!empty($_POST['submit'])) {
@@ -91,7 +95,7 @@ class UserAction extends BaseAction {
 					$data['address'] = $address;
 					$data['introduction'] = $introduction;
 					$data['addtime'] = date('Y-m-d H:i:s');
-					$data['status'] = 1;
+					$data['status'] = 0;
 					if (!$company_id = M('Company')->data($data)->add()) {
 						self::_error('提交公司资料出错！');
 					}
@@ -127,6 +131,7 @@ class UserAction extends BaseAction {
 		$this->display('Layout:default');
 	}
 	public function login() {
+		$this->assign('ACTION_TITLE', '登录');
 		if (!empty($_POST['submit'])) {
 			$email = trim($_REQUEST['email']);
 			$password = trim($_REQUEST['password']);
@@ -172,6 +177,7 @@ class UserAction extends BaseAction {
 		$this->display('Layout:default');
 	}
 	public function profile() {
+		$this->assign('ACTION_TITLE', '编辑资料');
 		if (empty($_SESSION[C('USER_ID')])) {
 			redirect(__URL__.'/login');
 			exit;

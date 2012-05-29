@@ -173,8 +173,8 @@
 #company_list ul li {
 	float: left;
 	width: 132px;
-	height: 51px;
-	padding: 7px 5px;
+	height: 80px;
+	padding: 10px 5px 6px;
 }
 #company_list dl {
 	height: 83px;
@@ -453,6 +453,14 @@
 	text-indent: -10000px;
 	background: url(../Images/designer_bg.png) left top no-repeat;
 }
+#designer h2 a {
+	float: right;
+	color: #FF5A00;
+	font-size: 14px;
+	line-height: 40px;
+	padding-right: 15px;
+	text-indent: 0;
+}
 #designer ul {
 	margin-left: 7px;
 	background-color: #e5f2c2;
@@ -469,7 +477,7 @@
 }
 #designer ul li dt img {
 	width: 135px;
-	height: 148px;
+	height: 130px;
 }
 #designer ul li dl dd.name {
 	float: left;

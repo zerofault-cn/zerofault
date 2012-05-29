@@ -5,6 +5,7 @@ class InviteAction extends BaseAction {
 	public function _initialize() {
 		$this->dao = D('Invite');
 		parent::_initialize();
+		$this->assign('MODULE_TITLE', '装修招标');
 	}
 
 	public function index() {
@@ -20,6 +21,11 @@ class InviteAction extends BaseAction {
 			'status' => array('gt', 0)
 			);
 		$order = 'id desc';
+		if (!empty($_REQUEST['budget'])) {
+			$temp_arr = explode('~', trim($_REQUEST['budget']));
+			$where['budget'] = array(array('egt', intval($temp_arr[0])));
+			!empty($temp_arr[1]) && $where['budget'][] = array('lt', intval($temp_arr[1]));
+		}
 		$count = $this->dao->where($where)->getField('count(*)');
 		import("@.Paginator");
 		$limit = 10;
@@ -122,7 +128,6 @@ class InviteAction extends BaseAction {
 		$options = C('_options_');
 
 		$id = intval($_REQUEST['id']);
-		$this->dao->setInc('view', 'id='.$id);
 
 		$rs = $this->dao->find($id);
 		$rs['tender_count'] = M('Tender')->where("invite_id=".$id." and status>0")->count();
@@ -139,6 +144,7 @@ class InviteAction extends BaseAction {
 		}
 		$this->assign('info', $rs);
 
+		$this->assign('ACTION_TITLE', $rs['region'].' '.$rs['address'].' '.$rs['room_str'].' '.round($rs['area'], 1).'M2');
 		$this->assign('content', ACTION_NAME);
 		$this->display('Layout:main');
 	}

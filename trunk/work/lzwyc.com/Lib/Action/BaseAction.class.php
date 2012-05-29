@@ -1,5 +1,6 @@
 <?php
 class BaseAction extends Action{
+	public $setting;
 	/**
 	*
 	* 对象初始化时自动执行
@@ -21,6 +22,8 @@ class BaseAction extends Action{
 				}
 			}
 		}
+		$this->setting = F('Index-setting');
+		$this->assign('setting', $this->setting);
 	}
 	protected function success($msg, $url='', $timeout=2000){
 		$html  = '<script language="JavaScript" type="text/javascript">';

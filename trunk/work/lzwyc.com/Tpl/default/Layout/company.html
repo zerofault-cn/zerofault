@@ -3,8 +3,8 @@
 <head>
 	<title><notempty name="ACTION_TITLE">{$ACTION_TITLE} - </notempty> <notempty name="MODULE_TITLE">{$MODULE_TITLE} - </notempty> 乐装网</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-	<meta name="keywords" content="宜昌装修公司排名 装修报价 宜昌乐装网 装修网 装饰网 建材网 家装公司 家装网 宜昌装潢 宜昌房子装修 宜昌二手房装修" />
-	<meta name="description" content="" />
+	<meta name="keywords" content="{$info.name} {$setting.keywords}" />
+	<meta name="description" content="{$info.introduction|str_replace="\\r\\n"," ",###}" />
 	<link rel="icon" type="image/x-icon" href="../Public/Images/favicon.ico" />
 	<link rel="Shortcut Icon" type="image/x-icon" href="../Public/Images/favicon.ico" />
 	<link type="text/css" rel="stylesheet" href="../Public/Css/company_base.css" />
@@ -66,11 +66,12 @@
 		</div>
 		<div class="clear"></div>
 		<div id="footer">
-			{$info.name} 宜昌装饰 乐装网<br />
+			{$info.name} 宜昌装饰 <a href="__APP__" title="返回乐装网首页">乐装网</a><br />
 			乐装网(宜昌)信息技术有限公司 版权所有
 		</div>
 	</div>
 	<iframe id="_iframe" name="_iframe" style="width:0;height:0;display:none;"></iframe>
 	<script language="JavaScript" type="text/javascript" src="../Public/Js/myfunc.js"></script>
+	<script src="http://s96.cnzz.com/stat.php?id=4180465&web_id=4180465&show=pic1" language="JavaScript"></script>
 </body>
 </html>
