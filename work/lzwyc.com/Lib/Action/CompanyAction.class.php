@@ -8,8 +8,7 @@ class CompanyAction extends BaseAction {
 
 		$id = intval($_REQUEST['id']);
 		$info = $this->dao->relation(true)->find($id);
-		$options = C('_options_');
-		$info['qq'] = $options['admin_qq'];
+		$info['qq'] = array_shift($this->setting);
 		$this->assign('info', $info);
 		$this->assign('MODULE_TITLE', '装修公司');
 		$this->assign('ACTION_TITLE', $info['name']);
