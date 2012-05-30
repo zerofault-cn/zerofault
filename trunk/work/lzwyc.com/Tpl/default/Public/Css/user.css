@@ -1,11 +1,16 @@
 #navi {
-	line-height: 30px;
+	width: 154px;
+	line-height: 33px;
+}
+#navi a {
+	color: #3C3C3C;
 }
 #navi li {
 	text-align: center;
 }
 #navi li.curr {
-	background-color: #ff9933;
+	font-weight: bold;
+	background: url(../Images/InviteBids_14.gif) center center no-repeat;
 }
 
 #user dl {
@@ -27,8 +32,11 @@
 	width: 640px;
 	height: 28px;
 	padding-bottom: 15px;
-	color: #8C8B8B;
+	color: #3c3c3c;
 	line-height: 28px;
+}
+#user dl dd span {
+	color: #8C8B8B;
 }
 #user dl dt.company {
 	width: 300px;
@@ -51,7 +59,7 @@
 	height: 20px;
 	line-height: 20px;
 	border: 1px solid gray;
-	color: #A6A6A6;
+	color: #3c3c3c;
 	padding: 3px;
 }
 #user #table1 th, #user #table1 td {

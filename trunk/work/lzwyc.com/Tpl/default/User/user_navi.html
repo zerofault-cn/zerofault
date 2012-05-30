@@ -1,0 +1,12 @@
+<ul id="navi">
+	<if condition="$_SESSION['user_type'] eq 1">
+	<li class="<eq name='ACTION_NAME' value='index'>curr</eq>"><a href="__URL__">已发布的招标</a></li>
+	<li class="<eq name='ACTION_NAME' value='profile'>curr</eq>"><a href="__URL__/profile">修改个人资料</a></li>
+	<elseif condition="$_SESSION['user_type'] eq 2" />
+	<li class="<eq name='ACTION_NAME' value='index'>curr</eq>"><a href="__URL__">已提交的投标</a></li>
+	<li class="<eq name='ACTION_NAME' value='view_list'>curr</eq>"><a href="__URL__/view_list">您的查看记录</a></li>
+	<li class="<eq name='ACTION_NAME' value='profile'>curr</eq>"><a href="__URL__/profile">修改公司资料</a></li>
+	<li class="<eq name='ACTION_NAME' value='case_list'>curr</eq>"><a href="__URL__/case_list">装修案例管理</a></li>
+	</if>
+</ul>
+

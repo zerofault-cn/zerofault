@@ -254,14 +254,7 @@
 	font-weight: bold;
 	line-height: 24px;
 }
-#invite_detail dl sup {
-	color: #008f03;
-}
-#invite_detail dl dd div {
-	padding: 10px;
-	text-align: right;
-}
-#invite_detail dl dd div img {
+#invite_detail .invite_btn {
 	cursor: pointer;
 }
 
@@ -283,4 +276,5 @@
 	text-align: center;
 	border: none;
 	background: url(../Images/btn_bg6.gif) center center no-repeat;
+	cursor: pointer;
 }

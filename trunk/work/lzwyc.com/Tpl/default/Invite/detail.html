@@ -6,7 +6,7 @@
 		<tr>
 			<td rowspan="6" align="center">
 				<div class="tender_count">{$info.tender_count}</div>
-				<img onclick="tender({$info.id});" src="../Public/Images/tender_btn.gif"/>
+				<img class="invite_btn" onclick="myConfirm('确定投标？', '__APP__/Invite/tender/id/{$info.id}');" src="../Public/Images/tender_btn.gif"/>
 			</td>
 			<td>
 				<address>{$info.region} {$info.address} {$info.room_str} {$info.area|round=1}m<sup>2</sup></address>
@@ -25,7 +25,7 @@
 			<td>装修空间：<strong>{$info.space_str}</strong></td>
 		</tr>
 		<tr>
-			<td>联系方式：<strong>{$info.name}</strong> <empty name="info.view">(电话号码需要消耗1点积分才能查看)<input type="button" class="view_btn" value="点击查看" onclick="view({$info.id});"/><else />(电话：{$info.phone})</empty></td>
+			<td>联系方式：<strong>{$info.name}</strong> <empty name="info.view">(电话号码需要消耗1点积分才能查看)<input type="button" class="view_btn" value="点击查看" onclick="myConfirm('确定查看？', '__APP__/Invite/view/id/{$info.id}');"/><else />(电话：{$info.phone})</empty></td>
 		</tr>
 		</table>
 		
@@ -39,10 +39,5 @@
 function tender(id){
 	var random=Math.random();
 	$("#_iframe").attr("src", "__APP__/Invite/tender/id/"+id+"/random/"+random);
-}
-function view(id){
-	var random=Math.random();
-	var random=Math.random();
-	$("#_iframe").attr("src", "__APP__/Invite/view/id/"+id+"/random/"+random);
 }
 </script>

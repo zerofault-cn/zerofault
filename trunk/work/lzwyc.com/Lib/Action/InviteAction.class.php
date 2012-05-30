@@ -94,6 +94,7 @@ class InviteAction extends BaseAction {
 		empty($reserve_date) && ($reserve_date=date('Y-m-d'));
 		$phone = trim($_REQUEST['phone']);
 		empty($phone) && self::_error('联系电话必须填写！');
+		!preg_match("/^1[358]{1}[0-9]{9}$/",$phone) && self::_error('手机号码格式不正确！');
 
 		$this->dao->user_id = $user_id;
 		$this->dao->district = $district;
@@ -180,10 +181,14 @@ class InviteAction extends BaseAction {
 		}
 	}
 	public function view() {
-		$options = C('_options_');
 		//检验是否公司帐号
 		if (empty($_SESSION[C('USER_ID')]) || $_SESSION['user_type']!=2 || empty($_SESSION['company_id'])) {
 			self::error('您还没有登录公司帐号，请登录后再查看！<br /><br /><a href="'.__APP__.'/User/login">登录</a>');
+		}
+		//检查账号等级
+		$user_info = M('User')->find($_SESSION[C('USER_ID')]);
+		if ($user_info['status']<2) {
+			self::error('您的账号还未通过认证，不能查看用户信息！');
 		}
 
 		$dao = M('View');
@@ -198,7 +203,7 @@ class InviteAction extends BaseAction {
 		$month = ceil((time() - strtotime($addtime))/86400/30);
 		//检查点数
 		$count = $dao->where("company_id=".$_SESSION['company_id'])->count();
-		if ($count > $month*$options['company_point']) {
+		if ($count >= $month*$this->setting['point']) {
 			self::error('您的查看点数已用完！');
 		}
 
