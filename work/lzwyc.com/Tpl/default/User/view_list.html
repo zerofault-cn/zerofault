@@ -1,0 +1,70 @@
+<link type="text/css" rel="stylesheet" href="../Public/Css/user.css" />
+<div class="wrapper" id="user">
+	<table width="100%" border="0" cellpadding="0" cellspacing="0" bgcolor="#FFFFFF">
+	<tr>
+		<td width="16" height="50"><img src="../Public/Images/Register_03.gif"></td>
+		<td width="970" background="../Public/Images/Register_05.gif"></td>
+		<td width="14"><img src="../Public/Images/Register_07.gif"></td>
+	</tr>
+	<tr>
+		<td width="3" style="background:url(../Public/Images/Register_13.gif) left top repeat-y;"></td>
+		<td>
+			<table width="100%">
+			<tr>
+				<td width="150" valign="top">
+					<include file="./Tpl/default/User/user_navi.html"/> 
+				</td>
+				<td width="800" style="padding: 10px;">
+					<table id="table0" width="100%" cellspacing="1" bgcolor="#999999">
+					<tr bgcolor="#ededed">
+						<th>您的注册时间</th>
+						<th>有效月数</th>
+						<th>已获得查看点数</th>
+						<th>已用点数</th>
+						<th>剩余点数</th>
+					</tr>
+					<tr bgcolor="#FFFFFF" align="center">
+						<td>{$info.addtime}</td>
+						<td>{$info.month}</td>
+						<td>{$info.total_point}</td>
+						<td>{$info.used_point}</td>
+						<td>{$info.available_point}</td>
+					</tr>
+					</table>
+					<br />
+					<table id="table1" width="100%" cellspacing="1" bgcolor="#999999">
+					<tr bgcolor="#ededed">
+						<th>项目名称</th>
+						<th>联系方式</th>
+						<th width="11%" align="center">查看时间</th>
+					</tr>
+					<iterate name="list" id="item">
+					<tr bgcolor="<eq name='mod' value='1'>#FFFFE1<else/>#FFFFFF</eq>">
+						<td>
+							<a href="__APP__/Invite/detail/id/{$item.Invite.id}">{$item.Invite.region} {$item.Invite.address} {$item.Invite.room_str} {$item.Invite.area|round=1}m<sup>2</sup></a>
+						</td>
+						<td>{$item.Invite.name}：{$item.Invite.phone}</td>
+						<td align="center" nowrap="nowrap">{$item.action_time|substr=0,16}</td>
+					</tr>
+					</iterate>
+					<empty name="list">
+					<tr bgcolor="#ffffff">
+						<td colspan="3" align="center">
+						暂无记录
+						</td>
+					</empty>
+					</table>
+					<div class="pagenavi">{$page}</div>
+				</td>
+			</tr>
+			</table>
+		</td>
+		<td width="3" style="background:url(../Public/Images/Register_15.gif) right top repeat-y;"></td>
+	</tr>
+	<tr>
+		<td height="62"><img src="../Public/Images/Register_25.gif"></td>
+		<td background="../Public/Images/Register_26.gif"></td>
+		<td ><img src="../Public/Images/Register_29.gif"></td>
+	</tr>
+	</table>
+</div>

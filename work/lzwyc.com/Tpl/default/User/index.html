@@ -12,15 +12,7 @@
 			<table width="100%">
 			<tr>
 				<td width="150" valign="top">
-					<ul id="navi">
-						<if condition="$_SESSION['user_type'] eq 1">
-						<li class="curr"><a href="__URL__">已发布的招标</a></li>
-						<li><a href="__URL__/profile">修改个人资料</a></li>
-						<elseif condition="$_SESSION['user_type'] eq 2" />
-						<li class="curr"><a href="__URL__">已提交的投标</a></li>
-						<li><a href="__URL__/profile">修改公司资料</a></li>
-						</if>
-					</ul>
+					<include file="./Tpl/default/User/user_navi.html"/> 
 				</td>
 				<td width="800" style="padding: 10px;">
 					<table id="table1" width="100%" cellspacing="1" bgcolor="#999999">
@@ -49,7 +41,7 @@
 						<td align="center">{$item.tender_count}</td>
 						<td align="center" nowrap="nowrap">
 							<foreach name="item.tender_list" item="tender">
-							<a href="__APP__/Company/index/id/{$tender.company_id}">{$tender.company.name}</a><br />
+							<a href="__APP__/Company/index/id/{$tender.company_id}">{$tender.Company.name}</a><br />
 							</foreach>
 							<empty name="item.tender_list">
 							目前没有公司投标
@@ -65,38 +57,34 @@
 					</empty>
 					<elseif condition="$_SESSION['user_type'] eq 2" />
 					<tr bgcolor="#ededed">
-						<th>&nbsp;&nbsp;项目名称</th>
-						<th width="11%" align="center">招标时间</th>
-						<th width="13%" align="center">投标时间</th>
-						<th width="10%" align="center">投标状态</th>
+						<th>项目名称</th>
+						<th>预算</th>
+						<th>联系方式</th>
+						<th width="10%" align="center">招标时间</th>
+						<th width="10%" align="center">投标时间</th>
 					</tr>
 					<iterate name="list" id="item">
 					<tr bgcolor="<eq name='mod' value='1'>#FFFFE1<else/>#FFFFFF</eq>">
-						<td><a href="__APP__/Invite/detail/id/{$item.invite.id}">{$item.invite.region} {$item.invite.address} {$item.invite.room_str} {$item.invite.area|round=1}m<sup>2</sup></a>
+						<td>
+							<a href="__APP__/Invite/detail/id/{$item.Invite.id}">{$item.Invite.region} {$item.Invite.address} {$item.Invite.room_str} {$item.Invite.area|round=1}m<sup>2</sup></a>
 						</td>
+						<td>{$item.Invite.budget|round}万元</td>
+						<td><gt name="item.view" value="0">{$item.Invite.name}：{$item.Invite.phone}<else /><input type="button" class="view_btn" value="点击查看" onclick="myConfirm('查看联系方式将消耗一个查看点数，确定查看？', '__APP__/Invite/view/id/{$item.invite_id}');"/></gt></td>
 						<td align="center">
-							{$item.invite.create_time|substr=0,10}
+							{$item.Invite.create_time|substr=0,10}
 						</td>
 						<td align="center">{$item.action_time|substr=0,10}</td>
-						<td align="center">
-							<if condition="$item.status eq 0">
-							无效
-							<elseif condition="$item.status eq 1"/>
-							竞投中
-							<else />
-							中标
-							</if>
-						</td>
 					</tr>
 					</iterate>
 					<empty name="list">
-					<tr>
-						<td colspan="4" align="center">
+					<tr bgcolor="#ffffff">
+						<td colspan="5" align="center">
 						贵公司尚未投中任何招标
 						</td>
 					</empty>
 					</if>
 					</table>
+					<div class="pagenavi">{$page}</div>
 				</td>
 			</tr>
 			</table>

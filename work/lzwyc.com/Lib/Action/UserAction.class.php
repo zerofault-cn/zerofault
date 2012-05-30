@@ -13,30 +13,49 @@ class UserAction extends BaseAction {
 			redirect(__URL__.'/login');
 			exit;
 		}
+		$options = C('_options_');
 		if (2==$_SESSION['user_type']) {
 			$this->assign('ACTION_TITLE', '已投标');
 			//显示投标记录
 			$dao = D('Tender');
-			$rs = $dao->relation(true)->where("company_id=".$_SESSION['company_id'])->select();
+			$where = array(
+				'company_id' => $_SESSION['company_id']
+				);
+			$order = 'id desc';
+			$count = $dao->where($where)->count();
+			import("@.Paginator");
+			$limit = 10;
+			$p = new Paginator($count,$limit);
+			$rs = $dao->relation(true)->where($where)->order($order)->limit($p->offset.','.$p->limit)->select();
 			foreach ($rs as $i=>$row) {
-				$rs[$i]['invite']['region'] = M('Region')->where("id=".$row['invite']['district'])->getField('name');
-				$rs[$i]['invite']['room_str'] = $options['room'][$row['invite']['room']];
+				//获取联系方式查看权限
+				$rs[$i]['view'] = M('View')->where("invite_id=".$row['invite_id']." and company_id=".$_SESSION['company_id'])->count();
+				$rs[$i]['Invite']['region'] = M('Region')->where("id=".$row['Invite']['district'])->getField('name');
+				$rs[$i]['Invite']['room_str'] = $options['room'][$row['Invite']['room']];
 			}
-			$this->assign('list', $rs);
 		}
 		else {
 			$this->assign('ACTION_TITLE', '发布的招标');
 			//显示招标记录
 			$dao = M('Invite');
-			$rs = $dao->where("user_id=".$_SESSION[C('USER_ID')])->select();
+			$where = array(
+				'user_id' => $_SESSION[C('USER_ID')]
+				);
+			$order = 'id desc';
+			$count = $dao->where($where)->count();
+			import("@.Paginator");
+			$limit = 10;
+			$p = new Paginator($count,$limit);
+			$rs = $dao->where($where)->order($order)->limit($p->offset.','.$p->limit)->select();
 			foreach ($rs as $i=>$row) {
 				$rs[$i]['region'] = M('Region')->where("id=".$row['district'])->getField('name');
 				$rs[$i]['room_str'] = $options['room'][$row['room']];
 				$rs[$i]['tender_list'] = D('Tender')->relation(true)->where("invite_id=".$row['id']." and status>0")->select();
 				$rs[$i]['tender_count'] = count($rs[$i]['tender_list']);
 			}
-			$this->assign('list', $rs);
 		}
+		$this->assign('list', $rs);
+		$this->assign('page', $p->showMultiNavi());
 		$this->assign('content', ACTION_NAME);
 		$this->display('Layout:default');
 	}
@@ -103,6 +122,7 @@ class UserAction extends BaseAction {
 				$_SESSION[C('USER_ID')] = $user_id;
 				$_SESSION['user_name'] = $realname;
 				$_SESSION['user_type'] = $type;
+				$_SESSION['user_status'] = 1;
 				if (!empty($company_id)) {
 					$_SESSION['company_id'] = $company_id;
 				}
@@ -139,13 +159,14 @@ class UserAction extends BaseAction {
 			$where = array(
 				'email' => $email,
 				'password' => md5($password),
-				'status' => 1
+				'status' => array('gt', 0)
 				);
 			$rs = $this->dao->where($where)->find();
 			if (!empty($rs) && count($rs)>0) {
 				$_SESSION[C('USER_ID')] = $rs['id'];
 				$_SESSION['user_name'] = $rs['realname'];
 				$_SESSION['user_type'] = $rs['type'];
+				$_SESSION['user_status'] = $rs['status'];
 				if (2 == $rs['type']) {
 					$company_id = M('Company')->where("user_id=".$rs['id'])->getField('id');
 					if (!empty($company_id)) {
@@ -241,6 +262,69 @@ class UserAction extends BaseAction {
 		$this->assign('content', ACTION_NAME);
 		$this->display('Layout:default');
 	}
+
+	public function view_list() {
+		if (empty($_SESSION[C('USER_ID')])) {
+			redirect(__URL__.'/login');
+			exit;
+		}
+		$this->assign('ACTION_TITLE', '查看记录');
+		$dao = D('View');
+		//获取公司注册时间
+		$info = array();
+		$info['addtime'] = M('Company')->where("id=".$_SESSION['company_id'])->getField('addtime');
+		$info['month'] = ceil((time() - strtotime($info['addtime']))/86400/30);
+		$info['total_point'] = $info['month']*$this->setting['point'];
+		
+		$where = array(
+			'company_id' => $_SESSION['company_id']
+			);
+		$order = 'id desc';
+		$count = $dao->where($where)->count();
+		$info['used_point'] = $count;
+		$info['available_point'] = $info['total_point'] - $count;
+		import("@.Paginator");
+		$limit = 10;
+		$p = new Paginator($count,$limit);
+
+		$options = C('_options_');
+		$rs = $dao->relation(true)->where($where)->order($order)->limit($p->offset.','.$p->limit)->select();
+		foreach ($rs as $i=>$row) {
+			$rs[$i]['Invite']['region'] = M('Region')->where("id=".$row['Invite']['district'])->getField('name');
+			$rs[$i]['Invite']['room_str'] = $options['room'][$row['Invite']['room']];
+		}
+		$this->assign('list', $rs);
+		$this->assign('page', $p->showMultiNavi());
+
+		$this->assign('info', $info);
+		$this->assign('content', ACTION_NAME);
+		$this->display('Layout:default');
+	}
+	public function case_list() {
+		if (empty($_SESSION[C('USER_ID')])) {
+			redirect(__URL__.'/login');
+			exit;
+		}
+		$this->assign('ACTION_TITLE', '装修案例');
+		$dao = D('Case');
+		$where = array(
+			'company_id' => $_SESSION['company_id']
+			);
+		$order = 'id desc';
+		$count = $dao->where($where)->count();
+		import("@.Paginator");
+		$limit = 10;
+		$p = new Paginator($count,$limit);
+		$rs = $dao->relation(true)->where($where)->order($order)->limit($p->offset.','.$p->limit)->select();
+		foreach ($rs as $i=>$row) {
+		}
+		$this->assign('list', $rs);
+		$this->assign('page', $p->showMultiNavi());
+
+		$this->assign('content', ACTION_NAME);
+		$this->display('Layout:default');
+	}
+
 	public function logout(){
 		$_SESSION[C('USER_ID')] = 0;
 		cookie(C('USER_ID'), null);

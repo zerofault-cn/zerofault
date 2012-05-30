@@ -118,7 +118,7 @@
 					<div><if condition="$item['tender_count'] lt 3">招标中<else />招标结束</if></div>
 					<div>投标数({$item.tender_count})</div>
 				</div>
-				<div onclick="tender({$item.id});" class="btn2 <if condition="$item['tender_count'] lt 3">open<else />close</if>" >﹤投标</div>
+				<div onclick="myConfirm('确定投标？', '__APP__/Invite/tender/id/{$item.id}');" class="btn2 <if condition="$item['tender_count'] lt 3">open<else />close</if>" >﹤投标</div>
 			</dd>
 		</dl>
 		</foreach>

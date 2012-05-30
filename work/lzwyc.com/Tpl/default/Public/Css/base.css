@@ -27,10 +27,19 @@ b{font-weight:normal;}
 em, i{font-style:normal;}
 
 a, a sup{color: #008f03;text-decoration:none;}
-a:hover,a:active,a.active{color:#ffcc00;}
+a:hover, a:active, a:hover sup, a:active sup {color:#ffcc00;}
 .clear{clear:both;}
 .hide{display:none;}
 
+.red {
+	color: red;
+}
+.blue {
+	color: blue;
+}
+#welcome {
+	font-size: 12px;
+}
 #header {
 	width:1068px;
 	height:auto !important;

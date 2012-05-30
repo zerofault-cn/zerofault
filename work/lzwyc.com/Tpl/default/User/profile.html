@@ -12,15 +12,7 @@
 			<table width="100%">
 			<tr>
 				<td width="160" valign="top">
-					<ul id="navi">
-						<if condition="$_SESSION['user_type'] eq 1">
-						<li><a href="__URL__">已发布的招标</a></li>
-						<li class="curr"><a href="__URL__/profile">修改个人资料</a></li>
-						<elseif condition="$_SESSION['user_type'] eq 2" />
-						<li><a href="__URL__">已提交的投标</a></li>
-						<li class="curr"><a href="__URL__/profile">修改公司资料</a></li>
-						</if>
-					</ul>
+					<include file="./Tpl/default/User/user_navi.html"/>
 				</td>
 				<td style="padding: 10px;">
 					<form method="post" target="_iframe">
