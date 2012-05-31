@@ -1,18 +1,25 @@
-<style>
-dl {
-	position: relative;
-	padding: 5px;
-	margin: 10px 0;
-	border: 1px solid #b4b4b4;
-}
-input.delete {
-	position: absolute;
-	right: 0;
-	bottom: 0;
-}
-</style>
-<form method="post" enctype="multipart/form-data" target="_iframe">
-<input type="hidden" name="company_id" value="{$info.company_id}" />
+<link type="text/css" rel="stylesheet" href="../Public/Css/user.css" />
+<div class="wrapper" id="user">
+	<table width="100%" border="0" cellpadding="0" cellspacing="0" bgcolor="#FFFFFF">
+	<tr>
+		<td width="16" height="50"><img src="../Public/Images/Register_03.gif"></td>
+		<td width="970" background="../Public/Images/Register_05.gif"></td>
+		<td width="14"><img src="../Public/Images/Register_07.gif"></td>
+	</tr>
+	<tr>
+		<td width="3" style="background:url(../Public/Images/Register_13.gif) left top repeat-y;"></td>
+		<td>
+			<table width="100%">
+			<tr>
+				<td width="150" valign="top">
+					<include file="./Tpl/default/User/user_navi.html"/> 
+				</td>
+				<td width="800" valign="top" style="padding: 10px;">
+					<table id="table1" width="100%" cellspacing="1" bgcolor="#999999">
+					<tr>
+						<td bgcolor="#ffffff">
+
+<form id="case_form" method="post" enctype="multipart/form-data" target="_iframe">
 <input type="hidden" name="id" value="{$info.id}" />
 <table cellpadding="4" cellspacing="4">
 <tr>
@@ -34,7 +41,7 @@ input.delete {
 	<td class="img_list">
 		<foreach name="info.Attachment" item="item">
 		<dl>
-			<dt><img src="__APP__/../{$item.path}" /></dt>
+			<dt><img src="__APP__/../{$item.path}" width="600"/></dt>
 			<dd>{$item.name}<input type="button" class="delete" onclick="myConfirm('删除操作不可恢复，确认删除？', '__APP__/Attachment/delete/id/{$item.id}');" value="删除图片"/></dd>
 		</dl>
 		</foreach>
@@ -53,6 +60,22 @@ input.delete {
 </tr>
 </table>
 </form>
+						</td>
+					</tr>
+					</table>
+				</td>
+			</tr>
+			</table>
+		</td>
+		<td width="3" style="background:url(../Public/Images/Register_15.gif) right top repeat-y;"></td>
+	</tr>
+	<tr>
+		<td height="62"><img src="../Public/Images/Register_25.gif"></td>
+		<td background="../Public/Images/Register_26.gif"></td>
+		<td ><img src="../Public/Images/Register_29.gif"></td>
+	</tr>
+	</table>
+</div>
 <script type="text/javascript">
 function addItem(obj) {
 	$(obj).before('<dl><dt></dt><dd>上传图片：<input type="file" name="img_file[]" size="60"/><br />图片说明：<input type="text" name="img_name[]" value="" size="60"/></dd></dl>');

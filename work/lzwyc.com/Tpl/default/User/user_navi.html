@@ -6,7 +6,7 @@
 	<li class="<eq name='ACTION_NAME' value='index'>curr</eq>"><a href="__URL__">已提交的投标</a></li>
 	<li class="<eq name='ACTION_NAME' value='view_list'>curr</eq>"><a href="__URL__/view_list">您的查看记录</a></li>
 	<li class="<eq name='ACTION_NAME' value='profile'>curr</eq>"><a href="__URL__/profile">修改公司资料</a></li>
-	<li class="<eq name='ACTION_NAME' value='case_list'>curr</eq>"><a href="__URL__/case_list">装修案例管理</a></li>
+	<li class="<if condition="substr(ACTION_NAME,0,5) eq 'case_'">curr</if>"><a href="__URL__/case_list">装修案例管理</a></li>
 	</if>
 </ul>
 

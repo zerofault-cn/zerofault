@@ -15,7 +15,7 @@
 	<tr bgcolor="<eq name='mod' value='1'>#FFFFE1</eq>" class="<eq name='item.status' value='0'>gray</eq>">
 		<td>{$item['id']}</td>
 		<td>
-			<a href="#" target="_blank">{$item['name']}</a>
+			<a href="__APP__/../index.php/Company/detail/id/{$item.id}" target="_blank">{$item['name']}</a>
 			<if condition="is_file('__APP__/../html/Attach/company_logo/'.$item['id'].'.jpg') eq true">
 			<img id="{$item['id']}" class="thumb" name="company_logo" src="../Public/Images/picture.gif" align="absmiddle"/><span class="showThumb"><div><img src="__APP__/../html/Attach/company_logo/{$item['id']}.jpg" width="135"></div></span>
 			<else />
@@ -25,7 +25,7 @@
 		<td class="a_left">
 			<ul class="case_list">
 			<foreach name="item.Case" item="case">
-				<li><a class="view" href="{$case.url}" target="_blank">{$case.name}</a><a class="edit" href="javascript:void(0);" onclick="myConfirm('确定删除此案例？', '__URL__/delete_case/id/{$case.id}');"><img src="../Public/Images/cross.gif" /></a><a class="edit" href="__URL__/case_form/id/{$case.id}"><img src="../Public/Images/form_edit.gif" /></a></li>
+				<li><a class="view" href="__APP__/../index.php/Company/case_detail/id/{$item.id}/case_id/{$case.id}" target="_blank">{$case.name}</a><a class="edit" href="javascript:void(0);" onclick="myConfirm('确定删除此案例？', '__URL__/delete_case/id/{$case.id}');"><img src="../Public/Images/cross.gif" /></a><a class="edit" href="__URL__/case_form/id/{$case.id}"><img src="../Public/Images/form_edit.gif" /></a></li>
 			</foreach>
 				<li class="add_form"><a href="__URL__/case_form/company_id/{$item.id}" ><img src="../Public/Images/form_add.gif" /></a></li>
 			</ul>

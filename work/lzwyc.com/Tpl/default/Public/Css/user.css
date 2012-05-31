@@ -13,10 +13,10 @@
 	background: url(../Images/InviteBids_14.gif) center center no-repeat;
 }
 
-#user dl {
+#user_form dl {
 	padding: 20px 0;
 }
-#user dl dt {
+#user_form dl dt {
 	float: left;
 	width: 128px;
 	height: 28px;
@@ -27,7 +27,7 @@
 	font-weight: bold;
 	line-height: 28px;
 }
-#user dl dd {
+#user_form dl dd {
 	float: left;
 	width: 640px;
 	height: 28px;
@@ -35,10 +35,10 @@
 	color: #3c3c3c;
 	line-height: 28px;
 }
-#user dl dd span {
+#user_form dl dd span {
 	color: #8C8B8B;
 }
-#user dl dt.company {
+#user_form dl dt.company {
 	width: 300px;
 	height: 14px;
 	font-size: 14px;
@@ -47,14 +47,14 @@
 	color: #72a30c;
 	line-height: 30px;
 }
-#user dl dd.company {
+#user_form dl dd.company {
 	width: 488px;
 	height: 14px;
 }
-#user dl dd.textarea {
+#user_form dl dd.textarea {
 	height: 150px;
 }
-#user input.text {
+#user_form input.text {
 	width: 223px;
 	height: 20px;
 	line-height: 20px;
@@ -64,4 +64,15 @@
 }
 #user #table1 th, #user #table1 td {
 	padding: 5px;
+}
+#case_form dl {
+	position: relative;
+	padding: 5px;
+	margin: 10px 0;
+	border: 1px solid #b4b4b4;
+}
+#case_form input.delete {
+	position: absolute;
+	right: 0;
+	bottom: 0;
 }

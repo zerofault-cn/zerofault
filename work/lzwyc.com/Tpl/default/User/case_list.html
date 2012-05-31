@@ -14,28 +14,34 @@
 				<td width="150" valign="top">
 					<include file="./Tpl/default/User/user_navi.html"/> 
 				</td>
-				<td width="800" style="padding: 10px;">
+				<td width="800" valign="top" style="padding: 10px;">
 					<table id="table1" width="100%" cellspacing="1" bgcolor="#999999">
 					<tr bgcolor="#ededed">
 						<th>案例标题</th>
+						<th>图片数</th>
+						<th>排序</th>
 						<th>操作</th>
 					</tr>
 					<iterate name="list" id="item">
 					<tr bgcolor="<eq name='mod' value='1'>#FFFFE1<else/>#FFFFFF</eq>">
-						<td>
-							{$item.name}
+						<td>{$item.name}</td>
+						<td align="center">{$item.Attachment|count}</td>
+						<td align="center">{$item.sort}</td>
+						<td align="center" nowrap="nowrap">
+							<a href="__URL__/case_form/id/{$item.id}">编辑</a>
+							<a href="javascript:void(0);" onclick="myConfirm('删除操作不可恢复，确认删除？', '__URL__/case_delete/id/{$item.id}');">删除</a>
 						</td>
-						<td align="center" nowrap="nowrap"></td>
 					</tr>
 					</iterate>
 					<empty name="list">
 					<tr bgcolor="#ffffff">
-						<td colspan="2" align="center">
+						<td colspan="4" align="center">
 						暂无记录
 						</td>
 					</empty>
 					</table>
 					<div class="pagenavi">{$page}</div>
+					<input type="button" value="添加装修案例" onclick="window.location.href='__URL__/case_form';"/>
 				</td>
 			</tr>
 			</table>

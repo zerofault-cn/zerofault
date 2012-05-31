@@ -310,7 +310,7 @@ class UserAction extends BaseAction {
 		$where = array(
 			'company_id' => $_SESSION['company_id']
 			);
-		$order = 'id desc';
+		$order = 'sort, id desc';
 		$count = $dao->where($where)->count();
 		import("@.Paginator");
 		$limit = 10;
@@ -323,6 +323,130 @@ class UserAction extends BaseAction {
 
 		$this->assign('content', ACTION_NAME);
 		$this->display('Layout:default');
+	}
+	public function case_form() {
+		if (empty($_SESSION[C('USER_ID')])) {
+			redirect(__URL__.'/login');
+			exit;
+		}
+		$id = empty($_REQUEST['id']) ? 0 : intval($_REQUEST['id']);
+		$dao = D('Case');
+		if(!empty($_POST['submit'])) {
+			$company_id = $_SESSION['company_id'];
+			$name = trim($_REQUEST['name']);
+			''==$name && self::error('案例名称必须填写！');
+			$sort = intval($_REQUEST['sort']);
+			if ($id>0) {
+				$dao->name = $name;
+				$dao->sort = $sort;
+				if(false !== $dao->where("id=".$id)->save()) {
+					if ($_FILES['thumb']['size']>0) {
+						move_uploaded_file($_FILES['thumb']['tmp_name'], 'html/Attach/case_thumb/'.$id.'.jpg');
+					}
+					foreach ($_FILES['img_file']['size'] as $i=>$size) {
+						if($size > 0) {
+							$data = array(
+								'name' => $_REQUEST['img_name'][$i],
+								'type' => $_FILES['img_file']['type'][$i],
+								'size' => $size,
+								'path' => 'html/Attach/case_pic/'.date("YmdHis").substr(microtime(),1,7).'.'.strtolower(pathinfo($_FILES['img_file']['name'][$i], PATHINFO_EXTENSION)),
+								'model_name' => 'Case',
+								'model_id' => $id,
+								'staff_id' => $_SESSION[C('USER_ID')],
+								'upload_time' => date('Y-m-d H:i:s'),
+								'status' => 1
+								);
+							if (move_uploaded_file($_FILES['img_file']['tmp_name'][$i], $data['path'])) {
+								if (!M('Attachment')->add($data)) {
+									self::_error('Insert fail!'.(C('APP_DEBUG')?$dao->getLastSql():''));
+								}
+							}
+							else {
+								self::_error('Move '.$_FILES['img_file']['tmp_name'][$i].' to '.$data['path'].' fail!');
+							}
+						}
+					}
+					self::success('修改成功！', __URL__.'/case_list');
+				}
+				else{
+					self::error('修改失败！'.(C('APP_DEBUG')?$dao->getLastSql():''));
+				}
+			}
+			else {
+				$dao->company_id = $company_id;
+				$dao->name = $name;
+				$dao->sort = $sort;
+				$dao->status = 1;
+				if($case_id = $dao->add()) {
+					if ($_FILES['thumb']['size']>0) {
+						move_uploaded_file($_FILES['thumb']['tmp_name'], 'html/Attach/case_thumb/'.$case_id.'.jpg');
+					}
+					foreach ($_FILES['img_file']['size'] as $i=>$size) {
+						if($size > 0) {
+							$data = array(
+								'name' => $_REQUEST['img_name'][$i],
+								'type' => $_FILES['img_file']['type'][$i],
+								'size' => $size,
+								'path' => 'html/Attach/case_pic/'.date("YmdHis").substr(microtime(),1,7).'.'.strtolower(pathinfo($_FILES['img_file']['name'][$i], PATHINFO_EXTENSION)),
+								'model_name' => 'Case',
+								'model_id' => $case_id,
+								'staff_id' => $_SESSION[C('USER_ID')],
+								'upload_time' => date('Y-m-d H:i:s'),
+								'status' => 1
+								);
+							if (move_uploaded_file($_FILES['img_file']['tmp_name'][$i], $data['path'])) {
+								if (!M('Attachment')->add($data)) {
+									self::_error('Insert fail!'.(C('APP_DEBUG')?$dao->getLastSql():''));
+								}
+							}
+							else {
+								self::_error('Move '.$_FILES['img_file']['tmp_name'][$i].' to '.$data['path'].' fail!');
+							}
+						}
+					}
+					self::success('添加成功！', __URL__.'/case_list');
+				}
+				else {
+					self::error('添加失败！'.(C('APP_DEBUG')?$dao->getLastSql():''));
+				}
+			}
+			exit;
+		}
+		if ($id > 0) {
+			$this->assign('ACTION_TITLE', '编辑装修案例');
+			$info = $dao->relation(true)->find($id);
+		}
+		else {
+			$this->assign('ACTION_TITLE', '添加装修案例');
+			$info = array('id' => 0);
+			$max_sort = $dao->getField("max(sort)");//获取最大sort值，用于分配给新增记录的默认sort值
+			$info['sort'] = $max_sort+2;
+		}
+		$this->assign("info", $info);
+
+		$this->assign('content', ACTION_NAME);
+		$this->display('Layout:default');
+	}
+	public function case_delete() {
+		$this->dao = M('Case');
+
+		//delete attachment
+		$id = $_REQUEST['id'];
+		$rs = M('Attachment')->where(array('model_name'=>'Case', 'model_id'=>$id))->select();
+		empty($rs) && ($rs = array());
+		foreach ($rs as $row) {
+			@unlink($row['path']);
+			M('Attachment')->where('id='.$row['id'])->delete();
+		}
+		if($this->dao->find($id) && $this->dao->delete())
+		{
+			self::success('删除成功！');
+		}
+		else
+		{
+			self::error('发生错误！'.(C('APP_DEBUG')?$this->dao->getLastSql():''));
+		}
+
 	}
 
 	public function logout(){
