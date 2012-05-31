@@ -38,8 +38,6 @@
 #company_list td.text {
 	float: left;
 	width: 395px;
-	height: 160px;
-	overflow: hidden;
 	font-size: 12px;
 	line-height: 24px;
 }
