@@ -1,0 +1,17 @@
+<load file="../Public/Css/jquery.lightbox-0.5.css" />
+<load file="../Public/Js/jquery.lightbox-0.5.pack.js" />
+<div id="case">
+	<h2></h2>
+	<h3>{$case_info.name}</h3>
+	<p>
+		<foreach name="case_info.Attachment" item="item">
+		<a href="__APP__/../{$item.path}" title="{$item.name}"><img src="__APP__/../{$item.path}" width="600" alt="{$item.name}"/></a><br />
+		{$item.name}<br />
+		</foreach>
+	</p>
+</div>
+<script type="text/javascript">
+$(document).ready(function(){
+	$("p a").lightBox();
+});
+</script>

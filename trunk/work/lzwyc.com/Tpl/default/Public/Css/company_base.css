@@ -27,6 +27,11 @@ a:hover,a:active,a.active{color:#ffcc00;}
 .clear{clear:both;}
 .hide{display:none;}
 
+.a_right{
+	padding:3px;
+	text-align:right;
+}
+
 .wrapper {
 	width: 1000px;
 	margin: 0px auto;
@@ -167,7 +172,22 @@ h2 {
 	display: block;
 	border: 2px solid #282828;
 }
-
+#case h3 {
+	padding-top: 16px;
+	font-size: 16px;
+	font-weight: bold;
+	text-align: center;
+	background-color: #494949;
+}
+#case p {
+	padding: 0 10px 10px;
+	margin: 0;
+	text-align: center;
+	background-color: #494949;
+}
+#case p img {
+	margin-top: 20px;
+}
 #contact h2 {
 	background-image:url(../Images/company_contact.png);
 }

@@ -138,18 +138,41 @@ class CompanyAction extends BaseAction{
 			);
 
 		$id = empty($_REQUEST['id']) ? 0 : intval($_REQUEST['id']);
-		$dao = M('Case');
+		$dao = D('Case');
 		if(!empty($_POST['submit'])) {
 			$company_id = intval($_REQUEST['company_id']);
 			$name = trim($_REQUEST['name']);
 			''==$name && self::_error('案例名称必须填写！');
-			$url = trim($_REQUEST['url']);
+			$sort = intval($_REQUEST['sort']);
 			if ($id>0) {
 				$dao->name = $name;
-				$dao->url = $url;
-				if($dao->where("id=".$id)->save()) {
+				$dao->sort = $sort;
+				if(false !== $dao->where("id=".$id)->save()) {
 					if ($_FILES['thumb']['size']>0) {
 						move_uploaded_file($_FILES['thumb']['tmp_name'], 'html/Attach/case_thumb/'.$id.'.jpg');
+					}
+					foreach ($_FILES['img_file']['size'] as $i=>$size) {
+						if($size > 0) {
+							$data = array(
+								'name' => $_REQUEST['img_name'][$i],
+								'type' => $_FILES['img_file']['type'][$i],
+								'size' => $size,
+								'path' => 'html/Attach/case_pic/'.date("YmdHis").substr(microtime(),1,7).'.'.strtolower(pathinfo($_FILES['img_file']['name'][$i], PATHINFO_EXTENSION)),
+								'model_name' => 'Case',
+								'model_id' => $id,
+								'staff_id' => 0,
+								'upload_time' => date('Y-m-d H:i:s'),
+								'status' => 1
+								);
+							if (move_uploaded_file($_FILES['img_file']['tmp_name'][$i], $data['path'])) {
+								if (!M('Attachment')->add($data)) {
+									self::_error('Insert fail!'.(C('APP_DEBUG')?$dao->getLastSql():''));
+								}
+							}
+							else {
+								self::_error('Move '.$_FILES['img_file']['tmp_name'][$i].' to '.$data['path'].' fail!');
+							}
+						}
 					}
 					self::_success('修改成功！', __URL__);
 				}
@@ -160,11 +183,34 @@ class CompanyAction extends BaseAction{
 			else {
 				$dao->company_id = $company_id;
 				$dao->name = $name;
-				$dao->url = $url;
+				$dao->sort = $sort;
 				$dao->status = 1;
 				if($case_id = $dao->add()) {
 					if ($_FILES['thumb']['size']>0) {
 						move_uploaded_file($_FILES['thumb']['tmp_name'], 'html/Attach/case_thumb/'.$case_id.'.jpg');
+					}
+					foreach ($_FILES['img_file']['size'] as $i=>$size) {
+						if($size > 0) {
+							$data = array(
+								'name' => $_REQUEST['img_name'][$i],
+								'type' => $_FILES['img_file']['type'][$i],
+								'size' => $size,
+								'path' => 'html/Attach/case_pic/'.date("YmdHis").substr(microtime(),1,7).'.'.strtolower(pathinfo($_FILES['img_file']['name'][$i], PATHINFO_EXTENSION)),
+								'model_name' => 'Case',
+								'model_id' => $case_id,
+								'staff_id' => 0,
+								'upload_time' => date('Y-m-d H:i:s'),
+								'status' => 1
+								);
+							if (move_uploaded_file($_FILES['img_file']['tmp_name'][$i], $data['path'])) {
+								if (!M('Attachment')->add($data)) {
+									self::_error('Insert fail!'.(C('APP_DEBUG')?$dao->getLastSql():''));
+								}
+							}
+							else {
+								self::_error('Move '.$_FILES['img_file']['tmp_name'][$i].' to '.$data['path'].' fail!');
+							}
+						}
 					}
 					self::_success('添加成功！', __URL__);
 				}
@@ -175,7 +221,7 @@ class CompanyAction extends BaseAction{
 			exit;
 		}
 		if ($id > 0) {
-			$info = $dao->find($id);
+			$info = $dao->relation(true)->find($id);
 			$company = $this->dao->find($info['company_id']);
 			$topnavi[]=array(
 				'text'=> $company['name'],
@@ -183,7 +229,6 @@ class CompanyAction extends BaseAction{
 			$topnavi[]=array(
 				'text'=> '修改案例信息',
 				);
-			$info = $dao->find($id);
 		}
 		else {
 			$company = $this->dao->find($_REQUEST['company_id']);
@@ -206,6 +251,15 @@ class CompanyAction extends BaseAction{
 	}
 	public function delete_case() {
 		$this->dao = M('Case');
+
+		//delete attachment
+		$id = $_REQUEST['id'];
+		$rs = M('Attachment')->where(array('model_name'=>'Case', 'model_id'=>$id))->select();
+		empty($rs) && ($rs = array());
+		foreach ($rs as $row) {
+			@unlink($row['path']);
+			M('Attachment')->where('id='.$row['id'])->delete();
+		}
 		parent::_delete();
 	}
 }

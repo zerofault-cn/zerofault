@@ -15,72 +15,78 @@
 					<include file="./Tpl/default/User/user_navi.html"/>
 				</td>
 				<td style="padding: 10px;">
-					<form method="post" target="_iframe">
-					<input type="hidden" name="submit" value="1"/>
-					<dl>
-						<dt>您的登录账号：</dt>
-						<dd>
-							{$info.email}
-						</dd>
-						<dt>真实姓名：</dt>
-						<dd>
-							<input type="text" class="text" name="realname" id="realname" autocomplete="off" value="{$info.realname}"/>
-							<input type="radio" name="sex" value="1" id="sex_1" <eq name="info.sex" value="1">checked="checked"</eq>/><label for="sex_1">先生</label>
-							<input type="radio" name="sex" value="2" id="sex_2" <eq name="info.sex" value="2">checked="checked"</eq>/><label for="sex_2">女士</label>
-						</dd>
-						<dt>原始密码：</dt>
-						<dd>
-							<input type="password" class="text" name="password0" id="password0" />
-							<span>必须提供原始密码才能修改资料</span>
-						</dd>
-						<dt>新密码：</dt>
-						<dd>
-							<input type="password" class="text" name="password" id="password" />
-							<span>密码由6-20个字母、数字组成，如果不想修改请留空</span>
-						</dd>
-						<dt>确认新密码：</dt>
-						<dd>
-							<input type="password" class="text" name="password2" id="password2" />
-							<span>必须与上面设置的密码一致</span>
-						</dd>
-						<if condition="$info['type'] eq 2">
-						<dt class="company">公司名称及联系方式</dt><dd class="company"></dd>
-						<div class="clear"></div>
-						<dt>公司名称：</dt>
-						<dd>
-							<input type="text" class="text" name="name" id="name" value="{$info.company.name}"/>
-						</dd>
-						<dt>固定电话：</dt>
-						<dd>
-							<input type="text" class="text" name="telephone" id="telephone" value="{$info.company.telephone}"/>
-						</dd>
-						<dt>移动电话：</dt>
-						<dd>
-							<input type="text" class="text" name="mobile" id="mobile" value="{$info.company.mobile}"/>
-						</dd>
-						<dt>公司地址：</dt>
-						<dd>
-							<input type="text" class="text" name="address" id="address" value="{$info.company.address}"/>
-						</dd>
-						<dt>公司介绍：</dt>
-						<dd class="textarea">
-							<textarea name="introduction" cols="60" rows="8">{$info.company.introduction}</textarea>
-						</dd>
-						<dt>公司资质：</dt>
-						<dd class="textarea">
-							<textarea name="qualifications" cols="60" rows="8">{$info.company.qualifications}</textarea>
-						</dd>
-						</if>
-						<dt></dt>
-						<dd>
-							<div id="message_box" class="message_box"></div>
-						</dd>
-						<dt></dt>
-						<dd>
-							<input type="submit" name="submit" value="提交" />
-						</dd>
-					</dl>
-					</form>
+					<table id="table1" width="100%" cellspacing="1" bgcolor="#999999">
+					<tr>
+						<td bgcolor="#ffffff">
+							<form id="user_form" method="post" target="_iframe">
+							<input type="hidden" name="submit" value="1"/>
+							<dl>
+								<dt>您的登录账号：</dt>
+								<dd>
+									{$info.email}
+								</dd>
+								<dt>真实姓名：</dt>
+								<dd>
+									<input type="text" class="text" name="realname" id="realname" autocomplete="off" value="{$info.realname}"/>
+									<input type="radio" name="sex" value="1" id="sex_1" <eq name="info.sex" value="1">checked="checked"</eq>/><label for="sex_1">先生</label>
+									<input type="radio" name="sex" value="2" id="sex_2" <eq name="info.sex" value="2">checked="checked"</eq>/><label for="sex_2">女士</label>
+								</dd>
+								<dt>原始密码：</dt>
+								<dd>
+									<input type="password" class="text" name="password0" id="password0" />
+									<span>必须提供原始密码才能修改资料</span>
+								</dd>
+								<dt>新密码：</dt>
+								<dd>
+									<input type="password" class="text" name="password" id="password" />
+									<span>密码由6-20个字母、数字组成，如果不想修改请留空</span>
+								</dd>
+								<dt>确认新密码：</dt>
+								<dd>
+									<input type="password" class="text" name="password2" id="password2" />
+									<span>必须与上面设置的密码一致</span>
+								</dd>
+								<if condition="$info['type'] eq 2">
+								<dt class="company">公司名称及联系方式</dt><dd class="company"></dd>
+								<div class="clear"></div>
+								<dt>公司名称：</dt>
+								<dd>
+									<input type="text" class="text" name="name" id="name" value="{$info.Company.name}"/>
+								</dd>
+								<dt>固定电话：</dt>
+								<dd>
+									<input type="text" class="text" name="telephone" id="telephone" value="{$info.Company.telephone}"/>
+								</dd>
+								<dt>移动电话：</dt>
+								<dd>
+									<input type="text" class="text" name="mobile" id="mobile" value="{$info.Company.mobile}"/>
+								</dd>
+								<dt>公司地址：</dt>
+								<dd>
+									<input type="text" class="text" name="address" id="address" value="{$info.Company.address}"/>
+								</dd>
+								<dt>公司介绍：</dt>
+								<dd class="textarea">
+									<textarea name="introduction" cols="60" rows="8">{$info.Company.introduction}</textarea>
+								</dd>
+								<dt>公司资质：</dt>
+								<dd class="textarea">
+									<textarea name="qualifications" cols="60" rows="8">{$info.Company.qualifications}</textarea>
+								</dd>
+								</if>
+								<dt></dt>
+								<dd>
+									<div id="message_box" class="message_box"></div>
+								</dd>
+								<dt></dt>
+								<dd>
+									<input type="submit" name="submit" value="提交" />
+								</dd>
+							</dl>
+							</form>
+						</td>
+					</tr>
+					</table>
 				</td>
 			</tr>
 			</table>

@@ -6,16 +6,23 @@ class CompanyAction extends BaseAction {
 		$this->dao = D('Company');
 		parent::_initialize();
 
-		$id = intval($_REQUEST['id']);
-		$info = $this->dao->relation(true)->find($id);
-		$info['qq'] = array_shift($this->setting);
-		$this->assign('info', $info);
-		$this->assign('MODULE_TITLE', '装修公司');
-		$this->assign('ACTION_TITLE', $info['name']);
+		if ('index'!=ACTION_NAME) {
+			$id = intval($_REQUEST['id']);
+			$info = $this->dao->relation(true)->find($id);
+			if ($info['status'] >0) {
+				$info['qq'] = array_shift($this->setting);
+				$this->assign('info', $info);
+				$this->assign('MODULE_TITLE', '装修公司');
+				$this->assign('ACTION_TITLE', $info['name']);
+			}
+			else {
+				redirect(__URL__);
+				exit;
+			}
+		}
 	}
 
-	public function index($category_id=1) {
-
+	public function index() {
 		$where = array(
 			'status' => array('gt', 0)
 			);
@@ -28,24 +35,48 @@ class CompanyAction extends BaseAction {
 		$this->assign('list', $rs);
 		$this->assign('page', $p->showMultiNavi());
 
-		$this->assign('content', 'index');
+		$this->assign('content', ACTION_NAME);
 		$this->display('Layout:main');
 	}
 	public function detail() {
 		$id = intval($_REQUEST['id']);
 		$this->dao->setInc('view', 'id='.$id);
 
-		$this->assign('content', 'detail');
+		$this->assign('content', ACTION_NAME);
 		$this->display('Layout:company');
 	}
 	public function introduction() {
-		$this->assign('content', 'introduction');
+		$this->assign('content', ACTION_NAME);
 		$this->display('Layout:company');
 	}
-	public function caselist() {
-		$this->assign('content', 'case');
+	public function case_list() {
+		$id = intval($_REQUEST['id']);
+		$dao = M('Case');
+		$where = array(
+			'company_id' => $id,
+			'status' => array('gt', 0)
+			);
+		$order = 'sort, id desc';
+		$count = $dao->where($where)->count();
+		import("@.Paginator");
+		$limit = 20;
+		$p = new Paginator($count, $limit);
+		$rs = $dao->where($where)->order($order)->limit($p->offset.','.$p->limit)->select();
+		$this->assign('list', $rs);
+		$this->assign('page', $p->showMultiNavi());
+
+		$this->assign('content', ACTION_NAME);
 		$this->display('Layout:company');
 	}
+	public function case_detail() {
+		$case_id = intval($_REQUEST['case_id']);
+		$dao = D('Case');
+		$rs = $dao->relation(true)->find($case_id);
+		$this->assign('case_info', $rs);
+		$this->assign('content', ACTION_NAME);
+		$this->display('Layout:company');
+	}
+	
 	public function feedback() {
 		$dao = M('Feedback');
 		if (!empty($_POST['post'])) {
@@ -88,11 +119,11 @@ class CompanyAction extends BaseAction {
 		$this->assign('list', $rs);
 		$this->assign('page', $p->showMultiNavi());
 
-		$this->assign('content', 'feedback');
+		$this->assign('content', ACTION_NAME);
 		$this->display('Layout:company');
 	}
 	public function contact() {
-		$this->assign('content', 'contact');
+		$this->assign('content', ACTION_NAME);
 		$this->display('Layout:company');
 	}
 

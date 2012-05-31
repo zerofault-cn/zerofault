@@ -25,7 +25,7 @@ function myConfirm(str, url) {
 			}
 			return true;
 		},
-		buttons: {Yes:true, Cancel:false}
+		buttons: {'确定':true, '取消':false}
 	});
 	return true;
 }

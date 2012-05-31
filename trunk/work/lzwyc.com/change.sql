@@ -10,3 +10,5 @@ ALTER TABLE `lzwyc_feedback`
 
 ALTER TABLE `lzwyc_case`
   ADD COLUMN `company_id` int(10) unsigned NOT NULL DEFAULT 0 AFTER `id`;
+ALTER TABLE `lzwyc_case`
+  ADD COLUMN `sort` int(11) NOT NULL DEFAULT 0 AFTER `url`;
