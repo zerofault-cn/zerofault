@@ -9,7 +9,7 @@
 			<td class="text">
 				<address><a href="__URL__/detail/id/{$item.id}" target="_blank">{$item.name}</a></address>
 				办公地址：{$item.address}<br />
-				公司介绍：{$item.introduction|nl2br}<br />
+				公司介绍：{$item.introduction|mb_substr=0,240|nl2br}&nbsp;<a href="__URL__/detail/id/{$item.id}" target="_blank">[查看完整内容]</a><br />
 				电话：<em>{$item.telephone} {$item.mobile}</em><br />
 			</td>
 			<td width="82" class="ext" valign="top">
@@ -23,7 +23,6 @@
 		</tr>
 		</foreach>
 		</table>
-		
 		<div class="pagenavi">{$page}</div>
 	</div>
 </div>

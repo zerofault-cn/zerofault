@@ -16,7 +16,7 @@ class DesignerAction extends BaseAction {
 		$order = 'sort, id desc';
 		$count = $this->dao->where($where)->getField('count(*)');
 		import("@.Paginator");
-		$limit = 5;
+		$limit = 10;
 		$p = new Paginator($count, $limit);
 		$rs = $this->dao->relation(true)->where($where)->order($order)->limit($p->offset.','.$p->limit)->select();
 		foreach ($rs as $i=>$row) {
