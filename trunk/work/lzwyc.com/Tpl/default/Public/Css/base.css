@@ -1,5 +1,6 @@
 @charset "gb2312";
 body {
+	margin: 0;
 	font-size: 14px;
 	color: #464646;
 	font-family: "ËÎÌו";
@@ -113,7 +114,42 @@ a:hover, a:active, a:hover sup, a:active sup {color:#ffcc00;}
 	padding: 3px 3px 3px 22px;
 	background: url(../Images/sign_explain.png) 3px center no-repeat;
 }
+#divOnline {
+	position: fixed;
+	right: 5px;
+	top: 30px;
+	width: 145px;
+	z-index: 100;
+	font-size: 12px;
+}
+#divOnline .t {
+	height: 6px;
+	BACKGROUND: url(../Images/qq_listbg.gif) left top no-repeat;
+}
+#divOnline .c {
+	background: url(../Images/qq_listbg.gif) -155px 0px repeat-y;
+}
+#divOnline .c h2 {
+	text-align: center;
+	font-size: 14px;
+	font-weight: bold;
+	line-height: 22px;
+	color: #ffffff;
+}
+#divOnline .c ul {
+	padding: 5px 0;
+	margin:0 5px;
+	background-color: #ffffff;
+}
+#divOnline .c ul li {
+	text-align: center;
+	line-height: 24px;
+}
 
+#divOnline .b {
+	height: 6px;
+	BACKGROUND: url(../Images/qq_listbg.gif) right top no-repeat;
+}
 #main {
 	width: 1000px;
 	padding-bottom: 12px;
