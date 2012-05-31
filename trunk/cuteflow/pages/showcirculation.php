@@ -5,7 +5,7 @@
 	require_once '../language_files/language.inc.php';
 	require_once '../config/db_connect.inc.php';
 	require_once 'CCirculation.inc.php';
-	
+
 	$nCurUserID = $_SESSION["SESSION_CUTEFLOW_USERID"];
 ?>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
@@ -13,29 +13,29 @@
 <head>
 	<meta http-equiv="content-type" content="text/html; charset=<?php echo $DEFAULT_CHARSET ?>">
 	<link rel="stylesheet" href="format.css" type="text/css">
-	<style>		
+	<style>
 		tr.rowEven
 		{
 			background-color: #efefef;
 		}
-		
+
 		tr.rowUneven
 		{
 			background-color: #fff;
 		}
-		
+
 		td.highlight_bright
 		{
 			background-color: #F4E8C2;
 		}
-		
+
 		td.highlight_dark
 		{
 			background-color: #FFF7DE;
-		}		
+		}
 	</style>
 	<script src="../lib/prototype/prototype.js" type="text/javascript"></script>
-	
+
 	<!-- calendar stylesheet -->
 	<link rel="stylesheet" type="text/css" media="all" href="../lib/calendar/calendar-win2k-cold-1.css" title="win2k-cold-1" />
 	<!-- main calendar program -->
@@ -45,7 +45,7 @@
 	<!-- the following script defines the Calendar.setup helper function, which makes
 	       adding a calendar a matter of 1 or 2 lines of code. -->
 	<script type="text/javascript" src="../lib/calendar/calendar-setup.js"></script>
-	<script type="text/javascript" src="tooltip.js"></script>	
+	<script type="text/javascript" src="tooltip.js"></script>
 	<script src="../lib/RPL/Encryption/aamcrypt.js" type="text/javascript" language="JavaScript"></script>
 	<script src="../lib/RPL/Encryption/boxes.js?<?php echo time();?>" type="text/javascript" language="JavaScript"></script>
 	<script type="text/javascript">
@@ -66,7 +66,7 @@
 			var strParams	= "language=<?php echo $_REQUEST['language']; ?>&circid=" + nCircId;
 			inpdata	= strParams;
 			encodeblowfish();
-			
+
 			if (bSeperateWindow)
 			{
 				destination = "circulation_detail.php?key=" + outdata;
@@ -78,42 +78,42 @@
 				location.href = "circulation_detail.php?key=" + outdata;
 			}
 		}
-		
+
 		var nCurID;
-		
+
 		function setCurID(myID)
 		{
 			nCurID = myID;
 		}
-		
+
 		function editCirculation(nCirculationId,UserId)
-		{	
+		{
 			var strParams	= 'cfid=' + nCirculationId + '&uid='+UserId+'&language=<?php echo $_REQUEST['language']?>';
 			inpdata	= strParams;
 			encodeblowfish();
-			
+
 			location = 'editworkflow_standalone.php?key=' + outdata+'&'+Math.random();
 		}
-		
+
 		function deleteCirculation(nCirculationId, nStart)
 		{
 			Check = confirm("<?php echo $CIRCULATION_MNGT_ASKDELETE;?>");
-			if(Check == true) 
+			if(Check == true)
 			{
 				var strParams	= "cfid="+nCirculationId+"&language=<?php echo $_REQUEST['language']?>&archivemode=<?php echo $_REQUEST['archivemode'];?>&sortDirection=<?php echo $_REQUEST['sortDirection'];?>&sortby=<?php echo $_REQUEST['sortby']?>&start=<?php echo $_REQUEST['start']?>";
 				inpdata	= strParams;
 				encodeblowfish();
 				strParams = "key=" + outdata;
-				
+
 				new Ajax.Request
 				(
 					"ajax_deletecirculation.php",
 					{
-						onSuccess : function(resp) 
+						onSuccess : function(resp)
 						{
 							sortResult('<?php echo $sortDirection;?>', '<?php echo $sortby;?>', nStart);
 						},
-				 		onFailure : function(resp) 
+				 		onFailure : function(resp)
 				 		{
 				   			alert("Oops, there's been an error.");
 				 		},
@@ -122,20 +122,20 @@
 				);
 			}
 		}
-		
+
 		function archiveCirculation(nCirculationId, nArchiveBit, nStart)
 		{
 			var strParams	= 'circid=' + nCirculationId + '&archivebit=' + nArchiveBit + '&language=<?php echo $_REQUEST['language'] ?>';
-			
+
 			new Ajax.Request
 			(
 				"ajax_archive_circulation.php",
 				{
-					onSuccess : function(resp) 
+					onSuccess : function(resp)
 					{
 						sortResult('<?php echo $sortDirection;?>', '<?php echo $sortby;?>', nStart);
 					},
-			 		onFailure : function(resp) 
+			 		onFailure : function(resp)
 			 		{
 			   			alert("Oops, there's been an error.");
 			 		},
@@ -143,20 +143,20 @@
 				}
 			);
 		}
-		
+
 		function stopCirculation(nCirculationId, nStart)
 		{
 			var strParams	= 'circid=' + nCirculationId + '&language=<?php echo $_REQUEST['language'] ?>';
-			
+
 			new Ajax.Request
 			(
 				"ajax_stop_circulation.php",
 				{
-					onSuccess : function(resp) 
+					onSuccess : function(resp)
 					{
 						sortResult('<?php echo $sortDirection;?>', '<?php echo $sortby;?>', nStart);
 					},
-			 		onFailure : function(resp) 
+			 		onFailure : function(resp)
 			 		{
 			   			alert("Oops, there's been an error.");
 			 		},
@@ -167,16 +167,16 @@
 		function pauseCirculation(nHistoryId, nStart)
 		{
 			var strParams	= 'historyid='+nHistoryId+'&language=<?php echo $_REQUEST['language'] ?>';
-			
+
 			new Ajax.Request
 			(
 				"ajax_pause_circulation.php",
 				{
-					onSuccess : function(resp) 
+					onSuccess : function(resp)
 					{
 						sortResult('<?php echo $sortDirection;?>', '<?php echo $sortby;?>', nStart);
 					},
-			 		onFailure : function(resp) 
+			 		onFailure : function(resp)
 			 		{
 			   			alert("Oops, there's been an error.");
 			 		},
@@ -187,16 +187,16 @@
 		function startCirculation(nHistoryId, nStart)
 		{
 			var strParams	= 'historyid='+nHistoryId+'&language=<?php echo $_REQUEST['language'] ?>';
-			
+
 			new Ajax.Request
 			(
 				"ajax_start_circulation.php",
 				{
-					onSuccess : function(resp) 
+					onSuccess : function(resp)
 					{
 						sortResult('<?php echo $sortDirection;?>', '<?php echo $sortby;?>', nStart);
 					},
-			 		onFailure : function(resp) 
+			 		onFailure : function(resp)
 			 		{
 			   			alert("Oops, there's been an error.");
 			 		},
@@ -204,7 +204,7 @@
 				}
 			);
 		}
-		
+
 		function checkFilterView()
 		{
 			if (document.getElementById('filter').style.display == 'none')
@@ -217,30 +217,30 @@
 				document.getElementById('choose_filter').style.display = 'none';
 			}
 		}
-		
+
 		function addCustom()
 		{
 			var addMe = document.getElementById('custom_add').innerHTML;
-			
+
 			var addTest = replaceIt(addMe, 'REPLACE', nCurID);
-			
+
 			new Insertion.Bottom('custom', addTest);
-			
+
 			nCurID++;
 		}
-		
+
 		function removeCustom(nID)
 		{
 			var TableID = 'FILTERCustom_TableID--' + nID;
 			objRemove = document.getElementById(TableID);
-			
+
 			if (objRemove)
 			{
 				objRemove.parentNode.removeChild(objRemove);
 			}
 		}
-		
-		 function replaceIt(string,suchen,ersetzen) 
+
+		 function replaceIt(string,suchen,ersetzen)
 		 {
 			ausgabe = "" + string;
 			while (ausgabe.indexOf(suchen)>-1) {
@@ -250,16 +250,16 @@
 			}
 			return ausgabe;
 		 }
-		 
+
 		 function addFilter()
 		 {
 		 	WindowObjectReference = window.open(
 				'showcirculation_filter_add.php?language=<?php echo $_REQUEST['language']; ?>&nCurCuserID=<?php echo $_SESSION["SESSION_CUTEFLOW_USERID"]; ?>',
 				'add_filter',
 				'width=310,height=200,resizable,scrollbars=no,status=1'
-				);	
+				);
 		 }
-		 
+
 		 function selectDeleteFilter()
 		 {
 		 	WindowObjectReference = window.open(
@@ -268,18 +268,18 @@
 				'width=310,height=250,resizable=no,scrollbars=no,status=1'
 				);
 		 }
-		 
+
 		 function deleteFilter(nFilterID)
-		 {		 	
+		 {
 		 	new Ajax.Request
 			(
 				"showcirculation_filter_delete_write.php",
 				{
-					onSuccess : function(resp) 
+					onSuccess : function(resp)
 					{
 						document.getElementById('choose_filter').style.display = 'none';
 					},
-			 		onFailure : function(resp) 
+			 		onFailure : function(resp)
 			 		{
 			   			alert("Oops, there's been an error.");
 			 		},
@@ -287,7 +287,7 @@
 				}
 			);
 		 }
-		 
+
 		 function resetFilter()
 		 {
 		 	document.getElementById('FILTER_Name').value = "";
@@ -299,13 +299,13 @@
 			document.getElementById('FILTER_Date_End').value = "";
 			document.getElementById('FILTER_Mailinglist').value = 0;
 			document.getElementById('FILTER_Template').value = 0;
-			
+
 			for (i = 20; i >= 0; i--)
 			{
 				removeCustom(i);
 			}
 			setCurID(0);
-			
+
 			addCustom();
 		 }
 	//-->
@@ -316,7 +316,7 @@
 <tr>
 	<td align="left" style="padding-right: 20px;">
 	<span style="float: left;font-size: 14pt; color: #ffa000; font-family: Verdana; font-weight: bold;">
-		<?php 
+		<?php
 		if ($_REQUEST['archivemode'] == 0)
 		{
 			if ($_REQUEST['bOwnCirculations'])
@@ -358,26 +358,26 @@
 	$sortby			= $_REQUEST['sortby'];
 	$start			= $_REQUEST['start'];
 	$nShowRows		= $_REQUEST['nShowRows'];
-	
+
 	if ($nShowRows == "")
 	{
 		$nShowRows	= $SHOWROWS;
 	}
-	
+
 	if ($sortby == "")
 	{
-		$sortby = $DEFAULT_SORT_COL;	
+		$sortby = $DEFAULT_SORT_COL;
 	}
-	
+
 	if ($sortDirection == "")
 	{
-		$sortDirection = $SORTDIRECTION;	
+		$sortDirection = $SORTDIRECTION;
 	}
 ?>
 	<script language="javascript">
 	<!--
 		var bFirstStart = <?php echo $_REQUEST['bFirstStart']; ?>
-				
+
 		if (bFirstStart == true)
 		{
 			<?php
@@ -395,13 +395,13 @@
 			}
 			?>
 		}
-		
-		
+
+
 		function saveFilter(Value, nCurUserID)
 		 {
 		 	var strCurFilterLabel 	= Value;
 		 	var nCurUserID 			= nCurUserID;
-		 	
+
 		 	var FILTER_Name 				= document.getElementById('FILTER_Name').value;
 			var FILTER_Station 				= document.getElementById('FILTER_Station').value;
 			var FILTER_Sender				= document.getElementById('FILTER_Sender').value;
@@ -411,43 +411,43 @@
 			var FILTER_Date_End 			= document.getElementById('FILTER_Date_End').value;
 			var FILTER_Mailinglist 			= document.getElementById('FILTER_Mailinglist').value;
 			var FILTER_Template 			= document.getElementById('FILTER_Template').value;
-			
+
 			var strCustom_No1 = '&FILTER_nUserID=' + nCurUserID + '&FILTER_strLabel=' + strCurFilterLabel + '&FILTER_Name=' + FILTER_Name + '&FILTER_Sender=' + FILTER_Sender + '&FILTER_Station=' + FILTER_Station + '&FILTER_DaysInProgress_Start=' + FILTER_DaysInProgress_Start + '&FILTER_DaysInProgress_End=' + FILTER_DaysInProgress_End + '&FILTER_Date_Start=' + FILTER_Date_Start + '&FILTER_Date_End=' + FILTER_Date_End + '&FILTER_Mailinglist=' + FILTER_Mailinglist + '&FILTER_Template=' + FILTER_Template;
-			
+
 			var strCustom = '';
-			
+
 			var nMax = 1;
 			for (nIndex = 0; nIndex < nMax; nIndex++)
 			{
 				strFIELD_CurField 		= 'FILTERCustom_Field--' + nIndex;
 				strFIELD_CurOperator 	= 'FILTERCustom_Operator--' + nIndex;
 				strFIELD_CurValue 		= 'FILTERCustom_Value--' + nIndex;
-										
+
 				if (document.getElementById(strFIELD_CurValue))
 				{
 					strCurField 	= document.getElementById(strFIELD_CurField).value;
 					strCurOperator 	= document.getElementById(strFIELD_CurOperator).value;
 					strCurValue 	= document.getElementById(strFIELD_CurValue).value;
-					
+
 					strCustom = strCustom + '&' + strFIELD_CurField + '=' + strCurField;
 					strCustom = strCustom + '&' + strFIELD_CurOperator + '=' + strCurOperator;
 					strCustom = strCustom + '&' + strFIELD_CurValue + '=' + strCurValue;
-					
+
 					nMax++;
 				}
 			}
-			
+
 			//alert (strCustom_No1);
-			
+
 			new Ajax.Request
 			(
 				"showcirculation_filter_write.php",
 				{
-					onSuccess : function(resp) 
+					onSuccess : function(resp)
 					{
 						//--- nothing to do
 					},
-			 		onFailure : function(resp) 
+			 		onFailure : function(resp)
 			 		{
 			   			alert("Oops, there's been an error.");
 			 		},
@@ -455,18 +455,18 @@
 				}
 			);
 		 }
-		 
-		 
-		
+
+
+
 		function sortResult(sortDirection, strSortBy, nStart)
 		{
 			doCronjob();
-			
+
 			document.getElementById('loading').style.display = 'block';
 			var strLanguage 	= document.getElementById('language').value;
 			var nArchivemode 	= document.getElementById('archivemode').value;
 			var nAccessLevel	= document.getElementById('nAccessLevel').value;
-			
+
 			if (sortDirection == '')
 			{
 				sortDirection 	= document.getElementById('sortDirection').value;
@@ -477,7 +477,7 @@
 				document.getElementById('sortDirection').value = sortDirection;
 				document.getElementById('sortby').value = strSortBy;
 			}
-			
+
 			if (nStart == '')
 			{
 				nStart 			= document.getElementById('start').value;
@@ -486,9 +486,9 @@
 			{
 				document.getElementById('start').value = nStart;
 			}
-			
+
 			var NumRows = document.getElementById('IN_nShowRows').value;
-						
+
 			if (NumRows != '')
 			{
 				if ((document.getElementById('filter').style.display != 'block') && ('<?php echo $_REQUEST['bOwnCirculations'] ?>' != 1))
@@ -497,12 +497,12 @@
 					(
 						"showcirculation_sorted.php",
 						{
-							onSuccess : function(resp) 
+							onSuccess : function(resp)
 							{
 								document.getElementById('div_content').innerHTML = resp.responseText;
 								document.getElementById('loading').style.display = 'none';
 							},
-					 		onFailure : function(resp) 
+					 		onFailure : function(resp)
 					 		{
 					   			alert("Oops, there's been an error.");
 					 		},
@@ -529,94 +529,103 @@
 						FILTER_Station = <?php echo $_SESSION["SESSION_CUTEFLOW_USERID"] ?>;
 						bOwnCirculations = 1;
 					}
-					
+
 					var strCustom = '&bFilterOn=1&FILTER_Name=' + FILTER_Name + '&FILTER_Station=' + FILTER_Station + '&FILTER_Sender='+ FILTER_Sender+'&FILTER_DaysInProgress_Start=' + FILTER_DaysInProgress_Start + '&FILTER_DaysInProgress_End=' + FILTER_DaysInProgress_End + '&FILTER_Date_Start=' + FILTER_Date_Start + '&FILTER_Date_End=' + FILTER_Date_End + '&FILTER_Mailinglist=' + FILTER_Mailinglist + '&FILTER_Template=' + FILTER_Template + '&bOwnCirculations=' + bOwnCirculations;
-					
+
 					var nMax = 1;
 					for (nIndex = 0; nIndex < nMax; nIndex++)
 					{
 						strFIELD_CurField 		= 'FILTERCustom_Field--' + nIndex;
 						strFIELD_CurOperator 	= 'FILTERCustom_Operator--' + nIndex;
 						strFIELD_CurValue 		= 'FILTERCustom_Value--' + nIndex;
-												
+
 						if (document.getElementById(strFIELD_CurValue))
 						{
 							strCurField 	= document.getElementById(strFIELD_CurField).value;
 							strCurOperator 	= document.getElementById(strFIELD_CurOperator).value;
 							strCurValue 	= document.getElementById(strFIELD_CurValue).value;
-							
+
 							strCustom = strCustom + '&' + strFIELD_CurField + '=' + strCurField;
 							strCustom = strCustom + '&' + strFIELD_CurOperator + '=' + strCurOperator;
 							strCustom = strCustom + '&' + strFIELD_CurValue + '=' + strCurValue;
-							
+
 							nMax++;
 						}
 					}
-					
+
 					new Ajax.Request
 					(
 						"showcirculation_sorted.php",
 						{
-							onSuccess : function(resp) 
+							onSuccess : function(resp)
 							{
 								document.getElementById('div_content').innerHTML = resp.responseText;
 								document.getElementById('loading').style.display = 'none';
 							},
-					 		onFailure : function(resp) 
+					 		onFailure : function(resp)
 					 		{
 					   			alert("Oops, there's been an error.");
 					 		},
 					 		parameters : "language=" + strLanguage + "&archivemode=" + nArchivemode + "&start=" + nStart + "&nShowRows=" + NumRows + "&sortDirection=" + sortDirection + "&sortby=" + strSortBy + "&nAccessLevel=" + nAccessLevel + strCustom
 						}
 					);
-					
+
 				}
 			}
 			else
 			{
 				document.getElementById('loading').style.display = 'none';
 			}
-		}		
-		
+		}
+
 		var objTimer = null;
-		function changeRows()
-		{			
+		function changeRows(numRows)
+		{
+			var oStart = document.getElementById('nStart');
+			oStart.length = 0;
+			for (var i=0; i<100; i++) {
+				oStart.options.add(new Option(i*numRows+1, i*numRows+1));
+			}
 	        if (objTimer) {
 				window.clearTimeout(objTimer);
 			}
 			objTimer = window.setTimeout("doChangeRows()", 500);
 		}
-		
+		function changePage(start) {
+			var sortDirection 	= document.getElementById('sortDirection').value;
+			var strSortBy 		= document.getElementById('sortby').value;
+			sortResult(sortDirection, strSortBy, start);
+		}
 		function doChangeRows()
 		{
 			var sortDirection 	= document.getElementById('sortDirection').value;
 			var strSortBy 		= document.getElementById('sortby').value;
 			sortResult(sortDirection, strSortBy, '1');
 		}
-		
+
 		var bReloadMe = 'false';
 		var sMyTimeout = <?php echo $AUTO_RELOAD_SEC; ?> * 1000;
-		
+
 		function reload_loadpage()
 		{
 			sortDirection 	= document.getElementById('sortDirection').value;
 			strSortBy 		= document.getElementById('sortby').value;
 			nStart 			= document.getElementById('start').value;
-			
+
 			if (bReloadMe == 'true')
 			{
 				sortResult(sortDirection, strSortBy, nStart);
 			}
 			reload_timeout(bReloadMe);
 		}
-		
+
 		function reload_loadnopage()
-		{			
+		{
 			reload_timeout(bReloadMe);
 		}
-		
+
 		function reload_timeout(bRL)
-		{			
+		{
 			if(bRL == 'true')
 			{
 				window.setTimeout("reload_loadpage()", sMyTimeout);
@@ -626,21 +635,21 @@
 				window.setTimeout("reload_loadnopage()", sMyTimeout);
 			}
 		}
-		
+
 		function reload_activate()
-		{			
+		{
 			if(bReloadMe == 'false')
 			{
 				new Ajax.Request
 				(
 					"showcirculation_setcookie.php",
 					{
-						onSuccess : function(resp) 
+						onSuccess : function(resp)
 						{
 							bReloadMe = 'true';
 							reload_timeout(bReloadMe);
 						},
-				 		onFailure : function(resp) 
+				 		onFailure : function(resp)
 				 		{
 				   			alert("Oops, there's been an error.");
 				 		},
@@ -654,12 +663,12 @@
 				(
 					"showcirculation_setcookie.php",
 					{
-						onSuccess : function(resp) 
+						onSuccess : function(resp)
 						{
 							bReloadMe = 'false';
 							reload_timeout(bReloadMe);
 						},
-				 		onFailure : function(resp) 
+				 		onFailure : function(resp)
 				 		{
 				   			alert("Oops, there's been an error.");
 				 		},
@@ -667,62 +676,62 @@
 					}
 				);
 			}
-		}	
-		
-		
+		}
+
+
 		function changeFilter(nFilterID)
 		 {
 		 	new Ajax.Request
 			(
 				"showcirculation_filter_load.php",
 				{
-					onSuccess : function(resp) 
+					onSuccess : function(resp)
 					{
 						var response = resp.responseText;
 						document.getElementById('choose_filter').style.display = 'none';
 						document.getElementById('filter').innerHTML = response;
 					},
-			 		onFailure : function(resp) 
+			 		onFailure : function(resp)
 			 		{
 			   			alert("Oops, there's been an error.");
 			 		},
 			 		parameters : "nFilterID=" + nFilterID + "&language=<?php echo $_REQUEST['language']; ?>"
 				}
 			);
-		 }	
-		
-		
+		 }
+
+
 		function editCurCirculation(strAction)
 		{
 			if (document.getElementById('bFilterOn').checked)
 			{
 				alert('ok');
-				
+
 			}
 		}
 	//-->
 	</script>
-<?php	
-	
+<?php
+
 	$objCirculation = new CCirculation();
-	
+
 	$arrAllUsers 		= $objCirculation->getAllUsers();
 	$arrActiveUsers		= $objCirculation->getAllUsers(false);
 	$arrAllMailingLists	= $objCirculation->getAllMailingLists();
 	$arrAllInputFields	= $objCirculation->getMyInputFields();
 	$arrAllTemplates	= $objCirculation->getAllTemplates();
-	
+
 	if (($_REQUEST["archivemode"] == 0) && !$_REQUEST['bOwnCirculations'])
 	{
 		?>
 		<table width="90%" cellspacing="0" cellpadding="0">
 		<tr>
-			<?php 
+			<?php
 			if (($_SESSION["SESSION_CUTEFLOW_ACCESSLEVEL"] == 2)||($_SESSION["SESSION_CUTEFLOW_ACCESSLEVEL"] == 8))
 			{
 				// check if an extension exists
 				$extensions 	= $objCirculation->getExtensionsByHookId('CF_ADD_CIRCULATION');
-				
+
 				if ($extensions)
 				{
 					$extension 	= $extensions[0]; // only one extension is possible here
@@ -730,7 +739,7 @@
 					$Extension	= $extension['Extension'];
 					$hooks		= $Extension->hook;
 					$hook		= $hooks[0];
-					
+
 					$destination			= $path.$hook->destination;
 					$destination			.= $objCirculation->getExtensionParams($hook);
 					$strEncryptedLinkURL	= $destination;
@@ -762,16 +771,23 @@
 				<?php
 			}
 			?>
-			
+
 			<td style="border: 1px solid #aaa; background: #ccc; border-right: 0px; padding-left: 3px; padding-right: 3px;" align="center" width="120">
 				<?php echo $CONFIG_ROWS_PER_PAGE; ?>:
 			</td>
-			<td align="center" style="border: 1px solid #aaa; border-left: 0px; background: #ccc; width: 60px;">
-				<select onChange="changeRows()" style="border: 1px solid #999; width: 60px; padding: 1px; font-family: arial; font-size: 12px;" name="IN_nShowRows" id="IN_nShowRows">
+			<td align="center" style="border: 1px solid #aaa; border-left: 0px; background: #ccc; width: 160px;">
+				<select onChange="changeRows(this.value)" style="border: 1px solid #999; width: 60px; padding: 1px; font-family: arial; font-size: 12px;" name="IN_nShowRows" id="IN_nShowRows">
 					<option value="10" <?php if($nShowRows == 10){ echo 'selected'; } ?>>10</option>
 					<option value="20" <?php if($nShowRows == 20){ echo 'selected'; } ?>>20</option>
 					<option value="50" <?php if($nShowRows == 50){ echo 'selected'; } ?>>50</option>
 					<option value="100" <?php if($nShowRows == 100){ echo 'selected'; } ?>>100</option>
+				</select>
+				Start:<select onChange="changePage(this.value)" style="border: 1px solid #999; width: 60px; padding: 1px; font-family: arial; font-size: 12px;" id="nStart">
+					<?php
+					for ($i=0; $i<20; $i++) {
+						echo '<option value="'.($i*$nShowRows+1).'">'.($i*$nShowRows+1).'</option>';
+					}
+					?>
 				</select>
 			</td>
 		</tr>
@@ -783,8 +799,8 @@
 		?>
 		<table width="90%" cellspacing="0" cellpadding="0">
 		<tr>
-			
-			<td align="left" width="80%">
+
+			<td align="left" width="70%">
 				<?php
 					$strParams = 'language='.$_REQUEST["language"];
 					$strParams .= '&archivemode=0';
@@ -793,30 +809,37 @@
 					$strParams .= '&sortby=COL_CIRCULATION_PROCESS_DAYS';
 					$strParams .= '&sortDirection=DESC';
 					$strParams .= '&uid='.$nCurUserID;
-					
+
 					$strEncyrptedParams		= $objURL->encryptURL($strParams);
 					$strEncryptedFeedURL	= 'todo_feed.php?key='.$strEncyrptedParams;
 				?>
 				<img src="../images/feed.png" border="0"/> [ <a href="<?php echo $strEncryptedFeedURL; ?>"> RSS </a> ]
 			</td>
-    			
+
 			<td style="border: 1px solid #aaa; background: #ccc; border-right: 0px; padding-left: 3px; padding-right: 3px;" align="center" width="120">
 				<?php echo $CONFIG_ROWS_PER_PAGE; ?>:
 			</td>
-			<td align="center" style="border: 1px solid #aaa; border-left: 0px; background: #ccc; width: 60px;">
+			<td align="center" style="border: 1px solid #aaa; border-left: 0px; background: #ccc; width: 160px;">
 				<select onChange="changeRows()" style="border: 1px solid #999; width: 60px; padding: 1px; font-family: arial; font-size: 12px;" name="IN_nShowRows" id="IN_nShowRows">
 					<option value="10" <?php if($nShowRows == 10){ echo 'selected'; } ?>>10</option>
 					<option value="20" <?php if($nShowRows == 20){ echo 'selected'; } ?>>20</option>
 					<option value="50" <?php if($nShowRows == 50){ echo 'selected'; } ?>>50</option>
 					<option value="100" <?php if($nShowRows == 100){ echo 'selected'; } ?>>100</option>
 				</select>
+				Start:<select onChange="changePage(this.value)" style="border: 1px solid #999; width: 60px; padding: 1px; font-family: arial; font-size: 12px;" id="nStart">
+					<?php
+					for ($i=0; $i<20; $i++) {
+						echo '<option value="'.($i*$nShowRows+1).'">'.($i*$nShowRows+1).'</option>';
+					}
+					?>
+				</select>
 			</td>
 		</tr>
 		</table>
 		<?php
 	}
-	
-	if(isset($_COOKIE['nReloadTimeout'])) 
+
+	if(isset($_COOKIE['nReloadTimeout']))
 	{// cookie is set
 		if ($_COOKIE['nReloadTimeout'] == 'true')
 		{
@@ -829,10 +852,10 @@
 			<?php
 		}
 	}
-	
-	
+
+
 	?>
-	
+
 	<script language="javascript">
 	function getPosition(element)
 	{
@@ -840,19 +863,19 @@
 		var tagname = '';
 		var x		= 0;
 		var y		= 0;
-		
+
 		while ( (typeof(elem) == "object") && (typeof(elem.tagName) != "undefined") )
-		{		    	
+		{
 	    	y 		+= elem.offsetTop;
 	    	x 		+= elem.offsetLeft;
 	    	tagname = elem.tagName.toUpperCase();
-			
-			
+
+
 			if (tagname == "BODY")
 			{
 				elem = 0;
 			}
-			
+
 			if (typeof(elem) == "object")
 			{
 				if (typeof(elem.offsetParent) == "object")
@@ -867,7 +890,7 @@
 		position.y	= y;
 		return position;
 	}
-	
+
 	function show_filters()
 	{
 		if (document.getElementById('choose_filter').style.display == 'block')
@@ -877,11 +900,11 @@
 		else
 		{
 			var testttt = document.getElementById('select_filter');
-			
+
 			var MyPos 	= getPosition(testttt);
 			var MyX		= (MyPos.x) - 4;
 			var MyY		= (MyPos.y) + 15;
-			
+
 			document.getElementById('choose_filter').style.left 	= MyX + 'px';
 			document.getElementById('choose_filter').style.top 		= MyY + 'px';
 
@@ -889,13 +912,13 @@
 			(
 				"showcirculation_filter_select.php",
 				{
-					onSuccess : function(resp) 
+					onSuccess : function(resp)
 					{
 						var response = resp.responseText;
 						document.getElementById('choose_filter').innerHTML = response;
 						document.getElementById('choose_filter').style.display = 'block';
 					},
-			 		onFailure : function(resp) 
+			 		onFailure : function(resp)
 			 		{
 			   			alert("Oops, there's been an error.");
 			 		},
@@ -905,18 +928,18 @@
 		}
 	}
 	</script>
-	
+
 	<div id="choose_filter" style="display: none; position: absolute;">
-	
+
 	</div>
-	
-	
+
+
     <br><table width="90%" cellspacing="0" cellpadding="0">
         <tr>
             <td align="left">
                 <form action="showcirculation.php" method="post">
                     <table style="border: 1px solid #aaa; width: 100%;" cellspacing="0" cellpadding="0">
-                    <tr>	
+                    <tr>
                     	<td style="padding: 1px; background: #ccc; " align="center" valign="top" width="15" valign="middle">
                         	<input type="checkbox" name="bFilterOn" id="bFilterOn" value="1" onClick="checkFilterView();" <?php if ($_REQUEST['bFilterOn']) { echo 'checked'; } ?>>
                         </td>
@@ -978,7 +1001,7 @@
 	                    							?>
 	                    							<option value="<?php echo $nUserID ?>" <?php if ($nUserID == $_SESSION['SESSION_CUTEFLOW_USERID']) echo 'selected' ?>><?php echo $strUsername ?></option>
 	                    							<?php
-	                    						}                        							
+	                    						}
 	                    					?>
                     					</select>
                     					<?php
@@ -996,7 +1019,7 @@
 	                    							?>
 	                    							<option value="<?php echo $nUserID ?>"><?php echo $strUsername ?></option>
 	                    							<?php
-	                    						}                        							
+	                    						}
 	                    					?>
                     					</select>
                     					<?php
@@ -1016,15 +1039,15 @@
                     						for($nIndex = 0; $nIndex < $nMax; $nIndex++)
                     						{
                     							$arrUser 		= $arrActiveUsers[$nIndex];
-                    							
+
                     							if ($arrUser["nAccessLevel"] > 0)
                     							{
 	                    							$nUserID 		= $arrUser['nID'];
 	                    							$strUsername 	= $arrUser['strUserId'];
-	                    							
+
 	                    							echo '<option value="'.$nUserID.'">'.$strUsername.'</option>';
                     							}
-                    						}                        							
+                    						}
                     					?>
                     				</select>
                     			</td>
@@ -1059,7 +1082,7 @@
                     					</td>
                     				</tr>
                     				</table>
-                    				
+
                     				 <script type="text/javascript">
                     				 Calendar.setup(
 									    {
@@ -1094,7 +1117,7 @@
                     							$strTitle 	= $arrRow['strName'];
 
                     							echo '<option value="'.$strTitle.'">'.$strTitle.'</option>';
-                    						}                        							
+                    						}
                     					?>
                     				</select>
                     			</td>
@@ -1115,7 +1138,7 @@
                     							$strTitle 	= $arrRow['strName'];
 
                     							echo '<option value="'.$nID.'">'.$strTitle.'</option>';
-                    						}                        							
+                    						}
                     					?>
                     				</select>
                     			</td>
@@ -1126,33 +1149,33 @@
                     			</td>
                     			<td valign="top" align="left">
                     				<div id="custom">
-                    				
+
                     				<script language="javascript">
                     					function startExtendedFilter(nMyID)
                     					{
                     						var strCurID = 'FILTERCustom_Field--' + nMyID;
-                    						
+
                     						var nCurInputFieldID = document.getElementById(strCurID).value;
-                    						                    						
+
                     						var strMyParameters = "nCurInputFieldID=" + nCurInputFieldID + "&nCurRunningID=" + nMyID + '&language=<?php echo $_REQUEST['language'] ?>';
-                    						
+
                     						new Ajax.Request
 											(
 												"showcirculation_extendedfilter.php",
 												{
-													onSuccess : function(resp) 
+													onSuccess : function(resp)
 													{
 														if (resp.responseText != '')
 														{
-															var strCurDiv = 'extendedDIV--' +nMyID 
+															var strCurDiv = 'extendedDIV--' +nMyID
 															document.getElementById(strCurDiv).innerHTML = resp.responseText;
 														}
 														else
 														{
-															
+
 														}
 													},
-											 		onFailure : function(resp) 
+											 		onFailure : function(resp)
 											 		{
 											   			alert("Oops, there's been an error.");
 											 		},
@@ -1161,12 +1184,12 @@
 											);
                     					}
                     				</script>
-                    				
+
                     				<?php
                     					if (!$_REQUEST['bSearch'])
                     					{
                     						?>
-                    						
+
                     						<table cellspacing="0" cellpadding="0" id="FILTERCustom_TableID--0">
 	                        				<tr>
 	                        					<td valign="middle" align="left" nowrap="nowrap" width="420">
@@ -1180,9 +1203,9 @@
 			                        							$arrRow 	= $arrAllInputFields[$nIndex];
 			                        							$nID 		= $arrRow['nID'];
 			                        							$strTitle 	= $arrRow['strName'];
-			                        							
+
 			                        							echo '<option value="'.$nID.'">'.$strTitle.'</option>';
-			                        						}                        							
+			                        						}
 			                        					?>
 			                        				</select>
 			                        				<select style="width: 90px; font-family: arial; font-size: 12px;" name="FILTERCustom_Operator--0" id="FILTERCustom_Operator--0">
@@ -1191,11 +1214,11 @@
 			                        					<option value="2">&lt;</option>
 			                        					<option value="4">&lt;=</option>
 			                        					<option value="3">&gt;</option>
-			                        					<option value="5">&gt;=</option>	
-			                        					<option value="6">~ (like)</option>		                        					
+			                        					<option value="5">&gt;=</option>
+			                        					<option value="6">~ (like)</option>
 			                        				</select>
 			                        				</div>
-			                        				
+
 	                        						<div id="extendedDIV--0" style="float:left; margin: 0px 4px 0px 2px;">
 	                        						<input type="text" name="FILTERCustom_Value--0" id="FILTERCustom_Value--0" style="border: 1px solid #999; width: 150px; padding: 1px; font-family: arial; font-size: 12px;">
 	                        						</div>
@@ -1205,24 +1228,24 @@
 	                        					</td>
 	                        				</tr>
 	                        				</table>
-                    						
+
                     						<?php
                     						$nIndexValues = 0;
                     					}
                     					else
-                    					{                        					
+                    					{
 											$nIndexValues 		= 0;
 											while(list($key, $value) = each($_REQUEST))
 											{
 												$arrCurKey = split('_', $key);
-												
+
 												if ($arrCurKey[0] == 'FILTERCustom')
 												{
 													$arrPart2 = split('--', $arrCurKey[1]);
-													
+
 													$strType 			= $arrPart2[0];
 													$nFILTERCustomID 	= $arrPart2[1];
-													
+
 													switch($strType)
 													{
 														case 'Field':
@@ -1234,19 +1257,19 @@
 														case 'Value':
 															$arrFILTERCustom[$nFILTERCustomID]['strValue'] = $value;
 															break;
-													}														
+													}
 													$nIndexValues++;
-												}		
+												}
 											}
-											
+
 											$nTableID = 0;
                         					foreach($arrFILTERCustom as $arrCurFILTERCustom)
                         					{
                         						$nInputFieldID	= $arrCurFILTERCustom['nInputFieldID'];
                         						$nOperatorID	= $arrCurFILTERCustom['nOperatorID'];
                         						$strValue		= $arrCurFILTERCustom['strValue'];
-                        						?>	                        						
-                        						
+                        						?>
+
                         						<table cellspacing="0" cellpadding="0" id="FILTERCustom_TableID--<?php echo $nTableID; ?>">
 		                        				<tr>
 		                        					<td valign="middle" align="left" width="420">
@@ -1260,7 +1283,7 @@
 					                        							$arrRow 	= $arrAllInputFields[$nIndex];
 					                        							$nID 		= $arrRow['nID'];
 					                        							$strTitle 	= $arrRow['strName'];
-					                        							
+
 					                        							if($nInputFieldID == $nID)
 					                        							{
 					                        								echo '<option value="'.$nID.'" selected>'.$strTitle.'</option>';
@@ -1269,7 +1292,7 @@
 					                        							{
 					                        								echo '<option value="'.$nID.'">'.$strTitle.'</option>';
 					                        							}
-					                        						}                        							
+					                        						}
 					                        					?>
 					                        				</select>
 					                        				<select style="width: 90px; font-family: arial; font-size: 12px;" name="FILTERCustom_Operator--<?php echo $nTableID; ?>" id="FILTERCustom_Operator--<?php echo $nTableID; ?>">
@@ -1294,7 +1317,7 @@
 		                        					</td>
 		                        				</tr>
 		                        				</table>
-                        						
+
                         						<?php
                         						$nTableID++;
                         					}
@@ -1303,7 +1326,7 @@
                     				<script language="javascript">
                     					setCurID(<?php echo ($nIndexValues+1); ?>);
                     				</script>
-                    				
+
                     				</div>
                     			</td>
                     		</tr>
@@ -1325,9 +1348,9 @@
                     <input type="hidden" name="start" id="start" value="1">
                     <input type="hidden" name="nAccessLevel" id="nAccessLevel" value="<?php echo $_SESSION["SESSION_CUTEFLOW_ACCESSLEVEL"]; ?>">
                 </form>
-                
+
                 <div id="custom_add" style="display: none;">
-					
+
 					<table cellspacing="0" cellpadding="0" id="FILTERCustom_TableID--REPLACE">
         				<tr>
         					<td valign="middle" align="left" nowrap="nowrap" width="420">
@@ -1341,9 +1364,9 @@
 	                							$arrRow 	= $arrAllInputFields[$nIndex];
 	                							$nID 		= $arrRow['nID'];
 	                							$strTitle 	= $arrRow['strName'];
-	                							
+
 	                							echo '<option value="'.$nID.'">'.$strTitle.'</option>';
-	                						}                        							
+	                						}
 	                					?>
 	                				</select>
 	                				<select style="width: 90px; font-family: arial; font-size: 12px;" name="FILTERCustom_Operator--REPLACE" id="FILTERCustom_Operator--REPLACE">
@@ -1356,7 +1379,7 @@
 	                					<option value="6">~ (like)</option>
 	                				</select>
                 				</div>
-                				
+
         						<div id="extendedDIV--REPLACE" style="float:left; margin: 0px 4px 0px 2px;">
         						<input type="text" name="FILTERCustom_Value--REPLACE" id="FILTERCustom_Value--REPLACE" style="border: 1px solid #999; width: 150px; padding: 1px; font-family: arial; font-size: 12px;">
         						</div>
@@ -1367,9 +1390,9 @@
         					</td>
         				</tr>
         			</table>
-        			
+
 				</div>
-				
+
             </td>
         </tr>
     </table>
@@ -1383,20 +1406,20 @@
 	<br><br>
 </div>
 	<script type="text/javascript">
-		
+
 		function doCronjob()
 		{
 			new Ajax.Request
 			(
 				"cronjob_check_substitute.php",
 				{
-					onSuccess : function(resp) 
+					onSuccess : function(resp)
 					{
-						
+
 					},
-			 		onFailure : function(resp) 
+			 		onFailure : function(resp)
 			 		{
-			   			
+
 			 		}
 				}
 			);
