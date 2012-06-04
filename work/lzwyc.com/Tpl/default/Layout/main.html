@@ -7,9 +7,11 @@
 	<meta name="description" content="{$setting.description}" />
 	<link rel="icon" type="image/x-icon" href="../Public/Images/favicon.ico" />
 	<link rel="Shortcut Icon" type="image/x-icon" href="../Public/Images/favicon.ico" />
-	<link type="text/css" rel="stylesheet" href="../Public/Css/base.css" />
-	<link type="text/css" rel="stylesheet" href="../Public/Css/jquery-impromptu.css"/>
-	<script language="JavaScript" type="text/javascript" src="../Public/Js/jquery-1.4.2.min.js"></script>
+
+	<load file="../Public/Css/base.css" />
+	<load file="../Public/Css/jquery-impromptu.css" />
+	<load file="../Public/Js/jquery-1.4.2.min.js" />
+	<load file="../Public/Js/jquery-impromptu.1.6.js"/>
 	<script language="JavaScript" type="text/javascript">
 	var _APP_ = '__APP__';
 	var _URL_ = '__URL__';
@@ -18,61 +20,72 @@
 	</script>
 </head>
 <body>
-<layout name="Public:header" cache="0" />
-<div id="main">
-	<div class="left">
-	<layout name="$content" cache="0" />
+	<div class="Qlist" id="divOnline">
+		<div class="t"></div>
+		<div class="c">
+			<h2>在线客服</h2>
+			<ul>
+				<li><a href="http://wpa.qq.com/msgrd?v=3&amp;uin=272468213&amp;site=qq&amp;menu=yes" title="联系宜昌乐装网">客服QQ <img border="0" src="http://wpa.qq.com/pa?p=2:272468213:42" alt="QQ交谈" align="absmiddle"/></a></li>
+				<li><a href="http://wpa.qq.com/msgrd?v=3&amp;uin=1518985666&amp;site=qq&amp;menu=yes" title="联系宜昌乐装网">客服QQ <img border="0" src="http://wpa.qq.com/pa?p=2:1518985666:42" alt="QQ交谈" align="absmiddle"/></a></li>
+				<li>客服电话:0717-6032333</li>
+			</ul>
+		</div>
+		<div class="b"></div>
 	</div>
-	<div class="right">
-		<img src="../Public/Images/flow_1.png" />
-		<if condition="MODULE_NAME eq 'Company' or MODULE_NAME eq 'Designer'">
-		<img src="../Public/Images/right_form_bg1.png" />
-		<form action="__APP__/Invite">
-		<table>
-		<tr>
-			<td>称呼：</td>
-			<td><input type="text" class="text" name="name" size="10" value="{$_SESSION['user_name']}"/></td>
-		</tr>
-		<tr>
-			<td>电话：</td>
-			<td><input type="text" class="text" name="phone" size="11"/></td>
-		</tr>
-		<tr>
-			<td width="40" nowrap="nowrap">地点：</td>
-			<td><select class="district" name="district"><option value="0">请选择</option>{$district_opts}</select></td>
-		</tr>
-		<tr>
-			<td>面积：</td>
-			<td><input type="text" name="area" size="6"/> m<sup>2<sup></td>
-		</tr>
-		<tr>
-			<td>预算：</td>
-			<td><input type="text" name="budget" size="6"/> 万元</td>
-		</tr>
-		<tr>
-			<td>户型：</td>
-			<td><select class="room" name="room"><option value="0">请选择</option>{$room_options}</select></td>
-		</tr>
-		<tr>
-			<td valign="top">要求：</td>
-			<td><textarea name="demand" rows="2" cols="36"></textarea></td>
-		</tr>
-		<tr>
-			<td colspan="2" class="btn">
-				<input type="image" class="image" src="../Public/Images/right_form_btn.png" />
-			</td>
-		</tr>
-		</table>
-		</form>
-		<img src="../Public/Images/right_form_bg3.png" />
-		</if>
-		<img src="../Public/Images/right_btm.png" /></div>
-	<div class="clear"></div>
-</div>
-<layout name="Public:footer" cache="0" />
-<iframe id="_iframe" name="_iframe" style="width:0;height:0;display:none;"></iframe>
-<script language="JavaScript" type="text/javascript" src="../Public/Js/jquery-impromptu.1.6.js"></script>
-<script language="JavaScript" type="text/javascript" src="../Public/Js/myfunc.js"></script>
-<script src="http://s96.cnzz.com/stat.php?id=4180465&web_id=4180465&show=pic1" language="JavaScript"></script>
+	<layout name="Public:header" cache="0" />
+	<div id="main">
+		<div class="left">
+		<layout name="$content" cache="0" />
+		</div>
+		<div class="right">
+			<img src="../Public/Images/flow_1.png" />
+			<if condition="MODULE_NAME eq 'Company' or MODULE_NAME eq 'Designer'">
+			<img src="../Public/Images/right_form_bg1.png" />
+			<form action="__APP__/Invite">
+			<table>
+			<tr>
+				<td>称呼：</td>
+				<td><input type="text" class="text" name="name" size="10" value="{$_SESSION['user_name']}"/></td>
+			</tr>
+			<tr>
+				<td>电话：</td>
+				<td><input type="text" class="text" name="phone" size="11"/></td>
+			</tr>
+			<tr>
+				<td width="40" nowrap="nowrap">地点：</td>
+				<td><select class="district" name="district"><option value="0">请选择</option>{$district_opts}</select></td>
+			</tr>
+			<tr>
+				<td>面积：</td>
+				<td><input type="text" name="area" size="6"/> m<sup>2<sup></td>
+			</tr>
+			<tr>
+				<td>预算：</td>
+				<td><input type="text" name="budget" size="6"/> 万元</td>
+			</tr>
+			<tr>
+				<td>户型：</td>
+				<td><select class="room" name="room"><option value="0">请选择</option>{$room_options}</select></td>
+			</tr>
+			<tr>
+				<td valign="top">要求：</td>
+				<td><textarea name="demand" rows="2" cols="36"></textarea></td>
+			</tr>
+			<tr>
+				<td colspan="2" class="btn">
+					<input type="image" class="image" src="../Public/Images/right_form_btn.png" />
+				</td>
+			</tr>
+			</table>
+			</form>
+			<img src="../Public/Images/right_form_bg3.png" />
+			</if>
+			<img src="../Public/Images/right_btm.png" /></div>
+		<div class="clear"></div>
+	</div>
+	<layout name="Public:footer" cache="0" />
+	<iframe id="_iframe" name="_iframe" style="width:0;height:0;display:none;"></iframe>
+	<load file="../Public/Js/myfunc.js"/>
+	<script src="http://s96.cnzz.com/stat.php?id=4180465&web_id=4180465&show=pic1" language="JavaScript"></script>
 </body>
 </html>

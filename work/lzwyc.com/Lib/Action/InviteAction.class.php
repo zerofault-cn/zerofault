@@ -201,9 +201,12 @@ class InviteAction extends BaseAction {
 		//获取公司注册时间
 		$addtime = M('Company')->where("id=".$_SESSION['company_id'])->getField('addtime');
 		$month = ceil((time() - strtotime($addtime))/86400/30);
+		$point = $month*$this->setting['point'];
+		//额外分配的点数
+		$point += (int)M('Point')->where("user_id=".$_SESSION[C('USER_ID')]." and status>0")->sum('point');
 		//检查点数
 		$count = $dao->where("company_id=".$_SESSION['company_id'])->count();
-		if ($count >= $month*$this->setting['point']) {
+		if ($count >= $point) {
 			self::error('您的查看点数已用完！');
 		}
 

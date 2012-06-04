@@ -10,8 +10,9 @@
 		</empty>
 		<if condition="!empty($_GET['type']) and $_GET['type'] eq 2">
 		<th>关联公司</th>
+		<th><abbr title="注册获得 + 额外购买 - 已使用 = 剩余">查看点数</abbr></th>
 		</if>
-		<th>注册时间</th>
+		<th>注册日期</th>
 		<th>上次登录</th>
 		<th>操作</th>
 	</tr>
@@ -26,8 +27,9 @@
 		</empty>
 		<if condition="!empty($_GET['type']) and $_GET['type'] eq 2">
 		<td>{$item['company_name']}</td>
+		<td nowrap="nowrap">{$item['month_point']} + <a href="__URL__/point/user_id/{$item['id']}" title="查看和分配点数">{$item['added_point']}</a> - {$item['used_point']} = {$item['available_point']}</td>
 		</if>
-		<td nowrap="nowrap">{$item['reg_time']|substr=2,14}</td>
+		<td nowrap="nowrap">{$item['reg_time']|substr=0,10}</td>
 		<td nowrap="nowrap">{$item['login_time']|substr=2,14}</td>
 		<td nowrap="nowrap">
 			<if condition="$item['status'] neq '-1'">
