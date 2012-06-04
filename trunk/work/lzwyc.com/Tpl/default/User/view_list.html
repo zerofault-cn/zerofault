@@ -17,16 +17,18 @@
 				<td width="800" style="padding: 10px;">
 					<table id="table0" width="100%" cellspacing="1" bgcolor="#999999">
 					<tr bgcolor="#ededed">
-						<th>您的注册时间</th>
+						<th>您的注册日期</th>
 						<th>有效月数</th>
 						<th>已获得查看点数</th>
+						<th>购买的点数</th>
 						<th>已用点数</th>
 						<th>剩余点数</th>
 					</tr>
 					<tr bgcolor="#FFFFFF" align="center">
-						<td>{$info.addtime}</td>
+						<td>{$info.addtime|substr=0,10}</td>
 						<td>{$info.month}</td>
 						<td>{$info.total_point}</td>
+						<td>{$info.added_point}</td>
 						<td>{$info.used_point}</td>
 						<td>{$info.available_point}</td>
 					</tr>

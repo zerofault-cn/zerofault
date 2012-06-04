@@ -1,0 +1,56 @@
+<style>
+dl {
+	position: relative;
+	padding: 5px;
+	margin: 10px 0;
+	border: 1px solid #b4b4b4;
+}
+input.delete {
+	position: absolute;
+	right: 0;
+	bottom: 0;
+}
+</style>
+	<table id="table" class="list" border="1" cellpadding="3" cellspacing="0" width="100%" bordercolor="#999999" style="border-collapse:collapse;">
+	<tr bgcolor="#ededed">
+		<th>购买时间</th>
+		<th>购买点数</th>
+		<th>附注</th>
+		<th>当前状态</th>
+		<th>最后操作时间</th>
+		<th>操作</th>
+	</tr>
+	<iterate name="list" id="item">
+	<tr bgcolor="<eq name='mod' value='1'>#FFFFE1</eq>" class="<eq name='item.status' value='0'>gray</eq>">
+		<td>{$item['add_time']}</td>
+		<td>{$item['point']}</td>
+		<td>{$item['note']}</td>
+		<td><if condition='$item.status eq 0'>无效<else />有效</if></td>
+		<td>{$item['modify_time']}</td>
+		<td nowrap="nowrap">
+			<a href="__URL__/update_point/id/{$item['id']}/f/status/v/{:intval(!$item['status'])}" target="_iframe" title="<if condition='$item.status eq 0'>使有效<else />使无效</if>"><if condition="$item['status'] eq 0"><img src="../Public/Images/add.gif" alt="YES" align="absmiddle"/><else /><img src="../Public/Images/delete.gif" alt="NO" align="absmiddle"/></if></a>
+		</td>
+	</tr>
+	</iterate>
+	</table>
+
+<form method="post" target="_iframe">
+<input type="hidden" name="user_id" value="{$user_id}" />
+<table cellpadding="4" cellspacing="4">
+<tr>
+	<td nowrap="nowrap">增加查看点数：</td>
+	<td><input type="text" name="point" size="10" value="" /></td>
+</tr>
+<tr>
+	<td width="50">附注说明：</td>
+	<td><input type="text" name="note" size="60" maxlength="250" />
+	</td>
+</tr>
+<tr>
+	<td>&nbsp;</td>
+	<td>
+		<input type="submit" value="提交" name="submit" />
+	</td>
+</tr>
+</table>
+</form>

@@ -275,6 +275,9 @@ class UserAction extends BaseAction {
 		$info['addtime'] = M('Company')->where("id=".$_SESSION['company_id'])->getField('addtime');
 		$info['month'] = ceil((time() - strtotime($info['addtime']))/86400/30);
 		$info['total_point'] = $info['month']*$this->setting['point'];
+
+		//额外分配的点数
+		$info['added_point'] = (int)M('Point')->where("user_id=".$_SESSION[C('USER_ID')]." and status>0")->sum('point');
 		
 		$where = array(
 			'company_id' => $_SESSION['company_id']
@@ -282,7 +285,7 @@ class UserAction extends BaseAction {
 		$order = 'id desc';
 		$count = $dao->where($where)->count();
 		$info['used_point'] = $count;
-		$info['available_point'] = $info['total_point'] - $count;
+		$info['available_point'] = $info['total_point'] +$info['added_point'] - $count;
 		import("@.Paginator");
 		$limit = 10;
 		$p = new Paginator($count,$limit);
