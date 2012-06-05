@@ -118,12 +118,16 @@ a:hover, a:active, a:hover sup, a:active sup {color:#ffcc00;}
 	position: fixed;
 	right: 5px;
 	top: 30px;
+	_position: absolute;/*ºÊ»›IE6*/
+	_right: 0;
+	_top: expression(offsetParent.scrollTop+30);/*ºÊ»›IE6*/
 	width: 145px;
 	z-index: 100;
 	font-size: 12px;
 }
 #divOnline .t {
 	height: 6px;
+	font-size:0;
 	BACKGROUND: url(../Images/qq_listbg.gif) left top no-repeat;
 }
 #divOnline .c {
@@ -148,6 +152,7 @@ a:hover, a:active, a:hover sup, a:active sup {color:#ffcc00;}
 
 #divOnline .b {
 	height: 6px;
+	font-size:0;
 	BACKGROUND: url(../Images/qq_listbg.gif) right top no-repeat;
 }
 #main {
