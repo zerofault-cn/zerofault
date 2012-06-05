@@ -45,10 +45,10 @@
 
 #banner {
 	height: 396px;
+	overflow:hidden;
 	background:url(../Images/banner_bg.png) top center repeat-x;
 }
 #banner .wrapper {
-	position: relative;
 	width: 1070px;
 	height: auto;
 	margin:0 auto;
@@ -164,7 +164,6 @@
 #company_list {
 	width: 574px;
 	height: 285px;
-	position: relative;
 }
 #company_list ul {
 	background-color: #e7f3c4;
@@ -389,6 +388,7 @@
 #company ul li dl {
 	width: 300px;
 	height: 178px;
+	overflow: hidden;
 	padding:4px 9px 3px 8px;
 	font-size: 14px;
 	background: url(../Images/company_cell_bg.png) left top no-repeat;
@@ -412,6 +412,7 @@
 	width: 148px;
 	padding-left: 8px;
 	line-height: 24px;
+	font-size: 12px;
 }
 #tips dl {
 	float: left;
