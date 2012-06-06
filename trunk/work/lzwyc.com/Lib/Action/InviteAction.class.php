@@ -22,7 +22,7 @@ class InviteAction extends BaseAction {
 			);
 		$order = 'id desc';
 		if (!empty($_REQUEST['budget'])) {
-			$temp_arr = explode('~', trim($_REQUEST['budget']));
+			$temp_arr = explode('-', trim($_REQUEST['budget']));
 			$where['budget'] = array(array('egt', intval($temp_arr[0])));
 			!empty($temp_arr[1]) && $where['budget'][] = array('lt', intval($temp_arr[1]));
 		}
@@ -49,6 +49,7 @@ class InviteAction extends BaseAction {
 		if (empty($_POST['submit'])) {
 			return;
 		}
+		/*
 		if (empty($_REQUEST['quick_form'])) {
 			//正常发布
 			empty($_SESSION[C('USER_ID')]) && self::_error('请先登录后才能发布招标！', 'message_box', 5000);
@@ -64,6 +65,8 @@ class InviteAction extends BaseAction {
 				$user_id = $_SESSION[C('USER_ID')];
 			}
 		}
+		*/
+		$user_id = empty($_SESSION[C('USER_ID')]) ? 0 : intval($_SESSION[C('USER_ID')]);
 		empty($_REQUEST['quick_form']) && $_SESSION['verify']!=md5(trim($_REQUEST['verify'])) && self::_error('验证码错误！');
 
 		$district = intval($_REQUEST['district']);
@@ -94,7 +97,7 @@ class InviteAction extends BaseAction {
 		empty($reserve_date) && ($reserve_date=date('Y-m-d'));
 		$phone = trim($_REQUEST['phone']);
 		empty($phone) && self::_error('联系电话必须填写！');
-		!preg_match("/^1[358]{1}[0-9]{9}$/",$phone) && self::_error('手机号码格式不正确！');
+		!preg_match("/^1[3458]{1}[0-9]{9}$/",$phone) && self::_error('手机号码格式不正确！');
 
 		$this->dao->user_id = $user_id;
 		$this->dao->district = $district;

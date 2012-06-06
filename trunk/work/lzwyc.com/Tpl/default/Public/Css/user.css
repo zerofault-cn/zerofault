@@ -38,14 +38,11 @@
 #user_form dl dd span {
 	color: #8C8B8B;
 }
-#user_form dl dt.company {
-	width: 300px;
-	height: 14px;
+#user_form td.company {
 	font-size: 14px;
 	font-weight: bold;
 	text-align: left;
 	color: #72a30c;
-	line-height: 30px;
 }
 #user_form dl dd.company {
 	width: 488px;

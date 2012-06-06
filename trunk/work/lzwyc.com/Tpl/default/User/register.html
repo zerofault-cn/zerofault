@@ -21,70 +21,95 @@
 			<h4>如果您是装修业主，请<a href="__URL__/register/type/1">点击此处注册个人会员</a> </h4>
 			</if>
 
-			<dl>
-				<dt>登录邮箱：</dt>
-				<dd>
+			<table id="form_table" cellpadding="3">
+			<tr>
+				<td>登录邮箱：</td>
+				<td>
 					<input type="text" class="text" name="email" id="email" autocomplete="off"/>
 					<span><em>*</em> 将作为您的登录账号</span>
-				</dd>
-				<dt>真实姓名：</dt>
-				<dd>
+				</td>
+			</tr>
+			<tr>
+				<td>真实姓名：</td>
+				<td>
 					<input type="text" class="text" name="realname" id="realname" autocomplete="off"/>
 					<input type="radio" name="sex" value="1" id="sex_1"/><label for="sex_1">先生</label>
 					<input type="radio" name="sex" value="2" id="sex_2"/><label for="sex_2">女士</label>
 					<span><em>*</em> 为了保护业主权益，乐装网实行实名制注册</span>
-				</dd>
-				<dt>设置密码：</dt>
-				<dd>
+				</td>
+			</tr>
+			<tr>
+				<td>设置密码：</td>
+				<td>
 					<input type="password" class="text" name="password" id="password" />
 					<span><em>*</em>密码由6-20个字母、数字组成</span>
-				</dd>
-				<dt>确认密码：</dt>
-				<dd>
+				</td>
+			</tr>
+			<tr>
+				<td>确认密码：</td>
+				<td>
 					<input type="password" class="text" name="password2" id="password2" />
 					<span><em>*</em>必须与上面设置的密码一致</span>
-				</dd>
-				<if condition="$type eq 2">
-				<dt class="company">公司名称及联系方式</dt><dd class="company"></dd>
-				<dt>公司名称：</dt>
-				<dd>
+				</td>
+			</tr>
+			<if condition="$type eq 2">
+			<tr>
+				<td class="company" colspan="2">公司名称及联系方式</td>
+			</tr>
+			<tr>
+				<td>公司名称：</td>
+				<td>
 					<input type="text" class="text" name="name" id="name" />
 					<span><em>*</em>请填写公司全称，注册后不可修改</span>
-				</dd>
-				<dt>固定电话：</dt>
-				<dd>
+				</td>
+			</tr>
+			<tr>
+				<td>固定电话：</td>
+				<td>
 					<input type="text" class="text" name="telephone" id="telephone" />
 					<span><em>*</em>区号+电话号码</span>
-				</dd>
-				<dt>移动电话：</dt>
-				<dd>
+				</td>
+			</tr>
+			<tr>
+				<td>移动电话：</td>
+				<td>
 					<input type="text" class="text" name="mobile" id="mobile" /> <em>*</em>
-				</dd>
-				<dt>公司地址：</dt>
-				<dd>
+				</td>
+			</tr>
+			<tr>
+				<td>公司地址：</td>
+				<td>
 					<input type="text" class="text" name="address" id="address" /> <em>*</em>
-				</dd>
-				<dt>公司介绍：</dt>
-				<dd class="textarea">
+				</td>
+			</tr>
+			<tr>
+				<td align="top">公司介绍：</td>
+				<td>
 					<textarea name="introduction" cols="40" rows="4"></textarea><span>可以以后再填写</span>
-				</dd>
-				</if>
-				<dt>验证码：</dt>
-				<dd>
+				</td>
+			</tr>
+			</if>
+			<tr>
+				<td>验证码：</td>
+				<td>
 					<input TYPE="text" class="text verify" name="verify" size="4" > <img src="__APP__/Public/verify" style="cursor:pointer" onclick="javascript:this.src='__APP__/Public/verify?r='+Math.random();" title="看不清？点击刷新" align="absmiddle" />
-				</dd>
-				<dt></dt>
-				<dd>
+				</td>
+			</tr>
+			<tr>
+				<td></td>
+				<td>
 					<div id="message_box" class="message_box"></div>
-				</dd>
-				<dt></dt>
-				<dd>
+				</td>
+			</tr>
+			<tr>
+				<td></td>
+				<td>
 					<input type="image" class="image" src="../Public/Images/Register_22.gif" align="absmiddle">
 					&nbsp;&nbsp;
 					已经注册？请直接<a href="__APP__/User/login">登录</a>。
-				</dd>
-				<div class="clear"></div>
-			</dl>
+				</td>
+			</tr>
+			</table>
 			</form>
 		</td>
 		<td width="3" style="background:url(../Public/Images/Register_15.gif) right top repeat-y;"></td>
