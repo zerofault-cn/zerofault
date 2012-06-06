@@ -86,6 +86,23 @@ a:hover, a:active, a:hover sup, a:active sup {color:#ffcc00;}
 #header ul li a.active:hover {
 	color: #00cc33;
 }
+
+#top {
+	width: 960px;
+	height:72px;
+	padding-left: 40px;
+	padding-top: 64px;
+	margin: 0 auto 10px;
+	background:url(../Images/top_bg.png) top center no-repeat;
+}
+#top a {
+	font-size: 16px;
+	font-weight: bold;
+	line-height: 24px;
+	color: #FE7200;
+	padding-right: 50px;
+}
+
 .wrapper {
 	width: 1000px;
 	margin: 10px auto;

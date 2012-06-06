@@ -18,71 +18,131 @@
 					<table id="table1" width="100%" cellspacing="1" bgcolor="#999999">
 					<tr>
 						<td bgcolor="#ffffff">
-							<form id="user_form" method="post" target="_iframe">
+							<form id="user_form" method="post" enctype="multipart/form-data" target="_iframe">
 							<input type="hidden" name="submit" value="1"/>
-							<dl>
-								<dt>您的登录账号：</dt>
-								<dd>
+							<table id="form_table" cellpadding="3">
+							<tr>
+								<td>您的登录账号：</td>
+								<td>
 									{$info.email}
-								</dd>
-								<dt>真实姓名：</dt>
-								<dd>
+								</td>
+							</tr>
+							<tr>
+								<td>真实姓名：</td>
+								<td>
 									<input type="text" class="text" name="realname" id="realname" autocomplete="off" value="{$info.realname}"/>
 									<input type="radio" name="sex" value="1" id="sex_1" <eq name="info.sex" value="1">checked="checked"</eq>/><label for="sex_1">先生</label>
 									<input type="radio" name="sex" value="2" id="sex_2" <eq name="info.sex" value="2">checked="checked"</eq>/><label for="sex_2">女士</label>
-								</dd>
-								<dt>原始密码：</dt>
-								<dd>
+								</td>
+							</tr>
+							<tr>
+								<td>原始密码：</td>
+								<td>
 									<input type="password" class="text" name="password0" id="password0" />
 									<span>必须提供原始密码才能修改资料</span>
-								</dd>
-								<dt>新密码：</dt>
-								<dd>
+								</td>
+							</tr>
+							<tr>
+								<td>新密码：</td>
+								<td>
 									<input type="password" class="text" name="password" id="password" />
 									<span>密码由6-20个字母、数字组成，如果不想修改请留空</span>
-								</dd>
-								<dt>确认新密码：</dt>
-								<dd>
+								</td>
+							</tr>
+							<tr>
+								<td>确认新密码：</td>
+								<td>
 									<input type="password" class="text" name="password2" id="password2" />
 									<span>必须与上面设置的密码一致</span>
-								</dd>
-								<if condition="$info['type'] eq 2">
-								<dt class="company">公司名称及联系方式</dt><dd class="company"></dd>
-								<div class="clear"></div>
-								<dt>公司名称：</dt>
-								<dd>
+								</td>
+							</tr>
+							<if condition="$info['type'] eq 2">
+							<tr>
+								<td class="company" colspan="2">公司名称及联系方式</td>
+							</tr>
+							<tr>
+								<td>公司名称：</td>
+								<td>
 									<input type="text" class="text" name="name" id="name" value="{$info.Company.name}"/>
-								</dd>
-								<dt>固定电话：</dt>
-								<dd>
+								</td>
+							</tr>
+							<tr>
+								<td>公司Logo：</td>
+								<td>
+									<if condition="is_file('__APP__/../html/Attach/company_logo/'.$info['Company']['id'].'.jpg') eq true">
+									<img src="__APP__/../html/Attach/company_logo/{$info['Company']['id']}.jpg" />重新上传将覆盖原Logo<br />
+									</if>
+									<input type="file" name="file" class="text" />
+								</td>
+							</tr>
+							<tr>
+								<td>固定电话：</td>
+								<td>
 									<input type="text" class="text" name="telephone" id="telephone" value="{$info.Company.telephone}"/>
-								</dd>
-								<dt>移动电话：</dt>
-								<dd>
+								</td>
+							</tr>
+							<tr>
+								<td>移动电话：</td>
+								<td>
 									<input type="text" class="text" name="mobile" id="mobile" value="{$info.Company.mobile}"/>
-								</dd>
-								<dt>公司地址：</dt>
-								<dd>
+								</td>
+							</tr>
+							<tr>
+								<td>公司地址：</td>
+								<td>
 									<input type="text" class="text" name="address" id="address" value="{$info.Company.address}"/>
-								</dd>
-								<dt>公司介绍：</dt>
-								<dd class="textarea">
+								</td>
+							</tr>
+							<tr>
+								<td valign="top">公司介绍：</td>
+								<td>
 									<textarea name="introduction" cols="60" rows="8">{$info.Company.introduction}</textarea>
-								</dd>
-								<dt>公司资质：</dt>
-								<dd class="textarea">
-									<textarea name="qualifications" cols="60" rows="8">{$info.Company.qualifications}</textarea>
-								</dd>
-								</if>
-								<dt></dt>
-								<dd>
+								</td>
+							</tr>
+							<tr>
+								<td>公司资质：</td>
+								<td><input type="text" class="text" name="qualification" value="{$info.Company.qualification}" />
+								</td>
+							</tr>
+							<tr>
+								<td>注册资本：</td>
+								<td><input type="text" class="text" name="capital" value="{$info.Company.capital}" />
+								</td>
+							</tr>
+							<tr>
+								<td>成立日期：</td>
+								<td><input type="text" class="text" name="establish_date" value="{$info.Company.establish_date}" />格式：2012-06-01
+								</td>
+							</tr>
+							<tr>
+								<td>公司规模：</td>
+								<td><input type="text" class="text" name="scale" value="{$info.Company.scale}" />
+								</td>
+							</tr>
+							<tr>
+								<td>基础定价：</td>
+								<td><input type="text" class="text" name="fixed_price" value="{$info.Company.fixed_price}" />
+								</td>
+							</tr>
+							<tr>
+								<td valign="top">业务范围：</td>
+								<td><textarea name="business_line" cols="60" rows="8">{$info.Company.business_line}</textarea>
+								</td>
+							</tr>
+							</if>
+							<tr>
+								<td></td>
+								<td>
 									<div id="message_box" class="message_box"></div>
-								</dd>
-								<dt></dt>
-								<dd>
+								</td>
+							</tr>
+							<tr>
+								<td></td>
+								<td>
 									<input type="submit" name="submit" value="提交" />
-								</dd>
-							</dl>
+								</td>
+							</tr>
+							</table>
 							</form>
 						</td>
 					</tr>

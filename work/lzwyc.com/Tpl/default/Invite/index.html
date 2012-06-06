@@ -12,7 +12,7 @@
 	</tr>
 	<tr>
 		<td>类 型：</td>
-		<td colspan="3">{$type_radios}</td>
+		<td colspan="3" style="color:red;">{$type_radios}</td>
 	</tr>
 	<tr>
 		<td>空 间：</td>
@@ -51,9 +51,6 @@
 	</tr>
 	<tr>
 		<td colspan="4">
-			<empty name="_SESSION[C('USER_ID')]">
-			<em>请注意：您必须<a href="__APP__/User/login">登录</a>后才能发布招标</em>
-			</empty>
 			<div id="message_box" class="message_box"></div>
 		</td>
 	</tr>
@@ -81,20 +78,20 @@
 			<else />
 			<a href="__URL__/index/budget/0#list">全部</a>
 			</if>
-			<if condition="trim($_REQUEST['budget']) eq '0~2'">
+			<if condition="trim($_REQUEST['budget']) eq '0-2'">
 			2万元以下
 			<else />
-			<a href="__URL__/index/budget/0~2#list">2万元以下</a>
+			<a href="__URL__/index/budget/0-2#list">2万元以下</a>
 			</if>
-			<if condition="trim($_REQUEST['budget']) eq '2~6'">
+			<if condition="trim($_REQUEST['budget']) eq '2-6'">
 			2~6万元
 			<else />
-			<a href="__URL__/index/budget/2~6#list">2~6万元</a>
+			<a href="__URL__/index/budget/2-6#list">2~6万元</a>
 			</if>
-			<if condition="trim($_REQUEST['budget']) eq '6~10'">
+			<if condition="trim($_REQUEST['budget']) eq '6-10'">
 			6~10万元
 			<else />
-			<a href="__URL__/index/budget/6~10#list">6~10万元</a>
+			<a href="__URL__/index/budget/6-10#list">6~10万元</a>
 			</if>
 			<if condition="trim($_REQUEST['budget']) eq '10'">
 			10万元以上

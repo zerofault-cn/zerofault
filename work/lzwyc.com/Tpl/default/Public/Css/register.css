@@ -16,6 +16,9 @@
 	color: #8c8b8b;
 	line-height: 30px;
 }
+#register #form_table {
+	margin-left: 20px;
+}
 
 #register dl {
 	padding: 20px 0;
@@ -33,24 +36,21 @@
 }
 #register dl dd {
 	float: left;
-	width: 660px;
+	width: 760px;
 	height: 28px;
 	padding-bottom: 15px;
 	color: #8C8B8B;
 	line-height: 28px;
 }
-#register dl dt.company {
-	width: 300px;
-	height: 14px;
+#register td.company {
+	height: 30px;
 	font-size: 14px;
 	font-weight: bold;
-	text-align: left;
 	color: #72a30c;
-	line-height: 30px;
 }
 #register dl dd.company {
 	width: 488px;
-	height: 14px;
+	height: 30px;
 }
 #register dl dd.textarea {
 	height: 70px;

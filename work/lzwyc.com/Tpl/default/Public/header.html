@@ -24,19 +24,21 @@
 		<li><a href="__APP__/Article/activity" class='<eq name="MODULE_NAME" value="Article"><eq name="ACTION_NAME" value="activity">active</eq></eq>'>乐装活动</a></li>
 	</ul>
 </div>
-<if condition="MODULE_NAME eq 'Index' and empty($_SESSION[C('USER_ID')])">
 <div class="wrapper">
+	<if condition="empty($_SESSION[C('USER_ID')])">
 	<div id="top">
 		<a href="__APP__/User/register">免费注册</a>
 		<a href="__APP__/User/login">登录</a>
 	</div>
+	</if>
+	<if condition="MODULE_NAME eq 'Index'">
 	<div id="site_msg">
 		<label>乐装网动态：</label><div class="marquee"><ul><foreach name="marquee" item="item"><li><a href="{$item.url}" target="_blank">{$item.title}</a></li></foreach></ul></div>
 	</div>
 	<div class="clear"></div>
+	</if>
 </div>
 <script type="text/javascript" src="../Public/Js/kxbdMarquee.js"></script>
-</if>
 <if condition="ACTION_NAME eq 'Indemnity'">
 <div class="wrapper">
 	<img src="../Public/Images/Indemnity_1.png" />

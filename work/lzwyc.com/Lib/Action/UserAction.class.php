@@ -229,7 +229,13 @@ class UserAction extends BaseAction {
 				$address = trim($_REQUEST['address']);
 				empty($address) && self::_error('公司地址必须填写！');
 				$introduction = trim($_REQUEST['introduction']);
-				$qualifications = trim($_REQUEST['qualifications']);
+				$qualification = trim($_REQUEST['qualification']);
+				$capital = trim($_REQUEST['capital']);
+				$establish_date = trim($_REQUEST['establish_date']);
+				strtotime($establish_date)<=0 && self::_error('成立日期的格式错误！');
+				$scale = trim($_REQUEST['scale']);
+				$fixed_price = trim($_REQUEST['fixed_price']);
+				$business_line = trim($_REQUEST['business_line']);
 			}
 
 			$this->dao->realname = $realname;
@@ -244,9 +250,24 @@ class UserAction extends BaseAction {
 					$data['mobile'] = $mobile;
 					$data['address'] = $address;
 					$data['introduction'] = $introduction;
-					$data['qualifications'] = $qualifications;
+					$data['qualification'] = $qualification;
+					$data['capital'] = $capital;
+					$data['establish_date'] = $establish_date;
+					$data['scale'] = $scale;
+					$data['fixed_price'] = $fixed_price;
+					$data['business_line'] = $business_line;
+
 					if (false === M('Company')->save($data)) {
 						self::_error('提交公司资料出错！');
+					}
+					else {
+						//保存Logo
+						$file = $_FILES['file'];
+						$file_path = 'html/Attach/company_logo/';
+						$file_name = $_SESSION['company_id'].'.jpg';
+						if (!move_uploaded_file($file['tmp_name'], $file_path.$file_name)) {
+							self::_error('保存Logo文件出错！');
+						}
 					}
 				}
 				self::_success('更新成功！');
