@@ -334,3 +334,9 @@ fieldset.addForm{
 	list-style: none;
 	border:none;
 }
+.qualification {
+	padding: 10px 2px 2px;
+}
+.qualification li {
+	list-style: disc inside;
+}

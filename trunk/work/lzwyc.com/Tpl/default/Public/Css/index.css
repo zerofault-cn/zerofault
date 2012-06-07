@@ -150,6 +150,11 @@
 	width: 574px;
 	height: 285px;
 }
+#company_list object {
+	font-size:0;
+	line-height: 0;
+}
+
 #company_list ul {
 	background-color: #e7f3c4;
 	height: 202px;
@@ -210,7 +215,7 @@
 #knowledge dl dt {
 	float: left;
 	width: 103px;
-	height: 146px;
+	height: 100px;
 	padding: 6px;
 	background-color: #c3e0b2;
 }

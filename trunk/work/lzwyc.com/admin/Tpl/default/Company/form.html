@@ -22,8 +22,37 @@
 	<td><textarea name="introduction" rows="10" cols="90">{$info.introduction}</textarea></td>
 </tr>
 <tr>
-	<td align="right" valign="top">资质：</td>
-	<td><textarea name="qualifications" rows="10" cols="90">{$info.qualifications}</textarea></td>
+	<td>公司资质：</td>
+	<td><select name="qualification">
+		<option value="暂无资质">暂无资质</option>
+		{$qualification_options}"
+		</select>
+	</td>
+</tr>
+<tr>
+	<td>注册资本：</td>
+	<td><input type="text" class="text" name="capital" value="{$info.capital}" />
+	</td>
+</tr>
+<tr>
+	<td>成立日期：</td>
+	<td><input type="text" class="text" name="establish_date" value="{$info.establish_date}" />(格式：2012-06-01)
+	</td>
+</tr>
+<tr>
+	<td>公司规模：</td>
+	<td><input type="text" class="text" name="scale" value="{$info.scale}" />
+	</td>
+</tr>
+<tr>
+	<td>基础定价：</td>
+	<td><input type="text" class="text" name="fixed_price" value="{$info.fixed_price}" />
+	</td>
+</tr>
+<tr>
+	<td valign="top">业务范围：</td>
+	<td><textarea name="business_line" cols="90" rows="4">{$info.business_line}</textarea>
+	</td>
 </tr>
 <tr>
 	<td align="right">显示顺序：</td>

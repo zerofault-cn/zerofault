@@ -142,9 +142,14 @@ h2 {
 	background-image:url(../Images/company_qual.png);
 }
 #qual div {
-	height: 131px;
 	padding: 18px 35px 30px 25px;
 	background-color: #494949;
+}
+#qual ul li {
+	line-height: 26px;
+}
+#qual em {
+	color: #ffcc00;
 }
 #case {
 	margin-bottom: 6px;

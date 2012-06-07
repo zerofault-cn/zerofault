@@ -6,7 +6,8 @@ class CompanyModel extends RelationModel{
 		'Case' => array(
 			'mapping_type' => HAS_MANY,
 			'mapping_order'=>'sort, id desc'
-			)
+			),
+		'Feedback' => HAS_MANY
 	);
 }
 ?>

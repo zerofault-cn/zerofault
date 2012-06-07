@@ -101,17 +101,20 @@
 							</tr>
 							<tr>
 								<td>公司资质：</td>
-								<td><input type="text" class="text" name="qualification" value="{$info.Company.qualification}" />
+								<td><select name="qualification">
+									<option value="暂无资质">暂无资质</option>
+									{$qualification_options}"
+									</select>(需认证审核)
 								</td>
 							</tr>
 							<tr>
 								<td>注册资本：</td>
-								<td><input type="text" class="text" name="capital" value="{$info.Company.capital}" />
+								<td><input type="text" class="text" name="capital" value="{$info.Company.capital}" />(需认证审核)
 								</td>
 							</tr>
 							<tr>
 								<td>成立日期：</td>
-								<td><input type="text" class="text" name="establish_date" value="{$info.Company.establish_date}" />格式：2012-06-01
+								<td><input type="text" class="text" name="establish_date" value="{$info.Company.establish_date}" />(格式：2012-06-01，需认证审核)
 								</td>
 							</tr>
 							<tr>
