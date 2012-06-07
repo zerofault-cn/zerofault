@@ -33,8 +33,8 @@ input.remove {
 	<td>
 		<foreach name="data.tip2" item="item">
 		<dl>
-			<dt><input type="text" name="title[tip2][]" value="{$item.title}" size="30"/></dt>
-			<dd><input type="text" name="url[tip2][]" value="{$item.url}" size="60"/><input type="button" class="remove" value="移除" onclick="$(this).parent().parent().remove();"/></dd>
+			<dt>标题：<input type="text" name="title[tip2][]" value="{$item.title}" size="30"/></dt>
+			<dd>链接：<input type="text" name="url[tip2][]" value="{$item.url}" size="60"/><input type="button" class="remove" value="移除" onclick="$(this).parent().parent().remove();"/></dd>
 		</dl>
 		</foreach>
 		<input type="button" value="增加条目" onclick="addItem(this, 'tip2');"/>
@@ -45,8 +45,8 @@ input.remove {
 	<td>
 		<foreach name="data.tip3" item="item">
 		<dl>
-			<dt><input type="text" name="title[tip3][]" value="{$item.title}" size="30"/></dt>
-			<dd><input type="text" name="url[tip3][]" value="{$item.url}" size="60"/><input type="button" class="remove" value="移除" onclick="$(this).parent().parent().remove();"/></dd>
+			<dt>标题：<input type="text" name="title[tip3][]" value="{$item.title}" size="30"/></dt>
+			<dd>链接：<input type="text" name="url[tip3][]" value="{$item.url}" size="60"/><input type="button" class="remove" value="移除" onclick="$(this).parent().parent().remove();"/></dd>
 		</dl>
 		</foreach>
 		<input type="button" value="增加条目" onclick="addItem(this, 'tip3');"/>
@@ -64,6 +64,6 @@ input.remove {
 </form>
 <script type="text/javascript">
 function addItem(obj, n) {
-	$(obj).before('<dl><dt><input type="text" name="title['+n+'][]" value="" size="30"/></dt><dd><input type="text" name="url['+n+'][]" value="" size="60"/><input type="button" class="remove" value="移除" onclick="$(this).parent().parent().remove();"/></dd></dl>');
+	$(obj).before('<dl><dt>标题：<input type="text" name="title['+n+'][]" value="" size="30"/></dt><dd>链接：<input type="text" name="url['+n+'][]" value="" size="60"/><input type="button" class="remove" value="移除" onclick="$(this).parent().parent().remove();"/></dd></dl>');
 }
 </script>

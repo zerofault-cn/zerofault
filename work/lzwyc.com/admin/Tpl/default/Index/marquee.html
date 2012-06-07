@@ -29,6 +29,6 @@ input.remove {
 </form>
 <script type="text/javascript">
 function addItem(obj) {
-	$(obj).before('<dl><dt><input type="text" name="title[]" value="" size="60"/></dt><dd><input type="text" name="url[]" value="" size="60"/><input type="button" class="remove" value="移除" onclick="$(this).parent().parent().remove();"/></dd></dl>');
+	$(obj).before('<dl><dt>标题：<input type="text" name="title[]" value="" size="60"/></dt><dd>链接：<input type="text" name="url[]" value="" size="60"/><input type="button" class="remove" value="移除" onclick="$(this).parent().parent().remove();"/></dd></dl>');
 }
 </script>
