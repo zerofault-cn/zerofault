@@ -13,7 +13,7 @@ input.remove {
 </style>
 <form method="post" enctype="multipart/form-data" target="_iframe" autocomplete="off">
 <foreach name="list" item="item">
-<dl>
+<dl>位置<php>echo ceil(($key+1)/2);</php>—<if condition="$key%2 eq 0">正面<else />反面</if>
 	<dt>图片预览：<a href="{$item.url}" target="_blank"><img src="__APP__/../{$item.img}" /></a></dt>
 	<dd><input type="hidden" name="img0[]" value="{$item.img}" />
 		更新图片：<input type="file" name="img[]" size="60"/><br />

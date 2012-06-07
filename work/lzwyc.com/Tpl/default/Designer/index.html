@@ -4,10 +4,10 @@
 	<div class="body">
 		<foreach name="list" item="item">
 		<dl class="designer">
-			<dt class="photo"><if condition="is_file('__APP__/../Html/Attach/photo/'.$item['id'].'.jpg') eq true"><img src="__APP__/../Html/Attach/photo/{$item.id}.jpg" width="147"/><else /><img src="../Public/Images/test_photo.png"/></if></dt>
+			<dt class="photo"><if condition="is_file('__APP__/../Html/Attach/photo/'.$item['id'].'.jpg') eq true"><img src="__APP__/../Html/Attach/photo/{$item.id}.jpg" width="147"/><else /><img src="../Public/Images/test_photo.png"/></if><a href="__APP__/Invite"><img src="../Public/Images/yuyue.gif" align="absmiddle" style="border:none;margin-left:25px;"/></a></dt>
 			<dd class="text">
 				<a name="{$item.id}"></a>
-				<address>{$item.name}</address>
+				<address>{$item.name} </address>
 				设计专长：{$item.feature}<br />
 				入行年限：{$item.workage} 年<br />
 				职位：{$item.title}<br />

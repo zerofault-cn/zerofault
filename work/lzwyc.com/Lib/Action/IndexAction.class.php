@@ -31,7 +31,7 @@ class IndexAction extends BaseAction{
 		}
 		$this->assign('invite_list', $rs);
 
-		$rs = M('Company')->where("status>0")->order("sort, id desc")->limit(9)->select();
+		$rs = D('Company')->relation(true)->where("status>0")->order("sort, id desc")->limit(9)->select();
 		$this->assign('company_list', $rs);
 
 		$this->assign('tips', F('Index-tips'));

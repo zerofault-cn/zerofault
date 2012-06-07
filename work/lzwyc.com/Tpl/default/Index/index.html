@@ -3,6 +3,7 @@
 	display: none;
 }
 </style>
+<load file="../Public/Js/sinaflash.js" />
 <link type="text/css" rel="stylesheet" href="../Public/Css/index.css" />
 <div id="banner">
 	<div class="wrapper">
@@ -91,11 +92,82 @@
 		</div>
 	</div>
 	<div class="right" id="company_list">
-		<ul>
-			<iterate name="company" id="item" offset="0" length="8">
-			<li><a href="{$item.url}" target="_blank"><img src="__APP__/../{$item.img}" width="132" height="80"/></a></li>
-			</iterate>
-		</ul>
+		<div id="company_ad1">
+		</div>
+		<div id="company_ad2">
+		</div>
+<script>
+//第一个
+var fp_data = new Array();
+<iterate name="company" id="item" offset="0" length="8">
+fp_data.push(["__APP__/../{$item.img}", "{$item.url}"]);
+</iterate>
+var fp_pics="",fp_links="";
+var fp_lens = fp_data.length;
+for(var i=0; i<fp_lens; i++){
+	fp_pics += fp_data[i][0];
+	fp_links += escape(fp_data[i][1]);
+	if(i%2==0 && i!=fp_lens-1){
+		fp_pics += "§";
+		fp_links += "§";
+	}else if(i%2==1 && i!=fp_lens-1){
+		fp_pics += "§_§";
+		fp_links += "§_§";
+	}
+}
+var oswf = new sinaFlash("../Public/Js/flipper_v2.swf", "flipper", 574, 100, "4", "#E7F3C4", false, "High");
+oswf.addParam("allowScriptAccess", "always");
+oswf.addParam("menu", "false");
+oswf.addParam("wmode", "opaque");
+oswf.addParam("scale", "noscale");
+oswf.addVariable("pic_width", "132");
+oswf.addVariable("pic_height", "80");
+oswf.addVariable("colnum", "4");
+oswf.addVariable("hspace", "9");
+oswf.addVariable("vspace", "20");
+oswf.addVariable("flip_time", "400");
+oswf.addVariable("pause_time", "3000");
+oswf.addVariable("pics", fp_pics);
+oswf.addVariable("urls", fp_links);
+oswf.addVariable("rand", "0");
+oswf.write("company_ad1");
+
+
+//第二个
+var fp_data = new Array();
+<iterate name="company" id="item" offset="8" length="16">
+fp_data.push(["__APP__/../{$item.img}", "{$item.url}"]);
+</iterate>
+var fp_pics="",fp_links="";
+var fp_lens = fp_data.length;
+for(var i=0; i<fp_lens; i++){
+	fp_pics += fp_data[i][0];
+	fp_links += escape(fp_data[i][1]);
+	if(i%2==0 && i!=fp_lens-1){
+		fp_pics += "§";
+		fp_links += "§";
+	}else if(i%2==1 && i!=fp_lens-1){
+		fp_pics += "§_§";
+		fp_links += "§_§";
+	}
+}
+var oswf = new sinaFlash("../Public/Js/flipper_v2.swf", "flipper", 574, 100, "4", "#E7F3C4", false, "High");
+oswf.addParam("allowScriptAccess", "always");
+oswf.addParam("menu", "false");
+oswf.addParam("wmode", "opaque");
+oswf.addParam("scale", "noscale");
+oswf.addVariable("pic_width", "132");
+oswf.addVariable("pic_height", "80");
+oswf.addVariable("colnum", "4");
+oswf.addVariable("hspace", "9");
+oswf.addVariable("vspace", "20");
+oswf.addVariable("flip_time", "400");
+oswf.addVariable("pause_time", "3000");
+oswf.addVariable("pics", fp_pics);
+oswf.addVariable("urls", fp_links);
+oswf.addVariable("rand", "0");
+oswf.write("company_ad2");
+</script>
 		<dl>
 			<dt>最新数据</dt>
 			<dd>招标总金额：↑￥{$statistic.total|number_format}万</dd>
@@ -114,13 +186,13 @@
 		<h2>装修常识</h2>
 		<div class="body">
 			<dl>
-				<dt><a href="{$knowledge[0]['url']}" target="_blank"><img src="__APP__/../{$knowledge[0]['img']}" width="103" height="146"/></a></dt>
+				<dt><a href="{$knowledge[0]['url']}" target="_blank"><img src="__APP__/../{$knowledge[0]['img']}" width="103" height="100"/></a></dt>
 				<dd class="title"><a href="__APP__/Article/knowledge/id/{$knowledge_list[0]['id']}">{$knowledge_list[0]['title']}</a></dd>
 				<dd>{$knowledge_list[0]['summary']}</dd>
 				<div class="clear"></div>
 			</dl>
 			<dl>
-				<dt><a href="{$knowledge[1]['url']}" target="_blank"><img src="__APP__/../{$knowledge[1]['img']}" width="103" height="146"/></a></dt>
+				<dt><a href="{$knowledge[1]['url']}" target="_blank"><img src="__APP__/../{$knowledge[1]['img']}" width="103" height="100"/></a></dt>
 				<dd class="title"><a href="__APP__/Article/knowledge/id/{$knowledge_list[1]['id']}">{$knowledge_list[1]['title']}</a></dd>
 				<dd>{$knowledge_list[1]['summary']}</dd>
 				<div class="clear"></div>
@@ -155,6 +227,7 @@
 					装修时间：{$item.reserve_date} <br />
 					装修类型：{$item.type_str}<br />
 					装修空间：{$item.space_str}<br />
+					装修预算：{$item.budget|round} 万元<br />
 					装修要求：{$item.demand|nl2br}
 				</dd>
 				<dd class="btn">
@@ -181,9 +254,9 @@
 				<dt><a href="__APP__/Company/detail/id/{$item.id}" target="_blank">{$item.name}</a></dt>
 				<dd class="img"><a href="__APP__/Company/detail/id/{$item.id}" target="_blank"><if condition="is_file('__APP__/../Html/Attach/company_logo/'.$item['id'].'.jpg') eq true"><img src="__APP__/../Html/Attach/company_logo/{$item.id}.jpg" /><else /><img src="../Public/Images/test_pic6.png"/></if></a></dd>
 				<dd class="text">
-					资质：<br />
+					资质：{$item.qualification}<br />
 					浏览：{$item.view}<br />
-					案例：<br />
+					案例：{$item.Case|count}<br />
 					联系电话：{$item.telephone} {$item.mobile}
 				</dd>
 			</dl>

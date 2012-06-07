@@ -60,6 +60,9 @@ class CompanyAction extends BaseAction{
 		$this->assign("topnavi", $topnavi);
 		$this->assign("info", $info);
 
+		$qualification_arr = array('一级', '二级', '三级', '甲级', '乙级', '丙级');
+		$this->assign('qualification_options', self::genOptions(array_combine($qualification_arr, $qualification_arr), $info['qualification']));
+
 		$this->assign('content',ACTION_NAME);
 		$this->display('Layout:default');
 	}
@@ -76,6 +79,13 @@ class CompanyAction extends BaseAction{
 		$mobile = trim($_REQUEST['mobile']);
 		$telephone = trim($_REQUEST['telephone']);
 		$introduction = trim($_REQUEST['introduction']);
+		$qualification = trim($_REQUEST['qualification']);
+		$capital = trim($_REQUEST['capital']);
+		$establish_date = trim($_REQUEST['establish_date']);
+		strtotime($establish_date)<=0 && self::_error('成立日期的格式错误！');
+		$scale = trim($_REQUEST['scale']);
+		$fixed_price = trim($_REQUEST['fixed_price']);
+		$business_line = trim($_REQUEST['business_line']);
 		$sort = intval($_REQUEST['sort']);
 		if($id>0) {
 			$rs = $this->dao->where(array('name'=>$name,'id'=>array('neq',$id)))->find();
@@ -87,6 +97,12 @@ class CompanyAction extends BaseAction{
 			$this->dao->mobile = $mobile;
 			$this->dao->telephone = $telephone;
 			$this->dao->introduction = $introduction;
+			$this->dao->qualification = $qualification;
+			$this->dao->capital = $capital;
+			$this->dao->establish_date = $establish_date;
+			$this->dao->scale = $scale;
+			$this->dao->fixed_price = $fixed_price;
+			$this->dao->business_line = $business_line;
 			$this->dao->sort = $sort;
 			if($this->dao->where("id=".$id)->save()) {
 				self::_success('修改成功！', __URL__);
@@ -122,6 +138,26 @@ class CompanyAction extends BaseAction{
 	*/
 	public function update(){
 		parent::_update();
+	}
+	public function update_bit() {
+		$id=$_REQUEST['id'];
+		$field=$_REQUEST['f'];
+		$value=intval($_REQUEST['v']);
+		if ($value<0) {
+			$rs = $this->dao->setDec($field, 'id='.$id, abs($value));
+		}
+		else {
+			$rs = $this->dao->setInc($field, 'id='.$id, $value);
+		}
+		if(false !== $rs)
+		{
+		//	Log::Write($this->dao->getLastSql(), INFO);
+			self::_success('操作成功！','',1200);
+		}
+		else
+		{
+			self::_error('发生错误！'.(C('APP_DEBUG')?$this->dao->getLastSql():''));
+		}
 	}
 	/**
 	*

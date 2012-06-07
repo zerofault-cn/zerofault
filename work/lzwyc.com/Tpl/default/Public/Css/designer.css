@@ -37,7 +37,6 @@
 #designer_list dl.designer dt.photo {
 	float: left;
 	width: 177px;
-	height: 177px;
 }
 #designer_list dl.designer dt.photo img {
 	padding: 3px;

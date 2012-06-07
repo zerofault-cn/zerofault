@@ -3,7 +3,7 @@
 	<table id="table" class="list" border="1" cellpadding="3" cellspacing="0" width="100%" bordercolor="#999999" style="border-collapse:collapse;">
 	<tr bgcolor="#ededed">
 		<th width="5%">ID</th>
-		<th>公司名称</th>
+		<th>公司名称/Logo/资质</th>
 		<th>案例</th>
 		<th>关联账号</th>
 		<th>关注</th>
@@ -14,13 +14,40 @@
 	<iterate name="list" id="item">
 	<tr bgcolor="<eq name='mod' value='1'>#FFFFE1</eq>" class="<eq name='item.status' value='0'>gray</eq>">
 		<td>{$item['id']}</td>
-		<td>
-			<a href="__APP__/../index.php/Company/detail/id/{$item.id}" target="_blank">{$item['name']}</a>
-			<if condition="is_file('__APP__/../html/Attach/company_logo/'.$item['id'].'.jpg') eq true">
-			<img id="{$item['id']}" class="thumb" name="company_logo" src="../Public/Images/picture.gif" align="absmiddle"/><span class="showThumb"><div><img src="__APP__/../html/Attach/company_logo/{$item['id']}.jpg" width="135"></div></span>
-			<else />
-			<img id="{$item['id']}" class="thumb" name="company_logo" src="../Public/Images/picture_add.gif" alt="上传公司Logo" align="absmiddle"/><span class="showThumb" style="display:none"><div><img src="../Public/Images/blank.gif" width="135"></div></span>
-			</if>
+		<td valign="top" class="a_left">
+			<table width="100%">
+			<tr>
+				<td class="a_left">
+					<a href="__APP__/../index.php/Company/detail/id/{$item.id}" target="_blank">{$item['name']}</a>
+					<if condition="is_file('__APP__/../html/Attach/company_logo/'.$item['id'].'.jpg') eq true">
+					<img id="{$item['id']}" class="thumb" name="company_logo" src="../Public/Images/picture.gif" align="absmiddle"/><span class="showThumb"><div><img src="__APP__/../html/Attach/company_logo/{$item['id']}.jpg" width="135"></div></span>
+					<else />
+					<img id="{$item['id']}" class="thumb" name="company_logo" src="../Public/Images/picture_add.gif" alt="上传公司Logo" align="absmiddle"/><span class="showThumb" style="display:none"><div><img src="../Public/Images/blank.gif" width="135"></div></span>
+					</if>
+				</td>
+				<td width="20"><if condition="($item['auth_status']&2) eq 2"><a href="__URL__/update_bit/id/{$item['id']}/f/auth_status/v/-2" target="_iframe" title="取消品牌认证"><img src="../Public/Images/pin0.jpg" align="absmiddle"/></a><else /><a href="__URL__/update_bit/id/{$item['id']}/f/auth_status/v/2" target="_iframe" title="通过品牌认证"><img src="../Public/Images/pin1.jpg" align="absmiddle"/></a></if></td>
+			</tr>
+			<tr>
+				<td class="a_left">
+					<ul class="qualification">
+						<if condition="$item.qualification neq ''">
+						<li>公司资质：{$item.qualification}
+						</li></if>
+						<if condition="$item.capital neq ''">
+						<li>注册资本：{$item.capital}
+						</li></if>
+						<if condition="$item.capital neq ''">
+						<li>成立日期：{$item.establish_date}
+						</li></if>
+					</ul>
+				</td>
+				<td>
+					<if condition="$item.qualification neq ''">
+						<if condition="($item['auth_status']&1) eq 1"><a href="__URL__/update_bit/id/{$item['id']}/f/auth_status/v/-1" target="_iframe" title="取消实名认证"><img src="../Public/Images/shi0.jpg" align="absmiddle"/></a><else /><a href="__URL__/update_bit/id/{$item['id']}/f/auth_status/v/1" target="_iframe" title="通过实名认证"><img src="../Public/Images/shi1.jpg" align="absmiddle"/></a></if>
+					</if>
+				</td>
+			</tr>
+			</table>
 		</td>
 		<td class="a_left">
 			<ul class="case_list">
@@ -37,11 +64,11 @@
 		<td nowrap="nowrap">
 			<if condition="$item['status'] neq '-1'">
 			<a href="__URL__/form/id/{$item['id']}" title="修改"><img src="../Public/Images/form_edit.gif" alt="edit" /></a>
-			<a href="__URL__/update/t/Company/id/{$item['id']}/f/status/v/{:intval(!$item['status'])}/" target="_iframe" title="<if condition='$item.status eq 0'>设为显示<else />设为隐藏</if>"><if condition="$item['status'] eq 0"><img src="../Public/Images/add.gif" alt="显示" /><else /><img src="../Public/Images/delete.gif" alt="隐藏" /></if></a>
-			<a href="__URL__/update/t/Company/id/{$item['id']}/f/status/v/-1/"  target="_iframe" title="删除"><img src="../Public/Images/cross.gif" alt="删除" /></a>
+			<a href="__URL__/update/id/{$item['id']}/f/status/v/{:intval(!$item['status'])}/" target="_iframe" title="<if condition='$item.status eq 0'>设为显示<else />设为隐藏</if>"><if condition="$item['status'] eq 0"><img src="../Public/Images/add.gif" alt="显示" /><else /><img src="../Public/Images/delete.gif" alt="隐藏" /></if></a>
+			<a href="__URL__/update/id/{$item['id']}/f/status/v/-1/"  target="_iframe" title="删除"><img src="../Public/Images/cross.gif" alt="删除" /></a>
 			<else />
-			<a href="__URL__/update/t/Company/id/{$item['id']}/f/status/v/0/" target="_iframe" title="恢复"><img src="../Public/Images/tick.gif" alt="恢复"/></a>
-			<a href="__URL__/delete/t/Company/id/{$item['id']}/" target="_iframe" title="彻底删除"><img src="../Public/Images/cross.gif" alt="彻底删除"/></a>
+			<a href="__URL__/update/id/{$item['id']}/f/status/v/0/" target="_iframe" title="恢复"><img src="../Public/Images/tick.gif" alt="恢复"/></a>
+			<a href="__URL__/delete/id/{$item['id']}/" target="_iframe" title="彻底删除"><img src="../Public/Images/cross.gif" alt="彻底删除"/></a>
 			</if>
 		</td>
 	</tr>

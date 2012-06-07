@@ -265,7 +265,7 @@ class UserAction extends BaseAction {
 						$file = $_FILES['file'];
 						$file_path = 'html/Attach/company_logo/';
 						$file_name = $_SESSION['company_id'].'.jpg';
-						if (!move_uploaded_file($file['tmp_name'], $file_path.$file_name)) {
+						if ($file['size']>0 && !move_uploaded_file($file['tmp_name'], $file_path.$file_name)) {
 							self::_error('保存Logo文件出错！');
 						}
 					}
@@ -279,6 +279,9 @@ class UserAction extends BaseAction {
 
 		$rs = $this->dao->relation(true)->find($_SESSION[C('USER_ID')]);
 		$this->assign('info', $rs);
+
+		$qualification_arr = array('一级', '二级', '三级', '甲级', '乙级', '丙级');
+		$this->assign('qualification_options', self::genOptions(array_combine($qualification_arr, $qualification_arr), $rs['Company']['qualification']));
 
 		$this->assign('content', ACTION_NAME);
 		$this->display('Layout:default');
