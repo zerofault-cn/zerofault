@@ -12,7 +12,7 @@
 		<div id="slider">
 			<div id="KinSlideshow" style="visibility:hidden;">
 				<foreach name="focus" item="item">
-				<a href="{$item.url}" target="_blank"><img src="__APP__/../{$item.img}" width="550" height="352" /></a>
+				<a href="{$item.url}" target="_blank"><img src="__APP__/../{$item.img}" width="630" height="352" /></a>
 				</foreach>
 			</div>
 		</div>
@@ -236,7 +236,7 @@ oswf.write("company_ad2");
 						<div><if condition="$item['tender_count'] lt 3">招标中<else />招标结束</if></div>
 						<div>投标数({$item.tender_count})</div>
 					</div>
-					<div onclick="tender({$item.id});" class="btn2 <if condition="$item['tender_count'] lt 3">open<else />close</if>" >﹤投标</div>
+					<div onclick="myConfirm('确定投标？', '__APP__/Invite/tender/id/{$item.id}');" class="btn2 <if condition="$item['tender_count'] lt 3">open<else />close</if>" >﹤投标</div>
 				</dd>
 			</dl>
 			</foreach>
@@ -338,10 +338,6 @@ oswf.write("company_ad2");
 	</div>
 </div>
 <script type="text/javascript"> 
-function tender(id){
-	var random=Math.random();
-	$("#_iframe").attr("src", "__APP__/Invite/tender/id/"+id+"/random/"+random);
-}
 $(document).ready(function(){
 	$(".marquee").kxbdMarquee({isEqual:false});
 	$("#KinSlideshow").KinSlideshow();

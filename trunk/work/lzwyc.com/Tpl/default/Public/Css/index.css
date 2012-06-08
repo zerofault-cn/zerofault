@@ -40,7 +40,7 @@
 }
 #slider {
 	float: left;
-	width: 550px;
+	width: 630px;
 	height: 352px;
 	padding: 30px 0 14px 40px;
 }
@@ -49,8 +49,8 @@
 	width: 310px;
 	height: 326px;
 	padding-top: 70px;
-	padding-left:160px;
-	background:url(../Images/form_bg.png) left top no-repeat;
+	padding-left: 80px;
+	background:url(../Images/form_bg.png) right top no-repeat;
 }
 #quick_form .name, #quick_form .phone {
 	width: 150px;
