@@ -303,7 +303,7 @@ oswf.write("company_ad2");
 				<dl>
 					<dt><a href="__APP__/Designer/#{$item.id}"><if condition="is_file('__APP__/../Html/Attach/photo/'.$item['id'].'.jpg') eq true"><img src="__APP__/../Html/Attach/photo/{$item.id}.jpg" /><else /><img src="../Public/Images/test_photo.png"/></if></a></dt>
 					<dd class="name">{$item.name}</dd>
-					<dd class="number"><a href="tencent://message/?uin={$item.qq}&Site=乐装网&Menu=yes" title="点击这里开始QQ交流"><img border="0" src="http://wpa.qq.com/pa?p=1:{$tem.qq}:1" alt="QQ在线"></a></dd>
+					<dd class="number"><a href="tencent://message/?uin={$setting.qq_designer}&Site=乐装网&Menu=yes" title="点击这里开始QQ交流"><img border="0" src="http://wpa.qq.com/pa?p=1:{$setting.qq_designer}:1" alt="QQ在线"></a></dd>
 				</dl>
 			</li>
 			</foreach>

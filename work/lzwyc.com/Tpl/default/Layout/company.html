@@ -34,7 +34,7 @@
 		<div class="left">
 			<div id="intro">
 				<h2><a href="__URL__/introduction/id/{$info.id}">更多&gt;&gt;</a></h2>
-				<div>{$info.introduction|nl2br}</div>
+				<div><marquee direction="up" behavior="scroll" scrollamount="12" scrolldelay="400" width="100%" height="100%" onmouseover= "this.stop(); " onmouseout="this.start();">{$info.introduction|nl2br}</marquee></div>
 			</div>
 			<div id="msg_form">
 				<h2><a href="__URL__/feedback/id/{$info.id}">查看&gt;&gt;</a></h2>
