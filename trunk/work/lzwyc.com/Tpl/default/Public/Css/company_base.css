@@ -1,10 +1,9 @@
-@charset "gb2312";
-
 body {
-	color: #F3F3F3;
+	margin: 0;
+	color: #333;
 	font-size: 12px;
-	font-family: "ËÎÌå";
-	background-color: #000000;
+	font-family: "å®‹ä½“";
+	background-color: #fffdd8;
 }
 ol,ul{
 	padding: 0;
@@ -22,7 +21,7 @@ input.image, input.radio {border: none; padding:0;}
 b{font-weight:normal;}
 em, i{font-style:normal;}
 
-a{color: #e3c800;text-decoration:none;}
+a{color: #F4F4F4;text-decoration:none;}
 a:hover,a:active,a.active{color:#ffcc00;}
 .clear{clear:both;}
 .hide{display:none;}
@@ -41,12 +40,12 @@ a:hover,a:active,a.active{color:#ffcc00;}
 	padding-top: 20px;
 	padding-left: 35px;
 	height: 127px;
-	background: url(../Images/company_logo_bg.png) left top repeat-x;
+	background: url(../Images/topbg.gif) center top;
 }
 #navi {
 	height: 44px;
 	margin-bottom: 5px;	
-	background-color: #acacac;
+	background-color: #00a604;
 }
 #navi ul li {
 	float:left;
@@ -54,16 +53,9 @@ a:hover,a:active,a.active{color:#ffcc00;}
 	height: 44px;
 	line-height: 44px;
 	font-size: 16px;
-	font-family: "ºÚÌå", simHei;
+	font-family: "é»‘ä½“", simHei;
 	color: #fef590;
 	text-align: center;
-}
-#navi ul li a {
-	color: #F4F4F4;
-}
-#navi ul li a:hover, #navi ul li a:active, #navi ul li a.active{
-	color:#fef590;
-	text-decoration:none;
 }
 .left {
 	float: left;
@@ -75,18 +67,24 @@ a:hover,a:active,a.active{color:#ffcc00;}
 	width: 666px;
 }
 h2 {
-	height: 47px;
+	height: 49px;
 	padding-right: 8px;
-	border-bottom: 2px solid #ddc821;
-	line-height: 47px;
+	line-height: 46px;
 	font-size: 12px;
 	text-align: right;
-	background: #494949 left top no-repeat;
+	background: transparent 3px 1px no-repeat;
 }
 
 #intro {
 	height: 381px;
 }
+.left #intro {
+	background: url(../Images/leftbg.gif) left top no-repeat;
+}
+.right #introduction {
+	background: url(../Images/rightbg.gif) center top no-repeat;
+}
+
 #intro h2, #introduction h2 {
 	background-image: url(../Images/company_intro.png);
 }
@@ -94,25 +92,31 @@ h2 {
 	height: 302px;
 	padding: 15px 20px;
 	overflow: hidden;
-	text-indent: 2em;
 	line-height: 24px;
-	background-color: #494949;
+	background-color: #FFFFFF;
+	border: 1px solid #00a604;
 }
+
 #introduction div {
 	padding: 15px 20px;
 	text-indent: 2em;
 	line-height: 24px;
-	background-color: #494949;
+	background-color: #FFFFFF;
+	border: 1px solid #00a604;
 }
 #msg_form {
-	padding-top: 7px;
+	margin-top: 7px;
+}
+.left #msg_form {
+	background: url(../Images/leftbg.gif) center top no-repeat;
 }
 #msg_form h2, #feedback h2{
 	background-image:url(../Images/company_msg.png);
 }
 #msg_form div, #feedback div {
 	padding: 15px 10px 15px 20px;
-	background-color: #494949;
+	background-color: #FFFFFF;
+	border: 1px solid #00a604;
 }
 #msg_form .submit {
 	width: 82px;
@@ -138,12 +142,16 @@ h2 {
 #qual {
 	margin-bottom: 6px;
 }
+.right #qual {
+	background: url(../Images/rightbg.gif) center top no-repeat;
+}
 #qual h2{
 	background-image:url(../Images/company_qual.png);
 }
 #qual div {
 	padding: 18px 35px 30px 25px;
-	background-color: #494949;
+	background-color: #FFFFFF;
+	border: 1px solid #00a604;
 }
 #qual ul li {
 	line-height: 26px;
@@ -154,12 +162,16 @@ h2 {
 #case {
 	margin-bottom: 6px;
 }
+.right #case {
+	background: url(../Images/rightbg.gif) center top no-repeat;
+}
 #case h2 {
 	background-image:url(../Images/company_case.png);
 }
 #case ul {
 	padding: 18px 12px 30px 30px;
-	background-color: #494949;
+	background-color: #FFFFFF;
+	border: 1px solid #00a604;
 }
 #case ul li {
 	float: left;
@@ -169,7 +181,7 @@ h2 {
 	line-height: 24px;
 }
 #case ul li a {
-	color: #ffffff;
+	color: #333;
 }
 #case ul img {
 	width: 132px;
@@ -182,16 +194,23 @@ h2 {
 	font-size: 16px;
 	font-weight: bold;
 	text-align: center;
-	background-color: #494949;
+	background-color: #FFFFFF;
+	border-left: 1px solid #00a604;
+	border-right: 1px solid #00a604;
 }
 #case p {
 	padding: 0 10px 10px;
 	margin: 0;
 	text-align: center;
-	background-color: #494949;
+	background-color: #FFFFFF;
+	border: 1px solid #00a604;
+	border-top: none;
 }
 #case p img {
 	margin-top: 20px;
+}
+.right #contact {
+	background: url(../Images/rightbg.gif) center top no-repeat;
 }
 #contact h2 {
 	background-image:url(../Images/company_contact.png);
@@ -199,16 +218,19 @@ h2 {
 #contact div {
 	padding: 18px 35px 30px 25px;
 	line-height: 30px;
-	background-color: #494949;
+	background-color: #FFFFFF;
+	border: 1px solid #00a604;
 }
-
+.right #feedback {
+	background: url(../Images/rightbg.gif) center top no-repeat;
+}
 #feedback dl{
 	padding:5px 0px 10px;
 }
 #feedback dl dt{
 	height:22px;
 	border-top:1px solid #E6E6E6;
-	background-color:#F7F7F7;
+	background-color:#beffbb;
 	padding:0px 15px;
 	line-height:22px;
 	color:#08336F;
@@ -225,8 +247,11 @@ h2 {
 
 #footer {
 	padding: 20px 10px;
-	border-top: 4px solid #aeaeae;
+	border-top: 4px solid #00a604;
 	margin-top: 30px;
 	text-align: center;
 	line-height: 30px;
+}
+#footer a {
+	color: #00a604;
 }

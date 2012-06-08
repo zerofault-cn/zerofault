@@ -24,7 +24,12 @@ class IndexAction extends BaseAction{
 	public function setting() {
 		if (!empty($_POST['submit'])) {
 			$data = array(
-				'qq' => trim($_REQUEST['qq']),
+				'qq_service1' => trim($_REQUEST['qq_service1']),
+				'qq_service2' => trim($_REQUEST['qq_service2']),
+				'phone_service' => trim($_REQUEST['phone_service']),
+				'qq_designer' => trim($_REQUEST['qq_designer']),
+				'qq_company' => trim($_REQUEST['qq_company']),
+				'qq_cooperation' => trim($_REQUEST['qq_cooperation']),
 				'point' => intval($_REQUEST['point']),
 				'keywords' => str_replace(array("\r\n", "\n"), ' ', trim($_REQUEST['keywords'])),
 				'description' => str_replace(array("\r\n", "\n"), ' ', trim($_REQUEST['description']))
@@ -45,7 +50,12 @@ class IndexAction extends BaseAction{
 		$data = F(MODULE_NAME.'-'.ACTION_NAME, '', APP_PATH.'/../Runtime/Data/');
 		if (empty($data)) {
 			$data = array(
-				'qq' => '272468213',
+				'qq_service1' => '1518985666',
+				'qq_service2' => '1006770691',
+				'phone_service' => '18727279944',
+				'qq_designer' => '1518985666',
+				'qq_company' => '1518985666',
+				'qq_cooperation' => '272468213',
 				'point' => '20',
 				'keywords' => '宜昌装修公司排名 装修报价 宜昌乐装网 装修网 装饰网 建材网 家装公司 家装网 宜昌装潢 宜昌房子装修 宜昌二手房装修',
 				'description' => '乐装网的网站描述，通过搜索引擎抓取后方便用户了解'

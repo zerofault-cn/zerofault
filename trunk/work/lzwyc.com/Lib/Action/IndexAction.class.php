@@ -20,6 +20,7 @@ class IndexAction extends BaseAction{
 		$rs = M('Article')->where("category_id=2 and status>0")->order("id desc")->limit(12)->select();
 		$this->assign('knowledge_list', $rs);
 
+		$options = C('_options_');
 		$rs = M('Invite')->where("status>0")->order("id desc")->limit(5)->select();
 		foreach ($rs as $i=>$row) {
 			$rs[$i]['budget_num'] = $row['budget']*10000;
@@ -36,11 +37,7 @@ class IndexAction extends BaseAction{
 
 		$this->assign('tips', F('Index-tips'));
 
-		$options = C('_options_');
 		$rs = M('Designer')->where("status>0")->order("sort, id desc")->limit(8)->select();
-		foreach ($rs as $i=>$row) {
-			empty($row['qq']) && ($rs[$i]['qq'] = array_shift($this->setting));
-		}
 		$this->assign('designer_list', $rs);
 
 		//网站公告

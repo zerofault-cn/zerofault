@@ -10,7 +10,6 @@ class CompanyAction extends BaseAction {
 			$id = intval($_REQUEST['id']);
 			$info = $this->dao->relation(true)->find($id);
 			if ($info['status'] >0) {
-				$info['qq'] = array_shift($this->setting);
 				$this->assign('info', $info);
 				$this->assign('MODULE_TITLE', '装修公司');
 				$this->assign('ACTION_TITLE', $info['name']);
