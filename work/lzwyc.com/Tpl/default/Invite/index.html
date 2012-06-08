@@ -1,6 +1,17 @@
+<style>
+.KSS_titleBar {
+	display: none;
+}
+</style>
 <link type="text/css" rel="stylesheet" href="../Public/Css/invite.css" />
 <div id="invite_form">
-	<img class="ad" src="../Public/Images/invite_ad.jpg" />
+	<div id="slider">
+		<div id="KinSlideshow" style="visibility:hidden;">
+			<a href="javascript:void(0);"><img src="../Public/Images/invite_ad2.jpg" width="375" height="324" /></a>
+			<a href="javascript:void(0);"><img src="../Public/Images/invite_ad3.gif" width="375" height="324" /></a>
+			<a href="javascript:void(0);"><img src="../Public/Images/invite_ad4.jpg" width="375" height="324" /></a>
+		</div>
+	</div>
 	<form method="post" action="__URL__/submit" target="_iframe">
 	<input type="hidden" name="submit" value="1" />
 	<table width="100%" cellspacing="6" cellpadding="0">
@@ -124,9 +135,10 @@
 		<div class="pagenavi">{$page}</div>
 	</div>
 </div>
+<load file="../Public/Js/jquery.KinSlideshow-1.2.1.min.js"/>
 <script type="text/javascript"> 
-function tender(id){
-	var random=Math.random();
-	$("#_iframe").attr("src", "__APP__/Invite/tender/id/"+id+"/random/"+random);
-}
+$(document).ready(function(){
+	$(".marquee").kxbdMarquee({isEqual:false});
+	$("#KinSlideshow").KinSlideshow();
+});
 </script>
