@@ -79,10 +79,10 @@ class InviteAction extends BaseAction {
 		empty($_REQUEST['quick_form'])&&empty($space) && self::_error('户型必须选择！');
 		$room = intval($_REQUEST['room']);
 		empty($_REQUEST['quick_form'])&&empty($room) && self_error('空间类型必须选择！');
-		$area = intval($_REQUEST['area']);
+		$area = floatval($_REQUEST['area']);
 		empty($area) && self::_error('面积必须填写！');
 		!is_numeric($area) && self::_error('面积必须填写数字！');
-		$budget = intval($_REQUEST['budget']);
+		$budget = floatval($_REQUEST['budget']);
 		empty($budget) && self::_error('预算必须填写！');
 		!is_numeric($budget) && self::_error('预算必须填写数字！');
 		$demand = trim($_REQUEST['demand']);

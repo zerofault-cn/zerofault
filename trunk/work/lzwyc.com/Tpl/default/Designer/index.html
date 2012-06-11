@@ -1,10 +1,11 @@
-<link type="text/css" rel="stylesheet" href="../Public/Css/designer.css" />
+<load file="../Public/Css/designer.css" />
+<load file="../Public/Css/thickbox.css" />
 <div id="designer_list">
 	<h2><strong>设计师列表</strong><ul><li></li></ul></h2>
 	<div class="body">
 		<foreach name="list" item="item">
 		<dl class="designer">
-			<dt class="photo"><if condition="is_file('__APP__/../Html/Attach/photo/'.$item['id'].'.jpg') eq true"><img src="__APP__/../Html/Attach/photo/{$item.id}.jpg" width="147"/><else /><img src="../Public/Images/test_photo.png"/></if><a href="__APP__/Invite"><img src="../Public/Images/yuyue.gif" align="absmiddle" style="border:none;margin-left:25px;"/></a></dt>
+			<dt class="photo"><if condition="is_file('__APP__/../Html/Attach/photo/'.$item['id'].'.jpg') eq true"><img src="__APP__/../Html/Attach/photo/{$item.id}.jpg" width="147"/><else /><img src="../Public/Images/test_photo.png"/></if><a class="thickbox" href="__URL__/reserve/designer_id/{$item.id}?width=550&height=400&modal=true"><img src="../Public/Images/yuyue.gif" align="absmiddle" style="border:none;margin-left:25px;"/></a></dt>
 			<dd class="text">
 				<a name="{$item.id}"></a>
 				<address>{$item.name} </address>
@@ -29,3 +30,4 @@
 		<div class="pagenavi">{$page}</div>
 	</div>
 </div>
+<load file="../Public/Js/thickbox-compressed.js"/>

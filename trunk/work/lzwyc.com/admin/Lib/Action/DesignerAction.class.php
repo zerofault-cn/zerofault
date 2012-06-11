@@ -40,6 +40,45 @@ class DesignerAction extends BaseAction{
 		$this->assign('content',ACTION_NAME);
 		$this->display('Layout:default');
 	}
+
+	public function reserve() {
+		$designer_id = intval($_REQUEST['designer_id']);
+		$this->assign('designer_id', $designer_id);
+
+		$this->dao = D('Reserve');
+		$where = array();
+		$order = 'id desc';
+		$topnavi[]=array(
+			'text'=> '设计师管理',
+			'url' => __APP__.'/Designer'
+			);
+
+		if ($designer_id > 0) {
+			$where['designer_id'] = $designer_id;
+			$designer_name = M('Designer')->where('id='.$designer_id)->getField('name');
+			$topnavi[]=array(
+				'text'=> '给【'.$designer_name.'】的预约咨询列表',
+				);
+		}
+		else {
+			$topnavi[]=array(
+				'text'=> '预约咨询列表',
+				);
+		}
+
+		$count = $this->dao->where($where)->count();
+		import("@.Paginator");
+		$limit = 20;
+		$p = new Paginator($count, $limit);
+		$rs = $this->dao->relation(true)->where($where)->order($order)->limit($p->offset.','.$p->limit)->select();
+
+		$this->assign("topnavi",$topnavi);
+		$this->assign('page', $p->showMultiNavi());
+		$this->assign('list', $rs);
+		$this->assign('content',ACTION_NAME);
+		$this->display('Layout:default');
+	}
+
 	public function case_form() {
 		$topnavi[]=array(
 			'text'=> '设计师管理',
@@ -206,6 +245,10 @@ class DesignerAction extends BaseAction{
 	}
 	public function delete_case() {
 		$this->dao = M('Case');
+		parent::_delete();
+	}
+	public function delete_reserve() {
+		$this->dao = M('Reserve');
 		parent::_delete();
 	}
 }

@@ -1,0 +1,55 @@
+<table id="SelectTable" width="98%" class="w10" cellpadding="0" cellspacing="0">
+<tr><td>
+	<fieldset>
+		<legend>&nbsp;请填写您的项目信息&nbsp;</legend>
+		<form action="__URL__/reserve" method="post" target="_iframe">
+		<input type="hidden" name="designer_id" value="{$designer_id}" />
+		<table width="100%" border="0" cellpadding="4" cellspacing="1">
+		<tr>
+			<td nowrap="nowrap">建筑面积：</td>
+			<td><input type="text" class="text" name="area" />平方米</td>
+			<td nowrap="nowrap">设计方案：</td>
+			<td><select name="program_number">
+				<option value="1">1</option>
+				<option value="2">2</option>
+				<option value="3">3</option>
+				</select>套
+			</td>
+		</tr>
+		<tr>
+			<td>房屋类型：</td>
+			<td colspan="3">
+				{$type_radios}
+			</td>
+		</tr>
+		<tr>
+			<td>所在区域：</td>
+			<td><select class="district" name="district"><option value="0">请选择</option>{$district_opts}</select></td>
+			<td>您的称呼：</td>
+			<td><input type="text" class="text" name="name"/></td>
+		</tr>
+		<tr>
+			<td>电话：</td>
+			<td><input type="text" class="text" name="phone"/></td>
+			<td>QQ：</td>
+			<td><input type="text" class="text" name="qq"/></td>
+		</tr>
+		<tr>
+			<td>备注：</td>
+			<td colspan="3"><textarea name="demand" cols="60" rows="6"></textarea></td>
+		</tr>
+		<tr>
+			<td></td>
+			<td colspan="3" id="message_box" class="message_box"></td>
+		</tr>
+		<tr>
+			<td colspan="4" align="center">
+			<input type="submit" name="submit" value="提交" />&nbsp;&nbsp;&nbsp;&nbsp;
+			<input type="button" value="关闭" onclick="tb_remove();" />
+			</td>
+		</tr>
+		</table>
+		</form>
+	</fieldset>
+</td></tr>
+</table>

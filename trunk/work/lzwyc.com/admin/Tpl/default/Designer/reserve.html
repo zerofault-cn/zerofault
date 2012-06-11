@@ -1,0 +1,35 @@
+	{$page}
+	<table id="table" class="list" border="1" cellpadding="3" cellspacing="0" width="100%" bordercolor="#999999" style="border-collapse:collapse;">
+	<tr bgcolor="#ededed">
+		<th>ID</th>
+		<eq name="designer_id" value="0">
+		<th>预约设计师</th>
+		</eq>
+		<th>房屋信息</th>
+		<th>业主信息</th>
+		<th>备注</th>
+		<th width="14%">添加时间</th>
+		<th>操作</th>
+	</tr>
+	<iterate name="list" id="item">
+	<tr bgcolor="<eq name='mod' value='1'>#FFFFE1</eq>">
+		<td>{$item.id}</td>
+		<eq name="designer_id" value="0">
+		<td>{$item.Designer.name}</td>
+		</eq>
+		<td class="a_left" nowrap="nowrap">
+			{$item.Region.name} {$item.Building.name} {$item.area} m<sup>2</sup>
+		</td>
+		<td class="a_left">
+			称呼：{$item.name}<br />电话：{$item.phone}<br />QQ：{$item.qq}
+		</td>
+		<td class="a_left">{$item.demand|nl2br}</td>
+		<td nowrap="nowrap">{$item['addtime']|substr=2,14}</td>
+		<td>
+			<a href="javascript:void(0);" onclick="myConfirm('删除不可恢复，确定删除？', '__URL__/delete_reserve/id/{$item.id}');" target="_iframe" title="彻底删除"><img src="../Public/Images/cross.gif" alt="彻底删除"/></a>
+			</if>
+		</td>
+	</tr>
+	</iterate>
+	</table>
+	{$page}
