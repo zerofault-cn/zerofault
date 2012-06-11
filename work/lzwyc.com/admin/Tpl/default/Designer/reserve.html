@@ -12,13 +12,14 @@
 		<th>操作</th>
 	</tr>
 	<iterate name="list" id="item">
-	<tr bgcolor="<eq name='mod' value='1'>#FFFFE1</eq>">
+	<tr bgcolor="<eq name='mod' value='1'>#FFFFE1</eq>" class="<eq name='item.status' value='0'>gray</eq>">
 		<td>{$item.id}</td>
 		<eq name="designer_id" value="0">
 		<td>{$item.Designer.name}</td>
 		</eq>
 		<td class="a_left" nowrap="nowrap">
-			{$item.Region.name} {$item.Building.name} {$item.area} m<sup>2</sup>
+			{$item.Region.name} {$item.Building.name} {$item.area} m<sup>2</sup><br />
+			预约方案：{$item.program_number}套
 		</td>
 		<td class="a_left">
 			称呼：{$item.name}<br />电话：{$item.phone}<br />QQ：{$item.qq}
@@ -26,6 +27,7 @@
 		<td class="a_left">{$item.demand|nl2br}</td>
 		<td nowrap="nowrap">{$item['addtime']|substr=2,14}</td>
 		<td>
+			<a href="__URL__/update_reserve/id/{$item['id']}/f/status/v/{:intval(!$item['status'])}/" target="_iframe" title="<if condition='$item.status eq 0'>标记为已处理<else />标记为未处理</if>"><if condition="$item['status'] eq 0"><img src="../Public/Images/flag_red.gif" alt="标记" /><else /><img src="../Public/Images/flag_gray.gif" alt="取消" /></if></a>
 			<a href="javascript:void(0);" onclick="myConfirm('删除不可恢复，确定删除？', '__URL__/delete_reserve/id/{$item.id}');" target="_iframe" title="彻底删除"><img src="../Public/Images/cross.gif" alt="彻底删除"/></a>
 			</if>
 		</td>
