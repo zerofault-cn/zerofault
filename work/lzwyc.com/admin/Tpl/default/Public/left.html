@@ -39,6 +39,7 @@
 				<li class="<eq name="MODULE_NAME" value="Designer"><if condition="ACTION_NAME eq 'index' && empty($_GET['status'])">curr</if></eq>"><a href="__APP__/Designer">设计师列表</a></li>
 				<li class="<eq name="MODULE_NAME" value="Designer"><eq name="ACTION_NAME" value="form">curr</eq></eq>"><a href="__APP__/Designer/form">添加设计师</a></li>
 				<li class="<eq name="MODULE_NAME" value="Designer"><eq name="_GET['status']" value="-1">curr</eq></eq>"><a href="__APP__/Designer/index/status/-1">回收站</a></li>
+				<li class="<eq name="MODULE_NAME" value="Designer"><if condition="ACTION_NAME eq 'reserve'">curr</if></eq>"><a href="__APP__/Designer/reserve">预约咨询</a></li>
 			</ul>
 		</li>
 		<li>文章内容

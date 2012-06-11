@@ -47,21 +47,66 @@ CREATE TABLE `lzwyc_attachment` (
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='附件文件';
 
+DROP TABLE IF EXISTS `lzwyc_building`;
+CREATE TABLE `lzwyc_building` (
+  `id` int(10) unsigned NOT NULL auto_increment,
+  `name` varchar(255) NOT NULL default '',
+  `sort` tinyint(3) NOT NULL default '0',
+  PRIMARY KEY  (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='房屋类型';
+
+INSERT INTO `lzwyc_building` VALUES (1,'住宿公寓',0);
+INSERT INTO `lzwyc_building` VALUES (2,'别墅',0);
+INSERT INTO `lzwyc_building` VALUES (3,'办公楼',0);
+INSERT INTO `lzwyc_building` VALUES (4,'商场',0);
+INSERT INTO `lzwyc_building` VALUES (5,'专卖展示店',0);
+INSERT INTO `lzwyc_building` VALUES (6,'酒店宾馆',0);
+INSERT INTO `lzwyc_building` VALUES (7,'餐饮酒吧',0);
+INSERT INTO `lzwyc_building` VALUES (8,'歌厅迪厅',0);
+INSERT INTO `lzwyc_building` VALUES (9,'休闲健身',0);
+INSERT INTO `lzwyc_building` VALUES (10,'体育馆长',0);
+INSERT INTO `lzwyc_building` VALUES (11,'博物馆',0);
+INSERT INTO `lzwyc_building` VALUES (12,'图书馆',0);
+INSERT INTO `lzwyc_building` VALUES (13,'学校',0);
+INSERT INTO `lzwyc_building` VALUES (14,'医院',0);
+INSERT INTO `lzwyc_building` VALUES (15,'机场车船站',0);
+INSERT INTO `lzwyc_building` VALUES (16,'工厂',0);
+INSERT INTO `lzwyc_building` VALUES (17,'公园广场',0);
+INSERT INTO `lzwyc_building` VALUES (18,'会所',0);
+INSERT INTO `lzwyc_building` VALUES (19,'样板间',0);
+INSERT INTO `lzwyc_building` VALUES (20,'其它',0);
+
+CREATE TABLE `lzwyc_case` (
+  `id` int(10) unsigned NOT NULL auto_increment,
+  `designer_id` int(10) unsigned NOT NULL default '0',
+  `company_id` int(10) unsigned NOT NULL DEFAULT 0,
+  `name` varchar(255) NOT NULL default '',
+  `url` varchar(255) NOT NULL default '',
+  `sort` tinyint(3) NOT NULL default '0',
+  `status` tinyint(3) NOT NULL default '0',
+  PRIMARY KEY  (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='案例';
+
 DROP TABLE IF EXISTS `lzwyc_company`;
 CREATE TABLE `lzwyc_company` (
   `id` int(10) unsigned NOT NULL auto_increment,
   `user_id` int(10) unsigned NOT NULL default '0',
   `name` varchar(255) NOT NULL default '' COMMENT '公司名称',
   `address` varchar(255) NOT NULL default '' COMMENT '公司地址',
-  `aptitude` varchar(255) NOT NULL default '' COMMENT '资质',
   `mobile` varchar(255) NOT NULL default '' COMMENT '手机',
   `telephone` varchar(255) NOT NULL default '' COMMENT '电话',
   `introduction` text NOT NULL COMMENT '公司介绍',
-  `qualifications` text NOT NULL COMMENT '资质',
+  `qualification` varchar(255) NOT NULL default '' COMMENT '资质',
+  `capital` varchar(255) NOT NULL default '' COMMENT '注册资本',
+  `establish_date` date NOT NULL default '0000-00-00' COMMENT '成立时间',
+  `scale` varchar(255) NOT NULL default '' COMMENT '公司规模',
+  `fixed_price` varchar(255) NOT NULL default '' COMMENT '基础定价',
+  `business_line` text NOT NULL COMMENT '业务范围',
   `sort` int(11) NOT NULL default '0' COMMENT '显示排序',
   `addtime` datetime NOT NULL default '0000-00-00 00:00:00' COMMENT '添加时间',
   `view` int(11) NOT NULL default '0' COMMENT '查看次数',
   `status` tinyint(3) NOT NULL default '0',
+  `auth_status` tinyint(3) NOT NULL default '0',
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='装修公司';
 
@@ -116,6 +161,18 @@ CREATE TABLE `lzwyc_invite` (
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='招标';
 
+CREATE TABLE `lzwyc_point` (
+  `id` int(10) unsigned NOT NULL auto_increment,
+  `user_id` int(10) unsigned NOT NULL default '0',
+  `point` int(10) NOT NULL default '0',
+  `note` varchar(255) NOT NULL default '',
+  `add_time` datetime NOT NULL default '0000-00-00 00:00:00',
+  `modify_time` datetime NOT NULL default '0000-00-00 00:00:00',
+  `status` tinyint(3) unsigned NOT NULL default '0',
+  PRIMARY KEY  (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+
 DROP TABLE IF EXISTS `lzwyc_region`;
 CREATE TABLE `lzwyc_region` (
   `id` smallint(5) unsigned NOT NULL auto_increment,
@@ -140,6 +197,22 @@ INSERT INTO `lzwyc_region` VALUES (12,2,'兴山县',0);
 INSERT INTO `lzwyc_region` VALUES (13,2,'秭归县',0);
 INSERT INTO `lzwyc_region` VALUES (14,2,'长阳土家族自治县',0);
 INSERT INTO `lzwyc_region` VALUES (15,2,'五峰土家族自治县',0);
+
+CREATE TABLE `lzwyc_reserve` (
+  `id` int(10) unsigned NOT NULL auto_increment,
+  `designer_id` smallint(5) unsigned NOT NULL default '0',
+  `area` decimal(8,2) unsigned NOT NULL default '0.00' COMMENT '面积',
+  `program_number` tinyint(3) unsigned NOT NULL default '0' COMMENT '方案套数',
+  `type` tinyint(3) unsigned NOT NULL default '0' COMMENT '房屋类型',
+  `district` tinyint(3) unsigned NOT NULL default '0' COMMENT '所在区域',
+  `name` varchar(255) NOT NULL default '' COMMENT '姓名称呼',
+  `qq` varchar(255) NOT NULL default '',
+  `phone` varchar(255) NOT NULL default '' COMMENT '手机号码',
+  `demand` text NOT NULL COMMENT '需求说明',
+  `addtime` datetime NOT NULL default '0000-00-00 00:00:00',
+  `status` tinyint(3) NOT NULL default '0',
+  PRIMARY KEY  (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='方案预约';
 
 DROP TABLE IF EXISTS `lzwyc_tender`;
 CREATE TABLE `lzwyc_tender` (
@@ -174,12 +247,5 @@ CREATE TABLE `lzwyc_view` (
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
-CREATE TABLE `lzwyc_case` (
-  `id` int(10) unsigned NOT NULL auto_increment,
-  `designer_id` int(10) unsigned NOT NULL default '0',
-  `company_id` int(10) unsigned NOT NULL DEFAULT 0,
-  `name` varchar(255) NOT NULL default '',
-  `url` varchar(255) NOT NULL default '',
-  `status` tinyint(3) NOT NULL default '0',
-  PRIMARY KEY  (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='案例';
+
+

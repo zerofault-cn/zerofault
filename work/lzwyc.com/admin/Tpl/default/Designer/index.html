@@ -5,6 +5,7 @@
 		<th width="5%">ID</th>
 		<th>设计师姓名</th>
 		<th>案例</th>
+		<th>预约</th>
 		<th width="12%">排序</th>
 		<th width="14%">添加时间</th>
 		<th width="14%">操作</th>
@@ -28,6 +29,7 @@
 				<li class="add_form"><a href="__URL__/case_form/designer_id/{$item.id}" ><img src="../Public/Images/form_add.gif" /></a></li>
 			</ul>
 		</td>
+		<td><a href="__URL__/reserve/designer_id/{$item.id}">{$item.Reserve|count}</a></td>
 		<td><label id="{$item['id']}">{$item['sort']}</label></td>
 		<td nowrap="nowrap">{$item['addtime']|substr=2,14}</td>
 		<td>

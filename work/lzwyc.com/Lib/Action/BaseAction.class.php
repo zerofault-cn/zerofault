@@ -71,17 +71,22 @@ class BaseAction extends Action{
 		}
 		return $str;
 	}
-	protected function genRadios($arr=array(), $checked='', $name='radio', $sp=' ') {
+	protected function genRadios($arr=array(), $checked='', $name='radio', $sp=' ', $force_br=0) {
 		$str = '';
 		if(empty($arr) || !is_array($arr)) {
 			return $arr;
 		}
+		$i = 0;
 		foreach($arr as $key=>$val) {
+			$i ++;
 			$str .= '<input type="radio" class="radio" name="'.$name.'" id="radio_'.$name.'_'.$key.'" value="'.$key.'" ';
 			if($checked == $key) {
 				$str .= ' checked="checked"';
 			}
 			$str .= '><label for="radio_'.$name.'_'.$key.'">'.$val.'</label>'.$sp;
+			if ($force_br>0 && $i%$force_br==0) {
+				$str .= '<br />';
+			}
 		}
 		return $str;
 	}

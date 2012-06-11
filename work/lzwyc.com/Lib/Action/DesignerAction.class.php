@@ -29,23 +29,52 @@ class DesignerAction extends BaseAction {
 		$this->assign('content', 'index');
 		$this->display('Layout:main');
 	}
-	public function detail($id=0) {
-		if (empty($id)) {
-			redirect(__URL__);
+	public function reserve() {
+		$designer_id = intval($_REQUEST['designer_id']);
+		$this->assign('designer_id', $designer_id);
+		if (!empty($_POST['submit'])) {
+			$this->dao = M('Reserve');
+			$area = floatval($_REQUEST['area']);
+			empty($area) && self::_error('建筑面积必须填写！');
+			!is_numeric($area) && self::_error('建筑面积必须填写数字！');
+			$program_number = intval($_REQUEST['program_number']);
+			$type = intval($_REQUEST['type']);
+			empty($type) && self::_error('房屋类型必须选择！');
+			$district = intval($_REQUEST['district']);
+			empty($district) && self::_error('所在区域必须选择！');
+			$name = trim($_REQUEST['name']);
+			$qq = trim($_REQUEST['qq']);
+			$phone = trim($_REQUEST['phone']);
+			empty($phone) && self::_error('联系电话必须填写！');
+			!preg_match("/^1[3458]{1}[0-9]{9}$/",$phone) && self::_error('手机号码格式不正确！');
+			$demand = trim($_REQUEST['demand']);
+
+			$this->dao->designer_id = $designer_id;
+			$this->dao->area = $area;
+			$this->dao->program_number = $program_number;
+			$this->dao->type = $type;
+			$this->dao->district = $district;
+			$this->dao->name = $name;
+			$this->dao->qq = $qq;
+			$this->dao->phone = $phone;
+			$this->dao->demand = $demand;
+			$this->dao->addtime = date('Y-m-d H:i:s');
+			$this->dao->status = 0;
+
+			if ($this->dao->add()) {
+				self::_success('提交成功，我们会在第一时间与您联系！', __URL__, 3000);
+			}
+			else {
+				self::_error('提交失败！');
+			}
+			exit;
 		}
-		$id = intval($_REQUEST['id']);
-		$info = $this->dao->find($id);
 
-		$this->assign('ACTION_TITLE', $info['title']);
-		$this->assign('MODULE_TITLE', $this->category[$info['category_id']]);
-		$this->assign('category', $this->category[$info['category_id']]);
-		$this->assign('info', $info);
+		$this->assign('district_opts', self::genOptions(M('Region')->where("pid=2")->getField('id,name')));
+		$this->assign('type_radios', self::genRadios(M('Building')->getField('id,name'), '', 'type', ' ', 7));
 
-
-		$this->dao->setInc('view', 'id='.$id);
-
-		$this->assign('content', 'detail');
-		$this->display('Layout:main');
+		$this->assign('content', 'reserve');
+		$this->display('Layout:thickbox');
 	}
 }
 ?>
