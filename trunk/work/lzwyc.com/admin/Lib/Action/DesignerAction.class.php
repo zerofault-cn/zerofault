@@ -233,19 +233,24 @@ class DesignerAction extends BaseAction{
 	*
 	* 调用基类方法
 	*/
-	public function update(){
+	public function update() {
 		parent::_update();
 	}
 	/**
 	*
 	* 调用基类方法
 	*/
-	public function delete(){
+	public function delete() {
 		parent::_delete();
 	}
 	public function delete_case() {
 		$this->dao = M('Case');
 		parent::_delete();
+	}
+
+	public function update_reserve() {
+		$this->dao = M('Reserve');
+		parent::_update();
 	}
 	public function delete_reserve() {
 		$this->dao = M('Reserve');
