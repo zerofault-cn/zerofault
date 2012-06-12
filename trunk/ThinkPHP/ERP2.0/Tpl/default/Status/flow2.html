@@ -87,7 +87,11 @@ td.focus {
 	<td colspan="5" align="right" bgcolor="#CCCCFF"><strong>Test Item:&nbsp;</strong></td>
 	<td class="sp"></td>
 	<foreach name="item_list" item="item">
-	<td colspan="2" title="{$item['description']}" valign="top">{$key+1}.&nbsp;{$item['name']}</td>
+	<td colspan="2" title="{$item['description']}" valign="top">
+		<if condition="$item.status_count gt 0">{$key+1}.&nbsp;{$item['name']}
+		<else /><a href="__URL__/revision/flow_id/{$flow_info['id']}/item_id/{$item['id']}?width=420&height=360&modal=true" class="thickbox" title="Batch edit all the Revision&Status of this Item">{$key+1}.&nbsp;{$item['name']}</a>
+		</if>
+	</td>
 	</foreach>
 </tr>
 <tr bgcolor="#CCCCFF">
@@ -124,7 +128,7 @@ td.focus {
 	</if>
 	<td class="sp"></td>
 	<foreach name="board.board_item" item="item">
-	<td><a href="__URL__/revision/status_id/{$item['status_id']}?width=420&height=360&modal=true" class="thickbox" title="{$item['title']}"><strong class="{$status_arr[$item['status']]}">{$status_arr[$item['status']]}</strong></a></td>
+	<td><a href="__URL__/revision/status_id/{$item['status_id']}?width=420&height=360&modal=true" class="thickbox"><strong class="{$status_arr[$item['status']]}">{$status_arr[$item['status']]}</strong></a></td>
 	<td valign="top" class="td_comment"><a style="float:right;" href="__URL__/list_comment/model/StatusStatus/id/{$item['status_id']}?width=480&height=360&modal=true" class="thickbox" title="Click to view comment"><img src="../Public/Images/comments.gif"/></a><notempty name="item.last_comment">{$item['last_comment']['content']|substr=0,12}</notempty></td>
 	</foreach>
 </tr>

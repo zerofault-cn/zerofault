@@ -280,7 +280,7 @@ CREATE TABLE `erp_status_log` (
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 2012/2/14
-ALTER TABLE `erp_status_status` CHANGE `mail_status` `mail_time` INT( 10 ) UNSIGNED NOT NULL DEFAULT '0'
+ALTER TABLE `erp_status_status` CHANGE `mail_status` `mail_time` INT( 10 ) UNSIGNED NOT NULL DEFAULT '0';
 
 CREATE TABLE `erp_status_remind` (
   `id` int(10) unsigned NOT NULL auto_increment,

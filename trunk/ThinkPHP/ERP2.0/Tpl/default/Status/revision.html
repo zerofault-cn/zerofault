@@ -11,6 +11,8 @@ td.field {
 <fieldset>
 	<legend>Revision & Status</legend>
 	<form id="_form" action="__URL__/revision" method="post" target="_iframe">
+	<input type="hidden" name="flow_id" value="{$flow_id}" />
+	<input type="hidden" name="item_id" value="{$item_id}" />
 	<input type="hidden" name="status_id" value="{$status_id}" />
 	<input type="hidden" name="board_id" value="{$board_id}" />
 	<table width="100%" cellpadding="3" border="1" bordercolor="#FFFFFF" style="border-collapse:collapse;">
