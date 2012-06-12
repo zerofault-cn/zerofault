@@ -15,7 +15,9 @@
 		<td>{$item['create_time']|substr=2,14}</td>
 		<td>{$item['login_time']|substr=2,14}</td>
 		<td>
+			<if condition="$_SESSION[C('ADMIN_ID')] eq 1 or $item.id eq $_SESSION[C('ADMIN_ID')]">
 			<img class="password" id="{$item['id']}" src="../Public/Images/key_edit.gif" alt="修改密码" align="absmiddle" />
+			</if>
 			<neq name="item['username']" value="admin">
 			<a href="__URL__/index/id/{$item['id']}" title="编辑"><img src="../Public/Images/form_edit.gif" alt="编辑" align="absmiddle"/></a>
 			<a href="__URL__/update/id/{$item['id']}/f/status/v/{:intval(!$item['status'])}" target="_iframe" title="<if condition='$item.status eq 0'>启用<else />禁用</if>"><if condition="$item['status'] eq 0"><img src="../Public/Images/add.gif" alt="启用" align="absmiddle"/><else /><img src="../Public/Images/delete.gif" alt="禁用" align="absmiddle"/></if></a>
