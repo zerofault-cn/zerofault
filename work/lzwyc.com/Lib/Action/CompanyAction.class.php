@@ -82,7 +82,7 @@ class CompanyAction extends BaseAction {
 			if($_SESSION['verify']!=md5(trim($_REQUEST['verify']))) {
 				self::_error('验证码错误!');
 			}
-			$data['company_id'] = $_REQUEST['company_id'];
+			$data['company_id'] = $_REQUEST['id'];
 			$name = trim($_REQUEST['name']);
 			empty($name) && self::_error('您的称呼必须填写！');
 			$data['name'] = $name;
