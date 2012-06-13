@@ -1,0 +1,26 @@
+<table id="SelectTable" width="98%" class="w10" cellpadding="0" cellspacing="0">
+<tr><td>
+	<fieldset>
+		<legend>&nbsp;投标记录&nbsp;</legend>
+		<table width="100%" border="1" cellpadding="4" cellspacing="1" bordercolor="#999999" style="border-collapse:collapse;">
+		<tr>
+			<th>序号</th>
+			<th>公司账号</th>
+			<th>公司名称</th>
+			<th>投标时间</th>
+		</tr>
+		<foreach name="list" item="item">
+		<tr>
+			<td>{$key+1}</td>
+			<td>{$item.User.email}</td>
+			<td>{$item.Company.name}</td>
+			<td>{$item.action_time}</td>
+		</tr>
+		</foreach>
+		</table><br />
+		<center>
+			<input type="button" value="关闭" onclick="tb_remove();" />
+		</center>
+	</fieldset>
+</td></tr>
+</table>

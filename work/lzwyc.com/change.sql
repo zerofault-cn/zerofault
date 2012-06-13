@@ -23,3 +23,6 @@ CREATE TABLE `lzwyc_point` (
   `status` tinyint(3) unsigned NOT NULL default '0',
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+ALTER TABLE `lzwyc_view`
+  ADD COLUMN `point` tinyint(3) unsigned NOT NULL DEFAULT 1;

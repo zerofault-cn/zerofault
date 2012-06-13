@@ -146,6 +146,7 @@ class InviteAction extends BaseAction {
 				$rs['view'] = 1;
 			}
 		}
+		$rs['view_count'] = M('View')->where("invite_id=".$id)->count();
 		$this->assign('info', $rs);
 
 		$this->assign('ACTION_TITLE', $rs['region'].' '.$rs['address'].' '.$rs['room_str'].' '.round($rs['area'], 1).'M2');
@@ -178,8 +179,18 @@ class InviteAction extends BaseAction {
 		$data['action_time'] = date('Y-m-d H:i:s');
 		$data['status'] = 1;
 		if ($dao->data($data)->add()) {
-			unset($data['status']);
-			M('View')->data($data)->add();
+			$addtime = M('Company')->where("id=".$_SESSION['company_id'])->getField('addtime');
+			$month = ceil((time() - strtotime($addtime))/86400/30);
+			$point = $month*$this->setting['point'];
+			//额外分配的点数
+			$point += (int)M('Point')->where("user_id=".$_SESSION[C('USER_ID')]." and status>0")->sum('point');
+			//检查点数
+			$count = (int)M('View')->where("company_id=".$_SESSION['company_id'])->sum('point');
+			if ($count < $point) {
+				unset($data['status']);
+				$data['point'] = (M('View')->where("invite_id=".$id)->count()>=3)?2:1;
+				M('View')->data($data)->add();
+			}
 			self::success('投标成功，请等待业主确认！');
 		}
 	}
@@ -208,7 +219,7 @@ class InviteAction extends BaseAction {
 		//额外分配的点数
 		$point += (int)M('Point')->where("user_id=".$_SESSION[C('USER_ID')]." and status>0")->sum('point');
 		//检查点数
-		$count = $dao->where("company_id=".$_SESSION['company_id'])->count();
+		$count = (int)$dao->where("company_id=".$_SESSION['company_id'])->sum('point');
 		if ($count >= $point) {
 			self::error('您的查看点数已用完！');
 		}
@@ -216,6 +227,7 @@ class InviteAction extends BaseAction {
 		$dao->invite_id = $id;
 		$dao->company_id = $_SESSION['company_id'];
 		$dao->action_time = date('Y-m-d H:i:s');
+		$dao->point = (M('View')->where("invite_id=".$id)->count()>=3)?2:1;
 		if ($dao->add()) {
 			self::success('登记成功，请刷新页面查看！');
 		}

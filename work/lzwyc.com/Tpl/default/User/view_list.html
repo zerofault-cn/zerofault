@@ -39,6 +39,7 @@
 						<th>项目名称</th>
 						<th>联系方式</th>
 						<th width="11%" align="center">查看时间</th>
+						<th>消耗点数</th>
 					</tr>
 					<iterate name="list" id="item">
 					<tr bgcolor="<eq name='mod' value='1'>#FFFFE1<else/>#FFFFFF</eq>">
@@ -47,11 +48,12 @@
 						</td>
 						<td>{$item.Invite.name}：{$item.Invite.phone}</td>
 						<td align="center" nowrap="nowrap">{$item.action_time|substr=0,16}</td>
+						<td align="center">{$item.point}</td>
 					</tr>
 					</iterate>
 					<empty name="list">
 					<tr bgcolor="#ffffff">
-						<td colspan="3" align="center">
+						<td colspan="4" align="center">
 						暂无记录
 						</td>
 					</empty>

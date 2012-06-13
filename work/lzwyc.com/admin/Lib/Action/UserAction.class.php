@@ -40,7 +40,7 @@ class UserAction extends BaseAction{
 				$rs[$i]['month_point'] = $month*$setting['point'];
 				//额外分配的点数
 				$rs[$i]['added_point'] = (int)M('Point')->where("user_id=".$row['id']." and status>0")->sum('point');
-				$rs[$i]['used_point'] = M('View')->where("company_id=".$tmp_rs['id'])->count();
+				$rs[$i]['used_point'] = (int)M('View')->where("company_id=".$tmp_rs['id'])->sum('point');
 				$rs[$i]['available_point'] = $rs[$i]['month_point'] + $rs[$i]['added_point'] - $rs[$i]['used_point'];
 			}
 		}
@@ -109,6 +109,7 @@ class UserAction extends BaseAction{
 	* 调用基类方法
 	*/
 	public function update(){
+		'password'==$_REQUEST['f'] && ($_REQUEST['v']=md5($_REQUEST['v']));
 		parent::_update();
 	}
 	/**

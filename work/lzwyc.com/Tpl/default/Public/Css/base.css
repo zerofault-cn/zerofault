@@ -11,6 +11,13 @@ ol,ul{
 	padding:0;
 	list-style:none;
 }
+.content ol, .content ul {
+	margin-left:20px;
+	list-style:disc outside;
+}
+.content ol {
+	list-style-type: decimal;
+}
 dl, dd{
 	margin: 0;
 }
@@ -26,7 +33,9 @@ input.image, input.radio {border: none; padding:0;}
 
 b{font-weight:normal;}
 em, i{font-style:normal;}
-
+.content em {
+	font-style: italic;
+}
 a, a sup{color: #008f03;text-decoration:none;}
 a:hover, a:active, a:hover sup, a:active sup {color:#ffcc00;}
 .clear{clear:both;}
