@@ -1,3 +1,4 @@
+<load file="../Public/Css/thickbox.css" />
 {$page}
 <table id="table" class="list" border="1" cellpadding="3" cellspacing="0" width="100%" bordercolor="#999999" style="border-collapse:collapse;">
 <tr bgcolor="#ededed">
@@ -6,6 +7,7 @@
 	<th nowrap="nowrap">时间/类型/空间</th>
 	<th>要求</th>
 	<th>招标人</th>
+	<th>查看数</th>
 	<th nowrap="nowrap">投标数</th>
 	<th>发布时间</th>
 	<th>操作</th>
@@ -30,7 +32,8 @@
 		<notempty name="item.qq">QQ：{$item.qq}<br /></notempty>
 		(<empty name="item.user_id"><i class="red">未注册用户</i><else />注册用户ID：{$item.user_id}</empty>)
 	</td>
-	<td>{$item.tender_count}</td>
+	<td><if condition="$item.view_count gt 0"><a href="__URL__/view_list/id/{$item.id}?width=500&height=300&modal=true" class="thickbox">{$item.view_count}</a><else />{$item.view_count}</if></td>
+	<td><if condition="$item.tender_count gt 0"><a href="__URL__/tender_list/id/{$item.id}?width=500&height=200&modal=true" class="thickbox">{$item.tender_count}</a><else />{$item.tender_count}</if></td>
 	<td nowrap="nowrap">{$item['create_time']|substr=2,14}</td>
 	<td nowrap="nowrap">
 		<if condition="$item['status'] neq '-1'">
@@ -46,3 +49,4 @@
 </iterate>
 </table>
 {$page}
+<load file="../Public/Js/thickbox-compressed.js"/>

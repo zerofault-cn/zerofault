@@ -69,7 +69,7 @@
 							<a href="__APP__/Invite/detail/id/{$item.Invite.id}">{$item.Invite.region} {$item.Invite.address} {$item.Invite.room_str} {$item.Invite.area|round=1}m<sup>2</sup></a>
 						</td>
 						<td>{$item.Invite.budget|round}万元</td>
-						<td><gt name="item.view" value="0">{$item.Invite.name}：{$item.Invite.phone}<else /><input type="button" class="view_btn" value="点击查看" onclick="myConfirm('查看联系方式将消耗一个查看点数，确定查看？', '__APP__/Invite/view/id/{$item.invite_id}');"/></gt></td>
+						<td><gt name="item.view" value="0">{$item.Invite.name}：{$item.Invite.phone}<else /><input type="button" class="view_btn" value="点击查看" onclick="myConfirm('查看联系方式将消耗1~2个查看点数，确定查看？', '__APP__/Invite/view/id/{$item.invite_id}');"/></gt></td>
 						<td align="center">
 							{$item.Invite.create_time|substr=0,10}
 						</td>

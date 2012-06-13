@@ -3,7 +3,7 @@ class IndexAction extends BaseAction{
 
 	public function _initialize() {
 		parent::_initialize();
-		$this->assign('MODULE_TITLE', '首页');
+		$this->assign('MODULE_TITLE', '宜昌装饰装修家居建材门户');
 	}
 
 	public function index(){

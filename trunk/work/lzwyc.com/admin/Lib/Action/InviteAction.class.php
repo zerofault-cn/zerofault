@@ -39,6 +39,7 @@ class InviteAction extends BaseAction {
 			$rs[$i]['type_str'] = $options['type'][$row['type']];
 			$rs[$i]['space_str'] = $options['space'][$row['space']];
 			$rs[$i]['room_str'] = $options['room'][$row['room']];
+			$rs[$i]['view_count'] = M('View')->where("invite_id=".$row['id'])->count();
 			$rs[$i]['tender_count'] = M('Tender')->where("invite_id=".$row['id']." and status>0")->count();
 		}
 		$this->assign('list', $rs);
@@ -46,6 +47,26 @@ class InviteAction extends BaseAction {
 
 		$this->assign('content', ACTION_NAME);
 		$this->display('Layout:default');
+	}
+	public function view_list() {
+		$invite_id = intval($_REQUEST['id']);
+		$rs = D('View')->relation(true)->where("invite_id=".$invite_id)->select();
+		foreach ($rs as $i=>$row) {
+			$user_id = M('Company')->where("id=".$row['company_id'])->getField('user_id');
+			$rs[$i]['User'] = M('User')->find($user_id);
+		}
+		$this->assign('list', $rs);
+		$this->display('Layout:thickbox');
+	}
+	public function tender_list() {
+		$invite_id = intval($_REQUEST['id']);
+		$rs = D('Tender')->relation(true)->where("invite_id=".$invite_id)->select();
+		foreach ($rs as $i=>$row) {
+			$user_id = M('Company')->where("id=".$row['company_id'])->getField('user_id');
+			$rs[$i]['User'] = M('User')->find($user_id);
+		}
+		$this->assign('list', $rs);
+		$this->display('Layout:thickbox');
 	}
 	public function form() {
 		$id = empty($_REQUEST['id']) ? 0 : intval($_REQUEST['id']);

@@ -307,11 +307,12 @@ class UserAction extends BaseAction {
 			'company_id' => $_SESSION['company_id']
 			);
 		$order = 'id desc';
-		$count = $dao->where($where)->count();
-		$info['used_point'] = $count;
-		$info['available_point'] = $info['total_point'] +$info['added_point'] - $count;
+		$point = $dao->where($where)->sum('point');
+		$info['used_point'] = $point;
+		$info['available_point'] = $info['total_point'] +$info['added_point'] - $point;
 		import("@.Paginator");
 		$limit = 10;
+		$count = $dao->where($where)->count();
 		$p = new Paginator($count,$limit);
 
 		$options = C('_options_');

@@ -25,7 +25,14 @@
 			<td>装修空间：<strong>{$info.space_str}</strong></td>
 		</tr>
 		<tr>
-			<td>联系方式：<strong>{$info.name}</strong> <empty name="info.view">(电话号码需要消耗1点积分才能查看)<input type="button" class="view_btn" value="点击查看" onclick="myConfirm('确定查看？', '__APP__/Invite/view/id/{$info.id}');"/><else />(电话：{$info.phone})</empty></td>
+			<td>联系方式：<strong>{$info.name}</strong>
+			<empty name="info.view">
+				<if condition="$info.view_count gt 5">(已超过查看名额)
+				<else />(电话号码需要消耗<if condition="$info.view_count egt 3">2<else />1</if>点积分才能查看)<input type="button" class="view_btn" value="点击查看" onclick="myConfirm('确定查看？', '__APP__/Invite/view/id/{$info.id}');"/>
+				</if>
+			<else />
+			(电话：{$info.phone})
+			</empty></td>
 		</tr>
 		</table>
 		

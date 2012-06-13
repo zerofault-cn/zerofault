@@ -27,11 +27,17 @@
 		</empty>
 		<if condition="!empty($_GET['type']) and $_GET['type'] eq 2">
 		<td>{$item['company_name']}</td>
-		<td nowrap="nowrap">{$item['month_point']} + <a href="__URL__/point/user_id/{$item['id']}" title="查看和分配点数">{$item['added_point']}</a> - {$item['used_point']} = {$item['available_point']}</td>
+		<td nowrap="nowrap">{$item['month_point']}
+		+ 
+		<a href="__URL__/point/user_id/{$item['id']}" title="查看和分配点数">{$item['added_point']}</a>
+		-
+		{$item['used_point']}
+		= {$item['available_point']}</td>
 		</if>
 		<td nowrap="nowrap">{$item['reg_time']|substr=0,10}</td>
 		<td nowrap="nowrap">{$item['login_time']|substr=2,14}</td>
 		<td nowrap="nowrap">
+			<img class="password" id="{$item['id']}" src="../Public/Images/key_edit.gif" alt="重设密码" align="absmiddle" />
 			<if condition="$item['status'] neq '-1'">
 				<if condition="$item['type'] eq '2'">
 					<if condition="$item['status'] eq '1'">
@@ -51,3 +57,4 @@
 	</iterate>
 	</table>
 	{$page}
+	<script language="JavaScript" type="text/javascript" src="../Public/Js/user_func.js"></script>
