@@ -1,0 +1,20 @@
+<link type="text/css" rel="stylesheet" href="../Public/Css/article.css" />
+
+<div id="article_list">
+	<h2><strong>{$category}</strong><ul><li></li></ul></h2>
+	<div class="body">
+		<ul>
+		<foreach name="list" key="key" item="item">
+			<if condition="$key gt 0 && $key%5 eq 0">
+			<li class="line"></li>
+			</if>
+			<li>
+				<span>({$item.create_time|substr=0,10})</span>
+				<a href="__URL__/{$Think.ACTION_NAME}/id/{$item.id}" target="_blank">{$item.title}</a>
+				<div class="clear"></div>
+			</li>
+		</foreach>
+		</ul>
+		<div class="pagenavi">{$page}</div>
+	</div>
+</div>
