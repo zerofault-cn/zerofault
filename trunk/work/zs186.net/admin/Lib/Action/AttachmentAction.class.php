@@ -23,7 +23,7 @@ class AttachmentAction extends BaseAction{
 				'path' => 'html/Attach/'.$model_name.'/'.date("YmdHis").substr(microtime(),1,7).'.'.strtolower(pathinfo($file['name'], PATHINFO_EXTENSION)),
 				'model_name' => $model_name,
 				'model_id' => $model_id,
-				'staff_id' => $_SESSION[C('ADMIN_ID')],
+				'user_id' => $_SESSION[C('USER_AUTH_KEY')],
 				'upload_time' => date('Y-m-d H:i:s'),
 				'status' => 1
 				);

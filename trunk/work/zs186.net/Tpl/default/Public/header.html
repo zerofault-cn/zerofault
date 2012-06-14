@@ -4,83 +4,25 @@
 </div>
 <div id="nav">
 	<ul class="menu">
-		<li>
-			<a href="#"><img src="../Public/Images/index_07.gif"></a>
-			<ul>
-				<li><div class="jt"></div><a href="#" target="_blank">区域选择</a></li>
-				<li><a href="#" target="_blank">星级选择</a></li>
-				<li><a href="#" target="_blank">承接能力</a></li>
-			</ul>
-		</li>
-		<li><img src="../Public/Images/index_09.gif"></li>
-		<li><img src="../Public/Images/index_11.gif">
-			<ul>
-				<li><div class="jt"></div><a href="#" target="_blank">婚礼用品</a></li>
-				<li><a href="#" target="_blank">宴会灯效</a></li>
-				<li><a href="#" target="_blank">婚礼道具</a></li>
-			</ul>
-		</li>
-		<li><img src="../Public/Images/index_09.gif">  </li>
-		<li><img src="../Public/Images/index_13.gif"> 
-			<ul>
-				<li><div class="jt"></div><a href="#" target="_blank">婚礼用品</a></li>
-				<li><a href="#" target="_blank">宴会灯效</a></li>
-				<li><a href="#" target="_blank">婚礼道具</a></li>
-				<li><a href="#" target="_blank">花品设计</a></li>
-				<li><a href="#" target="_blank">婚礼人员</a></li>
-				<li><a href="#" target="_blank">各式婚礼</a></li>
-			</ul>
-		</li>
-		<li><img src="../Public/Images/index_09.gif"></li>
-		<li><img src="../Public/Images/index_15.gif">
-			<ul>
-				<li><div class="jt"></div><a href="#" target="_blank">车展策划</a></li>
-				<li><a href="#" target="_blank">地产策划</a></li>
-				<li><a href="#" target="_blank">路演推广</a></li>
-				<li><a href="#" target="_blank">高端酒会</a></li>
-				<li><a href="#" target="_blank">开业庆典</a></li>
-				<li><a href="#" target="_blank">年会策划</a></li>
-			</ul>
-		</li>
+		<volist name="menu" id="item">
+			<if condition="$i eq 5">
 		<li><div style="width:170px;">&nbsp;</div></li>
-		<li><img src="../Public/Images/index_17.gif">
+			<elseif condition="$i gt 1"/>
+		<li><img src="../Public/Images/menu_slash.gif"></li>
+			</if>
+		<li>
+			<a href="__APP__/{$item.type}/{$item.alias}"><img src="../Public/Images/menu_{$item.alias}.gif"></a>
 			<ul>
-				<li><div class="jt"></div><a href="#" target="_blank">会议礼品</a></li>
-				<li><a href="#" target="_blank">会议鲜花</a></li>
-				<li><a href="#" target="_blank">活动场地</a></li>
-				<li><a href="#" target="_blank">会场布置</a></li>
-				<li><a href="#" target="_blank">摄影摄像</a></li>
-				<li><a href="#" target="_blank">工作人员</a></li>
-				<li><a href="#" target="_blank">会议接待</a></li>
+				<volist name="item.sub" id="sub" key="j">
+				<li>
+					<eq name="j" value="1"><div class="jt"></div></eq>
+					<a href="__APP__/{$item.type}/{$item.alias}/id/{$key}" target="_blank">{$sub}</a>
+				</li>
+				</volist>
 			</ul>
 		</li>
-		<li><img src="../Public/Images/index_09.gif"></li>
-		<li><img src="../Public/Images/index_19.gif">
-			<ul>
-				<li><div class="jt"></div><a href="#" target="_blank">国际标展搭建</a></li>
-				<li><a href="#" target="_blank">特装设计</a></li>
-				<li><a href="#" target="_blank">展会宣传</a></li>
-				<li><a href="#" target="_blank">展览管理</a></li>
-				<li><a href="#" target="_blank">布展方案</a></li>
-				<li><a href="#" target="_blank">配套器材</a></li>
-			</ul>
-		</li>
-		<li><img src="../Public/Images/index_09.gif"></li>
-		<li><img src="../Public/Images/index_21.gif">
-			<ul>
-				<li><div class="jt"></div><a href="#" target="_blank">致尚优惠</a></li>
-				<li><a href="#" target="_blank">会议新闻</a></li>
-				<li><a href="#" target="_blank">会展新闻</a></li>
-			</ul>
-		</li>
-		<li><img src="../Public/Images/index_09.gif"></li>
-		<li><img src="../Public/Images/index_23.gif">
-			<ul>
-				<li><div class="jt"></div><a href="#" target="_blank">企业概括</a></li>
-				<li><a href="#" target="_blank">主营方向</a></li>
-				<li><a href="#" target="_blank">联系方式</a></li>
-			</ul>
-		</li>
+		</volist>
+
 	</ul>
 </div>
 <neq name="MODULE_NAME" value="Index">

@@ -1,10 +1,14 @@
 <?php
 class ArticleAction extends BaseAction{
-	protected $dao;
+	protected $dao, $topnavi;
 
 	public function _initialize() {
-		$this->dao = D('Article');
 		parent::_initialize();
+		$this->dao = D('Article');
+		$this->topnavi[] = array(
+			'text' => '内容管理'
+			);
+		$this->category_arr = M('Category')->where("type='Article' and status>0")->order('sort')->getField('id,name');
 	}
 
 	public function index(){
@@ -13,12 +17,12 @@ class ArticleAction extends BaseAction{
 			'url' => __APP__.'/Article'
 			);
 
-		$order = 'id desc';
+		$order = 'sort';
 		$where = array();
 		if(!empty($_REQUEST['category_id'])) {
 			$where['category_id'] = $_REQUEST['category_id'];
 			$topnavi[]=array(
-				'text'=> '文章列表：'.$this->categorys[$_REQUEST['category_id']],
+				'text'=> '文章列表：'.$this->category_array['Article'][$_REQUEST['category_id']],
 				);
 		}
 		else {
@@ -26,25 +30,12 @@ class ArticleAction extends BaseAction{
 				'text'=> '全部文章',
 				);
 		}
-		$where['status'] = array('gt', -1);
-		if(!empty($_REQUEST['status'])) {
-			$where['status'] = $_REQUEST['status'];
-			$order = 'id desc';
-		}
-		if (!empty($_REQUEST['s_title'])) {
-			$where['title'] = array('LIKE', '%'.trim($_REQUEST['s_title']).'%');
-			$this->assign('s_title', $_REQUEST['s_title']);
-		}
-		$count = $this->dao->where($where)->getField('count(*)');
-		import("@.Paginator");
-		$limit = 20;
-		$p = new Paginator($count,$limit);
-		$rs = $this->dao->where($where)->order($order)->limit($p->offset.','.$p->limit)->select();
+		$rs = $this->dao->where($where)->order($order)->select();
+
+		$this->assign('list', $rs);
 
 		$this->assign("topnavi",$topnavi);
-		$this->assign('page', $p->showMultiNavi());
-		$this->assign('list', $rs);
-		$this->assign('content',ACTION_NAME);
+		$this->assign('content', ACTION_NAME);
 		$this->display('Layout:default');
 	}
 	public function form() {
@@ -55,7 +46,7 @@ class ArticleAction extends BaseAction{
 				'text'=> '修改文章内容',
 				);
 			$info = $this->dao->find($id);
-			$info['category_opts'] = self::genOptions($this->categorys, $info['category_id']);
+			$info['category_opts'] = self::genOptions($this->category_array['Article'], $info['category_id']);
 
 		}
 		else {
@@ -63,7 +54,7 @@ class ArticleAction extends BaseAction{
 				'text'=> '添加文章',
 				);
 			$info = array('id' => 0);
-			$info['category_opts'] = self::genOptions($this->categorys, $info['category_id']);
+			$info['category_opts'] = self::genOptions($this->category_array['Article'], $info['category_id']);
 			$max_sort = $this->dao->getField("max(sort)");
 			$info['sort'] = $max_sort+2;
 		}
@@ -84,9 +75,7 @@ class ArticleAction extends BaseAction{
 		$category_id<=0 && self::_error('类别必须选择！');
 		$title = trim($_REQUEST['title']);
 		''==$title && self::_error('标题必须填写！');
-		$tags = trim($_REQUEST['tags']);
-		$source = trim($_REQUEST['source']);
-		''==$source && ($source = '乐装网');
+		$author = trim($_REQUEST['author']);
 		$summary = trim($_REQUEST['summary']);
 		$content = trim($_REQUEST['content']);
 		$sort = intval($_REQUEST['sort']);
@@ -97,13 +86,11 @@ class ArticleAction extends BaseAction{
 			}
 			$this->dao->category_id = $category_id;
 			$this->dao->title = $title;
-			$this->dao->tags = $tags;
-			$this->dao->source = $source;
 			$this->dao->summary = $summary;
 			$this->dao->content = $content;
 			$this->dao->sort = $sort;
 			$this->dao->modify_time = date("Y-m-d H:i:s");
-			if($this->dao->where("id=".$id)->save()) {
+			if(false !== $this->dao->where("id=".$id)->save()) {
 				self::_success('修改成功！', __URL__.'/index/category_id/'.$category_id);
 			}
 			else{
@@ -117,8 +104,6 @@ class ArticleAction extends BaseAction{
 			}
 			$this->dao->category_id = $category_id;
 			$this->dao->title = $title;
-			$this->dao->tags = $tags;
-			$this->dao->source = $source;
 			$this->dao->content = $content;
 			$this->dao->sort = $sort;
 			$this->dao->create_time = date("Y-m-d H:i:s");

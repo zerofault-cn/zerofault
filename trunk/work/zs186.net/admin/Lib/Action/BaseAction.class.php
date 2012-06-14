@@ -1,20 +1,16 @@
 <?php
 class BaseAction extends Action{
-	protected $categorys;
+	protected $category_array;
 
-	public function _initialize() {
+	protected function _initialize() {
 		header("Content-Type:text/html; charset=utf-8");
 
-		$options = C('_options_');
-		$this->categorys = $options['article_category'];
-		$this->assign("categorys", $this->categorys);
-
-		if('Public'!=MODULE_NAME && empty($_SESSION[C('ADMIN_ID')])) {
-			//记下刚才的Action
-			Session::set('lastModule', MODULE_NAME);
-			//跳转到认证网关
-			redirect(PHP_FILE.C('USER_AUTH_GATEWAY'));
-		}
+		$this->category_array = array(
+			'Hotel' => M('Category')->where("type='Hotel' and status>0")->order('sort')->getField('id,name'),
+			'Article' => M('Category')->where("type='Article' and status>0 and pid=0")->order('sort')->getField('id,name')
+			);
+		$this->assign("Hotel_Category", $this->category_array['Hotel']);
+		$this->assign("Article_Category", $this->category_array['Article']);
 	}
 	/**
 	*
@@ -26,7 +22,7 @@ class BaseAction extends Action{
 	*
 	* @return string HTML格式的JS代码
 	*/
-	protected function _success($msg,$url='',$timeout=2000){
+	protected function _success($msg, $url='', $timeout=2000) {
 		$html  = '<script language="JavaScript" type="text/javascript">';
 		$html .= 'parent.myAlert("'.$msg.'");';
 		$html .= 'parent.myLocation("'.$url.'",'.$timeout.');';

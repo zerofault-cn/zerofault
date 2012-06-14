@@ -1,0 +1,28 @@
+	<table id="table" class="list" border="1" cellpadding="3" cellspacing="0" width="100%" bordercolor="#999999" style="border-collapse:collapse;">
+	<thead>
+	<tr bgcolor="#ededed">
+		<th width="6%">ID</th>
+		<th>分类名称</th>
+		<th width="12%">数量</th>
+		<th width="12%">排序</th>
+		<th width="10%">操作</th>
+	</tr>
+	</thead>
+	<iterate name="list" id="item">
+	<tr bgcolor="<eq name='mod' value='1'>#FFFFE1</eq>" class="<eq name='item.status' value='0'>gray</eq>" id="{$item['id']}">
+		<td>{$item['id']}</td>
+		<td class="name_editable">{$item['name']}</td>
+		<td><a href="__APP__/Site/index/id/{$item['id']}">{$item['count']}</a></td>
+		<td class="sort_editable">{$item['sort']}</td>
+		<td>
+		</td>
+	</tr>
+	</iterate>
+	</table>
+	<br />
+	<form action="__APP__/Category/add" method="post" target="_iframe">
+		<label for="input_name">添加新分类：</label><input type="text" name="name" id="input_name" size="10" tabindex="1" />
+		<label for="input_sort">排序：</label><input type="text" name="sort" id="input_sort" value="{$new_sort}" size="4" tabindex="2">
+		<input type="hidden" name="type" value="{$type}" />
+		<input type="submit" name="submit" value="添加" />
+	</form>
