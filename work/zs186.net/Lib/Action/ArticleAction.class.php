@@ -8,31 +8,15 @@ class ArticleAction extends BaseAction {
 		$options = C('_options_');
 		$this->category = $options['article_category'];
 	}
+	public function _empty() {
+		if (empty($_REQUEST['id'])) {
+			$this->index(ACTION_NAME);
+		}
+		else {
+			$this->detail($_REQUEST['id']);
+		}
+	}
 
-	public function announcement() {
-		if (empty($_REQUEST['id'])) {
-			$this->index(1);
-		}
-		else {
-			$this->detail();
-		}
-	}
-	public function knowledge() {
-		if (empty($_REQUEST['id'])) {
-			$this->index(2);
-		}
-		else {
-			$this->detail();
-		}
-	}
-	public function activity() {
-		if (empty($_REQUEST['id'])) {
-			$this->index(4);
-		}
-		else {
-			$this->detail();
-		}
-	}
 
 	public function index($category_id=1) {
 
@@ -55,7 +39,7 @@ class ArticleAction extends BaseAction {
 		$this->assign('page', $p->showMultiNavi());
 
 		$this->assign('content', 'index');
-		$this->display('Layout:main');
+		$this->display('Layout:default');
 	}
 	public function detail() {
 		if (empty($_REQUEST['id'])) {
@@ -73,7 +57,7 @@ class ArticleAction extends BaseAction {
 		$this->dao->setInc('view', 'id='.$id);
 
 		$this->assign('content', 'detail');
-		$this->display('Layout:main');
+		$this->display('Layout:default');
 	}
 }
 ?>

@@ -1,29 +1,30 @@
 <?php
 class BaseAction extends Action{
-	public $setting;
-	/**
-	*
-	* 对象初始化时自动执行
-	*/
-	public function _initialize() {
+
+	protected function _initialize() {
 		header("Content-Type:text/html; charset=utf-8");
-		if (cookie(C('USER_ID'))) {
-			//自动登录
-			$rs = M('User')->where("status=1")->find(cookie(C('USER_ID')));
-			if (!empty($rs) && count($rs)>0) {
-				$_SESSION[C('USER_ID')] = $rs['id'];
-				$_SESSION['user_name'] = $rs['realname'];
-				$_SESSION['user_type'] = $rs['type'];
-				if (2 == $rs['type']) {
-					$company_id = M('Company')->where("user_id=".$rs['id'])->getField('id');
-					if (!empty($company_id)) {
-						$_SESSION['company_id'] = $company_id;
-					}
+
+		$dao = M('Category');
+		$rs = $dao->where("status>0 and pid=0")->order('sort')->select();
+		foreach ($rs as $i=>$row) {
+			if ('Hotel' == $row['type']) {
+				$rs[$i]['sub'] = array(
+					'区域选择',
+					'星级选择',
+					'承接能力'
+					);
+			}
+			else {
+				$tmp_rs = $dao->where("pid=".$row['id']." and status>0")->order('sort')->getField('id,name');
+				if (!empty($tmp_rs) && count($tmp_rs)>0) {
+					$rs[$i]['sub'] = $tmp_rs;
+				}
+				else {
+					$rs[$i]['sub'] = M('Article')->where("category_id=".$row['id']." and status>0")->order('sort')->getField('id,title');
 				}
 			}
 		}
-		$this->setting = F('Index-setting');
-		$this->assign('setting', $this->setting);
+		$this->assign('menu', $rs);
 	}
 	protected function success($msg, $url='', $timeout=2000){
 		$html  = '<script language="JavaScript" type="text/javascript">';
