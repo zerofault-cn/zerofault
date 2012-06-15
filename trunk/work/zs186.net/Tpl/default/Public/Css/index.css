@@ -32,7 +32,13 @@ h1,h2,h3,h4,h5,h6{
 	margin:0;
 	font-weight:normal;
 }
-	
+.mce_content ol, .mce_content ul {
+	margin-left:20px;
+	list-style:disc outside;
+}
+.mce_content ol {
+	list-style-type: decimal;
+}
 
 .clear{
 	clear:both;

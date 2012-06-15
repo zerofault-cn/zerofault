@@ -1,11 +1,14 @@
-<load file="../Public/Css/index.css" />
-<load file="../Public/Css/inside.css" />
-<div id="article_detail">
-	<h2><strong>{$category}</strong><ul><li></li></ul></h2>
-	<div class="body">
-		<h3>{$info.title}</h3>
-		<h4><neq name="info.category_id" value="5">发布时间：{$info.create_time} &nbsp;&nbsp;&nbsp;&nbsp;
-		来源：{$info.source}</neq></h4>
-		<div class="content">{$info.content}</div>
-	</div>
-</div>
+			<div class="yhjd_r_nav"><div class="yhjd_r_bt">{$category}</div></div>
+			<div class="newxx_bt hui">
+				<h2>{$info.title}</h2>
+				作者：{$info.author}  时间：{$info.create_time|substr=0,10}  人气：{$info.view}  <a href="#">返回列表</a>
+			</div>
+			<div class="mce_content">
+				{$info.content}
+			</div>
+			<div style="height:50px;">
+				<table width="100%"><tr><td>上一篇：<empty name="rel_link.prev">没有了<else /><a href="__APP__/Article/detail/id/{$rel_link.prev.id}">{$rel_link.prev.title}</a></empty></td>
+				<td align="right">下一篇：<empty name="rel_link.next">没有了<else /><a href="__APP__/Article/detail/id/{$rel_link.next.id}">{$rel_link.next.title}</a></empty></td>
+				</tr>
+				</table>
+			</div>
