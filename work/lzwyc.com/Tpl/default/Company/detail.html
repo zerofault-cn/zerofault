@@ -3,13 +3,13 @@
 	<div>
 		<ul>
 			<li><strong>公司资质：</strong>{$info.qualification}
-				<if condition="($info['auth_status']&1) eq 1"><img src="../Public/Images/auth.png" align="absmiddle"/><em>已通过认证</em></if>
+				<if condition="($info['auth_status']&1) eq 1"><img src="../Public/Images/icon_renzheng.gif" align="absmiddle"/><em>已通过认证</em></if>
 			</li>
 			<li><strong>注册资本：</strong>{$info.capital}
-				<if condition="($info['auth_status']&1) eq 1"><img src="../Public/Images/auth.png" align="absmiddle"/><em>已通过认证</em></if>
+				<if condition="($info['auth_status']&1) eq 1"><img src="../Public/Images/icon_renzheng.gif" align="absmiddle"/><em>已通过认证</em></if>
 			</li>
 			<li><strong>成立时间：</strong>{$info.establish_date}
-				<if condition="($info['auth_status']&1) eq 1"><img src="../Public/Images/auth.png" align="absmiddle"/><em>已通过认证</em></if>
+				<if condition="($info['auth_status']&1) eq 1"><img src="../Public/Images/icon_renzheng.gif" align="absmiddle"/><em>已通过认证</em></if>
 			</li>
 			<li><strong>公司规模：</strong>{$info.scale}</li>
 			<li><strong>基础装修定价：</strong>{$info.fixed_price}</li>
@@ -19,7 +19,7 @@
 </div>
 <div id="case">
 	<h2><a href="__URL__/case_list/id/{$info.id}">更多&gt;&gt;</a></h2>
-	<ul>
+	<ul style="zoom:1">
 	<iterate name="info.Case" id="item" offset="0" length="8">
 		<li>
 			<a href="__URL__/case_detail/id/{$info.id}/case_id/{$item.id}" target="_blank"><if condition="is_file('__APP__/../Html/Attach/case_thumb/'.$item['id'].'.jpg') eq true"><img src="__APP__/../Html/Attach/case_thumb/{$item.id}.jpg" /><else /><img src="../Public/Images/test_case2.gif"></if></a>
@@ -28,6 +28,7 @@
 	</iterate>
 		<div class="clear"></div>
 	</ul>
+	
 </div>
 <div id="contact">
 	<h2></h2>

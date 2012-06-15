@@ -312,11 +312,13 @@ oswf.write("company_ad2");
 	</div>
 	<div class="right" id="announcement">
 		<h2>乐装网公告</h2>
+		<div class="announcement">
 		<ul>
 			<foreach name="announcement_list" item="item">
 			<li><a href="__APP__/Article/announcement/id/{$item.id}">{$item.title}</a></li>
 			</foreach>
 		</ul>
+		</div>
 		<img src="../Public/Images/service.png"/>
 	</div>
 	<div class="clear"></div>
@@ -340,6 +342,7 @@ oswf.write("company_ad2");
 <script type="text/javascript"> 
 $(document).ready(function(){
 	$(".marquee").kxbdMarquee({isEqual:false});
+	$(".announcement").kxbdMarquee({direction: 'up'});
 	$("#KinSlideshow").KinSlideshow();
 });
 </script>

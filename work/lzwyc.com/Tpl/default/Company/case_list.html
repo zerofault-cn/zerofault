@@ -1,6 +1,6 @@
 <div id="case">
 	<h2></h2>
-	<ul>
+	<ul style="zoom:1">
 		<foreach name="list" item="item">
 		<li>
 			<a href="__URL__/case_detail/id/{$info.id}/case_id/{$item.id}" target="_blank"><if condition="is_file('__APP__/../Html/Attach/case_thumb/'.$item['id'].'.jpg') eq true"><img src="__APP__/../Html/Attach/case_thumb/{$item.id}.jpg" /><else /><img src="../Public/Images/test_case2.gif"></if></a>
