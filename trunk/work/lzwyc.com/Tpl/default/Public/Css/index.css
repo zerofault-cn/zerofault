@@ -437,7 +437,7 @@
 }
 #designer {
 	width:676px;
-	height: 509px;
+	height: 460px;
 }
 #designer h2 {
 	height: 44px;
@@ -485,9 +485,14 @@
 	text-indent: -10000px;
 	background: url(../Images/announcement_bg.png) left top no-repeat;
 }
-#announcement ul {
+#announcement div {
 	padding: 10px 20px;
 	background-color: #e5f2c2;
+	height: 277px;
+	overflow: hidden;
+}
+#announcement ul {
+	
 }
 #announcement ul li {
 	color: #7ec64e;
