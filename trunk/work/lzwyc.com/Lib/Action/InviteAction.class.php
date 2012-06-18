@@ -224,10 +224,14 @@ class InviteAction extends BaseAction {
 			self::error('您的查看点数已用完！');
 		}
 
+		$view_count = M('View')->where("invite_id=".$id)->count();
+		if ($view_count >= 5) {
+			self::error('已超过查看名额限制！');
+		}
 		$dao->invite_id = $id;
 		$dao->company_id = $_SESSION['company_id'];
 		$dao->action_time = date('Y-m-d H:i:s');
-		$dao->point = (M('View')->where("invite_id=".$id)->count()>=3)?2:1;
+		$dao->point = ($view_count>=3)?2:1;
 		if ($dao->add()) {
 			self::success('登记成功，请刷新页面查看！');
 		}
