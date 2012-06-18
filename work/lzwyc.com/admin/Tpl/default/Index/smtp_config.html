@@ -1,0 +1,47 @@
+<form method="post" target="_iframe" autocomplete="off">
+<table cellpadding="5" cellspacing="1" bgcolor="#999999">
+<tr bgcolor="#FFFFFF">
+	<td>SMTP服务器地址：</td>
+	<td><input type="text" name="host" size="30" value="{$data.host}" />推荐：smtp.163.com</td>
+</tr>
+<tr bgcolor="#FFFFFF">
+	<td>SMTP服务器端口：</td>
+	<td><input type="text" name="port" size="10" value="{$data.port}" />默认：25</td>
+</tr>
+<tr bgcolor="#FFFFFF">
+	<td>SMTP服务账号：</td>
+	<td><input type="text" name="username" size="30" value="{$data.username}"/>如：test@163.com</td>
+</tr>
+<tr bgcolor="#FFFFFF">
+	<td>SMTP服务密码：</td>
+	<td><input type="password" name="password" size="30" value="{$data.password}"/>该账号的登录密码</td>
+</tr>
+<tr bgcolor="#FFFFFF">
+	<td>发送者邮箱：</td>
+	<td><input type="text" name="from_mail" size="30" value="{$data.from_mail}"/>请尽量与SMTP账号一致</td>
+</tr>
+<tr bgcolor="#FFFFFF">
+	<td>发送者称呼：</td>
+	<td><input type="text" name="from_name" size="30" value="{$data.from_name}"/>如：宜昌乐装网</td>
+</tr>
+<tr bgcolor="#FFFFFF">
+	<td colspan="2" style="text-align:center;">
+		<input type="submit" value="提交" name="submit" />
+	</td>
+</tr>
+</table>
+
+<br />
+</form>
+<if condition="!empty($data['username']) and !empty($data['password'])">
+<form action="__URL__/smtp_test" method="post" target="_iframe">
+<table cellpadding="5" cellspacing="1" bgcolor="#999999">
+<tr bgcolor="#FFFFFF">
+	<td>发送测试邮件：</td>
+	<td><input type="text" name="email" size="30" />
+	<input type="submit" value="发送" name="submit" /></td>
+</tr>
+</table>
+</form>
+</if>
+<br />
