@@ -1,22 +1,20 @@
 <?php
-class DistrictAction extends BaseAction{
+class LevelAction extends BaseAction{
 	protected $dao, $topnavi;
 	
 	protected function _initialize() {
 		parent::_initialize();
-		$this->dao = M('District');
+		$this->dao = M('Level');
 		$this->topnavi[] = array(
-			'text' => '区域设置'
+			'text' => '酒店星级'
 			);
 	}
 	public function index(){
 		$this->topnavi[]=array(
-			'text'=> '商业区域',
+			'text'=> '星级设置',
 			);
 		$this->assign("topnavi", $this->topnavi);
-		$where = array(
-			'pid' => 2
-			);
+		$where = array();
 		$order = 'sort';
 		$rs = $this->dao->where($where)->order($order)->select();
 		$this->assign('list', $rs);
@@ -33,14 +31,13 @@ class DistrictAction extends BaseAction{
 		if(!empty($count) && $count>0) {
 			self::_error('已经存在同名项目！');
 		}
-		$this->dao->pid = 2;
 		$this->dao->name = $name;
 		$this->dao->sort = $sort;
 		if($this->dao->add()){
 			self::_success('添加成功！');
 		}
 		else{
-			self::_error('添加失败！'.(C('APP_DEBUG')?$this->dao->getLastSql():''));
+			self::_error('修改失败！'.(C('APP_DEBUG')?$this->dao->getLastSql():''));
 		}
 	}
 	public function update(){

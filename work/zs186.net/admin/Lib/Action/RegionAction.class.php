@@ -25,20 +25,17 @@ class RegionAction extends BaseAction{
 		$this->display('Layout:default');
 	}
 	public function add(){
-		$type = trim($_REQUEST['type']);
 		$name = trim($_REQUEST['name']);
 		$sort = intval($_REQUEST['sort']);
 
 		$where['name'] = $name;
 		$count = $this->dao->where($where)->count();
 		if(!empty($count) && $count>0) {
-			self::_error('已经存在同名分类！');
+			self::_error('已经存在同名项目！');
 		}
-		$this->dao->type = $type;
+		$this->pid = 2;
 		$this->dao->name = $name;
-		$this->dao->create_time = date("Y-m-d H:i:s");
 		$this->dao->sort = $sort;
-		$this->dao->status = 1;
 		if($this->dao->add()){
 			self::_success('添加成功！');
 		}

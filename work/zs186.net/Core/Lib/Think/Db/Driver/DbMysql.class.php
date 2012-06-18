@@ -404,11 +404,16 @@ class DbMysql extends Db{
      +----------------------------------------------------------
      */
     public function escape_string($str) {
-        if($this->_linkID) {
-            return mysql_real_escape_string($str,$this->_linkID);
-        }else{
-            return mysql_escape_string($str);
-        }
+		if (get_magic_quotes_gpc()) {
+			return $str;
+		}
+		else {
+			if($this->_linkID) {
+				return mysql_real_escape_string($str,$this->_linkID);
+			}else{
+				return mysql_escape_string($str);
+			}
+		}
     }
 
     /**

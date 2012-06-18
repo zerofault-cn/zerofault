@@ -5,5 +5,8 @@ Class EmptyAction extends BaseAction {
 		echo	$alias = MODULE_NAME;
 		echo '|'.$_REQUEST['id'];
 	}
+	public function add() {
+		echo ACTION_NAME;
+	}
 }
 ?>

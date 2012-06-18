@@ -2,28 +2,44 @@
 <input type="hidden" name="id" value="{$info.id}" />
 <table cellpadding="4" cellspacing="4">
 <tr>
-	<td width="72">类别：</td>
-	<td><select name="category_id"><option value="0">请选择类别</option>{$info.category_opts}</select></td>
+	<td width="72">酒店分类：</td>
+	<td><select name="category_id"><option value="0">--请选择--</option>{$info.category_opts}</select></td>
 </tr>
 <tr>
-	<td width="50">标题：</td>
-	<td><input type="text" name="title" size="20" maxlength="100" value="{$info.title}" /></td>
+	<td>酒店名称：</td>
+	<td><input type="text" name="name" size="30" maxlength="100" value="{$info.name}" /></td>
 </tr>
 <tr>
-	<td>作者：</td>
-	<td><input type="text" name="author" size="20" maxlength="100" value="{$info.author}" /></td>
+	<td>缩略图：</td>
+	<td><if condition="is_file('__APP__/../html/Attach/Hotel/'.$info['id'].'.jpg') eq true">
+		<img src="__APP__/../html/Attach/Hotel/{$info['id']}.jpg"/>(上传新文件将覆盖原文件)<br />
+		</if>
+		<input type="file" name="file" size="30" />(JPG格式，尺寸：228*130)
+	</td>
 </tr>
 <tr>
-	<td>摘要：</td>
-	<td><textarea name="summary" rows="4" cols="60" >{$info.summary}</textarea></td>
+	<td>行政区域：</td>
+	<td><select name="region_id"><option value="0">--请选择--</option>{$info.region_opts}</select></td>
 </tr>
 <tr>
-	<td>正文：</td>
-	<td><textarea name="content" rows="40" cols="100" >{$info.content}</textarea></td>
+	<td>商业区域：</td>
+	<td><select name="district_id"><option value="0">--请选择--</option>{$info.district_opts}</select></td>
+</tr>
+<tr>
+	<td>星级：</td>
+	<td><select name="level_id"><option value="0">--请选择--</option>{$info.level_opts}</select></td>
+</tr>
+<tr>
+	<td>承接能力：</td>
+	<td><input type="text" class="text" name="capacity" value="{$info.capacity}" /></td>
+</tr>
+<tr>
+	<td>详细介绍：</td>
+	<td><textarea name="introduction" class="content" rows="40" cols="100" >{$info.introduction}</textarea></td>
 </tr>
 <tr>
 	<td align="right" nowrap="nowrap">显示顺序：</td>
-	<td><input type="text" class="t_input" name="sort" value="{$info.sort}" size="10" />(数字越小越靠前)</td>
+	<td><input type="text" name="sort" value="{$info.sort}" size="10" />(数字越小越靠前)</td>
 </tr>
 <tr>
 	<td>&nbsp;</td>
@@ -41,10 +57,9 @@
 <script type="text/javascript">
 $(document).ready(function(){
 	tinyMCE.init({
-		// General options
 		language : "cn",
 		mode : "exact",
-		elements : "content",
+		elements : "introduction",
 		theme : "advanced",
 		plugins : "advlist,advimage,table,preview,paste",
 		theme_advanced_toolbar_location : "top",
