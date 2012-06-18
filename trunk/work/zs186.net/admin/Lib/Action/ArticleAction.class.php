@@ -46,22 +46,24 @@ class ArticleAction extends BaseAction{
 				'text'=> '修改文章内容',
 				);
 			$info = $this->dao->find($id);
-			$info['category_opts'] = self::genOptions($this->category_array['Article'], $info['category_id']);
-
 		}
 		else {
 			$topnavi[]=array(
 				'text'=> '添加文章',
 				);
-			$info = array('id' => 0);
-			$info['category_opts'] = self::genOptions($this->category_array['Article'], $info['category_id']);
+			$info = array(
+				'id' => 0,
+				'category_id' => 0
+				);
+			!empty($_REQUEST['category_id']) && ($info['category_id'] = $_REQUEST['category_id']);
 			$max_sort = $this->dao->getField("max(sort)");
 			$info['sort'] = $max_sort+2;
 		}
-		$this->assign("topnavi", $topnavi);
+		$info['category_opts'] = self::genOptions($this->category_array['Article'], $info['category_id']);
 		$this->assign("info", $info);
+		$this->assign("topnavi", $topnavi);
 
-		$this->assign('content',ACTION_NAME);
+		$this->assign('content', ACTION_NAME);
 		$this->display('Layout:default');
 	}
 

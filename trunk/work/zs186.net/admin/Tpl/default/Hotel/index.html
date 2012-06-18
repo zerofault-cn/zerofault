@@ -1,3 +1,4 @@
+	<input type="button" value="添加酒店" onclick="window.location.href='__URL__/form/category_id/{$category_id}';"/>
 	{$page}
 	<table id="table" class="list" border="1" cellpadding="3" cellspacing="0" width="100%" bordercolor="#999999" style="border-collapse:collapse;">
 	<tr bgcolor="#ededed">
@@ -7,6 +8,7 @@
 		<th>商业区域</th>
 		<th>星级</th>
 		<th>承接能力</th>
+		<th>排序</th>
 		<th>添加日期</th>
 		<th>操作</th>
 	</tr>
@@ -16,9 +18,10 @@
 		<td>{$item.name}</td>
 		<td nowrap="nowrap">{$item.Region.name}</td>
 		<td nowrap="nowrap">{$item.District.name}</td>
-		<td>{$item.level}</td>
+		<td>{$item.Level.name}</td>
 		<td>{$item.capacity}</td>
-		<td nowrap="nowrap">{$item['create_time']|substr=0,10}</td>
+		<td>{$item.sort}</td>
+		<td nowrap="nowrap">{$item['addtime']|substr=0,10}</td>
 		<td nowrap="nowrap">
 			<if condition="$item['status'] neq '-1'">
 			<a href="__URL__/form/id/{$item['id']}" title="修改"><img src="../Public/Images/form_edit.gif" alt="edit" /></a>

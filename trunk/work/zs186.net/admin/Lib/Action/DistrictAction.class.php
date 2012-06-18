@@ -31,7 +31,7 @@ class DistrictAction extends BaseAction{
 		$where['name'] = $name;
 		$count = $this->dao->where($where)->count();
 		if(!empty($count) && $count>0) {
-			self::_error('已经存在同名分类！');
+			self::_error('已经存在同名项目！');
 		}
 		$this->dao->pid = 2;
 		$this->dao->name = $name;
