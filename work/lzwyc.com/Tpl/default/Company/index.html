@@ -8,12 +8,13 @@
 			<td width="190" class="img" valign="top"><a href="__URL__/detail/id/{$item.id}" target="_blank"><if condition="is_file('__APP__/../Html/Attach/company_logo/'.$item['id'].'.jpg') eq true"><img src="__APP__/../Html/Attach/company_logo/{$item.id}.jpg" width="150"/><else /><img src="../Public/Images/test_logo.jpg"/></if></a></td>
 			<td class="text">
 				<address><a href="__URL__/detail/id/{$item.id}" target="_blank">{$item.name}</a>
-				<if condition="($item['auth_status']&2) eq 2">
-				<img src="../Public/Images/icon_pinpai.gif" align="absmiddle"/>
-				</if></address>
 				<if condition="($item['auth_status']&1) eq 1">
-				<img src="../Public/Images/icon_shiming.png" /><br />
+				<img src="../Public/Images/icon_shiming.png" align="absbottom"/>
 				</if>
+				<if condition="($item['auth_status']&2) eq 2">
+				<img src="../Public/Images/icon_pinpai.gif"  align="absbottom"/>
+				</if></address>
+				
 				<if condition="$item.qualification neq ''">
 				公司资质：{$item.qualification}
 				</if>
@@ -26,9 +27,6 @@
 				<br />
 				案例: {$item.Case|count}套； 留言: {$item.Feedback|count}条； 装修公司定价：{$item.fixed_price}<br />
 				电话：<em>{$item.telephone} {$item.mobile}</em><br />
-			</td>
-			<td width="82" class="ext" valign="top">
-				<a class="btn" href="__URL__/detail/id/{$item.id}" target="_blank">去看看</a>
 			</td>
 		</tr>
 		<tr>

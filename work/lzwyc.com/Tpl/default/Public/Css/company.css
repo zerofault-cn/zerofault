@@ -36,8 +36,6 @@
 	border-width: 8px 9px;
 }
 #company_list td.text {
-	float: left;
-	width: 395px;
 	font-size: 12px;
 	line-height: 24px;
 }
