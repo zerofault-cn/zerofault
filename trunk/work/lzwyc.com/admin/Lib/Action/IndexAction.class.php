@@ -66,6 +66,68 @@ class IndexAction extends BaseAction{
 		$this->display('Layout:default');
 	}
 
+	public function smtp_config() {
+		if (!empty($_POST['submit'])) {
+			$data = array(
+				'host' => trim($_REQUEST['host']),
+				'port' => trim($_REQUEST['port']),
+				'username' => trim($_REQUEST['username']),
+				'password' => trim($_REQUEST['password']),
+				'from_mail' => trim($_REQUEST['from_mail']),
+				'from_name' => trim($_REQUEST['from_name'])
+				);
+
+			if(F(ACTION_NAME, $data, APP_PATH.'/../Runtime/Data/')) {
+				self::_success('提交成功！', __URL__.'/'.ACTION_NAME);
+			}
+			else {
+				self::_error('保存数据出错！');
+			}
+		}
+		$topnavi[]=array(
+			'text'=> '邮件服务器设置',
+			);
+		$this->assign("topnavi", $topnavi);
+
+		$data = F(ACTION_NAME, '', APP_PATH.'/../Runtime/Data/');
+		if (empty($data)) {
+			$data = array(
+				'host' => 'smtp.163.com',
+				'port' => '25',
+				'username' => '',
+				'password' => '',
+				'from_mail' => '',
+				'from_name' => '宜昌乐装网(www.lzwyc.com)'
+				);
+		}
+		$this->assign('data', $data);
+		$this->assign('content', ACTION_NAME);
+		$this->display('Layout:default');
+	}
+	public function smtp_test() {
+		$email = trim($_REQUEST['email']);
+		empty($email) && self::_error('请先填写一个有效的email地址！');
+		$smtp_config = F('smtp_config', '', APP_PATH.'/../Runtime/Data/');
+		include_once (LIB_PATH.'class.phpmailer.php');
+		$mail = new PHPMailer();
+		$mail->IsSMTP();
+		$mail->Host		= $smtp_config['host'];
+		$mail->Port		= $smtp_config['port'];
+		$mail->SMTPAuth = true;
+		$mail->Username = $smtp_config['username'];
+		$mail->Password = $smtp_config['password'];
+		$mail->SetFrom($smtp_config['from_mail'], $smtp_config['from_name']);
+		$mail->Subject='测试邮件';
+		$mail->AddAddress($email);
+		$mail->MsgHTML('<h1>这是一封测试邮件，用于测试您的SMTP参数是否设置正确！</h1><h2>您现在看到了这封邮件，说明您的参数设置是正确的！</h2>');
+		if($mail->Send()) {
+			self::_success('测试邮件发送成功，请到您的邮箱查看确认！', 5000);
+		}
+		else {
+			self::_error('发送失败！<br />'.str_replace(array("\r\n", "\n"), '<br />', $mail->ErrorInfo));
+		}
+	}
+
 	public function marquee() {
 		if (!empty($_POST['submit'])) {
 			$data = array();

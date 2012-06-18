@@ -157,7 +157,40 @@ class InviteAction extends BaseAction {
 	*
 	* 调用基类方法
 	*/
-	public function update(){
+	public function update() {
+		if ('status'==$_REQUEST['f'] && 1==intval($_REQUEST['v'])) {
+			//邮件通知给所有公司账号
+			$smtp_config = F('smtp_config', '', APP_PATH.'/../Runtime/Data/');
+			if (empty($smtp_config)) {
+				self::_error('邮件服务器参数未设置！');
+			}
+			include_once (LIB_PATH.'class.phpmailer.php');
+			$mail = new PHPMailer();
+			$mail->IsSMTP();
+			$mail->Host		= $smtp_config['host'];
+			$mail->Port		= $smtp_config['port'];
+			$mail->SMTPAuth = true;
+			$mail->Username = $smtp_config['username'];
+			$mail->Password = $smtp_config['password'];
+			$mail->SetFrom($smtp_config['from_mail'], $smtp_config['from_name']);
+			
+			$info = $this->dao->find($_REQUEST['id']);
+			$mail->Subject = '最新招标提醒：'.$info['region'].' '.$info['address'].' '.$info['room_str'].' '.round($info['area'], 1).'平米';
+			$body = '各装饰装修公司：<br />&nbsp;&nbsp;&nbsp;&nbsp;现有业主发布新的装修招标，并已通过审核，请登录“宜昌乐装网(www.lzwyc.com)”查看投标。<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;招标项目：<a href="__APP__/Invite/detail/id/'.$info['id'].'">'.$info['region'].' '.$info['address'].' '.$info['room_str'].' '.round($info['area'], 1).'m<sup>2</sup>, ¥'.number_format($info['budget']*10000).'元</a><br />';
+			$body .= '<br /><br />宜昌乐装网：<a href="http://www.lzwyc.com">http://www.lzwyc.com</a>';
+			$mail->MsgHTML($body);
+			
+			//所有已通过审核的公司账号
+			$rs = M('User')->where("type=2 and status=2")->getField('id,email');
+			foreach($rs as $email) {
+				$mail->ClearAddresses();
+				$mail->AddAddress($email);
+				if(!$mail->Send()) {
+					Log::Write('Mail Error: '.$mail->ErrorInfo, LOG::ERR);
+				}
+				Log::Write('Mail Success: '.$email, LOG::INFO);
+			}
+		}
 		parent::_update();
 	}
 	/**

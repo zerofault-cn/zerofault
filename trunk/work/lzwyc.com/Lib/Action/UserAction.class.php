@@ -102,7 +102,7 @@ class UserAction extends BaseAction {
 			$this->dao->password = md5($password);
 			$this->dao->realname = $realname;
 			$this->dao->sex = $sex;
-			$this->dao->reg_time = date('Y-m-d H:i:s');
+			$this->dao->reg_time = $this->dao->login_time = date('Y-m-d H:i:s');
 			$this->dao->status = 1;
 			if($user_id = $this->dao->add()) {
 				if (2==$type) {
