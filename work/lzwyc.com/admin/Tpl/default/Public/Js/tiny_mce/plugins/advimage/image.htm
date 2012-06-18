@@ -28,11 +28,11 @@
 
 						<table class="properties">
 							<tr>
-								<td class="column1"><label id="filelabel" for="select_file">Upload Image file</label></td>
-								<td colspan="2"><input type="file" id="select_file" name="select_file" style="width:auto;"/><input type="button" id="upload_file" value="Submit" style="width:auto;" onclick='ImageDialog.upload_file();'/><img id="upload_status" src="../../../../Images/loader.gif" style="display:none;" align="absmiddle"/></td>
+								<td class="column1"><label id="filelabel" for="select_file">从本地上传</label></td>
+								<td colspan="2"><input type="file" id="select_file" name="select_file" style="width:auto;"/><input type="button" id="upload_file" value="上传" style="width:auto;" onclick='ImageDialog.upload_file();'/><img id="upload_status" src="../../../../Images/loader.gif" style="display:none;" align="absmiddle"/></td>
 							</tr>
 							<tr>
-								<td class="column1">or <label id="srclabel" for="src">{#advimage_dlg.src}</label></td>
+								<td class="column1">或填写 <label id="srclabel" for="src">{#advimage_dlg.src}</label></td>
 								<td colspan="2"><table border="0" cellspacing="0" cellpadding="0">
 									<tr> 
 									  <td><input name="src" type="text" id="src" value="" class="mceFocus" onchange="ImageDialog.showPreviewImage(this.value);" /></td> 
