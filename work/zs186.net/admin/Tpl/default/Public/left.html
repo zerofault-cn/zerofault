@@ -15,7 +15,7 @@
 				<foreach name="Hotel_Category" key="key" item="item">
 				<li class="<eq name='MODULE_NAME' value='Hotel'><eq name='_GET.category_id' value='$key'>curr</eq></eq>"><a href="__APP__/Hotel/index/category_id/{$key}">{$item}</a></li>
 				</foreach>
-				<li class="<eq name='MODULE_NAME' value='Article'><eq name='ACTION_NAME' value='form'>curr</eq></eq>"><a href="__APP__/Hotel/form">添加酒店</a></li>
+				<li class="<eq name='MODULE_NAME' value='Hotel'><eq name='ACTION_NAME' value='form'>curr</eq></eq>"><a href="__APP__/Hotel/form">添加酒店</a></li>
 			</ul>
 		</li>
 

@@ -1,20 +1,10 @@
-<load file="../Public/Css/index.css" />
-
-<div id="article_list">
-	<h2><strong>{$category}</strong><ul><li></li></ul></h2>
-	<div class="body">
-		<ul>
-		<foreach name="list" key="key" item="item">
-			<if condition="$key gt 0 && $key%5 eq 0">
-			<li class="line"></li>
-			</if>
-			<li>
-				<span>({$item.create_time|substr=0,10})</span>
-				<a href="__URL__/{$Think.ACTION_NAME}/id/{$item.id}" target="_blank">{$item.title}</a>
-				<div class="clear"></div>
-			</li>
-		</foreach>
-		</ul>
-		<div class="pagenavi">{$page}</div>
-	</div>
-</div>
+<div class="yhjd_r_nav"><div class="yhjd_r_bt">{$info.title}</div></div>
+<iterate name="list" item="item">
+<div class="new_mk">
+      <div class="new_mk_l"><img src="images/new_10.jpg"></div>
+      <div class="new_mk_r">
+        <div class="new_nav">{$item.title}&nbsp;<span class="hui">{$item.create_time|substr=0,10}</span></div>
+          <div>{$item.summary}</div>
+          <div class="more"><a href="#" target="_blank"><img src="images/new_17.jpg"></a></div>
+      </div>
+  </div>

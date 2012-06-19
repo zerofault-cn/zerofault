@@ -5,32 +5,35 @@ class ArticleAction extends BaseAction{
 	public function _initialize() {
 		parent::_initialize();
 		$this->dao = D('Article');
-		$this->topnavi[] = array(
-			'text' => '内容管理'
-			);
-		$this->category_arr = M('Category')->where("type='Article' and status>0")->order('sort')->getField('id,name');
 	}
 
 	public function index(){
 		$topnavi[]=array(
-			'text'=> '文章管理',
+			'text'=> '内容管理',
 			'url' => __APP__.'/Article'
 			);
 
 		$order = 'sort';
 		$where = array();
 		if(!empty($_REQUEST['category_id'])) {
-			$where['category_id'] = $_REQUEST['category_id'];
+			//判断是否有子类
+			$tmp_rs = M('Category')->where("pid=".$_REQUEST['category_id'])->getField('id,name');
+			if (!empty($tmp_rs) && count($tmp_rs)>0) {
+				$where['category_id'] = array('in', implode(',', array_keys($tmp_rs)));
+			}
+			else {
+				$where['category_id'] = $_REQUEST['category_id'];
+			}
 			$topnavi[]=array(
-				'text'=> '文章列表：'.$this->category_array['Article'][$_REQUEST['category_id']],
+				'text'=> '内容列表：'.M('Category')->where("id=".$_REQUEST['category_id'])->getField('name'),
 				);
 		}
 		else {
 			$topnavi[]=array(
-				'text'=> '全部文章',
+				'text'=> '全部内容',
 				);
 		}
-		$rs = $this->dao->where($where)->order($order)->select();
+		$rs = $this->dao->relation(true)->where($where)->order($order)->select();
 
 		$this->assign('list', $rs);
 
@@ -43,13 +46,17 @@ class ArticleAction extends BaseAction{
 
 		if ($id > 0) {
 			$topnavi[]=array(
-				'text'=> '修改文章内容',
+				'text'=> '修改内容',
 				);
 			$info = $this->dao->find($id);
+			$pid = M('Category')->where("id=".$info['category_id'])->getField('pid');
+			if (!empty($pid) && $pid>0) {
+				$this->category_array['Article'] = M('Category')->where("pid=".$pid." and status>0")->getField('id,name');
+			}
 		}
 		else {
 			$topnavi[]=array(
-				'text'=> '添加文章',
+				'text'=> '添加内容',
 				);
 			$info = array(
 				'id' => 0,
@@ -66,6 +73,12 @@ class ArticleAction extends BaseAction{
 		$this->assign('content', ACTION_NAME);
 		$this->display('Layout:default');
 	}
+	public function sub_category() {
+		$id = intval($_REQUEST['id']);
+		$rs = M('Category')->where("pid=".$id." and status>0")->order('sort')->getField('id,name');
+		empty($rs) && ($rs = array());
+		die(json_encode($rs));
+	}
 
 	public function submit(){
 		if(empty($_POST['submit'])) {
@@ -74,7 +87,7 @@ class ArticleAction extends BaseAction{
 		$id = empty($_REQUEST['id']) ? 0 : intval($_REQUEST['id']);
 
 		$category_id = intval($_REQUEST['category_id']);
-		$category_id<=0 && self::_error('类别必须选择！');
+		$category_id<=0 && self::_error('分类必须选择！');
 		$title = trim($_REQUEST['title']);
 		''==$title && self::_error('标题必须填写！');
 		$author = trim($_REQUEST['author']);
@@ -88,11 +101,18 @@ class ArticleAction extends BaseAction{
 			}
 			$this->dao->category_id = $category_id;
 			$this->dao->title = $title;
+			$this->dao->author = $author;
 			$this->dao->summary = $summary;
 			$this->dao->content = $content;
 			$this->dao->sort = $sort;
 			$this->dao->modify_time = date("Y-m-d H:i:s");
 			if(false !== $this->dao->where("id=".$id)->save()) {
+				if($_FILES['file']['size'] > 0) {
+					$path = 'html/Attach/Article/'.$id.'.jpg';
+					if (!move_uploaded_file($_FILES['file']['tmp_name'], $path)) {
+						self::_error('上传缩略图出错！');
+					}
+				}
 				self::_success('修改成功！', __URL__.'/index/category_id/'.$category_id);
 			}
 			else{
@@ -106,12 +126,20 @@ class ArticleAction extends BaseAction{
 			}
 			$this->dao->category_id = $category_id;
 			$this->dao->title = $title;
+			$this->dao->author = $author;
+			$this->dao->summary = $summary;
 			$this->dao->content = $content;
 			$this->dao->sort = $sort;
 			$this->dao->create_time = date("Y-m-d H:i:s");
 			$this->dao->modify_time = date("Y-m-d H:i:s");
 			$this->dao->status = 1;
-			if($this->dao->add()) {
+			if($id = $this->dao->add()) {
+				if($_FILES['file']['size'] > 0) {
+					$path = 'html/Attach/Article/'.$id.'.jpg';
+					if (!move_uploaded_file($_FILES['file']['tmp_name'], $path)) {
+						self::_error('上传缩略图出错！');
+					}
+				}
 				self::_success('添加成功！', __URL__.'/index/category_id/'.$category_id);
 			}
 			else {

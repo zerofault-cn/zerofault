@@ -1,14 +1,42 @@
-			<div class="yhjd_r_nav"><div class="yhjd_r_bt">{$category}</div></div>
+			<div class="yhjd_r_nav"><div class="yhjd_r_bt">{$info.title}</div></div>
+			<eq name="category.alias" value="news">
 			<div class="newxx_bt hui">
 				<h2>{$info.title}</h2>
 				作者：{$info.author}  时间：{$info.create_time|substr=0,10}  人气：{$info.view}  <a href="#">返回列表</a>
 			</div>
+			</eq>
 			<div class="mce_content">
 				{$info.content}
 			</div>
 			<div style="height:50px;">
-				<table width="100%"><tr><td>上一篇：<empty name="rel_link.prev">没有了<else /><a href="__APP__/Article/detail/id/{$rel_link.prev.id}">{$rel_link.prev.title}</a></empty></td>
-				<td align="right">下一篇：<empty name="rel_link.next">没有了<else /><a href="__APP__/Article/detail/id/{$rel_link.next.id}">{$rel_link.next.title}</a></empty></td>
+				<table width="100%"><tr><td>上一篇：<empty name="rel_link.prev">没有了<else /><a href="__APP__/Article/{$category.alias}/id/{$rel_link.prev.id}">{$rel_link.prev.title}</a></empty></td>
+				<td align="right">下一篇：<empty name="rel_link.next">没有了<else /><a href="__APP__/Article/{$category.alias}/id/{$rel_link.next.id}">{$rel_link.next.title}</a></empty></td>
+				</tr>
+				</table>
+			</div>
+			<div class="wyyd">
+				<div class="wyyd_nav">我要预订</div>
+				<table width="90%" align="center">
+				<tr>
+					<td>
+						<span class="red">*</span> 姓名：
+					</td>
+					<td>
+						<input name="textfield" type="text" class="textbox" id="textfield" />
+					</td>
+					<td>
+						<span class="red">*</span> 电话：
+					</td>
+					<td >
+						<input name="textfield" type="text" class="textbox" id="textfield"  />
+					</td>
+					<td></td>
+				</tr>
+				<tr>
+					<td colspan="4">
+						<textarea name="textarea" cols="45" rows="5" class="textareabox">详细需求说明</textarea>
+					</td>
+					<td><a href="#"><img src="../Public/Images/yhjdxx_18.gif"></a></td>
 				</tr>
 				</table>
 			</div>

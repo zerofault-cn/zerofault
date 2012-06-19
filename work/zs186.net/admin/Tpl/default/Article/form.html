@@ -2,13 +2,20 @@
 <input type="hidden" name="id" value="{$info.id}" />
 <table cellpadding="4" cellspacing="4">
 <tr>
-	<td width="72">类别：</td>
-	<td><select name="category_id"><option value="0">请选择类别</option>{$info.category_opts}</select></td>
+	<td width="72">分类：</td>
+	<td><select name="category_id" id="category_id"><option value="0">--请选择--</option>{$info.category_opts}</select>&nbsp;</td>
 </tr>
 <tr>
-	<td width="50">标题：</td>
+	<td>标题：</td>
 	<td><input type="text" name="title" size="20" maxlength="100" value="{$info.title}" /></td>
 </tr>
+<tr>
+	<td>配图：</td>
+	<td><if condition="is_file('__APP__/../html/Attach/Article/'.$info['id'].'.jpg') eq true">
+		<img src="__APP__/../html/Attach/Article/{$info['id']}.jpg"/>(上传新文件将覆盖原文件)<br />
+		</if>
+		<input type="file" name="file" size="30" />(JPG格式，尺寸：140*106)
+	</td>
 <tr>
 	<td>作者：</td>
 	<td><input type="text" name="author" size="20" maxlength="100" value="{$info.author}" /></td>
@@ -57,5 +64,29 @@ $(document).ready(function(){
 		forced_root_block : false,
 		convert_urls : false
 	});
+	$("#category_id").change(function(i) {
+		var obj = $(this);
+		var category_id = obj.val();
+		//get sub category
+		$.getJSON("__URL__/sub_category/id/"+category_id, function(data) {
+			obj.nextAll().remove();
+			var select = $("<select />").attr("name", "category_id");
+			select.append($("<option />").text("请选择子分类"));
+			var n = 0;
+			$.each(data, function(id, name) {
+				var option = $("<option />").attr("value", id).text(name);
+				select.append(option);
+				n++;
+			});
+			if (n>0) {
+				obj.attr("name", "pid");
+				obj.after(select);
+			}
+			else {
+				obj.attr("name", "category_id");
+			}
+		});
+	});
 });
+
 </script>

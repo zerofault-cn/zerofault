@@ -1,9 +1,9 @@
 			<div class="lxfs"><img src="../Public/Images/new_06.jpg"></div>
 			<div class="new_list">
 				<ul>
-					<li><a href="#">致尚优惠</a></li>
-					<li><a href="#">会议新闻</a></li>
-					<li><a href="#">会展新闻</a></li>
+					<foreach name="left_list" item="item">
+					<li><a href="__URL__/{$category.alias}/id/{$item.id}" <eq name="_GET.id" value="$item.id">class="active"</eq>>{$item.title}</a></li>
+					</foreach>
 				</ul>
 			</div>
 			<div class="lxfs"><img src="images/yhjd_21.jpg"></div>
