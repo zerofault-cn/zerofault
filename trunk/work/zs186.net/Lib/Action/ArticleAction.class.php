@@ -1,57 +1,66 @@
 <?php
 class ArticleAction extends BaseAction {
-	protected $dao, $category;
+	protected $dao;
 
 	public function _initialize() {
 		$this->dao = D('Article');
 		parent::_initialize();
-		$options = C('_options_');
-		$this->category = $options['article_category'];
 	}
 	public function _empty() {
-		if (empty($_REQUEST['id'])) {
-			$this->index(ACTION_NAME);
+		$id = intval($_REQUEST['id']);
+		if (empty($id)) {
+			$alias = ACTION_NAME;
+			$category = M('Category')->where("alias='".$alias."'")->find();
+			$sub_category = M('Category')->where("pid=".$category_id)->select();
+			if (!empty($sub_category) && count($sub_category)>0) {
+				$this->index($category['id']);
+				exit;
+			}
+
+			$where = array(
+				'category_id' => $category['id'],
+				'status' => array('gt', 0)
+				);
+			$order = 'sort, id';
+			$row = $this->dao->where($where)->order($order)->find();
+			$id = $row['id'];
+			$_GET['id'] = $id;
 		}
 		else {
-			$this->detail($_REQUEST['id']);
+			$category_id = $this->dao->where("id=".$id)->getField('category_id');
+			$category = M('Category')->find($category_id);
 		}
+		$this->assign('category', $category);
+
+		$left_list = $this->dao->where("category_id=".$category['id']." and status>0")->order('sort, id')->select();
+		$this->assign('left_list', $left_list);
+		$this->detail($id);
 	}
+	public function index($category_id=0) {
+		//取第一个子分类
+		$first_sub_category = M('Category')->where("pid=".$category_id)->find();
 
-
-	public function index($category_id=1) {
-
-		if(!empty($_REQUEST['cid'])) {
-			$category_id = $_REQUEST['cid'];
-		}
-		$this->assign('category', $this->category[$category_id]);
-		$this->assign('MODULE_TITLE', $this->category[$category_id]);
+		//子分类文章列表
 		$where = array(
-			'category_id' => $category_id,
+			'category_id' => $first_sub_category['id'],
 			'status' => array('gt', 0)
 			);
 		$order = 'sort, id desc';
-		$count = $this->dao->where($where)->getField('count(*)');
+		$count = $this->dao->where($where)->count();
 		import("@.Paginator");
-		$limit = 30;
+		$limit = 10;
 		$p = new Paginator($count, $limit);
 		$rs = $this->dao->where($where)->order($order)->limit($p->offset.','.$p->limit)->select();
 		$this->assign('list', $rs);
 		$this->assign('page', $p->showMultiNavi());
-
-		$this->assign('content', 'index');
-		$this->display('Layout:main');
 	}
-	public function detail() {
-		if (empty($_REQUEST['id'])) {
-			redirect(__URL__);
-		}
-		$id = intval($_REQUEST['id']);
+
+	public function detail($id=0) {
+		!empty($_REQUEST['id']) && ($id = intval($_REQUEST['id']));
 		$this->dao->setInc('view', 'id='.$id);
 
 		$info = $this->dao->find($id);
 		$this->assign('ACTION_TITLE', $info['title']);
-		$this->assign('MODULE_TITLE', $this->category[$info['category_id']]);
-		$this->assign('category', $this->category[$info['category_id']]);
 		$this->assign('info', $info);
 
 		//获取上一篇，下一篇

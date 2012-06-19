@@ -237,7 +237,7 @@ h1{
 	}
 
 
-.new_list ul li a:hover{
+.new_list ul li a:hover, .new_list ul li a:active, .new_list ul li a.active{
 	background:url(../Images/new_13.jpg) no-repeat;
 	color:#FFF;
 	}

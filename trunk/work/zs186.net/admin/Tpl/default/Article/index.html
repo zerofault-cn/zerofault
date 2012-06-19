@@ -4,7 +4,7 @@
 		<th width="5%">ID</th>
 		<th>标题</th>
 		<notpresent name="_GET['category_id']">
-		<th nowrap>文章类别</th>
+		<th nowrap>分类</th>
 		</notpresent>
 		<th width="10%">查看次数</th>
 		<th width="12%">排序</th>
@@ -18,7 +18,7 @@
 			<a href="__APP__/../index.php/Article/detail/id/{$item.id}" target="_blank">{$item['title']}</a>
 		</td>
 		<notpresent name="_GET['category_id']">
-		<td><a href="__URL__/index/category_id/{$item['category_id']}" title="查看本类下所有文章">{$categorys[$item['category_id']]}</a>
+		<td><a href="__URL__/index/category_id/{$item['category_id']}" title="查看本类下所有文章">{$item.Category.name}</a>
 		</notpresent>
 		<td>{$item['view']}</td>
 		<td><label id="{$item['id']}">{$item['sort']}</label></td>

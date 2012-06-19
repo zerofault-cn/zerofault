@@ -20,13 +20,23 @@ class CategoryAction extends BaseAction{
 			);
 		$this->assign("topnavi", $this->topnavi);
 		$where = array(
-			'type' => $type
+			'type' => $type,
+			'pid' => 0
 			);
 		$order = 'sort';
 		$rs = $this->dao->where($where)->order($order)->select();
 		foreach($rs as $key=>$val) {
 			$rs[$key]['count'] = M($type)->where(array('category_id'=>$val['id']))->count();
+			$tmp_rs = $this->dao->where("pid=".$val['id'])->select();
+			if (!empty($tmp_rs) && count($tmp_rs)>0) {
+				foreach ($tmp_rs as $tmp_key=>$tmp_val) {
+					$tmp_rs[$tmp_key]['count'] = M($type)->where(array('category_id'=>$tmp_val['id']))->count();
+					$rs[$key]['count'] += $tmp_rs[$tmp_key]['count'];
+				}
+				$rs[$key]['sub'] = $tmp_rs;
+			}
 		}
+
 
 		$this->assign('list', $rs);
 		$this->assign('type', $type);
