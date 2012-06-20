@@ -29,5 +29,6 @@ return  array(
     'APP_FILE_CASE'  =>   true, // 是否检查文件的大小写 对Windows平台有效
     'TMPL_STRIP_SPACE'      => false,       // 是否去除模板文件里面的html空格与换行
     'SHOW_ERROR_MSG'        => true,    // 显示错误信息
+	'SHOW_PAGE_TRACE'=>true,
 );
 ?>

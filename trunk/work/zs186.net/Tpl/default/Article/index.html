@@ -1,10 +1,11 @@
-<div class="yhjd_r_nav"><div class="yhjd_r_bt">{$info.title}</div></div>
-<iterate name="list" item="item">
+<div class="yhjd_r_nav"><div class="yhjd_r_bt">{$category.name}</div></div>
+<iterate name="list" id="item">
 <div class="new_mk">
-      <div class="new_mk_l"><img src="images/new_10.jpg"></div>
+      <div class="new_mk_l"><a href="__URL__/{$category.alias}/id/{$item.id}" target="_blank"><if condition="is_file('__APP__/../html/Attach/Article/'.$item['id'].'.jpg') eq true"><img src="__APP__/../html/Attach/Article/{$item.id}.jpg" width="140"/><else /><img src="../Public/Images/new_10.jpg"/></if></a></div>
       <div class="new_mk_r">
-        <div class="new_nav">{$item.title}&nbsp;<span class="hui">{$item.create_time|substr=0,10}</span></div>
+        <div class="new_nav"><a href="__URL__/detail/id/{$item.id}" target="_blank">{$item.title}</a>&nbsp;<span class="hui">{$item.create_time|substr=0,10}</span></div>
           <div>{$item.summary}</div>
-          <div class="more"><a href="#" target="_blank"><img src="images/new_17.jpg"></a></div>
+          <div class="more"><a href="__URL__/{$category.alias}/id/{$item.id}" target="_blank"><img src="../Public/Images/new_17.jpg"></a></div>
       </div>
   </div>
+</iterate>

@@ -1,0 +1,74 @@
+<div class="yhjd_r_nav"><div class="yhjd_r_bt">{$category.name}</div></div>
+<div class="yhjdxx_top">
+	<div class="yhjdxx_top_l"><if condition="is_file('__APP__/../html/Attach/Hotel/'.$info['id'].'.jpg') eq true"><img src="__APP__/../html/Attach/Hotel/{$info.id}.jpg" width="228"/><else /><img src="../Public/Images/yhjd_10.jpg"/></if></div>
+	<div class="yhjdxx_top_m">
+		<h1>{$info.name}</h1>
+		<div>
+			加入时间：{$info.addtime|substr=0,10}<br/>
+			酒店地址：{$info.address}
+		</div>
+		<div>
+			浏览人气：{$info.view}&nbsp;&nbsp;
+			
+<div id="ckepop">
+<a href="http://www.jiathis.com/share/" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank">分享到：</a>
+<a class="jiathis_button_tools_1"></a>
+<a class="jiathis_button_tools_2"></a>
+<a class="jiathis_button_tools_3"></a>
+<a class="jiathis_button_tools_4"></a>
+</div>
+<script type="text/javascript" src="http://v2.jiathis.com/code/jia.js" charset="utf-8"></script>
+		</div>
+	</div>
+	<div class="yhjdxx_top_r">
+		<table width="80%">
+		<tr>
+			<td>
+				<empty name="rel_link.prev"><img src="../Public/Images/yhjdxx_03.gif"/><else /><a href="__APP__/Hotel/{$category.alias}/id/{$rel_link.prev.id}"><img src="../Public/Images/yhjdxx_04.gif"></a></empty>
+			</td>
+			<td>
+				<empty name="rel_link.next"><img src="../Public/Images/yhjdxx_05.gif"/><else /><a href="__APP__/Hotel/{$category.alias}/id/{$rel_link.next.id}"><img src="../Public/Images/yhjdxx_06.gif"/></a></empty>
+			</td>
+		</tr>
+		<tr>
+			<td>上一篇</td>
+			<td>下一篇</td>
+		</tr>
+		</table>
+	</div>
+</div>
+<div class="mce_content">
+{$info.introduction}
+</div>
+<div style="height:50px;">
+	<table width="100%"><tr><td>上一篇：<empty name="rel_link.prev">没有了<else /><a href="__APP__/Hotel/{$category.alias}/id/{$rel_link.prev.id}">{$rel_link.prev.name}</a></empty></td>
+	<td align="right">下一篇：<empty name="rel_link.next">没有了<else /><a href="__APP__/Hotel/{$category.alias}/id/{$rel_link.next.id}">{$rel_link.next.name}</a></empty></td>
+	</tr>
+	</table>
+</div>
+<div class="wyyd">
+	<div class="wyyd_nav">我要预订</div>
+	<table width="90%" align="center">
+	<tr>
+		<td>
+			<span class="red">*</span> 姓名：
+		</td>
+		<td>
+			<input name="textfield" type="text" class="textbox" id="textfield" />
+		</td>
+		<td>
+			<span class="red">*</span> 电话：
+		</td>
+		<td >
+			<input name="textfield" type="text" class="textbox" id="textfield"  />
+		</td>
+		<td></td>
+	</tr>
+	<tr>
+		<td colspan="4">
+			<textarea name="textarea" cols="45" rows="5" class="textareabox">详细需求说明</textarea>
+		</td>
+		<td><a href="#"><img src="../Public/Images/yhjdxx_18.gif"></a></td>
+	</tr>
+	</table>
+</div>

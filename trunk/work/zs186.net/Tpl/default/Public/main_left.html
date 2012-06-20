@@ -1,44 +1,112 @@
-			<div class="lxfs"><img src="../Public/Images/new_06.jpg"></div>
-			<div class="new_list">
-				<ul>
-					<foreach name="left_list" item="item">
-					<li><a href="__URL__/{$category.alias}/id/{$item.id}" <eq name="_GET.id" value="$item.id">class="active"</eq>>{$item.title}</a></li>
-					</foreach>
-				</ul>
-			</div>
-			<div class="lxfs"><img src="images/yhjd_21.jpg"></div>
-			<table width="90%" align="center">
-			<tr><td width="19%">电话：</td>
-				<td width="81%">0717-6852993</td>
-			</tr>
-			<tr>
-				<td>&nbsp;</td>
-				<td>0717-6319870</td>
-			</tr>
-			<tr>
-				<td>传真：</td>
-				<td>0717-6852993</td>
-			</tr>
-			<tr>
-				<td>&nbsp;QQ：</td>
-				<td>531315267</td>
-			</tr>
-			<tr>
-				<td>&nbsp;</td>
-				<td>1053459726</td>
-			</tr>
-			<tr>
-				<td>邮箱：</td>
-				<td>yczs@zshz666.com</td>
-			</tr>
-			<tr>
-				<td>网址：</td>
-				<td>www.zs186.net</td>
-			</tr>
-			<tr>
-				<td colspan="2">宜昌市东山大道95号清江大厦408室</td>
-			</tr>
-			<tr>
-				<td colspan="2">Room 408 of Qingjiang Building, No. 95 Dongshan Avenue, Yichang City</td>
-			</tr>
-			</table>
+<eq name="MODULE_NAME" value="Hotel">
+<load file="../Public/Css/calendar.css" />
+<load file="../Public/Js/jquery.calendar.js" />
+<script type="text/javascript"> 
+$(document).ready(function() {
+	$("#begin_date").calendar();
+	$("#end_date").calendar();
+});
+</script>
+<div class="jdyd_ny">
+	<div class="jdyd_nav"><img src="../Public/Images/index_38.gif"></div>
+	<div class="jdyd_main_ny">
+		<form action="__APP__/Book/submit" method="post" target="_iframe">
+		<input type="hidden" name="category_id" value="{$category.id}" />
+		<input type="hidden" name="alias" value="{alias}" />
+		<table width="100%" align="center" style="text-align:right">
+		<tr>
+			<td width="28%">区域：</td>
+			<td width="72%" align="left"><select name="region_id" class="textbox2"><option value="0">--请选择--</option>{$region_options}</select></td>
+		</tr>
+		<tr>
+			<td>关键字：</td>
+			<td align="left"><input name="keyword" type="text" class="textbox2" value="桃花岭饭店" onclick="this.value='';"/></td>
+		</tr>
+		<eq name="alias" value="meeting">
+		<tr>
+			<td>入住日期：</td>
+			<td align="left"><input name="begin_date" type="text" readonly="readonly" class="textbox2 html_date" id="begin_date" value="<php>echo date('Y-m-d', time()+86400);</php>" /></td>
+		</tr>
+		<tr>
+			<td>退房日期：</td>
+			<td align="left"><input name="end_date" type="text" readonly="readonly" class="textbox2 html_date" id="end_date" value="<php>echo date('Y-m-d', time()+2*86400);</php>" /></td>
+		</tr>
+		<tr>
+			<td>会议：</td>
+			<td align="left"><input name="number" type="text" class="textbox1" value="" /> 人</td>
+		</tr>
+		<else />
+		<tr>
+			<td>宴会：</td>
+			<td align="left"><input name="number" type="text" class="textbox1" value="" /> 桌</td>
+		</tr>
+		</eq>
+		<tr>
+			<td>星级：</td>
+			<td align="left">
+				<input name="level[]" type="checkbox" id="checkbox_5" checked="checked" value="5星"/><label for="checkbox_5">5星</label>
+				<input name="level[]" type="checkbox" id="checkbox_4" checked="checked" value="4星"/><label for="checkbox_4">4星</label>
+				<input name="level[]" type="checkbox" id="checkbox_3" checked="checked" value="3星或以下"/><label for="checkbox_3">3星或以下</label>
+			</td>
+		</tr>
+		<tr>
+			<td></td>
+			<td id="message_box" class="message_box"></td>
+		</tr>
+		<tr>
+			<td colspan="2" align="center"><input type="image" name="submit" src="../Public/Images/index_46.gif"/></td>
+		</tr>
+		</table>
+		</form>
+	</div>
+</div>
+<else />
+<div class="new_l">
+	<div class="lxfs"><img src="../Public/Images/left_navi_{$alias}.jpg"></div>
+	<div class="new_list">
+		<ul>
+			<foreach name="left_list" item="item">
+			<li>
+				<a href="__URL__/{$alias}/id/{$item.id}" <eq name="_GET.id" value="$item.id">class="active"</eq>><empty name="item.title">{$item.name}<else />{$item.title}</empty></a>
+			</li>
+			</foreach>
+		</ul>
+	</div>
+</div>
+</eq>
+<div class="lxfs"><img src="../Public/Images/yhjd_21.jpg"></div>
+<table width="90%" align="center">
+<tr><td width="19%">电话：</td>
+	<td width="81%">0717-6852993</td>
+</tr>
+<tr>
+	<td>&nbsp;</td>
+	<td>0717-6319870</td>
+</tr>
+<tr>
+	<td>传真：</td>
+	<td>0717-6852993</td>
+</tr>
+<tr>
+	<td>&nbsp;QQ：</td>
+	<td>531315267</td>
+</tr>
+<tr>
+	<td>&nbsp;</td>
+	<td>1053459726</td>
+</tr>
+<tr>
+	<td>邮箱：</td>
+	<td>yczs@zshz666.com</td>
+</tr>
+<tr>
+	<td>网址：</td>
+	<td>www.zs186.net</td>
+</tr>
+<tr>
+	<td colspan="2">宜昌市东山大道95号清江大厦408室</td>
+</tr>
+<tr>
+	<td colspan="2">Room 408 of Qingjiang Building, No. 95 Dongshan Avenue, Yichang City</td>
+</tr>
+</table>

@@ -7,6 +7,7 @@
 .yhjd_l{
 	width:245px;
 	float:left;
+	background:url(../Images/new_03.jpg) no-repeat right top;
 	}
 	
 .yhjd_r{
@@ -51,13 +52,22 @@
 	color:#80bb40;
 	}	
 	
-	
+.yhjd_r_img ul li div.img {
+	width: 228px;
+	height: 130px;
+	overflow: hidden;
+	text-align: center;
+}
 .search a{
 	color:#0069ca;
 	text-decoration:none;
 	line-height:26px;
 	}	
 	
+.search b {
+	color: #56A400;
+}
+
 .hui{
 	color:#888888;
 	}
@@ -87,7 +97,10 @@
 	background-color:#e0ebc5;
 	padding-bottom:10px;
 	}
-	
+
+.jdyd_main_ny td {
+	line-height: 30px;
+}
 .textbox2{
 	width:140px;
 	}
@@ -214,12 +227,6 @@ h1{
 	padding-top:5px;
 	}
 
-.new_l{
-	background:url(../Images/new_03.jpg) no-repeat right top;
-	padding-top:27px;
-	}
-
-
 .new_list ul{
 	padding:0 0 20px 5px;
 	}
@@ -259,7 +266,9 @@ h2{
 	}
 	
 	
-	
+#ckepop .button, #ckepop .jiathis_separator {
+	text-indent: -100px;
+}
 	
 	
 	

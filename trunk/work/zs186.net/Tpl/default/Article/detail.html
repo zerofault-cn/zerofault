@@ -1,9 +1,14 @@
-			<div class="yhjd_r_nav"><div class="yhjd_r_bt">{$info.title}</div></div>
-			<eq name="category.alias" value="news">
+			<eq name="ACTION_NAME" value="detail">
+			<div class="yhjd_r_nav"><div class="yhjd_r_bt">{$category.name}</div></div>
 			<div class="newxx_bt hui">
 				<h2>{$info.title}</h2>
-				作者：{$info.author}  时间：{$info.create_time|substr=0,10}  人气：{$info.view}  <a href="#">返回列表</a>
+				作者：{$info.author}&nbsp;&nbsp;&nbsp;&nbsp;
+				时间：{$info.create_time|substr=0,10}&nbsp;&nbsp;&nbsp;&nbsp;
+				人气：{$info.view}&nbsp;&nbsp;&nbsp;&nbsp;
+				<a href="__URL__/{$alias}/id/{$category.id}">返回列表</a>
 			</div>
+			<else />
+			<div class="yhjd_r_nav"><div class="yhjd_r_bt">{$info.title}</div></div>
 			</eq>
 			<div class="mce_content">
 				{$info.content}
@@ -14,6 +19,7 @@
 				</tr>
 				</table>
 			</div>
+			<neq name="ACTION_NAME" value="detail">
 			<div class="wyyd">
 				<div class="wyyd_nav">我要预订</div>
 				<table width="90%" align="center">
@@ -40,3 +46,4 @@
 				</tr>
 				</table>
 			</div>
+			</neq>

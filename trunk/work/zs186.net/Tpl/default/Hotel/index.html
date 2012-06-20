@@ -1,0 +1,54 @@
+<div class="yhjd_r_nav">
+	<div class="yhjd_r_bt">{$category.name}</div>
+</div>
+<div class="search">
+	<strong>行政</strong>区域：<empty name="_GET.r_id"><b>不限</b><else /><a href="__URL__/{$alias}/r_id/0/d_id/{$_GET.d_id|intval}/l_id/{$_GET.l_id|intval}/cc/{$_GET.cc}">不限</a></empty>&nbsp;
+		<foreach name="region_list" item="item">
+			<eq name="_GET.r_id" value="$key">
+		<b>{$item}</b>
+			<else />
+		<a href="__URL__/{$alias}/r_id/{$key}/d_id/{$_GET.d_id|intval}/l_id/{$_GET.l_id|intval}/cc/{$_GET.cc}">{$item}</a>
+			</eq>&nbsp;
+		</foreach><br />
+	<strong>商业</strong>区域：<empty name="_GET.d_id"><b>不限</b><else /><a href="__URL__/{$alias}/r_id/{$_GET.r_id|intval}/d_id/0/l_id/{$_GET.l_id|intval}/cc/{$_GET.cc}">不限</a></empty>&nbsp;
+		<foreach name="district_list" item="item">
+			<eq name="_GET.d_id" value="$key">
+		<b>{$item}</b>
+			<else />
+		<a href="__URL__/{$alias}/r_id/{$_GET.r_id|intval}/d_id/{$key}/l_id/{$_GET.l_id|intval}/cc/{$_GET.cc}">{$item}</a>
+			</eq>&nbsp;
+		</foreach><br />
+	<strong>星级</strong>选择：<empty name="_GET.l_id"><b>不限</b><else /><a href="__URL__/{$alias}/r_id/{$_GET.r_id|intval}/d_id/{$_GET.d_id|intval}/l_id/0/cc/{$_GET.cc}">不限</a></empty>&nbsp;
+		<foreach name="level_list" item="item">
+			<eq name="_GET.l_id" value="$key">
+		<b>{$item}</b>
+			<else />
+		<a href="__URL__/{$alias}/r_id/{$_GET.r_id|intval}/d_id/{$_GET.d_id|intval}/l_id/{$key}/cc/{$_GET.cc}">{$item}</a><span class="hui">({$level_number[$key]}家)</span>
+			</eq>&nbsp;
+		</foreach><br />
+	<strong>承接</strong>能力：<empty name="_GET.cc"><b>不限</b><else /><a href="__URL__/{$alias}/r_id/{$_GET.r_id|intval}/d_id/{$_GET.d_id|intval}/l_id/{$_GET.l_id|intval}/cc/0">不限</a></empty>&nbsp;
+		<foreach name="capacity_list" item="item">
+			<eq name="_GET.cc" value="$key">
+		<b>{$item}</b>
+			<else />
+		<a href="__URL__/{$alias}/r_id/{$_GET.r_id|intval}/d_id/{$_GET.d_id|intval}/l_id/{$_GET.l_id|intval}/cc/{$key}">{$item}</a>
+			</eq>&nbsp;
+		</foreach><br />
+</div>
+<div class="yhjd_r_img">
+	<empty name="list">
+	<strong style="font-size: 16px;margin: 30px;"><img src="../Public/Images/dot19.gif" align="absmiddle"/>&nbsp;很抱歉，没有找到相合条件的酒店！</strong>
+	</empty>
+	<ul>
+		<foreach name="list" item="item">
+		<li>
+			<div class="img"><a href="__URL__/{$alias}/id/{$item.id}" target="_blank"><if condition="is_file('__APP__/../html/Attach/Hotel/'.$item['id'].'.jpg') eq true"><img src="__APP__/../html/Attach/Hotel/{$item.id}.jpg" width="228"/><else /><img src="../Public/Images/yhjd_10.jpg"/></if></a></div>
+			<div class="yhjd_rq">Time {$item.addtime|substr=0,10}</div>
+			<div>{$item.name}</div>
+		</li>
+		</foreach>
+		<div class="clear"></div>
+	</ul>
+	<div class="clear"></div>
+</div>
+<div>{$page}</div>

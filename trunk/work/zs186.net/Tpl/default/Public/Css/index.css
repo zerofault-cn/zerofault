@@ -43,7 +43,10 @@ h1,h2,h3,h4,h5,h6{
 .clear{
 	clear:both;
 	}
-
+.a_right{
+	padding:3px;
+	text-align:right;
+}
 #top,#nav,#baner,#main,#foot{
 	width:1000px;
 	margin:0 auto;
