@@ -16,7 +16,11 @@
 				<volist name="item.sub" id="sub" key="j">
 				<li>
 					<eq name="j" value="1"><div class="jt"></div></eq>
-					<a href="__APP__/{$item.type}/{$item.alias}/id/{$key}" target="_blank">{$sub}</a>
+						<eq name="item.type" value="Hotel">
+					<a href="__APP__/{$item.type}/{$item.alias}">{$sub}</a>
+						<else />
+					<a href="__APP__/{$item.type}/{$item.alias}/id/{$key}">{$sub}</a>
+						</eq>
 				</li>
 				</volist>
 			</ul>

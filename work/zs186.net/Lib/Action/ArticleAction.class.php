@@ -8,11 +8,12 @@ class ArticleAction extends BaseAction {
 	}
 	public function _empty() {
 		$id = intval($_REQUEST['id']);
+		$alias = ACTION_NAME;
+		$this->assign('alias', $alias);
 		if (empty($id)) {
-			$alias = ACTION_NAME;
 			$category = M('Category')->where("alias='".$alias."'")->find();
-			$sub_category = M('Category')->where("pid=".$category_id)->select();
-			if (!empty($sub_category) && count($sub_category)>0) {
+			$sub_category_count = M('Category')->where("pid=".$category['id']." and status>0")->count();
+			if (!empty($sub_category_count) && $sub_category_count>0) {
 				$this->index($category['id']);
 				exit;
 			}
@@ -27,6 +28,12 @@ class ArticleAction extends BaseAction {
 			$_GET['id'] = $id;
 		}
 		else {
+			$category = M('Category')->where("alias='".$alias."'")->find();
+			$sub_category_count = M('Category')->where("pid=".$category['id']." and status>0")->count();
+			if (!empty($sub_category_count) && $sub_category_count>0) {
+				$this->index();
+				exit;
+			}
 			$category_id = $this->dao->where("id=".$id)->getField('category_id');
 			$category = M('Category')->find($category_id);
 		}
@@ -36,13 +43,22 @@ class ArticleAction extends BaseAction {
 		$this->assign('left_list', $left_list);
 		$this->detail($id);
 	}
-	public function index($category_id=0) {
-		//È¡µÚÒ»¸ö×Ó·ÖÀà
-		$first_sub_category = M('Category')->where("pid=".$category_id)->find();
-
-		//×Ó·ÖÀàÎÄÕÂÁÐ±í
+	public function index($pid=0) {
+		if (!empty($_REQUEST['id'])) {
+			$category_id = intval($_REQUEST['id']);
+			$category = M('Category')->find($category_id);
+			$pid = $category['pid'];
+		}
+		$sub_category = M('Category')->where("pid=".$pid." and status>0")->order('sort')->select();
+		$this->assign('left_list', $sub_category);
+		if (empty($_REQUEST['id'])) {
+			//å–ç¬¬ä¸€ä¸ªå­åˆ†ç±»
+			$category = array_shift($sub_category);
+		}
+		$this->assign('category', $category);
+		//å­åˆ†ç±»æ–‡ç« åˆ—è¡¨
 		$where = array(
-			'category_id' => $first_sub_category['id'],
+			'category_id' => $category['id'],
 			'status' => array('gt', 0)
 			);
 		$order = 'sort, id desc';
@@ -53,9 +69,13 @@ class ArticleAction extends BaseAction {
 		$rs = $this->dao->where($where)->order($order)->limit($p->offset.','.$p->limit)->select();
 		$this->assign('list', $rs);
 		$this->assign('page', $p->showMultiNavi());
+
+		$this->assign('content', 'index');
+		$this->display('Layout:main');
 	}
 
 	public function detail($id=0) {
+		$detail_id = $id;
 		!empty($_REQUEST['id']) && ($id = intval($_REQUEST['id']));
 		$this->dao->setInc('view', 'id='.$id);
 
@@ -63,7 +83,16 @@ class ArticleAction extends BaseAction {
 		$this->assign('ACTION_TITLE', $info['title']);
 		$this->assign('info', $info);
 
-		//»ñÈ¡ÉÏÒ»Æª£¬ÏÂÒ»Æª
+		if (0 == $detail_id) {
+			$category = M('Category')->find($info['category_id']);
+			$this->assign('category', $category);
+			$sub_category = M('Category')->where("pid=".$category['pid']." and status>0")->order('sort')->select();
+			$this->assign('left_list', $sub_category);
+			$this->assign('alias', M('Category')->where("id=".$category['pid'])->getField('alias'));
+			$_GET['id'] = $category['id'];
+		}
+
+		//èŽ·å–ä¸Šä¸€ç¯‡ï¼Œä¸‹ä¸€ç¯‡
 		$rel_link = array();
 		$rs = $this->dao->where("category_id=".$info['category_id']." and (sort=".$info['sort']." and id<".$id." or sort<".$info['sort'].")")->order('sort desc, id desc')->find();
 		if (!empty($rs) && count($rs)>0) {
