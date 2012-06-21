@@ -14,7 +14,7 @@ input.remove {
 	top: 0;
 }
 </style>
-<form method="post" target="_iframe" autocomplete="off">
+<form method="post" enctype="multipart/form-data" target="_iframe" autocomplete="off">
 <foreach name="list" item="item">
 <dl>
 	<dt>预览：<a href="{$item.url}" target="_blank"><img src="__APP__/../{$item.img}" /></a></dt>
