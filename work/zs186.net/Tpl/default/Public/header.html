@@ -1,5 +1,5 @@
 <div id="top">
-	<div class="logo"><a href="__APP__"><img src="../Public/Images/index_05.gif"></a></div>
+	<div class="logo"><a href="__APP__" title="·µ»ØÊ×Ò³"><img src="../Public/Images/index_05.gif"></a></div>
 	<div class="phone"><img src="../Public/Images/index_03.gif"></div>
 </div>
 <div id="nav">
@@ -11,15 +11,15 @@
 		<li><img src="../Public/Images/menu_slash.gif"></li>
 			</if>
 		<li>
-			<a href="__APP__/{$item.type}/{$item.alias}"><img src="../Public/Images/menu_{$item.alias}.gif"></a>
+			<a href="__APP__/{$item.type}/{$item.alias}" title="{$item.name}"><img src="../Public/Images/menu_{$item.alias}.gif"></a>
 			<ul>
 				<volist name="item.sub" id="sub" key="j">
 				<li>
 					<eq name="j" value="1"><div class="jt"></div></eq>
 						<eq name="item.type" value="Hotel">
-					<a href="__APP__/{$item.type}/{$item.alias}">{$sub}</a>
+					<a href="__APP__/{$item.type}/{$item.alias}" title="{$sub}">{$sub}</a>
 						<else />
-					<a href="__APP__/{$item.type}/{$item.alias}/id/{$key}">{$sub}</a>
+					<a href="__APP__/{$item.type}/{$item.alias}/id/{$key}" title="{$sub}">{$sub}</a>
 						</eq>
 				</li>
 				</volist>

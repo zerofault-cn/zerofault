@@ -3,7 +3,10 @@ class BaseAction extends Action{
 
 	protected function _initialize() {
 		header("Content-Type:text/html; charset=utf-8");
-
+		
+		$this->setting = F('Index-setting');
+		$this->assign('setting', $this->setting);
+		
 		$dao = M('Category');
 		$rs = $dao->where("status>0 and pid=0")->order('sort')->select();
 		foreach ($rs as $i=>$row) {

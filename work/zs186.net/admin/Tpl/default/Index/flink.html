@@ -17,8 +17,13 @@ input.remove {
 <form method="post" target="_iframe" autocomplete="off">
 <foreach name="list" item="item">
 <dl>
-	<dt>名称：<input type="text" name="name[]" value="{$item.name}" size="30"/></dt>
-	<dd>链接：<input type="text" name="url[]" value="{$item.url}" size="60"/><input type="button" class="remove" value="移除" onclick="$(this).parent().parent().remove();"/></dd>
+	<dt>预览：<a href="{$item.url}" target="_blank"><img src="__APP__/../{$item.img}" /></a></dt>
+	<dd><input type="hidden" name="img0[]" value="{$item.img}" />
+		更新图片：<input type="file" name="img[]" size="60"/><br />
+		更新名称：<input type="text" name="name[]" value="{$item.name}" size="60"/><br />
+		更新链接：<input type="text" name="url[]" value="{$item.url}" size="60"/><br />
+		<input type="button" class="remove" value="移除" onclick="$(this).parent().parent().remove();"/>
+	</dd>
 </dl>
 </foreach>
 <input type="button" value="增加条目" onclick="addItem(this);"/>
@@ -29,6 +34,6 @@ input.remove {
 </form>
 <script type="text/javascript">
 function addItem(obj) {
-	$(obj).before('<dl><dt><input type="text" name="name[]" value="" size="30"/></dt><dd><input type="text" name="url[]" value="" size="60"/><input type="button" class="remove" value="移除" onclick="$(this).parent().parent().remove();"/></dd></dl>');
+	$(obj).before('<dl><dt></dt><dd>图片：<input type="file" name="img[]" size="60"/><br />名称：<input type="text" name="name[]" value="" size="60"/><br />链接：<input type="text" name="url[]" value="" size="60"/><br /><input type="hidden" name="img0[]" value="" /><input type="button" class="remove" value="移除" onclick="$(this).parent().parent().remove();"/></dd></dl>');
 }
 </script>

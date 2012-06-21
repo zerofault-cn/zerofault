@@ -471,8 +471,36 @@ h1,h2,h3,h4,h5,h6{
  padding:0 5px;
 }
 
-
-
-
-
-
+.jdyd_main_ny dl {
+	line-height: 18px;
+}
+.jdyd_main_ny td.message_box {
+	line-height: 20px;
+}
+.message_box i {
+	font-style: normal;
+	color: #ff3333;
+	display:inline-block;
+	padding: 3px 3px 3px 22px;
+	background: url(../Images/sign_error.png) 3px center no-repeat;
+}
+.message_box b {
+	color: #73cc63;
+	display:inline-block;
+	padding: 3px 3px 3px 22px;
+	background: url(../Images/sign_explain.png) 3px center no-repeat;
+}
+#hotel_div {
+	position: relative;
+}
+#hotel_dl {
+	position: absolute;
+	left: 0;
+	top:0;
+	padding: 2px 5px 2px 2px;
+	border:1px solid #A0C63A;
+	box-shadow:2px 2px 5px #083e66;
+	z-index:101;
+	background: #FFFFFF;
+	white-space: nowrap;
+}
