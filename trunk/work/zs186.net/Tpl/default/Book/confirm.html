@@ -1,0 +1,58 @@
+<div class="yhjd_r_nav"><div class="yhjd_r_bt">{$category.name}预订</div></div>
+<div class="jdydxx">
+	<form action="__APP__/Book/submit" method="post" target="_iframe">
+	<input type="hidden" name="type" value="{$category.type}" />
+	<input type="hidden" name="category_id" value="{$request.category_id}" />
+	<input type="hidden" name="alias" value="{$request.alias}" />
+	<div class="red">请您核实以下信息是否正确</div>
+	<div class="jdydxx_top">
+		<table width="90%">
+		<tr>
+			<td align="right"><strong>区域：</strong></td>
+			<td>{$region}<input type="hidden" name="region_id" value="{$request.region_id}" /></td>
+			<td align="right"><strong><present name="hotel">酒店名称：<else />酒店关键字：</present></strong></td>
+			<td><present name="hotel">{$hotel.name}<input type="hidden" name="hotel_id" value="{$hotel.id}"/><else />{$request.keyword}</present><input type="hidden" name="keyword" value="{$request.keyword}"/></td>
+		</tr>
+		<eq name="request.alias" value="meeting">
+		<tr>
+			<td align="right"><strong>入住日期：</strong></td>
+			<td>{$request.begin_date}<input type="hidden" name="begin_date" value="{$request.begin_date}" /></td>
+			<td align="right"><strong>退房日期：</strong></td>
+			<td>{$request.end_date}<input type="hidden" name="end_date" value="{$request.end_date}" /></td>
+		</tr>
+		<else />
+		<tr>
+			<td align="right"><strong>宴会日期：</strong></td>
+			<td>{$request.begin_date}<input type="hidden" name="begin_date" value="{$request.begin_date}" /></td>
+			<td colspan="2"></td>
+		</tr>
+		</eq>
+		<tr>
+			<td align="right"><strong>宴会桌数：</strong></td>
+			<td>{$request.number}<input type="hidden" name="number" value="{$request.number}" /></td>
+			<td align="right"><strong>星级：</strong></td>
+			<td><present name="hotel">{$hotel.Level.name}<input type="hidden" name="level" value="{$hotel.Level.name}"/><else />{$request.level|implode=','}<input type="hidden" name="level" value="{$request.level|implode=','}"/></present></td>
+		</tr>
+		</table>
+	</div>
+	<table width="100%" align="center">
+	<tr>
+		<td><span class="red">*</span> 姓名：</td>
+		<td><input name="name" type="text" class="textbox" /></td>
+		<td ><span class="red">*</span> 电话：</td>
+		<td ><input name="phone" type="text" class="textbox" /></td>
+	</tr>
+	<tr>
+		<td colspan="4">
+			<textarea name="demand" cols="40" rows="5" class="textareabox" onclick="this.value='';">详细需求说明</textarea>
+		</td>
+	</tr>
+	<tr>
+		<td colspan="4" align="center" id="message_box" class="message_box"></td>
+	</tr>
+	<tr>
+		<td colspan="4" align="center"><input type="image" src="../Public/Images/ydxx_03.jpg"/></td>
+	</tr>
+	</table>
+	</form>
+</div>

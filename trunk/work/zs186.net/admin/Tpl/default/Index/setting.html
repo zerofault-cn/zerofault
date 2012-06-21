@@ -1,6 +1,10 @@
 <form method="post" target="_iframe" autocomplete="off">
 <table cellpadding="5" cellspacing="1" bgcolor="#999999">
 <tr bgcolor="#FFFFFF">
+	<td>网站固定标题：</td>
+	<td><input type="text" name="title" size="50" value="{$data.title}" /></td>
+</tr>
+<tr bgcolor="#FFFFFF">
 	<td>网站关键字：</td>
 	<td><textarea name="keywords" cols="60" rows="4">{$data.keywords}</textarea></td>
 </tr>
@@ -17,31 +21,10 @@
 	<td><input type="text" name="qq_service2" size="20" value="{$data.qq_service2}"/></td>
 </tr>
 <tr bgcolor="#FFFFFF">
-	<td>在线客服电话：</td>
-	<td><input type="text" name="phone_service" size="20" value="{$data.phone_service}"/></td>
-</tr>
-<tr bgcolor="#FFFFFF">
-	<td>设计师联系QQ：</td>
-	<td><input type="text" name="qq_designer" size="20" value="{$data.qq_designer}"/></td>
-</tr>
-<tr bgcolor="#FFFFFF">
-	<td>装饰公司联系QQ：</td>
-	<td><input type="text" name="qq_company" size="20" value="{$data.qq_company}"/></td>
-</tr>
-<tr bgcolor="#FFFFFF">
-	<td>媒体合作QQ：</td>
-	<td><input type="text" name="qq_cooperation" size="20" value="{$data.qq_cooperation}"/></td>
-</tr>
-<tr bgcolor="#FFFFFF">
-	<td>公司每月额定查看点数：</td>
-	<td><input type="text" name="point" size="20" value="{$data.point}"/></td>
-</tr>
-<tr bgcolor="#FFFFFF">
 	<td colspan="2" style="text-align:center;">
 	<input type="submit" value="提交" name="submit" />
 	</td>
 </tr>
 </table>
-
 <br />
 </form>

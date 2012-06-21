@@ -1,26 +1,20 @@
-<eq name="MODULE_NAME" value="Hotel">
+<if condition="MODULE_NAME eq 'Hotel'">
 <load file="../Public/Css/calendar.css" />
 <load file="../Public/Js/jquery.calendar.js" />
-<script type="text/javascript"> 
-$(document).ready(function() {
-	$("#begin_date").calendar();
-	$("#end_date").calendar();
-});
-</script>
 <div class="jdyd_ny">
 	<div class="jdyd_nav"><img src="../Public/Images/index_38.gif"></div>
 	<div class="jdyd_main_ny">
-		<form action="__APP__/Book/submit" method="post" target="_iframe">
+		<form action="__APP__/Book/confirm" method="post" target="_iframe">
 		<input type="hidden" name="category_id" value="{$category.id}" />
-		<input type="hidden" name="alias" value="{alias}" />
+		<input type="hidden" name="alias" value="{$alias}" />
 		<table width="100%" align="center" style="text-align:right">
 		<tr>
 			<td width="28%">区域：</td>
-			<td width="72%" align="left"><select name="region_id" class="textbox2"><option value="0">--请选择--</option>{$region_options}</select></td>
+			<td width="72%" align="left"><select name="region_id" id="region_id" class="textbox2"><option value="0">--请选择--</option>{$region_options}</select></td>
 		</tr>
 		<tr>
-			<td>关键字：</td>
-			<td align="left"><input name="keyword" type="text" class="textbox2" value="桃花岭饭店" onclick="this.value='';"/></td>
+			<td valign="top">关键字：</td>
+			<td align="left"><input name="keyword" id="keyword" type="text" class="textbox2" value="" /><div id="hotel_div"></td>
 		</tr>
 		<eq name="alias" value="meeting">
 		<tr>
@@ -37,6 +31,10 @@ $(document).ready(function() {
 		</tr>
 		<else />
 		<tr>
+			<td>日期：</td>
+			<td align="left"><input name="begin_date" type="text" readonly="readonly" class="textbox2 html_date" id="begin_date" value="<php>echo date('Y-m-d', time()+86400);</php>" /></td>
+		</tr>
+		<tr>
 			<td>宴会：</td>
 			<td align="left"><input name="number" type="text" class="textbox1" value="" /> 桌</td>
 		</tr>
@@ -44,23 +42,21 @@ $(document).ready(function() {
 		<tr>
 			<td>星级：</td>
 			<td align="left">
-				<input name="level[]" type="checkbox" id="checkbox_5" checked="checked" value="5星"/><label for="checkbox_5">5星</label>
-				<input name="level[]" type="checkbox" id="checkbox_4" checked="checked" value="4星"/><label for="checkbox_4">4星</label>
-				<input name="level[]" type="checkbox" id="checkbox_3" checked="checked" value="3星或以下"/><label for="checkbox_3">3星或以下</label>
+				<input name="level[]" type="checkbox" id="checkbox_5" checked="checked" value="5星"/><label for="checkbox_5">5星</label><input name="level[]" type="checkbox" id="checkbox_4" checked="checked" value="4星"/><label for="checkbox_4">4星</label><input name="level[]" type="checkbox" id="checkbox_3" checked="checked" value="3星或以下"/><label for="checkbox_3">3星或以下</label>
 			</td>
 		</tr>
 		<tr>
 			<td></td>
-			<td id="message_box" class="message_box"></td>
+			<td id="message_box" class="message_box" align="left"></td>
 		</tr>
 		<tr>
-			<td colspan="2" align="center"><input type="image" name="submit" src="../Public/Images/index_46.gif"/></td>
+			<td colspan="2" align="center"><input type="image" src="../Public/Images/index_46.gif"/></td>
 		</tr>
 		</table>
 		</form>
 	</div>
 </div>
-<else />
+<elseif condition="MODULE_NAME eq 'Article'" />
 <div class="new_l">
 	<div class="lxfs"><img src="../Public/Images/left_navi_{$alias}.jpg"></div>
 	<div class="new_list">
@@ -73,7 +69,7 @@ $(document).ready(function() {
 		</ul>
 	</div>
 </div>
-</eq>
+</if>
 <div class="lxfs"><img src="../Public/Images/yhjd_21.jpg"></div>
 <table width="90%" align="center">
 <tr><td width="19%">电话：</td>

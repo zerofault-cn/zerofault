@@ -2,46 +2,60 @@
 <load file="../Public/Js/jdt.js" />
 <load file="../Public/Js/yqlj.js" />
 <load file="../Public/Js/upnews.js" />
+<load file="../Public/Css/calendar.css" />
+<load file="../Public/Js/jquery.calendar.js" />
 <div id="baner">
 	<div class="jdyd">
 		<div class="jdyd_nav"><img src="../Public/Images/index_38.gif"></div>
 		<div class="jdyd_main">
 			<div class="jdyd_m_t"></div>
 			<div class="jdyd_m_m">
-				<table width="100%" height="260" align="center" style="text-align:right">
+				<form action="__APP__/Book/confirm" method="post" target="_iframe">
+				<input type="hidden" name="category_id" value="1" />
+				<input type="hidden" name="alias" value="banquet" />
+				<input type="hidden" name="hotel_id" value="0" />
+				<table width="100%" align="center">
 				<tr>
-					<td>城市/区域：</td>
-					<td colspan="3">
-					<input name="textfield" type="text" class="textbox" id="textfield" value="西陵区" /></td>
+					<td align="right">酒店类型：</td>
+					<td>
+						<foreach name="category_arr" item="item">
+						<input type="radio" name="category_id" id="category_id_{$key}" value="{$item.id}" class="{$item.alias}" <neq name="key" value="0">checked="checked"</neq>/><label for="category_id_{$key}">{$item.name}</label>
+						</foreach>
+					</td>
 				</tr>
 				<tr>
-					<td>酒店关键字：</td>
-					<td colspan="3"><input name="textfield" type="text" class="textbox" id="textfield" value="桃花岭饭店" /></td>
+					<td align="right">酒店区域：</td>
+					<td><select name="region_id" id="region_id" class="textbox2"><option value="0">--请选择--</option>{$region_options}</select></td>
 				</tr>
 				<tr>
-					<td>入住日期：</td>
-					<td colspan="3"><input name="textfield" type="text" class="textbox" id="textfield" value="2012-6-7" /></td>
+					<td align="right">酒店关键字：</td>
+					<td ><input name="keyword" id="keyword" type="text" class="textbox2" value="" /><div id="hotel_div"></div></td>
 				</tr>
 				<tr>
-					<td>退房日期：</td>
-					<td colspan="3"><input name="textfield" type="text" class="textbox" id="textfield" value="2012-6-9" /></td>
+					<td align="right">入住日期：</td>
+					<td ><input name="begin_date" type="text" readonly="readonly" class="textbox2 html_date" id="begin_date" value="<php>echo date('Y-m-d', time()+86400);</php>" /></td>
 				</tr>
 				<tr>
-					<td>宴会：</td>
-					<td><input name="textfield" type="text" class="textbox1" id="textfield" value="1" /> 桌</td>
-					<td>会议：</td>
-					<td><input name="textfield" type="text" class="textbox1" id="textfield" value="1" /> 人</td>
+					<td align="right">退房日期：</td>
+					<td ><input name="end_date" type="text" readonly="readonly" class="textbox2 html_date" id="end_date" value="<php>echo date('Y-m-d', time()+2*86400);</php>" /></td>
 				</tr>
 				<tr>
-					<td>星级：</td>
-					<td colspan="3"><input name="checkbox" type="checkbox" id="checkbox" checked="checked" />
-					<label for="checkbox"></label>
-					5星<input name="checkbox" type="checkbox" id="checkbox" checked="checked" />4星<input name="checkbox" type="checkbox" id="checkbox" checked="checked" />3星或以下</td>
+					<td align="right">会议人数：</td>
+					<td ><input name="number" type="text" class="textbox1" value="" /> <span>人</span></td>
 				</tr>
 				<tr>
-					<td colspan="4" align="center"><a href="#" target="_blank"><img src="../Public/Images/index_46.gif"></a></td>
+					<td align="right">星级：</td>
+					<td><input name="level[]" type="checkbox" id="checkbox_5" checked="checked" value="5星"/><label for="checkbox_5">5星</label><input name="level[]" type="checkbox" id="checkbox_4" checked="checked" value="4星"/><label for="checkbox_4">4星</label><input name="level[]" type="checkbox" id="checkbox_3" checked="checked" value="3星或以下"/><label for="checkbox_3">3星或以下</label></td>
+				</tr>
+				<tr>
+					<td></td>
+					<td id="message_box" class="message_box" align="left"></td>
+				</tr>
+				<tr>
+					<td colspan="2" align="center"><input type="image" src="../Public/Images/index_46.gif"/></td>
 				</tr>
 				</table>
+				</form>
 			</div>
 			<div class="jdyd_m_b"></div>
 		</div>
@@ -73,14 +87,9 @@
 			<div class="zsfw_list_r">
 				<DIV class=area><DIV class=center><DIV class=box><DIV class=c><DIV id=upNews1>
 					<UL>
-					  <LI>05-25 <A href="#" target="_blank">艺尊软装商品城品形象反对撒了就离开家里设计</A></LI>
-					  <LI>05-25 <A href="#" target="_blank">艺尊软装商品城品形象设计</A></LI>
-					  <LI>05-25 <A href="#" target="_blank">艺尊软装商品城品形象设计</A></LI>
-					  <LI>05-25 <A href="#" target="_blank">艺尊软装商品城品形象设计</A></LI>
-					  <LI>05-25 <A href="#" target="_blank">艺尊软装商品城品形象设计</A></LI>
-					  <LI>05-25 <A href="#" target="_blank">艺尊软装商品城品形象设计</A>5</LI>
-					  <LI>05-25 <A href="#" target="_blank">艺尊软装商品城品形象设计</A></LI>
-					  <LI>05-25 <A href="#" target="_blank">艺尊软装商品城品形象设计</A></LI>
+					<foreach name="news_list" item="item">
+						<LI>{$item.create_time|substr=5,5} <A href="__APP__/Article/detail/id/{$item.id}" target="_blank" title="{$item.title}">{$item.title|mb_substr=0,20}</A></LI>
+					</foreach>
 					 </UL>
 				</DIV></DIV></DIV></DIV></DIV>
 			</div>
@@ -111,13 +120,18 @@
 	<div class="main_r">
 		<div><img src="../Public/Images/index_56.gif"></div>
 		<div>
-			<div class="fw_img img01"><a href="#" target="_blank"><img src="../Public/Images/index_66.gif"></a></div>
-			<div class="fw_img img02"><a href="#" target="_blank"><img src="../Public/Images/index_76.gif"></a></div>
-			<div class="fw_img img03"><a href="#" target="_blank"><img src="../Public/Images/index_60.gif"></a></div>
-			<div class="fw_img img04"><a href="#" target="_blank"><img src="../Public/Images/index_73.gif"></a></div>
-			<div class="fw_img img05"><a href="#" target="_blank"><img src="../Public/Images/index_63.gif"></a></div>
+			<div class="fw_img img01"><a href="__APP__/Hotel/meeting" target="_blank"><img src="../Public/Images/index_66.gif"></a></div>
+			<div class="fw_img img02"><a href="__APP__/Article/wedding" target="_blank"><img src="../Public/Images/index_76.gif"></a></div>
+			<div class="fw_img img03"><a href="__APP__/Article/business" target="_blank"><img src="../Public/Images/index_60.gif"></a></div>
+			<div class="fw_img img04"><a href="__APP__/Article/affair" target="_blank"><img src="../Public/Images/index_73.gif"></a></div>
+			<div class="fw_img img05"><a href="__APP__/Article/exhibition" target="_blank"><img src="../Public/Images/index_63.gif"></a></div>
 			<div class="clear"></div>
 		</div>
 	</div>
 	<div class="clear"></div>
 </div>
+<script>
+$(document).ready(function() {
+//	ISL_GoDown_1();
+});
+</script>
