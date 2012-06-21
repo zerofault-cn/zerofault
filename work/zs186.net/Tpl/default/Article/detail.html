@@ -19,7 +19,7 @@
 				</tr>
 				</table>
 			</div>
-			<neq name="ACTION_NAME" value="detail">
+			<if condition="ACTION_NAME neq 'detail' and $alias neq 'about'">
 			<div class="wyyd">
 				<div class="wyyd_nav">我要预订</div>
 				<table width="90%" align="center">
@@ -46,4 +46,4 @@
 				</tr>
 				</table>
 			</div>
-			</neq>
+			</if>

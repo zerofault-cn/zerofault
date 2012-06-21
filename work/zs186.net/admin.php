@@ -2,6 +2,9 @@
 if (file_exists(dirname(__FILE__).'/LOCAL')) {
 	define('ENV', 'LOCAL');
 }
+elseif (file_exists(dirname(__FILE__).'/TEST')) {
+	define('ENV', 'TEST');
+}
 else {
 	define('ENV', '');
 }

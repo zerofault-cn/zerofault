@@ -1,4 +1,5 @@
-﻿
+set names utf8;
+
 DROP TABLE IF EXISTS `zs_admin`;
 CREATE TABLE `zs_admin` (
   `id` int(10) unsigned NOT NULL auto_increment,

@@ -1,11 +1,5 @@
 <?php
-/**
-*
-* 管理首页
-*
-* @author zerofault <zerofault@gmail.com>
-* @since 2009/8/5
-*/
+
 class IndexAction extends BaseAction{
 
 	public function _initialize() {
@@ -26,6 +20,7 @@ class IndexAction extends BaseAction{
 			$data = array(
 				'qq_service1' => trim($_REQUEST['qq_service1']),
 				'qq_service2' => trim($_REQUEST['qq_service2']),
+				'title' => trim($_REQUEST['title']),
 				'keywords' => str_replace(array("\r\n", "\n"), ' ', trim($_REQUEST['keywords'])),
 				'description' => str_replace(array("\r\n", "\n"), ' ', trim($_REQUEST['description']))
 				);
@@ -72,6 +67,7 @@ class IndexAction extends BaseAction{
 				}
 				$data[] = array(
 					'img' => $path,
+					'name' => $_REQUEST['name'][$i],
 					'url' => $_REQUEST['url'][$i]
 					);
 			}
@@ -83,7 +79,7 @@ class IndexAction extends BaseAction{
 			}
 		}
 		$topnavi[]=array(
-			'text'=> '品牌直达管理',
+			'text'=> '友情链接管理',
 			);
 		$this->assign("topnavi",$topnavi);
 
@@ -91,28 +87,9 @@ class IndexAction extends BaseAction{
 		if (empty($data)) {
 			$data = array(
 				array(
-					'img' => 'Tpl/default/Public/Images/brand1.png',
-					'url' => '#'
-					),
-				array(
-					'img' => 'Tpl/default/Public/Images/brand2.png',
-					'url' => '#'
-					),
-				array(
-					'img' => 'Tpl/default/Public/Images/brand3.png',
-					'url' => '#'
-					),
-				array(
-					'img' => 'Tpl/default/Public/Images/brand4.png',
-					'url' => '#'
-					),
-				array(
-					'img' => 'Tpl/default/Public/Images/brand5.png',
-					'url' => '#'
-					),
-				array(
-					'img' => 'Tpl/default/Public/Images/brand6.png',
-					'url' => '#'
+					'img' => 'Tpl/default/Public/Images/ruit_logo.gif',
+					'name' => '睿腾网络',
+					'url' => 'http://www.ycruit.com/'
 					)
 				);
 		}
