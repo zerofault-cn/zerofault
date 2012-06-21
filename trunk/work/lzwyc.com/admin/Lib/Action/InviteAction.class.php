@@ -175,9 +175,10 @@ class InviteAction extends BaseAction {
 			$mail->SetFrom($smtp_config['from_mail'], $smtp_config['from_name']);
 			
 			$info = $this->dao->find($_REQUEST['id']);
-			$mail->Subject = '最新招标提醒：'.$info['region'].' '.$info['address'].' '.$info['room_str'].' '.round($info['area'], 1).'平米';
-			$body = '各装饰装修公司：<br />&nbsp;&nbsp;&nbsp;&nbsp;现有业主发布新的装修招标，并已通过审核，请登录“宜昌乐装网(www.lzwyc.com)”查看投标。<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;招标项目：<a href="__APP__/Invite/detail/id/'.$info['id'].'">'.$info['region'].' '.$info['address'].' '.$info['room_str'].' '.round($info['area'], 1).'m<sup>2</sup>, ¥'.number_format($info['budget']*10000).'元</a><br />';
-			$body .= '<br /><br />宜昌乐装网：<a href="http://www.lzwyc.com">http://www.lzwyc.com</a>';
+			$info['region'] = M('Region')->where("id=".$info['district'])->getField('name');
+			$info['room_str'] = $options['room'][$info['room']];
+			$mail->Subject = '[宜昌乐装网]最新招标提醒：'.$info['region'].' '.$info['address'].' '.$info['room_str'].' '.round($info['area'], 1).'平米';
+			$body = '温馨提示：尊敬的会员您好，现有业主发布新的装修招标，并已通过审核，请登录“宜昌乐装网(<a href="http://www.lzwyc.com">http://www.lzwyc.com</a>)”查看投标。<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;招标项目：<a href="http://www.lzwyc.com'.__APP__.'/Invite/detail/id/'.$info['id'].'">'.$info['region'].' '.$info['address'].' '.$info['room_str'].' '.round($info['area'], 1).'平米， ¥'.number_format($info['budget']*10000).'元</a><br /><br />宜昌乐装网';
 			$mail->MsgHTML($body);
 			
 			//所有已通过审核的公司账号
