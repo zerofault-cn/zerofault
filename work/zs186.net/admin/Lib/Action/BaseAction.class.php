@@ -12,9 +12,7 @@ class BaseAction extends Action{
 		$this->assign("Hotel_Category", $this->category_array['Hotel']);
 		$this->assign("Article_Category", $this->category_array['Article']);
 
-		if('Public'!=MODULE_NAME && empty($_SESSION[C('ADMIN_ID')])) {
-			//记下刚才的Action
-			Session::set('lastModule', MODULE_NAME);
+		if('Public'!=MODULE_NAME && empty($_SESSION[C('USER_AUTH_KEY')])) {
 			//跳转到认证网关
 			redirect(PHP_FILE.C('USER_AUTH_GATEWAY'));
 		}
