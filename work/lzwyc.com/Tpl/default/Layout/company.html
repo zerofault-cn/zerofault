@@ -20,7 +20,7 @@
 <body>
 	<div class="wrapper">
 		<div id="header">
-			<if condition="is_file('__APP__/../html/Attach/company_logo/'.$info['id'].'.jpg') eq true"><img src="__APP__/../html/Attach/company_logo/{$info.id}.jpg" /><else /><h1>{$info.name}</h1></if>
+			<h1><if condition="is_file('__APP__/../html/Attach/company_logo/'.$info['id'].'.jpg') eq true"><img src="__APP__/../html/Attach/company_logo/{$info.id}.jpg" align="texttop"/></if>{$info.name}</h1>
 		</div>
 		<div id="navi">
 			<ul>

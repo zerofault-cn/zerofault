@@ -45,6 +45,15 @@ a:hover,a:active,a.active{color:#ffcc00;}
 	height: 127px;
 	background: url(../Images/topbg.gif) center top;
 }
+#header h1 {
+	font-weight: bold;
+	filter:
+		Dropshadow(offx=2,offy=0,color=white)
+		Dropshadow(offx=0,offy=2,color=white)
+		Dropshadow(offx=0,offy=-2,color=white)
+		Dropshadow(offx=-2,offy=0,color=white);
+	text-shadow:2px 2px 1px #ffffff,-2px -2px 1px #ffffff,-2px 2px 1px #ffffff, 2px -2px 1px #ffffff; 
+}
 #navi {
 	height: 44px;
 	margin-bottom: 5px;	

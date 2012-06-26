@@ -19,7 +19,7 @@
 }
 #site_msg li {
 	float:left;
-	padding:0 10px;
+	padding:0 20px;
 }
 #site_msg a {
 	color: #FF7200;
@@ -168,6 +168,9 @@
 #company_list dl {
 	height: 83px;
 	background-color: #cee8ae;
+}
+#company_list dl dd {
+	color: #FF7F00;
 }
 #company_list dl dt {
 	float: left;
