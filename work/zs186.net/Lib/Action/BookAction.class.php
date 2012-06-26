@@ -28,10 +28,10 @@ class BookAction extends BaseAction {
 			$hotel_id = intval($_REQUEST['hotel_id']);
 			if (empty($hotel_id)) {
 				$region_id = intval($_REQUEST['region_id']);
-				empty($region_id) && self::_error('请先选择区域！');
+				empty($region_id) && self::_error('请先选择区域！', 'book_message_box');
 
 				$keyword = trim($_REQUEST['keyword']);
-				(empty($keyword) || '如：桃花岭饭店'==$keyword) && self::_error('请输入酒店关键字！');
+				(empty($keyword) || '如：桃花岭饭店'==$keyword) && self::_error('请输入酒店关键字！', 'book_message_box');
 			}
 			else {
 				$region_id = M('Hotel')->where('id='.$hotel_id)->getField('region_id');
@@ -39,15 +39,15 @@ class BookAction extends BaseAction {
 			}
 			
 			$begin_date = trim($_REQUEST['begin_date']);
-			empty($begin_date) && self::_error(('meeting'==$alias?'入住':'宴会').'日期必须填写！');
+			empty($begin_date) && self::_error(('meeting'==$alias?'入住':'宴会').'日期必须填写！', 'book_message_box');
 			if (isset($_REQUEST['end_date'])) {
 				$end_date = trim($_REQUEST['end_date']);
-				empty($end_date) && self::_error('退房日期必须填写！');
+				empty($end_date) && self::_error('退房日期必须填写！', 'book_message_box');
 			}
 			
 			$alias = trim($_REQUEST['alias']);
 			$number = intval($_REQUEST['number']);
-			empty($number) && self::_error(('meeting'==$alias?'会议人数':'宴会桌数').'必须填写！');
+			empty($number) && self::_error(('meeting'==$alias?'会议人数':'宴会桌数').'必须填写！', 'book_message_box');
 			Session::setLocal('request', $_REQUEST);
 			die('<script>parent.location=document.location;</script>');
 		}

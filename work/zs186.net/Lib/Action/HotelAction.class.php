@@ -88,7 +88,7 @@ class HotelAction extends BaseAction {
 		$id = intval($_REQUEST['id']);
 		$this->dao->setInc('view', 'id='.$id);
 
-		$info = $this->dao->find($id);
+		$info = $this->dao->relation(true)->find($id);
 		$this->assign('ACTION_TITLE', $info['name']);
 		$this->assign('info', $info);
 
