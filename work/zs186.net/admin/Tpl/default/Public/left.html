@@ -30,6 +30,18 @@
 				<li class="<eq name='MODULE_NAME' value='Article'><eq name='_GET.status' value='-1'>curr</eq></eq>"><a href="__APP__/Article/index/status/-1">回收站</a></li>
 			</ul>
 		</li>
+		<li><a href="__APP__">预定管理</a>
+			<ul class="sub">
+				<li class="<eq name='MODULE_NAME' value='Book'><empty name='_GET.status'>curr</empty></eq>"><a href="__APP__/Book">待处理</a></li>
+				<li class="<eq name='MODULE_NAME' value='Book'><eq name='_GET.status' value='1'>curr</eq></eq>"><a href="__APP__/Book/index/status/1">已处理</a></li>
+			</ul>
+		</li>
+		<li>留言管理
+			<ul class="sub">
+				<li class="<eq name='MODULE_NAME' value='Feedback'><empty name='_GET.status'>curr</empty></eq>"><a href="__APP__/Feedback">待处理</a></li>
+				<li class="<eq name='MODULE_NAME' value='Feedback'><eq name='_GET.status' value='1'>curr</eq></eq>"><a href="__APP__/Feedback/index/status/1">已处理</a></li>
+			</ul>
+		</li>
 		<li>管理员管理
 			<ul class="sub">
 				<li class="<eq name='MODULE_NAME' value='Admin'>curr</eq>"><a href="__APP__/Admin">管理员列表</a></li>

@@ -12,10 +12,10 @@
 	<iterate name="list" id="item">
 	<tr bgcolor="<eq name='mod' value='1'>#FFFFE1</eq>" class="<eq name='item.status' value='0'>gray</eq>" id="{$item['id']}">
 		<td>{$item['id']}</td>
-		<td class="name_editable">{$item['name']}</td>
+		<td class="text_editable" name="name">{$item['name']}</td>
 		<td></td>
 		<td><a href="__APP__/{$type}/index/category_id/{$item['id']}">{$item['count']}</a></td>
-		<td class="sort_editable">{$item['sort']}</td>
+		<td class="text_editable" name="sort">{$item['sort']}</td>
 		<td>
 		</td>
 	</tr>

@@ -77,18 +77,18 @@ class BookAction extends BaseAction {
 		$this->dao->category_id = intval($_REQUEST['category_id']);
 		$this->dao->region_id = intval($_REQUEST['region_id']);
 		$this->dao->hotel_id = intval($_REQUEST['hotel_id']);
-		$this->dao->hotel_keyword = $_REQUEST['keyword'];
+		$this->dao->hotel_keyword = empty($_REQUEST['keyword'])?'':trim($_REQUEST['keyword']);
 		$this->dao->begin_date = empty($_REQUEST['begin_date'])?date('Y-m-d'):$_REQUEST['begin_date'];
-		$this->dao->end_date = empty($_REQUEST['end_date'])?date('Y-m-d'):$_REQUEST['end_date'];
-		$this->dao->number = $_REQUEST['number'];
-		$this->dao->level = $_REQUEST['level'];
-		$this->dao->name = $_REQUEST['name'];
-		$this->dao->phone = $_REQUEST['phone'];
+		$this->dao->end_date = empty($_REQUEST['end_date'])?'0000-00-00':$_REQUEST['end_date'];
+		$this->dao->number = intval($_REQUEST['number']);
+		$this->dao->level = empty($_REQUEST['level'])?'':$_REQUEST['level'];
+		$this->dao->name = trim($_REQUEST['name']);
+		$this->dao->phone = trim($_REQUEST['phone']);
 		$this->dao->demand = trim($_REQUEST['demand']);
 		$this->dao->create_time = date('Y-m-d H:i:s');
-		$this->dao->status = 1;
+		$this->dao->status = 0;
 		if($this->dao->add()) {
-			self::_success('预订成功！', __APP__.'/'.$_REQUEST['type'].'/'.$_REQUEST['alias']);
+			self::_success('预订成功！', __APP__.'/'.$_REQUEST['type'].'/'.$_REQUEST['alias'].(empty($_REQUEST['id'])?'':('/id/'.$_REQUEST['id'])));
 		}
 		else {
 			self::_error('预定出错！'.(C('APP_DEBUG')?$this->dao->getLastSql():''));
