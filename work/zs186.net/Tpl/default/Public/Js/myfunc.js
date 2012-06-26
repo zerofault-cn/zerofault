@@ -48,6 +48,9 @@ $(document).ready(function() {
 	if ($("#end_date").length > 0) {
 		$("#end_date").calendar();
 	}
+	if ($(".kf54kefuqqbottom").length > 0) {
+		$(".kf54kefuqqbottom").html($(".kf54kefuqqbottom a").html());
+	}
 
 	if($("#calendar_block").length < 1){
 		$("<div></div>",{"id":"calendar_block"}).appendTo("body");
