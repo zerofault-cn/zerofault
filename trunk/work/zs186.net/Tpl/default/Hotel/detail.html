@@ -4,13 +4,14 @@
 	<div class="yhjdxx_top_m">
 		<h1>{$info.name}</h1>
 		<div>
-			加入时间：{$info.addtime|substr=0,10}<br/>
-			酒店地址：{$info.address}
+			酒店地址：{$info.address}<br />
+			酒店星级：{$info.Level.name}<br />
+			加入时间：{$info.addtime|substr=0,10}
 		</div>
 		<div>
 			浏览人气：{$info.view}&nbsp;&nbsp;
 			
-<div id="ckepop">
+<div id="ckepop" style="padding: 5px 0;">
 <a href="http://www.jiathis.com/share/" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank">分享到：</a>
 <a class="jiathis_button_tools_1"></a>
 <a class="jiathis_button_tools_2"></a>
@@ -47,6 +48,13 @@
 	</table>
 </div>
 <div class="wyyd">
+	<form action="__APP__/Book/submit" method="post" target="_iframe">
+	<input type="hidden" name="type" value="{$category.type}" />
+	<input type="hidden" name="category_id" value="{$category.id}" />
+	<input type="hidden" name="alias" value="{$category.alias}" />
+	<input type="hidden" name="region_id" value="{$info.region_id}" />
+	<input type="hidden" name="hotel_id" value="{$info.id}" />
+	<input type="hidden" name="level" value="{$info.Level.name}" />
 	<div class="wyyd_nav">我要预订</div>
 	<table width="90%" align="center">
 	<tr>
@@ -54,21 +62,25 @@
 			<span class="red">*</span> 姓名：
 		</td>
 		<td>
-			<input name="textfield" type="text" class="textbox" id="textfield" />
+			<input name="name" type="text" class="textbox" />
 		</td>
 		<td>
 			<span class="red">*</span> 电话：
 		</td>
 		<td >
-			<input name="textfield" type="text" class="textbox" id="textfield"  />
+			<input name="phone" type="text" class="textbox" />
 		</td>
 		<td></td>
 	</tr>
 	<tr>
 		<td colspan="4">
-			<textarea name="textarea" cols="45" rows="5" class="textareabox">详细需求说明</textarea>
+			<textarea name="demand" cols="45" rows="5" class="textareabox" onclick="this.value='';">详细需求说明</textarea>
 		</td>
-		<td><a href="#"><img src="../Public/Images/yhjdxx_18.gif"></a></td>
+		<td><input type="image" src="../Public/Images/yhjdxx_18.gif"/></td>
+	</tr>
+	<tr>
+		<td colspan="4" id="message_box" class="message_box"></td>
 	</tr>
 	</table>
+	</form>
 </div>
