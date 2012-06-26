@@ -72,7 +72,7 @@
 </div>
 <div id="main">
 	<div class="main_l">
-		<div class="zsfw_nav"><a href="#" target="_blank"><img src="../Public/Images/index_97.jpg"></a></div>
+		<div class="zsfw_nav"><a href="__APP__/Article/news" target="_blank"><img src="../Public/Images/index_97.jpg"></a></div>
 		<div class="zsfw_list">
 			<div class="zsfw_list_l">
 				<ul>
@@ -99,17 +99,9 @@
 			<div class="pcont" id="ISL_Cont_1">
 				<div class="ScrCont">
 					<div id="List1_1">
-						<!-- piclist begin -->
-						<a class="pl" href="#" ><img src="../Public/Images/index_92.gif" alt="" width="103" height="25"/></a>
-						<a class="pl"href="#"> <img src="../Public/Images/index_92.gif" alt="" width="103" height="25"/></a>
-						<a class="pl" href="#"><img src="../Public/Images/index_92.gif" alt=""width="103" height="25"/></a>
-						<a class="pl" href="#"><img src="../Public/Images/index_92.gif" alt="" width="103" height="25"/></a>
-						<a class="pl" href="#"><img src="../Public/Images/index_92.gif" alt="" width="103" height="25"/></a>
-						<a class="pl" href="#"><img src="../Public/Images/index_92.gif" alt="" width="103" height="25"/></a>
-						<a class="pl" href="#"><img src="../Public/Images/index_92.gif" alt="" width="103" height="25"/></a>
-						<a class="pl" href="#" ><img src="../Public/Images/index_92.gif" alt="" width="103" height="25"/></a>
-						<a class="pl" href="#" ><img src="../Public/Images/index_92.gif" alt="" width="103" height="25"/></a>
-						<!-- piclist end -->
+						<foreach name="flink" item="item">
+						<a class="pl" href="{$item.url}" title="{$item.name}"><img src="__APP__/../{$item.img}" alt="{$item.name}" width="103" height="25"/></a>
+						</foreach>
 					</div>
 					<div id="List2_1"></div>
 				</div>

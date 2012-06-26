@@ -10,6 +10,10 @@
 	<td><input type="text" name="name" size="30" maxlength="100" value="{$info.name}" /></td>
 </tr>
 <tr>
+	<td>酒店地址：</td>
+	<td><input type="text" name="address" size="30" maxlength="100" value="{$info.address}" /></td>
+</tr>
+<tr>
 	<td>缩略图：</td>
 	<td><if condition="is_file('__APP__/../html/Attach/Hotel/'.$info['id'].'.jpg') eq true">
 		<img src="__APP__/../html/Attach/Hotel/{$info['id']}.jpg"/>(上传新文件将覆盖原文件)<br />

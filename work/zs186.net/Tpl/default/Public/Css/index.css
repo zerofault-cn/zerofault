@@ -239,12 +239,16 @@ h1,h2,h3,h4,h5,h6{
 	float:left;
 	}
 
-.zsfw_list_l ul li{
-	height:21px;
-	padding-top:2px;
+.zsfw_list_l ul li {
+	height:23px;
+	font-size: 0;
+	line-height: 0;
 	list-style:none;
 	}	
 
+.zsfw_list_l ul li img {
+	padding-top: 3px;
+}
 .zsfw_list_r{
 	width:370px;
 	float:left;

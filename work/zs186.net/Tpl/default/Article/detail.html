@@ -1,61 +1,61 @@
-			<eq name="ACTION_NAME" value="detail">
-			<div class="yhjd_r_nav"><div class="yhjd_r_bt">{$category.name}</div></div>
-			<div class="newxx_bt hui">
-				<h2>{$info.title}</h2>
-				作者：{$info.author}&nbsp;&nbsp;&nbsp;&nbsp;
-				时间：{$info.create_time|substr=0,10}&nbsp;&nbsp;&nbsp;&nbsp;
-				人气：{$info.view}&nbsp;&nbsp;&nbsp;&nbsp;
-				<a href="__URL__/{$alias}/id/{$category.id}">返回列表</a>
-			</div>
-			<else />
-			<div class="yhjd_r_nav"><div class="yhjd_r_bt">{$info.title}</div></div>
-			</eq>
-			<div class="mce_content">
-				<if condition="is_file('__APP__/../html/Attach/Article/'.$info['id'].'.jpg') eq true">
-				<center><img src="__APP__/../html/Attach/Article/{$info.id}.jpg" /></center>
-				</if>
-				{$info.content}
-			</div>
-			<div style="height:50px;">
-				<table width="100%"><tr><td>上一篇：<empty name="rel_link.prev">没有了<else /><a href="__APP__/Article/{$category.alias}/id/{$rel_link.prev.id}">{$rel_link.prev.title}</a></empty></td>
-				<td align="right">下一篇：<empty name="rel_link.next">没有了<else /><a href="__APP__/Article/{$category.alias}/id/{$rel_link.next.id}">{$rel_link.next.title}</a></empty></td>
-				</tr>
-				</table>
-			</div>
-			<if condition="ACTION_NAME neq 'detail' and $alias neq 'about'">
-			<div class="wyyd">
-				<form action="__APP__/Book/submit" method="post" target="_iframe">
-				<input type="hidden" name="type" value="{$category.type}" />
-				<input type="hidden" name="category_id" value="{$category.id}" />
-				<input type="hidden" name="alias" value="{$category.alias}" />
-				<input type="hidden" name="id" value="{$info.id}" />
-				<div class="wyyd_nav">我要预订</div>
-				<table width="90%" align="center">
-				<tr>
-					<td>
-						<span class="red">*</span> 姓名：
-					</td>
-					<td>
-						<input name="name" type="text" class="textbox" />
-					</td>
-					<td>
-						<span class="red">*</span> 电话：
-					</td>
-					<td >
-						<input name="phone" type="text" class="textbox" />
-					</td>
-					<td></td>
-				</tr>
-				<tr>
-					<td colspan="4">
-						<textarea name="demand" cols="45" rows="5" class="textareabox" onclick="this.value='';">详细需求说明</textarea>
-					</td>
-					<td><input type="image" src="../Public/Images/yhjdxx_18.gif" /></td>
-				</tr>
-				<tr>
-					<td colspan="4" id="message_box" class="message_box"></td>
-				</tr>
-				</table>
-				</form>
-			</div>
-			</if>
+<eq name="ACTION_NAME" value="detail">
+<div class="yhjd_r_nav"><div class="yhjd_r_bt">{$category.name}</div></div>
+<div class="newxx_bt hui">
+	<h2>{$info.title}</h2>
+	作者：{$info.author}&nbsp;&nbsp;&nbsp;&nbsp;
+	时间：{$info.create_time|substr=0,10}&nbsp;&nbsp;&nbsp;&nbsp;
+	人气：{$info.view}&nbsp;&nbsp;&nbsp;&nbsp;
+	<a href="__URL__/{$alias}/id/{$category.id}">返回列表</a>
+</div>
+<else />
+<div class="yhjd_r_nav"><div class="yhjd_r_bt">{$info.title}</div></div>
+</eq>
+<div class="mce_content">
+	<if condition="is_file('__APP__/../html/Attach/Article/'.$info['id'].'.jpg') eq true">
+	<center><img src="__APP__/../html/Attach/Article/{$info.id}.jpg" /></center>
+	</if>
+	{$info.content}
+</div>
+<div style="height:50px;">
+	<table width="100%"><tr><td>上一篇：<empty name="rel_link.prev">没有了<else /><a href="__APP__/Article/<empty name='category.alias'>detail<else />{$category.alias}</empty>/id/{$rel_link.prev.id}">{$rel_link.prev.title}</a></empty></td>
+	<td align="right">下一篇：<empty name="rel_link.next">没有了<else /><a href="__APP__/Article/<empty name='category.alias'>detail<else />{$category.alias}</empty>/id/{$rel_link.next.id}">{$rel_link.next.title}</a></empty></td>
+	</tr>
+	</table>
+</div>
+<if condition="ACTION_NAME neq 'detail' and $alias neq 'about'">
+<div class="wyyd">
+	<form action="__APP__/Book/submit" method="post" target="_iframe">
+	<input type="hidden" name="type" value="{$category.type}" />
+	<input type="hidden" name="category_id" value="{$category.id}" />
+	<input type="hidden" name="alias" value="{$category.alias}" />
+	<input type="hidden" name="id" value="{$info.id}" />
+	<div class="wyyd_nav">我要预订</div>
+	<table width="90%" align="center">
+	<tr>
+		<td>
+			<span class="red">*</span> 姓名：
+		</td>
+		<td>
+			<input name="name" type="text" class="textbox" />
+		</td>
+		<td>
+			<span class="red">*</span> 电话：
+		</td>
+		<td >
+			<input name="phone" type="text" class="textbox" />
+		</td>
+		<td></td>
+	</tr>
+	<tr>
+		<td colspan="4">
+			<textarea name="demand" cols="45" rows="5" class="textareabox" onclick="this.value='';">详细需求说明</textarea>
+		</td>
+		<td><input type="image" src="../Public/Images/yhjdxx_18.gif" /></td>
+	</tr>
+	<tr>
+		<td colspan="4" id="message_box" class="message_box"></td>
+	</tr>
+	</table>
+	</form>
+</div>
+</if>
