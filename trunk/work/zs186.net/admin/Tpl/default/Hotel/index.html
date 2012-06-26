@@ -13,14 +13,14 @@
 		<th>操作</th>
 	</tr>
 	<iterate name="list" id="item">
-	<tr bgcolor="<eq name='mod' value='1'>#FFFFE1</eq>" class="<eq name='item.status' value='0'>gray</eq>">
+	<tr bgcolor="<eq name='mod' value='1'>#FFFFE1</eq>" class="<eq name='item.status' value='0'>gray</eq>" id="{$item['id']}">
 		<td>{$item.id}</td>
-		<td>{$item.name}</td>
+		<td class="text_editable" name="name">{$item.name}</td>
 		<td nowrap="nowrap">{$item.Region.name}</td>
 		<td nowrap="nowrap">{$item.District.name}</td>
 		<td>{$item.Level.name}</td>
 		<td>{$item.capacity}</td>
-		<td>{$item.sort}</td>
+		<td class="text_editable" name="sort">{$item.sort}</td>
 		<td nowrap="nowrap">{$item['addtime']|substr=0,10}</td>
 		<td nowrap="nowrap">
 			<if condition="$item['status'] neq '-1'">

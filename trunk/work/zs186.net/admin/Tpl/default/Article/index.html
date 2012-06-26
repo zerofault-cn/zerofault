@@ -12,16 +12,16 @@
 		<th width="14%">操作</th>
 	</tr>
 	<iterate name="list" id="item">
-	<tr bgcolor="<eq name='mod' value='1'>#FFFFE1</eq>" class="<eq name='item.status' value='0'>gray</eq>">
+	<tr bgcolor="<eq name='mod' value='1'>#FFFFE1</eq>" class="<eq name='item.status' value='0'>gray</eq>" id="{$item['id']}">
 		<td>{$item['id']}</td>
-		<td>
+		<td class="text_editable" name="title">
 			{$item['title']}
 		</td>
 		<notpresent name="_GET['category_id']">
 		<td><a href="__URL__/index/category_id/{$item['category_id']}" title="查看本类下所有文章">{$item.Category.name}</a>
 		</notpresent>
 		<td>{$item['view']}</td>
-		<td><label id="{$item['id']}">{$item['sort']}</label></td>
+		<td class="text_editable" name="sort">{$item['sort']}</td>
 		<td nowrap="nowrap">{$item['create_time']|substr=2,14}</td>
 		<td>
 			<if condition="$item['status'] neq '-1'">

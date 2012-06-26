@@ -33,7 +33,7 @@ class RegionAction extends BaseAction{
 		if(!empty($count) && $count>0) {
 			self::_error('已经存在同名项目！');
 		}
-		$this->pid = 2;
+		$this->dao->pid = 2;
 		$this->dao->name = $name;
 		$this->dao->sort = $sort;
 		if($this->dao->add()){

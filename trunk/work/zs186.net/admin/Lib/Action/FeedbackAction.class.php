@@ -13,32 +13,19 @@ class FeedbackAction extends BaseAction{
 			);
 
 		$where = array();
-		$dCompany = D('Company');
-		if(!empty($_REQUEST['id'])){
-			$where['company_id'] = $_REQUEST['id'];
-			$company_name = $dCompany->where(array('id'=>$_REQUEST['id']))->getField('name');
-			$topnavi[]=array(
-				'text'=> '给【'.$company_name.'】的留言',
-				);
-		}
-		else{
-			$topnavi[]=array(
-				'text'=> '所有留言',
-				);
-			$where['status'] = 0;
-			if(!empty($_REQUEST['status'])) {
-				$where['status'] = $_REQUEST['status'];
-			}
+		$topnavi[]=array(
+			'text'=> '所有留言',
+			);
+		$where['status'] = 0;
+		if(!empty($_REQUEST['status'])) {
+			$where['status'] = $_REQUEST['status'];
 		}
 		$order = 'id desc';
-		$count = $this->dao->where($where)->getField('count(*)');
+		$count = $this->dao->where($where)->count();
 		import("@.Paginator");
 		$limit = 20;
 		$p = new Paginator($count,$limit);
 		$rs = $this->dao->where($where)->order($order)->limit($p->offset.','.$p->limit)->select();
-		foreach($rs as $key=>$val){
-			$rs[$key]['company_info'] = $dCompany->find($val['company_id']);
-		}
 
 		$this->assign("topnavi",$topnavi);
 		$this->assign('page', $p->showMultiNavi());

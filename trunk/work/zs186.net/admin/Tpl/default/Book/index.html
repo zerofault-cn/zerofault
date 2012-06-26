@@ -1,0 +1,49 @@
+	{$page}
+	<table id="table" class="list" border="1" cellpadding="3" cellspacing="0" width="100%" bordercolor="#999999" style="border-collapse:collapse;">
+	<tr bgcolor="#ededed">
+		<th width="5%">ID</th>
+		<th>预订项目</th>
+		<th>预订内容</th>
+		<th>详细需求说明</th>
+		<th>预订人信息</th>
+		<th width="5%">操作</th>
+	</tr>
+	<empty name="list">
+	<tr>
+		<td colspan="10">没有记录</td>
+	</tr>
+	</empty>
+	<iterate name="list" id="item">
+	<tr bgcolor="<eq name='mod' value='1'>#FFFFE1</eq>">
+		<td>{$item['id']}</td>
+		<td>{$item.Category.name}</td>
+		<td class="a_left" nowrap="nowrap">
+			<if condition="$item['Category']['type'] eq 'Hotel'">
+			<address>{$item.Region.name}&nbsp;<gt name="item.hotel_id">{$item.Hotel.name}<else />~{$item.hotel_keyword}~</gt></address>
+			<strong>日期</strong>：{$item.begin_date}<neq name="item.end_date" value="0000-00-00">&nbsp;~&nbsp;{$item.end_date}</neq><br />
+				<if condition="$item['Category']['alias'] eq 'meeting'">
+			<strong>人数</strong>：{$item.number}人
+				<else />
+			<strong>桌数</strong>：{$item.number}桌
+				</if><br />
+			<strong>星级</strong>：{$item.level}
+			</if>
+		</td>
+		<td class="a_left">
+			{$item.demand|nl2br}
+		</td>
+		<td class="a_left">
+			姓名：{$item.name}<br />
+			电话：{$item.phone}<br />
+			时间：{$item.create_time|substr=2,14}<br />
+		</td>
+		<td nowrap="nowrap">
+			<if condition="$item['status'] eq '0'">
+			<a href="__URL__/update/id/{$item['id']}/f/status/v/1"  target="_iframe" title="标记为已处理"><img src="../Public/Images/flag_blue.gif" alt="标记为已处理" align="absmiddle"/></a>
+			<elseif condition="$item['status'] eq '1'" />
+			<a href="__URL__/update/id/{$item['id']}/f/status/v/0"  target="_iframe" title="标记为未处理"><img src="../Public/Images/flag_gray.gif" alt="标记为未处理" align="absmiddle"/></a>
+			</if>
+		</td>
+	</tr>
+	</iterate>
+	</table>

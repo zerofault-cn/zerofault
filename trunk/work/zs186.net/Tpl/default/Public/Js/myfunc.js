@@ -42,10 +42,14 @@ function myConfirm(str, url) {
 }
 
 $(document).ready(function() {
-	$("#begin_date").calendar();
-	$("#end_date").calendar();
+	if ($("#begin_date").length > 0) {
+		$("#begin_date").calendar();
+	}
+	if ($("#end_date").length > 0) {
+		$("#end_date").calendar();
+	}
 
-	if($("#calendar_block").length<1){
+	if($("#calendar_block").length < 1){
 		$("<div></div>",{"id":"calendar_block"}).appendTo("body");
 	};
 	var calendar_block=$("#calendar_block");
