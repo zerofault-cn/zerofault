@@ -84,6 +84,7 @@ class ArticleAction extends BaseAction {
 		$this->assign('info', $info);
 
 		if (0 == $detail_id) {
+			//url传参
 			$category = M('Category')->find($info['category_id']);
 			$this->assign('category', $category);
 			$sub_category = M('Category')->where("pid=".$category['pid']." and status>0")->order('sort')->select();

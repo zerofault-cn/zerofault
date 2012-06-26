@@ -81,6 +81,7 @@ class HotelAction extends BaseAction{
 
 		$name = trim($_REQUEST['name']);
 		''==$name && self::_error('酒店名称必须填写！');
+		$address = trim($_REQUEST['address']);
 		$category_id = intval($_REQUEST['category_id']);
 		empty($category_id) && self::_error('酒店分类必须选择！');
 		$region_id = intval($_REQUEST['region_id']);
@@ -100,6 +101,7 @@ class HotelAction extends BaseAction{
 				self::_error('此酒店已被添加过！');
 			}
 			$this->dao->name = $name;
+			$this->dao->address = $address;
 			$this->dao->category_id = $category_id;
 			$this->dao->region_id = $region_id;
 			$this->dao->district_id = $district_id;
