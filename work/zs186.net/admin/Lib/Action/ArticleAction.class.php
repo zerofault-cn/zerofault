@@ -33,6 +33,11 @@ class ArticleAction extends BaseAction{
 				'text'=> '全部内容',
 				);
 		}
+		$where['status'] = array('gt', -1);
+		if(!empty($_REQUEST['status'])) {
+			$where['status'] = $_REQUEST['status'];
+			$order = 'id desc';
+		}
 		$rs = $this->dao->relation(true)->where($where)->order($order)->select();
 
 		$this->assign('list', $rs);

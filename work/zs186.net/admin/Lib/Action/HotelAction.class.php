@@ -17,7 +17,12 @@ class HotelAction extends BaseAction{
 		$this->assign("topnavi", $topnavi);
 
 		$where = array();
-		$order = 'sort desc';
+		$order = 'sort';
+		$where['status'] = array('gt', -1);
+		if(!empty($_REQUEST['status'])) {
+			$where['status'] = $_REQUEST['status'];
+			$order = 'id desc';
+		}
 		if (!empty($_REQUEST['category_id'])) {
 			$where['category_id'] = intval($_REQUEST['category_id']);
 			$this->assign('category_id', $_REQUEST['category_id']);
