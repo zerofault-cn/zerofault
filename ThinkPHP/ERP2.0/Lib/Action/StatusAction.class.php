@@ -1287,6 +1287,204 @@ class StatusAction extends BaseAction{
 		$this->assign('content', ACTION_NAME);
 		$this->display('Layout:content');
 	}
+	public function status() {
+		$flow_id = empty($_REQUEST['flow_id']) ? 0 : intval($_REQUEST['flow_id']);
+		$this->assign('flow_id', $flow_id);
+		$item_id = empty($_REQUEST['item_id']) ? 0 : intval($_REQUEST['item_id']);
+		$this->assign('item_id', $item_id);
+
+		if (!empty($_POST['submit'])) {
+			//flow_id>0 and item_id>0 means batch mode
+			if ($flow_id>0 && $item_id>0) {
+				//get all board_id
+				$board_arr = M('StatusStatus')->where("flow_id=".$flow_id." and item_id=".$item_id)->getField('id,board_id');
+				$status_id = 99999;
+			}
+			else {
+				$board_arr = array($status_id=>$board_id);
+			}
+			if (!empty($_REQUEST['field'])) {
+				//user added field
+				foreach ($_REQUEST['field'] as $i=>$field) {
+					if (''==trim($field) || ''==trim($_REQUEST['value'][$i])) {
+						continue;
+					}
+					if (array_key_exists(trim($field), $RevArray)) {
+						self::_error('The field name: "'.$field.'" is not allowed');
+					}
+					foreach ($board_arr as $status_id=>$board_id) {
+						$data = array(
+							'board_id' => $board_id,
+							'status_id' => $status_id,
+							'field' => $field,
+							'value' => trim($_REQUEST['value'][$i]),
+							'sort' => 10,
+							'staff_id' => $_SESSION[C('USER_AUTH_KEY')],
+							'update_time' => date('Y-m-d H:i:s')
+						);
+						if (!M('StatusRevision')->add($data)) {
+							self::_error('Add ext revision entry fail!<br />'.$this->dao->getLastSql());
+						}
+						if ($board_id > 0) {
+							self::write_log('Manually', 'Set extended Revision['.$field.'='.trim($_REQUEST['value'][$i]).'] for Board('.$board_id.': '.M('StatusBoard')->where("id=".$board_id)->getField('name').')');
+						}
+						elseif($status_id > 0) {
+							$status_info = M('StatusStatus')->where("id=".$status_id)->find();
+							self::write_log('Manually', 'Set extended Revision['.$field.'='.trim($_REQUEST['value'][$i]).'] for Item('.$status_info['item_id'].': '.M('StatusItem')->where("id=".$status_info['item_id'])->getField('name').') of Board('.$status_info['board_id'].': '.M('StatusBoard')->where("id=".$status_info['board_id'])->getField('name').')');
+						}
+					}
+				}
+			}
+			if (!empty($_REQUEST['_field'])) {
+				//system field
+				foreach ($_REQUEST['_field'] as $i=>$field) {
+					if (''==trim($_REQUEST['_value'][$i])) {
+						continue;
+					}
+					foreach ($board_arr as $status_id=>$board_id) {
+						$data = array(
+							'board_id' => $board_id,
+							'status_id' => $status_id,
+							'field' => $field,
+							'value' => trim($_REQUEST['_value'][$i]),
+							'sort' => $RevSort[$field],
+							'staff_id' => $_SESSION[C('USER_AUTH_KEY')],
+							'update_time' => date('Y-m-d H:i:s')
+						);
+						if (!M('StatusRevision')->add($data)) {
+							self::_error('Add revision entry fail!<br />'.$this->dao->getLastSql());
+						}
+						if ($board_id > 0) {
+							self::write_log('Manually', 'Set Revision['.$field.'='.trim($_REQUEST['_value'][$i]).'] for Board('.$board_id.': '.M('StatusBoard')->where("id=".$board_id)->getField('name').')');
+						}
+						elseif($status_id > 0) {
+							$status_info = M('StatusStatus')->where("id=".$status_id)->find();
+							self::write_log('Manually', 'Set Revision['.$field.'='.trim($_REQUEST['_value'][$i]).'] for Item('.$status_info['item_id'].': '.M('StatusItem')->where("id=".$status_info['item_id'])->getField('name').') of Board('.$status_info['board_id'].': '.M('StatusBoard')->where("id=".$status_info['board_id'])->getField('name').')');
+						}
+					}
+				}
+			}
+			if (!empty($_REQUEST['_id'])) {
+				//edit exists field, not available in batch mode
+				foreach ($_REQUEST['_id'] as $id=>$value) {
+					if (empty($id)) {
+						continue;
+					}
+					$dao = M('StatusRevision');
+					$dao->find($id);
+					if (''==trim($value)) {
+						//delete the entry
+						$dao->delete();
+						if ($board_id > 0) {
+							self::write_log('Manually', 'Delete Revision['.$dao->field.'='.$dao->value.'] of Board('.$board_id.': '.M('StatusBoard')->where("id=".$board_id)->getField('name').')');
+						}
+						elseif($status_id > 0) {
+							$status_info = M('StatusStatus')->where("id=".$status_id)->find();
+							self::write_log('Manually', 'Delete Revision['.$dao->field.'='.$dao->value.'] of Item('.$status_info['item_id'].': '.M('StatusItem')->where("id=".$status_info['item_id'])->getField('name').') of Board('.$status_info['board_id'].': '.M('StatusBoard')->where("id=".$status_info['board_id'])->getField('name').')');
+						}
+					}
+					else {
+						if ($dao->value == trim($value)) {
+							continue;
+						}
+						$old_value = $dao->value;
+						$dao->value = trim($value);
+						$dao->update_time = date('Y-m-d H:i:s');
+						if (false === $dao->save()) {
+							self::_error('Update revision entry fail!<br />'.$this->dao->getLastSql());
+						}
+						if ($board_id > 0) {
+							self::write_log('Manually', 'Change Revision['.$dao->field.'] of Board('.$board_id.': '.M('StatusBoard')->where("id=".$board_id)->getField('name').') from ['.$old_value.'] to ['.trim($value).']');
+						}
+						elseif($status_id > 0) {
+							$status_info = M('StatusStatus')->where("id=".$status_id)->find();
+							self::write_log('Manually', 'Change Revision['.$dao->field.'] of Item('.$status_info['item_id'].': '.M('StatusItem')->where("id=".$status_info['item_id'])->getField('name').') of Board('.$status_info['board_id'].': '.M('StatusBoard')->where("id=".$status_info['board_id'])->getField('name').') from ['.$old_value.'] to ['.trim($value).']');
+						}
+					}
+				}
+			}
+			$value = intval($_REQUEST['status']);
+			if (0==$flow_id && 0==$item_id && $board_id > 0) {
+				//改变Board状态
+				$dao = M('StatusBoard');
+				$info = $dao->find($board_id);
+				if ($info['status'] != $value) {
+					$dao->where('id='.$board_id)->setField(array('status', 'update_time'), array($value, date('Y-m-d H:i:s')));
+					self::write_log('Manually', 'Change finnal status of Board('.$info['id'].': '.$info['name'].') from ['.$this->status_arr[$info['status']].'] to ['.$this->status_arr[$value].']');
+				}
+			}
+			elseif ($status_id > 0) {
+				//改变Status状态
+				foreach ($board_arr as $status_id=>$board_id) {
+					$value = intval($_REQUEST['status']);
+					$dao = M('StatusStatus');
+					$info = $dao->find($status_id);
+					$item = M('StatusItem')->find($info['item_id']);
+					$board = M('StatusBoard')->find($info['board_id']);
+					if ($info['status'] != $value) {
+						$dao->where("id=".$status_id)->setField(array('status', 'update_time'), array($value, date('Y-m-d H:i:s')));
+						self::write_log('Manually', 'Change status of Item('.$item['id'].': '.$item['name'].') of Board('.$board['id'].': '.$board['name'].') from ['.$this->status_arr[$info['status']].'] to ['.$this->status_arr[$value].']');
+					}
+
+					$status_count = M('StatusStatus')->where("board_id=".$board['id'])->group('status')->getField('status,count(*)');
+					if ($status_count[2] > 0) {
+						//有Fail
+						$value = 2;//设为Fail
+					}
+					else {
+						//没有Fail
+						if ($status_count[0] > 0) {
+							//有Ongoing
+							$value = 0;//设为Ongoing
+						}
+						else {
+							//没有Pending
+							if ($status_count[-1] > 0) {
+								//有TBD
+								if ($status_count[1]>0) {
+									//有Pass
+									$value = 0;//设为Ongoing 
+								}
+								else {
+									//全部TBD，或还有Ignore
+									$value = -1;//设为TBD
+								}
+							}
+							else {
+								//没有TBD，只剩Pass和Ignore
+								if ($status_count[8]>0) {
+									//有Ignore
+									$value = 9;//设为Pass*
+								}
+								else {
+									//全部Pass
+									$value = 1;//设为Pass
+								}
+							}
+						}
+					}
+					if ($board['status'] != $value) {
+						M('StatusBoard')->where("id=".$board['id'])->setField(array('status', 'update_time'), array($value, date('Y-m-d H:i:s')));
+						self::write_log('Automatically', 'Change Board('.$board['id'].': '.$board['name'].') finnal status from ['.$this->status_arr[$board['status']].'] to ['.$this->status_arr[$value].']');
+					}
+				}
+			}
+			self::_success('Revision and Status updated!');
+		}
+
+		$result = array();
+		$where = array(
+			'flow_id' => $flow_id,
+			'item_id' => $item_id
+			);
+		$result = D('StatusStatus')->relation(true)->where($where)->select();
+		$this->assign('result', $result);
+		$this->assign('item_info', M('StatusItem')->find($item_id));
+
+		$this->assign('content', ACTION_NAME);
+		$this->display('Layout:content');
+	}
+
 	public function update() {
 		$board_id = empty($_REQUEST['board_id']) ? 0 : intval($_REQUEST['board_id']);
 		$status_id = empty($_REQUEST['id']) ? 0 : intval($_REQUEST['id']);
