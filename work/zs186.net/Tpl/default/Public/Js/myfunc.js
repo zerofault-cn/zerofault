@@ -49,7 +49,7 @@ $(document).ready(function() {
 		$("#end_date").calendar();
 	}
 	if ($(".kf54kefuqqbottom").length > 0) {
-		$(".kf54kefuqqbottom").html($(".kf54kefuqqbottom a").html());
+	//	$(".kf54kefuqqbottom").html($(".kf54kefuqqbottom a").html());
 	}
 
 	if($("#calendar_block").length < 1){
