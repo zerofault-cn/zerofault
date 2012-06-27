@@ -42,6 +42,6 @@ function myConfirm(str, url) {
 }
 $(document).ready(function() {
 	if ($(".kf54kefuqqbottom").length > 0) {
-		$(".kf54kefuqqbottom").html($(".kf54kefuqqbottom a").html());
+	//	$(".kf54kefuqqbottom").html($(".kf54kefuqqbottom a").html());
 	}
 });
