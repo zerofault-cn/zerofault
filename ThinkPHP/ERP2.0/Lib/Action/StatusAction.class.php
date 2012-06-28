@@ -920,6 +920,271 @@ class StatusAction extends BaseAction{
 
 		$op = empty($_REQUEST['op']) ? '' : trim($_REQUEST['op']);
 		if ('export' == $op) {
+			include_once (LIB_PATH.'PHPExcel.php');
+			$COLS = array();
+			$last_col = 'A';
+			for ($i=0; $i<count($item_list)+6; $i++) {
+				$COLS[] = $last_col;
+				$last_col ++;
+			}
+			$objPHPExcel = new PHPExcel();
+			$objPHPExcel->getProperties()
+				->setTitle('Board Status Test Flow: '.$flow_info['name'])
+				->setSubject('Board Status Test Flow: '.$flow_info['name']);
+			$objPHPExcel->setActiveSheetIndex(0);
+
+			$Style_BoardTH = new PHPExcel_Style();
+			$Style_BoardTH->applyFromArray(
+				array(
+					'font' => array(
+						'bold'  => true,
+					),
+					'alignment' => array(
+						'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_RIGHT,
+						'vertical'   => PHPExcel_Style_Alignment::VERTICAL_CENTER,
+					),
+					'fill' => array(
+						'type' => PHPExcel_Style_Fill::FILL_SOLID,
+						'startcolor' => array(
+							'rgb' => 'CCCCFF'
+						)
+					)
+				)
+			);
+			$Style_BoardTD = new PHPExcel_Style();
+			$Style_BoardTD->applyFromArray(
+				array(
+					'font' => array(
+						'bold'  => true,
+						'color' => array('rgb' => '0000FF')
+					),
+					'fill' => array(
+						'type' => PHPExcel_Style_Fill::FILL_SOLID,
+						'startcolor' => array(
+							'rgb' => 'CCFFFF'
+						)
+					)
+				)
+			);
+			$Style_BoardInfo = new PHPExcel_Style();
+			$Style_BoardInfo->applyFromArray(
+				array(
+					'fill' => array(
+						'type' => PHPExcel_Style_Fill::FILL_SOLID,
+						'startcolor' => array(
+							'rgb' => 'CCFFFF'
+						)
+					),
+					'alignment' => array(
+						'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_LEFT,
+						'vertical'   => PHPExcel_Style_Alignment::VERTICAL_TOP,
+						'wrap' => true
+					)
+				)
+			);
+			$Style_ItemTH = new PHPExcel_Style();
+			$Style_ItemTH->applyFromArray(
+				array(
+					'font' => array(
+						'bold'  => true,
+					),
+					'alignment' => array(
+						'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_LEFT,
+						'vertical'   => PHPExcel_Style_Alignment::VERTICAL_CENTER,
+					),
+					'fill' => array(
+						'type' => PHPExcel_Style_Fill::FILL_SOLID,
+						'startcolor' => array(
+							'rgb' => '9999CC'
+						)
+					)
+				)
+			);
+			$Style_StatusTH = new PHPExcel_Style();
+			$Style_StatusTH->applyFromArray(
+				array(
+					'font' => array(
+						'bold'  => true,
+					),
+					'alignment' => array(
+						'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
+						'vertical'   => PHPExcel_Style_Alignment::VERTICAL_CENTER,
+					),
+					'fill' => array(
+						'type' => PHPExcel_Style_Fill::FILL_SOLID,
+						'startcolor' => array(
+							'rgb' => 'CC99FF'
+						)
+					)
+				)
+			);
+			$Style_Status_None = new PHPExcel_Style();
+			$Style_Status_None->applyFromArray(
+				array(
+					'font' => array(
+						'bold'  => true,
+						'color' => array('rgb' => '808080')
+					)
+				)
+			);
+			$Style_Status_Pass = new PHPExcel_Style();
+			$Style_Status_Pass->applyFromArray(
+				array(
+					'font' => array(
+						'bold'  => true,
+						'color' => array('rgb' => '339900')
+					)
+				)
+			);
+			$Style_Status_Pending = new PHPExcel_Style();
+			$Style_Status_Pending->applyFromArray(
+				array(
+					'font' => array(
+						'bold'  => true,
+						'color' => array('rgb' => '0000FF')
+					)
+				)
+			);
+			$Style_Status_Failed = new PHPExcel_Style();
+			$Style_Status_Failed->applyFromArray(
+				array(
+					'font' => array(
+						'bold'  => true,
+						'color' => array('rgb' => 'FF0000')
+					)
+				)
+			);
+
+			$Style_BoardStatusTH = new PHPExcel_Style();
+			$Style_BoardStatusTH->applyFromArray(
+				array(
+					'font' => array(
+						'bold'  => true,
+					),
+					'alignment' => array(
+						'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_RIGHT,
+						'vertical'   => PHPExcel_Style_Alignment::VERTICAL_CENTER,
+					),
+					'fill' => array(
+						'type' => PHPExcel_Style_Fill::FILL_SOLID,
+						'startcolor' => array(
+							'rgb' => '9999CC'
+						)
+					)
+				)
+			);
+
+			$objPHPExcel->getActiveSheet()->getColumnDimension('A')->setAutoSize(true);
+			$objPHPExcel->getActiveSheet()->getColumnDimension('B')->setAutoSize(true);
+			$objPHPExcel->getActiveSheet()->getColumnDimension('C')->setAutoSize(true);
+			$objPHPExcel->getActiveSheet()->getColumnDimension('D')->setAutoSize(true);
+			$objPHPExcel->getActiveSheet()->getColumnDimension('E')->setAutoSize(true);
+			$objPHPExcel->getActiveSheet()->setCellValue('A1', 'Test Item: ');
+			$objPHPExcel->getActiveSheet()->mergeCells('A1:E1');
+			$objPHPExcel->getActiveSheet()->setCellValue('A2', 'Default Test Owner: ');
+			$objPHPExcel->getActiveSheet()->mergeCells('A2:E2');
+			$objPHPExcel->getActiveSheet()->setSharedStyle($Style_BoardTH, 'A1:E2');
+
+			foreach ($item_list as $i=>$item) {
+				$objPHPExcel->getActiveSheet()->getColumnDimension($COLS[5+$i])->setWidth(15);
+				$objPHPExcel->getActiveSheet()->setCellValue($COLS[5+$i*2].'1', $item['name']);
+				$objPHPExcel->getActiveSheet()->mergeCells($COLS[5+$i*2].'1:'.$COLS[5+$i*2+1].'1');
+			}
+			foreach ($owner_list as $i=>$item) {
+				$objPHPExcel->getActiveSheet()->setCellValue($COLS[5+$i*2].'2', $item);
+				$objPHPExcel->getActiveSheet()->mergeCells($COLS[5+$i*2].'2:'.$COLS[5+$i*2+1].'2');
+			}
+			$objPHPExcel->getActiveSheet()->setSharedStyle($Style_BoardTD, 'D1:'.$COLS[3+$i].'1');
+			$objPHPExcel->getActiveSheet()->setSharedStyle($Style_BoardInfo, 'D2:'.$COLS[3+$i].'2');
+
+			$objPHPExcel->getActiveSheet()->setCellValue('D3', 'Board Status');
+			$objPHPExcel->getActiveSheet()->mergeCells('D3:'.$COLS[3+$i].'3');
+			$objPHPExcel->getActiveSheet()->setSharedStyle($Style_StatusTH, 'D3:'.$COLS[3+$i].'3');
+
+			$objPHPExcel->getActiveSheet()->setCellValue('A3', 'No.');
+			$objPHPExcel->getActiveSheet()->setCellValue('B3', 'Test Item');
+			$objPHPExcel->getActiveSheet()->setCellValue('C3', 'Default Test Owner');
+			$objPHPExcel->getActiveSheet()->setSharedStyle($Style_ItemTH, 'A3:C3');
+
+			foreach ($item_board_status as $j=>$item) {
+				$objPHPExcel->getActiveSheet()->setCellValue('A'.(4+$j), $j+1);
+				$objPHPExcel->getActiveSheet()->setCellValue('B'.(4+$j), $item['item_info']['name']);
+				$objPHPExcel->getActiveSheet()->setCellValue('C'.(4+$j), $item['owner']);
+				foreach ($item['board_status'] as $k=>$status) {
+					$objPHPExcel->getActiveSheet()->setCellValue($COLS[3+$k].(4+$j), $this->status_arr[$status['status']]);
+					switch ($status['status']) {
+						case '-1':
+							$objPHPExcel->getActiveSheet()->setSharedStyle($Style_Status_None, $COLS[3+$k].(4+$j));
+							break;
+						case '0':
+							$objPHPExcel->getActiveSheet()->setSharedStyle($Style_Status_Pending, $COLS[3+$k].(4+$j));
+							break;
+						case '1':
+							$objPHPExcel->getActiveSheet()->setSharedStyle($Style_Status_Pass, $COLS[3+$k].(4+$j));
+							break;
+						case '2':
+							$objPHPExcel->getActiveSheet()->setSharedStyle($Style_Status_Failed, $COLS[3+$k].(4+$j));
+							break;
+						default:
+							//
+					}
+					empty($status['comment']) && $status['comment']=array();
+					foreach ($status['comment'] as $comment) {
+						$objPHPExcel->getActiveSheet()->getComment($COLS[3+$k].(4+$j))->setAuthor($comment['staff']['realname']);
+						$objCommentRichText = $objPHPExcel->getActiveSheet()->getComment($COLS[3+$k].(4+$j))->getText()->createTextRun('['.$comment['staff']['realname'].']@'.$comment['create_time'].':');
+						$objCommentRichText->getFont()->setBold(true);
+						$objPHPExcel->getActiveSheet()->getComment($COLS[3+$k].(4+$j))->getText()->createTextRun("\r\n");
+						$objPHPExcel->getActiveSheet()->getComment($COLS[3+$k].(4+$j))->getText()->createTextRun($comment['content']."\r\n");
+						$objPHPExcel->getActiveSheet()->getComment($COLS[3+$k].(4+$j))->setWidth('180pt');
+						$objPHPExcel->getActiveSheet()->getComment($COLS[3+$k].(4+$j))->setHeight('180pt');
+					}
+				}
+				$objPHPExcel->getActiveSheet()->getStyle('A'.(4+$j).':'.$COLS[3+$k].(4+$j))->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID);
+				$objPHPExcel->getActiveSheet()->getStyle('A'.(4+$j).':'.$COLS[3+$k].(4+$j))->getFill()->getStartColor()->setRGB($j%2?'CCCCCC':'EEEEEE');
+			}
+			$objPHPExcel->getActiveSheet()->setCellValue('A'.(5+$j), 'Board Final Status: ');
+			$objPHPExcel->getActiveSheet()->mergeCells('A'.(5+$j).':C'.(5+$j));
+			$objPHPExcel->getActiveSheet()->setSharedStyle($Style_BoardStatusTH, 'A'.(5+$j).':C'.(5+$j));
+			foreach ($board_list as $i=>$board) {
+				$objPHPExcel->getActiveSheet()->setCellValue($COLS[3+$i].(5+$j), $this->status_arr[$board['status']]);
+				switch ($board['status']) {
+					case '-1':
+						$objPHPExcel->getActiveSheet()->setSharedStyle($Style_Status_None, $COLS[3+$i].(5+$j));
+						break;
+					case '0':
+						$objPHPExcel->getActiveSheet()->setSharedStyle($Style_Status_Pending, $COLS[3+$i].(5+$j));
+						break;
+					case '1':
+						$objPHPExcel->getActiveSheet()->setSharedStyle($Style_Status_Pass, $COLS[3+$i].(5+$j));
+						break;
+					case '2':
+						$objPHPExcel->getActiveSheet()->setSharedStyle($Style_Status_Failed, $COLS[3+$i].(5+$j));
+						break;
+					default:
+						//
+				}
+				empty($board['comment']) && $board['comment']=array();
+				foreach ($board['comment'] as $comment) {
+					$objPHPExcel->getActiveSheet()->getComment($COLS[3+$i].(5+$j))->setAuthor($comment['staff']['realname']);
+					$objCommentRichText = $objPHPExcel->getActiveSheet()->getComment($COLS[3+$i].(5+$j))->getText()->createTextRun('['.$comment['staff']['realname'].']@'.$comment['create_time'].':');
+					$objCommentRichText->getFont()->setBold(true);
+					$objPHPExcel->getActiveSheet()->getComment($COLS[3+$i].(5+$j))->getText()->createTextRun("\r\n");
+					$objPHPExcel->getActiveSheet()->getComment($COLS[3+$i].(5+$j))->getText()->createTextRun($comment['content']."\r\n");
+					$objPHPExcel->getActiveSheet()->getComment($COLS[3+$i].(5+$j))->setWidth('180pt');
+					$objPHPExcel->getActiveSheet()->getComment($COLS[3+$i].(5+$j))->setHeight('180pt');
+				}
+			}
+			$objPHPExcel->getActiveSheet()->getStyle('D'.(5+$j).':'.$COLS[3+$i].(5+$j))->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID);
+			$objPHPExcel->getActiveSheet()->getStyle('D'.(5+$j).':'.$COLS[3+$i].(5+$j))->getFill()->getStartColor()->setRGB('99CCFF');
+
+
+			header('Content-Type: application/vnd.ms-excel');
+			header('Content-Disposition: attachment;filename="'.$flow_info['name'].'.xls"');
+			header('Cache-Control: max-age=0');
+
+			$objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
+			$objWriter->save('php://output');
+			exit;
 		}
 
 		$this->assign('flow_info', $flow_info);
@@ -1294,182 +1559,61 @@ class StatusAction extends BaseAction{
 		$this->assign('item_id', $item_id);
 
 		if (!empty($_POST['submit'])) {
-			//flow_id>0 and item_id>0 means batch mode
-			if ($flow_id>0 && $item_id>0) {
-				//get all board_id
-				$board_arr = M('StatusStatus')->where("flow_id=".$flow_id." and item_id=".$item_id)->getField('id,board_id');
-				$status_id = 99999;
-			}
-			else {
-				$board_arr = array($status_id=>$board_id);
-			}
-			if (!empty($_REQUEST['field'])) {
-				//user added field
-				foreach ($_REQUEST['field'] as $i=>$field) {
-					if (''==trim($field) || ''==trim($_REQUEST['value'][$i])) {
-						continue;
-					}
-					if (array_key_exists(trim($field), $RevArray)) {
-						self::_error('The field name: "'.$field.'" is not allowed');
-					}
-					foreach ($board_arr as $status_id=>$board_id) {
-						$data = array(
-							'board_id' => $board_id,
-							'status_id' => $status_id,
-							'field' => $field,
-							'value' => trim($_REQUEST['value'][$i]),
-							'sort' => 10,
-							'staff_id' => $_SESSION[C('USER_AUTH_KEY')],
-							'update_time' => date('Y-m-d H:i:s')
-						);
-						if (!M('StatusRevision')->add($data)) {
-							self::_error('Add ext revision entry fail!<br />'.$this->dao->getLastSql());
-						}
-						if ($board_id > 0) {
-							self::write_log('Manually', 'Set extended Revision['.$field.'='.trim($_REQUEST['value'][$i]).'] for Board('.$board_id.': '.M('StatusBoard')->where("id=".$board_id)->getField('name').')');
-						}
-						elseif($status_id > 0) {
-							$status_info = M('StatusStatus')->where("id=".$status_id)->find();
-							self::write_log('Manually', 'Set extended Revision['.$field.'='.trim($_REQUEST['value'][$i]).'] for Item('.$status_info['item_id'].': '.M('StatusItem')->where("id=".$status_info['item_id'])->getField('name').') of Board('.$status_info['board_id'].': '.M('StatusBoard')->where("id=".$status_info['board_id'])->getField('name').')');
-						}
-					}
-				}
-			}
-			if (!empty($_REQUEST['_field'])) {
-				//system field
-				foreach ($_REQUEST['_field'] as $i=>$field) {
-					if (''==trim($_REQUEST['_value'][$i])) {
-						continue;
-					}
-					foreach ($board_arr as $status_id=>$board_id) {
-						$data = array(
-							'board_id' => $board_id,
-							'status_id' => $status_id,
-							'field' => $field,
-							'value' => trim($_REQUEST['_value'][$i]),
-							'sort' => $RevSort[$field],
-							'staff_id' => $_SESSION[C('USER_AUTH_KEY')],
-							'update_time' => date('Y-m-d H:i:s')
-						);
-						if (!M('StatusRevision')->add($data)) {
-							self::_error('Add revision entry fail!<br />'.$this->dao->getLastSql());
-						}
-						if ($board_id > 0) {
-							self::write_log('Manually', 'Set Revision['.$field.'='.trim($_REQUEST['_value'][$i]).'] for Board('.$board_id.': '.M('StatusBoard')->where("id=".$board_id)->getField('name').')');
-						}
-						elseif($status_id > 0) {
-							$status_info = M('StatusStatus')->where("id=".$status_id)->find();
-							self::write_log('Manually', 'Set Revision['.$field.'='.trim($_REQUEST['_value'][$i]).'] for Item('.$status_info['item_id'].': '.M('StatusItem')->where("id=".$status_info['item_id'])->getField('name').') of Board('.$status_info['board_id'].': '.M('StatusBoard')->where("id=".$status_info['board_id'])->getField('name').')');
-						}
-					}
-				}
-			}
-			if (!empty($_REQUEST['_id'])) {
-				//edit exists field, not available in batch mode
-				foreach ($_REQUEST['_id'] as $id=>$value) {
-					if (empty($id)) {
-						continue;
-					}
-					$dao = M('StatusRevision');
-					$dao->find($id);
-					if (''==trim($value)) {
-						//delete the entry
-						$dao->delete();
-						if ($board_id > 0) {
-							self::write_log('Manually', 'Delete Revision['.$dao->field.'='.$dao->value.'] of Board('.$board_id.': '.M('StatusBoard')->where("id=".$board_id)->getField('name').')');
-						}
-						elseif($status_id > 0) {
-							$status_info = M('StatusStatus')->where("id=".$status_id)->find();
-							self::write_log('Manually', 'Delete Revision['.$dao->field.'='.$dao->value.'] of Item('.$status_info['item_id'].': '.M('StatusItem')->where("id=".$status_info['item_id'])->getField('name').') of Board('.$status_info['board_id'].': '.M('StatusBoard')->where("id=".$status_info['board_id'])->getField('name').')');
-						}
-					}
-					else {
-						if ($dao->value == trim($value)) {
-							continue;
-						}
-						$old_value = $dao->value;
-						$dao->value = trim($value);
-						$dao->update_time = date('Y-m-d H:i:s');
-						if (false === $dao->save()) {
-							self::_error('Update revision entry fail!<br />'.$this->dao->getLastSql());
-						}
-						if ($board_id > 0) {
-							self::write_log('Manually', 'Change Revision['.$dao->field.'] of Board('.$board_id.': '.M('StatusBoard')->where("id=".$board_id)->getField('name').') from ['.$old_value.'] to ['.trim($value).']');
-						}
-						elseif($status_id > 0) {
-							$status_info = M('StatusStatus')->where("id=".$status_id)->find();
-							self::write_log('Manually', 'Change Revision['.$dao->field.'] of Item('.$status_info['item_id'].': '.M('StatusItem')->where("id=".$status_info['item_id'])->getField('name').') of Board('.$status_info['board_id'].': '.M('StatusBoard')->where("id=".$status_info['board_id'])->getField('name').') from ['.$old_value.'] to ['.trim($value).']');
-						}
-					}
-				}
-			}
-			$value = intval($_REQUEST['status']);
-			if (0==$flow_id && 0==$item_id && $board_id > 0) {
-				//改变Board状态
-				$dao = M('StatusBoard');
-				$info = $dao->find($board_id);
-				if ($info['status'] != $value) {
-					$dao->where('id='.$board_id)->setField(array('status', 'update_time'), array($value, date('Y-m-d H:i:s')));
-					self::write_log('Manually', 'Change finnal status of Board('.$info['id'].': '.$info['name'].') from ['.$this->status_arr[$info['status']].'] to ['.$this->status_arr[$value].']');
-				}
-			}
-			elseif ($status_id > 0) {
+			$dao = M('StatusStatus');
+			foreach ($_REQUEST['status'] as $status_id=>$value) {
 				//改变Status状态
-				foreach ($board_arr as $status_id=>$board_id) {
-					$value = intval($_REQUEST['status']);
-					$dao = M('StatusStatus');
-					$info = $dao->find($status_id);
-					$item = M('StatusItem')->find($info['item_id']);
-					$board = M('StatusBoard')->find($info['board_id']);
-					if ($info['status'] != $value) {
-						$dao->where("id=".$status_id)->setField(array('status', 'update_time'), array($value, date('Y-m-d H:i:s')));
-						self::write_log('Manually', 'Change status of Item('.$item['id'].': '.$item['name'].') of Board('.$board['id'].': '.$board['name'].') from ['.$this->status_arr[$info['status']].'] to ['.$this->status_arr[$value].']');
-					}
+				$info = $dao->find($status_id);
+				$item = M('StatusItem')->find($info['item_id']);
+				$board = M('StatusBoard')->find($info['board_id']);
+				if ($info['status'] != $value) {
+					$dao->where("id=".$status_id)->setField(array('status', 'update_time'), array($value, date('Y-m-d H:i:s')));
+					self::write_log('Manually', 'Change status of Item('.$item['id'].': '.$item['name'].') of Board('.$board['id'].': '.$board['name'].') from ['.$this->status_arr[$info['status']].'] to ['.$this->status_arr[$value].']');
+				}
 
-					$status_count = M('StatusStatus')->where("board_id=".$board['id'])->group('status')->getField('status,count(*)');
-					if ($status_count[2] > 0) {
-						//有Fail
-						$value = 2;//设为Fail
+				//自动更新Board Status
+				$status_count = M('StatusStatus')->where("board_id=".$board['id'])->group('status')->getField('status,count(*)');
+				if ($status_count[2] > 0) {
+					//有Fail
+					$value = 2;//设为Fail
+				}
+				else {
+					//没有Fail
+					if ($status_count[0] > 0) {
+						//有Ongoing
+						$value = 0;//设为Ongoing
 					}
 					else {
-						//没有Fail
-						if ($status_count[0] > 0) {
-							//有Ongoing
-							$value = 0;//设为Ongoing
-						}
-						else {
-							//没有Pending
-							if ($status_count[-1] > 0) {
-								//有TBD
-								if ($status_count[1]>0) {
-									//有Pass
-									$value = 0;//设为Ongoing 
-								}
-								else {
-									//全部TBD，或还有Ignore
-									$value = -1;//设为TBD
-								}
+						//没有Pending
+						if ($status_count[-1] > 0) {
+							//有TBD
+							if ($status_count[1]>0) {
+								//有Pass
+								$value = 0;//设为Ongoing 
 							}
 							else {
-								//没有TBD，只剩Pass和Ignore
-								if ($status_count[8]>0) {
-									//有Ignore
-									$value = 9;//设为Pass*
-								}
-								else {
-									//全部Pass
-									$value = 1;//设为Pass
-								}
+								//全部TBD，或还有Ignore
+								$value = -1;//设为TBD
+							}
+						}
+						else {
+							//没有TBD，只剩Pass和Ignore
+							if ($status_count[8]>0) {
+								//有Ignore
+								$value = 9;//设为Pass*
+							}
+							else {
+								//全部Pass
+								$value = 1;//设为Pass
 							}
 						}
 					}
-					if ($board['status'] != $value) {
-						M('StatusBoard')->where("id=".$board['id'])->setField(array('status', 'update_time'), array($value, date('Y-m-d H:i:s')));
-						self::write_log('Automatically', 'Change Board('.$board['id'].': '.$board['name'].') finnal status from ['.$this->status_arr[$board['status']].'] to ['.$this->status_arr[$value].']');
-					}
+				}
+				if ($board['status'] != $value) {
+					M('StatusBoard')->where("id=".$board['id'])->setField(array('status', 'update_time'), array($value, date('Y-m-d H:i:s')));
+					self::write_log('Automatically', 'Change Board('.$board['id'].': '.$board['name'].') finnal status from ['.$this->status_arr[$board['status']].'] to ['.$this->status_arr[$value].']');
 				}
 			}
-			self::_success('Revision and Status updated!');
+			self::_success('All Boards\' Status updated!');
 		}
 
 		$result = array();

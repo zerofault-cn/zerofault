@@ -21,7 +21,7 @@ td.field {
 	<tr class="trbg{$mod}">
 		<td class="board">{$item.board.name}</td>
 		<td><if condition="$_SESSION[C('USER_AUTH_KEY')] eq $item['owner_id'] or $_SESSION[C('USER_AUTH_KEY')] eq $item['substitute_id'] or $_SESSION[C('ADMIN_AUTH_NAME')] or in_array($_SESSION[C('USER_AUTH_KEY')], C('STATUS_ADMIN_ID'))">
-			<select name="status" class="status {$status_arr[$item['status']]|str_replace='*','X',###}" onchange="javascript:this.className='status '+this.options[this.selectedIndex].className;">
+			<select name="status[{$item.id}]" class="status {$status_arr[$item['status']]|str_replace='*','X',###}" onchange="javascript:this.className='status '+this.options[this.selectedIndex].className;">
 				<option value="-1" class="TBD">TBD</option>
 				<option value="0" class="Ongoing" <eq name="item.status" value="0">selected="selected"</eq>>Ongoing</option>
 				<option value="1" class="Pass" <eq name="item.status" value="1">selected="selected"</eq>>Pass</option>

@@ -134,10 +134,10 @@ td.focus {
 </tr>
 </iterate>
 <tr>
-	<th nowrap="nowrap" colspan="5" align="right">Batch edit the Item's Status:</th>
+	<td colspan="5" align="right" bgcolor="#CCCCFF"><strong>Edit all boards' Status:</strong></td>
 	<td class="sp"></td>
 	<foreach name="item_list" item="item">
-	<th colspan="2"><input type="button" value="Edit" alt="__URL__/status/flow_id/{$flow_info['id']}/item_id/{$item['id']}?width=420&height=500&modal=true" class="thickbox"/></th>
+	<td colspan="2" bgcolor="#CCCCFF"><input type="button" value="Edit" alt="__URL__/status/flow_id/{$flow_info['id']}/item_id/{$item['id']}?width=420&height=500&modal=true" class="thickbox"/></td>
 	</foreach>
 </tr>
 
