@@ -914,6 +914,7 @@ class StatusAction extends BaseAction{
 			}
 		//	dump($board_item);
 			$board_list[$i]['board_item'] = $board_item;
+			$board_list[$i]['comment'] = D('Comment')->relation(true)->where(array('model_name'=>'StatusBoard', 'model_id'=>$board['id']))->order('id')->select();
 			$board_list[$i]['last_comment'] = M('Comment')->where(array('model_name'=>'StatusBoard', 'model_id'=>$board['id']))->order('id desc')->find();
 		}
 
@@ -933,15 +934,14 @@ class StatusAction extends BaseAction{
 				->setSubject('Board Status Test Flow: '.$flow_info['name']);
 			$objPHPExcel->setActiveSheetIndex(0);
 
-			$Style_BoardTH = new PHPExcel_Style();
-			$Style_BoardTH->applyFromArray(
+			$Style_ItemTH = new PHPExcel_Style();
+			$Style_ItemTH->applyFromArray(
 				array(
 					'font' => array(
 						'bold'  => true,
 					),
 					'alignment' => array(
-						'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_RIGHT,
-						'vertical'   => PHPExcel_Style_Alignment::VERTICAL_CENTER,
+						'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_RIGHT
 					),
 					'fill' => array(
 						'type' => PHPExcel_Style_Fill::FILL_SOLID,
@@ -951,75 +951,37 @@ class StatusAction extends BaseAction{
 					)
 				)
 			);
-			$Style_BoardTD = new PHPExcel_Style();
-			$Style_BoardTD->applyFromArray(
-				array(
-					'font' => array(
-						'bold'  => true,
-						'color' => array('rgb' => '0000FF')
-					),
-					'fill' => array(
-						'type' => PHPExcel_Style_Fill::FILL_SOLID,
-						'startcolor' => array(
-							'rgb' => 'CCFFFF'
-						)
-					)
-				)
-			);
-			$Style_BoardInfo = new PHPExcel_Style();
-			$Style_BoardInfo->applyFromArray(
+			$Style_ItemTD = new PHPExcel_Style();
+			$Style_ItemTD->applyFromArray(
 				array(
 					'fill' => array(
 						'type' => PHPExcel_Style_Fill::FILL_SOLID,
 						'startcolor' => array(
-							'rgb' => 'CCFFFF'
+							'rgb' => 'CCCCFF'
 						)
-					),
-					'alignment' => array(
-						'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_LEFT,
-						'vertical'   => PHPExcel_Style_Alignment::VERTICAL_TOP,
-						'wrap' => true
 					)
 				)
 			);
-			$Style_ItemTH = new PHPExcel_Style();
-			$Style_ItemTH->applyFromArray(
+			$Style_TH = new PHPExcel_Style();
+			$Style_TH->applyFromArray(
 				array(
 					'font' => array(
 						'bold'  => true,
-					),
-					'alignment' => array(
-						'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_LEFT,
-						'vertical'   => PHPExcel_Style_Alignment::VERTICAL_CENTER,
 					),
 					'fill' => array(
 						'type' => PHPExcel_Style_Fill::FILL_SOLID,
 						'startcolor' => array(
 							'rgb' => '9999CC'
 						)
-					)
-				)
-			);
-			$Style_StatusTH = new PHPExcel_Style();
-			$Style_StatusTH->applyFromArray(
-				array(
-					'font' => array(
-						'bold'  => true,
 					),
 					'alignment' => array(
 						'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
-						'vertical'   => PHPExcel_Style_Alignment::VERTICAL_CENTER,
-					),
-					'fill' => array(
-						'type' => PHPExcel_Style_Fill::FILL_SOLID,
-						'startcolor' => array(
-							'rgb' => 'CC99FF'
-						)
 					)
 				)
 			);
-			$Style_Status_None = new PHPExcel_Style();
-			$Style_Status_None->applyFromArray(
+			
+			$Style_Status_TBD = new PHPExcel_Style();
+			$Style_Status_TBD->applyFromArray(
 				array(
 					'font' => array(
 						'bold'  => true,
@@ -1032,12 +994,12 @@ class StatusAction extends BaseAction{
 				array(
 					'font' => array(
 						'bold'  => true,
-						'color' => array('rgb' => '339900')
+						'color' => array('rgb' => '009900')
 					)
 				)
 			);
-			$Style_Status_Pending = new PHPExcel_Style();
-			$Style_Status_Pending->applyFromArray(
+			$Style_Status_Ongoing = new PHPExcel_Style();
+			$Style_Status_Ongoing->applyFromArray(
 				array(
 					'font' => array(
 						'bold'  => true,
@@ -1054,22 +1016,12 @@ class StatusAction extends BaseAction{
 					)
 				)
 			);
-
-			$Style_BoardStatusTH = new PHPExcel_Style();
-			$Style_BoardStatusTH->applyFromArray(
+			$Style_Status_Ignore = new PHPExcel_Style();
+			$Style_Status_Ignore->applyFromArray(
 				array(
 					'font' => array(
 						'bold'  => true,
-					),
-					'alignment' => array(
-						'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_RIGHT,
-						'vertical'   => PHPExcel_Style_Alignment::VERTICAL_CENTER,
-					),
-					'fill' => array(
-						'type' => PHPExcel_Style_Fill::FILL_SOLID,
-						'startcolor' => array(
-							'rgb' => '9999CC'
-						)
+						'color' => array('rgb' => '0099FF')
 					)
 				)
 			);
@@ -1083,99 +1035,86 @@ class StatusAction extends BaseAction{
 			$objPHPExcel->getActiveSheet()->mergeCells('A1:E1');
 			$objPHPExcel->getActiveSheet()->setCellValue('A2', 'Default Test Owner: ');
 			$objPHPExcel->getActiveSheet()->mergeCells('A2:E2');
-			$objPHPExcel->getActiveSheet()->setSharedStyle($Style_BoardTH, 'A1:E2');
+			$objPHPExcel->getActiveSheet()->setSharedStyle($Style_ItemTH, 'A1:E2');
 
 			foreach ($item_list as $i=>$item) {
 				$objPHPExcel->getActiveSheet()->getColumnDimension($COLS[5+$i])->setWidth(15);
-				$objPHPExcel->getActiveSheet()->setCellValue($COLS[5+$i*2].'1', $item['name']);
-				$objPHPExcel->getActiveSheet()->mergeCells($COLS[5+$i*2].'1:'.$COLS[5+$i*2+1].'1');
+				$objPHPExcel->getActiveSheet()->setCellValue($COLS[5+$i].'1', $item['name']);
+				$objPHPExcel->getActiveSheet()->setCellValue($COLS[5+$i].'2', $owner_list[$i]);
+				$objPHPExcel->getActiveSheet()->setCellValue($COLS[5+$i].'3', 'Status');
 			}
-			foreach ($owner_list as $i=>$item) {
-				$objPHPExcel->getActiveSheet()->setCellValue($COLS[5+$i*2].'2', $item);
-				$objPHPExcel->getActiveSheet()->mergeCells($COLS[5+$i*2].'2:'.$COLS[5+$i*2+1].'2');
-			}
-			$objPHPExcel->getActiveSheet()->setSharedStyle($Style_BoardTD, 'D1:'.$COLS[3+$i].'1');
-			$objPHPExcel->getActiveSheet()->setSharedStyle($Style_BoardInfo, 'D2:'.$COLS[3+$i].'2');
+			$objPHPExcel->getActiveSheet()->setSharedStyle($Style_ItemTD, 'E1:'.$COLS[5+$i].'2');
+			
+			$objPHPExcel->getActiveSheet()->setCellValue('A3', 'Board Name');
+			$objPHPExcel->getActiveSheet()->setCellValue('B3', 'Board Owner');
+			$objPHPExcel->getActiveSheet()->setCellValue('C3', 'Information');
+			$objPHPExcel->getActiveSheet()->setCellValue('D3', 'Final Status');
+			$objPHPExcel->getActiveSheet()->setCellValue('E3', 'Board Remark');
 
-			$objPHPExcel->getActiveSheet()->setCellValue('D3', 'Board Status');
-			$objPHPExcel->getActiveSheet()->mergeCells('D3:'.$COLS[3+$i].'3');
-			$objPHPExcel->getActiveSheet()->setSharedStyle($Style_StatusTH, 'D3:'.$COLS[3+$i].'3');
+			$objPHPExcel->getActiveSheet()->setSharedStyle($Style_TH, 'A3:'.$COLS[5+$i].'3');
 
-			$objPHPExcel->getActiveSheet()->setCellValue('A3', 'No.');
-			$objPHPExcel->getActiveSheet()->setCellValue('B3', 'Test Item');
-			$objPHPExcel->getActiveSheet()->setCellValue('C3', 'Default Test Owner');
-			$objPHPExcel->getActiveSheet()->setSharedStyle($Style_ItemTH, 'A3:C3');
-
-			foreach ($item_board_status as $j=>$item) {
-				$objPHPExcel->getActiveSheet()->setCellValue('A'.(4+$j), $j+1);
-				$objPHPExcel->getActiveSheet()->setCellValue('B'.(4+$j), $item['item_info']['name']);
-				$objPHPExcel->getActiveSheet()->setCellValue('C'.(4+$j), $item['owner']);
-				foreach ($item['board_status'] as $k=>$status) {
-					$objPHPExcel->getActiveSheet()->setCellValue($COLS[3+$k].(4+$j), $this->status_arr[$status['status']]);
-					switch ($status['status']) {
-						case '-1':
-							$objPHPExcel->getActiveSheet()->setSharedStyle($Style_Status_None, $COLS[3+$k].(4+$j));
-							break;
-						case '0':
-							$objPHPExcel->getActiveSheet()->setSharedStyle($Style_Status_Pending, $COLS[3+$k].(4+$j));
-							break;
-						case '1':
-							$objPHPExcel->getActiveSheet()->setSharedStyle($Style_Status_Pass, $COLS[3+$k].(4+$j));
-							break;
-						case '2':
-							$objPHPExcel->getActiveSheet()->setSharedStyle($Style_Status_Failed, $COLS[3+$k].(4+$j));
-							break;
-						default:
-							//
-					}
-					empty($status['comment']) && $status['comment']=array();
-					foreach ($status['comment'] as $comment) {
-						$objPHPExcel->getActiveSheet()->getComment($COLS[3+$k].(4+$j))->setAuthor($comment['staff']['realname']);
-						$objCommentRichText = $objPHPExcel->getActiveSheet()->getComment($COLS[3+$k].(4+$j))->getText()->createTextRun('['.$comment['staff']['realname'].']@'.$comment['create_time'].':');
-						$objCommentRichText->getFont()->setBold(true);
-						$objPHPExcel->getActiveSheet()->getComment($COLS[3+$k].(4+$j))->getText()->createTextRun("\r\n");
-						$objPHPExcel->getActiveSheet()->getComment($COLS[3+$k].(4+$j))->getText()->createTextRun($comment['content']."\r\n");
-						$objPHPExcel->getActiveSheet()->getComment($COLS[3+$k].(4+$j))->setWidth('180pt');
-						$objPHPExcel->getActiveSheet()->getComment($COLS[3+$k].(4+$j))->setHeight('180pt');
-					}
-				}
-				$objPHPExcel->getActiveSheet()->getStyle('A'.(4+$j).':'.$COLS[3+$k].(4+$j))->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID);
-				$objPHPExcel->getActiveSheet()->getStyle('A'.(4+$j).':'.$COLS[3+$k].(4+$j))->getFill()->getStartColor()->setRGB($j%2?'CCCCCC':'EEEEEE');
-			}
-			$objPHPExcel->getActiveSheet()->setCellValue('A'.(5+$j), 'Board Final Status: ');
-			$objPHPExcel->getActiveSheet()->mergeCells('A'.(5+$j).':C'.(5+$j));
-			$objPHPExcel->getActiveSheet()->setSharedStyle($Style_BoardStatusTH, 'A'.(5+$j).':C'.(5+$j));
-			foreach ($board_list as $i=>$board) {
-				$objPHPExcel->getActiveSheet()->setCellValue($COLS[3+$i].(5+$j), $this->status_arr[$board['status']]);
+			foreach ($board_list as $j=>$board) {
+				$objPHPExcel->getActiveSheet()->setCellValue('A'.(4+$j), $board['name']);
+				$objPHPExcel->getActiveSheet()->setCellValue('B'.(4+$j), $board['owner']['realname']);
+				$objPHPExcel->getActiveSheet()->setCellValue('C'.(4+$j), $board['info']);
+				$objPHPExcel->getActiveSheet()->setCellValue('D'.(4+$j), $this->status_arr[$board['status']]);
 				switch ($board['status']) {
 					case '-1':
-						$objPHPExcel->getActiveSheet()->setSharedStyle($Style_Status_None, $COLS[3+$i].(5+$j));
+						$objPHPExcel->getActiveSheet()->setSharedStyle($Style_Status_TBD, 'D'.(4+$j));
 						break;
 					case '0':
-						$objPHPExcel->getActiveSheet()->setSharedStyle($Style_Status_Pending, $COLS[3+$i].(5+$j));
+						$objPHPExcel->getActiveSheet()->setSharedStyle($Style_Status_Ongoing, 'D'.(4+$j));
 						break;
 					case '1':
-						$objPHPExcel->getActiveSheet()->setSharedStyle($Style_Status_Pass, $COLS[3+$i].(5+$j));
+					case '9':
+						$objPHPExcel->getActiveSheet()->setSharedStyle($Style_Status_Pass, 'D'.(4+$j));
 						break;
 					case '2':
-						$objPHPExcel->getActiveSheet()->setSharedStyle($Style_Status_Failed, $COLS[3+$i].(5+$j));
+						$objPHPExcel->getActiveSheet()->setSharedStyle($Style_Status_Failed, 'D'.(4+$j));
+						break;
+					case '8':
+						$objPHPExcel->getActiveSheet()->setSharedStyle($Style_Status_Ignore, 'D'.(4+$j));
 						break;
 					default:
 						//
 				}
-				empty($board['comment']) && $board['comment']=array();
-				foreach ($board['comment'] as $comment) {
-					$objPHPExcel->getActiveSheet()->getComment($COLS[3+$i].(5+$j))->setAuthor($comment['staff']['realname']);
-					$objCommentRichText = $objPHPExcel->getActiveSheet()->getComment($COLS[3+$i].(5+$j))->getText()->createTextRun('['.$comment['staff']['realname'].']@'.$comment['create_time'].':');
-					$objCommentRichText->getFont()->setBold(true);
-					$objPHPExcel->getActiveSheet()->getComment($COLS[3+$i].(5+$j))->getText()->createTextRun("\r\n");
-					$objPHPExcel->getActiveSheet()->getComment($COLS[3+$i].(5+$j))->getText()->createTextRun($comment['content']."\r\n");
-					$objPHPExcel->getActiveSheet()->getComment($COLS[3+$i].(5+$j))->setWidth('180pt');
-					$objPHPExcel->getActiveSheet()->getComment($COLS[3+$i].(5+$j))->setHeight('180pt');
+				$objPHPExcel->getActiveSheet()->setCellValue('E'.(4+$j), $board['remark']);
+				foreach ($board['board_item'] as $k=>$item) {
+					$objPHPExcel->getActiveSheet()->setCellValue($COLS[5+$k].(4+$j), $this->status_arr[$item['status']]);
+					switch ($item['status']) {
+						case '-1':
+							$objPHPExcel->getActiveSheet()->setSharedStyle($Style_Status_TBD, $COLS[5+$k].(4+$j));
+							break;
+						case '0':
+							$objPHPExcel->getActiveSheet()->setSharedStyle($Style_Status_Ongoing, $COLS[5+$k].(4+$j));
+							break;
+						case '1':
+						case '9':
+							$objPHPExcel->getActiveSheet()->setSharedStyle($Style_Status_Pass, $COLS[5+$k].(4+$j));
+							break;
+						case '2':
+							$objPHPExcel->getActiveSheet()->setSharedStyle($Style_Status_Failed, $COLS[5+$k].(4+$j));
+							break;
+						case '8':
+							$objPHPExcel->getActiveSheet()->setSharedStyle($Style_Status_Ignore, $COLS[5+$k].(4+$j));
+							break;
+						default:
+							//
+					}
+					empty($item['comment']) && $item['comment']=array();
+					foreach ($item['comment'] as $comment) {
+						$objPHPExcel->getActiveSheet()->getComment($COLS[5+$k].(4+$j))->setAuthor($comment['staff']['realname']);
+						$objCommentRichText = $objPHPExcel->getActiveSheet()->getComment($COLS[5+$k].(4+$j))->getText()->createTextRun('['.$comment['staff']['realname'].']@'.$comment['create_time'].':');
+						$objCommentRichText->getFont()->setBold(true);
+						$objPHPExcel->getActiveSheet()->getComment($COLS[5+$k].(4+$j))->getText()->createTextRun("\r\n");
+						$objPHPExcel->getActiveSheet()->getComment($COLS[5+$k].(4+$j))->getText()->createTextRun($comment['content']."\r\n");
+						$objPHPExcel->getActiveSheet()->getComment($COLS[5+$k].(4+$j))->setWidth('180pt');
+						$objPHPExcel->getActiveSheet()->getComment($COLS[5+$k].(4+$j))->setHeight('180pt');
+					}
 				}
+				$objPHPExcel->getActiveSheet()->getStyle('A'.(4+$j).':'.$COLS[5+$k].(4+$j))->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID);
+				$objPHPExcel->getActiveSheet()->getStyle('A'.(4+$j).':'.$COLS[5+$k].(4+$j))->getFill()->getStartColor()->setRGB($j%2?'CCCCCC':'EEEEEE');
 			}
-			$objPHPExcel->getActiveSheet()->getStyle('D'.(5+$j).':'.$COLS[3+$i].(5+$j))->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID);
-			$objPHPExcel->getActiveSheet()->getStyle('D'.(5+$j).':'.$COLS[3+$i].(5+$j))->getFill()->getStartColor()->setRGB('99CCFF');
 
 
 			header('Content-Type: application/vnd.ms-excel');
