@@ -75,7 +75,14 @@ class CompanyAction extends BaseAction {
 		$this->assign('content', ACTION_NAME);
 		$this->display('Layout:company');
 	}
-	
+	public function talk_detail() {
+		$talk_id = intval($_REQUEST['talk_id']);
+		$dao = D('Talk');
+		$rs = $dao->find($talk_id);
+		$this->assign('talk_info', $rs);
+		$this->assign('content', ACTION_NAME);
+		$this->display('Layout:company');
+	}
 	public function feedback() {
 		$dao = M('Feedback');
 		if (!empty($_POST['post'])) {

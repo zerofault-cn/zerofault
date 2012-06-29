@@ -474,7 +474,86 @@ class UserAction extends BaseAction {
 		{
 			self::error('发生错误！'.(C('APP_DEBUG')?$this->dao->getLastSql():''));
 		}
+	}
+	public function talk_list() {
+		if (empty($_SESSION[C('USER_ID')])) {
+			redirect(__URL__.'/login');
+			exit;
+		}
+		$this->assign('ACTION_TITLE', '装修杂谈');
+		$dao = D('Talk');
+		$where = array(
+			'company_id' => $_SESSION['company_id']
+			);
+		$order = 'id desc';
+		$rs = $dao->where($where)->order($order)->select();
+		$this->assign('list', $rs);
+		
+		$this->assign('content', ACTION_NAME);
+		$this->display('Layout:default');
+	}
+	public function talk_form() {
+		if (empty($_SESSION[C('USER_ID')])) {
+			redirect(__URL__.'/login');
+			exit;
+		}
+		$id = empty($_REQUEST['id']) ? 0 : intval($_REQUEST['id']);
+		$dao = D('Talk');
+		if(!empty($_POST['submit'])) {
+			$company_id = $_SESSION['company_id'];
+			$title = trim($_REQUEST['title']);
+			''==$title && self::error('标题必须填写！');
+			$content = trim($_REQUEST['content']);
+			if ($id>0) {
+				$dao->title = $title;
+				$dao->content = $content;
+				if(false !== $dao->where("id=".$id)->save()) {
+					
+					self::success('修改成功！', __URL__.'/talk_list');
+				}
+				else{
+					self::error('修改失败！'.(C('APP_DEBUG')?$dao->getLastSql():''));
+				}
+			}
+			else {
+				$dao->company_id = $company_id;
+				$dao->title = $title;
+				$dao->content = $content;
+				$dao->addtime = date('Y-m-d H:i:s');
+				if($talk_id = $dao->add()) {
+					self::success('添加成功！', __URL__.'/talk_list');
+				}
+				else {
+					self::error('添加失败！'.(C('APP_DEBUG')?$dao->getLastSql():''));
+				}
+			}
+			exit;
+		}
+		if ($id > 0) {
+			$this->assign('ACTION_TITLE', '编辑装修杂谈');
+			$info = $dao->find($id);
+		}
+		else {
+			$this->assign('ACTION_TITLE', '添加装修杂谈');
+			$info = array('id' => 0);
+		}
+		$this->assign("info", $info);
 
+		$this->assign('content', ACTION_NAME);
+		$this->display('Layout:default');
+	}
+	public function talk_delete() {
+		$this->dao = M('Talk');
+
+		$id = $_REQUEST['id'];
+		if($this->dao->find($id) && $this->dao->delete())
+		{
+			self::success('删除成功！');
+		}
+		else
+		{
+			self::error('发生错误！'.(C('APP_DEBUG')?$this->dao->getLastSql():''));
+		}
 	}
 
 	public function logout(){

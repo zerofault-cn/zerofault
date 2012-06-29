@@ -174,13 +174,19 @@ h2 {
 #case {
 	margin-bottom: 6px;
 }
+#talk {
+	margin-bottom: 6px;
+}
 .right #case {
 	background: url(../Images/rightbg.gif) center top no-repeat;
 }
-#case h2 {
+.right #talk {
+	background: url(../Images/rightbg.gif) center top no-repeat;
+}
+#case h2, #talk h2{
 	background-image:url(../Images/company_case.png);
 }
-#case ul {
+#case ul, #talk ul {
 	padding: 18px 12px 30px 30px;
 	background-color: #FFFFFF;
 	border: 1px solid #00a604;
@@ -192,7 +198,16 @@ h2 {
 	padding-right: 6px;
 	line-height: 24px;
 }
-#case ul li a {
+#talk ul li {
+	list-style-type: disc;
+}
+#talk ul li span{
+	float: right;
+}
+#talk ul li a{
+	float: left;
+}
+#case ul li a, #talk ul li a {
 	color: #333;
 }
 #case ul img {
@@ -201,7 +216,7 @@ h2 {
 	display: block;
 	border: 2px solid #00a604;
 }
-#case h3 {
+#case h3, #talk h3 {
 	padding-top: 16px;
 	font-size: 16px;
 	font-weight: bold;
@@ -210,10 +225,21 @@ h2 {
 	border-left: 1px solid #00a604;
 	border-right: 1px solid #00a604;
 }
+#talk h4 {
+	margin: 5px 20px;
+	border-bottom: 1px solid #888;
+}
 #case p {
 	padding: 0 10px 10px;
 	margin: 0;
 	text-align: center;
+	background-color: #FFFFFF;
+	border: 1px solid #00a604;
+	border-top: none;
+}
+#talk div.mce_content {
+	padding: 12px 10px 10px;
+	margin: 0;
 	background-color: #FFFFFF;
 	border: 1px solid #00a604;
 	border-top: none;
