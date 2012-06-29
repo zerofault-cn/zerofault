@@ -45,7 +45,7 @@ class CategoryAction extends BaseAction{
 		$this->assign('content', 'index');
 		$this->display('Layout:default');
 	}
-	public function add(){
+	private function add(){
 		$type = trim($_REQUEST['type']);
 		$name = trim($_REQUEST['name']);
 		$sort = intval($_REQUEST['sort']);
@@ -70,7 +70,7 @@ class CategoryAction extends BaseAction{
 	public function update(){
 		parent::_update();
 	}
-	public function delete(){
+	private function delete(){
 		parent::_delete();
 	}
 }

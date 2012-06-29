@@ -46,7 +46,7 @@ class RegionAction extends BaseAction{
 	public function update(){
 		parent::_update();
 	}
-	public function delete(){
+	private function delete(){
 		parent::_delete();
 	}
 }

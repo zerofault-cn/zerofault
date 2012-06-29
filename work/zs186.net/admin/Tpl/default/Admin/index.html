@@ -3,6 +3,7 @@
 		<th width="5%">ID</th>
 		<th width="15%">登录帐号</th>
 		<th width="15%">实名</th>
+		<th>角色</th>
 		<th width="15%">创建时间</th>
 		<th width="15%">上次登录</th>
 		<th width="12%">操作</th>
@@ -12,10 +13,19 @@
 		<td>{$item['id']}</td>
 		<td>{$item['username']}</td>
 		<td><label id="{$item['id']}">{$item['realname']}</label></td>
+		<td>
+			<if condition="$item['id'] eq 1">
+			不受权限控制影响
+			<else />
+				<iterate name="item['Role']" id="role" key="j">
+				{$role['name']}<br />
+				</iterate>
+			</if>
+		</td>
 		<td>{$item['create_time']|substr=2,14}</td>
 		<td>{$item['login_time']|substr=2,14}</td>
 		<td>
-			<if condition="$_SESSION[C('ADMIN_ID')] eq 1 or $item.id eq $_SESSION[C('ADMIN_ID')]">
+			<if condition="$_SESSION[C('IS_ADMINISTRATOR')] or $item.id eq $_SESSION[C('USER_AUTH_KEY')]">
 			<img class="password" id="{$item['id']}" src="../Public/Images/key_edit.gif" alt="修改密码" align="absmiddle" />
 			</if>
 			<neq name="item['username']" value="admin">
@@ -34,16 +44,29 @@
 			<input type="hidden" class="user_id" value="{$user_info['id']}"/>
 			<label>帐号：</label>{$user_info['username']}<br />
 			<label>实名：</label><input type="text" class="realname" name="realname" size="10" tabindex="2" value="{$user_info['realname']}"/><br />
-			<input type="button" value="提交" class="submit" />
-			<input type="button" value="取消" onclick="javascript:back();"/>
 			<else />
 			<legend>添加新账号</legend>
 			<input type="hidden" class="user_id" value=""/>
 			<label>帐号：</label><input type="text" class="username" name="username" size="10" tabindex="1" /><br />
 			<label>实名：</label><input type="text" class="realname" name="realname" size="10" tabindex="2" /><br />
 			<label>密码：</label><input type="password" class="password" name="password" size="10" tabindex="3" /><br />
-			<input type="button" value="提交" class="submit" />
 			</present>
+			<label>分配角色：</label>
+			<iterate name="role_list" id="item">
+				<input type="checkbox" class="role_sel" name="role_sel[]" value="{$item['id']}"
+				<iterate name="user_info['Role']" id="user_role" key="j">
+					<if condition="$user_role['id'] eq $item['id']">
+					checked="true"
+					</if>
+				</iterate>
+				<eq name="key" value="0">
+				checked="checked"
+				</eq>
+				/>{$item['name']}
+			</iterate>
+			<br />
+			<input type="button" value="提交" class="submit" />
 		</fieldset>
 	</div>
+	注意：“后台管理根角色”必须选中，否则不能管理任何项目<br />
 	<script language="JavaScript" type="text/javascript" src="../Public/Js/admin_func.js"></script>
