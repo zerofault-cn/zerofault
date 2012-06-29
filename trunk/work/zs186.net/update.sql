@@ -41,3 +41,18 @@ CREATE TABLE `zs_role_node` (
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 ROW_FORMAT=FIXED;
 
 INSERT INTO `zs_role_node` VALUES (1,1);
+
+
+CREATE TABLE `zs_feedback` (
+  `id` int(10) unsigned NOT NULL auto_increment,
+  `name` varchar(255) NOT NULL default '',
+  `phone` varchar(255) NOT NULL default '',
+  `content` text NOT NULL,
+  `reply` text NOT NULL,
+  `ip` varchar(255) NOT NULL default '',
+  `referer` varchar(255) NOT NULL default '',
+  `addtime` datetime NOT NULL default '0000-00-00 00:00:00',
+  `replytime` datetime NOT NULL default '0000-00-00 00:00:00',
+  `status` tinyint(3) NOT NULL default '0',
+  PRIMARY KEY  (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='留言咨询';
