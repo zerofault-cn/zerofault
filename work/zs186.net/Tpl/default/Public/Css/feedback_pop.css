@@ -1,0 +1,36 @@
+@charset "utf-8";
+#feedback_pop {
+	position: fixed;
+	right: 0;
+	bottom:-204px;
+	z-index:10000;
+	width: 254px;
+	height: 242px;
+	background: url(../Images/feedback_pop_bg.jpg) no-repeat center center;
+	line-height: 24px;
+}
+#feedback_pop h3 {
+	height: 38px;
+}
+#feedback_pop h3 i {
+	float: left;
+	width: 138px;
+	height: 28px;
+	cursor: pointer;
+}
+#feedback_pop h3 b {
+	float: right;
+	width: 28px;
+	height: 28px;
+	cursor: pointer;
+}
+#feedback_pop form {
+	padding: 3px;
+}
+#feedback_pop form .text {
+	width: 168px;
+}
+#feedback_pop form textarea {
+	width: 168px;
+	height: 76px;
+}

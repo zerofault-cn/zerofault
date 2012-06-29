@@ -2,11 +2,9 @@
 	<table id="table" class="list" border="1" cellpadding="3" cellspacing="0" width="100%" bordercolor="#999999" style="border-collapse:collapse;">
 	<tr bgcolor="#ededed">
 		<th width="5%">ID</th>
-		<th>留言内容</th>
-		<notpresent name="_GET['id']">
-		<th>留言对象</th>
-		</notpresent>
-		<th width="5%">留言人</th>
+		<th width="40%">留言内容</th>
+		<th width="40%">留言页面</th>
+		<th>留言人</th>
 		<th width="5%">操作</th>
 	</tr>
 	<iterate name="list" id="item">
@@ -14,39 +12,20 @@
 		<td>{$item['id']}</td>
 		<td class="a_left" id="{$item['id']}">
 			{$item['content']|nl2br}
-			<empty name="item['reply']">
-			<div style="position:relative;"><input type="button" class="reply" style="position:absolute;right:0px;bottom:0px;" value="回复"/></div>
-			<else />
-			<fieldset style="border:1px dashed red;color:red;">
-				<legend>管理员回复</legend>
-				<div class="reply">{$item['reply']|nl2br}</div>
-				<div class="edit_reply" style="display:none;">
-					<textarea class="reply" name="reply" cols="40" rows="4">{$item['reply']}</textarea>&nbsp;&nbsp;<input type="button" value="提交" class="submit"/>&nbsp;<input type="button" value="取消" class="cancel"/>
-				</div>
-			</fieldset>
-			</empty>
 		</td>
-		<notpresent name="_GET['id']">
-		<td><a href="__URL__/index/id/{$item['company_info']['id']}" title="查看对公司【{$item['company_info']['name']}】的所有留言">{$item['company_info']['name']}</a>
-		</notpresent>
+		<td class="a_left"><a href="{$item.referer}" target="_blank">{$item.referer}</a></td>
 		<td class="a_left" nowrap="nowrap">
 			姓名：{$item.name}<br />
 			电话：{$item.phone}<br />
 			时间：{$item.addtime|substr=2,14}<br />
-			IP：{$item.ip}<br />
 		</td>
 		<td nowrap="nowrap">
 			<if condition="$item['status'] eq '0'">
-			<a href="__URL__/update/id/{$item['id']}/f/status/v/1"  target="_iframe" title="显示"><img src="../Public/Images/accept.gif" alt="显示" align="absmiddle"/></a>
-			<a href="__URL__/update/id/{$item['id']}/f/status/v/-1"  target="_iframe" title="删除"><img src="../Public/Images/cross.gif" alt="删除" align="absmiddle"/></a>
+			<a href="__URL__/update/id/{$item['id']}/f/status/v/1"  target="_iframe" title="标记为已处理"><img src="../Public/Images/flag_blue.gif" alt="标记为已处理" align="absmiddle"/></a>
 			<elseif condition="$item['status'] eq '1'" />
-			<a href="__URL__/update/id/{$item['id']}/f/status/v/0"  target="_iframe" title="隐藏"><img src="../Public/Images/deny.png" alt="隐藏" align="absmiddle"/></a>
-			<a href="__URL__/update/id/{$item['id']}/f/status/v/-1"  target="_iframe" title="删除"><img src="../Public/Images/cross.gif" alt="删除" align="absmiddle"/></a>
-			<else />
-			<a href="__URL__/update/id/{$item['id']}/f/status/v/1" target="_iframe" title="显示"><img src="../Public/Images/accept.gif" alt="显示" align="absmiddle"/></a>
+			<a href="__URL__/update/id/{$item['id']}/f/status/v/0"  target="_iframe" title="标记为未处理"><img src="../Public/Images/flag_gray.gif" alt="标记为未处理" align="absmiddle"/></a>
 			</if>
 		</td>
 	</tr>
 	</iterate>
 	</table>
-	<script language="JavaScript" type="text/javascript" src="../Public/Js/feedback_func.js"></script>
