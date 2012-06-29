@@ -22,8 +22,11 @@ elseif (ENV == 'TEST') {
 	$config['DB_PWD'] = 'ruiteng@test';
 }
 else {
+	$config['APP_SUB_DOMAIN_DEPLOY'] = true;
 	$config['DB_HOST'] = 'localhost';
-	$config['APP_DOMAIN_DEPLOY'] = true;
+	$config['DB_NAME'] = 'zshz666_com';
+	$config['DB_USER'] = 'zshz666_com';
+	$config['DB_PWD'] = 'yczshwhz';
 }
 return $config;
 ?>

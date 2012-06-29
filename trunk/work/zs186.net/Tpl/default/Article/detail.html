@@ -11,7 +11,7 @@
 <div class="yhjd_r_nav"><div class="yhjd_r_bt">{$info.title}</div></div>
 </eq>
 <div class="mce_content">
-	<if condition="is_file('__APP__/../html/Attach/Article/'.$info['id'].'.jpg') eq true">
+	<if condition="is_file('./html/Attach/Article/'.$info['id'].'.jpg') eq true">
 	<center><img src="__APP__/../html/Attach/Article/{$info.id}.jpg" /></center>
 	</if>
 	{$info.content}

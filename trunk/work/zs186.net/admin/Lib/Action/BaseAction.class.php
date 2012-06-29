@@ -1,20 +1,64 @@
 <?php
-class BaseAction extends Action{
+class BaseAction extends Action {
 	protected $category_array;
 
 	protected function _initialize() {
 		header("Content-Type:text/html; charset=utf-8");
-
+		
+		import('@.RBAC');
+		//检查当前 MODULE_NAME/ACTION_NAME 是否需要认证
+		if(RBAC::checkAccess()) {
+			//检查是否已登录
+			if(empty($_SESSION[C('USER_AUTH_KEY')])) {
+				//跳转到认证网关
+				redirect(__APP__.'/Public/login');
+				exit;
+			}
+		}
 		$this->category_array = array(
 			'Hotel' => M('Category')->where("type='Hotel' and status>0")->order('sort')->getField('id,name'),
 			'Article' => M('Category')->where("type='Article' and status>0 and pid=0")->order('sort')->getField('id,name')
 			);
-		$this->assign("Hotel_Category", $this->category_array['Hotel']);
-		$this->assign("Article_Category", $this->category_array['Article']);
+		$Hotel_Category = $this->category_array['Hotel'];
+		$Article_Category = $this->category_array['Article'];
+		$this->assign("Hotel_Category", $Hotel_Category);
+		$this->assign("Article_Category", $Article_Category);
+		
+		$menu = C('menu');
+		//dump($menu);
+		//确定可显示的一级菜单
+		$tmp_menu = array();
+		foreach ($menu as $name=>$submenu) {
+			$tmp_submenu = array();
+			foreach ($submenu as $sub_name=>$sub_action) {
+				if (RBAC::AccessDecision($sub_action[0], $sub_action[1])) {
+					if ('foreach' == strtolower($sub_name)) {
+						foreach (${$sub_action[2]} as $key=>$val) {
+							$sub_action[2] = array('category_id', $key);
+							$tmp_submenu[$val] = $sub_action;
+						}
+					}
+					else {
+						$tmp_submenu[$sub_name] = $sub_action;
+					}
+					
+				}
+			}
+			if (!empty($tmp_submenu)) {
+				$tmp_menu[$name] = $tmp_submenu;
+			}
+		}
+		$this->assign('menu', $tmp_menu);
 
-		if('Public'!=MODULE_NAME && empty($_SESSION[C('USER_AUTH_KEY')])) {
-			//跳转到认证网关
-			redirect(PHP_FILE.C('USER_AUTH_GATEWAY'));
+		// 检查权限
+		if(!RBAC::AccessDecision()) {
+			if(in_array(ACTION_NAME, C('IFRAME_ACTION'))) {
+				die(self::_error('没有权限！', 2000));
+			}
+			$this->assign('message','没有权限！');
+			$this->assign('content','Public:error');
+			$this->display('Layout:default');
+			exit;
 		}
 	}
 	/**

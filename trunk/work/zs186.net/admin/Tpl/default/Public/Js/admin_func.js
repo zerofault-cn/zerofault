@@ -35,7 +35,8 @@ function submit_addForm(){
 	if(''!=$(".addForm input.user_id").val()) {
 		$.post(_URL_+"/edit",{
 			'id' : $(".addForm input.user_id").val(),
-			'realname' : $(".addForm input.realname").val()
+			'realname' : $(".addForm input.realname").val(),
+			'role_ids': role_sel.join(',')
 		},function(str){
 				if(str=='1')
 				{

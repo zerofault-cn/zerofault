@@ -100,7 +100,7 @@ h1,h2,h3,h4,h5,h6{
 	
 .jdyd_m_t{
 	height:5px;
-	background:url(../images/index_42.gif) no-repeat;
+	background:url(../Images/index_42.gif) no-repeat;
 	}
 	
 .jdyd_m_m{
@@ -109,7 +109,7 @@ h1,h2,h3,h4,h5,h6{
 	
 .jdyd_m_b{
 	height:5px;
-	background:url(../images/index_49.gif) no-repeat bottom;
+	background:url(../Images/index_49.gif) no-repeat bottom;
 	}
 	
 .textbox,.textbox2{
@@ -198,7 +198,7 @@ h1,h2,h3,h4,h5,h6{
 	position:absolute; 
 	top:90px; 
 	cursor:pointer;
-	background:url(../images/sprite.png) no-repeat;
+	background:url(../Images/sprite.png) no-repeat;
 	}
 	
 #focus .pre 
@@ -225,7 +225,7 @@ h1,h2,h3,h4,h5,h6{
 	
 .zsfw_nav{
 	height:19px;
-	background:url(../images/index_53.gif) no-repeat;
+	background:url(../Images/index_53.gif) no-repeat;
 	padding:22px 0 0 106px;
 	}	
 
@@ -291,7 +291,7 @@ h1,h2,h3,h4,h5,h6{
 	
 #nav{
 	height:49px;
-	background:url(../images/index_06.jpg) no-repeat center;
+	background:url(../Images/index_06.jpg) no-repeat center;
 	margin-bottom:5px;
 	}	
 
@@ -389,7 +389,7 @@ h1,h2,h3,h4,h5,h6{
 	
 #foot{
 	height:85px;
-	background:url(../images/index_109.gif) repeat-x;
+	background:url(../Images/index_109.gif) repeat-x;
 	}	
 	
 .footlogo{
@@ -455,12 +455,12 @@ h1,h2,h3,h4,h5,h6{
 .blk_18 .LeftBotton {
  background-position: 0 0;
  margin:8px 5px 0;
- background:url(../images/index_89.gif) no-repeat;
+ background:url(../Images/index_89.gif) no-repeat;
 }
 .blk_18 .RightBotton {
  background-position: 0 -100px;
  margin:8px 1px 10px 5px;
- background:url(../images/index_87.gif) no-repeat;
+ background:url(../Images/index_87.gif) no-repeat;
 }
 
 .blk_18 .pl img {

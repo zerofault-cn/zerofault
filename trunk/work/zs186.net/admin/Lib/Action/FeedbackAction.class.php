@@ -54,7 +54,7 @@ class FeedbackAction extends BaseAction{
 	*
 	* 调用基类方法
 	*/
-	public function delete(){
+	private function delete(){
 		parent::_delete();
 	}
 }
