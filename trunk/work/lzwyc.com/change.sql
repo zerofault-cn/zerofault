@@ -26,3 +26,14 @@ CREATE TABLE `lzwyc_point` (
 
 ALTER TABLE `lzwyc_view`
   ADD COLUMN `point` tinyint(3) unsigned NOT NULL DEFAULT 1;
+
+
+CREATE TABLE `lzwyc_talk` (
+  `id` int(10) unsigned NOT NULL auto_increment,
+  `company_id` smallint(5) unsigned NOT NULL default '0',
+  `title` varchar(255) NOT NULL default '',
+  `content` text NOT NULL,
+  `addtime` datetime NOT NULL default '0000-00-00 00:00:00',
+  `view` int(10) unsigned NOT NULL default '0',
+  PRIMARY KEY  (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='装修杂谈';
