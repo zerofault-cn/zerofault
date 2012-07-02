@@ -1,0 +1,42 @@
+#invite_pop_tip {
+	position: fixed;
+	right: 0;
+	bottom: 0;
+	width: 27px;
+	height: 138px;
+	background: url(../Images/pop_tip.png) no-repeat center center;
+}
+#invite_pop {
+	position: fixed;
+	right: -267px;
+	bottom: 0;
+	z-index:10000;
+	width: 207px;
+	height: 254px;
+	padding: 40px 30px;
+	background: url(../Images/pop_bg.png) no-repeat center center;
+	line-height: 24px;
+}
+
+#invite_pop form {
+	padding: 3px;
+}
+#invite_pop form .text {
+	width: 130px;
+}
+#invite_pop form .area {
+	width: 110px;
+}
+#invite_pop form select {
+	width: 135px;
+}
+#invite_pop form textarea {
+	width: 130px;
+	height: 76px;
+}
+#invite_pop .message_box {
+	font-size: 12px;
+}
+#invite_pop .message_box i {
+	padding: 0 0 0 22px;
+}

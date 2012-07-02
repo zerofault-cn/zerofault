@@ -183,8 +183,11 @@ h2 {
 .right #talk {
 	background: url(../Images/rightbg.gif) center top no-repeat;
 }
-#case h2, #talk h2{
+#case h2{
 	background-image:url(../Images/company_case.png);
+}
+#talk h2 {
+	background-image:url(../Images/company_talk.png);
 }
 #case ul, #talk ul {
 	padding: 18px 12px 30px 30px;
