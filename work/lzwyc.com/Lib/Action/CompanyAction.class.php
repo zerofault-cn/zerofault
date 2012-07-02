@@ -79,6 +79,7 @@ class CompanyAction extends BaseAction {
 		$talk_id = intval($_REQUEST['talk_id']);
 		$dao = D('Talk');
 		$rs = $dao->find($talk_id);
+		$dao->setInc('view', 'id='.$talk_id);
 		$this->assign('talk_info', $rs);
 		$this->assign('content', ACTION_NAME);
 		$this->display('Layout:company');

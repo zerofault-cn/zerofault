@@ -70,7 +70,14 @@ class InviteAction extends BaseAction {
 		empty($_REQUEST['quick_form']) && $_SESSION['verify']!=md5(trim($_REQUEST['verify'])) && self::_error('验证码错误！');
 
 		$district = intval($_REQUEST['district']);
-		empty($district) && self::_error('地点区域必须选择！');
+		if (empty($district)) {
+			if (!empty($_REQUEST['pop_form'])) {
+				self::_error('地点区域必须选择！', 'invite_message_box');
+			}
+			else {
+				self::_error('地点区域必须选择！');
+			}
+		}
 		$address = trim($_REQUEST['address']);
 		empty($_REQUEST['quick_form'])&&(empty($address)||'如：××小区'==$address) && self::_error('小区地址必须填写！');
 		$type = intval($_REQUEST['type']);
@@ -80,15 +87,36 @@ class InviteAction extends BaseAction {
 		$room = intval($_REQUEST['room']);
 		empty($_REQUEST['quick_form'])&&empty($room) && self_error('空间类型必须选择！');
 		$area = floatval($_REQUEST['area']);
-		empty($area) && self::_error('面积必须填写！');
+		if (empty($area)) {
+			if (!empty($_REQUEST['pop_form'])) {
+				self::_error('面积必须填写！', 'invite_message_box');
+			}
+			else {
+				self::_error('面积必须填写！');
+			}
+		}
 		!is_numeric($area) && self::_error('面积必须填写数字！');
 		$budget = floatval($_REQUEST['budget']);
-		empty($budget) && self::_error('预算必须填写！');
+		if (empty($budget)) {
+			if (!empty($_REQUEST['pop_form'])) {
+				self::_error('预算必须填写！', 'invite_message_box');
+			}
+			else {
+				self::_error('预算必须填写！');
+			}
+		}
 		!is_numeric($budget) && self::_error('预算必须填写数字！');
 		$demand = trim($_REQUEST['demand']);
 		$demand = str_replace('请简单描述您对装修设计的要求', '', $demand);
 		$name = trim($_REQUEST['name']);
-		empty($name) && self::_error('姓名必须填写！');
+		if (empty($name)) {
+			if (!empty($_REQUEST['pop_form'])) {
+				self::_error('姓名必须填写！', 'invite_message_box');
+			}
+			else {
+				self::_error('姓名必须填写！');
+			}
+		}
 		$qq = trim($_REQUEST['qq']);
 		//empty($qq) && self::_error('QQ必须填写！');
 		$reserve_date = trim($_REQUEST['reserve_date']);
@@ -96,7 +124,14 @@ class InviteAction extends BaseAction {
 		empty($_REQUEST['quick_form'])&&strtotime($reserve_date)<=0 && self::_error('预约装修时间格式错误！');
 		empty($reserve_date) && ($reserve_date=date('Y-m-d'));
 		$phone = trim($_REQUEST['phone']);
-		empty($phone) && self::_error('联系电话必须填写！');
+		if (empty($phone)) {
+			if (!empty($_REQUEST['pop_form'])) {
+				self::_error('联系电话必须填写！', 'invite_message_box');
+			}
+			else {
+				self::_error('联系电话必须填写！');
+			}
+		}
 		!preg_match("/^1[3458]{1}[0-9]{9}$/",$phone) && self::_error('手机号码格式不正确！');
 
 		$this->dao->user_id = $user_id;
@@ -121,10 +156,16 @@ class InviteAction extends BaseAction {
 				self::_success('发布成功，请等待审核！', __URL__);
 			}
 			else {
+				if (!empty($_REQUEST['pop_form'])) {
+					self::_success('发布成功，请等待审核！', '', 100000, 'invite_message_box');
+				}
 				self::success('您已经成功发布消息，稍后会有工作人员与您取得联系！', '', 5000);
 			}
 		}
 		else {
+			if (!empty($_REQUEST['pop_form'])) {
+				self::_error('发布失败！', 'invite_message_box');
+			}
 			self::_error('发布失败！');
 		}
 	}
