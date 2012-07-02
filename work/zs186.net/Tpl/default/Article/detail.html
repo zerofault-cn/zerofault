@@ -22,6 +22,12 @@
 	</tr>
 	</table>
 </div>
+<load file="../Public/Js/jQuery.autoIMG.min.js" />
+<script>
+jQuery(function ($) {
+	$(".mce_content").autoIMG();
+});
+</script>
 <if condition="ACTION_NAME neq 'detail' and $alias neq 'about'">
 <div class="wyyd">
 	<form action="__APP__/Book/submit" method="post" target="_iframe">
