@@ -51,6 +51,9 @@ $(document).ready(function() {
 	if ($(".kf54kefuqqbottom").length > 0) {
 	//	$(".kf54kefuqqbottom").html($(".kf54kefuqqbottom a").html());
 	}
+	if ($("div[align=center]").length > 0) {
+		$("div[align=center]").remove();
+	}
 
 	if($("#calendar_block").length < 1){
 		$("<div></div>",{"id":"calendar_block"}).appendTo("body");

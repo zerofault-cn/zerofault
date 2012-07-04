@@ -11,7 +11,7 @@
 </tr>
 <tr>
 	<td>配图：</td>
-	<td><if condition="is_file('__APP__/../html/Attach/Article/'.$info['id'].'.jpg') eq true">
+	<td><if condition="is_file('./html/Attach/Article/'.$info['id'].'.jpg') eq true">
 		<img src="__APP__/../html/Attach/Article/{$info['id']}.jpg"/>(上传新文件将覆盖原文件)<br />
 		</if>
 		<input type="file" name="file" size="30" />(JPG格式，尺寸：140*106)
