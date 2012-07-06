@@ -259,7 +259,7 @@ oswf.write("company_ad2");
 		<li>
 			<dl>
 				<dt><a href="__APP__/Company/detail/id/{$item.id}" target="_blank">{$item.name}</a></dt>
-				<dd class="img"><a href="__APP__/Company/detail/id/{$item.id}" target="_blank"><if condition="is_file('__APP__/../Html/Attach/company_logo/'.$item['id'].'.jpg') eq true"><img src="__APP__/../Html/Attach/company_logo/{$item.id}.jpg" /><else /><img src="../Public/Images/test_pic6.png"/></if></a></dd>
+				<dd class="img"><a href="__APP__/Company/detail/id/{$item.id}" target="_blank"><if condition="is_file('__APP__/../html/Attach/company_logo/'.$item['id'].'.jpg') eq true"><img src="__APP__/../html/Attach/company_logo/{$item.id}.jpg" /><else /><img src="../Public/Images/company_logo.gif"/></if></a></dd>
 				<dd class="text">
 					资质：{$item.qualification}<br />
 					浏览：{$item.view}<br />
@@ -308,7 +308,7 @@ oswf.write("company_ad2");
 			<foreach name="designer_list" item="item">
 			<li>
 				<dl>
-					<dt><a href="__APP__/Designer/#{$item.id}"><if condition="is_file('__APP__/../Html/Attach/photo/'.$item['id'].'.jpg') eq true"><img src="__APP__/../Html/Attach/photo/{$item.id}.jpg" /><else /><img src="../Public/Images/test_photo.png"/></if></a></dt>
+					<dt><a href="__APP__/Designer/#{$item.id}"><if condition="is_file('__APP__/../html/Attach/photo/'.$item['id'].'.jpg') eq true"><img src="__APP__/../html/Attach/photo/{$item.id}.jpg" /><else /><img src="../Public/Images/test_photo.png"/></if></a></dt>
 					<dd class="name">{$item.name}</dd>
 					<dd class="number"><a href="tencent://message/?uin={$setting.qq_designer}&Site=乐装网&Menu=yes" title="点击这里开始QQ交流"><img border="0" src="http://wpa.qq.com/pa?p=1:{$setting.qq_designer}:1" alt="QQ在线"></a></dd>
 				</dl>
