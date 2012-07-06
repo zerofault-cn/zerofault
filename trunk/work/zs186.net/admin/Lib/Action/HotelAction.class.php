@@ -96,7 +96,7 @@ class HotelAction extends BaseAction{
 		$introduction = trim($_REQUEST['introduction']);
 		$sort = intval($_REQUEST['sort']);
 		if($id>0) {
-			$rs = $this->dao->where(array('name'=>$name,'id'=>array('neq',$id)))->find();
+			$rs = $this->dao->where(array('name'=>$name,'id'=>array('neq',$id), 'category_id'=>$category_id))->find();
 			if($rs && sizeof($rs)>0) {
 				self::_error('此酒店已被添加过！');
 			}
@@ -123,7 +123,7 @@ class HotelAction extends BaseAction{
 			}
 		}
 		else {
-			$rs = $this->dao->where(array('name'=>$name))->find();
+			$rs = $this->dao->where(array('name'=>$name, 'category_id'=>$category_id))->find();
 			if(!empty($rs) && sizeof($rs)>0) {
 				self::_error('此酒店已被添加过！');
 			}
