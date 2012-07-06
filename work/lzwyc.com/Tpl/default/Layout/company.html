@@ -20,13 +20,14 @@
 <body>
 	<div class="wrapper">
 		<div id="header">
-			<h1><if condition="is_file('__APP__/../html/Attach/company_logo/'.$info['id'].'.jpg') eq true"><img src="__APP__/../html/Attach/company_logo/{$info.id}.jpg" align="texttop"/></if>{$info.name}</h1>
+			<h1><if condition="is_file('__APP__/../html/Attach/company_logo/'.$info['id'].'.jpg') eq true"><img src="__APP__/../html/Attach/company_logo/{$info.id}.jpg" /></if><span>{$info.name}</span></h1>
 		</div>
 		<div id="navi">
 			<ul>
 				<li><a href="__URL__/detail/id/{$info.id}" <eq name="ACTION_NAME" value="detail">class="active"</eq>>首页</a></li>
 				<li><a href="__URL__/introduction/id/{$info.id}" <eq name="ACTION_NAME" value="introduction">class="active"</eq>>公司简介</a></li>
-				<li><a href="__URL__/case_list/id/{$info.id}" <eq name="ACTION_NAME" value="caselist">class="active"</eq>>精品案例</a></li>
+				<li><a href="__URL__/case_list/id/{$info.id}" <eq name="ACTION_NAME" value="case_list">class="active"</eq>>精品案例</a></li>
+				<li><a href="__URL__/talk_list/id/{$info.id}" <eq name="ACTION_NAME" value="talk_list">class="active"</eq>>装修杂谈</a></li>
 				<li><a href="__URL__/feedback/id/{$info.id}" <eq name="ACTION_NAME" value="feedback">class="active"</eq>>留言咨询</a></li>
 				<li><a href="__URL__/contact/id/{$info.id}" <eq name="ACTION_NAME" value="contact">class="active"</eq>>联系我们</a></li>
 			</ul>

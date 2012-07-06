@@ -54,6 +54,15 @@ a:hover,a:active,a.active{color:#ffcc00;}
 		Dropshadow(offx=-2,offy=0,color=white);
 	text-shadow:2px 2px 1px #ffffff,-2px -2px 1px #ffffff,-2px 2px 1px #ffffff, 2px -2px 1px #ffffff; 
 }
+#header h1 img {
+	float: left;
+	padding-left: 10px;
+}
+#header h1 span {
+	float: left;
+	padding-left: 20px;
+	padding-top: 20px;
+}
 #navi {
 	height: 44px;
 	margin-bottom: 5px;	

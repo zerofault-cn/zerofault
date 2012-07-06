@@ -121,7 +121,7 @@ class IndexAction extends BaseAction{
 		$mail->AddAddress($email);
 		$mail->MsgHTML('<h1>这是一封测试邮件，用于测试您的SMTP参数是否设置正确！</h1><h2>您现在看到了这封邮件，说明您的参数设置是正确的！</h2>');
 		if($mail->Send()) {
-			self::_success('测试邮件发送成功，请到您的邮箱查看确认！', 5000);
+			self::_success('测试邮件发送成功，请到您的邮箱查看确认！', '', 5000);
 		}
 		else {
 			self::_error('发送失败！<br />'.str_replace(array("\r\n", "\n"), '<br />', $mail->ErrorInfo));

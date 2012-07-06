@@ -75,6 +75,24 @@ class CompanyAction extends BaseAction {
 		$this->assign('content', ACTION_NAME);
 		$this->display('Layout:company');
 	}
+	public function talk_list() {
+		$id = intval($_REQUEST['id']);
+		$dao = M('Talk');
+		$where = array(
+			'company_id' => $id
+			);
+		$order = 'id desc';
+		$count = $dao->where($where)->count();
+		import("@.Paginator");
+		$limit = 20;
+		$p = new Paginator($count, $limit);
+		$rs = $dao->where($where)->order($order)->limit($p->offset.','.$p->limit)->select();
+		$this->assign('list', $rs);
+		$this->assign('page', $p->showMultiNavi());
+
+		$this->assign('content', ACTION_NAME);
+		$this->display('Layout:company');
+	}
 	public function talk_detail() {
 		$talk_id = intval($_REQUEST['talk_id']);
 		$dao = D('Talk');

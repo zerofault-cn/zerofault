@@ -1,0 +1,11 @@
+<div id="talk">
+	<h2></h2>
+	<ul style="zoom:1">
+	<iterate name="info.Talk" id="item" offset="0" length="8">
+		<li>
+			<span>{$item.addtime|substr=0,10}</span><a href="__URL__/talk_detail/id/{$info.id}/talk_id/{$item.id}" target="_blank">{$item.title}</a>
+		</li>
+	</iterate>
+	</ul>
+	{$page}
+</div>
