@@ -14,7 +14,7 @@
 		<td class="text_editable" name="name">{$item['name']}</td>
 		<td>
 			<if condition="'Article' eq ACTION_NAME and 'about' neq $item['alias']">
-			<img class="add" src="../Public/Images/add.gif" align="absmiddle"/>
+			<img class="add" src="../Public/Images/add.gif" align="absmiddle" alt="添加子分类" title="添加子分类"/>
 			</if>
 		</td>
 		<td><a href="__APP__/{$type}/index/category_id/{$item['id']}">{$item['count']}</a></td>

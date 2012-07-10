@@ -10,7 +10,7 @@
 	<td><input type="text" name="title" size="20" maxlength="100" value="{$info.title}" /></td>
 </tr>
 <tr>
-	<td>配图：</td>
+	<td>缩略图：</td>
 	<td><if condition="is_file('./html/Attach/Article/'.$info['id'].'.jpg') eq true">
 		<img src="__APP__/../html/Attach/Article/{$info['id']}.jpg"/>(上传新文件将覆盖原文件)<br />
 		</if>
