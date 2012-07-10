@@ -1,0 +1,65 @@
+#lightbox {
+	Z-INDEX: 100; POSITION: absolute; TEXT-ALIGN: center; LINE-HEIGHT: 0; WIDTH: 100%; LEFT: 0px
+}
+#lightbox A IMG {
+	BORDER-BOTTOM-STYLE: none; BORDER-RIGHT-STYLE: none; BORDER-TOP-STYLE: none; BORDER-LEFT-STYLE: none
+}
+#outerImageContainer {
+	POSITION: relative; BACKGROUND-COLOR: #fff; MARGIN: 0px auto; WIDTH: 250px; HEIGHT: 250px
+}
+#imageContainer {
+	padding:10px;
+}
+#loading {
+	POSITION: absolute; TEXT-ALIGN: center; LINE-HEIGHT: 0; WIDTH: 100%; HEIGHT: 0; TOP: 0; LEFT: 0%
+}
+#hoverNav {
+	Z-INDEX: 10; POSITION: absolute; WIDTH: 100%; HEIGHT: 100%; TOP: 0px; LEFT: 0px
+}
+#imageContainer > #hoverNav {
+	LEFT: 0px
+}
+#hoverNav A {
+	OUTLINE-STYLE: none
+}
+
+#prevLink {
+	FLOAT: left; LEFT: 0px
+}
+#nextLink {
+	FLOAT: right; RIGHT: 0px
+}
+
+#imageDataContainer {
+	BACKGROUND-COLOR: #fff; MARGIN: 0px auto; FONT: 10px/1.4em Verdana, Helvetica, sans-serif
+}
+#imageData {
+	PADDING-BOTTOM: 0px; PADDING-LEFT: 10px; PADDING-RIGHT: 10px; COLOR: #666; PADDING-TOP: 0px
+}
+#imageData #imageDetails {
+	TEXT-ALIGN: left; WIDTH: 70%; FLOAT: left
+}
+#imageData #caption {
+	FONT-WEIGHT: bold
+}
+#imageData #numberDisplay {
+	PADDING-BOTTOM: 1em; DISPLAY: block; CLEAR: left
+}
+#imageData #bottomNavClose {
+	PADDING-BOTTOM: 0.7em; WIDTH: 66px; FLOAT: right
+}
+#overlay {
+	Z-INDEX: 90; POSITION: absolute; FILTER: alpha(opacity=60); BACKGROUND-COLOR: #000; WIDTH: 100%; HEIGHT: 500px; TOP: 0px; LEFT: 0px; opacity: 0.6; -moz-opacity: 0.6
+}
+.clearfix:after {
+	DISPLAY: block; HEIGHT: 0px; VISIBILITY: hidden; CLEAR: both; CONTENT: "."
+}
+.clearfix {
+	DISPLAY: inline-block
+}
+* HTML .clearfix {
+	HEIGHT: 1%
+}
+.clearfix {
+	DISPLAY: block
+}

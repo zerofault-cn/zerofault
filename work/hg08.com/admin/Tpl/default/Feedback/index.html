@@ -1,0 +1,31 @@
+	{$page}
+	<table id="table" class="list" border="1" cellpadding="3" cellspacing="0" width="100%" bordercolor="#999999" style="border-collapse:collapse;">
+	<tr bgcolor="#ededed">
+		<th width="5%">ID</th>
+		<th width="40%">留言内容</th>
+		<th width="40%">留言页面</th>
+		<th>留言人</th>
+		<th width="5%">操作</th>
+	</tr>
+	<iterate name="list" id="item">
+	<tr bgcolor="<eq name='mod' value='1'>#FFFFE1</eq>">
+		<td>{$item['id']}</td>
+		<td class="a_left" id="{$item['id']}">
+			{$item['content']|nl2br}
+		</td>
+		<td class="a_left"><a href="{$item.referer}" target="_blank">{$item.referer}</a></td>
+		<td class="a_left" nowrap="nowrap">
+			姓名：{$item.name}<br />
+			电话：{$item.phone}<br />
+			时间：{$item.addtime|substr=2,14}<br />
+		</td>
+		<td nowrap="nowrap">
+			<if condition="$item['status'] eq '0'">
+			<a href="__URL__/update/id/{$item['id']}/f/status/v/1"  target="_iframe" title="标记为已处理"><img src="../Public/Images/flag_blue.gif" alt="标记为已处理" align="absmiddle"/></a>
+			<elseif condition="$item['status'] eq '1'" />
+			<a href="__URL__/update/id/{$item['id']}/f/status/v/0"  target="_iframe" title="标记为未处理"><img src="../Public/Images/flag_gray.gif" alt="标记为未处理" align="absmiddle"/></a>
+			</if>
+		</td>
+	</tr>
+	</iterate>
+	</table>

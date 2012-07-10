@@ -1,0 +1,70 @@
+	<load file="../Public/Js/gonggao.js" />
+<div id="top">
+	<div class="top_m">
+		<div class="logo"><img src="../Public/Images/new_03.jpg"></div>
+		<div id="nav">
+			<ul class="menu">
+				<li><a href="__APP__"><img src="../Public/Images/new_06.jpg" alt="../Public/Images/index_03.jpg"></a></li>
+				<li><a href="__APP__/Article/about"><img src="../Public/Images/new_08.jpg" alt="../Public/Images/index_05.jpg"></a>
+					<ul>
+						<foreach name="Article_about" item="item">
+						<li><a href="__APP__/Article/about/id/{$item.id}" target="_blank">{$item.title}</a></li>
+						</foreach>
+					</ul>
+				</li>
+				<li><a href="__APP__/Photo"><img src="../Public/Images/new_10.jpg" alt="../Public/Images/index_07.jpg"></a> 
+					<ul>
+						<foreach name="Photo_category" item="item">
+						<li><a href="__APP__/Photo/product/id/{$item.id}" target="_blank">{$item.name}</a></li>
+						</foreach>
+					</ul>
+				</li>
+				<li><a href="__APP__/Photo/special"><img src="../Public/Images/new_12.jpg" alt="../Public/Images/index_09.jpg"></a></li>
+				<li><a href="__APP__/Client"><img src="../Public/Images/new_14.jpg" alt="../Public/Images/index_11.jpg"></a>
+					<ul>
+						<li><a href="__APP__/Client/reserve" target="_blank">在线预约</a></li>
+						<li><a href="__APP__/Client/feedback" target="_blank">访客留言</a></li>
+					</ul>
+				</li>
+				<li><a href="__APP__/Client/reminder"><img src="../Public/Images/new_16.jpg" alt="../Public/Images/index_13.jpg"></a></li>
+			</ul> 
+		</div>
+	</div>
+	<div class="clear"></div>
+</div>
+<eq name="MODULE_NAME" value="Index">
+<load file="../Public/Js/swfobject.js"/>
+<load file="../Public/Js/banner.js"/>
+<div id="banner">
+	<div id="show_pro_img"></div>
+</div>
+<else />
+<div id="n_banner">
+	<img src="../Public/Images/new_17.jpg" />
+</div>
+</eq>
+</div>
+<div id="lxwm">
+    <ul>
+        <li><a href="#"><img src="../Public/Images/zxgt.gif"></a></li>
+        <li><a href="#"><img src="../Public/Images/wsdd.gif"></a></li>
+        <li><img src="../Public/Images/dh.gif"></li>
+        <li class="dh"><img src="../Public/Images/index_06.jpg"></li>
+        <li><img src="../Public/Images/hi.gif"></li>
+        <li class="dt">
+        <div class="scrollDiv">
+            <ul>
+                <li><a href="#">7.8月特价活动计划开启！敬请期待！1</a></li>
+                <li><a href="#">7.8月特价活动计划开启！敬请期待！2</a></li>
+                <li><a href="#">7.8月特价活动计划开启！敬请期待！3</a></li>
+                <li><a href="#">7.8月特价活动计划开启！敬请期待！4</a></li>
+                <li><a href="#">7.8月特价活动计划开启！敬请期待！5</a></li>
+                <li><a href="#">7.8月特价活动计划开启！敬请期待！6</a></li>
+            </ul>
+        </div>
+        </li>
+        <div class="clear"></div>
+    </ul>
+</div>
+<div class="clear"></div>
+
