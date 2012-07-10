@@ -1,0 +1,217 @@
+body{
+	background:url(../images/index_02.jpg) no-repeat center 440px;
+	}
+	
+#n_banner{
+	width:1578px;
+	height:303px;
+	margin:0 auto;
+	}
+
+#n_main{
+	width:980px;
+	margin:0 auto;
+	padding-bottom:30px;
+	}
+	
+.n_main_nav{
+	border-bottom:#c5c1ba solid 1px;
+	padding-bottom:5px;
+	}	
+		
+.new_l{
+	width:250px;
+	padding-top:28px;
+	float:left;
+	}	
+	
+.new_l ul li{
+	width:185px;
+	height:36px;
+	margin-bottom:10px;
+	list-style:none;
+	}	
+
+.new_l ul li a{
+	display:block;
+	width:150px;
+	height:36px;
+	color:#0a0a0a;
+	font-size:14px;
+	line-height:36px;
+	background:url(../images/works_10.jpg) no-repeat;
+	padding-left:35px;
+	}
+	
+.new_l ul li a:hover{
+	background:url(../images/works_07.jpg) no-repeat;
+	color:#b8a901;
+	}	
+	
+.new_r{
+	width:730px;
+	float:left;
+	}	
+	
+.new_r ul li{
+	list-style:none;
+	height:96px;
+	padding-top:25px;
+
+	}	
+
+.new_r ul li:hover{
+	background:url(../images/new_18.jpg) no-repeat bottom center;
+	}
+
+.new_r ul li span{
+	font-size:12px;
+	color:#949494;
+	}
+	
+h2 a{
+	color:#b41213;
+	font-weight:normal;
+	}	
+	
+h2 a:hover{
+	color:#cfa45a;
+	}	
+	
+.newxx_bt{
+	height:75px;
+	padding-top:22px;
+	text-align:center;
+	color:#848484;
+	}
+	
+h1{
+	line-height:30px;
+	font-weight:normal;
+	color:#b41213;
+	}	
+	
+.about_r{
+	padding-top:25px;
+	}	
+	
+.textbox{
+	width:235px;
+	height:24px;
+	border:0;
+	line-height:24px;
+	text-indent:5px;
+	background:#fff;
+	border:#d2d2d2 solid 1px;
+	}	
+	
+.textbox1{
+	background-color:#0f0f0f;
+	border:#d2d2d2 solid 1px;
+	width:495px;
+	height:139px;
+	background:#fff;
+	text-indent:5px;
+	scrollbar-face-color:#d2d2d2;
+	scrollbar-highlight-color:#d2d2d2;
+	scrollbar-3dlight-color:#fff;
+	scrollbar-darkshadow-color:#fff;
+	scrollbar-Shadow-color:#0f0f0f;
+	scrollbar-arrow-color:#393939;
+	scrollbar-track-color:#efefef;
+	}
+		
+.wxts_wb{
+	width:700px;
+	margin:0 auto;
+	color:#8c7551;
+	padding-top:70px;
+	}	
+	
+	
+.yd_bd{
+	color:#717171;
+	}	
+	
+	
+.ly_mk{
+	height:110px;
+	background:url(../images/new_18.jpg) no-repeat center bottom;
+	padding-top:20px;
+	border-bottom:#e5e5e5 solid 1px;
+	padding-left:7px;
+	}	
+
+.nc{
+	font-size:16px;
+	font-weight:bold;
+	color:#bc9450;
+	padding-bottom:20px;
+	}
+	
+.nc span{
+	color:#b8b8b8;
+	font-size:12px;
+	font-weight:normal;
+	}	
+
+.ly_bd{
+	padding:30px 0;
+	}	
+	
+.case_img ul li{
+	width:167px;
+	height:270px;
+	float:left;
+	text-align:right;
+	margin-right:15px;
+	font-size:14px;
+	}	
+
+.case_img ul li:hover{
+	background:none;
+	color:#b41213;
+	}
+	
+.case_img ul li a{
+	display:block;
+	width:162px;
+	height:240px;
+	padding:3px;
+	}
+	
+.case_img ul li a:hover{
+	background:url(../images/case_03.jpg) no-repeat;
+	}	
+	
+.gktz_logo{
+	padding:5px 0 10px 10px;
+	}
+	
+	
+	
+
+
+.WorksList {
+	WIDTH: 100%; HEIGHT: auto; PADDING:15px 0 0 20px;
+}
+.WorksList li {
+	 WIDTH:170px;  FLOAT:left; HEIGHT:auto; MARGIN:0 42px 20px 0;
+}
+
+.WorksList li:hover{
+	background:none;
+}
+
+
+
+
+
+
+	
+	
+	
+	
+	
+	
+	

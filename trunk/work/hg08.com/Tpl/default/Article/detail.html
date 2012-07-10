@@ -1,0 +1,24 @@
+<neq name="ACTION_NAME" value="detail">
+<div class="mce_content">
+	{$info.content}
+</div>
+<else />
+<div class="newxx_bt">
+	<h1>{$info.title}</h1>
+	作者：{$info.author}&nbsp;&nbsp;&nbsp;&nbsp;
+	时间：{$info.create_time|substr=0,10}&nbsp;&nbsp;&nbsp;&nbsp;
+	人气：{$info.view}&nbsp;&nbsp;&nbsp;&nbsp;
+</div>
+<div style="height:50px;">
+	<table width="100%"><tr><td>上一篇：<empty name="rel_link.prev">没有了<else /><a href="__APP__/Article/<empty name='category.alias'>detail<else />{$category.alias}</empty>/id/{$rel_link.prev.id}">{$rel_link.prev.title}</a></empty></td>
+	<td align="right">下一篇：<empty name="rel_link.next">没有了<else /><a href="__APP__/Article/<empty name='category.alias'>detail<else />{$category.alias}</empty>/id/{$rel_link.next.id}">{$rel_link.next.title}</a></empty></td>
+	</tr>
+	</table>
+</div>
+</neq>
+<load file="../Public/Js/jQuery.autoIMG.min.js" />
+<script>
+jQuery(function ($) {
+	$(".mce_content").autoIMG();
+});
+</script>

@@ -1,0 +1,15 @@
+var cacheBuster = "?t=" + Date.parse(new Date());
+var stageW = "100%";
+var stageH = 432;//"100%";
+var attributes = {};
+attributes.id = 'show_pro_img';
+attributes.name = attributes.id;
+var params = {};
+params.bgcolor = "#000000";
+params.wmode ="transparent";
+var flashvars = {};
+flashvars.componentWidth = stageW;
+flashvars.componentHeight = stageH;
+flashvars.pathToFiles = "Tpl/default/Public/Images/";
+flashvars.xmlPath = "../../../../Runtime/Data/banner.xml";
+swfobject.embedSWF("Tpl/default/Public/Flash/preview.swf"+cacheBuster, attributes.id, stageW, stageH, "9.0.124", "Tpl/default/Public/Flash/expressInstall.swf", flashvars, params);	

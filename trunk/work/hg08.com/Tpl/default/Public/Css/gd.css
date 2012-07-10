@@ -1,0 +1,129 @@
+.fL {
+	FLOAT: left
+}
+
+.hide {
+	DISPLAY: none
+}
+
+.titleTxt{
+	padding-left:18px;
+	}
+
+.showCase .showTitle {
+	POSITION: relative; 
+	HEIGHT: 47px; 
+}
+
+.showCase .showTitle .tabs {
+	POSITION: absolute; 
+	TOP: 0px; 
+	LEFT:894px
+}
+.showCase .showTitle .tabs .item {
+	PADDING-BOTTOM: 18px; 
+	PADDING-LEFT: 5px; 
+	WIDTH: 11px; 
+	PADDING-RIGHT: 5px; 
+	DISPLAY: block; 
+	HEIGHT: 11px; 
+	PADDING-TOP: 18px
+}
+.showCase .showTitle .tabs .item .tag {
+	TEXT-INDENT: -9999px; 
+	WIDTH: 11px; 
+	DISPLAY: block; 
+	BACKGROUND:url(../images/tag01.gif) no-repeat 0px 0px; 
+	HEIGHT: 11px
+}
+.showCase .showTitle .tabs .item .tagHover {
+	BACKGROUND: url(../images/tag02.gif) no-repeat 0px 0px
+}
+.showCase .showTitle .tabs .item .tag:hover {
+	BACKGROUND: url(../images/tag02.gif) no-repeat 0px 0px
+}
+
+.showCase .showCont .tagBox .picList {
+	MARGIN: 0px auto 0px 20px; 
+	WIDTH: 980px
+}
+.showCase .showCont .tagBox .picList .item {
+	POSITION: relative; 
+	WIDTH: 210px; 
+	HEIGHT: 310px; 
+	MARGIN-RIGHT:24px; 
+	border:#CCC solid 1px;
+	padding:5px;
+}
+.showCase .showCont .tagBox .picList .lastItem {
+	MARGIN-RIGHT: 0px
+}
+.showCase .showCont .tagBox .picList .item .picBox {
+	WIDTH: 210px; 
+	HEIGHT: 310px; 
+	OVERFLOW: hidden
+}
+.showCase .showCont .tagBox .picList .item .picBox .picture {
+	WIDTH: 210px; 
+	DISPLAY: block; 
+	HEIGHT: 310px
+}
+.showCase .showCont .tagBox .picList .item .picNameBG {
+	POSITION: absolute; 
+	FILTER: alpha(opacity=50); 
+	WIDTH: 210px; 
+	BOTTOM: 15px; 
+	BACKGROUND: #000; 
+	HEIGHT: 35px; 
+	LEFT: 5px; 
+	opacity: .5; 
+	-khtml-opacity: .5; 
+	-moz-opacity: .5
+}
+.showCase .showCont .tagBox .picList .item .picName {
+	POSITION: absolute; 
+	TEXT-ALIGN: right; 
+	LINE-HEIGHT: 33px; 
+	WIDTH: 182px; 
+	BOTTOM: 15px; 
+	HEIGHT: 33px; 
+	COLOR: #f39800; 
+	FONT-SIZE: 14px; 
+	OVERFLOW: hidden; 
+	RIGHT: 17px
+}
+.tagBox {
+	WIDTH:1000px;
+	HEIGHT: 353px; 
+	PADDING-TOP: 15px
+}
+.showCase .showCont .tagBox .picList .item .picBox A {
+	POSITION: relative; 
+	WIDTH: 210px; 
+	DISPLAY: block; 
+	HEIGHT: 310px
+}
+.showCase .showCont .tagBox .picList .item .picBox A .ShowpicMask {
+	POSITION: absolute; 
+	WIDTH: 210px; 
+	HEIGHT: 310px; 
+	TOP: 0px; 
+	CURSOR: pointer; 
+	LEFT: 0px
+}
+.showCase .showCont .tagBox .picList .item .picBox A:hover .ShowpicMask {
+	POSITION: absolute; 
+	FILTER: alpha(opacity=30); 
+	BACKGROUND: #ccc; 
+	TOP: 0px; 
+	CURSOR: pointer; 
+	LEFT: 0px; opacity: .3; 
+	-khtml-opacity: .3; 
+	-moz-opacity: .3
+}
+
+.tabs ul li{
+	list-style:none;
+	}
+
+
