@@ -13,7 +13,7 @@
 		<td>{$item['id']}</td>
 		<td class="text_editable" name="name">{$item['name']}</td>
 		<td>
-			<if condition="'Article' eq ACTION_NAME and 'about' neq $item['alias']">
+			<if condition="false and 'Article' eq ACTION_NAME and 'about' neq $item['alias']">
 			<img class="add" src="../Public/Images/add.gif" align="absmiddle" alt="添加子分类" title="添加子分类"/>
 			</if>
 		</td>
@@ -34,7 +34,7 @@
 	</iterate>
 	</table>
 	<br />
-	(提示：请谨慎操作，一旦添加子分类，将不方便删除)
+	<!-- (提示：请谨慎操作，一旦添加子分类，将不方便删除) -->
 	<!-- <form action="__APP__/Category/add" method="post" target="_iframe">
 		<label for="input_name">添加新分类：</label><input type="text" name="name" id="input_name" size="10" tabindex="1" />
 		<label for="input_sort">排序：</label><input type="text" name="sort" id="input_sort" value="{$new_sort}" size="4" tabindex="2">
