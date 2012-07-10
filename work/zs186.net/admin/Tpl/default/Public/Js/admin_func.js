@@ -4,10 +4,6 @@ $(document).ready(function(){
 		submit_addForm(this);
 	});
 
-//	$("table#table label").each(function(i){
-//		setNameEditable(this,i);
-//	});
-
 	$("img.password").each(function(i){
 		showPasswordEdit(this, i);
 	});
@@ -77,43 +73,6 @@ function confirmDelete(obj,n) {
 	$(obj).css("cursor","pointer").click(function(){
 		myConfirm('确认彻底删除 '+$(obj).attr('name')+' 的帐号？', _URL_+'/delete/id/'+$(obj).attr('id'));
 	});
-}
-
-function setNameEditable(obj,n){
-	$(obj).mouseover(function(){
-		$(this).addClass("editable");
-	}).mouseout(function(){
-		$(this).removeClass("editable");
-	}).click(function(){
-		html0=$(this).html();
-		html1='<span><input class="quickedit" type="text" value="'+html0+'" size="'+2*html0.length+'"> <i class="submit"><img src="'+IMAGE_FOLDER+'accept.gif" alt="提交" align="absmiddle"/></i><i class="cancel"><img src="'+IMAGE_FOLDER+'cancel.gif" alt="取消" align="absmiddle"/></i></span>';
-		$(this).after(html1).hide();
-		$(this).next().children("input").select().keydown(function(e){
-			var keyCode=e.keyCode ||window.event.keyCode;
-			if(keyCode==13)//回车键
-			{
-				submit_name(this,n);
-			}
-			else if(keyCode==27)//取消健
-			{
-				cancel_name(this,n);
-			}
-		});
-		$(this).next().children(".submit").css("cursor","pointer").click(function(){
-			submit_name(this,n);
-		});
-		$(this).next().children(".cancel").css("cursor","pointer").click(function(){
-			cancel_name(this,n);
-		});
-
-	});
-}
-function submit_name(obj,n){
-	$("#_iframe").attr("src", _URL_+"/update/id/"+$(obj).parent().prev().attr('id')+"/f/realname/v/"+$(obj).parent().children("input").val());
-}
-function cancel_name(obj,n){
-	$(obj).parent().prev().show();
-	$(obj).parent().remove();
 }
 
 function showPasswordEdit(obj,n) {

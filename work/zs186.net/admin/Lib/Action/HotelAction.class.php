@@ -72,7 +72,25 @@ class HotelAction extends BaseAction{
 		$this->assign('content', ACTION_NAME);
 		$this->display('Layout:default');
 	}
+	public function client_edit() {
+		if (empty($_SESSION['hotel_id'])) {
+			return;
+		}
+		$id = $_SESSION['hotel_id'];
+		$info = $this->dao->find($id);
 
+		$info['category_opts'] = self::genOptions(M('Category')->where("type='Hotel' and status=1")->order('sort')->getField('id,name'), $info['category_id']);
+		$info['region_opts'] = self::genOptions(M('Region')->where("pid=2")->order('sort')->getField('id,name'), $info['region_id']);
+		$info['district_opts'] = self::genOptions(M('District')->order('sort')->getField('id,name'), $info['district_id']);
+		$info['level_opts'] = self::genOptions(M('Level')->order('sort')->getField('id,name'), $info['level_id']);
+		$this->assign("info", $info);
+
+		$this->assign('content', 'form');
+		$this->display('Layout:main');
+	}
+	public function client_submit() {
+		$this->submit();
+	}
 	public function submit(){
 		if(empty($_POST['submit'])) {
 			return;
@@ -81,6 +99,9 @@ class HotelAction extends BaseAction{
 
 		$name = trim($_REQUEST['name']);
 		''==$name && self::_error('酒店名称必须填写！');
+		
+		$password = trim($_REQUEST['password']);
+
 		$address = trim($_REQUEST['address']);
 		$category_id = intval($_REQUEST['category_id']);
 		empty($category_id) && self::_error('酒店分类必须选择！');
@@ -100,6 +121,13 @@ class HotelAction extends BaseAction{
 			if($rs && sizeof($rs)>0) {
 				self::_error('此酒店已被添加过！');
 			}
+			if (!empty($password)) {
+				strlen($password)<6 && self::_error('新密码至少需要6个字符！');
+				strlen($password)>20 && self::_error('新密码不能超过20个字符！');
+				$password2 = trim($_REQUEST['password2']);
+				$password!=$password2 && self::_error('两次输入的新密码不一致！');
+				$this->dao->password = md5($password);
+			}
 			$this->dao->name = $name;
 			$this->dao->address = $address;
 			$this->dao->category_id = $category_id;
@@ -108,7 +136,6 @@ class HotelAction extends BaseAction{
 			$this->dao->level_id = $level_id;
 			$this->dao->capacity = $capacity;
 			$this->dao->introduction = $introduction;
-			$this->dao->sort = $sort;
 			if(false !== $this->dao->where("id=".$id)->save()) {
 				if($_FILES['file']['size'] > 0) {
 					$path = 'html/Attach/Hotel/'.$id.'.jpg';
@@ -116,7 +143,12 @@ class HotelAction extends BaseAction{
 						self::_error('上传缩略图出错！');
 					}
 				}
-				self::_success('修改成功！', __URL__.'/index/category_id/'.$category_id);
+				if (-1 == $_SESSION[C('USER_AUTH_KEY')]) {
+					self::_success('修改成功！');
+				}
+				else {
+					self::_success('修改成功！', __URL__.'/index/category_id/'.$category_id);
+				}
 			}
 			else{
 				self::_error('修改失败！'.(C('APP_DEBUG')?$this->dao->getLastSql():''));
@@ -127,7 +159,10 @@ class HotelAction extends BaseAction{
 			if(!empty($rs) && sizeof($rs)>0) {
 				self::_error('此酒店已被添加过！');
 			}
+			''==$password && self::_error('密码不能为空！');
+
 			$this->dao->name = $name;
+			$this->dao->password = md5($password);
 			$this->dao->category_id = $category_id;
 			$this->dao->region_id = $region_id;
 			$this->dao->district_id = $district_id;
@@ -152,6 +187,7 @@ class HotelAction extends BaseAction{
 		}
 	}
 	public function update(){
+		'password'==$_REQUEST['f'] && ($_REQUEST['v']=md5($_REQUEST['v']));
 		parent::_update();
 	}
 	public function delete(){

@@ -36,7 +36,7 @@ class RBAC extends Think
     {
         if(null===$authId) {
 			$authId = $_SESSION[C('USER_AUTH_KEY')];
-			}
+		}
 		// 如果使用普通权限模式，保存当前用户的访问权限列表
         // 对管理员开放所有权限
         if(C('USER_AUTH_TYPE') !=2 && !$_SESSION[C('IS_ADMINISTRATOR')] ) {

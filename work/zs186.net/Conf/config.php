@@ -23,7 +23,6 @@ elseif (ENV == 'TEST') {
 }
 else {
 	$config['APP_SUB_DOMAIN_DEPLOY'] = true;
-	$config['DB_HOST'] = 'localhost';
 	$config['DB_NAME'] = 'zshz666_com';
 	$config['DB_USER'] = 'zshz666_com';
 	$config['DB_PWD'] = 'yczshwhz';

@@ -56,3 +56,5 @@ CREATE TABLE `zs_feedback` (
   `status` tinyint(3) NOT NULL default '0',
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='留言咨询';
+
+ALTER TABLE `zs_hotel` ADD COLUMN `password` varchar(32) NOT NULL DEFAULT '' AFTER `name`;

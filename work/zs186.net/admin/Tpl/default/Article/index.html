@@ -3,9 +3,7 @@
 	<tr bgcolor="#ededed">
 		<th width="5%">ID</th>
 		<th>标题</th>
-		<notpresent name="_GET['category_id']">
 		<th nowrap>分类</th>
-		</notpresent>
 		<th width="10%">查看次数</th>
 		<th width="12%">排序</th>
 		<th width="14%">添加时间</th>
@@ -17,9 +15,7 @@
 		<td class="text_editable" name="title">
 			{$item['title']}
 		</td>
-		<notpresent name="_GET['category_id']">
 		<td><a href="__URL__/index/category_id/{$item['category_id']}" title="查看本类下所有文章">{$item.Category.name}</a>
-		</notpresent>
 		<td>{$item['view']}</td>
 		<td class="text_editable" name="sort">{$item['sort']}</td>
 		<td nowrap="nowrap">{$item['create_time']|substr=2,14}</td>

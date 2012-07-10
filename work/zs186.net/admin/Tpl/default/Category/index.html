@@ -3,21 +3,22 @@
 	<tr bgcolor="#ededed">
 		<th width="6%">ID</th>
 		<th width="20%">分类名称</th>
-		<th width="20%">子分类</th>
+		<th width="20%">子分类名称</th>
 		<th>数量</th>
 		<th>排序</th>
-		<th>操作</th>
 	</tr>
 	</thead>
 	<iterate name="list" id="item">
-	<tr bgcolor="<eq name='mod' value='1'>#FFFFE1</eq>" class="<eq name='item.status' value='0'>gray</eq>" id="{$item['id']}">
+	<tr bgcolor="<eq name='mod' value='1'>#FFFFE1</eq>" class="<eq name='item.status' value='0'>gray</eq>" id="{$item['id']}" type="{$item.type}">
 		<td>{$item['id']}</td>
 		<td class="text_editable" name="name">{$item['name']}</td>
-		<td></td>
+		<td>
+			<if condition="'Article' eq ACTION_NAME and 'about' neq $item['alias']">
+			<img class="add" src="../Public/Images/add.gif" align="absmiddle"/>
+			</if>
+		</td>
 		<td><a href="__APP__/{$type}/index/category_id/{$item['id']}">{$item['count']}</a></td>
 		<td class="text_editable" name="sort">{$item['sort']}</td>
-		<td>
-		</td>
 	</tr>
 		<notempty name="item.sub">
 		<iterate name="item.sub" id="sub">
@@ -27,17 +28,17 @@
 		<td class="text_editable" name="name">{$sub['name']}</td>
 		<td><a href="__APP__/{$type}/index/category_id/{$sub['id']}">{$sub['count']}</a></td>
 		<td class="text_editable" name="sort">{$sub['sort']}</td>
-		<td>
-		</td>
 	</tr>
 		</iterate>
 		</notempty>
 	</iterate>
 	</table>
 	<br />
+	(提示：请谨慎操作，一旦添加子分类，将不方便删除)
 	<!-- <form action="__APP__/Category/add" method="post" target="_iframe">
 		<label for="input_name">添加新分类：</label><input type="text" name="name" id="input_name" size="10" tabindex="1" />
 		<label for="input_sort">排序：</label><input type="text" name="sort" id="input_sort" value="{$new_sort}" size="4" tabindex="2">
 		<input type="hidden" name="type" value="{$type}" />
 		<input type="submit" name="submit" value="添加" />
 	</form> -->
+	<load file="../Public/Js/category_func.js" />

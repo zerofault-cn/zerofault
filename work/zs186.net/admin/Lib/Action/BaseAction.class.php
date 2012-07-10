@@ -6,15 +6,13 @@ class BaseAction extends Action {
 		header("Content-Type:text/html; charset=utf-8");
 		
 		import('@.RBAC');
-		//检查当前 MODULE_NAME/ACTION_NAME 是否需要认证
-		if(RBAC::checkAccess()) {
-			//检查是否已登录
-			if(empty($_SESSION[C('USER_AUTH_KEY')])) {
-				//跳转到认证网关
-				redirect(__APP__.'/Public/login');
-				exit;
-			}
+		//检查是否已登录
+		if('Public'!=MODULE_NAME && empty($_SESSION[C('USER_AUTH_KEY')])) {
+			//跳转到认证网关
+			redirect(__APP__.'/Public/login');
+			exit;
 		}
+
 		$this->category_array = array(
 			'Hotel' => M('Category')->where("type='Hotel' and status>0")->order('sort')->getField('id,name'),
 			'Article' => M('Category')->where("type='Article' and status>0 and pid=0")->order('sort')->getField('id,name')
