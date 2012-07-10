@@ -5,19 +5,19 @@ $config = array(
 	'DB_PREFIX'			=> 'zs_',
 
 
-	'USER_AUTH_TYPE'	=> 1,
+	'USER_AUTH_TYPE'	=> 1,//登录时认证一次
 	'USER_AUTH_ON'	=> true,
 	'USER_AUTH_KEY' => 'administrator_ID',
 	'IS_ADMINISTRATOR' => 'zs186_administrator',
 	'NOT_AUTH_MODULE' => 'Base,Public,Attachment,Empty',
 	'REQUIRE_AUTH_MODULE'=> '',
-	'NOT_AUTH_ACTION' => '',
+	'NOT_AUTH_ACTION' => 'client_edit,client_submit',
 	'REQUIRE_AUTH_ACTION'=> '',
-	'IFRAME_ACTION' => array('update','delete','edit','sub_category')
+	'IFRAME_ACTION' => array('submit', 'update','delete','edit','sub_category')
 );
 if (ENV == 'LOCAL') {
 	$config['APP_DEBUG'] = true;
-	$config['USER_AUTH_TYPE'] = 2;
+	$config['USER_AUTH_TYPE'] = 2;//实时认证
 	$config['DB_NAME'] = 'zs186_net';
 }
 elseif (ENV == 'TEST') {

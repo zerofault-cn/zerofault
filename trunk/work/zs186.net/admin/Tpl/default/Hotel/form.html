@@ -1,14 +1,34 @@
+<if condition="-1 eq $_SESSION[C('USER_AUTH_KEY')]">
+<form action="__URL__/client_submit" method="post" enctype="multipart/form-data" target="_iframe">
+<else />
 <form action="__URL__/submit" method="post" enctype="multipart/form-data" target="_iframe">
+</if>
 <input type="hidden" name="id" value="{$info.id}" />
 <table cellpadding="4" cellspacing="4">
 <tr>
-	<td width="72">酒店分类：</td>
+	<td width="72" nowrap="nowrap">酒店分类：</td>
 	<td><select name="category_id"><option value="0">--请选择--</option>{$info.category_opts}</select></td>
 </tr>
 <tr>
 	<td>酒店名称：</td>
 	<td><input type="text" name="name" size="30" maxlength="100" value="{$info.name}" /></td>
 </tr>
+<empty name="info.id">
+<tr>
+	<td>管理密码：</td>
+	<td><input type="password" name="password" size="30" maxlength="100" value=""/></td>
+</tr>
+</empty>
+<if condition="-1 eq $_SESSION[C('USER_AUTH_KEY')]">
+<tr>
+	<td>新密码：</td>
+	<td><input type="password" size="30" name="password" value="" />(密码由6-20个字母、数字组成，如果不修改请留空)</td>
+</tr>
+<tr>
+	<td>确认新密码：</td>
+	<td><input type="password" size="30" name="password2" value="" />(必须与上面设置的密码一致)</td>
+</tr>
+</if>
 <tr>
 	<td>酒店地址：</td>
 	<td><input type="text" name="address" size="30" maxlength="100" value="{$info.address}" /></td>
@@ -18,7 +38,7 @@
 	<td><if condition="is_file('./html/Attach/Hotel/'.$info['id'].'.jpg') eq true">
 		<img src="__APP__/../html/Attach/Hotel/{$info['id']}.jpg"/>(上传新文件将覆盖原文件)<br />
 		</if>
-		<input type="file" name="file" size="30" />(JPG格式，尺寸：228*130)
+		<input type="file" name="file" size="30" />(JPG格式，尺寸：228*130像素)
 	</td>
 </tr>
 <tr>
@@ -35,16 +55,18 @@
 </tr>
 <tr>
 	<td>承接能力：</td>
-	<td><input type="text" class="text" name="capacity" value="{$info.capacity}" /></td>
+	<td><input type="text" name="capacity" size="10" value="{$info.capacity}" />(填数字即可)</td>
 </tr>
 <tr>
 	<td>详细介绍：</td>
 	<td><textarea name="introduction" class="content" rows="40" cols="100" >{$info.introduction}</textarea></td>
 </tr>
+<empty name="info.id">
 <tr>
 	<td align="right" nowrap="nowrap">显示顺序：</td>
 	<td><input type="text" name="sort" value="{$info.sort}" size="10" />(数字越小越靠前)</td>
 </tr>
+</empty>
 <tr>
 	<td>&nbsp;</td>
 	<td>

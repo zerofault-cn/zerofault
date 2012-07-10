@@ -26,34 +26,52 @@ class PublicAction extends BaseAction{
 	* 验证并保存登录信息
 	*/
 	public function checkLogin(){
-		$User	=	D('Admin');
 		if(''==trim($_REQUEST['username'])) {
-			die(self::_error('用户名必须!'));
+			die(self::_error('未输入用户名!'));
 		}
 		elseif (''==trim($_REQUEST['password'])){
-			die(self::_error('密码必须！'));
+			die(self::_error('未输入密码！'));
 		}
-		$where = array(
-			'username' => trim($_POST['username']),
-			'password' => md5(trim($_POST['password']))
+		$username = trim($_POST['username']);
+		$password = trim($_POST['password']);
+		if ('hotel_' == substr($username, 0, 6)) {
+			$where = array(
+				'id' => intval(substr($username, 6)),
+				'password' => md5($password)
 			);
-		// 进行委托认证
-		$info = $User->where($where)->find();
-		if(empty($info)) {
-			self::_error('登录失败，请检查用户名和密码是否有误！');
-		}
-		else{
-			if ($info['status'] < 1) {
-				self::_error('此用户账号已被停用！');
+			$info = M('Hotel')->where($where)->find();
+			if (empty($info)) {
+				self::_error('登录失败，请确认密码是否正确！');
 			}
-			$_SESSION[C('USER_AUTH_KEY')] = $info['id'];
-			$_SESSION[C('IS_ADMINISTRATOR')] = (1==$info['id']?true:false);
-			$_SESSION['admin_name'] = empty($info['realname'])?$info['username']:$info['realname'];
-			
-			//保存访问权限
-			RBAC::saveAccessList($info['id']);
-			$User->where("id=".$info['id'])->setField('login_time', date('Y-m-d H:i:s'));
-			self::_success('登陆成功！', __APP__, 500);
+			else {
+				$_SESSION[C('USER_AUTH_KEY')] = -1;
+				$_SESSION['hotel_id'] = $info['id'];
+				$_SESSION['admin_name'] = $info['name'];
+				self::_success('登陆成功！', __APP__.'/Hotel/client_edit', 500);
+			}
+		}
+		else {
+			$where = array(
+				'username' => $username,
+				'password' => md5($password)
+				);
+			$info = M('Admin')->where($where)->find();
+			if(empty($info)) {
+				self::_error('登录失败，请检查用户名和密码是否有误！');
+			}
+			else{
+				if ($info['status'] < 1) {
+					self::_error('此用户账号已被停用！');
+				}
+				$_SESSION[C('USER_AUTH_KEY')] = $info['id'];
+				$_SESSION[C('IS_ADMINISTRATOR')] = (1==$info['id']?true:false);
+				$_SESSION['admin_name'] = empty($info['realname'])?$info['username']:$info['realname'];
+				
+				//保存访问权限
+				RBAC::saveAccessList($info['id']);
+				M('Admin')->where("id=".$info['id'])->setField('login_time', date('Y-m-d H:i:s'));
+				self::_success('登陆成功！', __APP__, 500);
+			}
 		}
 	}
 	/**

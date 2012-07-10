@@ -16,7 +16,7 @@ class CategoryAction extends BaseAction{
 
 	public function index($type='Hotel'){
 		$this->topnavi[]=array(
-			'text'=> 'Hotel'==$type?'酒店分类':'文章分类',
+			'text'=> 'Hotel'==$type?'酒店分类':'内容分类',
 			);
 		$this->assign("topnavi", $this->topnavi);
 		$where = array(
@@ -45,26 +45,29 @@ class CategoryAction extends BaseAction{
 		$this->assign('content', 'index');
 		$this->display('Layout:default');
 	}
-	private function add(){
+	public function add(){
+		$pid = intval($_REQUEST['pid']);
 		$type = trim($_REQUEST['type']);
+
 		$name = trim($_REQUEST['name']);
+		empty($name) && die('<i>名称必须填写！</i>');
 		$sort = intval($_REQUEST['sort']);
 
 		$where['name'] = $name;
 		$count = $this->dao->where($where)->count();
 		if(!empty($count) && $count>0) {
-			self::_error('已经存在同名分类！');
+			die('<i>已经存在同名分类！</i>');
 		}
+		$this->dao->pid = $pid;
 		$this->dao->type = $type;
 		$this->dao->name = $name;
-		$this->dao->create_time = date("Y-m-d H:i:s");
 		$this->dao->sort = $sort;
 		$this->dao->status = 1;
 		if($this->dao->add()){
-			self::_success('添加成功！');
+			die('1');
 		}
 		else{
-			self::_error('修改失败！'.(C('APP_DEBUG')?$this->dao->getLastSql():''));
+			die('sql:'.(C('APP_DEBUG')?$this->dao->getLastSql():''));
 		}
 	}
 	public function update(){

@@ -24,6 +24,7 @@
 		<td nowrap="nowrap">{$item['addtime']|substr=0,10}</td>
 		<td nowrap="nowrap">
 			<if condition="$item['status'] neq '-1'">
+			<img class="password" id="{$item['id']}" src="../Public/Images/key_edit.gif" alt="重设密码" title="重设密码" align="absmiddle" />
 			<a href="__URL__/form/id/{$item['id']}" title="修改"><img src="../Public/Images/form_edit.gif" alt="edit" /></a>
 			<a href="__URL__/update/id/{$item['id']}/f/status/v/{:intval(!$item['status'])}/" target="_iframe" title="<if condition='$item.status eq 0'>设为显示<else />设为隐藏</if>"><if condition="$item['status'] eq 0"><img src="../Public/Images/add.gif" alt="显示" /><else /><img src="../Public/Images/delete.gif" alt="隐藏" /></if></a>
 			<a href="__URL__/update/id/{$item['id']}/f/status/v/-1/"  target="_iframe" title="删除"><img src="../Public/Images/cross.gif" alt="删除" /></a>
@@ -36,3 +37,5 @@
 	</iterate>
 	</table>
 	{$page}
+	(提示：酒店管理员登录账号格式为：hotel_ID，如桃花岭饭店的账号是:hotel_2)<br />
+	<load file="../Public/Js/hotel_func.js" />

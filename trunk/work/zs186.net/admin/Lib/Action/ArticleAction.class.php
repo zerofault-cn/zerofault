@@ -19,6 +19,7 @@ class ArticleAction extends BaseAction{
 			//判断是否有子类
 			$tmp_rs = M('Category')->where("pid=".$_REQUEST['category_id'])->getField('id,name');
 			if (!empty($tmp_rs) && count($tmp_rs)>0) {
+				$tmp_rs[$_REQUEST['category_id']] = '';
 				$where['category_id'] = array('in', implode(',', array_keys($tmp_rs)));
 			}
 			else {
