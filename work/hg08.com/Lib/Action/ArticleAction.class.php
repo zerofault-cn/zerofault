@@ -7,58 +7,34 @@ class ArticleAction extends BaseAction {
 		parent::_initialize();
 	}
 	public function _empty() {
+		$this->assign('alias', ACTION_NAME);
+		$left_list = $this->dao->where("category_id=1 and status>0")->order('sort, id desc')->select();
+		array_unshift($left_list, array('alias'=> 'news', 'name'=>'最新活动', ));
+		$this->assign('left_list', $left_list);
+		
 		$id = intval($_REQUEST['id']);
-		$alias = ACTION_NAME;
-		$this->assign('alias', $alias);
 		if (empty($id)) {
-			$category = M('Category')->where("alias='".$alias."'")->find();
-			$sub_category_count = M('Category')->where("pid=".$category['id']." and status>0")->count();
-			if (!empty($sub_category_count) && $sub_category_count>0) {
-				$this->index($category['id']);
+			if ('news' == ACTION_NAME) {
+				$this->assign('MODULE_TITLE', '最新活动');
+				$this->index(2);
 				exit;
 			}
 
 			$where = array(
-				'category_id' => $category['id'],
+				'category_id' => 1,
 				'status' => array('gt', 0)
 				);
-			$order = 'sort, id';
+			$order = 'sort, id desc';
 			$row = $this->dao->where($where)->order($order)->find();
 			$id = $row['id'];
 			$_GET['id'] = $id;
 		}
-		else {
-			$category = M('Category')->where("alias='".$alias."'")->find();
-			$sub_category_count = M('Category')->where("pid=".$category['id']." and status>0")->count();
-			if (!empty($sub_category_count) && $sub_category_count>0) {
-				$this->index();
-				exit;
-			}
-			$category_id = $this->dao->where("id=".$id)->getField('category_id');
-			$category = M('Category')->find($category_id);
-		}
-		$this->assign('category', $category);
-
-		$left_list = $this->dao->where("category_id=".$category['id']." and status>0")->order('sort, id')->select();
-		$this->assign('left_list', $left_list);
 		$this->detail($id);
 	}
-	public function index($pid=0) {
-		if (!empty($_REQUEST['id'])) {
-			$category_id = intval($_REQUEST['id']);
-			$category = M('Category')->find($category_id);
-			$pid = $category['pid'];
-		}
-		$sub_category = M('Category')->where("pid=".$pid." and status>0")->order('sort')->select();
-		$this->assign('left_list', $sub_category);
-		if (empty($_REQUEST['id'])) {
-			//取第一个子分类
-			$category = array_shift($sub_category);
-		}
-		$this->assign('category', $category);
-		//子分类文章列表
+	public function index($category_id) {
+		empty($category_id) && ($category_id=2);
 		$where = array(
-			'category_id' => $category['id'],
+			'category_id' => $category_id,
 			'status' => array('gt', 0)
 			);
 		$order = 'sort, id desc';
@@ -108,5 +84,6 @@ class ArticleAction extends BaseAction {
 		$this->assign('content', 'detail');
 		$this->display('Layout:main');
 	}
+
 }
 ?>

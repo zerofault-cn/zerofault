@@ -1,0 +1,35 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<title><notempty name="ACTION_TITLE">{$ACTION_TITLE} - </notempty> <notempty name="MODULE_TITLE">{$MODULE_TITLE} - </notempty> {$setting.title}</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta name="keywords" content="{$setting.keywords}" />
+	<meta name="description" content="{$setting.description}" />
+	<link rel="icon" type="image/x-icon" href="../Public/Images/favicon.ico" />
+	<link rel="Shortcut Icon" type="image/x-icon" href="../Public/Images/favicon.ico" />
+	<load file="../Public/Css/index.css" />
+
+	<load file="../Public/Js/gallery.js" />
+	<script language="JavaScript" type="text/javascript">
+	var _APP_ = '__APP__';
+	var _URL_ = '__URL__';
+	var APP_PUBLIC_URL = '../Public';
+	var IMAGE_FOLDER = '../Public/Images/';
+	</script>
+</head>
+<body>
+	<div style="padding: 5px 0 10px 10px;">
+		<a href="__APP__" title="返回首页"><img src="../Public/Images/new_03.jpg"></a>
+	</div>
+	<div id="flashcontent" style="width:100%;height:700px;"></div>
+	<div style="text-align:center;">鄂ICP备11006842(1/3)号 技术支持 <a href="http://www.ycruit.com" target="_blank">Ruit</a></div>
+</body>
+<script type="text/javascript">
+	var fo = new SWFObject("../Public/Flash/autoviewer.swf", "autoviewer", "100%", "100%", "8");		
+	//Optional Configuration
+	//fo.addVariable("langOpenImage", "Open Image in New Window");
+	//fo.addVariable("langAbout", "About");	
+	fo.addVariable("xmlURL", "__APP__/Album/gallery_xml");
+	fo.write("flashcontent");	
+</script>
+</html>

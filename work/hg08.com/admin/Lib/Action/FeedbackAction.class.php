@@ -9,13 +9,9 @@ class FeedbackAction extends BaseAction{
 	public function index(){
 		$topnavi[]=array(
 			'text'=> '留言管理',
-			'url' => __APP__.'/Feedback'
 			);
 
 		$where = array();
-		$topnavi[]=array(
-			'text'=> '所有留言',
-			);
 		$where['status'] = 0;
 		if(!empty($_REQUEST['status'])) {
 			$where['status'] = $_REQUEST['status'];

@@ -1,4 +1,4 @@
-<neq name="ACTION_NAME" value="detail">
+<eq name="ACTION_NAME" value="about">
 <div class="mce_content">
 	{$info.content}
 </div>
@@ -9,13 +9,16 @@
 	时间：{$info.create_time|substr=0,10}&nbsp;&nbsp;&nbsp;&nbsp;
 	人气：{$info.view}&nbsp;&nbsp;&nbsp;&nbsp;
 </div>
+<div class="mce_content">
+	{$info.content}
+</div>
 <div style="height:50px;">
-	<table width="100%"><tr><td>上一篇：<empty name="rel_link.prev">没有了<else /><a href="__APP__/Article/<empty name='category.alias'>detail<else />{$category.alias}</empty>/id/{$rel_link.prev.id}">{$rel_link.prev.title}</a></empty></td>
-	<td align="right">下一篇：<empty name="rel_link.next">没有了<else /><a href="__APP__/Article/<empty name='category.alias'>detail<else />{$category.alias}</empty>/id/{$rel_link.next.id}">{$rel_link.next.title}</a></empty></td>
+	<table width="100%"><tr><td>上一篇：<empty name="rel_link.prev">没有了<else /><a href="__APP__/Article/{$alias}/id/{$rel_link.prev.id}">{$rel_link.prev.title}</a></empty></td>
+	<td align="right">下一篇：<empty name="rel_link.next">没有了<else /><a href="__APP__/Article/{$alias}/id/{$rel_link.next.id}">{$rel_link.next.title}</a></empty></td>
 	</tr>
 	</table>
 </div>
-</neq>
+</eq>
 <load file="../Public/Js/jQuery.autoIMG.min.js" />
 <script>
 jQuery(function ($) {

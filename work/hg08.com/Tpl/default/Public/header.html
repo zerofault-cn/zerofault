@@ -4,29 +4,29 @@
 		<div class="logo"><img src="../Public/Images/new_03.jpg"></div>
 		<div id="nav">
 			<ul class="menu">
-				<li><a href="__APP__"><img src="../Public/Images/new_06.jpg" alt="../Public/Images/index_03.jpg"></a></li>
-				<li><a href="__APP__/Article/about"><img src="../Public/Images/new_08.jpg" alt="../Public/Images/index_05.jpg"></a>
+				<li><a href="__APP__" title="返回首页"><img src="../Public/Images/new_06.jpg" alt="../Public/Images/index_03.jpg"></a></li>
+				<li><a href="__APP__/Article/about" title="关于皇宫"><img src="../Public/Images/new_08.jpg" alt="../Public/Images/index_05.jpg"></a>
 					<ul>
 						<foreach name="Article_about" item="item">
-						<li><a href="__APP__/Article/about/id/{$item.id}" target="_blank">{$item.title}</a></li>
+						<li><a href="__APP__/Article/about/id/{$item.id}" target="_blank" title="{$item.title}">{$item.title}</a></li>
 						</foreach>
 					</ul>
 				</li>
-				<li><a href="__APP__/Photo"><img src="../Public/Images/new_10.jpg" alt="../Public/Images/index_07.jpg"></a> 
+				<li><a href="__APP__/Album/works" title="最新作品"><img src="../Public/Images/new_10.jpg" alt="../Public/Images/index_07.jpg"></a> 
 					<ul>
-						<foreach name="Photo_category" item="item">
-						<li><a href="__APP__/Photo/product/id/{$item.id}" target="_blank">{$item.name}</a></li>
+						<foreach name="Album_category" item="item">
+						<li><a href="__APP__/Album/works/id/{$item.id}" target="_blank" title="{$item.name}">{$item.name}</a></li>
 						</foreach>
 					</ul>
 				</li>
-				<li><a href="__APP__/Photo/special"><img src="../Public/Images/new_12.jpg" alt="../Public/Images/index_09.jpg"></a></li>
-				<li><a href="__APP__/Client"><img src="../Public/Images/new_14.jpg" alt="../Public/Images/index_11.jpg"></a>
+				<li><a href="__APP__/Album/photo" target="_blank" title="顾客特照"><img src="../Public/Images/new_12.jpg" alt="../Public/Images/index_09.jpg"></a></li>
+				<li><a href="__APP__/Client" title="在线预定"><img src="../Public/Images/new_14.jpg" alt="../Public/Images/index_11.jpg"></a>
 					<ul>
-						<li><a href="__APP__/Client/reserve" target="_blank">在线预约</a></li>
-						<li><a href="__APP__/Client/feedback" target="_blank">访客留言</a></li>
+						<li><a href="__APP__/Client/reserve" target="_blank" title="在线预约">在线预约</a></li>
+						<li><a href="__APP__/Client/feedback" target="_blank" title="访客留言">访客留言</a></li>
 					</ul>
 				</li>
-				<li><a href="__APP__/Client/reminder"><img src="../Public/Images/new_16.jpg" alt="../Public/Images/index_13.jpg"></a></li>
+				<li><a href="__APP__/Client/reminder" title="温馨提示"><img src="../Public/Images/new_16.jpg" alt="../Public/Images/index_13.jpg"></a></li>
 			</ul> 
 		</div>
 	</div>
@@ -40,31 +40,34 @@
 </div>
 <else />
 <div id="n_banner">
-	<img src="../Public/Images/new_17.jpg" />
+	<img src="__APP__/../{$image.top_$alias.img}" />
 </div>
 </eq>
 </div>
 <div id="lxwm">
-    <ul>
-        <li><a href="#"><img src="../Public/Images/zxgt.gif"></a></li>
-        <li><a href="#"><img src="../Public/Images/wsdd.gif"></a></li>
-        <li><img src="../Public/Images/dh.gif"></li>
-        <li class="dh"><img src="../Public/Images/index_06.jpg"></li>
-        <li><img src="../Public/Images/hi.gif"></li>
-        <li class="dt">
-        <div class="scrollDiv">
-            <ul>
-                <li><a href="#">7.8月特价活动计划开启！敬请期待！1</a></li>
-                <li><a href="#">7.8月特价活动计划开启！敬请期待！2</a></li>
-                <li><a href="#">7.8月特价活动计划开启！敬请期待！3</a></li>
-                <li><a href="#">7.8月特价活动计划开启！敬请期待！4</a></li>
-                <li><a href="#">7.8月特价活动计划开启！敬请期待！5</a></li>
-                <li><a href="#">7.8月特价活动计划开启！敬请期待！6</a></li>
-            </ul>
-        </div>
-        </li>
-        <div class="clear"></div>
-    </ul>
+	<ul>
+		<li>
+			<eq name="MODULE_NAME" value="Index">
+			<a href="#"><img src="../Public/Images/zxgt.gif"></a>
+			<else />
+			<a href="#"><img src="../Public/Images/wxts.gif"></a>
+			</eq>
+		</li>
+		<li><a href="#"><img src="../Public/Images/wsdd.gif"></a></li>
+		<li><img src="../Public/Images/dh.gif"></li>
+		<li class="dh"><img src="../Public/Images/index_06.jpg"></li>
+		<li><img src="../Public/Images/hi.gif"></li>
+		<li class="dt">
+			<div class="scrollDiv">
+				<ul>
+					<foreach name="top_list" item="item">
+					<li><a href="__APP__/Article/news/id/{$item.id}" target="_blank">{$item.title}</a></li>
+					</foreach>
+				</ul>
+			</div>
+		</li>
+		<div class="clear"></div>
+	</ul>
 </div>
 <div class="clear"></div>
 

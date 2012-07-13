@@ -13,7 +13,7 @@ class ArticleAction extends BaseAction{
 			'url' => __APP__.'/Article'
 			);
 
-		$order = 'sort';
+		$order = 'sort, id desc';
 		$where = array();
 		if(!empty($_REQUEST['category_id'])) {
 			//判断是否有子类
@@ -38,10 +38,14 @@ class ArticleAction extends BaseAction{
 			$where['status'] = $_REQUEST['status'];
 			$order = 'id desc';
 		}
-		$rs = $this->dao->relation(true)->where($where)->order($order)->select();
-
+		$count = $this->dao->where($where)->count();
+		import("@.Paginator");
+		$limit = 20;
+		$p = new Paginator($count,$limit);
+		$rs = $this->dao->relation(true)->where($where)->order($order)->limit($p->offset.','.$p->limit)->select();
 		$this->assign('list', $rs);
-
+		$this->assign('page', $p->showMultiNavi());
+		
 		$this->assign("topnavi",$topnavi);
 		$this->assign('content', ACTION_NAME);
 		$this->display('Layout:default');
@@ -65,11 +69,10 @@ class ArticleAction extends BaseAction{
 				);
 			$info = array(
 				'id' => 0,
-				'category_id' => 0
+				'category_id' => 0,
+				'sort' => 100
 				);
 			!empty($_REQUEST['category_id']) && ($info['category_id'] = $_REQUEST['category_id']);
-			$max_sort = $this->dao->getField("max(sort)");
-			$info['sort'] = $max_sort+2;
 		}
 		$info['category_opts'] = self::genOptions($this->category_array['Article'], $info['category_id']);
 		$this->assign("info", $info);

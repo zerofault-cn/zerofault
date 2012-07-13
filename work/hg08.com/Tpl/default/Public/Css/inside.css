@@ -20,7 +20,7 @@ body{
 	}	
 		
 .new_l{
-	width:250px;
+	width:240px;
 	padding-top:28px;
 	float:left;
 	}	
@@ -43,22 +43,23 @@ body{
 	padding-left:35px;
 	}
 	
-.new_l ul li a:hover{
+.new_l ul li a:hover, .new_l ul li a:active, .new_l ul li a.active{
 	background:url(../images/works_07.jpg) no-repeat;
 	color:#b8a901;
 	}	
 	
 .new_r{
-	width:730px;
+	width:740px;
 	float:left;
+	padding-top: 28px;
 	}	
 	
-.new_r ul li{
+.new_r ul{
 	list-style:none;
-	height:96px;
-	padding-top:25px;
-
-	}	
+}
+.new_r ul.article li{
+	margin-bottom:25px;
+	}
 
 .new_r ul li:hover{
 	background:url(../images/new_18.jpg) no-repeat bottom center;
@@ -80,7 +81,6 @@ h2 a:hover{
 	
 .newxx_bt{
 	height:75px;
-	padding-top:22px;
 	text-align:center;
 	color:#848484;
 	}
@@ -160,30 +160,48 @@ h1{
 	}	
 	
 .case_img ul li{
-	width:167px;
-	height:270px;
+	height: 220px;
 	float:left;
-	text-align:right;
-	margin-right:15px;
+	padding-top: 0;
+	text-align:center;
 	font-size:14px;
+	line-height: 30px;
 	}	
-
+.case_img ul li div.item-wrap{
+	padding:5px;
+}
+.case_img ul li div.item{
+	width:160px;
+	border-color: #F0F0F0 #E6E6E6 #D8D8D8;
+	border-style: solid;
+	border-width: 1px;
+	padding:5px;
+	}
+.case_img ul li div.item:hover{
+	box-shadow:0 0 5px rgba(0,0,0,0.2);
+	background-color:#fefefe;
+	}
 .case_img ul li:hover{
-	background:none;
+	background: none;
 	color:#b41213;
 	}
 	
-.case_img ul li a{
-	display:block;
-	width:162px;
-	height:240px;
-	padding:3px;
-	}
-	
-.case_img ul li a:hover{
-	background:url(../images/case_03.jpg) no-repeat;
+.case_album ul li{
+	width:210px;
+	height:230px;
+	float:left;
+	text-align:center;
+	padding:0 10px 5px 10px;
+	font-size:14px;
+	line-height: 20px;
 	}	
-	
+.case_album ul li div{
+	width: 210px;
+	height: 210px;
+	}
+.case_album ul li:hover{
+	background: none;
+}
 .gktz_logo{
 	padding:5px 0 10px 10px;
 	}
@@ -206,12 +224,6 @@ h1{
 
 
 
-
-
-	
-	
-	
-	
-	
-	
-	
+.paginator .a_right {
+	text-align: right;
+	}

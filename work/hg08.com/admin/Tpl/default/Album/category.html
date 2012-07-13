@@ -1,0 +1,29 @@
+	<table id="table" class="list" border="1" cellpadding="3" cellspacing="0" width="100%" bordercolor="#999999" style="border-collapse:collapse;">
+	<thead>
+	<tr bgcolor="#ededed">
+		<th width="6%">ID</th>
+		<th width="20%">分类名称</th>
+		<th>作品数量</th>
+		<th>排序</th>
+		<th>操作</th>
+	</tr>
+	</thead>
+	<iterate name="list" id="item">
+	<tr bgcolor="<eq name='mod' value='1'>#FFFFE1</eq>" class="<eq name='item.status' value='0'>gray</eq>" id="{$item['id']}" type="{$item.type}">
+		<td>{$item['id']}</td>
+		<td class="text_editable" name="Category_name">{$item['name']}</td>
+		<td><a href="__URL__/index/category_id/{$item['id']}">{$item.Album|count}</a></td>
+		<td class="text_editable" name="Category_sort">{$item['sort']}</td>
+		<td>
+			<a href="__URL__/update/id/{$item['id']}/t/Category/f/status/v/{:intval(!$item['status'])}/" target="_iframe" title="<if condition='$item.status eq 0'>设为显示<else />设为隐藏</if>"><if condition="$item['status'] eq 0"><img src="../Public/Images/add.gif" alt="显示" /><else /><img src="../Public/Images/delete.gif" alt="隐藏" /></if></a>
+			<a href="javascript:void(0);" onclick="myConfirm('删除不可恢复，确定删除？', '__URL__/delete_category/id/{$item['id']}');" target="_iframe" title="删除"><img src="../Public/Images/cross.gif" alt="删除" /></a>
+		</td>
+	</tr>
+	</iterate>
+	</table>
+	<br />
+	<form method="post" target="_iframe">
+		<label for="input_name">添加新分类：</label><input type="text" name="name" id="input_name" size="10" tabindex="1" />
+		<label for="input_sort">排序：</label><input type="text" name="sort" id="input_sort" value="0" size="4" tabindex="2">
+		<input type="submit" name="submit" value="添加" />
+	</form>
