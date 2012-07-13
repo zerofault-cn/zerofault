@@ -5,6 +5,7 @@ class AlbumModel extends RelationModel{
 		'Category' => BELONGS_TO,
 		'Photo' => array(
 			'mapping_type'=>HAS_MANY,
+		//	'condition' => 'status>0',
 			'mapping_order'=>'sort, id desc'
 			)
 		);

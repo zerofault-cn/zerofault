@@ -9,6 +9,9 @@
 		<th width="10%">查看次数</th>
 		<th width="12%">排序</th>
 		<th width="14%">添加时间</th>
+		<eq name="_GET.category_id" value="2">
+		<th nowrap="nowrap">头部滚动</th>
+		</eq>
 		<th width="14%">操作</th>
 	</tr>
 	<iterate name="list" id="item">
@@ -23,6 +26,15 @@
 		<td>{$item['view']}</td>
 		<td class="text_editable" name="sort">{$item['sort']}</td>
 		<td nowrap="nowrap">{$item['create_time']|substr=2,14}</td>
+		<eq name="_GET.category_id" value="2">
+		<td>
+			<if condition="$item.status eq 2">
+			<a href="__URL__/update/id/{$item['id']}/f/status/v/1" target="_iframe" title="取消头部滚动">是</a>
+			<else />
+			<a href="__URL__/update/id/{$item['id']}/f/status/v/2" target="_iframe" title="设置为头部滚动">否</a>
+			</if>
+		</td>
+		</eq>
 		<td>
 			<if condition="$item['status'] neq '-1'">
 			<a href="__URL__/form/id/{$item['id']}" title="修改"><img src="../Public/Images/form_edit.gif" alt="edit" /></a>

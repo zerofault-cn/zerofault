@@ -3,14 +3,13 @@ class ReserveAction extends BaseAction{
 	protected $dao;
 
 	public function _initialize() {
-		$this->dao = D('Reservation');
+		$this->dao = D('Reserve');
 		parent::_initialize();
 	}
 
 	public function index(){
 		$topnavi[]=array(
 			'text'=> '预约管理',
-			'url' => __APP__.'/Reserve'
 			);
 
 		$where = array();

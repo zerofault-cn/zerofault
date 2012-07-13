@@ -26,7 +26,17 @@ ul,p,h1,h2,h3{
 	margin:0;
 	padding:0;
 	}
-	
+.mce_content {
+	padding-bottom: 10px;
+	}
+.mce_content ol, .mce_content ul {
+	margin-left:20px;
+	list-style:disc outside;
+}
+.mce_content ol {
+	list-style-type: decimal;
+}
+
 .clear{
 	clear:both;
 	}
@@ -209,7 +219,14 @@ ul,p,h1,h2,h3{
 	float:left;
 	padding:10px 0 0 30px;
 	}
-	
+.hdgg h2 {
+	height: 51px;
+	padding-right: 30px;
+	background: url(../Images/index_36.jpg) no-repeat left center;
+	}
+.hdgg h2 a {
+	float: right;
+	}
 .hdgg ul{
 	padding:10px 0 0 10px;
 	}	
@@ -284,9 +301,16 @@ ul,p,h1,h2,h3{
 	background:url(../Images/index_58.jpg) no-repeat;
 	}
 
+.sshs_m_r ul li a {
+	display: block;
+	height: 130px;
+	overflow: hidden;
+	text-align: center;
+	}
 
-
-
+.sshs_m_r ul li a img{
+	width: 199px;
+	}
 
 
 
@@ -364,3 +388,16 @@ ul,p,h1,h2,h3{
 	}
 
 
+.message_box i {
+	font-style: normal;
+	color: #ff3333;
+	display:inline-block;
+	padding: 3px 3px 3px 22px;
+	background: url(../Images/sign_error.png) 3px center no-repeat;
+}
+.message_box b {
+	color: #73cc63;
+	display:inline-block;
+	padding: 3px 3px 3px 22px;
+	background: url(../Images/sign_explain.png) 3px center no-repeat;
+}

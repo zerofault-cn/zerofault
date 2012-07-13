@@ -6,12 +6,17 @@ class BaseAction extends Action{
 		
 		$this->assign('setting', F('System-setting'));
 		$this->assign('flink', F('System-flink'));
+		$this->assign('image', F('System-image'));
 
 		$Article_about = M('Article')->where('category_id=1 and status>0')->order('sort')->select();
 		$this->assign('Article_about', $Article_about);
 
-		$Photo_category = M('Category')->where("status>0 and pid=3")->order('sort')->select();
-		$this->assign('Photo_category', $Photo_category);
+		$Album_category = M('Category')->where("status>0 and pid=4")->order('sort')->select();
+		$this->assign('Album_category', $Album_category);
+
+		$rs = M('Article')->where("category_id=2 and status>1")->order("sort, id desc")->select();
+		$this->assign('top_list', $rs);
+
 	}
 
 	protected function success($msg, $url='', $timeout=2000){

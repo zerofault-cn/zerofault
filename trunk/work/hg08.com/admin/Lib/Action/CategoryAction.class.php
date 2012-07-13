@@ -1,24 +1,21 @@
 <?php
 class CategoryAction extends BaseAction{
-	protected $dao, $topnavi;
+	protected $dao;
 	
 	protected function _initialize() {
 		parent::_initialize();
 		$this->dao = M('Category');
-		$this->topnavi[] = array(
-			'text' => '分类管理'
-			);
 	}
 	Public function _empty() {
 		$type = ACTION_NAME; 
 		$this->index($type); 
 	}
 
-	public function index($type='Hotel'){
-		$this->topnavi[]=array(
-			'text'=> 'Hotel'==$type?'酒店分类':'文章分类',
+	public function index($type='Album'){
+		$topnavi[]=array(
+			'text'=> '作品分类',
 			);
-		$this->assign("topnavi", $this->topnavi);
+		$this->assign("topnavi", $topnavi);
 		$where = array(
 			'type' => $type,
 			'pid' => 0

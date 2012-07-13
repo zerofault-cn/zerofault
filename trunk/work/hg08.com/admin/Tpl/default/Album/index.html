@@ -1,15 +1,17 @@
+	<input type="button" value="在当前分类添加相册" onclick="window.location.href='__URL__/form/category_id/{$category_id}';"/>
 	{$page}
 	<table id="table" class="list" border="1" cellpadding="3" cellspacing="0" width="100%" bordercolor="#999999" style="border-collapse:collapse;">
 	<tr bgcolor="#ededed">
 		<th width="5%">ID</th>
-		<th>标题</th>
-		<notpresent name="_GET['category_id']">
-		<th nowrap>分类</th>
-		</notpresent>
+		<th>相册标题</th>
+		<th>图片张数</th>
 		<th width="10%">查看次数</th>
 		<th width="12%">排序</th>
 		<th width="14%">添加时间</th>
-		<th width="14%">操作</th>
+		<neq name="_GET.status" value="-1">
+		<th nowrap="nowrap">首页显示</th>
+		</neq>
+		<th width="10%">操作</th>
 	</tr>
 	<iterate name="list" id="item">
 	<tr bgcolor="<eq name='mod' value='1'>#FFFFE1</eq>" class="<eq name='item.status' value='0'>gray</eq>" id="{$item['id']}">
@@ -17,12 +19,19 @@
 		<td class="text_editable" name="name">
 			{$item['name']}
 		</td>
-		<notpresent name="_GET['category_id']">
-		<td><a href="__URL__/index/category_id/{$item['category_id']}" title="查看本类下所有文章">{$item.Category.name}</a>
-		</notpresent>
+		<td><a href="__URL__/photo/album_id/{$item.id}">{$item.Photo|count}</a></td>
 		<td>{$item['view']}</td>
 		<td class="text_editable" name="sort">{$item['sort']}</td>
 		<td nowrap="nowrap">{$item['create_time']|substr=2,14}</td>
+		<gt name="item.status" value="-1">
+		<td>
+			<if condition="$item.status eq 2">
+			<a href="__URL__/update/id/{$item['id']}/f/status/v/1" target="_iframe" title="取消首页显示">是</a>
+			<else />
+			<a href="__URL__/update/id/{$item['id']}/f/status/v/2" target="_iframe" title="推荐至首页显示">否</a>
+			</if>
+		</td>
+		</gt>
 		<td>
 			<if condition="$item['status'] neq '-1'">
 			<a href="__URL__/form/id/{$item['id']}" title="修改"><img src="../Public/Images/form_edit.gif" alt="edit" /></a>

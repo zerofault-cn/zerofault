@@ -15,7 +15,7 @@ class BaseAction extends Action {
 
 		$this->category_array = array(
 			'Article' => M('Category')->where("type='Article' and status>0 and pid=0")->order('sort')->getField('id,name'),
-			'Album' => M('Category')->where("type='Album' and status>0 and pid=0")->order('sort')->getField('id,name')
+			'Album' => M('Category')->where("type='Album' and status>0 and pid!=0")->order('sort')->getField('id,name')
 			);
 		$Article_Category = $this->category_array['Article'];
 	//	$this->assign("Article_Category", $Article_Category);
@@ -134,15 +134,22 @@ class BaseAction extends Action {
 	* 只能在_iframe中执行，执行后在父窗口提示结果
 	*/
 	protected function _update(){
-		$id=$_REQUEST['id'];
-		$field=$_REQUEST['f'];
-		$value=$_REQUEST['v'];
+		if (!empty($_REQUEST['t'])) {
+			$this->dao = M(trim($_REQUEST['t']));
+		}
+		if (false !== strpos($_REQUEST['f'], '_')) {
+			list($table, $field) = explode('_', trim($_REQUEST['f']));
+			$this->dao = M(ucfirst($table));
+			$_REQUEST['f'] = $field;
+		}
+
+		$id = intval($_REQUEST['id']);
+		$field = $_REQUEST['f'];
+		$value = $_REQUEST['v'];
 		//$value = iconv("GB2312", "UTF-8", $value);
-		$rs = $this->dao->where('id='.$id)->setField($field,$value);
-		if(false !== $rs)
+		if(false !== $this->dao->where('id='.$id)->setField($field, $value))
 		{
-		//	Log::Write($this->dao->getLastSql(), INFO);
-			self::_success('操作成功！','',1200);
+			self::_success('操作成功！');
 		}
 		else
 		{
@@ -158,7 +165,7 @@ class BaseAction extends Action {
 		$id=$_REQUEST['id'];
 		if($this->dao->find($id) && $this->dao->delete())
 		{
-			self::_success('删除成功！','',1200);
+			self::_success('删除成功！');
 		}
 		else
 		{

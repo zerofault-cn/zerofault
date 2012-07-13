@@ -1,0 +1,28 @@
+<img src="../Public/Images/ly_03.jpg">
+
+<foreach name="list" item="item">
+<div class="ly_mk">
+	<div class="nc">{$item.name} <span>{$item.addtime|substr=0,10}</span></div>
+	{$item.content|nl2br}
+</div>
+</foreach>
+<div>{$page}</div>
+<div class="ly_bd">
+	<form method="post" target="_iframe">
+	<table width="70%" height="246">
+	<tr>
+		<td width="8%">昵称：</td>
+		<td width="92%"><input type="text" name="name" class="textbox" /></td>
+	</tr>
+	<tr>
+		<td colspan="2"><textarea name="content" cols="45" rows="5" class="textbox1"></textarea></td>
+	</tr>
+	<tr>
+		<td colspan="2" id="message_box" class="message_box"></td>
+	</tr>
+	<tr>
+		<td colspan="2" align="center"><input type="image" src="../Public/Images/yd_03.jpg"/></td>
+	</tr>
+	</table>
+	</form>
+</div>

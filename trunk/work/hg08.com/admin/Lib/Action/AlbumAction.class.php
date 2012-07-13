@@ -7,12 +7,35 @@ class AlbumAction extends BaseAction{
 		$this->dao = D('Album');
 	}
 
-	public function index(){
-		$topnavi[]=array(
-			'text'=> '作品管理',
-			'url' => __APP__.'/Album'
-			);
+	public function category() {
+		$this->dao = D('Category');
+		if (!empty($_POST)) {
+			$name = trim($_REQUEST['name']);
+			empty($name) && self::_error('分类名称必须填写！');
+			$sort = intval($_REQUEST['sort']);
+			$this->dao->pid = 4;
+			$this->dao->type = 'Album';
+			$this->dao->name = $name;
+			$this->dao->sort = $sort;
+			if ($this->dao->add()) {
+				self::_success('添加成功！');
+			}
+			else {
+				self::_error('添加失败！'.(C('APP_DEBUG')?$this->dao->getLastSql():''));
+			}
+		}
 
+		$topnavi[]=array(
+			'text'=> '作品分类',
+			);
+		$rs = $this->dao->relation(true)->where('pid=4')->order('sort')->select();
+		$this->assign('list', $rs);
+
+		$this->assign("topnavi",$topnavi);
+		$this->assign('content', ACTION_NAME);
+		$this->display('Layout:default');
+	}
+	public function index(){
 		$order = 'sort';
 		$where = array();
 		if(!empty($_REQUEST['category_id'])) {
@@ -27,6 +50,7 @@ class AlbumAction extends BaseAction{
 			$topnavi[]=array(
 				'text'=> '作品列表：'.M('Category')->where("id=".$_REQUEST['category_id'])->getField('name')
 				);
+			$this->assign('category_id', $_REQUEST['category_id']);
 		}
 		else {
 			$topnavi[]=array(
@@ -38,24 +62,25 @@ class AlbumAction extends BaseAction{
 			$where['status'] = $_REQUEST['status'];
 			$order = 'id desc';
 		}
-		$rs = $this->dao->relation(true)->where($where)->order($order)->select();
-
+		$count = $this->dao->where($where)->count();
+		import("@.Paginator");
+		$limit = 20;
+		$p = new Paginator($count, $limit);
+		$rs = $this->dao->relation(true)->where($where)->order($order)->limit($p->offset.','.$p->limit)->select();
 		$this->assign('list', $rs);
 
 		$this->assign("topnavi",$topnavi);
 		$this->assign('content', ACTION_NAME);
 		$this->display('Layout:default');
 	}
+	public function photo() {
+		R('Photo', 'index');
+	}
 	public function form() {
-		$topnavi[]=array(
-			'text'=> '作品管理',
-			'url' => __APP__.'/Album'
-			);
-
 		$id = empty($_REQUEST['id']) ? 0 : intval($_REQUEST['id']);
 		if ($id > 0) {
 			$topnavi[]=array(
-				'text'=> '修改内容',
+				'text'=> '修改相册',
 				);
 			$info = $this->dao->relation(true)->find($id);
 			$pid = M('Category')->where("id=".$info['category_id'])->getField('pid');
@@ -65,16 +90,15 @@ class AlbumAction extends BaseAction{
 		}
 		else {
 			$topnavi[]=array(
-				'text'=> '添加内容',
+				'text'=> '添加相册',
 				);
 			$info = array(
 				'id' => 0,
 				'category_id' => 0,
+				'sort' => 100,
 				'Photo' => array()
 				);
 			!empty($_REQUEST['category_id']) && ($info['category_id'] = $_REQUEST['category_id']);
-			$max_sort = $this->dao->getField("max(sort)");
-			$info['sort'] = $max_sort+2;
 		}
 		$info['category_opts'] = self::genOptions($this->category_array['Album'], $info['category_id']);
 		$this->assign("info", $info);
@@ -130,7 +154,7 @@ class AlbumAction extends BaseAction{
 						if (!move_uploaded_file($_FILES['_photo_file']['tmp_name'][$i], $src)) {
 							self::_error('上传图片出错！');
 						}
-						if (!$image->thumb($src, $thumb, '', 170, 170)) {
+						if (!$image->thumb($src, $thumb, '', 200, 200)) {
 							self::_error('生成缩略图出错！');
 						}
 						$data['name'] = $_REQUEST['_photo_name'][$i];
@@ -155,7 +179,7 @@ class AlbumAction extends BaseAction{
 						if (!move_uploaded_file($_FILES['photo_file']['tmp_name'][$i], $src)) {
 							self::_error('上传图片出错！');
 						}
-						if (!$image->thumb($src, $thumb, '', 170, 170)) {
+						if (!$image->thumb($src, $thumb, '', 200, 200)) {
 							self::_error('生成缩略图出错！');
 						}
 						$data['name'] = $_REQUEST['photo_name'][$i];
@@ -206,7 +230,7 @@ class AlbumAction extends BaseAction{
 						if (!move_uploaded_file($_FILES['photo_file']['tmp_name'][$i], $src)) {
 							self::_error('上传图片出错！');
 						}
-						if (!$image->thumb($src, $thumb, '', 170, 170)) {
+						if (!$image->thumb($src, $thumb, '', 200, 200)) {
 							self::_error('生成缩略图出错！');
 						}
 						$data['name'] = $_REQUEST['photo_name'][$i];
@@ -225,18 +249,23 @@ class AlbumAction extends BaseAction{
 			}
 		}
 	}
-	/**
-	*
-	* 调用基类方法
-	*/
-	public function update(){
+	public function update() {
 		parent::_update();
 	}
-	/**
-	*
-	* 调用基类方法
-	*/
-	public function delete(){
+
+	public function delete() {
+		$id = intval($_REQUEST['id']);
+		if (M('Photo')->where('album_id='.$id)->count() > 0) {
+			self::_error('该作品相册下还有图片文件，不能删除！');
+		}
+		parent::_delete();
+	}
+	public function delete_category() {
+		$this->dao = M('Category');
+		$id = intval($_REQUEST['id']);
+		if (M('Album')->where('category_id='.$id)->count() > 0) {
+			self::_error('该分类下还有作品，不能删除！');
+		}
 		parent::_delete();
 	}
 }

@@ -6,15 +6,15 @@
 				<foreach name="item" item="sub" key="subname">
 					<assign name="curr" value="" />
 					<eq name='MODULE_NAME' value='$sub.0'>
-						<empty name="sub.2">
-							<eq name="ACTION_NAME" value="$sub.1">
+						<eq name="ACTION_NAME" value="$sub.1">
+							<empty name="sub.2">
 								<assign name="curr" value="curr"/>
-							</eq>
-						<else />
-							<if condition="$_GET[$sub[2][0]] eq $sub[2][1]">
-								<assign name="curr" value="curr" />
-							</if>
-						</empty>
+							<else />
+								<if condition="$_GET[$sub[2][0]] eq $sub[2][1]">
+									<assign name="curr" value="curr" />
+								</if>
+							</empty>
+						</eq>
 					</eq>
 				<li class="{$curr}"><a href="__APP__/{$sub.0}/{$sub.1}<notempty name='sub.2'>/{$sub.2.0}/{$sub.2.1}</notempty>">{$subname}</a></li>
 				</foreach>

@@ -1,0 +1,55 @@
+<style>
+dl {
+	position: relative;
+	padding: 15px;
+	margin: 15px;
+	border: 1px solid #b4b4b4;
+}
+input.remove {
+	position: absolute;
+	right: 0;
+	top: 0;
+}
+</style>
+<form method="post" enctype="multipart/form-data" target="_iframe" autocomplete="off">
+<volist name="list" id="item">
+<h3>{$item.name}：</h3>
+<input type="hidden" name="{$key}[name]" value="{$item.name}"/>
+	<notempty name="item.list">
+		<foreach name="item.list" item="item2" key="j">
+<dl>
+	<dt>预览：<img src="__APP__/../{$item2.img}" width="600"/></dt>
+	<dd><input type="hidden" name="{$key}[img0][]" value="{$item2.img}" />
+		更新图片：<input type="file" name="{$key}[img][]" size="60"/><br />
+		<if condition="isset($item2['title'])">
+		更新标题：<input type="text" name="{$key}[title][]" value="{$item2.title}" size="60"/><br />
+		<elseif condition="isset($item2['url'])"/>
+		更新链接：<input type="text" name="{$key}[url][]" value="{$item2.url}" size="60"/><br />
+		</if>
+		<input type="button" class="remove" value="移除" onclick="$(this).parent().parent().remove();"/>
+	</dd>
+</dl>
+		</foreach>
+<input type="button" value="增加位置" onclick="addItem_{$key}(this);"/>
+<script type="text/javascript">
+function addItem_{$key}(obj) {
+	$(obj).before('<dl><dt></dt><dd>上传图片：<input type="file" name="{$key}[img][]" size="60"/><br />图片标题：<input type="text" name="{$key}[title][]" value="" size="60"/><br /><input type="hidden" name="{$key}[img0][]" value="" /><input type="button" class="remove" value="移除" onclick="$(this).parent().parent().remove();"/></dd></dl>');
+}
+</script>
+	<else />
+<dl>
+	<dt>预览：<img src="__APP__/../{$item.img}" <neq name="key" value="index_wedding">width="600"</neq>/></dt>
+	<dd><input type="hidden" name="{$key}[img0]" value="{$item.img}" />
+		更新图片：<input type="file" name="{$key}[img]" size="60"/><br />
+		<if condition="!empty($item['url'])">
+		更新链接：<input type="text" name="{$key}[url]" value="{$item.url}" size="60"/><br />
+		</if>
+	</dd>
+</dl>
+	</notempty>
+<hr />
+<br />
+</volist>
+<center><input type="submit" value="提交" name="submit" /></center>
+<br />
+</form>

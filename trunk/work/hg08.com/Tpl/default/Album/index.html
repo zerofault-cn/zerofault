@@ -1,0 +1,15 @@
+<div class="case_img">
+	<ul>
+		<foreach name="list" item="item">
+		<li>
+			<div class="item-wrap">
+				<div class="item">
+					<a href="__URL__/album/id/{$item.id}" target="_blank" title="{$item.name}"><img src="__APP__/../html/Attach/Album/{$item.id}.jpg"/><br />{$item.name}</a>
+				</div>
+			</div>
+		</li>
+		</foreach>
+	</ul>
+	<div class="clear"></div>
+</div>
+<div>{$page}</div>

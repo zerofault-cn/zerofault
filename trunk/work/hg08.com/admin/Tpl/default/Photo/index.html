@@ -1,0 +1,46 @@
+	{$page}
+	<table id="table" class="list" border="1" cellpadding="3" cellspacing="0" width="100%" bordercolor="#999999" style="border-collapse:collapse;">
+	<tr bgcolor="#ededed">
+		<th width="5%">ID</th>
+		<th>图片名称</th>
+		<th>所属分类</th>
+		<th>缩略图预览</th>
+		<th>图片参数</th>
+		<th width="60">排序</th>
+		<th width="14%">添加时间</th>
+		<empty name="_GET.album_id">
+		<th nowrap="nowrap">首页展示</th>
+		</empty>
+		<th width="10%">操作</th>
+	</tr>
+	<iterate name="list" id="item">
+	<tr bgcolor="<eq name='mod' value='1'>#FFFFE1</eq>" class="<eq name='item.status' value='0'>gray</eq>" id="{$item['id']}">
+		<td>{$item['id']}</td>
+		<td class="text_editable" name="Photo_name">{$item['name']}&nbsp;</td>
+		<td>{$item.Category.name}<notempty name="item.Album">-&gt;{$item.Album.name}</notempty></td>
+		<td><a href="__APP__/../{$item.src}" title="点击查看原图" target="_blank"><img src="__APP__/../{$item.thumb}" height="60"/></a></td>
+		<td nowrap="nowrap">
+			类型：{$item.type}<br />
+			分辨率：{$item.width}*{$item.height}像素<br />
+			文件大小：{$item.size|number_format}字节
+		</td>
+		<td class="text_editable" name="Photo_sort">{$item['sort']}</td>
+		<td nowrap="nowrap">{$item['addtime']|substr=2,14}</td>
+		<empty name="_GET.album_id">
+		<td>
+			<if condition="$item.status eq 2">
+			<a href="__URL__/update/id/{$item['id']}/f/status/v/1" target="_iframe" title="取消首页展示">是</a>
+			<else />
+			<a href="__URL__/update/id/{$item['id']}/f/status/v/2" target="_iframe" title="推荐至首页展示">否</a>
+			</if>
+		</td>
+		</empty>
+		<td>
+			<a href="__APP__/Photo/form/id/{$item['id']}" title="修改"><img src="../Public/Images/form_edit.gif" alt="edit" /></a>
+			<a href="__APP__/Photo/update/id/{$item['id']}/f/status/v/{:intval(!$item['status'])}/" target="_iframe" title="<if condition='$item.status eq 0'>设为显示<else />设为隐藏</if>"><if condition="$item['status'] eq 0"><img src="../Public/Images/add.gif" alt="显示" /><else /><img src="../Public/Images/delete.gif" alt="隐藏" /></if></a>
+			<a href="javascript:void(0);" onclick="myConfirm('删除不可恢复，确定删除？', '__APP__/Photo/delete/id/{$item['id']}');" target="_iframe" title="彻底删除"><img src="../Public/Images/cross.gif" alt="彻底删除"/></a>
+		</td>
+	</tr>
+	</iterate>
+	</table>
+	{$page}

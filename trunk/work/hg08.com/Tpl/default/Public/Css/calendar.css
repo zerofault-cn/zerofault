@@ -1,0 +1,25 @@
+/* 日期输入框
+------------------------------ */
+input.html_date{background:#fff url(../Images/calendar_day.png) no-repeat right center;cursor:pointer;}
+
+/* 日期选择器
+------------------------------ */
+.html_calendar{display:none;position:absolute;width:160px;font:12px Arial;border:1px solid #A0C63A;border-top:none;box-shadow:2px 2px 5px #083e66;z-index:101;}
+.html_calendar h5{position:relative;height:20px;padding:4px 6px;margin:0;background:#88b6d8;color:#fff;font:normal 12px/20px "\5B8B\4F53";text-align:center;}
+.html_calendar h5 select{vertical-align:baseline;font:12px/18px Tahoma;}
+.html_calendar h5 span{padding:0 6px;}
+.html_calendar table{position:relative;border-collapse:collapse;table-layout:fixed;empty-cells:show;font-family:Arial;text-align:center;}
+.html_calendar table .sat{color:#06f}
+.html_calendar table .sun{color:#e00;}
+.html_calendar table .now{background:#d9e9fa;}
+.html_calendar table .selected{background:#090;color:#fff;}
+.html_calendar thead th{width:22px;height:24px;background:#fff;line-height:24px;text-align:center;}
+.html_calendar tfoot td{height:24px;border-top:1px solid #ccc;background:#eee;color:#999;font-family:"\5B8B\4F53";line-height:24px;}
+.html_calendar tfoot a{cursor:pointer;}
+.html_calendar tfoot .pre,
+.html_calendar tfoot .next{font-family:Tahoma;font-size:11px;}
+.html_calendar tfoot .clear{}
+.html_calendar tfoot a:hover{color:#333;text-decoration:none;}
+.html_calendar tbody td{position:static;width:22px;height:20px;padding:0;background:#eaf4fe;line-height:20px;}
+.html_calendar tbody td.num:hover{background:#88b6d8;color:#fff;text-decoration:none;cursor:pointer;}
+#calendar_block{display:none;position:absolute;top:0;left:0;background:#fff;filter:alpha(opacity=0);opacity:0;z-index:100;}
