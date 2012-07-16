@@ -42,7 +42,7 @@
 	<ul>
 		<foreach name="list" item="item">
 		<li>
-			<div class="img"><a href="__URL__/{$alias}/id/{$item.id}" target="_blank"><if condition="is_file('./html/Attach/Hotel/'.$item['id'].'.jpg') eq true"><img src="__APP__/../html/Attach/Hotel/{$item.id}.jpg" width="228"/><else /><img src="../Public/Images/yhjd_10.jpg"/></if></a></div>
+			<div class="img"><a href="__URL__/{$alias}/id/{$item.id}" target="_blank"><if condition="is_file('html/Attach/Hotel/'.$item['id'].'.jpg') eq true"><img src="__APP__/../html/Attach/Hotel/{$item.id}.jpg" width="228"/><else /><img src="../Public/Images/yhjd_10.jpg"/></if></a></div>
 			<div class="yhjd_rq">Time {$item.addtime|substr=0,10}</div>
 			<div>{$item.name}</div>
 		</li>
