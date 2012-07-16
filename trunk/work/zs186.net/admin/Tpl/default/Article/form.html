@@ -10,13 +10,6 @@
 	<td><input type="text" name="title" size="20" maxlength="100" value="{$info.title}" /></td>
 </tr>
 <tr>
-	<td>缩略图：</td>
-	<td><if condition="is_file('./html/Attach/Article/'.$info['id'].'.jpg') eq true">
-		<img src="__APP__/../html/Attach/Article/{$info['id']}.jpg"/>(上传新文件将覆盖原文件)<br />
-		</if>
-		<input type="file" name="file" size="30" />(JPG格式，尺寸：140*106)
-	</td>
-<tr>
 	<td>作者：</td>
 	<td><input type="text" name="author" size="20" maxlength="100" value="{$info.author}" /></td>
 </tr>

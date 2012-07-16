@@ -12,8 +12,9 @@ class ArticleAction extends BaseAction {
 		$this->assign('alias', $alias);
 		if (empty($id)) {
 			$category = M('Category')->where("alias='".$alias."'")->find();
-			$sub_category_count = M('Category')->where("pid=".$category['id']." and status>0")->count();
-			if (!empty($sub_category_count) && $sub_category_count>0) {
+			$sub_category = M('Category')->where("pid=".$category['id']." and status>0")->order('sort')->find();
+			if (!empty($sub_category)) {
+				$_GET['id'] = $sub_category['id'];
 				$this->index($category['id']);
 				exit;
 			}
