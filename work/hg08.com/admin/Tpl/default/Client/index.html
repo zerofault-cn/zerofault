@@ -1,0 +1,47 @@
+<load file="../Public/Css/thickbox.css" />
+	<neq name="ACTION_NAME" value="archived">
+	<table width="100%">
+	<tr>
+		<td><form style="text-align:left">客户姓名 <input type="text" name="s_name" value="{$s_name}" /> <input type="submit" value="搜索" /></form></td>
+		<td align="right">
+			<input type="button" value="添加客户" class="thickbox" alt="__URL__/form/?height=175&width=290&modal=true" />
+		</td>
+	</tr>
+	</table>
+	</neq>
+
+	{$page}
+	<table id="table" class="list" border="1" cellpadding="3" cellspacing="0" width="100%" bordercolor="#999999" style="border-collapse:collapse;">
+	<tr bgcolor="#ededed">
+		<th width="5%">ID</th>
+		<th width="120">客户姓名</th>
+		<th width="120">电话</th>
+		<th>当前进度</th>
+		<th width="110">添加时间</th>
+		<th width="100">操作</th>
+	</tr>
+	<iterate name="list" id="item">
+	<tr bgcolor="<eq name='mod' value='1'>#FFFFE1</eq>" class="<eq name='item.status' value='0'>gray</eq>" id="{$item['id']}">
+		<td>{$item['id']}</td>
+		<td class="text_editable" name="name">{$item['name']}</td>
+		<td class="text_editable" name="phone">{$item['phone']}</td>
+		<td >
+			{$item.Project.name}
+			<eq name="item.status" value="-1">
+			(已完成)
+			<else />
+			<a href="javascript:void(0);" onclick="myConfirm('确定转到下一步？', '__URL__/next/id/{$item['id']}');" target="_iframe" title="转到下一步"><img src="../Public/Images/193.png" alt="next" /></a>
+			</eq>
+		</td>
+		<td nowrap="nowrap">{$item['create_time']|substr=2,14}</td>
+		<td>
+			<img class="password" id="{$item['id']}" src="../Public/Images/key_edit.gif" alt="重设密码" title="重设密码" align="absmiddle" />
+			<a href="__URL__/update/t/Designer/id/{$item['id']}/f/status/v/{:intval(!$item['status'])}/" target="_iframe" title="<if condition='$item.status eq 0'>设为显示<else />设为隐藏</if>"><if condition="$item['status'] eq 0"><img src="../Public/Images/add.gif" alt="显示" /><else /><img src="../Public/Images/delete.gif" alt="隐藏" /></if></a>
+			<a href="javascript:void(0);" onclick="myConfirm('删除不可恢复，确定删除？', '__URL__/delete/id/{$item['id']}');" target="_iframe" title="彻底删除"><img src="../Public/Images/cross.gif" alt="彻底删除"/></a>
+		</td>
+	</tr>
+	</iterate>
+	</table>
+	{$page}
+<load file="../Public/Js/password_func.js" />
+<load file="../Public/Js/thickbox-compressed.js" />

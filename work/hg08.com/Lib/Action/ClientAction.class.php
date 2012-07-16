@@ -4,6 +4,7 @@ class ClientAction extends BaseAction {
 
 	public function _initialize() {
 		parent::_initialize();
+		$this->dao = D('Client');
 	}
 	
 	public function index() {
@@ -111,12 +112,48 @@ class ClientAction extends BaseAction {
 	}
 
 	public function reminder() {
+		$this->assign('alias', 'reminder');
+		if (!empty($_POST)) {
+			//处理登录
+			$name = trim($_REQUEST['name']);
+			empty($name) && self::_error('请输入您的姓名！');
+			$password = trim($_REQUEST['password']);
+			empty($password) && self::_error('请输入您的密码！');
+			$where = array(
+				'name' => $name,
+				'password' => md5($password)
+				);
+			$info = $this->dao->relation(true)->where($where)->find();
+			if(empty($info)) {
+				self::_error('验证失败，请检查您的姓名和密码是否输入有误！');
+			}
+			else{
+				if ($info['status'] == 0) {
+					self::_error('此账号已被禁用！');
+				}
+				$_SESSION['client_id'] = $info['id'];
+				$_SESSION['client_name'] = $info['name'];
+				self::_success('登录成功，正在提取提示信息');
+			}
+		}
 		if (empty($_SESSION['client_id'])) {
 			//显示登录
+			$this->assign('content', 'login');
 		}
 		else {
 			//显示提示
+			if (empty($info)) {
+				$info = $this->dao->relation(true)->find($_SESSION['client_id']);
+			}
+			$this->assign('info', $info);
+			$this->assign('content', 'reminder');
 		}
+		$this->display('Layout:reminder');
 	}
+	public function logout(){
+		Session::clear();
+		self::_success('退出成功！');
+	}
+
 }
 ?>

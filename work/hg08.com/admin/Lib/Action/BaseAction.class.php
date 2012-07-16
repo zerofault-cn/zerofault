@@ -146,6 +146,7 @@ class BaseAction extends Action {
 		$id = intval($_REQUEST['id']);
 		$field = $_REQUEST['f'];
 		$value = $_REQUEST['v'];
+		'password'==$field && ($value = md5($value));
 		//$value = iconv("GB2312", "UTF-8", $value);
 		if(false !== $this->dao->where('id='.$id)->setField($field, $value))
 		{

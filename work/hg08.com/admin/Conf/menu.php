@@ -27,7 +27,8 @@ $menu['顾客特照'] = array(
 
 $menu['客户管理'] = array(
 	'客户列表' => array('Client', 'index'),
-	'提示项目' => array('Client', 'project'),
+	'已归档' => array('Client', 'archived'),
+	'项目步骤' => array('Client', 'project'),
 	);
 
 $menu['预约管理'] = array(
