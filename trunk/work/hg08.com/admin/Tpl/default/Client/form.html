@@ -1,0 +1,29 @@
+<fieldset style="width:280px">
+	<legend>添加新客户</legend>
+	<form action="__URL__/submit" method="post" target="_iframe"  autocomplete="off">
+	<table>
+	<tr>
+		<td><label for="client_name">姓名：</label></td>
+		<td><input type="text" name="name" id="client_name" size="10" /></td>
+	</tr>
+	<tr>
+		<td><label for="client_phone">电话：</label></td>
+		<td><input type="text" name="phone" id="client_phone" size="10" /></td>
+	</tr>
+	<tr>
+		<td><label for="client_password">密码：</label></td>
+		<td><input type="password" name="password" id="client_password" size="10" /></td>
+	</tr>
+	<tr>
+		<td><label for="client_project">当前进度：</label></td>
+		<td><select name="project_id" id="client_project">{$project_opts}</select>
+	</tr>
+	<tr>
+		<td></td>
+		<td><input type="submit" value="提交" name="submit" />
+			<input type="button" value="取消" onclick="tb_remove();" />
+		</td>
+	</tr>
+	</table>
+	</form>
+</fieldset>

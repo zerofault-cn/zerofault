@@ -1,23 +1,4 @@
-﻿# SQL-Front 5.1  (Build 4.16)
-
-/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE */;
-/*!40101 SET SQL_MODE='NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */;
-/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES */;
-/*!40103 SET SQL_NOTES='ON' */;
-
-
-# Host: localhost    Database: hg08_com
-# ------------------------------------------------------
-# Server version 5.0.22-community-nt-log
-
-DROP DATABASE IF EXISTS `hg08_com`;
-CREATE DATABASE `hg08_com` /*!40100 DEFAULT CHARACTER SET utf8 */;
-USE `hg08_com`;
-
-#
-# Source for table hg_admin
-#
-
+﻿
 DROP TABLE IF EXISTS `hg_admin`;
 CREATE TABLE `hg_admin` (
   `id` int(10) unsigned NOT NULL auto_increment,
@@ -31,16 +12,8 @@ CREATE TABLE `hg_admin` (
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='后台管理员';
 
-#
-# Dumping data for table hg_admin
-#
 
 INSERT INTO `hg_admin` VALUES (1,'admin','32bb79e5a88829bfd6b94085067ace49','超级管理员','','0000-00-00 00:00:00','2012-07-10 14:09:21',1);
-INSERT INTO `hg_admin` VALUES (2,'test','e10adc3949ba59abbe56e057f20f883e','TEST','','2012-07-06 10:36:35','2012-07-06 11:23:30',1);
-
-#
-# Source for table hg_admin_role
-#
 
 DROP TABLE IF EXISTS `hg_admin_role`;
 CREATE TABLE `hg_admin_role` (
@@ -48,16 +21,6 @@ CREATE TABLE `hg_admin_role` (
   `role_id` mediumint(9) unsigned NOT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 ROW_FORMAT=FIXED;
 
-#
-# Dumping data for table hg_admin_role
-#
-
-INSERT INTO `hg_admin_role` VALUES (2,1);
-INSERT INTO `hg_admin_role` VALUES (2,2);
-
-#
-# Source for table hg_album
-#
 
 DROP TABLE IF EXISTS `hg_album`;
 CREATE TABLE `hg_album` (
@@ -72,20 +35,6 @@ CREATE TABLE `hg_album` (
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
-#
-# Dumping data for table hg_album
-#
-
-INSERT INTO `hg_album` VALUES (1,5,'热门外景测试',2,'2012-07-10 15:30:45','2012-07-11 09:25:29',23,2);
-INSERT INTO `hg_album` VALUES (2,5,'adfa',4,'2012-07-10 16:00:58','2012-07-11 10:25:42',5,1);
-INSERT INTO `hg_album` VALUES (3,5,'测试测试测试测试测试',100,'2012-07-11 09:32:35','2012-07-11 09:32:35',0,1);
-INSERT INTO `hg_album` VALUES (5,5,'shishang',100,'2012-07-11 09:38:27','2012-07-11 09:38:27',1,2);
-INSERT INTO `hg_album` VALUES (6,5,'测试测试测试',100,'2012-07-11 09:39:33','2012-07-11 16:59:59',0,1);
-INSERT INTO `hg_album` VALUES (7,4,'特照1',100,'2012-07-11 10:28:35','2012-07-11 10:28:35',0,1);
-
-#
-# Source for table hg_article
-#
 
 DROP TABLE IF EXISTS `hg_article`;
 CREATE TABLE `hg_article` (
@@ -104,9 +53,6 @@ CREATE TABLE `hg_article` (
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='文章';
 
-#
-# Dumping data for table hg_article
-#
 
 INSERT INTO `hg_article` VALUES (1,1,'公司文化','','','公司文化摘要','公司文化正文',2,'2012-07-09 16:25:22','2012-07-12 11:42:36',46,1);
 INSERT INTO `hg_article` VALUES (2,1,'公司全景','','','公司全景摘要','公司全景正文',4,'2012-07-09 16:25:41','2012-07-12 11:42:52',10,1);
@@ -120,9 +66,6 @@ INSERT INTO `hg_article` VALUES (9,2,'关于顾客预告片的发布说明！6',
 INSERT INTO `hg_article` VALUES (10,2,'关于顾客预告片的发布说明！7','','','','',100,'2012-07-10 17:31:23','2012-07-10 17:31:23',2,1);
 INSERT INTO `hg_article` VALUES (11,2,'关于顾客预告片的发布说明！8','','','','',100,'2012-07-10 17:31:41','2012-07-10 17:31:41',1,1);
 
-#
-# Source for table hg_category
-#
 
 DROP TABLE IF EXISTS `hg_category`;
 CREATE TABLE `hg_category` (
@@ -136,9 +79,6 @@ CREATE TABLE `hg_category` (
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='类别';
 
-#
-# Dumping data for table hg_category
-#
 
 INSERT INTO `hg_category` VALUES (1,0,'Article','关于皇宫','about',0,1);
 INSERT INTO `hg_category` VALUES (2,0,'Article','最新活动','news',0,1);
@@ -146,11 +86,7 @@ INSERT INTO `hg_category` VALUES (3,0,'Photo','顾客特照','',0,1);
 INSERT INTO `hg_category` VALUES (4,0,'Album','摄影作品','works',0,1);
 INSERT INTO `hg_category` VALUES (5,4,'Album','时尚婚纱','',0,1);
 INSERT INTO `hg_category` VALUES (6,4,'Album','个人写真','',0,1);
-INSERT INTO `hg_category` VALUES (9,4,'Album','test','',0,1);
 
-#
-# Source for table hg_client
-#
 
 DROP TABLE IF EXISTS `hg_client`;
 CREATE TABLE `hg_client` (
@@ -158,18 +94,13 @@ CREATE TABLE `hg_client` (
   `name` varchar(255) NOT NULL default '',
   `password` varchar(255) NOT NULL default '',
   `phone` varchar(255) NOT NULL default '',
+  `project_id` smallint(5) unsigned NOT NULL default '0',
+  `create_time` datetime NOT NULL default '0000-00-00 00:00:00',
+  `modify_time` datetime NOT NULL default '0000-00-00 00:00:00',
   `status` tinyint(3) NOT NULL default '0',
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
-#
-# Dumping data for table hg_client
-#
-
-
-#
-# Source for table hg_feedback
-#
 
 DROP TABLE IF EXISTS `hg_feedback`;
 CREATE TABLE `hg_feedback` (
@@ -184,15 +115,6 @@ CREATE TABLE `hg_feedback` (
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='留言咨询';
 
-#
-# Dumping data for table hg_feedback
-#
-
-INSERT INTO `hg_feedback` VALUES (1,'test','奥德赛的方式','','','2012-07-13 17:07:57','0000-00-00 00:00:00',0);
-
-#
-# Source for table hg_node
-#
 
 DROP TABLE IF EXISTS `hg_node`;
 CREATE TABLE `hg_node` (
@@ -206,10 +128,6 @@ CREATE TABLE `hg_node` (
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC;
 
-#
-# Dumping data for table hg_node
-#
-
 INSERT INTO `hg_node` VALUES (1,0,'admin','后台管理','后台管理根节点',1,0);
 INSERT INTO `hg_node` VALUES (6,1,'System','网站系统设置','',2,0);
 INSERT INTO `hg_node` VALUES (7,6,'setting','网站参数设置','',3,0);
@@ -218,9 +136,6 @@ INSERT INTO `hg_node` VALUES (9,1,'Index','默认首页','',2,0);
 INSERT INTO `hg_node` VALUES (11,9,'index','默认首页','',3,0);
 INSERT INTO `hg_node` VALUES (12,1,'Feedback','留言管理','',2,0);
 
-#
-# Source for table hg_photo
-#
 
 DROP TABLE IF EXISTS `hg_photo`;
 CREATE TABLE `hg_photo` (
@@ -240,31 +155,21 @@ CREATE TABLE `hg_photo` (
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
-#
-# Dumping data for table hg_photo
-#
 
-INSERT INTO `hg_photo` VALUES (1,5,2,'1',3,'html/Attach/Photo_thumb/20120710164021.450039.jpg','html/Attach/Photo_src/20120710164021.450039.jpg',0,0,'',0,'0000-00-00 00:00:00',0);
-INSERT INTO `hg_photo` VALUES (2,5,2,'2',2,'html/Attach/Photo_thumb/20120710164021.137115.jpg','html/Attach/Photo_src/20120710164021.137115.jpg',0,0,'',0,'0000-00-00 00:00:00',0);
-INSERT INTO `hg_photo` VALUES (3,5,2,'3 2',1,'html/Attach/Photo_thumb/20120710164021.842546.jpg','html/Attach/Photo_src/20120710164021.842546.jpg',0,0,'',0,'0000-00-00 00:00:00',-1);
-INSERT INTO `hg_photo` VALUES (4,5,1,'',1,'html/Attach/Photo_thumb/20120711092530.334108.gif','html/Attach/Photo_src/20120711092530.334108.gif',0,0,'',0,'0000-00-00 00:00:00',1);
-INSERT INTO `hg_photo` VALUES (5,5,1,'',0,'html/Attach/Photo_thumb/20120711163843.329777.jpg','html/Attach/Photo_src/20120711163843.329777.jpg',600,300,'jpeg',41935,'0000-00-00 00:00:00',1);
-INSERT INTO `hg_photo` VALUES (6,5,3,'',0,'html/Attach/Photo_thumb/20120711093235.629449.jpg','html/Attach/Photo_src/20120711093235.629449.jpg',0,0,'',0,'0000-00-00 00:00:00',0);
-INSERT INTO `hg_photo` VALUES (7,5,4,'',0,'html/Attach/Photo_thumb/20120711093804.138544.gif','html/Attach/Photo_src/20120711093804.138544.gif',0,0,'',0,'0000-00-00 00:00:00',0);
-INSERT INTO `hg_photo` VALUES (8,5,5,'',0,'html/Attach/Photo_thumb/20120711093827.527790.jpg','html/Attach/Photo_src/20120711093827.527790.jpg',0,0,'',0,'0000-00-00 00:00:00',0);
-INSERT INTO `hg_photo` VALUES (9,5,6,'',0,'html/Attach/Photo_thumb/20120711093933.172813.jpg','html/Attach/Photo_src/20120711093933.172813.jpg',0,0,'',0,'0000-00-00 00:00:00',0);
-INSERT INTO `hg_photo` VALUES (10,5,6,'',0,'html/Attach/Photo_thumb/20120711093933.292827.gif','html/Attach/Photo_src/20120711093933.292827.gif',0,0,'',0,'0000-00-00 00:00:00',0);
-INSERT INTO `hg_photo` VALUES (11,5,6,'',0,'html/Attach/Photo_thumb/20120711093933.309261.jpg','html/Attach/Photo_src/20120711093933.309261.jpg',0,0,'',0,'0000-00-00 00:00:00',0);
-INSERT INTO `hg_photo` VALUES (12,5,2,'22',0,'html/Attach/Photo_thumb/20120711102542.750469.jpg','html/Attach/Photo_src/20120711102542.750469.jpg',0,0,'',0,'0000-00-00 00:00:00',1);
-INSERT INTO `hg_photo` VALUES (13,5,2,'',0,'html/Attach/Photo_thumb/20120711102542.856977.jpg','html/Attach/Photo_src/20120711102542.856977.jpg',0,0,'',0,'0000-00-00 00:00:00',1);
-INSERT INTO `hg_photo` VALUES (14,3,0,'特照2',0,'html/Attach/Photo_thumb/20120711102835.092268.jpg','html/Attach/Photo_src/20120711102835.092268.jpg',0,0,'',0,'0000-00-00 00:00:00',-1);
-INSERT INTO `hg_photo` VALUES (21,3,0,'test',100,'html/Attach/Photo_thumb/20120711162905.808055.jpg','html/Attach/Photo_src/20120711162905.808055.jpg',654,488,'jpeg',45869,'2012-07-11 16:29:05',2);
-INSERT INTO `hg_photo` VALUES (22,3,0,'test3',100,'html/Attach/Photo_thumb/20120712093008.453200.jpg','html/Attach/Photo_src/20120712093008.453200.jpg',750,749,'jpeg',115240,'2012-07-12 09:30:08',2);
-INSERT INTO `hg_photo` VALUES (23,3,0,'test4',100,'html/Attach/Photo_thumb/20120712093031.531055.png','html/Attach/Photo_src/20120712093031.531055.png',1072,710,'png',617227,'2012-07-12 09:30:31',1);
+DROP TABLE IF EXISTS `hg_project`;
+CREATE TABLE `hg_project` (
+  `id` int(10) unsigned NOT NULL auto_increment,
+  `name` varchar(255) NOT NULL default '',
+  `content` text NOT NULL,
+  `sort` tinyint(3) unsigned NOT NULL default '0',
+  `status` tinyint(3) NOT NULL default '0',
+  PRIMARY KEY  (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
-#
-# Source for table hg_reserve
-#
+INSERT INTO `hg_project` VALUES (1,'服务流程','<p>温馨提示一：</p>\r\n<p>感谢您选择皇宫婚纱摄影为您拍摄婚纱照、全家福、艺术套照等，为了给您提供更完美的服务，请您仔细阅读我们的服务流程。</p>\r\n<p>1、付款方式：本公司采用先付款后拍照，请您务必妥善保管好您的预约单，预约单上将清楚纪录您的付款情况，此单视同您的付款收据。若有准备额外消费的预算，可多带一些现金。</p>\r\n<p>2、拍摄前一晚，请提前就寝，睡眠充足，请勿多喝水及喝酒，以免眼睛红肿或精神不佳。</p>\r\n<p>3、安排预约时间后，请准时到店，以免不要之等待；拍摄时，请保持良好心态，遇到问题，可随时沟通。</p>\r\n<p>4、如果您对化妆品有过敏反应，请告诉本店服务人员；如新娘已怀有喜孕，请主动告之工作人员，以便为您提供更细致周到的服务。</p>\r\n<p>5、请依照排定时间日期到达，若有临时变故不能抵达本店，务必请拍照前一天通知本店服务人员。</p>\r\n<p>6、请勿携带其他贵重物品，若有遗失，本店概不负责。</p>\r\n<p>7、请勿携带照相机，录影机等，公司内部及外景禁止使用（同时禁止用手机拍摄）。</p>\r\n<p>8、拍摄当天请勿带任何亲戚朋友参观，因场地有限，更可避免影响拍摄过程及您俩的心情。</p>\r\n<p>9、请保管好单据，若有遗失不补发。</p>\r\n<p>10、在服务过程中，公司将提供部分选择性消费。</p>\r\n<p>11、在您预约完成后，我们会根据您的需要，事先为您安排化妆造型师和摄影师等专业服务人员。如果当天天气是阴天的话，我们就要按调度的安排才能确定是否可以拍摄外景，如果是阴雨天气，我们就可以安排拍摄内景，待天气转好后才能拍摄外景。</p>\r\n<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 如有疑问、请询问门市部接待人员</p>',1,1);
+INSERT INTO `hg_project` VALUES (2,'拍前提醒','<p>温馨提示二：</p>\r\n<p>1、早上拍摄的新人，请先用早餐，依预定时候到达本公司，请务必带好预约单及全额拍照款男女主角在拍摄当天，须与我们并肩合作，共同创造属于自己的幸福回忆。</p>\r\n<p>2、办理完拍摄手续后，将由本公司专业部流程主管及礼服部服务人员为您安排挑选婚纱礼服，在这个流程中请将您的个人爱好及特殊要求，与我们专业服务人员沟通，对您的服务，我们始终坚持最好！如果您有任何需要可以随时向您身边的工作人员取得联系。</p>\r\n<p>3、公司婚纱礼服是分区的，依预定的套系不同可挑选穿着的区域有所不同，本公司礼服部的工作人员会根据您的脸型、气质及要求为您提供参考意见，协助您选择试穿。</p>\r\n<p>4、拍照婚纱礼服以拍照效果为主，将会由礼服部服务人员为您事先准备，但因数量过多，无法一一修改，服装的尺寸过大或过小先则用别针固定。</p>\r\n<p>6、进入影棚拍摄前，如您对化妆造型或礼服有不尽满意之处，请立即当面明确向我们工作人员沟通，待您认为满意后，再进行拍摄，以有利于达到最佳的拍摄效果。</p>\r\n<p>7、在拍摄当天，所有的化妆、造型、礼服及拍摄等专业服务，均有公司艺术总监负责安排调整，若出现任何不称心之事，都可以向我们的调度进行说明与沟通，我们将及时为您解决。</p>\r\n<p>8、本公司有为您提供加锁的储物柜，请小心保管好钥匙，于拍摄结束后归还，特别提醒您拍摄当天请勿携带贵重物品，本公司不承担赔偿责任。</p>\r\n<p>9、外景拍摄，公司配有专用外景拍摄车辆接送，但不可携带亲友，以免拍摄时影响摄影师调动的情绪。</p>\r\n<p>&nbsp;&nbsp;&nbsp;&nbsp; 如果正遇结婚旺季，拍摄新人较多，全套结婚照拍摄需要一个整天的时间，拍摄过程中等候在所难免，请您耐心等待并保持良好的心情，以期达到最佳的拍摄效果。您在等候过程中，本公司有提供报刊杂志及电视放映，具体情况请询问服务人员，在拍摄过程中，为了追求最完美的效果，为了让您选出最佳的照片及给您提供更多的选择机会，摄影师会适量拍多一点底片，但是我们会根据套系限定拍摄数量，如果您有多买照片的预算，请提前和摄影师沟通。</p>\r\n<p>&nbsp;</p>\r\n<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;如有疑问、请询问门市部接待人员</p>',2,1);
+INSERT INTO `hg_project` VALUES (3,'照片校色','<p>温馨提示三:</p>\r\n<p>您的照片正在校色当中。</p>\r\n<p>校色在婚纱艺术摄影是一个非常重要的环节，化妆、造型、美姿、灯光、拍摄等，都只是前期的一个创作过程，如果需要出成品（相片），还必须要把照片旋转调色及修整，调色过程根据我们的业务量的安排，大概需要3-7天时间，您的照片完成校色后我们会短信和电话通知您，和您确认具体选样的日期，您也可以登陆本公司网站客户端随时查询。</p>\r\n<p>温馨提示一：由于每个电子显示器的色彩会有所差异，您在电脑里看见的色彩会略有区别，属于正常现象。</p>\r\n<p>&nbsp;为了让您选出最好的照片，本公司已为您多拍了一定量的照片，未选之照片所有权归本公司所有，将由本公司收回作相关数据及技术统计处理，您可以通过购买小样或加选入册加做版页等方法，取得对未选照片的所有权。公司将视情况给与一定的优惠，并且公司定期推出的特惠套餐，可供您选择。如果您确定有特殊的原因需提前看样，本公司可为您提供加急。</p>\r\n<p>选片注意事项如下：</p>\r\n<p>1、请联系工作人员确定好具体时间，准时前来公司。</p>\r\n<p>2、请勿亲友陪同。</p>\r\n<p>3、为了合理的安排选样的流程，建议您在1.5-2小时内完成，以免影响他人选片时间，谢谢！</p>\r\n<p>4、工作人员有向您推荐新产品的义务，您有自由选择的权利。</p>\r\n<p>5、如果照片拍得很满意，可能您会想多点要点，最好多准备一些预支消费先进。</p>\r\n<p>6、请一次确定好您要的照片，果断决策。</p>\r\n<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 如有疑问、请询问门市部接待人员</p>',3,1);
+
 
 DROP TABLE IF EXISTS `hg_reserve`;
 CREATE TABLE `hg_reserve` (
@@ -279,15 +184,7 @@ CREATE TABLE `hg_reserve` (
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='预订';
 
-#
-# Dumping data for table hg_reserve
-#
 
-INSERT INTO `hg_reserve` VALUES (1,'aaa','1233456','','2012-07-11','','2012-07-13 16:57:23',1);
-
-#
-# Source for table hg_role
-#
 
 DROP TABLE IF EXISTS `hg_role`;
 CREATE TABLE `hg_role` (
@@ -298,16 +195,8 @@ CREATE TABLE `hg_role` (
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC;
 
-#
-# Dumping data for table hg_role
-#
 
 INSERT INTO `hg_role` VALUES (1,'后台管理根角色',1,'所有管理员都必须先赋予此角色');
-INSERT INTO `hg_role` VALUES (2,'网站设置',1,'网站设置');
-
-#
-# Source for table hg_role_node
-#
 
 DROP TABLE IF EXISTS `hg_role_node`;
 CREATE TABLE `hg_role_node` (
@@ -315,16 +204,7 @@ CREATE TABLE `hg_role_node` (
   `node_id` smallint(5) unsigned NOT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 ROW_FORMAT=FIXED;
 
-#
-# Dumping data for table hg_role_node
-#
 
 INSERT INTO `hg_role_node` VALUES (1,1);
-INSERT INTO `hg_role_node` VALUES (2,6);
-INSERT INTO `hg_role_node` VALUES (2,7);
-INSERT INTO `hg_role_node` VALUES (2,8);
-INSERT INTO `hg_role_node` VALUES (2,9);
-INSERT INTO `hg_role_node` VALUES (2,11);
 
-/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
-/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+
