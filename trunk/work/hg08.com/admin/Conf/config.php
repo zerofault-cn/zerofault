@@ -21,9 +21,10 @@ if (ENV == 'LOCAL') {
 	$config['DB_NAME'] = 'hg08_com';
 }
 elseif (ENV == 'TEST') {
-	$config['DB_NAME'] = 'ruitcms';
-	$config['DB_USER'] = 'root';
-	$config['DB_PWD'] = 'ruiteng';
+	$config['DB_HOST'] = 'ruitengtest.gotoip2.com';
+	$config['DB_NAME'] = 'ruitengtest';
+	$config['DB_USER'] = 'ruitengtest';
+	$config['DB_PWD'] = 'ruiteng@test';
 }
 else {
 	$config['DB_NAME'] = 'ruitcms';
