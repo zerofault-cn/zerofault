@@ -46,15 +46,27 @@ class ClientAction extends BaseAction{
 			$content = trim($_REQUEST['content']);
 			$sort = intval($_REQUEST['sort']);
 			
+			$id = empty($_REQUEST['id']) ? 0 : intval($_REQUEST['id']);
 			$this->dao->name = $name;
 			$this->dao->content = $content;
 			$this->dao->sort = $sort;
-			$this->dao->status = 1;
-			if ($this->dao->add()) {
-				self::_success('添加成功！');
+				
+			if ($id > 0) {
+				if (false !== $this->dao->where("id=".$id)->save()) {
+					self::_success('修改成功！', __URL__);
+				}
+				else{
+					self::_error('修改失败！'.(C('APP_DEBUG')?$this->dao->getLastSql():''));
+				}
 			}
 			else {
-				self::_error('添加失败！'.(C('APP_DEBUG')?$this->dao->getLastSql():''));
+				$this->dao->status = 1;
+				if ($this->dao->add()) {
+					self::_success('添加成功！');
+				}
+				else {
+					self::_error('添加失败！'.(C('APP_DEBUG')?$this->dao->getLastSql():''));
+				}
 			}
 		}
 		$topnavi[]=array(
@@ -177,5 +189,14 @@ class ClientAction extends BaseAction{
 	public function delete() {
 		parent::_delete();
 	}
+	public function delete_project() {
+		$this->dao = M('Project');
+		$id = intval($_REQUEST['id']);
+		if (M('Client')->where('project_id='.$id)->count() > 0) {
+			self::_error('此项目已被使用，不能删除！');
+		}
+		parent::_delete();
+	}
+
 }
 ?>

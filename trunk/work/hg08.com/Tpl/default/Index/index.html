@@ -7,7 +7,7 @@
 		<h2><a href="__APP__/Article/news"><img src="../Public/Images/index_39.jpg"></a></h2>
 		<ul>
 			<foreach name="news_list" item="item">
-			<li>{$item.create_time|substr=5,5}&nbsp;<a href="__APP__/Article/news/id/{$item.id}">{$item.title}</a></li>
+			<li>{$item.create_time|substr=5,5}&nbsp;<a href="__APP__/Article/news/id/{$item.id}" target="_blank">{$item.title}</a></li>
 			</foreach>
 		</ul>
 	</div>
@@ -66,7 +66,7 @@
 			<div class="sshs_m_r">
 				<ul>
 					<foreach name="wedding_list" item="item">
-					<li><a href="__APP__/Album/id/{$item.id}" target="_blank"><img src="html/Attach/Album/{$item.id}.jpg"></a>{$item.name}</li>
+					<li><a href="__APP__/Album/album/id/{$item.id}" target="_blank"><img src="html/Attach/Album/{$item.id}.jpg"></a>{$item.name}</li>
 					</foreach>
 				</ul>
 			</div>

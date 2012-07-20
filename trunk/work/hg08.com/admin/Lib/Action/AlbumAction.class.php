@@ -161,6 +161,12 @@ class AlbumAction extends BaseAction{
 						$data['thumb'] = $thumb;
 						$data['src'] = $src;
 						$data['sort'] = $_REQUEST['_photo_sort'][$i];
+
+						$image_info = $image->getImageInfo($src);
+						$data['width'] = $image_info['width'];
+						$data['height'] = $image_info['height'];
+						$data['type'] = $image_info['type'];
+						$data['size'] = $image_info['size'];
 						if (false === $photo_dao->where('id='.$i)->save($data)) {
 							self::_error('添加图片记录出错！');
 						}
@@ -170,6 +176,7 @@ class AlbumAction extends BaseAction{
 				foreach ($_FILES['photo_file']['size'] as $i=>$size) {
 					$photo_dao = M('Photo');
 					$data = array(
+						'category_id' => $category_id,
 						'album_id' => $id
 						);
 					if ($size>0) {
@@ -186,6 +193,13 @@ class AlbumAction extends BaseAction{
 						$data['thumb'] = $thumb;
 						$data['src'] = $src;
 						$data['sort'] = $_REQUEST['photo_sort'][$i];
+						$data['status'] = 1;
+
+						$image_info = $image->getImageInfo($src);
+						$data['width'] = $image_info['width'];
+						$data['height'] = $image_info['height'];
+						$data['type'] = $image_info['type'];
+						$data['size'] = $image_info['size'];
 						if (!$photo_dao->add($data)) {
 							self::_error('添加图片记录出错！');
 						}
@@ -221,6 +235,7 @@ class AlbumAction extends BaseAction{
 				foreach ($_FILES['photo_file']['size'] as $i=>$size) {
 					$photo_dao = M('Photo');
 					$data = array(
+						'category_id' => $category_id,
 						'album_id' => $id
 						);
 					if ($size>0) {
@@ -237,6 +252,13 @@ class AlbumAction extends BaseAction{
 						$data['thumb'] = $thumb;
 						$data['src'] = $src;
 						$data['sort'] = $_REQUEST['photo_sort'][$i];
+						$data['status'] = 1;
+						
+						$image_info = $image->getImageInfo($src);
+						$data['width'] = $image_info['width'];
+						$data['height'] = $image_info['height'];
+						$data['type'] = $image_info['type'];
+						$data['size'] = $image_info['size'];
 						if (!$photo_dao->add($data)) {
 							self::_error('添加图片记录出错！');
 						}
