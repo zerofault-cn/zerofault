@@ -11,7 +11,7 @@
 <iterate name="list" id="item">
 <tr bgcolor="<eq name='mod' value='1'>#FFFFE1</eq>" class="<eq name='item.status' value='0'>gray</eq>" id="{$item['id']}">
 	<td>{$item['id']}</td>
-	<td class="text_editable" name="Project_name">{$item.name}</td>
+	<td class="text_editable" name="Project_name">{$item.name}&nbsp;</td>
 	<td><a class="thickbox" href="#TB_inline?width=600&height=400&inlineId=content_{$item.id}&modal=true">点击查看</a><div style="display:none;" id="content_{$item.id}">{$item.content}<center><input type="button" onclick="tb_remove();" value="关闭"/></div></td>
 	<td class="text_editable" name="Project_sort">{$item.sort}</td>
 	<td>
