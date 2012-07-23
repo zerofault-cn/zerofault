@@ -1,8 +1,36 @@
 <load file="../Public/Css/gd.css"/>
 <load file="../Public/Js/jquery.tools.min.js"/>
 <load file="../Public/Js/index.js"/>
+<load file="../Public/Js/SWFObject-1.5.js"/>
 <div id="main">
-	<div class="qjzs"><img src="../Public/Images/index_30.jpg"></div>
+	<div class="qjzs">
+		<div id="flashcontent">
+		观看虚拟漫游，需要9.0.28以上版本的flash播放器。请下载并安装最新版本的<a href="http://www.adobe.com/go/getflashplayer" target="_blank">Flash 播放器。
+		</div>
+	</div>
+<script type="text/javascript"> 
+ // <![CDATA[ 
+ var so = new SWFObject("HGSmall/twviewer.swf", "sotester", "480", "332", "9.0.0", "#FFFFFF"); 
+ so.addParam("allowNetworking", "all"); 
+ so.addParam("allowScriptAccess", "always"); 
+ so.addParam("allowFullScreen", "true"); 
+ so.addParam("scale", "noscale"); 
+ //<!-%% Share Mode %%->
+ so.addVariable("lwImg", "resources/hgsmall_37.jpg"); 
+ so.addVariable("lwBgColor", "255,0,0,0"); 
+ so.addVariable("lwBarBgColor", "255,255,255,255"); 
+ so.addVariable("lwBarColor", "255,0,255,0"); 
+ so.addVariable("lwBarBounds", "446,342,147,120"); 
+ so.addVariable("lwlocation", "0"); 
+ so.addVariable("lwShowLoadingPercent", "true"); 
+ so.addVariable("lwTextColor", "255,0,0,0"); 
+ so.addVariable("iniFile", "config_HGSmall.bin"); 
+ so.addVariable("progressType", "1"); 
+ so.addVariable("swfFile", "resources/lw_sceneviewer.swf"); 
+ so.addVariable("href", location.href); 
+ so.write("flashcontent"); 
+ // ]]> 
+ </script> 
 	<div class="hdgg">
 		<h2><a href="__APP__/Article/news"><img src="../Public/Images/index_39.jpg"></a></h2>
 		<ul>
