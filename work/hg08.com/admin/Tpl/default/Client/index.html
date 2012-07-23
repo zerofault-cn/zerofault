@@ -23,8 +23,8 @@
 	<iterate name="list" id="item">
 	<tr bgcolor="<eq name='mod' value='1'>#FFFFE1</eq>" class="<eq name='item.status' value='0'>gray</eq>" id="{$item['id']}">
 		<td>{$item['id']}</td>
-		<td class="text_editable" name="name">{$item['name']}</td>
-		<td class="text_editable" name="phone">{$item['phone']}</td>
+		<td class="text_editable" name="name">{$item['name']}&nbsp;</td>
+		<td class="text_editable" name="phone">{$item['phone']}&nbsp;</td>
 		<td >
 			{$item.Project.name}
 			<eq name="item.status" value="-1">

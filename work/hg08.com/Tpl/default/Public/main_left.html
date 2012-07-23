@@ -3,7 +3,7 @@
 		<notempty name="item.alias">
 		<li><a href="__URL__/{$item.alias}" <eq name="alias" value="$item.alias">class="active"</eq>>{$item.name}</a></li>
 		<else />
-		<li><a href="__URL__/about/id/{$item.id}" <eq name="_GET.id" value="$item.id">class="active"</eq>><empty name="item.title">{$item.name}<else />{$item.title}</empty></a></li>
+		<li><a href="__URL__/{$alias}/id/{$item.id}" <eq name="_GET.id" value="$item.id">class="active"</eq>><empty name="item.title">{$item.name}<else />{$item.title}</empty></a></li>
 		</notempty>
 	</foreach>
 </ul>
