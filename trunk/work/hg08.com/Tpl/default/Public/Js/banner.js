@@ -1,6 +1,6 @@
 var cacheBuster = "?t=" + Date.parse(new Date());
 var stageW = "100%";
-var stageH = 432;//"100%";
+var stageH = 530;//"100%";
 var attributes = {};
 attributes.id = 'show_pro_img';
 attributes.name = attributes.id;

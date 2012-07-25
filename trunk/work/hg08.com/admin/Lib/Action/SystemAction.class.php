@@ -92,7 +92,7 @@ class SystemAction extends BaseAction{
 				$xml->startDocument('1.0', 'utf-8');
 				$xml->startElement('banner');
 				$xml->writeAttribute('width', '1578');
-				$xml->writeAttribute('height', '432');
+				$xml->writeAttribute('height', '530');
 				$xml->writeAttribute('backgroundColor', '0xffffff');
 				$xml->writeAttribute('backgroundTransparency', '100');
 				$xml->writeAttribute('startWith', '1');
