@@ -51,7 +51,7 @@ class IndexAction extends BaseAction{
 			$xml->startElement('menu');
 			$xml->writeAttribute('url', __APP__.'/Album/photo');
 			$xml->writeAttribute('frame', '_blank');
-			$xml->writeAttribute('imageUrl', __APP__.'/../'.$row['src']);
+			$xml->writeAttribute('imageUrl', __APP__.'/../'.$row['thumb']);
 			$xml->endElement();
 		}
 		$xml->endElement();

@@ -103,7 +103,15 @@ class PhotoAction extends BaseAction{
 					if (!move_uploaded_file($_FILES['file']['tmp_name'], $src)) {
 						self::_error('上传图片出错！');
 					}
-					if (!$image->thumb($src, $thumb, '', 170, 170)) {
+					if (3 == $category_id) {
+						$maxWidth = 680;
+						$maxHeight = 345;
+					}
+					else {
+						$maxWidth = 170;
+						$maxHeight = 170;
+					}
+					if (!$image->thumb($src, $thumb, '', $maxWidth, $maxHeight)) {
 						self::_error('生成缩略图出错！');
 					}
 					$image_info = $image->getImageInfo($src);
@@ -140,7 +148,15 @@ class PhotoAction extends BaseAction{
 					if (!move_uploaded_file($_FILES['file']['tmp_name'], $src)) {
 						self::_error('上传图片出错！');
 					}
-					if (!$image->thumb($src, $thumb, '', 170, 170)) {
+					if (3 == $category_id) {
+						$maxWidth = 680;
+						$maxHeight = 345;
+					}
+					else {
+						$maxWidth = 170;
+						$maxHeight = 170;
+					}
+					if (!$image->thumb($src, $thumb, '', $maxWidth, $maxHeight)) {
 						self::_error('生成缩略图出错！');
 					}
 					$image_info = $image->getImageInfo($src);
