@@ -139,7 +139,7 @@ class AlbumAction extends BaseAction{
 				$image = new Image();
 				if ($_FILES['file']['size'] > 0) {
 					$path = 'html/Attach/Album/'.$id.'.jpg';
-					if (!$image->thumb($_FILES['file']['tmp_name'], $path, '', 160, 160)) {
+					if (!$image->thumb($_FILES['file']['tmp_name'], $path, '', 210, 310)) {
 						self::_error('上传缩略图出错！');
 					}
 					@unlink($_FILES['file']['tmp_name']);
@@ -227,7 +227,7 @@ class AlbumAction extends BaseAction{
 				$image = new Image();
 				if ($_FILES['file']['size'] > 0) {
 					$path = 'html/Attach/Album/'.$id.'.jpg';
-					if (!$image->thumb($_FILES['file']['tmp_name'], $path, '', 160, 160)) {
+					if (!$image->thumb($_FILES['file']['tmp_name'], $path, '', 210, 310)) {
 						self::_error('上传缩略图出错！');
 					}
 					@unlink($_FILES['file']['tmp_name']);

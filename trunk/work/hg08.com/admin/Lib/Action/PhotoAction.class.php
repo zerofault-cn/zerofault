@@ -108,8 +108,8 @@ class PhotoAction extends BaseAction{
 						$maxHeight = 345;
 					}
 					else {
-						$maxWidth = 170;
-						$maxHeight = 170;
+						$maxWidth = 200;
+						$maxHeight = 200;
 					}
 					if (!$image->thumb($src, $thumb, '', $maxWidth, $maxHeight)) {
 						self::_error('生成缩略图出错！');
@@ -153,8 +153,8 @@ class PhotoAction extends BaseAction{
 						$maxHeight = 345;
 					}
 					else {
-						$maxWidth = 170;
-						$maxHeight = 170;
+						$maxWidth = 200;
+						$maxHeight = 200;
 					}
 					if (!$image->thumb($src, $thumb, '', $maxWidth, $maxHeight)) {
 						self::_error('生成缩略图出错！');
