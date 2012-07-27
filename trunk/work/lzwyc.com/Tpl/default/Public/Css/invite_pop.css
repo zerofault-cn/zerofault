@@ -1,3 +1,5 @@
+* html body{background-image:url(about:blank);background-attachment:fixed}
+
 #invite_pop_tip {
 	position: fixed;
 	right: 0;
@@ -5,17 +7,24 @@
 	width: 27px;
 	height: 138px;
 	background: url(../Images/pop_tip.png) no-repeat center center;
+	z-index:10001;
 }
 #invite_pop {
 	position: fixed;
-	right: -267px;
+	display: none;
+	right: 0;
 	bottom: 0;
-	z-index:10000;
+	z-index:10002;
 	width: 207px;
 	height: 254px;
 	padding: 40px 30px;
 	background: url(../Images/pop_bg.png) no-repeat center center;
 	line-height: 24px;
+}
+* html #invite_pop_tip, * html #invite_pop {
+	position: absolute;
+	left:expression(eval(document.documentElement.scrollLeft+document.documentElement.clientWidth-this.offsetWidth)-(parseInt(this.currentStyle.marginLeft,10)||0)-(parseInt(this.currentStyle.marginRight,10)||0));
+	top:expression(eval(document.documentElement.scrollTop+document.documentElement.clientHeight-this.offsetHeight-(parseInt(this.currentStyle.marginTop,10)||0)-(parseInt(this.currentStyle.marginBottom,10)||0)));
 }
 
 #invite_pop form {
