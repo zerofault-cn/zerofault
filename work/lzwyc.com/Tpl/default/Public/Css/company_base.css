@@ -85,7 +85,7 @@ a:hover,a:active,a.active{color:#ffcc00;}
 }
 .right {
 	float: right;
-	width: 666px;
+	width: 663px;
 }
 h2 {
 	height: 49px;
@@ -206,12 +206,15 @@ h2 {
 #case ul li {
 	float: left;
 	width: 150px;
-	height: 116px;
+	height: 140px;
 	padding-right: 6px;
-	line-height: 24px;
+	line-height: 20px;
 }
 #talk ul li {
-	list-style-type: disc;
+	padding-left: 16px;
+	background:url(../Images/dot.png) no-repeat 3px center;
+	height: 20px;
+	line-height: 20px;
 }
 #talk ul li span{
 	float: right;
