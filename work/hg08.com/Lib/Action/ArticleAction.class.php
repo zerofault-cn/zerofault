@@ -65,7 +65,12 @@ class ArticleAction extends BaseAction {
 			$this->assign('category', $category);
 			$sub_category = M('Category')->where("pid=".$category['pid']." and status>0")->order('sort')->select();
 			$this->assign('left_list', $sub_category);
-			$this->assign('alias', M('Category')->where("id=".$category['pid'])->getField('alias'));
+			if (0 == $category['pid']) {
+				$this->assign('alias', $category['alias']);
+			}
+			else {
+				$this->assign('alias', M('Category')->where("id=".$category['pid'])->getField('alias'));
+			}
 			$_GET['id'] = $category['id'];
 		}
 

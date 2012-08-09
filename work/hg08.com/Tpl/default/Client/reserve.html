@@ -1,10 +1,20 @@
 <load file="../Public/Css/calendar.css" />
 <load file="../Public/Js/jquery.calendar.js" />
-
+<style>
+dl {
+	float: left;
+	padding: 3px 5px;
+	margin: 0;
+}
+dl dt {
+	line-height:0;
+	font-size: 0;
+}
+</style>
 <div class="wxts_wb" style="padding-top:25px; width:600px;">请您填好您的详细信息，我们会在2个工作日内与您联系，并给您制定详细的拍摄方案，谢谢！</div>
 <div class="yd_bd">
 	<form method="post" target="_iframe">
-	<table width="80%" align="center">
+	<table align="center">
 	<tr>
 		<td>姓名：</td>
 		<td>联系电话：</td>
@@ -20,6 +30,19 @@
 	<tr>
 		<td><input type="text" name="qq" class="textbox" /></td>
 		<td><input type="text" name="date" class="textbox html_date" id="date"/></td>
+	</tr>
+	<tr>
+		<td colspan="2">选择套系：</td>
+	</tr>
+	<tr>
+		<td colspan="2" width="570">
+		<foreach name="set_list" item="item">
+		<dl>
+			<dt><a href="__APP__/Article/set/id/{$item.id}" target="_blank"><img src="__APP__/../html/Attach/Article/{$item.id}.jpg" width="180"/></a></dt>
+			<dd><input type="radio" name="set" value="{$item.id}"/><a href="__APP__/Article/set/id/{$item.id}" target="_blank">{$item.title}</a></dd>
+		</dl>
+		</foreach>
+		</td>
 	</tr>
 	<tr>
 		<td colspan="2">备注：</td>

@@ -178,6 +178,10 @@ class SystemAction extends BaseAction{
 					'name' => '【最新活动】页头部图',
 					'img' => 'Tpl/default/Public/Images/new_17.jpg'
 					),
+				'top_set' => array(
+					'name' => '【拍摄套系】页头部图',
+					'img' => 'Tpl/default/Public/Images/new_17.jpg'
+					),
 				'top_works' => array(
 					'name' => '【最新作品】页头部图',
 					'img' => 'Tpl/default/Public/Images/new_17.jpg'
