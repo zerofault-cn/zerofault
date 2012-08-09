@@ -65,45 +65,138 @@ class PublicAction extends BaseAction{
 		self::_success('注销成功！', __APP__, 500);
 	}
 	
-	public function variable() {
-		echo '__ROOT__:'.__ROOT__.'<br />';// 网站根目录地址 
-		echo '__APP__:'.__APP__ .'<br />';// ： 当前项目（入口文件）地址 
-		echo '__GROUP__:'.__GROUP__.'<br />';//：当前分组地址
-		echo '__URL__:'.__URL__.'<br />';//  ： 当前模块地址 
-		echo '__ACTION__:'.__ACTION__.'<br />';// ： 当前操作地址 
-		echo '__SELF__:'.__SELF__.'<br />';//  ： 当前 URL 地址 
-		echo '__CURRENT__:'.__CURRENT__.'<br />';//  ： 当前模块的模板目录
-		echo 'ACTION_NAME:'.ACTION_NAME.'<br />';// ： 当前操作名称 
-		echo 'APP_PATH:'.APP_PATH.'<br />';// ： 当前项目目录 
-		echo 'APP_NAME:'.APP_NAME.'<br />';// ： 当前项目名称 
-		echo 'APP_TMPL_PATH:'.APP_TMPL_PATH.'<br />';// ： 项目模板目录
-		echo 'APP_PUBLIC_PATH ：'.APP_PUBLIC_PATH.'<br />';//项目公共文件目录 
-		echo 'CACHE_PATH ：'.CACHE_PATH.'<br />';// 项目模版缓存目录 
-		echo 'CONFIG_PATH ：'.CONFIG_PATH.'<br />';//'.项目配置文件目录 
-		echo 'COMMON_PATH ：'.COMMON_PATH.'<br />';// 项目公共文件目录
-		echo 'DATA_PATH ：'.DATA_PATH.'<br />';// 项目数据文件目录 
-		echo 'GROUP_NAME ：'.GROUP_NAME.'<br />';//当前分组名称 
-		echo 'HTML_PATH ：'.HTML_PATH.'<br />';// 项目静态文件目录
-		echo 'IS_APACHE ：'.IS_APACHE.'<br />';// 是否属于 Apache (2.1版开始已取消)
-		echo 'IS_CGI ：'.IS_CGI.'<br />';//是否属于 CGI模式 
-		echo 'IS_IIS ：'.IS_IIS.'<br />';//是否属于 IIS  (2.1版开始已取消)
-		echo 'IS_WIN ：'.IS_WIN.'<br />';//是否属于Windows 环境 
-		echo 'LANG_SET ：'.LANG_SET.'<br />';// 浏览器语言 
-		echo 'LIB_PATH ：'.LIB_PATH.'<br />';// 项目类库目录 
-		echo 'LOG_PATH ：'.LOG_PATH.'<br />';// 项目日志文件目录 
-		echo 'LANG_PATH ：'.LANG_PATH.'<br />';// 项目语言文件目录
-		echo 'MODULE_NAME ：'.MODULE_NAME.'<br />';//当前模块名称 
-		echo 'MEMORY_LIMIT_ON ：'.MEMORY_LIMIT_ON.'<br />';// 是否有内存使用限制 
-		echo 'MAGIC_QUOTES_GPC ：'.MAGIC_QUOTES_GPC.'<br />';// MAGIC_QUOTES_GPC 
-		echo 'TEMP_PATH  ：'.TEMP_PATH.'<br />';//项目临时文件目录 
-		echo 'TMPL_PATH ：'.TMPL_PATH.'<br />';// 项目模版目录 
-		echo 'THINK_PATH ：'.THINK_PATH.'<br />';// ThinkPHP 系统目录 
-		echo 'THINK_VERSION ：'.THINK_VERSION.'<br />';//ThinkPHP版本号 
-		echo 'TEMPLATE_NAME ：'.TEMPLATE_NAME.'<br />';//当前模版名称 
-		echo 'TEMPLATE_PATH ：'.TEMPLATE_PATH.'<br />';//当前模版路径 
-		echo 'VENDOR_PATH ：'.VENDOR_PATH.'<br />';// 第三方类库目录 
-		echo 'WEB_PUBLIC_PATH ：'.WEB_PUBLIC_PATH.'<br />';//网站公共目录 
-		echo 'TAPP_CACHE_NAME ：'.TAPP_CACHE_NAME.'<br />';// 系统缓存文件名  2.1版本新增
+	Public function upload() {
+		import("ORG.Net.UploadFile");
+		$upload = new UploadFile(); // 实例化上传类
+		$upload->maxSize  = 1024*1024*min(ini_get('memory_limit'), ini_get('post_max_size'), ini_get('upload_max_filesize')); // 设置附件上传大小
+
+		$ext_arr = array(
+			'image' => array('gif', 'jpg', 'jpeg', 'png', 'bmp'),
+			'flash' => array('swf', 'flv'),
+			'media' => array('swf', 'flv', 'mp3', 'wav', 'wma', 'wmv', 'mid', 'avi', 'mpg', 'asf', 'rm', 'rmvb'),
+			'file' => array('doc', 'docx', 'xls', 'xlsx', 'ppt', 'htm', 'html', 'txt', 'zip', 'rar', 'gz', 'bz2'),
+		);
+		$upload_type = trim($_REQUEST['dir']);
+		$upload->allowExts  = $ext_arr[$upload_type]; // 设置附件上传类型
+		$upload->savePath =  'html/Attach/'.$upload_type.'/'; // 设置附件上传目录
+		if (!is_dir($upload->savePath)) {
+			@mkdir($upload->savePath);
+		}
+		$arr = array();
+		if(!$upload->upload()) { // 上传错误提示错误信息
+			$arr['error' ] = 1;
+			$arr['message'] = $upload->getErrorMsg();
+		}
+		else{ // 上传成功 获取上传文件信息
+			$info =  $upload->getUploadFileInfo();
+			$arr['error'] = 0;
+			$arr['url'] = __APP__.'/../'.$info[0]['savepath'].$info[0]['savename'];
+		}
+		die(json_encode($arr));
+	}
+
+	public function file_manager() {
+		//目录名
+		$dir_name = empty($_GET['dir']) ? '' : trim($_GET['dir']);
+		if (!in_array($dir_name, array('', 'image', 'flash', 'media', 'file'))) {
+			echo "Invalid Directory name.";
+			exit;
+		}
+		//图片扩展名
+		$ext_arr = array('gif', 'jpg', 'jpeg', 'png', 'bmp');
+
+		//根目录路径，可以指定绝对路径，比如 /var/www/attached/
+		$root_path = __APP__ . '/../html/Attach/';
+		//根目录URL，可以指定绝对路径，比如 http://www.yoursite.com/attached/
+		$root_url = $root_path;
+
+		
+		if ($dir_name !== '') {
+			$root_path .= $dir_name . "/";
+			$root_url .= $dir_name . "/";
+			if (!file_exists($root_path)) {
+				@mkdir($root_path);
+			}
+		}
+
+		//根据path参数，设置各路径和URL
+		if (empty($_GET['path'])) {
+			$current_path = realpath($root_path) . '/';
+			$current_url = $root_url;
+			$current_dir_path = '';
+			$moveup_dir_path = '';
+		} else {
+			$current_path = realpath($root_path) . '/' . $_GET['path'];
+			$current_url = $root_url . $_GET['path'];
+			$current_dir_path = $_GET['path'];
+			$moveup_dir_path = preg_replace('/(.*?)[^\/]+\/$/', '$1', $current_dir_path);
+		}
+		
+		//排序形式，name or size or type
+		$order = empty($_GET['order']) ? 'name' : strtolower($_GET['order']);
+
+		//不允许使用..移动到上一级目录
+		if (preg_match('/\.\./', $current_path) || '/'==$current_path) {
+			echo 'Access is not allowed.';
+			exit;
+		}
+		//最后一个字符不是/
+		if (!preg_match('/\/$/', $current_path)) {
+			echo 'Parameter is not valid.';
+			exit;
+		}
+		//目录不存在或不是目录
+		if (!file_exists($current_path) || !is_dir($current_path)) {
+			echo 'Directory does not exist.';
+			exit;
+		}
+
+		//遍历目录取得文件信息
+		$file_list = array();
+		
+		if ($handle = opendir($current_path)) {
+			$i = 0;
+			while (false !== ($filename = readdir($handle))) {
+				if ($filename{0} == '.') continue;
+				$file = $current_path . $filename;
+				if (is_dir($file)) {
+					$file_list[$i]['is_dir'] = true; //是否文件夹
+					$file_list[$i]['has_file'] = (count(scandir($file)) > 2); //文件夹是否包含文件
+					$file_list[$i]['filesize'] = 0; //文件大小
+					$file_list[$i]['is_photo'] = false; //是否图片
+					$file_list[$i]['filetype'] = ''; //文件类别，用扩展名判断
+				} else {
+					$file_list[$i]['is_dir'] = false;
+					$file_list[$i]['has_file'] = false;
+					$file_list[$i]['filesize'] = filesize($file);
+					$file_list[$i]['dir_path'] = '';
+					$file_ext = strtolower(array_pop(explode('.', trim($file))));
+					$file_list[$i]['is_photo'] = in_array($file_ext, $ext_arr);
+					$file_list[$i]['filetype'] = $file_ext;
+				}
+				$file_list[$i]['filename'] = $filename; //文件名，包含扩展名
+				$file_list[$i]['datetime'] = date('Y-m-d H:i:s', filemtime($file)); //文件最后修改时间
+				$i++;
+			}
+			closedir($handle);
+		}
+		usort($file_list, 'cmp_func');
+
+		$result = array();
+		//相对于根目录的上一级目录
+		$result['moveup_dir_path'] = $moveup_dir_path;
+		//相对于根目录的当前目录
+		$result['current_dir_path'] = $current_dir_path;
+		//当前目录的URL
+		$result['current_url'] = $current_url;
+		//文件数
+		$result['total_count'] = count($file_list);
+		//文件列表数组
+		$result['file_list'] = $file_list;
+
+		//输出JSON字符串
+		header('Content-type: application/json; charset=UTF-8');
+		die(json_encode($result));
 	}
 }
 ?>

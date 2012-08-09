@@ -20,10 +20,13 @@ class ClientAction extends BaseAction {
 			$qq = trim($_REQUEST['qq']);
 			$phone = trim($_REQUEST['phone']);
 			empty($phone) && self::_error('联系电话必须填写！');
-			strlen($phone)<7 && self::_error('您的电话号码似乎太短！');
+			strlen($phone)<7 && self::_error('请填写正确的电话号码！');
 			$date = trim($_REQUEST['date']);
+			$set = intval($_REQUEST['set']);
+			empty($set) && self::_error('请选择套系！');
 			$remark = trim($_REQUEST['remark']);
 
+			$this->dao->set = $set;
 			$this->dao->name = $name;
 			$this->dao->qq = $qq;
 			$this->dao->phone = $phone;
@@ -54,6 +57,9 @@ class ClientAction extends BaseAction {
 				)
 			);
 		$this->assign('left_list', $left_list);
+		$category_id = M('Category')->where("alias='set'")->getField('id');
+		$this->assign('set_list', M('Article')->where("category_id=".$category_id." and status>0")->order('sort')->field('id,title')->select());
+		
 
 		$this->assign('content', 'reserve');
 		$this->display('Layout:main');

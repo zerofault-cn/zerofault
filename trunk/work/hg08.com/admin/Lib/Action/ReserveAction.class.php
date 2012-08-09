@@ -22,7 +22,7 @@ class ReserveAction extends BaseAction{
 		import("@.Paginator");
 		$limit = 20;
 		$p = new Paginator($count,$limit);
-		$rs = $this->dao->where($where)->order($order)->limit($p->offset.','.$p->limit)->select();
+		$rs = $this->dao->relation(true)->where($where)->order($order)->limit($p->offset.','.$p->limit)->select();
 
 		$this->assign("topnavi", $topnavi);
 		$this->assign('page', $p->showMultiNavi());

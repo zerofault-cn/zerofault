@@ -2,6 +2,7 @@
 	<table id="table" class="list" border="1" cellpadding="3" cellspacing="0" width="100%" bordercolor="#999999" style="border-collapse:collapse;">
 	<tr bgcolor="#ededed">
 		<th width="5%">ID</th>
+		<th>预约套系</th>
 		<th>需求说明</th>
 		<th width="20%">预订人信息</th>
 		<th width="5%">操作</th>
@@ -14,6 +15,7 @@
 	<iterate name="list" id="item">
 	<tr bgcolor="<eq name='mod' value='1'>#FFFFE1</eq>">
 		<td>{$item['id']}</td>
+		<td><a href="__APP__/../index.php/Article/set/id/{$item.Article.id}" target="_blank">{$item.Article.title}</a></td>
 		<td class="a_left">
 			{$item.remark|nl2br}
 		</td>
