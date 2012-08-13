@@ -69,8 +69,7 @@ class ArticleAction extends BaseAction{
 				'category_id' => 0
 				);
 			!empty($_REQUEST['category_id']) && ($info['category_id'] = $_REQUEST['category_id']);
-			$max_sort = $this->dao->getField("max(sort)");
-			$info['sort'] = $max_sort+2;
+			$info['sort'] = 100;
 		}
 		$info['category_opts'] = self::genOptions($this->category_array['Article'], $info['category_id']);
 		$this->assign("info", $info);

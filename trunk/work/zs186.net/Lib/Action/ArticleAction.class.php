@@ -50,7 +50,7 @@ class ArticleAction extends BaseAction {
 			$category = M('Category')->find($category_id);
 			$pid = $category['pid'];
 		}
-		$sub_category = M('Category')->where("pid=".$pid." and status>0")->order('sort')->select();
+		$sub_category = M('Category')->where("pid=".$pid." and status>0")->order('sort, id desc')->select();
 		$this->assign('left_list', $sub_category);
 		if (empty($_REQUEST['id'])) {
 			//取第一个子分类
