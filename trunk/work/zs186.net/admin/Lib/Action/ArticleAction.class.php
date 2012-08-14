@@ -13,7 +13,7 @@ class ArticleAction extends BaseAction{
 			'url' => __APP__.'/Article'
 			);
 
-		$order = 'sort';
+		$order = 'sort, id desc';
 		$where = array();
 		if(!empty($_REQUEST['category_id'])) {
 			//判断是否有子类
@@ -37,16 +37,20 @@ class ArticleAction extends BaseAction{
 		$where['status'] = array('gt', -1);
 		if(!empty($_REQUEST['status'])) {
 			$where['status'] = $_REQUEST['status'];
-			$order = 'id desc';
 		}
-		$rs = $this->dao->relation(true)->where($where)->order($order)->select();
-
+		$count = $this->dao->where($where)->count();
+		import("@.Paginator");
+		$limit = 20;
+		$p = new Paginator($count,$limit);
+		$rs = $this->dao->relation(true)->where($where)->order($order)->limit($p->offset.','.$p->limit)->select();
 		$this->assign('list', $rs);
+		$this->assign('page', $p->showMultiNavi());
 
 		$this->assign("topnavi",$topnavi);
 		$this->assign('content', ACTION_NAME);
 		$this->display('Layout:default');
 	}
+
 	public function form() {
 		$id = empty($_REQUEST['id']) ? 0 : intval($_REQUEST['id']);
 
