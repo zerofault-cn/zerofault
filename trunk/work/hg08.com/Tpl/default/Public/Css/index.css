@@ -401,3 +401,33 @@ ul,p,h1,h2,h3{
 	padding: 3px 3px 3px 22px;
 	background: url(../Images/sign_explain.png) 3px center no-repeat;
 }
+
+#service {
+	width: 129px;
+	z-index:100;
+	position:absolute;
+	left:0;
+	top:630px;
+}
+#service .top {
+	height: 120px;
+	background: url(../Images/kf_03.gif) no-repeat center top;
+}
+#service ul {
+	list-style: none;
+	background: url(../Images/kf_10.gif) repeat-y center center;
+}
+#service ul li {
+	height: 28px;
+	background: transparent url(../Images/kf_07.gif) no-repeat center center;
+	line-height: 28px;
+	font-size: 14px;
+	text-align: center;
+}
+#service ul li a {
+	color: #ae8d0f;
+}
+#service .bottom {
+	height: 28px;
+	background: url(../Images/kf_12.gif) no-repeat center bottom;
+}
