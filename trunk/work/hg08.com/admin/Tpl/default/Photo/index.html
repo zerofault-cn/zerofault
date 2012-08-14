@@ -8,9 +8,7 @@
 		<th>图片参数</th>
 		<th width="60">排序</th>
 		<th width="14%">添加时间</th>
-		<empty name="_GET.album_id">
 		<th nowrap="nowrap">首页展示</th>
-		</empty>
 		<th width="10%">操作</th>
 	</tr>
 	<iterate name="list" id="item">
@@ -26,7 +24,6 @@
 		</td>
 		<td class="text_editable" name="Photo_sort">{$item['sort']}</td>
 		<td nowrap="nowrap">{$item['addtime']|substr=2,14}</td>
-		<empty name="_GET.album_id">
 		<td>
 			<if condition="$item.status eq 2">
 			<a href="__URL__/update/id/{$item['id']}/f/status/v/1" target="_iframe" title="取消首页展示">是</a>
@@ -34,7 +31,6 @@
 			<a href="__URL__/update/id/{$item['id']}/f/status/v/2" target="_iframe" title="推荐至首页展示">否</a>
 			</if>
 		</td>
-		</empty>
 		<td>
 			<a href="__APP__/Photo/form/id/{$item['id']}" title="修改"><img src="../Public/Images/form_edit.gif" alt="edit" /></a>
 			<a href="__APP__/Photo/update/id/{$item['id']}/f/status/v/{:intval(!$item['status'])}/" target="_iframe" title="<if condition='$item.status eq 0'>设为显示<else />设为隐藏</if>"><if condition="$item['status'] eq 0"><img src="../Public/Images/add.gif" alt="显示" /><else /><img src="../Public/Images/delete.gif" alt="隐藏" /></if></a>

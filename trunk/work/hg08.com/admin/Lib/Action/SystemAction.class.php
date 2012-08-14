@@ -186,6 +186,10 @@ class SystemAction extends BaseAction{
 					'name' => '【最新作品】页头部图',
 					'img' => 'Tpl/default/Public/Images/new_17.jpg'
 					),
+				'top_customer' => array(
+					'name' => '【顾客特照】页头部图',
+					'img' => 'Tpl/default/Public/Images/new_17.jpg'
+					),
 				'top_reserve' => array(
 					'name' => '【在线预定】页头部图',
 					'img' => 'Tpl/default/Public/Images/new_17.jpg'

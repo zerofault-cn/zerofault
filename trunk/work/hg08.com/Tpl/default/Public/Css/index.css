@@ -26,6 +26,9 @@ ul,p,h1,h2,h3{
 	margin:0;
 	padding:0;
 	}
+ul {
+	list-style: none;
+}
 .mce_content {
 	padding-bottom: 10px;
 	}
@@ -311,16 +314,6 @@ ul,p,h1,h2,h3{
 .sshs_m_r ul li a img{
 	width: 199px;
 	}
-
-
-
-
-
-
-
-
-
-
 
 /*公告*/
 .scrollDiv{
