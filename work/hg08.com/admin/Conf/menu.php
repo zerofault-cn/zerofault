@@ -20,11 +20,6 @@ $menu['作品管理'] = array(
 	'回收站' => array('Album', 'index', array('status',-1))
 	);
 
-$menu['顾客特照'] = array(
-	'图片列表' => array('Photo', 'index'),
-	'添加图片' => array('Photo', 'form', array('category_id', 3))
-	);
-
 $menu['客户管理'] = array(
 	'客户列表' => array('Client', 'index'),
 	'已归档' => array('Client', 'archived'),

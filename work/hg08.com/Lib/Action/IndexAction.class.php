@@ -49,7 +49,7 @@ class IndexAction extends BaseAction{
 		empty($rs) && ($rs = array());
 		foreach ($rs as $row) {
 			$xml->startElement('menu');
-			$xml->writeAttribute('url', __APP__.'/Album/photo');
+			$xml->writeAttribute('url', __APP__.'/Album/photo/id/'.$row['album_id']);
 			$xml->writeAttribute('frame', '_blank');
 			$xml->writeAttribute('imageUrl', __APP__.'/../'.$row['thumb']);
 			$xml->endElement();

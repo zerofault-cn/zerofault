@@ -15,7 +15,7 @@ class BaseAction extends Action {
 
 		$this->category_array = array(
 			'Article' => M('Category')->where("type='Article' and status>0 and pid=0")->order('sort')->getField('id,name'),
-			'Album' => M('Category')->where("type='Album' and status>0 and pid!=0")->order('sort')->getField('id,name')
+			'Album' => M('Category')->where("(pid=0 and alias='customer') or (type='Album' and status>0 and pid!=0)")->order('sort')->getField('id,name')
 			);
 		$Article_Category = $this->category_array['Article'];
 	//	$this->assign("Article_Category", $Article_Category);

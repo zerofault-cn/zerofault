@@ -6,63 +6,42 @@ class AlbumAction extends BaseAction {
 		$this->dao = D('Album');
 		parent::_initialize();
 	}
-	public function _empty() {
+	public function works() {
 		$this->assign('MODULE_TITLE', '最新作品');
 		$id = intval($_REQUEST['id']);
 		$alias = ACTION_NAME;
 		$this->assign('alias', $alias);
+		
 		if (empty($id)) {
+			//找第一个子分类
 			$category = M('Category')->where("alias='".$alias."'")->find();
 			$sub_category = M('Category')->where("pid=".$category['id']." and status>0")->order('sort')->find();
-			if (!empty($sub_category)) {
-				$_GET['id'] = $sub_category['id'];
-				$this->index($category['id']);
-				exit;
-			}
+			$id = $_GET['id'] = $sub_category['id'];
 
-			$where = array(
-				'category_id' => $category['id'],
-				'status' => array('gt', 0)
-				);
-			$order = 'sort, id desc';
-			$row = $this->dao->where($where)->order($order)->find();
-			echo $this->dao->getLastSql();
-			$id = $row['id'];
-			$_GET['id'] = $id;
+			$left_list = M('Category')->where("pid=".$category['id']." and status>0")->order('sort')->select();
 		}
 		else {
-			$category = M('Category')->where("alias='".$alias."'")->find();
-			$sub_category_count = M('Category')->where("pid=".$category['id']." and status>0")->count();
-			if (!empty($sub_category_count) && $sub_category_count>0) {
-				$this->index();
-				exit;
-			}
-			$category_id = $this->dao->where("id=".$id)->getField('category_id');
-			$category = M('Category')->find($category_id);
+			$category = M('Category')->where("id=".$id)->find();
+			$left_list = M('Category')->where("pid=".$category['pid']." and status>0")->order('sort')->select();
 		}
-		$this->assign('category', $category);
-
-		$left_list = $this->dao->where("category_id=".$category['id']." and status>0")->order('sort, id desc')->select();
-		$this->assign('left_list', $left_list);
-		$this->detail($id);
-	}
-	public function index($pid=0) {
-		if (!empty($_REQUEST['id'])) {
-			$category_id = intval($_REQUEST['id']);
-			$category = M('Category')->find($category_id);
-			$pid = $category['pid'];
-		}
-		$sub_category = M('Category')->where("pid=".$pid." and status>0")->order('sort')->select();
-		$this->assign('left_list', $sub_category);
-		if (empty($_REQUEST['id'])) {
-			//取第一个子分类
-			$category = array_shift($sub_category);
-		}
-		$this->assign('category', $category);
 		$this->assign('ACTION_TITLE', $category['name']);
+		$this->assign('left_list', $left_list);
+		$this->index($id);
+	}
+
+	public function customer() {
+		$alias = ACTION_NAME;
+		$this->assign('alias', $alias);
+
+		$category = M('Category')->where("alias='".$alias."'")->find();
+		$this->assign('MODULE_TITLE', $category['name']);
+		$this->index($category['id']);
+	}
+
+	public function index($id=0) {
 		//子分类文章列表
 		$where = array(
-			'category_id' => $category['id'],
+			'category_id' => $id,
 			'status' => array('gt', 0)
 			);
 		$order = 'sort, id desc';
@@ -74,8 +53,8 @@ class AlbumAction extends BaseAction {
 		$this->assign('list', $rs);
 		$this->assign('page', $p->showMultiNavi());
 
-		$this->assign('content', 'index');
-		$this->display('Layout:main');
+		$this->assign('content', ACTION_NAME);
+		$this->display('Layout:reminder');
 	}
 
 	public function album($id=0) {
@@ -95,7 +74,7 @@ class AlbumAction extends BaseAction {
 		$this->assign('left_list', $sub_category);
 		$this->assign('alias', M('Category')->where("id=".$category['pid'])->getField('alias'));
 		$_GET['id'] = $category['id'];
-
+/*
 		//获取上一篇，下一篇
 		$rel_link = array();
 		$rs = $this->dao->where("category_id=".$info['category_id']." and (sort=".$info['sort']." and id<".$id." or sort<".$info['sort'].")")->order('sort desc, id desc')->find();
@@ -107,13 +86,17 @@ class AlbumAction extends BaseAction {
 			$rel_link['next'] = $rs;
 		}
 		$this->assign('rel_link', $rel_link);
-
+*/
 		$this->assign('content', 'album');
 		$this->display('Layout:main');
 	}
-
 	public function photo() {
 		$this->assign('MODULE_TITLE', '顾客特照');
+		
+		$id = intval($_REQUEST['id']);
+		$info = $this->dao->find($id);
+		$this->assign('ACTION_TITLE', $info['name']);
+		$this->assign('album', $info);
 		$this->display('Layout:gallery');
 	}
 	public function gallery_xml() {
@@ -131,11 +114,10 @@ class AlbumAction extends BaseAction {
 		$xml->writeAttribute('imagePadding', '0');
 
 		$where = array(
-			'category_id' => 3,
+			'album_id' => intval($_REQUEST['id']),
 			'status' => array('gt', 0)
 			);
-		$order = 'sort, id desc';
-		$rs = M('Photo')->where($where)->order($order)->select();
+		$rs = M('Photo')->where($where)->order('sort')->select();
 		empty($rs) && ($rs = array());
 		foreach ($rs as $row) {
 			$xml->startElement('image');
