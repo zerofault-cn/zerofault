@@ -23,23 +23,26 @@
 <load file="../Public/Js/jQuery.autoIMG.min.js" />
 <script>
 $(document).ready(function() {
-	$(".mce_content").autoIMG();
+//	$(".mce_content").autoIMG();
 
 	var speed=20;
+	var width = 0;
 	if($(".mce_content div>div>ul").length > 0) {
 		var tab1 = $(".mce_content div>div>ul");
-		tab1.css("float", "left");
+		tab1.css({"float": "left", "margin": 0});
 		tab1.children().each(function() {
 			$(this).css("float", "left");
+			//width += $(this).children("img").width();
+			//alert($(this).children("img"));
 		});
 
 		var tab = tab1.parent().parent();
 		tab.css({"width": $(".mce_content").width(), "overflow": "hidden"});
 
 		var wrap = tab1.parent();
-		wrap.css("width", "600%");
+		wrap.css("width", "2000%");
 
-		var tab2 = $("<ul/>").css("float", "left").html(tab1.html());
+		var tab2 = $("<ul/>").css({"float": "left", "margin": 0}).html(tab1.html());
 		tab1.after(tab2);
 		function Marquee() {
 			if(tab2[0].offsetWidth-tab[0].scrollLeft <= 0) {
