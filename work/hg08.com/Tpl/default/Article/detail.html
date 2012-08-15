@@ -22,7 +22,36 @@
 </eq>
 <load file="../Public/Js/jQuery.autoIMG.min.js" />
 <script>
-jQuery(function ($) {
+$(document).ready(function() {
 	$(".mce_content").autoIMG();
+
+	var speed=20;
+	if($(".mce_content div>div>ul").length > 0) {
+		var tab1 = $(".mce_content div>div>ul");
+		tab1.css("float", "left");
+		tab1.children().each(function() {
+			$(this).css("float", "left");
+		});
+
+		var tab = tab1.parent().parent();
+		tab.css({"width": $(".mce_content").width(), "overflow": "hidden"});
+
+		var wrap = tab1.parent();
+		wrap.css("width", "600%");
+
+		var tab2 = $("<ul/>").css("float", "left").html(tab1.html());
+		tab1.after(tab2);
+		function Marquee() {
+			if(tab2[0].offsetWidth-tab[0].scrollLeft <= 0) {
+				tab[0].scrollLeft -= tab1[0].offsetWidth;
+			}
+			else {
+				tab[0].scrollLeft++;
+			}
+		}
+		var MyMar = setInterval(Marquee, speed);
+		tab[0].onmouseover=function() {clearInterval(MyMar)};
+		tab[0].onmouseout=function() {MyMar=setInterval(Marquee,speed)};
+	}
 });
 </script>
