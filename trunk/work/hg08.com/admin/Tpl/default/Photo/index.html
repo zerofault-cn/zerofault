@@ -26,9 +26,9 @@
 		<td nowrap="nowrap">{$item['addtime']|substr=2,14}</td>
 		<td>
 			<if condition="$item.status eq 2">
-			<a href="__URL__/update/id/{$item['id']}/f/status/v/1" target="_iframe" title="取消首页展示">是</a>
+			<a href="__URL__/update/t/Photo/id/{$item['id']}/f/status/v/1" target="_iframe" title="取消首页展示">是</a>
 			<else />
-			<a href="__URL__/update/id/{$item['id']}/f/status/v/2" target="_iframe" title="推荐至首页展示">否</a>
+			<a href="__URL__/update/t/Photo/id/{$item['id']}/f/status/v/2" target="_iframe" title="推荐至首页展示">否</a>
 			</if>
 		</td>
 		<td>
