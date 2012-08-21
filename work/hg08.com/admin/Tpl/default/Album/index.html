@@ -25,10 +25,12 @@
 		<td nowrap="nowrap">{$item['create_time']|substr=2,14}</td>
 		<gt name="item.status" value="-1">
 		<td>
+			<if condition="$item.category_id neq 3">
 			<if condition="$item.status eq 2">
 			<a href="__URL__/update/id/{$item['id']}/f/status/v/1" target="_iframe" title="取消首页显示">是</a>
 			<else />
 			<a href="__URL__/update/id/{$item['id']}/f/status/v/2" target="_iframe" title="推荐至首页显示">否</a>
+			</if>
 			</if>
 		</td>
 		</gt>
