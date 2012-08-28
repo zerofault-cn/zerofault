@@ -3,7 +3,8 @@ $menu = array();
 
 $menu['网站设置'] = array(
 	'网站参数' => array('System', 'setting'),
-	'栏目头图' => array('System', 'image'),
+	'首页头图' => array('System', 'image_index'),
+	'内页头图' => array('System', 'image_main'),
 	'友情链接' => array('System', 'flink')
 	);
 
