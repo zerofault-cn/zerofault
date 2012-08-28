@@ -39,7 +39,13 @@ class SystemAction extends BaseAction{
 		$this->assign('content', ACTION_NAME);
 		$this->display('Layout:default');
 	}
-	public function image() {
+	public function image_index() {
+		$this->_image('index');
+	}
+	public function image_main() {
+		$this->_image('main');
+	}
+	private function _image($page) {
 		if (!empty($_POST['submit'])) {
 			$data = array();
 			foreach ($_REQUEST as $key=>$val) {
@@ -81,63 +87,65 @@ class SystemAction extends BaseAction{
 				}
 			}
 			if(F(MODULE_NAME.'-'.ACTION_NAME, $data, 'Runtime/Data/')) {
-				//生成banner.xml
-				$uri = './Runtime/Data/banner.xml';
-				touch($uri);
-				$uri = realpath($uri);
-				$xml = new XMLWriter();
-				$xml->openUri($uri);
-				$xml->setIndentString('  ');
-				$xml->setIndent(true);
-				$xml->startDocument('1.0', 'utf-8');
-				$xml->startElement('banner');
-				$xml->writeAttribute('width', '1578');
-				$xml->writeAttribute('height', '530');
-				$xml->writeAttribute('backgroundColor', '0xffffff');
-				$xml->writeAttribute('backgroundTransparency', '100');
-				$xml->writeAttribute('startWith', '1');
-				$xml->writeAttribute('barHeight', '28');
-				$xml->writeAttribute('fadeTransition', 'false');
-				$xml->writeAttribute('verticalTransition', 'false');
-				$xml->writeAttribute('controllerTop', 'false');
-				$xml->writeAttribute('transitionSpeed', '1');
-				$xml->writeAttribute('titleX', '0');
-				$xml->writeAttribute('titleY', '0');
+				if ('index' == $page) {
+					//生成banner.xml
+					$uri = './Runtime/Data/banner.xml';
+					touch($uri);
+					$uri = realpath($uri);
+					$xml = new XMLWriter();
+					$xml->openUri($uri);
+					$xml->setIndentString('  ');
+					$xml->setIndent(true);
+					$xml->startDocument('1.0', 'utf-8');
+					$xml->startElement('banner');
+					$xml->writeAttribute('width', '1578');
+					$xml->writeAttribute('height', '530');
+					$xml->writeAttribute('backgroundColor', '0xffffff');
+					$xml->writeAttribute('backgroundTransparency', '100');
+					$xml->writeAttribute('startWith', '1');
+					$xml->writeAttribute('barHeight', '28');
+					$xml->writeAttribute('fadeTransition', 'false');
+					$xml->writeAttribute('verticalTransition', 'false');
+					$xml->writeAttribute('controllerTop', 'false');
+					$xml->writeAttribute('transitionSpeed', '1');
+					$xml->writeAttribute('titleX', '0');
+					$xml->writeAttribute('titleY', '0');
 
-				$xml->startElement('items');
-				foreach ($data['index_top']['list'] as $item) {
-					$xml->startElement('item');
+					$xml->startElement('items');
+					foreach ($data['index_top']['list'] as $item) {
+						$xml->startElement('item');
 
-						$xml->startElement('title');
-						$xml->text($item['title']);
+							$xml->startElement('title');
+							$xml->text($item['title']);
+							$xml->endElement();
+						
+							$xml->startElement('path');
+							$xml->text($item['img']);
+							$xml->endElement();
+
+							$xml->startElement('target');
+							$xml->text('_blank');
+							$xml->endElement();
+
+							$xml->startElement('bar_color');
+							$xml->text('0x888888');
+							$xml->endElement();
+
+							$xml->startElement('bar_transparency');
+							$xml->text('50');
+							$xml->endElement();
+
+							$xml->startElement('slideShowTime');
+							$xml->text('3');
+							$xml->endElement();
+
 						$xml->endElement();
-					
-						$xml->startElement('path');
-						$xml->text($item['img']);
-						$xml->endElement();
-
-						$xml->startElement('target');
-						$xml->text('_blank');
-						$xml->endElement();
-
-						$xml->startElement('bar_color');
-						$xml->text('0x888888');
-						$xml->endElement();
-
-						$xml->startElement('bar_transparency');
-						$xml->text('50');
-						$xml->endElement();
-
-						$xml->startElement('slideShowTime');
-						$xml->text('3');
-						$xml->endElement();
-
+					}
 					$xml->endElement();
+					$xml->endElement();
+					$xml->endDocument();
+				//	$xml->flush();
 				}
-				$xml->endElement();
-				$xml->endElement();
-				$xml->endDocument();
-			//	$xml->flush();
 
 				self::_success('提交成功！', __URL__.'/'.ACTION_NAME);
 			}
@@ -153,55 +161,37 @@ class SystemAction extends BaseAction{
 
 		$data = F(MODULE_NAME.'-'.ACTION_NAME, '', 'Runtime/Data/');
 		if (empty($data)) {
-			$data = array(
-				'index_top' => array(
+			$data = array();
+			if ('index' == $page) {
+				$data['index_top'] = array(
 					'name' => '首页头部图',
 					'list' => array(
 						array(
-							'img' => 'Tpl/default/Public/Images/banner_01.jpg'
+							'img' => 'Tpl/default/Public/Images/index-1.jpg'
 							),
 						array(
-							'img' => 'Tpl/default/Public/Images/banner_02.jpg'
+							'img' => 'Tpl/default/Public/Images/index-2.jpg'
+							),
+						array(
+							'img' => 'Tpl/default/Public/Images/index-3.jpg'
 							)
 						)
-					),
-				'index_wedding' => array(
+					);
+				$data['index_wedding'] = array(
 					'name' => '首页【[时尚婚纱】配图',
 					'img' => 'Tpl/default/Public/Images/index_56.jpg',
 					'url' => __APP__.'/Album/works/5'
-					),
-				'top_about' => array(
-					'name' => '【关于皇宫】页头部图',
-					'img' => 'Tpl/default/Public/Images/new_17.jpg'
-					),
-				'top_news' => array(
-					'name' => '【最新活动】页头部图',
-					'img' => 'Tpl/default/Public/Images/new_17.jpg'
-					),
-				'top_set' => array(
-					'name' => '【拍摄套系】页头部图',
-					'img' => 'Tpl/default/Public/Images/new_17.jpg'
-					),
-				'top_works' => array(
-					'name' => '【最新作品】页头部图',
-					'img' => 'Tpl/default/Public/Images/new_17.jpg'
-					),
-				'top_customer' => array(
-					'name' => '【顾客特照】页头部图',
-					'img' => 'Tpl/default/Public/Images/new_17.jpg'
-					),
-				'top_reserve' => array(
-					'name' => '【在线预定】页头部图',
-					'img' => 'Tpl/default/Public/Images/new_17.jpg'
-					),
-				'top_reminder' => array(
-					'name' => '【温馨提示】页头部图',
-					'img' => 'Tpl/default/Public/Images/new_17.jpg'
-					)
-				);
+					);
+			}
+			elseif ('main' == $page) {
+				$data['main_top'] = array(
+					'name' => '内页头部图',
+					'img' => 'Tpl/default/Public/Images/main_top.jpg'
+					);
+			}
 		}
 		$this->assign('list', $data);
-		$this->assign('content', ACTION_NAME);
+		$this->assign('content', 'image');
 		$this->display('Layout:default');
 	}
 

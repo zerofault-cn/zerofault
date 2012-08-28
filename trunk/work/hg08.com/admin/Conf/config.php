@@ -13,26 +13,20 @@ $config = array(
 	'REQUIRE_AUTH_MODULE'=> '',
 	'NOT_AUTH_ACTION' => '',
 	'REQUIRE_AUTH_ACTION'=> '',
-	'IFRAME_ACTION' => array('update','delete','edit')
+	'IFRAME_ACTION' => array('submit', 'update', 'delete', 'edit')
 );
 if (ENV == 'LOCAL') {
 	$config['APP_DEBUG'] = true;
 	$config['USER_AUTH_TYPE'] = 2;
 	$config['DB_NAME'] = 'hg08_com';
-//	$config['DB_TYPE'] = 'pdo';
-//	$config['DB_DSN'] = 'odbc:DRIVER={Microsoft Access Driver (*.mdb)};DBQ='.getcwd().'\Database.mdb';
-//	$config['DB_DESCRIBE_TABLE_SQL'] = 'select name from syscolumns where id=object_id("%table%")';
 }
 elseif (ENV == 'TEST') {
-	$config['DB_HOST'] = 'ruitengtest.gotoip2.com';
-	$config['DB_NAME'] = 'ruitengtest';
-	$config['DB_USER'] = 'ruitengtest';
-	$config['DB_PWD'] = 'ruiteng@test';
 }
 else {
-	$config['DB_NAME'] = 'ruitcms';
-	$config['DB_USER'] = 'root';
-	$config['DB_PWD'] = 'ruiteng';
+	$config['DB_HOST'] = '60.191.221.120';
+	$config['DB_NAME'] = 'hg08com';
+	$config['DB_USER'] = 'hg08com';
+	$config['DB_PWD'] = 'hg08com';
 }
 return $config;
 ?>

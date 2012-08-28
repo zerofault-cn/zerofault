@@ -16,17 +16,13 @@ if (ENV == 'LOCAL') {
 	$config['DB_NAME'] = 'hg08_com';
 }
 elseif (ENV == 'TEST') {
-	$config['DB_HOST'] = 'ruitengtest.gotoip2.com';
-	$config['DB_NAME'] = 'ruitengtest';
-	$config['DB_USER'] = 'ruitengtest';
-	$config['DB_PWD'] = 'ruiteng@test';
 }
 else {
 	$config['APP_SUB_DOMAIN_DEPLOY'] = true;
-	$config['DB_HOST'] = 'localhost';
-	$config['DB_NAME'] = 'zshz666_com';
-	$config['DB_USER'] = 'zshz666_com';
-	$config['DB_PWD'] = 'yczshwhz';
+	$config['DB_HOST'] = '60.191.221.120';
+	$config['DB_NAME'] = 'hg08com';
+	$config['DB_USER'] = 'hg08com';
+	$config['DB_PWD'] = 'hg08com';
 }
 return $config;
 ?>
