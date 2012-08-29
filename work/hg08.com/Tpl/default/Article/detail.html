@@ -1,7 +1,10 @@
 <load file="../Public/Js/SWFObject-1.5.js"/>
-<eq name="ACTION_NAME" value="about">
-<div class="mce_content">
-	{$info.content}
+<if condition="ACTION_NAME eq 'about'">
+<!-- no header -->
+<elseif condition="ACTION_NAME eq 'set'" />
+<div class="newxx_bt">
+	<h1>{$info.title}</h1>
+	<a href="__APP__/Client/reserve/set_id/{$info.id}"/>&gt;&gt;预定此套系&lt;&lt;</a>
 </div>
 <else />
 <div class="newxx_bt">
@@ -10,6 +13,7 @@
 	时间：{$info.create_time|substr=0,10}&nbsp;&nbsp;&nbsp;&nbsp;
 	人气：{$info.view}&nbsp;&nbsp;&nbsp;&nbsp;
 </div>
+</if>
 <div class="mce_content">
 	{$info.content}
 </div>
@@ -19,7 +23,6 @@
 	</tr>
 	</table>
 </div>
-</eq>
 <load file="../Public/Js/jQuery.autoIMG.min.js" />
 <script>
 $(document).ready(function() {
