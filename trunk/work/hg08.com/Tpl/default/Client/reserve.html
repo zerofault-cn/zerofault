@@ -39,7 +39,13 @@ dl dt {
 		<foreach name="set_list" item="item">
 		<dl>
 			<dt><a href="__APP__/Article/set/id/{$item.id}" target="_blank"><img src="__APP__/../html/Attach/Article/{$item.id}.jpg" width="180"/></a></dt>
-			<dd><input type="radio" name="set" value="{$item.id}"/><a href="__APP__/Article/set/id/{$item.id}" target="_blank">{$item.title}</a></dd>
+			<dd>
+				<if condition="$set_id eq $item['id']">
+				<input type="radio" name="set" value="{$item.id}" checked="checked"/>
+				<else />
+				<input type="radio" name="set" value="{$item.id}" />
+				</if><a href="__APP__/Article/set/id/{$item.id}" target="_blank">{$item.title}</a>
+			</dd>
 		</dl>
 		</foreach>
 		</td>
