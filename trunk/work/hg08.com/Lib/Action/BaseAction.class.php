@@ -6,9 +6,11 @@ class BaseAction extends Action{
 		
 		$this->assign('setting', F('System-setting'));
 		$this->assign('flink', F('System-flink'));
+		$this->assign('count', F('System-count'));
+
 		$this->assign('image_index', F('System-image_index'));
 		$this->assign('image_main', F('System-image_main'));
-
+		
 		$Article_about = M('Article')->where('category_id=1 and status>0')->order('sort')->select();
 		$this->assign('Article_about', $Article_about);
 

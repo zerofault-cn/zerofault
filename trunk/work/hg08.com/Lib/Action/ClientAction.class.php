@@ -60,7 +60,8 @@ class ClientAction extends BaseAction {
 		$category_id = M('Category')->where("alias='set'")->getField('id');
 		$this->assign('set_list', M('Article')->where("category_id=".$category_id." and status>0")->order('sort')->field('id,title')->select());
 		$this->assign('set_id', empty($_REQUEST['set_id'])?0:intval($_REQUEST['set_id']));
-
+		
+		$this->assign('content', 'reserve');
 		$this->display('Layout:main');
 	}
 
