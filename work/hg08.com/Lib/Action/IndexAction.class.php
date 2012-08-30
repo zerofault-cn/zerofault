@@ -7,6 +7,9 @@ class IndexAction extends BaseAction{
 
 	public function index() {
 
+		$count = F('System-count');
+		F('System-count', $count+mt_rand(1, 5));
+
 		$rs = M('Article')->where("category_id=2 and status>0")->order("sort, id desc")->limit(8)->select();
 		$this->assign('news_list', $rs);
 
