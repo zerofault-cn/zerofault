@@ -111,7 +111,7 @@ class AbsenceAction extends BaseAction{
 				}
 				else {
 					//该员工在2011年前入职，则用2010年剩余年假 + 2011年至去年的整年假
-					$tmp_balance_hour = $staff_info['balance']*8 + (date('Y', $this->time)-2011)*$Accrual[0]*8;
+				//	$tmp_balance_hour = $staff_info['balance']*8 + (date('Y', $this->time)-2011)*$Accrual[0]*8;
 					//到达新的等级后
 					$tmp_balance_hour = $staff_info['balance']*8;
 					$tmp_time1 = mktime(0,0,0,1,1,2011);
@@ -127,7 +127,7 @@ class AbsenceAction extends BaseAction{
 						$tmp_balance_hour += ($tmp_time2-strtotime($staff_info['onboard'])-$AccrualTime[2])/86400/365*$this->Absence_Config['accrualrate'][$AccrualTime[2]][0]*8;
 					}
 					elseif (strtotime($staff_info['onboard'])+$AccrualTime[1] < $tmp_time1) {
-						//2011年初已有4年工龄的，即2007年1月1日入职，此时$Accrual[0]＝20
+						//2011年初已有4年工龄的，即2007年1月1日前入职，此时$Accrual[0]＝20
 						$tmp_balance_hour += (date('Y', $this->time)-2011)*$Accrual[0]*8;
 					}
 					elseif (strtotime($staff_info['onboard'])+$AccrualTime[1]<$tmp_time2) {
@@ -143,7 +143,8 @@ class AbsenceAction extends BaseAction{
 						}
 					}
 					else {
-						$tmp_balance_hour += (date('Y', $this->time)-2011)*$Accrual[0]*8;
+						//去年未达到4年工龄
+						$tmp_balance_hour += (date('Y', $this->time)-2011)*15*8;
 					}
 				}
 				$tmp_balance_hour = round($tmp_balance_hour);
@@ -1013,7 +1014,8 @@ class AbsenceAction extends BaseAction{
 							}
 						}
 						else {
-							$tmp_balance_hour += (date('Y', $this->time)-2011)*$Accrual[0]*8;
+							//去年未达到4年工龄的
+							$tmp_balance_hour += (date('Y', $this->time)-2011)*15*8;
 						}
 					}
 					$balance_hour = round($tmp_balance_hour);
