@@ -84,7 +84,10 @@ h2 a:hover{
 	text-align:center;
 	color:#848484;
 	}
-	
+.newxx_bt h1 {
+	font-size: 22px;
+	font-weight: 700;
+}
 h1{
 	line-height:30px;
 	font-weight:normal;
