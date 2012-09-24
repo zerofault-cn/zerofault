@@ -120,8 +120,8 @@ class InviteAction extends BaseAction {
 		$qq = trim($_REQUEST['qq']);
 		//empty($qq) && self::_error('QQ必须填写！');
 		$reserve_date = trim($_REQUEST['reserve_date']);
-		empty($_REQUEST['quick_form'])&&empty($reserve_date) && self::_error('预约装修时间必须填写！');
-		empty($_REQUEST['quick_form'])&&strtotime($reserve_date)<=0 && self::_error('预约装修时间格式错误！');
+	//	empty($_REQUEST['quick_form'])&&empty($reserve_date) && self::_error('预约装修时间必须填写！');
+	//	empty($_REQUEST['quick_form'])&&strtotime($reserve_date)<=0 && self::_error('预约装修时间格式错误！');
 		empty($reserve_date) && ($reserve_date=date('Y-m-d'));
 		$phone = trim($_REQUEST['phone']);
 		if (empty($phone)) {
