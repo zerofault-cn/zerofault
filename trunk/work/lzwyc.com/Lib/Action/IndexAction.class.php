@@ -41,7 +41,7 @@ class IndexAction extends BaseAction{
 		$this->assign('designer_list', $rs);
 
 		//网站公告
-		$rs = M('Article')->where("category_id=1 and status>0")->order("sort, id desc")->limit(12)->select();
+		$rs = M('Article')->where("category_id=1 and status>0")->order("sort, id desc")->select();
 		$this->assign('announcement_list', $rs);
 
 		$this->assign('brand', F('Index-brand'));
