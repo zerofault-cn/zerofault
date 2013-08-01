@@ -344,7 +344,7 @@ class StatusAction extends BaseAction{
 								//有TBD
 								if ($status_count[1]>0) {
 									//有Pass
-									$value = 0;//设为Ongoing 
+									$value = 0;//设为Ongoing
 								}
 								else {
 									//全部TBD，或还有Ignore
@@ -979,7 +979,7 @@ class StatusAction extends BaseAction{
 					)
 				)
 			);
-			
+
 			$Style_Status_TBD = new PHPExcel_Style();
 			$Style_Status_TBD->applyFromArray(
 				array(
@@ -1044,7 +1044,7 @@ class StatusAction extends BaseAction{
 				$objPHPExcel->getActiveSheet()->setCellValue($COLS[5+$i].'3', 'Status');
 			}
 			$objPHPExcel->getActiveSheet()->setSharedStyle($Style_ItemTD, 'E1:'.$COLS[5+$i].'2');
-			
+
 			$objPHPExcel->getActiveSheet()->setCellValue('A3', 'Board Name');
 			$objPHPExcel->getActiveSheet()->setCellValue('B3', 'Board Owner');
 			$objPHPExcel->getActiveSheet()->setCellValue('C3', 'Information');
@@ -1430,7 +1430,7 @@ class StatusAction extends BaseAction{
 								//有TBD
 								if ($status_count[1]>0) {
 									//有Pass
-									$value = 0;//设为Ongoing 
+									$value = 0;//设为Ongoing
 								}
 								else {
 									//全部TBD，或还有Ignore
@@ -1462,6 +1462,14 @@ class StatusAction extends BaseAction{
 		$result = array();
 		if (!empty($flow_id) && !empty($item_id)) {
 			$rs = array();
+			$info = $this->dao->find($flow_id);
+			$item_arr = explode(',', $info['item_ids']);
+			$owner_arr = explode(',', $info['owner_ids']);
+			foreach($item_arr as $key=>$val) {
+				if ($item_id == $val) {
+					$result['Status']['owner_id'] = $owner_arr[$key];
+				}
+			}
 		}
 		else {
 			if (!empty($status_id)) {
@@ -1527,7 +1535,7 @@ class StatusAction extends BaseAction{
 							//有TBD
 							if ($status_count[1]>0) {
 								//有Pass
-								$value = 0;//设为Ongoing 
+								$value = 0;//设为Ongoing
 							}
 							else {
 								//全部TBD，或还有Ignore
@@ -1591,6 +1599,9 @@ class StatusAction extends BaseAction{
 						}
 						if ($owner_id < 0) {
 							$owner_name = M('Location')->where("id=".abs($owner_id))->getField('name');
+						}
+						else {
+							$owner_name = M('Staff')->where("id=".abs($owner_id))->getField('realname');
 						}
 						self::write_log('Automatically', "Change Board(".$info['id'].": ".$value.") Owner from [".$info['owner']['realname']."] to [".$owner_name."]");
 					}
