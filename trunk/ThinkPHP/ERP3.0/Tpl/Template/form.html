@@ -1,0 +1,91 @@
+<p class="page_title_text">Edit Mail Template</p>
+<form action="__URL__/submit" method="post" target="_iframe">
+<input type="hidden" name="id" value="{$info['id']}" />
+<input type="hidden" name="action" value="{$info['action']}" />
+<input type="hidden" name="do" value="{$info['do']}" />
+<table cellpadding="5" border="1" bordercolor="#FFFFFF" style="border-collapse:collapse;">
+<tr>
+	<td width="100" align="right" class="trbg0">Action:</td>
+	<td width="510">{$info['action']|ucfirst} -> {$info['do']|ucfirst}</td>
+</tr>
+<tr>
+	<td rowspan="2" align="right" class="trbg0">Subject:</td>
+	<td><input type="text" id="subject" name="subject" size="70" value="{$info['subject']}" /></td>
+</tr>
+<tr>
+	<td>
+		<input type="button" onclick="insert('subject','[staff]');" value="[staff]" />
+		<input type="button" onclick="insert('subject','[from_staff]');" value="[from_staff]" />
+		<input type="button" onclick="insert('subject','[to_staff]');" value="[to_staff]" />
+		<input type="button" onclick="insert('subject','[product]');" value="[product]" />
+		<input type="button" onclick="insert('subject','[code]');" value="[code]" />
+	</td>
+</td>
+</tr>
+<tr>
+	<td align="right" class="trbg0" rowspan="2">Body:</td>
+	<td><textarea id="body" name="body" cols="80" rows="7">{$info['body']}</textarea></td>
+</tr>
+<tr>
+	<td>
+		<input type="button" onclick="insert('body','[staff]');" value="[staff]" />
+		<input type="button" onclick="insert('body','[from_staff]');" value="[from_staff]" />
+		<input type="button" onclick="insert('body','[to_staff]');" value="[to_staff]" />
+		<input type="button" onclick="insert('body','[leader]');" value="[leader]" />
+		<input type="button" onclick="insert('body','[manager]');" value="[manager]" />
+		<input type="button" onclick="insert('body','[product]');" value="[product]" />
+		<input type="button" onclick="insert('body','[quantity]');" value="[quantity]" />
+		<input type="button" onclick="insert('body','[unit]');" value="[unit]" />
+		<input type="button" onclick="insert('body','[remark]');" value="[remark]" />
+		<input type="button" onclick="insert('body','[url]');" value="[url]" />
+		<input type="button" onclick="insert('body','\t');" value="TAB" /></td>
+</tr>
+</table>
+<p class="center">
+	<input type="submit" value="Submit" name="submit"/>
+	&nbsp;&nbsp;&nbsp;&nbsp;
+	<input type="button" value="Cancel" onclick="javascript:location.href='__URL__';"/>
+</p>
+</form>
+<table cellpadding="5" border="1" bordercolor="#FFFFFF" style="border-collapse:collapse;">
+<tr>
+	<th colspan="2">Support Tags</th>
+</tr>
+<iterate name="tags" id="item">
+<tr class="trbg{$mod}">
+	<td>{$key}&nbsp;</td>
+	<td>{$item}</td>
+</tr>
+</iterate>
+</table>
+<br />
+<script>
+function insert(id, value) {
+	var field = document.getElementById(id);
+	//IE support
+	if (document.selection) {
+		field.focus();
+		var sel = document.selection.createRange();
+		sel.text = value;
+		sel.select();
+	}
+	else if (field.selectionStart || field.selectionStart == '0') {
+		var startPos = field.selectionStart;
+		var endPos = field.selectionEnd;
+		// save scrollTop before insert
+		var restoreTop = field.scrollTop;
+		field.value = field.value.substring(0, startPos) + value + field.value.substring(endPos, field.value.length);
+		if (restoreTop > 0) {
+			// restore previous scrollTop
+			field.scrollTop = restoreTop;
+		}
+		field.focus();
+		field.selectionStart = startPos + value.length;
+		field.selectionEnd = startPos + value.length;
+	}
+	else {
+		field.value += value;
+		field.focus();
+	}
+}
+</script>

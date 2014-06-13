@@ -1,0 +1,139 @@
+<style>
+.highlight, .tDnD_whileDrag {
+	background-color: #FFCC33;
+}
+#items_table tr.item {
+	background-color: #E9E9E9;
+}
+#item_list {
+	border: 1px solid #ddd;
+	border-bottom: none;
+	background-color: #ffffff;
+}
+#item_list li{
+	padding:5px;
+	line-height: 16px;
+	border-bottom: 1px solid #ddd;
+}
+#item_list li.caption {
+	font-weight:bold;
+	background-color: #9999CC;
+}
+#item_list li.li0 {
+	background-color: #FFFFE1;
+}
+</style>
+<p class="page_title_text">Create Flow Template</p>
+<table cellpadding="3" border="1" bordercolor="#FFFFFF" style="border-collapse:collapse;">
+<tr>
+	<td valign="top">
+		<form id="_form" action="__URL__/template" method="post" target="_iframe">
+		<input type="hidden" name="id" value="{$info['id']}" />
+		<table cellpadding="3" border="1" bordercolor="#FFFFFF" style="border-collapse:collapse;">
+		<tr bgcolor="#78A3DF">
+			<td nowrap="nowrap">Template Name</td>
+			<td bgcolor="#DADADA"><input type="text" name="name" size="40" value="{$info['name']}"/></td>
+		</tr>
+		<tr bgcolor="#BCD1EF">
+			<td>Test Items</td>
+			<td bgcolor="#E9E9E9">
+				<table id="items_table" width="100%" cellpadding="3" border="1" bordercolor="#FFFFFF" style="border-collapse:collapse;">
+				<tr class="nodrop nodrag">
+					<th> </th>
+					<th>Item Name</th>
+					<th nowrap="nowrap">Default Owner</th>
+				</tr>
+				<iterate name="info.item_list" id="item">
+				<tr class="item" id="item_{$item['id']}">
+					<td class="icon" align="center"><img align="absmiddle" src="../Public/Images/delete.gif" alt="Remove" id="{$item['id']}"/></td>
+					<td nowrap="nowrap">
+						{$item['name']}<input type="hidden" value="{$item['id']}" name="item_id[]"/>
+					</td>
+					<td>
+						<select name="owner_id[]"><option value="0">*IDEM*</option>
+						{$item['staff_opts']}
+						</select>
+					</td>
+				</tr>
+				</iterate>
+				<empty name="info.item_list">
+				<tr id="tip" class="nodrop nodrag" bgcolor="#FFFFFF">
+					<td colspan="3" align="center">Add item from right side!</td>
+				</tr>
+				</empty>
+				</table>
+			</td>
+		</tr>
+		<tr>
+			<td colspan="2" align="center">
+				<input type="submit" value="Submit" name="submit"/>
+				&nbsp;&nbsp;&nbsp;&nbsp;
+				<input type="button" value="Cancel" onclick="javascript:location.href='__URL__/template';"/>
+			</td>
+		</tr>
+		</table>
+		</form>
+	</td>
+	<td width="300" valign="top">
+		<ul id="item_list">
+			<li class="caption">Defined Test Items:</li>
+		<iterate name="item_list" id="item">
+			<li class="li{$mod}"><input type="checkbox" class="item" id="chk_{$item['id']}" value="{$item['id']}"/>&nbsp;{$item['name']}</li>
+		</iterate>
+		<empty name="item_list">
+			<li>No Record</li>
+		</empty>
+		</ul>
+	</td>
+</tr>
+</table>
+<p class="center"></p>
+<script language="JavaScript" type="text/javascript" src="../Public/Js/jquery-tablednd-0.5.js"></script>
+<script language="JavaScript" type="text/javascript">
+$(document).ready(function() {
+	$("#items_table").tableDnD({
+		onDragClass: "highlight"
+	});
+	$("#item_list input.item").attr("checked", false);
+	$("#items_table td.icon img").each(function() {
+		$(this).css({"cursor": "pointer"}).click(function() {
+			$(this).parent().parent().remove();
+			$("#item_list input#chk_"+$(this).attr("id")).attr("checked", false);
+		});
+		$("#item_list input#chk_"+$(this).attr("id")).attr("checked", true);
+	});
+	$("#item_list li input:checkbox").each(function() {
+		$(this).click(function() {
+			add_item($(this).val(), $(this).attr("checked"));
+		});
+	});
+});
+function add_item(id, checked) {
+	if (!checked) {
+		//remove from left
+		$("#items_table tr#item_"+id).remove();
+	}
+	else {
+		$.getJSON("__URL__/template", {
+			"op": "get_item",
+			"id": id
+		}, function(json) {
+			var tr = $("<tr/>").attr({"id": "item_"+json.id, "class": "item"});
+			var icon = $("<img/>").attr({"src": "../Public/Images/delete.gif", "align": "absmiddle"}).css({"cursor": "pointer"}).click(function() {
+				$(this).parent().parent().remove();
+			});
+			tr.append($("<td/>").attr("align", "center").append(icon));
+			tr.append($("<td/>").attr("nowrap", "nowrap").append(json.name+'<input type="hidden" name="item_id[]" value="'+json.id+'"/>'));
+			tr.append($("<td/>").append('<select name="owner_id[]"><option value="0">*IDEM*</option>'+json.staff_opts+'</select>'));
+			$("#items_table").append(tr);
+			if ($("#items_table tr.item").length>0) {
+				$("#items_table tr#tip").hide();
+			}
+			else {
+				$("#items_table tr#tip").show();
+			}
+			$("#items_table").tableDnD();
+		});
+	}
+}
+</script>

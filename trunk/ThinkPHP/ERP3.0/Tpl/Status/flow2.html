@@ -1,0 +1,221 @@
+<style>
+#title_layer {
+	position: absolute;
+	border: 1px solid #767676;
+	padding: 6px;
+	background-color: #FFFFDD;
+	border-radius: 6px;
+	-moz-border-radius: 6px;
+	-webkit-border-radius: 6px;
+	z-index: 200;
+}
+
+th.sp, td.sp {
+	padding: 2px;
+	background-color: #FFFF99;
+}
+strong.TBD, select.TBD, option.TBD {
+	color: #808080;
+}
+strong.Pass, select.Pass, option.Pass {
+	color: #009900;
+}
+strong.PassX, select.PassX, option.PassX {
+	color: #009900;
+}
+strong.Ongoing, select.Ongoing, option.Ongoing {
+	color: #0000FF;
+}
+strong.Failed, select.Failed, option.Failed {
+	color: #FF0000;
+}
+strong.Ignore, select.Ignore, option.Ignore {
+	color: #0099FF;
+}
+select.status{
+	font-weight:bold;
+}
+td.focus {
+	background-color: #FFCC33;
+}
+</style>
+<p class="page_title_text">{$flow_info['name']}</p>
+<table>
+<tr>
+	<td>
+		<form action="__URL__/flow2/id/{$request['id']}">
+		<table id="search_table" cellpadding="3" border="1" bordercolor="#FFFFFF" style="border-collapse:collapse;">
+		<tr>
+			<th>Board Name</th>
+			<th>Board Information</th>
+			<th>Board Owner</th>
+			<th>Board Status</th>
+			<th>Test Item</th>
+			<td rowspan="2">
+				<input type="submit" value="Filter"/>
+				<input type="button" onclick="window.location='__URL__/flow2/id/{$request['id']}';" value="Reset" />
+			</td>
+		</tr>
+		<tr>
+			<td><input type="text" name="board_name" size="10" value="{$request['board_name']}"/></td>
+			<td><input type="text" name="board_info" size="16" value="{$request['board_info']}"/></td>
+			<td><select name="owner_id"><option value="">All</option>{$owner_opts}</select></td>
+			<td><select name="board_status" class="status {$status_arr[$request['board_status']]|str_replace='*','X',###}" onchange="javascript:this.className='status '+this.options[this.selectedIndex].className;">
+					<option value="-2">All</option>
+					<option value="-1" class="TBD" <eq name="request.board_status" value="-1">selected="selected"</eq>>TBD</option>
+					<option value="0" class="Ongoing" <eq name="request.board_status" value="0">selected="selected"</eq>>Ongoing</option>
+					<option value="1" class="Pass" <eq name="request.board_status" value="1">selected="selected"</eq>>Pass</option>
+					<gt name="board_id" value="0">
+					<option value="9" class="PassX" <eq name="request.board_status" value="9">selected="selected"</eq>>Pass*</option>
+					</gt>
+					<option value="2" class="Failed" <eq name="request.board_status" value="2">selected="selected"</eq>>Failed</option>
+					<option value="8" class="Ignore" <eq name="request.board_status" value="8">selected="selected"</eq>>Ignore</option>
+				</select>
+			</td>
+			<td><select name="item_id"><option value="0">All</option>
+				{$flow_item_opts}
+				</select>
+			</td>
+		</tr>
+		</table>
+		</form>
+	</td>
+</tr>
+</table>
+<table cellpadding="3" border="1" bordercolor="#FFFFFF" style="border-collapse:collapse;">
+<tr bgcolor="#CCCCFF">
+	<td colspan="5" align="right" bgcolor="#CCCCFF"><strong>Test Item:&nbsp;</strong></td>
+	<td class="sp"></td>
+	<foreach name="item_list" item="item">
+	<td colspan="2" title="{$item['description']}" valign="top">
+		<if condition="$item.status_count gt 0">{$key+1}.&nbsp;{$item['name']}
+		<else /><a href="__URL__/revision/flow_id/{$flow_info['id']}/item_id/{$item['id']}?width=420&height=360&modal=true" class="thickbox" title="Batch edit all the Revision&Status of this Item">{$key+1}.&nbsp;{$item['name']}</a>
+		</if>
+	</td>
+	</foreach>
+</tr>
+<tr bgcolor="#CCCCFF">
+	<td colspan="5" align="right" bgcolor="#CCCCFF"><strong>Default Test Owner:&nbsp;</strong></td>
+	<td class="sp"></td>
+	<foreach name="owner_list" item="owner">
+	<td colspan="2">{$owner}</td>
+	</foreach>
+</tr>
+<tr>
+	<th nowrap="nowrap">Board Name/Owner</th>
+	<th nowrap="nowrap">Information</th>
+	<th nowrap="nowrap">Final Status</th>
+	<th nowrap="nowrap">Board Comment</th>
+	<th nowrap="nowrap">Board Remark</th>
+	<td class="sp"></td>
+	<foreach name="item_list" item="item">
+	<th>Status</th>
+	<th>Comment</th>
+	</foreach>
+</tr>
+
+<iterate name="board_list" id="board">
+<tr class="trbg{$mod}">
+	<td><a href="__URL__/board/id/{$board['id']}" title="Edit/View Board Detail"><strong>{$board['name']}</strong></a><br />{$board['owner']['realname']}
+	</td>
+	<td valign="top">{$board['info']|nl2br}</td>
+	<td><a href="__URL__/revision/board_id/{$board['id']}?width=420&height=360&modal=true" class="thickbox"><strong class="{$status_arr[$board['status']]|str_replace='*','X',###}">{$status_arr[$board['status']]}</strong></a></td>
+	<td valign="top" class="td_comment"><a style="float:right;" href="__URL__/list_comment/model/StatusBoard/id/{$board['id']}?width=480&height=360&modal=true" class="thickbox" title="Click to view board comment"><img src="../Public/Images/comments.gif"/></a><notempty name="board.last_comment">{$board['last_comment']['content']|substr=0,12}</notempty></td>
+	<if condition="$_SESSION[C('USER_AUTH_KEY')] eq $board['owner_id'] or $_SESSION[C('ADMIN_AUTH_NAME')] or in_array($_SESSION[C('USER_AUTH_KEY')], C('STATUS_ADMIN_ID'))">
+	<td class="edit" title="Click to Edit, Ctrl+Enter to submit"><span class="textarea">{$board['remark']|nl2br}</span><textarea class="remark" id="{$board['id']}" style="display:none;width:0;height:0;">{$board['remark']}</textarea></td>
+	<else />
+	<td>{$board['remark']|nl2br}</td>
+	</if>
+	<td class="sp"></td>
+	<foreach name="board.board_item" item="item">
+	<td><a href="__URL__/revision/status_id/{$item['status_id']}?width=420&height=360&modal=true" class="thickbox"><strong class="{$status_arr[$item['status']]}">{$status_arr[$item['status']]}</strong></a></td>
+	<td valign="top" class="td_comment"><a style="float:right;" href="__URL__/list_comment/model/StatusStatus/id/{$item['status_id']}?width=480&height=360&modal=true" class="thickbox" title="Click to view comment"><img src="../Public/Images/comments.gif"/></a><notempty name="item.last_comment">{$item['last_comment']['content']|substr=0,12}</notempty></td>
+	</foreach>
+</tr>
+</iterate>
+<tr>
+	<td colspan="5" align="right" bgcolor="#CCCCFF"><strong>Edit all boards' Status:</strong></td>
+	<td class="sp"></td>
+	<foreach name="item_list" item="item">
+	<td colspan="2" bgcolor="#CCCCFF"><input type="button" value="Edit" alt="__URL__/status/flow_id/{$flow_info['id']}/item_id/{$item['id']}?width=420&height=500&modal=true" class="thickbox"/></td>
+	</foreach>
+</tr>
+
+</table>
+<p class="center"><input type="button" value="Export as Excel" onclick="document.location='__URL__/flow2/id/{$request['id']}/op/export';" /></p>
+
+<div id="title_layer" class="w10" style="display:none;"></div>
+<script language="JavaScript" type="text/javascript" src="../Public/Js/title_tip.js"></script>
+
+<script language="JavaScript" type="text/javascript">
+$(document).ready(function() {
+	$("td.edit").each(function(i) {
+		setEditable(this, i);
+	});
+
+	$("th[title], td[title], a[title]").each(function() {
+		$(this).hover(
+			function(event) { showTitle(this, event);},
+			function() { hideTitle(this);}
+		).mousemove(function(event) {
+			moveTitle(event);
+		});
+	});
+});
+var last_element = '';
+function setEditable(obj, n) {
+	$(obj).css('cursor', 'pointer').mouseover(function(){
+		$(this).addClass("focus");
+	}).mouseout(function(){
+		$(this).removeClass("focus");
+	}).click(function(){
+		var element = $(this).children('span').attr('class');
+		if (''==element) {
+			element = 'input';
+		}
+		if ($(this).children(element).css('display') != 'none') {
+			return;
+		}
+		if (''!=last_element) {
+			$("td.editing").children(last_element).hide();
+			$("td.editing").children('span').show();
+			$("td.editing").removeClass('editing');
+		}
+		var width = $(this).width();
+		var height = $(this).height();
+		$(this).children('span').hide();
+		var element_obj = $(this).children(element);
+		element_obj.css('width', width);
+		if ('textarea' == element) {
+			element_obj.css('height', height+20).css('overflow-y','scroll');
+		}
+		element_obj.show().select().keydown(function(e){
+			var keyCode=e.keyCode || window.event.keyCode;
+			if (keyCode==13) {
+				if ('textarea' == element && !e.ctrlKey && !window.event.ctrlKey) {
+					return;
+				}
+				submit_edit(this);
+			}
+			else if (keyCode==27) {
+				cancel_edit(this);
+			}
+		});
+		$(this).addClass('editing');
+		last_element = element;
+	});
+}
+function submit_edit(obj) {
+	$.post('__URL__/update', {
+		"board_id" : $(obj).attr("id"),
+		"f" : $(obj).attr("class"),
+		"v" : $(obj).val()
+	}, function(str) {
+		myAlert(str);
+		myLocation("", "");
+	});
+}
+function cancel_edit(obj){
+	$(obj).hide().prev().show();
+}
+</script>

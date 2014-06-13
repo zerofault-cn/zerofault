@@ -1,0 +1,93 @@
+<style>
+td.Open, strong.Open {
+	color: #339900;
+}
+td.Pending, strong.Pending {
+	color: #0000FF;
+}
+td.Closed, strong.Closed {
+	color: #808080;
+}
+</style>
+<p class="page_title_text">
+<if condition="ACTION_NAME eq 'all'">
+<table>
+<tr>
+	<td>
+		<form method="post">
+		<table id="search_table" cellpadding="3" border="1" bordercolor="#FFFFFF" style="border-collapse:collapse;">
+		<tr>
+			<th>Task Name</th>
+			<th>Category</th>
+			<th>Creator</th>
+			<th>Owner</th>
+			<td rowspan="2"><input type="submit" value="Filter"/></td>
+			<td rowspan="2"><input type="button" onclick="javascript:document.location='__URL__/form';" value="Create Task" /></td>
+
+		</tr>
+		<tr>
+			<td><input type="text" name="title" size="14" value="{$request['title']}"/></td>
+			<td><select name="category_id"><option value="">All</option>{$category_opts}</select></td>
+			<td><select name="creator_id"><option value="">All</option>{$creator_opts}</select></td>
+			<td><select name="owner_id"><option value="">All</option>{$owner_opts}</select></td>
+		</tr>
+		</table>
+		</form>
+	</td>
+</tr>
+</table>
+<else />
+<input type="button" onclick="javascript:document.location='__URL__/form';" value="Create Task" />
+</if>
+</p>
+<table cellpadding="3" cellspacing="0" border="1" bordercolor="#FFFFFF" style="border-collapse:collapse;">
+<tr>
+	<td colspan="9">{$page}</td>
+</tr>
+<tr>
+	<th>Task No.</th>
+	<th>Task Name</th>
+	<th>Project</th>
+	<th>Category</th>
+	<th>Creator</th>
+	<th>Status</th>
+	<th>Owners</th>
+	<th>Due Date</th>
+	<th>OP</th>
+</tr>
+<iterate name="result" id="item">
+<tr class="trbg{$mod} task_status{$item['status']}">
+	<td>T{$item.id|sprintf='%06s',###}</td>
+	<td><a href="__URL__/detail/id/{$item['id']}?width=600&height=600&modal=true" class="thickbox" title="Click to show task detail">{$item.title}</td>
+	<td>{$item['project']}</td>
+	<td>{$item['category']['name']}</td>
+	<td>{$item['creator']['realname']}</td>
+	<td class="{$status_arr[$item['status']]}"><strong>{$status_arr[$item['status']]}</strong>
+	<td>
+		<table width="100%" class="owner_list" style="background-color:transparent;">
+		<foreach name="item.owner" item="owner">
+		<tr>
+			<td width="100" nowrap="nowrap">{$owner.realname}</td>
+			<td width="60" class="{$status_arr[$owner['status']]}"><strong>{$status_arr[$owner['status']]}</strong></td>
+			
+		</tr>
+		</foreach>
+		</table>
+	</td>
+	<td><if condition="$item['status'] lt 1 and strcmp(date('Y-m-d'), $item['due_date']) gt 0"><span style="padding:1px;color:red;background-color:yellow">{$item['due_date']}</span><else />{$item['due_date']}</if></td>
+	<td>
+		<if condition="$_SESSION[C('ADMIN_AUTH_NAME')] or $_SESSION[C('USER_AUTH_KEY')] eq $item.creator_id or in_array($_SESSION[C('USER_AUTH_KEY')], C('TASK_ADMIN_ID'))"><a href="__URL__/form/id/{$item.id}" title="Edit this task"><img src="../Public/Images/form_edit.gif" border="0" alt="Edit" align="absmiddle" /></a>
+		<img src="../Public/Images/cross.gif" align="absmiddle" border="0" alt="Delete" title="Delete this task" style="cursor:pointer;" onclick="myConfirm('Are you sure to delete this task?', '__URL__/delete/id/{$item.id}');"/></if>
+	</td>
+</tr>
+</iterate>
+<empty name="result">
+<tr>
+	<td colspan="9" align="center">No Task</td>
+</tr>
+</empty>
+<tr>
+	<td colspan="9">{$page}</td>
+</tr>
+</table>
+<p class="center"></p>

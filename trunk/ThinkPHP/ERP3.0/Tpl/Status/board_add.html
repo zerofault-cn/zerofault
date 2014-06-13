@@ -1,0 +1,63 @@
+<style>
+#think_run_time,#think_page_trace{display:none;}
+fieldset legend {
+	font-weight:bold;
+	line-height:24px;
+}
+
+</style>
+<table width="98%" class="w10" cellpadding="0" cellspacing="0">
+<tr><td>
+	<form id="_form" action="__URL__/board/submit" method="post" target="_iframe">
+	<input type="hidden" name="flow_id" value="{$flow_info['id']}" />
+	<fieldset>
+		<legend>Add Board to The Test Flow</legend>
+		<table cellpadding="3" border="1" bordercolor="#FFFFFF" style="border-collapse:collapse;">
+		<tr>
+			<td bgcolor="#BCD1EF">Flow Name:</td>
+			<td bgcolor="#E9E9E9">{$flow_info['name']}</a></td>
+		</tr>
+		<tr>
+			<td bgcolor="#BCD1EF">Board Name:</td>
+			<td bgcolor="#E9E9E9">
+				<input type="text" name="board_name" value="{$info['name_ext']}"/>
+				<br /><input type="button" value="Sync Owner from Assets" onclick="sync_owner();" />
+			</td>
+		</tr>
+		<tr>
+			<td bgcolor="#BCD1EF" nowrap="nowrap">Board Information:</td>
+			<td bgcolor="#E9E9E9"><textarea name="board_info" rows="4" cols="35">{$info['info']}</textarea></td>
+		<tr>
+			<td bgcolor="#BCD1EF">Owner:</td>
+			<td bgcolor="#E9E9E9">
+				<select name="board_owner_id">
+				<option value="0">None</option>
+				{$info['owner_opts']}
+				</select>
+			</td>
+		</tr>
+		<tr>
+			<td colspan="2" align="center">
+				<input type="submit" value="Submit" name="submit" />
+				<input type="button" value="Close" name="close" onclick="tb_remove();" />
+			</td>
+		</tr>
+		</table>
+	</fieldset>
+	</form>
+</td></tr>
+</table>
+<script language="JavaScript" type="text/javascript">
+function sync_owner() {
+	var name = $("#_form input[name=board_name]").val();
+	if ($.trim(name) == '') {
+		myAlert('<i>Board Name is empty!</i>');
+		return;
+	}
+	$.get("__URL__/get_owner", {
+		"name" : name
+		}, function(str) {
+			$("#_form select[name=board_owner_id]").val($.trim(str));
+		});
+}
+</script>

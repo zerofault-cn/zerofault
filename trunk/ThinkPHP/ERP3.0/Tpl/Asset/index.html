@@ -1,0 +1,111 @@
+<p class="page_title_text">My Asset List</p>
+<table>
+<tr>
+	<iterate name="result" id="item">
+	<td class="clsTab" id="fixed{$key}"> {$fixed_arr[$key]} </td>
+	</iterate>
+</tr>
+<tr>
+	<td colspan="6">
+	<iterate name="result" id="type_item">
+		<if condition="$key eq $default_fixed">
+		<table class="clsTab" cellpadding="3" border="1" bordercolor="#FFFFFF" style="border-collapse:collapse;" id="fixed{$key}">
+		<else />
+		<table class="clsTab" cellpadding="3" border="1" bordercolor="#FFFFFF" style="border-collapse:collapse;display:none" id="fixed{$key}">
+		</if>
+		<tr>
+			<th><if condition="$key eq $default_fixed"><input type="checkbox" id="checkall" onclick="checkAll2();"/></if></th>
+			<th>No.</th>
+			<th>Code</th>
+			<th class="basic_data">Internal P/N</th>
+			<th class="basic_data">Description</th>
+			<th class="basic_data">Manufacture</th>
+			<th class="basic_data">MPN</th>
+			<th>Quantity</th>
+			<th>Unit</th>
+			<th>Comment</th>
+			<th>OP</th>
+		</tr>
+		<iterate name="type_item" id="item">
+		<tr class="trbg{$mod}">
+			<td><input type="checkbox" name="chk[]" value="{$item['product']['id']}" onclick="updateCheckAll2(this);" /></td>
+			<td align="center">{$i}</td>
+			<td>{$item['product']['code']}</td>
+			<td class="basic_data">{$item['product']['Internal_PN']}</td>
+			<td class="basic_data">{$item['product']['description']}</td>
+			<td class="basic_data">{$item['product']['manufacture']}</td>
+			<td class="basic_data">{$item['product']['MPN']}</td>
+			<td>{$item['ori_quantity']+$item['chg_quantity']}</td>
+			<td>{$item['unit_name']}</td>
+			<td align="center"><a href="__APP__/Public/remark/product_id/{$item['product_id']}?width=600&height=300&modal=true" class="thickbox" title="View Product Comment"><img src="../Public/Images/comments.gif"/></a></td>
+			<td><a href="__URL__/form/action/transfer/lp_id/{$item['id']}">Transfer</a>
+				<a href="__URL__/form/action/return/lp_id/{$item['id']}">Return</a></td>
+		</tr>
+		</iterate>
+		<empty name="type_item">
+		<tr>
+			<td colspan="11" align="center">No Record</td>
+		</tr>
+		</empty>
+		<tr>
+			<td colspan="11">
+				<input type="button" name="transfer" value="Transfer Selected" onclick="batch_form('transfer');" disabled="true" />
+				<input type="button" name="return" value="Return Selected" onclick="batch_form('return');" disabled="true" />
+			</td>
+		</tr>
+		</table>
+	</iterate>
+	</td>
+</tr>
+</table>
+<p class="center"></p>
+<div style="display:none" id="batch_form">
+<p class="page_title_text"></p>
+<form name="Batch" action="__APP__/Inventory/batch" method="post" target="_iframe">
+<table width="96%" cellpadding="3" border="1" bordercolor="#FFFFFF" style="border-collapse:collapse;">
+<tr>
+	<th>Internal P/N</th>
+	<th>Description</th>
+	<th>Quantity</th>
+</tr>
+<iterate name="result" id="type_item">
+	<iterate name="type_item" id="item">
+<tr id="tr_{$item['product']['id']}" style="display:none">
+	<td>{$item['product']['Internal_PN']}</td>
+	<td>{$item['product']['description']}</td>
+	<td><input type="text" id="input_{$item['product']['id']}" name="quantity[{$item['product']['id']}]" size="3" value="{$item['chg_quantity']}" disabled="true"/></td>
+</tr>
+	</iterate>
+</iterate>
+<tr id="transfer_to" bgcolor="#FFFFFF">
+	<td align="right">Transfer to:</td>
+	<td colspan="2">
+		<select id="location_opts" onchange="select_location(this);"><option value="">Select One</option>{$info.location_opts}</select>
+		<select id="staff_opts" onchange="select_staff(this);" style="display:none;"><option value="">Select One</option>{$info.staff_opts}</select>
+	</td>
+</tr>
+</table>
+<p class="center">
+	<input type="hidden" name="action" value="transfer" />
+	<input type="hidden" name="from_page" value="Asset" />
+	<input type="hidden" name="from_type" id="from_type" value="staff" />
+	<input type="hidden" name="from_id" id="from_id" value="{$_SESSION[C('USER_AUTH_KEY')]}" />
+	<input type="hidden" name="to_type" id="to_type" value="" />
+	<input type="hidden" name="to_id" id="to_id" value="" />
+	<input type="submit" value="Submit" name="submit"/>
+	<input type="button" value="Cancel" onclick="tb_remove();"/>
+</p>
+</form>
+</div>
+<script language="JavaScript" type="text/javascript" src="../Public/Js/batch.js"></script>
+
+<script>
+$(document).ready(function(){
+	$("td#fixed{$default_fixed}").addClass("current");
+	$("td.clsTab").each(function(){
+		$(this).css("cursor", "pointer").click(function(){
+			switchTab($(this).attr("id"));
+		});
+	});
+});
+</script>

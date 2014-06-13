@@ -1,0 +1,20 @@
+<table width="100%" cellpadding="5" border="1" bordercolor="#FFFFFF" style="border-collapse:collapse;">
+<tr>
+	<th>Staff/Location</th>
+	<th>Quantity</th>
+</tr>
+<iterate name="result" id="item">
+<tr class="trbg{$mod}">
+	<td align="center">{$item['name']}</td>
+	<td align="center">{$item['chg_quantity']}</td>
+</tr>
+</iterate>
+<empty name="result">
+<tr>
+	<td colspan="2" align="center">No Record</td>
+</tr>
+</empty>
+</table>
+<style>
+#think_run_time,#think_page_trace{display:none;}
+</style>

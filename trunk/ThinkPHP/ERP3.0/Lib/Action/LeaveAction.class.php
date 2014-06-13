@@ -1,0 +1,90 @@
+<?php
+/**
+*
+* 休假类型管理
+*
+* @author zerofault <zerofault@gmail.com>
+* @since 2010/6/15
+*/
+class LeaveAction extends BaseAction{
+
+	protected $dao;
+
+	public function _initialize() {
+		session('top', 'System');
+		session('sub', MODULE_NAME);
+		$this->dao = D('Options');
+		parent::_initialize();
+		$this->assign('MODULE_TITLE', 'System');
+	}
+	public function index() {
+		$Absence_Config = C('_absence_');
+		
+		if (!empty($_POST['submit'])) {
+			$id = intval($_REQUEST['id']);
+			$data = array();
+			$data['type'] = trim($_REQUEST['type']);
+			$data['name'] = trim($_REQUEST['name']);
+			$data['descr'] = trim($_REQUEST['description']);
+			if (''==$data['name']) {
+				self::_error('Your must input a name!');
+				return;
+			}
+			if ($id>0) {
+				if (false !== $this->dao->where('id='.$id)->save($data)) {
+					self::_success('Information updated!',__ACTION__);
+				}
+				else{
+					self::_error('Update fail!'.(C('APP_DEBUG')?$this->dao->getLastSql():''));
+				}
+			}
+			else {
+				if (false !== $this->dao->add($data)) {
+					self::_success('New leave type added!',__ACTION__);
+				}
+				else{
+					self::_error('Add fail!'.(C('APP_DEBUG')?$this->dao->getLastSql():''));
+				}
+			}
+			return;
+		}
+
+		foreach($Absence_Config['leavetype'] as $key=>$val) {
+			$rs = $this->dao->where(array('type'=>$key))->find();
+			if (empty($rs)) {
+				$result[$key] = array(
+					'id' => -1,
+					'type' => $key,
+					'name' => $val,
+					'description' => ''
+				);
+			}
+			else {
+				$result[$key] = array(
+					'id' => $rs['id'],
+					'type' => $key,
+					'name' => empty($rs['name']) ? $val : $rs['name'],
+					'description' => $rs['descr']
+					);
+			}
+		}
+		$this->assign('ACTION_TITLE', 'Leave Type Definition');
+		$this->assign('result', $result);
+		$this->display();
+	}
+	public function update() {
+		parent::_update();
+	}
+	public function delete() {
+		//判断是否已被使用
+		$id = $_REQUEST['id'];
+		$rs = M('Absence')->where("leave_id=".$id)->select();
+		if(!empty($rs) && sizeof($rs)>0) {
+			self::_error('This item is in-use, can\'t be deleted!');
+		}
+		else{
+			self::_delete();
+		}
+	}
+}
+?>

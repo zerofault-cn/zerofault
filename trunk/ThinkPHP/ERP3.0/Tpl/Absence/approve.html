@@ -1,0 +1,68 @@
+<p class="page_title_text">{$ACTION_TITLE}</p>
+<table >
+<tr>
+	<td class="clsTab" id="status_0"><a href="__ACTION__/status/0">Waiting for approval</a></td>
+	</if>
+	<td class="clsTab" id="status_1"><a href="__ACTION__/status/1">Approved</a></td>
+	<td class="clsTab" id="status_2"><a href="__ACTION__/status/2">Rejected</a></td>
+	</if>
+</tr>
+<tr>
+	<td colspan="4">
+		<table cellpadding="3" border="1" bordercolor="#FFFFFF" style="border-collapse:collapse;">
+		<tr>
+			<th>ID</th>
+			<th width="8%">Staff</th>
+			<th width="160" nowrap="nowrap">Application Type</th>
+			<th width="250">Duration</th>
+			<th width="50">Hours</th>
+			<th>Deputy</th>
+			<th width="20%">Note</th>
+			<th>Comment</th>
+			<th>Operation</th>
+		</tr>
+		<iterate name="result" id="item">
+		<form id="form{$item['id']}" action="__URL__/confirm" method="post" target="_iframe">
+		<tr align="center" class="trbg{$mod}">
+			<td>A{$item['id']|sprintf='%05d',###}</td>
+			<td nowrap="nowrap">{$item['staff']['realname']}</td>
+			<td><empty name="LeaveType[$item['type']]">{$item['type']}<else />{$LeaveType[$item['type']]}</empty></td>
+			<td nowrap="nowrap"><if condition="$item['type'] eq 'CashOut'"><font color="#a4a4a4">N/A</font><else />{$item['time_from']|substr=0,-3} ~ {$item['time_to']|substr=0,-3}</if></td>
+			<td>{$item['hours']|round}</td>
+			<td nowrap="nowrap"><empty name="item['deputy_id']"><font color="#a4a4a4">N/A</font><else />{$item['deputy']['realname']}</empty></td>
+			<td align="left"><if condition="$item['type'] eq 'CashOut'"><font color="#a4a4a4">N/A</font><else />{$item['note']|nl2br}</if></td>
+			<td align="left" valign="top"><if condition="$item['status'] lt 1"><textarea name="comment" cols="30" rows="3"></textarea><else />{$item['comment']|nl2br}</if></td>
+			<td nowrap="nowrap">
+				<if condition="$item['status'] lt 1">
+				<input type="hidden" name="id" value="{$item['id']}" />
+				<input type="hidden" id="status{$item['id']}" name="status" value="0" />
+				<input type="button" value="Edit" class="thickbox" alt="__URL__/form/type/{$item['type']}/id/{$item['id']}?width=600&height=350&modal=true"/>
+				<input type="button" onclick="confirm('{$item['id']}', {$item['status']+1});" value="Approve" />
+				<input type="button" onclick="confirm('{$item['id']}', 2);" value="Reject" />
+				</if>
+			</td>
+		</tr>
+		</form>
+		</iterate>
+		<empty name="result">
+		<tr>
+			<td colspan="9" align="center">No Record</td>
+		</tr>
+		</empty>
+		</table>
+	</td>
+</tr>
+</table>
+<p class="center">
+	<input type="button" value="Overtime application for Staff" class="thickbox" alt="__URL__/form/type/Overtime?width=600&height=300&modal=true"/>
+</p>
+<script type="text/javascript"> 
+$(document).ready(function(){
+	$("td#status_{$status}").addClass("current");
+});
+
+function confirm(n, status) {
+	$('#status'+n).val(status);
+	$('#form'+n).submit();
+}
+</script>

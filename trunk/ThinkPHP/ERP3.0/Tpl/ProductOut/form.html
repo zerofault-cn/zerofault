@@ -1,0 +1,102 @@
+<p class="page_title_text">
+<if condition="$action neq ''">
+Product {$action|ucfirst} Form
+<elseif condition="$action eq '' and $info['action'] neq ''"/>
+Product {$info['action']|ucfirst} Form
+</if>
+</p>
+<form name="form1" action="__URL__/submit" method="post" target="_iframe">
+<input type="hidden" name="id" value="{$id}" />
+<input type="hidden" name="action" value="{$action}" />
+<input type="hidden" name="fixed" id="fixed" value="{$info['product']['fixed']}" />
+<input type="hidden" id="product_id" name="product_id" value="{$info['product']['id']}" />
+<table>
+<tr>
+	<td>No.</td>
+	<td><input type="text" maxlength="20" size="30" name="code" value="{$code}" readonly="true" /> <img src="../Public/Images/lock.gif" /></td>
+</tr>
+<if condition="empty($product_id) and empty($info['product']['id']) and ($action eq 'apply' or ($action eq '' and $info['action'] eq 'apply') or ($id eq 0 and ($action eq 'transfer' or $action eq 'release' or $action eq 'scrap')))">
+<tr>
+	<td></td>
+	<td><input type="button" value="Select Component/Board" class="thickbox" alt="__URL__/select/action/apply?width=800&height=600&modal=true"/></td>
+</tr>
+</if>
+<tr>
+	<td id="form_title1">Internal PN:</td>
+	<td><input type="text" size="30" name="PN" id="Internal_PN" value="{$info['product']['Internal_PN']}" readonly="true" /> <img src="../Public/Images/system.gif" /></td>
+</tr>
+<tr>
+	<td id="form_title2">Description:</td>
+	<td><input type="text" size="30" id="description" value="{$info['product']['description']}" readonly="true" /> <img src="../Public/Images/system.gif" /></td>
+</tr>
+<tr>
+	<td id="form_title3">Manufacture:</td>
+	<td><input type="text" size="30" id="manufacture" value="{$info['product']['manufacture']}" readonly="true"/> <img src="../Public/Images/system.gif" /></td>
+</tr>
+<tr>
+	<td id="form_title4">MPN:</td>
+	<td><input type="text" size="30" id="MPN" value="{$info['product']['MPN']}" readonly="true"/> <img src="../Public/Images/system.gif" /></td>
+</tr>
+<tr>
+	<td>Category:</td>
+	<td><input type="text" size="30" id="category" value="{$info['category']}" readonly="true"/> <img src="../Public/Images/system.gif" /></td>
+</tr>
+<tr>
+	<td>Value/Package:</td>
+	<td><input type="text" size="30" id="value" value="{$info['product']['value']}" readonly="true"/> <img src="../Public/Images/system.gif" /></td>
+</tr>
+<tr>
+	<td>Unit:</td>
+	<td><input type="text" size="30" id="unit" value="{$info['unit']}" readonly="true"/> <img src="../Public/Images/system.gif" /></td>
+</tr>
+<tr>
+	<td>{$action|ucfirst} Quantity:</td>
+	<td><input type="text" maxlength="20" size="30" id="quantity" name="quantity" value="{$info['quantity']}"><input type="hidden" name="ori_quantity" id="ori_quantity" value="{$info['ori_quantity']}"/>(Max: <span id="max_quantity">{$info['ori_quantity']|default=0}</span>)</td>
+</tr>
+<eq name="action" value="transfer">
+<tr>
+	<td>Transfer to:</td>
+	<td><select id="location_opts" onchange="select_location(this);"><option value="">Select One</option>{$info.location_opts}</select>
+		<select id="staff_opts" onchange="select_staff(this);"><option value="">Select One</option>{$info.staff_opts}</select></td>
+</tr>
+</eq>
+<tr>
+	<td valign="top">Remark:</td>
+	<td><textarea name="remark" rows="3" cols="36">{$info.remark}</textarea></td>
+</tr>
+</table>
+<input type="hidden" name="to_type" id="to_type" value="{$info['to_type']}" />
+<input type="hidden" name="to_id" id="to_id" value="{$info['to_id']}" />
+<input type="hidden" name="from_type" value="{$info['from_type']}" />
+<input type="hidden" name="from_id" value="{$info['from_id']}" />
+<p class="center">
+	<input type="submit" name="submit" value="Submit"/>
+	&nbsp;&nbsp;&nbsp;&nbsp;
+	<input type="button" value="Cancel" onclick="javascript:location.href='__APP__/{$_SESSION['sub']}';"/>
+</p>
+</form>
+<script language="JavaScript" type="text/javascript">
+$(document).ready(function(){
+	if('staff' == $("#location_opts").val()) {
+		$("#staff_opts").show();
+	}
+	else{
+		$("#staff_opts").hide();
+	}
+});
+function select_location(obj) {
+	if('staff' == $(obj).val()) {
+		$('#staff_opts').show();
+		$('#to_type').val('staff');
+	}
+	else {
+		$("#staff_opts").hide();
+		$('#to_type').val('location');
+		$("#to_id").val($(obj).val());
+		
+	}
+}
+function select_staff(obj) {
+	$("#to_id").val($(obj).val());
+}
+</script>
