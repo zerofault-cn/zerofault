@@ -1,0 +1,76 @@
+<p class="page_title_text">{$ACTION_TITLE}</p>
+<form action="__URL__/submit" method="post" target="_iframe">
+<input type="hidden" name="id" value="{$info.id}" />
+<table>
+<tr>
+	<td>Staff Code:</td>
+	<td><input type="text" maxlength="10" size="15" name="code" value="{$code}" readonly="true" /> <img src="../Public/Images/system.gif" /></td>
+</tr>
+<tr>
+	<td>Staff Name:</td>
+	<td><input type="text" maxlength="40" size="15" name="name" value="{$info.name}" /> *</td>
+</tr>
+<tr>
+	<td>Staff Realname:</td>
+	<td><input type="text" maxlength="40" size="15" name="realname" value="{$info.realname}" /></td>
+</tr>
+<tr>
+	<td><if condition="$info['id'] eq 0">Init<else />Reset</if> Password:</td>
+	<td><input type="password" autocomplete="off" maxlength="40" size="15" name="password" value="" /> *</td>
+</tr>
+<tr>
+	<td>E_mail:</td>
+	<td><input type="text" maxlength="40" size="15" name="email" value="{$info.email}" /> *</td>
+</tr>
+<tr>
+	<td>Enroll Date:</td>
+	<td><input type="text" maxlength="10" size="10" name="onboard" id="Datepicker" value="{$info.onboard}" /></td>
+</tr>
+<tr>
+	<td>2010 Balance:</td>
+	<td><input type="text" maxlength="10" size="10" name="balance" value="{$info.balance}" /> Days</td>
+</tr>
+<tr>
+	<td>Department:</td>
+	<td><select name="dept_id"><option value="">Select One</option>{$info.dept_opts}</select></td>
+</tr>
+<tr>
+	<td>Leader:</td>
+	<td><select name="leader_id"><option value="">Select One</option>{$info.leader_opts}</select></td>
+</tr>
+<tr>
+	<td>Is Leader:</td>
+	<td><input type="checkbox" name="is_leader" value="1" <notempty name="info['is_leader']" value="1">checked="true"</notempty> />Yes</td>
+</tr>
+<tr>
+	<td>Role:</td>
+	<td>{$info.role_chks}</td>
+</tr>
+</table>
+<p class="center">
+	<input type="submit" value="Submit" name="submit"/>
+	&nbsp;&nbsp;&nbsp;&nbsp;
+	<input type="button" value="Cancel" onclick="javascript:location.href='__URL__';"/>
+</p>
+</form>
+<!-- Datepicker -->
+<style type="text/css">@import "../Public/Css/jquery-ui-1.8.2.custom.css?20100620";</style> 
+<script type="text/javascript" src="../Public/Js/jquery-ui-1.8.2.custom.min.js?20100620"></script>
+<script type="text/javascript">
+$(document).ready(function(){
+	$('#Datepicker').datepicker({
+		dateFormat: 'yy-mm-dd',
+		changeMonth: true,
+		changeYear: true,
+	//	showButtonPanel: true,
+		showOtherMonths: true,
+		showMonthAfterYear: true,
+		selectOtherMonths: true,
+		minDate: '-3Y',
+		maxDate: '+1Y',
+		showOn: 'both',
+		buttonImage: '../Public/Images/date.gif',
+		buttonImageOnly: true
+		});
+});
+</script>

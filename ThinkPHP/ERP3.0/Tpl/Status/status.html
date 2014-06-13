@@ -1,0 +1,54 @@
+<style>
+#think_run_time,#think_page_trace{display:none;}
+legend {
+	font-weight:bold;
+	line-height:24px;
+}
+td.field {
+	font-weight: bold;
+}
+</style>
+<fieldset>
+	<legend>Boards' Status of [{$item_info.name}]</legend>
+	<form id="_form" action="__URL__/status" method="post" target="_iframe">
+	<table width="100%" cellpadding="3" border="1" bordercolor="#FFFFFF" style="border-collapse:collapse;">
+	<tr>
+		<th>Board</th>
+		<th>Status</th>
+		<th nowrap="nowrap">Update Time</th>
+	</tr>
+	<iterate name="result" id="item">
+	<tr class="trbg{$mod}">
+		<td class="board">{$item.board.name}</td>
+		<td><if condition="$_SESSION[C('USER_AUTH_KEY')] eq $item['owner_id'] or $_SESSION[C('USER_AUTH_KEY')] eq $item['substitute_id'] or $_SESSION[C('ADMIN_AUTH_NAME')] or in_array($_SESSION[C('USER_AUTH_KEY')], C('STATUS_ADMIN_ID'))">
+			<select name="status[{$item.id}]" class="status {$status_arr[$item['status']]|str_replace='*','X',###}" onchange="javascript:this.className='status '+this.options[this.selectedIndex].className;">
+				<option value="-1" class="TBD">TBD</option>
+				<option value="0" class="Ongoing" <eq name="item.status" value="0">selected="selected"</eq>>Ongoing</option>
+				<option value="1" class="Pass" <eq name="item.status" value="1">selected="selected"</eq>>Pass</option>
+				<gt name="board_id" value="0">
+				<option value="9" class="PassX" <eq name="item.status" value="9">selected="selected"</eq>>Pass*</option>
+				</gt>
+				<option value="2" class="Failed" <eq name="item.status" value="2">selected="selected"</eq>>Failed</option>
+				<option value="8" class="Ignore" <eq name="item.status" value="8">selected="selected"</eq>>Ignore</option>
+			</select>
+			<else />
+			<strong class="{$status_arr[$item['status']]}">{$status_arr[$item['status']]}</strong>
+			</if>
+		</td>
+		<td>{$item['update_time']}</td>
+	</tr>
+	</iterate>
+	<tr>
+		<td colspan="3" align="center">
+			<if condition="$_SESSION[C('USER_AUTH_KEY')]">
+			<input type="submit" value="Submit" name="submit" />
+			&nbsp;&nbsp;&nbsp;&nbsp;
+			<input type="button" value="Cancel" onclick="tb_remove();"/>
+			<else />
+			<input type="button" value="Close" onclick="tb_remove();"/>
+			</if>
+		</td>
+	</tr>
+	</table>
+	</form>
+</fieldset>

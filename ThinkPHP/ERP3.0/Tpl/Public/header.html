@@ -1,0 +1,43 @@
+<table class="quick_menu" cellspacing="0" cellpadding="0" border="0" width="100%">
+<tr>
+	<td class="quick_menu_left" align="left">
+		<a href="__APP__/Public/profile?width=300&height=460&modal=true" class="thickbox"><img src="../Public/Images/user.gif" alt="User" align="absmiddle"/> {$_SESSION[C('STAFF_AUTH_NAME')]['realname']}<br />
+		<a href="__APP__/Public/logout" target="_iframe">Logout</a>
+	</td>
+	<td class="quick_menu_left" align="center" style="width:100%;font-size:11pt;">
+		{$Think.config.ERP_TITLE}
+	</td>
+	<td class="quick_menu_tabs">
+		<table cellspacing="0" cellpadding="0" class="quick_menu_tabs">
+		<tr>
+			<iterate name="topmenu" id="item">
+				<if condition="$_SESSION['top'] eq str_replace('&nbsp;',' ',$key)">
+			<td align="center" class="quick_menu_tab onfoc">{$key}</td>
+				<else />
+			<td align="center" class="quick_menu_tab"><a href="__APP__/{$item}">{$key}</a></td>
+				</if>
+			</iterate>
+		</tr>
+		</table>
+	</td>
+	</tr>
+</table>
+
+<notempty name="submenu">
+<table cellspacing="0" cellpadding="0" border="0" width="100%" class="main_menu">
+<tr>
+	<td class="main_menu">
+		<table class="main_menu">
+		<tr>
+			<iterate name="submenu" id="item">
+				<if condition="$_SESSION['sub'] eq $item">
+			<td class="main_menu_selected"><a href="__APP__/{$item}">{$key}</a></td>
+				<else />
+			<td class="main_menu_unselected"><a href="__APP__/{$item}">{$key}</a></td>
+				</if>
+			</iterate>
+		</table>
+	</td>
+</tr>
+</table>
+</notempty>

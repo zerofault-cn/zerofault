@@ -1,0 +1,173 @@
+<p class="page_title_text">{$ACTION_TITLE}</p>
+<form action="__URL__/submit" method="post" enctype="multipart/form-data" target="_iframe">
+<input type="hidden" name="id" value="{$info.id}" />
+<table>
+<tr>
+	<td>Code:</td>
+	<td><input type="text" maxlength="20" size="30" name="code" value="{$code}" readonly="true" /> <img src="../Public/Images/system.gif" /></td>
+</tr>
+<tr>
+	<td>Board Code:</td>
+	<td><input type="text" size="30" name="PN" value="{$info.Internal_PN}" /> *</td>
+</tr>
+<tr>
+	<td>Board Name:</td>
+	<td><input type="text" size="30" name="description" value="{$info.description}" /> *</td>
+</tr>
+<tr>
+	<td>Manufacture:</td>
+	<td><input type="text" size="30" name="manufacture" value="{$info.manufacture}"/></td>
+</tr>
+<tr>
+	<td>Board Series Number:</td>
+	<td><input type="text" size="30" name="MPN" value="{$info.MPN}"/></td>
+</tr>
+<tr>
+	<td>Value/Package:</td>
+	<td><input type="text" size="30" name="value" value="{$info.value}"/></td>
+</tr>
+<tr>
+	<td>Unit:</td>
+	<td><select name="unit_id">{$info.unit_opts}</td>
+</tr>
+<tr>
+	<td>Category:</td>
+	<td><select name="category_id"><option value="">Select One</option>{$info.category_opts}</select> *</td>
+</tr>
+<tr>
+	<td>Fixed Assets:</td>
+	<td><if condition="$info['fixed'] eq 1">
+		<input type="radio" class="fixed" name="fixed" value="1" checked="true"/>Yes&nbsp;&nbsp;<input type="radio" class="fixed" name="fixed" value="0" />No
+		<else />
+		<input type="radio" name="fixed" value="1" />Yes&nbsp;&nbsp;<input type="radio" name="fixed" value="0" checked="true"/>No
+		</if>
+	</td>
+</tr>
+<tr>
+	<td>Status:</td>
+	<td><select name="status_id"><option value="">Select One</option>{$info.status_opts}</select></td>
+</tr>
+<tr>
+	<td>RoHS:</td>
+	<td><input type="text" size="30" name="Rohs" value="{$info.Rohs}"/></td>
+</tr>
+<tr>
+	<td>LT days:</td>
+	<td><input type="text" size="30" name="LT_days" value="{$info.LT_days}"/></td>
+</tr>
+<tr>
+	<td>MOQ:</td>
+	<td><input type="text" size="30" name="MOQ" value="{$info.MOQ}"/></td>
+</tr>
+<input type="hidden" size="30" name="SPQ" value=""/></td>
+<tr>
+	<td>MSL:</td>
+	<td><input type="text" size="30" name="MSL" value="{$info.MSL}"/></td>
+</tr>
+<tr>
+	<td>Project:</td>
+	<td><input type="text" size="30" name="project" value="{$info.project}"/></td>
+</tr>
+<input type="hidden" size="30" name="inventory_limit" value=""/></td>
+<tr>
+	<td>Currency:</td>
+	<td><select name="currency_id"><option value="">Select One</option>{$info.currency_opts}</select></td>
+</tr>
+<tr>
+	<td>Price:</td>
+	<td><input type="text" size="30" name="price" value="{$info.price}"/></td>
+</tr>
+<tr>
+	<td>Accessories:</td>
+	<td><textarea name="accessories" rows="3" cols="36">{$info.accessories}</textarea></td>
+</tr>
+<tr>
+	<td>Attachment:</td>
+	<td><input type="hidden" name="MAX_FILE_SIZE" value="{$MAX_FILE_SIZE}"/>
+	<input type="file" size="15" name="attachment" /><br />
+	<empty name="info.attachment">
+	Don't try to upload a file larger than {$upload_max_filesize}!
+	<else />
+	The old attachment will be replaced by the new one!<br />
+	<a href="__APP__/../{$info.attachment}" target="_blank" title="View attachment in new window">View Attachment</a>
+	</empty>
+	</td>
+</tr>
+<tr>
+	<td valign="top">Remark:</td>
+	<td><textarea name="remark" rows="3" cols="36">{$info.remark}</textarea></td>
+</tr>
+</table>
+<p class="center">
+	<input type="submit" value="Submit" name="submit1"/>
+	&nbsp;&nbsp;&nbsp;&nbsp;
+	<input type="button" value="Direct Warehouse Entry" onclick="mysubmit();"/> &nbsp;&nbsp;&nbsp;&nbsp;
+	<input type="button" value="Cancel" onclick="javascript:location.href='__URL__';"/>
+</p>
+<input type="hidden" name="submit2" value="" />
+</form>
+
+<div id="direct_input" style="display:none;">
+<form name="direct_input" action="__APP__/ProductIn/submit" method="post" target="_iframe">
+<p class="page_title_text">Direct Warehouse Entry</p>
+<table>
+<tr>
+	<td>Supplier:</td>
+	<td><select name="supplier_id"><option value="">Select One</option>{$info.supplier_opts}</select>
+		</td>
+</tr>
+<tr>
+	<td>Currency:</td>
+	<td><select name="currency_id"><option value="">Select One</option>{$info.currency_opts}</select></td>
+</tr>
+<tr>
+	<td>
+	Quantity:</td>
+	<td><input type="text" maxlength="20" size="30" id="quantity" name="quantity" value="" onchange="calc_total()"/></td>
+</tr>
+<tr>
+	<td>Unit Price:</td>
+	<td><input type="text" maxlength="20" size="30" id="price" name="price" value="" onchange="calc_total()"/></td>
+</tr>
+<tr>
+	<td>Total Price:</td>
+	<td><input type="text" maxlength="20" size="30" id="total" value="" readonly="true"/> <img src="../Public/Images/lock.gif" /></td>
+</tr>
+<tr>
+	<td>Accessories:</td>
+	<td><textarea name="accessories" rows="3" cols="36">{$info.accessories}</textarea></td>
+</tr>
+<tr>
+	<td valign="top">Remark:</td>
+	<td><textarea name="remark" rows="3" cols="36"></textarea></td>
+</tr>
+</table>
+<p class="center">
+	<input type="hidden" name="action" value="enter" />
+	<input type="hidden" id="fixed" name="fixed" value="" />
+	<input type="hidden" name="direct_input" value="1" />
+	<input type="hidden" id="product_id" name="product_id" value="" />
+	<input type="submit" value="Submit" name="submit"/>
+	<input type="button" value="Cancel" onclick="javascript:location.href='__URL__';"/>
+</p>
+</form>
+</div>
+<script type="text/javascript">
+function mysubmit() {
+	$("input[name='submit2']").val('1');
+	$("form:first").submit();
+}
+function clear() {
+	$("input[name='submit2']").val('');
+}
+function direct_input(id) {
+	$("input#product_id").val(id);
+	$("input#fixed").val($("input.fixed:checked").val());
+	tb_show('','#TB_inline?width=360&height=360&modal=true&inlineId=direct_input','')
+}
+function calc_total() {
+	if($('#price').val()!='' && $('#quantity').val()!='') {
+		$('#total').val(parseFloat($('#price').val())*parseInt($('#quantity').val()));
+	}
+}
+</script>

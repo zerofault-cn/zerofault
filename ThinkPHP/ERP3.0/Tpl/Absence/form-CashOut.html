@@ -1,0 +1,91 @@
+<style>
+#think_run_time,#think_page_trace{display:none;}
+</style>
+<table width="100%">
+<tr>
+	<td colspan="2">
+		<form class="clsTab" id="leave" action="__URL__/submit" method="post" target="_iframe">
+			<present name="info">
+		<input type="hidden" name="id" value="{$info['id']}" />
+			</present>
+		<table width="100%" border="1" cellpadding="3" cellspacing="1" bordercolor="#FFFFFF" style="border-collapse:collapse;">
+		<tr>
+			<th colspan="2">Cash Out application form</th>
+		</tr>
+		<tr>
+			<td bgcolor="#CCCCCC" width="30%"><b>Annual leave available: </b></td>
+			<td bgcolor="#EEEEEE">{$total_leave}</td>
+		</tr>
+		<tr>
+			<td bgcolor="#CCCCCC"><b>Reserved days: </b></td>
+			<td bgcolor="#EEEEEE">{$reserved}</td>
+		</tr>
+		<tr>
+			<td bgcolor="#CCCCCC"><b>Your cash out days: </b></td>
+			<td bgcolor="#EEEEEE"><input type="text" name="days" value="{$info['hours']/8}" size="4" onkeyup="this.value=this.value.replace(/[^0-9]/g,'')"/>days, max: {$available}</td>
+		</tr>
+		<tr>
+			<td bgcolor="#CCCCCC"><b>Type again to confirm: </b></td>
+			<td bgcolor="#EEEEEE"><input type="text" name="days2" size="4" onkeyup="this.value=this.value.replace(/[^0-9]/g,'')"/> <span style="color:red">(The days can't be changed once you submited)</span></td>
+		</tr>
+		</table>
+		<p class="center">
+			<input type="hidden" name="type" value="CashOut" />
+			<input type="submit" name="submit" value="Submit" title="Submit this form" />&nbsp;&nbsp;&nbsp;<input type="button" value="Cancel" onclick="self.parent.tb_remove()" alt="Cancel" title="Click to go previous page" />
+		</p>
+		</form>
+	</td>
+</table>
+<!-- Datepicker -->
+<link type="text/css" rel="stylesheet" href="../Public/Css/jquery-ui-1.8.2.custom.css?20100901" />
+<script type="text/javascript" src="../Public/Js/jquery-ui-1.8.2.custom.min.js?20100901"></script>
+<script language="JavaScript" type="text/javascript">
+$(document).ready(function(){
+	$('.date_from, .date_to').datepicker({
+		dateFormat: 'yy-mm-dd',
+		changeMonth: true,
+		changeYear: true,
+		showOtherMonths: true,
+		showMonthAfterYear: true,
+		selectOtherMonths: true,
+		minDate: '-1W',
+		maxDate: '+1Y'
+	});
+	$("td.clsTab").each(function(){
+		$(this).css("cursor", "pointer").click(function(){
+			switchTab($(this).attr("id"));
+		});
+	});
+});
+
+var descr_arr = new Array();
+<iterate name="LeaveType" id="item">
+descr_arr['{$item["type"]}'] = '{$item["description"]}';
+</iterate>
+function ChangeType(type) {
+	if (type!='') {
+		$('.date_from, .time_from, .date_to, .time_to').attr('disabled', false);
+		$('#div_typeRule').html(descr_arr[type]);
+	}
+}
+function addFile(obj) {
+	if ($('#file').css('display')=='none') {
+		$('#file').show();
+	}
+	else {
+		$(obj).before('<img src="../Public/Images/attachfile.gif" align="absmiddle" style="visibility:hidden;"><br /><input type="file" name="file[]" size="30" />&nbsp;');
+	}
+}
+function addNotify(obj) {
+	if ($('#notification').css('display')=='none') {
+		$('#notification').show();
+	}
+	else {
+		var html = '<br /><select name="notification[]">';
+		html += $('#notification').html();
+		html += '</select> ';
+		$(obj).before(html);
+	}
+}
+
+</script>

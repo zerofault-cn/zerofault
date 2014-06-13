@@ -1,0 +1,159 @@
+<present name="submit">
+<iterate name="result" id="item">
+<tr class="trbg{$mod} tr_{$type}">
+	<td align="center"><input type="radio" id="radio{$item['id']}" name="product_id" value="{$item['id']}"/></td>
+	<if condition="$action neq 'apply' and $type eq 'Board'">
+	<td class="select_val1" style="display:none">
+	<else/>
+	<td class="select_val1">
+	</if><label for="radio{$item['id']}">{$item['Internal_PN']}</label></td></neq>
+	<td class="select_val2"><label for="radio{$item['id']}">{$item['description']}</label></td>
+	<td class="select_val3"><label for="radio{$item['id']}">{$item['manufacture']}</label></td>
+	<if condition="$action neq 'apply' and $type eq 'Board'">
+	<td class="select_val4" style="display:none">
+	<else/>
+	<td class="select_val4">
+	</if><label for="radio{$item['id']}">{$item['MPN']}</label></td>
+	<if condition="$action eq 'apply'">
+	<td><label for="radio{$item['id']}">{$item['location_product'][0]['ori_quantity']+$item['location_product'][0]['chg_quantity']}</label></th>
+	<else />
+	<td style="background:#ffffff"></td>
+	</if>
+</tr>
+</iterate>
+<if condition="empty($result)">
+<tr>
+	<td colspan="7" align="center">Basic Data Not Defined or Inventory Empty</td>
+</tr>
+</if>
+<else />
+<p class="page_title_text">Select Component/Board</p>
+<table id="search_table" width="100%" cellpadding="3" border="1" bordercolor="#FFFFFF" style="border-collapse:collapse;">
+<tr>
+	<th>Type</th>
+	<th id="select_title1">Internal P/N</th>
+	<th id="select_title2">Description</th>
+	<th id="select_title3">Manufacture</th>
+	<th id="select_title4">MPN</th>
+	<if condition="$action eq 'apply'">
+	<th>Quantity</th>
+	<else />
+	<th style="background:#ffffff"></th>
+	</if>
+</tr>
+<tr id="key" bgcolor="#FCD5B4">
+	<td><select id="key_type" onchange="update_title(this.value);">
+			<option value="Component">Component</option>
+			<option value="Board">Board</option>
+		</select></td>
+	<td nowrap="nowrap" id="select_key1">and<input type="text" id="key_Internal_PN" value="" size="8"/></td>
+	<td nowrap="nowrap" id="select_key2">and<input type="text" id="key_description" value="" size="8"/></td>
+	<td nowrap="nowrap" id="select_key3">and<input type="text" id="key_manufacture" value="" size="8"/></td>
+	<td nowrap="nowrap" id="select_key4">and<input type="text" id="key_MPN" value="" size="8"/></td>
+	<td style="background:#ffffff"><input type="button" value="Search" onclick="search();"/></td>
+</tr>
+</table>
+<p class="center" id="btn"><input type="button" id="select_close" value="Close" onclick="tb_remove();" /></p>
+
+<script type="text/javascript">
+var _URL_ = '__URL__';
+var action = '{$action}';
+function search() {
+	$.post(_URL_+"/select",{
+		'submit' : 1,
+		'fixed'  : '{$fixed}',
+		'action' : '{$action}',
+		'type' : $("#key_type").val(),
+		'Internal_PN': $("#key_Internal_PN").val(),
+		'description' : $("#key_description").val(),
+		'manufacture': $("#key_manufacture").val(),
+		'MPN': $("#key_MPN").val()
+		},function(str){
+			$("#key").nextAll().remove();
+			$("#key").after(str);
+			$("#btn").html('<input type="button" value="Select" onclick="do_select();" />&nbsp;&nbsp;<input type="button" value="Cancel" onclick="tb_remove();" />');
+		});
+}
+var title_arr = new Array();
+title_arr['Component'] = new Array('Internal P/N','Description','Manufacture','MPN');
+title_arr['Board'] = new Array('Board Code','Board Name','Manufacture','Series Number');
+function update_title(type) {
+	$("#select_title1").text(title_arr[type][0]);
+	$("#select_title2").text(title_arr[type][1]);
+	$("#select_title3").text(title_arr[type][2]);
+	$("#select_title4").text(title_arr[type][3]);
+
+	if ('apply'!=action && 'Component'==type)
+	{
+		$(".tr_Component").show();
+		$(".tr_Board").hide();
+
+		$("#select_title1").show();
+		$("#select_title4").show();
+		$("#select_key1").show();
+		$("#select_key4").show();
+		$(".select_val1").show();
+		$(".select_val4").show();
+	}
+	else if('apply'!=action && 'Board'==type) {
+		$(".tr_Component").hide();
+		$(".tr_Board").show();
+		
+		$("#select_title1").hide();
+		$("#select_title4").hide();
+		$("#select_key1").hide();
+		$("#select_key4").hide();
+		$(".select_val1").hide();
+		$(".select_val4").hide();
+	}
+}
+var action = '{$action}';
+function do_select() {
+	if($("input:checked").length >0) {
+		var product_id = $("input:checked").val();
+		$("#product_id").val(product_id);
+		$.getJSON(_URL_+'/select/id/'+product_id, function(json) {
+			$("#fixed").val(json.fixed);
+			$("#Internal_PN").val(json.Internal_PN);
+			$("#description").val(json.description);
+			$("#manufacture").val(json.manufacture);
+			$("#MPN").val(json.MPN);
+			if(json.category) {
+				$("#category").val(json.category.name);
+			}
+			$("#value").val(json.value);
+			$("#project").val(json.project);
+			$("#unit").val(json.unit.name);
+			$("#MOQ").val(json.MOQ);
+			$("#inventory_limit").val(json.inventory_limit);
+			$("#currency_id").val(json.currency_id);
+			$("#price").val(json.price);
+			if(''!=action && 'enter'!=action) {
+				$("#ori_quantity").val(parseInt(json.location_product[0].ori_quantity)+parseInt(json.location_product[0].chg_quantity));
+				$("#max_quantity").html(parseInt(json.location_product[0].ori_quantity)+parseInt(json.location_product[0].chg_quantity));
+			}
+			$("#form_title1").text(title_arr[json.type][0]+':');
+			$("#form_title2").text(title_arr[json.type][1]+':');
+			$("#form_title3").text(title_arr[json.type][2]+':');
+			$("#form_title4").text(title_arr[json.type][3]+':');
+
+			tb_remove();
+		});
+		
+	}
+	else{
+		myAlert("You haven't select any item!");
+	}
+}
+$(document).keydown(function(e){
+	var keyCode=e.keyCode ||window.event.keyCode;
+	if(keyCode==27)//Esc
+	{
+		tb_remove();
+	}
+});
+</script>
+</present>
+<style>
+#think_run_time,#think_page_trace{display:none;}
+</style>

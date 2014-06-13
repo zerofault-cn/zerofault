@@ -1,0 +1,122 @@
+<p class="page_title_text">{$MODULE_TITLE} - {$ACTION_TITLE}</p>
+<form action="__URL__/confirm" method="post" target="_iframe">
+<input type="hidden" name="action" value="{$action}" />
+<table >
+<tr>
+	<td class="clsTab" id="status_0"><a href="__ACTION__/status/0">Ready to confirm</a></td>
+	<td class="clsTab" id="status_1"><a href="__ACTION__/status/1">Confirmed</a></td>
+</tr>
+<tr>
+	<td colspan="2">
+		<table cellpadding="3" border="1" bordercolor="#FFFFFF" style="border-collapse:collapse;">
+		<tr>
+			<td colspan="17">{$page}</td>
+		</tr>
+		<tr>
+			<neq name="status" value="1"><th><input type="checkbox" id="checkall" onclick="checkAll();"/></th></neq>
+			<th>No.</th>
+			<th>Code</th>
+			<th colspan="2">Product</th>
+			<th>Category</th>
+			<th>Supplier</th>
+			<th>Quantity<if condition="$action neq 'reject' and $status eq 1">/Rejected</if></th>
+			<th>Unit</th>
+			<th>Price</th>
+			<th>Total</th>
+			<th>Currency</th>
+			<th>OP Time</th>
+			<th>OP Staff</th>
+			<eq name="status" value="1"><th>Confirm Staff</th></eq>
+			<th>Remark</th>
+			<th>OP</th>
+		</tr>
+		<iterate name="result" id="item">
+		<tr class="trbg{$mod}">
+			<neq name="item['status']" value="1"><td><input type="checkbox" name="chk[]" value="{$item['id']}" onclick="updateCheckAll(this);"/></td></neq>
+			<td align="center">{$i}</td>
+			<td>{$item['code']}</td>
+			<td class="basic_data">{$item['product']['Internal_PN']}</td>
+			<td class="basic_data">{$item['product']['description']}</td>
+			<td>{$category[$item['product']['category_id']]}</td>
+			<td>{$item['supplier']['name']}</td>
+			<td>{$item['quantity']}<if condition="$action neq 'reject' and $status eq 1">/{$item['rejected_quantity']}</if></td>
+			<td>{$unit[$item['product']['unit_id']]}</td>
+			<td>{$item['price']}</td>
+			<td>{$item['quantity']*$item['price']|round=2}</td>
+			<td>{$item['currency']['code']}</td>
+			<td>{$item['create_time']}</td>
+			<td align="center">{$item['staff']['realname']}</td>
+			<eq name="status" value="1"><td align="center">{$item['confirmed_staff']['realname']}</td></eq>
+			<td>{$item['remark']}</td>
+			<td><if condition="$item['status'] eq 0">
+				<a href="__URL__/form/id/{$item['id']}">Edit</a>
+				<a href="javascript:void(0);" onclick="myConfirm('Are you sure to delete this item?', '__URL__/delete/id/{$item['id']}');" target="_iframe">Delete</a></td>
+				<else />
+					<if condition="$item['action'] neq 'reject'">
+				<a href="__URL__/form/action/reject/id/{$item['id']}">Reject</a>
+					</if>
+				</if></td>
+		</tr>
+		</iterate>
+		<empty name="result">
+		<tr>
+			<td colspan="17" align="center">No Record</td>
+		</tr>
+		</empty>
+		<tr>
+			<td colspan="4">
+				<neq name="status" value="1"><input type="submit" name="submit" value="Confirm Selected" /></neq>
+			</td>
+			<td colspan="13">{$page}</td>
+		</tr>
+		</table>
+	</td>
+</tr>
+</table>
+</form>
+<neq name="action" value="reject">
+<br />
+<form id="Import" name="Import" action="__URL__/import" enctype="multipart/form-data" target="_iframe" method="post">
+<table align="center" style="background-color:#FFFFFF;padding:10px;margin:12px auto;">
+<tr>
+	<td align="right" valign="top" width="30%">
+	<if condition="ACTION_NAME eq 'fixed'">
+		<input type="button" onclick="javascript:document.location='__URL__/form/fixed/1';" value="Enter Fixed-Assets" />
+		<input type="hidden" name="Fixed" value="Yes" />
+	<elseif condition="ACTION_NAME eq 'floating'" />
+		<input type="button" onclick="javascript:document.location='__URL__/form/fixed/0';" value="Enter Floating-Assets" />
+		<input type="hidden" name="Fixed" value="No" />
+	<else />
+		<input type="button" onclick="javascript:document.location='__URL__/form';" value="Enter Product" />
+		<input type="hidden" name="Fixed" value="All" />
+	</if>
+	</td>
+	<td width="10">&nbsp;</td>
+	<td nowrap="nowrap">
+		<input type="button" id="batch" onclick="$('input#batch').hide();$('div#select_file').show();" value="Batch Entering" />
+		<div id="select_file" style="display:none;">
+			<input type="file" name="file" size="15" />
+			<input type="submit" value="Submit" />
+			<input type="button" onclick="$('div#select_file').hide();$('input#batch').show();" value="Cancel" />
+		</div>
+	</td>
+	<td width="10">&nbsp;</td>
+	<td width="30%">
+		<input type="button" onclick="javascript:document.location='__URL__/export/action/enter';" value="Export as Excel" />
+	</td>
+</tr>
+</table>
+<input type="hidden" name="confirm" value="" />
+</form>
+</neq>
+<eq name="action" value="reject">
+<p class="center">
+	<input type="button" onclick="javascript:document.location='__URL__/export/action/reject';" value="Export as Excel" />
+</p>
+</eq>
+<script type="text/javascript"> 
+$(document).ready(function(){
+	$("td#status_{$status}").addClass("current");
+});
+
+</script>

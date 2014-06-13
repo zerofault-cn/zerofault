@@ -1,0 +1,119 @@
+<style>
+legend {
+	line-height:24px;
+}
+dt {
+	padding:3px;border-left:3px solid #CC0000;background-color:#BEBEBE;
+}
+dl{
+	height:199px;
+	overflow-y:auto;
+}
+dd {
+	padding:5px;
+}
+dt span,dd span{
+	float:right;
+}
+textarea {
+	width:240px;
+	height:42px;
+	margin-top:4px;
+}
+#think_run_time,#think_page_trace{display:none;}
+
+</style>
+<fieldset>
+	<legend>Product Comment</legend>
+	<dl id="remark_list">
+		<iterate name="result" id="item">
+			<notempty name="item['remark']">
+		<dt id="dt_{$item['id']}">
+			<if condition="empty($item['staff_id'])">
+			Basic Remark
+			<elseif condition="empty($item['id'])" />
+			<span>{$item['create_time']}</span>{$staff[$item['staff_id']]} 
+			<else />
+			<span>{$item['create_time']}</span>{$staff[$item['staff_id']]}
+			</if>
+		</dt>
+		<dd id="dd_{$item['id']}"><if condition="$_SESSION[C('USER_AUTH_KEY')] eq $item['staff_id'] and !empty($item['id'])"><span><a href="javascript:void(0);" onclick="edit('{$item['id']}');">Edit</a></span></if><div>{$item['remark']|nl2br}</div></dd>
+			</notempty>
+		</iterate>
+		<empty name="result">
+		<p class="center">No Record</p>
+		</empty>
+	</dl>
+</fieldset>
+<input type="hidden" name="product_id" value="{$product_id}"/>
+<input type="hidden" name="remark_id" value=""/>
+<textarea name="remark" rows="3" cols="30"></textarea> <input type="button" id="post_remark" value="Post My Comment" onclick="javascript:post();" align="bottom"/>&nbsp;&nbsp;<input type="button" value="Close" onclick="tb_remove();" align="bottom"/>
+<script language="JavaScript" type="text/javascript">
+function post() {
+	if (''==$("textarea[name='remark']").val()) {
+		myAlert('Content is empty!');
+		return;
+	}
+	else {
+		$.post('__APP__/Public/remark', {
+			'product_id' : $("input[name='product_id']").val(),
+			'remark_id' : $("input[name='remark_id']").val(),
+			'remark' : $("textarea[name='remark']").val(),
+			'submit' : 1
+		}, function(json) {
+				if(json.result=='1')
+				{
+					if (''!=$("input[name='remark_id']").val()) {
+						myAlert('Submit success.');
+						$("dt#dt_"+json.remark_id).html('<span>'+json.create_time+'</span>'+json.staff_name);
+						$("dd#dd_"+json.remark_id+" div").html(json.remark);
+						$("input[name='remark_id']").val('');
+						$("input#post_remark").val('Post My Comment');
+						$("input#reset_remark").remove();
+						has_reset = false;
+					}
+					else {
+						myAlert('Post success.');
+						$("dl#remark_list").append('<dt><span>'+json.create_time+'</span>'+json.staff_name+'</dt><dd>'+json.remark+'</dd>');
+						myOK(1000);
+					}
+					$("textarea[name='remark']").val('');
+					myOK(2000);
+				}
+				else {
+					myAlert(json.msg);
+				}
+				
+			}, 'json');
+	}
+}
+
+var has_reset = false;
+function edit(remark_id) {
+	$("input[name='remark_id']").val(remark_id);
+	$.get('__APP__/Public/remark', {
+		'remark_id' : remark_id
+	}, function(str) {
+			$("textarea[name='remark']").val(str);
+		});
+	$("input#post_remark").val('Submit');
+	if(!has_reset) {
+		$("input#post_remark").after('<input type="button" id="reset_remark" value="Cancel"/>');
+		$("input#reset_remark").click(function(){
+			$("input[name='remark_id']").val('');
+			$("textarea[name='remark']").val('');
+			$("input#post_remark").val('Post My Remark');
+			$(this).remove();
+			has_reset = false;
+		});
+		has_reset = true;
+	}
+}
+$(document).keydown(function(e){
+	var keyCode=e.keyCode ||window.event.keyCode;
+	if(keyCode==27)//Esc
+	{
+		tb_remove();
+	}
+});
+</script>

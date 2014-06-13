@@ -1,0 +1,170 @@
+<style>
+#title_layer {
+	position: absolute;
+	border: 1px solid #767676;
+	padding: 6px;
+	background-color: #FFFFDD;
+	border-radius: 6px;
+	-moz-border-radius: 6px;
+	-webkit-border-radius: 6px;
+	z-index: 200;
+}
+#tTable tr.flow, #tTable tr.flow a {
+	font-weight: bold;
+}
+#tTable tr.flow td {
+	padding: 4px 60px 4px 4px;
+}
+#tTable td.board_name {
+	padding-left: 58px;
+	background: 38px center no-repeat;
+}
+#tTable td.TBD {
+	background-image:url("../Public/Images/159.png");
+}
+#tTable td.Ongoing {
+	background-image:url("../Public/Images/153.png");
+}
+#tTable td.Pass, #tTable td.PassX {
+	background-image:url("../Public/Images/152.png");
+}
+#tTable td.Failed {
+	background-image:url("../Public/Images/151.png");
+}
+#tTable td.Ignore {
+	background-image:url("../Public/Images/160.png");
+}
+strong.TBD{
+	color: #808080;
+}
+strong.Pass, strong.PassX {
+	color: #009900;
+}
+strong.Ongoing {
+	color: #0000FF;
+}
+strong.Failed {
+	color: #FF0000;
+}
+strong.Ignore {
+	color: #0099FF;
+}
+</style>
+<if condition="$_SESSION[C('ADMIN_AUTH_NAME')] or in_array($_SESSION[C('USER_AUTH_KEY')], C('STATUS_ADMIN_ID'))">
+<p class="page_title_text">
+	Create test flow from template:
+	<select id="template_id"><option value="0">None</option>
+	{$template_opts}
+	</select>
+	<input type="button" value="Create" onclick="javascript:document.location='__URL__/form/template_id/'+$('#template_id').val();" />
+</p>
+</if>
+<table>
+<tr>
+	<td>
+		<form action="__URL__">
+		<table id="search_table" cellpadding="3" border="1" bordercolor="#FFFFFF" style="border-collapse:collapse;">
+		<tr>
+			<th>Flow Name</th>
+			<th>Flow Creator</th>
+			<th>Board Name</th>
+			<th>Board Information</th>
+			<th>Board Owner</th>
+			<td rowspan="2">
+				<input type="submit" value="Filter"/>
+				<input type="button" onclick="window.location='__URL__';" value="Reset" />
+			</td>
+		</tr>
+		<tr>
+			<td><input type="text" name="flow_name" size="10" value="{$request['flow_name']}"/></td>
+			<td><select name="creator_id"><option value="">All</option>{$creator_opts}</select></td>
+			<td><input type="text" name="board_name" size="10" value="{$request['board_name']}"/></td>
+			<td><input type="text" name="board_info" size="16" value="{$request['board_info']}"/></td>
+			<td><select name="owner_id"><option value="">All</option>{$owner_opts}</select></td>
+		</tr>
+		</table>
+		</form>
+	</td>
+</tr>
+</table>
+<table id="tTable" cellpadding="3" border="1" bordercolor="#FFFFFF" style="border-collapse:collapse;">
+<tr>
+	<td colspan="7">{$page}</td>
+</tr>
+<tr>
+	<th width="50">No.</th>
+	<th colspan="2">Flow Name</th>
+	<th>Creator/Owner</th>
+	<th>Create Time</th>
+	<th>Update Time</th>
+	<th>OP</th>
+</tr>
+<iterate name="result" id="flow">
+<tr bgcolor="#F5CBAD" class="flow">
+	<td>F{$flow['id']|sprintf='%05s',###}</td>
+	<td colspan="2" nowrap="nowrap"><a href="__URL__/flow2/id/{$flow['id']}">{$flow['name']}</a></td>
+	<td>{$flow['creator']['realname']}</td>
+	<td>{$flow['create_time']}</td>
+	<td>{$flow['update_time']}</td>
+	<td style="padding: 4px;">
+		<if condition="$_SESSION[C('USER_AUTH_KEY')] eq $flow['owner_id'] or $_SESSION[C('ADMIN_AUTH_NAME')] or in_array($_SESSION[C('USER_AUTH_KEY')], C('STATUS_ADMIN_ID'))">
+		<a href="__URL__/form/id/{$flow['id']}">Edit</a>
+		<a href="javascript:void(0);" onclick="myConfirm('Are you sure to delete this item?', '__URL__/delete/id/{$flow['id']}');" target="_iframe">Delete</a>
+		<a href="javascript:void(0);" onclick="myConfirm('Are you sure to send notification mail?', '__URL__/send_mail/type/flow/id/{$flow['id']}');" target="_iframe" title="Send notification mail of this flow">Mail</a>
+		</if>
+		<if condition="$_SESSION[C('ADMIN_AUTH_NAME')] or in_array($_SESSION[C('USER_AUTH_KEY')], C('STATUS_ADMIN_ID'))">
+		<a href="__URL__/board/op/add/flow_id/{$flow['id']}?width=400&height=275&modal=true" class="thickbox" title="Add a new board to the test flow">Add</a>
+		</if>
+	</td>
+</tr>
+<notempty name="flow.board_list">
+	<iterate name="flow.board_list" id="board">
+<tr class="trbg{$mod}">
+	<td colspan="2" class="board_name {$status_arr[$board['status']]|str_replace='*','X',###}"><a href="__URL__/board/id/{$board['id']}" title="{$board['info']}">{$board['name']}</a></td>
+	<td width="50"><strong class="{$status_arr[$board['status']]|str_replace='*','X',###}">{$status_arr[$board['status']]}</strong></td>
+	<td>{$board['owner']['realname']}</td>
+	<td>{$board['create_time']}</td>
+	<td>{$board['update_time']}</td>
+	<td>
+		<if condition="$_SESSION[C('USER_AUTH_KEY')] eq $board['owner_id'] or $_SESSION[C('ADMIN_AUTH_NAME')] or in_array($_SESSION[C('USER_AUTH_KEY')], C('STATUS_ADMIN_ID'))">
+		<a href="__URL__/board/id/{$board['id']}">Edit</a>
+		<a href="javascript:void(0);" onclick="myConfirm('Are you sure to delete this item?', '__URL__/board/op/delete/id/{$board['id']}');" target="_iframe">Delete</a>
+		<a href="javascript:void(0);" onclick="myConfirm('Are you sure to send notification mail?', '__URL__/send_mail/type/board/id/{$board['id']}');" target="_iframe" title="Send notification mail">Mail</a>
+		</if>
+	</td>
+</tr>
+	</iterate>
+</iterate>
+<empty name="result">
+<tr>
+	<td colspan="7" align="center">No Record</td>
+</tr>
+</empty>
+<tr>
+	<td colspan="7">{$page}</td>
+</tr>
+<tr>
+	<td style="padding:0;"></td>
+	<td style="padding:0;"></td>
+	<td style="padding:0;"></td>
+	<td style="padding:0;"></td>
+	<td style="padding:0;"></td>
+	<td style="padding:0;"></td>
+	<td style="padding:0;"></td>
+</tr>
+</table>
+<p class="center"></p>
+<div id="title_layer" class="w10" style="display:none;"></div>
+<script language="JavaScript" type="text/javascript" src="../Public/Js/title_tip.js"></script>
+<script language="JavaScript" type="text/javascript">
+$(document).ready(function(){
+	$("th[title], td[title], a[title]").each(function() {
+		$(this).hover(
+			function(event) { showTitle(this, event);},
+			function() { hideTitle(this);}
+		).mousemove(function(event) {
+			moveTitle(event);
+		});
+	});
+});
+</script>

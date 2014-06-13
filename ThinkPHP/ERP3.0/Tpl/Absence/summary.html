@@ -1,0 +1,44 @@
+<style>
+.exceed1 {
+	background-color: #FF00FF;
+}
+</style>
+<p class="page_title_text">Staff Leave Summary</p>
+<table cellpadding="3" border="1" bordercolor="#FFFFFF" style="border-collapse:collapse;">
+<tr>
+	<th rowspan="2">Staff</th>
+	<th rowspan="2">Enroll Date</th>
+	<th colspan="6">Annual Leave</th>
+	<th colspan="2">Compensatory Leave</th>
+</tr>
+<tr>
+	<th style="background-color:#00CC00">{$leave_info['Balance_year']} Balance</th>
+	<th style="background-color:#00CC00">{$leave_info['Annual_year']} Accumulated</th>
+	<th style="background-color:#CCCC00">{$leave_info['Annual_year']} Consumed</th>
+	<th style="background-color:#CCCC00">Cash out Days in {$leave_info['CashOut'][0]['Month']}</th>
+	<th style="background-color:#CCCC00">Cash out Days in {$leave_info['CashOut'][1]['Month']}</th>
+	<th>Available<br />(= <span style="background-color:#00CC00">　</span> - <span style="background-color:#CCCC00">　</span>)</th>
+	<th style="background-color:#33CCFF">Accumulated<br />in last 3 months</th>
+	<th style="background-color:#33CCFF">Consumed<br />in last 3 months</th>
+</tr>
+<iterate name="result" id="item">
+<tr class="trbg{$mod}">
+	<td align="center" nowrap="nowrap">{$item['realname']}</td>
+	<td>{$item['onboard']}</td>
+	<td>{$item['Balance']}</td>
+	<td>{$item['Annual']}</td>
+	<td>{$item['Annual_used']}</td>
+	<td>{$item['CashOut'][0]}</td>
+	<td>{$item['CashOut'][1]}</td>
+	<td class="exceed{$item['Exceed']}" <eq name="item['Exceed']" value="1">title="It will accumulate {$item['Accrual']} days, which exceed your Maximum Accrual: {$item['MaxAccrual']} days"</eq>>{$item['Annual_available']}</td>
+	<td>{$item['Overtime']}</td>
+	<td>{$item['Compensatory']}</td>
+</tr>
+</iterate>
+<empty name="result">
+<tr>
+	<td colspan="10" align="center">No Record</td>
+</tr>
+</empty>
+</table>
+<p class="center"></p>
