@@ -32,6 +32,7 @@ class AbsenceAction extends BaseAction{
 		}
 		$LeaveType['Overtime'] = 'Overtime';
 		$LeaveType['Out'] ='Out of office';
+		$LeaveType['Additional'] = 'Additional';
 		$this->assign('LeaveType', $LeaveType);
 	}
 
@@ -49,11 +50,30 @@ class AbsenceAction extends BaseAction{
 			}
 		}
 		$where = array(
-			'type' => array('in', array('Annual','CashOut')),
+			'type' => 'Annual',
 			'staff_id' => $_SESSION[C('USER_AUTH_KEY')],
+			'create_time' => array('lt', date('Y', $this->time).'-01-01'),
 			'status' => 1
 			);
-		$used_annual_hours = $this->dao->where($where)->sum('hours');
+		$used_annual_hours_before_thisyear = $this->dao->where($where)->sum('hours');
+		$where = array(
+			'type' => 'CashOut',
+			'staff_id' => $_SESSION[C('USER_AUTH_KEY')],
+			'create_time' => array('lt', date('Y', $this->time).'-01-01'),
+			'status' => 1
+			);
+		$cashout_hours_before_thisyear = $this->dao->where($where)->sum('hours');
+		$used_before_thisyear = $used_annual_hours_before_thisyear + $cashout_hours_before_thisyear.
+
+		$where = array(
+			'type' => 'Annual',
+			'staff_id' => $staff_info['id'],
+			'status' => 1,
+			'time_from' => array(array('egt', date('Y', $this->time).'-01-01'), array('lt', (date('Y', $this->time)+1).'-01-01'))
+			);
+		$annual_used = $this->dao->where($where)->sum('hours');
+		$used_annual_hours = $used_before_thisyear + $annual_used;
+
 		$leave_info = array();
 		$total_annual = 0;
 		$total_leave = 0;
@@ -83,10 +103,13 @@ class AbsenceAction extends BaseAction{
 					}
 				}
 			}
+			//每满7年，多加5天
+			$count7 = ($this->time - strtotime($staff_info['onboard'])) / 365 / 7;
+
 
 			if (date('Y', $this->time)==2011) {
 				//如果现在是2011年，则读取2010剩余年假，并减除已使用假期
-				$balance_hour = max(0, round($staff_info['balance']*8)-$used_annual_hours);
+				$balance_hour = max(0, round($staff_info['balance']*8)-$used_before_thisyear);
 
 				$total_annual = $added_annual_hour + round($staff_info['balance']*8) - $used_annual_hours;
 			}
@@ -148,14 +171,25 @@ class AbsenceAction extends BaseAction{
 					}
 				}
 				$tmp_balance_hour = round($tmp_balance_hour);
-				$balance_hour = max(0, $tmp_balance_hour-$used_annual_hours);
+				$balance_hour = $tmp_balance_hour-$used_before_thisyear;
 
 				$total_annual = $added_annual_hour + $tmp_balance_hour - $used_annual_hours;
 			}
 			$leave_info['Balance'] = self::parseHour($balance_hour);
 		}
+		$tmp_where = array(
+			'type' => 'Additional',
+			'staff_id' => $staff_info['id'],
+			'status' => 1,
+			'time_to' => array('lt', (date('Y', $this->time)+1).'-01-01')
+			);
+		$Additional_hour = $this->dao->where($tmp_where)->sum('hours');
+		$leave_info['Additional'] = self::parseHour($Additional_hour);
+		$total_annual += $Additional_hour;
+
 
 		$leave_info['Annual'] =  self::parseHour($added_annual_hour);
+		$leave_info['Consumed'] =  self::parseHour($annual_used);
 		$this->assign('total_annual', self::parseHour($total_annual));
 		$total_leave = $total_annual;
 
@@ -183,6 +217,7 @@ class AbsenceAction extends BaseAction{
 			if ($hour==0 && date('n', $this->time) == $this->Absence_Config['cashoutmonth'][$key]) {
 				$leave_info['CashOut'][$key]['enable'] = true;
 			}
+			$total_leave -= $hour;
 		}
 		$leave_info['Overtime'] = array();
 		$date_3month_ago = date('Y-m-d', mktime(0,0,0,date('m', $this->time)-3, date('d', $this->time), date('Y', $this->time)));
@@ -855,6 +890,7 @@ class AbsenceAction extends BaseAction{
 		$this->assign('content', ACTION_NAME);
 		$this->display('Layout:ERP_layout');
 	}
+
 	public function history() {
 		Session::set('sub', MODULE_NAME.'/'.ACTION_NAME);
 
@@ -1045,7 +1081,41 @@ class AbsenceAction extends BaseAction{
 				$rs[$n]['CashOut'][$key] = self::parseHour($hour);
 			}
 
-			$annual_available = $balance_hour-$history_used+$added_annual_hour-$annual_used-$cashout_used;
+			//计算是否满7年赠送5天
+			$rs[$n]['present'] = false;
+			$rs[$n]['Additional'] = 0;
+			//先检查是否已赠送过
+			$tmp_where = array(
+				'type' => 'Additional',
+				'staff_id' => $staff_info['id'],
+				'status' => 1,
+				'time_to' => array('lt', (date('Y', $this->time)+1).'-01-01')
+				);
+			$Additional_hour = $this->dao->where($tmp_where)->sum('hours');
+			if ($Additional_hour>0) {
+				//已赠送过，检查上一次的赠送日期
+				$tmp_where = array(
+					'type' => 'Additional',
+					'staff_id' => $staff_info['id'],
+					'status' => 1
+					);
+				$last_row = $this->dao->where($tmp_where)->order('time_to desc')->find();
+				if ($last_row) {
+					$last_date = $last_row['time_to'];
+				}
+			}
+			else {
+				//没有赠送过
+				$last_date = $staff_info['onboard'];
+			}
+			//根据上次赠送日期，计算7年后的时间
+			$year7 = mktime(0,0,0,substr($last_date, 5, 2), substr($last_date, 8, 2), substr($last_date, 0, 4)+7);
+			if ($this->time >= $year7) {
+				$rs[$n]['present'] = true;
+			}
+			$rs[$n]['Additional'] = self::parseHour($Additional_hour);
+
+			$annual_available = $balance_hour-$history_used+$added_annual_hour-$annual_used-$cashout_used+$Additional_hour;
 			$rs[$n]['Annual_available'] = self::parseHour($annual_available);
 			$leave_available = $annual_available;
 
@@ -1084,6 +1154,45 @@ class AbsenceAction extends BaseAction{
 		$this->assign('ACTION_TITLE', 'Staff Leave Summary');
 		$this->assign('content', ACTION_NAME);
 		$this->display('Layout:ERP_layout');
+	}
+	
+	public function present() {
+		$id = intval($_REQUEST['id']);
+		if ($id==0) {
+			return;
+		}
+		
+		//检查上一次的赠送日期
+		$where = array(
+			'type' => 'Additional',
+			'staff_id' => $id,
+			'time_to' => array('lt', date('Y', $this->time).'-01-01')
+			);
+		$last_row = $this->dao->where($where)->order('time_to desc')->find();
+		if ($last_row) {
+			$date_from = $last_row['time_to'];
+			$date_from = substr($date_from, 0, 10);
+		}
+		else {
+			$date_from = D('Staff')->where(array("id"=>$id))->getField('onboard');
+		}
+		$date_to = (substr($date_from, 0, 4)+7) .'-'. substr($date_from, 5, 2) .'-'. substr($date_from, 8, 2);
+
+		unset($this->dao->id);
+		$this->dao->type = 'Additional';
+		$this->dao->staff_id = $id;
+		$this->dao->creator_id = $_SESSION[C('USER_AUTH_KEY')];
+		$this->dao->time_from = $date_from.' 00:00:00';
+		$this->dao->time_to = $date_to.' 00:00:00';
+		$this->dao->hours = 5*8;
+		$this->dao->status = 1;
+		$this->dao->create_time = date("Y-m-d H:i:s");
+		if($this->dao->add()) {
+			self::_success('Present success!',__URL__.'/summary');
+		}
+		else{
+			self::_error('Present fail!'.(C('APP_DEBUG')?$this->dao->getLastSql():''));
+		}
 	}
 
 	private function get_avaliable($type, $staff_id, $id=0) {
@@ -1197,6 +1306,14 @@ class AbsenceAction extends BaseAction{
 						$total_leave = $added_annual_hour + $tmp_balance_hour - $used_annual_hours;
 					}
 				}
+				$tmp_where = array(
+					'type' => 'Additional',
+					'staff_id' => $staff_info['id'],
+					'status' => 1,
+					'time_to' => array('lt', (date('Y', $this->time)+1).'-01-01')
+					);
+				$Additional_hour = $this->dao->where($tmp_where)->sum('hours');
+				$total_leave += $Additional_hour;
 				break;
 
 			case 'Compensatory':
