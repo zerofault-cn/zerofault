@@ -47,7 +47,7 @@
 	<td>A{$item['id']|sprintf='%05d',###}</td>
 	<td nowrap="nowrap">{$item['staff']['realname']}</td>
 	<td><empty name="LeaveType[$item['type']]">{$item['type']}<else />{$LeaveType[$item['type']]}</empty></td>
-	<td nowrap="nowrap"><if condition="$item['type'] eq 'CashOut'"><font color="#a4a4a4">N/A</font><else />{$item['time_from']|substr=0,-3} ~ {$item['time_to']|substr=0,-3}</if></td>
+	<td nowrap="nowrap"><if condition="$item['type'] eq 'CashOut'">CashOut on {$item['create_time']|substr=0,10}<else />{$item['time_from']|substr=0,-3} ~ {$item['time_to']|substr=0,-3}</if></td>
 	<td>{$item['hours']}</td>
 	<td nowrap="nowrap"><empty name="item['deputy_id']"><font color="#a4a4a4">N/A</font><else />{$item['deputy']['realname']}</empty></td>
 	<td align="left" valign="top" class="note"><if condition="$item['type'] eq 'CashOut'"><font color="#a4a4a4">N/A</font><else />{$item['note']|nl2br}</if></td>
@@ -55,7 +55,13 @@
 	<td align="left" valign="top" class="note">{$item['comment']|nl2br}</td>
 	<if condition="in_array($_SESSION[C('USER_AUTH_KEY')], C('ABSENCE_ADMIN_ID')) eq true">
 	<td nowrap="nowrap">
-		<neq name="item.type" value="Additional"><a href="__URL__/form/id/{$item['id']}?width=500&height=450&modal=true" class="thickbox">Edit</a></neq>
+		<if condition="$item['type'] eq 'CashOut' or $item['type'] eq 'Overtime'">
+			<a href="__URL__/form/type/{$item['type']}/id/{$item['id']}?width=500&height=450&modal=true" class="thickbox">Edit</a>
+		<else />
+			<if condition="$item['type'] neq 'Additional'">
+			<a href="__URL__/form/id/{$item['id']}?width=500&height=450&modal=true" class="thickbox">Edit</a>
+			</if>
+		</if>
 		<a href="javascript:void(0);" onclick="myConfirm('Are you sure to delete this item?', '__URL__/delete/op/delete/id/{$item['id']}');" target="_iframe">Delete</a>
 	</td>
 	</if>
